@@ -1,0 +1,197 @@
+{
+  "id": "run-contract.kp.economics.motion-block-publication-v1",
+  "kind": "run-contract",
+  "title": "Economics motion blocks and progressive publication",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics.motion-block-publication-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-economics-motion-block-progressive-publication-long-loop-proposal.md",
+      "summary": "Approved rationale, exact 28 slices, acceptance, preservation, rollback, verification, deferrals, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md",
+      "summary": "Accepted motion-block, scroll, stage, URL, progressive-enhancement, framework-neutrality, and performance standards."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm test",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Implement only the 28 approved economics exemplar slices, focused tests, stable visual and performance harness extensions, progressive tutorial custom-element renderers, and durable project/Theseus evidence.",
+    "Continue through objective exemplar slices under advance approval, but freeze all visual acceptance and cross-caller promotion at the final human checkpoint."
+  ],
+  "disallowedWork": [
+    "Do not implement solve-x as a second caller, promote shared reader or motif contracts, adopt SvelteKit, build Public Web or an editor, or roll motion blocks across the catalogue.",
+    "Do not build a universal scene graph, layout engine, motif registry, economics engine, client KaTeX compiler, live LLM prose path, surplus/deadweight-loss lesson, or resume matrix work."
+  ],
+  "goal": "Deliver two cumulative economics motion blocks with viewport-synchronized local timelines, reversible stage composition, semantic deep links, progressively enhanced portable controls, low-JS evidence, and a frozen human review checkpoint.",
+  "target": "next-action.kp.economics.motion-block-publication-v0",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on source-of-truth conflict, competing execution authority, or unavoidable overlap with unrelated user-owned files.",
+    "Stop if cumulative economics state is nondeterministic, scroll and manual ownership cannot reconcile without a jump, or exact model truth would change.",
+    "Stop if delivery requires eager heavy capabilities, client KaTeX, widened performance targets, fidelity loss, or framework ownership of semantic/runtime authority.",
+    "Stop when required verification is missing or contradictory, or when the final economics human visual checkpoint is review-ready."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Record-approved-direction",
+      "summary": "Recorded the accepted 28-slice direction, supersession boundaries, preservation/rollback rules, explicit deferrals, roadmap priority, and explanation-attention next action.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Define-motion-block-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Build-cumulative-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Author-second-motion-block",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Render-first-motion-block",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Define-scroll-corridors",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Centralize-scroll-coordination",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Bind-first-scroll-timeline",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Bind-second-cumulative-timeline",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Reconcile-manual-and-scroll-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Animate-supply-movement-interpretation",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Match-graph-label-backings",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Define-stage-composition-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Add-aperture-ingress-egress",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Reveal-verification-math",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Render-semantic-toc",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Enhance-toc-web-component",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Progressively-enhance-scrubber",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Expand-concise-authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Define-semantic-url-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Restore-deep-link-state",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Transact-toc-and-history-navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Replace-diamond-with-pointer",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Tune-wide-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Complete-responsive-accessible-fallbacks",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Prove-tutorial-performance",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Close-framework-neutral-boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Capture-human-review-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

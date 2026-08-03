@@ -2,15 +2,14 @@
 
 Status: active-supporting
 Last Updated: 2026-08-02
-Current Next Action: Human-review the integrated economics tutorial at
-`/tutorials/economics/demand-shift/` for reading cadence, stage coordination,
-semantic controls, the directional prose scrub boundary, graph-local focus
-attenuation, spotlight scope, stage/page continuity, the stable-prose focus
-divider, reading-band gutter marker, and the compact phone dock. The rejected
-cross-page connector is removed; the selected local revision uses a soft
-two-aperture page wash and a contiguous wide stage. Do not
-generalize the local lesson compiler, autoplay rule, or salience projection, or
-begin the solve-x caller, before this checkpoint is approved.
+Current Next Action: Execute the approved economics motion-block and
+progressive-publication exemplar at `/tutorials/economics/demand-shift/`.
+Replace crossing-triggered autoplay with two independently controlled local
+scroll corridors, cumulative state reconstruction, semantic deep links, a
+progressively enhanced TOC and scrubber, bounded stage composition motifs,
+graph-plane label backings, and the solid reading pointer. Stop at the renewed
+economics human checkpoint; do not generalize the lesson compiler, reader,
+motifs, or component contracts or begin the solve-x caller before approval.
 
 ## Goal
 
@@ -50,6 +49,21 @@ graph-local focus but never changes the active prose passage or stage heading.
 A quiet wide-screen gutter diamond marks the `38vh` reading band. At the
 divider, the Play button lifts through transform while a pre-rendered
 pseudo-element shadow fades in; phones omit the fixed marker.
+
+The approved successor is recorded in
+`decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`.
+Each meaningful multi-step animation now owns one stable motion block with its
+own text-free controls and local semantic timeline. A viewport-relative
+corridor seeks that active timeline continuously; manual control takes over and
+later scroll resumes from the visible frame without jumping. Motion blocks
+compose cumulatively. The economics exemplar will prove two blocks before any
+shared contract is inferred.
+
+The same decision adds semantic deep links, deterministic state restoration, a
+progressively enhanced `kp-tutorial-toc`, pre-rendered scrub controls, the
+stage/surface/slot/aperture vocabulary, a solid reading pointer, and graph-plane
+label backings. Svelte remains a host rather than semantic or component
+authority.
 
 The first exemplar is the approved economics supply-demand equilibrium asset.
 Its lesson asks why increased demand raises both equilibrium price and quantity
@@ -111,17 +125,19 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 1. Human editorial review of economics prose and storyboard. Complete.
 2. Economics-local Svelte 5 integrated exemplar with cheap preservation checks.
    Complete.
-3. Human review of cadence, choreography, controls, wide layout, and phone dock.
-   Current checkpoint.
-4. Generated solve-x as a structurally different second caller.
-5. Promotion of only caller-proven shared attention and document contracts.
-6. Broader responsive, accessibility, cross-browser, and release checks.
+3. Economics-local two-block, scroll-corridor, deep-link, TOC, progressive-
+   enhancement, and stage-composition revision. Current approved loop.
+4. Human review of cadence, choreography, controls, wide layout, phone dock,
+   navigation, and performance.
+5. Generated solve-x as a structurally different second caller.
+6. Promotion of only caller-proven shared attention and document contracts.
+7. Broader responsive, accessibility, cross-browser, and release checks.
 
 ## Out Of Scope
 
 - resuming or reranking the tabled linear algebra frontier;
 - changing the approved economics graph during integrated review;
-- many inline players, unannounced or catalogue-wide autoplay, continuous
+- many inline players, unannounced or catalogue-wide autoplay, lesson-global
   scroll scrubbing, or prose auto-scrolling;
 - replacing full prose with cue cards or a transcript rail;
 - an authoring editor before the hand-authored exemplar passes;

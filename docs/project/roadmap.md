@@ -116,6 +116,20 @@ This remains an exemplar-only treatment pending the same integrated review.
 This priority change does not resume linear algebra, authorize SvelteKit or a
 public site, or move LLM wording into runtime.
 
+The approved successor in
+`decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`
+replaces only the economics crossing-triggered clock and “scroll never seeks”
+rule. Each meaningful animation receives one stable motion block, local
+semantic controls, and a bounded viewport corridor. The exemplar will compose
+two economics blocks cumulatively, add a progressively enhanced TOC and
+scrubber, restore exact state from semantic URLs, prove bounded stage ingress,
+reveal, and tiling, match neutral graph labels to the graph plane, and replace
+the gutter diamond with a solid reading pointer. The approved 28-slice
+execution rationale is in
+`reviews/2026-08-02-economics-motion-block-progressive-publication-long-loop-proposal.md`.
+This remains economics-local and ends at human review before solve-x or shared
+contract promotion.
+
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
 closed its first 28-slice implementation loop. The delivery plan in
@@ -231,17 +245,19 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The active human checkpoint is the integrated economics continuous-prose
-tutorial at `/tutorials/economics/demand-shift/`.** Its canonical Markdown
+**The active implementation is the approved economics motion-block and
+progressive-publication revision at `/tutorials/economics/demand-shift/`.** Its
+canonical Markdown
 preserves one argument over a persistent graph, lets the graph lead and
 equations verify, inserts one non-gating prediction before learner-triggered
 motion, and closes on the shift-versus-movement misconception before optional
 exploration. The local Svelte 5 host adds semantic controls, static pre-motion
 passage preparation, a framework-neutral prose scrub-bar custom element, a wide
 graph-only persistent stage, and a compact phone dock without changing the
-asset or runtime. Downward crossing plays, upward crossing rewinds, manual
-interaction takes timeline ownership, scrolling never seeks the curves, and
-reduced-motion disables automatic motion. It now also
+asset or runtime. The retained first version plays downward or rewinds upward
+on crossing; the approved successor replaces that clock with two local
+viewport-derived timelines, cumulative state projection, and no-jump manual
+takeover. Reduced motion remains manual-only. It now also
 carries economics-local target profiles,
 context-preserving graph attenuation, graph-local spotlighting, stable prose
 around a text-free playback divider, a wide-screen reading-band marker, a
@@ -249,8 +265,9 @@ composited Play-button lift and shadow, and indented lesson paragraphs whose
 inline KaTeX does not inherit that indent.
 The rejected passage-to-stage connector is removed. The
 selected local revision adds a two-aperture page wash and a contiguous wide
-stage while retaining the bounded phone dock. No shared attention schema or
-second caller begins until this integrated cadence and salience treatment are
+stage while retaining the bounded phone dock. No shared attention, reader,
+URL, stage, or component schema and no second caller begins until the revised
+integrated cadence, navigation, composition, and salience treatment are
 approved.
 
 **Canonical construction, the fraction and radical migrations, foldable
@@ -587,14 +604,13 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Human-review the integrated economics tutorial at
-   `/tutorials/economics/demand-shift/` across wide and phone layouts, including
-   its directional prose scrub boundary, curve continuity, manual precedence,
-   context-preserving focus attenuation, page-wash strength, aperture softness,
-   contiguous wide stage, bounded phone dock, and paragraph indentation. The
-   rejected connector is removed.
-2. Make only checkpoint-requested economics-local revisions, then approve or
-   reject the exemplar without promoting a shared schema.
+1. Execute the approved economics motion-block and progressive-publication
+   loop at `/tutorials/economics/demand-shift/`: two local scroll corridors,
+   cumulative state, stage ingress/reveal/tiling, graph-plane labels, solid
+   reading pointer, semantic URLs, and progressively enhanced TOC/scrubbers.
+2. Human-review the revised wide, phone, reduced-motion, deep-link, and pre-
+   upgrade exemplar, then approve or reject it without promoting a shared
+   schema.
 3. After approval, pressure the attention boundary with generated solve-x, then
    promote only the document, passage, control, and reader contracts both
    callers prove.

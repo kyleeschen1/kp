@@ -10,17 +10,15 @@ with source refs, verification, run-contract slices, and completion evidence.
 1. Keep `Apply a 2 × 2 matrix to a vector` and its remaining run slices tabled
    at the open visual checkpoint while the explanation-attention work leads.
    This is a preservation guardrail, not authorization to resume the run.
-2. Review the integrated economics tutorial at
-   `/tutorials/economics/demand-shift/`: continuous prose, persistent stage,
-   a custom-element prose scrub boundary with downward play and upward rewind,
-   stable explanatory prose above and below a text-free control divider, a
-   quiet wide-screen reading-band marker, composited Play-button lift and
-   shadow, no curve seeking, manual timeline precedence, context-preserving
-   focus attenuation, two-aperture page-wash strength, contiguous wide stage,
-   paragraph indents without inherited KaTeX spacing, and compact phone dock.
-   The rejected connector and animation-driven cue changes are removed.
-3. Make only economics-local cadence or presentation revisions requested at
-   the checkpoint; do not generalize the local compiler during review.
+2. Execute the approved 28-slice economics motion-block and progressive-
+   publication loop at `/tutorials/economics/demand-shift/`: two stable local
+   motion blocks, continuous viewport corridors, cumulative state, reversible
+   stage ingress/reveal/tiling, graph-plane label backings, a solid reading
+   pointer, semantic deep links, and progressively enhanced TOC and scrubber
+   elements without component-upgrade layout shift.
+3. Human-review the resulting wide, phone, reduced-motion, deep-link, and pre-
+   upgrade exemplar; do not generalize the local compiler, motifs, URL model,
+   or component contracts during review.
 4. After approval, use generated solve-x as the second caller. Promote only shared document,
    passage, control, and reader seams that survive both exemplars.
 5. When animation promotion resumes, choose among place-value subtraction,

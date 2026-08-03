@@ -1,0 +1,99 @@
+{
+  "id": "next-action.kp.economics.motion-block-publication-v0",
+  "kind": "next-action",
+  "title": "Economics motion blocks and progressive publication",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-economics-motion-block-progressive-publication-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "priority-change.kp.explanation-attention-economics-integrated-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "priority-change.kp.explanation-attention-economics-integrated-v0"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 durable promotion-order alignment",
+      "checkedAt": "2026-08-03T05:52:50.850Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s01 documentation and contract hygiene",
+      "checkedAt": "2026-08-03T05:52:51.762Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 durable graph validation",
+      "checkedAt": "2026-08-03T05:52:52.596Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Accepted motion-block, continuous local scroll, cumulative projection, stage composition, graph-label, reading-pointer, semantic URL, progressive-enhancement, framework-neutrality, and low-JS standards are durable; execution remains economics-only."
+  },
+  "expectedLearning": [
+    "Whether two stable local motion blocks can synchronize viewport motion, manual controls, cumulative semantic state, URLs, and a persistent composed stage without a universal reader or scene graph.",
+    "Whether compiler-expanded custom-element markup can preserve authoring ergonomics, no-upgrade meaning, framework neutrality, and zero upgrade layout shift at low initial JavaScript cost."
+  ],
+  "allowedWork": [
+    "The 28 approved economics exemplar slices and their tests, stable visual/performance harnesses, project memory, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Solve-x promotion, shared contract promotion, SvelteKit or public/editor work, universal scene/motif infrastructure, new economics topics, client KaTeX, live LLM prose, matrix work, and catalogue-wide rollout."
+  ],
+  "criteria": [
+    {
+      "id": "cumulative-state",
+      "weight": "high"
+    },
+    {
+      "id": "scroll-manual-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "progressive-enhancement-cls",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-deep-links",
+      "weight": "high"
+    },
+    {
+      "id": "framework-neutrality",
+      "weight": "high"
+    },
+    {
+      "id": "low-js-performance",
+      "weight": "high"
+    },
+    {
+      "id": "human-visual-checkpoint",
+      "weight": "medium"
+    }
+  ]
+}

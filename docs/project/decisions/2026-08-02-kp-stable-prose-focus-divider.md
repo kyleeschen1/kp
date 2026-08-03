@@ -5,6 +5,9 @@ Status: accepted
 Scope: economics tutorial discovery exemplar
 Supersedes: only the animation-phase viewing-copy treatment in
 `2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
+Superseded in part: the diamond marker and crossing-triggered clock are
+replaced by the solid reading pointer and local scroll corridors in
+`2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`.
 
 ## Context
 
@@ -64,4 +67,3 @@ reading-band marker, local host projection, tests, and this decision.
 This is still one-caller discovery evidence. It does not promote a shared
 reader schema, global gutter marker, catalogue-wide autoplay rule, or SvelteKit
 surface before economics approval and solve-x pressure.
-

@@ -2,6 +2,9 @@
 
 Status: accepted
 Date: 2026-08-02
+Superseded in part: the crossing-triggered autoplay and “scroll never seeks”
+rules are replaced by the local motion-block corridor decision in
+`2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`.
 
 ## Context
 
