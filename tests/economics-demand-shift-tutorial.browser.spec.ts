@@ -65,6 +65,24 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .toHaveCount(2);
   await expect(toc.locator('[data-kp-tutorial-toc-item="checkpoint"]'))
     .toHaveCount(6);
+  const tocProjection = await toc.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const prose = document.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__prose"
+    )!.getBoundingClientRect();
+    return {
+      position: getComputedStyle(element).position,
+      top: bounds.top,
+      right: bounds.right,
+      proseLeft: prose.left,
+      viewportHeight: window.innerHeight,
+      bottom: bounds.bottom
+    };
+  });
+  expect(tocProjection.position).toBe("fixed");
+  expect(tocProjection.right).toBeLessThanOrEqual(tocProjection.proseLeft - 8);
+  expect(tocProjection.top).toBeGreaterThanOrEqual(0);
+  expect(tocProjection.bottom).toBeLessThanOrEqual(tocProjection.viewportHeight);
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="movement-verified"]'
   )).toHaveAttribute(
@@ -237,8 +255,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
       background: style.backgroundColor,
       clipPath: style.clipPath,
       filter: style.filter,
+      opacity: style.opacity,
       pointerEvents: style.pointerEvents,
       zIndex: Number(style.zIndex),
+      width: bounds.width,
+      height: bounds.height,
       right: bounds.right,
       hitTargetIsPointer: document.elementFromPoint(
         bounds.left + bounds.width / 2,
@@ -251,12 +272,19 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(pointerProjection).toMatchObject({
     background: "rgb(122, 157, 168)",
     clipPath: "polygon(0px 0px, 100% 50%, 0px 100%)",
+    opacity: "1",
     pointerEvents: "none",
     hitTargetIsPointer: false
   });
   expect(pointerProjection.filter).toContain("drop-shadow");
-  expect(pointerProjection.zIndex).toBeGreaterThan(1);
+  expect(pointerProjection.zIndex).toBeGreaterThan(12);
+  expect(pointerProjection.width).toBeGreaterThanOrEqual(16);
+  expect(pointerProjection.height).toBeGreaterThanOrEqual(19);
   expect(pointerProjection.right).toBeLessThan(demandTextBox!.x);
+  await expect.poll(() => toc.evaluate((element) =>
+    element.getBoundingClientRect().top
+  )).toBeCloseTo(tocProjection.top, 1);
+  await expect.poll(() => toc.evaluate((element) => element.scrollLeft)).toBe(0);
   await expect.poll(() => demandChange.evaluate((element) => ({
     rail: getComputedStyle(element).borderLeftColor,
     pointer: getComputedStyle(document.querySelector(
@@ -1001,6 +1029,36 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
     '[data-kp-tutorial-destination-id="movement-traced"]'
   )).toHaveAttribute("aria-current", "location");
   await expect(toc.locator("[aria-current]")).toHaveCount(1);
+});
+
+test("floating tutorial TOC reserves a non-overlapping narrow-desktop gutter", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const geometry = await root.evaluate((element) => {
+    const toc = element.querySelector<HTMLElement>("kp-tutorial-toc")!;
+    const prose = element.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__prose"
+    )!;
+    const stage = element.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__stage"
+    )!;
+    return {
+      tocPosition: getComputedStyle(toc).position,
+      tocRight: toc.getBoundingClientRect().right,
+      proseLeft: prose.getBoundingClientRect().left,
+      stageRight: stage.getBoundingClientRect().right,
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth
+    };
+  });
+  expect(geometry.tocPosition).toBe("fixed");
+  expect(geometry.tocRight).toBeLessThanOrEqual(geometry.proseLeft - 8);
+  expect(geometry.stageRight).toBeLessThanOrEqual(geometry.viewportWidth);
+  expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth);
 });
 
 test("direct semantic links restore complete cumulative state without replay", async ({

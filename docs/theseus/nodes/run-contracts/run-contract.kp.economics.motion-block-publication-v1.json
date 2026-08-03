@@ -662,6 +662,27 @@
       "scope": "s28",
       "checkedAt": "2026-08-03T08:36:13.166Z",
       "notes": "Workspace valid before loop closeout: 873 nodes and 16865 events."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "post-checkpoint-floating-toc-pointer",
+      "checkedAt": "2026-08-03T15:57:17.144Z",
+      "notes": "Twelve Chromium scenarios passed. The fixed left TOC remains outside prose at 1280px and the 1024px pressure width, stays horizontally stable while scrolling, and preserves phone fallback. The reader pointer is at least 16 by 19 CSS pixels, fully opaque, above the TOC and veil, and non-interactive."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "post-checkpoint-floating-toc-pointer",
+      "checkedAt": "2026-08-03T15:57:18.579Z",
+      "notes": "All 24 focused semantic, runtime, authoring, URL, and renderer tests passed after the visual refinement."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "post-checkpoint-floating-toc-pointer",
+      "checkedAt": "2026-08-03T15:57:19.613Z",
+      "notes": "Svelte check found zero errors and zero warnings after removing dynamic pointer styles."
     }
   ],
   "allowedWork": [

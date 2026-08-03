@@ -278,11 +278,6 @@
         manualMotionBlock === "supply-movement"
     });
   });
-  let readingBandStyle = $derived(
-    `--kp-tutorial-reading-band-proximity:${readingBandProximity.toFixed(3)};` +
-    `--kp-tutorial-reading-band-opacity:${(0.18 + 0.72 * readingBandProximity).toFixed(3)};` +
-    `--kp-tutorial-reading-band-scale:${(0.78 + 0.28 * readingBandProximity).toFixed(3)}`
-  );
   let spotlightStyle = $derived(
     `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
     `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
@@ -1351,7 +1346,6 @@
     class="kp-economics-tutorial__reading-band-marker"
     data-kp-economics-tutorial-reading-band
     data-kp-reading-band-state={readingBandProximity >= 0.94 ? "crossing" : "tracking"}
-    style={readingBandStyle}
     aria-hidden="true"
   ></span>
 

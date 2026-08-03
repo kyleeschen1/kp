@@ -325,3 +325,17 @@ generated solve-x tutorial candidate—to reproduce the boundary without
 economics concepts, plus focused regression evidence for both callers. Until
 then, consumers import the candidate modules directly and no `tutorial`
 package barrel or universal scene graph is created.
+
+## Post-checkpoint navigation and pointer refinement
+
+The 2026-08-03 review makes the lesson TOC a persistent left rail whenever the
+viewport can hold the rail, prose, and stage as three non-overlapping regions.
+The rail remains independently scrollable and keeps the same complete static
+light DOM, ordinary links, active-destination semantics, and custom-element
+upgrade. At narrower widths it returns to the inline article position rather
+than overlaying prose or shrinking the graph below its useful minimum.
+
+The reading pointer is now a stable orientation marker, not a proximity
+animation. It is larger, fully opaque, and painted above all passage washes and
+the page veil. Reading-band proximity may still select the current passage, but
+it must not fade, scale, or otherwise animate the pointer itself.
