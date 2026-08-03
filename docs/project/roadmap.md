@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-02
+Last Updated: 2026-08-03
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -80,55 +80,29 @@ M4/M5, and only then a constrained Public Editor. The preceding reversible
 Svelte catalogue-shell gate is complete: Svelte 5 now owns the canonical host
 composition without owning framework-neutral animation or publication truth.
 
-The immediate product priority is now explanatory text and its coordination
-with animation, recorded in
-`decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
-and owned by `threads/explanation-attention.md`. KP will preserve continuous
-Markdown prose and coordinate it with one persistent semantic stage through
-static pre-motion passage preparation and a block-level custom-element scrub
-boundary with manual-priority semantic controls. Crossing down plays and
-crossing up rewinds the authored timeline; scroll never assigns curve positions,
-direction changes mirror the clock without jumping, and reduced-motion remains
-explicit-only.
-The
-approved economics equilibrium asset is the canonical discovery exemplar;
-generated solve-x is the second caller before any shared passage or reader
-contract is promoted. The editorial checkpoint is approved. The bounded
-economics route is now built from canonical Markdown and awaits integrated
-human review:
-`reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`.
-The current economics-local revision implements the accepted learner-facing
-framing of KP as a salience-transmission engine: each checkpoint names a target
-and retained context, while graph-local attenuation and spotlighting emphasize
-the intended landing. Stable lesson prose now surrounds a text-free control
-divider: the paragraph above introduces the motion and the paragraph below
-interprets it. Playback progress changes graph-local focus but never changes
-the active prose or stage heading. A quiet wide-screen gutter diamond marks the
-`38vh` reading band; the local divider and composited Play-button lift signal
-its crossing. Inline KaTeX explicitly cancels inherited paragraph indentation.
-Human review rejected the cross-page connector, so it is removed on every
-viewport; lesson body paragraphs still use first-line indents.
-Follow-up review selected a soft wide-screen page wash with apertures for the
-active passage and complete stage, plus a contiguous wide stage without card
-chrome or a separate graph plane. The fixed phone dock keeps its surface
-boundary. Wash strength and aperture softness remain human-review questions.
-This remains an exemplar-only treatment pending the same integrated review.
-This priority change does not resume linear algebra, authorize SvelteKit or a
-public site, or move LLM wording into runtime.
+The immediate product priority is explanatory text and its coordination with
+animation, owned by `threads/explanation-attention.md`. The economics discovery
+exemplar is complete: two cumulative motion blocks track bounded scroll
+corridors, preserve fine-grained manual control, reconstruct semantic URLs,
+ship progressively enhanced TOC and scrubber light DOM, and retain one
+persistent stage over continuous Markdown prose. Human-requested follow-up now
+fixes the TOC to the left of the prose, centers it vertically, strengthens the
+solid reading pointer, widens the three-column gutters, and increases prose
+line height. The exact route, graph, controls, responsive behavior, and
+performance ceilings are the reference caller.
 
-The approved successor in
-`decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`
-replaces only the economics crossing-triggered clock and “scroll never seeks”
-rule. Each meaningful animation receives one stable motion block, local
-semantic controls, and a bounded viewport corridor. The exemplar will compose
-two economics blocks cumulatively, add a progressively enhanced TOC and
-scrubber, restore exact state from semantic URLs, prove bounded stage ingress,
-reveal, and tiling, match neutral graph labels to the graph plane, and replace
-the gutter diamond with a solid reading pointer. The approved 28-slice
-execution rationale is in
-`reviews/2026-08-02-economics-motion-block-progressive-publication-long-loop-proposal.md`.
-This remains economics-local and ends at human review before solve-x or shared
-contract promotion.
+Botanical Lisp now replaces generated solve-x as the next tutorial caller,
+recorded in
+`decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
+The loop first builds the exact lambda-application semantic asset and local
+tutorial, then compares economics, Lisp, and the existing `KpLessonDocument`
+before extracting shared lesson document, navigation, control, motion,
+publication, token, and Svelte-host seams. Domain semantics, renderer geometry,
+stage choreography, and salience profiles remain local. Generated solve-x is
+retained as the third caller. This priority does not resume linear algebra,
+authorize SvelteKit or Public Web, promote a botanical language pack, or move
+LLM wording into runtime. The approved contract rationale is
+`reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
@@ -161,9 +135,10 @@ second concept supplies evidence for promotion.
 
 An exploratory semantic-explanatory-atlas direction is recorded in
 `decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`. It captures
-programming-language semantic theater and topology explanation designs for
-future bounded exemplars. It does not change the active solve-x checkpoint or
-the approved symbolic exemplar order.
+programming-language semantic theater and topology explanation designs. Its
+smallest botanical Lisp checkpoint is now the bounded second tutorial caller;
+the wider language pack and topology lane remain exploratory. This does not
+change the approved animation-promotion order.
 
 A retained portable-publication lane is recorded in
 `threads/portable-publication-platform.md`, with preliminary boundary guidance
@@ -245,30 +220,18 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The active implementation is the approved economics motion-block and
-progressive-publication revision at `/tutorials/economics/demand-shift/`.** Its
-canonical Markdown
-preserves one argument over a persistent graph, lets the graph lead and
-equations verify, inserts one non-gating prediction before learner-triggered
-motion, and closes on the shift-versus-movement misconception before optional
-exploration. The local Svelte 5 host adds semantic controls, static pre-motion
-passage preparation, a framework-neutral prose scrub-bar custom element, a wide
-graph-only persistent stage, and a compact phone dock without changing the
-asset or runtime. The retained first version plays downward or rewinds upward
-on crossing; the approved successor replaces that clock with two local
-viewport-derived timelines, cumulative state projection, and no-jump manual
-takeover. Reduced motion remains manual-only. It now also
-carries economics-local target profiles,
-context-preserving graph attenuation, graph-local spotlighting, stable prose
-around a text-free playback divider, a wide-screen reading-band marker, a
-composited Play-button lift and shadow, and indented lesson paragraphs whose
-inline KaTeX does not inherit that indent.
-The rejected passage-to-stage connector is removed. The
-selected local revision adds a two-aperture page wash and a contiguous wide
-stage while retaining the bounded phone dock. No shared attention, reader,
-URL, stage, or component schema and no second caller begins until the revised
-integrated cadence, navigation, composition, and salience treatment are
-approved.
+**The active implementation is the botanical Lisp semantic asset,
+tutorial, and two-caller shared lesson seam.** The exact exemplar is
+`((lambda (x) (+ x 1)) 4) -> (+ 4 1) -> 5`, published at the proposed internal
+route `/tutorials/programming/lisp-function-application/`. Lisp first proves
+S-expression occurrence identity, binding provenance, exact evaluation,
+material conservation, native settled code, reversible botanical presentation,
+and two cumulative motion blocks locally. Only after that complete caller
+exists may the loop compare it with economics and extract lifecycle-identical
+lesson mechanics. The economics route remains the visual, URL, responsive,
+and performance preservation baseline. Shared Svelte code may own replaceable
+first-party reader composition, but semantic assets, clocks, URLs, custom-
+element contracts, and stage renderers remain framework-neutral.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -604,23 +567,24 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Execute the approved economics motion-block and progressive-publication
-   loop at `/tutorials/economics/demand-shift/`: two local scroll corridors,
-   cumulative state, stage ingress/reveal/tiling, graph-plane labels, solid
-   reading pointer, semantic URLs, and progressively enhanced TOC/scrubbers.
-2. Human-review the revised wide, phone, reduced-motion, deep-link, and pre-
-   upgrade exemplar, then approve or reject it without promoting a shared
-   schema.
-3. After approval, pressure the attention boundary with generated solve-x, then
-   promote only the document, passage, control, and reader contracts both
-   callers prove.
-4. Select one nearer transformation exemplar without resuming the tabled
+1. Execute the approved botanical Lisp/shared-lesson contract, beginning with
+   the exact Lisp semantic asset and reversible botanical catalogue exemplar.
+2. Publish the Lisp function-application tutorial locally with continuous
+   prose, two cumulative motion blocks, semantic URLs, progressive controls,
+   and the economics reader baseline.
+3. Compare economics, Lisp, and `KpLessonDocument`; extract only proven shared
+   lesson document, navigation, control, motion, publication, layout-token, and
+   replaceable Svelte-host seams. Preserve domain stages and semantics.
+4. Stop for human review of the botanical language and shared lesson
+   ergonomics, then use generated solve-x as a third caller before broad
+   rollout.
+5. Select one nearer transformation exemplar without resuming the tabled
    matrix-to-linear-map run. Place-value subtraction remains the recommended
    default when animation-library promotion resumes.
-5. Revisit what evidence should replace the old matrix-specific host-pressure
+6. Revisit what evidence should replace the old matrix-specific host-pressure
    gate before generalizing the Svelte seam or adopting SvelteKit, then resume
    the Internal Studio and Public Web sequence.
-6. Complete M4 before internal M5 editorial candidates, and build the
+7. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

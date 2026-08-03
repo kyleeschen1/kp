@@ -1,0 +1,11 @@
+{
+  "id": "next-action.kp.botanical-lisp-shared-lesson-v0",
+  "kind": "next-action",
+  "title": "Build botanical Lisp and extract shared lesson seams",
+  "status": "ready",
+  "domain": "kp",
+  "progress": {
+    "state": "partial",
+    "summary": "Approved 28-slice contract activated; economics baseline, Lisp semantic exemplar, shared-lesson boundary, verification tiers, deferrals, and stop conditions are now durable. Production work begins with the minimal Lisp semantic model in s02."
+  }
+}

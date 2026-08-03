@@ -1,15 +1,14 @@
 # Explanation and Attention Thread
 
 Status: active-supporting
-Last Updated: 2026-08-02
-Current Next Action: Execute the approved economics motion-block and
-progressive-publication exemplar at `/tutorials/economics/demand-shift/`.
-Replace crossing-triggered autoplay with two independently controlled local
-scroll corridors, cumulative state reconstruction, semantic deep links, a
-progressively enhanced TOC and scrubber, bounded stage composition motifs,
-graph-plane label backings, and the solid reading pointer. Stop at the renewed
-economics human checkpoint; do not generalize the lesson compiler, reader,
-motifs, or component contracts or begin the solve-x caller before approval.
+Last Updated: 2026-08-03
+Current Next Action: Execute the approved botanical Lisp and shared-lesson
+contract in
+`../reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`.
+Build the Lisp semantic asset and local tutorial first; only then compare it
+with the completed economics caller and extract lifecycle-identical lesson
+mechanics. Generated solve-x remains the third caller. Do not promote botanical
+motifs, adopt SvelteKit, or change the animation-promotion ledger.
 
 ## Goal
 
@@ -50,14 +49,14 @@ A quiet wide-screen gutter diamond marks the `38vh` reading band. At the
 divider, the Play button lifts through transform while a pre-rendered
 pseudo-element shadow fades in; phones omit the fixed marker.
 
-The approved successor is recorded in
+The implemented successor is recorded in
 `decisions/2026-08-02-kp-motion-blocks-and-progressive-tutorial-navigation.md`.
 Each meaningful multi-step animation now owns one stable motion block with its
 own text-free controls and local semantic timeline. A viewport-relative
 corridor seeks that active timeline continuously; manual control takes over and
 later scroll resumes from the visible frame without jumping. Motion blocks
-compose cumulatively. The economics exemplar will prove two blocks before any
-shared contract is inferred.
+compose cumulatively. The economics exemplar now proves two blocks; no shared
+contract was inferred inside that one-caller loop.
 
 The same decision adds semantic deep links, deterministic state restoration, a
 progressively enhanced `kp-tutorial-toc`, pre-rendered scrub controls, the
@@ -67,9 +66,13 @@ authority.
 
 The first exemplar is the approved economics supply-demand equilibrium asset.
 Its lesson asks why increased demand raises both equilibrium price and quantity
-when supply remains fixed. The generated solve-x lesson is the second caller.
-Shared passage, control, reader, or authoring contracts wait until both callers
-demonstrate the boundary.
+when supply remains fixed. The accepted second caller is now the botanical Lisp
+function-application tutorial, recorded in
+`decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
+It replaces generated solve-x because the user chose stronger cross-domain
+pressure; solve-x remains the recommended third caller. Shared passage,
+control, reader, or authoring contracts wait until the completed economics and
+Lisp callers demonstrate the same lifecycle.
 
 ## Delivered Economics Exemplar
 
@@ -106,6 +109,12 @@ The delivered exemplar includes:
 - conventional first-line indents for lesson body paragraphs;
 - economics-local rollback and preservation boundaries.
 
+The 28-slice motion-block/publication loop is resolved. Subsequent human-
+requested refinements place a fixed TOC to the left of the prose, keep it
+vertically centered, strengthen the always-solid reading pointer, widen the
+three-column gutters, and increase prose line height. These refinements are now
+part of the economics reference baseline for the next caller.
+
 ## Accepted Product Boundary
 
 After editorial approval, the first implementation is one bounded internal
@@ -126,12 +135,13 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 2. Economics-local Svelte 5 integrated exemplar with cheap preservation checks.
    Complete.
 3. Economics-local two-block, scroll-corridor, deep-link, TOC, progressive-
-   enhancement, and stage-composition revision. Current approved loop.
-4. Human review of cadence, choreography, controls, wide layout, phone dock,
-   navigation, and performance.
-5. Generated solve-x as a structurally different second caller.
-6. Promotion of only caller-proven shared attention and document contracts.
-7. Broader responsive, accessibility, cross-browser, and release checks.
+   enhancement, and stage-composition revision. Complete.
+4. Human review and requested navigation/typography refinements. Complete.
+5. Botanical Lisp semantic asset and local tutorial as the structurally
+   different second caller. Next proposed loop.
+6. Comparison of economics, Lisp, and the existing lesson document, followed
+   by promotion of only caller-proven shared lesson mechanics.
+7. Generated solve-x as a third caller before broad lesson rollout.
 
 ## Out Of Scope
 
@@ -144,34 +154,26 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 - SvelteKit adoption, Public Web, or a Public Editor during discovery;
 - live or runtime LLM prose generation;
 - consumer/producer-surplus or deadweight-loss teaching in this lesson;
-- a generic reader schema or catalogue-wide rollout before solve-x pressure.
+- a generic programming-language pack, universal scene graph, or catalogue-
+  wide lesson rollout inside the two-caller loop.
 
-## Open Human Questions
+## Next Human Questions
 
-- Does the persistent stage coordinate attention without making the prose feel
-  subordinate or crowded?
-- Are Previous/Play/Next and the marked scrubber sufficient for both conceptual
-  and fine-grained control?
-- Does the block-level scrub boundary make both downward play and upward rewind
-  feel expected rather than surprising?
-- Does the gutter marker make the reading height legible without becoming
-  visible machinery, and does the divider lift feel gradual rather than
-  decorative?
-- Does mirrored direction reversal eliminate every curve jump?
-- Does attenuation make the target unmistakable without obscuring causally
-  necessary context?
-- Is the hybrid page wash strong enough without making surrounding prose feel
-  unavailable?
-- Are the two apertures soft enough, and does the wide stage now feel genuinely
-  contiguous with the page?
-- Is the phone dock large enough to read while leaving enough room for prose?
-- Should any local cadence, emphasis, or control detail change before solve-x
-  pressures the boundary?
+- Does the botanical material clarify recursive identity and binding without
+  competing with native code?
+- Are the two Lisp motion blocks calm enough to preserve the continuous-prose
+  cadence established by economics?
+- Which lesson-shell behaviors are genuinely identical across graph and code
+  stages, and which should remain domain-local adapters?
+- After the shared seam is visible in both callers, does generated solve-x
+  expose any equation-specific pressure before wider lesson adoption?
 
 ## Links
 
 - `docs/project/decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
 - `docs/project/decisions/2026-08-02-kp-salience-transmission-engine.md`
+- `docs/project/decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`
+- `docs/project/reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-economics-demand-shift-lesson-draft.md`
 - `docs/project/reviews/2026-08-02-economics-text-animation-editorial-checkpoint.md`
 - `docs/project/reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`

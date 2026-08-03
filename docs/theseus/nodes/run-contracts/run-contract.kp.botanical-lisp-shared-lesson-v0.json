@@ -1,0 +1,222 @@
+{
+  "id": "run-contract.kp.botanical-lisp-shared-lesson-v0",
+  "kind": "run-contract",
+  "title": "Botanical Lisp and shared lesson seams",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.botanical-lisp-shared-lesson-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md",
+      "summary": "Human-approved rationale, exact 28 slices, risks, checks, commit cadence, preservation boundary, deferrals, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md",
+      "summary": "Accepted priority replacement and caller-proven shared lesson architecture boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:botanical-lisp-tutorial",
+    "npm run visual:botanical-lisp-asset",
+    "npm run visual:botanical-lisp-tutorial",
+    "npm run performance:botanical-lisp-tutorial",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-demand-shift-tutorial",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:promotion-memory",
+    "npm test",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s01 durable promotion-ledger preservation",
+      "checkedAt": "2026-08-03T16:31:56.670Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 typed contract and workspace integrity",
+      "checkedAt": "2026-08-03T16:31:57.965Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s01 project-memory and contract patch hygiene",
+      "checkedAt": "2026-08-03T16:31:58.923Z"
+    }
+  ],
+  "allowedWork": [
+    "Minimal Lisp semantics, exact evaluator fixture, canonical asset, runtime frames, native settled renderer, and Lisp-local botanical presentation.",
+    "One internal botanical Lisp catalogue asset and one internal tutorial route at /tutorials/programming/lisp-function-application/.",
+    "Reuse existing tutorial URL, TOC, scrubber, review, runtime, catalogue, and Svelte host boundaries.",
+    "After the local Lisp tutorial passes, compare economics, Lisp, and KpLessonDocument and extract only lifecycle-identical lesson mechanics.",
+    "Migrate economics and Lisp to caller-proven shared document, motion, navigation, control, token, and replaceable Svelte lesson-shell seams.",
+    "Add stable scoped unit, browser, visual, accessibility, performance, architecture, and release evidence.",
+    "Delete only local mechanics made obsolete by the verified two-caller migration."
+  ],
+  "disallowedWork": [
+    "Do not implement a general Lisp parser, VM, meta-circular evaluator, quote, closures, continuations, macros, arbitrary execution, or other languages.",
+    "Do not promote botanical motifs or create a generic programming-language pack, universal scene graph, stage grammar, motif registry, or animation schema.",
+    "Do not implement generated solve-x, SvelteKit, Internal Studio, Public Web, mission site, Public Editor, or catalogue-wide lesson rollout.",
+    "Do not move domain semantics, clocks, renderer truth, stage choreography, or salience profiles into Svelte or shared lesson code.",
+    "Do not change economics semantics, approved visuals, URLs, performance ceilings, or the stable animation-promotion ledger.",
+    "Do not add client KaTeX, client syntax-highlighter bundles, live LLM prose, or runtime editorial calls.",
+    "Stop on identity inferred from glyph equality, invented evaluator semantics, loss of native settled code, nondeterministic seek/rewind, provenance gaps, scroll jumps, multiple samplers, economics regression, domain branches in shared code, wider budgets, unrelated-file overlap, missing proof, or the final human checkpoint."
+  ],
+  "goal": "Build an exact botanical Lisp function-application asset and tutorial, then extract only lesson mechanics proven by both Lisp and the approved economics tutorial while preserving framework-neutral semantic and renderer authority.",
+  "target": "next-action.kp.botanical-lisp-shared-lesson-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Activate contract and freeze baselines",
+      "summary": "Activated the human-approved 28-slice contract, aligned roadmap and supporting threads, froze the economics preservation baseline and Lisp acceptance boundary, and kept the matrix promotion ledger unchanged. Promotion-memory, workspace validation, and patch hygiene pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Define minimal Lisp semantic model",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add exact lambda evaluator fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Compile canonical Lisp animation asset",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Project deterministic Lisp runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Render native settled S-expressions",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Plan local botanical presentation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Render reversible botanical animation",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Register catalogue asset and visual harness",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Author canonical Lisp lesson prose",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Compile local Lisp publication payload",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Host local Svelte tutorial route",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Bind application and substitution motion block",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Bind cumulative evaluation motion block",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Add Lisp salience projection",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Restore semantic deep links transactionally",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Coordinate scroll and manual ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Complete responsive and accessible projections",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Certify local tutorial visuals and performance",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Compare economics Lisp and lesson document seams",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Reconcile shared lesson publication document",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Extract shared motion and scroll mechanics",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Extract shared navigation transactions",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Extract shared static publication controls",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Extract shared lesson shell and tokens",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Migrate economics and prune superseded mechanics",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Migrate Lisp and prove shared conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Close release evidence and human checkpoint",
+      "status": "planned"
+    }
+  ]
+}

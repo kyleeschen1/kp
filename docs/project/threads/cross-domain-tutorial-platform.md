@@ -1,11 +1,11 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active-supporting
-Last Updated: 2026-08-02
-Current Next Action: Human-review the bounded economics Svelte 5 tutorial at
-`/tutorials/economics/demand-shift/`. Generated solve remains the approved
-second caller; shared-schema promotion, M4, and live-model work do not advance
-during this integrated checkpoint.
+Last Updated: 2026-08-03
+Current Next Action: Build botanical Lisp as the second tutorial caller, then
+extract only lesson mechanics proven by both it and the completed economics
+route. Generated solve remains the third caller; shared-domain schemas, M4,
+SvelteKit, and live-model work do not advance in this loop.
 
 ## Goal
 
@@ -32,17 +32,20 @@ contracts, and retired four zero-caller rendering facades. Older symbolic,
 capability-pressure, and six-loop records retain rationale but do not
 independently override this stable ledger.
 
-The immediate tutorial priority is now the text-animation attention problem,
+The immediate tutorial priority remains the text-animation attention problem,
 owned by `threads/explanation-attention.md` and recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.
 The economics equilibrium asset now supports one continuous four-section
 argument with static passage preparation and explicit learner-triggered motion
 at a dedicated internal URL. The source remains Markdown, while a local Svelte
-host composes the existing framework-neutral asset and runtime. The exemplar is
-at its integrated human checkpoint. Generated solve-x then pressures the
-boundary before any continuous-prose schema or shared lesson host is promoted.
-This changes the near-term tutorial order without changing the stable
-animation-promotion ledger.
+host composes the existing framework-neutral asset and runtime. The economics
+exemplar has completed its motion-block, publication, navigation, and rhythm
+revisions. The user selected botanical Lisp as the structurally different
+second caller before any continuous-prose schema or shared lesson host is
+promoted. The accepted boundary is recorded in
+`decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
+Generated solve-x remains a lower-risk third caller. This changes the near-term
+tutorial order without changing the stable animation-promotion ledger.
 
 The same ledger now owns the platform gates around that content order. After
 the four early visible exemplars, KP declared public API tiers and will compile
@@ -170,11 +173,13 @@ The retained cross-domain decision is to expand through capability-opening
 vertical exemplars instead of either perfecting every equation indefinitely or
 building universal renderer abstractions in advance.
 
-The semantic explanatory atlas is now retained as an exploratory design lane.
-Its programming-language and topology specs define subject-native semantic
-packs and exemplar checkpoints without authorizing implementation or changing
-the active product order. The decision is recorded in
-`decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`.
+The semantic explanatory atlas remains an exploratory design lane, but its
+smallest botanical Lisp checkpoint is now selected for bounded implementation.
+This does not authorize the wider programming-language pack, topology work, or
+meta-circular evaluator. The original lane is recorded in
+`decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`; the bounded
+caller decision is recorded in
+`decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
 
 The core pedagogical principle is the hermeneutic loop, realized as sparse
 typed interpretive cycles that establish a whole, isolate a part, relate it
@@ -257,6 +262,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 ## Links
 
 - `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
+- `docs/project/decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`
+- `docs/project/reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/threads/animation-catalogue.md`
 - `docs/project/decisions/2026-07-31-kp-animation-catalogue-first-simplification.md`
