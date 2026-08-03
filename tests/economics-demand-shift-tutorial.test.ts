@@ -27,6 +27,10 @@ import {
   projectKpEconomicsScrollFrame
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-coordinator.ts";
 import {
+  kpEconomicsStageCompositionInterval,
+  projectKpEconomicsStageComposition
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-stage-composition.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute,
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
@@ -88,10 +92,17 @@ test("economics defines two local motion blocks with exact scene handoff", () =>
 });
 
 test("lesson motion projection settles predecessors and ignores DOM history", () => {
-  assert.deepEqual(projectKpEconomicsLessonMotion({
+  const shifting = projectKpEconomicsLessonMotion({
     activeBlockId: "demand-shift",
     localProgress: 0.4
-  }), {
+  });
+  assert.deepEqual({
+    activeBlockId: shifting.activeBlockId,
+    blocks: shifting.blocks,
+    demandShiftProgress: shifting.demandShiftProgress,
+    supplyMovementProgress: shifting.supplyMovementProgress,
+    scene: shifting.scene
+  }, {
     activeBlockId: "demand-shift",
     blocks: [
       { id: "demand-shift", status: "active", progress: 0.4 },
@@ -102,10 +113,17 @@ test("lesson motion projection settles predecessors and ignores DOM history", ()
     scene: { market: "shifting", presentation: "graph-only" }
   });
 
-  assert.deepEqual(projectKpEconomicsLessonMotion({
+  const tracing = projectKpEconomicsLessonMotion({
     activeBlockId: "supply-movement",
     localProgress: 0.58
-  }), {
+  });
+  assert.deepEqual({
+    activeBlockId: tracing.activeBlockId,
+    blocks: tracing.blocks,
+    demandShiftProgress: tracing.demandShiftProgress,
+    supplyMovementProgress: tracing.supplyMovementProgress,
+    scene: tracing.scene
+  }, {
     activeBlockId: "supply-movement",
     blocks: [
       { id: "demand-shift", status: "settled", progress: 1 },
@@ -128,6 +146,117 @@ test("lesson motion projection settles predecessors and ignores DOM history", ()
     activeBlockId: "demand-shift",
     localProgress: Number.NaN
   }).demandShiftProgress, 0);
+  assert.equal(shifting.composition.phase, "merged");
+  assert.equal(tracing.composition.phase, "merged");
+});
+
+test("economics stage composition has stable reversible merge and split endpoints", () => {
+  const merged = projectKpEconomicsStageComposition(
+    kpEconomicsStageCompositionInterval.start
+  );
+  const midpoint = projectKpEconomicsStageComposition(0.71);
+  const split = projectKpEconomicsStageComposition(
+    kpEconomicsStageCompositionInterval.end
+  );
+
+  assert.deepEqual(merged, {
+    phase: "merged",
+    progress: 0,
+    stage: {
+      id: "economics-stage",
+      rect: { inline: 0, block: 0, inlineSize: 1, blockSize: 1 }
+    },
+    slots: [
+      {
+        id: "graph-slot",
+        rect: { inline: 0, block: 0, inlineSize: 1, blockSize: 1 }
+      },
+      {
+        id: "verification-slot",
+        rect: { inline: 0.7, block: 0.14, inlineSize: 0.28, blockSize: 0.72 }
+      }
+    ],
+    aperture: {
+      id: "verification-aperture",
+      edge: "inline-end",
+      openness: 0,
+      rect: { inline: 0.98, block: 0.14, inlineSize: 0, blockSize: 0.72 }
+    },
+    surfaces: [
+      {
+        id: "market-graph",
+        slotId: "graph-slot",
+        lifecycle: "present",
+        rect: { inline: 0, block: 0, inlineSize: 1, blockSize: 1 }
+      },
+      {
+        id: "equilibrium-verification",
+        slotId: "verification-slot",
+        lifecycle: "outside",
+        rect: { inline: 0.98, block: 0.14, inlineSize: 0.28, blockSize: 0.72 }
+      }
+    ]
+  });
+  assert.equal(midpoint.phase, "composing");
+  assert.equal(midpoint.progress, 0.5);
+  assert.deepEqual(midpoint.slots[0]!.rect, {
+    inline: 0.01,
+    block: 0.015,
+    inlineSize: 0.8200000000000001,
+    blockSize: 0.97
+  });
+  assert.deepEqual(split, {
+    phase: "split",
+    progress: 1,
+    stage: merged.stage,
+    slots: [
+      {
+        id: "graph-slot",
+        rect: { inline: 0.02, block: 0.03, inlineSize: 0.64, blockSize: 0.94 }
+      },
+      merged.slots[1]
+    ],
+    aperture: {
+      id: "verification-aperture",
+      edge: "inline-end",
+      openness: 1,
+      rect: { inline: 0.7, block: 0.14, inlineSize: 0.28, blockSize: 0.72 }
+    },
+    surfaces: [
+      {
+        id: "market-graph",
+        slotId: "graph-slot",
+        lifecycle: "present",
+        rect: { inline: 0.02, block: 0.03, inlineSize: 0.64, blockSize: 0.94 }
+      },
+      {
+        id: "equilibrium-verification",
+        slotId: "verification-slot",
+        lifecycle: "settled",
+        rect: { inline: 0.7, block: 0.14, inlineSize: 0.28, blockSize: 0.72 }
+      }
+    ]
+  });
+  assert.deepEqual(
+    projectKpEconomicsStageComposition(Number.NaN),
+    projectKpEconomicsStageComposition(-1)
+  );
+  assert.deepEqual(
+    projectKpEconomicsStageComposition(1),
+    projectKpEconomicsStageComposition(4)
+  );
+  assert.equal(Object.isFrozen(split), true);
+  assert.equal(Object.isFrozen(split.slots), true);
+  assert.equal(Object.isFrozen(split.slots[0]!.rect), true);
+
+  const sampleInputs = Array.from({ length: 101 }, (_, index) => index / 100);
+  const reverseSamples = [...sampleInputs].reverse().map((progress) =>
+    projectKpEconomicsStageComposition(progress).progress
+  ).reverse();
+  const forwardSamples = sampleInputs.map((progress) =>
+    projectKpEconomicsStageComposition(progress).progress
+  );
+  assert.deepEqual(reverseSamples, forwardSamples);
 });
 
 test("viewport corridors preserve authored holds in both scroll directions", () => {
