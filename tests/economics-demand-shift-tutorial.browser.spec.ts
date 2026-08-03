@@ -254,6 +254,15 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(pointerProjection.filter).toContain("drop-shadow");
   expect(pointerProjection.zIndex).toBeGreaterThan(1);
   expect(pointerProjection.right).toBeLessThan(demandTextBox!.x);
+  await expect.poll(() => demandChange.evaluate((element) => ({
+    rail: getComputedStyle(element).borderLeftColor,
+    pointer: getComputedStyle(document.querySelector(
+      "[data-kp-economics-tutorial-reading-band]"
+    )!).backgroundColor
+  }))).toEqual({
+    rail: "rgb(122, 157, 168)",
+    pointer: "rgb(122, 157, 168)"
+  });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
     .toContain("opacity(1)");
@@ -366,6 +375,10 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
   await expect(root.locator(".kp-economics-tutorial__stage-header strong"))
     .toHaveText("New equilibrium");
+  const settledDividerBox = await motionCue.boundingBox();
+  expect(settledDividerBox).not.toBeNull();
+  expect(settledDividerBox!.width).toBeCloseTo(dividerBox!.width, 1);
+  expect(settledDividerBox!.height).toBeCloseTo(dividerBox!.height, 1);
 
   await demandChange.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
@@ -813,6 +826,30 @@ test("verification surface enters and exits without changing outer stage geometr
   }))).toEqual({
     clipPath: "inset(0px 0px 0px 50%)",
     travel: expect.not.stringMatching(/^none$/)
+  });
+  const midpointGeometry = await host.evaluate((element) => {
+    const stage = element.getBoundingClientRect();
+    const graph = element.querySelector<HTMLElement>(
+      ".editor-animation-player__surface--graph"
+    )!.getBoundingClientRect();
+    const verification = element.querySelector<HTMLElement>(
+      "[data-kp-economics-stage-aperture]"
+    )!.getBoundingClientRect();
+    const visibleVerificationLeft = verification.left + verification.width / 2;
+    const envelopeLeft = Math.min(graph.left, visibleVerificationLeft);
+    const envelopeRight = Math.max(graph.right, verification.right);
+    return {
+      stageCenter: stage.left + stage.width / 2,
+      compositionCenter: (envelopeLeft + envelopeRight) / 2
+    };
+  });
+  expect(Math.abs(
+    midpointGeometry.compositionCenter - midpointGeometry.stageCenter
+  )).toBeLessThan(3);
+  await mkdir(evidenceDirectory, { recursive: true });
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-composition-midpoint.png`,
+    fullPage: false
   });
 
   await supplyScrubber.fill("0.84");

@@ -31,6 +31,7 @@ summary {
   --kp-tutorial-muted: #667983;
   --kp-tutorial-border: #d8d5cc;
   --kp-tutorial-paper: #fffdf8;
+  --kp-tutorial-reading-rail: #7a9da8;
   --kp-tutorial-focus-supply: 1;
   --kp-tutorial-focus-demand: 1;
   --kp-tutorial-focus-equilibrium: 0.9;
@@ -235,7 +236,7 @@ kp-tutorial-toc {
   z-index: 7;
   width: 0.72rem;
   height: 0.8rem;
-  background: #7a9da8;
+  background: var(--kp-tutorial-reading-rail);
   clip-path: polygon(0 0, 100% 50%, 0 100%);
   filter: drop-shadow(0 1px 1px rgb(38 56 69 / 0.3));
   opacity: var(--kp-tutorial-reading-band-opacity);
@@ -311,7 +312,7 @@ kp-tutorial-toc {
 }
 
 .kp-economics-tutorial__passage--active {
-  border-left-color: #7a9da8;
+  border-left-color: var(--kp-tutorial-reading-rail);
   background: rgb(255 253 248 / 0.72);
 }
 

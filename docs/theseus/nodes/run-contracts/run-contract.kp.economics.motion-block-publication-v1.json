@@ -521,6 +521,20 @@
       "scope": "s23",
       "checkedAt": "2026-08-03T07:59:10.288Z",
       "notes": "Active pointer refinement has no whitespace errors."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-03T08:04:57.974Z",
+      "notes": "Ten Chromium checks pass and refresh the stable wide contact set; merged, midpoint, and split compositions stay centered, motion-box geometry is invariant, and rail/pointer color is one local token."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-03T08:04:59.132Z",
+      "notes": "Wide exemplar tuning has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -685,7 +699,8 @@
     {
       "id": "s24",
       "title": "Tune-wide-exemplar",
-      "status": "planned"
+      "summary": "Kept the approved wide composition intact, unified pointer and active rail color behind one economics-local token, proved stable motion-box geometry, and added deterministic midpoint evidence showing the graph plus ingress composition remains visually centered without shared-motif promotion.",
+      "status": "complete"
     },
     {
       "id": "s25",
