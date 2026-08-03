@@ -451,6 +451,34 @@
       "scope": "s20",
       "checkedAt": "2026-08-03T07:38:17.218Z",
       "notes": "Active semantic URL contract diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-08-03T07:48:56.395Z",
+      "notes": "Twenty-four focused tests pass; direct section, block, and checkpoint links resolve valid prose, exact cumulative demand/supply progress, composition, reveal, scene, focus, and scroll travel, while invalid links fall back to the lesson start."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-08-03T07:48:57.561Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after initial deep-link state became an explicit immutable input."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-08-03T07:48:58.486Z",
+      "notes": "Nine Chromium checks pass; handoff, movement-verified, and model-scope direct document loads render exact state without predecessor replay and remain stable after coordinator/font initialization."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-08-03T07:48:59.392Z",
+      "notes": "Active deep-link restoration diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -597,7 +625,8 @@
     {
       "id": "s21",
       "title": "Restore-deep-link-state",
-      "status": "planned"
+      "summary": "Resolved semantic hashes before animation preparation into one immutable complete initial economics projection, including prose/focus, cumulative block state, exact player playhead, stage composition, reveal, TOC/scrubbers, and deterministic scroll placement; initialization projections are suppressed until deliberate scrolling so no predecessor or intermediate state replays.",
+      "status": "complete"
     },
     {
       "id": "s22",

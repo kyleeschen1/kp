@@ -26,12 +26,16 @@ import KpEconomicsDemandShiftTutorial from
 import {
   compileKpEconomicsDemandShiftPublication
 } from "./economics-demand-shift-publication.ts";
+import {
+  resolveKpEconomicsDemandShiftInitialDestination
+} from "./economics-demand-shift-deep-link.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
   readonly search: string;
+  readonly hash: string;
 }): Promise<() => void> {
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
@@ -43,14 +47,18 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   if (entry === undefined) {
     throw new Error("Economics demand-shift tutorial asset is not catalogued.");
   }
+  const publication = compileKpEconomicsDemandShiftPublication(lessonMarkdown);
+  const initialDestination = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson: publication.lesson,
+    hash: input.hash
+  });
   const prepared = await createKpAnimationCatalogueSelectionPreparationService({
     descriptors
   }).prepare({
     entry,
     search: input.search,
-    playhead: 0
+    playhead: initialDestination.motion.demandShiftProgress
   });
-  const publication = compileKpEconomicsDemandShiftPublication(lessonMarkdown);
   const component = mount(KpEconomicsDemandShiftTutorial, {
     target: input.root,
     props: {
@@ -63,6 +71,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       tocHtml: publication.tocHtml,
       motionScrubBarHtml: publication.motionScrubBarHtml,
       verificationSurfaceHtml: publication.verificationSurfaceHtml,
+      initialDestination,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }

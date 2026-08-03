@@ -31,6 +31,9 @@
   import type {
     KpEconomicsDemandShiftLesson
   } from "./economics-demand-shift-lesson-compiler.ts";
+  import type {
+    KpEconomicsDemandShiftInitialDestination
+  } from "./economics-demand-shift-deep-link.ts";
   import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
@@ -118,6 +121,7 @@
     animation,
     hostability,
     initialDemandIntercept,
+    initialDestination,
     lesson,
     motionScrubBarHtml,
     tocHtml,
@@ -129,12 +133,14 @@
     readonly animation: KpAnimationAsset;
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
+    readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
     readonly verificationSurfaceHtml: string;
   } = $props();
 
+  const initialDeepLink = untrack(() => initialDestination);
   const initial = untrack(() => ({
     progress: initialPlayer.progress,
     playbackStatus: initialPlayer.playbackStatus,
@@ -151,7 +157,7 @@
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
-  let checkpointIndex = $state(0);
+  let checkpointIndex = $state(initialDeepLink.checkpointIndex);
   let progress = $state(initial.progress);
   let playbackStatus = $state(initial.playbackStatus);
   let playbackDirection = $state(initial.playbackDirection);
@@ -159,7 +165,11 @@
   let ready = $state(false);
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
-  let announcement = $state("Initial market ready.");
+  let announcement = $state(
+    initialDeepLink.destination === undefined
+      ? "Initial market ready."
+      : `Opened ${initialDeepLink.destination.kind} ${initialDeepLink.destination.id}.`
+  );
   let motionOwner = $state<KpEconomicsTutorialMotionOwner>("untouched");
   let manualMotionBlock = $state<KpEconomicsMotionBlockId | undefined>();
   let scrollTimelineStatus = $state<KpEconomicsTutorialScrollTimelineStatus>(
@@ -168,7 +178,9 @@
   let reducedMotion = $state(false);
   let readingBandProximity = $state(0);
   let scrollCoordinatorStatus = $state<"pending" | "connected">("pending");
-  let scrollActiveMotionBlock = $state("");
+  let scrollActiveMotionBlock = $state<KpEconomicsMotionBlockId | "">(
+    initialDeepLink.motion.activeBlockId
+  );
   let attentionFrame: number | undefined;
   let attentionResizeObserver: ResizeObserver | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
@@ -177,18 +189,14 @@
   let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
   let latestScrollProjection: KpEconomicsCoordinatedScrollProjection | undefined;
   let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
+  let initialNavigationPending = initialDeepLink.destination !== undefined;
   let supplyPlaybackStatus = $state<"paused" | "playing" | "complete">(
     "paused"
   );
   let supplyPlaybackDirection = $state<"forward" | "rewind">("forward");
   let supplyPlaybackFrame: number | undefined;
   let supplyPlaybackLastMs: number | undefined;
-  let lessonMotionProjection = $state(projectKpEconomicsLessonMotion({
-    activeBlockId: "demand-shift",
-    localProgress: initial.playbackDirection === "rewind"
-      ? 1 - initial.progress
-      : initial.progress
-  }));
+  let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
   let equationsVisible = $derived(
@@ -769,6 +777,9 @@
     projection: KpEconomicsCoordinatedScrollProjection
   ): void {
     latestScrollProjection = projection;
+    if (initialNavigationPending && projection.scrollChanged) {
+      initialNavigationPending = false;
+    }
     scrollActiveMotionBlock = projection.activeBlockId ?? "";
     const active = projection.blocks.find(({ ownsScroll }) => ownsScroll);
     const activeScrubBar = active?.id === "supply-movement"
@@ -782,7 +793,9 @@
       });
       const manualCanResume = motionOwner === "manual" &&
         projection.scrollChanged;
-      const mayProjectScroll = motionOwner !== "manual" || manualCanResume;
+      const mayProjectScroll = !initialNavigationPending && (
+        motionOwner !== "manual" || manualCanResume
+      );
       if (!reducedMotion && ready && player !== undefined && mayProjectScroll && (
         motionOwner === "scroll" ||
         manualCanResume ||
@@ -824,7 +837,7 @@
         seek(lessonMotionProjection.demandShiftProgress);
       }
     }
-    updateReadingBandSelection();
+    if (!initialNavigationPending) updateReadingBandSelection();
     updateAttentionProjection();
   }
 
@@ -918,6 +931,7 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
+    restoreInitialDestinationScroll();
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -1044,6 +1058,42 @@
     return `${(value * 100).toFixed(4)}%`;
   }
 
+  function restoreInitialDestinationScroll(): void {
+    if (shell === undefined || initialDeepLink.destination === undefined) {
+      return;
+    }
+    if (initialDeepLink.motionScroll !== undefined) {
+      const block = findKpEconomicsMotionBlock(
+        initialDeepLink.motionScroll.blockId
+      )!;
+      const anchor = initialDeepLink.motionScroll.blockId ===
+          "supply-movement"
+        ? supplyScrubBar
+        : demandScrubBar;
+      if (anchor === undefined) return;
+      const start = block.corridor.startViewportRatio * window.innerHeight;
+      const end = block.corridor.endViewportRatio * window.innerHeight;
+      const endpointInset = initialDeepLink.motionScroll.travel <= 0.001
+        ? 2
+        : initialDeepLink.motionScroll.travel >= 0.999
+          ? -2
+          : 0;
+      const desiredTop = start -
+        initialDeepLink.motionScroll.travel * (start - end) + endpointInset;
+      window.scrollTo({
+        top: Math.max(
+          0,
+          window.scrollY + anchor.getBoundingClientRect().top - desiredTop
+        ),
+        behavior: "auto"
+      });
+      return;
+    }
+    shell.querySelector<HTMLElement>(
+      `#${initialDeepLink.targetElementId}`
+    )?.scrollIntoView({ block: "start", behavior: "auto" });
+  }
+
   function writeScrubBarAttributes(
     scrubBar: KpTutorialScrubBarElement | undefined,
     attributes: Readonly<Record<string, string | number | boolean>>
@@ -1096,6 +1146,9 @@
   data-kp-economics-tutorial-scroll-timeline={scrollTimelineStatus}
   data-kp-economics-tutorial-scroll-coordinator={scrollCoordinatorStatus}
   data-kp-economics-tutorial-scroll-active-block={scrollActiveMotionBlock}
+  data-kp-economics-tutorial-initial-destination={initialDeepLink.destination === undefined
+    ? ""
+    : `${initialDeepLink.destination.kind}:${initialDeepLink.destination.id}`}
   data-kp-economics-tutorial-demand-progress={lessonMotionProjection.demandShiftProgress.toFixed(3)}
   data-kp-economics-tutorial-supply-movement-progress={supplyMovementProgress.toFixed(3)}
   data-kp-economics-tutorial-scene-market={lessonMotionProjection.scene.market}

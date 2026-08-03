@@ -25,7 +25,8 @@ async function bootstrap(): Promise<void> {
     );
     const dispose = await tutorial.mountKpEconomicsDemandShiftTutorial({
       root,
-      search: window.location.search
+      search: window.location.search,
+      hash: window.location.hash
     });
     window.addEventListener("pagehide", dispose, { once: true });
     return;

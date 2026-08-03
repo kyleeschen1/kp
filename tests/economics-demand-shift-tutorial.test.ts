@@ -16,6 +16,9 @@ import {
   compileKpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 import {
+  resolveKpEconomicsDemandShiftInitialDestination
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-deep-link.ts";
+import {
   findKpEconomicsMotionBlock,
   findKpEconomicsMotionCheckpoint,
   kpEconomicsMotionBlocks,
@@ -112,6 +115,60 @@ test("semantic tutorial URLs round-trip without choreography coordinates", () =>
     }),
     /require a section, block, or checkpoint slug/
   );
+});
+
+test("semantic deep links resolve complete cumulative economics state", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  const lesson = compileKpEconomicsDemandShiftLesson(markdown);
+  const handoff = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson,
+    hash: "#kp-checkpoint-shift-handoff"
+  });
+  assert.equal(handoff.passageId, "follow-shift");
+  assert.equal(handoff.motion.demandShiftProgress, 0.72);
+  assert.equal(handoff.motion.supplyMovementProgress, 0);
+  assert.equal(handoff.motion.scene.market, "shifting");
+  assert.equal(handoff.motionScroll?.travel, 0.57);
+
+  const supplyBlock = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson,
+    hash: "#kp-block-supply-movement"
+  });
+  assert.equal(supplyBlock.passageId, "shift-versus-movement");
+  assert.equal(supplyBlock.motion.demandShiftProgress, 1);
+  assert.equal(supplyBlock.motion.supplyMovementProgress, 0);
+  assert.equal(supplyBlock.motionScroll?.travel, 0);
+
+  const verified = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson,
+    hash: "#kp-checkpoint-movement-verified"
+  });
+  assert.equal(verified.motion.demandShiftProgress, 1);
+  assert.equal(verified.motion.supplyMovementProgress, 1);
+  assert.equal(verified.motion.scene.presentation, "comparison-verified");
+  assert.equal(verified.motion.composition.phase, "split");
+  assert.equal(verified.motion.verification.phase, "verified");
+
+  const modelScope = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson,
+    hash: "#kp-section-model-scope"
+  });
+  assert.equal(modelScope.passageId, "scope");
+  assert.equal(modelScope.motion.demandShiftProgress, 1);
+  assert.equal(modelScope.motion.supplyMovementProgress, 1);
+  assert.equal(modelScope.motionScroll, undefined);
+
+  const invalid = resolveKpEconomicsDemandShiftInitialDestination({
+    lesson,
+    hash: "#kp-checkpoint-0.72"
+  });
+  assert.equal(invalid.destination, undefined);
+  assert.equal(invalid.passageId, "context");
+  assert.equal(invalid.motion.demandShiftProgress, 0);
+  assert.equal(invalid.motion.supplyMovementProgress, 0);
 });
 
 test("economics defines two local motion blocks with exact scene handoff", () => {

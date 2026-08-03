@@ -933,6 +933,107 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
   await expect(toc.locator("[aria-current]")).toHaveCount(1);
 });
 
+test("direct semantic links restore complete cumulative state without replay", async ({
+  page
+}) => {
+  await page.goto(`${route}?direct=handoff#kp-checkpoint-shift-handoff`);
+  let root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  let player = root.locator("[data-kp-editor-animation-player]");
+  let toc = root.locator("kp-tutorial-toc");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-initial-destination",
+    "checkpoint:shift-handoff"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "0.720"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scene-market",
+    "shifting"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.72"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "idle"
+  );
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="shift-handoff"]'
+  )).toHaveAttribute("aria-current", "location");
+  await page.waitForTimeout(240);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.72"
+  );
+
+  await page.goto(`${route}?direct=verified#kp-checkpoint-movement-verified`);
+  root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  player = root.locator("[data-kp-editor-animation-player]");
+  toc = root.locator("kp-tutorial-toc");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-initial-destination",
+    "checkpoint:movement-verified"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scene-presentation",
+    "comparison-verified"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "split"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-verification-reveal",
+    "verified"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "1"
+  );
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="movement-verified"]'
+  )).toHaveAttribute("aria-current", "location");
+
+  await page.goto(`${route}?direct=scope#kp-section-model-scope`);
+  root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  toc = root.locator("kp-tutorial-toc");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-initial-destination",
+    "section:model-scope"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-checkpoint",
+    "scope"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-demand-progress",
+    "1.000"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="model-scope"]'
+  )).toHaveAttribute("aria-current", "location");
+  await expect(root.locator("#kp-section-model-scope")).toBeInViewport();
+});
+
 test("reduced-motion readers retain the text-free divider without automatic seek", async ({
   page
 }) => {
