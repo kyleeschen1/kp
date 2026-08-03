@@ -66,6 +66,24 @@
       "status": "passed",
       "scope": "s02 repository TypeScript and Svelte boundary",
       "checkedAt": "2026-08-03T16:38:52.593Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-semantic-model.test.ts tests/kp-lisp-lambda-application-fixture.test.ts",
+      "status": "passed",
+      "scope": "s03 eight exact semantic and evaluator tests",
+      "checkedAt": "2026-08-03T16:41:44.009Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s03 application types",
+      "checkedAt": "2026-08-03T16:41:45.074Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s03 test inference",
+      "checkedAt": "2026-08-03T16:41:46.034Z"
     }
   ],
   "allowedWork": [
@@ -104,7 +122,8 @@
     {
       "id": "s03",
       "title": "Add exact lambda evaluator fixture",
-      "status": "planned"
+      "summary": "Added the exact ((lambda (x) (+ x 1)) 4) fixture and a deliberately bounded evaluator that certifies x-to-4 binding, destination provenance, (+ 4 1) reconstruction, and exact result 5 independently of animation. Eight focused tests and app/test TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s04",
