@@ -854,6 +854,77 @@ test("verification surface enters and exits without changing outer stage geometr
   expect(graphAfter!.height).toBeCloseTo(outerBefore!.height, 1);
 });
 
+test("tutorial TOC enhances light DOM and emits cancelable navigation intent", async ({
+  page
+}) => {
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const toc = root.locator("kp-tutorial-toc");
+  await expect(toc).toHaveAttribute(
+    "data-kp-tutorial-toc-enhancement",
+    "ready"
+  );
+  expect(await toc.evaluate((element) => ({
+    registered: customElements.get(element.localName) === element.constructor,
+    shadow: element.shadowRoot,
+    navCount: element.querySelectorAll("nav").length,
+    linkCount: element.querySelectorAll("a").length
+  }))).toEqual({
+    registered: true,
+    shadow: null,
+    navCount: 1,
+    linkCount: 12
+  });
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="equilibrium"]'
+  )).toHaveAttribute("aria-current", "location");
+  await expect(toc.locator("[aria-current]")).toHaveCount(1);
+
+  await page.evaluate(() => {
+    const target = document.querySelector("kp-tutorial-toc")!;
+    target.addEventListener("kp:tutorial-toc-navigate", (event) => {
+      event.preventDefault();
+      const customEvent = event as CustomEvent;
+      (window as unknown as { kpTocIntent: unknown }).kpTocIntent = {
+        detail: customEvent.detail,
+        bubbles: customEvent.bubbles,
+        cancelable: customEvent.cancelable,
+        composed: customEvent.composed
+      };
+    }, { once: true });
+  });
+  const urlBefore = page.url();
+  await toc.locator(
+    '[data-kp-tutorial-destination-id="supply-movement"]'
+  ).click();
+  expect(page.url()).toBe(urlBefore);
+  expect(await page.evaluate(() =>
+    (window as unknown as { kpTocIntent: unknown }).kpTocIntent
+  )).toEqual({
+    detail: {
+      kind: "block",
+      id: "supply-movement",
+      href: `${new URL(route, page.url()).origin}${route}#kp-block-supply-movement`
+    },
+    bubbles: true,
+    cancelable: true,
+    composed: true
+  });
+
+  const supplyMotionCue = root.locator(
+    '[data-kp-tutorial-motion-block="supply-movement"] kp-tutorial-scrub-bar'
+  );
+  await supplyMotionCue.evaluate((element) => window.scrollTo({
+    top: window.scrollY + element.getBoundingClientRect().top -
+      window.innerHeight * 0.38
+  }));
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="movement-traced"]'
+  )).toHaveAttribute("aria-current", "location");
+  await expect(toc.locator("[aria-current]")).toHaveCount(1);
+});
+
 test("reduced-motion readers retain the text-free divider without automatic seek", async ({
   page
 }) => {

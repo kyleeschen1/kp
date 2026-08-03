@@ -202,6 +202,12 @@ kp-tutorial-toc {
   text-underline-offset: 0.18em;
 }
 
+.kp-tutorial-toc a[aria-current="location"] {
+  color: #234b58;
+  text-decoration-color: #4f7986;
+  text-decoration-thickness: 2px;
+}
+
 .kp-tutorial-toc__list--depth-1 > li > a {
   font-weight: 700;
 }

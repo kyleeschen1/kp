@@ -41,6 +41,9 @@
     projectKpEconomicsRebasedCorridor
   } from "./economics-demand-shift-scroll-corridor.ts";
   import {
+    resolveKpEconomicsDemandShiftTocDestination
+  } from "./economics-demand-shift-toc.ts";
+  import {
     KpEconomicsTutorialScrollCoordinator,
     type KpEconomicsCoordinatedScrollProjection,
     type KpEconomicsScrollBlockRegistration
@@ -54,6 +57,9 @@
     type KpTutorialScrubBarElement,
     type KpTutorialScrubSeekDetail
   } from "../kp-tutorial-scrub-bar.ts";
+  import type {
+    KpTutorialTocElement
+  } from "../kp-tutorial-toc-element.ts";
   import KpInlineMath from "./KpInlineMath.svelte";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
@@ -142,6 +148,7 @@
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
+  let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(0);
   let progress = $state(initial.progress);
   let playbackStatus = $state(initial.playbackStatus);
@@ -201,6 +208,17 @@
         ]!
       : checkpoint
   );
+  let tocActiveDestination = $derived(
+    resolveKpEconomicsDemandShiftTocDestination({
+      lesson,
+      passageId: checkpoint.passageId,
+      demandShiftProgress: lessonMotionProjection.demandShiftProgress,
+      supplyMovementProgress: lessonMotionProjection.supplyMovementProgress
+    })
+  );
+  $effect(() => {
+    tutorialToc?.setActiveDestination(tocActiveDestination);
+  });
   let readingBandStyle = $derived(
     `--kp-tutorial-reading-band-proximity:${readingBandProximity.toFixed(3)};` +
     `--kp-tutorial-reading-band-opacity:${(0.18 + 0.72 * readingBandProximity).toFixed(3)};` +
@@ -864,6 +882,9 @@
       "[data-kp-editor-animation-player]"
     ) ?? undefined;
     if (player === undefined) return;
+    tutorialToc = shell.querySelector<KpTutorialTocElement>(
+      "kp-tutorial-toc"
+    ) ?? undefined;
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {

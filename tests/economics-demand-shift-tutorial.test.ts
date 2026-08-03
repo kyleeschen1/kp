@@ -41,7 +41,8 @@ import {
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 import {
-  createKpEconomicsDemandShiftToc
+  createKpEconomicsDemandShiftToc,
+  resolveKpEconomicsDemandShiftTocDestination
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-toc.ts";
 import {
   renderKpTutorialToc
@@ -491,6 +492,26 @@ test("static tutorial TOC links every section, motion block, and checkpoint", ()
   assert.match(html, /<nav class="kp-tutorial-toc" aria-label="In this lesson">/);
   assert.match(html, /href="\/tutorials\/economics\/demand-shift\/#kp-checkpoint-movement-verified"/);
   assert.doesNotMatch(html, /onclick|<script/);
+
+  const lesson = compileKpEconomicsDemandShiftLesson(markdown);
+  assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
+    lesson,
+    passageId: "context",
+    demandShiftProgress: 0,
+    supplyMovementProgress: 0
+  }), { kind: "section", id: "equilibrium" });
+  assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
+    lesson,
+    passageId: "follow-shift",
+    demandShiftProgress: 0.72,
+    supplyMovementProgress: 0
+  }), { kind: "checkpoint", id: "shift-handoff" });
+  assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
+    lesson,
+    passageId: "shift-versus-movement",
+    demandShiftProgress: 1,
+    supplyMovementProgress: 0.58
+  }), { kind: "checkpoint", id: "movement-traced" });
 });
 
 test("semantic checkpoint navigation is ordered, bounded, and reversible", () => {

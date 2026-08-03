@@ -33,12 +33,14 @@ import {
 } from "./economics-demand-shift-toc.ts";
 import { renderKpTutorialToc } from "../kp-tutorial-toc.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
+import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
   readonly search: string;
 }): Promise<() => void> {
   defineKpTutorialScrubBar();
+  defineKpTutorialToc();
   const descriptors = createKpEditorAnimationLibrary();
   const projection = createKpAnimationCatalogueProjection({ descriptors });
   const entry = projection.entries.find(

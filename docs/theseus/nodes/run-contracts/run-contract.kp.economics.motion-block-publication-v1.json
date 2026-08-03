@@ -346,6 +346,34 @@
       "scope": "s16",
       "checkedAt": "2026-08-03T07:19:44.787Z",
       "notes": "Active semantic-TOC diff has no whitespace errors."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-08-03T07:25:19.344Z",
+      "notes": "Twenty focused tests pass, including semantic active-destination projection for section and both local motion-block checkpoint timelines."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-08-03T07:25:20.436Z",
+      "notes": "Svelte and TypeScript diagnostics pass with zero errors and warnings after the light-DOM custom-element enhancement."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-08-03T07:25:21.339Z",
+      "notes": "Seven Chromium exemplar checks pass; the undefined-element light DOM upgrades in place, keeps one active link, and emits a cancelable composed navigation intent without breaking prior motion, reduced-motion, or phone behavior."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-08-03T07:25:22.251Z",
+      "notes": "Active TOC-enhancement diff has no whitespace errors."
     }
   ],
   "allowedWork": [
@@ -468,7 +496,8 @@
     {
       "id": "s17",
       "title": "Enhance-toc-web-component",
-      "status": "planned"
+      "summary": "Enhanced the existing static kp-tutorial-toc light DOM in place with one semantic active destination and a cancelable bubbling composed navigation-intent event; ordinary anchor navigation remains the no-JavaScript fallback, and the Svelte host only calls the element public method.",
+      "status": "complete"
     },
     {
       "id": "s18",

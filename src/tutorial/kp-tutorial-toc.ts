@@ -3,6 +3,11 @@ export type KpTutorialTocDestinationKind =
   | "block"
   | "checkpoint";
 
+export interface KpTutorialTocDestination {
+  readonly kind: KpTutorialTocDestinationKind;
+  readonly id: string;
+}
+
 export interface KpTutorialTocItem {
   readonly kind: KpTutorialTocDestinationKind;
   readonly id: string;
