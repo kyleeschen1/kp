@@ -25,13 +25,11 @@ import {
   projectKpEconomicsLessonMotion
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import {
-  projectKpEconomicsCorridorTravel,
-  projectKpEconomicsMotionCorridor,
-  projectKpEconomicsRebasedCorridor
-} from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-corridor.ts";
-import {
-  projectKpEconomicsScrollFrame
-} from "../src/tutorial/economics-demand-shift/economics-demand-shift-scroll-coordinator.ts";
+  projectKpTutorialCorridorTravel,
+  projectKpTutorialMotionCorridor,
+  projectKpTutorialRebasedCorridor,
+  projectKpTutorialScrollFrame
+} from "../src/tutorial/kp-tutorial-motion.ts";
 import {
   kpEconomicsStageCompositionInterval,
   projectKpEconomicsStageComposition
@@ -47,12 +45,8 @@ import {
   kpEconomicsDemandShiftTutorialPath
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 import {
-  createKpEconomicsDemandShiftToc,
   resolveKpEconomicsDemandShiftTocDestination
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-toc.ts";
-import {
-  renderKpTutorialToc
-} from "../src/tutorial/kp-tutorial-toc.ts";
 import {
   renderKpTutorialScrubBar
 } from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
@@ -424,32 +418,32 @@ test("viewport corridors preserve authored holds in both scroll directions", () 
   const corridor = kpEconomicsMotionBlocks[0]!.corridor;
   const sampledTravel = Array.from({ length: 1001 }, (_, index) => index / 1000);
   const forward = sampledTravel.map((travel) =>
-    projectKpEconomicsCorridorTravel(corridor, travel)
+    projectKpTutorialCorridorTravel(corridor, travel)
   );
   const reverse = [...sampledTravel].reverse().map((travel) =>
-    projectKpEconomicsCorridorTravel(corridor, travel)
+    projectKpTutorialCorridorTravel(corridor, travel)
   ).reverse();
 
   assert.deepEqual(forward, reverse);
   assert.equal(forward.every((progress, index) =>
     index === 0 || progress + Number.EPSILON >= forward[index - 1]!
   ), true);
-  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.14), 0);
-  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.57), 0.72);
-  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.63), 0.72);
-  assert.equal(projectKpEconomicsCorridorTravel(corridor, 0.94), 1);
+  assert.equal(projectKpTutorialCorridorTravel(corridor, 0.14), 0);
+  assert.equal(projectKpTutorialCorridorTravel(corridor, 0.57), 0.72);
+  assert.equal(projectKpTutorialCorridorTravel(corridor, 0.63), 0.72);
+  assert.equal(projectKpTutorialCorridorTravel(corridor, 0.94), 1);
 
-  assert.deepEqual(projectKpEconomicsMotionCorridor({
+  assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 720,
     viewportHeight: 1000
   }), { travel: 0, progress: 0 });
-  assert.deepEqual(projectKpEconomicsMotionCorridor({
+  assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 160,
     viewportHeight: 1000
   }), { travel: 1, progress: 1 });
-  assert.equal(projectKpEconomicsMotionCorridor({
+  assert.equal(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 380,
     viewportHeight: 1000
@@ -457,7 +451,7 @@ test("viewport corridors preserve authored holds in both scroll directions", () 
 });
 
 test("one coordinated scroll frame grants paint ownership to one block", () => {
-  const projection = projectKpEconomicsScrollFrame({
+  const projection = projectKpTutorialScrollFrame({
     viewportHeight: 1000,
     blocks: [
       {
@@ -478,7 +472,7 @@ test("one coordinated scroll frame grants paint ownership to one block", () => {
     projection.blocks.filter(({ ownsScroll }) => ownsScroll).map(({ id }) => id),
     ["supply-movement"]
   );
-  assert.equal(projectKpEconomicsScrollFrame({
+  assert.equal(projectKpTutorialScrollFrame({
     viewportHeight: 1000,
     blocks: []
   }).activeBlockId, undefined);
@@ -486,19 +480,19 @@ test("one coordinated scroll frame grants paint ownership to one block", () => {
 
 test("manual corridor takeover rebases the next scroll without a jump", () => {
   const corridor = kpEconomicsMotionBlocks[0]!.corridor;
-  const takeover = projectKpEconomicsRebasedCorridor({
+  const takeover = projectKpTutorialRebasedCorridor({
     corridor,
     rawTravelAtTakeover: 0.4,
     manualProgress: 0.72,
     rawTravel: 0.4
   });
-  const onePixelDown = projectKpEconomicsRebasedCorridor({
+  const onePixelDown = projectKpTutorialRebasedCorridor({
     corridor,
     rawTravelAtTakeover: 0.4,
     manualProgress: 0.72,
     rawTravel: 0.401
   });
-  const upward = projectKpEconomicsRebasedCorridor({
+  const upward = projectKpTutorialRebasedCorridor({
     corridor,
     rawTravelAtTakeover: 0.4,
     manualProgress: 0.72,
@@ -562,46 +556,11 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
   );
 });
 
-test("static tutorial TOC links every section, motion block, and checkpoint", () => {
+test("active TOC destinations remain domain-specific semantic projections", () => {
   const markdown = readFileSync(new URL(
     "../content/lessons/economics-demand-shift.md",
     import.meta.url
   ), "utf8");
-  const toc = createKpEconomicsDemandShiftToc(
-    compileKpEconomicsDemandShiftLesson(markdown)
-  );
-  const destinations = toc.items.flatMap((section) => [
-    [section.kind, section.id, section.href],
-    ...section.children.flatMap((block) => [
-      [block.kind, block.id, block.href],
-      ...block.children.map((checkpoint) => [
-        checkpoint.kind,
-        checkpoint.id,
-        checkpoint.href
-      ])
-    ])
-  ]);
-
-  assert.deepEqual(destinations, [
-    ["section", "equilibrium", "/tutorials/economics/demand-shift/#kp-section-equilibrium"],
-    ["section", "demand-increase", "/tutorials/economics/demand-shift/#kp-section-demand-increase"],
-    ["section", "market-clearing", "/tutorials/economics/demand-shift/#kp-section-market-clearing"],
-    ["block", "demand-shift", "/tutorials/economics/demand-shift/#kp-block-demand-shift"],
-    ["checkpoint", "shift-ready", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-ready"],
-    ["checkpoint", "shift-handoff", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-handoff"],
-    ["checkpoint", "shift-settled", "/tutorials/economics/demand-shift/#kp-checkpoint-shift-settled"],
-    ["block", "supply-movement", "/tutorials/economics/demand-shift/#kp-block-supply-movement"],
-    ["checkpoint", "movement-ready", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-ready"],
-    ["checkpoint", "movement-traced", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-traced"],
-    ["checkpoint", "movement-verified", "/tutorials/economics/demand-shift/#kp-checkpoint-movement-verified"],
-    ["section", "model-scope", "/tutorials/economics/demand-shift/#kp-section-model-scope"]
-  ]);
-  const html = renderKpTutorialToc(toc);
-  assert.match(html, /^<kp-tutorial-toc/);
-  assert.match(html, /<nav class="kp-tutorial-toc" aria-label="In this lesson">/);
-  assert.match(html, /href="\/tutorials\/economics\/demand-shift\/#kp-checkpoint-movement-verified"/);
-  assert.doesNotMatch(html, /onclick|<script/);
-
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
   assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
     lesson,

@@ -53,7 +53,10 @@ export const kpLessonSeamLedger: readonly KpLessonSeamLedgerEntry[] =
       disposition: "reuse-existing",
       lifecycle: "serialize and parse section, block, and checkpoint destinations",
       evidence: [
-        economics("src/tutorial/economics-demand-shift/economics-demand-shift-toc.ts"),
+        economics(
+          "src/tutorial/economics-demand-shift/economics-demand-shift-deep-link.ts",
+          "src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts"
+        ),
         lisp("src/tutorial/lisp-function-application/lisp-function-application-publication.ts")
       ],
       boundary: "The URL carries semantic identity, never animation progress."
@@ -96,7 +99,9 @@ export const kpLessonSeamLedger: readonly KpLessonSeamLedgerEntry[] =
       disposition: "extract-shared",
       lifecycle: "map viewport travel through authored holds and resume smoothly after manual control",
       evidence: [
-        economics("src/tutorial/economics-demand-shift/economics-demand-shift-scroll-corridor.ts"),
+        economics(
+          "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"
+        ),
         lisp("src/tutorial/lisp-function-application/lisp-function-application-scroll.ts")
       ],
       extractionSlice: "s22",
@@ -107,7 +112,9 @@ export const kpLessonSeamLedger: readonly KpLessonSeamLedgerEntry[] =
       disposition: "extract-shared",
       lifecycle: "sample registered anchors once per animation frame and choose one reading-band owner",
       evidence: [
-        economics("src/tutorial/economics-demand-shift/economics-demand-shift-scroll-coordinator.ts"),
+        economics(
+          "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"
+        ),
         lisp("src/tutorial/lisp-function-application/lisp-function-application-scroll.ts")
       ],
       extractionSlice: "s22",

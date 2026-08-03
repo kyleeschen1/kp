@@ -42,16 +42,11 @@
     type KpEconomicsMotionBlockId
   } from "./economics-demand-shift-motion-blocks.ts";
   import {
-    projectKpEconomicsRebasedCorridor
-  } from "./economics-demand-shift-scroll-corridor.ts";
-  import {
-    resolveKpEconomicsDemandShiftTocDestination
-  } from "./economics-demand-shift-toc.ts";
-  import {
-    KpEconomicsTutorialScrollCoordinator,
-    type KpEconomicsCoordinatedScrollProjection,
-    type KpEconomicsScrollBlockRegistration
-  } from "./economics-demand-shift-scroll-coordinator.ts";
+    KpTutorialScrollCoordinator,
+    projectKpTutorialRebasedCorridor,
+    type KpTutorialCoordinatedScrollProjection,
+    type KpTutorialScrollBlockRegistration
+  } from "../kp-tutorial-motion.ts";
   import {
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
     KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
@@ -74,6 +69,9 @@
   import { serializeKpTutorialDestinationHash } from "../kp-tutorial-url.ts";
   import KpTutorialLessonShell from "../KpTutorialLessonShell.svelte";
   import KpInlineMath from "./KpInlineMath.svelte";
+  import {
+    resolveKpEconomicsDemandShiftTocDestination
+  } from "./economics-demand-shift-toc.ts";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   type KpEconomicsTutorialScrollTimelineStatus =
@@ -202,9 +200,11 @@
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
-  let scrollCoordinator: KpEconomicsTutorialScrollCoordinator | undefined;
+  let scrollCoordinator:
+    KpTutorialScrollCoordinator<KpEconomicsMotionBlockId> | undefined;
   let navigationController: KpTutorialNavigationController | undefined;
-  let latestScrollProjection: KpEconomicsCoordinatedScrollProjection | undefined;
+  let latestScrollProjection:
+    KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId> | undefined;
   let manualScrollRebase: KpEconomicsManualScrollRebase | undefined;
   let navigationProjectionPending = initialDeepLink.destination !== undefined;
   let navigationLockedScrollY: number | undefined;
@@ -776,7 +776,9 @@
     };
   }
 
-  function collectScrollBlocks(): readonly KpEconomicsScrollBlockRegistration[] {
+  function collectScrollBlocks(): readonly KpTutorialScrollBlockRegistration<
+    KpEconomicsMotionBlockId
+  >[] {
     if (shell === undefined) return [];
     return kpEconomicsMotionBlocks.flatMap((block) => {
       const boundary = shell?.querySelector<HTMLElement>(
@@ -792,7 +794,7 @@
   }
 
   function handleCoordinatedScroll(
-    projection: KpEconomicsCoordinatedScrollProjection
+    projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
     latestScrollProjection = projection;
     const movedFromNavigation = navigationProjectionPending &&
@@ -846,7 +848,7 @@
         let localProgress = active.progress;
         if (manualScrollRebase?.blockId === active.id) {
           const block = findKpEconomicsMotionBlock(active.id)!;
-          const rebased = projectKpEconomicsRebasedCorridor({
+          const rebased = projectKpTutorialRebasedCorridor({
             corridor: block.corridor,
             rawTravelAtTakeover: manualScrollRebase.rawTravelAtTakeover,
             manualProgress: manualScrollRebase.manualProgress,
@@ -1001,7 +1003,7 @@
         handleScrubBarSeek
       );
     }
-    scrollCoordinator = new KpEconomicsTutorialScrollCoordinator(
+    scrollCoordinator = new KpTutorialScrollCoordinator<KpEconomicsMotionBlockId>(
       window,
       collectScrollBlocks,
       handleCoordinatedScroll

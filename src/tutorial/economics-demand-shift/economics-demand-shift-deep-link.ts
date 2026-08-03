@@ -13,8 +13,8 @@ import {
   type KpEconomicsMotionBlockId
 } from "./economics-demand-shift-motion-blocks.ts";
 import {
-  resolveKpEconomicsCorridorTravelForProgress
-} from "./economics-demand-shift-scroll-corridor.ts";
+  resolveKpTutorialCorridorTravelForProgress
+} from "../kp-tutorial-motion.ts";
 import type {
   KpTutorialTocDestination
 } from "../kp-tutorial-toc.ts";
@@ -74,7 +74,7 @@ export function resolveKpEconomicsDemandShiftInitialDestination(input: {
     motion,
     motionScroll: Object.freeze({
       blockId: block.id,
-      travel: resolveKpEconomicsCorridorTravelForProgress({
+      travel: resolveKpTutorialCorridorTravelForProgress({
         corridor: block.corridor,
         progress: checkpoint.progress,
         preferredTravel: destination.kind === "block" ? 0 : 0.5

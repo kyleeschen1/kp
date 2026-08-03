@@ -697,6 +697,37 @@
       "status": "passed",
       "scope": "s25 patch hygiene",
       "checkedAt": "2026-08-03T19:15:22.024Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s26 twenty-six economics semantic render and shared-seam conformance tests",
+      "checkedAt": "2026-08-03T19:22:43.937Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s26 twelve gold exemplar visual URL scroll no-JS and phone preservation checks",
+      "checkedAt": "2026-08-03T19:22:45.156Z"
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s26 production build type and preserved performance budgets",
+      "checkedAt": "2026-08-03T19:22:46.137Z",
+      "notes": "48 resources; 236714 script bytes; initial CLS 0.000276; initial longest task 110ms; active p95 33.5ms; no active long tasks."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 economics shared-seam and domain boundary",
+      "checkedAt": "2026-08-03T19:22:47.101Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s26 patch hygiene",
+      "checkedAt": "2026-08-03T19:22:48.061Z"
     }
   ],
   "allowedWork": [
@@ -873,7 +904,8 @@
     {
       "id": "s26",
       "title": "Migrate economics and prune superseded mechanics",
-      "status": "planned"
+      "summary": "Migrated the approved economics exemplar directly onto the shared lesson motion, navigation, document, controls, tokens, and shell seams. Deleted the superseded corridor/coordinator pass-through modules and obsolete economics TOC builder, added a durable shared-seam conformance gate, and retained checkpoints, graph composition, verification, salience, and parameters as domain-local projections. Twenty-six economics tests, 12 browser/visual checks, production build/typecheck, architecture, and patch hygiene pass; the preserved 48-resource budget, exact URLs, no-JS controls, phone layout, and 33.5ms active p95 remain intact.",
+      "status": "complete"
     },
     {
       "id": "s27",
