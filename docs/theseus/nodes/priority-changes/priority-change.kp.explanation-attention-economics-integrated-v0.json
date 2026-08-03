@@ -1,0 +1,93 @@
+{
+  "id": "priority-change.kp.explanation-attention-economics-integrated-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.explanation-attention-economics-integrated-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The approved economics prose is now a canonical Markdown-backed tutorial at /tutorials/economics/demand-shift/ and must pass integrated human review before solve-x pressure or shared-schema promotion.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The approved economics prose is now a canonical Markdown-backed tutorial at /tutorials/economics/demand-shift/ and must pass integrated human review before solve-x pressure or shared-schema promotion.",
+      "occurredAt": "2026-08-03T02:04:41.239Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/lessons/economics-demand-shift.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused lesson source, route, checkpoints, and reading-band laws",
+      "checkedAt": "2026-08-03T02:07:36.709Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "wide and phone integrated browser checkpoint",
+      "checkedAt": "2026-08-03T02:07:37.891Z"
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "catalogue link metadata",
+      "checkedAt": "2026-08-03T02:07:38.880Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture preservation boundaries",
+      "checkedAt": "2026-08-03T02:07:39.855Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "catalogue display and Review placement regressions",
+      "checkedAt": "2026-08-03T02:07:41.155Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production typecheck and nested route build",
+      "checkedAt": "2026-08-03T02:07:43.475Z"
+    }
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The approved economics prose is now a canonical Markdown-backed tutorial at /tutorials/economics/demand-shift/ and must pass integrated human review before solve-x pressure or shared-schema promotion.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "explanation-attention",
+        "to": "economics-integrated-checkpoint"
+      },
+      {
+        "subject": "matrix-linear-map",
+        "to": "tabled"
+      },
+      {
+        "subject": "animation-promotion",
+        "to": "paused"
+      }
+    ],
+    "effectiveAt": "2026-08-03T02:04:41.239Z",
+    "requestedBy": "kyle"
+  }
+}

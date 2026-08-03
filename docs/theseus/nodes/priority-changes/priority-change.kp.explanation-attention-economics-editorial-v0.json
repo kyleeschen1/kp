@@ -2,9 +2,9 @@
   "id": "priority-change.kp.explanation-attention-economics-editorial-v0",
   "kind": "priority-change",
   "title": "Priority change priority-change.kp.explanation-attention-economics-editorial-v0",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "The user approved continuous prose with explicit learner-controlled semantic checkpoints, economics as the editorial exemplar, and solve-x as the second caller before shared attention contracts.",
+  "summary": "The user approved the four-section economics prose and the bounded Svelte tutorial is delivered at /tutorials/economics/demand-shift/.",
   "sourceRefs": [
     {
       "kind": "user-intent",

@@ -1,6 +1,11 @@
 # Economics demand-shift lesson draft
 
-Status: `EDITORIAL_CHECKPOINT`
+Status: `APPROVED_SOURCE_MIGRATED`
+
+The user approved this draft on 2026-08-02. Its canonical runtime Markdown is
+now `content/lessons/economics-demand-shift.md`; this file retains the editorial
+draft and binding notes as review history. The runtime source orders synthesis
+before optional exploration, matching the accepted attention storyboard.
 
 This is a prose artifact for review, not a compiled KP lesson. The prose is
 intentionally continuous. The binding notes after it are editorial annotations,

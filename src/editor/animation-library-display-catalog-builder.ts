@@ -266,6 +266,14 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
 
 const supplementalRepresentations = [
   {
+    animationId: "animation.economics.supply-demand-equilibrium-shift",
+    id: "library.tutorial.economics-demand-shift",
+    label: "Demand shift tutorial",
+    kind: "reader",
+    href: "/tutorials/economics/demand-shift/",
+    role: "canonical-host"
+  },
+  {
     animationId: "animation.operation-evaluation.one-plus-two",
     id: "library.editor.operation-evaluation-focused-host",
     label: "Animation + lesson",

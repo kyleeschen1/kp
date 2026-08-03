@@ -3,7 +3,7 @@
 Status: active
 Last Updated: 2026-08-02
 Current Next Action: Keep `Apply a 2 × 2 matrix to a vector` tabled at its open
-visual checkpoint while the economics explanation-attention editorial
+visual checkpoint while the economics explanation-attention integrated
 checkpoint leads. When animation promotion resumes, select a nearer
 non-linear-algebra transformation. Do not resume generalization or silently
 rerank the ledger before that explicit human choice.

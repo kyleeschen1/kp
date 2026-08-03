@@ -10,12 +10,26 @@ import {
 import {
   readKpAnimationCatalogueRoute
 } from "./editor/animation-catalogue-route.ts";
+import {
+  isKpEconomicsDemandShiftTutorialRoute
+} from "./tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 
 const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
 
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>("#app");
   if (root === null) throw new Error("Expected #app root element to exist.");
+  if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
+    const tutorial = await import(
+      "./tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts"
+    );
+    const dispose = await tutorial.mountKpEconomicsDemandShiftTutorial({
+      root,
+      search: window.location.search
+    });
+    window.addEventListener("pagehide", dispose, { once: true });
+    return;
+  }
   const entry = conceptCatalog.find((candidate) =>
     candidate.canonicalPath === window.location.pathname ||
     candidate.legacyAliases.includes(window.location.pathname)

@@ -1,8 +1,16 @@
 # Economics text-animation editorial checkpoint
 
-Status: `HUMAN_CHECKPOINT`
+Status: `APPROVED`
 Review type: prose, cadence, claims, and storyboard
-Implementation status: not started
+Implementation status: complete; integrated exemplar awaits human review
+
+The user approved this editorial checkpoint on 2026-08-02 (“This looks
+good!”). The accepted prose now lives canonically in
+`content/lessons/economics-demand-shift.md`; the bounded implementation is
+recorded in
+`reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`.
+Everything below preserves the reviewed pre-implementation rationale and
+acceptance boundary.
 
 This checkpoint asks whether KP has the right explanation before it builds a
 new lesson surface. Review the lesson draft at

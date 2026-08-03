@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-02
-Current Next Action: Human-review the economics continuous-prose lesson and
-attention storyboard before building a bounded Svelte 5 lesson surface.
-Generated solve remains the approved second caller; M4 and live-model work do
-not advance during this editorial checkpoint.
+Current Next Action: Human-review the bounded economics Svelte 5 tutorial at
+`/tutorials/economics/demand-shift/`. Generated solve remains the approved
+second caller; shared-schema promotion, M4, and live-model work do not advance
+during this integrated checkpoint.
 
 ## Goal
 
@@ -35,12 +35,14 @@ independently override this stable ledger.
 The immediate tutorial priority is now the text-animation attention problem,
 owned by `threads/explanation-attention.md` and recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.
-The economics equilibrium asset will first support one continuous four-section
-argument with static passage preparation and explicit learner-triggered motion.
-The editorial checkpoint precedes UI implementation. Generated solve-x then
-pressures the boundary before any continuous-prose schema or shared lesson host
-is promoted. This changes the near-term tutorial order without changing the
-stable animation-promotion ledger.
+The economics equilibrium asset now supports one continuous four-section
+argument with static passage preparation and explicit learner-triggered motion
+at a dedicated internal URL. The source remains Markdown, while a local Svelte
+host composes the existing framework-neutral asset and runtime. The exemplar is
+at its integrated human checkpoint. Generated solve-x then pressures the
+boundary before any continuous-prose schema or shared lesson host is promoted.
+This changes the near-term tutorial order without changing the stable
+animation-promotion ledger.
 
 The same ledger now owns the platform gates around that content order. After
 the four early visible exemplars, KP declared public API tiers and will compile

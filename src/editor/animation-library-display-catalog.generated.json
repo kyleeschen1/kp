@@ -1448,6 +1448,13 @@
         "kind": "editor",
         "href": "/?animation=editor-animation.animation.economics.supply-demand-equilibrium-shift",
         "role": "canonical-host"
+      },
+      {
+        "id": "library.tutorial.economics-demand-shift",
+        "label": "Demand shift tutorial",
+        "kind": "reader",
+        "href": "/tutorials/economics/demand-shift/",
+        "role": "projection"
       }
     ]
   }

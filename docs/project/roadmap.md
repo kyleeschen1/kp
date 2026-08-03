@@ -89,8 +89,10 @@ static passage preparation, explicit learner-triggered motion, semantic
 Previous/Next controls, and a continuously draggable marked scrubber. The
 approved economics equilibrium asset is the canonical discovery exemplar;
 generated solve-x is the second caller before any shared passage or reader
-contract is promoted. The current checkpoint is editorial only:
-`reviews/2026-08-02-economics-text-animation-editorial-checkpoint.md`.
+contract is promoted. The editorial checkpoint is approved. The bounded
+economics route is now built from canonical Markdown and awaits integrated
+human review:
+`reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`.
 This priority change does not resume linear algebra, authorize SvelteKit or a
 public site, or move LLM wording into runtime.
 
@@ -209,12 +211,15 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The active human checkpoint is the economics continuous-prose explanation
-and attention storyboard.** The full four-section draft preserves one argument
-over a persistent graph, lets the graph lead and equations verify, inserts one
-non-gating prediction before learner-triggered motion, and closes on the shift
-versus movement misconception. No lesson UI or generic attention schema will
-be built until its prose and cadence are approved.
+**The active human checkpoint is the integrated economics continuous-prose
+tutorial at `/tutorials/economics/demand-shift/`.** Its canonical Markdown
+preserves one argument over a persistent graph, lets the graph lead and
+equations verify, inserts one non-gating prediction before learner-triggered
+motion, and closes on the shift-versus-movement misconception before optional
+exploration. The local Svelte 5 host adds semantic controls, static passage
+preparation, a wide persistent stage, and a compact phone dock without changing
+the asset or runtime. No shared attention schema or second caller begins until
+this integrated cadence is approved.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -550,11 +555,11 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Human-review the economics demand-shift prose, verified claims, and
-   attention storyboard; revise the Markdown before creating UI churn.
-2. After editorial approval, build one bounded internal Svelte 5 economics
-   lesson surface and stop at an integrated human cadence checkpoint.
-3. Pressure the approved attention boundary with generated solve-x, then
+1. Human-review the integrated economics tutorial at
+   `/tutorials/economics/demand-shift/` across wide and phone layouts.
+2. Make only checkpoint-requested economics-local revisions, then approve or
+   reject the exemplar without promoting a shared schema.
+3. After approval, pressure the attention boundary with generated solve-x, then
    promote only the document, passage, control, and reader contracts both
    callers prove.
 4. Select one nearer transformation exemplar without resuming the tabled

@@ -10,14 +10,12 @@ with source refs, verification, run-contract slices, and completion evidence.
 1. Keep `Apply a 2 × 2 matrix to a vector` and its remaining run slices tabled
    at the open visual checkpoint while the explanation-attention work leads.
    This is a preservation guardrail, not authorization to resume the run.
-2. Review the four-section economics lesson draft and its attention storyboard.
-   Decide prose length, cadence, concrete-market usefulness, prediction timing,
-   and whether the closing synthesis repairs shift versus movement.
-3. If the editorial checkpoint is approved, build one economics-local Svelte 5
-   lesson surface with a persistent stage, compact semantic controls, static
-   passage preparation, and a stable phone dock; then stop for integrated human
-   review.
-4. Use generated solve-x as the second caller. Promote only shared document,
+2. Review the integrated economics tutorial at
+   `/tutorials/economics/demand-shift/`: continuous prose, persistent stage,
+   semantic controls, static passage preparation, and compact phone dock.
+3. Make only economics-local cadence or presentation revisions requested at
+   the checkpoint; do not generalize the local compiler during review.
+4. After approval, use generated solve-x as the second caller. Promote only shared document,
    passage, control, and reader seams that survive both exemplars.
 5. When animation promotion resumes, choose among place-value subtraction,
    fraction equivalence, function-coordinate transformations, and geometric
