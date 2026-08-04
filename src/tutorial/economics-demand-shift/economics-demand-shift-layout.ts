@@ -29,6 +29,18 @@ export interface KpInlineStickyParagraphProjection {
   readonly distanceFromStageBottomPx: number;
 }
 
+export interface KpTwoColumnScrollCardProjection
+  extends KpInlineStickyParagraphProjection {
+  readonly opacity: number;
+  readonly ownsAttention: boolean;
+}
+
+export interface KpTwoColumnScrollSequenceProjection {
+  readonly cards: readonly KpTwoColumnScrollCardProjection[];
+  readonly attentionIndex: number;
+  readonly incomingIndex: number | undefined;
+}
+
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 
@@ -45,15 +57,27 @@ export function readKpEconomicsDemandShiftPresentationLayout(
 
 export function projectKpTwoColumnScrollCard(input: {
   readonly cardTopPx: number;
+  readonly previousCardTopPx?: number | undefined;
   readonly viewportHeightPx: number;
 }): KpInlineStickyParagraphProjection {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const cardTop = Number.isFinite(input.cardTopPx)
+  const measuredCardTop = Number.isFinite(input.cardTopPx)
     ? input.cardTopPx
     : viewportHeight;
-  const travel = clamp((viewportHeight - cardTop) / viewportHeight, 0, 1);
+  const cardTop = Math.abs(measuredCardTop) <= 0.5 ? 0 : measuredCardTop;
+  const measuredPreviousCardTop = input.previousCardTopPx;
+  const previousCardTop = measuredPreviousCardTop !== undefined &&
+      Math.abs(measuredPreviousCardTop) <= 0.5
+    ? 0
+    : measuredPreviousCardTop;
+  const cardDistance = previousCardTop === undefined ||
+      !Number.isFinite(previousCardTop)
+    ? viewportHeight
+    : Math.max(1, cardTop - previousCardTop);
+  const startY = Math.min(viewportHeight, cardDistance);
+  const travel = clamp((startY - cardTop) / startY, 0, 1);
   return Object.freeze({
-    phase: cardTop >= viewportHeight
+    phase: cardTop >= startY
       ? "below"
       : cardTop > 0
         ? "crossing"
@@ -66,8 +90,67 @@ export function projectKpTwoColumnScrollCard(input: {
   });
 }
 
+export function projectKpTwoColumnScrollSequence(input: {
+  readonly cardTopPx: readonly number[];
+  readonly viewportHeightPx: number;
+  readonly inactiveOpacity?: number | undefined;
+}): KpTwoColumnScrollSequenceProjection {
+  const inactiveOpacity = clamp(input.inactiveOpacity ?? 0.24, 0, 1);
+  const baseCards = input.cardTopPx.map((cardTopPx, index) =>
+    projectKpTwoColumnScrollCard({
+      cardTopPx,
+      ...(index === 0
+        ? {}
+        : { previousCardTopPx: input.cardTopPx[index - 1] }),
+      viewportHeightPx: input.viewportHeightPx
+    })
+  );
+  if (baseCards.length === 0) {
+    return Object.freeze({
+      cards: Object.freeze([]),
+      attentionIndex: -1,
+      incomingIndex: undefined
+    });
+  }
+
+  const opacity = baseCards.map(() => inactiveOpacity);
+  const incomingIndex = baseCards.findIndex(({ phase }) => phase === "crossing");
+  let attentionIndex = 0;
+  if (incomingIndex >= 0) {
+    const incomingProgress = baseCards[incomingIndex]!.travel;
+    opacity[incomingIndex] = inactiveOpacity +
+      (1 - inactiveOpacity) * incomingProgress;
+    if (incomingIndex > 0) {
+      opacity[incomingIndex - 1] = 1 -
+        (1 - inactiveOpacity) * incomingProgress;
+      attentionIndex = incomingProgress >= 0.5
+        ? incomingIndex
+        : incomingIndex - 1;
+    }
+  } else {
+    let lastPassedIndex = -1;
+    baseCards.forEach(({ phase }, index) => {
+      if (phase === "passed") lastPassedIndex = index;
+    });
+    attentionIndex = lastPassedIndex >= 0 ? lastPassedIndex : 0;
+    opacity[attentionIndex] = lastPassedIndex >= 0 ? 1 : inactiveOpacity;
+  }
+
+  return Object.freeze({
+    cards: Object.freeze(baseCards.map((card, index) => Object.freeze({
+      ...card,
+      opacity: opacity[index]!,
+      ownsAttention: index === attentionIndex
+    }))),
+    attentionIndex,
+    incomingIndex: incomingIndex >= 0 ? incomingIndex : undefined
+  });
+}
+
 export function projectKpTwoColumnScrollMotionCorridor(input: {
   readonly corridor: KpTutorialMotionCorridor;
+  readonly cardDistancePx: number;
+  readonly viewportHeightPx: number;
 }): KpTutorialMotionCorridor {
   const keyframes = input.corridor.keyframes;
   const firstProgress = keyframes[0]?.progress ?? 0;
@@ -107,7 +190,11 @@ export function projectKpTwoColumnScrollMotionCorridor(input: {
   // retain their independently approved entry and exit holds.
   return Object.freeze({
     ...input.corridor,
-    startViewportRatio: 1,
+    startViewportRatio: Math.min(
+      1,
+      finitePositive(input.cardDistancePx, input.viewportHeightPx) /
+        finitePositive(input.viewportHeightPx, 640)
+    ),
     endViewportRatio: 0,
     keyframes: Object.freeze(projectedKeyframes.map((keyframe) =>
       Object.freeze(keyframe)

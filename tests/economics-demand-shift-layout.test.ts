@@ -7,6 +7,7 @@ import {
   projectKpInlineStickyParagraphMotionCorridor,
   projectKpTwoColumnScrollCard,
   projectKpTwoColumnScrollMotionCorridor,
+  projectKpTwoColumnScrollSequence,
   readKpEconomicsDemandShiftPresentationLayout
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts";
 import {
@@ -33,24 +34,26 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
 });
 
-test("two-column card travel runs exactly from viewport bottom to top", () => {
+test("two-column card travel begins after its predecessor settles", () => {
   assert.deepEqual(projectKpTwoColumnScrollCard({
-    cardTopPx: 800,
+    cardTopPx: 240,
+    previousCardTopPx: 0,
     viewportHeightPx: 800
   }), {
     phase: "below",
     travel: 0,
     crossingProgress: 0,
-    distanceFromStageBottomPx: 800
+    distanceFromStageBottomPx: 240
   });
   assert.deepEqual(projectKpTwoColumnScrollCard({
-    cardTopPx: 400,
+    cardTopPx: 120,
+    previousCardTopPx: -120,
     viewportHeightPx: 800
   }), {
     phase: "crossing",
     travel: 0.5,
     crossingProgress: 0.5,
-    distanceFromStageBottomPx: 400
+    distanceFromStageBottomPx: 120
   });
   assert.deepEqual(projectKpTwoColumnScrollCard({
     cardTopPx: 0,
@@ -63,7 +66,35 @@ test("two-column card travel runs exactly from viewport bottom to top", () => {
   });
 });
 
-test("two-column motion uses the whole card journey without changing choreography", () => {
+test("neighboring cards trade opacity while the incoming card approaches top", () => {
+  const settled = projectKpTwoColumnScrollSequence({
+    cardTopPx: [0, 240, 500],
+    viewportHeightPx: 800
+  });
+  assert.equal(settled.attentionIndex, 0);
+  assert.equal(settled.incomingIndex, undefined);
+  assert.deepEqual(settled.cards.map(({ opacity }) => opacity), [1, 0.24, 0.24]);
+
+  const midpoint = projectKpTwoColumnScrollSequence({
+    cardTopPx: [-120, 120, 380],
+    viewportHeightPx: 800
+  });
+  assert.equal(midpoint.attentionIndex, 1);
+  assert.equal(midpoint.incomingIndex, 1);
+  assert.deepEqual(midpoint.cards.map(({ opacity }) => opacity), [0.62, 0.62, 0.24]);
+  assert.deepEqual(midpoint.cards.map(({ ownsAttention }) => ownsAttention), [
+    false, true, false
+  ]);
+
+  const longHold = projectKpTwoColumnScrollSequence({
+    cardTopPx: [-200, 800],
+    viewportHeightPx: 800
+  });
+  assert.equal(longHold.incomingIndex, undefined);
+  assert.deepEqual(longHold.cards.map(({ opacity }) => opacity), [1, 0.24]);
+});
+
+test("two-column motion uses natural card distance without changing choreography", () => {
   const corridor = projectKpTwoColumnScrollMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -76,10 +107,12 @@ test("two-column motion uses the whole card journey without changing choreograph
         { travel: 0.94, progress: 1 },
         { travel: 1, progress: 1 }
       ]
-    }
+    },
+    cardDistancePx: 240,
+    viewportHeightPx: 800
   });
 
-  assert.equal(corridor.startViewportRatio, 1);
+  assert.equal(corridor.startViewportRatio, 0.3);
   assert.equal(corridor.endViewportRatio, 0);
   assert.deepEqual(corridor.keyframes, [
     { travel: 0, progress: 0 },
@@ -89,7 +122,7 @@ test("two-column motion uses the whole card journey without changing choreograph
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 800,
+    anchorTop: 240,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
   assert.deepEqual(projectKpTutorialMotionCorridor({

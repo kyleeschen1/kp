@@ -199,22 +199,31 @@ The economics caller also exposes `?layout=two-column-scroll` as a parallel,
 independently reversible desktop experiment. It does not supersede the
 one-column contract above. In this mode:
 
-- a compact atomic cue occupies the left column and one persistent graph
-  occupies the right;
-- the graph is vertically centered while sticky;
-- a cue's top edge maps viewport bottom to progress `0` and viewport top to
-  progress `1`;
-- one viewport of step ownership separates consecutive cues so timelines do
-  not compete;
+- a mix of concise and longer cards occupies a narrow left column and one
+  persistent graph occupies a narrow right column;
+- a `1px` vertical rule separates the columns and the graph remains vertically
+  centered while sticky;
+- the opening card describes the untouched graph and owns its fully settled
+  initial state at viewport top;
+- every later card owns the state fully settled when its top reaches viewport
+  top;
+- an incoming transition begins only after its predecessor has reached the top
+  and the incoming card is visible, then uses the remaining natural card-top
+  distance;
+- outgoing and incoming cards exchange opacity over that same interval while
+  inactive context remains faintly legible;
+- ordinary paragraph height and moderate fixed gaps establish rhythm instead
+  of universal viewport-sized steps;
 - regular conceptual exposition and terminal reflection remain ordinary prose;
 - no transport bar is rendered; and
-- phones retain the one-column inline-sticky geometry until the desktop
-  grammar passes review.
+- narrow or short viewports retain the one-column inline-sticky geometry until
+  the desktop grammar passes review.
 
-The query-local cue sidecar, viewport-height step, and two-column paint are
-comparison machinery rather than shared authoring or layout standards. The
-preservation and promotion boundary is recorded in
-`../decisions/2026-08-04-kp-two-column-scroll-comparison.md`.
+The query-local sidecar, natural-distance projector, opacity exchange, sticky
+text, breakpoint, and two-column paint are comparison machinery rather than
+shared authoring or layout standards. The current preservation and promotion
+boundary is recorded in
+`../decisions/2026-08-04-kp-natural-card-state-handoff.md`.
 
 ## Controls, Navigation, And Accessibility
 

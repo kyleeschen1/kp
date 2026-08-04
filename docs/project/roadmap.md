@@ -134,14 +134,16 @@ a shared lesson-layout promotion.
 
 A parallel economics-only comparison is now available through
 `?layout=two-column-scroll`, recorded in
-`decisions/2026-08-04-kp-two-column-scroll-comparison.md`. On desktop, three
-short atomic cue cards occupy the left column while one vertically centered
-sticky graph occupies the right. Each card top maps the full viewport journey
-from semantic progress zero at the bottom to one at the top; scroll remains the
-only visible transport. The accepted inline route, source prose, split default,
-and all semantic animation truth remain unchanged. Phones temporarily retain
-the one-column inline geometry. Human comparison precedes any second caller or
-promotion of cards, viewport-height steps, or a two-column lesson shell.
+`decisions/2026-08-04-kp-natural-card-state-handoff.md`. On desktop, four
+naturally sized cards occupy a narrow left column while one vertically centered
+sticky graph occupies a narrow right column behind a `1px` divider. The first
+fully opaque card describes the untouched graph. Later cards own semantic
+states that become exact when their tops reach viewport top, trading opacity
+with their predecessors over the available natural card distance. Universal
+viewport-height steps are removed. The accepted inline route, source prose,
+split default, and semantic animation truth remain unchanged; narrow and short
+viewports retain one-column geometry. Human comparison precedes any second
+caller or promotion of this grammar.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in

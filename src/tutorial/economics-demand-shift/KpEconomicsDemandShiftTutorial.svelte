@@ -37,14 +37,14 @@
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
-    projectKpTwoColumnScrollCard,
     projectKpTwoColumnScrollMotionCorridor,
+    projectKpTwoColumnScrollSequence,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
   import {
-    findKpEconomicsTwoColumnCue
+    kpEconomicsTwoColumnCards
   } from "./economics-demand-shift-two-column-scroll.ts";
   import {
     findKpEconomicsMotionBlock,
@@ -120,6 +120,8 @@
     readonly passageId: string;
     readonly motionBlockId: KpEconomicsMotionBlockId | undefined;
     readonly projection: KpInlineStickyParagraphProjection;
+    readonly opacity: number;
+    readonly ownsAttention: boolean;
   }
 
   let {
@@ -208,6 +210,7 @@
   let inlineParagraphProjections = $state<
     Readonly<Record<string, KpInlineStickyParagraphProjection>>
   >({});
+  let twoColumnCardOpacities = $state<Readonly<Record<string, number>>>({});
   let reducedMotionQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let disposePlayerHost: (() => void) | undefined;
@@ -710,7 +713,7 @@
         `[data-kp-tutorial-motion-block="${block.id}"]`
       );
       const anchor = scrollPassageLayout
-        ? boundary?.querySelector<HTMLElement>("p")
+        ? scrollAnchorForMotionBoundary(boundary)
         : boundary?.querySelector<KpTutorialScrubBarElement>(
             "kp-tutorial-scrub-bar"
           );
@@ -719,7 +722,7 @@
         : [{
             id: block.id,
             anchor,
-            corridor: motionCorridorFor(block, anchor.offsetHeight)
+            corridor: motionCorridorFor(block, anchor)
           }];
     });
   }
@@ -733,7 +736,9 @@
     const tutorialAttention = scrollPassageLayout &&
         inlineStickyFit !== "reading" &&
         inlineStickyStageState === "pinned"
-      ? updateInlineStickyAttention(inlineParagraphFrames)
+      ? usesTwoColumnDesktopGeometry()
+        ? updateTwoColumnAttention(inlineParagraphFrames)
+        : updateInlineStickyAttention(inlineParagraphFrames)
       : updateReadingBandSelection(projection.readingBandY);
     const movedFromNavigation = navigationProjectionPending &&
       navigationScrollIntent &&
@@ -797,11 +802,14 @@
         let localProgress = active.progress;
         if (manualScrollRebase?.blockId === active.id) {
           const block = findKpEconomicsMotionBlock(active.id)!;
-          const paragraph = shell?.querySelector<HTMLElement>(
-            `[data-kp-tutorial-motion-block="${block.id}"] p`
+          const boundary = shell?.querySelector<HTMLElement>(
+            `[data-kp-tutorial-motion-block="${block.id}"]`
           );
+          const paragraph = scrollAnchorForMotionBoundary(boundary);
           const rebased = projectKpTutorialRebasedCorridor({
-            corridor: motionCorridorFor(block, paragraph?.offsetHeight ?? 1),
+            corridor: paragraph === undefined
+              ? block.corridor
+              : motionCorridorFor(block, paragraph),
             rawTravelAtTakeover: manualScrollRebase.rawTravelAtTakeover,
             manualProgress: manualScrollRebase.manualProgress,
             rawTravel: active.travel
@@ -835,6 +843,27 @@
   }
 
   function settleMotionOutsideAttentionBlock(passageId: string): void {
+    if (passageId === "graph-at-rest") {
+      settleMotionBoundary({
+        activeBlockId: "demand-shift",
+        localProgress: 0
+      });
+      return;
+    }
+    if (twoColumnScroll && passageId === "follow-shift") {
+      settleMotionBoundary({
+        activeBlockId: "demand-shift",
+        localProgress: 1
+      });
+      return;
+    }
+    if (twoColumnScroll && passageId === "shift-versus-movement") {
+      settleMotionBoundary({
+        activeBlockId: "supply-movement",
+        localProgress: 1
+      });
+      return;
+    }
     const passageOrder = lesson.sections.flatMap(({ passages }) =>
       passages.map((passage) => passage.id)
     );
@@ -852,9 +881,15 @@
           : undefined;
     if (boundary === undefined) return;
 
-    // Once the cursor enters prose outside a motion card, that prose owns the
-    // corresponding boundary frame. This keeps scroll, focus, and paint state
-    // synchronized without pretending a departed motion card is still active.
+    settleMotionBoundary(boundary);
+  }
+
+  function settleMotionBoundary(boundary: {
+    readonly activeBlockId: KpEconomicsMotionBlockId;
+    readonly localProgress: number;
+  }): void {
+    // Prose outside a live transition owns an exact settled frame. This keeps
+    // scroll, focus, and paint synchronized without event-history inference.
     lessonMotionProjection = projectKpEconomicsLessonMotion(boundary);
     seek(lessonMotionProjection.demandShiftProgress);
     cancelSupplyPlayback();
@@ -866,6 +901,38 @@
     scrollTimelineStatus = boundary.localProgress === 1
       ? "complete"
       : "rewound";
+  }
+
+  function updateTwoColumnAttention(
+    paragraphFrames: readonly KpEconomicsInlineParagraphFrame[]
+  ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
+    const focusedParagraph = paragraphFrames.find(({ ownsAttention }) =>
+      ownsAttention
+    ) ?? paragraphFrames[0];
+    const incomingParagraph = paragraphFrames.find(({ projection }) =>
+      projection.phase === "crossing"
+    );
+    const passageId = focusedParagraph?.passageId;
+    const motionBlockId = incomingParagraph?.motionBlockId;
+    if (passageId === undefined) return updateReadingBandSelection(0);
+
+    attentionPassageId = passageId;
+    attentionCursorState = "within-region";
+    scrollActiveMotionBlock = motionBlockId ?? "";
+    if (checkpoint.passageId !== passageId) {
+      const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
+        (candidate) => candidate.passageId === passageId
+      );
+      if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
+    }
+    return Object.freeze({
+      cursorY: 0,
+      state: "within-region",
+      activeRegionId: passageId,
+      activePassageId: passageId,
+      ...(motionBlockId === undefined ? {} : { activeMotionBlockId: motionBlockId }),
+      nearestRegionDistance: 0
+    });
   }
 
   function updateInlineStickyAttention(
@@ -921,16 +988,33 @@
       return [];
     }
     const stageBounds = inlineStage.getBoundingClientRect();
-    const frames = [...shell.querySelectorAll<HTMLElement>(
+    const elements = [...shell.querySelectorAll<HTMLElement>(
       "[data-kp-scroll-cue]"
-    )].map((element): KpEconomicsInlineParagraphFrame => {
+    )];
+    const measurements = elements.map((element) => {
       const paragraph = element.querySelector<HTMLElement>("p") ?? element;
-      const paragraphBounds = paragraph.getBoundingClientRect();
+      return {
+        element,
+        paragraphBounds: paragraph.getBoundingClientRect(),
+        cardTop: usesTwoColumnDesktopGeometry()
+          ? element.getBoundingClientRect().top
+          : paragraph.getBoundingClientRect().top
+      };
+    });
+    const sequence = usesTwoColumnDesktopGeometry()
+      ? projectKpTwoColumnScrollSequence({
+          cardTopPx: measurements.map(({ cardTop }) => cardTop),
+          viewportHeightPx: window.innerHeight
+        })
+      : undefined;
+    const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
+      const { element, paragraphBounds } = measurement;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
       const motionBlockId = economicsMotionBlockId(
         element.dataset["kpTutorialMotionBlock"]
       );
-      const projection = inlineStickyFit === "reading"
+      const sequenceCard = sequence?.cards[index];
+      const projection = sequenceCard ?? (inlineStickyFit === "reading"
         ? Object.freeze({
             phase: "below" as const,
             travel: 0,
@@ -938,21 +1022,25 @@
             distanceFromStageBottomPx:
               paragraphBounds.top - stageBounds.bottom
           })
-        : usesTwoColumnDesktopGeometry()
-          ? projectKpTwoColumnScrollCard({
-              cardTopPx: paragraphBounds.top,
-              viewportHeightPx: window.innerHeight
-            })
-          : projectKpInlineStickyParagraph({
-              paragraphTopPx: paragraphBounds.top,
-              paragraphBottomPx: paragraphBounds.bottom,
-              stageBottomPx: stageBounds.bottom,
-              viewportHeightPx: window.innerHeight
-            });
-      return { passageId, motionBlockId, projection };
+        : projectKpInlineStickyParagraph({
+            paragraphTopPx: paragraphBounds.top,
+            paragraphBottomPx: paragraphBounds.bottom,
+            stageBottomPx: stageBounds.bottom,
+            viewportHeightPx: window.innerHeight
+          }));
+      return {
+        passageId,
+        motionBlockId,
+        projection,
+        opacity: sequenceCard?.opacity ?? 1,
+        ownsAttention: sequenceCard?.ownsAttention ?? false
+      };
     });
     inlineParagraphProjections = Object.freeze(Object.fromEntries(frames.map(
       ({ passageId, projection }) => [passageId, projection]
+    )));
+    twoColumnCardOpacities = Object.freeze(Object.fromEntries(frames.map(
+      ({ passageId, opacity }) => [passageId, opacity]
     )));
     return Object.freeze(frames);
   }
@@ -1014,14 +1102,25 @@
 
   function motionCorridorFor(
     block: KpEconomicsMotionBlock,
-    paragraphHeightPx: number
+    anchor: HTMLElement
   ): KpTutorialMotionCorridor {
     if (!scrollPassageLayout || inlineStickyFit === "reading") {
       return block.corridor;
     }
     if (usesTwoColumnDesktopGeometry()) {
+      const card = anchor.closest<HTMLElement>(
+        "[data-kp-two-column-scroll-card]"
+      );
+      const previousCard = card?.previousElementSibling as
+        HTMLElement | null | undefined;
+      const cardDistancePx = previousCard === undefined || previousCard === null
+        ? window.innerHeight
+        : anchor.getBoundingClientRect().top -
+          previousCard.getBoundingClientRect().top;
       return projectKpTwoColumnScrollMotionCorridor({
-        corridor: block.corridor
+        corridor: block.corridor,
+        cardDistancePx,
+        viewportHeightPx: window.innerHeight
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1029,12 +1128,14 @@
       stageBottomPx: inlineStage?.getBoundingClientRect().bottom ??
         inlineStickyTopInset() + inlineStickyStageHeightPx,
       viewportHeightPx: window.innerHeight,
-      paragraphHeightPx
+      paragraphHeightPx: anchor.offsetHeight
     });
   }
 
   function usesTwoColumnDesktopGeometry(): boolean {
-    return twoColumnScroll && window.innerWidth > 760;
+    return twoColumnScroll && window.matchMedia(
+      "(min-width: 60rem) and (min-height: 32rem)"
+    ).matches;
   }
 
   function updateReadingBandSelection(
@@ -1285,15 +1386,16 @@
       const block = findKpEconomicsMotionBlock(
         destination.motionScroll.blockId
       )!;
+      const boundary = shell.querySelector<HTMLElement>(
+        `[data-kp-tutorial-motion-block="${destination.motionScroll.blockId}"]`
+      ) ?? undefined;
       const anchor = scrollPassageLayout
-        ? shell.querySelector<HTMLElement>(
-            `[data-kp-tutorial-motion-block="${destination.motionScroll.blockId}"] p`
-          ) ?? undefined
+        ? scrollAnchorForMotionBoundary(boundary)
         : destination.motionScroll.blockId === "supply-movement"
           ? supplyScrubBar
           : demandScrubBar;
       if (anchor === undefined) return;
-      const corridor = motionCorridorFor(block, anchor.offsetHeight);
+      const corridor = motionCorridorFor(block, anchor);
       const start = corridor.startViewportRatio * window.innerHeight;
       const end = corridor.endViewportRatio * window.innerHeight;
       const endpointInset = destination.motionScroll.travel <= 0.001
@@ -1321,6 +1423,15 @@
 
   function handleNavigationScrollIntent(): void {
     if (navigationProjectionPending) navigationScrollIntent = true;
+  }
+
+  function scrollAnchorForMotionBoundary(
+    boundary: HTMLElement | null | undefined
+  ): HTMLElement | undefined {
+    if (boundary === undefined || boundary === null) return undefined;
+    return usesTwoColumnDesktopGeometry()
+      ? boundary
+      : boundary.querySelector<HTMLElement>("p") ?? boundary;
   }
 
   function resolveNavigationTarget(
@@ -1438,9 +1549,6 @@
   {@const inlineParagraphProjection = scrollCue
     ? inlineParagraphProjections[passage.id]
     : undefined}
-  {@const twoColumnCue = twoColumnScroll
-    ? findKpEconomicsTwoColumnCue(passage.id)
-    : undefined}
   <div
     class="kp-economics-tutorial__passage"
     class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
@@ -1460,6 +1568,9 @@
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
+    data-kp-two-column-card-opacity={twoColumnScroll && scrollCue
+      ? (twoColumnCardOpacities[passage.id] ?? 0.24).toFixed(4)
+      : undefined}
     data-kp-tutorial-motion-block={renderedMotionBlock?.id}
     id={renderedMotionBlock === undefined
       ? undefined
@@ -1472,6 +1583,9 @@
     aria-label={renderedMotionBlock === undefined
       ? undefined
       : `${renderedMotionBlock.label} animation step`}
+    style={twoColumnScroll && scrollCue
+      ? `--kp-two-column-card-opacity:${twoColumnCardOpacities[passage.id] ?? 0.24}`
+      : undefined}
   >
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}
@@ -1485,9 +1599,7 @@
         ></span>
       {/each}
     {/if}
-    {#if twoColumnCue !== undefined}
-      <p>{@html twoColumnCue.html}</p>
-    {:else if passage.id === "prediction"}
+    {#if passage.id === "prediction"}
       <p>{@html passage.paragraphs[0]!.html}</p>
       <details>
         <summary>Reveal what happens at the old price</summary>
@@ -1650,7 +1762,9 @@
                   {@render economicsStage()}
                 </aside>
                 <div class="kp-economics-tutorial__motion-passage-cards">
-                  {#each section.passages.filter(({ role }) => role !== "reflection") as passage}
+                  {#each (twoColumnScroll
+                    ? kpEconomicsTwoColumnCards
+                    : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {@render lessonPassage(passage, true)}
                   {/each}
                 </div>

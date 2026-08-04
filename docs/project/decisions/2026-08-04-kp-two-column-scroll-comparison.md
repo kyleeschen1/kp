@@ -1,7 +1,8 @@
 # Preserve A Two-Column Scroll Comparison
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: initial viewport-step trial superseded by
+`2026-08-04-kp-natural-card-state-handoff.md`
 
 ## Decision
 

@@ -54,13 +54,15 @@ split layout remains the default pending human comparison and a structurally
 different second caller.
 
 The parallel comparison in
-`decisions/2026-08-04-kp-two-column-scroll-comparison.md` keeps short atomic
-cues left and a vertically centered sticky graph right. A cue top owns the
-entire reversible viewport-bottom-to-viewport-top timeline. It intentionally
-tests a viewport-height step rhythm and scroll-only transport without changing
-the accepted Markdown, semantic motion blocks, or inline route. Phones retain
-the one-column inline geometry. This remains economics-local until human
-review; it does not authorize a shared cue schema or lesson-shell rollout.
+`decisions/2026-08-04-kp-natural-card-state-handoff.md` keeps naturally sized,
+mixed-length cards left and a vertically centered sticky graph right, with a
+thin divider and narrower total measure. The opening card explains the initial
+graph as a settled state. Each successor reaches full opacity and exact
+semantic completion when its top reaches viewport top, exchanging opacity with
+its predecessor over their natural document distance. Universal `100vh` steps
+are absent. Narrow and short viewports retain one-column geometry. This remains
+economics-local until human review; it does not authorize a shared card schema
+or lesson-shell rollout.
 
 The bounded theme trial in
 `decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same
