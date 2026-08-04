@@ -82,18 +82,22 @@ export function renderKpLispStructuralMotionHtml(
   sourceHtml += escapeHtml(frame.state.nativeCode.slice(cursor));
 
   const beads = frame.beads.map((bead) =>
-    `<span class="kp-lisp-structural-stage__bead" data-kp-lisp-structural-bead="${escapeAttribute(bead.bead.expressionId)}" data-kp-lisp-visible="${bead.opacity > 0.001}" style="--kp-lisp-bead-x:${bead.xEm}em;--kp-lisp-bead-y:${bead.yEm}em;--kp-lisp-bead-scale:${bead.scale};--kp-lisp-bead-opacity:${bead.opacity}">${renderKpLispExpressionBeadHtml({ bead: bead.bead, detailed: bead.detailed })}</span>`
+    `<span class="kp-lisp-structural-stage__bead" data-kp-lisp-structural-bead="${escapeAttribute(bead.bead.expressionId)}" data-kp-lisp-visible="${bead.opacity > 0.001}" style="--kp-lisp-bead-x:${px(bead.xEm)};--kp-lisp-bead-y:${px(bead.yEm)};--kp-lisp-bead-scale:${bead.scale};--kp-lisp-bead-opacity:${bead.opacity}">${renderKpLispExpressionBeadHtml({ bead: bead.bead, detailed: bead.detailed })}</span>`
   ).join("");
   const frontier = frame.frontierExpressionIds.join(" ");
 
-  return `<section class="kp-lisp-structural-stage" data-kp-lisp-structural-stage data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-direction="${frame.direction}" data-kp-lisp-frontier="${escapeAttribute(frontier)}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}"><pre class="kp-lisp-structural-stage__source" style="--kp-lisp-stage-width:${frame.geometry.stage.widthEm}em;--kp-lisp-stage-height:${frame.geometry.stage.heightEm}em"><code data-kp-lisp-native-code="application">${sourceHtml}</code>${beads}</pre></section>`;
+  return `<section class="kp-lisp-structural-stage" data-kp-lisp-structural-stage data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-direction="${frame.direction}" data-kp-lisp-frontier="${escapeAttribute(frontier)}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}"><pre class="kp-lisp-structural-stage__source" style="--kp-lisp-stage-width:${px(frame.geometry.stage.widthEm)};--kp-lisp-stage-height:${px(frame.geometry.stage.heightEm)}"><code data-kp-lisp-native-code="application">${sourceHtml}</code>${beads}</pre></section>`;
 }
 
 function renderToken(
   frame: KpLispStructuralMotionFrame["tokens"][number]
 ): string {
   const { token } = frame;
-  return `<span class="kp-lisp-structural-stage__token" data-kp-lisp-material-id="${escapeAttribute(token.id)}" data-kp-lisp-material-kind="${token.kind}" data-kp-lisp-owner-expression="${escapeAttribute(token.ownerExpressionId)}" data-kp-lisp-owner-role="${token.ownerRole}" data-kp-lisp-origin-ids="${escapeAttribute(token.originIds.join(" "))}" data-kp-lisp-active="${frame.active}" data-kp-lisp-compression="${frame.compression}" data-kp-lisp-visible="${frame.opacity > 0.001}" style="--kp-lisp-token-x:${frame.xEm}em;--kp-lisp-token-y:${frame.yEm}em;--kp-lisp-token-scale:${frame.scale};--kp-lisp-token-opacity:${frame.opacity}">${escapeHtml(token.lexeme)}</span>`;
+  return `<span class="kp-lisp-structural-stage__token" data-kp-lisp-material-id="${escapeAttribute(token.id)}" data-kp-lisp-material-kind="${token.kind}" data-kp-lisp-owner-expression="${escapeAttribute(token.ownerExpressionId)}" data-kp-lisp-owner-role="${token.ownerRole}" data-kp-lisp-origin-ids="${escapeAttribute(token.originIds.join(" "))}" data-kp-lisp-active="${frame.active}" data-kp-lisp-compression="${frame.compression}" data-kp-lisp-visible="${frame.opacity > 0.001}" style="--kp-lisp-token-x:${px(frame.xEm)};--kp-lisp-token-y:${px(frame.yEm)};--kp-lisp-token-scale:${frame.scale};--kp-lisp-token-opacity:${frame.opacity}">${escapeHtml(token.lexeme)}</span>`;
+}
+
+function px(valueEm: number): string {
+  return `${Math.round(valueEm * 20 * 1e6) / 1e6}px`;
 }
 
 function escapeHtml(value: string): string {

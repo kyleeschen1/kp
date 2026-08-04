@@ -348,6 +348,45 @@
       "status": "passed",
       "scope": "s16 committed visual script type boundary",
       "checkedAt": "2026-08-04T02:37:30.099Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-application-motion.test.ts tests/kp-lisp-bound-value-propagation.test.ts tests/kp-lisp-reconstruction-choreography.test.ts tests/kp-lisp-lambda-binding-geometry.test.ts tests/kp-lisp-s-expression-material-dom.test.ts tests/kp-lisp-structural-motion.test.ts",
+      "status": "passed",
+      "scope": "s17 end-to-end binding, propagation, reconstruction, DOM ownership, structural coordinate preservation, and direct seek",
+      "checkedAt": "2026-08-04T02:50:19.536Z",
+      "notes": "37 focused tests pass across wide and phone programs, 441-frame application rewind sampling, and preserved structural sampling"
+    },
+    {
+      "command": "npm run visual:lisp-application-motion",
+      "status": "passed",
+      "scope": "s17 canonical nine-frame application visual smoke",
+      "checkedAt": "2026-08-04T02:50:20.565Z",
+      "notes": "Inspected open, transfer, absorb, bind, propagate, provenance, reconstruct, recenter, and settled phone frames in tmp/codex/lisp-application-motion/canonical-application-sequence.png"
+    },
+    {
+      "command": "npm run visual:lisp-structural-motion",
+      "status": "passed",
+      "scope": "s17 fixed-20px coordinate-unit preservation",
+      "checkedAt": "2026-08-04T02:50:21.451Z",
+      "notes": "Re-inspected the six structural frames after converting stage, token, and bead coordinates to explicit 20px geometry units"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s17 application type boundary",
+      "checkedAt": "2026-08-04T02:50:22.347Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s17 test type boundary",
+      "checkedAt": "2026-08-04T02:50:23.251Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s17 committed visual script type boundary",
+      "checkedAt": "2026-08-04T02:50:24.168Z"
     }
   ],
   "progress": {
