@@ -15,18 +15,17 @@ export interface KpInlineStickyLessonLayoutProjection {
   readonly availableHeightPx: number;
 }
 
-export type KpInlineStickyCuePhase =
+export type KpInlineStickyParagraphPhase =
   | "below"
   | "approach"
-  | "hold"
-  | "fade"
-  | "occluded";
+  | "crossing"
+  | "passed";
 
-export interface KpInlineStickyCueProjection {
-  readonly phase: KpInlineStickyCuePhase;
-  readonly opacity: number;
-  readonly fadeProgress: number;
-  readonly distanceFromHandoffThresholdPx: number;
+export interface KpInlineStickyParagraphProjection {
+  readonly phase: KpInlineStickyParagraphPhase;
+  readonly travel: number;
+  readonly crossingProgress: number;
+  readonly distanceFromStageBottomPx: number;
 }
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
@@ -41,11 +40,11 @@ export function readKpEconomicsDemandShiftPresentationLayout(
 export function projectKpInlineStickyLessonLayout(input: {
   readonly viewportWidthPx: number;
   readonly viewportHeightPx: number;
-  readonly cueHeightPx: number;
+  readonly proseLineHeightPx: number;
 }): KpInlineStickyLessonLayoutProjection {
   const width = finitePositive(input.viewportWidthPx, 320);
   const height = finitePositive(input.viewportHeightPx, 640);
-  const cueHeight = finiteNonNegative(input.cueHeightPx);
+  const proseLineHeight = finitePositive(input.proseLineHeightPx, 28);
   const topInset = clamp(height * 0.04, 16, 40);
   const bottomInset = clamp(height * 0.03, 16, 32);
   const availableHeight = Math.max(0, height - topInset - bottomInset);
@@ -55,10 +54,16 @@ export function projectKpInlineStickyLessonLayout(input: {
     minimumStageHeight,
     width <= 480 ? 360 : 432
   );
-  const stageBudget = availableHeight - cueHeight;
+  const minimumReadingBand = clamp(
+    proseLineHeight * 4.5,
+    144,
+    height * 0.42
+  );
+  const stageBudget = availableHeight - minimumReadingBand;
 
-  // Typography remains authoritative. The stage contracts before a complete
-  // cue loses its ordinary below-stage reading position.
+  // A paragraph may be taller than the lower viewport because it passes
+  // beneath the stage. Preserve several readable lines instead of demanding
+  // that the complete paragraph coexist with the graph.
   if (stageBudget < minimumStageHeight) {
     return Object.freeze({
       fit: "reading",
@@ -73,85 +78,86 @@ export function projectKpInlineStickyLessonLayout(input: {
   });
 }
 
-export function projectKpInlineStickyCue(input: {
-  readonly cueAnchorTopPx: number;
-  readonly stageTopPx: number;
+export function projectKpInlineStickyParagraph(input: {
+  readonly paragraphTopPx: number;
+  readonly paragraphBottomPx: number;
   readonly stageBottomPx: number;
   readonly viewportHeightPx: number;
-}): KpInlineStickyCueProjection {
-  const stageTop = finiteNonNegative(input.stageTopPx);
+}): KpInlineStickyParagraphProjection {
   const stageBottom = finiteNonNegative(input.stageBottomPx);
-  const stageHeight = Math.max(0, stageBottom - stageTop);
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const holdDistance = viewportHeight * 0.05;
-  const fadeDistance = viewportHeight * 0.1;
-  const fadeStart = stageBottom - holdDistance;
-  const fadeEnd = fadeStart - fadeDistance;
-  const cueTop = Number.isFinite(input.cueAnchorTopPx)
-    ? input.cueAnchorTopPx
-    : stageBottom;
-  const viewportBottom = Math.max(stageBottom, viewportHeight);
-  const distanceFromHandoffThreshold = cueTop - stageBottom;
-  const approachProgress = viewportBottom <= stageBottom
-    ? 0
-    : 1 - smoothstep(stageBottom, viewportBottom, cueTop);
-
-  if (cueTop > stageBottom || stageHeight === 0) {
-    return cueProjection(
-      approachProgress > 0 ? "approach" : "below",
-      0
-    );
-  }
-  if (cueTop <= fadeEnd) {
-    return cueProjection("occluded", 1);
-  }
-  if (cueTop >= fadeStart) {
-    return cueProjection("hold", 0);
-  }
-  return cueProjection(
-    "fade",
-    clamp((fadeStart - cueTop) / fadeDistance, 0, 1)
+  const paragraphTop = Number.isFinite(input.paragraphTopPx)
+    ? input.paragraphTopPx
+    : viewportHeight;
+  const paragraphBottom = Number.isFinite(input.paragraphBottomPx)
+    ? Math.max(paragraphTop, input.paragraphBottomPx)
+    : paragraphTop;
+  const paragraphHeight = Math.max(1, paragraphBottom - paragraphTop);
+  const travelDistance = Math.max(
+    1,
+    viewportHeight - stageBottom + paragraphHeight
   );
-
-  function cueProjection(
-    phase: KpInlineStickyCuePhase,
-    fadeProgress: number
-  ): KpInlineStickyCueProjection {
-    const progress = clamp(fadeProgress, 0, 1);
-    const fade = smoothstep(0, 1, progress);
-    return Object.freeze({
-      phase,
-      opacity: phase === "fade" ? 1 - fade : phase === "occluded" ? 0 : 1,
-      fadeProgress: progress,
-      distanceFromHandoffThresholdPx: distanceFromHandoffThreshold
-    });
-  }
+  const travel = clamp(
+    (viewportHeight - paragraphTop) / travelDistance,
+    0,
+    1
+  );
+  const crossingProgress = clamp(
+    (stageBottom - paragraphTop) / paragraphHeight,
+    0,
+    1
+  );
+  return Object.freeze({
+    phase: paragraphTop >= viewportHeight
+      ? "below"
+      : paragraphTop > stageBottom
+        ? "approach"
+        : paragraphBottom > stageBottom
+          ? "crossing"
+          : "passed",
+    travel,
+    crossingProgress,
+    distanceFromStageBottomPx: paragraphTop - stageBottom
+  });
 }
 
-export function projectKpInlineStickyMotionCorridor(input: {
+export function projectKpInlineStickyParagraphMotionCorridor(input: {
   readonly corridor: KpTutorialMotionCorridor;
   readonly stageBottomPx: number;
   readonly viewportHeightPx: number;
-  readonly scrollTravelViewportRatio: number;
+  readonly paragraphHeightPx: number;
 }): KpTutorialMotionCorridor {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const motionStart = clamp(
-    finiteNonNegative(input.stageBottomPx) - viewportHeight * 0.15,
-    viewportHeight * 0.08,
-    viewportHeight * 0.58
+  const stageBottom = clamp(
+    finiteNonNegative(input.stageBottomPx),
+    1,
+    viewportHeight
   );
-  const startViewportRatio = motionStart / viewportHeight;
-  const scrollTravelViewportRatio = clamp(
-    input.scrollTravelViewportRatio,
-    0.2,
-    0.9
+  const paragraphHeight = finitePositive(input.paragraphHeightPx, 1);
+  const totalTravel = viewportHeight - stageBottom + paragraphHeight;
+  const crossingStart = clamp(
+    (viewportHeight - stageBottom) / totalTravel,
+    Number.EPSILON,
+    1 - Number.EPSILON
   );
-  // A scene's physical track and its projection corridor share one travel
-  // budget, so blank document space cannot outlive the semantic animation.
+  const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
+  const keyframes = [
+    { travel: 0, progress: firstProgress },
+    ...input.corridor.keyframes.map(({ travel, progress }) => ({
+      travel: crossingStart + travel * (1 - crossingStart),
+      progress
+    }))
+  ];
+  // The paragraph's approach is a semantic entry hold. Its authored motion
+  // then occupies exactly the distance during which the paragraph passes
+  // beneath the stage, ending when the paragraph's trailing edge arrives.
   return Object.freeze({
     ...input.corridor,
-    startViewportRatio,
-    endViewportRatio: startViewportRatio - scrollTravelViewportRatio
+    startViewportRatio: 1,
+    endViewportRatio: (stageBottom - paragraphHeight) / viewportHeight,
+    keyframes: Object.freeze(keyframes.map((keyframe) =>
+      Object.freeze(keyframe)
+    ))
   });
 }
 
@@ -165,10 +171,4 @@ function finiteNonNegative(value: number): number {
 
 function clamp(value: number, minimum: number, maximum: number): number {
   return Math.max(minimum, Math.min(maximum, value));
-}
-
-function smoothstep(edge0: number, edge1: number, value: number): number {
-  if (edge1 <= edge0) return value >= edge1 ? 1 : 0;
-  const position = clamp((value - edge0) / (edge1 - edge0), 0, 1);
-  return position * position * (3 - 2 * position);
 }

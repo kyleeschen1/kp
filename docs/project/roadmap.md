@@ -94,28 +94,22 @@ performance ceilings are the reference caller.
 A bounded successor now tests a one-axis alternative without replacing that
 reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
-pinned, and released stage lifecycle. The current bounded revision rejects both
-visible row and visible card metaphors in favor of a continuous canvas: prose
-keeps one 43-rem measure while the transparent sticky graph bleeds wider around
-the same center. Cue and stage have no rule, fill, border, radius, lift, scale,
-depth, or shadow. The cue's top edge crosses an invisible stage-bottom
-threshold, holds fully opaque for `5vh`, fades through one opacity-only eased
-envelope over `10vh`, and only then permits semantic motion. Native scroll snap
-remains deliberately absent. Block controls are a quiet inline divider. This
-query-local proof also trials Gill Sans for all non-KaTeX text while retaining
-KaTeX's renderer-owned fonts. The accepted correction is recorded in
-`decisions/2026-08-04-kp-continuous-canvas-attention-ownership.md`. The
-latest exemplar refinement fixes economics graph strokes at `1px`, derives the
-grid at half that token, preserves ghost stroke style, sizes inline math and
-`P`/`Q` with prose, removes the persistent equation banner from the reading
-stage, and replaces generic post-passage runways with two motion-only scene
-tracks whose physical distance exactly owns semantic progress. It is recorded
-in
-`decisions/2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md`.
-These graph choices remain economics-local pending a second caller. The
-economics proof is query-selected through `?layout=inline-sticky`; the approved
-split route remains default until human comparison and a structurally different
-second caller justify promotion.
+pinned, and released stage lifecycle. The latest reversible refinement is
+`decisions/2026-08-04-kp-paragraph-owned-stage-occlusion.md`: prose keeps one
+43-rem measure while an almost-opaque page-colored graph stage bleeds wider and
+paints above it. Each paragraph owns either semantic motion or a focus change.
+Approach holds the initial frame; motion advances while the paragraph crosses
+beneath the stage and completes at its trailing edge. Paragraph opacity and
+geometry stay stable, and no synthetic runway or scene-track element exists.
+Native scroll snap remains absent. The visible controls reduce to Rewind,
+Previous, Play/Pause, and Next, while progressive slider markup remains hidden
+in light DOM. The query-local graph profile uses `1px` structural strokes,
+`1.5px` curves, a `0.5px` grid, style-preserving ghosts, SteelBlue/red roles,
+prose-sized inline and graph KaTeX, and smaller equilibrium markers. These
+choices remain economics-local pending a second caller. The proof is
+query-selected through `?layout=inline-sticky`; the approved split route
+remains default until human comparison and a structurally different caller
+justify promotion.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -602,12 +596,13 @@ activating heavy animation capabilities lazily.
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
    `?layout=inline-sticky` continuous-canvas proof, including the wider
-   transparent graph bleed, invisible top-edge threshold, absence of row/card
-   chrome, `5vh` hold, `10vh` opacity-only fade and motion gate, quiet inline
-   controls, two exact motion-only scene tracks, invariant `1px` graph strokes,
-   half-width grid, style-preserving ghosts, body-sized inline math and `P`/`Q`,
-   reverse scroll, query-local Gill Sans/KaTeX font separation, constant prose
-   measure, phone fit, and large-text fallback; do not infer default promotion.
+   page-colored stage bleed, paragraph-owned motion and focus, stable prose
+   paint, absence of synthetic tracks, moderate reading rhythm, four quiet
+   semantic controls with hidden sliders, exact reverse scroll, `1px`
+   structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
+   SteelBlue/red roles, prose-sized inline and graph math, smaller equilibrium
+   markers, query-local Gill Sans/KaTeX separation, constant prose measure,
+   phone fit, and large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

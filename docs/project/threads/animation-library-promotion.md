@@ -247,11 +247,13 @@ construction grid, role-based hierarchy, inline KaTeX, and stable two-decimal
 moving readouts over exact semantic truth. Domain geometry, equations,
 narrative, units, responsive composition, and choreography remain local.
 
-The later economics inline-sticky discovery additionally trials invariant
-`1px` structural strokes, a calculated half-width grid, and style-preserving
-opacity ghosts. That treatment remains scoped to the economics presentation
-profile; it is evidence for a future shared-profile comparison, not a silent
-revision of `kp.graph.dimensional-continuity.v1`.
+The later economics inline-sticky discovery additionally trials `1px`
+structural strokes, `1.5px` curves, a calculated `0.5px` grid,
+style-preserving opacity ghosts, SteelBlue/red semantic roles, prose-sized
+graph mathematics, and smaller equilibrium markers. That treatment remains
+scoped to the economics presentation profile; it is evidence for a future
+shared-profile comparison, not a silent revision of
+`kp.graph.dimensional-continuity.v1`.
 
 Consumer and producer surplus remain a possible optional follow-on rather than
 default choreography. Deadweight loss is deferred to a separate model with an

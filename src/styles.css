@@ -2186,7 +2186,10 @@ h2 {
 
 .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
   --kp-graph-line-width: 1px;
+  --kp-graph-curve-line-width: calc(var(--kp-graph-line-width) * 1.5);
   --kp-graph-grid-line-width: calc(var(--kp-graph-line-width) * 0.5);
+  --kp-graph-stable: #4682b4;
+  --kp-graph-changing: #dc443c;
 }
 
 .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] .editor-graph-stage__plot-plane {
@@ -2312,7 +2315,7 @@ h2 {
 .editor-graph-stage__economics-curve {
   fill: none;
   stroke-linecap: round;
-  stroke-width: var(--kp-graph-line-width, 1px);
+  stroke-width: var(--kp-graph-curve-line-width, 1.5px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-curve--supply { stroke: var(--kp-graph-stable); }
@@ -2359,7 +2362,7 @@ h2 {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   stroke-linecap: round;
-  stroke-width: var(--kp-graph-line-width, 1px);
+  stroke-width: var(--kp-graph-curve-line-width, 1.5px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-supply-movement-target {

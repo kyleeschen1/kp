@@ -1,7 +1,13 @@
 # Use Stable Graph Strokes And Semantic Scene Tracks In The Economics Proof
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded in part for bounded discovery
+
+Superseded on 2026-08-04 by
+`2026-08-04-kp-paragraph-owned-stage-occlusion.md`: paragraph crossing now
+owns semantic progress, so explicit scene tracks and the cue fade gate no
+longer apply. The economics stroke trial is also revised to keep structural
+lines at `1px`, use `1.5px` curves, and retain the half-width grid.
 
 ## Decision
 

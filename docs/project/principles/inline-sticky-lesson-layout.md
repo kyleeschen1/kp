@@ -8,28 +8,29 @@ Revised: 2026-08-04
 
 KP lessons may coordinate prose and animation through one reading axis on a
 continuous canvas. A diagram begins as an ordinary embedded figure and pins in
-the upper viewport while its scene is active. The following stable prose cue
-approaches on the same page plane. When its top edge reaches the stage's lower
-edge, it remains fully readable for `5vh`, fades over the following `10vh`, and
-only then yields attention to essential animation.
+the upper viewport while its scene is active. Complete, stable prose then
+approaches and passes beneath that diagram. Paragraph geometry—not synthetic
+scroll runway, transient caption text, or an opacity animation—coordinates
+what receives attention and how semantic motion advances.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required presentation.
 
 ## Vocabulary And Geometry
 
-- **Stage:** the sticky animation region in the upper viewport. It is geometry,
-  not a visible card.
-- **Graph bleed:** a diagram may extend wider than the prose while remaining on
-  the same center and page plane.
-- **Handoff threshold:** the invisible stage-bottom line used for projection.
-- **Hold region:** the first `5vh` above the threshold after a cue top crosses.
-- **Fade region:** the following `10vh`, ending `15vh` above the threshold.
-- **Cue:** one stable prose block that tells the learner what to inspect.
-- **Continuous canvas:** page, cue, stage, and diagram share one visual ground;
-  no row or card surface separates their explanatory roles.
-- **Scene track:** source-order travel after a motion cue whose physical height
-  is exactly the block's normalized semantic-motion corridor.
+- **Stage:** the sticky animation region in the upper viewport.
+- **Graph bleed:** a diagram may extend wider than prose while sharing its
+  center and page hue.
+- **Crossing threshold:** the stage's lower edge.
+- **Paragraph scene:** one stable prose paragraph and the focus or motion it
+  owns.
+- **Approach:** paragraph travel from the viewport bottom to the threshold.
+- **Crossing:** travel from the paragraph's leading edge reaching the threshold
+  to its trailing edge reaching the threshold.
+- **Stage occlusion:** the wider stage paints above crossed text with an
+  almost-opaque version of the page surface. The text itself does not fade.
+- **Continuous canvas:** page, paragraph, stage, and diagram share one visual
+  ground; no row or card surface separates their explanatory roles.
 
 The stage lifecycle is:
 
@@ -37,52 +38,54 @@ The stage lifecycle is:
 embedded -> pinned -> released -> embedded
 ```
 
-Each cue has the reversible lifecycle:
+Each paragraph has the reversible lifecycle:
 
 ```text
-below -> approach -> hold -> fade -> occluded
+below -> approach -> crossing -> passed
 ```
 
-The cue's untransformed top edge is its stage anchor. It stays fully opaque
-before crossing and while it travels the next `5vh`. Across the following
-`10vh`, one smooth eased envelope takes opacity from one to zero. There is no
-cue transform, elevation, scale, depth, shadow, or stacking switch. Reverse
-scrolling reconstructs the same states from geometry without replaying pixels.
+One geometry sample projects the stage lifecycle, paragraph lifecycle,
+attention owner, active motion block, and local semantic progress.
+Intersection events may assist lazy loading but do not own animation or
+attention truth.
 
 ## Motion And Attention Contract
 
-- A motion scene is one cue followed by one explicit scene track. Ordinary
-  context and conclusion passages do not receive timing-shaped spacers.
-- Crossing the invisible threshold begins the `5vh` hold, not semantic motion.
-- The block-local semantic motion corridor begins after the following `10vh`
-  fade, once cue opacity reaches zero.
-- The scene track's viewport-unit height and its projected start-to-end
-  corridor are one declared budget. Its first pixel maps to local travel zero,
-  its last pixel maps to one, and authored keyframe plateaus own any pauses.
-- The next cue remains fully opaque below the stage and does not enter the
-  handoff until the preceding segment can settle.
-- Every cue cycle in the exemplar uses the same opacity envelope; asset-local
-  semantic choreography remains independently authored.
-- Consecutive animation blocks retain independent semantic progress and only
+- Every paragraph in the active scene owns either continuous motion or a
+  deterministic focus/checkpoint change.
+- Approach is a semantic entry hold: authored motion stays at its initial
+  frame while the learner reads what to watch.
+- Crossing begins when the paragraph's leading edge reaches the stage bottom.
+  Authored local keyframes are remapped across the paragraph's physical
+  crossing distance.
+- Motion reaches its final frame when the paragraph's trailing edge reaches
+  the stage bottom. Authored keyframe plateaus own internal pauses.
+- A focus-only paragraph becomes the attention owner through the same crossing
+  geometry without inventing empty animation time.
+- Between paragraphs, the latest passed paragraph remains authoritative until
+  the next paragraph crosses.
+- Consecutive motion paragraphs retain independent semantic progress and only
   one active sampler.
-- Visual top and bottom margins are explicit rem/viewport-clamped tokens and
-  never extend semantic motion.
+- Reverse scroll reconstructs the same state from geometry without replaying
+  pixels or depending on event history.
+- Moderate rem/viewport-clamped paragraph margins express reading rhythm only.
+  They never extend semantic progress.
 
-One geometry sample projects immutable stage phase, cue phase, cue opacity,
-active passage, active motion block, and local semantic progress. Intersection
-events may assist lazy loading but do not own animation or attention truth.
+Do not add a scene-track element, generic runway, viewport-sized spacer, or
+second scroll clock merely to create animation time.
 
 ## Text And DOM Contract
 
 - Canonical lesson content remains continuous structured prose.
 - Every paragraph exists from initial publication in source order.
 - Enhancement must not duplicate, reparent, rewrite, or replace prose.
-- The prose column keeps one width, font size, indentation, padding, and line
-  wrapping in every cue phase. Opacity changes paint, never layout measure.
-- Cue wording remains visually stable while its animation runs.
-- Prose below the stage stays fully opaque until its own threshold crossing.
-- Released prose leaves through normal page motion. It is not blurred or
-  clipped, and there are no internal prose scrollbars.
+- Prose keeps one width, font size, indentation, padding, line wrapping,
+  opacity, transform, scale, and background in every phase.
+- Paragraph wording remains visually stable while its animation runs.
+- Long paragraphs may continue beneath the stage; stage occlusion, rather than
+  paragraph mutation, establishes depth.
+- Released prose leaves through normal page motion. It is not blurred, clipped,
+  or placed in an internal scrollbar.
 
 ## Readable Fit Contract
 
@@ -98,16 +101,22 @@ line-height: 1.55;
 
 Primary lesson prose must not shrink below approximately 17 CSS pixels at the
 default browser text scale. Section headings begin at `h3` scale. Inline KaTeX
-inherits the prose scale; long mathematics receives authored semantic breaks
+inherits the actual prose scale, including an explicit reset of the inner
+`.katex` enlargement when needed. Long mathematics receives semantic breaks
 rather than blanket scaling. Animated readouts use stable tabular geometry and
 must not change line height.
 
 Each scene projects one fit class:
 
-1. `comfortable`: the preferred stage and one complete readable cue coexist;
-2. `compact`: the stage contracts while the prose measure remains unchanged;
-3. `reading`: sticky positioning, cue fading, and scene tracks turn off and the
+1. `comfortable`: the preferred stage and a useful paragraph reading band
+   coexist;
+2. `compact`: the stage contracts while prose measure remains unchanged;
+3. `reading`: sticky positioning and scroll projection turn off and the
    complete diagram and prose return to ordinary flow.
+
+Fit reserves a small multi-line reading band rather than requiring an entire
+paragraph to fit below the stage. This permits paragraphs taller than the lower
+viewport while preserving readable type.
 
 The adaptation order is:
 
@@ -118,60 +127,58 @@ remove excess spacing
 -> return to reading flow
 ```
 
-Do not shrink prose indefinitely, clip it, or introduce nested scrolling. Use
-stable viewport units (`svh`) for stage and scene-track budgets so mobile browser
-chrome does not resize an active scene. Respect safe-area insets and user font
-scaling.
+Do not shrink prose indefinitely, clip it, or introduce nested scrolling.
+Respect safe-area insets, stable viewport geometry, and user font scaling.
 
 ## Visual Contract
 
-- The prose always retains one readable measure. A graph or code stage may
-  bleed wider around the same center without changing text width.
-- Page, cue, stage, player, and diagram plot plane form one continuous ground.
-- The stage and cue have no card fill, border, radius, rule, shadow, lift,
-  perspective, or scale. Do not substitute visible rows or columns.
-- The fading cue remains above the diagram while visible, but its only animated
-  presentation property is opacity.
-- Block-local controls read as a quiet inline divider, not another card:
-  actions have no border, radius, lift, or shadow.
+- Prose always retains one readable measure. A graph or code stage may bleed
+  wider around the same center without changing text width.
+- Page and stage use the same hue. The stage uses an almost-opaque surface and
+  a higher stacking layer; its player and plot plane remain transparent.
+- The stage has no border, radius, rule, shadow, lift, perspective, or scale.
+- Paragraphs have no animated opacity, depth, scale, shadow, or surface.
+- Stage occlusion begins physically when prose passes beneath it; do not fake
+  the crossing by changing paragraph paint.
+- Block-local controls read as a quiet inline divider, not another card.
+- Visible controls may be reduced to Rewind, Previous, Play/Pause, and Next
+  when continuous range input adds clutter. Progressive static markup may
+  retain hidden range and output nodes to avoid a second component contract.
 - Stage, prose, diagram labels, controls, and mathematical foregrounds use
   explicit theme roles. KaTeX keeps renderer-owned font metrics.
-- The economics discovery caller trials invariant `1px` axes, curves, guides,
-  traces, and emphasis, with grid width derived as one half of the line token.
-  Ghosts preserve source stroke topology and become quiet through opacity.
-- In that caller, inline KaTeX inherits prose size, `P` and `Q` share the prose
-  token, and the persistent equation banner is omitted from the reading stage.
-  These graph details remain exemplar-local pending a second graph caller.
+
+The economics discovery caller currently trials `1px` axes, ticks, guides, and
+traces; `1.5px` curves; a calculated `0.5px` grid; SteelBlue/red curve roles;
+style-preserving opacity ghosts; prose-sized graph math; smaller equilibrium
+markers; and no persistent equation banner. These graph details remain
+exemplar-local pending a structurally different graph caller.
 
 ## Controls, Navigation, And Accessibility
 
-- Fine-grained manual controls operate the same block-local normalized
-  progress as scroll.
+- Manual controls operate the same block-local normalized progress as scroll.
 - Manual interaction temporarily owns progress; later scroll rebases from the
   visible state without jumping.
-- Keyboard focus forces a fading cue fully visible so controls are never
-  operated invisibly.
-- Semantic URLs and TOC jumps restore scroll destination, active passage, and
-  animation state atomically rather than replaying history.
-- Document-level CSS Scroll Snap does not own cue punctuation or lesson state.
-  Revisit only as a separate browser-tested presentation experiment.
-- Reduced-motion presentation returns the stage and fully opaque cues to
-  ordinary reading flow. Increased-contrast presentation keeps cues opaque.
+- Semantic URLs and TOC jumps restore destination, active paragraph,
+  checkpoint, and animation state atomically rather than replaying history.
+- Document-level CSS Scroll Snap does not own paragraph punctuation or lesson
+  state.
+- Reduced motion returns the stage and fully opaque prose to ordinary reading
+  flow. Increased contrast uses an opaque page-colored stage.
 - Static and no-JavaScript publication remains meaningful, searchable,
   selectable, printable, and correctly ordered.
 - Large text, short viewports, landscape phones, unsupported sticky geometry,
-  or cues that cannot coexist below the useful stage use `reading` mode rather
-  than a compromised simulation.
+  or an insufficient useful stage use `reading` mode rather than a compromised
+  simulation.
 
 ## Promotion Boundary
 
-The canonical discovery caller is the approved economics demand-shift lesson,
-available experimentally through `?layout=inline-sticky`. Its exact domain
-model, semantic frames, graph renderer, prose, checkpoints, controls, URLs, and
-review capture remain unchanged. The approved split presentation remains the
-default and the query-selected presentation is one reversible rollback unit.
+The canonical discovery caller is the economics demand-shift lesson, available
+experimentally through `?layout=inline-sticky`. Its domain model, semantic
+frames, graph renderer, prose, checkpoints, controls, URLs, and review capture
+remain unchanged. The approved split presentation remains the default and the
+query-selected presentation is one reversible rollback unit.
 
-Human review of the economics continuous-canvas proof precedes any shared
-lesson-shell promotion. A structurally different second caller must then prove
-the same stage, cue, scene-track, fit, and accessibility boundaries before this can
-become KP's default lesson grammar.
+Human review of the economics proof precedes shared lesson-shell promotion. A
+structurally different second caller must then prove the same stage,
+paragraph-projection, occlusion, fit, navigation, and accessibility boundaries
+before this can become KP's default lesson grammar.

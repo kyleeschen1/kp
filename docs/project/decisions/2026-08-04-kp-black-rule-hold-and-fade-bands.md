@@ -1,13 +1,14 @@
 # Mark The Handoff With A Rule, Hold, And Fade Bands
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded for bounded discovery
 
-Latest correction: the continuous-canvas treatment in
+Later correction: the continuous-canvas treatment in
 `2026-08-04-kp-continuous-canvas-attention-ownership.md` supersedes this
 decision's visible rule, shared filled plane, lift, scale, depth, shadow, and
-stacking treatment. Its top-edge anchor, `5vh` hold, `10vh` fade, post-fade
-motion gate, query-local typography trial, and rollback boundary remain active.
+stacking treatment. The subsequent
+`2026-08-04-kp-paragraph-owned-stage-occlusion.md` also supersedes the fixed
+hold, opacity fade, and post-fade motion gate.
 
 ## Decision
 

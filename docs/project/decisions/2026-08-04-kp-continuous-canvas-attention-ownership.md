@@ -1,7 +1,12 @@
 # Use A Continuous Canvas For The One-Axis Lesson Proof
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded in part for bounded discovery
+
+Latest correction: `2026-08-04-kp-paragraph-owned-stage-occlusion.md`
+preserves the continuous page-colored canvas and wider stage, but replaces cue
+fade, fixed hold bands, post-fade motion gating, and explicit scene tracks with
+paragraph-owned crossing geometry and stage occlusion.
 
 ## Decision
 

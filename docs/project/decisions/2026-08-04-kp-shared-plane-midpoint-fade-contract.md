@@ -1,14 +1,15 @@
 # Share One Plane And Complete The Cue Fade By Midpoint
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded for bounded discovery
 
-Latest correction: the top-edge anchor, fixed black handoff rule, `5vh` hold,
+Later correction: the top-edge anchor, fixed black handoff rule, `5vh` hold,
 and following `10vh` fade recorded in
 `2026-08-04-kp-black-rule-hold-and-fade-bands.md` supersede this proof's
 cue-center anchor, bottom-to-midpoint fade distance, and midpoint motion gate.
-The shared surface, eased property envelope, positive-only depth, and rollback
-boundary remain in force.
+The subsequent `2026-08-04-kp-paragraph-owned-stage-occlusion.md` replaces the
+remaining cue envelope and depth treatment with stable prose beneath an
+almost-opaque page-colored stage.
 
 ## Decision
 

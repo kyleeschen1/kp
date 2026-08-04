@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async ({
+test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -18,11 +18,11 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   const stage = root.locator("[data-kp-inline-sticky-stage]");
   const stageCard = stage.locator(".kp-economics-tutorial__stage-card");
   const graph = stage.locator(".editor-graph-stage");
-  const demandCue = cue(root, "follow-shift");
-  const followingCue = cue(root, "new-equilibrium");
-  const demandTrack = root.locator(
-    '[data-kp-inline-sticky-motion-track="demand-shift"]'
-  );
+  const demandPassage = passage(root, "follow-shift");
+  const demandParagraph = demandPassage.locator("p").first();
+  const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
+  const followingParagraph = passage(root, "new-equilibrium").locator("p").first();
+  const followingPassage = passage(root, "new-equilibrium");
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
@@ -32,13 +32,11 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
     .toHaveCount(1);
   await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
   await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
-    .toHaveCount(2);
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-inline-sticky-runway]"))
     .toHaveCount(0);
-  await expect(root.locator("[data-kp-inline-sticky-attention-padding]"))
-    .toHaveCount(0);
-  await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
-    .toHaveAttribute("aria-busy", "false");
+  await expectNoVisibleSliders(root);
+
   await expect.poll(() => root.locator(
     ".kp-economics-tutorial__passage p"
   ).first().evaluate((element) => getComputedStyle(element).fontFamily))
@@ -52,9 +50,10 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   )).not.toContain("Gill Sans");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math")
     .first().evaluate((element) => ({
-      math: getComputedStyle(element).fontSize,
-      prose: getComputedStyle(element.parentElement!).fontSize
-    }))).toEqual({ math: "19px", prose: "19px" });
+      inner: getComputedStyle(element.querySelector(".katex")!).fontSize,
+      prose: getComputedStyle(element.parentElement!).fontSize,
+      wrapper: getComputedStyle(element).fontSize
+    }))).toEqual({ inner: "19px", prose: "19px", wrapper: "19px" });
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -67,15 +66,13 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
     marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom),
     shadow: getComputedStyle(element).boxShadow,
     transform: getComputedStyle(element).transform
-  }))).toMatchObject({
-    background: "rgba(0, 0, 0, 0)",
+  }))).toEqual({
+    background: "rgba(244, 241, 233, 0.96)",
+    marginTop: 20,
+    marginBottom: 24,
     shadow: "none",
     transform: "none"
   });
-  await expect.poll(() => stage.evaluate((element) => ({
-    marginTop: Number.parseFloat(getComputedStyle(element).marginTop),
-    marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom)
-  }))).toEqual({ marginTop: 20, marginBottom: 24 });
   await expect.poll(() => stageCard.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
     borderTop: getComputedStyle(element).borderTopWidth,
@@ -85,28 +82,66 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
     borderTop: "0px",
     shadow: "none"
   });
-  await expect.poll(() => stage.evaluate((element) =>
-    getComputedStyle(element, "::after").content
-  )).toBe("none");
   await expect.poll(() => stage.locator(".editor-animation-player__stage")
     .evaluate((element) => getComputedStyle(element).backgroundColor))
     .toBe("rgba(0, 0, 0, 0)");
   await expect.poll(() => stage.locator(".editor-graph-stage__plot-plane")
     .evaluate((element) => getComputedStyle(element).fill))
     .toBe("rgba(0, 0, 0, 0)");
+
+  const stageWidth = await stage.evaluate(
+    (element) => (element as HTMLElement).offsetWidth
+  );
+  const paragraphWidth = await demandPassage.evaluate(
+    (element) => (element as HTMLElement).offsetWidth
+  );
+  expect(stageWidth).toBeGreaterThan(paragraphWidth + 100);
+  await expect.poll(() => Promise.all([
+    stage.evaluate((element) => Number.parseInt(getComputedStyle(element).zIndex)),
+    demandPassage.evaluate((element) =>
+      Number.parseInt(getComputedStyle(element).zIndex)
+    )
+  ])).toEqual([8, 1]);
+
   await expect.poll(() => graph.evaluate((element) => ({
-    line: getComputedStyle(element).getPropertyValue("--kp-graph-line-width")
+    axis: getComputedStyle(element).getPropertyValue("--kp-graph-line-width")
       .trim(),
+    curve: getComputedStyle(element).getPropertyValue(
+      "--kp-graph-curve-line-width"
+    ).trim(),
     grid: getComputedStyle(element).getPropertyValue(
       "--kp-graph-grid-line-width"
-    ).trim()
-  }))).toEqual({ line: "1px", grid: "calc(1px * 0.5)" });
+    ).trim(),
+    stable: getComputedStyle(element).getPropertyValue("--kp-graph-stable")
+      .trim(),
+    changing: getComputedStyle(element).getPropertyValue("--kp-graph-changing")
+      .trim()
+  }))).toEqual({
+    axis: "1px",
+    curve: "calc(1px * 1.5)",
+    grid: "calc(1px * 0.5)",
+    stable: "#4682b4",
+    changing: "#dc443c"
+  });
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("1px");
+  await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      width: getComputedStyle(element).strokeWidth
+    }))).toEqual({ color: "rgb(70, 130, 180)", width: "1.5px" });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
-    .evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("1px");
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      width: getComputedStyle(element).strokeWidth
+    }))).toEqual({ color: "rgb(220, 68, 60)", width: "1.5px" });
+  await expect.poll(() => graph.locator(
+    "[data-kp-economics-initial-demand-reference]"
+  ).evaluate((element) => ({
+    dash: getComputedStyle(element).strokeDasharray,
+    width: getComputedStyle(element).strokeWidth
+  }))).toEqual({ dash: "none", width: "1.5px" });
   await expect.poll(() => graph.locator(".editor-graph-stage__economics-grid-line")
     .first().evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("0.5px");
@@ -114,189 +149,151 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
     .first().evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("1px");
   await expect.poll(() => graph.locator(
-    "[data-kp-economics-initial-demand-reference]"
-  ).evaluate((element) => ({
-    dash: getComputedStyle(element).strokeDasharray,
-    width: getComputedStyle(element).strokeWidth
-  }))).toEqual({ dash: "none", width: "1px" });
-  await expect.poll(() => graph.locator(
     "[data-kp-economics-supply-movement-trace]"
   ).evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("1px");
-  await expect.poll(() => graph.locator(
-    '[data-kp-economics-math-label="axis-quantity"] ' +
-      ".editor-graph-stage__economics-math-label"
-  ).evaluate((element) => getComputedStyle(element).fontSize))
-    .toBe("19px");
+    .toBe("1.5px");
+
+  for (const role of [
+    "axis-quantity",
+    "axis-price",
+    "tick-quantity-2",
+    "tick-price-4",
+    "curve-supply",
+    "curve-demand-current",
+    "equilibrium-current"
+  ]) {
+    await expect.poll(() => graph.locator(
+      `[data-kp-economics-math-label="${role}"] .katex`
+    ).evaluate((element) => getComputedStyle(element).fontSize)).toBe("19px");
+  }
+  await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
+    .toHaveAttribute("r", "3");
+  await expect(graph.locator("[data-kp-economics-initial-equilibrium-reference]"))
+    .toHaveAttribute("r", "2.75");
+  await expect(graph.locator(
+    '[data-kp-economics-supply-movement-target="initial"]'
+  )).toHaveAttribute("r", "4.5");
   await expect(stage.locator(
     ".editor-graph-stage__economics-explanation-foreign-object"
   )).toBeHidden();
-  const stageWidth = await stage.evaluate(
-    (element) => (element as HTMLElement).offsetWidth
-  );
 
-  const geometry = await handoffGeometry(page);
-  const layoutWidth = await demandCue.evaluate(
-    (element) => (element as HTMLElement).offsetWidth
-  );
-  expect(stageWidth).toBeGreaterThan(layoutWidth + 100);
-  await expectQuietControls(root);
-  const entryTop = await demandCue.evaluate(() => window.innerHeight);
-  await placeCueTopAt(page, demandCue, entryTop);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
+  const margins = await Promise.all([
+    "follow-shift",
+    "new-equilibrium",
+    "shift-versus-movement",
+    "equation-check"
+  ].map((id) => passage(root, id).evaluate((element) => ({
+    before: Number.parseFloat(getComputedStyle(element).marginTop),
+    after: Number.parseFloat(getComputedStyle(element).marginBottom)
+  }))));
+  expect(new Set(margins.map(({ before }) => before))).toEqual(new Set([20]));
+  expect(new Set(margins.map(({ after }) => after))).toEqual(new Set([20]));
+
+  const geometry = await stageGeometry(stage);
+  await placeParagraphTopAt(page, demandParagraph, 800);
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-inline-sticky-paragraph-phase",
     /below|approach/
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
+  await expectOpaqueParagraph(demandPassage);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
 
-  const approachTop = (entryTop + geometry.stageBottom) / 2;
-  await placeCueTopAt(page, demandCue, approachTop);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
+  await expectModerateParagraphRhythm(
+    demandParagraph,
+    demandTransport,
+    followingParagraph
+  );
+
+  await placeParagraphTopAt(
+    page,
+    demandParagraph,
+    (800 + geometry.bottom) / 2
+  );
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-inline-sticky-paragraph-phase",
     "approach"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expectContinuousCueSurface(demandCue);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+
+  await placeParagraphTopAt(page, demandParagraph, geometry.bottom - 1);
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-inline-sticky-paragraph-phase",
+    "crossing"
+  );
+  await expectOpaqueParagraph(demandPassage);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-approach.png`,
+    path: `${evidenceDirectory}/wide-paragraph-handoff.png`,
     fullPage: false
   });
 
-  await placeCueTopAt(page, demandCue, geometry.stageBottom - 1);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "hold"
-  );
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-  await expectContinuousCueSurface(demandCue);
-  expect(await page.evaluate(() =>
-    getComputedStyle(document.documentElement).scrollSnapType
-  )).toBe("none");
-  await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-threshold.png`,
-    fullPage: false
-  });
-
-  const holdSample = (geometry.stageBottom + geometry.fadeStart) / 2;
-  await placeCueTopAt(page, demandCue, holdSample);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "hold"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-  await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-5vh-hold.png`,
-    fullPage: false
-  });
-
-  const fadeMidpoint = (geometry.fadeStart + geometry.fadeEnd) / 2;
-  await placeCueTopAt(page, demandCue, fadeMidpoint);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "fade"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.35);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.65);
-  await expectContinuousCueSurface(demandCue);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-  await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-fade.png`,
-    fullPage: false
-  });
-
-  await placeCueTopAt(page, demandCue, geometry.fadeEnd - 2);
-  await expect(root).toHaveAttribute(
-    "data-kp-inline-sticky-stage-state",
-    "pinned"
-  );
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "occluded"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
-  await expect.poll(async () => Number(await demandCue.getAttribute(
-    "data-kp-inline-sticky-fade-progress"
-  ))).toBeCloseTo(1, 1);
-  await expectContinuousCueSurface(demandCue);
-  expect(await demandCue.evaluate((element) =>
-    (element as HTMLElement).offsetWidth
-  ))
-    .toBe(layoutWidth);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-  await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-prose-cleared.png`,
-    fullPage: false
-  });
-
-  const demandTrackHeight = await demandTrack.evaluate(
+  const paragraphHeight = await demandParagraph.evaluate(
     (element) => (element as HTMLElement).offsetHeight
   );
-  expect(demandTrackHeight).toBeCloseTo(800 * 0.52, 0);
-  await placeCueTopAt(
+  await placeParagraphTopAt(
     page,
-    demandCue,
-    geometry.fadeEnd - demandTrackHeight * 0.25
+    demandParagraph,
+    geometry.bottom - paragraphHeight / 2
   );
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeGreaterThan(0.16);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.21);
-
-  await placeCueTopAt(
-    page,
-    demandCue,
-    geometry.fadeEnd - demandTrackHeight * 0.5
-  );
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeGreaterThan(0.58);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.63);
+  await expect.poll(async () => Number(await demandPassage.getAttribute(
+    "data-kp-inline-sticky-crossing-progress"
+  ))).toBeCloseTo(0.5, 1);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.55);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.68);
+  await expectOpaqueParagraph(demandPassage);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-continuous-motion-track.png`,
+    path: `${evidenceDirectory}/wide-paragraph-motion.png`,
     fullPage: false
   });
 
-  await placeCueTopAt(
+  await placeParagraphTopAt(
     page,
-    demandCue,
-    geometry.fadeEnd - demandTrackHeight + 2
+    demandParagraph,
+    geometry.bottom - paragraphHeight + 2
   );
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeGreaterThan(0.99);
-  await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
+  await expectOpaqueParagraph(demandPassage);
+  await expectOpaqueParagraph(followingPassage);
 
-  await placeCueTopAt(page, demandCue, geometry.fadeEnd);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.01);
+  // A paragraph owns attention precisely while it crosses the stage; even
+  // focus-only passages therefore participate in the same spatial grammar.
+  for (const passageId of [
+    "new-equilibrium",
+    "shift-versus-movement",
+    "equation-check"
+  ]) {
+    const focusPassage = passage(root, passageId);
+    await placeParagraphTopAt(
+      page,
+      focusPassage.locator("p").first(),
+      geometry.bottom - 1
+    );
+    await expect(root).toHaveAttribute(
+      "data-kp-economics-tutorial-attention-passage",
+      passageId
+    );
+    await expect(focusPassage).toHaveAttribute(
+      "data-kp-inline-sticky-paragraph-phase",
+      "crossing"
+    );
+  }
+
+  await placeParagraphTopAt(page, demandParagraph, geometry.bottom);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
 });
 
-test("phone continuous canvas preserves one text measure through both bands", async ({
+test("phone paragraph crossing preserves readable type and exact motion", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(route);
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
-  const demandCue = cue(root, "follow-shift");
-  const demandTrack = root.locator(
-    '[data-kp-inline-sticky-motion-track="demand-shift"]'
-  );
+  const graph = stage.locator(".editor-graph-stage");
+  const demandPassage = passage(root, "follow-shift");
+  const demandParagraph = demandPassage.locator("p").first();
+  const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
+  const followingParagraph = passage(root, "new-equilibrium").locator("p").first();
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -307,65 +304,49 @@ test("phone continuous canvas preserves one text measure through both bands", as
     "data-kp-inline-sticky-stage-state",
     "pinned"
   );
-  await expect.poll(() => stage.locator(".editor-animation-player__stage")
-    .evaluate((element) => getComputedStyle(element).backgroundColor))
-    .toBe("rgba(0, 0, 0, 0)");
-  await expectQuietControls(root);
-  await expect.poll(() => demandTrack.evaluate(
+  await expect.poll(() => stage.evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  )).toBe("rgba(244, 241, 233, 0.96)");
+  await expectNoVisibleSliders(root);
+  await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
+    .toHaveCount(0);
+  await expectModerateParagraphRhythm(
+    demandParagraph,
+    demandTransport,
+    followingParagraph
+  );
+
+  const proseFontSize = await demandParagraph.evaluate((element) =>
+    getComputedStyle(element).fontSize
+  );
+  for (const role of ["axis-quantity", "tick-quantity-2", "curve-supply"] ) {
+    await expect.poll(() => graph.locator(
+      `[data-kp-economics-math-label="${role}"] .katex`
+    ).evaluate((element) => getComputedStyle(element).fontSize))
+      .toBe(proseFontSize);
+  }
+  const geometry = await stageGeometry(stage);
+  const paragraphHeight = await demandParagraph.evaluate(
     (element) => (element as HTMLElement).offsetHeight
-  )).toBeCloseTo(844 * 0.52, 0);
-  const geometry = await handoffGeometry(page);
-  await placeCueTopAt(page, demandCue, geometry.stageBottom - 1);
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expectContinuousCueSurface(demandCue);
-
-  const before = await phoneProjection(page);
+  );
+  await placeParagraphTopAt(
+    page,
+    demandParagraph,
+    geometry.bottom - paragraphHeight / 2
+  );
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.55);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.68);
+  await expectOpaqueParagraph(demandPassage);
+  await expect.poll(() => page.evaluate(() =>
+    document.documentElement.scrollWidth - window.innerWidth
+  )).toBeLessThanOrEqual(1);
   await page.screenshot({
-    path: `${evidenceDirectory}/phone-continuous-threshold.png`,
+    path: `${evidenceDirectory}/phone-paragraph-motion.png`,
     fullPage: false
   });
-  const holdSample = (geometry.stageBottom + geometry.fadeStart) / 2;
-  await placeCueTopAt(page, demandCue, holdSample);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "hold"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-
-  const fadeMidpoint = (geometry.fadeStart + geometry.fadeEnd) / 2;
-  await placeCueTopAt(page, demandCue, fadeMidpoint);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "fade"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.35);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.65);
-  await expectContinuousCueSurface(demandCue);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-  const during = await phoneProjection(page);
-
-  expect(before.stageBottom).toBeLessThan(844 * 0.55);
-  expect(before.demandWidth).toBe(during.demandWidth);
-  expect(before.demandWidth).toBe(before.holdWidth);
-  expect(during.fontSize).toBeGreaterThanOrEqual(17);
-  expect(during.lineHeight).toBeGreaterThanOrEqual(25);
-  expect(during.horizontalOverflow).toBeLessThanOrEqual(1);
-
-  await page.screenshot({
-    path: `${evidenceDirectory}/phone-continuous-fade.png`,
-    fullPage: false
-  });
-
-  await placeCueTopAt(page, demandCue, geometry.fadeEnd - 2);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
 });
 
-test("large text selects ordinary reading flow instead of shrinking", async ({
+test("large text may exceed the lower viewport without shrinking or fading", async ({
   page
 }) => {
   await page.setViewportSize({ width: 360, height: 640 });
@@ -373,19 +354,40 @@ test("large text selects ordinary reading flow instead of shrinking", async ({
   await page.addStyleTag({ content: "html { font-size: 200%; }" });
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
-  const demandCue = cue(root, "follow-shift");
-  await expect(root).toHaveAttribute("data-kp-inline-sticky-fit", "reading");
+  const demandPassage = passage(root, "follow-shift");
+  const demandParagraph = demandPassage.locator("p").first();
+  await expect(root).toHaveAttribute(
+    "data-kp-inline-sticky-fit",
+    /comfortable|compact/
+  );
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).position
-  )).toBe("relative");
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expect.poll(() => cueTransform(demandCue)).toBe("none");
-  await expect.poll(() => demandCue.evaluate((element) =>
+  )).toBe("sticky");
+  await expect.poll(() => demandParagraph.evaluate((element) =>
     Number.parseFloat(getComputedStyle(element).fontSize)
   )).toBeGreaterThanOrEqual(34);
+  await expect.poll(() => root.locator(".kp-economics-tutorial__math")
+    .first().evaluate((element) => ({
+      inner: getComputedStyle(element.querySelector(".katex")!).fontSize,
+      prose: getComputedStyle(element.parentElement!).fontSize
+    }))).toEqual({ inner: "34px", prose: "34px" });
+  const geometry = await stageGeometry(stage);
+  expect(await demandParagraph.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  )).toBeGreaterThan(640 - geometry.bottom);
+  await expectOpaqueParagraph(demandPassage);
+  await expect.poll(() => page.evaluate(() => [...document.querySelectorAll<HTMLElement>(
+    "body *"
+  )].map((element) => ({
+    className: element.className.toString(),
+    right: element.getBoundingClientRect().right,
+    tag: element.tagName
+  })).filter(({ right }) => right > window.innerWidth + 1)
+    .sort((left, right) => right.right - left.right)
+    .slice(0, 8))).toEqual([]);
 });
 
-test("reduced motion keeps every cue opaque in ordinary reading flow", async ({
+test("reduced motion returns opaque paragraphs and the stage to reading flow", async ({
   page
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -401,14 +403,12 @@ test("reduced motion keeps every cue opaque in ordinary reading flow", async ({
     "new-equilibrium",
     "shift-versus-movement",
     "equation-check"
-  ]) {
-    const passage = cue(root, passageId);
-    await expect.poll(() => cueOpacity(passage)).toBe(1);
-    await expect.poll(() => cueTransform(passage)).toBe("none");
-  }
+  ]) await expectOpaqueParagraph(passage(root, passageId));
+  await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
+    .toHaveCount(0);
 });
 
-function cue(root: Locator, passageId: string): Locator {
+function passage(root: Locator, passageId: string): Locator {
   return root.locator(
     `[data-kp-economics-tutorial-passage="${passageId}"]`
   );
@@ -418,23 +418,19 @@ async function pinStage(stage: Locator): Promise<void> {
   await stage.evaluate((element) => {
     const top = element.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: Math.max(0, top - window.innerHeight * 0.04) });
+    window.scrollTo({ top: Math.max(0, top - window.innerHeight * 0.04) });
   });
 }
 
-async function placeCueTopAt(
+async function placeParagraphTopAt(
   page: Page,
-  cueElement: Locator,
+  paragraph: Locator,
   viewportY: number
 ): Promise<void> {
-  // Sticky settlement can change stage geometry after the first scroll. A few
-  // bounded corrections make the visual checkpoint sample the requested top.
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    await cueElement.evaluate((element, targetY) => {
-      const bounds = element.getBoundingClientRect();
-      const layoutHeight = (element as HTMLElement).offsetHeight;
-      const untransformedTop = bounds.top + bounds.height / 2 - layoutHeight / 2;
+    await paragraph.evaluate((element, targetY) => {
       window.scrollBy({
-        top: untransformedTop - targetY,
+        top: element.getBoundingClientRect().top - targetY,
         behavior: "auto"
       });
     }, viewportY);
@@ -444,97 +440,64 @@ async function placeCueTopAt(
   }
 }
 
-async function handoffGeometry(page: Page): Promise<{
-  readonly stageTop: number;
-  readonly stageBottom: number;
-  readonly fadeStart: number;
-  readonly fadeEnd: number;
+async function stageGeometry(stage: Locator): Promise<{
+  readonly top: number;
+  readonly bottom: number;
 }> {
-  return page.evaluate(() => {
-    const stage = document.querySelector<HTMLElement>(
-      "[data-kp-inline-sticky-stage]"
-    )!;
-    const bounds = stage.getBoundingClientRect();
-    return {
-      stageTop: bounds.top,
-      stageBottom: bounds.bottom,
-      fadeStart: bounds.bottom - window.innerHeight * 0.05,
-      fadeEnd: bounds.bottom - window.innerHeight * 0.15
-    };
+  return stage.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return { top: bounds.top, bottom: bounds.bottom };
   });
 }
 
-async function phoneProjection(page: Page): Promise<{
-  readonly stageBottom: number;
-  readonly demandWidth: number;
-  readonly holdWidth: number;
-  readonly fontSize: number;
-  readonly lineHeight: number;
-  readonly horizontalOverflow: number;
-}> {
-  return page.evaluate(() => {
-    const stage = document.querySelector<HTMLElement>(
-      "[data-kp-inline-sticky-stage]"
-    )!;
-    const demand = document.querySelector<HTMLElement>(
-      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="follow-shift"]'
-    )!;
-    const hold = document.querySelector<HTMLElement>(
-      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="new-equilibrium"]'
-    )!;
-    const demandStyle = getComputedStyle(demand);
-    return {
-      stageBottom: stage.getBoundingClientRect().bottom,
-      demandWidth: demand.offsetWidth,
-      holdWidth: hold.offsetWidth,
-      fontSize: Number.parseFloat(demandStyle.fontSize),
-      lineHeight: Number.parseFloat(demandStyle.lineHeight),
-      horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth
-    };
-  });
+async function demandProgress(root: Locator): Promise<number> {
+  return Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ));
 }
 
-async function cueOpacity(cueElement: Locator): Promise<number> {
-  return cueElement.evaluate((element) =>
-    Number.parseFloat(getComputedStyle(element).opacity)
-  );
-}
-
-async function cueTransform(cueElement: Locator): Promise<string> {
-  return cueElement.evaluate((element) => getComputedStyle(element).transform);
-}
-
-async function expectContinuousCueSurface(cueElement: Locator): Promise<void> {
-  await expect.poll(() => cueElement.evaluate((element) => ({
+async function expectOpaqueParagraph(passageElement: Locator): Promise<void> {
+  await expect.poll(() => passageElement.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
-    borderLeft: getComputedStyle(element).borderLeftWidth,
-    shadow: getComputedStyle(element).boxShadow,
-    transform: getComputedStyle(element).transform,
-    beforeContent: getComputedStyle(element, "::before").content,
-    afterContent: getComputedStyle(element, "::after").content
+    opacity: Number.parseFloat(getComputedStyle(element).opacity),
+    transform: getComputedStyle(element).transform
   }))).toEqual({
     background: "rgba(0, 0, 0, 0)",
-    borderLeft: "0px",
-    shadow: "none",
-    transform: "none",
-    beforeContent: "none",
-    afterContent: "none"
+    opacity: 1,
+    transform: "none"
   });
 }
 
-async function expectQuietControls(root: Locator): Promise<void> {
-  const action = root.locator(".kp-tutorial-scrub__action").first();
-  await expect.poll(() => action.evaluate((element) => ({
-    borderTop: getComputedStyle(element).borderTopWidth,
-    borderRadius: getComputedStyle(element).borderRadius,
-    shadow: getComputedStyle(element).boxShadow,
-    transform: getComputedStyle(element).transform,
-    afterContent: getComputedStyle(element, "::after").content
-  }))).toEqual({
-    borderTop: "0px",
-    borderRadius: "0px",
-    shadow: "none",
-    transform: "none",
-    afterContent: "none"
-  });
+async function expectNoVisibleSliders(root: Locator): Promise<void> {
+  await expect(root.locator("kp-tutorial-scrub-bar input[data-action='seek']"))
+    .toHaveCount(2);
+  for (const slider of await root.locator(
+    "kp-tutorial-scrub-bar input[data-action='seek']"
+  ).all()) await expect(slider).toBeHidden();
+  for (const output of await root.locator(
+    "kp-tutorial-scrub-bar .kp-tutorial-scrub__progress"
+  ).all()) await expect(output).toBeHidden();
+  await expect(root.locator(".kp-tutorial-scrub__action")).toHaveCount(8);
+}
+
+async function expectModerateParagraphRhythm(
+  paragraph: Locator,
+  transport: Locator,
+  followingParagraph: Locator
+): Promise<void> {
+  await expect.poll(() => Promise.all([
+    paragraph.evaluate((element) => element.getBoundingClientRect().bottom),
+    transport.evaluate((element) => element.getBoundingClientRect().top)
+  ]).then(([paragraphBottom, transportTop]) => transportTop - paragraphBottom))
+    .toBeGreaterThanOrEqual(7);
+  await expect.poll(() => Promise.all([
+    transport.evaluate((element) => element.getBoundingClientRect().bottom),
+    followingParagraph.evaluate((element) => element.getBoundingClientRect().top)
+  ]).then(([transportBottom, paragraphTop]) => paragraphTop - transportBottom))
+    .toBeGreaterThanOrEqual(18);
+  await expect.poll(() => Promise.all([
+    transport.evaluate((element) => element.getBoundingClientRect().bottom),
+    followingParagraph.evaluate((element) => element.getBoundingClientRect().top)
+  ]).then(([transportBottom, paragraphTop]) => paragraphTop - transportBottom))
+    .toBeLessThanOrEqual(60);
 }
