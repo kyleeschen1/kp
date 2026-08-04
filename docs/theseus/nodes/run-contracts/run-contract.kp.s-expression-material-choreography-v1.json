@@ -96,7 +96,8 @@
     {
       "id": "s08",
       "title": "Project-responsive-breathing-geometry",
-      "status": "planned"
+      "summary": "Projected fixed-20px wide and phone Lisp geometry inside a stable twelve-em stage envelope, with certified expression-boundary wrapping, distinct phone argument lanes, depth-scaled active breathing, centered rows, and no token overlap or typography shrink; fourteen focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s09",

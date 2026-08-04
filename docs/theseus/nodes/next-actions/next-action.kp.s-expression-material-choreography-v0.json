@@ -157,6 +157,25 @@
       "status": "passed",
       "scope": "s07 test type boundary",
       "checkedAt": "2026-08-04T01:41:19.976Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-responsive-geometry.test.ts tests/kp-lisp-s-expression-contained-jostle.test.ts tests/kp-lisp-s-expression-fold-schedule.test.ts",
+      "status": "passed",
+      "scope": "s08 responsive breathing geometry and preserved motion laws",
+      "checkedAt": "2026-08-04T01:47:46.879Z",
+      "notes": "14 focused wide/phone, envelope, readability, jostle, and fold tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s08 application type boundary",
+      "checkedAt": "2026-08-04T01:47:47.884Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s08 test type boundary",
+      "checkedAt": "2026-08-04T01:47:48.756Z"
     }
   ],
   "progress": {
