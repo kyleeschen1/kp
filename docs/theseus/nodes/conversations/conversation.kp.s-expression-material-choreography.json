@@ -1,0 +1,86 @@
+{
+  "id": "conversation.kp.s-expression-material-choreography",
+  "kind": "conversation",
+  "title": "Adopt S-expression material choreography",
+  "status": "resolved",
+  "domain": "programming",
+  "summary": "The project owner approved replacing the botanical Lisp presentation with code-native, recursively folded S-expression material choreography and approved an exemplar-first Theseus loop proposal process.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/reviews/2026-08-03-s-expression-material-choreography-long-loop-proposal.md",
+      "turnRange": "S-expression material choreography grill and loop proposal",
+      "digest": "sha256:68ca799ca5dbdd4896804149aa503493bf2782c25ba3d6f2cf0990f162f90227",
+      "summary": "The project owner approved replacing the botanical Lisp presentation with code-native, recursively folded S-expression material choreography and approved an exemplar-first Theseus loop proposal process."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-08-04T00:57:26.000Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "codex",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/reviews/2026-08-03-s-expression-material-choreography-long-loop-proposal.md",
+        "turnRange": "S-expression material choreography grill and loop proposal",
+        "digest": "sha256:68ca799ca5dbdd4896804149aa503493bf2782c25ba3d6f2cf0990f162f90227"
+      }
+    ],
+    "summary": "The project owner approved replacing the botanical Lisp presentation with code-native, recursively folded S-expression material choreography and approved an exemplar-first Theseus loop proposal process.",
+    "proposals": [
+      {
+        "id": "replace-botanical-lisp",
+        "statement": "Replace the botanical renderer with framework-neutral S-expression material choreography while preserving certified semantics and the shared lesson shell.",
+        "proposedBy": "codex",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "approve-s-expression-material",
+        "statement": "Adopt the code-native material grammar, perfect the canonical lambda exemplar, and require a human checkpoint before the repeated-variable caller and botanical retirement.",
+        "proposalId": "replace-botanical-lisp",
+        "decidedAt": "2026-08-04T00:57:26.000Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "The durable proposal summarizes the project owner's explicit approvals in the active Codex thread."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with project history."
+    },
+    "linkedEntityIds": [
+      "workflow.kp.delivery"
+    ]
+  }
+}
