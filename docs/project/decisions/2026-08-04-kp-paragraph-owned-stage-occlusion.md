@@ -104,6 +104,12 @@ track portions of the earlier continuous-canvas decisions. It revises, but
 does not globally promote, the economics graph trial in
 `2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md`.
 
+The later bounded decision
+`2026-08-04-kp-half-viewport-stage-and-scene-rhythm.md` supersedes this
+decision's `0.96` stage opacity and moderate-margin values for the economics
+inline-sticky caller. Paragraph-owned crossing and the absence of synthetic
+timing tracks remain authoritative.
+
 The next step remains human comparison with the approved split layout. A
 structurally different lesson must pressure the paragraph-owned projection,
 stage occlusion, fit, navigation, and accessibility seams before shared-shell

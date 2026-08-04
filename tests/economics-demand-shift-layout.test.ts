@@ -29,52 +29,63 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
 
 test("economics theme is explicit, reversible, and preserves other query state", () => {
   assert.equal(readKpEconomicsDemandShiftTheme("?theme=dark"), "dark");
-  assert.equal(readKpEconomicsDemandShiftTheme("?theme=unknown"), "light");
-  assert.equal(readKpEconomicsDemandShiftTheme(""), "light");
+  assert.equal(readKpEconomicsDemandShiftTheme("?theme=light"), "light");
+  assert.equal(readKpEconomicsDemandShiftTheme("?theme=unknown"), "dark");
+  assert.equal(readKpEconomicsDemandShiftTheme(""), "dark");
   assert.equal(writeKpEconomicsDemandShiftTheme({
     search: "?layout=inline-sticky&demand=19",
     theme: "dark"
-  }), "?layout=inline-sticky&demand=19&theme=dark");
+  }), "?layout=inline-sticky&demand=19");
   assert.equal(writeKpEconomicsDemandShiftTheme({
-    search: "?layout=inline-sticky&demand=19&theme=dark",
+    search: "?layout=inline-sticky&demand=19",
     theme: "light"
+  }), "?layout=inline-sticky&demand=19&theme=light");
+  assert.equal(writeKpEconomicsDemandShiftTheme({
+    search: "?layout=inline-sticky&demand=19&theme=light",
+    theme: "dark"
   }), "?layout=inline-sticky&demand=19");
 });
 
-test("phone layout preserves readable text by contracting the stage first", () => {
+test("inline sticky stage is exactly half the viewport on every width", () => {
   assert.deepEqual(projectKpInlineStickyLessonLayout({
     viewportWidthPx: 390,
     viewportHeightPx: 844,
     proseLineHeightPx: 29.45
   }), {
     fit: "comfortable",
-    stageHeightPx: 354,
-    availableHeightPx: 785
+    stageHeightPx: 422,
+    availableHeightPx: 844
   });
 
-  const compact = projectKpInlineStickyLessonLayout({
+  assert.deepEqual(projectKpInlineStickyLessonLayout({
     viewportWidthPx: 390,
     viewportHeightPx: 640,
     proseLineHeightPx: 29.45
+  }), {
+    fit: "comfortable",
+    stageHeightPx: 320,
+    availableHeightPx: 640
   });
-  assert.equal(compact.fit, "comfortable");
-  assert.ok(compact.stageHeightPx >= 208);
 });
 
-test("long paragraphs retain sticky flow while a short large-text viewport falls back", () => {
-  assert.equal(projectKpInlineStickyLessonLayout({
+test("large text does not resize the fixed half-viewport stage", () => {
+  assert.deepEqual(projectKpInlineStickyLessonLayout({
     viewportWidthPx: 360,
     viewportHeightPx: 640,
     proseLineHeightPx: 56
-  }).fit, "comfortable");
+  }), {
+    fit: "comfortable",
+    stageHeightPx: 320,
+    availableHeightPx: 640
+  });
   assert.deepEqual(projectKpInlineStickyLessonLayout({
     viewportWidthPx: 360,
     viewportHeightPx: 400,
     proseLineHeightPx: 56
   }), {
-    fit: "reading",
-    stageHeightPx: 208,
-    availableHeightPx: 368
+    fit: "comfortable",
+    stageHeightPx: 200,
+    availableHeightPx: 400
   });
 });
 

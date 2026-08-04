@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-kp-lesson-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,13 +10,19 @@
     <title>Demand shifts and equilibrium · Kinetic Press</title>
     <script>
       document.documentElement.dataset.kpLessonTheme =
-        new URLSearchParams(location.search).get("theme") === "dark"
-          ? "dark"
-          : "light";
+        new URLSearchParams(location.search).get("theme") === "light"
+          ? "light"
+          : "dark";
     </script>
     <style>
       html, body, #app { min-height: 100%; }
       body { min-width: 320px; min-height: 100vh; margin: 0; }
+      html[data-kp-lesson-theme="light"],
+      html[data-kp-lesson-theme="light"] body {
+        color: #263845;
+        background: #f4f1e9;
+        color-scheme: light;
+      }
       html[data-kp-lesson-theme="dark"],
       html[data-kp-lesson-theme="dark"] body {
         color: #e8e7e2;

@@ -12,18 +12,19 @@ CSS custom properties. Stable and changing graph curves remain distinct
 SteelBlue and red roles, adjusted for contrast rather than replaced with new
 semantic meanings.
 
-Light remains the default. `?theme=dark` selects and shares the dark state. A
-small switch at the bottom of the lesson changes the theme with
+Midnight is now the economics lesson default. `?theme=light` selects and shares
+the retained paper state. A small switch at the bottom of the lesson changes
+the theme with
 `history.replaceState`, preserving the current layout, model parameters,
 semantic hash, scroll position, document identity, and geometry. Returning to
-light removes the default-valued theme parameter. A tiny route-head bootstrap
-sets the root theme before the application mounts so a direct dark URL does not
-begin with a light page flash.
+midnight removes the default-valued theme parameter. A tiny route-head
+bootstrap sets the root theme before the application mounts so the default URL
+does not begin with a light page flash.
 
-The stage occlusion surface uses the same `#0d0e1c` RGB channels at `0.96`
-opacity. Its player and inline-sticky plot plane remain transparent, preserving
-the continuous canvas. KaTeX retains its renderer-owned fonts and metrics; only
-its foreground role changes. The native switch has stable pre-enhancement
+The stage occlusion surface uses opaque `#0d0e1c`. Its player and inline-sticky
+plot plane remain transparent, preserving the continuous canvas. KaTeX retains
+its renderer-owned fonts and metrics; only its foreground role changes. The
+native switch has stable pre-enhancement
 geometry, an accessible label and pressed state, reduced-motion behavior, and
 enough wrapping room for large text.
 
@@ -44,18 +45,19 @@ visually coherent without adding a theme library or a second client runtime.
 
 Preserve the lesson prose, mathematical truth, semantic frames, graph geometry,
 motion clocks, paragraph-owned scroll projection, controls, TOC, accessibility
-truth, and approved light presentation. Theme changes must not alter measured
+truth, and retained light presentation. Theme changes must not alter measured
 lesson width, height, scroll position, stage fit, or animation progress.
 
 The economics theme module, its role-token overrides, and its footer switch are
 one independently reversible unit. This decision does not establish an
 application-wide theme provider, change another lesson, revise the promoted
-graph profile, or make dark mode the default.
+graph profile, or make dark mode the default outside this economics lesson.
 
 ## Proof Criteria
 
-- direct dark URLs paint the root, page, and inline-sticky occlusion surface
-  from the midnight role before the lesson becomes interactive;
+- the default URL paints the root, page, and inline-sticky occlusion surface
+  from the midnight role before the lesson becomes interactive, while
+  `?theme=light` paints the retained paper state;
 - prose and math have readable contrast and the graph preserves structural,
   stable, changing, guide, and focal distinctions;
 - toggling in either direction preserves the live document, query state other

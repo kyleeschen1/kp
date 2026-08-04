@@ -42,39 +42,14 @@ export function projectKpInlineStickyLessonLayout(input: {
   readonly viewportHeightPx: number;
   readonly proseLineHeightPx: number;
 }): KpInlineStickyLessonLayoutProjection {
-  const width = finitePositive(input.viewportWidthPx, 320);
   const height = finitePositive(input.viewportHeightPx, 640);
-  const proseLineHeight = finitePositive(input.proseLineHeightPx, 28);
-  const topInset = clamp(height * 0.04, 16, 40);
-  const bottomInset = clamp(height * 0.03, 16, 32);
-  const availableHeight = Math.max(0, height - topInset - bottomInset);
-  const minimumStageHeight = width <= 480 ? 208 : 240;
-  const preferredStageHeight = clamp(
-    height * (width <= 480 ? 0.42 : 0.46),
-    minimumStageHeight,
-    width <= 480 ? 360 : 432
-  );
-  const minimumReadingBand = clamp(
-    proseLineHeight * 4.5,
-    144,
-    height * 0.42
-  );
-  const stageBudget = availableHeight - minimumReadingBand;
-
-  // A paragraph may be taller than the lower viewport because it passes
-  // beneath the stage. Preserve several readable lines instead of demanding
-  // that the complete paragraph coexist with the graph.
-  if (stageBudget < minimumStageHeight) {
-    return Object.freeze({
-      fit: "reading",
-      stageHeightPx: minimumStageHeight,
-      availableHeightPx: Math.round(availableHeight)
-    });
-  }
+  // CSS owns the initial 50vh geometry so progressive publication does not
+  // shift when enhancement mounts. This projection mirrors that fixed visual
+  // contract for scroll and semantic motion calculations.
   return Object.freeze({
-    fit: stageBudget >= preferredStageHeight ? "comfortable" : "compact",
-    stageHeightPx: Math.round(Math.min(preferredStageHeight, stageBudget)),
-    availableHeightPx: Math.round(availableHeight)
+    fit: "comfortable",
+    stageHeightPx: Math.round(height * 0.5),
+    availableHeightPx: Math.round(height)
   });
 }
 

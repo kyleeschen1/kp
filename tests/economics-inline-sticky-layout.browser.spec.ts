@@ -21,7 +21,6 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   const demandPassage = passage(root, "follow-shift");
   const demandParagraph = demandPassage.locator("p").first();
   const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
-  const followingParagraph = passage(root, "new-equilibrium").locator("p").first();
   const followingPassage = passage(root, "new-equilibrium");
 
   await expect(root).toHaveAttribute(
@@ -30,14 +29,14 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   );
   await expect(page.locator("html")).toHaveAttribute(
     "data-kp-lesson-theme",
-    "light"
+    "dark"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-theme",
-    "light"
+    "dark"
   );
   await expect(root.locator("[data-kp-economics-theme-toggle]"))
-    .toHaveAttribute("aria-pressed", "false");
+    .toHaveAttribute("aria-pressed", "true");
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveCount(1);
   await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
@@ -72,16 +71,32 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   );
   await expect.poll(() => stage.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
+    height: element.getBoundingClientRect().height,
     marginTop: Number.parseFloat(getComputedStyle(element).marginTop),
     marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom),
     shadow: getComputedStyle(element).boxShadow,
+    top: element.getBoundingClientRect().top,
     transform: getComputedStyle(element).transform
   }))).toEqual({
-    background: "rgba(244, 241, 233, 0.96)",
-    marginTop: 20,
+    background: "rgb(13, 14, 28)",
+    height: 400,
+    marginTop: 0,
     marginBottom: 24,
     shadow: "none",
+    top: 0,
     transform: "none"
+  });
+  await expect.poll(() => stage.evaluate((element) => {
+    const style = getComputedStyle(element, "::after");
+    return {
+      background: style.backgroundColor,
+      height: Number.parseFloat(style.height),
+      width: Number.parseFloat(style.width)
+    };
+  })).toEqual({
+    background: "rgb(98, 103, 117)",
+    height: 8,
+    width: 992
   });
   await expect.poll(() => stageCard.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
@@ -130,8 +145,8 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     axis: "1px",
     curve: "calc(1px * 1.5)",
     grid: "calc(1px * 0.5)",
-    stable: "#4682b4",
-    changing: "#dc443c"
+    stable: "#68a9df",
+    changing: "#ff6b63"
   });
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => getComputedStyle(element).strokeWidth))
@@ -140,12 +155,12 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({ color: "rgb(70, 130, 180)", width: "1.5px" });
+    }))).toEqual({ color: "rgb(104, 169, 223)", width: "1.5px" });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({ color: "rgb(220, 68, 60)", width: "1.5px" });
+    }))).toEqual({ color: "rgb(255, 107, 99)", width: "1.5px" });
   await expect.poll(() => graph.locator(
     "[data-kp-economics-initial-demand-reference]"
   ).evaluate((element) => ({
@@ -196,8 +211,8 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     before: Number.parseFloat(getComputedStyle(element).marginTop),
     after: Number.parseFloat(getComputedStyle(element).marginBottom)
   }))));
-  expect(new Set(margins.map(({ before }) => before))).toEqual(new Set([20]));
-  expect(new Set(margins.map(({ after }) => after))).toEqual(new Set([20]));
+  expect(margins.map(({ before }) => before)).toEqual([0, 400, 400, 400]);
+  expect(new Set(margins.map(({ after }) => after))).toEqual(new Set([0]));
 
   const geometry = await stageGeometry(stage);
   await placeParagraphTopAt(page, demandParagraph, 800);
@@ -208,10 +223,12 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expectOpaqueParagraph(demandPassage);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
 
-  await expectModerateParagraphRhythm(
+  await expectHalfViewportParagraphRhythm(
+    page,
     demandParagraph,
     demandTransport,
-    followingParagraph
+    demandPassage,
+    followingPassage
   );
 
   await placeParagraphTopAt(
@@ -303,7 +320,7 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   const demandPassage = passage(root, "follow-shift");
   const demandParagraph = demandPassage.locator("p").first();
   const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
-  const followingParagraph = passage(root, "new-equilibrium").locator("p").first();
+  const followingPassage = passage(root, "new-equilibrium");
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -316,14 +333,23 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   );
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
-  )).toBe("rgba(244, 241, 233, 0.96)");
+  )).toBe("rgb(13, 14, 28)");
+  await expect.poll(() => stage.evaluate((element) => ({
+    height: element.getBoundingClientRect().height,
+    top: element.getBoundingClientRect().top
+  }))).toEqual({ height: 422, top: 0 });
+  await expect.poll(() => stage.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element, "::after").width)
+  )).toBe(390);
   await expectNoVisibleSliders(root);
   await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
     .toHaveCount(0);
-  await expectModerateParagraphRhythm(
+  await expectHalfViewportParagraphRhythm(
+    page,
     demandParagraph,
     demandTransport,
-    followingParagraph
+    demandPassage,
+    followingPassage
   );
 
   const proseFontSize = await demandParagraph.evaluate((element) =>
@@ -356,11 +382,11 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   });
 });
 
-test("dark theme preserves the continuous canvas and toggles without navigation", async ({
+test("default midnight theme toggles without navigation", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(`${route}&demand=19&theme=dark`);
+  await page.goto(`${route}&demand=19`);
   const html = page.locator("html");
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
@@ -398,7 +424,7 @@ test("dark theme preserves the continuous canvas and toggles without navigation"
   expect(await contrastRatio(root, page.locator("body"))).toBeGreaterThan(12);
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
-  )).toBe("rgba(13, 14, 28, 0.96)");
+  )).toBe("rgb(13, 14, 28)");
   await expect.poll(() => graph.evaluate((element) => ({
     axis: getComputedStyle(element).getPropertyValue("--kp-graph-axis").trim(),
     changing: getComputedStyle(element).getPropertyValue(
@@ -470,18 +496,25 @@ test("dark theme preserves the continuous canvas and toggles without navigation"
     demand: "19",
     documentPreserved: true,
     layout: "inline-sticky",
-    theme: null
+    theme: "light"
   });
   await expect.poll(() => root.evaluate((element) => ({
     height: element.getBoundingClientRect().height,
     scrollY: window.scrollY,
     width: element.getBoundingClientRect().width
   }))).toEqual(beforeToggle);
+  await expect.poll(() => stage.evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  )).toBe("rgb(244, 241, 233)");
+  await page.screenshot({
+    path: `${evidenceDirectory}/light-footer-toggle.png`,
+    fullPage: false
+  });
 
   await toggle.click();
   await expect(html).toHaveAttribute("data-kp-lesson-theme", "dark");
   await expect.poll(() => new URL(page.url()).searchParams.get("theme"))
-    .toBe("dark");
+    .toBeNull();
   await expect.poll(() => passage(root, "synthesis").evaluate((element) =>
     getComputedStyle(element).backgroundColor
   )).toBe("rgba(37, 44, 65, 0.72)");
@@ -495,11 +528,11 @@ test("dark theme preserves the continuous canvas and toggles without navigation"
   });
 });
 
-test("dark phone theme keeps graph, prose, and footer within one viewport", async ({
+test("default phone theme keeps graph, prose, and footer within one viewport", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${route}&theme=dark`);
+  await page.goto(route);
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
   const paragraph = passage(root, "follow-shift").locator("p").first();
@@ -595,8 +628,8 @@ function passage(root: Locator, passageId: string): Locator {
 async function pinStage(stage: Locator): Promise<void> {
   await stage.evaluate((element) => {
     const top = element.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: Math.max(0, top - window.innerHeight * 0.04) });
-    window.scrollTo({ top: Math.max(0, top - window.innerHeight * 0.04) });
+    window.scrollTo({ top: Math.max(0, top + 1) });
+    window.scrollTo({ top: Math.max(0, top + 1) });
   });
 }
 
@@ -658,10 +691,12 @@ async function expectNoVisibleSliders(root: Locator): Promise<void> {
   await expect(root.locator(".kp-tutorial-scrub__action")).toHaveCount(8);
 }
 
-async function expectModerateParagraphRhythm(
+async function expectHalfViewportParagraphRhythm(
+  page: Page,
   paragraph: Locator,
   transport: Locator,
-  followingParagraph: Locator
+  passageElement: Locator,
+  followingPassage: Locator
 ): Promise<void> {
   await expect.poll(() => Promise.all([
     paragraph.evaluate((element) => element.getBoundingClientRect().bottom),
@@ -669,15 +704,10 @@ async function expectModerateParagraphRhythm(
   ]).then(([paragraphBottom, transportTop]) => transportTop - paragraphBottom))
     .toBeGreaterThanOrEqual(7);
   await expect.poll(() => Promise.all([
-    transport.evaluate((element) => element.getBoundingClientRect().bottom),
-    followingParagraph.evaluate((element) => element.getBoundingClientRect().top)
-  ]).then(([transportBottom, paragraphTop]) => paragraphTop - transportBottom))
-    .toBeGreaterThanOrEqual(18);
-  await expect.poll(() => Promise.all([
-    transport.evaluate((element) => element.getBoundingClientRect().bottom),
-    followingParagraph.evaluate((element) => element.getBoundingClientRect().top)
-  ]).then(([transportBottom, paragraphTop]) => paragraphTop - transportBottom))
-    .toBeLessThanOrEqual(60);
+    passageElement.evaluate((element) => element.getBoundingClientRect().bottom),
+    followingPassage.evaluate((element) => element.getBoundingClientRect().top)
+  ]).then(([passageBottom, followingTop]) => followingTop - passageBottom))
+    .toBeCloseTo(page.viewportSize()!.height * 0.5, 0);
 }
 
 async function contrastRatio(

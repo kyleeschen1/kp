@@ -28,7 +28,8 @@ laboratory layout and not yet a globally required presentation.
 - **Crossing:** travel from the paragraph's leading edge reaching the threshold
   to its trailing edge reaching the threshold.
 - **Stage occlusion:** the wider stage paints above crossed text with an
-  almost-opaque version of the page surface. The text itself does not fade.
+  opaque or explicitly controlled near-opaque version of the page surface. The
+  text itself does not fade.
 - **Continuous canvas:** page, paragraph, stage, and diagram share one visual
   ground; no row or card surface separates their explanatory roles.
 
@@ -68,8 +69,8 @@ attention truth.
   one active sampler.
 - Reverse scroll reconstructs the same state from geometry without replaying
   pixels or depending on event history.
-- Moderate rem/viewport-clamped paragraph margins express reading rhythm only.
-  They never extend semantic progress.
+- Declared paragraph margins express reading rhythm only. Whether moderate or
+  viewport-sized, they never extend semantic progress.
 
 Do not add a scene-track element, generic runway, viewport-sized spacer, or
 second scroll clock merely to create animation time.
@@ -134,9 +135,11 @@ Respect safe-area insets, stable viewport geometry, and user font scaling.
 
 - Prose always retains one readable measure. A graph or code stage may bleed
   wider around the same center without changing text width.
-- Page and stage use the same hue. The stage uses an almost-opaque surface and
-  a higher stacking layer; its player and plot plane remain transparent.
-- The stage has no border, radius, rule, shadow, lift, perspective, or scale.
+- Page and stage use the same hue. The stage uses an occluding surface and a
+  higher stacking layer; its player and plot plane remain transparent.
+- The stage has no perimeter border, radius, shadow, lift, perspective, or
+  scale. A lower-edge threshold bar is an exemplar-local option rather than a
+  card boundary.
 - Paragraphs have no animated opacity, depth, scale, shadow, or surface.
 - Stage occlusion begins physically when prose passes beneath it; do not fake
   the crossing by changing paragraph paint.
@@ -160,6 +163,12 @@ style-preserving opacity ghosts; prose-sized graph math; smaller equilibrium
 markers; and no persistent equation banner. These graph details remain
 exemplar-local pending a structurally different graph caller.
 
+The current economics geometry trial fixes the stage at `50vh`, pins it at the
+viewport top, separates adjacent paragraph scenes by `50vh`, makes stage paint
+opaque, and adds a full-bleed `0.5rem` grey lower threshold. These values
+override the adaptive fit geometry only for this caller and remain
+exemplar-local pending a structurally different lesson.
+
 ## Controls, Navigation, And Accessibility
 
 - Manual controls operate the same block-local normalized progress as scroll.
@@ -181,7 +190,8 @@ exemplar-local pending a structurally different graph caller.
 
 The canonical discovery caller is the economics demand-shift lesson, available
 experimentally through `?layout=inline-sticky`; its bounded midnight palette is
-available through `?theme=dark`. Its domain model, semantic
+the economics default, with paper available through `?theme=light`. Its domain
+model, semantic
 frames, graph renderer, prose, checkpoints, controls, URLs, and review capture
 remain unchanged. The approved split presentation remains the default and the
 query-selected presentation and economics-local theme are independent

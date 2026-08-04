@@ -10,15 +10,15 @@ for (const lesson of [
     documentId: "lesson.economics.demand-shift",
     motionBlockId: "demand-shift",
     expressionExpected: false,
-    themeId: "theme.kp.lesson.economics-paper-v1"
+    themeId: "theme.kp.lesson.economics-midnight-v1"
   },
   {
-    name: "economics dark",
-    route: "/tutorials/economics/demand-shift/?theme=dark",
+    name: "economics light",
+    route: "/tutorials/economics/demand-shift/?theme=light",
     documentId: "lesson.economics.demand-shift",
     motionBlockId: "demand-shift",
     expressionExpected: false,
-    themeId: "theme.kp.lesson.economics-midnight-v1"
+    themeId: "theme.kp.lesson.economics-paper-v1"
   },
   {
     name: "Lisp",

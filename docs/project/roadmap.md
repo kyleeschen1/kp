@@ -96,7 +96,7 @@ reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
 pinned, and released stage lifecycle. The latest reversible refinement is
 `decisions/2026-08-04-kp-paragraph-owned-stage-occlusion.md`: prose keeps one
-43-rem measure while an almost-opaque page-colored graph stage bleeds wider and
+43-rem measure while a page-colored graph stage bleeds wider and
 paints above it. Each paragraph owns either semantic motion or a focus change.
 Approach holds the initial frame; motion advances while the paragraph crosses
 beneath the stage and completes at its trailing edge. Paragraph opacity and
@@ -113,10 +113,18 @@ justify promotion.
 
 The same economics exemplar now has a bounded, independently reversible
 midnight-theme trial recorded in
-`decisions/2026-08-04-kp-economics-midnight-theme-trial.md`. `?theme=dark` uses
-`#0d0e1c`, theme-role tokens, early root paint, stable review identity, and a
-small bottom-of-page switch that preserves live document, query, scroll, and
-geometry. Light remains default, and no shared theme API is promoted.
+`decisions/2026-08-04-kp-economics-midnight-theme-trial.md`. The default route
+uses `#0d0e1c`, theme-role tokens, early root paint, stable review identity, and
+a small bottom-of-page switch that preserves live document, query, scroll, and
+geometry. Midnight is now the economics default, paper remains available
+through `?theme=light`, and no shared theme API is promoted.
+
+The inline-sticky caller now also trials the bounded geometry in
+`decisions/2026-08-04-kp-half-viewport-stage-and-scene-rhythm.md`: an opaque,
+top-aligned `50vh` stage, exact `50vh` gaps between paragraph scenes, and a
+full-bleed grey lower threshold. CSS owns initial size while the semantic
+projector mirrors it; gaps still do not advance motion. These values are not a
+shared lesson-layout promotion.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -609,9 +617,10 @@ activating heavy animation capabilities lazily.
    structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
    SteelBlue/red roles, prose-sized inline and graph math, smaller equilibrium
    markers, query-local Gill Sans/KaTeX separation, constant prose measure,
-   phone fit, large-text fallback, and the optional `?theme=dark` midnight
-   palette with its non-navigating footer switch; do not infer layout, theme,
-   or shared-API promotion.
+   phone fit, large-text behavior, the default midnight palette with its
+   non-navigating footer switch, the opaque top-aligned `50vh` stage, exact
+   `50vh` paragraph-scene gaps, and the full-bleed grey threshold; do not infer
+   layout, theme, or shared-API promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

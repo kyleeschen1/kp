@@ -12,16 +12,17 @@ with source refs, verification, run-contract slices, and completion evidence.
    retirement without explicit approval.
 2. Compare the approved economics split presentation with
    `/tutorials/economics/demand-shift/?layout=inline-sticky`, including wide
-   stage bleed and page-colored occlusion, paragraph-owned attention and motion,
-   no prose fade or synthetic scene tracks, moderate uniform prose rhythm,
+   stage bleed and opaque page-colored occlusion, paragraph-owned attention
+   and motion, no prose fade or synthetic scene tracks, exact `50vh` paragraph
+   rhythm,
    hidden sliders with four quiet semantic controls, exact reverse scrolling,
    `1px` structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
    SteelBlue/red graph roles, prose-sized inline and graph KaTeX, smaller
    equilibrium markers, Gill Sans/KaTeX font separation, constant text
-   measure, phone fit, large-text reading fallback, and the optional
-   `?theme=dark` midnight palette with its bottom switch. Confirm both themes
-   preserve geometry and legibility. Neither query-selected proof is the
-   default or a shared API.
+   measure, phone fit, large-text behavior, the default midnight palette and
+   its bottom switch, the top-aligned `50vh` stage, and the full-bleed grey
+   threshold. Confirm the retained `?theme=light` state preserves geometry and
+   legibility. The layout proof is not the default or a shared API.
 3. If the S-expression visual is approved, complete only the contract's final
    repeated-variable pressure and botanical-retirement slices.
 4. If the inline-sticky economics proof is approved, pressure its lifecycle

@@ -1,7 +1,7 @@
 export type KpEconomicsDemandShiftTheme = "light" | "dark";
 
 export const kpEconomicsDemandShiftDefaultTheme:
-  KpEconomicsDemandShiftTheme = "light";
+  KpEconomicsDemandShiftTheme = "dark";
 
 export const kpEconomicsDemandShiftThemeIds: Readonly<
   Record<KpEconomicsDemandShiftTheme, string>
@@ -13,8 +13,9 @@ export const kpEconomicsDemandShiftThemeIds: Readonly<
 export function readKpEconomicsDemandShiftTheme(
   search: string
 ): KpEconomicsDemandShiftTheme {
-  return new URLSearchParams(search).get("theme") === "dark"
-    ? "dark"
+  const value = new URLSearchParams(search).get("theme");
+  return value === "light" || value === "dark"
+    ? value
     : kpEconomicsDemandShiftDefaultTheme;
 }
 

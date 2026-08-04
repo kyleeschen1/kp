@@ -143,13 +143,13 @@ test("approved economics prose and semantic controls form one persistent tutoria
   })).toEqual({
     graph: "rgba(0, 0, 0, 0)",
     label: "rgba(0, 0, 0, 0)",
-    equations: "rgba(0, 0, 0, 0)"
+    equations: "rgb(23, 26, 43)"
   });
   await expect.poll(() => root.locator(
     '[data-kp-economics-math-label="equilibrium-current"] ' +
     ".editor-graph-stage__economics-math-label"
   ).evaluate((element) => getComputedStyle(element).textShadow))
-    .toContain("rgb(244, 241, 233)");
+    .toContain("rgb(13, 14, 28)");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math")
     .first()
     .evaluate((element) => ({
@@ -163,8 +163,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .toEqual({
       wrapper: "0px",
       katex: "0px",
-      mathColor: "rgb(61, 69, 75)",
-      diagramMathColor: "rgb(61, 69, 75)"
+      mathColor: "rgb(214, 216, 223)",
+      diagramMathColor: "rgb(214, 216, 223)"
     });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
@@ -238,7 +238,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .toBe("rgba(0, 0, 0, 0)");
   await expect.poll(() => graph.locator(".editor-graph-stage__plot-plane")
     .evaluate((element) => getComputedStyle(element).fill))
-    .toBe("rgba(0, 0, 0, 0)");
+    .toBe("rgb(23, 26, 43)");
   await expect.poll(() => root.locator(".kp-economics-tutorial__passage p")
     .first()
     .evaluate((element) => Number.parseFloat(getComputedStyle(element).textIndent)))
@@ -316,7 +316,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   const demandTextBox = await demandChange.locator("p").first().boundingBox();
   expect(demandTextBox).not.toBeNull();
   expect(pointerProjection).toMatchObject({
-    background: "rgb(122, 157, 168)",
+    background: "rgb(130, 186, 240)",
     clipPath: "polygon(0px 0px, 100% 50%, 0px 100%)",
     opacity: "1",
     pointerEvents: "none",
@@ -354,8 +354,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
       "[data-kp-economics-tutorial-reading-band]"
     )!).backgroundColor
   }))).toEqual({
-    rail: "rgb(122, 157, 168)",
-    pointer: "rgb(122, 157, 168)"
+    rail: "rgb(130, 186, 240)",
+    pointer: "rgb(130, 186, 240)"
   });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
@@ -1575,7 +1575,7 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     return [graphStage, graphLabel].map((node) =>
       node === null ? null : getComputedStyle(node).backgroundColor
     );
-  })).toEqual(["rgb(255, 253, 248)", "rgb(255, 253, 248)"]);
+  })).toEqual(["rgb(23, 26, 43)", "rgb(23, 26, 43)"]);
   await expect.poll(() => stageCard.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
@@ -1585,8 +1585,8 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
     };
   })).toEqual({
     borderBottom: "1px",
-    background: "rgb(255, 253, 248)",
-    shadow: "rgba(45, 61, 69, 0.18) 0px 10px 32px 0px"
+    background: "rgb(23, 26, 43)",
+    shadow: "rgba(0, 0, 0, 0.42) 0px 10px 32px 0px"
   });
   const compact = await stage.boundingBox();
   expect(compact).not.toBeNull();

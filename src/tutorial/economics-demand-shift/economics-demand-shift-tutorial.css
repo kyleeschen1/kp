@@ -3,7 +3,8 @@
 :root {
   color-scheme: light;
   --kp-lesson-theme-page: #f4f1e9;
-  --kp-lesson-theme-stage-occlusion: rgb(244 241 233 / 0.96);
+  --kp-lesson-theme-stage-occlusion: #f4f1e9;
+  --kp-lesson-theme-stage-divider: #8a8f95;
   --kp-lesson-theme-surface: #fffdf8;
   --kp-lesson-theme-ink: #263845;
   --kp-lesson-theme-muted: #667983;
@@ -57,7 +58,8 @@
 :root[data-kp-lesson-theme="dark"] {
   color-scheme: dark;
   --kp-lesson-theme-page: #0d0e1c;
-  --kp-lesson-theme-stage-occlusion: rgb(13 14 28 / 0.96);
+  --kp-lesson-theme-stage-occlusion: #0d0e1c;
+  --kp-lesson-theme-stage-divider: #626775;
   --kp-lesson-theme-surface: #171a2b;
   --kp-lesson-theme-ink: #e8e7e2;
   --kp-lesson-theme-muted: #a9afbf;
@@ -1004,12 +1006,12 @@ kp-tutorial-toc {
    default while this query-selected exemplar lets prose and graph exchange
    attention without introducing visible cards, rows, or columns. */
 .kp-economics-tutorial--inline-sticky {
-  --kp-inline-sticky-top: clamp(1rem, 4svh, 2.5rem);
+  --kp-inline-sticky-top: 0px;
   --kp-inline-sticky-measure: 43rem;
   --kp-inline-sticky-stage-width: min(60rem, calc(100vw - 2rem));
+  --kp-inline-sticky-stage-height: 50vh;
   --kp-inline-sticky-prose-font-size:
     clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
-  --kp-animation-block-margin-before: clamp(1.25rem, 2.5svh, 2rem);
   --kp-animation-block-margin-after: clamp(1.5rem, 3svh, 2.5rem);
   --kp-inline-sticky-text-font:
     "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
@@ -1080,7 +1082,7 @@ kp-tutorial-toc {
   min-height: 0;
   max-height: none;
   margin:
-    var(--kp-animation-block-margin-before)
+    0
     0
     var(--kp-animation-block-margin-after)
     calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
@@ -1088,6 +1090,19 @@ kp-tutorial-toc {
   background: var(--kp-lesson-theme-stage-occlusion);
   box-shadow: none;
   transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline::after {
+  content: "";
+  position: absolute;
+  right: 50%;
+  bottom: -0.5rem;
+  width: min(100vw, calc(100% + 2rem));
+  height: 0.5rem;
+  background: var(--kp-lesson-theme-stage-divider);
+  pointer-events: none;
+  transform: translateX(50%);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1155,7 +1170,7 @@ kp-tutorial-toc {
   position: relative;
   z-index: 1;
   width: 100%;
-  margin-block: clamp(1.2rem, 2.5svh, 1.75rem);
+  margin-block: 0;
   margin-inline: 0;
   border-left: 0;
   padding-inline: 0;
@@ -1164,6 +1179,13 @@ kp-tutorial-toc {
   opacity: 1;
   transform: none;
   transition: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue]
+  + [data-kp-inline-sticky-cue] {
+  margin-top: 50vh;
 }
 
 .kp-economics-tutorial--inline-sticky

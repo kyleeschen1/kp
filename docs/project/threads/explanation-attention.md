@@ -38,8 +38,11 @@ owns either motion or a focus checkpoint. Approach holds the initial frame;
 authored motion advances while the paragraph physically crosses beneath the
 stage and completes when its trailing edge reaches the stage bottom. Synthetic
 runways, cue fades, and explicit scene tracks are absent. The paragraph remains
-fully opaque and geometrically stable; an almost-opaque page-colored stage
-paints above it to create depth. Native scroll snap does not own this geometry.
+fully opaque and geometrically stable; an opaque page-colored stage paints
+above it to create depth. The current geometry trial fixes that stage at
+`50vh`, aligns it to the viewport top, spaces paragraph scenes by `50vh`, and
+marks its lower threshold with a full-bleed grey bar. Those gaps remain outside
+semantic progress. Native scroll snap does not own this geometry.
 The durable typography, fit, progressive-enhancement, URL, accessibility, and
 rollback rules live in `../principles/inline-sticky-lesson-layout.md`.
 Economics is the canonical proof through `?layout=inline-sticky`; its approved
@@ -48,11 +51,12 @@ different second caller.
 
 The bounded theme trial in
 `decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same
-lesson use `?theme=dark` with a `#0d0e1c` continuous canvas and a small footer
-switch. Theme state changes semantic role tokens without changing layout,
-scroll, motion, or KaTeX metrics; direct URLs paint the selected root early and
-Review capture records light or midnight identity. This remains economics-local
-and does not promote a shared theme provider.
+lesson use a default `#0d0e1c` continuous canvas, retain paper through
+`?theme=light`, and switch with a small footer control. Theme state changes
+semantic role tokens without changing layout, scroll, motion, or KaTeX
+metrics; direct URLs paint the selected root early and Review capture records
+light or midnight identity. This remains economics-local and does not promote
+a shared theme provider.
 
 The same revision updates the economics-local graph trial. Axes, ticks, guides,
 and traces stay at `1px`; curves use `1.5px`; the grid derives to `0.5px`;
@@ -141,11 +145,12 @@ The delivered exemplar includes:
 - economics-local rollback and preservation boundaries.
 
 The query-selected inline-sticky successor now adds paragraph-owned motion,
-stage occlusion instead of prose fading, moderate uniform prose rhythm, hidden
+stage occlusion instead of prose fading, exact half-viewport scene rhythm, hidden
 range sliders, body-sized inline and graph KaTeX, brighter economics roles,
 stable structural/curve/grid stroke tiers, and smaller equilibrium points. It
-also trials the reversible midnight role palette and footer switch. Both remain
-bounded comparison surfaces, not approved defaults or shared APIs.
+also uses the reversible midnight role palette by default and retains the
+footer switch. Both remain bounded comparison surfaces, not approved defaults
+or shared APIs.
 
 The 28-slice motion-block/publication loop is resolved. Subsequent human-
 requested refinements place a fixed TOC to the left of the prose, keep it

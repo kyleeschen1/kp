@@ -977,7 +977,7 @@
   }
 
   function inlineStickyTopInset(): number {
-    return clamp(window.innerHeight * 0.04, 16, 40);
+    return 0;
   }
 
   function inlineStickyHandoffStartY(): number {
@@ -1449,7 +1449,7 @@
       themeId: kpEconomicsDemandShiftThemeIds[theme]
     })
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-inline-sticky-stage-height:${inlineStickyStageHeightPx}px`}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
