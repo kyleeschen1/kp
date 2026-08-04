@@ -17,7 +17,7 @@ import {
 const source = createKpLispLambdaApplicationAsset();
 const botanicalPlan = createKpLispBotanicalPresentationPlan(source);
 
-test("defaults the existing lesson projection boundary to material motion", () => {
+test("defaults the lesson projection boundary to material motion", () => {
   const projector = createKpLispLessonStageProjector({ source, botanicalPlan });
   const runtimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
     asset: source,
@@ -25,7 +25,7 @@ test("defaults the existing lesson projection boundary to material motion", () =
   });
   const html = projector.render({
     runtimeFrame,
-    activeBlockId: "bind-and-reconstruct",
+    activeBlockId: "application",
     localProgress: 0.5,
     availableWidthPx: 760
   });
@@ -40,7 +40,26 @@ test("defaults the existing lesson projection boundary to material motion", () =
   assert.doesNotMatch(html, /data-kp-lisp-botanical-stage/u);
 });
 
-test("maps the existing evaluation block to the causal material reduction", () => {
+test("maps the new structure block without advancing evaluator truth", () => {
+  const projector = createKpLispLessonStageProjector({ source, botanicalPlan });
+  const runtimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
+    asset: source,
+    progress: 0
+  });
+  const html = projector.render({
+    runtimeFrame,
+    activeBlockId: "structure",
+    localProgress: 0.7,
+    availableWidthPx: 760
+  });
+
+  assert.match(html, /data-kp-lisp-structural-stage/u);
+  assert.match(html, /data-kp-lisp-runtime-frame="lisp-lambda-frame\.0\.0000"/u);
+  assert.equal(count(html, "data-kp-lisp-paint-owner="), 1);
+  assert.doesNotMatch(html, /data-kp-lisp-application-stage|data-kp-lisp-evaluation-stage/u);
+});
+
+test("maps the evaluation block to the causal material reduction", () => {
   const projector = createKpLispLessonStageProjector({ source, botanicalPlan });
   const runtimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
     asset: source,
@@ -48,7 +67,7 @@ test("maps the existing evaluation block to the causal material reduction", () =
   });
   const html = projector.render({
     runtimeFrame,
-    activeBlockId: "evaluate-and-gather",
+    activeBlockId: "evaluation",
     localProgress: 1,
     availableWidthPx: 390
   });
@@ -71,7 +90,7 @@ test("keeps botanical paint behind an explicit inactive rollback selector", () =
   });
   const html = projector.render({
     runtimeFrame,
-    activeBlockId: "bind-and-reconstruct",
+    activeBlockId: "application",
     localProgress: 0.5,
     availableWidthPx: 760
   });
@@ -90,7 +109,7 @@ test("rejects invalid presentation coordinates without mutating runtime truth", 
   });
   assert.throws(() => projector.render({
     runtimeFrame,
-    activeBlockId: "bind-and-reconstruct",
+    activeBlockId: "application",
     localProgress: Number.NaN,
     availableWidthPx: 760
   }), /progress must be finite/u);

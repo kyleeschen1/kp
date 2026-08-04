@@ -461,6 +461,41 @@
       "scope": "Patch whitespace",
       "checkedAt": "2026-08-04T03:13:49.812Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s20 three-block lesson, source material, runtime preservation, publication, and rollback",
+      "checkedAt": "2026-08-04T03:32:09.928Z",
+      "notes": "156 Lisp tests passed, including the new structure/application/evaluation publication, local-to-runtime projection, cumulative corridors, stable prose, and static control count."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts tests/kp-lisp-tutorial-visual.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s20 canonical editorial and interaction browser checks",
+      "checkedAt": "2026-08-04T03:32:10.990Z",
+      "notes": "Eight Chromium checks passed: direct checkpoint restoration, Back/Forward, three-block scroll ownership, cumulative handoff, fixed prose during playback, reader attention cues, wide checkpoint smoke, and phone result."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 application, node, test, Svelte, and domains",
+      "checkedAt": "2026-08-04T03:32:11.967Z",
+      "notes": "All type boundaries passed after introducing the structural block and block-local playback authority."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 architecture boundaries",
+      "checkedAt": "2026-08-04T03:32:12.844Z",
+      "notes": "All architecture gates passed; structural motion remains presentation-only and certified evaluator truth is unchanged."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s20 patch whitespace",
+      "checkedAt": "2026-08-04T03:32:13.722Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

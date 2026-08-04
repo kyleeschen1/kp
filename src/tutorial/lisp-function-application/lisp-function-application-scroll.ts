@@ -20,6 +20,7 @@ import {
 import type { KpLispLessonMotionController } from "./lisp-function-application-motion-controller.ts";
 import type { KpLispLessonNavigationController } from "./lisp-function-application-navigation.ts";
 import {
+  isKpLispLessonMotionBlockId,
   kpLispLessonMotionBlocks,
   type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
@@ -185,19 +186,23 @@ export function createKpLispLessonScrollController(input: {
         dataset["kpTutorialAttentionMotionBlock"] === block.id
       )
     );
-    const firstMotionIndex = motionRegionIndexes[0] ?? -1;
-    const secondMotionIndex = motionRegionIndexes[1] ?? -1;
-    if (regionIndex < 0 || firstMotionIndex < 0 || secondMotionIndex < 0) {
+    if (regionIndex < 0 || motionRegionIndexes.some((index) => index < 0)) {
       return undefined;
     }
-    if (regionIndex < firstMotionIndex) {
-      return { blockId: "bind-and-reconstruct", localProgress: 0 };
+    if (regionIndex < motionRegionIndexes[0]!) {
+      return { blockId: kpLispLessonMotionBlocks[0]!.id, localProgress: 0 };
     }
-    if (regionIndex > secondMotionIndex) {
-      return { blockId: "evaluate-and-gather", localProgress: 1 };
+    for (let index = 0; index < motionRegionIndexes.length - 1; index += 1) {
+      if (regionIndex > motionRegionIndexes[index]! &&
+          regionIndex < motionRegionIndexes[index + 1]!) {
+        return {
+          blockId: kpLispLessonMotionBlocks[index]!.id,
+          localProgress: 1
+        };
+      }
     }
-    if (regionIndex > firstMotionIndex && regionIndex < secondMotionIndex) {
-      return { blockId: "bind-and-reconstruct", localProgress: 1 };
+    if (regionIndex > motionRegionIndexes.at(-1)!) {
+      return { blockId: kpLispLessonMotionBlocks.at(-1)!.id, localProgress: 1 };
     }
     return undefined;
   };
@@ -273,15 +278,13 @@ function blockFromEvent(event: Event): KpLispLessonMotionBlockId | undefined {
   if (!(event.target instanceof Element)) return undefined;
   const id = event.target.closest<HTMLElement>("[data-kp-tutorial-motion-controls]")
     ?.dataset["kpTutorialMotionControls"];
-  return id === "bind-and-reconstruct" || id === "evaluate-and-gather" ? id : undefined;
+  return isKpLispLessonMotionBlockId(id) ? id : undefined;
 }
 
 function lispMotionBlockId(
   value: string | undefined
 ): KpLispLessonMotionBlockId | undefined {
-  return value === "bind-and-reconstruct" || value === "evaluate-and-gather"
-    ? value
-    : undefined;
+  return isKpLispLessonMotionBlockId(value) ? value : undefined;
 }
 
 function required<ElementType extends Element>(root: ParentNode, selector: string): ElementType {

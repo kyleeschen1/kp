@@ -38,8 +38,11 @@ try {
       frame,
       plan,
       activeBlockId: progress < 0.74
-        ? "bind-and-reconstruct"
-        : "evaluate-and-gather"
+        ? "application"
+        : "evaluation",
+      localProgress: progress < 0.74
+        ? progress / 0.74
+        : (progress - 0.74) / 0.26
     });
     const stage = renderKpLispBotanicalStageHtml({ frame, plan, salience });
     await page.setContent(`<!doctype html><html><head><meta charset="utf-8"><style>

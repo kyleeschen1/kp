@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  projectKpLispLessonRuntimeProgress,
   projectKpLispBindAndReconstructProgress,
   projectKpLispEvaluateAndGatherProgress,
   unprojectKpLispBindAndReconstructProgress,
@@ -21,7 +22,7 @@ test("evaluation motion starts at reconstructed form and settles at result", () 
   }
 });
 
-test("later global state keeps earlier block cumulatively complete", () => {
+test("later runtime state keeps application semantically complete", () => {
   for (let index = 0; index <= 100; index += 1) {
     const global = projectKpLispEvaluateAndGatherProgress(index / 100);
     assert.equal(unprojectKpLispBindAndReconstructProgress(global), 1);
@@ -29,9 +30,18 @@ test("later global state keeps earlier block cumulatively complete", () => {
   assert.equal(unprojectKpLispEvaluateAndGatherProgress(0.4), 0);
 });
 
-test("both local blocks share one exact global boundary", () => {
+test("application and evaluation share one exact runtime boundary", () => {
   assert.equal(
     projectKpLispBindAndReconstructProgress(1),
     projectKpLispEvaluateAndGatherProgress(0)
   );
+});
+
+test("structural motion advances locally without pretending to evaluate", () => {
+  for (let index = 0; index <= 100; index += 1) {
+    assert.equal(projectKpLispLessonRuntimeProgress("structure", index / 100), 0);
+  }
+  assert.equal(projectKpLispLessonRuntimeProgress("application", 1), 0.74);
+  assert.equal(projectKpLispLessonRuntimeProgress("evaluation", 0), 0.74);
+  assert.equal(projectKpLispLessonRuntimeProgress("evaluation", 1), 1);
 });

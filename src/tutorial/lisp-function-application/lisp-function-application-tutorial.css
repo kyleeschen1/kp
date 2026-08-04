@@ -65,6 +65,15 @@ button, input { font: inherit; }
 
 .kp-lisp-tutorial__toc { z-index: 4; }
 .kp-lisp-tutorial__stage { min-width: 0; }
+.kp-lisp-tutorial__stage [data-kp-lisp-stage-host] {
+  display: grid;
+  min-height: 12em;
+  place-items: center;
+  width: 100%;
+}
+.kp-lisp-tutorial__stage [data-kp-lisp-lesson-stage-projection] {
+  width: 100%;
+}
 
 .kp-lisp-tutorial__reading-band-marker {
   position: fixed;

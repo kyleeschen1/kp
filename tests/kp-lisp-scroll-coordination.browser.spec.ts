@@ -9,54 +9,87 @@ test("scroll owns one block, honors holds, and rebases manual control without ju
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-scroll-coordinator", "connected");
 
-  await setTravel(page, "bind-and-reconstruct", 0.5, "wheel");
+  await setTravel(page, "structure", 0.5, "wheel");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "scroll");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", "bind-and-reconstruct");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.3404");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", "structure");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "0.4462");
   await expect(root.locator("kp-tutorial-toc")).toHaveAttribute(
     "data-kp-tutorial-toc-active-id",
-    "bind-and-reconstruct"
+    "structure"
   );
 
-  await setTravel(page, "bind-and-reconstruct", 0.58, "wheel");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.3404");
+  await setTravel(page, "structure", 0.52, "wheel");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "0.4462");
 
   const scrub = root.locator(
-    '[data-kp-tutorial-motion-controls="bind-and-reconstruct"] input[data-action="seek"]'
+    '[data-kp-tutorial-motion-controls="structure"] input[data-action="seek"]'
   );
   await scrub.evaluate((element: HTMLInputElement) => {
     element.value = "0.8";
     element.dispatchEvent(new Event("input", { bubbles: true }));
   });
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "manual");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.5920");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "0.8000");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
 
-  const before = Number(await root.getAttribute("data-kp-lisp-tutorial-progress"));
+  const before = Number(await root.getAttribute("data-kp-lisp-tutorial-local-progress"));
   await shiftScroll(page, 18, "wheel");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "scroll");
-  const after = Number(await root.getAttribute("data-kp-lisp-tutorial-progress"));
+  const after = Number(await root.getAttribute("data-kp-lisp-tutorial-local-progress"));
   expect(after).toBeGreaterThan(before);
-  expect(after - before).toBeLessThan(0.08);
+  expect(after - before).toBeLessThan(0.15);
 
   await shiftScroll(page, -18, "touch");
-  const reversed = Number(await root.getAttribute("data-kp-lisp-tutorial-progress"));
+  const reversed = Number(await root.getAttribute("data-kp-lisp-tutorial-local-progress"));
   expect(reversed).toBeLessThan(after);
 
   await page.keyboard.press("Alt+ArrowRight");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "manual");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.7400");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "0.6448");
+  await page.keyboard.press("Alt+ArrowRight");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "1.0000");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
 });
 
-test("scroll hands cumulative ownership to the second block", async ({ page }) => {
+test("scroll hands cumulative ownership to the third block", async ({ page }) => {
   await page.goto(route);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-scroll-coordinator", "connected");
-  await setTravel(page, "evaluate-and-gather", 0.55, "touch");
+  await setTravel(page, "evaluation", 0.5, "touch");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-motion-owner", "scroll");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", "evaluate-and-gather");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.8908");
-  await expect(root.locator('[data-kp-tutorial-motion-controls="bind-and-reconstruct"]'))
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", "evaluation");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.8700");
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", "0.5000");
+  await expect(root.locator('[data-kp-tutorial-motion-controls="structure"]'))
     .toHaveAttribute("progress", "1.0000");
+  await expect(root.locator('[data-kp-tutorial-motion-controls="application"]'))
+    .toHaveAttribute("progress", "1.0000");
+});
+
+test("manual playback keeps prose fixed and gives one block control", async ({
+  page
+}) => {
+  await page.goto(`${route}#kp-block-application`);
+  const root = page.locator("[data-kp-lisp-function-application-tutorial]");
+  const passages = root.locator(".kp-lisp-tutorial__passage");
+  await expect(passages).toHaveCount(7);
+  const authoredText = await passages.allTextContents();
+  const application = root.locator(
+    '[data-kp-tutorial-motion-controls="application"]'
+  );
+
+  await application.locator('button[data-action="toggle"]').click();
+  await expect(application).toHaveAttribute("playback-status", "playing");
+  await expect(root.locator('[data-kp-tutorial-motion-controls="structure"]'))
+    .toHaveAttribute("playback-status", "paused");
+  await expect(root.locator('[data-kp-tutorial-motion-controls="evaluation"]'))
+    .toHaveAttribute("playback-status", "paused");
+  await page.waitForTimeout(120);
+  expect(await passages.allTextContents()).toEqual(authoredText);
+
+  await application.locator('button[data-action="toggle"]').click();
+  await expect(application).toHaveAttribute("playback-status", "paused");
 });
 
 async function setTravel(

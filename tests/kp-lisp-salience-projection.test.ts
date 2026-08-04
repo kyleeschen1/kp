@@ -9,57 +9,68 @@ import {
   projectKpLispLessonSalience,
   resolveKpLispSalienceState
 } from "../src/tutorial/lisp-function-application/lisp-function-application-salience.ts";
+import type { KpLispLessonMotionBlockId } from
+  "../src/tutorial/lisp-function-application/lisp-function-application-motion-blocks.ts";
 
 const asset = createKpLispLambdaApplicationAsset();
 const plan = createKpLispBotanicalPresentationPlan(asset);
 
-function projection(progress: number, activeBlockId: "bind-and-reconstruct" | "evaluate-and-gather") {
+function projection(
+  progress: number,
+  activeBlockId: KpLispLessonMotionBlockId,
+  localProgress = progress
+) {
   const frame = sampleKpLispLambdaApplicationRuntimeFrame({ asset, progress });
   return {
     frame,
-    salience: projectKpLispLessonSalience({ frame, plan, activeBlockId })
+    salience: projectKpLispLessonSalience({
+      frame,
+      plan,
+      activeBlockId,
+      localProgress
+    })
   };
 }
 
 test("semantic stages project exact targets while retaining named context", () => {
-  assert.deepEqual(projection(0, "bind-and-reconstruct").salience.targetNodeIds, [
+  assert.deepEqual(projection(0, "structure").salience.targetNodeIds, [
     "botanical.application"
   ]);
-  assert.deepEqual(projection(0.34, "bind-and-reconstruct").salience.targetNodeIds, [
+  assert.deepEqual(projection(0.34, "application").salience.targetNodeIds, [
     "botanical.binder",
     "botanical.argument",
     "botanical.environment"
   ]);
-  assert.deepEqual(projection(0.72, "bind-and-reconstruct").salience.targetNodeIds, [
+  assert.deepEqual(projection(0.72, "application").salience.targetNodeIds, [
     "botanical.reconstructed"
   ]);
-  assert.deepEqual(projection(0.96, "evaluate-and-gather").salience.targetNodeIds, [
+  assert.deepEqual(projection(0.96, "evaluation").salience.targetNodeIds, [
     "botanical.result"
   ]);
-  assert.equal(projection(0.5, "bind-and-reconstruct").salience.attenuation, 0.58);
+  assert.equal(projection(0.5, "application").salience.attenuation, 0.58);
 });
 
 test("passage emphasis changes state without changing authored prose", () => {
   assert.equal(
-    projection(0.3, "bind-and-reconstruct").salience.activePassageId,
-    "binding-before"
+    projection(0, "structure", 0.3).salience.activePassageId,
+    "structure-before"
   );
   assert.equal(
-    projection(0.74, "bind-and-reconstruct").salience.activePassageId,
-    "binding-after"
+    projection(0, "structure", 1).salience.activePassageId,
+    "structure-after"
   );
   assert.equal(
-    projection(0.8, "evaluate-and-gather").salience.activePassageId,
+    projection(0.8, "evaluation", 0.3).salience.activePassageId,
     "evaluation-before"
   );
   assert.equal(
-    projection(0.96, "evaluate-and-gather").salience.activePassageId,
+    projection(0.96, "evaluation", 1).salience.activePassageId,
     "evaluation-after"
   );
 });
 
 test("renderer marks targets context and attenuated material without hiding native code", () => {
-  const { frame, salience } = projection(0.5, "bind-and-reconstruct");
+  const { frame, salience } = projection(0.5, "application");
   const html = renderKpLispBotanicalStageHtml({ frame, plan, salience });
   assert.match(html, /data-kp-lisp-botanical-node="botanical\.reconstructed" data-kp-lisp-salience="target"/);
   assert.match(html, /data-kp-lisp-botanical-node="botanical\.reference" data-kp-lisp-salience="context"/);

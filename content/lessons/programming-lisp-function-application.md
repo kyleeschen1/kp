@@ -1,73 +1,69 @@
 # How can applying a function turn code into a value without losing where each part came from?
 
-Kicker: Function application, binding, and provenance
+Kicker: Structure, binding, and evaluation in one Lisp expression
 
 Assumption: This lesson assumes that you can read a small prefix Lisp expression. It does not assume prior knowledge of lambda calculus or an evaluator.
 
-### Read the shape before the symbols move
+### See the structure before interpreting it
 
-<!-- kp:section read-application -->
+<!-- kp:section see-structure -->
 
-<!-- kp:passage expression-as-structure -->
+<!-- kp:passage structure-before -->
 
-Consider `((lambda (x) (+ x 1)) 4)`. The outer parentheses say that one expression is being applied to an argument. The expression in function position is `(lambda (x) (+ x 1))`; the argument is `4`. Inside the lambda, `(x)` names one parameter and `(+ x 1)` is its body.
+Consider `((lambda (x) (+ x 1)) 4)`. It is tempting to see a flat line of punctuation, but Lisp asks us to read nested forms. The outermost list is an application. Its function position contains `(lambda (x) (+ x 1))`, and its argument position contains `4`. Within the lambda, `(x)` is a parameter list and `(+ x 1)` is the body.
 
-This is easy to flatten into a string of punctuation. Resist that impulse. The two visible `x` characters do different jobs. The first introduces the parameter; the second is a reference inside the body. They look alike because the reference names that parameter, not because they are the same occurrence. The application also contains several structures at once: an outer application, a lambda, a parameter list, a body, and a separate argument.
+The animation begins by treating those parentheses as boundaries around real subexpressions. Watch the deepest lists fold first. Their contents gather before their wrapping parentheses follow; only then can a containing list fold. Reversing the motion restores the exact same source in the opposite causal order. Nothing is evaluated during this motion. A folded form is still the same structure, held compactly.
 
-<!-- kp:passage question -->
+<!-- kp:motion structure -->
 
-Our question is not merely why the answer is `5`. Ordinary arithmetic already tells us that. The interesting question is how the whole application can become `(+ 4 1)`, and then `5`, while preserving an account of what each visible part contributed.
+<!-- kp:passage structure-after -->
 
-A trustworthy animation therefore cannot decide identity by comparing glyphs. It needs the structure first. Then motion can reveal that structure: the argument can travel to a particular reference because a binding connects them, while the operator `+` and the literal `1` persist for their own reasons.
+This fold gives us a useful ownership map. The parameter-list bead belongs inside the lambda, the body bead belongs beside it, and the whole lambda belongs in the function position of the application. A bead may expose smaller particles while its interior matters, but each particle comes from a real immediate child. The animation does not add decorative material or replace code with a new notation.
 
-### Application creates a local binding
+The two visible `x` characters now have distinct places in that structure. The first occurs in the parameter list and introduces a name. The second occurs in the body and refers to that name. Their matching glyphs do not establish identity; lexical structure does. That distinction is what will let the next motion send one argument to one certified destination.
 
-<!-- kp:section bind-argument -->
+### Apply the lambda through its binding
 
-<!-- kp:passage binding-before -->
+<!-- kp:section apply-lambda -->
 
-Applying the lambda creates a small lexical environment. In that environment, the parameter `x` is bound to the argument value `4`. Think of the binding as a directed relationship—`x` maps to `4`—rather than as a global instruction to replace every letter x that happens to appear.
+<!-- kp:passage application-before -->
 
-The destination is the reference to `x` inside `(+ x 1)`. The binder occurrence tells us which name the lambda introduces; the reference occurrence tells us where that name is used. Their connection supplies the provenance for substitution.
+Applying the lambda creates a small lexical environment in which parameter `x` is bound to argument value `4`. Read this as a directed relationship, `x` maps to `4`, rather than as a global command to replace every character x. The parameter occurrence tells us what name the function accepts. The reference occurrence inside `(+ x 1)` tells us where that bound value is used.
 
-<!-- kp:motion bind-and-reconstruct -->
+Watch the original argument `4`. The parameter and reference gain related boxes, then that one source value travels along an arch into the parameter. It contracts and disappears there before a derived `4` appears at the body reference. That delay matters: it makes the reappearance causal rather than a simultaneous visual substitution. The `+` and `1` do not travel because they already belong to the body.
 
-<!-- kp:passage binding-after -->
+<!-- kp:motion application -->
 
-At the end of the motion, the body has been reconstructed as `(+ 4 1)`. The `4` in this new form is not an unexplained new token. It descends from the argument through the binding into the exact reference destination. The `+` and `1` remain because the lambda body already contained them.
+<!-- kp:passage application-after -->
 
-The application shell and the lambda parameter are no longer needed in the reconstructed form. Their disappearance is not visual tidying; it has a semantic reason. Once the body and environment determine `(+ 4 1)`, the outer application has done its work. Native code at rest makes the endpoint available as code again, not as a picture of code.
+The reconstructed body is `(+ 4 1)`. Its `4` carries the provenance of both the original argument and the reference destination it now occupies. The operator `+`, literal `1`, and body parentheses persist from the source. The outer application, lambda keyword, and parameter machinery have completed their role, so they fold into a temporary provenance bead before leaving the display.
 
-### Evaluation gathers a form into its value
+At rest, the temporary bead is gone and the reconstructed body recenters as ordinary selectable code. The disappearance of the application shell is not cosmetic tidying: once the certified binding and body determine `(+ 4 1)`, that shell contributes provenance but is no longer part of the expression to evaluate.
 
-<!-- kp:section evaluate-form -->
+### Evaluate the reconstructed form
+
+<!-- kp:section evaluate-result -->
 
 <!-- kp:passage evaluation-before -->
 
-Substitution and evaluation are related, but they are not the same step. Substitution gives us a new expression, `(+ 4 1)`. That expression is still code: a call to primitive addition with two integer arguments. Evaluation asks what value that complete form denotes.
+Substitution and evaluation are related, but they are not the same operation. Substitution produced `(+ 4 1)`, which is still code: a call to primitive addition with two integer inputs. Evaluation asks what exact value that complete form denotes. Holding the reconstructed form between the two motions prevents a correct answer from hiding the explanatory middle.
 
-Keeping the reconstructed form visible for a moment matters. It lets us see the boundary between applying the lambda and carrying out the addition. If both changes collapse into one jump from the original application to `5`, the answer is correct but the explanation loses its middle.
+Watch the `+` first become a compact structural root. At that point no arithmetic has occurred. Then `4` and `1` gather into the operator and are absorbed. Only after both inputs arrive does the operator pulse and emit `5`. The pulse distinguishes computation from folding: a fold preserves a form, while this reduction creates a value certified by exact integer addition.
 
-<!-- kp:motion evaluate-and-gather -->
+<!-- kp:motion evaluation -->
 
 <!-- kp:passage evaluation-after -->
 
-The reconstructed form now gathers into `5`. “Gathers” is a visual description, not a new evaluation rule. The rule is exact integer addition: `4 + 1 = 5`. The botanical image gives the eye a way to follow the contributors as a branch resolves into fruit; the evaluator remains the authority for the result.
+The result settles as ordinary native `5`, not as a permanent particle or diagram label. Its provenance still names the reconstructed operator and both integer inputs. The visual gathering helps the eye track contributors; the bounded evaluator remains the authority for the claim that `4 + 1 = 5`.
 
-This distinction protects rewind as well. Moving backward from `5` restores `(+ 4 1)` before it restores the lambda application. We do not invent history by reversing pixels. We sample the same certified stages in the opposite direction, so each checkpoint recovers the same semantic identities and native code.
+Rewind follows the same causal path backward. It restores `(+ 4 1)` before restoring the lambda application, and it expands nested forms in the reverse of their certified fold order. Directly seeking to any checkpoint reconstructs that state from semantic identities rather than replaying prior pixels.
 
-### What the botanical picture adds
+### Follow provenance across the whole explanation
 
-<!-- kp:section metaphor-scope -->
-
-<!-- kp:passage botanical-language -->
-
-The botanical presentation turns recursive structure into a spatial intuition. Atoms can read as leaves or buds, list structure as branches, the binding environment as roots, parentheses as a flexible enclosure, and the final value as fruit. Material can persist, travel to a named destination, gather into a parent, or leave for an explicit reason.
-
-That vocabulary is useful because Lisp expressions really are nested structures, and evaluation repeatedly moves between a whole form and its parts. The picture also keeps provenance perceptible: the argument leaf does not simply blink out while an unrelated `4` appears elsewhere.
+<!-- kp:section follow-provenance -->
 
 <!-- kp:passage synthesis -->
 
-But the plant does not explain Lisp by itself. It does not tell us what `lambda` means, create the binding, choose the substitution destination, or prove that the result is `5`. Those claims come from the semantic model and the bounded evaluator. The plant is a presentation of those claims, and native code remains the settled form.
+The complete path has three different verbs. First, see the structure: nested forms can fold and expand without changing meaning. Second, apply the lambda: bind `x` to `4`, propagate the value to the exact body reference, and reconstruct `(+ 4 1)`. Third, evaluate the result: gather the complete addition into its operator and produce `5`.
 
-The complete path is now concise. Read the outer application. Bind `x` to `4`. Reconstruct the body as `(+ 4 1)`. Evaluate that form as `5`. At every step, ask not only “what is visible now?” but also “where did it come from, and why is it allowed to persist, gather, or leave?” That second question is what turns a correct animation into an explanation.
+Those verbs must remain distinct even when they share a visual material language. Parentheses lag behind their contents because they enclose them. The argument follows a directed route because a lexical binding connects source and destination. The result emerges from `+` because the evaluator certifies that operation. At every step, ask both what is visible and why each part is allowed to persist, move, gather, or leave. That second question turns motion into an explanation.

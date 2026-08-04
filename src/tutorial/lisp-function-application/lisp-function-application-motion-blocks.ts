@@ -3,10 +3,16 @@ import type {
   KpTutorialMotionCheckpoint,
   KpTutorialMotionCorridor
 } from "../kp-tutorial-motion.ts";
+import {
+  compileKpLispDwellTimeline,
+  defineKpLispInternalTuning,
+  KP_LISP_AUTHORED_DWELL_BEATS
+} from "../../animation/lisp-s-expression-timing.ts";
 
 export type KpLispLessonMotionBlockId =
-  | "bind-and-reconstruct"
-  | "evaluate-and-gather";
+  | "structure"
+  | "application"
+  | "evaluation";
 
 export interface KpLispLessonMotionCheckpoint
   extends KpTutorialMotionCheckpoint {}
@@ -21,21 +27,55 @@ export interface KpLispLessonMotionBlock
 
 export const kpLispLessonMotionBlocks: readonly KpLispLessonMotionBlock[] =
   Object.freeze([
-    block("bind-and-reconstruct", "Bind and reconstruct", [
-      checkpoint("application-ready", "Application ready", 0),
-      checkpoint("binding-established", "Binding established", 0.46),
-      checkpoint("body-reconstructed", "Body reconstructed", 1)
-    ], corridor([
-      [0, 0], [0.14, 0], [0.48, 0.46], [0.61, 0.46], [0.94, 1], [1, 1]
-    ])),
-    block("evaluate-and-gather", "Evaluate and gather", [
-      checkpoint("evaluation-form-ready", "Form ready", 0),
-      checkpoint("evaluation-gathering", "Evaluation gathering", 0.58),
-      checkpoint("result-settled", "Result settled", 1)
-    ], corridor([
-      [0, 0], [0.16, 0], [0.55, 0.58], [0.68, 0.58], [0.94, 1], [1, 1]
-    ]))
+    authoredBlock("structure", "See the structure", {
+      "source-readable": "Source readable",
+      "leaf-forms-folded": "Leaf forms folded",
+      "lambda-form-folded": "Lambda folded",
+      "application-folded": "Application folded",
+      "source-restored": "Source restored"
+    }),
+    authoredBlock("application", "Apply the lambda", {
+      "binding-ready": "Binding ready",
+      "parameter-bound": "Parameter bound",
+      "body-propagated": "Body propagated",
+      "body-reconstructed": "Body reconstructed"
+    }),
+    authoredBlock("evaluation", "Evaluate the result", {
+      "reduction-ready": "Reduction ready",
+      "inputs-gathered": "Inputs gathered",
+      "result-settled": "Result settled"
+    })
   ]);
+
+export function isKpLispLessonMotionBlockId(
+  value: string | undefined
+): value is KpLispLessonMotionBlockId {
+  return kpLispLessonMotionBlocks.some(({ id }) => id === value);
+}
+
+function authoredBlock(
+  id: KpLispLessonMotionBlockId,
+  label: string,
+  labels: Readonly<Record<string, string>>
+): KpLispLessonMotionBlock {
+  const beats = KP_LISP_AUTHORED_DWELL_BEATS.filter(({ block: beatBlock }) =>
+    beatBlock === id
+  );
+  const timeline = compileKpLispDwellTimeline(
+    beats,
+    defineKpLispInternalTuning()
+  );
+  const checkpoints = timeline.checkpoints.map((entry, index) => checkpoint(
+    entry.id,
+    labels[entry.id] ?? entry.id,
+    index === 0
+      ? 0
+      : index === timeline.checkpoints.length - 1
+        ? 1
+        : entry.seekProgress
+  ));
+  return block(id, label, checkpoints, corridorFor(checkpoints));
+}
 
 function block(
   id: KpLispLessonMotionBlockId,
@@ -69,4 +109,20 @@ function corridor(
       Object.freeze({ travel, progress })
     ))
   });
+}
+
+function corridorFor(
+  checkpoints: readonly KpLispLessonMotionCheckpoint[]
+): KpLispLessonMotionCorridor {
+  const keyframes: Array<readonly [number, number]> = [
+    [0, 0],
+    [0.08, 0]
+  ];
+  for (let index = 1; index < checkpoints.length - 1; index += 1) {
+    const center = index / (checkpoints.length - 1);
+    const progress = checkpoints[index]!.progress;
+    keyframes.push([center - 0.035, progress], [center + 0.035, progress]);
+  }
+  keyframes.push([0.92, 1], [1, 1]);
+  return corridor(keyframes);
 }

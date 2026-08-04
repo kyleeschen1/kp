@@ -3,33 +3,33 @@ import { mkdir } from "node:fs/promises";
 import { expect, test, type Page } from "@playwright/test";
 
 const route = "/tutorials/programming/lisp-function-application/";
-const evidenceDirectory = "tmp/codex/botanical-lisp-tutorial";
+const evidenceDirectory = "tmp/codex/s-expression-lisp-tutorial";
 
 test("the shared shell preserves the approved reader attention cues", async ({ page }) => {
   await page.setViewportSize({ width: 1_440, height: 900 });
   await page.goto(route);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   const passage = root.locator(
-    '[data-kp-lisp-tutorial-passage="binding-before"]'
+    '[data-kp-lisp-tutorial-passage="application-before"]'
   );
   const attentionRegion = root.locator(
-    '[data-kp-tutorial-attention-passage="binding-before"]'
+    '[data-kp-tutorial-attention-passage="application-before"]'
   );
   const motion = root.locator(
-    '[data-kp-tutorial-motion-block="bind-and-reconstruct"]'
+    '[data-kp-tutorial-motion-block="application"]'
   );
 
   await expect(motion).toHaveAttribute(
     "data-kp-tutorial-motion-introduction",
-    "binding-before"
+    "application-before"
   );
   await expect(motion).toHaveAttribute(
     "aria-describedby",
-    "kp-passage-binding-before"
+    "kp-passage-application-before"
   );
   expect(await motion.evaluate((element) =>
     element.previousElementSibling?.id
-  )).toBe("kp-passage-binding-before");
+  )).toBe("kp-passage-application-before");
   const introductionGap = await motion.evaluate((element) => {
     const before = element.previousElementSibling!.getBoundingClientRect();
     return element.getBoundingClientRect().top - before.bottom;
@@ -45,7 +45,7 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   }));
   await expect(root).toHaveAttribute(
     "data-kp-lisp-tutorial-reading-passage",
-    "binding-before"
+    "application-before"
   );
   await expect(attentionRegion).toHaveAttribute(
     "data-kp-lisp-reading-active",
@@ -54,7 +54,7 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   const toc = root.locator("kp-tutorial-toc");
   await expect(toc).toHaveAttribute(
     "data-kp-tutorial-toc-active-id",
-    "bind-and-reconstruct"
+    "application"
   );
 
   const pointer = root.locator("[data-kp-lisp-tutorial-reading-band]");
@@ -108,18 +108,19 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
 test("capture the complete local Lisp tutorial checkpoint story", async ({ page }) => {
   await mkdir(evidenceDirectory, { recursive: true });
   await page.setViewportSize({ width: 1_440, height: 900 });
-  for (const [name, hash, progress] of [
-    ["wide-application", "application-ready", "0.0000"],
-    ["wide-binding", "binding-established", "0.3404"],
-    ["wide-reconstructed", "body-reconstructed", "0.7400"],
-    ["wide-evaluation", "evaluation-gathering", "0.8908"],
-    ["wide-result", "result-settled", "1.0000"]
+  for (const [name, hash, block, localProgress, runtimeProgress] of [
+    ["wide-structure", "source-readable", "structure", "0.0000", "0.0000"],
+    ["wide-leaf-fold", "leaf-forms-folded", "structure", "0.2708", "0.0000"],
+    ["wide-binding", "parameter-bound", "application", "0.3817", "0.2824"],
+    ["wide-reconstructed", "body-reconstructed", "application", "1.0000", "0.7400"],
+    ["wide-evaluation", "inputs-gathered", "evaluation", "0.5000", "0.8700"],
+    ["wide-result", "result-settled", "evaluation", "1.0000", "1.0000"]
   ] as const) {
     await page.goto(`${route}#kp-checkpoint-${hash}`);
-    await settle(page, progress);
+    await settle(page, block, localProgress, runtimeProgress);
     const nativeBounds = await page.locator(
-      '[data-kp-lisp-current="true"][aria-hidden="false"]'
-    ).evaluate((element) => {
+      '[data-kp-lisp-stage-host] [data-kp-lisp-native-code]'
+    ).first().evaluate((element) => {
       const expression = element.getBoundingClientRect();
       const stage = element.closest<HTMLElement>(".kp-lisp-tutorial__stage")!
         .getBoundingClientRect();
@@ -143,7 +144,7 @@ test("capture the phone lesson with its persistent stage and native result", asy
   await mkdir(evidenceDirectory, { recursive: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${route}#kp-checkpoint-result-settled`);
-  await settle(page, "1.0000");
+  await settle(page, "evaluation", "1.0000", "1.0000");
   await expect(page.locator('[data-kp-lisp-native-code="result"]')).toBeVisible();
   await page.screenshot({
     path: `${evidenceDirectory}/phone-result.png`,
@@ -151,9 +152,16 @@ test("capture the phone lesson with its persistent stage and native result", asy
   });
 });
 
-async function settle(page: Page, progress: string): Promise<void> {
+async function settle(
+  page: Page,
+  block: string,
+  localProgress: string,
+  runtimeProgress: string
+): Promise<void> {
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
-  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", progress);
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-active-motion-block", block);
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-local-progress", localProgress);
+  await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", runtimeProgress);
   await page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise<void>((resolve) => {

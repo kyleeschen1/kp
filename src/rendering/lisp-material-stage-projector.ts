@@ -10,6 +10,11 @@ import {
 } from "../animation/lisp-evaluation-motion.ts";
 import { projectKpLispLambdaSourceMaterial } from
   "../animation/lisp-s-expression-material-projection.ts";
+import {
+  compileKpLispStructuralMotionProgram,
+  sampleKpLispStructuralMotion,
+  type KpLispStructuralMotionProgram
+} from "../animation/lisp-structural-motion.ts";
 import type { KpLispLambdaApplicationFixture } from
   "../semantic/lisp-lambda-application-fixture.ts";
 import {
@@ -20,8 +25,15 @@ import {
   kpLispEvaluationMotionCss,
   renderKpLispEvaluationMotionHtml
 } from "./lisp-evaluation-motion-html.ts";
+import {
+  kpLispStructuralMotionCss,
+  renderKpLispStructuralMotionHtml
+} from "./lisp-structural-motion-html.ts";
 
-export type KpLispMaterialStageOperation = "application" | "evaluation";
+export type KpLispMaterialStageOperation =
+  | "structure"
+  | "application"
+  | "evaluation";
 
 export interface KpLispMaterialStageRenderInput {
   readonly operation: KpLispMaterialStageOperation;
@@ -39,8 +51,15 @@ export function createKpLispMaterialStageProjector(
   fixture: KpLispLambdaApplicationFixture
 ): KpLispMaterialStageProjector {
   const material = projectKpLispLambdaSourceMaterial(fixture);
+  const applicationState = material.canonicalStates.find(({ id }) =>
+    id === "application"
+  );
+  if (applicationState === undefined) {
+    throw new Error("Lisp material projection requires canonical application code.");
+  }
   let compiled: {
     readonly widthPx: number;
+    readonly structure: KpLispStructuralMotionProgram;
     readonly application: KpLispApplicationMotionProgram;
     readonly evaluation: KpLispEvaluationMotionProgram;
   } | undefined;
@@ -55,6 +74,11 @@ export function createKpLispMaterialStageProjector(
     });
     compiled = Object.freeze({
       widthPx,
+      structure: compileKpLispStructuralMotionProgram({
+        semantic: fixture.semantic,
+        state: applicationState,
+        availableWidthPx: widthPx
+      }),
       application,
       evaluation: compileKpLispEvaluationMotionProgram({
         fixture,
@@ -67,12 +91,19 @@ export function createKpLispMaterialStageProjector(
   };
 
   return Object.freeze({
-    css: `${kpLispApplicationMotionCss}\n${kpLispEvaluationMotionCss}`,
+    css: `${kpLispStructuralMotionCss}\n${kpLispApplicationMotionCss}\n${kpLispEvaluationMotionCss}`,
     render: ({ operation, progress, availableWidthPx }:
       KpLispMaterialStageRenderInput) => {
       const program = programs(availableWidthPx);
       const normalizedProgress = clamp(progress);
-      return operation === "evaluation"
+      return operation === "structure"
+        ? renderKpLispStructuralMotionHtml(
+            sampleKpLispStructuralMotion(
+              program.structure,
+              normalizedProgress
+            )
+          )
+        : operation === "evaluation"
         ? renderKpLispEvaluationMotionHtml(
             sampleKpLispEvaluationMotion(
               program.evaluation,

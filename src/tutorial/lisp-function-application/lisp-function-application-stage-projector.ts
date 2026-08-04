@@ -74,9 +74,7 @@ export function createKpLispLessonStageProjector(input: {
     css: material.css,
     render: (frameInput: KpLispLessonStageRenderInput) => {
       const html = material.render({
-        operation: frameInput.activeBlockId === "evaluate-and-gather"
-          ? "evaluation"
-          : "application",
+        operation: frameInput.activeBlockId,
         progress: frameInput.localProgress,
         availableWidthPx: frameInput.availableWidthPx
       });

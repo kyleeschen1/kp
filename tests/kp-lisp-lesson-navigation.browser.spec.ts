@@ -9,11 +9,11 @@ test("direct checkpoints restore exact state while the TOC names the animation",
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "1.0000");
   await expect(root).toHaveAttribute(
     "data-kp-lisp-tutorial-active-motion-block",
-    "evaluate-and-gather"
+    "evaluation"
   );
   await expect(toc).toHaveAttribute(
     "data-kp-tutorial-toc-active-id",
-    "evaluate-and-gather"
+    "evaluation"
   );
   await expect(root.locator('[data-kp-lisp-native-code="result"]')).toHaveText("5");
 
@@ -26,8 +26,8 @@ test("direct checkpoints restore exact state while the TOC names the animation",
     return values;
   });
   expect(observed).toEqual([]);
-  await toc.locator('[data-kp-tutorial-destination-id="bind-and-reconstruct"]').click();
-  await expect(page).toHaveURL(/\/tutorials\/programming\/lisp-function-application\/#kp-block-bind-and-reconstruct$/);
+  await toc.locator('[data-kp-tutorial-destination-id="structure"]').click();
+  await expect(page).toHaveURL(/\/tutorials\/programming\/lisp-function-application\/#kp-block-structure$/);
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
   expect(await page.evaluate(() =>
     (window as typeof window & { __kpObservedProgress?: string[] }).__kpObservedProgress
@@ -35,17 +35,17 @@ test("direct checkpoints restore exact state while the TOC names the animation",
 });
 
 test("Back and Forward restore text destination and animation transactionally", async ({ page }) => {
-  await page.goto(`${route}#kp-checkpoint-application-ready`);
+  await page.goto(`${route}#kp-checkpoint-source-readable`);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   const toc = root.locator("kp-tutorial-toc");
-  await toc.locator('[data-kp-tutorial-destination-id="evaluate-and-gather"]').click();
+  await toc.locator('[data-kp-tutorial-destination-id="evaluation"]').click();
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.7400");
-  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "evaluate-and-gather");
+  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "evaluation");
 
   await page.goBack();
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
-  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "bind-and-reconstruct");
+  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "structure");
   await page.goForward();
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.7400");
-  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "evaluate-and-gather");
+  await expect(toc).toHaveAttribute("data-kp-tutorial-toc-active-id", "evaluation");
 });

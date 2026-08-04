@@ -133,10 +133,10 @@ function sectionState(id: string): {
   readonly localProgress: number;
 } | undefined {
   switch (id) {
-    case "read-application":
-    case "bind-argument": return { blockId: "bind-and-reconstruct", localProgress: 0 };
-    case "evaluate-form": return { blockId: "evaluate-and-gather", localProgress: 0 };
-    case "metaphor-scope": return { blockId: "evaluate-and-gather", localProgress: 1 };
+    case "see-structure": return { blockId: "structure", localProgress: 0 };
+    case "apply-lambda": return { blockId: "application", localProgress: 0 };
+    case "evaluate-result": return { blockId: "evaluation", localProgress: 0 };
+    case "follow-provenance": return { blockId: "evaluation", localProgress: 1 };
     default: return undefined;
   }
 }

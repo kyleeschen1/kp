@@ -18,7 +18,7 @@ test("local compiler preserves ordered prose and motion blocks", async () => {
     publication.lesson.sections.flatMap(({ blocks }) =>
       blocks.filter(({ kind }) => kind === "motion").map(({ id }) => id)
     ),
-    ["bind-and-reconstruct", "evaluate-and-gather"]
+    ["structure", "application", "evaluation"]
   );
   const firstHtml = publication.lesson.sections[0]?.blocks[0]?.kind === "passage"
     ? publication.lesson.sections[0].blocks[0].paragraphs[0]?.html
@@ -60,10 +60,10 @@ test("compiler rejects missing, unintroduced, and unsafe motion content", async 
   );
   const source = await readFile(lessonUrl, "utf8");
   const unintroduced = source
-    .replace("<!-- kp:motion bind-and-reconstruct -->", "")
+    .replace("<!-- kp:motion structure -->", "")
     .replace(
-      "<!-- kp:passage binding-before -->",
-      "<!-- kp:motion bind-and-reconstruct -->\n\n<!-- kp:passage binding-before -->"
+      "<!-- kp:passage structure-before -->",
+      "<!-- kp:motion structure -->\n\n<!-- kp:passage structure-before -->"
     );
   assert.throws(
     () => compileKpLispFunctionApplicationPublication(unintroduced),

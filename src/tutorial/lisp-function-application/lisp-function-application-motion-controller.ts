@@ -22,6 +22,7 @@ import {
 import type { KpTutorialScrubBarElement } from "../kp-tutorial-scrub-bar.ts";
 import { projectKpTutorialCumulativeMotion } from "../kp-tutorial-motion.ts";
 import {
+  isKpLispLessonMotionBlockId,
   kpLispLessonMotionBlocks,
   type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
@@ -100,13 +101,14 @@ export function createKpLispLessonMotionController(input: {
     animation: input.animation,
     progress: 0
   });
-  let activeBlockId: KpLispLessonMotionBlockId = "bind-and-reconstruct";
+  let activeBlockId: KpLispLessonMotionBlockId = "structure";
   let motionOwner: "untouched" | "navigation" | "scroll" | "manual" =
     "untouched";
   let request: number | undefined;
 
   const render = (): void => {
-    const global = semanticProgress(session);
+    const local = sessionProgress(session);
+    const global = projectKpLispLessonRuntimeProgress(activeBlockId, local);
     const frame = sampleKpLispLambdaApplicationRuntimeFrame({
       asset: input.source,
       progress: global
@@ -114,22 +116,24 @@ export function createKpLispLessonMotionController(input: {
     const salience = projectKpLispLessonSalience({
       frame,
       plan: input.plan,
-      activeBlockId
+      activeBlockId,
+      localProgress: local
     });
     stage.innerHTML = input.stageProjector.render({
       runtimeFrame: frame,
       activeBlockId,
-      localProgress: localProgress(activeBlockId, global),
+      localProgress: local,
       availableWidthPx: stageWidth(stage),
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
-    const reviewLocalProgress = localProgress(activeBlockId, global);
+    const reviewLocalProgress = local;
     const reviewCheckpoint = [...kpLispLessonMotionBlocks.find(
       ({ id }) => id === activeBlockId
     )!.checkpoints].reverse().find(
       ({ progress }) => reviewLocalProgress + 0.001 >= progress
     )!;
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
+    input.root.dataset["kpLispTutorialLocalProgress"] = local.toFixed(4);
     input.root.dataset["kpLispTutorialStageRenderer"] =
       input.stageProjector.rendererKind;
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
@@ -152,7 +156,7 @@ export function createKpLispLessonMotionController(input: {
     const cumulative = projectKpTutorialCumulativeMotion({
       blocks: kpLispLessonMotionBlocks,
       activeBlockId,
-      localProgress: localProgress(activeBlockId, global)
+      localProgress: local
     });
     for (const block of kpLispLessonMotionBlocks) {
       const control = scrubs[block.id];
@@ -178,10 +182,11 @@ export function createKpLispLessonMotionController(input: {
     local: number
   ): void => {
     activeBlockId = blockId;
-    const global = globalProgress(blockId, local);
     session = reduceKpEditorAnimationPlaybackSession(session, {
       type: "seek",
-      progress: session.player.direction === "rewind" ? 1 - global : global
+      progress: session.player.direction === "rewind"
+        ? 1 - clamp(local)
+        : clamp(local)
     });
     cancel();
     render();
@@ -192,11 +197,10 @@ export function createKpLispLessonMotionController(input: {
       type: "tick",
       nowMs
     });
-    const global = semanticProgress(session);
-    const bounds = blockBounds(activeBlockId);
+    const local = sessionProgress(session);
     const boundary = session.player.direction === "forward"
-      ? global >= bounds.end
-      : global <= bounds.start;
+      ? local >= 1
+      : local <= 0;
     if (boundary) {
       seek(activeBlockId, session.player.direction === "forward" ? 1 : 0);
       return;
@@ -229,9 +233,7 @@ export function createKpLispLessonMotionController(input: {
       "[data-kp-tutorial-motion-controls]"
     );
     const id = control?.dataset["kpTutorialMotionControls"];
-    return id === "bind-and-reconstruct" || id === "evaluate-and-gather"
-      ? id
-      : undefined;
+    return isKpLispLessonMotionBlockId(id) ? id : undefined;
   };
 
   const onSeek = (event: Event): void => {
@@ -244,8 +246,9 @@ export function createKpLispLessonMotionController(input: {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
     const changedBlock = blockId !== activeBlockId;
+    const targetProgress = displayedProgress(blockId);
     setOwner("manual", blockId);
-    if (session.player.playbackStatus === "playing" && blockId === activeBlockId) {
+    if (session.player.playbackStatus === "playing" && !changedBlock) {
       session = reduceKpEditorAnimationPlaybackSession(session, {
         type: "pause",
         nowMs: view.performance.now()
@@ -254,9 +257,8 @@ export function createKpLispLessonMotionController(input: {
       render();
     } else {
       cancel();
-      const local = localProgress(blockId, semanticProgress(session));
-      if (changedBlock || local >= 0.999) {
-        seek(blockId, local >= 0.999 ? 0 : local);
+      if (changedBlock || targetProgress >= 0.999) {
+        seek(blockId, targetProgress >= 0.999 ? 0 : targetProgress);
       }
       activeBlockId = blockId;
       session = reduceKpEditorAnimationPlaybackSession(session, {
@@ -272,9 +274,10 @@ export function createKpLispLessonMotionController(input: {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
     const changedBlock = blockId !== activeBlockId;
+    const targetProgress = displayedProgress(blockId);
     setOwner("manual", blockId);
     if (changedBlock) {
-      seek(blockId, localProgress(blockId, semanticProgress(session)));
+      seek(blockId, targetProgress);
     }
     activeBlockId = blockId;
     session = reduceKpEditorAnimationPlaybackSession(session, {
@@ -288,16 +291,16 @@ export function createKpLispLessonMotionController(input: {
   const onNext = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    const local = displayedProgress(blockId);
     setOwner("manual", blockId);
-    const local = localProgress(blockId, semanticProgress(session));
     const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
     seek(blockId, checkpoints.find(({ progress }) => progress > local + 0.001)?.progress ?? 1);
   };
   const onPrevious = (event: Event): void => {
     const blockId = blockForEvent(event);
     if (blockId === undefined) return;
+    const local = displayedProgress(blockId);
     setOwner("manual", blockId);
-    const local = localProgress(blockId, semanticProgress(session));
     const checkpoints = kpLispLessonMotionBlocks.find(({ id }) => id === blockId)!.checkpoints;
     seek(blockId, [...checkpoints].reverse().find(({ progress }) => progress < local - 0.001)?.progress ?? 0);
   };
@@ -326,11 +329,11 @@ export function createKpLispLessonMotionController(input: {
           : "seeking";
     },
     snapshot: () => {
-      const global = semanticProgress(session);
+      const local = sessionProgress(session);
       return Object.freeze({
         activeBlockId,
-        localProgress: localProgress(activeBlockId, global),
-        globalProgress: global,
+        localProgress: local,
+        globalProgress: projectKpLispLessonRuntimeProgress(activeBlockId, local),
         playbackStatus: session.player.playbackStatus
       });
     },
@@ -344,6 +347,14 @@ export function createKpLispLessonMotionController(input: {
       resizeObserver.disconnect();
     }
   });
+
+  function displayedProgress(blockId: KpLispLessonMotionBlockId): number {
+    return projectKpTutorialCumulativeMotion({
+      blocks: kpLispLessonMotionBlocks,
+      activeBlockId,
+      localProgress: sessionProgress(session)
+    }).find(({ id }) => id === blockId)!.progress;
+  }
 }
 
 function stageWidth(stage: HTMLElement): number {
@@ -351,34 +362,20 @@ function stageWidth(stage: HTMLElement): number {
     stage.parentElement?.getBoundingClientRect().width || 720;
 }
 
-function globalProgress(
+export function projectKpLispLessonRuntimeProgress(
   blockId: KpLispLessonMotionBlockId,
   local: number
 ): number {
-  return blockId === "evaluate-and-gather"
+  if (blockId === "structure") {
+    clamp(local);
+    return 0;
+  }
+  return blockId === "evaluation"
     ? projectKpLispEvaluateAndGatherProgress(local)
     : projectKpLispBindAndReconstructProgress(local);
 }
 
-function localProgress(
-  blockId: KpLispLessonMotionBlockId,
-  global: number
-): number {
-  return blockId === "evaluate-and-gather"
-    ? unprojectKpLispEvaluateAndGatherProgress(global)
-    : unprojectKpLispBindAndReconstructProgress(global);
-}
-
-function blockBounds(blockId: KpLispLessonMotionBlockId): {
-  readonly start: number;
-  readonly end: number;
-} {
-  return blockId === "evaluate-and-gather"
-    ? { start: kpLispReconstructedGlobalProgress, end: 1 }
-    : { start: 0, end: kpLispReconstructedGlobalProgress };
-}
-
-function semanticProgress(session: KpEditorAnimationPlaybackSession): number {
+function sessionProgress(session: KpEditorAnimationPlaybackSession): number {
   return session.player.direction === "rewind"
     ? 1 - session.player.progress
     : session.player.progress;

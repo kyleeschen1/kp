@@ -8,7 +8,7 @@ import {
   unprojectKpLispBindAndReconstructProgress
 } from "../src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts";
 
-test("first motion block maps exactly onto application through reconstruction", () => {
+test("application block maps exactly onto runtime reconstruction", () => {
   assert.equal(projectKpLispBindAndReconstructProgress(0), 0);
   assert.equal(projectKpLispBindAndReconstructProgress(1), 0.74);
   assert.equal(kpLispReconstructedGlobalProgress, 0.74);

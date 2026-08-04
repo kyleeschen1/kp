@@ -17,6 +17,7 @@ export function projectKpLispLessonSalience(input: {
   readonly frame: KpLispLambdaApplicationRuntimeFrame;
   readonly plan: KpLispBotanicalPresentationPlan;
   readonly activeBlockId: KpLispLessonMotionBlockId;
+  readonly localProgress: number;
 }): KpLispLessonSalienceProjection {
   const targetNodeIds = input.plan.nodes
     .filter(({ selectorId }) => input.frame.activeSelectorIds.includes(selectorId))
@@ -51,15 +52,14 @@ export function resolveKpLispSalienceState(input: {
 function passages(input: {
   readonly frame: KpLispLambdaApplicationRuntimeFrame;
   readonly activeBlockId: KpLispLessonMotionBlockId;
+  readonly localProgress: number;
 }): readonly [string, string] {
-  if (input.activeBlockId === "bind-and-reconstruct") {
-    return input.frame.progress >= 0.74
-      ? ["binding-after", "binding-before"]
-      : ["binding-before", "binding-after"];
-  }
-  return input.frame.stage === "settle"
-    ? ["evaluation-after", "evaluation-before"]
-    : ["evaluation-before", "evaluation-after"];
+  const stem = input.activeBlockId === "structure"
+    ? "structure"
+    : input.activeBlockId;
+  return input.localProgress >= 1
+    ? [`${stem}-after`, `${stem}-before`]
+    : [`${stem}-before`, `${stem}-after`];
 }
 
 function contextNodes(

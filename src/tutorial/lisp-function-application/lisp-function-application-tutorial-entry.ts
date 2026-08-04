@@ -50,7 +50,7 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   });
   const stageHtml = stageProjector.render({
     runtimeFrame: initialRuntimeFrame,
-    activeBlockId: "bind-and-reconstruct",
+    activeBlockId: "structure",
     localProgress: 0,
     availableWidthPx: 720
   });

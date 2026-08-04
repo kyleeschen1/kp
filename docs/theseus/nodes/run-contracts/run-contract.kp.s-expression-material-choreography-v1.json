@@ -168,7 +168,8 @@
     {
       "id": "s20",
       "title": "Reauthor-three-block-Lisp-lesson",
-      "status": "planned"
+      "summary": "Re-authored the Lisp lesson as three independent structure, application, and evaluation motion blocks with stable prose, cumulative state handoff, source-derived checkpoints, and centered material presentation; 156 Lisp tests and eight canonical browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
