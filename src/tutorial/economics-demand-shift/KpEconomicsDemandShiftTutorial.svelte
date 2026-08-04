@@ -884,6 +884,7 @@
             phase: "below" as const,
             opacity: 1,
             handoffProgress: 0,
+            emphasis: 0,
             depthPx: 0,
             scale: 1,
             stageMidpointPx: stageBounds.top + stageBounds.height / 2,
@@ -950,19 +951,26 @@
     return stageBottom;
   }
 
+  function inlineStickyMotionStartY(): number {
+    const stageBounds = inlineStage?.getBoundingClientRect();
+    return stageBounds === undefined
+      ? inlineStickyTopInset() + inlineStickyStageHeightPx / 2
+      : stageBounds.top + stageBounds.height / 2;
+  }
+
   function motionCorridorFor(
     corridor: KpTutorialMotionCorridor
   ): KpTutorialMotionCorridor {
     if (!inlineSticky || inlineStickyFit === "reading") return corridor;
     const startViewportRatio = clamp(
-      inlineStickyHandoffStartY() / window.innerHeight,
-      0.36,
-      0.78
+      inlineStickyMotionStartY() / window.innerHeight,
+      0.22,
+      0.58
     );
     const endViewportRatio = clamp(
-      inlineStickyTopInset() / window.innerHeight + 0.12,
-      0.14,
-      0.2
+      (inlineStickyTopInset() + 24) / window.innerHeight,
+      0.06,
+      0.12
     );
     return Object.freeze({ ...corridor, startViewportRatio, endViewportRatio });
   }
@@ -1482,6 +1490,7 @@
                   : undefined}
               data-kp-inline-sticky-cue-phase={inlineCueProjection?.phase}
               data-kp-inline-sticky-handoff-progress={inlineCueProjection?.handoffProgress.toFixed(4)}
+              data-kp-inline-sticky-emphasis={inlineCueProjection?.emphasis.toFixed(4)}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
               id={renderedMotionBlock === undefined
                 ? undefined
@@ -1496,7 +1505,7 @@
                 : `${renderedMotionBlock.label} animation step`}
               style={inlineCueProjection === undefined
                 ? undefined
-                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)};--kp-inline-sticky-cue-depth:${inlineCueProjection.depthPx.toFixed(3)}px;--kp-inline-sticky-cue-scale:${inlineCueProjection.scale.toFixed(5)}`}
+                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)};--kp-inline-sticky-cue-emphasis:${inlineCueProjection.emphasis.toFixed(4)};--kp-inline-sticky-cue-depth:${inlineCueProjection.depthPx.toFixed(3)}px;--kp-inline-sticky-cue-scale:${inlineCueProjection.scale.toFixed(5)}`}
             >
               {#if renderedMotionBlock !== undefined}
                 <span

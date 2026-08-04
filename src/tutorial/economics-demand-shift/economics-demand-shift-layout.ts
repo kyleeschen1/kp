@@ -22,6 +22,7 @@ export interface KpInlineStickyCueProjection {
   readonly phase: KpInlineStickyCuePhase;
   readonly opacity: number;
   readonly handoffProgress: number;
+  readonly emphasis: number;
   readonly depthPx: number;
   readonly scale: number;
   readonly stageMidpointPx: number;
@@ -78,6 +79,7 @@ export function projectKpInlineStickyCue(input: {
   readonly stageBottomPx: number;
   readonly maximumDepthPx?: number | undefined;
   readonly maximumScaleReduction?: number | undefined;
+  readonly emphasisRangePx?: number | undefined;
 }): KpInlineStickyCueProjection {
   const stageTop = finiteNonNegative(input.stageTopPx);
   const stageBottom = finiteNonNegative(input.stageBottomPx);
@@ -90,6 +92,10 @@ export function projectKpInlineStickyCue(input: {
     input.maximumScaleReduction ?? 0.012,
     0,
     0.1
+  );
+  const emphasisRange = Math.max(
+    1,
+    finiteNonNegative(input.emphasisRangePx ?? 32)
   );
   const cueCenter = Number.isFinite(input.cueAnchorCenterPx)
     ? input.cueAnchorCenterPx
@@ -110,12 +116,23 @@ export function projectKpInlineStickyCue(input: {
     handoffProgress: number
   ): KpInlineStickyCueProjection {
     const progress = clamp(handoffProgress, 0, 1);
+    // Depth settles quickly after the punctuation point; opacity continues to
+    // clear the cue through the rest of the lower-half handoff.
+    const depthProgress = smoothstep(0, 0.35, progress);
+    const emphasis = distanceFromStageBottom >= 0
+      ? 1 - smoothstep(0, emphasisRange, distanceFromStageBottom)
+      : 1 - smoothstep(
+          0,
+          emphasisRange * 0.4,
+          -distanceFromStageBottom
+        );
     return Object.freeze({
       phase,
-      opacity: 1 - progress,
+      opacity: (1 - progress) ** 2,
       handoffProgress: progress,
-      depthPx: progress === 0 ? 0 : -maximumDepth * progress,
-      scale: 1 - maximumScaleReduction * progress,
+      emphasis: phase === "occluded" ? 0 : clamp(emphasis, 0, 1),
+      depthPx: depthProgress === 0 ? 0 : -maximumDepth * depthProgress,
+      scale: 1 - maximumScaleReduction * depthProgress,
       stageMidpointPx: stageMidpoint,
       distanceFromStageBottomPx: distanceFromStageBottom
     });

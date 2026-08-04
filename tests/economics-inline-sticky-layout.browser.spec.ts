@@ -57,8 +57,22 @@ test("wide proof hands an opaque cue into an unelevated sticky stage", async ({
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
   await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
   const belowTransform = await cueTransform(demandCue);
+
+  await placeCueCenterAt(page, demandCue, geometry.stageBottom);
+  await expect.poll(async () => Number(await demandCue.getAttribute(
+    "data-kp-inline-sticky-emphasis"
+  ))).toBeGreaterThan(0.99);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
+  const punctuation = await cuePresentation(demandCue);
+  expect(punctuation.background).toContain("0.58");
+  expect(punctuation.textShadow).not.toBe("none");
+  expect(await page.evaluate(() =>
+    getComputedStyle(document.documentElement).scrollSnapType
+  )).toBe("none");
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-below-stage.png`,
+    path: `${evidenceDirectory}/wide-cue-punctuation.png`,
     fullPage: false
   });
 
@@ -72,19 +86,21 @@ test("wide proof hands an opaque cue into an unelevated sticky stage", async ({
     "data-kp-inline-sticky-cue-phase",
     "handoff"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.2);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.3);
   await expect.poll(async () => Number(await demandCue.getAttribute(
     "data-kp-inline-sticky-handoff-progress"
   ))).toBeCloseTo(0.5, 1);
   expect(await cueTransform(demandCue)).not.toBe(belowTransform);
+  expect((await cuePresentation(demandCue)).textShadow)
+    .not.toBe(punctuation.textShadow);
   expect(await demandCue.evaluate((element) =>
     (element as HTMLElement).offsetWidth
   ))
     .toBe(layoutWidth);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
-  ))).toBeGreaterThan(0.001);
+  ))).toBeLessThan(0.001);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-cue-depth-handoff.png`,
     fullPage: false
@@ -96,14 +112,27 @@ test("wide proof hands an opaque cue into an unelevated sticky stage", async ({
     "occluded"
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
 
-  await placeCueCenterAt(page, demandCue, 800 * 0.16 - 2);
+  await placeCueCenterAt(
+    page,
+    demandCue,
+    geometry.stageMidpoint -
+      (geometry.stageMidpoint - geometry.stageTop) * 0.35
+  );
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeGreaterThan(0.001);
+
+  await placeCueCenterAt(page, demandCue, geometry.stageTop + 20);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.99);
   await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
 
-  await placeCueCenterAt(page, demandCue, geometry.stageBottom);
+  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.01);
@@ -128,22 +157,35 @@ test("phone proof preserves one text measure through the depth handoff", async (
     "pinned"
   );
   const geometry = await handoffGeometry(page);
-  await placeCueCenterAt(page, demandCue, geometry.stageBottom + 12);
+  await placeCueCenterAt(page, demandCue, geometry.stageBottom);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
     "below"
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(async () => Number(await demandCue.getAttribute(
+    "data-kp-inline-sticky-emphasis"
+  ))).toBeGreaterThan(0.99);
 
   const before = await phoneProjection(page);
+  const punctuation = await cuePresentation(demandCue);
+  expect(punctuation.background).toContain("0.58");
+  expect(punctuation.textShadow).not.toBe("none");
+  await page.screenshot({
+    path: `${evidenceDirectory}/phone-cue-punctuation.png`,
+    fullPage: false
+  });
   const halfway = (geometry.stageBottom + geometry.stageMidpoint) / 2;
   await placeCueCenterAt(page, demandCue, halfway);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
     "handoff"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.2);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.3);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
   const during = await phoneProjection(page);
 
   expect(before.stageBottom).toBeLessThan(844 * 0.55);
@@ -288,4 +330,14 @@ async function cueOpacity(cueElement: Locator): Promise<number> {
 
 async function cueTransform(cueElement: Locator): Promise<string> {
   return cueElement.evaluate((element) => getComputedStyle(element).transform);
+}
+
+async function cuePresentation(cueElement: Locator): Promise<{
+  readonly background: string;
+  readonly textShadow: string;
+}> {
+  return cueElement.evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
+    textShadow: getComputedStyle(element.querySelector("p")!).textShadow
+  }));
 }

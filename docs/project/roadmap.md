@@ -96,12 +96,14 @@ reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
 pinned, and released stage lifecycle. The latest bounded revision replaces the
 external padding corridor with a direct depth handoff: cues remain fully opaque
-below the stage, then fade and recede from its bottom edge to its midpoint while
-the same center anchor begins semantic motion. The accepted revision is
+below the stage, receive a brief text-shadow punctuation at its bottom edge,
+then fade and recede to zero at its midpoint. Only then does semantic motion
+begin. The translucent cue plane leaves graph context visible underneath, and
+native scroll snap remains deliberately absent. The accepted refinement is
 recorded in
-`decisions/2026-08-04-kp-depth-handoff-lesson-layout-revision.md`. The economics
-proof is query-selected through `?layout=inline-sticky`; the approved split
-route remains default until human comparison and a structurally different
+`decisions/2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`. The
+economics proof is query-selected through `?layout=inline-sticky`; the approved
+split route remains default until human comparison and a structurally different
 second caller justify promotion.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
@@ -589,9 +591,9 @@ activating heavy animation capabilities lazily.
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
    `?layout=inline-sticky` proof, including unelevated stage pinning, cue
-   depth handoff from stage bottom to midpoint, reverse scroll, constant prose
-   measure, readable phone fit, and large-text fallback; do not infer default
-   promotion.
+   punctuation and depth handoff from stage bottom to midpoint, the post-cue
+   motion gate, reverse scroll, constant prose measure, readable phone fit, and
+   large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

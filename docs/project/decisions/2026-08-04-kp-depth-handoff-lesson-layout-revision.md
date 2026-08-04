@@ -3,6 +3,12 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
+Timing refinement: the cue-center crossing at the stage bottom no longer
+starts semantic motion. Boundary punctuation, faster prose recession, and the
+midpoint motion gate are recorded in
+`2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`. The direct depth
+geometry, unelevated stage, cue plane, and following runways remain in force.
+
 ## Decision
 
 Replace the economics proof's external padding corridor and anticipatory cue

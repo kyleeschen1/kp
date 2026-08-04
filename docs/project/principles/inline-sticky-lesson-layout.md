@@ -10,8 +10,9 @@ KP lessons may coordinate prose and animation through one reading axis. A
 diagram begins as an ordinary embedded figure and pins in the upper viewport
 while its scene is active. The following cue remains ordinary fully opaque
 prose until its center crosses the stage's lower edge. It then recedes and
-fades through the lower half of the stage, transferring attention from the
-instruction to the animation without introducing a separate card or caption.
+fades through the lower half of the stage. Only after the cue is absent at the
+stage midpoint does essential animation begin, transferring attention without
+introducing a separate card or caption.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required lesson presentation.
@@ -22,8 +23,11 @@ laboratory layout and not yet a globally required lesson presentation.
 - **Handoff region:** the lower half of the stage, from its bottom edge to its
   midpoint.
 - **Cue:** one stable prose block that tells the learner what to inspect.
-- **Cue plane:** the theme-page-colored surface behind the cue. It has no
-  border, radius, or shadow and exists only to keep text legible while it leads.
+- **Cue plane:** a translucent theme-page-colored surface behind the cue. It
+  has no border, radius, or box shadow and keeps text legible while leaving
+  stage ink visible underneath.
+- **Boundary punctuation:** a short text-shadow emphasis envelope that peaks
+  when the cue center reaches the stage bottom and drops after it crosses.
 - **Runway:** source-order space after a cue that gives its semantic animation
   time to complete and hold before the next cue arrives.
 
@@ -43,9 +47,10 @@ The cue's vertical center is its geometric anchor. While the center is at or
 below the stage bottom, the cue and its plane remain fully opaque. As the
 center moves from the stage bottom to its midpoint, one smooth projection maps
 scroll position to opacity `1 -> 0`, shallow negative depth, and a restrained
-scale reduction. At the midpoint the cue is fully absent and may move behind
-the stage's stacking plane. Reverse scrolling reconstructs the same states
-without replaying pixels.
+scale reduction. Opacity clears and depth settles quickly enough to remove the
+prose from competition with the graph. At the midpoint the cue is fully absent
+and may move behind the stage's stacking plane. Reverse scrolling reconstructs
+the same states without replaying pixels.
 
 CSS cannot interpolate `z-index`. The depth impression must therefore come
 from continuous opacity, perspective translation, scale, and the cue plane;
@@ -56,10 +61,10 @@ simulate depth.
 ## Motion And Attention Contract
 
 - A scene is one cue followed by one explicit runway.
-- The same cue-center crossing that begins the visual handoff begins the
-  block-local semantic motion corridor.
-- Motion retains authored holds and may continue through the runway after the
-  cue becomes fully occluded at the stage midpoint.
+- The stage-bottom crossing begins only prose punctuation and recession.
+- The block-local semantic motion corridor begins at the stage midpoint, after
+  cue opacity reaches zero. Motion retains authored entry holds and may
+  continue through the following runway.
 - The runway, not an enlarged paragraph or changing caption, supplies the
   remaining scroll distance.
 - The next cue remains fully opaque below the stage and does not enter the
@@ -70,9 +75,9 @@ simulate depth.
   the current settled animation frame.
 
 One geometry sample projects an immutable scene state containing stage phase,
-cue phase, cue opacity and depth, active passage, active motion block, and local
-semantic progress. Intersection events may assist lazy loading but do not own
-animation or attention truth.
+cue phase, cue opacity, depth and emphasis, active passage, active motion block,
+and local semantic progress. Intersection events may assist lazy loading but do
+not own animation or attention truth.
 
 ## Text And DOM Contract
 
@@ -134,9 +139,11 @@ scaling.
   stage may bleed wider around the same center without changing text width.
 - The pinned stage is not elevated: no card shadow, lift transform, rounded
   container, or joined paragraph surface.
-- Stage, cue plane, diagram labels, and page use the same theme background.
-- The cue plane may cover stage ink while the cue leads, then fades with the
+- Stage, cue plane, diagram labels, and page use the same theme roles.
+- The cue plane remains translucent while the cue leads, then fades with the
   cue so the graph emerges; it must not look like a separate card.
+- A restrained tokenized paragraph text shadow may peak at the boundary to
+  make the prose read above the graph, but must disappear once the cue crosses.
 - Depth is shallow and supportive. At the end of the handoff the text may be
   roughly 24 CSS pixels behind a long perspective plane with about one percent
   explicit scale reduction, not dramatically thrown into space.
@@ -153,6 +160,8 @@ scaling.
   transform so controls are never operated invisibly.
 - Semantic URLs and TOC jumps restore scroll destination, active passage, and
   animation state atomically rather than replaying history.
+- Document-level CSS Scroll Snap does not own cue punctuation or lesson state.
+  Revisit only as a separate browser-tested presentation experiment.
 - Reduced-motion presentation returns the stage and fully opaque cues to
   ordinary reading flow. Increased-contrast presentation keeps cues opaque and
   removes the depth transform.

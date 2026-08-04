@@ -30,14 +30,17 @@ implementation is local discovery evidence, not a globally enforced schema.
 
 The accepted bounded discovery in
 `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md`, revised by
-`decisions/2026-08-04-kp-depth-handoff-lesson-layout-revision.md`, adds an
+`decisions/2026-08-04-kp-depth-handoff-lesson-layout-revision.md` and refined
+by
+`decisions/2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`, adds an
 alternate one-axis lesson grammar. A diagram begins in document flow and pins
 without elevation in the upper viewport. Stable, constant-width cues remain
-fully opaque below it, then their center anchors carry them through a shallow
-opacity-and-depth handoff from stage bottom to midpoint while the same geometry
-starts semantic motion. Theme-page-colored cue planes preserve legibility
-without becoming cards, and explicit runways let motion finish before the next
-cue arrives. The durable typography, fit, progressive-enhancement, URL,
+fully opaque below it, receive a short shadow punctuation at the bottom edge,
+then clear through a front-loaded opacity-and-depth handoff. Translucent
+theme-page cue planes keep graph context visible. Essential semantic motion
+begins only after the cue reaches zero at the stage midpoint; explicit runways
+let it finish before the next cue arrives. Native scroll snap does not own this
+geometry. The durable typography, fit, progressive-enhancement, URL,
 accessibility, and rollback rules live in
 `../principles/inline-sticky-lesson-layout.md`. Economics is the canonical proof
 through `?layout=inline-sticky`; its approved split layout remains the default

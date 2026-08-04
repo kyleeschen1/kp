@@ -62,19 +62,23 @@ test("cue hands attention from the stage bottom to its midpoint", () => {
     phase: "below",
     opacity: 1,
     handoffProgress: 0,
+    emphasis: 0,
     depthPx: 0,
     scale: 1,
     stageMidpointPx: 250,
     distanceFromStageBottomPx: 100
   });
   assert.equal(project(400).phase, "below");
+  assert.equal(project(400).emphasis, 1);
   assert.equal(project(325).phase, "handoff");
-  assert.equal(project(325).opacity, 0.5);
+  assert.equal(project(325).opacity, 0.25);
   assert.equal(project(325).handoffProgress, 0.5);
-  assert.equal(project(325).depthPx, -12);
-  assert.equal(project(325).scale, 0.994);
+  assert.equal(project(325).emphasis, 0);
+  assert.equal(project(325).depthPx, -24);
+  assert.equal(project(325).scale, 0.988);
   assert.equal(project(250).phase, "occluded");
   assert.equal(project(250).opacity, 0);
+  assert.equal(project(250).emphasis, 0);
   assert.equal(project(250).depthPx, -24);
   assert.deepEqual(project(325), project(325));
 });

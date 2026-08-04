@@ -2,6 +2,7 @@
 
 :root {
   --kp-lesson-theme-page: #f4f1e9;
+  --kp-lesson-theme-page-rgb: 244 241 233;
   --kp-lesson-theme-surface: #fffdf8;
   --kp-lesson-theme-ink: #263845;
   --kp-lesson-theme-muted: #667983;
@@ -11,6 +12,8 @@
   --kp-lesson-theme-focus-surface: rgb(255 253 248 / 0.72);
   --kp-lesson-theme-link: #456b78;
   --kp-lesson-theme-page-wash: rgb(124 158 170 / 0.12);
+  --kp-lesson-theme-cue-plane: rgb(244 241 233 / 0.58);
+  --kp-lesson-theme-cue-shadow-rgb: 38 56 69;
   --kp-lesson-theme-heading: #1f313b;
   --kp-lesson-theme-section-heading: #294653;
   --kp-lesson-theme-eyebrow: #59727d;
@@ -929,9 +932,9 @@ kp-tutorial-toc {
   width: 100%;
   margin-inline: 0;
   border-left-color: transparent;
-  /* The page-colored plane keeps the cue readable while it initially leads;
-     fading the whole plane then reveals the graph without introducing a card. */
-  background: var(--kp-lesson-theme-page);
+  /* The translucent plane preserves the page relationship while graph ink
+     remains visible underneath the cue's brief punctuation. */
+  background: var(--kp-lesson-theme-cue-plane);
   box-shadow: none;
   opacity: var(--kp-inline-sticky-cue-opacity, 1);
   transform: perspective(64rem)
@@ -940,6 +943,22 @@ kp-tutorial-toc {
   transform-origin: center;
   transform-style: preserve-3d;
   transition: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue] p {
+  text-shadow:
+    0 1px 1px rgb(
+      var(--kp-lesson-theme-page-rgb) /
+      calc(0.72 * var(--kp-inline-sticky-cue-emphasis, 0))
+    ),
+    0 calc(1px + 2px * var(--kp-inline-sticky-cue-emphasis, 0))
+      calc(1px + 8px * var(--kp-inline-sticky-cue-emphasis, 0))
+      rgb(
+        var(--kp-lesson-theme-cue-shadow-rgb) /
+        calc(0.26 * var(--kp-inline-sticky-cue-emphasis, 0))
+      );
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -959,7 +978,7 @@ kp-tutorial-toc {
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue].kp-economics-tutorial__passage--active {
   border-left-color: transparent;
-  background: var(--kp-lesson-theme-page);
+  background: var(--kp-lesson-theme-cue-plane);
   box-shadow: none;
 }
 
@@ -969,6 +988,12 @@ kp-tutorial-toc {
   z-index: 10;
   opacity: 1;
   transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue]:focus-within p {
+  text-shadow: none;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1010,6 +1035,12 @@ kp-tutorial-toc {
   z-index: auto;
   opacity: 1;
   transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue] p {
+  text-shadow: none;
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
@@ -1069,6 +1100,12 @@ kp-tutorial-toc {
     opacity: 1;
     transform: none;
   }
+
+  .kp-economics-tutorial--inline-sticky
+    #kp-section-market-clearing
+    [data-kp-inline-sticky-cue] p {
+    text-shadow: none;
+  }
 }
 
 @media (prefers-contrast: more) {
@@ -1079,5 +1116,11 @@ kp-tutorial-toc {
     opacity: 1;
     pointer-events: auto;
     transform: none;
+  }
+
+  .kp-economics-tutorial--inline-sticky
+    #kp-section-market-clearing
+    [data-kp-inline-sticky-cue] p {
+    text-shadow: none;
   }
 }
