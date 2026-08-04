@@ -26,6 +26,9 @@ import {
 import {
   resolveKpEconomicsDemandShiftInitialDestination
 } from "./economics-demand-shift-deep-link.ts";
+import {
+  readKpEconomicsDemandShiftPresentationLayout
+} from "./economics-demand-shift-layout.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
@@ -70,6 +73,9 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       motionScrubBarHtml: publication.motionScrubBarHtml,
       verificationSurfaceHtml: publication.verificationSurfaceHtml,
       initialDestination,
+      presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
+        input.search
+      ),
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }

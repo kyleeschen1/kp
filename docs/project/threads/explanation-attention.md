@@ -1,14 +1,12 @@
 # Explanation and Attention Thread
 
 Status: active-supporting
-Last Updated: 2026-08-03
-Current Next Action: Review the completed botanical Lisp tutorial and the
-deterministic economics/Lisp comparison in
-`../reviews/2026-08-03-botanical-lisp-shared-lesson-human-checkpoint.md`.
-Approve, repair, or reject the botanical language before any motif promotion;
-then pressure the shared lesson seams with generated solve-x as the third
-caller. Do not adopt SvelteKit, widen the lesson rollout, or change the
-animation-promotion ledger at this checkpoint.
+Last Updated: 2026-08-04
+Current Next Action: Review the code-native S-expression choreography at its
+mandatory slice-25 human checkpoint and compare the approved economics split
+layout with its bounded `?layout=inline-sticky` proof. The layout proof does not
+approve the Lisp visual language, promote a default lesson shell, adopt
+SvelteKit, widen the lesson rollout, or change the animation-promotion ledger.
 
 ## Goal
 
@@ -29,6 +27,16 @@ The accepted product refinement in
 KP as a salience-transmission engine. Each checkpoint must make the primary
 target, necessary context, and attention transition evident. The economics
 implementation is local discovery evidence, not a globally enforced schema.
+
+The accepted bounded discovery in
+`decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` adds an alternate
+one-axis lesson grammar. A diagram begins in document flow, lifts into a sticky
+platform, and lets stable observation prose dock beneath it while scroll drives
+the corresponding semantic motion segment. The durable typography, fit,
+progressive-enhancement, URL, accessibility, and rollback rules live in
+`../principles/inline-sticky-lesson-layout.md`. Economics is the canonical
+proof through `?layout=inline-sticky`; its approved split layout remains the
+default pending human comparison and a structurally different second caller.
 
 Learners retain fine-grained control through a block-level prose scrub bar with
 Rewind, Previous semantic checkpoint, Play/Pause, Next semantic checkpoint, a
@@ -137,12 +145,15 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 3. Economics-local two-block, scroll-corridor, deep-link, TOC, progressive-
    enhancement, and stage-composition revision. Complete.
 4. Human review and requested navigation/typography refinements. Complete.
-5. Botanical Lisp semantic asset and local tutorial as the structurally
-   different second caller. Complete; human review pending.
+5. Lisp semantic asset and local tutorial as the structurally different
+   second caller. Complete; the original botanical renderer remains only as a
+   rollback reference while the code-native S-expression checkpoint is under
+   review.
 6. Comparison of economics, Lisp, and the existing lesson document, followed
    by extraction of only caller-proven shared lesson mechanics. Complete.
-7. Human review of the botanical language and shared lesson ergonomics.
-   Current checkpoint.
+7. Human review of the code-native S-expression choreography and shared lesson
+   ergonomics. Current checkpoint at slice 25; repeated-variable pressure and
+   botanical-renderer retirement remain gated on approval.
 8. Generated solve-x as a third caller before broad lesson rollout.
 
 ## Out Of Scope
@@ -161,9 +172,9 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 
 ## Next Human Questions
 
-- Does the botanical material clarify recursive identity and binding without
-  competing with native code?
-- Are the two Lisp motion blocks calm enough to preserve the continuous-prose
+- Does the code-native S-expression material clarify recursive identity and
+  binding without competing with native code?
+- Are the three Lisp motion blocks calm enough to preserve the continuous-prose
   cadence established by economics?
 - Which lesson-shell behaviors are genuinely identical across graph and code
   stages, and which should remain domain-local adapters?

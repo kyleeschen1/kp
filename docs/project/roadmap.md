@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-03
+Last Updated: 2026-08-04
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -91,6 +91,14 @@ solid reading pointer, widens the three-column gutters, and increases prose
 line height. The exact route, graph, controls, responsive behavior, and
 performance ceilings are the reference caller.
 
+A bounded successor now tests a one-axis alternative without replacing that
+reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
+`principles/inline-sticky-lesson-layout.md` record the candidate embedded,
+lifted, docked, and released lifecycle plus its readable-fit ladder. The
+economics proof is query-selected through `?layout=inline-sticky`; the approved
+split route remains default until human comparison and a structurally
+different second caller justify promotion.
+
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
 `decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
@@ -137,9 +145,10 @@ second concept supplies evidence for promotion.
 An exploratory semantic-explanatory-atlas direction is recorded in
 `decisions/2026-07-21-kp-semantic-explanatory-atlas-exploration.md`. It captures
 programming-language semantic theater and topology explanation designs. Its
-smallest botanical Lisp checkpoint is now the bounded second tutorial caller;
-the wider language pack and topology lane remain exploratory. This does not
-change the approved animation-promotion order.
+original botanical Lisp checkpoint became the bounded second tutorial caller
+and is now being replaced, behind a rollback boundary, by the code-native
+S-expression treatment. The wider language pack and topology lane remain
+exploratory. This does not change the approved animation-promotion order.
 
 A retained portable-publication lane is recorded in
 `threads/portable-publication-platform.md`, with preliminary boundary guidance
@@ -221,20 +230,21 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The botanical Lisp semantic asset, tutorial, and two-caller shared lesson
-seam are implementation-complete and now await human review.** The exact
+**The code-native S-expression Lisp tutorial is at its mandatory slice-25 human
+visual checkpoint; two later slices remain approval-gated.** The exact
 exemplar `((lambda (x) (+ x 1)) 4) -> (+ 4 1) -> 5` is published internally at
 `/tutorials/programming/lisp-function-application/`. It proves S-expression
 occurrence identity, binding provenance, exact evaluation, material
-conservation, native settled code, reversible botanical presentation, and two
-cumulative motion blocks. Economics and Lisp now share one lesson-document
+conservation, native settled code, recursive fold, binding propagation,
+reconstruction, and distinct reduction choreography across three cumulative
+motion blocks. Economics and Lisp now share one lesson-document
 adapter, motion primitives, navigation transaction, progressive publication
 controls, layout tokens, and a replaceable Svelte host. Domain semantics,
 stage rendering, focus geometry, and choreography remain local. The botanical
-presentation remains experimental pending the checkpoint in
-`reviews/2026-08-03-botanical-lisp-shared-lesson-human-checkpoint.md`; generated
-solve-x remains the third caller, and no botanical motif, SvelteKit adoption,
-or wider lesson rollout is authorized.
+renderer is retained only as rollback until visual approval permits the final
+repeated-variable pressure caller and retirement slice. Generated solve-x
+remains the later lesson caller; no SvelteKit adoption or wider rollout is
+authorized.
 
 **Canonical construction, the fraction and radical migrations, foldable
 distribution pressure work, canonical fraction composition, and role-complete
@@ -570,21 +580,26 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Review the economics/Lisp comparison checkpoint, especially botanical
-   legibility, binding/evaluation choreography, salience, and phone behavior.
-2. Approve, repair, or reject the botanical treatment while preserving the
-   certified Lisp semantics and the already-proven shared lesson mechanics.
-3. After approval, use generated solve-x as a third caller before any broad
+1. Review the code-native S-expression choreography, especially recursive
+   ownership, binding/evaluation causality, timing, rewind, and phone behavior.
+2. Compare the approved economics split layout with the bounded
+   `?layout=inline-sticky` proof, including docking, reverse scroll, readable
+   phone fit, and large-text fallback; do not infer default promotion.
+3. After explicit S-expression approval, run the repeated-variable pressure
+   caller and botanical-renderer retirement slices.
+4. After lesson-layout approval and a structurally different layout caller,
+   decide whether the one-axis grammar should replace the split default.
+5. Later use generated solve-x as a third semantic lesson caller before broad
    lesson rollout or public tutorial API declaration.
-4. Keep botanical presentation experimental and SvelteKit/Public Web deferred
-   until those caller and publication gates pass.
-5. Select one nearer transformation exemplar without resuming the tabled
+6. Keep SvelteKit/Public Web deferred until those caller and publication gates
+   pass.
+7. Select one nearer transformation exemplar without resuming the tabled
    matrix-to-linear-map run. Place-value subtraction remains the recommended
    default when animation-library promotion resumes.
-6. Revisit what evidence should replace the old matrix-specific host-pressure
+8. Revisit what evidence should replace the old matrix-specific host-pressure
    gate before generalizing the Svelte seam or adopting SvelteKit, then resume
    the Internal Studio and Public Web sequence.
-7. Complete M4 before internal M5 editorial candidates, and build the
+9. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

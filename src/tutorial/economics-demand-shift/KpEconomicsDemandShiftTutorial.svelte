@@ -33,6 +33,11 @@
     type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
+    projectKpInlineStickyLessonLayout,
+    type KpEconomicsDemandShiftPresentationLayout,
+    type KpInlineStickyLessonFit
+  } from "./economics-demand-shift-layout.ts";
+  import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
     projectKpEconomicsLessonMotion,
@@ -103,6 +108,7 @@
     hostability,
     initialDemandIntercept,
     initialDestination,
+    presentationLayout,
     lesson,
     motionScrubBarHtml,
     tocHtml,
@@ -115,6 +121,7 @@
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
+    readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
@@ -134,6 +141,7 @@
     })
   }));
   let shell = $state<HTMLElement | undefined>();
+  let inlineStage = $state<HTMLElement | undefined>();
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
@@ -167,6 +175,11 @@
   let scrollActiveMotionBlock = $state<KpEconomicsMotionBlockId | "">(
     initialDeepLink.motion.activeBlockId
   );
+  let inlineStickyFit = $state<KpInlineStickyLessonFit>("comfortable");
+  let inlineStickyStageHeightPx = $state(320);
+  let inlineStickyStageState = $state<"embedded" | "lifted" | "released">(
+    "embedded"
+  );
   let reducedMotionQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let disposePlayerHost: (() => void) | undefined;
@@ -189,6 +202,8 @@
   let supplyPlaybackDirection = $state<"forward" | "rewind">("forward");
   let supplyPlaybackFrame: number | undefined;
   let supplyPlaybackLastMs: number | undefined;
+  let inlineLayoutObserver: ResizeObserver | undefined;
+  const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
@@ -644,9 +659,13 @@
       const boundary = shell?.querySelector<HTMLElement>(
         `[data-kp-tutorial-motion-block="${block.id}"]`
       );
-      const anchor = boundary?.querySelector<KpTutorialScrubBarElement>(
-        "kp-tutorial-scrub-bar"
-      );
+      const anchor = inlineSticky
+        ? shell?.querySelector<HTMLElement>(
+            `[data-kp-inline-sticky-motion-anchor="${block.id}"]`
+          )
+        : boundary?.querySelector<KpTutorialScrubBarElement>(
+            "kp-tutorial-scrub-bar"
+          );
       return anchor === undefined || anchor === null
         ? []
         : [{ id: block.id, anchor, corridor: block.corridor }];
@@ -657,9 +676,10 @@
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
     latestScrollProjection = projection;
-    const tutorialAttention = updateReadingBandSelection(
-      projection.readingBandY
-    );
+    updateInlineStickyStageProjection();
+    const tutorialAttention = inlineSticky && inlineStickyFit !== "reading"
+      ? updateInlineStickyAttention(projection)
+      : updateReadingBandSelection(projection.readingBandY);
     const movedFromNavigation = navigationProjectionPending &&
       navigationScrollIntent &&
       navigationLockedScrollY !== undefined &&
@@ -790,6 +810,82 @@
       : "rewound";
   }
 
+  function updateInlineStickyAttention(
+    projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
+  ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
+    const owner = projection.blocks.find(({ ownsScroll, anchorTop, id }) => {
+      if (!ownsScroll) return false;
+      const corridor = findKpEconomicsMotionBlock(id)!.corridor;
+      return anchorTop <= corridor.startViewportRatio * window.innerHeight &&
+        anchorTop >= corridor.endViewportRatio * window.innerHeight;
+    });
+    if (owner === undefined) {
+      return updateReadingBandSelection(inlineStickyDockY());
+    }
+    const block = findKpEconomicsMotionBlock(owner.id)!;
+    attentionPassageId = block.passageId;
+    attentionCursorState = "within-region";
+    scrollActiveMotionBlock = block.id;
+    if (checkpoint.passageId !== block.passageId) {
+      const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
+        ({ passageId }) => passageId === block.passageId
+      );
+      if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
+    }
+    return Object.freeze({
+      cursorY: inlineStickyDockY(),
+      state: "within-region",
+      activeRegionId: block.passageId,
+      activePassageId: block.passageId,
+      activeMotionBlockId: block.id,
+      nearestRegionDistance: 0
+    });
+  }
+
+  function updateInlineStickyLayoutProjection(): void {
+    if (!inlineSticky || shell === undefined) return;
+    const dockedPassages = [...shell.querySelectorAll<HTMLElement>(
+      "[data-kp-inline-sticky-dock-candidate]"
+    )];
+    const dockedTextHeight = dockedPassages.reduce(
+      (maximum, passage) => Math.max(maximum, passage.getBoundingClientRect().height),
+      0
+    );
+    const layout = projectKpInlineStickyLessonLayout({
+      viewportWidthPx: window.innerWidth,
+      viewportHeightPx: window.innerHeight,
+      dockedTextHeightPx: dockedTextHeight
+    });
+    inlineStickyFit = layout.fit;
+    inlineStickyStageHeightPx = layout.stageHeightPx;
+    updateInlineStickyStageProjection();
+    scrollCoordinator?.scheduleProjection();
+  }
+
+  function updateInlineStickyStageProjection(): void {
+    if (!inlineSticky || inlineStage === undefined) return;
+    if (inlineStickyFit === "reading") {
+      inlineStickyStageState = "embedded";
+      return;
+    }
+    const stageBounds = inlineStage.getBoundingClientRect();
+    const sectionBounds = inlineStage.closest("section")?.getBoundingClientRect();
+    const top = inlineStickyTopInset();
+    inlineStickyStageState = stageBounds.top > top + 1
+      ? "embedded"
+      : sectionBounds !== undefined && sectionBounds.bottom <= stageBounds.bottom + 1
+        ? "released"
+        : "lifted";
+  }
+
+  function inlineStickyTopInset(): number {
+    return clamp(window.innerHeight * 0.04, 16, 40);
+  }
+
+  function inlineStickyDockY(): number {
+    return inlineStickyTopInset() + inlineStickyStageHeightPx + 12;
+  }
+
   function updateReadingBandSelection(
     readingBandY: number = window.innerHeight * 0.38
   ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
@@ -912,6 +1008,16 @@
     );
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
+    if (inlineSticky) {
+      inlineLayoutObserver = new ResizeObserver(
+        updateInlineStickyLayoutProjection
+      );
+      for (const passage of shell.querySelectorAll<HTMLElement>(
+        "[data-kp-inline-sticky-dock-candidate]"
+      )) inlineLayoutObserver.observe(passage);
+      window.addEventListener("resize", updateInlineStickyLayoutProjection);
+      updateInlineStickyLayoutProjection();
+    }
     if (tutorialToc !== undefined) {
       navigationController = createKpTutorialNavigationController({
         root: shell,
@@ -959,6 +1065,7 @@
     }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
     void document.fonts.ready.then(() => {
+      updateInlineStickyLayoutProjection();
       scrollCoordinator?.scheduleProjection();
     });
     scrollCoordinator.scheduleProjection();
@@ -995,6 +1102,8 @@
     window.removeEventListener("keydown", handleTutorialKeydown);
     window.removeEventListener("wheel", handleNavigationScrollIntent);
     window.removeEventListener("touchmove", handleNavigationScrollIntent);
+    window.removeEventListener("resize", updateInlineStickyLayoutProjection);
+    inlineLayoutObserver?.disconnect();
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;
@@ -1025,10 +1134,13 @@
       const block = findKpEconomicsMotionBlock(
         destination.motionScroll.blockId
       )!;
-      const anchor = destination.motionScroll.blockId ===
-          "supply-movement"
-        ? supplyScrubBar
-        : demandScrubBar;
+      const anchor = inlineSticky
+        ? shell.querySelector<HTMLElement>(
+            `[data-kp-inline-sticky-motion-anchor="${destination.motionScroll.blockId}"]`
+          ) ?? undefined
+        : destination.motionScroll.blockId === "supply-movement"
+          ? supplyScrubBar
+          : demandScrubBar;
       if (anchor === undefined) return;
       const start = block.corridor.startViewportRatio * window.innerHeight;
       const end = block.corridor.endViewportRatio * window.innerHeight;
@@ -1127,9 +1239,48 @@
 
 </script>
 
+{#snippet economicsStage()}
+  <div class="kp-economics-tutorial__stage-card">
+    <button
+      type="button"
+      class="kp-economics-tutorial__expand"
+      aria-expanded={stageExpanded}
+      aria-label={stageExpanded ? "Return stage to compact size" : "Expand stage"}
+      onclick={() => stageExpanded = !stageExpanded}
+    >{stageExpanded ? "Compact" : "Expand"}</button>
+
+    <div
+      class="kp-economics-tutorial__player-host"
+      data-kp-animation-catalogue-stage
+      data-kp-animation-catalogue-stage-persistent="true"
+      data-kp-economics-stage="economics-stage"
+      data-kp-economics-stage-outer-geometry="fixed"
+      aria-busy={!ready}
+    >
+      {@html playerHtml}
+      <div
+        class="kp-economics-tutorial__verification-aperture"
+        data-kp-economics-stage-aperture="verification-aperture"
+        data-kp-economics-stage-aperture-edge={stageComposition.aperture.edge}
+        data-kp-economics-stage-aperture-openness={stageComposition.aperture.openness.toFixed(3)}
+        aria-hidden="true"
+      >
+        <div
+          class="kp-economics-tutorial__verification-surface"
+          data-kp-economics-stage-surface="equilibrium-verification"
+          data-kp-economics-stage-slot="verification-slot"
+          data-kp-economics-stage-surface-lifecycle={verificationStageSurface.lifecycle}
+        >{@html verificationSurfaceHtml}</div>
+      </div>
+    </div>
+  </div>
+{/snippet}
+
 <KpTutorialLessonShell
   bind:root={shell}
-  rootClass={`kp-economics-tutorial${stageExpanded
+  rootClass={`kp-economics-tutorial${inlineSticky
+    ? " kp-economics-tutorial--inline-sticky"
+    : ""}${stageExpanded
     ? " kp-economics-tutorial--stage-expanded"
     : ""}`}
   layoutClass="kp-economics-tutorial__layout"
@@ -1139,6 +1290,9 @@
   stageLabel="Persistent supply and demand stage"
   attributes={{
     "data-kp-economics-demand-shift-tutorial": true,
+    "data-kp-economics-tutorial-layout": presentationLayout,
+    "data-kp-inline-sticky-fit": inlineStickyFit,
+    "data-kp-inline-sticky-stage-state": inlineStickyStageState,
     "data-kp-animation-catalogue": true,
     "data-kp-animation-catalogue-selection": entry.animationId,
     "data-kp-economics-demand-intercept": demandIntercept,
@@ -1176,7 +1330,7 @@
       ? supplyPlaybackDirection
       : playbackDirection
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-inline-sticky-stage-height:${inlineStickyStageHeightPx}px`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
@@ -1211,10 +1365,28 @@
         >
           <h3 id={`kp-heading-${section.id}`}>{section.heading}</h3>
 
+          {#if inlineSticky && section.id === "market-clearing"}
+            <aside
+              bind:this={inlineStage}
+              class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
+              aria-label="Sticky supply and demand stage proof of concept"
+              data-kp-inline-sticky-stage
+            >
+              {@render economicsStage()}
+            </aside>
+          {/if}
+
           {#each section.passages as passage}
             {@const renderedMotionBlock = findKpEconomicsMotionBlock(
               passage.motionBlockId
             )}
+            {#if inlineSticky && renderedMotionBlock !== undefined}
+              <span
+                class="kp-economics-tutorial__inline-motion-anchor"
+                data-kp-inline-sticky-motion-anchor={renderedMotionBlock.id}
+                aria-hidden="true"
+              ></span>
+            {/if}
             <div
               class="kp-economics-tutorial__passage"
               class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
@@ -1224,6 +1396,10 @@
               class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
+              data-kp-inline-sticky-dock-candidate={inlineSticky &&
+                section.id === "market-clearing"
+                  ? true
+                  : undefined}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
               id={renderedMotionBlock === undefined
                 ? undefined
@@ -1306,41 +1482,9 @@
   {/snippet}
 
   {#snippet stage()}
-      <div class="kp-economics-tutorial__stage-card">
-        <button
-          type="button"
-          class="kp-economics-tutorial__expand"
-          aria-expanded={stageExpanded}
-          aria-label={stageExpanded ? "Return stage to compact size" : "Expand stage"}
-          onclick={() => stageExpanded = !stageExpanded}
-        >{stageExpanded ? "Compact" : "Expand"}</button>
-
-        <div
-          class="kp-economics-tutorial__player-host"
-          data-kp-animation-catalogue-stage
-          data-kp-animation-catalogue-stage-persistent="true"
-          data-kp-economics-stage="economics-stage"
-          data-kp-economics-stage-outer-geometry="fixed"
-          aria-busy={!ready}
-        >
-          {@html playerHtml}
-          <div
-            class="kp-economics-tutorial__verification-aperture"
-            data-kp-economics-stage-aperture="verification-aperture"
-            data-kp-economics-stage-aperture-edge={stageComposition.aperture.edge}
-            data-kp-economics-stage-aperture-openness={stageComposition.aperture.openness.toFixed(3)}
-            aria-hidden="true"
-          >
-            <div
-              class="kp-economics-tutorial__verification-surface"
-              data-kp-economics-stage-surface="equilibrium-verification"
-              data-kp-economics-stage-slot="verification-slot"
-              data-kp-economics-stage-surface-lifecycle={verificationStageSurface.lifecycle}
-            >{@html verificationSurfaceHtml}</div>
-          </div>
-        </div>
-
-      </div>
+    {#if !inlineSticky}
+      {@render economicsStage()}
+    {/if}
   {/snippet}
 
   {#snippet after()}
