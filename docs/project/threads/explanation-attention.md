@@ -46,6 +46,14 @@ Economics is the canonical proof through `?layout=inline-sticky`; its approved
 split layout remains the default pending human comparison and a structurally
 different second caller.
 
+The bounded theme trial in
+`decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same
+lesson use `?theme=dark` with a `#0d0e1c` continuous canvas and a small footer
+switch. Theme state changes semantic role tokens without changing layout,
+scroll, motion, or KaTeX metrics; direct URLs paint the selected root early and
+Review capture records light or midnight identity. This remains economics-local
+and does not promote a shared theme provider.
+
 The same revision updates the economics-local graph trial. Axes, ticks, guides,
 and traces stay at `1px`; curves use `1.5px`; the grid derives to `0.5px`;
 ghosts preserve stroke style; stable and changing curves use SteelBlue and
@@ -136,7 +144,8 @@ The query-selected inline-sticky successor now adds paragraph-owned motion,
 stage occlusion instead of prose fading, moderate uniform prose rhythm, hidden
 range sliders, body-sized inline and graph KaTeX, brighter economics roles,
 stable structural/curve/grid stroke tiers, and smaller equilibrium points. It
-remains a bounded comparison surface, not the approved default.
+also trials the reversible midnight role palette and footer switch. Both remain
+bounded comparison surfaces, not approved defaults or shared APIs.
 
 The 28-slice motion-block/publication loop is resolved. Subsequent human-
 requested refinements place a fixed TOC to the left of the prose, keep it

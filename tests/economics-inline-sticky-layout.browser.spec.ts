@@ -28,6 +28,16 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     "data-kp-economics-tutorial-layout",
     "inline-sticky"
   );
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-lesson-theme",
+    "light"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-theme",
+    "light"
+  );
+  await expect(root.locator("[data-kp-economics-theme-toggle]"))
+    .toHaveAttribute("aria-pressed", "false");
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveCount(1);
   await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
@@ -346,6 +356,174 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   });
 });
 
+test("dark theme preserves the continuous canvas and toggles without navigation", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(`${route}&demand=19&theme=dark`);
+  const html = page.locator("html");
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const stage = root.locator("[data-kp-inline-sticky-stage]");
+  const graph = stage.locator(".editor-graph-stage");
+  const paragraph = passage(root, "follow-shift").locator("p").first();
+  const toggle = root.locator("[data-kp-economics-theme-toggle]");
+
+  await expect(html).toHaveAttribute("data-kp-lesson-theme", "dark");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-theme",
+    "dark"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-tutorial-review-evidence",
+    JSON.stringify({ themeId: "theme.kp.lesson.economics-midnight-v1" })
+  );
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(() => html.evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
+    colorScheme: getComputedStyle(element).colorScheme
+  }))).toEqual({ background: "rgb(13, 14, 28)", colorScheme: "dark" });
+  await expect.poll(() => root.evaluate((element) => ({
+    background: getComputedStyle(element).getPropertyValue(
+      "--kp-lesson-theme-page"
+    ).trim(),
+    color: getComputedStyle(element).color,
+    math: getComputedStyle(element).getPropertyValue(
+      "--kp-lesson-theme-math-foreground"
+    ).trim()
+  }))).toEqual({
+    background: "#0d0e1c",
+    color: "rgb(232, 231, 226)",
+    math: "#d6d8df"
+  });
+  expect(await contrastRatio(root, page.locator("body"))).toBeGreaterThan(12);
+  await expect.poll(() => stage.evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  )).toBe("rgba(13, 14, 28, 0.96)");
+  await expect.poll(() => graph.evaluate((element) => ({
+    axis: getComputedStyle(element).getPropertyValue("--kp-graph-axis").trim(),
+    changing: getComputedStyle(element).getPropertyValue(
+      "--kp-graph-changing"
+    ).trim(),
+    focal: getComputedStyle(element).getPropertyValue("--kp-graph-focal").trim(),
+    grid: getComputedStyle(element).getPropertyValue("--kp-graph-grid").trim(),
+    plane: getComputedStyle(element).getPropertyValue("--kp-graph-plane").trim(),
+    stable: getComputedStyle(element).getPropertyValue("--kp-graph-stable").trim()
+  }))).toEqual({
+    axis: "#9aa5ba",
+    changing: "#ff6b63",
+    focal: "#e8e7e2",
+    grid: "#63708b",
+    plane: "transparent",
+    stable: "#68a9df"
+  });
+  await expect.poll(() => root.locator(".kp-economics-tutorial__math .katex")
+    .first().evaluate((element) => getComputedStyle(element).color))
+    .toBe("rgb(214, 216, 223)");
+  await expect.poll(() => passage(root, "synthesis").evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  )).toBe("rgba(37, 44, 65, 0.72)");
+
+  await pinStage(stage);
+  const geometry = await stageGeometry(stage);
+  const paragraphHeight = await paragraph.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  );
+  await placeParagraphTopAt(
+    page,
+    paragraph,
+    geometry.bottom - paragraphHeight / 2
+  );
+  await page.screenshot({
+    path: `${evidenceDirectory}/dark-wide-paragraph-motion.png`,
+    fullPage: false
+  });
+
+  await toggle.scrollIntoViewIfNeeded();
+  await page.evaluate(() => {
+    (window as Window & { kpThemeDocumentIdentity?: Document })
+      .kpThemeDocumentIdentity = document;
+  });
+  const beforeToggle = await root.evaluate((element) => ({
+    height: element.getBoundingClientRect().height,
+    scrollY: window.scrollY,
+    width: element.getBoundingClientRect().width
+  }));
+  await toggle.click();
+  await expect(html).toHaveAttribute("data-kp-lesson-theme", "light");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-theme",
+    "light"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-tutorial-review-evidence",
+    JSON.stringify({ themeId: "theme.kp.lesson.economics-paper-v1" })
+  );
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect.poll(() => page.evaluate(() => ({
+    demand: new URL(location.href).searchParams.get("demand"),
+    documentPreserved:
+      (window as Window & { kpThemeDocumentIdentity?: Document })
+        .kpThemeDocumentIdentity === document,
+    layout: new URL(location.href).searchParams.get("layout"),
+    theme: new URL(location.href).searchParams.get("theme")
+  }))).toEqual({
+    demand: "19",
+    documentPreserved: true,
+    layout: "inline-sticky",
+    theme: null
+  });
+  await expect.poll(() => root.evaluate((element) => ({
+    height: element.getBoundingClientRect().height,
+    scrollY: window.scrollY,
+    width: element.getBoundingClientRect().width
+  }))).toEqual(beforeToggle);
+
+  await toggle.click();
+  await expect(html).toHaveAttribute("data-kp-lesson-theme", "dark");
+  await expect.poll(() => new URL(page.url()).searchParams.get("theme"))
+    .toBe("dark");
+  await expect.poll(() => passage(root, "synthesis").evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  )).toBe("rgba(37, 44, 65, 0.72)");
+  await expect.poll(() => toggle.locator(
+    ".kp-economics-tutorial__theme-toggle-thumb"
+  ).evaluate((element) => getComputedStyle(element).transform))
+    .toBe("matrix(1, 0, 0, 1, 12.16, 0)");
+  await page.screenshot({
+    path: `${evidenceDirectory}/dark-footer-toggle.png`,
+    fullPage: false
+  });
+});
+
+test("dark phone theme keeps graph, prose, and footer within one viewport", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${route}&theme=dark`);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const stage = root.locator("[data-kp-inline-sticky-stage]");
+  const paragraph = passage(root, "follow-shift").locator("p").first();
+  await pinStage(stage);
+  const geometry = await stageGeometry(stage);
+  const paragraphHeight = await paragraph.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  );
+  await placeParagraphTopAt(
+    page,
+    paragraph,
+    geometry.bottom - paragraphHeight / 2
+  );
+  await expect.poll(() => page.evaluate(() =>
+    document.documentElement.scrollWidth - window.innerWidth
+  )).toBeLessThanOrEqual(1);
+  await expect(root.locator("[data-kp-economics-theme-toggle]"))
+    .toHaveAttribute("aria-pressed", "true");
+  await page.screenshot({
+    path: `${evidenceDirectory}/dark-phone-paragraph-motion.png`,
+    fullPage: false
+  });
+});
+
 test("large text may exceed the lower viewport without shrinking or fading", async ({
   page
 }) => {
@@ -500,4 +678,32 @@ async function expectModerateParagraphRhythm(
     followingParagraph.evaluate((element) => element.getBoundingClientRect().top)
   ]).then(([transportBottom, paragraphTop]) => paragraphTop - transportBottom))
     .toBeLessThanOrEqual(60);
+}
+
+async function contrastRatio(
+  foreground: Locator,
+  background: Locator
+): Promise<number> {
+  const [foregroundColor, backgroundColor] = await Promise.all([
+    foreground.evaluate((element) => getComputedStyle(element).color),
+    background.evaluate((element) => getComputedStyle(element).backgroundColor)
+  ]);
+  const foregroundLuminance = relativeLuminance(foregroundColor);
+  const backgroundLuminance = relativeLuminance(backgroundColor);
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+    (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+}
+
+function relativeLuminance(color: string): number {
+  const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+  if (channels === undefined || channels.length !== 3) {
+    throw new Error(`Expected an RGB color, received ${color}.`);
+  }
+  const [red, green, blue] = channels.map((channel) => {
+    const normalized = channel! / 255;
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+  return red! * 0.2126 + green! * 0.7152 + blue! * 0.0722;
 }

@@ -84,6 +84,11 @@
   import {
     resolveKpEconomicsDemandShiftTocDestination
   } from "./economics-demand-shift-toc.ts";
+  import {
+    kpEconomicsDemandShiftThemeIds,
+    writeKpEconomicsDemandShiftTheme,
+    type KpEconomicsDemandShiftTheme
+  } from "./economics-demand-shift-theme.ts";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   type KpEconomicsTutorialScrollTimelineStatus =
@@ -118,6 +123,7 @@
     animation,
     hostability,
     initialDemandIntercept,
+    initialTheme,
     initialDestination,
     presentationLayout,
     lesson,
@@ -131,6 +137,7 @@
     readonly animation: KpAnimationAsset;
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
+    readonly initialTheme: KpEconomicsDemandShiftTheme;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
     readonly lesson: KpEconomicsDemandShiftLesson;
@@ -162,6 +169,7 @@
   let playbackStatus = $state(initial.playbackStatus);
   let playbackDirection = $state(initial.playbackDirection);
   let demandIntercept = $state(initial.demandIntercept);
+  let theme = $state(untrack(() => initialTheme));
   let ready = $state(false);
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
@@ -555,6 +563,23 @@
     // passage the learner is currently reading.
     seek(1);
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
+  }
+
+  function toggleTheme(): void {
+    theme = theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset["kpLessonTheme"] = theme;
+    const search = writeKpEconomicsDemandShiftTheme({
+      search: window.location.search,
+      theme
+    });
+    // Theme is presentation state. Preserve the current semantic destination,
+    // history transaction, and scroll position instead of navigating the lesson.
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
+    );
+    announcement = `${theme === "dark" ? "Dark" : "Light"} theme enabled.`;
   }
 
   function handleFrame(event: Event): void {
@@ -1381,6 +1406,7 @@
   attributes={{
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
+    "data-kp-economics-tutorial-theme": theme,
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
     "data-kp-animation-catalogue": true,
@@ -1418,7 +1444,10 @@
     "data-kp-tutorial-review-motion-authority": motionOwner,
     "data-kp-tutorial-review-playback-direction": lessonMotionProjection.activeBlockId === "supply-movement"
       ? supplyPlaybackDirection
-      : playbackDirection
+      : playbackDirection,
+    "data-kp-tutorial-review-evidence": JSON.stringify({
+      themeId: kpEconomicsDemandShiftThemeIds[theme]
+    })
   }}
   style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-inline-sticky-stage-height:${inlineStickyStageHeightPx}px`}
 >
@@ -1568,6 +1597,19 @@
 
       <footer class="kp-economics-tutorial__footer">
         <a href={`/?artifact=${entry.animationId}`}>Open the animation catalogue</a>
+        <button
+          class="kp-economics-tutorial__theme-toggle"
+          type="button"
+          aria-label="Dark mode"
+          aria-pressed={theme === "dark"}
+          data-kp-economics-theme-toggle
+          onclick={toggleTheme}
+        >
+          <span class="kp-economics-tutorial__theme-toggle-track" aria-hidden="true">
+            <span class="kp-economics-tutorial__theme-toggle-thumb"></span>
+          </span>
+          <span>Dark mode</span>
+        </button>
       </footer>
   {/snippet}
 

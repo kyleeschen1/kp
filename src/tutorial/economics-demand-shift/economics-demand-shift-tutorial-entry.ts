@@ -29,6 +29,9 @@ import {
 import {
   readKpEconomicsDemandShiftPresentationLayout
 } from "./economics-demand-shift-layout.ts";
+import {
+  readKpEconomicsDemandShiftTheme
+} from "./economics-demand-shift-theme.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
@@ -38,6 +41,11 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly search: string;
   readonly hash: string;
 }): Promise<() => void> {
+  const initialTheme = readKpEconomicsDemandShiftTheme(input.search);
+  const previousDocumentTheme = document.documentElement.dataset[
+    "kpLessonTheme"
+  ];
+  document.documentElement.dataset["kpLessonTheme"] = initialTheme;
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
   const descriptors = createKpEditorAnimationLibrary();
@@ -76,6 +84,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
         input.search
       ),
+      initialTheme,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }
@@ -87,6 +96,11 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   return () => {
     reviewHost.dispose();
     delete input.root.dataset["kpEconomicsDemandShiftTutorialMounted"];
+    if (previousDocumentTheme === undefined) {
+      delete document.documentElement.dataset["kpLessonTheme"];
+    } else {
+      document.documentElement.dataset["kpLessonTheme"] = previousDocumentTheme;
+    }
     void unmount(component);
   };
 }

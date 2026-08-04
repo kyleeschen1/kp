@@ -255,6 +255,11 @@ scoped to the economics presentation profile; it is evidence for a future
 shared-profile comparison, not a silent revision of
 `kp.graph.dimensional-continuity.v1`.
 
+The economics midnight theme maps those local visual roles to a dark canvas but
+does not change their semantics or the promoted profile. Its colors, early
+theme bootstrap, and footer switch remain lesson-presentation evidence rather
+than animation-library authority.
+
 Consumer and producer surplus remain a possible optional follow-on rather than
 default choreography. Deadweight loss is deferred to a separate model with an
 actual inefficiency wedge. Neither expands the current promotion contract.

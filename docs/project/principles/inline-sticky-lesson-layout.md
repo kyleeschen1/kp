@@ -146,6 +146,13 @@ Respect safe-area insets, stable viewport geometry, and user font scaling.
   retain hidden range and output nodes to avoid a second component contract.
 - Stage, prose, diagram labels, controls, and mathematical foregrounds use
   explicit theme roles. KaTeX keeps renderer-owned font metrics.
+- An optional theme changes role values, never semantic roles, DOM structure,
+  stage fit, scroll geometry, or motion progress. Page and occlusion surfaces
+  retain the same RGB channels within a theme so the continuous canvas remains
+  visually contiguous.
+- A reader-selected theme is URL-reproducible, progressively legible before
+  enhancement, and switchable without navigation or layout shift. Review
+  capture records a stable theme identity.
 
 The economics discovery caller currently trials `1px` axes, ticks, guides, and
 traces; `1.5px` curves; a calculated `0.5px` grid; SteelBlue/red curve roles;
@@ -173,12 +180,15 @@ exemplar-local pending a structurally different graph caller.
 ## Promotion Boundary
 
 The canonical discovery caller is the economics demand-shift lesson, available
-experimentally through `?layout=inline-sticky`. Its domain model, semantic
+experimentally through `?layout=inline-sticky`; its bounded midnight palette is
+available through `?theme=dark`. Its domain model, semantic
 frames, graph renderer, prose, checkpoints, controls, URLs, and review capture
 remain unchanged. The approved split presentation remains the default and the
-query-selected presentation is one reversible rollback unit.
+query-selected presentation and economics-local theme are independent
+reversible rollback units.
 
 Human review of the economics proof precedes shared lesson-shell promotion. A
 structurally different second caller must then prove the same stage,
 paragraph-projection, occlusion, fit, navigation, and accessibility boundaries
-before this can become KP's default lesson grammar.
+before this can become KP's default lesson grammar. The same promotion gate
+applies separately to a shared lesson-theme API.

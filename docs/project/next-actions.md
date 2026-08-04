@@ -18,8 +18,10 @@ with source refs, verification, run-contract slices, and completion evidence.
    `1px` structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
    SteelBlue/red graph roles, prose-sized inline and graph KaTeX, smaller
    equilibrium markers, Gill Sans/KaTeX font separation, constant text
-   measure, phone fit, and large-text reading fallback. The query-selected
-   proof is not the default.
+   measure, phone fit, large-text reading fallback, and the optional
+   `?theme=dark` midnight palette with its bottom switch. Confirm both themes
+   preserve geometry and legibility. Neither query-selected proof is the
+   default or a shared API.
 3. If the S-expression visual is approved, complete only the contract's final
    repeated-variable pressure and botanical-retirement slices.
 4. If the inline-sticky economics proof is approved, pressure its lifecycle

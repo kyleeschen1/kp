@@ -111,6 +111,13 @@ query-selected through `?layout=inline-sticky`; the approved split route
 remains default until human comparison and a structurally different caller
 justify promotion.
 
+The same economics exemplar now has a bounded, independently reversible
+midnight-theme trial recorded in
+`decisions/2026-08-04-kp-economics-midnight-theme-trial.md`. `?theme=dark` uses
+`#0d0e1c`, theme-role tokens, early root paint, stable review identity, and a
+small bottom-of-page switch that preserves live document, query, scroll, and
+geometry. Light remains default, and no shared theme API is promoted.
+
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
 `decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`.
@@ -602,7 +609,9 @@ activating heavy animation capabilities lazily.
    structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
    SteelBlue/red roles, prose-sized inline and graph math, smaller equilibrium
    markers, query-local Gill Sans/KaTeX separation, constant prose measure,
-   phone fit, and large-text fallback; do not infer default promotion.
+   phone fit, large-text fallback, and the optional `?theme=dark` midnight
+   palette with its non-navigating footer switch; do not infer layout, theme,
+   or shared-API promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

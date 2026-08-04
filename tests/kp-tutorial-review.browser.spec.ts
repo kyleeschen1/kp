@@ -9,14 +9,24 @@ for (const lesson of [
     route: "/tutorials/economics/demand-shift/",
     documentId: "lesson.economics.demand-shift",
     motionBlockId: "demand-shift",
-    expressionExpected: false
+    expressionExpected: false,
+    themeId: "theme.kp.lesson.economics-paper-v1"
+  },
+  {
+    name: "economics dark",
+    route: "/tutorials/economics/demand-shift/?theme=dark",
+    documentId: "lesson.economics.demand-shift",
+    motionBlockId: "demand-shift",
+    expressionExpected: false,
+    themeId: "theme.kp.lesson.economics-midnight-v1"
   },
   {
     name: "Lisp",
     route: "/tutorials/programming/lisp-function-application/",
     documentId: "lesson.programming.lisp-function-application",
     motionBlockId: "structure",
-    expressionExpected: true
+    expressionExpected: true,
+    themeId: "theme.kp.lesson.lisp-paper-v1"
   }
 ] as const) {
   test(`${lesson.name} lesson review captures its current tutorial state`, async ({
@@ -76,6 +86,7 @@ for (const lesson of [
     expect(captured?.capture.semantic.focusRefs.length).toBeGreaterThan(0);
     expect(captured?.capture.render.rendererId).not.toBe("");
     expect(captured?.capture.render.ownerIds).toContain(lesson.documentId);
+    expect(captured?.capture.semantic.themeId).toBe(lesson.themeId);
     if (lesson.expressionExpected) {
       expect(captured?.capture.semantic.expression).toEqual({
         expressionId: "expr.application",
@@ -86,13 +97,10 @@ for (const lesson of [
         destinationIdentityIds: ["expr.application"]
       });
       expect(captured?.capture.semantic.checkpointClass).toBe("major-hold");
-      expect(captured?.capture.semantic.themeId)
-        .toBe("theme.kp.lesson.lisp-paper-v1");
       expect(Object.keys(captured?.capture.semantic.tuning ?? {})).toHaveLength(8);
     } else {
       expect(captured?.capture.semantic.expression).toBeUndefined();
       expect(captured?.capture.semantic.checkpointClass).toBeUndefined();
-      expect(captured?.capture.semantic.themeId).toBeUndefined();
     }
   });
 }

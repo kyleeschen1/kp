@@ -10,6 +10,10 @@ import {
 import {
   projectKpTutorialMotionCorridor
 } from "../src/tutorial/kp-tutorial-motion.ts";
+import {
+  readKpEconomicsDemandShiftTheme,
+  writeKpEconomicsDemandShiftTheme
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-theme.ts";
 
 test("inline sticky economics layout is an explicit reversible query mode", () => {
   assert.equal(
@@ -21,6 +25,20 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
     "split"
   );
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
+});
+
+test("economics theme is explicit, reversible, and preserves other query state", () => {
+  assert.equal(readKpEconomicsDemandShiftTheme("?theme=dark"), "dark");
+  assert.equal(readKpEconomicsDemandShiftTheme("?theme=unknown"), "light");
+  assert.equal(readKpEconomicsDemandShiftTheme(""), "light");
+  assert.equal(writeKpEconomicsDemandShiftTheme({
+    search: "?layout=inline-sticky&demand=19",
+    theme: "dark"
+  }), "?layout=inline-sticky&demand=19&theme=dark");
+  assert.equal(writeKpEconomicsDemandShiftTheme({
+    search: "?layout=inline-sticky&demand=19&theme=dark",
+    theme: "light"
+  }), "?layout=inline-sticky&demand=19");
 });
 
 test("phone layout preserves readable text by contracting the stage first", () => {

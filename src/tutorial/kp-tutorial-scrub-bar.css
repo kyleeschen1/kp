@@ -4,7 +4,7 @@ kp-tutorial-scrub-bar {
   --kp-tutorial-scrub-focus-scale: 1;
   display: block;
   margin: 0.8rem 0 1rem;
-  color: #294653;
+  color: var(--kp-tutorial-scrub-ink, #294653);
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -40,11 +40,11 @@ kp-tutorial-scrub-bar {
 }
 
 .kp-tutorial-scrub__boundary::before {
-  background: rgb(91 122 133 / 0.24);
+  background: var(--kp-tutorial-scrub-divider, rgb(91 122 133 / 0.24));
 }
 
 .kp-tutorial-scrub__boundary::after {
-  background: #608692;
+  background: var(--kp-tutorial-scrub-focus, #608692);
   opacity: var(--kp-tutorial-scrub-focus-proximity);
   transition: opacity 180ms ease-out;
 }
@@ -60,11 +60,11 @@ kp-tutorial-scrub-bar {
 
 .kp-tutorial-scrub__action {
   box-sizing: border-box;
-  border: 1px solid #b7c2c4;
+  border: 1px solid var(--kp-tutorial-scrub-border, #b7c2c4);
   border-radius: 7px;
   padding: 0.42rem 0.58rem;
-  color: #334e59;
-  background: #fffefa;
+  color: var(--kp-tutorial-scrub-action-ink, #334e59);
+  background: var(--kp-tutorial-scrub-surface, #fffefa);
   cursor: pointer;
   font: inherit;
   font-size: 0.68rem;
@@ -78,9 +78,9 @@ kp-tutorial-scrub-bar {
 .kp-tutorial-scrub__action[data-action="toggle"] {
   position: relative;
   isolation: isolate;
-  border-color: #365e6a;
-  color: #fff;
-  background: #365e6a;
+  border-color: var(--kp-tutorial-scrub-toggle-border, #365e6a);
+  color: var(--kp-tutorial-scrub-toggle-ink, #fff);
+  background: var(--kp-tutorial-scrub-toggle-surface, #365e6a);
   box-shadow: 0 1px 2px rgb(38 56 66 / 0.16);
   transform:
     translateY(var(--kp-tutorial-scrub-focus-lift))
@@ -124,13 +124,13 @@ kp-tutorial-scrub-bar[data-kp-tutorial-scrub-enhancement="ready"]
 .kp-tutorial-scrub__controls input {
   width: 100%;
   min-width: 0;
-  background: #fffdf8;
-  accent-color: #496f7b;
+  background: var(--kp-tutorial-scrub-surface, #fffdf8);
+  accent-color: var(--kp-tutorial-scrub-accent, #496f7b);
 }
 
 .kp-tutorial-scrub__progress {
-  color: #607983;
-  background: #fffdf8;
+  color: var(--kp-tutorial-scrub-progress, #607983);
+  background: var(--kp-tutorial-scrub-surface, #fffdf8);
   font-size: 0.67rem;
   font-variant-numeric: tabular-nums;
   font-weight: 750;

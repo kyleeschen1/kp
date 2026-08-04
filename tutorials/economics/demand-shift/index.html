@@ -8,9 +8,21 @@
       content="An interactive explanation of why a demand increase raises equilibrium price and quantity while supply remains fixed."
     />
     <title>Demand shifts and equilibrium · Kinetic Press</title>
+    <script>
+      document.documentElement.dataset.kpLessonTheme =
+        new URLSearchParams(location.search).get("theme") === "dark"
+          ? "dark"
+          : "light";
+    </script>
     <style>
       html, body, #app { min-height: 100%; }
       body { min-width: 320px; min-height: 100vh; margin: 0; }
+      html[data-kp-lesson-theme="dark"],
+      html[data-kp-lesson-theme="dark"] body {
+        color: #e8e7e2;
+        background: #0d0e1c;
+        color-scheme: dark;
+      }
     </style>
   </head>
   <body>
