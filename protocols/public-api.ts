@@ -74,6 +74,7 @@ export {
   type KpDevReviewCreateRequestV1,
   type KpDevReviewEnvironmentV1,
   type KpDevReviewEventV1,
+  type KpDevReviewExpressionEvidenceV1,
   type KpDevReviewInboxV1,
   type KpDevReviewNoteV1,
   type KpDevReviewRenderContextV1,
@@ -83,6 +84,7 @@ export {
   type KpDevReviewScreenshotRequestV1,
   type KpDevReviewStatusV1,
   type KpDevReviewTemporalSampleV1,
+  type KpDevReviewTutorialEvidenceV1,
   type KpDevReviewViewportV1
 } from "./dev-review-v1.ts";
 
@@ -91,8 +93,10 @@ export {
   kpDevReviewInboxSchema,
   kpDevReviewNoteSchema,
   kpDevReviewEventSchema,
+  kpDevReviewExpressionEvidenceSchema,
   kpDevReviewScreenshotSchema,
   kpDevReviewScreenshotRequestSchema,
+  kpDevReviewTutorialEvidenceSchema,
   kpDevReviewProtocolLimits
 } from "./dev-review-schema.ts";
 

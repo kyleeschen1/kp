@@ -3,6 +3,8 @@ import type {
   KpDevReviewCaptureProvider
 } from "./capture-provider.ts";
 import { captureKpDevReviewSemanticTarget } from "./semantic-target.ts";
+import { readKpTutorialReviewEvidence } from
+  "./tutorial-review-evidence.ts";
 
 const tutorialRootSelector = "[data-kp-tutorial-review-root]";
 
@@ -35,6 +37,7 @@ export function createKpTutorialCaptureProvider(
         "kpTutorialReviewDocumentVersion"
       );
       const assetId = requiredDataset(root, "kpTutorialReviewAssetId");
+      const extension = readKpTutorialReviewEvidence(root);
       const target = context.pointer === undefined
         ? undefined
         : captureKpDevReviewSemanticTarget(
@@ -70,6 +73,7 @@ export function createKpTutorialCaptureProvider(
             root.dataset["kpTutorialReviewPlaybackDirection"] === "rewind"
               ? "rewind"
               : "forward",
+          ...extension,
           ...(target === undefined ? {} : { target })
         },
         render: {

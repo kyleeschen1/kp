@@ -38,6 +38,16 @@ function request(): Record<string, unknown> {
         foldMode: "automatic",
         foldDetail: "expanded",
         layoutPolicy: "single-row",
+        expression: {
+          expressionId: "expr.application",
+          operation: "bind",
+          syntaxPath: ["expr.application", "expr.lambda", "expr.body"],
+          depth: 2,
+          sourceIdentityIds: ["occurrence.argument.four"],
+          destinationIdentityIds: ["destination.body.x"]
+        },
+        checkpointClass: "minor-hold",
+        themeId: "theme.kp.lesson.lisp-paper-v1",
         tuning: {
           "gestalt-style": "kp.organic-subtle@1.0.0",
           "focus-experiment": "flat"
@@ -84,6 +94,12 @@ test("dev review schema accepts and clones a bounded canonical request", () => {
     parsed.capture.semantic.tuning?.["focus-experiment"],
     "flat"
   );
+  assert.equal(parsed.capture.semantic.expression?.operation, "bind");
+  assert.deepEqual(parsed.capture.semantic.expression?.syntaxPath, [
+    "expr.application",
+    "expr.lambda",
+    "expr.body"
+  ]);
   assert.equal(parsed.capture.render.surface?.profile, "phone");
   assert.equal(parsed.capture.screenshot?.pixelWidth, 640);
 });

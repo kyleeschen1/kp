@@ -18,7 +18,9 @@ import {
   KP_DEV_REVIEW_SCHEMA_VERSION,
   type KpDevReviewCreateRequestV1,
   type KpDevReviewEventV1,
-  type KpDevReviewScreenshotRequestV1
+  type KpDevReviewExpressionEvidenceV1,
+  type KpDevReviewScreenshotRequestV1,
+  type KpDevReviewTutorialEvidenceV1
 } from "./dev-review-v1.ts";
 
 export const kpDevReviewProtocolLimits = Object.freeze({
@@ -28,6 +30,8 @@ export const kpDevReviewProtocolLimits = Object.freeze({
   reasonCharacters: 1_000,
   activeTransformations: 32,
   focusRefs: 64,
+  expressionIdentityRefs: 64,
+  expressionSyntaxDepth: 64,
   ownerIds: 128,
   temporalSamples: 180,
   screenshotDataUrlCharacters: 75_000,
@@ -42,6 +46,9 @@ const id = protocolString({
 const optionalId = protocolOptional(id);
 const boundedText = protocolString({ minLength: 1, maxLength: 256 });
 const optionalText = protocolOptional(boundedText);
+const identityRefs = protocolArray(id, {
+  maxLength: kpDevReviewProtocolLimits.expressionIdentityRefs
+});
 const isoTimestamp = protocolRefine(
   protocolString({ minLength: 20, maxLength: 40 }),
   (value) => !Number.isNaN(Date.parse(value)) && value.includes("T"),
@@ -73,6 +80,24 @@ const target = protocolObject({
   viewportRect: protocolOptional(rect),
   pagePoint: protocolOptional(point)
 });
+export const kpDevReviewExpressionEvidenceSchema = protocolObject({
+  expressionId: optionalId,
+  operation: optionalText,
+  syntaxPath: protocolArray(id, {
+    maxLength: kpDevReviewProtocolLimits.expressionSyntaxDepth
+  }),
+  depth: protocolOptional(protocolInteger({ min: 0, max: 64 })),
+  sourceIdentityIds: identityRefs,
+  destinationIdentityIds: identityRefs
+}) as ProtocolSchema<KpDevReviewExpressionEvidenceV1>;
+
+export const kpDevReviewTutorialEvidenceSchema = protocolObject({
+  expression: protocolOptional(kpDevReviewExpressionEvidenceSchema),
+  checkpointClass: optionalText,
+  themeId: optionalId,
+  tuning: protocolOptional(protocolRecord(boundedText, id))
+}) as ProtocolSchema<KpDevReviewTutorialEvidenceV1>;
+
 const environment = protocolObject({
   browserName: boundedText,
   browserVersion: optionalText,
@@ -118,6 +143,9 @@ const semantic = protocolObject({
   motionPreference: optionalText,
   motionMode: optionalText,
   playbackDirection: protocolOptional(protocolEnum(["forward", "rewind"])),
+  expression: protocolOptional(kpDevReviewExpressionEvidenceSchema),
+  checkpointClass: optionalText,
+  themeId: optionalId,
   parameters: protocolOptional(protocolRecord(boundedText, id)),
   tuning: protocolOptional(protocolRecord(boundedText, id)),
   target: protocolOptional(target)

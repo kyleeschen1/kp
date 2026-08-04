@@ -531,6 +531,55 @@
       "scope": "s21 patch whitespace",
       "checkedAt": "2026-08-04T03:40:26.351Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s22 Lisp review adapter and preserved material lesson",
+      "checkedAt": "2026-08-04T03:50:55.564Z",
+      "notes": "159 Lisp tests passed, including certified checkpoint-to-expression evidence projection."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/dev-review-schema.test.ts tests/kp-tutorial-review-evidence.test.ts tests/kp-lisp-tutorial-review-adapter.test.ts",
+      "status": "passed",
+      "scope": "s22 bounded protocol, generic extension seam, and Lisp adapter",
+      "checkedAt": "2026-08-04T03:50:56.572Z",
+      "notes": "Eight schema and adapter tests passed; malformed identity paths are rejected and all eight internal tunables are captured."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-tutorial-review.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s22 economics and Lisp lesson review submissions",
+      "checkedAt": "2026-08-04T03:50:57.475Z",
+      "notes": "Both live lesson submissions passed; Lisp includes exact expression evidence while economics omits the optional extension."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 protocol, application, test, Svelte, and domain types",
+      "checkedAt": "2026-08-04T03:50:58.351Z",
+      "notes": "All type boundaries passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s22 production review closure",
+      "checkedAt": "2026-08-04T03:50:59.241Z",
+      "notes": "Production closure passed across 322 files with all review-only markers governed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 provider and domain-adapter boundaries",
+      "checkedAt": "2026-08-04T03:51:00.162Z",
+      "notes": "All four architecture gates passed; the generic provider imports no Lisp code."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22 patch whitespace",
+      "checkedAt": "2026-08-04T03:51:01.099Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

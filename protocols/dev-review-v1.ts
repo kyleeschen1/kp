@@ -52,6 +52,22 @@ export interface KpDevReviewSemanticTargetV1 {
   readonly pagePoint?: { readonly x: number; readonly y: number } | undefined;
 }
 
+export interface KpDevReviewExpressionEvidenceV1 {
+  readonly expressionId?: string | undefined;
+  readonly operation?: string | undefined;
+  readonly syntaxPath: readonly string[];
+  readonly depth?: number | undefined;
+  readonly sourceIdentityIds: readonly string[];
+  readonly destinationIdentityIds: readonly string[];
+}
+
+export interface KpDevReviewTutorialEvidenceV1 {
+  readonly expression?: KpDevReviewExpressionEvidenceV1 | undefined;
+  readonly checkpointClass?: string | undefined;
+  readonly themeId?: string | undefined;
+  readonly tuning?: Readonly<Record<string, string>> | undefined;
+}
+
 export interface KpDevReviewSemanticContextV1 {
   readonly documentId?: string | undefined;
   readonly documentVersion?: string | undefined;
@@ -72,6 +88,9 @@ export interface KpDevReviewSemanticContextV1 {
   readonly motionPreference?: string | undefined;
   readonly motionMode?: string | undefined;
   readonly playbackDirection?: "forward" | "rewind" | undefined;
+  readonly expression?: KpDevReviewExpressionEvidenceV1 | undefined;
+  readonly checkpointClass?: string | undefined;
+  readonly themeId?: string | undefined;
   readonly parameters?: Readonly<Record<string, string>> | undefined;
   readonly tuning?: Readonly<Record<string, string>> | undefined;
   readonly target?: KpDevReviewSemanticTargetV1 | undefined;

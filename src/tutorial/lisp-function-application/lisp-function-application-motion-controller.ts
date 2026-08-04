@@ -29,6 +29,8 @@ import {
 import { projectKpLispLessonSalience } from "./lisp-function-application-salience.ts";
 import type { KpLispLessonStageProjector } from
   "./lisp-function-application-stage-projector.ts";
+import { createKpLispLessonReviewAdapter } from
+  "./lisp-function-application-review-adapter.ts";
 
 export { kpLispReconstructedGlobalProgress };
 
@@ -105,6 +107,10 @@ export function createKpLispLessonMotionController(input: {
   let motionOwner: "untouched" | "navigation" | "scroll" | "manual" =
     "untouched";
   let request: number | undefined;
+  const review = createKpLispLessonReviewAdapter({
+    root: input.root,
+    source: input.source
+  });
 
   const render = (): void => {
     const local = sessionProgress(session);
@@ -126,12 +132,10 @@ export function createKpLispLessonMotionController(input: {
       availableWidthPx: stageWidth(stage),
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
-    const reviewLocalProgress = local;
-    const reviewCheckpoint = [...kpLispLessonMotionBlocks.find(
-      ({ id }) => id === activeBlockId
-    )!.checkpoints].reverse().find(
-      ({ progress }) => reviewLocalProgress + 0.001 >= progress
-    )!;
+    const reviewProjection = review.project({
+      activeBlockId,
+      localProgress: local
+    });
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
     input.root.dataset["kpLispTutorialLocalProgress"] = local.toFixed(4);
     input.root.dataset["kpLispTutorialStageRenderer"] =
@@ -140,8 +144,9 @@ export function createKpLispLessonMotionController(input: {
     input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
     input.root.dataset["kpTutorialReviewMotionBlock"] = activeBlockId;
     input.root.dataset["kpTutorialReviewProgress"] =
-      reviewLocalProgress.toFixed(4);
-    input.root.dataset["kpTutorialReviewCheckpoint"] = reviewCheckpoint.id;
+      local.toFixed(4);
+    input.root.dataset["kpTutorialReviewCheckpoint"] =
+      reviewProjection.checkpointId;
     input.root.dataset["kpTutorialReviewMotionAuthority"] = motionOwner;
     input.root.dataset["kpTutorialReviewPlaybackDirection"] =
       session.player.direction;
