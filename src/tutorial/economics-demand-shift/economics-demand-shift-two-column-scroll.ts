@@ -9,7 +9,7 @@ import type {
   KpEconomicsMotionBlockId
 } from "./economics-demand-shift-motion-blocks.ts";
 
-export const kpEconomicsTwoColumnCards:
+export const kpEconomicsTwoColumnParagraphs:
   readonly KpEconomicsDemandShiftLessonPassage[] = Object.freeze([
     card({
       id: "graph-at-rest",

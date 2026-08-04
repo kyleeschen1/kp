@@ -199,31 +199,33 @@ The economics caller also exposes `?layout=two-column-scroll` as a parallel,
 independently reversible desktop experiment. It does not supersede the
 one-column contract above. In this mode:
 
-- a mix of concise and longer cards occupies a narrow left column and one
-  persistent graph occupies a narrow right column;
-- a `1px` vertical rule separates the columns and the graph remains vertically
-  centered while sticky;
-- the opening card describes the untouched graph and owns its fully settled
-  initial state at viewport top;
-- every later card owns the state fully settled when its top reaches viewport
-  top;
-- an incoming transition begins only after its predecessor has reached the top
-  and the incoming card is visible, then uses the remaining natural card-top
-  distance;
-- outgoing and incoming cards exchange opacity over that same interval while
-  inactive context remains faintly legible;
-- ordinary paragraph height and moderate fixed gaps establish rhythm instead
+- one persistent graph occupies a narrow left column and ordinary paragraphs
+  occupy a narrow right column;
+- a neutral `1px` vertical rule separates the columns, remains attached to the
+  vertically centered sticky graph, and exposes its top as the exact semantic
+  completion threshold;
+- query paragraphs have no card background, frame, shadow, radius, top border,
+  or sticky paragraph geometry;
+- the opening paragraph describes the untouched graph and owns its fully
+  settled initial state at the divider top;
+- paragraph opacity and a fixed-width blue left rule share a salience scalar
+  that peaks just above viewport center;
+- transition motion begins after a short prose-focus plateau and completes when
+  its paragraph reaches the divider top;
+- a transition waits for predecessor settlement when natural spacing is short,
+  while longer spacing becomes a settled hold rather than stretched motion;
+- doubled paragraph gaps and ordinary paragraph height establish rhythm instead
   of universal viewport-sized steps;
 - regular conceptual exposition and terminal reflection remain ordinary prose;
 - no transport bar is rendered; and
 - narrow or short viewports retain the one-column inline-sticky geometry until
   the desktop grammar passes review.
 
-The query-local sidecar, natural-distance projector, opacity exchange, sticky
-text, breakpoint, and two-column paint are comparison machinery rather than
+The query-local sidecar, divider-relative projector, salience curve, blue rule,
+breakpoint, gap, and two-column paint are comparison machinery rather than
 shared authoring or layout standards. The current preservation and promotion
 boundary is recorded in
-`../decisions/2026-08-04-kp-natural-card-state-handoff.md`.
+`../decisions/2026-08-04-kp-divider-relative-prose-salience.md`.
 
 ## Controls, Navigation, And Accessibility
 

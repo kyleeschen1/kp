@@ -5,8 +5,8 @@ import {
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
-  projectKpTwoColumnScrollCard,
   projectKpTwoColumnScrollMotionCorridor,
+  projectKpTwoColumnScrollParagraph,
   projectKpTwoColumnScrollSequence,
   readKpEconomicsDemandShiftPresentationLayout
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts";
@@ -34,67 +34,86 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
 });
 
-test("two-column card travel begins after its predecessor settles", () => {
-  assert.deepEqual(projectKpTwoColumnScrollCard({
-    cardTopPx: 240,
-    previousCardTopPx: 0,
-    viewportHeightPx: 800
-  }), {
-    phase: "below",
-    travel: 0,
-    crossingProgress: 0,
-    distanceFromStageBottomPx: 240
-  });
-  assert.deepEqual(projectKpTwoColumnScrollCard({
-    cardTopPx: 120,
-    previousCardTopPx: -120,
-    viewportHeightPx: 800
-  }), {
-    phase: "crossing",
-    travel: 0.5,
-    crossingProgress: 0.5,
-    distanceFromStageBottomPx: 120
-  });
-  assert.deepEqual(projectKpTwoColumnScrollCard({
-    cardTopPx: 0,
+test("two-column prose peaks near center and settles at the divider", () => {
+  assert.deepEqual(projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 128,
+    dividerTopPx: 128,
     viewportHeightPx: 800
   }), {
     phase: "passed",
     travel: 1,
     crossingProgress: 1,
-    distanceFromStageBottomPx: 0
+    distanceFromStageBottomPx: 0,
+    salience: 0.65,
+    opacity: 0.762,
+    ruleScale: 0.7060000000000001
+  });
+  assert.deepEqual(projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 376,
+    previousParagraphTopPx: 88,
+    dividerTopPx: 128,
+    viewportHeightPx: 800
+  }), {
+    phase: "approach",
+    travel: 0,
+    crossingProgress: 0,
+    distanceFromStageBottomPx: 248,
+    salience: 1,
+    opacity: 1,
+    ruleScale: 1
+  });
+  assert.deepEqual(projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 128,
+    previousParagraphTopPx: -120,
+    dividerTopPx: 128,
+    viewportHeightPx: 800
+  }), {
+    phase: "passed",
+    travel: 1,
+    crossingProgress: 1,
+    distanceFromStageBottomPx: 0,
+    salience: 0.65,
+    opacity: 0.762,
+    ruleScale: 0.7060000000000001
   });
 });
 
-test("neighboring cards trade opacity while the incoming card approaches top", () => {
+test("paragraph salience hands off after predecessor settlement", () => {
   const settled = projectKpTwoColumnScrollSequence({
-    cardTopPx: [0, 240, 500],
+    paragraphTopPx: [128, 376, 650],
+    dividerTopPx: 128,
     viewportHeightPx: 800
   });
   assert.equal(settled.attentionIndex, 0);
-  assert.equal(settled.incomingIndex, undefined);
-  assert.deepEqual(settled.cards.map(({ opacity }) => opacity), [1, 0.24, 0.24]);
-
-  const midpoint = projectKpTwoColumnScrollSequence({
-    cardTopPx: [-120, 120, 380],
-    viewportHeightPx: 800
-  });
-  assert.equal(midpoint.attentionIndex, 1);
-  assert.equal(midpoint.incomingIndex, 1);
-  assert.deepEqual(midpoint.cards.map(({ opacity }) => opacity), [0.62, 0.62, 0.24]);
-  assert.deepEqual(midpoint.cards.map(({ ownsAttention }) => ownsAttention), [
-    false, true, false
+  assert.deepEqual(settled.paragraphs.map(({ opacity }) => opacity), [
+    1, 0.32, 0.32
   ]);
 
-  const longHold = projectKpTwoColumnScrollSequence({
-    cardTopPx: [-200, 800],
+  const handoff = projectKpTwoColumnScrollSequence({
+    paragraphTopPx: [108, 356, 630],
+    dividerTopPx: 128,
     viewportHeightPx: 800
   });
-  assert.equal(longHold.incomingIndex, undefined);
-  assert.deepEqual(longHold.cards.map(({ opacity }) => opacity), [1, 0.24]);
+  assert.equal(handoff.attentionIndex, 0);
+  assert.deepEqual(handoff.paragraphs.map(({ opacity }) => opacity), [
+    0.89375, 0.6599999999999999, 0.32
+  ]);
+
+  const focused = projectKpTwoColumnScrollSequence({
+    paragraphTopPx: [88, 336, 610],
+    dividerTopPx: 128,
+    viewportHeightPx: 800
+  });
+  assert.equal(focused.attentionIndex, 1);
+  assert.deepEqual(focused.paragraphs.map(({ ownsAttention }) => ownsAttention), [
+    false, true, false
+  ]);
+  assert.deepEqual(focused.paragraphs.map(({ ruleScale }) => ruleScale), [
+    0.58, 1, 0.16
+  ]);
 });
 
-test("two-column motion uses natural card distance without changing choreography", () => {
+test("two-column motion begins after focus and completes at the divider", () => {
   const corridor = projectKpTwoColumnScrollMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -108,12 +127,13 @@ test("two-column motion uses natural card distance without changing choreography
         { travel: 1, progress: 1 }
       ]
     },
-    cardDistancePx: 240,
+    paragraphDistancePx: 248,
+    dividerTopPx: 128,
     viewportHeightPx: 800
   });
 
-  assert.equal(corridor.startViewportRatio, 0.3);
-  assert.equal(corridor.endViewportRatio, 0);
+  assert.equal(corridor.startViewportRatio, 0.42);
+  assert.equal(corridor.endViewportRatio, 0.16);
   assert.deepEqual(corridor.keyframes, [
     { travel: 0, progress: 0 },
     { travel: 0.5375, progress: 0.72 },
@@ -122,14 +142,23 @@ test("two-column motion uses natural card distance without changing choreography
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 240,
+    anchorTop: 336,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 0,
+    anchorTop: 128,
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
+
+  const shortCorridor = projectKpTwoColumnScrollMotionCorridor({
+    corridor,
+    paragraphDistancePx: 160,
+    dividerTopPx: 128,
+    viewportHeightPx: 800
+  });
+  assert.equal(shortCorridor.startViewportRatio, 0.36);
+  assert.equal(shortCorridor.endViewportRatio, 0.16);
 });
 
 test("economics theme is explicit, reversible, and preserves other query state", () => {

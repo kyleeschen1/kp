@@ -1,7 +1,7 @@
 # Let Natural Cards Hand Off Settled Graph States
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded by `2026-08-04-kp-divider-relative-prose-salience.md`
 
 ## Decision
 

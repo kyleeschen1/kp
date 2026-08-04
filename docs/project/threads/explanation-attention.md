@@ -54,15 +54,16 @@ split layout remains the default pending human comparison and a structurally
 different second caller.
 
 The parallel comparison in
-`decisions/2026-08-04-kp-natural-card-state-handoff.md` keeps naturally sized,
-mixed-length cards left and a vertically centered sticky graph right, with a
-thin divider and narrower total measure. The opening card explains the initial
-graph as a settled state. Each successor reaches full opacity and exact
-semantic completion when its top reaches viewport top, exchanging opacity with
-its predecessor over their natural document distance. Universal `100vh` steps
-are absent. Narrow and short viewports retain one-column geometry. This remains
-economics-local until human review; it does not authorize a shared card schema
-or lesson-shell rollout.
+`decisions/2026-08-04-kp-divider-relative-prose-salience.md` keeps a vertically
+centered sticky graph left and ordinary naturally spaced paragraphs right of a
+thin neutral divider. No visible card surface remains. Paragraph opacity and a
+layout-neutral blue left rule share one salience scalar that peaks just above
+viewport center. Motion holds through a short focus plateau, then scrubs to an
+exact final state at the divider top. The opening paragraph owns the untouched
+graph, and doubled gaps supply reading and settlement time without synthetic
+tracks. Narrow and short viewports retain one-column geometry. This remains
+economics-local until human review; it does not authorize a shared salience
+schema or lesson-shell rollout.
 
 The bounded theme trial in
 `decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same

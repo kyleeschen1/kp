@@ -44,7 +44,7 @@
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
   import {
-    kpEconomicsTwoColumnCards
+    kpEconomicsTwoColumnParagraphs
   } from "./economics-demand-shift-two-column-scroll.ts";
   import {
     findKpEconomicsMotionBlock,
@@ -122,6 +122,12 @@
     readonly projection: KpInlineStickyParagraphProjection;
     readonly opacity: number;
     readonly ownsAttention: boolean;
+  }
+
+  interface KpEconomicsTwoColumnParagraphPresentation {
+    readonly opacity: number;
+    readonly salience: number;
+    readonly ruleScale: number;
   }
 
   let {
@@ -210,7 +216,10 @@
   let inlineParagraphProjections = $state<
     Readonly<Record<string, KpInlineStickyParagraphProjection>>
   >({});
-  let twoColumnCardOpacities = $state<Readonly<Record<string, number>>>({});
+  let twoColumnParagraphPresentations = $state<Readonly<Record<
+    string,
+    KpEconomicsTwoColumnParagraphPresentation
+  >>>({});
   let reducedMotionQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let disposePlayerHost: (() => void) | undefined;
@@ -909,12 +918,16 @@
     const focusedParagraph = paragraphFrames.find(({ ownsAttention }) =>
       ownsAttention
     ) ?? paragraphFrames[0];
-    const incomingParagraph = paragraphFrames.find(({ projection }) =>
-      projection.phase === "crossing"
+    const motionParagraph = paragraphFrames.find((frame) =>
+      frame.motionBlockId !== undefined && (
+        frame.ownsAttention || frame.projection.phase === "crossing"
+      )
     );
     const passageId = focusedParagraph?.passageId;
-    const motionBlockId = incomingParagraph?.motionBlockId;
-    if (passageId === undefined) return updateReadingBandSelection(0);
+    const motionBlockId = motionParagraph?.motionBlockId;
+    if (passageId === undefined) {
+      return updateReadingBandSelection(inlineStickyTopInset());
+    }
 
     attentionPassageId = passageId;
     attentionCursorState = "within-region";
@@ -926,7 +939,7 @@
       if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
     }
     return Object.freeze({
-      cursorY: 0,
+      cursorY: inlineStickyTopInset(),
       state: "within-region",
       activeRegionId: passageId,
       activePassageId: passageId,
@@ -995,15 +1008,15 @@
       const paragraph = element.querySelector<HTMLElement>("p") ?? element;
       return {
         element,
-        paragraphBounds: paragraph.getBoundingClientRect(),
-        cardTop: usesTwoColumnDesktopGeometry()
-          ? element.getBoundingClientRect().top
-          : paragraph.getBoundingClientRect().top
+        paragraphBounds: paragraph.getBoundingClientRect()
       };
     });
     const sequence = usesTwoColumnDesktopGeometry()
       ? projectKpTwoColumnScrollSequence({
-          cardTopPx: measurements.map(({ cardTop }) => cardTop),
+          paragraphTopPx: measurements.map(
+            ({ paragraphBounds }) => paragraphBounds.top
+          ),
+          dividerTopPx: stageBounds.top,
           viewportHeightPx: window.innerHeight
         })
       : undefined;
@@ -1013,8 +1026,8 @@
       const motionBlockId = economicsMotionBlockId(
         element.dataset["kpTutorialMotionBlock"]
       );
-      const sequenceCard = sequence?.cards[index];
-      const projection = sequenceCard ?? (inlineStickyFit === "reading"
+      const sequenceParagraph = sequence?.paragraphs[index];
+      const projection = sequenceParagraph ?? (inlineStickyFit === "reading"
         ? Object.freeze({
             phase: "below" as const,
             travel: 0,
@@ -1032,15 +1045,19 @@
         passageId,
         motionBlockId,
         projection,
-        opacity: sequenceCard?.opacity ?? 1,
-        ownsAttention: sequenceCard?.ownsAttention ?? false
+        opacity: sequenceParagraph?.opacity ?? 1,
+        ownsAttention: sequenceParagraph?.ownsAttention ?? false
       };
     });
     inlineParagraphProjections = Object.freeze(Object.fromEntries(frames.map(
       ({ passageId, projection }) => [passageId, projection]
     )));
-    twoColumnCardOpacities = Object.freeze(Object.fromEntries(frames.map(
-      ({ passageId, opacity }) => [passageId, opacity]
+    twoColumnParagraphPresentations = Object.freeze(Object.fromEntries(frames.map(
+      ({ passageId, opacity }, index) => [passageId, Object.freeze({
+        opacity,
+        salience: sequence?.paragraphs[index]?.salience ?? 1,
+        ruleScale: sequence?.paragraphs[index]?.ruleScale ?? 1
+      })]
     )));
     return Object.freeze(frames);
   }
@@ -1108,18 +1125,22 @@
       return block.corridor;
     }
     if (usesTwoColumnDesktopGeometry()) {
-      const card = anchor.closest<HTMLElement>(
-        "[data-kp-two-column-scroll-card]"
+      const passage = anchor.closest<HTMLElement>(
+        "[data-kp-two-column-scroll-paragraph]"
       );
-      const previousCard = card?.previousElementSibling as
+      const previousPassage = passage?.previousElementSibling as
         HTMLElement | null | undefined;
-      const cardDistancePx = previousCard === undefined || previousCard === null
+      const previousParagraph = previousPassage?.querySelector<HTMLElement>("p");
+      const paragraphDistancePx = previousParagraph === undefined ||
+          previousParagraph === null
         ? window.innerHeight
         : anchor.getBoundingClientRect().top -
-          previousCard.getBoundingClientRect().top;
+          previousParagraph.getBoundingClientRect().top;
       return projectKpTwoColumnScrollMotionCorridor({
         corridor: block.corridor,
-        cardDistancePx,
+        paragraphDistancePx,
+        dividerTopPx: inlineStage?.getBoundingClientRect().top ??
+          inlineStickyTopInset(),
         viewportHeightPx: window.innerHeight
       });
     }
@@ -1429,9 +1450,7 @@
     boundary: HTMLElement | null | undefined
   ): HTMLElement | undefined {
     if (boundary === undefined || boundary === null) return undefined;
-    return usesTwoColumnDesktopGeometry()
-      ? boundary
-      : boundary.querySelector<HTMLElement>("p") ?? boundary;
+    return boundary.querySelector<HTMLElement>("p") ?? boundary;
   }
 
   function resolveNavigationTarget(
@@ -1549,6 +1568,9 @@
   {@const inlineParagraphProjection = scrollCue
     ? inlineParagraphProjections[passage.id]
     : undefined}
+  {@const twoColumnParagraphPresentation = twoColumnScroll && scrollCue
+    ? twoColumnParagraphPresentations[passage.id]
+    : undefined}
   <div
     class="kp-economics-tutorial__passage"
     class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
@@ -1561,16 +1583,16 @@
     data-kp-lesson-passage-role={passage.role}
     data-kp-scroll-cue={scrollCue ? true : undefined}
     data-kp-inline-sticky-cue={scrollCue ? true : undefined}
-    data-kp-two-column-scroll-card={twoColumnScroll && scrollCue
+    data-kp-two-column-scroll-paragraph={twoColumnScroll && scrollCue
       ? true
       : undefined}
     data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
-    data-kp-two-column-card-opacity={twoColumnScroll && scrollCue
-      ? (twoColumnCardOpacities[passage.id] ?? 0.24).toFixed(4)
-      : undefined}
+    data-kp-two-column-paragraph-opacity={twoColumnParagraphPresentation?.opacity.toFixed(4)}
+    data-kp-two-column-paragraph-salience={twoColumnParagraphPresentation?.salience.toFixed(4)}
+    data-kp-two-column-rule-scale={twoColumnParagraphPresentation?.ruleScale.toFixed(4)}
     data-kp-tutorial-motion-block={renderedMotionBlock?.id}
     id={renderedMotionBlock === undefined
       ? undefined
@@ -1583,9 +1605,10 @@
     aria-label={renderedMotionBlock === undefined
       ? undefined
       : `${renderedMotionBlock.label} animation step`}
-    style={twoColumnScroll && scrollCue
-      ? `--kp-two-column-card-opacity:${twoColumnCardOpacities[passage.id] ?? 0.24}`
-      : undefined}
+    style={twoColumnParagraphPresentation === undefined
+      ? undefined
+      : `--kp-two-column-paragraph-opacity:${twoColumnParagraphPresentation.opacity};--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience};--kp-two-column-rule-scale:${twoColumnParagraphPresentation.ruleScale}`
+    }
   >
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}
@@ -1761,9 +1784,9 @@
                 >
                   {@render economicsStage()}
                 </aside>
-                <div class="kp-economics-tutorial__motion-passage-cards">
+                <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll
-                    ? kpEconomicsTwoColumnCards
+                    ? kpEconomicsTwoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {@render lessonPassage(passage, true)}
                   {/each}

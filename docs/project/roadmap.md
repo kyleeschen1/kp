@@ -134,16 +134,18 @@ a shared lesson-layout promotion.
 
 A parallel economics-only comparison is now available through
 `?layout=two-column-scroll`, recorded in
-`decisions/2026-08-04-kp-natural-card-state-handoff.md`. On desktop, four
-naturally sized cards occupy a narrow left column while one vertically centered
-sticky graph occupies a narrow right column behind a `1px` divider. The first
-fully opaque card describes the untouched graph. Later cards own semantic
-states that become exact when their tops reach viewport top, trading opacity
-with their predecessors over the available natural card distance. Universal
-viewport-height steps are removed. The accepted inline route, source prose,
-split default, and semantic animation truth remain unchanged; narrow and short
-viewports retain one-column geometry. Human comparison precedes any second
-caller or promotion of this grammar.
+`decisions/2026-08-04-kp-divider-relative-prose-salience.md`. On desktop, one
+vertically centered sticky graph sits left of a neutral `1px` divider and four
+naturally spaced paragraphs sit right. No visible card surface remains. Text
+opacity and a fixed-width blue left rule share one geometry-derived salience
+scalar that peaks just above viewport center; semantic motion begins after a
+short focus plateau and completes exactly when the paragraph reaches the
+divider top. The first fully salient paragraph describes the untouched graph,
+and doubled natural gaps provide reading and settled-state holds without a
+synthetic track. The accepted inline route, source prose, split default, and
+semantic animation truth remain unchanged; narrow and short viewports retain
+one-column geometry. Human comparison precedes any second caller or promotion
+of this grammar.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in

@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("desktop cards hand off natural-distance state beside a narrow graph", async ({
+test("desktop prose hands off salience beside a left-hand graph", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -18,39 +18,42 @@ test("desktop cards hand off natural-distance state beside a narrow graph", asyn
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const body = root.locator(".kp-economics-tutorial__motion-passage-body");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
-  const cards = root.locator("[data-kp-two-column-scroll-card]");
-  const initialCard = card(root, "graph-at-rest");
-  const demandCard = card(root, "follow-shift");
-  const demandParagraph = demandCard.locator("p");
+  const paragraphs = root.locator("[data-kp-two-column-scroll-paragraph]");
+  const initialPassage = card(root, "graph-at-rest");
+  const initialParagraph = initialPassage.locator("p");
+  const demandPassage = card(root, "follow-shift");
+  const demandParagraph = demandPassage.locator("p");
   const reflection = card(root, "equation-check");
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
     "two-column-scroll"
   );
-  await expect(cards).toHaveCount(4);
+  await expect(paragraphs).toHaveCount(4);
+  await expect(root.locator("[data-kp-two-column-scroll-card]")).toHaveCount(0);
   await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
-  await expect(initialCard.locator("p")).toContainText(
+  await expect(initialParagraph).toContainText(
     "Begin with the graph at rest."
   );
   await expect(demandParagraph).toContainText(
     "Now suppose strawberries become more desirable"
   );
   await expect(reflection).not.toHaveAttribute(
-    "data-kp-two-column-scroll-card",
+    "data-kp-two-column-scroll-paragraph",
     "true"
   );
 
   await expect.poll(() => body.evaluate((element) =>
     getComputedStyle(element).display
   )).toBe("grid");
-  const cardHeights = await cards.evaluateAll((elements) =>
+  const passageHeights = await paragraphs.evaluateAll((elements) =>
     elements.map((element) => element.getBoundingClientRect().height)
   );
-  expect(cardHeights.slice(0, 3).every((height) => height < 400)).toBe(true);
-  expect(cardHeights[3]).toBeLessThan(800);
+  expect(passageHeights.slice(0, 3).every((height) => height < 500)).toBe(true);
+  expect(passageHeights[3]).toBeLessThan(800);
 
-  await placeTopAt(page, initialCard, 0);
+  const dividerTop = 128;
+  await placeTopAt(page, initialParagraph, dividerTop);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "pinned"
@@ -60,60 +63,87 @@ test("desktop cards hand off natural-distance state beside a narrow graph", asyn
     return { top: Math.round(bounds.top), height: Math.round(bounds.height) };
   })).toEqual({ top: 128, height: 544 });
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
-  await expect(initialCard).toHaveAttribute(
-    "data-kp-two-column-card-opacity",
+  await expect(initialPassage).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
     "1.0000"
   );
-  await expect(demandCard).toHaveAttribute(
-    "data-kp-two-column-card-opacity",
-    "0.2400"
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
+    "0.3200"
   );
   await page.screenshot({
-    path: `${evidenceDirectory}/desktop-initial-graph-state.png`,
+    path: `${evidenceDirectory}/desktop-initial-paragraph-state.png`,
     fullPage: false
   });
 
-  const demandDistance = await demandCard.evaluate((element) => {
-    const previous = element.previousElementSibling!;
-    return element.getBoundingClientRect().top -
-      previous.getBoundingClientRect().top;
+  const demandDistance = await demandParagraph.evaluate((element) => {
+    const previous = element.parentElement!.previousElementSibling!
+      .querySelector("p")!;
+    return element.getBoundingClientRect().top - previous.getBoundingClientRect().top;
   });
-  expect(demandDistance).toBeGreaterThan(180);
-  expect(demandDistance).toBeLessThan(500);
-  await placeTopAt(page, demandCard, demandDistance / 2);
+  expect(demandDistance).toBeGreaterThan(240);
+  expect(demandDistance).toBeLessThan(520);
+  const motionStart = Math.min(800 * 0.42, dividerTop + demandDistance);
+  await placeTopAt(page, demandParagraph, motionStart);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
+    "1.0000"
+  );
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-two-column-rule-scale",
+    "1.0000"
+  );
+
+  const motionMidpoint = (motionStart + dividerTop) / 2;
+  await placeTopAt(page, demandParagraph, motionMidpoint);
   const forwardMidpoint = await demandProgress(root);
   expect(forwardMidpoint).toBeGreaterThan(0.6);
   expect(forwardMidpoint).toBeLessThan(0.73);
-  await expect(demandCard).toHaveAttribute(
+  await expect(demandPassage).toHaveAttribute(
     "data-kp-inline-sticky-paragraph-phase",
     "crossing"
   );
-  await expect.poll(async () => Number(await initialCard.getAttribute(
-    "data-kp-two-column-card-opacity"
-  ))).toBeCloseTo(0.62, 2);
-  await expect.poll(async () => Number(await demandCard.getAttribute(
-    "data-kp-two-column-card-opacity"
-  ))).toBeCloseTo(0.62, 2);
+  await expect.poll(async () => Number(await demandPassage.getAttribute(
+    "data-kp-two-column-paragraph-salience"
+  ))).toBeCloseTo(0.825, 2);
 
   const columns = await page.evaluate(() => {
     const paragraphElement = document.querySelector<HTMLElement>(
-      '[data-kp-two-column-scroll-card="true"] p'
+      '[data-kp-two-column-scroll-paragraph="true"] p'
     )!;
     const stageElement = document.querySelector<HTMLElement>(
       "[data-kp-inline-sticky-stage]"
     )!;
     const paragraphBounds = paragraphElement.getBoundingClientRect();
     const stageBounds = stageElement.getBoundingClientRect();
+    const passageStyle = getComputedStyle(paragraphElement.parentElement!);
+    const paragraphStyle = getComputedStyle(paragraphElement);
+    const paragraphRule = getComputedStyle(paragraphElement, "::before");
     return {
-      divider: getComputedStyle(stageElement).borderLeftWidth,
-      paragraphRight: paragraphBounds.right,
+      divider: getComputedStyle(stageElement).borderRightWidth,
+      passageBackground: passageStyle.backgroundColor,
+      passageBorderLeft: passageStyle.borderLeftWidth,
+      passageGap: passageStyle.paddingBottom,
+      paragraphBackground: paragraphStyle.backgroundColor,
+      paragraphBorderTop: paragraphStyle.borderTopWidth,
+      paragraphPosition: paragraphStyle.position,
+      paragraphRuleWidth: paragraphRule.width,
+      paragraphLeft: paragraphBounds.left,
       paragraphWidth: paragraphBounds.width,
-      stageLeft: stageBounds.left,
+      stageRight: stageBounds.right,
       stageWidth: stageBounds.width
     };
   });
   expect(columns.divider).toBe("1px");
-  expect(columns.stageLeft - columns.paragraphRight).toBeGreaterThan(20);
+  expect(columns.passageBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(columns.passageBorderLeft).toBe("0px");
+  expect(columns.passageGap).toBe("128px");
+  expect(columns.paragraphBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(columns.paragraphBorderTop).toBe("0px");
+  expect(columns.paragraphPosition).toBe("relative");
+  expect(columns.paragraphRuleWidth).toBe("2px");
+  expect(columns.paragraphLeft - columns.stageRight).toBeGreaterThan(20);
   expect(columns.paragraphWidth).toBeLessThan(440);
   expect(columns.stageWidth).toBeLessThan(540);
   await page.screenshot({
@@ -121,13 +151,13 @@ test("desktop cards hand off natural-distance state beside a narrow graph", asyn
     fullPage: false
   });
 
-  await placeTopAt(page, demandCard, 0);
+  await placeTopAt(page, demandParagraph, dividerTop);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
-  await expect(demandCard).toHaveAttribute(
-    "data-kp-two-column-card-opacity",
-    "1.0000"
+  await expect(demandPassage).toHaveAttribute(
+    "data-kp-two-column-paragraph-salience",
+    "0.6500"
   );
-  await placeTopAt(page, demandCard, demandDistance / 2);
+  await placeTopAt(page, demandParagraph, motionMidpoint);
   await expect.poll(async () => Math.abs(
     (await demandProgress(root)) - forwardMidpoint
   )).toBeLessThan(0.015);
@@ -178,6 +208,7 @@ test("the accepted inline route remains an independent rollback reference", asyn
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   await expect(root).not.toHaveClass(/two-column-scroll/);
   await expect(root.locator("[data-kp-two-column-scroll-card]")).toHaveCount(0);
+  await expect(root.locator("[data-kp-two-column-scroll-paragraph]")).toHaveCount(0);
   await expect(card(root, "follow-shift").locator("p")).toContainText(
     "Begin with the graph at rest."
   );

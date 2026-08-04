@@ -29,16 +29,17 @@ export interface KpInlineStickyParagraphProjection {
   readonly distanceFromStageBottomPx: number;
 }
 
-export interface KpTwoColumnScrollCardProjection
+export interface KpTwoColumnScrollParagraphProjection
   extends KpInlineStickyParagraphProjection {
+  readonly salience: number;
   readonly opacity: number;
+  readonly ruleScale: number;
   readonly ownsAttention: boolean;
 }
 
 export interface KpTwoColumnScrollSequenceProjection {
-  readonly cards: readonly KpTwoColumnScrollCardProjection[];
+  readonly paragraphs: readonly KpTwoColumnScrollParagraphProjection[];
   readonly attentionIndex: number;
-  readonly incomingIndex: number | undefined;
 }
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
@@ -55,101 +56,162 @@ export function readKpEconomicsDemandShiftPresentationLayout(
       : "split";
 }
 
-export function projectKpTwoColumnScrollCard(input: {
-  readonly cardTopPx: number;
-  readonly previousCardTopPx?: number | undefined;
+export function projectKpTwoColumnScrollParagraph(input: {
+  readonly paragraphTopPx: number;
+  readonly previousParagraphTopPx?: number | undefined;
+  readonly dividerTopPx: number;
   readonly viewportHeightPx: number;
-}): KpInlineStickyParagraphProjection {
+  readonly opening?: boolean | undefined;
+  readonly inactiveOpacity?: number | undefined;
+}): Omit<KpTwoColumnScrollParagraphProjection, "ownsAttention"> {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const measuredCardTop = Number.isFinite(input.cardTopPx)
-    ? input.cardTopPx
+  const measuredParagraphTop = Number.isFinite(input.paragraphTopPx)
+    ? input.paragraphTopPx
     : viewportHeight;
-  const cardTop = Math.abs(measuredCardTop) <= 0.5 ? 0 : measuredCardTop;
-  const measuredPreviousCardTop = input.previousCardTopPx;
-  const previousCardTop = measuredPreviousCardTop !== undefined &&
-      Math.abs(measuredPreviousCardTop) <= 0.5
-    ? 0
-    : measuredPreviousCardTop;
-  const cardDistance = previousCardTop === undefined ||
-      !Number.isFinite(previousCardTop)
+  const dividerTop = clamp(
+    finiteNonNegative(input.dividerTopPx),
+    0,
+    viewportHeight - 1
+  );
+  const paragraphTop = Math.abs(measuredParagraphTop - dividerTop) <= 0.5
+    ? dividerTop
+    : measuredParagraphTop;
+  const measuredPreviousParagraphTop = input.previousParagraphTopPx;
+  const previousParagraphTop = measuredPreviousParagraphTop !== undefined &&
+      Math.abs(measuredPreviousParagraphTop - dividerTop) <= 0.5
+    ? dividerTop
+    : measuredPreviousParagraphTop;
+  const paragraphDistance = previousParagraphTop === undefined ||
+      !Number.isFinite(previousParagraphTop)
     ? viewportHeight
-    : Math.max(1, cardTop - previousCardTop);
-  const startY = Math.min(viewportHeight, cardDistance);
-  const travel = clamp((startY - cardTop) / startY, 0, 1);
+    : Math.max(1, paragraphTop - previousParagraphTop);
+  const approachStartY = viewportHeight * 0.82;
+  const focusApexY = viewportHeight * 0.47;
+  const authoredMotionStartY = Math.max(dividerTop + 1, viewportHeight * 0.42);
+  // Short passages may approach before their predecessor settles. Starting at
+  // the later event preserves cumulative truth; longer gaps become a readable
+  // hold instead of stretching motion artificially.
+  const motionStartY = input.opening
+    ? dividerTop
+    : Math.max(
+        dividerTop + 1,
+        Math.min(authoredMotionStartY, dividerTop + paragraphDistance)
+      );
+  const travel = input.opening
+    ? paragraphTop <= dividerTop ? 1 : 0
+    : clamp(
+        (motionStartY - paragraphTop) /
+          Math.max(1, motionStartY - dividerTop),
+        0,
+        1
+      );
+  const exitEndY = Math.max(0, dividerTop - viewportHeight * 0.1);
+  const rawSalience = input.opening
+    ? paragraphTop >= dividerTop
+      ? 1
+      : smoothstep(clamp(
+          (paragraphTop - exitEndY) / Math.max(1, dividerTop - exitEndY),
+          0,
+          1
+        ))
+    : paragraphTop >= approachStartY
+      ? 0
+      : paragraphTop >= focusApexY
+        ? smoothstep(clamp(
+            (approachStartY - paragraphTop) /
+              Math.max(1, approachStartY - focusApexY),
+            0,
+            1
+          ))
+        : paragraphTop >= authoredMotionStartY
+          ? 1
+          : paragraphTop >= dividerTop
+            ? 0.65 + 0.35 * clamp(
+                (paragraphTop - dividerTop) /
+                  Math.max(1, authoredMotionStartY - dividerTop),
+                0,
+                1
+              )
+            : 0.65 * smoothstep(clamp(
+                (paragraphTop - exitEndY) /
+                  Math.max(1, dividerTop - exitEndY),
+                0,
+                1
+              ));
+  const predecessorReadiness = input.opening ||
+      previousParagraphTop === undefined ||
+      !Number.isFinite(previousParagraphTop)
+    ? 1
+    : smoothstep(clamp(
+        (dividerTop - previousParagraphTop) / (viewportHeight * 0.05),
+        0,
+        1
+      ));
+  const salience = clamp(rawSalience * predecessorReadiness, 0, 1);
+  const inactiveOpacity = clamp(input.inactiveOpacity ?? 0.32, 0, 1);
   return Object.freeze({
-    phase: cardTop >= startY
+    phase: paragraphTop >= approachStartY
       ? "below"
-      : cardTop > 0
+      : paragraphTop > motionStartY
+        ? "approach"
+        : paragraphTop > dividerTop
         ? "crossing"
         : "passed",
     travel,
     crossingProgress: travel,
-    // The shared attention frame sorts this value by distance from its
-    // ownership threshold. For this candidate that threshold is viewport top.
-    distanceFromStageBottomPx: cardTop
+    // The legacy field name is shared with the inline projector. Here the
+    // completion boundary is the visible top of the sticky column divider.
+    distanceFromStageBottomPx: paragraphTop - dividerTop,
+    salience,
+    opacity: inactiveOpacity + (1 - inactiveOpacity) * salience,
+    ruleScale: 0.16 + 0.84 * salience
   });
 }
 
 export function projectKpTwoColumnScrollSequence(input: {
-  readonly cardTopPx: readonly number[];
+  readonly paragraphTopPx: readonly number[];
+  readonly dividerTopPx: number;
   readonly viewportHeightPx: number;
   readonly inactiveOpacity?: number | undefined;
 }): KpTwoColumnScrollSequenceProjection {
-  const inactiveOpacity = clamp(input.inactiveOpacity ?? 0.24, 0, 1);
-  const baseCards = input.cardTopPx.map((cardTopPx, index) =>
-    projectKpTwoColumnScrollCard({
-      cardTopPx,
+  const baseParagraphs = input.paragraphTopPx.map((paragraphTopPx, index) =>
+    projectKpTwoColumnScrollParagraph({
+      paragraphTopPx,
       ...(index === 0
         ? {}
-        : { previousCardTopPx: input.cardTopPx[index - 1] }),
-      viewportHeightPx: input.viewportHeightPx
+        : { previousParagraphTopPx: input.paragraphTopPx[index - 1] }),
+      dividerTopPx: input.dividerTopPx,
+      viewportHeightPx: input.viewportHeightPx,
+      opening: index === 0,
+      inactiveOpacity: input.inactiveOpacity
     })
   );
-  if (baseCards.length === 0) {
+  if (baseParagraphs.length === 0) {
     return Object.freeze({
-      cards: Object.freeze([]),
-      attentionIndex: -1,
-      incomingIndex: undefined
+      paragraphs: Object.freeze([]),
+      attentionIndex: -1
     });
   }
 
-  const opacity = baseCards.map(() => inactiveOpacity);
-  const incomingIndex = baseCards.findIndex(({ phase }) => phase === "crossing");
-  let attentionIndex = 0;
-  if (incomingIndex >= 0) {
-    const incomingProgress = baseCards[incomingIndex]!.travel;
-    opacity[incomingIndex] = inactiveOpacity +
-      (1 - inactiveOpacity) * incomingProgress;
-    if (incomingIndex > 0) {
-      opacity[incomingIndex - 1] = 1 -
-        (1 - inactiveOpacity) * incomingProgress;
-      attentionIndex = incomingProgress >= 0.5
-        ? incomingIndex
-        : incomingIndex - 1;
-    }
-  } else {
-    let lastPassedIndex = -1;
-    baseCards.forEach(({ phase }, index) => {
-      if (phase === "passed") lastPassedIndex = index;
-    });
-    attentionIndex = lastPassedIndex >= 0 ? lastPassedIndex : 0;
-    opacity[attentionIndex] = lastPassedIndex >= 0 ? 1 : inactiveOpacity;
-  }
+  const attentionIndex = baseParagraphs.reduce((bestIndex, paragraph, index) =>
+    paragraph.salience > baseParagraphs[bestIndex]!.salience
+      ? index
+      : bestIndex
+  , 0);
 
   return Object.freeze({
-    cards: Object.freeze(baseCards.map((card, index) => Object.freeze({
-      ...card,
-      opacity: opacity[index]!,
+    paragraphs: Object.freeze(baseParagraphs.map((paragraph, index) => Object.freeze({
+      ...paragraph,
       ownsAttention: index === attentionIndex
     }))),
-    attentionIndex,
-    incomingIndex: incomingIndex >= 0 ? incomingIndex : undefined
+    attentionIndex
   });
 }
 
 export function projectKpTwoColumnScrollMotionCorridor(input: {
   readonly corridor: KpTutorialMotionCorridor;
-  readonly cardDistancePx: number;
+  readonly paragraphDistancePx: number;
+  readonly dividerTopPx: number;
   readonly viewportHeightPx: number;
 }): KpTutorialMotionCorridor {
   const keyframes = input.corridor.keyframes;
@@ -185,17 +247,26 @@ export function projectKpTwoColumnScrollMotionCorridor(input: {
     travel: (travel - authoredMotionStart) / authoredMotionSpan,
     progress
   }));
-  // This comparison mode deliberately spends the card's entire bottom-to-top
-  // journey on visible choreography. The shared split and inline corridors
-  // retain their independently approved entry and exit holds.
+  const viewportHeight = finitePositive(input.viewportHeightPx, 640);
+  const dividerTop = clamp(
+    finiteNonNegative(input.dividerTopPx),
+    0,
+    viewportHeight - 1
+  );
+  const motionStart = Math.max(
+    dividerTop + 1,
+    Math.min(
+      viewportHeight * 0.42,
+      dividerTop + finitePositive(input.paragraphDistancePx, viewportHeight)
+    )
+  );
+  // Prose spacing is real scroll authority: short intervals wait for the
+  // predecessor's divider settlement, while long intervals hold the graph
+  // until the incoming paragraph has passed its center-focus plateau.
   return Object.freeze({
     ...input.corridor,
-    startViewportRatio: Math.min(
-      1,
-      finitePositive(input.cardDistancePx, input.viewportHeightPx) /
-        finitePositive(input.viewportHeightPx, 640)
-    ),
-    endViewportRatio: 0,
+    startViewportRatio: motionStart / viewportHeight,
+    endViewportRatio: dividerTop / viewportHeight,
     keyframes: Object.freeze(projectedKeyframes.map((keyframe) =>
       Object.freeze(keyframe)
     ))
@@ -326,4 +397,8 @@ function finiteNonNegative(value: number): number {
 
 function clamp(value: number, minimum: number, maximum: number): number {
   return Math.max(minimum, Math.min(maximum, value));
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }
