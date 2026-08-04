@@ -34,6 +34,7 @@
     "visual:lisp-expression-beads": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-expression-beads.ts",
     "visual:lisp-structural-motion": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-structural-motion.ts",
     "visual:lisp-application-motion": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-application-motion.ts",
+    "visual:lisp-evaluation-motion": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-evaluation-motion.ts",
     "test:botanical-lisp-tutorial": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-*.test.ts",
     "test:browser:botanical-lisp-tutorial": "playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-tutorial-visual.browser.spec.ts tests/kp-lisp-accessibility.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --project=chromium --workers=1",
     "test:browser:tutorial-review": "playwright test tests/kp-tutorial-review.browser.spec.ts --project=chromium --workers=1",

@@ -387,6 +387,38 @@
       "status": "passed",
       "scope": "s17 committed visual script type boundary",
       "checkedAt": "2026-08-04T02:50:24.168Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-evaluation-motion.test.ts tests/kp-lisp-reduction-choreography.test.ts tests/kp-lisp-application-motion.test.ts tests/kp-lisp-s-expression-material-dom.test.ts",
+      "status": "passed",
+      "scope": "s18 evaluation composition, reduction distinction, causal operator, native endpoint, and preserved application/DOM seams",
+      "checkedAt": "2026-08-04T02:58:28.461Z",
+      "notes": "28 focused tests pass across 482-frame evaluation rewind sampling and preserved reduction/application laws"
+    },
+    {
+      "command": "npm run visual:lisp-evaluation-motion",
+      "status": "passed",
+      "scope": "s18 canonical nine-frame evaluation visual smoke",
+      "checkedAt": "2026-08-04T02:58:29.573Z",
+      "notes": "Inspected native source, bead formation, gather, absorbed hold, operator pulse, result emission, settlement, and native 5 in tmp/codex/lisp-evaluation-motion/canonical-evaluation-sequence.png"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s18 application type boundary",
+      "checkedAt": "2026-08-04T02:58:30.467Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s18 test type boundary",
+      "checkedAt": "2026-08-04T02:58:31.440Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s18 committed visual script type boundary",
+      "checkedAt": "2026-08-04T02:58:32.765Z"
     }
   ],
   "progress": {

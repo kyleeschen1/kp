@@ -156,7 +156,8 @@
     {
       "id": "s18",
       "title": "Render-evaluation-motion-block",
-      "status": "planned"
+      "summary": "Rendered evaluation end to end as a distinct reduction grammar: ordinary (+ 4 1) first hands its source plus into a structural bead without computing, exact operands contract into and are absorbed by that root, the isolated plus bead visibly pulses, and provenance-certified 5 emerges before the bead exits and one native selectable result settles. The fixed 20px, 12em, single-DOM-owner renderer uses no SVG; 28 focused tests, three type boundaries, and an inspected nine-frame visual smoke pass.",
+      "status": "complete"
     },
     {
       "id": "s19",
