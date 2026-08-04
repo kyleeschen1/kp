@@ -29,23 +29,27 @@ target, necessary context, and attention transition evident. The economics
 implementation is local discovery evidence, not a globally enforced schema.
 
 The accepted bounded discovery in
-`decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` adds an alternate
-one-axis lesson grammar. A diagram begins in document flow, lifts into a sticky
-platform, and lets stable observation prose dock beneath it while scroll drives
-the corresponding semantic motion segment. The durable typography, fit,
-progressive-enhancement, URL, accessibility, and rollback rules live in
-`../principles/inline-sticky-lesson-layout.md`. Economics is the canonical
-proof through `?layout=inline-sticky`; its approved split layout remains the
-default pending human comparison and a structurally different second caller.
+`decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md`, revised by
+`decisions/2026-08-04-kp-attention-corridor-lesson-layout-revision.md`, adds an
+alternate one-axis lesson grammar. A diagram begins in document flow and pins
+without elevation in the upper viewport. Stable, constant-width cues approach
+the lower edge of padding `P`, pause on a full-opacity reading shelf, then fade
+as scroll drives the corresponding semantic motion and carries them beneath
+the stage. Explicit runways let the motion finish before the next cue arrives.
+The durable typography, fit, progressive-enhancement, URL, accessibility, and
+rollback rules live in `../principles/inline-sticky-lesson-layout.md`.
+Economics is the canonical proof through `?layout=inline-sticky`; its approved
+split layout remains the default pending human comparison and a structurally
+different second caller.
 
 Learners retain fine-grained control through a block-level prose scrub bar with
 Rewind, Previous semantic checkpoint, Play/Pause, Next semantic checkpoint, a
 continuously draggable marked timeline, and keyboard equivalents. The local
 economics exemplar implements that control as a custom web component rather
-than Svelte UI. Crossing it downward plays; crossing it upward rewinds. Scroll
-does not scrub or seek the curves, any manual interaction takes precedence,
-reduced-motion suppresses automatic motion, and no coordination action
-auto-scrolls the page.
+than Svelte UI. Scroll projects the same block-local progress in either
+direction; any manual interaction takes precedence and the next scroll input
+rebases from the visible state. Reduced-motion suppresses continuous seeking,
+and no coordination action auto-scrolls the page.
 
 The accepted refinement is recorded in
 `decisions/2026-08-02-kp-stable-prose-focus-divider.md`. Stable lesson prose

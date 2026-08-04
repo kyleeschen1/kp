@@ -94,10 +94,12 @@ performance ceilings are the reference caller.
 A bounded successor now tests a one-axis alternative without replacing that
 reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
-lifted, docked, and released lifecycle plus its readable-fit ladder. The
+pinned, and released stage lifecycle plus a constant-width cue envelope through
+padding `P`. The accepted revision is recorded in
+`decisions/2026-08-04-kp-attention-corridor-lesson-layout-revision.md`. The
 economics proof is query-selected through `?layout=inline-sticky`; the approved
-split route remains default until human comparison and a structurally
-different second caller justify promotion.
+split route remains default until human comparison and a structurally different
+second caller justify promotion.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -583,8 +585,9 @@ activating heavy animation capabilities lazily.
 1. Review the code-native S-expression choreography, especially recursive
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
-   `?layout=inline-sticky` proof, including docking, reverse scroll, readable
-   phone fit, and large-text fallback; do not infer default promotion.
+   `?layout=inline-sticky` proof, including unelevated stage pinning, cue
+   opacity through padding `P`, reverse scroll, constant prose measure,
+   readable phone fit, and large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

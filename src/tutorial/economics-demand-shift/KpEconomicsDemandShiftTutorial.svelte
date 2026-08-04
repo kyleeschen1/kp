@@ -33,8 +33,10 @@
     type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
+    projectKpInlineStickyCue,
     projectKpInlineStickyLessonLayout,
     type KpEconomicsDemandShiftPresentationLayout,
+    type KpInlineStickyCueProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
   import {
@@ -52,6 +54,7 @@
     KpTutorialScrollCoordinator,
     projectKpTutorialRebasedCorridor,
     type KpTutorialCoordinatedScrollProjection,
+    type KpTutorialMotionCorridor,
     type KpTutorialScrollBlockRegistration
   } from "../kp-tutorial-motion.ts";
   import {
@@ -98,6 +101,12 @@
   interface KpEconomicsNavigationResume {
     readonly blockId: KpEconomicsMotionBlockId;
     readonly progress: number;
+  }
+
+  interface KpEconomicsInlineCueFrame {
+    readonly passageId: string;
+    readonly motionBlockId: KpEconomicsMotionBlockId | undefined;
+    readonly projection: KpInlineStickyCueProjection;
   }
 
   let {
@@ -177,9 +186,15 @@
   );
   let inlineStickyFit = $state<KpInlineStickyLessonFit>("comfortable");
   let inlineStickyStageHeightPx = $state(320);
-  let inlineStickyStageState = $state<"embedded" | "lifted" | "released">(
+  let inlineStickyPaddingHeightPx = $state(96);
+  let inlineStickyApproachHeightPx = $state(144);
+  let inlineStickyReadingShelfHeightPx = $state(24);
+  let inlineStickyStageState = $state<"embedded" | "pinned" | "released">(
     "embedded"
   );
+  let inlineCueProjections = $state<
+    Readonly<Record<string, KpInlineStickyCueProjection>>
+  >({});
   let reducedMotionQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let disposePlayerHost: (() => void) | undefined;
@@ -660,15 +675,13 @@
         `[data-kp-tutorial-motion-block="${block.id}"]`
       );
       const anchor = inlineSticky
-        ? shell?.querySelector<HTMLElement>(
-            `[data-kp-inline-sticky-motion-anchor="${block.id}"]`
-          )
+        ? boundary
         : boundary?.querySelector<KpTutorialScrubBarElement>(
             "kp-tutorial-scrub-bar"
           );
       return anchor === undefined || anchor === null
         ? []
-        : [{ id: block.id, anchor, corridor: block.corridor }];
+        : [{ id: block.id, anchor, corridor: motionCorridorFor(block.corridor) }];
     });
   }
 
@@ -677,8 +690,9 @@
   ): void {
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
+    const inlineCueFrames = updateInlineStickyCueProjections();
     const tutorialAttention = inlineSticky && inlineStickyFit !== "reading"
-      ? updateInlineStickyAttention(projection)
+      ? updateInlineStickyAttention(projection, inlineCueFrames)
       : updateReadingBandSelection(projection.readingBandY);
     const movedFromNavigation = navigationProjectionPending &&
       navigationScrollIntent &&
@@ -743,7 +757,7 @@
         if (manualScrollRebase?.blockId === active.id) {
           const block = findKpEconomicsMotionBlock(active.id)!;
           const rebased = projectKpTutorialRebasedCorridor({
-            corridor: block.corridor,
+            corridor: motionCorridorFor(block.corridor),
             rawTravelAtTakeover: manualScrollRebase.rawTravelAtTakeover,
             manualProgress: manualScrollRebase.manualProgress,
             rawTravel: active.travel
@@ -811,54 +825,108 @@
   }
 
   function updateInlineStickyAttention(
-    projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
+    projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>,
+    cueFrames: readonly KpEconomicsInlineCueFrame[]
   ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
-    const owner = projection.blocks.find(({ ownsScroll, anchorTop, id }) => {
-      if (!ownsScroll) return false;
-      const corridor = findKpEconomicsMotionBlock(id)!.corridor;
-      return anchorTop <= corridor.startViewportRatio * window.innerHeight &&
-        anchorTop >= corridor.endViewportRatio * window.innerHeight;
-    });
-    if (owner === undefined) {
-      return updateReadingBandSelection(inlineStickyDockY());
+    // A completed block retains the stage through its runway. This also makes
+    // large scroll deltas land on the terminal semantic frame instead of
+    // depending on the browser sampling the corridor's final pixel.
+    const owner = projection.blocks.find(({ ownsScroll, travel }) =>
+      ownsScroll && travel > 0.001
+    );
+    const focusedCue = cueFrames
+      .filter(({ projection: cue }) =>
+        cue.phase === "approaching" ||
+        cue.phase === "reading" ||
+        cue.phase === "receding"
+      )
+      .sort((left, right) =>
+        right.projection.opacity - left.projection.opacity ||
+        Math.abs(left.projection.distanceFromFocusLinePx) -
+          Math.abs(right.projection.distanceFromFocusLinePx)
+      )[0];
+    const block = owner === undefined
+      ? undefined
+      : findKpEconomicsMotionBlock(owner.id);
+    const passageId = block?.passageId ?? focusedCue?.passageId;
+    const motionBlockId = block?.id ?? focusedCue?.motionBlockId;
+    if (passageId === undefined) {
+      return updateReadingBandSelection(inlineStickyFocusLineY());
     }
-    const block = findKpEconomicsMotionBlock(owner.id)!;
-    attentionPassageId = block.passageId;
+    attentionPassageId = passageId;
     attentionCursorState = "within-region";
-    scrollActiveMotionBlock = block.id;
-    if (checkpoint.passageId !== block.passageId) {
+    scrollActiveMotionBlock = motionBlockId ?? "";
+    if (checkpoint.passageId !== passageId) {
       const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
-        ({ passageId }) => passageId === block.passageId
+        (candidate) => candidate.passageId === passageId
       );
       if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
     }
     return Object.freeze({
-      cursorY: inlineStickyDockY(),
+      cursorY: inlineStickyFocusLineY(),
       state: "within-region",
-      activeRegionId: block.passageId,
-      activePassageId: block.passageId,
-      activeMotionBlockId: block.id,
+      activeRegionId: passageId,
+      activePassageId: passageId,
+      ...(motionBlockId === undefined ? {} : { activeMotionBlockId: motionBlockId }),
       nearestRegionDistance: 0
     });
   }
 
+  function updateInlineStickyCueProjections(): readonly KpEconomicsInlineCueFrame[] {
+    if (!inlineSticky || shell === undefined || inlineStage === undefined) {
+      return [];
+    }
+    const stageBottom = inlineStage.getBoundingClientRect().bottom;
+    const frames = [...shell.querySelectorAll<HTMLElement>(
+      "[data-kp-inline-sticky-cue]"
+    )].map((element): KpEconomicsInlineCueFrame => {
+      const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
+      const motionBlockId = economicsMotionBlockId(
+        element.dataset["kpTutorialMotionBlock"]
+      );
+      const projection = inlineStickyFit === "reading"
+        ? Object.freeze({
+            phase: "reading" as const,
+            opacity: 1,
+            focusLinePx: stageBottom + inlineStickyPaddingHeightPx,
+            distanceFromFocusLinePx: 0
+          })
+        : projectKpInlineStickyCue({
+            cueAnchorTopPx: element.getBoundingClientRect().top,
+            stageBottomPx: stageBottom,
+            paddingHeightPx: inlineStickyPaddingHeightPx,
+            approachHeightPx: inlineStickyApproachHeightPx,
+            readingShelfHeightPx: inlineStickyReadingShelfHeightPx
+          });
+      return { passageId, motionBlockId, projection };
+    });
+    inlineCueProjections = Object.freeze(Object.fromEntries(frames.map(
+      ({ passageId, projection }) => [passageId, projection]
+    )));
+    return Object.freeze(frames);
+  }
+
   function updateInlineStickyLayoutProjection(): void {
     if (!inlineSticky || shell === undefined) return;
-    const dockedPassages = [...shell.querySelectorAll<HTMLElement>(
-      "[data-kp-inline-sticky-dock-candidate]"
+    const cues = [...shell.querySelectorAll<HTMLElement>(
+      "[data-kp-inline-sticky-cue]"
     )];
-    const dockedTextHeight = dockedPassages.reduce(
+    const cueHeight = cues.reduce(
       (maximum, passage) => Math.max(maximum, passage.getBoundingClientRect().height),
       0
     );
     const layout = projectKpInlineStickyLessonLayout({
       viewportWidthPx: window.innerWidth,
       viewportHeightPx: window.innerHeight,
-      dockedTextHeightPx: dockedTextHeight
+      cueHeightPx: cueHeight
     });
     inlineStickyFit = layout.fit;
     inlineStickyStageHeightPx = layout.stageHeightPx;
+    inlineStickyPaddingHeightPx = layout.paddingHeightPx;
+    inlineStickyApproachHeightPx = layout.approachHeightPx;
+    inlineStickyReadingShelfHeightPx = layout.readingShelfHeightPx;
     updateInlineStickyStageProjection();
+    updateInlineStickyCueProjections();
     scrollCoordinator?.scheduleProjection();
   }
 
@@ -875,15 +943,34 @@
       ? "embedded"
       : sectionBounds !== undefined && sectionBounds.bottom <= stageBounds.bottom + 1
         ? "released"
-        : "lifted";
+        : "pinned";
   }
 
   function inlineStickyTopInset(): number {
     return clamp(window.innerHeight * 0.04, 16, 40);
   }
 
-  function inlineStickyDockY(): number {
-    return inlineStickyTopInset() + inlineStickyStageHeightPx + 12;
+  function inlineStickyFocusLineY(): number {
+    const stageBottom = inlineStage?.getBoundingClientRect().bottom ??
+      inlineStickyTopInset() + inlineStickyStageHeightPx;
+    return stageBottom + inlineStickyPaddingHeightPx;
+  }
+
+  function motionCorridorFor(
+    corridor: KpTutorialMotionCorridor
+  ): KpTutorialMotionCorridor {
+    if (!inlineSticky || inlineStickyFit === "reading") return corridor;
+    const startViewportRatio = clamp(
+      inlineStickyFocusLineY() / window.innerHeight,
+      0.5,
+      0.82
+    );
+    const endViewportRatio = clamp(
+      inlineStickyTopInset() / window.innerHeight + 0.12,
+      0.14,
+      0.2
+    );
+    return Object.freeze({ ...corridor, startViewportRatio, endViewportRatio });
   }
 
   function updateReadingBandSelection(
@@ -1013,7 +1100,7 @@
         updateInlineStickyLayoutProjection
       );
       for (const passage of shell.querySelectorAll<HTMLElement>(
-        "[data-kp-inline-sticky-dock-candidate]"
+        "[data-kp-inline-sticky-cue]"
       )) inlineLayoutObserver.observe(passage);
       window.addEventListener("resize", updateInlineStickyLayoutProjection);
       updateInlineStickyLayoutProjection();
@@ -1136,14 +1223,15 @@
       )!;
       const anchor = inlineSticky
         ? shell.querySelector<HTMLElement>(
-            `[data-kp-inline-sticky-motion-anchor="${destination.motionScroll.blockId}"]`
+            `[data-kp-tutorial-motion-block="${destination.motionScroll.blockId}"]`
           ) ?? undefined
         : destination.motionScroll.blockId === "supply-movement"
           ? supplyScrubBar
           : demandScrubBar;
       if (anchor === undefined) return;
-      const start = block.corridor.startViewportRatio * window.innerHeight;
-      const end = block.corridor.endViewportRatio * window.innerHeight;
+      const corridor = motionCorridorFor(block.corridor);
+      const start = corridor.startViewportRatio * window.innerHeight;
+      const end = corridor.endViewportRatio * window.innerHeight;
       const endpointInset = destination.motionScroll.travel <= 0.001
         ? 2
         : destination.motionScroll.travel >= 0.999
@@ -1293,6 +1381,7 @@
     "data-kp-economics-tutorial-layout": presentationLayout,
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
+    "data-kp-inline-sticky-padding-height": inlineStickyPaddingHeightPx,
     "data-kp-animation-catalogue": true,
     "data-kp-animation-catalogue-selection": entry.animationId,
     "data-kp-economics-demand-intercept": demandIntercept,
@@ -1330,7 +1419,7 @@
       ? supplyPlaybackDirection
       : playbackDirection
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-inline-sticky-stage-height:${inlineStickyStageHeightPx}px`}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-inline-sticky-stage-height:${inlineStickyStageHeightPx}px;--kp-inline-sticky-padding-height:${inlineStickyPaddingHeightPx}px;--kp-inline-sticky-approach-height:${inlineStickyApproachHeightPx}px;--kp-inline-sticky-reading-shelf-height:${inlineStickyReadingShelfHeightPx}px`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
@@ -1369,24 +1458,26 @@
             <aside
               bind:this={inlineStage}
               class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
-              aria-label="Sticky supply and demand stage proof of concept"
+              aria-label="Sticky supply and demand attention corridor proof"
               data-kp-inline-sticky-stage
             >
               {@render economicsStage()}
             </aside>
+            <span
+              class="kp-economics-tutorial__attention-padding"
+              data-kp-inline-sticky-attention-padding
+              aria-hidden="true"
+            ></span>
           {/if}
 
           {#each section.passages as passage}
             {@const renderedMotionBlock = findKpEconomicsMotionBlock(
               passage.motionBlockId
             )}
-            {#if inlineSticky && renderedMotionBlock !== undefined}
-              <span
-                class="kp-economics-tutorial__inline-motion-anchor"
-                data-kp-inline-sticky-motion-anchor={renderedMotionBlock.id}
-                aria-hidden="true"
-              ></span>
-            {/if}
+            {@const inlineCueProjection = inlineSticky &&
+              section.id === "market-clearing"
+                ? inlineCueProjections[passage.id]
+                : undefined}
             <div
               class="kp-economics-tutorial__passage"
               class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
@@ -1396,10 +1487,11 @@
               class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
               class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
               data-kp-economics-tutorial-passage={passage.id}
-              data-kp-inline-sticky-dock-candidate={inlineSticky &&
+              data-kp-inline-sticky-cue={inlineSticky &&
                 section.id === "market-clearing"
                   ? true
                   : undefined}
+              data-kp-inline-sticky-cue-phase={inlineCueProjection?.phase}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
               id={renderedMotionBlock === undefined
                 ? undefined
@@ -1412,6 +1504,9 @@
               aria-label={renderedMotionBlock === undefined
                 ? undefined
                 : `${renderedMotionBlock.label} animation step`}
+              style={inlineCueProjection === undefined
+                ? undefined
+                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)}`}
             >
               {#if renderedMotionBlock !== undefined}
                 {#each renderedMotionBlock.checkpoints as motionCheckpoint}
@@ -1472,6 +1567,15 @@
                 </details>
               {/if}
             </div>
+            {#if inlineSticky && section.id === "market-clearing"}
+              <span
+                class="kp-economics-tutorial__cue-runway"
+                data-kp-inline-sticky-runway={renderedMotionBlock === undefined
+                  ? "hold"
+                  : "motion"}
+                aria-hidden="true"
+              ></span>
+            {/if}
           {/each}
         </section>
       {/each}

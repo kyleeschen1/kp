@@ -3,6 +3,12 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
+Presentation revision: the raised lift-and-dock treatment in this record is
+superseded by
+`2026-08-04-kp-attention-corridor-lesson-layout-revision.md`. The query-selected
+exemplar, preservation boundary, readable fallback, and promotion gate remain
+in force.
+
 ## Decision
 
 Record the inline-sticky lesson standards in
