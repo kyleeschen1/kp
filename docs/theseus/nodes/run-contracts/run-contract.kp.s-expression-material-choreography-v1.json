@@ -66,7 +66,8 @@
     {
       "id": "s03",
       "title": "Extend-certified-syntax-and-binding-identities",
-      "status": "planned"
+      "summary": "Extended the certified Lisp model with semantic list roles and distinct parenthesis identities, tightened lexical binder/reference scope laws, and updated the exact fixture; eighteen focused tests plus app/test typechecks pass.",
+      "status": "complete"
     },
     {
       "id": "s04",

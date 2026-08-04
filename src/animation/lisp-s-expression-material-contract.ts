@@ -1,13 +1,14 @@
+import {
+  KP_LISP_LIST_ROLES,
+  type KpLispListRole
+} from "../semantic/lisp-semantic-model.ts";
+
 export const KP_LISP_MATERIAL_FORM_ROLES = Object.freeze([
-  "executable-form",
-  "parameter-list",
-  "anonymous-application",
-  "quoted-data",
+  ...KP_LISP_LIST_ROLES,
   "atom"
 ] as const);
 
-export type KpLispMaterialFormRole =
-  (typeof KP_LISP_MATERIAL_FORM_ROLES)[number];
+export type KpLispMaterialFormRole = KpLispListRole | "atom";
 
 export const KP_LISP_MATERIAL_OPERATION_KINDS = Object.freeze([
   "activate",

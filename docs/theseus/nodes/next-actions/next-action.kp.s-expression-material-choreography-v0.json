@@ -65,6 +65,24 @@
       "status": "passed",
       "scope": "s02 test inference",
       "checkedAt": "2026-08-04T01:19:41.046Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-semantic-model.test.ts tests/kp-lisp-lambda-application-fixture.test.ts tests/kp-lisp-lambda-application-asset.test.ts tests/kp-lisp-s-expression-material-contract.test.ts",
+      "status": "passed",
+      "scope": "s03 eighteen semantic identity, fixture, asset, and vocabulary tests",
+      "checkedAt": "2026-08-04T01:23:28.933Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s03 application types",
+      "checkedAt": "2026-08-04T01:23:29.972Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s03 test inference",
+      "checkedAt": "2026-08-04T01:23:30.933Z"
     }
   ],
   "progress": {

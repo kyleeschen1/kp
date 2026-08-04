@@ -50,23 +50,31 @@ export function createKpLispLambdaApplicationFixture(): KpLispLambdaApplicationF
     root: {
       kind: "list",
       id: "expr.application",
+      role: "anonymous-application",
+      delimiters: delimiters("expr.application", 0, 23),
       source: { start: 0, end: 24 },
       children: [
         {
           kind: "list",
           id: "expr.lambda",
+          role: "executable-form",
+          delimiters: delimiters("expr.lambda", 1, 20),
           source: { start: 1, end: 21 },
           children: [
             atom("occurrence.lambda", "symbol", "lambda", 2, 8),
             {
               kind: "list",
               id: "expr.parameters",
+              role: "parameter-list",
+              delimiters: delimiters("expr.parameters", 9, 11),
               source: { start: 9, end: 12 },
               children: [atom("occurrence.x.binder", "symbol", "x", 10, 11)]
             },
             {
               kind: "list",
               id: "expr.body",
+              role: "executable-form",
+              delimiters: delimiters("expr.body", 13, 19),
               source: { start: 13, end: 20 },
               children: [
                 atom("occurrence.plus", "symbol", "+", 14, 15),
@@ -189,6 +197,21 @@ function atom(
     atomKind,
     lexeme,
     source: Object.freeze({ start, end })
+  });
+}
+
+function delimiters(id: string, openStart: number, closeStart: number) {
+  return Object.freeze({
+    open: Object.freeze({
+      id: `delimiter.${id}.open`,
+      kind: "open-paren" as const,
+      source: Object.freeze({ start: openStart, end: openStart + 1 })
+    }),
+    close: Object.freeze({
+      id: `delimiter.${id}.close`,
+      kind: "close-paren" as const,
+      source: Object.freeze({ start: closeStart, end: closeStart + 1 })
+    })
   });
 }
 

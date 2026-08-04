@@ -5,6 +5,15 @@ export interface KpLispSourceSpan {
 
 export type KpLispSExpression = KpLispAtom | KpLispList;
 
+export const KP_LISP_LIST_ROLES = Object.freeze([
+  "executable-form",
+  "parameter-list",
+  "anonymous-application",
+  "quoted-data"
+] as const);
+
+export type KpLispListRole = (typeof KP_LISP_LIST_ROLES)[number];
+
 export interface KpLispAtom {
   readonly kind: "atom";
   readonly id: string;
@@ -16,7 +25,18 @@ export interface KpLispAtom {
 export interface KpLispList {
   readonly kind: "list";
   readonly id: string;
+  readonly role: KpLispListRole;
+  readonly delimiters: {
+    readonly open: KpLispDelimiter;
+    readonly close: KpLispDelimiter;
+  };
   readonly children: readonly KpLispSExpression[];
+  readonly source: KpLispSourceSpan;
+}
+
+export interface KpLispDelimiter {
+  readonly id: string;
+  readonly kind: "open-paren" | "close-paren";
   readonly source: KpLispSourceSpan;
 }
 
@@ -98,12 +118,30 @@ export function validateKpLispSemanticModel(
     requireText(binding.name, `${path}.name`, issues);
     requireAtom(binding.binderOccurrenceId, `${path}.binderOccurrenceId`, expressionsById, issues);
     requireExpression(binding.scopeExpressionId, `${path}.scopeExpressionId`, expressionsById, issues);
+    const binder = expressionsById.get(binding.binderOccurrenceId);
+    if (binder?.kind === "atom" && binder.lexeme !== binding.name) {
+      issues.push(issue(`${path}.name`, "binding name must match its binder lexeme"));
+    }
     if (binding.referenceOccurrenceIds.length === 0) {
       issues.push(issue(`${path}.referenceOccurrenceIds`, "binding needs a reference occurrence"));
     }
-    binding.referenceOccurrenceIds.forEach((id, refIndex) =>
-      requireAtom(id, `${path}.referenceOccurrenceIds[${refIndex}]`, expressionsById, issues)
-    );
+    const scope = expressionsById.get(binding.scopeExpressionId);
+    binding.referenceOccurrenceIds.forEach((id, refIndex) => {
+      requireAtom(id, `${path}.referenceOccurrenceIds[${refIndex}]`, expressionsById, issues);
+      const reference = expressionsById.get(id);
+      if (reference?.kind === "atom" && reference.lexeme !== binding.name) {
+        issues.push(issue(
+          `${path}.referenceOccurrenceIds[${refIndex}]`,
+          "binding reference lexeme must match its binder"
+        ));
+      }
+      if (scope !== undefined && !containsExpression(scope, id)) {
+        issues.push(issue(
+          `${path}.referenceOccurrenceIds[${refIndex}]`,
+          "binding reference must be inside its certified scope"
+        ));
+      }
+    });
   });
 
   model.environments.forEach((environment, index) => {
@@ -194,9 +232,64 @@ function validateExpression(
     }
     return;
   }
+  if (!KP_LISP_LIST_ROLES.includes(expression.role)) {
+    issues.push(issue(`${path}.role`, `unsupported list role ${String(expression.role)}`));
+  }
+  validateDelimiter(
+    expression.delimiters.open,
+    "(",
+    `${path}.delimiters.open`,
+    expression.source,
+    sourceText,
+    allIds,
+    issues
+  );
+  validateDelimiter(
+    expression.delimiters.close,
+    ")",
+    `${path}.delimiters.close`,
+    expression.source,
+    sourceText,
+    allIds,
+    issues
+  );
+  if (expression.delimiters.open.source.start !== expression.source.start) {
+    issues.push(issue(`${path}.delimiters.open.source`,
+      "opening parenthesis must begin the list source span"));
+  }
+  if (expression.delimiters.close.source.end !== expression.source.end) {
+    issues.push(issue(`${path}.delimiters.close.source`,
+      "closing parenthesis must end the list source span"));
+  }
   expression.children.forEach((child, index) =>
     validateExpression(child, `${path}.children[${index}]`, sourceText, expression.source, expressionsById, allIds, issues)
   );
+}
+
+function validateDelimiter(
+  delimiter: KpLispDelimiter,
+  lexeme: "(" | ")",
+  path: string,
+  parent: KpLispSourceSpan,
+  sourceText: string,
+  allIds: Map<string, string>,
+  issues: KpLispSemanticIssue[]
+): void {
+  requireId(delimiter.id, `${path}.id`, allIds, issues);
+  if (delimiter.kind !== (lexeme === "(" ? "open-paren" : "close-paren")) {
+    issues.push(issue(`${path}.kind`, `delimiter must be ${lexeme === "(" ? "open" : "close"}`));
+  }
+  const { start, end } = delimiter.source;
+  if (start < parent.start || end > parent.end || end - start !== 1 ||
+      sourceText.slice(start, end) !== lexeme) {
+    issues.push(issue(`${path}.source`, `delimiter source span must select ${lexeme}`));
+  }
+}
+
+function containsExpression(root: KpLispSExpression, id: string): boolean {
+  if (root.id === id) return true;
+  return root.kind === "list" && root.children.some((child) =>
+    containsExpression(child, id));
 }
 
 function requireExpression(
@@ -255,6 +348,16 @@ function freezeModel(input: KpLispSemanticModel): KpLispSemanticModel {
       : Object.freeze({
         ...expression,
         source: Object.freeze({ ...expression.source }),
+        delimiters: Object.freeze({
+          open: Object.freeze({
+            ...expression.delimiters.open,
+            source: Object.freeze({ ...expression.delimiters.open.source })
+          }),
+          close: Object.freeze({
+            ...expression.delimiters.close,
+            source: Object.freeze({ ...expression.delimiters.close.source })
+          })
+        }),
         children: Object.freeze(expression.children.map(freezeExpression))
       });
   return Object.freeze({

@@ -15,12 +15,16 @@ function model(): KpLispSemanticModel {
     root: {
       kind: "list",
       id: "expr.lambda",
+      role: "executable-form",
+      delimiters: delimiters("expr.lambda", 0, 19),
       source: { start: 0, end: 20 },
       children: [
         { kind: "atom", id: "occurrence.lambda", atomKind: "symbol", lexeme: "lambda", source: { start: 1, end: 7 } },
         {
           kind: "list",
           id: "expr.parameters",
+          role: "parameter-list",
+          delimiters: delimiters("expr.parameters", 8, 10),
           source: { start: 8, end: 11 },
           children: [
             { kind: "atom", id: "occurrence.x.binder", atomKind: "symbol", lexeme: "x", source: { start: 9, end: 10 } }
@@ -29,6 +33,8 @@ function model(): KpLispSemanticModel {
         {
           kind: "list",
           id: "expr.body",
+          role: "executable-form",
+          delimiters: delimiters("expr.body", 12, 18),
           source: { start: 12, end: 19 },
           children: [
             { kind: "atom", id: "occurrence.plus", atomKind: "symbol", lexeme: "+", source: { start: 13, end: 14 } },
@@ -85,8 +91,37 @@ test("deep-freezes semantic collections and expression structure", () => {
   assert.equal(Object.isFrozen(semantic), true);
   assert.equal(Object.isFrozen(semantic.root), true);
   assert.equal(Object.isFrozen(semantic.root.kind === "list" ? semantic.root.children : []), true);
+  assert.equal(Object.isFrozen(semantic.root.kind === "list" ? semantic.root.delimiters : {}), true);
   assert.equal(Object.isFrozen(semantic.bindings[0]?.referenceOccurrenceIds), true);
   assert.equal(Object.isFrozen(semantic.environments[0]?.entries), true);
+});
+
+test("certifies distinct parenthesis identities and semantic list roles", () => {
+  const semantic = defineKpLispSemanticModel(model());
+  const lists = collectKpLispExpressions(semantic.root).filter(
+    (expression) => expression.kind === "list"
+  );
+
+  assert.deepEqual(lists.map(({ role }) => role), [
+    "executable-form",
+    "parameter-list",
+    "executable-form"
+  ]);
+  assert.equal(new Set(lists.flatMap(({ delimiters }) => [
+    delimiters.open.id,
+    delimiters.close.id
+  ])).size, 6);
+});
+
+test("rejects binding links outside their certified scope", () => {
+  const base = model();
+  assert.throws(() => defineKpLispSemanticModel({
+    ...base,
+    bindings: [{
+      ...base.bindings[0]!,
+      referenceOccurrenceIds: ["occurrence.one"]
+    }]
+  }), /binding reference lexeme must match|binding reference must be inside/);
 });
 
 test("rejects a substitution destination that does not name its exact child", () => {
@@ -125,3 +160,18 @@ test("reports duplicate occurrence identity independently of source glyphs", () 
   const issues = validateKpLispSemanticModel(invalid);
   assert.ok(issues.some(({ message }) => message.includes("duplicate id occurrence.x.binder")));
 });
+
+function delimiters(id: string, openStart: number, closeStart: number) {
+  return {
+    open: {
+      id: `delimiter.${id}.open`,
+      kind: "open-paren" as const,
+      source: { start: openStart, end: openStart + 1 }
+    },
+    close: {
+      id: `delimiter.${id}.close`,
+      kind: "close-paren" as const,
+      source: { start: closeStart, end: closeStart + 1 }
+    }
+  };
+}
