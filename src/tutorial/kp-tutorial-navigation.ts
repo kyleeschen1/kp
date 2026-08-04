@@ -58,6 +58,10 @@ export function createKpTutorialNavigationController<Target>(input: {
   readonly resolve: (destination: KpTutorialTocDestination) => Target | undefined;
   readonly restore: (target: Target, destination: KpTutorialTocDestination) => void;
   readonly scroll: (target: Target, destination: KpTutorialTocDestination) => void;
+  readonly projectTocDestination?: ((
+    target: Target,
+    destination: KpTutorialTocDestination
+  ) => KpTutorialTocDestination) | undefined;
   readonly onApplied?: ((input: {
     readonly target: Target;
     readonly destination: KpTutorialTocDestination;
@@ -86,7 +90,9 @@ export function createKpTutorialNavigationController<Target>(input: {
       },
       restore: () => input.restore(target, destination),
       setActive: () => {
-        input.toc.setActiveDestination(destination);
+        input.toc.setActiveDestination(
+          input.projectTocDestination?.(target, destination) ?? destination
+        );
         input.root.dataset["kpTutorialDestinationKind"] = destination.kind;
         input.root.dataset["kpTutorialDestinationId"] = destination.id;
         lastAppliedHash = hash;

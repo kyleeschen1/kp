@@ -145,6 +145,8 @@ export function createKpLispLessonScrollController(input: {
     }
     input.root.dataset["kpLispTutorialReadingPassage"] =
       attention.activePassageId ?? "";
+    input.root.dataset["kpTutorialReviewPassage"] =
+      attention.activePassageId ?? "";
     input.root.dataset["kpLispTutorialAttentionState"] = attention.state;
     if (activeRegion !== undefined) {
       const regionBounds = activeRegion.getBoundingClientRect();
@@ -157,20 +159,9 @@ export function createKpLispLessonScrollController(input: {
       attention.state === "within-region" ? "crossing" : "tracking";
 
     if (attention.activeMotionBlockId !== undefined) {
-      const snapshot = input.motion.snapshot();
-      const definition = kpLispLessonMotionBlocks.find(
-        ({ id }) => id === attention.activeMotionBlockId
-      )!;
-      const localProgress = snapshot.activeBlockId === attention.activeMotionBlockId
-        ? snapshot.localProgress
-        : 0;
-      const checkpoint = [...definition.checkpoints].sort((left, right) =>
-        Math.abs(left.progress - localProgress) -
-        Math.abs(right.progress - localProgress)
-      )[0]!;
       input.navigation.setReadingDestination({
-        kind: "checkpoint",
-        id: checkpoint.id
+        kind: "block",
+        id: attention.activeMotionBlockId
       });
       return;
     }

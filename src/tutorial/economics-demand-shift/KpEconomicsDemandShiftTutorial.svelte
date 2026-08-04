@@ -22,9 +22,7 @@
     writeKpEconomicsEquilibriumParameters
   } from "../../editor/economics-equilibrium-parameters.ts";
   import {
-    findKpEconomicsDemandShiftCheckpointIndex,
     kpEconomicsDemandShiftCheckpoints,
-    selectKpEconomicsDemandShiftPlaybackCheckpointId,
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
   import type {
@@ -86,23 +84,6 @@
     | "manual"
     | "reduced-motion";
 
-  interface KpEconomicsTutorialAttentionProjection {
-    readonly spotlightVisible: boolean;
-    readonly spotlightX: number;
-    readonly spotlightY: number;
-    readonly pageVeilVisible: boolean;
-    readonly viewportWidth: number;
-    readonly viewportHeight: number;
-    readonly passageX: number;
-    readonly passageY: number;
-    readonly passageWidth: number;
-    readonly passageHeight: number;
-    readonly stageX: number;
-    readonly stageY: number;
-    readonly stageWidth: number;
-    readonly stageHeight: number;
-  }
-
   interface KpEconomicsManualScrollRebase {
     readonly blockId: KpEconomicsMotionBlockId;
     readonly rawTravelAtTakeover: number;
@@ -113,23 +94,6 @@
     readonly blockId: KpEconomicsMotionBlockId;
     readonly progress: number;
   }
-
-  const emptyAttentionProjection: KpEconomicsTutorialAttentionProjection = {
-    spotlightVisible: false,
-    spotlightX: 0,
-    spotlightY: 0,
-    pageVeilVisible: false,
-    viewportWidth: 0,
-    viewportHeight: 0,
-    passageX: 0,
-    passageY: 0,
-    passageWidth: 0,
-    passageHeight: 0,
-    stageX: 0,
-    stageY: 0,
-    stageWidth: 0,
-    stageHeight: 0
-  };
 
   let {
     entry,
@@ -203,11 +167,8 @@
   let scrollActiveMotionBlock = $state<KpEconomicsMotionBlockId | "">(
     initialDeepLink.motion.activeBlockId
   );
-  let attentionFrame: number | undefined;
-  let attentionResizeObserver: ResizeObserver | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
-  let attentionProjection = $state(emptyAttentionProjection);
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator:
     KpTutorialScrollCoordinator<KpEconomicsMotionBlockId> | undefined;
@@ -231,31 +192,19 @@
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
-  let equationsVisible = $derived(
-    checkpoint.id === "equation-check" ||
-    checkpoint.id === "scope" ||
-    checkpoint.id === "synthesis" ||
-    checkpoint.id === "explore"
-  );
   let semanticProgress = $derived(lessonMotionProjection.demandShiftProgress);
   let supplyMovementProgress = $derived(
     lessonMotionProjection.supplyMovementProgress
   );
-  let visualCheckpoint = $derived(
-    checkpoint.passageId === "follow-shift"
-      ? kpEconomicsDemandShiftCheckpoints[
-          findKpEconomicsDemandShiftCheckpointIndex(
-            selectKpEconomicsDemandShiftPlaybackCheckpointId(semanticProgress)
-          )
-        ]!
-      : checkpoint
+  let reviewProgress = $derived(
+    lessonMotionProjection.activeBlockId === "supply-movement"
+      ? lessonMotionProjection.supplyMovementProgress
+      : lessonMotionProjection.demandShiftProgress
   );
   let tocActiveDestination = $derived(
     resolveKpEconomicsDemandShiftTocDestination({
       lesson,
-      passageId: checkpoint.passageId,
-      demandShiftProgress: lessonMotionProjection.demandShiftProgress,
-      supplyMovementProgress: lessonMotionProjection.supplyMovementProgress
+      passageId: checkpoint.passageId
     })
   );
   $effect(() => {
@@ -286,11 +235,6 @@
         manualMotionBlock === "supply-movement"
     });
   });
-  let spotlightStyle = $derived(
-    `--kp-tutorial-spotlight-x:${attentionProjection.spotlightX}px;` +
-    `--kp-tutorial-spotlight-y:${attentionProjection.spotlightY}px;` +
-    `--kp-tutorial-spotlight-radius:${visualCheckpoint.attention.spotlightRadius}px`
-  );
   let supplyInterpretationStyle = $derived(
     `--kp-tutorial-supply-emphasis:${clamp(supplyMovementProgress / 0.18, 0, 1).toFixed(3)};` +
     `--kp-tutorial-supply-trace:${clamp((supplyMovementProgress - 0.12) / 0.46, 0, 1).toFixed(3)};` +
@@ -359,7 +303,6 @@
     if (source === "manual" || (
       motionOwner === "untouched" && next.progress === 0
     )) seek(next.progress);
-    scheduleAttentionProjection();
   }
 
   function stepCheckpoint(direction: -1 | 1): void {
@@ -556,7 +499,6 @@
       `${window.location.pathname}${search}${window.location.hash}`
     );
     announcement = `Exploration target set to demand intercept ${demandIntercept}.`;
-    scheduleAttentionProjection();
   }
 
   function restoreLessonExample(): void {
@@ -584,7 +526,6 @@
     // passage the learner is currently reading.
     seek(1);
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
-    scheduleAttentionProjection();
   }
 
   function handleFrame(event: Event): void {
@@ -633,7 +574,6 @@
         announcement = "Demand shift complete. Quantity 8 and price 10.";
       }
     }
-    scheduleAttentionProjection();
   }
 
   function handleLoad(event: Event): void {
@@ -643,7 +583,6 @@
     ) return;
     ready = true;
     scrollCoordinator?.scheduleProjection();
-    scheduleAttentionProjection();
   }
 
   function claimManualMotion(
@@ -695,94 +634,6 @@
     const blockId = motionBlockFromEvent(event);
     claimManualMotion(blockId);
     applyManualMotionProgress(blockId, detail.progress);
-  }
-
-  function scheduleAttentionProjection(): void {
-    if (attentionFrame !== undefined) return;
-    attentionFrame = requestAnimationFrame(() => {
-      attentionFrame = undefined;
-      updateAttentionProjection();
-    });
-  }
-
-  function updateAttentionProjection(): void {
-    if (shell === undefined) {
-      attentionProjection = emptyAttentionProjection;
-      return;
-    }
-    const playerHost = shell.querySelector<HTMLElement>(
-      ".kp-economics-tutorial__player-host"
-    );
-    const passage = shell.querySelector<HTMLElement>(
-      `[data-kp-economics-tutorial-passage="${checkpoint.passageId}"]`
-    );
-    const stage = shell.querySelector<HTMLElement>(
-      ".kp-economics-tutorial__stage-card"
-    );
-    const target = playerHost === null
-      ? null
-      : playerHost.querySelector<Element>(
-          visualCheckpoint.attention.targetSelector
-        );
-    if (
-      playerHost === null ||
-      passage === null ||
-      stage === null ||
-      target === null
-    ) {
-      attentionProjection = emptyAttentionProjection;
-      return;
-    }
-
-    const playerHostRect = playerHost.getBoundingClientRect();
-    const passageRect = passage.getBoundingClientRect();
-    const stageRect = stage.getBoundingClientRect();
-    const targetPoint = resolveAttentionTargetPoint(
-      target,
-      visualCheckpoint.attention.targetAnchor
-    );
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const passageFocusRect = projectAttentionFocusRect(
-      passageRect,
-      10,
-      viewportWidth,
-      viewportHeight
-    );
-    const stageFocusRect = projectAttentionFocusRect(
-      stageRect,
-      12,
-      viewportWidth,
-      viewportHeight
-    );
-    const passageIsVisible = passageRect.bottom > 0 &&
-      passageRect.top < viewportHeight;
-    const stageIsVisible = stageRect.bottom > 0 && stageRect.top < viewportHeight;
-
-    attentionProjection = {
-      spotlightVisible: playerHostRect.width > 0 && playerHostRect.height > 0,
-      spotlightX: clamp(
-        targetPoint.x - playerHostRect.left,
-        0,
-        playerHostRect.width
-      ),
-      spotlightY: clamp(
-        targetPoint.y - playerHostRect.top,
-        0,
-        playerHostRect.height
-      ),
-      pageVeilVisible: viewportWidth > 760 && passageIsVisible && stageIsVisible,
-      viewportWidth,
-      viewportHeight,
-      passageX: passageFocusRect.x,
-      passageY: passageFocusRect.y,
-      passageWidth: passageFocusRect.width,
-      passageHeight: passageFocusRect.height,
-      stageX: stageFocusRect.x,
-      stageY: stageFocusRect.y,
-      stageWidth: stageFocusRect.width,
-      stageHeight: stageFocusRect.height
-    };
   }
 
   function collectScrollBlocks(): readonly KpTutorialScrollBlockRegistration<
@@ -903,7 +754,6 @@
         seek(lessonMotionProjection.demandShiftProgress);
       }
     }
-    updateAttentionProjection();
   }
 
   function settleMotionOutsideAttentionBlock(passageId: string): void {
@@ -1069,6 +919,10 @@
         resolve: resolveNavigationTarget,
         restore: restoreNavigationTarget,
         scroll: scrollToSemanticDestination,
+        projectTocDestination: (target, destination) =>
+          destination.kind === "checkpoint"
+            ? { kind: "block", id: target.motion.activeBlockId }
+            : destination,
         onApplied: ({ destination }) => {
           currentSemanticDestination = destination;
           announcement = `Opened ${destination.kind} ${destination.id}.`;
@@ -1096,12 +950,6 @@
       hostability,
       animation
     });
-    attentionResizeObserver = new ResizeObserver(scheduleAttentionProjection);
-    attentionResizeObserver.observe(shell);
-    const playerHost = shell.querySelector<HTMLElement>(
-      ".kp-economics-tutorial__player-host"
-    );
-    if (playerHost !== null) attentionResizeObserver.observe(playerHost);
     reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     previousHistoryScrollRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
@@ -1112,18 +960,14 @@
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
     void document.fonts.ready.then(() => {
       scrollCoordinator?.scheduleProjection();
-      scheduleAttentionProjection();
     });
     scrollCoordinator.scheduleProjection();
-    scheduleAttentionProjection();
   });
 
   onDestroy(() => {
     scrollCoordinator?.disconnect();
     navigationController?.dispose();
     cancelSupplyPlayback();
-    if (attentionFrame !== undefined) cancelAnimationFrame(attentionFrame);
-    attentionResizeObserver?.disconnect();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -1157,32 +1001,6 @@
     }
     disposePlayerHost?.();
   });
-
-  function resolveAttentionTargetPoint(
-    target: Element,
-    anchor: number
-  ): { readonly x: number; readonly y: number } {
-    // A curve's bounding-box center often coincides with equilibrium. Project
-    // the authored anchor so the spotlight identifies the curve itself.
-    if (target instanceof SVGLineElement) {
-      const matrix = target.getScreenCTM();
-      const svg = target.ownerSVGElement;
-      if (matrix !== null && svg !== null) {
-        const point = svg.createSVGPoint();
-        point.x = Number(target.getAttribute("x1")) * (1 - anchor) +
-          Number(target.getAttribute("x2")) * anchor;
-        point.y = Number(target.getAttribute("y1")) * (1 - anchor) +
-          Number(target.getAttribute("y2")) * anchor;
-        const projected = point.matrixTransform(matrix);
-        return { x: projected.x, y: projected.y };
-      }
-    }
-    const targetRect = target.getBoundingClientRect();
-    return {
-      x: targetRect.left + targetRect.width / 2,
-      y: targetRect.top + targetRect.height / 2
-    };
-  }
 
   function clamp(value: number, minimum: number, maximum: number): number {
     return Math.max(minimum, Math.min(maximum, value));
@@ -1283,7 +1101,6 @@
     supplyPlaybackStatus = "paused";
     seek(next.motion.demandShiftProgress);
     scrollCoordinator?.scheduleProjection();
-    scheduleAttentionProjection();
   }
 
   function createNavigationResume(
@@ -1308,28 +1125,6 @@
     }
   }
 
-  function projectAttentionFocusRect(
-    rect: DOMRect,
-    inset: number,
-    viewportWidth: number,
-    viewportHeight: number
-  ): {
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-  } {
-    const x = clamp(rect.left - inset, 0, viewportWidth);
-    const y = clamp(rect.top - inset, 0, viewportHeight);
-    const right = clamp(rect.right + inset, 0, viewportWidth);
-    const bottom = clamp(rect.bottom + inset, 0, viewportHeight);
-    return {
-      x,
-      y,
-      width: Math.max(0, right - x),
-      height: Math.max(0, bottom - y)
-    };
-  }
 </script>
 
 <KpTutorialLessonShell
@@ -1351,9 +1146,6 @@
     "data-kp-economics-tutorial-passage": checkpoint.passageId,
     "data-kp-economics-tutorial-attention-passage": attentionPassageId ?? "",
     "data-kp-economics-tutorial-attention-state": attentionCursorState,
-    "data-kp-economics-tutorial-focus-profile": visualCheckpoint.attention.profile,
-    "data-kp-economics-tutorial-focus-target": visualCheckpoint.attention.target,
-    "data-kp-economics-tutorial-equations": equationsVisible ? "visible" : "quiet",
     "data-kp-economics-tutorial-motion-owner": motionOwner,
     "data-kp-economics-tutorial-manual-block": manualMotionBlock ?? "",
     "data-kp-economics-tutorial-scroll-timeline": scrollTimelineStatus,
@@ -1369,7 +1161,20 @@
     "data-kp-economics-tutorial-supply-interpretation": supplyInterpretationPhase,
     "data-kp-economics-stage-composition-phase": stageComposition.phase,
     "data-kp-economics-stage-composition-progress": stageComposition.progress.toFixed(3),
-    "data-kp-economics-verification-reveal": verificationReveal.phase
+    "data-kp-economics-verification-reveal": verificationReveal.phase,
+    "data-kp-tutorial-review-root": true,
+    "data-kp-tutorial-review-document-id": "lesson.economics.demand-shift",
+    "data-kp-tutorial-review-document-version": "1.0.0",
+    "data-kp-tutorial-review-asset-id": entry.animationId,
+    "data-kp-tutorial-review-renderer": "economics-equilibrium-graph",
+    "data-kp-tutorial-review-passage": attentionPassageId ?? checkpoint.passageId,
+    "data-kp-tutorial-review-motion-block": lessonMotionProjection.activeBlockId,
+    "data-kp-tutorial-review-checkpoint": checkpoint.id,
+    "data-kp-tutorial-review-progress": reviewProgress.toFixed(4),
+    "data-kp-tutorial-review-motion-authority": motionOwner,
+    "data-kp-tutorial-review-playback-direction": lessonMotionProjection.activeBlockId === "supply-movement"
+      ? supplyPlaybackDirection
+      : playbackDirection
   }}
   style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
 >
@@ -1502,19 +1307,13 @@
 
   {#snippet stage()}
       <div class="kp-economics-tutorial__stage-card">
-        <header class="kp-economics-tutorial__stage-header">
-          <div>
-            <p>Current focus</p>
-            <strong>{checkpoint.label}</strong>
-          </div>
-          <button
-            type="button"
-            class="kp-economics-tutorial__expand"
-            aria-expanded={stageExpanded}
-            aria-label={stageExpanded ? "Return stage to compact size" : "Expand stage"}
-            onclick={() => stageExpanded = !stageExpanded}
-          >{stageExpanded ? "Compact" : "Expand"}</button>
-        </header>
+        <button
+          type="button"
+          class="kp-economics-tutorial__expand"
+          aria-expanded={stageExpanded}
+          aria-label={stageExpanded ? "Return stage to compact size" : "Expand stage"}
+          onclick={() => stageExpanded = !stageExpanded}
+        >{stageExpanded ? "Compact" : "Expand"}</button>
 
         <div
           class="kp-economics-tutorial__player-host"
@@ -1539,84 +1338,14 @@
               data-kp-economics-stage-surface-lifecycle={verificationStageSurface.lifecycle}
             >{@html verificationSurfaceHtml}</div>
           </div>
-          <div
-            class="kp-economics-tutorial__spotlight"
-            data-kp-economics-tutorial-spotlight
-            data-kp-attention-spotlight-visible={attentionProjection.spotlightVisible}
-            style={spotlightStyle}
-            aria-hidden="true"
-          ></div>
         </div>
 
       </div>
   {/snippet}
 
   {#snippet after()}
-  <svg
-    class="kp-economics-tutorial__page-veil"
-    class:kp-economics-tutorial__page-veil--visible={attentionProjection.pageVeilVisible}
-    data-kp-economics-tutorial-page-veil
-    data-kp-attention-page-veil-visible={attentionProjection.pageVeilVisible}
-    width={attentionProjection.viewportWidth}
-    height={attentionProjection.viewportHeight}
-    aria-hidden="true"
-  >
-    <defs>
-      <filter
-        id="kp-economics-tutorial-page-veil-soften"
-        x="-20%"
-        y="-20%"
-        width="140%"
-        height="140%"
-      >
-        <feGaussianBlur stdDeviation="10"></feGaussianBlur>
-      </filter>
-      <mask
-        id="kp-economics-tutorial-page-veil-mask"
-        maskUnits="userSpaceOnUse"
-        x="0"
-        y="0"
-        width={attentionProjection.viewportWidth}
-        height={attentionProjection.viewportHeight}
-      >
-        <rect
-          width={attentionProjection.viewportWidth}
-          height={attentionProjection.viewportHeight}
-          fill="white"
-        ></rect>
-        <g filter="url(#kp-economics-tutorial-page-veil-soften)">
-          <rect
-            data-kp-attention-page-veil-passage
-            x={attentionProjection.passageX}
-            y={attentionProjection.passageY}
-            width={attentionProjection.passageWidth}
-            height={attentionProjection.passageHeight}
-            rx="16"
-            fill="black"
-          ></rect>
-          <rect
-            data-kp-attention-page-veil-stage
-            x={attentionProjection.stageX}
-            y={attentionProjection.stageY}
-            width={attentionProjection.stageWidth}
-            height={attentionProjection.stageHeight}
-            rx="18"
-            fill="black"
-          ></rect>
-        </g>
-      </mask>
-    </defs>
-    <rect
-      class="kp-economics-tutorial__page-veil-wash"
-      width={attentionProjection.viewportWidth}
-      height={attentionProjection.viewportHeight}
-      mask="url(#kp-economics-tutorial-page-veil-mask)"
-    ></rect>
-  </svg>
-
   <p class="kp-economics-tutorial__announcement" aria-live="polite">
     {announcement}
   </p>
-  <div data-kp-animation-catalogue-review-dock aria-hidden="true"></div>
   {/snippet}
 </KpTutorialLessonShell>

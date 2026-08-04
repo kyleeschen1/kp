@@ -64,7 +64,7 @@ test("reduced motion disables scroll seeking but retains manual semantic steps",
     .toHaveAttribute("data-kp-lisp-botanical-mode", "reduced");
 });
 
-test("high contrast replaces attenuation and shadows with system emphasis", async ({ page }) => {
+test("high contrast keeps the undimmed stage and system passage emphasis", async ({ page }) => {
   await page.emulateMedia({ forcedColors: "active" });
   await page.goto(route);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
@@ -81,17 +81,19 @@ test("high contrast replaces attenuation and shadows with system emphasis", asyn
     "true"
   );
   const projection = await root.evaluate((element) => {
-    const target = element.querySelector<HTMLElement>('[data-kp-lisp-salience="target"]')!;
+    const stageNode = element.querySelector<HTMLElement>(
+      "[data-kp-lisp-botanical-node]"
+    )!;
     const passage = element.querySelector<HTMLElement>(
       '[data-kp-tutorial-attention-region][data-kp-lisp-reading-active="true"]'
     )!;
     return {
-      targetFilter: getComputedStyle(target).filter,
+      stageFilter: getComputedStyle(stageNode).filter,
       passageShadow: getComputedStyle(passage).boxShadow,
       passageOutline: getComputedStyle(passage).outlineStyle
     };
   });
-  expect(projection.targetFilter).toBe("none");
+  expect(projection.stageFilter).toBe("none");
   expect(projection.passageShadow).toBe("none");
   expect(projection.passageOutline).not.toBe("none");
 });

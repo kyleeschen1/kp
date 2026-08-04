@@ -68,7 +68,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(toc.locator('[data-kp-tutorial-toc-item="block"]'))
     .toHaveCount(2);
   await expect(toc.locator('[data-kp-tutorial-toc-item="checkpoint"]'))
-    .toHaveCount(6);
+    .toHaveCount(0);
   const tocProjection = await toc.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const prose = document.querySelector<HTMLElement>(
@@ -110,10 +110,10 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(tocProjection.proseLineHeight / tocProjection.proseFontSize)
     .toBeGreaterThanOrEqual(1.77);
   await expect(toc.locator(
-    '[data-kp-tutorial-destination-id="movement-verified"]'
+    '[data-kp-tutorial-destination-id="supply-movement"]'
   )).toHaveAttribute(
     "href",
-    "/tutorials/economics/demand-shift/#kp-checkpoint-movement-verified"
+    "/tutorials/economics/demand-shift/#kp-block-supply-movement"
   );
   await expect(root.locator("#kp-checkpoint-movement-verified"))
     .toHaveAttribute("data-kp-tutorial-destination-block", "supply-movement");
@@ -154,9 +154,18 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .first()
     .evaluate((element) => ({
       wrapper: getComputedStyle(element).textIndent,
-      katex: getComputedStyle(element.querySelector(".katex")!).textIndent
+      katex: getComputedStyle(element.querySelector(".katex")!).textIndent,
+      mathColor: getComputedStyle(element.querySelector(".katex")!).color,
+      diagramMathColor: getComputedStyle(document.querySelector(
+        '[data-kp-economics-math-label="equilibrium-current"] .katex'
+      )!).color
     })))
-    .toEqual({ wrapper: "0px", katex: "0px" });
+    .toEqual({
+      wrapper: "0px",
+      katex: "0px",
+      mathColor: "rgb(61, 69, 75)",
+      diagramMathColor: "rgb(61, 69, 75)"
+    });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
     "true"
@@ -198,26 +207,12 @@ test("approved economics prose and semantic controls form one persistent tutoria
   await expect(motionCue.getByRole("link", {
     name: "Next semantic checkpoint"
   })).toBeVisible();
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-profile",
-    "market"
-  );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-target",
-    "market"
-  );
   await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
-    .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
     .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-page-veil]"))
-    .toHaveAttribute("data-kp-attention-page-veil-visible", "true");
-  await expect.poll(() => root.locator("[data-kp-attention-page-veil-passage]")
-    .evaluate((element) => (element as SVGRectElement).width.baseVal.value))
-    .toBeGreaterThan(300);
-  await expect.poll(() => root.locator("[data-kp-attention-page-veil-stage]")
-    .evaluate((element) => (element as SVGRectElement).width.baseVal.value))
-    .toBeGreaterThan(400);
+    .toHaveCount(0);
   await expect.poll(() => stageCard.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
@@ -261,14 +256,6 @@ test("approved economics prose and semantic controls form one persistent tutoria
     top: window.scrollY + element.getBoundingClientRect().top -
       window.innerHeight * 0.38
   }));
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-profile",
-    "demand"
-  );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-target",
-    "demand"
-  );
   const readingPointer = root.locator(
     "[data-kp-economics-tutorial-reading-band]"
   );
@@ -292,14 +279,21 @@ test("approved economics prose and semantic controls form one persistent tutoria
       : pointerBounds.top + pointerBounds.height / 2;
     return {
       activeCount: activePassages.length,
+      passageOpacities: [...element.querySelectorAll<HTMLElement>(
+        ".kp-economics-tutorial__passage"
+      )].map((passage) => getComputedStyle(passage).opacity),
       cursorIsInsideActivePassage: passageBounds !== undefined &&
         cursorY >= passageBounds.top && cursorY <= passageBounds.bottom
     };
   });
   expect(attentionContainment).toEqual({
     activeCount: 1,
+    passageOpacities: expect.arrayContaining(["1"]),
     cursorIsInsideActivePassage: true
   });
+  expect(new Set(attentionContainment.passageOpacities)).toEqual(
+    new Set(["1"])
+  );
   const pointerProjection = await readingPointer.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const style = getComputedStyle(element);
@@ -365,7 +359,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
-    .toContain("opacity(1)");
+    .toBe("none");
   await page.screenshot({
     path: `${evidenceDirectory}/wide-demand-focus.png`,
     fullPage: false
@@ -464,17 +458,13 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-passage",
     "new-equilibrium"
   );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-target",
-    "equilibrium"
-  );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-progress",
     "1"
   );
   await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
-  await expect(root.locator(".kp-economics-tutorial__stage-header strong"))
-    .toHaveText("New equilibrium");
+  await expect(root.locator(".kp-economics-tutorial__stage-header"))
+    .toHaveCount(0);
   const settledDividerBox = await motionCue.boundingBox();
   expect(settledDividerBox).not.toBeNull();
   expect(settledDividerBox!.width).toBeCloseTo(dividerBox!.width, 1);
@@ -579,10 +569,6 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-checkpoint",
     "ready-to-shift"
   );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-target",
-    "equilibrium"
-  );
   await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
   await page.screenshot({
     path: `${evidenceDirectory}/wide-motion-divider.png`,
@@ -620,22 +606,14 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-checkpoint",
     "synthesis"
   );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-profile",
-    "synthesis"
-  );
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-focus-target",
-    "supply"
-  );
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
     .toHaveCount(0);
   await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
     .evaluate((element) => getComputedStyle(element).filter))
-    .toContain("opacity(1)");
+    .toBe("none");
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => getComputedStyle(element).filter))
-    .toContain("opacity(0.38)");
+    .toBe("none");
   await expect(player).not.toHaveAttribute(
     "data-kp-editor-animation-status",
     "playing"
@@ -1049,7 +1027,7 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
     registered: true,
     shadow: null,
     navCount: 1,
-    linkCount: 12
+    linkCount: 6
   });
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="equilibrium"]'
@@ -1095,7 +1073,7 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
       window.innerHeight * 0.38
   }));
   await expect(toc.locator(
-    '[data-kp-tutorial-destination-id="movement-traced"]'
+    '[data-kp-tutorial-destination-id="supply-movement"]'
   )).toHaveAttribute("aria-current", "location");
   await expect(toc.locator("[aria-current]")).toHaveCount(1);
 });
@@ -1165,7 +1143,7 @@ test("direct semantic links restore complete cumulative state without replay", a
     "idle"
   );
   await expect(toc.locator(
-    '[data-kp-tutorial-destination-id="shift-handoff"]'
+    '[data-kp-tutorial-destination-id="demand-shift"]'
   )).toHaveAttribute("aria-current", "location");
   await page.waitForTimeout(240);
   await expect(player).toHaveAttribute(
@@ -1206,7 +1184,7 @@ test("direct semantic links restore complete cumulative state without replay", a
     "1"
   );
   await expect(toc.locator(
-    '[data-kp-tutorial-destination-id="movement-verified"]'
+    '[data-kp-tutorial-destination-id="supply-movement"]'
   )).toHaveAttribute("aria-current", "location");
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
@@ -1272,14 +1250,14 @@ test("TOC transactions and history restore exact states without intermediate rep
   });
 
   await toc.locator(
-    '[data-kp-tutorial-destination-id="movement-verified"]'
+    '[data-kp-tutorial-destination-id="supply-movement"]'
   ).click();
   await expect(page).toHaveURL(
-    `${route}?keep=1#kp-checkpoint-movement-verified`
+    `${route}?keep=1#kp-block-supply-movement`
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-initial-destination",
-    "checkpoint:movement-verified"
+    "block:supply-movement"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-demand-progress",
@@ -1287,7 +1265,7 @@ test("TOC transactions and history restore exact states without intermediate rep
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
-    "1.000"
+    "0.000"
   );
   expect(await page.evaluate(() =>
     (window as unknown as { kpNavigationSamples: string[] })
@@ -1295,12 +1273,12 @@ test("TOC transactions and history restore exact states without intermediate rep
   )).not.toContain("1.000|0.580");
 
   await toc.locator(
-    '[data-kp-tutorial-destination-id="shift-handoff"]'
+    '[data-kp-tutorial-destination-id="demand-shift"]'
   ).click();
-  await expect(page).toHaveURL(`${route}?keep=1#kp-checkpoint-shift-handoff`);
+  await expect(page).toHaveURL(`${route}?keep=1#kp-block-demand-shift`);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-demand-progress",
-    "0.720"
+    "0.000"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
@@ -1316,22 +1294,22 @@ test("TOC transactions and history restore exact states without intermediate rep
 
   await page.goBack();
   await expect(page).toHaveURL(
-    `${route}?keep=1#kp-checkpoint-movement-verified`
+    `${route}?keep=1#kp-block-supply-movement`
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
-    "1.000"
+    "0.000"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-stage-composition-phase",
-    "split"
+    "merged"
   );
 
   await page.goForward();
-  await expect(page).toHaveURL(`${route}?keep=1#kp-checkpoint-shift-handoff`);
+  await expect(page).toHaveURL(`${route}?keep=1#kp-block-demand-shift`);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-demand-progress",
-    "0.720"
+    "0.000"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
@@ -1575,9 +1553,9 @@ test("phone tutorial keeps a stable compact stage dock with optional expansion",
   await expect(root.locator("[data-kp-economics-tutorial-attention-bridge]"))
     .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-spotlight]"))
-    .toHaveAttribute("data-kp-attention-spotlight-visible", "true");
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-page-veil]"))
-    .toHaveAttribute("data-kp-attention-page-veil-visible", "false");
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-tutorial-reading-band]"))
     .toBeHidden();
   await expect.poll(() => root.locator(".kp-economics-tutorial__prose")

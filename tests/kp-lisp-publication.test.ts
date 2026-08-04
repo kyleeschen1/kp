@@ -32,11 +32,16 @@ test("publication emits useful static TOC and scrubber geometry", async () => {
   );
   assert.match(publication.tocHtml, /data-kp-tutorial-toc-enhancement="pending"/);
   assert.match(publication.tocHtml, /\/tutorials\/programming\/lisp-function-application\//);
-  assert.match(publication.tocHtml, /data-kp-tutorial-destination-kind="checkpoint"/);
+  assert.match(publication.tocHtml, /data-kp-tutorial-destination-kind="block"/);
+  assert.doesNotMatch(
+    publication.tocHtml,
+    /data-kp-tutorial-destination-kind="checkpoint"/
+  );
   for (const html of Object.values(publication.motionScrubBarHtml)) {
     assert.match(html, /data-kp-tutorial-scrub-static-boundary/);
     assert.match(html, /controls-disabled="true"/);
     assert.match(html, /<a[^>]+data-action="next"/);
+    assert.match(html, /#kp-checkpoint-/);
     assert.doesNotMatch(html, /what to watch/i);
   }
 });

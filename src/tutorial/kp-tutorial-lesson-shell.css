@@ -1,11 +1,30 @@
+:root {
+  --kp-lesson-theme-page: #f4f1e9;
+  --kp-lesson-theme-surface: #fffdf8;
+  --kp-lesson-theme-ink: #263845;
+  --kp-lesson-theme-muted: #667983;
+  --kp-lesson-theme-math-foreground: #3d454b;
+  --kp-lesson-theme-border: #d8d5cc;
+  --kp-lesson-theme-focus: #7a9da8;
+  --kp-lesson-theme-focus-surface: rgb(255 253 248 / 0.72);
+  --kp-lesson-theme-link: #456b78;
+}
+
 .kp-tutorial-shell {
-  --kp-lesson-ink: #263845;
-  --kp-lesson-muted: #667983;
-  --kp-lesson-border: #d8d5cc;
-  --kp-lesson-paper: #fffdf8;
-  --kp-lesson-reading-rail: #7a9da8;
+  --kp-lesson-ink: var(--kp-lesson-theme-ink);
+  --kp-lesson-muted: var(--kp-lesson-theme-muted);
+  --kp-lesson-math-foreground: var(--kp-lesson-theme-math-foreground);
+  --kp-lesson-border: var(--kp-lesson-theme-border);
+  --kp-lesson-paper: var(--kp-lesson-theme-surface);
+  --kp-lesson-reading-rail: var(--kp-lesson-theme-focus);
   min-height: 100vh;
   color: var(--kp-lesson-ink);
+}
+
+/* Notation is a theme role, not a renderer detail. This reaches static KaTeX
+   in prose and the same KaTeX markup embedded inside diagram labels. */
+.kp-tutorial-shell :where(.katex) {
+  color: var(--kp-lesson-math-foreground);
 }
 
 .kp-tutorial-shell__layout {
@@ -125,8 +144,18 @@
 
 @media (forced-colors: active) {
   .kp-tutorial-shell {
+    --kp-lesson-theme-page: Canvas;
+    --kp-lesson-theme-surface: Canvas;
+    --kp-lesson-theme-ink: CanvasText;
+    --kp-lesson-theme-muted: CanvasText;
+    --kp-lesson-theme-math-foreground: CanvasText;
+    --kp-lesson-theme-border: CanvasText;
+    --kp-lesson-theme-focus: Highlight;
+    --kp-lesson-theme-focus-surface: Canvas;
+    --kp-lesson-theme-link: LinkText;
     --kp-lesson-ink: CanvasText;
     --kp-lesson-muted: CanvasText;
+    --kp-lesson-math-foreground: CanvasText;
     --kp-lesson-border: CanvasText;
     --kp-lesson-paper: Canvas;
     color: CanvasText;

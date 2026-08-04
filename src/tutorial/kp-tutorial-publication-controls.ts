@@ -68,13 +68,9 @@ export function compileKpTutorialPublicationControls<BlockId extends string>(inp
         id: story.id,
         label: input.motionBlockLabels[story.id as BlockId]!,
         href: href(input.path, "block", story.id),
-        children: story.beats.map((beat) => item({
-          kind: "checkpoint",
-          id: beat.checkpoint.id,
-          label: beat.title,
-          href: href(input.path, "checkpoint", beat.checkpoint.id),
-          children: []
-        }))
+        // Checkpoints belong to the animation's own scrubber. Repeating them
+        // in the page TOC conflates document structure with playhead state.
+        children: []
       }))
     })))
   });

@@ -70,6 +70,10 @@ export function createKpLispLessonNavigationController(input: {
     restore: (resolved) => {
       input.motion.restore(resolved.blockId, resolved.localProgress);
     },
+    projectTocDestination: (resolved, destination) =>
+      destination.kind === "checkpoint"
+        ? { kind: "block", id: resolved.blockId }
+        : destination,
     scroll: (resolved, destination) => {
       const element = input.root.ownerDocument.getElementById(
         resolved.elementId

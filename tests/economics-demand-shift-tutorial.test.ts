@@ -555,7 +555,7 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
   );
 });
 
-test("active TOC destinations remain domain-specific semantic projections", () => {
+test("active TOC destinations stop at lesson sections and animation blocks", () => {
   const markdown = readFileSync(new URL(
     "../content/lessons/economics-demand-shift.md",
     import.meta.url
@@ -563,22 +563,16 @@ test("active TOC destinations remain domain-specific semantic projections", () =
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
   assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
     lesson,
-    passageId: "context",
-    demandShiftProgress: 0,
-    supplyMovementProgress: 0
+    passageId: "context"
   }), { kind: "section", id: "equilibrium" });
   assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
     lesson,
-    passageId: "follow-shift",
-    demandShiftProgress: 0.72,
-    supplyMovementProgress: 0
-  }), { kind: "checkpoint", id: "shift-handoff" });
+    passageId: "follow-shift"
+  }), { kind: "block", id: "demand-shift" });
   assert.deepEqual(resolveKpEconomicsDemandShiftTocDestination({
     lesson,
-    passageId: "shift-versus-movement",
-    demandShiftProgress: 1,
-    supplyMovementProgress: 0.58
-  }), { kind: "checkpoint", id: "movement-traced" });
+    passageId: "shift-versus-movement"
+  }), { kind: "block", id: "supply-movement" });
 });
 
 test("static tutorial scrubber has final light DOM and native checkpoint links", () => {

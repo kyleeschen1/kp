@@ -15,9 +15,6 @@ import {
   createKpAnimationCatalogueProjection
 } from "../../editor/animation-catalogue-projection.ts";
 import {
-  createKpAnimationCatalogueReviewHost
-} from "../../editor/animation-catalogue-review-host.ts";
-import {
   createKpAnimationCatalogueSelectionPreparationService
 } from "../../editor/animation-catalogue-selection-preparation.ts";
 import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
@@ -31,6 +28,7 @@ import {
 } from "./economics-demand-shift-deep-link.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
+import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
@@ -76,7 +74,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }
   });
-  const reviewHost = createKpAnimationCatalogueReviewHost();
+  const reviewHost = createKpTutorialReviewHost();
   input.root.dataset["kpEconomicsDemandShiftTutorialMounted"] = "true";
   void reviewHost.mount();
 

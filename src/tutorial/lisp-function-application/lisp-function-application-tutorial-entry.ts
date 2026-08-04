@@ -9,7 +9,6 @@ import { mount, unmount } from "svelte";
 import { createKpLispBotanicalPresentationPlan } from "../../animation/lisp-botanical-presentation-plan.ts";
 import { createKpLispLambdaApplicationAnimationAsset } from "../../animation/lisp-lambda-application-adapter.ts";
 import { sampleKpLispLambdaApplicationRuntimeFrame } from "../../animation/lisp-lambda-application-runtime-frame.ts";
-import { createKpAnimationCatalogueReviewHost } from "../../editor/animation-catalogue-review-host.ts";
 import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
 import {
   kpLispBotanicalStageCss,
@@ -18,6 +17,7 @@ import {
 import { createKpLispLambdaApplicationAsset } from "../../semantic/lisp-lambda-application-asset.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
+import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
 import KpLispFunctionApplicationTutorial from "./KpLispFunctionApplicationTutorial.svelte";
 import {
   createKpLispLessonMotionController
@@ -82,7 +82,7 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
     motion,
     navigation
   });
-  const reviewHost = createKpAnimationCatalogueReviewHost();
+  const reviewHost = createKpTutorialReviewHost();
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";
   void reviewHost.mount();
 

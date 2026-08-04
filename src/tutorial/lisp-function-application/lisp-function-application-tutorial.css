@@ -1,8 +1,19 @@
 @import "../kp-tutorial-lesson-shell.css";
 
 :root {
-  color: #203b35;
-  background: #f4f0e6;
+  --kp-lesson-theme-page: #f4f0e6;
+  --kp-lesson-theme-surface: #fffdf8;
+  --kp-lesson-theme-ink: #203b35;
+  --kp-lesson-theme-muted: #667b74;
+  --kp-lesson-theme-math-foreground: #3d454b;
+  --kp-lesson-theme-border: #d8d1c2;
+  --kp-lesson-theme-focus: #7a9da8;
+  --kp-lesson-theme-focus-surface: rgb(255 253 248 / .72);
+  --kp-lesson-theme-link: #436d62;
+  --kp-lesson-theme-eyebrow: #7a6848;
+  --kp-lesson-theme-code-surface: rgb(32 59 53 / .07);
+  color: var(--kp-lesson-theme-ink);
+  background: var(--kp-lesson-theme-page);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizelegibility;
@@ -10,15 +21,15 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { min-width: 320px; margin: 0; background: #f4f0e6; }
+body { min-width: 320px; margin: 0; background: var(--kp-lesson-theme-page); }
 button, input { font: inherit; }
 
 .kp-lisp-tutorial {
-  --kp-lesson-ink: #203b35;
-  --kp-lesson-muted: #667b74;
-  --kp-lesson-border: #d8d1c2;
-  --kp-lesson-paper: #f4f0e6;
-  --kp-lesson-reading-rail: #7a9da8;
+  --kp-lesson-ink: var(--kp-lesson-theme-ink);
+  --kp-lesson-muted: var(--kp-lesson-theme-muted);
+  --kp-lesson-border: var(--kp-lesson-theme-border);
+  --kp-lesson-paper: var(--kp-lesson-theme-surface);
+  --kp-lesson-reading-rail: var(--kp-lesson-theme-focus);
   --kp-lisp-ink: var(--kp-lesson-ink);
   --kp-lisp-muted: var(--kp-lesson-muted);
   --kp-lisp-line: var(--kp-lesson-border);
@@ -72,7 +83,7 @@ button, input { font: inherit; }
 .kp-lisp-tutorial__intro { margin-bottom: 5rem; }
 .kp-lisp-tutorial__eyebrow {
   margin: 0 0 1rem;
-  color: #7a6848;
+  color: var(--kp-lesson-theme-eyebrow);
   font-size: .74rem;
   font-weight: 750;
   letter-spacing: .13em;
@@ -109,22 +120,18 @@ button, input { font: inherit; }
 }
 .kp-lisp-tutorial__attention-region {
   border-left: 3px solid transparent;
-  border-radius: .8rem;
   padding: .45rem .9rem .5rem 1rem;
   background: transparent;
-  transition: border-color 180ms ease, background-color 180ms ease,
-    transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  transition: border-color 180ms ease, background-color 180ms ease;
 }
 .kp-lisp-tutorial__attention-region[data-kp-lisp-reading-active="true"] {
   border-left-color: var(--kp-lesson-reading-rail);
-  background: rgb(255 253 248 / .72);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgb(32 59 53 / .09);
+  background: var(--kp-lesson-theme-focus-surface);
 }
 .kp-lisp-tutorial__inline-code {
   padding: .08em .28em;
   border-radius: .3em;
-  background: rgb(32 59 53 / .07);
+  background: var(--kp-lesson-theme-code-surface);
   font-size: .92em;
 }
 
@@ -146,7 +153,7 @@ button, input { font: inherit; }
   padding-top: 1.5rem;
   border-top: 1px solid var(--kp-lisp-line);
 }
-.kp-lisp-tutorial a { color: #436d62; }
+.kp-lisp-tutorial a { color: var(--kp-lesson-theme-link); }
 
 .kp-lisp-tutorial__toc kp-tutorial-toc { display: block; }
 .kp-lisp-tutorial__toc .kp-tutorial-toc__label {
@@ -205,7 +212,7 @@ button, input { font: inherit; }
     max-height: none;
     overflow: hidden;
     transform: none;
-    background: #f4f0e6;
+    background: var(--kp-lesson-theme-page);
     border-bottom: 1px solid var(--kp-lisp-line);
   }
   .kp-lisp-tutorial__stage [data-kp-lisp-stage-host],
@@ -222,9 +229,6 @@ button, input { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .kp-lisp-tutorial__attention-region { transition: none; }
-  .kp-lisp-tutorial__attention-region[data-kp-lisp-reading-active="true"] {
-    transform: none;
-  }
 }
 
 @media (forced-colors: active) {

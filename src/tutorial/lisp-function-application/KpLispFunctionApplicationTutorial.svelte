@@ -91,7 +91,12 @@
   attributes={{
     "data-kp-lisp-function-application-tutorial": true,
     "data-kp-animation-catalogue": true,
-    "data-kp-animation-catalogue-selection": animationId
+    "data-kp-animation-catalogue-selection": animationId,
+    "data-kp-tutorial-review-root": true,
+    "data-kp-tutorial-review-document-id": "lesson.programming.lisp-function-application",
+    "data-kp-tutorial-review-document-version": "1.0.0",
+    "data-kp-tutorial-review-asset-id": animationId,
+    "data-kp-tutorial-review-renderer": "lisp-botanical-stage"
   }}
 >
   {#snippet before()}

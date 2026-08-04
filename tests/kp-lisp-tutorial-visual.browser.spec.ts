@@ -54,7 +54,7 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
   const toc = root.locator("kp-tutorial-toc");
   await expect(toc).toHaveAttribute(
     "data-kp-tutorial-toc-active-id",
-    "application-ready"
+    "bind-and-reconstruct"
   );
 
   const pointer = root.locator("[data-kp-lisp-tutorial-reading-band]");
@@ -78,6 +78,12 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
       right: bounds.right,
       passageLeft: activeBounds.left,
       rail: getComputedStyle(activeRegion).borderLeftColor,
+      radius: getComputedStyle(activeRegion).borderTopLeftRadius,
+      shadow: getComputedStyle(activeRegion).boxShadow,
+      transform: getComputedStyle(activeRegion).transform,
+      proseOpacities: [...document.querySelectorAll<HTMLElement>(
+        ".kp-lisp-tutorial__passage"
+      )].map((passage) => getComputedStyle(passage).opacity),
       cursorIsInsideActiveRegion: cursorY >= activeBounds.top &&
         cursorY <= activeBounds.bottom
     };
@@ -87,6 +93,10 @@ test("the shared shell preserves the approved reader attention cues", async ({ p
     pointerEvents: "none"
   });
   expect(cueProjection.background).toBe(cueProjection.rail);
+  expect(cueProjection.radius).toBe("0px");
+  expect(cueProjection.shadow).toBe("none");
+  expect(cueProjection.transform).toBe("none");
+  expect(new Set(cueProjection.proseOpacities)).toEqual(new Set(["1"]));
   expect(cueProjection.clipPath).toContain("polygon");
   expect(cueProjection.zIndex).toBeGreaterThan(12);
   expect(cueProjection.width).toBeGreaterThanOrEqual(16);

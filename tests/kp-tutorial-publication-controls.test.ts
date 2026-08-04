@@ -44,12 +44,17 @@ test("both lesson callers obey one shared publication contract", async () => {
     assert.match(publication.tocHtml, /^<kp-tutorial-toc/);
     assert.equal(
       (publication.tocHtml.match(/data-kp-tutorial-destination-kind="checkpoint"/g) ?? []).length,
-      6
+      0
+    );
+    assert.equal(
+      (publication.tocHtml.match(/data-kp-tutorial-destination-kind="block"/g) ?? []).length,
+      ids.length
     );
     assert.deepEqual(Object.keys(publication.motionScrubBarHtml), ids);
     for (const html of Object.values(publication.motionScrubBarHtml)) {
       assert.match(html, /data-kp-tutorial-scrub-enhancement="pending"/);
       assert.match(html, /data-kp-tutorial-scrub-static-boundary/);
+      assert.match(html, /#kp-checkpoint-/);
       assert.match(html, /<a[^>]+data-action="rewind"/);
       assert.match(html, /<input[^>]+disabled/);
     }

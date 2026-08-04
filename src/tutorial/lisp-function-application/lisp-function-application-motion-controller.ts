@@ -114,19 +114,31 @@ export function createKpLispLessonMotionController(input: {
     stage.innerHTML = renderKpLispBotanicalStageHtml({
       frame,
       plan: input.plan,
-      salience,
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
+    const reviewLocalProgress = localProgress(activeBlockId, global);
+    const reviewCheckpoint = [...kpLispLessonMotionBlocks.find(
+      ({ id }) => id === activeBlockId
+    )!.checkpoints].reverse().find(
+      ({ progress }) => reviewLocalProgress + 0.001 >= progress
+    )!;
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
     input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
+    input.root.dataset["kpTutorialReviewMotionBlock"] = activeBlockId;
+    input.root.dataset["kpTutorialReviewProgress"] =
+      reviewLocalProgress.toFixed(4);
+    input.root.dataset["kpTutorialReviewCheckpoint"] = reviewCheckpoint.id;
+    input.root.dataset["kpTutorialReviewMotionAuthority"] = motionOwner;
+    input.root.dataset["kpTutorialReviewPlaybackDirection"] =
+      session.player.direction;
     if (motionOwner === "manual") {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "manual";
     } else if (motionOwner === "navigation") {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "navigation";
     }
-    // Stage salience remains semantic animation data; the scroll attention
-    // projection is the sole owner of visible prose-card focus.
+    // Salience remains semantic evidence while visible stage emphasis is
+    // intentionally paused until the lesson establishes a better grammar.
     input.root.dataset["kpLispTutorialStagePassage"] = salience.activePassageId;
     const cumulative = projectKpTutorialCumulativeMotion({
       blocks: kpLispLessonMotionBlocks,
