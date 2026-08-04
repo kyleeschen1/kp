@@ -90,7 +90,8 @@
     {
       "id": "s07",
       "title": "Project-deterministic-contained-jostle",
-      "status": "planned"
+      "summary": "Added a framework-neutral seeded atom-jostle projector with owner-local normalized coordinates, certified parenthesis membranes, exact endpoint settlement, active-expression isolation, non-crossing order, containment, direct-seek repeatability, and reverse sampling; twelve focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s08",

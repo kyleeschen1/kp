@@ -138,6 +138,25 @@
       "status": "passed",
       "scope": "s06 test type boundary",
       "checkedAt": "2026-08-04T01:36:26.132Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-contained-jostle.test.ts tests/kp-lisp-s-expression-fold-schedule.test.ts tests/kp-lisp-s-expression-material-projection.test.ts",
+      "status": "passed",
+      "scope": "s07 deterministic contained jostle and preserved fold/material laws",
+      "checkedAt": "2026-08-04T01:41:17.985Z",
+      "notes": "12 focused tests pass across 101 sampled containment frames and reverse seeks"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s07 application type boundary",
+      "checkedAt": "2026-08-04T01:41:19.069Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s07 test type boundary",
+      "checkedAt": "2026-08-04T01:41:19.976Z"
     }
   ],
   "progress": {
