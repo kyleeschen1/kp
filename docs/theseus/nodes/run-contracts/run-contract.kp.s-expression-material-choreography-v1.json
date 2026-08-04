@@ -72,7 +72,8 @@
     {
       "id": "s04",
       "title": "Compile-source-material-projection",
-      "status": "planned"
+      "summary": "Compiled the certified fixture into an immutable source-material projection with fourteen uniquely identified source tokens, exact canonical application/reconstructed/result states, derived origins, and native equivalents for inspection holds; thirteen focused tests and app/test typechecks pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

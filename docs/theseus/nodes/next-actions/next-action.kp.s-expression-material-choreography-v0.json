@@ -83,6 +83,24 @@
       "status": "passed",
       "scope": "s03 test inference",
       "checkedAt": "2026-08-04T01:23:30.933Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-material-projection.test.ts tests/kp-lisp-semantic-model.test.ts tests/kp-lisp-lambda-application-fixture.test.ts",
+      "status": "passed",
+      "scope": "s04 thirteen source material, semantic, and fixture tests",
+      "checkedAt": "2026-08-04T01:27:12.530Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s04 application types",
+      "checkedAt": "2026-08-04T01:27:13.551Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s04 test inference",
+      "checkedAt": "2026-08-04T01:27:14.483Z"
     }
   ],
   "progress": {
