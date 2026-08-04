@@ -20,17 +20,11 @@ export type KpInlineStickyCuePhase =
   | "fade"
   | "occluded";
 
-export type KpInlineStickyCueStacking = "front" | "behind";
-
 export interface KpInlineStickyCueProjection {
   readonly phase: KpInlineStickyCuePhase;
   readonly opacity: number;
   readonly fadeProgress: number;
-  readonly elevationProgress: number;
-  readonly depthPx: number;
-  readonly scale: number;
-  readonly stacking: KpInlineStickyCueStacking;
-  readonly distanceFromHandoffRulePx: number;
+  readonly distanceFromHandoffThresholdPx: number;
 }
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
@@ -82,8 +76,6 @@ export function projectKpInlineStickyCue(input: {
   readonly stageTopPx: number;
   readonly stageBottomPx: number;
   readonly viewportHeightPx: number;
-  readonly maximumElevationPx?: number | undefined;
-  readonly maximumScaleIncrease?: number | undefined;
 }): KpInlineStickyCueProjection {
   const stageTop = finiteNonNegative(input.stageTopPx);
   const stageBottom = finiteNonNegative(input.stageBottomPx);
@@ -93,20 +85,11 @@ export function projectKpInlineStickyCue(input: {
   const fadeDistance = viewportHeight * 0.1;
   const fadeStart = stageBottom - holdDistance;
   const fadeEnd = fadeStart - fadeDistance;
-  const maximumElevation = Math.max(
-    0,
-    finiteNonNegative(input.maximumElevationPx ?? 24)
-  );
-  const maximumScaleIncrease = clamp(
-    input.maximumScaleIncrease ?? 0.012,
-    0,
-    0.1
-  );
   const cueTop = Number.isFinite(input.cueAnchorTopPx)
     ? input.cueAnchorTopPx
     : stageBottom;
   const viewportBottom = Math.max(stageBottom, viewportHeight);
-  const distanceFromHandoffRule = cueTop - stageBottom;
+  const distanceFromHandoffThreshold = cueTop - stageBottom;
   const approachProgress = viewportBottom <= stageBottom
     ? 0
     : 1 - smoothstep(stageBottom, viewportBottom, cueTop);
@@ -114,52 +97,31 @@ export function projectKpInlineStickyCue(input: {
   if (cueTop > stageBottom || stageHeight === 0) {
     return cueProjection(
       approachProgress > 0 ? "approach" : "below",
-      0,
-      approachProgress
+      0
     );
   }
   if (cueTop <= fadeEnd) {
-    return cueProjection("occluded", 1, 0);
+    return cueProjection("occluded", 1);
   }
   if (cueTop >= fadeStart) {
-    return cueProjection("hold", 0, 1);
+    return cueProjection("hold", 0);
   }
   return cueProjection(
     "fade",
-    clamp((fadeStart - cueTop) / fadeDistance, 0, 1),
-    0
+    clamp((fadeStart - cueTop) / fadeDistance, 0, 1)
   );
 
   function cueProjection(
     phase: KpInlineStickyCuePhase,
-    fadeProgress: number,
-    approachElevation: number
+    fadeProgress: number
   ): KpInlineStickyCueProjection {
     const progress = clamp(fadeProgress, 0, 1);
-    const descent = smoothstep(0, 1, progress);
-    const elevation = phase === "fade"
-      ? 1 - descent
-      : phase === "occluded"
-        ? 0
-        : clamp(approachElevation, 0, 1);
-    // The stacking switch is invisible because every animated property has
-    // reached its neutral or zero endpoint at the end of the 10vh fade.
-    const stacking: KpInlineStickyCueStacking = phase === "occluded"
-      ? "behind"
-      : "front";
+    const fade = smoothstep(0, 1, progress);
     return Object.freeze({
       phase,
-      opacity: phase === "fade"
-        ? 1 - descent
-        : phase === "occluded"
-          ? 0
-          : 1,
+      opacity: phase === "fade" ? 1 - fade : phase === "occluded" ? 0 : 1,
       fadeProgress: progress,
-      elevationProgress: elevation,
-      depthPx: maximumElevation * elevation,
-      scale: 1 + maximumScaleIncrease * elevation,
-      stacking,
-      distanceFromHandoffRulePx: distanceFromHandoffRule
+      distanceFromHandoffThresholdPx: distanceFromHandoffThreshold
     });
   }
 }

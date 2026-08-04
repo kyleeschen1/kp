@@ -51,7 +51,7 @@ test("large text falls back to reading flow instead of becoming illegible", () =
   });
 });
 
-test("cue holds for 5vh then fades over 10vh from its top edge", () => {
+test("cue holds for 5vh then fades prose over 10vh from its top edge", () => {
   const project = (cueAnchorTopPx: number) => projectKpInlineStickyCue({
     cueAnchorTopPx,
     stageTopPx: 100,
@@ -63,34 +63,21 @@ test("cue holds for 5vh then fades over 10vh from its top edge", () => {
     phase: "below",
     opacity: 1,
     fadeProgress: 0,
-    elevationProgress: 0,
-    depthPx: 0,
-    scale: 1,
-    stacking: "front",
-    distanceFromHandoffRulePx: 400
+    distanceFromHandoffThresholdPx: 400
   });
   assert.equal(project(600).phase, "approach");
-  assert.equal(project(600).elevationProgress, 0.5);
-  assert.equal(project(600).depthPx, 12);
+  assert.equal(project(600).opacity, 1);
   assert.equal(project(400).phase, "hold");
-  assert.equal(project(400).elevationProgress, 1);
-  assert.equal(project(400).depthPx, 24);
-  assert.equal(project(400).scale, 1.012);
+  assert.equal(project(400).opacity, 1);
   assert.equal(project(360).phase, "hold");
   assert.equal(project(360).opacity, 1);
-  assert.equal(project(360).elevationProgress, 1);
   assert.equal(project(320).phase, "fade");
   assert.equal(project(320).opacity, 0.5);
   assert.equal(project(320).fadeProgress, 0.5);
-  assert.equal(project(320).elevationProgress, 0.5);
-  assert.equal(project(320).depthPx, 12);
-  assert.equal(project(320).scale, 1.006);
-  assert.equal(project(280).stacking, "behind");
+  assert.equal(project(280).phase, "occluded");
   assert.equal(project(280).opacity, 0);
-  assert.equal(project(280).depthPx, 0);
-  assert.equal(project(280).scale, 1);
+  assert.equal(project(280).fadeProgress, 1);
   assert.equal(project(200).phase, "occluded");
   assert.equal(project(200).opacity, 0);
-  assert.equal(project(200).depthPx, 0);
   assert.deepEqual(project(320), project(320));
 });

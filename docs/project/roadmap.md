@@ -94,17 +94,17 @@ performance ceilings are the reference caller.
 A bounded successor now tests a one-axis alternative without replacing that
 reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
-pinned, and released stage lifecycle. The latest bounded revision replaces the
-external padding corridor with a direct depth handoff: cues remain fully opaque
-while a composited focus plane, scale, and positive depth raise them from
-viewport entry to the stage bottom. Cue and stage now share one exact surface
-token. A fixed black rule marks the stage bottom. Once the cue's top edge
-crosses it, the cue holds at full lift for `5vh`, then one eased envelope fades
-it and returns elevation, depth, scale, and shadow to neutral over `10vh`. Only
-then does semantic motion begin. Native scroll snap remains deliberately
-absent. This query-local proof also trials Gill Sans for all non-KaTeX text
-while retaining KaTeX's renderer-owned fonts. The latest accepted refinement
-is recorded in `decisions/2026-08-04-kp-black-rule-hold-and-fade-bands.md`. The
+pinned, and released stage lifecycle. The current bounded revision rejects both
+visible row and visible card metaphors in favor of a continuous canvas: prose
+keeps one 43-rem measure while the transparent sticky graph bleeds wider around
+the same center. Cue and stage have no rule, fill, border, radius, lift, scale,
+depth, or shadow. The cue's top edge crosses an invisible stage-bottom
+threshold, holds fully opaque for `5vh`, fades through one opacity-only eased
+envelope over `10vh`, and only then permits semantic motion. Native scroll snap
+remains deliberately absent. Block controls are a quiet inline divider. This
+query-local proof also trials Gill Sans for all non-KaTeX text while retaining
+KaTeX's renderer-owned fonts. The accepted correction is recorded in
+`decisions/2026-08-04-kp-continuous-canvas-attention-ownership.md`. The
 economics proof is query-selected through `?layout=inline-sticky`; the approved
 split route remains default until human comparison and a structurally different
 second caller justify promotion.
@@ -593,11 +593,12 @@ activating heavy animation capabilities lazily.
 1. Review the code-native S-expression choreography, especially recursive
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
-   `?layout=inline-sticky` proof, including unelevated stage pinning, cue
-   approach elevation, exact cue/stage surface matching, the fixed black rule,
-   top-edge crossing, `5vh` hold, `10vh` eased fade and motion gate, reverse
-   scroll, query-local Gill Sans/KaTeX font separation, constant prose measure,
-   phone fit, and large-text fallback; do not infer default promotion.
+   `?layout=inline-sticky` continuous-canvas proof, including the wider
+   transparent graph bleed, invisible top-edge threshold, absence of row/card
+   chrome, `5vh` hold, `10vh` opacity-only fade and motion gate, quiet inline
+   controls, reverse scroll, query-local Gill Sans/KaTeX font separation,
+   constant prose measure, phone fit, and large-text fallback; do not infer
+   default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

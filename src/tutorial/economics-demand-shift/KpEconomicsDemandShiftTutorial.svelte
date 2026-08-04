@@ -838,8 +838,8 @@
         cue.phase === "hold" || cue.phase === "fade"
       )
       .sort((left, right) =>
-        Math.abs(left.projection.distanceFromHandoffRulePx) -
-          Math.abs(right.projection.distanceFromHandoffRulePx)
+        Math.abs(left.projection.distanceFromHandoffThresholdPx) -
+          Math.abs(right.projection.distanceFromHandoffThresholdPx)
       )[0];
     const block = owner === undefined
       ? undefined
@@ -891,11 +891,7 @@
             phase: "below" as const,
             opacity: 1,
             fadeProgress: 0,
-            elevationProgress: 0,
-            depthPx: 0,
-            scale: 1,
-            stacking: "front" as const,
-            distanceFromHandoffRulePx: cueAnchorTop - stageBounds.bottom
+            distanceFromHandoffThresholdPx: cueAnchorTop - stageBounds.bottom
           })
         : projectKpInlineStickyCue({
             cueAnchorTopPx: cueAnchorTop,
@@ -1466,7 +1462,7 @@
             <aside
               bind:this={inlineStage}
               class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
-              aria-label="Sticky supply and demand depth handoff proof"
+              aria-label="Sticky supply and demand continuous-canvas proof"
               data-kp-inline-sticky-stage
             >
               {@render economicsStage()}
@@ -1496,8 +1492,6 @@
                   : undefined}
               data-kp-inline-sticky-cue-phase={inlineCueProjection?.phase}
               data-kp-inline-sticky-fade-progress={inlineCueProjection?.fadeProgress.toFixed(4)}
-              data-kp-inline-sticky-elevation={inlineCueProjection?.elevationProgress.toFixed(4)}
-              data-kp-inline-sticky-stacking={inlineCueProjection?.stacking}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
               id={renderedMotionBlock === undefined
                 ? undefined
@@ -1512,7 +1506,7 @@
                 : `${renderedMotionBlock.label} animation step`}
               style={inlineCueProjection === undefined
                 ? undefined
-                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)};--kp-inline-sticky-cue-elevation:${inlineCueProjection.elevationProgress.toFixed(4)};--kp-inline-sticky-cue-depth:${inlineCueProjection.depthPx.toFixed(3)}px;--kp-inline-sticky-cue-scale:${inlineCueProjection.scale.toFixed(5)}`}
+                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)}`}
             >
               {#if renderedMotionBlock !== undefined}
                 <span

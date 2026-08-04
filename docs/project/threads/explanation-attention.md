@@ -33,17 +33,16 @@ The accepted bounded discovery in
 `decisions/2026-08-04-kp-depth-handoff-lesson-layout-revision.md` and refined
 by
 `decisions/2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`, with
-the latest visual contract in
-`decisions/2026-08-04-kp-black-rule-hold-and-fade-bands.md`, adds an
+latest correction in
+`decisions/2026-08-04-kp-continuous-canvas-attention-ownership.md`, adds an
 alternate one-axis lesson grammar. A diagram begins in document flow and pins
-without elevation in the upper viewport. A constant-width cue gathers into a
-raised shelf from viewport entry to the stage bottom. Cue and stage use the
-same surface token, and a fixed black rule marks their boundary. After the cue
-top crosses that rule it holds at full lift for `5vh`; one eased envelope then
-fades it and returns elevation, depth, scale, and shadow to neutral over the
-following `10vh`. Only then does essential semantic motion begin. The focus
-shadow is pre-rendered on a transparent pseudo-element; scroll projects only
-transform and opacity. Native scroll snap does not own this geometry. The durable
+in the upper viewport. Prose keeps one measure while the transparent graph
+bleeds wider around the same center. Cue and stage remain on the page plane
+without a visible row, card, rule, fill, border, lift, scale, depth, or shadow.
+After the cue top crosses the invisible stage-bottom threshold it holds fully
+opaque for `5vh`, then one eased opacity envelope fades it over `10vh`. Only
+then does essential semantic motion begin. Native scroll snap does not own this
+geometry, and block-local controls read as a quiet inline divider. The durable
 typography, fit, progressive-enhancement, URL, accessibility, and rollback
 rules live in
 `../principles/inline-sticky-lesson-layout.md`. Economics is the canonical proof

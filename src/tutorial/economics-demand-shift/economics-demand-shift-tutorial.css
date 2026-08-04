@@ -11,11 +11,6 @@
   --kp-lesson-theme-focus-surface: rgb(255 253 248 / 0.72);
   --kp-lesson-theme-link: #456b78;
   --kp-lesson-theme-page-wash: rgb(124 158 170 / 0.12);
-  --kp-lesson-theme-shared-plane: rgb(244 241 233 / 0.9);
-  --kp-lesson-theme-cue-focus-edge: rgb(88 124 135 / 0.24);
-  --kp-lesson-theme-cue-focus-shadow:
-    0 1.15rem 2.4rem rgb(38 56 69 / 0.18),
-    0 0.3rem 0.8rem rgb(38 56 69 / 0.13);
   --kp-lesson-theme-heading: #1f313b;
   --kp-lesson-theme-section-heading: #294653;
   --kp-lesson-theme-eyebrow: #59727d;
@@ -837,9 +832,9 @@ kp-tutorial-toc {
   }
 }
 
-/* Experimental one-axis depth handoff. The approved split presentation stays
-   default while this query-selected exemplar lets prose lead into the graph
-   without changing its source-order measure or raising the stage. */
+/* Experimental continuous canvas. The approved split presentation stays
+   default while this query-selected exemplar lets prose and graph exchange
+   attention without introducing visible cards, rows, or columns. */
 .kp-economics-tutorial--inline-sticky {
   --kp-inline-sticky-top: clamp(1rem, 4svh, 2.5rem);
   --kp-inline-sticky-measure: 43rem;
@@ -913,22 +908,9 @@ kp-tutorial-toc {
   max-height: none;
   margin: 1.5rem 0 0 calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
   isolation: isolate;
-  background: var(--kp-lesson-theme-shared-plane);
+  background: transparent;
   box-shadow: none;
   transform: none;
-}
-
-.kp-economics-tutorial--inline-sticky
-  .kp-economics-tutorial__stage--inline::after {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 6px;
-  background: #000;
-  content: "";
-  pointer-events: none;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -945,6 +927,29 @@ kp-tutorial-toc {
 
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__stage--inline
+  :is(
+    .editor-animation-player,
+    .editor-animation-player__stage,
+    .editor-animation-player__surface,
+    .editor-graph-stage
+  ) {
+  background: transparent;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
+  .editor-graph-stage {
+  --kp-graph-plane: transparent;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
+  .editor-graph-stage__plot-plane {
+  fill: transparent;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
   .kp-economics-tutorial__expand {
   display: none;
 }
@@ -954,71 +959,21 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue] {
   position: relative;
   z-index: 9;
-  isolation: isolate;
   width: 100%;
   margin-inline: 0;
-  border-left-color: transparent;
+  border-left: 0;
+  padding-inline: 0;
   background: transparent;
   box-shadow: none;
   opacity: var(--kp-inline-sticky-cue-opacity, 1);
-  transform: perspective(64rem)
-    translateZ(var(--kp-inline-sticky-cue-depth, 0))
-    scale(var(--kp-inline-sticky-cue-scale, 1));
-  transform-origin: center;
-  transform-style: preserve-3d;
+  transform: none;
   transition: none;
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]::before,
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]::after {
-  position: absolute;
-  inset: 0;
-  border: 1px solid transparent;
-  border-radius: 0;
-  content: "";
-  pointer-events: none;
-}
-
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]::before {
-  z-index: -2;
-  border-color: rgb(88 124 135 / 0.1);
-  /* Text and animation share one plane; elevation comes from the separate
-     composited edge/shadow layer rather than a second surface color. */
-  background: var(--kp-lesson-theme-shared-plane);
-}
-
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]::after {
-  z-index: -1;
-  border-color: var(--kp-lesson-theme-cue-focus-edge);
-  background: transparent;
-  box-shadow: var(--kp-lesson-theme-cue-focus-shadow);
-  opacity: var(--kp-inline-sticky-cue-elevation, 0);
-}
-
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue-phase="approach"],
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue-phase="hold"],
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
   [data-kp-inline-sticky-cue-phase="fade"] {
-  will-change: opacity, transform;
-}
-
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-stacking="behind"] {
-  z-index: 7;
+  will-change: opacity;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1040,13 +995,35 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue]:focus-within {
   z-index: 10;
   opacity: 1;
+}
+
+.kp-economics-tutorial--inline-sticky kp-tutorial-scrub-bar {
+  margin-block: 0.65rem 0.85rem;
+}
+
+.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__boundary {
+  padding-block: 0.35rem;
+}
+
+.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__boundary::before {
+  background: rgb(38 56 69 / 0.16);
+}
+
+.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__action,
+.kp-economics-tutorial--inline-sticky
+  .kp-tutorial-scrub__action[data-action="toggle"] {
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0.45rem;
+  color: var(--kp-lesson-theme-section-heading);
+  background: var(--kp-lesson-theme-page);
+  box-shadow: none;
   transform: none;
 }
 
 .kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]:focus-within::after {
-  opacity: 1;
+  .kp-tutorial-scrub__action[data-action="toggle"]::after {
+  content: none;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1087,13 +1064,6 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue] {
   z-index: auto;
   opacity: 1;
-  transform: none;
-}
-
-.kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
-  #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]::after {
-  opacity: 0;
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
@@ -1151,33 +1121,15 @@ kp-tutorial-toc {
     [data-kp-inline-sticky-cue] {
     z-index: auto;
     opacity: 1;
-    transform: none;
-  }
-
-  .kp-economics-tutorial--inline-sticky
-    #kp-section-market-clearing
-    [data-kp-inline-sticky-cue]::after {
-    opacity: 0;
   }
 }
 
 @media (prefers-contrast: more) {
-  :root {
-    --kp-lesson-theme-shared-plane: var(--kp-lesson-theme-surface);
-  }
-
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
     [data-kp-inline-sticky-cue] {
     z-index: 9;
     opacity: 1;
     pointer-events: auto;
-    transform: none;
-  }
-
-  .kp-economics-tutorial--inline-sticky
-    #kp-section-market-clearing
-    [data-kp-inline-sticky-cue]::after {
-    opacity: 0;
   }
 }
