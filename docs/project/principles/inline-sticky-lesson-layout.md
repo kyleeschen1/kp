@@ -8,11 +8,11 @@ Revised: 2026-08-04
 
 KP lessons may coordinate prose and animation through one reading axis. A
 diagram begins as an ordinary embedded figure and pins in the upper viewport
-while its scene is active. The following cue remains ordinary fully opaque
-prose until its center crosses the stage's lower edge. It then recedes and
-fades through the lower half of the stage. Only after the cue is absent at the
-stage midpoint does essential animation begin, transferring attention without
-introducing a separate card or caption.
+while its scene is active. The following cue gathers into a raised reading
+shelf as it approaches, peaks when its center reaches the stage's lower edge,
+then descends through the stage. It crosses behind at the midpoint and is
+absent by 75% of the stage traversal. Only then does essential animation begin,
+transferring attention without changing the cue's content.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required lesson presentation.
@@ -20,14 +20,17 @@ laboratory layout and not yet a globally required lesson presentation.
 ## Vocabulary And Geometry
 
 - **Stage:** the sticky animation surface in the upper viewport.
-- **Handoff region:** the lower half of the stage, from its bottom edge to its
-  midpoint.
+- **Approach region:** the visible path from the cue's viewport entry to the
+  stage bottom.
+- **Handoff region:** the first 75% of the stage measured upward from its
+  bottom edge.
 - **Cue:** one stable prose block that tells the learner what to inspect.
-- **Cue plane:** a translucent theme-page-colored surface behind the cue. It
-  has no border, radius, or box shadow and keeps text legible while leaving
-  stage ink visible underneath.
-- **Boundary punctuation:** a short text-shadow emphasis envelope that peaks
-  when the cue center reaches the stage bottom and drops after it crosses.
+- **Cue plane:** a square translucent warm surface plus an opacity-controlled
+  focus wash and pre-rendered shadow layer.
+- **Elevation arc:** scale, positive depth, and shadow rise from viewport entry
+  to the stage bottom, then settle back to the stage plane at its midpoint.
+- **Stage plane:** a fairly opaque, unelevated animation surface that makes the
+  cue's midpoint stacking change perceptible.
 - **Runway:** source-order space after a cue that gives its semantic animation
   time to complete and hold before the next cue arrives.
 
@@ -40,30 +43,30 @@ embedded -> pinned -> released -> embedded
 Each cue has the reversible lifecycle:
 
 ```text
-below -> handoff -> occluded
+below -> approach -> handoff(front) -> handoff(behind) -> occluded
 ```
 
-The cue's vertical center is its geometric anchor. While the center is at or
-below the stage bottom, the cue and its plane remain fully opaque. As the
-center moves from the stage bottom to its midpoint, one smooth projection maps
-scroll position to opacity `1 -> 0`, shallow negative depth, and a restrained
-scale reduction. Opacity clears and depth settles quickly enough to remove the
-prose from competition with the graph. At the midpoint the cue is fully absent
-and may move behind the stage's stacking plane. Reverse scrolling reconstructs
-the same states without replaying pixels.
+The cue's vertical center is its stage anchor; its untransformed layout height
+determines viewport entry. Elevation progresses `0 -> 1` from entry to the
+stage bottom. During the first half-stage traversal it returns `1 -> 0` while
+opacity stays one. At the midpoint scale and depth are neutral, so the cue may
+change from the front to the back stacking plane without a visible geometric
+jump. During the next quarter-stage traversal, opacity falls `1 -> 0` and
+negative depth settles. Reverse scrolling reconstructs the same states without
+replaying pixels.
 
 CSS cannot interpolate `z-index`. The depth impression must therefore come
-from continuous opacity, perspective translation, scale, and the cue plane;
-any stacking change occurs only after opacity has reached zero. Do not use
-blur, a sudden visible layer swap, or a large perspective distortion to
-simulate depth.
+from continuous opacity, perspective translation, scale, and the two surface
+planes. The stacking switch occurs only at neutral scale and depth. Do not use
+blur, a large perspective distortion, or an unrelated time animation to
+simulate the crossing.
 
 ## Motion And Attention Contract
 
 - A scene is one cue followed by one explicit runway.
-- The stage-bottom crossing begins only prose punctuation and recession.
-- The block-local semantic motion corridor begins at the stage midpoint, after
-  cue opacity reaches zero. Motion retains authored entry holds and may
+- The stage-bottom crossing begins the cue's descent, not semantic animation.
+- The block-local semantic motion corridor begins at 75% of stage traversal,
+  after cue opacity reaches zero. Motion retains authored entry holds and may
   continue through the following runway.
 - The runway, not an enlarged paragraph or changing caption, supplies the
   remaining scroll distance.
@@ -75,9 +78,9 @@ simulate depth.
   the current settled animation frame.
 
 One geometry sample projects an immutable scene state containing stage phase,
-cue phase, cue opacity, depth and emphasis, active passage, active motion block,
-and local semantic progress. Intersection events may assist lazy loading but do
-not own animation or attention truth.
+cue phase, cue opacity, elevation, depth, scale, stacking, active passage,
+active motion block, and local semantic progress. Intersection events may
+assist lazy loading but do not own animation or attention truth.
 
 ## Text And DOM Contract
 
@@ -88,8 +91,8 @@ not own animation or attention truth.
   wrapping in every cue phase. The depth transform changes only visual paint,
   never layout measure.
 - Cue wording remains visually stable while its animation runs.
-- Prose below the stage stays fully opaque; there is no anticipatory dimming or
-  approach phase.
+- Prose below the stage stays fully opaque. The approach changes only its
+  transform and composited focus layer, not text opacity or content.
 - Released prose leaves through normal page motion. It is not blurred or
   clipped.
 - There are no internal prose scrollbars.
@@ -139,14 +142,15 @@ scaling.
   stage may bleed wider around the same center without changing text width.
 - The pinned stage is not elevated: no card shadow, lift transform, rounded
   container, or joined paragraph surface.
-- Stage, cue plane, diagram labels, and page use the same theme roles.
-- The cue plane remains translucent while the cue leads, then fades with the
-  cue so the graph emerges; it must not look like a separate card.
-- A restrained tokenized paragraph text shadow may peak at the boundary to
-  make the prose read above the graph, but must disappear once the cue crosses.
-- Depth is shallow and supportive. At the end of the handoff the text may be
-  roughly 24 CSS pixels behind a long perspective plane with about one percent
-  explicit scale reduction, not dramatically thrown into space.
+- Stage, cue planes, diagram labels, and page use explicit theme roles. The
+  stage is fairly opaque; the cue's base and focus planes remain translucent.
+- The cue may read temporarily as a raised square shelf. Its focus plane may
+  use a restrained gradient, edge, and layered shadow, but not rounded corners.
+- Keep the larger shadow fixed on a pseudo-element and project only its
+  opacity. Do not animate `box-shadow` itself on scroll.
+- Depth is shallow and supportive: roughly 24 CSS pixels above at peak and 24
+  below at occlusion, with about one percent explicit scale change in either
+  direction.
 - Mathematical labels inside the diagram use the same theme roles and surface
   background as inline mathematical prose.
 

@@ -3,11 +3,11 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
-Timing refinement: the cue-center crossing at the stage bottom no longer
-starts semantic motion. Boundary punctuation, faster prose recession, and the
-midpoint motion gate are recorded in
-`2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`. The direct depth
-geometry, unelevated stage, cue plane, and following runways remain in force.
+Latest refinement: the elevation arc and 75%-traversal motion gate recorded in
+`2026-08-04-kp-cue-elevation-arc-and-stage-crossing.md` supersede this proof's
+presentation trajectory and original timing. The direct geometry, unelevated
+stage, cue/runway structure, reverse projection, and query rollback remain in
+force.
 
 ## Decision
 

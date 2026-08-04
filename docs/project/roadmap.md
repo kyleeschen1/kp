@@ -96,12 +96,13 @@ reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
 pinned, and released stage lifecycle. The latest bounded revision replaces the
 external padding corridor with a direct depth handoff: cues remain fully opaque
-below the stage, receive a brief text-shadow punctuation at its bottom edge,
-then fade and recede to zero at its midpoint. Only then does semantic motion
-begin. The translucent cue plane leaves graph context visible underneath, and
-native scroll snap remains deliberately absent. The accepted refinement is
+while a composited focus plane, scale, and positive depth raise them from
+viewport entry to the stage bottom. They descend at full opacity, cross behind
+the fairly opaque stage at its midpoint, and reach zero opacity at 75% of stage
+traversal. Only then does semantic motion begin. Native scroll snap remains
+deliberately absent. The latest accepted refinement is
 recorded in
-`decisions/2026-08-04-kp-depth-handoff-punctuation-and-motion-gate.md`. The
+`decisions/2026-08-04-kp-cue-elevation-arc-and-stage-crossing.md`. The
 economics proof is query-selected through `?layout=inline-sticky`; the approved
 split route remains default until human comparison and a structurally different
 second caller justify promotion.
@@ -591,8 +592,8 @@ activating heavy animation capabilities lazily.
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
    `?layout=inline-sticky` proof, including unelevated stage pinning, cue
-   punctuation and depth handoff from stage bottom to midpoint, the post-cue
-   motion gate, reverse scroll, constant prose measure, readable phone fit, and
+   approach elevation, midpoint plane crossing, 75%-traversal fade and motion
+   gate, reverse scroll, constant prose measure, readable phone fit, and
    large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.

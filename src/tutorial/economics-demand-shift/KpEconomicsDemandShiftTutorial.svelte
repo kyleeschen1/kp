@@ -875,6 +875,9 @@
       "[data-kp-inline-sticky-cue]"
     )].map((element): KpEconomicsInlineCueFrame => {
       const cueBounds = element.getBoundingClientRect();
+      // Layout height stays authoritative while the projected box scales;
+      // measured transform bounds would feed elevation back into its geometry.
+      const cueLayoutHeight = element.offsetHeight;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
       const motionBlockId = economicsMotionBlockId(
         element.dataset["kpTutorialMotionBlock"]
@@ -884,17 +887,22 @@
             phase: "below" as const,
             opacity: 1,
             handoffProgress: 0,
-            emphasis: 0,
+            elevationProgress: 0,
             depthPx: 0,
             scale: 1,
+            stacking: "front" as const,
             stageMidpointPx: stageBounds.top + stageBounds.height / 2,
+            stageOcclusionPointPx: stageBounds.bottom -
+              stageBounds.height * 0.75,
             distanceFromStageBottomPx: cueBounds.top + cueBounds.height / 2 -
               stageBounds.bottom
           })
         : projectKpInlineStickyCue({
             cueAnchorCenterPx: cueBounds.top + cueBounds.height / 2,
+            cueHeightPx: cueLayoutHeight,
             stageTopPx: stageBounds.top,
-            stageBottomPx: stageBounds.bottom
+            stageBottomPx: stageBounds.bottom,
+            viewportBottomPx: window.innerHeight
           });
       return { passageId, motionBlockId, projection };
     });
@@ -910,7 +918,7 @@
       "[data-kp-inline-sticky-cue]"
     )];
     const cueHeight = cues.reduce(
-      (maximum, passage) => Math.max(maximum, passage.getBoundingClientRect().height),
+      (maximum, passage) => Math.max(maximum, passage.offsetHeight),
       0
     );
     const layout = projectKpInlineStickyLessonLayout({
@@ -954,8 +962,8 @@
   function inlineStickyMotionStartY(): number {
     const stageBounds = inlineStage?.getBoundingClientRect();
     return stageBounds === undefined
-      ? inlineStickyTopInset() + inlineStickyStageHeightPx / 2
-      : stageBounds.top + stageBounds.height / 2;
+      ? inlineStickyTopInset() + inlineStickyStageHeightPx * 0.25
+      : stageBounds.bottom - stageBounds.height * 0.75;
   }
 
   function motionCorridorFor(
@@ -964,7 +972,7 @@
     if (!inlineSticky || inlineStickyFit === "reading") return corridor;
     const startViewportRatio = clamp(
       inlineStickyMotionStartY() / window.innerHeight,
-      0.22,
+      0.08,
       0.58
     );
     const endViewportRatio = clamp(
@@ -1490,7 +1498,8 @@
                   : undefined}
               data-kp-inline-sticky-cue-phase={inlineCueProjection?.phase}
               data-kp-inline-sticky-handoff-progress={inlineCueProjection?.handoffProgress.toFixed(4)}
-              data-kp-inline-sticky-emphasis={inlineCueProjection?.emphasis.toFixed(4)}
+              data-kp-inline-sticky-elevation={inlineCueProjection?.elevationProgress.toFixed(4)}
+              data-kp-inline-sticky-stacking={inlineCueProjection?.stacking}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}
               id={renderedMotionBlock === undefined
                 ? undefined
@@ -1505,7 +1514,7 @@
                 : `${renderedMotionBlock.label} animation step`}
               style={inlineCueProjection === undefined
                 ? undefined
-                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)};--kp-inline-sticky-cue-emphasis:${inlineCueProjection.emphasis.toFixed(4)};--kp-inline-sticky-cue-depth:${inlineCueProjection.depthPx.toFixed(3)}px;--kp-inline-sticky-cue-scale:${inlineCueProjection.scale.toFixed(5)}`}
+                : `--kp-inline-sticky-cue-opacity:${inlineCueProjection.opacity.toFixed(4)};--kp-inline-sticky-cue-elevation:${inlineCueProjection.elevationProgress.toFixed(4)};--kp-inline-sticky-cue-depth:${inlineCueProjection.depthPx.toFixed(3)}px;--kp-inline-sticky-cue-scale:${inlineCueProjection.scale.toFixed(5)}`}
             >
               {#if renderedMotionBlock !== undefined}
                 <span
