@@ -108,7 +108,8 @@
     {
       "id": "s10",
       "title": "Compile-dwell-and-internal-tuning",
-      "status": "planned"
+      "summary": "Compiled twelve authored semantic holds across the three future motion blocks with real minor/major dwell plateaus and direct checkpoint seeks; added stable parsing and serialization for exactly eight bounded internal-only tuning parameters with no public controls. Fourteen focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s11",

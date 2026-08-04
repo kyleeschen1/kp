@@ -202,6 +202,25 @@
       "status": "passed",
       "scope": "s09 test type boundary",
       "checkedAt": "2026-08-04T01:54:27.324Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-timing.test.ts tests/kp-lisp-s-expression-fold-schedule.test.ts tests/kp-lisp-s-expression-contained-jostle.test.ts",
+      "status": "passed",
+      "scope": "s10 authored dwell, bounded internal tuning, and preserved motion laws",
+      "checkedAt": "2026-08-04T02:01:25.941Z",
+      "notes": "14 duration, plateau, bounds, serialization, fold, and jostle tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s10 application type boundary",
+      "checkedAt": "2026-08-04T02:01:27.202Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s10 test type boundary",
+      "checkedAt": "2026-08-04T02:01:28.578Z"
     }
   ],
   "progress": {
