@@ -221,6 +221,25 @@
       "status": "passed",
       "scope": "s10 test type boundary",
       "checkedAt": "2026-08-04T02:01:28.578Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-lambda-binding-geometry.test.ts tests/kp-lisp-s-expression-responsive-geometry.test.ts tests/kp-lisp-s-expression-timing.test.ts",
+      "status": "passed",
+      "scope": "s11 lambda binding route, responsive clearance, and tuning preservation",
+      "checkedAt": "2026-08-04T02:05:23.024Z",
+      "notes": "15 semantic identity, geometry, dense phone clearance, envelope, and timing tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s11 application type boundary",
+      "checkedAt": "2026-08-04T02:05:24.006Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s11 test type boundary",
+      "checkedAt": "2026-08-04T02:05:24.921Z"
     }
   ],
   "progress": {
