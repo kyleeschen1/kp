@@ -1,0 +1,191 @@
+{
+  "id": "run-contract.kp.s-expression-material-choreography-v1",
+  "kind": "run-contract",
+  "title": "S-expression material choreography",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.s-expression-material-choreography-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-03-s-expression-material-choreography-long-loop-proposal.md",
+      "summary": "Human-approved rationale, exact 27 slices, visual grammar, preservation boundary, verification cadence, deferrals, rollback, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:botanical-lisp-tutorial",
+    "npm run test:browser:botanical-lisp-tutorial",
+    "npm run test:browser:tutorial-review",
+    "npm run visual:tutorial-lesson-comparison",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run check:architecture",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Extend only the certified lambda asset, exemplar-proven semantic roles and operations, recursive choreography, responsive DOM/SVG rendering, and Lisp presentation adapters.",
+    "Re-author the internal Lisp tutorial into three cumulative motion blocks with compatible URLs, shared review capture, progressive enhancement, accessibility, and scoped performance evidence.",
+    "After the required human checkpoint, add only the approved repeated-variable caller and delete botanical presentation code proven obsolete."
+  ],
+  "disallowedWork": [
+    "Do not implement factoring, arbitrary duplication, list streaming, composition, arbitrary Lisp, a parser, debugger, REPL, nested shadowing, dialect-specific evaluation order, or direct learner manipulation.",
+    "Do not create a universal language renderer, scene graph, catalogue-wide motif rollout, public editor, public site, or unrelated cleanup.",
+    "Do not change certified evaluator truth, economics behavior, shared lesson contracts, performance ceilings, or framework-neutral semantic and renderer ownership."
+  ],
+  "goal": "Replace the botanical Lisp presentation with deterministic code-native S-expression material choreography, perfect the canonical lambda exemplar, stop for human visual review, then prove one-to-many propagation before botanical retirement.",
+  "target": "next-action.kp.s-expression-material-choreography-v0",
+  "runMode": "run",
+  "maxSlices": 27,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if semantics are inferred from rendered glyphs or any visible material lacks certified provenance.",
+    "Stop on nondeterministic sampling, token crossing, wrapper-before-content motion, replay-based links, scroll discontinuity, multiple active samplers, or layout shift.",
+    "Stop if implementation requires a new runtime dependency, widened performance ceiling, framework-owned semantic truth, unrelated-file overlap, or deferred scope.",
+    "Always stop after slice s25 for explicit human visual approval before executing s26 or s27."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Activate-contract-and-freeze-boundaries",
+      "summary": "Activated the exact approved 27-slice typed contract, froze the exemplar and rollback boundaries, repaired relocated motif source references, attached target criteria and provenance, and cleared all autonomy hygiene failures.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Define-proven-semantic-roles-and-operations",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Extend-certified-syntax-and-binding-identities",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Compile-source-material-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Resolve-role-dependent-expression-roots",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Compile-recursive-fold-and-unfold-schedule",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Project-deterministic-contained-jostle",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Project-responsive-breathing-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Project-source-derived-expression-beads",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Compile-dwell-and-internal-tuning",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Plan-lambda-binding-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Compile-bound-value-propagation",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Compile-reconstruction-and-provenance-fold",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Compile-distinct-reduction-choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Build-semantic-DOM-token-renderer",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Render-structural-motion-block",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Render-lambda-application-motion-block",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Render-evaluation-motion-block",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Integrate-material-renderer-with-rollback",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Reauthor-three-block-Lisp-lesson",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Migrate-destinations-and-legacy-URL-aliases",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Extend-review-capture-for-expression-state",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Complete-accessible-progressive-projections",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Certify-scoped-visual-and-performance-budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run-canonical-human-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Pressure-test-repeated-variable-propagation",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Retire-botanical-renderer-and-close-loop",
+      "status": "planned"
+    }
+  ]
+}

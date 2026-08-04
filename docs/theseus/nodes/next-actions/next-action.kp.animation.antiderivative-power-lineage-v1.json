@@ -43,8 +43,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Implemented the antiderivative power rule as exponent branching into two successor sites, quotient and exponent group resolution, persistent coefficient/base motion, and caused integration-constant entry."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -72,19 +72,6 @@
     "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
     "npm test",
     "npm run build"
-  ],
-  "expectedLearning": [
-    "Whether Implement antiderivative power rule can be completed inside Semantic Motion Animation Library Long Loop."
-  ],
-  "allowedWork": [
-    "Only implement the 28 approved semantic-animation slices in stored order.",
-    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
-    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
-  ],
-  "disallowedWork": [
-    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
-    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
-    "Do not add unapproved animation families or gestalt style packages."
   ],
   "verificationRecords": [
     {
@@ -120,12 +107,25 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-16T23:32:53.207Z",
-      "scope": "Theseus graph"
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-16T23:32:53.207Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Implemented the antiderivative power rule as exponent branching into two successor sites, quotient and exponent group resolution, persistent coefficient/base motion, and caused integration-constant entry."
-  }
+  },
+  "expectedLearning": [
+    "Whether Implement antiderivative power rule can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ]
 }

@@ -8,8 +8,8 @@
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
-      "summary": "Maps editable semantic transformation trees to motif segments, forward phases, rewind phases, and mirrored annotation placement using descriptor rules."
+      "path": "src/animation/motifs/visual-motif-composition.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -39,8 +39,8 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-10T20:40:03.937Z",
-      "scope": "Theseus graph validation"
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-10T20:40:03.937Z"
     }
   ],
   "progress": {

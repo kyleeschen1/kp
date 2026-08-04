@@ -28,8 +28,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
-      "summary": "Existing semantic transformation tree to visual motif timeline boundary."
+      "path": "src/animation/motifs/visual-motif-composition.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",

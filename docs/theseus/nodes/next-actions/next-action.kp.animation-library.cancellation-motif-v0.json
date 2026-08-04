@@ -13,12 +13,12 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif.ts",
-      "summary": "Reusable equation visual motif descriptors, including the cancelation motif primitives and phases."
+      "path": "src/animation/motifs/visual-motif.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Default mapping from generated semantic transform definitions to reusable equation visual motifs."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Adds the equation cancelation visual motif contract law for descriptor shape and generated cancellation transform default mappings."
     },
     {
@@ -73,6 +73,42 @@
     "npm run theseus -- validate",
     "npm run theseus -- run-contract-hygiene-report"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "focused motif, planner, sampler, and timeline coverage for cancellation",
+      "checkedAt": "2026-07-14T19:52:49.325Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for cancellation motion diagnostics and KaTeX regressions",
+      "checkedAt": "2026-07-14T19:52:49.356Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for cancellation motif slice",
+      "checkedAt": "2026-07-14T19:52:49.388Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for cancellation motif slice",
+      "checkedAt": "2026-07-14T19:52:49.426Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "scope": "Run-contract hygiene for cancellation motif slice",
+      "checkedAt": "2026-07-14T19:52:49.461Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted cancellation motif coverage by adding a reusable cancelation motif contract law that pins vanish primitives, meet/collapse/layout-shift phases, and generated cancellation transform defaults."
+  },
   "expectedLearning": [
     "Whether Promote cancellation motif coverage can be completed inside KP animation library expansion v0 loop."
   ],
@@ -104,41 +140,5 @@
       "id": "browser-diagnostics-prove-cancelation-motion-remains-observable",
       "weight": "medium"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
-      "status": "passed",
-      "scope": "focused motif, planner, sampler, and timeline coverage for cancellation",
-      "checkedAt": "2026-07-14T19:52:49.325Z"
-    },
-    {
-      "command": "npm run test:browser:katex",
-      "status": "passed",
-      "scope": "browser coverage for cancellation motion diagnostics and KaTeX regressions",
-      "checkedAt": "2026-07-14T19:52:49.356Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "standard TypeScript verification for cancellation motif slice",
-      "checkedAt": "2026-07-14T19:52:49.388Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "scope": "Theseus graph validation for cancellation motif slice",
-      "checkedAt": "2026-07-14T19:52:49.426Z"
-    },
-    {
-      "command": "npm run theseus -- run-contract-hygiene-report",
-      "status": "passed",
-      "checkedAt": "2026-07-14T19:52:49.461Z",
-      "scope": "Run-contract hygiene for cancellation motif slice"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Promoted cancellation motif coverage by adding a reusable cancelation motif contract law that pins vanish primitives, meet/collapse/layout-shift phases, and generated cancellation transform defaults."
-  }
+  ]
 }

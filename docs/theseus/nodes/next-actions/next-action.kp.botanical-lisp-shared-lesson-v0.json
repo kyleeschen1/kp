@@ -5,6 +5,12 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "HUMAN_CHECKPOINT: exact Lisp semantic asset, experimental botanical tutorial, two-caller shared lesson seams, API tiers, comparison evidence, release verification, and durable project memory are complete; motif promotion and third-caller rollout await human judgment.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run visual:tutorial-lesson-comparison",

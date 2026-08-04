@@ -4,6 +4,7 @@
   "title": "KP generated math family expansion",
   "status": "resolved",
   "domain": "kp.asset-calculus",
+  "summary": "Completed generated math family expansion loop with generated algebra families, dashboard/search/export/law coverage, roadmap refresh, and closeout verification.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -247,8 +248,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Defines default transform-kind to visual-motif rules for wrap and unwrap transforms."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -963,6 +964,5 @@
       "summary": "Wrote generated math family expansion closeout, recorded final verification, and linked the closeout from the semantic runtime thread.",
       "status": "complete"
     }
-  ],
-  "summary": "Completed generated math family expansion loop with generated algebra families, dashboard/search/export/law coverage, roadmap refresh, and closeout verification."
+  ]
 }

@@ -28,13 +28,13 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif.ts",
-      "summary": "Reusable relation-flip equation motif descriptor and phase."
+      "path": "src/animation/motifs/visual-motif.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Negative inequality multiplication mapping to relation-flip."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -77,19 +77,6 @@
     "npm run theseus -- run-contract-hygiene-report",
     "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
   ],
-  "expectedLearning": [
-    "Whether Render inequality sign flip can be completed inside KP editor visible animation player v0 loop."
-  ],
-  "allowedWork": [
-    "Only implement the approved visible editor animation player slices.",
-    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
-    "Add focused editor renderers, controls, browser checks, and closeout evidence."
-  ],
-  "disallowedWork": [
-    "Do not create a second animation clock or duplicate semantic animation assets.",
-    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
-    "Do not stage unrelated dirty worktree files."
-  ],
   "verificationRecords": [
     {
       "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-inequality-visible-animation.test.ts",
@@ -106,12 +93,25 @@
     {
       "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --grep inequality",
       "status": "passed",
-      "checkedAt": "2026-07-15T18:17:21.528Z",
-      "scope": "inequality relation flip in Chromium"
+      "scope": "inequality relation flip in Chromium",
+      "checkedAt": "2026-07-15T18:17:21.528Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Completed the inequality sign-flip animation with a dedicated relation-flip motif, 3D relation turn, negative-multiplication cue, family route, and exact x < 3 to -2x > -6 transition."
-  }
+  },
+  "expectedLearning": [
+    "Whether Render inequality sign flip can be completed inside KP editor visible animation player v0 loop."
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ]
 }

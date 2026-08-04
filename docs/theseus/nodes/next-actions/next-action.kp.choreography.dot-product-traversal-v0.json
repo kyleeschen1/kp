@@ -38,8 +38,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif.ts",
-      "summary": "Adds the reusable dot-product-accumulate motif and semantic phases."
+      "path": "src/animation/motifs/visual-motif.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -64,29 +64,6 @@
     "Run the focused checks named for this slice in the approved loop proposal.",
     "npm run typecheck",
     "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "allowedWork": [
-    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ],
-  "criteria": [
-    {
-      "id": "semantic-choreography",
-      "weight": "high"
-    },
-    {
-      "id": "perceptual-conformance",
-      "weight": "high"
-    },
-    {
-      "id": "focused-verification",
-      "weight": "high"
-    }
   ],
   "verificationRecords": [
     {
@@ -134,12 +111,35 @@
     {
       "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts -g \"dot-product traversal|every pure equation descriptor\"",
       "status": "passed",
-      "checkedAt": "2026-07-16T18:20:31.695Z",
-      "scope": "final-state dot-product and pure-equation browser proof"
+      "scope": "final-state dot-product and pure-equation browser proof",
+      "checkedAt": "2026-07-16T18:20:31.695Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Added a three-term dot-product proof with honest six-component fan-in semantics, index-ranked pair traversal, bounded overlapping propagation, correlated organic focus, persistent product chips, partial-sum accumulation, optional compression metadata, late scalar handoff, and exact rewind/release."
-  }
+  },
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-choreography",
+      "weight": "high"
+    },
+    {
+      "id": "perceptual-conformance",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
 }

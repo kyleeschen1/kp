@@ -1,0 +1,88 @@
+{
+  "id": "next-action.kp.s-expression-material-choreography-v0",
+  "kind": "next-action",
+  "title": "Perfect S-expression material choreography",
+  "status": "ready",
+  "domain": "kp.programming",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-03-s-expression-material-choreography-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.s-expression-material-choreography-v1.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.s-expression-material-choreography-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:botanical-lisp-tutorial",
+    "npm run test:browser:botanical-lisp-tutorial",
+    "npm run typecheck",
+    "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan checks quick",
+      "status": "passed",
+      "scope": "s01 source references, done contracts, and typed run-contract hygiene",
+      "checkedAt": "2026-08-04T01:15:25.882Z",
+      "notes": "All four required integrity checks pass; only the pre-existing workflow queue advisory remains."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 durable contract activation",
+      "checkedAt": "2026-08-04T01:15:26.872Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s01 patch hygiene",
+      "checkedAt": "2026-08-04T01:15:27.770Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "The project owner approved the exact 27-slice proposal; typed run-contract v1 is active with a mandatory slice-25 visual checkpoint and the botanical renderer retained as rollback."
+  },
+  "expectedLearning": [
+    "Whether code-native S-expression material can make recursive structure, lexical binding, and evaluation legible without a detached metaphor.",
+    "Whether the canonical grammar generalizes to repeated variable propagation without renderer special-casing."
+  ],
+  "allowedWork": [
+    "Only the exact approved 27 slices and files required by their certified Lisp, renderer, tutorial, compatibility, review, accessibility, and verification boundaries."
+  ],
+  "disallowedWork": [
+    "No deferred operations, arbitrary Lisp, universal language renderer, unrelated cleanup, or post-checkpoint promotion without explicit approval."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-code-remains-readable",
+      "weight": "high"
+    },
+    {
+      "id": "recursive-causality-is-traceable",
+      "weight": "high"
+    },
+    {
+      "id": "binding-and-reduction-are-distinct",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-responsive-accessible",
+      "weight": "high"
+    },
+    {
+      "id": "economics-and-shared-shell-preserved",
+      "weight": "high"
+    }
+  ]
+}

@@ -38,8 +38,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif.ts",
-      "summary": "New reusable visual motif module with descriptors, phase lookup, create, and clone helpers."
+      "path": "src/animation/motifs/visual-motif.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -77,6 +77,36 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/katex-transition-controller.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion and KaTeX controller tests; package script also ran the full Node suite.",
+      "checkedAt": "2026-07-10T17:34:30.039Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "KaTeX browser transition suite.",
+      "checkedAt": "2026-07-10T17:34:30.048Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T17:34:30.067Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T17:34:30.093Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Extracted reusable visual motif descriptors and plan helpers from equation motion planning while preserving the existing equation API."
+  },
   "expectedLearning": [
     "Where the boundary belongs between semantic transformations, reusable visual motifs, sampled frames, and controller-only DOM concerns.",
     "Which current equation animation behaviors can be expressed as shared motif parameters without losing visual fidelity."
@@ -104,35 +134,5 @@
       "id": "existing-motion-tests-pass",
       "weight": "high"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/katex-transition-controller.test.ts",
-      "status": "passed",
-      "scope": "Focused equation motion and KaTeX controller tests; package script also ran the full Node suite.",
-      "checkedAt": "2026-07-10T17:34:30.039Z"
-    },
-    {
-      "command": "npm run test:browser:katex",
-      "status": "passed",
-      "scope": "KaTeX browser transition suite.",
-      "checkedAt": "2026-07-10T17:34:30.048Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "App, node, and test TypeScript projects.",
-      "checkedAt": "2026-07-10T17:34:30.067Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-10T17:34:30.093Z",
-      "scope": "Theseus graph validation."
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Extracted reusable visual motif descriptors and plan helpers from equation motion planning while preserving the existing equation API."
-  }
+  ]
 }

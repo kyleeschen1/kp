@@ -23,8 +23,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Default mapping from wrapFunction to the wrap visual motif and unwrapFunction to unwrap."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -73,6 +73,42 @@
     "npm run theseus -- validate",
     "npm run theseus -- run-contract-hygiene-report"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-function-wrap-animation-asset.test.ts tests/equation-motion-plan.test.ts tests/visual-motif-composition.test.ts tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "scope": "focused generated function-wrap transform, planner, motif, and fixture registry coverage",
+      "checkedAt": "2026-07-14T20:13:52.397Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:13:52.429Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for function-wrap slice",
+      "checkedAt": "2026-07-14T20:13:52.458Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for function-wrap slice",
+      "checkedAt": "2026-07-14T20:13:52.498Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "scope": "Run-contract hygiene for function-wrap slice",
+      "checkedAt": "2026-07-14T20:13:52.530Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded function wrapping transform coverage by adding a generated function-wrap definition contract for wrapFunction, including target-only wrapper artifacts and identity/role preservation for the argument."
+  },
   "expectedLearning": [
     "Whether Expand function wrapping transform coverage can be completed inside KP animation library expansion v0 loop."
   ],
@@ -104,41 +140,5 @@
       "id": "browser-coverage-keeps-function-wrap-visible",
       "weight": "medium"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-function-wrap-animation-asset.test.ts tests/equation-motion-plan.test.ts tests/visual-motif-composition.test.ts tests/kp-generated-algebra-fixture-registry.test.ts",
-      "status": "passed",
-      "scope": "focused generated function-wrap transform, planner, motif, and fixture registry coverage",
-      "checkedAt": "2026-07-14T20:13:52.397Z"
-    },
-    {
-      "command": "npm run test:browser:katex",
-      "status": "passed",
-      "scope": "browser coverage for live KaTeX behavior and regressions",
-      "checkedAt": "2026-07-14T20:13:52.429Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "standard TypeScript verification for function-wrap slice",
-      "checkedAt": "2026-07-14T20:13:52.458Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "scope": "Theseus graph validation for function-wrap slice",
-      "checkedAt": "2026-07-14T20:13:52.498Z"
-    },
-    {
-      "command": "npm run theseus -- run-contract-hygiene-report",
-      "status": "passed",
-      "checkedAt": "2026-07-14T20:13:52.530Z",
-      "scope": "Run-contract hygiene for function-wrap slice"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Expanded function wrapping transform coverage by adding a generated function-wrap definition contract for wrapFunction, including target-only wrapper artifacts and identity/role preservation for the argument."
-  }
+  ]
 }

@@ -14,18 +14,18 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/executable-motif-grammar.ts",
-      "summary": "Canonical operation to trusted motif and primitive grammar."
+      "path": "src/animation/motifs/executable-motif-grammar.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Generated algebra defaults now carry registry-resolved canonical motif compositions."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
-      "summary": "Visual timeline segments retain canonical operation and trusted motif provenance."
+      "path": "src/animation/motifs/visual-motif-composition.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -51,6 +51,30 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/visual-motif-composition.test.ts tests/kp-animation-visual-motif.test.ts",
+      "status": "passed",
+      "scope": "executable grammar, defaults, and visual composition",
+      "checkedAt": "2026-07-16T01:29:11.334Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:29:11.374Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event log",
+      "checkedAt": "2026-07-16T01:29:11.415Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Centralized all canonical semantic operations in one versioned executable motif grammar and threaded canonical operation and trusted motif compositions through generated definition defaults and visual motif timelines while retaining current compatibility descriptors until their conformance slices."
+  },
   "expectedLearning": [
     "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
   ],
@@ -73,29 +97,5 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "node --disable-warning=ExperimentalWarning --test tests/visual-motif-composition.test.ts tests/kp-animation-visual-motif.test.ts",
-      "status": "passed",
-      "scope": "executable grammar, defaults, and visual composition",
-      "checkedAt": "2026-07-16T01:29:11.334Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "application, node, and test TypeScript projects",
-      "checkedAt": "2026-07-16T01:29:11.374Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-16T01:29:11.415Z",
-      "scope": "Theseus graph and event log"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Centralized all canonical semantic operations in one versioned executable motif grammar and threaded canonical operation and trusted motif compositions through generated definition defaults and visual motif timelines while retaining current compatibility descriptors until their conformance slices."
-  }
+  ]
 }

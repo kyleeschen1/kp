@@ -13,7 +13,7 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Current wrapping visual motif defaults that should later consume semantic definitions."
     },
     {
@@ -33,7 +33,7 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Verified existing wrapFunction visual motif default remains compatible."
     }
   ],
@@ -51,6 +51,30 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra laws and equation visual motif timeline",
+      "status": "passed",
+      "scope": "slice 5 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:35:35.797Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 5 typecheck",
+      "checkedAt": "2026-07-13T21:35:35.824Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 5 graph validation",
+      "checkedAt": "2026-07-13T21:35:35.844Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted function-wrap semantic transform definition while preserving existing wrap visual motif defaults."
+  },
   "expectedLearning": [
     "How wrapping preserves the input while adding function and paren artifacts.",
     "Which semantic data the wrapping visual motif needs without owning the semantic operation."
@@ -72,29 +96,5 @@
       "id": "function-wrap-laws-covered",
       "weight": "high"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "npm test generated algebra laws and equation visual motif timeline",
-      "status": "passed",
-      "scope": "slice 5 focused plus broad node tests",
-      "checkedAt": "2026-07-13T21:35:35.797Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "slice 5 typecheck",
-      "checkedAt": "2026-07-13T21:35:35.824Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-13T21:35:35.844Z",
-      "scope": "slice 5 graph validation"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Promoted function-wrap semantic transform definition while preserving existing wrap visual motif defaults."
-  }
+  ]
 }

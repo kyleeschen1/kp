@@ -1,11 +1,11 @@
 # S-expression material choreography long-loop proposal
 
 Date: 2026-08-03
-Status: proposed; awaiting exact run-contract approval
+Status: approved; execution active
 Mode: Theseus long loop
 Canonical route: `/tutorials/programming/lisp-function-application/`
-Proposed target: `next-action.kp.s-expression-material-choreography-v0`
-Proposed contract: `run-contract.kp.s-expression-material-choreography-v0`
+Target: `next-action.kp.s-expression-material-choreography-v0`
+Contract: `run-contract.kp.s-expression-material-choreography-v1`
 Expected duration: 10-16 focused implementation hours, followed by a required
 human visual checkpoint
 

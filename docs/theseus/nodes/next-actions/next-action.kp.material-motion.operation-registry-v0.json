@@ -43,8 +43,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
-      "summary": "Consumes the lightweight canonical composition projection."
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -76,15 +76,6 @@
     "npm test",
     "npm run build",
     "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether Define canonical operation registry can be completed inside KP Semantic Material Motion And Performance V0."
-  ],
-  "allowedWork": [
-    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
-  ],
-  "disallowedWork": [
-    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
   ],
   "verificationRecords": [
     {
@@ -120,12 +111,21 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-17T19:30:51.109Z",
-      "scope": "Theseus graph"
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-17T19:30:51.109Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Extended the versioned canonical-operation registry with one authority-linked contract covering roles, lineage relations, ownership, law and witness refs, reverse meaning, motif requirements, pacing, static-cost roles, and fixtures; migrated core, generated algebra, semantic-motion, and LLM consumers; validated reverse closure and project extension packs; split a compact canonical-composition projection from the heavy registry so governed metadata stays off the initial render path and entry gzip remains 243.99 KB."
-  }
+  },
+  "expectedLearning": [
+    "Whether Define canonical operation registry can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ]
 }

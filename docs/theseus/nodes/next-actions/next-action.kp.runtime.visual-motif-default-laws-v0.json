@@ -8,12 +8,12 @@
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
+      "path": "src/animation/motifs/visual-motif-composition.ts",
       "summary": "Maps semantic transformation trees to motif segments and forward/rewind phases."
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Default equation visual motif definitions."
     },
     {
@@ -33,12 +33,12 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "path": "src/animation/motifs/equation-visual-motif-defaults.ts",
       "summary": "Added promoted generated algebra definition-backed default motif rules and a default coverage law."
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
+      "path": "src/animation/motifs/visual-motif-composition.ts",
       "summary": "Carried optional semantic definition ids through motif rules and added a visual motif rewind mirror law."
     },
     {
@@ -72,6 +72,30 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/generated-algebra-laws.test.ts",
+      "status": "passed",
+      "scope": "slice 9 expected test command",
+      "checkedAt": "2026-07-13T22:01:32.342Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 typecheck",
+      "checkedAt": "2026-07-13T22:01:32.363Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 9 graph validation",
+      "checkedAt": "2026-07-13T22:01:32.384Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Attached generated-definition-backed equation visual motif defaults and rewind laws for reusable motif timelines."
+  },
   "expectedLearning": [
     "Which semantic transformation kinds can share a visual motif without losing semantic specificity.",
     "How to test rewind and composition at the motif timeline layer before renderer binding.",
@@ -100,29 +124,5 @@
       "id": "semantic-and-presentation-layers-separated",
       "weight": "high"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "npm test -- tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/generated-algebra-laws.test.ts",
-      "status": "passed",
-      "scope": "slice 9 expected test command",
-      "checkedAt": "2026-07-13T22:01:32.342Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "slice 9 typecheck",
-      "checkedAt": "2026-07-13T22:01:32.363Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-13T22:01:32.384Z",
-      "scope": "slice 9 graph validation"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Attached generated-definition-backed equation visual motif defaults and rewind laws for reusable motif timelines."
-  }
+  ]
 }

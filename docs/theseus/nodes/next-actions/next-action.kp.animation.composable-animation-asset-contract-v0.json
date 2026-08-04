@@ -28,8 +28,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/visual-motif-composition.ts",
-      "summary": "Renderer-neutral visual motif timeline composition that animation assets should target."
+      "path": "src/animation/motifs/visual-motif-composition.ts",
+      "summary": "Update durable source reference after motif-module relocation."
     },
     {
       "kind": "file",
@@ -68,6 +68,36 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "slice 1 semantic and motif contract tests",
+      "checkedAt": "2026-07-13T22:32:55.321Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 1 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:32:55.344Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 1 typecheck",
+      "checkedAt": "2026-07-13T22:32:55.376Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 1 graph validation",
+      "checkedAt": "2026-07-13T22:32:55.404Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the core AnimationAsset contract as a thin typed composition layer over semantic bundles, transformations, editable transform trees, render targets, layouts, timelines, export targets, dashboard metadata, and validation refs."
+  },
   "expectedLearning": [
     "What minimal AnimationAsset v0 fields can compile to existing semantic assets, transform trees, visual motifs, dashboard rows, and exports.",
     "Which tutorial-card-specific names should stay as compatibility consumers rather than become the core abstraction.",
@@ -103,35 +133,5 @@
       "id": "dashboard-and-export-consume-animation-metadata",
       "weight": "medium"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
-      "status": "passed",
-      "scope": "slice 1 semantic and motif contract tests",
-      "checkedAt": "2026-07-13T22:32:55.321Z"
-    },
-    {
-      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
-      "status": "passed",
-      "scope": "slice 1 generated algebra consumers",
-      "checkedAt": "2026-07-13T22:32:55.344Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "slice 1 typecheck",
-      "checkedAt": "2026-07-13T22:32:55.376Z"
-    },
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-13T22:32:55.404Z",
-      "scope": "slice 1 graph validation"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Defined the core AnimationAsset contract as a thin typed composition layer over semantic bundles, transformations, editable transform trees, render targets, layouts, timelines, export targets, dashboard metadata, and validation refs."
-  }
+  ]
 }
