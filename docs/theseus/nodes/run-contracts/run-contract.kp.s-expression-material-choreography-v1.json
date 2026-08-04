@@ -102,7 +102,8 @@
     {
       "id": "s09",
       "title": "Project-source-derived-expression-beads",
-      "status": "planned"
+      "summary": "Projected source-derived folded beads for all canonical lists: executable forms retain literal heads, anonymous application retains operator and argument miniatures, and detailed interiors map one-to-one to immediate semantic children with explicit subtree aggregation; added escaped local HTML/CSS primitives and a stable inspected visual capture command. Eleven focused tests, both type boundaries, and the single-frame visual pass.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -176,6 +176,32 @@
       "status": "passed",
       "scope": "s08 test type boundary",
       "checkedAt": "2026-08-04T01:47:48.756Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-beads.test.ts tests/kp-lisp-s-expression-material-projection.test.ts tests/kp-lisp-s-expression-material-roots.test.ts",
+      "status": "passed",
+      "scope": "s09 source-derived bead, aggregation, identity, and renderer primitives",
+      "checkedAt": "2026-08-04T01:54:24.484Z",
+      "notes": "11 focused tests pass; every particle is an immediate certified child and every visible string is source-derived"
+    },
+    {
+      "command": "npm run visual:lisp-expression-beads",
+      "status": "passed",
+      "scope": "s09 canonical single-frame bead visual",
+      "checkedAt": "2026-08-04T01:54:25.524Z",
+      "notes": "Captured body, lambda, and anonymous-application beads to tmp/codex/lisp-expression-beads/canonical-beads.png and inspected the result"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s09 application type boundary",
+      "checkedAt": "2026-08-04T01:54:26.422Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s09 test type boundary",
+      "checkedAt": "2026-08-04T01:54:27.324Z"
     }
   ],
   "progress": {
