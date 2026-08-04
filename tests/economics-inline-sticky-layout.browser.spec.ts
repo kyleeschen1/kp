@@ -20,8 +20,9 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   const graph = stage.locator(".editor-graph-stage");
   const demandPassage = passage(root, "follow-shift");
   const demandParagraph = demandPassage.locator("p").first();
-  const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
   const followingPassage = passage(root, "new-equilibrium");
+  const motionPassage = root.locator('[data-kp-motion-passage="demand-change"]');
+  const reflection = passage(root, "equation-check");
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
@@ -39,20 +40,29 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     .toHaveAttribute("aria-pressed", "true");
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveCount(1);
-  await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
+  await expect(motionPassage).toHaveCount(1);
+  await expect(motionPassage.locator(
+    ".kp-economics-tutorial__motion-passage-gate--entrance"
+  )).toContainText("A change in demand");
+  await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(3);
+  await expect(reflection).toHaveAttribute(
+    "data-kp-lesson-passage-role",
+    "reflection"
+  );
+  await expect(reflection).not.toHaveAttribute("data-kp-inline-sticky-cue", "true");
   await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
     .toHaveCount(0);
   await expect(root.locator("[data-kp-inline-sticky-runway]"))
     .toHaveCount(0);
-  await expectNoVisibleSliders(root);
+  await expectNoTransportControls(root);
 
   await expect.poll(() => root.locator(
     ".kp-economics-tutorial__passage p"
   ).first().evaluate((element) => getComputedStyle(element).fontFamily))
     .toContain("Gill Sans");
-  await expect.poll(() => root.locator(
-    ".kp-tutorial-scrub__action"
-  ).first().evaluate((element) => getComputedStyle(element).fontFamily))
+  await expect.poll(() => motionPassage.locator(
+    ".kp-economics-tutorial__motion-passage-gate--entrance"
+  ).evaluate((element) => getComputedStyle(element).fontFamily))
     .toContain("Gill Sans");
   await expect.poll(() => root.locator(".katex").first().evaluate(
     (element) => getComputedStyle(element).fontFamily
@@ -64,6 +74,14 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
       wrapper: getComputedStyle(element).fontSize
     }))).toEqual({ inner: "19px", prose: "19px", wrapper: "19px" });
 
+  await motionPassage.locator(
+    ".kp-economics-tutorial__motion-passage-gate--entrance"
+  ).scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-motion-passage-entrance.png`,
+    fullPage: false
+  });
+
   await pinStage(stage);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
@@ -74,14 +92,18 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     height: element.getBoundingClientRect().height,
     marginTop: Number.parseFloat(getComputedStyle(element).marginTop),
     marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom),
+    paddingBottom: Number.parseFloat(getComputedStyle(element).paddingBottom),
+    paddingTop: Number.parseFloat(getComputedStyle(element).paddingTop),
     shadow: getComputedStyle(element).boxShadow,
     top: element.getBoundingClientRect().top,
     transform: getComputedStyle(element).transform
   }))).toEqual({
-    background: "rgb(13, 14, 28)",
+    background: "rgba(13, 14, 28, 0.976)",
     height: 400,
     marginTop: 0,
-    marginBottom: 24,
+    marginBottom: 0,
+    paddingBottom: 20,
+    paddingTop: 20,
     shadow: "none",
     top: 0,
     transform: "none"
@@ -95,7 +117,7 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     };
   })).toEqual({
     background: "rgb(98, 103, 117)",
-    height: 8,
+    height: 1.5,
     width: 992
   });
   await expect.poll(() => stageCard.evaluate((element) => ({
@@ -181,8 +203,6 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   for (const role of [
     "axis-quantity",
     "axis-price",
-    "tick-quantity-2",
-    "tick-price-4",
     "curve-supply",
     "curve-demand-current",
     "equilibrium-current"
@@ -190,6 +210,11 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     await expect.poll(() => graph.locator(
       `[data-kp-economics-math-label="${role}"] .katex`
     ).evaluate((element) => getComputedStyle(element).fontSize)).toBe("19px");
+  }
+  for (const role of ["tick-quantity-2", "tick-price-4"]) {
+    await expect.poll(() => graph.locator(
+      `[data-kp-economics-math-label="${role}"] .katex`
+    ).evaluate((element) => getComputedStyle(element).fontSize)).toBe("14.25px");
   }
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
     .toHaveAttribute("r", "3");
@@ -211,8 +236,8 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     before: Number.parseFloat(getComputedStyle(element).marginTop),
     after: Number.parseFloat(getComputedStyle(element).marginBottom)
   }))));
-  expect(margins.map(({ before }) => before)).toEqual([0, 400, 400, 400]);
-  expect(new Set(margins.map(({ after }) => after))).toEqual(new Set([0]));
+  expect(margins.map(({ before }) => before)).toEqual([200, 200, 200, 48]);
+  expect(margins.map(({ after }) => after)).toEqual([0, 0, 0, 6.4]);
 
   const geometry = await stageGeometry(stage);
   await placeParagraphTopAt(page, demandParagraph, 800);
@@ -223,10 +248,8 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expectOpaqueParagraph(demandPassage);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
 
-  await expectHalfViewportParagraphRhythm(
+  await expectQuarterViewportParagraphRhythm(
     page,
-    demandParagraph,
-    demandTransport,
     demandPassage,
     followingPassage
   );
@@ -248,7 +271,7 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     "crossing"
   );
   await expectOpaqueParagraph(demandPassage);
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-paragraph-handoff.png`,
     fullPage: false
@@ -265,8 +288,8 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expect.poll(async () => Number(await demandPassage.getAttribute(
     "data-kp-inline-sticky-crossing-progress"
   ))).toBeCloseTo(0.5, 1);
-  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.55);
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.68);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.7);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.73);
   await expectOpaqueParagraph(demandPassage);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-paragraph-motion.png`,
@@ -282,12 +305,10 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expectOpaqueParagraph(demandPassage);
   await expectOpaqueParagraph(followingPassage);
 
-  // A paragraph owns attention precisely while it crosses the stage; even
-  // focus-only passages therefore participate in the same spatial grammar.
+  // Only passages inside the bounded motion passage participate in crossing.
   for (const passageId of [
     "new-equilibrium",
-    "shift-versus-movement",
-    "equation-check"
+    "shift-versus-movement"
   ]) {
     const focusPassage = passage(root, passageId);
     await placeParagraphTopAt(
@@ -305,8 +326,99 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     );
   }
 
+  await placeParagraphTopAt(
+    page,
+    reflection.locator("p").first(),
+    geometry.bottom + 40
+  );
+  await expect(reflection).not.toHaveAttribute(
+    "data-kp-inline-sticky-paragraph-phase",
+    /crossing|passed/
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-inline-sticky-stage-state",
+    "released"
+  );
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-motion-passage-exit.png`,
+    fullPage: false
+  });
+
   await placeParagraphTopAt(page, demandParagraph, geometry.bottom);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
+});
+
+test("equation comparison enters reversibly and persists through reflection", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const stage = root.locator("[data-kp-inline-sticky-stage]");
+  const supplyPassage = passage(root, "shift-versus-movement");
+  const supplyParagraph = supplyPassage.locator("p").first();
+  const reflection = passage(root, "equation-check");
+  const verification = stage.locator(
+    '[data-kp-economics-stage-surface="equilibrium-verification"]'
+  );
+
+  await pinStage(stage);
+  const geometry = await stageGeometry(stage);
+  const outerBefore = await stage.boundingBox();
+  expect(outerBefore).not.toBeNull();
+  const paragraphHeight = await supplyParagraph.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  );
+
+  await placeParagraphTopAt(page, supplyParagraph, geometry.bottom - 1);
+  await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0);
+
+  await placeParagraphTopAt(
+    page,
+    supplyParagraph,
+    geometry.bottom - paragraphHeight * 0.7
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    /composing|split/
+  );
+  await expect.poll(() => verification.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).opacity)
+  )).toBeGreaterThan(0);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-equation-composition.png`,
+    fullPage: false
+  });
+
+  await placeParagraphTopAt(
+    page,
+    supplyParagraph,
+    geometry.bottom - paragraphHeight + 2
+  );
+  await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.99);
+  await expect(verification).toHaveAttribute(
+    "data-kp-economics-stage-surface-lifecycle",
+    "settled"
+  );
+  await expect(verification).toHaveCSS("opacity", "1");
+  expect(await stage.boundingBox()).toEqual(outerBefore);
+
+  await placeParagraphTopAt(
+    page,
+    reflection.locator("p").first(),
+    geometry.bottom + 40
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-inline-sticky-stage-state",
+    "released"
+  );
+  await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.99);
+  await expect(verification).toHaveCount(1);
+
+  await placeParagraphTopAt(page, supplyParagraph, geometry.bottom + 1);
+  await expect.poll(() => supplyProgress(root)).toBeLessThan(0.01);
+  await expect(verification).toHaveCount(1);
+  await expect(verification).toHaveCSS("opacity", "0");
 });
 
 test("phone paragraph crossing preserves readable type and exact motion", async ({
@@ -319,7 +431,6 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   const graph = stage.locator(".editor-graph-stage");
   const demandPassage = passage(root, "follow-shift");
   const demandParagraph = demandPassage.locator("p").first();
-  const demandTransport = demandPassage.locator("kp-tutorial-scrub-bar");
   const followingPassage = passage(root, "new-equilibrium");
 
   await pinStage(stage);
@@ -333,7 +444,7 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   );
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
-  )).toBe("rgb(13, 14, 28)");
+  )).toBe("rgba(13, 14, 28, 0.976)");
   await expect.poll(() => stage.evaluate((element) => ({
     height: element.getBoundingClientRect().height,
     top: element.getBoundingClientRect().top
@@ -341,13 +452,11 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   await expect.poll(() => stage.evaluate((element) =>
     Number.parseFloat(getComputedStyle(element, "::after").width)
   )).toBe(390);
-  await expectNoVisibleSliders(root);
+  await expectNoTransportControls(root);
   await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
     .toHaveCount(0);
-  await expectHalfViewportParagraphRhythm(
+  await expectQuarterViewportParagraphRhythm(
     page,
-    demandParagraph,
-    demandTransport,
     demandPassage,
     followingPassage
   );
@@ -355,12 +464,16 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
   const proseFontSize = await demandParagraph.evaluate((element) =>
     getComputedStyle(element).fontSize
   );
-  for (const role of ["axis-quantity", "tick-quantity-2", "curve-supply"] ) {
+  for (const role of ["axis-quantity", "curve-supply"] ) {
     await expect.poll(() => graph.locator(
       `[data-kp-economics-math-label="${role}"] .katex`
     ).evaluate((element) => getComputedStyle(element).fontSize))
       .toBe(proseFontSize);
   }
+  await expect.poll(() => graph.locator(
+    '[data-kp-economics-math-label="tick-quantity-2"] .katex'
+  ).evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)))
+    .toBeCloseTo(Number.parseFloat(proseFontSize) * 0.75, 2);
   const geometry = await stageGeometry(stage);
   const paragraphHeight = await demandParagraph.evaluate(
     (element) => (element as HTMLElement).offsetHeight
@@ -370,8 +483,8 @@ test("phone paragraph crossing preserves readable type and exact motion", async 
     demandParagraph,
     geometry.bottom - paragraphHeight / 2
   );
-  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.55);
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.68);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.7);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.73);
   await expectOpaqueParagraph(demandPassage);
   await expect.poll(() => page.evaluate(() =>
     document.documentElement.scrollWidth - window.innerWidth
@@ -424,7 +537,7 @@ test("default midnight theme toggles without navigation", async ({
   expect(await contrastRatio(root, page.locator("body"))).toBeGreaterThan(12);
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
-  )).toBe("rgb(13, 14, 28)");
+  )).toBe("rgba(13, 14, 28, 0.976)");
   await expect.poll(() => graph.evaluate((element) => ({
     axis: getComputedStyle(element).getPropertyValue("--kp-graph-axis").trim(),
     changing: getComputedStyle(element).getPropertyValue(
@@ -505,7 +618,7 @@ test("default midnight theme toggles without navigation", async ({
   }))).toEqual(beforeToggle);
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
-  )).toBe("rgb(244, 241, 233)");
+  )).toBe("rgba(244, 241, 233, 0.976)");
   await page.screenshot({
     path: `${evidenceDirectory}/light-footer-toggle.png`,
     fullPage: false
@@ -667,6 +780,12 @@ async function demandProgress(root: Locator): Promise<number> {
   ));
 }
 
+async function supplyProgress(root: Locator): Promise<number> {
+  return Number(await root.getAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress"
+  ));
+}
+
 async function expectOpaqueParagraph(passageElement: Locator): Promise<void> {
   await expect.poll(() => passageElement.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
@@ -679,35 +798,21 @@ async function expectOpaqueParagraph(passageElement: Locator): Promise<void> {
   });
 }
 
-async function expectNoVisibleSliders(root: Locator): Promise<void> {
-  await expect(root.locator("kp-tutorial-scrub-bar input[data-action='seek']"))
-    .toHaveCount(2);
-  for (const slider of await root.locator(
-    "kp-tutorial-scrub-bar input[data-action='seek']"
-  ).all()) await expect(slider).toBeHidden();
-  for (const output of await root.locator(
-    "kp-tutorial-scrub-bar .kp-tutorial-scrub__progress"
-  ).all()) await expect(output).toBeHidden();
-  await expect(root.locator(".kp-tutorial-scrub__action")).toHaveCount(8);
+async function expectNoTransportControls(root: Locator): Promise<void> {
+  await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
+  await expect(root.locator(".kp-tutorial-scrub__action")).toHaveCount(0);
 }
 
-async function expectHalfViewportParagraphRhythm(
+async function expectQuarterViewportParagraphRhythm(
   page: Page,
-  paragraph: Locator,
-  transport: Locator,
   passageElement: Locator,
   followingPassage: Locator
 ): Promise<void> {
   await expect.poll(() => Promise.all([
-    paragraph.evaluate((element) => element.getBoundingClientRect().bottom),
-    transport.evaluate((element) => element.getBoundingClientRect().top)
-  ]).then(([paragraphBottom, transportTop]) => transportTop - paragraphBottom))
-    .toBeGreaterThanOrEqual(7);
-  await expect.poll(() => Promise.all([
     passageElement.evaluate((element) => element.getBoundingClientRect().bottom),
     followingPassage.evaluate((element) => element.getBoundingClientRect().top)
   ]).then(([passageBottom, followingTop]) => followingTop - passageBottom))
-    .toBeCloseTo(page.viewportSize()!.height * 0.5, 0);
+    .toBeCloseTo(page.viewportSize()!.height * 0.25, 0);
 }
 
 async function contrastRatio(

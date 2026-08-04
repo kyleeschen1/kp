@@ -33,16 +33,19 @@ The accepted bounded discovery in
 several reversible presentation trials. The current correction is recorded in
 `decisions/2026-08-04-kp-paragraph-owned-stage-occlusion.md`. A diagram begins
 in document flow and pins in the upper viewport. Prose keeps one measure while
-the graph bleeds wider around the same center. Every market-clearing paragraph
-owns either motion or a focus checkpoint. Approach holds the initial frame;
-authored motion advances while the paragraph physically crosses beneath the
-stage and completes when its trailing edge reaches the stage bottom. Synthetic
-runways, cue fades, and explicit scene tracks are absent. The paragraph remains
-fully opaque and geometrically stable; an opaque page-colored stage paints
-above it to create depth. The current geometry trial fixes that stage at
-`50vh`, aligns it to the viewport top, spaces paragraph scenes by `50vh`, and
-marks its lower threshold with a full-bleed grey bar. Those gaps remain outside
-semantic progress. Native scroll snap does not own this geometry.
+the graph bleeds wider around the same center. The accepted refinement in
+`decisions/2026-08-04-kp-bounded-motion-passage-and-reflection.md` bounds the
+coordinated sequence with a slight wash, thin entrance and exit rules, a
+content label, and a quiet direction glyph. Source-authored transition,
+interpretation, and reflection roles distinguish motion ownership from
+retrospective prose. Approach holds the initial frame; authored motion begins
+as a transition paragraph crosses beneath the stage and completes when its
+trailing edge reaches the stage bottom. The terminal reflection stays outside
+the passage. Synthetic runways, cue fades, explicit scene tracks, and scroll
+snap are absent. Paragraph paint remains stable; a near-opaque page-colored
+stage creates depth. The stage stays top-aligned at `50vh`, includes `2.5vh`
+block padding and its internal `1.5px` threshold, and uses `25vh` scene gaps
+that remain outside semantic progress.
 The durable typography, fit, progressive-enhancement, URL, accessibility, and
 rollback rules live in `../principles/inline-sticky-lesson-layout.md`.
 Economics is the canonical proof through `?layout=inline-sticky`; its approved
@@ -61,18 +64,18 @@ a shared theme provider.
 The same revision updates the economics-local graph trial. Axes, ticks, guides,
 and traces stay at `1px`; curves use `1.5px`; the grid derives to `0.5px`;
 ghosts preserve stroke style; stable and changing curves use SteelBlue and
-bright red; all graph mathematics and inline KaTeX use the prose-size token;
-equilibrium markers are smaller; and the persistent equation banner remains
-absent. These choices do not alter the shared graph profile.
+bright red; inline KaTeX and semantic graph labels use the prose-size token;
+numeric ticks use `0.75` of it; equilibrium markers are smaller; and the
+persistent equation banner remains absent. These choices do not alter the
+shared graph profile.
 
-Learners retain fine-grained semantic control through a block-level custom web
-component with Rewind, Previous checkpoint, Play/Pause, and Next checkpoint.
-The query-selected one-axis proof hides its continuously draggable range and
-percentage output to reduce chrome, while retaining that progressive markup in
-the light DOM. Scroll and manual controls project the same block-local progress
-in either direction; manual interaction takes precedence and the next scroll
-input rebases from the visible state. Reduced-motion suppresses continuous
-seeking, and no coordination action auto-scrolls the page.
+The approved split layout retains fine-grained semantic control through a
+block-level custom web component with Rewind, Previous checkpoint, Play/Pause,
+Next checkpoint, and continuous seeking. The query-selected one-axis proof now
+renders no transport component: scroll is its visible reversible timeline.
+Both presentations still project the same block-local semantic progress.
+Reduced motion returns the inline proof to ordinary reading flow, and no
+coordination action auto-scrolls the page.
 
 The accepted refinement is recorded in
 `decisions/2026-08-02-kp-stable-prose-focus-divider.md`. Stable lesson prose
@@ -145,12 +148,15 @@ The delivered exemplar includes:
 - economics-local rollback and preservation boundaries.
 
 The query-selected inline-sticky successor now adds paragraph-owned motion,
-stage occlusion instead of prose fading, exact half-viewport scene rhythm, hidden
-range sliders, body-sized inline and graph KaTeX, brighter economics roles,
-stable structural/curve/grid stroke tiers, and smaller equilibrium points. It
-also uses the reversible midnight role palette by default and retains the
-footer switch. Both remain bounded comparison surfaces, not approved defaults
-or shared APIs.
+stage occlusion instead of prose fading, a bounded motion-passage entrance and
+exit, explicit prose roles, `25vh` reading rhythm, no visible transport,
+body-sized inline and semantic graph KaTeX with smaller numeric ticks, brighter
+economics roles, stable structural/curve/grid stroke tiers, and smaller
+equilibrium points. The supply comparison enters from the right through
+continuous fade, clipping, travel, and graph recomposition; it is not removed
+before the ordinary-flow reflection. The proof also uses the reversible
+midnight role palette by default and retains the footer switch. Both remain
+bounded comparison surfaces, not approved defaults or shared APIs.
 
 The 28-slice motion-block/publication loop is resolved. Subsequent human-
 requested refinements place a fixed TOC to the left of the prose, keep it

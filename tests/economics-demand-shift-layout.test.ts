@@ -160,3 +160,43 @@ test("paragraph crossing is the exact semantic motion corridor", () => {
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
 });
+
+test("inline crossing consumes the shared pre-motion hold before the threshold", () => {
+  const corridor = projectKpInlineStickyParagraphMotionCorridor({
+    corridor: {
+      startViewportRatio: 0.72,
+      endViewportRatio: 0.16,
+      keyframes: [
+        { travel: 0, progress: 0 },
+        { travel: 0.14, progress: 0 },
+        { travel: 0.57, progress: 0.72 },
+        { travel: 0.69, progress: 0.72 },
+        { travel: 0.94, progress: 1 },
+        { travel: 1, progress: 1 }
+      ]
+    },
+    stageBottomPx: 400,
+    viewportHeightPx: 800,
+    paragraphHeightPx: 200
+  });
+
+  assert.deepEqual(corridor.keyframes.map(({ progress }) => progress), [
+    0, 0, 0.72, 0.72, 1, 1
+  ]);
+  const expectedTravels = [
+    0,
+    2 / 3,
+    5 / 6,
+    2 / 3 + ((0.69 - 0.14) / 0.86) / 3,
+    2 / 3 + ((0.94 - 0.14) / 0.86) / 3,
+    1
+  ];
+  corridor.keyframes.forEach(({ travel }, index) => {
+    assert.ok(Math.abs(travel - expectedTravels[index]!) < 1e-12);
+  });
+  assert.equal(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 399,
+    viewportHeight: 800
+  }).progress > 0, true);
+});

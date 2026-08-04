@@ -3,7 +3,7 @@
 :root {
   color-scheme: light;
   --kp-lesson-theme-page: #f4f1e9;
-  --kp-lesson-theme-stage-occlusion: #f4f1e9;
+  --kp-lesson-theme-stage-occlusion: rgb(244 241 233 / 0.975);
   --kp-lesson-theme-stage-divider: #8a8f95;
   --kp-lesson-theme-surface: #fffdf8;
   --kp-lesson-theme-ink: #263845;
@@ -58,7 +58,7 @@
 :root[data-kp-lesson-theme="dark"] {
   color-scheme: dark;
   --kp-lesson-theme-page: #0d0e1c;
-  --kp-lesson-theme-stage-occlusion: #0d0e1c;
+  --kp-lesson-theme-stage-occlusion: rgb(13 14 28 / 0.975);
   --kp-lesson-theme-stage-divider: #626775;
   --kp-lesson-theme-surface: #171a2b;
   --kp-lesson-theme-ink: #e8e7e2;
@@ -1010,6 +1010,10 @@ kp-tutorial-toc {
   --kp-inline-sticky-measure: 43rem;
   --kp-inline-sticky-stage-width: min(60rem, calc(100vw - 2rem));
   --kp-inline-sticky-stage-height: 50vh;
+  --kp-inline-sticky-scene-gap: 25vh;
+  --kp-inline-sticky-structural-line-width: 1px;
+  --kp-inline-sticky-curve-line-width:
+    calc(var(--kp-inline-sticky-structural-line-width) * 1.5);
   --kp-inline-sticky-prose-font-size:
     clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
   --kp-animation-block-margin-after: clamp(1.5rem, 3svh, 2.5rem);
@@ -1073,19 +1077,83 @@ kp-tutorial-toc {
   display: none;
 }
 
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage {
+  position: relative;
+  width: var(--kp-inline-sticky-stage-width);
+  margin-inline-start:
+    calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
+  border-block: 1px solid var(--kp-lesson-theme-subtle-border);
+  background: var(--kp-lesson-theme-page-wash);
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-gate {
+  width: min(100%, var(--kp-inline-sticky-measure));
+  margin-inline: auto;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-gate--entrance {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.4rem;
+  padding-block: 0.45rem;
+  color: var(--kp-lesson-theme-eyebrow);
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-gate--entrance p {
+  margin: 0;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  line-height: 1.2;
+  text-indent: 0;
+  text-transform: uppercase;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-gate--entrance span {
+  display: inline-grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--kp-lesson-theme-focus);
+  font-size: 0.9em;
+  line-height: 1;
+  place-items: center;
+  animation: kp-motion-passage-direction 1.8s ease-in-out infinite;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-gate--exit {
+  min-height: clamp(1.25rem, 2.5vh, 2rem);
+}
+
+@keyframes kp-motion-passage-direction {
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+
+  50% {
+    transform: translateY(2px);
+  }
+}
+
 .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
+  box-sizing: border-box;
   position: sticky;
   top: var(--kp-inline-sticky-top);
   z-index: 8;
-  width: var(--kp-inline-sticky-stage-width);
+  width: 100%;
   height: var(--kp-inline-sticky-stage-height);
   min-height: 0;
   max-height: none;
-  margin:
-    0
-    0
-    var(--kp-animation-block-margin-after)
-    calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
+  margin: 0;
+  padding-block: 2.5vh;
   isolation: isolate;
   background: var(--kp-lesson-theme-stage-occlusion);
   box-shadow: none;
@@ -1097,9 +1165,10 @@ kp-tutorial-toc {
   content: "";
   position: absolute;
   right: 50%;
-  bottom: -0.5rem;
+  bottom: 0;
+  z-index: 2;
   width: min(100vw, calc(100% + 2rem));
-  height: 0.5rem;
+  height: var(--kp-inline-sticky-curve-line-width);
   background: var(--kp-lesson-theme-stage-divider);
   pointer-events: none;
   transform: translateX(50%);
@@ -1115,6 +1184,11 @@ kp-tutorial-toc {
   background: transparent;
   box-shadow: none;
   transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__verification-surface {
+  opacity: var(--kp-stage-verification-opacity);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1160,6 +1234,12 @@ kp-tutorial-toc {
 
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__stage--inline
+  .editor-graph-stage__economics-math-label--tick {
+  font-size: calc(var(--kp-inline-sticky-prose-font-size) * 0.75);
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
   .kp-economics-tutorial__expand {
   display: none;
 }
@@ -1169,9 +1249,9 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue] {
   position: relative;
   z-index: 1;
-  width: 100%;
+  width: min(100%, var(--kp-inline-sticky-measure));
   margin-block: 0;
-  margin-inline: 0;
+  margin-inline: auto;
   border-left: 0;
   padding-inline: 0;
   background: transparent;
@@ -1183,9 +1263,22 @@ kp-tutorial-toc {
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
+  .kp-economics-tutorial__stage--inline
+  + [data-kp-inline-sticky-cue] {
+  margin-top: var(--kp-inline-sticky-scene-gap);
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
   [data-kp-inline-sticky-cue]
   + [data-kp-inline-sticky-cue] {
-  margin-top: 50vh;
+  margin-top: var(--kp-inline-sticky-scene-gap);
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-lesson-passage-role="reflection"] {
+  margin-top: clamp(2rem, 6vh, 4rem);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1200,45 +1293,6 @@ kp-tutorial-toc {
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue]:focus-within {
   z-index: 2;
-}
-
-.kp-economics-tutorial--inline-sticky kp-tutorial-scrub-bar {
-  margin-block: 0.5rem 0.6rem;
-}
-
-.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__boundary {
-  padding-block: 0.35rem;
-}
-
-.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__controls {
-  grid-template-columns: repeat(4, max-content);
-  justify-content: center;
-}
-
-.kp-economics-tutorial--inline-sticky
-  :is(.kp-tutorial-scrub__controls input, .kp-tutorial-scrub__progress) {
-  display: none;
-}
-
-.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__boundary::before {
-  background: var(--kp-lesson-theme-divider);
-}
-
-.kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__action,
-.kp-economics-tutorial--inline-sticky
-  .kp-tutorial-scrub__action[data-action="toggle"] {
-  border: 0;
-  border-radius: 0;
-  padding-inline: 0.45rem;
-  color: var(--kp-lesson-theme-section-heading);
-  background: var(--kp-lesson-theme-page);
-  box-shadow: none;
-  transform: none;
-}
-
-.kp-economics-tutorial--inline-sticky
-  .kp-tutorial-scrub__action[data-action="toggle"]::after {
-  content: none;
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
@@ -1269,12 +1323,8 @@ kp-tutorial-toc {
 
   .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
     right: auto;
-    width: var(--kp-inline-sticky-stage-width);
+    width: 100%;
     min-height: 0;
-  }
-
-  .kp-economics-tutorial--inline-sticky .kp-tutorial-scrub__controls {
-    grid-template-columns: repeat(2, max-content);
   }
 
   .kp-economics-tutorial--inline-sticky
@@ -1293,6 +1343,12 @@ kp-tutorial-toc {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kp-economics-tutorial--inline-sticky
+    .kp-economics-tutorial__motion-passage-gate--entrance span {
+    display: none;
+    animation: none;
+  }
+
   .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
     position: relative;
     top: auto;
@@ -1302,6 +1358,7 @@ kp-tutorial-toc {
     #kp-section-market-clearing
     [data-kp-inline-sticky-cue] {
     z-index: auto;
+    margin-top: 2rem;
     opacity: 1;
   }
 }

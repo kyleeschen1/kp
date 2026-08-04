@@ -42,21 +42,25 @@ At the old price of $8$, sellers still supply six hundred boxes. Under the new d
 
 <!-- kp:passage follow-shift -->
 <!-- kp:motion demand-shift -->
+<!-- kp:role transition -->
 
-Now play the shift. Watch the demand curve and its intersection with supply as one event. The old demand curve can remain as a quiet reference, while the supply curve remains fixed. The moving equilibrium point travels up and to the right because it must stay at the intersection of the changing demand curve and the unchanged supply curve.
+Begin with the graph at rest. The supply curve, $S$, and the initial demand curve, $D_0$, meet at $E_0=(6,8)$. Keep your attention on the red demand curve and on the intersection it determines with supply. When this paragraph crosses the line beneath the graph, demand will shift from $D_0$ to $D_1$ while $S$ remains fixed; the equilibrium point must follow their changing intersection.
 
 <!-- kp:passage new-equilibrium -->
+<!-- kp:role interpretation -->
 
-The graph carries the causal argument. Once demand has shifted, a price of $8$ leaves quantity demanded above quantity supplied. A higher price reduces quantity demanded along the new demand curve and increases quantity supplied along the unchanged supply curve. At $P=10$, both quantities are $Q=8$, so the market clears again. The new equilibrium is $E_1=(8,10)$.
+The completed shift carries the intersection up and to the right. At the old price of $8$, quantity demanded now exceeds quantity supplied. A higher price reduces quantity demanded along $D_1$ and increases quantity supplied along the unchanged supply curve. At $P=10$, both quantities are $Q=8$, so the market clears again at $E_1=(8,10)$.
 
 <!-- kp:passage shift-versus-movement -->
 <!-- kp:motion supply-movement -->
+<!-- kp:role transition -->
 
-Notice the two different kinds of change. Demand shifted: the relationship between price and quantity demanded changed. Supply did not shift: the supply relationship stayed $P=2+Q$. Yet the market moved from one point on the supply curve to another, from $(6,8)$ to $(8,10)$. That is a movement along the supply curve, caused here by the change in demand.
+Hold the completed graph in view and look now at the blue supply curve. Its relationship is still $P=2+Q$; it did not shift when demand changed. When this paragraph crosses the line, a trace will follow that same supply curve from $E_0$ to $E_1$, and the exact comparison will enter from the right. This is movement along supply, not a shift of supply.
 
 <!-- kp:passage equation-check -->
+<!-- kp:role reflection -->
 
-The equations verify what the graph has already shown. Initially, $2+Q=14-Q$, so $2Q=12$, $Q=6$, and $P=8$. After the demand shift, $2+Q=18-Q$, so $2Q=16$, $Q=8$, and $P=10$. The algebra does not provide a second story. It gives an exact reading of the same two intersections.
+The trace has now separated the two kinds of change: demand shifted, while equilibrium moved along an unchanged supply curve. The equations verify what the graph showed. Initially, $2+Q=14-Q$, so $Q=6$ and $P=8$. After the demand shift, $2+Q=18-Q$, so $Q=8$ and $P=10$. The algebra is not a second story; it is an exact reading of the same two intersections.
 
 ### What the model does and does not say
 

@@ -26,7 +26,8 @@
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
   import type {
-    KpEconomicsDemandShiftLesson
+    KpEconomicsDemandShiftLesson,
+    KpEconomicsDemandShiftLessonPassage
   } from "./economics-demand-shift-lesson-compiler.ts";
   import {
     resolveKpEconomicsDemandShiftInitialDestination,
@@ -299,6 +300,7 @@
     `--kp-stage-verification-inline-size:${percent(verificationStageSlot.rect.inlineSize)};` +
     `--kp-stage-verification-block-size:${percent(verificationStageSlot.rect.blockSize)};` +
     `--kp-stage-aperture-inset:${percent(1 - stageComposition.aperture.openness)};` +
+    `--kp-stage-verification-opacity:${stageComposition.progress.toFixed(3)};` +
     `--kp-stage-verification-travel:${percent(
       (verificationStageSurface.rect.inline - verificationStageSlot.rect.inline) /
         verificationStageSlot.rect.inlineSize
@@ -719,7 +721,9 @@
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
-    const tutorialAttention = inlineSticky && inlineStickyFit !== "reading"
+    const tutorialAttention = inlineSticky &&
+        inlineStickyFit !== "reading" &&
+        inlineStickyStageState === "pinned"
       ? updateInlineStickyAttention(inlineParagraphFrames)
       : updateReadingBandSelection(projection.readingBandY);
     const movedFromNavigation = navigationProjectionPending &&
@@ -764,9 +768,9 @@
     ) {
       settleMotionOutsideAttentionBlock(tutorialAttention.activePassageId);
     }
-    if (active !== undefined && activeScrubBar !== undefined) {
+    if (active !== undefined) {
       const distance = active.anchorTop - projection.readingBandY;
-      activeScrubBar.setReadingBandProjection({
+      activeScrubBar?.setReadingBandProjection({
         distance,
         proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
       });
@@ -967,11 +971,14 @@
       return;
     }
     const stageBounds = inlineStage.getBoundingClientRect();
-    const sectionBounds = inlineStage.closest("section")?.getBoundingClientRect();
+    const passageBounds = inlineStage.closest<HTMLElement>(
+      "[data-kp-motion-passage]"
+    )?.getBoundingClientRect();
     const top = inlineStickyTopInset();
     inlineStickyStageState = stageBounds.top > top + 1
       ? "embedded"
-      : sectionBounds !== undefined && sectionBounds.bottom <= stageBounds.bottom + 1
+      : passageBounds !== undefined &&
+          passageBounds.bottom <= stageBounds.bottom + 1
         ? "released"
         : "pinned";
   }
@@ -1391,6 +1398,105 @@
   </div>
 {/snippet}
 
+{#snippet lessonPassage(
+  passage: KpEconomicsDemandShiftLessonPassage,
+  inlineCue: boolean
+)}
+  {@const renderedMotionBlock = findKpEconomicsMotionBlock(
+    passage.motionBlockId
+  )}
+  {@const inlineParagraphProjection = inlineCue
+    ? inlineParagraphProjections[passage.id]
+    : undefined}
+  <div
+    class="kp-economics-tutorial__passage"
+    class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
+    class:kp-economics-tutorial__motion-block={renderedMotionBlock !== undefined}
+    class:kp-tutorial-shell__motion-block={renderedMotionBlock !== undefined}
+    class:kp-economics-tutorial__prediction={passage.id === "prediction"}
+    class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
+    class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
+    data-kp-economics-tutorial-passage={passage.id}
+    data-kp-lesson-passage-role={passage.role}
+    data-kp-inline-sticky-cue={inlineCue ? true : undefined}
+    data-kp-inline-sticky-passage-role={inlineCue ? passage.role : undefined}
+    data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
+    data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
+    data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
+    data-kp-tutorial-motion-block={renderedMotionBlock?.id}
+    id={renderedMotionBlock === undefined
+      ? undefined
+      : `kp-block-${renderedMotionBlock.id}`}
+    data-kp-tutorial-destination={renderedMotionBlock === undefined
+      ? undefined
+      : "block"}
+    data-kp-tutorial-destination-id={renderedMotionBlock?.id}
+    role={renderedMotionBlock === undefined ? undefined : "group"}
+    aria-label={renderedMotionBlock === undefined
+      ? undefined
+      : `${renderedMotionBlock.label} animation step`}
+  >
+    {#if renderedMotionBlock !== undefined}
+      {#each renderedMotionBlock.checkpoints as motionCheckpoint}
+        <span
+          class="kp-economics-tutorial__checkpoint-anchor"
+          id={`kp-checkpoint-${motionCheckpoint.id}`}
+          data-kp-tutorial-destination="checkpoint"
+          data-kp-tutorial-destination-id={motionCheckpoint.id}
+          data-kp-tutorial-destination-block={renderedMotionBlock.id}
+          aria-hidden="true"
+        ></span>
+      {/each}
+    {/if}
+    {#if passage.id === "prediction"}
+      <p>{@html passage.paragraphs[0]!.html}</p>
+      <details>
+        <summary>Reveal what happens at the old price</summary>
+        <p>{@html passage.paragraphs[1]!.html}</p>
+      </details>
+    {:else if passage.id === "synthesis"}
+      <p class="kp-economics-tutorial__synthesis-question">
+        {@html passage.paragraphs[0]!.html}
+      </p>
+      <details>
+        <summary>Reveal the model explanation</summary>
+        <p>{@html passage.paragraphs[1]!.html}</p>
+      </details>
+    {:else}
+      {#each passage.paragraphs as paragraph}
+        <p>{@html paragraph.html}</p>
+      {/each}
+    {/if}
+    {#if !inlineSticky && renderedMotionBlock?.id === "demand-shift"}
+      {@html motionScrubBarHtml["demand-shift"]}
+    {:else if !inlineSticky && renderedMotionBlock?.id === "supply-movement"}
+      {@html motionScrubBarHtml["supply-movement"]}
+    {/if}
+    {#if passage.id === "explore"}
+      <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>
+        <summary>Explore another demand shift</summary>
+        <div class="kp-economics-tutorial__explore-panel">
+          <label>
+            New demand intercept
+            <input
+              type="range"
+              min={kpEconomicsDemandInterceptParameter.minimum}
+              max={kpEconomicsDemandInterceptParameter.maximum}
+              step={kpEconomicsDemandInterceptParameter.step}
+              value={demandIntercept}
+              oninput={changeDemandIntercept}
+            />
+            <output><KpInlineMath latex={String(demandIntercept)} /></output>
+          </label>
+          <button type="button" onclick={restoreLessonExample}>
+            Return to lesson example
+          </button>
+        </div>
+      </details>
+    {/if}
+  </div>
+{/snippet}
+
 <KpTutorialLessonShell
   bind:root={shell}
   rootClass={`kp-economics-tutorial${inlineSticky
@@ -1485,113 +1591,38 @@
           <h3 id={`kp-heading-${section.id}`}>{section.heading}</h3>
 
           {#if inlineSticky && section.id === "market-clearing"}
-            <aside
-              bind:this={inlineStage}
-              class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
-              aria-label="Sticky supply and demand continuous-canvas proof"
-              data-kp-inline-sticky-stage
-            >
-              {@render economicsStage()}
-            </aside>
-          {/if}
-
-          {#each section.passages as passage}
-            {@const renderedMotionBlock = findKpEconomicsMotionBlock(
-              passage.motionBlockId
-            )}
-            {@const inlineParagraphProjection = inlineSticky &&
-              section.id === "market-clearing"
-                ? inlineParagraphProjections[passage.id]
-                : undefined}
             <div
-              class="kp-economics-tutorial__passage"
-              class:kp-economics-tutorial__passage--active={attentionPassageId === passage.id}
-              class:kp-economics-tutorial__motion-block={renderedMotionBlock !== undefined}
-              class:kp-tutorial-shell__motion-block={renderedMotionBlock !== undefined}
-              class:kp-economics-tutorial__prediction={passage.id === "prediction"}
-              class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
-              class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
-              data-kp-economics-tutorial-passage={passage.id}
-              data-kp-inline-sticky-cue={inlineSticky &&
-                section.id === "market-clearing"
-                  ? true
-                  : undefined}
-              data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
-              data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
-              data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
-              data-kp-tutorial-motion-block={renderedMotionBlock?.id}
-              id={renderedMotionBlock === undefined
-                ? undefined
-                : `kp-block-${renderedMotionBlock.id}`}
-              data-kp-tutorial-destination={renderedMotionBlock === undefined
-                ? undefined
-                : "block"}
-              data-kp-tutorial-destination-id={renderedMotionBlock?.id}
-              role={renderedMotionBlock === undefined ? undefined : "group"}
-              aria-label={renderedMotionBlock === undefined
-                ? undefined
-                : `${renderedMotionBlock.label} animation step`}
+              class="kp-economics-tutorial__motion-passage"
+              data-kp-motion-passage="demand-change"
             >
-              {#if renderedMotionBlock !== undefined}
-                {#each renderedMotionBlock.checkpoints as motionCheckpoint}
-                  <span
-                    class="kp-economics-tutorial__checkpoint-anchor"
-                    id={`kp-checkpoint-${motionCheckpoint.id}`}
-                    data-kp-tutorial-destination="checkpoint"
-                    data-kp-tutorial-destination-id={motionCheckpoint.id}
-                    data-kp-tutorial-destination-block={renderedMotionBlock.id}
-                    aria-hidden="true"
-                  ></span>
-                {/each}
-              {/if}
-              {#if passage.id === "prediction"}
-                <p>{@html passage.paragraphs[0]!.html}</p>
-                <details>
-                  <summary>Reveal what happens at the old price</summary>
-                  <p>{@html passage.paragraphs[1]!.html}</p>
-                </details>
-              {:else if passage.id === "synthesis"}
-                <p class="kp-economics-tutorial__synthesis-question">
-                  {@html passage.paragraphs[0]!.html}
-                </p>
-                <details>
-                  <summary>Reveal the model explanation</summary>
-                  <p>{@html passage.paragraphs[1]!.html}</p>
-                </details>
-              {:else}
-                {#each passage.paragraphs as paragraph}
-                  <p>{@html paragraph.html}</p>
-                {/each}
-              {/if}
-              {#if renderedMotionBlock?.id === "demand-shift"}
-                {@html motionScrubBarHtml["demand-shift"]}
-              {:else if renderedMotionBlock?.id === "supply-movement"}
-                {@html motionScrubBarHtml["supply-movement"]}
-              {/if}
-              {#if passage.id === "explore"}
-                <details class="kp-economics-tutorial__explore" bind:open={explorationOpen}>
-                  <summary>Explore another demand shift</summary>
-                  <div class="kp-economics-tutorial__explore-panel">
-                    <label>
-                      New demand intercept
-                      <input
-                        type="range"
-                        min={kpEconomicsDemandInterceptParameter.minimum}
-                        max={kpEconomicsDemandInterceptParameter.maximum}
-                        step={kpEconomicsDemandInterceptParameter.step}
-                        value={demandIntercept}
-                        oninput={changeDemandIntercept}
-                      />
-                      <output><KpInlineMath latex={String(demandIntercept)} /></output>
-                    </label>
-                    <button type="button" onclick={restoreLessonExample}>
-                      Return to lesson example
-                    </button>
-                  </div>
-                </details>
-              {/if}
+              <header class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--entrance">
+                <p>A change in demand</p>
+                <span aria-hidden="true">↓</span>
+              </header>
+              <aside
+                bind:this={inlineStage}
+                class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
+                aria-label="Sticky supply and demand continuous-canvas proof"
+                data-kp-inline-sticky-stage
+              >
+                {@render economicsStage()}
+              </aside>
+              {#each section.passages.filter(({ role }) => role !== "reflection") as passage}
+                {@render lessonPassage(passage, true)}
+              {/each}
+              <div
+                class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--exit"
+                aria-hidden="true"
+              ></div>
             </div>
-          {/each}
+            {#each section.passages.filter(({ role }) => role === "reflection") as passage}
+              {@render lessonPassage(passage, false)}
+            {/each}
+          {:else}
+            {#each section.passages as passage}
+              {@render lessonPassage(passage, false)}
+            {/each}
+          {/if}
         </section>
       {/each}
 

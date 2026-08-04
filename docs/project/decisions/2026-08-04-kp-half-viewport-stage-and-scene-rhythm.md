@@ -1,7 +1,12 @@
 # Trial A Half-Viewport Stage And Scene Rhythm In The Economics Lesson
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded for bounded discovery
+
+The retained `50vh` stage was refined by
+`2026-08-04-kp-bounded-motion-passage-and-reflection.md`. That decision replaces
+the `50vh` scene gaps, opaque paint, exterior `0.5rem` bar, and visible inline
+transport described below with the current bounded passage treatment.
 
 ## Decision
 

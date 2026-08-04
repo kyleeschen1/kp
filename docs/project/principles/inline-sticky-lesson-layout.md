@@ -7,11 +7,13 @@ Revised: 2026-08-04
 ## Purpose
 
 KP lessons may coordinate prose and animation through one reading axis on a
-continuous canvas. A diagram begins as an ordinary embedded figure and pins in
-the upper viewport while its scene is active. Complete, stable prose then
-approaches and passes beneath that diagram. Paragraph geometry—not synthetic
-scroll runway, transient caption text, or an opacity animation—coordinates
-what receives attention and how semantic motion advances.
+continuous canvas. A quietly bounded motion passage announces entry into that
+interaction mode. Its diagram begins as an ordinary embedded figure and pins
+in the upper viewport while complete, stable prose approaches and passes
+beneath it. A terminal reflection returns to ordinary flow outside the
+passage. Paragraph geometry—not synthetic scroll runway, transient caption
+text, or an opacity animation—coordinates what receives attention and how
+semantic motion advances.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required presentation.
@@ -19,11 +21,18 @@ laboratory layout and not yet a globally required presentation.
 ## Vocabulary And Geometry
 
 - **Stage:** the sticky animation region in the upper viewport.
+- **Motion passage:** a bounded run of coordinated stage and prose behavior,
+  marked by progressively published entrance and exit gates.
 - **Graph bleed:** a diagram may extend wider than prose while sharing its
   center and page hue.
 - **Crossing threshold:** the stage's lower edge.
 - **Paragraph scene:** one stable prose paragraph and the focus or motion it
   owns.
+- **Transition:** a paragraph that prepares and owns one reversible motion.
+- **Interpretation:** a non-driving paragraph that explains a completed change
+  while the passage remains active.
+- **Reflection:** terminal prose after the passage exit; it never passes under
+  the sticky stage.
 - **Approach:** paragraph travel from the viewport bottom to the threshold.
 - **Crossing:** travel from the paragraph's leading edge reaching the threshold
   to its trailing edge reaching the threshold.
@@ -45,18 +54,21 @@ Each paragraph has the reversible lifecycle:
 below -> approach -> crossing -> passed
 ```
 
-One geometry sample projects the stage lifecycle, paragraph lifecycle,
+One geometry sample projects the passage and stage lifecycle, paragraph lifecycle,
 attention owner, active motion block, and local semantic progress.
 Intersection events may assist lazy loading but do not own animation or
 attention truth.
 
 ## Motion And Attention Contract
 
-- Every paragraph in the active scene owns either continuous motion or a
-  deterministic focus/checkpoint change.
+- Every paragraph inside the active motion passage owns either continuous
+  motion or a deterministic focus/checkpoint change. Terminal reflection is
+  explicitly outside that passage.
 - Approach is a semantic entry hold: authored motion stays at its initial
   frame while the learner reads what to watch.
 - Crossing begins when the paragraph's leading edge reaches the stage bottom.
+  Visible motion begins immediately after that boundary; pre-motion delay
+  belongs to approach, not an implicit post-crossing hold.
   Authored local keyframes are remapped across the paragraph's physical
   crossing distance.
 - Motion reaches its final frame when the paragraph's trailing edge reaches
@@ -71,6 +83,10 @@ attention truth.
   pixels or depending on event history.
 - Declared paragraph margins express reading rhythm only. Whether moderate or
   viewport-sized, they never extend semantic progress.
+- A transition paragraph establishes the current scene, names the attention
+  target, and forecasts the change. Interpretation and reflection explain
+  evidence already shown rather than asking the learner to read a new causal
+  claim during essential motion.
 
 Do not add a scene-track element, generic runway, viewport-sized spacer, or
 second scroll clock merely to create animation time.
@@ -138,15 +154,20 @@ Respect safe-area insets, stable viewport geometry, and user font scaling.
 - Page and stage use the same hue. The stage uses an occluding surface and a
   higher stacking layer; its player and plot plane remain transparent.
 - The stage has no perimeter border, radius, shadow, lift, perspective, or
-  scale. A lower-edge threshold bar is an exemplar-local option rather than a
-  card boundary.
+  scale. A lower-edge threshold bar is an exemplar-local event boundary rather
+  than a card edge.
+- A motion passage may use a slight role-based wash and thin top and bottom
+  gates that extend beyond prose. Avoid side borders and giant rounded
+  containers. Entrance labels describe the content rather than the interface.
 - Paragraphs have no animated opacity, depth, scale, shadow, or surface.
 - Stage occlusion begins physically when prose passes beneath it; do not fake
   the crossing by changing paragraph paint.
 - Block-local controls read as a quiet inline divider, not another card.
-- Visible controls may be reduced to Rewind, Previous, Play/Pause, and Next
-  when continuous range input adds clutter. Progressive static markup may
-  retain hidden range and output nodes to avoid a second component contract.
+- A scroll-led presentation may omit visible transport entirely when scroll is
+  the primary reversible timeline and the static document remains meaningful.
+  Another presentation may retain Rewind, Previous, Play/Pause, Next, or a
+  range input over the same semantic progress without changing animation
+  truth.
 - Stage, prose, diagram labels, controls, and mathematical foregrounds use
   explicit theme roles. KaTeX keeps renderer-owned font metrics.
 - An optional theme changes role values, never semantic roles, DOM structure,
@@ -163,15 +184,19 @@ style-preserving opacity ghosts; prose-sized graph math; smaller equilibrium
 markers; and no persistent equation banner. These graph details remain
 exemplar-local pending a structurally different graph caller.
 
-The current economics geometry trial fixes the stage at `50vh`, pins it at the
-viewport top, separates adjacent paragraph scenes by `50vh`, makes stage paint
-opaque, and adds a full-bleed `0.5rem` grey lower threshold. These values
-override the adaptive fit geometry only for this caller and remain
-exemplar-local pending a structurally different lesson.
+The current economics geometry trial fixes the complete stage at `50vh`, pins
+it at the viewport top, includes `2.5vh` padding at each block edge, separates
+the first and adjacent paragraph scenes by `25vh`, uses a near-opaque page RGB
+surface, and places a full-bleed `1.5px` grey threshold inside the stage. A
+slight passage wash, content label, direction glyph, and thin entrance/exit
+rules announce the coordinated segment. Its explicit transition,
+interpretation, and reflection roles remain exemplar-local pending a
+structurally different lesson.
 
 ## Controls, Navigation, And Accessibility
 
-- Manual controls operate the same block-local normalized progress as scroll.
+- When present, manual controls operate the same block-local normalized
+  progress as scroll.
 - Manual interaction temporarily owns progress; later scroll rebases from the
   visible state without jumping.
 - Semantic URLs and TOC jumps restore destination, active paragraph,

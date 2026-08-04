@@ -116,16 +116,31 @@ export function projectKpInlineStickyParagraphMotionCorridor(input: {
     1 - Number.EPSILON
   );
   const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
+  const firstMovingIndex = input.corridor.keyframes.findIndex(
+    ({ progress }) => Math.abs(progress - firstProgress) > Number.EPSILON
+  );
+  const authoredMotionStart = firstMovingIndex <= 0
+    ? 0
+    : input.corridor.keyframes[firstMovingIndex - 1]!.travel;
+  const authoredMotionSpan = Math.max(
+    Number.EPSILON,
+    1 - authoredMotionStart
+  );
+  const activeKeyframes = input.corridor.keyframes.filter(
+    ({ travel }) => travel >= authoredMotionStart
+  );
   const keyframes = [
     { travel: 0, progress: firstProgress },
-    ...input.corridor.keyframes.map(({ travel, progress }) => ({
-      travel: crossingStart + travel * (1 - crossingStart),
+    ...activeKeyframes.map(({ travel, progress }) => ({
+      travel: crossingStart +
+        ((travel - authoredMotionStart) / authoredMotionSpan) *
+          (1 - crossingStart),
       progress
     }))
   ];
-  // The paragraph's approach is a semantic entry hold. Its authored motion
-  // then occupies exactly the distance during which the paragraph passes
-  // beneath the stage, ending when the paragraph's trailing edge arrives.
+  // Approach now owns the original pre-motion hold. Crossing can therefore
+  // begin visibly at the threshold without mutating the shared authored
+  // corridor used by the approved split presentation.
   return Object.freeze({
     ...input.corridor,
     startViewportRatio: 1,

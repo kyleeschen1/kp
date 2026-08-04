@@ -545,6 +545,15 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
       ["shift-versus-movement", "supply-movement"]
     ]
   );
+  assert.deepEqual(
+    lesson.sections[2]!.passages.map(({ id, role }) => [id, role]),
+    [
+      ["follow-shift", "transition"],
+      ["new-equilibrium", "interpretation"],
+      ["shift-versus-movement", "transition"],
+      ["equation-check", "reflection"]
+    ]
+  );
   assert.match(
     lesson.sections[0]!.passages[0]!.paragraphs[0]!.html,
     /data-kp-latex="Q"/

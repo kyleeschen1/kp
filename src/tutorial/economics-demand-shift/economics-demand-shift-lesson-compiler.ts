@@ -10,8 +10,15 @@ export interface KpEconomicsDemandShiftLessonParagraph {
   readonly sourceText: string;
 }
 
+export type KpEconomicsDemandShiftPassageRole =
+  | "regular"
+  | "transition"
+  | "interpretation"
+  | "reflection";
+
 export interface KpEconomicsDemandShiftLessonPassage {
   readonly id: string;
+  readonly role: KpEconomicsDemandShiftPassageRole;
   readonly motionBlockId?: KpEconomicsMotionBlockId | undefined;
   readonly paragraphs: readonly KpEconomicsDemandShiftLessonParagraph[];
 }
@@ -30,6 +37,8 @@ export interface KpEconomicsDemandShiftLesson {
 }
 
 const passageMarkerPattern = /^<!-- kp:passage ([a-z0-9-]+) -->$/;
+const passageRoleMarkerPattern =
+  /^<!-- kp:role (regular|transition|interpretation|reflection) -->$/;
 const motionMarkerPattern = /^<!-- kp:motion ([a-z0-9-]+) -->$/;
 const sectionMarkerPattern = /^<!-- kp:section ([a-z0-9-]+) -->$/;
 
@@ -69,6 +78,7 @@ export function compileKpEconomicsDemandShiftLesson(
     heading: string;
     passages: Array<{
       id: string;
+      role: KpEconomicsDemandShiftPassageRole;
       motionBlockId?: KpEconomicsMotionBlockId | undefined;
       paragraphs: KpEconomicsDemandShiftLessonParagraph[];
     }>;
@@ -139,8 +149,19 @@ export function compileKpEconomicsDemandShiftLesson(
       if (section === undefined) {
         throw new Error("Passage annotations must follow a lesson section.");
       }
-      passage = { id: passageMarker[1]!, paragraphs: [] };
+      passage = { id: passageMarker[1]!, role: "regular", paragraphs: [] };
       section.passages.push(passage);
+      continue;
+    }
+    const passageRoleMarker = passageRoleMarkerPattern.exec(line);
+    if (passageRoleMarker !== null) {
+      flushParagraph();
+      if (passage === undefined || passage.paragraphs.length > 0) {
+        throw new Error(
+          "A passage role must appear once before its prose."
+        );
+      }
+      passage.role = passageRoleMarker[1] as KpEconomicsDemandShiftPassageRole;
       continue;
     }
     const motionMarker = motionMarkerPattern.exec(line);
@@ -198,6 +219,14 @@ export function compileKpEconomicsDemandShiftLesson(
   ) {
     throw new Error(
       "Lesson motion annotations must cover every local motion block exactly once."
+    );
+  }
+  if (sections.some(({ passages }) => passages.some((candidate) =>
+    (candidate.role === "transition") !==
+      (candidate.motionBlockId !== undefined)
+  ))) {
+    throw new Error(
+      "Transition passages and motion annotations must correspond exactly."
     );
   }
   if (sections.some(({ passages }) =>

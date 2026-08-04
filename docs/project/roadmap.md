@@ -96,20 +96,23 @@ reference. `decisions/2026-08-04-kp-inline-sticky-lesson-layout-proof.md` and
 `principles/inline-sticky-lesson-layout.md` record the candidate embedded,
 pinned, and released stage lifecycle. The latest reversible refinement is
 `decisions/2026-08-04-kp-paragraph-owned-stage-occlusion.md`: prose keeps one
-43-rem measure while a page-colored graph stage bleeds wider and
-paints above it. Each paragraph owns either semantic motion or a focus change.
-Approach holds the initial frame; motion advances while the paragraph crosses
-beneath the stage and completes at its trailing edge. Paragraph opacity and
-geometry stay stable, and no synthetic runway or scene-track element exists.
-Native scroll snap remains absent. The visible controls reduce to Rewind,
-Previous, Play/Pause, and Next, while progressive slider markup remains hidden
-in light DOM. The query-local graph profile uses `1px` structural strokes,
+43-rem measure while a page-colored graph stage bleeds wider and paints above
+it. The current refinement in
+`decisions/2026-08-04-kp-bounded-motion-passage-and-reflection.md` adds a quiet
+progressively published entrance and exit, explicit transition,
+interpretation, and reflection roles, and ordinary terminal prose outside the
+sticky passage. Approach holds the initial frame; visible motion begins as a
+transition crosses the stage threshold and completes at its trailing edge.
+Paragraph opacity and geometry stay stable, and no synthetic runway,
+scene-track, or scroll snap exists. The inline proof renders no transport bar;
+the approved split layout retains manual controls over the same semantic
+timelines. The query-local graph profile uses `1px` structural strokes,
 `1.5px` curves, a `0.5px` grid, style-preserving ghosts, SteelBlue/red roles,
-prose-sized inline and graph KaTeX, and smaller equilibrium markers. These
-choices remain economics-local pending a second caller. The proof is
-query-selected through `?layout=inline-sticky`; the approved split route
-remains default until human comparison and a structurally different caller
-justify promotion.
+prose-sized inline and graph KaTeX except smaller numeric ticks, and smaller
+equilibrium markers. These choices remain economics-local pending a second
+caller. The proof is query-selected through `?layout=inline-sticky`; the
+approved split route remains default until human comparison and a structurally
+different caller justify promotion.
 
 The same economics exemplar now has a bounded, independently reversible
 midnight-theme trial recorded in
@@ -119,12 +122,15 @@ a small bottom-of-page switch that preserves live document, query, scroll, and
 geometry. Midnight is now the economics default, paper remains available
 through `?theme=light`, and no shared theme API is promoted.
 
-The inline-sticky caller now also trials the bounded geometry in
-`decisions/2026-08-04-kp-half-viewport-stage-and-scene-rhythm.md`: an opaque,
-top-aligned `50vh` stage, exact `50vh` gaps between paragraph scenes, and a
-full-bleed grey lower threshold. CSS owns initial size while the semantic
-projector mirrors it; gaps still do not advance motion. These values are not a
-shared lesson-layout promotion.
+The inline-sticky caller retains the top-aligned `50vh` stage introduced in
+`decisions/2026-08-04-kp-half-viewport-stage-and-scene-rhythm.md`, but its
+current bounded refinement includes `2.5vh` internal block padding, a
+near-opaque surface, an internal `1.5px` threshold, and exact `25vh` reading
+gaps. CSS owns initial size while the semantic projector mirrors it; gaps still
+do not advance motion. The right-side verification surface now enters and
+reverses through explicit opacity, clipping, and travel over stable outer
+geometry and remains settled through terminal reflection. These values are not
+a shared lesson-layout promotion.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -619,8 +625,10 @@ activating heavy animation capabilities lazily.
    markers, query-local Gill Sans/KaTeX separation, constant prose measure,
    phone fit, large-text behavior, the default midnight palette with its
    non-navigating footer switch, the opaque top-aligned `50vh` stage, exact
-   `50vh` paragraph-scene gaps, and the full-bleed grey threshold; do not infer
-   layout, theme, or shared-API promotion.
+   bounded entrance and exit, source-authored prose roles, `25vh` scene gaps,
+   near-opaque padded stage, internal curve-width threshold, scroll-only
+   transport, ordinary-flow reflection, and reversible right-side equation
+   composition; do not infer layout, theme, or shared-API promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,
