@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("wide proof pins an unelevated stage and projects one cue envelope", async ({
+test("wide proof hands an opaque cue into an unelevated sticky stage", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -27,6 +27,8 @@ test("wide proof pins an unelevated stage and projects one cue envelope", async 
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveCount(1);
   await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
+  await expect(root.locator("[data-kp-inline-sticky-attention-padding]"))
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveAttribute("aria-busy", "false");
 
@@ -43,85 +45,71 @@ test("wide proof pins an unelevated stage and projects one cue envelope", async 
     getComputedStyle(element).boxShadow
   )).toBe("none");
 
-  const geometry = await attentionGeometry(page);
-  const widthBefore = (await demandCue.boundingBox())!.width;
-  await placeCueAt(page, demandCue, geometry.focusLine + geometry.approach * 0.7);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "approaching"
+  const geometry = await handoffGeometry(page);
+  const layoutWidth = await demandCue.evaluate(
+    (element) => (element as HTMLElement).offsetWidth
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.18);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(1);
-
-  await placeCueAt(page, demandCue, geometry.focusLine);
-  await expect.poll(async () => (await demandCue.boundingBox())!.y)
-    .toBeCloseTo(geometry.focusLine, 0);
+  await placeCueCenterAt(page, demandCue, geometry.stageBottom + 48);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
-    "reading"
+    "below"
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  const widthAtFocus = (await demandCue.boundingBox())!.width;
-  expect(Math.abs(widthAtFocus - widthBefore)).toBeLessThanOrEqual(0.5);
+  await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
+  const belowTransform = await cueTransform(demandCue);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-reading-shelf.png`,
+    path: `${evidenceDirectory}/wide-cue-below-stage.png`,
     fullPage: false
   });
 
-  await placeCueAt(
-    page,
-    demandCue,
-    geometry.stageBottom + geometry.padding * 0.45
-  );
+  const halfway = (geometry.stageBottom + geometry.stageMidpoint) / 2;
+  await placeCueCenterAt(page, demandCue, halfway);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "pinned"
   );
-  await expect.poll(async () => (await demandCue.boundingBox())!.y)
-    .toBeCloseTo(geometry.stageBottom + geometry.padding * 0.45, 0);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
-    "receding"
+    "handoff"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.05);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.95);
-  const widthWhileReceding = (await demandCue.boundingBox())!.width;
-  expect(Math.abs(widthWhileReceding - widthAtFocus)).toBeLessThanOrEqual(0.5);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(async () => Number(await demandCue.getAttribute(
+    "data-kp-inline-sticky-handoff-progress"
+  ))).toBeCloseTo(0.5, 1);
+  expect(await cueTransform(demandCue)).not.toBe(belowTransform);
+  expect(await demandCue.evaluate((element) =>
+    (element as HTMLElement).offsetWidth
+  ))
+    .toBe(layoutWidth);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.001);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-receding.png`,
+    path: `${evidenceDirectory}/wide-cue-depth-handoff.png`,
     fullPage: false
   });
 
-  await placeCueAt(page, demandCue, geometry.stageBottom - 2);
+  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint - 2);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
     "occluded"
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
 
-  await placeCueAt(page, demandCue, 800 * 0.16 - 2);
+  await placeCueCenterAt(page, demandCue, 800 * 0.16 - 2);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.99);
-  await expect(followingCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "waiting"
-  );
+  await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
 
-  await placeCueAt(page, demandCue, geometry.stageBottom);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.99);
-  await placeCueAt(page, demandCue, geometry.focusLine);
+  await placeCueCenterAt(page, demandCue, geometry.stageBottom);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.01);
 });
 
-test("phone proof preserves one text measure and a readable focus shelf", async ({
+test("phone proof preserves one text measure through the depth handoff", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -139,47 +127,34 @@ test("phone proof preserves one text measure and a readable focus shelf", async 
     "data-kp-inline-sticky-stage-state",
     "pinned"
   );
-  const geometry = await attentionGeometry(page);
-  await placeCueAt(page, demandCue, geometry.focusLine);
+  const geometry = await handoffGeometry(page);
+  await placeCueCenterAt(page, demandCue, geometry.stageBottom + 12);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
-    "reading"
+    "below"
   );
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
 
-  const projection = await page.evaluate(() => {
-    const stageElement = document.querySelector<HTMLElement>(
-      "[data-kp-inline-sticky-stage]"
-    )!;
-    const demand = document.querySelector<HTMLElement>(
-      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="follow-shift"]'
-    )!;
-    const hold = document.querySelector<HTMLElement>(
-      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="new-equilibrium"]'
-    )!;
-    const demandBounds = demand.getBoundingClientRect();
-    const demandStyle = getComputedStyle(demand);
-    return {
-      stageBottom: stageElement.getBoundingClientRect().bottom,
-      demandBottom: demandBounds.bottom,
-      demandWidth: demandBounds.width,
-      holdWidth: hold.getBoundingClientRect().width,
-      fontSize: Number.parseFloat(demandStyle.fontSize),
-      lineHeight: Number.parseFloat(demandStyle.lineHeight),
-      opacity: Number.parseFloat(demandStyle.opacity),
-      horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth
-    };
-  });
-  expect(projection.stageBottom).toBeLessThan(844 * 0.55);
-  expect(projection.demandBottom).toBeLessThanOrEqual(844);
-  expect(Math.abs(projection.demandWidth - projection.holdWidth))
-    .toBeLessThanOrEqual(0.5);
-  expect(projection.fontSize).toBeGreaterThanOrEqual(17);
-  expect(projection.lineHeight).toBeGreaterThanOrEqual(25);
-  expect(projection.opacity).toBeGreaterThan(0.99);
-  expect(projection.horizontalOverflow).toBeLessThanOrEqual(1);
+  const before = await phoneProjection(page);
+  const halfway = (geometry.stageBottom + geometry.stageMidpoint) / 2;
+  await placeCueCenterAt(page, demandCue, halfway);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-inline-sticky-cue-phase",
+    "handoff"
+  );
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  const during = await phoneProjection(page);
+
+  expect(before.stageBottom).toBeLessThan(844 * 0.55);
+  expect(before.demandWidth).toBe(during.demandWidth);
+  expect(before.demandWidth).toBe(before.holdWidth);
+  expect(during.fontSize).toBeGreaterThanOrEqual(17);
+  expect(during.lineHeight).toBeGreaterThanOrEqual(25);
+  expect(during.horizontalOverflow).toBeLessThanOrEqual(1);
 
   await page.screenshot({
-    path: `${evidenceDirectory}/phone-cue-reading-shelf.png`,
+    path: `${evidenceDirectory}/phone-cue-depth-handoff.png`,
     fullPage: false
   });
 });
@@ -198,6 +173,7 @@ test("large text selects ordinary reading flow instead of shrinking", async ({
     getComputedStyle(element).position
   )).toBe("relative");
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => cueTransform(demandCue)).toBe("none");
   await expect.poll(() => demandCue.evaluate((element) =>
     Number.parseFloat(getComputedStyle(element).fontSize)
   )).toBeGreaterThanOrEqual(34);
@@ -219,7 +195,11 @@ test("reduced motion keeps every cue opaque in ordinary reading flow", async ({
     "new-equilibrium",
     "shift-versus-movement",
     "equation-check"
-  ]) await expect.poll(() => cueOpacity(cue(root, passageId))).toBe(1);
+  ]) {
+    const passage = cue(root, passageId);
+    await expect.poll(() => cueOpacity(passage)).toBe(1);
+    await expect.poll(() => cueTransform(passage)).toBe("none");
+  }
 });
 
 function cue(root: Locator, passageId: string): Locator {
@@ -235,14 +215,15 @@ async function pinStage(stage: Locator): Promise<void> {
   });
 }
 
-async function placeCueAt(
+async function placeCueCenterAt(
   page: Page,
   cueElement: Locator,
   viewportY: number
 ): Promise<void> {
   await cueElement.evaluate((element, targetY) => {
+    const bounds = element.getBoundingClientRect();
     window.scrollBy({
-      top: element.getBoundingClientRect().top - targetY,
+      top: bounds.top + bounds.height / 2 - targetY,
       behavior: "auto"
     });
   }, viewportY);
@@ -251,28 +232,51 @@ async function placeCueAt(
   ));
 }
 
-async function attentionGeometry(page: Page): Promise<{
+async function handoffGeometry(page: Page): Promise<{
+  readonly stageTop: number;
   readonly stageBottom: number;
-  readonly padding: number;
-  readonly approach: number;
-  readonly focusLine: number;
+  readonly stageMidpoint: number;
 }> {
   return page.evaluate(() => {
-    const root = document.querySelector<HTMLElement>(
-      "[data-kp-economics-demand-shift-tutorial]"
-    )!;
     const stage = document.querySelector<HTMLElement>(
       "[data-kp-inline-sticky-stage]"
     )!;
-    const style = getComputedStyle(root);
-    const stageBottom = stage.getBoundingClientRect().bottom;
-    const padding = Number.parseFloat(
-      style.getPropertyValue("--kp-inline-sticky-padding-height")
-    );
-    const approach = Number.parseFloat(
-      style.getPropertyValue("--kp-inline-sticky-approach-height")
-    );
-    return { stageBottom, padding, approach, focusLine: stageBottom + padding };
+    const bounds = stage.getBoundingClientRect();
+    return {
+      stageTop: bounds.top,
+      stageBottom: bounds.bottom,
+      stageMidpoint: bounds.top + bounds.height / 2
+    };
+  });
+}
+
+async function phoneProjection(page: Page): Promise<{
+  readonly stageBottom: number;
+  readonly demandWidth: number;
+  readonly holdWidth: number;
+  readonly fontSize: number;
+  readonly lineHeight: number;
+  readonly horizontalOverflow: number;
+}> {
+  return page.evaluate(() => {
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-inline-sticky-stage]"
+    )!;
+    const demand = document.querySelector<HTMLElement>(
+      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="follow-shift"]'
+    )!;
+    const hold = document.querySelector<HTMLElement>(
+      '[data-kp-inline-sticky-cue][data-kp-economics-tutorial-passage="new-equilibrium"]'
+    )!;
+    const demandStyle = getComputedStyle(demand);
+    return {
+      stageBottom: stage.getBoundingClientRect().bottom,
+      demandWidth: demand.offsetWidth,
+      holdWidth: hold.offsetWidth,
+      fontSize: Number.parseFloat(demandStyle.fontSize),
+      lineHeight: Number.parseFloat(demandStyle.lineHeight),
+      horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth
+    };
   });
 }
 
@@ -280,4 +284,8 @@ async function cueOpacity(cueElement: Locator): Promise<number> {
   return cueElement.evaluate((element) =>
     Number.parseFloat(getComputedStyle(element).opacity)
   );
+}
+
+async function cueTransform(cueElement: Locator): Promise<string> {
+  return cueElement.evaluate((element) => getComputedStyle(element).transform);
 }

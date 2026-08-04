@@ -8,10 +8,10 @@ Revised: 2026-08-04
 
 KP lessons may coordinate prose and animation through one reading axis. A
 diagram begins as an ordinary embedded figure and pins in the upper viewport
-while its scene is active. An invisible attention corridor of height `P` sits
-beneath it. A stable cue paragraph approaches the lower edge of `P`, reaches a
-brief full-opacity reading shelf, then fades as it crosses `P` while the
-corresponding semantic motion unfolds.
+while its scene is active. The following cue remains ordinary fully opaque
+prose until its center crosses the stage's lower edge. It then recedes and
+fades through the lower half of the stage, transferring attention from the
+instruction to the animation without introducing a separate card or caption.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required lesson presentation.
@@ -19,14 +19,13 @@ laboratory layout and not yet a globally required lesson presentation.
 ## Vocabulary And Geometry
 
 - **Stage:** the sticky animation surface in the upper viewport.
-- **Padding `P`:** the transparent attention corridor immediately below the
-  stage.
-- **Focus line:** the lower edge of `P`.
-- **Reading shelf:** a one-to-two-line-height plateau around the focus line on
-  which the cue is fully opaque.
+- **Handoff region:** the lower half of the stage, from its bottom edge to its
+  midpoint.
 - **Cue:** one stable prose block that tells the learner what to inspect.
+- **Cue plane:** the theme-page-colored surface behind the cue. It has no
+  border, radius, or shadow and exists only to keep text legible while it leads.
 - **Runway:** source-order space after a cue that gives its semantic animation
-  time to complete and hold before the next cue approaches.
+  time to complete and hold before the next cue arrives.
 
 The stage lifecycle is:
 
@@ -37,33 +36,43 @@ embedded -> pinned -> released -> embedded
 Each cue has the reversible lifecycle:
 
 ```text
-waiting -> approaching -> reading -> receding -> occluded
+below -> handoff -> occluded
 ```
 
-The cue uses one leading-edge anchor. Far below the focus line it remains
-quietly visible. It gains opacity through a bounded approach region, stays at
-full opacity across the reading shelf, fades smoothly from one to zero while
-crossing `P`, and is fully occluded at the stage edge. Reverse scrolling
-reconstructs the same states without replaying pixels.
+The cue's vertical center is its geometric anchor. While the center is at or
+below the stage bottom, the cue and its plane remain fully opaque. As the
+center moves from the stage bottom to its midpoint, one smooth projection maps
+scroll position to opacity `1 -> 0`, shallow negative depth, and a restrained
+scale reduction. At the midpoint the cue is fully absent and may move behind
+the stage's stacking plane. Reverse scrolling reconstructs the same states
+without replaying pixels.
+
+CSS cannot interpolate `z-index`. The depth impression must therefore come
+from continuous opacity, perspective translation, scale, and the cue plane;
+any stacking change occurs only after opacity has reached zero. Do not use
+blur, a sudden visible layer swap, or a large perspective distortion to
+simulate depth.
 
 ## Motion And Attention Contract
 
 - A scene is one cue followed by one explicit runway.
-- The animation segment begins at the focus line, retains authored holds, and
-  may continue after the cue becomes occluded.
+- The same cue-center crossing that begins the visual handoff begins the
+  block-local semantic motion corridor.
+- Motion retains authored holds and may continue through the runway after the
+  cue becomes fully occluded at the stage midpoint.
 - The runway, not an enlarged paragraph or changing caption, supplies the
   remaining scroll distance.
-- The next cue does not begin its approach until the preceding segment can
-  settle.
+- The next cue remains fully opaque below the stage and does not enter the
+  handoff until the preceding segment can settle.
 - Consecutive animation blocks retain independent semantic progress and only
   one active sampler.
 - Context or conclusion passages may use shorter hold runways while preserving
   the current settled animation frame.
 
 One geometry sample projects an immutable scene state containing stage phase,
-cue phase and opacity, active passage, active motion block, and local semantic
-progress. Intersection events may assist lazy loading but do not own animation
-or attention truth.
+cue phase, cue opacity and depth, active passage, active motion block, and local
+semantic progress. Intersection events may assist lazy loading but do not own
+animation or attention truth.
 
 ## Text And DOM Contract
 
@@ -71,11 +80,13 @@ or attention truth.
 - Every paragraph exists from initial publication in source order.
 - Enhancement must not duplicate, reparent, rewrite, or replace prose.
 - The prose column keeps one width, font size, indentation, padding, and line
-  wrapping in every cue phase. Salience must never widen or dock the paragraph.
+  wrapping in every cue phase. The depth transform changes only visual paint,
+  never layout measure.
 - Cue wording remains visually stable while its animation runs.
-- Prose outside an active sticky scene stays fully opaque.
-- Released or occluded prose leaves through normal page motion and the stage's
-  opaque page-colored paint plane; it is not blurred or clipped.
+- Prose below the stage stays fully opaque; there is no anticipatory dimming or
+  approach phase.
+- Released prose leaves through normal page motion. It is not blurred or
+  clipped.
 - There are no internal prose scrollbars.
 
 ## Readable Fit Contract
@@ -98,10 +109,10 @@ must not change line height.
 
 Each scene projects one fit class:
 
-1. `comfortable`: preferred stage, `P`, and a readable cue coexist;
+1. `comfortable`: the preferred stage and one complete readable cue coexist;
 2. `compact`: the stage contracts while the prose measure remains unchanged;
-3. `reading`: sticky positioning, fading, and runways turn off and the complete
-   diagram and prose return to ordinary flow.
+3. `reading`: sticky positioning, fading, depth, and runways turn off and the
+   complete diagram and prose return to ordinary flow.
 
 The adaptation order is:
 
@@ -113,9 +124,9 @@ remove excess spacing
 ```
 
 Do not shrink prose indefinitely, clip it, or introduce nested scrolling. Use
-stable viewport units (`svh`) for stage, corridor, and runway budgets so mobile
-browser chrome does not resize an active scene. Respect safe-area insets and
-user font scaling.
+stable viewport units (`svh`) for stage and runway budgets so mobile browser
+chrome does not resize an active scene. Respect safe-area insets and user font
+scaling.
 
 ## Visual Contract
 
@@ -123,10 +134,12 @@ user font scaling.
   stage may bleed wider around the same center without changing text width.
 - The pinned stage is not elevated: no card shadow, lift transform, rounded
   container, or joined paragraph surface.
-- Stage, diagram labels, and page use the same theme background. The stage
-  remains opaque so fully receded prose cannot ghost through the animation.
-- Cue opacity is the only default prose salience change. Active cues do not
-  receive a widened background card or a second competing reading rail.
+- Stage, cue plane, diagram labels, and page use the same theme background.
+- The cue plane may cover stage ink while the cue leads, then fades with the
+  cue so the graph emerges; it must not look like a separate card.
+- Depth is shallow and supportive. At the end of the handoff the text may be
+  roughly 24 CSS pixels behind a long perspective plane with about one percent
+  explicit scale reduction, not dramatically thrown into space.
 - Mathematical labels inside the diagram use the same theme roles and surface
   background as inline mathematical prose.
 
@@ -136,17 +149,18 @@ user font scaling.
   progress as scroll.
 - Manual interaction temporarily owns progress; later scroll rebases from the
   visible state without jumping.
-- Keyboard focus forces a fading cue fully visible so controls are never
-  operated invisibly.
+- Keyboard focus forces a fading cue fully visible and removes its depth
+  transform so controls are never operated invisibly.
 - Semantic URLs and TOC jumps restore scroll destination, active passage, and
   animation state atomically rather than replaying history.
 - Reduced-motion presentation returns the stage and fully opaque cues to
-  ordinary reading flow. Increased-contrast presentation keeps cues opaque.
+  ordinary reading flow. Increased-contrast presentation keeps cues opaque and
+  removes the depth transform.
 - Static and no-JavaScript publication remains meaningful, searchable,
   selectable, printable, and correctly ordered.
 - Large text, short viewports, landscape phones, unsupported sticky geometry,
-  or cues that exceed the lower viewport use `reading` mode rather than a
-  compromised simulation.
+  or cues that cannot coexist below the useful stage use `reading` mode rather
+  than a compromised simulation.
 
 ## Promotion Boundary
 
@@ -156,7 +170,7 @@ model, semantic frames, graph renderer, prose, checkpoints, controls, URLs, and
 review capture remain unchanged. The approved split presentation remains the
 default and the query-selected presentation is one reversible rollback unit.
 
-Human review of the economics attention-corridor proof precedes any shared
+Human review of the economics depth-handoff proof precedes any shared
 lesson-shell promotion. A structurally different second caller must then prove
 the same stage, cue, runway, fit, and accessibility boundaries before this can
 become KP's default lesson grammar.

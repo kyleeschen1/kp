@@ -3,6 +3,12 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
+Superseded presentation detail: the external padding `P`, anticipatory
+approach, and reading shelf are replaced by the direct cue-to-stage depth
+handoff in `2026-08-04-kp-depth-handoff-lesson-layout-revision.md`. This file
+remains the rationale for the unelevated stage, constant prose measure, and
+explicit following runways.
+
 ## Decision
 
 Replace the economics proof's raised platform and docked paragraph with an

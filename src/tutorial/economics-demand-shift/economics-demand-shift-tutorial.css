@@ -832,9 +832,9 @@ kp-tutorial-toc {
   }
 }
 
-/* Experimental one-axis attention corridor. The approved split presentation
-   stays default while this query-selected exemplar proves stable prose,
-   cue salience, and scroll-synchronized motion without a raised card. */
+/* Experimental one-axis depth handoff. The approved split presentation stays
+   default while this query-selected exemplar lets prose lead into the graph
+   without changing its source-order measure or raising the stage. */
 .kp-economics-tutorial--inline-sticky {
   --kp-inline-sticky-top: clamp(1rem, 4svh, 2.5rem);
   --kp-inline-sticky-measure: 43rem;
@@ -922,39 +922,63 @@ kp-tutorial-toc {
 }
 
 .kp-economics-tutorial--inline-sticky
-  .kp-economics-tutorial__attention-padding {
-  display: block;
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue] {
+  position: relative;
+  z-index: 9;
   width: 100%;
-  height: var(--kp-inline-sticky-padding-height);
-  pointer-events: none;
+  margin-inline: 0;
+  border-left-color: transparent;
+  /* The page-colored plane keeps the cue readable while it initially leads;
+     fading the whole plane then reveals the graph without introducing a card. */
+  background: var(--kp-lesson-theme-page);
+  box-shadow: none;
+  opacity: var(--kp-inline-sticky-cue-opacity, 1);
+  transform: perspective(64rem)
+    translateZ(var(--kp-inline-sticky-cue-depth, 0))
+    scale(var(--kp-inline-sticky-cue-scale, 1));
+  transform-origin: center;
+  transform-style: preserve-3d;
+  transition: none;
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue] {
-  position: relative;
-  width: 100%;
-  margin-inline: 0;
-  border-left-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  opacity: var(--kp-inline-sticky-cue-opacity, 0.18);
-  transform: none;
-  transition: none;
+  [data-kp-inline-sticky-cue-phase="handoff"] {
+  will-change: opacity, transform;
+}
+
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue-phase="occluded"] {
+  z-index: 7;
+  pointer-events: none;
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue].kp-economics-tutorial__passage--active {
   border-left-color: transparent;
-  background: transparent;
+  background: var(--kp-lesson-theme-page);
   box-shadow: none;
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue]:focus-within {
+  z-index: 10;
   opacity: 1;
+  transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__inline-motion-anchor {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -981,14 +1005,11 @@ kp-tutorial-toc {
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
-  .kp-economics-tutorial__attention-padding {
-  height: 1.5rem;
-}
-
-.kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue] {
+  z-index: auto;
   opacity: 1;
+  transform: none;
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
@@ -1037,8 +1058,6 @@ kp-tutorial-toc {
   }
 
   .kp-economics-tutorial--inline-sticky
-    .kp-economics-tutorial__attention-padding,
-  .kp-economics-tutorial--inline-sticky
     .kp-economics-tutorial__cue-runway {
     height: 1.5rem;
   }
@@ -1046,7 +1065,9 @@ kp-tutorial-toc {
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
     [data-kp-inline-sticky-cue] {
+    z-index: auto;
     opacity: 1;
+    transform: none;
   }
 }
 
@@ -1054,6 +1075,9 @@ kp-tutorial-toc {
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
     [data-kp-inline-sticky-cue] {
+    z-index: 9;
     opacity: 1;
+    pointer-events: auto;
+    transform: none;
   }
 }

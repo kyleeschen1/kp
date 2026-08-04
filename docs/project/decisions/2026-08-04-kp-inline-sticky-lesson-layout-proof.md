@@ -3,9 +3,10 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
-Presentation revision: the raised lift-and-dock treatment in this record is
-superseded by
-`2026-08-04-kp-attention-corridor-lesson-layout-revision.md`. The query-selected
+Presentation revision: the raised lift-and-dock treatment in this record was
+first revised by `2026-08-04-kp-attention-corridor-lesson-layout-revision.md`;
+its padding corridor was then superseded by
+`2026-08-04-kp-depth-handoff-lesson-layout-revision.md`. The query-selected
 exemplar, preservation boundary, readable fallback, and promotion gate remain
 in force.
 

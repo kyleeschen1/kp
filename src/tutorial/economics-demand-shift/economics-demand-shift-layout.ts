@@ -10,24 +10,22 @@ export type KpInlineStickyLessonFit =
 export interface KpInlineStickyLessonLayoutProjection {
   readonly fit: KpInlineStickyLessonFit;
   readonly stageHeightPx: number;
-  readonly paddingHeightPx: number;
-  readonly approachHeightPx: number;
-  readonly readingShelfHeightPx: number;
   readonly availableHeightPx: number;
 }
 
 export type KpInlineStickyCuePhase =
-  | "waiting"
-  | "approaching"
-  | "reading"
-  | "receding"
+  | "below"
+  | "handoff"
   | "occluded";
 
 export interface KpInlineStickyCueProjection {
   readonly phase: KpInlineStickyCuePhase;
   readonly opacity: number;
-  readonly focusLinePx: number;
-  readonly distanceFromFocusLinePx: number;
+  readonly handoffProgress: number;
+  readonly depthPx: number;
+  readonly scale: number;
+  readonly stageMidpointPx: number;
+  readonly distanceFromStageBottomPx: number;
 }
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
@@ -49,9 +47,6 @@ export function projectKpInlineStickyLessonLayout(input: {
   const cueHeight = finiteNonNegative(input.cueHeightPx);
   const topInset = clamp(height * 0.04, 16, 40);
   const bottomInset = clamp(height * 0.03, 16, 32);
-  const paddingHeight = clamp(height * 0.12, 72, 128);
-  const approachHeight = clamp(height * 0.18, 96, 160);
-  const readingShelfHeight = clamp(height * 0.03, 20, 30);
   const availableHeight = Math.max(0, height - topInset - bottomInset);
   const minimumStageHeight = width <= 480 ? 208 : 240;
   const preferredStageHeight = clamp(
@@ -59,85 +54,70 @@ export function projectKpInlineStickyLessonLayout(input: {
     minimumStageHeight,
     width <= 480 ? 360 : 432
   );
-  const stageBudget = availableHeight - paddingHeight - cueHeight;
+  const stageBudget = availableHeight - cueHeight;
 
-  // Typography remains authoritative. The stage and its attention corridor
-  // contract before a readable cue is ever narrowed, clipped, or scrolled.
+  // Typography remains authoritative. The stage contracts before a complete
+  // cue loses its ordinary below-stage reading position.
   if (stageBudget < minimumStageHeight) {
     return Object.freeze({
       fit: "reading",
       stageHeightPx: minimumStageHeight,
-      paddingHeightPx: Math.round(paddingHeight),
-      approachHeightPx: Math.round(approachHeight),
-      readingShelfHeightPx: Math.round(readingShelfHeight),
       availableHeightPx: Math.round(availableHeight)
     });
   }
   return Object.freeze({
     fit: stageBudget >= preferredStageHeight ? "comfortable" : "compact",
     stageHeightPx: Math.round(Math.min(preferredStageHeight, stageBudget)),
-    paddingHeightPx: Math.round(paddingHeight),
-    approachHeightPx: Math.round(approachHeight),
-    readingShelfHeightPx: Math.round(readingShelfHeight),
     availableHeightPx: Math.round(availableHeight)
   });
 }
 
 export function projectKpInlineStickyCue(input: {
-  readonly cueAnchorTopPx: number;
+  readonly cueAnchorCenterPx: number;
+  readonly stageTopPx: number;
   readonly stageBottomPx: number;
-  readonly paddingHeightPx: number;
-  readonly approachHeightPx: number;
-  readonly readingShelfHeightPx: number;
-  readonly waitingOpacity?: number | undefined;
+  readonly maximumDepthPx?: number | undefined;
+  readonly maximumScaleReduction?: number | undefined;
 }): KpInlineStickyCueProjection {
+  const stageTop = finiteNonNegative(input.stageTopPx);
   const stageBottom = finiteNonNegative(input.stageBottomPx);
-  const paddingHeight = finiteNonNegative(input.paddingHeightPx);
-  const approachHeight = Math.max(1, finiteNonNegative(input.approachHeightPx));
-  const shelfHeight = Math.max(
-    1,
-    finiteNonNegative(input.readingShelfHeightPx)
+  const stageMidpoint = stageTop + Math.max(0, stageBottom - stageTop) / 2;
+  const maximumDepth = Math.max(
+    0,
+    finiteNonNegative(input.maximumDepthPx ?? 24)
   );
-  const waitingOpacity = clamp(input.waitingOpacity ?? 0.18, 0, 1);
-  const focusLine = stageBottom + paddingHeight;
-  const shelfTop = focusLine - shelfHeight / 2;
-  const shelfBottom = focusLine + shelfHeight / 2;
-  const approachEnd = shelfBottom + approachHeight;
-  const cueTop = Number.isFinite(input.cueAnchorTopPx)
-    ? input.cueAnchorTopPx
-    : approachEnd;
-  const distanceFromFocusLine = cueTop - focusLine;
+  const maximumScaleReduction = clamp(
+    input.maximumScaleReduction ?? 0.012,
+    0,
+    0.1
+  );
+  const cueCenter = Number.isFinite(input.cueAnchorCenterPx)
+    ? input.cueAnchorCenterPx
+    : stageBottom;
+  const distanceFromStageBottom = cueCenter - stageBottom;
 
-  if (cueTop <= stageBottom) {
-    return cueProjection("occluded", 0);
+  if (cueCenter >= stageBottom || stageMidpoint >= stageBottom) {
+    return cueProjection("below", 0);
   }
-  if (cueTop < shelfTop) {
-    return cueProjection(
-      "receding",
-      smoothstep(stageBottom, shelfTop, cueTop)
-    );
+  if (cueCenter <= stageMidpoint) {
+    return cueProjection("occluded", 1);
   }
-  if (cueTop <= shelfBottom) {
-    return cueProjection("reading", 1);
-  }
-  if (cueTop < approachEnd) {
-    const approach = 1 - smoothstep(shelfBottom, approachEnd, cueTop);
-    return cueProjection(
-      "approaching",
-      waitingOpacity + (1 - waitingOpacity) * approach
-    );
-  }
-  return cueProjection("waiting", waitingOpacity);
+  const handoff = 1 - smoothstep(stageMidpoint, stageBottom, cueCenter);
+  return cueProjection("handoff", handoff);
 
   function cueProjection(
     phase: KpInlineStickyCuePhase,
-    opacity: number
+    handoffProgress: number
   ): KpInlineStickyCueProjection {
+    const progress = clamp(handoffProgress, 0, 1);
     return Object.freeze({
       phase,
-      opacity: clamp(opacity, 0, 1),
-      focusLinePx: focusLine,
-      distanceFromFocusLinePx: distanceFromFocusLine
+      opacity: 1 - progress,
+      handoffProgress: progress,
+      depthPx: progress === 0 ? 0 : -maximumDepth * progress,
+      scale: 1 - maximumScaleReduction * progress,
+      stageMidpointPx: stageMidpoint,
+      distanceFromStageBottomPx: distanceFromStageBottom
     });
   }
 }
