@@ -496,6 +496,41 @@
       "scope": "s20 patch whitespace",
       "checkedAt": "2026-08-04T03:32:13.722Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s21 legacy destination and canonical lesson resolution",
+      "checkedAt": "2026-08-04T03:40:22.748Z",
+      "notes": "158 Lisp tests passed, including exact direct resolution for all renamed sections, blocks, and checkpoints plus retained checkpoint IDs."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/kp-lisp-lesson-navigation.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s21 direct load, history, long-jump, and alias normalization",
+      "checkedAt": "2026-08-04T03:40:23.724Z",
+      "notes": "Four Chromium navigation checks passed; legacy hashes restore current semantic state once, replace the same history entry canonically, and remain exact through Back and Forward."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 application, test, Svelte, and domain types",
+      "checkedAt": "2026-08-04T03:40:24.587Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 shared navigation and Lisp compatibility boundaries",
+      "checkedAt": "2026-08-04T03:40:25.478Z",
+      "notes": "All four architecture gates passed; alias policy is opt-in at the shared framework-neutral navigation seam."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s21 patch whitespace",
+      "checkedAt": "2026-08-04T03:40:26.351Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

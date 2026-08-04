@@ -58,6 +58,10 @@ export function createKpTutorialNavigationController<Target>(input: {
   readonly resolve: (destination: KpTutorialTocDestination) => Target | undefined;
   readonly restore: (target: Target, destination: KpTutorialTocDestination) => void;
   readonly scroll: (target: Target, destination: KpTutorialTocDestination) => void;
+  readonly canonicalizeDestination?: ((
+    target: Target,
+    destination: KpTutorialTocDestination
+  ) => KpTutorialTocDestination) | undefined;
   readonly projectTocDestination?: ((
     target: Target,
     destination: KpTutorialTocDestination
@@ -74,11 +78,18 @@ export function createKpTutorialNavigationController<Target>(input: {
   let lastAppliedHash: string | undefined;
 
   const apply = (
-    destination: KpTutorialTocDestination,
+    requestedDestination: KpTutorialTocDestination,
     options: KpTutorialNavigationApplyOptions
   ): boolean => {
-    const target = input.resolve(destination);
+    const target = input.resolve(requestedDestination);
     if (target === undefined) return false;
+    const destination = input.canonicalizeDestination?.(
+      target,
+      requestedDestination
+    ) ?? requestedDestination;
+    const requestedHash = serializeKpTutorialDestinationHash(
+      requestedDestination
+    );
     const hash = serializeKpTutorialDestinationHash(destination);
     applyKpTutorialNavigationTransaction({
       target,
@@ -104,6 +115,25 @@ export function createKpTutorialNavigationController<Target>(input: {
       }),
       moveViewport: () => input.scroll(target, destination)
     });
+    if (
+      options.source !== "push" &&
+      requestedHash !== hash &&
+      view.location.hash === requestedHash
+    ) {
+      // Alias migration rewrites the current entry only after semantic state
+      // is restored, so observers never see a canonical URL with stale paint.
+      view.history.replaceState(
+        {
+          ...(typeof view.history.state === "object" &&
+          view.history.state !== null
+            ? view.history.state
+            : {}),
+          kpTutorialDestination: destination
+        },
+        "",
+        hash
+      );
+    }
     return true;
   };
 

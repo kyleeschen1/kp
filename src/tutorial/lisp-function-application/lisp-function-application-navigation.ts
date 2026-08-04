@@ -23,11 +23,41 @@ export interface KpLispLessonNavigationController {
   readonly dispose: () => void;
 }
 
+const legacyDestinationAliases: Readonly<
+  Record<string, KpTutorialTocDestination>
+> = Object.freeze({
+  "section:read-application": destination("section", "see-structure"),
+  "section:bind-argument": destination("section", "apply-lambda"),
+  "section:evaluate-form": destination("section", "evaluate-result"),
+  "section:metaphor-scope": destination("section", "follow-provenance"),
+  "block:bind-and-reconstruct": destination("block", "application"),
+  "block:evaluate-and-gather": destination("block", "evaluation"),
+  "checkpoint:application-ready": destination("checkpoint", "binding-ready"),
+  "checkpoint:binding-established": destination(
+    "checkpoint",
+    "parameter-bound"
+  ),
+  "checkpoint:evaluation-form-ready": destination(
+    "checkpoint",
+    "reduction-ready"
+  ),
+  "checkpoint:evaluation-gathering": destination(
+    "checkpoint",
+    "inputs-gathered"
+  )
+});
+
+export function canonicalizeKpLispLessonDestination(
+  value: KpTutorialTocDestination
+): KpTutorialTocDestination {
+  return legacyDestinationAliases[`${value.kind}:${value.id}`] ?? value;
+}
+
 export function resolveKpLispLessonNavigationTarget(input: {
   readonly lesson: KpLispFunctionApplicationLesson;
   readonly destination: KpTutorialTocDestination;
 }): KpLispLessonNavigationTarget | undefined {
-  const { destination } = input;
+  const destination = canonicalizeKpLispLessonDestination(input.destination);
   if (destination.kind === "section") {
     if (!input.lesson.sections.some(({ id }) => id === destination.id)) return undefined;
     const state = sectionState(destination.id);
@@ -67,13 +97,14 @@ export function createKpLispLessonNavigationController(input: {
       lesson: input.lesson,
       destination
     }),
+    canonicalizeDestination: (resolved) => resolved.destination,
     restore: (resolved) => {
       input.motion.restore(resolved.blockId, resolved.localProgress);
     },
     projectTocDestination: (resolved, destination) =>
       destination.kind === "checkpoint"
         ? { kind: "block", id: resolved.blockId }
-        : destination,
+        : resolved.destination,
     scroll: (resolved, destination) => {
       const element = input.root.ownerDocument.getElementById(
         resolved.elementId
@@ -114,18 +145,27 @@ export function createKpLispLessonNavigationController(input: {
     // Reading projection only moves the visible TOC cursor. URL changes and
     // semantic restoration remain atomic navigation transactions above.
     setReadingDestination: (destination: KpTutorialTocDestination): boolean => {
-      if (resolveKpLispLessonNavigationTarget({
+      const resolved = resolveKpLispLessonNavigationTarget({
         lesson: input.lesson,
         destination
-      }) === undefined) return false;
-      toc.setActiveDestination(destination);
+      });
+      if (resolved === undefined) return false;
+      toc.setActiveDestination(resolved.destination);
       input.root.dataset["kpLispTutorialReadingDestinationKind"] =
-        destination.kind;
-      input.root.dataset["kpLispTutorialReadingDestinationId"] = destination.id;
+        resolved.destination.kind;
+      input.root.dataset["kpLispTutorialReadingDestinationId"] =
+        resolved.destination.id;
       return true;
     },
     dispose: controller.dispose
   });
+}
+
+function destination(
+  kind: KpTutorialTocDestination["kind"],
+  id: string
+): KpTutorialTocDestination {
+  return Object.freeze({ kind, id });
 }
 
 function sectionState(id: string): {
