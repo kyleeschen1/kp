@@ -3,11 +3,11 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
-Presentation refinement: the broader elevation arc, visible midpoint layer
-crossing, 75%-traversal fade and later motion gate in
-`2026-08-04-kp-cue-elevation-arc-and-stage-crossing.md` supersede this proof's
-narrow text-shadow punctuation and midpoint timing. The no-scroll-snap rule,
-query rollback, and requirement that prose clear before motion remain in force.
+Presentation refinement: the shared-plane bottom-to-midpoint fade in
+`2026-08-04-kp-shared-plane-midpoint-fade-contract.md` supersedes this proof's
+text-shadow punctuation and transform timing while retaining its midpoint
+motion gate. The no-scroll-snap rule, query rollback, and requirement that
+prose clear before motion remain in force.
 
 ## Decision
 

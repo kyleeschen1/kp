@@ -30,7 +30,6 @@ export interface KpInlineStickyCueProjection {
   readonly scale: number;
   readonly stacking: KpInlineStickyCueStacking;
   readonly stageMidpointPx: number;
-  readonly stageOcclusionPointPx: number;
   readonly distanceFromStageBottomPx: number;
 }
 
@@ -86,29 +85,17 @@ export function projectKpInlineStickyCue(input: {
   readonly viewportBottomPx?: number | undefined;
   readonly maximumElevationPx?: number | undefined;
   readonly maximumScaleIncrease?: number | undefined;
-  readonly maximumDepthPx?: number | undefined;
-  readonly maximumScaleReduction?: number | undefined;
 }): KpInlineStickyCueProjection {
   const stageTop = finiteNonNegative(input.stageTopPx);
   const stageBottom = finiteNonNegative(input.stageBottomPx);
   const stageHeight = Math.max(0, stageBottom - stageTop);
   const stageMidpoint = stageTop + stageHeight / 2;
-  const stageOcclusionPoint = stageBottom - stageHeight * 0.75;
   const maximumElevation = Math.max(
     0,
     finiteNonNegative(input.maximumElevationPx ?? 24)
   );
   const maximumScaleIncrease = clamp(
     input.maximumScaleIncrease ?? 0.012,
-    0,
-    0.1
-  );
-  const maximumDepth = Math.max(
-    0,
-    finiteNonNegative(input.maximumDepthPx ?? 24)
-  );
-  const maximumScaleReduction = clamp(
-    input.maximumScaleReduction ?? 0.012,
     0,
     0.1
   );
@@ -133,15 +120,15 @@ export function projectKpInlineStickyCue(input: {
       approachProgress
     );
   }
-  if (cueCenter <= stageOcclusionPoint) {
+  if (cueCenter <= stageMidpoint) {
     return cueProjection("occluded", 1, 0);
   }
   const stageTraversal = clamp(
     (stageBottom - cueCenter) / stageHeight,
     0,
-    0.75
+    0.5
   );
-  return cueProjection("handoff", stageTraversal / 0.75, 0);
+  return cueProjection("handoff", stageTraversal / 0.5, 0);
 
   function cueProjection(
     phase: KpInlineStickyCuePhase,
@@ -149,31 +136,30 @@ export function projectKpInlineStickyCue(input: {
     approachElevation: number
   ): KpInlineStickyCueProjection {
     const progress = clamp(handoffProgress, 0, 1);
-    const stageTraversal = progress * 0.75;
-    const descent = smoothstep(0, 0.5, stageTraversal);
-    const behindProgress = smoothstep(0.5, 0.75, stageTraversal);
+    const descent = smoothstep(0, 1, progress);
     const elevation = phase === "handoff"
       ? 1 - descent
       : phase === "occluded"
         ? 0
         : clamp(approachElevation, 0, 1);
-    // The non-interpolable stacking switch happens only at the neutral plane;
-    // transforms and opacity carry the visible approach and departure.
-    const stacking: KpInlineStickyCueStacking = phase === "occluded" ||
-      (phase === "handoff" && stageTraversal >= 0.5)
+    // The stacking switch is invisible because every animated cue property
+    // reaches its neutral or zero endpoint at the same midpoint sample.
+    const stacking: KpInlineStickyCueStacking = phase === "occluded"
       ? "behind"
       : "front";
     return Object.freeze({
       phase,
-      opacity: phase === "occluded" ? 0 : 1 - behindProgress,
+      opacity: phase === "handoff"
+        ? 1 - descent
+        : phase === "occluded"
+          ? 0
+          : 1,
       handoffProgress: progress,
       elevationProgress: elevation,
-      depthPx: maximumElevation * elevation - maximumDepth * behindProgress,
-      scale: 1 + maximumScaleIncrease * elevation -
-        maximumScaleReduction * behindProgress,
+      depthPx: maximumElevation * elevation,
+      scale: 1 + maximumScaleIncrease * elevation,
       stacking,
       stageMidpointPx: stageMidpoint,
-      stageOcclusionPointPx: stageOcclusionPoint,
       distanceFromStageBottomPx: distanceFromStageBottom
     });
   }

@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("wide proof raises a cue, crosses the stage plane, then clears it", async ({
+test("wide proof raises a cue then eases every property out by midpoint", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -49,6 +49,9 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
   await expect.poll(() => stageCard.evaluate((element) =>
     getComputedStyle(element).boxShadow
   )).toBe("none");
+  const stageBackground = await stage.evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  );
 
   const geometry = await handoffGeometry(page);
   const layoutWidth = await demandCue.evaluate(
@@ -94,8 +97,8 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.001);
   const peak = await cuePresentation(demandCue);
-  expect(peak.baseBackground).toContain("0.62");
-  expect(peak.focusBackground).toContain("linear-gradient");
+  expect(peak.baseBackground).toBe(stageBackground);
+  expect(peak.focusBackground).toBe("none");
   expect(peak.focusOpacity).toBeGreaterThan(0.99);
   expect(peak.focusShadow).not.toBe("none");
   expect(peak.focusShadow).toBe(approachPresentation.focusShadow);
@@ -115,9 +118,13 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
     "data-kp-inline-sticky-stacking",
     "front"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-descent.png`,
+    path: `${evidenceDirectory}/wide-cue-fade-out.png`,
     fullPage: false
   });
 
@@ -128,18 +135,18 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
   );
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
-    "handoff"
+    "occluded"
   );
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-stacking",
     "behind"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
   await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.001);
   await expect.poll(async () => Number(await demandCue.getAttribute(
     "data-kp-inline-sticky-handoff-progress"
-  ))).toBeCloseTo(2 / 3, 1);
-  expect(await cueTransform(demandCue)).not.toBe(belowTransform);
+  ))).toBeCloseTo(1, 1);
+  expect(await cueTransform(demandCue)).toBe(belowTransform);
   expect((await cuePresentation(demandCue)).focusOpacity).toBeLessThan(0.001);
   expect(await demandCue.evaluate((element) =>
     (element as HTMLElement).offsetWidth
@@ -153,30 +160,11 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
     fullPage: false
   });
 
-  const fadeMidpoint = (geometry.stageMidpoint + geometry.stageOcclusionPoint) / 2;
-  await placeCueCenterAt(page, demandCue, fadeMidpoint);
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
-  await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-behind-fade.png`,
-    fullPage: false
-  });
-
-  await placeCueCenterAt(page, demandCue, geometry.stageOcclusionPoint - 2);
-  await expect(demandCue).toHaveAttribute(
-    "data-kp-inline-sticky-cue-phase",
-    "occluded"
-  );
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
-  await expect.poll(async () => Number(await root.getAttribute(
-    "data-kp-economics-tutorial-demand-progress"
-  ))).toBeLessThan(0.001);
-
   await placeCueCenterAt(
     page,
     demandCue,
-    geometry.stageOcclusionPoint -
-      (geometry.stageOcclusionPoint - geometry.stageTop) * 0.65
+    geometry.stageMidpoint -
+      (geometry.stageMidpoint - geometry.stageTop) * 0.65
   );
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
@@ -188,13 +176,13 @@ test("wide proof raises a cue, crosses the stage plane, then clears it", async (
   ))).toBeGreaterThan(0.99);
   await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
 
-  await placeCueCenterAt(page, demandCue, geometry.stageOcclusionPoint);
+  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.01);
 });
 
-test("phone proof preserves one text measure through the depth handoff", async ({
+test("phone proof preserves one text measure through the midpoint fade", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -218,15 +206,19 @@ test("phone proof preserves one text measure through the depth handoff", async (
   await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.99);
 
   const before = await phoneProjection(page);
+  const stageBackground = await stage.evaluate((element) =>
+    getComputedStyle(element).backgroundColor
+  );
   const peak = await cuePresentation(demandCue);
-  expect(peak.baseBackground).toContain("0.62");
+  expect(peak.baseBackground).toBe(stageBackground);
+  expect(peak.focusBackground).toBe("none");
   expect(peak.focusOpacity).toBeGreaterThan(0.99);
   expect(peak.focusShadow).not.toBe("none");
   await page.screenshot({
     path: `${evidenceDirectory}/phone-cue-peak-lift.png`,
     fullPage: false
   });
-  const fadeMidpoint = (geometry.stageMidpoint + geometry.stageOcclusionPoint) / 2;
+  const fadeMidpoint = (geometry.stageBottom + geometry.stageMidpoint) / 2;
   await placeCueCenterAt(page, demandCue, fadeMidpoint);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
@@ -234,7 +226,7 @@ test("phone proof preserves one text measure through the depth handoff", async (
   );
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-stacking",
-    "behind"
+    "front"
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
   await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
@@ -251,9 +243,16 @@ test("phone proof preserves one text measure through the depth handoff", async (
   expect(during.horizontalOverflow).toBeLessThanOrEqual(1);
 
   await page.screenshot({
-    path: `${evidenceDirectory}/phone-cue-behind-fade.png`,
+    path: `${evidenceDirectory}/phone-cue-fade-out.png`,
     fullPage: false
   });
+
+  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint - 2);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
+  await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.001);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
 });
 
 test("large text selects ordinary reading flow instead of shrinking", async ({
@@ -333,7 +332,6 @@ async function handoffGeometry(page: Page): Promise<{
   readonly stageTop: number;
   readonly stageBottom: number;
   readonly stageMidpoint: number;
-  readonly stageOcclusionPoint: number;
 }> {
   return page.evaluate(() => {
     const stage = document.querySelector<HTMLElement>(
@@ -343,8 +341,7 @@ async function handoffGeometry(page: Page): Promise<{
     return {
       stageTop: bounds.top,
       stageBottom: bounds.bottom,
-      stageMidpoint: bounds.top + bounds.height / 2,
-      stageOcclusionPoint: bounds.bottom - bounds.height * 0.75
+      stageMidpoint: bounds.top + bounds.height / 2
     };
   });
 }

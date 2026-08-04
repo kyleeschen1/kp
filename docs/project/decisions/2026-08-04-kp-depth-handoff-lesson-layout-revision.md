@@ -3,8 +3,8 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
-Latest refinement: the elevation arc and 75%-traversal motion gate recorded in
-`2026-08-04-kp-cue-elevation-arc-and-stage-crossing.md` supersede this proof's
+Latest refinement: the shared-plane midpoint fade recorded in
+`2026-08-04-kp-shared-plane-midpoint-fade-contract.md` supersedes this proof's
 presentation trajectory and original timing. The direct geometry, unelevated
 stage, cue/runway structure, reverse projection, and query rollback remain in
 force.

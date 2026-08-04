@@ -12,10 +12,10 @@ with source refs, verification, run-contract slices, and completion evidence.
    retirement without explicit approval.
 2. Compare the approved economics split presentation with
    `/tutorials/economics/demand-shift/?layout=inline-sticky`, including wide
-   stage pinning, approach elevation, the midpoint plane crossing, the 75%
-   opacity and motion gate, reverse scrolling, constant text measure, phone
-   fit, and large-text reading fallback. The query-selected proof is not the
-   default.
+   stage pinning, approach elevation, the shared cue/stage surface, the eased
+   bottom-to-midpoint fade and motion gate, reverse scrolling, constant text
+   measure, phone fit, and large-text reading fallback. The query-selected
+   proof is not the default.
 3. If the S-expression visual is approved, complete only the contract's final
    repeated-variable pressure and botanical-retirement slices.
 4. If the inline-sticky economics proof is approved, pressure its lifecycle

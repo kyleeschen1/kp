@@ -3,6 +3,12 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
+Latest correction: the shared surface and bottom-to-midpoint eased fade in
+`2026-08-04-kp-shared-plane-midpoint-fade-contract.md` supersede this proof's
+separate surface colors, full-opacity descent, visible midpoint crossing,
+negative depth, 75%-traversal fade, and later motion gate. The approach lift,
+composited shadow, no-scroll-snap rule, and rollback boundary remain in force.
+
 ## Decision
 
 Refine the economics inline-sticky proof around one reversible elevation arc.

@@ -11,13 +11,7 @@
   --kp-lesson-theme-focus-surface: rgb(255 253 248 / 0.72);
   --kp-lesson-theme-link: #456b78;
   --kp-lesson-theme-page-wash: rgb(124 158 170 / 0.12);
-  --kp-lesson-theme-stage-plane: rgb(244 241 233 / 0.9);
-  --kp-lesson-theme-cue-plane: rgb(255 253 248 / 0.62);
-  --kp-lesson-theme-cue-focus-plane: linear-gradient(
-    135deg,
-    rgb(255 253 248 / 0.66),
-    rgb(224 235 234 / 0.42)
-  );
+  --kp-lesson-theme-shared-plane: rgb(244 241 233 / 0.9);
   --kp-lesson-theme-cue-focus-edge: rgb(88 124 135 / 0.24);
   --kp-lesson-theme-cue-focus-shadow:
     0 1.15rem 2.4rem rgb(38 56 69 / 0.18),
@@ -909,7 +903,7 @@ kp-tutorial-toc {
   max-height: none;
   margin: 1.5rem 0 0 calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
   isolation: isolate;
-  background: var(--kp-lesson-theme-stage-plane);
+  background: var(--kp-lesson-theme-shared-plane);
   box-shadow: none;
   transform: none;
 }
@@ -971,7 +965,9 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue]::before {
   z-index: -2;
   border-color: rgb(88 124 135 / 0.1);
-  background: var(--kp-lesson-theme-cue-plane);
+  /* Text and animation share one plane; elevation comes from the separate
+     composited edge/shadow layer rather than a second surface color. */
+  background: var(--kp-lesson-theme-shared-plane);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -979,7 +975,7 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue]::after {
   z-index: -1;
   border-color: var(--kp-lesson-theme-cue-focus-edge);
-  background: var(--kp-lesson-theme-cue-focus-plane);
+  background: transparent;
   box-shadow: var(--kp-lesson-theme-cue-focus-shadow);
   opacity: var(--kp-inline-sticky-cue-elevation, 0);
 }
@@ -1140,6 +1136,10 @@ kp-tutorial-toc {
 }
 
 @media (prefers-contrast: more) {
+  :root {
+    --kp-lesson-theme-shared-plane: var(--kp-lesson-theme-surface);
+  }
+
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
     [data-kp-inline-sticky-cue] {
@@ -1147,12 +1147,6 @@ kp-tutorial-toc {
     opacity: 1;
     pointer-events: auto;
     transform: none;
-  }
-
-  .kp-economics-tutorial--inline-sticky
-    #kp-section-market-clearing
-    [data-kp-inline-sticky-cue]::before {
-    background: var(--kp-lesson-theme-surface);
   }
 
   .kp-economics-tutorial--inline-sticky

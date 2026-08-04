@@ -10,9 +10,9 @@ KP lessons may coordinate prose and animation through one reading axis. A
 diagram begins as an ordinary embedded figure and pins in the upper viewport
 while its scene is active. The following cue gathers into a raised reading
 shelf as it approaches, peaks when its center reaches the stage's lower edge,
-then descends through the stage. It crosses behind at the midpoint and is
-absent by 75% of the stage traversal. Only then does essential animation begin,
-transferring attention without changing the cue's content.
+then fades and settles through the stage's lower half. It is fully absent and
+back at neutral depth by the midpoint. Only then does essential animation
+begin, transferring attention without changing the cue's content.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required lesson presentation.
@@ -22,15 +22,16 @@ laboratory layout and not yet a globally required lesson presentation.
 - **Stage:** the sticky animation surface in the upper viewport.
 - **Approach region:** the visible path from the cue's viewport entry to the
   stage bottom.
-- **Handoff region:** the first 75% of the stage measured upward from its
-  bottom edge.
+- **Handoff region:** the lower half of the stage, measured from its bottom
+  edge to its midpoint.
 - **Cue:** one stable prose block that tells the learner what to inspect.
-- **Cue plane:** a square translucent warm surface plus an opacity-controlled
-  focus wash and pre-rendered shadow layer.
+- **Shared plane:** the exact theme background used by both the square cue and
+  the unelevated animation stage.
+- **Cue focus layer:** a transparent opacity-controlled edge and pre-rendered
+  shadow with no independent surface fill.
 - **Elevation arc:** scale, positive depth, and shadow rise from viewport entry
-  to the stage bottom, then settle back to the stage plane at its midpoint.
-- **Stage plane:** a fairly opaque, unelevated animation surface that makes the
-  cue's midpoint stacking change perceptible.
+  to the stage bottom, then settle to neutral while the cue fades out by the
+  stage midpoint.
 - **Runway:** source-order space after a cue that gives its semantic animation
   time to complete and hold before the next cue arrives.
 
@@ -43,35 +44,36 @@ embedded -> pinned -> released -> embedded
 Each cue has the reversible lifecycle:
 
 ```text
-below -> approach -> handoff(front) -> handoff(behind) -> occluded
+below -> approach -> handoff -> occluded
 ```
 
 The cue's vertical center is its stage anchor; its untransformed layout height
 determines viewport entry. Elevation progresses `0 -> 1` from entry to the
-stage bottom. During the first half-stage traversal it returns `1 -> 0` while
-opacity stays one. At the midpoint scale and depth are neutral, so the cue may
-change from the front to the back stacking plane without a visible geometric
-jump. During the next quarter-stage traversal, opacity falls `1 -> 0` and
-negative depth settles. Reverse scrolling reconstructs the same states without
-replaying pixels.
+stage bottom. Across the lower half-stage traversal, one eased envelope drives
+elevation, positive depth, scale, and shadow `1 -> 0` while opacity also falls
+`1 -> 0`. At the midpoint the cue is invisible and all transform properties
+are neutral. Reverse scrolling reconstructs the same states without replaying
+pixels.
 
-CSS cannot interpolate `z-index`. The depth impression must therefore come
-from continuous opacity, perspective translation, scale, and the two surface
-planes. The stacking switch occurs only at neutral scale and depth. Do not use
-blur, a large perspective distortion, or an unrelated time animation to
-simulate the crossing.
+CSS cannot interpolate `z-index`. The visible depth impression must therefore
+come from continuous opacity, perspective translation, scale, and shadow. Any
+stacking switch occurs only after opacity reaches zero and scale and depth are
+neutral. Do not use blur, negative depth, a large perspective distortion, or
+an unrelated time animation to simulate the crossing.
 
 ## Motion And Attention Contract
 
 - A scene is one cue followed by one explicit runway.
 - The stage-bottom crossing begins the cue's descent, not semantic animation.
-- The block-local semantic motion corridor begins at 75% of stage traversal,
+- The block-local semantic motion corridor begins at the stage midpoint,
   after cue opacity reaches zero. Motion retains authored entry holds and may
   continue through the following runway.
 - The runway, not an enlarged paragraph or changing caption, supplies the
   remaining scroll distance.
 - The next cue remains fully opaque below the stage and does not enter the
   handoff until the preceding segment can settle.
+- Every cue cycle in the exemplar uses the same eased fade-and-transform
+  envelope; asset-local semantic choreography remains independently authored.
 - Consecutive animation blocks retain independent semantic progress and only
   one active sampler.
 - Context or conclusion passages may use shorter hold runways while preserving
@@ -142,15 +144,15 @@ scaling.
   stage may bleed wider around the same center without changing text width.
 - The pinned stage is not elevated: no card shadow, lift transform, rounded
   container, or joined paragraph surface.
-- Stage, cue planes, diagram labels, and page use explicit theme roles. The
-  stage is fairly opaque; the cue's base and focus planes remain translucent.
-- The cue may read temporarily as a raised square shelf. Its focus plane may
-  use a restrained gradient, edge, and layered shadow, but not rounded corners.
+- Stage, cue, diagram labels, and page use explicit theme roles. The stage and
+  cue resolve to the exact same fairly opaque shared-plane token.
+- The cue may read temporarily as a raised square shelf. Its transparent focus
+  layer may use a restrained edge and layered shadow, but not a color wash,
+  independent fill, gradient, or rounded corners.
 - Keep the larger shadow fixed on a pseudo-element and project only its
   opacity. Do not animate `box-shadow` itself on scroll.
-- Depth is shallow and supportive: roughly 24 CSS pixels above at peak and 24
-  below at occlusion, with about one percent explicit scale change in either
-  direction.
+- Depth is shallow and supportive: roughly 24 CSS pixels above at peak,
+  returning to zero by the midpoint, with about one percent scale increase.
 - Mathematical labels inside the diagram use the same theme roles and surface
   background as inline mathematical prose.
 

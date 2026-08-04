@@ -892,8 +892,6 @@
             scale: 1,
             stacking: "front" as const,
             stageMidpointPx: stageBounds.top + stageBounds.height / 2,
-            stageOcclusionPointPx: stageBounds.bottom -
-              stageBounds.height * 0.75,
             distanceFromStageBottomPx: cueBounds.top + cueBounds.height / 2 -
               stageBounds.bottom
           })
@@ -962,8 +960,8 @@
   function inlineStickyMotionStartY(): number {
     const stageBounds = inlineStage?.getBoundingClientRect();
     return stageBounds === undefined
-      ? inlineStickyTopInset() + inlineStickyStageHeightPx * 0.25
-      : stageBounds.bottom - stageBounds.height * 0.75;
+      ? inlineStickyTopInset() + inlineStickyStageHeightPx / 2
+      : stageBounds.top + stageBounds.height / 2;
   }
 
   function motionCorridorFor(

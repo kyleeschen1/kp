@@ -51,7 +51,7 @@ test("large text falls back to reading flow instead of becoming illegible", () =
   });
 });
 
-test("cue rises from viewport entry then clears after crossing the stage plane", () => {
+test("cue rises from viewport entry then eases to neutral by midpoint", () => {
   const project = (cueAnchorCenterPx: number) => projectKpInlineStickyCue({
     cueAnchorCenterPx,
     cueHeightPx: 100,
@@ -69,7 +69,6 @@ test("cue rises from viewport entry then clears after crossing the stage plane",
     scale: 1,
     stacking: "front",
     stageMidpointPx: 250,
-    stageOcclusionPointPx: 175,
     distanceFromStageBottomPx: 450
   });
   assert.equal(project(625).phase, "approach");
@@ -80,18 +79,17 @@ test("cue rises from viewport entry then clears after crossing the stage plane",
   assert.equal(project(400).depthPx, 24);
   assert.equal(project(400).scale, 1.012);
   assert.equal(project(325).phase, "handoff");
-  assert.equal(project(325).opacity, 1);
-  assert.equal(project(325).handoffProgress, 1 / 3);
+  assert.equal(project(325).opacity, 0.5);
+  assert.equal(project(325).handoffProgress, 0.5);
   assert.equal(project(325).elevationProgress, 0.5);
   assert.equal(project(325).depthPx, 12);
   assert.equal(project(325).scale, 1.006);
   assert.equal(project(250).stacking, "behind");
-  assert.equal(project(250).opacity, 1);
+  assert.equal(project(250).opacity, 0);
   assert.equal(project(250).depthPx, 0);
-  assert.equal(project(212.5).opacity, 0.5);
-  assert.equal(project(212.5).depthPx, -12);
+  assert.equal(project(250).scale, 1);
   assert.equal(project(175).phase, "occluded");
   assert.equal(project(175).opacity, 0);
-  assert.equal(project(175).depthPx, -24);
+  assert.equal(project(175).depthPx, 0);
   assert.deepEqual(project(325), project(325));
 });
