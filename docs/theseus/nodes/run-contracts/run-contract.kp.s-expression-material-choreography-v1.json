@@ -84,7 +84,8 @@
     {
       "id": "s06",
       "title": "Compile-recursive-fold-and-unfold-schedule",
-      "status": "planned"
+      "summary": "Compiled recursive inside-out fold and exact reverse-unfold schedules: same-depth leaves run together, every parent waits for child completion, contents lead wrapping parentheses, and direct URL seeks normalize to bit-stable material states; ten focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s07",
