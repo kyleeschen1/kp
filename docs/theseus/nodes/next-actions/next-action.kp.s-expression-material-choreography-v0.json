@@ -316,6 +316,38 @@
       "status": "passed",
       "scope": "s15 test type boundary",
       "checkedAt": "2026-08-04T02:24:06.395Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-structural-motion.test.ts tests/kp-lisp-s-expression-fold-schedule.test.ts tests/kp-lisp-s-expression-contained-jostle.test.ts tests/kp-lisp-s-expression-beads.test.ts tests/kp-lisp-s-expression-material-dom.test.ts",
+      "status": "passed",
+      "scope": "s16 structural activation, contained drift, recursive fold, interiors, expansion, paint ownership, and preserved primitives",
+      "checkedAt": "2026-08-04T02:37:25.744Z",
+      "notes": "26 focused tests pass, including 601-frame responsive overlap sampling and 161-frame reverse/direct-seek equality"
+    },
+    {
+      "command": "npm run visual:lisp-structural-motion",
+      "status": "passed",
+      "scope": "s16 canonical six-frame structural visual smoke",
+      "checkedAt": "2026-08-04T02:37:26.978Z",
+      "notes": "Inspected source, leaf, lambda, application, unfold, and restored frames in tmp/codex/lisp-structural-motion/canonical-structural-sequence.png"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s16 application type boundary",
+      "checkedAt": "2026-08-04T02:37:27.988Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s16 test type boundary",
+      "checkedAt": "2026-08-04T02:37:29.053Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s16 committed visual script type boundary",
+      "checkedAt": "2026-08-04T02:37:30.099Z"
     }
   ],
   "progress": {

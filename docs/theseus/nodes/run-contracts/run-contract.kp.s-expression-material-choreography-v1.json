@@ -144,7 +144,8 @@
     {
       "id": "s16",
       "title": "Render-structural-motion-block",
-      "status": "planned"
+      "summary": "Rendered the structural block end to end as a pure, responsive, framework-neutral frame sequence: source activation and contained block-axis drift, authored recursive frontier holds, content-before-parenthesis collapse, source-derived detailed beads, and exact reverse expansion into the same selectable code. The single semantic DOM owner stays inside a fixed 12em stage; 26 focused tests, dense wide/phone no-overlap and seek/rewind sampling, three type boundaries, and an inspected six-frame visual smoke pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
