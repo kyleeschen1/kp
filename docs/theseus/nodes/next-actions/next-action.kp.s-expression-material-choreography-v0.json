@@ -259,6 +259,25 @@
       "status": "passed",
       "scope": "s12 test type boundary",
       "checkedAt": "2026-08-04T02:08:51.436Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-reconstruction-choreography.test.ts tests/kp-lisp-bound-value-propagation.test.ts tests/kp-lisp-s-expression-material-projection.test.ts",
+      "status": "passed",
+      "scope": "s13 reconstruction ledger, recursive shell fold, endpoint, and preserved propagation",
+      "checkedAt": "2026-08-04T02:13:25.805Z",
+      "notes": "15 material-totality, provenance, fold, endpoint, rewind, and projection tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s13 application type boundary",
+      "checkedAt": "2026-08-04T02:13:26.795Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s13 test type boundary",
+      "checkedAt": "2026-08-04T02:13:27.689Z"
     }
   ],
   "progress": {

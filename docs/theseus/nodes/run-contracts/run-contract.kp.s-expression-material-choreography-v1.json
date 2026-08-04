@@ -126,7 +126,8 @@
     {
       "id": "s13",
       "title": "Compile-reconstruction-and-provenance-fold",
-      "status": "planned"
+      "summary": "Compiled a total fourteen-item source-material ledger: six materials map explicitly into native (+ 4 1), while eight consumed shell materials recursively fold parameter-to-lambda-to-application into a temporary source-derived provenance bead with an explicit exit reason. The native reconstruction then appears and recenters as the bead exits; fifteen focused tests and both type boundaries pass, including exact rewind and missing-origin rejection.",
+      "status": "complete"
     },
     {
       "id": "s14",
