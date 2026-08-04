@@ -1,7 +1,7 @@
 # Animation Library Promotion Thread
 
 Status: active
-Last Updated: 2026-08-03
+Last Updated: 2026-08-04
 Current Next Action: Keep `Apply a 2 × 2 matrix to a vector` tabled at its open
 visual checkpoint while the completed botanical Lisp/shared-lesson proof waits
 for human review. When animation promotion resumes, select a nearer non-linear-
@@ -246,6 +246,12 @@ exact, mechanically verified, and human approved. Together they promote
 construction grid, role-based hierarchy, inline KaTeX, and stable two-decimal
 moving readouts over exact semantic truth. Domain geometry, equations,
 narrative, units, responsive composition, and choreography remain local.
+
+The later economics inline-sticky discovery additionally trials invariant
+`1px` structural strokes, a calculated half-width grid, and style-preserving
+opacity ghosts. That treatment remains scoped to the economics presentation
+profile; it is evidence for a future shared-profile comparison, not a silent
+revision of `kp.graph.dimensional-continuity.v1`.
 
 Consumer and producer surplus remain a possible optional follow-on rather than
 default choreography. Deadweight loss is deferred to a separate model with an

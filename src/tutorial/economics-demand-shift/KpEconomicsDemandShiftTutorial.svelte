@@ -35,6 +35,7 @@
   import {
     projectKpInlineStickyCue,
     projectKpInlineStickyLessonLayout,
+    projectKpInlineStickyMotionCorridor,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpInlineStickyCueProjection,
     type KpInlineStickyLessonFit
@@ -43,6 +44,7 @@
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
     projectKpEconomicsLessonMotion,
+    type KpEconomicsMotionBlock,
     type KpEconomicsMotionBlockId
   } from "./economics-demand-shift-motion-blocks.ts";
   import {
@@ -680,7 +682,7 @@
           );
       return anchor === undefined || anchor === null
         ? []
-        : [{ id: block.id, anchor, corridor: motionCorridorFor(block.corridor) }];
+        : [{ id: block.id, anchor, corridor: motionCorridorFor(block) }];
     });
   }
 
@@ -756,7 +758,7 @@
         if (manualScrollRebase?.blockId === active.id) {
           const block = findKpEconomicsMotionBlock(active.id)!;
           const rebased = projectKpTutorialRebasedCorridor({
-            corridor: motionCorridorFor(block.corridor),
+            corridor: motionCorridorFor(block),
             rawTravelAtTakeover: manualScrollRebase.rawTravelAtTakeover,
             manualProgress: manualScrollRebase.manualProgress,
             rawTravel: active.travel
@@ -827,8 +829,8 @@
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>,
     cueFrames: readonly KpEconomicsInlineCueFrame[]
   ): KpTutorialAttentionFrame<string, string, KpEconomicsMotionBlockId> {
-    // A completed block retains the stage through its runway. This also makes
-    // large scroll deltas land on the terminal semantic frame instead of
+    // A completed block retains the stage through its scene track. This also
+    // makes large scroll deltas land on the terminal semantic frame instead of
     // depending on the browser sampling the corridor's final pixel.
     const owner = projection.blocks.find(({ ownsScroll, travel }) =>
       ownsScroll && travel > 0.001
@@ -954,27 +956,17 @@
     return stageBottom;
   }
 
-  function inlineStickyMotionStartY(): number {
-    const stageBottom = inlineStage?.getBoundingClientRect().bottom ??
-      inlineStickyTopInset() + inlineStickyStageHeightPx;
-    return stageBottom - window.innerHeight * 0.15;
-  }
-
   function motionCorridorFor(
-    corridor: KpTutorialMotionCorridor
+    block: KpEconomicsMotionBlock
   ): KpTutorialMotionCorridor {
-    if (!inlineSticky || inlineStickyFit === "reading") return corridor;
-    const startViewportRatio = clamp(
-      inlineStickyMotionStartY() / window.innerHeight,
-      0.08,
-      0.58
-    );
-    const endViewportRatio = clamp(
-      (inlineStickyTopInset() + 24) / window.innerHeight,
-      0.06,
-      0.12
-    );
-    return Object.freeze({ ...corridor, startViewportRatio, endViewportRatio });
+    if (!inlineSticky || inlineStickyFit === "reading") return block.corridor;
+    return projectKpInlineStickyMotionCorridor({
+      corridor: block.corridor,
+      stageBottomPx: inlineStage?.getBoundingClientRect().bottom ??
+        inlineStickyTopInset() + inlineStickyStageHeightPx,
+      viewportHeightPx: window.innerHeight,
+      scrollTravelViewportRatio: block.inlineStickyScrollTravelRatio
+    });
   }
 
   function updateReadingBandSelection(
@@ -1234,7 +1226,7 @@
           ? supplyScrubBar
           : demandScrubBar;
       if (anchor === undefined) return;
-      const corridor = motionCorridorFor(block.corridor);
+      const corridor = motionCorridorFor(block);
       const start = corridor.startViewportRatio * window.innerHeight;
       const end = corridor.endViewportRatio * window.innerHeight;
       const endpointInset = destination.motionScroll.travel <= 0.001
@@ -1572,13 +1564,17 @@
                 </details>
               {/if}
             </div>
-            {#if inlineSticky && section.id === "market-clearing"}
+            {#if inlineSticky &&
+              section.id === "market-clearing" &&
+              renderedMotionBlock !== undefined}
               <span
-                class="kp-economics-tutorial__cue-runway"
-                data-kp-inline-sticky-runway={renderedMotionBlock === undefined
-                  ? "hold"
-                  : "motion"}
+                class="kp-economics-tutorial__motion-track"
+                data-kp-inline-sticky-motion-track={renderedMotionBlock.id}
+                data-kp-inline-sticky-motion-travel={renderedMotionBlock.inlineStickyScrollTravelRatio.toFixed(2)}
                 aria-hidden="true"
+                style={`--kp-inline-sticky-motion-travel:${(
+                  renderedMotionBlock.inlineStickyScrollTravelRatio * 100
+                ).toFixed(0)}svh`}
               ></span>
             {/if}
           {/each}

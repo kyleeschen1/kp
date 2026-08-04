@@ -1,3 +1,5 @@
+import type { KpTutorialMotionCorridor } from "../kp-tutorial-motion.ts";
+
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
   | "inline-sticky";
@@ -124,6 +126,33 @@ export function projectKpInlineStickyCue(input: {
       distanceFromHandoffThresholdPx: distanceFromHandoffThreshold
     });
   }
+}
+
+export function projectKpInlineStickyMotionCorridor(input: {
+  readonly corridor: KpTutorialMotionCorridor;
+  readonly stageBottomPx: number;
+  readonly viewportHeightPx: number;
+  readonly scrollTravelViewportRatio: number;
+}): KpTutorialMotionCorridor {
+  const viewportHeight = finitePositive(input.viewportHeightPx, 640);
+  const motionStart = clamp(
+    finiteNonNegative(input.stageBottomPx) - viewportHeight * 0.15,
+    viewportHeight * 0.08,
+    viewportHeight * 0.58
+  );
+  const startViewportRatio = motionStart / viewportHeight;
+  const scrollTravelViewportRatio = clamp(
+    input.scrollTravelViewportRatio,
+    0.2,
+    0.9
+  );
+  // A scene's physical track and its projection corridor share one travel
+  // budget, so blank document space cannot outlive the semantic animation.
+  return Object.freeze({
+    ...input.corridor,
+    startViewportRatio,
+    endViewportRatio: startViewportRatio - scrollTravelViewportRatio
+  });
 }
 
 function finitePositive(value: number, fallback: number): number {

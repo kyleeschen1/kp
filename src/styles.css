@@ -2184,6 +2184,11 @@ h2 {
   background: var(--kp-graph-plane);
 }
 
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-line-width: 1px;
+  --kp-graph-grid-line-width: calc(var(--kp-graph-line-width) * 0.5);
+}
+
 .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] .editor-graph-stage__plot-plane {
   fill: var(--kp-graph-plane);
 }
@@ -2192,6 +2197,11 @@ h2 {
   stroke: var(--kp-graph-axis);
   stroke-linecap: round;
   stroke-width: 1.8;
+}
+
+.editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] [data-kp-editor-graph-axis] {
+  stroke-width: var(--kp-graph-line-width);
+  vector-effect: non-scaling-stroke;
 }
 
 .editor-graph-stage__curve,
@@ -2302,44 +2312,42 @@ h2 {
 .editor-graph-stage__economics-curve {
   fill: none;
   stroke-linecap: round;
-  stroke-width: 3.25;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-curve--supply { stroke: var(--kp-graph-stable); }
 .editor-graph-stage__economics-curve--demand { stroke: var(--kp-graph-changing); }
 .editor-graph-stage__economics-curve--demand-reference {
   stroke: var(--kp-graph-changing);
-  stroke-dasharray: 7 6;
-  stroke-width: 2;
+  stroke-dasharray: none;
 }
 .editor-graph-stage__economics-grid-line {
   stroke: var(--kp-graph-grid);
-  stroke-width: 0.8;
+  stroke-width: var(--kp-graph-grid-line-width, 0.5px);
   opacity: 0.28;
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-tick {
   stroke: var(--kp-graph-axis);
-  stroke-width: 1.4;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-guide {
   stroke: #708998;
   stroke-dasharray: 4 5;
-  stroke-width: 1.25;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-equilibrium {
   fill: var(--kp-graph-focal);
   stroke: var(--kp-graph-plane);
-  stroke-width: 2;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-equilibrium--reference {
-  fill: var(--kp-graph-plane);
-  stroke: #708998;
-  stroke-dasharray: 3 2;
-  stroke-width: 1.5;
+  fill: var(--kp-graph-focal);
+  stroke: var(--kp-graph-plane);
+  stroke-dasharray: none;
 }
 .editor-graph-stage__economics-supply-movement {
   opacity: 0;
@@ -2351,13 +2359,13 @@ h2 {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   stroke-linecap: round;
-  stroke-width: 6;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-supply-movement-target {
   fill: var(--kp-graph-plane);
   stroke: var(--kp-graph-stable);
-  stroke-width: 2;
+  stroke-width: var(--kp-graph-line-width, 1px);
   vector-effect: non-scaling-stroke;
 }
 .editor-graph-stage__economics-math-foreign-object {

@@ -105,6 +105,14 @@ remains deliberately absent. Block controls are a quiet inline divider. This
 query-local proof also trials Gill Sans for all non-KaTeX text while retaining
 KaTeX's renderer-owned fonts. The accepted correction is recorded in
 `decisions/2026-08-04-kp-continuous-canvas-attention-ownership.md`. The
+latest exemplar refinement fixes economics graph strokes at `1px`, derives the
+grid at half that token, preserves ghost stroke style, sizes inline math and
+`P`/`Q` with prose, removes the persistent equation banner from the reading
+stage, and replaces generic post-passage runways with two motion-only scene
+tracks whose physical distance exactly owns semantic progress. It is recorded
+in
+`decisions/2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md`.
+These graph choices remain economics-local pending a second caller. The
 economics proof is query-selected through `?layout=inline-sticky`; the approved
 split route remains default until human comparison and a structurally different
 second caller justify promotion.
@@ -596,9 +604,10 @@ activating heavy animation capabilities lazily.
    `?layout=inline-sticky` continuous-canvas proof, including the wider
    transparent graph bleed, invisible top-edge threshold, absence of row/card
    chrome, `5vh` hold, `10vh` opacity-only fade and motion gate, quiet inline
-   controls, reverse scroll, query-local Gill Sans/KaTeX font separation,
-   constant prose measure, phone fit, and large-text fallback; do not infer
-   default promotion.
+   controls, two exact motion-only scene tracks, invariant `1px` graph strokes,
+   half-width grid, style-preserving ghosts, body-sized inline math and `P`/`Q`,
+   reverse scroll, query-local Gill Sans/KaTeX font separation, constant prose
+   measure, phone fit, and large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

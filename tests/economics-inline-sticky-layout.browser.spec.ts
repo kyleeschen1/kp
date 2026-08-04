@@ -17,8 +17,12 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
   const stageCard = stage.locator(".kp-economics-tutorial__stage-card");
+  const graph = stage.locator(".editor-graph-stage");
   const demandCue = cue(root, "follow-shift");
   const followingCue = cue(root, "new-equilibrium");
+  const demandTrack = root.locator(
+    '[data-kp-inline-sticky-motion-track="demand-shift"]'
+  );
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
@@ -27,6 +31,10 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveCount(1);
   await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(4);
+  await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
+    .toHaveCount(2);
+  await expect(root.locator("[data-kp-inline-sticky-runway]"))
+    .toHaveCount(0);
   await expect(root.locator("[data-kp-inline-sticky-attention-padding]"))
     .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
@@ -42,6 +50,11 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   await expect.poll(() => root.locator(".katex").first().evaluate(
     (element) => getComputedStyle(element).fontFamily
   )).not.toContain("Gill Sans");
+  await expect.poll(() => root.locator(".kp-economics-tutorial__math")
+    .first().evaluate((element) => ({
+      math: getComputedStyle(element).fontSize,
+      prose: getComputedStyle(element.parentElement!).fontSize
+    }))).toEqual({ math: "19px", prose: "19px" });
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -50,13 +63,19 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   );
   await expect.poll(() => stage.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
+    marginTop: Number.parseFloat(getComputedStyle(element).marginTop),
+    marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom),
     shadow: getComputedStyle(element).boxShadow,
     transform: getComputedStyle(element).transform
-  }))).toEqual({
+  }))).toMatchObject({
     background: "rgba(0, 0, 0, 0)",
     shadow: "none",
     transform: "none"
   });
+  await expect.poll(() => stage.evaluate((element) => ({
+    marginTop: Number.parseFloat(getComputedStyle(element).marginTop),
+    marginBottom: Number.parseFloat(getComputedStyle(element).marginBottom)
+  }))).toEqual({ marginTop: 20, marginBottom: 24 });
   await expect.poll(() => stageCard.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
     borderTop: getComputedStyle(element).borderTopWidth,
@@ -75,6 +94,43 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
   await expect.poll(() => stage.locator(".editor-graph-stage__plot-plane")
     .evaluate((element) => getComputedStyle(element).fill))
     .toBe("rgba(0, 0, 0, 0)");
+  await expect.poll(() => graph.evaluate((element) => ({
+    line: getComputedStyle(element).getPropertyValue("--kp-graph-line-width")
+      .trim(),
+    grid: getComputedStyle(element).getPropertyValue(
+      "--kp-graph-grid-line-width"
+    ).trim()
+  }))).toEqual({ line: "1px", grid: "calc(1px * 0.5)" });
+  await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
+    .evaluate((element) => getComputedStyle(element).strokeWidth))
+    .toBe("1px");
+  await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
+    .evaluate((element) => getComputedStyle(element).strokeWidth))
+    .toBe("1px");
+  await expect.poll(() => graph.locator(".editor-graph-stage__economics-grid-line")
+    .first().evaluate((element) => getComputedStyle(element).strokeWidth))
+    .toBe("0.5px");
+  await expect.poll(() => graph.locator(".editor-graph-stage__economics-guide")
+    .first().evaluate((element) => getComputedStyle(element).strokeWidth))
+    .toBe("1px");
+  await expect.poll(() => graph.locator(
+    "[data-kp-economics-initial-demand-reference]"
+  ).evaluate((element) => ({
+    dash: getComputedStyle(element).strokeDasharray,
+    width: getComputedStyle(element).strokeWidth
+  }))).toEqual({ dash: "none", width: "1px" });
+  await expect.poll(() => graph.locator(
+    "[data-kp-economics-supply-movement-trace]"
+  ).evaluate((element) => getComputedStyle(element).strokeWidth))
+    .toBe("1px");
+  await expect.poll(() => graph.locator(
+    '[data-kp-economics-math-label="axis-quantity"] ' +
+      ".editor-graph-stage__economics-math-label"
+  ).evaluate((element) => getComputedStyle(element).fontSize))
+    .toBe("19px");
+  await expect(stage.locator(
+    ".editor-graph-stage__economics-explanation-foreign-object"
+  )).toBeHidden();
   const stageWidth = await stage.evaluate(
     (element) => (element as HTMLElement).offsetWidth
   );
@@ -182,17 +238,43 @@ test("wide continuous canvas preserves the 5vh hold and 10vh prose fade", async 
     fullPage: false
   });
 
+  const demandTrackHeight = await demandTrack.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  );
+  expect(demandTrackHeight).toBeCloseTo(800 * 0.52, 0);
   await placeCueTopAt(
     page,
     demandCue,
-    geometry.fadeEnd -
-      (geometry.fadeEnd - geometry.stageTop) * 0.65
+    geometry.fadeEnd - demandTrackHeight * 0.25
   );
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
-  ))).toBeGreaterThan(0.001);
+  ))).toBeGreaterThan(0.16);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.21);
 
-  await placeCueTopAt(page, demandCue, geometry.stageTop + 20);
+  await placeCueTopAt(
+    page,
+    demandCue,
+    geometry.fadeEnd - demandTrackHeight * 0.5
+  );
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeGreaterThan(0.58);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.63);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-continuous-motion-track.png`,
+    fullPage: false
+  });
+
+  await placeCueTopAt(
+    page,
+    demandCue,
+    geometry.fadeEnd - demandTrackHeight + 2
+  );
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.99);
@@ -212,6 +294,9 @@ test("phone continuous canvas preserves one text measure through both bands", as
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const stage = root.locator("[data-kp-inline-sticky-stage]");
   const demandCue = cue(root, "follow-shift");
+  const demandTrack = root.locator(
+    '[data-kp-inline-sticky-motion-track="demand-shift"]'
+  );
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -226,6 +311,9 @@ test("phone continuous canvas preserves one text measure through both bands", as
     .evaluate((element) => getComputedStyle(element).backgroundColor))
     .toBe("rgba(0, 0, 0, 0)");
   await expectQuietControls(root);
+  await expect.poll(() => demandTrack.evaluate(
+    (element) => (element as HTMLElement).offsetHeight
+  )).toBeCloseTo(844 * 0.52, 0);
   const geometry = await handoffGeometry(page);
   await placeCueTopAt(page, demandCue, geometry.stageBottom - 1);
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);

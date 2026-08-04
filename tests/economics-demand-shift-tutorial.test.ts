@@ -170,6 +170,7 @@ test("economics defines two local motion blocks with exact scene handoff", () =>
     passageId: block.passageId,
     entry: block.entry,
     settled: block.settled,
+    inlineStickyScrollTravelRatio: block.inlineStickyScrollTravelRatio,
     checkpoints: block.checkpoints.map(({ id, progress }) => [id, progress])
   })), [
     {
@@ -177,6 +178,7 @@ test("economics defines two local motion blocks with exact scene handoff", () =>
       passageId: "follow-shift",
       entry: { market: "initial", presentation: "graph-only" },
       settled: { market: "shifted", presentation: "graph-only" },
+      inlineStickyScrollTravelRatio: 0.52,
       checkpoints: [
         ["shift-ready", 0],
         ["shift-handoff", 0.72],
@@ -188,6 +190,7 @@ test("economics defines two local motion blocks with exact scene handoff", () =>
       passageId: "shift-versus-movement",
       entry: { market: "shifted", presentation: "graph-only" },
       settled: { market: "shifted", presentation: "comparison-verified" },
+      inlineStickyScrollTravelRatio: 0.48,
       checkpoints: [
         ["movement-ready", 0],
         ["movement-traced", 0.58],

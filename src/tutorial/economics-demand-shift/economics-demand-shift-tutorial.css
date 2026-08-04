@@ -256,7 +256,7 @@ kp-tutorial-toc {
   display: inline-block;
   min-width: max-content;
   color: var(--kp-lesson-math-foreground);
-  font-size: 0.94em;
+  font-size: 1em;
   line-height: 1;
   /* Paragraph indentation must not restart inside each inline KaTeX box. */
   text-indent: 0;
@@ -526,7 +526,7 @@ kp-tutorial-toc {
   .editor-graph-stage__economics-equations,
 .kp-economics-tutorial__player-host
   [data-kp-editor-graph-axis] {
-  transition: filter 180ms ease, opacity 180ms ease, stroke-width 180ms ease;
+  transition: filter 180ms ease, opacity 180ms ease;
 }
 
 .kp-economics-tutorial__player-host
@@ -548,11 +548,7 @@ kp-tutorial-toc {
 .kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
   .kp-economics-tutorial__player-host
   [data-kp-economics-supply-line] {
-  stroke-width: calc(
-    3.25px +
-    1.1px * var(--kp-tutorial-supply-emphasis) +
-    0.65px * var(--kp-verification-supply-rule)
-  );
+  stroke-width: var(--kp-graph-line-width, 1px);
 }
 
 .kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation p {
@@ -839,8 +835,10 @@ kp-tutorial-toc {
   --kp-inline-sticky-top: clamp(1rem, 4svh, 2.5rem);
   --kp-inline-sticky-measure: 43rem;
   --kp-inline-sticky-stage-width: min(60rem, calc(100vw - 2rem));
-  --kp-inline-sticky-motion-runway: 52svh;
-  --kp-inline-sticky-hold-runway: 24svh;
+  --kp-inline-sticky-prose-font-size:
+    clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
+  --kp-animation-block-margin-before: clamp(1.25rem, 2.5svh, 2rem);
+  --kp-animation-block-margin-after: clamp(1.5rem, 3svh, 2.5rem);
   --kp-inline-sticky-text-font:
     "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
   font-family: var(--kp-inline-sticky-text-font);
@@ -870,8 +868,11 @@ kp-tutorial-toc {
   width: min(100%, var(--kp-inline-sticky-measure));
   margin-inline: auto;
   padding: 0 0 8rem;
-  font-size: clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
+  font-size: var(--kp-inline-sticky-prose-font-size);
   line-height: 1.55;
+  /* Gill Sans closes punctuation tightly; retain a visible reading-space at
+     sentence boundaries without altering the accepted line measure. */
+  word-spacing: 0.035em;
 }
 
 .kp-economics-tutorial--inline-sticky kp-tutorial-toc {
@@ -906,7 +907,11 @@ kp-tutorial-toc {
   height: var(--kp-inline-sticky-stage-height);
   min-height: 0;
   max-height: none;
-  margin: 1.5rem 0 0 calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
+  margin:
+    var(--kp-animation-block-margin-before)
+    0
+    var(--kp-animation-block-margin-after)
+    calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
   isolation: isolate;
   background: transparent;
   box-shadow: none;
@@ -946,6 +951,18 @@ kp-tutorial-toc {
   .kp-economics-tutorial__stage--inline
   .editor-graph-stage__plot-plane {
   fill: transparent;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
+  .editor-graph-stage__economics-explanation-foreign-object {
+  display: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline
+  .editor-graph-stage__economics-math-label--axis {
+  font-size: var(--kp-inline-sticky-prose-font-size);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -1037,20 +1054,11 @@ kp-tutorial-toc {
 }
 
 .kp-economics-tutorial--inline-sticky
-  .kp-economics-tutorial__cue-runway {
+  .kp-economics-tutorial__motion-track {
   display: block;
   width: 1px;
+  height: var(--kp-inline-sticky-motion-travel);
   pointer-events: none;
-}
-
-.kp-economics-tutorial--inline-sticky
-  [data-kp-inline-sticky-runway="motion"] {
-  height: var(--kp-inline-sticky-motion-runway);
-}
-
-.kp-economics-tutorial--inline-sticky
-  [data-kp-inline-sticky-runway="hold"] {
-  height: var(--kp-inline-sticky-hold-runway);
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
@@ -1067,8 +1075,8 @@ kp-tutorial-toc {
 }
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
-  .kp-economics-tutorial__cue-runway {
-  height: 1.5rem;
+  .kp-economics-tutorial__motion-track {
+  height: var(--kp-animation-block-margin-after);
 }
 
 @media (max-width: 760px) {
@@ -1080,7 +1088,7 @@ kp-tutorial-toc {
   .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__prose {
     width: 100%;
     padding: 0 1.125rem 6rem;
-    font-size: clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
+    font-size: var(--kp-inline-sticky-prose-font-size);
     line-height: 1.55;
   }
 
@@ -1112,8 +1120,8 @@ kp-tutorial-toc {
   }
 
   .kp-economics-tutorial--inline-sticky
-    .kp-economics-tutorial__cue-runway {
-    height: 1.5rem;
+    .kp-economics-tutorial__motion-track {
+    height: var(--kp-animation-block-margin-after);
   }
 
   .kp-economics-tutorial--inline-sticky

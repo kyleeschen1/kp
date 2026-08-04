@@ -49,6 +49,16 @@ rules live in
 through `?layout=inline-sticky`; its approved split layout remains the default
 pending human comparison and a structurally different second caller.
 
+The latest bounded refinement is recorded in
+`decisions/2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md`.
+Only the two prose passages that own motion now receive a scene track, and each
+track's physical scroll height is exactly its normalized semantic-motion
+corridor. Non-motion passages return to ordinary spacing. The same economics
+proof trials invariant `1px` graph strokes, a calculated `0.5px` grid,
+style-preserving opacity ghosts, body-sized inline KaTeX and `P`/`Q`, and no
+persistent equation banner. These remain exemplar-local and do not alter the
+shared graph profile or approved split default.
+
 Learners retain fine-grained control through a block-level prose scrub bar with
 Rewind, Previous semantic checkpoint, Play/Pause, Next semantic checkpoint, a
 continuously draggable marked timeline, and keyboard equivalents. The local

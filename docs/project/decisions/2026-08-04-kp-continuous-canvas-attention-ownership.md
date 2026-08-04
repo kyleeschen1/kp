@@ -78,7 +78,15 @@ This does not promote a shared lesson API, make the one-axis layout the
 default, or authorize a second caller. Human comparison with the split layout
 still precedes any promotion decision.
 
+The later bounded refinement in
+`2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md` replaces
+generic post-passage runways with motion-only scene tracks whose physical and
+semantic travel budgets are identical. It also records the economics-local
+stable-stroke and mathematical-label hierarchy without changing this
+decision's attention geometry.
+
 ## References
 
 - `2026-08-04-kp-black-rule-hold-and-fade-bands.md`
+- `2026-08-04-kp-stable-graph-strokes-and-semantic-scene-tracks.md`
 - `../principles/inline-sticky-lesson-layout.md`

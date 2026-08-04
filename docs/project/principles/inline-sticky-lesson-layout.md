@@ -28,8 +28,8 @@ laboratory layout and not yet a globally required presentation.
 - **Cue:** one stable prose block that tells the learner what to inspect.
 - **Continuous canvas:** page, cue, stage, and diagram share one visual ground;
   no row or card surface separates their explanatory roles.
-- **Runway:** source-order space after a cue that gives its semantic animation
-  time to complete and hold before the next cue arrives.
+- **Scene track:** source-order travel after a motion cue whose physical height
+  is exactly the block's normalized semantic-motion corridor.
 
 The stage lifecycle is:
 
@@ -51,21 +51,22 @@ scrolling reconstructs the same states from geometry without replaying pixels.
 
 ## Motion And Attention Contract
 
-- A scene is one cue followed by one explicit runway.
+- A motion scene is one cue followed by one explicit scene track. Ordinary
+  context and conclusion passages do not receive timing-shaped spacers.
 - Crossing the invisible threshold begins the `5vh` hold, not semantic motion.
 - The block-local semantic motion corridor begins after the following `10vh`
-  fade, once cue opacity reaches zero. Motion retains authored entry holds and
-  may continue through the following runway.
-- The runway, not an enlarged paragraph or changing caption, supplies the
-  remaining scroll distance.
+  fade, once cue opacity reaches zero.
+- The scene track's viewport-unit height and its projected start-to-end
+  corridor are one declared budget. Its first pixel maps to local travel zero,
+  its last pixel maps to one, and authored keyframe plateaus own any pauses.
 - The next cue remains fully opaque below the stage and does not enter the
   handoff until the preceding segment can settle.
 - Every cue cycle in the exemplar uses the same opacity envelope; asset-local
   semantic choreography remains independently authored.
 - Consecutive animation blocks retain independent semantic progress and only
   one active sampler.
-- Context or conclusion passages may use shorter hold runways while preserving
-  the current settled animation frame.
+- Visual top and bottom margins are explicit rem/viewport-clamped tokens and
+  never extend semantic motion.
 
 One geometry sample projects immutable stage phase, cue phase, cue opacity,
 active passage, active motion block, and local semantic progress. Intersection
@@ -105,7 +106,7 @@ Each scene projects one fit class:
 
 1. `comfortable`: the preferred stage and one complete readable cue coexist;
 2. `compact`: the stage contracts while the prose measure remains unchanged;
-3. `reading`: sticky positioning, cue fading, and runways turn off and the
+3. `reading`: sticky positioning, cue fading, and scene tracks turn off and the
    complete diagram and prose return to ordinary flow.
 
 The adaptation order is:
@@ -118,7 +119,7 @@ remove excess spacing
 ```
 
 Do not shrink prose indefinitely, clip it, or introduce nested scrolling. Use
-stable viewport units (`svh`) for stage and runway budgets so mobile browser
+stable viewport units (`svh`) for stage and scene-track budgets so mobile browser
 chrome does not resize an active scene. Respect safe-area insets and user font
 scaling.
 
@@ -135,6 +136,12 @@ scaling.
   actions have no border, radius, lift, or shadow.
 - Stage, prose, diagram labels, controls, and mathematical foregrounds use
   explicit theme roles. KaTeX keeps renderer-owned font metrics.
+- The economics discovery caller trials invariant `1px` axes, curves, guides,
+  traces, and emphasis, with grid width derived as one half of the line token.
+  Ghosts preserve source stroke topology and become quiet through opacity.
+- In that caller, inline KaTeX inherits prose size, `P` and `Q` share the prose
+  token, and the persistent equation banner is omitted from the reading stage.
+  These graph details remain exemplar-local pending a second graph caller.
 
 ## Controls, Navigation, And Accessibility
 
@@ -166,5 +173,5 @@ default and the query-selected presentation is one reversible rollback unit.
 
 Human review of the economics continuous-canvas proof precedes any shared
 lesson-shell promotion. A structurally different second caller must then prove
-the same stage, cue, runway, fit, and accessibility boundaries before this can
+the same stage, cue, scene-track, fit, and accessibility boundaries before this can
 become KP's default lesson grammar.

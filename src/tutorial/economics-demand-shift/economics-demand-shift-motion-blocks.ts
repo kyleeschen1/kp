@@ -63,6 +63,7 @@ export interface KpEconomicsMotionBlock
   readonly settled: KpEconomicsMotionSceneState;
   readonly checkpoints: readonly KpEconomicsMotionCheckpoint[];
   readonly corridor: KpEconomicsMotionCorridor;
+  readonly inlineStickyScrollTravelRatio: number;
 }
 
 export interface KpEconomicsMotionBlockProjection {
@@ -94,6 +95,7 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
         checkpoint("shift-handoff", "Equilibrium handoff", 0.72),
         checkpoint("shift-settled", "New equilibrium", 1)
       ],
+      inlineStickyScrollTravelRatio: 0.52,
       corridor: corridor([
         [0, 0],
         [0.14, 0],
@@ -114,6 +116,7 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
         checkpoint("movement-traced", "Trace movement along supply", 0.58),
         checkpoint("movement-verified", "Compare price and quantity", 1)
       ],
+      inlineStickyScrollTravelRatio: 0.48,
       corridor: corridor([
         [0, 0],
         [0.16, 0],
