@@ -60,7 +60,8 @@
     {
       "id": "s02",
       "title": "Define-proven-semantic-roles-and-operations",
-      "status": "planned"
+      "summary": "Defined and validated the exemplar-local S-expression material roles and activate/fold/unfold/bind/propagate/reconstruct/reduce operations as a deeply immutable framework-neutral contract; four focused tests and app/test typechecks pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
