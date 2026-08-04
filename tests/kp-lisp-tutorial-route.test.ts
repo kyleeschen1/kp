@@ -30,6 +30,20 @@ test("bootstrap lazy-loads the Lisp Svelte host", async () => {
   assert.match(bootstrap, /lisp-function-application-tutorial-entry\.ts/);
 });
 
+test("the Lisp route owns a build entry with a static fallback", async () => {
+  const [html, vite] = await Promise.all([
+    readFile(new URL(
+      "../tutorials/programming/lisp-function-application/index.html",
+      import.meta.url
+    ), "utf8"),
+    readFile(new URL("../vite.config.ts", import.meta.url), "utf8")
+  ]);
+  assert.match(html, /data-kp-lisp-static-fallback/);
+  assert.match(html, /kp:lisp-static-fallback/);
+  assert.match(vite, /lispFunctionApplicationTutorial: lispTutorialFilename/);
+  assert.match(vite, /compileLispTutorialStaticFallback/);
+});
+
 test("Svelte host composes framework-neutral publication and stage payloads", async () => {
   const source = await readFile(
     new URL(

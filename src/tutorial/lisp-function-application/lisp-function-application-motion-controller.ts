@@ -91,6 +91,7 @@ export function createKpLispLessonMotionController(input: {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp motion controls require a browser view.");
   const stage = required<HTMLElement>(input.root, "[data-kp-lisp-stage-host]");
+  const reducedMotionQuery = view.matchMedia("(prefers-reduced-motion: reduce)");
   const scrubs = Object.fromEntries(kpLispLessonMotionBlocks.map(({ id }) => [
     id,
     required<KpTutorialScrubBarElement>(
@@ -130,7 +131,7 @@ export function createKpLispLessonMotionController(input: {
       activeBlockId,
       localProgress: local,
       availableWidthPx: stageWidth(stage),
-      reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
+      reducedMotion: reducedMotionQuery.matches
     });
     const reviewProjection = review.project({
       activeBlockId,
@@ -150,7 +151,11 @@ export function createKpLispLessonMotionController(input: {
     input.root.dataset["kpTutorialReviewMotionAuthority"] = motionOwner;
     input.root.dataset["kpTutorialReviewPlaybackDirection"] =
       session.player.direction;
-    if (motionOwner === "manual") {
+    // Reduced motion is a user preference, so it remains observable even when
+    // navigation or manual controls own the current semantic checkpoint.
+    if (reducedMotionQuery.matches) {
+      input.root.dataset["kpLispTutorialScrollTimeline"] = "reduced-motion";
+    } else if (motionOwner === "manual") {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "manual";
     } else if (motionOwner === "navigation") {
       input.root.dataset["kpLispTutorialScrollTimeline"] = "navigation";
@@ -317,6 +322,7 @@ export function createKpLispLessonMotionController(input: {
   input.root.addEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
   const resizeObserver = new ResizeObserver(() => render());
   resizeObserver.observe(stage);
+  reducedMotionQuery.addEventListener("change", render);
   render();
 
   return Object.freeze({
@@ -350,6 +356,7 @@ export function createKpLispLessonMotionController(input: {
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_NEXT_EVENT, onNext);
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
       resizeObserver.disconnect();
+      reducedMotionQuery.removeEventListener("change", render);
     }
   });
 

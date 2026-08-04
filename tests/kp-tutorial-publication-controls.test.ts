@@ -68,6 +68,6 @@ test("publication controls reject label drift from document motion truth", async
   assert.throws(() => compileKpTutorialPublicationControls({
     publication: publication.document,
     path: "/tutorials/programming/lisp-function-application/",
-    motionBlockLabels: { "bind-and-reconstruct": "Bind" }
-  }), /label for motion block evaluate-and-gather/);
+    motionBlockLabels: { structure: "Structure" }
+  }), /label for motion block application/);
 });

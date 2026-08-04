@@ -108,15 +108,19 @@ export const kpLispApplicationMotionCss = `
 `;
 
 export function renderKpLispApplicationMotionHtml(
-  frame: KpLispApplicationMotionFrame
+  frame: KpLispApplicationMotionFrame,
+  options: { readonly reducedMotion?: boolean | undefined } = {}
 ): string {
   const body = frame.phase === "settled"
     ? renderSettledEndpoint(frame)
-    : renderMotion(frame);
-  return `<section class="kp-lisp-application-stage" data-kp-lisp-application-stage data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-canonical-endpoint="${frame.canonicalEndpoint ?? "none"}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}">${body}</section>`;
+    : renderMotion(frame, options.reducedMotion === true);
+  return `<section class="kp-lisp-application-stage" data-kp-lisp-application-stage data-kp-lisp-motion-mode="${options.reducedMotion === true ? "reduced" : "full"}" data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-canonical-endpoint="${frame.canonicalEndpoint ?? "none"}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}">${body}</section>`;
 }
 
-function renderMotion(frame: KpLispApplicationMotionFrame): string {
+function renderMotion(
+  frame: KpLispApplicationMotionFrame,
+  reducedMotion: boolean
+): string {
   const tokenById = new Map(frame.sourceTokens.map((entry) => [entry.token.id, entry]));
   const source = renderCodeWithGaps(
     frame.sourceState.nativeCode,
@@ -134,7 +138,7 @@ function renderMotion(frame: KpLispApplicationMotionFrame): string {
   ).join("");
   const bead = frame.provenanceBead;
   const provenance = `<span class="kp-lisp-application-stage__provenance" data-kp-lisp-provenance-bead="${escapeAttribute(bead.id)}" data-kp-lisp-consumed-materials="${escapeAttribute(bead.consumedMaterialIds.join(" "))}" aria-hidden="true" style="--kp-lisp-x:${px(bead.xEm)};--kp-lisp-y:${px(bead.yEm)};--kp-lisp-scale:${bead.scale};--kp-lisp-opacity:${bead.opacity}"><code>${escapeHtml(bead.nativeCode)}</code></span>`;
-  const guides = renderGuides(frame);
+  const guides = reducedMotion ? "" : renderGuides(frame);
   return `<pre class="kp-lisp-application-stage__source" style="--kp-lisp-stage-width:${px(frame.geometry.stage.widthEm)};--kp-lisp-stage-height:${px(frame.geometry.stage.heightEm)}"><code data-kp-lisp-native-code="application">${source}</code>${boxes}${derived}${provenance}${reconstructed}${guides}</pre>`;
 }
 

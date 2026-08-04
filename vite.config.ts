@@ -14,6 +14,18 @@ import { kpReaderRouteManifest } from "./src/reader/compiler/reader-route-manife
 import {
   compactKpCompiledReaderHtml
 } from "./src/reader/compiler/compiled-reader-html.ts";
+import { createKpLispBotanicalPresentationPlan } from
+  "./src/animation/lisp-botanical-presentation-plan.ts";
+import { sampleKpLispLambdaApplicationRuntimeFrame } from
+  "./src/animation/lisp-lambda-application-runtime-frame.ts";
+import { createKpLispLambdaApplicationAsset } from
+  "./src/semantic/lisp-lambda-application-asset.ts";
+import { compileKpLispFunctionApplicationPublication } from
+  "./src/tutorial/lisp-function-application/lisp-function-application-publication.ts";
+import { renderKpLispFunctionApplicationStaticPublication } from
+  "./src/tutorial/lisp-function-application/lisp-function-application-static-publication.ts";
+import { createKpLispLessonStageProjector } from
+  "./src/tutorial/lisp-function-application/lisp-function-application-stage-projector.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -26,6 +38,11 @@ const readerBuildRouteByFilename = new Map(
   readerBuildRoutes.map((route) => [route.filename, route] as const)
 );
 const reviewBuildIdentity = readReviewBuildIdentity();
+const lispTutorialFilename = resolve(
+  projectRoot,
+  "tutorials/programming/lisp-function-application/index.html"
+);
+const lispTutorialStaticFallback = compileLispTutorialStaticFallback();
 
 export default defineConfig({
   define: {
@@ -73,6 +90,20 @@ export default defineConfig({
             : html;
         }
       }
+    },
+    {
+      name: "kp-lisp-tutorial-static-fallback",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          return context.filename === lispTutorialFilename
+            ? html.replace(
+                "<!-- kp:lisp-static-fallback -->",
+                lispTutorialStaticFallback
+              )
+            : html;
+        }
+      }
     }
   ],
   build: {
@@ -86,6 +117,7 @@ export default defineConfig({
           projectRoot,
           "tutorials/economics/demand-shift/index.html"
         ),
+        lispFunctionApplicationTutorial: lispTutorialFilename,
         ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
           kpReaderRouteEntryName(descriptor.route),
           filename
@@ -159,4 +191,46 @@ function readReviewBuildIdentity(): { commit: string; fingerprint: string; dirty
   } catch {
     return { commit: "unknown", fingerprint: "dev-unknown", dirty: true };
   }
+}
+
+function compileLispTutorialStaticFallback(): string {
+  const source = createKpLispLambdaApplicationAsset();
+  const stage = createKpLispLessonStageProjector({
+    source,
+    botanicalPlan: createKpLispBotanicalPresentationPlan(source)
+  });
+  const runtimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
+    asset: source,
+    progress: 0
+  });
+  const publication = compileKpLispFunctionApplicationPublication(
+    readFileSync(resolve(
+      projectRoot,
+      "content/lessons/programming-lisp-function-application.md"
+    ), "utf8")
+  );
+  const sharedCss = readFileSync(resolve(
+    projectRoot,
+    "src/tutorial/kp-tutorial-lesson-shell.css"
+  ), "utf8");
+  const scrubCss = readFileSync(resolve(
+    projectRoot,
+    "src/tutorial/kp-tutorial-scrub-bar.css"
+  ), "utf8");
+  const lessonCss = readFileSync(resolve(
+    projectRoot,
+    "src/tutorial/lisp-function-application/lisp-function-application-tutorial.css"
+  ), "utf8").replace(/^@import[^;]+;\s*/, "");
+  const publicationHtml = renderKpLispFunctionApplicationStaticPublication({
+    publication,
+    animationId: source.id,
+    stageHtml: stage.render({
+      runtimeFrame,
+      activeBlockId: "structure",
+      localProgress: 0,
+      availableWidthPx: 720,
+      reducedMotion: true
+    })
+  });
+  return `<style>${sharedCss}\n${scrubCss}\n${lessonCss}\n${stage.css}</style>${publicationHtml}`;
 }

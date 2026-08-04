@@ -37,7 +37,26 @@ test("defaults the lesson projection boundary to material motion", () => {
   assert.match(html, /data-kp-lisp-application-stage/u);
   assert.match(html, new RegExp(`data-kp-lisp-runtime-frame="${runtimeFrame.id}"`, "u"));
   assert.equal(count(html, "data-kp-lisp-paint-owner="), 1);
+  assert.match(html, /data-kp-lisp-accessible-state role="status"/u);
   assert.doesNotMatch(html, /data-kp-lisp-botanical-stage/u);
+});
+
+test("reduced motion snaps to semantic holds and removes transient travel", () => {
+  const projector = createKpLispLessonStageProjector({ source, botanicalPlan });
+  const runtimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
+    asset: source,
+    progress: 0.4
+  });
+  const html = projector.render({
+    runtimeFrame,
+    activeBlockId: "application",
+    localProgress: 0.5,
+    availableWidthPx: 760,
+    reducedMotion: true
+  });
+  assert.match(html, /data-kp-lisp-motion-mode="reduced"/u);
+  assert.doesNotMatch(html, /data-kp-lisp-transient-guides/u);
+  assert.match(html, /data-kp-lisp-binding-box/u);
 });
 
 test("maps the new structure block without advancing evaluator truth", () => {

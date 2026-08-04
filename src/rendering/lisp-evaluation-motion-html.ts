@@ -75,12 +75,13 @@ export const kpLispEvaluationMotionCss = `
 `;
 
 export function renderKpLispEvaluationMotionHtml(
-  frame: KpLispEvaluationMotionFrame
+  frame: KpLispEvaluationMotionFrame,
+  options: { readonly reducedMotion?: boolean | undefined } = {}
 ): string {
   const body = frame.phase === "settled"
     ? renderResultEndpoint(frame)
     : renderMotion(frame);
-  return `<section class="kp-lisp-evaluation-stage" data-kp-lisp-evaluation-stage data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-canonical-endpoint="${frame.canonicalEndpoint ?? "none"}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}">${body}</section>`;
+  return `<section class="kp-lisp-evaluation-stage" data-kp-lisp-evaluation-stage data-kp-lisp-motion-mode="${options.reducedMotion === true ? "reduced" : "full"}" data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-canonical-endpoint="${frame.canonicalEndpoint ?? "none"}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}">${body}</section>`;
 }
 
 function renderMotion(frame: KpLispEvaluationMotionFrame): string {

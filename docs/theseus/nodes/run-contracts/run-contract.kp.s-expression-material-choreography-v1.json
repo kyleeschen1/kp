@@ -186,7 +186,8 @@
     {
       "id": "s23",
       "title": "Complete-accessible-progressive-projections",
-      "status": "planned"
+      "summary": "Completed the real public Lisp route with build-time static publication, progressively enhanced TOC and scrubbers, semantic reduced-motion snapping, live accessible descriptions, forced-colors support, keyboard checkpoint control, and stable phone layout; 161 unit tests, 16 browser checks, production build, architecture, and review closure pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

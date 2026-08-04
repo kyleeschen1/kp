@@ -67,7 +67,8 @@ ${kpLispExpressionBeadCss}
 `;
 
 export function renderKpLispStructuralMotionHtml(
-  frame: KpLispStructuralMotionFrame
+  frame: KpLispStructuralMotionFrame,
+  options: { readonly reducedMotion?: boolean | undefined } = {}
 ): string {
   const tokenById = new Map(frame.tokens.map((token) => [token.token.id, token]));
   let cursor = 0;
@@ -86,7 +87,7 @@ export function renderKpLispStructuralMotionHtml(
   ).join("");
   const frontier = frame.frontierExpressionIds.join(" ");
 
-  return `<section class="kp-lisp-structural-stage" data-kp-lisp-structural-stage data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-direction="${frame.direction}" data-kp-lisp-frontier="${escapeAttribute(frontier)}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}"><pre class="kp-lisp-structural-stage__source" style="--kp-lisp-stage-width:${px(frame.geometry.stage.widthEm)};--kp-lisp-stage-height:${px(frame.geometry.stage.heightEm)}"><code data-kp-lisp-native-code="application">${sourceHtml}</code>${beads}</pre></section>`;
+  return `<section class="kp-lisp-structural-stage" data-kp-lisp-structural-stage data-kp-lisp-motion-mode="${options.reducedMotion === true ? "reduced" : "full"}" data-kp-lisp-progress="${frame.progress}" data-kp-lisp-checkpoint="${escapeAttribute(frame.checkpointId)}" data-kp-lisp-phase="${frame.phase}" data-kp-lisp-direction="${frame.direction}" data-kp-lisp-frontier="${escapeAttribute(frontier)}" data-kp-lisp-paint-owner="semantic-dom" aria-label="${escapeAttribute(frame.accessibleDescription)}"><pre class="kp-lisp-structural-stage__source" style="--kp-lisp-stage-width:${px(frame.geometry.stage.widthEm)};--kp-lisp-stage-height:${px(frame.geometry.stage.heightEm)}"><code data-kp-lisp-native-code="application">${sourceHtml}</code>${beads}</pre></section>`;
 }
 
 function renderToken(

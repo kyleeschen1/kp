@@ -40,6 +40,17 @@ export interface KpLispLessonStageProjector {
   readonly render: (input: KpLispLessonStageRenderInput) => string;
 }
 
+const accessibleStageCss = `
+.kp-lisp-lesson-stage__accessible {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+`;
+
 /**
  * Owns the presentation-only rollback boundary. Semantic/runtime truth remains
  * an input to both renderers, so changing this selector cannot change it.
@@ -54,7 +65,7 @@ export function createKpLispLessonStageProjector(input: {
   if (rendererKind === kpLispBotanicalRollbackRendererKind) {
     return Object.freeze({
       rendererKind,
-      css: kpLispBotanicalStageCss,
+      css: `${kpLispBotanicalStageCss}\n${accessibleStageCss}`,
       render: (frameInput: KpLispLessonStageRenderInput) => wrap(
         rendererKind,
         frameInput.runtimeFrame,
@@ -71,14 +82,20 @@ export function createKpLispLessonStageProjector(input: {
 
   return Object.freeze({
     rendererKind,
-    css: material.css,
+    css: `${material.css}\n${accessibleStageCss}`,
     render: (frameInput: KpLispLessonStageRenderInput) => {
-      const html = material.render({
+      const projection = material.project({
         operation: frameInput.activeBlockId,
         progress: frameInput.localProgress,
-        availableWidthPx: frameInput.availableWidthPx
+        availableWidthPx: frameInput.availableWidthPx,
+        reducedMotion: frameInput.reducedMotion
       });
-      return wrap(rendererKind, frameInput.runtimeFrame, html);
+      return wrap(
+        rendererKind,
+        frameInput.runtimeFrame,
+        projection.html,
+        projection.accessibleDescription
+      );
     }
   });
 }
@@ -86,7 +103,16 @@ export function createKpLispLessonStageProjector(input: {
 function wrap(
   rendererKind: KpLispLessonStageRendererKind,
   runtimeFrame: KpLispLambdaApplicationRuntimeFrame,
-  html: string
+  html: string,
+  accessibleDescription: string = runtimeFrame.accessibleDescription
 ): string {
-  return `<div data-kp-lisp-lesson-stage-projection="${rendererKind}" data-kp-lisp-runtime-frame="${runtimeFrame.id}" data-kp-lisp-runtime-checkpoint="${runtimeFrame.checkpointId}">${html}</div>`;
+  return `<div data-kp-lisp-lesson-stage-projection="${rendererKind}" data-kp-lisp-runtime-frame="${runtimeFrame.id}" data-kp-lisp-runtime-checkpoint="${runtimeFrame.checkpointId}">${html}<p class="kp-lisp-lesson-stage__accessible" data-kp-lisp-accessible-state role="status" aria-live="polite" aria-atomic="true">${escapeHtml(accessibleDescription)}</p></div>`;
+}
+
+function escapeHtml(value: string): string {
+  return value.replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
