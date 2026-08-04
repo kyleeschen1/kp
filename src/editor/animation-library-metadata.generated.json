@@ -1548,7 +1548,7 @@
       "lisp",
       "lambda",
       "binding",
-      "botanical"
+      "s-expression"
     ],
     "promotion": {
       "maturity": "reviewable",

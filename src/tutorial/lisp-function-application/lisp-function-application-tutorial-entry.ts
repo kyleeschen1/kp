@@ -10,10 +10,6 @@ import { createKpLispBotanicalPresentationPlan } from "../../animation/lisp-bota
 import { createKpLispLambdaApplicationAnimationAsset } from "../../animation/lisp-lambda-application-adapter.ts";
 import { sampleKpLispLambdaApplicationRuntimeFrame } from "../../animation/lisp-lambda-application-runtime-frame.ts";
 import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
-import {
-  kpLispBotanicalStageCss,
-  renderKpLispBotanicalStageHtml
-} from "../../rendering/lisp-botanical-stage-html.ts";
 import { createKpLispLambdaApplicationAsset } from "../../semantic/lisp-lambda-application-asset.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
@@ -25,6 +21,10 @@ import {
 import { compileKpLispFunctionApplicationPublication } from "./lisp-function-application-publication.ts";
 import { createKpLispLessonNavigationController } from "./lisp-function-application-navigation.ts";
 import { createKpLispLessonScrollController } from "./lisp-function-application-scroll.ts";
+import {
+  createKpLispLessonStageProjector,
+  kpLispDefaultLessonStageRendererKind
+} from "./lisp-function-application-stage-projector.ts";
 
 export async function mountKpLispFunctionApplicationTutorial(input: {
   readonly root: HTMLElement;
@@ -33,15 +33,26 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   defineKpTutorialToc();
   const source = createKpLispLambdaApplicationAsset();
   const plan = createKpLispBotanicalPresentationPlan(source);
+  const stageProjector = createKpLispLessonStageProjector({
+    source,
+    botanicalPlan: plan,
+    rendererKind: kpLispDefaultLessonStageRendererKind
+  });
   const animation = createKpLispLambdaApplicationAnimationAsset();
   const publication = compileKpLispFunctionApplicationPublication(lessonMarkdown);
   const style = input.root.ownerDocument.createElement("style");
-  style.dataset["kpLispBotanicalStageStyles"] = "true";
-  style.textContent = kpLispBotanicalStageCss;
+  style.dataset["kpLispStageRendererStyles"] = stageProjector.rendererKind;
+  style.textContent = stageProjector.css;
   input.root.ownerDocument.head.append(style);
-  const stageHtml = renderKpLispBotanicalStageHtml({
-    frame: sampleKpLispLambdaApplicationRuntimeFrame({ asset: source, progress: 0 }),
-    plan
+  const initialRuntimeFrame = sampleKpLispLambdaApplicationRuntimeFrame({
+    asset: source,
+    progress: 0
+  });
+  const stageHtml = stageProjector.render({
+    runtimeFrame: initialRuntimeFrame,
+    activeBlockId: "bind-and-reconstruct",
+    localProgress: 0,
+    availableWidthPx: 720
   });
   const component = mount(KpLispFunctionApplicationTutorial, {
     target: input.root,
@@ -50,7 +61,8 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
       tocHtml: publication.tocHtml,
       motionScrubBarHtml: publication.motionScrubBarHtml,
       stageHtml,
-      animationId: animation.id
+      animationId: animation.id,
+      rendererKind: stageProjector.rendererKind
     }
   });
   const descriptor = createKpEditorAnimationLibrary().find(
@@ -70,7 +82,8 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
     animation,
     descriptor,
     source,
-    plan
+    plan,
+    stageProjector
   });
   const navigation = createKpLispLessonNavigationController({
     root: tutorialRoot,

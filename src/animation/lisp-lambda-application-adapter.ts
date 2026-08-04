@@ -60,9 +60,9 @@ export function createKpLispLambdaApplicationAnimationAsset(): KpAnimationAsset 
       ),
       transformationIds: source.transformations.map(({ id }) => id),
       timelineId,
-      summary: "Native Lisp code with one experimental botanical presentation projection.",
+      summary: "Native Lisp code with one experimental S-expression material projection.",
       metadata: {
-        rendererKind: "lisp-botanical-local-v0",
+        rendererKind: "lisp-s-expression-material-v0",
         presentationStatus: "experimental-local",
         settledAuthority: "native-code"
       }
@@ -90,14 +90,14 @@ export function createKpLispLambdaApplicationAnimationAsset(): KpAnimationAsset 
     }],
     dashboard: {
       rowId: "animation-programming-lisp-lambda-application",
-      tags: ["animation", "programming", "lisp", "lambda", "binding", "botanical"],
+      tags: ["animation", "programming", "lisp", "lambda", "binding", "s-expression"],
       sampleTargetIds: [renderTargetId],
       sourceRefIds: [source.fixture.id]
     },
     metadata: {
       domain: "programming",
       sourceFixtureId: source.fixture.id,
-      rendererKind: "lisp-botanical-local-v0",
+      rendererKind: "lisp-s-expression-material-v0",
       presentationStatus: "experimental-local"
     }
   });

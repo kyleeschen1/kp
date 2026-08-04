@@ -41,6 +41,9 @@ import {
   kpEditorOperationEvaluationSurfaceAdapter
 } from "../src/editor/operation-evaluation-surface-adapter.ts";
 import {
+  kpEditorLispMaterialSurfaceAdapter
+} from "../src/editor/lisp-material-surface-adapter.ts";
+import {
   kpEditorPlaceValueAdditionSurfaceAdapter
 } from "../src/editor/place-value-addition-surface-adapter.ts";
 import {
@@ -68,7 +71,8 @@ function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[]
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
     kpEditorPlaceValueAdditionSurfaceAdapter,
-    kpEditorProgrammingSurfaceAdapter
+    kpEditorProgrammingSurfaceAdapter,
+    kpEditorLispMaterialSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -125,7 +129,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 36, broken: 0 }
+    { ready: 0, review: 37, broken: 0 }
   );
   assert.deepEqual(
     health

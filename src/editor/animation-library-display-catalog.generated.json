@@ -1288,11 +1288,11 @@
     "tags": [
       "animation",
       "binding",
-      "botanical",
       "editor",
       "lambda",
       "lisp",
-      "programming"
+      "programming",
+      "s-expression"
     ],
     "availability": "playable",
     "canonicalFormat": "legacy",

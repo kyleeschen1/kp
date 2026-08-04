@@ -35,6 +35,9 @@ import {
   kpEditorOperationEvaluationSurfaceAdapter
 } from "../src/editor/operation-evaluation-surface-adapter.ts";
 import {
+  kpEditorLispMaterialSurfaceAdapter
+} from "../src/editor/lisp-material-surface-adapter.ts";
+import {
   kpEditorPlaceValueAdditionSurfaceAdapter
 } from "../src/editor/place-value-addition-surface-adapter.ts";
 import {
@@ -62,7 +65,8 @@ function currentHostability() {
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
     kpEditorPlaceValueAdditionSurfaceAdapter,
-    kpEditorProgrammingSurfaceAdapter
+    kpEditorProgrammingSurfaceAdapter,
+    kpEditorLispMaterialSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -84,7 +88,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 36);
+  assert.equal(hostability.length, 37);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -93,7 +97,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 36,
+      ready: 37,
       "missing-adapter": 0,
       "unsupported-surface": 0
     }
@@ -177,6 +181,14 @@ test("hostability records exact generic and specialized adapter ownership", () =
       slotKind: "programming",
       status: "ready",
       adapterId: "editor-animation-surface.programming.trace"
+    }]
+  );
+  assert.deepEqual(
+    byId.get("animation.programming.lisp-lambda-application")?.slots,
+    [{
+      slotKind: "programming",
+      status: "ready",
+      adapterId: "editor-animation-surface.programming.lisp-material"
     }]
   );
 });

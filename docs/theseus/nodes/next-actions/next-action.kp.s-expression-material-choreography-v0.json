@@ -419,6 +419,48 @@
       "status": "passed",
       "scope": "s18 committed visual script type boundary",
       "checkedAt": "2026-08-04T02:58:32.765Z"
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "Lisp asset/runtime, material choreography, rollback, lesson, and catalogue registration",
+      "checkedAt": "2026-08-04T03:13:45.055Z",
+      "notes": "153 tests passed after moving the default lesson presentation to S-expression material motion; the legacy botanical renderer remains directly tested as rollback."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-catalogue-health.test.ts tests/animation-catalogue-surface-hostability.test.ts",
+      "status": "passed",
+      "scope": "Catalogue hostability and health",
+      "checkedAt": "2026-08-04T03:13:46.071Z",
+      "notes": "All 37 loadable catalogue assets resolve host adapters; the Lisp asset resolves editor-animation-surface.programming.lisp-material and catalogue health has no broken entries."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, test, Svelte, and domain type boundaries",
+      "checkedAt": "2026-08-04T03:13:47.010Z",
+      "notes": "All typecheck projects passed with the framework-neutral material projector shared by lesson and catalogue hosts."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Architecture boundaries",
+      "checkedAt": "2026-08-04T03:13:47.959Z",
+      "notes": "All four architecture gates passed; semantic truth remains outside presentation adapters."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "Generated catalogue display metadata",
+      "checkedAt": "2026-08-04T03:13:48.893Z",
+      "notes": "Generated Lisp tags and display metadata are current."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "Patch whitespace",
+      "checkedAt": "2026-08-04T03:13:49.812Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

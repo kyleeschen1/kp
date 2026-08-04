@@ -34,15 +34,24 @@ test("Lisp consumes every shared lesson seam without projection wrappers", async
   assert.match(staticShell, /kp-tutorial-shell__layout/);
 });
 
-test("botanical semantics and paint remain explicit experimental-local seams", async () => {
-  const [entry, motion, salience] = await Promise.all([
+test("material paint and botanical rollback remain explicit local seams", async () => {
+  const [entry, motion, projector, material, salience] = await Promise.all([
     read("lisp-function-application-tutorial-entry.ts"),
     read("lisp-function-application-motion-controller.ts"),
+    read("lisp-function-application-stage-projector.ts"),
+    readFile("src/rendering/lisp-material-stage-projector.ts", "utf8"),
     read("lisp-function-application-salience.ts")
   ]);
   assert.match(entry, /createKpLispBotanicalPresentationPlan/);
+  assert.match(entry, /kpLispDefaultLessonStageRendererKind/);
   assert.match(motion, /sampleKpLispLambdaApplicationRuntimeFrame/);
-  assert.match(motion, /renderKpLispBotanicalStageHtml/);
+  assert.match(motion, /stageProjector\.render/);
+  assert.match(projector, /kpLispSExpressionMaterialRendererKind/);
+  assert.match(projector, /kpLispBotanicalRollbackRendererKind/);
+  assert.match(projector, /renderKpLispBotanicalStageHtml/);
+  assert.match(projector, /createKpLispMaterialStageProjector/);
+  assert.match(material, /renderKpLispApplicationMotionHtml/);
+  assert.match(material, /renderKpLispEvaluationMotionHtml/);
   assert.match(salience, /KpLispBotanicalPresentationPlan/);
   assert.doesNotMatch(salience, /economics|graph/i);
 });

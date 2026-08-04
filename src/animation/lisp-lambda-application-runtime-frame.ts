@@ -17,6 +17,8 @@ export type KpLispMaterialState =
   | "target"
   | "exited";
 
+export const kpLispReconstructedGlobalProgress = 0.74;
+
 export interface KpLispMaterialRuntimeState {
   readonly id: string;
   readonly reason: KpLispMaterialLedgerEntry["reason"];
@@ -54,8 +56,16 @@ export function sampleKpLispLambdaApplicationRuntimeFrame(input: {
 }): KpLispLambdaApplicationRuntimeFrame {
   const progress = clamp(input.progress);
   const bindingProgress = interval(progress, 0.18, 0.42);
-  const substitutionProgress = interval(progress, 0.42, 0.74);
-  const evaluationProgress = interval(progress, 0.74, 0.94);
+  const substitutionProgress = interval(
+    progress,
+    0.42,
+    kpLispReconstructedGlobalProgress
+  );
+  const evaluationProgress = interval(
+    progress,
+    kpLispReconstructedGlobalProgress,
+    0.94
+  );
   const stage = stageAt(progress);
   const checkpoint = checkpointAt(input.asset.checkpoints, progress);
 
@@ -144,7 +154,7 @@ function checkpointAt(
 function stageAt(progress: number): KpLispRuntimeStage {
   if (progress < 0.18) return "read";
   if (progress < 0.42) return "bind";
-  if (progress < 0.74) return "substitute";
+  if (progress < kpLispReconstructedGlobalProgress) return "substitute";
   if (progress < 0.94) return "evaluate";
   return "settle";
 }

@@ -1,13 +1,15 @@
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type { KpLispBotanicalPresentationPlan } from "../../animation/lisp-botanical-presentation-plan.ts";
-import { sampleKpLispLambdaApplicationRuntimeFrame } from "../../animation/lisp-lambda-application-runtime-frame.ts";
+import {
+  kpLispReconstructedGlobalProgress,
+  sampleKpLispLambdaApplicationRuntimeFrame
+} from "../../animation/lisp-lambda-application-runtime-frame.ts";
 import type { KpEditorAnimationDescriptor } from "../../editor/animation-descriptor.ts";
 import {
   createKpEditorAnimationPlaybackSession,
   reduceKpEditorAnimationPlaybackSession,
   type KpEditorAnimationPlaybackSession
 } from "../../editor/animation-playback-session.ts";
-import { renderKpLispBotanicalStageHtml } from "../../rendering/lisp-botanical-stage-html.ts";
 import type { KpLispLambdaApplicationAsset } from "../../semantic/lisp-lambda-application-asset.ts";
 import {
   KP_TUTORIAL_SCRUB_NEXT_EVENT,
@@ -24,8 +26,10 @@ import {
   type KpLispLessonMotionBlockId
 } from "./lisp-function-application-motion-blocks.ts";
 import { projectKpLispLessonSalience } from "./lisp-function-application-salience.ts";
+import type { KpLispLessonStageProjector } from
+  "./lisp-function-application-stage-projector.ts";
 
-export const kpLispReconstructedGlobalProgress = 0.74;
+export { kpLispReconstructedGlobalProgress };
 
 export interface KpLispLessonMotionController {
   readonly restore: (
@@ -79,6 +83,7 @@ export function createKpLispLessonMotionController(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly source: KpLispLambdaApplicationAsset;
   readonly plan: KpLispBotanicalPresentationPlan;
+  readonly stageProjector: KpLispLessonStageProjector;
 }): KpLispLessonMotionController {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp motion controls require a browser view.");
@@ -111,9 +116,11 @@ export function createKpLispLessonMotionController(input: {
       plan: input.plan,
       activeBlockId
     });
-    stage.innerHTML = renderKpLispBotanicalStageHtml({
-      frame,
-      plan: input.plan,
+    stage.innerHTML = input.stageProjector.render({
+      runtimeFrame: frame,
+      activeBlockId,
+      localProgress: localProgress(activeBlockId, global),
+      availableWidthPx: stageWidth(stage),
       reducedMotion: view.matchMedia("(prefers-reduced-motion: reduce)").matches
     });
     const reviewLocalProgress = localProgress(activeBlockId, global);
@@ -123,6 +130,8 @@ export function createKpLispLessonMotionController(input: {
       ({ progress }) => reviewLocalProgress + 0.001 >= progress
     )!;
     input.root.dataset["kpLispTutorialProgress"] = global.toFixed(4);
+    input.root.dataset["kpLispTutorialStageRenderer"] =
+      input.stageProjector.rendererKind;
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
     input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
     input.root.dataset["kpTutorialReviewMotionBlock"] = activeBlockId;
@@ -298,6 +307,8 @@ export function createKpLispLessonMotionController(input: {
   input.root.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, onRewind);
   input.root.addEventListener(KP_TUTORIAL_SCRUB_NEXT_EVENT, onNext);
   input.root.addEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
+  const resizeObserver = new ResizeObserver(() => render());
+  resizeObserver.observe(stage);
   render();
 
   return Object.freeze({
@@ -330,8 +341,14 @@ export function createKpLispLessonMotionController(input: {
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, onRewind);
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_NEXT_EVENT, onNext);
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
+      resizeObserver.disconnect();
     }
   });
+}
+
+function stageWidth(stage: HTMLElement): number {
+  return stage.getBoundingClientRect().width ||
+    stage.parentElement?.getBoundingClientRect().width || 720;
 }
 
 function globalProgress(
