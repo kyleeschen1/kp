@@ -846,6 +846,16 @@ kp-tutorial-toc {
   --kp-inline-sticky-stage-width: min(60rem, calc(100vw - 2rem));
   --kp-inline-sticky-motion-runway: 52svh;
   --kp-inline-sticky-hold-runway: 24svh;
+  --kp-inline-sticky-text-font:
+    "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  font-family: var(--kp-inline-sticky-text-font);
+}
+
+/* This typography trial is deliberately query-local. KaTeX and every node it
+   owns retain their mathematical font metrics. */
+.kp-economics-tutorial--inline-sticky
+  :not(.katex):not(.katex *) {
+  font-family: var(--kp-inline-sticky-text-font);
 }
 
 .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__layout {
@@ -906,6 +916,19 @@ kp-tutorial-toc {
   background: var(--kp-lesson-theme-shared-plane);
   box-shadow: none;
   transform: none;
+}
+
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__stage--inline::after {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 6px;
+  background: #000;
+  content: "";
+  pointer-events: none;
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -985,7 +1008,10 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue-phase="approach"],
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue-phase="handoff"] {
+  [data-kp-inline-sticky-cue-phase="hold"],
+.kp-economics-tutorial--inline-sticky
+  #kp-section-market-clearing
+  [data-kp-inline-sticky-cue-phase="fade"] {
   will-change: opacity, transform;
 }
 
@@ -1026,7 +1052,7 @@ kp-tutorial-toc {
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__inline-motion-anchor {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 0;
   width: 0;
   height: 0;

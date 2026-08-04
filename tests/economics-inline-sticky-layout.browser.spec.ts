@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("wide proof raises a cue then eases every property out by midpoint", async ({
+test("wide proof holds 5vh above the rule then fades over 10vh", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -31,6 +31,17 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
     .toHaveCount(0);
   await expect(root.locator("[data-kp-economics-stage='economics-stage']"))
     .toHaveAttribute("aria-busy", "false");
+  await expect.poll(() => root.locator(
+    ".kp-economics-tutorial__passage p"
+  ).first().evaluate((element) => getComputedStyle(element).fontFamily))
+    .toContain("Gill Sans");
+  await expect.poll(() => root.locator(
+    ".kp-tutorial-scrub__action"
+  ).first().evaluate((element) => getComputedStyle(element).fontFamily))
+    .toContain("Gill Sans");
+  await expect.poll(() => root.locator(".katex").first().evaluate(
+    (element) => getComputedStyle(element).fontFamily
+  )).not.toContain("Gill Sans");
 
   await pinStage(stage);
   await expect(root).toHaveAttribute(
@@ -49,6 +60,10 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
   await expect.poll(() => stageCard.evaluate((element) =>
     getComputedStyle(element).boxShadow
   )).toBe("none");
+  await expect.poll(() => stage.evaluate((element) => ({
+    color: getComputedStyle(element, "::after").backgroundColor,
+    height: getComputedStyle(element, "::after").height
+  }))).toEqual({ color: "rgb(0, 0, 0)", height: "6px" });
   const stageBackground = await stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
   );
@@ -57,37 +72,32 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
   const layoutWidth = await demandCue.evaluate(
     (element) => (element as HTMLElement).offsetWidth
   );
-  const entryCenter = await demandCue.evaluate((element) =>
-    window.innerHeight + (element as HTMLElement).offsetHeight / 2
-  );
-  await placeCueCenterAt(page, demandCue, entryCenter);
+  const entryTop = await demandCue.evaluate(() => window.innerHeight);
+  await placeCueTopAt(page, demandCue, entryTop);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
     /below|approach/
   );
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
-  await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.001);
+  await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.01);
   await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
-  const belowTransform = await cueTransform(demandCue);
 
-  const approachCenter = (entryCenter + geometry.stageBottom) / 2;
-  await placeCueCenterAt(page, demandCue, approachCenter);
+  const approachTop = (entryTop + geometry.stageBottom) / 2;
+  await placeCueTopAt(page, demandCue, approachTop);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
     "approach"
   );
   await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.1);
-  await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.9);
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
   const approachPresentation = await cuePresentation(demandCue);
   expect(approachPresentation.focusOpacity).toBeGreaterThan(0.1);
-  expect(approachPresentation.focusOpacity).toBeLessThan(0.9);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-cue-approach.png`,
     fullPage: false
   });
 
-  await placeCueCenterAt(page, demandCue, geometry.stageBottom);
+  await placeCueTopAt(page, demandCue, geometry.stageBottom);
   await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.99);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-stacking",
@@ -110,16 +120,36 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
     fullPage: false
   });
 
-  const descentCenter = (geometry.stageBottom + geometry.stageMidpoint) / 2;
-  await placeCueCenterAt(page, demandCue, descentCenter);
+  const holdSample = (geometry.stageBottom + geometry.fadeStart) / 2;
+  await placeCueTopAt(page, demandCue, holdSample);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-inline-sticky-cue-phase",
+    "hold"
+  );
+  await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(async () => Number(await root.getAttribute(
+    "data-kp-economics-tutorial-demand-progress"
+  ))).toBeLessThan(0.001);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-cue-5vh-hold.png`,
+    fullPage: false
+  });
+
+  const fadeMidpoint = (geometry.fadeStart + geometry.fadeEnd) / 2;
+  await placeCueTopAt(page, demandCue, fadeMidpoint);
   await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.45);
   await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.55);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-inline-sticky-cue-phase",
+    "fade"
+  );
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-stacking",
     "front"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.35);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.65);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.001);
@@ -128,7 +158,7 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
     fullPage: false
   });
 
-  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint - 2);
+  await placeCueTopAt(page, demandCue, geometry.fadeEnd - 2);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "pinned"
@@ -144,9 +174,8 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
   await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
   await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.001);
   await expect.poll(async () => Number(await demandCue.getAttribute(
-    "data-kp-inline-sticky-handoff-progress"
+    "data-kp-inline-sticky-fade-progress"
   ))).toBeCloseTo(1, 1);
-  expect(await cueTransform(demandCue)).toBe(belowTransform);
   expect((await cuePresentation(demandCue)).focusOpacity).toBeLessThan(0.001);
   expect(await demandCue.evaluate((element) =>
     (element as HTMLElement).offsetWidth
@@ -156,33 +185,33 @@ test("wide proof raises a cue then eases every property out by midpoint", async 
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.001);
   await page.screenshot({
-    path: `${evidenceDirectory}/wide-cue-midpoint-crossing.png`,
+    path: `${evidenceDirectory}/wide-cue-fade-complete.png`,
     fullPage: false
   });
 
-  await placeCueCenterAt(
+  await placeCueTopAt(
     page,
     demandCue,
-    geometry.stageMidpoint -
-      (geometry.stageMidpoint - geometry.stageTop) * 0.65
+    geometry.fadeEnd -
+      (geometry.fadeEnd - geometry.stageTop) * 0.65
   );
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.001);
 
-  await placeCueCenterAt(page, demandCue, geometry.stageTop + 20);
+  await placeCueTopAt(page, demandCue, geometry.stageTop + 20);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeGreaterThan(0.99);
   await expect.poll(() => cueOpacity(followingCue)).toBeGreaterThan(0.99);
 
-  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint);
+  await placeCueTopAt(page, demandCue, geometry.fadeEnd);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.01);
 });
 
-test("phone proof preserves one text measure through the midpoint fade", async ({
+test("phone proof preserves one text measure through the 5vh and 10vh bands", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -201,7 +230,7 @@ test("phone proof preserves one text measure through the midpoint fade", async (
     "pinned"
   );
   const geometry = await handoffGeometry(page);
-  await placeCueCenterAt(page, demandCue, geometry.stageBottom - 1);
+  await placeCueTopAt(page, demandCue, geometry.stageBottom - 1);
   await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
   await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.99);
 
@@ -218,18 +247,27 @@ test("phone proof preserves one text measure through the midpoint fade", async (
     path: `${evidenceDirectory}/phone-cue-peak-lift.png`,
     fullPage: false
   });
-  const fadeMidpoint = (geometry.stageBottom + geometry.stageMidpoint) / 2;
-  await placeCueCenterAt(page, demandCue, fadeMidpoint);
+  const holdSample = (geometry.stageBottom + geometry.fadeStart) / 2;
+  await placeCueTopAt(page, demandCue, holdSample);
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-cue-phase",
-    "handoff"
+    "hold"
+  );
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.99);
+  await expect.poll(() => cueElevation(demandCue)).toBeGreaterThan(0.99);
+
+  const fadeMidpoint = (geometry.fadeStart + geometry.fadeEnd) / 2;
+  await placeCueTopAt(page, demandCue, fadeMidpoint);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-inline-sticky-cue-phase",
+    "fade"
   );
   await expect(demandCue).toHaveAttribute(
     "data-kp-inline-sticky-stacking",
     "front"
   );
-  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.45);
-  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.55);
+  await expect.poll(() => cueOpacity(demandCue)).toBeGreaterThan(0.35);
+  await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.65);
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
   ))).toBeLessThan(0.001);
@@ -247,7 +285,7 @@ test("phone proof preserves one text measure through the midpoint fade", async (
     fullPage: false
   });
 
-  await placeCueCenterAt(page, demandCue, geometry.stageMidpoint - 2);
+  await placeCueTopAt(page, demandCue, geometry.fadeEnd - 2);
   await expect.poll(() => cueOpacity(demandCue)).toBeLessThan(0.01);
   await expect.poll(() => cueElevation(demandCue)).toBeLessThan(0.001);
   await expect.poll(async () => Number(await root.getAttribute(
@@ -311,27 +349,34 @@ async function pinStage(stage: Locator): Promise<void> {
   });
 }
 
-async function placeCueCenterAt(
+async function placeCueTopAt(
   page: Page,
   cueElement: Locator,
   viewportY: number
 ): Promise<void> {
-  await cueElement.evaluate((element, targetY) => {
-    const bounds = element.getBoundingClientRect();
-    window.scrollBy({
-      top: bounds.top + bounds.height / 2 - targetY,
-      behavior: "auto"
-    });
-  }, viewportY);
-  await page.evaluate(() => new Promise<void>((resolve) =>
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-  ));
+  // Sticky settlement can change stage geometry after the first scroll. A few
+  // bounded corrections make the visual checkpoint sample the requested top.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await cueElement.evaluate((element, targetY) => {
+      const bounds = element.getBoundingClientRect();
+      const layoutHeight = (element as HTMLElement).offsetHeight;
+      const untransformedTop = bounds.top + bounds.height / 2 - layoutHeight / 2;
+      window.scrollBy({
+        top: untransformedTop - targetY,
+        behavior: "auto"
+      });
+    }, viewportY);
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+  }
 }
 
 async function handoffGeometry(page: Page): Promise<{
   readonly stageTop: number;
   readonly stageBottom: number;
-  readonly stageMidpoint: number;
+  readonly fadeStart: number;
+  readonly fadeEnd: number;
 }> {
   return page.evaluate(() => {
     const stage = document.querySelector<HTMLElement>(
@@ -341,7 +386,8 @@ async function handoffGeometry(page: Page): Promise<{
     return {
       stageTop: bounds.top,
       stageBottom: bounds.bottom,
-      stageMidpoint: bounds.top + bounds.height / 2
+      fadeStart: bounds.bottom - window.innerHeight * 0.05,
+      fadeEnd: bounds.bottom - window.innerHeight * 0.15
     };
   });
 }

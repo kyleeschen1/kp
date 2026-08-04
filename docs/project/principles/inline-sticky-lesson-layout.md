@@ -9,10 +9,10 @@ Revised: 2026-08-04
 KP lessons may coordinate prose and animation through one reading axis. A
 diagram begins as an ordinary embedded figure and pins in the upper viewport
 while its scene is active. The following cue gathers into a raised reading
-shelf as it approaches, peaks when its center reaches the stage's lower edge,
-then fades and settles through the stage's lower half. It is fully absent and
-back at neutral depth by the midpoint. Only then does essential animation
-begin, transferring attention without changing the cue's content.
+shelf as it approaches, peaks when its top edge reaches the stage's lower edge,
+then crosses a fixed black rule there. The cue holds at full lift for `5vh`,
+then fades and settles over `10vh`. Only after it is absent does essential
+animation begin, transferring attention without changing the cue's content.
 
 This is a candidate learner-facing lesson grammar, not a catalogue, editor, or
 laboratory layout and not yet a globally required lesson presentation.
@@ -22,16 +22,17 @@ laboratory layout and not yet a globally required lesson presentation.
 - **Stage:** the sticky animation surface in the upper viewport.
 - **Approach region:** the visible path from the cue's viewport entry to the
   stage bottom.
-- **Handoff region:** the lower half of the stage, measured from its bottom
-  edge to its midpoint.
+- **Handoff rule:** a fixed thick solid-black line at the stage bottom.
+- **Hold region:** the first `5vh` above the rule after the cue top crosses it.
+- **Fade region:** the following `10vh`, ending `15vh` above the rule.
 - **Cue:** one stable prose block that tells the learner what to inspect.
 - **Shared plane:** the exact theme background used by both the square cue and
   the unelevated animation stage.
 - **Cue focus layer:** a transparent opacity-controlled edge and pre-rendered
   shadow with no independent surface fill.
 - **Elevation arc:** scale, positive depth, and shadow rise from viewport entry
-  to the stage bottom, then settle to neutral while the cue fades out by the
-  stage midpoint.
+  to the handoff rule, remain at peak through the hold region, then settle to
+  neutral with cue opacity across the fade region.
 - **Runway:** source-order space after a cue that gives its semantic animation
   time to complete and hold before the next cue arrives.
 
@@ -44,16 +45,16 @@ embedded -> pinned -> released -> embedded
 Each cue has the reversible lifecycle:
 
 ```text
-below -> approach -> handoff -> occluded
+below -> approach -> hold -> fade -> occluded
 ```
 
-The cue's vertical center is its stage anchor; its untransformed layout height
-determines viewport entry. Elevation progresses `0 -> 1` from entry to the
-stage bottom. Across the lower half-stage traversal, one eased envelope drives
-elevation, positive depth, scale, and shadow `1 -> 0` while opacity also falls
-`1 -> 0`. At the midpoint the cue is invisible and all transform properties
-are neutral. Reverse scrolling reconstructs the same states without replaying
-pixels.
+The cue's untransformed top edge is its stage anchor. Elevation progresses
+`0 -> 1` from viewport entry to the handoff rule. It remains one while the top
+edge travels the next `5vh`. Across the following `10vh`, one eased envelope
+drives elevation, positive depth, scale, and shadow `1 -> 0` while opacity also
+falls `1 -> 0`. At the fade endpoint the cue is invisible and all transform
+properties are neutral. Reverse scrolling reconstructs the same states without
+replaying pixels.
 
 CSS cannot interpolate `z-index`. The visible depth impression must therefore
 come from continuous opacity, perspective translation, scale, and shadow. Any
@@ -64,10 +65,10 @@ an unrelated time animation to simulate the crossing.
 ## Motion And Attention Contract
 
 - A scene is one cue followed by one explicit runway.
-- The stage-bottom crossing begins the cue's descent, not semantic animation.
-- The block-local semantic motion corridor begins at the stage midpoint,
-  after cue opacity reaches zero. Motion retains authored entry holds and may
-  continue through the following runway.
+- Crossing the stage-bottom rule begins the `5vh` hold, not semantic animation.
+- The block-local semantic motion corridor begins after the following `10vh`
+  fade, once cue opacity reaches zero. Motion retains authored entry holds and
+  may continue through the following runway.
 - The runway, not an enlarged paragraph or changing caption, supplies the
   remaining scroll distance.
 - The next cue remains fully opaque below the stage and does not enter the
@@ -144,6 +145,8 @@ scaling.
   stage may bleed wider around the same center without changing text width.
 - The pinned stage is not elevated: no card shadow, lift transform, rounded
   container, or joined paragraph surface.
+- A fixed six-pixel solid-black rule marks the stage bottom without affecting
+  stage geometry. It stays with the stage and does not animate with the cue.
 - Stage, cue, diagram labels, and page use explicit theme roles. The stage and
   cue resolve to the exact same fairly opaque shared-plane token.
 - The cue may read temporarily as a raised square shelf. Its transparent focus
@@ -152,7 +155,7 @@ scaling.
 - Keep the larger shadow fixed on a pseudo-element and project only its
   opacity. Do not animate `box-shadow` itself on scroll.
 - Depth is shallow and supportive: roughly 24 CSS pixels above at peak,
-  returning to zero by the midpoint, with about one percent scale increase.
+  returning to zero by the fade endpoint, with about one percent scale increase.
 - Mathematical labels inside the diagram use the same theme roles and surface
   background as inline mathematical prose.
 

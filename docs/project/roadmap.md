@@ -98,11 +98,13 @@ pinned, and released stage lifecycle. The latest bounded revision replaces the
 external padding corridor with a direct depth handoff: cues remain fully opaque
 while a composited focus plane, scale, and positive depth raise them from
 viewport entry to the stage bottom. Cue and stage now share one exact surface
-token. Across the lower half of the stage, one eased envelope fades the cue and
-returns its elevation, depth, scale, and shadow to neutral by the midpoint.
-Only then does semantic motion begin. Native scroll snap remains deliberately
-absent. The latest accepted refinement is recorded in
-`decisions/2026-08-04-kp-shared-plane-midpoint-fade-contract.md`. The
+token. A fixed black rule marks the stage bottom. Once the cue's top edge
+crosses it, the cue holds at full lift for `5vh`, then one eased envelope fades
+it and returns elevation, depth, scale, and shadow to neutral over `10vh`. Only
+then does semantic motion begin. Native scroll snap remains deliberately
+absent. This query-local proof also trials Gill Sans for all non-KaTeX text
+while retaining KaTeX's renderer-owned fonts. The latest accepted refinement
+is recorded in `decisions/2026-08-04-kp-black-rule-hold-and-fade-bands.md`. The
 economics proof is query-selected through `?layout=inline-sticky`; the approved
 split route remains default until human comparison and a structurally different
 second caller justify promotion.
@@ -592,9 +594,10 @@ activating heavy animation capabilities lazily.
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 2. Compare the approved economics split layout with the bounded
    `?layout=inline-sticky` proof, including unelevated stage pinning, cue
-   approach elevation, exact cue/stage surface matching, the bottom-to-midpoint
-   eased fade and motion gate, reverse scroll, constant prose measure, phone
-   fit, and large-text fallback; do not infer default promotion.
+   approach elevation, exact cue/stage surface matching, the fixed black rule,
+   top-edge crossing, `5vh` hold, `10vh` eased fade and motion gate, reverse
+   scroll, query-local Gill Sans/KaTeX font separation, constant prose measure,
+   phone fit, and large-text fallback; do not infer default promotion.
 3. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
 4. After lesson-layout approval and a structurally different layout caller,

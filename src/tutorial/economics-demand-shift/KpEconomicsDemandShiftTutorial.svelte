@@ -834,10 +834,12 @@
       ownsScroll && travel > 0.001
     );
     const focusedCue = cueFrames
-      .filter(({ projection: cue }) => cue.phase === "handoff")
+      .filter(({ projection: cue }) =>
+        cue.phase === "hold" || cue.phase === "fade"
+      )
       .sort((left, right) =>
-        Math.abs(left.projection.distanceFromStageBottomPx) -
-          Math.abs(right.projection.distanceFromStageBottomPx)
+        Math.abs(left.projection.distanceFromHandoffRulePx) -
+          Math.abs(right.projection.distanceFromHandoffRulePx)
       )[0];
     const block = owner === undefined
       ? undefined
@@ -875,9 +877,11 @@
       "[data-kp-inline-sticky-cue]"
     )].map((element): KpEconomicsInlineCueFrame => {
       const cueBounds = element.getBoundingClientRect();
-      // Layout height stays authoritative while the projected box scales;
-      // measured transform bounds would feed elevation back into its geometry.
       const cueLayoutHeight = element.offsetHeight;
+      // Recover the untransformed top from the stable center so projected
+      // scale cannot feed back into the cue's own scroll geometry.
+      const cueAnchorTop = cueBounds.top + cueBounds.height / 2 -
+        cueLayoutHeight / 2;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
       const motionBlockId = economicsMotionBlockId(
         element.dataset["kpTutorialMotionBlock"]
@@ -886,21 +890,18 @@
         ? Object.freeze({
             phase: "below" as const,
             opacity: 1,
-            handoffProgress: 0,
+            fadeProgress: 0,
             elevationProgress: 0,
             depthPx: 0,
             scale: 1,
             stacking: "front" as const,
-            stageMidpointPx: stageBounds.top + stageBounds.height / 2,
-            distanceFromStageBottomPx: cueBounds.top + cueBounds.height / 2 -
-              stageBounds.bottom
+            distanceFromHandoffRulePx: cueAnchorTop - stageBounds.bottom
           })
         : projectKpInlineStickyCue({
-            cueAnchorCenterPx: cueBounds.top + cueBounds.height / 2,
-            cueHeightPx: cueLayoutHeight,
+            cueAnchorTopPx: cueAnchorTop,
             stageTopPx: stageBounds.top,
             stageBottomPx: stageBounds.bottom,
-            viewportBottomPx: window.innerHeight
+            viewportHeightPx: window.innerHeight
           });
       return { passageId, motionBlockId, projection };
     });
@@ -958,10 +959,9 @@
   }
 
   function inlineStickyMotionStartY(): number {
-    const stageBounds = inlineStage?.getBoundingClientRect();
-    return stageBounds === undefined
-      ? inlineStickyTopInset() + inlineStickyStageHeightPx / 2
-      : stageBounds.top + stageBounds.height / 2;
+    const stageBottom = inlineStage?.getBoundingClientRect().bottom ??
+      inlineStickyTopInset() + inlineStickyStageHeightPx;
+    return stageBottom - window.innerHeight * 0.15;
   }
 
   function motionCorridorFor(
@@ -1495,7 +1495,7 @@
                   ? true
                   : undefined}
               data-kp-inline-sticky-cue-phase={inlineCueProjection?.phase}
-              data-kp-inline-sticky-handoff-progress={inlineCueProjection?.handoffProgress.toFixed(4)}
+              data-kp-inline-sticky-fade-progress={inlineCueProjection?.fadeProgress.toFixed(4)}
               data-kp-inline-sticky-elevation={inlineCueProjection?.elevationProgress.toFixed(4)}
               data-kp-inline-sticky-stacking={inlineCueProjection?.stacking}
               data-kp-tutorial-motion-block={renderedMotionBlock?.id}

@@ -51,45 +51,46 @@ test("large text falls back to reading flow instead of becoming illegible", () =
   });
 });
 
-test("cue rises from viewport entry then eases to neutral by midpoint", () => {
-  const project = (cueAnchorCenterPx: number) => projectKpInlineStickyCue({
-    cueAnchorCenterPx,
-    cueHeightPx: 100,
+test("cue holds for 5vh then fades over 10vh from its top edge", () => {
+  const project = (cueAnchorTopPx: number) => projectKpInlineStickyCue({
+    cueAnchorTopPx,
     stageTopPx: 100,
     stageBottomPx: 400,
-    viewportBottomPx: 800
+    viewportHeightPx: 800
   });
 
-  assert.deepEqual(project(850), {
+  assert.deepEqual(project(800), {
     phase: "below",
     opacity: 1,
-    handoffProgress: 0,
+    fadeProgress: 0,
     elevationProgress: 0,
     depthPx: 0,
     scale: 1,
     stacking: "front",
-    stageMidpointPx: 250,
-    distanceFromStageBottomPx: 450
+    distanceFromHandoffRulePx: 400
   });
-  assert.equal(project(625).phase, "approach");
-  assert.equal(project(625).elevationProgress, 0.5);
-  assert.equal(project(625).depthPx, 12);
-  assert.equal(project(400).phase, "handoff");
+  assert.equal(project(600).phase, "approach");
+  assert.equal(project(600).elevationProgress, 0.5);
+  assert.equal(project(600).depthPx, 12);
+  assert.equal(project(400).phase, "hold");
   assert.equal(project(400).elevationProgress, 1);
   assert.equal(project(400).depthPx, 24);
   assert.equal(project(400).scale, 1.012);
-  assert.equal(project(325).phase, "handoff");
-  assert.equal(project(325).opacity, 0.5);
-  assert.equal(project(325).handoffProgress, 0.5);
-  assert.equal(project(325).elevationProgress, 0.5);
-  assert.equal(project(325).depthPx, 12);
-  assert.equal(project(325).scale, 1.006);
-  assert.equal(project(250).stacking, "behind");
-  assert.equal(project(250).opacity, 0);
-  assert.equal(project(250).depthPx, 0);
-  assert.equal(project(250).scale, 1);
-  assert.equal(project(175).phase, "occluded");
-  assert.equal(project(175).opacity, 0);
-  assert.equal(project(175).depthPx, 0);
-  assert.deepEqual(project(325), project(325));
+  assert.equal(project(360).phase, "hold");
+  assert.equal(project(360).opacity, 1);
+  assert.equal(project(360).elevationProgress, 1);
+  assert.equal(project(320).phase, "fade");
+  assert.equal(project(320).opacity, 0.5);
+  assert.equal(project(320).fadeProgress, 0.5);
+  assert.equal(project(320).elevationProgress, 0.5);
+  assert.equal(project(320).depthPx, 12);
+  assert.equal(project(320).scale, 1.006);
+  assert.equal(project(280).stacking, "behind");
+  assert.equal(project(280).opacity, 0);
+  assert.equal(project(280).depthPx, 0);
+  assert.equal(project(280).scale, 1);
+  assert.equal(project(200).phase, "occluded");
+  assert.equal(project(200).opacity, 0);
+  assert.equal(project(200).depthPx, 0);
+  assert.deepEqual(project(320), project(320));
 });
