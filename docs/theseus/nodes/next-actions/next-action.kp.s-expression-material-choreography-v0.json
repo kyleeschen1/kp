@@ -101,6 +101,24 @@
       "status": "passed",
       "scope": "s04 test inference",
       "checkedAt": "2026-08-04T01:27:14.483Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-material-roots.test.ts tests/kp-lisp-s-expression-material-projection.test.ts tests/kp-lisp-semantic-model.test.ts",
+      "status": "passed",
+      "scope": "s05 twelve semantic-root, projection, and model tests",
+      "checkedAt": "2026-08-04T01:30:22.750Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s05 application types",
+      "checkedAt": "2026-08-04T01:30:23.703Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s05 test inference",
+      "checkedAt": "2026-08-04T01:30:24.606Z"
     }
   ],
   "progress": {

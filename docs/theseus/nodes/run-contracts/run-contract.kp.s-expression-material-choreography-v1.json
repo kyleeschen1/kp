@@ -78,7 +78,8 @@
     {
       "id": "s05",
       "title": "Resolve-role-dependent-expression-roots",
-      "status": "planned"
+      "summary": "Added immutable role-dependent gathering roots for executable forms, anonymous applications, parameter/data centroids, and atoms; twelve focused tests and app/test typechecks pass without geometry inference.",
+      "status": "complete"
     },
     {
       "id": "s06",
