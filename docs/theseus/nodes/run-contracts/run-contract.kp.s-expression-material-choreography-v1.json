@@ -138,7 +138,8 @@
     {
       "id": "s15",
       "title": "Build-semantic-DOM-token-renderer",
-      "status": "planned"
+      "summary": "Built a framework-neutral semantic DOM renderer that emits one exact selectable code tree for application, reconstructed, and result endpoints, preserves certified token order, roles, depths, and provenance, and allows SVG only as an accessibility-hidden pointer-transparent transient guide overlay. Twelve focused renderer/projection tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

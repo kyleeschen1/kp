@@ -297,6 +297,25 @@
       "status": "passed",
       "scope": "s14 test type boundary",
       "checkedAt": "2026-08-04T02:16:59.087Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-s-expression-material-dom.test.ts tests/kp-lisp-s-expression-material-projection.test.ts tests/kp-lisp-lambda-application-renderer.test.ts",
+      "status": "passed",
+      "scope": "s15 semantic DOM ownership, canonical selection, native reading order, transient guides, and preserved legacy endpoint renderer",
+      "checkedAt": "2026-08-04T02:24:04.407Z",
+      "notes": "12 focused renderer, projection, ownership, escaping, endpoint, and accessibility tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s15 application type boundary",
+      "checkedAt": "2026-08-04T02:24:05.469Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s15 test type boundary",
+      "checkedAt": "2026-08-04T02:24:06.395Z"
     }
   ],
   "progress": {
