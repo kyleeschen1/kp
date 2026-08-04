@@ -201,10 +201,17 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     this.toggleButton.textContent = playing
       ? "Pause"
       : direction === "rewind" && playbackStatus === "paused"
-        ? "Continue rewind"
+        ? "Continue"
         : progress >= 0.999
           ? "Replay"
           : "Play";
+    this.toggleButton.setAttribute("aria-label", playing
+      ? "Pause animation"
+      : direction === "rewind" && playbackStatus === "paused"
+        ? "Continue rewind animation"
+        : progress >= 0.999
+          ? "Replay animation"
+          : "Play animation");
     this.dataset["kpTutorialScrubManual"] = String(manualClaimed);
     this.dataset["kpTutorialScrubReducedMotion"] = String(reducedMotion);
     this.setAttribute(

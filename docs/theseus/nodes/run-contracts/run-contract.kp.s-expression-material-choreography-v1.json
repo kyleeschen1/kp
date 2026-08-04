@@ -192,7 +192,8 @@
     {
       "id": "s24",
       "title": "Certify-scoped-visual-and-performance-budgets",
-      "status": "planned"
+      "summary": "Added stable Lisp visual and production-performance commands; hard-capped the material renderer at 72,000 raw and 18,000 gzip bytes; exposed a one-or-zero sampler contract; paused manual playback offscreen; and removed scrub-label layout shift. Production evidence is 68,520 raw/16,948 gzip, zero initial and active CLS, 34.4 ms p95, and all Lisp plus economics preservation checks passing.",
+      "status": "complete"
     },
     {
       "id": "s25",

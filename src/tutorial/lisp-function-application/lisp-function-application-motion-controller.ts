@@ -108,6 +108,7 @@ export function createKpLispLessonMotionController(input: {
   let motionOwner: "untouched" | "navigation" | "scroll" | "manual" =
     "untouched";
   let request: number | undefined;
+  let stageVisible = true;
   const review = createKpLispLessonReviewAdapter({
     root: input.root,
     source: input.source
@@ -203,6 +204,8 @@ export function createKpLispLessonMotionController(input: {
   };
 
   const tick = (nowMs: number): void => {
+    request = undefined;
+    projectSamplerCount();
     session = reduceKpEditorAnimationPlaybackSession(session, {
       type: "tick",
       nowMs
@@ -217,13 +220,39 @@ export function createKpLispLessonMotionController(input: {
     }
     render();
     if (session.player.playbackStatus === "playing") {
-      request = view.requestAnimationFrame(tick);
+      scheduleTick();
     }
   };
 
   const cancel = (): void => {
     if (request !== undefined) view.cancelAnimationFrame(request);
     request = undefined;
+    projectSamplerCount();
+  };
+
+  const scheduleTick = (): void => {
+    if (request !== undefined || !stageVisible || view.document.hidden) return;
+    request = view.requestAnimationFrame(tick);
+    projectSamplerCount();
+  };
+
+  const projectSamplerCount = (): void => {
+    input.root.dataset["kpLispTutorialActiveSamplers"] =
+      request === undefined ? "0" : "1";
+  };
+
+  const suspendPlayback = (reason: "offscreen" | "document-hidden"): void => {
+    input.root.dataset["kpLispTutorialPlaybackVisibility"] = reason;
+    if (session.player.playbackStatus !== "playing") {
+      cancel();
+      return;
+    }
+    session = reduceKpEditorAnimationPlaybackSession(session, {
+      type: "pause",
+      nowMs: view.performance.now()
+    });
+    cancel();
+    render();
   };
 
   const setOwner = (
@@ -277,7 +306,7 @@ export function createKpLispLessonMotionController(input: {
       });
       cancel();
       render();
-      request = view.requestAnimationFrame(tick);
+      scheduleTick();
     }
   };
   const onRewind = (event: Event): void => {
@@ -296,7 +325,7 @@ export function createKpLispLessonMotionController(input: {
     });
     cancel();
     render();
-    request = view.requestAnimationFrame(tick);
+    scheduleTick();
   };
   const onNext = (event: Event): void => {
     const blockId = blockForEvent(event);
@@ -322,7 +351,22 @@ export function createKpLispLessonMotionController(input: {
   input.root.addEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
   const resizeObserver = new ResizeObserver(() => render());
   resizeObserver.observe(stage);
+  const visibilityObserver = new IntersectionObserver(([entry]) => {
+    stageVisible = entry?.isIntersecting ?? false;
+    if (stageVisible) {
+      input.root.dataset["kpLispTutorialPlaybackVisibility"] = "visible";
+    } else {
+      suspendPlayback("offscreen");
+    }
+  });
+  visibilityObserver.observe(stage);
+  const onVisibilityChange = (): void => {
+    if (view.document.hidden) suspendPlayback("document-hidden");
+  };
+  view.document.addEventListener("visibilitychange", onVisibilityChange);
   reducedMotionQuery.addEventListener("change", render);
+  input.root.dataset["kpLispTutorialPlaybackVisibility"] = "visible";
+  projectSamplerCount();
   render();
 
   return Object.freeze({
@@ -356,6 +400,8 @@ export function createKpLispLessonMotionController(input: {
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_NEXT_EVENT, onNext);
       input.root.removeEventListener(KP_TUTORIAL_SCRUB_PREVIOUS_EVENT, onPrevious);
       resizeObserver.disconnect();
+      visibilityObserver.disconnect();
+      view.document.removeEventListener("visibilitychange", onVisibilityChange);
       reducedMotionQuery.removeEventListener("change", render);
     }
   });

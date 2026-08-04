@@ -86,6 +86,7 @@ kp-tutorial-scrub-bar {
     translateY(var(--kp-tutorial-scrub-focus-lift))
     scale(var(--kp-tutorial-scrub-focus-scale));
   transition: transform 280ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  inline-size: 4.4rem;
 }
 
 .kp-tutorial-scrub__action[data-action="toggle"]::after {
