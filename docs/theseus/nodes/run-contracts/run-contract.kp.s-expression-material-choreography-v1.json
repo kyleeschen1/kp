@@ -132,7 +132,8 @@
     {
       "id": "s14",
       "title": "Compile-distinct-reduction-choreography",
-      "status": "planned"
+      "summary": "Compiled reduction as a distinct value-creating operation: a source-derived + bead first holds structure without computing, 4 and 1 then gather and are absorbed, the operator visibly pulses before exact result 5 emerges from its root, and ordinary native 5 settles. All five reconstructed materials have explicit dispositions and both input origins remain certified; seventeen focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

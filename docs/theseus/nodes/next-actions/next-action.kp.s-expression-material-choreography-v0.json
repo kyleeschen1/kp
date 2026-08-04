@@ -278,6 +278,25 @@
       "status": "passed",
       "scope": "s13 test type boundary",
       "checkedAt": "2026-08-04T02:13:27.689Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-reduction-choreography.test.ts tests/kp-lisp-reconstruction-choreography.test.ts tests/kp-lisp-lambda-application-fixture.test.ts",
+      "status": "passed",
+      "scope": "s14 distinct reduction, causal operator, endpoint, ledger, and preserved reconstruction/evaluator",
+      "checkedAt": "2026-08-04T02:16:57.183Z",
+      "notes": "17 structural-hold, gather, absorption, causal pulse, emission, endpoint, totality, provenance, and rewind tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s14 application type boundary",
+      "checkedAt": "2026-08-04T02:16:58.183Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s14 test type boundary",
+      "checkedAt": "2026-08-04T02:16:59.087Z"
     }
   ],
   "progress": {
