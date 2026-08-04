@@ -120,7 +120,8 @@
     {
       "id": "s12",
       "title": "Compile-bound-value-propagation",
-      "status": "planned"
+      "summary": "Compiled evaluator-backed argument flow through the binding arch, full contraction and disappearance at the parameter, then ordered source-derived reappearance at certified body destinations. Parameter and occurrence emphasis are causally separated, provenance is retained, and pure sampling makes rewind/direct seek exact; fifteen focused tests and both type boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s13",

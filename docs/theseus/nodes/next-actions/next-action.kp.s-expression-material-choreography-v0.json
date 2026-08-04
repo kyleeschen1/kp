@@ -240,6 +240,25 @@
       "status": "passed",
       "scope": "s11 test type boundary",
       "checkedAt": "2026-08-04T02:05:24.921Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-lisp-bound-value-propagation.test.ts tests/kp-lisp-lambda-binding-geometry.test.ts tests/kp-lisp-lambda-application-fixture.test.ts",
+      "status": "passed",
+      "scope": "s12 certified bound-value propagation and preserved evaluator/binding laws",
+      "checkedAt": "2026-08-04T02:08:49.383Z",
+      "notes": "15 provenance, transfer, contraction, disappearance, reappearance, direct-seek, evaluator, and geometry tests pass"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s12 application type boundary",
+      "checkedAt": "2026-08-04T02:08:50.527Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s12 test type boundary",
+      "checkedAt": "2026-08-04T02:08:51.436Z"
     }
   ],
   "progress": {
