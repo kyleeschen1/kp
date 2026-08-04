@@ -198,7 +198,8 @@
     {
       "id": "s25",
       "title": "Run-canonical-human-visual-checkpoint",
-      "status": "planned"
+      "summary": "Captured the canonical 12-state S-expression choreography contact sheet and passed the full objective promotion boundary. HUMAN_CHECKPOINT: stop before the repeated-variable caller until explicit visual approval.",
+      "status": "complete"
     },
     {
       "id": "s26",

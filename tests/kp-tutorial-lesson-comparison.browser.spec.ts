@@ -175,8 +175,8 @@ function expectSharedWideShell(geometry: LessonGeometry): void {
   expect(geometry.prose.right).toBeLessThanOrEqual(geometry.stage.left - 40);
   expect(geometry.prose.lineHeightRatio).toBeGreaterThanOrEqual(1.65);
   expect(geometry.headingCount).toBeGreaterThanOrEqual(3);
-  expect(geometry.motionBlockCount).toBe(2);
-  expect(geometry.scrubBarCount).toBe(2);
+  expect(geometry.motionBlockCount).toBe(expectedMotionBlocks(geometry.id));
+  expect(geometry.scrubBarCount).toBe(expectedMotionBlocks(geometry.id));
   expect(Object.values(geometry.shellTokens).every(Boolean)).toBe(true);
 }
 
@@ -189,7 +189,11 @@ function expectSharedPhoneShell(geometry: LessonGeometry): void {
   expect(["fixed", "sticky"]).toContain(geometry.stage.position);
   expect(geometry.stage.top).toBeCloseTo(0, 0);
   expect(geometry.prose.lineHeightRatio).toBeGreaterThanOrEqual(1.65);
-  expect(geometry.motionBlockCount).toBe(2);
-  expect(geometry.scrubBarCount).toBe(2);
+  expect(geometry.motionBlockCount).toBe(expectedMotionBlocks(geometry.id));
+  expect(geometry.scrubBarCount).toBe(expectedMotionBlocks(geometry.id));
   expect(Object.values(geometry.shellTokens).every(Boolean)).toBe(true);
+}
+
+function expectedMotionBlocks(id: string): number {
+  return id.startsWith("lisp") ? 3 : 2;
 }

@@ -152,6 +152,109 @@ test("capture the phone lesson with its persistent stage and native result", asy
   });
 });
 
+test("capture the wide phone and reduced-motion promotion contact sheet", async ({
+  page
+}, testInfo) => {
+  await mkdir(evidenceDirectory, { recursive: true });
+  const captures: { readonly label: string; readonly dataUrl: string }[] = [];
+  const checkpoints = [
+    ["source", "source-readable", "structure", "0.0000", "0.0000"],
+    ["recursive fold", "leaf-forms-folded", "structure", "0.2708", "0.0000"],
+    ["binding", "parameter-bound", "application", "0.3817", "0.2824"],
+    ["reconstruction", "body-reconstructed", "application", "1.0000", "0.7400"],
+    ["reduction", "inputs-gathered", "evaluation", "0.5000", "0.8700"],
+    ["result", "result-settled", "evaluation", "1.0000", "1.0000"]
+  ] as const;
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setViewportSize({ width: 1_440, height: 900 });
+  for (const [label, hash, block, local, runtime] of checkpoints) {
+    await capture(page, captures, `wide · ${label}`, hash, block, local, runtime);
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [label, hash, block, local, runtime] of [
+    checkpoints[1],
+    checkpoints[2],
+    checkpoints[5]
+  ]) {
+    await capture(page, captures, `phone · ${label}`, hash, block, local, runtime);
+  }
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1_440, height: 900 });
+  for (const [label, hash, block, local, runtime] of [
+    checkpoints[1],
+    checkpoints[2],
+    checkpoints[5]
+  ]) {
+    await capture(
+      page,
+      captures,
+      `reduced motion · ${label}`,
+      hash,
+      block,
+      local,
+      runtime,
+      true
+    );
+  }
+
+  await page.setContent(renderContactSheet(captures));
+  const path = `${evidenceDirectory}/canonical-promotion-contact-sheet.png`;
+  await page.screenshot({ path, fullPage: true });
+  await testInfo.attach("s-expression-material-promotion-contact-sheet", {
+    path,
+    contentType: "image/png"
+  });
+});
+
+async function capture(
+  page: Page,
+  captures: { label: string; dataUrl: string }[],
+  label: string,
+  hash: string,
+  block: string,
+  localProgress: string,
+  runtimeProgress: string,
+  reducedMotion = false
+): Promise<void> {
+  await page.goto(`${route}#kp-checkpoint-${hash}`);
+  await settle(page, block, localProgress, runtimeProgress);
+  if (reducedMotion) {
+    await expect(page.locator(
+      "[data-kp-lisp-structural-stage], " +
+      "[data-kp-lisp-application-stage], " +
+      "[data-kp-lisp-evaluation-stage]"
+    )).toHaveAttribute("data-kp-lisp-motion-mode", "reduced");
+  }
+  const image = await page.screenshot({ fullPage: false });
+  captures.push({ label, dataUrl: `data:image/png;base64,${image.toString("base64")}` });
+}
+
+function renderContactSheet(
+  captures: readonly { readonly label: string; readonly dataUrl: string }[]
+): string {
+  const cards = captures.map(({ label, dataUrl }) => `<figure>
+    <figcaption>${escapeHtml(label)}</figcaption>
+    <img src="${dataUrl}" alt="${escapeHtml(label)}">
+  </figure>`).join("");
+  return `<!doctype html><html><head><style>
+    body { margin: 0; padding: 24px; background: #e7e1d5; color: #203b35; font: 600 14px/1.3 system-ui, sans-serif; }
+    main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    figure { margin: 0; padding: 10px; background: #fffdf8; border: 1px solid #cfc6b6; }
+    figcaption { margin: 0 0 8px; }
+    img { display: block; width: 100%; height: 260px; object-fit: contain; object-position: top center; background: #f4f0e6; }
+  </style></head><body><main>${cards}</main></body></html>`;
+}
+
+function escapeHtml(value: string): string {
+  return value.replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 async function settle(
   page: Page,
   block: string,

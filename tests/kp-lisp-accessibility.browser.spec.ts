@@ -65,13 +65,21 @@ test("high contrast keeps the undimmed stage and system passage emphasis", async
   await page.goto(route);
   const root = page.locator("[data-kp-lisp-function-application-tutorial]");
   await expect(root).toHaveAttribute("data-kp-lisp-tutorial-progress", "0.0000");
+  await expect(root).toHaveAttribute(
+    "data-kp-lisp-tutorial-scroll-coordinator",
+    "connected"
+  );
   const attentionRegion = root.locator(
     '[data-kp-tutorial-attention-passage="structure-before"]'
   );
-  await attentionRegion.evaluate((element) => window.scrollTo({
-    top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38
-  }));
+  await attentionRegion.evaluate((element) => {
+    document.documentElement.style.scrollBehavior = "auto";
+    window.dispatchEvent(new WheelEvent("wheel", { deltaY: 1 }));
+    window.scrollTo({
+      top: window.scrollY + element.getBoundingClientRect().top -
+        window.innerHeight * 0.38 + 2
+    });
+  });
   await expect(attentionRegion).toHaveAttribute(
     "data-kp-lisp-reading-active",
     "true"

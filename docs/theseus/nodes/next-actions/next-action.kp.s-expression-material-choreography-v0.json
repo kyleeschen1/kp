@@ -685,6 +685,97 @@
       "scope": "s24 patch whitespace",
       "checkedAt": "2026-08-04T04:19:31.605Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run visual:lisp-function-application-tutorial",
+      "status": "passed",
+      "scope": "canonical-contact-sheet",
+      "checkedAt": "2026-08-04T04:34:51.624Z",
+      "notes": "4 Chromium visual checks passed; generated 12-state wide, phone, and reduced-motion contact sheet."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "lisp-unit",
+      "checkedAt": "2026-08-04T04:34:52.634Z",
+      "notes": "161 unit tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-preservation",
+      "checkedAt": "2026-08-04T04:34:53.540Z",
+      "notes": "25 economics tutorial unit tests passed."
+    },
+    {
+      "command": "npm run test:browser:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "lisp-browser-chromium",
+      "checkedAt": "2026-08-04T04:34:54.433Z",
+      "notes": "17 Chromium tutorial checks passed, including the promotion contact sheet."
+    },
+    {
+      "command": "playwright lisp coordination accessibility navigation on Firefox and WebKit",
+      "status": "passed",
+      "scope": "lisp-browser-cross-engine",
+      "checkedAt": "2026-08-04T04:34:55.326Z",
+      "notes": "26 Firefox and WebKit checks passed."
+    },
+    {
+      "command": "npm run test:browser:tutorial-review",
+      "status": "passed",
+      "scope": "review-capture",
+      "checkedAt": "2026-08-04T04:34:56.203Z",
+      "notes": "2 review-inbox integration checks passed."
+    },
+    {
+      "command": "npm run visual:tutorial-lesson-comparison",
+      "status": "passed",
+      "scope": "economics-comparison",
+      "checkedAt": "2026-08-04T04:34:57.093Z",
+      "notes": "Economics and Lisp wide/phone lesson comparison smoke passed."
+    },
+    {
+      "command": "npm run performance:lisp-function-application-tutorial",
+      "status": "passed",
+      "scope": "publication-performance",
+      "checkedAt": "2026-08-04T04:34:57.985Z",
+      "notes": "Passed: 132476 transfer bytes, 102925 script bytes, 22 resources, zero initial and active CLS, 33.6 ms active p95, no active long tasks, and offscreen sampler suspension."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-04T04:34:58.900Z",
+      "notes": "TypeScript, Svelte, domain typechecks, and production build passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture-boundaries",
+      "checkedAt": "2026-08-04T04:34:59.801Z",
+      "notes": "All architecture gates passed, including 437 semantic-animation files and 3 motif consumers."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "review-production-closure",
+      "checkedAt": "2026-08-04T04:35:00.702Z",
+      "notes": "Production review closure passed across 325 files."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "theseus-integrity",
+      "checkedAt": "2026-08-04T04:35:01.590Z",
+      "notes": "Workspace valid with 880 nodes and 17390 events before checkpoint evidence recording."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "patch-hygiene",
+      "checkedAt": "2026-08-04T04:35:02.484Z",
+      "notes": "Patch whitespace validation passed."
     }
   ],
   "progress": {
