@@ -37,10 +37,15 @@
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
+    projectKpTwoColumnScrollCard,
+    projectKpTwoColumnScrollMotionCorridor,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
+  import {
+    findKpEconomicsTwoColumnCue
+  } from "./economics-demand-shift-two-column-scroll.ts";
   import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
@@ -227,6 +232,10 @@
   let supplyPlaybackLastMs: number | undefined;
   let inlineLayoutObserver: ResizeObserver | undefined;
   const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
+  const twoColumnScroll = untrack(
+    () => presentationLayout === "two-column-scroll"
+  );
+  const scrollPassageLayout = inlineSticky || twoColumnScroll;
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
@@ -700,7 +709,7 @@
       const boundary = shell?.querySelector<HTMLElement>(
         `[data-kp-tutorial-motion-block="${block.id}"]`
       );
-      const anchor = inlineSticky
+      const anchor = scrollPassageLayout
         ? boundary?.querySelector<HTMLElement>("p")
         : boundary?.querySelector<KpTutorialScrubBarElement>(
             "kp-tutorial-scrub-bar"
@@ -721,7 +730,7 @@
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
-    const tutorialAttention = inlineSticky &&
+    const tutorialAttention = scrollPassageLayout &&
         inlineStickyFit !== "reading" &&
         inlineStickyStageState === "pinned"
       ? updateInlineStickyAttention(inlineParagraphFrames)
@@ -908,12 +917,12 @@
   }
 
   function updateInlineStickyParagraphProjections(): readonly KpEconomicsInlineParagraphFrame[] {
-    if (!inlineSticky || shell === undefined || inlineStage === undefined) {
+    if (!scrollPassageLayout || shell === undefined || inlineStage === undefined) {
       return [];
     }
     const stageBounds = inlineStage.getBoundingClientRect();
     const frames = [...shell.querySelectorAll<HTMLElement>(
-      "[data-kp-inline-sticky-cue]"
+      "[data-kp-scroll-cue]"
     )].map((element): KpEconomicsInlineParagraphFrame => {
       const paragraph = element.querySelector<HTMLElement>("p") ?? element;
       const paragraphBounds = paragraph.getBoundingClientRect();
@@ -929,12 +938,17 @@
             distanceFromStageBottomPx:
               paragraphBounds.top - stageBounds.bottom
           })
-        : projectKpInlineStickyParagraph({
-            paragraphTopPx: paragraphBounds.top,
-            paragraphBottomPx: paragraphBounds.bottom,
-            stageBottomPx: stageBounds.bottom,
-            viewportHeightPx: window.innerHeight
-          });
+        : usesTwoColumnDesktopGeometry()
+          ? projectKpTwoColumnScrollCard({
+              cardTopPx: paragraphBounds.top,
+              viewportHeightPx: window.innerHeight
+            })
+          : projectKpInlineStickyParagraph({
+              paragraphTopPx: paragraphBounds.top,
+              paragraphBottomPx: paragraphBounds.bottom,
+              stageBottomPx: stageBounds.bottom,
+              viewportHeightPx: window.innerHeight
+            });
       return { passageId, motionBlockId, projection };
     });
     inlineParagraphProjections = Object.freeze(Object.fromEntries(frames.map(
@@ -944,9 +958,9 @@
   }
 
   function updateInlineStickyLayoutProjection(): void {
-    if (!inlineSticky || shell === undefined) return;
+    if (!scrollPassageLayout || shell === undefined) return;
     const cues = [...shell.querySelectorAll<HTMLElement>(
-      "[data-kp-inline-sticky-cue]"
+      "[data-kp-scroll-cue]"
     )];
     const paragraph = cues[0]?.querySelector<HTMLElement>("p") ?? cues[0];
     const proseLineHeight = paragraph === undefined
@@ -958,21 +972,24 @@
       proseLineHeightPx: proseLineHeight
     });
     inlineStickyFit = layout.fit;
-    inlineStickyStageHeightPx = layout.stageHeightPx;
+    inlineStickyStageHeightPx = usesTwoColumnDesktopGeometry()
+      ? inlineStage?.getBoundingClientRect().height ??
+        Math.round(window.innerHeight * 0.68)
+      : layout.stageHeightPx;
     updateInlineStickyStageProjection();
     updateInlineStickyParagraphProjections();
     scrollCoordinator?.scheduleProjection();
   }
 
   function updateInlineStickyStageProjection(): void {
-    if (!inlineSticky || inlineStage === undefined) return;
+    if (!scrollPassageLayout || inlineStage === undefined) return;
     if (inlineStickyFit === "reading") {
       inlineStickyStageState = "embedded";
       return;
     }
     const stageBounds = inlineStage.getBoundingClientRect();
     const passageBounds = inlineStage.closest<HTMLElement>(
-      "[data-kp-motion-passage]"
+      ".kp-economics-tutorial__motion-passage-body"
     )?.getBoundingClientRect();
     const top = inlineStickyTopInset();
     inlineStickyStageState = stageBounds.top > top + 1
@@ -984,7 +1001,9 @@
   }
 
   function inlineStickyTopInset(): number {
-    return 0;
+    return usesTwoColumnDesktopGeometry()
+      ? Math.max(0, (window.innerHeight - inlineStickyStageHeightPx) / 2)
+      : 0;
   }
 
   function inlineStickyHandoffStartY(): number {
@@ -997,7 +1016,14 @@
     block: KpEconomicsMotionBlock,
     paragraphHeightPx: number
   ): KpTutorialMotionCorridor {
-    if (!inlineSticky || inlineStickyFit === "reading") return block.corridor;
+    if (!scrollPassageLayout || inlineStickyFit === "reading") {
+      return block.corridor;
+    }
+    if (usesTwoColumnDesktopGeometry()) {
+      return projectKpTwoColumnScrollMotionCorridor({
+        corridor: block.corridor
+      });
+    }
     return projectKpInlineStickyParagraphMotionCorridor({
       corridor: block.corridor,
       stageBottomPx: inlineStage?.getBoundingClientRect().bottom ??
@@ -1005,6 +1031,10 @@
       viewportHeightPx: window.innerHeight,
       paragraphHeightPx
     });
+  }
+
+  function usesTwoColumnDesktopGeometry(): boolean {
+    return twoColumnScroll && window.innerWidth > 760;
   }
 
   function updateReadingBandSelection(
@@ -1129,12 +1159,12 @@
     );
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
-    if (inlineSticky) {
+    if (scrollPassageLayout) {
       inlineLayoutObserver = new ResizeObserver(
         updateInlineStickyLayoutProjection
       );
       for (const passage of shell.querySelectorAll<HTMLElement>(
-        "[data-kp-inline-sticky-cue]"
+        "[data-kp-scroll-cue]"
       )) inlineLayoutObserver.observe(passage);
       window.addEventListener("resize", updateInlineStickyLayoutProjection);
       updateInlineStickyLayoutProjection();
@@ -1255,7 +1285,7 @@
       const block = findKpEconomicsMotionBlock(
         destination.motionScroll.blockId
       )!;
-      const anchor = inlineSticky
+      const anchor = scrollPassageLayout
         ? shell.querySelector<HTMLElement>(
             `[data-kp-tutorial-motion-block="${destination.motionScroll.blockId}"] p`
           ) ?? undefined
@@ -1400,13 +1430,16 @@
 
 {#snippet lessonPassage(
   passage: KpEconomicsDemandShiftLessonPassage,
-  inlineCue: boolean
+  scrollCue: boolean
 )}
   {@const renderedMotionBlock = findKpEconomicsMotionBlock(
     passage.motionBlockId
   )}
-  {@const inlineParagraphProjection = inlineCue
+  {@const inlineParagraphProjection = scrollCue
     ? inlineParagraphProjections[passage.id]
+    : undefined}
+  {@const twoColumnCue = twoColumnScroll
+    ? findKpEconomicsTwoColumnCue(passage.id)
     : undefined}
   <div
     class="kp-economics-tutorial__passage"
@@ -1418,8 +1451,12 @@
     class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
     data-kp-economics-tutorial-passage={passage.id}
     data-kp-lesson-passage-role={passage.role}
-    data-kp-inline-sticky-cue={inlineCue ? true : undefined}
-    data-kp-inline-sticky-passage-role={inlineCue ? passage.role : undefined}
+    data-kp-scroll-cue={scrollCue ? true : undefined}
+    data-kp-inline-sticky-cue={scrollCue ? true : undefined}
+    data-kp-two-column-scroll-card={twoColumnScroll && scrollCue
+      ? true
+      : undefined}
+    data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
@@ -1448,7 +1485,9 @@
         ></span>
       {/each}
     {/if}
-    {#if passage.id === "prediction"}
+    {#if twoColumnCue !== undefined}
+      <p>{@html twoColumnCue.html}</p>
+    {:else if passage.id === "prediction"}
       <p>{@html passage.paragraphs[0]!.html}</p>
       <details>
         <summary>Reveal what happens at the old price</summary>
@@ -1467,9 +1506,9 @@
         <p>{@html paragraph.html}</p>
       {/each}
     {/if}
-    {#if !inlineSticky && renderedMotionBlock?.id === "demand-shift"}
+    {#if !scrollPassageLayout && renderedMotionBlock?.id === "demand-shift"}
       {@html motionScrubBarHtml["demand-shift"]}
-    {:else if !inlineSticky && renderedMotionBlock?.id === "supply-movement"}
+    {:else if !scrollPassageLayout && renderedMotionBlock?.id === "supply-movement"}
       {@html motionScrubBarHtml["supply-movement"]}
     {/if}
     {#if passage.id === "explore"}
@@ -1499,8 +1538,10 @@
 
 <KpTutorialLessonShell
   bind:root={shell}
-  rootClass={`kp-economics-tutorial${inlineSticky
+  rootClass={`kp-economics-tutorial${scrollPassageLayout
     ? " kp-economics-tutorial--inline-sticky"
+    : ""}${twoColumnScroll
+    ? " kp-economics-tutorial--two-column-scroll"
     : ""}${stageExpanded
     ? " kp-economics-tutorial--stage-expanded"
     : ""}`}
@@ -1590,7 +1631,7 @@
         >
           <h3 id={`kp-heading-${section.id}`}>{section.heading}</h3>
 
-          {#if inlineSticky && section.id === "market-clearing"}
+          {#if scrollPassageLayout && section.id === "market-clearing"}
             <div
               class="kp-economics-tutorial__motion-passage"
               data-kp-motion-passage="demand-change"
@@ -1599,17 +1640,21 @@
                 <p>A change in demand</p>
                 <span aria-hidden="true">↓</span>
               </header>
-              <aside
-                bind:this={inlineStage}
-                class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
-                aria-label="Sticky supply and demand continuous-canvas proof"
-                data-kp-inline-sticky-stage
-              >
-                {@render economicsStage()}
-              </aside>
-              {#each section.passages.filter(({ role }) => role !== "reflection") as passage}
-                {@render lessonPassage(passage, true)}
-              {/each}
+              <div class="kp-economics-tutorial__motion-passage-body">
+                <aside
+                  bind:this={inlineStage}
+                  class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
+                  aria-label="Sticky supply and demand continuous-canvas proof"
+                  data-kp-inline-sticky-stage
+                >
+                  {@render economicsStage()}
+                </aside>
+                <div class="kp-economics-tutorial__motion-passage-cards">
+                  {#each section.passages.filter(({ role }) => role !== "reflection") as passage}
+                    {@render lessonPassage(passage, true)}
+                  {/each}
+                </div>
+              </div>
               <div
                 class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--exit"
                 aria-hidden="true"
@@ -1645,7 +1690,7 @@
   {/snippet}
 
   {#snippet stage()}
-    {#if !inlineSticky}
+    {#if !scrollPassageLayout}
       {@render economicsStage()}
     {/if}
   {/snippet}

@@ -5,6 +5,8 @@ import {
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
+  projectKpTwoColumnScrollCard,
+  projectKpTwoColumnScrollMotionCorridor,
   readKpEconomicsDemandShiftPresentationLayout
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts";
 import {
@@ -17,6 +19,10 @@ import {
 
 test("inline sticky economics layout is an explicit reversible query mode", () => {
   assert.equal(
+    readKpEconomicsDemandShiftPresentationLayout("?layout=two-column-scroll"),
+    "two-column-scroll"
+  );
+  assert.equal(
     readKpEconomicsDemandShiftPresentationLayout("?layout=inline-sticky"),
     "inline-sticky"
   );
@@ -25,6 +31,72 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
     "split"
   );
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
+});
+
+test("two-column card travel runs exactly from viewport bottom to top", () => {
+  assert.deepEqual(projectKpTwoColumnScrollCard({
+    cardTopPx: 800,
+    viewportHeightPx: 800
+  }), {
+    phase: "below",
+    travel: 0,
+    crossingProgress: 0,
+    distanceFromStageBottomPx: 800
+  });
+  assert.deepEqual(projectKpTwoColumnScrollCard({
+    cardTopPx: 400,
+    viewportHeightPx: 800
+  }), {
+    phase: "crossing",
+    travel: 0.5,
+    crossingProgress: 0.5,
+    distanceFromStageBottomPx: 400
+  });
+  assert.deepEqual(projectKpTwoColumnScrollCard({
+    cardTopPx: 0,
+    viewportHeightPx: 800
+  }), {
+    phase: "passed",
+    travel: 1,
+    crossingProgress: 1,
+    distanceFromStageBottomPx: 0
+  });
+});
+
+test("two-column motion uses the whole card journey without changing choreography", () => {
+  const corridor = projectKpTwoColumnScrollMotionCorridor({
+    corridor: {
+      startViewportRatio: 0.72,
+      endViewportRatio: 0.16,
+      keyframes: [
+        { travel: 0, progress: 0 },
+        { travel: 0.14, progress: 0 },
+        { travel: 0.57, progress: 0.72 },
+        { travel: 0.69, progress: 0.72 },
+        { travel: 0.94, progress: 1 },
+        { travel: 1, progress: 1 }
+      ]
+    }
+  });
+
+  assert.equal(corridor.startViewportRatio, 1);
+  assert.equal(corridor.endViewportRatio, 0);
+  assert.deepEqual(corridor.keyframes, [
+    { travel: 0, progress: 0 },
+    { travel: 0.5375, progress: 0.72 },
+    { travel: 0.6875, progress: 0.72 },
+    { travel: 1, progress: 1 }
+  ]);
+  assert.deepEqual(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 800,
+    viewportHeight: 800
+  }), { travel: 0, progress: 0 });
+  assert.deepEqual(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 0,
+    viewportHeight: 800
+  }), { travel: 1, progress: 1 });
 });
 
 test("economics theme is explicit, reversible, and preserves other query state", () => {

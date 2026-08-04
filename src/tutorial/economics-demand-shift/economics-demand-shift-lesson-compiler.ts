@@ -51,7 +51,9 @@ function escapeHtml(value: string): string {
     .replaceAll("'", "&#39;");
 }
 
-function renderInlineMarkdown(value: string): string {
+export function renderKpEconomicsDemandShiftInlineMarkdown(
+  value: string
+): string {
   const parts = value.split("$");
   if (parts.length % 2 === 0) {
     throw new Error(`Unclosed inline math delimiter in: ${value}`);
@@ -94,7 +96,7 @@ export function compileKpEconomicsDemandShiftLesson(
     }
     const sourceText = paragraphLines.join(" ");
     passage.paragraphs.push({
-      html: renderInlineMarkdown(sourceText),
+      html: renderKpEconomicsDemandShiftInlineMarkdown(sourceText),
       sourceText
     });
     paragraphLines = [];

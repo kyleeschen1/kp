@@ -4,7 +4,8 @@ Status: active-supporting
 Last Updated: 2026-08-04
 Current Next Action: Review the code-native S-expression choreography at its
 mandatory slice-25 human checkpoint and compare the approved economics split
-layout with its bounded `?layout=inline-sticky` proof. The layout proof does not
+layout with its bounded `?layout=inline-sticky` and
+`?layout=two-column-scroll` proofs. The layout proofs do not
 approve the Lisp visual language, promote a default lesson shell, adopt
 SvelteKit, widen the lesson rollout, or change the animation-promotion ledger.
 
@@ -51,6 +52,15 @@ rollback rules live in `../principles/inline-sticky-lesson-layout.md`.
 Economics is the canonical proof through `?layout=inline-sticky`; its approved
 split layout remains the default pending human comparison and a structurally
 different second caller.
+
+The parallel comparison in
+`decisions/2026-08-04-kp-two-column-scroll-comparison.md` keeps short atomic
+cues left and a vertically centered sticky graph right. A cue top owns the
+entire reversible viewport-bottom-to-viewport-top timeline. It intentionally
+tests a viewport-height step rhythm and scroll-only transport without changing
+the accepted Markdown, semantic motion blocks, or inline route. Phones retain
+the one-column inline geometry. This remains economics-local until human
+review; it does not authorize a shared cue schema or lesson-shell rollout.
 
 The bounded theme trial in
 `decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same

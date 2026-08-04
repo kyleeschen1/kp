@@ -1132,6 +1132,13 @@ kp-tutorial-toc {
   min-height: clamp(1.25rem, 2.5vh, 2rem);
 }
 
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-body,
+.kp-economics-tutorial--inline-sticky
+  .kp-economics-tutorial__motion-passage-cards {
+  position: relative;
+}
+
 @keyframes kp-motion-passage-direction {
   0%,
   100% {
@@ -1263,8 +1270,8 @@ kp-tutorial-toc {
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  .kp-economics-tutorial__stage--inline
-  + [data-kp-inline-sticky-cue] {
+  .kp-economics-tutorial__motion-passage-cards
+  > [data-kp-inline-sticky-cue]:first-child {
   margin-top: var(--kp-inline-sticky-scene-gap);
 }
 
@@ -1306,6 +1313,109 @@ kp-tutorial-toc {
   [data-kp-inline-sticky-cue] {
   z-index: auto;
   opacity: 1;
+}
+
+/* Query-local desktop comparison. The same published DOM falls back to the
+   accepted one-column inline treatment below 761px. */
+@media (min-width: 761px) {
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__layout {
+    width: min(82rem, calc(100% - 2rem));
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__prose {
+    width: min(100%, var(--kp-inline-sticky-measure));
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage {
+    width: min(82rem, calc(100vw - 2rem));
+    margin-inline-start:
+      calc((100% - min(82rem, calc(100vw - 2rem))) / 2);
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-body {
+    display: grid;
+    grid-template-columns: minmax(19rem, 31rem) minmax(30rem, 1fr);
+    gap: clamp(3.5rem, 6vw, 6rem);
+    align-items: start;
+    padding-inline: clamp(0rem, 1.5vw, 1.25rem);
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-cards {
+    grid-area: 1 / 1;
+    min-width: 0;
+    padding-top: calc((100vh + min(68vh, 38rem)) / 2);
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__stage--inline {
+    grid-area: 1 / 2;
+    top: max(1.5rem, calc((100vh - min(68vh, 38rem)) / 2));
+    z-index: 2;
+    width: 100%;
+    height: min(68vh, 38rem);
+    padding: 0;
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__stage--inline::after {
+    content: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-card] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-card]
+    + [data-kp-two-column-scroll-card] {
+    margin-top: 0;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-card]
+    > p {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    border-top: 1px solid var(--kp-lesson-theme-subtle-border);
+    padding: 0.9rem 1rem 1rem;
+    color: var(--kp-tutorial-ink);
+    background: color-mix(
+      in srgb,
+      var(--kp-lesson-theme-focus-surface) 42%,
+      transparent
+    );
+    box-shadow: none;
+    text-indent: 0;
+    transition: background-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-card].kp-economics-tutorial__passage--active
+    > p {
+    background: var(--kp-lesson-theme-focus-surface);
+    box-shadow: inset 2px 0 0 var(--kp-lesson-theme-focus);
+  }
 }
 
 @media (max-width: 760px) {
