@@ -159,6 +159,13 @@
       "scope": "slice s01 accepted route and opt-in exemplar descriptor",
       "checkedAt": "2026-08-05T20:35:05.582Z",
       "notes": "42 economics tests, Svelte diagnostics, and all 10 accepted two-column Chromium cases passed. The canonical route reports continuous-passage; only layout=two-column-scroll with scrub=motion-bridge opts into the new descriptor."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s02 motion bridge authoring records",
+      "checkedAt": "2026-08-05T20:38:18.187Z",
+      "notes": "All 40 tutorial passage and page-scale tests passed, including three new authoring contract cases; complete TypeScript, Svelte, and domain typechecking passed."
     }
   ],
   "progress": {

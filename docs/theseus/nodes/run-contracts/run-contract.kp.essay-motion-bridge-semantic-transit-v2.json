@@ -64,7 +64,8 @@
     {
       "id": "s02",
       "title": "Define motion bridge authoring records",
-      "status": "planned"
+      "summary": "Added immutable framework-neutral ordinary-beat and motion-bridge authoring records with semantic checkpoint endpoints, preset distances, slug validation, and no raw choreography fields.",
+      "status": "complete"
     },
     {
       "id": "s03",
