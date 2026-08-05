@@ -565,7 +565,28 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-supply-movement-progress"
   ))).toBeLessThan(0.99);
+  await placeTopAt(page, supplyInterpretation.locator("p"), focusTop + 80);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage-phase",
+    "scrubbing"
+  );
+  await expect(supplyInterpretation).not.toHaveAttribute(
+    "data-kp-two-column-endpoint-pinned",
+    "true"
+  );
   await placeTopAt(page, supplyInterpretation.locator("p"), focusTop);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage-phase",
+    "released"
+  );
+  await expect(supplyInterpretation).toHaveAttribute(
+    "data-kp-two-column-endpoint-pinned",
+    "true"
+  );
+  await expect(supplyInterpretation).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
+    "1.0000"
+  );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-attention-passage",
     "movement-along-supply"
@@ -591,6 +612,14 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "released"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage-phase",
+    "released"
+  );
+  await expect(supplyInterpretation).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
+    "1.0000"
   );
   await expect.poll(() => body.evaluate((element) =>
     Math.round(element.getBoundingClientRect().bottom)

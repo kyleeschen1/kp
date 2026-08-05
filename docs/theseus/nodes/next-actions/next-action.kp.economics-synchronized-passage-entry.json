@@ -120,6 +120,13 @@
       "scope": "slice s13 opening boundary cue salience",
       "checkedAt": "2026-08-05T18:00:51.294Z",
       "notes": "All 9 Chromium exemplar cases, 17 lifecycle tests, and Svelte typecheck passed. The first cue reports ordinary-document and endpoint-pinned at full opacity before entry, then entry-latched and unpinned at the shared anchor."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run typecheck:svelte; focused passage lifecycle tests",
+      "status": "passed",
+      "scope": "slice s14 final boundary cue salience",
+      "checkedAt": "2026-08-05T18:06:53.216Z",
+      "notes": "All 9 Chromium exemplar cases, 17 lifecycle tests, and Svelte typecheck passed. One prior scoped run failed before the route root mounted and passed unchanged on rerun. The final cue is unpinned during scrubbing and pinned at full opacity through same-tick release."
     }
   ],
   "expectedLearning": [

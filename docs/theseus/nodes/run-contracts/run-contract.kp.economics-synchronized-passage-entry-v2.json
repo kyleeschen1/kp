@@ -133,7 +133,8 @@
     {
       "id": "s14",
       "title": "Preserve final cue endpoint",
-      "status": "planned"
+      "summary": "The final cue now remains full-opacity from terminal settlement through the accepted same-tick native release, while earlier scrubbing remains unpinned.",
+      "status": "complete"
     },
     {
       "id": "s15",

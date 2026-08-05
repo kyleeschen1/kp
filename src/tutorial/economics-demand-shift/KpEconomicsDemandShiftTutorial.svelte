@@ -1256,7 +1256,7 @@
           }));
       const projectedOpacity = sequenceParagraph?.opacity ?? 1;
       const cueIndex = cueIndexOffset + index;
-      const boundarySalience = twoColumnDesktop && cueIndex === 0
+      const boundarySalience = twoColumnDesktop
         ? projectKpTutorialBoundaryCueSalience({
             phase: twoColumnPassagePhase,
             cueIndex,
@@ -1611,12 +1611,14 @@
     );
     const terminalLatchScrollY = Math.max(
       motionStartScrollY,
-      last.documentTop - geometry.textAnchorY
+      last.documentTop - geometry.textAnchorY -
+        kpEconomicsScrollLatchEpsilonPx
     );
     const releaseScrollY = Math.max(
       terminalLatchScrollY,
       bodyDocumentBottom -
-        (geometry.stageTopY + inlineStickyStageHeightPx)
+        (geometry.stageTopY + inlineStickyStageHeightPx) -
+        kpEconomicsScrollLatchEpsilonPx
     );
     return Object.freeze({
       entryLatchScrollY,
