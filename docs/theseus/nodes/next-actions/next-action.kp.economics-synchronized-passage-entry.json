@@ -215,6 +215,34 @@
       "scope": "s08 full static typing",
       "checkedAt": "2026-08-05T21:00:26.618Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s09 progressive static bridge",
+      "checkedAt": "2026-08-05T21:05:35.073Z",
+      "notes": "51 tests passed; complete prose remains in natural DOM order with visual-only bridge descendants."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 economics static publication",
+      "checkedAt": "2026-08-05T21:05:36.114Z",
+      "notes": "45 tests passed, including optional bridge payload and visual-only marker assertions."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s09 rail CSS ownership",
+      "checkedAt": "2026-08-05T21:05:37.122Z",
+      "notes": "7 tests passed; rail is one pixel, square-ended, hidden before enhancement, and uses no viewport units."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 full static typing",
+      "checkedAt": "2026-08-05T21:05:38.141Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {

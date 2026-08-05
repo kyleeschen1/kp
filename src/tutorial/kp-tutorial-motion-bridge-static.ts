@@ -14,8 +14,9 @@ export function renderKpTutorialMotionBridgeStatic(input: {
   // geometry between them, but it never owns or reconstructs their content.
   return [
     `<kp-motion-bridge class="kp-tutorial-motion-bridge" data-kp-motion-bridge="${input.bridge.id}" data-kp-motion-bridge-distance="${input.bridge.distance}" data-kp-motion-block="${input.bridge.motionBlockId}" data-kp-motion-from-checkpoint="${input.bridge.fromCheckpointId}" data-kp-motion-to-checkpoint="${input.bridge.toCheckpointId}">`,
-    `<p data-kp-motion-bridge-before="${input.bridge.beforePassageId}">${input.beforeHtml}</p>`,
-    `<p data-kp-motion-bridge-after="${input.bridge.afterPassageId}">${input.afterHtml}</p>`,
+    `<p data-kp-motion-bridge-before="${input.bridge.beforePassageId}"><span class="kp-tutorial-motion-bridge__statement">${input.beforeHtml}</span><span class="kp-tutorial-motion-bridge__ellipsis kp-tutorial-motion-bridge__ellipsis--before" aria-hidden="true">…</span></p>`,
+    `<span class="kp-tutorial-motion-bridge__rail" aria-hidden="true"><span class="kp-tutorial-motion-bridge__rail-progress"></span></span>`,
+    `<p data-kp-motion-bridge-after="${input.bridge.afterPassageId}"><span class="kp-tutorial-motion-bridge__ellipsis kp-tutorial-motion-bridge__ellipsis--after" aria-hidden="true">…</span><span class="kp-tutorial-motion-bridge__statement">${input.afterHtml}</span></p>`,
     "</kp-motion-bridge>"
   ].join("");
 }

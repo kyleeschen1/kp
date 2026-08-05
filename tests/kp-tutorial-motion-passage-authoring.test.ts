@@ -115,7 +115,10 @@ test("static bridge markup keeps complete prose in natural light-DOM order", () 
   assert.ok(html.indexOf("Demand begins") < html.indexOf("new equilibrium"));
   assert.match(html, /<p data-kp-motion-bridge-before="follow-shift">/);
   assert.match(html, /<p data-kp-motion-bridge-after="new-equilibrium">/);
-  assert.doesNotMatch(html, /style=|aria-hidden|\.\.\.|scroll|progress=/);
+  assert.equal((html.match(/aria-hidden="true"/g) ?? []).length, 3);
+  assert.equal((html.match(/>…<\/span>/g) ?? []).length, 2);
+  assert.match(html, /kp-tutorial-motion-bridge__rail-progress/);
+  assert.doesNotMatch(html, /style=|\.\.\.|scroll|progress=/);
   assert.throws(() => renderKpTutorialMotionBridgeStatic({
     bridge,
     beforeHtml: "",

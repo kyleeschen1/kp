@@ -183,6 +183,11 @@ test("economics publication emits an optional progressive bridge payload", () =>
   assert.match(html, /katex-mathml/);
   const bridgeTag = /^<kp-motion-bridge[^>]+>/.exec(html)?.[0] ?? "";
   assert.doesNotMatch(bridgeTag, /style=|aria-hidden/);
+  assert.equal(
+    (html.match(/class="kp-tutorial-motion-bridge__[^"]+" aria-hidden="true"/g)
+      ?? []).length,
+    3
+  );
   assert.doesNotMatch(html, /data-kp-motion-bridge-spacer|\.\.\./);
 });
 

@@ -38,7 +38,7 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
   }
 });
 
-test("motion bridge timing tokens reserve no static document space", () => {
+test("motion bridge tokens and visual rail preserve progressive document flow", () => {
   const css = readFileSync(new URL(
     "../src/tutorial/kp-tutorial-motion-bridge.css",
     import.meta.url
@@ -48,7 +48,11 @@ test("motion bridge timing tokens reserve no static document space", () => {
   assert.match(css, /--kp-tutorial-motion-bridge-distance-standard-ratio: 0\.5;/);
   assert.match(css, /--kp-tutorial-motion-bridge-distance-extended-ratio: 0\.8;/);
   assert.match(css, /--kp-tutorial-ordinary-beat-approach-ratio: 0\.14;/);
-  assert.doesNotMatch(css, /\b(?:vh|svh|dvh)\b|block-size|height|margin|padding/);
+  assert.match(css, /--kp-tutorial-motion-bridge-rail-width: 1px;/);
+  assert.match(css, /block-size: var\(--kp-tutorial-motion-bridge-distance-px\);/);
+  assert.match(css, /transform: scaleY\(var\(--kp-tutorial-motion-bridge-progress\)\);/);
+  assert.match(css, /\.kp-tutorial-motion-bridge__rail \{\s*display: none;/);
+  assert.doesNotMatch(css, /\b(?:vh|svh|dvh)\b|border-radius/);
 });
 
 test("economics learner entry loads one route-local stylesheet facade", () => {

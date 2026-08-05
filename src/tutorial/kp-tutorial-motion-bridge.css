@@ -1,7 +1,57 @@
-/* Shared motion-bridge timing tokens; host geometry converts ratios to pixels. */
+/* Shared motion-bridge timing and progressive visual contract. */
 :root {
   --kp-tutorial-motion-bridge-distance-short-ratio: 0.32;
   --kp-tutorial-motion-bridge-distance-standard-ratio: 0.5;
   --kp-tutorial-motion-bridge-distance-extended-ratio: 0.8;
   --kp-tutorial-ordinary-beat-approach-ratio: 0.14;
+  --kp-tutorial-motion-bridge-rail-width: 1px;
+  --kp-tutorial-motion-bridge-rail-track:
+    var(--kp-lesson-theme-divider, currentcolor);
+  --kp-tutorial-motion-bridge-rail-progress:
+    var(--kp-lesson-theme-focus, currentcolor);
+  --kp-tutorial-motion-bridge-ellipsis:
+    var(--kp-lesson-theme-muted, currentcolor);
+}
+
+.kp-tutorial-motion-bridge {
+  --kp-tutorial-motion-bridge-distance-px: 0px;
+  --kp-tutorial-motion-bridge-progress: 0;
+  display: block;
+}
+
+.kp-tutorial-motion-bridge__ellipsis {
+  color: var(--kp-tutorial-motion-bridge-ellipsis);
+}
+
+.kp-tutorial-motion-bridge__ellipsis--before {
+  margin-inline-start: 0.12em;
+}
+
+.kp-tutorial-motion-bridge__ellipsis--after {
+  margin-inline-end: 0.12em;
+}
+
+/* The rail is absent from progressive markup flow until runtime has cached
+   its header-safe pixel distance. Its descendants never carry meaning. */
+.kp-tutorial-motion-bridge__rail {
+  display: none;
+}
+
+.kp-tutorial-motion-bridge[data-kp-motion-bridge-enhanced="true"]
+  .kp-tutorial-motion-bridge__rail {
+  position: relative;
+  display: block;
+  inline-size: var(--kp-tutorial-motion-bridge-rail-width);
+  block-size: var(--kp-tutorial-motion-bridge-distance-px);
+  background: var(--kp-tutorial-motion-bridge-rail-track);
+  overflow: hidden;
+}
+
+.kp-tutorial-motion-bridge__rail-progress {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--kp-tutorial-motion-bridge-rail-progress);
+  transform: scaleY(var(--kp-tutorial-motion-bridge-progress));
+  transform-origin: 50% 0;
 }
