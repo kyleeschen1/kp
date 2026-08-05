@@ -102,6 +102,34 @@
       "scope": "s06 durable evidence integrity",
       "checkedAt": "2026-08-05T07:15:39.832Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s07 persistent economics scaffold",
+      "checkedAt": "2026-08-05T07:18:48.908Z",
+      "notes": "Chromium proved one parsed economics view per content owner, stable scaffold and root identity on repeated mount, and idempotent disposal."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s07 scaffold browser types",
+      "checkedAt": "2026-08-05T07:18:49.808Z",
+      "notes": "Browser scaffold and retained-session types passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s07 patch hygiene",
+      "checkedAt": "2026-08-05T07:18:50.679Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s07 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:18:51.573Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

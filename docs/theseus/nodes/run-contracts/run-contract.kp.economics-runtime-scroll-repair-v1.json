@@ -108,7 +108,8 @@
     {
       "id": "s07",
       "title": "Mount-persistent-SVG-scaffold",
-      "status": "planned"
+      "summary": "Mounted the deterministic economics markup exactly once per content owner as a retained scaffold; repeated mount preserves root identity and explicit disposal is idempotent.",
+      "status": "complete"
     },
     {
       "id": "s08",
