@@ -112,7 +112,8 @@
     {
       "id": "s10",
       "title": "Compile demand shift bridge exemplar",
-      "status": "planned"
+      "summary": "Compiled one standard demand-increase bridge from follow-shift to new-equilibrium, mapped shift-ready to shift-settled, and exposed it only to the opt-in browser strategy.",
+      "status": "complete"
     },
     {
       "id": "s11",

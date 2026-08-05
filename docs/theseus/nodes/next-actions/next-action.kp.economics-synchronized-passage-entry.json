@@ -243,6 +243,27 @@
       "scope": "s09 full static typing",
       "checkedAt": "2026-08-05T21:05:38.141Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s10 exemplar compile target",
+      "checkedAt": "2026-08-05T21:09:14.833Z",
+      "notes": "46 economics tests passed; one exact follow-shift to new-equilibrium bridge compiles against existing semantic checkpoints."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "s10 deterministic build artifact",
+      "checkedAt": "2026-08-05T21:09:15.878Z",
+      "notes": "6 artifact tests passed; the bridge and its server-rendered KaTeX are digest-verified build output."
+    },
+    {
+      "command": "npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "s10 route prop boundary",
+      "checkedAt": "2026-08-05T21:09:16.862Z",
+      "notes": "Svelte diagnostics passed with an optional opt-in bridge payload."
     }
   ],
   "progress": {

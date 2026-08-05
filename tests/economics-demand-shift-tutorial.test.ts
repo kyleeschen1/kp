@@ -191,6 +191,23 @@ test("economics publication emits an optional progressive bridge payload", () =>
   assert.doesNotMatch(html, /data-kp-motion-bridge-spacer|\.\.\./);
 });
 
+test("economics motion bridge exemplar has one semantic compile target", async () => {
+  const { kpEconomicsDemandShiftMotionBridgeExemplar: bridge } = await import(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts"
+  );
+  assert.deepEqual(bridge, {
+    schemaVersion: "kp.tutorial.motion-bridge.v1",
+    kind: "motion-bridge",
+    id: "demand-increase",
+    beforePassageId: "follow-shift",
+    afterPassageId: "new-equilibrium",
+    distance: "standard",
+    motionBlockId: "demand-shift",
+    fromCheckpointId: "shift-ready",
+    toCheckpointId: "shift-settled"
+  });
+});
+
 test("semantic tutorial URLs round-trip without choreography coordinates", () => {
   const destinations = [
     { kind: "section" as const, id: "market-clearing" },

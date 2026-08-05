@@ -212,6 +212,7 @@
     presentationLayout,
     scrubStrategy,
     lesson,
+    motionBridgeHtml,
     motionScrubBarHtml,
     tocHtml,
     twoColumnParagraphs,
@@ -231,6 +232,7 @@
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
     readonly scrubStrategy: KpEconomicsScrollScrubStrategy;
     readonly lesson: KpEconomicsDemandShiftLesson;
+    readonly motionBridgeHtml?: Readonly<Record<string, string>> | undefined;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
     readonly twoColumnParagraphs:
@@ -2292,6 +2294,8 @@
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
     "data-kp-economics-tutorial-scrub-strategy": scrubStrategy,
+    "data-kp-economics-motion-bridge-artifact":
+      motionBridgeHtml?.["demand-increase"] === undefined ? "" : "demand-increase",
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),

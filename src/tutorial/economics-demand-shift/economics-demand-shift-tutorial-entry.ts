@@ -55,6 +55,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   const { descriptors, entry } =
     createKpEconomicsDemandShiftAnimationCapability();
   const publication = readKpEconomicsDemandShiftCompiledPublication();
+  const scrubStrategy = readKpEconomicsScrollScrubStrategy(input.search);
   const initialDestination = resolveKpEconomicsDemandShiftInitialDestination({
     lesson: publication.lesson,
     hash: input.hash
@@ -75,6 +76,9 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       animation: prepared.animation,
       hostability: prepared.hostability,
       lesson: publication.lesson,
+      motionBridgeHtml: scrubStrategy === "motion-bridge"
+        ? publication.motionBridgeHtml
+        : undefined,
       tocHtml: publication.tocHtml,
       motionScrubBarHtml: publication.motionScrubBarHtml,
       verificationSurfaceHtml: publication.verificationSurfaceHtml,
@@ -83,7 +87,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
         input.search
       ),
-      scrubStrategy: readKpEconomicsScrollScrubStrategy(input.search),
+      scrubStrategy,
       initialTwoColumnTextSide: readKpEconomicsTwoColumnTextSide(input.search),
       initialTwoColumnParagraphGapVh:
         readKpEconomicsTwoColumnParagraphGapVh(input.search),

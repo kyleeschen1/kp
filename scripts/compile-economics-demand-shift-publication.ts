@@ -11,6 +11,9 @@ import {
   type KpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 import {
+  kpEconomicsDemandShiftMotionBridgeExemplar
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts";
+import {
   sampleKpEconomicsEquilibriumRuntimeFrame
 } from "../src/animation/economics-equilibrium-runtime-frame.ts";
 import {
@@ -46,7 +49,9 @@ export function compileKpEconomicsDemandShiftPublicationArtifact(input: {
   readonly markdown: string;
   readonly katexVersion: string;
 }): KpCompiledPublicationArtifact<KpEconomicsDemandShiftPublication> {
-  const payload = compileKpEconomicsDemandShiftPublication(input.markdown);
+  const payload = compileKpEconomicsDemandShiftPublication(input.markdown, {
+    proseMotion: [kpEconomicsDemandShiftMotionBridgeExemplar]
+  });
   const mathSources = collectMathSources(payload);
 
   return createKpCompiledPublicationArtifact({
