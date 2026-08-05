@@ -121,6 +121,11 @@ export interface KpTutorialScrollCoordinatorOptions {
   readonly now?: (() => number) | undefined;
 }
 
+export interface KpTutorialCueActivationObserverOptions {
+  readonly rootMargin?: string | undefined;
+  readonly onActivationChange?: (() => void) | undefined;
+}
+
 export function projectKpTutorialLocalViewportAnchor(input: {
   readonly anchor: KpTutorialLocalViewportAnchor;
   readonly stageBlockSize: number;
@@ -193,6 +198,100 @@ export class KpTutorialDocumentCueGeometryCache<CueId extends string> {
   measurementReads(): number {
     return this.reads;
   }
+}
+
+/** IntersectionObserver gates near-viewport work; scroll+rAF still owns progress. */
+export class KpTutorialCueActivationObserver<CueId extends string> {
+  private readonly view: Window;
+  private readonly registrations: () =>
+    readonly KpTutorialDocumentCueRegistration<CueId>[];
+  private readonly options: KpTutorialCueActivationObserverOptions;
+  private readonly idsByAnchor = new Map<HTMLElement, CueId>();
+  private readonly activeIds = new Set<CueId>();
+  private observer: IntersectionObserver | undefined;
+  private connected = false;
+
+  constructor(
+    view: Window,
+    registrations: () => readonly KpTutorialDocumentCueRegistration<CueId>[],
+    options: KpTutorialCueActivationObserverOptions = {}
+  ) {
+    this.view = view;
+    this.registrations = registrations;
+    this.options = options;
+  }
+
+  connect(): void {
+    if (this.connected) return;
+    this.connected = true;
+    const Observer = (this.view as Window & {
+      readonly IntersectionObserver?: typeof IntersectionObserver;
+    }).IntersectionObserver;
+    if (typeof Observer !== "function") {
+      for (const { id } of this.registrations()) this.activeIds.add(id);
+      this.options.onActivationChange?.();
+      return;
+    }
+    this.observer = new Observer(
+      this.handleIntersections,
+      { root: null, rootMargin: this.options.rootMargin ?? "100% 0px" }
+    );
+    this.refresh();
+  }
+
+  refresh(): void {
+    if (!this.connected || this.observer === undefined) return;
+    const registrations = this.registrations();
+    const nextAnchors = new Set(registrations.map(({ anchor }) => anchor));
+    for (const anchor of this.idsByAnchor.keys()) {
+      if (nextAnchors.has(anchor)) continue;
+      this.observer.unobserve(anchor);
+      const id = this.idsByAnchor.get(anchor);
+      this.idsByAnchor.delete(anchor);
+      if (id !== undefined) this.activeIds.delete(id);
+    }
+    for (const { id, anchor } of registrations) {
+      if (this.idsByAnchor.get(anchor) === id) continue;
+      this.idsByAnchor.set(anchor, id);
+      this.observer.observe(anchor);
+    }
+  }
+
+  disconnect(): void {
+    if (!this.connected) return;
+    this.connected = false;
+    this.observer?.disconnect();
+    this.observer = undefined;
+    this.idsByAnchor.clear();
+    this.activeIds.clear();
+  }
+
+  isActive(id: CueId): boolean {
+    return this.activeIds.has(id);
+  }
+
+  activeCueIds(): ReadonlySet<CueId> {
+    return new Set(this.activeIds);
+  }
+
+  private readonly handleIntersections: IntersectionObserverCallback = (
+    entries
+  ): void => {
+    let changed = false;
+    for (const entry of entries) {
+      const id = this.idsByAnchor.get(entry.target as HTMLElement);
+      if (id === undefined) continue;
+      if (entry.isIntersecting) {
+        if (!this.activeIds.has(id)) {
+          this.activeIds.add(id);
+          changed = true;
+        }
+      } else if (this.activeIds.delete(id)) {
+        changed = true;
+      }
+    }
+    if (changed) this.options.onActivationChange?.();
+  };
 }
 
 export function projectKpTutorialCumulativeMotion<BlockId extends string>(input: {

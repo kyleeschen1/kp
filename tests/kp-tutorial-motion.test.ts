@@ -5,6 +5,7 @@ import { kpEconomicsMotionBlocks } from "../src/tutorial/economics-demand-shift/
 import { kpLispLessonMotionBlocks } from "../src/tutorial/lisp-function-application/lisp-function-application-motion-blocks.ts";
 import {
   KpTutorialDocumentCueGeometryCache,
+  KpTutorialCueActivationObserver,
   KpTutorialScrollCoordinator,
   projectKpTutorialCorridorTravel,
   projectKpTutorialCumulativeMotion,
@@ -73,6 +74,51 @@ test("cue geometry is measured once in document space until invalidated", () => 
   assert.equal(cache.viewportGeometry()[0]!.documentTop, 250);
   assert.equal(layoutReads, 2);
   assert.equal(cache.measurementReads(), 2);
+});
+
+test("IntersectionObserver activates cues without projecting progress", () => {
+  let callback: IntersectionObserverCallback | undefined;
+  const observed = new Set<Element>();
+  let disconnects = 0;
+  class FakeIntersectionObserver {
+    constructor(next: IntersectionObserverCallback) { callback = next; }
+    observe(target: Element): void { observed.add(target); }
+    unobserve(target: Element): void { observed.delete(target); }
+    disconnect(): void { disconnects += 1; observed.clear(); }
+  }
+  const view = {
+    IntersectionObserver: FakeIntersectionObserver
+  } as unknown as Window;
+  const first = {} as HTMLElement;
+  const second = {} as HTMLElement;
+  let registrations: readonly {
+    readonly id: "first" | "second";
+    readonly anchor: HTMLElement;
+  }[] = [
+    { id: "first", anchor: first },
+    { id: "second", anchor: second }
+  ];
+  let changes = 0;
+  const activation = new KpTutorialCueActivationObserver(
+    view,
+    () => registrations,
+    { onActivationChange: () => { changes += 1; } }
+  );
+  activation.connect();
+  assert.equal(observed.size, 2);
+  callback?.([
+    { target: first, isIntersecting: true } as unknown as IntersectionObserverEntry
+  ], {} as IntersectionObserver);
+  assert.deepEqual([...activation.activeCueIds()], ["first"]);
+  assert.equal(changes, 1);
+
+  registrations = [{ id: "second", anchor: second }];
+  activation.refresh();
+  assert.equal(observed.has(first), false);
+  assert.equal(activation.isActive("first"), false);
+  activation.disconnect();
+  assert.equal(disconnects, 1);
+  assert.equal(activation.activeCueIds().size, 0);
 });
 
 test("cumulative projection obeys the same predecessor law for both callers", () => {

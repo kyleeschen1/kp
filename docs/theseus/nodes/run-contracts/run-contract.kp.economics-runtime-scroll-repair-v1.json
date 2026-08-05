@@ -162,7 +162,8 @@
     {
       "id": "s16",
       "title": "Add-IntersectionObserver-activation-lifecycle",
-      "status": "planned"
+      "summary": "Added a progressive IntersectionObserver activation lifecycle with refresh and disposal; it owns only coarse near-viewport cue activity while scroll+rAF remains the exact progress authority.",
+      "status": "complete"
     },
     {
       "id": "s17",
