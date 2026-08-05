@@ -513,6 +513,27 @@
       "scope": "s23 tuner types",
       "checkedAt": "2026-08-05T09:07:44.870Z",
       "notes": "Application, Node, test, Svelte, and domain checks passed."
+    },
+    {
+      "command": "playwright focused economics font family",
+      "status": "passed",
+      "scope": "s24 non-KaTeX font token",
+      "checkedAt": "2026-08-05T09:13:12.363Z",
+      "notes": "Prose, headings, TOC, SVG-native text inheritance, bottom controls, spacing tuner, and Review textarea/route all resolve Source Serif 4 in dark and light themes; inline KaTeX remains KaTeX_Main."
+    },
+    {
+      "command": "npm run test:browser:tutorial-review",
+      "status": "passed",
+      "scope": "s24 review font fallback and capture preservation",
+      "checkedAt": "2026-08-05T09:13:13.585Z",
+      "notes": "All four Review integration cases passed, including economics dark, light, two-column spacing, and the unaffected Lisp fallback."
+    },
+    {
+      "command": "npm run typecheck:svelte and test project typecheck",
+      "status": "passed",
+      "scope": "s24 typography test types",
+      "checkedAt": "2026-08-05T09:13:14.711Z",
+      "notes": "Svelte reported zero diagnostics and the browser-test TypeScript project passed."
     }
   ],
   "expectedLearning": [

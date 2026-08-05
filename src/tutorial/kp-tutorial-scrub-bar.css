@@ -5,7 +5,10 @@ kp-tutorial-scrub-bar {
   display: block;
   margin: 0.8rem 0 1rem;
   color: var(--kp-tutorial-scrub-ink, #294653);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(
+    --kp-economics-non-katex-font-family,
+    Inter, ui-sans-serif, system-ui, sans-serif
+  );
 }
 
 @media (forced-colors: active) {

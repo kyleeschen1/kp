@@ -210,7 +210,8 @@
     {
       "id": "s24",
       "title": "Unify-non-KaTeX-font-and-local-visual-tokens",
-      "status": "planned"
+      "summary": "Defined one economics-local Source Serif non-KaTeX font token and applied it across prose, headings, TOC, controls, scrubbers, native graph inheritance, and Review UI while preserving KaTeX families and theme-specific weight compensation.",
+      "status": "complete"
     },
     {
       "id": "s25",

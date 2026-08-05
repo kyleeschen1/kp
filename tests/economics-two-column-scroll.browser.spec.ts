@@ -638,6 +638,52 @@ test("light theme applies one compensated graph width and prose weight", async (
   });
 });
 
+test("economics uses one non-KaTeX family across lesson and review surfaces", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  await page.evaluate(() => document.fonts.ready);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const review = page.locator("[data-kp-dev-review-shell]");
+  await expect(review).toHaveAttribute("data-kp-dev-review-available", "true");
+  const nonMathSurfaces = [
+    root.locator(".kp-economics-tutorial__prose p").first(),
+    root.locator(".kp-economics-tutorial__prose h3").first(),
+    root.locator("kp-tutorial-toc a").first(),
+    root.locator("[data-kp-inline-sticky-stage] svg").first(),
+    page.locator("[data-kp-economics-column-toggle]"),
+    page.locator("[data-kp-economics-spacing-tuner] summary"),
+    page.locator("[data-kp-economics-theme-toggle]"),
+    review.locator("textarea"),
+    review.locator(".route")
+  ];
+  for (const surface of nonMathSurfaces) {
+    await expect.poll(() => surface.evaluate((element) =>
+      getComputedStyle(element).fontFamily
+    )).toContain("Source Serif 4 Variable");
+  }
+
+  const inlineMath = root.locator(".kp-economics-tutorial__prose .katex")
+    .first();
+  await expect.poll(() => inlineMath.evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  )).toContain("KaTeX_Main");
+  await expect.poll(() => inlineMath.evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  )).not.toContain("Source Serif 4 Variable");
+
+  await page.locator("[data-kp-economics-theme-toggle]").click();
+  await expect(root).toHaveAttribute("data-kp-economics-tutorial-theme", "light");
+  await expect.poll(() => review.locator("textarea").evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  )).toContain("Source Serif 4 Variable");
+  await expect.poll(() => inlineMath.evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  )).toContain("KaTeX_Main");
+});
+
 test("column toggle swaps prose and graph without resetting the lesson", async ({
   page
 }) => {

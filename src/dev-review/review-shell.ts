@@ -196,7 +196,7 @@ const shellStyles = `
     right: 18px;
     bottom: 18px;
     color: var(--ink);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--kp-economics-non-katex-font-family, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
     font-synthesis: none;
     line-height: 1.4;
     box-sizing: border-box;
@@ -307,7 +307,7 @@ const shellStyles = `
   }
   h2, h3 {
     margin: 0;
-    font-family: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
+    font-family: var(--kp-economics-non-katex-font-family, Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif);
     font-size: 1.12rem;
     font-weight: 650;
     letter-spacing: -.015em;
@@ -378,7 +378,7 @@ const shellStyles = `
     font-size: .63rem;
     font-weight: 700;
   }
-  .route { min-height: .86rem; margin: 0 0 .85rem; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .61rem; overflow-wrap: anywhere; }
+  .route { min-height: .86rem; margin: 0 0 .85rem; color: var(--muted); font-family: var(--kp-economics-non-katex-font-family, ui-monospace, SFMono-Regular, Menlo, monospace); font-size: .61rem; overflow-wrap: anywhere; }
   form { display: grid; gap: .48rem; }
   label { font-size: .72rem; font-weight: 750; }
   textarea {
@@ -390,7 +390,7 @@ const shellStyles = `
     border-radius: .62rem;
     color: var(--ink);
     background: #fffdf7;
-    font: 400 .79rem/1.5 Inter, ui-sans-serif, system-ui, sans-serif;
+    font: 400 .79rem/1.5 var(--kp-economics-non-katex-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   }
   textarea::placeholder { color: color-mix(in srgb, var(--muted) 72%, transparent); }
   textarea:disabled { opacity: .65; }
