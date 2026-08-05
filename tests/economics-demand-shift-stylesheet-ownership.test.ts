@@ -37,6 +37,19 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
   }
 });
 
+test("economics learner entry loads one route-local stylesheet facade", () => {
+  const entry = readFileSync(new URL(
+    "economics-demand-shift-tutorial-entry.ts",
+    directory
+  ), "utf8");
+  const cssImports = [...entry.matchAll(/import\s+"([^\"]+\.css)";/g)]
+    .map((match) => match[1]!)
+    .filter((path) => path.startsWith("./"));
+
+  assert.deepEqual(cssImports, ["./economics-demand-shift-tutorial.css"]);
+  assert.doesNotMatch(entry, /katex-adapter|from\s+["']katex/);
+});
+
 test("economics style owners retain disjoint anchor responsibilities", () => {
   const theme = read("economics-demand-shift-theme.css");
   const publication = read("economics-demand-shift-publication.css");

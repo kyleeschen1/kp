@@ -763,6 +763,76 @@
       "scope": "slice s12 durable evidence",
       "checkedAt": "2026-08-05T12:11:13.658Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "failed",
+      "scope": "slice s13 local stylesheet gate diagnostic",
+      "checkedAt": "2026-08-05T12:17:18.595Z",
+      "notes": "The first gate incorrectly treated shared base, KaTeX presentation CSS, and scrubber CSS as route-local ownership violations; the assertion was narrowed to relative same-directory imports."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "slice s13 route stylesheet boundary",
+      "checkedAt": "2026-08-05T12:17:19.777Z",
+      "notes": "All four ownership and pruning gates passed; the learner entry imports exactly one route-local CSS facade and no runtime KaTeX adapter."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "slice s13 ratcheted route closure",
+      "checkedAt": "2026-08-05T12:17:20.851Z",
+      "notes": "New ceilings pass at 238933 transfer bytes under 250000, 139306 script bytes under 150000, exactly 42 resources, one 76680-byte economics stylesheet under 77000, zero runtime KaTeX, zero CLS, 135ms cold task, and 34.2ms active p95."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s13 deterministic release build",
+      "checkedAt": "2026-08-05T12:17:21.785Z",
+      "notes": "All application, Node, test, Svelte, and domain types passed; the compiled publication stale gate and Vite production build passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s13 learner release behavior",
+      "checkedAt": "2026-08-05T12:17:22.820Z",
+      "notes": "All 12 persistence, manual control, verification, TOC, direct-link, history, reduced-motion, no-JS, upgrade, and phone cases passed."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "slice s13 compiled math closure",
+      "checkedAt": "2026-08-05T12:17:23.920Z",
+      "notes": "All six artifact and retained-math determinism checks passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s13 economics semantics",
+      "checkedAt": "2026-08-05T12:17:25.002Z",
+      "notes": "All 42 economics semantic, choreography, retained-runtime, and shared-lesson checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s13 architecture gates",
+      "checkedAt": "2026-08-05T12:17:26.016Z",
+      "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s13 patch hygiene",
+      "checkedAt": "2026-08-05T12:17:26.994Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s13 durable evidence",
+      "checkedAt": "2026-08-05T12:17:28.042Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

@@ -15,9 +15,10 @@ const routeEntry =
 // These ceilings leave bounded machine variance above the production exemplar,
 // while making an eager heavy renderer or duplicated scroll clock fail loudly.
 const budgets = Object.freeze({
-  initialTransferBytes: 360_000,
-  initialScriptBytes: 275_000,
-  initialResourceCount: 48,
+  initialTransferBytes: 250_000,
+  initialScriptBytes: 150_000,
+  initialResourceCount: 42,
+  economicsCssBytes: 77_000,
   cumulativeLayoutShift: 0.02,
   initialLongestTaskMs: 150,
   activeP95FrameMs: 42,
@@ -528,6 +529,12 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(initial.resourceCount).toBeLessThanOrEqual(budgets.initialResourceCount);
   expect(initial.cls).toBeLessThanOrEqual(budgets.cumulativeLayoutShift);
   expect(initial.longestTaskMs).toBeLessThanOrEqual(budgets.initialLongestTaskMs);
+  const economicsCss = loadedRouteBuild.css.filter(
+    ({ category }) => category === "economics"
+  );
+  expect(economicsCss).toHaveLength(1);
+  expect(economicsCss[0]!.bytes).toBeLessThanOrEqual(budgets.economicsCssBytes);
+  expect(loadedRouteBuild.totals["runtime-katex-js"] ?? 0).toBe(0);
   expect(loadedRouteNames(loadedRouteBuild.javascript, "catalogue"))
     .toEqual(routeClosureDebt.catalogue);
   expect(loadedRouteNames(loadedRouteBuild.javascript, "runtime-katex-js"))

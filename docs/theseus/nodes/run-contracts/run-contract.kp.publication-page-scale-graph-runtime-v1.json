@@ -131,7 +131,8 @@
     {
       "id": "s13",
       "title": "Close-route-math-and-CSS-boundary",
-      "status": "planned"
+      "summary": "Closed Phase 5 with enforceable route budgets: at most 250KB transferred, 150KB script, 42 resources, one route-local CSS facade and at most 77KB minified economics CSS, with zero runtime KaTeX or unrelated graph domains. Full build, artifact, learner, semantic, architecture, and runtime checks pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
