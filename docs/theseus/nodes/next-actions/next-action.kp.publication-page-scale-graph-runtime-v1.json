@@ -420,6 +420,48 @@
       "scope": "s07 durable evidence integrity",
       "checkedAt": "2026-08-05T11:05:21.414Z",
       "notes": "Workspace validation passed with the compiled publication contract and decision record."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "slice s08 deterministic generated artifact",
+      "checkedAt": "2026-08-05T11:13:30.364Z",
+      "notes": "Four tests passed; byte identity, source and payload SHA-256, trusted-off build-time KaTeX HTML+MathML, and timestamp exclusion verified."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s08 economics preservation",
+      "checkedAt": "2026-08-05T11:13:31.477Z",
+      "notes": "All 42 economics publication, semantic frame, direct seek, rewind, retained SVG, and shared lesson checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s08 release build",
+      "checkedAt": "2026-08-05T11:13:32.521Z",
+      "notes": "Full typecheck, Svelte diagnostics, domain checks, stale artifact gate, and Vite production build passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s08 architecture",
+      "checkedAt": "2026-08-05T11:13:33.585Z",
+      "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s08 patch hygiene",
+      "checkedAt": "2026-08-05T11:13:42.419Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s08 durable evidence",
+      "checkedAt": "2026-08-05T11:13:43.533Z",
+      "notes": "Workspace validated with the deterministic generator, checked artifact, and release-build stale gate."
     }
   ],
   "expectedLearning": [

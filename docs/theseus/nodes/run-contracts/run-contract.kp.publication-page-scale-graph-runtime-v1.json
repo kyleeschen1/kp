@@ -101,7 +101,8 @@
     {
       "id": "s08",
       "title": "Build-deterministic-lesson-and-KaTeX-compiler",
-      "status": "planned"
+      "summary": "Added a deterministic checked-in economics publication generator with exact Markdown and payload SHA-256 identities, 42 trusted-off build-time KaTeX HTML+MathML fragments across 23 unique sources, byte-for-byte stale detection in every production build, and complete economics and architecture preservation evidence.",
+      "status": "complete"
     },
     {
       "id": "s09",

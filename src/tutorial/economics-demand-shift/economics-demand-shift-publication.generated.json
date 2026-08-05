@@ -1,0 +1,557 @@
+{
+  "schemaVersion": "kp.compiled-publication-artifact.v1",
+  "kind": "compiled-publication-artifact",
+  "artifactId": "publication.economics.demand-shift",
+  "source": {
+    "path": "content/lessons/economics-demand-shift.md",
+    "sha256": "sha256:17f620030ddd06162dee711e05f265da08ff59e8253afdfad91084c2d0d45f05"
+  },
+  "compiler": {
+    "id": "kp.economics-demand-shift-publication",
+    "version": "1"
+  },
+  "math": {
+    "engine": "katex",
+    "engineVersion": "0.17.0",
+    "rendering": "build-time",
+    "output": "htmlAndMathml",
+    "trust": false,
+    "fragmentCount": 42,
+    "sourceLatex": [
+      "10",
+      "14\\rightarrow18",
+      "2+Q=14-Q",
+      "2+Q=18-Q",
+      "8",
+      "D_0",
+      "D_1",
+      "E_0",
+      "E_0 = (6.00,\\,8.00)",
+      "E_0=(6,8)",
+      "E_1",
+      "E_1 = (8.00,\\,10.00)",
+      "E_1=(8,10)",
+      "P",
+      "P = 2 + Q",
+      "P=10",
+      "P=8",
+      "Q",
+      "Q=6",
+      "Q=8",
+      "S",
+      "\\Delta P = +2.00",
+      "\\Delta Q = +2.00"
+    ]
+  },
+  "payloadSha256": "sha256:658d204dad7291e14cf9a897deac31d92c7337844b9ee053882950fb370d64f8",
+  "payload": {
+    "lesson": {
+      "title": "Why does an increase in demand raise both equilibrium price and equilibrium quantity when supply remains fixed?",
+      "kicker": "Supply, demand, and equilibrium",
+      "assumption": "This lesson assumes that you can read price and quantity axes and have encountered supply, demand, and equilibrium before. It focuses on the difference between shifting a curve and moving to a new point on an unchanged curve.",
+      "sections": [
+        {
+          "id": "equilibrium",
+          "heading": "The puzzle in the starting market",
+          "passages": [
+            {
+              "id": "context",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "Imagine a weekly market for boxes of strawberries. Quantity, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"Q\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>Q</mi></mrow><annotation encoding=\"application/x-tex\">Q</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span></span></span></span></span>, is measured in hundreds of boxes and price, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"P\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>P</mi></mrow><annotation encoding=\"application/x-tex\">P</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span></span></span></span></span>, in dollars per box. Strawberries become more desirable, so demand increases, but the supply curve does not shift. The new equilibrium nevertheless has a larger quantity. If the supply relationship stayed fixed, why do sellers supply more?",
+                  "sourceText": "Imagine a weekly market for boxes of strawberries. Quantity, $Q$, is measured in hundreds of boxes and price, $P$, in dollars per box. Strawberries become more desirable, so demand increases, but the supply curve does not shift. The new equilibrium nevertheless has a larger quantity. If the supply relationship stayed fixed, why do sellers supply more?"
+                }
+              ]
+            },
+            {
+              "id": "initial-equilibrium",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "The starting supply schedule, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"S\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>S</mi></mrow><annotation encoding=\"application/x-tex\">S</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">S</span></span></span></span></span>, and demand schedule, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"D_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>D</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">D_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">D</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span>, collect possible price–quantity combinations; neither curve is a path that the market travels over time. They meet at <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0=(6,8)\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub><mo>=</mo><mo stretchy=\"false\">(</mo><mn>6</mn><mo separator=\"true\">,</mo><mn>8</mn><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">E_0=(6,8)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">(</span><span class=\"mord\">6</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8</span><span class=\"mclose\">)</span></span></span></span></span>. At that point sellers want to supply <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"Q=6\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding=\"application/x-tex\">Q=6</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">6</span></span></span></span></span> and buyers want to purchase <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"Q=6\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding=\"application/x-tex\">Q=6</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">6</span></span></span></span></span>, so the market clears.",
+                  "sourceText": "The starting supply schedule, $S$, and demand schedule, $D_0$, collect possible price–quantity combinations; neither curve is a path that the market travels over time. They meet at $E_0=(6,8)$. At that point sellers want to supply $Q=6$ and buyers want to purchase $Q=6$, so the market clears."
+                },
+                {
+                  "html": "Equilibrium means only that the two schedules agree at the displayed price and quantity. It does not mean that the outcome is ideal, fair, or permanent. The intersection is determined by both relationships at once, so changing either relationship can make the old point inconsistent with market clearing.",
+                  "sourceText": "Equilibrium means only that the two schedules agree at the displayed price and quantity. It does not mean that the outcome is ideal, fair, or permanent. The intersection is determined by both relationships at once, so changing either relationship can make the old point inconsistent with market clearing."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "demand-increase",
+          "heading": "Change one relationship",
+          "passages": [
+            {
+              "id": "demand-change",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "Buyers now want four hundred more boxes at every displayed price, so the entire demand schedule shifts from <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"D_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>D</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">D_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">D</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> to <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"D_1\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>D</mi><mn>1</mn></msub></mrow><annotation encoding=\"application/x-tex\">D_1</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">D</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span>. Supply remains the same relationship, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"S\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>S</mi></mrow><annotation encoding=\"application/x-tex\">S</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">S</span></span></span></span></span>. A fixed supply curve does not freeze quantity at six hundred boxes; it says how much sellers supply at each possible price. A new market-clearing price may therefore select a different point on that unchanged curve.",
+                  "sourceText": "Buyers now want four hundred more boxes at every displayed price, so the entire demand schedule shifts from $D_0$ to $D_1$. Supply remains the same relationship, $S$. A fixed supply curve does not freeze quantity at six hundred boxes; it says how much sellers supply at each possible price. A new market-clearing price may therefore select a different point on that unchanged curve."
+                }
+              ]
+            },
+            {
+              "id": "prediction",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "Before watching the change, predict where the new intersection must lie. Can <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0=(6,8)\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub><mo>=</mo><mo stretchy=\"false\">(</mo><mn>6</mn><mo separator=\"true\">,</mo><mn>8</mn><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">E_0=(6,8)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">(</span><span class=\"mord\">6</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8</span><span class=\"mclose\">)</span></span></span></span></span> still clear the market when demand has increased but supply has not shifted? Should the new point have a higher or lower price, and a larger or smaller quantity?",
+                  "sourceText": "Before watching the change, predict where the new intersection must lie. Can $E_0=(6,8)$ still clear the market when demand has increased but supply has not shifted? Should the new point have a higher or lower price, and a larger or smaller quantity?"
+                },
+                {
+                  "html": "At the old price of <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"8\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>8</mn></mrow><annotation encoding=\"application/x-tex\">8</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">8</span></span></span></span></span>, sellers still supply six hundred boxes, but buyers now demand one thousand. The shortage tells us that <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> is no longer an equilibrium. It does not yet tell us the exact new point; for that, we must follow where the shifted demand curve meets unchanged supply.",
+                  "sourceText": "At the old price of $8$, sellers still supply six hundred boxes, but buyers now demand one thousand. The shortage tells us that $E_0$ is no longer an equilibrium. It does not yet tell us the exact new point; for that, we must follow where the shifted demand curve meets unchanged supply."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "market-clearing",
+          "heading": "Follow the new intersection",
+          "passages": [
+            {
+              "id": "follow-shift",
+              "role": "transition",
+              "paragraphs": [
+                {
+                  "html": "Begin at <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span>. Hold the blue supply curve fixed and follow only the red demand curve and the intersection it determines. As demand shifts from <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"D_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>D</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">D_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">D</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> to <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"D_1\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>D</mi><mn>1</mn></msub></mrow><annotation encoding=\"application/x-tex\">D_1</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">D</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span>, the equilibrium point follows the changing intersection.",
+                  "sourceText": "Begin at $E_0$. Hold the blue supply curve fixed and follow only the red demand curve and the intersection it determines. As demand shifts from $D_0$ to $D_1$, the equilibrium point follows the changing intersection."
+                }
+              ],
+              "motionBlockId": "demand-shift"
+            },
+            {
+              "id": "new-equilibrium",
+              "role": "interpretation",
+              "paragraphs": [
+                {
+                  "html": "The new curves meet at <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_1=(8,10)\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>1</mn></msub><mo>=</mo><mo stretchy=\"false\">(</mo><mn>8</mn><mo separator=\"true\">,</mo><mn>10</mn><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">E_1=(8,10)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">(</span><span class=\"mord\">8</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">10</span><span class=\"mclose\">)</span></span></span></span></span>, above and to the right of <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span>. Equilibrium price has risen from <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"8\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>8</mn></mrow><annotation encoding=\"application/x-tex\">8</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">8</span></span></span></span></span> to <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"10\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>10</mn></mrow><annotation encoding=\"application/x-tex\">10</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">10</span></span></span></span></span>, and equilibrium quantity from six hundred to eight hundred boxes. The result is not an extra rule placed on the graph: <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_1\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>1</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_1</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> is simply the one point that satisfies both of the relationships now shown.",
+                  "sourceText": "The new curves meet at $E_1=(8,10)$, above and to the right of $E_0$. Equilibrium price has risen from $8$ to $10$, and equilibrium quantity from six hundred to eight hundred boxes. The result is not an extra rule placed on the graph: $E_1$ is simply the one point that satisfies both of the relationships now shown."
+                }
+              ]
+            },
+            {
+              "id": "shift-versus-movement",
+              "role": "transition",
+              "paragraphs": [
+                {
+                  "html": "Now ignore the red curve and watch blue <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"S\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>S</mi></mrow><annotation encoding=\"application/x-tex\">S</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">S</span></span></span></span></span>. The trace will move from <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> to <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_1\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>1</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_1</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> along that same supply curve. Its position changes; the supply relationship itself does not.",
+                  "sourceText": "Now ignore the red curve and watch blue $S$. The trace will move from $E_0$ to $E_1$ along that same supply curve. Its position changes; the supply relationship itself does not."
+                }
+              ],
+              "motionBlockId": "supply-movement"
+            },
+            {
+              "id": "equation-check",
+              "role": "reflection",
+              "paragraphs": [
+                {
+                  "html": "The trace separates two kinds of change. Demand shifted from one schedule to another; sellers moved to a new point on the same supply schedule. Quantity supplied rose because the higher market-clearing price selected a different point on unchanged <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"S\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>S</mi></mrow><annotation encoding=\"application/x-tex\">S</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">S</span></span></span></span></span>.",
+                  "sourceText": "The trace separates two kinds of change. Demand shifted from one schedule to another; sellers moved to a new point on the same supply schedule. Quantity supplied rose because the higher market-clearing price selected a different point on unchanged $S$."
+                },
+                {
+                  "html": "Only now do we need the equations. Initially, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"2+Q=14-Q\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>2</mn><mo>+</mo><mi>Q</mi><mo>=</mo><mn>14</mn><mo>−</mo><mi>Q</mi></mrow><annotation encoding=\"application/x-tex\">2+Q=14-Q</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">2</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">14</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span></span></span></span></span>, so <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"Q=6\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding=\"application/x-tex\">Q=6</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">6</span></span></span></span></span> and <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"P=8\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>P</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding=\"application/x-tex\">P=8</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">8</span></span></span></span></span>. After the demand shift, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"2+Q=18-Q\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>2</mn><mo>+</mo><mi>Q</mi><mo>=</mo><mn>18</mn><mo>−</mo><mi>Q</mi></mrow><annotation encoding=\"application/x-tex\">2+Q=18-Q</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">2</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">18</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span></span></span></span></span>, so <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"Q=8\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding=\"application/x-tex\">Q=8</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">8</span></span></span></span></span> and <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"P=10\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>P</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding=\"application/x-tex\">P=10</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">10</span></span></span></span></span>. The algebra is not a second story; it verifies the same two intersections shown by the graph.",
+                  "sourceText": "Only now do we need the equations. Initially, $2+Q=14-Q$, so $Q=6$ and $P=8$. After the demand shift, $2+Q=18-Q$, so $Q=8$ and $P=10$. The algebra is not a second story; it verifies the same two intersections shown by the graph."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "model-scope",
+          "heading": "Check and generalize",
+          "passages": [
+            {
+              "id": "scope",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "Comparing <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_0\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> with <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"E_1\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>1</mn></msub></mrow><annotation encoding=\"application/x-tex\">E_1</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span> gives a comparative-static result: with upward-sloping supply held fixed, an increase in demand raises both equilibrium price and equilibrium quantity. The exact amounts belong to this example. A different curve shape, a simultaneous supply shift, or a price control could produce a different result.",
+                  "sourceText": "Comparing $E_0$ with $E_1$ gives a comparative-static result: with upward-sloping supply held fixed, an increase in demand raises both equilibrium price and equilibrium quantity. The exact amounts belong to this example. A different curve shape, a simultaneous supply shift, or a price control could produce a different result."
+                },
+                {
+                  "html": "The comparison identifies the two equilibria; it does not describe the path or speed by which an actual market adjusts, the trades made along the way, or whether every participant is better off. Those questions require additional models rather than more detail on this graph.",
+                  "sourceText": "The comparison identifies the two equilibria; it does not describe the path or speed by which an actual market adjusts, the trades made along the way, or whether every participant is better off. Those questions require additional models rather than more detail on this graph."
+                }
+              ]
+            },
+            {
+              "id": "synthesis",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "Supply did not shift. Explain why equilibrium quantity supplied nevertheless rose. Pause before revealing the answer.",
+                  "sourceText": "Supply did not shift. Explain why equilibrium quantity supplied nevertheless rose. Pause before revealing the answer."
+                },
+                {
+                  "html": "The supply curve describes how much sellers supply at each possible price; it does not hold quantity at six hundred boxes. The demand shift made <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"P=8\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>P</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding=\"application/x-tex\">P=8</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">8</span></span></span></span></span> inconsistent with market clearing. At the higher clearing price of <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"10\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>10</mn></mrow><annotation encoding=\"application/x-tex\">10</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">10</span></span></span></span></span>, sellers move along unchanged <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"S\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>S</mi></mrow><annotation encoding=\"application/x-tex\">S</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">S</span></span></span></span></span> and supply eight hundred boxes. Quantity supplied rose because equilibrium selected a new point on the same supply relationship, not because the supply curve itself moved.",
+                  "sourceText": "The supply curve describes how much sellers supply at each possible price; it does not hold quantity at six hundred boxes. The demand shift made $P=8$ inconsistent with market clearing. At the higher clearing price of $10$, sellers move along unchanged $S$ and supply eight hundred boxes. Quantity supplied rose because equilibrium selected a new point on the same supply relationship, not because the supply curve itself moved."
+                }
+              ]
+            },
+            {
+              "id": "explore",
+              "role": "regular",
+              "paragraphs": [
+                {
+                  "html": "As an optional transfer exercise, change the final demand intercept and predict the new equilibrium before reading the graph. The Explore control always returns to the lesson example, <span class=\"kp-economics-tutorial__math\" data-kp-latex=\"14\\rightarrow18\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mn>14</mn><mo>→</mo><mn>18</mn></mrow><annotation encoding=\"application/x-tex\">14\\rightarrow18</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">14</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">→</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">18</span></span></span></span></span>, and its two exact equilibria.",
+                  "sourceText": "As an optional transfer exercise, change the final demand intercept and predict the new equilibrium before reading the graph. The Explore control always returns to the lesson example, $14\\rightarrow18$, and its two exact equilibria."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "document": {
+      "kind": "tutorial-lesson-publication-document",
+      "document": {
+        "kind": "lesson-document",
+        "id": "lesson.economics.demand-shift",
+        "version": "1.0.0",
+        "title": "Why does an increase in demand raise both equilibrium price and equilibrium quantity when supply remains fixed?",
+        "language": "en",
+        "blocks": [
+          {
+            "kind": "heading",
+            "id": "equilibrium",
+            "level": 3,
+            "content": [
+              {
+                "kind": "text",
+                "value": "The puzzle in the starting market"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "context-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Imagine a weekly market for boxes of strawberries. Quantity, $Q$, is measured in hundreds of boxes and price, $P$, in dollars per box. Strawberries become more desirable, so demand increases, but the supply curve does not shift. The new equilibrium nevertheless has a larger quantity. If the supply relationship stayed fixed, why do sellers supply more?"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "initial-equilibrium-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "The starting supply schedule, $S$, and demand schedule, $D_0$, collect possible price–quantity combinations; neither curve is a path that the market travels over time. They meet at $E_0=(6,8)$. At that point sellers want to supply $Q=6$ and buyers want to purchase $Q=6$, so the market clears."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "initial-equilibrium-paragraph-2",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Equilibrium means only that the two schedules agree at the displayed price and quantity. It does not mean that the outcome is ideal, fair, or permanent. The intersection is determined by both relationships at once, so changing either relationship can make the old point inconsistent with market clearing."
+              }
+            ]
+          },
+          {
+            "kind": "heading",
+            "id": "demand-increase",
+            "level": 3,
+            "content": [
+              {
+                "kind": "text",
+                "value": "Change one relationship"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "demand-change-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Buyers now want four hundred more boxes at every displayed price, so the entire demand schedule shifts from $D_0$ to $D_1$. Supply remains the same relationship, $S$. A fixed supply curve does not freeze quantity at six hundred boxes; it says how much sellers supply at each possible price. A new market-clearing price may therefore select a different point on that unchanged curve."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "prediction-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Before watching the change, predict where the new intersection must lie. Can $E_0=(6,8)$ still clear the market when demand has increased but supply has not shifted? Should the new point have a higher or lower price, and a larger or smaller quantity?"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "prediction-paragraph-2",
+            "content": [
+              {
+                "kind": "text",
+                "value": "At the old price of $8$, sellers still supply six hundred boxes, but buyers now demand one thousand. The shortage tells us that $E_0$ is no longer an equilibrium. It does not yet tell us the exact new point; for that, we must follow where the shifted demand curve meets unchanged supply."
+              }
+            ]
+          },
+          {
+            "kind": "heading",
+            "id": "market-clearing",
+            "level": 3,
+            "content": [
+              {
+                "kind": "text",
+                "value": "Follow the new intersection"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "follow-shift-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Begin at $E_0$. Hold the blue supply curve fixed and follow only the red demand curve and the intersection it determines. As demand shifts from $D_0$ to $D_1$, the equilibrium point follows the changing intersection."
+              }
+            ]
+          },
+          {
+            "kind": "animation-story",
+            "id": "demand-shift",
+            "asset": {
+              "kind": "animation-asset",
+              "id": "asset.economics.supply-demand-equilibrium-shift",
+              "version": "1"
+            },
+            "presentation": "scroll-scrub",
+            "beats": [
+              {
+                "id": "beat-shift-ready",
+                "title": "Before the shift",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "Before the shift"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "shift-ready",
+                  "progressPermille": 0
+                },
+                "focusRefs": []
+              },
+              {
+                "id": "beat-shift-handoff",
+                "title": "Equilibrium handoff",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "Equilibrium handoff"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "shift-handoff",
+                  "progressPermille": 720
+                },
+                "focusRefs": []
+              },
+              {
+                "id": "beat-shift-settled",
+                "title": "New equilibrium",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "New equilibrium"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "shift-settled",
+                  "progressPermille": 1000
+                },
+                "focusRefs": []
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "new-equilibrium-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "The new curves meet at $E_1=(8,10)$, above and to the right of $E_0$. Equilibrium price has risen from $8$ to $10$, and equilibrium quantity from six hundred to eight hundred boxes. The result is not an extra rule placed on the graph: $E_1$ is simply the one point that satisfies both of the relationships now shown."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "shift-versus-movement-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Now ignore the red curve and watch blue $S$. The trace will move from $E_0$ to $E_1$ along that same supply curve. Its position changes; the supply relationship itself does not."
+              }
+            ]
+          },
+          {
+            "kind": "animation-story",
+            "id": "supply-movement",
+            "asset": {
+              "kind": "animation-asset",
+              "id": "asset.economics.supply-demand-equilibrium-shift",
+              "version": "1"
+            },
+            "presentation": "scroll-scrub",
+            "beats": [
+              {
+                "id": "beat-movement-ready",
+                "title": "Hold supply fixed",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "Hold supply fixed"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "movement-ready",
+                  "progressPermille": 0
+                },
+                "focusRefs": []
+              },
+              {
+                "id": "beat-movement-traced",
+                "title": "Trace movement along supply",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "Trace movement along supply"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "movement-traced",
+                  "progressPermille": 580
+                },
+                "focusRefs": []
+              },
+              {
+                "id": "beat-movement-verified",
+                "title": "Compare price and quantity",
+                "content": [
+                  {
+                    "kind": "text",
+                    "value": "Compare price and quantity"
+                  }
+                ],
+                "checkpoint": {
+                  "id": "movement-verified",
+                  "progressPermille": 1000
+                },
+                "focusRefs": []
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "equation-check-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "The trace separates two kinds of change. Demand shifted from one schedule to another; sellers moved to a new point on the same supply schedule. Quantity supplied rose because the higher market-clearing price selected a different point on unchanged $S$."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "equation-check-paragraph-2",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Only now do we need the equations. Initially, $2+Q=14-Q$, so $Q=6$ and $P=8$. After the demand shift, $2+Q=18-Q$, so $Q=8$ and $P=10$. The algebra is not a second story; it verifies the same two intersections shown by the graph."
+              }
+            ]
+          },
+          {
+            "kind": "heading",
+            "id": "model-scope",
+            "level": 3,
+            "content": [
+              {
+                "kind": "text",
+                "value": "Check and generalize"
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "scope-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Comparing $E_0$ with $E_1$ gives a comparative-static result: with upward-sloping supply held fixed, an increase in demand raises both equilibrium price and equilibrium quantity. The exact amounts belong to this example. A different curve shape, a simultaneous supply shift, or a price control could produce a different result."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "scope-paragraph-2",
+            "content": [
+              {
+                "kind": "text",
+                "value": "The comparison identifies the two equilibria; it does not describe the path or speed by which an actual market adjusts, the trades made along the way, or whether every participant is better off. Those questions require additional models rather than more detail on this graph."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "synthesis-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "Supply did not shift. Explain why equilibrium quantity supplied nevertheless rose. Pause before revealing the answer."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "synthesis-paragraph-2",
+            "content": [
+              {
+                "kind": "text",
+                "value": "The supply curve describes how much sellers supply at each possible price; it does not hold quantity at six hundred boxes. The demand shift made $P=8$ inconsistent with market clearing. At the higher clearing price of $10$, sellers move along unchanged $S$ and supply eight hundred boxes. Quantity supplied rose because equilibrium selected a new point on the same supply relationship, not because the supply curve itself moved."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "id": "explore-paragraph-1",
+            "content": [
+              {
+                "kind": "text",
+                "value": "As an optional transfer exercise, change the final demand intercept and predict the new equilibrium before reading the graph. The Explore control always returns to the lesson example, $14\\rightarrow18$, and its two exact equilibria."
+              }
+            ]
+          }
+        ],
+        "source": {
+          "kind": "lesson-source",
+          "id": "content.lessons.economics-demand-shift",
+          "version": "1.0.0"
+        }
+      },
+      "metadata": {
+        "kicker": "Supply, demand, and equilibrium",
+        "assumption": "This lesson assumes that you can read price and quantity axes and have encountered supply, demand, and equilibrium before. It focuses on the difference between shifting a curve and moving to a new point on an unchanged curve."
+      }
+    },
+    "tocHtml": "<kp-tutorial-toc data-kp-tutorial-toc data-kp-tutorial-toc-enhancement=\"pending\">\n    <nav class=\"kp-tutorial-toc\" aria-label=\"In this lesson\">\n      <p class=\"kp-tutorial-toc__label\">In this lesson</p>\n      <ol class=\"kp-tutorial-toc__list kp-tutorial-toc__list--depth-0\">\n    <li data-kp-tutorial-toc-item=\"section\" data-kp-tutorial-toc-item-id=\"equilibrium\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-section-equilibrium\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"section\" data-kp-tutorial-destination-id=\"equilibrium\">The puzzle in the starting market</a>\n      \n    </li><li data-kp-tutorial-toc-item=\"section\" data-kp-tutorial-toc-item-id=\"demand-increase\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-section-demand-increase\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"section\" data-kp-tutorial-destination-id=\"demand-increase\">Change one relationship</a>\n      \n    </li><li data-kp-tutorial-toc-item=\"section\" data-kp-tutorial-toc-item-id=\"market-clearing\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-section-market-clearing\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"section\" data-kp-tutorial-destination-id=\"market-clearing\">Follow the new intersection</a>\n      <ol class=\"kp-tutorial-toc__list kp-tutorial-toc__list--depth-1\">\n    <li data-kp-tutorial-toc-item=\"block\" data-kp-tutorial-toc-item-id=\"demand-shift\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-block-demand-shift\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"block\" data-kp-tutorial-destination-id=\"demand-shift\">Demand shifts</a>\n      \n    </li><li data-kp-tutorial-toc-item=\"block\" data-kp-tutorial-toc-item-id=\"supply-movement\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-block-supply-movement\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"block\" data-kp-tutorial-destination-id=\"supply-movement\">Supply did not shift</a>\n      \n    </li>\n  </ol>\n    </li><li data-kp-tutorial-toc-item=\"section\" data-kp-tutorial-toc-item-id=\"model-scope\">\n      <a href=\"/tutorials/economics/demand-shift/#kp-section-model-scope\" data-kp-tutorial-toc-link data-kp-tutorial-destination-kind=\"section\" data-kp-tutorial-destination-id=\"model-scope\">Check and generalize</a>\n      \n    </li>\n  </ol>\n    </nav>\n  </kp-tutorial-toc>",
+    "motionScrubBarHtml": {
+      "demand-shift": "<kp-tutorial-scrub-bar\n    data-kp-tutorial-motion-controls=\"demand-shift\"\n    data-kp-tutorial-scrub-enhancement=\"pending\"\n    progress=\"0\"\n    playback-status=\"paused\"\n    direction=\"forward\"\n    controls-disabled=\"true\"\n    previous-disabled=\"true\"\n    next-disabled=\"false\"\n    manual-claimed=\"false\"\n    aria-label=\"Animation timeline\"\n  >\n    <div class=\"kp-tutorial-scrub__boundary\" data-kp-tutorial-scrub-static-boundary>\n      <div class=\"kp-tutorial-scrub__controls\" role=\"group\" aria-label=\"Animation timeline\">\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-shift-ready\" data-action=\"rewind\" aria-label=\"Rewind animation\">Rewind</a>\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-shift-ready\" data-action=\"previous\" aria-label=\"Previous semantic checkpoint\" aria-keyshortcuts=\"Alt+ArrowLeft\">Previous</a>\n        <button class=\"kp-tutorial-scrub__action\" type=\"button\" data-action=\"toggle\" disabled>Play</button>\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-shift-handoff\" data-action=\"next\" aria-label=\"Next semantic checkpoint\" aria-keyshortcuts=\"Alt+ArrowRight\">Next</a>\n        <input data-action=\"seek\" type=\"range\" min=\"0\" max=\"1\" step=\"0.001\" value=\"0\" aria-label=\"Scrub animation progress\" list=\"kp-tutorial-scrub-marks-demand-shift\" disabled />\n        <output class=\"kp-tutorial-scrub__progress\" data-progress>0%</output>\n        <datalist id=\"kp-tutorial-scrub-marks-demand-shift\">\n          <option value=\"0\" label=\"Before the shift\"></option><option value=\"0.72\" label=\"Equilibrium handoff\"></option><option value=\"1\" label=\"New equilibrium\"></option>\n        </datalist>\n      </div>\n    </div>\n  </kp-tutorial-scrub-bar>",
+      "supply-movement": "<kp-tutorial-scrub-bar\n    data-kp-tutorial-motion-controls=\"supply-movement\"\n    data-kp-tutorial-scrub-enhancement=\"pending\"\n    progress=\"0\"\n    playback-status=\"paused\"\n    direction=\"forward\"\n    controls-disabled=\"true\"\n    previous-disabled=\"true\"\n    next-disabled=\"false\"\n    manual-claimed=\"false\"\n    aria-label=\"Animation timeline\"\n  >\n    <div class=\"kp-tutorial-scrub__boundary\" data-kp-tutorial-scrub-static-boundary>\n      <div class=\"kp-tutorial-scrub__controls\" role=\"group\" aria-label=\"Animation timeline\">\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-movement-ready\" data-action=\"rewind\" aria-label=\"Rewind animation\">Rewind</a>\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-movement-ready\" data-action=\"previous\" aria-label=\"Previous semantic checkpoint\" aria-keyshortcuts=\"Alt+ArrowLeft\">Previous</a>\n        <button class=\"kp-tutorial-scrub__action\" type=\"button\" data-action=\"toggle\" disabled>Play</button>\n        <a class=\"kp-tutorial-scrub__action\" href=\"/tutorials/economics/demand-shift/#kp-checkpoint-movement-traced\" data-action=\"next\" aria-label=\"Next semantic checkpoint\" aria-keyshortcuts=\"Alt+ArrowRight\">Next</a>\n        <input data-action=\"seek\" type=\"range\" min=\"0\" max=\"1\" step=\"0.001\" value=\"0\" aria-label=\"Scrub animation progress\" list=\"kp-tutorial-scrub-marks-supply-movement\" disabled />\n        <output class=\"kp-tutorial-scrub__progress\" data-progress>0%</output>\n        <datalist id=\"kp-tutorial-scrub-marks-supply-movement\">\n          <option value=\"0\" label=\"Hold supply fixed\"></option><option value=\"0.58\" label=\"Trace movement along supply\"></option><option value=\"1\" label=\"Compare price and quantity\"></option>\n        </datalist>\n      </div>\n    </div>\n  </kp-tutorial-scrub-bar>"
+    },
+    "verificationSurfaceHtml": "<div class=\"kp-economics-verification\" data-kp-economics-verification data-kp-math-renderer=\"static-katex-html\">\n    \n      <section class=\"kp-economics-verification__group\" data-kp-economics-verification-group=\"supply-rule\" data-kp-economics-verification-targets=\"supply-line\">\n        <p>Same supply curve</p>\n        <div class=\"kp-economics-verification__math\">\n          <span data-kp-latex=\"P = 2 + Q\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>P</mi><mo>=</mo><mn>2</mn><mo>+</mo><mi>Q</mi></mrow><annotation encoding=\"application/x-tex\">P = 2 + Q</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">2</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">Q</span></span></span></span></span>\n        </div>\n      </section>\n    \n      <section class=\"kp-economics-verification__group\" data-kp-economics-verification-group=\"equilibria\" data-kp-economics-verification-targets=\"initial-equilibrium settled-equilibrium\">\n        <p>Two equilibria</p>\n        <div class=\"kp-economics-verification__math\">\n          <span data-kp-latex=\"E_0 = (6.00,\\,8.00)\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>0</mn></msub><mo>=</mo><mo stretchy=\"false\">(</mo><mn>6.00</mn><mo separator=\"true\">,</mo><mtext> </mtext><mn>8.00</mn><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">E_0 = (6.00,\\,8.00)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">0</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">(</span><span class=\"mord\">6.00</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">8.00</span><span class=\"mclose\">)</span></span></span></span></span><span data-kp-latex=\"E_1 = (8.00,\\,10.00)\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msub><mi>E</mi><mn>1</mn></msub><mo>=</mo><mo stretchy=\"false\">(</mo><mn>8.00</mn><mo separator=\"true\">,</mo><mtext> </mtext><mn>10.00</mn><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">E_1 = (8.00,\\,10.00)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mopen\">(</span><span class=\"mord\">8.00</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">10.00</span><span class=\"mclose\">)</span></span></span></span></span>\n        </div>\n      </section>\n    \n      <section class=\"kp-economics-verification__group\" data-kp-economics-verification-group=\"changes\" data-kp-economics-verification-targets=\"quantity-guides price-guides\">\n        <p>Exact changes</p>\n        <div class=\"kp-economics-verification__math\">\n          <span data-kp-latex=\"\\Delta Q = +2.00\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi mathvariant=\"normal\">Δ</mi><mi>Q</mi><mo>=</mo><mo>+</mo><mn>2.00</mn></mrow><annotation encoding=\"application/x-tex\">\\Delta Q = +2.00</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord\">Δ</span><span class=\"mord mathnormal\">Q</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">+</span><span class=\"mord\">2.00</span></span></span></span></span><span data-kp-latex=\"\\Delta P = +2.00\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi mathvariant=\"normal\">Δ</mi><mi>P</mi><mo>=</mo><mo>+</mo><mn>2.00</mn></mrow><annotation encoding=\"application/x-tex\">\\Delta P = +2.00</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6833em;\"></span><span class=\"mord\">Δ</span><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.7278em;vertical-align:-0.0833em;\"></span><span class=\"mord\">+</span><span class=\"mord\">2.00</span></span></span></span></span>\n        </div>\n      </section>\n    \n  </div>"
+  }
+}

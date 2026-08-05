@@ -62,7 +62,8 @@ export function renderKpEconomicsDemandShiftInlineMarkdown(
     if (index % 2 === 0) return escapeHtml(part);
     const latex = part.trim();
     return `<span class="kp-economics-tutorial__math" data-kp-latex="${escapeHtml(latex)}">${renderLatexToHtml(latex, {
-      displayMode: false
+      displayMode: false,
+      output: "htmlAndMathml"
     })}</span>`;
   }).join("");
 }
