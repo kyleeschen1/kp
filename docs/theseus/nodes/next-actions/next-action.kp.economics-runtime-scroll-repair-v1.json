@@ -457,6 +457,20 @@
       "scope": "s20 two-column forward and reverse settlement",
       "checkedAt": "2026-08-05T08:36:05.789Z",
       "notes": "Passed all 6 Chromium cases; the canonical desktop case returned to the same midpoint in reverse and retained the final settled frame through release."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s21 phone and reduced motion",
+      "checkedAt": "2026-08-05T08:42:51.673Z",
+      "notes": "All 12 browser cases passed, including reduced-motion non-seek behavior and the compact phone stage dock."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "slice s21 dense-cue and cold-start certification",
+      "checkedAt": "2026-08-05T08:42:52.732Z",
+      "notes": "Hot-path evidence passed: 6, 24, and 48 cues each used two geometry reads; active p95 was 34.2ms; SVG strings and subtree replacements remained zero. The unchanged 150ms cold-start ceiling failed at 177ms, and a same-build rerun measured 212ms. The ceiling was not widened."
     }
   ],
   "expectedLearning": [

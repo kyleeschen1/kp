@@ -192,7 +192,8 @@
     {
       "id": "s21",
       "title": "Certify-dense-cue-phone-and-reduced-motion",
-      "status": "planned"
+      "summary": "Certified constant two-read 6/24/48-cue projection, reduced-motion non-seek behavior, and compact phone fallback; retained the unchanged cold-start ceiling and recorded its environmental variance without weakening the hot-path result.",
+      "status": "complete"
     },
     {
       "id": "s22",
