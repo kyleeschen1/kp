@@ -179,7 +179,8 @@
     {
       "id": "s21",
       "title": "Pressure-WebGL-context-leases",
-      "status": "planned"
+      "summary": "Pressure-tested and hardened WebGL leases for page-scale motion: scheduled waits are cancellable, reserve capacity, never stale-reacquire offscreen stages, remain within two contexts, and preserve the existing Graph3D caller.",
+      "status": "complete"
     },
     {
       "id": "s22",

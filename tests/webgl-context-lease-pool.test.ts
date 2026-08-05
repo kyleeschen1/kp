@@ -6,6 +6,12 @@ import {
   cancelKpWebglContextLeaseWait,
   inspectKpWebglContextLeasePool
 } from "../src/rendering/webgl-context-lease-pool.ts";
+import {
+  kpTutorialTwelvePassagePageFixture
+} from "../src/tutorial/kp-tutorial-motion-passage-fixtures.ts";
+import {
+  projectKpTutorialMotionPassageLifecycle
+} from "../src/tutorial/kp-tutorial-motion-passage-lifecycle.ts";
 
 test("structural WebGL leases cap active contexts and wake one waiter", async () => {
   const ownerDocument = {} as Document;
@@ -104,6 +110,106 @@ test("leases can request WebGL2 without changing the WebGL1 default", () => {
   assert.equal(webgl2.status, "acquired");
   assert.deepEqual(requestedKinds, ["webgl2"]);
   if (webgl2.status === "acquired") webgl2.lease.release();
+});
+
+test("a scheduled waiter can be cancelled before stale offscreen reacquisition", async () => {
+  const ownerDocument = {} as Document;
+  const first = fakeCanvas(ownerDocument);
+  const second = fakeCanvas(ownerDocument);
+  const stale = fakeCanvas(ownerDocument);
+  const next = fakeCanvas(ownerDocument);
+  const notifications: string[] = [];
+  const firstLease = acquireKpWebglContextLease({ canvas: first.canvas });
+  const secondLease = acquireKpWebglContextLease({ canvas: second.canvas });
+  acquireKpWebglContextLease({
+    canvas: stale.canvas,
+    onAvailable: () => notifications.push("stale")
+  });
+  acquireKpWebglContextLease({
+    canvas: next.canvas,
+    onAvailable: () => notifications.push("next")
+  });
+
+  if (firstLease.status === "acquired") firstLease.lease.release();
+  assert.deepEqual(inspectKpWebglContextLeasePool(ownerDocument), {
+    limit: 2,
+    active: 1,
+    waiting: 2
+  });
+  cancelKpWebglContextLeaseWait(stale.canvas);
+  await Promise.resolve();
+  await Promise.resolve();
+  assert.deepEqual(notifications, ["next"]);
+  assert.deepEqual(inspectKpWebglContextLeasePool(ownerDocument), {
+    limit: 2,
+    active: 1,
+    waiting: 0
+  });
+  if (secondLease.status === "acquired") secondLease.lease.release();
+});
+
+test("a moving twelve-passage live window never exceeds WebGL capacity", async () => {
+  const ownerDocument = {} as Document;
+  const passages = kpTutorialTwelvePassagePageFixture.passages;
+  const canvases = new Map(passages.map(({ id }) => [
+    id,
+    fakeCanvas(ownerDocument)
+  ] as const));
+  const leases = new Map<string, { readonly release: () => void }>();
+  let maximumActive = 0;
+  let maximumWaiting = 0;
+
+  for (let focusedIndex = 0; focusedIndex < passages.length; focusedIndex += 1) {
+    const observed = passages.map((passage, index) => ({
+      ...passage,
+      proximity: index === focusedIndex
+        ? "visible" as const
+        : Math.abs(index - focusedIndex) === 1
+          ? "near" as const
+          : "distant" as const
+    }));
+    const plan = projectKpTutorialMotionPassageLifecycle({
+      passages: observed,
+      focusedPassageId: observed[focusedIndex]!.id,
+      reducedMotion: false,
+      policy: kpTutorialTwelvePassagePageFixture.policy
+    });
+    const desired = new Set(plan.hydratedPassageIds);
+    for (const [id, lease] of [...leases]) {
+      if (desired.has(id)) continue;
+      lease.release();
+      leases.delete(id);
+      cancelKpWebglContextLeaseWait(canvases.get(id)!.canvas);
+    }
+    for (const id of plan.hydratedPassageIds) {
+      if (leases.has(id)) continue;
+      const acquisition = acquireKpWebglContextLease({
+        canvas: canvases.get(id)!.canvas,
+        onAvailable: () => undefined
+      });
+      if (acquisition.status === "acquired") leases.set(id, acquisition.lease);
+    }
+    const snapshot = inspectKpWebglContextLeasePool(ownerDocument);
+    maximumActive = Math.max(maximumActive, snapshot.active);
+    maximumWaiting = Math.max(maximumWaiting, snapshot.waiting);
+    assert.ok(leases.has(plan.activeMotionPassageId!));
+    assert.ok(snapshot.active <= snapshot.limit);
+    assert.ok(snapshot.waiting <= 1);
+    await Promise.resolve();
+  }
+
+  for (const lease of leases.values()) lease.release();
+  for (const { canvas } of canvases.values()) {
+    cancelKpWebglContextLeaseWait(canvas);
+  }
+  await Promise.resolve();
+  assert.equal(maximumActive, 2);
+  assert.equal(maximumWaiting, 1);
+  assert.deepEqual(inspectKpWebglContextLeasePool(ownerDocument), {
+    limit: 2,
+    active: 0,
+    waiting: 0
+  });
 });
 
 function fakeCanvas(ownerDocument: Document): {

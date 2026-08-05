@@ -1130,11 +1130,59 @@
       "status": "passed",
       "scope": "slice s20 evidence integrity",
       "checkedAt": "2026-08-05T13:09:36.863Z"
+    },
+    {
+      "command": "node test webgl-context-lease-pool (5/5)",
+      "status": "passed",
+      "scope": "slice s21 page-scale leases",
+      "checkedAt": "2026-08-05T13:14:55.564Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (22/22)",
+      "status": "passed",
+      "scope": "slice s21 lifecycle preservation",
+      "checkedAt": "2026-08-05T13:14:56.725Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "slice s21 types",
+      "checkedAt": "2026-08-05T13:14:57.857Z"
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d (2/2)",
+      "status": "passed",
+      "scope": "slice s21 real Graph3D lease caller",
+      "checkedAt": "2026-08-05T13:14:58.841Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "slice s21 economics preservation",
+      "checkedAt": "2026-08-05T13:14:59.751Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s21 architecture",
+      "checkedAt": "2026-08-05T13:15:00.695Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s21 patch hygiene",
+      "checkedAt": "2026-08-05T13:15:21.717Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17864 events)",
+      "status": "passed",
+      "scope": "slice s21 evidence integrity",
+      "checkedAt": "2026-08-05T13:15:22.885Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s20 proves document-order settlement across all twelve stages in both directions, exact direct progress, one accessible surface per stage, one motion owner, shared capabilities, and zero resumed sessions for reduced motion."
+    "summary": "Slice s21 hardens the existing two-context WebGL pool with cancellable capacity-reserving scheduled waiters. A moving twelve-passage window stays at active<=2 and waiting<=1, preserves the focused lease, cleans to 0/0, and the real Graph3D host still releases on switch/context loss."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."

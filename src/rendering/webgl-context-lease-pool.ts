@@ -25,7 +25,13 @@ export interface KpWebglContextLeaseSnapshot {
 
 interface KpWebglContextLeasePool {
   readonly activeCanvases: Set<HTMLCanvasElement>;
-  readonly waiters: Map<HTMLCanvasElement, () => void>;
+  readonly waiters: Map<HTMLCanvasElement, KpWebglContextLeaseWaiter>;
+  readonly scheduledWaiters: Map<HTMLCanvasElement, KpWebglContextLeaseWaiter>;
+}
+
+interface KpWebglContextLeaseWaiter {
+  readonly notify: () => void;
+  cancelled: boolean;
 }
 
 const pools = new WeakMap<Document, KpWebglContextLeasePool>();
@@ -45,18 +51,24 @@ export function acquireKpWebglContextLease(input: {
   if (pool.activeCanvases.has(input.canvas)) {
     throw new Error("A canvas cannot hold more than one WebGL context lease.");
   }
+  removeWaiter(pool, input.canvas, false);
   if (pool.activeCanvases.size >= KP_WEBGL_CONTEXT_LEASE_LIMIT) {
     if (input.onAvailable !== undefined) {
-      pool.waiters.set(input.canvas, input.onAvailable);
+      pool.waiters.set(input.canvas, {
+        notify: input.onAvailable,
+        cancelled: false
+      });
     }
     return { status: "capacity" };
   }
 
-  pool.waiters.delete(input.canvas);
   const context = input.contextKind === "webgl2"
     ? input.canvas.getContext("webgl2", input.attributes)
     : input.canvas.getContext("webgl", input.attributes);
-  if (context === null) return { status: "unavailable" };
+  if (context === null) {
+    notifyNextWaiter(pool);
+    return { status: "unavailable" };
+  }
 
   pool.activeCanvases.add(input.canvas);
   let released = false;
@@ -90,7 +102,9 @@ export function acquireKpWebglContextLease(input: {
 export function cancelKpWebglContextLeaseWait(
   canvas: HTMLCanvasElement
 ): void {
-  pools.get(canvas.ownerDocument)?.waiters.delete(canvas);
+  const pool = pools.get(canvas.ownerDocument);
+  if (pool === undefined) return;
+  removeWaiter(pool, canvas, true);
 }
 
 export function inspectKpWebglContextLeasePool(
@@ -100,7 +114,9 @@ export function inspectKpWebglContextLeasePool(
   return {
     limit: KP_WEBGL_CONTEXT_LEASE_LIMIT,
     active: pool?.activeCanvases.size ?? 0,
-    waiting: pool?.waiters.size ?? 0
+    waiting: pool === undefined
+      ? 0
+      : pool.waiters.size + pool.scheduledWaiters.size
   };
 }
 
@@ -109,16 +125,41 @@ function requirePool(ownerDocument: Document): KpWebglContextLeasePool {
   if (existing !== undefined) return existing;
   const created = {
     activeCanvases: new Set<HTMLCanvasElement>(),
-    waiters: new Map<HTMLCanvasElement, () => void>()
+    waiters: new Map<HTMLCanvasElement, KpWebglContextLeaseWaiter>(),
+    scheduledWaiters: new Map<HTMLCanvasElement, KpWebglContextLeaseWaiter>()
   };
   pools.set(ownerDocument, created);
   return created;
 }
 
 function notifyNextWaiter(pool: KpWebglContextLeasePool): void {
+  const available = KP_WEBGL_CONTEXT_LEASE_LIMIT -
+    pool.activeCanvases.size - pool.scheduledWaiters.size;
+  if (available <= 0) return;
   const next = pool.waiters.entries().next().value;
   if (next === undefined) return;
-  const [canvas, notify] = next;
+  const [canvas, waiter] = next;
   pool.waiters.delete(canvas);
-  queueMicrotask(notify);
+  pool.scheduledWaiters.set(canvas, waiter);
+  queueMicrotask(() => {
+    if (pool.scheduledWaiters.get(canvas) !== waiter) return;
+    pool.scheduledWaiters.delete(canvas);
+    if (!waiter.cancelled) waiter.notify();
+    // A waiter may decline to reacquire because its stage became distant.
+    notifyNextWaiter(pool);
+  });
+}
+
+function removeWaiter(
+  pool: KpWebglContextLeasePool,
+  canvas: HTMLCanvasElement,
+  notifyReplacement: boolean
+): void {
+  const waiting = pool.waiters.get(canvas);
+  if (waiting !== undefined) waiting.cancelled = true;
+  pool.waiters.delete(canvas);
+  const scheduled = pool.scheduledWaiters.get(canvas);
+  if (scheduled !== undefined) scheduled.cancelled = true;
+  const removedScheduled = pool.scheduledWaiters.delete(canvas);
+  if (notifyReplacement && removedScheduled) notifyNextWaiter(pool);
 }
