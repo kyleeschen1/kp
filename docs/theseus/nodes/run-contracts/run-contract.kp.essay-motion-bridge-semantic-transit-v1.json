@@ -1,0 +1,175 @@
+{
+  "id": "run-contract.kp.essay-motion-bridge-semantic-transit-v1",
+  "kind": "run-contract",
+  "title": "Essay motion bridge and semantic transit",
+  "status": "deferred",
+  "summary": "Contract authoring attempt omitted required typed autonomy metadata because the CLI help did not advertise supported flags; replaced before execution by a complete v2 contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-synchronized-passage-entry.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-essay-motion-bridge-semantic-transit-long-loop-proposal.md",
+      "summary": "User-approved 25-slice exemplar-first proposal with mandatory motion-bridge and semantic-transit checkpoints."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run test:tutorial-motion-page-scale",
+    "npm run visual:economics-motion-bridge",
+    "npm run visual:economics-two-column-scroll",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Never; retain only as contract-authoring audit evidence."
+  ],
+  "allowedWork": [
+    "Framework-neutral typed motion-bridge and semantic-transit contracts",
+    "Pure ordinary-beat bridge-progress usable-viewport and direct-settlement projections",
+    "Progressive economics exemplar markup CSS and one inline P to price-axis P visual proxy",
+    "Focused unit browser visual accessibility page-scale and durable evidence"
+  ],
+  "disallowedWork": [
+    "Economic semantic graph geometry renderer or keyframe changes beyond mapping an existing semantic interval",
+    "Reparenting live inline prose KaTeX SVG canvas or stage nodes",
+    "Svelte ownership of semantic authoring clocks renderers or publication truth",
+    "Catalog-wide rollout or another domain before both mandatory exemplar checkpoints",
+    "Raw choreography URLs intermediate replay unrelated hydration or a second scroll authority",
+    "Unrelated user-owned worktree files and the unrelated gold equation frontier"
+  ],
+  "goal": "Make ordinary tutorial prose read like a static essay while explicit motion bridges scrub deterministic semantic animation and one framework-neutral visual proxy demonstrates text-to-stage correspondence without layout mutation.",
+  "target": "next-action.kp.economics-synchronized-passage-entry",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze accepted route and add opt-in exemplar descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Define motion bridge authoring records",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Validate bridge authoring in lesson compiler",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Emit progressive static bridge markup",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Define bridge distance and beat tokens",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Project ordinary beat progress",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Project motion bridge progress",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Use cached header-safe viewport authority",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Render ellipses and progress rail",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Compile demand shift bridge exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Connect bridge to semantic motion interval",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Prove reverse direct seek and route isolation",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Motion bridge visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Apply approved bridge refinements",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Bound active passage scheduling",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Cache semantic transit geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Define text and stage endpoint identities",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Add semantic transit proxy layer",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Scrub inline P to price axis P",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Harden transit fallbacks",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Semantic transit visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Promote approved transit motif to second caller",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Harden direct semantic reconstruction",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Close accessibility and responsive behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Pressure test and release closeout",
+      "status": "planned"
+    }
+  ]
+}

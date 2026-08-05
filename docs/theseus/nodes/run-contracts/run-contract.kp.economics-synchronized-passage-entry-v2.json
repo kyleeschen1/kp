@@ -2,8 +2,9 @@
   "id": "run-contract.kp.economics-synchronized-passage-entry-v2",
   "kind": "run-contract",
   "title": "Economics synchronized passage entry",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "Superseded after the slice 17 exemplar approval by the user-approved essay motion bridge and semantic transit proposal; relevant unexecuted hardening is carried into the successor contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,6 +25,9 @@
     "npm run typecheck",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "The successor experiment is rejected or the accepted economics route must be restored as the active development line."
   ],
   "allowedWork": [
     "Economics two-column passage geometry and presentation",
