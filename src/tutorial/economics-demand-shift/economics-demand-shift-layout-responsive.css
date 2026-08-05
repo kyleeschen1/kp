@@ -1,0 +1,79 @@
+/* Layout-specific phone, reduced-motion, and contrast fallbacks load last to preserve accessible cascade authority. */
+@media (max-width: 760px) {
+  .kp-economics-tutorial__bottom-controls {
+    right: 18px;
+    left: auto;
+  }
+
+  .kp-economics-tutorial__theme-toggle > span:last-child {
+    display: none;
+  }
+
+  .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__layout {
+    width: 100%;
+    padding: 1.25rem 0 5rem;
+  }
+
+  .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__prose {
+    width: 100%;
+    padding: 0 1.125rem 6rem;
+    font-size: var(--kp-inline-sticky-prose-font-size);
+    line-height: var(--kp-lesson-prose-line-height);
+  }
+
+  .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
+    right: auto;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .kp-economics-tutorial--inline-sticky
+    .kp-economics-tutorial__player-host .editor-animation-player__stage,
+  .kp-economics-tutorial--inline-sticky
+    .kp-economics-tutorial__player-host .editor-graph-stage {
+    --kp-graph-plane: transparent;
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--inline-sticky
+    .kp-economics-tutorial__player-host
+    .editor-graph-stage__economics-math-label {
+    --kp-graph-plane: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-economics-tutorial--inline-sticky
+    .kp-economics-tutorial__motion-passage-gate--entrance span {
+    display: none;
+    animation: none;
+  }
+
+  .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
+    position: relative;
+    top: auto;
+  }
+
+  .kp-economics-tutorial--inline-sticky
+    #kp-section-market-clearing
+    [data-kp-inline-sticky-cue] {
+    z-index: auto;
+    margin-top: 2rem;
+    opacity: 1;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
+    background: var(--kp-lesson-theme-page);
+  }
+
+  .kp-economics-tutorial--inline-sticky
+    #kp-section-market-clearing
+    [data-kp-inline-sticky-cue] {
+    z-index: 1;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+

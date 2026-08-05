@@ -119,7 +119,8 @@
     {
       "id": "s11",
       "title": "Split-economics-CSS-by-owner",
-      "status": "planned"
+      "summary": "Split the monolithic economics sheet into explicit theme, publication, controls, graph-stage, responsive, inline rollback, and approved two-column owners behind one import-only entry. The production CSS hash and size are byte-output stable, all eight canonical visuals pass, and source gates prevent ownership collapse.",
+      "status": "complete"
     },
     {
       "id": "s12",

@@ -630,6 +630,76 @@
       "scope": "slice s10 retained-math preservation diagnostic",
       "checkedAt": "2026-08-05T11:53:40.574Z",
       "notes": "The first preservation run exposed an outdated HTML-only descendant count and an overbroad use of the route-local retained renderer as the arbitrary-frame canonical oracle; both assertions were corrected without changing learner behavior."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "slice s11 production cascade",
+      "checkedAt": "2026-08-05T12:03:30.615Z",
+      "notes": "Build passed and emitted the exact same economics CSS hash D3PuPozu and 77.29KB size as slice s10, proving the ownership split did not change compiled declarations or cascade output."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "slice s11 stylesheet ownership",
+      "checkedAt": "2026-08-05T12:03:32.164Z",
+      "notes": "Both source gates passed for the import-only entry and disjoint theme, publication, controls, graph, responsive, inline rollback, and two-column owners."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "slice s11 canonical visual preservation",
+      "checkedAt": "2026-08-05T12:03:34.341Z",
+      "notes": "All eight approved desktop, phone, theme, typography, column-side, spacing, stroke, and rollback cases passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s11 economics semantics",
+      "checkedAt": "2026-08-05T12:03:35.847Z",
+      "notes": "All 42 publication, motion, runtime, exact-frame, URL, and shared lesson tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 source and Svelte types",
+      "checkedAt": "2026-08-05T12:03:37.269Z",
+      "notes": "Application, Node, test, Svelte, and domain checks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s11 architecture gates",
+      "checkedAt": "2026-08-05T12:03:38.520Z",
+      "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "slice s11 cold-task variance",
+      "checkedAt": "2026-08-05T12:03:40.012Z",
+      "notes": "Three identical-build samples preserved 238976 transfer bytes, 139308 script bytes, 42 resources, zero CLS, and the exact s10 production asset hashes, but cold longest tasks sampled 153ms, 285ms, and 297ms against the unchanged 150ms ceiling. Active motion and retained-SVG invariants held."
+    },
+    {
+      "command": "git diff --check",
+      "status": "failed",
+      "scope": "slice s11 patch hygiene diagnostic",
+      "checkedAt": "2026-08-05T12:03:41.469Z",
+      "notes": "The first check found one trailing blank line in the import-only aggregator."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s11 patch hygiene",
+      "checkedAt": "2026-08-05T12:03:43.249Z",
+      "notes": "The aggregator newline was corrected and no whitespace errors remain."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s11 durable evidence",
+      "checkedAt": "2026-08-05T12:03:44.733Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

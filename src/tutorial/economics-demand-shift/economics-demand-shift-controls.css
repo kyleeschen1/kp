@@ -1,0 +1,168 @@
+/* Fixed review-adjacent controls and author tuning panels share one isolated interaction layer. */
+.kp-economics-tutorial__bottom-controls {
+  position: fixed;
+  bottom: 18px;
+  left: 8rem;
+  z-index: 2147482999;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.kp-economics-tutorial__theme-toggle {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 999px;
+  padding: 0.62rem 0.9rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow);
+  cursor: pointer;
+  font-family: var(--kp-economics-non-katex-font-family);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.kp-economics-tutorial__theme-toggle:hover {
+  border-color: var(--kp-lesson-theme-focus);
+}
+
+.kp-economics-tutorial__theme-toggle:focus-visible {
+  outline: 2px solid var(--kp-lesson-theme-focus);
+  outline-offset: 4px;
+}
+
+.kp-economics-tutorial__theme-toggle-track {
+  position: relative;
+  display: block;
+  width: 1.8rem;
+  height: 1rem;
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 999px;
+  background: var(--kp-lesson-theme-control-surface);
+}
+
+.kp-economics-tutorial__theme-toggle-thumb {
+  position: absolute;
+  top: 0.16rem;
+  left: 0.16rem;
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 50%;
+  background: currentcolor;
+  transform: translateX(0);
+  transition: transform 140ms ease-out;
+}
+
+.kp-economics-tutorial__theme-toggle[aria-pressed="true"]
+  .kp-economics-tutorial__theme-toggle-track {
+  border-color: var(--kp-lesson-theme-focus);
+  background: var(--kp-lesson-theme-focus-surface);
+}
+
+.kp-economics-tutorial__theme-toggle[aria-pressed="true"]
+  .kp-economics-tutorial__theme-toggle-thumb {
+  transform: translateX(0.76rem);
+}
+
+.kp-economics-tutorial__column-toggle {
+  display: none;
+  gap: 0.45rem;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 999px;
+  padding: 0.62rem 0.9rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow);
+  cursor: pointer;
+  font-family: var(--kp-economics-non-katex-font-family);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+}
+
+.kp-economics-tutorial__column-toggle:hover {
+  border-color: var(--kp-lesson-theme-focus);
+}
+
+.kp-economics-tutorial__column-toggle:focus-visible {
+  outline: 3px solid var(--kp-lesson-theme-focus);
+  outline-offset: 4px;
+}
+
+kp-graph-style-tuner {
+  position: relative;
+  display: block;
+  font-family: var(--kp-economics-non-katex-font-family);
+}
+
+.kp-economics-tutorial__spacing-tuner {
+  position: relative;
+}
+
+.kp-economics-tutorial__line-tuner > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 999px;
+  padding: 0.62rem 0.9rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  list-style: none;
+}
+
+.kp-economics-tutorial__line-tuner > summary::-webkit-details-marker {
+  display: none;
+}
+
+.kp-economics-tutorial__line-tuner > summary:hover {
+  border-color: var(--kp-lesson-theme-focus);
+}
+
+.kp-economics-tutorial__line-tuner > summary:focus-visible {
+  outline: 3px solid var(--kp-lesson-theme-focus);
+  outline-offset: 4px;
+}
+
+.kp-economics-tutorial__line-tuner-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.65rem);
+  display: grid;
+  gap: 0.55rem;
+  width: min(18rem, calc(100vw - 2rem));
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 0.75rem;
+  padding: 0.8rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  box-shadow: 0 16px 42px var(--kp-lesson-theme-shadow);
+  font-size: 0.75rem;
+}
+
+.kp-economics-tutorial__line-tuner-panel label {
+  font-weight: 750;
+}
+
+.kp-economics-tutorial__line-tuner-panel input {
+  width: 100%;
+  accent-color: var(--kp-lesson-theme-control-accent);
+}
+
+.kp-economics-tutorial__line-tuner-panel output {
+  color: var(--kp-lesson-theme-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+

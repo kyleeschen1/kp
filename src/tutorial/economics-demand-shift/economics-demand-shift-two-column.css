@@ -1,0 +1,278 @@
+/* The approved two-column exemplar owns only its local scroll geometry and attention projection. */
+.kp-economics-tutorial--two-column-scroll {
+  /* Numeric vh tokens are also read by the scroll projector. Keep the unit in
+     the derived property so CSS and runtime share one source of truth. */
+  --kp-two-column-approach-start-vh: 78;
+  --kp-two-column-focus-top-vh: 35;
+  --kp-two-column-focus-bottom-vh: 50;
+  --kp-two-column-motion-start-vh: 62;
+  --kp-two-column-minimum-effective-height-vh: 23;
+  --kp-two-column-paragraph-gap-vh: 16;
+  --kp-two-column-release-span-vh: 15;
+  --kp-two-column-stage-top-vh: 14;
+  --kp-two-column-stage-block-size: 30rem;
+  --kp-two-column-passage-width: min(66rem, calc(100vw - 2rem));
+  --kp-two-column-focus-top:
+    calc(var(--kp-two-column-focus-top-vh) * 1vh);
+  --kp-two-column-paragraph-gap:
+    calc(var(--kp-two-column-paragraph-gap-vh) * 1vh);
+  --kp-two-column-release-span:
+    calc(var(--kp-two-column-release-span-vh) * 1vh);
+  --kp-two-column-stage-top:
+    calc(var(--kp-two-column-stage-top-vh) * 1vh);
+  --kp-two-column-entry-offset:
+    calc(var(--kp-two-column-focus-top) - var(--kp-two-column-stage-top));
+  --kp-two-column-terminal-min-block:
+    calc(
+      var(--kp-two-column-stage-block-size) +
+      var(--kp-two-column-stage-top) -
+      var(--kp-two-column-focus-top)
+    );
+  --kp-two-column-axis-line: 1px;
+  --kp-two-column-plot-inline-padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* Prose outside the animated corridor remains ordinary document material.
+   Scroll attention must not leak into the surrounding lesson. */
+.kp-economics-tutorial--two-column-scroll
+  .kp-economics-tutorial__passage:not([data-kp-two-column-scroll-paragraph]) {
+  border-left: 0;
+  padding-inline: 0;
+  background: transparent;
+}
+
+.kp-economics-tutorial--two-column-scroll
+  .kp-economics-tutorial__passage:not([data-kp-two-column-scroll-paragraph]).kp-economics-tutorial__passage--active {
+  border-left-color: transparent;
+  background: transparent;
+}
+
+/* Query-local desktop comparison. The same published DOM falls back to the
+   accepted one-column inline treatment below 761px. */
+@media (min-width: 60rem) and (min-height: 32rem) {
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__layout {
+    width: min(66rem, calc(100% - 2rem));
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__prose {
+    width: min(100%, var(--kp-inline-sticky-measure));
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage {
+    width: var(--kp-two-column-passage-width);
+    margin-inline-start:
+      calc((100% - var(--kp-two-column-passage-width)) / 2);
+    border: 0;
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    > h3 {
+    width: var(--kp-two-column-passage-width);
+    margin: 0 0 0
+      calc((100% - var(--kp-two-column-passage-width)) / 2);
+    border-bottom: var(--kp-two-column-axis-line) solid
+      var(--kp-lesson-theme-stage-divider);
+    padding: 0 0 0.7rem;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-gate--exit {
+    display: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-body {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(24rem, 30rem) minmax(18rem, 24rem);
+    gap: clamp(1.25rem, 2.4vw, 2.25rem);
+    align-items: start;
+    justify-content: center;
+    padding-inline: 1rem;
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
+    .kp-economics-tutorial__motion-passage-body {
+    grid-template-columns: minmax(18rem, 24rem) minmax(24rem, 30rem);
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-body::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: var(--kp-two-column-axis-line);
+    background: var(--kp-lesson-theme-stage-divider);
+    content: "";
+    pointer-events: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__motion-passage-prose {
+    grid-area: 1 / 2;
+    min-width: 0;
+    padding-top: var(--kp-two-column-entry-offset);
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
+    .kp-economics-tutorial__motion-passage-prose {
+    grid-area: 1 / 1;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__stage--inline {
+    grid-area: 1 / 1;
+    top: var(
+      --kp-two-column-stage-anchor-top,
+      max(0px, var(--kp-two-column-stage-top))
+    );
+    z-index: 2;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border: 0;
+    border-right: var(--kp-two-column-axis-line) solid
+      var(--kp-lesson-theme-stage-divider);
+    padding: 0;
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__stage--inline::after {
+    content: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
+    .kp-economics-tutorial__stage--inline {
+    grid-area: 1 / 2;
+    border-right: 0;
+    border-left: var(--kp-two-column-axis-line) solid
+      var(--kp-lesson-theme-stage-divider);
+  }
+
+  .kp-economics-tutorial__column-toggle {
+    display: inline-flex;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph] {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    border: 0;
+    padding: 0 0 var(--kp-two-column-paragraph-gap);
+    background: transparent;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph]
+    + [data-kp-two-column-scroll-paragraph] {
+    margin-top: 0;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph]:last-child {
+    min-height: var(--kp-two-column-terminal-min-block);
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph]
+    > p {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: var(--kp-tutorial-ink);
+    background: transparent;
+    box-shadow: none;
+    text-indent: 1.35em;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph]
+    > p
+    > .kp-economics-tutorial__passage-ink {
+    opacity: var(--kp-two-column-paragraph-opacity, 0.32);
+    will-change: opacity;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph].kp-economics-tutorial__passage--active {
+    border-left-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  :root .kp-economics-tutorial--two-column-scroll
+    .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+    --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
+    width: 100%;
+    height: auto;
+  }
+
+  /* The explanatory prose now carries the verification. Keeping the graph in
+     one stable slot avoids a composition jump when the final motion settles. */
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__player-host {
+    --kp-stage-graph-inline: 0%;
+    --kp-stage-graph-block: 0%;
+    --kp-stage-graph-inline-size: 100%;
+    --kp-stage-graph-block-size: 100%;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .editor-animation-player__surface--graph {
+    display: grid;
+    place-items: center;
+    padding-inline: var(--kp-two-column-plot-inline-padding);
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__verification-aperture {
+    display: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    :is(
+      .editor-graph-stage__economics-tick,
+      [data-kp-economics-math-label^="tick-"]
+    ) {
+    display: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    [data-kp-economics-label-disclosure="contextual"],
+  .kp-economics-tutorial--two-column-scroll
+    .editor-graph-stage__economics-math-foreign-object:has(
+      :is(
+        .editor-graph-stage__economics-math-label--supply,
+        .editor-graph-stage__economics-math-label--demand,
+        .editor-graph-stage__economics-math-label--equilibrium,
+        .editor-graph-stage__economics-math-label--reference
+      )
+    ) {
+    display: none;
+  }
+
+  .kp-economics-tutorial--two-column-scroll
+    .editor-graph-stage__economics-math-label {
+    color: var(--kp-lesson-theme-math-foreground);
+  }
+}
+

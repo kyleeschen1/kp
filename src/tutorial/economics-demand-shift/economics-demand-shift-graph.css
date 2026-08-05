@@ -1,0 +1,432 @@
+/* The economics stage owns graph composition, retained labels, verification paint, and local parameter exploration. */
+.kp-economics-tutorial__stage {
+  position: sticky;
+  top: clamp(0.7rem, 2vw, 1.4rem);
+  align-self: start;
+  height: min(44rem, calc(100vh - clamp(1.4rem, 4vw, 2.8rem)));
+  min-height: 34rem;
+  /* This stage is top-anchored; the shared shell's centered-stage transform
+     belongs to lessons whose domain stylesheet does not choose an anchor. */
+  transform: none;
+}
+
+.kp-economics-tutorial__stage-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kp-economics-tutorial__expand {
+  display: none;
+}
+
+.kp-economics-tutorial__player-host {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.kp-economics-tutorial__player-host .editor-animation-player {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.kp-economics-tutorial__player-host .editor-animation-player__stage {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.kp-economics-tutorial__player-host .editor-animation-player__surface {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-animation-player__surface--graph {
+  position: absolute;
+  top: var(--kp-stage-graph-block);
+  left: var(--kp-stage-graph-inline);
+  width: var(--kp-stage-graph-inline-size);
+  height: var(--kp-stage-graph-block-size);
+  contain: layout paint style;
+}
+
+.kp-economics-tutorial__verification-aperture {
+  position: absolute;
+  top: var(--kp-stage-verification-block);
+  left: var(--kp-stage-verification-inline);
+  z-index: 1;
+  width: var(--kp-stage-verification-inline-size);
+  height: var(--kp-stage-verification-block-size);
+  overflow: hidden;
+  clip-path: inset(0 0 0 var(--kp-stage-aperture-inset));
+  pointer-events: none;
+}
+
+.kp-economics-tutorial__verification-surface {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  transform: translateX(var(--kp-stage-verification-travel));
+  transform-origin: center;
+}
+
+.kp-economics-verification {
+  display: grid;
+  gap: 0.85rem;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--kp-tutorial-ink);
+}
+
+.kp-economics-verification__group {
+  display: grid;
+  gap: 0.28rem;
+  margin: 0;
+  clip-path: inset(0 var(--kp-verification-group-clip) 0 0);
+  opacity: var(--kp-verification-group-progress);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="supply-rule"] {
+  --kp-verification-group-progress: var(--kp-verification-supply-rule);
+  --kp-verification-group-clip: var(--kp-verification-supply-rule-clip);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="equilibria"] {
+  --kp-verification-group-progress: var(--kp-verification-equilibria);
+  --kp-verification-group-clip: var(--kp-verification-equilibria-clip);
+}
+
+.kp-economics-verification__group[data-kp-economics-verification-group="changes"] {
+  --kp-verification-group-progress: var(--kp-verification-changes);
+  --kp-verification-group-clip: var(--kp-verification-changes-clip);
+}
+
+.kp-economics-verification__group p {
+  margin: 0;
+  color: var(--kp-tutorial-muted);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-indent: 0;
+  text-transform: uppercase;
+}
+
+.kp-economics-verification__math {
+  display: grid;
+  gap: 0.18rem;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.kp-economics-verification__math > span {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.kp-economics-verification__math .katex {
+  font-size: 1em;
+}
+
+.kp-economics-tutorial__player-host .editor-animation-player__controls {
+  display: none;
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage {
+  --kp-graph-plane: transparent;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: transparent;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-math-label {
+  --kp-graph-plane: transparent;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-math-label:is(
+    .editor-graph-stage__economics-math-label--supply,
+    .editor-graph-stage__economics-math-label--demand,
+    .editor-graph-stage__economics-math-label--equilibrium,
+    .editor-graph-stage__economics-math-label--reference
+  ) {
+  text-shadow:
+    -1px 0 var(--kp-lesson-theme-page),
+    1px 0 var(--kp-lesson-theme-page),
+    0 -1px var(--kp-lesson-theme-page),
+    0 1px var(--kp-lesson-theme-page);
+}
+
+/* The SVG retains complete static KaTeX as its progressive fallback. Once the
+   absolute overlay is ready, labels use screen pixels while geometry remains
+   in the scalable graph coordinate system. */
+.kp-economics-tutorial__player-host
+  .editor-animation-player__surface--graph[data-kp-economics-screen-space-labels-ready="true"]
+  .editor-graph-stage__economics-math-foreign-object {
+  visibility: hidden;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-screen-space-overlay {
+  position: absolute;
+  z-index: 3;
+  overflow: visible;
+  color: var(--kp-lesson-theme-math-foreground);
+  font-family: KaTeX_Main, "Times New Roman", serif;
+  font-size: var(--kp-inline-sticky-prose-font-size, 1.125rem);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1;
+  pointer-events: none;
+  text-transform: none;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-screen-space-label {
+  position: absolute;
+  display: block;
+  width: max-content;
+  max-width: min(15rem, 80%);
+  padding: 0.08em 0.2em;
+  color: var(--kp-lesson-theme-math-foreground);
+  background: var(--kp-lesson-theme-page);
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.1;
+  opacity: var(--kp-economics-label-entry-opacity, 1);
+  text-shadow: none;
+  transition: opacity 140ms ease-out;
+  white-space: nowrap;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-screen-space-label
+  .katex {
+  font-size: 1em;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-screen-space-label.editor-graph-stage__economics-math-label--reference {
+  color: var(--kp-lesson-theme-graph-reference);
+  font-size: 0.9em;
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-screen-space-label="equilibrium-current"] {
+  border: 1px solid var(--kp-lesson-theme-graph-intersection-stroke);
+  border-radius: 3px;
+  padding: 0.28em 0.48em;
+  background: var(--kp-lesson-theme-page);
+  box-shadow: 0 4px 14px var(--kp-lesson-theme-shadow);
+  transform: translate(calc(-100% - 0.65rem), -50%);
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-screen-space-label="equilibrium-reference"] {
+  transform: translate(calc(-100% - 0.45rem), 0.35rem);
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-screen-space-label="axis-price"] {
+  transform: translate(calc(-100% - 0.4rem), -50%);
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-screen-space-label="axis-quantity"] {
+  transform: translate(-50%, 0.4rem);
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-screen-space-label.editor-graph-stage__economics-math-label--tick {
+  font-size: 0.75em;
+}
+
+.kp-economics-tutorial--inline-sticky
+  :is(
+    .editor-graph-stage__economics-tick,
+    [data-kp-economics-screen-space-label^="tick-"]
+  ) {
+  display: none;
+}
+
+.kp-economics-tutorial--two-column-scroll
+  [data-kp-economics-label-disclosure="contextual"] {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 140ms ease-out,
+    visibility 0s linear 140ms;
+}
+
+.kp-economics-tutorial--two-column-scroll:is(
+    [data-kp-economics-tutorial-attention-passage="graph-at-rest"],
+    [data-kp-economics-tutorial-attention-passage="follow-shift"]
+  )
+  :is(
+    [data-kp-economics-screen-space-label="curve-supply"],
+    [data-kp-economics-screen-space-label="curve-demand-current"],
+    [data-kp-economics-screen-space-label="curve-demand-reference"]
+  ),
+.kp-economics-tutorial--two-column-scroll:is(
+    [data-kp-economics-tutorial-attention-passage="initial-equilibrium"],
+    [data-kp-economics-tutorial-attention-passage="follow-shift"],
+    [data-kp-economics-tutorial-attention-passage="new-equilibrium"],
+    [data-kp-economics-tutorial-attention-passage="shift-versus-movement"],
+    [data-kp-economics-tutorial-attention-passage="movement-along-supply"]
+  )
+  [data-kp-economics-screen-space-label="equilibrium-current"],
+.kp-economics-tutorial--two-column-scroll:is(
+    [data-kp-economics-tutorial-attention-passage="shift-versus-movement"],
+    [data-kp-economics-tutorial-attention-passage="movement-along-supply"]
+  )
+  :is(
+    [data-kp-economics-screen-space-label="curve-supply"],
+    [data-kp-economics-screen-space-label="equilibrium-reference"]
+  ) {
+  visibility: visible;
+  opacity: var(--kp-economics-label-entry-opacity, 1);
+  transition-delay: 0s;
+}
+
+@media (min-width: 761px) {
+  .kp-economics-tutorial__player-host .editor-animation-player,
+  .kp-economics-tutorial__player-host .editor-animation-player__stage,
+  .kp-economics-tutorial__player-host
+    .editor-animation-player__surface:has(.editor-graph-stage),
+  .kp-economics-tutorial__player-host
+    .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] {
+    background: transparent;
+  }
+
+  .kp-economics-tutorial__player-host .editor-graph-stage__plot-plane {
+    fill: transparent;
+  }
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-curve,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-guide,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-equilibrium,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-grid,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-tick,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-math-foreign-object,
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-equations,
+.kp-economics-tutorial__player-host
+  [data-kp-editor-graph-axis] {
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-supply-movement {
+  opacity: 1;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-supply-movement-trace {
+  opacity: var(--kp-tutorial-supply-emphasis);
+  stroke-dashoffset: calc(1 - var(--kp-tutorial-supply-trace));
+}
+
+.kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
+  .kp-economics-tutorial__player-host
+  [data-kp-economics-supply-line] {
+  stroke-width: var(--kp-graph-line-width, 1px);
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation p {
+  display: none;
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation {
+  border-bottom: 0;
+  background: var(--kp-graph-plane);
+}
+
+.kp-economics-tutorial__explore > summary,
+.kp-economics-tutorial__explore-panel button,
+.kp-economics-tutorial__expand {
+  border: 1px solid var(--kp-lesson-theme-control-border);
+  border-radius: 7px;
+  padding: 0.42rem 0.62rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.kp-economics-tutorial__explore {
+  margin-top: 1rem;
+  font-family: var(--kp-economics-non-katex-font-family);
+}
+
+.kp-economics-tutorial__explore > summary {
+  width: fit-content;
+  max-width: 100%;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
+
+.kp-economics-tutorial__explore > summary::-webkit-details-marker {
+  display: none;
+}
+
+.kp-economics-tutorial__explore-panel {
+  display: grid;
+  gap: 0.75rem;
+  width: min(22rem, 100%);
+  margin-top: 0.55rem;
+  border: 1px solid var(--kp-lesson-theme-panel-border);
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: var(--kp-lesson-theme-control-surface);
+  box-shadow: 0 14px 34px var(--kp-lesson-theme-shadow);
+}
+
+.kp-economics-tutorial__explore-panel label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 0.65rem;
+  color: var(--kp-lesson-theme-panel-label);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.kp-economics-tutorial__explore-panel input {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--kp-lesson-theme-control-accent);
+}
+
+.kp-economics-tutorial__explore-panel output {
+  font-variant-numeric: tabular-nums;
+}
+
