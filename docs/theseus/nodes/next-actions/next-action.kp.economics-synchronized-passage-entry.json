@@ -180,6 +180,13 @@
       "scope": "slice s04 progressive static bridge markup",
       "checkedAt": "2026-08-05T20:45:48.996Z",
       "notes": "41 tutorial passage tests, 45 economics tests, full typechecking, and 3 deterministic artifact tests passed. One initial assertion incorrectly rejected KaTeX-owned style and aria markup; it was narrowed to the bridge wrapper and passed without product changes."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css; npm run typecheck:svelte",
+      "status": "passed",
+      "scope": "slice s05 bridge distance and beat tokens",
+      "checkedAt": "2026-08-05T20:48:19.563Z",
+      "notes": "All 7 stylesheet ownership tests and Svelte diagnostics passed. Shared 0.32, 0.5, 0.8 bridge ratios and a 0.14 beat-approach ratio introduce no vh unit or static spacing rule."
     }
   ],
   "progress": {

@@ -1,0 +1,7 @@
+/* Shared motion-bridge timing tokens; host geometry converts ratios to pixels. */
+:root {
+  --kp-tutorial-motion-bridge-distance-short-ratio: 0.32;
+  --kp-tutorial-motion-bridge-distance-standard-ratio: 0.5;
+  --kp-tutorial-motion-bridge-distance-extended-ratio: 0.8;
+  --kp-tutorial-ordinary-beat-approach-ratio: 0.14;
+}

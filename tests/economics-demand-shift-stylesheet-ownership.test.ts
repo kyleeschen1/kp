@@ -29,12 +29,26 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
     [...entry.matchAll(/@import "([^"]+)";/g)].map((match) => match[1]),
     [
       "../kp-tutorial-lesson-shell.css",
+      "../kp-tutorial-motion-bridge.css",
       ...ownedStylesheets.map((name) => `./${name}`)
     ]
   );
   for (const name of ownedStylesheets) {
     assert.match(read(name), /^\/\* [^\n]+ \*\//);
   }
+});
+
+test("motion bridge timing tokens reserve no static document space", () => {
+  const css = readFileSync(new URL(
+    "../src/tutorial/kp-tutorial-motion-bridge.css",
+    import.meta.url
+  ), "utf8");
+
+  assert.match(css, /--kp-tutorial-motion-bridge-distance-short-ratio: 0\.32;/);
+  assert.match(css, /--kp-tutorial-motion-bridge-distance-standard-ratio: 0\.5;/);
+  assert.match(css, /--kp-tutorial-motion-bridge-distance-extended-ratio: 0\.8;/);
+  assert.match(css, /--kp-tutorial-ordinary-beat-approach-ratio: 0\.14;/);
+  assert.doesNotMatch(css, /\b(?:vh|svh|dvh)\b|block-size|height|margin|padding/);
 });
 
 test("economics learner entry loads one route-local stylesheet facade", () => {

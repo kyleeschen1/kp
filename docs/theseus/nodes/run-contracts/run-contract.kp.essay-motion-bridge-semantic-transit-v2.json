@@ -82,7 +82,8 @@
     {
       "id": "s05",
       "title": "Define bridge distance and beat tokens",
-      "status": "planned"
+      "summary": "Added shared unitless short, standard, extended, and ordinary-beat approach tokens through the route-local CSS facade without reserving pre-enhancement document space.",
+      "status": "complete"
     },
     {
       "id": "s06",
