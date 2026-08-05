@@ -432,7 +432,11 @@ export function patchKpEconomicsEquilibriumMathLabels(input: {
         input.viewport.width - kpEconomicsGraphPlotInsets.right + 12
       ));
       setAttributeIfChanged(label, "y", String(initialDemandEnd[1] - 11));
-      label.style.opacity = String(input.frame.initialDemandReferenceOpacity);
+      setAttributeIfChanged(
+        label,
+        "style",
+        `opacity:${input.frame.initialDemandReferenceOpacity}`
+      );
     }
   });
 
@@ -479,8 +483,10 @@ export function patchKpEconomicsEquilibriumMathLabels(input: {
         "editor-graph-stage__economics-math-label--equilibrium"
     }),
     patch: (label) => {
-      label.style.opacity = String(
-        input.frame.initialEquilibriumReferenceOpacity
+      setAttributeIfChanged(
+        label,
+        "style",
+        `opacity:${input.frame.initialEquilibriumReferenceOpacity}`
       );
     }
   });
@@ -679,7 +685,7 @@ function createMathLabel(input: {
     );
   }
   if (input.opacity !== undefined) {
-    foreignObject.style.opacity = String(input.opacity);
+    foreignObject.setAttribute("style", `opacity:${input.opacity}`);
   }
   const owner = document.createElement("div");
   owner.className =

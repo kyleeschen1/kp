@@ -242,6 +242,41 @@
       "scope": "s11 durable evidence integrity",
       "checkedAt": "2026-08-05T07:38:05.188Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s12 retained node identity, seek, and rewind browser parity",
+      "checkedAt": "2026-08-05T07:48:23.864Z",
+      "notes": "Passed 2 Chromium cases, including canonical direct-seek and rewind semantic parity across 13 stage-boundary samples with retained node identity."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s12 economics deterministic and mounted-runtime regression",
+      "checkedAt": "2026-08-05T07:48:24.990Z",
+      "notes": "Passed all 39 economics tests."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s12 canonical desktop, phone, theme, column, and tuner preservation",
+      "checkedAt": "2026-08-05T07:48:25.990Z",
+      "notes": "Passed all 6 Chromium visual-contract cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 TypeScript, Svelte, and domain contracts",
+      "checkedAt": "2026-08-05T07:48:27.003Z",
+      "notes": "Passed application, node, test, Svelte, and domain typechecks."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s12 patch hygiene",
+      "checkedAt": "2026-08-05T07:48:27.985Z",
+      "notes": "Passed with no whitespace errors."
     }
   ],
   "expectedLearning": [

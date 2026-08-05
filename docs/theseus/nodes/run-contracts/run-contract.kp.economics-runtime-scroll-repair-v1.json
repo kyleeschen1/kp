@@ -138,7 +138,8 @@
     {
       "id": "s12",
       "title": "Prove-seek-rewind-and-node-identity",
-      "status": "planned"
+      "summary": "Proved retained economics SVG parity across stage boundaries, repeated traversal, direct seek, rewind, and fixed-node identity while keeping the deterministic renderer authoritative.",
+      "status": "complete"
     },
     {
       "id": "s13",
