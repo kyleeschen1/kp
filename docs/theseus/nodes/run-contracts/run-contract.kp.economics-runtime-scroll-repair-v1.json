@@ -126,7 +126,8 @@
     {
       "id": "s10",
       "title": "Retain-KaTeX-and-screen-label-nodes",
-      "status": "planned"
+      "summary": "Retained current math-label and KaTeX owners across motion, limited label creation to discrete reference-entry boundaries, and reconciled screen-space label text without replacing compatible DOM topology.",
+      "status": "complete"
     },
     {
       "id": "s11",

@@ -328,7 +328,9 @@ function syncEconomicsScreenSpaceLabels(input: {
     label.className =
       `${source.className} editor-graph-stage__economics-screen-space-label`;
     label.dataset["kpLatex"] = source.dataset["kpLatex"] ?? "";
-    if (label.innerHTML !== source.innerHTML) label.innerHTML = source.innerHTML;
+    if (label.innerHTML !== source.innerHTML) {
+      patchRetainedEconomicsLabelMarkup(label, source);
+    }
     label.style.left = `${x / input.model.width * 100}%`;
     label.style.top = `${y / input.model.height * 100}%`;
     label.style.setProperty(
@@ -341,6 +343,49 @@ function syncEconomicsScreenSpaceLabels(input: {
     if (!currentRoles.has(role)) label.remove();
   }
   input.slot.dataset["kpEconomicsScreenSpaceLabelsReady"] = "true";
+}
+
+function patchRetainedEconomicsLabelMarkup(
+  target: HTMLElement,
+  source: HTMLElement
+): void {
+  const targetElements = Array.from(target.querySelectorAll("*"));
+  const sourceElements = Array.from(source.querySelectorAll("*"));
+  const sameTopology = targetElements.length === sourceElements.length &&
+    targetElements.every((element, index) => {
+      const sourceElement = sourceElements[index];
+      return sourceElement !== undefined &&
+        element.localName === sourceElement.localName &&
+        element.getAttribute("class") === sourceElement.getAttribute("class");
+    });
+  if (!sameTopology) {
+    target.innerHTML = source.innerHTML;
+    return;
+  }
+  const targetText = textNodes(target);
+  const sourceText = textNodes(source);
+  if (targetText.length !== sourceText.length) {
+    target.innerHTML = source.innerHTML;
+    return;
+  }
+  targetText.forEach((node, index) => {
+    const value = sourceText[index]?.nodeValue;
+    if (value !== undefined && node.nodeValue !== value) node.nodeValue = value;
+  });
+}
+
+function textNodes(root: HTMLElement): Text[] {
+  const nodes: Text[] = [];
+  const walker = root.ownerDocument.createTreeWalker(
+    root,
+    NodeFilter.SHOW_TEXT
+  );
+  let current = walker.nextNode();
+  while (current !== null) {
+    nodes.push(current as Text);
+    current = walker.nextNode();
+  }
+  return nodes;
 }
 
 function economicsScreenSpaceLabelSession(input: {

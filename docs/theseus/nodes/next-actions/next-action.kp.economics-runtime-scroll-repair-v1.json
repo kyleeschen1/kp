@@ -186,6 +186,34 @@
       "scope": "s09 durable evidence integrity",
       "checkedAt": "2026-08-05T07:26:00.888Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s10 retained KaTeX owners",
+      "checkedAt": "2026-08-05T07:31:39.376Z",
+      "notes": "Chromium proved current demand and equilibrium foreignObjects and KaTeX roots retain identity while role, relation, exact formatted values, positions, and discrete reference labels update."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s10 screen-space label reconciliation preservation",
+      "checkedAt": "2026-08-05T07:31:40.357Z",
+      "notes": "All six canonical two-column checks passed after screen-label synchronization switched to retained topology/text reconciliation."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s10 semantic and static KaTeX preservation",
+      "checkedAt": "2026-08-05T07:31:41.307Z",
+      "notes": "All 39 focused economics tests passed; server/static KaTeX output remains authoritative and unchanged."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s10 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:31:42.249Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

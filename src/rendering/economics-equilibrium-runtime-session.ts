@@ -7,8 +7,13 @@ import {
 } from "./economics-equilibrium-svg.ts";
 import type { KpEconomicsGraphViewport } from "./economics-equilibrium-svg.ts";
 import {
-  kpDimensionalContinuityDynamicDisplayDecimals
+  formatKpDimensionalContinuityDynamicDisplay,
+  kpDimensionalContinuityDynamicDisplayDecimals,
+  kpDimensionalContinuityDynamicDisplayRelation
 } from "../animation/dimensional-continuity-dynamic-display.ts";
+import {
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-graph-profile.ts";
 
 export interface KpEconomicsEquilibriumRuntimeSessionInput {
   readonly content: SVGGElement;
@@ -306,6 +311,252 @@ export function patchKpEconomicsEquilibriumDynamicStructure(input: {
     exactText(frame.equilibrium.price)
   );
   setCircle(pointElement, equilibrium[0], equilibrium[1]);
+}
+
+export function patchKpEconomicsEquilibriumMathLabels(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly frame: KpEconomicsEquilibriumRuntimeFrame;
+  readonly viewport: KpEconomicsGraphViewport;
+}): void {
+  requireMounted(input.scaffold);
+  patchKpEconomicsEquilibriumDynamicStructure(input);
+  const view = input.scaffold.view;
+  const frame = input.frame.semanticFrame;
+  const point = graphPoint(input.viewport);
+  const maximumQuantity = input.viewport.xDomain[1];
+  const demandIntercept = exactNumber(frame.demand.priceInterceptCurrent);
+  const initialDemandIntercept = exactNumber(frame.demand.priceInterceptBefore);
+  const demandSlope = exactNumber(frame.demand.priceChangePerQuantity);
+  const demandEnd = point(
+    maximumQuantity,
+    demandIntercept - demandSlope * maximumQuantity
+  );
+  const initialDemandEnd = point(
+    maximumQuantity,
+    initialDemandIntercept - demandSlope * maximumQuantity
+  );
+  const equilibrium = point(
+    exactNumber(frame.equilibrium.quantity),
+    exactNumber(frame.equilibrium.price)
+  );
+  const initialEquilibrium = point(
+    exactNumber(input.frame.initialEquilibrium.quantity),
+    exactNumber(input.frame.initialEquilibrium.price)
+  );
+  const demandRole = input.frame.stage === "establish"
+    ? "D_0"
+    : input.frame.stage === "shift"
+      ? "D_t"
+      : "D_1";
+  const equilibriumRole = input.frame.stage === "establish"
+    ? "E_0"
+    : input.frame.stage === "shift"
+      ? "E_t"
+      : "E_1";
+  const equilibriumLatex = `${equilibriumRole} ${
+    kpDimensionalContinuityDynamicDisplayRelation(input.frame.stage === "shift")
+  } (${formatKpDimensionalContinuityDynamicDisplay(frame.equilibrium.quantity)}, ${
+    formatKpDimensionalContinuityDynamicDisplay(frame.equilibrium.price)
+  })`;
+
+  const demandLabel = requireElement<SVGForeignObjectElement>(
+    view,
+    '[data-kp-economics-math-label="curve-demand-current"]'
+  );
+  setAttributeIfChanged(demandLabel, "y", String(demandEnd[1] - 11));
+  patchCurveRoleLabel(demandLabel, demandRole);
+
+  patchDiscreteMathLabel({
+    scaffold: input.scaffold,
+    active: input.frame.initialDemandReferenceOpacity > 0,
+    role: "curve-demand-reference",
+    beforeSelector: '[data-kp-economics-math-label="equilibrium-current"]',
+    create: () => createMathLabel({
+      scaffold: input.scaffold,
+      role: "curve-demand-reference",
+      latex: "D_0",
+      x: input.viewport.width - kpEconomicsGraphPlotInsets.right + 12,
+      y: initialDemandEnd[1] - 11,
+      width: 46,
+      height: 26,
+      opacity: input.frame.initialDemandReferenceOpacity,
+      className: "editor-graph-stage__economics-math-label--reference"
+    }),
+    patch: (label) => {
+      setAttributeIfChanged(label, "x", String(
+        input.viewport.width - kpEconomicsGraphPlotInsets.right + 12
+      ));
+      setAttributeIfChanged(label, "y", String(initialDemandEnd[1] - 11));
+      label.style.opacity = String(input.frame.initialDemandReferenceOpacity);
+    }
+  });
+
+  const equilibriumLabel = requireElement<SVGForeignObjectElement>(
+    view,
+    '[data-kp-economics-math-label="equilibrium-current"]'
+  );
+  setAttributeIfChanged(
+    equilibriumLabel,
+    "x",
+    String(Math.max(0, equilibrium[0] - 210 - 12))
+  );
+  setAttributeIfChanged(equilibriumLabel, "y", String(equilibrium[1] - 15));
+  setAttributeIfChanged(
+    equilibriumLabel,
+    "data-kp-economics-screen-anchor-x",
+    String(equilibrium[0])
+  );
+  setAttributeIfChanged(
+    equilibriumLabel,
+    "data-kp-economics-screen-anchor-y",
+    String(equilibrium[1])
+  );
+  patchEquilibriumLabel(equilibriumLabel, equilibriumLatex, equilibriumRole, frame);
+
+  patchDiscreteMathLabel({
+    scaffold: input.scaffold,
+    active: input.frame.initialEquilibriumReferenceOpacity > 0,
+    role: "equilibrium-reference",
+    beforeSelector: '[data-kp-economics-math-label="axis-quantity"]',
+    create: () => createMathLabel({
+      scaffold: input.scaffold,
+      role: "equilibrium-reference",
+      latex: "E_0",
+      x: initialEquilibrium[0] - 54,
+      y: initialEquilibrium[1] - 13,
+      width: 42,
+      height: 26,
+      opacity: input.frame.initialEquilibriumReferenceOpacity,
+      screenAnchorX: initialEquilibrium[0],
+      screenAnchorY: initialEquilibrium[1],
+      className:
+        "editor-graph-stage__economics-math-label--reference " +
+        "editor-graph-stage__economics-math-label--equilibrium"
+    }),
+    patch: (label) => {
+      label.style.opacity = String(
+        input.frame.initialEquilibriumReferenceOpacity
+      );
+    }
+  });
+}
+
+function patchCurveRoleLabel(
+  foreignObject: SVGForeignObjectElement,
+  latex: string
+): void {
+  const owner = requireElement<HTMLElement>(foreignObject, "[data-kp-latex]");
+  setAttributeIfChanged(owner, "data-kp-latex", latex);
+  const role = requireElement<HTMLElement>(
+    owner,
+    ".katex-html .msupsub .mord.mtight"
+  );
+  role.textContent = latex.slice(2);
+}
+
+function patchEquilibriumLabel(
+  foreignObject: SVGForeignObjectElement,
+  latex: string,
+  role: string,
+  frame: KpEconomicsEquilibriumRuntimeFrame["semanticFrame"]
+): void {
+  const owner = requireElement<HTMLElement>(foreignObject, "[data-kp-latex]");
+  setAttributeIfChanged(owner, "data-kp-latex", latex);
+  requireElement<HTMLElement>(
+    owner,
+    ".katex-html .msupsub .mord.mtight"
+  ).textContent = role.slice(2);
+  requireElement<HTMLElement>(owner, ".katex-html .mrel").textContent =
+    role === "E_t" ? "≈" : "=";
+  const values = owner.querySelectorAll<HTMLElement>(
+    ".katex-html > .base:nth-child(2) > .mord"
+  );
+  if (values.length !== 2) {
+    throw new Error("Economics equilibrium KaTeX value topology diverged.");
+  }
+  values[0]!.textContent = formatKpDimensionalContinuityDynamicDisplay(
+    frame.equilibrium.quantity
+  );
+  values[1]!.textContent = formatKpDimensionalContinuityDynamicDisplay(
+    frame.equilibrium.price
+  );
+}
+
+function patchDiscreteMathLabel(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly active: boolean;
+  readonly role: string;
+  readonly beforeSelector: string;
+  readonly create: () => SVGForeignObjectElement;
+  readonly patch: (label: SVGForeignObjectElement) => void;
+}): void {
+  let label = input.scaffold.view.querySelector<SVGForeignObjectElement>(
+    `[data-kp-economics-math-label="${input.role}"]`
+  );
+  if (!input.active) {
+    label?.remove();
+    return;
+  }
+  if (label === null) {
+    label = input.create();
+    input.scaffold.view.insertBefore(
+      label,
+      requireElement(input.scaffold.view, input.beforeSelector)
+    );
+  }
+  input.patch(label);
+}
+
+function createMathLabel(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly role: string;
+  readonly latex: string;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly opacity?: number | undefined;
+  readonly screenAnchorX?: number | undefined;
+  readonly screenAnchorY?: number | undefined;
+  readonly className: string;
+}): SVGForeignObjectElement {
+  const document = input.scaffold.content.ownerDocument;
+  const foreignObject = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "foreignObject"
+  );
+  foreignObject.setAttribute(
+    "class",
+    "editor-graph-stage__economics-math-foreign-object"
+  );
+  foreignObject.setAttribute("data-kp-economics-math-label", input.role);
+  foreignObject.setAttribute("x", String(input.x));
+  foreignObject.setAttribute("y", String(input.y));
+  foreignObject.setAttribute("width", String(input.width));
+  foreignObject.setAttribute("height", String(input.height));
+  foreignObject.setAttribute("aria-hidden", "true");
+  if (input.screenAnchorX !== undefined) {
+    foreignObject.setAttribute(
+      "data-kp-economics-screen-anchor-x",
+      String(input.screenAnchorX)
+    );
+  }
+  if (input.screenAnchorY !== undefined) {
+    foreignObject.setAttribute(
+      "data-kp-economics-screen-anchor-y",
+      String(input.screenAnchorY)
+    );
+  }
+  if (input.opacity !== undefined) {
+    foreignObject.style.opacity = String(input.opacity);
+  }
+  const owner = document.createElement("div");
+  owner.className =
+    `editor-graph-stage__economics-math-label ${input.className}`;
+  owner.dataset["kpLatex"] = input.latex;
+  owner.innerHTML = renderKpDimensionalContinuityInlineLatex(input.latex);
+  foreignObject.append(owner);
+  return foreignObject;
 }
 
 function patchInitialEquilibriumGuides(input: {
