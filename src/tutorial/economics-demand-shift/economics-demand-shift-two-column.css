@@ -200,6 +200,35 @@
     min-height: var(--kp-two-column-terminal-min-block);
   }
 
+  /* A bridge is one document-space interval: the before and after paragraph
+     tops are exactly one cached preset apart, independent of prose height. */
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-tutorial-scrub-strategy="motion-bridge"]
+    kp-motion-bridge[data-kp-motion-bridge-enhanced="true"] {
+    display: grid;
+    grid-template-rows:
+      var(--kp-tutorial-motion-bridge-distance-px) auto;
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-tutorial-scrub-strategy="motion-bridge"]
+    kp-motion-bridge
+    [data-kp-motion-bridge-before] {
+    grid-area: 1 / 1;
+    padding-bottom: 0;
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-tutorial-scrub-strategy="motion-bridge"]
+    kp-motion-bridge
+    .kp-tutorial-motion-bridge__rail {
+    grid-area: 1 / 1;
+    z-index: 0;
+  }
+
+  .kp-economics-tutorial--two-column-scroll[data-kp-economics-tutorial-scrub-strategy="motion-bridge"]
+    kp-motion-bridge
+    [data-kp-motion-bridge-after] {
+    grid-area: 2 / 1;
+  }
+
   .kp-economics-tutorial--two-column-scroll
     #kp-section-market-clearing
     [data-kp-two-column-scroll-paragraph]

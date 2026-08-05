@@ -208,6 +208,39 @@ test("economics motion bridge exemplar has one semantic compile target", async (
   });
 });
 
+test("economics motion bridge uses the existing semantic interval", async () => {
+  const [
+    { kpEconomicsDemandShiftMotionBridgeExemplar: bridge },
+    { projectKpEconomicsMotionBridgeCorridor },
+    { projectKpTutorialMotionCorridor }
+  ] = await Promise.all([
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts"),
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge.ts"),
+    import("../src/tutorial/kp-tutorial-motion.ts")
+  ]);
+  const corridor = projectKpEconomicsMotionBridgeCorridor({
+    bridge,
+    viewportHeightPx: 800,
+    readingAnchorPx: 280,
+    distancePx: 400
+  });
+  assert.deepEqual(corridor, {
+    startViewportRatio: 0.35,
+    endViewportRatio: -0.15,
+    keyframes: [
+      { travel: 0, progress: 0 },
+      { travel: 1, progress: 1 }
+    ]
+  });
+  assert.deepEqual([280, 80, -120].map((anchorTop) =>
+    projectKpTutorialMotionCorridor({
+      corridor,
+      anchorTop,
+      viewportHeight: 800
+    }).progress
+  ), [0, 0.5, 1]);
+});
+
 test("semantic tutorial URLs round-trip without choreography coordinates", () => {
   const destinations = [
     { kind: "section" as const, id: "market-clearing" },

@@ -118,7 +118,8 @@
     {
       "id": "s11",
       "title": "Connect bridge to semantic motion interval",
-      "status": "planned"
+      "summary": "Rendered the opt-in bridge as one exact cached document-space interval and adapted it into the existing coordinator, semantic projection, rail progress, navigation, and manual rebase authority.",
+      "status": "complete"
     },
     {
       "id": "s12",

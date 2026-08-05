@@ -264,6 +264,27 @@
       "scope": "s10 route prop boundary",
       "checkedAt": "2026-08-05T21:09:16.862Z",
       "notes": "Svelte diagnostics passed with an optional opt-in bridge payload."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s11 semantic bridge interval",
+      "checkedAt": "2026-08-05T21:17:12.177Z",
+      "notes": "47 economics tests passed; cached 400px bridge geometry maps exact 0, 0.5, and 1 into the existing demand-shift session."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s11 exact bridge document interval",
+      "checkedAt": "2026-08-05T21:17:13.318Z",
+      "notes": "7 stylesheet tests passed; the enhanced grid fixes paragraph-top distance independently of prose height."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 full static typing",
+      "checkedAt": "2026-08-05T21:17:14.287Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {

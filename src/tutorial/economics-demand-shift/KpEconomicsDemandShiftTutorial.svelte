@@ -85,6 +85,12 @@
     projectKpTutorialViewportAnchors
   } from "../kp-tutorial-usable-viewport.ts";
   import {
+    projectKpTutorialProseMotionGeometry
+  } from "../kp-tutorial-motion-bridge-geometry.ts";
+  import type {
+    KpTutorialMotionBridgeAuthoring
+  } from "../kp-tutorial-motion-bridge-authoring.ts";
+  import {
     projectKpTutorialBoundaryCueSalience,
     projectKpTutorialScrollPassagePhase,
     type KpTutorialScrollPassagePhase,
@@ -130,6 +136,9 @@
     writeKpEconomicsDemandShiftTheme,
     type KpEconomicsDemandShiftTheme
   } from "./economics-demand-shift-theme.ts";
+  import {
+    projectKpEconomicsMotionBridgeCorridor
+  } from "./economics-demand-shift-motion-bridge.ts";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
@@ -175,6 +184,7 @@
     readonly horizontalBoundaryOffsetFromStageTopPx: number;
     readonly minimumEffectiveHeightRatio: number;
     readonly motionStartRatio: number;
+    readonly motionBridgeDistancePx: number;
     readonly stageCenterRatio: number;
     readonly stageCenterY: number;
     readonly stageTopY: number;
@@ -353,6 +363,22 @@
     () => presentationLayout === "two-column-scroll"
   );
   const scrollPassageLayout = inlineSticky || twoColumnScroll;
+  const motionBridge = untrack(() => scrubStrategy === "motion-bridge" &&
+      motionBridgeHtml?.["demand-increase"] !== undefined
+    ? lesson.proseMotion?.find((record): record is KpTutorialMotionBridgeAuthoring =>
+        record.kind === "motion-bridge" && record.id === "demand-increase"
+      )
+    : undefined);
+  const motionBridgeBeforePassage = untrack(() => motionBridge === undefined
+    ? undefined
+    : twoColumnParagraphs.find(({ id }) => id === motionBridge.beforePassageId));
+  const motionBridgeAfterPassage = untrack(() => motionBridge === undefined
+    ? undefined
+    : twoColumnParagraphs.find(({ id }) => id === motionBridge.afterPassageId));
+  const motionBridgeEnabled = motionBridge !== undefined &&
+    motionBridgeBeforePassage !== undefined &&
+    motionBridgeAfterPassage !== undefined;
+  let motionBridgeDistancePx = $state(0);
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
@@ -1316,6 +1342,9 @@
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = measureTwoColumnScrollGeometry();
       twoColumnStageTopPx = geometry.stageTopY;
+      motionBridgeDistancePx = motionBridgeEnabled
+        ? geometry.motionBridgeDistancePx
+        : 0;
       writeTwoColumnAssemblyGeometry(geometry);
       cachedTwoColumnPassageTimeline = measureTwoColumnPassageTimeline(
         geometry
@@ -1323,6 +1352,7 @@
     } else {
       cachedTwoColumnScrollGeometry = undefined;
       cachedTwoColumnPassageTimeline = undefined;
+      motionBridgeDistancePx = 0;
       clearTwoColumnAssemblyGeometry();
     }
     updateInlineStickyStageProjection();
@@ -1372,12 +1402,24 @@
     }
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = readCachedTwoColumnScrollGeometry();
+      if (motionBridge?.motionBlockId === block.id) {
+        return projectKpEconomicsMotionBridgeCorridor({
+          bridge: motionBridge,
+          viewportHeightPx: geometry.viewportHeightPx,
+          readingAnchorPx: geometry.textAnchorY,
+          distancePx: geometry.motionBridgeDistancePx
+        });
+      }
       const passage = anchor.closest<HTMLElement>(
         "[data-kp-two-column-scroll-paragraph]"
       );
       const previousPassage = passage?.previousElementSibling as
         HTMLElement | null | undefined;
-      const previousParagraph = previousPassage?.querySelector<HTMLElement>("p");
+      const previousParagraph = previousPassage?.matches("kp-motion-bridge")
+        ? previousPassage.querySelector<HTMLElement>(
+            "[data-kp-motion-bridge-after] p"
+          )
+        : previousPassage?.querySelector<HTMLElement>("p");
       const paragraphDistancePx = previousParagraph === undefined ||
           previousParagraph === null
         ? window.innerHeight
@@ -1453,17 +1495,43 @@
       const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
       return clamp((Number.isFinite(value) ? value : fallbackVh) / 100, 0, 1);
     };
+    const unitRatio = (name: string, fallback: number): number => {
+      const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
+      return clamp(Number.isFinite(value) ? value : fallback, 0, 1);
+    };
     const pixels = (name: string): number => {
       const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
       return Number.isFinite(value) ? Math.max(0, value) : 0;
     };
     const focusTopRatio = ratio("--kp-two-column-focus-top-vh", 35);
     const stageCenterRatio = ratio("--kp-two-column-stage-center-vh", 50);
-    const viewport = projectKpTutorialUsableViewport({
+    const proseMotionGeometry = projectKpTutorialProseMotionGeometry({
       viewportHeightPx: window.innerHeight,
       persistentTopInsetPx: pixels("--kp-tutorial-persistent-top-inset"),
-      persistentBottomInsetPx: pixels("--kp-tutorial-persistent-bottom-inset")
+      persistentBottomInsetPx: pixels("--kp-tutorial-persistent-bottom-inset"),
+      readingAnchorRatio: focusTopRatio,
+      timing: {
+        ordinaryBeatApproachRatio: unitRatio(
+          "--kp-tutorial-ordinary-beat-approach-ratio",
+          0.14
+        ),
+        bridgeDistanceRatios: {
+          short: unitRatio(
+            "--kp-tutorial-motion-bridge-distance-short-ratio",
+            0.32
+          ),
+          standard: unitRatio(
+            "--kp-tutorial-motion-bridge-distance-standard-ratio",
+            0.5
+          ),
+          extended: unitRatio(
+            "--kp-tutorial-motion-bridge-distance-extended-ratio",
+            0.8
+          )
+        }
+      }
     });
+    const viewport = proseMotionGeometry.viewport;
     const anchors = projectKpTutorialViewportAnchors({
       viewport,
       textRatio: focusTopRatio,
@@ -1493,6 +1561,8 @@
         23
       ),
       motionStartRatio: ratio("--kp-two-column-motion-start-vh", 62),
+      motionBridgeDistancePx:
+        proseMotionGeometry.bridgeDistancePx[motionBridge?.distance ?? "standard"],
       stageCenterRatio,
       stageCenterY: latch.stageCenterY,
       stageTopY: latch.stageTopY,
@@ -1534,6 +1604,7 @@
         assembly.horizontalBoundaryOffsetFromStageTopPx,
       minimumEffectiveHeightRatio: 0.23,
       motionStartRatio: 0.62,
+      motionBridgeDistancePx: viewport.heightPx * 0.5,
       stageCenterRatio: anchors.stageCenterRatio,
       stageCenterY: latch.stageCenterY,
       stageTopY: latch.stageTopY,
@@ -2163,7 +2234,8 @@
 
 {#snippet lessonPassage(
   passage: KpEconomicsDemandShiftLessonPassage,
-  scrollCue: boolean
+  scrollCue: boolean,
+  motionBridgePosition?: "before" | "after"
 )}
   {@const renderedMotionBlock = findKpEconomicsMotionBlock(
     passage.motionBlockId
@@ -2183,6 +2255,12 @@
     class:kp-economics-tutorial__equation-check={passage.id === "equation-check"}
     class:kp-economics-tutorial__synthesis={passage.id === "synthesis"}
     data-kp-economics-tutorial-passage={passage.id}
+    data-kp-motion-bridge-before={motionBridgePosition === "before"
+      ? passage.id
+      : undefined}
+    data-kp-motion-bridge-after={motionBridgePosition === "after"
+      ? passage.id
+      : undefined}
     data-kp-lesson-passage-role={passage.role}
     data-kp-scroll-cue={scrollCue ? true : undefined}
     data-kp-inline-sticky-cue={scrollCue ? true : undefined}
@@ -2243,7 +2321,21 @@
       </details>
     {:else}
       {#each passage.paragraphs as paragraph}
-        <p><span class="kp-economics-tutorial__passage-ink">{@html paragraph.html}</span></p>
+        <p>
+          {#if motionBridgePosition === "after"}
+            <span
+              class="kp-tutorial-motion-bridge__ellipsis kp-tutorial-motion-bridge__ellipsis--after"
+              aria-hidden="true"
+            >…</span>
+          {/if}
+          <span class="kp-economics-tutorial__passage-ink">{@html paragraph.html}</span>
+          {#if motionBridgePosition === "before"}
+            <span
+              class="kp-tutorial-motion-bridge__ellipsis kp-tutorial-motion-bridge__ellipsis--before"
+              aria-hidden="true"
+            >…</span>
+          {/if}
+        </p>
       {/each}
     {/if}
     {#if !scrollPassageLayout && renderedMotionBlock?.id === "demand-shift"}
@@ -2276,6 +2368,33 @@
   </div>
 {/snippet}
 
+{#snippet demandShiftMotionBridge()}
+  {#if motionBridge !== undefined &&
+      motionBridgeBeforePassage !== undefined &&
+      motionBridgeAfterPassage !== undefined}
+    <kp-motion-bridge
+      class="kp-tutorial-motion-bridge"
+      data-kp-motion-bridge={motionBridge.id}
+      data-kp-motion-bridge-distance={motionBridge.distance}
+      data-kp-motion-block={motionBridge.motionBlockId}
+      data-kp-motion-from-checkpoint={motionBridge.fromCheckpointId}
+      data-kp-motion-to-checkpoint={motionBridge.toCheckpointId}
+      data-kp-motion-bridge-enhanced={motionBridgeDistancePx > 0
+        ? "true"
+        : undefined}
+      style={motionBridgeDistancePx > 0
+        ? `--kp-tutorial-motion-bridge-distance-px:${motionBridgeDistancePx}px;--kp-tutorial-motion-bridge-progress:${semanticProgress}`
+        : undefined}
+    >
+      {@render lessonPassage(motionBridgeBeforePassage, true, "before")}
+      <span class="kp-tutorial-motion-bridge__rail" aria-hidden="true">
+        <span class="kp-tutorial-motion-bridge__rail-progress"></span>
+      </span>
+      {@render lessonPassage(motionBridgeAfterPassage, true, "after")}
+    </kp-motion-bridge>
+  {/if}
+{/snippet}
+
 <KpTutorialLessonShell
   bind:root={shell}
   rootClass={`kp-economics-tutorial${scrollPassageLayout
@@ -2296,6 +2415,9 @@
     "data-kp-economics-tutorial-scrub-strategy": scrubStrategy,
     "data-kp-economics-motion-bridge-artifact":
       motionBridgeHtml?.["demand-increase"] === undefined ? "" : "demand-increase",
+    "data-kp-economics-motion-bridge-progress": motionBridgeEnabled
+      ? semanticProgress.toFixed(3)
+      : "",
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),
@@ -2415,7 +2537,13 @@
                   {#each (twoColumnScroll
                     ? twoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
-                    {@render lessonPassage(passage, true)}
+                    {#if motionBridgeEnabled &&
+                        passage.id === motionBridge?.beforePassageId}
+                      {@render demandShiftMotionBridge()}
+                    {:else if !motionBridgeEnabled ||
+                        passage.id !== motionBridge?.afterPassageId}
+                      {@render lessonPassage(passage, true)}
+                    {/if}
                   {/each}
                 </div>
               </div>
