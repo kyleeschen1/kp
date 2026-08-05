@@ -33,6 +33,7 @@ test("page projection preserves passage and local block identity", () => {
       readingBandY: 280,
       scrollY: 400,
       scrollChanged: true,
+      nearViewportBlockIds: ["r2", "r1"],
       blocks: [
         {
           id: "r1",
@@ -57,6 +58,8 @@ test("page projection preserves passage and local block identity", () => {
   assert.equal(projection.activeRegistrationId, "r2");
   assert.equal(projection.activePassageId, "p2");
   assert.equal(projection.activeBlockId, "transform");
+  assert.deepEqual(projection.nearViewportRegistrationIds, ["r2", "r1"]);
+  assert.deepEqual(projection.nearViewportPassageIds, ["p2", "p1"]);
   assert.deepEqual(
     projection.blocks.map(({ passageId, blockId, ownsScroll }) => ({
       passageId,
@@ -76,9 +79,20 @@ test("twelve passages share one listener, one pending frame, and cached geometry
   let nextFrame = 1;
   let scrollY = 0;
   let layoutReads = 0;
+  let intersectionCallback: IntersectionObserverCallback | undefined;
+  const observed = new Set<Element>();
+  class FakeIntersectionObserver {
+    constructor(callback: IntersectionObserverCallback) {
+      intersectionCallback = callback;
+    }
+    observe(target: Element): void { observed.add(target); }
+    unobserve(target: Element): void { observed.delete(target); }
+    disconnect(): void { observed.clear(); }
+  }
   const view = {
     innerHeight: kpTutorialTwelvePassagePageFixture.viewportBlockSize,
     get scrollY() { return scrollY; },
+    IntersectionObserver: FakeIntersectionObserver,
     requestAnimationFrame(callback: FrameRequestCallback): number {
       const id = nextFrame++;
       frameCallbacks.set(id, callback);
@@ -132,10 +146,24 @@ test("twelve passages share one listener, one pending frame, and cached geometry
   coordinator.scheduleProjection();
   assert.equal(listeners.get("scroll")?.size, 1);
   assert.equal(listeners.get("resize")?.size, 1);
+  assert.equal(observed.size, 12);
+  intersectionCallback?.(
+    [...observed].map((target) => ({
+      target,
+      isIntersecting: true
+    } as unknown as IntersectionObserverEntry)),
+    {} as IntersectionObserver
+  );
   assert.equal(frameCallbacks.size, 1);
   runNextFrame(frameCallbacks);
   assert.equal(projections.length, 1);
-  assert.equal(projections[0]!.blocks.length, 12);
+  assert.equal(projections[0]!.blocks.length, 3);
+  assert.equal(projections[0]!.nearViewportRegistrationIds.length, 3);
+  assert.equal(projections[0]!.nearViewportPassageIds.length, 3);
+  assert.equal(
+    projections[0]!.nearViewportRegistrationIds[0],
+    projections[0]!.activeRegistrationId
+  );
   assert.equal(layoutReads, 12);
 
   scrollY = 720;
@@ -148,8 +176,8 @@ test("twelve passages share one listener, one pending frame, and cached geometry
   assert.deepEqual(coordinator.snapshotMetrics(), {
     scrollEvents: 2,
     resizeEvents: 0,
-    scheduleRequests: 5,
-    coalescedRequests: 3,
+    scheduleRequests: 6,
+    coalescedRequests: 4,
     requestedFrames: 2,
     executedFrames: 2,
     registrationReads: 12,
@@ -175,6 +203,7 @@ test("duplicate page registration identity fails before a frame can run", () => 
       readingBandY: 0,
       scrollY: 0,
       scrollChanged: false,
+      nearViewportBlockIds: [],
       blocks: []
     }
   }), /registration ids must be unique/);

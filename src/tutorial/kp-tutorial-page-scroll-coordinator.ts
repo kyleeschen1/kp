@@ -42,6 +42,8 @@ export interface KpTutorialPageScrollProjection<
   readonly activeRegistrationId: RegistrationId | undefined;
   readonly activePassageId: PassageId | undefined;
   readonly activeBlockId: BlockId | undefined;
+  readonly nearViewportRegistrationIds: readonly RegistrationId[];
+  readonly nearViewportPassageIds: readonly PassageId[];
   readonly readingBandY: number;
   readonly scrollY: number;
   readonly scrollChanged: boolean;
@@ -96,10 +98,25 @@ export function projectKpTutorialPageScrollFrame<
       input.projection.activeBlockId
     );
   }
+  const nearViewportRegistrations = input.projection.nearViewportBlockIds.map(
+    (id) => {
+      const registration = registrationsById.get(id);
+      if (registration === undefined) {
+        throw new Error(`Missing near-viewport page scroll registration: ${id}`);
+      }
+      return registration;
+    }
+  );
   return Object.freeze({
     activeRegistrationId: input.projection.activeBlockId,
     activePassageId: activeRegistration?.passageId,
     activeBlockId: activeRegistration?.blockId,
+    nearViewportRegistrationIds: Object.freeze(
+      nearViewportRegistrations.map(({ id }) => id)
+    ),
+    nearViewportPassageIds: Object.freeze(
+      [...new Set(nearViewportRegistrations.map(({ passageId }) => passageId))]
+    ),
     readingBandY: input.projection.readingBandY,
     scrollY: input.projection.scrollY,
     scrollChanged: input.projection.scrollChanged,

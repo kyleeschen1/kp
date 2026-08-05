@@ -108,6 +108,8 @@ export interface KpTutorialCoordinatedScrollProjection<BlockId extends string>
   extends KpTutorialScrollFrameProjection<BlockId> {
   readonly scrollY: number;
   readonly scrollChanged: boolean;
+  /** Coarse observer candidates, capped and ordered with the exact owner first. */
+  readonly nearViewportBlockIds: readonly BlockId[];
 }
 
 export interface KpTutorialScrollCoordinatorMetrics {
@@ -127,6 +129,11 @@ export interface KpTutorialScrollCoordinatorOptions {
   /** Detailed timing is opt-in so the measurement surface does not become reader overhead. */
   readonly profileExecution?: boolean | undefined;
   readonly now?: (() => number) | undefined;
+  /** Exact scroll projection visits at most radius * 2 + 1 registrations. */
+  readonly projectionNeighborhoodRadius?: number | undefined;
+  /** Observer activation cannot create an unbounded live-stage candidate set. */
+  readonly maxNearViewportBlocks?: number | undefined;
+  readonly activationRootMargin?: string | undefined;
 }
 
 export interface KpTutorialCueActivationObserverOptions {
@@ -502,10 +509,14 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
   private previousScrollY: number | undefined;
   private readonly profileExecution: boolean;
   private readonly now: () => number;
+  private readonly projectionNeighborhoodRadius: number;
+  private readonly maxNearViewportBlocks: number;
   private readonly geometryCache: KpTutorialDocumentCueGeometryCache<BlockId>;
   private readonly activationObserver: KpTutorialCueActivationObserver<BlockId>;
   private registrationSnapshot:
     readonly KpTutorialScrollBlockRegistration<BlockId>[] | undefined;
+  private registrationByIdSnapshot:
+    ReadonlyMap<BlockId, KpTutorialScrollBlockRegistration<BlockId>> | undefined;
   private metrics = emptyScrollCoordinatorMetrics();
 
   constructor(
@@ -522,6 +533,14 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.onProjection = onProjection;
     this.profileExecution = options.profileExecution ?? false;
     this.now = options.now ?? (() => this.view.performance.now());
+    this.projectionNeighborhoodRadius = nonnegativeInteger(
+      options.projectionNeighborhoodRadius ?? 2,
+      "Tutorial projection neighborhood radius"
+    );
+    this.maxNearViewportBlocks = positiveInteger(
+      options.maxNearViewportBlocks ?? 3,
+      "Tutorial near-viewport block limit"
+    );
     const geometryRegistrations = () => this.currentRegistrations().map(
       ({ id, anchor }) => ({ id, anchor })
     );
@@ -532,7 +551,10 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.activationObserver = new KpTutorialCueActivationObserver(
       view,
       geometryRegistrations,
-      { onActivationChange: this.scheduleProjection }
+      {
+        rootMargin: options.activationRootMargin,
+        onActivationChange: this.scheduleProjection
+      }
     );
   }
 
@@ -567,6 +589,7 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
 
   readonly invalidateGeometry = (): void => {
     this.registrationSnapshot = undefined;
+    this.registrationByIdSnapshot = undefined;
     this.geometryCache.invalidate();
     this.activationObserver.refresh();
     this.scheduleProjection();
@@ -584,18 +607,20 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
       this.frame = undefined;
       const startedAt = this.profileExecution ? this.now() : 0;
       try {
-        const registrations = this.currentRegistrations();
-        const byId = new Map(registrations.map((registration) => [
-          registration.id,
-          registration
-        ]));
+        const byId = this.currentRegistrationsById();
         const readsBefore = this.geometryCache.measurementReads();
         const scrollY = this.view.scrollY;
         const geometry = this.geometryCache.documentGeometry();
         if (this.profileExecution) this.metrics.layoutReads +=
           this.geometryCache.measurementReads() - readsBefore;
+        const activeWindow = projectKpTutorialActiveCueWindow({
+          geometry,
+          scrollY,
+          viewportHeight: this.view.innerHeight,
+          neighborhoodRadius: this.projectionNeighborhoodRadius
+        });
         const projection = projectKpTutorialScrollFrame({
-          blocks: geometry.map(({ id, documentTop }) => {
+          blocks: activeWindow.cues.map(({ id, viewportTop }) => {
             const registration = byId.get(id);
             if (registration === undefined) {
               throw new Error(`Missing tutorial scroll registration: ${id}`);
@@ -604,15 +629,30 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
               id,
               corridor: registration.corridor,
               snapTolerance: registration.snapTolerance,
-              anchorTop: documentTop - scrollY
+              anchorTop: viewportTop
             };
           }),
           viewportHeight: this.view.innerHeight
         });
+        const nearViewportBlockIds = Object.freeze(projection.blocks
+          .filter(({ id, ownsScroll }) =>
+            ownsScroll || this.activationObserver.isActive(id)
+          )
+          .sort((left, right) => {
+            if (left.ownsScroll !== right.ownsScroll) return left.ownsScroll ? -1 : 1;
+            return left.distanceFromReadingBand - right.distanceFromReadingBand;
+          })
+          .slice(0, this.maxNearViewportBlocks)
+          .map(({ id }) => id));
         const scrollChanged = this.previousScrollY !== undefined &&
           Math.abs(scrollY - this.previousScrollY) > 0.01;
         this.previousScrollY = scrollY;
-        this.onProjection(Object.freeze({ ...projection, scrollY, scrollChanged }));
+        this.onProjection(Object.freeze({
+          ...projection,
+          scrollY,
+          scrollChanged,
+          nearViewportBlockIds
+        }));
       } finally {
         if (this.profileExecution) {
           const duration = Math.max(0, this.now() - startedAt);
@@ -651,6 +691,25 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
       this.metrics.registrationReads += this.registrationSnapshot.length;
     }
     return this.registrationSnapshot;
+  }
+
+  private currentRegistrationsById(): ReadonlyMap<
+    BlockId,
+    KpTutorialScrollBlockRegistration<BlockId>
+  > {
+    if (this.registrationByIdSnapshot !== undefined) {
+      return this.registrationByIdSnapshot;
+    }
+    const registrations = this.currentRegistrations();
+    const byId = new Map(registrations.map((registration) => [
+      registration.id,
+      registration
+    ]));
+    if (byId.size !== registrations.length) {
+      throw new Error("Tutorial scroll registration ids must be unique.");
+    }
+    this.registrationByIdSnapshot = byId;
+    return byId;
   }
 }
 
@@ -702,6 +761,20 @@ function lowerBoundCueTop<CueId extends string>(
 
 function finitePositive(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
+function nonnegativeInteger(value: number, label: string): number {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`${label} must be a nonnegative integer.`);
+  }
+  return value;
+}
+
+function positiveInteger(value: number, label: string): number {
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`${label} must be a positive integer.`);
+  }
+  return value;
 }
 
 function clamp(value: number): number {

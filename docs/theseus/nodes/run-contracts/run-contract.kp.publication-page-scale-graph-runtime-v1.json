@@ -155,7 +155,8 @@
     {
       "id": "s17",
       "title": "Bound-observer-activation-and-live-stage-window",
-      "status": "planned"
+      "summary": "Bound observer activation to three live-stage candidates and exact projection to five cached registrations without adding a scroll clock; all semantic, browser, visual, type, and architecture checks pass, with three recorded cold-start-only performance misses under the unchanged ceiling.",
+      "status": "complete"
     },
     {
       "id": "s18",

@@ -941,11 +941,92 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-05T12:39:59.442Z"
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "slice s17 cold-task variance",
+      "checkedAt": "2026-08-05T12:48:30.585Z",
+      "notes": "All observer-window, route, active-motion, retained-SVG, and dense-cue assertions passed, but the known cold-start variance sampled 152ms against the unchanged 150ms ceiling. Transfer 239212B, script 139583B, resources 42, CLS 0, active p95 33.7ms, and dense geometry reads 2/2/2 remained within budget."
+    },
+    {
+      "command": "playwright economics performance identical-build rerun",
+      "status": "failed",
+      "scope": "slice s17 cold-task variance",
+      "checkedAt": "2026-08-05T12:48:50.871Z",
+      "notes": "Second identical-build sample again missed only the cold-start ceiling at 171ms. Route bytes and resources were identical; CLS remained zero, active p95 34.1ms, longest coordinator frame 2.5ms, dense geometry reads 2/2/2, and retained-SVG invariants all passed."
+    },
+    {
+      "command": "playwright economics performance third identical-build sample",
+      "status": "failed",
+      "scope": "slice s17 cold-task variance",
+      "checkedAt": "2026-08-05T12:49:31.136Z",
+      "notes": "Third identical-build sample again missed only the cold-start ceiling at 199ms. The unchanged route remained 239212B transfer, 139583B script, 42 resources, zero CLS; active p95 was 34.2ms, longest coordinator frame 5.3ms, dense reads 2/2/2, and all page-scale-specific focused checks pass. Budget remains unchanged; no further retry in this slice."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (14/14)",
+      "status": "passed",
+      "scope": "slice s17 focused rerun",
+      "checkedAt": "2026-08-05T12:51:04.366Z"
+    },
+    {
+      "command": "node test kp-tutorial-motion (9/9)",
+      "status": "passed",
+      "scope": "slice s17 coordinator preservation",
+      "checkedAt": "2026-08-05T12:51:05.782Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "slice s17 types",
+      "checkedAt": "2026-08-05T12:51:06.724Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "slice s17 semantic preservation",
+      "checkedAt": "2026-08-05T12:51:07.655Z"
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial (12/12)",
+      "status": "passed",
+      "scope": "slice s17 learner preservation",
+      "checkedAt": "2026-08-05T12:51:08.609Z"
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll (8/8)",
+      "status": "passed",
+      "scope": "slice s17 canonical visual preservation",
+      "checkedAt": "2026-08-05T12:51:09.534Z"
+    },
+    {
+      "command": "npm run build within performance probe",
+      "status": "passed",
+      "scope": "slice s17 production build",
+      "checkedAt": "2026-08-05T12:51:10.528Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s17 architecture",
+      "checkedAt": "2026-08-05T12:51:11.476Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s17 patch hygiene",
+      "checkedAt": "2026-08-05T12:51:31.713Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17818 events)",
+      "status": "passed",
+      "scope": "slice s17 evidence integrity",
+      "checkedAt": "2026-08-05T12:51:32.865Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s16 adds a page-level passage/block projection adapter over the single existing cached-geometry scroll coordinator. Twelve passages share one passive scroll listener, one resize listener, one pending rAF, and no ordinary-scroll layout rereads."
+    "summary": "Slice s17 makes IntersectionObserver a coarse activation gate while exact progress stays on one rAF clock. Binary-search projection visits at most five registrations, emits at most three live candidates, caches registration identity, and preserves the focused owner through observer lag. Three performance samples retained all active/scale budgets but missed the unchanged volatile cold-start ceiling."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."
