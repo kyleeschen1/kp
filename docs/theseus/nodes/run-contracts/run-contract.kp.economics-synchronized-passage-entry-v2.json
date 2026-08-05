@@ -139,7 +139,8 @@
     {
       "id": "s15",
       "title": "Unify dark axis and divider token",
-      "status": "planned"
+      "summary": "Dark graph axes now consume the dark stage-divider token exactly; the light theme retains its independent black axis token.",
+      "status": "complete"
     },
     {
       "id": "s16",

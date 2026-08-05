@@ -92,7 +92,7 @@
   --kp-lesson-theme-graph-stroke-width: 1px;
   --kp-lesson-theme-graph-grid: #25293b;
   --kp-lesson-theme-graph-reference: #858e9d;
-  --kp-lesson-theme-graph-axis: #a2acbf;
+  --kp-lesson-theme-graph-axis: var(--kp-lesson-theme-stage-divider);
   --kp-lesson-theme-graph-ghost-curve-casing: #9e6268;
   --kp-lesson-theme-graph-ghost-curve-core: #858e9d;
   --kp-lesson-theme-graph-ghost-guide-casing: #8f98aa;
@@ -214,4 +214,3 @@ input,
 summary {
   font: inherit;
 }
-

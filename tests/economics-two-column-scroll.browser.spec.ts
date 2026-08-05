@@ -251,8 +251,18 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     .evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("1px");
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
-    .evaluate((element) => getComputedStyle(element).stroke))
-    .toBe("rgb(162, 172, 191)");
+    .evaluate((element) => {
+      const stageElement = element.closest<HTMLElement>(
+        "[data-kp-inline-sticky-stage]"
+      )!;
+      return {
+        axis: getComputedStyle(element).stroke,
+        divider: getComputedStyle(stageElement).borderRightColor
+      };
+    })).toEqual({
+      axis: "rgb(98, 103, 117)",
+      divider: "rgb(98, 103, 117)"
+    });
   await expect(graph).toHaveAttribute(
     "data-kp-editor-graph-origin-policy",
     "shared-endpoint"

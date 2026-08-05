@@ -127,6 +127,13 @@
       "scope": "slice s14 final boundary cue salience",
       "checkedAt": "2026-08-05T18:06:53.216Z",
       "notes": "All 9 Chromium exemplar cases, 17 lifecycle tests, and Svelte typecheck passed. One prior scoped run failed before the route root mounted and passed unchanged on rerun. The final cue is unpinned during scrubbing and pinned at full opacity through same-tick release."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "slice s15 dark axis and divider token unification",
+      "checkedAt": "2026-08-05T18:09:49.665Z",
+      "notes": "All 9 Chromium exemplar cases and 6 stylesheet ownership tests passed. Dark axis and divider both compute to rgb(98, 103, 117); light axis remains rgb(17, 19, 25)."
     }
   ],
   "expectedLearning": [
