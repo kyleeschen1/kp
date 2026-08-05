@@ -31,6 +31,13 @@ export interface KpTutorialSemanticTransitProjection {
   readonly viewport: Readonly<{ width: number; height: number }>;
 }
 
+export interface KpTutorialSemanticTransitTransform {
+  readonly progress: number;
+  readonly x: number;
+  readonly y: number;
+  readonly visible: boolean;
+}
+
 export interface KpTutorialSemanticTransitGeometryCacheOptions {
   readonly onInvalidated?: (() => void) | undefined;
 }
@@ -184,6 +191,25 @@ export function projectKpTutorialSemanticTransitGeometry(input: {
   });
 }
 
+export function projectKpTutorialSemanticTransitTransform(input: {
+  readonly projection: KpTutorialSemanticTransitProjection;
+  readonly progress: number;
+}): KpTutorialSemanticTransitTransform {
+  const progress = clampUnit(input.progress);
+  const source = input.projection.sourceViewport;
+  const destination = input.projection.destinationViewport;
+  // Center alignment keeps the cloned glyph at native scale, avoiding the
+  // subpixel blur that a size interpolation would introduce.
+  const destinationX = destination.centerX - source.width / 2;
+  const destinationY = destination.centerY - source.height / 2;
+  return Object.freeze({
+    progress,
+    x: interpolate(source.left, destinationX, progress),
+    y: interpolate(source.top, destinationY, progress),
+    visible: progress > 0 && progress < 1
+  });
+}
+
 function rectFromBounds(bounds: Pick<DOMRectReadOnly,
   "left" | "top" | "width" | "height"
 >): KpTutorialSemanticTransitRect {
@@ -231,4 +257,12 @@ function positive(value: number, label: string): number {
   const result = finite(value, label);
   if (result <= 0) throw new Error(`${label} must be positive.`);
   return result;
+}
+
+function clampUnit(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+}
+
+function interpolate(before: number, after: number, progress: number): number {
+  return before + (after - before) * progress;
 }

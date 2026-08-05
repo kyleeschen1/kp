@@ -199,6 +199,22 @@ test("two-column prose focuses at 35vh with a short-block plateau", () => {
   assert.equal(passed.opacity, 0.32);
 });
 
+test("opening prose exposes continuous approach progress without replaying state", () => {
+  const project = (paragraphTopPx: number) =>
+    projectKpTwoColumnScrollParagraph({
+      paragraphTopPx,
+      paragraphBottomPx: paragraphTopPx + 80,
+      focusTopPx: 280,
+      viewportHeightPx: 800,
+      opening: true
+    });
+
+  assert.equal(project(624).crossingProgress, 0);
+  assert.equal(project(452).crossingProgress, 0.5);
+  assert.equal(project(280).crossingProgress, 1);
+  assert.equal(project(452).travel, 0);
+});
+
 test("paragraph salience hands off after predecessor settlement", () => {
   const settled = projectKpTwoColumnScrollSequence({
     paragraphTopPx: [280, 700, 1000],

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   KpTutorialSemanticTransitGeometryCache,
   projectKpTutorialSemanticTransitGeometry,
+  projectKpTutorialSemanticTransitTransform,
   type KpTutorialSemanticTransitRect
 } from "../src/tutorial/kp-tutorial-semantic-transit-geometry.ts";
 import {
@@ -12,6 +13,36 @@ import {
   defineKpTutorialStageObject,
   defineKpTutorialTextReference
 } from "../src/tutorial/kp-tutorial-semantic-transit-authoring.ts";
+
+test("semantic transit transform is exact, native-scale, and reversible", () => {
+  const projection = {
+    sourceViewport: stageRect(700, 300),
+    destinationViewport: stageRect(200, 100),
+    stageViewport: stageRect(100, 40),
+    viewport: { width: 1280, height: 800 }
+  };
+  const forward = [0, 0.25, 0.5, 0.75, 1].map((progress) =>
+    projectKpTutorialSemanticTransitTransform({ projection, progress })
+  );
+  assert.deepEqual(forward.map(({ progress, x, y, visible }) => ({
+    progress,
+    x,
+    y,
+    visible
+  })), [
+    { progress: 0, x: 700, y: 300, visible: false },
+    { progress: 0.25, x: 575, y: 250, visible: true },
+    { progress: 0.5, x: 450, y: 200, visible: true },
+    { progress: 0.75, x: 325, y: 150, visible: true },
+    { progress: 1, x: 200, y: 100, visible: false }
+  ]);
+  assert.deepEqual(
+    [...forward].reverse(),
+    [1, 0.75, 0.5, 0.25, 0].map((progress) =>
+      projectKpTutorialSemanticTransitTransform({ projection, progress })
+    )
+  );
+});
 
 test("semantic transit identity is authored independently of text and DOM position", () => {
   const reference = defineKpTutorialTextReference({

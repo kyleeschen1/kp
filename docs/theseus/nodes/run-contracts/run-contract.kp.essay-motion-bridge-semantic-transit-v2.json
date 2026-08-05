@@ -166,7 +166,8 @@
     {
       "id": "s19",
       "title": "Scrub inline P to price axis P",
-      "status": "planned"
+      "summary": "Scrubbed the inline P proxy to the price-axis P with native-scale transform-only interpolation, exact reverse, and no scroll-time geometry refresh.",
+      "status": "complete"
     },
     {
       "id": "s20",

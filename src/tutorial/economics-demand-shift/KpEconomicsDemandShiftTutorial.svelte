@@ -100,6 +100,11 @@
     KpTutorialSemanticTransitProxyLayer
   } from "../kp-tutorial-semantic-transit-layer.ts";
   import {
+    KpTutorialSemanticTransitGeometryCache,
+    projectKpTutorialSemanticTransitGeometry,
+    projectKpTutorialSemanticTransitTransform
+  } from "../kp-tutorial-semantic-transit-geometry.ts";
+  import {
     projectKpTutorialBoundaryCueSalience,
     projectKpTutorialScrollPassagePhase,
     type KpTutorialScrollPassagePhase,
@@ -350,6 +355,10 @@
   let cueMutationObserver: MutationObserver | undefined;
   let semanticTransitProxyLayer:
     KpTutorialSemanticTransitProxyLayer | undefined;
+  let semanticTransitGeometryCache:
+    KpTutorialSemanticTransitGeometryCache | undefined;
+  let semanticTransitProxyId: string | undefined;
+  let semanticTransitSourcePassageId: string | undefined;
   let runtimePerformanceApi:
     KpEconomicsTutorialRuntimePerformanceApi | undefined;
   let navigationController: KpTutorialNavigationController | undefined;
@@ -868,13 +877,59 @@
     const stage = destination?.closest<HTMLElement>(
       `[data-kp-tutorial-stage="${object.stageId}"]`
     );
-    if (source === null || destination === null || stage === null) return;
+    if (
+      source === null ||
+      destination === null ||
+      stage === null ||
+      stage === undefined
+    ) return;
     semanticTransitProxyLayer = new KpTutorialSemanticTransitProxyLayer(shell);
     semanticTransitProxyLayer.mountProxy({
       transitId: transit.id,
       source
     });
+    semanticTransitProxyId = transit.id;
+    semanticTransitSourcePassageId = reference.passageId;
+    semanticTransitGeometryCache =
+      new KpTutorialSemanticTransitGeometryCache(
+        window,
+        () => ({ source, destination, stage }),
+        { onInvalidated: () => scrollCoordinator?.scheduleProjection() }
+      );
+    semanticTransitGeometryCache.connect();
     shell.dataset["kpEconomicsSemanticTransitLayer"] = "ready";
+  }
+
+  function updateSemanticTransitProxy(
+    frames: readonly KpEconomicsInlineParagraphFrame[]
+  ): void {
+    if (
+      semanticTransitProxyLayer === undefined ||
+      semanticTransitGeometryCache === undefined ||
+      semanticTransitProxyId === undefined ||
+      semanticTransitSourcePassageId === undefined ||
+      !usesTwoColumnDesktopGeometry()
+    ) return;
+    const progress = frames.find(
+      ({ passageId }) => passageId === semanticTransitSourcePassageId
+    )?.projection.crossingProgress ?? 0;
+    const geometry = semanticTransitGeometryCache.geometry();
+    const projection = projectKpTutorialSemanticTransitGeometry({
+      geometry,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY
+    });
+    semanticTransitProxyLayer.paintProxy(
+      semanticTransitProxyId,
+      projectKpTutorialSemanticTransitTransform({ projection, progress })
+    );
+    if (shell !== undefined) {
+      shell.dataset["kpEconomicsSemanticTransitProgress"] =
+        progress.toFixed(4);
+      shell.dataset["kpEconomicsSemanticTransitGeometryReads"] = String(
+        semanticTransitGeometryCache.measurementReads()
+      );
+    }
   }
 
   function claimManualMotion(
@@ -1378,6 +1433,7 @@
         salience: sequence?.paragraphs[index]?.salience ?? 1
       })]
     )));
+    updateSemanticTransitProxy(frames);
     return Object.freeze(frames);
   }
 
@@ -2069,9 +2125,15 @@
     );
     document.fonts.removeEventListener("loadingdone", handleFontMetricsChange);
     semanticTransitProxyLayer?.dispose();
+    semanticTransitGeometryCache?.disconnect();
     semanticTransitProxyLayer = undefined;
+    semanticTransitGeometryCache = undefined;
+    semanticTransitProxyId = undefined;
+    semanticTransitSourcePassageId = undefined;
     if (shell !== undefined) {
       delete shell.dataset["kpEconomicsSemanticTransitLayer"];
+      delete shell.dataset["kpEconomicsSemanticTransitProgress"];
+      delete shell.dataset["kpEconomicsSemanticTransitGeometryReads"];
     }
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;

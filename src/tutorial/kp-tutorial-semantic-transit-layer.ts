@@ -3,6 +3,13 @@ export interface KpTutorialSemanticTransitProxyRegistration {
   readonly source: HTMLElement;
 }
 
+export interface KpTutorialSemanticTransitProxyPaint {
+  readonly progress: number;
+  readonly x: number;
+  readonly y: number;
+  readonly visible: boolean;
+}
+
 /** Fixed visual copies preserve both endpoint nodes, selection, and layout. */
 export class KpTutorialSemanticTransitProxyLayer {
   readonly host: HTMLElement;
@@ -38,6 +45,23 @@ export class KpTutorialSemanticTransitProxyLayer {
 
   proxy(transitId: string): HTMLElement | undefined {
     return this.proxies.get(transitId);
+  }
+
+  paintProxy(
+    transitId: string,
+    paint: KpTutorialSemanticTransitProxyPaint
+  ): void {
+    const proxy = this.proxies.get(transitId);
+    if (proxy === undefined) {
+      throw new Error(`Unknown semantic transit proxy: ${transitId}`);
+    }
+    proxy.dataset["kpTutorialSemanticTransitProgress"] =
+      paint.progress.toFixed(4);
+    proxy.dataset["kpTutorialSemanticTransitX"] = paint.x.toFixed(4);
+    proxy.dataset["kpTutorialSemanticTransitY"] = paint.y.toFixed(4);
+    proxy.style.transform = `translate3d(${paint.x}px, ${paint.y}px, 0)`;
+    proxy.style.visibility = paint.visible ? "visible" : "hidden";
+    proxy.style.opacity = paint.visible ? "1" : "0";
   }
 
   dispose(): void {

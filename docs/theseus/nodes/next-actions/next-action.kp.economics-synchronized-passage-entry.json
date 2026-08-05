@@ -375,6 +375,27 @@
       "status": "passed",
       "scope": "s18 inert semantic transit proxy layer",
       "checkedAt": "2026-08-05T22:25:56.585Z"
+    },
+    {
+      "command": "npm-run-test-economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "semantic-transit-slice-19",
+      "checkedAt": "2026-08-05T22:43:23.581Z",
+      "notes": "49-unit-tests-passed"
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "s19-transform-only-semantic-transit",
+      "checkedAt": "2026-08-05T22:43:30.546Z",
+      "notes": "Seven Chromium cases passed with exact reverse and stable geometry reads during scroll."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19-full-static-typing",
+      "checkedAt": "2026-08-05T22:43:35.710Z",
+      "notes": "TypeScript Svelte and domain checks passed."
     }
   ],
   "progress": {

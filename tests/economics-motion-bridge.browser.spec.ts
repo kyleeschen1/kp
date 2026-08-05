@@ -152,6 +152,67 @@ test("semantic transit proxy layer is visual-only and preserves endpoints", asyn
   )).toBe(true);
 });
 
+test("inline P transits to axis P with exact transform-only reverse", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(exemplarRoute);
+  const root = tutorial(page);
+  const paragraph = root.locator(
+    '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+  );
+  const proxy = root.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  const samples = [0, 0.25, 0.5, 0.75, 1] as const;
+  const forward: Array<{ x: string | null; y: string | null }> = [];
+  await placeTopAt(page, paragraph, 624);
+  const settledGeometryReads = await root.evaluate((element) =>
+    element.getAttribute(
+      "data-kp-economics-semantic-transit-geometry-reads"
+    )
+  );
+  expect(Number(settledGeometryReads)).toBeGreaterThanOrEqual(3);
+  for (const progress of samples) {
+    await placeTopAt(page, paragraph, 624 - 344 * progress);
+    await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(
+      progress,
+      2
+    );
+    await expect(root).toHaveAttribute(
+      "data-kp-economics-semantic-transit-geometry-reads",
+      settledGeometryReads!
+    );
+    forward.push({
+      x: await proxy.getAttribute("data-kp-tutorial-semantic-transit-x"),
+      y: await proxy.getAttribute("data-kp-tutorial-semantic-transit-y")
+    });
+    if (progress > 0 && progress < 1) {
+      await expect(proxy).toHaveCSS("visibility", "visible");
+      await expect(proxy).toHaveCSS("opacity", "1");
+    } else {
+      await expect(proxy).toHaveCSS("visibility", "hidden");
+    }
+  }
+  for (const [index, progress] of [...samples].reverse().entries()) {
+    await placeTopAt(page, paragraph, 624 - 344 * progress);
+    await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(
+      progress,
+      2
+    );
+    expect({
+      x: await proxy.getAttribute("data-kp-tutorial-semantic-transit-x"),
+      y: await proxy.getAttribute("data-kp-tutorial-semantic-transit-y")
+    }).toEqual(forward[forward.length - index - 1]);
+  }
+  await placeTopAt(page, paragraph, 452);
+  await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(0.5, 2);
+  await page.screenshot({
+    path: `${evidenceDirectory}/desktop-dark-transit-midpoint.png`,
+    fullPage: false
+  });
+});
+
 test("dark light and reverse midpoint states remain visually inspectable", async ({
   page
 }) => {
@@ -274,6 +335,12 @@ async function placeTopAt(
 async function demandProgress(root: Locator): Promise<number> {
   return Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
+  ));
+}
+
+async function semanticTransitProgress(root: Locator): Promise<number> {
+  return Number(await root.getAttribute(
+    "data-kp-economics-semantic-transit-progress"
   ));
 }
 

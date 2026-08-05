@@ -225,6 +225,16 @@ export function projectKpTwoColumnScrollParagraph(input: {
         0,
         1
       );
+  // Opening prose owns an already-settled graph, but correspondence cues still
+  // need a continuous approach clock before that first paragraph latches.
+  const crossingProgress = input.opening
+    ? clamp(
+        (approachStartY - paragraphTop) /
+          Math.max(1, approachStartY - focusTop),
+        0,
+        1
+      )
+    : travel;
   const exitEndY = Math.max(0, focusTop);
   // A projected minimum height gives short thoughts a real reading plateau
   // without inserting artificial space into the document flow.
@@ -253,7 +263,7 @@ export function projectKpTwoColumnScrollParagraph(input: {
         ? "crossing"
         : "passed",
     travel,
-    crossingProgress: travel,
+    crossingProgress,
     // The legacy field name is shared with the inline projector. Here it
     // measures distance from the invisible prose completion line.
     distanceFromStageBottomPx: paragraphTop - focusTop,
