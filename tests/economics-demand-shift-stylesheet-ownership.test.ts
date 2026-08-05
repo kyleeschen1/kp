@@ -63,3 +63,27 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.match(layoutFallbacks, /prefers-reduced-motion/);
   assert.match(layoutFallbacks, /prefers-contrast/);
 });
+
+test("economics layout owners do not restate settled passage paint", () => {
+  const inline = read("economics-demand-shift-inline-sticky.css");
+  const twoColumn = read("economics-demand-shift-two-column.css");
+  const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
+
+  assert.doesNotMatch(
+    inline,
+    /\[data-kp-inline-sticky-cue\]\.kp-economics-tutorial__passage--active/
+  );
+  assert.doesNotMatch(
+    twoColumn,
+    /\[data-kp-two-column-scroll-paragraph\]\.kp-economics-tutorial__passage--active/
+  );
+  assert.doesNotMatch(
+    twoColumn,
+    /:not\(\[data-kp-two-column-scroll-paragraph\]\)\.kp-economics-tutorial__passage--active/
+  );
+  assert.equal(
+    [...`${inline}\n${layoutFallbacks}`.matchAll(/\n\s*opacity: 1;/g)].length,
+    1,
+    "Only the base inline cue owner should force full prose opacity."
+  );
+});

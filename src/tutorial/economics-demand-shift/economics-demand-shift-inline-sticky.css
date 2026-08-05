@@ -303,14 +303,6 @@
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue].kp-economics-tutorial__passage--active {
-  border-left-color: transparent;
-  background: transparent;
-  box-shadow: none;
-}
-
-.kp-economics-tutorial--inline-sticky
-  #kp-section-market-clearing
   [data-kp-inline-sticky-cue]:focus-within {
   z-index: 2;
 }
@@ -325,6 +317,4 @@
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue] {
   z-index: auto;
-  opacity: 1;
 }
-

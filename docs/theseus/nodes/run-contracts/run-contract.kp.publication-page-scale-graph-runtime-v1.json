@@ -125,7 +125,8 @@
     {
       "id": "s12",
       "title": "Prune-proven-dead-and-duplicate-CSS",
-      "status": "planned"
+      "summary": "Removed three cascade-proven active-state no-op blocks and repeated full-opacity declarations while retaining split, inline rollback, phone, reduced-motion, and contrast owners. Economics CSS falls by 615 minified bytes and 40 gzip bytes; the approved eight-case visual suite and all route performance ceilings pass.",
+      "status": "complete"
     },
     {
       "id": "s13",

@@ -41,12 +41,6 @@
   background: transparent;
 }
 
-.kp-economics-tutorial--two-column-scroll
-  .kp-economics-tutorial__passage:not([data-kp-two-column-scroll-paragraph]).kp-economics-tutorial__passage--active {
-  border-left-color: transparent;
-  background: transparent;
-}
-
 /* Query-local desktop comparison. The same published DOM falls back to the
    accepted one-column inline treatment below 761px. */
 @media (min-width: 60rem) and (min-height: 32rem) {
@@ -211,14 +205,6 @@
     will-change: opacity;
   }
 
-  .kp-economics-tutorial--two-column-scroll
-    #kp-section-market-clearing
-    [data-kp-two-column-scroll-paragraph].kp-economics-tutorial__passage--active {
-    border-left-color: transparent;
-    background: transparent;
-    box-shadow: none;
-  }
-
   :root .kp-economics-tutorial--two-column-scroll
     .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
     --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
@@ -275,4 +261,3 @@
     color: var(--kp-lesson-theme-math-foreground);
   }
 }
-

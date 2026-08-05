@@ -700,6 +700,69 @@
       "scope": "slice s11 durable evidence",
       "checkedAt": "2026-08-05T12:03:44.733Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "slice s12 cascade pruning",
+      "checkedAt": "2026-08-05T12:11:01.371Z",
+      "notes": "Three source gates passed, including the invariant that layout owners do not restate settled passage paint."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "slice s12 production CSS reduction",
+      "checkedAt": "2026-08-05T12:11:02.959Z",
+      "notes": "Build passed; economics CSS fell from 77.29KB to 76.68KB minified and from 30.28KB to 30.24KB gzip."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "slice s12 approved and rollback visual preservation",
+      "checkedAt": "2026-08-05T12:11:04.665Z",
+      "notes": "All eight approved two-column, phone, theme, typography, tuning, and inline rollback cases passed."
+    },
+    {
+      "command": "npm run visual:economics-inline-sticky-poc",
+      "status": "failed",
+      "scope": "slice s12 legacy inline diagnostic",
+      "checkedAt": "2026-08-05T12:11:06.202Z",
+      "notes": "Five of seven cases passed. One stale assertion still requires Inter despite the approved unified Source Serif typography, and the phone motion timing sampled final progress instead of its narrow intermediate corridor. Neither failed assertion is controlled by the removed paint no-ops."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/economics-inline-sticky-layout.browser.spec.ts --grep phone-paragraph-crossing --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "slice s12 legacy phone diagnostic",
+      "checkedAt": "2026-08-05T12:11:07.815Z",
+      "notes": "The isolated legacy phone case reproduced its narrow intermediate-progress timing miss; the canonical phone rollback case in the approved two-column suite passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "slice s12 route CSS and runtime budgets",
+      "checkedAt": "2026-08-05T12:11:09.093Z",
+      "notes": "Production passed at 238933 transfer bytes, 139306 script bytes, 42 resources, zero CLS, 140ms cold longest task, 34.2ms active p95, constant dense-cue reads, and zero SVG rebuilds or replacements."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice s12 CSS ownership test types",
+      "checkedAt": "2026-08-05T12:11:10.849Z",
+      "notes": "The stylesheet ownership and pruning gates compile under the test project."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s12 patch hygiene",
+      "checkedAt": "2026-08-05T12:11:12.268Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s12 durable evidence",
+      "checkedAt": "2026-08-05T12:11:13.658Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [
