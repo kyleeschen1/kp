@@ -115,7 +115,8 @@
     {
       "id": "s11",
       "title": "Gate motion until post-latch travel",
-      "status": "planned"
+      "summary": "Scroll motion remains at exact semantic zero through the shared latch, begins on the first post-latch pixel, and returns continuously to zero under reverse scroll.",
+      "status": "complete"
     },
     {
       "id": "s12",

@@ -124,6 +124,7 @@
   } from "./economics-demand-shift-theme.ts";
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
+  const kpEconomicsScrollStartEpsilon = 0.002;
   type KpEconomicsTutorialScrollTimelineStatus =
     | "idle"
     | "seeking"
@@ -938,10 +939,15 @@
       if (!reducedMotion && ready && player !== undefined && mayProjectScroll && (
         motionOwner === "scroll" ||
         manualCanResume ||
-        active.progress > 0.001 ||
+        active.progress > kpEconomicsScrollStartEpsilon ||
         active.id === "supply-movement"
       )) {
-        let localProgress = active.progress;
+        // Browser scroll positions can settle at a fractional CSS pixel. Snap
+        // that residual to the semantic endpoint while preserving motion on
+        // the first whole post-latch pixel.
+        let localProgress = active.progress <= kpEconomicsScrollStartEpsilon
+          ? 0
+          : active.progress;
         if (manualScrollRebase?.blockId === active.id) {
           const block = findKpEconomicsMotionBlock(active.id)!;
           const boundary = shell?.querySelector<HTMLElement>(

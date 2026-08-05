@@ -196,7 +196,7 @@ test("paragraph salience hands off after predecessor settlement", () => {
   ]);
 });
 
-test("two-column motion begins after focus and completes at 35vh", () => {
+test("two-column motion stays at zero through its post-latch start", () => {
   const corridor = projectKpTwoColumnScrollMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -228,6 +228,13 @@ test("two-column motion begins after focus and completes at 35vh", () => {
     anchorTop: 496,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
+  const firstPostLatchPixel = projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 495,
+    viewportHeight: 800
+  });
+  assert.ok(firstPostLatchPixel.travel > 0);
+  assert.ok(firstPostLatchPixel.progress > 0);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 280,

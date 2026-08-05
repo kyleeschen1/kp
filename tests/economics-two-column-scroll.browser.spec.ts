@@ -165,9 +165,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       width: Math.round(bounds.width)
     };
   })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 415 });
-  await expect.poll(() => demandProgress(root)).toBeLessThan(
-    entryTarget.focusLatch.maximumInitialDemandProgress
-  );
+  await expect.poll(() => demandProgress(root)).toBe(0);
   await expect(initialPassage).toHaveAttribute(
     "data-kp-two-column-paragraph-opacity",
     "1.0000"
@@ -351,14 +349,19 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(demandDistance).toBeGreaterThan(180);
   expect(demandDistance).toBeLessThan(440);
   const motionStart = Math.min(
-    entryBaseline.viewport.height * 0.62,
+    entryTarget.viewport.height * 0.62,
     focusTop + demandDistance
   );
   await placeTopAt(page, demandParagraph, motionStart);
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
+  await expect.poll(() => demandProgress(root)).toBe(0);
   await expect.poll(async () => Number(await demandPassage.getAttribute(
     "data-kp-two-column-paragraph-opacity"
   ))).toBeGreaterThan(0.5);
+
+  await placeTopAt(page, demandParagraph, motionStart - 1);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
+  await placeTopAt(page, demandParagraph, motionStart);
+  await expect.poll(() => demandProgress(root)).toBe(0);
 
   const motionMidpoint = (motionStart + focusTop) / 2;
   await placeTopAt(page, demandParagraph, motionMidpoint);
