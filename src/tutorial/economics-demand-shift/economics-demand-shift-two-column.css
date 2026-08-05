@@ -10,6 +10,8 @@
   --kp-two-column-paragraph-gap-vh: 16;
   --kp-two-column-release-span-vh: 15;
   --kp-two-column-stage-center-vh: 50;
+  --kp-tutorial-persistent-top-inset: 0px;
+  --kp-tutorial-persistent-bottom-inset: 0px;
   --kp-two-column-stage-block-size: 30rem;
   --kp-two-column-passage-width: min(66rem, calc(100vw - 2rem));
   --kp-two-column-focus-top:

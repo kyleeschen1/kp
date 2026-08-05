@@ -85,6 +85,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-05T17:30:07.204Z",
       "notes": "All eight existing Chromium two-column cases remained stable."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run typecheck:svelte; npm run test:economics-demand-shift-css; focused Node geometry tests",
+      "status": "passed",
+      "scope": "slice s09 cached viewport and chrome measurement integration",
+      "checkedAt": "2026-08-05T17:37:57.957Z",
+      "notes": "31 focused geometry/runtime tests, 5 stylesheet ownership tests, Svelte typecheck, and all 9 Chromium exemplar cases passed, including cached root-style-read instrumentation."
     }
   ],
   "expectedLearning": [

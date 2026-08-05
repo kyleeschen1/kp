@@ -105,6 +105,8 @@ test("two-column progressive layout derives prose and graph from one latch", () 
   const twoColumn = read("economics-demand-shift-two-column.css");
 
   assert.match(twoColumn, /--kp-two-column-stage-center-vh: 50;/);
+  assert.match(twoColumn, /--kp-tutorial-persistent-top-inset: 0px;/);
+  assert.match(twoColumn, /--kp-tutorial-persistent-bottom-inset: 0px;/);
   assert.match(
     twoColumn,
     /--kp-two-column-stage-top:\s*calc\(\s*var\(--kp-two-column-stage-center\)\s*-\s*var\(--kp-two-column-stage-block-size\) \/ 2\s*\)/

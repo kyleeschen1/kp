@@ -103,7 +103,8 @@
     {
       "id": "s09",
       "title": "Cache viewport and chrome measurements",
-      "status": "planned"
+      "summary": "Cached CSS viewport ratios and persistent chrome insets at layout invalidation; scroll projections consume an immutable geometry snapshot with no per-frame computed-style reads.",
+      "status": "complete"
     },
     {
       "id": "s10",

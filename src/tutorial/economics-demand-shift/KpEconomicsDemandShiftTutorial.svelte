@@ -79,6 +79,10 @@
     type KpTutorialScrollBlockRegistration
   } from "../kp-tutorial-motion.ts";
   import {
+    projectKpTutorialUsableViewport,
+    projectKpTutorialViewportAnchors
+  } from "../kp-tutorial-usable-viewport.ts";
+  import {
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
     KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
     KP_TUTORIAL_SCRUB_REWIND_EVENT,
@@ -158,6 +162,13 @@
     readonly focusTopRatio: number;
     readonly minimumEffectiveHeightRatio: number;
     readonly motionStartRatio: number;
+    readonly stageCenterRatio: number;
+    readonly stageCenterY: number;
+    readonly textAnchorY: number;
+    readonly usableViewportBottomPx: number;
+    readonly usableViewportHeightPx: number;
+    readonly usableViewportTopPx: number;
+    readonly viewportHeightPx: number;
   }
 
   interface KpEconomicsTutorialRuntimePerformanceApi {
@@ -281,6 +292,8 @@
     string,
     KpEconomicsTwoColumnParagraphPresentation
   >>>({});
+  let cachedTwoColumnScrollGeometry:
+    KpEconomicsTwoColumnScrollGeometry | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
   let twoColumnGeometryQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
@@ -1133,7 +1146,7 @@
       ? undefined
       : inlineStage.getBoundingClientRect();
     const twoColumnGeometry = twoColumnDesktop
-      ? readTwoColumnScrollGeometry()
+      ? readCachedTwoColumnScrollGeometry()
       : undefined;
     const cachedDocumentGeometry = twoColumnDesktop
       ? cueGeometryCache?.documentGeometry()
@@ -1144,7 +1157,9 @@
           geometry: cachedDocumentGeometry,
           scrollY: window.scrollY,
           viewportHeight: window.innerHeight,
-          viewportAnchorRatio: twoColumnGeometry!.focusTopRatio
+          viewportAnchorRatio:
+            twoColumnGeometry!.textAnchorY /
+              twoColumnGeometry!.viewportHeightPx
         });
     const measurements = cueWindow === undefined
       ? [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
@@ -1177,9 +1192,8 @@
             ? cachedDocumentGeometry![cueWindow.startIndex - 1]!.documentTop -
               window.scrollY
             : undefined,
-          focusTopPx:
-            window.innerHeight * twoColumnGeometry!.focusTopRatio,
-          viewportHeightPx: window.innerHeight,
+          focusTopPx: twoColumnGeometry!.textAnchorY,
+          viewportHeightPx: twoColumnGeometry!.viewportHeightPx,
           approachStartRatio: twoColumnGeometry!.approachStartRatio,
           focusBottomRatio: twoColumnGeometry!.focusBottomRatio,
           minimumEffectiveHeightRatio:
@@ -1251,11 +1265,14 @@
         Math.round(window.innerHeight * 0.68)
       : layout.stageHeightPx;
     if (usesTwoColumnDesktopGeometry()) {
+      const geometry = measureTwoColumnScrollGeometry();
       twoColumnStageTopPx = Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
         stageBlockSizePx: inlineStickyStageHeightPx,
-        viewportHeightPx: window.innerHeight,
-        focusTopRatio: readTwoColumnScrollGeometry().focusTopRatio
+        viewportHeightPx: geometry.viewportHeightPx,
+        focusTopRatio: geometry.textAnchorY / geometry.viewportHeightPx
       }).stageTop);
+    } else {
+      cachedTwoColumnScrollGeometry = undefined;
     }
     updateInlineStickyStageProjection();
     updateInlineStickyParagraphProjections();
@@ -1282,18 +1299,18 @@
   }
 
   function inlineStickyTopInset(): number {
-    return usesTwoColumnDesktopGeometry()
-      ? Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
-          stageBlockSizePx: inlineStickyStageHeightPx,
-          viewportHeightPx: window.innerHeight,
-          focusTopRatio: readTwoColumnScrollGeometry().focusTopRatio
-        }).stageTop)
-      : 0;
+    if (!usesTwoColumnDesktopGeometry()) return 0;
+    const geometry = readCachedTwoColumnScrollGeometry();
+    return Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
+      stageBlockSizePx: inlineStickyStageHeightPx,
+      viewportHeightPx: geometry.viewportHeightPx,
+      focusTopRatio: geometry.textAnchorY / geometry.viewportHeightPx
+    }).stageTop);
   }
 
   function inlineStickyHandoffStartY(): number {
     if (usesTwoColumnDesktopGeometry()) {
-      return window.innerHeight * readTwoColumnScrollGeometry().focusTopRatio;
+      return readCachedTwoColumnScrollGeometry().textAnchorY;
     }
     const stageBottom = inlineStage?.getBoundingClientRect().bottom ??
       inlineStickyTopInset() + inlineStickyStageHeightPx;
@@ -1308,6 +1325,7 @@
       return block.corridor;
     }
     if (usesTwoColumnDesktopGeometry()) {
+      const geometry = readCachedTwoColumnScrollGeometry();
       const passage = anchor.closest<HTMLElement>(
         "[data-kp-two-column-scroll-paragraph]"
       );
@@ -1322,10 +1340,9 @@
       return projectKpTwoColumnScrollMotionCorridor({
         corridor: block.corridor,
         paragraphDistancePx,
-        focusTopPx:
-          window.innerHeight * readTwoColumnScrollGeometry().focusTopRatio,
-        viewportHeightPx: window.innerHeight,
-        motionStartRatio: readTwoColumnScrollGeometry().motionStartRatio
+        focusTopPx: geometry.textAnchorY,
+        viewportHeightPx: geometry.viewportHeightPx,
+        motionStartRatio: geometry.motionStartRatio
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1384,23 +1401,74 @@
     updateInlineStickyLayoutProjection();
   }
 
-  function readTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
+  function measureTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
     const style = shell === undefined ? undefined : getComputedStyle(shell);
     const ratio = (name: string, fallbackVh: number): number => {
       const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
       return clamp((Number.isFinite(value) ? value : fallbackVh) / 100, 0, 1);
     };
+    const pixels = (name: string): number => {
+      const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
+      return Number.isFinite(value) ? Math.max(0, value) : 0;
+    };
+    const focusTopRatio = ratio("--kp-two-column-focus-top-vh", 35);
+    const stageCenterRatio = ratio("--kp-two-column-stage-center-vh", 50);
+    const viewport = projectKpTutorialUsableViewport({
+      viewportHeightPx: window.innerHeight,
+      persistentTopInsetPx: pixels("--kp-tutorial-persistent-top-inset"),
+      persistentBottomInsetPx: pixels("--kp-tutorial-persistent-bottom-inset")
+    });
+    const anchors = projectKpTutorialViewportAnchors({
+      viewport,
+      textRatio: focusTopRatio,
+      stageCenterRatio
+    });
     // CSS owns the physical rhythm; enhancement reads the same numeric vh
-    // tokens so scroll semantics cannot drift from the published layout.
-    return Object.freeze({
+    // tokens during layout invalidation, then every scroll frame consumes this
+    // immutable snapshot instead of forcing a fresh style calculation.
+    cachedTwoColumnScrollGeometry = Object.freeze({
       approachStartRatio: ratio("--kp-two-column-approach-start-vh", 78),
       focusBottomRatio: ratio("--kp-two-column-focus-bottom-vh", 50),
-      focusTopRatio: ratio("--kp-two-column-focus-top-vh", 35),
+      focusTopRatio,
       minimumEffectiveHeightRatio: ratio(
         "--kp-two-column-minimum-effective-height-vh",
         23
       ),
-      motionStartRatio: ratio("--kp-two-column-motion-start-vh", 62)
+      motionStartRatio: ratio("--kp-two-column-motion-start-vh", 62),
+      stageCenterRatio,
+      stageCenterY: anchors.stageCenterY,
+      textAnchorY: anchors.textY,
+      usableViewportBottomPx: viewport.bottomPx,
+      usableViewportHeightPx: viewport.heightPx,
+      usableViewportTopPx: viewport.topPx,
+      viewportHeightPx: viewport.viewportHeightPx
+    });
+    return cachedTwoColumnScrollGeometry;
+  }
+
+  function readCachedTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
+    if (cachedTwoColumnScrollGeometry !== undefined) {
+      return cachedTwoColumnScrollGeometry;
+    }
+    // Mount establishes the CSS-backed snapshot before the coordinator starts.
+    // This layout-free fallback keeps direct calls deterministic during setup.
+    const viewport = projectKpTutorialUsableViewport({
+      viewportHeightPx: window.innerHeight
+    });
+    const anchors = projectKpTutorialViewportAnchors({ viewport });
+    return Object.freeze({
+      approachStartRatio: 0.78,
+      focusBottomRatio: 0.5,
+      focusTopRatio: anchors.textRatio,
+      minimumEffectiveHeightRatio: 0.23,
+      motionStartRatio: 0.62,
+      stageCenterRatio: anchors.stageCenterRatio,
+      stageCenterY: anchors.stageCenterY,
+      textAnchorY: anchors.textY,
+      usableViewportBottomPx: viewport.bottomPx,
+      usableViewportHeightPx: viewport.heightPx,
+      usableViewportTopPx: viewport.topPx,
+      viewportHeightPx: viewport.viewportHeightPx
     });
   }
 

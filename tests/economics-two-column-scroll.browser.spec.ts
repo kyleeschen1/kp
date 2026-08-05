@@ -1000,6 +1000,63 @@ test("the accepted inline route remains an independent rollback reference", asyn
   );
 });
 
+test("scroll frames reuse cached two-column viewport geometry", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.addInitScript(() => {
+    const target = window as typeof window & {
+      __kpTwoColumnRootStyleReads?: number;
+    };
+    const nativeGetComputedStyle = window.getComputedStyle;
+    target.__kpTwoColumnRootStyleReads = 0;
+    window.getComputedStyle = function getComputedStyle(
+      element: Element,
+      pseudoElement?: string | null
+    ): CSSStyleDeclaration {
+      if (element.matches("[data-kp-economics-demand-shift-tutorial]")) {
+        target.__kpTwoColumnRootStyleReads =
+          (target.__kpTwoColumnRootStyleReads ?? 0) + 1;
+      }
+      return nativeGetComputedStyle.call(window, element, pseudoElement);
+    };
+  });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-coordinator",
+    "connected"
+  );
+  await page.waitForTimeout(100);
+  const readsAfterMount = await page.evaluate(() => (
+    window as typeof window & { __kpTwoColumnRootStyleReads?: number }
+  ).__kpTwoColumnRootStyleReads ?? 0);
+  expect(readsAfterMount).toBeGreaterThan(0);
+
+  for (const ratio of [0.15, 0.35, 0.6, 0.85, 0.4, 0.1]) {
+    await page.evaluate((scrollRatio) => {
+      window.scrollTo({
+        top: (document.documentElement.scrollHeight - window.innerHeight) *
+          scrollRatio,
+        behavior: "auto"
+      });
+    }, ratio);
+    await page.evaluate(() => new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    ));
+  }
+  const readsAfterScroll = await page.evaluate(() => (
+    window as typeof window & { __kpTwoColumnRootStyleReads?: number }
+  ).__kpTwoColumnRootStyleReads ?? 0);
+  expect(readsAfterScroll).toBe(readsAfterMount);
+
+  await page.setViewportSize({ width: 1280, height: 760 });
+  await expect.poll(() => page.evaluate(() => (
+    window as typeof window & { __kpTwoColumnRootStyleReads?: number }
+  ).__kpTwoColumnRootStyleReads ?? 0)).toBeGreaterThan(readsAfterScroll);
+});
+
 function card(root: Locator, passageId: string): Locator {
   return root.locator(
     `[data-kp-economics-tutorial-passage="${passageId}"]`
