@@ -14,6 +14,9 @@ import {
 import {
   renderKpDimensionalContinuityInlineLatex
 } from "./dimensional-continuity-graph-profile.ts";
+import {
+  createKpEconomicsEquilibriumSynchronizedView
+} from "../animation/economics-equilibrium-synchronized-view.ts";
 
 export interface KpEconomicsEquilibriumRuntimeSessionInput {
   readonly content: SVGGElement;
@@ -51,6 +54,48 @@ const scaffoldStates = new WeakMap<
   KpEconomicsEquilibriumMountedScaffold,
   KpEconomicsEquilibriumScaffoldState
 >();
+
+const runtimeSessions = new WeakMap<
+  SVGGElement,
+  KpEconomicsEquilibriumRuntimeSession
+>();
+
+export function createKpEconomicsEquilibriumRuntimeSession(
+  input: KpEconomicsEquilibriumRuntimeSessionInput
+): KpEconomicsEquilibriumRuntimeSession {
+  const extant = runtimeSessions.get(input.content);
+  if (extant?.status === "mounted") {
+    extant.apply({ frame: input.frame, viewport: input.viewport });
+    return extant;
+  }
+  const scaffold = mountKpEconomicsEquilibriumRuntimeScaffold(input);
+  let disposed = false;
+  const session: KpEconomicsEquilibriumRuntimeSession = Object.freeze({
+    content: input.content,
+    get status() {
+      return disposed ? "disposed" as const : "mounted" as const;
+    },
+    apply(next: {
+      readonly frame: KpEconomicsEquilibriumRuntimeFrame;
+      readonly viewport: KpEconomicsGraphViewport;
+    }) {
+      if (disposed) {
+        throw new Error("Cannot apply a disposed economics runtime session.");
+      }
+      patchKpEconomicsEquilibriumMathLabels({ scaffold, ...next });
+      patchKpEconomicsEquilibriumSynchronizedContent({ scaffold, ...next });
+    },
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      scaffold.dispose();
+      runtimeSessions.delete(input.content);
+    }
+  });
+  runtimeSessions.set(input.content, session);
+  session.apply({ frame: input.frame, viewport: input.viewport });
+  return session;
+}
 
 export function mountKpEconomicsEquilibriumRuntimeScaffold(
   input: KpEconomicsEquilibriumRuntimeSessionInput
@@ -439,6 +484,92 @@ export function patchKpEconomicsEquilibriumMathLabels(input: {
       );
     }
   });
+}
+
+function patchKpEconomicsEquilibriumSynchronizedContent(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly frame: KpEconomicsEquilibriumRuntimeFrame;
+  readonly viewport: KpEconomicsGraphViewport;
+}): void {
+  const synchronized = createKpEconomicsEquilibriumSynchronizedView(input.frame);
+  const description = requireElement<SVGDescElement>(
+    input.scaffold.view,
+    "[data-kp-economics-nonvisual-summary]"
+  );
+  if (description.textContent !== synchronized.nonvisualSummary) {
+    description.textContent = synchronized.nonvisualSummary;
+  }
+  const explanation = requireElement<HTMLElement>(
+    input.scaffold.view,
+    "[data-kp-economics-synchronized-view]"
+  );
+  setAttributeIfChanged(
+    explanation,
+    "data-kp-economics-narrative-id",
+    synchronized.narrative.id
+  );
+  setAttributeIfChanged(
+    explanation,
+    "data-kp-economics-claim-ids",
+    synchronized.narrative.claimIds.join(" ")
+  );
+  patchSynchronizedDemandEquation(
+    requireElement(explanation, '[data-kp-economics-equation-role="demand"]'),
+    synchronized.equations.demandLatex
+  );
+  patchSynchronizedEquilibriumEquation(
+    requireElement(
+      explanation,
+      '[data-kp-economics-equation-role="equilibrium"]'
+    ),
+    synchronized.equations.equilibriumLatex
+  );
+  const narrative = requireElement<HTMLParagraphElement>(
+    explanation,
+    "[data-kp-economics-narrative]"
+  );
+  if (narrative.textContent !== synchronized.narrative.text) {
+    narrative.textContent = synchronized.narrative.text;
+  }
+}
+
+function patchSynchronizedDemandEquation(
+  owner: HTMLElement,
+  latex: string
+): void {
+  setAttributeIfChanged(owner, "data-kp-latex", latex);
+  const relation = requireElement<HTMLElement>(owner, ".katex-html .mrel");
+  relation.textContent = latex.includes("\\approx") ? "≈" : "=";
+  const intercept = requireElement<HTMLElement>(
+    owner,
+    ".katex-html > .base:nth-child(2) > .mord"
+  );
+  const match = latex.match(/(?:=|\\approx)\s+([^\s]+)/);
+  if (match?.[1] === undefined) {
+    throw new Error("Economics synchronized demand notation diverged.");
+  }
+  intercept.textContent = match[1];
+}
+
+function patchSynchronizedEquilibriumEquation(
+  owner: HTMLElement,
+  latex: string
+): void {
+  setAttributeIfChanged(owner, "data-kp-latex", latex);
+  const relations = owner.querySelectorAll<HTMLElement>(".katex-html .mrel");
+  if (relations.length !== 2) {
+    throw new Error("Economics synchronized equilibrium relation topology diverged.");
+  }
+  relations[1]!.textContent = latex.includes("\\approx") ? "≈" : "=";
+  const values = owner.querySelectorAll<HTMLElement>(
+    ".katex-html > .base:nth-child(3) > .mord"
+  );
+  const match = latex.match(/\(([^,]+),\s*([^\)]+)\)$/);
+  if (values.length !== 2 || match?.[1] === undefined || match[2] === undefined) {
+    throw new Error("Economics synchronized equilibrium value topology diverged.");
+  }
+  values[0]!.textContent = match[1];
+  values[1]!.textContent = match[2];
 }
 
 function patchCurveRoleLabel(

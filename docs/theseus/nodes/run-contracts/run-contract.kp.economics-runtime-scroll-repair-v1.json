@@ -132,7 +132,8 @@
     {
       "id": "s11",
       "title": "Retain-accessibility-and-disposal-owners",
-      "status": "planned"
+      "summary": "Cut the economics exemplar over to one mounted runtime session that owns retained SVG and KaTeX nodes, synchronized accessible truth, screen-label reconciliation, and player-bound disposal; all other graph callers remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s12",

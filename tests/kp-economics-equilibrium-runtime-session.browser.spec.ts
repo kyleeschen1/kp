@@ -146,6 +146,25 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     observer.disconnect();
     first.dispose();
     first.dispose();
+    const fullSession = runtime.createKpEconomicsEquilibriumRuntimeSession({
+      content,
+      frame: shiftFrame,
+      viewport: input.viewport
+    });
+    const shiftedDescription = content.querySelector(
+      "[data-kp-economics-nonvisual-summary]"
+    )?.textContent;
+    fullSession.apply({ frame: sample(1), viewport: input.viewport });
+    const settledDescription = content.querySelector(
+      "[data-kp-economics-nonvisual-summary]"
+    )?.textContent;
+    fullSession.dispose();
+    let disposedApplyThrows = false;
+    try {
+      fullSession.apply({ frame, viewport: input.viewport });
+    } catch {
+      disposedApplyThrows = true;
+    }
 
     return {
       descendants,
@@ -173,7 +192,12 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
           '[data-kp-economics-math-label="equilibrium-reference"]'
         ) === null,
       demandReferenceLabelRetained,
+      disposedApplyThrows,
       equilibriumReferenceLabelRetained,
+      settledDescriptionHasFinalEquilibrium:
+        settledDescription?.includes("quantity 8 and price 10") ?? false,
+      shiftedDescriptionHasIntermediateEquilibrium:
+        shiftedDescription?.includes("quantity 7 and price 9") ?? false,
       guideGroupRemovedAtEstablish: initialView.querySelector(
         "[data-kp-economics-initial-equilibrium-guides]"
       ) === null,
@@ -212,7 +236,10 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     equilibriumValues: ["7.00", "9.00"],
     discreteLabelsRemovedAtEstablish: true,
     demandReferenceLabelRetained: true,
+    disposedApplyThrows: true,
     equilibriumReferenceLabelRetained: true,
+    settledDescriptionHasFinalEquilibrium: true,
+    shiftedDescriptionHasIntermediateEquilibrium: true,
     guideGroupRemovedAtEstablish: true,
     guideGroupRetained: true,
     firstGridLineRetained: true,

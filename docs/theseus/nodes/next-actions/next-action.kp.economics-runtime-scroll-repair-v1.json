@@ -214,6 +214,34 @@
       "scope": "s10 durable evidence integrity",
       "checkedAt": "2026-08-05T07:31:42.249Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s11 composed lifecycle and accessibility owner",
+      "checkedAt": "2026-08-05T07:38:01.963Z",
+      "notes": "Chromium proved the complete session updates intermediate and settled nonvisual summaries, rejects apply after disposal, and retains its explicit idempotent lifecycle."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s11 production economics runtime cutover",
+      "checkedAt": "2026-08-05T07:38:03.043Z",
+      "notes": "All 12 production tutorial browser checks passed across manual scrub, supply playback, URL and TOC restoration, reduced motion, static enhancement, phone layout, and cumulative state."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s11 canonical production visual preservation",
+      "checkedAt": "2026-08-05T07:38:04.049Z",
+      "notes": "All six canonical checks passed on the production retained runtime. A parallel command briefly contended for the test port, but this visual command completed successfully; the scoped runtime command then passed alone."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s11 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:38:05.188Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [
