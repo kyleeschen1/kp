@@ -185,7 +185,8 @@
     {
       "id": "s22",
       "title": "Close-multi-passage-performance-boundary",
-      "status": "planned"
+      "summary": "Closed Phase 6 with an enforceable page-scale performance contract exercised through the real coordinator and runtime hosts at one, three, and twelve passages: initial geometry scales once with document size, ordinary scroll performs zero registration or layout reads, exact projection stays within five blocks, activation and hydration stay within three stages, one motion owner remains, and capability loads deduplicate by identity. Preserved economics, canonical visuals, WebGL/Graph3D, architecture, full types, production build, and unchanged route budgets all pass.",
+      "status": "complete"
     },
     {
       "id": "s23",

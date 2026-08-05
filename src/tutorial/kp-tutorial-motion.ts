@@ -1,3 +1,7 @@
+import {
+  kpTutorialPageScalePerformanceBudget
+} from "./kp-tutorial-page-scale-performance.ts";
+
 export interface KpTutorialMotionCheckpoint<Id extends string = string> {
   readonly id: Id;
   readonly label: string;
@@ -534,11 +538,13 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.profileExecution = options.profileExecution ?? false;
     this.now = options.now ?? (() => this.view.performance.now());
     this.projectionNeighborhoodRadius = nonnegativeInteger(
-      options.projectionNeighborhoodRadius ?? 2,
+      options.projectionNeighborhoodRadius ??
+        kpTutorialPageScalePerformanceBudget.projectionNeighborhoodRadius,
       "Tutorial projection neighborhood radius"
     );
     this.maxNearViewportBlocks = positiveInteger(
-      options.maxNearViewportBlocks ?? 3,
+      options.maxNearViewportBlocks ??
+        kpTutorialPageScalePerformanceBudget.maxNearViewportBlocks,
       "Tutorial near-viewport block limit"
     );
     const geometryRegistrations = () => this.currentRegistrations().map(

@@ -1178,6 +1178,76 @@
       "status": "passed",
       "scope": "slice s21 evidence integrity",
       "checkedAt": "2026-08-05T13:15:22.885Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s22 deterministic page-scale boundary",
+      "checkedAt": "2026-08-05T13:27:00.726Z",
+      "notes": "26 tests passed across 1, 3, and 12 passages: one scroll listener and scheduled frame, projection at most five blocks, near/live at most three, zero ordinary-scroll geometry reads, one motion owner, and one capability load per identity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 page-scale performance types",
+      "checkedAt": "2026-08-05T13:27:01.806Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s22 economics semantic preservation",
+      "checkedAt": "2026-08-05T13:27:02.783Z",
+      "notes": "All 42 economics semantic, layout, runtime, static SVG, and conformance tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 dependency direction",
+      "checkedAt": "2026-08-05T13:27:03.710Z",
+      "notes": "All four architecture gates passed; the performance boundary adds no framework, renderer, or domain authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/webgl-context-lease-pool.test.ts",
+      "status": "passed",
+      "scope": "s22 bounded resource preservation",
+      "checkedAt": "2026-08-05T13:27:04.645Z",
+      "notes": "All five WebGL lease pressure and cleanup tests passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s22 real learner preservation",
+      "checkedAt": "2026-08-05T13:27:05.591Z",
+      "notes": "All 12 Chromium learner behavior, direct seek, history, accessibility, reduced-motion, static, and phone checks passed."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s22 canonical visual preservation",
+      "checkedAt": "2026-08-05T13:27:06.521Z",
+      "notes": "All eight accepted two-column midnight, paper, side, spacing, line, phone, and rollback cases passed."
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s22 existing Graph3D caller preservation",
+      "checkedAt": "2026-08-05T13:27:07.452Z",
+      "notes": "Both bounded context acquisition/release and context-loss semantic SVG fallback checks passed."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s22 production route and motion budgets",
+      "checkedAt": "2026-08-05T13:27:08.370Z",
+      "notes": "Production build and probe passed: 239343 transfer bytes, 139716 script bytes, 42 resources, CLS 0, 146ms initial longest task, 33.6ms active p95, and zero active registration/layout reads."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22 patch hygiene",
+      "checkedAt": "2026-08-05T13:27:09.316Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
