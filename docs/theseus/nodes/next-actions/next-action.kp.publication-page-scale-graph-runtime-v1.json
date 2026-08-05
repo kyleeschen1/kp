@@ -70,6 +70,48 @@
       "scope": "s01 control-plane integrity",
       "checkedAt": "2026-08-05T10:04:05.156Z",
       "notes": "Workspace validation passed after contract creation, approval capture, and baseline evidence."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s02 attribution typing diagnostic",
+      "checkedAt": "2026-08-05T10:16:18.581Z",
+      "notes": "The first full attribution build stopped before browser execution because exactOptionalPropertyTypes rejected an explicit undefined optional chunk name; the evidence mapper now conditionally includes that field."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s02 route attribution baseline",
+      "checkedAt": "2026-08-05T10:16:20.099Z",
+      "notes": "Production build and browser budgets passed. The attached manifest/network ledger attributes 42 loaded JS, four CSS, and two font files, including 257841 minified runtime-KaTeX bytes, 77648 catalogue bytes, 68569 unrelated graph-domain bytes, and 85167 shared viewport bytes."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s02 final concise attribution probe",
+      "checkedAt": "2026-08-05T10:16:21.082Z",
+      "notes": "The final probe passed and emitted concise category totals while retaining the complete per-file manifest and loaded-resource ledger as the test attachment."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s02 attribution types",
+      "checkedAt": "2026-08-05T10:16:23.426Z",
+      "notes": "The manifest traversal, loaded-resource matching, and category evidence types passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s02 patch hygiene",
+      "checkedAt": "2026-08-05T10:16:25.700Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s02 durable evidence integrity",
+      "checkedAt": "2026-08-05T10:16:28.223Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

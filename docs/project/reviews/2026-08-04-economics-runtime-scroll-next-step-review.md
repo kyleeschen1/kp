@@ -336,6 +336,26 @@ measured `110ms` and passed. Both results remain evidence of the already-known
 cold-start variance rather than a widened budget. All eight canonical visual
 cases passed at contract activation.
 
+The production probe now attributes both the static entry closure and every
+resource actually loaded by the route. Minified on-disk bytes are intentionally
+separate from compressed network transfer:
+
+| Loaded route category | Minified bytes before closure |
+| --- | ---: |
+| Runtime KaTeX JavaScript | 257,841 |
+| Catalogue/library JavaScript | 77,648 |
+| Unrelated graph-domain JavaScript | 68,569 |
+| Shared graph viewport JavaScript | 85,167 |
+| Economics JavaScript and CSS | 159,368 |
+| KaTeX CSS | 28,835 |
+| Loaded KaTeX fonts | 42,712 |
+| Other route CSS | 86,739 |
+
+The loaded graph-domain category names the current physics, integral, matrix,
+linear-map, focus-profile, and propagation chunks rather than inferring waste
+from total build output. Later closure slices must remove them from this route
+without hiding them in a renamed shared chunk.
+
 ## Phase 5: Reduce Route And CSS Closure After Approval
 
 After the Phase-4 visual checkpoint, split the shared graph viewport's static

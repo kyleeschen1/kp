@@ -65,7 +65,8 @@
     {
       "id": "s02",
       "title": "Attribute-route-modules-KaTeX-and-CSS",
-      "status": "planned"
+      "summary": "Extended the stable production probe with recursive Vite-manifest and actual loaded-resource attribution, recording exact runtime KaTeX, catalogue, unrelated graph-domain, graph viewport, CSS, and font closure without changing learner behavior or budgets.",
+      "status": "complete"
     },
     {
       "id": "s03",

@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync, statSync } from "node:fs";
+import { basename, resolve } from "node:path";
 
 import type {
   KpTutorialScrollCoordinatorMetrics
@@ -8,6 +10,8 @@ import type {
 } from "../src/editor/graph-svg-viewport.ts";
 
 const route = "/tutorials/economics/demand-shift/?layout=two-column-scroll";
+const routeEntry =
+  "src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts";
 // These ceilings leave bounded machine variance above the production exemplar,
 // while making an eager heavy renderer or duplicated scroll clock fail loudly.
 const budgets = Object.freeze({
@@ -36,9 +40,156 @@ interface KpGraphRuntimePerformanceApi {
   readonly snapshot: () => KpEconomicsGraphRuntimeMetrics;
 }
 
+interface ViteManifestChunk {
+  readonly file: string;
+  readonly name?: string;
+  readonly imports?: readonly string[];
+  readonly css?: readonly string[];
+  readonly assets?: readonly string[];
+}
+
+function readEconomicsRouteBuildAttribution(): {
+  readonly entry: string;
+  readonly javascript: readonly RouteBuildFile[];
+  readonly css: readonly RouteBuildFile[];
+  readonly assets: readonly RouteBuildFile[];
+  readonly totals: Record<string, number>;
+  readonly manifestJavascript: readonly RouteBuildFile[];
+  readonly manifestCss: readonly RouteBuildFile[];
+  readonly manifestAssets: readonly RouteBuildFile[];
+} {
+  const manifest = JSON.parse(readFileSync(
+    resolve(process.cwd(), "dist/.vite/manifest.json"),
+    "utf8"
+  )) as Record<string, ViteManifestChunk>;
+  const entry = manifest[routeEntry];
+  if (entry === undefined) throw new Error(`Missing Vite entry ${routeEntry}.`);
+  const directImports = new Set(entry.imports ?? []);
+  const visited = new Set<string>();
+  const visit = (key: string): void => {
+    if (visited.has(key)) return;
+    const chunk = manifest[key];
+    if (chunk === undefined) throw new Error(`Missing Vite manifest chunk ${key}.`);
+    visited.add(key);
+    for (const imported of chunk.imports ?? []) visit(imported);
+  };
+  visit(routeEntry);
+
+  const javascript = [...visited].map((key): RouteBuildFile => {
+    const chunk = manifest[key]!;
+    return routeBuildFile({
+      key,
+      file: chunk.file,
+      ...(chunk.name === undefined ? {} : { name: chunk.name }),
+      direct: key === routeEntry || directImports.has(key)
+    });
+  }).sort(compareRouteBuildFiles);
+  const cssFiles = new Set<string>();
+  const assetFiles = new Set<string>();
+  for (const key of visited) {
+    const chunk = manifest[key]!;
+    for (const file of chunk.css ?? []) cssFiles.add(file);
+    for (const file of chunk.assets ?? []) assetFiles.add(file);
+  }
+  const css = [...cssFiles].map((file) => routeBuildFile({ file }))
+    .sort(compareRouteBuildFiles);
+  const assets = [...assetFiles].map((file) => routeBuildFile({ file }))
+    .sort(compareRouteBuildFiles);
+  const manifestFiles = new Map<string, RouteBuildFile>();
+  for (const [key, chunk] of Object.entries(manifest)) {
+    if (!chunk.file.startsWith("assets/")) continue;
+    manifestFiles.set(chunk.file, routeBuildFile({
+      key,
+      file: chunk.file,
+      ...(chunk.name === undefined ? {} : { name: chunk.name })
+    }));
+  }
+  for (const file of [...css, ...assets]) {
+    if (!manifestFiles.has(file.file)) manifestFiles.set(file.file, file);
+  }
+  const manifestJavascript = [...manifestFiles.values()]
+    .filter(({ file }) => file.endsWith(".js"))
+    .sort(compareRouteBuildFiles);
+  const manifestCss = [...manifestFiles.values()]
+    .filter(({ file }) => file.endsWith(".css"))
+    .sort(compareRouteBuildFiles);
+  const manifestAssets = [...manifestFiles.values()]
+    .filter(({ file }) => !file.endsWith(".js") && !file.endsWith(".css"))
+    .sort(compareRouteBuildFiles);
+  return {
+    entry: entry.file,
+    javascript,
+    css,
+    assets,
+    totals: Object.fromEntries([
+      ...new Set([...javascript, ...css, ...assets].map(({ category }) => category))
+    ].sort().map((category) => [category, [...javascript, ...css, ...assets]
+      .filter((file) => file.category === category)
+      .reduce((total, { bytes }) => total + bytes, 0)])),
+    manifestJavascript,
+    manifestCss,
+    manifestAssets
+  };
+}
+
+interface RouteBuildFile {
+  readonly key?: string;
+  readonly file: string;
+  readonly name?: string;
+  readonly bytes: number;
+  readonly category: string;
+  readonly direct?: boolean;
+}
+
+function routeBuildFile(input: {
+  readonly key?: string;
+  readonly file: string;
+  readonly name?: string;
+  readonly direct?: boolean;
+}): RouteBuildFile {
+  return {
+    ...input,
+    bytes: statSync(resolve(process.cwd(), "dist", input.file)).size,
+    category: routeBuildCategory(`${input.name ?? ""} ${input.file}`)
+  };
+}
+
+function routeBuildCategory(value: string): string {
+  if (/katex/i.test(value) && /\.js$/i.test(value)) return "runtime-katex-js";
+  if (/katex/i.test(value) && /\.css$/i.test(value)) return "katex-css";
+  if (/katex/i.test(value)) return "katex-font";
+  if (/catalogue|animation-library/i.test(value)) return "catalogue";
+  if (/integral|matrix|constant-force|physics|dot-projection|vector-projection|linear-map|propagation-compiler|focus-profile/i
+    .test(value)) return "unrelated-graph-domain";
+  if (/graph-svg-viewport/i.test(value)) return "shared-graph-viewport";
+  if (/economics/i.test(value)) return "economics";
+  if (/\.css$/i.test(value)) return "other-css";
+  return "shared-runtime";
+}
+
+function compareRouteBuildFiles(left: RouteBuildFile, right: RouteBuildFile): number {
+  return left.category.localeCompare(right.category) ||
+    left.file.localeCompare(right.file);
+}
+
+function routeBuildTotals(files: readonly RouteBuildFile[]): Record<string, number> {
+  return Object.fromEntries([
+    ...new Set(files.map(({ category }) => category))
+  ].sort().map((category) => [category, files
+    .filter((file) => file.category === category)
+    .reduce((total, { bytes }) => total + bytes, 0)]));
+}
+
 test("production economics tutorial stays inside publication and motion budgets", async ({
   page
 }, testInfo) => {
+  const buildAttribution = readEconomicsRouteBuildAttribution();
+  const {
+    manifestJavascript,
+    manifestCss,
+    manifestAssets,
+    ...routeBuild
+  } = buildAttribution;
   await page.setViewportSize({ width: 1_280, height: 720 });
   await page.addInitScript(() => {
     const target = window as typeof window & {
@@ -303,9 +454,40 @@ test("production economics tutorial stays inside publication and motion budgets"
     };
   });
 
-  const evidence = { budgets, initial, active };
+  const loadedFiles = new Set(initial.resources.map(({ name }) => name));
+  const loadedJavascript = manifestJavascript.filter(({ file }) =>
+    loadedFiles.has(basename(file)));
+  const loadedCss = manifestCss.filter(({ file }) =>
+    loadedFiles.has(basename(file)));
+  const loadedAssets = manifestAssets.filter(({ file }) =>
+    loadedFiles.has(basename(file)));
+  const loadedRouteBuild = {
+    javascript: loadedJavascript,
+    css: loadedCss,
+    assets: loadedAssets,
+    totals: routeBuildTotals([...loadedJavascript, ...loadedCss, ...loadedAssets])
+  };
+  const evidence = { budgets, routeBuild, loadedRouteBuild, initial, active };
+  const consoleEvidence = {
+    budgets,
+    routeBuild: {
+      entry: routeBuild.entry,
+      javascriptFiles: routeBuild.javascript.length,
+      cssFiles: routeBuild.css.length,
+      assetFiles: routeBuild.assets.length,
+      totals: routeBuild.totals
+    },
+    loadedRouteBuild: {
+      javascriptFiles: loadedRouteBuild.javascript.length,
+      cssFiles: loadedRouteBuild.css.length,
+      assetFiles: loadedRouteBuild.assets.length,
+      totals: loadedRouteBuild.totals
+    },
+    initial,
+    active
+  };
   console.info("KP economics tutorial performance\n" +
-    JSON.stringify(evidence, null, 2));
+    JSON.stringify(consoleEvidence, null, 2));
   await testInfo.attach("economics-tutorial-performance", {
     body: JSON.stringify(evidence, null, 2),
     contentType: "application/json"
