@@ -29,6 +29,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-05T17:10:18.745Z",
       "notes": "Eight Chromium cases passed; the new baseline fixture records stage center 280 against the current 280 paragraph anchor before repair."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T17:12:28.183Z",
+      "notes": "Twenty-eight page-scale and lifecycle tests passed."
     }
   ],
   "expectedLearning": [

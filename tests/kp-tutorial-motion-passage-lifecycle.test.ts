@@ -5,6 +5,7 @@ import test from "node:test";
 import {
   disposeKpTutorialMotionPassage,
   projectKpTutorialMotionPassageLifecycle,
+  projectKpTutorialScrollPassagePhase,
   type KpTutorialMotionPassage
 } from "../src/tutorial/kp-tutorial-motion-passage-lifecycle.ts";
 
@@ -154,6 +155,58 @@ test("invalid focus, progress, identity, and hydration policy fail closed", () =
     reducedMotion: false,
     policy: { maxHydratedPassages: 0 }
   }), /positive integer/);
+});
+
+test("scroll passage phases depend on position rather than traversal history", () => {
+  const timeline = {
+    entryLatchScrollY: 100,
+    motionStartScrollY: 120,
+    terminalLatchScrollY: 500,
+    releaseScrollY: 560
+  };
+  const positions = [80, 100, 119, 120, 499, 500, 559, 560];
+  const forward = positions.map((scrollY) =>
+    projectKpTutorialScrollPassagePhase({ scrollY, timeline })
+  );
+  const reverse = [...positions].reverse().map((scrollY) =>
+    projectKpTutorialScrollPassagePhase({ scrollY, timeline })
+  ).reverse();
+
+  assert.deepEqual(forward, reverse);
+  assert.deepEqual(forward.map(({ phase }) => phase), [
+    "ordinary-document",
+    "entry-latched",
+    "entry-latched",
+    "scrubbing",
+    "scrubbing",
+    "terminal-latched",
+    "terminal-latched",
+    "released"
+  ]);
+  assert.deepEqual(forward.map(({ motionEligible }) => motionEligible), [
+    false, false, false, true, true, false, false, false
+  ]);
+});
+
+test("scroll passage timelines reject non-finite and unordered authority", () => {
+  assert.throws(() => projectKpTutorialScrollPassagePhase({
+    scrollY: Number.NaN,
+    timeline: {
+      entryLatchScrollY: 0,
+      motionStartScrollY: 1,
+      terminalLatchScrollY: 2,
+      releaseScrollY: 3
+    }
+  }), /scroll position must be finite/);
+  assert.throws(() => projectKpTutorialScrollPassagePhase({
+    scrollY: 0,
+    timeline: {
+      entryLatchScrollY: 0,
+      motionStartScrollY: 2,
+      terminalLatchScrollY: 1,
+      releaseScrollY: 3
+    }
+  }), /thresholds must be ordered/);
 });
 
 function passage(

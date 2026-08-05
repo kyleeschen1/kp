@@ -68,6 +68,53 @@ export interface KpTutorialMotionPassageLifecyclePlan<
   >[];
 }
 
+export type KpTutorialScrollPassagePhase =
+  | "ordinary-document"
+  | "entry-latched"
+  | "scrubbing"
+  | "terminal-latched"
+  | "released";
+
+export interface KpTutorialScrollPassageTimeline {
+  readonly entryLatchScrollY: number;
+  readonly motionStartScrollY: number;
+  readonly terminalLatchScrollY: number;
+  readonly releaseScrollY: number;
+}
+
+export interface KpTutorialScrollPassagePhaseProjection {
+  readonly phase: KpTutorialScrollPassagePhase;
+  readonly motionEligible: boolean;
+}
+
+/**
+ * Physical scroll state is projected from position alone. Keeping direction
+ * out of this contract makes browser history, direct seek, and reverse scroll
+ * settle to the same state without reconstructing prior events.
+ */
+export function projectKpTutorialScrollPassagePhase(input: {
+  readonly scrollY: number;
+  readonly timeline: KpTutorialScrollPassageTimeline;
+}): KpTutorialScrollPassagePhaseProjection {
+  assertScrollPassageTimeline(input.timeline);
+  if (!Number.isFinite(input.scrollY)) {
+    throw new Error("Tutorial passage scroll position must be finite.");
+  }
+  const phase = input.scrollY < input.timeline.entryLatchScrollY
+    ? "ordinary-document" as const
+    : input.scrollY < input.timeline.motionStartScrollY
+      ? "entry-latched" as const
+      : input.scrollY < input.timeline.terminalLatchScrollY
+        ? "scrubbing" as const
+        : input.scrollY < input.timeline.releaseScrollY
+          ? "terminal-latched" as const
+          : "released" as const;
+  return Object.freeze({
+    phase,
+    motionEligible: phase === "scrubbing"
+  });
+}
+
 /**
  * Pure lifecycle policy stops before DOM, framework, and renderer ownership.
  * Hosts may realize reserved geometry differently while sharing one bounded
@@ -260,4 +307,23 @@ function proximityRank(proximity: KpTutorialMotionPassageProximity): number {
   if (proximity === "visible") return 2;
   if (proximity === "near") return 1;
   return 0;
+}
+
+function assertScrollPassageTimeline(
+  timeline: KpTutorialScrollPassageTimeline
+): void {
+  const thresholds = [
+    timeline.entryLatchScrollY,
+    timeline.motionStartScrollY,
+    timeline.terminalLatchScrollY,
+    timeline.releaseScrollY
+  ];
+  if (thresholds.some((value) => !Number.isFinite(value))) {
+    throw new Error("Tutorial passage timeline thresholds must be finite.");
+  }
+  for (let index = 1; index < thresholds.length; index += 1) {
+    if (thresholds[index]! < thresholds[index - 1]!) {
+      throw new Error("Tutorial passage timeline thresholds must be ordered.");
+    }
+  }
 }

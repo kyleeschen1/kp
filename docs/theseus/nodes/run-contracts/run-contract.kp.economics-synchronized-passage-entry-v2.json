@@ -61,7 +61,8 @@
     {
       "id": "s02",
       "title": "Define passage lifecycle states",
-      "status": "planned"
+      "summary": "Added direction-independent ordinary, latch, scrub, terminal, and release passage phases with fail-closed timeline validation.",
+      "status": "complete"
     },
     {
       "id": "s03",
