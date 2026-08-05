@@ -443,6 +443,20 @@
       "scope": "s19 patch hygiene",
       "checkedAt": "2026-08-05T08:33:40.532Z",
       "notes": "Passed with no whitespace errors."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s20 semantic navigation and manual settlement",
+      "checkedAt": "2026-08-05T08:36:04.491Z",
+      "notes": "Passed all 12 Chromium cases, including manual demand rebase, supply handoff, direct links, TOC/history restoration, reduced motion, and phone."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s20 two-column forward and reverse settlement",
+      "checkedAt": "2026-08-05T08:36:05.789Z",
+      "notes": "Passed all 6 Chromium cases; the canonical desktop case returned to the same midpoint in reverse and retained the final settled frame through release."
     }
   ],
   "expectedLearning": [

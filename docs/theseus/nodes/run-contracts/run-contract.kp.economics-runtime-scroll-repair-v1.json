@@ -186,7 +186,8 @@
     {
       "id": "s20",
       "title": "Prove-URL-TOC-manual-and-reverse-settlement",
-      "status": "planned"
+      "summary": "Proved cached-coordinator parity for manual-to-scroll rebase, exact forward/reverse frames, cumulative supply handoff, semantic deep links, TOC/history restoration, reduced motion, phone, and rollback routes.",
+      "status": "complete"
     },
     {
       "id": "s21",
