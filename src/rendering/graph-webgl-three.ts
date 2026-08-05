@@ -20,6 +20,10 @@ import type {
   Graph3DObject,
   GraphPoint3D
 } from "../semantic/graph.ts";
+import type {
+  KpGraph3DResolvedVisualRoles,
+  KpGraph3DRuntimeFrame
+} from "./graph-3d-runtime-protocol.ts";
 import {
   GRAPH_3D_WEBGL_RENDERER_KIND,
   createGraph3DWebGLSceneModel,
@@ -46,10 +50,39 @@ const AXIS_ARROW_RADIUS = 0.075;
 const AXIS_HALO_ARROW_RADIUS = 0.115;
 const AXIS_HALO_RADIUS = 0.032;
 const AXIS_RADIUS = 0.018;
-const GRAPH_BACKGROUND_COLOR = 0xfffdf8;
-const SURFACE_BORDER_COLOR = 0x315e6d;
 const SURFACE_BORDER_RADIUS = 0.012;
 const THREE_Y_AXIS = new Vector3(0, 1, 0);
+const DEFAULT_GRAPH_3D_VISUAL_ROLES: KpGraph3DResolvedVisualRoles =
+  Object.freeze({
+    background: Object.freeze({
+      color: "#fffdf8",
+      opacity: 1,
+      apparentWidth: 0
+    }),
+    axis: Object.freeze({ color: "#394756", opacity: 1, apparentWidth: 1 }),
+    "axis-accent": Object.freeze({
+      color: "#2b6f59",
+      opacity: 1,
+      apparentWidth: 1
+    }),
+    "axis-occluded": Object.freeze({
+      color: "#fffdf8",
+      opacity: 1,
+      apparentWidth: 1
+    }),
+    surface: Object.freeze({ color: "#7faabd", opacity: 0.76, apparentWidth: 0 }),
+    "surface-grid": Object.freeze({
+      color: "#53798a",
+      opacity: 0.64,
+      apparentWidth: 1
+    }),
+    "surface-border": Object.freeze({
+      color: "#315e6d",
+      opacity: 1,
+      apparentWidth: 1
+    }),
+    shadow: Object.freeze({ color: "#0f172a", opacity: 0.2, apparentWidth: 0 })
+  });
 interface ActiveGraph3DWebGLRenderer {
   animationFrameId?: number;
   lease: KpWebglContextLease;
@@ -68,6 +101,7 @@ export interface Graph3DWebGLHydrationOptions {
   previousObjects?: readonly KpSemanticObject[] | undefined;
   transitionProgress?: number | undefined;
   transitionDurationMs?: number;
+  visualRoles?: KpGraph3DResolvedVisualRoles | undefined;
 }
 
 const GRAPH_3D_WEBGL_TRANSITION_DURATION_MS = 650;
@@ -77,7 +111,8 @@ const activeGraph3DWebGLRenderers = new WeakMap<
 >();
 
 export function createGraph3DWebGLThreeScene(
-  model: Graph3DWebGLSceneModel
+  model: Graph3DWebGLSceneModel,
+  visualRoles: KpGraph3DResolvedVisualRoles = DEFAULT_GRAPH_3D_VISUAL_ROLES
 ): Graph3DWebGLThreeScene {
   const scene = new Scene();
   const root = new Group();
@@ -101,15 +136,15 @@ export function createGraph3DWebGLThreeScene(
   scene.add(root);
 
   for (const surface of model.surfaces) {
-    const mesh = createSurfaceMesh(surface);
-    const meshLines = createSurfaceMeshLines(surface);
+    const mesh = createSurfaceMesh(surface, visualRoles);
+    const meshLines = createSurfaceMeshLines(surface, visualRoles);
 
     surfaceMeshes.push(mesh);
     surfaceMeshLines.push(meshLines);
     root.add(mesh, meshLines);
 
     if (surface.drawBorder) {
-      const borderObject = createSurfaceBorderObject(surface);
+      const borderObject = createSurfaceBorderObject(surface, visualRoles);
 
       surfaceBorderObjects.push(borderObject);
       root.add(borderObject);
@@ -117,7 +152,7 @@ export function createGraph3DWebGLThreeScene(
   }
 
   for (const axis of model.axes) {
-    const axisObject = createAxisObject(axis);
+    const axisObject = createAxisObject(axis, visualRoles);
 
     axisObjects.push(axisObject);
     root.add(axisObject);
@@ -244,7 +279,11 @@ export function hydrateGraph3DWebGLShell(
       renderer
     };
 
-    renderer.setClearColor(0xfffdf8, 1);
+    const visualRoles = options.visualRoles ?? DEFAULT_GRAPH_3D_VISUAL_ROLES;
+    renderer.setClearColor(
+      visualRoles.background.color,
+      visualRoles.background.opacity
+    );
     renderer.setPixelRatio(graph3DWebGLPixelRatio());
     renderer.setSize(graph.width, graph.height, false);
 
@@ -252,7 +291,7 @@ export function hydrateGraph3DWebGLShell(
     shell.dataset["kpWebglStatus"] = "ready";
     shell.dataset["kpWebglError"] = "";
     setAccessibleStatus(shell, "Interactive 3D graph ready.");
-    renderGraph3DWebGLFrame(activeRenderer, graph, model);
+    renderGraph3DWebGLFrame(activeRenderer, graph, model, visualRoles);
 
     if (shouldAnimate) {
       shell.dataset["kpWebglTransition"] = "running";
@@ -285,7 +324,7 @@ export function renderGraph3DWebGLShellFrame(
   graph: Graph3DObject,
   options: Pick<
     Graph3DWebGLHydrationOptions,
-    "previousObjects" | "transitionProgress"
+    "previousObjects" | "transitionProgress" | "visualRoles"
   > = {}
 ): boolean {
   const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
@@ -299,9 +338,76 @@ export function renderGraph3DWebGLShellFrame(
       ? {}
       : { transitionProgress: options.transitionProgress })
   });
-  renderGraph3DWebGLFrame(activeRenderer, graph, model);
+  renderGraph3DWebGLFrame(
+    activeRenderer,
+    graph,
+    model,
+    options.visualRoles
+  );
   shell.dataset["kpWebglTransition"] = "sampled";
   return true;
+}
+
+export type KpGraph3DSemanticRuntimeFrame = KpGraph3DRuntimeFrame<
+  readonly KpSemanticObject[]
+>;
+
+export function hydrateKpGraph3DWebGLRuntimeFrame(
+  shell: HTMLElement,
+  frame: KpGraph3DSemanticRuntimeFrame
+): Graph3DWebGLHydrationOutcome {
+  requireProtocolGraph(frame, frame.scene.source, "source");
+  requireProtocolGraph(frame, frame.scene.target, "target");
+  return hydrateGraph3DWebGLShell(shell, frame.scene.target, {
+    previousObjects: frame.scene.source,
+    transitionProgress: frame.clock.visualProgress,
+    visualRoles: frame.theme.roles
+  });
+}
+
+export function renderKpGraph3DWebGLRuntimeFrame(
+  shell: HTMLElement,
+  frame: KpGraph3DSemanticRuntimeFrame
+): boolean {
+  requireProtocolGraph(frame, frame.scene.source, "source");
+  const graph = requireProtocolGraph(frame, frame.scene.target, "target");
+  return renderGraph3DWebGLShellFrame(shell, frame.scene.target, graph, {
+    previousObjects: frame.scene.source,
+    transitionProgress: frame.clock.visualProgress,
+    visualRoles: frame.theme.roles
+  });
+}
+
+function requireProtocolGraph(
+  frame: KpGraph3DSemanticRuntimeFrame,
+  objects: readonly KpSemanticObject[],
+  endpoint: "source" | "target"
+): Graph3DObject {
+  const graph = objects.find(
+    (object): object is Graph3DObject =>
+      object.type === "graph-3d" && object.id === frame.identity.graphId
+  );
+  if (graph === undefined) {
+    throw new Error(
+      `Graph3D protocol ${endpoint} scene lacks ${frame.identity.graphId}.`
+    );
+  }
+  const origin = frame.stage.anchors.plotOrigin;
+  const camera = frame.camera;
+  if (
+    graph.width !== frame.stage.width ||
+    graph.height !== frame.stage.height ||
+    graph.camera.origin[0] !== origin[0] ||
+    graph.camera.origin[1] !== origin[1] ||
+    graph.camera.azimuthDegrees !== camera.azimuthDegrees ||
+    graph.camera.elevationDegrees !== camera.elevationDegrees ||
+    graph.camera.scale !== camera.scale
+  ) {
+    throw new Error(
+      `Graph3D protocol ${endpoint} scene disagrees with stage or camera state.`
+    );
+  }
+  return graph;
 }
 
 function shouldAnimateGraph3DTransition(
@@ -343,7 +449,12 @@ function animateGraph3DWebGLTransition(
       transitionProgress: easedProgress
     });
 
-    renderGraph3DWebGLFrame(activeRenderer, graph, model);
+    renderGraph3DWebGLFrame(
+      activeRenderer,
+      graph,
+      model,
+      options.visualRoles
+    );
 
     if (progress < 1) {
       const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
@@ -364,9 +475,10 @@ function animateGraph3DWebGLTransition(
 function renderGraph3DWebGLFrame(
   activeRenderer: ActiveGraph3DWebGLRenderer,
   graph: Graph3DObject,
-  model: Graph3DWebGLSceneModel
+  model: Graph3DWebGLSceneModel,
+  visualRoles: KpGraph3DResolvedVisualRoles = DEFAULT_GRAPH_3D_VISUAL_ROLES
 ): void {
-  const threeScene = createGraph3DWebGLThreeScene(model);
+  const threeScene = createGraph3DWebGLThreeScene(model, visualRoles);
   const camera = createGraph3DWebGLCamera(graph, model.camera);
 
   if (activeRenderer.scene !== undefined) {
@@ -459,7 +571,10 @@ function setAccessibleStatus(shell: HTMLElement, status: string): void {
   if (output !== null) output.textContent = status;
 }
 
-function createSurfaceMesh(surface: Graph3DWebGLSurfaceModel): Mesh {
+function createSurfaceMesh(
+  surface: Graph3DWebGLSurfaceModel,
+  visualRoles: KpGraph3DResolvedVisualRoles
+): Mesh {
   const geometry = new BufferGeometry();
   const positions: number[] = [];
   const indices: number[] = [];
@@ -486,10 +601,10 @@ function createSurfaceMesh(surface: Graph3DWebGLSurfaceModel): Mesh {
   geometry.computeVertexNormals();
 
   const material = new MeshBasicMaterial({
-    color: 0x7faabd,
+    color: visualRoles.surface.color,
     depthTest: true,
     depthWrite: true,
-    opacity: 0.76,
+    opacity: visualRoles.surface.opacity,
     side: DoubleSide,
     transparent: true
   });
@@ -509,7 +624,8 @@ function createSurfaceMesh(surface: Graph3DWebGLSurfaceModel): Mesh {
 }
 
 function createSurfaceMeshLines(
-  surface: Graph3DWebGLSurfaceModel
+  surface: Graph3DWebGLSurfaceModel,
+  visualRoles: KpGraph3DResolvedVisualRoles
 ): LineSegments {
   const positions: number[] = [];
 
@@ -551,9 +667,10 @@ function createSurfaceMeshLines(
   geometry.setAttribute("position", new Float32BufferAttribute(positions, 3));
 
   const material = new LineBasicMaterial({
-    color: 0x53798a,
+    color: visualRoles["surface-grid"].color,
     depthTest: true,
-    opacity: 0.64,
+    linewidth: visualRoles["surface-grid"].apparentWidth,
+    opacity: visualRoles["surface-grid"].opacity,
     transparent: true
   });
   const lines = new LineSegments(geometry, material);
@@ -567,12 +684,17 @@ function createSurfaceMeshLines(
   return lines;
 }
 
-function createSurfaceBorderObject(surface: Graph3DWebGLSurfaceModel): Group {
+function createSurfaceBorderObject(
+  surface: Graph3DWebGLSurfaceModel,
+  visualRoles: KpGraph3DResolvedVisualRoles
+): Group {
   const group = new Group();
   const material = new MeshBasicMaterial({
-    color: SURFACE_BORDER_COLOR,
+    color: visualRoles["surface-border"].color,
     depthTest: true,
-    depthWrite: true
+    depthWrite: true,
+    opacity: visualRoles["surface-border"].opacity,
+    transparent: visualRoles["surface-border"].opacity < 1
   });
 
   group.name = `${surface.id}-border`;
@@ -671,13 +793,18 @@ function createSurfaceBorderSegmentMesh(
   return mesh;
 }
 
-function createAxisObject(axis: Axis3DObject): Group {
+function createAxisObject(
+  axis: Axis3DObject,
+  visualRoles: KpGraph3DResolvedVisualRoles
+): Group {
   const [min, max] = axis.domain;
   const start = vectorFromGraphPoint(axisPoint(axis, min));
   const end = vectorFromGraphPoint(axisPoint(axis, max));
   const direction = end.clone().sub(start).normalize();
   const minDirection = direction.clone().multiplyScalar(-1);
-  const foregroundColor = axis.orientation === "z" ? 0x2b6f59 : 0x394756;
+  const foregroundColor = axis.orientation === "z"
+    ? visualRoles["axis-accent"].color
+    : visualRoles.axis.color;
   const shaftStart = start
     .clone()
     .add(direction.clone().multiplyScalar(AXIS_ARROW_LENGTH));
@@ -697,21 +824,21 @@ function createAxisObject(axis: Axis3DObject): Group {
       shaftStart,
       shaftEnd,
       AXIS_HALO_RADIUS,
-      GRAPH_BACKGROUND_COLOR,
+      visualRoles.background.color,
       "halo-shaft"
     ),
     createAxisArrowMesh(
       start,
       minDirection,
       AXIS_HALO_ARROW_RADIUS,
-      GRAPH_BACKGROUND_COLOR,
+      visualRoles.background.color,
       "halo-min-arrow"
     ),
     createAxisArrowMesh(
       end,
       direction,
       AXIS_HALO_ARROW_RADIUS,
-      GRAPH_BACKGROUND_COLOR,
+      visualRoles.background.color,
       "halo-max-arrow"
     ),
     createAxisShaftMesh(
@@ -744,7 +871,7 @@ function createAxisShaftMesh(
   start: Vector3,
   end: Vector3,
   radius: number,
-  color: number,
+  color: number | string,
   layer: string
 ): Mesh {
   const direction = end.clone().sub(start);
@@ -771,7 +898,7 @@ function createAxisArrowMesh(
   tip: Vector3,
   direction: Vector3,
   radius: number,
-  color: number,
+  color: number | string,
   layer: string
 ): Mesh {
   const unitDirection = direction.clone().normalize();
@@ -794,7 +921,7 @@ function createAxisArrowMesh(
 }
 
 function createAxisMaterial(
-  color: number,
+  color: number | string,
   depthWrite: boolean
 ): MeshBasicMaterial {
   return new MeshBasicMaterial({

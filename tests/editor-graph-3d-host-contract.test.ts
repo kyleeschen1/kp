@@ -11,6 +11,7 @@ import {
   createKpEditorGraph3DHostContract,
   KP_EDITOR_GRAPH_3D_ANIMATION_ID,
   projectKpEditorGraph3DHostFrame,
+  projectKpEditorGraph3DRuntimeFrame,
   supportsKpEditorGraph3DAnimation
 } from "../src/editor/graph-3d-surface-contract.ts";
 import {
@@ -85,6 +86,35 @@ test("Graph3D host projection preserves direct seek and exact rewind", () => {
   );
   assert.equal(forward.description, "Saddle surface: mesh to donut, 37 percent complete.");
   assert.equal(rewind.description, forward.description);
+
+  const forwardRuntime = projectKpEditorGraph3DRuntimeFrame(forward);
+  const rewindRuntime = projectKpEditorGraph3DRuntimeFrame(rewind);
+  assert.equal(
+    forwardRuntime.schemaVersion,
+    "kp.graph-3d-runtime-protocol.v1"
+  );
+  assert.equal(forwardRuntime.identity.frameId, forward.runtimeFrameId);
+  assert.equal(forwardRuntime.clock.visualProgress, 0.37);
+  assert.equal(
+    forwardRuntime.clock.visualProgress,
+    rewindRuntime.clock.visualProgress
+  );
+  assert.equal(forwardRuntime.stage.coordinateSpace, "stage-local");
+  assert.deepEqual(forwardRuntime.stage.anchors.plotOrigin, [280, 244]);
+  assert.deepEqual(forwardRuntime.stage.anchors.cameraTarget, [0, 0, 0]);
+  assert.equal(forwardRuntime.camera.projection, "orthographic");
+  assert.equal(forwardRuntime.theme.id, "kp.graph.paper.v1");
+  assert.deepEqual(forwardRuntime.theme.roles.surface, {
+    color: "#7faabd",
+    opacity: 0.76,
+    apparentWidth: 0
+  });
+  assert.equal(forwardRuntime.scene.source, forward.sourceObjects);
+  assert.equal(forwardRuntime.scene.target, forward.targetObjects);
+  assert.equal(
+    forwardRuntime.accessibility.description,
+    forward.description
+  );
 });
 
 test("Graph3D semantic shell exposes one accessible image and keeps canvas hidden", () => {

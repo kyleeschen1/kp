@@ -227,7 +227,8 @@
     {
       "id": "s29",
       "title": "Pressure-protocol-through-existing-Graph3D-host",
-      "status": "planned"
+      "summary": "The existing internal Graph3D host now consumes kp.graph-3d-runtime-protocol.v1 through its lazy Three renderer while semantic SVG fallback, exact host-clock seek/rewind, accessible description, current material appearance, selected-visible hydration, context-loss recovery, and the two-context lease cap remain intact. Focused 3D, browser, architecture, type, economics semantic, and unchanged production-budget gates pass; geometry widths were deliberately preserved pending visual review.",
+      "status": "complete"
     },
     {
       "id": "s30",

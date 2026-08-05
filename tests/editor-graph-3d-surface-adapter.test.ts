@@ -43,7 +43,9 @@ test("Graph3D adapter owns one literal lazy Three capability boundary", () => {
   );
   assert.doesNotMatch(source, /from "three"/);
   assert.match(source, /KP_EDITOR_ANIMATION_DISPOSE_EVENT/);
-  assert.match(source, /renderGraph3DWebGLShellFrame/);
+  assert.match(source, /projectKpEditorGraph3DRuntimeFrame/);
+  assert.match(source, /renderKpGraph3DWebGLRuntimeFrame/);
+  assert.match(source, /hydrateKpGraph3DWebGLRuntimeFrame/);
 });
 
 function stateFor(animation: ReturnType<typeof createGraphSurfaceModeAnimationAsset>) {

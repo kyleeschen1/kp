@@ -6,6 +6,12 @@ import type {
   Graph3DSurfaceMode,
   Surface3DObject
 } from "../semantic/graph.ts";
+import {
+  createKpGraph3DRuntimeFrame,
+  type KpGraph3DResolvedVisualRoles,
+  type KpGraph3DRuntimeFrame
+} from "../rendering/graph-3d-runtime-protocol.ts";
+import { occludedAxisColor } from "../rendering/graph-svg.ts";
 import { KP_WEBGL_CONTEXT_LEASE_LIMIT } from "../rendering/webgl-context-lease-pool.ts";
 
 export const KP_EDITOR_GRAPH_3D_ANIMATION_ID =
@@ -59,6 +65,10 @@ export interface KpEditorGraph3DHostFrame {
   readonly targetObjects: readonly KpSemanticObject[];
   readonly description: string;
 }
+
+export type KpEditorGraph3DRuntimeFrame = KpGraph3DRuntimeFrame<
+  readonly KpSemanticObject[]
+>;
 
 export function supportsKpEditorGraph3DAnimation(
   animationId: string
@@ -202,6 +212,74 @@ export function projectKpEditorGraph3DHostFrame(input: {
       `${graph.label}: ${contract.sourceMode} to ${contract.targetMode}, ` +
       `${Math.round(transitionProgress * 100)} percent complete.`
   };
+}
+
+export function projectKpEditorGraph3DRuntimeFrame(
+  frame: KpEditorGraph3DHostFrame
+): KpEditorGraph3DRuntimeFrame {
+  const { graph } = frame;
+  return createKpGraph3DRuntimeFrame({
+    identity: {
+      animationId: frame.animationId,
+      frameId: frame.runtimeFrameId,
+      graphId: graph.id
+    },
+    clock: {
+      direction: frame.direction,
+      requestedProgress: frame.requestedProgress,
+      visualProgress: frame.transitionProgress
+    },
+    stage: {
+      width: graph.width,
+      height: graph.height,
+      anchors: {
+        plotOrigin: graph.camera.origin,
+        cameraTarget: [0, 0, 0]
+      }
+    },
+    camera: {
+      projection: "orthographic",
+      azimuthDegrees: graph.camera.azimuthDegrees,
+      elevationDegrees: graph.camera.elevationDegrees,
+      scale: graph.camera.scale
+    },
+    theme: {
+      id: "kp.graph.paper.v1",
+      roles: currentGraph3DVisualRoles(graph)
+    },
+    scene: {
+      source: frame.sourceObjects,
+      target: frame.targetObjects
+    },
+    accessibility: { description: frame.description }
+  });
+}
+
+function currentGraph3DVisualRoles(
+  graph: Graph3DObject
+): KpGraph3DResolvedVisualRoles {
+  return Object.freeze({
+    background: role("#fffdf8", 1, 0),
+    axis: role("#394756", 1, 1),
+    "axis-accent": role("#2b6f59", 1, 1),
+    "axis-occluded": role(
+      occludedAxisColor(graph.occludedAxisLightness),
+      0.62,
+      1
+    ),
+    surface: role("#7faabd", 0.76, 0),
+    "surface-grid": role("#53798a", 0.64, 1),
+    "surface-border": role("#315e6d", 1, 1),
+    shadow: role("#0f172a", graph.shadow.opacity, 0)
+  });
+}
+
+function role(
+  color: string,
+  opacity: number,
+  apparentWidth: number
+) {
+  return Object.freeze({ color, opacity, apparentWidth });
 }
 
 function replaceGraph(

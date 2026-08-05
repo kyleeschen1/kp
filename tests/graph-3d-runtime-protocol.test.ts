@@ -20,6 +20,11 @@ interface TestScene {
 const roles = Object.freeze({
   background: { color: "surface.background", opacity: 1, apparentWidth: 0 },
   axis: { color: "line.axis", opacity: 1, apparentWidth: 1 },
+  "axis-accent": {
+    color: "line.axis-accent",
+    opacity: 1,
+    apparentWidth: 1
+  },
   "axis-occluded": {
     color: "line.axis-occluded",
     opacity: 0.45,
@@ -87,6 +92,7 @@ test("Graph3D protocol freezes the minimal renderer-neutral authority boundary",
   assert.deepEqual(KP_GRAPH_3D_VISUAL_ROLES, [
     "background",
     "axis",
+    "axis-accent",
     "axis-occluded",
     "surface",
     "surface-grid",
@@ -244,4 +250,22 @@ test("protocol source has no backend, DOM, framework, domain, or Graph2D depende
     source,
     /(?:three|webgl|svg|HTMLElement|canvas|svelte|\.\.\/animation|\.\.\/editor|graph-2d)/i
   );
+});
+
+test("Graph3D adoption remains absent from the economics and shared Graph2D path", () => {
+  const paths = [
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts",
+    "../src/editor/economics-graph-svg-surface-capability.ts",
+    "../src/editor/graph-svg-viewport.ts",
+    "../src/rendering/graph-2d-runtime-session.ts"
+  ];
+
+  for (const path of paths) {
+    const source = readFileSync(new URL(path, import.meta.url), "utf8");
+    assert.doesNotMatch(
+      source,
+      /(?:graph-3d-runtime|graph-webgl|graph-3d-surface|from "three")/i,
+      path
+    );
+  }
 });

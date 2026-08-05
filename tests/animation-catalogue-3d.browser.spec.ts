@@ -36,6 +36,10 @@ test("catalogue loads and releases the bounded Graph3D capability in place", asy
     "data-kp-editor-graph-3d-contract",
     "kp.editor-animation.graph-3d-host.v1"
   );
+  await expect(slot).toHaveAttribute(
+    "data-kp-editor-graph-3d-runtime-protocol",
+    "kp.graph-3d-runtime-protocol.v1"
+  );
   await expect.poll(() => shell.getAttribute("data-kp-webgl-status"))
     .not.toBe("pending");
   const webglStatus = await shell.getAttribute("data-kp-webgl-status");
@@ -47,6 +51,14 @@ test("catalogue loads and releases the bounded Graph3D capability in place", asy
   await expect(shell).toHaveAttribute(
     "data-kp-editor-graph-3d-capability",
     "ready"
+  );
+  await expect(shell).toHaveAttribute(
+    "data-kp-editor-graph-3d-visibility",
+    "visible"
+  );
+  await expect(shell).toHaveAttribute(
+    "data-kp-editor-graph-3d-theme",
+    "kp.graph.paper.v1"
   );
   expect(capabilityRequests.some((url) =>
     url.includes("graph-webgl-three")

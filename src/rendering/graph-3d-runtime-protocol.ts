@@ -4,6 +4,7 @@ export const KP_GRAPH_3D_RUNTIME_PROTOCOL_SCHEMA =
 export const KP_GRAPH_3D_VISUAL_ROLES = [
   "background",
   "axis",
+  "axis-accent",
   "axis-occluded",
   "surface",
   "surface-grid",
@@ -130,6 +131,10 @@ export function createKpGraph3DRuntimeFrame<Scene>(
   const roles = Object.freeze({
     background: copyRole(input.theme.roles.background, "background"),
     axis: copyRole(input.theme.roles.axis, "axis"),
+    "axis-accent": copyRole(
+      input.theme.roles["axis-accent"],
+      "axis-accent"
+    ),
     "axis-occluded": copyRole(
       input.theme.roles["axis-occluded"],
       "axis-occluded"

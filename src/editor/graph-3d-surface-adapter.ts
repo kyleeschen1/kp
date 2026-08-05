@@ -11,8 +11,9 @@ import {
 import {
   createKpEditorGraph3DHostContract,
   projectKpEditorGraph3DHostFrame,
+  projectKpEditorGraph3DRuntimeFrame,
   supportsKpEditorGraph3DAnimation,
-  type KpEditorGraph3DHostFrame
+  type KpEditorGraph3DRuntimeFrame
 } from "./graph-3d-surface-contract.ts";
 import {
   renderGraph3DWebGLFallback,
@@ -29,10 +30,11 @@ interface KpEditorGraph3DSurfaceSession {
   client?: Graph3DWebGLClient | undefined;
   disposed: boolean;
   fallbackMode: Graph3DSurfaceMode;
-  frame: KpEditorGraph3DHostFrame;
+  frame: KpEditorGraph3DRuntimeFrame;
   loadPromise?: Promise<Graph3DWebGLClient> | undefined;
   observer?: IntersectionObserver | undefined;
   shell: HTMLElement;
+  visibility: "offscreen" | "near" | "visible";
 }
 
 const sessions = new WeakMap<HTMLElement, KpEditorGraph3DSurfaceSession>();
@@ -49,16 +51,18 @@ export const kpEditorGraph3DSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
     if (animation === undefined) return;
     const contract = createKpEditorGraph3DHostContract(animation);
-    const frame = projectKpEditorGraph3DHostFrame({
-      animation,
-      runtimeFrame: state.runtimeFrame
-    });
+    const frame = projectKpEditorGraph3DRuntimeFrame(
+      projectKpEditorGraph3DHostFrame({
+        animation,
+        runtimeFrame: state.runtimeFrame
+      })
+    );
     let session = sessions.get(player);
 
     if (session === undefined) {
       const fallbackGraph = graphForFallback(frame);
       slot.innerHTML = renderGraph3DWebGLShell(
-        frame.sourceObjects,
+        frame.scene.source,
         fallbackGraph
       );
       const shell = slot.querySelector<HTMLElement>(".graph-webgl");
@@ -67,7 +71,8 @@ export const kpEditorGraph3DSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         disposed: false,
         fallbackMode: fallbackGraph.surfaceMode,
         frame,
-        shell
+        shell,
+        visibility: "near"
       };
       shell.setAttribute(
         "data-kp-editor-graph-3d-fallback-mode",
@@ -79,36 +84,43 @@ export const kpEditorGraph3DSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         () => disposeKpEditorGraph3DSurface(player, session!),
         { once: true }
       );
+      setGraph3DVisibility(session, "near");
       beginGraph3DCapabilityLoad(session);
     } else {
       session.frame = frame;
     }
 
-    session.shell.setAttribute("aria-label", frame.description);
+    session.shell.setAttribute(
+      "aria-label",
+      frame.accessibility.description
+    );
     session.shell.setAttribute(
       "data-kp-editor-graph-3d-progress",
-      String(frame.transitionProgress)
+      String(frame.clock.visualProgress)
     );
     session.shell.setAttribute(
       "data-kp-editor-graph-3d-direction",
-      frame.direction
+      frame.clock.direction
     );
     syncGraph3DFallback(session, frame);
     if (session.client !== undefined) {
-      session.client.renderGraph3DWebGLShellFrame(
+      session.client.renderKpGraph3DWebGLRuntimeFrame(
         session.shell,
-        frame.targetObjects,
-        frame.graph,
-        {
-          previousObjects: frame.sourceObjects,
-          transitionProgress: frame.transitionProgress
-        }
+        frame
       );
     }
 
     slot.setAttribute(
       "data-kp-editor-graph-3d-contract",
       contract.schemaVersion
+    );
+    slot.setAttribute(
+      "data-kp-editor-graph-3d-runtime-protocol",
+      frame.schemaVersion
+    );
+    session.shell.setAttribute(
+      "data-kp-editor-graph-3d-theme",
+      frame.theme.id
     );
   }
 };
@@ -123,6 +135,7 @@ function beginGraph3DCapabilityLoad(
   session: KpEditorGraph3DSurfaceSession
 ): void {
   if (typeof IntersectionObserver === "undefined") {
+    setGraph3DVisibility(session, "visible");
     loadGraph3DCapability(session);
     return;
   }
@@ -133,6 +146,7 @@ function beginGraph3DCapabilityLoad(
     if (!entries.some((entry) => entry.isIntersecting)) return;
     session.observer?.disconnect();
     session.observer = undefined;
+    setGraph3DVisibility(session, "visible");
     loadGraph3DCapability(session);
   }, { rootMargin: "160px" });
   session.observer.observe(session.shell);
@@ -146,13 +160,9 @@ function loadGraph3DCapability(session: KpEditorGraph3DSurfaceSession): void {
     if (session.disposed || !session.shell.isConnected) return;
     session.client = client;
     const frame = session.frame;
-    const outcome = client.hydrateGraph3DWebGLShell(
+    const outcome = client.hydrateKpGraph3DWebGLRuntimeFrame(
       session.shell,
-      frame.targetObjects,
-      {
-        previousObjects: frame.sourceObjects,
-        transitionProgress: frame.transitionProgress
-      }
+      frame
     );
     session.shell.setAttribute(
       "data-kp-editor-graph-3d-capability",
@@ -184,23 +194,24 @@ function disposeKpEditorGraph3DSurface(
 ): void {
   if (session.disposed) return;
   session.disposed = true;
+  setGraph3DVisibility(session, "offscreen");
   session.observer?.disconnect();
   session.client?.disposeGraph3DWebGLShell(session.shell);
   sessions.delete(player);
 }
 
-function graphForFallback(frame: KpEditorGraph3DHostFrame): Graph3DObject {
-  return frame.sourceObjects.find(
+function graphForFallback(frame: KpEditorGraph3DRuntimeFrame): Graph3DObject {
+  return frame.scene.source.find(
     (object): object is Graph3DObject => object.type === "graph-3d"
-  ) ?? frame.graph;
+  ) ?? requireTargetGraph(frame);
 }
 
 function syncGraph3DFallback(
   session: KpEditorGraph3DSurfaceSession,
-  frame: KpEditorGraph3DHostFrame
+  frame: KpEditorGraph3DRuntimeFrame
 ): void {
-  const useTarget = frame.transitionProgress >= 0.5;
-  const objects = useTarget ? frame.targetObjects : frame.sourceObjects;
+  const useTarget = frame.clock.visualProgress >= 0.5;
+  const objects = useTarget ? frame.scene.target : frame.scene.source;
   const graph = objects.find(
     (object): object is Graph3DObject => object.type === "graph-3d"
   );
@@ -217,5 +228,29 @@ function syncGraph3DFallback(
   session.shell.setAttribute(
     "data-kp-editor-graph-3d-fallback-mode",
     graph.surfaceMode
+  );
+}
+
+function requireTargetGraph(frame: KpEditorGraph3DRuntimeFrame): Graph3DObject {
+  const graph = frame.scene.target.find(
+    (object): object is Graph3DObject =>
+      object.type === "graph-3d" && object.id === frame.identity.graphId
+  );
+  if (graph === undefined) {
+    throw new Error(
+      `Graph3D runtime target lacks ${frame.identity.graphId}.`
+    );
+  }
+  return graph;
+}
+
+function setGraph3DVisibility(
+  session: KpEditorGraph3DSurfaceSession,
+  visibility: KpEditorGraph3DSurfaceSession["visibility"]
+): void {
+  session.visibility = visibility;
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-visibility",
+    visibility
   );
 }

@@ -236,6 +236,40 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   );
 });
 
+test("renderer-neutral visual roles resolve to the existing rich materials", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const model = createGraph3DWebGLSceneModel(scene, graph);
+  const roles = {
+    background: { color: "#fffdf8", opacity: 1, apparentWidth: 0 },
+    axis: { color: "#394756", opacity: 1, apparentWidth: 1 },
+    "axis-accent": { color: "#2b6f59", opacity: 1, apparentWidth: 1 },
+    "axis-occluded": { color: "#85909b", opacity: 0.62, apparentWidth: 1 },
+    surface: { color: "#7faabd", opacity: 0.76, apparentWidth: 0 },
+    "surface-grid": { color: "#53798a", opacity: 0.64, apparentWidth: 1 },
+    "surface-border": { color: "#315e6d", opacity: 1, apparentWidth: 1 },
+    shadow: { color: "#0f172a", opacity: 0.2, apparentWidth: 0 }
+  } as const;
+  const richScene = createGraph3DWebGLThreeScene(model, roles);
+  const surfaceMaterial = material(richScene.surfaceMeshes[0]);
+  const gridMaterial = material(richScene.surfaceMeshLines[0]);
+  const borderMaterial = material(
+    richScene.surfaceBorderObjects[0]?.children[0]
+  );
+  const xAxisMaterial = material(richScene.axisObjects[0]?.children[3]);
+  const zAxisMaterial = material(richScene.axisObjects[2]?.children[3]);
+  const haloMaterial = material(richScene.axisObjects[0]?.children[0]);
+
+  assert.equal(surfaceMaterial.color.getHexString(), "7faabd");
+  assert.equal(surfaceMaterial.opacity, 0.76);
+  assert.equal(gridMaterial.color.getHexString(), "53798a");
+  assert.equal(gridMaterial.opacity, 0.64);
+  assert.equal(borderMaterial.color.getHexString(), "315e6d");
+  assert.equal(xAxisMaterial.color.getHexString(), "394756");
+  assert.equal(zAxisMaterial.color.getHexString(), "2b6f59");
+  assert.equal(haloMaterial.color.getHexString(), "fffdf8");
+});
+
 test("WebGL camera derives an orthographic view from graph dimensions and camera settings", () => {
   const scene = createDefaultGraph3DScene();
   const graph = scene[0] as Graph3DObject;
@@ -248,3 +282,25 @@ test("WebGL camera derives an orthographic view from graph dimensions and camera
   assert.equal(camera.bottom, -graph.height / (2 * graph.camera.scale));
   assert.ok(camera.position.length() > 0);
 });
+
+function material(value: unknown): {
+  readonly color: { getHexString(): string };
+  readonly opacity: number;
+} {
+  const candidate = value as {
+    readonly material?: {
+      readonly color?: { getHexString?: () => string };
+      readonly opacity?: number;
+    };
+  };
+  if (
+    candidate.material?.color?.getHexString === undefined ||
+    candidate.material.opacity === undefined
+  ) {
+    throw new Error("Expected one material with color and opacity.");
+  }
+  return candidate.material as {
+    readonly color: { getHexString(): string };
+    readonly opacity: number;
+  };
+}

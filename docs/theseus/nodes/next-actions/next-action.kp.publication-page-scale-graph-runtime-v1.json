@@ -1514,6 +1514,83 @@
       "scope": "s28 patch hygiene",
       "checkedAt": "2026-08-05T14:32:02.418Z",
       "notes": "The protocol, focused tests, stable package command, and durable evidence contain no whitespace errors."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s29 2D route isolation cold-start sample",
+      "checkedAt": "2026-08-05T14:43:46.817Z",
+      "notes": "Full types, publication check, build, route dependency isolation, transfer 239467B, script 139839B, 42 resources, CLS 0, active p95 34.2ms, and zero SVG rebuilds passed. The known cold-start-only variance sampled 196ms against the unchanged 150ms ceiling; rerun the identical build without widening policy."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s29 identical-build cold-start rerun",
+      "checkedAt": "2026-08-05T14:44:18.169Z",
+      "notes": "The unchanged built artifact again passed route isolation and all active budgets, but cold startup sampled 159ms against 150ms. This remains within the already recorded 124-234ms environmental variance; rerun once more without code or ceiling change."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s29 third identical-build cold-start sample",
+      "checkedAt": "2026-08-05T14:47:06.457Z",
+      "notes": "The unchanged built artifact again passed route isolation and every active budget except cold startup, which sampled 161ms against the unchanged 150ms ceiling. Transfer remained 239467B, script 139839B, 42 resources, CLS 0, active p95 about 34ms, and zero SVG rebuilds; this is within the previously recorded 124-234ms environmental range."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "s29 existing Graph3D host protocol pressure",
+      "checkedAt": "2026-08-05T14:47:59.393Z",
+      "notes": "All 30 protocol, host projection, lazy adapter, retained Three material, fallback, direct-seek/rewind, source-isolation, and bounded twelve-passage lease tests pass."
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s29 real Graph3D host adoption",
+      "checkedAt": "2026-08-05T14:48:28.184Z",
+      "notes": "Both Chromium cases pass with the protocol marker and theme/visibility state: exact lazy hydration, direct frame sampling, selection release, and context-loss fallback preserve bounded ownership."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s29 economics semantic and retained-2D preservation",
+      "checkedAt": "2026-08-05T14:48:49.539Z",
+      "notes": "All 42 economics publication, URL, semantic frame, direct-seek/rewind, static KaTeX/SVG, retained session, layout, and lesson-conformance checks pass after Graph3D adoption."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s29 renderer boundary preservation",
+      "checkedAt": "2026-08-05T14:48:50.592Z",
+      "notes": "All four architecture gates pass; Graph3D protocol adoption remains contained to the existing 3D host and does not enter economics, Graph2D, domain, or framework authority."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s29 patch hygiene",
+      "checkedAt": "2026-08-05T14:48:51.596Z",
+      "notes": "No whitespace errors in the host adoption, focused tests, or durable evidence."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s29 final unchanged-build 2D route isolation",
+      "checkedAt": "2026-08-05T14:49:11.112Z",
+      "notes": "The identical build passed the unchanged ceiling on the final sample: 239467B transfer, 139839B script, 42 resources, CLS 0, 123ms cold longest task, 33.9ms active p95, zero SVG strings/subtree replacements, and no Graph3D/Three/WebGL route leakage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s29 Graph3D protocol type closure",
+      "checkedAt": "2026-08-05T14:49:52.501Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects all typecheck with the host-projected renderer-neutral runtime frame and lazy Three client wrappers."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s29 durable host-adoption evidence",
+      "checkedAt": "2026-08-05T14:50:49.929Z",
+      "notes": "Workspace validation passes after the protocol adoption, all focused verification records, context receipt closure, and completed slice state."
     }
   ],
   "progress": {
