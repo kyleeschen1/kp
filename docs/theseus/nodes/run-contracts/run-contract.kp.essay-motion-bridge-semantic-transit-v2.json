@@ -130,7 +130,8 @@
     {
       "id": "s13",
       "title": "Motion bridge visual checkpoint",
-      "status": "planned"
+      "summary": "Captured and manually inspected dark, light, reverse-midpoint, and compiled no-JS bridge states. HUMAN_CHECKPOINT reached; no semantic-transit work may start without fresh visual approval.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -306,11 +306,32 @@
       "scope": "s12 full static typing",
       "checkedAt": "2026-08-05T21:23:37.315Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "s13 mandatory visual checkpoint",
+      "checkedAt": "2026-08-05T21:28:30.921Z",
+      "notes": "5 Chromium cases passed. Manual inspection found dark/light midpoint and reverse midpoint geometrically identical; the compiled no-JS fragment retains both statements but exposes a reviewable period-plus-ellipsis punctuation treatment."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s13 focused economics regression",
+      "checkedAt": "2026-08-05T21:28:31.969Z",
+      "notes": "47 economics tests passed after visual capture."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s13 production checkpoint",
+      "checkedAt": "2026-08-05T21:28:32.993Z",
+      "notes": "Full typecheck, deterministic publication check, and Vite production build passed; existing large-chunk warnings remain visible."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 17 was visually approved. A new motion-bridge and semantic-transit request exceeds the active contract; its unexecuted tail remains paused pending approval of the superseding proposal."
+    "summary": "HUMAN_CHECKPOINT: motion-bridge exemplar is implemented and captured. Slices s14-s21 require fresh visual approval; period-plus-ellipsis punctuation and midpoint prose opacity are explicit review decisions."
   },
   "expectedLearning": [
     "Whether one usable-viewport authority can synchronize ordinary-document entry, exact scroll state, and direct semantic navigation without per-scroll layout work."

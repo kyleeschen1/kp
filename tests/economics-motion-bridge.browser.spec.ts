@@ -1,8 +1,15 @@
+import { mkdirSync, readFileSync } from "node:fs";
+
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const acceptedRoute =
   "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 const exemplarRoute = `${acceptedRoute}&scrub=motion-bridge`;
+const evidenceDirectory = "tmp/codex/economics-motion-bridge";
+
+test.beforeAll(() => {
+  mkdirSync(evidenceDirectory, { recursive: true });
+});
 
 test("motion bridge projects exact forward and reverse semantic state", async ({
   page
@@ -99,6 +106,78 @@ test("accepted route has no motion bridge presentation", async ({ page }) => {
   );
   await expect(root.locator("[data-kp-two-column-scroll-paragraph]"))
     .toHaveCount(6);
+});
+
+test("dark light and reverse midpoint states remain visually inspectable", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const theme of ["dark", "light"] as const) {
+    await page.goto(`${exemplarRoute}&theme=${theme}`);
+    const root = tutorial(page);
+    const before = root.locator("[data-kp-motion-bridge-before] p");
+    await placeTopAt(page, before, 80);
+    await expect.poll(() => demandProgress(root)).toBeCloseTo(0.5, 2);
+    await page.screenshot({
+      path: `${evidenceDirectory}/desktop-${theme}-midpoint.png`,
+      fullPage: false
+    });
+  }
+
+  await page.goto(exemplarRoute);
+  const root = tutorial(page);
+  const before = root.locator("[data-kp-motion-bridge-before] p");
+  await placeTopAt(page, before, -120);
+  await expect.poll(() => demandProgress(root)).toBe(1);
+  await placeTopAt(page, before, 80);
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(0.5, 2);
+  await page.screenshot({
+    path: `${evidenceDirectory}/desktop-dark-reverse-midpoint.png`,
+    fullPage: false
+  });
+});
+
+test("compiled bridge has a complete no-JS prose fallback", async ({
+  browser
+}) => {
+  const artifact = JSON.parse(readFileSync(new URL(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
+    import.meta.url
+  ), "utf8")) as {
+    readonly payload: {
+      readonly motionBridgeHtml?: Readonly<Record<string, string>>;
+    };
+  };
+  const bridgeHtml = artifact.payload.motionBridgeHtml?.["demand-increase"];
+  expect(bridgeHtml).toBeTruthy();
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 720, height: 520 }
+  });
+  const page = await context.newPage();
+  await page.setContent(`<!doctype html><html><head><style>
+    :root { color-scheme: dark; background: #0d0e1c; color: #c5c7cd; }
+    body { max-width: 38rem; margin: 0 auto; padding: 5rem 2rem;
+      font: 20px/1.72 Georgia, serif; }
+    kp-motion-bridge { display: block; }
+    kp-motion-bridge p { margin: 0 0 2rem; text-indent: 1.35em; }
+    .kp-tutorial-motion-bridge__ellipsis { color: #a9afbf; }
+    .kp-tutorial-motion-bridge__rail { display: none; }
+    .katex-html { display: none; }
+    .katex-mathml { position: static !important; clip: auto !important;
+      width: auto !important; height: auto !important; overflow: visible !important; }
+  </style></head><body>${bridgeHtml}</body></html>`);
+  const bridge = page.locator("kp-motion-bridge");
+  await expect(bridge.locator("p")).toHaveCount(2);
+  await expect(bridge).toContainText("Begin at");
+  await expect(bridge).toContainText("The new curves meet");
+  await expect(bridge.locator(".kp-tutorial-motion-bridge__rail"))
+    .toBeHidden();
+  await page.screenshot({
+    path: `${evidenceDirectory}/compiled-no-js-prose.png`,
+    fullPage: false
+  });
+  await context.close();
 });
 
 function tutorial(page: Page): Locator {
