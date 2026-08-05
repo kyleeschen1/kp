@@ -102,7 +102,8 @@
     {
       "id": "s06",
       "title": "Define-economics-runtime-session-contract",
-      "status": "planned"
+      "summary": "Defined and tested the economics-only mounted runtime lifecycle: one content owner, retained-node apply, discrete keyed topology, history-independent seek, and idempotent disposal; static markup remains authoritative.",
+      "status": "complete"
     },
     {
       "id": "s07",

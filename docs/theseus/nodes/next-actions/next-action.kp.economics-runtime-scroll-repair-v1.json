@@ -74,6 +74,34 @@
       "scope": "s05 durable evidence integrity",
       "checkedAt": "2026-08-05T07:11:53.571Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s06 economics runtime session contract",
+      "checkedAt": "2026-08-05T07:15:37.029Z",
+      "notes": "All 39 focused tests passed, including the economics-local retained-session authority and narrow lifecycle surface."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 runtime contract types",
+      "checkedAt": "2026-08-05T07:15:38.043Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s06 patch hygiene",
+      "checkedAt": "2026-08-05T07:15:38.940Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s06 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:15:39.832Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [
