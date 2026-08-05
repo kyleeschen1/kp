@@ -148,7 +148,8 @@
     {
       "id": "s16",
       "title": "Cache semantic transit geometry",
-      "status": "planned"
+      "summary": "Added cached source, destination, stage-local, document, and viewport geometry with resize, font, and endpoint-resize invalidation; scroll and sticky-stage projection now require no layout reads.",
+      "status": "complete"
     },
     {
       "id": "s17",

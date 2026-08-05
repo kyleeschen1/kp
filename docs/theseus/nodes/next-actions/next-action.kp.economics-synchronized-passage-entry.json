@@ -357,6 +357,12 @@
       "status": "passed",
       "scope": "s15 active-window runtime performance",
       "checkedAt": "2026-08-05T22:07:03.517Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale; npm run typecheck",
+      "status": "passed",
+      "scope": "s16 semantic transit geometry cache",
+      "checkedAt": "2026-08-05T22:12:00.104Z"
     }
   ],
   "progress": {
