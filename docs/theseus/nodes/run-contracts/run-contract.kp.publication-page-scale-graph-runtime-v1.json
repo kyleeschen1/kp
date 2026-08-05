@@ -95,7 +95,8 @@
     {
       "id": "s07",
       "title": "Define-compiled-math-artifact-contract",
-      "status": "planned"
+      "summary": "Defined and documented kp.compiled-publication-artifact.v1 with exact source and payload digests, deterministic compiler identity, build-time trusted-off KaTeX HTML+MathML, and a sorted source-LaTeX manifest. Added runtime schema assertions and a stable contract test command.",
+      "status": "complete"
     },
     {
       "id": "s08",

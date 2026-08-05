@@ -385,6 +385,41 @@
       "scope": "s06 durable evidence integrity",
       "checkedAt": "2026-08-05T11:00:48.612Z",
       "notes": "Workspace validation passed after explicit economics capability closure."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "s07 compiled artifact contract",
+      "checkedAt": "2026-08-05T11:05:03.272Z",
+      "notes": "All three schema, deterministic math, digest, freeze, and JSON round-trip checks passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s07 application contract types",
+      "checkedAt": "2026-08-05T11:05:04.389Z",
+      "notes": "The generic compiled artifact contract compiles without Node, DOM, or KaTeX runtime dependencies."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s07 contract test types",
+      "checkedAt": "2026-08-05T11:05:05.310Z",
+      "notes": "The contract tests compile under the test project."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s07 patch hygiene",
+      "checkedAt": "2026-08-05T11:05:20.411Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s07 durable evidence integrity",
+      "checkedAt": "2026-08-05T11:05:21.414Z",
+      "notes": "Workspace validation passed with the compiled publication contract and decision record."
     }
   ],
   "expectedLearning": [
