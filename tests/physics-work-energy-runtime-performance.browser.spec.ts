@@ -7,7 +7,7 @@ const sampleProgress = [
   0.68, 0.72, 0.76, 0.8, 0.84, 0.88, 0.92, 0.96
 ] as const;
 
-test("physics SVG baseline measures frame rebuild and retained shell identity", async ({
+test("physics retained SVG session preserves frame and KaTeX identity", async ({
   page
 }) => {
   await page.goto(`/?artifact=${animationId}`);
@@ -37,21 +37,34 @@ test("physics SVG baseline measures frame rebuild and retained shell identity", 
       view: content.querySelector("[data-kp-physics-work-energy-view]"),
       workArea: content.querySelector("[data-kp-physics-work-area]"),
       description: content.querySelector("[data-kp-physics-nonvisual-summary]"),
-      math: content.querySelector('[data-kp-physics-equation-role="work"]'),
-      childListMutations: 0,
+      math: content.querySelector(
+        '[data-kp-physics-equation-role="work"] .katex'
+      ),
+      rootChildListMutations: 0,
+      descendantChildListMutations: 0,
+      characterDataMutations: 0,
       addedNodes: 0,
       removedNodes: 0,
       observer: undefined as MutationObserver | undefined
     };
     baseline.observer = new MutationObserver((records) => {
       for (const record of records) {
+        if (record.type === "characterData") {
+          baseline.characterDataMutations += 1;
+          continue;
+        }
         if (record.type !== "childList") continue;
-        baseline.childListMutations += 1;
+        if (record.target === content) baseline.rootChildListMutations += 1;
+        else baseline.descendantChildListMutations += 1;
         baseline.addedNodes += record.addedNodes.length;
         baseline.removedNodes += record.removedNodes.length;
       }
     });
-    baseline.observer.observe(content, { childList: true, subtree: true });
+    baseline.observer.observe(content, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
     (window as typeof window & {
       __kpPhysicsSvgBaseline?: typeof baseline;
     }).__kpPhysicsSvgBaseline = baseline;
@@ -86,7 +99,7 @@ test("physics SVG baseline measures frame rebuild and retained shell identity", 
           "[data-kp-physics-nonvisual-summary]"
         ),
         mathPreserved: baseline.math === baseline.content.querySelector(
-          '[data-kp-physics-equation-role="work"]'
+          '[data-kp-physics-equation-role="work"] .katex'
         ),
         accessible: baseline.svg.getAttribute("aria-describedby") ===
           "kp-physics-work-energy-description" &&
@@ -103,13 +116,15 @@ test("physics SVG baseline measures frame rebuild and retained shell identity", 
     if (baseline === undefined) throw new Error("Physics baseline was not installed.");
     baseline.observer?.disconnect();
     return {
-      childListMutations: baseline.childListMutations,
+      rootChildListMutations: baseline.rootChildListMutations,
+      descendantChildListMutations: baseline.descendantChildListMutations,
+      characterDataMutations: baseline.characterDataMutations,
       addedNodes: baseline.addedNodes,
       removedNodes: baseline.removedNodes
     };
   });
   const report = {
-    schemaVersion: "kp.physics-svg-runtime-baseline.v1",
+    schemaVersion: "kp.physics-retained-svg-runtime.v1",
     sampleCount: samples.length,
     retainedShellSamples: samples.filter(
       ({ svgPreserved, contentPreserved }) => svgPreserved && contentPreserved
@@ -123,29 +138,31 @@ test("physics SVG baseline measures frame rebuild and retained shell identity", 
     ).length,
     retainedMathSamples: samples.filter(({ mathPreserved }) => mathPreserved).length,
     accessibleSamples: samples.filter(({ accessible }) => accessible).length,
-    serializedCharacters: samples.reduce(
+    observedMarkupCharacters: samples.reduce(
       (total, sample) => total + sample.serializedCharacters,
       0
     ),
     ...mutations
   } as const;
 
-  console.log("KP physics SVG runtime baseline");
+  console.log("KP physics retained SVG runtime");
   console.log(JSON.stringify(report, null, 2));
   expect(report).toMatchObject({
-    schemaVersion: "kp.physics-svg-runtime-baseline.v1",
+    schemaVersion: "kp.physics-retained-svg-runtime.v1",
     sampleCount: 24,
     retainedShellSamples: 24,
-    retainedViewSamples: 0,
-    retainedWorkAreaSamples: 0,
-    retainedDescriptionSamples: 0,
-    retainedMathSamples: 0,
+    retainedViewSamples: 24,
+    retainedWorkAreaSamples: 24,
+    retainedDescriptionSamples: 24,
+    retainedMathSamples: 24,
     accessibleSamples: 24
   });
-  expect(report.childListMutations).toBeGreaterThanOrEqual(report.sampleCount);
-  expect(report.addedNodes).toBeGreaterThanOrEqual(report.sampleCount);
-  expect(report.removedNodes).toBeGreaterThanOrEqual(report.sampleCount);
-  expect(report.serializedCharacters).toBeGreaterThan(0);
+  expect(report.rootChildListMutations).toBe(0);
+  expect(report.descendantChildListMutations).toBe(0);
+  expect(report.addedNodes).toBe(0);
+  expect(report.removedNodes).toBe(0);
+  expect(report.characterDataMutations).toBeGreaterThan(0);
+  expect(report.observedMarkupCharacters).toBeGreaterThan(0);
 });
 
 interface PhysicsIdentitySample {
@@ -166,7 +183,9 @@ interface PhysicsBrowserBaseline {
   readonly workArea: Element | null;
   readonly description: Element | null;
   readonly math: Element | null;
-  childListMutations: number;
+  rootChildListMutations: number;
+  descendantChildListMutations: number;
+  characterDataMutations: number;
   addedNodes: number;
   removedNodes: number;
   observer?: MutationObserver | undefined;

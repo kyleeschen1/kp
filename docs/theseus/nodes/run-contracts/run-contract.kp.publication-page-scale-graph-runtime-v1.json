@@ -197,7 +197,8 @@
     {
       "id": "s24",
       "title": "Add-physics-local-retained-SVG-session",
-      "status": "planned"
+      "summary": "Added one physics-local retained SVG runtime session. The pure deterministic renderer remains mount and export authority; ordinary progress, rewind, and force-parameter changes patch shared projected geometry, exact attributes, narration, and existing KaTeX/text nodes, while structural viewport changes alone may remount. Across 24 Chromium seeks the shell, view, work area, accessible description, and KaTeX root retain identity with zero added or removed nodes. Exact physics, three-browser caller, economics, vector, types, and architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "s25",

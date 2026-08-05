@@ -28,6 +28,35 @@ export interface KpPhysicsGraphViewport {
   readonly yDomain: readonly [number, number];
 }
 
+export interface KpConstantForceWorkEnergySvgGeometry {
+  readonly graphBounds: {
+    readonly left: number;
+    readonly right: number;
+    readonly top: number;
+    readonly bottom: number;
+  };
+  readonly graphOrigin: readonly [number, number];
+  readonly forceStart: readonly [number, number];
+  readonly forceEnd: readonly [number, number];
+  readonly currentTop: readonly [number, number];
+  readonly currentBase: readonly [number, number];
+  readonly areaWidth: number;
+  readonly areaHeight: number;
+  readonly blockStartX: number;
+  readonly blockX: number;
+  readonly blockY: number;
+  readonly blockWidth: number;
+  readonly blockHeight: number;
+  readonly forceArrowLength: number;
+  readonly displacementStart: number;
+  readonly displacementCurrent: number;
+  readonly energyX: number;
+  readonly energyY: number;
+  readonly energyWidth: number;
+  readonly initialEnergyWidth: number;
+  readonly workEnergyWidth: number;
+}
+
 export const kpPhysicsGraphPresentationProfile =
   createKpDimensionalContinuityGraphPresentationProfile("physics");
 
@@ -61,23 +90,17 @@ export function renderKpConstantForceWorkEnergyRuntimeContent(input: {
   });
 }
 
-function renderPhysicsContent(input: {
+/** One pure projection feeds both deterministic markup and retained patches. */
+export function projectKpConstantForceWorkEnergySvgGeometry(input: {
   readonly frame: KpConstantForceWorkEnergyFrameV1;
   readonly viewport: KpPhysicsGraphViewport;
-  readonly stage: KpConstantForceWorkEnergyRuntimeFrame["stage"];
-  readonly workAreaOpacity: number;
-  readonly forceArrowEmphasis: number;
-  readonly unitIdentityOpacity: number;
-  readonly synchronizedView?:
-    | KpConstantForceWorkEnergySynchronizedView
-    | undefined;
-}): string {
-  const graphBounds = {
+}): KpConstantForceWorkEnergySvgGeometry {
+  const graphBounds = Object.freeze({
     left: 46,
     right: Math.min(430, input.viewport.width - 290),
     top: 106,
     bottom: input.viewport.height - 70
-  };
+  });
   const graphPoint = (position: number, force: number) => [
     scale(position, input.viewport.xDomain, [graphBounds.left, graphBounds.right]),
     scale(force, input.viewport.yDomain, [graphBounds.bottom, graphBounds.top])
@@ -92,25 +115,83 @@ function renderPhysicsContent(input: {
   const forceEnd = graphPoint(intervalEnd, force);
   const currentTop = graphPoint(position, force);
   const currentBase = graphPoint(position, 0);
-  const areaWidth = Math.max(0, currentTop[0] - graphOrigin[0]);
-  const areaHeight = Math.max(0, graphOrigin[1] - currentTop[1]);
   const blockStartX = input.viewport.width - 240;
   const blockEndX = input.viewport.width - 142;
   const blockX = scale(displacement, [0, intervalEnd], [blockStartX, blockEndX]);
   const blockY = 184;
   const blockWidth = 50;
   const blockHeight = 42;
-  const forceArrowLength = 42 + force * 8;
-  const displacementStart = blockStartX + blockWidth / 2;
-  const displacementCurrent = blockX + blockWidth / 2;
-  const initialKineticEnergy = 4;
-  const maximumEnergy = 24;
   const energyX = input.viewport.width - 248;
   const energyY = 306;
   const energyWidth = 210;
-  const initialEnergyWidth = energyWidth * initialKineticEnergy / maximumEnergy;
-  const workEnergyWidth = energyWidth * work / maximumEnergy;
+  const initialEnergyWidth = energyWidth * 4 / 24;
+  return Object.freeze({
+    graphBounds,
+    graphOrigin,
+    forceStart,
+    forceEnd,
+    currentTop,
+    currentBase,
+    areaWidth: Math.max(0, currentTop[0] - graphOrigin[0]),
+    areaHeight: Math.max(0, graphOrigin[1] - currentTop[1]),
+    blockStartX,
+    blockX,
+    blockY,
+    blockWidth,
+    blockHeight,
+    forceArrowLength: 42 + force * 8,
+    displacementStart: blockStartX + blockWidth / 2,
+    displacementCurrent: blockX + blockWidth / 2,
+    energyX,
+    energyY,
+    energyWidth,
+    initialEnergyWidth,
+    workEnergyWidth: energyWidth * work / 24
+  });
+}
 
+function renderPhysicsContent(input: {
+  readonly frame: KpConstantForceWorkEnergyFrameV1;
+  readonly viewport: KpPhysicsGraphViewport;
+  readonly stage: KpConstantForceWorkEnergyRuntimeFrame["stage"];
+  readonly workAreaOpacity: number;
+  readonly forceArrowEmphasis: number;
+  readonly unitIdentityOpacity: number;
+  readonly synchronizedView?:
+    | KpConstantForceWorkEnergySynchronizedView
+    | undefined;
+}): string {
+  const geometry = projectKpConstantForceWorkEnergySvgGeometry({
+    frame: input.frame,
+    viewport: input.viewport
+  });
+  const {
+    graphBounds,
+    graphOrigin,
+    forceStart,
+    forceEnd,
+    currentTop,
+    currentBase,
+    areaWidth,
+    areaHeight,
+    blockStartX,
+    blockX,
+    blockY,
+    blockWidth,
+    blockHeight,
+    forceArrowLength,
+    displacementStart,
+    displacementCurrent,
+    energyX,
+    energyY,
+    energyWidth,
+    initialEnergyWidth,
+    workEnergyWidth
+  } = geometry;
+  const graphPoint = (position: number, force: number) => [
+    scale(position, input.viewport.xDomain, [graphBounds.left, graphBounds.right]),
+    scale(force, input.viewport.yDomain, [graphBounds.bottom, graphBounds.top])
+  ] as const;
   return `<g data-kp-physics-work-energy-view data-kp-physics-work-energy-phase="${input.frame.phase}" data-kp-physics-choreography-stage="${input.stage}" data-kp-physics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-physics-position="${exactText(input.frame.state.position)}" data-kp-physics-net-force="${exactText(input.frame.state.netForceMagnitude)}" style="--kp-physics-unit-opacity:${input.unitIdentityOpacity}">
     ${renderPhysicsGrid(input.viewport, graphBounds, graphPoint)}
     <line class="editor-graph-stage__physics-axis" data-kp-physics-axis="position" x1="${graphBounds.left}" y1="${graphBounds.bottom}" x2="${graphBounds.right + 8}" y2="${graphBounds.bottom}" marker-end="url(#kp-editor-graph-axis-arrow)" />

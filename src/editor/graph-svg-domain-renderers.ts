@@ -28,6 +28,10 @@ import {
   renderKpConstantForceWorkEnergyRuntimeContent
 } from "../rendering/constant-force-work-energy-svg.ts";
 import {
+  createKpConstantForceWorkEnergyRuntimeSession,
+  type KpConstantForceWorkEnergyRuntimeSession
+} from "../rendering/constant-force-work-energy-runtime-session.ts";
+import {
   kpVectorDotProjectionGraphPresentationProfile,
   renderKpVectorDotProjectionRuntimeContent
 } from "../rendering/vector-dot-projection-svg.ts";
@@ -44,6 +48,9 @@ import {
   disposeKpEconomicsGraphSvgViewport
 } from "./graph-svg-viewport.ts";
 import {
+  KP_EDITOR_ANIMATION_DISPOSE_EVENT
+} from "./animation-player-controller.ts";
+import {
   createKpEditorGraphSvgViewportLifecycleAdapter,
   scaleKpEditorGraphCoordinate,
   type KpEditorGraphSvgViewportModel,
@@ -56,6 +63,10 @@ const economicsGraphSvgViewportRenderer =
   createKpEconomicsGraphSvgViewportRenderer(
     renderKpDimensionalContinuityInlineLatex
   );
+const physicsMountedRuntimeSessions = new WeakMap<
+  HTMLElement,
+  KpConstantForceWorkEnergyRuntimeSession
+>();
 
 export function createKpEditorGraphSvgDomainAdapter(
   supportedAnimationIds: readonly string[]
@@ -109,10 +120,37 @@ function renderGraphSvgDomainFrame(
   input: KpEditorGraphSvgViewportRenderInput
 ): void {
   if (input.animation.id === economicsEquilibriumAnimationId) {
+    disposePhysicsMountedRuntimeSession(input.slot);
     economicsGraphSvgViewportRenderer.render(input);
     return;
   }
   disposeKpEconomicsGraphSvgViewport(input.slot);
+  if (input.animation.id === "animation.physics.constant-force-work-energy") {
+    const frame = sampleKpConstantForceWorkEnergyRuntimeFrame({
+      animation: input.animation,
+      runtimeFrame: input.state.runtimeFrame
+    });
+    let runtime = physicsMountedRuntimeSessions.get(input.slot);
+    if (runtime?.content !== input.content || runtime.status === "disposed") {
+      runtime?.dispose();
+      runtime = createKpConstantForceWorkEnergyRuntimeSession({
+        content: input.content,
+        frame,
+        viewport: input.model
+      });
+      physicsMountedRuntimeSessions.set(input.slot, runtime);
+      input.player.addEventListener(
+        KP_EDITOR_ANIMATION_DISPOSE_EVENT,
+        () => disposePhysicsMountedRuntimeSession(input.slot),
+        { once: true }
+      );
+    } else {
+      runtime.apply({ frame, viewport: input.model });
+    }
+    syncGraphAccessibility(input.svg, input.content);
+    return;
+  }
+  disposePhysicsMountedRuntimeSession(input.slot);
   input.content.innerHTML = renderRuntimeContent(
     input.animation,
     input.state,
@@ -120,6 +158,11 @@ function renderGraphSvgDomainFrame(
     graphAccessibilityMode(input.player)
   );
   syncGraphAccessibility(input.svg, input.content);
+}
+
+function disposePhysicsMountedRuntimeSession(slot: HTMLElement): void {
+  physicsMountedRuntimeSessions.get(slot)?.dispose();
+  physicsMountedRuntimeSessions.delete(slot);
 }
 
 function renderRuntimeContent(
