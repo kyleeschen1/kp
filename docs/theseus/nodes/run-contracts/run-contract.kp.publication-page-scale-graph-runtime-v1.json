@@ -191,7 +191,8 @@
     {
       "id": "s23",
       "title": "Measure-physics-SVG-runtime-baseline",
-      "status": "planned"
+      "summary": "Added stable focused and Chromium performance commands and measured the current physics SVG debt without changing learner behavior. Across 24 direct seeks the outer SVG/content shell remains stable, but the physics view, work area, accessible description, and KaTeX equation identities survive zero frames; the path serializes 688070 characters and performs 24 root remove/add replacements while all 24 frames remain accessible. All 22 exact physics tests and the Chromium/Firefox/WebKit learner matrix pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

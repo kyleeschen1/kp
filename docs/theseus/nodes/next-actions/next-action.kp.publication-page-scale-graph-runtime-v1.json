@@ -1248,6 +1248,41 @@
       "scope": "s22 patch hygiene",
       "checkedAt": "2026-08-05T13:27:09.316Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run performance:physics-work-energy",
+      "status": "passed",
+      "scope": "s23 measured physics SVG baseline",
+      "checkedAt": "2026-08-05T13:32:47.178Z",
+      "notes": "Chromium measured 24/24 retained outer SVG shells, 0/24 retained physics view/work-area/description/KaTeX identities, 688070 serialized characters, 24 child-list replacements, 24 added roots, 24 removed roots, and 24/24 accessible frames."
+    },
+    {
+      "command": "npm run test:physics-work-energy",
+      "status": "passed",
+      "scope": "s23 exact physics semantics and rendering",
+      "checkedAt": "2026-08-05T13:32:48.477Z",
+      "notes": "All 22 physics contract, exact model, parameter, runtime, static SVG, deterministic output, synchronized view, and dense seek/rewind tests passed."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s23 three-engine preservation",
+      "checkedAt": "2026-08-05T13:32:49.705Z",
+      "notes": "Chromium, Firefox, and WebKit preserve exact seek, rewind, parameters, Review, history, accessibility, and persistent catalogue navigation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 baseline harness types",
+      "checkedAt": "2026-08-05T13:32:50.891Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23 patch hygiene",
+      "checkedAt": "2026-08-05T13:32:51.979Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {

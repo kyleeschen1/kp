@@ -56,6 +56,8 @@
     "preview:economics-demand-shift-performance": "vite preview --port 4176 --strictPort",
     "performance:economics-demand-shift-tutorial": "npm run build && playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
     "test:browser:physics-work-energy": "playwright test tests/animation-catalogue-physics-work-energy.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
+    "test:physics-work-energy": "node --disable-warning=ExperimentalWarning --test tests/kp-constant-force-work-energy-*.test.ts",
+    "performance:physics-work-energy": "playwright test tests/physics-work-energy-runtime-performance.browser.spec.ts --project=chromium --workers=1",
     "test:browser:vector-dot-projection": "playwright test tests/vector-dot-projection-exemplar.browser.spec.ts tests/editor-animation-visuals.browser.spec.ts --grep \"vector projection|dot projection visibly\" --project=chromium --workers=1",
     "test:browser:animation-catalogue-3d": "playwright test tests/animation-catalogue-3d.browser.spec.ts --project=chromium --workers=1",
     "test:browser:animation-equation-capability": "playwright test tests/animation-equation-capability.browser.spec.ts --project=chromium --workers=1",
