@@ -100,7 +100,8 @@
     {
       "id": "s08",
       "title": "Use cached header-safe viewport authority",
-      "status": "planned"
+      "summary": "Projected motion distances through the shared usable viewport and added an explicitly invalidated geometry cache with no per-scroll measurement.",
+      "status": "complete"
     },
     {
       "id": "s09",

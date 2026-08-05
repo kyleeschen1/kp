@@ -201,6 +201,20 @@
       "scope": "slice s07 motion bridge projection",
       "checkedAt": "2026-08-05T20:54:03.229Z",
       "notes": "All 47 tutorial passage/page-scale tests and full typechecking passed. Exact 0, midpoint, and 1 anchors plus dense forward/reverse projections are identical."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s08 focused geometry and page-scale",
+      "checkedAt": "2026-08-05T21:00:25.585Z",
+      "notes": "51 tests passed, including chrome-safe anchors, ratios, and invalidation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 full static typing",
+      "checkedAt": "2026-08-05T21:00:26.618Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {
