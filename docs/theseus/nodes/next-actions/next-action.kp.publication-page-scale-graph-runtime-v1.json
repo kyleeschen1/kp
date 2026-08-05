@@ -899,11 +899,53 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-05T12:32:56.798Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (14/14)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:39:28.141Z"
+    },
+    {
+      "command": "node test kp-tutorial-motion (9/9)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:39:30.596Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:39:33.499Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:39:35.897Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:39:37.432Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:39:58.352Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17800 events)",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:39:59.442Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s15 adds deterministic one-, three-, and twelve-passage pressure fixtures; the 12-passage case retains nine static/dehydrated stages, three live stages, one motion owner, stable geometry facts, exact semantic state, and two deduplicated capabilities."
+    "summary": "Slice s16 adds a page-level passage/block projection adapter over the single existing cached-geometry scroll coordinator. Twelve passages share one passive scroll listener, one resize listener, one pending rAF, and no ordinary-scroll layout rereads."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."

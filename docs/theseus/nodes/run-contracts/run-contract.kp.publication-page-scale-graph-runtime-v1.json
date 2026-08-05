@@ -149,7 +149,8 @@
     {
       "id": "s16",
       "title": "Extend-one-page-scroll-coordinator",
-      "status": "planned"
+      "summary": "Extended one cached-geometry scroll coordinator to page-level passage and local-block identities; twelve passages share one listener and one coalesced frame without additional scroll clocks or ordinary-scroll layout reads.",
+      "status": "complete"
     },
     {
       "id": "s17",
