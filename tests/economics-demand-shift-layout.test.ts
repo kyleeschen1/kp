@@ -5,7 +5,6 @@ import {
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
-  projectKpEconomicsTwoColumnStageAnchor,
   projectKpTwoColumnScrollMotionCorridor,
   projectKpTwoColumnScrollParagraph,
   projectKpTwoColumnScrollSequence,
@@ -29,17 +28,6 @@ import {
   readKpEconomicsGraphStrokeScale,
   writeKpEconomicsGraphStrokeScale
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-graph-style.ts";
-
-test("economics anchors the stable graph center to the 35vh focus line", () => {
-  assert.deepEqual(projectKpEconomicsTwoColumnStageAnchor({
-    stageBlockSizePx: 480,
-    viewportHeightPx: 800
-  }), {
-    stageLocalY: 240,
-    viewportY: 280,
-    stageTop: 40
-  });
-});
 
 test("inline sticky economics layout is an explicit reversible query mode", () => {
   assert.equal(

@@ -1,8 +1,4 @@
-import {
-  projectKpTutorialLocalViewportAnchor,
-  type KpTutorialLocalViewportAnchorProjection,
-  type KpTutorialMotionCorridor
-} from "../kp-tutorial-motion.ts";
+import type { KpTutorialMotionCorridor } from "../kp-tutorial-motion.ts";
 
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
@@ -56,22 +52,6 @@ export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
 export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
 export const kpEconomicsTwoColumnParagraphGapStepVh = 1;
 export const kpEconomicsTwoColumnParagraphGapDefaultVh = 16;
-
-export function projectKpEconomicsTwoColumnStageAnchor(input: {
-  readonly stageBlockSizePx: number;
-  readonly viewportHeightPx: number;
-  readonly focusTopRatio?: number | undefined;
-}): KpTutorialLocalViewportAnchorProjection {
-  return projectKpTutorialLocalViewportAnchor({
-    anchor: {
-      // The graph center is stable even while its curves and labels move.
-      stageLocalRatio: 0.5,
-      viewportRatio: input.focusTopRatio ?? 0.35
-    },
-    stageBlockSize: input.stageBlockSizePx,
-    viewportHeight: input.viewportHeightPx
-  });
-}
 
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string

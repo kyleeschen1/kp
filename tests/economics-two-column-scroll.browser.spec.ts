@@ -25,6 +25,10 @@ const entryBaseline = JSON.parse(readFileSync(new URL(
     readonly releaseInset: number;
   };
 };
+const entryTarget = JSON.parse(readFileSync(new URL(
+  "./fixtures/economics-two-column-entry-target.json",
+  import.meta.url
+), "utf8")) as typeof entryBaseline;
 
 test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
@@ -33,7 +37,7 @@ test.beforeAll(() => {
 test("desktop prose hands off salience beside a left-hand graph", async ({
   page
 }) => {
-  await page.setViewportSize(entryBaseline.viewport);
+  await page.setViewportSize(entryTarget.viewport);
   await page.goto(route);
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
@@ -118,7 +122,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(passageHeights.slice(0, 5).every((height) => height < 500)).toBe(true);
   expect(passageHeights[5]).toBeLessThan(800);
 
-  const focusTop = entryBaseline.focusLatch.paragraphTop;
+  expect(entryTarget.focusLatch.stageCenter).not.toBe(
+    entryBaseline.focusLatch.stageCenter
+  );
+  const focusTop = entryTarget.focusLatch.paragraphTop;
   await placeTopAt(page, initialParagraph, focusTop);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
@@ -128,8 +135,8 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     const bounds = element.getBoundingClientRect();
     return { top: Math.round(bounds.top), height: Math.round(bounds.height) };
   })).toEqual({
-    top: entryBaseline.focusLatch.stageTop,
-    height: entryBaseline.focusLatch.stageHeight
+    top: entryTarget.focusLatch.stageTop,
+    height: entryTarget.focusLatch.stageHeight
   });
   await expect.poll(() => Promise.all([
     initialParagraph.evaluate((element) => Math.round(
@@ -139,13 +146,13 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       element.getBoundingClientRect().top
     ))
   ])).toEqual([
-    entryBaseline.focusLatch.paragraphTop,
-    entryBaseline.focusLatch.stageTop
+    entryTarget.focusLatch.paragraphTop,
+    entryTarget.focusLatch.stageTop
   ]);
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.top + bounds.height / 2);
-  })).toBe(entryBaseline.focusLatch.stageCenter);
+  })).toBe(entryTarget.focusLatch.stageCenter);
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;
@@ -159,7 +166,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     };
   })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 415 });
   await expect.poll(() => demandProgress(root)).toBeLessThan(
-    entryBaseline.focusLatch.maximumInitialDemandProgress
+    entryTarget.focusLatch.maximumInitialDemandProgress
   );
   await expect(initialPassage).toHaveAttribute(
     "data-kp-two-column-paragraph-opacity",

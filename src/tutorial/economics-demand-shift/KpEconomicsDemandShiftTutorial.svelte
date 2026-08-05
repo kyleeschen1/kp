@@ -37,7 +37,6 @@
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
-    projectKpEconomicsTwoColumnStageAnchor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
     kpEconomicsTwoColumnParagraphGapMaximumVh,
@@ -79,6 +78,7 @@
     type KpTutorialScrollBlockRegistration
   } from "../kp-tutorial-motion.ts";
   import {
+    projectKpTutorialSynchronizedLatch,
     projectKpTutorialUsableViewport,
     projectKpTutorialViewportAnchors
   } from "../kp-tutorial-usable-viewport.ts";
@@ -164,7 +164,9 @@
     readonly motionStartRatio: number;
     readonly stageCenterRatio: number;
     readonly stageCenterY: number;
+    readonly stageTopY: number;
     readonly textAnchorY: number;
+    readonly textDocumentOffsetFromStagePx: number;
     readonly usableViewportBottomPx: number;
     readonly usableViewportHeightPx: number;
     readonly usableViewportTopPx: number;
@@ -1266,13 +1268,14 @@
       : layout.stageHeightPx;
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = measureTwoColumnScrollGeometry();
-      twoColumnStageTopPx = Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
-        stageBlockSizePx: inlineStickyStageHeightPx,
-        viewportHeightPx: geometry.viewportHeightPx,
-        focusTopRatio: geometry.textAnchorY / geometry.viewportHeightPx
-      }).stageTop);
+      twoColumnStageTopPx = geometry.stageTopY;
+      shell.style.setProperty(
+        "--kp-two-column-entry-offset",
+        `${geometry.textDocumentOffsetFromStagePx}px`
+      );
     } else {
       cachedTwoColumnScrollGeometry = undefined;
+      shell.style.removeProperty("--kp-two-column-entry-offset");
     }
     updateInlineStickyStageProjection();
     updateInlineStickyParagraphProjections();
@@ -1300,12 +1303,7 @@
 
   function inlineStickyTopInset(): number {
     if (!usesTwoColumnDesktopGeometry()) return 0;
-    const geometry = readCachedTwoColumnScrollGeometry();
-    return Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
-      stageBlockSizePx: inlineStickyStageHeightPx,
-      viewportHeightPx: geometry.viewportHeightPx,
-      focusTopRatio: geometry.textAnchorY / geometry.viewportHeightPx
-    }).stageTop);
+    return readCachedTwoColumnScrollGeometry().stageTopY;
   }
 
   function inlineStickyHandoffStartY(): number {
@@ -1423,6 +1421,11 @@
       textRatio: focusTopRatio,
       stageCenterRatio
     });
+    const latch = projectKpTutorialSynchronizedLatch({
+      viewport,
+      anchors,
+      stageBlockSizePx: inlineStickyStageHeightPx
+    });
     // CSS owns the physical rhythm; enhancement reads the same numeric vh
     // tokens during layout invalidation, then every scroll frame consumes this
     // immutable snapshot instead of forcing a fresh style calculation.
@@ -1436,8 +1439,11 @@
       ),
       motionStartRatio: ratio("--kp-two-column-motion-start-vh", 62),
       stageCenterRatio,
-      stageCenterY: anchors.stageCenterY,
-      textAnchorY: anchors.textY,
+      stageCenterY: latch.stageCenterY,
+      stageTopY: latch.stageTopY,
+      textAnchorY: latch.textY,
+      textDocumentOffsetFromStagePx:
+        latch.textDocumentOffsetFromStagePx,
       usableViewportBottomPx: viewport.bottomPx,
       usableViewportHeightPx: viewport.heightPx,
       usableViewportTopPx: viewport.topPx,
@@ -1456,6 +1462,11 @@
       viewportHeightPx: window.innerHeight
     });
     const anchors = projectKpTutorialViewportAnchors({ viewport });
+    const latch = projectKpTutorialSynchronizedLatch({
+      viewport,
+      anchors,
+      stageBlockSizePx: inlineStickyStageHeightPx
+    });
     return Object.freeze({
       approachStartRatio: 0.78,
       focusBottomRatio: 0.5,
@@ -1463,8 +1474,11 @@
       minimumEffectiveHeightRatio: 0.23,
       motionStartRatio: 0.62,
       stageCenterRatio: anchors.stageCenterRatio,
-      stageCenterY: anchors.stageCenterY,
-      textAnchorY: anchors.textY,
+      stageCenterY: latch.stageCenterY,
+      stageTopY: latch.stageTopY,
+      textAnchorY: latch.textY,
+      textDocumentOffsetFromStagePx:
+        latch.textDocumentOffsetFromStagePx,
       usableViewportBottomPx: viewport.bottomPx,
       usableViewportHeightPx: viewport.heightPx,
       usableViewportTopPx: viewport.topPx,

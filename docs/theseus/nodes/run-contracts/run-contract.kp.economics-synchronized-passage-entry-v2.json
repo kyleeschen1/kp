@@ -109,7 +109,8 @@
     {
       "id": "s10",
       "title": "Implement synchronized entry latch",
-      "status": "planned"
+      "summary": "Enhanced two-column layout now derives prose offset and stage top from one cached synchronized latch; graph center settles at 50 percent while prose settles at 35 percent on the same tick.",
+      "status": "complete"
     },
     {
       "id": "s11",

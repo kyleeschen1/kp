@@ -92,6 +92,13 @@
       "scope": "slice s09 cached viewport and chrome measurement integration",
       "checkedAt": "2026-08-05T17:37:57.957Z",
       "notes": "31 focused geometry/runtime tests, 5 stylesheet ownership tests, Svelte typecheck, and all 9 Chromium exemplar cases passed, including cached root-style-read instrumentation."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run test:economics-demand-shift-tutorial; npm run typecheck:svelte; focused lifecycle and layout tests",
+      "status": "passed",
+      "scope": "slice s10 simultaneous prose and graph entry latch",
+      "checkedAt": "2026-08-05T17:43:08.348Z",
+      "notes": "All 9 Chromium exemplar cases, 41 economics tutorial tests, 30 focused lifecycle/layout tests, 5 CSS ownership tests, and Svelte typecheck passed. Target geometry is prose top 280, stage top 160, stage center 400 at 1280 by 800."
     }
   ],
   "expectedLearning": [
