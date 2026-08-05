@@ -89,7 +89,8 @@
     {
       "id": "s06",
       "title": "Cut-economics-route-to-explicit-graph-capability",
-      "status": "planned"
+      "summary": "Economics selects a dedicated retained-SVG capability, while the full graph registry owns matrix, calculus, vector, and physics renderers. Parameter modules are lazy by selected domain. Unrelated graph debt is now empty; initial script fell to 207971B and requests to 42 with all economics, physics, and vector preservation checks passing.",
+      "status": "complete"
     },
     {
       "id": "s07",

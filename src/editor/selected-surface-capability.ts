@@ -24,6 +24,7 @@ export function supportsKpEditorGraphSvgAnimation(
 
 export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"
+  | "graph-svg-economics"
   | "graph-svg-katex-labels"
   | "graph-webgl-3d"
   | "programming-trace";
@@ -37,6 +38,12 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
     capabilities.push("equation-katex");
   }
   if (
+    input.slotKinds.includes("graph") &&
+    input.animationId ===
+      "animation.economics.supply-demand-equilibrium-shift"
+  ) {
+    capabilities.push("graph-svg-economics");
+  } else if (
     input.slotKinds.includes("graph") &&
     supportsKpEditorGraphSvgAnimation(input.animationId)
   ) {

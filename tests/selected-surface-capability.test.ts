@@ -16,6 +16,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["graph"]
   }), ["graph-svg-katex-labels"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.economics.supply-demand-equilibrium-shift",
+    slotKinds: ["graph"]
+  }), ["graph-svg-economics"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.graph.surface-mode.mesh-to-donut",
     slotKinds: ["graph"]
   }), ["graph-webgl-3d"]);
@@ -35,6 +39,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     catalogueSource,
     capabilityHostSource,
     equationCapability,
+    economicsGraphCapability,
     graphCapability,
     graph3DCapability,
     programmingCapability,
@@ -48,6 +53,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     ),
     readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
+    readFile("src/editor/economics-graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-3d-surface-capability.ts", "utf8"),
     readFile("src/editor/programming-surface-capability.ts", "utf8"),
@@ -71,6 +77,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
   assert.doesNotMatch(mainSource, /import\(\s*"\.\/editor\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
   assert.doesNotMatch(catalogueSource, /import\(\s*"\.\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
   assert.match(capabilityHostSource, /import\("\.\/equation-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/economics-graph-svg-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/graph-svg-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/graph-3d-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/programming-surface-capability\.ts"\)/);
@@ -79,10 +86,15 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     /loadKpAnimationAsset|window\.|document\.|from "svelte/
   );
   assert.match(equationCapability, /import "katex\/dist\/katex\.min\.css"/);
+  assert.doesNotMatch(economicsGraphCapability, /katex|three|matrix|physics/i);
+  assert.match(
+    economicsGraphCapability,
+    /import\("\.\/graph-svg-viewport\.ts"\)/
+  );
   assert.match(graphCapability, /import "katex\/dist\/katex\.min\.css"/);
   assert.match(
     graphCapability,
-    /import\("\.\/graph-svg-viewport\.ts"\)/
+    /import\("\.\/graph-svg-domain-renderers\.ts"\)/
   );
   assert.match(
     graph3DCapability,

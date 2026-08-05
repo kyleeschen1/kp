@@ -36,7 +36,7 @@
     },
     {
       "role": "graph projection",
-      "path": "src/editor/graph-svg-viewport.ts",
+      "path": "src/editor/graph-svg-domain-renderers.ts",
       "authorityToken": "animation.graph.vector.linear-map-scale"
     },
     {

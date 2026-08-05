@@ -88,6 +88,7 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     ownerPaths: ["src/editor/animation-surface-adapter-registry.ts"],
     callerPaths: [
       "src/editor/equation-surface-adapter.ts",
+      "src/editor/graph-svg-domain-renderers.ts",
       "src/editor/graph-svg-viewport.ts",
       "src/editor/diagram-svg-adapter.ts"
     ],
@@ -99,8 +100,11 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     id: "api.graph.svg-viewport",
     tier: "internal-platform",
     decision: "retain",
-    ownerPaths: ["src/editor/graph-svg-viewport.ts"],
-    callerPaths: ["src/editor/animation-surface-adapter-registry.ts"],
+    ownerPaths: ["src/editor/graph-svg-viewport-lifecycle.ts"],
+    callerPaths: [
+      "src/editor/graph-svg-domain-renderers.ts",
+      "src/editor/graph-svg-viewport.ts"
+    ],
     callerAnimationIds: [
       "animation.economics.supply-demand-equilibrium-shift",
       "animation.physics.constant-force-work-energy"
@@ -133,7 +137,7 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
       "src/animation/constant-force-work-energy-synchronized-view.ts",
       "src/rendering/constant-force-work-energy-svg.ts"
     ],
-    callerPaths: ["src/editor/graph-svg-viewport.ts"],
+    callerPaths: ["src/editor/graph-svg-domain-renderers.ts"],
     callerAnimationIds: [
       "animation.physics.constant-force-work-energy"
     ],
@@ -164,6 +168,7 @@ export const kpCrossDomainAnimationApiAudit = Object.freeze([
     callerPaths: [
       "src/rendering/economics-equilibrium-svg.ts",
       "src/rendering/constant-force-work-energy-svg.ts",
+      "src/editor/graph-svg-domain-renderers.ts",
       "src/editor/graph-svg-viewport.ts"
     ],
     callerAnimationIds: [

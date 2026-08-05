@@ -32,9 +32,12 @@ import { createKpEditorAnimationLibrary } from
 import { createKpEditorAnimationPlayerState } from
   "../src/editor/animation-player-state.ts";
 import {
-  createKpEditorGraphSvgViewportModel,
-  createKpEditorGraphSvgViewportAdapter
+  createKpEditorGraphSvgViewportModel
 } from "../src/editor/graph-svg-viewport.ts";
+import {
+  createKpEditorGraphSvgDomainAdapter as
+    createKpEditorGraphSvgViewportAdapter
+} from "../src/editor/graph-svg-domain-renderers.ts";
 import {
   kpEditorGraphSvgAnimationIds
 } from "../src/editor/selected-surface-capability.ts";

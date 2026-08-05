@@ -21,7 +21,7 @@ export const kpVectorDotProjectionReferenceInventory = Object.freeze([
     "preserve"
   ),
   reference(
-    "src/editor/graph-svg-viewport.ts",
+    "src/editor/graph-svg-domain-renderers.ts",
     "Existing native SVG graph host and sole graph paint owner.",
     "evolve"
   ),

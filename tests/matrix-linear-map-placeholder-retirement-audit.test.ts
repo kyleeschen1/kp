@@ -65,7 +65,7 @@ test("linear-map placeholder remains the vector-add-scale graph caller", () => {
 test("linear-map placeholder keeps named product and conformance references", async () => {
   const references = [
     ["src/animation/graph-adapter.ts", "createLinearMapVectorAnimationAsset"],
-    ["src/editor/graph-svg-viewport.ts", `case "${animationId}"`],
+    ["src/editor/graph-svg-domain-renderers.ts", `case "${animationId}"`],
     ["src/editor/selected-surface-capability.ts", `"${animationId}"`],
     [
       "src/animation/symbolic-manipulation-family-registry.ts",

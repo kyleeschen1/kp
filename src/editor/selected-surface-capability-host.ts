@@ -90,6 +90,17 @@ async function loadCapability(
     );
     return;
   }
+  if (capability === "graph-svg-economics") {
+    const client = await import("./economics-graph-svg-surface-capability.ts");
+    if (!registry.list().some(
+      ({ id }) => id === "editor-animation-surface.graph.svg.economics"
+    )) {
+      registry.register(
+        await client.createKpEconomicsGraphSvgSurfaceCapability()
+      );
+    }
+    return;
+  }
   const client = await import("./graph-svg-surface-capability.ts");
   await registerOnceAsync(
     registry,

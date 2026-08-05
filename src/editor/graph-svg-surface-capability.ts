@@ -6,8 +6,8 @@ export async function registerKpEditorGraphSvgSurfaceCapability(
   // Keep the renderer graph behind the selected Graph SVG capability itself.
   // Without this nested boundary, production chunk coalescing made its KaTeX
   // label profile a static dependency of unrelated 3D and programming routes.
-  const client = await import("./graph-svg-viewport.ts");
-  return client.registerKpEditorGraphSvgViewportAdapter(
+  const client = await import("./graph-svg-domain-renderers.ts");
+  return client.registerKpEditorGraphSvgDomainAdapter(
     supportedAnimationIds
   );
 }

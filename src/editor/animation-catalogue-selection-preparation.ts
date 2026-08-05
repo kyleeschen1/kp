@@ -2,12 +2,7 @@ import {
   loadKpAnimationAsset,
   type KpLoadedAnimationAsset
 } from "../animation/catalog-loader.ts";
-import {
-  economicsEquilibriumAnimationId
-} from "../animation/economics-equilibrium-adapter.ts";
-import {
-  constantForceWorkEnergyAnimationId
-} from "../animation/constant-force-work-energy-adapter.ts";
+import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
   deriveKpAnimationCatalogueHealth,
   type KpAnimationCatalogueHealth
@@ -36,27 +31,27 @@ import {
 import {
   dispatchKpEditorAnimationSurface
 } from "./animation-surface-dispatch.ts";
-import {
-  createParameterizedConstantForceWorkEnergyAnimation,
-  readKpConstantForceWorkEnergyParameters,
-  type KpConstantForceWorkEnergyParameterState
+import type {
+  KpConstantForceWorkEnergyParameterState
 } from "./constant-force-work-energy-parameters.ts";
-import {
-  createParameterizedEconomicsEquilibriumAnimation,
-  readKpEconomicsEquilibriumParameters,
-  type KpEconomicsEquilibriumParameterState
+import type {
+  KpEconomicsEquilibriumParameterState
 } from "./economics-equilibrium-parameters.ts";
 import {
   kpEditorSelectedSurfaceCapabilityHost,
   type KpEditorSelectedSurfaceCapabilityHost
 } from "./selected-surface-capability-host.ts";
-import {
-  kpVerifiedGeneratedLinearSolveAnimationId
-} from "../tutorial/verified-generated-linear-solve-identity.ts";
-
 type GeneratedLinearSolveReaderClient = typeof import(
   "./verified-generated-linear-solve-reader.ts"
 );
+
+interface KpParameterizedSelection {
+  readonly animation?: KpAnimationAsset | undefined;
+  readonly economicsParameters?:
+    KpEconomicsEquilibriumParameterState | undefined;
+  readonly physicsParameters?:
+    KpConstantForceWorkEnergyParameterState | undefined;
+}
 
 export interface KpAnimationCataloguePreparedSelection {
   readonly animation: KpLoadedAnimationAsset["animation"];
@@ -117,33 +112,23 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
       // Pack data and paint code stay independent until sampling. Starting
       // both here preserves the current direct-route latency without merging
       // either loader or its cache into this coordination service.
-      const [loaded] = await Promise.all([
+      const [loaded, , parameterized] = await Promise.all([
         loadAsset(selection.entry.animationId),
         capabilityHost.loadSelected({
           animationId: selection.entry.animationId,
           slotKinds: dispatchKpEditorAnimationSurface(descriptor).slotKinds
+        }),
+        prepareParameterizedSelection({
+          animationId: selection.entry.animationId,
+          search: selection.search
         })
       ]);
       assertLoadedIdentity(selection.entry, loaded);
 
-      const economicsParameters = selection.entry.animationId ===
-          economicsEquilibriumAnimationId
-        ? readKpEconomicsEquilibriumParameters(selection.search)
-        : undefined;
-      const physicsParameters = selection.entry.animationId ===
-          constantForceWorkEnergyAnimationId
-        ? readKpConstantForceWorkEnergyParameters(selection.search)
-        : undefined;
-      const animation = economicsParameters !== undefined
-        ? createParameterizedEconomicsEquilibriumAnimation(economicsParameters)
-            .animation
-        : physicsParameters !== undefined
-          ? createParameterizedConstantForceWorkEnergyAnimation(
-              physicsParameters
-            ).animation
-          : loaded.animation;
+      const { economicsParameters, physicsParameters } = parameterized;
+      const animation = parameterized.animation ?? loaded.animation;
       const readerCompanion = selection.entry.animationId ===
-          kpVerifiedGeneratedLinearSolveAnimationId
+          "animation.generated.linear-solve.linear-68c15d41"
         ? await loadReaderCompanion()
         : undefined;
       const catalog = loaded.catalog.some(({ id }) => id === animation.id)
@@ -179,6 +164,40 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
       });
     }
   });
+}
+
+async function prepareParameterizedSelection(input: {
+  readonly animationId: string;
+  readonly search: string;
+}): Promise<KpParameterizedSelection> {
+  if (
+    input.animationId ===
+      "animation.economics.supply-demand-equilibrium-shift"
+  ) {
+    const client = await import("./economics-equilibrium-parameters.ts");
+    const economicsParameters = client.readKpEconomicsEquilibriumParameters(
+      input.search
+    );
+    return Object.freeze({
+      economicsParameters,
+      animation: client.createParameterizedEconomicsEquilibriumAnimation(
+        economicsParameters
+      ).animation
+    });
+  }
+  if (input.animationId === "animation.physics.constant-force-work-energy") {
+    const client = await import("./constant-force-work-energy-parameters.ts");
+    const physicsParameters = client.readKpConstantForceWorkEnergyParameters(
+      input.search
+    );
+    return Object.freeze({
+      physicsParameters,
+      animation: client.createParameterizedConstantForceWorkEnergyAnimation(
+        physicsParameters
+      ).animation
+    });
+  }
+  return Object.freeze({});
 }
 
 let generatedReaderClientPromise:

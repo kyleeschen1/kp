@@ -26,8 +26,9 @@ import {
   kpEditorGraph3DSurfaceAdapter
 } from "../src/editor/graph-3d-surface-adapter.ts";
 import {
-  createKpEditorGraphSvgViewportAdapter
-} from "../src/editor/graph-svg-viewport.ts";
+  createKpEditorGraphSvgDomainAdapter as
+    createKpEditorGraphSvgViewportAdapter
+} from "../src/editor/graph-svg-domain-renderers.ts";
 import {
   kpEditorGraphSvgAnimationIds
 } from "../src/editor/selected-surface-capability.ts";

@@ -294,6 +294,97 @@
       "scope": "s05 durable evidence integrity",
       "checkedAt": "2026-08-05T10:43:23.997Z",
       "notes": "Workspace validation passed after the generic viewport split."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 explicit capability types",
+      "checkedAt": "2026-08-05T11:00:18.190Z",
+      "notes": "All application, Node, test, Svelte, and domain projects passed with the split renderer registry and lazy parameter modules."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s06 explicit economics capability build",
+      "checkedAt": "2026-08-05T11:00:19.385Z",
+      "notes": "Production build keeps the economics-only renderer independently loadable from the full graph domain registry."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s06 route debt ratchet diagnostic",
+      "checkedAt": "2026-08-05T11:00:20.506Z",
+      "notes": "The runtime and ceilings passed; the test failed because measured unrelated graph debt had already fallen from eight chunks to one, proving the old exact allowlist was stale."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s06 closed economics graph route",
+      "checkedAt": "2026-08-05T11:00:21.552Z",
+      "notes": "Unrelated graph-domain debt is empty. Initial transfer is 307641B, script 207971B, resources 42, CLS 0, cold longest task 98ms; retained SVG and active-motion ceilings pass."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s06 economics semantic preservation",
+      "checkedAt": "2026-08-05T11:00:22.544Z",
+      "notes": "All 42 economics publication, motion, runtime, static SVG, URL, and parity checks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/selected-surface-capability.test.ts tests/animation-catalogue-selection-preparation.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/vector-dot-projection-catalogue-integration.test.ts tests/matrix-linear-map-placeholder-retirement-audit.test.ts tests/kp-constant-force-work-energy-static-svg.test.ts tests/vector-dot-projection-svg.test.ts",
+      "status": "passed",
+      "scope": "s06 capability and sibling renderer preservation",
+      "checkedAt": "2026-08-05T11:00:23.592Z",
+      "notes": "All 31 selected-capability, preparation, hostability, matrix, physics, and vector checks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s06 learner route behavior",
+      "checkedAt": "2026-08-05T11:00:24.580Z",
+      "notes": "All 12 persistent tutorial, seek, rewind, history, accessibility, no-JS, and phone cases passed."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s06 canonical visual preservation",
+      "checkedAt": "2026-08-05T11:00:25.541Z",
+      "notes": "All eight canonical economics visual cases passed."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s06 full-registry physics preservation",
+      "checkedAt": "2026-08-05T11:00:26.501Z",
+      "notes": "Physics exact seek, rewind, parameters, Review, and history passed in Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "s06 full-registry vector preservation",
+      "checkedAt": "2026-08-05T11:00:27.489Z",
+      "notes": "All three vector projection paint, geometry, reduced-motion, and lazy-route cases passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 architecture gates",
+      "checkedAt": "2026-08-05T11:00:28.413Z",
+      "notes": "All four architecture gates passed with updated graph lifecycle and domain-renderer ownership."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s06 patch hygiene",
+      "checkedAt": "2026-08-05T11:00:47.624Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s06 durable evidence integrity",
+      "checkedAt": "2026-08-05T11:00:48.612Z",
+      "notes": "Workspace validation passed after explicit economics capability closure."
     }
   ],
   "expectedLearning": [

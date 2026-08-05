@@ -108,12 +108,13 @@ export function projectKpEditorGraphAxes(input: {
 }
 
 export function createKpEditorGraphSvgViewportLifecycleAdapter(input: {
+  readonly adapterId?: string | undefined;
   readonly supportedAnimationIds: readonly string[];
   readonly renderer: KpEditorGraphSvgViewportRenderer;
 }): KpEditorAnimationSurfaceAdapter {
   const supported = new Set(input.supportedAnimationIds);
   const adapter: KpEditorAnimationSurfaceAdapter = {
-    id: "editor-animation-surface.graph.svg",
+    id: input.adapterId ?? "editor-animation-surface.graph.svg",
     slotKind: "graph",
     priority: 0,
     supports(state) {

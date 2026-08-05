@@ -32,16 +32,7 @@ const routeClosureDebt = Object.freeze({
     "kp-catalogue-identities"
   ],
   runtimeKatex: ["katex", "katex-adapter"],
-  unrelatedGraphDomains: [
-    "constant-force-work-energy-adapter",
-    "focus-profile",
-    "integral-area-sweep-adapter",
-    "linear-map",
-    "matrix",
-    "matrix-linear-map-frame",
-    "matrix-linear-map-pacing",
-    "propagation-compiler"
-  ]
+  unrelatedGraphDomains: []
 });
 
 interface KpTutorialPerformanceProbe {
