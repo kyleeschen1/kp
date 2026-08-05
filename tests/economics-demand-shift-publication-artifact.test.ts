@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  compileKpEconomicsRetainedMathArtifact,
   compileKpEconomicsDemandShiftPublicationArtifact,
   serializeKpCompiledPublicationArtifact
 } from "../scripts/compile-economics-demand-shift-publication.ts";
@@ -29,9 +30,28 @@ const artifactSource = readFileSync(
 const artifact = JSON.parse(artifactSource) as KpCompiledPublicationArtifact<
   KpEconomicsDemandShiftPublication
 >;
+const retainedMathSource = readFileSync(
+  new URL(
+    "../src/rendering/economics-equilibrium-retained-math.generated.json",
+    import.meta.url
+  ),
+  "utf8"
+);
+const retainedMath = JSON.parse(retainedMathSource) as {
+  readonly engineVersion: string;
+  readonly sourceLatex: readonly string[];
+  readonly fragments: Readonly<Record<string, string>>;
+};
 const routeEntrySource = readFileSync(
   new URL(
     "../src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts",
+    import.meta.url
+  ),
+  "utf8"
+);
+const inlineMathSource = readFileSync(
+  new URL(
+    "../src/tutorial/economics-demand-shift/KpInlineMath.svelte",
     import.meta.url
   ),
   "utf8"
@@ -63,6 +83,28 @@ test("economics learner route consumes the artifact rather than compiler inputs"
   );
   assert.doesNotMatch(routeEntrySource, /economics-demand-shift\.md\?raw/);
   assert.doesNotMatch(routeEntrySource, /compileKpEconomicsDemandShiftPublication/);
+  assert.doesNotMatch(inlineMathSource, /katex-adapter|renderLatexToHtml/);
+  assert.match(inlineMathSource, /renderKpEconomicsRetainedInlineLatex/);
+});
+
+test("bounded dynamic economics math is an exact retained fragment bank", () => {
+  const rebuilt = compileKpEconomicsRetainedMathArtifact(
+    retainedMath.engineVersion
+  );
+  assert.equal(`${JSON.stringify(rebuilt, null, 2)}\n`, retainedMathSource);
+  assert.deepEqual(
+    Object.keys(retainedMath.fragments).sort(),
+    [...retainedMath.sourceLatex].sort()
+  );
+  assert.deepEqual(
+    ["15", "16", "17", "18", "19", "20"].filter(
+      (latex) => retainedMath.fragments[latex] !== undefined
+    ),
+    ["15", "16", "17", "18", "19", "20"]
+  );
+  assert.ok(Object.values(retainedMath.fragments).every((html) =>
+    html.includes("katex-mathml") && html.includes("katex-html")
+  ));
 });
 
 function digest(value: string): `sha256:${string}` {

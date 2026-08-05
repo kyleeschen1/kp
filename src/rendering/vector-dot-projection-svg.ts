@@ -6,9 +6,11 @@ import {
   kpVectorDotProjectionExemplarContract
 } from "../animation/vector-dot-projection-exemplar-contract.ts";
 import {
-  createKpDimensionalContinuityGraphPresentationProfile,
-  renderKpDimensionalContinuityInlineLatex
+  createKpDimensionalContinuityGraphPresentationProfile
 } from "./dimensional-continuity-graph-profile.ts";
+import {
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-inline-latex.ts";
 
 export interface KpVectorDotProjectionGraphViewport {
   readonly width: number;

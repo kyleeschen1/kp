@@ -21,6 +21,9 @@ import {
 } from "../animation/economics-equilibrium-adapter.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
+  renderKpDimensionalContinuityInlineLatex
+} from "../rendering/dimensional-continuity-inline-latex.ts";
+import {
   kpPhysicsGraphPresentationProfile,
   renderKpConstantForceWorkEnergyRuntimeContent
 } from "../rendering/constant-force-work-energy-svg.ts";
@@ -37,8 +40,8 @@ import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import {
-  disposeKpEconomicsGraphSvgViewport,
-  kpEconomicsGraphSvgViewportRenderer
+  createKpEconomicsGraphSvgViewportRenderer,
+  disposeKpEconomicsGraphSvgViewport
 } from "./graph-svg-viewport.ts";
 import {
   createKpEditorGraphSvgViewportLifecycleAdapter,
@@ -49,6 +52,10 @@ import {
 } from "./graph-svg-viewport-lifecycle.ts";
 
 const matrixLinearMapPlanCache = new Map<string, KpMatrixLinearMapPlan>();
+const economicsGraphSvgViewportRenderer =
+  createKpEconomicsGraphSvgViewportRenderer(
+    renderKpDimensionalContinuityInlineLatex
+  );
 
 export function createKpEditorGraphSvgDomainAdapter(
   supportedAnimationIds: readonly string[]
@@ -75,7 +82,7 @@ function graphSvgViewportPresentation(input: {
   readonly model: KpEditorGraphSvgViewportModel;
 }): KpEditorGraphSvgViewportPresentation {
   if (input.animation.id === economicsEquilibriumAnimationId) {
-    return kpEconomicsGraphSvgViewportRenderer.presentation(input);
+    return economicsGraphSvgViewportRenderer.presentation(input);
   }
   const physicsProfile = input.animation.id ===
     "animation.physics.constant-force-work-energy";
@@ -102,7 +109,7 @@ function renderGraphSvgDomainFrame(
   input: KpEditorGraphSvgViewportRenderInput
 ): void {
   if (input.animation.id === economicsEquilibriumAnimationId) {
-    kpEconomicsGraphSvgViewportRenderer.render(input);
+    economicsGraphSvgViewportRenderer.render(input);
     return;
   }
   disposeKpEconomicsGraphSvgViewport(input.slot);

@@ -11,6 +11,9 @@ import {
   kpEconomicsGraphPlotInsets,
   kpEconomicsGraphPresentationProfile
 } from "../rendering/economics-equilibrium-svg.ts";
+import type {
+  KpEconomicsInlineLatexRenderer
+} from "../rendering/economics-equilibrium-svg.ts";
 import {
   createKpEconomicsEquilibriumRuntimeSession,
   type KpEconomicsEquilibriumRuntimeSession
@@ -95,19 +98,28 @@ const economicsMountedRuntimeSessions = new WeakMap<
   KpEconomicsEquilibriumRuntimeSession
 >();
 
-export function createKpEconomicsGraphSvgViewportAdapter():
+export function createKpEconomicsGraphSvgViewportAdapter(input: {
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
+}):
 KpEditorAnimationSurfaceAdapter {
   return createKpEditorGraphSvgViewportLifecycleAdapter({
     adapterId: "editor-animation-surface.graph.svg.economics",
     supportedAnimationIds: [economicsEquilibriumAnimationId],
-    renderer: kpEconomicsGraphSvgViewportRenderer
+    renderer: createKpEconomicsGraphSvgViewportRenderer(
+      input.renderInlineLatex
+    )
   });
 }
 
-export const kpEconomicsGraphSvgViewportRenderer = Object.freeze({
-  presentation: economicsGraphSvgViewportPresentation,
-  render: renderEconomicsGraphSvgFrame
-});
+export function createKpEconomicsGraphSvgViewportRenderer(
+  renderInlineLatex: KpEconomicsInlineLatexRenderer
+) {
+  return Object.freeze({
+    presentation: economicsGraphSvgViewportPresentation,
+    render: (input: KpEditorGraphSvgViewportRenderInput) =>
+      renderEconomicsGraphSvgFrame(input, renderInlineLatex)
+  });
+}
 
 function renderEconomicsGraphSvgFrame({
   animation,
@@ -117,7 +129,8 @@ function renderEconomicsGraphSvgFrame({
   slot,
   state,
   svg
-}: KpEditorGraphSvgViewportRenderInput): void {
+}: KpEditorGraphSvgViewportRenderInput,
+renderInlineLatex: KpEconomicsInlineLatexRenderer): void {
       const economicsProfile = economicsGraphRuntimePerformanceSession(
         player,
         slot
@@ -134,7 +147,8 @@ function renderEconomicsGraphSvgFrame({
               runtime = createKpEconomicsEquilibriumRuntimeSession({
                 content,
                 frame: economicsFrame,
-                viewport: model
+                viewport: model,
+                renderInlineLatex
               });
               economicsMountedRuntimeSessions.set(slot, runtime);
               player.addEventListener(

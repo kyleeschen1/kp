@@ -17,6 +17,9 @@ import {
   kpEconomicsGraphPresentationProfile,
   renderKpEconomicsEquilibriumStaticContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
+import {
+  renderKpEconomicsRetainedInlineLatex
+} from "../src/rendering/economics-equilibrium-retained-math.ts";
 
 test("static economics SVG paints exact curves and initial equilibrium", () => {
   const model = createKpSupplyDemandEquilibriumModel();
@@ -27,7 +30,11 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   const viewport = createKpEditorGraphSvgViewportModel(
     createEconomicsEquilibriumAnimationAsset(model)
   );
-  const html = renderKpEconomicsEquilibriumStaticContent({ frame, viewport });
+  const html = renderKpEconomicsEquilibriumStaticContent({
+    frame,
+    viewport,
+    renderInlineLatex: renderKpEconomicsRetainedInlineLatex
+  });
 
   assert.deepEqual(viewport, {
     width: 640,
@@ -83,7 +90,15 @@ test("static economics SVG is deterministic for the same exact frame", () => {
   };
 
   assert.equal(
-    renderKpEconomicsEquilibriumStaticContent({ frame, viewport }),
-    renderKpEconomicsEquilibriumStaticContent({ frame, viewport })
+    renderKpEconomicsEquilibriumStaticContent({
+      frame,
+      viewport,
+      renderInlineLatex: renderKpEconomicsRetainedInlineLatex
+    }),
+    renderKpEconomicsEquilibriumStaticContent({
+      frame,
+      viewport,
+      renderInlineLatex: renderKpEconomicsRetainedInlineLatex
+    })
   );
 });

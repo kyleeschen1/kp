@@ -15,9 +15,11 @@ import {
   kpDimensionalContinuityDynamicDisplayRelation
 } from "../animation/dimensional-continuity-dynamic-display.ts";
 import {
-  createKpDimensionalContinuityGraphPresentationProfile,
-  renderKpDimensionalContinuityInlineLatex
+  createKpDimensionalContinuityGraphPresentationProfile
 } from "./dimensional-continuity-graph-profile.ts";
+import {
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-inline-latex.ts";
 
 export interface KpPhysicsGraphViewport {
   readonly width: number;

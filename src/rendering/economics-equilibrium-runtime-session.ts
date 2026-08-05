@@ -5,15 +5,15 @@ import {
   kpEconomicsGraphPlotInsets,
   renderKpEconomicsEquilibriumRuntimeContent
 } from "./economics-equilibrium-svg.ts";
-import type { KpEconomicsGraphViewport } from "./economics-equilibrium-svg.ts";
+import type {
+  KpEconomicsGraphViewport,
+  KpEconomicsInlineLatexRenderer
+} from "./economics-equilibrium-svg.ts";
 import {
   formatKpDimensionalContinuityDynamicDisplay,
   kpDimensionalContinuityDynamicDisplayDecimals,
   kpDimensionalContinuityDynamicDisplayRelation
 } from "../animation/dimensional-continuity-dynamic-display.ts";
-import {
-  renderKpDimensionalContinuityInlineLatex
-} from "./dimensional-continuity-graph-profile.ts";
 import {
   createKpEconomicsEquilibriumSynchronizedView
 } from "../animation/economics-equilibrium-synchronized-view.ts";
@@ -22,6 +22,7 @@ export interface KpEconomicsEquilibriumRuntimeSessionInput {
   readonly content: SVGGElement;
   readonly frame: KpEconomicsEquilibriumRuntimeFrame;
   readonly viewport: KpEconomicsGraphViewport;
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
 }
 
 export interface KpEconomicsEquilibriumRuntimeSession {
@@ -48,6 +49,7 @@ const mountedScaffolds = new WeakMap<
 
 interface KpEconomicsEquilibriumScaffoldState {
   stableGeometryKey: string;
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
 }
 
 const scaffoldStates = new WeakMap<
@@ -107,7 +109,8 @@ export function mountKpEconomicsEquilibriumRuntimeScaffold(
   // later progress patches retain this parsed tree instead of rebuilding it.
   input.content.innerHTML = renderKpEconomicsEquilibriumRuntimeContent({
     frame: input.frame,
-    viewport: input.viewport
+    viewport: input.viewport,
+    renderInlineLatex: input.renderInlineLatex
   });
   const view = input.content.querySelector<SVGGElement>(
     ":scope > [data-kp-economics-equilibrium-view]"
@@ -132,7 +135,8 @@ export function mountKpEconomicsEquilibriumRuntimeScaffold(
   });
   mountedScaffolds.set(input.content, scaffold);
   scaffoldStates.set(scaffold, {
-    stableGeometryKey: stableGeometryKey(input.frame, input.viewport)
+    stableGeometryKey: stableGeometryKey(input.frame, input.viewport),
+    renderInlineLatex: input.renderInlineLatex
   });
   return scaffold;
 }
@@ -697,9 +701,21 @@ function createMathLabel(input: {
   owner.className =
     `editor-graph-stage__economics-math-label ${input.className}`;
   owner.dataset["kpLatex"] = input.latex;
-  owner.innerHTML = renderKpDimensionalContinuityInlineLatex(input.latex);
+  owner.innerHTML = requireScaffoldState(input.scaffold).renderInlineLatex(
+    input.latex
+  );
   foreignObject.append(owner);
   return foreignObject;
+}
+
+function requireScaffoldState(
+  scaffold: KpEconomicsEquilibriumMountedScaffold
+): KpEconomicsEquilibriumScaffoldState {
+  const state = scaffoldStates.get(scaffold);
+  if (state === undefined) {
+    throw new Error("Economics runtime scaffold state is unavailable.");
+  }
+  return state;
 }
 
 function patchInitialEquilibriumGuides(input: {

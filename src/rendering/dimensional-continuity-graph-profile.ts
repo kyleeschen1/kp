@@ -1,4 +1,3 @@
-import { renderLatexToHtml } from "./katex-adapter.ts";
 import {
   kpDimensionalContinuityGraphLanguageId
 } from "./dimensional-continuity-graph-language.ts";
@@ -22,9 +21,6 @@ export interface KpDimensionalContinuityGraphPresentationProfileV1 {
   };
 }
 
-const inlineLatexHtmlCache = new Map<string, string>();
-const inlineLatexHtmlCacheLimit = 512;
-
 export function createKpDimensionalContinuityGraphPresentationProfile(
   domain: string
 ): KpDimensionalContinuityGraphPresentationProfileV1 {
@@ -46,15 +42,4 @@ export function createKpDimensionalContinuityGraphPresentationProfile(
       plane: "warm"
     })
   });
-}
-
-export function renderKpDimensionalContinuityInlineLatex(latex: string): string {
-  const cached = inlineLatexHtmlCache.get(latex);
-  if (cached !== undefined) return cached;
-  const html = renderLatexToHtml(latex, { displayMode: false });
-  if (inlineLatexHtmlCache.size >= inlineLatexHtmlCacheLimit) {
-    inlineLatexHtmlCache.delete(inlineLatexHtmlCache.keys().next().value ?? "");
-  }
-  inlineLatexHtmlCache.set(latex, html);
-  return html;
 }

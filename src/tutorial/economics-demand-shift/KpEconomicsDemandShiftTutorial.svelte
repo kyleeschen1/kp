@@ -56,9 +56,6 @@
     writeKpEconomicsGraphStrokeScale
   } from "./economics-demand-shift-graph-style.ts";
   import {
-    kpEconomicsTwoColumnParagraphs
-  } from "./economics-demand-shift-two-column-scroll.ts";
-  import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
     projectKpEconomicsLessonMotion,
@@ -190,6 +187,7 @@
     lesson,
     motionScrubBarHtml,
     tocHtml,
+    twoColumnParagraphs,
     verificationSurfaceHtml
   }: {
     readonly entry: KpAnimationCatalogueEntry;
@@ -207,6 +205,8 @@
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
+    readonly twoColumnParagraphs:
+      readonly KpEconomicsDemandShiftLessonPassage[];
     readonly verificationSurfaceHtml: string;
   } = $props();
 
@@ -2175,7 +2175,7 @@
                 </aside>
                 <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll
-                    ? kpEconomicsTwoColumnParagraphs
+                    ? twoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {@render lessonPassage(passage, true)}
                   {/each}

@@ -10,12 +10,34 @@ import {
   compileKpEconomicsDemandShiftPublication,
   type KpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import {
+  sampleKpEconomicsEquilibriumRuntimeFrame
+} from "../src/animation/economics-equilibrium-runtime-frame.ts";
+import {
+  sampleKpAnimationRuntimeFrame
+} from "../src/animation/runtime-sampler.ts";
+import {
+  createKpEconomicsEquilibriumParameterState,
+  createParameterizedEconomicsEquilibriumAnimation,
+  kpEconomicsDemandInterceptParameter
+} from "../src/editor/economics-equilibrium-parameters.ts";
+import {
+  createKpEditorGraphSvgViewportModel
+} from "../src/editor/graph-svg-viewport-lifecycle.ts";
+import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
+import {
+  renderKpEconomicsEquilibriumRuntimeContent
+} from "../src/rendering/economics-equilibrium-svg.ts";
 
 const sourcePath = "content/lessons/economics-demand-shift.md";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceUrl = new URL(`../${sourcePath}`, import.meta.url);
 const outputUrl = new URL(
   "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
+  import.meta.url
+);
+const retainedMathOutputUrl = new URL(
+  "../src/rendering/economics-equilibrium-retained-math.generated.json",
   import.meta.url
 );
 const katexPackageUrl = new URL("../node_modules/katex/package.json", import.meta.url);
@@ -55,6 +77,59 @@ export function serializeKpCompiledPublicationArtifact(
   artifact: KpCompiledPublicationArtifact<KpEconomicsDemandShiftPublication>
 ): string {
   return `${JSON.stringify(artifact, null, 2)}\n`;
+}
+
+export function compileKpEconomicsRetainedMathArtifact(katexVersion: string) {
+  const sources = new Set<string>();
+  const collect = (latex: string): string => {
+    sources.add(latex);
+    return "";
+  };
+  const initialProgresses = [0, 0.1, 0.44, 0.72, 0.8, 1] as const;
+  for (
+    let value = kpEconomicsDemandInterceptParameter.minimum;
+    value <= kpEconomicsDemandInterceptParameter.maximum;
+    value += kpEconomicsDemandInterceptParameter.step
+  ) {
+    sources.add(String(value));
+    const parameterized = createParameterizedEconomicsEquilibriumAnimation(
+      createKpEconomicsEquilibriumParameterState(value)
+    );
+    const viewport = createKpEditorGraphSvgViewportModel(
+      parameterized.animation
+    );
+    for (const progress of initialProgresses) {
+      const frame = sampleKpEconomicsEquilibriumRuntimeFrame({
+        animation: parameterized.animation,
+        model: parameterized.model,
+        runtimeFrame: sampleKpAnimationRuntimeFrame({
+          animation: parameterized.animation,
+          progress
+        })
+      });
+      renderKpEconomicsEquilibriumRuntimeContent({
+        frame,
+        viewport,
+        renderInlineLatex: collect
+      });
+    }
+  }
+  const sourceLatex = [...sources].sort();
+  return Object.freeze({
+    schemaVersion: "kp.economics-retained-math.v1" as const,
+    engine: "katex" as const,
+    engineVersion: katexVersion,
+    output: "htmlAndMathml" as const,
+    trust: false as const,
+    sourceLatex,
+    fragments: Object.fromEntries(sourceLatex.map((latex) => [
+      latex,
+      renderLatexToHtml(latex, {
+        displayMode: false,
+        output: "htmlAndMathml"
+      })
+    ]))
+  });
 }
 
 function collectMathSources(value: unknown): string[] {
@@ -106,10 +181,16 @@ export function generateKpEconomicsDemandShiftPublicationArtifact(
       katexVersion: readKatexVersion()
     })
   );
+  const retainedMathOutput = `${JSON.stringify(
+    compileKpEconomicsRetainedMathArtifact(readKatexVersion()),
+    null,
+    2
+  )}\n`;
 
   if (checkOnly) {
     const existing = readFileSync(outputUrl, "utf8");
-    if (existing !== output) {
+    const retainedMathExisting = readFileSync(retainedMathOutputUrl, "utf8");
+    if (existing !== output || retainedMathExisting !== retainedMathOutput) {
       throw new Error(
         `Compiled publication is stale. Run npm run generate:economics-demand-shift-publication from ${projectRoot}.`
       );
@@ -117,6 +198,7 @@ export function generateKpEconomicsDemandShiftPublicationArtifact(
     return;
   }
   writeFileSync(outputUrl, output);
+  writeFileSync(retainedMathOutputUrl, retainedMathOutput);
 }
 
 if (

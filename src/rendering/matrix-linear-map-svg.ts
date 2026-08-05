@@ -1,9 +1,11 @@
 import type { KpMatrixLinearMapFrame } from
   "../animation/matrix-linear-map-frame.ts";
 import {
-  createKpDimensionalContinuityGraphPresentationProfile,
-  renderKpDimensionalContinuityInlineLatex
+  createKpDimensionalContinuityGraphPresentationProfile
 } from "./dimensional-continuity-graph-profile.ts";
+import {
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-inline-latex.ts";
 
 export interface KpMatrixLinearMapGraphViewport {
   readonly width: number;

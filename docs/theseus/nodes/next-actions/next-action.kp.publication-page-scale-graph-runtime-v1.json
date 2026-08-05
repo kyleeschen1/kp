@@ -525,6 +525,111 @@
       "scope": "slice s09 durable evidence",
       "checkedAt": "2026-08-05T11:20:07.066Z",
       "notes": "Workspace validation passed after artifact route adoption."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "slice s10 route closure",
+      "checkedAt": "2026-08-05T11:52:40.205Z",
+      "notes": "First probe retained runtime KaTeX through the generic graph renderer; a later probe isolated the fallback two-column compiler import."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "slice s10 closed-route cold sample",
+      "checkedAt": "2026-08-05T11:52:50.174Z",
+      "notes": "All route-closure and active-motion assertions passed at 238976 transfer bytes and 139308 script bytes, but the known cold-task variance sampled 175ms against the unchanged 150ms ceiling."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "slice s10 retained-math route closure",
+      "checkedAt": "2026-08-05T11:52:58.612Z",
+      "notes": "Identical production build passed with no loaded runtime KaTeX: 238976 transfer bytes, 139308 script bytes, 42 resources, CLS 0, 125ms cold longest task, 34.2ms active p95, 56 geometry reads, and zero SVG strings or subtree replacements."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 retained-math and renderer types",
+      "checkedAt": "2026-08-05T11:53:20.849Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed with the injected math renderer and compiled fallback publication."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "slice s10 deterministic retained math",
+      "checkedAt": "2026-08-05T11:53:22.205Z",
+      "notes": "All six artifact tests passed, including byte-exact generated publication and a trusted-off KaTeX HTML plus MathML retained fragment bank."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s10 economics semantic preservation",
+      "checkedAt": "2026-08-05T11:53:23.241Z",
+      "notes": "All 42 economics publication, semantic frame, direct seek, rewind, retained SVG, and shared lesson tests passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s10 learner behavior",
+      "checkedAt": "2026-08-05T11:53:24.219Z",
+      "notes": "All 12 persistence, manual control, direct link, history, accessibility, no-JS, upgrade, and phone cases passed."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "slice s10 canonical visual preservation",
+      "checkedAt": "2026-08-05T11:53:25.294Z",
+      "notes": "All eight approved desktop, phone, theme, typography, column-side, spacing, stroke, and rollback cases passed."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "slice s10 retained session identity",
+      "checkedAt": "2026-08-05T11:53:26.332Z",
+      "notes": "Both retained scaffold and canonical seek-rewind parity checks passed after updating the HTML plus MathML descendant baseline and keeping runtime KaTeX only as an independent catalogue oracle."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "slice s10 sibling physics preservation",
+      "checkedAt": "2026-08-05T11:53:27.354Z",
+      "notes": "Exact seek, rewind, parameters, Review, and history passed in Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "slice s10 sibling vector preservation",
+      "checkedAt": "2026-08-05T11:53:28.587Z",
+      "notes": "All three vector projection paint, geometry, reduced-motion, and lazy-route cases passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s10 architecture gates",
+      "checkedAt": "2026-08-05T11:53:29.614Z",
+      "notes": "All four architecture gates passed after splitting generic runtime math from the domain-neutral graph profile."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s10 patch hygiene",
+      "checkedAt": "2026-08-05T11:53:30.583Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s10 durable evidence",
+      "checkedAt": "2026-08-05T11:53:31.546Z",
+      "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "failed",
+      "scope": "slice s10 retained-math preservation diagnostic",
+      "checkedAt": "2026-08-05T11:53:40.574Z",
+      "notes": "The first preservation run exposed an outdated HTML-only descendant count and an overbroad use of the route-local retained renderer as the arbitrary-frame canonical oracle; both assertions were corrected without changing learner behavior."
     }
   ],
   "expectedLearning": [

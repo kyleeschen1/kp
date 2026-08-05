@@ -77,6 +77,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       tocHtml: publication.tocHtml,
       motionScrubBarHtml: publication.motionScrubBarHtml,
       verificationSurfaceHtml: publication.verificationSurfaceHtml,
+      twoColumnParagraphs: publication.twoColumnParagraphs,
       initialDestination,
       presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
         input.search

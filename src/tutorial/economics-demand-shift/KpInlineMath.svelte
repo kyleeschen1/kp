@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+  import {
+    renderKpEconomicsRetainedInlineLatex
+  } from "../../rendering/economics-equilibrium-retained-math.ts";
 
+  // Only trusted-off compiler output reaches this sink; runtime values select
+  // retained fragments and never become HTML or KaTeX parser input.
   let { latex }: { readonly latex: string } = $props();
-  let html = $derived(renderLatexToHtml(latex, { displayMode: false }));
+  let html = $derived(renderKpEconomicsRetainedInlineLatex(latex));
 </script>
 
 <span class="kp-economics-tutorial__math" data-kp-latex={latex}>{@html html}</span>

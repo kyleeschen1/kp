@@ -31,7 +31,7 @@ const routeClosureDebt = Object.freeze({
     "animation-catalogue-player-host",
     "kp-catalogue-identities"
   ],
-  runtimeKatex: ["katex", "katex-adapter"],
+  runtimeKatex: [],
   unrelatedGraphDomains: []
 });
 

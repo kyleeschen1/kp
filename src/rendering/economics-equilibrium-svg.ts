@@ -15,9 +15,10 @@ import {
   kpDimensionalContinuityDynamicDisplayRelation
 } from "../animation/dimensional-continuity-dynamic-display.ts";
 import {
-  createKpDimensionalContinuityGraphPresentationProfile,
-  renderKpDimensionalContinuityInlineLatex
+  createKpDimensionalContinuityGraphPresentationProfile
 } from "./dimensional-continuity-graph-profile.ts";
+
+export type KpEconomicsInlineLatexRenderer = (latex: string) => string;
 
 export interface KpEconomicsGraphViewport {
   readonly width: number;
@@ -39,6 +40,7 @@ export const kpEconomicsGraphPlotInsets = Object.freeze({
 export function renderKpEconomicsEquilibriumStaticContent(input: {
   readonly frame: KpSupplyDemandEquilibriumFrameV1;
   readonly viewport: KpEconomicsGraphViewport;
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
 }): string {
   return renderEconomicsContent({
     frame: input.frame,
@@ -46,13 +48,15 @@ export function renderKpEconomicsEquilibriumStaticContent(input: {
     stage: "establish",
     initialDemandReferenceOpacity: 0,
     initialEquilibriumReferenceOpacity: 0,
-    initialEquilibrium: input.frame.equilibrium
+    initialEquilibrium: input.frame.equilibrium,
+    renderInlineLatex: input.renderInlineLatex
   });
 }
 
 export function renderKpEconomicsEquilibriumRuntimeContent(input: {
   readonly frame: KpEconomicsEquilibriumRuntimeFrame;
   readonly viewport: KpEconomicsGraphViewport;
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
 }): string {
   const synchronizedView =
     createKpEconomicsEquilibriumSynchronizedView(input.frame);
@@ -64,7 +68,8 @@ export function renderKpEconomicsEquilibriumRuntimeContent(input: {
     initialEquilibriumReferenceOpacity:
       input.frame.initialEquilibriumReferenceOpacity,
     initialEquilibrium: input.frame.initialEquilibrium,
-    synchronizedView
+    synchronizedView,
+    renderInlineLatex: input.renderInlineLatex
   });
 }
 
@@ -81,6 +86,7 @@ function renderEconomicsContent(input: {
   readonly synchronizedView?:
     | KpEconomicsEquilibriumSynchronizedView
     | undefined;
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
 }): string {
   const plot = {
     left: kpEconomicsGraphPlotInsets.left,
@@ -166,7 +172,7 @@ function renderEconomicsContent(input: {
   );
 
   return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
-    ${renderEconomicsGrid(input.viewport, point)}
+    ${renderEconomicsGrid(input.viewport, point, input.renderInlineLatex)}
     <g class="editor-graph-stage__economics-demand-reference" data-kp-economics-reference-progress="${input.initialDemandReferenceOpacity}">
       <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-casing" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
       <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-core" data-kp-economics-initial-demand-reference-core x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
@@ -187,6 +193,7 @@ function renderEconomicsContent(input: {
     <circle class="editor-graph-stage__economics-equilibrium editor-graph-stage__economics-equilibrium--reference" data-kp-economics-initial-equilibrium-reference data-kp-economics-supply-movement-target="initial" data-kp-economics-reference-progress="${input.initialEquilibriumReferenceOpacity}" cx="${initialEquilibrium[0]}" cy="${initialEquilibrium[1]}" r="2.75" />
     <circle class="editor-graph-stage__economics-equilibrium" data-kp-economics-equilibrium-point data-kp-economics-supply-movement-target="settled" data-kp-economics-equilibrium-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-equilibrium-price="${exactText(input.frame.equilibrium.price)}" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="3" />
     ${renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "curve-supply",
       latex: "S",
       x: plot.right + 12,
@@ -196,6 +203,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--supply"
     })}
     ${renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "curve-demand-current",
       latex: demandRole,
       x: plot.right + 12,
@@ -205,6 +213,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--demand"
     })}
     ${input.initialDemandReferenceOpacity <= 0 ? "" : renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "curve-demand-reference",
       latex: "D_0",
       x: plot.right + 12,
@@ -215,6 +224,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--reference"
     })}
     ${renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "equilibrium-current",
       latex: equilibriumLatex,
       x: equilibriumLabelX,
@@ -226,6 +236,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--equilibrium"
     })}
     ${input.initialEquilibriumReferenceOpacity <= 0 ? "" : renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "equilibrium-reference",
       latex: "E_0",
       x: initialEquilibrium[0] - 54,
@@ -238,6 +249,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--reference editor-graph-stage__economics-math-label--equilibrium"
     })}
     ${renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "axis-quantity",
       latex: "Q",
       x: (plot.left + plot.right) / 2 - 14,
@@ -249,6 +261,7 @@ function renderEconomicsContent(input: {
       className: "editor-graph-stage__economics-math-label--axis"
     })}
     ${renderMathLabel({
+      renderInlineLatex: input.renderInlineLatex,
       role: "axis-price",
       latex: "P",
       x: 0,
@@ -259,13 +272,18 @@ function renderEconomicsContent(input: {
       screenAnchorY: (plot.top + plot.bottom) / 2,
       className: "editor-graph-stage__economics-math-label--axis"
     })}
-    ${input.synchronizedView === undefined ? "" : renderSynchronizedView(input.synchronizedView, input.viewport)}
+    ${input.synchronizedView === undefined ? "" : renderSynchronizedView(
+      input.synchronizedView,
+      input.viewport,
+      input.renderInlineLatex
+    )}
   </g>`;
 }
 
 function renderEconomicsGrid(
   viewport: KpEconomicsGraphViewport,
-  point: (quantity: number, price: number) => readonly [number, number]
+  point: (quantity: number, price: number) => readonly [number, number],
+  renderInlineLatex: KpEconomicsInlineLatexRenderer
 ): string {
   const quantityTicks = [2, 4, 6, 8, 10];
   const priceTicks = [4, 8, 12, 16];
@@ -274,6 +292,7 @@ function renderEconomicsGrid(
     return `<line class="editor-graph-stage__economics-grid-line" data-kp-economics-grid-axis="quantity" data-kp-economics-grid-value="${value}" x1="${x}" y1="20" x2="${x}" y2="${viewport.height - 28}" />
       <line class="editor-graph-stage__economics-tick" data-kp-economics-tick-axis="quantity" x1="${x}" y1="${viewport.height - 32}" x2="${x}" y2="${viewport.height - 24}" />
       ${renderMathLabel({
+        renderInlineLatex,
         role: `tick-quantity-${value}`,
         latex: String(value),
         x: x - 18,
@@ -288,6 +307,7 @@ function renderEconomicsGrid(
     return `<line class="editor-graph-stage__economics-grid-line" data-kp-economics-grid-axis="price" data-kp-economics-grid-value="${value}" x1="${kpEconomicsGraphPlotInsets.left}" y1="${y}" x2="${viewport.width - kpEconomicsGraphPlotInsets.right}" y2="${y}" />
       <line class="editor-graph-stage__economics-tick" data-kp-economics-tick-axis="price" x1="32" y1="${y}" x2="40" y2="${y}" />
       ${renderMathLabel({
+        renderInlineLatex,
         role: `tick-price-${value}`,
         latex: String(value),
         x: 0,
@@ -301,6 +321,7 @@ function renderEconomicsGrid(
 }
 
 function renderMathLabel(input: {
+  readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
   readonly role: string;
   readonly latex: string;
   readonly x: number;
@@ -313,7 +334,7 @@ function renderMathLabel(input: {
   readonly className: string;
 }): string {
   return `<foreignObject class="editor-graph-stage__economics-math-foreign-object" data-kp-economics-math-label="${input.role}"${input.screenAnchorX === undefined ? "" : ` data-kp-economics-screen-anchor-x="${input.screenAnchorX}"`}${input.screenAnchorY === undefined ? "" : ` data-kp-economics-screen-anchor-y="${input.screenAnchorY}"`} x="${input.x}" y="${input.y}" width="${input.width}" height="${input.height}" aria-hidden="true"${input.opacity === undefined ? "" : ` style="opacity:${input.opacity}"`}>
-      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderKpDimensionalContinuityInlineLatex(input.latex)}</div>
+      <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${input.renderInlineLatex(input.latex)}</div>
     </foreignObject>`;
 }
 
@@ -335,23 +356,28 @@ function demandEquation(frame: KpSupplyDemandEquilibriumFrameV1): string {
 
 function renderSynchronizedView(
   view: KpEconomicsEquilibriumSynchronizedView,
-  viewport: KpEconomicsGraphViewport
+  viewport: KpEconomicsGraphViewport,
+  renderInlineLatex: KpEconomicsInlineLatexRenderer
 ): string {
   return `<desc id="kp-economics-graph-description" data-kp-economics-nonvisual-summary>${escapeHtml(view.nonvisualSummary)}</desc>
     <foreignObject class="editor-graph-stage__economics-explanation-foreign-object" x="${Math.max(104, viewport.width / 2 - 180)}" y="16" width="360" height="88">
       <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-explanation" data-kp-economics-synchronized-view data-kp-economics-narrative-id="${view.narrative.id}" data-kp-economics-claim-ids="${view.narrative.claimIds.join(" ")}">
         <div class="editor-graph-stage__economics-equations">
-          ${renderInlineEquation("supply", view.equations.supplyLatex)}
-          ${renderInlineEquation("demand", view.equations.demandLatex)}
-          ${renderInlineEquation("equilibrium", view.equations.equilibriumLatex)}
+          ${renderInlineEquation("supply", view.equations.supplyLatex, renderInlineLatex)}
+          ${renderInlineEquation("demand", view.equations.demandLatex, renderInlineLatex)}
+          ${renderInlineEquation("equilibrium", view.equations.equilibriumLatex, renderInlineLatex)}
         </div>
         <p data-kp-economics-narrative>${escapeHtml(view.narrative.text)}</p>
       </div>
     </foreignObject>`;
 }
 
-function renderInlineEquation(role: string, latex: string): string {
-  return `<span class="editor-graph-stage__economics-equation editor-graph-stage__economics-equation--${role}" data-kp-economics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderKpDimensionalContinuityInlineLatex(latex)}</span>`;
+function renderInlineEquation(
+  role: string,
+  latex: string,
+  renderInlineLatex: KpEconomicsInlineLatexRenderer
+): string {
+  return `<span class="editor-graph-stage__economics-equation editor-graph-stage__economics-equation--${role}" data-kp-economics-equation-role="${role}" data-kp-latex="${escapeHtml(latex)}">${renderInlineLatex(latex)}</span>`;
 }
 
 function escapeHtml(value: string): string {

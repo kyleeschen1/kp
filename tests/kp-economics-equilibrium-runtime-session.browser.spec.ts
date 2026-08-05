@@ -12,11 +12,14 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
       "/src/animation/economics-equilibrium-runtime-frame.ts";
     const samplerUrl = "/src/animation/runtime-sampler.ts";
     const viewportUrl = "/src/editor/graph-svg-viewport.ts";
+    const retainedMathUrl =
+      "/src/rendering/economics-equilibrium-retained-math.ts";
     const runtime = await import(/* @vite-ignore */ runtimeUrl);
     const animationModule = await import(/* @vite-ignore */ animationUrl);
     const runtimeFrameModule = await import(/* @vite-ignore */ runtimeFrameUrl);
     const samplerModule = await import(/* @vite-ignore */ samplerUrl);
     const viewportModule = await import(/* @vite-ignore */ viewportUrl);
+    const retainedMath = await import(/* @vite-ignore */ retainedMathUrl);
     const animation = animationModule.createEconomicsEquilibriumAnimationAsset();
     const sample = (progress: number) =>
       runtimeFrameModule.sampleKpEconomicsEquilibriumRuntimeFrame({
@@ -33,7 +36,8 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     const input = {
       content,
       frame,
-      viewport: viewportModule.createKpEditorGraphSvgViewportModel(animation)
+      viewport: viewportModule.createKpEditorGraphSvgViewportModel(animation),
+      renderInlineLatex: retainedMath.renderKpEconomicsRetainedInlineLatex
     };
     const first = runtime.mountKpEconomicsEquilibriumRuntimeScaffold(input);
     const initialView = first.view;
@@ -149,7 +153,8 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     const fullSession = runtime.createKpEconomicsEquilibriumRuntimeSession({
       content,
       frame: shiftFrame,
-      viewport: input.viewport
+      viewport: input.viewport,
+      renderInlineLatex: retainedMath.renderKpEconomicsRetainedInlineLatex
     });
     const shiftedDescription = content.querySelector(
       "[data-kp-economics-nonvisual-summary]"
@@ -222,7 +227,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
   });
 
   expect(result).toEqual({
-    descendants: 234,
+    descendants: 366,
     changedInputMutations: 25,
     demandRetained: true,
     demandKatexRetained: true,
@@ -266,12 +271,18 @@ test("retained economics session matches canonical direct seek and rewind", asyn
       "/src/animation/economics-equilibrium-runtime-frame.ts";
     const samplerUrl = "/src/animation/runtime-sampler.ts";
     const viewportUrl = "/src/editor/graph-svg-viewport.ts";
+    const retainedMathUrl =
+      "/src/rendering/economics-equilibrium-retained-math.ts";
+    const runtimeMathUrl =
+      "/src/rendering/dimensional-continuity-inline-latex.ts";
     const runtime = await import(/* @vite-ignore */ runtimeUrl);
     const renderer = await import(/* @vite-ignore */ rendererUrl);
     const animationModule = await import(/* @vite-ignore */ animationUrl);
     const runtimeFrameModule = await import(/* @vite-ignore */ runtimeFrameUrl);
     const samplerModule = await import(/* @vite-ignore */ samplerUrl);
     const viewportModule = await import(/* @vite-ignore */ viewportUrl);
+    const retainedMath = await import(/* @vite-ignore */ retainedMathUrl);
+    const runtimeMath = await import(/* @vite-ignore */ runtimeMathUrl);
     const animation = animationModule.createEconomicsEquilibriumAnimationAsset();
     const viewport = viewportModule.createKpEditorGraphSvgViewportModel(animation);
     const sample = (
@@ -353,7 +364,11 @@ test("retained economics session matches canonical direct seek and rewind", asyn
       const content = createContent();
       content.innerHTML = renderer.renderKpEconomicsEquilibriumRuntimeContent({
         frame,
-        viewport
+        viewport,
+        // The catalogue's generic renderer remains the independent canonical
+        // oracle; the learner route proves retained math at its mount points.
+        renderInlineLatex:
+          runtimeMath.renderKpDimensionalContinuityInlineLatex
       });
       return snapshot(content);
     };
@@ -362,7 +377,8 @@ test("retained economics session matches canonical direct seek and rewind", asyn
     const session = runtime.createKpEconomicsEquilibriumRuntimeSession({
       content,
       frame: initialFrame,
-      viewport
+      viewport,
+      renderInlineLatex: retainedMath.renderKpEconomicsRetainedInlineLatex
     });
     const fixedNodes = [
       content.querySelector("[data-kp-economics-equilibrium-view]"),
@@ -429,7 +445,8 @@ test("retained economics session matches canonical direct seek and rewind", asyn
     const fresh = runtime.createKpEconomicsEquilibriumRuntimeSession({
       content: freshContent,
       frame: directFrame,
-      viewport
+      viewport,
+      renderInlineLatex: retainedMath.renderKpEconomicsRetainedInlineLatex
     });
     const freshDirectSeekMatches = mismatchSummary(
       traversed,

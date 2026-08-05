@@ -18,6 +18,9 @@ import {
 import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
+import {
+  renderKpEconomicsRetainedInlineLatex
+} from "../src/rendering/economics-equilibrium-retained-math.ts";
 
 test("economics runtime choreography holds, shifts, hands off, and settles", () => {
   const animation = createEconomicsEquilibriumAnimationAsset();
@@ -128,7 +131,8 @@ test("runtime SVG shows the moving demand and old-equilibrium handoff", () => {
   });
   const html = renderKpEconomicsEquilibriumRuntimeContent({
     frame,
-    viewport: createKpEditorGraphSvgViewportModel(animation)
+    viewport: createKpEditorGraphSvgViewportModel(animation),
+    renderInlineLatex: renderKpEconomicsRetainedInlineLatex
   });
 
   assert.match(html, /data-kp-economics-choreography-stage="shift"/);

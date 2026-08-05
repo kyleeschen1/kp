@@ -18,6 +18,9 @@ import {
 import {
   adaptKpEconomicsDemandShiftLessonDocument
 } from "./economics-demand-shift-document.ts";
+import {
+  kpEconomicsTwoColumnParagraphs
+} from "./economics-demand-shift-two-column-scroll.ts";
 import type {
   KpTutorialLessonPublicationDocument
 } from "../kp-tutorial-lesson-document.ts";
@@ -28,6 +31,8 @@ export interface KpEconomicsDemandShiftPublication {
   readonly tocHtml: string;
   readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
   readonly verificationSurfaceHtml: string;
+  readonly twoColumnParagraphs:
+    readonly KpEconomicsDemandShiftLesson["sections"][number]["passages"][number][];
 }
 
 /**
@@ -52,6 +57,7 @@ export function compileKpEconomicsDemandShiftPublication(
     document,
     tocHtml: controls.tocHtml,
     motionScrubBarHtml: controls.motionScrubBarHtml,
-    verificationSurfaceHtml: renderKpEconomicsVerificationSurface()
+    verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
+    twoColumnParagraphs: kpEconomicsTwoColumnParagraphs
   });
 }

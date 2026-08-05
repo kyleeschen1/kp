@@ -113,7 +113,8 @@
     {
       "id": "s10",
       "title": "Retain-exact-dynamic-math-without-reparse",
-      "status": "planned"
+      "summary": "The economics route now consumes deterministic HTML plus MathML for static and bounded mount-time math, injects a route-local retained renderer into the persistent SVG session, and loads no runtime KaTeX. Production falls to 238976 transfer bytes and 139308 script bytes while semantic, accessibility, visual, physics, and vector preservation checks pass.",
+      "status": "complete"
     },
     {
       "id": "s11",
