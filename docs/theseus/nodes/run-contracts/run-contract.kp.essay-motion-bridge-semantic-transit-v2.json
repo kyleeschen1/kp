@@ -172,7 +172,8 @@
     {
       "id": "s20",
       "title": "Harden transit fallbacks",
-      "status": "planned"
+      "summary": "Defined static phone and reduced-motion settlement, synchronous stale-paint hiding on invalidation, and exact resume after responsive resize without losing endpoint identity.",
+      "status": "complete"
     },
     {
       "id": "s21",

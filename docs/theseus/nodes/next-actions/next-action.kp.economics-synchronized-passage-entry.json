@@ -396,6 +396,27 @@
       "scope": "s19-full-static-typing",
       "checkedAt": "2026-08-05T22:43:35.710Z",
       "notes": "TypeScript Svelte and domain checks passed."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s20-semantic-transit-fallback-policy",
+      "checkedAt": "2026-08-05T22:53:16.518Z",
+      "notes": "Fifty-nine framework-neutral motion page-scale and transit tests passed."
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "s20-responsive-interruption-and-reduced-motion",
+      "checkedAt": "2026-08-05T22:53:23.355Z",
+      "notes": "Nine Chromium cases passed including phone static fallback, reduced motion, resize invalidation, interrupted scroll, and endpoint continuity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20-full-static-typing",
+      "checkedAt": "2026-08-05T22:53:30.947Z",
+      "notes": "TypeScript Svelte and domain checks passed."
     }
   ],
   "progress": {

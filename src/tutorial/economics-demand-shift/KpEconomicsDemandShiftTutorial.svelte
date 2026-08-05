@@ -102,6 +102,7 @@
   import {
     KpTutorialSemanticTransitGeometryCache,
     projectKpTutorialSemanticTransitGeometry,
+    projectKpTutorialSemanticTransitPresentation,
     projectKpTutorialSemanticTransitTransform
   } from "../kp-tutorial-semantic-transit-geometry.ts";
   import {
@@ -894,7 +895,12 @@
       new KpTutorialSemanticTransitGeometryCache(
         window,
         () => ({ source, destination, stage }),
-        { onInvalidated: () => scrollCoordinator?.scheduleProjection() }
+        {
+          onInvalidated: () => {
+            hideSemanticTransitProxy("geometry-pending");
+            scrollCoordinator?.scheduleProjection();
+          }
+        }
       );
     semanticTransitGeometryCache.connect();
     shell.dataset["kpEconomicsSemanticTransitLayer"] = "ready";
@@ -907,12 +913,26 @@
       semanticTransitProxyLayer === undefined ||
       semanticTransitGeometryCache === undefined ||
       semanticTransitProxyId === undefined ||
-      semanticTransitSourcePassageId === undefined ||
-      !usesTwoColumnDesktopGeometry()
+      semanticTransitSourcePassageId === undefined
     ) return;
     const progress = frames.find(
       ({ passageId }) => passageId === semanticTransitSourcePassageId
     )?.projection.crossingProgress ?? 0;
+    const presentation = projectKpTutorialSemanticTransitPresentation({
+      desktopLayout: usesTwoColumnDesktopGeometry(),
+      reducedMotion
+    });
+    shell!.dataset["kpEconomicsSemanticTransitProgress"] =
+      progress.toFixed(4);
+    if (presentation !== "animated") {
+      semanticTransitProxyLayer.hideProxy(
+        semanticTransitProxyId,
+        presentation,
+        progress
+      );
+      shell!.dataset["kpEconomicsSemanticTransitState"] = presentation;
+      return;
+    }
     const geometry = semanticTransitGeometryCache.geometry();
     const projection = projectKpTutorialSemanticTransitGeometry({
       geometry,
@@ -923,12 +943,22 @@
       semanticTransitProxyId,
       projectKpTutorialSemanticTransitTransform({ projection, progress })
     );
+    shell!.dataset["kpEconomicsSemanticTransitState"] = "animated";
+    shell!.dataset["kpEconomicsSemanticTransitGeometryReads"] = String(
+      semanticTransitGeometryCache.measurementReads()
+    );
+  }
+
+  function hideSemanticTransitProxy(
+    state: "geometry-pending" | "phone-static" | "reduced-motion-static"
+  ): void {
+    if (
+      semanticTransitProxyLayer === undefined ||
+      semanticTransitProxyId === undefined
+    ) return;
+    semanticTransitProxyLayer.hideProxy(semanticTransitProxyId, state);
     if (shell !== undefined) {
-      shell.dataset["kpEconomicsSemanticTransitProgress"] =
-        progress.toFixed(4);
-      shell.dataset["kpEconomicsSemanticTransitGeometryReads"] = String(
-        semanticTransitGeometryCache.measurementReads()
-      );
+      shell.dataset["kpEconomicsSemanticTransitState"] = state;
     }
   }
 
@@ -969,6 +999,8 @@
 
   function handleReducedMotionChange(event: MediaQueryListEvent): void {
     reducedMotion = event.matches;
+    if (event.matches) hideSemanticTransitProxy("reduced-motion-static");
+    scrollCoordinator?.scheduleProjection();
     if (motionOwner === "untouched") {
       scrollTimelineStatus = event.matches ? "reduced-motion" : "idle";
     }
@@ -2134,6 +2166,7 @@
       delete shell.dataset["kpEconomicsSemanticTransitLayer"];
       delete shell.dataset["kpEconomicsSemanticTransitProgress"];
       delete shell.dataset["kpEconomicsSemanticTransitGeometryReads"];
+      delete shell.dataset["kpEconomicsSemanticTransitState"];
     }
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;

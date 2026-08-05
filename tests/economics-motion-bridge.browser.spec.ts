@@ -205,12 +205,133 @@ test("inline P transits to axis P with exact transform-only reverse", async ({
       y: await proxy.getAttribute("data-kp-tutorial-semantic-transit-y")
     }).toEqual(forward[forward.length - index - 1]);
   }
+  const source = root.locator(
+    '[data-kp-tutorial-text-reference="price-axis-inline"]'
+  );
+  const destination = root.locator(
+    '[data-kp-tutorial-stage-object="axis-price"]'
+  );
+  for (const progress of [0.001, 0.999]) {
+    await placeTopAt(page, paragraph, 624 - 344 * progress);
+    const [proxyBounds, sourceBounds, destinationBounds] = await Promise.all([
+      proxy.boundingBox(),
+      source.boundingBox(),
+      destination.boundingBox()
+    ]);
+    const projectedProgress = await semanticTransitProgress(root);
+    const expectedX = center(sourceBounds!, "x") +
+      (center(destinationBounds!, "x") - center(sourceBounds!, "x")) *
+      projectedProgress;
+    const expectedY = center(sourceBounds!, "y") +
+      (center(destinationBounds!, "y") - center(sourceBounds!, "y")) *
+      projectedProgress;
+    expect(Math.abs(
+      center(proxyBounds!, "x") - expectedX
+    )).toBeLessThan(1.5);
+    expect(Math.abs(
+      center(proxyBounds!, "y") - expectedY
+    )).toBeLessThan(1.5);
+  }
   await placeTopAt(page, paragraph, 452);
   await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(0.5, 2);
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-dark-transit-midpoint.png`,
     fullPage: false
   });
+});
+
+test("phone and reduced-motion layouts preserve static semantic endpoints", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(exemplarRoute);
+  let root = tutorial(page);
+  let proxy = root.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-state",
+    "phone-static"
+  );
+  await expect(proxy).toHaveCSS("visibility", "hidden");
+  await expect(root.locator(
+    '[data-kp-tutorial-text-reference="price-axis-inline"]'
+  )).toHaveCount(1);
+  await expect(root.locator(
+    '[data-kp-tutorial-stage-object="axis-price"]'
+  )).toHaveCount(1);
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(exemplarRoute);
+  root = tutorial(page);
+  proxy = root.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  const paragraph = root.locator(
+    '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+  );
+  await placeTopAt(page, paragraph, 452);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-state",
+    "reduced-motion-static"
+  );
+  await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(0.5, 2);
+  await expect(proxy).toHaveCSS("visibility", "hidden");
+});
+
+test("interrupted scroll and responsive resize settle without stale proxy paint", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(exemplarRoute);
+  let root = tutorial(page);
+  let paragraph = root.locator(
+    '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+  );
+  let proxy = root.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  await placeTopAt(page, paragraph, 452);
+  await expect(proxy).toHaveCSS("visibility", "visible");
+  const interruptedTransform = await proxy.getAttribute("style");
+  await page.evaluate(() => new Promise<void>((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+  ));
+  expect(await proxy.getAttribute("style")).toBe(interruptedTransform);
+  const readsBeforeResize = Number(await root.getAttribute(
+    "data-kp-economics-semantic-transit-geometry-reads"
+  ));
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-state",
+    "phone-static"
+  );
+  await expect(proxy).toHaveCSS("visibility", "hidden");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  root = tutorial(page);
+  paragraph = root.locator(
+    '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+  );
+  proxy = root.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  await placeTopAt(page, paragraph, 452);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-state",
+    "animated"
+  );
+  await expect(proxy).toHaveCSS("visibility", "visible");
+  const settledReads = Number(await root.getAttribute(
+    "data-kp-economics-semantic-transit-geometry-reads"
+  ));
+  expect(settledReads).toBeGreaterThan(readsBeforeResize);
+  await placeTopAt(page, paragraph, 418);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-geometry-reads",
+    String(settledReads)
+  );
 });
 
 test("dark light and reverse midpoint states remain visually inspectable", async ({
@@ -350,4 +471,13 @@ async function railProgress(rail: Locator): Promise<number> {
       "--kp-tutorial-motion-bridge-progress"
     )
   ));
+}
+
+function center(
+  bounds: { x: number; y: number; width: number; height: number },
+  axis: "x" | "y"
+): number {
+  return axis === "x"
+    ? bounds.x + bounds.width / 2
+    : bounds.y + bounds.height / 2;
 }

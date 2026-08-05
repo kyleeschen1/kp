@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   KpTutorialSemanticTransitGeometryCache,
   projectKpTutorialSemanticTransitGeometry,
+  projectKpTutorialSemanticTransitPresentation,
   projectKpTutorialSemanticTransitTransform,
   type KpTutorialSemanticTransitRect
 } from "../src/tutorial/kp-tutorial-semantic-transit-geometry.ts";
@@ -42,6 +43,25 @@ test("semantic transit transform is exact, native-scale, and reversible", () => 
       projectKpTutorialSemanticTransitTransform({ projection, progress })
     )
   );
+});
+
+test("semantic transit presentation fails back to static native endpoints", () => {
+  assert.equal(projectKpTutorialSemanticTransitPresentation({
+    desktopLayout: true,
+    reducedMotion: false
+  }), "animated");
+  assert.equal(projectKpTutorialSemanticTransitPresentation({
+    desktopLayout: false,
+    reducedMotion: false
+  }), "phone-static");
+  assert.equal(projectKpTutorialSemanticTransitPresentation({
+    desktopLayout: true,
+    reducedMotion: true
+  }), "reduced-motion-static");
+  assert.equal(projectKpTutorialSemanticTransitPresentation({
+    desktopLayout: false,
+    reducedMotion: true
+  }), "phone-static");
 });
 
 test("semantic transit identity is authored independently of text and DOM position", () => {

@@ -10,6 +10,12 @@ export interface KpTutorialSemanticTransitProxyPaint {
   readonly visible: boolean;
 }
 
+export type KpTutorialSemanticTransitProxyState =
+  | "animated"
+  | "geometry-pending"
+  | "phone-static"
+  | "reduced-motion-static";
+
 /** Fixed visual copies preserve both endpoint nodes, selection, and layout. */
 export class KpTutorialSemanticTransitProxyLayer {
   readonly host: HTMLElement;
@@ -59,9 +65,28 @@ export class KpTutorialSemanticTransitProxyLayer {
       paint.progress.toFixed(4);
     proxy.dataset["kpTutorialSemanticTransitX"] = paint.x.toFixed(4);
     proxy.dataset["kpTutorialSemanticTransitY"] = paint.y.toFixed(4);
+    proxy.dataset["kpTutorialSemanticTransitState"] = "animated";
     proxy.style.transform = `translate3d(${paint.x}px, ${paint.y}px, 0)`;
     proxy.style.visibility = paint.visible ? "visible" : "hidden";
     proxy.style.opacity = paint.visible ? "1" : "0";
+  }
+
+  hideProxy(
+    transitId: string,
+    state: Exclude<KpTutorialSemanticTransitProxyState, "animated">,
+    progress?: number
+  ): void {
+    const proxy = this.proxies.get(transitId);
+    if (proxy === undefined) {
+      throw new Error(`Unknown semantic transit proxy: ${transitId}`);
+    }
+    proxy.dataset["kpTutorialSemanticTransitState"] = state;
+    if (progress !== undefined) {
+      proxy.dataset["kpTutorialSemanticTransitProgress"] =
+        Math.max(0, Math.min(1, progress)).toFixed(4);
+    }
+    proxy.style.visibility = "hidden";
+    proxy.style.opacity = "0";
   }
 
   dispose(): void {

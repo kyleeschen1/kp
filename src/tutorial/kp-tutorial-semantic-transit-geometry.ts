@@ -38,6 +38,11 @@ export interface KpTutorialSemanticTransitTransform {
   readonly visible: boolean;
 }
 
+export type KpTutorialSemanticTransitPresentation =
+  | "animated"
+  | "phone-static"
+  | "reduced-motion-static";
+
 export interface KpTutorialSemanticTransitGeometryCacheOptions {
   readonly onInvalidated?: (() => void) | undefined;
 }
@@ -208,6 +213,14 @@ export function projectKpTutorialSemanticTransitTransform(input: {
     y: interpolate(source.top, destinationY, progress),
     visible: progress > 0 && progress < 1
   });
+}
+
+export function projectKpTutorialSemanticTransitPresentation(input: {
+  readonly desktopLayout: boolean;
+  readonly reducedMotion: boolean;
+}): KpTutorialSemanticTransitPresentation {
+  if (!input.desktopLayout) return "phone-static";
+  return input.reducedMotion ? "reduced-motion-static" : "animated";
 }
 
 function rectFromBounds(bounds: Pick<DOMRectReadOnly,
