@@ -67,7 +67,8 @@
     {
       "id": "s03",
       "title": "Add usable viewport projection",
-      "status": "planned"
+      "summary": "Added fail-closed usable viewport authority with explicit persistent top and bottom insets.",
+      "status": "complete"
     },
     {
       "id": "s04",

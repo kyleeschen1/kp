@@ -8,6 +8,9 @@ import {
   projectKpTutorialScrollPassagePhase,
   type KpTutorialMotionPassage
 } from "../src/tutorial/kp-tutorial-motion-passage-lifecycle.ts";
+import {
+  projectKpTutorialUsableViewport
+} from "../src/tutorial/kp-tutorial-usable-viewport.ts";
 
 test("the lifecycle contract remains framework and renderer neutral", async () => {
   const source = await readFile(
@@ -207,6 +210,42 @@ test("scroll passage timelines reject non-finite and unordered authority", () =>
       releaseScrollY: 3
     }
   }), /thresholds must be ordered/);
+});
+
+test("one usable viewport removes persistent chrome exactly once", () => {
+  assert.deepEqual(projectKpTutorialUsableViewport({
+    viewportHeightPx: 800
+  }), {
+    viewportHeightPx: 800,
+    topPx: 0,
+    bottomPx: 800,
+    heightPx: 800
+  });
+  assert.deepEqual(projectKpTutorialUsableViewport({
+    viewportHeightPx: 800,
+    persistentTopInsetPx: 64,
+    persistentBottomInsetPx: 24
+  }), {
+    viewportHeightPx: 800,
+    topPx: 64,
+    bottomPx: 776,
+    heightPx: 712
+  });
+});
+
+test("usable viewport authority rejects invalid or occluded intervals", () => {
+  assert.throws(() => projectKpTutorialUsableViewport({
+    viewportHeightPx: 0
+  }), /height must be positive/);
+  assert.throws(() => projectKpTutorialUsableViewport({
+    viewportHeightPx: 800,
+    persistentTopInsetPx: -1
+  }), /top inset must be finite and non-negative/);
+  assert.throws(() => projectKpTutorialUsableViewport({
+    viewportHeightPx: 800,
+    persistentTopInsetPx: 700,
+    persistentBottomInsetPx: 100
+  }), /must leave a usable viewport/);
 });
 
 function passage(
