@@ -6,6 +6,9 @@ import {
   defineKpTutorialOrdinaryBeat,
   kpTutorialMotionBridgeDistancePresets
 } from "../src/tutorial/kp-tutorial-motion-bridge-authoring.ts";
+import {
+  renderKpTutorialMotionBridgeStatic
+} from "../src/tutorial/kp-tutorial-motion-bridge-static.ts";
 
 test("ordinary prose beats settle at semantic checkpoints", () => {
   assert.deepEqual(defineKpTutorialOrdinaryBeat({
@@ -91,4 +94,31 @@ test("motion authoring fails closed on layout and choreography coordinates", () 
       checkpointId: "shift-ready"
     }
   }), /non-negative integer/);
+});
+
+test("static bridge markup keeps complete prose in natural light-DOM order", () => {
+  const bridge = defineKpTutorialMotionBridge({
+    id: "demand-increase",
+    beforePassageId: "follow-shift",
+    afterPassageId: "new-equilibrium",
+    distance: "standard",
+    motionBlockId: "demand-shift",
+    fromCheckpointId: "shift-ready",
+    toCheckpointId: "shift-settled"
+  });
+  const html = renderKpTutorialMotionBridgeStatic({
+    bridge,
+    beforeHtml: "Demand begins to shift",
+    afterHtml: "the new equilibrium is higher and farther right."
+  });
+  assert.match(html, /^<kp-motion-bridge/);
+  assert.ok(html.indexOf("Demand begins") < html.indexOf("new equilibrium"));
+  assert.match(html, /<p data-kp-motion-bridge-before="follow-shift">/);
+  assert.match(html, /<p data-kp-motion-bridge-after="new-equilibrium">/);
+  assert.doesNotMatch(html, /style=|aria-hidden|\.\.\.|scroll|progress=/);
+  assert.throws(() => renderKpTutorialMotionBridgeStatic({
+    bridge,
+    beforeHtml: "",
+    afterHtml: "Complete thought."
+  }), /requires prose on both sides/);
 });

@@ -173,6 +173,13 @@
       "scope": "slice s03 compiler validation",
       "checkedAt": "2026-08-05T20:42:02.531Z",
       "notes": "44 economics tests, 3 deterministic artifact tests, and full typechecking passed. Existing Markdown still compiles without prose-motion metadata; opt-in records fail closed on missing or overlapping prose and invalid checkpoint order."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale; npm run test:economics-demand-shift-tutorial; npm run typecheck; node --test economics publication artifact",
+      "status": "passed",
+      "scope": "slice s04 progressive static bridge markup",
+      "checkedAt": "2026-08-05T20:45:48.996Z",
+      "notes": "41 tutorial passage tests, 45 economics tests, full typechecking, and 3 deterministic artifact tests passed. One initial assertion incorrectly rejected KaTeX-owned style and aria markup; it was narrowed to the bridge wrapper and passed without product changes."
     }
   ],
   "progress": {

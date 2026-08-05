@@ -157,6 +157,35 @@ test("economics compiler rejects ambiguous or invalid bridge semantics", () => {
   );
 });
 
+test("economics publication emits an optional progressive bridge payload", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  assert.equal(
+    compileKpEconomicsDemandShiftPublication(markdown).motionBridgeHtml,
+    undefined
+  );
+  const publication = compileKpEconomicsDemandShiftPublication(markdown, {
+    proseMotion: [defineKpTutorialMotionBridge({
+      id: "demand-increase",
+      beforePassageId: "follow-shift",
+      afterPassageId: "new-equilibrium",
+      distance: "standard",
+      motionBlockId: "demand-shift",
+      fromCheckpointId: "shift-ready",
+      toCheckpointId: "shift-settled"
+    })]
+  });
+  const html = publication.motionBridgeHtml?.["demand-increase"] ?? "";
+  assert.match(html, /<kp-motion-bridge/);
+  assert.ok(html.indexOf("Begin at") < html.indexOf("The new curves meet"));
+  assert.match(html, /katex-mathml/);
+  const bridgeTag = /^<kp-motion-bridge[^>]+>/.exec(html)?.[0] ?? "";
+  assert.doesNotMatch(bridgeTag, /style=|aria-hidden/);
+  assert.doesNotMatch(html, /data-kp-motion-bridge-spacer|\.\.\./);
+});
+
 test("semantic tutorial URLs round-trip without choreography coordinates", () => {
   const destinations = [
     { kind: "section" as const, id: "market-clearing" },

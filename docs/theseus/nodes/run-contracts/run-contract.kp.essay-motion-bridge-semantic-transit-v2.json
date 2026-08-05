@@ -76,7 +76,8 @@
     {
       "id": "s04",
       "title": "Emit progressive static bridge markup",
-      "status": "planned"
+      "summary": "Added deterministic framework-neutral kp-motion-bridge light-DOM markup and optional publication payloads with both prose statements in natural order, no wrapper-owned spacer, and unchanged default artifacts.",
+      "status": "complete"
     },
     {
       "id": "s05",
