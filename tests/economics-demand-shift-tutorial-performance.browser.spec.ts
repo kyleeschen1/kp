@@ -192,21 +192,70 @@ test("production economics tutorial stays inside publication and motion budgets"
       }
     }
     observer.disconnect();
-    Element.prototype.getBoundingClientRect = readGeometry;
     const sorted = [...frameDurations].sort((left, right) => left - right);
     const percentile = (ratio: number): number =>
       sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * ratio))] ?? 0;
     const scrollCoordinator = runtime.snapshotScrollCoordinator();
     const graph = graphRuntime.snapshot();
+    const canonicalGeometryReads = probe.geometryReads;
+    const canonicalCls = probe.cls;
+    const canonicalLongTasks = [...probe.longTasks];
+    const cueHost = tutorial.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__motion-passage-prose"
+    )!;
+    const baseCues = [...cueHost.querySelectorAll<HTMLElement>(
+      ":scope > [data-kp-scroll-cue]"
+    )];
+    const cueDensity: Array<{
+      cueCount: number;
+      executedFrames: number;
+      geometryReads: number;
+      coordinatorExecutionMs: number;
+    }> = [];
+    for (const cueCount of [6, 24, 48]) {
+      const fixtureNodes: HTMLElement[] = [];
+      for (let index = baseCues.length; index < cueCount; index += 1) {
+        const clone = baseCues[index % baseCues.length]!.cloneNode(true) as
+          HTMLElement;
+        clone.dataset["kpEconomicsTutorialPassage"] =
+          `performance-cue-${cueCount}-${index}`;
+        delete clone.dataset["kpTutorialMotionBlock"];
+        delete clone.dataset["kpTutorialDestination"];
+        delete clone.dataset["kpTutorialDestinationId"];
+        clone.removeAttribute("id");
+        for (const identified of clone.querySelectorAll<HTMLElement>("[id]")) {
+          identified.removeAttribute("id");
+        }
+        cueHost.append(clone);
+        fixtureNodes.push(clone);
+      }
+      await waitForProjection();
+      probe.geometryReads = 0;
+      runtime.resetScrollCoordinator();
+      const maximumScrollY = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+      scrollTo(0, scrollY < maximumScrollY ? Math.min(maximumScrollY, scrollY + 1) :
+        Math.max(0, scrollY - 1));
+      await waitForProjection();
+      const densityMetrics = runtime.snapshotScrollCoordinator();
+      cueDensity.push({
+        cueCount,
+        executedFrames: densityMetrics.executedFrames,
+        geometryReads: probe.geometryReads,
+        coordinatorExecutionMs: densityMetrics.totalExecutionMs
+      });
+      for (const node of fixtureNodes) node.remove();
+      await waitForProjection();
+    }
+    Element.prototype.getBoundingClientRect = readGeometry;
     return {
       samples: frameDurations.length,
       p95FrameMs: percentile(0.95),
       maxFrameMs: Math.max(...frameDurations),
-      longTaskCount: probe.longTasks.length,
-      longestTaskMs: Math.max(0, ...probe.longTasks),
-      cls: probe.cls,
-      geometryReads: probe.geometryReads,
-      geometryReadsPerFrame: probe.geometryReads /
+      longTaskCount: canonicalLongTasks.length,
+      longestTaskMs: Math.max(0, ...canonicalLongTasks),
+      cls: canonicalCls,
+      geometryReads: canonicalGeometryReads,
+      geometryReadsPerFrame: canonicalGeometryReads /
         Math.max(1, scrollCoordinator.executedFrames),
       scrollCoordinator,
       averageCoordinatorExecutionMs: scrollCoordinator.totalExecutionMs /
@@ -217,6 +266,8 @@ test("production economics tutorial stays inside publication and motion budgets"
         addedNodes,
         removedNodes
       },
+      baseCueCount: baseCues.length,
+      cueDensity,
       maxChangedProgressAttributes: Math.max(...changedAttributeCounts),
       demandOwnerSamples: observedOwners.filter((id) => id === "demand-shift").length,
       supplyOwnerSamples: observedOwners.filter((id) => id === "supply-movement").length
@@ -257,6 +308,14 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(active.graph.addedElements).toBeGreaterThan(0);
   expect(active.domChurn.addedNodes).toBeGreaterThan(0);
   expect(active.domChurn.removedNodes).toBeGreaterThan(0);
+  expect(active.baseCueCount).toBe(6);
+  expect(active.cueDensity.map(({ cueCount }) => cueCount)).toEqual([6, 24, 48]);
+  expect(active.cueDensity.every(({ executedFrames }) => executedFrames === 1))
+    .toBe(true);
+  expect(active.cueDensity[1]!.geometryReads)
+    .toBeGreaterThan(active.cueDensity[0]!.geometryReads);
+  expect(active.cueDensity[2]!.geometryReads)
+    .toBeGreaterThan(active.cueDensity[1]!.geometryReads);
   expect(active.demandOwnerSamples).toBeGreaterThan(0);
   expect(active.supplyOwnerSamples).toBeGreaterThan(0);
 });

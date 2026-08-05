@@ -90,7 +90,8 @@
     {
       "id": "s04",
       "title": "Build-dense-cue-performance-fixtures",
-      "status": "planned"
+      "summary": "Added stable test-only 6/24/48-cue fixtures over one mounted economics stage; measured geometry reads grow 15/33/57 per frame, establishing the linear baseline for cached-window repair.",
+      "status": "complete"
     },
     {
       "id": "s05",

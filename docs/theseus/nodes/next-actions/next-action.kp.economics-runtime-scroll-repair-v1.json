@@ -25,6 +25,36 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s04 six-, twenty-four-, and forty-eight-cue pressure fixtures",
+      "checkedAt": "2026-08-05T07:08:10.943Z",
+      "notes": "The stable production probe passed and exercised one persistent stage with exactly 6, 24, and 48 cues. One scroll frame performed 15, 33, and 57 geometry reads respectively, proving the current O(n) hot path without changing the public lesson."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s04 browser fixture types",
+      "checkedAt": "2026-08-05T07:08:12.582Z",
+      "notes": "Test TypeScript inference passed for the dense-cue fixture and evidence shape."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s04 patch hygiene",
+      "checkedAt": "2026-08-05T07:08:13.855Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s04 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:08:15.343Z",
+      "notes": "Workspace validation passed before slice completion."
+    }
+  ],
   "expectedLearning": [
     "Whether persistent SVG ownership and cached local-anchor projection materially reduce DOM churn and layout reads without weakening exact seek, accessibility, or authoring ergonomics."
   ],
