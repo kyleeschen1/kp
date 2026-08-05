@@ -137,7 +137,8 @@
     {
       "id": "s14",
       "title": "Define-multi-passage-lifecycle-contract",
-      "status": "planned"
+      "summary": "Added and verified a pure multi-passage lifecycle plan with bounded hydration, single motion authority, static distant accessibility, stable geometry reservation, reduced-motion pause, shared capability deduplication, exact state retention, and terminal disposal.",
+      "status": "complete"
     },
     {
       "id": "s15",

@@ -833,8 +833,48 @@
       "scope": "slice s13 durable evidence",
       "checkedAt": "2026-08-05T12:17:28.042Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (6/6)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:26:29.088Z"
+    },
+    {
+      "command": "npm run typecheck (app, node, test, Svelte, domains)",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:26:30.425Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:26:31.523Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:26:32.595Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T12:27:00.776Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17778 events)",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T12:27:01.771Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice s14 establishes the framework-neutral multi-passage lifecycle contract: stable reserved geometry, bounded near/visible hydration, one motion owner, static distant state, reduced-motion pause, capability deduplication, retained semantic progress, and terminal idempotent disposal."
+  },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."
   ],
