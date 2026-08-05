@@ -10,7 +10,8 @@ import {
 } from "../src/tutorial/kp-tutorial-motion-passage-lifecycle.ts";
 import {
   projectKpTutorialUsableViewport,
-  projectKpTutorialViewportAnchors
+  projectKpTutorialViewportAnchors,
+  projectKpTutorialSynchronizedLatch
 } from "../src/tutorial/kp-tutorial-usable-viewport.ts";
 
 test("the lifecycle contract remains framework and renderer neutral", async () => {
@@ -282,6 +283,46 @@ test("viewport anchor ratios fail closed outside their shared interval", () => {
     viewport,
     stageCenterRatio: 1.01
   }), /stage-center anchor ratio must be within/);
+});
+
+test("one local offset settles text and graph on the same latch tick", () => {
+  const viewport = projectKpTutorialUsableViewport({ viewportHeightPx: 800 });
+  const anchors = projectKpTutorialViewportAnchors({ viewport });
+  assert.deepEqual(projectKpTutorialSynchronizedLatch({
+    viewport,
+    anchors,
+    stageBlockSizePx: 480
+  }), {
+    stageTopY: 160,
+    stageCenterY: 400,
+    textY: 280,
+    textDocumentOffsetFromStagePx: 120
+  });
+
+  const insetViewport = projectKpTutorialUsableViewport({
+    viewportHeightPx: 800,
+    persistentTopInsetPx: 64,
+    persistentBottomInsetPx: 24
+  });
+  assert.deepEqual(projectKpTutorialSynchronizedLatch({
+    viewport: insetViewport,
+    anchors: projectKpTutorialViewportAnchors({ viewport: insetViewport }),
+    stageBlockSizePx: 480
+  }), {
+    stageTopY: 180,
+    stageCenterY: 420,
+    textY: 313.2,
+    textDocumentOffsetFromStagePx: 133.2
+  });
+});
+
+test("synchronized latch rejects a stage that cannot fit", () => {
+  const viewport = projectKpTutorialUsableViewport({ viewportHeightPx: 400 });
+  assert.throws(() => projectKpTutorialSynchronizedLatch({
+    viewport,
+    anchors: projectKpTutorialViewportAnchors({ viewport }),
+    stageBlockSizePx: 480
+  }), /does not fit inside/);
 });
 
 function passage(

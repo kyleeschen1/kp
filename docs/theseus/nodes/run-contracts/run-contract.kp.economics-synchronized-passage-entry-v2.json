@@ -79,7 +79,8 @@
     {
       "id": "s05",
       "title": "Derive simultaneous latch offset",
-      "status": "planned"
+      "summary": "Synchronized latch geometry now derives stage top and prose document offset from shared anchors and stage size.",
+      "status": "complete"
     },
     {
       "id": "s06",

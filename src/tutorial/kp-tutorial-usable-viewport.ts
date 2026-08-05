@@ -12,6 +12,13 @@ export interface KpTutorialViewportAnchorProjection {
   readonly stageCenterRatio: number;
 }
 
+export interface KpTutorialSynchronizedLatchProjection {
+  readonly stageTopY: number;
+  readonly stageCenterY: number;
+  readonly textY: number;
+  readonly textDocumentOffsetFromStagePx: number;
+}
+
 /**
  * Persistent chrome is removed once from the physical viewport. Every reading
  * and stage anchor can then share this local interval instead of accumulating
@@ -65,6 +72,31 @@ export function projectKpTutorialViewportAnchors(input: {
       input.viewport.topPx + input.viewport.heightPx * stageCenterRatio,
     textRatio,
     stageCenterRatio
+  });
+}
+
+export function projectKpTutorialSynchronizedLatch(input: {
+  readonly viewport: KpTutorialUsableViewportProjection;
+  readonly anchors: KpTutorialViewportAnchorProjection;
+  readonly stageBlockSizePx: number;
+}): KpTutorialSynchronizedLatchProjection {
+  const stageBlockSize = finiteNonNegative(
+    input.stageBlockSizePx,
+    "stage block size"
+  );
+  if (stageBlockSize === 0) {
+    throw new Error("Tutorial stage block size must be positive.");
+  }
+  const stageTop = input.anchors.stageCenterY - stageBlockSize / 2;
+  if (stageTop < input.viewport.topPx ||
+      stageTop + stageBlockSize > input.viewport.bottomPx) {
+    throw new Error("Tutorial stage does not fit inside the usable viewport.");
+  }
+  return Object.freeze({
+    stageTopY: stageTop,
+    stageCenterY: input.anchors.stageCenterY,
+    textY: input.anchors.textY,
+    textDocumentOffsetFromStagePx: input.anchors.textY - stageTop
   });
 }
 
