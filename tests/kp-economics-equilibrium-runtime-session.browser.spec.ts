@@ -18,13 +18,15 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     const samplerModule = await import(/* @vite-ignore */ samplerUrl);
     const viewportModule = await import(/* @vite-ignore */ viewportUrl);
     const animation = animationModule.createEconomicsEquilibriumAnimationAsset();
-    const frame = runtimeFrameModule.sampleKpEconomicsEquilibriumRuntimeFrame({
+    const sample = (progress: number) =>
+      runtimeFrameModule.sampleKpEconomicsEquilibriumRuntimeFrame({
       animation,
       runtimeFrame: samplerModule.sampleKpAnimationRuntimeFrame({
         animation,
-        progress: 0
+        progress
       })
     });
+    const frame = sample(0);
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const content = document.createElementNS("http://www.w3.org/2000/svg", "g");
     svg.append(content);
@@ -58,6 +60,37 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     });
     await Promise.resolve();
     const changedInputMutations = observerRecords.length;
+    const resizedSupplyX2 = supply?.getAttribute("x2");
+    const demand = initialView.querySelector("[data-kp-economics-demand-line]");
+    const equilibrium = initialView.querySelector(
+      "[data-kp-economics-equilibrium-point]"
+    );
+    const initialReference = initialView.querySelector(
+      "[data-kp-economics-initial-equilibrium-reference]"
+    );
+    const shiftFrame = sample(0.44);
+    runtime.patchKpEconomicsEquilibriumDynamicStructure({
+      scaffold: first,
+      frame: shiftFrame,
+      viewport: input.viewport
+    });
+    const demandShiftY1 = demand?.getAttribute("y1");
+    const guideGroup = initialView.querySelector(
+      "[data-kp-economics-initial-equilibrium-guides]"
+    );
+    runtime.patchKpEconomicsEquilibriumDynamicStructure({
+      scaffold: first,
+      frame: sample(0.8),
+      viewport: input.viewport
+    });
+    const guideGroupRetained = guideGroup === initialView.querySelector(
+      "[data-kp-economics-initial-equilibrium-guides]"
+    );
+    runtime.patchKpEconomicsEquilibriumDynamicStructure({
+      scaffold: first,
+      frame,
+      viewport: input.viewport
+    });
     observer.disconnect();
     first.dispose();
     first.dispose();
@@ -65,17 +98,31 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     return {
       descendants,
       changedInputMutations,
+      demandRetained: demand === initialView.querySelector(
+        "[data-kp-economics-demand-line]"
+      ),
+      demandShiftY1,
       disposedStatus: first.status,
+      equilibriumRetained: equilibrium === initialView.querySelector(
+        "[data-kp-economics-equilibrium-point]"
+      ),
+      guideGroupRemovedAtEstablish: initialView.querySelector(
+        "[data-kp-economics-initial-equilibrium-guides]"
+      ) === null,
+      guideGroupRetained,
       firstGridLineRetained: firstGridLine === initialView.querySelector(
         '[data-kp-economics-grid-axis="quantity"]'
       ),
       sameScaffold: first === second,
       sameInputMutations,
       sameView: initialView === second.view,
+      initialReferenceRetained: initialReference === initialView.querySelector(
+        "[data-kp-economics-initial-equilibrium-reference]"
+      ),
       supplyRetained: supply === initialView.querySelector(
         "[data-kp-economics-supply-line]"
       ),
-      supplyX2: supply?.getAttribute("x2"),
+      resizedSupplyX2,
       viewCountAfterDispose: content.querySelectorAll(
         "[data-kp-economics-equilibrium-view]"
       ).length
@@ -84,14 +131,20 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
 
   expect(result).toEqual({
     descendants: 234,
-    changedInputMutations: 77,
+    changedInputMutations: 25,
+    demandRetained: true,
+    demandShiftY1: "94.39999999999998",
     disposedStatus: "disposed",
+    equilibriumRetained: true,
+    guideGroupRemovedAtEstablish: true,
+    guideGroupRetained: true,
     firstGridLineRetained: true,
     sameScaffold: true,
     sameInputMutations: 0,
     sameView: true,
+    initialReferenceRetained: true,
     supplyRetained: true,
-    supplyX2: "616",
+    resizedSupplyX2: "616",
     viewCountAfterDispose: 0
   });
 });

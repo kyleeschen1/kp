@@ -120,7 +120,8 @@
     {
       "id": "s09",
       "title": "Patch-dynamic-curves-points-and-guides",
-      "status": "planned"
+      "summary": "Patched dynamic demand, references, equilibrium points, supply trace, guides, and keyed reference-guide topology in place; ordinary semantic motion no longer requires those nodes to be recreated.",
+      "status": "complete"
     },
     {
       "id": "s10",

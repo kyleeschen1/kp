@@ -158,6 +158,34 @@
       "scope": "s08 durable evidence integrity",
       "checkedAt": "2026-08-05T07:21:54.157Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s09 dynamic retained economics structure",
+      "checkedAt": "2026-08-05T07:25:57.182Z",
+      "notes": "Chromium proved demand, current and reference equilibrium, and stable scaffold nodes retain identity across shift/handoff/rewind; the keyed reference-guide group persists while active and is removed at the establish topology boundary."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 semantic and string-renderer preservation",
+      "checkedAt": "2026-08-05T07:25:58.258Z",
+      "notes": "All 39 focused economics tests passed; exact choreography and deterministic static/runtime markup remain unchanged."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s09 patch hygiene",
+      "checkedAt": "2026-08-05T07:25:59.504Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s09 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:26:00.888Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

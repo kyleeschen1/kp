@@ -6,6 +6,9 @@ import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "./economics-equilibrium-svg.ts";
 import type { KpEconomicsGraphViewport } from "./economics-equilibrium-svg.ts";
+import {
+  kpDimensionalContinuityDynamicDisplayDecimals
+} from "../animation/dimensional-continuity-dynamic-display.ts";
 
 export interface KpEconomicsEquilibriumRuntimeSessionInput {
   readonly content: SVGGElement;
@@ -115,10 +118,264 @@ export function patchKpEconomicsEquilibriumStableStructure(input: {
     input.scaffold.view,
     "[data-kp-economics-supply-line]"
   );
-  supply.dataset["kpEconomicsEquation"] = supplyEquation(frame);
+  setAttributeIfChanged(
+    supply,
+    "data-kp-economics-equation",
+    supplyEquation(frame)
+  );
   setLine(supply, supplyStart[0], supplyStart[1], supplyEnd[0], supplyEnd[1]);
   patchGrid(input.scaffold.view, input.viewport, point);
   state.stableGeometryKey = nextKey;
+}
+
+export function patchKpEconomicsEquilibriumDynamicStructure(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly frame: KpEconomicsEquilibriumRuntimeFrame;
+  readonly viewport: KpEconomicsGraphViewport;
+}): void {
+  requireMounted(input.scaffold);
+  patchKpEconomicsEquilibriumStableStructure(input);
+  const view = input.scaffold.view;
+  const frame = input.frame.semanticFrame;
+  const point = graphPoint(input.viewport);
+  const minimumQuantity = input.viewport.xDomain[0];
+  const maximumQuantity = input.viewport.xDomain[1];
+  const demandIntercept = exactNumber(frame.demand.priceInterceptCurrent);
+  const initialDemandIntercept = exactNumber(frame.demand.priceInterceptBefore);
+  const demandSlope = exactNumber(frame.demand.priceChangePerQuantity);
+  const demandStart = point(
+    minimumQuantity,
+    demandIntercept - demandSlope * minimumQuantity
+  );
+  const demandEnd = point(
+    maximumQuantity,
+    demandIntercept - demandSlope * maximumQuantity
+  );
+  const initialDemandStart = point(
+    minimumQuantity,
+    initialDemandIntercept - demandSlope * minimumQuantity
+  );
+  const initialDemandEnd = point(
+    maximumQuantity,
+    initialDemandIntercept - demandSlope * maximumQuantity
+  );
+  const equilibrium = point(
+    exactNumber(frame.equilibrium.quantity),
+    exactNumber(frame.equilibrium.price)
+  );
+  const quantityAxis = point(exactNumber(frame.equilibrium.quantity), 0);
+  const priceAxis = point(0, exactNumber(frame.equilibrium.price));
+  const initialEquilibrium = point(
+    exactNumber(input.frame.initialEquilibrium.quantity),
+    exactNumber(input.frame.initialEquilibrium.price)
+  );
+  const initialQuantityAxis = point(
+    exactNumber(input.frame.initialEquilibrium.quantity),
+    0
+  );
+  const initialPriceAxis = point(
+    0,
+    exactNumber(input.frame.initialEquilibrium.price)
+  );
+
+  setAttributeIfChanged(view, "data-kp-economics-equilibrium-phase", frame.phase);
+  setAttributeIfChanged(view, "data-kp-economics-choreography-stage", input.frame.stage);
+  setAttributeIfChanged(
+    view,
+    "data-kp-economics-display-precision",
+    String(kpDimensionalContinuityDynamicDisplayDecimals)
+  );
+  setAttributeIfChanged(
+    view,
+    "data-kp-economics-demand-intercept",
+    exactText(frame.demand.priceInterceptCurrent)
+  );
+
+  const demandReference = requireElement<SVGGElement>(
+    view,
+    ".editor-graph-stage__economics-demand-reference"
+  );
+  setAttributeIfChanged(
+    demandReference,
+    "data-kp-economics-reference-progress",
+    String(input.frame.initialDemandReferenceOpacity)
+  );
+  setLine(
+    requireElement(view, "[data-kp-economics-initial-demand-reference]"),
+    initialDemandStart[0],
+    initialDemandStart[1],
+    initialDemandEnd[0],
+    initialDemandEnd[1]
+  );
+  setLine(
+    requireElement(view, "[data-kp-economics-initial-demand-reference-core]"),
+    initialDemandStart[0],
+    initialDemandStart[1],
+    initialDemandEnd[0],
+    initialDemandEnd[1]
+  );
+
+  const demand = requireElement<SVGLineElement>(
+    view,
+    "[data-kp-economics-demand-line]"
+  );
+  setAttributeIfChanged(demand, "data-kp-economics-equation", demandEquation(frame));
+  setLine(demand, demandStart[0], demandStart[1], demandEnd[0], demandEnd[1]);
+
+  const movement = requireElement<SVGGElement>(
+    view,
+    "[data-kp-economics-supply-movement]"
+  );
+  setAttributeIfChanged(
+    movement,
+    "data-kp-economics-supply-equation",
+    supplyEquation(frame)
+  );
+  setAttributeIfChanged(
+    movement,
+    "data-kp-economics-movement-from-quantity",
+    exactText(input.frame.initialEquilibrium.quantity)
+  );
+  setAttributeIfChanged(
+    movement,
+    "data-kp-economics-movement-from-price",
+    exactText(input.frame.initialEquilibrium.price)
+  );
+  setAttributeIfChanged(
+    movement,
+    "data-kp-economics-movement-to-quantity",
+    exactText(frame.equilibrium.quantity)
+  );
+  setAttributeIfChanged(
+    movement,
+    "data-kp-economics-movement-to-price",
+    exactText(frame.equilibrium.price)
+  );
+  setLine(
+    requireElement(movement, "[data-kp-economics-supply-movement-trace]"),
+    initialEquilibrium[0],
+    initialEquilibrium[1],
+    equilibrium[0],
+    equilibrium[1]
+  );
+
+  setLine(
+    requireElement(view, "[data-kp-economics-equilibrium-quantity-guide]"),
+    equilibrium[0],
+    equilibrium[1],
+    quantityAxis[0],
+    quantityAxis[1]
+  );
+  setLine(
+    requireElement(view, "[data-kp-economics-equilibrium-price-guide]"),
+    equilibrium[0],
+    equilibrium[1],
+    priceAxis[0],
+    priceAxis[1]
+  );
+  patchInitialEquilibriumGuides({
+    scaffold: input.scaffold,
+    opacity: input.frame.initialEquilibriumReferenceOpacity,
+    initialEquilibrium,
+    initialPriceAxis,
+    initialQuantityAxis
+  });
+
+  const initialPoint = requireElement<SVGCircleElement>(
+    view,
+    "[data-kp-economics-initial-equilibrium-reference]"
+  );
+  setAttributeIfChanged(
+    initialPoint,
+    "data-kp-economics-reference-progress",
+    String(input.frame.initialEquilibriumReferenceOpacity)
+  );
+  setCircle(initialPoint, initialEquilibrium[0], initialEquilibrium[1]);
+  const pointElement = requireElement<SVGCircleElement>(
+    view,
+    "[data-kp-economics-equilibrium-point]"
+  );
+  setAttributeIfChanged(
+    pointElement,
+    "data-kp-economics-equilibrium-quantity",
+    exactText(frame.equilibrium.quantity)
+  );
+  setAttributeIfChanged(
+    pointElement,
+    "data-kp-economics-equilibrium-price",
+    exactText(frame.equilibrium.price)
+  );
+  setCircle(pointElement, equilibrium[0], equilibrium[1]);
+}
+
+function patchInitialEquilibriumGuides(input: {
+  readonly scaffold: KpEconomicsEquilibriumMountedScaffold;
+  readonly opacity: number;
+  readonly initialEquilibrium: readonly [number, number];
+  readonly initialQuantityAxis: readonly [number, number];
+  readonly initialPriceAxis: readonly [number, number];
+}): void {
+  let group = input.scaffold.view.querySelector<SVGGElement>(
+    "[data-kp-economics-initial-equilibrium-guides]"
+  );
+  if (input.opacity <= 0) {
+    group?.remove();
+    return;
+  }
+  if (group === null) {
+    group = createInitialEquilibriumGuideGroup(input.scaffold);
+  }
+  setAttributeIfChanged(
+    group,
+    "data-kp-economics-reference-progress",
+    String(input.opacity)
+  );
+  const lineInputs = [
+    ["[data-kp-economics-initial-equilibrium-quantity-guide]", input.initialQuantityAxis],
+    ["[data-kp-economics-initial-equilibrium-quantity-guide-core]", input.initialQuantityAxis],
+    ["[data-kp-economics-initial-equilibrium-price-guide]", input.initialPriceAxis],
+    ["[data-kp-economics-initial-equilibrium-price-guide-core]", input.initialPriceAxis]
+  ] as const;
+  for (const [selector, endpoint] of lineInputs) {
+    setLine(
+      requireElement(group, selector),
+      input.initialEquilibrium[0],
+      input.initialEquilibrium[1],
+      endpoint[0],
+      endpoint[1]
+    );
+  }
+}
+
+function createInitialEquilibriumGuideGroup(
+  scaffold: KpEconomicsEquilibriumMountedScaffold
+): SVGGElement {
+  const document = scaffold.content.ownerDocument;
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  group.setAttribute(
+    "class",
+    "editor-graph-stage__economics-equilibrium-guide-reference"
+  );
+  group.setAttribute("data-kp-economics-initial-equilibrium-guides", "");
+  group.setAttribute("aria-hidden", "true");
+  const definitions = [
+    ["editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-casing", "data-kp-economics-initial-equilibrium-quantity-guide"],
+    ["editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-core", "data-kp-economics-initial-equilibrium-quantity-guide-core"],
+    ["editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-casing", "data-kp-economics-initial-equilibrium-price-guide"],
+    ["editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-core", "data-kp-economics-initial-equilibrium-price-guide-core"]
+  ] as const;
+  for (const [className, attribute] of definitions) {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("class", className);
+    line.setAttribute(attribute, "");
+    group.append(line);
+  }
+  const insertionPoint = requireElement(
+    scaffold.view,
+    "[data-kp-economics-initial-equilibrium-reference]"
+  );
+  scaffold.view.insertBefore(group, insertionPoint);
+  return group;
 }
 
 function patchGrid(
@@ -217,6 +474,16 @@ function supplyEquation(
   return `P=${intercept}+${slope === "1" ? "" : slope}Q`;
 }
 
+function demandEquation(
+  frame: KpEconomicsEquilibriumRuntimeFrame["semanticFrame"]
+): string {
+  const intercept = formatNumber(
+    exactNumber(frame.demand.priceInterceptCurrent)
+  );
+  const slope = formatNumber(exactNumber(frame.demand.priceChangePerQuantity));
+  return `P=${intercept}-${slope === "1" ? "" : slope}Q`;
+}
+
 function setLine(
   line: SVGLineElement,
   x1: number,
@@ -224,10 +491,23 @@ function setLine(
   x2: number,
   y2: number
 ): void {
-  line.setAttribute("x1", String(x1));
-  line.setAttribute("y1", String(y1));
-  line.setAttribute("x2", String(x2));
-  line.setAttribute("y2", String(y2));
+  setAttributeIfChanged(line, "x1", String(x1));
+  setAttributeIfChanged(line, "y1", String(y1));
+  setAttributeIfChanged(line, "x2", String(x2));
+  setAttributeIfChanged(line, "y2", String(y2));
+}
+
+function setCircle(circle: SVGCircleElement, x: number, y: number): void {
+  setAttributeIfChanged(circle, "cx", String(x));
+  setAttributeIfChanged(circle, "cy", String(y));
+}
+
+function setAttributeIfChanged(
+  element: Element,
+  name: string,
+  value: string
+): void {
+  if (element.getAttribute(name) !== value) element.setAttribute(name, value);
 }
 
 function requireElement<ElementType extends Element>(
@@ -258,6 +538,15 @@ function exactNumber(value: {
 
 function formatNumber(value: number): string {
   return Number(value.toFixed(2)).toString();
+}
+
+function exactText(value: {
+  readonly numerator: string;
+  readonly denominator: string;
+}): string {
+  return value.denominator === "1"
+    ? value.numerator
+    : `${value.numerator}/${value.denominator}`;
 }
 
 function scale(
