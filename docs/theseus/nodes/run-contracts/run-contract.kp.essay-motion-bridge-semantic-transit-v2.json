@@ -88,7 +88,8 @@
     {
       "id": "s06",
       "title": "Project ordinary beat progress",
-      "status": "planned"
+      "summary": "Added a fail-closed framework-neutral ordinary-beat projector with fixed approach distance, exact anchor settlement, and no paragraph-height or traversal-history input.",
+      "status": "complete"
     },
     {
       "id": "s07",
