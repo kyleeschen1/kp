@@ -50,6 +50,12 @@ export interface KpTwoColumnScrollSequenceProjection {
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 const twoColumnTextSideQueryKey = "text";
+const twoColumnParagraphGapQueryKey = "gap";
+
+export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
+export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
+export const kpEconomicsTwoColumnParagraphGapStepVh = 1;
+export const kpEconomicsTwoColumnParagraphGapDefaultVh = 16;
 
 export function projectKpEconomicsTwoColumnStageAnchor(input: {
   readonly stageBlockSizePx: number;
@@ -95,6 +101,43 @@ export function writeKpEconomicsTwoColumnTextSide(input: {
     parameters.delete(twoColumnTextSideQueryKey);
   } else {
     parameters.set(twoColumnTextSideQueryKey, input.side);
+  }
+  const serialized = parameters.toString();
+  return serialized === "" ? "" : `?${serialized}`;
+}
+
+export function normalizeKpEconomicsTwoColumnParagraphGapVh(
+  value: number
+): number {
+  if (!Number.isFinite(value)) return kpEconomicsTwoColumnParagraphGapDefaultVh;
+  return clamp(
+    Math.round(value / kpEconomicsTwoColumnParagraphGapStepVh) *
+      kpEconomicsTwoColumnParagraphGapStepVh,
+    kpEconomicsTwoColumnParagraphGapMinimumVh,
+    kpEconomicsTwoColumnParagraphGapMaximumVh
+  );
+}
+
+export function readKpEconomicsTwoColumnParagraphGapVh(
+  search: string
+): number {
+  const value = new URLSearchParams(search).get(twoColumnParagraphGapQueryKey);
+  if (value === null || value.trim() === "") {
+    return kpEconomicsTwoColumnParagraphGapDefaultVh;
+  }
+  return normalizeKpEconomicsTwoColumnParagraphGapVh(Number(value));
+}
+
+export function writeKpEconomicsTwoColumnParagraphGapVh(input: {
+  readonly search: string;
+  readonly gapVh: number;
+}): string {
+  const gapVh = normalizeKpEconomicsTwoColumnParagraphGapVh(input.gapVh);
+  const parameters = new URLSearchParams(input.search);
+  if (gapVh === kpEconomicsTwoColumnParagraphGapDefaultVh) {
+    parameters.delete(twoColumnParagraphGapQueryKey);
+  } else {
+    parameters.set(twoColumnParagraphGapQueryKey, String(gapVh));
   }
   const serialized = parameters.toString();
   return serialized === "" ? "" : `?${serialized}`;

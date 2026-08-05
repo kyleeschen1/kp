@@ -198,7 +198,8 @@
     {
       "id": "s22",
       "title": "Add-spacing-query-and-review-contract",
-      "status": "planned"
+      "summary": "Added a bounded 0-100vh paragraph-gap URL contract with a 16vh implicit default, threaded it into typed Review tuning evidence, and repaired two-column Review capture to measure the visible inline stage.",
+      "status": "complete"
     },
     {
       "id": "s23",

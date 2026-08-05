@@ -45,9 +45,13 @@ export function createKpTutorialCaptureProvider(
             context.pointer
           );
       const shellBounds = root.getBoundingClientRect();
-      const stageBounds = root.querySelector<HTMLElement>(
-        ".kp-tutorial-shell__stage"
-      )?.getBoundingClientRect();
+      // Scroll-passage layouts keep an empty shell stage for progressive
+      // fallback, so capture the first actually painted stage instead.
+      const stageBounds = Array.from(root.querySelectorAll<HTMLElement>(
+        ".kp-tutorial-shell__stage, [data-kp-inline-sticky-stage]"
+      )).map((stage) => stage.getBoundingClientRect()).find(
+        ({ width, height }) => width >= 1 && height >= 1
+      );
       const progressPermille = Math.round(progress * 1_000);
       // A review taken between reading regions still needs a durable semantic
       // anchor, so fall back from the live passage to the restored lesson state.

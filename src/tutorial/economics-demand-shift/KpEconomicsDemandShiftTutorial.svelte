@@ -40,6 +40,7 @@
     projectKpEconomicsTwoColumnStageAnchor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
+    normalizeKpEconomicsTwoColumnParagraphGapVh,
     writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpEconomicsTwoColumnTextSide,
@@ -178,6 +179,7 @@
     initialDemandIntercept,
     initialGraphStrokeScale,
     initialTheme,
+    initialTwoColumnParagraphGapVh,
     initialTwoColumnTextSide,
     initialDestination,
     presentationLayout,
@@ -194,6 +196,7 @@
     readonly initialDemandIntercept: number;
     readonly initialGraphStrokeScale: number;
     readonly initialTheme: KpEconomicsDemandShiftTheme;
+    readonly initialTwoColumnParagraphGapVh: number;
     readonly initialTwoColumnTextSide: KpEconomicsTwoColumnTextSide;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
@@ -231,6 +234,11 @@
     untrack(() => normalizeKpGraphStrokeScale(initialGraphStrokeScale))
   );
   let theme = $state(untrack(() => initialTheme));
+  let twoColumnParagraphGapVh = $state(
+    untrack(() => normalizeKpEconomicsTwoColumnParagraphGapVh(
+      initialTwoColumnParagraphGapVh
+    ))
+  );
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
   let ready = $state(false);
   let stageExpanded = $state(false);
@@ -1984,6 +1992,7 @@
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
+    "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),
     "data-kp-economics-tutorial-theme": theme,
     "data-kp-inline-sticky-fit": inlineStickyFit,
@@ -2028,8 +2037,11 @@
       twoColumnScroll
         ? {
             themeId: kpEconomicsDemandShiftThemeIds[theme],
-            twoColumnTextSide,
-            graphStrokeScale
+            tuning: {
+              "two-column-text-side": twoColumnTextSide,
+              "graph-stroke-scale": graphStrokeScale.toFixed(2),
+              "paragraph-gap-vh": String(twoColumnParagraphGapVh)
+            }
           }
         : { themeId: kpEconomicsDemandShiftThemeIds[theme] }
     )

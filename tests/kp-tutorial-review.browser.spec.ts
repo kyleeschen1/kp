@@ -21,6 +21,19 @@ for (const lesson of [
     themeId: "theme.kp.lesson.economics-paper-v1"
   },
   {
+    name: "economics two-column spacing",
+    route: "/tutorials/economics/demand-shift/?layout=two-column-scroll&gap=42",
+    documentId: "lesson.economics.demand-shift",
+    motionBlockId: "demand-shift",
+    expressionExpected: false,
+    themeId: "theme.kp.lesson.economics-midnight-v1",
+    tuning: {
+      "two-column-text-side": "right",
+      "graph-stroke-scale": "1.00",
+      "paragraph-gap-vh": "42"
+    }
+  },
+  {
     name: "Lisp",
     route: "/tutorials/programming/lisp-function-application/",
     documentId: "lesson.programming.lisp-function-application",
@@ -33,6 +46,7 @@ for (const lesson of [
     page
   }) => {
     let captured: KpDevReviewCreateRequestV2 | undefined;
+    let captureError: unknown;
     await page.route("**/api/dev/reviews/v2/**", async (route) => {
       const pathname = new URL(route.request().url()).pathname;
       if (pathname.endsWith("/query")) {
@@ -43,9 +57,15 @@ for (const lesson of [
         });
         return;
       }
-      captured = kpDevReviewCreateRequestV2Schema.parse(
-        route.request().postDataJSON()
-      );
+      try {
+        captured = kpDevReviewCreateRequestV2Schema.parse(
+          route.request().postDataJSON()
+        );
+      } catch (error) {
+        captureError = error;
+        await route.fulfill({ status: 422, body: String(error) });
+        return;
+      }
       await route.fulfill({
         status: 201,
         contentType: "application/json",
@@ -77,6 +97,7 @@ for (const lesson of [
     await host.locator("button.launcher").click();
     await host.locator("textarea").fill("Check this lesson moment.");
     await host.locator("button.save").click();
+    expect(captureError).toBeUndefined();
     await expect(host.locator("output.status")).toHaveText("Saved note 1.");
 
     expect(captured?.capture.semantic.documentId).toBe(lesson.documentId);
@@ -87,6 +108,9 @@ for (const lesson of [
     expect(captured?.capture.render.rendererId).not.toBe("");
     expect(captured?.capture.render.ownerIds).toContain(lesson.documentId);
     expect(captured?.capture.semantic.themeId).toBe(lesson.themeId);
+    if ("tuning" in lesson) {
+      expect(captured?.capture.semantic.tuning).toEqual(lesson.tuning);
+    }
     if (lesson.expressionExpected) {
       expect(captured?.capture.semantic.expression).toEqual({
         expressionId: "expr.application",

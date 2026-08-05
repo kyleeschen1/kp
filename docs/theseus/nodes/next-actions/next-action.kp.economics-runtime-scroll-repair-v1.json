@@ -471,6 +471,27 @@
       "scope": "slice s21 dense-cue and cold-start certification",
       "checkedAt": "2026-08-05T08:42:52.732Z",
       "notes": "Hot-path evidence passed: 6, 24, and 48 cues each used two geometry reads; active p95 was 34.2ms; SVG strings and subtree replacements remained zero. The unchanged 150ms cold-start ceiling failed at 177ms, and a same-build rerun measured 212ms. The ceiling was not widened."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-layout.test.ts",
+      "status": "passed",
+      "scope": "s22 spacing URL contract",
+      "checkedAt": "2026-08-05T08:53:48.535Z",
+      "notes": "All 14 layout tests passed; gap normalizes to 0-100vh in 1vh steps, default 16vh omits the query key, and other presentation parameters remain intact."
+    },
+    {
+      "command": "npm run test:browser:tutorial-review",
+      "status": "passed",
+      "scope": "s22 spacing review contract",
+      "checkedAt": "2026-08-05T08:53:49.685Z",
+      "notes": "All four tutorial Review cases passed; two-column economics captures its visible stage and records text side, graph stroke scale, and 42vh paragraph gap as typed tuning evidence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 spacing and review types",
+      "checkedAt": "2026-08-05T08:53:50.657Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
     }
   ],
   "expectedLearning": [

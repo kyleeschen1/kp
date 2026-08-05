@@ -9,8 +9,12 @@ import {
   projectKpTwoColumnScrollMotionCorridor,
   projectKpTwoColumnScrollParagraph,
   projectKpTwoColumnScrollSequence,
+  kpEconomicsTwoColumnParagraphGapDefaultVh,
+  kpEconomicsTwoColumnParagraphGapMaximumVh,
+  readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsDemandShiftPresentationLayout,
   readKpEconomicsTwoColumnTextSide,
+  writeKpEconomicsTwoColumnParagraphGapVh,
   writeKpEconomicsTwoColumnTextSide
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts";
 import {
@@ -70,6 +74,37 @@ test("two-column text side is URL-reproducible and defaults right", () => {
     writeKpEconomicsTwoColumnTextSide({
       search: "?layout=two-column-scroll&text=left&theme=light",
       side: "right"
+    }),
+    "?layout=two-column-scroll&theme=light"
+  );
+});
+
+test("two-column paragraph spacing is bounded and URL-reproducible", () => {
+  assert.equal(
+    readKpEconomicsTwoColumnParagraphGapVh(""),
+    kpEconomicsTwoColumnParagraphGapDefaultVh
+  );
+  assert.equal(readKpEconomicsTwoColumnParagraphGapVh("?gap=42.4"), 42);
+  assert.equal(readKpEconomicsTwoColumnParagraphGapVh("?gap=-9"), 0);
+  assert.equal(
+    readKpEconomicsTwoColumnParagraphGapVh("?gap=900"),
+    kpEconomicsTwoColumnParagraphGapMaximumVh
+  );
+  assert.equal(
+    readKpEconomicsTwoColumnParagraphGapVh("?gap=not-a-number"),
+    kpEconomicsTwoColumnParagraphGapDefaultVh
+  );
+  assert.equal(
+    writeKpEconomicsTwoColumnParagraphGapVh({
+      search: "?layout=two-column-scroll&theme=light",
+      gapVh: 42
+    }),
+    "?layout=two-column-scroll&theme=light&gap=42"
+  );
+  assert.equal(
+    writeKpEconomicsTwoColumnParagraphGapVh({
+      search: "?layout=two-column-scroll&gap=42&theme=light",
+      gapVh: kpEconomicsTwoColumnParagraphGapDefaultVh
     }),
     "?layout=two-column-scroll&theme=light"
   );
