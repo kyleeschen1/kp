@@ -7,6 +7,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-05-economics-synchronized-passage-entry-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-essay-motion-bridge-semantic-transit-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
@@ -150,6 +154,10 @@
       "notes": "All 10 Chromium cases passed. Desktop dark and light entry, midpoint, and release captures are coherent and synchronized. Phone remains the accepted inline fallback but visibly retains overlay congestion and excess stage height; responsive repair is explicitly deferred to approved slice s20. HUMAN_CHECKPOINT reached."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 17 was visually approved. A new motion-bridge and semantic-transit request exceeds the active contract; its unexecuted tail remains paused pending approval of the superseding proposal."
+  },
   "expectedLearning": [
     "Whether one usable-viewport authority can synchronize ordinary-document entry, exact scroll state, and direct semantic navigation without per-scroll layout work."
   ],
