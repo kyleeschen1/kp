@@ -85,6 +85,49 @@ Verification: production build, current semantic tests, and the extended
 single-route performance probe. Stop if instrumentation changes learner paint
 or semantic timing.
 
+### Recorded before baseline
+
+The scoped production probe recorded this baseline on 2026-08-05 before the
+retained renderer or cached scroll projection existed. These values are
+comparison evidence, not new ceilings.
+
+| Surface | Before measurement |
+| --- | ---: |
+| Initial transfer | 344,047 bytes |
+| Initial scripts | 244,354 bytes |
+| Initial resources | 48 |
+| Initial CLS | 0.00978 |
+| Active-motion CLS | 0 |
+| Active two-rAF p95 | 34 ms |
+| Scroll events / coordinator frames | 26 / 26 |
+| Canonical geometry reads | 392 total; 15.08 per frame |
+| Coordinator anchor reads | 52 total |
+| Coordinator execution | 43.7 ms total; 3 ms longest frame |
+| Semantic samples | 27 calls; 2.5 ms total |
+| SVG strings | 27 strings; 623,249 characters; 3.5 ms construction |
+| Runtime subtree replacement | 27 replacements; 13.7 ms total |
+| Runtime elements removed / added | 7,335 / 7,380 |
+| Observed child-list mutations | 119 |
+| Observed nodes removed / added | 115 / 119 |
+| Screen-label synchronization | 27 calls; 4.5 ms total |
+
+The same mounted stage produced the following cue-density pressure result:
+
+| Cue count | Geometry reads for one scroll frame |
+| ---: | ---: |
+| 6 | 15 |
+| 24 | 33 |
+| 48 | 57 |
+
+That exact `cue count + 9` progression confirms the current all-cue layout
+loop. Later scroll slices must make the ordinary-scroll read count independent
+of total document cue count, while retaining explicit invalidation reads.
+
+The cold-start long-task sample varied between `122ms` and `201ms` across
+identical local production builds. The existing `150ms` ceiling is unchanged;
+the variance remains test-reliability pressure and must not be presented as
+isolated renderer CPU time.
+
 ## Phase 2: Retain The SVG Runtime Tree
 
 Keep `renderKpEconomicsEquilibriumStaticContent` as deterministic complete

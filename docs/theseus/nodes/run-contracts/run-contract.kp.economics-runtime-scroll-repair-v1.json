@@ -96,7 +96,8 @@
     {
       "id": "s05",
       "title": "Record-six-cue-and-dense-baselines",
-      "status": "planned"
+      "summary": "Recorded the verified publication, scroll scheduling, SVG churn, six/twenty-four/forty-eight-cue scaling, and cold-start variance before-state in the approved review.",
+      "status": "complete"
     },
     {
       "id": "s06",

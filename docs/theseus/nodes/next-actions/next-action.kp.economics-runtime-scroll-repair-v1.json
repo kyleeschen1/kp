@@ -53,6 +53,27 @@
       "scope": "s04 durable evidence integrity",
       "checkedAt": "2026-08-05T07:08:15.343Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "sed -n '88,145p' docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md",
+      "status": "passed",
+      "scope": "s05 durable before ledger",
+      "checkedAt": "2026-08-05T07:11:51.589Z",
+      "notes": "The approved review now records the publication, scroll, renderer churn, six/twenty-four/forty-eight-cue scaling, and cold-start variance baselines without duplicating live slice status."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s05 patch hygiene",
+      "checkedAt": "2026-08-05T07:11:52.650Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s05 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:11:53.571Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [
