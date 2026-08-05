@@ -130,6 +130,34 @@
       "scope": "s07 durable evidence integrity",
       "checkedAt": "2026-08-05T07:18:51.573Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s08 retained stable graph structure",
+      "checkedAt": "2026-08-05T07:21:51.319Z",
+      "notes": "Chromium proved repeated equal input causes zero attribute mutations, viewport invalidation patches retained grid/tick/supply nodes, and supply endpoint moves to the recalculated coordinate without identity loss."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s08 stable patch types",
+      "checkedAt": "2026-08-05T07:21:52.264Z",
+      "notes": "Retained stable-geometry patch and browser evidence types passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s08 patch hygiene",
+      "checkedAt": "2026-08-05T07:21:53.216Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s08 durable evidence integrity",
+      "checkedAt": "2026-08-05T07:21:54.157Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "expectedLearning": [

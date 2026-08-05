@@ -37,14 +37,45 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     const initialView = first.view;
     const second = runtime.mountKpEconomicsEquilibriumRuntimeScaffold(input);
     const descendants = initialView.querySelectorAll("*").length;
+    const supply = initialView.querySelector("[data-kp-economics-supply-line]");
+    const firstGridLine = initialView.querySelector(
+      '[data-kp-economics-grid-axis="quantity"]'
+    );
+    const observerRecords: MutationRecord[] = [];
+    const observer = new MutationObserver((records) => observerRecords.push(...records));
+    observer.observe(initialView, { attributes: true, subtree: true });
+    runtime.patchKpEconomicsEquilibriumStableStructure({
+      scaffold: first,
+      frame,
+      viewport: input.viewport
+    });
+    await Promise.resolve();
+    const sameInputMutations = observerRecords.length;
+    runtime.patchKpEconomicsEquilibriumStableStructure({
+      scaffold: first,
+      frame,
+      viewport: { ...input.viewport, width: 700 }
+    });
+    await Promise.resolve();
+    const changedInputMutations = observerRecords.length;
+    observer.disconnect();
     first.dispose();
     first.dispose();
 
     return {
       descendants,
+      changedInputMutations,
       disposedStatus: first.status,
+      firstGridLineRetained: firstGridLine === initialView.querySelector(
+        '[data-kp-economics-grid-axis="quantity"]'
+      ),
       sameScaffold: first === second,
+      sameInputMutations,
       sameView: initialView === second.view,
+      supplyRetained: supply === initialView.querySelector(
+        "[data-kp-economics-supply-line]"
+      ),
+      supplyX2: supply?.getAttribute("x2"),
       viewCountAfterDispose: content.querySelectorAll(
         "[data-kp-economics-equilibrium-view]"
       ).length
@@ -53,9 +84,14 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
 
   expect(result).toEqual({
     descendants: 234,
+    changedInputMutations: 77,
     disposedStatus: "disposed",
+    firstGridLineRetained: true,
     sameScaffold: true,
+    sameInputMutations: 0,
     sameView: true,
+    supplyRetained: true,
+    supplyX2: "616",
     viewCountAfterDispose: 0
   });
 });

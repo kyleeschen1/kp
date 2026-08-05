@@ -114,7 +114,8 @@
     {
       "id": "s08",
       "title": "Patch-stable-graph-structure",
-      "status": "planned"
+      "summary": "Added cached stable-geometry projection: identical frames write nothing, while viewport or supply invalidation patches retained grid, tick, and supply nodes without subtree replacement.",
+      "status": "complete"
     },
     {
       "id": "s09",
