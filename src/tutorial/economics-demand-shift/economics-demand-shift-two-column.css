@@ -9,7 +9,7 @@
   --kp-two-column-minimum-effective-height-vh: 23;
   --kp-two-column-paragraph-gap-vh: 16;
   --kp-two-column-release-span-vh: 15;
-  --kp-two-column-stage-top-vh: 14;
+  --kp-two-column-stage-center-vh: 50;
   --kp-two-column-stage-block-size: 30rem;
   --kp-two-column-passage-width: min(66rem, calc(100vw - 2rem));
   --kp-two-column-focus-top:
@@ -18,8 +18,13 @@
     calc(var(--kp-two-column-paragraph-gap-vh) * 1vh);
   --kp-two-column-release-span:
     calc(var(--kp-two-column-release-span-vh) * 1vh);
+  --kp-two-column-stage-center:
+    calc(var(--kp-two-column-stage-center-vh) * 1vh);
   --kp-two-column-stage-top:
-    calc(var(--kp-two-column-stage-top-vh) * 1vh);
+    calc(
+      var(--kp-two-column-stage-center) -
+      var(--kp-two-column-stage-block-size) / 2
+    );
   --kp-two-column-entry-offset:
     calc(var(--kp-two-column-focus-top) - var(--kp-two-column-stage-top));
   --kp-two-column-terminal-min-block:

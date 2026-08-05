@@ -100,3 +100,18 @@ test("economics layout owners do not restate settled passage paint", () => {
     "Only the base inline cue owner should force full prose opacity."
   );
 });
+
+test("two-column progressive layout derives prose and graph from one latch", () => {
+  const twoColumn = read("economics-demand-shift-two-column.css");
+
+  assert.match(twoColumn, /--kp-two-column-stage-center-vh: 50;/);
+  assert.match(
+    twoColumn,
+    /--kp-two-column-stage-top:\s*calc\(\s*var\(--kp-two-column-stage-center\)\s*-\s*var\(--kp-two-column-stage-block-size\) \/ 2\s*\)/
+  );
+  assert.match(
+    twoColumn,
+    /--kp-two-column-entry-offset:\s*calc\(var\(--kp-two-column-focus-top\) - var\(--kp-two-column-stage-top\)\)/
+  );
+  assert.doesNotMatch(twoColumn, /--kp-two-column-stage-top-vh/);
+});

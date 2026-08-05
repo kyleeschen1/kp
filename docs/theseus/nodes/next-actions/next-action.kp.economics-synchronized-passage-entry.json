@@ -71,6 +71,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-05T17:27:45.730Z",
       "notes": "Thirty-seven lifecycle, assembly, scale, and coordinator tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T17:30:06.259Z",
+      "notes": "Five stylesheet ownership and progressive-latch tests passed."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T17:30:07.204Z",
+      "notes": "All eight existing Chromium two-column cases remained stable."
     }
   ],
   "expectedLearning": [

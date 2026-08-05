@@ -97,7 +97,8 @@
     {
       "id": "s08",
       "title": "Restore ordinary progressive layout",
-      "status": "planned"
+      "summary": "Progressive two-column CSS now exposes graph and prose from one static latch geometry without changing enhanced behavior.",
+      "status": "complete"
     },
     {
       "id": "s09",
