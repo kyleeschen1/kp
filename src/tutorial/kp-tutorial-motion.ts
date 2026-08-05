@@ -281,7 +281,6 @@ export class KpTutorialCueActivationObserver<CueId extends string> {
     }).IntersectionObserver;
     if (typeof Observer !== "function") {
       for (const { id } of this.registrations()) this.activeIds.add(id);
-      this.options.onActivationChange?.();
       return;
     }
     this.observer = new Observer(
@@ -503,6 +502,10 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
   private previousScrollY: number | undefined;
   private readonly profileExecution: boolean;
   private readonly now: () => number;
+  private readonly geometryCache: KpTutorialDocumentCueGeometryCache<BlockId>;
+  private readonly activationObserver: KpTutorialCueActivationObserver<BlockId>;
+  private registrationSnapshot:
+    readonly KpTutorialScrollBlockRegistration<BlockId>[] | undefined;
   private metrics = emptyScrollCoordinatorMetrics();
 
   constructor(
@@ -519,6 +522,18 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.onProjection = onProjection;
     this.profileExecution = options.profileExecution ?? false;
     this.now = options.now ?? (() => this.view.performance.now());
+    const geometryRegistrations = () => this.currentRegistrations().map(
+      ({ id, anchor }) => ({ id, anchor })
+    );
+    this.geometryCache = new KpTutorialDocumentCueGeometryCache(
+      view,
+      geometryRegistrations
+    );
+    this.activationObserver = new KpTutorialCueActivationObserver(
+      view,
+      geometryRegistrations,
+      { onActivationChange: this.scheduleProjection }
+    );
   }
 
   connect(): void {
@@ -527,6 +542,7 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.previousScrollY = this.view.scrollY;
     this.view.addEventListener("scroll", this.handleScroll, { passive: true });
     this.view.addEventListener("resize", this.handleResize);
+    this.activationObserver.connect();
     this.scheduleProjection();
   }
 
@@ -535,6 +551,7 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     this.connected = false;
     this.view.removeEventListener("scroll", this.handleScroll);
     this.view.removeEventListener("resize", this.handleResize);
+    this.activationObserver.disconnect();
     this.cancelPendingProjection();
   }
 
@@ -545,6 +562,13 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
 
   readonly handleResize = (): void => {
     if (this.profileExecution) this.metrics.resizeEvents += 1;
+    this.invalidateGeometry();
+  };
+
+  readonly invalidateGeometry = (): void => {
+    this.registrationSnapshot = undefined;
+    this.geometryCache.invalidate();
+    this.activationObserver.refresh();
     this.scheduleProjection();
   };
 
@@ -560,21 +584,31 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
       this.frame = undefined;
       const startedAt = this.profileExecution ? this.now() : 0;
       try {
-        const registrations = this.registrations();
-        if (this.profileExecution) {
-          this.metrics.registrationReads += registrations.length;
-          this.metrics.layoutReads += registrations.length;
-        }
+        const registrations = this.currentRegistrations();
+        const byId = new Map(registrations.map((registration) => [
+          registration.id,
+          registration
+        ]));
+        const readsBefore = this.geometryCache.measurementReads();
+        const scrollY = this.view.scrollY;
+        const geometry = this.geometryCache.documentGeometry();
+        if (this.profileExecution) this.metrics.layoutReads +=
+          this.geometryCache.measurementReads() - readsBefore;
         const projection = projectKpTutorialScrollFrame({
-          blocks: registrations.map(({ id, anchor, corridor, snapTolerance }) => ({
-            id,
-            corridor,
-            snapTolerance,
-            anchorTop: anchor.getBoundingClientRect().top
-          })),
+          blocks: geometry.map(({ id, documentTop }) => {
+            const registration = byId.get(id);
+            if (registration === undefined) {
+              throw new Error(`Missing tutorial scroll registration: ${id}`);
+            }
+            return {
+              id,
+              corridor: registration.corridor,
+              snapTolerance: registration.snapTolerance,
+              anchorTop: documentTop - scrollY
+            };
+          }),
           viewportHeight: this.view.innerHeight
         });
-        const scrollY = this.view.scrollY;
         const scrollChanged = this.previousScrollY !== undefined &&
           Math.abs(scrollY - this.previousScrollY) > 0.01;
         this.previousScrollY = scrollY;
@@ -605,6 +639,18 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
     if (this.frame === undefined) return;
     this.view.cancelAnimationFrame(this.frame);
     this.frame = undefined;
+  }
+
+  private currentRegistrations():
+    readonly KpTutorialScrollBlockRegistration<BlockId>[] {
+    if (this.registrationSnapshot !== undefined) {
+      return this.registrationSnapshot;
+    }
+    this.registrationSnapshot = this.registrations();
+    if (this.profileExecution) {
+      this.metrics.registrationReads += this.registrationSnapshot.length;
+    }
+    return this.registrationSnapshot;
   }
 }
 

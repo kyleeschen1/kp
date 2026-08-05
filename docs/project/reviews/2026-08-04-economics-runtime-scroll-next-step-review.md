@@ -231,6 +231,31 @@ Acceptance:
 - exact forward, reverse, resize, URL, TOC, and manual-control settlement; and
 - stable phone and short-viewport reading fallbacks.
 
+### Recorded cached-scroll result
+
+The integrated production probe now reads only the sticky stage and passage
+release bounds during an ordinary frame. Cue and motion-anchor boxes are
+measured into document space on invalidation; scroll uses `scrollY`, binary
+search, and a five-cue neighborhood. IntersectionObserver changes the coarse
+near-viewport set and requests the same coordinator frame, but never computes
+semantic progress or creates another clock.
+
+| Surface | Before cache | Cached projection |
+| --- | ---: | ---: |
+| Canonical geometry reads | 392 | 56 |
+| Geometry reads per active frame | 15.08 | 2.07 |
+| Coordinator registration / layout reads | 52 / 52 | 0 / 0 |
+| Coordinator total / longest execution | 43.7 / 3 ms | 26.9 / 2.1 ms |
+| Six-cue ordinary frame | 15 reads | 2 reads |
+| Twenty-four-cue ordinary frame | 33 reads | 2 reads |
+| Forty-eight-cue ordinary frame | 57 reads | 2 reads |
+
+At the canonical `800px` viewport, the `480px` stage now sits at `40px`, so
+its stable center and the opening prose top both land at the `280px` (`35vh`)
+focus line. The browser suites retain exact manual rebase, forward/reverse
+settlement, URL/TOC restoration, reduced motion, phone fallback, and the
+independent inline-sticky rollback route.
+
 ## Phase 4: Add The Requested Tuner And Finish The Local Visual Requests
 
 Add the already-recorded internal `0–100vh` paragraph-gap tuner in `1vh` steps,

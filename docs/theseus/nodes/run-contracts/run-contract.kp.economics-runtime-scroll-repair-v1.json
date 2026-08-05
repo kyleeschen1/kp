@@ -174,7 +174,8 @@
     {
       "id": "s18",
       "title": "Integrate-coordinator-with-cached-projection",
-      "status": "planned"
+      "summary": "Integrated one cached scroll coordinator and cue window: the graph center and opening prose share 35vh, ordinary reads fell from 392 to 56, and 6/24/48-cue frames now each use two constant layout reads with exact semantic/browser preservation.",
+      "status": "complete"
     },
     {
       "id": "s19",

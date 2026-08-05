@@ -220,6 +220,8 @@ export function projectKpTwoColumnScrollParagraph(input: {
 export function projectKpTwoColumnScrollSequence(input: {
   readonly paragraphTopPx: readonly number[];
   readonly paragraphBottomPx?: readonly number[] | undefined;
+  readonly indexOffset?: number | undefined;
+  readonly previousParagraphTopPx?: number | undefined;
   readonly focusTopPx: number;
   readonly viewportHeightPx: number;
   readonly inactiveOpacity?: number | undefined;
@@ -234,12 +236,16 @@ export function projectKpTwoColumnScrollSequence(input: {
       ...(input.paragraphBottomPx?.[index] === undefined
         ? {}
         : { paragraphBottomPx: input.paragraphBottomPx[index] }),
-      ...(index === 0
+      ...((input.indexOffset ?? 0) + index === 0
         ? {}
-        : { previousParagraphTopPx: input.paragraphTopPx[index - 1] }),
+        : {
+            previousParagraphTopPx: index === 0
+              ? input.previousParagraphTopPx
+              : input.paragraphTopPx[index - 1]
+          }),
       focusTopPx: input.focusTopPx,
       viewportHeightPx: input.viewportHeightPx,
-      opening: index === 0,
+      opening: (input.indexOffset ?? 0) + index === 0,
       inactiveOpacity: input.inactiveOpacity,
       approachStartRatio: input.approachStartRatio,
       focusBottomRatio: input.focusBottomRatio,

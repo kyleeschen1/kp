@@ -345,10 +345,10 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(active.cueDensity.map(({ cueCount }) => cueCount)).toEqual([6, 24, 48]);
   expect(active.cueDensity.every(({ executedFrames }) => executedFrames === 1))
     .toBe(true);
-  expect(active.cueDensity[1]!.geometryReads)
-    .toBeGreaterThan(active.cueDensity[0]!.geometryReads);
-  expect(active.cueDensity[2]!.geometryReads)
-    .toBeGreaterThan(active.cueDensity[1]!.geometryReads);
+  expect(new Set(active.cueDensity.map(({ geometryReads }) => geometryReads)).size)
+    .toBe(1);
+  expect(active.cueDensity.every(({ geometryReads }) => geometryReads <= 3))
+    .toBe(true);
   expect(active.demandOwnerSamples).toBeGreaterThan(0);
   expect(active.supplyOwnerSamples).toBeGreaterThan(0);
 });

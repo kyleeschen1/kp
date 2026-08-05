@@ -106,7 +106,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return { top: Math.round(bounds.top), height: Math.round(bounds.height) };
-  })).toEqual({ top: 112, height: 480 });
+  })).toEqual({ top: 40, height: 480 });
   await expect.poll(() => Promise.all([
     initialParagraph.evaluate((element) => Math.round(
       element.getBoundingClientRect().top
@@ -114,7 +114,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     stage.evaluate((element) => Math.round(
       element.getBoundingClientRect().top
     ))
-  ])).toEqual([280, 112]);
+  ])).toEqual([280, 40]);
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;

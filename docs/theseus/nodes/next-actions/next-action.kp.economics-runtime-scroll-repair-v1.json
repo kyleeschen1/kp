@@ -361,6 +361,55 @@
       "scope": "s17 bounded cue-window projection",
       "checkedAt": "2026-08-05T08:17:37.047Z",
       "notes": "Passed 9 tests; binary search selected the exact focus cue in a 48-cue sequence and projected only a five-cue neighborhood."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-motion.test.ts tests/economics-demand-shift-layout.test.ts",
+      "status": "passed",
+      "scope": "s18 cached coordinator and bounded projection contracts",
+      "checkedAt": "2026-08-05T08:29:56.997Z",
+      "notes": "Passed 22 tests."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s18 economics semantic regression",
+      "checkedAt": "2026-08-05T08:29:58.077Z",
+      "notes": "Passed all 40 tests."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s18 URL, TOC, manual, reduced-motion, phone, and rollback settlement",
+      "checkedAt": "2026-08-05T08:29:58.971Z",
+      "notes": "Passed all 12 Chromium cases."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s18 anchored two-column and fallback visual contracts",
+      "checkedAt": "2026-08-05T08:29:59.894Z",
+      "notes": "Passed all 6 Chromium cases; 480px stage center lands at 280px on the 800px viewport."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s18 cached-scroll production profile",
+      "checkedAt": "2026-08-05T08:30:00.828Z",
+      "notes": "Passed unchanged budgets; total geometry reads fell 392 to 56 and 6/24/48-cue ordinary frames each used exactly 2 reads."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18 production build",
+      "checkedAt": "2026-08-05T08:30:01.790Z",
+      "notes": "Passed through the scoped performance command before the final assertion-only fixture update."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s18 patch hygiene",
+      "checkedAt": "2026-08-05T08:30:02.775Z",
+      "notes": "Passed with no whitespace errors."
     }
   ],
   "expectedLearning": [

@@ -37,6 +37,7 @@
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
+    projectKpEconomicsTwoColumnStageAnchor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
     writeKpEconomicsTwoColumnTextSide,
@@ -65,7 +66,10 @@
     type KpTutorialAttentionFrame
   } from "../kp-tutorial-attention.ts";
   import {
+    KpTutorialCueActivationObserver,
+    KpTutorialDocumentCueGeometryCache,
     KpTutorialScrollCoordinator,
+    projectKpTutorialActiveCueWindow,
     projectKpTutorialRebasedCorridor,
     type KpTutorialCoordinatedScrollProjection,
     type KpTutorialScrollCoordinatorMetrics,
@@ -254,6 +258,7 @@
   );
   let inlineStickyFit = $state<KpInlineStickyLessonFit>("comfortable");
   let inlineStickyStageHeightPx = $state(320);
+  let twoColumnStageTopPx = $state<number | undefined>();
   let inlineStickyStageState = $state<"embedded" | "pinned" | "released">(
     "embedded"
   );
@@ -269,6 +274,9 @@
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator:
     KpTutorialScrollCoordinator<KpEconomicsMotionBlockId> | undefined;
+  let cueGeometryCache: KpTutorialDocumentCueGeometryCache<string> | undefined;
+  let cueActivationObserver: KpTutorialCueActivationObserver<string> | undefined;
+  let cueMutationObserver: MutationObserver | undefined;
   let runtimePerformanceApi:
     KpEconomicsTutorialRuntimePerformanceApi | undefined;
   let navigationController: KpTutorialNavigationController | undefined;
@@ -812,6 +820,18 @@
     });
   }
 
+  function collectScrollCues(): readonly {
+    readonly id: string;
+    readonly anchor: HTMLElement;
+  }[] {
+    if (shell === undefined) return [];
+    return [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
+      .map((element, index) => ({
+        id: element.dataset["kpEconomicsTutorialPassage"] ?? `cue-${index}`,
+        anchor: element.querySelector<HTMLElement>("p") ?? element
+      }));
+  }
+
   function handleCoordinatedScroll(
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
@@ -1093,21 +1113,42 @@
     if (!scrollPassageLayout || shell === undefined || inlineStage === undefined) {
       return [];
     }
-    const stageBounds = inlineStage.getBoundingClientRect();
-    const elements = [...shell.querySelectorAll<HTMLElement>(
-      "[data-kp-scroll-cue]"
-    )];
-    const measurements = elements.map((element) => {
-      const paragraph = element.querySelector<HTMLElement>("p") ?? element;
-      return {
-        element,
-        paragraphBounds: paragraph.getBoundingClientRect()
-      };
-    });
-    const twoColumnGeometry = usesTwoColumnDesktopGeometry()
+    const twoColumnDesktop = usesTwoColumnDesktopGeometry();
+    const stageBounds = twoColumnDesktop
+      ? undefined
+      : inlineStage.getBoundingClientRect();
+    const twoColumnGeometry = twoColumnDesktop
       ? readTwoColumnScrollGeometry()
       : undefined;
-    const sequence = usesTwoColumnDesktopGeometry()
+    const cachedDocumentGeometry = twoColumnDesktop
+      ? cueGeometryCache?.documentGeometry()
+      : undefined;
+    const cueWindow = cachedDocumentGeometry === undefined
+      ? undefined
+      : projectKpTutorialActiveCueWindow({
+          geometry: cachedDocumentGeometry,
+          scrollY: window.scrollY,
+          viewportHeight: window.innerHeight,
+          viewportAnchorRatio: twoColumnGeometry!.focusTopRatio
+        });
+    const measurements = cueWindow === undefined
+      ? [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
+          .map((element) => {
+            const paragraph = element.querySelector<HTMLElement>("p") ?? element;
+            return {
+              element,
+              paragraphBounds: paragraph.getBoundingClientRect()
+            };
+          })
+      : cueWindow.cues.map((geometry) => ({
+          element: geometry.anchor.closest<HTMLElement>("[data-kp-scroll-cue]") ??
+            geometry.anchor,
+          paragraphBounds: {
+            top: geometry.viewportTop,
+            bottom: geometry.viewportBottom
+          }
+        }));
+    const sequence = twoColumnDesktop
       ? projectKpTwoColumnScrollSequence({
           paragraphTopPx: measurements.map(
             ({ paragraphBounds }) => paragraphBounds.top
@@ -1115,6 +1156,12 @@
           paragraphBottomPx: measurements.map(
             ({ paragraphBounds }) => paragraphBounds.bottom
           ),
+          indexOffset: cueWindow?.startIndex,
+          previousParagraphTopPx: cueWindow !== undefined &&
+              cueWindow.startIndex > 0
+            ? cachedDocumentGeometry![cueWindow.startIndex - 1]!.documentTop -
+              window.scrollY
+            : undefined,
           focusTopPx:
             window.innerHeight * twoColumnGeometry!.focusTopRatio,
           viewportHeightPx: window.innerHeight,
@@ -1138,12 +1185,12 @@
             travel: 0,
             crossingProgress: 0,
             distanceFromStageBottomPx:
-              paragraphBounds.top - stageBounds.bottom
+              paragraphBounds.top - (stageBounds?.bottom ?? 0)
           })
         : projectKpInlineStickyParagraph({
             paragraphTopPx: paragraphBounds.top,
             paragraphBottomPx: paragraphBounds.bottom,
-            stageBottomPx: stageBounds.bottom,
+            stageBottomPx: stageBounds?.bottom ?? 0,
             viewportHeightPx: window.innerHeight
           }));
       return {
@@ -1168,6 +1215,9 @@
 
   function updateInlineStickyLayoutProjection(): void {
     if (!scrollPassageLayout || shell === undefined) return;
+    cueGeometryCache?.invalidate();
+    cueActivationObserver?.refresh();
+    scrollCoordinator?.invalidateGeometry();
     const cues = [...shell.querySelectorAll<HTMLElement>(
       "[data-kp-scroll-cue]"
     )];
@@ -1185,6 +1235,13 @@
       ? inlineStage?.getBoundingClientRect().height ??
         Math.round(window.innerHeight * 0.68)
       : layout.stageHeightPx;
+    if (usesTwoColumnDesktopGeometry()) {
+      twoColumnStageTopPx = Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
+        stageBlockSizePx: inlineStickyStageHeightPx,
+        viewportHeightPx: window.innerHeight,
+        focusTopRatio: readTwoColumnScrollGeometry().focusTopRatio
+      }).stageTop);
+    }
     updateInlineStickyStageProjection();
     updateInlineStickyParagraphProjections();
     scrollCoordinator?.scheduleProjection();
@@ -1211,7 +1268,11 @@
 
   function inlineStickyTopInset(): number {
     return usesTwoColumnDesktopGeometry()
-      ? Math.max(0, (window.innerHeight - inlineStickyStageHeightPx) / 2)
+      ? Math.max(0, projectKpEconomicsTwoColumnStageAnchor({
+          stageBlockSizePx: inlineStickyStageHeightPx,
+          viewportHeightPx: window.innerHeight,
+          focusTopRatio: readTwoColumnScrollGeometry().focusTopRatio
+        }).stageTop)
       : 0;
   }
 
@@ -1412,6 +1473,16 @@
     const performanceTarget = window as KpEconomicsTutorialPerformanceWindow;
     const profileScrollExecution =
       performanceTarget.__kpEconomicsPerformanceProbeRequested === true;
+    cueGeometryCache = new KpTutorialDocumentCueGeometryCache(
+      window,
+      collectScrollCues
+    );
+    cueActivationObserver = new KpTutorialCueActivationObserver(
+      window,
+      collectScrollCues,
+      { onActivationChange: () => scrollCoordinator?.scheduleProjection() }
+    );
+    cueActivationObserver.connect();
     scrollCoordinator = new KpTutorialScrollCoordinator<KpEconomicsMotionBlockId>(
       window,
       collectScrollBlocks,
@@ -1446,6 +1517,17 @@
       for (const passage of shell.querySelectorAll<HTMLElement>(
         "[data-kp-scroll-cue]"
       )) inlineLayoutObserver.observe(passage);
+      cueMutationObserver = new MutationObserver(() => {
+        cueGeometryCache?.invalidate();
+        cueActivationObserver?.refresh();
+        scrollCoordinator?.invalidateGeometry();
+      });
+      const cueHost = shell.querySelector<HTMLElement>(
+        ".kp-economics-tutorial__motion-passage-prose"
+      );
+      if (cueHost !== null) {
+        cueMutationObserver.observe(cueHost, { childList: true });
+      }
       window.addEventListener("resize", updateInlineStickyLayoutProjection);
       updateInlineStickyLayoutProjection();
     }
@@ -1509,6 +1591,7 @@
       runtimePerformanceApi
     ) delete performanceTarget.__kpEconomicsTutorialRuntimePerformance;
     scrollCoordinator?.disconnect();
+    cueActivationObserver?.disconnect();
     navigationController?.dispose();
     cancelSupplyPlayback();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
@@ -1544,6 +1627,7 @@
     window.removeEventListener("touchmove", handleNavigationScrollIntent);
     window.removeEventListener("resize", updateInlineStickyLayoutProjection);
     inlineLayoutObserver?.disconnect();
+    cueMutationObserver?.disconnect();
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;
@@ -1972,6 +2056,8 @@
                 <aside
                   bind:this={inlineStage}
                   class="kp-economics-tutorial__stage kp-economics-tutorial__stage--inline"
+                  style:--kp-two-column-stage-anchor-top={twoColumnStageTopPx ===
+                    undefined ? undefined : `${twoColumnStageTopPx}px`}
                   aria-label="Sticky supply and demand continuous-canvas proof"
                   data-kp-inline-sticky-stage
                 >

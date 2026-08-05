@@ -1771,7 +1771,10 @@ kp-graph-style-tuner {
   .kp-economics-tutorial--two-column-scroll
     .kp-economics-tutorial__stage--inline {
     grid-area: 1 / 1;
-    top: max(1.5rem, var(--kp-two-column-stage-top));
+    top: var(
+      --kp-two-column-stage-anchor-top,
+      max(0px, var(--kp-two-column-stage-top))
+    );
     z-index: 2;
     width: 100%;
     height: auto;
