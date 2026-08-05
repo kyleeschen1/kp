@@ -113,6 +113,13 @@
       "scope": "slice s12 local graph divider and boundary assembly",
       "checkedAt": "2026-08-05T17:53:34.656Z",
       "notes": "All 9 Chromium exemplar cases, 5 CSS ownership tests, 17 lifecycle and assembly tests, and Svelte typecheck passed. Runtime assembly tokens are 280px text anchor, 160px stage top, 480px stage and boundary offset at the canonical viewport; release edges differ by at most one pixel."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run typecheck:svelte; focused passage lifecycle tests",
+      "status": "passed",
+      "scope": "slice s13 opening boundary cue salience",
+      "checkedAt": "2026-08-05T18:00:51.294Z",
+      "notes": "All 9 Chromium exemplar cases, 17 lifecycle tests, and Svelte typecheck passed. The first cue reports ordinary-document and endpoint-pinned at full opacity before entry, then entry-latched and unpinned at the shared anchor."
     }
   ],
   "expectedLearning": [

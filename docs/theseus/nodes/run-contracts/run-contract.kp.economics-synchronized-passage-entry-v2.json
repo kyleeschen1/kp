@@ -127,7 +127,8 @@
     {
       "id": "s13",
       "title": "Preserve first cue endpoint",
-      "status": "planned"
+      "summary": "The opening cue is explicitly full-opacity document text before entry and returns to the existing internal salience projection at the shared latch.",
+      "status": "complete"
     },
     {
       "id": "s14",

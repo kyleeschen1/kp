@@ -126,7 +126,28 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     entryBaseline.focusLatch.stageCenter
   );
   const focusTop = entryTarget.focusLatch.paragraphTop;
+  await placeTopAt(page, initialParagraph, focusTop + 120);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage-phase",
+    "ordinary-document"
+  );
+  await expect(initialPassage).toHaveAttribute(
+    "data-kp-two-column-endpoint-pinned",
+    "true"
+  );
+  await expect(initialPassage).toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity",
+    "1.0000"
+  );
   await placeTopAt(page, initialParagraph, focusTop);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-passage-phase",
+    "entry-latched"
+  );
+  await expect(initialPassage).not.toHaveAttribute(
+    "data-kp-two-column-endpoint-pinned",
+    "true"
+  );
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "pinned"

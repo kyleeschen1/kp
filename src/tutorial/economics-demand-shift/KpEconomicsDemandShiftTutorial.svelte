@@ -84,6 +84,12 @@
     projectKpTutorialViewportAnchors
   } from "../kp-tutorial-usable-viewport.ts";
   import {
+    projectKpTutorialBoundaryCueSalience,
+    projectKpTutorialScrollPassagePhase,
+    type KpTutorialScrollPassagePhase,
+    type KpTutorialScrollPassageTimeline
+  } from "../kp-tutorial-motion-passage-lifecycle.ts";
+  import {
     KP_TUTORIAL_SCRUB_NEXT_EVENT,
     KP_TUTORIAL_SCRUB_PREVIOUS_EVENT,
     KP_TUTORIAL_SCRUB_REWIND_EVENT,
@@ -126,6 +132,7 @@
 
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
+  const kpEconomicsScrollLatchEpsilonPx = 1;
   type KpEconomicsTutorialScrollTimelineStatus =
     | "idle"
     | "seeking"
@@ -146,6 +153,7 @@
   }
 
   interface KpEconomicsInlineParagraphFrame {
+    readonly endpointPinned: boolean;
     readonly passageId: string;
     readonly motionBlockId: KpEconomicsMotionBlockId | undefined;
     readonly projection: KpInlineStickyParagraphProjection;
@@ -154,6 +162,7 @@
   }
 
   interface KpEconomicsTwoColumnParagraphPresentation {
+    readonly endpointPinned: boolean;
     readonly opacity: number;
     readonly salience: number;
   }
@@ -297,8 +306,13 @@
     string,
     KpEconomicsTwoColumnParagraphPresentation
   >>>({});
+  let twoColumnPassagePhase = $state<KpTutorialScrollPassagePhase>(
+    "ordinary-document"
+  );
   let cachedTwoColumnScrollGeometry:
     KpEconomicsTwoColumnScrollGeometry | undefined;
+  let cachedTwoColumnPassageTimeline:
+    KpTutorialScrollPassageTimeline | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
   let twoColumnGeometryQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
@@ -1211,6 +1225,14 @@
           motionStartRatio: twoColumnGeometry!.motionStartRatio
         })
       : undefined;
+    if (twoColumnDesktop && cachedTwoColumnPassageTimeline !== undefined) {
+      twoColumnPassagePhase = projectKpTutorialScrollPassagePhase({
+        scrollY: window.scrollY,
+        timeline: cachedTwoColumnPassageTimeline
+      }).phase;
+    }
+    const cueIndexOffset = cueWindow?.startIndex ?? 0;
+    const cueCount = cachedDocumentGeometry?.length ?? measurements.length;
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
       const { element, paragraphBounds } = measurement;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
@@ -1232,11 +1254,22 @@
             stageBottomPx: stageBounds?.bottom ?? 0,
             viewportHeightPx: window.innerHeight
           }));
+      const projectedOpacity = sequenceParagraph?.opacity ?? 1;
+      const cueIndex = cueIndexOffset + index;
+      const boundarySalience = twoColumnDesktop && cueIndex === 0
+        ? projectKpTutorialBoundaryCueSalience({
+            phase: twoColumnPassagePhase,
+            cueIndex,
+            cueCount,
+            projectedOpacity
+          })
+        : { opacity: projectedOpacity, endpointPinned: false };
       return {
+        endpointPinned: boundarySalience.endpointPinned,
         passageId,
         motionBlockId,
         projection,
-        opacity: sequenceParagraph?.opacity ?? 1,
+        opacity: boundarySalience.opacity,
         ownsAttention: sequenceParagraph?.ownsAttention ?? false
       };
     });
@@ -1244,7 +1277,8 @@
       ({ passageId, projection }) => [passageId, projection]
     )));
     twoColumnParagraphPresentations = Object.freeze(Object.fromEntries(frames.map(
-      ({ passageId, opacity }, index) => [passageId, Object.freeze({
+      ({ endpointPinned, passageId, opacity }, index) => [passageId, Object.freeze({
+        endpointPinned,
         opacity,
         salience: sequence?.paragraphs[index]?.salience ?? 1
       })]
@@ -1278,8 +1312,12 @@
       const geometry = measureTwoColumnScrollGeometry();
       twoColumnStageTopPx = geometry.stageTopY;
       writeTwoColumnAssemblyGeometry(geometry);
+      cachedTwoColumnPassageTimeline = measureTwoColumnPassageTimeline(
+        geometry
+      );
     } else {
       cachedTwoColumnScrollGeometry = undefined;
+      cachedTwoColumnPassageTimeline = undefined;
       clearTwoColumnAssemblyGeometry();
     }
     updateInlineStickyStageProjection();
@@ -1534,6 +1572,58 @@
       "--kp-two-column-entry-offset",
       "--kp-two-column-horizontal-boundary-offset"
     ]) shell.style.removeProperty(name);
+  }
+
+  function measureTwoColumnPassageTimeline(
+    geometry: KpEconomicsTwoColumnScrollGeometry
+  ): KpTutorialScrollPassageTimeline | undefined {
+    const cues = cueGeometryCache?.documentGeometry();
+    const first = cues?.[0];
+    const last = cues?.at(-1);
+    const demandBlock = findKpEconomicsMotionBlock("demand-shift");
+    const demandBoundary = shell?.querySelector<HTMLElement>(
+      '[data-kp-tutorial-motion-block="demand-shift"]'
+    );
+    const demandAnchor = scrollAnchorForMotionBoundary(demandBoundary);
+    const passageBody = inlineStage?.closest<HTMLElement>(
+      ".kp-economics-tutorial__motion-passage-body"
+    );
+    if (
+      first === undefined ||
+      last === undefined ||
+      demandBlock === undefined ||
+      demandAnchor === undefined ||
+      passageBody === undefined ||
+      passageBody === null
+    ) return undefined;
+
+    const demandCorridor = motionCorridorFor(demandBlock, demandAnchor);
+    const demandDocumentTop =
+      demandAnchor.getBoundingClientRect().top + window.scrollY;
+    const bodyDocumentBottom =
+      passageBody.getBoundingClientRect().bottom + window.scrollY;
+    const entryLatchScrollY = first.documentTop - geometry.textAnchorY -
+      kpEconomicsScrollLatchEpsilonPx;
+    const motionStartScrollY = Math.max(
+      entryLatchScrollY,
+      demandDocumentTop -
+        demandCorridor.startViewportRatio * geometry.viewportHeightPx
+    );
+    const terminalLatchScrollY = Math.max(
+      motionStartScrollY,
+      last.documentTop - geometry.textAnchorY
+    );
+    const releaseScrollY = Math.max(
+      terminalLatchScrollY,
+      bodyDocumentBottom -
+        (geometry.stageTopY + inlineStickyStageHeightPx)
+    );
+    return Object.freeze({
+      entryLatchScrollY,
+      motionStartScrollY,
+      terminalLatchScrollY,
+      releaseScrollY
+    });
   }
 
   function updateReadingBandSelection(
@@ -2096,6 +2186,9 @@
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
+    data-kp-two-column-endpoint-pinned={twoColumnParagraphPresentation?.endpointPinned
+      ? "true"
+      : undefined}
     data-kp-two-column-paragraph-opacity={twoColumnParagraphPresentation?.opacity.toFixed(4)}
     data-kp-two-column-paragraph-salience={twoColumnParagraphPresentation?.salience.toFixed(4)}
     data-kp-tutorial-motion-block={renderedMotionBlock?.id}
@@ -2210,6 +2303,9 @@
     "data-kp-economics-tutorial-manual-block": manualMotionBlock ?? "",
     "data-kp-economics-tutorial-scroll-timeline": scrollTimelineStatus,
     "data-kp-economics-tutorial-scroll-coordinator": scrollCoordinatorStatus,
+    "data-kp-economics-tutorial-passage-phase": twoColumnScroll
+      ? twoColumnPassagePhase
+      : "",
     "data-kp-economics-tutorial-scroll-active-block": scrollActiveMotionBlock,
     "data-kp-economics-tutorial-initial-destination": currentSemanticDestination === undefined
       ? ""
