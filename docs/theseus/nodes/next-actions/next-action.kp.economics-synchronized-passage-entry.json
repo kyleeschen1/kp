@@ -417,11 +417,25 @@
       "scope": "s20-full-static-typing",
       "checkedAt": "2026-08-05T22:53:30.947Z",
       "notes": "TypeScript Svelte and domain checks passed."
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "s21-semantic-transit-visual-checkpoint",
+      "checkedAt": "2026-08-05T22:58:37.575Z",
+      "notes": "Ten Chromium cases passed and dark light phone and reduced-motion captures were manually inspected."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; npm run test:economics-demand-shift-tutorial; npm run test:economics-demand-shift-css; npm run test:tutorial-motion-page-scale; npm run build",
+      "status": "passed",
+      "scope": "s21-broad-checkpoint-regression",
+      "checkedAt": "2026-08-05T22:58:49.276Z",
+      "notes": "Accepted visual 10 of 10, economics 49 of 49, CSS 7 of 7, page scale 59 of 59, full typecheck, publication check, and production build passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: motion-bridge exemplar is implemented and captured. Slices s14-s21 require fresh visual approval; period-plus-ellipsis punctuation and midpoint prose opacity are explicit review decisions."
+    "summary": "HUMAN_CHECKPOINT: semantic transit exemplar is implemented, captured, and broadly verified through slice s21. Fresh approval is required before promotion to a second caller. Review the subtle inline P movement in dark and light desktop, static phone and reduced-motion fallbacks, and the existing fixed phone control congestion."
   },
   "expectedLearning": [
     "Whether one usable-viewport authority can synchronize ordinary-document entry, exact scroll state, and direct semantic navigation without per-scroll layout work."

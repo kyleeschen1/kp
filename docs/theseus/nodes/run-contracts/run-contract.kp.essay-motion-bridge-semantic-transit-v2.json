@@ -178,7 +178,8 @@
     {
       "id": "s21",
       "title": "Semantic transit visual checkpoint",
-      "status": "planned"
+      "summary": "Captured and manually inspected desktop dark and light transit, phone static fallback, and reduced-motion fallback. The semantic correspondence is coherent and non-disruptive; fixed phone review controls remain an existing visual concern. HUMAN_CHECKPOINT reached.",
+      "status": "complete"
     },
     {
       "id": "s22",

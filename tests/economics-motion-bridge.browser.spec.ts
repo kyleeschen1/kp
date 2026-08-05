@@ -260,6 +260,14 @@ test("phone and reduced-motion layouts preserve static semantic endpoints", asyn
   await expect(root.locator(
     '[data-kp-tutorial-stage-object="axis-price"]'
   )).toHaveCount(1);
+  const phoneParagraph = root.locator(
+    '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+  );
+  await placeTopAt(page, phoneParagraph, 430);
+  await page.screenshot({
+    path: `${evidenceDirectory}/phone-static-transit-fallback.png`,
+    fullPage: false
+  });
 
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -278,6 +286,10 @@ test("phone and reduced-motion layouts preserve static semantic endpoints", asyn
   );
   await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(0.5, 2);
   await expect(proxy).toHaveCSS("visibility", "hidden");
+  await page.screenshot({
+    path: `${evidenceDirectory}/desktop-reduced-motion-transit-fallback.png`,
+    fullPage: false
+  });
 });
 
 test("interrupted scroll and responsive resize settle without stale proxy paint", async ({
@@ -332,6 +344,29 @@ test("interrupted scroll and responsive resize settle without stale proxy paint"
     "data-kp-economics-semantic-transit-geometry-reads",
     String(settledReads)
   );
+});
+
+test("semantic transit checkpoint captures both desktop themes", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const theme of ["dark", "light"] as const) {
+    await page.goto(`${exemplarRoute}&theme=${theme}`);
+    const root = tutorial(page);
+    const paragraph = root.locator(
+      '[data-kp-economics-tutorial-passage="graph-at-rest"] p'
+    );
+    const proxy = root.locator(
+      '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+    );
+    await placeTopAt(page, paragraph, 452);
+    await expect.poll(() => semanticTransitProgress(root)).toBeCloseTo(0.5, 2);
+    await expect(proxy).toHaveCSS("visibility", "visible");
+    await page.screenshot({
+      path: `${evidenceDirectory}/desktop-${theme}-transit-midpoint.png`,
+      fullPage: false
+    });
+  }
 });
 
 test("dark light and reverse midpoint states remain visually inspectable", async ({

@@ -30,6 +30,7 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
     [
       "../kp-tutorial-lesson-shell.css",
       "../kp-tutorial-motion-bridge.css",
+      "../kp-tutorial-semantic-transit.css",
       ...ownedStylesheets.map((name) => `./${name}`)
     ]
   );
