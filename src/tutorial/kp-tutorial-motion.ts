@@ -70,6 +70,25 @@ export interface KpTutorialCoordinatedScrollProjection<BlockId extends string>
   readonly scrollChanged: boolean;
 }
 
+export interface KpTutorialScrollCoordinatorMetrics {
+  readonly scrollEvents: number;
+  readonly resizeEvents: number;
+  readonly scheduleRequests: number;
+  readonly coalescedRequests: number;
+  readonly requestedFrames: number;
+  readonly executedFrames: number;
+  readonly registrationReads: number;
+  readonly layoutReads: number;
+  readonly totalExecutionMs: number;
+  readonly longestExecutionMs: number;
+}
+
+export interface KpTutorialScrollCoordinatorOptions {
+  /** Detailed timing is opt-in so the measurement surface does not become reader overhead. */
+  readonly profileExecution?: boolean | undefined;
+  readonly now?: (() => number) | undefined;
+}
+
 export function projectKpTutorialCumulativeMotion<BlockId extends string>(input: {
   readonly blocks: readonly Pick<KpTutorialMotionBlock<BlockId>, "id">[];
   readonly activeBlockId: BlockId;
@@ -225,6 +244,9 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
   private frame: number | undefined;
   private connected = false;
   private previousScrollY: number | undefined;
+  private readonly profileExecution: boolean;
+  private readonly now: () => number;
+  private metrics = emptyScrollCoordinatorMetrics();
 
   constructor(
     view: Window,
@@ -232,56 +254,119 @@ export class KpTutorialScrollCoordinator<BlockId extends string> {
       readonly KpTutorialScrollBlockRegistration<BlockId>[],
     onProjection: (
       projection: KpTutorialCoordinatedScrollProjection<BlockId>
-    ) => void
+    ) => void,
+    options: KpTutorialScrollCoordinatorOptions = {}
   ) {
     this.view = view;
     this.registrations = registrations;
     this.onProjection = onProjection;
+    this.profileExecution = options.profileExecution ?? false;
+    this.now = options.now ?? (() => this.view.performance.now());
   }
 
   connect(): void {
     if (this.connected) return;
     this.connected = true;
     this.previousScrollY = this.view.scrollY;
-    this.view.addEventListener("scroll", this.scheduleProjection, { passive: true });
-    this.view.addEventListener("resize", this.scheduleProjection);
+    this.view.addEventListener("scroll", this.handleScroll, { passive: true });
+    this.view.addEventListener("resize", this.handleResize);
     this.scheduleProjection();
   }
 
   disconnect(): void {
     if (!this.connected) return;
     this.connected = false;
-    this.view.removeEventListener("scroll", this.scheduleProjection);
-    this.view.removeEventListener("resize", this.scheduleProjection);
+    this.view.removeEventListener("scroll", this.handleScroll);
+    this.view.removeEventListener("resize", this.handleResize);
     this.cancelPendingProjection();
   }
 
+  readonly handleScroll = (): void => {
+    if (this.profileExecution) this.metrics.scrollEvents += 1;
+    this.scheduleProjection();
+  };
+
+  readonly handleResize = (): void => {
+    if (this.profileExecution) this.metrics.resizeEvents += 1;
+    this.scheduleProjection();
+  };
+
   readonly scheduleProjection = (): void => {
-    if (!this.connected || this.frame !== undefined) return;
+    if (!this.connected) return;
+    if (this.profileExecution) this.metrics.scheduleRequests += 1;
+    if (this.frame !== undefined) {
+      if (this.profileExecution) this.metrics.coalescedRequests += 1;
+      return;
+    }
+    if (this.profileExecution) this.metrics.requestedFrames += 1;
     this.frame = this.view.requestAnimationFrame(() => {
       this.frame = undefined;
-      const projection = projectKpTutorialScrollFrame({
-        blocks: this.registrations().map(({ id, anchor, corridor, snapTolerance }) => ({
-          id,
-          corridor,
-          snapTolerance,
-          anchorTop: anchor.getBoundingClientRect().top
-        })),
-        viewportHeight: this.view.innerHeight
-      });
-      const scrollY = this.view.scrollY;
-      const scrollChanged = this.previousScrollY !== undefined &&
-        Math.abs(scrollY - this.previousScrollY) > 0.01;
-      this.previousScrollY = scrollY;
-      this.onProjection(Object.freeze({ ...projection, scrollY, scrollChanged }));
+      const startedAt = this.profileExecution ? this.now() : 0;
+      try {
+        const registrations = this.registrations();
+        if (this.profileExecution) {
+          this.metrics.registrationReads += registrations.length;
+          this.metrics.layoutReads += registrations.length;
+        }
+        const projection = projectKpTutorialScrollFrame({
+          blocks: registrations.map(({ id, anchor, corridor, snapTolerance }) => ({
+            id,
+            corridor,
+            snapTolerance,
+            anchorTop: anchor.getBoundingClientRect().top
+          })),
+          viewportHeight: this.view.innerHeight
+        });
+        const scrollY = this.view.scrollY;
+        const scrollChanged = this.previousScrollY !== undefined &&
+          Math.abs(scrollY - this.previousScrollY) > 0.01;
+        this.previousScrollY = scrollY;
+        this.onProjection(Object.freeze({ ...projection, scrollY, scrollChanged }));
+      } finally {
+        if (this.profileExecution) {
+          const duration = Math.max(0, this.now() - startedAt);
+          this.metrics.executedFrames += 1;
+          this.metrics.totalExecutionMs += duration;
+          this.metrics.longestExecutionMs = Math.max(
+            this.metrics.longestExecutionMs,
+            duration
+          );
+        }
+      }
     });
   };
+
+  snapshotMetrics(): KpTutorialScrollCoordinatorMetrics {
+    return Object.freeze({ ...this.metrics });
+  }
+
+  resetMetrics(): void {
+    this.metrics = emptyScrollCoordinatorMetrics();
+  }
 
   cancelPendingProjection(): void {
     if (this.frame === undefined) return;
     this.view.cancelAnimationFrame(this.frame);
     this.frame = undefined;
   }
+}
+
+function emptyScrollCoordinatorMetrics(): {
+  -readonly [Key in keyof KpTutorialScrollCoordinatorMetrics]:
+    KpTutorialScrollCoordinatorMetrics[Key]
+} {
+  return {
+    scrollEvents: 0,
+    resizeEvents: 0,
+    scheduleRequests: 0,
+    coalescedRequests: 0,
+    requestedFrames: 0,
+    executedFrames: 0,
+    registrationReads: 0,
+    layoutReads: 0,
+    totalExecutionMs: 0,
+    longestExecutionMs: 0
+  };
 }
 
 function snapTravel(

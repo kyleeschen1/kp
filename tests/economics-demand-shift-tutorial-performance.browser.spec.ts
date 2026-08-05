@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-const route = "/tutorials/economics/demand-shift/";
+import type {
+  KpTutorialScrollCoordinatorMetrics
+} from "../src/tutorial/kp-tutorial-motion.ts";
+
+const route = "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 // These ceilings leave bounded machine variance above the production exemplar,
 // while making an eager heavy renderer or duplicated scroll clock fail loudly.
 const budgets = Object.freeze({
@@ -15,7 +19,13 @@ const budgets = Object.freeze({
 
 interface KpTutorialPerformanceProbe {
   cls: number;
+  geometryReads: number;
   longTasks: number[];
+}
+
+interface KpTutorialRuntimePerformanceApi {
+  readonly resetScrollCoordinator: () => void;
+  readonly snapshotScrollCoordinator: () => KpTutorialScrollCoordinatorMetrics;
 }
 
 test("production economics tutorial stays inside publication and motion budgets", async ({
@@ -24,9 +34,15 @@ test("production economics tutorial stays inside publication and motion budgets"
   await page.setViewportSize({ width: 1_280, height: 720 });
   await page.addInitScript(() => {
     const target = window as typeof window & {
+      __kpEconomicsPerformanceProbeRequested?: boolean;
       __kpEconomicsTutorialPerformance?: KpTutorialPerformanceProbe;
     };
-    const probe: KpTutorialPerformanceProbe = { cls: 0, longTasks: [] };
+    const probe: KpTutorialPerformanceProbe = {
+      cls: 0,
+      geometryReads: 0,
+      longTasks: []
+    };
+    target.__kpEconomicsPerformanceProbeRequested = true;
     target.__kpEconomicsTutorialPerformance = probe;
     if (PerformanceObserver.supportedEntryTypes.includes("layout-shift")) {
       new PerformanceObserver((list) => {
@@ -95,10 +111,19 @@ test("production economics tutorial stays inside publication and motion budgets"
   const active = await page.evaluate(async () => {
     const target = window as typeof window & {
       __kpEconomicsTutorialPerformance?: KpTutorialPerformanceProbe;
+      __kpEconomicsTutorialRuntimePerformance?: KpTutorialRuntimePerformanceApi;
     };
     const probe = target.__kpEconomicsTutorialPerformance!;
+    const runtime = target.__kpEconomicsTutorialRuntimePerformance!;
     probe.cls = 0;
+    probe.geometryReads = 0;
     probe.longTasks.length = 0;
+    runtime.resetScrollCoordinator();
+    const readGeometry = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function (): DOMRect {
+      probe.geometryReads += 1;
+      return readGeometry.call(this);
+    };
     const tutorial = document.querySelector<HTMLElement>(
       "[data-kp-economics-demand-shift-tutorial]"
     )!;
@@ -126,9 +151,10 @@ test("production economics tutorial stays inside publication and motion budgets"
     const changedAttributeCounts: number[] = [];
     const observedOwners: string[] = [];
     for (const blockId of ["demand-shift", "supply-movement"] as const) {
-      const anchor = tutorial.querySelector<HTMLElement>(
-        `[data-kp-tutorial-motion-controls="${blockId}"]`
+      const boundary = tutorial.querySelector<HTMLElement>(
+        `[data-kp-tutorial-motion-block="${blockId}"]`
       )!;
+      const anchor = boundary.querySelector<HTMLElement>("p") ?? boundary;
       const anchorDocumentTop = scrollY + anchor.getBoundingClientRect().top;
       for (let index = 0; index <= 12; index += 1) {
         const travel = index / 12;
@@ -145,9 +171,11 @@ test("production economics tutorial stays inside publication and motion budgets"
       }
     }
     observer.disconnect();
+    Element.prototype.getBoundingClientRect = readGeometry;
     const sorted = [...frameDurations].sort((left, right) => left - right);
     const percentile = (ratio: number): number =>
       sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * ratio))] ?? 0;
+    const scrollCoordinator = runtime.snapshotScrollCoordinator();
     return {
       samples: frameDurations.length,
       p95FrameMs: percentile(0.95),
@@ -155,6 +183,12 @@ test("production economics tutorial stays inside publication and motion budgets"
       longTaskCount: probe.longTasks.length,
       longestTaskMs: Math.max(0, ...probe.longTasks),
       cls: probe.cls,
+      geometryReads: probe.geometryReads,
+      geometryReadsPerFrame: probe.geometryReads /
+        Math.max(1, scrollCoordinator.executedFrames),
+      scrollCoordinator,
+      averageCoordinatorExecutionMs: scrollCoordinator.totalExecutionMs /
+        Math.max(1, scrollCoordinator.executedFrames),
       maxChangedProgressAttributes: Math.max(...changedAttributeCounts),
       demandOwnerSamples: observedOwners.filter((id) => id === "demand-shift").length,
       supplyOwnerSamples: observedOwners.filter((id) => id === "supply-movement").length
@@ -182,6 +216,12 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(active.longestTaskMs).toBeLessThanOrEqual(budgets.activeLongestTaskMs);
   expect(active.cls).toBeLessThanOrEqual(budgets.cumulativeLayoutShift);
   expect(active.maxChangedProgressAttributes).toBeLessThanOrEqual(1);
+  expect(active.scrollCoordinator.executedFrames).toBeGreaterThanOrEqual(26);
+  expect(active.scrollCoordinator.requestedFrames)
+    .toBe(active.scrollCoordinator.executedFrames);
+  expect(active.scrollCoordinator.layoutReads)
+    .toBe(active.scrollCoordinator.registrationReads);
+  expect(active.geometryReads).toBeGreaterThan(active.scrollCoordinator.layoutReads);
   expect(active.demandOwnerSamples).toBeGreaterThan(0);
   expect(active.supplyOwnerSamples).toBeGreaterThan(0);
 });

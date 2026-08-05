@@ -68,6 +68,7 @@
     KpTutorialScrollCoordinator,
     projectKpTutorialRebasedCorridor,
     type KpTutorialCoordinatedScrollProjection,
+    type KpTutorialScrollCoordinatorMetrics,
     type KpTutorialMotionCorridor,
     type KpTutorialScrollBlockRegistration
   } from "../kp-tutorial-motion.ts";
@@ -152,6 +153,17 @@
     readonly minimumEffectiveHeightRatio: number;
     readonly motionStartRatio: number;
   }
+
+  interface KpEconomicsTutorialRuntimePerformanceApi {
+    readonly resetScrollCoordinator: () => void;
+    readonly snapshotScrollCoordinator: () => KpTutorialScrollCoordinatorMetrics;
+  }
+
+  type KpEconomicsTutorialPerformanceWindow = Window & {
+    __kpEconomicsPerformanceProbeRequested?: boolean | undefined;
+    __kpEconomicsTutorialRuntimePerformance?:
+      KpEconomicsTutorialRuntimePerformanceApi | undefined;
+  };
 
   let {
     entry,
@@ -257,6 +269,8 @@
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator:
     KpTutorialScrollCoordinator<KpEconomicsMotionBlockId> | undefined;
+  let runtimePerformanceApi:
+    KpEconomicsTutorialRuntimePerformanceApi | undefined;
   let navigationController: KpTutorialNavigationController | undefined;
   let latestScrollProjection:
     KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId> | undefined;
@@ -1395,11 +1409,34 @@
         handleScrubBarSeek
       );
     }
+    const performanceTarget = window as KpEconomicsTutorialPerformanceWindow;
+    const profileScrollExecution =
+      performanceTarget.__kpEconomicsPerformanceProbeRequested === true;
     scrollCoordinator = new KpTutorialScrollCoordinator<KpEconomicsMotionBlockId>(
       window,
       collectScrollBlocks,
-      handleCoordinatedScroll
+      handleCoordinatedScroll,
+      { profileExecution: profileScrollExecution }
     );
+    if (profileScrollExecution) {
+      runtimePerformanceApi = Object.freeze({
+        resetScrollCoordinator: () => scrollCoordinator?.resetMetrics(),
+        snapshotScrollCoordinator: () => scrollCoordinator?.snapshotMetrics() ?? {
+          scrollEvents: 0,
+          resizeEvents: 0,
+          scheduleRequests: 0,
+          coalescedRequests: 0,
+          requestedFrames: 0,
+          executedFrames: 0,
+          registrationReads: 0,
+          layoutReads: 0,
+          totalExecutionMs: 0,
+          longestExecutionMs: 0
+        }
+      });
+      performanceTarget.__kpEconomicsTutorialRuntimePerformance =
+        runtimePerformanceApi;
+    }
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
     if (scrollPassageLayout) {
@@ -1466,6 +1503,11 @@
   });
 
   onDestroy(() => {
+    const performanceTarget = window as KpEconomicsTutorialPerformanceWindow;
+    if (
+      performanceTarget.__kpEconomicsTutorialRuntimePerformance ===
+      runtimePerformanceApi
+    ) delete performanceTarget.__kpEconomicsTutorialRuntimePerformance;
     scrollCoordinator?.disconnect();
     navigationController?.dispose();
     cancelSupplyPlayback();

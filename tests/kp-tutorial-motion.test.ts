@@ -20,10 +20,14 @@ test("cumulative projection obeys the same predecessor law for both callers", ()
       activeBlockId: blocks[1]!.id,
       localProgress: 0.37
     });
-    assert.deepEqual(projection.map(({ status, progress }) => ({ status, progress })), [
-      { status: "settled", progress: 1 },
-      { status: "active", progress: 0.37 }
-    ]);
+    assert.deepEqual(
+      projection.map(({ status, progress }) => ({ status, progress })),
+      blocks.map((_, index) => index < 1
+        ? { status: "settled", progress: 1 }
+        : index === 1
+          ? { status: "active", progress: 0.37 }
+          : { status: "inactive", progress: 0 })
+    );
   }
 });
 
@@ -113,10 +117,12 @@ test("the host-neutral coordinator coalesces frames and disconnects listeners", 
     getBoundingClientRect: () => ({ top: 440 })
   } as unknown as HTMLElement;
   const projections: number[] = [];
+  let clock = 0;
   const coordinator = new KpTutorialScrollCoordinator(
     view,
     () => [{ id: "block", anchor, corridor: kpLispLessonMotionBlocks[0]!.corridor }],
-    ({ blocks }) => projections.push(blocks[0]!.progress)
+    ({ blocks }) => projections.push(blocks[0]!.progress),
+    { profileExecution: true, now: () => clock++ }
   );
   coordinator.connect();
   coordinator.scheduleProjection();
@@ -127,6 +133,28 @@ test("the host-neutral coordinator coalesces frames and disconnects listeners", 
   callbacks.delete(id);
   callback(0);
   assert.equal(projections.length, 1);
+  assert.deepEqual(coordinator.snapshotMetrics(), {
+    scrollEvents: 0,
+    resizeEvents: 0,
+    scheduleRequests: 2,
+    coalescedRequests: 1,
+    requestedFrames: 1,
+    executedFrames: 1,
+    registrationReads: 1,
+    layoutReads: 1,
+    totalExecutionMs: 1,
+    longestExecutionMs: 1
+  });
+  const scrollListener = [...(listeners.get("scroll") ?? [])][0];
+  assert.equal(typeof scrollListener, "function");
+  if (typeof scrollListener === "function") scrollListener(new Event("scroll"));
+  const second = callbacks.entries().next().value;
+  assert.ok(second !== undefined);
+  callbacks.delete(second[0]);
+  second[1](1);
+  assert.equal(coordinator.snapshotMetrics().scrollEvents, 1);
+  coordinator.resetMetrics();
+  assert.equal(coordinator.snapshotMetrics().executedFrames, 0);
   assert.equal(listeners.get("scroll")?.size, 1);
   coordinator.disconnect();
   assert.equal(listeners.get("scroll")?.size, 0);

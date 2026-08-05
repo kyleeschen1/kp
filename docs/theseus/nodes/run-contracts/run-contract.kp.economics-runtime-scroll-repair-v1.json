@@ -72,8 +72,8 @@
     {
       "id": "next-action.economics.s02-v0",
       "title": "Measure-scroll-scheduling-and-execution",
-      "summary": "Materialized from stored run-contract slice s02 in Economics runtime and scroll repair.",
-      "status": "ready"
+      "summary": "Measured scroll scheduling and execution on the query-selected two-column route with opt-in production telemetry; exact choreography, visuals, and existing budgets remain intact.",
+      "status": "complete"
     },
     {
       "id": "s03",

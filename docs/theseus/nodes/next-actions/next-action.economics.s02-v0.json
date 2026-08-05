@@ -2,9 +2,9 @@
   "id": "next-action.economics.s02-v0",
   "kind": "next-action",
   "title": "Measure-scroll-scheduling-and-execution",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
-  "summary": "Materialized from stored run-contract slice s02 in Economics runtime and scroll repair.",
+  "summary": "Added opt-in scroll scheduler telemetry and a stable production probe. The canonical run now distinguishes 26 scroll events, 26 frames, 52 coordinator reads, 392 total geometry reads, and 39.5 ms aggregate coordinator execution; preserved publication ceilings by inlining a smaller static Source Serif face instead of widening budgets.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,6 +39,43 @@
     "npm run check:architecture",
     "git diff --check",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-motion.test.ts",
+      "status": "passed",
+      "scope": "s02 scroll coordinator instrumentation",
+      "checkedAt": "2026-08-05T06:48:21.458Z",
+      "notes": "Five projection, reversibility, ownership, rAF coalescing, event attribution, timing, reset, and disconnect tests passed."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s02 production two-column scroll baseline",
+      "checkedAt": "2026-08-05T06:48:22.625Z",
+      "notes": "Passed without widened ceilings: 343497 transfer bytes, 243806 script bytes, 48 resources, 122 ms initial longest task, 34 ms active p95, zero active long tasks, 26 scroll events to 26 frames, 392 total geometry reads (15.08/frame), 52 coordinator anchor reads, 39.5 ms total and 2.9 ms longest coordinator execution."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s02 font and exemplar preservation",
+      "checkedAt": "2026-08-05T06:48:23.612Z",
+      "notes": "Six desktop, phone, theme, side-toggle, graph-tuner, and inline rollback visual checks passed after replacing the 50.8 KB variable font resource with the same Source Serif face as a 20 KB inlined static font."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s02 economics semantic preservation",
+      "checkedAt": "2026-08-05T06:48:24.719Z",
+      "notes": "All 37 economics layout, URL, semantic motion, static/runtime renderer, and shared lesson conformance tests passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s02 durable evidence integrity",
+      "checkedAt": "2026-08-05T06:48:25.743Z",
+      "notes": "Workspace validation passed before slice completion."
+    }
   ],
   "expectedLearning": [
     "Whether Measure-scroll-scheduling-and-execution can be completed inside Economics runtime and scroll repair."
