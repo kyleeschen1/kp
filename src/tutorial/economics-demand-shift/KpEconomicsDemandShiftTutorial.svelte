@@ -1114,11 +1114,22 @@
     const focusedParagraph = paragraphFrames.find(({ ownsAttention }) =>
       ownsAttention
     ) ?? paragraphFrames[0];
-    const motionParagraph = paragraphFrames.find((frame) =>
-      frame.motionBlockId !== undefined && (
-        frame.ownsAttention || frame.projection.phase === "crossing"
-      )
-    );
+    const bridgeProjection = motionBridge === undefined
+      ? undefined
+      : latestScrollProjection?.blocks.find(({ id, travel }) =>
+          id === motionBridge.motionBlockId && travel > 0 && travel < 1
+        );
+    // The paired prose may trade attention during the gap, but the one
+    // semantic bridge remains motion owner until its after anchor settles.
+    const motionParagraph = bridgeProjection === undefined
+      ? paragraphFrames.find((frame) =>
+          frame.motionBlockId !== undefined && (
+            frame.ownsAttention || frame.projection.phase === "crossing"
+          )
+        )
+      : paragraphFrames.find(({ passageId }) =>
+          passageId === motionBridge?.beforePassageId
+        );
     const passageId = focusedParagraph?.passageId;
     const motionBlockId = motionParagraph?.motionBlockId;
     if (passageId === undefined) {

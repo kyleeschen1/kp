@@ -40,6 +40,7 @@
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-inline-sticky-poc": "playwright test tests/economics-inline-sticky-layout.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-two-column-scroll": "playwright test tests/economics-two-column-scroll.browser.spec.ts --project=chromium --workers=1",
+    "visual:economics-motion-bridge": "playwright test tests/economics-motion-bridge.browser.spec.ts --project=chromium --workers=1",
     "visual:botanical-lisp-asset": "node --disable-warning=ExperimentalWarning scripts/capture-botanical-lisp-asset.ts",
     "visual:lisp-expression-beads": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-expression-beads.ts",
     "visual:lisp-structural-motion": "node --disable-warning=ExperimentalWarning scripts/capture-lisp-structural-motion.ts",

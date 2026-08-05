@@ -124,7 +124,8 @@
     {
       "id": "s12",
       "title": "Prove reverse direct seek and route isolation",
-      "status": "planned"
+      "summary": "Proved exact forward and reverse bridge samples, direct shift-ready and shift-settled URL reconstruction, and accepted-route isolation; repaired attention handoff so the semantic bridge remains sole motion owner through its interval.",
+      "status": "complete"
     },
     {
       "id": "s13",

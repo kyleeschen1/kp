@@ -285,6 +285,27 @@
       "scope": "s11 full static typing",
       "checkedAt": "2026-08-05T21:17:14.287Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "s12 forward reverse direct endpoint and isolation",
+      "checkedAt": "2026-08-05T21:23:35.166Z",
+      "notes": "3 Chromium cases passed. The first focused run caught and repaired a premature midpoint settlement caused by after-prose attention; the unchanged rerun proved exact 0, .25, .5, .75, 1 in both directions and semantic URL endpoints."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s12 accepted route isolation",
+      "checkedAt": "2026-08-05T21:23:36.278Z",
+      "notes": "All 10 accepted-route Chromium cases passed with no motion-bridge DOM or behavior leakage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 full static typing",
+      "checkedAt": "2026-08-05T21:23:37.315Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {
