@@ -327,6 +327,30 @@
       "scope": "s13 production checkpoint",
       "checkedAt": "2026-08-05T21:28:32.993Z",
       "notes": "Full typecheck, deterministic publication check, and Vite production build passed; existing large-chunk warnings remain visible."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T22:03:57.899Z"
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T22:04:00.294Z"
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T22:04:01.937Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-05T22:04:03.058Z"
     }
   ],
   "progress": {

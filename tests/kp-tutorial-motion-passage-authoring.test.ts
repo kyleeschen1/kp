@@ -7,6 +7,7 @@ import {
   kpTutorialMotionBridgeDistancePresets
 } from "../src/tutorial/kp-tutorial-motion-bridge-authoring.ts";
 import {
+  resolveKpTutorialMotionBridgeBeforeEllipsis,
   renderKpTutorialMotionBridgeStatic
 } from "../src/tutorial/kp-tutorial-motion-bridge-static.ts";
 
@@ -108,7 +109,7 @@ test("static bridge markup keeps complete prose in natural light-DOM order", () 
   });
   const html = renderKpTutorialMotionBridgeStatic({
     bridge,
-    beforeHtml: "Demand begins to shift",
+    beforeHtml: "Demand begins to shift.",
     afterHtml: "the new equilibrium is higher and farther right."
   });
   assert.match(html, /^<kp-motion-bridge/);
@@ -116,7 +117,8 @@ test("static bridge markup keeps complete prose in natural light-DOM order", () 
   assert.match(html, /<p data-kp-motion-bridge-before="follow-shift">/);
   assert.match(html, /<p data-kp-motion-bridge-after="new-equilibrium">/);
   assert.equal((html.match(/aria-hidden="true"/g) ?? []).length, 3);
-  assert.equal((html.match(/>…<\/span>/g) ?? []).length, 2);
+  assert.equal((html.match(/>\.\.<\/span>/g) ?? []).length, 1);
+  assert.equal((html.match(/>…<\/span>/g) ?? []).length, 1);
   assert.match(html, /kp-tutorial-motion-bridge__rail-progress/);
   assert.doesNotMatch(html, /style=|\.\.\.|scroll|progress=/);
   assert.throws(() => renderKpTutorialMotionBridgeStatic({
@@ -124,4 +126,13 @@ test("static bridge markup keeps complete prose in natural light-DOM order", () 
     beforeHtml: "",
     afterHtml: "Complete thought."
   }), /requires prose on both sides/);
+});
+
+test("visual bridge punctuation preserves complete source prose", () => {
+  assert.equal(resolveKpTutorialMotionBridgeBeforeEllipsis(
+    "The curve moves."
+  ), "..");
+  assert.equal(resolveKpTutorialMotionBridgeBeforeEllipsis(
+    "Watch <em>this</em>"
+  ), "…");
 });

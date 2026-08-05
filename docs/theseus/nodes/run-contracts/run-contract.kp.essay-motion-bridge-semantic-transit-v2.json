@@ -136,7 +136,8 @@
     {
       "id": "s14",
       "title": "Apply approved bridge refinements",
-      "status": "planned"
+      "summary": "Applied approved refinements: generated ellipses no longer double terminal punctuation, both bridge statements retain a 0.52 legibility floor, compiled no-JS output was regenerated, and focused visual/unit/type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

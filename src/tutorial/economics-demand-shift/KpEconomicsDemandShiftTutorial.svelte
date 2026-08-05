@@ -91,6 +91,9 @@
     KpTutorialMotionBridgeAuthoring
   } from "../kp-tutorial-motion-bridge-authoring.ts";
   import {
+    resolveKpTutorialMotionBridgeBeforeEllipsis
+  } from "../kp-tutorial-motion-bridge-static.ts";
+  import {
     projectKpTutorialBoundaryCueSalience,
     projectKpTutorialScrollPassagePhase,
     type KpTutorialScrollPassagePhase,
@@ -378,6 +381,11 @@
   const motionBridgeEnabled = motionBridge !== undefined &&
     motionBridgeBeforePassage !== undefined &&
     motionBridgeAfterPassage !== undefined;
+  const motionBridgeBeforeEllipsis = untrack(() =>
+    resolveKpTutorialMotionBridgeBeforeEllipsis(
+      motionBridgeBeforePassage?.paragraphs[0]?.html ?? ""
+    )
+  );
   let motionBridgeDistancePx = $state(0);
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
@@ -2344,7 +2352,7 @@
             <span
               class="kp-tutorial-motion-bridge__ellipsis kp-tutorial-motion-bridge__ellipsis--before"
               aria-hidden="true"
-            >…</span>
+            >{motionBridgeBeforeEllipsis}</span>
           {/if}
         </p>
       {/each}

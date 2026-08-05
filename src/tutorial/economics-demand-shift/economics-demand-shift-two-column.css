@@ -254,6 +254,20 @@
     will-change: opacity;
   }
 
+  /* A bridge must remain legible while attention trades between its paired
+     statements; ordinary essay beats keep the quieter default floor. */
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    kp-motion-bridge
+    [data-kp-two-column-scroll-paragraph]
+    > p
+    > .kp-economics-tutorial__passage-ink {
+    opacity: max(
+      var(--kp-two-column-paragraph-opacity, 0.32),
+      var(--kp-tutorial-motion-bridge-prose-opacity-floor)
+    );
+  }
+
   :root .kp-economics-tutorial--two-column-scroll
     .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
     --kp-graph-axis: var(--kp-lesson-theme-graph-axis);

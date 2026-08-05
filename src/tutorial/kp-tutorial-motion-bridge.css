@@ -4,6 +4,7 @@
   --kp-tutorial-motion-bridge-distance-standard-ratio: 0.5;
   --kp-tutorial-motion-bridge-distance-extended-ratio: 0.8;
   --kp-tutorial-ordinary-beat-approach-ratio: 0.14;
+  --kp-tutorial-motion-bridge-prose-opacity-floor: 0.52;
   --kp-tutorial-motion-bridge-rail-width: 1px;
   --kp-tutorial-motion-bridge-rail-track:
     var(--kp-lesson-theme-divider, currentcolor);

@@ -116,8 +116,16 @@ test("dark light and reverse midpoint states remain visually inspectable", async
     await page.goto(`${exemplarRoute}&theme=${theme}`);
     const root = tutorial(page);
     const before = root.locator("[data-kp-motion-bridge-before] p");
+    const bridgeInk = root.locator(
+      "kp-motion-bridge .kp-economics-tutorial__passage-ink"
+    );
     await placeTopAt(page, before, 80);
     await expect.poll(() => demandProgress(root)).toBeCloseTo(0.5, 2);
+    await expect.poll(async () => Math.min(...await bridgeInk.evaluateAll(
+      (elements) => elements.map((element) => Number.parseFloat(
+        getComputedStyle(element).opacity
+      ))
+    ))).toBeGreaterThanOrEqual(0.52);
     await page.screenshot({
       path: `${evidenceDirectory}/desktop-${theme}-midpoint.png`,
       fullPage: false
