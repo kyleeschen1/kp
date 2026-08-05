@@ -1094,11 +1094,47 @@
       "status": "passed",
       "scope": "slice s19 evidence integrity",
       "checkedAt": "2026-08-05T13:04:40.585Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (22/22)",
+      "status": "passed",
+      "scope": "slice s20 settlement accessibility",
+      "checkedAt": "2026-08-05T13:09:12.474Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "slice s20 types",
+      "checkedAt": "2026-08-05T13:09:14.561Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "slice s20 semantic preservation",
+      "checkedAt": "2026-08-05T13:09:16.263Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s20 architecture",
+      "checkedAt": "2026-08-05T13:09:17.510Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s20 patch hygiene",
+      "checkedAt": "2026-08-05T13:09:35.707Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17851 events)",
+      "status": "passed",
+      "scope": "slice s20 evidence integrity",
+      "checkedAt": "2026-08-05T13:09:36.863Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s19 adds shared capability-promise reuse with per-passage sessions, exact progress application, pause-before-single-resume ordering, offscreen dehydration, stale-load suppression, and terminal runtime disposal. Twelve passages use two chunks and at most three sessions."
+    "summary": "Slice s20 proves document-order settlement across all twelve stages in both directions, exact direct progress, one accessible surface per stage, one motion owner, shared capabilities, and zero resumed sessions for reduced motion."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."

@@ -173,7 +173,8 @@
     {
       "id": "s20",
       "title": "Prove-multi-passage-settlement-and-accessibility",
-      "status": "planned"
+      "summary": "Proved exact forward/reverse twelve-passage settlement independent of hydration, one accessible static-or-live surface per stage, one motion owner, retained capability reuse, and reduced-motion pause totality.",
+      "status": "complete"
     },
     {
       "id": "s21",

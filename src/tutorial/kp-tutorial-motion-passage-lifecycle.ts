@@ -174,6 +174,42 @@ export function disposeKpTutorialMotionPassage<
   });
 }
 
+/** Semantic settlement follows document order and does not depend on hydration. */
+export function projectKpTutorialMotionPassageSettlement<
+  PassageId extends string,
+  CapabilityId extends string
+>(input: {
+  readonly passages: readonly KpTutorialPresentMotionPassage<
+    PassageId,
+    CapabilityId
+  >[];
+  readonly activePassageId: PassageId;
+  readonly localProgress: number;
+}): readonly KpTutorialPresentMotionPassage<PassageId, CapabilityId>[] {
+  if (!Number.isFinite(input.localProgress) ||
+      input.localProgress < 0 || input.localProgress > 1) {
+    throw new Error("Tutorial passage local progress must be within [0, 1].");
+  }
+  const ids = new Set(input.passages.map(({ id }) => id));
+  if (ids.size !== input.passages.length) {
+    throw new Error("Tutorial passage settlement ids must be unique.");
+  }
+  const activeIndex = input.passages.findIndex(
+    ({ id }) => id === input.activePassageId
+  );
+  if (activeIndex < 0) {
+    throw new Error(`Unknown active tutorial passage: ${input.activePassageId}`);
+  }
+  return Object.freeze(input.passages.map((passage, index) => Object.freeze({
+    ...passage,
+    semanticProgress: index < activeIndex
+      ? 1
+      : index === activeIndex
+        ? input.localProgress
+        : 0
+  })));
+}
+
 function assertLifecycleInput<PassageId extends string, CapabilityId extends string>(
   input: {
     readonly passages: readonly KpTutorialMotionPassage<
