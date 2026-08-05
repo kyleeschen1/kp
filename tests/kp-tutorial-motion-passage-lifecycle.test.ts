@@ -4,6 +4,7 @@ import test from "node:test";
 
 import {
   disposeKpTutorialMotionPassage,
+  projectKpTutorialBoundaryCueSalience,
   projectKpTutorialMotionPassageLifecycle,
   projectKpTutorialScrollPassagePhase,
   type KpTutorialMotionPassage
@@ -212,6 +213,48 @@ test("scroll passage timelines reject non-finite and unordered authority", () =>
       releaseScrollY: 3
     }
   }), /thresholds must be ordered/);
+});
+
+test("boundary cue salience pins only the outer endpoint for passage state", () => {
+  assert.deepEqual(projectKpTutorialBoundaryCueSalience({
+    phase: "ordinary-document",
+    cueIndex: 0,
+    cueCount: 4,
+    projectedOpacity: 0.32
+  }), { opacity: 1, endpointPinned: true });
+  assert.deepEqual(projectKpTutorialBoundaryCueSalience({
+    phase: "scrubbing",
+    cueIndex: 0,
+    cueCount: 4,
+    projectedOpacity: 0.48
+  }), { opacity: 0.48, endpointPinned: false });
+  assert.deepEqual(projectKpTutorialBoundaryCueSalience({
+    phase: "terminal-latched",
+    cueIndex: 3,
+    cueCount: 4,
+    projectedOpacity: 0.32
+  }), { opacity: 1, endpointPinned: true });
+  assert.deepEqual(projectKpTutorialBoundaryCueSalience({
+    phase: "released",
+    cueIndex: 2,
+    cueCount: 4,
+    projectedOpacity: 0.32
+  }), { opacity: 0.32, endpointPinned: false });
+});
+
+test("boundary salience rejects invalid cue identity and opacity", () => {
+  assert.throws(() => projectKpTutorialBoundaryCueSalience({
+    phase: "scrubbing",
+    cueIndex: 1,
+    cueCount: 1,
+    projectedOpacity: 1
+  }), /cue index is outside/);
+  assert.throws(() => projectKpTutorialBoundaryCueSalience({
+    phase: "scrubbing",
+    cueIndex: 0,
+    cueCount: 1,
+    projectedOpacity: 1.1
+  }), /opacity must be within/);
 });
 
 test("one usable viewport removes persistent chrome exactly once", () => {

@@ -87,6 +87,11 @@ export interface KpTutorialScrollPassagePhaseProjection {
   readonly motionEligible: boolean;
 }
 
+export interface KpTutorialBoundaryCueSalienceProjection {
+  readonly opacity: number;
+  readonly endpointPinned: boolean;
+}
+
 /**
  * Physical scroll state is projected from position alone. Keeping direction
  * out of this contract makes browser history, direct seek, and reverse scroll
@@ -112,6 +117,34 @@ export function projectKpTutorialScrollPassagePhase(input: {
   return Object.freeze({
     phase,
     motionEligible: phase === "scrubbing"
+  });
+}
+
+export function projectKpTutorialBoundaryCueSalience(input: {
+  readonly phase: KpTutorialScrollPassagePhase;
+  readonly cueIndex: number;
+  readonly cueCount: number;
+  readonly projectedOpacity: number;
+}): KpTutorialBoundaryCueSalienceProjection {
+  if (!Number.isInteger(input.cueCount) || input.cueCount < 1) {
+    throw new Error("Tutorial passage cue count must be a positive integer.");
+  }
+  if (!Number.isInteger(input.cueIndex) ||
+      input.cueIndex < 0 || input.cueIndex >= input.cueCount) {
+    throw new Error("Tutorial passage cue index is outside its cue count.");
+  }
+  if (!Number.isFinite(input.projectedOpacity) ||
+      input.projectedOpacity < 0 || input.projectedOpacity > 1) {
+    throw new Error("Tutorial passage cue opacity must be within [0, 1].");
+  }
+  const firstBeforeEntry = input.cueIndex === 0 &&
+    input.phase === "ordinary-document";
+  const lastAfterTerminal = input.cueIndex === input.cueCount - 1 &&
+    (input.phase === "terminal-latched" || input.phase === "released");
+  const endpointPinned = firstBeforeEntry || lastAfterTerminal;
+  return Object.freeze({
+    opacity: endpointPinned ? 1 : input.projectedOpacity,
+    endpointPinned
   });
 }
 

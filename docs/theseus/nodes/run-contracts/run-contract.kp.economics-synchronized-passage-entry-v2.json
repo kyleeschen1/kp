@@ -85,7 +85,8 @@
     {
       "id": "s06",
       "title": "Encode boundary salience policy",
-      "status": "planned"
+      "summary": "Added fail-closed direction-independent boundary cue salience policy.",
+      "status": "complete"
     },
     {
       "id": "s07",
