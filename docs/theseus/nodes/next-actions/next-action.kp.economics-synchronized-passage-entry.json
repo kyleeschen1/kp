@@ -1,0 +1,56 @@
+{
+  "id": "next-action.kp.economics-synchronized-passage-entry",
+  "kind": "next-action",
+  "title": "Economics",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-economics-synchronized-passage-entry-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.publication-page-scale-graph-runtime-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-two-column-scroll",
+    "npm run test:tutorial-motion-page-scale"
+  ],
+  "expectedLearning": [
+    "Whether one usable-viewport authority can synchronize ordinary-document entry, exact scroll state, and direct semantic navigation without per-scroll layout work."
+  ],
+  "allowedWork": [
+    "Economics two-column passage geometry, framework-neutral pure viewport and navigation helpers, and scoped tests."
+  ],
+  "disallowedWork": [
+    "Semantic graph changes, catalog-wide visual rollout, and unrelated project work."
+  ],
+  "criteria": [
+    {
+      "id": "simultaneous-entry",
+      "weight": "high"
+    },
+    {
+      "id": "boundary-salience",
+      "weight": "high"
+    },
+    {
+      "id": "direct-navigation",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-passage-scale",
+      "weight": "high"
+    },
+    {
+      "id": "dark-axis-token",
+      "weight": "medium"
+    }
+  ]
+}

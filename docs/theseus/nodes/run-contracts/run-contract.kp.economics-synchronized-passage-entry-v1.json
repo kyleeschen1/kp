@@ -1,0 +1,169 @@
+{
+  "id": "run-contract.kp.economics-synchronized-passage-entry-v1",
+  "kind": "run-contract",
+  "title": "Economics synchronized passage entry",
+  "status": "superseded",
+  "summary": "Replaced",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-synchronized-passage-entry.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-economics-synchronized-passage-entry-long-loop-proposal.md",
+      "summary": "User-approved 25-slice exemplar-first proposal with mandatory slice 17 checkpoint and direct no-replay navigation hardening in slice 22."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run test:tutorial-motion-page-scale",
+    "npm run visual:economics-two-column-scroll",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Economics two-column passage geometry and presentation",
+    "Framework-neutral pure viewport passage-state navigation and scroll projection helpers proven by the exemplar",
+    "Focused unit browser visual performance fixtures and durable evidence"
+  ],
+  "disallowedWork": [
+    "Economic semantic changes new graph content or animation keyframe redesign",
+    "Catalog-wide visual rollout before the slice 17 human checkpoint",
+    "Raw progress time or frame URLs and unrelated-stage hydration during navigation",
+    "Svelte ownership of semantic truth assets clocks renderer ports or publication bundles",
+    "Unrelated user-owned worktree files and the unrelated gold equation frontier"
+  ],
+  "goal": "Make the economics two-column passage enter and release as an ordinary document with one header-safe anchor authority, exact reversible scroll state, direct no-replay semantic navigation, and bounded many-passage performance.",
+  "target": "next-action.kp.economics-synchronized-passage-entry",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Capture deterministic geometry baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Define passage lifecycle states",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add usable viewport projection",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Derive shared text and graph anchors",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Derive simultaneous latch offset",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Encode boundary salience policy",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Model one local stage assembly",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Restore ordinary progressive layout",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Cache viewport and chrome measurements",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Implement synchronized entry latch",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Gate motion until post-latch travel",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Preserve assembly spacing",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Preserve first cue endpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Preserve final cue endpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Unify dark axis and divider token",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Prove forward reverse symmetry",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Economics visual exemplar checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Apply approved visual refinements",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add sticky header safe anchors",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Harden dynamic viewport and mobile fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Reconcile reading anchor authority",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Harden direct semantic navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Close accessibility and static reading",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Pressure test 1 3 12 24 36 passages",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run release verification and closeout",
+      "status": "planned"
+    }
+  ]
+}
