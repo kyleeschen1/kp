@@ -1,0 +1,110 @@
+{
+  "id": "next-action.kp.publication-page-scale-graph-runtime-v1",
+  "kind": "next-action",
+  "title": "Close publication, page-scale, and graph runtime infrastructure",
+  "status": "ready",
+  "domain": "platform",
+  "summary": "Execute the user-approved successor to the economics runtime repair: route and build-time math closure, bounded multi-passage lifecycle, physics retained SVG pressure, minimal caller-proven Graph2D extraction, and a renderer-neutral Graph3D protocol.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.economics-runtime-scroll-repair-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run test:browser:physics-work-energy",
+    "npm run test:browser:animation-catalogue-3d",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s01 approved-reference baseline",
+      "checkedAt": "2026-08-05T10:00:32.757Z",
+      "notes": "The production build and all active-motion evidence passed, but the cold-start longest task sampled 166ms against the unchanged 150ms ceiling. This reproduces the already-recorded 124-212ms identical-build startup variance; transfer 349589, script 249919, resources 48, CLS 0, active p95 34.2ms, 56 geometry reads, zero SVG strings/replacements, and 2/2/2 dense-cue reads remained stable."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s01 reproducible approved baseline",
+      "checkedAt": "2026-08-05T10:04:01.287Z",
+      "notes": "The identical-build rerun passed with 349589 transfer bytes, 249919 script bytes, 48 resources, CLS 0, 110ms cold longest task, 33.7ms active p95, 56 geometry reads, zero SVG strings/replacements, and 2/2/2 dense-cue reads."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s01 canonical preservation reference",
+      "checkedAt": "2026-08-05T10:04:02.296Z",
+      "notes": "All eight canonical cases passed across desktop, phone, light theme, unified non-KaTeX typography, column side, spacing, stroke tuning, and inline rollback."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "s01 production compilation baseline",
+      "checkedAt": "2026-08-05T10:04:03.251Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks plus the Vite production build passed through the performance command."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s01 patch hygiene",
+      "checkedAt": "2026-08-05T10:04:04.231Z",
+      "notes": "No whitespace errors in the activation records."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 control-plane integrity",
+      "checkedAt": "2026-08-05T10:04:05.156Z",
+      "notes": "Workspace validation passed after contract creation, approval capture, and baseline evidence."
+    }
+  ],
+  "expectedLearning": [
+    "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."
+  ],
+  "allowedWork": [
+    "Economics route capability closure, deterministic build-time lesson and KaTeX artifacts, retained dynamic math, economics CSS ownership and verified pruning.",
+    "Multi-passage lifecycle, production pressure fixtures, one page scroll coordinator, bounded near-viewport hydration, stable placeholders, offscreen pause, capability reuse, and WebGL lease pressure.",
+    "Physics-local retained SVG runtime, two-caller Graph2D lifecycle extraction, renderer-neutral Graph3D protocol, existing internal Graph3D host adoption, focused tests, performance evidence, project memory, and Theseus control records."
+  ],
+  "disallowedWork": [
+    "Do not resume matrix or Lisp animation work, add another tutorial or curriculum domain, build SvelteKit, Internal Studio, Public Web, or either editor.",
+    "Do not delete rollback lesson layouts, introduce a universal scene graph, migrate every graph caller, or make Three.js, KaTeX, code, or WebGL an eager shared dependency.",
+    "Do not redesign the approved economics or physics visual language, change semantic truth, accessibility, direct seek, rewind, URL meaning, Review identity, or current performance ceilings."
+  ],
+  "criteria": [
+    {
+      "id": "route-capability-closure",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-static-math",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-multi-passage-cost",
+      "weight": "high"
+    },
+    {
+      "id": "persistent-physics-svg",
+      "weight": "high"
+    },
+    {
+      "id": "caller-proven-graph-seams",
+      "weight": "high"
+    }
+  ]
+}

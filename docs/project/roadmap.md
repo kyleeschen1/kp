@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-04
+Last Updated: 2026-08-05
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -163,16 +163,18 @@ that probe is not learner UI or a promoted layout API.
 This does not authorize a shared essay-embed component or resume the tabled
 animation-promotion frontier.
 
-The approved immediate repair sequence is recorded in
+The approved repair and consolidation sequence is recorded in
 `reviews/2026-08-04-economics-runtime-scroll-next-step-review.md`. Phases 1–4
-will instrument the actual hot paths, retain the economics SVG runtime tree,
-cache cue geometry behind a stable local-to-viewport anchor contract with
-IntersectionObserver-assisted activation, then add the spacing tuner and one
-canonical non-KaTeX lesson font. The tranche stops for human visual and
-performance review. Route/CSS closure, dense multi-stage promotion, shared
-Graph2D extraction, and a Graph3D protocol remain separately gated. The Lisp
-contract's final two slices are preserved in deferred state rather than mixed
-into this work.
+have closed: the economics route retains one SVG runtime tree, projects cached
+cue geometry through IntersectionObserver-assisted activation, exposes the
+internal spacing tuner, uses one non-KaTeX lesson face, and passes its visual
+and performance checkpoint. On 2026-08-05 the user approved the bounded
+Phases 5–7 successor. It now closes route, build-time math, and CSS ownership;
+proves bounded multi-passage hydration; then pressures a minimal Graph2D
+lifecycle and renderer-neutral Graph3D protocol through the existing physics
+and internal 3D callers. The current economics appearance is the preservation
+reference, not a redesign target. The Lisp contract's final two slices remain
+deferred rather than mixed into this work.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in

@@ -1,7 +1,7 @@
 # Economics Runtime And Scroll Next-Step Review
 
 Date: 2026-08-04
-Status: Phases 1–4 approved for execution; Phases 5–7 remain separately gated
+Status: Phases 1–4 complete; Phases 5–7 approved on 2026-08-05 and active
 
 ## Recommendation
 
@@ -311,6 +311,31 @@ visual cases, the production performance probe, build/type checks, and all
 architecture gates. Human judgment over the repaired exemplar remains the
 required promotion boundary.
 
+## Successor Approval And Preservation Reference
+
+On 2026-08-05, the user approved the Phase-4 checkpoint and the bounded
+Phases 5–7 successor. The canonical preservation reference is
+`/tutorials/economics/demand-shift/?layout=two-column-scroll` in midnight and
+paper themes, both text-side settings, and its phone fallback. Approval selects
+that exemplar for closure and caller pressure; it does not authorize a visual
+redesign or deletion of the retained rollback layouts.
+
+The successor closes route capability and build-time math costs, proves that
+multi-passage pages scale with the live window rather than total passage count,
+then uses the existing physics and internal Graph3D callers to promote only
+the lifecycle seams they actually share. The exact slice order, live status,
+verification evidence, and stop state belong solely to
+`run-contract.kp.publication-page-scale-graph-runtime-v1`.
+
+The activation baseline reproduced the stored publication values exactly:
+349,589 transfer bytes, 249,919 script bytes, 48 resources, zero CLS, 56 active
+geometry reads, zero SVG strings or subtree replacements, and constant `2 / 2
+/ 2` reads at 6, 24, and 48 cues. The first cold-start sample measured `166ms`
+and failed the unchanged `150ms` ceiling; an immediate identical-build rerun
+measured `110ms` and passed. Both results remain evidence of the already-known
+cold-start variance rather than a widened budget. All eight canonical visual
+cases passed at contract activation.
+
 ## Phase 5: Reduce Route And CSS Closure After Approval
 
 After the Phase-4 visual checkpoint, split the shared graph viewport's static
@@ -363,12 +388,13 @@ pages.
 Generated solve-x remains the later third lesson caller. Matrix work, SvelteKit,
 Public Web, broad motif promotion, and a universal scene graph remain deferred.
 
-## Recommended Approval Boundary
+## Approval Boundary
 
-Phases 1–4 are approved as one bounded exemplar tranche, with a mandatory
-visual and performance checkpoint after the spacing tuner and font
-unification. Phases 5–7 remain a separately approved consolidation tranche
-informed by those measurements and the selected layout.
+Phases 1–4 closed at their mandatory visual and performance checkpoint. The
+user approved Phases 5–7 as one independently reversible consolidation tranche
+on 2026-08-05. That tranche must still stop after its release matrix for an
+explicit human checkpoint; it does not authorize the deferred product,
+curriculum, SvelteKit, Internal Studio, Public Web, or public-editor work.
 
 ## Sources
 

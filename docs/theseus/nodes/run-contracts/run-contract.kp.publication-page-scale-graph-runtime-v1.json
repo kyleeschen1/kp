@@ -1,0 +1,211 @@
+{
+  "id": "run-contract.kp.publication-page-scale-graph-runtime-v1",
+  "kind": "run-contract",
+  "title": "Publication, page-scale, and graph runtime closure",
+  "status": "ready",
+  "domain": "platform",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.publication-page-scale-graph-runtime-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md",
+      "summary": "User-approved Phases 5-7 rationale, preservation boundary, promotion criteria, and explicit deferrals."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:browser:economics-demand-shift-tutorial",
+    "npm run visual:economics-two-column-scroll",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run test:browser:physics-work-energy",
+    "npm run test:browser:animation-catalogue-3d",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Execute only the exact approved 30-slice route, build-time math, CSS ownership, multi-passage lifecycle, physics retained SVG, caller-proven Graph2D, and renderer-neutral Graph3D tranche.",
+    "Preserve the current two-column economics route in midnight and paper themes, both text sides, phone behavior, exact semantic frames, accessibility, static export, URL/TOC/Review state, manual control, direct seek, and rewind.",
+    "Use IntersectionObserver only for coarse activation, retain one passive rAF-coalesced exact scroll source, keep a bounded live-stage window, and keep Three.js outside 2D route closure.",
+    "Keep every slice independently reversible, verified, durably recorded, and committed with exact path staging."
+  ],
+  "disallowedWork": [
+    "Do not resume matrix or Lisp animation work, add another tutorial or curriculum domain, build SvelteKit, Internal Studio, Public Web, or either editor.",
+    "Do not delete rollback lesson layouts, redesign approved economics or physics visuals, introduce a universal scene graph, or migrate graph callers that do not prove the seam.",
+    "Do not make Three.js, runtime KaTeX, code rendering, or WebGL an eager shared dependency, and do not widen performance ceilings to make a check pass.",
+    "Do not change semantic truth, domain choreography, accessibility ownership, direct seek, rewind, URL meaning, Review identity, reduced motion, or static/export authority."
+  ],
+  "goal": "Close route and build-time math costs, prove bounded multi-passage behavior, retain the physics SVG runtime, and promote only the graph lifecycle seams proven by economics, physics, and the existing internal Graph3D host.",
+  "target": "next-action.kp.publication-page-scale-graph-runtime-v1",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on any economics or physics semantic-frame, direct-seek, rewind, accessibility, URL, Review, reduced-motion, static-export, or approved-visual divergence.",
+    "Stop if route closure cannot demonstrate measurable dependency reduction without widening current transfer, script, resource, CLS, or long-task ceilings.",
+    "Stop on multiple scroll clocks, total-passage-dependent ordinary-scroll geometry reads, visible dehydration layout shift, cross-passage state leakage, or WebGL context exhaustion.",
+    "Stop if a shared Graph2D lifecycle requires domain-specific truth or if Graph3D protocol adoption pulls Three.js or WebGL into a 2D route.",
+    "Stop on unrelated user-file overlap, missing durable evidence, unsafe authority, or any subjective visual choice outside the approved preservation reference.",
+    "Always stop after s30 for explicit human review."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Activate-contract-and-freeze-reference",
+      "summary": "Activated the approved 30-slice successor, linked it to the completed economics repair, selected the two-column dark/light/phone exemplar as the preservation reference, froze exact route/runtime metrics, retained the cold-start variance without widening its ceiling, and passed all eight visual cases.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Attribute-route-modules-KaTeX-and-CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Enforce-economics-route-capability-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Resolve-economics-without-full-catalogue-library",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Split-generic-SVG-viewport-from-domain-renderers",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Cut-economics-route-to-explicit-graph-capability",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define-compiled-math-artifact-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Build-deterministic-lesson-and-KaTeX-compiler",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Consume-compiled-publication-without-runtime-KaTeX",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Retain-exact-dynamic-math-without-reparse",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Split-economics-CSS-by-owner",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Prune-proven-dead-and-duplicate-CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Close-route-math-and-CSS-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Define-multi-passage-lifecycle-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Build-one-three-and-twelve-passage-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Extend-one-page-scroll-coordinator",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Bound-observer-activation-and-live-stage-window",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Reserve-and-dehydrate-stable-stage-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Reuse-capability-chunks-and-pause-offscreen-work",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Prove-multi-passage-settlement-and-accessibility",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Pressure-WebGL-context-leases",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Close-multi-passage-performance-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Measure-physics-SVG-runtime-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Add-physics-local-retained-SVG-session",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Prove-physics-identity-seek-and-accessibility",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Extract-minimal-two-caller-Graph2D-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Adopt-shared-Graph2D-lifecycle-in-both-callers",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Define-renderer-neutral-Graph3D-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Pressure-protocol-through-existing-Graph3D-host",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run-release-matrix-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
