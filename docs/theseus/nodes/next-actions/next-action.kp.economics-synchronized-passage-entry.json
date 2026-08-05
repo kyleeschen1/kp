@@ -194,6 +194,13 @@
       "scope": "slice s06 ordinary beat projection",
       "checkedAt": "2026-08-05T20:51:10.325Z",
       "notes": "All 44 tutorial passage/page-scale tests and full typechecking passed. Dense forward and reverse samples are identical; the projector reaches exact progress 1 at the reading anchor."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 motion bridge projection",
+      "checkedAt": "2026-08-05T20:54:03.229Z",
+      "notes": "All 47 tutorial passage/page-scale tests and full typechecking passed. Exact 0, midpoint, and 1 anchors plus dense forward/reverse projections are identical."
     }
   ],
   "progress": {

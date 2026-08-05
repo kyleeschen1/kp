@@ -94,7 +94,8 @@
     {
       "id": "s07",
       "title": "Project motion bridge progress",
-      "status": "planned"
+      "summary": "Added a direction-independent motion-bridge projector whose paired document anchors define exact start, end, distance, and directly seekable semantic progress.",
+      "status": "complete"
     },
     {
       "id": "s08",

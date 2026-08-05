@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  projectKpTutorialMotionBridge,
   projectKpTutorialOrdinaryBeat
 } from "../src/tutorial/kp-tutorial-motion-bridge-projection.ts";
 
@@ -70,4 +71,73 @@ test("ordinary beat projection rejects invalid geometry", () => {
     readingAnchorPx: 280,
     approachDistancePx: 0
   }), /approach distance must be positive/);
+});
+
+test("motion bridge progress runs exactly between paired prose anchors", () => {
+  const input = {
+    beforeDocumentTopPx: 1_000,
+    afterDocumentTopPx: 1_400,
+    readingAnchorPx: 280
+  };
+  assert.deepEqual(projectKpTutorialMotionBridge({
+    ...input,
+    scrollY: 720
+  }), {
+    phase: "before",
+    progress: 0,
+    startScrollY: 720,
+    endScrollY: 1_120,
+    distancePx: 400
+  });
+  assert.deepEqual(projectKpTutorialMotionBridge({
+    ...input,
+    scrollY: 920
+  }), {
+    phase: "scrubbing",
+    progress: 0.5,
+    startScrollY: 720,
+    endScrollY: 1_120,
+    distancePx: 400
+  });
+  assert.deepEqual(projectKpTutorialMotionBridge({
+    ...input,
+    scrollY: 1_120
+  }), {
+    phase: "after",
+    progress: 1,
+    startScrollY: 720,
+    endScrollY: 1_120,
+    distancePx: 400
+  });
+});
+
+test("motion bridge direct and reverse projections are identical", () => {
+  const positions = [700, 720, 820, 920, 1_020, 1_120, 1_200];
+  const project = (scrollY: number) => projectKpTutorialMotionBridge({
+    scrollY,
+    beforeDocumentTopPx: 1_000,
+    afterDocumentTopPx: 1_400,
+    readingAnchorPx: 280
+  });
+  const forward = positions.map(project);
+  const reverse = [...positions].reverse().map(project).reverse();
+  assert.deepEqual(reverse, forward);
+  assert.deepEqual(forward.map(({ progress }) => progress), [
+    0, 0, 0.25, 0.5, 0.75, 1, 1
+  ]);
+});
+
+test("motion bridge rejects unordered and non-finite anchors", () => {
+  assert.throws(() => projectKpTutorialMotionBridge({
+    scrollY: 720,
+    beforeDocumentTopPx: 1_000,
+    afterDocumentTopPx: 1_000,
+    readingAnchorPx: 280
+  }), /after anchor must follow/);
+  assert.throws(() => projectKpTutorialMotionBridge({
+    scrollY: Number.NaN,
+    beforeDocumentTopPx: 1_000,
+    afterDocumentTopPx: 1_400,
+    readingAnchorPx: 280
+  }), /scroll position must be finite/);
 });
