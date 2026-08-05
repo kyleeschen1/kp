@@ -100,12 +100,56 @@ test("accepted route has no motion bridge presentation", async ({ page }) => {
     "continuous-passage"
   );
   await expect(root.locator("kp-motion-bridge")).toHaveCount(0);
+  await expect(root.locator("kp-semantic-transit-layer")).toHaveCount(0);
   await expect(root).toHaveAttribute(
     "data-kp-economics-motion-bridge-artifact",
     ""
   );
   await expect(root.locator("[data-kp-two-column-scroll-paragraph]"))
     .toHaveCount(6);
+});
+
+test("semantic transit proxy layer is visual-only and preserves endpoints", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(exemplarRoute);
+  const root = tutorial(page);
+  const source = root.locator(
+    '[data-kp-tutorial-text-reference="price-axis-inline"]'
+  );
+  const destination = root.locator(
+    '[data-kp-tutorial-stage-object="axis-price"]'
+  );
+  const layer = root.locator("kp-semantic-transit-layer");
+  const proxy = layer.locator(
+    '[data-kp-tutorial-semantic-transit-proxy="price-axis-correspondence"]'
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-semantic-transit-layer",
+    "ready"
+  );
+  await expect(source).toHaveCount(1);
+  await expect(destination).toHaveCount(1);
+  await expect(layer).toHaveAttribute("aria-hidden", "true");
+  await expect(layer).toHaveAttribute("inert", "");
+  await expect(proxy).toHaveCount(1);
+  await expect(proxy.locator("[data-kp-tutorial-text-reference]"))
+    .toHaveCount(0);
+  await expect.poll(() => layer.evaluate((element) => ({
+    position: getComputedStyle(element).position,
+    pointerEvents: getComputedStyle(element).pointerEvents
+  }))).toEqual({ position: "fixed", pointerEvents: "none" });
+  await expect.poll(() => proxy.evaluate((element) => ({
+    opacity: getComputedStyle(element).opacity,
+    visibility: getComputedStyle(element).visibility
+  }))).toEqual({ opacity: "0", visibility: "hidden" });
+  expect(await source.evaluate((element) =>
+    element.closest("kp-semantic-transit-layer") === null
+  )).toBe(true);
+  expect(await destination.evaluate((element) =>
+    element.closest("kp-semantic-transit-layer") === null
+  )).toBe(true);
 });
 
 test("dark light and reverse midpoint states remain visually inspectable", async ({

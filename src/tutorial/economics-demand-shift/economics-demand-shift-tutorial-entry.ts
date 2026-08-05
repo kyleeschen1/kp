@@ -79,6 +79,9 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       motionBridgeHtml: scrubStrategy === "motion-bridge"
         ? publication.motionBridgeHtml
         : undefined,
+      semanticTransit: scrubStrategy === "motion-bridge"
+        ? publication.semanticTransit
+        : undefined,
       tocHtml: publication.tocHtml,
       motionScrubBarHtml: publication.motionScrubBarHtml,
       verificationSurfaceHtml: publication.verificationSurfaceHtml,

@@ -312,6 +312,11 @@ function syncEconomicsScreenSpaceLabels(input: {
       role.startsWith("axis-") || role.startsWith("tick-")
         ? "persistent"
         : "contextual";
+    if (role === "axis-price") {
+      label.dataset["kpTutorialStageObject"] = role;
+    } else {
+      delete label.dataset["kpTutorialStageObject"];
+    }
     label.className =
       `${source.className} editor-graph-stage__economics-screen-space-label`;
     label.dataset["kpLatex"] = source.dataset["kpLatex"] ?? "";

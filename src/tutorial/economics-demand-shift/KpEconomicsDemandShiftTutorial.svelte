@@ -93,6 +93,12 @@
   import {
     resolveKpTutorialMotionBridgeBeforeEllipsis
   } from "../kp-tutorial-motion-bridge-static.ts";
+  import type {
+    KpTutorialSemanticTransitAuthoringBundle
+  } from "../kp-tutorial-semantic-transit-authoring.ts";
+  import {
+    KpTutorialSemanticTransitProxyLayer
+  } from "../kp-tutorial-semantic-transit-layer.ts";
   import {
     projectKpTutorialBoundaryCueSalience,
     projectKpTutorialScrollPassagePhase,
@@ -226,6 +232,7 @@
     scrubStrategy,
     lesson,
     motionBridgeHtml,
+    semanticTransit,
     motionScrubBarHtml,
     tocHtml,
     twoColumnParagraphs,
@@ -246,6 +253,7 @@
     readonly scrubStrategy: KpEconomicsScrollScrubStrategy;
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionBridgeHtml?: Readonly<Record<string, string>> | undefined;
+    readonly semanticTransit?: KpTutorialSemanticTransitAuthoringBundle | undefined;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
     readonly twoColumnParagraphs:
@@ -340,6 +348,8 @@
   let cueGeometryCache: KpTutorialDocumentCueGeometryCache<string> | undefined;
   let cueActivationObserver: KpTutorialCueActivationObserver<string> | undefined;
   let cueMutationObserver: MutationObserver | undefined;
+  let semanticTransitProxyLayer:
+    KpTutorialSemanticTransitProxyLayer | undefined;
   let runtimePerformanceApi:
     KpEconomicsTutorialRuntimePerformanceApi | undefined;
   let navigationController: KpTutorialNavigationController | undefined;
@@ -792,6 +802,7 @@
       playbackStatus =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
+    ensureSemanticTransitProxyLayer();
     // The player reports demand-curve paint progress. Once lesson authority has
     // handed off to supply interpretation, a seek must not demote that state.
     if (lessonMotionProjection.activeBlockId === "demand-shift") {
@@ -829,7 +840,41 @@
       (event.detail as { readonly status?: unknown })?.status !== "ready"
     ) return;
     ready = true;
+    ensureSemanticTransitProxyLayer();
     scrollCoordinator?.scheduleProjection();
+  }
+
+  function ensureSemanticTransitProxyLayer(): void {
+    if (
+      semanticTransitProxyLayer !== undefined ||
+      semanticTransit === undefined ||
+      shell === undefined
+    ) return;
+    const transit = semanticTransit.transits[0];
+    if (transit === undefined) return;
+    const reference = semanticTransit.textReferences.find(
+      ({ id }) => id === transit.sourceReferenceId
+    );
+    const object = semanticTransit.stageObjects.find(
+      ({ id }) => id === transit.destinationObjectId
+    );
+    if (reference === undefined || object === undefined) return;
+    const source = shell.querySelector<HTMLElement>(
+      `[data-kp-tutorial-text-reference="${reference.id}"]`
+    );
+    const destination = shell.querySelector<HTMLElement>(
+      `[data-kp-tutorial-stage-object="${object.id}"]`
+    );
+    const stage = destination?.closest<HTMLElement>(
+      `[data-kp-tutorial-stage="${object.stageId}"]`
+    );
+    if (source === null || destination === null || stage === null) return;
+    semanticTransitProxyLayer = new KpTutorialSemanticTransitProxyLayer(shell);
+    semanticTransitProxyLayer.mountProxy({
+      transitId: transit.id,
+      source
+    });
+    shell.dataset["kpEconomicsSemanticTransitLayer"] = "ready";
   }
 
   function claimManualMotion(
@@ -1956,6 +2001,7 @@
       hostability,
       animation
     });
+    ensureSemanticTransitProxyLayer();
     reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     previousHistoryScrollRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
@@ -2022,6 +2068,11 @@
       handleResponsiveGeometryChange
     );
     document.fonts.removeEventListener("loadingdone", handleFontMetricsChange);
+    semanticTransitProxyLayer?.dispose();
+    semanticTransitProxyLayer = undefined;
+    if (shell !== undefined) {
+      delete shell.dataset["kpEconomicsSemanticTransitLayer"];
+    }
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;
     }
@@ -2228,6 +2279,7 @@
       data-kp-animation-catalogue-stage
       data-kp-animation-catalogue-stage-persistent="true"
       data-kp-economics-stage="economics-stage"
+      data-kp-tutorial-stage="demand-shift-graph"
       data-kp-economics-stage-outer-geometry="fixed"
       data-kp-economics-screen-space-labels={scrollPassageLayout ? "true" : undefined}
       aria-busy={!ready}

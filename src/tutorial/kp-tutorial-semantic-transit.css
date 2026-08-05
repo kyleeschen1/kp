@@ -1,0 +1,28 @@
+:root {
+  --kp-tutorial-semantic-transit-layer-z: 40;
+}
+
+.kp-tutorial-semantic-transit-layer {
+  position: fixed;
+  z-index: var(--kp-tutorial-semantic-transit-layer-z);
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.kp-tutorial-semantic-transit-layer__proxy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+}

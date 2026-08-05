@@ -160,7 +160,8 @@
     {
       "id": "s18",
       "title": "Add semantic transit proxy layer",
-      "status": "planned"
+      "summary": "Added an opt-in fixed viewport proxy layer whose cloned visual is identity-stripped, aria-hidden, inert, pointer-inert, and hidden until motion; browser proof confirms source and destination DOM remain in place and the accepted route has no layer.",
+      "status": "complete"
     },
     {
       "id": "s19",
