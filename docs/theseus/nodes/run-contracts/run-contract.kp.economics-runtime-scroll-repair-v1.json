@@ -1,0 +1,201 @@
+{
+  "id": "run-contract.kp.economics-runtime-scroll-repair-v1",
+  "kind": "run-contract",
+  "title": "Economics runtime and scroll repair",
+  "status": "ready",
+  "domain": "economics",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-runtime-scroll-repair-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md",
+      "summary": "User-approved Phases 1-4, preservation boundary, verification cadence, visual checkpoint, and explicit deferrals."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-two-column-scroll",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Instrument and optimize only the economics tutorial, economics SVG runtime presentation, shared tutorial scroll coordination required by the exemplar, scoped performance/browser tests, internal spacing tuning, economics typography/theme tokens, and required project/Theseus records.",
+    "Preserve the pure deterministic static SVG renderer while adding an economics-local mounted runtime session with explicit apply and dispose lifecycle.",
+    "Use IntersectionObserver only for coarse activation and retain one passive rAF-coalesced scroll source for exact semantic progress over cached geometry."
+  ],
+  "disallowedWork": [
+    "Do not execute deferred Lisp slices s26 or s27, resume matrix work, add a new tutorial, or change animation-promotion rank.",
+    "Do not begin Phases 5-7: route or CSS consolidation, second-caller promotion, shared Graph2D extraction, Graph3D protocol work, SvelteKit, Public Web, or broad runtime migration.",
+    "Do not change economics semantic truth, exact sampled frames, URL meaning, Review identity, default or inline-sticky rollback behavior, accessibility ownership, performance ceilings, or framework-neutral authority.",
+    "Do not add a runtime dependency, universal scene graph, VDOM renderer, learner-facing tuning UI, or global font rule outside the economics lesson."
+  ],
+  "goal": "Repair the economics two-column exemplar hot paths without changing semantic truth: measure actual cost, retain one SVG runtime tree, cache local-anchor scroll geometry with observer-assisted lifecycle, then add the approved spacing tuner and canonical non-KaTeX font before a human checkpoint.",
+  "target": "next-action.kp.economics-runtime-scroll-repair-v1",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if static and runtime endpoint paint, accessibility truth, direct seek, rewind, cumulative motion, URL restoration, or Review capture diverge.",
+    "Stop if the retained renderer cannot eliminate ordinary-progress subtree replacement without changing semantic frames or static export.",
+    "Stop on multiple active clocks, scroll discontinuity, forced-layout regression, late layout shift, widened performance ceilings, or unrelated-file overlap.",
+    "Stop if visual judgment is required before slice s25 or if work would enter separately gated Phases 5-7.",
+    "Always stop after slice s25 for explicit human visual and performance approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Activate-contract-and-freeze-reference",
+      "summary": "Materialized as next-action.economics.s01-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.economics.s01-v0",
+      "title": "Activate-contract-and-freeze-reference",
+      "summary": "Approved contract active; accepted economics lesson, rollback modes, visual reference, and performance-preservation boundary frozen before instrumentation.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Measure-scroll-scheduling-and-execution",
+      "summary": "Materialized as next-action.economics.s02-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.economics.s02-v0",
+      "title": "Measure-scroll-scheduling-and-execution",
+      "summary": "Materialized from stored run-contract slice s02 in Economics runtime and scroll repair.",
+      "status": "ready"
+    },
+    {
+      "id": "s03",
+      "title": "Measure-SVG-construction-and-DOM-churn",
+      "summary": "Materialized as next-action.economics.s03-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.economics.s03-v0",
+      "title": "Measure-SVG-construction-and-DOM-churn",
+      "summary": "Materialized from stored run-contract slice s03 in Economics runtime and scroll repair.",
+      "status": "ready"
+    },
+    {
+      "id": "s04",
+      "title": "Build-dense-cue-performance-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Record-six-cue-and-dense-baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Define-economics-runtime-session-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Mount-persistent-SVG-scaffold",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Patch-stable-graph-structure",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Patch-dynamic-curves-points-and-guides",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Retain-KaTeX-and-screen-label-nodes",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Retain-accessibility-and-disposal-owners",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Prove-seek-rewind-and-node-identity",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Compare-runtime-performance-and-close-renderer-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Define-local-to-viewport-anchor-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Cache-document-space-cue-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Add-IntersectionObserver-activation-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Project-active-cue-window-by-index",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Integrate-coordinator-with-cached-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Handle-font-responsive-theme-and-side-invalidations",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Prove-URL-TOC-manual-and-reverse-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Certify-dense-cue-phone-and-reduced-motion",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Add-spacing-query-and-review-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add-internal-spacing-tuner",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Unify-non-KaTeX-font-and-local-visual-tokens",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run-canonical-visual-and-performance-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

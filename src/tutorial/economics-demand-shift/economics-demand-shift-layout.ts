@@ -5,6 +5,8 @@ export type KpEconomicsDemandShiftPresentationLayout =
   | "inline-sticky"
   | "two-column-scroll";
 
+export type KpEconomicsTwoColumnTextSide = "left" | "right";
+
 export type KpInlineStickyLessonFit =
   | "comfortable"
   | "compact"
@@ -33,7 +35,6 @@ export interface KpTwoColumnScrollParagraphProjection
   extends KpInlineStickyParagraphProjection {
   readonly salience: number;
   readonly opacity: number;
-  readonly ruleScale: number;
   readonly ownsAttention: boolean;
 }
 
@@ -44,6 +45,7 @@ export interface KpTwoColumnScrollSequenceProjection {
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
+const twoColumnTextSideQueryKey = "text";
 
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string
@@ -56,134 +58,173 @@ export function readKpEconomicsDemandShiftPresentationLayout(
       : "split";
 }
 
+export function readKpEconomicsTwoColumnTextSide(
+  search: string
+): KpEconomicsTwoColumnTextSide {
+  return new URLSearchParams(search).get(twoColumnTextSideQueryKey) === "left"
+    ? "left"
+    : "right";
+}
+
+export function writeKpEconomicsTwoColumnTextSide(input: {
+  readonly search: string;
+  readonly side: KpEconomicsTwoColumnTextSide;
+}): string {
+  const parameters = new URLSearchParams(input.search);
+  if (input.side === "right") {
+    parameters.delete(twoColumnTextSideQueryKey);
+  } else {
+    parameters.set(twoColumnTextSideQueryKey, input.side);
+  }
+  const serialized = parameters.toString();
+  return serialized === "" ? "" : `?${serialized}`;
+}
+
 export function projectKpTwoColumnScrollParagraph(input: {
   readonly paragraphTopPx: number;
+  readonly paragraphBottomPx?: number | undefined;
   readonly previousParagraphTopPx?: number | undefined;
-  readonly dividerTopPx: number;
+  readonly focusTopPx: number;
   readonly viewportHeightPx: number;
   readonly opening?: boolean | undefined;
   readonly inactiveOpacity?: number | undefined;
+  readonly approachStartRatio?: number | undefined;
+  readonly focusBottomRatio?: number | undefined;
+  readonly minimumEffectiveHeightRatio?: number | undefined;
+  readonly motionStartRatio?: number | undefined;
 }): Omit<KpTwoColumnScrollParagraphProjection, "ownsAttention"> {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
   const measuredParagraphTop = Number.isFinite(input.paragraphTopPx)
     ? input.paragraphTopPx
     : viewportHeight;
-  const dividerTop = clamp(
-    finiteNonNegative(input.dividerTopPx),
+  const focusTop = clamp(
+    finiteNonNegative(input.focusTopPx),
     0,
     viewportHeight - 1
   );
-  const paragraphTop = Math.abs(measuredParagraphTop - dividerTop) <= 0.5
-    ? dividerTop
+  const paragraphTop = Math.abs(measuredParagraphTop - focusTop) <= 0.5
+    ? focusTop
     : measuredParagraphTop;
+  const measuredParagraphBottom = input.paragraphBottomPx;
+  const paragraphBottom = measuredParagraphBottom === undefined ||
+      !Number.isFinite(measuredParagraphBottom)
+    ? paragraphTop
+    : Math.max(paragraphTop, measuredParagraphBottom);
   const measuredPreviousParagraphTop = input.previousParagraphTopPx;
   const previousParagraphTop = measuredPreviousParagraphTop !== undefined &&
-      Math.abs(measuredPreviousParagraphTop - dividerTop) <= 0.5
-    ? dividerTop
+      Math.abs(measuredPreviousParagraphTop - focusTop) <= 0.5
+    ? focusTop
     : measuredPreviousParagraphTop;
   const paragraphDistance = previousParagraphTop === undefined ||
       !Number.isFinite(previousParagraphTop)
     ? viewportHeight
     : Math.max(1, paragraphTop - previousParagraphTop);
-  const approachStartY = viewportHeight * 0.82;
-  const focusApexY = viewportHeight * 0.47;
-  const authoredMotionStartY = Math.max(dividerTop + 1, viewportHeight * 0.42);
+  const approachStartY = viewportHeight * clamp(
+    input.approachStartRatio ?? 0.78,
+    0,
+    1
+  );
+  const focusBottomY = viewportHeight * clamp(
+    input.focusBottomRatio ?? 0.5,
+    focusTop / viewportHeight,
+    1
+  );
+  const minimumEffectiveHeight = viewportHeight * clamp(
+    input.minimumEffectiveHeightRatio ?? 0.23,
+    0,
+    1
+  );
+  const paragraphHeight = Math.max(1, paragraphBottom - paragraphTop);
+  const effectiveHeight = Math.max(paragraphHeight, minimumEffectiveHeight);
+  const paragraphCenter = paragraphTop + paragraphHeight / 2;
+  const effectiveTop = paragraphCenter - effectiveHeight / 2;
+  const effectiveBottom = paragraphCenter + effectiveHeight / 2;
+  const authoredMotionStartY = Math.max(
+    focusTop + 1,
+    viewportHeight * clamp(input.motionStartRatio ?? 0.62, 0, 1)
+  );
   // Short passages may approach before their predecessor settles. Starting at
   // the later event preserves cumulative truth; longer gaps become a readable
   // hold instead of stretching motion artificially.
   const motionStartY = input.opening
-    ? dividerTop
+    ? focusTop
     : Math.max(
-        dividerTop + 1,
-        Math.min(authoredMotionStartY, dividerTop + paragraphDistance)
+        focusTop + 1,
+        Math.min(authoredMotionStartY, focusTop + paragraphDistance)
       );
   const travel = input.opening
-    ? paragraphTop <= dividerTop ? 1 : 0
+    ? paragraphTop <= focusTop ? 1 : 0
     : clamp(
         (motionStartY - paragraphTop) /
-          Math.max(1, motionStartY - dividerTop),
+          Math.max(1, motionStartY - focusTop),
         0,
         1
       );
-  const exitEndY = Math.max(0, dividerTop - viewportHeight * 0.1);
-  const rawSalience = input.opening
-    ? paragraphTop >= dividerTop
-      ? 1
-      : smoothstep(clamp(
-          (paragraphTop - exitEndY) / Math.max(1, dividerTop - exitEndY),
-          0,
-          1
-        ))
-    : paragraphTop >= approachStartY
-      ? 0
-      : paragraphTop >= focusApexY
-        ? smoothstep(clamp(
-            (approachStartY - paragraphTop) /
-              Math.max(1, approachStartY - focusApexY),
-            0,
-            1
-          ))
-        : paragraphTop >= authoredMotionStartY
-          ? 1
-          : paragraphTop >= dividerTop
-            ? 0.65 + 0.35 * clamp(
-                (paragraphTop - dividerTop) /
-                  Math.max(1, authoredMotionStartY - dividerTop),
-                0,
-                1
-              )
-            : 0.65 * smoothstep(clamp(
-                (paragraphTop - exitEndY) /
-                  Math.max(1, dividerTop - exitEndY),
-                0,
-                1
-              ));
-  const predecessorReadiness = input.opening ||
-      previousParagraphTop === undefined ||
-      !Number.isFinite(previousParagraphTop)
-    ? 1
-    : smoothstep(clamp(
-        (dividerTop - previousParagraphTop) / (viewportHeight * 0.05),
+  const exitEndY = Math.max(0, focusTop);
+  // A projected minimum height gives short thoughts a real reading plateau
+  // without inserting artificial space into the document flow.
+  const salience = effectiveTop > focusTop
+    ? smoothstep(clamp(
+        (approachStartY - effectiveTop) /
+          Math.max(1, approachStartY - focusTop),
         0,
         1
-      ));
-  const salience = clamp(rawSalience * predecessorReadiness, 0, 1);
+      ))
+    : effectiveBottom >= focusBottomY
+      ? 1
+      : smoothstep(clamp(
+          (effectiveBottom - exitEndY) /
+            Math.max(1, focusBottomY - exitEndY),
+          0,
+          1
+        ));
   const inactiveOpacity = clamp(input.inactiveOpacity ?? 0.32, 0, 1);
   return Object.freeze({
     phase: paragraphTop >= approachStartY
       ? "below"
       : paragraphTop > motionStartY
         ? "approach"
-        : paragraphTop > dividerTop
+        : paragraphTop > focusTop
         ? "crossing"
         : "passed",
     travel,
     crossingProgress: travel,
-    // The legacy field name is shared with the inline projector. Here the
-    // completion boundary is the visible top of the sticky column divider.
-    distanceFromStageBottomPx: paragraphTop - dividerTop,
+    // The legacy field name is shared with the inline projector. Here it
+    // measures distance from the invisible prose completion line.
+    distanceFromStageBottomPx: paragraphTop - focusTop,
     salience,
-    opacity: inactiveOpacity + (1 - inactiveOpacity) * salience,
-    ruleScale: 0.16 + 0.84 * salience
+    opacity: inactiveOpacity + (1 - inactiveOpacity) * salience
   });
 }
 
 export function projectKpTwoColumnScrollSequence(input: {
   readonly paragraphTopPx: readonly number[];
-  readonly dividerTopPx: number;
+  readonly paragraphBottomPx?: readonly number[] | undefined;
+  readonly focusTopPx: number;
   readonly viewportHeightPx: number;
   readonly inactiveOpacity?: number | undefined;
+  readonly approachStartRatio?: number | undefined;
+  readonly focusBottomRatio?: number | undefined;
+  readonly minimumEffectiveHeightRatio?: number | undefined;
+  readonly motionStartRatio?: number | undefined;
 }): KpTwoColumnScrollSequenceProjection {
   const baseParagraphs = input.paragraphTopPx.map((paragraphTopPx, index) =>
     projectKpTwoColumnScrollParagraph({
       paragraphTopPx,
+      ...(input.paragraphBottomPx?.[index] === undefined
+        ? {}
+        : { paragraphBottomPx: input.paragraphBottomPx[index] }),
       ...(index === 0
         ? {}
         : { previousParagraphTopPx: input.paragraphTopPx[index - 1] }),
-      dividerTopPx: input.dividerTopPx,
+      focusTopPx: input.focusTopPx,
       viewportHeightPx: input.viewportHeightPx,
       opening: index === 0,
-      inactiveOpacity: input.inactiveOpacity
+      inactiveOpacity: input.inactiveOpacity,
+      approachStartRatio: input.approachStartRatio,
+      focusBottomRatio: input.focusBottomRatio,
+      minimumEffectiveHeightRatio: input.minimumEffectiveHeightRatio,
+      motionStartRatio: input.motionStartRatio
     })
   );
   if (baseParagraphs.length === 0) {
@@ -211,8 +252,9 @@ export function projectKpTwoColumnScrollSequence(input: {
 export function projectKpTwoColumnScrollMotionCorridor(input: {
   readonly corridor: KpTutorialMotionCorridor;
   readonly paragraphDistancePx: number;
-  readonly dividerTopPx: number;
+  readonly focusTopPx: number;
   readonly viewportHeightPx: number;
+  readonly motionStartRatio?: number | undefined;
 }): KpTutorialMotionCorridor {
   const keyframes = input.corridor.keyframes;
   const firstProgress = keyframes[0]?.progress ?? 0;
@@ -248,16 +290,16 @@ export function projectKpTwoColumnScrollMotionCorridor(input: {
     progress
   }));
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const dividerTop = clamp(
-    finiteNonNegative(input.dividerTopPx),
+  const focusTop = clamp(
+    finiteNonNegative(input.focusTopPx),
     0,
     viewportHeight - 1
   );
   const motionStart = Math.max(
-    dividerTop + 1,
+    focusTop + 1,
     Math.min(
-      viewportHeight * 0.42,
-      dividerTop + finitePositive(input.paragraphDistancePx, viewportHeight)
+      viewportHeight * clamp(input.motionStartRatio ?? 0.62, 0, 1),
+      focusTop + finitePositive(input.paragraphDistancePx, viewportHeight)
     )
   );
   // Prose spacing is real scroll authority: short intervals wait for the
@@ -266,7 +308,7 @@ export function projectKpTwoColumnScrollMotionCorridor(input: {
   return Object.freeze({
     ...input.corridor,
     startViewportRatio: motionStart / viewportHeight,
-    endViewportRatio: dividerTop / viewportHeight,
+    endViewportRatio: focusTop / viewportHeight,
     keyframes: Object.freeze(projectedKeyframes.map((keyframe) =>
       Object.freeze(keyframe)
     ))

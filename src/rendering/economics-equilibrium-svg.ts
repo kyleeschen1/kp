@@ -29,6 +29,13 @@ export interface KpEconomicsGraphViewport {
 export const kpEconomicsGraphPresentationProfile =
   createKpDimensionalContinuityGraphPresentationProfile("economics");
 
+export const kpEconomicsGraphPlotInsets = Object.freeze({
+  top: 20,
+  right: 84,
+  bottom: 28,
+  left: 36
+});
+
 export function renderKpEconomicsEquilibriumStaticContent(input: {
   readonly frame: KpSupplyDemandEquilibriumFrameV1;
   readonly viewport: KpEconomicsGraphViewport;
@@ -75,9 +82,15 @@ function renderEconomicsContent(input: {
     | KpEconomicsEquilibriumSynchronizedView
     | undefined;
 }): string {
+  const plot = {
+    left: kpEconomicsGraphPlotInsets.left,
+    right: input.viewport.width - kpEconomicsGraphPlotInsets.right,
+    top: kpEconomicsGraphPlotInsets.top,
+    bottom: input.viewport.height - kpEconomicsGraphPlotInsets.bottom
+  };
   const point = (quantity: number, price: number) => [
-    scale(quantity, input.viewport.xDomain, [36, input.viewport.width - 20]),
-    scale(price, input.viewport.yDomain, [input.viewport.height - 28, 20])
+    scale(quantity, input.viewport.xDomain, [plot.left, plot.right]),
+    scale(price, input.viewport.yDomain, [plot.bottom, plot.top])
   ] as const;
   const [minimumQuantity, maximumQuantity] = input.viewport.xDomain;
   const supplyIntercept = exactNumber(input.frame.supply.priceIntercept);
@@ -107,11 +120,6 @@ function renderEconomicsContent(input: {
     maximumQuantity,
     demandIntercept - demandSlope * maximumQuantity
   );
-  const demandLabelPoint = point(
-    Math.min(maximumQuantity, minimumQuantity + 0.75),
-    demandIntercept - demandSlope *
-      Math.min(maximumQuantity, minimumQuantity + 0.75)
-  );
   const initialDemandStart = point(
     minimumQuantity,
     initialDemandIntercept - demandSlope * minimumQuantity
@@ -133,6 +141,8 @@ function renderEconomicsContent(input: {
     initialEquilibriumQuantity,
     initialEquilibriumPrice
   );
+  const initialQuantityAxis = point(initialEquilibriumQuantity, 0);
+  const initialPriceAxis = point(0, initialEquilibriumPrice);
   const demandRole = input.stage === "establish"
     ? "D_0"
     : input.stage === "shift"
@@ -149,26 +159,38 @@ function renderEconomicsContent(input: {
   const equilibriumLatex = `${equilibriumRole} ${equilibriumRelation} (` +
     `${formatKpDimensionalContinuityDynamicDisplay(input.frame.equilibrium.quantity)}, ` +
     `${formatKpDimensionalContinuityDynamicDisplay(input.frame.equilibrium.price)})`;
+  const equilibriumLabelWidth = 210;
+  const equilibriumLabelX = Math.max(
+    0,
+    equilibrium[0] - equilibriumLabelWidth - 12
+  );
 
   return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
     ${renderEconomicsGrid(input.viewport, point)}
-    <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" style="opacity:${input.initialDemandReferenceOpacity}" />
+    <g class="editor-graph-stage__economics-demand-reference" data-kp-economics-reference-progress="${input.initialDemandReferenceOpacity}">
+      <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-casing" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
+      <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-core" data-kp-economics-initial-demand-reference-core x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
+    </g>
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" x1="${supplyStart[0]}" y1="${supplyStart[1]}" x2="${supplyEnd[0]}" y2="${supplyEnd[1]}" />
     <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="${demandEquation(input.frame)}" x1="${demandStart[0]}" y1="${demandStart[1]}" x2="${demandEnd[0]}" y2="${demandEnd[1]}" />
     <g class="editor-graph-stage__economics-supply-movement" data-kp-economics-supply-movement data-kp-economics-supply-equation="${supplyEquation(input.frame)}" data-kp-economics-movement-from-quantity="${exactText(input.initialEquilibrium.quantity)}" data-kp-economics-movement-from-price="${exactText(input.initialEquilibrium.price)}" data-kp-economics-movement-to-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-movement-to-price="${exactText(input.frame.equilibrium.price)}" aria-hidden="true">
       <line class="editor-graph-stage__economics-supply-movement-trace" data-kp-economics-supply-movement-trace x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${equilibrium[0]}" y2="${equilibrium[1]}" pathLength="1" />
-      <circle class="editor-graph-stage__economics-supply-movement-target editor-graph-stage__economics-supply-movement-target--initial" data-kp-economics-supply-movement-target="initial" cx="${initialEquilibrium[0]}" cy="${initialEquilibrium[1]}" r="4.5" />
-      <circle class="editor-graph-stage__economics-supply-movement-target editor-graph-stage__economics-supply-movement-target--settled" data-kp-economics-supply-movement-target="settled" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="4.5" />
     </g>
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-quantity-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${quantityAxis[0]}" y2="${quantityAxis[1]}" />
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-price-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${priceAxis[0]}" y2="${priceAxis[1]}" />
-    <circle class="editor-graph-stage__economics-equilibrium" data-kp-economics-equilibrium-point data-kp-economics-equilibrium-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-equilibrium-price="${exactText(input.frame.equilibrium.price)}" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="3" />
-    <circle class="editor-graph-stage__economics-equilibrium editor-graph-stage__economics-equilibrium--reference" data-kp-economics-initial-equilibrium-reference cx="${initialEquilibrium[0]}" cy="${initialEquilibrium[1]}" r="2.75" style="opacity:${input.initialEquilibriumReferenceOpacity}" />
+    ${input.initialEquilibriumReferenceOpacity <= 0 ? "" : `<g class="editor-graph-stage__economics-equilibrium-guide-reference" data-kp-economics-initial-equilibrium-guides data-kp-economics-reference-progress="${input.initialEquilibriumReferenceOpacity}" aria-hidden="true">
+      <line class="editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-casing" data-kp-economics-initial-equilibrium-quantity-guide x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${initialQuantityAxis[0]}" y2="${initialQuantityAxis[1]}" />
+      <line class="editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-core" data-kp-economics-initial-equilibrium-quantity-guide-core x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${initialQuantityAxis[0]}" y2="${initialQuantityAxis[1]}" />
+      <line class="editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-casing" data-kp-economics-initial-equilibrium-price-guide x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${initialPriceAxis[0]}" y2="${initialPriceAxis[1]}" />
+      <line class="editor-graph-stage__economics-guide editor-graph-stage__economics-guide--reference-core" data-kp-economics-initial-equilibrium-price-guide-core x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${initialPriceAxis[0]}" y2="${initialPriceAxis[1]}" />
+    </g>`}
+    <circle class="editor-graph-stage__economics-equilibrium editor-graph-stage__economics-equilibrium--reference" data-kp-economics-initial-equilibrium-reference data-kp-economics-supply-movement-target="initial" data-kp-economics-reference-progress="${input.initialEquilibriumReferenceOpacity}" cx="${initialEquilibrium[0]}" cy="${initialEquilibrium[1]}" r="2.75" />
+    <circle class="editor-graph-stage__economics-equilibrium" data-kp-economics-equilibrium-point data-kp-economics-supply-movement-target="settled" data-kp-economics-equilibrium-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-equilibrium-price="${exactText(input.frame.equilibrium.price)}" cx="${equilibrium[0]}" cy="${equilibrium[1]}" r="3" />
     ${renderMathLabel({
       role: "curve-supply",
       latex: "S",
-      x: supplyEnd[0] - 42,
-      y: supplyEnd[1] - 34,
+      x: plot.right + 12,
+      y: supplyEnd[1] - 11,
       width: 38,
       height: 28,
       className: "editor-graph-stage__economics-math-label--supply"
@@ -176,8 +198,8 @@ function renderEconomicsContent(input: {
     ${renderMathLabel({
       role: "curve-demand-current",
       latex: demandRole,
-      x: demandLabelPoint[0] + 4,
-      y: demandLabelPoint[1] - 30,
+      x: plot.right + 12,
+      y: demandEnd[1] - 11,
       width: 58,
       height: 28,
       className: "editor-graph-stage__economics-math-label--demand"
@@ -185,8 +207,8 @@ function renderEconomicsContent(input: {
     ${input.initialDemandReferenceOpacity <= 0 ? "" : renderMathLabel({
       role: "curve-demand-reference",
       latex: "D_0",
-      x: initialDemandEnd[0] - 52,
-      y: initialDemandEnd[1] - 28,
+      x: plot.right + 12,
+      y: initialDemandEnd[1] - 11,
       width: 46,
       height: 26,
       opacity: input.initialDemandReferenceOpacity,
@@ -195,38 +217,46 @@ function renderEconomicsContent(input: {
     ${renderMathLabel({
       role: "equilibrium-current",
       latex: equilibriumLatex,
-      x: equilibrium[0] + 10,
-      y: equilibrium[1] - 38,
-      width: 164,
+      x: equilibriumLabelX,
+      y: equilibrium[1] - 15,
+      width: equilibriumLabelWidth,
       height: 30,
+      screenAnchorX: equilibrium[0],
+      screenAnchorY: equilibrium[1],
       className: "editor-graph-stage__economics-math-label--equilibrium"
     })}
     ${input.initialEquilibriumReferenceOpacity <= 0 ? "" : renderMathLabel({
       role: "equilibrium-reference",
       latex: "E_0",
-      x: initialEquilibrium[0] - 48,
-      y: initialEquilibrium[1] + 8,
+      x: initialEquilibrium[0] - 54,
+      y: initialEquilibrium[1] - 13,
       width: 42,
       height: 26,
       opacity: input.initialEquilibriumReferenceOpacity,
-      className: "editor-graph-stage__economics-math-label--reference"
+      screenAnchorX: initialEquilibrium[0],
+      screenAnchorY: initialEquilibrium[1],
+      className: "editor-graph-stage__economics-math-label--reference editor-graph-stage__economics-math-label--equilibrium"
     })}
     ${renderMathLabel({
       role: "axis-quantity",
       latex: "Q",
-      x: input.viewport.width - 44,
-      y: input.viewport.height - 50,
+      x: (plot.left + plot.right) / 2 - 14,
+      y: input.viewport.height - 24,
       width: 28,
-      height: 28,
+      height: 22,
+      screenAnchorX: (plot.left + plot.right) / 2,
+      screenAnchorY: plot.bottom,
       className: "editor-graph-stage__economics-math-label--axis"
     })}
     ${renderMathLabel({
       role: "axis-price",
       latex: "P",
-      x: 42,
-      y: 18,
+      x: 0,
+      y: input.viewport.height / 2 - 11,
       width: 28,
-      height: 28,
+      height: 22,
+      screenAnchorX: plot.left,
+      screenAnchorY: (plot.top + plot.bottom) / 2,
       className: "editor-graph-stage__economics-math-label--axis"
     })}
     ${input.synchronizedView === undefined ? "" : renderSynchronizedView(input.synchronizedView, input.viewport)}
@@ -255,7 +285,7 @@ function renderEconomicsGrid(
   }).join("");
   const horizontal = priceTicks.map((value) => {
     const [, y] = point(0, value);
-    return `<line class="editor-graph-stage__economics-grid-line" data-kp-economics-grid-axis="price" data-kp-economics-grid-value="${value}" x1="36" y1="${y}" x2="${viewport.width - 20}" y2="${y}" />
+    return `<line class="editor-graph-stage__economics-grid-line" data-kp-economics-grid-axis="price" data-kp-economics-grid-value="${value}" x1="${kpEconomicsGraphPlotInsets.left}" y1="${y}" x2="${viewport.width - kpEconomicsGraphPlotInsets.right}" y2="${y}" />
       <line class="editor-graph-stage__economics-tick" data-kp-economics-tick-axis="price" x1="32" y1="${y}" x2="40" y2="${y}" />
       ${renderMathLabel({
         role: `tick-price-${value}`,
@@ -278,9 +308,11 @@ function renderMathLabel(input: {
   readonly width: number;
   readonly height: number;
   readonly opacity?: number | undefined;
+  readonly screenAnchorX?: number | undefined;
+  readonly screenAnchorY?: number | undefined;
   readonly className: string;
 }): string {
-  return `<foreignObject class="editor-graph-stage__economics-math-foreign-object" data-kp-economics-math-label="${input.role}" x="${input.x}" y="${input.y}" width="${input.width}" height="${input.height}" aria-hidden="true"${input.opacity === undefined ? "" : ` style="opacity:${input.opacity}"`}>
+  return `<foreignObject class="editor-graph-stage__economics-math-foreign-object" data-kp-economics-math-label="${input.role}"${input.screenAnchorX === undefined ? "" : ` data-kp-economics-screen-anchor-x="${input.screenAnchorX}"`}${input.screenAnchorY === undefined ? "" : ` data-kp-economics-screen-anchor-y="${input.screenAnchorY}"`} x="${input.x}" y="${input.y}" width="${input.width}" height="${input.height}" aria-hidden="true"${input.opacity === undefined ? "" : ` style="opacity:${input.opacity}"`}>
       <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__economics-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderKpDimensionalContinuityInlineLatex(input.latex)}</div>
     </foreignObject>`;
 }

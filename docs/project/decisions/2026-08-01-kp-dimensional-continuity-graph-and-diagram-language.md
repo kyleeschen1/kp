@@ -64,6 +64,9 @@ spatial structure is itself meaningful.
 Graphs and graph-like diagrams must:
 
 - expose enough ticks, scale, and units to support the intended reading;
+- terminate zero-bounded x- and y-axes at one exact shared `(0,0)` endpoint,
+  without crossing tails; domains that extend through zero retain crossing
+  axes because the intersection is then part of the represented scale;
 - choose aspect ratio deliberately rather than stretching to arbitrary host
   dimensions;
 - avoid connecting discontinuities or visually interpolating undefined state;

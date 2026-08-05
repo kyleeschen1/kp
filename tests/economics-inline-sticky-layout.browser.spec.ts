@@ -59,14 +59,14 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expect.poll(() => root.locator(
     ".kp-economics-tutorial__passage p"
   ).first().evaluate((element) => getComputedStyle(element).fontFamily))
-    .toContain("Gill Sans");
+    .toContain("Source Serif 4 Variable");
   await expect.poll(() => motionPassage.locator(
     ".kp-economics-tutorial__motion-passage-gate--entrance"
   ).evaluate((element) => getComputedStyle(element).fontFamily))
-    .toContain("Gill Sans");
+    .toContain("Inter");
   await expect.poll(() => root.locator(".katex").first().evaluate(
     (element) => getComputedStyle(element).fontFamily
-  )).not.toContain("Gill Sans");
+  )).not.toContain("Source Serif 4 Variable");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math")
     .first().evaluate((element) => ({
       inner: getComputedStyle(element.querySelector(".katex")!).fontSize,
@@ -165,10 +165,10 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
       .trim()
   }))).toEqual({
     axis: "1px",
-    curve: "calc(1px * 1.5)",
-    grid: "calc(1px * 0.5)",
+    curve: "1px",
+    grid: "1px",
     stable: "#68a9df",
-    changing: "#ff6b63"
+    changing: "#e77b74"
   });
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => getComputedStyle(element).strokeWidth))
@@ -177,28 +177,28 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({ color: "rgb(104, 169, 223)", width: "1.5px" });
+    }))).toEqual({ color: "rgb(104, 169, 223)", width: "1px" });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({ color: "rgb(255, 107, 99)", width: "1.5px" });
+    }))).toEqual({ color: "rgb(231, 123, 116)", width: "1px" });
   await expect.poll(() => graph.locator(
     "[data-kp-economics-initial-demand-reference]"
   ).evaluate((element) => ({
     dash: getComputedStyle(element).strokeDasharray,
     width: getComputedStyle(element).strokeWidth
-  }))).toEqual({ dash: "none", width: "1.5px" });
+  }))).toEqual({ dash: "none", width: "1px" });
   await expect.poll(() => graph.locator(".editor-graph-stage__economics-grid-line")
     .first().evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("0.5px");
+    .toBe("1px");
   await expect.poll(() => graph.locator(".editor-graph-stage__economics-guide")
     .first().evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("1px");
   await expect.poll(() => graph.locator(
     "[data-kp-economics-supply-movement-trace]"
   ).evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("1.5px");
+    .toBe("1px");
 
   for (const role of [
     "axis-quantity",
@@ -222,7 +222,7 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
     .toHaveAttribute("r", "2.75");
   await expect(graph.locator(
     '[data-kp-economics-supply-movement-target="initial"]'
-  )).toHaveAttribute("r", "4.5");
+  )).toHaveAttribute("r", "2.75");
   await expect(stage.locator(
     ".editor-graph-stage__economics-explanation-foreign-object"
   )).toBeHidden();
@@ -531,10 +531,12 @@ test("default midnight theme toggles without navigation", async ({
     ).trim()
   }))).toEqual({
     background: "#0d0e1c",
-    color: "rgb(232, 231, 226)",
-    math: "#d6d8df"
+    color: "rgb(197, 199, 205)",
+    math: "#b9bec9"
   });
-  expect(await contrastRatio(root, page.locator("body"))).toBeGreaterThan(12);
+  const darkBodyContrast = await contrastRatio(root, page.locator("body"));
+  expect(darkBodyContrast).toBeGreaterThan(10);
+  expect(darkBodyContrast).toBeLessThan(12);
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
   )).toBe("rgba(13, 14, 28, 0.976)");
@@ -548,16 +550,45 @@ test("default midnight theme toggles without navigation", async ({
     plane: getComputedStyle(element).getPropertyValue("--kp-graph-plane").trim(),
     stable: getComputedStyle(element).getPropertyValue("--kp-graph-stable").trim()
   }))).toEqual({
-    axis: "#9aa5ba",
-    changing: "#ff6b63",
-    focal: "#e8e7e2",
-    grid: "#63708b",
+    axis: "#a2acbf",
+    changing: "#e77b74",
+    focal: "#c5c7cd",
+    grid: "#25293b",
     plane: "transparent",
     stable: "#68a9df"
   });
+  await expect.poll(() => root.evaluate((element) => {
+    const graphElement = element.querySelector<SVGElement>(
+      ".editor-graph-stage"
+    )!;
+    const axis = graphElement.querySelector<SVGElement>(
+      "[data-kp-editor-graph-axis]"
+    )!;
+    const curve = graphElement.querySelector<SVGElement>(
+      "[data-kp-economics-demand-line]"
+    )!;
+    const gridLine = graphElement.querySelector<SVGElement>(
+      ".editor-graph-stage__economics-grid-line"
+    )!;
+    return {
+      axisWidth: getComputedStyle(axis).strokeWidth,
+      curveWidth: getComputedStyle(curve).strokeWidth,
+      gridOpacity: getComputedStyle(gridLine).opacity,
+      gridWidth: getComputedStyle(gridLine).strokeWidth,
+      proseWeight: getComputedStyle(
+        element.querySelector<HTMLElement>(".kp-economics-tutorial__prose")!
+      ).fontWeight
+    };
+  })).toEqual({
+    axisWidth: "1px",
+    curveWidth: "1px",
+    gridOpacity: "1",
+    gridWidth: "1px",
+    proseWeight: "375"
+  });
   await expect.poll(() => root.locator(".kp-economics-tutorial__math .katex")
     .first().evaluate((element) => getComputedStyle(element).color))
-    .toBe("rgb(214, 216, 223)");
+    .toBe("rgb(185, 190, 201)");
   await expect.poll(() => passage(root, "synthesis").evaluate((element) =>
     getComputedStyle(element).backgroundColor
   )).toBe("rgba(37, 44, 65, 0.72)");
@@ -619,6 +650,42 @@ test("default midnight theme toggles without navigation", async ({
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element).backgroundColor
   )).toBe("rgba(244, 241, 233, 0.976)");
+  await expect.poll(() => root.evaluate((element) => {
+    const graphElement = element.querySelector<SVGElement>(
+      ".editor-graph-stage"
+    )!;
+    const axis = graphElement.querySelector<SVGElement>(
+      "[data-kp-editor-graph-axis]"
+    )!;
+    const curve = graphElement.querySelector<SVGElement>(
+      "[data-kp-economics-demand-line]"
+    )!;
+    const gridLine = graphElement.querySelector<SVGElement>(
+      ".editor-graph-stage__economics-grid-line"
+    )!;
+    const math = element.querySelector<HTMLElement>(
+      ".kp-economics-tutorial__math .katex"
+    )!;
+    return {
+      axisWidth: getComputedStyle(axis).strokeWidth,
+      curveWidth: getComputedStyle(curve).strokeWidth,
+      gridColor: getComputedStyle(gridLine).stroke,
+      gridOpacity: getComputedStyle(gridLine).opacity,
+      gridWidth: getComputedStyle(gridLine).strokeWidth,
+      mathColor: getComputedStyle(math).color,
+      proseWeight: getComputedStyle(
+        element.querySelector<HTMLElement>(".kp-economics-tutorial__prose")!
+      ).fontWeight
+    };
+  })).toEqual({
+    axisWidth: "1.25px",
+    curveWidth: "1.25px",
+    gridColor: "rgb(219, 225, 224)",
+    gridOpacity: "1",
+    gridWidth: "1.25px",
+    mathColor: "rgb(79, 87, 94)",
+    proseWeight: "425"
+  });
   await page.screenshot({
     path: `${evidenceDirectory}/light-footer-toggle.png`,
     fullPage: false

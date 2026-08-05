@@ -247,8 +247,8 @@ construction grid, role-based hierarchy, inline KaTeX, and stable two-decimal
 moving readouts over exact semantic truth. Domain geometry, equations,
 narrative, units, responsive composition, and choreography remain local.
 
-The later economics inline-sticky discovery additionally trials `1px`
-structural strokes, `1.5px` curves, a calculated `0.5px` grid,
+The later economics lesson discovery additionally trials one axis-canonical
+`1px` width for structural strokes, curves, guides, traces, and grid,
 style-preserving opacity ghosts, SteelBlue/red semantic roles, prose-sized
 graph mathematics, and smaller equilibrium markers. That treatment remains
 scoped to the economics presentation profile; it is evidence for a future

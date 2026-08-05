@@ -1,0 +1,243 @@
+# Economics Runtime And Scroll Next-Step Review
+
+Date: 2026-08-04
+Status: Phases 1–4 approved for execution; Phases 5–7 remain separately gated
+
+## Recommendation
+
+Run one bounded economics runtime-repair tranche before adding another lesson
+layout or generalizing the two-column passage. Preserve the reviewed semantic
+animation and current visual reference, measure the actual hot paths, replace
+whole-subtree SVG playback with a persistent renderer session, then replace
+per-scroll geometry measurement with cached local-anchor projection and
+IntersectionObserver-assisted lifecycle. Only after those repairs should the
+requested paragraph-spacing tuner become the exemplar's next visual control.
+
+This is not a broad runtime rewrite. Economics is the sole canonical caller
+through the first human checkpoint. Route closure, dense-page pressure, CSS
+retirement, and a shared 2D/3D graph protocol follow only after the repaired
+exemplar proves the boundary.
+
+## Candidate Review
+
+Scores use 5 as strongest except Risk, where 5 is most speculative. Slice size
+uses 1 for the smallest bounded change and 5 for the largest.
+
+| Candidate | Authoring | Reliability | Reuse | Slice size | Risk | Recommendation |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Instrument the economics SVG and cue hot paths | 3 | 5 | 4 | 1 | 1 | Start here |
+| Add an economics-local persistent SVG runtime session | 4 | 5 | 5 | 3 | 2 | First implementation |
+| Cache cue geometry and add observer-assisted activation | 4 | 5 | 5 | 3 | 2 | Second implementation |
+| Add the requested `0–100vh` paragraph-gap tuner | 5 | 3 | 2 | 1 | 1 | After geometry repair |
+| Split route capabilities and statically retain KaTeX labels | 3 | 5 | 5 | 3 | 2 | After exemplar checkpoint |
+| Prune all experimental lesson CSS immediately | 2 | 3 | 3 | 4 | 4 | Wait for layout selection |
+| Promote a universal 2D/3D graph protocol now | 4 | 4 | 5 | 5 | 5 | Wait for second renderer caller |
+
+## Canonical Reference And Preservation Boundary
+
+The canonical visual reference is the current economics route at
+`/tutorials/economics/demand-shift/?layout=two-column-scroll`, including its
+current light and midnight appearances and its static, initial, transition,
+settled, and reverse-scroll states.
+
+Preserve throughout the tranche:
+
+- the exact economics semantic asset and sampled runtime frames;
+- deterministic direct seek, rewind, cumulative motion blocks, URL state, and
+  Review capture;
+- the pure string renderer used for static output, export, and deterministic
+  fixtures;
+- the default split and inline-sticky routes as rollback references;
+- accessible graph truth, reduced motion, phone reading flow, theme identity,
+  and progressive publication; and
+- framework-neutral animation and renderer contracts outside Svelte ownership.
+
+Each phase below is one independently reversible rollback unit. The first
+human checkpoint follows Phase 4. No second caller or shared protocol is
+authorized before that checkpoint.
+
+## Phase 1: Measure The Actual Hot Paths
+
+Extend the stable economics production-performance entrypoint rather than
+creating a disposable browser script. Measure the query-selected two-column
+route and separate:
+
+- scroll scheduling latency from JavaScript execution time;
+- semantic sampling from SVG string construction, DOM replacement, style and
+  layout, and screen-space-label synchronization;
+- DOM nodes added and removed per seek;
+- geometry reads per scroll frame; and
+- six-, twenty-four-, and forty-eight-cue projections over one persistent
+  stage.
+
+Keep the existing publication budgets, but do not treat the current two-rAF
+`33.7ms` sample as isolated renderer CPU time. Record a before snapshot and
+mutation count so Phase 2 must demonstrate a real reduction.
+
+Likely files:
+
+- `tests/economics-demand-shift-tutorial-performance.browser.spec.ts`
+- `playwright.economics-demand-shift-performance.config.ts`
+- the existing scoped `npm run performance:economics-demand-shift-tutorial`
+  command and its committed entrypoint
+
+Verification: production build, current semantic tests, and the extended
+single-route performance probe. Stop if instrumentation changes learner paint
+or semantic timing.
+
+## Phase 2: Retain The SVG Runtime Tree
+
+Keep `renderKpEconomicsEquilibriumStaticContent` as deterministic complete
+markup. Add an economics-local mounted runtime session with explicit
+`apply(frame)` and `dispose()` operations. Construct the SVG scaffold, axes,
+grid, stable curves, labels, KaTeX nodes, and accessibility owners once. Patch
+only changing attributes, text, lifecycle classes, and the accessible
+description during playback.
+
+Topology changes should be keyed and discrete. Ordinary progress must not
+write `innerHTML`, replace the runtime group, recreate static KaTeX, or lose DOM
+node identity. Direct seek must remain history-independent.
+
+Likely files:
+
+- `src/editor/graph-svg-viewport.ts`
+- `src/rendering/economics-equilibrium-svg.ts`
+- one new economics-local runtime-session module if separation is clearer
+- focused renderer, browser, accessibility, and direct-seek tests
+
+Acceptance:
+
+- zero runtime-subtree replacements after mount during ordinary seeking;
+- stable node identity for axes, curves, points, guides, labels, and `<desc>`;
+- exact static/runtime endpoint parity and rewind;
+- no loss of screen-space label or theme behavior; and
+- a measured improvement without widening existing budgets.
+
+## Phase 3: Make Scroll Geometry Local, Cached, And Activated
+
+Retain one passive, rAF-coalesced scroll source for continuous semantic
+scrubbing. IntersectionObserver does not replace exact progress; it becomes the
+coarse lifecycle authority for near-viewport activation and offscreen pause.
+
+Declare two independent anchors:
+
+1. a stable stage-local anchor, initially the graph's normalized center; and
+2. a responsive viewport focus anchor, initially `35dvh` on the wide
+   two-column exemplar.
+
+Map the local anchor to the viewport anchor. Align the first prose block-start
+to that same focus line. Never make sticky geometry follow a moving object's
+live DOM box. Store semantic cue/progress in URLs rather than scroll pixels.
+
+Measure cue document offsets on mount and explicit invalidation only: resize,
+font readiness, responsive-mode change, text-side change, theme metric change,
+or authoring-tuner change. On scroll, read `scrollY`, binary-search the cached
+sequence, and project only the active cue neighborhood. Batch DOM reads before
+writes.
+
+Likely files:
+
+- `src/tutorial/kp-tutorial-motion.ts`
+- `src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts`
+- `src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte`
+- focused unit and two-column browser tests
+
+Acceptance:
+
+- one scroll listener and at most one pending frame for the passage;
+- IntersectionObserver owns activation, not semantic progress;
+- no all-cue `getBoundingClientRect()` loop during ordinary scroll;
+- exact forward, reverse, resize, URL, TOC, and manual-control settlement; and
+- stable phone and short-viewport reading fallbacks.
+
+## Phase 4: Add The Requested Tuner And Finish The Local Visual Requests
+
+Add the already-recorded internal `0–100vh` paragraph-gap tuner in `1vh` steps,
+starting from `16vh`. Keep it beside Review and the other bottom controls.
+Persist it in the URL and Review state. A change updates one CSS token and
+causes exactly one coalesced geometry invalidation; it does not become semantic
+timeline state or learner transport.
+
+Use this phase to visually verify the shared `35dvh` local/viewport anchor,
+the first paragraph's already-settled initial state, and the requested neutral
+grey dark-mode axes. Define one economics-lesson non-KaTeX font token and apply
+it consistently to prose, headings, navigation, controls, review/tuning UI,
+and any native text painted by the lesson; KaTeX descendants retain their own
+mathematical font families. Do not add new graph decoration. Mobile may clamp
+or ignore extreme desktop spacing values.
+
+Acceptance includes zero, default, middle, and maximum spacing in both scroll
+directions, exact URL reconstruction, no semantic snap after tuning, and a
+human checkpoint over the repaired economics exemplar.
+
+## Phase 5: Reduce Route And CSS Closure After Approval
+
+After the Phase-4 visual checkpoint, split the shared graph viewport's static
+domain imports so the economics tutorial requests only its selected SVG graph
+capability. Do not make it download matrix, integral, physics, catalogue, code,
+or WebGL callers merely because the general editor supports them.
+
+Pre-render or statically compile stable KaTeX and retain those nodes at
+runtime. Keep dynamic mathematical values exact and keyed; do not parse static
+axis labels every frame. Ratchet route transfer, resource-count, initial-task,
+and frame-execution budgets from the repaired baseline.
+
+CSS cleanup follows the human layout decision. First split shared lesson
+tokens, chosen passage geometry, theme roles, and economics graph paint into
+clear ownership layers. Retire rejected experimental branches only with a
+preserved visual reference and their own rollback commit. Gzip size alone does
+not excuse unused selectors, but a broad stylesheet rewrite before selection
+would destroy useful comparison evidence.
+
+## Phase 6: Pressure Dense Pages And Multiple Stages
+
+Prove two distinct cases:
+
+- many prose cues driving one persistent stage; and
+- several independent motion passages whose distant stages remain static or
+  dehydrated.
+
+The dense-cue fixture should exercise at least 6, 24, and 48 cues without
+linear layout reads per scroll frame. The multi-stage fixture should reserve
+stable geometry, hydrate only a small near-viewport window, share capability
+chunks, pause offscreen playback, and enforce a small live-stage limit. A
+WebGL caller must also retain the existing context-lease policy.
+
+This phase proves page-scale behavior; it does not authorize dozens of
+simultaneously moving stages or autoplay outside the active passage.
+
+## Phase 7: Promote Only Caller-Proven Graph Seams
+
+Use the existing physics graph-and-diagram caller to pressure the persistent
+SVG session and local-anchor contract. If economics and physics both pass,
+extract the smallest shared Graph2D runtime-session interface and lifecycle.
+
+Only then define the corresponding Graph3D protocol: renderer-neutral semantic
+frames and visual roles, local stage anchors, camera/projection state, theme
+resolution, and shared clock; SVG and WebGL remain separate renderer ports.
+The 3D renderer maps the same role tokens and line hierarchy to materials and
+camera-relative apparent widths without making Three.js a dependency of 2D
+pages.
+
+Generated solve-x remains the later third lesson caller. Matrix work, SvelteKit,
+Public Web, broad motif promotion, and a universal scene graph remain deferred.
+
+## Recommended Approval Boundary
+
+Phases 1–4 are approved as one bounded exemplar tranche, with a mandatory
+visual and performance checkpoint after the spacing tuner and font
+unification. Phases 5–7 remain a separately approved consolidation tranche
+informed by those measurements and the selected layout.
+
+## Sources
+
+- `docs/project/strategy.md`
+- `docs/project/roadmap.md`
+- `docs/project/threads/animation-library-promotion.md`
+- `docs/project/threads/explanation-attention.md`
+- `docs/project/decisions/2026-08-04-kp-essay-embedded-two-column-motion-passage.md`
+- `src/tutorial/kp-tutorial-motion.ts`
+- `src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte`
+- `src/editor/graph-svg-viewport.ts`
+- `src/rendering/economics-equilibrium-svg.ts`
+- `tests/economics-demand-shift-tutorial-performance.browser.spec.ts`

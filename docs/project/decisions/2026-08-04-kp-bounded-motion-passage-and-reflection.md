@@ -3,6 +3,12 @@
 Date: 2026-08-04
 Status: accepted for bounded discovery
 
+The later
+`2026-08-04-kp-two-column-natural-graph-and-uniform-strokes.md` decision makes
+economics graph strokes uniformly `1px`. The passage threshold remains a
+separate `1.5px` layout boundary; it no longer derives its width from a graph
+curve role.
+
 ## Decision
 
 Refine only the query-selected economics inline-sticky presentation into one

@@ -60,6 +60,8 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
     html,
     /data-kp-economics-initial-equilibrium-reference[^>]*r="2\.75"/
   );
+  assert.doesNotMatch(html, /data-kp-economics-initial-equilibrium-guides/);
+  assert.match(html, /data-kp-economics-initial-demand-reference-core/);
   assert.match(html, /data-kp-economics-grid-axis="quantity"/);
   assert.match(html, /data-kp-economics-grid-axis="price"/);
   assert.match(html, /data-kp-economics-tick-axis="quantity"/);

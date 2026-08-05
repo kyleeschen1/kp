@@ -163,8 +163,8 @@ test("approved economics prose and semantic controls form one persistent tutoria
     .toEqual({
       wrapper: "0px",
       katex: "0px",
-      mathColor: "rgb(214, 216, 223)",
-      diagramMathColor: "rgb(214, 216, 223)"
+      mathColor: "rgb(185, 190, 201)",
+      diagramMathColor: "rgb(185, 190, 201)"
     });
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",
@@ -254,7 +254,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await demandChange.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38
+      (window.innerHeight * 0.38 - 1)
   }));
   const readingPointer = root.locator(
     "[data-kp-economics-tutorial-reading-band]"
@@ -775,7 +775,7 @@ test("manual supply playback preserves the settled demand handoff", async ({
     "data-kp-economics-tutorial-supply-movement-progress",
     "1.000"
   );
-  await expect.poll(() => movement.locator(
+  await expect.poll(() => graph.locator(
     '[data-kp-economics-supply-movement-target="settled"]'
   ).evaluate((element) => Number(getComputedStyle(element).opacity)))
     .toBeCloseTo(1, 2);

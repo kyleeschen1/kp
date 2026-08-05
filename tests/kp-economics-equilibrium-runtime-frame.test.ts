@@ -137,6 +137,11 @@ test("runtime SVG shows the moving demand and old-equilibrium handoff", () => {
   assert.match(html, /data-kp-economics-equilibrium-price="9"/);
   assert.match(html, /data-kp-economics-initial-demand-reference/);
   assert.match(html, /data-kp-economics-initial-equilibrium-reference/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-guides/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-quantity-guide/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-quantity-guide-core/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-price-guide/);
+  assert.match(html, /data-kp-economics-initial-equilibrium-price-guide-core/);
   assert.match(
     html,
     /data-kp-economics-supply-movement[^>]*data-kp-economics-supply-equation="P=2\+Q"/

@@ -106,8 +106,9 @@ transition crosses the stage threshold and completes at its trailing edge.
 Paragraph opacity and geometry stay stable, and no synthetic runway,
 scene-track, or scroll snap exists. The inline proof renders no transport bar;
 the approved split layout retains manual controls over the same semantic
-timelines. The query-local graph profile uses `1px` structural strokes,
-`1.5px` curves, a `0.5px` grid, style-preserving ghosts, SteelBlue/red roles,
+timelines. The economics-local graph profile uses one axis-canonical `1px`
+width for structure, curves, guides, traces, and grid, plus style-preserving
+ghosts and SteelBlue/red roles,
 prose-sized inline and graph KaTeX except smaller numeric ticks, and smaller
 equilibrium markers. These choices remain economics-local pending a second
 caller. The proof is query-selected through `?layout=inline-sticky`; the
@@ -132,20 +133,46 @@ reverses through explicit opacity, clipping, and travel over stable outer
 geometry and remains settled through terminal reflection. These values are not
 a shared lesson-layout promotion.
 
-A parallel economics-only comparison is now available through
-`?layout=two-column-scroll`, recorded in
-`decisions/2026-08-04-kp-divider-relative-prose-salience.md`. On desktop, one
-vertically centered sticky graph sits left of a neutral `1px` divider and four
-naturally spaced paragraphs sit right. No visible card surface remains. Text
-opacity and a fixed-width blue left rule share one geometry-derived salience
-scalar that peaks just above viewport center; semantic motion begins after a
-short focus plateau and completes exactly when the paragraph reaches the
-divider top. The first fully salient paragraph describes the untouched graph,
-and doubled natural gaps provide reading and settled-state holds without a
-synthetic track. The accepted inline route, source prose, split default, and
-semantic animation truth remain unchanged; narrow and short viewports retain
-one-column geometry. Human comparison precedes any second caller or promotion
-of this grammar.
+A parallel economics-only comparison is available through
+`?layout=two-column-scroll`. Its question-driven explanatory spine and visual
+correction are implemented in
+`decisions/2026-08-04-kp-economics-question-driven-explanatory-spine.md` and
+`decisions/2026-08-04-kp-two-column-natural-graph-and-uniform-strokes.md`. The
+proof uses distinct transition and interpretation passages, a naturally wide
+`640 × 420` graph with reduced padding, no animated paragraph rails, one quiet
+vertical divider, neutral grey axes, a single axis-canonical stroke width, and
+a stable graph slot. Paragraph opacity remains prose-only; graph objects no
+longer attenuate with passage salience. Exact scroll reconstruction remains
+bounded discovery pending human review.
+The accepted inline route, source semantics, split default, and animation truth
+remain unchanged; narrow and short viewports retain one-column geometry. Human
+comparison still precedes any second caller or promotion of this grammar.
+
+The bounded correction recorded in
+`decisions/2026-08-04-kp-essay-embedded-two-column-motion-passage.md` now tests
+the two-column sequence as a compact passage inside ordinary essay flow:
+one full-span title and top rule, synchronized first-paragraph focus and stage
+pinning, a natural terminal sentinel and bottom rule, no redundant entrance
+title, and no oversized top or bottom runway. The same exemplar revises the
+economics-local light/dark palette, removes visible graph annotations, restores
+theme-distinct former-equilibrium ghost guides, and sharpens light prose. Code
+and KaTeX receive explicit readable-fit fallbacks rather than forced scaling.
+Its next implementation loop now includes an internal, URL- and Review-
+reconstructible `0–100vh` paragraph-gap tuner for finding the passage cadence;
+that probe is not learner UI or a promoted layout API.
+This does not authorize a shared essay-embed component or resume the tabled
+animation-promotion frontier.
+
+The approved immediate repair sequence is recorded in
+`reviews/2026-08-04-economics-runtime-scroll-next-step-review.md`. Phases 1–4
+will instrument the actual hot paths, retain the economics SVG runtime tree,
+cache cue geometry behind a stable local-to-viewport anchor contract with
+IntersectionObserver-assisted activation, then add the spacing tuner and one
+canonical non-KaTeX lesson font. The tranche stops for human visual and
+performance review. Route/CSS closure, dense multi-stage promotion, shared
+Graph2D extraction, and a Graph3D protocol remain separately gated. The Lisp
+contract's final two slices are preserved in deferred state rather than mixed
+into this work.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -628,37 +655,30 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Review the code-native S-expression choreography, especially recursive
+1. Execute the approved economics runtime/scroll repair Phases 1–4, including
+   measurement, persistent SVG paint, cached anchor projection, observer-
+   assisted lifecycle, the internal spacing tuner, and non-KaTeX font
+   unification; stop for the required economics visual/performance checkpoint.
+2. Review the repaired `?layout=two-column-scroll` exemplar against the split
+   and inline-sticky references without inferring shared layout, theme,
+   graph-profile, renderer, or authoring promotion.
+3. Later review the code-native S-expression choreography, especially recursive
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
-2. Compare the approved economics split layout with the bounded
-   `?layout=inline-sticky` continuous-canvas proof, including the wider
-   page-colored stage bleed, paragraph-owned motion and focus, stable prose
-   paint, absence of synthetic tracks, moderate reading rhythm, four quiet
-   semantic controls with hidden sliders, exact reverse scroll, `1px`
-   structure / `1.5px` curves / `0.5px` grid, style-preserving ghosts,
-   SteelBlue/red roles, prose-sized inline and graph math, smaller equilibrium
-   markers, query-local Gill Sans/KaTeX separation, constant prose measure,
-   phone fit, large-text behavior, the default midnight palette with its
-   non-navigating footer switch, the opaque top-aligned `50vh` stage, exact
-   bounded entrance and exit, source-authored prose roles, `25vh` scene gaps,
-   near-opaque padded stage, internal curve-width threshold, scroll-only
-   transport, ordinary-flow reflection, and reversible right-side equation
-   composition; do not infer layout, theme, or shared-API promotion.
-3. After explicit S-expression approval, run the repeated-variable pressure
+4. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
-4. After lesson-layout approval and a structurally different layout caller,
+5. After lesson-layout approval and a structurally different layout caller,
    decide whether the one-axis grammar should replace the split default.
-5. Later use generated solve-x as a third semantic lesson caller before broad
+6. Later use generated solve-x as a third semantic lesson caller before broad
    lesson rollout or public tutorial API declaration.
-6. Keep SvelteKit/Public Web deferred until those caller and publication gates
+7. Keep SvelteKit/Public Web deferred until those caller and publication gates
    pass.
-7. Select one nearer transformation exemplar without resuming the tabled
+8. Select one nearer transformation exemplar without resuming the tabled
    matrix-to-linear-map run. Place-value subtraction remains the recommended
    default when animation-library promotion resumes.
-8. Revisit what evidence should replace the old matrix-specific host-pressure
+9. Revisit what evidence should replace the old matrix-specific host-pressure
    gate before generalizing the Svelte seam or adopting SvelteKit, then resume
    the Internal Studio and Public Web sequence.
-9. Complete M4 before internal M5 editorial candidates, and build the
+10. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

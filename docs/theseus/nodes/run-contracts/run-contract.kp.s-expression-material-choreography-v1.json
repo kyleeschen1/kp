@@ -2,7 +2,8 @@
   "id": "run-contract.kp.s-expression-material-choreography-v1",
   "kind": "run-contract",
   "title": "S-expression material choreography",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "User prioritized the approved economics runtime and scroll repair tranche; preserve slices s26 and s27 for explicit later resume.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -28,6 +29,9 @@
     "git diff --check",
     "theseus workspace validate"
   ],
+  "revisitWhen": [
+    "The economics exemplar reaches its human checkpoint and the user explicitly resumes Lisp."
+  ],
   "allowedWork": [
     "Extend only the certified lambda asset, exemplar-proven semantic roles and operations, recursive choreography, responsive DOM/SVG rendering, and Lisp presentation adapters.",
     "Re-author the internal Lisp tutorial into three cumulative motion blocks with compatible URLs, shared review capture, progressive enhancement, accessibility, and scoped performance evidence.",
@@ -50,6 +54,18 @@
     "Stop if implementation requires a new runtime dependency, widened performance ceiling, framework-owned semantic truth, unrelated-file overlap, or deferred scope.",
     "Always stop after slice s25 for explicit human visual approval before executing s26 or s27."
   ],
+  "synchronizationWait": {
+    "schemaVersion": "theseus.synchronization-wait.v1",
+    "reason": "The user approved the economics runtime and scroll repair tranche as the immediate priority; preserve Lisp slices s26 and s27 without execution.",
+    "resumeWhen": [
+      "The economics runtime and scroll exemplar reaches its human checkpoint and the user explicitly resumes the Lisp tranche."
+    ],
+    "protectedProjects": [
+      "kp-lisp-tutorial"
+    ],
+    "requestedBy": "user",
+    "effectiveAt": "2026-08-05T06:12:56.653Z"
+  },
   "slices": [
     {
       "id": "s01",

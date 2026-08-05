@@ -178,11 +178,12 @@ Respect safe-area insets, stable viewport geometry, and user font scaling.
   enhancement, and switchable without navigation or layout shift. Review
   capture records a stable theme identity.
 
-The economics discovery caller currently trials `1px` axes, ticks, guides, and
-traces; `1.5px` curves; a calculated `0.5px` grid; SteelBlue/red curve roles;
-style-preserving opacity ghosts; prose-sized graph math; smaller equilibrium
-markers; and no persistent equation banner. These graph details remain
-exemplar-local pending a structurally different graph caller.
+The economics discovery caller currently uses its `1px` axis width as the
+canonical token for axes, ticks, guides, traces, curves, and grid lines;
+SteelBlue/red curve roles; style-preserving opacity ghosts; prose-sized graph
+math; smaller equilibrium markers; and no persistent equation banner. These
+graph details remain exemplar-local pending a structurally different graph
+caller.
 
 The current economics geometry trial fixes the complete stage at `50vh`, pins
 it at the viewport top, includes `2.5vh` padding at each block edge, separates

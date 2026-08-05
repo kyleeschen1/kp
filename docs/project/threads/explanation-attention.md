@@ -2,12 +2,16 @@
 
 Status: active-supporting
 Last Updated: 2026-08-04
-Current Next Action: Review the code-native S-expression choreography at its
-mandatory slice-25 human checkpoint and compare the approved economics split
-layout with its bounded `?layout=inline-sticky` and
-`?layout=two-column-scroll` proofs. The layout proofs do not
-approve the Lisp visual language, promote a default lesson shell, adopt
-SvelteKit, widen the lesson rollout, or change the animation-promotion ledger.
+Current Next Action: Execute approved Phases 1–4 from
+`../reviews/2026-08-04-economics-runtime-scroll-next-step-review.md`: measure
+the real SVG and cue hot paths, retain one economics SVG runtime tree, replace
+all-cue scroll measurement with cached local-anchor projection plus
+IntersectionObserver-assisted lifecycle, then add the internal `0–100vh`
+spacing tuner and one canonical non-KaTeX lesson font. Stop at the mandatory
+economics visual and performance checkpoint. Do not begin route/CSS
+consolidation, a second renderer caller, or 2D/3D protocol promotion. The
+code-native S-expression contract is durably deferred with slices 26 and 27
+preserved; this priority change does not alter animation-promotion rank.
 
 ## Goal
 
@@ -53,17 +57,50 @@ Economics is the canonical proof through `?layout=inline-sticky`; its approved
 split layout remains the default pending human comparison and a structurally
 different second caller.
 
-The parallel comparison in
-`decisions/2026-08-04-kp-divider-relative-prose-salience.md` keeps a vertically
-centered sticky graph left and ordinary naturally spaced paragraphs right of a
-thin neutral divider. No visible card surface remains. Paragraph opacity and a
-layout-neutral blue left rule share one salience scalar that peaks just above
-viewport center. Motion holds through a short focus plateau, then scrubs to an
-exact final state at the divider top. The opening paragraph owns the untouched
-graph, and doubled gaps supply reading and settlement time without synthetic
-tracks. Narrow and short viewports retain one-column geometry. This remains
-economics-local until human review; it does not authorize a shared salience
+The parallel comparison begun in
+`decisions/2026-08-04-kp-divider-relative-prose-salience.md` keeps a sticky
+graph left and ordinary naturally spaced paragraphs right. Its newest accepted
+correction is recorded in
+`decisions/2026-08-04-kp-two-column-natural-graph-and-uniform-strokes.md`: the
+plot retains its natural `640 × 420` geometry with reduced inline padding;
+animated paragraph rails remain absent; one quiet vertical divider remains;
+and axes share its neutral grey. Paragraph opacity may still express prose
+salience, but attention no longer attenuates objects inside the graph. All
+two-column graph strokes inherit the canonical `1px` axis width, while motion
+and lifecycle fades remain semantic and reconstructible from scroll geometry.
+Narrow and short viewports retain one-column geometry. This remains
+economics-local until human review and does not authorize a shared salience
 schema or lesson-shell rollout.
+
+The implemented successor is
+`decisions/2026-08-04-kp-essay-embedded-two-column-motion-passage.md`. It treats
+the two-column sequence as a bounded passage inside an ordinary essay: one
+full-span `h3` and top rule replace the redundant two-title entrance; the first
+paragraph arrives already focused at the `35vh` line when the stage pins; and a
+natural-flow end sentinel places the bottom rule after the final paragraph has
+settled without a universal terminal runway. The same bounded exemplar will
+remove visible graph annotations, add theme-distinct old-equilibrium ghost
+guides, revises light and dark optical tokens, and records readable fallback
+rules for code and KaTeX. The exact shared-origin projection also prevents
+zero-bounded axes from extending through one another. None of these candidates
+is promoted before the economics checkpoint passes human review.
+
+The same decision queues one next-loop discovery control: an internal,
+URL-reconstructible `0–100vh` tuner for the two-column paragraph-gap token. It
+exists to find a good cadence across short and long prose, must trigger one
+coalesced geometry resample, and must not become learner transport, semantic
+timeline state, or a shared authoring abstraction merely because it is useful
+inside this exemplar.
+
+The implemented editorial revision in
+`decisions/2026-08-04-kp-economics-question-driven-explanatory-spine.md`
+organizes the lesson as puzzle, starting model, one changed relationship,
+prediction, transition/interpretation pairs, equation verification, scope,
+retrieval, and optional transfer. Transition passages forecast motion;
+separate interpretation passages explain settled frames. The two-column proof
+now has six compact beats and a post-supply interpretation, while the canonical
+Markdown retains continuous prose and stable semantic identities. This is a
+candidate grammar under review, not a cross-domain authoring contract.
 
 The bounded theme trial in
 `decisions/2026-08-04-kp-economics-midnight-theme-trial.md` now lets the same
@@ -74,9 +111,9 @@ metrics; direct URLs paint the selected root early and Review capture records
 light or midnight identity. This remains economics-local and does not promote
 a shared theme provider.
 
-The same revision updates the economics-local graph trial. Axes, ticks, guides,
-and traces stay at `1px`; curves use `1.5px`; the grid derives to `0.5px`;
-ghosts preserve stroke style; stable and changing curves use SteelBlue and
+The economics-local graph profile now derives axes, ticks, guides, traces,
+curves, and grid lines from the same canonical `1px` axis token. Ghosts
+preserve stroke style; stable and changing curves use SteelBlue and
 bright red; inline KaTeX and semantic graph labels use the prose-size token;
 numeric ticks use `0.75` of it; equilibrium markers are smaller; and the
 persistent equation banner remains absent. These choices do not alter the

@@ -1,0 +1,63 @@
+{
+  "id": "next-action.economics.s03-v0",
+  "kind": "next-action",
+  "title": "Measure-SVG-construction-and-DOM-churn",
+  "status": "ready",
+  "domain": "economics",
+  "summary": "Materialized from stored run-contract slice s03 in Economics runtime and scroll repair.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.economics-runtime-scroll-repair-v1.json",
+      "summary": "Run contract whose stored slice s03 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-runtime-scroll-repair-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md",
+      "summary": "User-approved Phases 1-4, preservation boundary, verification cadence, visual checkpoint, and explicit deferrals."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.essay-embedded-two-column-motion-passage"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-two-column-scroll",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "git diff --check",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Measure-SVG-construction-and-DOM-churn can be completed inside Economics runtime and scroll repair."
+  ],
+  "allowedWork": [
+    "Instrument and optimize only the economics tutorial, economics SVG runtime presentation, shared tutorial scroll coordination required by the exemplar, scoped performance/browser tests, internal spacing tuning, economics typography/theme tokens, and required project/Theseus records.",
+    "Preserve the pure deterministic static SVG renderer while adding an economics-local mounted runtime session with explicit apply and dispose lifecycle.",
+    "Use IntersectionObserver only for coarse activation and retain one passive rAF-coalesced scroll source for exact semantic progress over cached geometry."
+  ],
+  "disallowedWork": [
+    "Do not execute deferred Lisp slices s26 or s27, resume matrix work, add a new tutorial, or change animation-promotion rank.",
+    "Do not begin Phases 5-7: route or CSS consolidation, second-caller promotion, shared Graph2D extraction, Graph3D protocol work, SvelteKit, Public Web, or broad runtime migration.",
+    "Do not change economics semantic truth, exact sampled frames, URL meaning, Review identity, default or inline-sticky rollback behavior, accessibility ownership, performance ceilings, or framework-neutral authority.",
+    "Do not add a runtime dependency, universal scene graph, VDOM renderer, learner-facing tuning UI, or global font rule outside the economics lesson."
+  ],
+  "criteria": [
+    {
+      "id": "slice-verification",
+      "weight": "high"
+    }
+  ]
+}

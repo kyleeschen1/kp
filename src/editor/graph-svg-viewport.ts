@@ -9,6 +9,7 @@ import {
   sampleKpEconomicsEquilibriumRuntimeFrame
 } from "../animation/economics-equilibrium-runtime-frame.ts";
 import {
+  kpEconomicsGraphPlotInsets,
   kpEconomicsGraphPresentationProfile,
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../rendering/economics-equilibrium-svg.ts";
@@ -37,7 +38,10 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
-import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
+import {
+  KP_EDITOR_ANIMATION_DISPOSE_EVENT,
+  getKpEditorAnimationPlaybackSession
+} from "./animation-player-controller.ts";
 
 export interface KpEditorGraphSvgViewportModel {
   readonly width: number;
@@ -48,7 +52,34 @@ export interface KpEditorGraphSvgViewportModel {
   readonly yAxisX: number;
 }
 
+export interface KpEditorGraphAxisProjection {
+  readonly originPolicy: "shared-endpoint" | "crossing";
+  readonly x: {
+    readonly x1: number;
+    readonly y1: number;
+    readonly x2: number;
+    readonly y2: number;
+  };
+  readonly y: {
+    readonly x1: number;
+    readonly y1: number;
+    readonly x2: number;
+    readonly y2: number;
+  };
+}
+
 const matrixLinearMapPlanCache = new Map<string, KpMatrixLinearMapPlan>();
+
+interface KpEconomicsScreenSpaceLabelSession {
+  readonly overlay: HTMLElement;
+  readonly resizeObserver?: ResizeObserver | undefined;
+  readonly svg: SVGSVGElement;
+}
+
+const economicsScreenSpaceLabelSessions = new WeakMap<
+  HTMLElement,
+  KpEconomicsScreenSpaceLabelSession
+>();
 
 export function createKpEditorGraphSvgViewportModel(
   animation: KpAnimationAsset
@@ -68,6 +99,33 @@ export function createKpEditorGraphSvgViewportModel(
     xAxisY: scale(0, yDomain, [height - 28, 20]),
     yAxisX: scale(0, xDomain, [36, width - 20])
   };
+}
+
+export function projectKpEditorGraphAxes(input: {
+  readonly viewport: KpEditorGraphSvgViewportModel;
+  readonly xAxisEnd?: number | undefined;
+}): KpEditorGraphAxisProjection {
+  const { viewport } = input;
+  const stopsAtOrigin = viewport.xDomain[0] === 0 && viewport.yDomain[0] === 0;
+  // Zero-bounded plots terminate both axes at one geometric endpoint. Signed
+  // domains retain full crossing axes because zero lies inside the plot.
+  const xStart = stopsAtOrigin ? viewport.yAxisX : 20;
+  const yStart = stopsAtOrigin ? viewport.xAxisY : viewport.height - 20;
+  return Object.freeze({
+    originPolicy: stopsAtOrigin ? "shared-endpoint" : "crossing",
+    x: Object.freeze({
+      x1: xStart,
+      y1: viewport.xAxisY,
+      x2: input.xAxisEnd ?? viewport.width - 20,
+      y2: viewport.xAxisY
+    }),
+    y: Object.freeze({
+      x1: viewport.yAxisX,
+      y1: yStart,
+      x2: viewport.yAxisX,
+      y2: 20
+    })
+  });
 }
 
 export function createKpEditorGraphSvgViewportAdapter(
@@ -105,11 +163,168 @@ export function createKpEditorGraphSvgViewportAdapter(
             graphAccessibilityMode(player)
           );
           syncGraphAccessibility(svg, content);
+          if (
+            animation.id ===
+              "animation.economics.supply-demand-equilibrium-shift" &&
+            player.closest("[data-kp-economics-screen-space-labels='true']")
+              !== null
+          ) {
+            syncEconomicsScreenSpaceLabels({
+              content,
+              model,
+              player,
+              slot,
+              svg
+            });
+          } else {
+            disposeEconomicsScreenSpaceLabels(slot);
+          }
         }
       }
     }
   };
   return Object.freeze(adapter);
+}
+
+function syncEconomicsScreenSpaceLabels(input: {
+  readonly content: SVGGElement;
+  readonly model: KpEditorGraphSvgViewportModel;
+  readonly player: HTMLElement;
+  readonly slot: HTMLElement;
+  readonly svg: SVGSVGElement;
+}): void {
+  const session = economicsScreenSpaceLabelSession(input);
+  const extantLabels = new Map(
+    Array.from(session.overlay.querySelectorAll<HTMLElement>(
+      "[data-kp-economics-screen-space-label]"
+    )).map((label) => [
+      label.dataset["kpEconomicsScreenSpaceLabel"] ?? "",
+      label
+    ])
+  );
+  const currentRoles = new Set<string>();
+
+  input.content.querySelectorAll<SVGForeignObjectElement>(
+    "[data-kp-economics-math-label]"
+  ).forEach((anchor) => {
+    const role = anchor.dataset["kpEconomicsMathLabel"];
+    const source = anchor.querySelector<HTMLElement>(
+      ".editor-graph-stage__economics-math-label"
+    );
+    const fallbackX = Number(anchor.getAttribute("x"));
+    const fallbackY = Number(anchor.getAttribute("y"));
+    const x = Number(
+      anchor.dataset["kpEconomicsScreenAnchorX"] ?? fallbackX
+    );
+    const y = Number(
+      anchor.dataset["kpEconomicsScreenAnchorY"] ?? fallbackY
+    );
+    if (
+      role === undefined || source === null ||
+      !Number.isFinite(x) || !Number.isFinite(y)
+    ) {
+      return;
+    }
+
+    currentRoles.add(role);
+    let label = extantLabels.get(role);
+    if (label === undefined) {
+      label = input.slot.ownerDocument.createElement("span");
+      label.dataset["kpEconomicsScreenSpaceLabel"] = role;
+      session.overlay.append(label);
+    }
+    label.dataset["kpEconomicsLabelDisclosure"] =
+      role.startsWith("axis-") || role.startsWith("tick-")
+        ? "persistent"
+        : "contextual";
+    label.className =
+      `${source.className} editor-graph-stage__economics-screen-space-label`;
+    label.dataset["kpLatex"] = source.dataset["kpLatex"] ?? "";
+    if (label.innerHTML !== source.innerHTML) label.innerHTML = source.innerHTML;
+    label.style.left = `${x / input.model.width * 100}%`;
+    label.style.top = `${y / input.model.height * 100}%`;
+    label.style.setProperty(
+      "--kp-economics-label-entry-opacity",
+      anchor.style.opacity === "" ? "1" : anchor.style.opacity
+    );
+  });
+
+  for (const [role, label] of extantLabels) {
+    if (!currentRoles.has(role)) label.remove();
+  }
+  input.slot.dataset["kpEconomicsScreenSpaceLabelsReady"] = "true";
+}
+
+function economicsScreenSpaceLabelSession(input: {
+  readonly model: KpEditorGraphSvgViewportModel;
+  readonly player: HTMLElement;
+  readonly slot: HTMLElement;
+  readonly svg: SVGSVGElement;
+}): KpEconomicsScreenSpaceLabelSession {
+  const extant = economicsScreenSpaceLabelSessions.get(input.slot);
+  if (extant?.svg === input.svg) return extant;
+  disposeEconomicsScreenSpaceLabels(input.slot);
+
+  const overlay = input.slot.ownerDocument.createElement("div");
+  overlay.className = "editor-graph-stage__economics-screen-space-overlay";
+  overlay.dataset["kpEconomicsScreenSpaceOverlay"] = "true";
+  overlay.setAttribute("aria-hidden", "true");
+  input.slot.append(overlay);
+
+  const resizeObserver = typeof ResizeObserver === "undefined"
+    ? undefined
+    : new ResizeObserver(() => positionEconomicsScreenSpaceLabelOverlay(
+        input.slot,
+        input.svg,
+        overlay,
+        input.model
+      ));
+  resizeObserver?.observe(input.svg);
+  const session = { overlay, resizeObserver, svg: input.svg };
+  economicsScreenSpaceLabelSessions.set(input.slot, session);
+  input.player.addEventListener(
+    KP_EDITOR_ANIMATION_DISPOSE_EVENT,
+    () => disposeEconomicsScreenSpaceLabels(input.slot),
+    { once: true }
+  );
+  positionEconomicsScreenSpaceLabelOverlay(
+    input.slot,
+    input.svg,
+    overlay,
+    input.model
+  );
+  return session;
+}
+
+function positionEconomicsScreenSpaceLabelOverlay(
+  slot: HTMLElement,
+  svg: SVGSVGElement,
+  overlay: HTMLElement,
+  model: KpEditorGraphSvgViewportModel
+): void {
+  const slotBounds = slot.getBoundingClientRect();
+  const svgBounds = svg.getBoundingClientRect();
+  const scale = Math.min(
+    svgBounds.width / model.width,
+    svgBounds.height / model.height
+  );
+  const width = model.width * scale;
+  const height = model.height * scale;
+  overlay.style.left =
+    `${svgBounds.left - slotBounds.left + (svgBounds.width - width) / 2}px`;
+  overlay.style.top =
+    `${svgBounds.top - slotBounds.top + (svgBounds.height - height) / 2}px`;
+  overlay.style.width = `${width}px`;
+  overlay.style.height = `${height}px`;
+}
+
+function disposeEconomicsScreenSpaceLabels(slot: HTMLElement): void {
+  const session = economicsScreenSpaceLabelSessions.get(slot);
+  if (session === undefined) return;
+  session.resizeObserver?.disconnect();
+  session.overlay.remove();
+  delete slot.dataset["kpEconomicsScreenSpaceLabelsReady"];
+  economicsScreenSpaceLabelSessions.delete(slot);
 }
 
 export function registerKpEditorGraphSvgViewportAdapter(
@@ -169,12 +384,19 @@ function renderViewport(
   const axisMarker = dimensionalContinuityProfile !== undefined
     ? ' marker-end="url(#kp-editor-graph-axis-arrow)"'
     : "";
+  const xAxisEnd = economicsProfile
+    ? model.width - kpEconomicsGraphPlotInsets.right
+    : model.width - 20;
+  const axisProjection = projectKpEditorGraphAxes({
+    viewport: model,
+    xAxisEnd
+  });
   const axes = physicsProfile
     ? ""
-    : `<line data-kp-editor-graph-axis="x" x1="20" y1="${model.xAxisY}" x2="${model.width - 20}" y2="${model.xAxisY}"${axisMarker} />
-    <line data-kp-editor-graph-axis="y" x1="${model.yAxisX}" y1="${model.height - 20}" x2="${model.yAxisX}" y2="20"${axisMarker} />`;
-  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}"${languageProfile} data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
-    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
+    : `<line data-kp-editor-graph-axis="x" x1="${axisProjection.x.x1}" y1="${axisProjection.x.y1}" x2="${axisProjection.x.x2}" y2="${axisProjection.x.y2}"${axisMarker} />
+    <line data-kp-editor-graph-axis="y" x1="${axisProjection.y.x1}" y1="${axisProjection.y.y1}" x2="${axisProjection.y.x2}" y2="${axisProjection.y.y2}"${axisMarker} />`;
+  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}"${languageProfile} data-kp-editor-graph-origin-policy="${axisProjection.originPolicy}" data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
+    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" data-kp-axis-arrow-scale="6" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
     <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
     <g data-kp-editor-graph-content></g>
     ${axes}

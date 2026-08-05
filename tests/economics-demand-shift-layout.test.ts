@@ -8,7 +8,9 @@ import {
   projectKpTwoColumnScrollMotionCorridor,
   projectKpTwoColumnScrollParagraph,
   projectKpTwoColumnScrollSequence,
-  readKpEconomicsDemandShiftPresentationLayout
+  readKpEconomicsDemandShiftPresentationLayout,
+  readKpEconomicsTwoColumnTextSide,
+  writeKpEconomicsTwoColumnTextSide
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts";
 import {
   projectKpTutorialMotionCorridor
@@ -17,6 +19,11 @@ import {
   readKpEconomicsDemandShiftTheme,
   writeKpEconomicsDemandShiftTheme
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-theme.ts";
+import {
+  projectKpEconomicsGraphStrokeWidths,
+  readKpEconomicsGraphStrokeScale,
+  writeKpEconomicsGraphStrokeScale
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-graph-style.ts";
 
 test("inline sticky economics layout is an explicit reversible query mode", () => {
   assert.equal(
@@ -34,54 +41,98 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
 });
 
-test("two-column prose peaks near center and settles at the divider", () => {
-  assert.deepEqual(projectKpTwoColumnScrollParagraph({
-    paragraphTopPx: 128,
-    dividerTopPx: 128,
-    viewportHeightPx: 800
-  }), {
-    phase: "passed",
-    travel: 1,
-    crossingProgress: 1,
-    distanceFromStageBottomPx: 0,
-    salience: 0.65,
-    opacity: 0.762,
-    ruleScale: 0.7060000000000001
+test("two-column text side is URL-reproducible and defaults right", () => {
+  assert.equal(readKpEconomicsTwoColumnTextSide(""), "right");
+  assert.equal(
+    readKpEconomicsTwoColumnTextSide("?layout=two-column-scroll&text=left"),
+    "left"
+  );
+  assert.equal(
+    writeKpEconomicsTwoColumnTextSide({
+      search: "?layout=two-column-scroll&theme=light",
+      side: "left"
+    }),
+    "?layout=two-column-scroll&theme=light&text=left"
+  );
+  assert.equal(
+    writeKpEconomicsTwoColumnTextSide({
+      search: "?layout=two-column-scroll&text=left&theme=light",
+      side: "right"
+    }),
+    "?layout=two-column-scroll&theme=light"
+  );
+});
+
+test("graph stroke tuning is bounded, theme-relative, and URL-reproducible", () => {
+  assert.equal(readKpEconomicsGraphStrokeScale(""), 1);
+  assert.equal(readKpEconomicsGraphStrokeScale("?stroke=1.21"), 1.2);
+  assert.equal(readKpEconomicsGraphStrokeScale("?stroke=9"), 1.75);
+  assert.equal(
+    writeKpEconomicsGraphStrokeScale({
+      search: "?layout=two-column-scroll&theme=light",
+      scale: 1.2
+    }),
+    "?layout=two-column-scroll&theme=light&stroke=1.20"
+  );
+  assert.equal(
+    writeKpEconomicsGraphStrokeScale({
+      search: "?layout=two-column-scroll&stroke=1.20",
+      scale: 1
+    }),
+    "?layout=two-column-scroll"
+  );
+  assert.deepEqual(projectKpEconomicsGraphStrokeWidths(1.2), {
+    darkPx: 1.2,
+    darkGhostCorePx: 0.6,
+    lightPx: 1.5,
+    lightGhostCorePx: 0.75
   });
-  assert.deepEqual(projectKpTwoColumnScrollParagraph({
-    paragraphTopPx: 376,
-    previousParagraphTopPx: 88,
-    dividerTopPx: 128,
+});
+
+test("two-column prose focuses at 35vh with a short-block plateau", () => {
+  const focused = projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 280,
+    paragraphBottomPx: 360,
+    previousParagraphTopPx: 40,
+    focusTopPx: 280,
     viewportHeightPx: 800
-  }), {
-    phase: "approach",
-    travel: 0,
-    crossingProgress: 0,
-    distanceFromStageBottomPx: 248,
-    salience: 1,
-    opacity: 1,
-    ruleScale: 1
   });
-  assert.deepEqual(projectKpTwoColumnScrollParagraph({
-    paragraphTopPx: 128,
-    previousParagraphTopPx: -120,
-    dividerTopPx: 128,
+  assert.equal(focused.phase, "passed");
+  assert.equal(focused.travel, 1);
+  assert.equal(focused.distanceFromStageBottomPx, 0);
+  assert.equal(focused.salience, 1);
+  assert.equal(focused.opacity, 1);
+
+  const approaching = projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 520,
+    paragraphBottomPx: 600,
+    previousParagraphTopPx: 280,
+    focusTopPx: 280,
     viewportHeightPx: 800
-  }), {
-    phase: "passed",
-    travel: 1,
-    crossingProgress: 1,
-    distanceFromStageBottomPx: 0,
-    salience: 0.65,
-    opacity: 0.762,
-    ruleScale: 0.7060000000000001
   });
+  assert.equal(approaching.phase, "approach");
+  assert.equal(approaching.travel, 0);
+  assert.ok(approaching.salience > 0);
+  assert.ok(approaching.salience < 1);
+
+  const passed = projectKpTwoColumnScrollParagraph({
+    paragraphTopPx: 80,
+    paragraphBottomPx: 160,
+    previousParagraphTopPx: -160,
+    focusTopPx: 280,
+    viewportHeightPx: 800
+  });
+  assert.equal(passed.phase, "passed");
+  assert.equal(passed.travel, 1);
+  assert.equal(passed.salience, 0);
+  assert.equal(passed.opacity, 0.32);
 });
 
 test("paragraph salience hands off after predecessor settlement", () => {
   const settled = projectKpTwoColumnScrollSequence({
-    paragraphTopPx: [128, 376, 650],
-    dividerTopPx: 128,
+    paragraphTopPx: [280, 700, 1000],
+    paragraphBottomPx: [360, 780, 1080],
+    focusTopPx: 280,
     viewportHeightPx: 800
   });
   assert.equal(settled.attentionIndex, 0);
@@ -90,30 +141,27 @@ test("paragraph salience hands off after predecessor settlement", () => {
   ]);
 
   const handoff = projectKpTwoColumnScrollSequence({
-    paragraphTopPx: [108, 356, 630],
-    dividerTopPx: 128,
+    paragraphTopPx: [200, 400, 800],
+    paragraphBottomPx: [280, 480, 880],
+    focusTopPx: 280,
     viewportHeightPx: 800
   });
-  assert.equal(handoff.attentionIndex, 0);
-  assert.deepEqual(handoff.paragraphs.map(({ opacity }) => opacity), [
-    0.89375, 0.6599999999999999, 0.32
-  ]);
+  assert.equal(handoff.attentionIndex, 1);
+  assert.ok(handoff.paragraphs[0]!.opacity < handoff.paragraphs[1]!.opacity);
 
   const focused = projectKpTwoColumnScrollSequence({
-    paragraphTopPx: [88, 336, 610],
-    dividerTopPx: 128,
+    paragraphTopPx: [160, 280, 700],
+    paragraphBottomPx: [240, 360, 780],
+    focusTopPx: 280,
     viewportHeightPx: 800
   });
   assert.equal(focused.attentionIndex, 1);
   assert.deepEqual(focused.paragraphs.map(({ ownsAttention }) => ownsAttention), [
     false, true, false
   ]);
-  assert.deepEqual(focused.paragraphs.map(({ ruleScale }) => ruleScale), [
-    0.58, 1, 0.16
-  ]);
 });
 
-test("two-column motion begins after focus and completes at the divider", () => {
+test("two-column motion begins after focus and completes at 35vh", () => {
   const corridor = projectKpTwoColumnScrollMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -128,12 +176,12 @@ test("two-column motion begins after focus and completes at the divider", () => 
       ]
     },
     paragraphDistancePx: 248,
-    dividerTopPx: 128,
+    focusTopPx: 280,
     viewportHeightPx: 800
   });
 
-  assert.equal(corridor.startViewportRatio, 0.42);
-  assert.equal(corridor.endViewportRatio, 0.16);
+  assert.equal(corridor.startViewportRatio, 0.62);
+  assert.equal(corridor.endViewportRatio, 0.35);
   assert.deepEqual(corridor.keyframes, [
     { travel: 0, progress: 0 },
     { travel: 0.5375, progress: 0.72 },
@@ -142,23 +190,23 @@ test("two-column motion begins after focus and completes at the divider", () => 
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 336,
+    anchorTop: 496,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 128,
+    anchorTop: 280,
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
 
   const shortCorridor = projectKpTwoColumnScrollMotionCorridor({
     corridor,
     paragraphDistancePx: 160,
-    dividerTopPx: 128,
+    focusTopPx: 280,
     viewportHeightPx: 800
   });
-  assert.equal(shortCorridor.startViewportRatio, 0.36);
-  assert.equal(shortCorridor.endViewportRatio, 0.16);
+  assert.equal(shortCorridor.startViewportRatio, 0.55);
+  assert.equal(shortCorridor.endViewportRatio, 0.35);
 });
 
 test("economics theme is explicit, reversible, and preserves other query state", () => {

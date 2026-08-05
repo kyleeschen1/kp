@@ -2,8 +2,9 @@
   "id": "next-action.kp.s-expression-material-choreography-v0",
   "kind": "next-action",
   "title": "Perfect S-expression material choreography",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.programming",
+  "summary": "User prioritized the approved economics runtime and scroll repair tranche; preserve the remaining Lisp visual refinement work without adding evidence to its broad task record.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -782,6 +783,9 @@
     "state": "partial",
     "summary": "The project owner approved the exact 27-slice proposal; typed run-contract v1 is active with a mandatory slice-25 visual checkpoint and the botanical renderer retained as rollback."
   },
+  "revisitWhen": [
+    "The economics runtime and scroll exemplar reaches its human checkpoint and the user explicitly resumes the Lisp tranche."
+  ],
   "expectedLearning": [
     "Whether code-native S-expression material can make recursive structure, lexical binding, and evaluation legible without a detached metaphor.",
     "Whether the canonical grammar generalizes to repeated variable propagation without renderer special-casing."

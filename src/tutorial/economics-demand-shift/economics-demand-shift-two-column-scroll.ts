@@ -15,27 +15,39 @@ export const kpEconomicsTwoColumnParagraphs:
       id: "graph-at-rest",
       role: "regular",
       sourceText:
-        "Begin with the graph at rest. Price, $P$, is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls. Their shared point is the initial market-clearing state, $E_0=(6,8)$."
+        "Begin with the graph at rest. Price, $P$, is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls."
+    }),
+    card({
+      id: "initial-equilibrium",
+      role: "interpretation",
+      sourceText:
+        "The two schedules meet at $E_0=(6,8)$. This point is equilibrium because buyers and sellers choose the same quantity at the same price."
     }),
     card({
       id: "follow-shift",
       role: "transition",
       motionBlockId: "demand-shift",
       sourceText:
-        "Now suppose strawberries become more desirable while supply remains fixed. Watch the red demand curve and the intersection it determines with blue $S$. As this paragraph approaches the top, demand shifts from $D_0$ to $D_1$, and equilibrium follows the changing intersection."
+        "Hold blue $S$ fixed. Follow red demand and its intersection with supply as $D_0$ shifts to $D_1$."
     }),
     card({
       id: "new-equilibrium",
       role: "interpretation",
       sourceText:
-        "The completed shift carries the intersection up and to the right. At the old price of $8$, quantity demanded now exceeds quantity supplied. A higher price reduces quantity demanded along $D_1$ and increases quantity supplied along unchanged $S$, until the market clears at $E_1=(8,10)$."
+        "The curves now meet at $E_1=(8,10)$, above and to the right of $E_0$. Both equilibrium price and equilibrium quantity are higher."
     }),
     card({
       id: "shift-versus-movement",
       role: "transition",
       motionBlockId: "supply-movement",
       sourceText:
-        "Hold the completed graph in view and look now at the blue supply curve. Its relationship is still $P=2+Q$; it did not shift when demand changed. As this paragraph approaches the top, the trace moves from $E_0$ to $E_1$ along that same curve. This is movement along supply, not a shift of supply."
+        "Now ignore red demand and watch blue $S$. Follow the trace from $E_0$ to $E_1$ without changing the curve itself."
+    }),
+    card({
+      id: "movement-along-supply",
+      role: "interpretation",
+      sourceText:
+        "Sellers supply more because the higher clearing price selects a new point on unchanged $S$. Quantity supplied moved; the supply curve did not shift."
     })
   ]);
 

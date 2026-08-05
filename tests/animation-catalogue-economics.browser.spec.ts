@@ -85,7 +85,7 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   await expect(graph.locator("[data-kp-economics-equilibrium-view]"))
     .toHaveAttribute("data-kp-economics-display-precision", "2");
   await expect(graph.locator("[data-kp-economics-equilibrium-point]"))
-    .toHaveAttribute("r", "4.5");
+    .toHaveAttribute("r", "3");
   await expect(graph.locator("text")).toHaveCount(0);
   await expect(graph.locator("#kp-economics-graph-description"))
     .toContainText("current equilibrium is quantity 6 and price 8");

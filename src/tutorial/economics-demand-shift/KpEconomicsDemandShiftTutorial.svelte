@@ -39,10 +39,16 @@
     projectKpInlineStickyParagraphMotionCorridor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
+    writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
+    type KpEconomicsTwoColumnTextSide,
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
+  import {
+    projectKpEconomicsGraphStrokeWidths,
+    writeKpEconomicsGraphStrokeScale
+  } from "./economics-demand-shift-graph-style.ts";
   import {
     kpEconomicsTwoColumnParagraphs
   } from "./economics-demand-shift-two-column-scroll.ts";
@@ -74,6 +80,16 @@
     type KpTutorialScrubBarElement,
     type KpTutorialScrubSeekDetail
   } from "../kp-tutorial-scrub-bar.ts";
+  import {
+    graphStrokeScaleSummary,
+    KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
+    kpGraphStrokeScaleMaximum,
+    kpGraphStrokeScaleMinimum,
+    kpGraphStrokeScaleStep,
+    normalizeKpGraphStrokeScale,
+    type KpGraphStyleTunerChangeDetail,
+    type KpGraphStyleTunerElement
+  } from "../kp-graph-style-tuner.ts";
   import type {
     KpTutorialTocElement
   } from "../kp-tutorial-toc-element.ts";
@@ -127,7 +143,14 @@
   interface KpEconomicsTwoColumnParagraphPresentation {
     readonly opacity: number;
     readonly salience: number;
-    readonly ruleScale: number;
+  }
+
+  interface KpEconomicsTwoColumnScrollGeometry {
+    readonly approachStartRatio: number;
+    readonly focusBottomRatio: number;
+    readonly focusTopRatio: number;
+    readonly minimumEffectiveHeightRatio: number;
+    readonly motionStartRatio: number;
   }
 
   let {
@@ -137,7 +160,9 @@
     animation,
     hostability,
     initialDemandIntercept,
+    initialGraphStrokeScale,
     initialTheme,
+    initialTwoColumnTextSide,
     initialDestination,
     presentationLayout,
     lesson,
@@ -151,7 +176,9 @@
     readonly animation: KpAnimationAsset;
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
+    readonly initialGraphStrokeScale: number;
     readonly initialTheme: KpEconomicsDemandShiftTheme;
+    readonly initialTwoColumnTextSide: KpEconomicsTwoColumnTextSide;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
     readonly lesson: KpEconomicsDemandShiftLesson;
@@ -177,13 +204,18 @@
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
+  let graphStyleTuner = $state<KpGraphStyleTunerElement | undefined>();
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(initialDeepLink.checkpointIndex);
   let progress = $state(initial.progress);
   let playbackStatus = $state(initial.playbackStatus);
   let playbackDirection = $state(initial.playbackDirection);
   let demandIntercept = $state(initial.demandIntercept);
+  let graphStrokeScale = $state(
+    untrack(() => normalizeKpGraphStrokeScale(initialGraphStrokeScale))
+  );
   let theme = $state(untrack(() => initialTheme));
+  let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
   let ready = $state(false);
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
@@ -335,6 +367,16 @@
     `--kp-verification-equilibria-clip:${percent(1 - verificationReveal.groups.equilibria)};` +
     `--kp-verification-changes:${verificationReveal.groups.changes.toFixed(3)};` +
     `--kp-verification-changes-clip:${percent(1 - verificationReveal.groups.changes)}`
+  );
+  let graphStrokeWidths = $derived(
+    projectKpEconomicsGraphStrokeWidths(graphStrokeScale)
+  );
+  let graphStrokeStyle = $derived(
+    `--kp-graph-stroke-scale:${graphStrokeScale.toFixed(2)};` +
+    `--kp-graph-tuned-dark-stroke-width:${graphStrokeWidths.darkPx}px;` +
+    `--kp-graph-tuned-dark-ghost-core-width:${graphStrokeWidths.darkGhostCorePx}px;` +
+    `--kp-graph-tuned-light-stroke-width:${graphStrokeWidths.lightPx}px;` +
+    `--kp-graph-tuned-light-ghost-core-width:${graphStrokeWidths.lightGhostCorePx}px`
   );
   let supplyInterpretationPhase = $derived(
     supplyMovementProgress <= 0.001
@@ -605,6 +647,24 @@
     announcement = `${theme === "dark" ? "Dark" : "Light"} theme enabled.`;
   }
 
+  function handleGraphStyleTunerChange(event: Event): void {
+    if (!(event instanceof CustomEvent)) return;
+    const detail = event.detail as KpGraphStyleTunerChangeDetail | undefined;
+    if (detail === undefined) return;
+    graphStrokeScale = normalizeKpGraphStrokeScale(detail.strokeScale);
+    const search = writeKpEconomicsGraphStrokeScale({
+      search: window.location.search,
+      scale: graphStrokeScale
+    });
+    // Tuning is reversible presentation state, not a new semantic location.
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
+    );
+    announcement = `Graph lines set to ${graphStrokeScale.toFixed(2)} times the default.`;
+  }
+
   function handleFrame(event: Event): void {
     if (
       !(event instanceof CustomEvent) ||
@@ -624,7 +684,9 @@
       playbackStatus =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
-    if (scrollActiveMotionBlock !== "supply-movement") {
+    // The player reports demand-curve paint progress. Once lesson authority has
+    // handed off to supply interpretation, a seek must not demote that state.
+    if (lessonMotionProjection.activeBlockId === "demand-shift") {
       lessonMotionProjection = projectKpEconomicsLessonMotion({
         activeBlockId: "demand-shift",
         localProgress: playbackDirection === "rewind" ? 1 - progress : progress
@@ -742,6 +804,7 @@
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
+    const previousAttentionPassageId = attentionPassageId;
     const tutorialAttention = scrollPassageLayout &&
         inlineStickyFit !== "reading" &&
         inlineStickyStageState === "pinned"
@@ -783,9 +846,15 @@
     const activeScrubBar = active?.id === "supply-movement"
       ? supplyScrubBar
       : demandScrubBar;
+    // Two-column prose is the sole state authority, including layout-only
+    // frames that arrive after the scroll coordinator consumed its changed flag.
     if (
       active === undefined &&
-      projection.scrollChanged &&
+      (
+        twoColumnScroll ||
+        projection.scrollChanged ||
+        tutorialAttention.activePassageId !== previousAttentionPassageId
+      ) &&
       !navigationProjectionPending &&
       tutorialAttention.activePassageId !== undefined
     ) {
@@ -867,6 +936,16 @@
       return;
     }
     if (twoColumnScroll && passageId === "shift-versus-movement") {
+      settleMotionBoundary({
+        activeBlockId: "supply-movement",
+        localProgress: 1
+      });
+      return;
+    }
+    if (twoColumnScroll && passageId === "movement-along-supply") {
+      // This two-column-only interpretation follows the supply motion but is
+      // absent from the canonical Markdown order. Give it the settled frame
+      // explicitly so leaving the sticky corridor cannot snap at reflection.
       settleMotionBoundary({
         activeBlockId: "supply-movement",
         localProgress: 1
@@ -1011,13 +1090,25 @@
         paragraphBounds: paragraph.getBoundingClientRect()
       };
     });
+    const twoColumnGeometry = usesTwoColumnDesktopGeometry()
+      ? readTwoColumnScrollGeometry()
+      : undefined;
     const sequence = usesTwoColumnDesktopGeometry()
       ? projectKpTwoColumnScrollSequence({
           paragraphTopPx: measurements.map(
             ({ paragraphBounds }) => paragraphBounds.top
           ),
-          dividerTopPx: stageBounds.top,
-          viewportHeightPx: window.innerHeight
+          paragraphBottomPx: measurements.map(
+            ({ paragraphBounds }) => paragraphBounds.bottom
+          ),
+          focusTopPx:
+            window.innerHeight * twoColumnGeometry!.focusTopRatio,
+          viewportHeightPx: window.innerHeight,
+          approachStartRatio: twoColumnGeometry!.approachStartRatio,
+          focusBottomRatio: twoColumnGeometry!.focusBottomRatio,
+          minimumEffectiveHeightRatio:
+            twoColumnGeometry!.minimumEffectiveHeightRatio,
+          motionStartRatio: twoColumnGeometry!.motionStartRatio
         })
       : undefined;
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
@@ -1055,8 +1146,7 @@
     twoColumnParagraphPresentations = Object.freeze(Object.fromEntries(frames.map(
       ({ passageId, opacity }, index) => [passageId, Object.freeze({
         opacity,
-        salience: sequence?.paragraphs[index]?.salience ?? 1,
-        ruleScale: sequence?.paragraphs[index]?.ruleScale ?? 1
+        salience: sequence?.paragraphs[index]?.salience ?? 1
       })]
     )));
     return Object.freeze(frames);
@@ -1112,6 +1202,9 @@
   }
 
   function inlineStickyHandoffStartY(): number {
+    if (usesTwoColumnDesktopGeometry()) {
+      return window.innerHeight * readTwoColumnScrollGeometry().focusTopRatio;
+    }
     const stageBottom = inlineStage?.getBoundingClientRect().bottom ??
       inlineStickyTopInset() + inlineStickyStageHeightPx;
     return stageBottom;
@@ -1139,9 +1232,10 @@
       return projectKpTwoColumnScrollMotionCorridor({
         corridor: block.corridor,
         paragraphDistancePx,
-        dividerTopPx: inlineStage?.getBoundingClientRect().top ??
-          inlineStickyTopInset(),
-        viewportHeightPx: window.innerHeight
+        focusTopPx:
+          window.innerHeight * readTwoColumnScrollGeometry().focusTopRatio,
+        viewportHeightPx: window.innerHeight,
+        motionStartRatio: readTwoColumnScrollGeometry().motionStartRatio
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1157,6 +1251,26 @@
     return twoColumnScroll && window.matchMedia(
       "(min-width: 60rem) and (min-height: 32rem)"
     ).matches;
+  }
+
+  function readTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
+    const style = shell === undefined ? undefined : getComputedStyle(shell);
+    const ratio = (name: string, fallbackVh: number): number => {
+      const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
+      return clamp((Number.isFinite(value) ? value : fallbackVh) / 100, 0, 1);
+    };
+    // CSS owns the physical rhythm; enhancement reads the same numeric vh
+    // tokens so scroll semantics cannot drift from the published layout.
+    return Object.freeze({
+      approachStartRatio: ratio("--kp-two-column-approach-start-vh", 78),
+      focusBottomRatio: ratio("--kp-two-column-focus-bottom-vh", 50),
+      focusTopRatio: ratio("--kp-two-column-focus-top-vh", 35),
+      minimumEffectiveHeightRatio: ratio(
+        "--kp-two-column-minimum-effective-height-vh",
+        23
+      ),
+      motionStartRatio: ratio("--kp-two-column-motion-start-vh", 62)
+    });
   }
 
   function updateReadingBandSelection(
@@ -1250,6 +1364,13 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
+    graphStyleTuner = shell.querySelector<KpGraphStyleTunerElement>(
+      "kp-graph-style-tuner"
+    ) ?? undefined;
+    graphStyleTuner?.addEventListener(
+      KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
+      handleGraphStyleTunerChange
+    );
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -1372,6 +1493,10 @@
         handleScrubBarSeek
       );
     }
+    graphStyleTuner?.removeEventListener(
+      KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
+      handleGraphStyleTunerChange
+    );
     window.removeEventListener("keydown", handleTutorialKeydown);
     window.removeEventListener("wheel", handleNavigationScrollIntent);
     window.removeEventListener("touchmove", handleNavigationScrollIntent);
@@ -1390,6 +1515,22 @@
 
   function percent(value: number): string {
     return `${(value * 100).toFixed(4)}%`;
+  }
+
+  function toggleTwoColumnTextSide(): void {
+    const nextSide = twoColumnTextSide === "right" ? "left" : "right";
+    twoColumnTextSide = nextSide;
+    const search = writeKpEconomicsTwoColumnTextSide({
+      search: window.location.search,
+      side: nextSide
+    });
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
+    );
+    announcement = `Text moved to the ${nextSide} of the graph.`;
+    scrollCoordinator?.scheduleProjection();
   }
 
   function scrollToSemanticDestination(
@@ -1537,6 +1678,7 @@
       data-kp-animation-catalogue-stage-persistent="true"
       data-kp-economics-stage="economics-stage"
       data-kp-economics-stage-outer-geometry="fixed"
+      data-kp-economics-screen-space-labels={scrollPassageLayout ? "true" : undefined}
       aria-busy={!ready}
     >
       {@html playerHtml}
@@ -1592,7 +1734,6 @@
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
     data-kp-two-column-paragraph-opacity={twoColumnParagraphPresentation?.opacity.toFixed(4)}
     data-kp-two-column-paragraph-salience={twoColumnParagraphPresentation?.salience.toFixed(4)}
-    data-kp-two-column-rule-scale={twoColumnParagraphPresentation?.ruleScale.toFixed(4)}
     data-kp-tutorial-motion-block={renderedMotionBlock?.id}
     id={renderedMotionBlock === undefined
       ? undefined
@@ -1607,7 +1748,7 @@
       : `${renderedMotionBlock.label} animation step`}
     style={twoColumnParagraphPresentation === undefined
       ? undefined
-      : `--kp-two-column-paragraph-opacity:${twoColumnParagraphPresentation.opacity};--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience};--kp-two-column-rule-scale:${twoColumnParagraphPresentation.ruleScale}`
+      : `--kp-two-column-paragraph-opacity:${twoColumnParagraphPresentation.opacity};--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
     }
   >
     {#if renderedMotionBlock !== undefined}
@@ -1638,7 +1779,7 @@
       </details>
     {:else}
       {#each passage.paragraphs as paragraph}
-        <p>{@html paragraph.html}</p>
+        <p><span class="kp-economics-tutorial__passage-ink">{@html paragraph.html}</span></p>
       {/each}
     {/if}
     {#if !scrollPassageLayout && renderedMotionBlock?.id === "demand-shift"}
@@ -1688,6 +1829,8 @@
   attributes={{
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
+    "data-kp-economics-two-column-text-side": twoColumnTextSide,
+    "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),
     "data-kp-economics-tutorial-theme": theme,
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
@@ -1727,11 +1870,17 @@
     "data-kp-tutorial-review-playback-direction": lessonMotionProjection.activeBlockId === "supply-movement"
       ? supplyPlaybackDirection
       : playbackDirection,
-    "data-kp-tutorial-review-evidence": JSON.stringify({
-      themeId: kpEconomicsDemandShiftThemeIds[theme]
-    })
+    "data-kp-tutorial-review-evidence": JSON.stringify(
+      twoColumnScroll
+        ? {
+            themeId: kpEconomicsDemandShiftThemeIds[theme],
+            twoColumnTextSide,
+            graphStrokeScale
+          }
+        : { themeId: kpEconomicsDemandShiftThemeIds[theme] }
+    )
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle}`}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle}`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
@@ -1771,10 +1920,12 @@
               class="kp-economics-tutorial__motion-passage"
               data-kp-motion-passage="demand-change"
             >
-              <header class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--entrance">
-                <p>A change in demand</p>
-                <span aria-hidden="true">↓</span>
-              </header>
+              {#if !twoColumnScroll}
+                <header class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--entrance">
+                  <p>A change in demand</p>
+                  <span aria-hidden="true">↓</span>
+                </header>
+              {/if}
               <div class="kp-economics-tutorial__motion-passage-body">
                 <aside
                   bind:this={inlineStage}
@@ -1810,19 +1961,6 @@
 
       <footer class="kp-economics-tutorial__footer">
         <a href={`/?artifact=${entry.animationId}`}>Open the animation catalogue</a>
-        <button
-          class="kp-economics-tutorial__theme-toggle"
-          type="button"
-          aria-label="Dark mode"
-          aria-pressed={theme === "dark"}
-          data-kp-economics-theme-toggle
-          onclick={toggleTheme}
-        >
-          <span class="kp-economics-tutorial__theme-toggle-track" aria-hidden="true">
-            <span class="kp-economics-tutorial__theme-toggle-thumb"></span>
-          </span>
-          <span>Dark mode</span>
-        </button>
       </footer>
   {/snippet}
 
@@ -1836,5 +1974,57 @@
   <p class="kp-economics-tutorial__announcement" aria-live="polite">
     {announcement}
   </p>
+  <div class="kp-economics-tutorial__bottom-controls">
+    {#if twoColumnScroll}
+      <button
+        class="kp-economics-tutorial__column-toggle"
+        type="button"
+        aria-label={`Text is on the ${twoColumnTextSide}; move it to the ${twoColumnTextSide === "right" ? "left" : "right"}`}
+        aria-pressed={twoColumnTextSide === "left"}
+        data-kp-economics-column-toggle
+        onclick={toggleTwoColumnTextSide}
+      >
+        <span aria-hidden="true">⇄</span>
+        <span>Text {twoColumnTextSide}</span>
+      </button>
+      <kp-graph-style-tuner
+        stroke-scale={graphStrokeScale.toFixed(2)}
+        data-kp-economics-graph-style-tuner
+      >
+        <details class="kp-economics-tutorial__line-tuner">
+          <summary>Lines</summary>
+          <div class="kp-economics-tutorial__line-tuner-panel">
+            <label for="kp-economics-line-width">Stroke multiplier</label>
+            <input
+              id="kp-economics-line-width"
+              type="range"
+              min={kpGraphStrokeScaleMinimum}
+              max={kpGraphStrokeScaleMaximum}
+              step={kpGraphStrokeScaleStep}
+              value={graphStrokeScale.toFixed(2)}
+              data-kp-graph-style-tuner-stroke
+            />
+            <output
+              for="kp-economics-line-width"
+              data-kp-graph-style-tuner-output
+            >{graphStrokeScaleSummary(graphStrokeScale)}</output>
+          </div>
+        </details>
+      </kp-graph-style-tuner>
+    {/if}
+    <button
+      class="kp-economics-tutorial__theme-toggle"
+      type="button"
+      aria-label="Dark mode"
+      aria-pressed={theme === "dark"}
+      data-kp-economics-theme-toggle
+      onclick={toggleTheme}
+    >
+      <span class="kp-economics-tutorial__theme-toggle-track" aria-hidden="true">
+        <span class="kp-economics-tutorial__theme-toggle-thumb"></span>
+      </span>
+      <span>Dark mode</span>
+    </button>
+  </div>
   {/snippet}
 </KpTutorialLessonShell>

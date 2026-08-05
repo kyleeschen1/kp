@@ -27,11 +27,16 @@ import {
   resolveKpEconomicsDemandShiftInitialDestination
 } from "./economics-demand-shift-deep-link.ts";
 import {
-  readKpEconomicsDemandShiftPresentationLayout
+  readKpEconomicsDemandShiftPresentationLayout,
+  readKpEconomicsTwoColumnTextSide
 } from "./economics-demand-shift-layout.ts";
 import {
   readKpEconomicsDemandShiftTheme
 } from "./economics-demand-shift-theme.ts";
+import {
+  readKpEconomicsGraphStrokeScale
+} from "./economics-demand-shift-graph-style.ts";
+import { defineKpGraphStyleTuner } from "../kp-graph-style-tuner.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
@@ -46,6 +51,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
     "kpLessonTheme"
   ];
   document.documentElement.dataset["kpLessonTheme"] = initialTheme;
+  defineKpGraphStyleTuner();
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
   const descriptors = createKpEditorAnimationLibrary();
@@ -84,6 +90,8 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
         input.search
       ),
+      initialTwoColumnTextSide: readKpEconomicsTwoColumnTextSide(input.search),
+      initialGraphStrokeScale: readKpEconomicsGraphStrokeScale(input.search),
       initialTheme,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18

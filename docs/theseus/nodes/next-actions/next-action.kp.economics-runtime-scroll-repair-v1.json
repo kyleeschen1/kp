@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.economics-runtime-scroll-repair-v1",
+  "kind": "next-action",
+  "title": "Repair economics SVG runtime and scroll projection",
+  "status": "ready",
+  "domain": "economics",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.essay-embedded-two-column-motion-passage"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "Run each slice's focused economics unit or browser checks from the approved review.",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether persistent SVG ownership and cached local-anchor projection materially reduce DOM churn and layout reads without weakening exact seek, accessibility, or authoring ergonomics."
+  ],
+  "allowedWork": [
+    "Only approved Phases 1-4 of the economics runtime and scroll repair review, their focused tests, internal tuning, typography, project memory, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not enter route/CSS consolidation, shared Graph2D or Graph3D promotion, another lesson caller, Lisp completion, matrix work, SvelteKit, Public Web, or unrelated cleanup."
+  ],
+  "criteria": [
+    {
+      "id": "persistent-svg-node-identity",
+      "weight": "high"
+    },
+    {
+      "id": "cached-local-anchor-projection",
+      "weight": "high"
+    },
+    {
+      "id": "exact-reversible-semantics",
+      "weight": "high"
+    },
+    {
+      "id": "spacing-and-font-review-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

@@ -9,6 +9,12 @@ owns semantic progress, so explicit scene tracks and the cue fade gate no
 longer apply. The economics stroke trial is also revised to keep structural
 lines at `1px`, use `1.5px` curves, and retain the half-width grid.
 
+The remaining variable stroke hierarchy was superseded by
+`2026-08-04-kp-two-column-natural-graph-and-uniform-strokes.md`: the economics
+profile now derives curves, guides, traces, and grid lines directly from the
+canonical `1px` axis width. Its semantic-scene and style-preserving ghost
+rationale remains historical evidence.
+
 ## Decision
 
 Refine the query-selected economics proof at

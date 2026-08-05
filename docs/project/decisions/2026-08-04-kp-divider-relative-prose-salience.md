@@ -1,7 +1,12 @@
 # Use Divider-Relative Prose Salience In The Two-Column Proof
 
 Date: 2026-08-04
-Status: accepted for bounded discovery
+Status: superseded for the next iteration
+
+Superseded by `2026-08-04-kp-two-column-next-loop-visual-correction.md`. This
+file remains the historical rationale for the bare-paragraph comparison, but
+its animated paragraph rail, width-filling square, and missing column divider
+are no longer accepted targets.
 
 ## Decision
 

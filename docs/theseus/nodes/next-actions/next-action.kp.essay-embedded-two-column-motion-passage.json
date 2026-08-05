@@ -1,0 +1,50 @@
+{
+  "id": "next-action.kp.essay-embedded-two-column-motion-passage",
+  "kind": "next-action",
+  "title": "Refine the economics essay-embedded two-column motion passage",
+  "status": "resolved",
+  "domain": "tutorial-explanation",
+  "summary": "Economics essay-embedded two-column exemplar delivered; stop at human visual review before generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-04-kp-essay-embedded-two-column-motion-passage.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T05:32:45.945Z"
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T05:32:47.193Z"
+    },
+    {
+      "command": "npm run visual:economics-inline-sticky-poc",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T05:32:48.234Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T05:32:49.449Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-05T05:32:50.559Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "All 3/3 approved slices implemented and verified; economics exemplar is ready for the named human visual checkpoint, with no shared-shell or motif promotion."
+  }
+}
