@@ -143,7 +143,8 @@
     {
       "id": "s15",
       "title": "Build-one-three-and-twelve-passage-fixtures",
-      "status": "planned"
+      "summary": "Added deterministic 1/3/12 passage fixtures with stable geometry, centered focus, bounded live windows, exact state, reusable graph capabilities, static alternatives, and framework-neutral source gates.",
+      "status": "complete"
     },
     {
       "id": "s16",
