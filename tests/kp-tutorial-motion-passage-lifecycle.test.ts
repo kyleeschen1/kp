@@ -12,7 +12,8 @@ import {
 import {
   projectKpTutorialUsableViewport,
   projectKpTutorialViewportAnchors,
-  projectKpTutorialSynchronizedLatch
+  projectKpTutorialSynchronizedLatch,
+  projectKpTutorialStageAssembly
 } from "../src/tutorial/kp-tutorial-usable-viewport.ts";
 
 test("the lifecycle contract remains framework and renderer neutral", async () => {
@@ -366,6 +367,36 @@ test("synchronized latch rejects a stage that cannot fit", () => {
     anchors: projectKpTutorialViewportAnchors({ viewport }),
     stageBlockSizePx: 480
   }), /does not fit inside/);
+});
+
+test("stage divider and horizontal boundary retain one local assembly", () => {
+  const viewport = projectKpTutorialUsableViewport({ viewportHeightPx: 800 });
+  const anchors = projectKpTutorialViewportAnchors({ viewport });
+  const latch = projectKpTutorialSynchronizedLatch({
+    viewport,
+    anchors,
+    stageBlockSizePx: 480
+  });
+  assert.deepEqual(projectKpTutorialStageAssembly({
+    latch,
+    stageBlockSizePx: 480,
+    boundaryGapPx: 20
+  }), {
+    stageTopY: 160,
+    stageBottomY: 640,
+    dividerTopY: 160,
+    dividerBottomY: 640,
+    horizontalBoundaryY: 660,
+    horizontalBoundaryOffsetFromStageTopPx: 500
+  });
+
+  const shifted = projectKpTutorialStageAssembly({
+    latch: { ...latch, stageTopY: 180 },
+    stageBlockSizePx: 480,
+    boundaryGapPx: 20
+  });
+  assert.equal(shifted.dividerBottomY - shifted.dividerTopY, 480);
+  assert.equal(shifted.horizontalBoundaryOffsetFromStageTopPx, 500);
 });
 
 function passage(

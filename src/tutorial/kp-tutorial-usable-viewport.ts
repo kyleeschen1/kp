@@ -19,6 +19,15 @@ export interface KpTutorialSynchronizedLatchProjection {
   readonly textDocumentOffsetFromStagePx: number;
 }
 
+export interface KpTutorialStageAssemblyProjection {
+  readonly stageTopY: number;
+  readonly stageBottomY: number;
+  readonly dividerTopY: number;
+  readonly dividerBottomY: number;
+  readonly horizontalBoundaryY: number;
+  readonly horizontalBoundaryOffsetFromStageTopPx: number;
+}
+
 /**
  * Persistent chrome is removed once from the physical viewport. Every reading
  * and stage anchor can then share this local interval instead of accumulating
@@ -97,6 +106,34 @@ export function projectKpTutorialSynchronizedLatch(input: {
     stageCenterY: input.anchors.stageCenterY,
     textY: input.anchors.textY,
     textDocumentOffsetFromStagePx: input.anchors.textY - stageTop
+  });
+}
+
+export function projectKpTutorialStageAssembly(input: {
+  readonly latch: KpTutorialSynchronizedLatchProjection;
+  readonly stageBlockSizePx: number;
+  readonly boundaryGapPx?: number | undefined;
+}): KpTutorialStageAssemblyProjection {
+  const stageBlockSize = finiteNonNegative(
+    input.stageBlockSizePx,
+    "stage block size"
+  );
+  if (stageBlockSize === 0) {
+    throw new Error("Tutorial stage block size must be positive.");
+  }
+  const boundaryGap = finiteNonNegative(
+    input.boundaryGapPx ?? 0,
+    "stage boundary gap"
+  );
+  const stageBottom = input.latch.stageTopY + stageBlockSize;
+  const horizontalBoundaryOffset = stageBlockSize + boundaryGap;
+  return Object.freeze({
+    stageTopY: input.latch.stageTopY,
+    stageBottomY: stageBottom,
+    dividerTopY: input.latch.stageTopY,
+    dividerBottomY: stageBottom,
+    horizontalBoundaryY: input.latch.stageTopY + horizontalBoundaryOffset,
+    horizontalBoundaryOffsetFromStageTopPx: horizontalBoundaryOffset
   });
 }
 

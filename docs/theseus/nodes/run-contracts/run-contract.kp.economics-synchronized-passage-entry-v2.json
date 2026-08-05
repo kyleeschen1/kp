@@ -91,7 +91,8 @@
     {
       "id": "s07",
       "title": "Model one local stage assembly",
-      "status": "planned"
+      "summary": "Added a local stage assembly projection with invariant divider and boundary spacing.",
+      "status": "complete"
     },
     {
       "id": "s08",
