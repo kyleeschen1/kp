@@ -1,0 +1,22 @@
+.kp-tutorial-motion-stage-reservation {
+  display: grid;
+  block-size: var(--kp-tutorial-motion-stage-block-size);
+  min-block-size: var(--kp-tutorial-motion-stage-block-size);
+  overflow: clip;
+  contain: layout paint style;
+  contain-intrinsic-block-size: var(--kp-tutorial-motion-stage-block-size);
+}
+
+.kp-tutorial-motion-stage-reservation > [data-kp-tutorial-static-stage],
+.kp-tutorial-motion-stage-reservation > [data-kp-tutorial-live-stage] {
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
+.kp-tutorial-motion-stage-reservation > [data-kp-tutorial-static-stage][hidden],
+.kp-tutorial-motion-stage-reservation > [data-kp-tutorial-live-stage][hidden] {
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}

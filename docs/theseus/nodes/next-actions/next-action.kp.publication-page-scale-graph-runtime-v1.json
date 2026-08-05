@@ -1022,11 +1022,47 @@
       "status": "passed",
       "scope": "slice s17 evidence integrity",
       "checkedAt": "2026-08-05T12:51:32.865Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (18/18)",
+      "status": "passed",
+      "scope": "slice s18 stage reservation",
+      "checkedAt": "2026-08-05T12:56:59.846Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "slice s18 types",
+      "checkedAt": "2026-08-05T12:57:00.990Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "slice s18 semantic preservation",
+      "checkedAt": "2026-08-05T12:57:02.009Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 architecture",
+      "checkedAt": "2026-08-05T12:57:02.985Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s18 patch hygiene",
+      "checkedAt": "2026-08-05T12:57:26.444Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17829 events)",
+      "status": "passed",
+      "scope": "slice s18 evidence integrity",
+      "checkedAt": "2026-08-05T12:57:27.637Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s17 makes IntersectionObserver a coarse activation gate while exact progress stays on one rAF clock. Binary-search projection visits at most five registrations, emits at most three live candidates, caches registration identity, and preserves the focused owner through observer lag. Three performance samples retained all active/scale budgets but missed the unchanged volatile cold-start ceiling."
+    "summary": "Slice s18 adds a progressively enhanced stable stage reservation: static and live surfaces overlay in one fixed geometry, hydration and dehydration are ordered to avoid blank frames, failed mounts retain static accessibility, and only terminal disposal releases the reservation."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."

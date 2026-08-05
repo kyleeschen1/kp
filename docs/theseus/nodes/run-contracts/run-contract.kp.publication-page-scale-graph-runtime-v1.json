@@ -161,7 +161,8 @@
     {
       "id": "s18",
       "title": "Reserve-and-dehydrate-stable-stage-geometry",
-      "status": "planned"
+      "summary": "Added stable stage reservation and dehydrate/rehydrate lifecycle with nonblank paint ordering, fixed geometry, accessible static fallback, failure recovery, idempotence, and terminal geometry release.",
+      "status": "complete"
     },
     {
       "id": "s19",
