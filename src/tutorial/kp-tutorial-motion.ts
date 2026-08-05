@@ -77,6 +77,25 @@ export interface KpTutorialScrollBlockRegistration<BlockId extends string> {
   readonly snapTolerance?: number | undefined;
 }
 
+export interface KpTutorialDocumentCueRegistration<CueId extends string> {
+  readonly id: CueId;
+  readonly anchor: HTMLElement;
+}
+
+export interface KpTutorialDocumentCueGeometry<CueId extends string> {
+  readonly id: CueId;
+  readonly anchor: HTMLElement;
+  readonly documentTop: number;
+  readonly documentBottom: number;
+  readonly height: number;
+}
+
+export interface KpTutorialViewportCueGeometry<CueId extends string>
+  extends KpTutorialDocumentCueGeometry<CueId> {
+  readonly viewportTop: number;
+  readonly viewportBottom: number;
+}
+
 export interface KpTutorialCoordinatedScrollProjection<BlockId extends string>
   extends KpTutorialScrollFrameProjection<BlockId> {
   readonly scrollY: number;
@@ -116,6 +135,64 @@ export function projectKpTutorialLocalViewportAnchor(input: {
     viewportY,
     stageTop: viewportY - stageLocalY
   });
+}
+
+/**
+ * Geometry is read only after explicit invalidation, then stored in document
+ * space so ordinary scroll can be projected with scrollY alone.
+ */
+export class KpTutorialDocumentCueGeometryCache<CueId extends string> {
+  private readonly view: Window;
+  private readonly registrations: () =>
+    readonly KpTutorialDocumentCueRegistration<CueId>[];
+  private geometry: readonly KpTutorialDocumentCueGeometry<CueId>[] =
+    Object.freeze([]);
+  private invalidated = true;
+  private reads = 0;
+
+  constructor(
+    view: Window,
+    registrations: () => readonly KpTutorialDocumentCueRegistration<CueId>[]
+  ) {
+    this.view = view;
+    this.registrations = registrations;
+  }
+
+  invalidate(): void {
+    this.invalidated = true;
+  }
+
+  documentGeometry(): readonly KpTutorialDocumentCueGeometry<CueId>[] {
+    if (!this.invalidated) return this.geometry;
+    const scrollY = this.view.scrollY;
+    this.geometry = Object.freeze(this.registrations().map(({ id, anchor }) => {
+      const bounds = anchor.getBoundingClientRect();
+      this.reads += 1;
+      return Object.freeze({
+        id,
+        anchor,
+        documentTop: bounds.top + scrollY,
+        documentBottom: bounds.bottom + scrollY,
+        height: bounds.height
+      });
+    }).sort((left, right) => left.documentTop - right.documentTop));
+    this.invalidated = false;
+    return this.geometry;
+  }
+
+  viewportGeometry(
+    scrollY: number = this.view.scrollY
+  ): readonly KpTutorialViewportCueGeometry<CueId>[] {
+    return Object.freeze(this.documentGeometry().map((geometry) => Object.freeze({
+      ...geometry,
+      viewportTop: geometry.documentTop - scrollY,
+      viewportBottom: geometry.documentBottom - scrollY
+    })));
+  }
+
+  measurementReads(): number {
+    return this.reads;
+  }
 }
 
 export function projectKpTutorialCumulativeMotion<BlockId extends string>(input: {

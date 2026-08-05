@@ -4,6 +4,7 @@ import test from "node:test";
 import { kpEconomicsMotionBlocks } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import { kpLispLessonMotionBlocks } from "../src/tutorial/lisp-function-application/lisp-function-application-motion-blocks.ts";
 import {
+  KpTutorialDocumentCueGeometryCache,
   KpTutorialScrollCoordinator,
   projectKpTutorialCorridorTravel,
   projectKpTutorialCumulativeMotion,
@@ -33,6 +34,45 @@ test("a stable stage-local anchor maps to a responsive viewport line", () => {
     viewportY: 252,
     stageTop: 92
   });
+});
+
+test("cue geometry is measured once in document space until invalidated", () => {
+  let scrollY = 120;
+  let layoutReads = 0;
+  const view = { get scrollY() { return scrollY; } } as Window;
+  const anchor = {
+    getBoundingClientRect: () => {
+      layoutReads += 1;
+      return { top: 80, bottom: 128, height: 48 } as DOMRect;
+    }
+  } as HTMLElement;
+  const cache = new KpTutorialDocumentCueGeometryCache(
+    view,
+    () => [{ id: "cue", anchor }]
+  );
+
+  assert.deepEqual(cache.viewportGeometry().map((geometry) => ({
+    id: geometry.id,
+    documentTop: geometry.documentTop,
+    documentBottom: geometry.documentBottom,
+    viewportTop: geometry.viewportTop,
+    viewportBottom: geometry.viewportBottom
+  })), [{
+    id: "cue",
+    documentTop: 200,
+    documentBottom: 248,
+    viewportTop: 80,
+    viewportBottom: 128
+  }]);
+  scrollY = 170;
+  assert.equal(cache.viewportGeometry()[0]!.viewportTop, 30);
+  assert.equal(layoutReads, 1);
+  assert.equal(cache.measurementReads(), 1);
+
+  cache.invalidate();
+  assert.equal(cache.viewportGeometry()[0]!.documentTop, 250);
+  assert.equal(layoutReads, 2);
+  assert.equal(cache.measurementReads(), 2);
 });
 
 test("cumulative projection obeys the same predecessor law for both callers", () => {

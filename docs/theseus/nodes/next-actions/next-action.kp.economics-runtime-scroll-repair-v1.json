@@ -333,6 +333,13 @@
       "scope": "s14 anchor API contracts",
       "checkedAt": "2026-08-05T08:09:33.042Z",
       "notes": "Passed application, node, test, Svelte, and domain typechecks."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-motion.test.ts",
+      "status": "passed",
+      "scope": "s15 cached document-space cue geometry",
+      "checkedAt": "2026-08-05T08:11:30.901Z",
+      "notes": "Passed 7 tests; one layout read establishes document geometry, scrollY reprojects viewport position without another read, and explicit invalidation remeasures."
     }
   ],
   "expectedLearning": [

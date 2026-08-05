@@ -156,7 +156,8 @@
     {
       "id": "s15",
       "title": "Cache-document-space-cue-geometry",
-      "status": "planned"
+      "summary": "Added an invalidation-owned document-space cue cache that measures each anchor once and reprojects viewport coordinates from scrollY without ordinary-scroll layout reads.",
+      "status": "complete"
     },
     {
       "id": "s16",
