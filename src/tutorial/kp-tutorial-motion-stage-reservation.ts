@@ -4,7 +4,9 @@ export const kpTutorialMotionStageBlockSizeProperty =
   "--kp-tutorial-motion-stage-block-size";
 
 export interface KpTutorialMotionStageSession {
+  applySemanticProgress(progress: number): void;
   pause(): void;
+  resume(): void;
   dispose(): void;
 }
 
@@ -22,6 +24,7 @@ export class KpTutorialMotionStageReservationHost {
   private readonly staticSurface: HTMLElement;
   private readonly liveSurface: HTMLElement;
   private session: KpTutorialMotionStageSession | undefined;
+  private motionActive = false;
   private state: KpTutorialMotionStageReservationState = "dehydrated";
 
   constructor(input: {
@@ -64,17 +67,22 @@ export class KpTutorialMotionStageReservationHost {
   ): KpTutorialMotionStageSession {
     this.assertPresent();
     if (this.session !== undefined) return this.session;
-    let session: KpTutorialMotionStageSession;
+    let session: KpTutorialMotionStageSession | undefined;
     try {
       session = mount(this.liveSurface);
       assertSession(session);
+      session.pause();
     } catch (error) {
+      if (session !== undefined && typeof session.dispose === "function") {
+        try { session.dispose(); } catch { /* Preserve the mount failure. */ }
+      }
       this.liveSurface.replaceChildren();
       this.liveSurface.hidden = true;
       this.liveSurface.setAttribute("aria-hidden", "true");
       throw error;
     }
     this.session = session;
+    this.motionActive = false;
     // Reveal mounted paint before hiding the static surface so there is no blank frame.
     this.liveSurface.hidden = false;
     this.liveSurface.setAttribute("aria-hidden", "false");
@@ -83,6 +91,26 @@ export class KpTutorialMotionStageReservationHost {
     this.state = "hydrated";
     this.root.dataset["kpTutorialMotionStageRuntime"] = "hydrated";
     return session;
+  }
+
+  setMotionActive(active: boolean): void {
+    this.assertPresent();
+    if (this.session === undefined) {
+      if (active) throw new Error("Dehydrated tutorial stage cannot own motion.");
+      return;
+    }
+    if (this.motionActive === active) return;
+    if (active) this.session.resume();
+    else this.session.pause();
+    this.motionActive = active;
+  }
+
+  applySemanticProgress(progress: number): void {
+    this.assertPresent();
+    if (!Number.isFinite(progress) || progress < 0 || progress > 1) {
+      throw new Error("Tutorial stage semantic progress must be within [0, 1].");
+    }
+    this.session?.applySemanticProgress(progress);
   }
 
   dehydrate(): void {
@@ -98,11 +126,14 @@ export class KpTutorialMotionStageReservationHost {
     this.state = "dehydrated";
     this.root.dataset["kpTutorialMotionStageRuntime"] = "dehydrated";
     let failure: unknown;
-    try {
-      session.pause();
-    } catch (error) {
-      failure = error;
+    if (this.motionActive) {
+      try {
+        session.pause();
+      } catch (error) {
+        failure = error;
+      }
     }
+    this.motionActive = false;
     try {
       session.dispose();
     } catch (error) {
@@ -142,6 +173,8 @@ function assertSession(
 ): asserts session is KpTutorialMotionStageSession {
   if (session === null || typeof session !== "object" ||
       typeof session.pause !== "function" ||
+      typeof session.resume !== "function" ||
+      typeof session.applySemanticProgress !== "function" ||
       typeof session.dispose !== "function") {
     throw new Error("Tutorial stage mount must return a pausable disposable session.");
   }

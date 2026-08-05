@@ -1058,11 +1058,47 @@
       "status": "passed",
       "scope": "slice s18 evidence integrity",
       "checkedAt": "2026-08-05T12:57:27.637Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale (20/20)",
+      "status": "passed",
+      "scope": "slice s19 capability and pause",
+      "checkedAt": "2026-08-05T13:04:19.169Z"
+    },
+    {
+      "command": "tsc app and test projects",
+      "status": "passed",
+      "scope": "slice s19 types",
+      "checkedAt": "2026-08-05T13:04:20.249Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (42/42)",
+      "status": "passed",
+      "scope": "slice s19 semantic preservation",
+      "checkedAt": "2026-08-05T13:04:21.184Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s19 architecture",
+      "checkedAt": "2026-08-05T13:04:22.206Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s19 patch hygiene",
+      "checkedAt": "2026-08-05T13:04:39.332Z"
+    },
+    {
+      "command": "theseus workspace validate (888 nodes, 17840 events)",
+      "status": "passed",
+      "scope": "slice s19 evidence integrity",
+      "checkedAt": "2026-08-05T13:04:40.585Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s18 adds a progressively enhanced stable stage reservation: static and live surfaces overlay in one fixed geometry, hydration and dehydration are ordered to avoid blank frames, failed mounts retain static accessibility, and only terminal disposal releases the reservation."
+    "summary": "Slice s19 adds shared capability-promise reuse with per-passage sessions, exact progress application, pause-before-single-resume ordering, offscreen dehydration, stale-load suppression, and terminal runtime disposal. Twelve passages use two chunks and at most three sessions."
   },
   "expectedLearning": [
     "Whether route-local capabilities and build-time math materially reduce publication closure while preserved visual truth, whether pages scale by active passages rather than total passages, and whether economics plus physics prove a minimal renderer-neutral graph lifecycle."

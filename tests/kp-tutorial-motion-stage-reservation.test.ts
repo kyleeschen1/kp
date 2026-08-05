@@ -14,6 +14,8 @@ test("reservation geometry survives hydration and dehydration", () => {
   const staticSurface = fakeElement("static", operations);
   const liveSurface = fakeElement("live", operations);
   let pauses = 0;
+  let resumes = 0;
+  const appliedProgress: number[] = [];
   let disposals = 0;
   const host = new KpTutorialMotionStageReservationHost({
     root: root.element,
@@ -34,7 +36,9 @@ test("reservation geometry survives hydration and dehydration", () => {
     assert.equal(surface, liveSurface.element);
     assert.equal(liveSurface.hidden(), true);
     return {
+      applySemanticProgress: (progress) => appliedProgress.push(progress),
       pause: () => { pauses += 1; },
+      resume: () => { resumes += 1; },
       dispose: () => { disposals += 1; }
     };
   });
@@ -43,13 +47,19 @@ test("reservation geometry survives hydration and dehydration", () => {
   assert.equal(liveSurface.hidden(), false);
   assert.equal(staticSurface.hidden(), true);
   assert.equal(root.style.get(kpTutorialMotionStageBlockSizeProperty), "480px");
+  assert.equal(pauses, 1);
+  host.setMotionActive(true);
+  host.setMotionActive(true);
+  assert.equal(resumes, 1);
+  host.applySemanticProgress(0.625);
+  assert.deepEqual(appliedProgress, [0.625]);
 
   operations.length = 0;
   host.dehydrate();
   assert.equal(host.snapshot(), "dehydrated");
   assert.equal(staticSurface.hidden(), false);
   assert.equal(liveSurface.hidden(), true);
-  assert.equal(pauses, 1);
+  assert.equal(pauses, 2);
   assert.equal(disposals, 1);
   assert.equal(liveSurface.replacements(), 1);
   assert.ok(operations.indexOf("static.hidden=false") <
@@ -99,7 +109,9 @@ test("terminal disposal releases only the reservation-owned geometry", () => {
   assert.equal(staticSurface.dataset["kpTutorialStaticStage"], undefined);
   assert.equal(liveSurface.dataset["kpTutorialLiveStage"], undefined);
   assert.throws(() => host.hydrate(() => ({
+    applySemanticProgress: () => undefined,
     pause: () => undefined,
+    resume: () => undefined,
     dispose: () => undefined
   })), /cannot be reused/);
 });

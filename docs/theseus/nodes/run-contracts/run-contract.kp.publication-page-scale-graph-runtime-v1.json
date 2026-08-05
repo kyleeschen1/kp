@@ -167,7 +167,8 @@
     {
       "id": "s19",
       "title": "Reuse-capability-chunks-and-pause-offscreen-work",
-      "status": "planned"
+      "summary": "Reused capability chunks across passages while retaining independent sessions, exact progress, one resumed owner, paused background work, offscreen dehydration, stale-load cancellation by revision, and terminal cleanup.",
+      "status": "complete"
     },
     {
       "id": "s20",
