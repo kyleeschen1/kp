@@ -73,7 +73,8 @@
     {
       "id": "s04",
       "title": "Derive shared text and graph anchors",
-      "status": "planned"
+      "summary": "Default text 35 percent and graph-center 50 percent anchors now share one usable viewport authority.",
+      "status": "complete"
     },
     {
       "id": "s05",

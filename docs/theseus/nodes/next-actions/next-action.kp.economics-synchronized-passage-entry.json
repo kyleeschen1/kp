@@ -43,6 +43,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-05T17:14:10.663Z",
       "notes": "Thirty lifecycle, viewport, scale, and coordinator tests passed."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T17:15:35.668Z",
+      "notes": "Thirty-two lifecycle, viewport-anchor, scale, and coordinator tests passed."
     }
   ],
   "expectedLearning": [

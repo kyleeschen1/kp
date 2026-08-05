@@ -9,7 +9,8 @@ import {
   type KpTutorialMotionPassage
 } from "../src/tutorial/kp-tutorial-motion-passage-lifecycle.ts";
 import {
-  projectKpTutorialUsableViewport
+  projectKpTutorialUsableViewport,
+  projectKpTutorialViewportAnchors
 } from "../src/tutorial/kp-tutorial-usable-viewport.ts";
 
 test("the lifecycle contract remains framework and renderer neutral", async () => {
@@ -246,6 +247,41 @@ test("usable viewport authority rejects invalid or occluded intervals", () => {
     persistentTopInsetPx: 700,
     persistentBottomInsetPx: 100
   }), /must leave a usable viewport/);
+});
+
+test("text and graph anchors share the same usable viewport interval", () => {
+  assert.deepEqual(projectKpTutorialViewportAnchors({
+    viewport: projectKpTutorialUsableViewport({ viewportHeightPx: 800 })
+  }), {
+    textY: 280,
+    stageCenterY: 400,
+    textRatio: 0.35,
+    stageCenterRatio: 0.5
+  });
+  assert.deepEqual(projectKpTutorialViewportAnchors({
+    viewport: projectKpTutorialUsableViewport({
+      viewportHeightPx: 800,
+      persistentTopInsetPx: 64,
+      persistentBottomInsetPx: 24
+    })
+  }), {
+    textY: 313.2,
+    stageCenterY: 420,
+    textRatio: 0.35,
+    stageCenterRatio: 0.5
+  });
+});
+
+test("viewport anchor ratios fail closed outside their shared interval", () => {
+  const viewport = projectKpTutorialUsableViewport({ viewportHeightPx: 800 });
+  assert.throws(() => projectKpTutorialViewportAnchors({
+    viewport,
+    textRatio: -0.01
+  }), /text anchor ratio must be within/);
+  assert.throws(() => projectKpTutorialViewportAnchors({
+    viewport,
+    stageCenterRatio: 1.01
+  }), /stage-center anchor ratio must be within/);
 });
 
 function passage(

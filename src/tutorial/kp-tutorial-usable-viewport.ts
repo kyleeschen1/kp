@@ -5,6 +5,13 @@ export interface KpTutorialUsableViewportProjection {
   readonly heightPx: number;
 }
 
+export interface KpTutorialViewportAnchorProjection {
+  readonly textY: number;
+  readonly stageCenterY: number;
+  readonly textRatio: number;
+  readonly stageCenterRatio: number;
+}
+
 /**
  * Persistent chrome is removed once from the physical viewport. Every reading
  * and stage anchor can then share this local interval instead of accumulating
@@ -42,9 +49,35 @@ export function projectKpTutorialUsableViewport(input: {
   });
 }
 
+export function projectKpTutorialViewportAnchors(input: {
+  readonly viewport: KpTutorialUsableViewportProjection;
+  readonly textRatio?: number | undefined;
+  readonly stageCenterRatio?: number | undefined;
+}): KpTutorialViewportAnchorProjection {
+  const textRatio = unitRatio(input.textRatio ?? 0.35, "text anchor");
+  const stageCenterRatio = unitRatio(
+    input.stageCenterRatio ?? 0.5,
+    "stage-center anchor"
+  );
+  return Object.freeze({
+    textY: input.viewport.topPx + input.viewport.heightPx * textRatio,
+    stageCenterY:
+      input.viewport.topPx + input.viewport.heightPx * stageCenterRatio,
+    textRatio,
+    stageCenterRatio
+  });
+}
+
 function finiteNonNegative(value: number, label: string): number {
   if (!Number.isFinite(value) || value < 0) {
     throw new Error(`Tutorial ${label} must be finite and non-negative.`);
+  }
+  return value;
+}
+
+function unitRatio(value: number, label: string): number {
+  if (!Number.isFinite(value) || value < 0 || value > 1) {
+    throw new Error(`Tutorial ${label} ratio must be within [0, 1].`);
   }
   return value;
 }
