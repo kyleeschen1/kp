@@ -10,8 +10,11 @@ import {
   projectKpTwoColumnScrollSequence,
   kpEconomicsTwoColumnParagraphGapDefaultVh,
   kpEconomicsTwoColumnParagraphGapMaximumVh,
+  kpEconomicsMotionBridgeExemplarSearch,
+  kpEconomicsTwoColumnScrollCanonicalSearch,
   readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsDemandShiftPresentationLayout,
+  readKpEconomicsScrollScrubStrategy,
   readKpEconomicsTwoColumnTextSide,
   writeKpEconomicsTwoColumnParagraphGapVh,
   writeKpEconomicsTwoColumnTextSide
@@ -43,6 +46,39 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
     "split"
   );
   assert.equal(readKpEconomicsDemandShiftPresentationLayout(""), "split");
+});
+
+test("motion bridge is an opt-in strategy isolated from the accepted route", () => {
+  assert.equal(
+    kpEconomicsTwoColumnScrollCanonicalSearch,
+    "?layout=two-column-scroll"
+  );
+  assert.equal(
+    kpEconomicsMotionBridgeExemplarSearch,
+    "?layout=two-column-scroll&scrub=motion-bridge"
+  );
+  assert.equal(
+    readKpEconomicsScrollScrubStrategy(
+      kpEconomicsTwoColumnScrollCanonicalSearch
+    ),
+    "continuous-passage"
+  );
+  assert.equal(
+    readKpEconomicsScrollScrubStrategy(
+      kpEconomicsMotionBridgeExemplarSearch
+    ),
+    "motion-bridge"
+  );
+  assert.equal(
+    readKpEconomicsScrollScrubStrategy("?scrub=motion-bridge"),
+    "continuous-passage"
+  );
+  assert.equal(
+    readKpEconomicsScrollScrubStrategy(
+      "?layout=inline-sticky&scrub=motion-bridge"
+    ),
+    "continuous-passage"
+  );
 });
 
 test("two-column text side is URL-reproducible and defaults right", () => {

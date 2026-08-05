@@ -58,7 +58,8 @@
     {
       "id": "s01",
       "title": "Freeze accepted route and add opt-in exemplar descriptor",
-      "status": "planned"
+      "summary": "Froze the accepted two-column URL as continuous-passage and added a fail-closed opt-in motion-bridge query descriptor with mounted review evidence.",
+      "status": "complete"
     },
     {
       "id": "s02",

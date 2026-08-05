@@ -66,6 +66,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "data-kp-economics-tutorial-layout",
     "two-column-scroll"
   );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scrub-strategy",
+    "continuous-passage"
+  );
   await expect(paragraphs).toHaveCount(6);
   await expect(root.locator("[data-kp-two-column-scroll-card]")).toHaveCount(0);
   await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);

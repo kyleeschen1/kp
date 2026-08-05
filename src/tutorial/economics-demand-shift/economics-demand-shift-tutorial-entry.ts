@@ -21,6 +21,7 @@ import {
 } from "./economics-demand-shift-deep-link.ts";
 import {
   readKpEconomicsDemandShiftPresentationLayout,
+  readKpEconomicsScrollScrubStrategy,
   readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsTwoColumnTextSide
 } from "./economics-demand-shift-layout.ts";
@@ -82,6 +83,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
         input.search
       ),
+      scrubStrategy: readKpEconomicsScrollScrubStrategy(input.search),
       initialTwoColumnTextSide: readKpEconomicsTwoColumnTextSide(input.search),
       initialTwoColumnParagraphGapVh:
         readKpEconomicsTwoColumnParagraphGapVh(input.search),

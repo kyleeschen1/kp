@@ -46,6 +46,7 @@
     writeKpEconomicsTwoColumnParagraphGapVh,
     writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
+    type KpEconomicsScrollScrubStrategy,
     type KpEconomicsTwoColumnTextSide,
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
@@ -209,6 +210,7 @@
     initialTwoColumnTextSide,
     initialDestination,
     presentationLayout,
+    scrubStrategy,
     lesson,
     motionScrubBarHtml,
     tocHtml,
@@ -227,6 +229,7 @@
     readonly initialTwoColumnTextSide: KpEconomicsTwoColumnTextSide;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
+    readonly scrubStrategy: KpEconomicsScrollScrubStrategy;
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionScrubBarHtml: Readonly<Record<KpEconomicsMotionBlockId, string>>;
     readonly tocHtml: string;
@@ -2288,6 +2291,7 @@
   attributes={{
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
+    "data-kp-economics-tutorial-scrub-strategy": scrubStrategy,
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),

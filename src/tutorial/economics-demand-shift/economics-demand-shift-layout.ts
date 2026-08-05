@@ -5,6 +5,10 @@ export type KpEconomicsDemandShiftPresentationLayout =
   | "inline-sticky"
   | "two-column-scroll";
 
+export type KpEconomicsScrollScrubStrategy =
+  | "continuous-passage"
+  | "motion-bridge";
+
 export type KpEconomicsTwoColumnTextSide = "left" | "right";
 
 export type KpInlineStickyLessonFit =
@@ -45,8 +49,14 @@ export interface KpTwoColumnScrollSequenceProjection {
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
+const motionBridgeScrubQueryValue = "motion-bridge";
 const twoColumnTextSideQueryKey = "text";
 const twoColumnParagraphGapQueryKey = "gap";
+
+export const kpEconomicsTwoColumnScrollCanonicalSearch =
+  "?layout=two-column-scroll";
+export const kpEconomicsMotionBridgeExemplarSearch =
+  "?layout=two-column-scroll&scrub=motion-bridge";
 
 export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
 export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
@@ -62,6 +72,18 @@ export function readKpEconomicsDemandShiftPresentationLayout(
     : value === twoColumnScrollLayoutQueryValue
       ? "two-column-scroll"
       : "split";
+}
+
+export function readKpEconomicsScrollScrubStrategy(
+  search: string
+): KpEconomicsScrollScrubStrategy {
+  const parameters = new URLSearchParams(search);
+  // The experiment is deliberately coupled to the accepted two-column host;
+  // a stray scrub query must not alter split or inline publication behavior.
+  return parameters.get("layout") === twoColumnScrollLayoutQueryValue &&
+      parameters.get("scrub") === motionBridgeScrubQueryValue
+    ? "motion-bridge"
+    : "continuous-passage";
 }
 
 export function readKpEconomicsTwoColumnTextSide(
