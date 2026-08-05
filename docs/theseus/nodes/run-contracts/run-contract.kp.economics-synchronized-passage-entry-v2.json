@@ -121,7 +121,8 @@
     {
       "id": "s12",
       "title": "Preserve assembly spacing",
-      "status": "planned"
+      "summary": "Graph, vertical divider, prose latch, and bottom release boundary now consume one local assembly projection and preserve their meeting geometry through release.",
+      "status": "complete"
     },
     {
       "id": "s13",

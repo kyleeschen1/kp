@@ -153,6 +153,24 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.top + bounds.height / 2);
   })).toBe(entryTarget.focusLatch.stageCenter);
+  await expect.poll(() => root.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      focusTop: style.getPropertyValue("--kp-two-column-focus-top").trim(),
+      stageTop: style.getPropertyValue("--kp-two-column-stage-top").trim(),
+      stageSize: style.getPropertyValue(
+        "--kp-two-column-stage-block-size"
+      ).trim(),
+      boundaryOffset: style.getPropertyValue(
+        "--kp-two-column-horizontal-boundary-offset"
+      ).trim()
+    };
+  })).toEqual({
+    focusTop: "280px",
+    stageTop: "160px",
+    stageSize: "480px",
+    boundaryOffset: "480px"
+  });
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;
@@ -556,6 +574,15 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => body.evaluate((element) =>
     Math.round(element.getBoundingClientRect().bottom)
   )).toBe(Math.round(stageBottom - entryBaseline.terminal.releaseInset));
+  await expect.poll(() => body.evaluate((element) => {
+    const stageElement = element.querySelector<HTMLElement>(
+      "[data-kp-inline-sticky-stage]"
+    )!;
+    return Math.abs(
+      stageElement.getBoundingClientRect().bottom -
+        element.getBoundingClientRect().bottom
+    );
+  })).toBeLessThanOrEqual(1);
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-native-release.png`,
     fullPage: false

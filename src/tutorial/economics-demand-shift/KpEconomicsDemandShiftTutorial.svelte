@@ -78,6 +78,7 @@
     type KpTutorialScrollBlockRegistration
   } from "../kp-tutorial-motion.ts";
   import {
+    projectKpTutorialStageAssembly,
     projectKpTutorialSynchronizedLatch,
     projectKpTutorialUsableViewport,
     projectKpTutorialViewportAnchors
@@ -161,6 +162,7 @@
     readonly approachStartRatio: number;
     readonly focusBottomRatio: number;
     readonly focusTopRatio: number;
+    readonly horizontalBoundaryOffsetFromStageTopPx: number;
     readonly minimumEffectiveHeightRatio: number;
     readonly motionStartRatio: number;
     readonly stageCenterRatio: number;
@@ -1275,13 +1277,10 @@
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = measureTwoColumnScrollGeometry();
       twoColumnStageTopPx = geometry.stageTopY;
-      shell.style.setProperty(
-        "--kp-two-column-entry-offset",
-        `${geometry.textDocumentOffsetFromStagePx}px`
-      );
+      writeTwoColumnAssemblyGeometry(geometry);
     } else {
       cachedTwoColumnScrollGeometry = undefined;
-      shell.style.removeProperty("--kp-two-column-entry-offset");
+      clearTwoColumnAssemblyGeometry();
     }
     updateInlineStickyStageProjection();
     updateInlineStickyParagraphProjections();
@@ -1432,6 +1431,11 @@
       anchors,
       stageBlockSizePx: inlineStickyStageHeightPx
     });
+    const assembly = projectKpTutorialStageAssembly({
+      latch,
+      stageBlockSizePx: inlineStickyStageHeightPx,
+      boundaryGapPx: pixels("--kp-two-column-boundary-gap")
+    });
     // CSS owns the physical rhythm; enhancement reads the same numeric vh
     // tokens during layout invalidation, then every scroll frame consumes this
     // immutable snapshot instead of forcing a fresh style calculation.
@@ -1439,6 +1443,8 @@
       approachStartRatio: ratio("--kp-two-column-approach-start-vh", 78),
       focusBottomRatio: ratio("--kp-two-column-focus-bottom-vh", 50),
       focusTopRatio,
+      horizontalBoundaryOffsetFromStageTopPx:
+        assembly.horizontalBoundaryOffsetFromStageTopPx,
       minimumEffectiveHeightRatio: ratio(
         "--kp-two-column-minimum-effective-height-vh",
         23
@@ -1473,10 +1479,16 @@
       anchors,
       stageBlockSizePx: inlineStickyStageHeightPx
     });
+    const assembly = projectKpTutorialStageAssembly({
+      latch,
+      stageBlockSizePx: inlineStickyStageHeightPx
+    });
     return Object.freeze({
       approachStartRatio: 0.78,
       focusBottomRatio: 0.5,
       focusTopRatio: anchors.textRatio,
+      horizontalBoundaryOffsetFromStageTopPx:
+        assembly.horizontalBoundaryOffsetFromStageTopPx,
       minimumEffectiveHeightRatio: 0.23,
       motionStartRatio: 0.62,
       stageCenterRatio: anchors.stageCenterRatio,
@@ -1490,6 +1502,38 @@
       usableViewportTopPx: viewport.topPx,
       viewportHeightPx: viewport.viewportHeightPx
     });
+  }
+
+  function writeTwoColumnAssemblyGeometry(
+    geometry: KpEconomicsTwoColumnScrollGeometry
+  ): void {
+    if (shell === undefined) return;
+    // All enhanced physical tokens come from one projection. The graph and
+    // divider may stick, while the document-owned bottom rule releases them;
+    // their local sizes and terminal meeting point cannot drift independently.
+    const properties = {
+      "--kp-two-column-focus-top": geometry.textAnchorY,
+      "--kp-two-column-stage-top": geometry.stageTopY,
+      "--kp-two-column-stage-block-size": inlineStickyStageHeightPx,
+      "--kp-two-column-entry-offset":
+        geometry.textDocumentOffsetFromStagePx,
+      "--kp-two-column-horizontal-boundary-offset":
+        geometry.horizontalBoundaryOffsetFromStageTopPx
+    } as const;
+    for (const [name, value] of Object.entries(properties)) {
+      shell.style.setProperty(name, `${value}px`);
+    }
+  }
+
+  function clearTwoColumnAssemblyGeometry(): void {
+    if (shell === undefined) return;
+    for (const name of [
+      "--kp-two-column-focus-top",
+      "--kp-two-column-stage-top",
+      "--kp-two-column-stage-block-size",
+      "--kp-two-column-entry-offset",
+      "--kp-two-column-horizontal-boundary-offset"
+    ]) shell.style.removeProperty(name);
   }
 
   function updateReadingBandSelection(

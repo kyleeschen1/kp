@@ -115,5 +115,13 @@ test("two-column progressive layout derives prose and graph from one latch", () 
     twoColumn,
     /--kp-two-column-entry-offset:\s*calc\(var\(--kp-two-column-focus-top\) - var\(--kp-two-column-stage-top\)\)/
   );
+  assert.match(
+    twoColumn,
+    /--kp-two-column-horizontal-boundary-offset:\s*calc\(var\(--kp-two-column-stage-block-size\) \+ var\(--kp-two-column-boundary-gap\)\)/
+  );
+  assert.match(
+    twoColumn,
+    /--kp-two-column-terminal-min-block:\s*calc\(\s*var\(--kp-two-column-horizontal-boundary-offset\)/
+  );
   assert.doesNotMatch(twoColumn, /--kp-two-column-stage-top-vh/);
 });

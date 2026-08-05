@@ -10,6 +10,7 @@
   --kp-two-column-paragraph-gap-vh: 16;
   --kp-two-column-release-span-vh: 15;
   --kp-two-column-stage-center-vh: 50;
+  --kp-two-column-boundary-gap: 0px;
   --kp-tutorial-persistent-top-inset: 0px;
   --kp-tutorial-persistent-bottom-inset: 0px;
   --kp-two-column-stage-block-size: 30rem;
@@ -29,9 +30,11 @@
     );
   --kp-two-column-entry-offset:
     calc(var(--kp-two-column-focus-top) - var(--kp-two-column-stage-top));
+  --kp-two-column-horizontal-boundary-offset:
+    calc(var(--kp-two-column-stage-block-size) + var(--kp-two-column-boundary-gap));
   --kp-two-column-terminal-min-block:
     calc(
-      var(--kp-two-column-stage-block-size) +
+      var(--kp-two-column-horizontal-boundary-offset) +
       var(--kp-two-column-stage-top) -
       var(--kp-two-column-focus-top)
     );
