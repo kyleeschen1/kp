@@ -166,6 +166,13 @@
       "scope": "slice s02 motion bridge authoring records",
       "checkedAt": "2026-08-05T20:38:18.187Z",
       "notes": "All 40 tutorial passage and page-scale tests passed, including three new authoring contract cases; complete TypeScript, Svelte, and domain typechecking passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial; node --test economics publication artifact; npm run typecheck",
+      "status": "passed",
+      "scope": "slice s03 compiler validation",
+      "checkedAt": "2026-08-05T20:42:02.531Z",
+      "notes": "44 economics tests, 3 deterministic artifact tests, and full typechecking passed. Existing Markdown still compiles without prose-motion metadata; opt-in records fail closed on missing or overlapping prose and invalid checkpoint order."
     }
   ],
   "progress": {

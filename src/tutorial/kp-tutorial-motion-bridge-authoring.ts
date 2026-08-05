@@ -17,6 +17,7 @@ export interface KpTutorialOrdinaryBeatAuthoring {
   readonly kind: "ordinary-beat";
   readonly id: string;
   readonly passageId: string;
+  readonly paragraphIndex: number;
   readonly settleAt: KpTutorialSemanticCheckpointEndpoint;
 }
 
@@ -39,6 +40,7 @@ export type KpTutorialProseMotionAuthoring =
 export function defineKpTutorialOrdinaryBeat(input: {
   readonly id: string;
   readonly passageId: string;
+  readonly paragraphIndex?: number | undefined;
   readonly settleAt: KpTutorialSemanticCheckpointEndpoint;
 }): KpTutorialOrdinaryBeatAuthoring {
   return Object.freeze({
@@ -46,6 +48,10 @@ export function defineKpTutorialOrdinaryBeat(input: {
     kind: "ordinary-beat",
     id: slug(input.id, "Ordinary beat id"),
     passageId: slug(input.passageId, "Ordinary beat passage id"),
+    paragraphIndex: nonNegativeInteger(
+      input.paragraphIndex ?? 0,
+      "Ordinary beat paragraph index"
+    ),
     settleAt: semanticEndpoint(input.settleAt)
   });
 }
@@ -111,6 +117,13 @@ function semanticEndpoint(
 function slug(value: string, label: string): string {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
     throw new Error(`${label} must be a lowercase semantic slug.`);
+  }
+  return value;
+}
+
+function nonNegativeInteger(value: number, label: string): number {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`${label} must be a non-negative integer.`);
   }
   return value;
 }

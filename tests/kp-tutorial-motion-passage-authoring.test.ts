@@ -20,6 +20,7 @@ test("ordinary prose beats settle at semantic checkpoints", () => {
     kind: "ordinary-beat",
     id: "notice-equilibrium",
     passageId: "initial-equilibrium",
+    paragraphIndex: 0,
     settleAt: {
       motionBlockId: "demand-shift",
       checkpointId: "shift-ready"
@@ -81,4 +82,13 @@ test("motion authoring fails closed on layout and choreography coordinates", () 
       checkpointId: "shift-handoff"
     }
   }), /lowercase semantic slug/);
+  assert.throws(() => defineKpTutorialOrdinaryBeat({
+    id: "notice-equilibrium",
+    passageId: "initial-equilibrium",
+    paragraphIndex: 0.5,
+    settleAt: {
+      motionBlockId: "demand-shift",
+      checkpointId: "shift-ready"
+    }
+  }), /non-negative integer/);
 });

@@ -70,7 +70,8 @@
     {
       "id": "s03",
       "title": "Validate bridge authoring in lesson compiler",
-      "status": "planned"
+      "summary": "The economics compiler now validates paragraph-level ordinary beats and adjacent one-statement bridge pairs against owned motion blocks and ordered semantic checkpoints without changing the default artifact.",
+      "status": "complete"
     },
     {
       "id": "s04",

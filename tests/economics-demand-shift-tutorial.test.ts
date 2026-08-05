@@ -12,6 +12,10 @@ import {
   compileKpEconomicsDemandShiftLesson
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-lesson-compiler.ts";
 import {
+  defineKpTutorialMotionBridge,
+  defineKpTutorialOrdinaryBeat
+} from "../src/tutorial/kp-tutorial-motion-bridge-authoring.ts";
+import {
   compileKpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 import {
@@ -67,6 +71,90 @@ test("economics demand-shift tutorial owns one stable route", () => {
     true
   );
   assert.equal(isKpEconomicsDemandShiftTutorialRoute("/"), false);
+});
+
+test("economics compiler validates semantic prose motion without changing defaults", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  assert.equal(
+    compileKpEconomicsDemandShiftLesson(markdown).proseMotion,
+    undefined
+  );
+
+  const bridge = defineKpTutorialMotionBridge({
+    id: "demand-increase",
+    beforePassageId: "follow-shift",
+    afterPassageId: "new-equilibrium",
+    distance: "standard",
+    motionBlockId: "demand-shift",
+    fromCheckpointId: "shift-ready",
+    toCheckpointId: "shift-settled"
+  });
+  const beat = defineKpTutorialOrdinaryBeat({
+    id: "starting-equilibrium",
+    passageId: "initial-equilibrium",
+    paragraphIndex: 1,
+    settleAt: {
+      motionBlockId: "demand-shift",
+      checkpointId: "shift-ready"
+    }
+  });
+  assert.deepEqual(
+    compileKpEconomicsDemandShiftLesson(markdown, {
+      proseMotion: [beat, bridge]
+    }).proseMotion,
+    [beat, bridge]
+  );
+});
+
+test("economics compiler rejects ambiguous or invalid bridge semantics", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  const bridge = defineKpTutorialMotionBridge({
+    id: "demand-increase",
+    beforePassageId: "follow-shift",
+    afterPassageId: "new-equilibrium",
+    distance: "standard",
+    motionBlockId: "demand-shift",
+    fromCheckpointId: "shift-ready",
+    toCheckpointId: "shift-settled"
+  });
+  const overlap = defineKpTutorialOrdinaryBeat({
+    id: "overlap",
+    passageId: "new-equilibrium",
+    settleAt: {
+      motionBlockId: "demand-shift",
+      checkpointId: "shift-settled"
+    }
+  });
+  assert.throws(
+    () => compileKpEconomicsDemandShiftLesson(markdown, {
+      proseMotion: [bridge, overlap]
+    }),
+    /overlaps/
+  );
+  assert.throws(
+    () => compileKpEconomicsDemandShiftLesson(markdown, {
+      proseMotion: [{
+        ...bridge,
+        afterPassageId: "equation-check"
+      }]
+    }),
+    /adjacent in one section/
+  );
+  assert.throws(
+    () => compileKpEconomicsDemandShiftLesson(markdown, {
+      proseMotion: [{
+        ...bridge,
+        toCheckpointId: "movement-verified"
+      }]
+    }),
+    /checkpoint order/
+  );
 });
 
 test("semantic tutorial URLs round-trip without choreography coordinates", () => {
