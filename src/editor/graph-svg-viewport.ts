@@ -68,6 +68,26 @@ export interface KpEditorGraphAxisProjection {
   };
 }
 
+export interface KpEconomicsGraphRuntimeMetrics {
+  readonly renderCalls: number;
+  readonly semanticSamples: number;
+  readonly semanticSampleTotalMs: number;
+  readonly semanticSampleLongestMs: number;
+  readonly svgStringsBuilt: number;
+  readonly svgStringCharacters: number;
+  readonly svgConstructionTotalMs: number;
+  readonly svgConstructionLongestMs: number;
+  readonly subtreeReplacements: number;
+  readonly removedElements: number;
+  readonly addedElements: number;
+  readonly subtreeReplacementTotalMs: number;
+  readonly subtreeReplacementLongestMs: number;
+  readonly accessibilitySyncTotalMs: number;
+  readonly screenLabelSyncs: number;
+  readonly screenLabelSyncTotalMs: number;
+  readonly screenLabelSyncLongestMs: number;
+}
+
 const matrixLinearMapPlanCache = new Map<string, KpMatrixLinearMapPlan>();
 
 interface KpEconomicsScreenSpaceLabelSession {
@@ -79,6 +99,30 @@ interface KpEconomicsScreenSpaceLabelSession {
 const economicsScreenSpaceLabelSessions = new WeakMap<
   HTMLElement,
   KpEconomicsScreenSpaceLabelSession
+>();
+
+interface KpEconomicsGraphRuntimePerformanceSession {
+  metrics: MutableKpEconomicsGraphRuntimeMetrics;
+  readonly api: {
+    readonly reset: () => void;
+    readonly snapshot: () => KpEconomicsGraphRuntimeMetrics;
+  };
+}
+
+type MutableKpEconomicsGraphRuntimeMetrics = {
+  -readonly [Key in keyof KpEconomicsGraphRuntimeMetrics]:
+    KpEconomicsGraphRuntimeMetrics[Key]
+};
+
+type KpEconomicsGraphPerformanceWindow = Window & {
+  __kpEconomicsPerformanceProbeRequested?: boolean | undefined;
+  __kpEconomicsGraphRuntimePerformance?:
+    KpEconomicsGraphRuntimePerformanceSession["api"] | undefined;
+};
+
+const economicsGraphRuntimePerformanceSessions = new WeakMap<
+  HTMLElement,
+  KpEconomicsGraphRuntimePerformanceSession
 >();
 
 export function createKpEditorGraphSvgViewportModel(
@@ -143,6 +187,11 @@ export function createKpEditorGraphSvgViewportAdapter(
     render({ player, slot, state }) {
       const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
       if (animation === undefined) return;
+      const economicsProfile = animation.id ===
+        "animation.economics.supply-demand-equilibrium-shift"
+        ? economicsGraphRuntimePerformanceSession(player, slot)
+        : undefined;
+      if (economicsProfile !== undefined) economicsProfile.metrics.renderCalls += 1;
       const model = createKpEditorGraphSvgViewportModel(animation);
       let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
       if (svg === null) {
@@ -156,19 +205,49 @@ export function createKpEditorGraphSvgViewportAdapter(
           "[data-kp-editor-graph-content]"
         );
         if (content !== null) {
-          content.innerHTML = renderRuntimeContent(
+          const runtimeContent = renderRuntimeContent(
             animation,
             state,
             model,
-            graphAccessibilityMode(player)
+            graphAccessibilityMode(player),
+            economicsProfile?.metrics
           );
+          const replacementStartedAt = economicsProfile === undefined
+            ? 0
+            : performanceNow(player);
+          const removedElements = economicsProfile === undefined
+            ? 0
+            : content.querySelectorAll("*").length;
+          content.innerHTML = runtimeContent;
+          if (economicsProfile !== undefined) {
+            const duration = performanceNow(player) - replacementStartedAt;
+            economicsProfile.metrics.subtreeReplacements += 1;
+            economicsProfile.metrics.removedElements += removedElements;
+            economicsProfile.metrics.addedElements +=
+              content.querySelectorAll("*").length;
+            economicsProfile.metrics.subtreeReplacementTotalMs += duration;
+            economicsProfile.metrics.subtreeReplacementLongestMs = Math.max(
+              economicsProfile.metrics.subtreeReplacementLongestMs,
+              duration
+            );
+          }
+          const accessibilityStartedAt = economicsProfile === undefined
+            ? 0
+            : performanceNow(player);
           syncGraphAccessibility(svg, content);
+          if (economicsProfile !== undefined) {
+            economicsProfile.metrics.accessibilitySyncTotalMs +=
+              performanceNow(player) - accessibilityStartedAt;
+          }
           if (
             animation.id ===
               "animation.economics.supply-demand-equilibrium-shift" &&
             player.closest("[data-kp-economics-screen-space-labels='true']")
               !== null
           ) {
+            const screenLabelsStartedAt = economicsProfile === undefined
+              ? 0
+              : performanceNow(player);
             syncEconomicsScreenSpaceLabels({
               content,
               model,
@@ -176,6 +255,15 @@ export function createKpEditorGraphSvgViewportAdapter(
               slot,
               svg
             });
+            if (economicsProfile !== undefined) {
+              const duration = performanceNow(player) - screenLabelsStartedAt;
+              economicsProfile.metrics.screenLabelSyncs += 1;
+              economicsProfile.metrics.screenLabelSyncTotalMs += duration;
+              economicsProfile.metrics.screenLabelSyncLongestMs = Math.max(
+                economicsProfile.metrics.screenLabelSyncLongestMs,
+                duration
+              );
+            }
           } else {
             disposeEconomicsScreenSpaceLabels(slot);
           }
@@ -407,7 +495,8 @@ function renderRuntimeContent(
   animation: KpAnimationAsset,
   state: KpEditorAnimationPlayerState,
   model: KpEditorGraphSvgViewportModel,
-  accessibilityMode: KpMatrixLinearMapAccessibilityMode
+  accessibilityMode: KpMatrixLinearMapAccessibilityMode,
+  economicsProfile?: MutableKpEconomicsGraphRuntimeMetrics | undefined
 ): string {
   const point = (coordinates: readonly number[]) => [
     scale(coordinates[0] ?? 0, model.xDomain, [36, model.width - 20]),
@@ -472,14 +561,40 @@ function renderRuntimeContent(
       });
     }
     case "animation.economics.supply-demand-equilibrium-shift": {
+      const sampleStartedAt = economicsProfile === undefined
+        ? 0
+        : performanceNow();
       const economicsFrame = sampleKpEconomicsEquilibriumRuntimeFrame({
         animation,
         runtimeFrame: state.runtimeFrame
       });
-      return renderKpEconomicsEquilibriumRuntimeContent({
+      if (economicsProfile !== undefined) {
+        const duration = performanceNow() - sampleStartedAt;
+        economicsProfile.semanticSamples += 1;
+        economicsProfile.semanticSampleTotalMs += duration;
+        economicsProfile.semanticSampleLongestMs = Math.max(
+          economicsProfile.semanticSampleLongestMs,
+          duration
+        );
+      }
+      const constructionStartedAt = economicsProfile === undefined
+        ? 0
+        : performanceNow();
+      const content = renderKpEconomicsEquilibriumRuntimeContent({
         frame: economicsFrame,
         viewport: model
       });
+      if (economicsProfile !== undefined) {
+        const duration = performanceNow() - constructionStartedAt;
+        economicsProfile.svgStringsBuilt += 1;
+        economicsProfile.svgStringCharacters += content.length;
+        economicsProfile.svgConstructionTotalMs += duration;
+        economicsProfile.svgConstructionLongestMs = Math.max(
+          economicsProfile.svgConstructionLongestMs,
+          duration
+        );
+      }
+      return content;
     }
     case "animation.physics.constant-force-work-energy": {
       const physicsFrame = sampleKpConstantForceWorkEnergyRuntimeFrame({
@@ -494,6 +609,63 @@ function renderRuntimeContent(
     default:
       return "";
   }
+}
+
+function economicsGraphRuntimePerformanceSession(
+  player: HTMLElement,
+  slot: HTMLElement
+): KpEconomicsGraphRuntimePerformanceSession | undefined {
+  const view = player.ownerDocument.defaultView as
+    KpEconomicsGraphPerformanceWindow | null;
+  if (view?.__kpEconomicsPerformanceProbeRequested !== true) return undefined;
+  const extant = economicsGraphRuntimePerformanceSessions.get(slot);
+  if (extant !== undefined) return extant;
+
+  const session: KpEconomicsGraphRuntimePerformanceSession = {
+    metrics: emptyEconomicsGraphRuntimeMetrics(),
+    api: {
+      reset: () => {
+        session.metrics = emptyEconomicsGraphRuntimeMetrics();
+      },
+      snapshot: () => Object.freeze({ ...session.metrics })
+    }
+  };
+  economicsGraphRuntimePerformanceSessions.set(slot, session);
+  view.__kpEconomicsGraphRuntimePerformance = session.api;
+  player.addEventListener(KP_EDITOR_ANIMATION_DISPOSE_EVENT, () => {
+    economicsGraphRuntimePerformanceSessions.delete(slot);
+    if (view.__kpEconomicsGraphRuntimePerformance === session.api) {
+      delete view.__kpEconomicsGraphRuntimePerformance;
+    }
+  }, { once: true });
+  return session;
+}
+
+function emptyEconomicsGraphRuntimeMetrics():
+  MutableKpEconomicsGraphRuntimeMetrics {
+  return {
+    renderCalls: 0,
+    semanticSamples: 0,
+    semanticSampleTotalMs: 0,
+    semanticSampleLongestMs: 0,
+    svgStringsBuilt: 0,
+    svgStringCharacters: 0,
+    svgConstructionTotalMs: 0,
+    svgConstructionLongestMs: 0,
+    subtreeReplacements: 0,
+    removedElements: 0,
+    addedElements: 0,
+    subtreeReplacementTotalMs: 0,
+    subtreeReplacementLongestMs: 0,
+    accessibilitySyncTotalMs: 0,
+    screenLabelSyncs: 0,
+    screenLabelSyncTotalMs: 0,
+    screenLabelSyncLongestMs: 0
+  };
+}
+
+function performanceNow(player?: HTMLElement): number {
+  return player?.ownerDocument.defaultView?.performance.now() ?? performance.now();
 }
 
 function graphAccessibilityMode(

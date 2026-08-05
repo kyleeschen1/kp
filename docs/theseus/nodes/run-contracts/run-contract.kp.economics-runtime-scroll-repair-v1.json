@@ -84,8 +84,8 @@
     {
       "id": "next-action.economics.s03-v0",
       "title": "Measure-SVG-construction-and-DOM-churn",
-      "summary": "Materialized from stored run-contract slice s03 in Economics runtime and scroll repair.",
-      "status": "ready"
+      "summary": "Separated and recorded semantic sampling, SVG string assembly, subtree replacement, accessibility sync, screen-label sync, and externally observed DOM churn on the production two-column route.",
+      "status": "complete"
     },
     {
       "id": "s04",

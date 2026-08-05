@@ -3,6 +3,9 @@ import { expect, test } from "@playwright/test";
 import type {
   KpTutorialScrollCoordinatorMetrics
 } from "../src/tutorial/kp-tutorial-motion.ts";
+import type {
+  KpEconomicsGraphRuntimeMetrics
+} from "../src/editor/graph-svg-viewport.ts";
 
 const route = "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 // These ceilings leave bounded machine variance above the production exemplar,
@@ -26,6 +29,11 @@ interface KpTutorialPerformanceProbe {
 interface KpTutorialRuntimePerformanceApi {
   readonly resetScrollCoordinator: () => void;
   readonly snapshotScrollCoordinator: () => KpTutorialScrollCoordinatorMetrics;
+}
+
+interface KpGraphRuntimePerformanceApi {
+  readonly reset: () => void;
+  readonly snapshot: () => KpEconomicsGraphRuntimeMetrics;
 }
 
 test("production economics tutorial stays inside publication and motion budgets", async ({
@@ -112,13 +120,16 @@ test("production economics tutorial stays inside publication and motion budgets"
     const target = window as typeof window & {
       __kpEconomicsTutorialPerformance?: KpTutorialPerformanceProbe;
       __kpEconomicsTutorialRuntimePerformance?: KpTutorialRuntimePerformanceApi;
+      __kpEconomicsGraphRuntimePerformance?: KpGraphRuntimePerformanceApi;
     };
     const probe = target.__kpEconomicsTutorialPerformance!;
     const runtime = target.__kpEconomicsTutorialRuntimePerformance!;
+    const graphRuntime = target.__kpEconomicsGraphRuntimePerformance!;
     probe.cls = 0;
     probe.geometryReads = 0;
     probe.longTasks.length = 0;
     runtime.resetScrollCoordinator();
+    graphRuntime.reset();
     const readGeometry = Element.prototype.getBoundingClientRect;
     Element.prototype.getBoundingClientRect = function (): DOMRect {
       probe.geometryReads += 1;
@@ -128,8 +139,16 @@ test("production economics tutorial stays inside publication and motion budgets"
       "[data-kp-economics-demand-shift-tutorial]"
     )!;
     const changedProgressAttributes = new Set<string>();
+    let addedNodes = 0;
+    let removedNodes = 0;
+    let childListMutations = 0;
     const observer = new MutationObserver((records) => {
       for (const record of records) {
+        if (record.type === "childList") {
+          childListMutations += 1;
+          addedNodes += record.addedNodes.length;
+          removedNodes += record.removedNodes.length;
+        }
         if (record.attributeName?.includes("-progress")) {
           changedProgressAttributes.add(record.attributeName);
         }
@@ -137,6 +156,8 @@ test("production economics tutorial stays inside publication and motion budgets"
     });
     observer.observe(tutorial, {
       attributes: true,
+      childList: true,
+      subtree: true,
       attributeFilter: [
         "data-kp-economics-tutorial-demand-progress",
         "data-kp-economics-tutorial-supply-movement-progress"
@@ -176,6 +197,7 @@ test("production economics tutorial stays inside publication and motion budgets"
     const percentile = (ratio: number): number =>
       sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * ratio))] ?? 0;
     const scrollCoordinator = runtime.snapshotScrollCoordinator();
+    const graph = graphRuntime.snapshot();
     return {
       samples: frameDurations.length,
       p95FrameMs: percentile(0.95),
@@ -189,6 +211,12 @@ test("production economics tutorial stays inside publication and motion budgets"
       scrollCoordinator,
       averageCoordinatorExecutionMs: scrollCoordinator.totalExecutionMs /
         Math.max(1, scrollCoordinator.executedFrames),
+      graph,
+      domChurn: {
+        childListMutations,
+        addedNodes,
+        removedNodes
+      },
       maxChangedProgressAttributes: Math.max(...changedAttributeCounts),
       demandOwnerSamples: observedOwners.filter((id) => id === "demand-shift").length,
       supplyOwnerSamples: observedOwners.filter((id) => id === "supply-movement").length
@@ -222,6 +250,13 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(active.scrollCoordinator.layoutReads)
     .toBe(active.scrollCoordinator.registrationReads);
   expect(active.geometryReads).toBeGreaterThan(active.scrollCoordinator.layoutReads);
+  expect(active.graph.renderCalls).toBe(active.graph.semanticSamples);
+  expect(active.graph.semanticSamples).toBe(active.graph.svgStringsBuilt);
+  expect(active.graph.svgStringsBuilt).toBe(active.graph.subtreeReplacements);
+  expect(active.graph.removedElements).toBeGreaterThan(0);
+  expect(active.graph.addedElements).toBeGreaterThan(0);
+  expect(active.domChurn.addedNodes).toBeGreaterThan(0);
+  expect(active.domChurn.removedNodes).toBeGreaterThan(0);
   expect(active.demandOwnerSamples).toBeGreaterThan(0);
   expect(active.supplyOwnerSamples).toBeGreaterThan(0);
 });

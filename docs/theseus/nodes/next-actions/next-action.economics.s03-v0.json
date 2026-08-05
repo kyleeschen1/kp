@@ -2,9 +2,9 @@
   "id": "next-action.economics.s03-v0",
   "kind": "next-action",
   "title": "Measure-SVG-construction-and-DOM-churn",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
-  "summary": "Materialized from stored run-contract slice s03 in Economics runtime and scroll repair.",
+  "summary": "Added opt-in economics graph-runtime telemetry and external child-list observation. The measured hot path confirms full-tree replacement, not semantic sampling or string assembly, is the dominant avoidable renderer operation: 27 seeks replace roughly 7.3k elements in each direction.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,6 +39,50 @@
     "npm run check:architecture",
     "git diff --check",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s03 SVG construction and DOM churn baseline",
+      "checkedAt": "2026-08-05T06:59:32.973Z",
+      "notes": "Passed existing budgets. Across 27 renders: 27 semantic samples (2.0 ms), 27 SVG strings totaling 623249 characters (3.4 ms), 27 subtree replacements (12.4 ms), 7335 elements removed, 7380 added, 119 observed child-list mutations, 119 nodes added and 115 removed, 4.6 ms label synchronization, and 0.2 ms accessibility synchronization."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-graph-svg-viewport.test.ts",
+      "status": "passed",
+      "scope": "s03 graph viewport preservation",
+      "checkedAt": "2026-08-05T06:59:34.064Z",
+      "notes": "Three dimension, zero-origin endpoint, and signed-domain axis tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s03 semantic and renderer preservation",
+      "checkedAt": "2026-08-05T06:59:35.282Z",
+      "notes": "All 37 economics tests passed with profiling disabled by default."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 application and profiler types",
+      "checkedAt": "2026-08-05T06:59:36.486Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s03 patch hygiene",
+      "checkedAt": "2026-08-05T06:59:37.651Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s03 durable evidence integrity",
+      "checkedAt": "2026-08-05T06:59:39.248Z",
+      "notes": "Workspace validation passed before slice completion."
+    }
   ],
   "expectedLearning": [
     "Whether Measure-SVG-construction-and-DOM-churn can be completed inside Economics runtime and scroll repair."
