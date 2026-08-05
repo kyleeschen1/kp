@@ -209,7 +209,8 @@
     {
       "id": "s26",
       "title": "Extract-minimal-two-caller-Graph2D-lifecycle",
-      "status": "planned"
+      "summary": "Extracted a dependency-free typed Graph2D session lifecycle that owns only owner-scoped create, same-content reuse, content replacement, fail-closed recovery, and terminal disposal. Two structurally distinct caller fixtures pass while domain frames, projection, KaTeX, accessibility, paint, and editor events remain outside the seam.",
+      "status": "complete"
     },
     {
       "id": "s27",

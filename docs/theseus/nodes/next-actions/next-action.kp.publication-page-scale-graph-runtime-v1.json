@@ -1374,6 +1374,34 @@
       "scope": "s25 patch hygiene",
       "checkedAt": "2026-08-05T13:57:32.921Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:graph-2d-runtime",
+      "status": "passed",
+      "scope": "Graph2D lifecycle contract",
+      "checkedAt": "2026-08-05T14:15:59.668Z",
+      "notes": "Four focused tests prove two structurally distinct callers, exact owner/content reuse, replacement disposal, factory failure recovery, idempotent terminal disposal, and zero domain/DOM/math/framework/renderer dependency."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Graph2D lifecycle type closure",
+      "checkedAt": "2026-08-05T14:16:00.962Z",
+      "notes": "Application, Node, test, Svelte, and domain TypeScript checks pass with the generic lifecycle and two differently typed caller fixtures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Graph2D architecture preservation",
+      "checkedAt": "2026-08-05T14:16:01.946Z",
+      "notes": "All four repository architecture gates pass; the shared lifecycle adds no domain or presentation authority."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "Slice patch hygiene",
+      "checkedAt": "2026-08-05T14:16:02.925Z",
+      "notes": "The Graph2D lifecycle, focused tests, package command, and durable evidence contain no whitespace errors."
     }
   ],
   "progress": {
