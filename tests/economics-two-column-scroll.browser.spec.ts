@@ -1,9 +1,30 @@
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const route = "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 const evidenceDirectory = "tmp/codex/economics-two-column-scroll";
+const entryBaseline = JSON.parse(readFileSync(new URL(
+  "./fixtures/economics-two-column-entry-baseline.json",
+  import.meta.url
+), "utf8")) as {
+  readonly viewport: { readonly width: number; readonly height: number };
+  readonly focusLatch: {
+    readonly paragraphTop: number;
+    readonly stageTop: number;
+    readonly stageHeight: number;
+    readonly stageCenter: number;
+    readonly maximumInitialDemandProgress: number;
+  };
+  readonly motionMidpoint: {
+    readonly minimumDemandProgress: number;
+    readonly maximumDemandProgress: number;
+  };
+  readonly terminal: {
+    readonly minimumSupplyProgress: number;
+    readonly releaseInset: number;
+  };
+};
 
 test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
@@ -12,7 +33,7 @@ test.beforeAll(() => {
 test("desktop prose hands off salience beside a left-hand graph", async ({
   page
 }) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.setViewportSize(entryBaseline.viewport);
   await page.goto(route);
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
@@ -97,7 +118,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(passageHeights.slice(0, 5).every((height) => height < 500)).toBe(true);
   expect(passageHeights[5]).toBeLessThan(800);
 
-  const focusTop = 280;
+  const focusTop = entryBaseline.focusLatch.paragraphTop;
   await placeTopAt(page, initialParagraph, focusTop);
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
@@ -106,7 +127,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return { top: Math.round(bounds.top), height: Math.round(bounds.height) };
-  })).toEqual({ top: 40, height: 480 });
+  })).toEqual({
+    top: entryBaseline.focusLatch.stageTop,
+    height: entryBaseline.focusLatch.stageHeight
+  });
   await expect.poll(() => Promise.all([
     initialParagraph.evaluate((element) => Math.round(
       element.getBoundingClientRect().top
@@ -114,7 +138,14 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     stage.evaluate((element) => Math.round(
       element.getBoundingClientRect().top
     ))
-  ])).toEqual([280, 40]);
+  ])).toEqual([
+    entryBaseline.focusLatch.paragraphTop,
+    entryBaseline.focusLatch.stageTop
+  ]);
+  await expect.poll(() => stage.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return Math.round(bounds.top + bounds.height / 2);
+  })).toBe(entryBaseline.focusLatch.stageCenter);
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;
@@ -127,7 +158,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       width: Math.round(bounds.width)
     };
   })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 415 });
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(
+    entryBaseline.focusLatch.maximumInitialDemandProgress
+  );
   await expect(initialPassage).toHaveAttribute(
     "data-kp-two-column-paragraph-opacity",
     "1.0000"
@@ -310,7 +343,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   });
   expect(demandDistance).toBeGreaterThan(180);
   expect(demandDistance).toBeLessThan(440);
-  const motionStart = Math.min(800 * 0.62, focusTop + demandDistance);
+  const motionStart = Math.min(
+    entryBaseline.viewport.height * 0.62,
+    focusTop + demandDistance
+  );
   await placeTopAt(page, demandParagraph, motionStart);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.01);
   await expect.poll(async () => Number(await demandPassage.getAttribute(
@@ -320,8 +356,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   const motionMidpoint = (motionStart + focusTop) / 2;
   await placeTopAt(page, demandParagraph, motionMidpoint);
   const forwardMidpoint = await demandProgress(root);
-  expect(forwardMidpoint).toBeGreaterThan(0.6);
-  expect(forwardMidpoint).toBeLessThan(0.73);
+  expect(forwardMidpoint).toBeGreaterThan(
+    entryBaseline.motionMidpoint.minimumDemandProgress
+  );
+  expect(forwardMidpoint).toBeLessThan(
+    entryBaseline.motionMidpoint.maximumDemandProgress
+  );
   await expect(demandPassage).toHaveAttribute(
     "data-kp-inline-sticky-paragraph-phase",
     "crossing"
@@ -487,21 +527,25 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   );
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-supply-movement-progress"
-  ))).toBeGreaterThan(0.99);
+  ))).toBeGreaterThan(entryBaseline.terminal.minimumSupplyProgress);
   await expect.poll(() => graph.evaluate((element) => Math.round(
     element.getBoundingClientRect().width
   ))).toBe(415);
   const stageBottom = await stage.evaluate(
     (element) => element.getBoundingClientRect().bottom
   );
-  await placeBottomAt(page, body, stageBottom - 1);
+  await placeBottomAt(
+    page,
+    body,
+    stageBottom - entryBaseline.terminal.releaseInset
+  );
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
     "released"
   );
   await expect.poll(() => body.evaluate((element) =>
     Math.round(element.getBoundingClientRect().bottom)
-  )).toBe(Math.round(stageBottom - 1));
+  )).toBe(Math.round(stageBottom - entryBaseline.terminal.releaseInset));
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-native-release.png`,
     fullPage: false

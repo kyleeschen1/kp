@@ -55,7 +55,8 @@
     {
       "id": "s01",
       "title": "Capture deterministic geometry baseline",
-      "status": "planned"
+      "summary": "Frozen",
+      "status": "complete"
     },
     {
       "id": "s02",

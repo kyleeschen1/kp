@@ -1,0 +1,21 @@
+{
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "focusLatch": {
+    "paragraphTop": 280,
+    "stageTop": 40,
+    "stageHeight": 480,
+    "stageCenter": 280,
+    "maximumInitialDemandProgress": 0.01
+  },
+  "motionMidpoint": {
+    "minimumDemandProgress": 0.6,
+    "maximumDemandProgress": 0.73
+  },
+  "terminal": {
+    "minimumSupplyProgress": 0.99,
+    "releaseInset": 1
+  }
+}
