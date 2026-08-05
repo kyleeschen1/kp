@@ -142,12 +142,34 @@ test("production economics tutorial stays inside publication and motion budgets"
     let addedNodes = 0;
     let removedNodes = 0;
     let childListMutations = 0;
+    let graphAddedNodes = 0;
+    let graphRemovedNodes = 0;
+    let graphChildListMutations = 0;
+    const graphContent = tutorial.querySelector<SVGGElement>(
+      "[data-kp-editor-graph-content]"
+    )!;
+    const childListTargets = new Map<string, number>();
     const observer = new MutationObserver((records) => {
       for (const record of records) {
         if (record.type === "childList") {
           childListMutations += 1;
           addedNodes += record.addedNodes.length;
           removedNodes += record.removedNodes.length;
+          if (graphContent.contains(record.target)) {
+            graphChildListMutations += 1;
+            graphAddedNodes += record.addedNodes.length;
+            graphRemovedNodes += record.removedNodes.length;
+          }
+          const target = record.target as Element;
+          const key = target instanceof Element
+            ? target.getAttribute("data-kp-economics-screen-space-label") ??
+              target.getAttribute("data-kp-economics-math-label") ??
+              target.getAttribute("data-kp-economics-equation-role") ??
+              target.getAttribute("data-kp-economics-narrative") ??
+              target.getAttribute("data-kp-economics-nonvisual-summary") ??
+              target.localName
+            : record.target.nodeName;
+          childListTargets.set(key, (childListTargets.get(key) ?? 0) + 1);
         }
         if (record.attributeName?.includes("-progress")) {
           changedProgressAttributes.add(record.attributeName);
@@ -264,7 +286,14 @@ test("production economics tutorial stays inside publication and motion budgets"
       domChurn: {
         childListMutations,
         addedNodes,
-        removedNodes
+        removedNodes,
+        targets: [...childListTargets.entries()]
+          .sort((left, right) => right[1] - left[1])
+      },
+      graphDomChurn: {
+        childListMutations: graphChildListMutations,
+        addedNodes: graphAddedNodes,
+        removedNodes: graphRemovedNodes
       },
       baseCueCount: baseCues.length,
       cueDensity,
@@ -302,12 +331,16 @@ test("production economics tutorial stays inside publication and motion budgets"
     .toBe(active.scrollCoordinator.registrationReads);
   expect(active.geometryReads).toBeGreaterThan(active.scrollCoordinator.layoutReads);
   expect(active.graph.renderCalls).toBe(active.graph.semanticSamples);
-  expect(active.graph.semanticSamples).toBe(active.graph.svgStringsBuilt);
-  expect(active.graph.svgStringsBuilt).toBe(active.graph.subtreeReplacements);
-  expect(active.graph.removedElements).toBeGreaterThan(0);
-  expect(active.graph.addedElements).toBeGreaterThan(0);
-  expect(active.domChurn.addedNodes).toBeGreaterThan(0);
-  expect(active.domChurn.removedNodes).toBeGreaterThan(0);
+  // The retained economics session samples semantic truth every render, but
+  // ordinary progress may no longer rebuild strings or replace its subtree.
+  expect(active.graph.svgStringsBuilt).toBe(0);
+  expect(active.graph.svgStringCharacters).toBe(0);
+  expect(active.graph.subtreeReplacements).toBe(0);
+  expect(active.graph.removedElements).toBe(0);
+  expect(active.graph.addedElements).toBe(0);
+  expect(active.graphDomChurn.childListMutations).toBeLessThan(10);
+  expect(active.graphDomChurn.addedNodes).toBeLessThan(10);
+  expect(active.graphDomChurn.removedNodes).toBeLessThan(10);
   expect(active.baseCueCount).toBe(6);
   expect(active.cueDensity.map(({ cueCount }) => cueCount)).toEqual([6, 24, 48]);
   expect(active.cueDensity.every(({ executedFrames }) => executedFrames === 1))

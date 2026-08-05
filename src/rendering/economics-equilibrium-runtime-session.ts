@@ -502,9 +502,7 @@ function patchKpEconomicsEquilibriumSynchronizedContent(input: {
     input.scaffold.view,
     "[data-kp-economics-nonvisual-summary]"
   );
-  if (description.textContent !== synchronized.nonvisualSummary) {
-    description.textContent = synchronized.nonvisualSummary;
-  }
+  setTextContentIfChanged(description, synchronized.nonvisualSummary);
   const explanation = requireElement<HTMLElement>(
     input.scaffold.view,
     "[data-kp-economics-synchronized-view]"
@@ -534,9 +532,7 @@ function patchKpEconomicsEquilibriumSynchronizedContent(input: {
     explanation,
     "[data-kp-economics-narrative]"
   );
-  if (narrative.textContent !== synchronized.narrative.text) {
-    narrative.textContent = synchronized.narrative.text;
-  }
+  setTextContentIfChanged(narrative, synchronized.narrative.text);
 }
 
 function patchSynchronizedDemandEquation(
@@ -545,7 +541,7 @@ function patchSynchronizedDemandEquation(
 ): void {
   setAttributeIfChanged(owner, "data-kp-latex", latex);
   const relation = requireElement<HTMLElement>(owner, ".katex-html .mrel");
-  relation.textContent = latex.includes("\\approx") ? "≈" : "=";
+  setTextContentIfChanged(relation, latex.includes("\\approx") ? "≈" : "=");
   const intercept = requireElement<HTMLElement>(
     owner,
     ".katex-html > .base:nth-child(2) > .mord"
@@ -554,7 +550,7 @@ function patchSynchronizedDemandEquation(
   if (match?.[1] === undefined) {
     throw new Error("Economics synchronized demand notation diverged.");
   }
-  intercept.textContent = match[1];
+  setTextContentIfChanged(intercept, match[1]);
 }
 
 function patchSynchronizedEquilibriumEquation(
@@ -566,7 +562,10 @@ function patchSynchronizedEquilibriumEquation(
   if (relations.length !== 2) {
     throw new Error("Economics synchronized equilibrium relation topology diverged.");
   }
-  relations[1]!.textContent = latex.includes("\\approx") ? "≈" : "=";
+  setTextContentIfChanged(
+    relations[1]!,
+    latex.includes("\\approx") ? "≈" : "="
+  );
   const values = owner.querySelectorAll<HTMLElement>(
     ".katex-html > .base:nth-child(3) > .mord"
   );
@@ -574,8 +573,8 @@ function patchSynchronizedEquilibriumEquation(
   if (values.length !== 2 || match?.[1] === undefined || match[2] === undefined) {
     throw new Error("Economics synchronized equilibrium value topology diverged.");
   }
-  values[0]!.textContent = match[1];
-  values[1]!.textContent = match[2];
+  setTextContentIfChanged(values[0]!, match[1]);
+  setTextContentIfChanged(values[1]!, match[2]);
 }
 
 function patchCurveRoleLabel(
@@ -588,7 +587,7 @@ function patchCurveRoleLabel(
     owner,
     ".katex-html .msupsub .mord.mtight"
   );
-  role.textContent = latex.slice(2);
+  setTextContentIfChanged(role, latex.slice(2));
 }
 
 function patchEquilibriumLabel(
@@ -599,23 +598,30 @@ function patchEquilibriumLabel(
 ): void {
   const owner = requireElement<HTMLElement>(foreignObject, "[data-kp-latex]");
   setAttributeIfChanged(owner, "data-kp-latex", latex);
-  requireElement<HTMLElement>(
-    owner,
-    ".katex-html .msupsub .mord.mtight"
-  ).textContent = role.slice(2);
-  requireElement<HTMLElement>(owner, ".katex-html .mrel").textContent =
-    role === "E_t" ? "≈" : "=";
+  setTextContentIfChanged(
+    requireElement<HTMLElement>(
+      owner,
+      ".katex-html .msupsub .mord.mtight"
+    ),
+    role.slice(2)
+  );
+  setTextContentIfChanged(
+    requireElement<HTMLElement>(owner, ".katex-html .mrel"),
+    role === "E_t" ? "≈" : "="
+  );
   const values = owner.querySelectorAll<HTMLElement>(
     ".katex-html > .base:nth-child(2) > .mord"
   );
   if (values.length !== 2) {
     throw new Error("Economics equilibrium KaTeX value topology diverged.");
   }
-  values[0]!.textContent = formatKpDimensionalContinuityDynamicDisplay(
-    frame.equilibrium.quantity
+  setTextContentIfChanged(
+    values[0]!,
+    formatKpDimensionalContinuityDynamicDisplay(frame.equilibrium.quantity)
   );
-  values[1]!.textContent = formatKpDimensionalContinuityDynamicDisplay(
-    frame.equilibrium.price
+  setTextContentIfChanged(
+    values[1]!,
+    formatKpDimensionalContinuityDynamicDisplay(frame.equilibrium.price)
   );
 }
 
@@ -896,6 +902,18 @@ function setAttributeIfChanged(
   value: string
 ): void {
   if (element.getAttribute(name) !== value) element.setAttribute(name, value);
+}
+
+function setTextContentIfChanged(node: Node, value: string): void {
+  if (node.textContent === value) return;
+  const text = node.childNodes.length === 1 && node.firstChild?.nodeType === 3
+    ? node.firstChild
+    : null;
+  if (text !== null) {
+    text.nodeValue = value;
+    return;
+  }
+  node.textContent = value;
 }
 
 function requireElement<ElementType extends Element>(

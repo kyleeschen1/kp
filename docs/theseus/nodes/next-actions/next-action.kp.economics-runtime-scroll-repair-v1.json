@@ -277,6 +277,48 @@
       "scope": "s12 patch hygiene",
       "checkedAt": "2026-08-05T07:48:27.985Z",
       "notes": "Passed with no whitespace errors."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s13 retained session semantic and lifecycle regression",
+      "checkedAt": "2026-08-05T08:05:00.660Z",
+      "notes": "Passed both Chromium cases after no-op text-node retention; direct seek, rewind, and fixed-node parity remain exact."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s13 economics deterministic regression",
+      "checkedAt": "2026-08-05T08:05:01.711Z",
+      "notes": "Passed all 39 tests."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s13 production build and type boundary",
+      "checkedAt": "2026-08-05T08:05:02.613Z",
+      "notes": "Passed as the build phase of the scoped performance command on every comparison run."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s13 full scoped performance command",
+      "checkedAt": "2026-08-05T08:05:03.531Z",
+      "notes": "Build and all active-motion/runtime budgets passed, but the unchanged 150 ms cold-start ceiling sampled 162 ms; the frozen baseline records 122-201 ms identical-build variance, so no ceiling was widened and the failure is retained as reliability evidence."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s13 retained runtime after-profile",
+      "checkedAt": "2026-08-05T08:05:04.596Z",
+      "notes": "Passed all unchanged budgets on the built artifact with 132 ms cold start; recorded zero SVG strings, zero subtree replacements, zero removed/added runtime elements, three graph-local discrete child mutations, and 34.4 ms active p95."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s13 patch hygiene",
+      "checkedAt": "2026-08-05T08:05:05.540Z",
+      "notes": "Passed with no whitespace errors."
     }
   ],
   "expectedLearning": [

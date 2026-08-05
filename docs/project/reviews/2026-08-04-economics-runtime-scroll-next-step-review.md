@@ -156,6 +156,44 @@ Acceptance:
 - no loss of screen-space label or theme behavior; and
 - a measured improvement without widening existing budgets.
 
+### Recorded retained-runtime result
+
+The production probe measured the retained economics session after Phase 2.
+The pure renderer remains the deterministic complete-markup authority for
+static output, export, fixtures, and fresh session mount; only the mounted
+economics caller uses the local retained patcher. No other graph caller or
+shared graph protocol changed.
+
+| Surface | Before | Retained runtime |
+| --- | ---: | ---: |
+| Initial transfer | 344,047 bytes | 347,382 bytes |
+| Initial scripts | 244,354 bytes | 247,690 bytes |
+| Initial resources | 48 | 48 |
+| Initial CLS | 0.00978 | 0.00978 |
+| Active-motion CLS | 0 | 0 |
+| Active two-rAF p95 | 34 ms | 34.4 ms |
+| Scroll events / coordinator frames | 26 / 26 | 26 / 26 |
+| Canonical geometry reads | 392 | 392 |
+| Semantic samples | 27 | 27 |
+| SVG strings after probe reset | 27; 623,249 characters | 0; 0 characters |
+| Runtime subtree replacement | 27 | 0 |
+| Runtime elements removed / added | 7,335 / 7,380 | 0 / 0 |
+| Graph-local child-list mutations | not isolated | 3 |
+| Graph-local nodes removed / added | not isolated | 0 / 3 |
+
+The retained session therefore eliminates ordinary-progress string assembly
+and whole-subtree replacement while preserving exact stage-boundary, direct
+seek, rewind, accessibility, and fixed-node identity tests. The three graph
+child-list mutations are discrete keyed guide/reference entry, not subtree
+replacement. Global observed mutations are now dominated by the existing
+scrubber output, status paragraph, and button text updates rather than graph
+paint.
+
+Post-change cold-start samples ranged from `132ms` to `178ms`, inside the
+already-recorded `122–201ms` machine variance. The `150ms` ceiling was not
+widened and produced a passing `132ms` sample; this remains reliability
+pressure rather than evidence about retained-renderer CPU cost.
+
 ## Phase 3: Make Scroll Geometry Local, Cached, And Activated
 
 Retain one passive, rAF-coalesced scroll source for continuous semantic

@@ -144,7 +144,8 @@
     {
       "id": "s13",
       "title": "Compare-runtime-performance-and-close-renderer-boundary",
-      "status": "planned"
+      "summary": "Eliminated post-mount economics SVG string construction and subtree replacement, retained dynamic text nodes, measured three discrete graph-local topology mutations, preserved all active budgets, and documented the economics-only boundary and unchanged cold-start variance.",
+      "status": "complete"
     },
     {
       "id": "s14",
