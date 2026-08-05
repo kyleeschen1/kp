@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "Enforce-economics-route-capability-closure",
-      "status": "planned"
+      "summary": "The production route probe now fails on catalogue, runtime-KaTeX, or unrelated graph-domain drift beyond the exact recorded debt, and immediately forbids WebGL, Graph3D, programming, Lisp, and Three.js leakage.",
+      "status": "complete"
     },
     {
       "id": "s04",

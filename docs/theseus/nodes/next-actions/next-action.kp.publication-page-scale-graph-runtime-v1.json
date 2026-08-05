@@ -112,6 +112,41 @@
       "scope": "s02 durable evidence integrity",
       "checkedAt": "2026-08-05T10:16:28.223Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s03 route closure performance ratchet",
+      "checkedAt": "2026-08-05T10:21:59.581Z",
+      "notes": "The route-closure assertions held, but a cold environmental sample exceeded the existing timing ceiling: initial longest task 234ms and active p95 43.9ms."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s03 route closure performance ratchet",
+      "checkedAt": "2026-08-05T10:22:02.544Z",
+      "notes": "Exact current debt and forbidden-family assertions passed; transfer 349589B, script 249919B, 48 resources, CLS 0, initial longest task 134ms, active p95 33.7ms."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s03 performance-spec type safety",
+      "checkedAt": "2026-08-05T10:22:06.174Z",
+      "notes": "Performance ratchet compiles under the test TypeScript project."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s03 patch hygiene",
+      "checkedAt": "2026-08-05T10:22:21.324Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s03 durable evidence integrity",
+      "checkedAt": "2026-08-05T10:22:22.478Z",
+      "notes": "Workspace validation passed with the current route debt ratchet."
     }
   ],
   "expectedLearning": [

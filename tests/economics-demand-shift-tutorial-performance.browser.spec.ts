@@ -24,6 +24,28 @@ const budgets = Object.freeze({
   activeLongestTaskMs: 100
 });
 
+// These are measured debts, not permissions to grow the route. Later slices
+// ratchet each list to empty as its owning capability is removed.
+const routeClosureDebt = Object.freeze({
+  catalogue: [
+    "animation-catalogue-player-host",
+    "animation-library",
+    "animation-library-display-catalog",
+    "kp-catalogue-identities"
+  ],
+  runtimeKatex: ["katex", "katex-adapter"],
+  unrelatedGraphDomains: [
+    "constant-force-work-energy-adapter",
+    "focus-profile",
+    "integral-area-sweep-adapter",
+    "linear-map",
+    "matrix",
+    "matrix-linear-map-frame",
+    "matrix-linear-map-pacing",
+    "propagation-compiler"
+  ]
+});
+
 interface KpTutorialPerformanceProbe {
   cls: number;
   geometryReads: number;
@@ -178,6 +200,15 @@ function routeBuildTotals(files: readonly RouteBuildFile[]): Record<string, numb
   ].sort().map((category) => [category, files
     .filter((file) => file.category === category)
     .reduce((total, { bytes }) => total + bytes, 0)]));
+}
+
+function loadedRouteNames(
+  files: readonly RouteBuildFile[],
+  category: string
+): string[] {
+  return files.filter((file) => file.category === category)
+    .map(({ name, file }) => name ?? basename(file, ".js"))
+    .sort();
 }
 
 test("production economics tutorial stays inside publication and motion budgets", async ({
@@ -483,7 +514,15 @@ test("production economics tutorial stays inside publication and motion budgets"
       assetFiles: loadedRouteBuild.assets.length,
       totals: loadedRouteBuild.totals
     },
-    initial,
+    initial: {
+      transferBytes: initial.transferBytes,
+      scriptBytes: initial.scriptBytes,
+      resourceCount: initial.resourceCount,
+      transferByInitiator: initial.transferByInitiator,
+      cls: initial.cls,
+      longTaskCount: initial.longTaskCount,
+      longestTaskMs: initial.longestTaskMs
+    },
     active
   };
   console.info("KP economics tutorial performance\n" +
@@ -500,6 +539,17 @@ test("production economics tutorial stays inside publication and motion budgets"
   expect(initial.resourceCount).toBeLessThanOrEqual(budgets.initialResourceCount);
   expect(initial.cls).toBeLessThanOrEqual(budgets.cumulativeLayoutShift);
   expect(initial.longestTaskMs).toBeLessThanOrEqual(budgets.initialLongestTaskMs);
+  expect(loadedRouteNames(loadedRouteBuild.javascript, "catalogue"))
+    .toEqual(routeClosureDebt.catalogue);
+  expect(loadedRouteNames(loadedRouteBuild.javascript, "runtime-katex-js"))
+    .toEqual(routeClosureDebt.runtimeKatex);
+  expect(loadedRouteNames(loadedRouteBuild.javascript, "unrelated-graph-domain"))
+    .toEqual(routeClosureDebt.unrelatedGraphDomains);
+  expect(loadedRouteBuild.javascript
+    .filter(({ file }) => /graph-webgl|graph-3d|programming|lisp-function|three-/i
+      .test(file))
+    .map(({ name, file }) => name ?? file))
+    .toEqual([]);
   expect(active.samples).toBe(26);
   expect(active.p95FrameMs, JSON.stringify(evidence, null, 2))
     .toBeLessThanOrEqual(budgets.activeP95FrameMs);
