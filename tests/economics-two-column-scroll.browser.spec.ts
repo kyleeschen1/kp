@@ -1154,6 +1154,72 @@ test("scroll frames reuse cached two-column viewport geometry", async ({
   ).__kpTwoColumnRootStyleReads ?? 0)).toBeGreaterThan(readsAfterScroll);
 });
 
+test("forward and reverse traversal project identical passage state", async ({
+  page
+}) => {
+  await page.setViewportSize(entryTarget.viewport);
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const first = card(root, "graph-at-rest").locator("p");
+  const demand = card(root, "follow-shift").locator("p");
+  const final = scrollParagraph(root, "movement-along-supply").locator("p");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-coordinator",
+    "connected"
+  );
+
+  const focusTop = entryTarget.focusLatch.paragraphTop;
+  const demandDistance = await demand.evaluate((element) => {
+    const previous = element.parentElement!.previousElementSibling!
+      .querySelector("p")!;
+    return element.getBoundingClientRect().top -
+      previous.getBoundingClientRect().top;
+  });
+  const motionStart = Math.min(
+    entryTarget.viewport.height * 0.62,
+    focusTop + demandDistance
+  );
+  const positions = [
+    { id: "ordinary", anchor: first, top: focusTop + 120 },
+    { id: "latched", anchor: first, top: focusTop },
+    {
+      id: "demand-midpoint",
+      anchor: demand,
+      top: (motionStart + focusTop) / 2
+    },
+    { id: "released", anchor: final, top: focusTop }
+  ] as const;
+
+  const forward = new Map<string, Awaited<ReturnType<typeof symmetrySnapshot>>>();
+  for (const position of positions) {
+    await placeTopAt(page, position.anchor, position.top);
+    forward.set(position.id, await symmetrySnapshot(root, position.id));
+  }
+  expect(positions.map(({ id }) => forward.get(id)?.passagePhase)).toEqual([
+    "ordinary-document",
+    "entry-latched",
+    "scrubbing",
+    "released"
+  ]);
+  expect(positions.map(({ id }) => forward.get(id)?.stageState)).toEqual([
+    "embedded",
+    "pinned",
+    "pinned",
+    "released"
+  ]);
+  expect(forward.get("ordinary")?.stageTop).toBe(
+    entryTarget.focusLatch.stageTop + 120
+  );
+
+  for (const position of [...positions].reverse()) {
+    await placeTopAt(page, position.anchor, position.top);
+    await expect.poll(() => symmetrySnapshot(root, position.id)).toEqual(
+      forward.get(position.id)
+    );
+  }
+});
+
 function card(root: Locator, passageId: string): Locator {
   return root.locator(
     `[data-kp-economics-tutorial-passage="${passageId}"]`
@@ -1196,6 +1262,67 @@ async function placeBottomAt(
   await page.evaluate(() => new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
   ));
+}
+
+async function symmetrySnapshot(
+  root: Locator,
+  positionId: string
+): Promise<{
+  readonly attention: string | null;
+  readonly demandProgress: string | null;
+  readonly equilibrium: readonly [string | null, string | null];
+  readonly passagePhase: string | null;
+  readonly relevantOpacity: string | null;
+  readonly relevantPinned: string | null;
+  readonly stageBottom: number;
+  readonly stageState: string | null;
+  readonly stageTop: number;
+  readonly supplyProgress: string | null;
+}> {
+  return root.evaluate((element, id) => {
+    const relevantPassageId = id === "ordinary" || id === "latched"
+      ? "graph-at-rest"
+      : id === "demand-midpoint"
+        ? "follow-shift"
+        : "movement-along-supply";
+    const relevant = element.querySelector<HTMLElement>(
+      `[data-kp-economics-tutorial-passage="${relevantPassageId}"]`
+    )!;
+    const stage = element.querySelector<HTMLElement>(
+      "[data-kp-inline-sticky-stage]"
+    )!;
+    const stageBounds = stage.getBoundingClientRect();
+    const equilibrium = element.querySelector<SVGElement>(
+      "[data-kp-economics-equilibrium-point]"
+    )!;
+    return {
+      attention: element.getAttribute(
+        "data-kp-economics-tutorial-attention-passage"
+      ),
+      demandProgress: element.getAttribute(
+        "data-kp-economics-tutorial-demand-progress"
+      ),
+      equilibrium: [
+        equilibrium.getAttribute("cx"),
+        equilibrium.getAttribute("cy")
+      ] as const,
+      passagePhase: element.getAttribute(
+        "data-kp-economics-tutorial-passage-phase"
+      ),
+      relevantOpacity: relevant.getAttribute(
+        "data-kp-two-column-paragraph-opacity"
+      ),
+      relevantPinned: relevant.getAttribute(
+        "data-kp-two-column-endpoint-pinned"
+      ),
+      stageBottom: Math.round(stageBounds.bottom),
+      stageState: element.getAttribute("data-kp-inline-sticky-stage-state"),
+      stageTop: Math.round(stageBounds.top),
+      supplyProgress: element.getAttribute(
+        "data-kp-economics-tutorial-supply-movement-progress"
+      )
+    };
+  }, positionId);
 }
 
 async function columnGeometry(

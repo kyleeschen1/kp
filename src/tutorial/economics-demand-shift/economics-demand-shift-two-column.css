@@ -129,6 +129,16 @@
     grid-area: 1 / 1;
   }
 
+  /* The inline-sticky motif adds a viewport-sized entrance gap. Two-column
+     entry already owns an exact prose-to-stage latch, so inheriting that gap
+     would let the graph pin before its opening paragraph arrives. */
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    .kp-economics-tutorial__motion-passage-prose
+    > [data-kp-inline-sticky-cue]:first-child {
+    margin-top: 0;
+  }
+
   .kp-economics-tutorial--two-column-scroll
     .kp-economics-tutorial__stage--inline {
     grid-area: 1 / 1;

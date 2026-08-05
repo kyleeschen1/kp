@@ -145,7 +145,8 @@
     {
       "id": "s16",
       "title": "Prove forward reverse symmetry",
-      "status": "planned"
+      "summary": "Forward and reverse traversal now project identical passage phase, semantics, salience, and stage geometry; removing the inherited inline entrance gap completed true simultaneous approach.",
+      "status": "complete"
     },
     {
       "id": "s17",
