@@ -215,7 +215,8 @@
     {
       "id": "s27",
       "title": "Adopt-shared-Graph2D-lifecycle-in-both-callers",
-      "status": "planned"
+      "summary": "Economics and physics now use the shared Graph2D lifecycle for owner-scoped retained-session creation, reuse, replacement, and disposal. Each caller still owns its domain frame, projection, KaTeX, accessibility, paint, metrics, and editor disposal event. Dense identity, three-engine physics, economics learner and canonical visuals, neighboring vector behavior, production route budgets, types, build, and architecture all pass.",
+      "status": "complete"
     },
     {
       "id": "s28",

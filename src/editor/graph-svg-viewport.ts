@@ -19,6 +19,9 @@ import {
   type KpEconomicsEquilibriumRuntimeSession
 } from "../rendering/economics-equilibrium-runtime-session.ts";
 import {
+  KpGraph2DRuntimeSessionLifecycle
+} from "../rendering/graph-2d-runtime-session.ts";
+import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import {
@@ -93,10 +96,13 @@ const economicsGraphRuntimePerformanceSessions = new WeakMap<
   KpEconomicsGraphRuntimePerformanceSession
 >();
 
-const economicsMountedRuntimeSessions = new WeakMap<
+type KpEconomicsRuntimeSessionLifecycle = KpGraph2DRuntimeSessionLifecycle<
   HTMLElement,
+  SVGGElement,
+  KpEconomicsEquilibriumRuntimeFrame,
+  KpEditorGraphSvgViewportModel,
   KpEconomicsEquilibriumRuntimeSession
->();
+>;
 
 export function createKpEconomicsGraphSvgViewportAdapter(input: {
   readonly renderInlineLatex: KpEconomicsInlineLatexRenderer;
@@ -114,10 +120,21 @@ KpEditorAnimationSurfaceAdapter {
 export function createKpEconomicsGraphSvgViewportRenderer(
   renderInlineLatex: KpEconomicsInlineLatexRenderer
 ) {
+  const runtimeLifecycle: KpEconomicsRuntimeSessionLifecycle =
+    new KpGraph2DRuntimeSessionLifecycle((input) =>
+      createKpEconomicsEquilibriumRuntimeSession({
+        ...input,
+        renderInlineLatex
+      })
+    );
   return Object.freeze({
     presentation: economicsGraphSvgViewportPresentation,
     render: (input: KpEditorGraphSvgViewportRenderInput) =>
-      renderEconomicsGraphSvgFrame(input, renderInlineLatex)
+      renderEconomicsGraphSvgFrame(input, runtimeLifecycle),
+    dispose: (slot: HTMLElement) => {
+      runtimeLifecycle.dispose(slot);
+      disposeEconomicsScreenSpaceLabels(slot);
+    }
   });
 }
 
@@ -130,7 +147,7 @@ function renderEconomicsGraphSvgFrame({
   state,
   svg
 }: KpEditorGraphSvgViewportRenderInput,
-renderInlineLatex: KpEconomicsInlineLatexRenderer): void {
+runtimeLifecycle: KpEconomicsRuntimeSessionLifecycle): void {
       const economicsProfile = economicsGraphRuntimePerformanceSession(
         player,
         slot
@@ -141,23 +158,18 @@ renderInlineLatex: KpEconomicsInlineLatexRenderer): void {
               state,
               economicsProfile?.metrics
             );
-            let runtime = economicsMountedRuntimeSessions.get(slot);
-            if (runtime?.content !== content || runtime.status === "disposed") {
-              runtime?.dispose();
-              runtime = createKpEconomicsEquilibriumRuntimeSession({
-                content,
-                frame: economicsFrame,
-                viewport: model,
-                renderInlineLatex
-              });
-              economicsMountedRuntimeSessions.set(slot, runtime);
+            const result = runtimeLifecycle.apply({
+              owner: slot,
+              content,
+              frame: economicsFrame,
+              viewport: model
+            });
+            if (result.created) {
               player.addEventListener(
                 KP_EDITOR_ANIMATION_DISPOSE_EVENT,
-                () => disposeEconomicsMountedRuntimeSession(slot),
+                () => runtimeLifecycle.dispose(slot),
                 { once: true }
               );
-            } else {
-              runtime.apply({ frame: economicsFrame, viewport: model });
             }
             const accessibilityStartedAt = economicsProfile === undefined
               ? 0
@@ -212,16 +224,6 @@ function sampleEconomicsRuntimeFrame(
     );
   }
   return frame;
-}
-
-function disposeEconomicsMountedRuntimeSession(slot: HTMLElement): void {
-  economicsMountedRuntimeSessions.get(slot)?.dispose();
-  economicsMountedRuntimeSessions.delete(slot);
-}
-
-export function disposeKpEconomicsGraphSvgViewport(slot: HTMLElement): void {
-  disposeEconomicsMountedRuntimeSession(slot);
-  disposeEconomicsScreenSpaceLabels(slot);
 }
 
 function syncEconomicsLabelsForCurrentMode(input: {

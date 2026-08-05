@@ -1402,6 +1402,83 @@
       "scope": "Slice patch hygiene",
       "checkedAt": "2026-08-05T14:16:02.925Z",
       "notes": "The Graph2D lifecycle, focused tests, package command, and durable evidence contain no whitespace errors."
+    },
+    {
+      "command": "npm run test:graph-2d-runtime",
+      "status": "passed",
+      "scope": "s27 shared lifecycle adoption",
+      "checkedAt": "2026-08-05T14:24:55.840Z",
+      "notes": "All five focused tests pass, including source-level proof that economics and physics use the shared lifecycle while editor disposal remains caller-local."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s27 economics semantic preservation",
+      "checkedAt": "2026-08-05T14:24:56.954Z",
+      "notes": "All 42 economics publication, semantic frame, direct-seek, rewind, static SVG, retained-session, and lesson conformance tests pass."
+    },
+    {
+      "command": "npm run test:physics-work-energy",
+      "status": "passed",
+      "scope": "s27 physics semantic preservation",
+      "checkedAt": "2026-08-05T14:24:57.866Z",
+      "notes": "All 24 exact physics model, runtime, deterministic SVG, synchronized-view, and retained-session tests pass."
+    },
+    {
+      "command": "npm run performance:physics-work-energy",
+      "status": "passed",
+      "scope": "s27 physics retained identity",
+      "checkedAt": "2026-08-05T14:24:58.786Z",
+      "notes": "Across 68 dense forward/reverse/revisited frames all five runtime identities remain 68/68, exact and accessible samples remain 68/68, and added/removed node counts remain zero after shared lifecycle adoption."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s27 three-engine physics caller",
+      "checkedAt": "2026-08-05T14:24:59.701Z",
+      "notes": "Chromium, Firefox, and WebKit preserve exact accessible seek, rewind, parameters, Review, history, and terminal lifecycle."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s27 economics learner behavior",
+      "checkedAt": "2026-08-05T14:25:00.626Z",
+      "notes": "All 12 Chromium learner checks pass across manual/scroll handoff, direct links, TOC/history, reduced motion, static/no-JS behavior, and phone layout."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s27 canonical visual preservation",
+      "checkedAt": "2026-08-05T14:25:01.563Z",
+      "notes": "All eight approved economics cases pass across desktop, phone, paper theme, typography, column side, spacing, stroke tuning, and inline rollback."
+    },
+    {
+      "command": "npm run test:browser:vector-dot-projection",
+      "status": "passed",
+      "scope": "s27 neighboring SVG caller preservation",
+      "checkedAt": "2026-08-05T14:25:02.476Z",
+      "notes": "All three vector projection checks pass; the generic non-retained domain path remains compact, exact, rewindable, and persistent."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s27 production route and build closure",
+      "checkedAt": "2026-08-05T14:25:03.393Z",
+      "notes": "Full typecheck, publication stale check, production build, and route budget pass: 239460 transfer bytes, 139832 script bytes, 42 resources, CLS 0, 87ms initial longest task, 34.1ms active p95, zero SVG strings or subtree replacements."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s27 architecture preservation",
+      "checkedAt": "2026-08-05T14:25:04.328Z",
+      "notes": "All four architecture gates pass with editor, domain, and renderer authority unchanged."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s27 patch hygiene",
+      "checkedAt": "2026-08-05T14:25:05.299Z",
+      "notes": "The two caller adoptions, focused source gate, and durable evidence contain no whitespace errors."
     }
   ],
   "progress": {

@@ -210,3 +210,21 @@ test("the shared lifecycle has no domain, DOM, math, framework, or renderer depe
     /(?:HTMLElement|SVGElement|katex|three|svelte|\.\.\/animation|\.\.\/editor)/i
   );
 });
+
+test("economics and physics adopt the lifecycle without moving editor disposal into it", () => {
+  const economicsSource = readFileSync(
+    new URL("../src/editor/graph-svg-viewport.ts", import.meta.url),
+    "utf8"
+  );
+  const domainSource = readFileSync(
+    new URL("../src/editor/graph-svg-domain-renderers.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.match(economicsSource, /KpGraph2DRuntimeSessionLifecycle/);
+  assert.match(domainSource, /KpGraph2DRuntimeSessionLifecycle/);
+  assert.doesNotMatch(economicsSource, /economicsMountedRuntimeSessions/);
+  assert.doesNotMatch(domainSource, /physicsMountedRuntimeSessions/);
+  assert.match(economicsSource, /KP_EDITOR_ANIMATION_DISPOSE_EVENT/);
+  assert.match(domainSource, /KP_EDITOR_ANIMATION_DISPOSE_EVENT/);
+});
