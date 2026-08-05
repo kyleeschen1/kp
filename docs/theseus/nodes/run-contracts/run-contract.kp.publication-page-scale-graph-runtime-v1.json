@@ -203,7 +203,8 @@
     {
       "id": "s25",
       "title": "Prove-physics-identity-seek-and-accessibility",
-      "status": "planned"
+      "summary": "Proved the physics retained caller before Graph2D extraction. Sixty-eight forward, reverse, and shuffled direct-seek frames match the independent exact sampler, synchronized narration, and projected geometry with view, work-area, description, and KaTeX identity retained and no add/remove churn. Force changes and reduced/static presentation preserve the session; terminal catalogue disposal removes the retained view from its detached owner. Exact unit, Chromium/Firefox/WebKit learner, full type, publication, and production build checks pass.",
+      "status": "complete"
     },
     {
       "id": "s26",

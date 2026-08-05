@@ -1339,6 +1339,41 @@
       "scope": "s24 patch hygiene",
       "checkedAt": "2026-08-05T13:45:35.762Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run performance:physics-work-energy",
+      "status": "passed",
+      "scope": "s25 dense identity, exactness, accessibility, and disposal",
+      "checkedAt": "2026-08-05T13:57:28.387Z",
+      "notes": "Two Chromium proofs pass. Sixty-eight forward/reverse/revisited frames match the independent exact sampler and geometry projection with all five retained identities and accessibility present, zero added/removed nodes, and 40 history revisits. Force changes plus reduced/static presentation retain nodes; terminal catalogue disposal removes the retained view from its detached owner."
+    },
+    {
+      "command": "npm run test:physics-work-energy",
+      "status": "passed",
+      "scope": "s25 exact physics closure",
+      "checkedAt": "2026-08-05T13:57:29.686Z",
+      "notes": "All 24 exact physics semantic, runtime, deterministic renderer, synchronized view, and retained-session contract tests passed."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s25 three-engine learner closure",
+      "checkedAt": "2026-08-05T13:57:30.787Z",
+      "notes": "Chromium, Firefox, and WebKit preserve exact accessible seek, rewind, parameters, Review, URL history, and persistent catalogue behavior."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production closure",
+      "checkedAt": "2026-08-05T13:57:31.853Z",
+      "notes": "Full typecheck, compiled economics publication stale check, and Vite production build passed; only the existing large-chunk advisory remains."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25 patch hygiene",
+      "checkedAt": "2026-08-05T13:57:32.921Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
