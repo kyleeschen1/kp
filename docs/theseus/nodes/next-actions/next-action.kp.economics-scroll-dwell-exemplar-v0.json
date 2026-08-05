@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.economics-scroll-dwell-exemplar-v0",
+  "kind": "next-action",
+  "title": "Economics scroll dwell exemplar",
+  "status": "ready",
+  "domain": "economics",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-scroll-hold-pacing-handoff.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-05T23:21:11.265Z",
+      "notes": "52 economics tests pass, including named dwell profiles, reverse projection, manual takeover, and linear rollback."
+    },
+    {
+      "command": "npm run visual:economics-motion-bridge",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-05T23:21:12.470Z",
+      "notes": "11 Chromium checks pass with arrival, midpoint, departure, reverse, and direct handoff evidence."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-05T23:21:13.569Z",
+      "notes": "59 lifecycle and page-scale checks pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "boundary",
+      "checkedAt": "2026-08-05T23:21:14.923Z",
+      "notes": "Production typecheck, Svelte diagnostics, compiled economics publication freshness, and Vite build pass."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository-baseline",
+      "checkedAt": "2026-08-05T23:21:16.177Z",
+      "notes": "3725 pass and 24 unrelated baseline tests fail: current worktree exposes 37 catalogue assets where stale expectations say 36, plus pre-existing HTML-helper, place-value byte, and roadmap snapshot drift. No failing test targets the economics dwell change."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Iteration slice 3/3 implementation and verification complete; stop at HUMAN_CHECKPOINT for visual selection among none, preserve, medium, and recommended. Default route remains linear and the approved long contract remains paused at slice 21."
+  }
+}

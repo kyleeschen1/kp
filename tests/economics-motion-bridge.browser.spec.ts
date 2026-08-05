@@ -5,6 +5,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 const acceptedRoute =
   "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 const exemplarRoute = `${acceptedRoute}&scrub=motion-bridge`;
+const dwellExemplarRoute = `${exemplarRoute}&dwell=recommended`;
 const evidenceDirectory = "tmp/codex/economics-motion-bridge";
 
 test.beforeAll(() => {
@@ -67,6 +68,44 @@ test("motion bridge projects exact forward and reverse semantic state", async ({
   }
 });
 
+test("recommended dwell holds the handoff through one reversible reading beat", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(dwellExemplarRoute);
+
+  const root = tutorial(page);
+  const before = root.locator("[data-kp-motion-bridge-before] p");
+  const rail = root.locator(".kp-tutorial-motion-bridge__rail");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-motion-bridge-dwell",
+    "recommended"
+  );
+  const samples = [
+    { label: "arrival", top: 65 },
+    { label: "midpoint", top: 15 },
+    { label: "departure", top: -35 }
+  ] as const;
+  for (const sample of samples) {
+    await placeTopAt(page, before, sample.top);
+    await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 3);
+    await expect.poll(() => railProgress(rail)).toBeCloseTo(0.72, 3);
+    await page.screenshot({
+      path: `${evidenceDirectory}/desktop-dark-dwell-${sample.label}.png`,
+      fullPage: false
+    });
+  }
+
+  await placeTopAt(page, before, -120);
+  await expect.poll(() => demandProgress(root)).toBe(1);
+  await placeTopAt(page, before, 15);
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 3);
+  await page.screenshot({
+    path: `${evidenceDirectory}/desktop-dark-dwell-reverse.png`,
+    fullPage: false
+  });
+});
+
 test("semantic checkpoint URLs settle directly at bridge endpoints", async ({
   page
 }) => {
@@ -89,6 +128,15 @@ test("semantic checkpoint URLs settle directly at bridge endpoints", async ({
     "checkpoint:shift-ready"
   );
   await expect.poll(() => demandProgress(tutorial(page))).toBe(0);
+
+  await page.goto(
+    `${dwellExemplarRoute}#kp-checkpoint-shift-handoff`
+  );
+  await expect(tutorial(page)).toHaveAttribute(
+    "data-kp-economics-tutorial-initial-destination",
+    "checkpoint:shift-handoff"
+  );
+  await expect.poll(() => demandProgress(tutorial(page))).toBeCloseTo(0.72, 3);
 });
 
 test("accepted route has no motion bridge presentation", async ({ page }) => {

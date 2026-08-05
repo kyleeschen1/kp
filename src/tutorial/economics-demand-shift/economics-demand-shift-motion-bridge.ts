@@ -4,6 +4,9 @@ import type {
 import type {
   KpTutorialMotionCorridor
 } from "../kp-tutorial-motion.ts";
+import type {
+  KpEconomicsMotionBridgeDwellProfile
+} from "./economics-demand-shift-layout.ts";
 import {
   findKpEconomicsMotionBlock,
   findKpEconomicsMotionCheckpoint
@@ -18,6 +21,7 @@ export function projectKpEconomicsMotionBridgeCorridor(input: {
   readonly viewportHeightPx: number;
   readonly readingAnchorPx: number;
   readonly distancePx: number;
+  readonly dwellProfile?: KpEconomicsMotionBridgeDwellProfile | undefined;
 }): KpTutorialMotionCorridor {
   const viewportHeight = positive(input.viewportHeightPx, "viewport height");
   const distance = positive(input.distancePx, "motion bridge distance");
@@ -42,11 +46,75 @@ export function projectKpEconomicsMotionBridgeCorridor(input: {
   return Object.freeze({
     startViewportRatio: readingAnchor / viewportHeight,
     endViewportRatio: (readingAnchor - distance) / viewportHeight,
-    keyframes: Object.freeze([
-      Object.freeze({ travel: 0, progress: from.progress }),
-      Object.freeze({ travel: 1, progress: to.progress })
-    ])
+    keyframes: projectDwellKeyframes({
+      corridor: block.corridor,
+      fromProgress: from.progress,
+      toProgress: to.progress,
+      profile: input.dwellProfile ?? "none"
+    })
   });
+}
+
+const dwellShareByProfile = Object.freeze({
+  preserve: 0.15,
+  medium: 0.2,
+  recommended: 0.25
+} satisfies Readonly<Record<
+  Exclude<KpEconomicsMotionBridgeDwellProfile, "none">,
+  number
+>>);
+
+function projectDwellKeyframes(input: {
+  readonly corridor: KpTutorialMotionCorridor;
+  readonly fromProgress: number;
+  readonly toProgress: number;
+  readonly profile: KpEconomicsMotionBridgeDwellProfile;
+}): KpTutorialMotionCorridor["keyframes"] {
+  const linear = () => Object.freeze([
+    Object.freeze({ travel: 0, progress: input.fromProgress }),
+    Object.freeze({ travel: 1, progress: input.toProgress })
+  ]);
+  if (input.profile === "none") return linear();
+
+  const source = input.corridor.keyframes;
+  const departure = [...source].reverse().find(({ progress }) =>
+    progress === input.fromProgress
+  );
+  const arrival = source.find(({ progress }) => progress === input.toProgress);
+  if (departure === undefined || arrival === undefined ||
+      arrival.travel <= departure.travel) {
+    return linear();
+  }
+  const plateau = source.slice(1).map((after, index) => ({
+    before: source[index]!,
+    after
+  })).find(({ before, after }) =>
+    before.progress === after.progress &&
+      before.progress > input.fromProgress &&
+      before.progress < input.toProgress
+  );
+  if (plateau === undefined) return linear();
+
+  const authoredTravel = arrival.travel - departure.travel;
+  const plateauStart = roundUnit(
+    (plateau.before.travel - departure.travel) / authoredTravel
+  );
+  const plateauEnd = Math.min(
+    1,
+    plateauStart + dwellShareByProfile[input.profile]
+  );
+  // This economics-only profile changes time spent reading the handoff state;
+  // the semantic state itself remains the authored checkpoint at every sample.
+  return Object.freeze([
+    Object.freeze({ travel: 0, progress: input.fromProgress }),
+    Object.freeze({ travel: plateauStart, progress: plateau.before.progress }),
+    Object.freeze({ travel: plateauEnd, progress: plateau.after.progress }),
+    Object.freeze({ travel: 1, progress: input.toProgress })
+  ]);
+}
+
+function roundUnit(value: number): number {
+  return Math.round(value * 10_000) / 10_000;
 }
 
 function finite(value: number, label: string): number {

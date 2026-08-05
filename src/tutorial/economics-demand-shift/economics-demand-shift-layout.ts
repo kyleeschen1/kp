@@ -9,6 +9,12 @@ export type KpEconomicsScrollScrubStrategy =
   | "continuous-passage"
   | "motion-bridge";
 
+export type KpEconomicsMotionBridgeDwellProfile =
+  | "none"
+  | "preserve"
+  | "medium"
+  | "recommended";
+
 export type KpEconomicsTwoColumnTextSide = "left" | "right";
 
 export type KpInlineStickyLessonFit =
@@ -50,6 +56,7 @@ export interface KpTwoColumnScrollSequenceProjection {
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 const motionBridgeScrubQueryValue = "motion-bridge";
+const motionBridgeDwellQueryKey = "dwell";
 const twoColumnTextSideQueryKey = "text";
 const twoColumnParagraphGapQueryKey = "gap";
 
@@ -57,6 +64,8 @@ export const kpEconomicsTwoColumnScrollCanonicalSearch =
   "?layout=two-column-scroll";
 export const kpEconomicsMotionBridgeExemplarSearch =
   "?layout=two-column-scroll&scrub=motion-bridge";
+export const kpEconomicsMotionBridgeDwellExemplarSearch =
+  "?layout=two-column-scroll&scrub=motion-bridge&dwell=recommended";
 
 export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
 export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
@@ -84,6 +93,18 @@ export function readKpEconomicsScrollScrubStrategy(
       parameters.get("scrub") === motionBridgeScrubQueryValue
     ? "motion-bridge"
     : "continuous-passage";
+}
+
+export function readKpEconomicsMotionBridgeDwellProfile(
+  search: string
+): KpEconomicsMotionBridgeDwellProfile {
+  if (readKpEconomicsScrollScrubStrategy(search) !== "motion-bridge") {
+    return "none";
+  }
+  const value = new URLSearchParams(search).get(motionBridgeDwellQueryKey);
+  return value === "preserve" || value === "medium" || value === "recommended"
+    ? value
+    : "none";
 }
 
 export function readKpEconomicsTwoColumnTextSide(

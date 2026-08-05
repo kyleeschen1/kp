@@ -46,6 +46,7 @@
     writeKpEconomicsTwoColumnParagraphGapVh,
     writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
+    type KpEconomicsMotionBridgeDwellProfile,
     type KpEconomicsScrollScrubStrategy,
     type KpEconomicsTwoColumnTextSide,
     type KpInlineStickyParagraphProjection,
@@ -236,6 +237,7 @@
     initialDestination,
     presentationLayout,
     scrubStrategy,
+    motionBridgeDwellProfile,
     lesson,
     motionBridgeHtml,
     semanticTransit,
@@ -257,6 +259,7 @@
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
     readonly scrubStrategy: KpEconomicsScrollScrubStrategy;
+    readonly motionBridgeDwellProfile: KpEconomicsMotionBridgeDwellProfile;
     readonly lesson: KpEconomicsDemandShiftLesson;
     readonly motionBridgeHtml?: Readonly<Record<string, string>> | undefined;
     readonly semanticTransit?: KpTutorialSemanticTransitAuthoringBundle | undefined;
@@ -1559,7 +1562,8 @@
           bridge: motionBridge,
           viewportHeightPx: geometry.viewportHeightPx,
           readingAnchorPx: geometry.textAnchorY,
-          distancePx: geometry.motionBridgeDistancePx
+          distancePx: geometry.motionBridgeDistancePx,
+          dwellProfile: motionBridgeDwellProfile
         });
       }
       const passage = anchor.closest<HTMLElement>(
@@ -2579,6 +2583,7 @@
     "data-kp-economics-demand-shift-tutorial": true,
     "data-kp-economics-tutorial-layout": presentationLayout,
     "data-kp-economics-tutorial-scrub-strategy": scrubStrategy,
+    "data-kp-economics-motion-bridge-dwell": motionBridgeDwellProfile,
     "data-kp-economics-motion-bridge-artifact":
       motionBridgeHtml?.["demand-increase"] === undefined ? "" : "demand-increase",
     "data-kp-economics-motion-bridge-progress": motionBridgeEnabled
@@ -2636,7 +2641,8 @@
             tuning: {
               "two-column-text-side": twoColumnTextSide,
               "graph-stroke-scale": graphStrokeScale.toFixed(2),
-              "paragraph-gap-vh": String(twoColumnParagraphGapVh)
+              "paragraph-gap-vh": String(twoColumnParagraphGapVh),
+              "motion-bridge-dwell": motionBridgeDwellProfile
             }
           }
         : { themeId: kpEconomicsDemandShiftThemeIds[theme] }

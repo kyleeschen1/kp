@@ -10,10 +10,12 @@ import {
   projectKpTwoColumnScrollSequence,
   kpEconomicsTwoColumnParagraphGapDefaultVh,
   kpEconomicsTwoColumnParagraphGapMaximumVh,
+  kpEconomicsMotionBridgeDwellExemplarSearch,
   kpEconomicsMotionBridgeExemplarSearch,
   kpEconomicsTwoColumnScrollCanonicalSearch,
   readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsDemandShiftPresentationLayout,
+  readKpEconomicsMotionBridgeDwellProfile,
   readKpEconomicsScrollScrubStrategy,
   readKpEconomicsTwoColumnTextSide,
   writeKpEconomicsTwoColumnParagraphGapVh,
@@ -78,6 +80,37 @@ test("motion bridge is an opt-in strategy isolated from the accepted route", () 
       "?layout=inline-sticky&scrub=motion-bridge"
     ),
     "continuous-passage"
+  );
+});
+
+test("motion bridge dwell profiles are named and fail closed outside the exemplar", () => {
+  assert.equal(
+    kpEconomicsMotionBridgeDwellExemplarSearch,
+    "?layout=two-column-scroll&scrub=motion-bridge&dwell=recommended"
+  );
+  for (const profile of ["preserve", "medium", "recommended"] as const) {
+    assert.equal(
+      readKpEconomicsMotionBridgeDwellProfile(
+        `${kpEconomicsMotionBridgeExemplarSearch}&dwell=${profile}`
+      ),
+      profile
+    );
+  }
+  assert.equal(
+    readKpEconomicsMotionBridgeDwellProfile(
+      `${kpEconomicsMotionBridgeExemplarSearch}&dwell=unknown`
+    ),
+    "none"
+  );
+  assert.equal(
+    readKpEconomicsMotionBridgeDwellProfile("?dwell=recommended"),
+    "none"
+  );
+  assert.equal(
+    readKpEconomicsMotionBridgeDwellProfile(
+      "?layout=two-column-scroll&dwell=recommended"
+    ),
+    "none"
   );
 });
 

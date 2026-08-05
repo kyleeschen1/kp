@@ -277,6 +277,78 @@ test("economics motion bridge uses the existing semantic interval", async () => 
   ), [0, 0.5, 1]);
 });
 
+test("economics motion bridge compares semantic dwell without adding a clock", async () => {
+  const [
+    { kpEconomicsDemandShiftMotionBridgeExemplar: bridge },
+    { projectKpEconomicsMotionBridgeCorridor }
+  ] = await Promise.all([
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts"),
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge.ts")
+  ]);
+  const expectedEnd = {
+    preserve: 0.6875,
+    medium: 0.7375,
+    recommended: 0.7875
+  } as const;
+  for (const profile of ["preserve", "medium", "recommended"] as const) {
+    const corridor = projectKpEconomicsMotionBridgeCorridor({
+      bridge,
+      viewportHeightPx: 800,
+      readingAnchorPx: 280,
+      distancePx: 400,
+      dwellProfile: profile
+    });
+    assert.deepEqual(corridor.keyframes, [
+      { travel: 0, progress: 0 },
+      { travel: 0.5375, progress: 0.72 },
+      { travel: expectedEnd[profile], progress: 0.72 },
+      { travel: 1, progress: 1 }
+    ]);
+    assert.equal(
+      projectKpTutorialCorridorTravel(corridor, 0.65),
+      0.72
+    );
+  }
+});
+
+test("recommended bridge dwell is reversible and preserves manual takeover", async () => {
+  const [
+    { kpEconomicsDemandShiftMotionBridgeExemplar: bridge },
+    { projectKpEconomicsMotionBridgeCorridor }
+  ] = await Promise.all([
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts"),
+    import("../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge.ts")
+  ]);
+  const corridor = projectKpEconomicsMotionBridgeCorridor({
+    bridge,
+    viewportHeightPx: 800,
+    readingAnchorPx: 280,
+    distancePx: 400,
+    dwellProfile: "recommended"
+  });
+  const travelSamples = [0.52, 0.5375, 0.65, 0.7875, 0.81];
+  const forward = travelSamples.map((travel) =>
+    projectKpTutorialCorridorTravel(corridor, travel)
+  );
+  const reverse = [...travelSamples].reverse().map((travel) =>
+    projectKpTutorialCorridorTravel(corridor, travel)
+  ).reverse();
+  assert.deepEqual(reverse, forward);
+  assert.equal(forward[1], 0.72);
+  assert.equal(forward[2], 0.72);
+  assert.equal(forward[3], 0.72);
+
+  assert.deepEqual(projectKpTutorialRebasedCorridor({
+    corridor,
+    rawTravelAtTakeover: 0.65,
+    manualProgress: 0.72,
+    rawTravel: 0.65
+  }), {
+    travel: 0.65,
+    progress: 0.72
+  });
+});
+
 test("semantic tutorial URLs round-trip without choreography coordinates", () => {
   const destinations = [
     { kind: "section" as const, id: "market-clearing" },
