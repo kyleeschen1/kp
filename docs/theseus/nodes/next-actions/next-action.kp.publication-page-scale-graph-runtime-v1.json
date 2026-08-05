@@ -1479,6 +1479,41 @@
       "scope": "s27 patch hygiene",
       "checkedAt": "2026-08-05T14:25:05.299Z",
       "notes": "The two caller adoptions, focused source gate, and durable evidence contain no whitespace errors."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "s28 renderer-neutral Graph3D protocol",
+      "checkedAt": "2026-08-05T14:31:58.349Z",
+      "notes": "Ten focused tests pass across the existing bounded host contract and the new protocol: exact direct seek/rewind, fail-closed validation, opaque scenes, resolved visual roles, local anchors, and separate renderer-port lifecycles."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s28 protocol type closure",
+      "checkedAt": "2026-08-05T14:31:59.535Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass with generic opaque scene payloads and static/interactive port types."
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s28 existing Graph3D preservation",
+      "checkedAt": "2026-08-05T14:32:00.523Z",
+      "notes": "Both Chromium checks pass: the bounded capability loads and releases in place, and context loss releases its lease while semantic static paint remains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s28 dependency boundary",
+      "checkedAt": "2026-08-05T14:32:01.468Z",
+      "notes": "All four architecture gates pass; the protocol source has zero imports and no backend, DOM, framework, domain, or Graph2D dependency."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s28 patch hygiene",
+      "checkedAt": "2026-08-05T14:32:02.418Z",
+      "notes": "The protocol, focused tests, stable package command, and durable evidence contain no whitespace errors."
     }
   ],
   "progress": {

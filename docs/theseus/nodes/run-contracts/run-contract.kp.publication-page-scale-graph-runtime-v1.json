@@ -221,7 +221,8 @@
     {
       "id": "s28",
       "title": "Define-renderer-neutral-Graph3D-protocol",
-      "status": "planned"
+      "summary": "Defined kp.graph-3d-runtime-protocol.v1 as an import-free renderer-neutral boundary: opaque caller-projected source/target scenes, host-owned direct-seek clock, stage-local plot and camera anchors, explicit orthographic camera state, seven resolved visual roles with apparent widths, visibility, and separate static/interactive mount-apply-visibility-dispose ports. Focused, type, architecture, and existing Graph3D browser checks pass without caller changes.",
+      "status": "complete"
     },
     {
       "id": "s29",
