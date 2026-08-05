@@ -74,6 +74,18 @@ test("generated economics publication is an exact deterministic artifact", () =>
   assert.ok(artifact.math.sourceLatex.length > 0);
   assert.match(artifactSource, /katex-mathml/);
   assert.equal(artifact.payload.lesson.proseMotion?.length, 1);
+  assert.equal(
+    artifact.payload.semanticTransit.transits[0]?.id,
+    "price-axis-correspondence"
+  );
+  assert.equal(
+    artifact.payload.semanticTransit.textReferences[0]?.id,
+    "price-axis-inline"
+  );
+  assert.equal(
+    artifact.payload.semanticTransit.stageObjects[0]?.id,
+    "axis-price"
+  );
   assert.match(
     artifact.payload.motionBridgeHtml?.["demand-increase"] ?? "",
     /data-kp-motion-from-checkpoint="shift-ready"[^>]+data-kp-motion-to-checkpoint="shift-settled"/

@@ -154,7 +154,8 @@
     {
       "id": "s17",
       "title": "Define text and stage endpoint identities",
-      "status": "planned"
+      "summary": "Defined stable text-reference, stage-object, and semantic-transit IDs; added concise inline reference authoring; compiled one P-to-axis-P descriptor into deterministic publication truth; and fail-closed validation rejects unknown or positional endpoints.",
+      "status": "complete"
     },
     {
       "id": "s18",

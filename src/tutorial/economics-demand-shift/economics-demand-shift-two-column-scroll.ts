@@ -15,7 +15,7 @@ export const kpEconomicsTwoColumnParagraphs:
       id: "graph-at-rest",
       role: "regular",
       sourceText:
-        "Begin with the graph at rest. Price, $P$, is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls."
+        "Begin with the graph at rest. Price, [$P$](kp-ref:price-axis-inline), is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls."
     }),
     card({
       id: "initial-equilibrium",

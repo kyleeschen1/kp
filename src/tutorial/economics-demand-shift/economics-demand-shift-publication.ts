@@ -28,6 +28,12 @@ import type {
 import {
   renderKpTutorialMotionBridgeStatic
 } from "../kp-tutorial-motion-bridge-static.ts";
+import type {
+  KpTutorialSemanticTransitAuthoringBundle
+} from "../kp-tutorial-semantic-transit-authoring.ts";
+import {
+  compileKpEconomicsDemandShiftSemanticTransitExemplar
+} from "./economics-demand-shift-semantic-transit-exemplar.ts";
 
 export interface KpEconomicsDemandShiftPublication {
   readonly lesson: KpEconomicsDemandShiftLesson;
@@ -38,6 +44,7 @@ export interface KpEconomicsDemandShiftPublication {
   readonly twoColumnParagraphs:
     readonly KpEconomicsDemandShiftLesson["sections"][number]["passages"][number][];
   readonly motionBridgeHtml?: Readonly<Record<string, string>> | undefined;
+  readonly semanticTransit: KpTutorialSemanticTransitAuthoringBundle;
 }
 
 /**
@@ -70,6 +77,13 @@ export function compileKpEconomicsDemandShiftPublication(
       })] as const];
     })
   ));
+  const semanticTransit = compileKpEconomicsDemandShiftSemanticTransitExemplar(
+    kpEconomicsTwoColumnParagraphs.map(({ id }) => id)
+  );
+  validateTextReferenceMarkup(
+    kpEconomicsTwoColumnParagraphs,
+    semanticTransit
+  );
 
   return Object.freeze({
     lesson,
@@ -78,10 +92,31 @@ export function compileKpEconomicsDemandShiftPublication(
     motionScrubBarHtml: controls.motionScrubBarHtml,
     verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
     twoColumnParagraphs: kpEconomicsTwoColumnParagraphs,
+    semanticTransit,
     ...(Object.keys(motionBridgeHtml).length === 0
       ? {}
       : { motionBridgeHtml })
   });
+}
+
+function validateTextReferenceMarkup(
+  passages: readonly KpEconomicsDemandShiftLesson["sections"][number]["passages"][number][],
+  authoring: KpTutorialSemanticTransitAuthoringBundle
+): void {
+  for (const reference of authoring.textReferences) {
+    const passage = passages.find(({ id }) => id === reference.passageId);
+    const marker = `data-kp-tutorial-text-reference="${reference.id}"`;
+    const count = passage?.paragraphs.reduce(
+      (total, paragraph) => total + paragraph.html.split(marker).length - 1,
+      0
+    ) ?? 0;
+    if (count !== 1) {
+      throw new Error(
+        `Text reference ${reference.id} must compile exactly once in ` +
+        `${reference.passageId}.`
+      );
+    }
+  }
 }
 
 function findPassage(

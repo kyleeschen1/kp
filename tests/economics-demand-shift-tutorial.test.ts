@@ -191,6 +191,42 @@ test("economics publication emits an optional progressive bridge payload", () =>
   assert.doesNotMatch(html, /data-kp-motion-bridge-spacer|\.\.\./);
 });
 
+test("economics publication compiles stable semantic transit endpoints", () => {
+  const markdown = readFileSync(new URL(
+    "../content/lessons/economics-demand-shift.md",
+    import.meta.url
+  ), "utf8");
+  const publication = compileKpEconomicsDemandShiftPublication(markdown);
+  assert.deepEqual(publication.semanticTransit, {
+    schemaVersion: "kp.tutorial.semantic-transit-authoring.v1",
+    textReferences: [{
+      schemaVersion: "kp.tutorial.text-reference.v1",
+      id: "price-axis-inline",
+      passageId: "graph-at-rest"
+    }],
+    stageObjects: [{
+      schemaVersion: "kp.tutorial.stage-object.v1",
+      id: "axis-price",
+      stageId: "demand-shift-graph"
+    }],
+    transits: [{
+      schemaVersion: "kp.tutorial.semantic-transit.v1",
+      id: "price-axis-correspondence",
+      sourceReferenceId: "price-axis-inline",
+      destinationObjectId: "axis-price"
+    }]
+  });
+  const sourceHtml = publication.twoColumnParagraphs.find(
+    ({ id }) => id === "graph-at-rest"
+  )?.paragraphs[0]?.html ?? "";
+  assert.equal(
+    (sourceHtml.match(/data-kp-tutorial-text-reference="price-axis-inline"/g)
+      ?? []).length,
+    1
+  );
+  assert.match(sourceHtml, /data-kp-latex="P"/);
+});
+
 test("economics motion bridge exemplar has one semantic compile target", async () => {
   const { kpEconomicsDemandShiftMotionBridgeExemplar: bridge } = await import(
     "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts"

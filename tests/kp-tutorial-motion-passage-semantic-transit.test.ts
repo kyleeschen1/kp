@@ -6,6 +6,73 @@ import {
   projectKpTutorialSemanticTransitGeometry,
   type KpTutorialSemanticTransitRect
 } from "../src/tutorial/kp-tutorial-semantic-transit-geometry.ts";
+import {
+  compileKpTutorialSemanticTransitAuthoring,
+  defineKpTutorialSemanticTransit,
+  defineKpTutorialStageObject,
+  defineKpTutorialTextReference
+} from "../src/tutorial/kp-tutorial-semantic-transit-authoring.ts";
+
+test("semantic transit identity is authored independently of text and DOM position", () => {
+  const reference = defineKpTutorialTextReference({
+    id: "price-axis-inline",
+    passageId: "graph-at-rest"
+  });
+  const object = defineKpTutorialStageObject({
+    id: "axis-price",
+    stageId: "demand-shift-graph"
+  });
+  const transit = defineKpTutorialSemanticTransit({
+    id: "price-axis-correspondence",
+    sourceReferenceId: reference.id,
+    destinationObjectId: object.id
+  });
+  assert.deepEqual(compileKpTutorialSemanticTransitAuthoring({
+    textReferences: [reference],
+    stageObjects: [object],
+    transits: [transit],
+    passageIds: ["graph-at-rest"],
+    stageIds: ["demand-shift-graph"]
+  }), {
+    schemaVersion: "kp.tutorial.semantic-transit-authoring.v1",
+    textReferences: [reference],
+    stageObjects: [object],
+    transits: [transit]
+  });
+  assert.deepEqual(Object.keys(transit), [
+    "schemaVersion",
+    "id",
+    "sourceReferenceId",
+    "destinationObjectId"
+  ]);
+});
+
+test("semantic transit authoring fails closed on missing or positional endpoints", () => {
+  const reference = defineKpTutorialTextReference({
+    id: "price-axis-inline",
+    passageId: "graph-at-rest"
+  });
+  const object = defineKpTutorialStageObject({
+    id: "axis-price",
+    stageId: "demand-shift-graph"
+  });
+  assert.throws(() => compileKpTutorialSemanticTransitAuthoring({
+    textReferences: [reference],
+    stageObjects: [object],
+    transits: [defineKpTutorialSemanticTransit({
+      id: "missing-source",
+      sourceReferenceId: "unknown-reference",
+      destinationObjectId: object.id
+    })],
+    passageIds: ["graph-at-rest"],
+    stageIds: ["demand-shift-graph"]
+  }), /unknown text reference/);
+  assert.throws(() => defineKpTutorialSemanticTransit({
+    id: "position:3",
+    sourceReferenceId: reference.id,
+    destinationObjectId: object.id
+  }), /semantic slug/);
+});
 
 test("semantic transit caches document and stage-local geometry", () => {
   let scrollY = 100;
