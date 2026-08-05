@@ -1,4 +1,8 @@
-import type { KpTutorialMotionCorridor } from "../kp-tutorial-motion.ts";
+import {
+  projectKpTutorialLocalViewportAnchor,
+  type KpTutorialLocalViewportAnchorProjection,
+  type KpTutorialMotionCorridor
+} from "../kp-tutorial-motion.ts";
 
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
@@ -46,6 +50,22 @@ export interface KpTwoColumnScrollSequenceProjection {
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 const twoColumnTextSideQueryKey = "text";
+
+export function projectKpEconomicsTwoColumnStageAnchor(input: {
+  readonly stageBlockSizePx: number;
+  readonly viewportHeightPx: number;
+  readonly focusTopRatio?: number | undefined;
+}): KpTutorialLocalViewportAnchorProjection {
+  return projectKpTutorialLocalViewportAnchor({
+    anchor: {
+      // The graph center is stable even while its curves and labels move.
+      stageLocalRatio: 0.5,
+      viewportRatio: input.focusTopRatio ?? 0.35
+    },
+    stageBlockSize: input.stageBlockSizePx,
+    viewportHeight: input.viewportHeightPx
+  });
+}
 
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string

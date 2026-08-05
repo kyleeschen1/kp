@@ -150,7 +150,8 @@
     {
       "id": "s14",
       "title": "Define-local-to-viewport-anchor-contract",
-      "status": "planned"
+      "summary": "Defined a host-neutral normalized stage-local-to-viewport anchor projection and fixed the economics contract to its stable graph center and responsive 35vh focus line.",
+      "status": "complete"
     },
     {
       "id": "s15",

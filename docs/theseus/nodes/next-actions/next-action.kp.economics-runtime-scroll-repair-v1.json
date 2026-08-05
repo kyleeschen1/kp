@@ -319,6 +319,20 @@
       "scope": "s13 patch hygiene",
       "checkedAt": "2026-08-05T08:05:05.540Z",
       "notes": "Passed with no whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-motion.test.ts tests/economics-demand-shift-layout.test.ts",
+      "status": "passed",
+      "scope": "s14 host-neutral and economics anchor projections",
+      "checkedAt": "2026-08-05T08:09:32.003Z",
+      "notes": "Passed 19 tests; graph center maps to 35vh and remains responsive without following moving graph children."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 anchor API contracts",
+      "checkedAt": "2026-08-05T08:09:33.042Z",
+      "notes": "Passed application, node, test, Svelte, and domain typechecks."
     }
   ],
   "expectedLearning": [

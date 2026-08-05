@@ -57,6 +57,19 @@ export interface KpTutorialScrollFrameProjection<BlockId extends string> {
   readonly blocks: readonly KpTutorialScrollBlockProjection<BlockId>[];
 }
 
+export interface KpTutorialLocalViewportAnchor {
+  /** Stable position inside the stage; never follows a moving child object. */
+  readonly stageLocalRatio: number;
+  /** Responsive reading line inside the viewport. */
+  readonly viewportRatio: number;
+}
+
+export interface KpTutorialLocalViewportAnchorProjection {
+  readonly stageLocalY: number;
+  readonly viewportY: number;
+  readonly stageTop: number;
+}
+
 export interface KpTutorialScrollBlockRegistration<BlockId extends string> {
   readonly id: BlockId;
   readonly anchor: HTMLElement;
@@ -87,6 +100,22 @@ export interface KpTutorialScrollCoordinatorOptions {
   /** Detailed timing is opt-in so the measurement surface does not become reader overhead. */
   readonly profileExecution?: boolean | undefined;
   readonly now?: (() => number) | undefined;
+}
+
+export function projectKpTutorialLocalViewportAnchor(input: {
+  readonly anchor: KpTutorialLocalViewportAnchor;
+  readonly stageBlockSize: number;
+  readonly viewportHeight: number;
+}): KpTutorialLocalViewportAnchorProjection {
+  const viewportHeight = finitePositive(input.viewportHeight);
+  const stageBlockSize = finitePositive(input.stageBlockSize);
+  const stageLocalY = stageBlockSize * clamp(input.anchor.stageLocalRatio);
+  const viewportY = viewportHeight * clamp(input.anchor.viewportRatio);
+  return Object.freeze({
+    stageLocalY,
+    viewportY,
+    stageTop: viewportY - stageLocalY
+  });
 }
 
 export function projectKpTutorialCumulativeMotion<BlockId extends string>(input: {

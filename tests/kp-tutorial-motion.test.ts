@@ -7,11 +7,33 @@ import {
   KpTutorialScrollCoordinator,
   projectKpTutorialCorridorTravel,
   projectKpTutorialCumulativeMotion,
+  projectKpTutorialLocalViewportAnchor,
   projectKpTutorialRebasedCorridor,
   projectKpTutorialScrollFrame,
   resolveKpTutorialCorridorTravelForProgress,
   type KpTutorialMotionBlock
 } from "../src/tutorial/kp-tutorial-motion.ts";
+
+test("a stable stage-local anchor maps to a responsive viewport line", () => {
+  assert.deepEqual(projectKpTutorialLocalViewportAnchor({
+    anchor: { stageLocalRatio: 0.5, viewportRatio: 0.35 },
+    stageBlockSize: 480,
+    viewportHeight: 800
+  }), {
+    stageLocalY: 240,
+    viewportY: 280,
+    stageTop: 40
+  });
+  assert.deepEqual(projectKpTutorialLocalViewportAnchor({
+    anchor: { stageLocalRatio: 0.5, viewportRatio: 0.42 },
+    stageBlockSize: 320,
+    viewportHeight: 600
+  }), {
+    stageLocalY: 160,
+    viewportY: 252,
+    stageTop: 92
+  });
+});
 
 test("cumulative projection obeys the same predecessor law for both callers", () => {
   for (const blocks of [kpEconomicsMotionBlocks, kpLispLessonMotionBlocks]) {
