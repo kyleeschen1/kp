@@ -96,6 +96,14 @@ export interface KpTutorialViewportCueGeometry<CueId extends string>
   readonly viewportBottom: number;
 }
 
+export interface KpTutorialActiveCueWindowProjection<CueId extends string> {
+  readonly anchorDocumentY: number;
+  readonly focusIndex: number;
+  readonly startIndex: number;
+  readonly endIndex: number;
+  readonly cues: readonly KpTutorialViewportCueGeometry<CueId>[];
+}
+
 export interface KpTutorialCoordinatedScrollProjection<BlockId extends string>
   extends KpTutorialScrollFrameProjection<BlockId> {
   readonly scrollY: number;
@@ -139,6 +147,50 @@ export function projectKpTutorialLocalViewportAnchor(input: {
     stageLocalY,
     viewportY,
     stageTop: viewportY - stageLocalY
+  });
+}
+
+export function projectKpTutorialActiveCueWindow<CueId extends string>(input: {
+  readonly geometry: readonly KpTutorialDocumentCueGeometry<CueId>[];
+  readonly scrollY: number;
+  readonly viewportHeight: number;
+  readonly viewportAnchorRatio?: number | undefined;
+  readonly neighborhoodRadius?: number | undefined;
+}): KpTutorialActiveCueWindowProjection<CueId> {
+  const anchorDocumentY = input.scrollY + finitePositive(input.viewportHeight) *
+    clamp(input.viewportAnchorRatio ?? 0.38);
+  if (input.geometry.length === 0) {
+    return Object.freeze({
+      anchorDocumentY,
+      focusIndex: -1,
+      startIndex: 0,
+      endIndex: 0,
+      cues: Object.freeze([])
+    });
+  }
+  const insertionIndex = lowerBoundCueTop(input.geometry, anchorDocumentY);
+  const beforeIndex = Math.max(0, insertionIndex - 1);
+  const afterIndex = Math.min(input.geometry.length - 1, insertionIndex);
+  const focusIndex = Math.abs(
+    input.geometry[beforeIndex]!.documentTop - anchorDocumentY
+  ) <= Math.abs(input.geometry[afterIndex]!.documentTop - anchorDocumentY)
+    ? beforeIndex
+    : afterIndex;
+  const radius = Math.max(0, Math.floor(input.neighborhoodRadius ?? 2));
+  const startIndex = Math.max(0, focusIndex - radius);
+  const endIndex = Math.min(input.geometry.length, focusIndex + radius + 1);
+  return Object.freeze({
+    anchorDocumentY,
+    focusIndex,
+    startIndex,
+    endIndex,
+    cues: Object.freeze(input.geometry.slice(startIndex, endIndex).map(
+      (geometry) => Object.freeze({
+        ...geometry,
+        viewportTop: geometry.documentTop - input.scrollY,
+        viewportBottom: geometry.documentBottom - input.scrollY
+      })
+    ))
   });
 }
 
@@ -586,6 +638,20 @@ function snapTravel(
   return nearest !== undefined && Math.abs(nearest.travel - travel) <= tolerance
     ? nearest.travel
     : travel;
+}
+
+function lowerBoundCueTop<CueId extends string>(
+  geometry: readonly KpTutorialDocumentCueGeometry<CueId>[],
+  documentY: number
+): number {
+  let low = 0;
+  let high = geometry.length;
+  while (low < high) {
+    const middle = low + Math.floor((high - low) / 2);
+    if (geometry[middle]!.documentTop < documentY) low = middle + 1;
+    else high = middle;
+  }
+  return low;
 }
 
 function finitePositive(value: number): number {

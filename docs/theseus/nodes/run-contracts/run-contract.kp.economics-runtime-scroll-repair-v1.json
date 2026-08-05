@@ -168,7 +168,8 @@
     {
       "id": "s17",
       "title": "Project-active-cue-window-by-index",
-      "status": "planned"
+      "summary": "Added binary-search focus selection over cached document geometry and bounded each viewport projection to a constant five-cue neighborhood, independent of total cue count.",
+      "status": "complete"
     },
     {
       "id": "s18",

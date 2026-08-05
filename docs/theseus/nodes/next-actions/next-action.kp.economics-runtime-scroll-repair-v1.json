@@ -354,6 +354,13 @@
       "scope": "s16 observer type contract",
       "checkedAt": "2026-08-05T08:15:55.190Z",
       "notes": "Passed test-project typecheck."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-tutorial-motion.test.ts",
+      "status": "passed",
+      "scope": "s17 bounded cue-window projection",
+      "checkedAt": "2026-08-05T08:17:37.047Z",
+      "notes": "Passed 9 tests; binary search selected the exact focus cue in a 48-cue sequence and projected only a five-cue neighborhood."
     }
   ],
   "expectedLearning": [

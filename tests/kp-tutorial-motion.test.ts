@@ -9,6 +9,7 @@ import {
   KpTutorialScrollCoordinator,
   projectKpTutorialCorridorTravel,
   projectKpTutorialCumulativeMotion,
+  projectKpTutorialActiveCueWindow,
   projectKpTutorialLocalViewportAnchor,
   projectKpTutorialRebasedCorridor,
   projectKpTutorialScrollFrame,
@@ -119,6 +120,37 @@ test("IntersectionObserver activates cues without projecting progress", () => {
   activation.disconnect();
   assert.equal(disconnects, 1);
   assert.equal(activation.activeCueIds().size, 0);
+});
+
+test("binary-search projection keeps a bounded cue neighborhood", () => {
+  const geometry = Array.from({ length: 48 }, (_, index) => ({
+    id: `cue-${index}`,
+    anchor: {} as HTMLElement,
+    documentTop: index * 240,
+    documentBottom: index * 240 + 80,
+    height: 80
+  }));
+  const projection = projectKpTutorialActiveCueWindow({
+    geometry,
+    scrollY: 5_720,
+    viewportHeight: 800,
+    viewportAnchorRatio: 0.35
+  });
+  assert.equal(projection.anchorDocumentY, 6_000);
+  assert.equal(projection.focusIndex, 25);
+  assert.equal(projection.startIndex, 23);
+  assert.equal(projection.endIndex, 28);
+  assert.equal(projection.cues.length, 5);
+  assert.deepEqual(projection.cues.map(({ id, viewportTop }) => ({
+    id,
+    viewportTop
+  })), [
+    { id: "cue-23", viewportTop: -200 },
+    { id: "cue-24", viewportTop: 40 },
+    { id: "cue-25", viewportTop: 280 },
+    { id: "cue-26", viewportTop: 520 },
+    { id: "cue-27", viewportTop: 760 }
+  ]);
 });
 
 test("cumulative projection obeys the same predecessor law for both callers", () => {
