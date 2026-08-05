@@ -147,6 +147,83 @@
       "scope": "s03 durable evidence integrity",
       "checkedAt": "2026-08-05T10:22:22.478Z",
       "notes": "Workspace validation passed with the current route debt ratchet."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 route capability and host types",
+      "checkedAt": "2026-08-05T10:35:38.049Z",
+      "notes": "Application, Node, test, Svelte, and domain projects passed with explicit descriptor handoff and lazy editor-library fallback."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s04 production closure build",
+      "checkedAt": "2026-08-05T10:35:39.152Z",
+      "notes": "The production build emitted the economics route without an eager full animation-library import."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s04 route capability parity and economics semantics",
+      "checkedAt": "2026-08-05T10:35:40.130Z",
+      "notes": "All 42 tests passed, including exact parity between the route-local descriptor/entry and canonical generated catalogue metadata."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s04 economics learner behavior",
+      "checkedAt": "2026-08-05T10:35:41.099Z",
+      "notes": "All 12 browser cases passed across persistent tutorial, direct seek, history, reduced motion, static publication, and phone behavior."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s04 canonical visual preservation",
+      "checkedAt": "2026-08-05T10:35:42.016Z",
+      "notes": "All eight approved desktop, phone, theme, typography, text-side, spacing, stroke, and rollback cases passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s04 production route closure",
+      "checkedAt": "2026-08-05T10:35:42.997Z",
+      "notes": "Catalogue-attributed minified loaded code fell from 77648B to 1310B; initial script fell from 249919B to 240240B and resources from 48 to 47. CLS, semantic frames, retained SVG, and scroll metrics remained within unchanged ceilings."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "failed",
+      "scope": "s04 editor catalogue preservation diagnostic",
+      "checkedAt": "2026-08-05T10:35:43.973Z",
+      "notes": "The host and preparation cases passed, but two pre-existing inventory assertions expect 36 catalogue entries while the unchanged generated catalogue currently contains 37."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "failed",
+      "scope": "s04 editor catalogue browser diagnostic",
+      "checkedAt": "2026-08-05T10:35:44.886Z",
+      "notes": "Thirteen of fourteen cases passed, including selection and capability loading; the sole failure is the same pre-existing 36-versus-37 result-count assertion, unrelated to descriptor handoff."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s04 final descriptor identity guard",
+      "checkedAt": "2026-08-05T10:35:45.889Z",
+      "notes": "The final crossed-descriptor guard compiles under the application project."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s04 patch hygiene",
+      "checkedAt": "2026-08-05T10:36:00.665Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s04 durable evidence integrity",
+      "checkedAt": "2026-08-05T10:36:01.629Z",
+      "notes": "Workspace validation passed after route capability closure evidence."
     }
   ],
   "expectedLearning": [

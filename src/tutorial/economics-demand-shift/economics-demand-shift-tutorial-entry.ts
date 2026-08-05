@@ -9,17 +9,13 @@ import lessonMarkdown from
 import { mount, unmount } from "svelte";
 
 import {
-  economicsEquilibriumAnimationId
-} from "../../animation/economics-equilibrium-adapter.ts";
-import {
-  createKpAnimationCatalogueProjection
-} from "../../editor/animation-catalogue-projection.ts";
-import {
   createKpAnimationCatalogueSelectionPreparationService
 } from "../../editor/animation-catalogue-selection-preparation.ts";
-import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
 import KpEconomicsDemandShiftTutorial from
   "./KpEconomicsDemandShiftTutorial.svelte";
+import {
+  createKpEconomicsDemandShiftAnimationCapability
+} from "./economics-demand-shift-animation-capability.ts";
 import {
   compileKpEconomicsDemandShiftPublication
 } from "./economics-demand-shift-publication.ts";
@@ -58,14 +54,8 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   defineKpGraphStyleTuner();
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
-  const descriptors = createKpEditorAnimationLibrary();
-  const projection = createKpAnimationCatalogueProjection({ descriptors });
-  const entry = projection.entries.find(
-    ({ animationId }) => animationId === economicsEquilibriumAnimationId
-  );
-  if (entry === undefined) {
-    throw new Error("Economics demand-shift tutorial asset is not catalogued.");
-  }
+  const { descriptors, entry } =
+    createKpEconomicsDemandShiftAnimationCapability();
   const publication = compileKpEconomicsDemandShiftPublication(lessonMarkdown);
   const initialDestination = resolveKpEconomicsDemandShiftInitialDestination({
     lesson: publication.lesson,

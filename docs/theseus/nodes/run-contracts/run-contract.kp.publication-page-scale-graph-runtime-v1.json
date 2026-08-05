@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "Resolve-economics-without-full-catalogue-library",
-      "status": "planned"
+      "summary": "The economics route now constructs one parity-tested descriptor and catalogue entry, passes that prepared descriptor through the shared host, and lazy-loads the full editor metadata library only for unprepared editor shells. Loaded catalogue-attributed code fell from 77648B to 1310B without changing learner behavior.",
+      "status": "complete"
     },
     {
       "id": "s05",

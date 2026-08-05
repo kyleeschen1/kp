@@ -1633,6 +1633,7 @@
     disposePlayerHost = mountKpAnimationCataloguePlayerHost({
       shell,
       entry,
+      descriptor,
       hostability,
       animation
     });

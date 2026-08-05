@@ -1,8 +1,8 @@
 import { loadKpAnimationAsset } from "../animation/catalog-loader.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
-import {
-  createKpEditorAnimationLibrary
-} from "./animation-library.ts";
+import type {
+  KpEditorAnimationDescriptor
+} from "./animation-descriptor.ts";
 import {
   createKpEditorAnimationPlaybackSession,
   replaceKpEditorAnimationPlaybackSessionAsset,
@@ -46,6 +46,8 @@ const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
 const renderQualityStates = new WeakMap<HTMLElement, KpRenderQualityState>();
 const frameRequests = new WeakMap<HTMLElement, number>();
+type AnimationLibraryClient = typeof import("./animation-library.ts");
+let animationLibraryClientPromise: Promise<AnimationLibraryClient> | undefined;
 type AnimationPlayerGestaltCapabilityClient = typeof import(
   "./animation-player-gestalt-capability.ts"
 );
@@ -60,6 +62,8 @@ export function hydrateKpEditorAnimationPlayers(
   root: ParentNode,
   options: {
     readonly animationOverrides?: readonly KpAnimationAsset[] | undefined;
+    readonly descriptorOverrides?:
+      readonly KpEditorAnimationDescriptor[] | undefined;
   } = {}
 ): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
@@ -68,7 +72,14 @@ export function hydrateKpEditorAnimationPlayers(
       const override = options.animationOverrides?.find(
         ({ id }) => id === animationId
       );
-      void hydrateKpEditorAnimationPlayer(player, override).catch((error: unknown) => {
+      const descriptorOverride = options.descriptorOverrides?.find(
+        ({ id }) => id === player.dataset["kpEditorAnimationDescriptorId"]
+      );
+      void hydrateKpEditorAnimationPlayer(
+        player,
+        override,
+        descriptorOverride
+      ).catch((error: unknown) => {
         markPlayerLoadFailure(player, error);
       });
     });
@@ -181,7 +192,8 @@ export function applyKpEditorAnimationPresentationTuning(
 
 async function hydrateKpEditorAnimationPlayer(
   player: HTMLElement,
-  animationOverride?: KpAnimationAsset | undefined
+  animationOverride?: KpAnimationAsset | undefined,
+  descriptorOverride?: KpEditorAnimationDescriptor | undefined
 ): Promise<void> {
   if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
     player.dataset["kpEditorAnimationLoading"] === "true") return;
@@ -189,10 +201,15 @@ async function hydrateKpEditorAnimationPlayer(
 
   const descriptorId = player.dataset["kpEditorAnimationDescriptorId"];
   const animationId = player.dataset["kpEditorAnimationId"];
-  const descriptor = createKpEditorAnimationLibrary().find(
-    (candidate) => candidate.id === descriptorId
-  );
-  if (descriptor === undefined || animationId === undefined) {
+  const descriptor = descriptorOverride ??
+    (await loadAnimationLibraryClient()).createKpEditorAnimationLibrary().find(
+      (candidate) => candidate.id === descriptorId
+    );
+  if (
+    descriptor === undefined ||
+    animationId === undefined ||
+    descriptor.animationId !== animationId
+  ) {
     throw new Error(
       `Cannot hydrate editor animation player for ${descriptorId ?? "unknown descriptor"} / ${animationId ?? "unknown animation"}.`
     );
@@ -255,6 +272,12 @@ async function hydrateKpEditorAnimationPlayer(
     bubbles: true,
     detail: Object.freeze({ status: "ready" as const })
   }));
+}
+
+async function loadAnimationLibraryClient(): Promise<AnimationLibraryClient> {
+  // Publication callers provide their one descriptor explicitly. Only editor
+  // hosts that hydrate an unprepared shell pay for the complete metadata set.
+  return animationLibraryClientPromise ??= import("./animation-library.ts");
 }
 
 function syncLoadedDiagnostics(

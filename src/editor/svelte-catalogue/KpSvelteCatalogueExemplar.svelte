@@ -324,6 +324,7 @@
     return mountKpAnimationCataloguePlayerHost({
       shell: mountedShell,
       entry: mountedSelection.view.entry,
+      descriptor: mountedSelection.view.descriptor,
       hostability: mountedSelection.hostability,
       animation: mountedSelection.animation,
       onObserved(observation) {

@@ -14,6 +14,9 @@ import type {
   KpAnimationCatalogueEntry
 } from "./animation-catalogue-projection.ts";
 import type {
+  KpEditorAnimationDescriptor
+} from "./animation-descriptor.ts";
+import type {
   KpAnimationCatalogueSurfaceHostability
 } from "./animation-catalogue-surface-hostability.ts";
 import {
@@ -38,6 +41,7 @@ export interface KpAnimationCataloguePlayerHostObservation {
 export function mountKpAnimationCataloguePlayerHost(input: {
   readonly shell: HTMLElement;
   readonly entry: KpAnimationCatalogueEntry;
+  readonly descriptor: KpEditorAnimationDescriptor;
   readonly hostability: KpAnimationCatalogueSurfaceHostability;
   readonly animation: KpAnimationAsset;
   readonly onObserved?:
@@ -89,7 +93,8 @@ export function mountKpAnimationCataloguePlayerHost(input: {
     once: true
   });
   hydrateKpEditorAnimationPlayers(input.shell, {
-    animationOverrides: [input.animation]
+    animationOverrides: [input.animation],
+    descriptorOverrides: [input.descriptor]
   });
 
   return () => {

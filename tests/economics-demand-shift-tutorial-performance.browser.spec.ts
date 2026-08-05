@@ -29,8 +29,6 @@ const budgets = Object.freeze({
 const routeClosureDebt = Object.freeze({
   catalogue: [
     "animation-catalogue-player-host",
-    "animation-library",
-    "animation-library-display-catalog",
     "kp-catalogue-identities"
   ],
   runtimeKatex: ["katex", "katex-adapter"],
