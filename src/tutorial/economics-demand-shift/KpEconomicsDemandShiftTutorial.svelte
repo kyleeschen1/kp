@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount, untrack } from "svelte";
+  import { onDestroy, onMount, tick, untrack } from "svelte";
 
   import type { KpAnimationAsset } from "../../animation/asset.ts";
   import type { KpAnimationCatalogueEntry } from "../../editor/animation-catalogue-projection.ts";
@@ -270,6 +270,7 @@
     KpEconomicsTwoColumnParagraphPresentation
   >>>({});
   let reducedMotionQuery: MediaQueryList | undefined;
+  let twoColumnGeometryQuery: MediaQueryList | undefined;
   let previousHistoryScrollRestoration: ScrollRestoration | undefined;
   let disposePlayerHost: (() => void) | undefined;
   let scrollCoordinator:
@@ -667,6 +668,7 @@
       `${window.location.pathname}${search}${window.location.hash}`
     );
     announcement = `${theme === "dark" ? "Dark" : "Light"} theme enabled.`;
+    void invalidateGeometryAfterPresentationChange();
   }
 
   function handleGraphStyleTunerChange(event: Event): void {
@@ -1323,9 +1325,22 @@
   }
 
   function usesTwoColumnDesktopGeometry(): boolean {
-    return twoColumnScroll && window.matchMedia(
+    return twoColumnScroll && (twoColumnGeometryQuery ?? window.matchMedia(
       "(min-width: 60rem) and (min-height: 32rem)"
-    ).matches;
+    )).matches;
+  }
+
+  async function invalidateGeometryAfterPresentationChange(): Promise<void> {
+    await tick();
+    updateInlineStickyLayoutProjection();
+  }
+
+  function handleResponsiveGeometryChange(): void {
+    updateInlineStickyLayoutProjection();
+  }
+
+  function handleFontMetricsChange(): void {
+    updateInlineStickyLayoutProjection();
   }
 
   function readTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
@@ -1473,6 +1488,13 @@
     const performanceTarget = window as KpEconomicsTutorialPerformanceWindow;
     const profileScrollExecution =
       performanceTarget.__kpEconomicsPerformanceProbeRequested === true;
+    twoColumnGeometryQuery = window.matchMedia(
+      "(min-width: 60rem) and (min-height: 32rem)"
+    );
+    twoColumnGeometryQuery.addEventListener(
+      "change",
+      handleResponsiveGeometryChange
+    );
     cueGeometryCache = new KpTutorialDocumentCueGeometryCache(
       window,
       collectScrollCues
@@ -1577,8 +1599,9 @@
       scrollTimelineStatus = "reduced-motion";
     }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
+    document.fonts.addEventListener("loadingdone", handleFontMetricsChange);
     void document.fonts.ready.then(() => {
-      updateInlineStickyLayoutProjection();
+      handleFontMetricsChange();
       scrollCoordinator?.scheduleProjection();
     });
     scrollCoordinator.scheduleProjection();
@@ -1629,6 +1652,11 @@
     inlineLayoutObserver?.disconnect();
     cueMutationObserver?.disconnect();
     reducedMotionQuery?.removeEventListener("change", handleReducedMotionChange);
+    twoColumnGeometryQuery?.removeEventListener(
+      "change",
+      handleResponsiveGeometryChange
+    );
+    document.fonts.removeEventListener("loadingdone", handleFontMetricsChange);
     if (previousHistoryScrollRestoration !== undefined) {
       window.history.scrollRestoration = previousHistoryScrollRestoration;
     }
@@ -1656,7 +1684,7 @@
       `${window.location.pathname}${search}${window.location.hash}`
     );
     announcement = `Text moved to the ${nextSide} of the graph.`;
-    scrollCoordinator?.scheduleProjection();
+    void invalidateGeometryAfterPresentationChange();
   }
 
   function scrollToSemanticDestination(

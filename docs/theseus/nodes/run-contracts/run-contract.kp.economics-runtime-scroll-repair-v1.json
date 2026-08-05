@@ -180,7 +180,8 @@
     {
       "id": "s19",
       "title": "Handle-font-responsive-theme-and-side-invalidations",
-      "status": "planned"
+      "summary": "Invalidated cached cue and block geometry after font loading, responsive-mode changes, resize, theme changes, and text-side swaps; all paths coalesce back into the single scroll coordinator.",
+      "status": "complete"
     },
     {
       "id": "s20",
