@@ -606,6 +606,10 @@ kp-graph-style-tuner {
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
+.kp-economics-tutorial__spacing-tuner {
+  position: relative;
+}
+
 .kp-economics-tutorial__line-tuner > summary {
   display: inline-flex;
   align-items: center;

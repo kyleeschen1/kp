@@ -204,7 +204,8 @@
     {
       "id": "s23",
       "title": "Add-internal-spacing-tuner",
-      "status": "planned"
+      "summary": "Added the internal 0-100vh spacing tuner beside the bottom controls; it persists URL and Review state, preserves the active cue, performs one bounded geometry transaction, and leaves extreme spacing inert on phone layouts.",
+      "status": "complete"
     },
     {
       "id": "s24",

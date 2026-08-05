@@ -40,7 +40,11 @@
     projectKpEconomicsTwoColumnStageAnchor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
+    kpEconomicsTwoColumnParagraphGapMaximumVh,
+    kpEconomicsTwoColumnParagraphGapMinimumVh,
+    kpEconomicsTwoColumnParagraphGapStepVh,
     normalizeKpEconomicsTwoColumnParagraphGapVh,
+    writeKpEconomicsTwoColumnParagraphGapVh,
     writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpEconomicsTwoColumnTextSide,
@@ -306,6 +310,7 @@
   let supplyPlaybackFrame: number | undefined;
   let supplyPlaybackLastMs: number | undefined;
   let inlineLayoutObserver: ResizeObserver | undefined;
+  let suppressNextInlineLayoutObservation = false;
   const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
   const twoColumnScroll = untrack(
     () => presentationLayout === "two-column-scroll"
@@ -1343,6 +1348,34 @@
     updateInlineStickyLayoutProjection();
   }
 
+  async function preserveCueAcrossLayoutChange(input: {
+    readonly anchor: HTMLElement | undefined;
+    readonly viewportTop: number | undefined;
+    readonly gapVh: number;
+  }): Promise<void> {
+    // Apply the physical token in this input task so the scroll correction,
+    // ResizeObserver invalidation, and coordinator request can coalesce.
+    shell?.style.setProperty(
+      "--kp-two-column-paragraph-gap-vh",
+      String(input.gapVh)
+    );
+    if (
+      input.anchor?.isConnected &&
+      input.viewportTop !== undefined
+    ) {
+      const delta = input.anchor.getBoundingClientRect().top - input.viewportTop;
+      if (Math.abs(delta) > 0.5) window.scrollBy({ top: delta, behavior: "auto" });
+    }
+    await tick();
+    if (inlineLayoutObserver !== undefined && shell !== undefined) {
+      suppressNextInlineLayoutObservation = true;
+      for (const passage of shell.querySelectorAll<HTMLElement>(
+        "[data-kp-scroll-cue]"
+      )) inlineLayoutObserver.observe(passage);
+    }
+    updateInlineStickyLayoutProjection();
+  }
+
   function handleResponsiveGeometryChange(): void {
     updateInlineStickyLayoutProjection();
   }
@@ -1541,9 +1574,13 @@
     scrollCoordinator.connect();
     scrollCoordinatorStatus = "connected";
     if (scrollPassageLayout) {
-      inlineLayoutObserver = new ResizeObserver(
-        updateInlineStickyLayoutProjection
-      );
+      inlineLayoutObserver = new ResizeObserver(() => {
+        if (suppressNextInlineLayoutObservation) {
+          suppressNextInlineLayoutObservation = false;
+          return;
+        }
+        updateInlineStickyLayoutProjection();
+      });
       for (const passage of shell.querySelectorAll<HTMLElement>(
         "[data-kp-scroll-cue]"
       )) inlineLayoutObserver.observe(passage);
@@ -1693,6 +1730,38 @@
     );
     announcement = `Text moved to the ${nextSide} of the graph.`;
     void invalidateGeometryAfterPresentationChange();
+  }
+
+  function changeTwoColumnParagraphGap(event: Event): void {
+    if (!(event.currentTarget instanceof HTMLInputElement)) return;
+    const activeAnchor = shell === undefined
+      ? undefined
+      : [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
+        .find(({ dataset }) =>
+          dataset["kpEconomicsTutorialPassage"] === attentionPassageId
+        );
+    const viewportTop = activeAnchor?.getBoundingClientRect().top;
+    // The tuner owns this one reversible resize transaction. Reconnect after
+    // Svelte settles so ResizeObserver cannot duplicate its invalidation.
+    inlineLayoutObserver?.disconnect();
+    twoColumnParagraphGapVh = normalizeKpEconomicsTwoColumnParagraphGapVh(
+      Number(event.currentTarget.value)
+    );
+    const search = writeKpEconomicsTwoColumnParagraphGapVh({
+      search: window.location.search,
+      gapVh: twoColumnParagraphGapVh
+    });
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
+    );
+    announcement = `Paragraph spacing set to ${twoColumnParagraphGapVh} viewport-height units.`;
+    void preserveCueAcrossLayoutChange({
+      anchor: activeAnchor,
+      viewportTop,
+      gapVh: twoColumnParagraphGapVh
+    });
   }
 
   function scrollToSemanticDestination(
@@ -2046,7 +2115,7 @@
         : { themeId: kpEconomicsDemandShiftThemeIds[theme] }
     )
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle}`}
+  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle};--kp-two-column-paragraph-gap-vh:${twoColumnParagraphGapVh}`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
@@ -2179,6 +2248,28 @@
           </div>
         </details>
       </kp-graph-style-tuner>
+      <details
+        class="kp-economics-tutorial__line-tuner kp-economics-tutorial__spacing-tuner"
+        data-kp-economics-spacing-tuner
+      >
+        <summary>Spacing</summary>
+        <div class="kp-economics-tutorial__line-tuner-panel">
+          <label for="kp-economics-paragraph-gap">Paragraph gap</label>
+          <input
+            id="kp-economics-paragraph-gap"
+            type="range"
+            min={kpEconomicsTwoColumnParagraphGapMinimumVh}
+            max={kpEconomicsTwoColumnParagraphGapMaximumVh}
+            step={kpEconomicsTwoColumnParagraphGapStepVh}
+            value={twoColumnParagraphGapVh}
+            data-kp-economics-spacing-tuner-input
+            oninput={changeTwoColumnParagraphGap}
+          />
+          <output for="kp-economics-paragraph-gap">
+            {twoColumnParagraphGapVh}vh
+          </output>
+        </div>
+      </details>
     {/if}
     <button
       class="kp-economics-tutorial__theme-toggle"

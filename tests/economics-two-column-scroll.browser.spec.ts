@@ -526,7 +526,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
 
 test("phone keeps the accepted one-column inline geometry", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(route);
+  await page.goto(`${route}&gap=100`);
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const body = root.locator(".kp-economics-tutorial__motion-passage-body");
@@ -534,9 +534,17 @@ test("phone keeps the accepted one-column inline geometry", async ({ page }) => 
   const paragraph = card(root, "follow-shift").locator("p");
   const columnToggle = page.locator("[data-kp-economics-column-toggle]");
 
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-two-column-paragraph-gap-vh",
+    "100"
+  );
+
   await expect.poll(() => body.evaluate((element) =>
     getComputedStyle(element).display
   )).toBe("block");
+  await expect.poll(() => paragraph.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element.parentElement!).paddingBottom)
+  )).toBeLessThan(200);
   await expect(columnToggle).toBeHidden();
   await placeTopAt(page, paragraph, 500);
   await expect.poll(() => stage.evaluate((element) => {
@@ -723,6 +731,107 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
     "right"
   );
   await expect(page).not.toHaveURL(/text=left/);
+});
+
+test("spacing tuner preserves the active cue across its full URL range", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    (window as Window & {
+      __kpEconomicsPerformanceProbeRequested?: boolean;
+    }).__kpEconomicsPerformanceProbeRequested = true;
+  });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const paragraph = card(root, "follow-shift").locator("p");
+  const tuner = page.locator("[data-kp-economics-spacing-tuner]");
+  const input = tuner.locator("[data-kp-economics-spacing-tuner-input]");
+  await placeTopAt(page, paragraph, 280);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-attention-passage",
+    "follow-shift"
+  );
+  await tuner.locator("summary").click();
+
+  for (const gapVh of [0, 16, 50, 100]) {
+    await page.evaluate(() => new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
+    const before = await page.evaluate(() => {
+      const target = window as Window & {
+        __kpEconomicsTutorialRuntimePerformance?: {
+          resetScrollCoordinator: () => void;
+        };
+      };
+      target.__kpEconomicsTutorialRuntimePerformance!
+        .resetScrollCoordinator();
+      const root = document.querySelector<HTMLElement>(
+        "[data-kp-economics-demand-shift-tutorial]"
+      )!;
+      return {
+        progress: root.dataset["kpEconomicsTutorialDemandProgress"],
+        passage: root.dataset["kpEconomicsTutorialAttentionPassage"]
+      };
+    });
+    await input.fill(String(gapVh));
+    await expect(root).toHaveAttribute(
+      "data-kp-economics-two-column-paragraph-gap-vh",
+      String(gapVh)
+    );
+    await expect(tuner.locator("output")).toHaveText(`${gapVh}vh`);
+    await expect.poll(() => paragraph.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element.parentElement!).paddingBottom)
+    )).toBe(gapVh * 8);
+    await expect.poll(() => page.evaluate(() => {
+      const target = window as Window & {
+        __kpEconomicsTutorialRuntimePerformance?: {
+          snapshotScrollCoordinator: () => { executedFrames: number };
+        };
+      };
+      return target.__kpEconomicsTutorialRuntimePerformance!
+        .snapshotScrollCoordinator().executedFrames;
+    })).toBeGreaterThan(0);
+    const coordinator = await page.evaluate(() => {
+      const target = window as Window & {
+        __kpEconomicsTutorialRuntimePerformance?: {
+          snapshotScrollCoordinator: () => {
+            executedFrames: number;
+            registrationReads: number;
+            layoutReads: number;
+          };
+        };
+      };
+      return target.__kpEconomicsTutorialRuntimePerformance!
+        .snapshotScrollCoordinator();
+    });
+    // One invalidation remeasures the two motion-block anchors. A second
+    // cached frame is allowed only for the viewport-anchor scroll correction.
+    expect(coordinator.registrationReads).toBe(2);
+    expect(coordinator.layoutReads).toBe(2);
+    expect(coordinator.executedFrames).toBeLessThanOrEqual(2);
+    await expect(root).toHaveAttribute(
+      "data-kp-economics-tutorial-demand-progress",
+      before.progress ?? ""
+    );
+    await expect(root).toHaveAttribute(
+      "data-kp-economics-tutorial-attention-passage",
+      before.passage ?? ""
+    );
+    expect(await page.evaluate(() =>
+      new URL(window.location.href).searchParams.get("gap")
+    )).toBe(gapVh === 16 ? null : String(gapVh));
+  }
+
+  await placeTopAt(page, paragraph, 390);
+  const forwardProgress = await demandProgress(root);
+  await placeTopAt(page, paragraph, 280);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
+  await placeTopAt(page, paragraph, 390);
+  await expect.poll(async () => Math.abs(
+    (await demandProgress(root)) - forwardProgress
+  )).toBeLessThan(0.015);
 });
 
 test("line tuner preserves optical theme compensation and URL state", async ({

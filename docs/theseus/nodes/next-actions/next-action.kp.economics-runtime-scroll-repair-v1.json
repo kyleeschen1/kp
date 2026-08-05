@@ -492,6 +492,27 @@
       "scope": "s22 spacing and review types",
       "checkedAt": "2026-08-05T08:53:50.657Z",
       "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "playwright focused spacing tuner",
+      "status": "passed",
+      "scope": "s23 internal spacing tuner",
+      "checkedAt": "2026-08-05T09:07:42.967Z",
+      "notes": "The 0, 16, 50, and 100vh cases passed; URL reconstruction, local cue anchoring, one two-anchor geometry remeasurement, reverse-scroll parity, and semantic progress preservation were exact."
+    },
+    {
+      "command": "playwright focused canonical desktop rerun",
+      "status": "passed",
+      "scope": "s23 accepted exemplar preservation",
+      "checkedAt": "2026-08-05T09:07:43.985Z",
+      "notes": "The complete canonical desktop choreography passed after an earlier full-suite run had one route-startup miss; the other six full-suite cases, including phone, spacing, theme, column, stroke, and rollback, passed in that run."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 tuner types",
+      "checkedAt": "2026-08-05T09:07:44.870Z",
+      "notes": "Application, Node, test, Svelte, and domain checks passed."
     }
   ],
   "expectedLearning": [
