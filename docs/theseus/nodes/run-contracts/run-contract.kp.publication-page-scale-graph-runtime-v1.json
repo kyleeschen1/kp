@@ -107,7 +107,8 @@
     {
       "id": "s09",
       "title": "Consume-compiled-publication-without-runtime-KaTeX",
-      "status": "planned"
+      "summary": "The economics learner entry now consumes the checked compiled artifact, performs only a cheap schema and route-identity check, and has no raw Markdown or static publication compiler dependency. All route, no-JS, visual, and performance checks pass; the sole remaining runtime KaTeX owner is the dynamic numeric label reserved for s10.",
+      "status": "complete"
     },
     {
       "id": "s10",

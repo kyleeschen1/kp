@@ -29,6 +29,13 @@ const artifactSource = readFileSync(
 const artifact = JSON.parse(artifactSource) as KpCompiledPublicationArtifact<
   KpEconomicsDemandShiftPublication
 >;
+const routeEntrySource = readFileSync(
+  new URL(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts",
+    import.meta.url
+  ),
+  "utf8"
+);
 
 test("generated economics publication is an exact deterministic artifact", () => {
   assert.doesNotThrow(() => assertKpCompiledPublicationArtifact(artifact));
@@ -47,6 +54,15 @@ test("generated economics publication is an exact deterministic artifact", () =>
   assert.ok(artifact.math.sourceLatex.length > 0);
   assert.match(artifactSource, /katex-mathml/);
   assert.doesNotMatch(artifactSource, /generatedAt|timestamp|rendering\": \"runtime/);
+});
+
+test("economics learner route consumes the artifact rather than compiler inputs", () => {
+  assert.match(
+    routeEntrySource,
+    /readKpEconomicsDemandShiftCompiledPublication\(\)/
+  );
+  assert.doesNotMatch(routeEntrySource, /economics-demand-shift\.md\?raw/);
+  assert.doesNotMatch(routeEntrySource, /compileKpEconomicsDemandShiftPublication/);
 });
 
 function digest(value: string): `sha256:${string}` {

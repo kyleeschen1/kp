@@ -3,9 +3,6 @@ import "katex/dist/katex.min.css";
 import "../kp-tutorial-scrub-bar.css";
 import "./economics-demand-shift-tutorial.css";
 
-import lessonMarkdown from
-  "../../../content/lessons/economics-demand-shift.md?raw";
-
 import { mount, unmount } from "svelte";
 
 import {
@@ -17,8 +14,8 @@ import {
   createKpEconomicsDemandShiftAnimationCapability
 } from "./economics-demand-shift-animation-capability.ts";
 import {
-  compileKpEconomicsDemandShiftPublication
-} from "./economics-demand-shift-publication.ts";
+  readKpEconomicsDemandShiftCompiledPublication
+} from "./economics-demand-shift-compiled-publication.ts";
 import {
   resolveKpEconomicsDemandShiftInitialDestination
 } from "./economics-demand-shift-deep-link.ts";
@@ -56,7 +53,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   defineKpTutorialToc();
   const { descriptors, entry } =
     createKpEconomicsDemandShiftAnimationCapability();
-  const publication = compileKpEconomicsDemandShiftPublication(lessonMarkdown);
+  const publication = readKpEconomicsDemandShiftCompiledPublication();
   const initialDestination = resolveKpEconomicsDemandShiftInitialDestination({
     lesson: publication.lesson,
     hash: input.hash

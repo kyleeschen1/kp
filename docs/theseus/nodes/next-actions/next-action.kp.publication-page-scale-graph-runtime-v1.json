@@ -462,6 +462,69 @@
       "scope": "slice s08 durable evidence",
       "checkedAt": "2026-08-05T11:13:43.533Z",
       "notes": "Workspace validated with the deterministic generator, checked artifact, and release-build stale gate."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "slice s09 parallel verification launch",
+      "checkedAt": "2026-08-05T11:19:59.099Z",
+      "notes": "The first launch collided with the simultaneous visual command on Playwright web-server ports 4173 and 4174; no learner assertion ran."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "slice s09 route artifact boundary",
+      "checkedAt": "2026-08-05T11:20:00.228Z",
+      "notes": "Five tests passed, including the source gate proving the learner entry no longer imports raw Markdown or the publication compiler."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s09 economics semantic preservation",
+      "checkedAt": "2026-08-05T11:20:01.223Z",
+      "notes": "All 42 economics publication, exact frame, seek, rewind, retained SVG, and shared lesson tests passed."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s09 compiled publication route",
+      "checkedAt": "2026-08-05T11:20:02.246Z",
+      "notes": "Production build and browser probe passed at 312273 transfer bytes, 212605 script bytes, 42 resources, CLS 0, 137ms cold longest task, 34.2ms active p95, 56 geometry reads, and zero SVG strings or replacements. Runtime KaTeX remains isolated to the dynamic label for s10."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "slice s09 canonical visual preservation",
+      "checkedAt": "2026-08-05T11:20:03.165Z",
+      "notes": "All eight desktop, phone, paper, typography, side, spacing, stroke, and rollback cases passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice s09 learner behavior rerun",
+      "checkedAt": "2026-08-05T11:20:04.253Z",
+      "notes": "All 12 persistence, manual control, direct link, history, accessibility, no-JS, upgrade, and phone cases passed when run without a competing web server."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s09 architecture",
+      "checkedAt": "2026-08-05T11:20:05.207Z",
+      "notes": "All four architecture gates passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s09 patch hygiene",
+      "checkedAt": "2026-08-05T11:20:06.142Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s09 durable evidence",
+      "checkedAt": "2026-08-05T11:20:07.066Z",
+      "notes": "Workspace validation passed after artifact route adoption."
     }
   ],
   "expectedLearning": [
