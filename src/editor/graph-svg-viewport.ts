@@ -44,34 +44,22 @@ import {
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 import {
-  KP_EDITOR_ANIMATION_DISPOSE_EVENT,
-  getKpEditorAnimationPlaybackSession
+  KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
+import {
+  createKpEditorGraphSvgViewportLifecycleAdapter,
+  scaleKpEditorGraphCoordinate,
+  type KpEditorGraphSvgViewportModel,
+  type KpEditorGraphSvgViewportPresentation,
+  type KpEditorGraphSvgViewportRenderInput
+} from "./graph-svg-viewport-lifecycle.ts";
 
-export interface KpEditorGraphSvgViewportModel {
-  readonly width: number;
-  readonly height: number;
-  readonly xDomain: readonly [number, number];
-  readonly yDomain: readonly [number, number];
-  readonly xAxisY: number;
-  readonly yAxisX: number;
-}
-
-export interface KpEditorGraphAxisProjection {
-  readonly originPolicy: "shared-endpoint" | "crossing";
-  readonly x: {
-    readonly x1: number;
-    readonly y1: number;
-    readonly x2: number;
-    readonly y2: number;
-  };
-  readonly y: {
-    readonly x1: number;
-    readonly y1: number;
-    readonly x2: number;
-    readonly y2: number;
-  };
-}
+export {
+  createKpEditorGraphSvgViewportModel,
+  projectKpEditorGraphAxes,
+  type KpEditorGraphAxisProjection,
+  type KpEditorGraphSvgViewportModel
+} from "./graph-svg-viewport-lifecycle.ts";
 
 export interface KpEconomicsGraphRuntimeMetrics {
   readonly renderCalls: number;
@@ -135,68 +123,27 @@ const economicsMountedRuntimeSessions = new WeakMap<
   KpEconomicsEquilibriumRuntimeSession
 >();
 
-export function createKpEditorGraphSvgViewportModel(
-  animation: KpAnimationAsset
-): KpEditorGraphSvgViewportModel {
-  const graph = animation.bundle.objects.find((object) => object.objectType === "graph-2d");
-  const value = isRecord(graph?.value) ? graph.value : {};
-  const width = positiveNumber(value["width"], 560);
-  const height = positiveNumber(value["height"], 380);
-  const xDomain = domain(value["xDomain"], [-5, 5]);
-  const yDomain = domain(value["yDomain"], [-5, 5]);
-
-  return {
-    width,
-    height,
-    xDomain,
-    yDomain,
-    xAxisY: scale(0, yDomain, [height - 28, 20]),
-    yAxisX: scale(0, xDomain, [36, width - 20])
-  };
-}
-
-export function projectKpEditorGraphAxes(input: {
-  readonly viewport: KpEditorGraphSvgViewportModel;
-  readonly xAxisEnd?: number | undefined;
-}): KpEditorGraphAxisProjection {
-  const { viewport } = input;
-  const stopsAtOrigin = viewport.xDomain[0] === 0 && viewport.yDomain[0] === 0;
-  // Zero-bounded plots terminate both axes at one geometric endpoint. Signed
-  // domains retain full crossing axes because zero lies inside the plot.
-  const xStart = stopsAtOrigin ? viewport.yAxisX : 20;
-  const yStart = stopsAtOrigin ? viewport.xAxisY : viewport.height - 20;
-  return Object.freeze({
-    originPolicy: stopsAtOrigin ? "shared-endpoint" : "crossing",
-    x: Object.freeze({
-      x1: xStart,
-      y1: viewport.xAxisY,
-      x2: input.xAxisEnd ?? viewport.width - 20,
-      y2: viewport.xAxisY
-    }),
-    y: Object.freeze({
-      x1: viewport.yAxisX,
-      y1: yStart,
-      x2: viewport.yAxisX,
-      y2: 20
-    })
-  });
-}
-
 export function createKpEditorGraphSvgViewportAdapter(
   supportedAnimationIds: readonly string[]
 ): KpEditorAnimationSurfaceAdapter {
-  const supported = new Set(supportedAnimationIds);
-  const adapter: KpEditorAnimationSurfaceAdapter = {
-    id: "editor-animation-surface.graph.svg",
-    slotKind: "graph",
-    priority: 0,
-    supports(state) {
-      return state.surface.slotKinds.includes("graph") &&
-        supported.has(state.animationId);
-    },
-    render({ player, slot, state }) {
-      const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
-      if (animation === undefined) return;
+  return createKpEditorGraphSvgViewportLifecycleAdapter({
+    supportedAnimationIds,
+    renderer: {
+      presentation: graphSvgViewportPresentation,
+      render: renderGraphSvgDomainFrame
+    }
+  });
+}
+
+function renderGraphSvgDomainFrame({
+  animation,
+  content,
+  model,
+  player,
+  slot,
+  state,
+  svg
+}: KpEditorGraphSvgViewportRenderInput): void {
       if (
         animation.id !==
           "animation.economics.supply-demand-equilibrium-shift"
@@ -208,19 +155,6 @@ export function createKpEditorGraphSvgViewportAdapter(
         ? economicsGraphRuntimePerformanceSession(player, slot)
         : undefined;
       if (economicsProfile !== undefined) economicsProfile.metrics.renderCalls += 1;
-      const model = createKpEditorGraphSvgViewportModel(animation);
-      let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
-      if (svg === null) {
-        slot.innerHTML = renderViewport(animation, model, state);
-        svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");
-      }
-      if (svg !== null) {
-        svg.dataset["kpEditorGraphProgress"] = String(state.progress);
-        svg.dataset["kpEditorGraphDirection"] = state.direction;
-        const content = svg.querySelector<SVGGElement>(
-          "[data-kp-editor-graph-content]"
-        );
-        if (content !== null) {
           if (
             animation.id ===
               "animation.economics.supply-demand-equilibrium-shift"
@@ -309,11 +243,38 @@ export function createKpEditorGraphSvgViewportAdapter(
             slot,
             svg
           });
-        }
-      }
-    }
-  };
-  return Object.freeze(adapter);
+}
+
+function graphSvgViewportPresentation(input: {
+  readonly animation: KpAnimationAsset;
+  readonly model: KpEditorGraphSvgViewportModel;
+}): KpEditorGraphSvgViewportPresentation {
+  const economicsProfile = input.animation.id ===
+    "animation.economics.supply-demand-equilibrium-shift";
+  const physicsProfile = input.animation.id ===
+    "animation.physics.constant-force-work-energy";
+  const vectorProjectionProfile = input.animation.id ===
+    "animation.dot-projection.basic";
+  const matrixLinearMapProfile = input.animation.id ===
+    "animation.generated.linear-algebra.matrix-vector.two-by-two";
+  const profile = economicsProfile
+    ? kpEconomicsGraphPresentationProfile
+    : physicsProfile
+      ? kpPhysicsGraphPresentationProfile
+      : vectorProjectionProfile
+        ? kpVectorDotProjectionGraphPresentationProfile
+        : matrixLinearMapProfile
+          ? kpMatrixLinearMapGraphPresentationProfile
+          : undefined;
+  return Object.freeze({
+    profileId: profile?.id ?? "kp.graph.editor-default.v1",
+    ...(profile === undefined ? {} : { languageId: profile.languageId }),
+    axes: physicsProfile ? "hidden" : "visible",
+    axisMarkers: profile !== undefined,
+    ...(economicsProfile
+      ? { xAxisEnd: input.model.width - kpEconomicsGraphPlotInsets.right }
+      : {})
+  });
 }
 
 function sampleEconomicsRuntimeFrame(
@@ -591,55 +552,6 @@ function syncGraphAccessibility(
   svg.setAttribute("aria-describedby", description.id);
 }
 
-function renderViewport(
-  animation: KpAnimationAsset,
-  model: KpEditorGraphSvgViewportModel,
-  state: KpEditorAnimationPlayerState
-): string {
-  const economicsProfile = animation.id ===
-    "animation.economics.supply-demand-equilibrium-shift";
-  const physicsProfile = animation.id ===
-    "animation.physics.constant-force-work-energy";
-  const vectorProjectionProfile = animation.id ===
-    "animation.dot-projection.basic";
-  const matrixLinearMapProfile = animation.id ===
-    "animation.generated.linear-algebra.matrix-vector.two-by-two";
-  const dimensionalContinuityProfile = economicsProfile
-    ? kpEconomicsGraphPresentationProfile
-    : physicsProfile
-      ? kpPhysicsGraphPresentationProfile
-      : vectorProjectionProfile
-        ? kpVectorDotProjectionGraphPresentationProfile
-        : matrixLinearMapProfile
-          ? kpMatrixLinearMapGraphPresentationProfile
-          : undefined;
-  const profile = dimensionalContinuityProfile?.id ??
-    "kp.graph.editor-default.v1";
-  const languageProfile = dimensionalContinuityProfile === undefined
-    ? ""
-    : ` data-kp-graph-language-profile="${dimensionalContinuityProfile.languageId}"`;
-  const axisMarker = dimensionalContinuityProfile !== undefined
-    ? ' marker-end="url(#kp-editor-graph-axis-arrow)"'
-    : "";
-  const xAxisEnd = economicsProfile
-    ? model.width - kpEconomicsGraphPlotInsets.right
-    : model.width - 20;
-  const axisProjection = projectKpEditorGraphAxes({
-    viewport: model,
-    xAxisEnd
-  });
-  const axes = physicsProfile
-    ? ""
-    : `<line data-kp-editor-graph-axis="x" x1="${axisProjection.x.x1}" y1="${axisProjection.x.y1}" x2="${axisProjection.x.x2}" y2="${axisProjection.x.y2}"${axisMarker} />
-    <line data-kp-editor-graph-axis="y" x1="${axisProjection.y.x1}" y1="${axisProjection.y.y1}" x2="${axisProjection.y.x2}" y2="${axisProjection.y.y2}"${axisMarker} />`;
-  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${profile}"${languageProfile} data-kp-editor-graph-origin-policy="${axisProjection.originPolicy}" data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
-    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" data-kp-axis-arrow-scale="6" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
-    <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
-    <g data-kp-editor-graph-content></g>
-    ${axes}
-  </svg>`;
-}
-
 function renderRuntimeContent(
   animation: KpAnimationAsset,
   state: KpEditorAnimationPlayerState,
@@ -853,21 +765,7 @@ function formatNumber(value: number): string {
 }
 
 function scale(value: number, from: readonly [number, number], to: readonly [number, number]): number {
-  return to[0] + ((value - from[0]) / (from[1] - from[0])) * (to[1] - to[0]);
-}
-
-function domain(value: unknown, fallback: readonly [number, number]): readonly [number, number] {
-  return Array.isArray(value) && value.length === 2 && value.every(Number.isFinite)
-    ? [Number(value[0]), Number(value[1])]
-    : fallback;
-}
-
-function positiveNumber(value: unknown, fallback: number): number {
-  return typeof value === "number" && value > 0 ? value : fallback;
-}
-
-function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
-  return typeof value === "object" && value !== null;
+  return scaleKpEditorGraphCoordinate(value, from, to);
 }
 
 function escapeHtml(value: string): string {

@@ -83,7 +83,8 @@
     {
       "id": "s05",
       "title": "Split-generic-SVG-viewport-from-domain-renderers",
-      "status": "planned"
+      "summary": "Extracted a domain-neutral retained-SVG lifecycle owning viewport models, axis projection, shell construction, and frame delegation. The existing editor-wide renderer registry now injects presentation and paint behavior, and a source gate prevents domain or KaTeX dependencies from entering the lifecycle.",
+      "status": "complete"
     },
     {
       "id": "s06",

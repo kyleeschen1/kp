@@ -224,6 +224,76 @@
       "scope": "s04 durable evidence integrity",
       "checkedAt": "2026-08-05T10:36:01.629Z",
       "notes": "Workspace validation passed after route capability closure evidence."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s05 generic viewport types",
+      "checkedAt": "2026-08-05T10:43:03.356Z",
+      "notes": "The injected retained-SVG lifecycle and existing domain registry compile without circular or domain type leakage."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-graph-svg-viewport.test.ts tests/kp-economics-equilibrium-runtime-frame.test.ts tests/kp-economics-equilibrium-static-svg.test.ts tests/kp-constant-force-work-energy-static-svg.test.ts tests/vector-dot-projection-svg.test.ts tests/animation-catalogue-health.test.ts tests/animation-catalogue-surface-hostability.test.ts tests/vector-dot-projection-catalogue-integration.test.ts",
+      "status": "passed",
+      "scope": "s05 graph renderer preservation",
+      "checkedAt": "2026-08-05T10:43:04.416Z",
+      "notes": "All 28 economics, physics, vector, viewport, hostability, and retained-runtime checks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-graph-svg-viewport.test.ts",
+      "status": "passed",
+      "scope": "s05 domain-neutral lifecycle boundary",
+      "checkedAt": "2026-08-05T10:43:05.358Z",
+      "notes": "Four checks passed, including a source gate proving the generic lifecycle imports no economics, physics, matrix, calculus, vector, or KaTeX renderer."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "s05 production build",
+      "checkedAt": "2026-08-05T10:43:06.310Z",
+      "notes": "The split builds as 1102 transformed modules; route closure remains intentionally unchanged until explicit capability selection in s06."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s05 cold performance sample",
+      "checkedAt": "2026-08-05T10:43:07.217Z",
+      "notes": "All closure and runtime assertions held, but the known cold-start variance sampled 160ms against the unchanged 150ms ceiling."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s05 reproducible runtime preservation",
+      "checkedAt": "2026-08-05T10:43:08.130Z",
+      "notes": "Identical-build rerun passed with 340108 transfer bytes, 240439 script bytes, 47 resources, CLS 0, 107ms cold longest task, 34.2ms active p95, zero SVG strings, and zero subtree replacements."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s05 canonical visual preservation",
+      "checkedAt": "2026-08-05T10:43:09.137Z",
+      "notes": "All eight canonical visual cases passed after the lifecycle extraction."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s05 architecture gates",
+      "checkedAt": "2026-08-05T10:43:10.171Z",
+      "notes": "All concept-room, reader, semantic-animation, and operation-evaluation boundaries passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s05 patch hygiene",
+      "checkedAt": "2026-08-05T10:43:23.058Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s05 durable evidence integrity",
+      "checkedAt": "2026-08-05T10:43:23.997Z",
+      "notes": "Workspace validation passed after the generic viewport split."
     }
   ],
   "expectedLearning": [

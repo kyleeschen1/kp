@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
@@ -59,4 +60,21 @@ test("signed graph domains retain crossing axes", () => {
   assert.equal(projection.originPolicy, "crossing");
   assert.equal(projection.x.x1, 20);
   assert.equal(projection.y.y1, 360);
+});
+
+test("generic retained SVG lifecycle has no domain renderer dependency", () => {
+  const source = readFileSync(
+    new URL(
+      "../src/editor/graph-svg-viewport-lifecycle.ts",
+      import.meta.url
+    ),
+    "utf8"
+  );
+
+  assert.doesNotMatch(
+    source,
+    /economics|physics|matrix|derivative|integral|dot-projection|katex/i
+  );
+  assert.match(source, /KpEditorGraphSvgViewportRenderer/);
+  assert.match(source, /createKpEditorGraphSvgViewportLifecycleAdapter/);
 });
