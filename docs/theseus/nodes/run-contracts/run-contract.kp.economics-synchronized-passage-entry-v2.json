@@ -151,7 +151,8 @@
     {
       "id": "s17",
       "title": "Economics visual exemplar checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: stable 10-case exemplar passes and desktop captures are ready for review; post-checkpoint slices require fresh visual approval, with known phone fallback cleanup reserved for s20.",
+      "status": "complete"
     },
     {
       "id": "s18",

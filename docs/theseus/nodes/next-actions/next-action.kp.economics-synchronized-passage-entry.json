@@ -141,6 +141,13 @@
       "scope": "slice s16 synchronized forward and reverse traversal",
       "checkedAt": "2026-08-05T18:18:22.210Z",
       "notes": "All 10 Chromium exemplar cases, 6 stylesheet ownership tests, and test TypeScript checking passed. Samples at ordinary, entry-latched, demand midpoint, and release match exactly in both directions; the stage is embedded at 280px before settling to 160px with prose at 280px."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll; manual capture inspection",
+      "status": "passed",
+      "scope": "slice s17 mandatory economics visual exemplar checkpoint",
+      "checkedAt": "2026-08-05T18:22:34.730Z",
+      "notes": "All 10 Chromium cases passed. Desktop dark and light entry, midpoint, and release captures are coherent and synchronized. Phone remains the accepted inline fallback but visibly retains overlay congestion and excess stage height; responsive repair is explicitly deferred to approved slice s20. HUMAN_CHECKPOINT reached."
     }
   ],
   "expectedLearning": [
