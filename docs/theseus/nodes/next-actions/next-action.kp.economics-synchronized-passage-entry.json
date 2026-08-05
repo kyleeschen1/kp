@@ -351,6 +351,12 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-05T22:04:03.058Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s15 active-window runtime performance",
+      "checkedAt": "2026-08-05T22:07:03.517Z"
     }
   ],
   "progress": {

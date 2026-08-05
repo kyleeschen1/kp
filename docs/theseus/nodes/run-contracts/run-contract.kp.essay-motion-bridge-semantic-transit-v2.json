@@ -142,7 +142,8 @@
     {
       "id": "s15",
       "title": "Bound active passage scheduling",
-      "status": "planned"
+      "summary": "Proved 36-passage scroll scheduling projects at most five cues, retains at most three near candidates, uses IntersectionObserver only to gate nearby work, and performs zero ordinary-scroll layout or registration reads.",
+      "status": "complete"
     },
     {
       "id": "s16",

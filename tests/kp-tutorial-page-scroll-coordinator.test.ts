@@ -191,6 +191,107 @@ test("twelve passages share one listener, one pending frame, and cached geometry
   assert.equal(listeners.get("resize")?.size, 0);
 });
 
+test("observation gates nearby work without becoming scroll progress authority", () => {
+  const frameCallbacks = new Map<number, FrameRequestCallback>();
+  const listeners = new Map<string, Set<EventListenerOrEventListenerObject>>();
+  const observed = new Set<Element>();
+  let intersectionCallback: IntersectionObserverCallback | undefined;
+  let nextFrame = 1;
+  let scrollY = 0;
+  class FakeIntersectionObserver {
+    constructor(callback: IntersectionObserverCallback) {
+      intersectionCallback = callback;
+    }
+    observe(target: Element): void { observed.add(target); }
+    unobserve(target: Element): void { observed.delete(target); }
+    disconnect(): void { observed.clear(); }
+  }
+  const view = {
+    innerHeight: 800,
+    get scrollY() { return scrollY; },
+    IntersectionObserver: FakeIntersectionObserver,
+    requestAnimationFrame(callback: FrameRequestCallback): number {
+      const id = nextFrame++;
+      frameCallbacks.set(id, callback);
+      return id;
+    },
+    cancelAnimationFrame(id: number): void { frameCallbacks.delete(id); },
+    addEventListener(
+      type: string,
+      listener: EventListenerOrEventListenerObject
+    ): void {
+      const bucket = listeners.get(type) ?? new Set();
+      bucket.add(listener);
+      listeners.set(type, bucket);
+    },
+    removeEventListener(
+      type: string,
+      listener: EventListenerOrEventListenerObject
+    ): void {
+      listeners.get(type)?.delete(listener);
+    }
+  } as unknown as Window;
+  const registrations = Array.from({ length: 36 }, (_, index) => {
+    const documentTop = index * 400;
+    return {
+      id: `registration.${index}`,
+      passageId: `passage.${index}`,
+      blockId: "primary",
+      anchor: {
+        getBoundingClientRect: () => ({
+          top: documentTop - scrollY,
+          bottom: documentTop - scrollY + 100,
+          height: 100
+        } as DOMRect)
+      } as HTMLElement,
+      corridor
+    };
+  }) satisfies readonly KpTutorialPageScrollBlockRegistration[];
+  const projections: KpTutorialPageScrollProjection[] = [];
+  const coordinator = new KpTutorialPageScrollCoordinator(
+    view,
+    () => registrations,
+    (projection) => projections.push(projection),
+    { profileExecution: true, now: () => 0 }
+  );
+
+  coordinator.connect();
+  const distant = [...observed].at(-1)!;
+  intersectionCallback?.([
+    { target: distant, isIntersecting: true } as unknown as IntersectionObserverEntry
+  ], {} as IntersectionObserver);
+  runNextFrame(frameCallbacks);
+  const initial = projections.at(-1)!;
+  assert.equal(initial.blocks.length, 4);
+  assert.equal(initial.nearViewportRegistrationIds.length, 1);
+  assert.equal(initial.blocks.find(({ ownsScroll }) => ownsScroll)?.progress, 0.25);
+
+  coordinator.resetMetrics();
+  intersectionCallback?.([
+    { target: distant, isIntersecting: false } as unknown as IntersectionObserverEntry
+  ], {} as IntersectionObserver);
+  runNextFrame(frameCallbacks);
+  const observerOnly = projections.at(-1)!;
+  assert.equal(
+    observerOnly.blocks.find(({ ownsScroll }) => ownsScroll)?.progress,
+    0.25
+  );
+
+  scrollY = 80;
+  dispatch(listeners, "scroll");
+  runNextFrame(frameCallbacks);
+  const scrolled = projections.at(-1)!;
+  assert.equal(
+    scrolled.blocks.find(({ ownsScroll }) => ownsScroll)?.progress,
+    0.5
+  );
+  assert.ok(scrolled.blocks.length <= 5);
+  assert.ok(scrolled.nearViewportRegistrationIds.length <= 3);
+  assert.equal(coordinator.snapshotMetrics().layoutReads, 0);
+  assert.equal(coordinator.snapshotMetrics().registrationReads, 0);
+  coordinator.disconnect();
+});
+
 test("duplicate page registration identity fails before a frame can run", () => {
   const anchor = {} as HTMLElement;
   assert.throws(() => projectKpTutorialPageScrollFrame({
