@@ -2,7 +2,7 @@
   "id": "next-action.kp.economics-runtime-scroll-repair-v1",
   "kind": "next-action",
   "title": "Repair economics SVG runtime and scroll projection",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
   "sourceRefs": [
     {
@@ -534,6 +534,76 @@
       "scope": "s24 typography test types",
       "checkedAt": "2026-08-05T09:13:14.711Z",
       "notes": "Svelte reported zero diagnostics and the browser-test TypeScript project passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s25 final semantic checkpoint",
+      "checkedAt": "2026-08-05T09:21:00.383Z",
+      "notes": "All 41 focused economics tests passed."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s25 retained runtime checkpoint",
+      "checkedAt": "2026-08-05T09:21:04.268Z",
+      "notes": "Both scaffold lifecycle and canonical direct-seek/rewind identity cases passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s25 font readiness diagnostic",
+      "checkedAt": "2026-08-05T09:21:06.989Z",
+      "notes": "The first run exposed three displaced split-layout timing assertions because the newly unified prose face could swap after geometry sampling. The route was changed to resolve its local Source Serif face before mounting observers."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s25 final tutorial integration checkpoint",
+      "checkedAt": "2026-08-05T09:21:08.394Z",
+      "notes": "All 12 cases passed after the font-readiness repair, including manual rebase, composition, URL/TOC restoration, reduced motion, static enhancement, and phone."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s25 canonical visual checkpoint",
+      "checkedAt": "2026-08-05T09:21:21.935Z",
+      "notes": "All eight cases passed: desktop choreography, phone fallback, light optical compensation, font separation, text side, 0-100vh spacing, stroke tuning, and inline rollback."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s25 production performance checkpoint",
+      "checkedAt": "2026-08-05T09:21:22.974Z",
+      "notes": "Build and all budgets passed: 349589 transfer bytes, 249919 script bytes, 48 resources, CLS 0, cold longest task 124ms, active p95 34.3ms, 56 geometry reads, zero SVG strings/replacements, and 2/2/2 dense-cue reads."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "s25 production compilation checkpoint",
+      "checkedAt": "2026-08-05T09:21:23.885Z",
+      "notes": "Application, Node, test, Svelte, domain checks, and the Vite production build passed through the performance command."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 architecture boundaries",
+      "checkedAt": "2026-08-05T09:21:24.826Z",
+      "notes": "Concept-room, semantic-reader, semantic-animation, and operation-evaluation gates passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25 worktree integrity",
+      "checkedAt": "2026-08-05T09:23:10.015Z",
+      "notes": "No whitespace errors were reported across the checkpoint diff."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 durable control record",
+      "checkedAt": "2026-08-05T09:23:11.107Z",
+      "notes": "Workspace validation passed with 886 nodes and 17592 events before final slice closure."
     }
   ],
   "expectedLearning": [

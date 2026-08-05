@@ -2,8 +2,9 @@
   "id": "run-contract.kp.economics-runtime-scroll-repair-v1",
   "kind": "run-contract",
   "title": "Economics runtime and scroll repair",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -216,7 +217,8 @@
     {
       "id": "s25",
       "title": "Run-canonical-visual-and-performance-checkpoint",
-      "status": "planned"
+      "summary": "Completed the mandatory economics exemplar checkpoint: unified non-KaTeX typography, reviewable spacing controls, retained SVG rendering, cached scroll projection, and the full visual/performance matrix passed; awaiting explicit human approval before Phases 5-7.",
+      "status": "complete"
     }
   ]
 }

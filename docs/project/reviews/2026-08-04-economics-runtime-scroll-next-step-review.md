@@ -189,10 +189,13 @@ replacement. Global observed mutations are now dominated by the existing
 scrubber output, status paragraph, and button text updates rather than graph
 paint.
 
-Post-change cold-start samples ranged from `132ms` to `178ms`, inside the
-already-recorded `122–201ms` machine variance. The `150ms` ceiling was not
-widened and produced a passing `132ms` sample; this remains reliability
-pressure rather than evidence about retained-renderer CPU cost.
+Post-change cold-start samples ranged from `124ms` to `212ms`. The final
+checkpoint passed at `124ms`; earlier identical-build samples at `162ms`,
+`177ms`, and `212ms` remain recorded as local startup variance. The `150ms`
+ceiling was not widened. This is still reliability pressure rather than
+evidence about retained-renderer CPU cost, but the `212ms` outlier extends the
+previously observed machine range and should remain visible in later route
+closure work.
 
 ## Phase 3: Make Scroll Geometry Local, Cached, And Activated
 
@@ -275,6 +278,38 @@ or ignore extreme desktop spacing values.
 Acceptance includes zero, default, middle, and maximum spacing in both scroll
 directions, exact URL reconstruction, no semantic snap after tuning, and a
 human checkpoint over the repaired economics exemplar.
+
+### Recorded Phase-4 checkpoint candidate
+
+The internal tuner now covers `0–100vh` in `1vh` steps with an implicit
+`16vh` default. Its query and typed Review evidence reconstruct zero, default,
+middle, and maximum values; active-cue anchoring prevents semantic jumps while
+one invalidation remeasures the two motion-block anchors. Phone layouts retain
+the value for sharing but ignore the extreme desktop gap.
+
+One economics-local Source Serif token now owns all non-KaTeX text in the
+lesson, TOC, SVG inheritance, controls, scrubbers, and Review UI. KaTeX keeps
+its own mathematical families. The route explicitly resolves the local prose
+face before mounting scroll observers, eliminating the late font-swap race and
+bringing final checkpoint CLS to zero.
+
+| Production checkpoint | Result |
+| --- | ---: |
+| Initial transfer | 349,589 bytes |
+| Initial script | 249,919 bytes |
+| Initial resources | 48 |
+| Initial CLS | 0 |
+| Final cold longest task | 124 ms |
+| Active p95 / maximum frame | 34.3 / 34.3 ms |
+| Active geometry reads | 56 total; 2.07 per frame |
+| SVG strings / subtree replacements | 0 / 0 |
+| Six / twenty-four / forty-eight cues | 2 / 2 / 2 reads |
+
+The final automated checkpoint passed 41 focused semantic tests, two retained
+runtime browser tests, twelve tutorial integration tests, eight canonical
+visual cases, the production performance probe, build/type checks, and all
+architecture gates. Human judgment over the repaired exemplar remains the
+required promotion boundary.
 
 ## Phase 5: Reduce Route And CSS Closure After Approval
 
