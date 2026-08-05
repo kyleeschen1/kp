@@ -1,15 +1,17 @@
 # KP Next Actions
 
-Last Updated: 2026-08-04
+Last Updated: 2026-08-05
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Human-review the code-native S-expression tutorial at the mandatory
-   slice-25 checkpoint. Do not start its repeated-variable caller or botanical
-   retirement without explicit approval.
+1. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
+   promotion rank. While that frontier is paused, human-review the code-native
+   S-expression tutorial at its mandatory slice-25 checkpoint. Do not start
+   the repeated-variable caller or botanical retirement without explicit
+   approval.
 2. Compare the approved economics split presentation with
    `/tutorials/economics/demand-shift/?layout=inline-sticky`, including wide
    stage bleed and opaque page-colored occlusion, paragraph-owned attention
@@ -30,8 +32,7 @@ with source refs, verification, run-contract slices, and completion evidence.
    shared shell or default presentation.
 5. Use generated solve-x later as the third semantic lesson caller before a
    broad lesson rollout or public tutorial API declaration.
-6. Keep `Apply a 2 × 2 matrix to a vector` tabled. When animation promotion
-   resumes, choose among place-value subtraction,
+6. When animation promotion resumes, choose among place-value subtraction,
    fraction equivalence, function-coordinate transformations, and geometric
    dissection; the recommended default remains `402 - 178 = 224`.
 7. Explicitly replace or waive the old matrix-specific host-pressure gate

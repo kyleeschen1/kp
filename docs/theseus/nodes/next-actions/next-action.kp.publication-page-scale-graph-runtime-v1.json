@@ -2,13 +2,17 @@
   "id": "next-action.kp.publication-page-scale-graph-runtime-v1",
   "kind": "next-action",
   "title": "Close publication, page-scale, and graph runtime infrastructure",
-  "status": "ready",
+  "status": "resolved",
   "domain": "platform",
-  "summary": "Execute the user-approved successor to the economics runtime repair: route and build-time math closure, bounded multi-passage lifecycle, physics retained SVG pressure, minimal caller-proven Graph2D extraction, and a renderer-neutral Graph3D protocol.",
+  "summary": "All 30 approved slices are complete. Economics route and compiled-math closure, bounded page-scale lifecycle, retained physics SVG, two-caller Graph2D lifecycle, and renderer-neutral Graph3D host adoption pass their full release matrix without visual redesign or widened ceilings. Stop at HUMAN_CHECKPOINT; recommend zero additional broad infrastructure passes.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-04-economics-runtime-scroll-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-publication-page-scale-graph-runtime-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1591,6 +1595,146 @@
       "scope": "s29 durable host-adoption evidence",
       "checkedAt": "2026-08-05T14:50:49.929Z",
       "notes": "Workspace validation passes after the protocol adoption, all focused verification records, context receipt closure, and completed slice state."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "s30 compiled publication release gate",
+      "checkedAt": "2026-08-05T14:52:17.755Z",
+      "notes": "Six deterministic artifact checks pass: exact source/payload digests, build-time static KaTeX, retained bounded dynamic fragments, no runtime compiler input, and fail-closed math policy."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s30 page-scale lifecycle release gate",
+      "checkedAt": "2026-08-05T14:52:18.786Z",
+      "notes": "All 26 one/three/twelve-passage checks pass: one clock and motion owner, bounded five-block projection and three-stage hydration, stable reservations, exact settlement/accessibility, shared chunks, stale-load cancellation, and terminal disposal."
+    },
+    {
+      "command": "npm run test:graph-2d-runtime",
+      "status": "passed",
+      "scope": "s30 shared Graph2D release gate",
+      "checkedAt": "2026-08-05T14:52:19.738Z",
+      "notes": "All five lifecycle tests pass across economics and physics with exact reuse/replacement/disposal and no domain, DOM, math, framework, renderer, or editor-event authority leakage."
+    },
+    {
+      "command": "npm run test:physics-work-energy",
+      "status": "passed",
+      "scope": "s30 physics semantic release gate",
+      "checkedAt": "2026-08-05T14:52:20.677Z",
+      "notes": "All 24 exact physics model, asset, runtime, direct-seek/rewind, parameter, retained SVG, accessibility, KaTeX, and deterministic output checks pass."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s30 economics semantic release gate",
+      "checkedAt": "2026-08-05T14:52:38.573Z",
+      "notes": "All 42 publication, layout, URL/TOC, semantic state, scroll/manual handoff, exact seek/rewind, static KaTeX/SVG, retained session, and lesson-conformance checks pass."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "s30 Graph3D protocol release gate",
+      "checkedAt": "2026-08-05T14:52:39.691Z",
+      "notes": "All 30 neutral-protocol, host projection, material mapping, lazy adapter, fallback, direct-seek/rewind, source-isolation, and bounded lease pressure checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s30 architecture release gate",
+      "checkedAt": "2026-08-05T14:52:40.734Z",
+      "notes": "All four architecture gates pass with route capabilities, shared Graph2D lifecycle, and Graph3D protocol authority correctly bounded."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s30 economics learner release gate",
+      "checkedAt": "2026-08-05T14:53:35.277Z",
+      "notes": "The Chromium learner suite passes across persistent prose/control integration, manual-to-scroll handoff, supply settlement, verification geometry, enhanced TOC, direct links/history, reduced motion, static/no-JS publication, and phone behavior."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s30 canonical visual preservation",
+      "checkedAt": "2026-08-05T14:54:07.811Z",
+      "notes": "All eight approved reference cases pass across desktop salience handoff, phone inline geometry, light theme compensation, unified non-KaTeX typography, text-side toggle, spacing and stroke tuning, and independent inline rollback."
+    },
+    {
+      "command": "npm run performance:physics-work-energy",
+      "status": "passed",
+      "scope": "s30 physics retained-SVG performance gate",
+      "checkedAt": "2026-08-05T14:54:37.394Z",
+      "notes": "Both Chromium pressure cases pass. Across 68 dense forward/reverse/revisited frames, shell, view, work area, description, and KaTeX identities remain 68/68; exact and accessible samples remain 68/68; root and descendant child-list mutation and add/remove counts stay zero."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "s30 cross-browser physics caller gate",
+      "checkedAt": "2026-08-05T14:55:12.823Z",
+      "notes": "Chromium, Firefox, and WebKit all preserve exact accessible seek, rewind, bounded parameters, Review capture identity, URL/history restoration, retained SVG behavior, and terminal lifecycle."
+    },
+    {
+      "command": "npm run test:browser:animation-catalogue-3d",
+      "status": "passed",
+      "scope": "s30 real Graph3D release gate",
+      "checkedAt": "2026-08-05T14:55:37.701Z",
+      "notes": "Both Chromium cases pass: the protocol-framed capability lazily hydrates and releases in place, and WebGL context loss releases its lease while restoring the semantic SVG fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s30 release type closure",
+      "checkedAt": "2026-08-05T14:56:24.746Z",
+      "notes": "Application, Node, tests, Svelte, and domain type checks pass through the production build command."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s30 deterministic production build",
+      "checkedAt": "2026-08-05T14:56:26.108Z",
+      "notes": "Full typecheck, checked-in economics publication stale check, and Vite production build complete successfully."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "s30 release cold-start sample",
+      "checkedAt": "2026-08-05T14:56:57.464Z",
+      "notes": "The final production artifact passed route closure and every active budget, but the known cold environmental sample measured 193ms against the unchanged 150ms ceiling. Transfer stayed 239467B, script 139839B, 42 resources, CLS 0, active p95 34.3ms, zero SVG rebuilds, and no 3D route leakage; rerun the identical build without widening policy."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s30 final identical-build route budget",
+      "checkedAt": "2026-08-05T14:58:06.820Z",
+      "notes": "The final production artifact passes every unchanged ceiling: 239467B transfer, 139839B script, 42 resources, CLS 0, 138ms cold longest task, 33.9ms active p95, zero active long tasks, zero SVG strings/subtree replacements, two cached geometry reads per scroll frame, and no Graph3D/Three/WebGL route leakage."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "failed",
+      "scope": "s30 project-memory drift diagnostic",
+      "checkedAt": "2026-08-05T15:00:37.725Z",
+      "notes": "The first closeout check found docs/project/next-actions.md no longer named the tabled rank-6 frontier in queue item 1; the roadmap and promotion thread already preserved the pause. The queue was corrected without activating matrix work."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s30 project-memory alignment",
+      "checkedAt": "2026-08-05T15:00:39.071Z",
+      "notes": "The stable promotion ledger, roadmap active thread, human-readable queue, approved plan, and evidence-derived catalogue status align at tabled rank 6 with no active implementation contract."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s30 final patch hygiene",
+      "checkedAt": "2026-08-05T15:00:57.391Z",
+      "notes": "No whitespace errors in the release closeout, project-memory alignment, Theseus evidence, or prior implementation."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s30 durable release evidence integrity",
+      "checkedAt": "2026-08-05T15:00:58.942Z",
+      "notes": "Workspace validation passes with the complete verification matrix, closeout reference, and project-memory records."
     }
   ],
   "progress": {

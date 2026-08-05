@@ -2,8 +2,9 @@
   "id": "run-contract.kp.publication-page-scale-graph-runtime-v1",
   "kind": "run-contract",
   "title": "Publication, page-scale, and graph runtime closure",
-  "status": "ready",
+  "status": "resolved",
   "domain": "platform",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -233,7 +234,8 @@
     {
       "id": "s30",
       "title": "Run-release-matrix-and-closeout",
-      "status": "planned"
+      "summary": "The full release matrix passes across deterministic compiled publication truth, economics semantics and eight-case canonical visuals, unchanged route budgets, one/three/twelve-passage lifecycle, 68-frame retained physics SVG, shared Graph2D lifecycle, protocol-framed lazy Graph3D, three-browser physics, types, build, architecture, promotion memory, patch hygiene, and workspace integrity. Cold-start variance remains honestly recorded under the unchanged ceiling. The closeout recommends zero further broad infrastructure passes and stops at the mandatory human checkpoint.",
+      "status": "complete"
     }
   ]
 }

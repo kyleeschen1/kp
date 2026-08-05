@@ -168,13 +168,16 @@ The approved repair and consolidation sequence is recorded in
 have closed: the economics route retains one SVG runtime tree, projects cached
 cue geometry through IntersectionObserver-assisted activation, exposes the
 internal spacing tuner, uses one non-KaTeX lesson face, and passes its visual
-and performance checkpoint. On 2026-08-05 the user approved the bounded
-Phases 5–7 successor. It now closes route, build-time math, and CSS ownership;
-proves bounded multi-passage hydration; then pressures a minimal Graph2D
-lifecycle and renderer-neutral Graph3D protocol through the existing physics
-and internal 3D callers. The current economics appearance is the preservation
-reference, not a redesign target. The Lisp contract's final two slices remain
-deferred rather than mixed into this work.
+and performance checkpoint. The user-approved Phases 5–7 successor is now
+complete. It closes route, build-time math, and CSS ownership; proves bounded
+one-, three-, and twelve-passage hydration; retains the physics SVG runtime;
+extracts only the two-caller Graph2D lifecycle; and pressures a renderer-neutral
+Graph3D protocol through the existing internal host without loading Three.js
+on the economics route. The current economics appearance remains the preserved
+reference rather than a redesign target. Results, metrics, known cold-start
+variance, and the post-run recommendation are recorded in
+`reviews/2026-08-05-publication-page-scale-graph-runtime-closeout.md`. The Lisp
+contract's final two slices remain deferred rather than mixed into this work.
 
 Botanical Lisp replaced generated solve-x as the second tutorial caller,
 recorded in
@@ -657,29 +660,28 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Execute the approved economics runtime/scroll repair Phases 1–4, including
-   measurement, persistent SVG paint, cached anchor projection, observer-
-   assisted lifecycle, the internal spacing tuner, and non-KaTeX font
-   unification; stop for the required economics visual/performance checkpoint.
-2. Review the repaired `?layout=two-column-scroll` exemplar against the split
-   and inline-sticky references without inferring shared layout, theme,
-   graph-profile, renderer, or authoring promotion.
-3. Later review the code-native S-expression choreography, especially recursive
+1. Review the completed publication/page-scale/graph-runtime tranche at its
+   required human checkpoint. Inspect the preserved economics two-column
+   reference and the existing internal Graph3D host; do not infer a visual
+   redesign from infrastructure completion.
+2. Schedule zero additional broad infrastructure passes. Return to visible
+   exemplar work; permit at most one bounded infrastructure repair only when a
+   real next caller demonstrates a failed generic invariant.
+3. Review the code-native S-expression choreography, especially recursive
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
 4. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
-5. After lesson-layout approval and a structurally different layout caller,
+5. Select a nearer non-linear-algebra transformation when animation-library
+   promotion resumes; place-value subtraction remains the recommended default.
+6. Let that visible caller determine whether another narrow Graph2D, Graph3D,
+   publication, or page-scale seam is actually required. Do not pre-schedule a
+   universal renderer or compositor pass.
+7. After lesson-layout approval and a structurally different layout caller,
    decide whether the one-axis grammar should replace the split default.
-6. Later use generated solve-x as a third semantic lesson caller before broad
+8. Later use generated solve-x as a third semantic lesson caller before broad
    lesson rollout or public tutorial API declaration.
-7. Keep SvelteKit/Public Web deferred until those caller and publication gates
+9. Keep SvelteKit/Public Web deferred until those caller and publication gates
    pass.
-8. Select one nearer transformation exemplar without resuming the tabled
-   matrix-to-linear-map run. Place-value subtraction remains the recommended
-   default when animation-library promotion resumes.
-9. Revisit what evidence should replace the old matrix-specific host-pressure
-   gate before generalizing the Svelte seam or adopting SvelteKit, then resume
-   the Internal Studio and Public Web sequence.
 10. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
