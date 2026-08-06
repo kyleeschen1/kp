@@ -1151,6 +1151,16 @@ test("direct semantic links restore complete cumulative state without replay", a
     "data-kp-editor-animation-status",
     "idle"
   );
+  await expect.poll(() => root.locator("[data-kp-economics-demand-line]")
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      opacity: getComputedStyle(element).opacity,
+      width: getComputedStyle(element).strokeWidth
+  }))).toEqual({
+      color: "rgb(249, 144, 196)",
+      opacity: "1",
+      width: "1.2px"
+    });
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="demand-shift"]'
   )).toHaveAttribute("aria-current", "location");

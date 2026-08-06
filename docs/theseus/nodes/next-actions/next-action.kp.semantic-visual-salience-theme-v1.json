@@ -236,6 +236,13 @@
       "scope": "s14 typed and Svelte boundary",
       "checkedAt": "2026-08-06T08:33:04.182Z",
       "notes": "TypeScript, Svelte, and domain checks pass with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial; npm run test:economics-demand-shift-css; npm run visual:economics-two-column-scroll; npm run visual:economics-demand-shift-tutorial; npm run typecheck",
+      "status": "passed",
+      "scope": "s15 demand semantic focus and context projection",
+      "checkedAt": "2026-08-06T08:41:06.013Z",
+      "notes": "59 tutorial tests, 15 CSS tests, 11 two-column browser tests, 12 tutorial browser tests, and typecheck pass; direct checkpoint keeps the owning demand passage focused."
     }
   ],
   "expectedLearning": [

@@ -149,7 +149,8 @@
     {
       "id": "s15",
       "title": "Apply state handoff through demand shift",
-      "status": "planned"
+      "summary": "Current demand now consumes the semantic focus/context seam in dark and light themes; scroll, manual scrub, direct link, renderer geometry, and animation clock remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s16",
