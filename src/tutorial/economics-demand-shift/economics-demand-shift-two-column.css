@@ -43,7 +43,7 @@
       var(--kp-two-column-stage-top) -
       var(--kp-two-column-focus-top)
     );
-  --kp-two-column-boundary-line: 1px;
+  --kp-two-column-boundary-line: var(--kp-graph-line-effective, 1px);
   --kp-two-column-column-half-gap: clamp(0.625rem, 1.2vw, 1.125rem);
   --kp-two-column-divider-block-size:
     calc(

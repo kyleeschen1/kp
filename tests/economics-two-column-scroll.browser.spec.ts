@@ -293,8 +293,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "strokeWidth"
   );
   await expect(graph.locator("#kp-editor-graph-axis-arrow")).toHaveAttribute(
-    "data-kp-axis-arrow-scale",
-    "6"
+    "data-kp-axis-arrow-length",
+    "9"
+  );
+  await expect(graph.locator("#kp-editor-graph-axis-arrow")).toHaveAttribute(
+    "data-kp-axis-arrow-breadth",
+    "7"
   );
   await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
     .evaluate((element) => ({
@@ -381,23 +385,23 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     const xAxis = bounds('[data-kp-editor-graph-axis="x"]');
     const price = labelBounds("axis-price");
     const quantity = labelBounds("axis-quantity");
-    const priceMidpoint = (yAxis.top + yAxis.bottom) / 2;
-    const quantityMidpoint = (xAxis.left + xAxis.right) / 2;
+    const priceCenter = (price.top + price.bottom) / 2;
+    const quantityCenter = (quantity.left + quantity.right) / 2;
     return {
       priceGapIsDeliberate: yAxis.left - price.right >= 4,
-      priceIsCentered: Math.abs(
-        (price.top + price.bottom) / 2 - priceMidpoint
-      ) <= 1,
+      priceClearsArrow: priceCenter - yAxis.top >= 12,
+      priceIsNearPositiveEnd: priceCenter - yAxis.top <= 36,
       quantityGapIsDeliberate: quantity.top - xAxis.bottom >= 4,
-      quantityIsCentered: Math.abs(
-        (quantity.left + quantity.right) / 2 - quantityMidpoint
-      ) <= 1
+      quantityClearsArrow: xAxis.right - quantityCenter >= 12,
+      quantityIsNearPositiveEnd: xAxis.right - quantityCenter <= 36
     };
   })).toEqual(expect.objectContaining({
     priceGapIsDeliberate: true,
-    priceIsCentered: true,
+    priceClearsArrow: true,
+    priceIsNearPositiveEnd: true,
     quantityGapIsDeliberate: true,
-    quantityIsCentered: true
+    quantityClearsArrow: true,
+    quantityIsNearPositiveEnd: true
   }));
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-initial-paragraph-state.png`,
@@ -674,9 +678,15 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-supply-movement-progress"
   ))).toBeGreaterThan(entryBaseline.terminal.minimumSupplyProgress);
-  await expect.poll(() => graph.evaluate((element) => Math.round(
-    element.getBoundingClientRect().width
-  ))).toBe(544);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-stage-composition-phase",
+    "split"
+  );
+  // The semantic composition phase may split, but the two-column graph slot
+  // remains geometrically stable so the final beat cannot introduce a jump.
+  await expect.poll(() => graph.evaluate((element) =>
+    Math.round(element.getBoundingClientRect().width)
+  )).toBe(544);
   const stageBottom = await stage.evaluate(
     (element) => element.getBoundingClientRect().bottom
   );
@@ -742,7 +752,7 @@ test("phone keeps the accepted one-column inline geometry", async ({ page }) => 
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-paragraph-gap-vh",
-    "100"
+    "50"
   );
 
   await expect.poll(() => body.evaluate((element) =>
@@ -841,7 +851,7 @@ test("light theme applies one compensated graph width and prose weight", async (
   }))).toEqual({
     color: "rgb(41, 43, 58)",
     proseWeight: "400",
-    divider: "1px"
+    divider: "1.5px"
   });
   await expect.poll(() => graph.evaluate((element) => {
     const selectors = [
@@ -853,7 +863,7 @@ test("light theme applies one compensated graph width and prose weight", async (
     return selectors.map((selector) => getComputedStyle(
       element.querySelector<SVGElement>(selector)!
     ).strokeWidth);
-  })).toEqual(["1.25px", "1.25px", "1.25px", "1.25px"]);
+  })).toEqual(["1.5px", "1.5px", "1.5px", "1.5px"]);
   await expect.poll(() => graph.locator(
     ".editor-graph-stage__economics-grid-line"
   ).first().evaluate((element) => ({
@@ -902,7 +912,6 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
     root.locator("kp-tutorial-toc a").first(),
     root.locator("[data-kp-inline-sticky-stage] svg").first(),
     page.locator("[data-kp-economics-column-toggle]"),
-    page.locator("[data-kp-economics-spacing-tuner] summary"),
     page.locator("[data-kp-economics-theme-toggle]"),
     review.locator("textarea"),
     review.locator(".route")
@@ -1044,256 +1053,35 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   await expect(page).not.toHaveURL(/text=left/);
 });
 
-test("spacing tuner preserves the active cue across its full URL range", async ({
+test("appearance experiments are frozen at defaults and legacy queries are inert", async ({
   page
 }) => {
-  await page.addInitScript(() => {
-    (window as Window & {
-      __kpEconomicsPerformanceProbeRequested?: boolean;
-    }).__kpEconomicsPerformanceProbeRequested = true;
-  });
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(route);
+  await page.goto(
+    `${route}&stroke=1.75&gap=0&context=0.1&mutedBlue=1&mutedRed=1&` +
+      "measure=16&leading=2.2&weight=600"
+  );
 
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
-  const paragraph = card(root, "follow-shift").locator("p");
-  const tuner = page.locator("[data-kp-economics-spacing-tuner]");
-  const input = tuner.locator("[data-kp-economics-spacing-tuner-input]");
-  await placeTopAt(page, paragraph, 280);
+  await expect(page.locator("kp-graph-style-tuner")).toHaveCount(0);
+  await expect(page.locator("[data-kp-economics-spacing-tuner]")).toHaveCount(0);
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-attention-passage",
-    "follow-shift"
+    "data-kp-economics-two-column-paragraph-gap-vh",
+    "50"
   );
-  await tuner.locator("summary").click();
-
-  for (const gapVh of [0, 16, 50, 100]) {
-    await page.evaluate(() => new Promise<void>((resolve) => {
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-    }));
-    const before = await page.evaluate(() => {
-      const target = window as Window & {
-        __kpEconomicsTutorialRuntimePerformance?: {
-          resetScrollCoordinator: () => void;
-        };
-      };
-      target.__kpEconomicsTutorialRuntimePerformance!
-        .resetScrollCoordinator();
-      const root = document.querySelector<HTMLElement>(
-        "[data-kp-economics-demand-shift-tutorial]"
-      )!;
-      return {
-        progress: root.dataset["kpEconomicsTutorialDemandProgress"],
-        passage: root.dataset["kpEconomicsTutorialAttentionPassage"]
-      };
-    });
-    await input.fill(String(gapVh));
-    await expect(root).toHaveAttribute(
-      "data-kp-economics-two-column-paragraph-gap-vh",
-      String(gapVh)
-    );
-    await expect(tuner.locator("output[for='kp-economics-paragraph-gap']"))
-      .toHaveText(`${gapVh}vh`);
-    await expect.poll(() => paragraph.evaluate((element) =>
-      Number.parseFloat(getComputedStyle(element.parentElement!).paddingBottom)
-    )).toBe(gapVh * 8);
-    await expect.poll(() => page.evaluate(() => {
-      const target = window as Window & {
-        __kpEconomicsTutorialRuntimePerformance?: {
-          snapshotScrollCoordinator: () => { executedFrames: number };
-        };
-      };
-      return target.__kpEconomicsTutorialRuntimePerformance!
-        .snapshotScrollCoordinator().executedFrames;
-    })).toBeGreaterThan(0);
-    const coordinator = await page.evaluate(() => {
-      const target = window as Window & {
-        __kpEconomicsTutorialRuntimePerformance?: {
-          snapshotScrollCoordinator: () => {
-            executedFrames: number;
-            registrationReads: number;
-            layoutReads: number;
-          };
-        };
-      };
-      return target.__kpEconomicsTutorialRuntimePerformance!
-        .snapshotScrollCoordinator();
-    });
-    // One invalidation remeasures the two motion-block anchors. A second
-    // cached frame is allowed only for the viewport-anchor scroll correction.
-    expect(coordinator.registrationReads).toBe(2);
-    expect(coordinator.layoutReads).toBe(2);
-    expect(coordinator.executedFrames).toBeLessThanOrEqual(2);
-    // Changing the authored corridor length can requantize a subpixel scroll
-    // position; preserve the semantic frame within its three-decimal display.
-    await expect.poll(async () => Math.abs(
-      await demandProgress(root) - Number(before.progress ?? 0)
-    )).toBeLessThanOrEqual(0.002);
-    await expect(root).toHaveAttribute(
-      "data-kp-economics-tutorial-attention-passage",
-      before.passage ?? ""
-    );
-    expect(await page.evaluate(() =>
-      new URL(window.location.href).searchParams.get("gap")
-    )).toBe(gapVh === 50 ? null : String(gapVh));
-  }
-
-  await placeTopAt(page, paragraph, 390);
-  const forwardProgress = await demandProgress(root);
-  await placeTopAt(page, paragraph, 280);
-  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
-  await placeTopAt(page, paragraph, 390);
-  await expect.poll(async () => Math.abs(
-    (await demandProgress(root)) - forwardProgress
-  )).toBeLessThan(0.015);
-});
-
-test("salience and prose tuners preserve graph focus and fill the shared width", async ({
-  page
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(route);
-
-  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
-  const body = root.locator(".kp-economics-tutorial__motion-passage-body");
-  const paragraph = card(root, "follow-shift").locator("p");
-  const supply = root.locator("[data-kp-economics-supply-line]");
-  const demand = root.locator("[data-kp-economics-demand-line]");
-  const lineTuner = page.locator("kp-graph-style-tuner");
-  const layoutTuner = page.locator("[data-kp-economics-spacing-tuner]");
-  const initialColumns = await columnGeometry(body);
-
-  await placeTopAt(page, paragraph, 280);
-  const initialProgress = await demandProgress(root);
-  await lineTuner.locator("summary").click();
-  await lineTuner.locator("[data-kp-economics-context-opacity-input]")
-    .fill("0.35");
-  await expect(root).toHaveAttribute("data-kp-economics-context-opacity", "0.35");
-  await expect.poll(() => demand.evaluate((element) =>
-    getComputedStyle(element).filter
-  )).toBe("opacity(0.35) opacity(1)");
-  await expect.poll(() => supply.evaluate((element) =>
-    getComputedStyle(element).filter
-  )).toBe("none");
-
-  await lineTuner.locator("[data-kp-economics-muted-blue-input]").check();
-  await lineTuner.locator("[data-kp-economics-muted-red-input]").check();
-  await expect(root).toHaveAttribute("data-kp-economics-muted-blue", "true");
-  await expect(root).toHaveAttribute("data-kp-economics-muted-red", "true");
-  await expect.poll(() => supply.evaluate((element) =>
-    getComputedStyle(element).stroke
-  )).toBe("rgb(94, 126, 159)");
-  await expect.poll(() => demand.evaluate((element) =>
-    getComputedStyle(element).stroke
-  )).toBe("rgb(150, 107, 103)");
-
-  await layoutTuner.locator("summary").click();
-  await layoutTuner.locator("[data-kp-economics-text-width-input]")
-    .fill("20");
-  await layoutTuner.locator("[data-kp-economics-prose-line-height-input]")
-    .fill("2");
-  await layoutTuner.locator("[data-kp-economics-prose-weight-input]")
-    .fill("500");
-  await expect(root).toHaveAttribute("data-kp-economics-text-width-rem", "20");
-  await expect(root).toHaveAttribute("data-kp-economics-prose-line-height", "2.00");
-  await expect(root).toHaveAttribute("data-kp-economics-prose-weight", "500");
-  const tunedColumns = await columnGeometry(body);
-  expect(tunedColumns.proseWidth).toBeLessThan(initialColumns.proseWidth);
-  expect(tunedColumns.stageWidth).toBeGreaterThan(initialColumns.stageWidth);
-  expect(tunedColumns.proseWidth + tunedColumns.stageWidth).toBe(
-    initialColumns.proseWidth + initialColumns.stageWidth
-  );
-  await expect.poll(() => paragraph.evaluate((element) =>
-    getComputedStyle(element).color
-  )).toBe("rgb(214, 215, 223)");
-  await expect.poll(() => paragraph.evaluate((element) =>
-    getComputedStyle(element).fontWeight
-  )).toBe("500");
-  await expect.poll(() => paragraph.evaluate((element) => {
+  await expect.poll(() => root.evaluate((element) => {
     const style = getComputedStyle(element);
-    return Number.parseFloat(style.lineHeight) /
-      Number.parseFloat(style.fontSize);
-  })).toBeCloseTo(2, 2);
-  await expect.poll(() => demandProgress(root)).toBeCloseTo(initialProgress, 2);
-  await expect(page).toHaveURL(/context=0.35/);
-  await expect(page).toHaveURL(/mutedBlue=1/);
-  await expect(page).toHaveURL(/mutedRed=1/);
-  await expect(page).toHaveURL(/measure=20/);
-  await expect(page).toHaveURL(/leading=2.00/);
-  await expect(page).toHaveURL(/weight=500/);
+    return {
+      lineHeight: style.getPropertyValue("--kp-two-column-prose-line-height").trim(),
+      proseWeight: style.getPropertyValue("--kp-lesson-theme-prose-weight").trim(),
+      textWidth: style.getPropertyValue("--kp-two-column-text-width-rem").trim()
+    };
+  })).toEqual({ lineHeight: "1.78", proseWeight: "400", textWidth: "24" });
 
-  await page.locator("[data-kp-economics-theme-toggle]").click();
-  await expect.poll(() => paragraph.evaluate((element) =>
-    getComputedStyle(element).color
-  )).toBe("rgb(41, 43, 58)");
-  await page.screenshot({
-    path: `${evidenceDirectory}/desktop-salience-tuning.png`,
-    fullPage: false
-  });
-
-  await page.reload();
-  await expect(root).toHaveAttribute("data-kp-economics-context-opacity", "0.35");
-  await expect(root).toHaveAttribute("data-kp-economics-text-width-rem", "20");
-  await expect(root).toHaveAttribute("data-kp-economics-prose-weight", "500");
-});
-
-test("line tuner preserves optical theme compensation and URL state", async ({
-  page
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(route);
-
-  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
-  const graph = root.locator(".editor-graph-stage");
-  const tuner = page.locator("kp-graph-style-tuner");
-  const range = tuner.locator("input[data-kp-graph-style-tuner-stroke]");
-  const output = tuner.locator("[data-kp-graph-style-tuner-output]");
-
-  await expect(tuner).toHaveAttribute(
-    "data-kp-graph-style-tuner-enhancement",
-    "ready"
-  );
-  await tuner.locator("summary").click();
-  await range.evaluate((element) => {
-    const input = element as HTMLInputElement;
-    input.value = "1.20";
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-graph-stroke-scale",
-    "1.20"
-  );
-  await expect(output).toContainText("dark 1.20px · light 1.50px");
-  await expect(page).toHaveURL(/stroke=1.20/);
-  await expect.poll(() => graph.locator(
-    "[data-kp-economics-supply-line]"
-  ).evaluate((element) => getComputedStyle(element).strokeWidth)).toBe("1.2px");
-  await page.screenshot({
-    path: `${evidenceDirectory}/desktop-line-tuner.png`,
-    fullPage: false
-  });
-
-  await page.locator("[data-kp-economics-theme-toggle]").click();
-  await expect.poll(() => graph.locator(
-    "[data-kp-economics-supply-line]"
-  ).evaluate((element) => getComputedStyle(element).strokeWidth)).toBe("1.5px");
-  await expect(page).toHaveURL(/stroke=1.20/);
-  await expect(graph.locator("#kp-editor-graph-axis-arrow")).toHaveAttribute(
-    "markerUnits",
-    "strokeWidth"
-  );
-
-  await page.reload();
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-graph-stroke-scale",
-    "1.20"
-  );
-  await expect(page.locator("[data-kp-economics-theme-toggle]")).toHaveAttribute(
-    "aria-pressed",
-    "false"
-  );
-  await expect.poll(() => root.locator(
-    "[data-kp-economics-supply-line]"
-  ).evaluate((element) => getComputedStyle(element).strokeWidth)).toBe("1.5px");
+  const evidence = await root.getAttribute("data-kp-tutorial-review-evidence");
+  expect(evidence).not.toContain("graph-stroke-scale");
+  expect(evidence).not.toContain("paragraph-gap-vh");
+  expect(evidence).not.toContain("context-opacity");
 });
 
 test("the accepted inline route remains an independent rollback reference", async ({

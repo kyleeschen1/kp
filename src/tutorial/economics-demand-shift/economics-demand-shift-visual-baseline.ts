@@ -10,9 +10,6 @@ export const kpEconomicsPreSalienceVisualBaseline = Object.freeze({
     light: Object.freeze({ stable: "#4682b4", changing: "#dc443c" })
   }),
   stateAttributes: Object.freeze([
-    "data-kp-economics-context-opacity",
-    "data-kp-economics-muted-blue",
-    "data-kp-economics-muted-red",
     "data-kp-economics-tutorial-attention-passage",
     "data-kp-economics-tutorial-attention-state",
     "data-kp-economics-tutorial-demand-progress",

@@ -2,7 +2,7 @@
   "id": "next-action.kp.economics-runtime-optical-consolidation",
   "kind": "next-action",
   "title": "Consolidate economics runtime and optical profile",
-  "status": "ready",
+  "status": "resolved",
   "domain": "rendering",
   "sourceRefs": [
     {

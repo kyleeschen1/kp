@@ -23,24 +23,11 @@ import {
   readKpEconomicsDemandShiftPresentationLayout,
   readKpEconomicsMotionBridgeDwellProfile,
   readKpEconomicsScrollScrubStrategy,
-  readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsTwoColumnTextSide
 } from "./economics-demand-shift-layout.ts";
 import {
   readKpEconomicsDemandShiftTheme
 } from "./economics-demand-shift-theme.ts";
-import {
-  readKpEconomicsGraphStrokeScale
-} from "./economics-demand-shift-graph-style.ts";
-import {
-  readKpEconomicsContextOpacity,
-  readKpEconomicsMutedBlue,
-  readKpEconomicsMutedRed,
-  readKpEconomicsProseLineHeight,
-  readKpEconomicsProseWeight,
-  readKpEconomicsTextWidthRem
-} from "./economics-demand-shift-visual-tuning.ts";
-import { defineKpGraphStyleTuner } from "../kp-graph-style-tuner.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
@@ -58,7 +45,6 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   // Typography is lesson geometry: resolve the one local prose face before
   // scroll and attention observers can sample fallback-font dimensions.
   await document.fonts.load('400 1rem "Source Serif 4"');
-  defineKpGraphStyleTuner();
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
   const { descriptors, entry } =
@@ -103,15 +89,6 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       motionBridgeDwellProfile:
         readKpEconomicsMotionBridgeDwellProfile(input.search),
       initialTwoColumnTextSide: readKpEconomicsTwoColumnTextSide(input.search),
-      initialTwoColumnParagraphGapVh:
-        readKpEconomicsTwoColumnParagraphGapVh(input.search),
-      initialGraphStrokeScale: readKpEconomicsGraphStrokeScale(input.search),
-      initialContextOpacity: readKpEconomicsContextOpacity(input.search),
-      initialMutedBlue: readKpEconomicsMutedBlue(input.search),
-      initialMutedRed: readKpEconomicsMutedRed(input.search),
-      initialProseLineHeight: readKpEconomicsProseLineHeight(input.search),
-      initialProseWeight: readKpEconomicsProseWeight(input.search),
-      initialTextWidthRem: readKpEconomicsTextWidthRem(input.search),
       initialTheme,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18

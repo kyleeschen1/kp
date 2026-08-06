@@ -20,16 +20,19 @@ test("pre-salience economics visual baseline is explicit and executable", () => 
     light: "#f4f1e9"
   });
   assert.equal(baseline.knownBroadSuiteBaseline.failures, 24);
-  assert.equal(new Set(baseline.stateAttributes).size, 7);
+  assert.equal(
+    new Set(baseline.stateAttributes).size,
+    baseline.stateAttributes.length
+  );
   assert.equal(new Set(baseline.tuningQueryKeys).size, 8);
   assert.equal(new Set(baseline.stylesheetOwners).size, 8);
 });
 
-test("frozen palette remains historical while current controls stay mounted", () => {
+test("frozen palette remains historical while appearance controls stay detached", () => {
   const theme = readSource("economics-demand-shift-theme.css");
   const component = readSource("KpEconomicsDemandShiftTutorial.svelte");
+  const entry = readSource("economics-demand-shift-tutorial-entry.ts");
   const tuning = readSource("economics-demand-shift-visual-tuning.ts");
-  const graphTuning = readSource("economics-demand-shift-graph-style.ts");
   const layoutTuning = readSource("economics-demand-shift-layout.ts");
   const global = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
@@ -46,15 +49,18 @@ test("frozen palette remains historical while current controls stay mounted", ()
   for (const attribute of baseline.stateAttributes) {
     assert.equal(component.includes(attribute), true, `missing state attribute ${attribute}`);
   }
-  for (const key of baseline.tuningQueryKeys) {
+  for (const key of baseline.tuningQueryKeys.filter((key) => key !== "stroke")) {
     assert.equal(
-      `${tuning}\n${graphTuning}\n${layoutTuning}\n${component}`.includes(
-        `"${key}"`
-      ),
+      `${tuning}\n${layoutTuning}`.includes(`"${key}"`),
       true,
       `missing tuning query key ${key}`
     );
   }
+  assert.doesNotMatch(component, /kp-graph-style-tuner|spacing-tuner/);
+  assert.doesNotMatch(
+    entry,
+    /readKpEconomics(?:GraphStrokeScale|ContextOpacity|MutedBlue|MutedRed|ProseLineHeight|ProseWeight|TextWidthRem|TwoColumnParagraphGapVh)/
+  );
 });
 
 test("dark graph palette uses the approved semantic identity sources", () => {
@@ -65,9 +71,7 @@ test("dark graph palette uses the approved semantic identity sources", () => {
     "#f4f4f8",
     "#42465b",
     "#7d8193",
-    "#626775",
-    "#5e7e9f",
-    "#966b67"
+    "#626775"
   ]) {
     assert.equal(theme.includes(color), true, `missing semantic color ${color}`);
   }
@@ -85,8 +89,7 @@ test("light graph palette uses separately tuned semantic sources", () => {
     "#aeb2bf",
     "#707586",
     "#74798a",
-    "#68788a",
-    "#806b67"
+    "#68788a"
   ]) {
     assert.equal(theme.includes(color), true, `missing light semantic color ${color}`);
   }

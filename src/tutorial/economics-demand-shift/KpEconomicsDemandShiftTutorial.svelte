@@ -45,11 +45,7 @@
     projectKpInlineStickyParagraphMotionCorridor,
     projectKpTwoColumnScrollMotionCorridor,
     projectKpTwoColumnScrollSequence,
-    kpEconomicsTwoColumnParagraphGapMaximumVh,
-    kpEconomicsTwoColumnParagraphGapMinimumVh,
-    kpEconomicsTwoColumnParagraphGapStepVh,
-    normalizeKpEconomicsTwoColumnParagraphGapVh,
-    writeKpEconomicsTwoColumnParagraphGapVh,
+    kpEconomicsTwoColumnParagraphGapDefaultVh,
     writeKpEconomicsTwoColumnTextSide,
     type KpEconomicsDemandShiftPresentationLayout,
     type KpEconomicsMotionBridgeDwellProfile,
@@ -58,11 +54,6 @@
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
-  import {
-    projectKpEconomicsGraphStrokeWidths,
-    serializeKpEconomicsGraphStrokeWidths,
-    writeKpEconomicsGraphStrokeScale
-  } from "./economics-demand-shift-graph-style.ts";
   import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
@@ -135,16 +126,6 @@
     type KpTutorialScrubBarElement,
     type KpTutorialScrubSeekDetail
   } from "../kp-tutorial-scrub-bar.ts";
-  import {
-    graphStrokeScaleSummary,
-    KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
-    kpGraphStrokeScaleMaximum,
-    kpGraphStrokeScaleMinimum,
-    kpGraphStrokeScaleStep,
-    normalizeKpGraphStrokeScale,
-    type KpGraphStyleTunerChangeDetail,
-    type KpGraphStyleTunerElement
-  } from "../kp-graph-style-tuner.ts";
   import type {
     KpTutorialTocElement
   } from "../kp-tutorial-toc-element.ts";
@@ -169,31 +150,6 @@
   import {
     projectKpEconomicsMotionBridgeCorridor
   } from "./economics-demand-shift-motion-bridge.ts";
-  import {
-    kpEconomicsContextOpacityMaximum,
-    kpEconomicsContextOpacityMinimum,
-    kpEconomicsContextOpacityStep,
-    kpEconomicsProseLineHeightMaximum,
-    kpEconomicsProseLineHeightMinimum,
-    kpEconomicsProseLineHeightStep,
-    kpEconomicsProseWeightMaximum,
-    kpEconomicsProseWeightMinimum,
-    kpEconomicsProseWeightStep,
-    kpEconomicsTextWidthMaximumRem,
-    kpEconomicsTextWidthMinimumRem,
-    kpEconomicsTextWidthStepRem,
-    normalizeKpEconomicsContextOpacity,
-    normalizeKpEconomicsProseLineHeight,
-    normalizeKpEconomicsProseWeight,
-    normalizeKpEconomicsTextWidthRem,
-    writeKpEconomicsContextOpacity,
-    writeKpEconomicsMutedBlue,
-    writeKpEconomicsMutedRed,
-    writeKpEconomicsProseLineHeight,
-    writeKpEconomicsProseWeight,
-    writeKpEconomicsTextWidthRem
-  } from "./economics-demand-shift-visual-tuning.ts";
-
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
   const kpEconomicsScrollLatchEpsilonPx = 1;
@@ -264,15 +220,7 @@
     animation,
     hostability,
     initialDemandIntercept,
-    initialGraphStrokeScale,
-    initialContextOpacity,
-    initialMutedBlue,
-    initialMutedRed,
-    initialProseLineHeight,
-    initialProseWeight,
-    initialTextWidthRem,
     initialTheme,
-    initialTwoColumnParagraphGapVh,
     initialTwoColumnTextSide,
     initialDestination,
     presentationLayout,
@@ -292,15 +240,7 @@
     readonly animation: KpAnimationAsset;
     readonly hostability: KpAnimationCatalogueSurfaceHostability;
     readonly initialDemandIntercept: number;
-    readonly initialGraphStrokeScale: number;
-    readonly initialContextOpacity: number;
-    readonly initialMutedBlue: boolean;
-    readonly initialMutedRed: boolean;
-    readonly initialProseLineHeight: number;
-    readonly initialProseWeight: number;
-    readonly initialTextWidthRem: number;
     readonly initialTheme: KpEconomicsDemandShiftTheme;
-    readonly initialTwoColumnParagraphGapVh: number;
     readonly initialTwoColumnTextSide: KpEconomicsTwoColumnTextSide;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
     readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
@@ -336,7 +276,6 @@
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
-  let graphStyleTuner = $state<KpGraphStyleTunerElement | undefined>();
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(initialDeepLink.checkpointIndex);
   // Playback changes every frame. This retained record is deliberately not a
@@ -347,29 +286,8 @@
     direction: initial.playbackDirection
   };
   let demandIntercept = $state(initial.demandIntercept);
-  let graphStrokeScale = $state(
-    untrack(() => normalizeKpGraphStrokeScale(initialGraphStrokeScale))
-  );
-  let contextOpacity = $state(
-    untrack(() => normalizeKpEconomicsContextOpacity(initialContextOpacity))
-  );
-  let mutedBlue = $state(untrack(() => initialMutedBlue));
-  let mutedRed = $state(untrack(() => initialMutedRed));
-  let proseLineHeight = $state(
-    untrack(() => normalizeKpEconomicsProseLineHeight(initialProseLineHeight))
-  );
-  let proseWeight = $state(
-    untrack(() => normalizeKpEconomicsProseWeight(initialProseWeight))
-  );
-  let textWidthRem = $state(
-    untrack(() => normalizeKpEconomicsTextWidthRem(initialTextWidthRem))
-  );
   let theme = $state(untrack(() => initialTheme));
-  let twoColumnParagraphGapVh = $state(
-    untrack(() => normalizeKpEconomicsTwoColumnParagraphGapVh(
-      initialTwoColumnParagraphGapVh
-    ))
-  );
+  const twoColumnParagraphGapVh = kpEconomicsTwoColumnParagraphGapDefaultVh;
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
   let ready = $state(false);
   let stageExpanded = $state(false);
@@ -444,7 +362,6 @@
     : createNavigationResume(initialDeepLink);
   let currentSemanticDestination = $state(initialDeepLink.destination);
   let inlineLayoutObserver: ResizeObserver | undefined;
-  let suppressNextInlineLayoutObservation = false;
   const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
   const twoColumnScroll = untrack(
     () => presentationLayout === "two-column-scroll"
@@ -538,16 +455,6 @@
     `--kp-verification-equilibria-clip:${percent(1 - verificationReveal.groups.equilibria)};` +
     `--kp-verification-changes:${verificationReveal.groups.changes.toFixed(3)};` +
     `--kp-verification-changes-clip:${percent(1 - verificationReveal.groups.changes)}`;
-  let graphStrokeWidths = $derived(
-    projectKpEconomicsGraphStrokeWidths({
-      scale: graphStrokeScale,
-      theme
-    })
-  );
-  let graphStrokeStyle = $derived(
-    `--kp-graph-stroke-scale:${graphStrokeScale.toFixed(2)};` +
-    serializeKpEconomicsGraphStrokeWidths(graphStrokeWidths)
-  );
   const supplyInterpretationPhase =
     supplyMovementProgress <= 0.001
       ? "ready"
@@ -579,6 +486,7 @@
       root: shell,
       player,
       styleOwner: motionStyleOwner,
+      stableGraphSlot: twoColumnScroll,
       aperture: verificationAperture,
       verificationSurface,
       motionBridge: shell.querySelector<HTMLElement>("kp-motion-bridge") ??
@@ -869,24 +777,6 @@
     announcement = `${theme === "dark" ? "Dark" : "Light"} theme enabled.`;
     commitLessonMotionProjection(motionRuntime.projection);
     void invalidateGeometryAfterPresentationChange();
-  }
-
-  function handleGraphStyleTunerChange(event: Event): void {
-    if (!(event instanceof CustomEvent)) return;
-    const detail = event.detail as KpGraphStyleTunerChangeDetail | undefined;
-    if (detail === undefined) return;
-    graphStrokeScale = normalizeKpGraphStrokeScale(detail.strokeScale);
-    const search = writeKpEconomicsGraphStrokeScale({
-      search: window.location.search,
-      scale: graphStrokeScale
-    });
-    // Tuning is reversible presentation state, not a new semantic location.
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-    announcement = `Graph lines set to ${graphStrokeScale.toFixed(2)} times the default.`;
   }
 
   function handleFrame(event: Event): void {
@@ -1701,51 +1591,6 @@
     updateInlineStickyLayoutProjection();
   }
 
-  async function preserveCueAcrossLayoutChange(input: {
-    readonly anchor: HTMLElement | undefined;
-    readonly viewportTop: number | undefined;
-  }): Promise<void> {
-    // Apply the physical token in this input task so the scroll correction,
-    // ResizeObserver invalidation, and coordinator request can coalesce.
-    shell?.style.setProperty(
-      "--kp-two-column-paragraph-gap-vh",
-      String(twoColumnParagraphGapVh)
-    );
-    shell?.style.setProperty(
-      "--kp-two-column-prose-line-height",
-      String(proseLineHeight)
-    );
-    shell?.style.setProperty(
-      "--kp-two-column-text-width-rem",
-      String(textWidthRem)
-    );
-    shell?.style.setProperty(
-      "--kp-economics-prose-weight",
-      String(proseWeight)
-    );
-    const restoreAnchor = (): void => {
-      if (!input.anchor?.isConnected || input.viewportTop === undefined) return;
-      const delta = input.anchor.getBoundingClientRect().top - input.viewportTop;
-      if (Math.abs(delta) > 0.5) window.scrollBy({ top: delta, behavior: "auto" });
-    };
-    restoreAnchor();
-    await tick();
-    // A newly selected real font face may settle after Svelte's DOM flush.
-    // Preserve the semantic cue again once those metrics are authoritative.
-    await document.fonts.load(
-      `${proseWeight} 1rem "Source Serif 4"`
-    );
-    restoreAnchor();
-    await tick();
-    if (inlineLayoutObserver !== undefined && shell !== undefined) {
-      suppressNextInlineLayoutObservation = true;
-      for (const passage of shell.querySelectorAll<HTMLElement>(
-        "[data-kp-scroll-cue]"
-      )) inlineLayoutObserver.observe(passage);
-    }
-    updateInlineStickyLayoutProjection();
-  }
-
   function handleResponsiveGeometryChange(): void {
     updateInlineStickyLayoutProjection();
   }
@@ -2066,13 +1911,6 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
-    graphStyleTuner = shell.querySelector<KpGraphStyleTunerElement>(
-      "kp-graph-style-tuner"
-    ) ?? undefined;
-    graphStyleTuner?.addEventListener(
-      KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
-      handleGraphStyleTunerChange
-    );
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -2146,10 +1984,6 @@
     scrollCoordinatorStatus = "connected";
     if (scrollPassageLayout) {
       inlineLayoutObserver = new ResizeObserver(() => {
-        if (suppressNextInlineLayoutObservation) {
-          suppressNextInlineLayoutObservation = false;
-          return;
-        }
         updateInlineStickyLayoutProjection();
       });
       for (const passage of shell.querySelectorAll<HTMLElement>(
@@ -2258,10 +2092,6 @@
         handleScrubBarSeek
       );
     }
-    graphStyleTuner?.removeEventListener(
-      KP_GRAPH_STYLE_TUNER_CHANGE_EVENT,
-      handleGraphStyleTunerChange
-    );
     window.removeEventListener("keydown", handleTutorialKeydown);
     window.removeEventListener("wheel", handleNavigationScrollIntent);
     window.removeEventListener("touchmove", handleNavigationScrollIntent);
@@ -2314,138 +2144,6 @@
     );
     announcement = `Text moved to the ${nextSide} of the graph.`;
     void invalidateGeometryAfterPresentationChange();
-  }
-
-  function changeTwoColumnParagraphGap(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    const activeAnchor = shell === undefined
-      ? undefined
-      : [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
-        .find(({ dataset }) =>
-          dataset["kpEconomicsTutorialPassage"] === attentionPassageId
-        );
-    const viewportTop = activeAnchor?.getBoundingClientRect().top;
-    // The tuner owns this one reversible resize transaction. Reconnect after
-    // Svelte settles so ResizeObserver cannot duplicate its invalidation.
-    inlineLayoutObserver?.disconnect();
-    twoColumnParagraphGapVh = normalizeKpEconomicsTwoColumnParagraphGapVh(
-      Number(event.currentTarget.value)
-    );
-    const search = writeKpEconomicsTwoColumnParagraphGapVh({
-      search: window.location.search,
-      gapVh: twoColumnParagraphGapVh
-    });
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-    announcement = `Paragraph spacing set to ${twoColumnParagraphGapVh} viewport-height units.`;
-    void preserveCueAcrossLayoutChange({
-      anchor: activeAnchor,
-      viewportTop
-    });
-  }
-
-  function replaceTuningSearch(search: string): void {
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-  }
-
-  function activeCueLayoutSnapshot(): {
-    readonly anchor: HTMLElement | undefined;
-    readonly viewportTop: number | undefined;
-  } {
-    const anchor = shell === undefined
-      ? undefined
-      : [...shell.querySelectorAll<HTMLElement>("[data-kp-scroll-cue]")]
-        .find(({ dataset }) =>
-          dataset["kpEconomicsTutorialPassage"] === attentionPassageId
-        );
-    return {
-      anchor,
-      viewportTop: anchor?.getBoundingClientRect().top
-    };
-  }
-
-  function changeContextOpacity(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    contextOpacity = normalizeKpEconomicsContextOpacity(
-      Number(event.currentTarget.value)
-    );
-    replaceTuningSearch(writeKpEconomicsContextOpacity({
-      search: window.location.search,
-      opacity: contextOpacity
-    }));
-    announcement = `Graph context opacity set to ${Math.round(contextOpacity * 100)} percent.`;
-  }
-
-  function changeMutedBlue(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    mutedBlue = event.currentTarget.checked;
-    replaceTuningSearch(writeKpEconomicsMutedBlue({
-      search: window.location.search,
-      muted: mutedBlue
-    }));
-    announcement = `Muted blue palette ${mutedBlue ? "enabled" : "disabled"}.`;
-  }
-
-  function changeMutedRed(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    mutedRed = event.currentTarget.checked;
-    replaceTuningSearch(writeKpEconomicsMutedRed({
-      search: window.location.search,
-      muted: mutedRed
-    }));
-    announcement = `Muted red palette ${mutedRed ? "enabled" : "disabled"}.`;
-  }
-
-  function changeProseLineHeight(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    const snapshot = activeCueLayoutSnapshot();
-    inlineLayoutObserver?.disconnect();
-    proseLineHeight = normalizeKpEconomicsProseLineHeight(
-      Number(event.currentTarget.value)
-    );
-    replaceTuningSearch(writeKpEconomicsProseLineHeight({
-      search: window.location.search,
-      lineHeight: proseLineHeight
-    }));
-    announcement = `Text line height set to ${proseLineHeight.toFixed(2)}.`;
-    void preserveCueAcrossLayoutChange(snapshot);
-  }
-
-  function changeTextWidth(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    const snapshot = activeCueLayoutSnapshot();
-    inlineLayoutObserver?.disconnect();
-    textWidthRem = normalizeKpEconomicsTextWidthRem(
-      Number(event.currentTarget.value)
-    );
-    replaceTuningSearch(writeKpEconomicsTextWidthRem({
-      search: window.location.search,
-      widthRem: textWidthRem
-    }));
-    announcement = `Text column width set to ${textWidthRem} rem.`;
-    void preserveCueAcrossLayoutChange(snapshot);
-  }
-
-  function changeProseWeight(event: Event): void {
-    if (!(event.currentTarget instanceof HTMLInputElement)) return;
-    const snapshot = activeCueLayoutSnapshot();
-    inlineLayoutObserver?.disconnect();
-    proseWeight = normalizeKpEconomicsProseWeight(
-      Number(event.currentTarget.value)
-    );
-    replaceTuningSearch(writeKpEconomicsProseWeight({
-      search: window.location.search,
-      weight: proseWeight
-    }));
-    announcement = `Text weight set to ${proseWeight}.`;
-    void preserveCueAcrossLayoutChange(snapshot);
   }
 
   function scrollToSemanticDestination(
@@ -2810,13 +2508,6 @@
       : "",
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
-    "data-kp-economics-context-opacity": contextOpacity.toFixed(2),
-    "data-kp-economics-muted-blue": mutedBlue,
-    "data-kp-economics-muted-red": mutedRed,
-    "data-kp-economics-prose-line-height": proseLineHeight.toFixed(2),
-    "data-kp-economics-prose-weight": proseWeight,
-    "data-kp-economics-text-width-rem": textWidthRem,
-    "data-kp-economics-graph-stroke-scale": graphStrokeScale.toFixed(2),
     "data-kp-economics-tutorial-theme": theme,
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
@@ -2863,21 +2554,13 @@
             themeId: kpEconomicsDemandShiftThemeIds[theme],
             tuning: {
               "two-column-text-side": twoColumnTextSide,
-              "graph-stroke-scale": graphStrokeScale.toFixed(2),
-              "paragraph-gap-vh": String(twoColumnParagraphGapVh),
-              "context-opacity": contextOpacity.toFixed(2),
-              "muted-blue": String(mutedBlue),
-              "muted-red": String(mutedRed),
-              "prose-line-height": proseLineHeight.toFixed(2),
-              "prose-weight": String(proseWeight),
-              "text-width-rem": String(textWidthRem),
               "motion-bridge-dwell": motionBridgeDwellProfile
             }
           }
         : { themeId: kpEconomicsDemandShiftThemeIds[theme] }
     )
   }}
-  style={`${semanticSalienceStyle};${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle};--kp-two-column-paragraph-gap-vh:${twoColumnParagraphGapVh};--kp-economics-context-opacity:${contextOpacity};--kp-two-column-prose-line-height:${proseLineHeight};--kp-economics-prose-weight:${proseWeight};--kp-two-column-text-width-rem:${textWidthRem}`}
+  style={`${semanticSalienceStyle};${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};--kp-two-column-paragraph-gap-vh:${twoColumnParagraphGapVh}`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">
@@ -2997,130 +2680,6 @@
         <span aria-hidden="true">⇄</span>
         <span>Text {twoColumnTextSide}</span>
       </button>
-      <kp-graph-style-tuner
-        stroke-scale={graphStrokeScale.toFixed(2)}
-        data-kp-economics-graph-style-tuner
-      >
-        <details
-          class="kp-economics-tutorial__line-tuner"
-          name="kp-economics-bottom-tuners"
-        >
-          <summary>Lines</summary>
-          <div class="kp-economics-tutorial__line-tuner-panel">
-            <label for="kp-economics-line-width">Stroke multiplier</label>
-            <input
-              id="kp-economics-line-width"
-              type="range"
-              min={kpGraphStrokeScaleMinimum}
-              max={kpGraphStrokeScaleMaximum}
-              step={kpGraphStrokeScaleStep}
-              value={graphStrokeScale.toFixed(2)}
-              data-kp-graph-style-tuner-stroke
-            />
-            <output
-              for="kp-economics-line-width"
-              data-kp-graph-style-tuner-output
-            >{graphStrokeScaleSummary(graphStrokeScale)}</output>
-            <label for="kp-economics-context-opacity">Non-supply opacity</label>
-            <input
-              id="kp-economics-context-opacity"
-              type="range"
-              min={kpEconomicsContextOpacityMinimum}
-              max={kpEconomicsContextOpacityMaximum}
-              step={kpEconomicsContextOpacityStep}
-              value={contextOpacity.toFixed(2)}
-              data-kp-economics-context-opacity-input
-              oninput={changeContextOpacity}
-            />
-            <output for="kp-economics-context-opacity">
-              {Math.round(contextOpacity * 100)}%
-            </output>
-            <label class="kp-economics-tutorial__tuner-check">
-              <input
-                type="checkbox"
-                checked={mutedBlue}
-                data-kp-economics-muted-blue-input
-                onchange={changeMutedBlue}
-              />
-              <span>Muted blue</span>
-            </label>
-            <label class="kp-economics-tutorial__tuner-check">
-              <input
-                type="checkbox"
-                checked={mutedRed}
-                data-kp-economics-muted-red-input
-                onchange={changeMutedRed}
-              />
-              <span>Muted red</span>
-            </label>
-          </div>
-        </details>
-      </kp-graph-style-tuner>
-      <details
-        class="kp-economics-tutorial__line-tuner kp-economics-tutorial__spacing-tuner"
-        name="kp-economics-bottom-tuners"
-        data-kp-economics-spacing-tuner
-      >
-        <summary>Layout</summary>
-        <div class="kp-economics-tutorial__line-tuner-panel">
-          <label for="kp-economics-paragraph-gap">Paragraph gap</label>
-          <input
-            id="kp-economics-paragraph-gap"
-            type="range"
-            min={kpEconomicsTwoColumnParagraphGapMinimumVh}
-            max={kpEconomicsTwoColumnParagraphGapMaximumVh}
-            step={kpEconomicsTwoColumnParagraphGapStepVh}
-            value={twoColumnParagraphGapVh}
-            data-kp-economics-spacing-tuner-input
-            oninput={changeTwoColumnParagraphGap}
-          />
-          <output for="kp-economics-paragraph-gap">
-            {twoColumnParagraphGapVh}vh
-          </output>
-          <label for="kp-economics-text-width">Text column width</label>
-          <input
-            id="kp-economics-text-width"
-            type="range"
-            min={kpEconomicsTextWidthMinimumRem}
-            max={kpEconomicsTextWidthMaximumRem}
-            step={kpEconomicsTextWidthStepRem}
-            value={textWidthRem}
-            data-kp-economics-text-width-input
-            oninput={changeTextWidth}
-          />
-          <output for="kp-economics-text-width">
-            {textWidthRem}rem
-          </output>
-          <label for="kp-economics-prose-line-height">Text line height</label>
-          <input
-            id="kp-economics-prose-line-height"
-            type="range"
-            min={kpEconomicsProseLineHeightMinimum}
-            max={kpEconomicsProseLineHeightMaximum}
-            step={kpEconomicsProseLineHeightStep}
-            value={proseLineHeight.toFixed(2)}
-            data-kp-economics-prose-line-height-input
-            oninput={changeProseLineHeight}
-          />
-          <output for="kp-economics-prose-line-height">
-            {proseLineHeight.toFixed(2)}
-          </output>
-          <label for="kp-economics-prose-weight">Text weight</label>
-          <input
-            id="kp-economics-prose-weight"
-            type="range"
-            min={kpEconomicsProseWeightMinimum}
-            max={kpEconomicsProseWeightMaximum}
-            step={kpEconomicsProseWeightStep}
-            value={proseWeight}
-            data-kp-economics-prose-weight-input
-            oninput={changeProseWeight}
-          />
-          <output for="kp-economics-prose-weight">
-            {proseWeight}
-          </output>
-        </div>
-      </details>
     {/if}
     <button
       class="kp-economics-tutorial__theme-toggle"

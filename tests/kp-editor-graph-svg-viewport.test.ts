@@ -7,6 +7,9 @@ import {
   createKpEditorGraphSvgViewportModel,
   projectKpEditorGraphAxes
 } from "../src/editor/graph-svg-viewport.ts";
+import {
+  kpEditorGraphAxisArrowMetrics
+} from "../src/editor/graph-svg-viewport-lifecycle.ts";
 
 test("graph SVG viewport derives dimensions, domains, and zero axes from graph semantics", () => {
   const animation = createKpAnimationAssets().find(
@@ -60,6 +63,13 @@ test("signed graph domains retain crossing axes", () => {
   assert.equal(projection.originPolicy, "crossing");
   assert.equal(projection.x.x1, 20);
   assert.equal(projection.y.y1, 360);
+});
+
+test("axis arrow length and breadth are independent stroke-relative metrics", () => {
+  assert.deepEqual(kpEditorGraphAxisArrowMetrics, {
+    lengthInStrokeWidths: 9,
+    breadthInStrokeWidths: 7
+  });
 });
 
 test("generic retained SVG lifecycle has no domain renderer dependency", () => {

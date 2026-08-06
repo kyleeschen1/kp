@@ -160,6 +160,11 @@ export function scaleKpEditorGraphCoordinate(
     (to[1] - to[0]);
 }
 
+export const kpEditorGraphAxisArrowMetrics = Object.freeze({
+  lengthInStrokeWidths: 9,
+  breadthInStrokeWidths: 7
+});
+
 function renderViewportShell(
   model: KpEditorGraphSvgViewportModel,
   state: KpEditorAnimationPlayerState,
@@ -182,7 +187,7 @@ function renderViewportShell(
     : `<line data-kp-editor-graph-axis="x" x1="${axisProjection.x.x1}" y1="${axisProjection.x.y1}" x2="${axisProjection.x.x2}" y2="${axisProjection.x.y2}"${axisMarker} />
     <line data-kp-editor-graph-axis="y" x1="${axisProjection.y.x1}" y1="${axisProjection.y.y1}" x2="${axisProjection.y.x2}" y2="${axisProjection.y.y2}"${axisMarker} />`;
   return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${presentation.profileId}"${languageProfile} data-kp-editor-graph-origin-policy="${axisProjection.originPolicy}" data-kp-editor-graph-progress="${state.progress}" data-kp-editor-graph-direction="${state.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(state.runtimeFrame.title)} graph animation">
-    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" data-kp-axis-arrow-scale="6" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
+    <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" data-kp-axis-arrow-length="${kpEditorGraphAxisArrowMetrics.lengthInStrokeWidths}" data-kp-axis-arrow-breadth="${kpEditorGraphAxisArrowMetrics.breadthInStrokeWidths}" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="${kpEditorGraphAxisArrowMetrics.lengthInStrokeWidths}" markerHeight="${kpEditorGraphAxisArrowMetrics.breadthInStrokeWidths}" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
     <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
     <g data-kp-editor-graph-content></g>
     ${axes}

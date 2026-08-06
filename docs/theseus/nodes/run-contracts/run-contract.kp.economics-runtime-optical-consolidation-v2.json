@@ -2,7 +2,8 @@
   "id": "run-contract.kp.economics-runtime-optical-consolidation-v2",
   "kind": "run-contract",
   "title": "Economics runtime and optical consolidation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -28,6 +29,64 @@
     "npm run performance:economics-demand-shift-tutorial",
     "npm run check",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "./node_modules/.bin/playwright test tests/economics-demand-shift-performance.browser.spec.ts",
+      "status": "passed",
+      "scope": "s19 production runtime budget",
+      "checkedAt": "2026-08-06T17:12:47.827Z",
+      "notes": "Initial transfer 248355 bytes, script 148469 bytes, resource count 42, initial and active CLS zero, active p95 34ms, no active long tasks, zero SVG string builds or subtree replacements."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s19 browser behavior",
+      "checkedAt": "2026-08-06T17:12:48.439Z",
+      "notes": "12 browser checks passed after the stable graph-slot correction; scroll, manual, URL, history, and semantic playhead behavior share the retained runtime."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s19 semantic optical ownership",
+      "checkedAt": "2026-08-06T17:12:48.937Z",
+      "notes": "17 tests passed; canonical line ownership, frozen appearance controls, theme-separated palettes, and direct motion paint contracts remain enforced."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s19 semantic and retained runtime",
+      "checkedAt": "2026-08-06T17:13:01.326Z",
+      "notes": "64 focused tests passed, including single-clock projection, direct retained-DOM commits, path binding, node identity, seek, rewind, and frozen-default contracts."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s19 retained session lifecycle",
+      "checkedAt": "2026-08-06T17:20:55.117Z",
+      "notes": "2 browser checks passed: mount/dispose idempotence plus canonical direct seek and rewind parity."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s19 type and production build",
+      "checkedAt": "2026-08-06T17:21:09.506Z",
+      "notes": "Production build, TypeScript, Svelte, domain typechecks, and publication closure completed with zero Svelte errors or warnings; this is the repository's available build gate in place of the contract's nonexistent npm run check alias."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 durable control integrity",
+      "checkedAt": "2026-08-06T17:21:22.264Z",
+      "notes": "Workspace valid with 900 nodes and 18437 events before entering the visual checkpoint."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s20 canonical economics visual checkpoint",
+      "checkedAt": "2026-08-06T17:41:47.088Z",
+      "notes": "10 Chromium checks passed. Captures cover initial graph, mid-demand handoff, native release, light optical compensation, text-side swap, phone inline fallback, forced colors, stable retained geometry, and reverse parity. User approved the visible exemplar before requesting loop completion."
+    }
   ],
   "allowedWork": [
     "Economics demand-shift tutorial adapter, local lesson motion projection, retained SVG runtime binding, Graph2D viewport axis marker and label geometry, economics-local CSS/theme tokens, dormant internal appearance controls, focused tests, stable visual evidence, and project/Theseus records.",
@@ -121,47 +180,56 @@
     {
       "id": "s12",
       "title": "Freeze-appearance-controls-at-defaults",
-      "status": "planned"
+      "summary": "Removed the visible line, opacity, palette, spacing, measure, leading, and weight tuners and froze the reviewed defaults in the lesson adapter. Theme and two-column text-side remain product controls; focused phone, typography, and frozen-default browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s13",
       "title": "Remove-appearance-query-authority",
-      "status": "planned"
+      "summary": "Removed appearance-query reads from the learner entry and stopped registering the graph tuner. Legacy stroke, gap, opacity, muted-color, measure, leading, and weight parameters are inert; review evidence omits them, while semantic/theme/text-side URL state remains intact.",
+      "status": "complete"
     },
     {
       "id": "s14",
       "title": "Centralize-one-pixel-core-line-token",
-      "status": "planned"
+      "summary": "Replaced route and TypeScript stroke scaling with one CSS --kp-graph-line-core token at 1px. Axes, live curves, grids, guides, intersections, and historical-trace casing derive from one effective width; the obsolete economics graph-style module was removed.",
+      "status": "complete"
     },
     {
       "id": "s15",
       "title": "Add-theme-only-light-optical-multiplier",
-      "status": "planned"
+      "summary": "Added exactly one theme optical multiplier: dark is 1 and light is 1.5. The multiplier is CSS-only, cannot be changed by user or salience state, and applies uniformly to every canonical graph-line role; focused dark and light browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s16",
       "title": "Unify-divider-with-optical-line-profile",
-      "status": "planned"
+      "summary": "Bound the two-column vertical divider and section rules to the same effective graph-line token. They render at 1px in dark and receive the same 1.5px light optical compensation, with no independent width authority; CSS and focused browser contracts pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
       "title": "Project-stroke-relative-axis-arrow-metrics",
-      "status": "planned"
+      "summary": "Replaced the single axis-arrow scale with independent stroke-relative metrics: 9 stroke widths long and 7 broad, using SVG markerUnits=strokeWidth. Arrow size now follows the canonical dark/light axis width without any absolute pixel or user multiplier.",
+      "status": "complete"
     },
     {
       "id": "s18",
       "title": "Place-P-and-Q-at-terminal-clearance-anchors",
-      "status": "planned"
+      "summary": "Moved P and Q from axis midpoints to positive-end anchors with a shared 24-unit terminal inset. Browser geometry proves both labels retain deliberate axis gaps, clear the enlarged arrowheads, and remain near their positive endpoints; static SVG truth is deterministic.",
+      "status": "complete"
     },
     {
       "id": "s19",
       "title": "Run-semantic-runtime-performance-and-browser-gates",
-      "status": "planned"
+      "summary": "Closed sequential release gates: 64 semantic/runtime tests, 17 stylesheet tests, 12 tutorial browser checks, 2 retained-session checks, production build/type closure, and the production performance budget all pass. Runtime evidence shows zero active CLS, zero SVG rebuilds, zero animation-phase long tasks, and a 34 ms active p95.",
+      "status": "complete"
     },
     {
       "id": "s20",
       "title": "Capture-economics-human-visual-checkpoint",
-      "status": "planned"
+      "summary": "Captured and reviewed the canonical dark economics exemplar plus light, phone, forced-colors, text-side, and release evidence. Updated the stale browser expectation to enforce the approved stable 544px graph slot instead of the removed terminal shrink. User approved completion; no cross-catalogue promotion was performed.",
+      "status": "complete"
     }
   ]
 }

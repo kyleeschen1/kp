@@ -29,8 +29,7 @@ const budgets = Object.freeze({
 // ratchet each list to empty as its owning capability is removed.
 const routeClosureDebt = Object.freeze({
   catalogue: [
-    "animation-catalogue-player-host",
-    "kp-catalogue-identities"
+    "animation-catalogue-player-host"
   ],
   runtimeKatex: [],
   unrelatedGraphDomains: []
@@ -40,6 +39,7 @@ interface KpTutorialPerformanceProbe {
   cls: number;
   geometryReads: number;
   longTasks: number[];
+  shiftSources: string[];
 }
 
 interface KpTutorialRuntimePerformanceApi {
@@ -220,7 +220,8 @@ test("production economics tutorial stays inside publication and motion budgets"
     const probe: KpTutorialPerformanceProbe = {
       cls: 0,
       geometryReads: 0,
-      longTasks: []
+      longTasks: [],
+      shiftSources: []
     };
     target.__kpEconomicsPerformanceProbeRequested = true;
     target.__kpEconomicsTutorialPerformance = probe;
@@ -230,8 +231,31 @@ test("production economics tutorial stays inside publication and motion budgets"
           const shift = entry as PerformanceEntry & {
             readonly value: number;
             readonly hadRecentInput: boolean;
+            readonly sources?: readonly {
+              readonly node?: Node | null;
+              readonly previousRect: DOMRectReadOnly;
+              readonly currentRect: DOMRectReadOnly;
+            }[];
           };
-          if (!shift.hadRecentInput) probe.cls += shift.value;
+          if (!shift.hadRecentInput) {
+            probe.cls += shift.value;
+            for (const { node, previousRect, currentRect } of
+              shift.sources ?? []) {
+              if (!(node instanceof Element)) continue;
+              const label = node.getAttribute("data-kp-tutorial-motion-block") ??
+                node.getAttribute("data-kp-economics-tutorial-passage") ??
+                node.getAttribute("data-kp-economics-screen-space-label") ??
+                node.className.toString() ??
+                node.localName;
+              probe.shiftSources.push(
+                `${shift.value.toFixed(5)}:${label}:` +
+                `${previousRect.x.toFixed(0)},${previousRect.y.toFixed(0)},` +
+                `${previousRect.width.toFixed(0)},${previousRect.height.toFixed(0)}->` +
+                `${currentRect.x.toFixed(0)},${currentRect.y.toFixed(0)},` +
+                `${currentRect.width.toFixed(0)},${currentRect.height.toFixed(0)}`
+              );
+            }
+          }
         }
       }).observe({ type: "layout-shift", buffered: true });
     }
@@ -300,6 +324,7 @@ test("production economics tutorial stays inside publication and motion budgets"
     probe.cls = 0;
     probe.geometryReads = 0;
     probe.longTasks.length = 0;
+    probe.shiftSources.length = 0;
     runtime.resetScrollCoordinator();
     graphRuntime.reset();
     const readGeometry = Element.prototype.getBoundingClientRect;
@@ -393,6 +418,7 @@ test("production economics tutorial stays inside publication and motion budgets"
     const graph = graphRuntime.snapshot();
     const canonicalGeometryReads = probe.geometryReads;
     const canonicalCls = probe.cls;
+    const canonicalShiftSources = [...probe.shiftSources];
     const canonicalLongTasks = [...probe.longTasks];
     const cueHost = tutorial.querySelector<HTMLElement>(
       ".kp-economics-tutorial__motion-passage-prose"
@@ -448,6 +474,7 @@ test("production economics tutorial stays inside publication and motion budgets"
       longTaskCount: canonicalLongTasks.length,
       longestTaskMs: Math.max(0, ...canonicalLongTasks),
       cls: canonicalCls,
+      shiftSources: canonicalShiftSources,
       geometryReads: canonicalGeometryReads,
       geometryReadsPerFrame: canonicalGeometryReads /
         Math.max(1, scrollCoordinator.executedFrames),

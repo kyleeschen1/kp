@@ -108,6 +108,9 @@ export default defineConfig({
   ],
   build: {
     manifest: true,
+    // All supported publication targets implement modulepreload. Shipping the
+    // legacy polyfill would add a startup request to every route.
+    modulePreload: { polyfill: false },
     rollupOptions: {
       input: {
         main: resolve(projectRoot, "index.html"),
@@ -148,7 +151,7 @@ export default defineConfig({
           if (
             id.includes("/src/rendering/dimensional-continuity-graph-language.ts") ||
             id.includes("/src/tutorial/verified-generated-linear-solve-identity.ts")
-          ) return "kp-catalogue-identities";
+          ) return "kp-route-table";
           return undefined;
         }
       }

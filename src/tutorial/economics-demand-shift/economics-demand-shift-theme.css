@@ -1,37 +1,12 @@
 /* Theme tokens and route-wide foundations stay separate from layout so graph and prose owners consume one optical palette. */
-@font-face {
-  font-family: "Source Serif 4";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 300;
-  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-300-normal.woff2")
-    format("woff2");
-}
-
+/* The lesson deliberately ships one regular prose face; font-synthesis below keeps
+   emphasis from silently adding another transfer or changing the approved weight. */
 @font-face {
   font-family: "Source Serif 4";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
   src: url("@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Source Serif 4";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 500;
-  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-500-normal.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Source Serif 4";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 600;
-  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2")
     format("woff2");
 }
 
@@ -47,8 +22,10 @@
   --kp-lesson-theme-muted: #4f5364;
   --kp-lesson-theme-math-foreground: #4f5364;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
-  --kp-lesson-theme-graph-stroke-width: 1.25px;
-  --kp-lesson-theme-graph-trace-core-width: 0.625px;
+  --kp-graph-line-core: 1px;
+  --kp-graph-theme-line-multiplier: 1.5;
+  --kp-graph-line-effective:
+    calc(var(--kp-graph-line-core) * var(--kp-graph-theme-line-multiplier));
   --kp-lesson-theme-reader-rail: #337c3a;
   --kp-lesson-theme-graph-grid: #d7dae3;
   --kp-lesson-theme-graph-reference: #707586;
@@ -113,8 +90,7 @@
   --kp-lesson-theme-muted: #a6a9b7;
   --kp-lesson-theme-math-foreground: #a6a9b7;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
-  --kp-lesson-theme-graph-stroke-width: 1px;
-  --kp-lesson-theme-graph-trace-core-width: 0.5px;
+  --kp-graph-theme-line-multiplier: 1;
   --kp-lesson-theme-reader-rail: #7acf7e;
   --kp-lesson-theme-graph-grid: #25293b;
   --kp-lesson-theme-graph-reference: #858e9d;
@@ -169,23 +145,13 @@
    still inherits one canonical stroke width. */
 :root
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-stroke-axis:
-    var(--kp-graph-tuned-stroke-axis, var(--kp-lesson-theme-graph-stroke-width));
-  --kp-graph-stroke-curve:
-    var(--kp-graph-tuned-stroke-curve, var(--kp-graph-stroke-axis));
-  --kp-graph-stroke-grid:
-    var(--kp-graph-tuned-stroke-grid, var(--kp-graph-stroke-axis));
-  --kp-graph-stroke-guide:
-    var(--kp-graph-tuned-stroke-guide, var(--kp-graph-stroke-axis));
-  --kp-graph-stroke-intersection:
-    var(--kp-graph-tuned-stroke-intersection, var(--kp-graph-stroke-axis));
-  --kp-graph-stroke-trace-casing:
-    var(--kp-graph-tuned-stroke-trace-casing, var(--kp-graph-stroke-axis));
-  --kp-graph-stroke-trace-core:
-    var(
-      --kp-graph-tuned-stroke-trace-core,
-      var(--kp-lesson-theme-graph-trace-core-width)
-    );
+  --kp-graph-stroke-axis: var(--kp-graph-line-effective);
+  --kp-graph-stroke-curve: var(--kp-graph-line-effective);
+  --kp-graph-stroke-grid: var(--kp-graph-line-effective);
+  --kp-graph-stroke-guide: var(--kp-graph-line-effective);
+  --kp-graph-stroke-intersection: var(--kp-graph-line-effective);
+  --kp-graph-stroke-trace-casing: var(--kp-graph-line-effective);
+  --kp-graph-stroke-trace-core: calc(var(--kp-graph-line-effective) * 0.5);
   /* The shared SVG still names these historical presentation variables.
      Alias them to the role profile so cascade order cannot split axis, curve,
      grid, guide, and historical-trace geometry. */
@@ -249,30 +215,6 @@
     var(--kp-economics-salience-market-guides-color, #42465b);
   --kp-graph-muted: #7d8193;
   --kp-graph-tick: var(--kp-lesson-theme-graph-axis);
-}
-
-/* These low-chroma alternatives remain categorical at reduced alpha without
-   generating a continuum of color-mix results for authors to reason about. */
-.kp-economics-tutorial[data-kp-economics-muted-blue="true"]
-  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-stable: #68788a;
-}
-
-.kp-economics-tutorial[data-kp-economics-muted-red="true"]
-  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #806b67;
-}
-
-:root[data-kp-lesson-theme="dark"]
-  .kp-economics-tutorial[data-kp-economics-muted-blue="true"]
-  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-stable: #5e7e9f;
-}
-
-:root[data-kp-lesson-theme="dark"]
-  .kp-economics-tutorial[data-kp-economics-muted-red="true"]
-  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #966b67;
 }
 
 :root[data-kp-lesson-theme="dark"]

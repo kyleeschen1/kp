@@ -14,6 +14,7 @@ import {
   createKpEditorGraphSvgViewportModel
 } from "../src/editor/graph-svg-viewport.ts";
 import {
+  kpEconomicsAxisTerminalLabelInset,
   kpEconomicsGraphPresentationProfile,
   projectKpEconomicsDataCurvePath,
   renderKpEconomicsEquilibriumStaticContent
@@ -60,6 +61,15 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   );
   assert.match(html, /data-kp-economics-math-label="axis-quantity"/);
   assert.match(html, /data-kp-economics-math-label="axis-price"/);
+  assert.equal(kpEconomicsAxisTerminalLabelInset, 24);
+  assert.match(
+    html,
+    /data-kp-economics-math-label="axis-quantity"[^>]*data-kp-economics-screen-anchor-x="532"/
+  );
+  assert.match(
+    html,
+    /data-kp-economics-math-label="axis-price"[^>]*data-kp-economics-screen-anchor-y="44"/
+  );
   assert.match(html, /data-kp-economics-math-label="curve-supply"/);
   assert.match(html, /data-kp-economics-math-label="curve-demand-current"/);
   assert.match(html, /data-kp-economics-math-label="equilibrium-current"/);

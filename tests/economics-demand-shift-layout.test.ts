@@ -29,12 +29,6 @@ import {
   writeKpEconomicsDemandShiftTheme
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-theme.ts";
 import {
-  projectKpEconomicsGraphStrokeWidths,
-  readKpEconomicsGraphStrokeScale,
-  serializeKpEconomicsGraphStrokeWidths,
-  writeKpEconomicsGraphStrokeScale
-} from "../src/tutorial/economics-demand-shift/economics-demand-shift-graph-style.ts";
-import {
   kpEconomicsContextOpacityDefault,
   kpEconomicsProseLineHeightDefault,
   kpEconomicsProseWeightDefault,
@@ -183,57 +177,6 @@ test("two-column paragraph spacing is bounded and URL-reproducible", () => {
       gapVh: kpEconomicsTwoColumnParagraphGapDefaultVh
     }),
     "?layout=two-column-scroll&theme=light"
-  );
-});
-
-test("graph stroke tuning is bounded, theme-relative, and URL-reproducible", () => {
-  assert.equal(readKpEconomicsGraphStrokeScale(""), 1);
-  assert.equal(readKpEconomicsGraphStrokeScale("?stroke=1.21"), 1.2);
-  assert.equal(readKpEconomicsGraphStrokeScale("?stroke=9"), 1.75);
-  assert.equal(
-    writeKpEconomicsGraphStrokeScale({
-      search: "?layout=two-column-scroll&theme=light",
-      scale: 1.2
-    }),
-    "?layout=two-column-scroll&theme=light&stroke=1.20"
-  );
-  assert.equal(
-    writeKpEconomicsGraphStrokeScale({
-      search: "?layout=two-column-scroll&stroke=1.20",
-      scale: 1
-    }),
-    "?layout=two-column-scroll"
-  );
-  const dark = projectKpEconomicsGraphStrokeWidths({
-    scale: 1.2,
-    theme: "dark"
-  });
-  assert.deepEqual(dark, {
-    theme: "dark",
-    axisPx: 1.2,
-    curvePx: 1.2,
-    gridPx: 1.2,
-    guidePx: 1.2,
-    intersectionPx: 1.2,
-    traceCasingPx: 1.2,
-    traceCorePx: 0.6
-  });
-  assert.deepEqual(
-    projectKpEconomicsGraphStrokeWidths({ scale: 1.2, theme: "light" }),
-    {
-      theme: "light",
-      axisPx: 1.5,
-      curvePx: 1.5,
-      gridPx: 1.5,
-      guidePx: 1.5,
-      intersectionPx: 1.5,
-      traceCasingPx: 1.5,
-      traceCorePx: 0.75
-    }
-  );
-  assert.match(
-    serializeKpEconomicsGraphStrokeWidths(dark),
-    /--kp-graph-tuned-stroke-axis:1\.2px;--kp-graph-tuned-stroke-curve:1\.2px/
   );
 });
 

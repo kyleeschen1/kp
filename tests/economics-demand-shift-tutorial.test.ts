@@ -619,6 +619,36 @@ test("identical lesson frames produce no retained presentation writes", () => {
   assert.equal(player.getAttribute("data-kp-economics-graph-progress"), "1");
 });
 
+test("the two-column owner preserves its CSS-governed stable graph slot", () => {
+  const styleOwner = fakePresentationElement();
+  commitKpEconomicsMotionPresentation({
+    owner: {
+      root: fakePresentationElement(),
+      player: fakePresentationElement(),
+      styleOwner,
+      stableGraphSlot: true,
+      aperture: fakePresentationElement(),
+      verificationSurface: fakePresentationElement()
+    },
+    projection: projectKpEconomicsLessonMotion({
+      activeBlockId: "supply-movement",
+      localProgress: 1
+    }),
+    theme: "dark",
+    focusTarget: "supply",
+    playbackDirection: "forward"
+  });
+
+  assert.equal(
+    styleOwner.style.getPropertyValue("--kp-stage-graph-inline-size"),
+    ""
+  );
+  assert.equal(
+    styleOwner.style.getPropertyValue("--kp-stage-graph-block-size"),
+    ""
+  );
+});
+
 function fakePresentationElement(): HTMLElement {
   const attributes = new Map<string, string>();
   const properties = new Map<string, string>();

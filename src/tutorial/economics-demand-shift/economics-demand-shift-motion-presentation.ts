@@ -16,6 +16,7 @@ export interface KpEconomicsMotionPresentationOwner {
   readonly root: HTMLElement;
   readonly player: HTMLElement;
   readonly styleOwner: HTMLElement;
+  readonly stableGraphSlot?: boolean | undefined;
   readonly aperture: HTMLElement;
   readonly verificationSurface: HTMLElement;
   readonly motionBridge?: HTMLElement | undefined;
@@ -87,16 +88,21 @@ export function commitKpEconomicsMotionPresentation(input: {
     "--kp-tutorial-supply-comparison",
     format(clamp((supplyProgress - 0.58) / 0.42))
   );
-  writeProperty("--kp-stage-graph-inline", percent(graphSlot.rect.inline));
-  writeProperty("--kp-stage-graph-block", percent(graphSlot.rect.block));
-  writeProperty(
-    "--kp-stage-graph-inline-size",
-    percent(graphSlot.rect.inlineSize)
-  );
-  writeProperty(
-    "--kp-stage-graph-block-size",
-    percent(graphSlot.rect.blockSize)
-  );
+  // The two-column publication keeps one stable plot slot and carries the
+  // verification in prose. Inline geometry would outrank that layout's CSS
+  // contract and reintroduce the graph shrink it deliberately removed.
+  if (input.owner.stableGraphSlot !== true) {
+    writeProperty("--kp-stage-graph-inline", percent(graphSlot.rect.inline));
+    writeProperty("--kp-stage-graph-block", percent(graphSlot.rect.block));
+    writeProperty(
+      "--kp-stage-graph-inline-size",
+      percent(graphSlot.rect.inlineSize)
+    );
+    writeProperty(
+      "--kp-stage-graph-block-size",
+      percent(graphSlot.rect.blockSize)
+    );
+  }
   writeProperty(
     "--kp-stage-verification-inline",
     percent(verificationSlot.rect.inline)

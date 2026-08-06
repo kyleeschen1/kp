@@ -37,6 +37,8 @@ export const kpEconomicsGraphPlotInsets = Object.freeze({
   left: 36
 });
 
+export const kpEconomicsAxisTerminalLabelInset = 24;
+
 /** Data curves share one path contract; axes, grids, and guides stay lines. */
 export function projectKpEconomicsDataCurvePath(
   start: readonly [number, number],
@@ -260,11 +262,11 @@ function renderEconomicsContent(input: {
       renderInlineLatex: input.renderInlineLatex,
       role: "axis-quantity",
       latex: "Q",
-      x: (plot.left + plot.right) / 2 - 14,
+      x: plot.right - kpEconomicsAxisTerminalLabelInset - 14,
       y: input.viewport.height - 24,
       width: 28,
       height: 22,
-      screenAnchorX: (plot.left + plot.right) / 2,
+      screenAnchorX: plot.right - kpEconomicsAxisTerminalLabelInset,
       screenAnchorY: plot.bottom,
       className: "editor-graph-stage__economics-math-label--axis"
     })}
@@ -273,11 +275,11 @@ function renderEconomicsContent(input: {
       role: "axis-price",
       latex: "P",
       x: 0,
-      y: input.viewport.height / 2 - 11,
+      y: plot.top + kpEconomicsAxisTerminalLabelInset - 11,
       width: 28,
       height: 22,
       screenAnchorX: plot.left,
-      screenAnchorY: (plot.top + plot.bottom) / 2,
+      screenAnchorY: plot.top + kpEconomicsAxisTerminalLabelInset,
       className: "editor-graph-stage__economics-math-label--axis"
     })}
     ${input.synchronizedView === undefined ? "" : renderSynchronizedView(

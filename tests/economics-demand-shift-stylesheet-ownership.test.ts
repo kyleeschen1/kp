@@ -92,11 +92,11 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
     global,
     /--kp-font-family-non-katex:[\s\S]*"Kinetic Press New Computer Modern Mono"/
   );
-  for (const weight of [300, 400, 500, 600]) {
-    assert.match(theme, new RegExp(
-      `font-family: "Source Serif 4";[\\s\\S]*?font-weight: ${weight};`
-    ));
-  }
+  assert.equal((theme.match(/@font-face/g) ?? []).length, 1);
+  assert.match(
+    theme,
+    /font-family: "Source Serif 4";[\s\S]*?font-weight: 400;/
+  );
   assert.match(
     theme,
     /--kp-economics-non-katex-font-family:[\s\S]*"Source Serif 4"/
@@ -207,6 +207,33 @@ test("axes remain theme-stable while semantic paint owns changing objects", () =
   assert.doesNotMatch(twoColumn, /--kp-economics-salience-market-axes-color/);
 });
 
+test("one optical line token owns graph roles and the two-column divider", () => {
+  const theme = read("economics-demand-shift-theme.css");
+  const twoColumn = read("economics-demand-shift-two-column.css");
+
+  assert.match(theme, /--kp-graph-line-core: 1px;/);
+  assert.match(theme, /--kp-graph-theme-line-multiplier: 1\.5;/);
+  assert.match(
+    theme,
+    /:root\[data-kp-lesson-theme="dark"\][\s\S]*?--kp-graph-theme-line-multiplier: 1;/
+  );
+  assert.match(
+    theme,
+    /--kp-graph-line-effective:\s*calc\(var\(--kp-graph-line-core\) \* var\(--kp-graph-theme-line-multiplier\)\);/
+  );
+  for (const role of ["axis", "curve", "grid", "guide", "intersection", "trace-casing"]) {
+    assert.match(
+      theme,
+      new RegExp(`--kp-graph-stroke-${role}: var\\(--kp-graph-line-effective\\);`)
+    );
+  }
+  assert.doesNotMatch(theme, /--kp-graph-tuned-stroke-|graph-stroke-scale/);
+  assert.match(
+    twoColumn,
+    /--kp-two-column-boundary-line: var\(--kp-graph-line-effective, 1px\);/
+  );
+});
+
 test("animation-owned graph paint follows the shared clock without CSS interpolation", () => {
   const graph = read("economics-demand-shift-graph.css");
   const responsive = read("economics-demand-shift-publication-responsive.css");
@@ -226,7 +253,10 @@ test("two-column progressive layout derives prose and graph from one latch", () 
 
   assert.match(twoColumn, /--kp-two-column-stage-center-vh: 50;/);
   assert.match(twoColumn, /--kp-two-column-paragraph-gap-vh: 50;/);
-  assert.match(twoColumn, /--kp-two-column-boundary-line: 1px;/);
+  assert.match(
+    twoColumn,
+    /--kp-two-column-boundary-line: var\(--kp-graph-line-effective, 1px\);/
+  );
   assert.match(twoColumn, /--kp-tutorial-persistent-top-inset: 0px;/);
   assert.match(twoColumn, /--kp-tutorial-persistent-bottom-inset: 0px;/);
   assert.match(
