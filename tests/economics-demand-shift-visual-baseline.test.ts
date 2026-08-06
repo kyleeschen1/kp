@@ -67,3 +67,23 @@ test("frozen stylesheet owners remain present without overlapping the inventory"
     false
   );
 });
+
+test("canonical economics captures have stable evidence names", () => {
+  const manifest = JSON.parse(readFileSync(new URL(
+    "./fixtures/economics-salience-exemplar-baselines.json",
+    import.meta.url
+  ), "utf8")) as {
+    readonly command: string;
+    readonly captures: readonly { readonly file: string }[];
+  };
+  const browserSpec = readFileSync(new URL(
+    "./economics-two-column-scroll.browser.spec.ts",
+    import.meta.url
+  ), "utf8");
+
+  assert.equal(manifest.command, "npm run visual:economics-two-column-scroll");
+  assert.equal(new Set(manifest.captures.map(({ file }) => file)).size, 3);
+  for (const { file } of manifest.captures) {
+    assert.equal(browserSpec.includes(file), true, `missing capture ${file}`);
+  }
+});

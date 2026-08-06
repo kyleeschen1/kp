@@ -71,7 +71,8 @@
     {
       "id": "s02",
       "title": "Capture canonical economics baselines",
-      "status": "planned"
+      "summary": "Recorded stable dark-wide, light-wide, and dark-phone baseline capture names and verified the full 11-case economics two-column visual command.",
+      "status": "complete"
     },
     {
       "id": "s03",

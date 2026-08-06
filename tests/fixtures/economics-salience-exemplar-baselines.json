@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "kp.economics.salience-baselines.v1",
+  "command": "npm run visual:economics-two-column-scroll",
+  "outputDirectory": "tmp/codex/economics-two-column-scroll",
+  "captures": [
+    {
+      "id": "dark-wide-opening",
+      "theme": "dark",
+      "viewport": "wide",
+      "file": "desktop-initial-paragraph-state.png"
+    },
+    {
+      "id": "light-wide-opening",
+      "theme": "light",
+      "viewport": "wide",
+      "file": "desktop-light-optical-compensation.png"
+    },
+    {
+      "id": "dark-phone-opening",
+      "theme": "dark",
+      "viewport": "phone",
+      "file": "phone-inline-fallback.png"
+    }
+  ]
+}

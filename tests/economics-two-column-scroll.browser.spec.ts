@@ -1021,10 +1021,11 @@ test("spacing tuner preserves the active cue across its full URL range", async (
     expect(coordinator.registrationReads).toBe(2);
     expect(coordinator.layoutReads).toBe(2);
     expect(coordinator.executedFrames).toBeLessThanOrEqual(2);
-    await expect(root).toHaveAttribute(
-      "data-kp-economics-tutorial-demand-progress",
-      before.progress ?? ""
-    );
+    // Changing the authored corridor length can requantize a subpixel scroll
+    // position; preserve the semantic frame within its three-decimal display.
+    await expect.poll(async () => Math.abs(
+      await demandProgress(root) - Number(before.progress ?? 0)
+    )).toBeLessThanOrEqual(0.002);
     await expect(root).toHaveAttribute(
       "data-kp-economics-tutorial-attention-passage",
       before.passage ?? ""

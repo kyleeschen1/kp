@@ -47,6 +47,20 @@
       "scope": "s01 static boundary",
       "checkedAt": "2026-08-06T07:08:02.888Z",
       "notes": "Application, node, tests, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s02 canonical economics baselines",
+      "checkedAt": "2026-08-06T07:11:23.577Z",
+      "notes": "All 11 Chromium cases pass and refresh stable dark-wide, light-wide, and dark-phone evidence names under the scoped command."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s02 capture manifest",
+      "checkedAt": "2026-08-06T07:11:24.759Z",
+      "notes": "Twelve CSS ownership, visual baseline, and stable capture-name checks pass."
     }
   ],
   "expectedLearning": [
