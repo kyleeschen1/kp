@@ -31,10 +31,17 @@ import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
+import {
+  parseKpEconomicsTwoColumnSource,
+  type KpEconomicsTwoColumnSource
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-two-column-source.ts";
 
 const sourcePath = "content/lessons/economics-demand-shift.md";
+const twoColumnSourcePath =
+  "content/lessons/economics-demand-shift-two-column.json";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceUrl = new URL(`../${sourcePath}`, import.meta.url);
+const twoColumnSourceUrl = new URL(`../${twoColumnSourcePath}`, import.meta.url);
 const outputUrl = new URL(
   "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
   import.meta.url
@@ -48,9 +55,13 @@ const katexPackageUrl = new URL("../node_modules/katex/package.json", import.met
 export function compileKpEconomicsDemandShiftPublicationArtifact(input: {
   readonly markdown: string;
   readonly katexVersion: string;
+  readonly twoColumnSource?: KpEconomicsTwoColumnSource | undefined;
 }): KpCompiledPublicationArtifact<KpEconomicsDemandShiftPublication> {
   const payload = compileKpEconomicsDemandShiftPublication(input.markdown, {
-    proseMotion: [kpEconomicsDemandShiftMotionBridgeExemplar]
+    proseMotion: [kpEconomicsDemandShiftMotionBridgeExemplar],
+    ...(input.twoColumnSource === undefined
+      ? {}
+      : { twoColumnSource: input.twoColumnSource })
   });
   const mathSources = collectMathSources(payload);
 
@@ -180,10 +191,14 @@ export function generateKpEconomicsDemandShiftPublicationArtifact(
   checkOnly: boolean
 ): void {
   const markdown = readFileSync(sourceUrl, "utf8");
+  const twoColumnSource = parseKpEconomicsTwoColumnSource(JSON.parse(
+    readFileSync(twoColumnSourceUrl, "utf8")
+  ));
   const output = serializeKpCompiledPublicationArtifact(
     compileKpEconomicsDemandShiftPublicationArtifact({
       markdown,
-      katexVersion: readKatexVersion()
+      katexVersion: readKatexVersion(),
+      twoColumnSource
     })
   );
   const retainedMathOutput = `${JSON.stringify(

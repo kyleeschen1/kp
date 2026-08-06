@@ -2588,20 +2588,21 @@
       {#if lessonDraft.selectedPassageId === passage.id &&
           LessonPassageEditor !== undefined}
         <LessonPassageEditor
-          passageId={passage.id}
+          id={passage.id}
           value={selectedLessonDraftPassage!.sourceText}
-          validationMessage={lessonEditorValidation}
+          draft={lessonDraft}
+          validation={lessonEditorValidation}
           canDelete={!selectedLessonDraftIsPublished}
-          canMovePrevious={!selectedLessonDraftIsPublished &&
+          canMoveUp={!selectedLessonDraftIsPublished &&
             selectedLessonDraftIndex > 0}
-          canMoveNext={!selectedLessonDraftIsPublished &&
+          canMoveDown={!selectedLessonDraftIsPublished &&
             selectedLessonDraftIndex < lessonDraft.passages.length - 1}
           onChange={updateLessonDraftSource}
-          onAddAfter={addLessonDraftPassageAfter}
-          onDuplicate={duplicateLessonDraftPassage}
+          onAdd={addLessonDraftPassageAfter}
+          onCopy={duplicateLessonDraftPassage}
           onDelete={deleteLessonDraftPassage}
-          onMovePrevious={() => moveLessonDraftPassage(-1)}
-          onMoveNext={() => moveLessonDraftPassage(1)}
+          onMoveUp={() => moveLessonDraftPassage(-1)}
+          onMoveDown={() => moveLessonDraftPassage(1)}
           onReset={resetLessonDraft}
         />
       {/if}

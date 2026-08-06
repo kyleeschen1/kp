@@ -6,34 +6,39 @@
     KpEconomicsCodeMirrorCompletion,
     KpEconomicsCodeMirrorMount
   } from "./economics-demand-shift-codemirror-runtime.ts";
+  import type {
+    KpEconomicsLessonDraftState
+  } from "./economics-demand-shift-lesson-draft.ts";
 
   let {
-    passageId,
+    id,
     value,
-    validationMessage,
+    draft,
+    validation,
     canDelete,
-    canMovePrevious,
-    canMoveNext,
+    canMoveUp,
+    canMoveDown,
     onChange,
-    onAddAfter,
-    onDuplicate,
+    onAdd,
+    onCopy,
     onDelete,
-    onMovePrevious,
-    onMoveNext,
+    onMoveUp,
+    onMoveDown,
     onReset
   }: {
-    readonly passageId: string;
+    readonly id: string;
     readonly value: string;
-    readonly validationMessage: string;
+    readonly draft: KpEconomicsLessonDraftState;
+    readonly validation: string;
     readonly canDelete: boolean;
-    readonly canMovePrevious: boolean;
-    readonly canMoveNext: boolean;
+    readonly canMoveUp: boolean;
+    readonly canMoveDown: boolean;
     readonly onChange: (value: string) => void;
-    readonly onAddAfter: () => void;
-    readonly onDuplicate: () => void;
+    readonly onAdd: () => void;
+    readonly onCopy: () => void;
     readonly onDelete: () => void;
-    readonly onMovePrevious: () => void;
-    readonly onMoveNext: () => void;
+    readonly onMoveUp: () => void;
+    readonly onMoveDown: () => void;
     readonly onReset: () => void;
   } = $props();
 
@@ -48,6 +53,10 @@
   let host = $state<HTMLElement | undefined>();
   let runtime: KpEconomicsCodeMirrorMount | undefined;
   let enhanced = $state(false);
+  let sourceSavePending = $state(false);
+  let sourceSaveStatus = $state(
+    "Autosaved locally. Use Save to source to update the project."
+  );
 
   onMount(() => {
     let disposed = false;
@@ -58,7 +67,7 @@
           parent: host,
           value,
           completions,
-          onChange
+          onChange: updateSource
         });
         enhanced = true;
         runtime.view.focus();
@@ -77,7 +86,46 @@
 
   function updateFallback(event: Event): void {
     if (event.currentTarget instanceof HTMLTextAreaElement) {
-      onChange(event.currentTarget.value);
+      updateSource(event.currentTarget.value);
+    }
+  }
+
+  function updateSource(nextValue: string): void {
+    markSourcePending();
+    onChange(nextValue);
+  }
+
+  function runDraftMutation(operation: () => void): void {
+    markSourcePending();
+    operation();
+  }
+
+  function markSourcePending(): void {
+    sourceSaveStatus =
+      "Autosaved locally. Use Save to source to update the project.";
+  }
+
+  async function saveToSource(): Promise<void> {
+    if (sourceSavePending) return;
+    sourceSavePending = true;
+    sourceSaveStatus = "Saving the lesson source…";
+    const submittedDraft = draft;
+    try {
+      const { saveKpEconomicsLessonSource } = await import(
+        "./economics-demand-shift-source-save-client.ts"
+      );
+      const result = await saveKpEconomicsLessonSource(submittedDraft);
+      sourceSaveStatus = draft === submittedDraft
+        ? result.changed
+          ? `Saved to ${result.sourcePath}.`
+          : `${result.sourcePath} already matches this draft.`
+        : "Saved the submitted revision; newer edits remain local.";
+    } catch (error) {
+      sourceSaveStatus = error instanceof Error
+        ? error.message
+        : "The lesson source could not be saved.";
+    } finally {
+      sourceSavePending = false;
     }
   }
 </script>
@@ -85,11 +133,11 @@
 <div
   class="kp-economics-lesson-editor"
   data-kp-economics-lesson-editor
-  data-kp-economics-lesson-editor-passage={passageId}
+  data-kp-economics-lesson-editor-passage={id}
   data-kp-economics-lesson-editor-enhanced={enhanced}
 >
   <div class="kp-economics-lesson-editor__heading">
-    <code>{passageId}</code>
+    <code>{id}</code>
     <span>Markdown · inline KaTeX with <code>$…$</code></span>
   </div>
   <div class="kp-economics-lesson-editor__surface" bind:this={host}>
@@ -105,23 +153,50 @@
     class="kp-economics-lesson-editor__validation"
     data-kp-economics-lesson-editor-validation
     aria-live="polite"
-  >{validationMessage}</p>
+  >{validation}</p>
+  <p
+    class="kp-economics-lesson-editor__source-status"
+    data-kp-economics-lesson-editor-source-status
+    aria-live="polite"
+  >{sourceSaveStatus}</p>
   <div class="kp-economics-lesson-editor__actions" aria-label="Passage actions">
-    <button type="button" onclick={onAddAfter}>Add after</button>
-    <button type="button" onclick={onDuplicate}>Duplicate</button>
-    <button type="button" onclick={onMovePrevious} disabled={!canMovePrevious}>
+    <button
+      type="button"
+      data-kp-economics-lesson-editor-save-source
+      onclick={saveToSource}
+      disabled={sourceSavePending}
+    >{sourceSavePending ? "Saving…" : "Save to source"}</button>
+    <button type="button" onclick={() => runDraftMutation(onAdd)}>
+      Add after
+    </button>
+    <button type="button" onclick={() => runDraftMutation(onCopy)}>
+      Duplicate
+    </button>
+    <button
+      type="button"
+      onclick={() => runDraftMutation(onMoveUp)}
+      disabled={!canMoveUp}
+    >
       Move up
     </button>
-    <button type="button" onclick={onMoveNext} disabled={!canMoveNext}>
+    <button
+      type="button"
+      onclick={() => runDraftMutation(onMoveDown)}
+      disabled={!canMoveDown}
+    >
       Move down
     </button>
-    <button type="button" onclick={onDelete} disabled={!canDelete}>
+    <button
+      type="button"
+      onclick={() => runDraftMutation(onDelete)}
+      disabled={!canDelete}
+    >
       Delete
     </button>
     <button
       type="button"
       data-kp-economics-lesson-editor-reset
-      onclick={onReset}
+      onclick={() => runDraftMutation(onReset)}
     >Reset draft</button>
   </div>
 </div>

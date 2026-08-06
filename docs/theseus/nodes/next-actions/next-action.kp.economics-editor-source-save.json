@@ -1,0 +1,63 @@
+{
+  "id": "next-action.kp.economics-editor-source-save",
+  "kind": "next-action",
+  "title": "Persist economics lesson editor drafts to source",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Explicit economics lesson source persistence is implemented and verified; broader editor promotion remains outside this bounded slice.",
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-lesson-source-save",
+      "status": "passed",
+      "scope": "source persistence boundary",
+      "checkedAt": "2026-08-06T19:50:51.151Z",
+      "notes": "4 tests passed: capability gating, atomic canonical write, malformed and structural rejection, and regeneration rollback."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "learner and semantic preservation",
+      "checkedAt": "2026-08-06T19:50:52.363Z",
+      "notes": "68 focused economics lesson, runtime, direct-seek, and publication checks passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "stylesheet preservation",
+      "checkedAt": "2026-08-06T19:50:53.287Z",
+      "notes": "17 economics stylesheet ownership and visual baseline checks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "editor persistence workflow",
+      "checkedAt": "2026-08-06T19:50:54.264Z",
+      "notes": "4 Chromium checks passed: no source request while editing, explicit source save, visible failure with local retention, completion, and invalid-preview fallback."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production type and artifact closure",
+      "checkedAt": "2026-08-06T19:50:55.242Z",
+      "notes": "TypeScript, Svelte, domain typechecks, compiled-publication freshness, and Vite production build passed."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "production performance",
+      "checkedAt": "2026-08-06T19:50:56.170Z",
+      "notes": "Passed at 249886 transfer bytes, 149998 script bytes, 42 resources, zero CLS, 146 ms longest startup task, 34.4 ms active p95, and zero active long tasks."
+    },
+    {
+      "command": "curl API, learner route, and capability-gated source endpoint",
+      "status": "passed",
+      "scope": "live development stack",
+      "checkedAt": "2026-08-06T19:50:57.134Z",
+      "notes": "Fresh npm run dev stack returned API 200, learner route 200, source route 404 without capability, and 405 for capability-authorized GET; no source mutation was issued."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Economics editor drafts now autosave locally and write canonical two-column lesson source only through an explicit dev-only Save to source action. The endpoint validates structural authority, writes atomically, regenerates the compiled publication, and rolls back on compiler failure. Focused server, learner, stylesheet, browser, build, performance, and live-stack checks pass."
+  }
+}

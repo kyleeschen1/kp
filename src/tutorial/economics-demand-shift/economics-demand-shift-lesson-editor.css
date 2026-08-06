@@ -88,12 +88,19 @@
   min-block-size: 9rem;
 }
 
-.kp-economics-lesson-editor__validation {
+.kp-economics-lesson-editor__validation,
+.kp-economics-lesson-editor__source-status {
   min-block-size: 1.1rem;
   margin: 0;
   padding-block: 0.4rem;
   color: var(--kp-lesson-theme-panel-label);
   font: 400 0.72rem/1.4 var(--kp-economics-non-katex-font-family);
+}
+
+.kp-economics-lesson-editor__source-status {
+  border-block-start: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-subtle-border);
+  color: var(--kp-lesson-theme-strong-ink);
 }
 
 .kp-economics-lesson-editor__actions {

@@ -25,6 +25,7 @@ const processes: readonly DevProcess[] = [
       ...process.env,
       KP_DEV_REVIEW: "1",
       KP_DEV_REVIEW_ROOT: reviewRoot,
+      KP_LESSON_SOURCE_WRITE: browserTestMode ? "0" : "1",
       ...(browserTestMode ? { PORT: browserTestApiPort } : {})
     }
   },

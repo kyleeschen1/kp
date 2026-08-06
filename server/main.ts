@@ -1,6 +1,8 @@
 import { createAppServer } from "./app.ts";
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { createKpDevReviewServicesFromEnvironment } from "./dev-review-config.ts";
+import { createKpEconomicsLessonSourceStoreFromEnvironment } from
+  "./economics-lesson-source-config.ts";
 
 const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 8001;
@@ -12,12 +14,17 @@ const server = createAppServer({
   linearProblemProvider: createExactRationalLinearProblemProvider(),
   devReviewService: devReviewServices?.legacy,
   devReviewRoundService: devReviewServices?.rounds,
-  devReviewScreenshotService: devReviewServices?.screenshots
+  devReviewScreenshotService: devReviewServices?.screenshots,
+  economicsLessonSourceStore:
+    createKpEconomicsLessonSourceStoreFromEnvironment(process.env)
 });
 
 server.listen(port, host, () => {
   console.log(`[api] listening on http://${host}:${port}`);
   if (devReviewServices !== undefined) console.log("[api] local visual review inbox enabled");
+  if (process.env["KP_LESSON_SOURCE_WRITE"] === "1") {
+    console.log("[api] explicit lesson source writes enabled");
+  }
 });
 
 process.once("SIGINT", shutdown);

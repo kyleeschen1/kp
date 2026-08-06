@@ -16,6 +16,24 @@ test.beforeEach(async ({ page }) => {
 test("CodeMirror edits one passage at a time and persists a live draft", async ({
   page
 }) => {
+  const sourceSaveRequests: unknown[] = [];
+  await page.route(
+    "**/api/dev/lesson-sources/economics-demand-shift-two-column",
+    async (route) => {
+      sourceSaveRequests.push(route.request().postDataJSON());
+      expect(route.request().headers()["x-kp-lesson-source-write"]).toBe("1");
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          schemaVersion: "kp.economics-lesson-source-save-result.v1",
+          sourcePath:
+            "content/lessons/economics-demand-shift-two-column.json",
+          changed: true
+        })
+      });
+    }
+  );
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const passages = root.locator("[data-kp-two-column-scroll-paragraph]");
   const toggle = root.locator("[data-kp-economics-lesson-editor-toggle]");
@@ -43,6 +61,10 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
   await content.fill(
     "Read [$P$](kp-ref:price-axis-inline), then compare $D_0$ with $S$."
   );
+  expect(sourceSaveRequests).toHaveLength(0);
+  await expect(root.locator(
+    "[data-kp-economics-lesson-editor-source-status]"
+  )).toContainText("Autosaved locally");
   const firstPassage = root.locator(
     "[data-kp-economics-tutorial-passage='graph-at-rest']"
   );
@@ -60,6 +82,29 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
     const stored = localStorage.getItem(key);
     return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
   }, storageKey)).toContain("then compare");
+
+  await editor.getByRole("button", { name: "Save to source" }).click();
+  await expect(root.locator(
+    "[data-kp-economics-lesson-editor-source-status]"
+  )).toContainText(
+    "Saved to content/lessons/economics-demand-shift-two-column.json"
+  );
+  expect(sourceSaveRequests).toHaveLength(1);
+  expect(sourceSaveRequests[0]).toMatchObject({
+    schemaVersion: "kp.economics-lesson-source-save.v1",
+    draft: {
+      version: 1,
+      selectedPassageId: "graph-at-rest"
+    }
+  });
+  const sourceSaveRequest = sourceSaveRequests[0] as {
+    draft: { passages: { id: string; sourceText: string }[] };
+  };
+  expect(sourceSaveRequest.draft.passages[0]).toMatchObject({
+    id: "graph-at-rest",
+    sourceText:
+      "Read [$P$](kp-ref:price-axis-inline), then compare $D_0$ with $S$."
+  });
 
   await editor.getByRole("button", { name: "Add after" }).click();
   await expect(passages).toHaveCount(7);
@@ -86,6 +131,36 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
   await expect.poll(() => page.evaluate((key) =>
     localStorage.getItem(key), storageKey
   )).toBeNull();
+});
+
+test("source-save failures remain visible without losing the local draft", async ({
+  page
+}) => {
+  await page.route(
+    "**/api/dev/lesson-sources/economics-demand-shift-two-column",
+    (route) => route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: "publication_regeneration_failed",
+        message: "The publication could not be regenerated."
+      })
+    })
+  );
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  await root.locator("[data-kp-economics-lesson-editor-toggle]").click();
+  await root.locator(".cm-content").fill(
+    "A locally retained edit with [$P$](kp-ref:price-axis-inline)."
+  );
+  await root.getByRole("button", { name: "Save to source" }).click();
+
+  await expect(root.locator(
+    "[data-kp-economics-lesson-editor-source-status]"
+  )).toHaveText("The publication could not be regenerated.");
+  await expect.poll(() => page.evaluate((key) => {
+    const stored = localStorage.getItem(key);
+    return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
+  }, storageKey)).toContain("locally retained edit");
 });
 
 test("semantic reference completion exposes only supported authoring IDs", async ({

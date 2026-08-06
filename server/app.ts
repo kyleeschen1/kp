@@ -10,6 +10,10 @@ import { createKpDevReviewHttpAdapter } from "./dev-review-http-adapter.ts";
 import type { KpDevReviewInboxService } from "./dev-review-inbox.ts";
 import type { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
 import type { KpDevReviewScreenshotService } from "./dev-review-screenshot.ts";
+import { createKpEconomicsLessonSourceHttpAdapter } from
+  "./economics-lesson-source-http-adapter.ts";
+import type { KpEconomicsLessonSourceStore } from
+  "./economics-lesson-source-store.ts";
 
 interface HealthResponse {
   status: "ok";
@@ -32,6 +36,8 @@ export function createAppServer(options: {
   readonly devReviewRoundService?: KpDevReviewRoundInboxService | undefined;
   readonly devReviewScreenshotService?:
     KpDevReviewScreenshotService | undefined;
+  readonly economicsLessonSourceStore?:
+    KpEconomicsLessonSourceStore | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
   const conceptReviewAdapter = createCanonicalConceptReviewHttpAdapter(options.linearProblemProvider);
@@ -40,8 +46,18 @@ export function createAppServer(options: {
     options.devReviewRoundService,
     options.devReviewScreenshotService
   );
+  const lessonSourceAdapter = createKpEconomicsLessonSourceHttpAdapter(
+    options.economicsLessonSourceStore
+  );
   return createServer((request, response) => {
-    handleRequest(request, response, linearProblemAdapter, conceptReviewAdapter, devReviewAdapter).catch((error: unknown) => {
+    handleRequest(
+      request,
+      response,
+      linearProblemAdapter,
+      conceptReviewAdapter,
+      devReviewAdapter,
+      lessonSourceAdapter
+    ).catch((error: unknown) => {
       console.error(error);
       sendJson(response, 400, { error: "invalid_request" });
     });
@@ -53,7 +69,10 @@ async function handleRequest(
   response: ServerResponse,
   linearProblemAdapter: ReturnType<typeof createLinearProblemHttpAdapter>,
   conceptReviewAdapter: ReturnType<typeof createCanonicalConceptReviewHttpAdapter>,
-  devReviewAdapter: ReturnType<typeof createKpDevReviewHttpAdapter>
+  devReviewAdapter: ReturnType<typeof createKpDevReviewHttpAdapter>,
+  lessonSourceAdapter: ReturnType<
+    typeof createKpEconomicsLessonSourceHttpAdapter
+  >
 ): Promise<void> {
   const url = new URL(
     request.url ?? "/",
@@ -63,6 +82,7 @@ async function handleRequest(
   if (await linearProblemAdapter.handle(request, response, url)) return;
   if (conceptReviewAdapter.handle(request, response, url)) return;
   if (await devReviewAdapter.handle(request, response, url)) return;
+  if (await lessonSourceAdapter.handle(request, response, url)) return;
 
   if (request.method === "GET" && url.pathname === "/api/health") {
     sendJson(response, 200, {

@@ -20,8 +20,12 @@ import {
   adaptKpEconomicsDemandShiftLessonDocument
 } from "./economics-demand-shift-document.ts";
 import {
+  compileKpEconomicsTwoColumnParagraphs,
   kpEconomicsTwoColumnParagraphs
 } from "./economics-demand-shift-two-column-scroll.ts";
+import type {
+  KpEconomicsTwoColumnSource
+} from "./economics-demand-shift-two-column-source.ts";
 import type {
   KpTutorialLessonPublicationDocument
 } from "../kp-tutorial-lesson-document.ts";
@@ -47,15 +51,23 @@ export interface KpEconomicsDemandShiftPublication {
   readonly semanticTransit: KpTutorialSemanticTransitAuthoringBundle;
 }
 
+export interface KpEconomicsDemandShiftPublicationCompileOptions extends
+    KpEconomicsDemandShiftLessonCompileOptions {
+  readonly twoColumnSource?: KpEconomicsTwoColumnSource | undefined;
+}
+
 /**
  * Expands the concise Markdown annotations and local motion metadata into the
  * complete static payload. Authors never maintain custom-element internals.
  */
 export function compileKpEconomicsDemandShiftPublication(
   markdown: string,
-  options: KpEconomicsDemandShiftLessonCompileOptions = {}
+  options: KpEconomicsDemandShiftPublicationCompileOptions = {}
 ): KpEconomicsDemandShiftPublication {
   const lesson = compileKpEconomicsDemandShiftLesson(markdown, options);
+  const twoColumnParagraphs = options.twoColumnSource === undefined
+    ? kpEconomicsTwoColumnParagraphs
+    : compileKpEconomicsTwoColumnParagraphs(options.twoColumnSource);
   const document = adaptKpEconomicsDemandShiftLessonDocument(lesson);
   const controls = compileKpTutorialPublicationControls({
     publication: document,
@@ -78,10 +90,10 @@ export function compileKpEconomicsDemandShiftPublication(
     })
   ));
   const semanticTransit = compileKpEconomicsDemandShiftSemanticTransitExemplar(
-    kpEconomicsTwoColumnParagraphs.map(({ id }) => id)
+    twoColumnParagraphs.map(({ id }) => id)
   );
   validateTextReferenceMarkup(
-    kpEconomicsTwoColumnParagraphs,
+    twoColumnParagraphs,
     semanticTransit
   );
 
@@ -91,7 +103,7 @@ export function compileKpEconomicsDemandShiftPublication(
     tocHtml: controls.tocHtml,
     motionScrubBarHtml: controls.motionScrubBarHtml,
     verificationSurfaceHtml: renderKpEconomicsVerificationSurface(),
-    twoColumnParagraphs: kpEconomicsTwoColumnParagraphs,
+    twoColumnParagraphs,
     semanticTransit,
     ...(Object.keys(motionBridgeHtml).length === 0
       ? {}
