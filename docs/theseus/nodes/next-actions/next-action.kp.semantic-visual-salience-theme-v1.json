@@ -460,6 +460,13 @@
       "scope": "s25-static-boundary",
       "checkedAt": "2026-08-06T12:14:47.360Z",
       "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
+    },
+    {
+      "command": "npm-run-visual-fraction-composition-salience",
+      "status": "passed",
+      "scope": "s26-dark-light-wide-phone",
+      "checkedAt": "2026-08-06T12:19:55.337Z",
+      "notes": "4-review-captures-pass-with-focus-context-no-overflow-no-header-collision-and-stable-equation-geometry"
     }
   ],
   "expectedLearning": [

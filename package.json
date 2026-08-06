@@ -133,6 +133,7 @@
     "test:browser:fraction-composition": "playwright test tests/semantic-reader-fraction-composition.browser.spec.ts --project=chromium --workers=1",
     "test:browser:fraction-composition:determinism": "playwright test tests/semantic-reader-fraction-composition-determinism.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "visual:fraction-composition-canonical": "playwright test tests/semantic-reader-fraction-composition-visual.browser.spec.ts --project=chromium --workers=1",
+    "visual:fraction-composition-salience": "playwright test tests/semantic-reader-fraction-composition-salience.browser.spec.ts --project=chromium --workers=1",
     "visual:fraction-composition-motif-fidelity": "playwright test tests/semantic-reader-fraction-composition-motif-fidelity.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "test:browser:canonical-reader-contract": "playwright test tests/semantic-reader-fraction-composition-motif-fidelity.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:canonical-reader-contract:webkit": "playwright test tests/semantic-reader-fraction-composition-motif-fidelity.browser.spec.ts --project=webkit --workers=1",

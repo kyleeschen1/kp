@@ -185,15 +185,24 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
 
 /* Reader cards can be narrow inside a wide viewport, so their chrome responds
    to the card rather than waiting for the page-level phone breakpoint. */
-body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-stage {
+body:is(
+  [data-kp-reader-lesson-variant="foldable-distribution"],
+  [data-kp-reader-lesson-variant="fraction-composition"]
+) .kp-reader-equation-stage {
   container-type: inline-size;
 }
 @container (max-width: 40rem) {
-  body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-stage-heading {
+  body:is(
+    [data-kp-reader-lesson-variant="foldable-distribution"],
+    [data-kp-reader-lesson-variant="fraction-composition"]
+  ) .kp-reader-equation-stage-heading {
     grid-template-areas: "kicker" "control" "status";
     grid-template-columns: minmax(0, 1fr);
   }
-  body[data-kp-reader-lesson-variant="foldable-distribution"] .kp-reader-equation-controls {
+  body:is(
+    [data-kp-reader-lesson-variant="foldable-distribution"],
+    [data-kp-reader-lesson-variant="fraction-composition"]
+  ) .kp-reader-equation-controls {
     flex-wrap: wrap;
     justify-content: flex-start;
     margin-left: 0;

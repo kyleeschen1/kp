@@ -215,7 +215,8 @@
     {
       "id": "s26",
       "title": "Pressure-test the second caller visually",
-      "status": "planned"
+      "summary": "Fraction-second-caller-passes-four-case-visual-pressure-test-and-container-responsive-header-no-overlap-gate",
+      "status": "complete"
     },
     {
       "id": "s27",
