@@ -24,8 +24,9 @@ On 2026-08-05, Kinetic Press:
 - renamed the files, family, full names, unique identifiers, and PostScript
   names so these derived webfonts cannot be mistaken for upstream files.
 
-The CSS family is `Kinetic Press New Computer Modern Mono`. Book is the
-default 400 face; Regular serves 300, and Bold serves 500 through 900.
+The CSS family is `Kinetic Press New Computer Modern Mono`. Regular is the
+default reading face and serves 300 through 400, Book serves 500, and Bold
+serves 600 through 900.
 
 Original OTF SHA-256 checksums:
 

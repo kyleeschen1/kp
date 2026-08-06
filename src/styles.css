@@ -3,7 +3,9 @@
   font-family: "Kinetic Press New Computer Modern Mono";
   font-style: normal;
   font-display: swap;
-  font-weight: 300;
+  /* Regular is the reading face: keep the default 400 request from silently
+     selecting the visibly denser Book cut. */
+  font-weight: 300 400;
   src:
     url("./assets/fonts/kp-new-computer-modern-mono-regular.woff")
     format("woff");
@@ -17,7 +19,7 @@
   font-family: "Kinetic Press New Computer Modern Mono";
   font-style: normal;
   font-display: swap;
-  font-weight: 400;
+  font-weight: 500;
   src:
     url("./assets/fonts/kp-new-computer-modern-mono-book.woff")
     format("woff");
@@ -31,7 +33,7 @@
   font-family: "Kinetic Press New Computer Modern Mono";
   font-style: normal;
   font-display: swap;
-  font-weight: 500 900;
+  font-weight: 600 900;
   src:
     url("./assets/fonts/kp-new-computer-modern-mono-bold.woff")
     format("woff");

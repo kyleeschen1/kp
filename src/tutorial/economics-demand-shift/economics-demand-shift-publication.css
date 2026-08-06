@@ -130,7 +130,9 @@ kp-tutorial-toc {
   min-width: 0;
   color: var(--kp-tutorial-ink);
   font-family: var(--kp-economics-non-katex-font-family);
-  font-size: clamp(1rem, 1.18vw, 1.12rem);
+  /* The mono face and inline KaTeX share Computer Modern metrics. Grow their
+     common parent instead of independently scaling either side of a sentence. */
+  font-size: clamp(1.08rem, 1.28vw, 1.2rem);
   line-height: 1.78;
 }
 
@@ -286,4 +288,3 @@ kp-tutorial-toc {
   color: var(--kp-lesson-theme-link);
   font-weight: 750;
 }
-

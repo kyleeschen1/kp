@@ -811,6 +811,11 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
     )).toContain("Kinetic Press New Computer Modern Mono");
   }
 
+  const prose = root.locator(".kp-economics-tutorial__passage p").first();
+  await expect.poll(() => prose.evaluate((element) =>
+    getComputedStyle(element).fontWeight
+  )).toBe("400");
+
   const inlineMath = root.locator(".kp-economics-tutorial__prose .katex")
     .first();
   await expect.poll(() => inlineMath.evaluate((element) =>
@@ -819,6 +824,18 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   await expect.poll(() => inlineMath.evaluate((element) =>
     getComputedStyle(element).fontFamily
   )).not.toContain("Kinetic Press New Computer Modern Mono");
+  await expect.poll(async () => {
+    const proseSize = await prose.evaluate((element) =>
+      getComputedStyle(element).fontSize
+    );
+    const mathSize = await inlineMath.evaluate((element) =>
+      getComputedStyle(element).fontSize
+    );
+    return proseSize === mathSize;
+  }).toBe(true);
+  await expect.poll(() => prose.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).fontSize)
+  )).toBeGreaterThanOrEqual(18);
 
   await page.locator("[data-kp-economics-theme-toggle]").click();
   await expect(root).toHaveAttribute("data-kp-economics-tutorial-theme", "light");

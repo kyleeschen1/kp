@@ -85,6 +85,9 @@ test("default typography uses the New Computer Modern companion without overridi
     ].length,
     3
   );
+  assert.match(global, /font-weight: 300 400;[\s\S]*?mono-regular\.woff/);
+  assert.match(global, /font-weight: 500;[\s\S]*?mono-book\.woff/);
+  assert.match(global, /font-weight: 600 900;[\s\S]*?mono-bold\.woff/);
   assert.match(
     global,
     /--kp-font-family-non-katex:[\s\S]*"Kinetic Press New Computer Modern Mono"/
@@ -95,6 +98,10 @@ test("default typography uses the New Computer Modern companion without overridi
   );
   assert.doesNotMatch(theme, /Source Serif|@fontsource/);
   assert.match(graph, /font-family: KaTeX_Main/);
+  assert.match(
+    read("economics-demand-shift-publication.css"),
+    /font-size: clamp\(1\.08rem, 1\.28vw, 1\.2rem\);/
+  );
 });
 
 test("economics style owners retain disjoint anchor responsibilities", () => {
