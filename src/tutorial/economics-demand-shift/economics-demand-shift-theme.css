@@ -13,6 +13,33 @@
     U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+@font-face {
+  font-family: "Source Serif 4 Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-300-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif 4 Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-500-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif 4 Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2")
+    format("woff2");
+}
+
 :root {
   color-scheme: light;
   --kp-economics-non-katex-font-family:
@@ -21,10 +48,10 @@
   --kp-lesson-theme-stage-occlusion: rgb(244 241 233 / 0.975);
   --kp-lesson-theme-stage-divider: #8a8f95;
   --kp-lesson-theme-surface: #fffdf8;
-  --kp-lesson-theme-ink: #181a1b;
+  --kp-lesson-theme-ink: #000000;
   --kp-lesson-theme-muted: #667983;
   --kp-lesson-theme-math-foreground: #4f575e;
-  --kp-lesson-theme-prose-weight: 425;
+  --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
   --kp-lesson-theme-graph-stroke-width: 1.25px;
   --kp-lesson-theme-graph-grid: #dbe1e0;
   --kp-lesson-theme-graph-reference: #7d8285;
@@ -85,10 +112,10 @@
   --kp-lesson-theme-stage-occlusion: rgb(13 14 28 / 0.975);
   --kp-lesson-theme-stage-divider: #626775;
   --kp-lesson-theme-surface: #171a2b;
-  --kp-lesson-theme-ink: #c5c7cd;
+  --kp-lesson-theme-ink: #ffffff;
   --kp-lesson-theme-muted: #a9afbf;
   --kp-lesson-theme-math-foreground: #b9bec9;
-  --kp-lesson-theme-prose-weight: 375;
+  --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
   --kp-lesson-theme-graph-stroke-width: 1px;
   --kp-lesson-theme-graph-grid: #25293b;
   --kp-lesson-theme-graph-reference: #858e9d;
@@ -183,6 +210,30 @@
   --kp-graph-guide: #8290a8;
   --kp-graph-muted: #a0a9ba;
   --kp-graph-tick: #aab2c2;
+}
+
+/* These low-chroma alternatives remain categorical at reduced alpha without
+   generating a continuum of color-mix results for authors to reason about. */
+.kp-economics-tutorial[data-kp-economics-muted-blue="true"]
+  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-stable: #6f8fa5;
+}
+
+.kp-economics-tutorial[data-kp-economics-muted-red="true"]
+  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-changing: #a77572;
+}
+
+:root[data-kp-lesson-theme="dark"]
+  .kp-economics-tutorial[data-kp-economics-muted-blue="true"]
+  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-stable: #8aa8bd;
+}
+
+:root[data-kp-lesson-theme="dark"]
+  .kp-economics-tutorial[data-kp-economics-muted-red="true"]
+  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
+  --kp-graph-changing: #c18f8b;
 }
 
 :root[data-kp-lesson-theme="dark"]

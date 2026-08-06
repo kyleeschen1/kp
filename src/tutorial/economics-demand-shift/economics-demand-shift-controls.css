@@ -5,6 +5,8 @@
   left: 8rem;
   z-index: 2147482999;
   display: flex;
+  max-width: calc(100vw - 9rem);
+  flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
 }
@@ -166,3 +168,16 @@ kp-graph-style-tuner {
   white-space: nowrap;
 }
 
+.kp-economics-tutorial__line-tuner-panel
+  .kp-economics-tutorial__tuner-check {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.kp-economics-tutorial__line-tuner-panel
+  .kp-economics-tutorial__tuner-check
+  input {
+  width: auto;
+  margin: 0;
+}

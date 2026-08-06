@@ -1,0 +1,82 @@
+{
+  "id": "next-action.kp.economics-salience-tuning-controls-v0",
+  "kind": "next-action",
+  "title": "Economics salience tuning controls",
+  "status": "ready",
+  "domain": "economics",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-05-kp-economics-salience-tuning-probe.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "economics-unit",
+      "checkedAt": "2026-08-06T02:42:26.853Z",
+      "notes": "Fifty-three"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "canonical-browser-exemplar",
+      "checkedAt": "2026-08-06T02:42:27.329Z",
+      "notes": "Eleven"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-08-06T02:42:27.704Z",
+      "notes": "TypeScript"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-06T02:42:28.051Z",
+      "notes": "Publication"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-08-06T02:42:49.829Z",
+      "notes": "TypeScript and Svelte boundaries passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-unit",
+      "checkedAt": "2026-08-06T02:42:51.014Z",
+      "notes": "Fifty-three economics publication runtime and URL tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "economics-css",
+      "checkedAt": "2026-08-06T02:42:51.987Z",
+      "notes": "Seven stylesheet ownership checks passed."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "canonical-browser-exemplar",
+      "checkedAt": "2026-08-06T02:42:52.993Z",
+      "notes": "Eleven Chromium scenarios passed including tuning reload geometry preservation and phone fallback."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-06T02:42:54.016Z",
+      "notes": "Publication artifact check and Vite production build passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implementation and focused verification are complete. The economics exemplar is awaiting human visual review and no promotion is authorized."
+  }
+}

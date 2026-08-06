@@ -199,7 +199,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;
-  })).toBe(1);
+  })).toBe(1.27);
   await expect.poll(() => graph.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return {
@@ -207,7 +207,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       viewBox: element.getAttribute("viewBox"),
       width: Math.round(bounds.width)
     };
-  })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 415 });
+  })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 544 });
   await expect.poll(() => demandProgress(root)).toBe(0);
   await expect(initialPassage).toHaveAttribute(
     "data-kp-two-column-paragraph-opacity",
@@ -489,12 +489,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     Number(getComputedStyle(element).opacity)
   )).toBeGreaterThan(0.8);
   expect(columns.proseFontFamily).toContain("Source Serif 4 Variable");
-  expect(columns.proseFontWeight).toBe("375");
+  expect(columns.proseFontWeight).toBe("400");
   expect(columns.proseLineHeight).toBeGreaterThan(32);
   expect(columns.releaseRuleHeight).toBe(1);
   expect(columns.paragraphLeft - columns.stageRight).toBeGreaterThan(20);
   expect(columns.paragraphWidth).toBeLessThan(440);
-  expect(columns.stageWidth).toBe(480);
+  expect(columns.stageWidth).toBeCloseTo(609.28, 1);
   expect(columns.graphLeftInset).toBeGreaterThan(30);
   expect(columns.graphLeftInset).toBeLessThan(34);
   expect(Math.abs(columns.graphLeftInset - columns.graphRightInset))
@@ -614,7 +614,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   ))).toBeGreaterThan(entryBaseline.terminal.minimumSupplyProgress);
   await expect.poll(() => graph.evaluate((element) => Math.round(
     element.getBoundingClientRect().width
-  ))).toBe(415);
+  ))).toBe(544);
   const stageBottom = await stage.evaluate(
     (element) => element.getBoundingClientRect().bottom
   );
@@ -736,8 +736,8 @@ test("light theme applies one compensated graph width and prose weight", async (
       element.querySelector<HTMLElement>("[data-kp-inline-sticky-stage]")!
     ).borderRightWidth
   }))).toEqual({
-    color: "rgb(24, 26, 27)",
-    proseWeight: "425",
+    color: "rgb(0, 0, 0)",
+    proseWeight: "400",
     stageDivider: "1px"
   });
   await expect.poll(() => graph.evaluate((element) => {
@@ -862,7 +862,7 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
     order: "graph-text",
     stageBorderLeft: "0px",
     stageBorderRight: "1px",
-    stageWidth: 480,
+    stageWidth: 609,
     proseWidth: 384
   });
 
@@ -902,7 +902,7 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
     order: "text-graph",
     stageBorderLeft: "1px",
     stageBorderRight: "0px",
-    stageWidth: 480,
+    stageWidth: 609,
     proseWidth: 384
   });
   await expect.poll(() => page.evaluate(() => window.scrollY))
@@ -971,7 +971,8 @@ test("spacing tuner preserves the active cue across its full URL range", async (
       "data-kp-economics-two-column-paragraph-gap-vh",
       String(gapVh)
     );
-    await expect(tuner.locator("output")).toHaveText(`${gapVh}vh`);
+    await expect(tuner.locator("output[for='kp-economics-paragraph-gap']"))
+      .toHaveText(`${gapVh}vh`);
     await expect.poll(() => paragraph.evaluate((element) =>
       Number.parseFloat(getComputedStyle(element.parentElement!).paddingBottom)
     )).toBe(gapVh * 8);
@@ -1023,6 +1024,95 @@ test("spacing tuner preserves the active cue across its full URL range", async (
   await expect.poll(async () => Math.abs(
     (await demandProgress(root)) - forwardProgress
   )).toBeLessThan(0.015);
+});
+
+test("salience and prose tuners preserve graph focus and fill the shared width", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const body = root.locator(".kp-economics-tutorial__motion-passage-body");
+  const paragraph = card(root, "follow-shift").locator("p");
+  const supply = root.locator("[data-kp-economics-supply-line]");
+  const demand = root.locator("[data-kp-economics-demand-line]");
+  const lineTuner = page.locator("kp-graph-style-tuner");
+  const layoutTuner = page.locator("[data-kp-economics-spacing-tuner]");
+  const initialColumns = await columnGeometry(body);
+
+  await placeTopAt(page, paragraph, 280);
+  const initialProgress = await demandProgress(root);
+  await lineTuner.locator("summary").click();
+  await lineTuner.locator("[data-kp-economics-context-opacity-input]")
+    .fill("0.35");
+  await expect(root).toHaveAttribute("data-kp-economics-context-opacity", "0.35");
+  await expect.poll(() => demand.evaluate((element) =>
+    getComputedStyle(element).filter
+  )).toBe("opacity(0.35)");
+  await expect.poll(() => supply.evaluate((element) =>
+    getComputedStyle(element).filter
+  )).toBe("none");
+
+  await lineTuner.locator("[data-kp-economics-muted-blue-input]").check();
+  await lineTuner.locator("[data-kp-economics-muted-red-input]").check();
+  await expect(root).toHaveAttribute("data-kp-economics-muted-blue", "true");
+  await expect(root).toHaveAttribute("data-kp-economics-muted-red", "true");
+  await expect.poll(() => supply.evaluate((element) =>
+    getComputedStyle(element).stroke
+  )).toBe("rgb(138, 168, 189)");
+  await expect.poll(() => demand.evaluate((element) =>
+    getComputedStyle(element).stroke
+  )).toBe("rgb(193, 143, 139)");
+
+  await layoutTuner.locator("summary").click();
+  await layoutTuner.locator("[data-kp-economics-text-width-input]")
+    .fill("20");
+  await layoutTuner.locator("[data-kp-economics-prose-line-height-input]")
+    .fill("2");
+  await layoutTuner.locator("[data-kp-economics-prose-weight-input]")
+    .fill("500");
+  await expect(root).toHaveAttribute("data-kp-economics-text-width-rem", "20");
+  await expect(root).toHaveAttribute("data-kp-economics-prose-line-height", "2.00");
+  await expect(root).toHaveAttribute("data-kp-economics-prose-weight", "500");
+  const tunedColumns = await columnGeometry(body);
+  expect(tunedColumns.proseWidth).toBeLessThan(initialColumns.proseWidth);
+  expect(tunedColumns.stageWidth).toBeGreaterThan(initialColumns.stageWidth);
+  expect(tunedColumns.proseWidth + tunedColumns.stageWidth).toBe(
+    initialColumns.proseWidth + initialColumns.stageWidth
+  );
+  await expect.poll(() => paragraph.evaluate((element) =>
+    getComputedStyle(element).color
+  )).toBe("rgb(255, 255, 255)");
+  await expect.poll(() => paragraph.evaluate((element) =>
+    getComputedStyle(element).fontWeight
+  )).toBe("500");
+  await expect.poll(() => paragraph.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return Number.parseFloat(style.lineHeight) /
+      Number.parseFloat(style.fontSize);
+  })).toBeCloseTo(2, 2);
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(initialProgress, 2);
+  await expect(page).toHaveURL(/context=0.35/);
+  await expect(page).toHaveURL(/mutedBlue=1/);
+  await expect(page).toHaveURL(/mutedRed=1/);
+  await expect(page).toHaveURL(/measure=20/);
+  await expect(page).toHaveURL(/leading=2.00/);
+  await expect(page).toHaveURL(/weight=500/);
+
+  await page.locator("[data-kp-economics-theme-toggle]").click();
+  await expect.poll(() => paragraph.evaluate((element) =>
+    getComputedStyle(element).color
+  )).toBe("rgb(0, 0, 0)");
+  await page.screenshot({
+    path: `${evidenceDirectory}/desktop-salience-tuning.png`,
+    fullPage: false
+  });
+
+  await page.reload();
+  await expect(root).toHaveAttribute("data-kp-economics-context-opacity", "0.35");
+  await expect(root).toHaveAttribute("data-kp-economics-text-width-rem", "20");
+  await expect(root).toHaveAttribute("data-kp-economics-prose-weight", "500");
 });
 
 test("line tuner preserves optical theme compensation and URL state", async ({

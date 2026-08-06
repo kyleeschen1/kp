@@ -33,6 +33,24 @@ import {
   readKpEconomicsGraphStrokeScale,
   writeKpEconomicsGraphStrokeScale
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-graph-style.ts";
+import {
+  kpEconomicsContextOpacityDefault,
+  kpEconomicsProseLineHeightDefault,
+  kpEconomicsProseWeightDefault,
+  kpEconomicsTextWidthDefaultRem,
+  readKpEconomicsContextOpacity,
+  readKpEconomicsMutedBlue,
+  readKpEconomicsMutedRed,
+  readKpEconomicsProseLineHeight,
+  readKpEconomicsProseWeight,
+  readKpEconomicsTextWidthRem,
+  writeKpEconomicsContextOpacity,
+  writeKpEconomicsMutedBlue,
+  writeKpEconomicsMutedRed,
+  writeKpEconomicsProseLineHeight,
+  writeKpEconomicsProseWeight,
+  writeKpEconomicsTextWidthRem
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-visual-tuning.ts";
 
 test("inline sticky economics layout is an explicit reversible query mode", () => {
   assert.equal(
@@ -191,6 +209,62 @@ test("graph stroke tuning is bounded, theme-relative, and URL-reproducible", () 
     lightPx: 1.5,
     lightGhostCorePx: 0.75
   });
+});
+
+test("economics salience and typography tuning is bounded and URL-reproducible", () => {
+  assert.equal(readKpEconomicsContextOpacity(""), kpEconomicsContextOpacityDefault);
+  assert.equal(readKpEconomicsContextOpacity("?context=0.43"), 0.45);
+  assert.equal(readKpEconomicsContextOpacity("?context=-2"), 0.1);
+  assert.equal(
+    writeKpEconomicsContextOpacity({
+      search: "?layout=two-column-scroll&theme=light",
+      opacity: 0.45
+    }),
+    "?layout=two-column-scroll&theme=light&context=0.45"
+  );
+  assert.equal(
+    writeKpEconomicsContextOpacity({
+      search: "?layout=two-column-scroll&context=0.45",
+      opacity: kpEconomicsContextOpacityDefault
+    }),
+    "?layout=two-column-scroll"
+  );
+
+  assert.equal(readKpEconomicsMutedBlue("?mutedBlue=1"), true);
+  assert.equal(readKpEconomicsMutedBlue("?mutedBlue=true"), false);
+  assert.equal(readKpEconomicsMutedRed("?mutedRed=1"), true);
+  assert.equal(
+    writeKpEconomicsMutedBlue({ search: "?layout=two-column-scroll", muted: true }),
+    "?layout=two-column-scroll&mutedBlue=1"
+  );
+  assert.equal(
+    writeKpEconomicsMutedRed({ search: "?mutedRed=1&theme=light", muted: false }),
+    "?theme=light"
+  );
+
+  assert.equal(
+    readKpEconomicsProseLineHeight(""),
+    kpEconomicsProseLineHeightDefault
+  );
+  assert.equal(readKpEconomicsProseLineHeight("?leading=1.91"), 1.92);
+  assert.equal(
+    writeKpEconomicsProseLineHeight({ search: "?theme=light", lineHeight: 1.92 }),
+    "?theme=light&leading=1.92"
+  );
+
+  assert.equal(readKpEconomicsTextWidthRem(""), kpEconomicsTextWidthDefaultRem);
+  assert.equal(readKpEconomicsTextWidthRem("?measure=21.3"), 21.5);
+  assert.equal(
+    writeKpEconomicsTextWidthRem({ search: "?layout=two-column-scroll", widthRem: 21.5 }),
+    "?layout=two-column-scroll&measure=21.5"
+  );
+
+  assert.equal(readKpEconomicsProseWeight(""), kpEconomicsProseWeightDefault);
+  assert.equal(readKpEconomicsProseWeight("?weight=547"), 500);
+  assert.equal(
+    writeKpEconomicsProseWeight({ search: "?theme=light", weight: 600 }),
+    "?theme=light&weight=600"
+  );
 });
 
 test("two-column prose focuses at 35vh with a short-block plateau", () => {

@@ -32,6 +32,14 @@ import {
 import {
   readKpEconomicsGraphStrokeScale
 } from "./economics-demand-shift-graph-style.ts";
+import {
+  readKpEconomicsContextOpacity,
+  readKpEconomicsMutedBlue,
+  readKpEconomicsMutedRed,
+  readKpEconomicsProseLineHeight,
+  readKpEconomicsProseWeight,
+  readKpEconomicsTextWidthRem
+} from "./economics-demand-shift-visual-tuning.ts";
 import { defineKpGraphStyleTuner } from "../kp-graph-style-tuner.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
@@ -98,6 +106,12 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       initialTwoColumnParagraphGapVh:
         readKpEconomicsTwoColumnParagraphGapVh(input.search),
       initialGraphStrokeScale: readKpEconomicsGraphStrokeScale(input.search),
+      initialContextOpacity: readKpEconomicsContextOpacity(input.search),
+      initialMutedBlue: readKpEconomicsMutedBlue(input.search),
+      initialMutedRed: readKpEconomicsMutedRed(input.search),
+      initialProseLineHeight: readKpEconomicsProseLineHeight(input.search),
+      initialProseWeight: readKpEconomicsProseWeight(input.search),
+      initialTextWidthRem: readKpEconomicsTextWidthRem(input.search),
       initialTheme,
       initialDemandIntercept:
         prepared.economicsParameters?.demandInterceptAfter ?? 18

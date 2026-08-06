@@ -349,6 +349,19 @@
   opacity: 1;
 }
 
+/* The supply path is deliberately excluded from this alpha experiment. A
+   filter composes with each animated element's own opacity instead of
+   overwriting reveal and ghost-state truth. */
+.kp-economics-tutorial--two-column-scroll
+  [data-kp-economics-equilibrium-view]
+  > :not([data-kp-economics-supply-line]),
+.kp-economics-tutorial--two-column-scroll
+  [data-kp-editor-graph-axis],
+.kp-economics-tutorial--two-column-scroll
+  .editor-graph-stage__economics-screen-space-label {
+  filter: opacity(var(--kp-economics-context-opacity, 1));
+}
+
 .kp-economics-tutorial__player-host
   .editor-graph-stage__economics-supply-movement-trace {
   opacity: var(--kp-tutorial-supply-emphasis);
@@ -429,4 +442,3 @@
 .kp-economics-tutorial__explore-panel output {
   font-variant-numeric: tabular-nums;
 }
-
