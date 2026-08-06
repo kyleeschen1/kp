@@ -178,14 +178,16 @@ test("economics layout owners do not restate settled passage paint", () => {
   );
 });
 
-test("dark graph axes share the divider while light axes use semantic ink", () => {
+test("axis fallbacks stay themed while the exemplar consumes semantic paint", () => {
   const theme = read("economics-demand-shift-theme.css");
+  const twoColumn = read("economics-demand-shift-two-column.css");
 
   assert.match(theme, /--kp-lesson-theme-graph-axis: #151622;/);
   assert.match(
     theme,
     /:root\[data-kp-lesson-theme="dark"\][\s\S]*?--kp-lesson-theme-stage-divider: #626775;[\s\S]*?--kp-lesson-theme-graph-axis: var\(--kp-lesson-theme-stage-divider\);/
   );
+  assert.match(twoColumn, /--kp-economics-salience-market-axes-color/);
 });
 
 test("two-column progressive layout derives prose and graph from one latch", () => {

@@ -67,4 +67,17 @@ test("economics route mounts the semantic property seam for local consumers", ()
     graph,
     /--kp-economics-salience-market-demand-current-stroke-scale/
   );
+  for (const object of [
+    "grid",
+    "axes",
+    "demand-initial",
+    "equilibrium-current",
+    "equilibrium-initial",
+    "guides",
+    "equations"
+  ]) {
+    assert.match(`${theme}\n${graph}`, new RegExp(
+      `--kp-economics-salience-market-${object}-(?:color|opacity|stroke-scale)`
+    ));
+  }
 });

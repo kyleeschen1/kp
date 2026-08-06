@@ -226,7 +226,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.locator(
     ".editor-graph-stage__economics-grid-line"
   ).first().evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("1px");
+    .toBe("0.8px");
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-demand-reference]"
   ).evaluate((element) => ({
@@ -235,10 +235,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     opacity: getComputedStyle(element).opacity,
     width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(158, 98, 104)",
+    color: "rgb(69, 56, 63)",
     dash: "none",
     opacity: "1",
-    width: "1px"
+    width: "0px"
   });
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-demand-reference-core]"
@@ -247,9 +247,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     dash: getComputedStyle(element).strokeDasharray,
     width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(133, 142, 157)",
+    color: "rgb(41, 45, 66)",
     dash: "none",
-    width: "0.5px"
+    width: "0px"
   });
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => getComputedStyle(element).strokeWidth))
@@ -261,11 +261,19 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       )!;
       return {
         axis: getComputedStyle(element).stroke,
-        divider: getComputedStyle(stageElement).borderRightColor
+        divider: getComputedStyle(stageElement).borderRightColor,
+        graphAxisToken: getComputedStyle(element).getPropertyValue(
+          "--kp-graph-axis"
+        ).trim(),
+        semanticAxesToken: getComputedStyle(element).getPropertyValue(
+          "--kp-economics-salience-market-axes-color"
+        ).trim()
       };
     })).toEqual({
-      axis: "rgb(98, 103, 117)",
-      divider: "rgb(98, 103, 117)"
+      axis: "rgb(41, 45, 66)",
+      divider: "rgb(98, 103, 117)",
+      graphAxisToken: "#292d42",
+      semanticAxesToken: "#292d42"
     });
   await expect(graph).toHaveAttribute(
     "data-kp-editor-graph-origin-policy",
@@ -328,7 +336,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   }))).toEqual({
     fill: "rgb(13, 14, 28)",
     radius: "3",
-    stroke: "rgb(255, 255, 255)"
+    stroke: "rgb(7, 208, 216)"
   });
   await expect(stage.locator(
     ".editor-graph-stage__economics-supply-movement-target"
@@ -561,9 +569,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     dash: getComputedStyle(element).strokeDasharray,
     width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(143, 152, 170)",
+    color: "rgb(52, 64, 64)",
     dash: "4px, 5px",
-    width: "1px"
+    width: "0.8px"
   });
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-equilibrium-quantity-guide-core]"
@@ -572,9 +580,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     dash: getComputedStyle(element).strokeDasharray,
     width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(48, 53, 71)",
+    color: "rgb(41, 45, 66)",
     dash: "4px, 5px",
-    width: "0.5px"
+    width: "0.4px"
   });
   await expect(stage.locator("[data-kp-economics-equilibrium-point]"))
     .not.toHaveCSS("opacity", "0");
@@ -601,6 +609,16 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       color: "rgb(249, 144, 196)",
       opacity: "1",
       width: "1.2px"
+    });
+  await expect.poll(() => graph.locator("[data-kp-economics-equilibrium-point]")
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      opacity: getComputedStyle(element).opacity,
+      width: getComputedStyle(element).strokeWidth
+    }))).toEqual({
+      color: "rgb(71, 127, 130)",
+      opacity: "0.62",
+      width: "1px"
     });
 
   await placeTopAt(page, supplyParagraph, focusTop + 40);
@@ -792,13 +810,13 @@ test("light theme applies one compensated graph width and prose weight", async (
     return selectors.map((selector) => getComputedStyle(
       element.querySelector<SVGElement>(selector)!
     ).strokeWidth);
-  })).toEqual(["1.25px", "1.25px", "1.25px", "1.25px"]);
+  })).toEqual(["1.25px", "1.25px", "1px", "1.25px"]);
   await expect.poll(() => graph.locator(
     ".editor-graph-stage__economics-grid-line"
   ).first().evaluate((element) => ({
     color: getComputedStyle(element).stroke,
     opacity: getComputedStyle(element).opacity
-  }))).toEqual({ color: "rgb(215, 218, 227)", opacity: "1" });
+  }))).toEqual({ color: "rgb(215, 218, 227)", opacity: "0.5" });
   await expect.poll(() => graph.evaluate((element) => ({
     axis: getComputedStyle(element.querySelector<SVGElement>(
       "[data-kp-editor-graph-axis]"
@@ -807,7 +825,7 @@ test("light theme applies one compensated graph width and prose weight", async (
       "[data-kp-economics-supply-line]"
     )!).stroke
   }))).toEqual({
-    axis: "rgb(21, 22, 34)",
+    axis: "rgb(215, 218, 227)",
     supply: "rgb(104, 120, 138)"
   });
   await expect.poll(() => graph.locator(
@@ -817,7 +835,7 @@ test("light theme applies one compensated graph width and prose weight", async (
     stroke: getComputedStyle(element).stroke
   }))).toEqual({
     fill: "rgb(244, 241, 233)",
-    stroke: "rgb(21, 22, 34)"
+    stroke: "rgb(8, 111, 116)"
   });
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-light-optical-compensation.png`,
@@ -1109,7 +1127,7 @@ test("salience and prose tuners preserve graph focus and fill the shared width",
   await expect(root).toHaveAttribute("data-kp-economics-context-opacity", "0.35");
   await expect.poll(() => demand.evaluate((element) =>
     getComputedStyle(element).filter
-  )).toBe("opacity(0.35)");
+  )).toBe("opacity(0.35) opacity(1)");
   await expect.poll(() => supply.evaluate((element) =>
     getComputedStyle(element).filter
   )).toBe("none");

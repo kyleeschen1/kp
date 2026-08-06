@@ -77,7 +77,11 @@ export function projectKpEconomicsSalience(input: {
       const signals: KpSalienceSignal[] = [];
       if (focused.has(definition.id)) signals.push("focused");
       else if (definition.baseLevel === "ghost") signals.push("ghost");
-      else if (definition.role !== "page") signals.push("contextual");
+      else if (definition.baseLevel === "normal" && definition.role !== "page") {
+        // Deliberately quiet structures such as the grid retain their authored
+        // dim baseline; "contextual" is the ordinary non-focus handoff state.
+        signals.push("contextual");
+      }
       return [definition.id, Object.freeze({
         id: definition.id,
         role: definition.role,

@@ -155,7 +155,8 @@
     {
       "id": "s16",
       "title": "Resolve graph context and transient roles",
-      "status": "planned"
+      "summary": "Grid, axes, guides, intersections, historical curves and points, labels, and transient equations now resolve through semantic role-state-theme properties while runtime presence remains independently composable.",
+      "status": "complete"
     },
     {
       "id": "s17",

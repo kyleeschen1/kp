@@ -787,7 +787,7 @@ test("manual supply playback preserves the settled demand handoff", async ({
   await expect.poll(() => graph.locator(
     '[data-kp-economics-supply-movement-target="settled"]'
   ).evaluate((element) => Number(getComputedStyle(element).opacity)))
-    .toBeCloseTo(1, 2);
+    .toBeCloseTo(0.62, 2);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-supply-movement-verified.png`,
     fullPage: false
@@ -995,7 +995,7 @@ test("verification surface enters and exits without changing outer stage geometr
   await expect.poll(() => host.locator(
     '[data-kp-economics-supply-movement-target="settled"]'
   ).evaluate((element) => Number(getComputedStyle(element).opacity)))
-    .toBeCloseTo(1, 2);
+    .toBeCloseTo(0.62, 2);
 
   await supplyScrubber.fill("0.58");
   await expect(root).toHaveAttribute(

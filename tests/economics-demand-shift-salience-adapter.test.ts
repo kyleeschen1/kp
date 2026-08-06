@@ -81,3 +81,14 @@ test("historical references and equations follow existing semantic presence", ()
   assert.equal(verified.objects["market.demand.initial"].salience.state.level, "ghost");
   assert.equal(verified.objects["market.equations"].salience.state.level, "focus");
 });
+
+test("the grid retains its deliberately dim structural baseline", () => {
+  const frame = projectKpEconomicsSalience({
+    market: "initial",
+    presentation: "graph-only",
+    focusTarget: "equilibrium"
+  });
+  assert.equal(frame.objects["market.grid"].salience.state.level, "dim");
+  assert.equal(frame.objects["market.axes"].salience.state.level, "context");
+  assert.equal(frame.objects["market.guides"].salience.state.level, "context");
+});

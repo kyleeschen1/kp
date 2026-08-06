@@ -133,31 +133,52 @@
       --kp-graph-tuned-light-stroke-width,
       var(--kp-lesson-theme-graph-stroke-width)
     );
-  --kp-graph-grid: var(--kp-lesson-theme-graph-grid);
-  --kp-graph-grid-opacity: 1;
-  --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
+  --kp-graph-grid:
+    var(--kp-economics-salience-market-grid-color, var(--kp-lesson-theme-graph-grid));
+  --kp-graph-grid-opacity:
+    var(--kp-economics-salience-market-grid-opacity, 1);
+  --kp-graph-axis:
+    var(--kp-economics-salience-market-axes-color, var(--kp-lesson-theme-graph-axis));
   --kp-graph-ghost-curve-casing:
-    var(--kp-lesson-theme-graph-ghost-curve-casing);
+    var(
+      --kp-economics-salience-market-demand-initial-color,
+      var(--kp-lesson-theme-graph-ghost-curve-casing)
+    );
   --kp-graph-ghost-curve-core:
-    var(--kp-lesson-theme-graph-ghost-curve-core);
+    var(
+      --kp-economics-salience-market-grid-color,
+      var(--kp-lesson-theme-graph-ghost-curve-core)
+    );
   --kp-graph-ghost-guide-casing:
-    var(--kp-lesson-theme-graph-ghost-guide-casing);
+    var(
+      --kp-economics-salience-market-equilibrium-initial-color,
+      var(--kp-lesson-theme-graph-ghost-guide-casing)
+    );
   --kp-graph-ghost-guide-core:
-    var(--kp-lesson-theme-graph-ghost-guide-core);
+    var(
+      --kp-economics-salience-market-grid-color,
+      var(--kp-lesson-theme-graph-ghost-guide-core)
+    );
   --kp-graph-ghost-core-line-width:
     var(--kp-graph-tuned-light-ghost-core-width, 0.625px);
   --kp-graph-intersection-stroke:
-    var(--kp-lesson-theme-graph-intersection-stroke);
+    var(
+      --kp-economics-salience-market-equilibrium-current-color,
+      var(--kp-lesson-theme-graph-intersection-stroke)
+    );
   --kp-graph-intersection-fill:
     var(--kp-lesson-theme-graph-intersection-fill);
   --kp-graph-stable:
     var(--kp-economics-salience-market-supply-color, #256ea8);
   --kp-graph-changing:
     var(--kp-economics-salience-market-demand-current-color, #a83770);
-  --kp-graph-focal: #151622;
-  --kp-graph-guide: #aeb2bf;
+  --kp-graph-focal:
+    var(--kp-economics-salience-market-equilibrium-current-color, #151622);
+  --kp-graph-guide:
+    var(--kp-economics-salience-market-guides-color, #aeb2bf);
   --kp-graph-muted: #707586;
-  --kp-graph-tick: #74798a;
+  --kp-graph-tick:
+    var(--kp-economics-salience-market-axes-color, #74798a);
 }
 
 :root[data-kp-lesson-theme="dark"]
@@ -167,17 +188,21 @@
       --kp-graph-tuned-dark-stroke-width,
       var(--kp-lesson-theme-graph-stroke-width)
     );
-  --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
+  --kp-graph-axis:
+    var(--kp-economics-salience-market-axes-color, var(--kp-lesson-theme-graph-axis));
   --kp-graph-ghost-core-line-width:
     var(--kp-graph-tuned-dark-ghost-core-width, 0.5px);
   --kp-graph-stable:
     var(--kp-economics-salience-market-supply-color, #7cbdff);
   --kp-graph-changing:
     var(--kp-economics-salience-market-demand-current-color, #f990c4);
-  --kp-graph-focal: #f4f4f8;
-  --kp-graph-guide: #42465b;
+  --kp-graph-focal:
+    var(--kp-economics-salience-market-equilibrium-current-color, #f4f4f8);
+  --kp-graph-guide:
+    var(--kp-economics-salience-market-guides-color, #42465b);
   --kp-graph-muted: #7d8193;
-  --kp-graph-tick: #696e83;
+  --kp-graph-tick:
+    var(--kp-economics-salience-market-axes-color, #696e83);
 }
 
 /* These low-chroma alternatives remain categorical at reduced alpha without

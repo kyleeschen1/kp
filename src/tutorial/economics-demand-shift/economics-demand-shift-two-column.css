@@ -280,7 +280,11 @@
 
   :root .kp-economics-tutorial--two-column-scroll
     .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-    --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
+    --kp-graph-axis:
+      var(
+        --kp-economics-salience-market-axes-color,
+        var(--kp-lesson-theme-graph-axis)
+      );
     width: 100%;
     height: auto;
   }

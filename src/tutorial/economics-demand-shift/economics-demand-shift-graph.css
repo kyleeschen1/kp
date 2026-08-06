@@ -359,7 +359,9 @@
   [data-kp-editor-graph-axis],
 .kp-economics-tutorial--two-column-scroll
   .editor-graph-stage__economics-screen-space-label {
-  filter: opacity(var(--kp-economics-context-opacity, 1));
+  filter:
+    opacity(var(--kp-economics-context-opacity, 1))
+    var(--kp-economics-semantic-filter, opacity(1));
 }
 
 .kp-economics-tutorial__player-host
@@ -406,6 +408,227 @@
     opacity 180ms ease,
     stroke 180ms ease,
     stroke-width 180ms ease;
+}
+
+/* Runtime presence remains on the SVG nodes. Semantic opacity is composed as
+   a filter for historical and transient objects so the two concerns multiply
+   instead of overwriting one another. */
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-grid-line {
+  opacity: var(--kp-economics-salience-market-grid-opacity, 1);
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-grid-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  :is([data-kp-editor-graph-axis], .editor-graph-stage__economics-tick) {
+  opacity: var(--kp-economics-salience-market-axes-opacity, 1);
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-axes-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-equilibrium-quantity-guide],
+    [data-kp-economics-equilibrium-price-guide]
+  ) {
+  opacity: var(--kp-economics-salience-market-guides-opacity, 1);
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-guides-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host [data-kp-economics-equilibrium-point] {
+  opacity: var(--kp-economics-salience-market-equilibrium-current-opacity, 1);
+  stroke: var(
+    --kp-economics-salience-market-equilibrium-current-color,
+    var(--kp-graph-intersection-stroke)
+  );
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-equilibrium-current-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+.editor-graph-stage__economics-demand-reference {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-demand-initial-opacity, 1));
+  filter: var(--kp-economics-semantic-filter);
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-initial-demand-reference] {
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-demand-initial-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-initial-demand-reference-core] {
+  stroke-width:
+    calc(
+      var(--kp-graph-ghost-core-line-width, 0.5px) *
+      var(--kp-economics-salience-market-demand-initial-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-initial-equilibrium-guides],
+    [data-kp-economics-initial-equilibrium-reference]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-equilibrium-initial-opacity, 1));
+  filter: var(--kp-economics-semantic-filter);
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-initial-equilibrium-guides]
+  .editor-graph-stage__economics-guide--reference-casing,
+.kp-economics-tutorial__player-host
+  [data-kp-economics-initial-equilibrium-reference] {
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-equilibrium-initial-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-initial-equilibrium-guides]
+  .editor-graph-stage__economics-guide--reference-core {
+  stroke-width:
+    calc(
+      var(--kp-graph-ghost-core-line-width, 0.5px) *
+      var(--kp-economics-salience-market-equilibrium-initial-stroke-scale, 1)
+    );
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage__economics-equations {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-equations-opacity, 1));
+  color: var(
+    --kp-economics-salience-market-equations-color,
+    var(--kp-lesson-theme-math-foreground)
+  );
+  filter: var(--kp-economics-semantic-filter);
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    .editor-graph-stage__economics-math-foreign-object,
+    .editor-graph-stage__economics-screen-space-label
+  ) {
+  filter: var(--kp-economics-semantic-filter, opacity(1));
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label^="axis-"],
+    [data-kp-economics-math-label^="tick-"],
+    [data-kp-economics-screen-space-label^="axis-"],
+    [data-kp-economics-screen-space-label^="tick-"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-axes-opacity, 1));
+  color: var(--kp-economics-salience-market-axes-color, var(--kp-graph-axis));
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label="curve-supply"],
+    [data-kp-economics-screen-space-label="curve-supply"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-supply-opacity, 1));
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label="curve-demand-current"],
+    [data-kp-economics-screen-space-label="curve-demand-current"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-demand-current-opacity, 1));
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label="curve-demand-reference"],
+    [data-kp-economics-screen-space-label="curve-demand-reference"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-demand-initial-opacity, 1));
+  color: var(
+    --kp-economics-salience-market-demand-initial-color,
+    var(--kp-lesson-theme-graph-reference)
+  );
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-math-label="curve-demand-reference"]
+  .editor-graph-stage__economics-math-label {
+  color: var(
+    --kp-economics-salience-market-demand-initial-color,
+    var(--kp-lesson-theme-graph-reference)
+  );
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label="equilibrium-current"],
+    [data-kp-economics-screen-space-label="equilibrium-current"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-equilibrium-current-opacity, 1));
+  color: var(
+    --kp-economics-salience-market-equilibrium-current-color,
+    var(--kp-graph-focal)
+  );
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-math-label="equilibrium-current"]
+  .editor-graph-stage__economics-math-label {
+  color: var(
+    --kp-economics-salience-market-equilibrium-current-color,
+    var(--kp-graph-focal)
+  );
+}
+
+.kp-economics-tutorial__player-host
+  :is(
+    [data-kp-economics-math-label="equilibrium-reference"],
+    [data-kp-economics-screen-space-label="equilibrium-reference"]
+  ) {
+  --kp-economics-semantic-filter:
+    opacity(var(--kp-economics-salience-market-equilibrium-initial-opacity, 1));
+  color: var(
+    --kp-economics-salience-market-equilibrium-initial-color,
+    var(--kp-lesson-theme-graph-reference)
+  );
+}
+
+.kp-economics-tutorial__player-host
+  [data-kp-economics-math-label="equilibrium-reference"]
+  .editor-graph-stage__economics-math-label {
+  color: var(
+    --kp-economics-salience-market-equilibrium-initial-color,
+    var(--kp-lesson-theme-graph-reference)
+  );
 }
 
 .kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation p {

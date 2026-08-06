@@ -243,6 +243,13 @@
       "scope": "s15 demand semantic focus and context projection",
       "checkedAt": "2026-08-06T08:41:06.013Z",
       "notes": "59 tutorial tests, 15 CSS tests, 11 two-column browser tests, 12 tutorial browser tests, and typecheck pass; direct checkpoint keeps the owning demand passage focused."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial; npm run test:economics-demand-shift-css; npm run visual:economics-two-column-scroll; npm run visual:economics-demand-shift-tutorial; npm run typecheck",
+      "status": "passed",
+      "scope": "s16 graph context ghost and transient roles",
+      "checkedAt": "2026-08-06T08:59:45.033Z",
+      "notes": "60 tutorial tests, 15 CSS tests, 11 two-column browser cases, 12 tutorial browser cases, and typecheck pass; grid retains dim baseline, axes and guides use context, equilibrium focus transfers, and ghost opacity composes with runtime presence."
     }
   ],
   "expectedLearning": [
