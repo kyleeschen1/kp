@@ -96,6 +96,13 @@
       "scope": "s07 exhaustive recipe matrix",
       "checkedAt": "2026-08-06T07:26:50.449Z",
       "notes": "Fourteen tests pass; all 84 dark/light role-level cells exist, preserve ordered hierarchy and absence, and compile deterministically with theme-specific optical floors."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s08 precedence and direct resolution",
+      "checkedAt": "2026-08-06T07:29:32.893Z",
+      "notes": "Seventeen tests pass; precedence is order-independent, direct projection is history-free, presence phases stay separate, and ambiguous direction or unknown signals fail closed."
     }
   ],
   "expectedLearning": [

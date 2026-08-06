@@ -107,7 +107,8 @@
     {
       "id": "s08",
       "title": "Define state precedence and direct resolution",
-      "status": "planned"
+      "summary": "Defined deterministic precedence for selected, focused, ghost, contextual, and base salience plus separate entering/withdrawing presence phases, direct seek idempotence, permutation laws, and fail-closed ambiguity.",
+      "status": "complete"
     },
     {
       "id": "s09",
