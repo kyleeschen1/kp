@@ -1,0 +1,4 @@
+interface:
+  display_name: "KP Visual Salience"
+  short_description: "Design semantic attention for KP visuals"
+  default_prompt: "Use $kp-visual-salience to design or implement semantic visual attention in Kinetic Press."

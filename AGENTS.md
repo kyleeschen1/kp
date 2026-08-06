@@ -59,6 +59,33 @@ canonical human checkpoint.
   sampling, complete browser matrices, and broad product regression for
   promotion and release boundaries.
 
+## Semantic visual salience
+
+Use `.agents/skills/kp-visual-salience/SKILL.md` for salience, focus,
+highlighting, ghosting, cross-view attention, renderer adapters, or promotion
+of an attention motif.
+
+- Author instructional intent against stable semantic entity, group, beat, and
+  correspondence IDs before choosing a visual treatment.
+- Reuse the semantic scene, salience-plan, reader-focus, attention-projector,
+  and cross-view seams already responsible for the behavior; do not create a
+  parallel global salience store.
+- Keep identity, salience, presence, and historical or prospective trace role
+  separate. Absence is a presence decision, not a low-salience style.
+- Project state deterministically from the semantic playhead so replay,
+  reverse, interruption, URL restoration, and TOC jumps reach the same state
+  without replaying intermediate motion.
+- Resolve target and context together at scene level, then let DOM, KaTeX, SVG,
+  Canvas, and WebGL adapters express that hierarchy in medium-specific ways.
+- Keep required instructional information legible and accessible when it is
+  contextual. Prefer paint-only focus changes and avoid layout-affecting
+  emphasis.
+- Treat exact colors, fonts, opacity thresholds, stroke ratios, durations, and
+  material curves as provisional until a canonical exemplar passes human
+  review. Pressure-test one structurally different caller before promotion.
+- Preserve semantic and authoring contracts when correcting presentation; a
+  visual fix does not authorize a catalogue-wide abstraction or migration.
+
 ## Plan and execution ownership
 
 - Keep one human-readable plan and one executable control record. For a
