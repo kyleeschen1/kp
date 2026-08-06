@@ -418,6 +418,27 @@
       "scope": "s23-static-boundary",
       "checkedAt": "2026-08-06T11:48:30.645Z",
       "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition",
+      "status": "passed",
+      "scope": "s24-direct-seek-rewind",
+      "checkedAt": "2026-08-06T12:00:20.618Z",
+      "notes": "7-Chromium-cases-pass-including-identical-salience-signatures-after-forward-and-rewind"
+    },
+    {
+      "command": "npm-run-test-fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s24-semantic-preservation",
+      "checkedAt": "2026-08-06T12:00:28.851Z",
+      "notes": "63-tests-pass-with-attention-lineage-distinct-from-total-preservation-lineage"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s24-static-boundary",
+      "checkedAt": "2026-08-06T12:00:37.834Z",
+      "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
     }
   ],
   "expectedLearning": [

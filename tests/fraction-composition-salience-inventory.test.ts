@@ -38,6 +38,12 @@ test("fraction salience inventory closes native endpoints and transitions", () =
     ]) {
       assert.ok(selectorIds.has(id) || structuralAnchorIds.has(id), id);
     }
+    assert.ok(transition.attentionSourceSelectorIds.every((id) =>
+      transition.sourceSelectorIds.includes(id)
+    ));
+    assert.ok(transition.attentionTargetSelectorIds.every((id) =>
+      transition.targetSelectorIds.includes(id)
+    ));
   }
 });
 

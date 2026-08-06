@@ -45,6 +45,8 @@ export interface KpFractionCompositionSalienceTransitionInventory {
   readonly correspondenceIds: readonly string[];
   readonly sourceSelectorIds: readonly string[];
   readonly targetSelectorIds: readonly string[];
+  readonly attentionSourceSelectorIds: readonly string[];
+  readonly attentionTargetSelectorIds: readonly string[];
 }
 
 export interface KpFractionCompositionSalienceCheckpointInventory {
@@ -99,6 +101,9 @@ KpFractionCompositionSalienceInventory {
   }));
   const transitions = asset.transformations.map((transformation) => {
     const records = transformation.correspondenceMap?.records ?? [];
+    const attentionRecords = records.filter(
+      ({ relation }) => relation !== "identity" && relation !== "artifact"
+    );
     return Object.freeze({
       stepId: transformation.id,
       sourceStateId: transformation.sourceObjectIds[0]!,
@@ -108,6 +113,14 @@ KpFractionCompositionSalienceInventory {
         ({ sourceSelectorIds }) => sourceSelectorIds
       )),
       targetSelectorIds: unique(records.flatMap(
+        ({ targetSelectorIds }) => targetSelectorIds
+      )),
+      // Total lineage proves preservation; attention lineage names only the
+      // material whose semantic role or existence changes in this operation.
+      attentionSourceSelectorIds: unique(attentionRecords.flatMap(
+        ({ sourceSelectorIds }) => sourceSelectorIds
+      )),
+      attentionTargetSelectorIds: unique(attentionRecords.flatMap(
         ({ targetSelectorIds }) => targetSelectorIds
       ))
     });

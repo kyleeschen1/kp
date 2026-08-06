@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
-  projectKpFractionCompositionSalience
+  projectKpFractionCompositionSalience,
+  projectKpFractionCompositionSalienceScene
 } from "../src/reader/app/fraction-composition-salience-adapter.ts";
 
 test("fraction KaTeX projection resolves the whole endpoint scene", () => {
@@ -70,4 +71,39 @@ test("the DOM adapter binds authored wrappers without recompiling KaTeX", () => 
   }
   assert.match(source, /data-kp-reader-selector-id/);
   assert.match(source, /--kp-semantic-salience-color/);
+});
+
+test("scene projection hands focus from source to target deterministically", () => {
+  const input = {
+    theme: "light" as const,
+    sourceStateId: "fraction-solve.state.distributed",
+    targetStateId: "fraction-solve.state.normalized",
+    operationIds: ["fraction-solve.step.normalize"]
+  };
+  const before = projectKpFractionCompositionSalienceScene({
+    ...input,
+    phaseProgress: 0.25
+  });
+  const after = projectKpFractionCompositionSalienceScene({
+    ...input,
+    phaseProgress: 0.75
+  });
+  const replay = projectKpFractionCompositionSalienceScene({
+    ...input,
+    phaseProgress: 0.75
+  });
+
+  assert.ok(Object.values(before.endpoints[0]!.objects).some(
+    ({ salience }) => salience.state.level === "focus"
+  ));
+  assert.ok(Object.values(after.endpoints[1]!.objects).some(
+    ({ salience }) => salience.state.level === "focus"
+  ));
+  assert.deepEqual(after, replay);
+  const crossSurface = projectKpFractionCompositionSalienceScene({
+    ...input,
+    phaseProgress: 0.5,
+    focusTargetIds: ["unknown.target"]
+  });
+  assert.deepEqual(crossSurface.focusTargetIds, input.operationIds);
 });

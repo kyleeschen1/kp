@@ -203,7 +203,8 @@
     {
       "id": "s24",
       "title": "Coordinate multi-step algebra attention",
-      "status": "planned"
+      "summary": "Coordinated-operation-attention-from-one-reader-clock-with-cross-surface-focus-fallback-and-identical-direct-rewind-state",
+      "status": "complete"
     },
     {
       "id": "s25",

@@ -136,6 +136,9 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
+const fractionCompositionSalience = lessonDescriptor.id === "fraction-composition"
+  ? await import("./fraction-composition-salience-adapter.ts")
+  : undefined;
 const usesCanonicalEquationRenderer =
   lessonDescriptor.canonicalTransitionSelection !== undefined;
 const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
@@ -907,6 +910,34 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
   applyFocus(focusSnapshot);
+  if (fractionCompositionSalience !== undefined) {
+    const transition = context.renderPlan.transitions[0];
+    const sourceStateId = transition?.source[0]?.objectId;
+    const targetStateId = transition?.target[0]?.objectId;
+    if (sourceStateId === undefined || targetStateId === undefined) {
+      throw new Error("Fraction salience requires one native endpoint pair.");
+    }
+    const salienceScene =
+      fractionCompositionSalience.projectKpFractionCompositionSalienceScene({
+        theme: "light",
+        sourceStateId,
+        targetStateId,
+        operationIds: runtimeFrame.activeTransformationIds,
+        phaseProgress,
+        focusTargetIds: focusedRefs
+      });
+    fractionCompositionSalience.applyKpFractionCompositionSalienceSceneToDom({
+      root: context.element,
+      projections: salienceScene.endpoints
+    });
+    stage.dataset["kpReaderSemanticSalienceScene"] = JSON.stringify({
+      sourceStateId,
+      targetStateId,
+      operationIds: salienceScene.operationIds,
+      focusTargetIds: salienceScene.focusTargetIds,
+      phaseProgressPermille: Math.round(phaseProgress * 1_000)
+    });
+  }
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;

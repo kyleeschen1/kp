@@ -203,10 +203,28 @@ test("fraction outline, direct seek, and rewind use exact canonical boundaries",
     );
     return body.getAttribute("data-kp-reader-review-frame");
   };
+  const salienceSignature = () => page.locator(
+    "[data-kp-reader-transition-active='true']"
+  ).evaluate((transition) => ({
+    scene: document.querySelector("[data-kp-reader-equation-stage]")
+      ?.getAttribute("data-kp-reader-semantic-salience-scene"),
+    objects: [...transition.querySelectorAll<HTMLElement>(
+      "[data-kp-fraction-salience-bound]"
+    )].map((element) => ({
+      id: element.dataset["kpReaderSelectorId"],
+      level: element.dataset["kpSemanticSalienceLevel"],
+      role: element.dataset["kpSemanticVisualRole"]
+    })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
+  }));
   const forward = await seek(620);
+  const forwardSalience = await salienceSignature();
+  expect(forwardSalience.objects.some(({ level }) => level === "focus")).toBe(true);
+  expect(forwardSalience.objects.some(({ level }) => level === "context")).toBe(true);
   await seek(900);
   const rewind = await seek(620);
+  const rewindSalience = await salienceSignature();
   expect(rewind).toBe(forward);
+  expect(rewindSalience).toEqual(forwardSalience);
   await expect(
     page.locator("[data-kp-reader-transition-active='true']")
   ).toHaveCount(1);
