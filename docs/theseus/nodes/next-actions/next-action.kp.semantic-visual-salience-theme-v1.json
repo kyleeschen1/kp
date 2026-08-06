@@ -439,6 +439,27 @@
       "scope": "s24-static-boundary",
       "checkedAt": "2026-08-06T12:00:37.834Z",
       "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
+    },
+    {
+      "command": "npm-run-test-browser-fraction-composition",
+      "status": "passed",
+      "scope": "s25-light-dark-DOM-theme",
+      "checkedAt": "2026-08-06T12:14:25.376Z",
+      "notes": "8-Chromium-cases-pass-with-shared-palette-colors-identical-semantic-levels-and-no-layout-drift"
+    },
+    {
+      "command": "npm-run-test-visual-salience",
+      "status": "passed",
+      "scope": "s25-shared-theme-source",
+      "checkedAt": "2026-08-06T12:14:37.203Z",
+      "notes": "20-tests-pass-including-direct-DOM-token-projection-from-the-approved-palette"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s25-static-boundary",
+      "checkedAt": "2026-08-06T12:14:47.360Z",
+      "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
     }
   ],
   "expectedLearning": [

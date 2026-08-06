@@ -21,6 +21,21 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: auto; }
 body { margin: 0; background: var(--kp-paper); color: var(--kp-ink); line-height: 1.58; }
+body[data-kp-reader-lesson-variant="fraction-composition"] {
+  /* Fallbacks preserve the static article before the shared theme adapter
+     enhances it; they are not an alternate algebra palette. */
+  --kp-paper: var(--kp-semantic-page, #f7f3e8);
+  --kp-surface: var(--kp-semantic-surface, #fffaf0);
+  --kp-ink: var(--kp-semantic-ink, #16231d);
+  --kp-muted: var(--kp-semantic-ink-secondary, #59645e);
+  --kp-accent: var(--kp-semantic-focus, #df7047);
+  --kp-relation: var(--kp-semantic-relation, #1f6371);
+  --kp-line: var(--kp-semantic-line, #d2d7cd);
+  color-scheme: light;
+}
+body[data-kp-reader-lesson-variant="fraction-composition"][data-kp-visual-theme="dark"] {
+  color-scheme: dark;
+}
 a { color: var(--kp-relation); text-underline-offset: .2em; }
 :focus-visible { outline: 3px solid var(--kp-relation); outline-offset: 4px; }
 
@@ -156,6 +171,12 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
   [data-kp-reader-focus-source="keyboard"],
   [data-kp-reader-focus-source="url"]
 ) :is(.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus) { color: var(--kp-relation) !important; }
+body[data-kp-reader-lesson-variant="fraction-composition"]
+  [data-kp-fraction-salience-bound] {
+  color: var(--kp-semantic-salience-color) !important;
+  opacity: var(--kp-semantic-salience-opacity);
+  transition: none;
+}
 .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: drop-shadow(0 .08em .16em rgb(223 112 71 / 18%)); }
 body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: none; }
 .kp-reader-equation-progress { height: 2px; margin: .1rem .3rem 0; background: color-mix(in srgb, var(--kp-line) 72%, transparent); overflow: hidden; }

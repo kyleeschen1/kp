@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import {
+  kpVisualPaletteSources
+} from "../src/animation/semantic-visual-salience.ts";
 
 const route = (
   progressPermille: number,
@@ -228,6 +231,49 @@ test("fraction outline, direct seek, and rewind use exact canonical boundaries",
   await expect(
     page.locator("[data-kp-reader-transition-active='true']")
   ).toHaveCount(1);
+});
+
+test("fraction scene consumes shared light and dark treatments without layout drift", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  const capture = async (theme: "light" | "dark") => {
+    await page.goto(route(620, { kpFoldMode: "expanded", kpTheme: theme }), {
+      waitUntil: "domcontentloaded"
+    });
+    const body = page.locator("body");
+    await expect(body).toHaveAttribute("data-kp-visual-theme", theme);
+    await expect(body).toHaveAttribute("data-kp-reader-hydrated", "true");
+    return page.locator("[data-kp-reader-transition-active='true']").evaluate(
+      (transition) => ({
+        bodyBackground: getComputedStyle(document.body).backgroundColor,
+        bodyColor: getComputedStyle(document.body).color,
+        rect: transition.getBoundingClientRect().toJSON(),
+        objects: [...transition.querySelectorAll<HTMLElement>(
+          "[data-kp-fraction-salience-bound]"
+        )].map((element) => ({
+          id: element.dataset["kpReaderSelectorId"],
+          level: element.dataset["kpSemanticSalienceLevel"],
+          color: getComputedStyle(element).color
+        })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
+      })
+    );
+  };
+  const light = await capture("light");
+  const dark = await capture("dark");
+
+  expect(light.bodyBackground).toBe("rgb(244, 241, 233)");
+  expect(dark.bodyBackground).toBe("rgb(13, 14, 28)");
+  expect(light.bodyColor).not.toBe(dark.bodyColor);
+  expect(light.objects.map(({ id, level }) => ({ id, level }))).toEqual(
+    dark.objects.map(({ id, level }) => ({ id, level }))
+  );
+  expect(light.objects.map(({ color }) => color)).not.toEqual(
+    dark.objects.map(({ color }) => color)
+  );
+  expect(light.rect.width).toBeCloseTo(dark.rect.width, 5);
+  expect(light.rect.height).toBeCloseTo(dark.rect.height, 5);
+  expect(kpVisualPaletteSources.dark.neutral.page).toBe("#0d0e1c");
 });
 
 test("balanced factors enter together and coefficient cancellation counter-orbits", async ({

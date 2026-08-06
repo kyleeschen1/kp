@@ -33,6 +33,7 @@ export interface KpFractionCompositionSalienceProjection {
 
 export interface KpFractionCompositionSalienceSceneProjection {
   readonly theme: KpVisualThemeId;
+  readonly presentationRevision: string;
   readonly phaseProgress: number;
   readonly operationIds: readonly string[];
   readonly focusTargetIds: readonly string[];
@@ -152,6 +153,11 @@ export function projectKpFractionCompositionSalienceScene(input: {
   const focusSource = input.phaseProgress < 0.5;
   return Object.freeze({
     theme: input.theme,
+    presentationRevision: [
+      input.theme,
+      focusSource ? "source" : "target",
+      ...focusTargets
+    ].join(":"),
     phaseProgress: input.phaseProgress,
     operationIds: Object.freeze([...input.operationIds]),
     focusTargetIds: Object.freeze([...focusTargets]),

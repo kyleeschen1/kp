@@ -139,6 +139,19 @@ const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVar
 const fractionCompositionSalience = lessonDescriptor.id === "fraction-composition"
   ? await import("./fraction-composition-salience-adapter.ts")
   : undefined;
+const semanticVisualDomTheme = fractionCompositionSalience === undefined
+  ? undefined
+  : await import("../../rendering/semantic-visual-dom-theme.ts");
+const fractionCompositionTheme =
+  new URL(window.location.href).searchParams.get("kpTheme") === "dark"
+    ? "dark" as const
+    : "light" as const;
+if (semanticVisualDomTheme !== undefined) {
+  semanticVisualDomTheme.applyKpSemanticVisualDomTheme({
+    root: document.body,
+    theme: fractionCompositionTheme
+  });
+}
 const usesCanonicalEquationRenderer =
   lessonDescriptor.canonicalTransitionSelection !== undefined;
 const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
@@ -910,6 +923,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
   applyFocus(focusSnapshot);
+  let semanticSaliencePresentationRevision = "none";
   if (fractionCompositionSalience !== undefined) {
     const transition = context.renderPlan.transitions[0];
     const sourceStateId = transition?.source[0]?.objectId;
@@ -919,7 +933,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     }
     const salienceScene =
       fractionCompositionSalience.projectKpFractionCompositionSalienceScene({
-        theme: "light",
+        theme: fractionCompositionTheme,
         sourceStateId,
         targetStateId,
         operationIds: runtimeFrame.activeTransformationIds,
@@ -930,6 +944,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       root: context.element,
       projections: salienceScene.endpoints
     });
+    semanticSaliencePresentationRevision = salienceScene.presentationRevision;
     stage.dataset["kpReaderSemanticSalienceScene"] = JSON.stringify({
       sourceStateId,
       targetStateId,
@@ -954,7 +969,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   const presentationRevision = [
     activeBeat === undefined ? "no-active-beat" : requiredData(activeBeat, "kpBeat"),
     focusSnapshot.activeSource ?? "none",
-    ...focusedRefs
+    ...focusedRefs,
+    semanticSaliencePresentationRevision
   ].join(":");
   const canonicalFrame = {
     renderPlan: context.renderPlan,

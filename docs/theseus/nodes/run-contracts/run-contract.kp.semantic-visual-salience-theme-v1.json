@@ -209,7 +209,8 @@
     {
       "id": "s25",
       "title": "Apply both themes without local recipes",
-      "status": "planned"
+      "summary": "Fraction-reader-now-consumes-shared-light-dark-DOM-tokens-and-object-treatments-with-stable-geometry-and-cache-safe-atomic-paint",
+      "status": "complete"
     },
     {
       "id": "s26",

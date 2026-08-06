@@ -100,6 +100,7 @@ test("scene projection hands focus from source to target deterministically", () 
     ({ salience }) => salience.state.level === "focus"
   ));
   assert.deepEqual(after, replay);
+  assert.notEqual(before.presentationRevision, after.presentationRevision);
   const crossSurface = projectKpFractionCompositionSalienceScene({
     ...input,
     phaseProgress: 0.5,
