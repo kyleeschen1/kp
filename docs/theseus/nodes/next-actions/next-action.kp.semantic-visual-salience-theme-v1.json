@@ -355,6 +355,20 @@
       "scope": "control-plane",
       "checkedAt": "2026-08-06T10:49:01.711Z",
       "notes": "Validated 897 nodes and 18331 events with s19 still held at the mandatory human checkpoint."
+    },
+    {
+      "command": "npm-run-visual-economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s20-reviewed-visual-states",
+      "checkedAt": "2026-08-06T11:08:23.841Z",
+      "notes": "12-Chromium-cases-passed"
+    },
+    {
+      "command": "npm-run-test-economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s20-focused-regression",
+      "checkedAt": "2026-08-06T11:08:24.921Z",
+      "notes": "15-tests-passed"
     }
   ],
   "expectedLearning": [
