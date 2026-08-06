@@ -113,7 +113,8 @@
     {
       "id": "s09",
       "title": "Add framework-neutral economics state adapter",
-      "status": "planned"
+      "summary": "Added a pure economics adapter mapping ten existing graph and equation objects from focus target plus cumulative scene state into shared roles, identity families, salience, and presence without paint or timing authority.",
+      "status": "complete"
     },
     {
       "id": "s10",
