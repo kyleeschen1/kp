@@ -21,6 +21,31 @@ export interface KpVisualThemeContract {
   };
 }
 
+export const kpVisualThemeContracts = Object.freeze({
+  dark: createKpVisualThemeContract({
+    id: "dark",
+    roleSources: roleSources(),
+    identitySources: identitySources(),
+    optical: {
+      hairlinePx: 1,
+      strokePx: 1.5,
+      contextOpacityFloor: 0.62,
+      dimOpacityFloor: 0.36
+    }
+  }),
+  light: createKpVisualThemeContract({
+    id: "light",
+    roleSources: roleSources(),
+    identitySources: identitySources(),
+    optical: {
+      hairlinePx: 1.25,
+      strokePx: 1.8,
+      contextOpacityFloor: 0.72,
+      dimOpacityFloor: 0.5
+    }
+  })
+});
+
 export function createKpVisualThemeContract(
   input: KpVisualThemeContract
 ): KpVisualThemeContract {
@@ -72,4 +97,28 @@ function deepFreeze<T extends KpVisualThemeContract>(input: T): T {
   Object.freeze(input.identitySources);
   Object.freeze(input.optical);
   return Object.freeze(input);
+}
+
+function roleSources(): Record<KpSemanticVisualRole, string> {
+  return {
+    page: "neutral.page",
+    ink: "neutral.ink",
+    structure: "neutral.line",
+    "data-series": "identity.normal",
+    relation: "neutral.secondary",
+    warning: "identity.rose",
+    focus: "identity.focus"
+  };
+}
+
+function identitySources(): Record<KpSalienceIdentityFamily, string> {
+  return {
+    neutral: "neutral.ink",
+    cyan: "identity.cyan",
+    blue: "identity.blue",
+    violet: "identity.violet",
+    rose: "identity.rose",
+    amber: "identity.amber",
+    green: "identity.green"
+  };
 }

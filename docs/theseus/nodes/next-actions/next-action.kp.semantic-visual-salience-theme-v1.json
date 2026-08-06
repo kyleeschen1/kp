@@ -89,6 +89,13 @@
       "scope": "s06 handoff palette sources",
       "checkedAt": "2026-08-06T07:23:32.556Z",
       "notes": "Eleven tests pass; retained page grounds, all six handoff identity families, five salience bands, complete dark/light coverage, and focus/ink contrast floors are executable."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s07 exhaustive recipe matrix",
+      "checkedAt": "2026-08-06T07:26:50.449Z",
+      "notes": "Fourteen tests pass; all 84 dark/light role-level cells exist, preserve ordered hierarchy and absence, and compile deterministically with theme-specific optical floors."
     }
   ],
   "expectedLearning": [

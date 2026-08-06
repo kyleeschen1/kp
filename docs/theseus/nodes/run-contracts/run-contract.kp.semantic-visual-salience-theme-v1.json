@@ -101,7 +101,8 @@
     {
       "id": "s07",
       "title": "Define exhaustive role by salience recipes",
-      "status": "planned"
+      "summary": "Compiled exhaustive role-by-salience recipes across both themes with bounded color-source, opacity, stroke-scale, detail, label, and rendered channels and no caller CSS.",
+      "status": "complete"
     },
     {
       "id": "s08",
