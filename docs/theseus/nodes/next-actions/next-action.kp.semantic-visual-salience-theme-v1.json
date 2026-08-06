@@ -390,6 +390,20 @@
       "scope": "s21-first-caller-preservation",
       "checkedAt": "2026-08-06T11:32:44.747Z",
       "notes": "8-adapter-and-style-tests-pass"
+    },
+    {
+      "command": "npm-run-test-fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s22-exact-inventory",
+      "checkedAt": "2026-08-06T11:39:42.359Z",
+      "notes": "59-tests-pass-including-14-endpoints-13-transitions-and-6-checkpoints"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s22-static-boundary",
+      "checkedAt": "2026-08-06T11:39:49.191Z",
+      "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
     }
   ],
   "expectedLearning": [

@@ -11,8 +11,8 @@ import {
   createKpFractionCompositionEvaluationTree
 } from "../../semantic/fraction-composition-evaluation-tree.ts";
 import {
-  semanticTransformationLeafRefs
-} from "../../semantic/transformation-composition.ts";
+  createKpFractionCompositionSalienceInventory
+} from "./fraction-composition-salience-inventory.ts";
 
 export interface KpFractionCompositionTranscriptEntry {
   readonly beatId: string;
@@ -40,25 +40,9 @@ export function compileKpFractionCompositionLessonModel(markdown: string) {
     throw new Error("Fraction composition lesson requires one animation story.");
   }
   const tree = createKpFractionCompositionEvaluationTree();
-  const root = tree.root;
-  if (root.kind !== "sequence") {
-    throw new Error("Fraction composition transcript requires a sequence root.");
-  }
-  const checkpoints = [
-    "factored",
-    "normalized",
-    "constant-quotient",
-    "difference-simplified",
-    "right-product-simplified",
-    "solved"
-  ] as const;
-  const operationsByCheckpoint = new Map(checkpoints.map(
-    (checkpointId, index) => [
-      checkpointId,
-      index === 0
-        ? []
-        : semanticTransformationLeafRefs(root.children[index - 1]!)
-    ] as const
+  const inventory = createKpFractionCompositionSalienceInventory();
+  const operationsByCheckpoint = new Map(inventory.checkpoints.map(
+    ({ id, operationIds }) => [id, operationIds] as const
   ));
   const transcript = Object.freeze(story.beats.map((beat) => Object.freeze({
     beatId: beat.id,
@@ -68,9 +52,9 @@ export function compileKpFractionCompositionLessonModel(markdown: string) {
       inline.kind === "text" ? inline.value : inline.text
     ).join(""),
     operationIds: Object.freeze(
-      (operationsByCheckpoint.get(
-        beat.checkpoint.id as typeof checkpoints[number]
-      ) ?? []).map(({ id }) => id)
+      operationsByCheckpoint.get(
+        beat.checkpoint.id as typeof inventory.checkpoints[number]["id"]
+      ) ?? []
     )
   })));
 
