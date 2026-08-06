@@ -2,13 +2,17 @@
   "id": "next-action.kp.semantic-visual-salience-theme-v1",
   "kind": "next-action",
   "title": "Semantic visual salience theme exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "visual-salience",
   "summary": "Execute the approved exemplar-first economics theme and salience system, then pressure-test fraction-composition algebra only after human approval.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-05-semantic-visual-salience-theme-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-06-semantic-visual-salience-theme-closeout.md"
     }
   ],
   "dependsOn": {
@@ -495,6 +499,97 @@
       "scope": "s27-production-boundary",
       "checkedAt": "2026-08-06T12:37:16.184Z",
       "notes": "Production-build-passed-with-salience-adapter-7.44-kB-and-DOM-theme-adapter-0.95-kB-uncompressed-chunks"
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "shared-semantic-laws",
+      "checkedAt": "2026-08-06T12:59:03.823Z",
+      "notes": "20-focused-tests-pass"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics-semantic-runtime",
+      "checkedAt": "2026-08-06T12:59:05.472Z",
+      "notes": "61-focused-tests-pass"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "economics-style-ownership",
+      "checkedAt": "2026-08-06T12:59:06.541Z",
+      "notes": "15-focused-tests-pass"
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "economics-canonical-visual",
+      "checkedAt": "2026-08-06T12:59:07.537Z",
+      "notes": "12-Chromium-cases-pass"
+    },
+    {
+      "command": "npm run test:operation-evaluation-presentation",
+      "status": "passed",
+      "scope": "fraction-operation-presentation",
+      "checkedAt": "2026-08-06T12:59:10.881Z",
+      "notes": "22-focused-tests-pass"
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "fraction-architecture",
+      "checkedAt": "2026-08-06T12:59:12.589Z",
+      "notes": "63-focused-tests-pass"
+    },
+    {
+      "command": "npm run visual:fraction-composition-salience",
+      "status": "passed",
+      "scope": "fraction-salience-visual",
+      "checkedAt": "2026-08-06T12:59:15.920Z",
+      "notes": "5-Chromium-cases-pass"
+    },
+    {
+      "command": "npm run test:browser:fraction-composition",
+      "status": "passed",
+      "scope": "fraction-browser-release",
+      "checkedAt": "2026-08-06T12:59:17.869Z",
+      "notes": "8-Chromium-cases-pass"
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "fraction-hot-path",
+      "checkedAt": "2026-08-06T12:59:20.664Z",
+      "notes": "Warm-rapid-seek-has-zero-salience-compilation-and-zero-DOM-paint"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-08-06T12:59:22.969Z",
+      "notes": "TypeScript-Svelte-and-domain-types-pass"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-06T12:59:27.366Z",
+      "notes": "Production-build-passes-with-existing-large-chunk-warning"
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "known-economics-payload-debt",
+      "checkedAt": "2026-08-06T12:59:29.641Z",
+      "notes": "Unchanged-budget-remains-red-at-274910-transfer-152794-script-and-46-resources-while-active-motion-and-CLS-remain-green"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-08-06T12:59:54.585Z",
+      "notes": "897-nodes-and-18400-events-valid-before-final-slice-close"
     }
   ],
   "expectedLearning": [

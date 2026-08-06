@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-05
+Last Updated: 2026-08-06
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -24,6 +24,17 @@ semantics first
 -> renderers third
 -> authoring and generation fourth
 ```
+
+The semantic visual-salience theme run is now complete. Economics SVG is the
+human-approved first caller and native-KaTeX fraction composition is the
+structurally different second caller. They share one framework-neutral role,
+state, theme, and treatment seam while retaining renderer-specific paint and
+domain truth. Direct seek and rewind, light/dark themes, forced colors, reduced
+motion, static publication, and a cached no-op DOM paint path are verified.
+The implementation boundary, release evidence, and exclusions are recorded in
+`reviews/2026-08-06-semantic-visual-salience-theme-closeout.md`. This is not a
+catalogue-wide, Canvas, WebGL, or Graph3D rollout, and it does not clear the
+remaining economics payload budget.
 
 The accepted long-term plan is recorded in
 `decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
@@ -309,6 +320,15 @@ return to the exemplar, second caller, then adjacent pruning. This prevents
 both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
+
+**The semantic visual-salience theme run is complete.** The immediate proposed
+successor is a bounded lesson-card authoring proof, recorded in
+`reviews/2026-08-06-lesson-card-editor-next-step-review.md`: one active
+CodeMirror editor, semantic-object-ID autocomplete, typed add/delete/reorder,
+and structured versioned persistence. It is not yet an executable run contract
+and does not activate the full Internal Studio, SvelteKit, arbitrary Svelte
+evaluation, or public authoring. The stable animation-promotion rank remains
+unchanged.
 
 **The code-native S-expression Lisp tutorial is at its mandatory slice-25 human
 visual checkpoint; two later slices remain approval-gated.** The exact
@@ -660,29 +680,33 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Review the completed publication/page-scale/graph-runtime tranche at its
+1. Approve and execute the bounded lesson-card authoring proof: one active
+   CodeMirror editor, semantic-object-ID autocomplete, typed card commands, and
+   a versioned framework-neutral lesson record. Keep lifecycle metadata,
+   arbitrary code, full Internal Studio, and public persistence deferred.
+2. Review the completed publication/page-scale/graph-runtime tranche at its
    required human checkpoint. Inspect the preserved economics two-column
    reference and the existing internal Graph3D host; do not infer a visual
    redesign from infrastructure completion.
-2. Schedule zero additional broad infrastructure passes. Return to visible
+3. Schedule zero additional broad infrastructure passes. Return to visible
    exemplar work; permit at most one bounded infrastructure repair only when a
    real next caller demonstrates a failed generic invariant.
-3. Review the code-native S-expression choreography, especially recursive
+4. Review the code-native S-expression choreography, especially recursive
    ownership, binding/evaluation causality, timing, rewind, and phone behavior.
-4. After explicit S-expression approval, run the repeated-variable pressure
+5. After explicit S-expression approval, run the repeated-variable pressure
    caller and botanical-renderer retirement slices.
-5. Select a nearer non-linear-algebra transformation when animation-library
+6. Select a nearer non-linear-algebra transformation when animation-library
    promotion resumes; place-value subtraction remains the recommended default.
-6. Let that visible caller determine whether another narrow Graph2D, Graph3D,
+7. Let that visible caller determine whether another narrow Graph2D, Graph3D,
    publication, or page-scale seam is actually required. Do not pre-schedule a
    universal renderer or compositor pass.
-7. After lesson-layout approval and a structurally different layout caller,
+8. After lesson-layout approval and a structurally different layout caller,
    decide whether the one-axis grammar should replace the split default.
-8. Later use generated solve-x as a third semantic lesson caller before broad
+9. Later use generated solve-x as a third semantic lesson caller before broad
    lesson rollout or public tutorial API declaration.
-9. Keep SvelteKit/Public Web deferred until those caller and publication gates
+10. Keep SvelteKit/Public Web deferred until those caller and publication gates
    pass.
-10. Complete M4 before internal M5 editorial candidates, and build the
+11. Complete M4 before internal M5 editorial candidates, and build the
    constrained Public Editor only after internal authoring, publication,
    untrusted-text, and public safety contracts pass.
 

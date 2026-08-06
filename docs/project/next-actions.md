@@ -1,18 +1,24 @@
 # KP Next Actions
 
-Last Updated: 2026-08-05
+Last Updated: 2026-08-06
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
+1. Approve a bounded lesson-card editor loop from
+   `reviews/2026-08-06-lesson-card-editor-next-step-review.md`: one active
+   CodeMirror instance, semantic-object-ID autocomplete, typed add/delete/
+   reorder commands, and a versioned framework-neutral lesson record. Do not
+   expand it into arbitrary Svelte execution, full Internal Studio, SvelteKit,
+   database persistence, or public authoring.
+2. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
    promotion rank. While that frontier is paused, human-review the code-native
    S-expression tutorial at its mandatory slice-25 checkpoint. Do not start
    the repeated-variable caller or botanical retirement without explicit
    approval.
-2. Compare the approved economics split presentation with
+3. Compare the approved economics split presentation with
    `/tutorials/economics/demand-shift/?layout=inline-sticky`, including wide
    stage bleed and opaque page-colored occlusion, paragraph-owned attention
    and motion, no prose fade or synthetic scene tracks, exact `50vh` paragraph
@@ -25,25 +31,25 @@ with source refs, verification, run-contract slices, and completion evidence.
    its bottom switch, the top-aligned `50vh` stage, and the full-bleed grey
    threshold. Confirm the retained `?theme=light` state preserves geometry and
    legibility. The layout proof is not the default or a shared API.
-3. If the S-expression visual is approved, complete only the contract's final
+4. If the S-expression visual is approved, complete only the contract's final
    repeated-variable pressure and botanical-retirement slices.
-4. If the inline-sticky economics proof is approved, pressure its lifecycle
+5. If the inline-sticky economics proof is approved, pressure its lifecycle
    and fit contract with one structurally different lesson before changing the
    shared shell or default presentation.
-5. Use generated solve-x later as the third semantic lesson caller before a
+6. Use generated solve-x later as the third semantic lesson caller before a
    broad lesson rollout or public tutorial API declaration.
-6. When animation promotion resumes, choose among place-value subtraction,
+7. When animation promotion resumes, choose among place-value subtraction,
    fraction equivalence, function-coordinate transformations, and geometric
    dissection; the recommended default remains `402 - 178 = 224`.
-7. Explicitly replace or waive the old matrix-specific host-pressure gate
+8. Explicitly replace or waive the old matrix-specific host-pressure gate
    before generalizing the Svelte seam or adopting SvelteKit.
-8. Build Internal Studio v0 after that decision, then freeze the portable
+9. Build Internal Studio v0 after that decision, then freeze the portable
    publication bundle and establish Public Web v0 with a small curated lesson
    set rather than every internally hostable catalogue row.
-9. Complete M4 context-specific encoding before M5 internal editorial
+10. Complete M4 context-specific encoding before M5 internal editorial
    candidates. Build the constrained Public Editor only after internal
    authoring, publication, untrusted-text, and public safety contracts pass.
-10. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
+11. Keep Graph3D mesh-to-donut and the programming addition/comparison internal.
    Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot

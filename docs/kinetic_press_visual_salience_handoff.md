@@ -11,6 +11,50 @@
 
 ---
 
+# Implemented boundary as of 2026-08-06
+
+The first portable semantic visual-treatment seam is implemented and proven by
+two structurally different callers:
+
+- the economics demand-shift SVG is the reviewed first caller;
+- the fraction-composition reader is the second caller and binds the same
+  treatment to native KaTeX-owned DOM.
+
+The shared boundary is framework-neutral. A pure facade resolves semantic role,
+identity family, salience, and presence into a complete visual treatment; thin
+renderer adapters translate that treatment into SVG or DOM/KaTeX paint. Theme
+data supplies separate dark and light optical systems. Forced-colors falls back
+to system colors and a non-color underline distinction. Svelte may host these
+callers, but it does not own their semantic state, treatment resolution, clock,
+or renderer contract.
+
+The fraction caller proves several additional constraints:
+
+- one reader clock determines checkpoint attention;
+- instructional attention lineage is distinct from semantic preservation
+  lineage, so persistent identity does not force every retained term to remain
+  focused;
+- direct seek and rewind resolve the same endpoint treatment;
+- native KaTeX remains the sole settled typography and accessibility owner;
+- repeated endpoint projections are cached, and unchanged presentation
+  revisions skip DOM paint;
+- CSS does not introduce a second animation clock between deterministic
+  endpoints.
+
+This is a deliberately narrow promotion. It does **not** claim a catalogue-wide
+rollout, a universal focus store, or implemented Canvas, WebGL, or Graph3D
+adapters. Sections 11.4 and 12 remain design guidance until a real caller proves
+those renderer seams. The broader canonical fraction compositor also still
+rebuilds its session 30 times in the existing rapid-seek pressure test even
+though material churn is zero; this salience run did not redesign that cadence.
+The economics production payload gate also remains red under its unchanged
+budget, so the visual-system promotion is not a bundle-release claim.
+
+Durable implementation and release evidence are recorded in
+`docs/project/reviews/2026-08-06-semantic-visual-salience-theme-closeout.md`.
+
+---
+
 # 1. Product-level visual idea
 
 Kinetic Press should be understood as a system for **choreographing attention through persistent formal objects**.

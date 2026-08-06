@@ -2,9 +2,9 @@
   "id": "run-contract.kp.semantic-visual-salience-theme-v1",
   "kind": "run-contract",
   "title": "Semantic visual salience theme system",
-  "status": "ready",
+  "status": "resolved",
   "domain": "visual-salience",
-  "summary": "User-approved 28-slice exemplar-first run with a mandatory economics visual checkpoint before shared promotion and algebra.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -227,7 +227,8 @@
     {
       "id": "s28",
       "title": "Record standards evidence and closeout",
-      "status": "planned"
+      "summary": "Recorded-two-caller-standards-promotion-evidence-final-green-matrix-and-explicit-economics-payload-compositor-and-unimplemented-renderer-debt",
+      "status": "complete"
     }
   ]
 }
