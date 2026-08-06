@@ -77,7 +77,8 @@
     {
       "id": "s03",
       "title": "Define semantic salience state vocabulary",
-      "status": "planned"
+      "summary": "Defined renderer-neutral focus, normal, context, dim, ghost, and absent states with identity families, normalized presence, exact-field validation, and all-pairs reversible transitions.",
+      "status": "complete"
     },
     {
       "id": "s04",

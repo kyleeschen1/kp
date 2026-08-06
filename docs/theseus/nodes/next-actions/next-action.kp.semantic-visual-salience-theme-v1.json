@@ -61,6 +61,13 @@
       "scope": "s02 capture manifest",
       "checkedAt": "2026-08-06T07:11:24.759Z",
       "notes": "Twelve CSS ownership, visual baseline, and stable capture-name checks pass."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s03 semantic state laws",
+      "checkedAt": "2026-08-06T07:15:08.296Z",
+      "notes": "Three tests cover the canonical level and identity vocabulary, reject renderer/timing fields, and prove every endpoint supports direct seek and reversal."
     }
   ],
   "expectedLearning": [
