@@ -4,7 +4,7 @@ import type {
 } from "./economics-demand-shift-lesson-compiler.ts";
 import {
   renderKpEconomicsDemandShiftInlineMarkdown
-} from "./economics-demand-shift-lesson-compiler.ts";
+} from "./economics-demand-shift-inline-markdown.ts";
 import type {
   KpEconomicsMotionBlockId
 } from "./economics-demand-shift-motion-blocks.ts";

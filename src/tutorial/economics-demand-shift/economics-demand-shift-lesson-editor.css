@@ -1,0 +1,136 @@
+/* Internal lesson-editor chrome owns author-only controls without changing publication or graph geometry. */
+.kp-economics-tutorial[data-kp-economics-lesson-editor-open="true"]
+  .kp-economics-tutorial__passage {
+  cursor: text;
+}
+
+.kp-economics-tutorial__passage-select {
+  appearance: none;
+  position: absolute;
+  inset-block-start: 0.45rem;
+  inset-inline-end: 0;
+  border: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-control-border);
+  border-radius: 0;
+  padding: 0.25rem 0.45rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  font: 400 0.72rem/1 var(--kp-economics-non-katex-font-family);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.kp-economics-tutorial__passage-select[aria-pressed="true"] {
+  border-color: var(--kp-lesson-theme-reader-rail);
+  color: var(--kp-lesson-theme-strong-ink);
+}
+
+.kp-economics-lesson-editor {
+  position: relative;
+  z-index: 3;
+  margin-block: 0 1rem;
+  border-block: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-panel-border);
+  color: var(--kp-lesson-theme-ink);
+  background: color-mix(
+    in srgb,
+    var(--kp-lesson-theme-control-surface) 94%,
+    transparent
+  );
+  contain: layout paint;
+}
+
+.kp-economics-lesson-editor__heading,
+.kp-economics-lesson-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+}
+
+.kp-economics-lesson-editor__heading {
+  justify-content: space-between;
+  color: var(--kp-lesson-theme-panel-label);
+  font: 400 0.74rem/1.35 var(--kp-economics-non-katex-font-family);
+}
+
+.kp-economics-lesson-editor__heading code {
+  color: var(--kp-lesson-theme-strong-ink);
+  font: 400 0.72rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-economics-lesson-editor__surface {
+  min-block-size: 9rem;
+  border-inline-start: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-reader-rail);
+  background: var(--kp-lesson-theme-page);
+}
+
+.kp-economics-lesson-editor__fallback {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-block-size: 9rem;
+  resize: vertical;
+  border: 0;
+  padding: 0.75rem;
+  color: var(--kp-lesson-theme-ink);
+  background: transparent;
+  font: 400 0.82rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-economics-lesson-editor__fallback--hidden {
+  display: none;
+}
+
+.kp-economics-lesson-editor__surface .cm-editor {
+  min-block-size: 9rem;
+}
+
+.kp-economics-lesson-editor__validation {
+  min-block-size: 1.1rem;
+  margin: 0;
+  padding-block: 0.4rem;
+  color: var(--kp-lesson-theme-panel-label);
+  font: 400 0.72rem/1.4 var(--kp-economics-non-katex-font-family);
+}
+
+.kp-economics-lesson-editor__actions {
+  border-block-start: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-subtle-border);
+}
+
+.kp-economics-lesson-editor__actions button {
+  appearance: none;
+  border: var(--kp-graph-line-effective) solid
+    var(--kp-lesson-theme-control-border);
+  border-radius: 0;
+  padding: 0.45rem 0.65rem;
+  color: var(--kp-lesson-theme-control-ink);
+  background: var(--kp-lesson-theme-control-surface);
+  font: 400 0.78rem/1 var(--kp-economics-non-katex-font-family);
+  cursor: pointer;
+}
+
+.kp-economics-lesson-editor__actions button:hover {
+  border-color: var(--kp-lesson-theme-control-accent);
+}
+
+.kp-economics-lesson-editor__actions button:focus-visible,
+.kp-economics-tutorial__passage-select:focus-visible {
+  outline: 2px solid var(--kp-lesson-theme-focus);
+  outline-offset: 2px;
+}
+
+.kp-economics-lesson-editor__actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 59.999rem) {
+  .kp-economics-tutorial__passage-select {
+    position: static;
+    margin-block-end: 0.5rem;
+  }
+}

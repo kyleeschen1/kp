@@ -1,0 +1,43 @@
+{
+  "id": "next-action.kp.economics-codemirror-editor-exemplar",
+  "kind": "next-action",
+  "title": "Add an internal CodeMirror lesson editor exemplar",
+  "status": "resolved",
+  "summary": "Bounded economics editor exemplar implemented and verified; promotion to shared lesson-authoring infrastructure remains a human visual and workflow decision.",
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-06T18:42:39.930Z"
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-06T18:42:46.277Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test --config playwright.economics-demand-shift-performance.config.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "production-performance",
+      "checkedAt": "2026-08-06T18:42:51.798Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "focused-styles",
+      "checkedAt": "2026-08-06T18:42:58.212Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-06T18:43:05.712Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Economics now has one internal CodeMirror passage editor exemplar with local draft persistence, add/duplicate/move/delete/reset actions, semantic ID completion, live KaTeX preview, and last-valid fallback. Editor shell, draft runtime, preview compiler, KaTeX, CSS, and CodeMirror load only after Edit is requested; the learner route remains within its existing production budgets at 249885 transfer bytes, 149998 script bytes, 42 resources, and zero CLS."
+  }
+}

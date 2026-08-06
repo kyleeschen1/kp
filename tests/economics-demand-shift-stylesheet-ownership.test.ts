@@ -11,6 +11,7 @@ const ownedStylesheets = [
   "economics-demand-shift-theme.css",
   "economics-demand-shift-publication.css",
   "economics-demand-shift-controls.css",
+  "economics-demand-shift-lesson-editor.css",
   "economics-demand-shift-graph.css",
   "economics-demand-shift-publication-responsive.css",
   "economics-demand-shift-inline-sticky.css",
@@ -24,6 +25,9 @@ function read(name: string): string {
 
 test("economics stylesheet entry preserves one explicit ownership cascade", () => {
   const entry = read("economics-demand-shift-tutorial.css");
+  const learnerStylesheets = ownedStylesheets.filter(
+    (name) => name !== "economics-demand-shift-lesson-editor.css"
+  );
   assert.equal(entry.includes("{"), false);
   assert.deepEqual(
     [...entry.matchAll(/@import "([^"]+)";/g)].map((match) => match[1]),
@@ -31,8 +35,12 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
       "../kp-tutorial-lesson-shell.css",
       "../kp-tutorial-motion-bridge.css",
       "../kp-tutorial-semantic-transit.css",
-      ...ownedStylesheets.map((name) => `./${name}`)
+      ...learnerStylesheets.map((name) => `./${name}`)
     ]
+  );
+  assert.match(
+    read("KpEconomicsPassageEditor.svelte"),
+    /import "\.\/economics-demand-shift-lesson-editor\.css";/
   );
   for (const name of ownedStylesheets) {
     assert.match(read(name), /^\/\* [^\n]+ \*\//);

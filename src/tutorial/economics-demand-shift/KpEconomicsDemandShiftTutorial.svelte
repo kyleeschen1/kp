@@ -138,7 +138,11 @@
   } from "../kp-tutorial-toc.ts";
   import { serializeKpTutorialDestinationHash } from "../kp-tutorial-url.ts";
   import KpTutorialLessonShell from "../KpTutorialLessonShell.svelte";
+  import type KpEconomicsPassageEditor from "./KpEconomicsPassageEditor.svelte";
   import KpInlineMath from "./KpInlineMath.svelte";
+  import type {
+    KpEconomicsLessonDraftState
+  } from "./economics-demand-shift-lesson-draft.ts";
   import {
     resolveKpEconomicsDemandShiftTocDestination
   } from "./economics-demand-shift-toc.ts";
@@ -289,6 +293,33 @@
   let theme = $state(untrack(() => initialTheme));
   const twoColumnParagraphGapVh = kpEconomicsTwoColumnParagraphGapDefaultVh;
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
+  const publicationTwoColumnPassageIds = new Set(
+    untrack(() => twoColumnParagraphs.map(({ id }) => id))
+  );
+  let lessonDraft = $state<KpEconomicsLessonDraftState | undefined>();
+  let lessonDraftRuntime:
+    typeof import("./economics-demand-shift-lesson-draft.ts") | undefined;
+  let editableTwoColumnParagraphs = $state(untrack(() => twoColumnParagraphs));
+  let lessonEditorOpen = $state(false);
+  let LessonPassageEditor = $state<
+    typeof KpEconomicsPassageEditor | undefined
+  >();
+  let lessonEditorGeometryRefreshPending = false;
+  let lessonEditorCompileRevision = 0;
+  let lessonEditorValidation = $state("");
+  let selectedLessonDraftPassage = $derived(
+    lessonDraft?.passages.find(({ id }) => id === lessonDraft?.selectedPassageId)
+  );
+  let selectedLessonDraftIndex = $derived(
+    lessonDraft?.passages.findIndex(({ id }) =>
+      id === lessonDraft?.selectedPassageId
+    ) ?? -1
+  );
+  let selectedLessonDraftIsPublished = $derived(
+    lessonDraft === undefined
+      ? false
+      : publicationTwoColumnPassageIds.has(lessonDraft.selectedPassageId)
+  );
   let ready = $state(false);
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
@@ -758,6 +789,172 @@
     // Asset replacement resamples the current shared playhead; it must not
     // invent a seek that advances whichever lesson block owns attention.
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
+  }
+
+  function toggleLessonEditor(): void {
+    lessonEditorOpen = !lessonEditorOpen;
+    if (lessonEditorOpen) void loadLessonEditor();
+    scheduleLessonEditorGeometryRefresh();
+  }
+
+  async function loadLessonEditor(): Promise<void> {
+    if (LessonPassageEditor === undefined || lessonDraftRuntime === undefined) {
+      const [componentModule, draftModule] = await Promise.all([
+        import("./KpEconomicsPassageEditor.svelte"),
+        import("./economics-demand-shift-lesson-draft.ts")
+      ]);
+      LessonPassageEditor = componentModule.default;
+      lessonDraftRuntime = draftModule;
+    }
+    if (lessonDraft === undefined) {
+      const serialized = window.localStorage.getItem(
+        lessonDraftRuntime.kpEconomicsLessonDraftStorageKey
+      );
+      const retained = lessonDraftRuntime.readKpEconomicsLessonDraft({
+        serialized,
+        publicationPassages: twoColumnParagraphs
+      });
+      lessonDraft = retained ?? lessonDraftRuntime.createKpEconomicsLessonDraft(
+        twoColumnParagraphs
+      );
+      if (retained !== undefined) {
+        void compileAndPresentLessonDraft(retained);
+      } else if (serialized !== null) {
+        lessonEditorValidation =
+          lessonDraftRuntime.kpEconomicsLessonDraftMessages.invalidStored;
+      }
+    }
+    if (attentionPassageId !== undefined && lessonDraft !== undefined &&
+        lessonDraft.passages.some(({ id }) => id === attentionPassageId)) {
+      lessonDraft = lessonDraftRuntime.selectKpEconomicsLessonDraftPassage(
+        lessonDraft,
+        attentionPassageId
+      );
+    }
+    scheduleLessonEditorGeometryRefresh();
+  }
+
+  function selectLessonDraftPassage(passageId: string): void {
+    if (!lessonEditorOpen || lessonDraftRuntime === undefined ||
+        lessonDraft === undefined) return;
+    lessonDraft = lessonDraftRuntime.selectKpEconomicsLessonDraftPassage(
+      lessonDraft,
+      passageId
+    );
+    persistLessonDraft(lessonDraft);
+  }
+
+  function updateLessonDraftSource(sourceText: string): void {
+    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
+    const next = lessonDraftRuntime.updateKpEconomicsLessonDraftSource({
+      draft: lessonDraft,
+      passageId: lessonDraft.selectedPassageId,
+      sourceText
+    });
+    lessonDraft = next;
+    persistLessonDraft(next);
+    compileAndPresentLessonDraft(next);
+  }
+
+  function addLessonDraftPassageAfter(): void {
+    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
+    applyLessonDraftOperation(lessonDraftRuntime.addKpEconomicsLessonDraftPassageAfter(
+      lessonDraft,
+      lessonDraft.selectedPassageId
+    ));
+  }
+
+  function duplicateLessonDraftPassage(): void {
+    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
+    applyLessonDraftOperation(lessonDraftRuntime.duplicateKpEconomicsLessonDraftPassage(
+      lessonDraft,
+      lessonDraft.selectedPassageId
+    ));
+  }
+
+  function deleteLessonDraftPassage(): void {
+    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
+    applyLessonDraftOperation(lessonDraftRuntime.deleteKpEconomicsLessonDraftPassage({
+      draft: lessonDraft,
+      passageId: lessonDraft.selectedPassageId,
+      publicationPassageIds: publicationTwoColumnPassageIds
+    }));
+  }
+
+  function moveLessonDraftPassage(direction: -1 | 1): void {
+    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
+    applyLessonDraftOperation(lessonDraftRuntime.moveKpEconomicsLessonDraftPassage({
+      draft: lessonDraft,
+      passageId: lessonDraft.selectedPassageId,
+      direction,
+      publicationPassageIds: publicationTwoColumnPassageIds
+    }));
+  }
+
+  function resetLessonDraft(): void {
+    if (lessonDraftRuntime === undefined) return;
+    window.localStorage.removeItem(
+      lessonDraftRuntime.kpEconomicsLessonDraftStorageKey
+    );
+    const reset = lessonDraftRuntime.createKpEconomicsLessonDraft(
+      twoColumnParagraphs
+    );
+    lessonDraft = reset;
+    editableTwoColumnParagraphs = twoColumnParagraphs;
+    lessonEditorValidation = lessonDraftRuntime.kpEconomicsLessonDraftMessages.reset;
+    scheduleLessonEditorGeometryRefresh();
+  }
+
+  function applyLessonDraftOperation(
+    next: KpEconomicsLessonDraftState
+  ): void {
+    lessonDraft = next;
+    persistLessonDraft(next);
+    compileAndPresentLessonDraft(next);
+  }
+
+  function persistLessonDraft(draft: KpEconomicsLessonDraftState): void {
+    if (lessonDraftRuntime === undefined) return;
+    try {
+      window.localStorage.setItem(
+        lessonDraftRuntime.kpEconomicsLessonDraftStorageKey,
+        lessonDraftRuntime.serializeKpEconomicsLessonDraft(draft)
+      );
+    } catch {
+      lessonEditorValidation =
+        lessonDraftRuntime.kpEconomicsLessonDraftMessages.persistenceFailed;
+    }
+  }
+
+  async function compileAndPresentLessonDraft(
+    draft: KpEconomicsLessonDraftState
+  ): Promise<void> {
+    const revision = ++lessonEditorCompileRevision;
+    try {
+      const { compileKpEconomicsLessonDraftPassages } = await import(
+        "./economics-demand-shift-lesson-draft-compiler.ts"
+      );
+      const compiled = compileKpEconomicsLessonDraftPassages(draft);
+      if (revision !== lessonEditorCompileRevision) return;
+      editableTwoColumnParagraphs = compiled;
+      lessonEditorValidation =
+        lessonDraftRuntime!.kpEconomicsLessonDraftMessages.compiled;
+      scheduleLessonEditorGeometryRefresh();
+    } catch (error) {
+      if (revision !== lessonEditorCompileRevision) return;
+      lessonEditorValidation = error instanceof Error
+        ? error.message
+        : lessonDraftRuntime!.kpEconomicsLessonDraftMessages.compileFailed;
+    }
+  }
+
+  function scheduleLessonEditorGeometryRefresh(): void {
+    if (lessonEditorGeometryRefreshPending) return;
+    lessonEditorGeometryRefreshPending = true;
+    void tick().then(() => {
+      lessonEditorGeometryRefreshPending = false;
+      updateInlineStickyLayoutProjection();
+    });
   }
 
   function toggleTheme(): void {
@@ -2378,6 +2575,37 @@
       : `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
     }
   >
+    {#if lessonEditorOpen && lessonDraft !== undefined &&
+        twoColumnScroll && scrollCue}
+      <button
+        type="button"
+        class="kp-economics-tutorial__passage-select"
+        aria-label={`Edit passage ${passage.id}`}
+        aria-pressed={lessonDraft.selectedPassageId === passage.id}
+        data-kp-economics-passage-select={passage.id}
+        onclick={() => selectLessonDraftPassage(passage.id)}
+      >Edit</button>
+      {#if lessonDraft.selectedPassageId === passage.id &&
+          LessonPassageEditor !== undefined}
+        <LessonPassageEditor
+          passageId={passage.id}
+          value={selectedLessonDraftPassage!.sourceText}
+          validationMessage={lessonEditorValidation}
+          canDelete={!selectedLessonDraftIsPublished}
+          canMovePrevious={!selectedLessonDraftIsPublished &&
+            selectedLessonDraftIndex > 0}
+          canMoveNext={!selectedLessonDraftIsPublished &&
+            selectedLessonDraftIndex < lessonDraft.passages.length - 1}
+          onChange={updateLessonDraftSource}
+          onAddAfter={addLessonDraftPassageAfter}
+          onDuplicate={duplicateLessonDraftPassage}
+          onDelete={deleteLessonDraftPassage}
+          onMovePrevious={() => moveLessonDraftPassage(-1)}
+          onMoveNext={() => moveLessonDraftPassage(1)}
+          onReset={resetLessonDraft}
+        />
+      {/if}
+    {/if}
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}
         <span
@@ -2509,6 +2737,13 @@
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-tutorial-theme": theme,
+    "data-kp-economics-lesson-editor-open": lessonEditorOpen
+      ? "true"
+      : "false",
+    "data-kp-economics-lesson-editor-selected": lessonEditorOpen &&
+        lessonDraft !== undefined
+      ? lessonDraft.selectedPassageId
+      : "",
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
     "data-kp-animation-catalogue": true,
@@ -2624,7 +2859,7 @@
                 ></span>
                 <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll
-                    ? twoColumnParagraphs
+                    ? editableTwoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {#if motionBridgeEnabled &&
                         passage.id === motionBridge?.beforePassageId}
@@ -2680,6 +2915,13 @@
         <span aria-hidden="true">⇄</span>
         <span>Text {twoColumnTextSide}</span>
       </button>
+      <button
+        class="kp-economics-tutorial__column-toggle"
+        type="button"
+        aria-pressed={lessonEditorOpen}
+        data-kp-economics-lesson-editor-toggle
+        onclick={toggleLessonEditor}
+      >{lessonEditorOpen ? "Done" : "Edit"}</button>
     {/if}
     <button
       class="kp-economics-tutorial__theme-toggle"
