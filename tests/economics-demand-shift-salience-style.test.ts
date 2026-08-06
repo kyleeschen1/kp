@@ -42,7 +42,7 @@ test("theme projection changes recipes without adding layout authority", () => {
   assert.doesNotMatch(serialized, /(?:width|height|inset|gap|top|left|right|bottom):/);
 });
 
-test("economics route mounts the semantic property seam without CSS consumers yet", () => {
+test("economics route mounts the semantic property seam for local consumers", () => {
   const component = readFileSync(new URL(
     "../src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
     import.meta.url
@@ -50,4 +50,15 @@ test("economics route mounts the semantic property seam without CSS consumers ye
   assert.match(component, /semanticSalienceStyle/);
   assert.match(component, /projectKpEconomicsSalienceCssProperties/);
   assert.match(component, /serializeKpEconomicsSalienceCssProperties/);
+  const theme = readFileSync(new URL(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-theme.css",
+    import.meta.url
+  ), "utf8");
+  const graph = readFileSync(new URL(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-graph.css",
+    import.meta.url
+  ), "utf8");
+  assert.match(theme, /--kp-economics-salience-market-supply-color/);
+  assert.match(graph, /--kp-economics-salience-market-supply-opacity/);
+  assert.match(graph, /--kp-economics-salience-market-supply-stroke-scale/);
 });

@@ -371,7 +371,27 @@
 .kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
   .kp-economics-tutorial__player-host
   [data-kp-economics-supply-line] {
-  stroke-width: var(--kp-graph-line-width, 1px);
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-supply-stroke-scale, 1)
+    );
+}
+
+/* Supply is the first visual object to consume semantic salience recipes.
+   The graph adapter owns paint while the shared state remains renderer-free. */
+.kp-economics-tutorial__player-host [data-kp-economics-supply-line] {
+  opacity: var(--kp-economics-salience-market-supply-opacity, 1);
+  stroke-width:
+    calc(
+      var(--kp-graph-line-width, 1px) *
+      var(--kp-economics-salience-market-supply-stroke-scale, 1)
+    );
+  transition:
+    filter 180ms ease,
+    opacity 180ms ease,
+    stroke 180ms ease,
+    stroke-width 180ms ease;
 }
 
 .kp-economics-tutorial__player-host .editor-graph-stage__economics-explanation p {

@@ -143,7 +143,8 @@
     {
       "id": "s14",
       "title": "Apply salience treatment to supply orientation",
-      "status": "planned"
+      "summary": "Connected only the supply curve to semantic context/focus color, opacity, and stroke recipes; preserved route tuners, curve geometry, animation data, motion authority, and direct/reverse behavior.",
+      "status": "complete"
     },
     {
       "id": "s15",

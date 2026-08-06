@@ -10,9 +10,10 @@ economics demand-shift tutorial, stop for human visual review, and only then
 pressure-test the approved boundary on a structurally different multi-step
 fraction-composition algebra caller.
 
-New Computer Modern Mono Book is a completed preflight choice in commit
-`df11107a`. It is the default non-KaTeX face; KaTeX retains its native fonts
-and metrics.
+New Computer Modern Mono was adopted in commit `df11107a`; the user then
+selected Regular as the default face in commit `69a43c08`, with Book retained
+for deliberate 500-weight treatment. KaTeX retains its native fonts and
+metrics.
 
 ## Canonical exemplar and acceptance
 

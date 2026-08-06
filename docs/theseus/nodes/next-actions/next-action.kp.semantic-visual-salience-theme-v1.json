@@ -208,6 +208,34 @@
       "scope": "s13 controls review and motion preservation",
       "checkedAt": "2026-08-06T08:26:43.445Z",
       "notes": "All 12 publication, controls, review-adjacent, KaTeX, direct-link, manual takeover, and phone checks pass; font-metric-sensitive test anchors now target semantic ranges."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s14 supply semantic consumer",
+      "checkedAt": "2026-08-06T08:33:01.134Z",
+      "notes": "59 economics tests pass; the local CSS seam is now consumed without changing adapter, geometry, timing, or direct state reconstruction."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s14 ownership preservation",
+      "checkedAt": "2026-08-06T08:33:02.281Z",
+      "notes": "15 stylesheet ownership and frozen baseline checks pass with the supply consumer contained in the graph adapter."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s14 supply focus context exemplar",
+      "checkedAt": "2026-08-06T08:33:03.227Z",
+      "notes": "All 11 cases pass; dark supply resolves context blue at 0.62 and focus blue at 1 with theme-relative stroke reinforcement, while light mode resolves its separate context source."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 typed and Svelte boundary",
+      "checkedAt": "2026-08-06T08:33:04.182Z",
+      "notes": "TypeScript, Svelte, and domain checks pass with zero diagnostics."
     }
   ],
   "expectedLearning": [

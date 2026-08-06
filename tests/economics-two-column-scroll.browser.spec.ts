@@ -292,8 +292,15 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "6"
   );
   await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
-    .evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("1px");
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      opacity: getComputedStyle(element).opacity,
+      width: getComputedStyle(element).strokeWidth
+    }))).toEqual({
+      color: "rgb(94, 126, 159)",
+      opacity: "0.62",
+      width: "1px"
+    });
   await expect.poll(() => graph.locator(
     ".editor-graph-stage__economics-guide"
   ).first().evaluate((element) => getComputedStyle(element).strokeWidth))
@@ -577,6 +584,20 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   )).toBeLessThan(0.015);
 
   await placeTopAt(page, supplyParagraph, focusTop + 40);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-attention-passage",
+    "shift-versus-movement"
+  );
+  await expect.poll(() => graph.locator("[data-kp-economics-supply-line]")
+    .evaluate((element) => ({
+      color: getComputedStyle(element).stroke,
+      opacity: getComputedStyle(element).opacity,
+      width: getComputedStyle(element).strokeWidth
+    }))).toEqual({
+      color: "rgb(124, 189, 255)",
+      opacity: "1",
+      width: "1.2px"
+    });
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-supply-movement-progress"
   ))).toBeLessThan(0.99);
@@ -767,7 +788,7 @@ test("light theme applies one compensated graph width and prose weight", async (
     )!).stroke
   }))).toEqual({
     axis: "rgb(21, 22, 34)",
-    supply: "rgb(37, 110, 168)"
+    supply: "rgb(104, 120, 138)"
   });
   await expect.poll(() => graph.locator(
     "[data-kp-economics-equilibrium-point]"

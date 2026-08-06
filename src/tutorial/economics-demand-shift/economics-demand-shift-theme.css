@@ -150,7 +150,8 @@
     var(--kp-lesson-theme-graph-intersection-stroke);
   --kp-graph-intersection-fill:
     var(--kp-lesson-theme-graph-intersection-fill);
-  --kp-graph-stable: #256ea8;
+  --kp-graph-stable:
+    var(--kp-economics-salience-market-supply-color, #256ea8);
   --kp-graph-changing: #a83770;
   --kp-graph-focal: #151622;
   --kp-graph-guide: #aeb2bf;
@@ -168,7 +169,8 @@
   --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
   --kp-graph-ghost-core-line-width:
     var(--kp-graph-tuned-dark-ghost-core-width, 0.5px);
-  --kp-graph-stable: #7cbdff;
+  --kp-graph-stable:
+    var(--kp-economics-salience-market-supply-color, #7cbdff);
   --kp-graph-changing: #f990c4;
   --kp-graph-focal: #f4f4f8;
   --kp-graph-guide: #42465b;
