@@ -2,8 +2,9 @@
   "id": "next-action.kp.economics-salience-tuning-controls-v0",
   "kind": "next-action",
   "title": "Economics salience tuning controls",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
+  "summary": "Completed tuning-control probe and verification are preserved as the baseline input to the approved semantic visual salience theme run.",
   "sourceRefs": [
     {
       "kind": "file",

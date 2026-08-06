@@ -1,0 +1,76 @@
+{
+  "id": "next-action.kp.semantic-visual-salience-theme-v1",
+  "kind": "next-action",
+  "title": "Semantic visual salience theme exemplar",
+  "status": "ready",
+  "domain": "visual-salience",
+  "summary": "Execute the approved exemplar-first economics theme and salience system, then pressure-test fraction-composition algebra only after human approval.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-semantic-visual-salience-theme-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.publication-page-scale-graph-runtime-v1"
+    ],
+    "preferred": [
+      "next-action.kp.economics-salience-tuning-controls-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run visual:economics-two-column-scroll",
+    "npm run test:operation-evaluation-presentation",
+    "npm run test:fraction-composition-architecture",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether one bounded role-state-theme contract can transmit attention coherently across prose, KaTeX, SVG, and a structurally different algebra caller without caller-owned palettes."
+  ],
+  "allowedWork": [
+    "Execute the approved slices in the semantic visual salience proposal through the mandatory economics checkpoint, then continue only after fresh human approval.",
+    "Retain the approved dark and light page backgrounds while adapting the handoff palette through semantic roles and renderer-local projections."
+  ],
+  "disallowedWork": [
+    "Do not change mathematics, graph geometry, lesson prose, scroll ownership, native KaTeX metrics, animation timing, Lisp, or unrelated catalogue debt."
+  ],
+  "criteria": [
+    {
+      "id": "economics-exemplar-handoff-palette",
+      "weight": "high"
+    },
+    {
+      "id": "renderer-neutral-role-state-theme-contract",
+      "weight": "high"
+    },
+    {
+      "id": "dark-light-wide-phone-accessibility",
+      "weight": "high"
+    },
+    {
+      "id": "direct-seek-rewind-semantic-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "human-checkpoint-before-promotion",
+      "weight": "high"
+    },
+    {
+      "id": "fraction-composition-second-caller",
+      "weight": "high"
+    },
+    {
+      "id": "no-caller-owned-palette-recipes",
+      "weight": "high"
+    }
+  ]
+}

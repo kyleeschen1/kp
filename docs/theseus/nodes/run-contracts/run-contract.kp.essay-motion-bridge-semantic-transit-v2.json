@@ -2,7 +2,8 @@
   "id": "run-contract.kp.essay-motion-bridge-semantic-transit-v2",
   "kind": "run-contract",
   "title": "Essay motion bridge and semantic transit",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "Paused with slices s22-s25 preserved while the approved semantic visual salience theme contract becomes current.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,6 +25,9 @@
     "npm run typecheck",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Resume after the semantic visual salience theme contract reaches its human checkpoint or closes."
   ],
   "allowedWork": [
     "Framework-neutral typed motion-bridge and semantic-transit contracts",

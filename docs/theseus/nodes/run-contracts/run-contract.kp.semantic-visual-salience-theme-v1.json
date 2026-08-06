@@ -1,0 +1,206 @@
+{
+  "id": "run-contract.kp.semantic-visual-salience-theme-v1",
+  "kind": "run-contract",
+  "title": "Semantic visual salience theme system",
+  "status": "ready",
+  "domain": "visual-salience",
+  "summary": "User-approved 28-slice exemplar-first run with a mandatory economics visual checkpoint before shared promotion and algebra.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-visual-salience-theme-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-05-semantic-visual-salience-theme-long-loop-proposal.md",
+      "summary": "User-approved 28-slice executable plan, preservation boundary, checkpoint, and rollback policy."
+    },
+    {
+      "kind": "file",
+      "path": "docs/kinetic_press_visual_salience_handoff.md",
+      "summary": "Canonical palette, semantic salience, typography, and renderer architecture reference."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run visual:economics-two-column-scroll",
+    "npm run test:operation-evaluation-presentation",
+    "npm run test:fraction-composition-architecture",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Framework-neutral typed semantic visual roles salience states theme contracts and deterministic resolution laws",
+    "Economics demand-shift exemplar adapters CSS tokens and bounded dark light wide phone visual evidence",
+    "Accessibility reduced-motion forced-colors contrast bundle layout-shift and scroll-work verification",
+    "Post-checkpoint fraction-composition algebra adapter and visual pressure test",
+    "Durable standards promotion evidence verification records and closeout"
+  ],
+  "disallowedWork": [
+    "Lisp botanical or material-motion presentation work",
+    "Changes to mathematics graph geometry animation timing lesson prose scroll ownership or URL meaning",
+    "Overrides of KaTeX internal fonts metrics spacing delimiters or symbol paint",
+    "Changes to the approved dark and light page background colors or introduction of an unrelated palette family",
+    "Shared promotion catalog-wide rollout or a second caller before the mandatory economics checkpoint",
+    "Unrelated user-owned dirty files and the known catalogue governance failure cohort"
+  ],
+  "goal": "Implement the approved handoff palette and semantic salience state system on the economics demand-shift exemplar, stop for human review, then prove the approved boundary on multi-step fraction-composition algebra.",
+  "target": "next-action.kp.semantic-visual-salience-theme-v1",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at HUMAN_CHECKPOINT after s19; slices s20 through s28 require fresh approval of the economics exemplar.",
+    "Stop if the treatment requires changing mathematics graph geometry lesson prose scroll ownership KaTeX metrics or animation timing.",
+    "Stop if a second palette or caller-specific recipe matrix is required instead of a semantic role extension.",
+    "Stop if economics state cannot be reconstructed directly or if forward and rewind visual state differ.",
+    "Stop if required focused verification cannot be repaired inside the current slice and rollback boundary.",
+    "Stop if unrelated dirty files or the known catalogue baseline would need modification."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze current visual and failure inventory",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Capture canonical economics baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define semantic salience state vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define shared semantic visual roles",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Define complete light and dark theme contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Encode the handoff palette sources",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define exhaustive role by salience recipes",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Define state precedence and direct resolution",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Add framework-neutral economics state adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Project recipes through route-local CSS properties",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Migrate the dark economics graph palette",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Migrate the light economics graph palette",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Migrate prose controls review and companion math",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Apply salience treatment to supply orientation",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Apply state handoff through demand shift",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Resolve graph context and transient roles",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Add accessible contrast and motion projections",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Capture economics review and performance matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Mandatory economics human visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Apply approved exemplar refinements",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Promote the demonstrated shared seam",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Inventory fraction composition attention targets",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add algebra DOM and KaTeX salience adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Coordinate multi-step algebra attention",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Apply both themes without local recipes",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Pressure-test the second caller visually",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Close accessibility static and performance gates",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Record standards evidence and closeout",
+      "status": "planned"
+    }
+  ]
+}

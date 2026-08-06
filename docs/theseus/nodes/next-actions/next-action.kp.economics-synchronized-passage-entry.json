@@ -2,7 +2,8 @@
   "id": "next-action.kp.economics-synchronized-passage-entry",
   "kind": "next-action",
   "title": "Economics",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "The semantic transit checkpoint remains preserved with the deferred essay-motion bridge contract while the approved salience theme run takes priority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -437,6 +438,9 @@
     "state": "partial",
     "summary": "HUMAN_CHECKPOINT: semantic transit exemplar is implemented, captured, and broadly verified through slice s21. Fresh approval is required before promotion to a second caller. Review the subtle inline P movement in dark and light desktop, static phone and reduced-motion fallbacks, and the existing fixed phone control congestion."
   },
+  "revisitWhen": [
+    "Revisit after the semantic visual salience economics checkpoint or closeout."
+  ],
   "expectedLearning": [
     "Whether one usable-viewport authority can synchronize ordinary-document entry, exact scroll state, and direct semantic navigation without per-scroll layout work."
   ],

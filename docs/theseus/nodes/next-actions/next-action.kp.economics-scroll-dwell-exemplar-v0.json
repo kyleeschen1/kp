@@ -2,8 +2,9 @@
   "id": "next-action.kp.economics-scroll-dwell-exemplar-v0",
   "kind": "next-action",
   "title": "Economics scroll dwell exemplar",
-  "status": "ready",
+  "status": "deferred",
   "domain": "economics",
+  "summary": "The pacing comparison remains preserved at its human checkpoint while the approved semantic salience exemplar establishes the visual attention system.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,5 +51,8 @@
   "progress": {
     "state": "partial",
     "summary": "Iteration slice 3/3 implementation and verification complete; stop at HUMAN_CHECKPOINT for visual selection among none, preserve, medium, and recommended. Default route remains linear and the approved long contract remains paused at slice 21."
-  }
+  },
+  "revisitWhen": [
+    "Revisit after the semantic visual salience economics checkpoint or closeout."
+  ]
 }
