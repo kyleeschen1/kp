@@ -293,9 +293,6 @@
   let theme = $state(untrack(() => initialTheme));
   const twoColumnParagraphGapVh = kpEconomicsTwoColumnParagraphGapDefaultVh;
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
-  const publicationTwoColumnPassageIds = new Set(
-    untrack(() => twoColumnParagraphs.map(({ id }) => id))
-  );
   let lessonDraft = $state<KpEconomicsLessonDraftState | undefined>();
   let lessonDraftRuntime:
     typeof import("./economics-demand-shift-lesson-draft.ts") | undefined;
@@ -310,16 +307,6 @@
   let lessonEditorValidation = $state("");
   let selectedLessonDraftPassage = $derived(
     lessonDraft?.passages.find(({ id }) => id === lessonDraft?.selectedPassageId)
-  );
-  let selectedLessonDraftIndex = $derived(
-    lessonDraft?.passages.findIndex(({ id }) =>
-      id === lessonDraft?.selectedPassageId
-    ) ?? -1
-  );
-  let selectedLessonDraftIsPublished = $derived(
-    lessonDraft === undefined
-      ? false
-      : publicationTwoColumnPassageIds.has(lessonDraft.selectedPassageId)
   );
   let ready = $state(false);
   let stageExpanded = $state(false);
@@ -859,63 +846,6 @@
       passageId: lessonDraft.selectedPassageId,
       sourceText
     });
-    lessonDraft = next;
-    persistLessonDraft(next);
-    compileAndPresentLessonDraft(next);
-  }
-
-  function addLessonDraftPassageAfter(): void {
-    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
-    applyLessonDraftOperation(lessonDraftRuntime.addKpEconomicsLessonDraftPassageAfter(
-      lessonDraft,
-      lessonDraft.selectedPassageId
-    ));
-  }
-
-  function duplicateLessonDraftPassage(): void {
-    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
-    applyLessonDraftOperation(lessonDraftRuntime.duplicateKpEconomicsLessonDraftPassage(
-      lessonDraft,
-      lessonDraft.selectedPassageId
-    ));
-  }
-
-  function deleteLessonDraftPassage(): void {
-    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
-    applyLessonDraftOperation(lessonDraftRuntime.deleteKpEconomicsLessonDraftPassage({
-      draft: lessonDraft,
-      passageId: lessonDraft.selectedPassageId,
-      publicationPassageIds: publicationTwoColumnPassageIds
-    }));
-  }
-
-  function moveLessonDraftPassage(direction: -1 | 1): void {
-    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
-    applyLessonDraftOperation(lessonDraftRuntime.moveKpEconomicsLessonDraftPassage({
-      draft: lessonDraft,
-      passageId: lessonDraft.selectedPassageId,
-      direction,
-      publicationPassageIds: publicationTwoColumnPassageIds
-    }));
-  }
-
-  function resetLessonDraft(): void {
-    if (lessonDraftRuntime === undefined) return;
-    window.localStorage.removeItem(
-      lessonDraftRuntime.kpEconomicsLessonDraftStorageKey
-    );
-    const reset = lessonDraftRuntime.createKpEconomicsLessonDraft(
-      twoColumnParagraphs
-    );
-    lessonDraft = reset;
-    editableTwoColumnParagraphs = twoColumnParagraphs;
-    lessonEditorValidation = lessonDraftRuntime.kpEconomicsLessonDraftMessages.reset;
-    scheduleLessonEditorGeometryRefresh();
-  }
-
-  function applyLessonDraftOperation(
-    next: KpEconomicsLessonDraftState
-  ): void {
     lessonDraft = next;
     persistLessonDraft(next);
     compileAndPresentLessonDraft(next);
@@ -2942,17 +2872,7 @@
     value={selectedLessonDraftPassage.sourceText}
     draft={lessonDraft}
     validation={lessonEditorValidation}
-    canDelete={!selectedLessonDraftIsPublished}
-    canMoveUp={!selectedLessonDraftIsPublished && selectedLessonDraftIndex > 0}
-    canMoveDown={!selectedLessonDraftIsPublished &&
-      selectedLessonDraftIndex < lessonDraft.passages.length - 1}
     onChange={updateLessonDraftSource}
-    onAdd={addLessonDraftPassageAfter}
-    onCopy={duplicateLessonDraftPassage}
-    onDelete={deleteLessonDraftPassage}
-    onMoveUp={() => moveLessonDraftPassage(-1)}
-    onMoveDown={() => moveLessonDraftPassage(1)}
-    onReset={resetLessonDraft}
     onClose={closeLessonEditorModal}
   />
 {/if}

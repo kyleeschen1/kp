@@ -53,10 +53,45 @@
       "scope": "initial learner budget",
       "checkedAt": "2026-08-06T21:02:48.461Z",
       "notes": "Behavioral metrics remain healthy (42 resources, zero CLS, 34.3 ms active p95, no active long tasks), but initial transfer is 251173/250000 bytes, script is 150294/150000 bytes, and the sampled cold longest task is 153/150 ms. The deliberate genuine Source Serif 300 asset accounts for about 980 bytes of the transfer delta; lazy CodeMirror/Vim is excluded from initial transfer."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "minimal Vim modal and ex workflow",
+      "checkedAt": "2026-08-06T21:39:49.334Z",
+      "notes": "4 Chromium checks passed: lazy activation, 1rem/1.5 buffer geometry, native ex panel, :w, :q, successful and failed :wq, autocomplete, local persistence, and last-valid compiler fallback."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "economics semantics and draft preservation",
+      "checkedAt": "2026-08-06T21:39:50.429Z",
+      "notes": "68 focused tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "economics stylesheet ownership",
+      "checkedAt": "2026-08-06T21:39:51.398Z",
+      "notes": "17 focused checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production closure",
+      "checkedAt": "2026-08-06T21:39:52.320Z",
+      "notes": "TypeScript, Svelte, domain types, publication freshness, and Vite production build passed; the editor remains a lazy chunk."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "strict initial learner budget",
+      "checkedAt": "2026-08-06T21:39:53.252Z",
+      "notes": "Initial script is now green at 149990/150000 bytes; 42 resources, zero CLS, 34.2 ms active p95, and zero active long tasks remain healthy. Total initial transfer is 250869/250000 and sampled cold longest task is 160/150 ms. The route-loaded Source Serif 300 file is 21068 bytes; the 227.26 KB gzip CodeMirror/Vim chunk remains lazy and excluded from initial transfer."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Bounded implementation is complete and verified for semantics, editor behavior, source persistence, build, and the canonical responsive exemplar. Awaiting human visual review before any promotion. The learner performance behavior remains healthy, but the strict initial route ceiling is red by 1173 transfer bytes and 294 script bytes after adopting the genuine 300-weight font; preserve the ceiling and treat optimization or an explicit font-budget tradeoff as a follow-up decision."
+    "summary": "Minimal Vim editor refinement is implemented and verified: buffer plus native ex panel plus modeline only, 1rem/1.5 editor type, Escape retained by Vim, :q closes the locally autosaved draft, :w validates and writes source, and :wq closes only after a successful write. Awaiting human choice on replacing the 21 KB Source Serif asset with a cross-platform system serif stack and on a separate whole-document authoring migration; no format or font migration was inferred."
   }
 }

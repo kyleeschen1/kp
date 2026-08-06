@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 
 const route =
@@ -12,6 +12,18 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(route);
 });
+
+async function runExCommand(page: Page, command: string): Promise<void> {
+  const editor = page.locator("[data-kp-economics-lesson-editor]");
+  const content = editor.locator(".cm-content");
+  await content.click();
+  await content.press("Escape");
+  await content.press(":");
+  const minibuffer = editor.locator(".cm-vim-panel input");
+  await expect(minibuffer).toBeVisible();
+  await minibuffer.fill(command);
+  await minibuffer.press("Enter");
+}
 
 test("CodeMirror edits one passage at a time and persists a live draft", async ({
   page
@@ -75,6 +87,15 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
     .toContainText("graph-at-rest");
   await expect(editor.locator("[data-kp-economics-editor-vim-mode]"))
     .toContainText("normal");
+  await expect(editor.locator(".kp-economics-lesson-editor__toolbar"))
+    .toHaveCount(0);
+  await expect(editor.locator(".kp-economics-lesson-editor__actions"))
+    .toHaveCount(0);
+  await expect(editor.locator(".cm-vim-panel")).toHaveCount(0);
+  expect(await editor.locator(".cm-content").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { fontSize: style.fontSize, lineHeight: style.lineHeight };
+  })).toEqual({ fontSize: "16px", lineHeight: "24px" });
   expect(await page.evaluate(() => performance.getEntriesByType("resource")
     .some(({ name }) => name.toLowerCase().includes("codemirror")))).toBe(true);
 
@@ -104,7 +125,7 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
     return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
   }, storageKey)).toContain("then compare");
 
-  await editor.getByRole("button", { name: "Save to source" }).click();
+  await runExCommand(page, "w");
   await expect(editor.locator(
     "[data-kp-economics-lesson-editor-source-status]"
   )).toContainText(
@@ -127,34 +148,24 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
       "Read [$P$](kp-ref:price-axis-inline), then compare $D_0$ with $S$."
   });
 
-  await editor.getByRole("button", { name: "Add after" }).click();
-  await expect(passages).toHaveCount(7);
-  await expect(root).toHaveAttribute(
-    "data-kp-economics-lesson-editor-selected",
-    /draft-passage-/
-  );
-  await expect(editor.locator(".cm-editor")).toHaveCount(1);
-  await editor.locator(".cm-content").fill("A short added explanation with $Q$.");
-
-  await editor.getByRole("button", { name: "Duplicate" }).click();
-  await expect(passages).toHaveCount(8);
-  await editor.getByRole("button", { name: "Move down" }).click();
-  await editor.getByRole("button", { name: "Delete" }).click();
-  await expect(passages).toHaveCount(7);
-
-  await page.reload();
-  await root.locator("[data-kp-economics-lesson-editor-toggle]").click();
-  await expect(passages).toHaveCount(7);
-  await expect(passages.first()).toContainText("then compare");
+  await runExCommand(page, "q");
+  await expect(editor).toHaveCount(0);
+  expect(sourceSaveRequests).toHaveLength(1);
 
   await root.locator(
     "[data-kp-economics-passage-select='graph-at-rest']"
   ).click();
-  await page.locator("[data-kp-economics-lesson-editor-reset]").click();
+  await editor.locator(".cm-content").fill(
+    "Read [$P$](kp-ref:price-axis-inline), then compare $D_1$ with $S$."
+  );
+  await runExCommand(page, "wq");
+  await expect(editor).toHaveCount(0);
+  expect(sourceSaveRequests).toHaveLength(2);
+
+  await page.reload();
+  await root.locator("[data-kp-economics-lesson-editor-toggle]").click();
   await expect(passages).toHaveCount(6);
-  await expect.poll(() => page.evaluate((key) =>
-    localStorage.getItem(key), storageKey
-  )).toBeNull();
+  await expect(passages.first()).toContainText("D1");
 });
 
 test("source-save failures remain visible without losing the local draft", async ({
@@ -180,11 +191,12 @@ test("source-save failures remain visible without losing the local draft", async
   await editor.locator(".cm-content").fill(
     "A locally retained edit with [$P$](kp-ref:price-axis-inline)."
   );
-  await editor.getByRole("button", { name: "Save to source" }).click();
+  await runExCommand(page, "wq");
 
   await expect(editor.locator(
     "[data-kp-economics-lesson-editor-source-status]"
   )).toHaveText("The publication could not be regenerated.");
+  await expect(editor).toBeVisible();
   await expect.poll(() => page.evaluate((key) => {
     const stored = localStorage.getItem(key);
     return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;

@@ -15,32 +15,14 @@
     value,
     draft,
     validation,
-    canDelete,
-    canMoveUp,
-    canMoveDown,
     onChange,
-    onAdd,
-    onCopy,
-    onDelete,
-    onMoveUp,
-    onMoveDown,
-    onReset,
     onClose
   }: {
     readonly id: string;
     readonly value: string;
     readonly draft: KpEconomicsLessonDraftState;
     readonly validation: string;
-    readonly canDelete: boolean;
-    readonly canMoveUp: boolean;
-    readonly canMoveDown: boolean;
     readonly onChange: (value: string) => void;
-    readonly onAdd: () => void;
-    readonly onCopy: () => void;
-    readonly onDelete: () => void;
-    readonly onMoveUp: () => void;
-    readonly onMoveDown: () => void;
-    readonly onReset: () => void;
     readonly onClose: () => void;
   } = $props();
 
@@ -58,6 +40,7 @@
   let enhanced = $state(false);
   let vimMode = $state("normal");
   let sourceSavePending = $state(false);
+  let sourceStatusHasPriority = $state(false);
   let sourceSaveStatus = $state(
     "Autosaved locally. Use Save to source to update the project."
   );
@@ -76,6 +59,8 @@
           value,
           completions,
           onChange: updateSource,
+          onQuit: onClose,
+          onWrite: saveToSource,
           onVimModeChange: (mode) => vimMode = mode
         });
         enhanced = true;
@@ -105,19 +90,16 @@
     onChange(nextValue);
   }
 
-  function runDraftMutation(operation: () => void): void {
-    markSourcePending();
-    operation();
-  }
-
   function markSourcePending(): void {
+    sourceStatusHasPriority = false;
     sourceSaveStatus =
       "Autosaved locally. Use Save to source to update the project.";
   }
 
-  async function saveToSource(): Promise<void> {
-    if (sourceSavePending) return;
+  async function saveToSource(): Promise<boolean> {
+    if (sourceSavePending) return false;
     sourceSavePending = true;
+    sourceStatusHasPriority = true;
     sourceSaveStatus = "Saving the lesson source…";
     const submittedDraft = draft;
     try {
@@ -130,10 +112,12 @@
           ? `Saved to ${result.sourcePath}.`
           : `${result.sourcePath} already matches this draft.`
         : "Saved the submitted revision; newer edits remain local.";
+      return true;
     } catch (error) {
       sourceSaveStatus = error instanceof Error
         ? error.message
         : "The lesson source could not be saved.";
+      return false;
     } finally {
       sourceSavePending = false;
     }
@@ -147,19 +131,11 @@
   data-kp-economics-lesson-editor-passage={id}
   data-kp-economics-lesson-editor-enhanced={enhanced}
   oncancel={(event) => {
+    // Escape belongs to Vim's mode machine; closing the dialog here would
+    // make the normal-mode escape key destroy the editing session.
     event.preventDefault();
-    onClose();
   }}
 >
-  <div class="kp-economics-lesson-editor__toolbar">
-    <span>Edit one passage; the lesson remains frozen behind this window.</span>
-    <button
-      type="button"
-      class="kp-economics-lesson-editor__close"
-      aria-label="Close lesson editor"
-      onclick={onClose}
-    >Close</button>
-  </div>
   <div class="kp-economics-lesson-editor__surface" bind:this={host}>
     <textarea
       class="kp-economics-lesson-editor__fallback"
@@ -169,59 +145,19 @@
       {value}
     ></textarea>
   </div>
-  <p
-    class="kp-economics-lesson-editor__validation"
-    data-kp-economics-lesson-editor-validation
-    aria-live="polite"
-  >{validation}</p>
-  <p
-    class="kp-economics-lesson-editor__source-status"
-    data-kp-economics-lesson-editor-source-status
-    aria-live="polite"
-  >{sourceSaveStatus}</p>
-  <div class="kp-economics-lesson-editor__actions" aria-label="Passage actions">
-    <button
-      type="button"
-      data-kp-economics-lesson-editor-save-source
-      onclick={saveToSource}
-      disabled={sourceSavePending}
-    >{sourceSavePending ? "Saving…" : "Save to source"}</button>
-    <button type="button" onclick={() => runDraftMutation(onAdd)}>
-      Add after
-    </button>
-    <button type="button" onclick={() => runDraftMutation(onCopy)}>
-      Duplicate
-    </button>
-    <button
-      type="button"
-      onclick={() => runDraftMutation(onMoveUp)}
-      disabled={!canMoveUp}
-    >
-      Move up
-    </button>
-    <button
-      type="button"
-      onclick={() => runDraftMutation(onMoveDown)}
-      disabled={!canMoveDown}
-    >
-      Move down
-    </button>
-    <button
-      type="button"
-      onclick={() => runDraftMutation(onDelete)}
-      disabled={!canDelete}
-    >
-      Delete
-    </button>
-    <button
-      type="button"
-      data-kp-economics-lesson-editor-reset
-      onclick={() => runDraftMutation(onReset)}
-    >Reset draft</button>
-  </div>
   <div class="kp-economics-lesson-editor__modeline" data-kp-economics-editor-modeline>
     <code>{id}</code>
     <span>Markdown + KaTeX</span>
+    <span
+      class="kp-economics-lesson-editor__modeline-status"
+      data-kp-economics-lesson-editor-validation
+      aria-live="polite"
+    >{sourceStatusHasPriority ? sourceSaveStatus : validation || sourceSaveStatus}</span>
+    <span
+      class="kp-economics-lesson-editor__visually-hidden"
+      data-kp-economics-lesson-editor-source-status
+      aria-live="polite"
+    >{sourceSaveStatus}</span>
     <span class="kp-economics-lesson-editor__modeline-spacer"></span>
     <span data-kp-economics-editor-vim-mode>VIM · {vimMode}</span>
   </div>

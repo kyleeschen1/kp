@@ -17,7 +17,35 @@ import {
   keymap,
   placeholder
 } from "@codemirror/view";
-import { getCM, vim } from "@replit/codemirror-vim";
+import { getCM, Vim, vim } from "@replit/codemirror-vim";
+
+interface KpEconomicsVimExHandlers {
+  readonly quit: () => void;
+  readonly write: () => Promise<boolean>;
+}
+
+const kpEconomicsVimExHandlers = new WeakMap<
+  object,
+  KpEconomicsVimExHandlers
+>();
+
+// Ex commands are registered globally by the CM5-compatible Vim API. Route
+// them through the mounted CM instance so HMR and future editor callers cannot
+// accidentally save or close a different buffer.
+Vim.defineEx("quit", "q", (cm) => {
+  kpEconomicsVimExHandlers.get(cm as object)?.quit();
+});
+Vim.defineEx("write", "w", (cm) => {
+  const handlers = kpEconomicsVimExHandlers.get(cm as object);
+  if (handlers !== undefined) void handlers.write();
+});
+Vim.defineEx("wq", "wq", (cm) => {
+  const handlers = kpEconomicsVimExHandlers.get(cm as object);
+  if (handlers === undefined) return;
+  void handlers.write().then((written) => {
+    if (written) handlers.quit();
+  });
+});
 
 export interface KpEconomicsCodeMirrorCompletion {
   readonly label: string;
@@ -37,6 +65,8 @@ export function mountKpEconomicsCodeMirror(input: {
   readonly value: string;
   readonly completions: readonly KpEconomicsCodeMirrorCompletion[];
   readonly onChange: (value: string) => void;
+  readonly onQuit?: (() => void) | undefined;
+  readonly onWrite?: (() => Promise<boolean>) | undefined;
   readonly onVimModeChange?: ((mode: string) => void) | undefined;
 }): KpEconomicsCodeMirrorMount {
   let applyingExternalValue = false;
@@ -93,10 +123,11 @@ export function mountKpEconomicsCodeMirror(input: {
             backgroundColor: "transparent",
             color: "var(--kp-lesson-theme-ink)",
             fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-            fontSize: "0.82rem"
+            fontSize: "1rem"
           },
           ".cm-content": {
             caretColor: "var(--kp-lesson-theme-reader-rail)",
+            lineHeight: "1.5",
             minHeight: "7.5rem",
             padding: "0.75rem"
           },
@@ -130,11 +161,18 @@ export function mountKpEconomicsCodeMirror(input: {
     input.onVimModeChange?.(`${mode}${subMode}`);
   };
   cm?.on("vim-mode-change", reportVimMode);
+  if (cm !== null) {
+    kpEconomicsVimExHandlers.set(cm as object, {
+      quit: input.onQuit ?? (() => undefined),
+      write: input.onWrite ?? (async () => true)
+    });
+  }
   reportVimMode();
   return Object.freeze({
     view,
     destroy: () => {
       cm?.off("vim-mode-change", reportVimMode);
+      if (cm !== null) kpEconomicsVimExHandlers.delete(cm as object);
       view.destroy();
     },
     setValue: (value: string) => {
