@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  projectKpAnimationStationMotionCorridor,
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
@@ -12,6 +13,7 @@ import {
   kpEconomicsTwoColumnParagraphGapMaximumVh,
   kpEconomicsMotionBridgeDwellExemplarSearch,
   kpEconomicsMotionBridgeExemplarSearch,
+  kpEconomicsAnimationStationExemplarSearch,
   kpEconomicsTwoColumnScrollCanonicalSearch,
   readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsDemandShiftPresentationLayout,
@@ -55,6 +57,12 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
   assert.equal(
     readKpEconomicsDemandShiftPresentationLayout("?layout=inline-sticky"),
     "inline-sticky"
+  );
+  assert.equal(
+    readKpEconomicsDemandShiftPresentationLayout(
+      kpEconomicsAnimationStationExemplarSearch
+    ),
+    "animation-station"
   );
   assert.equal(
     readKpEconomicsDemandShiftPresentationLayout("?layout=unknown&demand=18"),
@@ -518,6 +526,52 @@ test("paragraph crossing is the exact semantic motion corridor", () => {
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 200,
+    viewportHeight: 800
+  }), { travel: 1, progress: 1 });
+});
+
+test("animation station spends one stage-height on a deterministic cue handoff", () => {
+  const corridor = projectKpAnimationStationMotionCorridor({
+    corridor: {
+      startViewportRatio: 0.72,
+      endViewportRatio: 0.16,
+      keyframes: [
+        { travel: 0, progress: 0 },
+        { travel: 0.14, progress: 0 },
+        { travel: 0.57, progress: 0.72 },
+        { travel: 0.69, progress: 0.72 },
+        { travel: 0.94, progress: 1 },
+        { travel: 1, progress: 1 }
+      ]
+    },
+    stageBottomPx: 240,
+    viewportHeightPx: 800,
+    runwayPx: 240
+  });
+
+  assert.equal(corridor.startViewportRatio, 0.3);
+  assert.equal(corridor.endViewportRatio, 0);
+  assert.deepEqual(corridor.keyframes.map(({ progress }) => progress), [
+    0, 0, 0.72, 0.72, 1, 1, 1
+  ]);
+  assert.deepEqual(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 240,
+    viewportHeight: 800
+  }), { travel: 0, progress: 0 });
+  assert.deepEqual(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 216,
+    viewportHeight: 800
+  }), { travel: 0.1, progress: 0 });
+  assert.ok(Math.abs(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 120,
+    viewportHeight: 800
+  }).progress - 0.72) < 1e-12);
+  assert.deepEqual(projectKpTutorialMotionCorridor({
+    corridor,
+    anchorTop: 0,
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
 });

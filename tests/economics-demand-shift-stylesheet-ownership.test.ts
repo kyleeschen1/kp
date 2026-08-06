@@ -15,6 +15,7 @@ const ownedStylesheets = [
   "economics-demand-shift-graph.css",
   "economics-demand-shift-publication-responsive.css",
   "economics-demand-shift-inline-sticky.css",
+  "economics-demand-shift-animation-station.css",
   "economics-demand-shift-two-column.css",
   "economics-demand-shift-layout-responsive.css"
 ] as const;
@@ -147,6 +148,7 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   const graph = read("economics-demand-shift-graph.css");
   const responsive = read("economics-demand-shift-publication-responsive.css");
   const inline = read("economics-demand-shift-inline-sticky.css");
+  const station = read("economics-demand-shift-animation-station.css");
   const twoColumn = read("economics-demand-shift-two-column.css");
   const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
 
@@ -162,6 +164,8 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.doesNotMatch(responsive, /--inline-sticky/);
   assert.match(inline, /--inline-sticky/);
   assert.doesNotMatch(inline, /--two-column-scroll/);
+  assert.match(station, /--kp-animation-station/);
+  assert.doesNotMatch(station, /--two-column-scroll/);
   assert.match(twoColumn, /--two-column-scroll/);
   assert.match(layoutFallbacks, /prefers-reduced-motion/);
   assert.match(layoutFallbacks, /prefers-contrast/);

@@ -3,6 +3,7 @@ import type { KpTutorialMotionCorridor } from "../kp-tutorial-motion.ts";
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
   | "inline-sticky"
+  | "animation-station"
   | "two-column-scroll";
 
 export type KpEconomicsScrollScrubStrategy =
@@ -53,6 +54,7 @@ export interface KpTwoColumnScrollSequenceProjection {
 }
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
+const animationStationLayoutQueryValue = "animation-station";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 const motionBridgeScrubQueryValue = "motion-bridge";
 const motionBridgeDwellQueryKey = "dwell";
@@ -61,6 +63,8 @@ const twoColumnParagraphGapQueryKey = "gap";
 
 export const kpEconomicsTwoColumnScrollCanonicalSearch =
   "?layout=two-column-scroll";
+export const kpEconomicsAnimationStationExemplarSearch =
+  "?layout=animation-station";
 export const kpEconomicsMotionBridgeExemplarSearch =
   "?layout=two-column-scroll&scrub=motion-bridge";
 export const kpEconomicsMotionBridgeDwellExemplarSearch =
@@ -77,6 +81,8 @@ export function readKpEconomicsDemandShiftPresentationLayout(
   const value = new URLSearchParams(search).get("layout");
   return value === inlineStickyLayoutQueryValue
     ? "inline-sticky"
+    : value === animationStationLayoutQueryValue
+      ? "animation-station"
     : value === twoColumnScrollLayoutQueryValue
       ? "two-column-scroll"
       : "split";
@@ -589,6 +595,63 @@ export function projectKpInlineStickyParagraphMotionCorridor(input: {
     keyframes: Object.freeze(keyframes.map((keyframe) =>
       Object.freeze(keyframe)
     ))
+  });
+}
+
+export function projectKpAnimationStationMotionCorridor(input: {
+  readonly corridor: KpTutorialMotionCorridor;
+  readonly stageBottomPx: number;
+  readonly viewportHeightPx: number;
+  readonly runwayPx: number;
+}): KpTutorialMotionCorridor {
+  const viewportHeight = finitePositive(input.viewportHeightPx, 640);
+  const stageBottom = clamp(
+    finiteNonNegative(input.stageBottomPx),
+    1,
+    viewportHeight
+  );
+  const runway = clamp(
+    finitePositive(input.runwayPx, viewportHeight * 0.3),
+    1,
+    stageBottom
+  );
+  const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
+  const finalProgress = input.corridor.keyframes.at(-1)?.progress ??
+    firstProgress;
+  const firstMovingIndex = input.corridor.keyframes.findIndex(
+    ({ progress }) => Math.abs(progress - firstProgress) > Number.EPSILON
+  );
+  const authoredMotionStart = firstMovingIndex <= 0
+    ? 0
+    : input.corridor.keyframes[firstMovingIndex - 1]!.travel;
+  const authoredMotionSpan = Math.max(
+    Number.EPSILON,
+    1 - authoredMotionStart
+  );
+  const activeKeyframes = input.corridor.keyframes.filter(
+    ({ travel }) => travel > authoredMotionStart
+  );
+  const handoffEnd = 0.1;
+  const settleStart = 0.9;
+
+  // The cue relinquishes attention first; the remaining local interval is the
+  // existing semantic motion sampled over one stage-height of native scroll.
+  const projected = activeKeyframes.map(({ travel, progress }) => ({
+    travel: handoffEnd +
+      ((travel - authoredMotionStart) / authoredMotionSpan) *
+        (settleStart - handoffEnd),
+    progress
+  }));
+  return Object.freeze({
+    ...input.corridor,
+    startViewportRatio: stageBottom / viewportHeight,
+    endViewportRatio: (stageBottom - runway) / viewportHeight,
+    keyframes: Object.freeze([
+      Object.freeze({ travel: 0, progress: firstProgress }),
+      Object.freeze({ travel: handoffEnd, progress: firstProgress }),
+      ...projected.map((keyframe) => Object.freeze(keyframe)),
+      Object.freeze({ travel: 1, progress: finalProgress })
+    ])
   });
 }
 

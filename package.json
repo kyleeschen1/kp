@@ -42,6 +42,7 @@
     "test:browser:economics-runtime-session": "playwright test tests/kp-economics-equilibrium-runtime-session.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-inline-sticky-poc": "playwright test tests/economics-inline-sticky-layout.browser.spec.ts --project=chromium --workers=1",
+    "visual:economics-animation-station": "playwright test tests/economics-animation-station.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-two-column-scroll": "playwright test tests/economics-two-column-scroll.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-motion-bridge": "playwright test tests/economics-motion-bridge.browser.spec.ts --project=chromium --workers=1",
     "visual:botanical-lisp-asset": "node --disable-warning=ExperimentalWarning scripts/capture-botanical-lisp-asset.ts",

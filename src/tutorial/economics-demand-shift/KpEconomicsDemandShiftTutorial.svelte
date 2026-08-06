@@ -40,6 +40,7 @@
     type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
+    projectKpAnimationStationMotionCorridor,
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
@@ -382,10 +383,14 @@
   let currentSemanticDestination = $state(initialDeepLink.destination);
   let inlineLayoutObserver: ResizeObserver | undefined;
   const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
+  const animationStation = untrack(
+    () => presentationLayout === "animation-station"
+  );
   const twoColumnScroll = untrack(
     () => presentationLayout === "two-column-scroll"
   );
-  const scrollPassageLayout = inlineSticky || twoColumnScroll;
+  const scrollPassageLayout = inlineSticky || animationStation ||
+    twoColumnScroll;
   const motionBridge = untrack(() => scrubStrategy === "motion-bridge" &&
       motionBridgeHtml?.["demand-increase"] !== undefined
     ? lesson.proseMotion?.find((record): record is KpTutorialMotionBridgeAuthoring =>
@@ -1612,9 +1617,10 @@
       proseLineHeightPx: proseLineHeight
     });
     inlineStickyFit = layout.fit;
-    inlineStickyStageHeightPx = usesTwoColumnDesktopGeometry()
+    inlineStickyStageHeightPx = usesTwoColumnDesktopGeometry() ||
+        animationStation
       ? inlineStage?.getBoundingClientRect().height ??
-        Math.round(window.innerHeight * 0.68)
+        Math.round(window.innerHeight * (animationStation ? 0.3 : 0.68))
       : layout.stageHeightPx;
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = measureTwoColumnScrollGeometry();
@@ -1648,6 +1654,19 @@
       ".kp-economics-tutorial__motion-passage-body"
     )?.getBoundingClientRect();
     const top = inlineStickyTopInset();
+    if (animationStation && shell !== undefined) {
+      // Once the bounded station releases, native document travel withdraws
+      // its one live surface; reverse scroll reconstructs the same endpoint.
+      const exitProgress = clamp(
+        -stageBounds.top / Math.max(1, stageBounds.height * 0.35),
+        0,
+        1
+      );
+      shell.style.setProperty(
+        "--kp-animation-station-exit-progress",
+        exitProgress.toFixed(4)
+      );
+    }
     inlineStickyStageState = stageBounds.top > top + 1
       ? "embedded"
       : passageBounds !== undefined &&
@@ -1709,6 +1728,16 @@
         focusTopPx: geometry.textAnchorY,
         viewportHeightPx: geometry.viewportHeightPx,
         motionStartRatio: geometry.motionStartRatio
+      });
+    }
+    if (animationStation) {
+      return projectKpAnimationStationMotionCorridor({
+        corridor: block.corridor,
+        // Registration can happen before the stage pins. The station's local
+        // edge, not that transient document position, owns every cue handoff.
+        stageBottomPx: inlineStickyTopInset() + inlineStickyStageHeightPx,
+        viewportHeightPx: window.innerHeight,
+        runwayPx: inlineStickyStageHeightPx
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -2496,6 +2525,9 @@
     data-kp-two-column-scroll-paragraph={twoColumnScroll && scrollCue
       ? true
       : undefined}
+    data-kp-animation-station-cue={animationStation && scrollCue
+      ? true
+      : undefined}
     data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
@@ -2513,10 +2545,11 @@
     aria-label={renderedMotionBlock === undefined
       ? undefined
       : `${renderedMotionBlock.label} animation step`}
-    style={twoColumnParagraphPresentation === undefined
-      ? undefined
-      : `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
-    }
+    style={twoColumnParagraphPresentation !== undefined
+      ? `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
+      : animationStation && inlineParagraphProjection !== undefined
+        ? `--kp-animation-station-cue-exit:${inlineParagraphProjection.crossingProgress}`
+        : undefined}
   >
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}
@@ -2638,6 +2671,8 @@
     ? " kp-economics-tutorial--inline-sticky"
     : ""}${twoColumnScroll
     ? " kp-economics-tutorial--two-column-scroll"
+    : ""}${animationStation
+    ? " kp-economics-tutorial--animation-station"
     : ""}${stageExpanded
     ? " kp-economics-tutorial--stage-expanded"
     : ""}`}
@@ -2759,7 +2794,7 @@
               class="kp-economics-tutorial__motion-passage"
               data-kp-motion-passage="demand-change"
             >
-              {#if !twoColumnScroll}
+              {#if !twoColumnScroll && !animationStation}
                 <header class="kp-economics-tutorial__motion-passage-gate kp-economics-tutorial__motion-passage-gate--entrance">
                   <p>A change in demand</p>
                   <span aria-hidden="true">↓</span>
@@ -2782,8 +2817,10 @@
                   aria-hidden="true"
                 ></span>
                 <div class="kp-economics-tutorial__motion-passage-prose">
-                  {#each (twoColumnScroll
-                    ? editableTwoColumnParagraphs
+                  {#each (twoColumnScroll || animationStation
+                    ? animationStation
+                      ? editableTwoColumnParagraphs.slice(0, 4)
+                      : editableTwoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {#if motionBridgeEnabled &&
                         passage.id === motionBridge?.beforePassageId}
