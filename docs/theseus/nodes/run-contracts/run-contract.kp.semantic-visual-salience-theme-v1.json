@@ -65,7 +65,8 @@
     {
       "id": "s01",
       "title": "Freeze current visual and failure inventory",
-      "status": "planned"
+      "summary": "Frozen the issued economics palette, state attributes, tuning URLs, stylesheet owners, retained backgrounds, and known 24-failure broad-suite baseline in an executable manifest.",
+      "status": "complete"
     },
     {
       "id": "s02",

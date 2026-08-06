@@ -33,6 +33,22 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s01 executable visual inventory",
+      "checkedAt": "2026-08-06T07:08:00.991Z",
+      "notes": "Eleven ownership and baseline inventory checks pass; current palette, selectors, URL tuners, stylesheet owners, retained backgrounds, and the 24-failure broad baseline are frozen without presentation changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 static boundary",
+      "checkedAt": "2026-08-06T07:08:02.888Z",
+      "notes": "Application, node, tests, Svelte, and domain type checks pass."
+    }
+  ],
   "expectedLearning": [
     "Whether one bounded role-state-theme contract can transmit attention coherently across prose, KaTeX, SVG, and a structurally different algebra caller without caller-owned palettes."
   ],
