@@ -88,7 +88,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "Begin with the graph at rest."
   );
   await expect(demandParagraph).toContainText(
-    "Follow red demand and its intersection"
+    "Red demand has shifted"
   );
   await expect(initialEquilibriumPassage).toContainText(
     "This point is equilibrium"
@@ -125,7 +125,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     elements.map((element) => element.getBoundingClientRect().height)
   );
   expect(passageHeights.slice(0, 5).every((height) =>
-    height >= 400 && height < 650
+    height >= 240 && height < 500
   )).toBe(true);
   expect(passageHeights[5]).toBeLessThan(800);
 
@@ -193,7 +193,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return Math.round(bounds.width / bounds.height * 100) / 100;
-  })).toBe(1.27);
+  })).toBe(1.24);
   await expect.poll(() => graph.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return {
@@ -201,7 +201,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       viewBox: element.getAttribute("viewBox"),
       width: Math.round(bounds.width)
     };
-  })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 544 });
+  })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 531 });
   await expect.poll(() => demandProgress(root)).toBe(0);
   await expect(initialPassage).toHaveAttribute(
     "data-kp-two-column-paragraph-salience",
@@ -428,7 +428,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(demandDistance).toBeGreaterThan(400);
   expect(demandDistance).toBeLessThan(650);
   const motionStart = Math.min(
-    entryTarget.viewport.height * 0.62,
+    entryTarget.viewport.height,
     focusTop + demandDistance
   );
   await placeTopAt(page, demandParagraph, motionStart);
@@ -453,9 +453,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "data-kp-inline-sticky-paragraph-phase",
     "crossing"
   );
+  await expect.poll(async () => Number(
+    await demandPassage.getAttribute("data-kp-two-column-paragraph-salience")
+  )).toBeGreaterThan(0.35);
   await expect.poll(async () => Number(await demandPassage.getAttribute(
     "data-kp-two-column-paragraph-salience"
-  ))).toBeGreaterThan(0.75);
+  ))).toBeLessThan(0.55);
 
   const columns = await page.evaluate(() => {
     const paragraphElement = document.querySelector<HTMLElement>(
@@ -507,8 +510,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
         getComputedStyle(bodyElement, "::after").height
       ),
       paragraphLeft: paragraphBounds.left,
+      paragraphRight: paragraphBounds.right,
       paragraphWidth: paragraphBounds.width,
       stageRight: stageBounds.right,
+      stageLeft: stageBounds.left,
       stageWidth: stageBounds.width,
       graphLeftInset: graphBounds.left - stageBounds.left,
       graphRightInset: stageBounds.right - graphBounds.right
@@ -519,7 +524,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(columns.dividerPosition).toBe("sticky");
   expect(columns.passageBackground).toBe("rgba(0, 0, 0, 0)");
   expect(columns.passageBorderLeft).toBe("0px");
-  expect(columns.passageGap).toBe("400px");
+  expect(columns.passageGap).toBe("240px");
   expect(columns.paragraphBackground).toBe("rgba(0, 0, 0, 0)");
   expect(columns.paragraphBorderTop).toBe("0px");
   expect(columns.paragraphPosition).toBe("relative");
@@ -530,12 +535,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   )).toBeGreaterThan(0.8);
   expect(columns.proseFontFamily)
     .toContain("Source Serif 4");
-  expect(columns.proseFontWeight).toBe("400");
+  expect(columns.proseFontWeight).toBe("300");
   expect(columns.proseLineHeight).toBeGreaterThan(32);
   expect(columns.releaseRuleHeight).toBe(1);
-  expect(columns.paragraphLeft - columns.stageRight).toBeGreaterThan(20);
+  expect(columns.stageLeft - columns.paragraphRight).toBeGreaterThan(20);
   expect(columns.paragraphWidth).toBeLessThan(440);
-  expect(columns.stageWidth).toBeCloseTo(608.28, 1);
+  expect(columns.stageWidth).toBeCloseTo(595.38, 1);
   expect(columns.graphLeftInset).toBeGreaterThan(30);
   expect(columns.graphLeftInset).toBeLessThan(34);
   expect(Math.abs(columns.graphLeftInset - columns.graphRightInset))
@@ -620,7 +625,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(240, 121, 114)",
+    color: "rgb(255, 138, 132)",
     opacity: "1",
     width: "1px"
     });
@@ -646,7 +651,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(124, 189, 255)",
+    color: "rgb(144, 202, 255)",
     opacity: "1",
     width: "1px"
     });
@@ -686,7 +691,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   // remains geometrically stable so the final beat cannot introduce a jump.
   await expect.poll(() => graph.evaluate((element) =>
     Math.round(element.getBoundingClientRect().width)
-  )).toBe(544);
+  )).toBe(531);
   const stageBottom = await stage.evaluate(
     (element) => element.getBoundingClientRect().bottom
   );
@@ -752,7 +757,7 @@ test("phone keeps the accepted one-column inline geometry", async ({ page }) => 
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-paragraph-gap-vh",
-    "50"
+    "30"
   );
 
   await expect.poll(() => body.evaluate((element) =>
@@ -849,8 +854,8 @@ test("light theme applies one compensated graph width and prose weight", async (
       element.querySelector<HTMLElement>("[data-kp-economics-column-divider]")!
     ).width
   }))).toEqual({
-    color: "rgb(41, 43, 58)",
-    proseWeight: "400",
+    color: "rgb(79, 83, 100)",
+    proseWeight: "300",
     divider: "1.5px"
   });
   await expect.poll(() => graph.evaluate((element) => {
@@ -925,7 +930,7 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   const prose = root.locator(".kp-economics-tutorial__passage p").first();
   await expect.poll(() => prose.evaluate((element) =>
     getComputedStyle(element).fontWeight
-  )).toBe("400");
+  )).toBe("300");
 
   const inlineMath = root.locator(".kp-economics-tutorial__prose .katex")
     .first();
@@ -980,19 +985,19 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-text-side",
-    "right"
+    "left"
   );
   await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  await expect(toggle).toContainText("Text right");
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect(toggle).toContainText("Text left");
   await expect(themeToggle).toBeVisible();
   await expect(themeToggle).toContainText("Dark mode");
   await expect.poll(() => columnGeometry(body)).toEqual({
-    order: "graph-text",
+    order: "text-graph",
     stageBorderLeft: "0px",
     stageBorderRight: "0px",
-    stageWidth: 608,
-    proseWidth: 384
+    stageWidth: 595,
+    proseWidth: 397
   });
 
   await expect(review).toHaveCount(1);
@@ -1022,17 +1027,17 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   await toggle.click();
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-text-side",
-    "left"
+    "right"
   );
-  await expect(toggle).toHaveAttribute("aria-pressed", "true");
-  await expect(toggle).toContainText("Text left");
-  await expect(page).toHaveURL(/text=left/);
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await expect(toggle).toContainText("Text right");
+  await expect(page).toHaveURL(/text=right/);
   await expect.poll(() => columnGeometry(body)).toEqual({
-    order: "text-graph",
+    order: "graph-text",
     stageBorderLeft: "0px",
     stageBorderRight: "0px",
-    stageWidth: 608,
-    proseWidth: 384
+    stageWidth: 595,
+    proseWidth: 397
   });
   await expect.poll(() => page.evaluate(() => window.scrollY))
     .toBeCloseTo(before.scrollY, 0);
@@ -1048,9 +1053,9 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   await toggle.click();
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-text-side",
-    "right"
+    "left"
   );
-  await expect(page).not.toHaveURL(/text=left/);
+  await expect(page).not.toHaveURL(/text=right/);
 });
 
 test("appearance experiments are frozen at defaults and legacy queries are inert", async ({
@@ -1067,7 +1072,7 @@ test("appearance experiments are frozen at defaults and legacy queries are inert
   await expect(page.locator("[data-kp-economics-spacing-tuner]")).toHaveCount(0);
   await expect(root).toHaveAttribute(
     "data-kp-economics-two-column-paragraph-gap-vh",
-    "50"
+    "30"
   );
   await expect.poll(() => root.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -1076,7 +1081,7 @@ test("appearance experiments are frozen at defaults and legacy queries are inert
       proseWeight: style.getPropertyValue("--kp-lesson-theme-prose-weight").trim(),
       textWidth: style.getPropertyValue("--kp-two-column-text-width-rem").trim()
     };
-  })).toEqual({ lineHeight: "1.78", proseWeight: "400", textWidth: "24" });
+  })).toEqual({ lineHeight: "1.75", proseWeight: "300", textWidth: "24" });
 
   const evidence = await root.getAttribute("data-kp-tutorial-review-evidence");
   expect(evidence).not.toContain("graph-stroke-scale");

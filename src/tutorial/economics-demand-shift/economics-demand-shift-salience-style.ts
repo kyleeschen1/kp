@@ -20,7 +20,12 @@ export function projectKpEconomicsSalienceCssProperties(input: {
       state: object.salience.state
     });
     const prefix = `--kp-economics-salience-${cssId(object.id)}`;
-    properties[`${prefix}-color`] = treatment.color;
+    properties[`${prefix}-color`] = focusedEconomicsColor({
+      theme: input.theme,
+      identityFamily: object.salience.state.identityFamily,
+      level: object.salience.state.level,
+      fallback: treatment.color
+    });
     properties[`${prefix}-opacity`] = format(treatment.opacity);
     properties[`${prefix}-stroke-scale`] = format(treatment.strokeScale);
     properties[`${prefix}-detail`] = treatment.detail;
@@ -28,6 +33,22 @@ export function projectKpEconomicsSalienceCssProperties(input: {
     properties[`${prefix}-rendered`] = treatment.rendered ? "1" : "0";
   }
   return Object.freeze(properties);
+}
+
+function focusedEconomicsColor(input: {
+  readonly theme: KpVisualThemeId;
+  readonly identityFamily: string;
+  readonly level: string;
+  readonly fallback: string;
+}): string {
+  if (input.level !== "focus") return input.fallback;
+  if (input.identityFamily === "red") {
+    return input.theme === "dark" ? "#ff8a84" : "#c93630";
+  }
+  if (input.identityFamily === "blue") {
+    return input.theme === "dark" ? "#90caff" : "#146ead";
+  }
+  return input.fallback;
 }
 
 export function serializeKpEconomicsSalienceCssProperties(

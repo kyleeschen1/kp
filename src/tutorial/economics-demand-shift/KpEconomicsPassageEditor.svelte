@@ -24,7 +24,8 @@
     onDelete,
     onMoveUp,
     onMoveDown,
-    onReset
+    onReset,
+    onClose
   }: {
     readonly id: string;
     readonly value: string;
@@ -40,6 +41,7 @@
     readonly onMoveUp: () => void;
     readonly onMoveDown: () => void;
     readonly onReset: () => void;
+    readonly onClose: () => void;
   } = $props();
 
   const completions = Object.freeze<KpEconomicsCodeMirrorCompletion[]>([
@@ -51,8 +53,10 @@
   ]);
 
   let host = $state<HTMLElement | undefined>();
+  let dialog = $state<HTMLDialogElement | undefined>();
   let runtime: KpEconomicsCodeMirrorMount | undefined;
   let enhanced = $state(false);
+  let vimMode = $state("normal");
   let sourceSavePending = $state(false);
   let sourceSaveStatus = $state(
     "Autosaved locally. Use Save to source to update the project."
@@ -60,6 +64,10 @@
 
   onMount(() => {
     let disposed = false;
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    dialog?.showModal();
     void import("./economics-demand-shift-codemirror-runtime.ts").then(
       ({ mountKpEconomicsCodeMirror }) => {
         if (disposed || host === undefined) return;
@@ -67,7 +75,8 @@
           parent: host,
           value,
           completions,
-          onChange: updateSource
+          onChange: updateSource,
+          onVimModeChange: (mode) => vimMode = mode
         });
         enhanced = true;
         runtime.view.focus();
@@ -77,6 +86,7 @@
       disposed = true;
       runtime?.destroy();
       runtime = undefined;
+      root.style.overflow = previousOverflow;
     };
   });
 
@@ -130,15 +140,25 @@
   }
 </script>
 
-<div
+<dialog
+  bind:this={dialog}
   class="kp-economics-lesson-editor"
   data-kp-economics-lesson-editor
   data-kp-economics-lesson-editor-passage={id}
   data-kp-economics-lesson-editor-enhanced={enhanced}
+  oncancel={(event) => {
+    event.preventDefault();
+    onClose();
+  }}
 >
-  <div class="kp-economics-lesson-editor__heading">
-    <code>{id}</code>
-    <span>Markdown · inline KaTeX with <code>$…$</code></span>
+  <div class="kp-economics-lesson-editor__toolbar">
+    <span>Edit one passage; the lesson remains frozen behind this window.</span>
+    <button
+      type="button"
+      class="kp-economics-lesson-editor__close"
+      aria-label="Close lesson editor"
+      onclick={onClose}
+    >Close</button>
   </div>
   <div class="kp-economics-lesson-editor__surface" bind:this={host}>
     <textarea
@@ -199,4 +219,10 @@
       onclick={() => runDraftMutation(onReset)}
     >Reset draft</button>
   </div>
-</div>
+  <div class="kp-economics-lesson-editor__modeline" data-kp-economics-editor-modeline>
+    <code>{id}</code>
+    <span>Markdown + KaTeX</span>
+    <span class="kp-economics-lesson-editor__modeline-spacer"></span>
+    <span data-kp-economics-editor-vim-mode>VIM · {vimMode}</span>
+  </div>
+</dialog>

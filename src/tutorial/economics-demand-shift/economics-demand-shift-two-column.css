@@ -7,8 +7,8 @@
   --kp-two-column-focus-bottom-vh: 50;
   --kp-two-column-motion-start-vh: 62;
   --kp-two-column-minimum-effective-height-vh: 23;
-  --kp-two-column-paragraph-gap-vh: 50;
-  --kp-two-column-prose-line-height: 1.78;
+  --kp-two-column-paragraph-gap-vh: 30;
+  --kp-two-column-prose-line-height: 1.75;
   --kp-two-column-text-width-rem: 24;
   --kp-two-column-text-width:
     calc(var(--kp-two-column-text-width-rem) * 1rem);
@@ -45,6 +45,8 @@
     );
   --kp-two-column-boundary-line: var(--kp-graph-line-effective, 1px);
   --kp-two-column-column-half-gap: clamp(0.625rem, 1.2vw, 1.125rem);
+  --kp-two-column-text-share: 2fr;
+  --kp-two-column-stage-share: 3fr;
   --kp-two-column-divider-block-size:
     calc(
       100vh -
@@ -89,7 +91,7 @@
   .kp-economics-tutorial--two-column-scroll
     .kp-economics-tutorial__prose {
     width: min(100%, var(--kp-inline-sticky-measure));
-    font-weight: var(--kp-economics-prose-weight, 400);
+    font-weight: var(--kp-economics-prose-weight, 300);
   }
 
   .kp-economics-tutorial--two-column-scroll
@@ -122,9 +124,9 @@
     position: relative;
     display: grid;
     grid-template-columns:
-      minmax(24rem, 1fr)
+      minmax(0, var(--kp-two-column-stage-share))
       var(--kp-two-column-boundary-line)
-      minmax(16rem, var(--kp-two-column-text-width));
+      minmax(0, var(--kp-two-column-text-share));
     column-gap: var(--kp-two-column-column-half-gap);
     align-items: start;
     justify-content: center;
@@ -134,9 +136,9 @@
   .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
     .kp-economics-tutorial__motion-passage-body {
     grid-template-columns:
-      minmax(16rem, var(--kp-two-column-text-width))
+      minmax(0, var(--kp-two-column-text-share))
       var(--kp-two-column-boundary-line)
-      minmax(24rem, 1fr);
+      minmax(0, var(--kp-two-column-stage-share));
   }
 
   .kp-economics-tutorial--two-column-scroll

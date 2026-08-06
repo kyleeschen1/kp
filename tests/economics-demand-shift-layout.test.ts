@@ -127,25 +127,25 @@ test("motion bridge dwell profiles are named and fail closed outside the exempla
   );
 });
 
-test("two-column text side is URL-reproducible and defaults right", () => {
-  assert.equal(readKpEconomicsTwoColumnTextSide(""), "right");
+test("two-column text side is URL-reproducible and defaults left", () => {
+  assert.equal(readKpEconomicsTwoColumnTextSide(""), "left");
   assert.equal(
-    readKpEconomicsTwoColumnTextSide("?layout=two-column-scroll&text=left"),
-    "left"
+    readKpEconomicsTwoColumnTextSide("?layout=two-column-scroll&text=right"),
+    "right"
   );
   assert.equal(
     writeKpEconomicsTwoColumnTextSide({
       search: "?layout=two-column-scroll&theme=light",
       side: "left"
     }),
-    "?layout=two-column-scroll&theme=light&text=left"
+    "?layout=two-column-scroll&theme=light"
   );
   assert.equal(
     writeKpEconomicsTwoColumnTextSide({
-      search: "?layout=two-column-scroll&text=left&theme=light",
+      search: "?layout=two-column-scroll&text=right&theme=light",
       side: "right"
     }),
-    "?layout=two-column-scroll&theme=light"
+    "?layout=two-column-scroll&text=right&theme=light"
   );
 });
 
@@ -333,7 +333,7 @@ test("paragraph salience hands off after predecessor settlement", () => {
   assert.deepEqual(terminal.paragraphs.map(({ salience }) => salience), [0, 1]);
 });
 
-test("two-column motion stays at zero through its post-latch start", () => {
+test("two-column motion consumes the full gap after its preceding passage", () => {
   const corridor = projectKpTwoColumnScrollMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -352,7 +352,7 @@ test("two-column motion stays at zero through its post-latch start", () => {
     viewportHeightPx: 800
   });
 
-  assert.equal(corridor.startViewportRatio, 0.62);
+  assert.equal(corridor.startViewportRatio, 0.66);
   assert.equal(corridor.endViewportRatio, 0.35);
   assert.deepEqual(corridor.keyframes, [
     { travel: 0, progress: 0 },
@@ -362,12 +362,12 @@ test("two-column motion stays at zero through its post-latch start", () => {
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 496,
+    anchorTop: 528,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
   const firstPostLatchPixel = projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 495,
+    anchorTop: 527,
     viewportHeight: 800
   });
   assert.ok(firstPostLatchPixel.travel > 0);

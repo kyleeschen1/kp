@@ -69,7 +69,7 @@ export const kpEconomicsMotionBridgeDwellExemplarSearch =
 export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
 export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
 export const kpEconomicsTwoColumnParagraphGapStepVh = 1;
-export const kpEconomicsTwoColumnParagraphGapDefaultVh = 50;
+export const kpEconomicsTwoColumnParagraphGapDefaultVh = 30;
 
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string
@@ -109,9 +109,9 @@ export function readKpEconomicsMotionBridgeDwellProfile(
 export function readKpEconomicsTwoColumnTextSide(
   search: string
 ): KpEconomicsTwoColumnTextSide {
-  return new URLSearchParams(search).get(twoColumnTextSideQueryKey) === "left"
-    ? "left"
-    : "right";
+  return new URLSearchParams(search).get(twoColumnTextSideQueryKey) === "right"
+    ? "right"
+    : "left";
 }
 
 export function writeKpEconomicsTwoColumnTextSide(input: {
@@ -119,7 +119,7 @@ export function writeKpEconomicsTwoColumnTextSide(input: {
   readonly side: KpEconomicsTwoColumnTextSide;
 }): string {
   const parameters = new URLSearchParams(input.search);
-  if (input.side === "right") {
+  if (input.side === "left") {
     parameters.delete(twoColumnTextSideQueryKey);
   } else {
     parameters.set(twoColumnTextSideQueryKey, input.side);
@@ -460,16 +460,14 @@ export function projectKpTwoColumnScrollMotionCorridor(input: {
     0,
     viewportHeight - 1
   );
-  const motionStart = Math.max(
+  const motionStart = clamp(
+    focusTop + finitePositive(input.paragraphDistancePx, viewportHeight),
     focusTop + 1,
-    Math.min(
-      viewportHeight * clamp(input.motionStartRatio ?? 0.62, 0, 1),
-      focusTop + finitePositive(input.paragraphDistancePx, viewportHeight)
-    )
+    viewportHeight
   );
-  // Prose spacing is real scroll authority: short intervals wait for the
-  // predecessor's divider settlement, while long intervals hold the graph
-  // until the incoming paragraph has passed its center-focus plateau.
+  // The incoming transition paragraph names the motion, but the document gap
+  // before it owns the playhead. Motion begins when the preceding paragraph
+  // reaches its final reading anchor and ends when this paragraph reaches it.
   return Object.freeze({
     ...input.corridor,
     startViewportRatio: motionStart / viewportHeight,

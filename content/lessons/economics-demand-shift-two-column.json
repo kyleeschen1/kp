@@ -9,24 +9,24 @@
     {
       "id": "initial-equilibrium",
       "role": "interpretation",
-      "sourceText": "The two schedules meet at $E_0=(6,8)$. This point is equilibrium because buyers and sellers choose the same quantity at the same price."
+      "sourceText": "Before continuing, hold blue $S$ fixed and watch red demand. The two schedules meet at $E_0=(6,8)$. This point is equilibrium because buyers and sellers choose the same quantity at the same price."
     },
     {
       "id": "follow-shift",
       "role": "transition",
       "motionBlockId": "demand-shift",
-      "sourceText": "Hold blue $S$ fixed. Follow red demand and its intersection with supply as $D_0$ shifts to $D_1$."
+      "sourceText": "Red demand has shifted from $D_0$ to $D_1$ while blue $S$ stayed fixed. Its intersection with supply moved as well."
     },
     {
       "id": "new-equilibrium",
       "role": "interpretation",
-      "sourceText": "The curves now meet at $E_1=(8,10)$, above and to the right of $E_0$. Both equilibrium price and equilibrium quantity are higher."
+      "sourceText": "The curves now meet at $E_1=(8,10)$, above and to the right of $E_0$. Both equilibrium price and equilibrium quantity are higher. Next, ignore red demand and watch the equilibrium move along blue $S$."
     },
     {
       "id": "shift-versus-movement",
       "role": "transition",
       "motionBlockId": "supply-movement",
-      "sourceText": "Now ignore red demand and watch blue $S$. Follow the trace from $E_0$ to $E_1$ without changing the curve itself."
+      "sourceText": "The trace has moved from $E_0$ to $E_1$ along blue $S$ without changing the supply curve itself."
     },
     {
       "id": "movement-along-supply",

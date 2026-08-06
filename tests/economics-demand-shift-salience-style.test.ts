@@ -20,7 +20,7 @@ test("economics projects one route-local salience property seam", () => {
     projection
   });
   assert.equal(Object.keys(dark).length, 60);
-  assert.equal(dark["--kp-economics-salience-market-supply-color"], "#7cbdff");
+  assert.equal(dark["--kp-economics-salience-market-supply-color"], "#90caff");
   assert.equal(dark["--kp-economics-salience-market-supply-opacity"], "1");
   assert.equal(dark["--kp-economics-salience-market-demand-current-opacity"], "1");
   assert.equal(dark["--kp-economics-salience-market-demand-initial-rendered"], "1");
@@ -33,6 +33,10 @@ test("theme projection changes recipes without adding layout authority", () => {
   assert.notEqual(
     dark["--kp-economics-salience-market-supply-color"],
     light["--kp-economics-salience-market-supply-color"]
+  );
+  assert.equal(
+    light["--kp-economics-salience-market-supply-color"],
+    "#146ead"
   );
   assert.equal(
     light["--kp-economics-salience-market-demand-current-opacity"],

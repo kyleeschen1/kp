@@ -103,7 +103,7 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
   assert.equal((theme.match(/@font-face/g) ?? []).length, 1);
   assert.match(
     theme,
-    /font-family: "Source Serif 4";[\s\S]*?font-weight: 400;/
+    /font-family: "Source Serif 4";[\s\S]*?font-weight: 300;/
   );
   assert.match(
     theme,
@@ -126,11 +126,11 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
 test("prose controls and companion math consume semantic theme sources", () => {
   const theme = read("economics-demand-shift-theme.css");
   for (const declaration of [
-    "--kp-lesson-theme-ink: #292b3a",
+    "--kp-lesson-theme-ink: #4f5364",
     "--kp-lesson-theme-math-foreground: #4f5364",
     "--kp-lesson-theme-control-ink: #292b3a",
     "--kp-lesson-theme-control-accent: #256ea8",
-    "--kp-lesson-theme-ink: #d6d7df",
+    "--kp-lesson-theme-ink: #a6a9b7",
     "--kp-lesson-theme-math-foreground: #a6a9b7",
     "--kp-lesson-theme-control-ink: #d6d7df",
     "--kp-lesson-theme-control-accent: #7cbdff"
@@ -260,7 +260,7 @@ test("two-column progressive layout derives prose and graph from one latch", () 
   const twoColumn = read("economics-demand-shift-two-column.css");
 
   assert.match(twoColumn, /--kp-two-column-stage-center-vh: 50;/);
-  assert.match(twoColumn, /--kp-two-column-paragraph-gap-vh: 50;/);
+  assert.match(twoColumn, /--kp-two-column-paragraph-gap-vh: 30;/);
   assert.match(
     twoColumn,
     /--kp-two-column-boundary-line: var\(--kp-graph-line-effective, 1px\);/

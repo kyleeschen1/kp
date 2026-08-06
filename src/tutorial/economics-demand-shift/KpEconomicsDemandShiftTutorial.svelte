@@ -301,6 +301,7 @@
     typeof import("./economics-demand-shift-lesson-draft.ts") | undefined;
   let editableTwoColumnParagraphs = $state(untrack(() => twoColumnParagraphs));
   let lessonEditorOpen = $state(false);
+  let lessonEditorModalOpen = $state(false);
   let LessonPassageEditor = $state<
     typeof KpEconomicsPassageEditor | undefined
   >();
@@ -793,6 +794,7 @@
 
   function toggleLessonEditor(): void {
     lessonEditorOpen = !lessonEditorOpen;
+    if (!lessonEditorOpen) lessonEditorModalOpen = false;
     if (lessonEditorOpen) void loadLessonEditor();
     scheduleLessonEditorGeometryRefresh();
   }
@@ -841,7 +843,13 @@
       lessonDraft,
       passageId
     );
+    lessonEditorModalOpen = true;
     persistLessonDraft(lessonDraft);
+  }
+
+  function closeLessonEditorModal(): void {
+    lessonEditorModalOpen = false;
+    scrollCoordinator?.scheduleProjection();
   }
 
   function updateLessonDraftSource(sourceText: string): void {
@@ -1242,6 +1250,7 @@
   function handleCoordinatedScroll(
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
+    if (lessonEditorModalOpen) return;
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
@@ -1450,21 +1459,24 @@
     const focusedParagraph = paragraphFrames.find(({ ownsAttention }) =>
       ownsAttention
     ) ?? paragraphFrames[0];
-    const bridgeProjection = motionBridge === undefined
-      ? undefined
-      : latestScrollProjection?.blocks.find(({ id, travel }) =>
-          id === motionBridge.motionBlockId && travel > 0 && travel < 1
-        );
+    const activeGapProjection = latestScrollProjection?.blocks.find(
+      ({ travel }) => travel > 0 && travel < 1
+    );
+    const activeGapPassageId = activeGapProjection?.id === "demand-shift"
+      ? "follow-shift"
+      : activeGapProjection?.id === "supply-movement"
+        ? "shift-versus-movement"
+        : undefined;
     // The paired prose may trade attention during the gap, but the one
     // semantic bridge remains motion owner until its after anchor settles.
-    const motionParagraph = bridgeProjection === undefined
+    const motionParagraph = activeGapProjection === undefined
       ? paragraphFrames.find((frame) =>
           frame.motionBlockId !== undefined && (
             frame.ownsAttention || frame.projection.phase === "crossing"
           )
         )
       : paragraphFrames.find(({ passageId }) =>
-          passageId === motionBridge?.beforePassageId
+          passageId === activeGapPassageId
         );
     const passageId = focusedParagraph?.passageId;
     const motionBlockId = motionParagraph?.motionBlockId;
@@ -1475,9 +1487,10 @@
     attentionPassageId = passageId;
     attentionCursorState = "within-region";
     scrollActiveMotionBlock = motionBlockId ?? "";
-    if (checkpoint.passageId !== passageId) {
+    const checkpointPassageId = activeGapPassageId ?? passageId;
+    if (checkpoint.passageId !== checkpointPassageId) {
       const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
-        (candidate) => candidate.passageId === passageId
+        (candidate) => candidate.passageId === checkpointPassageId
       );
       if (nextIndex >= 0) activateCheckpoint(nextIndex, "scroll");
     }
@@ -2575,38 +2588,6 @@
       : `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
     }
   >
-    {#if lessonEditorOpen && lessonDraft !== undefined &&
-        twoColumnScroll && scrollCue}
-      <button
-        type="button"
-        class="kp-economics-tutorial__passage-select"
-        aria-label={`Edit passage ${passage.id}`}
-        aria-pressed={lessonDraft.selectedPassageId === passage.id}
-        data-kp-economics-passage-select={passage.id}
-        onclick={() => selectLessonDraftPassage(passage.id)}
-      >Edit</button>
-      {#if lessonDraft.selectedPassageId === passage.id &&
-          LessonPassageEditor !== undefined}
-        <LessonPassageEditor
-          id={passage.id}
-          value={selectedLessonDraftPassage!.sourceText}
-          draft={lessonDraft}
-          validation={lessonEditorValidation}
-          canDelete={!selectedLessonDraftIsPublished}
-          canMoveUp={!selectedLessonDraftIsPublished &&
-            selectedLessonDraftIndex > 0}
-          canMoveDown={!selectedLessonDraftIsPublished &&
-            selectedLessonDraftIndex < lessonDraft.passages.length - 1}
-          onChange={updateLessonDraftSource}
-          onAdd={addLessonDraftPassageAfter}
-          onCopy={duplicateLessonDraftPassage}
-          onDelete={deleteLessonDraftPassage}
-          onMoveUp={() => moveLessonDraftPassage(-1)}
-          onMoveDown={() => moveLessonDraftPassage(1)}
-          onReset={resetLessonDraft}
-        />
-      {/if}
-    {/if}
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}
         <span
@@ -2678,6 +2659,18 @@
           </button>
         </div>
       </details>
+    {/if}
+    {#if lessonEditorOpen && lessonDraft !== undefined &&
+        twoColumnScroll && scrollCue}
+      <button
+        type="button"
+        class="kp-economics-tutorial__passage-select"
+        aria-label={`Edit passage ${passage.id}`}
+        aria-pressed={lessonEditorModalOpen &&
+          lessonDraft.selectedPassageId === passage.id}
+        data-kp-economics-passage-select={passage.id}
+        onclick={() => selectLessonDraftPassage(passage.id)}
+      >Edit</button>
     {/if}
   </div>
 {/snippet}
@@ -2940,3 +2933,26 @@
   </div>
   {/snippet}
 </KpTutorialLessonShell>
+
+{#if lessonEditorOpen && lessonEditorModalOpen && lessonDraft !== undefined &&
+    selectedLessonDraftPassage !== undefined &&
+    LessonPassageEditor !== undefined}
+  <LessonPassageEditor
+    id={selectedLessonDraftPassage.id}
+    value={selectedLessonDraftPassage.sourceText}
+    draft={lessonDraft}
+    validation={lessonEditorValidation}
+    canDelete={!selectedLessonDraftIsPublished}
+    canMoveUp={!selectedLessonDraftIsPublished && selectedLessonDraftIndex > 0}
+    canMoveDown={!selectedLessonDraftIsPublished &&
+      selectedLessonDraftIndex < lessonDraft.passages.length - 1}
+    onChange={updateLessonDraftSource}
+    onAdd={addLessonDraftPassageAfter}
+    onCopy={duplicateLessonDraftPassage}
+    onDelete={deleteLessonDraftPassage}
+    onMoveUp={() => moveLessonDraftPassage(-1)}
+    onMoveDown={() => moveLessonDraftPassage(1)}
+    onReset={resetLessonDraft}
+    onClose={closeLessonEditorModal}
+  />
+{/if}

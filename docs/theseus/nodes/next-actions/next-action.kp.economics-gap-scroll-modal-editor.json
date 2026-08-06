@@ -1,0 +1,62 @@
+{
+  "id": "next-action.kp.economics-gap-scroll-modal-editor",
+  "kind": "next-action",
+  "title": "Refine economics gap choreography and modal editor",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "learner semantics and deterministic scroll",
+      "checkedAt": "2026-08-06T21:02:42.536Z",
+      "notes": "68 focused tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "stylesheet ownership and visual tokens",
+      "checkedAt": "2026-08-06T21:02:43.668Z",
+      "notes": "17 focused checks passed."
+    },
+    {
+      "command": "npm run test:economics-lesson-source-save",
+      "status": "passed",
+      "scope": "canonical source persistence",
+      "checkedAt": "2026-08-06T21:02:44.597Z",
+      "notes": "4 source-save boundary tests passed."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "modal editor workflow",
+      "checkedAt": "2026-08-06T21:02:45.518Z",
+      "notes": "4 Chromium checks passed, including below-passage activation, Vim mode, page freeze, autosave, and source save."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "canonical visual exemplar and responsive preservation",
+      "checkedAt": "2026-08-06T21:02:46.591Z",
+      "notes": "10 Chromium checks passed for desktop, phone, light, forced colors, column swap, cached geometry, and reverse traversal."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production type and artifact closure",
+      "checkedAt": "2026-08-06T21:02:47.515Z",
+      "notes": "TypeScript, Svelte, domain typechecks, publication freshness, and Vite production build passed."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "initial learner budget",
+      "checkedAt": "2026-08-06T21:02:48.461Z",
+      "notes": "Behavioral metrics remain healthy (42 resources, zero CLS, 34.3 ms active p95, no active long tasks), but initial transfer is 251173/250000 bytes, script is 150294/150000 bytes, and the sampled cold longest task is 153/150 ms. The deliberate genuine Source Serif 300 asset accounts for about 980 bytes of the transfer delta; lazy CodeMirror/Vim is excluded from initial transfer."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Bounded implementation is complete and verified for semantics, editor behavior, source persistence, build, and the canonical responsive exemplar. Awaiting human visual review before any promotion. The learner performance behavior remains healthy, but the strict initial route ceiling is red by 1173 transfer bytes and 294 script bytes after adopting the genuine 300-weight font; preserve the ceiling and treat optimization or an explicit font-budget tradeoff as a follow-up decision."
+  }
+}

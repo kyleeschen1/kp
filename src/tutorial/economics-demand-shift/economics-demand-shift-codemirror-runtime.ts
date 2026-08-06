@@ -13,9 +13,11 @@ import { markdown } from "@codemirror/lang-markdown";
 import { EditorState } from "@codemirror/state";
 import {
   EditorView,
+  drawSelection,
   keymap,
   placeholder
 } from "@codemirror/view";
+import { getCM, vim } from "@replit/codemirror-vim";
 
 export interface KpEconomicsCodeMirrorCompletion {
   readonly label: string;
@@ -35,6 +37,7 @@ export function mountKpEconomicsCodeMirror(input: {
   readonly value: string;
   readonly completions: readonly KpEconomicsCodeMirrorCompletion[];
   readonly onChange: (value: string) => void;
+  readonly onVimModeChange?: ((mode: string) => void) | undefined;
 }): KpEconomicsCodeMirrorMount {
   let applyingExternalValue = false;
   const completions: readonly Completion[] = input.completions.map(
@@ -64,6 +67,10 @@ export function mountKpEconomicsCodeMirror(input: {
     state: EditorState.create({
       doc: input.value,
       extensions: [
+        // Vim must precede every other keymap so normal-mode commands retain
+        // authority while the conventional bindings remain available in insert mode.
+        vim(),
+        drawSelection(),
         markdown(),
         history(),
         keymap.of([
@@ -112,9 +119,24 @@ export function mountKpEconomicsCodeMirror(input: {
       ]
     })
   });
+  const cm = getCM(view);
+  const reportVimMode = (event?: { mode?: string; subMode?: string }): void => {
+    const mode = event?.mode ?? cm?.state.vim?.mode ?? "normal";
+    const subMode = event?.subMode === "linewise"
+      ? " line"
+      : event?.subMode === "blockwise"
+        ? " block"
+        : "";
+    input.onVimModeChange?.(`${mode}${subMode}`);
+  };
+  cm?.on("vim-mode-change", reportVimMode);
+  reportVimMode();
   return Object.freeze({
     view,
-    destroy: () => view.destroy(),
+    destroy: () => {
+      cm?.off("vim-mode-change", reportVimMode);
+      view.destroy();
+    },
     setValue: (value: string) => {
       const current = view.state.doc.toString();
       if (current === value) return;

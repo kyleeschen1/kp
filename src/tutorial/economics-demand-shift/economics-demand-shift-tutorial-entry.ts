@@ -44,7 +44,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   document.documentElement.dataset["kpLessonTheme"] = initialTheme;
   // Typography is lesson geometry: resolve the one local prose face before
   // scroll and attention observers can sample fallback-font dimensions.
-  await document.fonts.load('400 1rem "Source Serif 4"');
+  await document.fonts.load('300 1rem "Source Serif 4"');
   defineKpTutorialScrubBar();
   defineKpTutorialToc();
   const { descriptors, entry } =

@@ -133,7 +133,8 @@ kp-tutorial-toc {
   /* The mono face and inline KaTeX share Computer Modern metrics. Grow their
      common parent instead of independently scaling either side of a sentence. */
   font-size: clamp(1.08rem, 1.28vw, 1.2rem);
-  line-height: 1.78;
+  font-weight: var(--kp-lesson-theme-prose-weight);
+  line-height: 1.75;
 }
 
 .kp-economics-tutorial__intro {
