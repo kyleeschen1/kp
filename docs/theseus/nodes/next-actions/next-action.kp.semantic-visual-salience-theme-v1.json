@@ -159,6 +159,27 @@
       "scope": "s11 dark graph palette smoke",
       "checkedAt": "2026-08-06T07:45:38.923Z",
       "notes": "All 11 canonical Chromium cases pass with updated dark blue/rose and low-chroma tuner expectations."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s12 light economics graph palette",
+      "checkedAt": "2026-08-06T07:48:46.143Z",
+      "notes": "14 ownership and palette checks pass; light sources are explicitly distinct and #f4f1e9 remains retained."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s12 runtime preservation",
+      "checkedAt": "2026-08-06T07:48:47.293Z",
+      "notes": "59 economics tests pass with unchanged semantic state, SVG geometry, direct seek, and motion."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s12 light graph palette smoke",
+      "checkedAt": "2026-08-06T07:48:48.424Z",
+      "notes": "All 11 canonical Chromium cases pass, including updated light axis, grid, series, intersection, and optical width assertions."
     }
   ],
   "expectedLearning": [

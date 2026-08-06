@@ -76,6 +76,26 @@ test("dark graph palette uses the approved semantic identity sources", () => {
   }
 });
 
+test("light graph palette uses separately tuned semantic sources", () => {
+  const theme = readSource("economics-demand-shift-theme.css");
+  for (const color of [
+    "#256ea8",
+    "#a83770",
+    "#151622",
+    "#aeb2bf",
+    "#707586",
+    "#74798a",
+    "#68788a",
+    "#856b76"
+  ]) {
+    assert.equal(theme.includes(color), true, `missing light semantic color ${color}`);
+  }
+  assert.deepEqual(baseline.graphSeries.light, {
+    stable: "#4682b4",
+    changing: "#dc443c"
+  });
+});
+
 test("frozen stylesheet owners remain present without overlapping the inventory", () => {
   for (const owner of baseline.stylesheetOwners) {
     assert.match(readSource(owner), /^\/\* [^\n]+ \*\//);

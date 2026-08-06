@@ -11,14 +11,14 @@
   --kp-lesson-theme-math-foreground: #4f575e;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
   --kp-lesson-theme-graph-stroke-width: 1.25px;
-  --kp-lesson-theme-graph-grid: #dbe1e0;
-  --kp-lesson-theme-graph-reference: #7d8285;
-  --kp-lesson-theme-graph-axis: #111319;
-  --kp-lesson-theme-graph-ghost-curve-casing: #b44f49;
-  --kp-lesson-theme-graph-ghost-curve-core: #7d8285;
-  --kp-lesson-theme-graph-ghost-guide-casing: #656b70;
-  --kp-lesson-theme-graph-ghost-guide-core: #c4c9c7;
-  --kp-lesson-theme-graph-intersection-stroke: #111319;
+  --kp-lesson-theme-graph-grid: #d7dae3;
+  --kp-lesson-theme-graph-reference: #707586;
+  --kp-lesson-theme-graph-axis: #151622;
+  --kp-lesson-theme-graph-ghost-curve-casing: #c9bec2;
+  --kp-lesson-theme-graph-ghost-curve-core: #b9bdc8;
+  --kp-lesson-theme-graph-ghost-guide-casing: #aeb2bf;
+  --kp-lesson-theme-graph-ghost-guide-core: #eceef5;
+  --kp-lesson-theme-graph-intersection-stroke: #151622;
   --kp-lesson-theme-graph-intersection-fill: var(--kp-lesson-theme-page);
   --kp-lesson-theme-border: #d8d5cc;
   --kp-lesson-theme-focus: #7a9da8;
@@ -150,6 +150,12 @@
     var(--kp-lesson-theme-graph-intersection-stroke);
   --kp-graph-intersection-fill:
     var(--kp-lesson-theme-graph-intersection-fill);
+  --kp-graph-stable: #256ea8;
+  --kp-graph-changing: #a83770;
+  --kp-graph-focal: #151622;
+  --kp-graph-guide: #aeb2bf;
+  --kp-graph-muted: #707586;
+  --kp-graph-tick: #74798a;
 }
 
 :root[data-kp-lesson-theme="dark"]
@@ -174,12 +180,12 @@
    generating a continuum of color-mix results for authors to reason about. */
 .kp-economics-tutorial[data-kp-economics-muted-blue="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-stable: #6f8fa5;
+  --kp-graph-stable: #68788a;
 }
 
 .kp-economics-tutorial[data-kp-economics-muted-red="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #a77572;
+  --kp-graph-changing: #856b76;
 }
 
 :root[data-kp-lesson-theme="dark"]

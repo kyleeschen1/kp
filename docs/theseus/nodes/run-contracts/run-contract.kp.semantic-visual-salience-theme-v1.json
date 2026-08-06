@@ -131,7 +131,8 @@
     {
       "id": "s12",
       "title": "Migrate the light economics graph palette",
-      "status": "planned"
+      "summary": "Migrated the light economics graph to separately tuned blue, rose, ink, structure, ghost, and low-chroma sources while preserving #f4f1e9 and the 1.25px light optical stroke.",
+      "status": "complete"
     },
     {
       "id": "s13",

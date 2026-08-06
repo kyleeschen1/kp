@@ -757,7 +757,7 @@ test("light theme applies one compensated graph width and prose weight", async (
   ).first().evaluate((element) => ({
     color: getComputedStyle(element).stroke,
     opacity: getComputedStyle(element).opacity
-  }))).toEqual({ color: "rgb(219, 225, 224)", opacity: "1" });
+  }))).toEqual({ color: "rgb(215, 218, 227)", opacity: "1" });
   await expect.poll(() => graph.evaluate((element) => ({
     axis: getComputedStyle(element.querySelector<SVGElement>(
       "[data-kp-editor-graph-axis]"
@@ -766,8 +766,8 @@ test("light theme applies one compensated graph width and prose weight", async (
       "[data-kp-economics-supply-line]"
     )!).stroke
   }))).toEqual({
-    axis: "rgb(17, 19, 25)",
-    supply: "rgb(70, 130, 180)"
+    axis: "rgb(21, 22, 34)",
+    supply: "rgb(37, 110, 168)"
   });
   await expect.poll(() => graph.locator(
     "[data-kp-economics-equilibrium-point]"
@@ -776,7 +776,7 @@ test("light theme applies one compensated graph width and prose weight", async (
     stroke: getComputedStyle(element).stroke
   }))).toEqual({
     fill: "rgb(244, 241, 233)",
-    stroke: "rgb(17, 19, 25)"
+    stroke: "rgb(21, 22, 34)"
   });
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-light-optical-compensation.png`,

@@ -155,10 +155,10 @@ test("economics layout owners do not restate settled passage paint", () => {
   );
 });
 
-test("dark graph axes share the divider token without changing light axes", () => {
+test("dark graph axes share the divider while light axes use semantic ink", () => {
   const theme = read("economics-demand-shift-theme.css");
 
-  assert.match(theme, /--kp-lesson-theme-graph-axis: #111319;/);
+  assert.match(theme, /--kp-lesson-theme-graph-axis: #151622;/);
   assert.match(
     theme,
     /:root\[data-kp-lesson-theme="dark"\][\s\S]*?--kp-lesson-theme-stage-divider: #626775;[\s\S]*?--kp-lesson-theme-graph-axis: var\(--kp-lesson-theme-stage-divider\);/
