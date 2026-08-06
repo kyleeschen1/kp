@@ -25,6 +25,12 @@
     kpEconomicsDemandShiftCheckpoints,
     stepKpEconomicsDemandShiftCheckpoint
   } from "./economics-demand-shift-checkpoints.ts";
+  import { projectKpEconomicsSalience } from
+    "./economics-demand-shift-salience-adapter.ts";
+  import {
+    projectKpEconomicsSalienceCssProperties,
+    serializeKpEconomicsSalienceCssProperties
+  } from "./economics-demand-shift-salience-style.ts";
   import type {
     KpEconomicsDemandShiftLesson,
     KpEconomicsDemandShiftLessonPassage
@@ -463,6 +469,15 @@
   let lessonMotionProjection = $state(initialDeepLink.motion);
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
+  let semanticSalienceStyle = $derived(serializeKpEconomicsSalienceCssProperties(
+    projectKpEconomicsSalienceCssProperties({
+      theme,
+      projection: projectKpEconomicsSalience({
+        ...lessonMotionProjection.scene,
+        focusTarget: checkpoint.attention.target
+      })
+    })
+  ));
   let semanticProgress = $derived(lessonMotionProjection.demandShiftProgress);
   let supplyMovementProgress = $derived(
     lessonMotionProjection.supplyMovementProgress
@@ -2827,7 +2842,7 @@
         : { themeId: kpEconomicsDemandShiftThemeIds[theme] }
     )
   }}
-  style={`${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle};--kp-two-column-paragraph-gap-vh:${twoColumnParagraphGapVh};--kp-economics-context-opacity:${contextOpacity};--kp-two-column-prose-line-height:${proseLineHeight};--kp-economics-prose-weight:${proseWeight};--kp-two-column-text-width-rem:${textWidthRem}`}
+  style={`${semanticSalienceStyle};${supplyInterpretationStyle};${stageCompositionStyle};${verificationRevealStyle};${graphStrokeStyle};--kp-two-column-paragraph-gap-vh:${twoColumnParagraphGapVh};--kp-economics-context-opacity:${contextOpacity};--kp-two-column-prose-line-height:${proseLineHeight};--kp-economics-prose-weight:${proseWeight};--kp-two-column-text-width-rem:${textWidthRem}`}
 >
   {#snippet before()}
     <h1 class="kp-tutorial-shell__visually-hidden kp-economics-tutorial__visually-hidden">

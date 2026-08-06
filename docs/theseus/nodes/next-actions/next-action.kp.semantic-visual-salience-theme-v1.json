@@ -110,6 +110,34 @@
       "scope": "s09 economics semantic adapter",
       "checkedAt": "2026-08-06T07:34:10.621Z",
       "notes": "All 56 economics tests pass, including focus-target closure, color/opacity-free output, historical/equation presence, direct reconstruction, and forward/rewind identity."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s10 route-local CSS seam",
+      "checkedAt": "2026-08-06T07:40:53.136Z",
+      "notes": "59 focused economics tests pass, including 60 semantic CSS properties and mounted route seam."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s10 stylesheet preservation",
+      "checkedAt": "2026-08-06T07:40:54.307Z",
+      "notes": "12 stylesheet ownership and frozen visual baseline tests pass; no CSS consumer changed yet."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s10 semantic infrastructure",
+      "checkedAt": "2026-08-06T07:40:55.325Z",
+      "notes": "17 semantic vocabulary, roles, palette, recipes, and resolver tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 typed projection seam",
+      "checkedAt": "2026-08-06T07:40:56.359Z",
+      "notes": "TypeScript, Svelte, and domain type checks pass with zero diagnostics."
     }
   ],
   "expectedLearning": [
