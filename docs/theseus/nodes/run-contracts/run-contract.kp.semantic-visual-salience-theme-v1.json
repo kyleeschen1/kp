@@ -167,7 +167,8 @@
     {
       "id": "s18",
       "title": "Capture economics review and performance matrix",
-      "status": "planned"
+      "summary": "Captured the bounded economics dark and light, wide and phone, forced colors, typography, direct seek, scroll, CSS, font, payload, CLS, and motion matrix. Both 12-case visual suites pass. Runtime and layout budgets pass, while the production payload gate honestly remains red at 323778 B transfer, 151211 B script, and 44 resources against 250000 B, 150000 B, and 42. No budget was relaxed and no release claim is made.",
+      "status": "complete"
     },
     {
       "id": "s19",
