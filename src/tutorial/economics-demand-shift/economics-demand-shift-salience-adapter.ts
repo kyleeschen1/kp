@@ -1,17 +1,12 @@
 import type {
-  KpResolvedSemanticSalience
-} from "../../animation/semantic-salience-resolver.ts";
-import {
-  resolveKpSemanticSalience,
-  type KpSalienceSignal
-} from "../../animation/semantic-salience-resolver.ts";
-import type {
+  KpResolvedSemanticSalience,
   KpSalienceIdentityFamily,
-  KpSalienceLevel
-} from "../../animation/semantic-salience-state.ts";
-import type {
+  KpSalienceLevel,
+  KpSalienceSignal,
   KpSemanticVisualRole
-} from "../../animation/semantic-visual-role.ts";
+} from "../../animation/semantic-visual-salience.ts";
+import { resolveKpSemanticSalience } from
+  "../../animation/semantic-visual-salience.ts";
 import type {
   KpEconomicsDemandShiftFocusTarget
 } from "./economics-demand-shift-checkpoints.ts";

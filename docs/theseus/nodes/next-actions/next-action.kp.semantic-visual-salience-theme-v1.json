@@ -369,6 +369,27 @@
       "scope": "s20-focused-regression",
       "checkedAt": "2026-08-06T11:08:24.921Z",
       "notes": "15-tests-passed"
+    },
+    {
+      "command": "npm-run-test-visual-salience",
+      "status": "passed",
+      "scope": "s21-shared-boundary",
+      "checkedAt": "2026-08-06T11:32:29.263Z",
+      "notes": "19-tests-pass-including-portable-facade-and-renderer-neutral-treatment"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "s21-static-boundary",
+      "checkedAt": "2026-08-06T11:32:38.385Z",
+      "notes": "All-TypeScript-Svelte-and-domain-checks-pass"
+    },
+    {
+      "command": "node-economics-salience-tests",
+      "status": "passed",
+      "scope": "s21-first-caller-preservation",
+      "checkedAt": "2026-08-06T11:32:44.747Z",
+      "notes": "8-adapter-and-style-tests-pass"
     }
   ],
   "expectedLearning": [
