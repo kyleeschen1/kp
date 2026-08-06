@@ -25,8 +25,14 @@ import {
   findKpEconomicsMotionBlock,
   findKpEconomicsMotionCheckpoint,
   kpEconomicsMotionBlocks,
-  projectKpEconomicsLessonMotion
+  localKpEconomicsMotionProgress,
+  projectKpEconomicsLessonMotion,
+  projectKpEconomicsLessonPlayhead,
+  projectKpEconomicsPlayerProgress
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
+import {
+  commitKpEconomicsMotionPresentation
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-presentation.ts";
 import {
   projectKpTutorialCorridorTravel,
   projectKpTutorialMotionCorridor,
@@ -544,6 +550,91 @@ test("lesson motion projection settles predecessors and ignores DOM history", ()
   assert.equal(shifting.composition.phase, "merged");
   assert.equal(tracing.composition.phase, "merged");
 });
+
+test("one player clock projects either lesson block without changing graph truth", () => {
+  const forwardSupply = projectKpEconomicsLessonPlayhead({
+    activeBlockId: "supply-movement",
+    direction: "forward",
+    playerProgress: 0.58
+  });
+  const rewindSupply = projectKpEconomicsLessonPlayhead({
+    activeBlockId: "supply-movement",
+    direction: "rewind",
+    playerProgress: 0.42
+  });
+
+  assert.equal(forwardSupply.localProgress, 0.58);
+  assert.equal(rewindSupply.localProgress, 0.5800000000000001);
+  assert.equal(forwardSupply.graphProgress, 1);
+  assert.equal(rewindSupply.graphProgress, 1);
+  assert.equal(forwardSupply.motion.supplyMovementProgress, 0.58);
+  assert.equal(rewindSupply.motion.supplyMovementProgress, 0.5800000000000001);
+  assert.equal(localKpEconomicsMotionProgress(forwardSupply.motion), 0.58);
+  assert.equal(projectKpEconomicsPlayerProgress({
+    direction: "rewind",
+    localProgress: 0.58
+  }), 0.42000000000000004);
+
+  const demand = projectKpEconomicsLessonPlayhead({
+    activeBlockId: "demand-shift",
+    direction: "forward",
+    playerProgress: 0.4
+  });
+  assert.equal(demand.graphProgress, 0.4);
+  assert.equal(demand.motion.supplyMovementProgress, 0);
+});
+
+test("identical lesson frames produce no retained presentation writes", () => {
+  const root = fakePresentationElement();
+  const player = fakePresentationElement();
+  const styleOwner = fakePresentationElement();
+  const aperture = fakePresentationElement();
+  const verificationSurface = fakePresentationElement();
+  const motionBridge = fakePresentationElement();
+  const projection = projectKpEconomicsLessonMotion({
+    activeBlockId: "supply-movement",
+    localProgress: 0.58
+  });
+  const input = {
+    owner: {
+      root,
+      player,
+      styleOwner,
+      aperture,
+      verificationSurface,
+      motionBridge
+    },
+    projection,
+    theme: "dark" as const,
+    focusTarget: "supply" as const,
+    playbackDirection: "forward" as const
+  };
+
+  const initial = commitKpEconomicsMotionPresentation(input);
+  const repeated = commitKpEconomicsMotionPresentation(input);
+
+  assert.ok(initial.changedWrites > 0);
+  assert.equal(repeated.attemptedWrites, initial.attemptedWrites);
+  assert.equal(repeated.changedWrites, 0);
+  assert.equal(player.getAttribute("data-kp-economics-graph-progress"), "1");
+});
+
+function fakePresentationElement(): HTMLElement {
+  const attributes = new Map<string, string>();
+  const properties = new Map<string, string>();
+  return {
+    getAttribute: (name: string) => attributes.get(name) ?? null,
+    setAttribute: (name: string, value: string) => {
+      attributes.set(name, value);
+    },
+    style: {
+      getPropertyValue: (name: string) => properties.get(name) ?? "",
+      setProperty: (name: string, value: string) => {
+        properties.set(name, value);
+      }
+    }
+  } as unknown as HTMLElement;
+}
 
 test("economics stage composition has stable reversible merge and split endpoints", () => {
   const merged = projectKpEconomicsStageComposition(

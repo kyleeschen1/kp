@@ -67,19 +67,7 @@
 
   .kp-economics-tutorial__passage,
   .kp-economics-tutorial__passage-ink,
-  .kp-economics-tutorial__theme-toggle-thumb,
-  .kp-economics-tutorial__player-host
-    :is(
-      .editor-graph-stage__economics-curve,
-      .editor-graph-stage__economics-guide,
-      .editor-graph-stage__economics-equilibrium,
-      .editor-graph-stage__economics-grid-line,
-      .editor-graph-stage__economics-tick,
-      .editor-graph-stage__economics-math-foreign-object,
-      .editor-graph-stage__economics-screen-space-label,
-      .editor-graph-stage__economics-equations,
-      [data-kp-editor-graph-axis]
-    ) {
+  .kp-economics-tutorial__theme-toggle-thumb {
     transition: none;
   }
 }

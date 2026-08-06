@@ -7,10 +7,14 @@ import {
 const strokeScaleQueryKey = "stroke";
 
 export interface KpEconomicsGraphStrokeWidths {
-  readonly darkPx: number;
-  readonly darkGhostCorePx: number;
-  readonly lightPx: number;
-  readonly lightGhostCorePx: number;
+  readonly theme: "dark" | "light";
+  readonly axisPx: number;
+  readonly curvePx: number;
+  readonly gridPx: number;
+  readonly guidePx: number;
+  readonly intersectionPx: number;
+  readonly traceCasingPx: number;
+  readonly traceCorePx: number;
 }
 
 export function readKpEconomicsGraphStrokeScale(search: string): number {
@@ -33,14 +37,39 @@ export function writeKpEconomicsGraphStrokeScale(input: {
   return serialized === "" ? "" : `?${serialized}`;
 }
 
-export function projectKpEconomicsGraphStrokeWidths(
-  scale: number
+export function projectKpEconomicsGraphStrokeWidths(input: {
+  readonly scale: number;
+  readonly theme: "dark" | "light";
+}
 ): KpEconomicsGraphStrokeWidths {
-  const normalized = normalizeKpGraphStrokeScale(scale);
+  const normalized = normalizeKpGraphStrokeScale(input.scale);
+  const axisPx = Number((
+    normalized * (input.theme === "light" ? 1.25 : 1)
+  ).toFixed(4));
   return Object.freeze({
-    darkPx: normalized,
-    darkGhostCorePx: Number((normalized * 0.5).toFixed(4)),
-    lightPx: Number((normalized * 1.25).toFixed(4)),
-    lightGhostCorePx: Number((normalized * 1.25 * 0.5).toFixed(4))
+    theme: input.theme,
+    axisPx,
+    curvePx: axisPx,
+    gridPx: axisPx,
+    guidePx: axisPx,
+    intersectionPx: axisPx,
+    traceCasingPx: axisPx,
+    traceCorePx: Number((axisPx * 0.5).toFixed(4))
   });
+}
+
+export function serializeKpEconomicsGraphStrokeWidths(
+  widths: KpEconomicsGraphStrokeWidths
+): string {
+  return [
+    ["axis", widths.axisPx],
+    ["curve", widths.curvePx],
+    ["grid", widths.gridPx],
+    ["guide", widths.guidePx],
+    ["intersection", widths.intersectionPx],
+    ["trace-casing", widths.traceCasingPx],
+    ["trace-core", widths.traceCorePx]
+  ].map(([role, width]) =>
+    `--kp-graph-tuned-stroke-${role}:${width}px`
+  ).join(";");
 }

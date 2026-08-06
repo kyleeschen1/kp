@@ -7,7 +7,7 @@
   --kp-two-column-focus-bottom-vh: 50;
   --kp-two-column-motion-start-vh: 62;
   --kp-two-column-minimum-effective-height-vh: 23;
-  --kp-two-column-paragraph-gap-vh: 16;
+  --kp-two-column-paragraph-gap-vh: 50;
   --kp-two-column-prose-line-height: 1.78;
   --kp-two-column-text-width-rem: 24;
   --kp-two-column-text-width:
@@ -43,8 +43,30 @@
       var(--kp-two-column-stage-top) -
       var(--kp-two-column-focus-top)
     );
-  --kp-two-column-axis-line: 1px;
+  --kp-two-column-boundary-line: 1px;
+  --kp-two-column-column-half-gap: clamp(0.625rem, 1.2vw, 1.125rem);
+  --kp-two-column-divider-block-size:
+    calc(
+      100vh -
+      var(--kp-tutorial-persistent-top-inset) -
+      var(--kp-tutorial-persistent-bottom-inset)
+    );
   --kp-two-column-plot-inline-padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+@supports (height: 100dvh) {
+  .kp-economics-tutorial--two-column-scroll {
+    --kp-two-column-divider-block-size:
+      calc(
+        100dvh -
+        var(--kp-tutorial-persistent-top-inset) -
+        var(--kp-tutorial-persistent-bottom-inset)
+      );
+  }
+}
+
+.kp-economics-tutorial__column-divider {
+  display: none;
 }
 
 /* Prose outside the animated corridor remains ordinary document material.
@@ -85,7 +107,7 @@
     width: var(--kp-two-column-passage-width);
     margin: 0 0 0
       calc((100% - var(--kp-two-column-passage-width)) / 2);
-    border-bottom: var(--kp-two-column-axis-line) solid
+    border-bottom: var(--kp-two-column-boundary-line) solid
       var(--kp-lesson-theme-stage-divider);
     padding: 0 0 0.7rem;
   }
@@ -101,8 +123,9 @@
     display: grid;
     grid-template-columns:
       minmax(24rem, 1fr)
+      var(--kp-two-column-boundary-line)
       minmax(16rem, var(--kp-two-column-text-width));
-    gap: clamp(1.25rem, 2.4vw, 2.25rem);
+    column-gap: var(--kp-two-column-column-half-gap);
     align-items: start;
     justify-content: center;
     padding-inline: 1rem;
@@ -112,6 +135,7 @@
     .kp-economics-tutorial__motion-passage-body {
     grid-template-columns:
       minmax(16rem, var(--kp-two-column-text-width))
+      var(--kp-two-column-boundary-line)
       minmax(24rem, 1fr);
   }
 
@@ -121,7 +145,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    height: var(--kp-two-column-axis-line);
+    height: var(--kp-two-column-boundary-line);
     background: var(--kp-lesson-theme-stage-divider);
     content: "";
     pointer-events: none;
@@ -129,7 +153,7 @@
 
   .kp-economics-tutorial--two-column-scroll
     .kp-economics-tutorial__motion-passage-prose {
-    grid-area: 1 / 2;
+    grid-area: 1 / 3;
     min-width: 0;
     padding-top: var(--kp-two-column-entry-offset);
   }
@@ -137,6 +161,22 @@
   .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
     .kp-economics-tutorial__motion-passage-prose {
     grid-area: 1 / 1;
+  }
+
+  /* The divider is its own progressively rendered grid item. Sticky height is
+     bounded by the passage body, so it visually joins the section rules
+     without making either content column own the boundary. */
+  .kp-economics-tutorial--two-column-scroll
+    .kp-economics-tutorial__column-divider {
+    display: block;
+    grid-area: 1 / 2;
+    position: sticky;
+    top: var(--kp-tutorial-persistent-top-inset);
+    z-index: 3;
+    width: var(--kp-two-column-boundary-line);
+    height: var(--kp-two-column-divider-block-size);
+    background: var(--kp-lesson-theme-stage-divider);
+    pointer-events: none;
   }
 
   /* The inline-sticky motif adds a viewport-sized entrance gap. Two-column
@@ -160,8 +200,6 @@
     width: 100%;
     height: var(--kp-two-column-stage-block-size);
     border: 0;
-    border-right: var(--kp-two-column-axis-line) solid
-      var(--kp-lesson-theme-stage-divider);
     padding: 0;
     background: transparent;
   }
@@ -173,10 +211,7 @@
 
   .kp-economics-tutorial--two-column-scroll[data-kp-economics-two-column-text-side="left"]
     .kp-economics-tutorial__stage--inline {
-    grid-area: 1 / 2;
-    border-right: 0;
-    border-left: var(--kp-two-column-axis-line) solid
-      var(--kp-lesson-theme-stage-divider);
+    grid-area: 1 / 3;
   }
 
   .kp-economics-tutorial__column-toggle {
@@ -258,33 +293,30 @@
   .kp-economics-tutorial--two-column-scroll
     #kp-section-market-clearing
     [data-kp-two-column-scroll-paragraph]
-    > p
-    > .kp-economics-tutorial__passage-ink {
-    opacity: var(--kp-two-column-paragraph-opacity, 0.32);
-    will-change: opacity;
+    > p::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -0.75rem;
+    width: 1px;
+    background: var(--kp-lesson-theme-reader-rail);
+    content: "";
+    transform: scaleY(var(--kp-two-column-paragraph-salience, 0));
+    transform-origin: top;
+    will-change: transform;
   }
 
-  /* A bridge must remain legible while attention trades between its paired
-     statements; ordinary essay beats keep the quieter default floor. */
   .kp-economics-tutorial--two-column-scroll
     #kp-section-market-clearing
-    kp-motion-bridge
     [data-kp-two-column-scroll-paragraph]
     > p
     > .kp-economics-tutorial__passage-ink {
-    opacity: max(
-      var(--kp-two-column-paragraph-opacity, 0.32),
-      var(--kp-tutorial-motion-bridge-prose-opacity-floor)
-    );
+    opacity: 1;
   }
 
   :root .kp-economics-tutorial--two-column-scroll
     .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-    --kp-graph-axis:
-      var(
-        --kp-economics-salience-market-axes-color,
-        var(--kp-lesson-theme-graph-axis)
-      );
+    --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
     width: 100%;
     height: auto;
   }
@@ -336,5 +368,14 @@
   .kp-economics-tutorial--two-column-scroll
     .editor-graph-stage__economics-math-label {
     color: var(--kp-lesson-theme-math-foreground);
+  }
+}
+
+@media (forced-colors: active) and (min-width: 60rem) and (min-height: 32rem) {
+  .kp-economics-tutorial--two-column-scroll
+    #kp-section-market-clearing
+    [data-kp-two-column-scroll-paragraph]
+    > p::before {
+    background: Highlight;
   }
 }

@@ -3,6 +3,7 @@ import type {
 } from "../animation/economics-equilibrium-runtime-frame.ts";
 import {
   kpEconomicsGraphPlotInsets,
+  projectKpEconomicsDataCurvePath,
   renderKpEconomicsEquilibriumRuntimeContent
 } from "./economics-equilibrium-svg.ts";
 import type {
@@ -168,7 +169,7 @@ export function patchKpEconomicsEquilibriumStableStructure(input: {
     maximumQuantity,
     supplyIntercept + supplySlope * maximumQuantity
   );
-  const supply = requireElement<SVGLineElement>(
+  const supply = requireElement<SVGPathElement>(
     input.scaffold.view,
     "[data-kp-economics-supply-line]"
   );
@@ -177,7 +178,7 @@ export function patchKpEconomicsEquilibriumStableStructure(input: {
     "data-kp-economics-equation",
     supplyEquation(frame)
   );
-  setLine(supply, supplyStart[0], supplyStart[1], supplyEnd[0], supplyEnd[1]);
+  setDataCurvePath(supply, supplyStart, supplyEnd);
   patchGrid(input.scaffold.view, input.viewport, point);
   state.stableGeometryKey = nextKey;
 }
@@ -254,27 +255,23 @@ export function patchKpEconomicsEquilibriumDynamicStructure(input: {
     "data-kp-economics-reference-progress",
     String(input.frame.initialDemandReferenceOpacity)
   );
-  setLine(
+  setDataCurvePath(
     requireElement(view, "[data-kp-economics-initial-demand-reference]"),
-    initialDemandStart[0],
-    initialDemandStart[1],
-    initialDemandEnd[0],
-    initialDemandEnd[1]
+    initialDemandStart,
+    initialDemandEnd
   );
-  setLine(
+  setDataCurvePath(
     requireElement(view, "[data-kp-economics-initial-demand-reference-core]"),
-    initialDemandStart[0],
-    initialDemandStart[1],
-    initialDemandEnd[0],
-    initialDemandEnd[1]
+    initialDemandStart,
+    initialDemandEnd
   );
 
-  const demand = requireElement<SVGLineElement>(
+  const demand = requireElement<SVGPathElement>(
     view,
     "[data-kp-economics-demand-line]"
   );
   setAttributeIfChanged(demand, "data-kp-economics-equation", demandEquation(frame));
-  setLine(demand, demandStart[0], demandStart[1], demandEnd[0], demandEnd[1]);
+  setDataCurvePath(demand, demandStart, demandEnd);
 
   const movement = requireElement<SVGGElement>(
     view,
@@ -305,12 +302,10 @@ export function patchKpEconomicsEquilibriumDynamicStructure(input: {
     "data-kp-economics-movement-to-price",
     exactText(frame.equilibrium.price)
   );
-  setLine(
+  setDataCurvePath(
     requireElement(movement, "[data-kp-economics-supply-movement-trace]"),
-    initialEquilibrium[0],
-    initialEquilibrium[1],
-    equilibrium[0],
-    equilibrium[1]
+    initialEquilibrium,
+    equilibrium
   );
 
   setLine(
@@ -905,6 +900,14 @@ function setLine(
   setAttributeIfChanged(line, "y1", String(y1));
   setAttributeIfChanged(line, "x2", String(x2));
   setAttributeIfChanged(line, "y2", String(y2));
+}
+
+function setDataCurvePath(
+  path: SVGPathElement,
+  start: readonly [number, number],
+  end: readonly [number, number]
+): void {
+  setAttributeIfChanged(path, "d", projectKpEconomicsDataCurvePath(start, end));
 }
 
 function setCircle(circle: SVGCircleElement, x: number, y: number): void {

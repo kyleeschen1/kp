@@ -156,7 +156,8 @@ runtimeLifecycle: KpEconomicsRuntimeSessionLifecycle): void {
             const economicsFrame = sampleEconomicsRuntimeFrame(
               animation,
               state,
-              economicsProfile?.metrics
+              economicsProfile?.metrics,
+              player
             );
             const result = runtimeLifecycle.apply({
               owner: slot,
@@ -207,12 +208,28 @@ function economicsGraphSvgViewportPresentation(input: {
 function sampleEconomicsRuntimeFrame(
   animation: KpAnimationAsset,
   state: KpEditorAnimationPlayerState,
-  economicsProfile?: MutableKpEconomicsGraphRuntimeMetrics | undefined
+  economicsProfile: MutableKpEconomicsGraphRuntimeMetrics | undefined,
+  player: HTMLElement
 ): KpEconomicsEquilibriumRuntimeFrame {
   const sampleStartedAt = economicsProfile === undefined ? 0 : performanceNow();
+  const lessonProgress = Number(
+    player.dataset["kpEconomicsGraphProgress"]
+  );
+  const runtimeFrame = Number.isFinite(lessonProgress)
+    ? {
+        ...state.runtimeFrame,
+        clock: {
+          ...state.runtimeFrame.clock,
+          // Lesson blocks remain cumulative and forward-semantic even while
+          // the one physical player clock is traversing a later block backward.
+          direction: "forward" as const,
+          progress: Math.max(0, Math.min(1, lessonProgress))
+        }
+      }
+    : state.runtimeFrame;
   const frame = sampleKpEconomicsEquilibriumRuntimeFrame({
     animation,
-    runtimeFrame: state.runtimeFrame
+    runtimeFrame
   });
   if (economicsProfile !== undefined) {
     const duration = performanceNow() - sampleStartedAt;

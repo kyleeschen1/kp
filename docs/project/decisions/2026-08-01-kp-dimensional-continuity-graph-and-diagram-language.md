@@ -86,6 +86,24 @@ non-color cue. Each dynamic view supplies a current accessible description,
 and responsive modes reduce optional density before shrinking essential labels
 below legibility.
 
+Axis-variable labels sit near the positive terminal ends of their axes by
+default. Their placement is projected from the axis endpoint, computed arrow
+length and breadth, measured KaTeX bounds, and a small clearance gap rather
+than from a hard-coded screen coordinate. Horizontal labels such as `Q` remain
+below the axis and vertical labels such as `P` remain to its left unless a
+domain-specific collision requires another declared anchor. Labels must never
+cover the arrowhead.
+
+The canonical 2D screen-space line target is one apparent pixel. One core CSS
+length owns axes, live curves, grid structure, guides, and layout rules that
+deliberately share that visual weight. Authors and salience states do not
+multiply it. Theme-specific optical compensation is expressed by one CSS
+multiplier over the core length: dark mode uses `1`; light mode may use a
+reviewed value initially near `1.5` when its strokes otherwise appear too
+weak. This multiplier is renderer/theme policy, not authoring state or a URL
+tuner. Arrowhead length and breadth use separate multiples of the resulting
+axis stroke so they remain legible as the theme changes.
+
 Diagrams inherit the palette, typography, line hierarchy, identity, and depth
 treatment. They do not acquire axes, camera semantics, or quantitative-grid
 rules when those concepts do not belong to the subject.

@@ -1,0 +1,79 @@
+{
+  "id": "next-action.kp.economics-runtime-optical-consolidation",
+  "kind": "next-action",
+  "title": "Consolidate economics runtime and optical profile",
+  "status": "ready",
+  "domain": "rendering",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/explanation-attention.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.economics-runtime-scroll-repair-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run test:browser:economics-runtime-session",
+    "npm run visual:economics-two-column-scroll",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run check",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s01 recovered economics semantic and retained-renderer baseline",
+      "checkedAt": "2026-08-06T15:16:25.667Z",
+      "notes": "All 61 focused economics tests passed with the interrupted in-scope corrections preserved and unrelated work excluded."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s01 recovered economics stylesheet baseline",
+      "checkedAt": "2026-08-06T15:16:26.091Z",
+      "notes": "All 15 stylesheet ownership and visual-baseline tests passed before runtime consolidation."
+    }
+  ],
+  "expectedLearning": [
+    "Whether one shared playhead, retained path-oriented SVG bindings, and a single theme-compensated stroke token remove lesson jitter and optical inconsistency without weakening exact seek, rewind, URL restoration, accessibility, or authoring ergonomics."
+  ],
+  "allowedWork": [
+    "Economics demand-shift tutorial adapter, local lesson motion projection, retained SVG runtime binding, Graph2D viewport axis marker and label geometry, economics-local CSS/theme tokens, dormant internal appearance controls, focused tests, stable visual evidence, and project/Theseus records.",
+    "Preserve and verify the in-scope uncommitted economics corrections already present in the worktree before extending them."
+  ],
+  "disallowedWork": [
+    "No semantic economics model changes, lesson prose rewrite, Graph3D implementation, Lisp or other lesson changes, catalogue-wide graph migration, new animation engine, new global salience store, consumer or producer surplus, deadweight loss, or public product work.",
+    "Do not stage or modify unrelated user-owned untracked documents or out-of-scope worktree changes."
+  ],
+  "criteria": [
+    {
+      "id": "unified-lesson-playhead",
+      "weight": "high"
+    },
+    {
+      "id": "retained-path-renderer",
+      "weight": "high"
+    },
+    {
+      "id": "frozen-optical-line-profile",
+      "weight": "high"
+    },
+    {
+      "id": "economics-human-visual-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

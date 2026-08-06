@@ -65,7 +65,7 @@ test("dark graph palette uses the approved semantic identity sources", () => {
     "#f4f4f8",
     "#42465b",
     "#7d8193",
-    "#696e83",
+    "#626775",
     "#5e7e9f",
     "#966b67"
   ]) {

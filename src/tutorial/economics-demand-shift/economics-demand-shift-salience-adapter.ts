@@ -24,7 +24,7 @@ export const kpEconomicsSalienceObjectDefinitions = Object.freeze([
   object("market.demand.initial", "data-series", "red", "ghost"),
   object("market.equilibrium.current", "focus", "cyan", "normal"),
   object("market.equilibrium.initial", "focus", "cyan", "ghost"),
-  object("market.guides", "relation", "neutral", "context"),
+  object("market.guides", "relation", "neutral", "normal"),
   object("market.equations", "ink", "neutral", "normal")
 ]);
 
@@ -72,11 +72,9 @@ export function projectKpEconomicsSalience(input: {
       const signals: KpSalienceSignal[] = [];
       if (focused.has(definition.id)) signals.push("focused");
       else if (definition.baseLevel === "ghost") signals.push("ghost");
-      else if (definition.baseLevel === "normal" && definition.role !== "page") {
-        // Deliberately quiet structures such as the grid retain their authored
-        // dim baseline; "contextual" is the ordinary non-focus handoff state.
-        signals.push("contextual");
-      }
+      // Live axes, guides, labels, and non-target curves are interpretive
+      // scaffolding. They retain their normal endpoint while the active object
+      // rises to focus; only authored grid and historical baselines recede.
       return [definition.id, Object.freeze({
         id: definition.id,
         role: definition.role,

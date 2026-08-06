@@ -81,6 +81,15 @@ export interface KpEconomicsLessonMotionProjection {
   readonly verification: KpEconomicsVerificationRevealProjection;
 }
 
+export interface KpEconomicsLessonPlayheadProjection {
+  readonly activeBlockId: KpEconomicsMotionBlockId;
+  readonly direction: "forward" | "rewind";
+  readonly playerProgress: number;
+  readonly localProgress: number;
+  readonly graphProgress: number;
+  readonly motion: KpEconomicsLessonMotionProjection;
+}
+
 export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
   Object.freeze([
     motionBlock({
@@ -171,6 +180,50 @@ export function projectKpEconomicsLessonMotion(input: {
             ? scene("shifting", "graph-only")
             : scene("initial", "graph-only")
   });
+}
+
+export function projectKpEconomicsLessonPlayhead(input: {
+  readonly activeBlockId: KpEconomicsMotionBlockId;
+  readonly direction: "forward" | "rewind";
+  readonly playerProgress: number;
+}): KpEconomicsLessonPlayheadProjection {
+  const playerProgress = boundedProgress(input.playerProgress);
+  // The shared player stores progress in traversal space. Lesson state stays
+  // forward-oriented so a direction change cannot invert cumulative blocks.
+  const localProgress = input.direction === "rewind"
+    ? 1 - playerProgress
+    : playerProgress;
+  const motion = projectKpEconomicsLessonMotion({
+    activeBlockId: input.activeBlockId,
+    localProgress
+  });
+  return Object.freeze({
+    activeBlockId: input.activeBlockId,
+    direction: input.direction,
+    playerProgress,
+    localProgress,
+    graphProgress: motion.demandShiftProgress,
+    motion
+  });
+}
+
+export function projectKpEconomicsPlayerProgress(input: {
+  readonly direction: "forward" | "rewind";
+  readonly localProgress: number;
+}): number {
+  const localProgress = boundedProgress(input.localProgress);
+  return input.direction === "rewind" ? 1 - localProgress : localProgress;
+}
+
+export function localKpEconomicsMotionProgress(
+  projection: KpEconomicsLessonMotionProjection
+): number {
+  return projection.blocks.find(({ id }) => id === projection.activeBlockId)
+    ?.progress ?? 0;
+}
+
+function boundedProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
 }
 
 function scene(

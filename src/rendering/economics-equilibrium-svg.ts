@@ -37,6 +37,14 @@ export const kpEconomicsGraphPlotInsets = Object.freeze({
   left: 36
 });
 
+/** Data curves share one path contract; axes, grids, and guides stay lines. */
+export function projectKpEconomicsDataCurvePath(
+  start: readonly [number, number],
+  end: readonly [number, number]
+): string {
+  return `M ${start[0]} ${start[1]} L ${end[0]} ${end[1]}`;
+}
+
 export function renderKpEconomicsEquilibriumStaticContent(input: {
   readonly frame: KpSupplyDemandEquilibriumFrameV1;
   readonly viewport: KpEconomicsGraphViewport;
@@ -174,13 +182,13 @@ function renderEconomicsContent(input: {
   return `<g data-kp-economics-equilibrium-view data-kp-economics-equilibrium-phase="${input.frame.phase}" data-kp-economics-choreography-stage="${input.stage}" data-kp-economics-display-precision="${kpDimensionalContinuityDynamicDisplayDecimals}" data-kp-economics-demand-intercept="${exactText(input.frame.demand.priceInterceptCurrent)}">
     ${renderEconomicsGrid(input.viewport, point, input.renderInlineLatex)}
     <g class="editor-graph-stage__economics-demand-reference" data-kp-economics-reference-progress="${input.initialDemandReferenceOpacity}">
-      <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-casing" data-kp-economics-initial-demand-reference x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
-      <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-core" data-kp-economics-initial-demand-reference-core x1="${initialDemandStart[0]}" y1="${initialDemandStart[1]}" x2="${initialDemandEnd[0]}" y2="${initialDemandEnd[1]}" />
+      <path class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-casing" data-kp-economics-initial-demand-reference d="${projectKpEconomicsDataCurvePath(initialDemandStart, initialDemandEnd)}" />
+      <path class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand-reference-core" data-kp-economics-initial-demand-reference-core d="${projectKpEconomicsDataCurvePath(initialDemandStart, initialDemandEnd)}" />
     </g>
-    <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" x1="${supplyStart[0]}" y1="${supplyStart[1]}" x2="${supplyEnd[0]}" y2="${supplyEnd[1]}" />
-    <line class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="${demandEquation(input.frame)}" x1="${demandStart[0]}" y1="${demandStart[1]}" x2="${demandEnd[0]}" y2="${demandEnd[1]}" />
+    <path class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--supply" data-kp-economics-supply-line data-kp-economics-equation="${supplyEquation(input.frame)}" d="${projectKpEconomicsDataCurvePath(supplyStart, supplyEnd)}" />
+    <path class="editor-graph-stage__economics-curve editor-graph-stage__economics-curve--demand" data-kp-economics-demand-line data-kp-economics-equation="${demandEquation(input.frame)}" d="${projectKpEconomicsDataCurvePath(demandStart, demandEnd)}" />
     <g class="editor-graph-stage__economics-supply-movement" data-kp-economics-supply-movement data-kp-economics-supply-equation="${supplyEquation(input.frame)}" data-kp-economics-movement-from-quantity="${exactText(input.initialEquilibrium.quantity)}" data-kp-economics-movement-from-price="${exactText(input.initialEquilibrium.price)}" data-kp-economics-movement-to-quantity="${exactText(input.frame.equilibrium.quantity)}" data-kp-economics-movement-to-price="${exactText(input.frame.equilibrium.price)}" aria-hidden="true">
-      <line class="editor-graph-stage__economics-supply-movement-trace" data-kp-economics-supply-movement-trace x1="${initialEquilibrium[0]}" y1="${initialEquilibrium[1]}" x2="${equilibrium[0]}" y2="${equilibrium[1]}" pathLength="1" />
+      <path class="editor-graph-stage__economics-supply-movement-trace" data-kp-economics-supply-movement-trace d="${projectKpEconomicsDataCurvePath(initialEquilibrium, equilibrium)}" pathLength="1" />
     </g>
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-quantity-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${quantityAxis[0]}" y2="${quantityAxis[1]}" />
     <line class="editor-graph-stage__economics-guide" data-kp-economics-equilibrium-price-guide x1="${equilibrium[0]}" y1="${equilibrium[1]}" x2="${priceAxis[0]}" y2="${priceAxis[1]}" />

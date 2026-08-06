@@ -198,18 +198,7 @@
   }
 
   .kp-economics-tutorial__passage,
-  .kp-economics-tutorial__stage,
-  .kp-economics-tutorial__player-host
-    .editor-graph-stage__economics-curve,
-  .kp-economics-tutorial__player-host
-    .editor-graph-stage__economics-guide,
-  .kp-economics-tutorial__player-host
-    .editor-graph-stage__economics-equilibrium,
-  .kp-economics-tutorial__player-host
-    .editor-graph-stage__economics-math-foreign-object,
-  .kp-economics-tutorial__player-host
-    .editor-graph-stage__economics-equations {
+  .kp-economics-tutorial__stage {
     transition: none;
   }
 }
-

@@ -15,6 +15,7 @@ import {
 } from "../src/editor/graph-svg-viewport.ts";
 import {
   kpEconomicsGraphPresentationProfile,
+  projectKpEconomicsDataCurvePath,
   renderKpEconomicsEquilibriumStaticContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
 import {
@@ -46,6 +47,9 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   });
   assert.match(html, /data-kp-economics-supply-line/);
   assert.match(html, /data-kp-economics-demand-line/);
+  assert.match(html, /<path[^>]*data-kp-economics-supply-line[^>]*d="M [^"]+ L [^"]+"/);
+  assert.match(html, /<path[^>]*data-kp-economics-demand-line[^>]*d="M [^"]+ L [^"]+"/);
+  assert.doesNotMatch(html, /<line[^>]*data-kp-economics-(?:supply|demand)-line/);
   assert.match(html, /data-kp-economics-equation="P=2\+Q"/);
   assert.match(html, /data-kp-economics-equation="P=14-Q"/);
   assert.match(html, /data-kp-economics-equilibrium-quantity="6"/);
@@ -74,6 +78,13 @@ test("static economics SVG paints exact curves and initial equilibrium", () => {
   assert.match(html, /data-kp-economics-tick-axis="quantity"/);
   assert.match(html, /data-kp-economics-tick-axis="price"/);
   assert.doesNotMatch(html, /<text\b/);
+});
+
+test("economics data curves share one path-oriented geometry contract", () => {
+  assert.equal(
+    projectKpEconomicsDataCurvePath([36, 392], [556, 20]),
+    "M 36 392 L 556 20"
+  );
 });
 
 test("static economics SVG is deterministic for the same exact frame", () => {

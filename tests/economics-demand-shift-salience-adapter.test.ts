@@ -28,7 +28,7 @@ test("every economics focus target maps to semantic role-state objects", () => {
   }
 });
 
-test("demand owns the red identity independently of its salience level", () => {
+test("demand owns the red identity while remaining structural context", () => {
   const frame = projectKpEconomicsSalience({
     market: "shifted",
     presentation: "comparison-verified",
@@ -44,7 +44,7 @@ test("demand owns the red identity independently of its salience level", () => {
   );
   assert.equal(
     frame.objects["market.demand.current"].salience.state.level,
-    "context"
+    "normal"
   );
 });
 
@@ -109,6 +109,6 @@ test("the grid retains its deliberately dim structural baseline", () => {
     focusTarget: "equilibrium"
   });
   assert.equal(frame.objects["market.grid"].salience.state.level, "dim");
-  assert.equal(frame.objects["market.axes"].salience.state.level, "context");
-  assert.equal(frame.objects["market.guides"].salience.state.level, "context");
+  assert.equal(frame.objects["market.axes"].salience.state.level, "normal");
+  assert.equal(frame.objects["market.guides"].salience.state.level, "normal");
 });

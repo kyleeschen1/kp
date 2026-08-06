@@ -60,15 +60,24 @@
   } from "./economics-demand-shift-layout.ts";
   import {
     projectKpEconomicsGraphStrokeWidths,
+    serializeKpEconomicsGraphStrokeWidths,
     writeKpEconomicsGraphStrokeScale
   } from "./economics-demand-shift-graph-style.ts";
   import {
     findKpEconomicsMotionBlock,
     kpEconomicsMotionBlocks,
+    localKpEconomicsMotionProgress,
     projectKpEconomicsLessonMotion,
+    projectKpEconomicsLessonPlayhead,
+    projectKpEconomicsPlayerProgress,
     type KpEconomicsMotionBlock,
-    type KpEconomicsMotionBlockId
+    type KpEconomicsMotionBlockId,
+    type KpEconomicsLessonMotionProjection
   } from "./economics-demand-shift-motion-blocks.ts";
+  import {
+    commitKpEconomicsMotionPresentation,
+    type KpEconomicsMotionPresentationOwner
+  } from "./economics-demand-shift-motion-presentation.ts";
   import {
     measureKpTutorialAttentionRegions,
     projectKpTutorialAttentionFrame,
@@ -113,7 +122,6 @@
     projectKpTutorialSemanticTransitTransform
   } from "../kp-tutorial-semantic-transit-geometry.ts";
   import {
-    projectKpTutorialBoundaryCueSalience,
     projectKpTutorialScrollPassagePhase,
     type KpTutorialScrollPassagePhase,
     type KpTutorialScrollPassageTimeline
@@ -209,17 +217,13 @@
   }
 
   interface KpEconomicsInlineParagraphFrame {
-    readonly endpointPinned: boolean;
     readonly passageId: string;
     readonly motionBlockId: KpEconomicsMotionBlockId | undefined;
     readonly projection: KpInlineStickyParagraphProjection;
-    readonly opacity: number;
     readonly ownsAttention: boolean;
   }
 
   interface KpEconomicsTwoColumnParagraphPresentation {
-    readonly endpointPinned: boolean;
-    readonly opacity: number;
     readonly salience: number;
   }
 
@@ -326,15 +330,22 @@
   }));
   let shell = $state<HTMLElement | undefined>();
   let inlineStage = $state<HTMLElement | undefined>();
+  let motionStyleOwner = $state<HTMLElement | undefined>();
+  let verificationAperture = $state<HTMLElement | undefined>();
+  let verificationSurface = $state<HTMLElement | undefined>();
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let graphStyleTuner = $state<KpGraphStyleTunerElement | undefined>();
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(initialDeepLink.checkpointIndex);
-  let progress = $state(initial.progress);
-  let playbackStatus = $state(initial.playbackStatus);
-  let playbackDirection = $state(initial.playbackDirection);
+  // Playback changes every frame. This retained record is deliberately not a
+  // Svelte rune: the player event commits its owned nodes directly.
+  const playbackRuntime = {
+    progress: initial.progress,
+    status: initial.playbackStatus,
+    direction: initial.playbackDirection
+  };
   let demandIntercept = $state(initial.demandIntercept);
   let graphStrokeScale = $state(
     untrack(() => normalizeKpGraphStrokeScale(initialGraphStrokeScale))
@@ -432,12 +443,6 @@
     ? undefined
     : createNavigationResume(initialDeepLink);
   let currentSemanticDestination = $state(initialDeepLink.destination);
-  let supplyPlaybackStatus = $state<"paused" | "playing" | "complete">(
-    "paused"
-  );
-  let supplyPlaybackDirection = $state<"forward" | "rewind">("forward");
-  let supplyPlaybackFrame: number | undefined;
-  let supplyPlaybackLastMs: number | undefined;
   let inlineLayoutObserver: ResizeObserver | undefined;
   let suppressNextInlineLayoutObservation = false;
   const inlineSticky = untrack(() => presentationLayout === "inline-sticky");
@@ -466,10 +471,12 @@
     )
   );
   let motionBridgeDistancePx = $state(0);
-  let lessonMotionProjection = $state(initialDeepLink.motion);
+  const lessonMotionProjection: KpEconomicsLessonMotionProjection =
+    initialDeepLink.motion;
   const playerHtml = initial.playerHtml;
   let checkpoint = $derived(kpEconomicsDemandShiftCheckpoints[checkpointIndex]!);
-  let semanticSalienceStyle = $derived(serializeKpEconomicsSalienceCssProperties(
+  const semanticSalienceStyle = untrack(() =>
+    serializeKpEconomicsSalienceCssProperties(
     projectKpEconomicsSalienceCssProperties({
       theme,
       projection: projectKpEconomicsSalience({
@@ -478,15 +485,12 @@
       })
     })
   ));
-  let semanticProgress = $derived(lessonMotionProjection.demandShiftProgress);
-  let supplyMovementProgress = $derived(
-    lessonMotionProjection.supplyMovementProgress
-  );
-  let reviewProgress = $derived(
+  const semanticProgress = lessonMotionProjection.demandShiftProgress;
+  const supplyMovementProgress = lessonMotionProjection.supplyMovementProgress;
+  const reviewProgress =
     lessonMotionProjection.activeBlockId === "supply-movement"
       ? lessonMotionProjection.supplyMovementProgress
-      : lessonMotionProjection.demandShiftProgress
-  );
+      : lessonMotionProjection.demandShiftProgress;
   let tocActiveDestination = $derived(
     resolveKpEconomicsDemandShiftTocDestination({
       lesson,
@@ -496,49 +500,22 @@
   $effect(() => {
     tutorialToc?.setActiveDestination(tocActiveDestination);
   });
-  $effect(() => {
-    writeScrubBarAttributes(demandScrubBar, {
-      progress: semanticProgress,
-      "playback-status": playbackStatus,
-      direction: playbackDirection,
-      "controls-disabled": !ready,
-      "previous-disabled": checkpointIndex === 0,
-      "next-disabled": checkpointIndex ===
-        kpEconomicsDemandShiftCheckpoints.length - 1,
-      "manual-claimed": motionOwner === "manual" &&
-        manualMotionBlock === "demand-shift"
-    });
-  });
-  $effect(() => {
-    writeScrubBarAttributes(supplyScrubBar, {
-      progress: supplyMovementProgress,
-      "playback-status": supplyPlaybackStatus,
-      direction: supplyPlaybackDirection,
-      "controls-disabled": !ready,
-      "previous-disabled": supplyMovementProgress <= 0.001,
-      "next-disabled": supplyMovementProgress >= 0.999,
-      "manual-claimed": motionOwner === "manual" &&
-        manualMotionBlock === "supply-movement"
-    });
-  });
-  let supplyInterpretationStyle = $derived(
+  const supplyInterpretationStyle =
     `--kp-tutorial-supply-emphasis:${clamp(supplyMovementProgress / 0.18, 0, 1).toFixed(3)};` +
     `--kp-tutorial-supply-trace:${clamp((supplyMovementProgress - 0.12) / 0.46, 0, 1).toFixed(3)};` +
-    `--kp-tutorial-supply-comparison:${clamp((supplyMovementProgress - 0.58) / 0.42, 0, 1).toFixed(3)}`
-  );
-  let stageComposition = $derived(lessonMotionProjection.composition);
-  let graphStageSlot = $derived(
-    stageComposition.slots.find(({ id }) => id === "graph-slot")!
-  );
-  let verificationStageSlot = $derived(
-    stageComposition.slots.find(({ id }) => id === "verification-slot")!
-  );
-  let verificationStageSurface = $derived(
+    `--kp-tutorial-supply-comparison:${clamp((supplyMovementProgress - 0.58) / 0.42, 0, 1).toFixed(3)}`;
+  const stageComposition = lessonMotionProjection.composition;
+  const graphStageSlot = stageComposition.slots.find(
+    ({ id }) => id === "graph-slot"
+  )!;
+  const verificationStageSlot = stageComposition.slots.find(
+    ({ id }) => id === "verification-slot"
+  )!;
+  const verificationStageSurface =
     stageComposition.surfaces.find(
       ({ id }) => id === "equilibrium-verification"
-    )!
-  );
-  let stageCompositionStyle = $derived(
+    )!;
+  const stageCompositionStyle =
     `--kp-stage-graph-inline:${percent(graphStageSlot.rect.inline)};` +
     `--kp-stage-graph-block:${percent(graphStageSlot.rect.block)};` +
     `--kp-stage-graph-inline-size:${percent(graphStageSlot.rect.inlineSize)};` +
@@ -552,36 +529,123 @@
     `--kp-stage-verification-travel:${percent(
       (verificationStageSurface.rect.inline - verificationStageSlot.rect.inline) /
         verificationStageSlot.rect.inlineSize
-    )}`
-  );
-  let verificationReveal = $derived(lessonMotionProjection.verification);
-  let verificationRevealStyle = $derived(
+    )}`;
+  const verificationReveal = lessonMotionProjection.verification;
+  const verificationRevealStyle =
     `--kp-verification-supply-rule:${verificationReveal.groups["supply-rule"].toFixed(3)};` +
     `--kp-verification-supply-rule-clip:${percent(1 - verificationReveal.groups["supply-rule"])};` +
     `--kp-verification-equilibria:${verificationReveal.groups.equilibria.toFixed(3)};` +
     `--kp-verification-equilibria-clip:${percent(1 - verificationReveal.groups.equilibria)};` +
     `--kp-verification-changes:${verificationReveal.groups.changes.toFixed(3)};` +
-    `--kp-verification-changes-clip:${percent(1 - verificationReveal.groups.changes)}`
-  );
+    `--kp-verification-changes-clip:${percent(1 - verificationReveal.groups.changes)}`;
   let graphStrokeWidths = $derived(
-    projectKpEconomicsGraphStrokeWidths(graphStrokeScale)
+    projectKpEconomicsGraphStrokeWidths({
+      scale: graphStrokeScale,
+      theme
+    })
   );
   let graphStrokeStyle = $derived(
     `--kp-graph-stroke-scale:${graphStrokeScale.toFixed(2)};` +
-    `--kp-graph-tuned-dark-stroke-width:${graphStrokeWidths.darkPx}px;` +
-    `--kp-graph-tuned-dark-ghost-core-width:${graphStrokeWidths.darkGhostCorePx}px;` +
-    `--kp-graph-tuned-light-stroke-width:${graphStrokeWidths.lightPx}px;` +
-    `--kp-graph-tuned-light-ghost-core-width:${graphStrokeWidths.lightGhostCorePx}px`
+    serializeKpEconomicsGraphStrokeWidths(graphStrokeWidths)
   );
-  let supplyInterpretationPhase = $derived(
+  const supplyInterpretationPhase =
     supplyMovementProgress <= 0.001
       ? "ready"
       : supplyMovementProgress < 0.58
         ? "tracing"
         : supplyMovementProgress < 0.999
           ? "comparing"
-          : "verified"
-  );
+          : "verified";
+  const motionRuntime = {
+    projection: lessonMotionProjection,
+    semanticProgress,
+    supplyMovementProgress,
+    reviewProgress,
+    stageComposition,
+    verificationReveal,
+    supplyInterpretationPhase
+  };
+
+  function motionPresentationOwner():
+    KpEconomicsMotionPresentationOwner | undefined {
+    if (
+      shell === undefined ||
+      player === undefined ||
+      motionStyleOwner === undefined ||
+      verificationAperture === undefined ||
+      verificationSurface === undefined
+    ) return undefined;
+    return {
+      root: shell,
+      player,
+      styleOwner: motionStyleOwner,
+      aperture: verificationAperture,
+      verificationSurface,
+      motionBridge: shell.querySelector<HTMLElement>("kp-motion-bridge") ??
+        undefined
+    };
+  }
+
+  function commitLessonMotionProjection(
+    next: KpEconomicsLessonMotionProjection,
+    direction: "forward" | "rewind" = playbackRuntime.direction
+  ): void {
+    motionRuntime.projection = next;
+    motionRuntime.semanticProgress = next.demandShiftProgress;
+    motionRuntime.supplyMovementProgress = next.supplyMovementProgress;
+    motionRuntime.reviewProgress = localKpEconomicsMotionProgress(next);
+    motionRuntime.stageComposition = next.composition;
+    motionRuntime.verificationReveal = next.verification;
+    motionRuntime.supplyInterpretationPhase =
+      motionRuntime.supplyMovementProgress <= 0.001
+      ? "ready"
+      : motionRuntime.supplyMovementProgress < 0.58
+        ? "tracing"
+        : motionRuntime.supplyMovementProgress < 0.999
+          ? "comparing"
+          : "verified";
+    const owner = motionPresentationOwner();
+    if (owner !== undefined) {
+      commitKpEconomicsMotionPresentation({
+        owner,
+        projection: next,
+        theme,
+        focusTarget:
+          kpEconomicsDemandShiftCheckpoints[checkpointIndex]!.attention.target,
+        playbackDirection: direction
+      });
+    }
+    syncMotionScrubBars();
+  }
+
+  function syncMotionScrubBars(): void {
+    const activeBlock = motionRuntime.projection.activeBlockId;
+    writeScrubBarAttributes(demandScrubBar, {
+      progress: motionRuntime.semanticProgress,
+      "playback-status": activeBlock === "demand-shift"
+        ? playbackRuntime.status
+        : "paused",
+      direction: playbackRuntime.direction,
+      "controls-disabled": !ready,
+      "previous-disabled": checkpointIndex === 0,
+      "next-disabled": checkpointIndex ===
+        kpEconomicsDemandShiftCheckpoints.length - 1,
+      "manual-claimed": motionOwner === "manual" &&
+        manualMotionBlock === "demand-shift"
+    });
+    writeScrubBarAttributes(supplyScrubBar, {
+      progress: motionRuntime.supplyMovementProgress,
+      "playback-status": activeBlock === "supply-movement"
+        ? playbackRuntime.status
+        : "paused",
+      direction: playbackRuntime.direction,
+      "controls-disabled": !ready,
+      "previous-disabled": motionRuntime.supplyMovementProgress <= 0.001,
+      "next-disabled": motionRuntime.supplyMovementProgress >= 0.999,
+      "manual-claimed": motionOwner === "manual" &&
+        manualMotionBlock === "supply-movement"
+    });
+  }
 
   function activateCheckpoint(
     index: number,
@@ -600,6 +664,7 @@
     if (source === "manual" || (
       motionOwner === "untouched" && next.progress === 0
     )) seek(next.progress);
+    else commitLessonMotionProjection(motionRuntime.projection);
   }
 
   function stepCheckpoint(direction: -1 | 1): void {
@@ -637,21 +702,23 @@
 
   function handleTogglePlayback(event: Event): void {
     const blockId = motionBlockFromEvent(event);
-    const demandWasPlaying = player === undefined
-      ? false
-      : getKpEditorAnimationPlaybackSession(player)?.player.playbackStatus ===
-        "playing";
-    const supplyWasPlaying = supplyPlaybackStatus === "playing";
     claimManualMotion(blockId);
-    if (blockId === "supply-movement") {
-      if (supplyWasPlaying) return;
-      toggleSupplyPlayback();
-      return;
-    }
-    if (demandWasPlaying) return;
     if (player === undefined) return;
     const session = getKpEditorAnimationPlaybackSession(player);
     if (session === undefined) return;
+    if (session.player.playbackStatus === "playing") {
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "pause",
+        nowMs: performance.now()
+      });
+      return;
+    }
+    commitLessonMotionProjection(projectKpEconomicsLessonMotion({
+      activeBlockId: blockId,
+      localProgress: blockId === "supply-movement"
+        ? motionRuntime.supplyMovementProgress
+        : motionRuntime.semanticProgress
+    }));
     dispatchKpEditorAnimationPlaybackAction(
       player,
       session.player.direction === "rewind" &&
@@ -664,11 +731,13 @@
   function handleRewindPlayback(event: Event): void {
     const blockId = motionBlockFromEvent(event);
     claimManualMotion(blockId);
-    if (blockId === "supply-movement") {
-      startSupplyPlayback("rewind");
-      return;
-    }
     if (player === undefined) return;
+    commitLessonMotionProjection(projectKpEconomicsLessonMotion({
+      activeBlockId: blockId,
+      localProgress: blockId === "supply-movement"
+        ? motionRuntime.supplyMovementProgress
+        : motionRuntime.semanticProgress
+    }));
     dispatchKpEditorAnimationPlaybackAction(player, {
       type: "rewind",
       nowMs: performance.now()
@@ -678,14 +747,13 @@
   function seek(nextProgress: number): void {
     if (!ready || player === undefined) return;
     const session = getKpEditorAnimationPlaybackSession(player);
-    // The prose scrubber always represents semantic start-to-finish progress,
-    // independent of the runtime's currently sampled direction.
-    if (session?.player.direction === "rewind") {
-      dispatchKpEditorAnimationPlaybackAction(player, { type: "reset" });
-    }
+    const direction = session?.player.direction ?? "forward";
     dispatchKpEditorAnimationPlaybackAction(player, {
       type: "seek",
-      progress: nextProgress
+      progress: projectKpEconomicsPlayerProgress({
+        direction,
+        localProgress: nextProgress
+      })
     });
   }
 
@@ -694,11 +762,12 @@
     nextProgress: number
   ): void {
     const localProgress = clamp(nextProgress, 0, 1);
-    lessonMotionProjection = projectKpEconomicsLessonMotion({
+    const next = projectKpEconomicsLessonMotion({
       activeBlockId: blockId,
       localProgress
     });
-    seek(lessonMotionProjection.demandShiftProgress);
+    commitLessonMotionProjection(next);
+    seek(localProgress);
     const rawTravel = latestScrollProjection?.blocks.find(
       ({ id }) => id === blockId
     )?.travel ?? 0;
@@ -714,8 +783,11 @@
     const checkpoints = findKpEconomicsMotionBlock("supply-movement")!
       .checkpoints;
     const currentIndex = checkpoints.reduce((nearest, candidate, index) =>
-      Math.abs(candidate.progress - supplyMovementProgress) <
-          Math.abs(checkpoints[nearest]!.progress - supplyMovementProgress)
+      Math.abs(candidate.progress - motionRuntime.supplyMovementProgress) <
+          Math.abs(
+            checkpoints[nearest]!.progress -
+              motionRuntime.supplyMovementProgress
+          )
         ? index
         : nearest
     , 0);
@@ -727,50 +799,6 @@
       "supply-movement",
       checkpoints[nextIndex]!.progress
     );
-  }
-
-  function toggleSupplyPlayback(): void {
-    if (supplyPlaybackStatus === "playing") {
-      cancelSupplyPlayback();
-      return;
-    }
-    startSupplyPlayback("forward");
-  }
-
-  function startSupplyPlayback(direction: "forward" | "rewind"): void {
-    cancelSupplyPlayback();
-    supplyPlaybackDirection = direction;
-    if (direction === "forward" && supplyMovementProgress >= 0.999) {
-      applyManualMotionProgress("supply-movement", 0);
-    }
-    supplyPlaybackStatus = "playing";
-    supplyPlaybackLastMs = performance.now();
-    supplyPlaybackFrame = requestAnimationFrame(tickSupplyPlayback);
-  }
-
-  function tickSupplyPlayback(nowMs: number): void {
-    if (supplyPlaybackStatus !== "playing") return;
-    const previousMs = supplyPlaybackLastMs ?? nowMs;
-    supplyPlaybackLastMs = nowMs;
-    const delta = Math.max(0, Math.min(64, nowMs - previousMs)) / 2400;
-    const nextProgress = supplyMovementProgress +
-      (supplyPlaybackDirection === "rewind" ? -delta : delta);
-    applyManualMotionProgress("supply-movement", nextProgress);
-    if (nextProgress <= 0 || nextProgress >= 1) {
-      supplyPlaybackStatus = "complete";
-      supplyPlaybackFrame = undefined;
-      return;
-    }
-    supplyPlaybackFrame = requestAnimationFrame(tickSupplyPlayback);
-  }
-
-  function cancelSupplyPlayback(): void {
-    if (supplyPlaybackFrame !== undefined) {
-      cancelAnimationFrame(supplyPlaybackFrame);
-      supplyPlaybackFrame = undefined;
-    }
-    supplyPlaybackLastMs = undefined;
-    if (supplyPlaybackStatus === "playing") supplyPlaybackStatus = "paused";
   }
 
   function changeDemandIntercept(event: Event): void {
@@ -819,9 +847,8 @@
       "",
       `${window.location.pathname}${search}${window.location.hash}`
     );
-    // Restoring model parameters must not steal prose attention from the
-    // passage the learner is currently reading.
-    seek(1);
+    // Asset replacement resamples the current shared playhead; it must not
+    // invent a seek that advances whichever lesson block owns attention.
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
   }
 
@@ -840,6 +867,7 @@
       `${window.location.pathname}${search}${window.location.hash}`
     );
     announcement = `${theme === "dark" ? "Dark" : "Light"} theme enabled.`;
+    commitLessonMotionProjection(motionRuntime.projection);
     void invalidateGeometryAfterPresentationChange();
   }
 
@@ -872,30 +900,33 @@
       readonly progress?: unknown;
       readonly playbackStatus?: unknown;
     };
-    if (typeof detail.progress === "number") progress = detail.progress;
+    if (typeof detail.progress === "number") {
+      playbackRuntime.progress = detail.progress;
+    }
     if (detail.direction === "forward" || detail.direction === "rewind") {
-      playbackDirection = detail.direction;
+      playbackRuntime.direction = detail.direction;
     }
     if (typeof detail.playbackStatus === "string") {
-      playbackStatus =
+      playbackRuntime.status =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
     ensureSemanticTransitProxyLayer();
-    // The player reports demand-curve paint progress. Once lesson authority has
-    // handed off to supply interpretation, a seek must not demote that state.
-    if (lessonMotionProjection.activeBlockId === "demand-shift") {
-      lessonMotionProjection = projectKpEconomicsLessonMotion({
-        activeBlockId: "demand-shift",
-        localProgress: playbackDirection === "rewind" ? 1 - progress : progress
-      });
-      if (motionOwner === "manual" && manualMotionBlock === "demand-shift") {
-        manualScrollRebase = manualScrollRebase === undefined
-          ? undefined
-          : {
-              ...manualScrollRebase,
-              manualProgress: lessonMotionProjection.demandShiftProgress
-            };
-      }
+    const playhead = projectKpEconomicsLessonPlayhead({
+      activeBlockId: motionRuntime.projection.activeBlockId,
+      direction: playbackRuntime.direction,
+      playerProgress: playbackRuntime.progress
+    });
+    commitLessonMotionProjection(playhead.motion, playbackRuntime.direction);
+    if (
+      motionOwner === "manual" &&
+      manualMotionBlock === playhead.activeBlockId
+    ) {
+      manualScrollRebase = manualScrollRebase === undefined
+        ? undefined
+        : {
+            ...manualScrollRebase,
+            manualProgress: playhead.localProgress
+          };
     }
     if (
       detail.playbackStatus === "complete" &&
@@ -918,7 +949,11 @@
       (event.detail as { readonly status?: unknown })?.status !== "ready"
     ) return;
     ready = true;
+    commitLessonMotionProjection(motionRuntime.projection);
     ensureSemanticTransitProxyLayer();
+    // Player hydration installs screen-space labels after the coordinator's
+    // first document measurement. Refresh once at that lifecycle boundary.
+    scrollCoordinator?.invalidateGeometry();
     scrollCoordinator?.scheduleProjection();
   }
 
@@ -1048,13 +1083,12 @@
         nowMs: performance.now()
       });
     }
-    cancelSupplyPlayback();
     motionOwner = "manual";
     manualMotionBlock = blockId;
     scrollTimelineStatus = "manual";
     const currentProgress = blockId === "supply-movement"
-      ? supplyMovementProgress
-      : semanticProgress;
+      ? motionRuntime.supplyMovementProgress
+      : motionRuntime.semanticProgress;
     const rawTravel = latestScrollProjection?.blocks.find(
       ({ id }) => id === blockId
     )?.travel ?? 0;
@@ -1182,6 +1216,14 @@
     }
     if (active !== undefined) {
       const distance = active.anchorTop - projection.readingBandY;
+      activeScrubBar?.setAttribute(
+        "data-kp-tutorial-scrub-anchor-top",
+        active.anchorTop.toFixed(3)
+      );
+      activeScrubBar?.setAttribute(
+        "data-kp-tutorial-scrub-reading-band",
+        projection.readingBandY.toFixed(3)
+      );
       activeScrubBar?.setReadingBandProjection({
         distance,
         proximity: clamp(1 - Math.abs(distance) / 96, 0, 1)
@@ -1224,12 +1266,12 @@
         } else if (manualCanResume) {
           manualScrollRebase = undefined;
         }
-        lessonMotionProjection = projectKpEconomicsLessonMotion({
+        const nextMotion = projectKpEconomicsLessonMotion({
           activeBlockId: active.id,
           localProgress
         });
+        commitLessonMotionProjection(nextMotion);
         if (manualCanResume) {
-          cancelSupplyPlayback();
           demandScrubBar?.releaseManualControl();
           supplyScrubBar?.releaseManualControl();
           manualMotionBlock = undefined;
@@ -1240,7 +1282,7 @@
           : localProgress <= 0.001
             ? "rewound"
             : "seeking";
-        seek(lessonMotionProjection.demandShiftProgress);
+        seek(localProgress);
       }
     }
   }
@@ -1303,9 +1345,8 @@
   }): void {
     // Prose outside a live transition owns an exact settled frame. This keeps
     // scroll, focus, and paint synchronized without event-history inference.
-    lessonMotionProjection = projectKpEconomicsLessonMotion(boundary);
-    seek(lessonMotionProjection.demandShiftProgress);
-    cancelSupplyPlayback();
+    commitLessonMotionProjection(projectKpEconomicsLessonMotion(boundary));
+    seek(boundary.localProgress);
     demandScrubBar?.releaseManualControl();
     supplyScrubBar?.releaseManualControl();
     manualMotionBlock = undefined;
@@ -1452,6 +1493,7 @@
             bottom: geometry.viewportBottom
           }
         }));
+    const cueCount = cachedDocumentGeometry?.length ?? measurements.length;
     const sequence = twoColumnDesktop
       ? projectKpTwoColumnScrollSequence({
           paragraphTopPx: measurements.map(
@@ -1461,6 +1503,7 @@
             ({ paragraphBounds }) => paragraphBounds.bottom
           ),
           indexOffset: cueWindow?.startIndex,
+          totalParagraphCount: cueCount,
           previousParagraphTopPx: cueWindow !== undefined &&
               cueWindow.startIndex > 0
             ? cachedDocumentGeometry![cueWindow.startIndex - 1]!.documentTop -
@@ -1481,8 +1524,6 @@
         timeline: cachedTwoColumnPassageTimeline
       }).phase;
     }
-    const cueIndexOffset = cueWindow?.startIndex ?? 0;
-    const cueCount = cachedDocumentGeometry?.length ?? measurements.length;
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
       const { element, paragraphBounds } = measurement;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
@@ -1504,22 +1545,10 @@
             stageBottomPx: stageBounds?.bottom ?? 0,
             viewportHeightPx: window.innerHeight
           }));
-      const projectedOpacity = sequenceParagraph?.opacity ?? 1;
-      const cueIndex = cueIndexOffset + index;
-      const boundarySalience = twoColumnDesktop
-        ? projectKpTutorialBoundaryCueSalience({
-            phase: twoColumnPassagePhase,
-            cueIndex,
-            cueCount,
-            projectedOpacity
-          })
-        : { opacity: projectedOpacity, endpointPinned: false };
       return {
-        endpointPinned: boundarySalience.endpointPinned,
         passageId,
         motionBlockId,
         projection,
-        opacity: boundarySalience.opacity,
         ownsAttention: sequenceParagraph?.ownsAttention ?? false
       };
     });
@@ -1527,9 +1556,7 @@
       ({ passageId, projection }) => [passageId, projection]
     )));
     twoColumnParagraphPresentations = Object.freeze(Object.fromEntries(frames.map(
-      ({ endpointPinned, passageId, opacity }, index) => [passageId, Object.freeze({
-        endpointPinned,
-        opacity,
+      ({ passageId }, index) => [passageId, Object.freeze({
         salience: sequence?.paragraphs[index]?.salience ?? 1
       })]
     )));
@@ -1724,7 +1751,13 @@
   }
 
   function handleFontMetricsChange(): void {
-    updateInlineStickyLayoutProjection();
+    if (scrollPassageLayout) {
+      updateInlineStickyLayoutProjection();
+      return;
+    }
+    // Split prose still moves when its real font settles, even though it does
+    // not need the inline-sticky layout projection.
+    scrollCoordinator?.invalidateGeometry();
   }
 
   function measureTwoColumnScrollGeometry(): KpEconomicsTwoColumnScrollGeometry {
@@ -2201,7 +2234,6 @@
     scrollCoordinator?.disconnect();
     cueActivationObserver?.disconnect();
     navigationController?.dispose();
-    cancelSupplyPlayback();
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -2503,21 +2535,22 @@
         nowMs: performance.now()
       });
     }
-    cancelSupplyPlayback();
     navigationProjectionPending = true;
     navigationScrollIntent = false;
     navigationResume = createNavigationResume(next);
     checkpointIndex = next.checkpointIndex;
-    lessonMotionProjection = next.motion;
     scrollActiveMotionBlock = next.motion.activeBlockId;
     motionOwner = "untouched";
     manualMotionBlock = undefined;
     manualScrollRebase = undefined;
     scrollTimelineStatus = "idle";
-    playbackDirection = "forward";
-    supplyPlaybackDirection = "forward";
-    supplyPlaybackStatus = "paused";
-    seek(next.motion.demandShiftProgress);
+    if (player !== undefined) {
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "reset" });
+    }
+    playbackRuntime.direction = "forward";
+    playbackRuntime.status = "idle";
+    commitLessonMotionProjection(next.motion, "forward");
+    seek(localKpEconomicsMotionProgress(next.motion));
     scrollCoordinator?.scheduleProjection();
   }
 
@@ -2539,7 +2572,10 @@
   ): void {
     if (scrubBar === undefined) return;
     for (const [name, value] of Object.entries(attributes)) {
-      scrubBar.setAttribute(name, String(value));
+      const serialized = String(value);
+      if (scrubBar.getAttribute(name) !== serialized) {
+        scrubBar.setAttribute(name, serialized);
+      }
     }
   }
 
@@ -2556,6 +2592,7 @@
     >{stageExpanded ? "Compact" : "Expand"}</button>
 
     <div
+      bind:this={motionStyleOwner}
       class="kp-economics-tutorial__player-host"
       data-kp-animation-catalogue-stage
       data-kp-animation-catalogue-stage-persistent="true"
@@ -2567,6 +2604,7 @@
     >
       {@html playerHtml}
       <div
+        bind:this={verificationAperture}
         class="kp-economics-tutorial__verification-aperture"
         data-kp-economics-stage-aperture="verification-aperture"
         data-kp-economics-stage-aperture-edge={stageComposition.aperture.edge}
@@ -2574,6 +2612,7 @@
         aria-hidden="true"
       >
         <div
+          bind:this={verificationSurface}
           class="kp-economics-tutorial__verification-surface"
           data-kp-economics-stage-surface="equilibrium-verification"
           data-kp-economics-stage-slot="verification-slot"
@@ -2623,10 +2662,6 @@
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
     data-kp-inline-sticky-crossing-progress={inlineParagraphProjection?.crossingProgress.toFixed(4)}
-    data-kp-two-column-endpoint-pinned={twoColumnParagraphPresentation?.endpointPinned
-      ? "true"
-      : undefined}
-    data-kp-two-column-paragraph-opacity={twoColumnParagraphPresentation?.opacity.toFixed(4)}
     data-kp-two-column-paragraph-salience={twoColumnParagraphPresentation?.salience.toFixed(4)}
     data-kp-tutorial-motion-block={renderedMotionBlock?.id}
     id={renderedMotionBlock === undefined
@@ -2642,7 +2677,7 @@
       : `${renderedMotionBlock.label} animation step`}
     style={twoColumnParagraphPresentation === undefined
       ? undefined
-      : `--kp-two-column-paragraph-opacity:${twoColumnParagraphPresentation.opacity};--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
+      : `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
     }
   >
     {#if renderedMotionBlock !== undefined}
@@ -2762,7 +2797,9 @@
   stageClass="kp-economics-tutorial__stage"
   stageLabel="Persistent supply and demand stage"
   attributes={{
-    "data-kp-economics-demand-shift-tutorial": true,
+    // Data attributes use strings so the review and test root exists in the
+    // server-rendered document before client enhancement attaches.
+    "data-kp-economics-demand-shift-tutorial": "true",
     "data-kp-economics-tutorial-layout": presentationLayout,
     "data-kp-economics-tutorial-scrub-strategy": scrubStrategy,
     "data-kp-economics-motion-bridge-dwell": motionBridgeDwellProfile,
@@ -2819,9 +2856,7 @@
     "data-kp-tutorial-review-checkpoint": checkpoint.id,
     "data-kp-tutorial-review-progress": reviewProgress.toFixed(4),
     "data-kp-tutorial-review-motion-authority": motionOwner,
-    "data-kp-tutorial-review-playback-direction": lessonMotionProjection.activeBlockId === "supply-movement"
-      ? supplyPlaybackDirection
-      : playbackDirection,
+    "data-kp-tutorial-review-playback-direction": initial.playbackDirection,
     "data-kp-tutorial-review-evidence": JSON.stringify(
       twoColumnScroll
         ? {
@@ -2899,6 +2934,11 @@
                 >
                   {@render economicsStage()}
                 </aside>
+                <span
+                  class="kp-economics-tutorial__column-divider"
+                  data-kp-economics-column-divider
+                  aria-hidden="true"
+                ></span>
                 <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll
                     ? twoColumnParagraphs

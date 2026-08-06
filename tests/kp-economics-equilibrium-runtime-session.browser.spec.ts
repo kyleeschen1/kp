@@ -64,7 +64,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     });
     await Promise.resolve();
     const changedInputMutations = observerRecords.length;
-    const resizedSupplyX2 = supply?.getAttribute("x2");
+    const resizedSupplyPath = supply?.getAttribute("d");
     const demand = initialView.querySelector("[data-kp-economics-demand-line]");
     const demandLabel = initialView.querySelector(
       '[data-kp-economics-math-label="curve-demand-current"]'
@@ -86,7 +86,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
       frame: shiftFrame,
       viewport: input.viewport
     });
-    const demandShiftY1 = demand?.getAttribute("y1");
+    const demandShiftPath = demand?.getAttribute("d");
     runtime.patchKpEconomicsEquilibriumMathLabels({
       scaffold: first,
       frame: shiftFrame,
@@ -179,7 +179,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
       ),
       demandKatexRetained: demandKatex === demandLabel?.querySelector(".katex"),
       demandLabelLatex,
-      demandShiftY1,
+      demandShiftPath,
       disposedStatus: first.status,
       equilibriumRetained: equilibrium === initialView.querySelector(
         "[data-kp-economics-equilibrium-point]"
@@ -219,7 +219,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
       supplyRetained: supply === initialView.querySelector(
         "[data-kp-economics-supply-line]"
       ),
-      resizedSupplyX2,
+      resizedSupplyPath,
       viewCountAfterDispose: content.querySelectorAll(
         "[data-kp-economics-equilibrium-view]"
       ).length
@@ -232,7 +232,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     demandRetained: true,
     demandKatexRetained: true,
     demandLabelLatex: "D_t",
-    demandShiftY1: "94.39999999999998",
+    demandShiftPath: "M 36 94.39999999999998 L 556 317.6",
     disposedStatus: "disposed",
     equilibriumRetained: true,
     equilibriumKatexRetained: true,
@@ -253,7 +253,7 @@ test("economics runtime scaffold mounts once and disposes idempotently", async (
     sameView: true,
     initialReferenceRetained: true,
     supplyRetained: true,
-    resizedSupplyX2: "616",
+    resizedSupplyPath: "M 36 354.8 L 616 131.60000000000002",
     viewCountAfterDispose: 0
   });
 });
@@ -308,7 +308,8 @@ test("retained economics session matches canonical direct seek and rewind", asyn
       return Object.fromEntries(Array.from(element.attributes)
         .filter(({ name }) =>
           name === "x" || name === "y" || name === "x1" || name === "y1" ||
-          name === "x2" || name === "y2" || name === "cx" || name === "cy" ||
+          name === "x2" || name === "y2" || name === "d" ||
+          name === "cx" || name === "cy" ||
           name === "style" || name.startsWith("data-kp-economics-")
         )
         .map(({ name, value }) => [name, value]));

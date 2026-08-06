@@ -217,7 +217,6 @@
   line-height: 1.1;
   opacity: var(--kp-economics-label-entry-opacity, 1);
   text-shadow: none;
-  transition: opacity 140ms ease-out;
   white-space: nowrap;
 }
 
@@ -275,9 +274,6 @@
   [data-kp-economics-label-disclosure="contextual"] {
   visibility: hidden;
   opacity: 0;
-  transition:
-    opacity 140ms ease-out,
-    visibility 0s linear 140ms;
 }
 
 .kp-economics-tutorial--two-column-scroll:is(
@@ -326,25 +322,6 @@
 }
 
 .kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-curve,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-guide,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-equilibrium,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-grid,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-tick,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-math-foreign-object,
-.kp-economics-tutorial__player-host
-  .editor-graph-stage__economics-equations,
-.kp-economics-tutorial__player-host
-  [data-kp-editor-graph-axis] {
-  transition: filter 180ms ease, opacity 180ms ease;
-}
-
-.kp-economics-tutorial__player-host
   .editor-graph-stage__economics-supply-movement {
   opacity: 1;
 }
@@ -370,44 +347,17 @@
   stroke-dashoffset: calc(1 - var(--kp-tutorial-supply-trace));
 }
 
-.kp-economics-tutorial[data-kp-economics-tutorial-scroll-active-block="supply-movement"]
-  .kp-economics-tutorial__player-host
-  [data-kp-economics-supply-line] {
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-supply-stroke-scale, 1)
-    );
-}
-
 /* Supply is the first visual object to consume semantic salience recipes.
-   The graph adapter owns paint while the shared state remains renderer-free. */
+   Semantic emphasis changes paint, never geometry: every live graph role reads
+   from the same axis-derived optical profile. */
 .kp-economics-tutorial__player-host [data-kp-economics-supply-line] {
   opacity: var(--kp-economics-salience-market-supply-opacity, 1);
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-supply-stroke-scale, 1)
-    );
-  transition:
-    filter 180ms ease,
-    opacity 180ms ease,
-    stroke 180ms ease,
-    stroke-width 180ms ease;
+  stroke-width: var(--kp-graph-stroke-curve, 1px);
 }
 
 .kp-economics-tutorial__player-host [data-kp-economics-demand-line] {
   opacity: var(--kp-economics-salience-market-demand-current-opacity, 1);
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-demand-current-stroke-scale, 1)
-    );
-  transition:
-    filter 180ms ease,
-    opacity 180ms ease,
-    stroke 180ms ease,
-    stroke-width 180ms ease;
+  stroke-width: var(--kp-graph-stroke-curve, 1px);
 }
 
 /* Runtime presence remains on the SVG nodes. Semantic opacity is composed as
@@ -416,21 +366,13 @@
 .kp-economics-tutorial__player-host
   .editor-graph-stage__economics-grid-line {
   opacity: var(--kp-economics-salience-market-grid-opacity, 1);
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-grid-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-grid, 1px);
 }
 
 .kp-economics-tutorial__player-host
   :is([data-kp-editor-graph-axis], .editor-graph-stage__economics-tick) {
   opacity: var(--kp-economics-salience-market-axes-opacity, 1);
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-axes-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-axis, 1px);
 }
 
 .kp-economics-tutorial__player-host
@@ -439,11 +381,7 @@
     [data-kp-economics-equilibrium-price-guide]
   ) {
   opacity: var(--kp-economics-salience-market-guides-opacity, 1);
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-guides-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-guide, 1px);
 }
 
 .kp-economics-tutorial__player-host [data-kp-economics-equilibrium-point] {
@@ -452,11 +390,7 @@
     --kp-economics-salience-market-equilibrium-current-color,
     var(--kp-graph-intersection-stroke)
   );
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-equilibrium-current-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-intersection, 1px);
 }
 
 .kp-economics-tutorial__player-host
@@ -468,20 +402,12 @@
 
 .kp-economics-tutorial__player-host
   [data-kp-economics-initial-demand-reference] {
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-demand-initial-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-trace-casing, 1px);
 }
 
 .kp-economics-tutorial__player-host
   [data-kp-economics-initial-demand-reference-core] {
-  stroke-width:
-    calc(
-      var(--kp-graph-ghost-core-line-width, 0.5px) *
-      var(--kp-economics-salience-market-demand-initial-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-trace-core, 0.5px);
 }
 
 .kp-economics-tutorial__player-host
@@ -499,21 +425,13 @@
   .editor-graph-stage__economics-guide--reference-casing,
 .kp-economics-tutorial__player-host
   [data-kp-economics-initial-equilibrium-reference] {
-  stroke-width:
-    calc(
-      var(--kp-graph-line-width, 1px) *
-      var(--kp-economics-salience-market-equilibrium-initial-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-trace-casing, 1px);
 }
 
 .kp-economics-tutorial__player-host
   [data-kp-economics-initial-equilibrium-guides]
   .editor-graph-stage__economics-guide--reference-core {
-  stroke-width:
-    calc(
-      var(--kp-graph-ghost-core-line-width, 0.5px) *
-      var(--kp-economics-salience-market-equilibrium-initial-stroke-scale, 1)
-    );
+  stroke-width: var(--kp-graph-stroke-trace-core, 0.5px);
 }
 
 .kp-economics-tutorial__player-host

@@ -22,7 +22,7 @@ test("economics projects one route-local salience property seam", () => {
   assert.equal(Object.keys(dark).length, 60);
   assert.equal(dark["--kp-economics-salience-market-supply-color"], "#7cbdff");
   assert.equal(dark["--kp-economics-salience-market-supply-opacity"], "1");
-  assert.equal(dark["--kp-economics-salience-market-demand-current-opacity"], "0.62");
+  assert.equal(dark["--kp-economics-salience-market-demand-current-opacity"], "1");
   assert.equal(dark["--kp-economics-salience-market-demand-initial-rendered"], "1");
   assert.equal(dark["--kp-economics-salience-market-equations-rendered"], "1");
 });
@@ -36,7 +36,7 @@ test("theme projection changes recipes without adding layout authority", () => {
   );
   assert.equal(
     light["--kp-economics-salience-market-demand-current-opacity"],
-    "0.72"
+    "1"
   );
   const serialized = serializeKpEconomicsSalienceCssProperties(dark);
   assert.doesNotMatch(serialized, /(?:width|height|inset|gap|top|left|right|bottom):/);
@@ -60,13 +60,10 @@ test("economics route mounts the semantic property seam for local consumers", ()
   ), "utf8");
   assert.match(theme, /--kp-economics-salience-market-supply-color/);
   assert.match(graph, /--kp-economics-salience-market-supply-opacity/);
-  assert.match(graph, /--kp-economics-salience-market-supply-stroke-scale/);
+  assert.match(graph, /--kp-graph-stroke-curve/);
   assert.match(theme, /--kp-economics-salience-market-demand-current-color/);
   assert.match(graph, /--kp-economics-salience-market-demand-current-opacity/);
-  assert.match(
-    graph,
-    /--kp-economics-salience-market-demand-current-stroke-scale/
-  );
+  assert.doesNotMatch(graph, /salience-market-(?:supply|demand-current)-stroke-scale/);
   for (const object of [
     "grid",
     "axes",
@@ -77,7 +74,7 @@ test("economics route mounts the semantic property seam for local consumers", ()
     "equations"
   ]) {
     assert.match(`${theme}\n${graph}`, new RegExp(
-      `--kp-economics-salience-market-${object}-(?:color|opacity|stroke-scale)`
+      `--kp-economics-salience-market-${object}-(?:color|opacity)`
     ));
   }
 });

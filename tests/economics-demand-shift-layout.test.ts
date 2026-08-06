@@ -31,6 +31,7 @@ import {
 import {
   projectKpEconomicsGraphStrokeWidths,
   readKpEconomicsGraphStrokeScale,
+  serializeKpEconomicsGraphStrokeWidths,
   writeKpEconomicsGraphStrokeScale
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-graph-style.ts";
 import {
@@ -203,12 +204,37 @@ test("graph stroke tuning is bounded, theme-relative, and URL-reproducible", () 
     }),
     "?layout=two-column-scroll"
   );
-  assert.deepEqual(projectKpEconomicsGraphStrokeWidths(1.2), {
-    darkPx: 1.2,
-    darkGhostCorePx: 0.6,
-    lightPx: 1.5,
-    lightGhostCorePx: 0.75
+  const dark = projectKpEconomicsGraphStrokeWidths({
+    scale: 1.2,
+    theme: "dark"
   });
+  assert.deepEqual(dark, {
+    theme: "dark",
+    axisPx: 1.2,
+    curvePx: 1.2,
+    gridPx: 1.2,
+    guidePx: 1.2,
+    intersectionPx: 1.2,
+    traceCasingPx: 1.2,
+    traceCorePx: 0.6
+  });
+  assert.deepEqual(
+    projectKpEconomicsGraphStrokeWidths({ scale: 1.2, theme: "light" }),
+    {
+      theme: "light",
+      axisPx: 1.5,
+      curvePx: 1.5,
+      gridPx: 1.5,
+      guidePx: 1.5,
+      intersectionPx: 1.5,
+      traceCasingPx: 1.5,
+      traceCorePx: 0.75
+    }
+  );
+  assert.match(
+    serializeKpEconomicsGraphStrokeWidths(dark),
+    /--kp-graph-tuned-stroke-axis:1\.2px;--kp-graph-tuned-stroke-curve:1\.2px/
+  );
 });
 
 test("economics salience and typography tuning is bounded and URL-reproducible", () => {
@@ -279,7 +305,6 @@ test("two-column prose focuses at 35vh with a short-block plateau", () => {
   assert.equal(focused.travel, 1);
   assert.equal(focused.distanceFromStageBottomPx, 0);
   assert.equal(focused.salience, 1);
-  assert.equal(focused.opacity, 1);
 
   const approaching = projectKpTwoColumnScrollParagraph({
     paragraphTopPx: 520,
@@ -303,7 +328,6 @@ test("two-column prose focuses at 35vh with a short-block plateau", () => {
   assert.equal(passed.phase, "passed");
   assert.equal(passed.travel, 1);
   assert.equal(passed.salience, 0);
-  assert.equal(passed.opacity, 0.32);
 });
 
 test("opening prose exposes continuous approach progress without replaying state", () => {
@@ -325,23 +349,25 @@ test("opening prose exposes continuous approach progress without replaying state
 test("paragraph salience hands off after predecessor settlement", () => {
   const settled = projectKpTwoColumnScrollSequence({
     paragraphTopPx: [280, 700, 1000],
-    paragraphBottomPx: [360, 780, 1080],
+    paragraphBottomPx: [480, 780, 1080],
     focusTopPx: 280,
     viewportHeightPx: 800
   });
   assert.equal(settled.attentionIndex, 0);
-  assert.deepEqual(settled.paragraphs.map(({ opacity }) => opacity), [
-    1, 0.32, 0.32
-  ]);
+  assert.deepEqual(settled.paragraphs.map(({ salience }) => salience), [1, 0, 0]);
 
   const handoff = projectKpTwoColumnScrollSequence({
-    paragraphTopPx: [200, 400, 800],
-    paragraphBottomPx: [280, 480, 880],
+    paragraphTopPx: [200, 340, 800],
+    paragraphBottomPx: [280, 420, 880],
     focusTopPx: 280,
     viewportHeightPx: 800
   });
   assert.equal(handoff.attentionIndex, 1);
-  assert.ok(handoff.paragraphs[0]!.opacity < handoff.paragraphs[1]!.opacity);
+  assert.ok(handoff.paragraphs[0]!.salience < handoff.paragraphs[1]!.salience);
+  assert.equal(
+    handoff.paragraphs[0]!.salience + handoff.paragraphs[1]!.salience,
+    1
+  );
 
   const focused = projectKpTwoColumnScrollSequence({
     paragraphTopPx: [160, 280, 700],
@@ -353,6 +379,15 @@ test("paragraph salience hands off after predecessor settlement", () => {
   assert.deepEqual(focused.paragraphs.map(({ ownsAttention }) => ownsAttention), [
     false, true, false
   ]);
+
+  const terminal = projectKpTwoColumnScrollSequence({
+    paragraphTopPx: [-200, 160],
+    paragraphBottomPx: [-120, 240],
+    focusTopPx: 280,
+    viewportHeightPx: 800,
+    totalParagraphCount: 2
+  });
+  assert.deepEqual(terminal.paragraphs.map(({ salience }) => salience), [0, 1]);
 });
 
 test("two-column motion stays at zero through its post-latch start", () => {

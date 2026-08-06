@@ -1,0 +1,167 @@
+{
+  "id": "run-contract.kp.economics-runtime-optical-consolidation-v2",
+  "kind": "run-contract",
+  "title": "Economics runtime and optical consolidation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-runtime-optical-consolidation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/explanation-attention.md",
+      "summary": "Approved next-loop runtime and optical correction, frozen defaults, and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-01-kp-dimensional-continuity-graph-and-diagram-language.md",
+      "summary": "Accepted graph-language refinement for apparent one-pixel strokes, theme-only compensation, terminal axis labels, and stroke-relative arrows."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run test:browser:economics-runtime-session",
+    "npm run visual:economics-two-column-scroll",
+    "npm run performance:economics-demand-shift-tutorial",
+    "npm run check",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Economics demand-shift tutorial adapter, local lesson motion projection, retained SVG runtime binding, Graph2D viewport axis marker and label geometry, economics-local CSS/theme tokens, dormant internal appearance controls, focused tests, stable visual evidence, and project/Theseus records.",
+    "Preserve and verify the in-scope uncommitted economics corrections already present in the worktree before extending them."
+  ],
+  "disallowedWork": [
+    "No semantic economics model changes, lesson prose rewrite, Graph3D implementation, Lisp or other lesson changes, catalogue-wide graph migration, new animation engine, new global salience store, consumer or producer surplus, deadweight loss, or public product work.",
+    "Do not stage or modify unrelated user-owned untracked documents or out-of-scope worktree changes."
+  ],
+  "goal": "Restore the economics tutorial to KP's single-clock retained-renderer boundary and establish the reviewed axis, stroke, label, and frozen-default presentation without changing semantic truth.",
+  "target": "next-action.kp.economics-runtime-optical-consolidation",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit independently reversible verified groups with exact path staging and completed Theseus evidence; never mix unrelated user-owned files.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s20 for explicit human review before promotion or generalization.",
+    "Stop if semantic economics truth, lesson prose, or publication truth would need to change.",
+    "Stop if the unified clock cannot preserve exact direct seek, rewind, URL restoration, and manual-control handoff.",
+    "Stop if path conversion changes curve geometry, labels, accessibility, or retained node identity.",
+    "Stop if required verification cannot be repaired inside the economics rollback boundary.",
+    "Stop if progress would require modifying or staging unrelated dirty files."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Recover-and-freeze-baseline",
+      "summary": "Recovered and froze the canonical two-column dark economics baseline, audited the dirty-worktree boundary, preserved unrelated files, and confirmed 61 semantic/runtime plus 15 stylesheet tests pass before new implementation.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Verify-canonical-runtime-ownership",
+      "summary": "Verified demand already runs on the shared player rAF and retained graph session; isolated the duplicate supply rAF, per-frame Svelte projection feedback, and CSS paint transitions as the three competing authorities. The correction can preserve the semantic asset and stable SVG nodes.",
+      "status": "complete"
+    },
+    {
+      "id": "s03",
+      "title": "Define-unified-lesson-playhead-projection",
+      "summary": "Added a pure direction-aware lesson playhead projection: the shared player exposes one local normalized clock for either motion block, rewind remains forward-semantic, and the graph receives cumulative demand progress. All 62 focused economics tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s04",
+      "title": "Route-supply-motion-through-shared-player",
+      "summary": "Routed demand shift and supply movement through the one retained editor player; local block playhead and cumulative graph progress now project independently from the same clock, with scroll geometry refreshed after split-layout font settlement.",
+      "status": "complete"
+    },
+    {
+      "id": "s05",
+      "title": "Remove-tutorial-local-playback-clock",
+      "summary": "Removed the tutorial-local supply rAF, timestamps, cancellation, and playback state. The Svelte lesson adapter now contains no requestAnimationFrame or cancelAnimationFrame authority; the retained editor player owns the only playback clock.",
+      "status": "complete"
+    },
+    {
+      "id": "s06",
+      "title": "Remove-Svelte-frame-feedback-authority",
+      "summary": "Moved hot-path playback and motion projection into plain runtime objects and a direct retained-DOM presentation adapter. No per-frame Svelte rune drives graph objects or animation-owned CSS; Svelte typecheck passes with zero errors and warnings.",
+      "status": "complete"
+    },
+    {
+      "id": "s07",
+      "title": "Unify-scroll-play-seek-and-URL-drivers",
+      "summary": "Unified scroll, play, manual scrub, direct semantic links, TOC/history restoration, rewind, and supply handoff through the same local playhead projection. The 12-test tutorial browser suite and 2-test retained runtime session suite pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s08",
+      "title": "Remove-animation-owned-CSS-transitions",
+      "summary": "Removed CSS interpolation from graph labels, curves, guides, equilibria, axes, and salience paint. Theme and phone UI transitions remain outside animation ownership; the stylesheet contract now rejects graph transition declarations and all 16 CSS tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s09",
+      "title": "Prove-retained-renderer-no-op-commit",
+      "summary": "Added a direct presentation no-op proof: the first retained frame writes its CSS properties and attributes, while committing the identical frame attempts the same projection and performs zero mutations. All 63 focused economics tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s10",
+      "title": "Define-path-oriented-data-curve-binding",
+      "summary": "Defined and tested one path-oriented line-segment contract for economics data curves, explicitly leaving axes, grids, and guide geometry on SVG lines. All 64 focused economics tests pass before caller conversion.",
+      "status": "complete"
+    },
+    {
+      "id": "s11",
+      "title": "Convert-economics-data-curves-to-paths",
+      "summary": "Converted supply, live demand, both historical-demand layers, and the supply-movement trace from SVG lines to retained paths using the shared d-attribute contract. Axes, grids, and guides remain lines; node identity, direct seek, rewind parity, labels, accessibility, and deterministic static output all pass in 64 unit and 2 browser tests.",
+      "status": "complete"
+    },
+    {
+      "id": "s12",
+      "title": "Freeze-appearance-controls-at-defaults",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Remove-appearance-query-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Centralize-one-pixel-core-line-token",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Add-theme-only-light-optical-multiplier",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Unify-divider-with-optical-line-profile",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Project-stroke-relative-axis-arrow-metrics",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Place-P-and-Q-at-terminal-clearance-anchors",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Run-semantic-runtime-performance-and-browser-gates",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Capture-economics-human-visual-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

@@ -194,7 +194,7 @@ test("economics layout owners do not restate settled passage paint", () => {
   );
 });
 
-test("axis fallbacks stay themed while the exemplar consumes semantic paint", () => {
+test("axes remain theme-stable while semantic paint owns changing objects", () => {
   const theme = read("economics-demand-shift-theme.css");
   const twoColumn = read("economics-demand-shift-two-column.css");
 
@@ -203,13 +203,30 @@ test("axis fallbacks stay themed while the exemplar consumes semantic paint", ()
     theme,
     /:root\[data-kp-lesson-theme="dark"\][\s\S]*?--kp-lesson-theme-stage-divider: #626775;[\s\S]*?--kp-lesson-theme-graph-axis: var\(--kp-lesson-theme-stage-divider\);/
   );
-  assert.match(twoColumn, /--kp-economics-salience-market-axes-color/);
+  assert.match(twoColumn, /--kp-graph-axis: var\(--kp-lesson-theme-graph-axis\);/);
+  assert.doesNotMatch(twoColumn, /--kp-economics-salience-market-axes-color/);
+});
+
+test("animation-owned graph paint follows the shared clock without CSS interpolation", () => {
+  const graph = read("economics-demand-shift-graph.css");
+  const responsive = read("economics-demand-shift-publication-responsive.css");
+  const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
+
+  assert.doesNotMatch(graph, /\btransition(?:-property)?:/);
+  for (const css of [responsive, layoutFallbacks]) {
+    assert.doesNotMatch(
+      css,
+      /(?:editor-graph-stage|data-kp-editor-graph-axis)[^{}]*\{[^}]*\btransition(?:-property)?:/s
+    );
+  }
 });
 
 test("two-column progressive layout derives prose and graph from one latch", () => {
   const twoColumn = read("economics-demand-shift-two-column.css");
 
   assert.match(twoColumn, /--kp-two-column-stage-center-vh: 50;/);
+  assert.match(twoColumn, /--kp-two-column-paragraph-gap-vh: 50;/);
+  assert.match(twoColumn, /--kp-two-column-boundary-line: 1px;/);
   assert.match(twoColumn, /--kp-tutorial-persistent-top-inset: 0px;/);
   assert.match(twoColumn, /--kp-tutorial-persistent-bottom-inset: 0px;/);
   assert.match(
@@ -232,5 +249,14 @@ test("two-column progressive layout derives prose and graph from one latch", () 
     twoColumn,
     /\[data-kp-inline-sticky-cue\]:first-child \{\s*margin-top: 0;/
   );
+  assert.match(
+    twoColumn,
+    /\.kp-economics-tutorial__column-divider \{[\s\S]*?position: sticky;[\s\S]*?height: var\(--kp-two-column-divider-block-size\);/
+  );
+  assert.match(
+    twoColumn,
+    /> p::before \{[\s\S]*?background: var\(--kp-lesson-theme-reader-rail\);[\s\S]*?transform: scaleY\(var\(--kp-two-column-paragraph-salience, 0\)\);/
+  );
+  assert.doesNotMatch(twoColumn, /--kp-two-column-paragraph-opacity/);
   assert.doesNotMatch(twoColumn, /--kp-two-column-stage-top-vh/);
 });

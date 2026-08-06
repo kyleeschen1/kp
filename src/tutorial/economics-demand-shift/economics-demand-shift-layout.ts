@@ -44,7 +44,6 @@ export interface KpInlineStickyParagraphProjection {
 export interface KpTwoColumnScrollParagraphProjection
   extends KpInlineStickyParagraphProjection {
   readonly salience: number;
-  readonly opacity: number;
   readonly ownsAttention: boolean;
 }
 
@@ -70,7 +69,7 @@ export const kpEconomicsMotionBridgeDwellExemplarSearch =
 export const kpEconomicsTwoColumnParagraphGapMinimumVh = 0;
 export const kpEconomicsTwoColumnParagraphGapMaximumVh = 100;
 export const kpEconomicsTwoColumnParagraphGapStepVh = 1;
-export const kpEconomicsTwoColumnParagraphGapDefaultVh = 16;
+export const kpEconomicsTwoColumnParagraphGapDefaultVh = 50;
 
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string
@@ -173,7 +172,6 @@ export function projectKpTwoColumnScrollParagraph(input: {
   readonly focusTopPx: number;
   readonly viewportHeightPx: number;
   readonly opening?: boolean | undefined;
-  readonly inactiveOpacity?: number | undefined;
   readonly approachStartRatio?: number | undefined;
   readonly focusBottomRatio?: number | undefined;
   readonly minimumEffectiveHeightRatio?: number | undefined;
@@ -274,7 +272,6 @@ export function projectKpTwoColumnScrollParagraph(input: {
           0,
           1
         ));
-  const inactiveOpacity = clamp(input.inactiveOpacity ?? 0.32, 0, 1);
   return Object.freeze({
     phase: paragraphTop >= approachStartY
       ? "below"
@@ -288,8 +285,7 @@ export function projectKpTwoColumnScrollParagraph(input: {
     // The legacy field name is shared with the inline projector. Here it
     // measures distance from the invisible prose completion line.
     distanceFromStageBottomPx: paragraphTop - focusTop,
-    salience,
-    opacity: inactiveOpacity + (1 - inactiveOpacity) * salience
+    salience
   });
 }
 
@@ -297,10 +293,10 @@ export function projectKpTwoColumnScrollSequence(input: {
   readonly paragraphTopPx: readonly number[];
   readonly paragraphBottomPx?: readonly number[] | undefined;
   readonly indexOffset?: number | undefined;
+  readonly totalParagraphCount?: number | undefined;
   readonly previousParagraphTopPx?: number | undefined;
   readonly focusTopPx: number;
   readonly viewportHeightPx: number;
-  readonly inactiveOpacity?: number | undefined;
   readonly approachStartRatio?: number | undefined;
   readonly focusBottomRatio?: number | undefined;
   readonly minimumEffectiveHeightRatio?: number | undefined;
@@ -322,7 +318,6 @@ export function projectKpTwoColumnScrollSequence(input: {
       focusTopPx: input.focusTopPx,
       viewportHeightPx: input.viewportHeightPx,
       opening: (input.indexOffset ?? 0) + index === 0,
-      inactiveOpacity: input.inactiveOpacity,
       approachStartRatio: input.approachStartRatio,
       focusBottomRatio: input.focusBottomRatio,
       minimumEffectiveHeightRatio: input.minimumEffectiveHeightRatio,
@@ -336,8 +331,20 @@ export function projectKpTwoColumnScrollSequence(input: {
     });
   }
 
-  const attentionIndex = baseParagraphs.reduce((bestIndex, paragraph, index) =>
-    paragraph.salience > baseParagraphs[bestIndex]!.salience
+  const railSalience = projectPairwiseRailSalience({
+    paragraphs: baseParagraphs,
+    paragraphTopPx: input.paragraphTopPx,
+    paragraphBottomPx: input.paragraphBottomPx,
+    focusTopPx: input.focusTopPx,
+    focusBottomPx:
+      input.viewportHeightPx * clamp(input.focusBottomRatio ?? 0.5, 0, 1),
+    indexOffset: input.indexOffset ?? 0,
+    totalParagraphCount:
+      input.totalParagraphCount ?? (input.indexOffset ?? 0) + baseParagraphs.length
+  });
+
+  const attentionIndex = railSalience.reduce((bestIndex, salience, index) =>
+    salience > railSalience[bestIndex]!
       ? index
       : bestIndex
   , 0);
@@ -345,10 +352,66 @@ export function projectKpTwoColumnScrollSequence(input: {
   return Object.freeze({
     paragraphs: Object.freeze(baseParagraphs.map((paragraph, index) => Object.freeze({
       ...paragraph,
+      salience: railSalience[index]!,
       ownsAttention: index === attentionIndex
     }))),
     attentionIndex
   });
+}
+
+function projectPairwiseRailSalience(input: {
+  readonly paragraphs: readonly Omit<
+    KpTwoColumnScrollParagraphProjection,
+    "ownsAttention"
+  >[];
+  readonly paragraphTopPx: readonly number[];
+  readonly paragraphBottomPx?: readonly number[] | undefined;
+  readonly focusTopPx: number;
+  readonly focusBottomPx: number;
+  readonly indexOffset: number;
+  readonly totalParagraphCount: number;
+}): readonly number[] {
+  const result = input.paragraphs.map(() => 0);
+  let settledIndex = -1;
+  input.paragraphTopPx.forEach((top, index) => {
+    if (top <= input.focusTopPx) settledIndex = index;
+  });
+  if (settledIndex < 0) {
+    result[0] = input.paragraphs[0]!.salience;
+    return Object.freeze(result);
+  }
+
+  const absoluteIndex = input.indexOffset + settledIndex;
+  const isTerminal = absoluteIndex === input.totalParagraphCount - 1;
+  const nextIndex = settledIndex + 1;
+  if (isTerminal || nextIndex >= input.paragraphs.length) {
+    result[settledIndex] = isTerminal
+      ? 1
+      : input.paragraphs[settledIndex]!.salience;
+    return Object.freeze(result);
+  }
+
+  const currentTop = input.paragraphTopPx[settledIndex]!;
+  const currentBottom = input.paragraphBottomPx?.[settledIndex] ?? currentTop;
+  if (currentBottom >= input.focusBottomPx) {
+    result[settledIndex] = 1;
+    return Object.freeze(result);
+  }
+
+  const nextTop = input.paragraphTopPx[nextIndex]!;
+  const gap = Math.max(0, nextTop - currentBottom);
+  const handoffSpan = Math.max(
+    1,
+    gap + input.focusBottomPx - input.focusTopPx
+  );
+  const progress = smoothstep(clamp(
+    (input.focusBottomPx - currentBottom) / handoffSpan,
+    0,
+    1
+  ));
+  result[settledIndex] = 1 - progress;
+  result[nextIndex] = progress;
+  return Object.freeze(result);
 }
 
 export function projectKpTwoColumnScrollMotionCorridor(input: {

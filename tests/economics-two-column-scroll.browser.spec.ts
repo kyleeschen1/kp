@@ -64,7 +64,8 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
-    "two-column-scroll"
+    "two-column-scroll",
+    { timeout: 15_000 }
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scrub-strategy",
@@ -123,7 +124,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   const passageHeights = await paragraphs.evaluateAll((elements) =>
     elements.map((element) => element.getBoundingClientRect().height)
   );
-  expect(passageHeights.slice(0, 5).every((height) => height < 500)).toBe(true);
+  expect(passageHeights.slice(0, 5).every((height) =>
+    height >= 400 && height < 650
+  )).toBe(true);
   expect(passageHeights[5]).toBeLessThan(800);
 
   expect(entryTarget.focusLatch.stageCenter).not.toBe(
@@ -135,22 +138,13 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "data-kp-economics-tutorial-passage-phase",
     "ordinary-document"
   );
-  await expect(initialPassage).toHaveAttribute(
-    "data-kp-two-column-endpoint-pinned",
-    "true"
-  );
-  await expect(initialPassage).toHaveAttribute(
-    "data-kp-two-column-paragraph-opacity",
-    "1.0000"
+  await expect(initialPassage).not.toHaveAttribute(
+    "data-kp-two-column-paragraph-opacity"
   );
   await placeTopAt(page, initialParagraph, focusTop);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-passage-phase",
     "entry-latched"
-  );
-  await expect(initialPassage).not.toHaveAttribute(
-    "data-kp-two-column-endpoint-pinned",
-    "true"
   );
   await expect(root).toHaveAttribute(
     "data-kp-inline-sticky-stage-state",
@@ -210,12 +204,12 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   })).toEqual({ ratio: 1.52, viewBox: "0 0 640 420", width: 544 });
   await expect.poll(() => demandProgress(root)).toBe(0);
   await expect(initialPassage).toHaveAttribute(
-    "data-kp-two-column-paragraph-opacity",
+    "data-kp-two-column-paragraph-salience",
     "1.0000"
   );
   await expect(demandPassage).toHaveAttribute(
-    "data-kp-two-column-paragraph-opacity",
-    /0\.[3-9][0-9]{3}/
+    "data-kp-two-column-paragraph-salience",
+    "0.0000"
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-attention-passage",
@@ -226,7 +220,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => stage.locator(
     ".editor-graph-stage__economics-grid-line"
   ).first().evaluate((element) => getComputedStyle(element).strokeWidth))
-    .toBe("0.8px");
+    .toBe("1px");
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-demand-reference]"
   ).evaluate((element) => ({
@@ -238,7 +232,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     color: "rgb(66, 58, 58)",
     dash: "none",
     opacity: "1",
-    width: "0px"
+    width: "1px"
   });
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-demand-reference-core]"
@@ -249,19 +243,22 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   }))).toEqual({
     color: "rgb(41, 45, 66)",
     dash: "none",
-    width: "0px"
+    width: "0.5px"
   });
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => getComputedStyle(element).strokeWidth))
     .toBe("1px");
   await expect.poll(() => graph.locator("[data-kp-editor-graph-axis]").first()
     .evaluate((element) => {
-      const stageElement = element.closest<HTMLElement>(
-        "[data-kp-inline-sticky-stage]"
+      const rootElement = element.closest<HTMLElement>(
+        "[data-kp-economics-demand-shift-tutorial]"
+      )!;
+      const divider = rootElement.querySelector<HTMLElement>(
+        "[data-kp-economics-column-divider]"
       )!;
       return {
         axis: getComputedStyle(element).stroke,
-        divider: getComputedStyle(stageElement).borderRightColor,
+        divider: getComputedStyle(divider).backgroundColor,
         graphAxisToken: getComputedStyle(element).getPropertyValue(
           "--kp-graph-axis"
         ).trim(),
@@ -270,10 +267,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
         ).trim()
       };
     })).toEqual({
-      axis: "rgb(41, 45, 66)",
+      axis: "rgb(98, 103, 117)",
       divider: "rgb(98, 103, 117)",
-      graphAxisToken: "#292d42",
-      semanticAxesToken: "#292d42"
+      graphAxisToken: "#626775",
+      semanticAxesToken: "#42465b"
     });
   await expect(graph).toHaveAttribute(
     "data-kp-editor-graph-origin-policy",
@@ -304,20 +301,20 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       color: getComputedStyle(element).stroke,
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({
-      color: "rgb(94, 126, 159)",
-      opacity: "0.62",
-      width: "1px"
+  }))).toEqual({
+    color: "rgb(103, 150, 199)",
+    opacity: "1",
+    width: "1px"
     });
   await expect.poll(() => graph.locator("[data-kp-economics-demand-line]")
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({
-      color: "rgb(150, 107, 103)",
-      opacity: "0.62",
-      width: "1px"
+  }))).toEqual({
+    color: "rgb(189, 116, 110)",
+    opacity: "1",
+    width: "1px"
     });
   await expect.poll(() => graph.locator(
     ".editor-graph-stage__economics-guide"
@@ -371,7 +368,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect(stage.locator(
     "[data-kp-economics-initial-equilibrium-guides]"
   )).toHaveCount(0);
-  await expect(demandInk).toHaveCSS("opacity", "0.32");
+  await expect(demandInk).toHaveCSS("opacity", "1");
   await expect.poll(() => graph.evaluate((element) => {
     const bounds = (selector: string) => element.querySelector<SVGElement>(
       selector
@@ -424,17 +421,15 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       .querySelector("p")!;
     return element.getBoundingClientRect().top - previous.getBoundingClientRect().top;
   });
-  expect(demandDistance).toBeGreaterThan(180);
-  expect(demandDistance).toBeLessThan(440);
+  expect(demandDistance).toBeGreaterThan(400);
+  expect(demandDistance).toBeLessThan(650);
   const motionStart = Math.min(
     entryTarget.viewport.height * 0.62,
     focusTop + demandDistance
   );
   await placeTopAt(page, demandParagraph, motionStart);
   await expect.poll(() => demandProgress(root)).toBe(0);
-  await expect.poll(async () => Number(await demandPassage.getAttribute(
-    "data-kp-two-column-paragraph-opacity"
-  ))).toBeGreaterThan(0.5);
+  await expect(demandInk).toHaveCSS("opacity", "1");
 
   await placeTopAt(page, demandParagraph, motionStart - 1);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
@@ -479,7 +474,21 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     )!;
     const graphBounds = graphElement.getBoundingClientRect();
     return {
-      divider: getComputedStyle(stageElement).borderRightWidth,
+      divider: getComputedStyle(
+        document.querySelector<HTMLElement>(
+          "[data-kp-economics-column-divider]"
+        )!
+      ).width,
+      dividerHeight: getComputedStyle(
+        document.querySelector<HTMLElement>(
+          "[data-kp-economics-column-divider]"
+        )!
+      ).height,
+      dividerPosition: getComputedStyle(
+        document.querySelector<HTMLElement>(
+          "[data-kp-economics-column-divider]"
+        )!
+      ).position,
       passageBackground: passageStyle.backgroundColor,
       passageBorderLeft: passageStyle.borderLeftWidth,
       passageGap: passageStyle.paddingBottom,
@@ -502,13 +511,15 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     };
   });
   expect(columns.divider).toBe("1px");
+  expect(columns.dividerHeight).toBe("800px");
+  expect(columns.dividerPosition).toBe("sticky");
   expect(columns.passageBackground).toBe("rgba(0, 0, 0, 0)");
   expect(columns.passageBorderLeft).toBe("0px");
-  expect(columns.passageGap).toBe("128px");
+  expect(columns.passageGap).toBe("400px");
   expect(columns.paragraphBackground).toBe("rgba(0, 0, 0, 0)");
   expect(columns.paragraphBorderTop).toBe("0px");
   expect(columns.paragraphPosition).toBe("relative");
-  expect(columns.paragraphRuleContent).toBe("none");
+  expect(columns.paragraphRuleContent).toBe('""');
   await expect(demandInk).toHaveCount(1);
   await expect.poll(() => demandInk.evaluate((element) =>
     Number(getComputedStyle(element).opacity)
@@ -520,7 +531,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   expect(columns.releaseRuleHeight).toBe(1);
   expect(columns.paragraphLeft - columns.stageRight).toBeGreaterThan(20);
   expect(columns.paragraphWidth).toBeLessThan(440);
-  expect(columns.stageWidth).toBeCloseTo(609.28, 1);
+  expect(columns.stageWidth).toBeCloseTo(608.28, 1);
   expect(columns.graphLeftInset).toBeGreaterThan(30);
   expect(columns.graphLeftInset).toBeLessThan(34);
   expect(Math.abs(columns.graphLeftInset - columns.graphRightInset))
@@ -532,10 +543,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
 
   await placeTopAt(page, demandParagraph, focusTop);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
-  await expect(demandPassage).toHaveAttribute(
-    "data-kp-two-column-paragraph-salience",
-    "1.0000"
-  );
+  await expect.poll(async () => Number(await demandPassage.getAttribute(
+    "data-kp-two-column-paragraph-salience"
+  ))).toBeGreaterThan(0.99);
   await expect(demandInk).toHaveCSS("opacity", "1");
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-attention-passage",
@@ -571,7 +581,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   }))).toEqual({
     color: "rgb(52, 64, 64)",
     dash: "4px, 5px",
-    width: "0.8px"
+    width: "1px"
   });
   await expect.poll(() => stage.locator(
     "[data-kp-economics-initial-equilibrium-quantity-guide-core]"
@@ -582,7 +592,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   }))).toEqual({
     color: "rgb(41, 45, 66)",
     dash: "4px, 5px",
-    width: "0.4px"
+    width: "0.5px"
   });
   await expect(stage.locator("[data-kp-economics-equilibrium-point]"))
     .not.toHaveCSS("opacity", "0");
@@ -605,20 +615,20 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       color: getComputedStyle(element).stroke,
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({
-      color: "rgb(240, 121, 114)",
-      opacity: "1",
-      width: "1.2px"
+  }))).toEqual({
+    color: "rgb(240, 121, 114)",
+    opacity: "1",
+    width: "1px"
     });
   await expect.poll(() => graph.locator("[data-kp-economics-equilibrium-point]")
     .evaluate((element) => ({
       color: getComputedStyle(element).stroke,
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({
-      color: "rgb(71, 127, 130)",
-      opacity: "0.62",
-      width: "1px"
+  }))).toEqual({
+    color: "rgb(66, 163, 168)",
+    opacity: "1",
+    width: "1px"
     });
 
   await placeTopAt(page, supplyParagraph, focusTop + 40);
@@ -631,10 +641,10 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       color: getComputedStyle(element).stroke,
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
-    }))).toEqual({
-      color: "rgb(124, 189, 255)",
-      opacity: "1",
-      width: "1.2px"
+  }))).toEqual({
+    color: "rgb(124, 189, 255)",
+    opacity: "1",
+    width: "1px"
     });
   await expect.poll(async () => Number(await root.getAttribute(
     "data-kp-economics-tutorial-supply-movement-progress"
@@ -644,21 +654,13 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "data-kp-economics-tutorial-passage-phase",
     "scrubbing"
   );
-  await expect(supplyInterpretation).not.toHaveAttribute(
-    "data-kp-two-column-endpoint-pinned",
-    "true"
-  );
   await placeTopAt(page, supplyInterpretation.locator("p"), focusTop);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-passage-phase",
-    "released"
+    "terminal-latched"
   );
   await expect(supplyInterpretation).toHaveAttribute(
-    "data-kp-two-column-endpoint-pinned",
-    "true"
-  );
-  await expect(supplyInterpretation).toHaveAttribute(
-    "data-kp-two-column-paragraph-opacity",
+    "data-kp-two-column-paragraph-salience",
     "1.0000"
   );
   await expect(root).toHaveAttribute(
@@ -691,10 +693,9 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     "data-kp-economics-tutorial-passage-phase",
     "released"
   );
-  await expect(supplyInterpretation).toHaveAttribute(
-    "data-kp-two-column-paragraph-opacity",
-    "1.0000"
-  );
+  await expect(supplyInterpretation.locator(
+    ".kp-economics-tutorial__passage-ink"
+  )).toHaveCSS("opacity", "1");
   await expect.poll(() => body.evaluate((element) =>
     Math.round(element.getBoundingClientRect().bottom)
   )).toBe(Math.round(stageBottom - entryBaseline.terminal.releaseInset));
@@ -834,13 +835,13 @@ test("light theme applies one compensated graph width and prose weight", async (
     proseWeight: getComputedStyle(
       element.querySelector<HTMLElement>(".kp-economics-tutorial__prose")!
     ).fontWeight,
-    stageDivider: getComputedStyle(
-      element.querySelector<HTMLElement>("[data-kp-inline-sticky-stage]")!
-    ).borderRightWidth
+    divider: getComputedStyle(
+      element.querySelector<HTMLElement>("[data-kp-economics-column-divider]")!
+    ).width
   }))).toEqual({
     color: "rgb(41, 43, 58)",
     proseWeight: "400",
-    stageDivider: "1px"
+    divider: "1px"
   });
   await expect.poll(() => graph.evaluate((element) => {
     const selectors = [
@@ -852,7 +853,7 @@ test("light theme applies one compensated graph width and prose weight", async (
     return selectors.map((selector) => getComputedStyle(
       element.querySelector<SVGElement>(selector)!
     ).strokeWidth);
-  })).toEqual(["1.25px", "1.25px", "1px", "1.25px"]);
+  })).toEqual(["1.25px", "1.25px", "1.25px", "1.25px"]);
   await expect.poll(() => graph.locator(
     ".editor-graph-stage__economics-grid-line"
   ).first().evaluate((element) => ({
@@ -867,8 +868,8 @@ test("light theme applies one compensated graph width and prose weight", async (
       "[data-kp-economics-supply-line]"
     )!).stroke
   }))).toEqual({
-    axis: "rgb(215, 218, 227)",
-    supply: "rgb(104, 120, 138)"
+    axis: "rgb(21, 22, 34)",
+    supply: "rgb(79, 115, 152)"
   });
   await expect.poll(() => graph.locator(
     "[data-kp-economics-equilibrium-point]"
@@ -980,8 +981,8 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   await expect.poll(() => columnGeometry(body)).toEqual({
     order: "graph-text",
     stageBorderLeft: "0px",
-    stageBorderRight: "1px",
-    stageWidth: 609,
+    stageBorderRight: "0px",
+    stageWidth: 608,
     proseWidth: 384
   });
 
@@ -1019,9 +1020,9 @@ test("column toggle swaps prose and graph without resetting the lesson", async (
   await expect(page).toHaveURL(/text=left/);
   await expect.poll(() => columnGeometry(body)).toEqual({
     order: "text-graph",
-    stageBorderLeft: "1px",
+    stageBorderLeft: "0px",
     stageBorderRight: "0px",
-    stageWidth: 609,
+    stageWidth: 608,
     proseWidth: 384
   });
   await expect.poll(() => page.evaluate(() => window.scrollY))
@@ -1133,7 +1134,7 @@ test("spacing tuner preserves the active cue across its full URL range", async (
     );
     expect(await page.evaluate(() =>
       new URL(window.location.href).searchParams.get("gap")
-    )).toBe(gapVh === 16 ? null : String(gapVh));
+    )).toBe(gapVh === 50 ? null : String(gapVh));
   }
 
   await placeTopAt(page, paragraph, 390);
@@ -1414,13 +1415,13 @@ test("forward and reverse traversal project identical passage state", async ({
     "ordinary-document",
     "entry-latched",
     "scrubbing",
-    "released"
+    "terminal-latched"
   ]);
   expect(positions.map(({ id }) => forward.get(id)?.stageState)).toEqual([
     "embedded",
     "pinned",
     "pinned",
-    "released"
+    "pinned"
   ]);
   expect(forward.get("ordinary")?.stageTop).toBe(
     entryTarget.focusLatch.stageTop + 120
@@ -1486,8 +1487,7 @@ async function symmetrySnapshot(
   readonly demandProgress: string | null;
   readonly equilibrium: readonly [string | null, string | null];
   readonly passagePhase: string | null;
-  readonly relevantOpacity: string | null;
-  readonly relevantPinned: string | null;
+  readonly relevantSalience: string | null;
   readonly stageBottom: number;
   readonly stageState: string | null;
   readonly stageTop: number;
@@ -1523,11 +1523,8 @@ async function symmetrySnapshot(
       passagePhase: element.getAttribute(
         "data-kp-economics-tutorial-passage-phase"
       ),
-      relevantOpacity: relevant.getAttribute(
-        "data-kp-two-column-paragraph-opacity"
-      ),
-      relevantPinned: relevant.getAttribute(
-        "data-kp-two-column-endpoint-pinned"
+      relevantSalience: relevant.getAttribute(
+        "data-kp-two-column-paragraph-salience"
       ),
       stageBottom: Math.round(stageBounds.bottom),
       stageState: element.getAttribute("data-kp-inline-sticky-stage-state"),

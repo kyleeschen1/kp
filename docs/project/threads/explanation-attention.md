@@ -92,6 +92,16 @@ coalesced geometry resample, and must not become learner transport, semantic
 timeline state, or a shared authoring abstraction merely because it is useful
 inside this exemplar.
 
+The successor pacing handoff in
+`../reviews/2026-08-05-scroll-hold-pacing-handoff.md` records the user's intent
+to make inspection-worthy semantic states harder to blow past. It proposes a
+continuous piecewise plateau inside the demand-shift motion bridge, not scroll
+snap, input interception, smoothing, or a second clock. Implementation waits
+for the active motion-bridge and semantic-transit checkpoint to release its
+source seams, then perfects one economics exemplar and stops for human review.
+The candidate `12.5vh` hold remains a tuning value rather than an accepted
+shared lesson rule.
+
 The implemented editorial revision in
 `decisions/2026-08-04-kp-economics-question-driven-explanatory-spine.md`
 organizes the lesson as puzzle, starting model, one changed relationship,
@@ -260,6 +270,51 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 - consumer/producer-surplus or deadweight-loss teaching in this lesson;
 - a generic programming-language pack, universal scene graph, or catalogue-
   wide lesson rollout inside the two-caller loop.
+
+## Queued Economics Runtime And Optical Correction
+
+The next approved economics loop should consolidate the tutorial back onto
+KP's existing runtime boundary rather than introduce another animation engine.
+Preserve the semantic asset, deterministic samplers, retained SVG session,
+direct seek and rewind, publication truth, and reviewed lesson composition.
+The bounded correction should:
+
+- make the shared player the only semantic clock for demand shift and supply
+  movement; scroll, play, scrub, URL, and TOC remain drivers of that playhead;
+- remove the tutorial-local supply `requestAnimationFrame` accumulator, the
+  scroll-to-player-to-Svelte frame feedback path, and per-object frame state
+  from Svelte ownership;
+- disable CSS transitions and animations for playhead-owned paint or geometry,
+  while retaining CSS for static layout, themes, and ordinary controls;
+- keep the mounted SVG nodes and batched attribute patcher, with data curves
+  eligible for a common path-oriented geometry adapter while axes, grids, and
+  guides may remain native line segments behind the same semantic paint API;
+- derive axis-arrow length and breadth from the canonical computed axis stroke
+  through separately named multipliers; the current equal `6x` marker
+  dimensions are too small at the dark-mode `1px` axis;
+- temporarily detach the internal appearance tuners from live presentation and
+  ignore their persisted query overrides while the reference is evaluated at
+  canonical defaults: midnight theme, full context opacity, unmuted identity
+  colors, `50vh` paragraph gap, `24rem` prose measure, `1.78` leading, and
+  Source Serif 4 weight `400`; the author-facing stroke multiplier is removed
+  from this input set rather than frozen as an authored value;
+- keep one canonical graph core line width of `1px`, prohibit per-role,
+  salience, or user multipliers, and derive any light-theme optical
+  compensation in CSS from one theme-owned multiplier (`1` in dark mode and a
+  reviewable value initially near `1.5` in light mode);
+- place axis-variable KaTeX labels near their positive terminal ends as the
+  graph default, with clearance computed from arrow length, arrow breadth,
+  label bounds, and a small label gap so `P` and `Q` never cover an arrow; and
+- verify that dark-mode axes, live curves, graph structure, and the central
+  divider all compute to one CSS pixel, then diagnose residual optical weight
+  separately from geometry across device-pixel ratios and browser zoom.
+
+Theme selection and text-column side remain product controls. Light mode is a
+separately tuned optical system: its effective CSS width may exceed `1px` only
+through the theme-owned compensation variable so it has the apparent weight of
+the canonical dark `1px` stroke. The smallest rollback unit is this economics
+tutorial adapter and its local style profile; no catalogue-wide graph or
+salience rollout is implied.
 
 ## Next Human Questions
 

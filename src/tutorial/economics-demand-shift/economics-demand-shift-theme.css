@@ -48,6 +48,8 @@
   --kp-lesson-theme-math-foreground: #4f5364;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
   --kp-lesson-theme-graph-stroke-width: 1.25px;
+  --kp-lesson-theme-graph-trace-core-width: 0.625px;
+  --kp-lesson-theme-reader-rail: #337c3a;
   --kp-lesson-theme-graph-grid: #d7dae3;
   --kp-lesson-theme-graph-reference: #707586;
   --kp-lesson-theme-graph-axis: #151622;
@@ -112,6 +114,8 @@
   --kp-lesson-theme-math-foreground: #a6a9b7;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 400);
   --kp-lesson-theme-graph-stroke-width: 1px;
+  --kp-lesson-theme-graph-trace-core-width: 0.5px;
+  --kp-lesson-theme-reader-rail: #7acf7e;
   --kp-lesson-theme-graph-grid: #25293b;
   --kp-lesson-theme-graph-reference: #858e9d;
   --kp-lesson-theme-graph-axis: var(--kp-lesson-theme-stage-divider);
@@ -165,17 +169,35 @@
    still inherits one canonical stroke width. */
 :root
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-line-width:
+  --kp-graph-stroke-axis:
+    var(--kp-graph-tuned-stroke-axis, var(--kp-lesson-theme-graph-stroke-width));
+  --kp-graph-stroke-curve:
+    var(--kp-graph-tuned-stroke-curve, var(--kp-graph-stroke-axis));
+  --kp-graph-stroke-grid:
+    var(--kp-graph-tuned-stroke-grid, var(--kp-graph-stroke-axis));
+  --kp-graph-stroke-guide:
+    var(--kp-graph-tuned-stroke-guide, var(--kp-graph-stroke-axis));
+  --kp-graph-stroke-intersection:
+    var(--kp-graph-tuned-stroke-intersection, var(--kp-graph-stroke-axis));
+  --kp-graph-stroke-trace-casing:
+    var(--kp-graph-tuned-stroke-trace-casing, var(--kp-graph-stroke-axis));
+  --kp-graph-stroke-trace-core:
     var(
-      --kp-graph-tuned-light-stroke-width,
-      var(--kp-lesson-theme-graph-stroke-width)
+      --kp-graph-tuned-stroke-trace-core,
+      var(--kp-lesson-theme-graph-trace-core-width)
     );
+  /* The shared SVG still names these historical presentation variables.
+     Alias them to the role profile so cascade order cannot split axis, curve,
+     grid, guide, and historical-trace geometry. */
+  --kp-graph-line-width: var(--kp-graph-stroke-axis);
+  --kp-graph-curve-line-width: var(--kp-graph-stroke-curve);
+  --kp-graph-grid-line-width: var(--kp-graph-stroke-grid);
+  --kp-graph-ghost-core-line-width: var(--kp-graph-stroke-trace-core);
   --kp-graph-grid:
     var(--kp-economics-salience-market-grid-color, var(--kp-lesson-theme-graph-grid));
   --kp-graph-grid-opacity:
     var(--kp-economics-salience-market-grid-opacity, 1);
-  --kp-graph-axis:
-    var(--kp-economics-salience-market-axes-color, var(--kp-lesson-theme-graph-axis));
+  --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
   --kp-graph-ghost-curve-casing:
     var(
       --kp-economics-salience-market-demand-initial-color,
@@ -196,8 +218,6 @@
       --kp-economics-salience-market-grid-color,
       var(--kp-lesson-theme-graph-ghost-guide-core)
     );
-  --kp-graph-ghost-core-line-width:
-    var(--kp-graph-tuned-light-ghost-core-width, 0.625px);
   --kp-graph-intersection-stroke:
     var(
       --kp-economics-salience-market-equilibrium-current-color,
@@ -214,21 +234,11 @@
   --kp-graph-guide:
     var(--kp-economics-salience-market-guides-color, #aeb2bf);
   --kp-graph-muted: #707586;
-  --kp-graph-tick:
-    var(--kp-economics-salience-market-axes-color, #74798a);
+  --kp-graph-tick: var(--kp-lesson-theme-graph-axis);
 }
 
 :root[data-kp-lesson-theme="dark"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-line-width:
-    var(
-      --kp-graph-tuned-dark-stroke-width,
-      var(--kp-lesson-theme-graph-stroke-width)
-    );
-  --kp-graph-axis:
-    var(--kp-economics-salience-market-axes-color, var(--kp-lesson-theme-graph-axis));
-  --kp-graph-ghost-core-line-width:
-    var(--kp-graph-tuned-dark-ghost-core-width, 0.5px);
   --kp-graph-stable:
     var(--kp-economics-salience-market-supply-color, #7cbdff);
   --kp-graph-changing:
@@ -238,8 +248,7 @@
   --kp-graph-guide:
     var(--kp-economics-salience-market-guides-color, #42465b);
   --kp-graph-muted: #7d8193;
-  --kp-graph-tick:
-    var(--kp-economics-salience-market-axes-color, #696e83);
+  --kp-graph-tick: var(--kp-lesson-theme-graph-axis);
 }
 
 /* These low-chroma alternatives remain categorical at reduced alpha without

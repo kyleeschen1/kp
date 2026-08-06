@@ -390,9 +390,10 @@ test("approved economics prose and semantic controls form one persistent tutoria
     status: element.querySelector("[data-status]") !== null
   }))).toEqual({ heading: false, status: false });
   await expect(motionCue.getByRole("button", { name: "Play" })).toBeVisible();
+  // The split layout uses the scrub boundary itself as its scroll anchor.
   await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38 + 32
+      window.innerHeight * 0.38
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-motion-owner",
@@ -402,33 +403,17 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-tutorial-scroll-timeline",
     "seeking"
   );
-  await expect(motionCue).toHaveAttribute(
-    "data-kp-tutorial-scrub-focus",
-    "crossing"
+  await expect.poll(() => motionCue.evaluate((element) => Math.abs(
+    element.getBoundingClientRect().top - window.innerHeight * 0.38
+  ))).toBeLessThanOrEqual(1);
+  await expect.poll(() => motionCue.evaluate((element) => Math.abs(
+    Number(element.getAttribute("data-kp-tutorial-scrub-anchor-top")) -
+      Number(element.getAttribute("data-kp-tutorial-scrub-reading-band"))
+  ))).toBeLessThanOrEqual(1);
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-scroll-active-block",
+    "demand-shift"
   );
-  await expect.poll(() => motionCue.evaluate((element) => {
-    const button = element.querySelector<HTMLButtonElement>(
-      "[data-action=toggle]"
-    );
-    const boundary = element.querySelector<HTMLElement>(
-      ".kp-tutorial-scrub__boundary"
-    );
-    if (
-      button === undefined ||
-      button === null ||
-      boundary === undefined ||
-      boundary === null
-    ) return null;
-    return {
-      transform: getComputedStyle(button).transform,
-      shadowOpacity: Number(getComputedStyle(button, "::after").opacity),
-      dividerOpacity: Number(getComputedStyle(boundary, "::after").opacity)
-    };
-  })).toEqual({
-    transform: expect.not.stringMatching(/^none$|matrix\(1, 0, 0, 1, 0, 0\)$/),
-    shadowOpacity: expect.closeTo(1, 1),
-    dividerOpacity: expect.closeTo(1, 1)
-  });
   await expect.poll(async () => Number(
     await player.getAttribute("data-kp-editor-animation-progress")
   )).toBeGreaterThan(0.55);
@@ -466,6 +451,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-editor-animation-progress",
     "1"
   );
+  await expect(player).toHaveAttribute("data-kp-economics-graph-progress", "1");
   await expect(beforeMotion).toHaveText(beforeMotionText ?? "");
   await expect(root.locator(".kp-economics-tutorial__stage-header"))
     .toHaveCount(0);
@@ -490,7 +476,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
 
   await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38 + 32
+      window.innerHeight * 0.38
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-timeline",
@@ -522,8 +508,9 @@ test("approved economics prose and semantic controls form one persistent tutoria
   );
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-progress",
-    "1"
+    "0.58"
   );
+  await expect(player).toHaveAttribute("data-kp-economics-graph-progress", "1");
   await expect(motionCue).toHaveAttribute("progress", "1");
   await expect(supplyMotionCue).toHaveAttribute("progress", "0.58");
 
@@ -543,10 +530,11 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-editor-animation-progress",
     "1"
   );
+  await expect(player).toHaveAttribute("data-kp-economics-graph-progress", "1");
 
   await motionCue.evaluate((element) => window.scrollTo({
     top: window.scrollY + element.getBoundingClientRect().top -
-      window.innerHeight * 0.38 + 32
+      window.innerHeight * 0.38
   }));
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-scroll-active-block",
@@ -769,7 +757,7 @@ test("manual supply playback preserves the settled demand handoff", async ({
   await expect.poll(() => trace.evaluate((element) => ({
     opacity: Number(getComputedStyle(element).opacity),
     traceProgress: Number(getComputedStyle(element.closest(
-      "[data-kp-economics-demand-shift-tutorial]"
+      ".kp-economics-tutorial__player-host"
     )!).getPropertyValue("--kp-tutorial-supply-trace"))
   }))).toEqual({
     opacity: expect.closeTo(1, 2),
@@ -787,7 +775,7 @@ test("manual supply playback preserves the settled demand handoff", async ({
   await expect.poll(() => graph.locator(
     '[data-kp-economics-supply-movement-target="settled"]'
   ).evaluate((element) => Number(getComputedStyle(element).opacity)))
-    .toBeCloseTo(0.62, 2);
+    .toBeCloseTo(1, 2);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-supply-movement-verified.png`,
     fullPage: false
@@ -837,10 +825,10 @@ test("manual supply playback preserves the settled demand handoff", async ({
     "data-kp-economics-tutorial-demand-progress",
     "1.000"
   );
-  await expect(player).toHaveAttribute(
-    "data-kp-editor-animation-progress",
-    "1"
-  );
+  await expect.poll(async () => Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ))).toBeCloseTo(manualProgress, 1);
+  await expect(player).toHaveAttribute("data-kp-economics-graph-progress", "1");
   await expect(supplyMotionCue).toHaveAttribute(
     "data-kp-tutorial-scrub-manual",
     "false"
@@ -995,7 +983,7 @@ test("verification surface enters and exits without changing outer stage geometr
   await expect.poll(() => host.locator(
     '[data-kp-economics-supply-movement-target="settled"]'
   ).evaluate((element) => Number(getComputedStyle(element).opacity)))
-    .toBeCloseTo(0.62, 2);
+    .toBeCloseTo(1, 2);
 
   await supplyScrubber.fill("0.58");
   await expect(root).toHaveAttribute(
@@ -1157,9 +1145,9 @@ test("direct semantic links restore complete cumulative state without replay", a
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-      color: "rgb(249, 144, 196)",
+      color: "rgb(240, 121, 114)",
       opacity: "1",
-      width: "1.2px"
+      width: "1px"
     });
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="demand-shift"]'
