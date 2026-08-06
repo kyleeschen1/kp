@@ -89,7 +89,8 @@
     {
       "id": "s05",
       "title": "Define complete light and dark theme contracts",
-      "status": "planned"
+      "summary": "Defined exact dark/light theme contracts with complete semantic role and identity source coverage, theme-specific optical floors, validation, freezing, and deterministic serialization.",
+      "status": "complete"
     },
     {
       "id": "s06",

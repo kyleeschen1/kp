@@ -75,6 +75,13 @@
       "scope": "s04 semantic role closure",
       "checkedAt": "2026-08-06T07:17:31.595Z",
       "notes": "Five state and role tests pass, including exhaustive canonical role definitions plus duplicate, unknown, and omission rejection."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s05 complete theme contracts",
+      "checkedAt": "2026-08-06T07:20:25.086Z",
+      "notes": "Eight tests pass; dark and light theme schemas enforce exact role and identity coverage, optical floors, and deterministic serialization."
     }
   ],
   "expectedLearning": [
