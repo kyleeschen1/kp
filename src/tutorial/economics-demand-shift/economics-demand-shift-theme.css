@@ -162,12 +162,12 @@
   --kp-graph-axis: var(--kp-lesson-theme-graph-axis);
   --kp-graph-ghost-core-line-width:
     var(--kp-graph-tuned-dark-ghost-core-width, 0.5px);
-  --kp-graph-stable: #68a9df;
-  --kp-graph-changing: #e77b74;
-  --kp-graph-focal: var(--kp-lesson-theme-ink);
-  --kp-graph-guide: #8290a8;
-  --kp-graph-muted: #a0a9ba;
-  --kp-graph-tick: #aab2c2;
+  --kp-graph-stable: #7cbdff;
+  --kp-graph-changing: #f990c4;
+  --kp-graph-focal: #f4f4f8;
+  --kp-graph-guide: #42465b;
+  --kp-graph-muted: #7d8193;
+  --kp-graph-tick: #696e83;
 }
 
 /* These low-chroma alternatives remain categorical at reduced alpha without
@@ -185,13 +185,13 @@
 :root[data-kp-lesson-theme="dark"]
   .kp-economics-tutorial[data-kp-economics-muted-blue="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-stable: #8aa8bd;
+  --kp-graph-stable: #5e7e9f;
 }
 
 :root[data-kp-lesson-theme="dark"]
   .kp-economics-tutorial[data-kp-economics-muted-red="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #c18f8b;
+  --kp-graph-changing: #987087;
 }
 
 :root[data-kp-lesson-theme="dark"]

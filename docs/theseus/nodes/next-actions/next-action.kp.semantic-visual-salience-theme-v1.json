@@ -138,6 +138,27 @@
       "scope": "s10 typed projection seam",
       "checkedAt": "2026-08-06T07:40:56.359Z",
       "notes": "TypeScript, Svelte, and domain type checks pass with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s11 dark economics graph palette",
+      "checkedAt": "2026-08-06T07:45:36.805Z",
+      "notes": "13 ownership and palette checks pass; retained page ground and frozen pre-salience inventory remain explicit."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s11 semantic and runtime preservation",
+      "checkedAt": "2026-08-06T07:45:37.993Z",
+      "notes": "59 economics semantic, direct-seek, choreography, SVG, and publication checks pass without geometry or timing changes."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s11 dark graph palette smoke",
+      "checkedAt": "2026-08-06T07:45:38.923Z",
+      "notes": "All 11 canonical Chromium cases pass with updated dark blue/rose and low-chroma tuner expectations."
     }
   ],
   "expectedLearning": [

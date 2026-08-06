@@ -25,7 +25,7 @@ test("pre-salience economics visual baseline is explicit and executable", () => 
   assert.equal(new Set(baseline.stylesheetOwners).size, 8);
 });
 
-test("frozen palette and state controls still describe the issued exemplar", () => {
+test("frozen palette remains historical while current controls stay mounted", () => {
   const theme = readSource("economics-demand-shift-theme.css");
   const component = readSource("KpEconomicsDemandShiftTutorial.svelte");
   const tuning = readSource("economics-demand-shift-visual-tuning.ts");
@@ -36,9 +36,10 @@ test("frozen palette and state controls still describe the issued exemplar", () 
   for (const color of Object.values(baseline.pageBackgrounds)) {
     assert.equal(theme.includes(color), true, `missing page background ${color}`);
   }
-  for (const color of Object.values(baseline.graphSeries.dark)) {
-    assert.equal(theme.includes(color), true, `missing dark graph color ${color}`);
-  }
+  assert.deepEqual(baseline.graphSeries.dark, {
+    stable: "#68a9df",
+    changing: "#e77b74"
+  });
   for (const color of Object.values(baseline.graphSeries.light)) {
     assert.equal(global.includes(color), true, `missing light graph color ${color}`);
   }
@@ -53,6 +54,25 @@ test("frozen palette and state controls still describe the issued exemplar", () 
       true,
       `missing tuning query key ${key}`
     );
+  }
+});
+
+test("dark graph palette uses the approved semantic identity sources", () => {
+  const theme = readSource("economics-demand-shift-theme.css");
+  for (const color of [
+    "#7cbdff",
+    "#f990c4",
+    "#f4f4f8",
+    "#42465b",
+    "#7d8193",
+    "#696e83",
+    "#5e7e9f",
+    "#987087"
+  ]) {
+    assert.equal(theme.includes(color), true, `missing semantic color ${color}`);
+  }
+  for (const color of Object.values(baseline.graphSeries.dark)) {
+    assert.equal(theme.includes(color), false, `stale dark graph color ${color}`);
   }
 });
 

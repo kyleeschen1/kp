@@ -125,7 +125,8 @@
     {
       "id": "s11",
       "title": "Migrate the dark economics graph palette",
-      "status": "planned"
+      "summary": "Migrated the dark economics graph's blue, rose, ink, guide, muted, tick, and opt-in low-chroma series sources to the approved handoff palette while retaining #0d0e1c and existing graph behavior.",
+      "status": "complete"
     },
     {
       "id": "s12",

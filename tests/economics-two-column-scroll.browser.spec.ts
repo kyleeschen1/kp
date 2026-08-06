@@ -1079,10 +1079,10 @@ test("salience and prose tuners preserve graph focus and fill the shared width",
   await expect(root).toHaveAttribute("data-kp-economics-muted-red", "true");
   await expect.poll(() => supply.evaluate((element) =>
     getComputedStyle(element).stroke
-  )).toBe("rgb(138, 168, 189)");
+  )).toBe("rgb(94, 126, 159)");
   await expect.poll(() => demand.evaluate((element) =>
     getComputedStyle(element).stroke
-  )).toBe("rgb(193, 143, 139)");
+  )).toBe("rgb(152, 112, 135)");
 
   await layoutTuner.locator("summary").click();
   await layoutTuner.locator("[data-kp-economics-text-width-input]")
