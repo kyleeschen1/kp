@@ -161,7 +161,8 @@
     {
       "id": "s17",
       "title": "Add accessible contrast and motion projections",
-      "status": "planned"
+      "summary": "Reduced-motion, prefers-contrast, and forced-colors projections now preserve readable semantic hierarchy, manual checkpoint access, and non-hue curve identity without changing the ordinary theme.",
+      "status": "complete"
     },
     {
       "id": "s18",

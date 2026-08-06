@@ -152,6 +152,9 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.match(twoColumn, /--two-column-scroll/);
   assert.match(layoutFallbacks, /prefers-reduced-motion/);
   assert.match(layoutFallbacks, /prefers-contrast/);
+  assert.match(layoutFallbacks, /forced-colors: active/);
+  assert.match(layoutFallbacks, /stroke-dasharray: 7px 4px/);
+  assert.match(layoutFallbacks, /outline: 2px solid Highlight/);
 });
 
 test("economics layout owners do not restate settled passage paint", () => {
@@ -172,9 +175,17 @@ test("economics layout owners do not restate settled passage paint", () => {
     /:not\(\[data-kp-two-column-scroll-paragraph\]\)\.kp-economics-tutorial__passage--active/
   );
   assert.equal(
-    [...`${inline}\n${layoutFallbacks}`.matchAll(/\n\s*opacity: 1;/g)].length,
+    [...inline.matchAll(/\n\s*opacity: 1;/g)].length,
     1,
-    "Only the base inline cue owner should force full prose opacity."
+    "Only the base inline cue owner should force full prose opacity outside accessibility projections."
+  );
+  assert.match(
+    layoutFallbacks,
+    /@media \(prefers-contrast: more\)[\s\S]*?passage-ink \{\s*opacity: 1;/
+  );
+  assert.match(
+    layoutFallbacks,
+    /@media \(forced-colors: active\)[\s\S]*?passage-ink \{\s*opacity: 1;/
   );
 });
 

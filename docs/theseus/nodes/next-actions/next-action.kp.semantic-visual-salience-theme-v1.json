@@ -250,6 +250,13 @@
       "scope": "s16 graph context ghost and transient roles",
       "checkedAt": "2026-08-06T08:59:45.033Z",
       "notes": "60 tutorial tests, 15 CSS tests, 11 two-column browser cases, 12 tutorial browser cases, and typecheck pass; grid retains dim baseline, axes and guides use context, equilibrium focus transfers, and ghost opacity composes with runtime presence."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial; npm run test:economics-demand-shift-css; focused Chromium reduced-motion and forced-colors cases; npm run typecheck",
+      "status": "passed",
+      "scope": "s17 accessible contrast and motion projections",
+      "checkedAt": "2026-08-06T09:08:15.322Z",
+      "notes": "60 tutorial and 15 CSS tests pass; reduced motion disables automatic seeking and all salience transitions while manual checkpoints remain; forced colors lifts prose and current graph roles to full opacity, uses system colors, and distinguishes demand from supply by pattern; prefers-contrast raises context while retaining semantic color and stroke hierarchy."
     }
   ],
   "expectedLearning": [

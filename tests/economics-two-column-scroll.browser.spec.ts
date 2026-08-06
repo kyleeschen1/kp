@@ -775,6 +775,48 @@ test("phone keeps the accepted one-column inline geometry", async ({ page }) => 
   }))).toEqual({ client: 844, scroll: 844 });
 });
 
+test("forced colors preserve readable hierarchy without relying on hue", async ({
+  page
+}) => {
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const initial = card(root, "graph-at-rest");
+  await placeTopAt(page, initial.locator("p"), 280);
+  expect(await page.evaluate(() =>
+    matchMedia("(forced-colors: active)").matches
+  )).toBe(true);
+
+  const graph = root.locator(".editor-graph-stage");
+  await expect.poll(() => graph.evaluate((element) => {
+    const style = (selector: string) => getComputedStyle(
+      element.querySelector<SVGElement>(selector)!
+    );
+    return {
+      axisOpacity: style("[data-kp-editor-graph-axis]").opacity,
+      demandDash: style("[data-kp-economics-demand-line]").strokeDasharray,
+      demandOpacity: style("[data-kp-economics-demand-line]").opacity,
+      gridOpacity: style(".editor-graph-stage__economics-grid-line").opacity,
+      pointOpacity: style("[data-kp-economics-equilibrium-point]").opacity,
+      supplyDash: style("[data-kp-economics-supply-line]").strokeDasharray,
+      supplyOpacity: style("[data-kp-economics-supply-line]").opacity
+    };
+  })).toEqual({
+    axisOpacity: "1",
+    demandDash: "7px, 4px",
+    demandOpacity: "1",
+    gridOpacity: "0.45",
+    pointOpacity: "1",
+    supplyDash: "none",
+    supplyOpacity: "1"
+  });
+  await expect(initial.locator("p")).toHaveCSS("outline-style", "solid");
+  await expect(initial.locator(".kp-economics-tutorial__passage-ink"))
+    .toHaveCSS("opacity", "1");
+});
+
 test("light theme applies one compensated graph width and prose weight", async ({
   page
 }) => {

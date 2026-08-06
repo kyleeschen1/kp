@@ -1375,6 +1375,12 @@ test("reduced-motion readers retain the text-free divider without automatic seek
     "aria-label",
     "Animation timeline. Automatic scroll motion is disabled."
   );
+  await expect.poll(() => root.locator("[data-kp-economics-demand-line]")
+    .evaluate((element) => getComputedStyle(element).transitionDuration))
+    .toBe("0s");
+  await expect.poll(() => root.locator(".editor-graph-stage__economics-grid-line")
+    .first().evaluate((element) => getComputedStyle(element).transitionDuration))
+    .toBe("0s");
   expect(await motionCue.evaluate((element) =>
     element.querySelector(".heading")
   )).toBeNull();
