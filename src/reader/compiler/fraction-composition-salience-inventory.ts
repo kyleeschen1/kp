@@ -31,6 +31,11 @@ export interface KpFractionCompositionSalienceEndpointInventory {
   readonly selectorIds: readonly string[];
   readonly structuralAnchorIds: readonly string[];
   readonly envelopeIds: readonly string[];
+  readonly envelopes: readonly {
+    readonly id: string;
+    readonly memberSelectorIds: readonly string[];
+    readonly structuralAnchorIds: readonly string[];
+  }[];
 }
 
 export interface KpFractionCompositionSalienceTransitionInventory {
@@ -81,7 +86,16 @@ KpFractionCompositionSalienceInventory {
     structuralAnchorIds: Object.freeze(
       endpoint.structuralAnchors.map(({ id }) => id)
     ),
-    envelopeIds: Object.freeze(endpoint.groupEnvelopes.map(({ id }) => id))
+    envelopeIds: Object.freeze(endpoint.groupEnvelopes.map(({ id }) => id)),
+    envelopes: Object.freeze(endpoint.groupEnvelopes.map((envelope) =>
+      Object.freeze({
+        id: envelope.id,
+        memberSelectorIds: envelope.memberSelectorIds,
+        structuralAnchorIds: Object.freeze([
+          ...(envelope.structuralAnchorIds ?? [])
+        ])
+      })
+    ))
   }));
   const transitions = asset.transformations.map((transformation) => {
     const records = transformation.correspondenceMap?.records ?? [];

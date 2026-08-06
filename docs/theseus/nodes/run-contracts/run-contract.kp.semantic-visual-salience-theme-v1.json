@@ -197,7 +197,8 @@
     {
       "id": "s23",
       "title": "Add algebra DOM and KaTeX salience adapter",
-      "status": "planned"
+      "summary": "Added-whole-scene-fraction-projection-and-DOM-binder-over-authored-KaTeX-wrappers-without-math-or-geometry-authority",
+      "status": "complete"
     },
     {
       "id": "s24",
