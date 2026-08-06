@@ -95,7 +95,8 @@
     {
       "id": "s06",
       "title": "Encode the handoff palette sources",
-      "status": "planned"
+      "summary": "Encoded the handoff neutral and six-family palette as typed dark/light source data, derived explicit context bands, retained exact page backgrounds, and enforced complete coverage plus focus contrast floors.",
+      "status": "complete"
     },
     {
       "id": "s07",

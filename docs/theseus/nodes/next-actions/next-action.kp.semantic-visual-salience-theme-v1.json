@@ -82,6 +82,13 @@
       "scope": "s05 complete theme contracts",
       "checkedAt": "2026-08-06T07:20:25.086Z",
       "notes": "Eight tests pass; dark and light theme schemas enforce exact role and identity coverage, optical floors, and deterministic serialization."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s06 handoff palette sources",
+      "checkedAt": "2026-08-06T07:23:32.556Z",
+      "notes": "Eleven tests pass; retained page grounds, all six handoff identity families, five salience bands, complete dark/light coverage, and focus/ink contrast floors are executable."
     }
   ],
   "expectedLearning": [
