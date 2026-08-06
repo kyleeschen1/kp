@@ -5,7 +5,7 @@
 
 **Primary decision:** Kinetic Press uses discrete semantic salience states with animated interpolation between renderer-specific visual targets.
 
-**Typography decision:** Use **New Computer Modern Mono Book** as the preferred companion font to KaTeX. Gill Sans has been discarded.
+**Typography decision:** Use **New Computer Modern Mono Regular** as the default companion font to KaTeX. Retain Book as the 500-weight option; Gill Sans has been discarded.
 
 **Visual-direction correction:** Do **not** define Kinetic Press by strict minimalism or monochrome austerity. The system may use the complete color palette and visually rich artifacts. Coherence should come from disciplined salience behavior, not from color scarcity.
 
@@ -482,7 +482,7 @@ The dark palette is more mature. The light palette should be finalized through a
 
 Preferred font:
 
-> **New Computer Modern Mono Book**
+> **New Computer Modern Mono Regular**
 
 Intended uses:
 
@@ -497,7 +497,7 @@ Reasons:
 - visually related to KaTeX’s Computer Modern lineage;
 - suitable for code;
 - scholarly and technical without looking like a conventional editor theme;
-- Book weight should hold up better on light backgrounds;
+- Regular avoids the excess density observed in prose; Book remains available where light-mode testing warrants a deliberate 500-weight treatment;
 - creates a unified formal and computational visual world.
 
 ## 8.2 KaTeX
@@ -511,7 +511,7 @@ Do not casually replace KaTeX’s internal fonts through CSS. Doing so can damag
 - vertical alignment;
 - symbol metrics.
 
-Treat New Computer Modern Mono Book as a companion font rather than a direct KaTeX font override.
+Treat New Computer Modern Mono Regular as a companion font rather than a direct KaTeX font override.
 
 ## 8.3 Gill Sans
 
@@ -521,7 +521,7 @@ Gill Sans has been explicitly discarded and should not appear in the implementat
 
 Test:
 
-- long-form reading in New Computer Modern Mono Book;
+- long-form reading in New Computer Modern Mono Regular;
 - inline code beside KaTeX;
 - small labels;
 - light-mode rendering;
@@ -1195,7 +1195,7 @@ These should compile into state transactions rather than renderer-specific comma
 - Theme data should be shared across CSS, SVG, Canvas, and WebGL.
 - WebGL contextual objects should generally remain opaque but visually muted.
 - Transparency is reserved for presence, ghosts, x-ray views, and disappearance.
-- New Computer Modern Mono Book is the preferred KaTeX companion.
+- New Computer Modern Mono Regular is the default KaTeX companion; Book is the deliberate 500-weight option.
 - Gill Sans is discarded.
 - Strict minimalism is discarded as a defining constraint.
 
@@ -1234,7 +1234,7 @@ The safer default is flexible identity colors unless a stable semantic mapping p
 
 ## Long-form prose font
 
-New Computer Modern Mono Book is selected as the main KaTeX companion, but long-form prose readability should be tested before committing to universal monospace typography.
+New Computer Modern Mono Regular is selected as the main KaTeX companion, but long-form prose readability should be tested before committing to universal monospace typography.
 
 Gill Sans should not be reconsidered unless the product direction changes explicitly.
 

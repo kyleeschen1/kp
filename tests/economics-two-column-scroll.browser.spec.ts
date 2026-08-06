@@ -563,7 +563,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     .not.toHaveCSS("opacity", "0");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math .katex")
     .first().evaluate((element) => getComputedStyle(element).color))
-    .toBe("rgb(185, 190, 201)");
+    .toBe("rgb(166, 169, 183)");
   await expect.poll(() => reflection.evaluate((element) => ({
     background: getComputedStyle(element).backgroundColor,
     borderLeft: getComputedStyle(element).borderLeftWidth
@@ -737,7 +737,7 @@ test("light theme applies one compensated graph width and prose weight", async (
       element.querySelector<HTMLElement>("[data-kp-inline-sticky-stage]")!
     ).borderRightWidth
   }))).toEqual({
-    color: "rgb(0, 0, 0)",
+    color: "rgb(41, 43, 58)",
     proseWeight: "400",
     stageDivider: "1px"
   });
@@ -1102,7 +1102,7 @@ test("salience and prose tuners preserve graph focus and fill the shared width",
   );
   await expect.poll(() => paragraph.evaluate((element) =>
     getComputedStyle(element).color
-  )).toBe("rgb(255, 255, 255)");
+  )).toBe("rgb(214, 215, 223)");
   await expect.poll(() => paragraph.evaluate((element) =>
     getComputedStyle(element).fontWeight
   )).toBe("500");
@@ -1122,7 +1122,7 @@ test("salience and prose tuners preserve graph focus and fill the shared width",
   await page.locator("[data-kp-economics-theme-toggle]").click();
   await expect.poll(() => paragraph.evaluate((element) =>
     getComputedStyle(element).color
-  )).toBe("rgb(0, 0, 0)");
+  )).toBe("rgb(41, 43, 58)");
   await page.screenshot({
     path: `${evidenceDirectory}/desktop-salience-tuning.png`,
     fullPage: false

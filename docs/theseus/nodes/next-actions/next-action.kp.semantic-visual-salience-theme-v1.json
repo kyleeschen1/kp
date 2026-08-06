@@ -180,6 +180,34 @@
       "scope": "s12 light graph palette smoke",
       "checkedAt": "2026-08-06T07:48:48.424Z",
       "notes": "All 11 canonical Chromium cases pass, including updated light axis, grid, series, intersection, and optical width assertions."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s13 prose controls math typography",
+      "checkedAt": "2026-08-06T08:26:40.253Z",
+      "notes": "15 stylesheet checks pass, including Regular default, Book at 500, semantic prose/control sources, and no KaTeX font override."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 static contracts",
+      "checkedAt": "2026-08-06T08:26:41.538Z",
+      "notes": "TypeScript, Svelte, and domain checks pass with zero diagnostics."
+    },
+    {
+      "command": "npm run visual:economics-two-column-scroll",
+      "status": "passed",
+      "scope": "s13 reading surfaces",
+      "checkedAt": "2026-08-06T08:26:42.481Z",
+      "notes": "All 11 dark, light, phone, typography, tuner, and direct-reversal checks pass with semantic prose and math neutrals."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s13 controls review and motion preservation",
+      "checkedAt": "2026-08-06T08:26:43.445Z",
+      "notes": "All 12 publication, controls, review-adjacent, KaTeX, direct-link, manual takeover, and phone checks pass; font-metric-sensitive test anchors now target semantic ranges."
     }
   ],
   "expectedLearning": [

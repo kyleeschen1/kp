@@ -137,7 +137,8 @@
     {
       "id": "s13",
       "title": "Migrate prose controls review and companion math",
-      "status": "planned"
+      "summary": "Migrated economics prose, headings, links, controls, scrubbers, review-adjacent surfaces, and companion math wrappers to semantic light/dark sources; recorded Regular as the default font and retained KaTeX internals plus existing motion.",
+      "status": "complete"
     },
     {
       "id": "s14",

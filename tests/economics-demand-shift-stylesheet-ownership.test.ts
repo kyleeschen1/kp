@@ -102,6 +102,29 @@ test("default typography uses the New Computer Modern companion without overridi
     read("economics-demand-shift-publication.css"),
     /font-size: clamp\(1\.08rem, 1\.28vw, 1\.2rem\);/
   );
+  const handoff = readFileSync(new URL(
+    "../docs/kinetic_press_visual_salience_handoff.md",
+    import.meta.url
+  ), "utf8");
+  assert.match(handoff, /New Computer Modern Mono Regular/);
+  assert.match(handoff, /Book is the deliberate 500-weight option/);
+});
+
+test("prose controls and companion math consume semantic theme sources", () => {
+  const theme = read("economics-demand-shift-theme.css");
+  for (const declaration of [
+    "--kp-lesson-theme-ink: #292b3a",
+    "--kp-lesson-theme-math-foreground: #4f5364",
+    "--kp-lesson-theme-control-ink: #292b3a",
+    "--kp-lesson-theme-control-accent: #256ea8",
+    "--kp-lesson-theme-ink: #d6d7df",
+    "--kp-lesson-theme-math-foreground: #a6a9b7",
+    "--kp-lesson-theme-control-ink: #d6d7df",
+    "--kp-lesson-theme-control-accent: #7cbdff"
+  ]) {
+    assert.equal(theme.includes(declaration), true, `missing ${declaration}`);
+  }
+  assert.doesNotMatch(theme, /\.katex\s*\{[^}]*font-family/s);
 });
 
 test("economics style owners retain disjoint anchor responsibilities", () => {
