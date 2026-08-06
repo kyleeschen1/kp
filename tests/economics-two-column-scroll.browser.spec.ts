@@ -488,7 +488,8 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
   await expect.poll(() => demandInk.evaluate((element) =>
     Number(getComputedStyle(element).opacity)
   )).toBeGreaterThan(0.8);
-  expect(columns.proseFontFamily).toContain("Source Serif 4 Variable");
+  expect(columns.proseFontFamily)
+    .toContain("Kinetic Press New Computer Modern Mono");
   expect(columns.proseFontWeight).toBe("400");
   expect(columns.proseLineHeight).toBeGreaterThan(32);
   expect(columns.releaseRuleHeight).toBe(1);
@@ -807,7 +808,7 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   for (const surface of nonMathSurfaces) {
     await expect.poll(() => surface.evaluate((element) =>
       getComputedStyle(element).fontFamily
-    )).toContain("Source Serif 4 Variable");
+    )).toContain("Kinetic Press New Computer Modern Mono");
   }
 
   const inlineMath = root.locator(".kp-economics-tutorial__prose .katex")
@@ -817,13 +818,13 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   )).toContain("KaTeX_Main");
   await expect.poll(() => inlineMath.evaluate((element) =>
     getComputedStyle(element).fontFamily
-  )).not.toContain("Source Serif 4 Variable");
+  )).not.toContain("Kinetic Press New Computer Modern Mono");
 
   await page.locator("[data-kp-economics-theme-toggle]").click();
   await expect(root).toHaveAttribute("data-kp-economics-tutorial-theme", "light");
   await expect.poll(() => review.locator("textarea").evaluate((element) =>
     getComputedStyle(element).fontFamily
-  )).toContain("Source Serif 4 Variable");
+  )).toContain("Kinetic Press New Computer Modern Mono");
   await expect.poll(() => inlineMath.evaluate((element) =>
     getComputedStyle(element).fontFamily
   )).toContain("KaTeX_Main");

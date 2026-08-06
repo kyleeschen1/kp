@@ -69,6 +69,34 @@ test("economics learner entry loads one route-local stylesheet facade", () => {
   assert.doesNotMatch(entry, /katex-adapter|from\s+["']katex/);
 });
 
+test("default typography uses the New Computer Modern companion without overriding KaTeX", () => {
+  const global = readFileSync(
+    new URL("../src/styles.css", import.meta.url),
+    "utf8"
+  );
+  const theme = read("economics-demand-shift-theme.css");
+  const graph = read("economics-demand-shift-graph.css");
+
+  assert.equal(
+    [
+      ...global.matchAll(
+        /font-family: "Kinetic Press New Computer Modern Mono";/g
+      )
+    ].length,
+    3
+  );
+  assert.match(
+    global,
+    /--kp-font-family-non-katex:[\s\S]*"Kinetic Press New Computer Modern Mono"/
+  );
+  assert.match(
+    theme,
+    /--kp-economics-non-katex-font-family: var\(--kp-font-family-non-katex\);/
+  );
+  assert.doesNotMatch(theme, /Source Serif|@fontsource/);
+  assert.match(graph, /font-family: KaTeX_Main/);
+});
+
 test("economics style owners retain disjoint anchor responsibilities", () => {
   const theme = read("economics-demand-shift-theme.css");
   const publication = read("economics-demand-shift-publication.css");

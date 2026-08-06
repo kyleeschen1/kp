@@ -1,0 +1,19 @@
+The GUST Font License (GFL)
+Version 1.0, 22 June 2009
+
+This work may be distributed and/or modified under the conditions of the
+LaTeX Project Public License, either version 1.3c or (at your option) any
+later version.
+
+Please also observe the following clause:
+
+It is requested, but not legally required, that derived works be distributed
+only after changing the names of the fonts comprising this work and given in
+an accompanying manifest, and that the files comprising the Work, as listed
+in the manifest, also be given new names. Any exceptions to this request are
+also given in the manifest.
+
+The latest license texts are available from:
+
+- https://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt
+- https://www.latex-project.org/lppl/lppl-1-3c.txt
