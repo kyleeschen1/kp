@@ -5,7 +5,7 @@
 
 **Primary decision:** Kinetic Press uses discrete semantic salience states with animated interpolation between renderer-specific visual targets.
 
-**Typography decision:** Use **New Computer Modern Mono Regular** as the default companion font to KaTeX. Retain Book as the 500-weight option; Gill Sans has been discarded.
+**Typography decision:** Use **Source Serif 4 Regular** for lesson prose. KaTeX retains its native mathematical faces, while technical UI may use a separate companion face; Gill Sans has been discarded.
 
 **Visual-direction correction:** Do **not** define Kinetic Press by strict minimalism or monochrome austerity. The system may use the complete color palette and visually rich artifacts. Coherence should come from disciplined salience behavior, not from color scarcity.
 
@@ -301,7 +301,7 @@ The initial palette contains six core hue families:
 - cyan;
 - blue;
 - violet;
-- rose;
+- red;
 - amber;
 - green.
 
@@ -312,7 +312,7 @@ Each family contains semantic gradations.
 | Cyan | `#07d0d8` | `#42a3a8` | `#4c6a6b` | `#344040` |
 | Blue | `#7cbdff` | `#6796c7` | `#546577` | `#37404c` |
 | Violet | `#bda7ff` | `#9687c4` | `#646076` | `#3d3c44` |
-| Rose | `#f990c4` | `#bc7b9a` | `#735b66` | `#45383f` |
+| Red | `#f07972` | `#bd746e` | `#705956` | `#423a3a` |
 | Amber | `#fb9d59` | `#bd835b` | `#735e50` | `#443b36` |
 | Green | `#7acf7e` | `#6fa170` | `#576957` | `#374238` |
 
@@ -351,7 +351,7 @@ This allows an object to retain family identity while becoming much less insiste
 | Cyan | 200° |
 | Blue | 250° |
 | Violet | 295° |
-| Rose | 350° |
+| Red | 25° |
 | Amber | 55° |
 | Green | 145° |
 
@@ -478,27 +478,25 @@ The dark palette is more mature. The light palette should be finalized through a
 
 # 8. Typography
 
-## 8.1 Selected companion font
+## 8.1 Selected reading font
 
-Preferred font:
+Preferred lesson-prose font:
 
-> **New Computer Modern Mono Regular**
+> **Source Serif 4 Regular**
 
 Intended uses:
 
-- code;
-- technical labels;
-- object identifiers;
-- controls;
-- possibly explanatory text, subject to readability testing.
+- explanatory prose;
+- headings and lists within the reading column;
+- prose-adjacent controls when visual continuity matters.
 
 Reasons:
 
-- visually related to KaTeX’s Computer Modern lineage;
-- suitable for code;
-- scholarly and technical without looking like a conventional editor theme;
-- Regular avoids the excess density observed in prose; Book remains available where light-mode testing warrants a deliberate 500-weight treatment;
-- creates a unified formal and computational visual world.
+- the economics exemplar demonstrated better long-form readability than the
+  monospace companion;
+- its serif texture distinguishes explanatory language from technical chrome;
+- Regular provides the preferred default density while discrete 300, 500, and
+  600 faces preserve the existing weight tuner without synthetic bolding.
 
 ## 8.2 KaTeX
 
@@ -511,7 +509,9 @@ Do not casually replace KaTeX’s internal fonts through CSS. Doing so can damag
 - vertical alignment;
 - symbol metrics.
 
-Treat New Computer Modern Mono Regular as a companion font rather than a direct KaTeX font override.
+Treat Source Serif 4 as prose typography rather than a direct KaTeX font override.
+Technical UI and code may retain a separate mono or sans companion without
+changing lesson prose.
 
 ## 8.3 Gill Sans
 
@@ -521,11 +521,11 @@ Gill Sans has been explicitly discarded and should not appear in the implementat
 
 Test:
 
-- long-form reading in New Computer Modern Mono Regular;
+- long-form reading in Source Serif 4 Regular;
 - inline code beside KaTeX;
 - small labels;
 - light-mode rendering;
-- Book versus heavier weights;
+- regular versus explicitly selected heavier weights;
 - punctuation and operator legibility;
 - fallback behavior;
 - variable-font or static-font loading strategy.
@@ -560,7 +560,7 @@ type ColorFamily =
   | "cyan"
   | "blue"
   | "violet"
-  | "rose"
+  | "red"
   | "amber"
   | "green";
 
@@ -1195,7 +1195,8 @@ These should compile into state transactions rather than renderer-specific comma
 - Theme data should be shared across CSS, SVG, Canvas, and WebGL.
 - WebGL contextual objects should generally remain opaque but visually muted.
 - Transparency is reserved for presence, ghosts, x-ray views, and disappearance.
-- New Computer Modern Mono Regular is the default KaTeX companion; Book is the deliberate 500-weight option.
+- Source Serif 4 Regular is the lesson-prose default; KaTeX retains its native
+  faces and technical UI may choose its own companion font.
 - Gill Sans is discarded.
 - Strict minimalism is discarded as a defining constraint.
 
@@ -1227,14 +1228,21 @@ Decide whether any colors receive stable meanings, such as:
 
 - amber for changed values;
 - green for resolution;
-- rose for contradiction;
+- red for warning or contradiction;
 - cyan for primary interaction.
 
 The safer default is flexible identity colors unless a stable semantic mapping proves useful.
 
+`red` is an identity family, not a salience command. Authors express semantic
+attention such as “focus demand”; the renderer resolves that object's retained
+red identity through the active theme and salience band. A warning role may use
+red without making every red object a warning.
+
 ## Long-form prose font
 
-New Computer Modern Mono Regular is selected as the main KaTeX companion, but long-form prose readability should be tested before committing to universal monospace typography.
+Source Serif 4 Regular is selected for lesson prose after the economics human
+checkpoint rejected universal monospace typography. Keep code and technical UI
+typography independently selectable.
 
 Gill Sans should not be reconsidered unless the product direction changes explicitly.
 

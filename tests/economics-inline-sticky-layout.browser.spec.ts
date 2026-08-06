@@ -59,14 +59,14 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expect.poll(() => root.locator(
     ".kp-economics-tutorial__passage p"
   ).first().evaluate((element) => getComputedStyle(element).fontFamily))
-    .toContain("Kinetic Press New Computer Modern Mono");
+    .toContain("Source Serif 4");
   await expect.poll(() => motionPassage.locator(
     ".kp-economics-tutorial__motion-passage-gate--entrance"
   ).evaluate((element) => getComputedStyle(element).fontFamily))
-    .toContain("Kinetic Press New Computer Modern Mono");
+    .toContain("Source Serif 4");
   await expect.poll(() => root.locator(".katex").first().evaluate(
     (element) => getComputedStyle(element).fontFamily
-  )).not.toContain("Kinetic Press New Computer Modern Mono");
+  )).not.toContain("Source Serif 4");
   await expect.poll(() => root.locator(".kp-economics-tutorial__math")
     .first().evaluate((element) => ({
       inner: getComputedStyle(element.querySelector(".katex")!).fontSize,

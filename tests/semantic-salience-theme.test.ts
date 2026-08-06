@@ -16,7 +16,7 @@ function theme(id: KpVisualThemeId): KpVisualThemeContract {
       structure: "neutral.line",
       "data-series": "identity.normal",
       relation: "neutral.secondary",
-      warning: "identity.rose",
+      warning: "identity.red",
       focus: "identity.focus"
     },
     identitySources: {
@@ -24,7 +24,7 @@ function theme(id: KpVisualThemeId): KpVisualThemeContract {
       cyan: "identity.cyan",
       blue: "identity.blue",
       violet: "identity.violet",
-      rose: "identity.rose",
+      red: "identity.red",
       amber: "identity.amber",
       green: "identity.green"
     },

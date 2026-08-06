@@ -106,7 +106,7 @@ function roleSources(): Record<KpSemanticVisualRole, string> {
     structure: "neutral.line",
     "data-series": "identity.normal",
     relation: "neutral.secondary",
-    warning: "identity.rose",
+    warning: "identity.red",
     focus: "identity.focus"
   };
 }
@@ -117,7 +117,7 @@ function identitySources(): Record<KpSalienceIdentityFamily, string> {
     cyan: "identity.cyan",
     blue: "identity.blue",
     violet: "identity.violet",
-    rose: "identity.rose",
+    red: "identity.red",
     amber: "identity.amber",
     green: "identity.green"
   };

@@ -1706,7 +1706,7 @@
     // A newly selected real font face may settle after Svelte's DOM flush.
     // Preserve the semantic cue again once those metrics are authoritative.
     await document.fonts.load(
-      `${proseWeight} 1rem "Kinetic Press New Computer Modern Mono"`
+      `${proseWeight} 1rem "Source Serif 4"`
     );
     restoreAnchor();
     await tick();

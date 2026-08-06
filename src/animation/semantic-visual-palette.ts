@@ -1,7 +1,7 @@
 import type { KpVisualThemeId } from "./semantic-visual-theme.ts";
 
 export const kpPaletteIdentityFamilies = Object.freeze([
-  "cyan", "blue", "violet", "rose", "amber", "green"
+  "cyan", "blue", "violet", "red", "amber", "green"
 ] as const);
 
 export const kpPaletteSalienceBands = Object.freeze([
@@ -37,7 +37,7 @@ const darkIdentities = {
   cyan: band("#07d0d8", "#42a3a8", "#477f82", "#4c6a6b", "#344040"),
   blue: band("#7cbdff", "#6796c7", "#5e7e9f", "#546577", "#37404c"),
   violet: band("#bda7ff", "#9687c4", "#7d739d", "#646076", "#3d3c44"),
-  rose: band("#f990c4", "#bc7b9a", "#987087", "#735b66", "#45383f"),
+  red: band("#f07972", "#bd746e", "#966b67", "#705956", "#423a3a"),
   amber: band("#fb9d59", "#bd835b", "#98705a", "#735e50", "#443b36"),
   green: band("#7acf7e", "#6fa170", "#637f64", "#576957", "#374238")
 };
@@ -46,7 +46,7 @@ const lightIdentities = {
   cyan: band("#086f74", "#306b70", "#557477", "#7c9292", "#b4c1bd"),
   blue: band("#256ea8", "#4f7398", "#68788a", "#8a96a2", "#bdc3c8"),
   violet: band("#6653b6", "#736a9d", "#7e788d", "#9c98a5", "#c4c1c8"),
-  rose: band("#a83770", "#9a5e79", "#856b76", "#a68f98", "#c9bec2"),
+  red: band("#b63f39", "#985953", "#806b67", "#a18e8b", "#c7bcba"),
   amber: band("#9a541f", "#916748", "#826f60", "#a39285", "#c9c0b8"),
   green: band("#337c3a", "#5c7b5e", "#667869", "#89988a", "#bdc5bc")
 };

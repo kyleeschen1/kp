@@ -83,7 +83,7 @@ function colorSource(
 ): string {
   const band = level === "absent" ? "ghost" : level;
   if (role === "data-series") return `identity.${band}`;
-  if (role === "warning") return `identity.rose.${band}`;
+  if (role === "warning") return `identity.red.${band}`;
   if (role === "focus") return `identity.cyan.${band}`;
   if (role === "page") return "neutral.page";
   if (role === "structure" || role === "relation") {

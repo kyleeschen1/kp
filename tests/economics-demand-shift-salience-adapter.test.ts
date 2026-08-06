@@ -28,6 +28,26 @@ test("every economics focus target maps to semantic role-state objects", () => {
   }
 });
 
+test("demand owns the red identity independently of its salience level", () => {
+  const frame = projectKpEconomicsSalience({
+    market: "shifted",
+    presentation: "comparison-verified",
+    focusTarget: "supply"
+  });
+  assert.equal(
+    frame.objects["market.demand.current"].salience.state.identityFamily,
+    "red"
+  );
+  assert.equal(
+    frame.objects["market.demand.initial"].salience.state.identityFamily,
+    "red"
+  );
+  assert.equal(
+    frame.objects["market.demand.current"].salience.state.level,
+    "context"
+  );
+});
+
 test("economics salience reconstructs directly from cumulative scene state", () => {
   const samples = [
     ["demand-shift", 0],

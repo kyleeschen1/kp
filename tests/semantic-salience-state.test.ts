@@ -12,7 +12,7 @@ test("semantic salience vocabulary matches the canonical handoff", () => {
     "focus", "normal", "context", "dim", "ghost", "absent"
   ]);
   assert.deepEqual(kpSalienceIdentityFamilies, [
-    "neutral", "cyan", "blue", "violet", "rose", "amber", "green"
+    "neutral", "cyan", "blue", "violet", "red", "amber", "green"
   ]);
 });
 
@@ -40,7 +40,7 @@ test("every semantic endpoint supports idempotence direct seek and reversal", ()
     for (const to of kpSalienceLevels) {
       const forward = createKpSemanticSalienceTransition({
         from: { level: from, identityFamily: "cyan", presence: 1 },
-        to: { level: to, identityFamily: "rose", presence: to === "absent" ? 0 : 1 }
+        to: { level: to, identityFamily: "red", presence: to === "absent" ? 0 : 1 }
       });
       const reverse = createKpSemanticSalienceTransition({
         from: forward.to,

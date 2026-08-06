@@ -39,7 +39,7 @@ test("recipe endpoints preserve hierarchy and absence", () => {
         colorSource: role === "data-series"
           ? "identity.ghost"
           : role === "warning"
-            ? "identity.rose.ghost"
+            ? "identity.red.ghost"
             : role === "focus"
               ? "identity.cyan.ghost"
               : role === "page"

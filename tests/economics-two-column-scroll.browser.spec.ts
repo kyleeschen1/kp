@@ -235,7 +235,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     opacity: getComputedStyle(element).opacity,
     width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-    color: "rgb(69, 56, 63)",
+    color: "rgb(66, 58, 58)",
     dash: "none",
     opacity: "1",
     width: "0px"
@@ -315,7 +315,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
     }))).toEqual({
-      color: "rgb(152, 112, 135)",
+      color: "rgb(150, 107, 103)",
       opacity: "0.62",
       width: "1px"
     });
@@ -514,7 +514,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
     Number(getComputedStyle(element).opacity)
   )).toBeGreaterThan(0.8);
   expect(columns.proseFontFamily)
-    .toContain("Kinetic Press New Computer Modern Mono");
+    .toContain("Source Serif 4");
   expect(columns.proseFontWeight).toBe("400");
   expect(columns.proseLineHeight).toBeGreaterThan(32);
   expect(columns.releaseRuleHeight).toBe(1);
@@ -606,7 +606,7 @@ test("desktop prose hands off salience beside a left-hand graph", async ({
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
     }))).toEqual({
-      color: "rgb(249, 144, 196)",
+      color: "rgb(240, 121, 114)",
       opacity: "1",
       width: "1.2px"
     });
@@ -909,7 +909,7 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   for (const surface of nonMathSurfaces) {
     await expect.poll(() => surface.evaluate((element) =>
       getComputedStyle(element).fontFamily
-    )).toContain("Kinetic Press New Computer Modern Mono");
+    )).toContain("Source Serif 4");
   }
 
   const prose = root.locator(".kp-economics-tutorial__passage p").first();
@@ -924,7 +924,7 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   )).toContain("KaTeX_Main");
   await expect.poll(() => inlineMath.evaluate((element) =>
     getComputedStyle(element).fontFamily
-  )).not.toContain("Kinetic Press New Computer Modern Mono");
+  )).not.toContain("Source Serif 4");
   await expect.poll(async () => {
     const proseSize = await prose.evaluate((element) =>
       getComputedStyle(element).fontSize
@@ -942,7 +942,7 @@ test("economics uses one non-KaTeX family across lesson and review surfaces", as
   await expect(root).toHaveAttribute("data-kp-economics-tutorial-theme", "light");
   await expect.poll(() => review.locator("textarea").evaluate((element) =>
     getComputedStyle(element).fontFamily
-  )).toContain("Kinetic Press New Computer Modern Mono");
+  )).toContain("Source Serif 4");
   await expect.poll(() => inlineMath.evaluate((element) =>
     getComputedStyle(element).fontFamily
   )).toContain("KaTeX_Main");
@@ -1183,7 +1183,7 @@ test("salience and prose tuners preserve graph focus and fill the shared width",
   )).toBe("rgb(94, 126, 159)");
   await expect.poll(() => demand.evaluate((element) =>
     getComputedStyle(element).stroke
-  )).toBe("rgb(152, 112, 135)");
+  )).toBe("rgb(150, 107, 103)");
 
   await layoutTuner.locator("summary").click();
   await layoutTuner.locator("[data-kp-economics-text-width-input]")

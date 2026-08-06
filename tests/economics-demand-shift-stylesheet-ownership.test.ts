@@ -69,7 +69,7 @@ test("economics learner entry loads one route-local stylesheet facade", () => {
   assert.doesNotMatch(entry, /katex-adapter|from\s+["']katex/);
 });
 
-test("default typography uses the New Computer Modern companion without overriding KaTeX", () => {
+test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
   const global = readFileSync(
     new URL("../src/styles.css", import.meta.url),
     "utf8"
@@ -92,11 +92,16 @@ test("default typography uses the New Computer Modern companion without overridi
     global,
     /--kp-font-family-non-katex:[\s\S]*"Kinetic Press New Computer Modern Mono"/
   );
+  for (const weight of [300, 400, 500, 600]) {
+    assert.match(theme, new RegExp(
+      `font-family: "Source Serif 4";[\\s\\S]*?font-weight: ${weight};`
+    ));
+  }
   assert.match(
     theme,
-    /--kp-economics-non-katex-font-family: var\(--kp-font-family-non-katex\);/
+    /--kp-economics-non-katex-font-family:[\s\S]*"Source Serif 4"/
   );
-  assert.doesNotMatch(theme, /Source Serif|@fontsource/);
+  assert.match(theme, /@fontsource\/source-serif-4/);
   assert.match(graph, /font-family: KaTeX_Main/);
   assert.match(
     read("economics-demand-shift-publication.css"),
@@ -106,8 +111,8 @@ test("default typography uses the New Computer Modern companion without overridi
     "../docs/kinetic_press_visual_salience_handoff.md",
     import.meta.url
   ), "utf8");
-  assert.match(handoff, /New Computer Modern Mono Regular/);
-  assert.match(handoff, /Book is the deliberate 500-weight option/);
+  assert.match(handoff, /Source Serif 4/);
+  assert.match(handoff, /lesson prose/);
 });
 
 test("prose controls and companion math consume semantic theme sources", () => {

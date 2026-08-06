@@ -1,7 +1,44 @@
 /* Theme tokens and route-wide foundations stay separate from layout so graph and prose owners consume one optical palette. */
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-300-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-500-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2")
+    format("woff2");
+}
+
 :root {
   color-scheme: light;
-  --kp-economics-non-katex-font-family: var(--kp-font-family-non-katex);
+  --kp-economics-non-katex-font-family:
+    "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
   --kp-lesson-theme-page: #f4f1e9;
   --kp-lesson-theme-stage-occlusion: rgb(244 241 233 / 0.975);
   --kp-lesson-theme-stage-divider: #74798a;
@@ -14,7 +51,7 @@
   --kp-lesson-theme-graph-grid: #d7dae3;
   --kp-lesson-theme-graph-reference: #707586;
   --kp-lesson-theme-graph-axis: #151622;
-  --kp-lesson-theme-graph-ghost-curve-casing: #c9bec2;
+  --kp-lesson-theme-graph-ghost-curve-casing: #c7bcba;
   --kp-lesson-theme-graph-ghost-curve-core: #b9bdc8;
   --kp-lesson-theme-graph-ghost-guide-casing: #aeb2bf;
   --kp-lesson-theme-graph-ghost-guide-core: #eceef5;
@@ -171,7 +208,7 @@
   --kp-graph-stable:
     var(--kp-economics-salience-market-supply-color, #256ea8);
   --kp-graph-changing:
-    var(--kp-economics-salience-market-demand-current-color, #a83770);
+    var(--kp-economics-salience-market-demand-current-color, #b63f39);
   --kp-graph-focal:
     var(--kp-economics-salience-market-equilibrium-current-color, #151622);
   --kp-graph-guide:
@@ -195,7 +232,7 @@
   --kp-graph-stable:
     var(--kp-economics-salience-market-supply-color, #7cbdff);
   --kp-graph-changing:
-    var(--kp-economics-salience-market-demand-current-color, #f990c4);
+    var(--kp-economics-salience-market-demand-current-color, #f07972);
   --kp-graph-focal:
     var(--kp-economics-salience-market-equilibrium-current-color, #f4f4f8);
   --kp-graph-guide:
@@ -214,7 +251,7 @@
 
 .kp-economics-tutorial[data-kp-economics-muted-red="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #856b76;
+  --kp-graph-changing: #806b67;
 }
 
 :root[data-kp-lesson-theme="dark"]
@@ -226,7 +263,7 @@
 :root[data-kp-lesson-theme="dark"]
   .kp-economics-tutorial[data-kp-economics-muted-red="true"]
   .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"] {
-  --kp-graph-changing: #987087;
+  --kp-graph-changing: #966b67;
 }
 
 :root[data-kp-lesson-theme="dark"]

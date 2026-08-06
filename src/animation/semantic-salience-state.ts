@@ -12,7 +12,7 @@ export const kpSalienceIdentityFamilies = Object.freeze([
   "cyan",
   "blue",
   "violet",
-  "rose",
+  "red",
   "amber",
   "green"
 ] as const);

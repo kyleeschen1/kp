@@ -18,7 +18,13 @@ test("handoff palette preserves retained page backgrounds and dark accents", () 
   });
   assert.equal(kpVisualPaletteSources.dark.identities.blue.focus, "#7cbdff");
   assert.equal(kpVisualPaletteSources.dark.identities.violet.focus, "#bda7ff");
-  assert.equal(kpVisualPaletteSources.dark.identities.rose.focus, "#f990c4");
+  assert.deepEqual(kpVisualPaletteSources.dark.identities.red, {
+    focus: "#f07972",
+    normal: "#bd746e",
+    context: "#966b67",
+    dim: "#705956",
+    ghost: "#423a3a"
+  });
   assert.equal(kpVisualPaletteSources.dark.identities.amber.focus, "#fb9d59");
   assert.equal(kpVisualPaletteSources.dark.identities.green.focus, "#7acf7e");
 });
