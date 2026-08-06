@@ -942,16 +942,17 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       });
     fractionCompositionSalience.applyKpFractionCompositionSalienceSceneToDom({
       root: context.element,
-      projections: salienceScene.endpoints
+      projections: salienceScene.endpoints,
+      presentationRevision: salienceScene.presentationRevision
     });
     semanticSaliencePresentationRevision = salienceScene.presentationRevision;
-    stage.dataset["kpReaderSemanticSalienceScene"] = JSON.stringify({
+    setDatasetIfChanged(stage, "kpReaderSemanticSalienceScene", JSON.stringify({
       sourceStateId,
       targetStateId,
       operationIds: salienceScene.operationIds,
       focusTargetIds: salienceScene.focusTargetIds,
       phaseProgressPermille: Math.round(phaseProgress * 1_000)
-    });
+    }));
   }
 
   for (const candidate of layout.contexts.values()) {

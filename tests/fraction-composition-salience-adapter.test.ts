@@ -15,6 +15,13 @@ test("fraction KaTeX projection resolves the whole endpoint scene", () => {
   assert.ok(Object.values(baseline.objects).every(
     ({ salience }) => salience.state.level === "normal"
   ));
+  assert.strictEqual(
+    projectKpFractionCompositionSalience({
+      stateId: "fraction-solve.state.factored",
+      theme: "dark"
+    }),
+    baseline
+  );
 
   const focused = projectKpFractionCompositionSalience({
     stateId: "fraction-solve.state.factored",

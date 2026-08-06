@@ -221,7 +221,8 @@
     {
       "id": "s27",
       "title": "Close accessibility static and performance gates",
-      "status": "planned"
+      "summary": "Closed-forced-colors-reduced-motion-no-JavaScript-build-and-salience-hot-path-gates-with-zero-post-warmup-salience-compilation-or-DOM-paint",
+      "status": "complete"
     },
     {
       "id": "s28",

@@ -14,6 +14,39 @@ import {
   createKpFractionCompositionSalienceInventory
 } from "../compiler/fraction-composition-salience-inventory.ts";
 
+const fractionSalienceInventory =
+  createKpFractionCompositionSalienceInventory();
+const fractionAssetObjects = new Map(
+  createKpFractionCompositionEquationAsset().bundle.objects.map(
+    (object) => [object.id, object] as const
+  )
+);
+const endpointProjectionCache = new Map<
+  string,
+  KpFractionCompositionSalienceProjection
+>();
+let endpointProjectionCompilations = 0;
+let endpointProjectionCacheHits = 0;
+let domApplications = 0;
+let domRevisionSkips = 0;
+
+export function inspectKpFractionCompositionSalienceRuntime() {
+  return Object.freeze({
+    endpointProjectionCompilations,
+    endpointProjectionCacheHits,
+    domApplications,
+    domRevisionSkips,
+    endpointProjectionCacheSize: endpointProjectionCache.size
+  });
+}
+
+export function resetKpFractionCompositionSalienceRuntime(): void {
+  endpointProjectionCompilations = 0;
+  endpointProjectionCacheHits = 0;
+  domApplications = 0;
+  domRevisionSkips = 0;
+}
+
 export interface KpFractionCompositionSalienceObjectProjection {
   readonly id: string;
   readonly role: KpSemanticVisualRole;
@@ -45,15 +78,24 @@ export function projectKpFractionCompositionSalience(input: {
   readonly theme: KpVisualThemeId;
   readonly focusTargetIds?: readonly string[];
 }): KpFractionCompositionSalienceProjection {
-  const inventory = createKpFractionCompositionSalienceInventory();
-  const endpoint = inventory.endpoints.find(
+  const cacheKey = [
+    input.theme,
+    input.stateId,
+    ...(input.focusTargetIds ?? [])
+  ].join(":");
+  const cached = endpointProjectionCache.get(cacheKey);
+  if (cached !== undefined) {
+    endpointProjectionCacheHits += 1;
+    return cached;
+  }
+  endpointProjectionCompilations += 1;
+  const endpoint = fractionSalienceInventory.endpoints.find(
     ({ stateId }) => stateId === input.stateId
   );
   if (endpoint === undefined) {
     throw new Error(`Unknown fraction salience state ${input.stateId}.`);
   }
-  const assetObject = createKpFractionCompositionEquationAsset().bundle.objects
-    .find(({ id }) => id === input.stateId);
+  const assetObject = fractionAssetObjects.get(input.stateId);
   if (assetObject === undefined) {
     throw new Error(`Fraction salience state ${input.stateId} has no asset object.`);
   }
@@ -61,7 +103,7 @@ export function projectKpFractionCompositionSalience(input: {
   const focusedIds = expandFocusTargets({
     stateId: input.stateId,
     focusTargetIds,
-    inventory
+    inventory: fractionSalienceInventory
   });
   const hasFocus = focusTargetIds.length > 0;
   const selectorById = new Map(assetObject.selectors.map(
@@ -95,12 +137,14 @@ export function projectKpFractionCompositionSalience(input: {
       theme: input.theme
     }))
   ]);
-  return Object.freeze({
+  const projection = Object.freeze({
     stateId: input.stateId,
     theme: input.theme,
     focusTargetIds,
     objects: Object.freeze(objects)
   });
+  endpointProjectionCache.set(cacheKey, projection);
+  return projection;
 }
 
 export function projectKpFractionCompositionSalienceScene(input: {
@@ -115,7 +159,7 @@ export function projectKpFractionCompositionSalienceScene(input: {
       input.phaseProgress > 1) {
     throw new Error("Fraction salience phase progress must be between 0 and 1.");
   }
-  const inventory = createKpFractionCompositionSalienceInventory();
+  const inventory = fractionSalienceInventory;
   const explicitTargets = Object.freeze([...(input.focusTargetIds ?? [])]);
   let focusTargets = explicitTargets.length > 0
     ? explicitTargets
@@ -178,7 +222,7 @@ export function projectKpFractionCompositionSalienceScene(input: {
 
 /** Applies paint intent to authored wrappers; KaTeX keeps glyph and rule geometry. */
 export function applyKpFractionCompositionSalienceToDom(input: {
-  readonly root: ParentNode;
+  readonly root: HTMLElement;
   readonly projection: KpFractionCompositionSalienceProjection;
 }): void {
   applyKpFractionCompositionSalienceSceneToDom({
@@ -188,9 +232,17 @@ export function applyKpFractionCompositionSalienceToDom(input: {
 }
 
 export function applyKpFractionCompositionSalienceSceneToDom(input: {
-  readonly root: ParentNode;
+  readonly root: HTMLElement;
   readonly projections: readonly KpFractionCompositionSalienceProjection[];
+  readonly presentationRevision?: string | undefined;
 }): void {
+  if (input.presentationRevision !== undefined &&
+      input.root.dataset["kpFractionSalienceRevision"] ===
+        input.presentationRevision) {
+    domRevisionSkips += 1;
+    return;
+  }
+  domApplications += 1;
   for (const element of input.root.querySelectorAll<HTMLElement>(
     "[data-kp-fraction-salience-bound]"
   )) {
@@ -238,6 +290,10 @@ export function applyKpFractionCompositionSalienceSceneToDom(input: {
         format(object.treatment.strokeScale)
       );
     }
+  }
+  if (input.presentationRevision !== undefined) {
+    input.root.dataset["kpFractionSalienceRevision"] =
+      input.presentationRevision;
   }
 }
 

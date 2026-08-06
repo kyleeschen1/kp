@@ -264,6 +264,24 @@ body:is(
   .kp-animation-beats > li, .kp-reader-equation-state [data-kp-reader-equation-anchor-id] { transition: none; }
 }
 
+@media (forced-colors: active) {
+  body[data-kp-reader-lesson-variant="fraction-composition"]
+    [data-kp-fraction-salience-bound] {
+    color: CanvasText !important;
+    opacity: 1;
+  }
+  body[data-kp-reader-lesson-variant="fraction-composition"]
+    [data-kp-fraction-salience-bound]
+    [data-kp-semantic-salience-level="focus"],
+  body[data-kp-reader-lesson-variant="fraction-composition"]
+    [data-kp-fraction-salience-bound][data-kp-semantic-salience-level="focus"] {
+    text-decoration: underline;
+    text-decoration-color: Highlight;
+    text-decoration-thickness: max(1px, .06em);
+    text-underline-offset: .14em;
+  }
+}
+
 @media print {
   .kp-reader-masthead, .kp-lesson-toc, .kp-reader-equation-stage { display: none; }
   .kp-reader-layout, .kp-animation-story { display: block; width: 100%; }

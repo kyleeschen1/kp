@@ -4,7 +4,14 @@ const cases = [
   { id: "light-wide", theme: "light", width: 1_100, height: 800 },
   { id: "dark-wide", theme: "dark", width: 1_100, height: 800 },
   { id: "light-phone", theme: "light", width: 390, height: 844 },
-  { id: "dark-phone", theme: "dark", width: 390, height: 844 }
+  { id: "dark-phone", theme: "dark", width: 390, height: 844 },
+  {
+    id: "forced-dark-wide",
+    theme: "dark",
+    width: 1_100,
+    height: 800,
+    forcedColors: true
+  }
 ] as const;
 
 for (const candidate of cases) {
@@ -15,6 +22,9 @@ for (const candidate of cases) {
       width: candidate.width,
       height: candidate.height
     });
+    if ("forcedColors" in candidate && candidate.forcedColors) {
+      await page.emulateMedia({ forcedColors: "active" });
+    }
     await page.goto(
       "/reader/fraction-composition/?" + new URLSearchParams({
         kpLesson: "lesson.algebra.fraction-composition",
@@ -74,6 +84,14 @@ for (const candidate of cases) {
         headerOverlap: kicker !== undefined && controls !== undefined &&
           kicker.right > controls.left && kicker.left < controls.right &&
           kicker.bottom > controls.top && kicker.top < controls.bottom,
+        contextOpacities: [...active.querySelectorAll<HTMLElement>(
+          '[data-kp-semantic-salience-level="context"]'
+        )].map((element) => getComputedStyle(element).opacity),
+        focusedUnderlines: [...active.querySelectorAll<HTMLElement>(
+          '[data-kp-semantic-salience-level="focus"]'
+        )].filter((element) =>
+          getComputedStyle(element).textDecorationLine.includes("underline")
+        ).length,
         theme: element.ownerDocument.body.dataset["kpVisualTheme"]
       };
     });
@@ -85,6 +103,11 @@ for (const candidate of cases) {
     expect(evidence.stage.width).toBeGreaterThan(0);
     expect(evidence.stage.height).toBeGreaterThan(0);
     expect(evidence.headerOverlap).toBe(false);
+    if ("forcedColors" in candidate && candidate.forcedColors) {
+      expect(evidence.contextOpacities.every((opacity) => opacity === "1"))
+        .toBe(true);
+      expect(evidence.focusedUnderlines).toBeGreaterThan(0);
+    }
     expect(errors).toEqual([]);
 
     await stage.screenshot({

@@ -21,6 +21,9 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
   const evidence = await page.evaluate(async () => {
     const metricsUrl = "/src/reader/runtime/reader-runtime-metrics.ts";
     const metrics = await import(/* @vite-ignore */ metricsUrl);
+    const salienceUrl =
+      "/src/reader/app/fraction-composition-salience-adapter.ts";
+    const salience = await import(/* @vite-ignore */ salienceUrl);
     await document.fonts.ready;
 
     const waitForFrames = async (count: number): Promise<void> => {
@@ -42,6 +45,7 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
     dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
     const warmRuntime = metrics.inspectKpReaderRuntimeMetrics(window);
     metrics.resetKpReaderRuntimeMetrics(window);
+    salience.resetKpFractionCompositionSalienceRuntime();
 
     const longTasks: number[] = [];
     const supportsLongTasks =
@@ -122,6 +126,8 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
         added: materialOwnersAdded,
         removed: materialOwnersRemoved
       },
+      salienceRuntime:
+        salience.inspectKpFractionCompositionSalienceRuntime(),
       authority: {
         nativeVisible,
         materialVisible
@@ -161,6 +167,12 @@ test("rapid bidirectional scroll emits canonical reader runtime evidence", async
   expect(evidence.materialOwnerChurn).toEqual({
     added: 0,
     removed: 0
+  });
+  expect(evidence.salienceRuntime).toMatchObject({
+    endpointProjectionCompilations: 0,
+    domApplications: 0,
+    endpointProjectionCacheHits: 60,
+    domRevisionSkips: 30
   });
 });
 
