@@ -83,7 +83,8 @@
     {
       "id": "s04",
       "title": "Define shared semantic visual roles",
-      "status": "planned"
+      "summary": "Defined a closed seven-role semantic visual registry for page, ink, structure, data series, relation, warning, and focus with complete intent and duplicate/unknown rejection.",
+      "status": "complete"
     },
     {
       "id": "s05",
