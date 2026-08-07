@@ -83,6 +83,30 @@
       "status": "passed",
       "scope": "s03 typed presenter integration",
       "checkedAt": "2026-08-07T15:28:18.339Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s04 bottom-edge approach laws",
+      "checkedAt": "2026-08-07T15:34:11.442Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s04 stable cue paint",
+      "checkedAt": "2026-08-07T15:34:12.889Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s04 cue entrance and handoff",
+      "checkedAt": "2026-08-07T15:34:14.032Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 typed cue projection",
+      "checkedAt": "2026-08-07T15:34:15.401Z"
     }
   ],
   "allowedWork": [
@@ -128,7 +152,8 @@
     {
       "id": "s04",
       "title": "cue-approach-projection",
-      "status": "planned"
+      "summary": "Cue materialization now begins when the paragraph bottom enters the station rails, reaches stable ink and scale at ready, and uses no blur or card chrome. Existing exit remains reversible; full tutorial, CSS, Chromium visual, and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

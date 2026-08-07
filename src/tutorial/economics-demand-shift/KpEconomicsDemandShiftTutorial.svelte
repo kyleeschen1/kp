@@ -1604,6 +1604,7 @@
       if (animationStation) {
         const presence = projectKpAnimationStationCuePresence({
           cueTopPx: paragraphBounds.top,
+          cueBottomPx: paragraphBounds.bottom,
           geometry: readCachedAnimationStationGeometry()
         });
         element.dataset["kpAnimationStationCuePhase"] = presence.phase;
@@ -1614,8 +1615,8 @@
           presence.presence.toFixed(4)
         );
         element.style.setProperty(
-          "--kp-animation-station-cue-blur",
-          `${presence.blurPx.toFixed(3)}px`
+          "--kp-animation-station-cue-scale",
+          presence.scale.toFixed(4)
         );
         element.style.setProperty(
           "--kp-animation-station-cue-pin-offset",

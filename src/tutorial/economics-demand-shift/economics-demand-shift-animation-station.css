@@ -272,7 +272,7 @@
   outline: 0;
   background: transparent;
   opacity: var(--kp-animation-station-cue-presence, 0);
-  filter: blur(var(--kp-animation-station-cue-blur, 2px));
+  filter: none;
   transition: none;
 }
 
@@ -283,11 +283,12 @@
   > .kp-economics-tutorial__passage-ink {
   /* Measure the paragraph's untouched flow box while its ink holds position. */
   display: block;
+  transform-origin: 50% 0%;
   transform: translate3d(
     0,
     var(--kp-animation-station-cue-pin-offset, 0px),
     0
-  );
+  ) scale(var(--kp-animation-station-cue-scale, 0.95));
 }
 
 .kp-economics-tutorial--animation-station

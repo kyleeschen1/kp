@@ -553,7 +553,7 @@ test("animation station projects one usable-viewport rhythm", () => {
     graphTopY: 186,
     graphBottomY: 450,
     graphHeightPx: 264,
-    cueRevealStartY: 850,
+    cueRevealStartY: 730,
     cueRevealEndY: 610,
     cuePinStartY: 490,
     cuePinEndY: 410,
@@ -609,36 +609,62 @@ test("animation station cue presence is reversible at every boundary", () => {
   const geometry = projectKpAnimationStationGeometry({
     viewportHeightPx: 800
   });
-  const samples = [800, 680, 560, 440, 400, 360, 347, 334].map((cueTopPx) =>
-    projectKpAnimationStationCuePresence({ cueTopPx, geometry })
+  const samples = [
+    { cueTopPx: 720, cueBottomPx: 800 },
+    { cueTopPx: 600, cueBottomPx: 680 },
+    { cueTopPx: 540, cueBottomPx: 620 },
+    { cueTopPx: 480, cueBottomPx: 560 },
+    { cueTopPx: 440, cueBottomPx: 520 },
+    { cueTopPx: 400, cueBottomPx: 480 },
+    { cueTopPx: 347, cueBottomPx: 427 },
+    { cueTopPx: 334, cueBottomPx: 414 }
+  ].map(({ cueTopPx, cueBottomPx }) =>
+    projectKpAnimationStationCuePresence({
+      cueTopPx,
+      cueBottomPx,
+      geometry
+    })
   );
 
   assert.deepEqual(samples.map(({ phase }) => phase), [
     "waiting",
+    "waiting",
     "materializing",
     "bright",
     "bright",
-    "pinned",
     "pinned",
     "dissolving",
     "gone"
   ]);
   assert.deepEqual(samples.map(({ presence }) =>
     Math.round(presence * 1_000) / 1_000), [
-    0, 0.5, 1, 1, 1, 1, 0.5, 0
+    0, 0, 0.5, 1, 1, 1, 0.5, 0
   ]);
-  assert.deepEqual(samples.map(({ blurPx }) =>
-    Math.round(blurPx * 1_000) / 1_000), [
-    2, 1, 0, 0, 0, 0, 1, 2
+  assert.deepEqual(samples.map(({ scale }) =>
+    Math.round(scale * 1_000) / 1_000), [
+    0.95, 0.95, 0.975, 1, 1, 1, 0.975, 0.95
   ]);
   assert.deepEqual(samples.map(({ pinOffsetPx }) =>
     Math.round(pinOffsetPx * 1_000) / 1_000), [
-    0, 0, 0, 0, 40, 80, 93, 106
+    0, 0, 0, 0, 0, 40, 93, 106
   ]);
   assert.deepEqual(
     [...samples].reverse(),
-    [334, 347, 360, 400, 440, 560, 680, 800].map((cueTopPx) =>
-      projectKpAnimationStationCuePresence({ cueTopPx, geometry })
+    [
+      { cueTopPx: 334, cueBottomPx: 414 },
+      { cueTopPx: 347, cueBottomPx: 427 },
+      { cueTopPx: 400, cueBottomPx: 480 },
+      { cueTopPx: 440, cueBottomPx: 520 },
+      { cueTopPx: 480, cueBottomPx: 560 },
+      { cueTopPx: 540, cueBottomPx: 620 },
+      { cueTopPx: 600, cueBottomPx: 680 },
+      { cueTopPx: 720, cueBottomPx: 800 }
+    ].map(({ cueTopPx, cueBottomPx }) =>
+      projectKpAnimationStationCuePresence({
+        cueTopPx,
+        cueBottomPx,
+        geometry
+      })
     )
   );
 });

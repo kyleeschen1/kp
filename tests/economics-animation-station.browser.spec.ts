@@ -125,19 +125,24 @@ test("compact station hands short cues to one bounded graph", async ({
     fullPage: false
   });
 
-  await alignTop(page, demandText, 805);
+  await alignBottom(page, demandText, 805);
   await expect.poll(() => paragraphOpacity(demandText)).toBeLessThan(0.05);
   await expect(demandCue).toHaveAttribute(
     "data-kp-animation-station-cue-phase",
     "waiting"
   );
 
-  await alignTop(page, demandText, 680);
+  await alignBottom(page, demandText, 620);
   await expect.poll(() => paragraphOpacity(demandText)).toBeCloseTo(0.5, 1);
 
-  await alignTop(page, demandText, 560);
+  await alignBottom(page, demandText, 560);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.98);
+  await expect.poll(() => demandCue.evaluate((element) => Number.parseFloat(
+    getComputedStyle(element).getPropertyValue(
+      "--kp-animation-station-cue-scale"
+    )
+  ))).toBeGreaterThan(0.999);
   await page.screenshot({
     path: `${evidenceDirectory}/station-cue-focused.png`,
     fullPage: false
@@ -174,9 +179,7 @@ test("compact station hands short cues to one bounded graph", async ({
 
   await alignTop(page, demandText, 136);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
-  await expect.poll(() => resultText.evaluate(
-    (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(680, 0);
+  await alignBottom(page, resultText, 620);
   await expect.poll(() => paragraphOpacity(resultText)).toBeCloseTo(0.5, 1);
   await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
   await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
@@ -284,4 +287,21 @@ async function alignTop(
   await expect.poll(() => locator.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(desiredTop, 0);
+}
+
+async function alignBottom(
+  page: Page,
+  locator: Locator,
+  desiredBottom: number
+): Promise<void> {
+  const currentBottom = await locator.evaluate(
+    (element) => element.getBoundingClientRect().bottom
+  );
+  await page.evaluate(
+    ({ delta }) => window.scrollBy(0, delta),
+    { delta: currentBottom - desiredBottom }
+  );
+  await expect.poll(() => locator.evaluate(
+    (element) => element.getBoundingClientRect().bottom
+  )).toBeCloseTo(desiredBottom, 0);
 }

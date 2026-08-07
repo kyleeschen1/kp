@@ -84,7 +84,7 @@ export interface KpAnimationStationCuePresenceProjection {
     | "dissolving"
     | "gone";
   readonly presence: number;
-  readonly blurPx: number;
+  readonly scale: number;
   readonly pinOffsetPx: number;
 }
 
@@ -112,7 +112,7 @@ export const kpEconomicsAnimationStationDefaultRhythm = Object.freeze({
   railBottomRatio: 0.85,
   graphTopRatio: 0.17,
   graphBottomRatio: 0.5,
-  cueRevealStartRatio: 1,
+  cueRevealStartRatio: 0.85,
   cueRevealEndRatio: 0.7,
   cuePinStartRatio: 0.55,
   cuePinDistanceRatio: 0.1,
@@ -822,23 +822,27 @@ export function projectKpAnimationStationEntrance(input: {
 
 export function projectKpAnimationStationCuePresence(input: {
   readonly cueTopPx: number;
+  readonly cueBottomPx: number;
   readonly geometry: KpAnimationStationGeometryProjection;
 }): KpAnimationStationCuePresenceProjection {
   const cueTop = Number.isFinite(input.cueTopPx)
     ? input.cueTopPx
     : input.geometry.usableBottomPx;
+  const cueBottom = Number.isFinite(input.cueBottomPx)
+    ? input.cueBottomPx
+    : cueTop;
   const geometry = input.geometry;
   const boundaryEpsilon = 1e-6;
   let phase: KpAnimationStationCuePresenceProjection["phase"];
   let presence: number;
   let pinOffsetPx = 0;
-  if (cueTop >= geometry.cueRevealStartY) {
+  if (cueBottom >= geometry.cueRevealStartY) {
     phase = "waiting";
     presence = 0;
-  } else if (cueTop > geometry.cueRevealEndY) {
+  } else if (cueBottom > geometry.cueRevealEndY) {
     phase = "materializing";
     presence = smoothstep(clamp(
-      (geometry.cueRevealStartY - cueTop) /
+      (geometry.cueRevealStartY - cueBottom) /
         Math.max(1, geometry.cueRevealStartY - geometry.cueRevealEndY),
       0,
       1
@@ -867,7 +871,7 @@ export function projectKpAnimationStationCuePresence(input: {
   return Object.freeze({
     phase,
     presence,
-    blurPx: (1 - presence) * 2,
+    scale: 0.95 + presence * 0.05,
     pinOffsetPx
   });
 }
