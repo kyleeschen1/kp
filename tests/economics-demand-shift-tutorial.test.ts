@@ -60,6 +60,9 @@ import {
   renderKpTutorialScrubBar
 } from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
 import {
+  renderKpTutorialProgressRail
+} from "../src/tutorial/kp-tutorial-progress-rail-renderer.ts";
+import {
   parseKpTutorialDestinationHash,
   serializeKpTutorialDestinationHash,
   serializeKpTutorialDestinationHref
@@ -1003,6 +1006,25 @@ test("static tutorial scrubber has final light DOM and native checkpoint links",
   assert.match(html, /<input[^>]+data-action="seek"[^>]+disabled/);
   assert.match(html, /<option value="0\.72" label="Handoff">/);
   assert.doesNotMatch(html, /<style|<script|shadow/);
+});
+
+test("static progress rail reserves read-only accessible light DOM", () => {
+  const html = renderKpTutorialProgressRail({
+    blockId: "demand-shift",
+    label: "Demand shift animation progress",
+    initialLabel: "Before the shift"
+  });
+
+  assert.match(html, /^<kp-tutorial-progress-rail/);
+  assert.match(html, /data-kp-tutorial-progress-enhancement="pending"/);
+  assert.match(html, /role="progressbar"/);
+  assert.match(html, /aria-valuemin="0"/);
+  assert.match(html, /aria-valuemax="100"/);
+  assert.match(html, /aria-valuenow="0"/);
+  assert.match(html, /aria-valuetext="Before the shift"/);
+  assert.match(html, /data-kp-tutorial-progress-track/);
+  assert.doesNotMatch(html, /<(?:button|input|a)\b/);
+  assert.doesNotMatch(html, /tabindex|<style|<script|shadow/);
 });
 
 test("concise lesson authoring expands into one complete static publication", () => {

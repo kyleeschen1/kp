@@ -278,6 +278,14 @@
 }
 
 .kp-economics-tutorial--animation-station
+  [data-kp-animation-station-cue]
+  > kp-tutorial-progress-rail {
+  width: min(100%, var(--kp-inline-sticky-measure));
+  margin-inline: auto;
+  opacity: var(--kp-animation-station-cue-presence, 0);
+}
+
+.kp-economics-tutorial--animation-station
   #kp-section-market-clearing
   [data-kp-animation-station-cue]
   > p

@@ -131,6 +131,30 @@
       "status": "passed",
       "scope": "s05 typed station presenter integration",
       "checkedAt": "2026-08-07T15:42:01.821Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s06 static read-only progress publication contract",
+      "checkedAt": "2026-08-07T15:49:21.475Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s06 station progress geometry ownership",
+      "checkedAt": "2026-08-07T15:49:22.875Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s06 no-JS semantics, accessibility, upgrade geometry, and station visual",
+      "checkedAt": "2026-08-07T15:49:23.943Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 typed progress custom element integration",
+      "checkedAt": "2026-08-07T15:49:25.030Z"
     }
   ],
   "allowedWork": [
@@ -188,7 +212,8 @@
     {
       "id": "s06",
       "title": "progress-rail-publication",
-      "status": "planned"
+      "summary": "Added a framework-neutral read-only progress-rail renderer and in-place custom-element enhancement. The motion cue reserves 24px light-DOM geometry, exposes progressbar semantics, has no controls or tab stop, survives without JavaScript, and upgrades without replacing nodes or shifting layout. Focused tutorial, CSS, Chromium, and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

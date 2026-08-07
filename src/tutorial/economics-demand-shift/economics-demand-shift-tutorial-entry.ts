@@ -1,5 +1,6 @@
 import "../../styles.css";
 import "katex/dist/katex.min.css";
+import "../kp-tutorial-progress-rail.css";
 import "../kp-tutorial-scrub-bar.css";
 import "./economics-demand-shift-tutorial.css";
 
@@ -29,6 +30,8 @@ import {
   readKpEconomicsDemandShiftTheme
 } from "./economics-demand-shift-theme.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
+import { defineKpTutorialProgressRail } from
+  "../kp-tutorial-progress-rail.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
 import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
 
@@ -46,6 +49,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   // scroll and attention observers can sample fallback-font dimensions.
   await document.fonts.load('300 1rem "Source Serif 4"');
   defineKpTutorialScrubBar();
+  defineKpTutorialProgressRail();
   defineKpTutorialToc();
   const { descriptors, entry } =
     createKpEconomicsDemandShiftAnimationCapability();

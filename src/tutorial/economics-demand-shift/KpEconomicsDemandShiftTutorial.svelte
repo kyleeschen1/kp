@@ -13,6 +13,8 @@
     replaceKpEditorAnimationPlaybackAsset
   } from "../../editor/animation-player-controller.ts";
   import type { KpEditorAnimationPlayerState } from "../../editor/animation-player-state.ts";
+  import { renderKpTutorialProgressRail } from
+    "../kp-tutorial-progress-rail-renderer.ts";
   import { renderKpEditorAnimationPlayerShell } from "../../editor/animation-player-shell.ts";
   import { mountKpAnimationCataloguePlayerHost } from "../../editor/animation-catalogue-player-host.ts";
   import {
@@ -269,6 +271,17 @@
       readonly KpEconomicsDemandShiftLessonPassage[];
     readonly verificationSurfaceHtml: string;
   } = $props();
+
+  const animationStationProgressRailHtml = Object.freeze(Object.fromEntries(
+    kpEconomicsMotionBlocks.map((block) => [
+      block.id,
+      renderKpTutorialProgressRail({
+        blockId: block.id,
+        label: `${block.label} animation progress`,
+        initialLabel: block.checkpoints[0]?.label ?? "Ready"
+      })
+    ])
+  ) as Record<KpEconomicsMotionBlockId, string>);
 
   const initialDeepLink = untrack(() => initialDestination);
   const initial = untrack(() => ({
@@ -2744,6 +2757,9 @@
           aria-hidden="true"
         ></span>
       {/each}
+    {/if}
+    {#if animationStation && renderedMotionBlock !== undefined}
+      {@html animationStationProgressRailHtml[renderedMotionBlock.id]}
     {/if}
     {#if passage.id === "prediction"}
       <p>{@html passage.paragraphs[0]!.html}</p>

@@ -1,6 +1,8 @@
 import { mkdirSync } from "node:fs";
 
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { renderKpTutorialProgressRail } from
+  "../src/tutorial/kp-tutorial-progress-rail-renderer.ts";
 
 const route = "/tutorials/economics/demand-shift/?layout=animation-station";
 const evidenceDirectory = "tmp/codex/economics-animation-station";
@@ -22,6 +24,7 @@ test("compact station hands short cues to one bounded graph", async ({
   const stage = station.locator("[data-kp-inline-sticky-stage]");
   const graph = stage.locator(".kp-economics-tutorial__stage-card");
   const cues = station.locator("[data-kp-animation-station-cue]");
+  const progressRail = station.locator("kp-tutorial-progress-rail");
   const shortOrdinaryCue = passage(station, "graph-at-rest");
   const longOrdinaryCue = passage(station, "initial-equilibrium");
   const demandCue = passage(root, "follow-shift");
@@ -44,6 +47,31 @@ test("compact station hands short cues to one bounded graph", async ({
     "true"
   );
   await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
+  await expect(progressRail).toHaveCount(1);
+  await expect(progressRail).toHaveAttribute("role", "progressbar");
+  await expect(progressRail).toHaveAttribute(
+    "data-kp-tutorial-progress-enhancement",
+    "ready"
+  );
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "0");
+  await expect(progressRail.locator("button, input, a, [tabindex]"))
+    .toHaveCount(0);
+  const progressGeometry = await progressRail.boundingBox();
+  expect(progressGeometry?.height).toBe(24);
+  await progressRail.evaluate((element) => {
+    element.setAttribute("progress", "0.5");
+    element.setAttribute("progress-label", "Equilibrium handoff");
+  });
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "50");
+  await expect(progressRail).toHaveAttribute(
+    "aria-valuetext",
+    "Equilibrium handoff"
+  );
+  expect((await progressRail.boundingBox())?.height).toBe(progressGeometry?.height);
+  await progressRail.evaluate((element) => {
+    element.setAttribute("progress", "0");
+    element.setAttribute("progress-label", "Before the shift");
+  });
 
   await expect(root).toHaveAttribute(
     "data-kp-animation-station-entrance-phase",
@@ -272,6 +300,98 @@ test("compact station hands short cues to one bounded graph", async ({
       "--kp-animation-station-supply-presence"
     )
   ))).toBeGreaterThan(0.999);
+});
+
+test("published motion progress survives without JavaScript", async ({
+  browser
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 820, height: 700 }
+  });
+  const page = await context.newPage();
+  try {
+    const html = renderKpTutorialProgressRail({
+      blockId: "demand-shift",
+      label: "Demand shift animation progress",
+      initialLabel: "Before the shift"
+    });
+    await page.setContent(`<!doctype html>
+      <html>
+        <head>
+          <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/kp-tutorial-progress-rail.css">
+          <style>main { width: 640px; }</style>
+        </head>
+        <body><main>${html}</main></body>
+      </html>`);
+    const rail = page.locator("kp-tutorial-progress-rail");
+    await expect(rail).toHaveAttribute(
+      "data-kp-tutorial-progress-enhancement",
+      "pending"
+    );
+    await expect(rail).toHaveAttribute("role", "progressbar");
+    await expect(rail).toHaveAttribute("aria-valuenow", "0");
+    await expect(rail.locator("button, input, a, [tabindex]")).toHaveCount(0);
+    expect((await rail.boundingBox())?.height).toBe(24);
+  } finally {
+    await context.close();
+  }
+});
+
+test("progress rail upgrades existing geometry without a layout shift", async ({
+  page
+}) => {
+  await page.goto(route);
+  const html = renderKpTutorialProgressRail({
+    blockId: "fixture",
+    label: "Fixture animation progress",
+    initialLabel: "Ready"
+  });
+  await page.locator("body").evaluate((body, staticHtml) => {
+    const frame = document.createElement("iframe");
+    frame.dataset["kpProgressFixture"] = "true";
+    frame.srcdoc = `<link rel="stylesheet" href="/src/tutorial/kp-tutorial-progress-rail.css"><main style="width:640px">${staticHtml}</main>`;
+    body.append(frame);
+  }, html);
+  const fixture = page.locator('iframe[data-kp-progress-fixture="true"]');
+  await expect(fixture).toBeAttached();
+  const frame = page.frames().find((candidate) =>
+    candidate !== page.mainFrame() && candidate.url() === "about:srcdoc"
+  )!;
+  await frame.waitForFunction(() => document.styleSheets.length > 0);
+  const before = await frame.evaluate(() => {
+    const host = document.querySelector("kp-tutorial-progress-rail")!;
+    const track = host.querySelector("[data-kp-tutorial-progress-track]")!;
+    const bounds = host.getBoundingClientRect();
+    (window as unknown as { kpProgressTrack: Element }).kpProgressTrack = track;
+    return { width: bounds.width, height: bounds.height };
+  });
+  const after = await frame.evaluate(async () => {
+    const moduleUrl = "/src/tutorial/kp-tutorial-progress-rail.ts";
+    const module = await import(/* @vite-ignore */ moduleUrl);
+    module.defineKpTutorialProgressRail();
+    await customElements.whenDefined("kp-tutorial-progress-rail");
+    const host = document.querySelector("kp-tutorial-progress-rail")!;
+    const bounds = host.getBoundingClientRect();
+    const stored = (window as unknown as {
+      kpProgressTrack: Element;
+    }).kpProgressTrack;
+    return {
+      width: bounds.width,
+      height: bounds.height,
+      sameTrack: stored === host.querySelector(
+        "[data-kp-tutorial-progress-track]"
+      ),
+      enhancement: host.getAttribute(
+        "data-kp-tutorial-progress-enhancement"
+      )
+    };
+  });
+  expect(after).toEqual({
+    ...before,
+    sameTrack: true,
+    enhancement: "ready"
+  });
 });
 
 function passage(root: Locator, id: string): Locator {

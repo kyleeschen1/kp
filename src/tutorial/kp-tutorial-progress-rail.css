@@ -1,0 +1,46 @@
+kp-tutorial-progress-rail {
+  --kp-tutorial-progress: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 0.25rem 1rem;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 1.5rem;
+  color: var(--kp-lesson-theme-ink-muted, #a6a9b7);
+}
+
+.kp-tutorial-progress-rail__track {
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-block: 0.125rem;
+  background: var(--kp-lesson-theme-stage-divider, #626775);
+}
+
+.kp-tutorial-progress-rail__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--kp-lesson-theme-control-accent, #7cbdff);
+  transform: scaleX(var(--kp-tutorial-progress));
+  transform-origin: 0 50%;
+}
+
+.kp-tutorial-progress-rail__status {
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  .kp-tutorial-progress-rail__track {
+    background: CanvasText;
+  }
+
+  .kp-tutorial-progress-rail__fill {
+    background: Highlight;
+  }
+}
