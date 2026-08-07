@@ -155,6 +155,36 @@
       "status": "passed",
       "scope": "s06 typed progress custom element integration",
       "checkedAt": "2026-08-07T15:49:25.030Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s07 50vh corridor, phase projection, direct and reverse laws",
+      "checkedAt": "2026-08-07T15:59:48.681Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s07 corridor and settle token ownership",
+      "checkedAt": "2026-08-07T15:59:50.718Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s07 forward, reverse, shared rail, and checkpoint URL restoration",
+      "checkedAt": "2026-08-07T15:59:51.852Z"
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s07 retained runtime direct-seek and rewind parity",
+      "checkedAt": "2026-08-07T15:59:53.127Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 typed shared-player corridor integration",
+      "checkedAt": "2026-08-07T15:59:54.465Z"
     }
   ],
   "allowedWork": [
@@ -218,7 +248,8 @@
     {
       "id": "s07",
       "title": "motion-cue-scroll-corridor",
-      "status": "planned"
+      "summary": "The motion cue now owns a tokenized 50vh native-scroll corridor: 40vh authored semantic scrub and 10vh settlement. It projects through the existing coordinator and retained player only, updates the read-only rail from the shared playhead, supports exact reverse, and resolves checkpoint URLs against presenter-specific corridors. Tutorial/CSS/type checks plus station and runtime browser tests pass.",
+      "status": "complete"
     },
     {
       "id": "s08",

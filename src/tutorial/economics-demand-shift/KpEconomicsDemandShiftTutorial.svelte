@@ -34,6 +34,7 @@
     serializeKpEconomicsSalienceCssProperties
   } from "./economics-demand-shift-salience-style.ts";
   import {
+    kpEconomicsMotionStationPhaseBoundaries,
     kpEconomicsOrdinaryStationPhaseBoundaries,
     projectKpEconomicsStationPhase
   } from "./economics-animation-station-phase.ts";
@@ -92,6 +93,7 @@
     KpTutorialScrollCoordinator,
     projectKpTutorialActiveCueWindow,
     projectKpTutorialRebasedCorridor,
+    resolveKpTutorialCorridorTravelForProgress,
     type KpTutorialCoordinatedScrollProjection,
     type KpTutorialScrollCoordinatorMetrics,
     type KpTutorialMotionCorridor,
@@ -303,6 +305,8 @@
   let player = $state<HTMLElement | undefined>();
   let demandScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
+  let demandProgressRail: HTMLElement | undefined;
+  let supplyProgressRail: HTMLElement | undefined;
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(initialDeepLink.checkpointIndex);
   // Playback changes every frame. This retained record is deliberately not a
@@ -602,6 +606,34 @@
       "manual-claimed": motionOwner === "manual" &&
         manualMotionBlock === "supply-movement"
     });
+    writeProgressRailAttributes(
+      demandProgressRail,
+      findKpEconomicsMotionBlock("demand-shift")!,
+      motionRuntime.semanticProgress
+    );
+    writeProgressRailAttributes(
+      supplyProgressRail,
+      findKpEconomicsMotionBlock("supply-movement")!,
+      motionRuntime.supplyMovementProgress
+    );
+  }
+
+  function writeProgressRailAttributes(
+    rail: HTMLElement | undefined,
+    block: KpEconomicsMotionBlock,
+    progress: number
+  ): void {
+    if (rail === undefined) return;
+    const label = [...block.checkpoints].reverse().find(
+      (candidate) => candidate.progress <= progress + 0.001
+    )?.label ?? block.checkpoints[0]!.label;
+    const serializedProgress = progress.toFixed(4);
+    if (rail.getAttribute("progress") !== serializedProgress) {
+      rail.setAttribute("progress", serializedProgress);
+    }
+    if (rail.getAttribute("progress-label") !== label) {
+      rail.setAttribute("progress-label", label);
+    }
   }
 
   function activateCheckpoint(
@@ -1656,9 +1688,27 @@
           element.dataset["kpAnimationStationActivePassage"] =
             stationPhase.activePassageId ?? "";
         } else {
-          delete element.dataset["kpAnimationStationPhase"];
-          delete element.dataset["kpAnimationStationOwnership"];
-          delete element.dataset["kpAnimationStationActivePassage"];
+          const block = findKpEconomicsMotionBlock(motionBlockId)!;
+          const scrollBlock = latestScrollProjection?.blocks.find(
+            ({ id }) => id === motionBlockId
+          );
+          const stationPhase = projectKpEconomicsStationPhase({
+            passageId,
+            cueKind: "motion",
+            anchorPx: paragraphBounds.top,
+            boundaries: kpEconomicsMotionStationPhaseBoundaries(
+              stationGeometry
+            ),
+            beforeCheckpointId: block.checkpoints[0]!.id,
+            afterCheckpointId: block.checkpoints.at(-1)!.id,
+            motionBlockId,
+            projectedSemanticProgress: scrollBlock?.progress
+          });
+          element.dataset["kpAnimationStationPhase"] = stationPhase.phase;
+          element.dataset["kpAnimationStationOwnership"] =
+            stationPhase.ownership;
+          element.dataset["kpAnimationStationActivePassage"] =
+            stationPhase.activePassageId ?? "";
         }
       }
       return {
@@ -1826,7 +1876,8 @@
         // the visual handoff boundary, never a second clock.
         motionStartPx: geometry.cueExitEndY,
         viewportHeightPx: window.innerHeight,
-        runwayPx: geometry.cueExitEndY - geometry.motionEndY
+        runwayPx: geometry.motionDistancePx,
+        settleRunwayPx: geometry.motionSettleDistancePx
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1867,6 +1918,12 @@
       rhythm: {
         cuePinDistanceRatio: Math.max(0, Math.min(1,
           number("--kp-animation-station-reading-hold-vh", 10) / 100
+        )),
+        motionDistanceRatio: Math.max(0, Math.min(1,
+          number("--kp-animation-station-motion-corridor-vh", 50) / 100
+        )),
+        motionSettleDistanceRatio: Math.max(0, Math.min(1,
+          number("--kp-animation-station-motion-settle-vh", 10) / 100
         ))
       }
     });
@@ -2273,6 +2330,13 @@
     supplyScrubBar = shell.querySelector<KpTutorialScrubBarElement>(
       '[data-kp-tutorial-motion-controls="supply-movement"]'
     ) ?? undefined;
+    demandProgressRail = shell.querySelector<HTMLElement>(
+      '[data-kp-tutorial-progress-rail="demand-shift"]'
+    ) ?? undefined;
+    supplyProgressRail = shell.querySelector<HTMLElement>(
+      '[data-kp-tutorial-progress-rail="supply-movement"]'
+    ) ?? undefined;
+    syncMotionScrubBars();
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player.addEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {
@@ -2533,15 +2597,23 @@
           : demandScrubBar;
       if (anchor === undefined) return;
       const corridor = motionCorridorFor(block, anchor);
+      const blockProgress = destination.motion.blocks.find(
+        ({ id }) => id === destination.motionScroll!.blockId
+      )?.progress ?? 0;
+      const destinationTravel = resolveKpTutorialCorridorTravelForProgress({
+        corridor,
+        progress: blockProgress,
+        preferredTravel: destination.motionScroll.travel
+      });
       const start = corridor.startViewportRatio * window.innerHeight;
       const end = corridor.endViewportRatio * window.innerHeight;
-      const endpointInset = destination.motionScroll.travel <= 0.001
+      const endpointInset = destinationTravel <= 0.001
         ? 2
-        : destination.motionScroll.travel >= 0.999
+        : destinationTravel >= 0.999
           ? -2
           : 0;
       const desiredTop = start -
-        destination.motionScroll.travel * (start - end) + endpointInset;
+        destinationTravel * (start - end) + endpointInset;
       window.scrollTo({
         top: Math.max(
           0,

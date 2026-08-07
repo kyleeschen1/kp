@@ -68,6 +68,9 @@ export interface KpAnimationStationGeometryProjection {
   readonly cuePinStartY: number;
   readonly cuePinEndY: number;
   readonly cueExitEndY: number;
+  readonly motionDistancePx: number;
+  readonly motionScrubEndY: number;
+  readonly motionSettleDistancePx: number;
   readonly motionEndY: number;
   readonly beatDistancePx: number;
   readonly railExitEndY: number;
@@ -117,7 +120,8 @@ export const kpEconomicsAnimationStationDefaultRhythm = Object.freeze({
   cuePinStartRatio: 0.55,
   cuePinDistanceRatio: 0.1,
   cueExitGraphRatio: 0.75,
-  motionEndRatio: 0.17,
+  motionDistanceRatio: 0.5,
+  motionSettleDistanceRatio: 0.1,
   beatDistanceRatio: 0.68,
   railExitEndRatio: 0.78,
   graphExitStartRatio: 0.75,
@@ -674,6 +678,7 @@ export function projectKpAnimationStationMotionCorridor(input: {
   readonly motionStartPx: number;
   readonly viewportHeightPx: number;
   readonly runwayPx: number;
+  readonly settleRunwayPx?: number | undefined;
 }): KpTutorialMotionCorridor {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
   const motionStart = clamp(
@@ -684,7 +689,12 @@ export function projectKpAnimationStationMotionCorridor(input: {
   const runway = clamp(
     finitePositive(input.runwayPx, viewportHeight * 0.3),
     1,
-    motionStart
+    viewportHeight
+  );
+  const settleRunway = clamp(
+    finitePositive(input.settleRunwayPx ?? runway * 0.2, runway * 0.2),
+    0,
+    runway
   );
   const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
   const finalProgress = input.corridor.keyframes.at(-1)?.progress ??
@@ -703,7 +713,7 @@ export function projectKpAnimationStationMotionCorridor(input: {
     ({ travel }) => travel > authoredMotionStart
   );
   const handoffEnd = 0.02;
-  const settleStart = 0.9;
+  const settleStart = clamp(1 - settleRunway / runway, handoffEnd, 1);
 
   // The cue relinquishes attention first; the remaining local interval is the
   // existing semantic motion sampled over one stage-height of native scroll.
@@ -766,6 +776,15 @@ export function projectKpAnimationStationGeometry(input: {
   );
   const cueExitEndY = graphTopY +
     (graphBottomY - graphTopY) * clamp(rhythm.cueExitGraphRatio, 0, 1);
+  const motionDistancePx = usableHeight * clamp(
+    rhythm.motionDistanceRatio,
+    0,
+    1
+  );
+  const motionSettleDistancePx = Math.min(
+    motionDistancePx,
+    usableHeight * clamp(rhythm.motionSettleDistanceRatio, 0, 1)
+  );
 
   return Object.freeze({
     usableTopPx: usableTop,
@@ -782,7 +801,11 @@ export function projectKpAnimationStationGeometry(input: {
     cuePinStartY,
     cuePinEndY,
     cueExitEndY,
-    motionEndY: y(rhythm.motionEndRatio),
+    motionDistancePx,
+    motionScrubEndY:
+      cueExitEndY - (motionDistancePx - motionSettleDistancePx),
+    motionSettleDistancePx,
+    motionEndY: cueExitEndY - motionDistancePx,
     beatDistancePx: usableHeight * clamp(rhythm.beatDistanceRatio, 0.1, 1),
     railExitEndY: y(rhythm.railExitEndRatio),
     graphExitStartY: y(rhythm.graphExitStartRatio),

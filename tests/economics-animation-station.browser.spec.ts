@@ -236,11 +236,40 @@ test("compact station hands short cues to one bounded graph", async ({
   await alignTop(page, demandText, 334);
   await expect.poll(() => paragraphOpacity(demandText)).toBeLessThan(0.05);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "scrub"
+  );
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-animation-station-ownership",
+    "motion-block"
+  );
 
   await alignTop(page, demandText, 320);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
 
-  await alignTop(page, demandText, 136);
+  await alignTop(page, demandText, 170);
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 2);
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "72");
+  await alignTop(page, demandText, 14);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "settle"
+  );
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "100");
+  await alignTop(page, demandText, -66);
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "handoff"
+  );
+  await alignTop(page, demandText, 170);
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 2);
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "72");
+  await alignTop(page, demandText, 334);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+  await expect(progressRail).toHaveAttribute("aria-valuenow", "0");
+  await alignTop(page, demandText, 14);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
   await alignBottom(page, resultText, 620);
   await expect.poll(() => paragraphOpacity(resultText)).toBeCloseTo(0.5, 1);
@@ -300,6 +329,27 @@ test("compact station hands short cues to one bounded graph", async ({
       "--kp-animation-station-supply-presence"
     )
   ))).toBeGreaterThan(0.999);
+});
+
+test("station checkpoint URLs restore the shared playhead directly", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(`${route}#kp-checkpoint-shift-handoff`);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const rail = root.locator(
+    '[data-kp-tutorial-progress-rail="demand-shift"]'
+  );
+  await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 2);
+  await expect(rail).toHaveAttribute("aria-valuenow", "72");
+  const cue = passage(
+    root.locator('[data-kp-motion-passage="demand-change"]'),
+    "follow-shift"
+  );
+  await expect(cue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "scrub"
+  );
 });
 
 test("published motion progress survives without JavaScript", async ({

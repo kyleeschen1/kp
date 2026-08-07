@@ -30,6 +30,7 @@ export interface KpEconomicsStationPhaseInput {
   readonly beforeCheckpointId: string;
   readonly afterCheckpointId: string;
   readonly motionBlockId?: string | undefined;
+  readonly projectedSemanticProgress?: number | undefined;
 }
 
 export interface KpEconomicsStationPhaseProjection {
@@ -49,6 +50,12 @@ export interface KpEconomicsOrdinaryStationGeometry {
   readonly cueExitEndY: number;
 }
 
+export interface KpEconomicsMotionStationGeometry extends
+    KpEconomicsOrdinaryStationGeometry {
+  readonly motionScrubEndY: number;
+  readonly motionEndY: number;
+}
+
 /**
  * Keeps the ordinary reading hold tied to station geometry, never prose height.
  * The duplicated scrub boundary lets ordinary cues reuse the phase projector
@@ -63,6 +70,18 @@ export function kpEconomicsOrdinaryStationPhaseBoundaries(
     scrubStartPx: geometry.cuePinEndY,
     scrubEndPx: geometry.cuePinEndY,
     handoffEndPx: geometry.cueExitEndY
+  });
+}
+
+export function kpEconomicsMotionStationPhaseBoundaries(
+  geometry: KpEconomicsMotionStationGeometry
+): KpEconomicsStationPhaseBoundaries {
+  return Object.freeze({
+    approachStartPx: geometry.usableBottomPx,
+    readyStartPx: geometry.cuePinStartY,
+    scrubStartPx: geometry.cueExitEndY,
+    scrubEndPx: geometry.motionScrubEndY,
+    handoffEndPx: geometry.motionEndY
   });
 }
 
@@ -112,11 +131,13 @@ export function projectKpEconomicsStationPhase(
   }
 
   if (motionCue && anchor > boundaries.scrubEndPx) {
-    const semanticProgress = descendingProgress(
-      anchor,
-      boundaries.scrubStartPx,
-      boundaries.scrubEndPx
-    );
+    const semanticProgress = input.projectedSemanticProgress === undefined
+      ? descendingProgress(
+          anchor,
+          boundaries.scrubStartPx,
+          boundaries.scrubEndPx
+        )
+      : clamp(input.projectedSemanticProgress);
     return Object.freeze({
       phase: "scrub",
       activePassageId: input.passageId,
