@@ -47,6 +47,18 @@
       "status": "passed",
       "scope": "s01 project memory integrity",
       "checkedAt": "2026-08-07T15:18:11.105Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s02 pure phase laws",
+      "checkedAt": "2026-08-07T15:23:32.981Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 typed phase contract",
+      "checkedAt": "2026-08-07T15:23:34.209Z"
     }
   ],
   "allowedWork": [
@@ -80,7 +92,8 @@
     {
       "id": "s02",
       "title": "pure-station-phase-model",
-      "status": "planned"
+      "summary": "Added a pure economics-local station phase projector for approach, ready, scrub, settle, and handoff with explicit ownership, checkpoint, and semantic progress; ordinary cues skip motion. Monotonic, direct, reverse, invalid-geometry, typecheck, and 77 tutorial checks pass. No DOM or paint integration.",
+      "status": "complete"
     },
     {
       "id": "s03",
