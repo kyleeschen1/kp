@@ -65,29 +65,56 @@ export interface KpAnimationStationGeometryProjection {
   readonly graphHeightPx: number;
   readonly cueRevealStartY: number;
   readonly cueRevealEndY: number;
+  readonly cuePinStartY: number;
+  readonly cuePinEndY: number;
   readonly cueExitEndY: number;
   readonly motionEndY: number;
   readonly beatDistancePx: number;
-  readonly terminalExitEndY: number;
+  readonly railExitEndY: number;
+  readonly graphExitStartY: number;
+  readonly graphExitEndY: number;
 }
 
 export interface KpAnimationStationCuePresenceProjection {
-  readonly phase: "waiting" | "materializing" | "bright" | "dissolving" | "gone";
+  readonly phase:
+    | "waiting"
+    | "materializing"
+    | "bright"
+    | "pinned"
+    | "dissolving"
+    | "gone";
   readonly presence: number;
   readonly blurPx: number;
+  readonly pinOffsetPx: number;
+}
+
+export interface KpAnimationStationExitProjection {
+  readonly railProgress: number;
+  readonly graphProgress: number;
+  readonly gridPresence: number;
+  readonly guidePresence: number;
+  readonly axisPresence: number;
+  readonly supplyPresence: number;
+  readonly demandPresence: number;
+  readonly pointPresence: number;
+  readonly labelPresence: number;
 }
 
 export const kpEconomicsAnimationStationDefaultRhythm = Object.freeze({
-  railTopRatio: 0.25,
-  railBottomRatio: 0.75,
-  graphTopRatio: 0.35,
-  graphBottomRatio: 0.65,
-  cueRevealStartRatio: 0.82,
-  cueRevealEndRatio: 0.75,
-  cueExitEndRatio: 0.6,
-  motionEndRatio: 0.4,
-  beatDistanceRatio: 0.45,
-  terminalExitEndRatio: 0.55
+  railTopRatio: 0.15,
+  railBottomRatio: 0.85,
+  graphTopRatio: 0.17,
+  graphBottomRatio: 0.5,
+  cueRevealStartRatio: 1,
+  cueRevealEndRatio: 0.7,
+  cuePinStartRatio: 0.55,
+  cuePinDistanceRatio: 0.1,
+  cueExitGraphRatio: 0.75,
+  motionEndRatio: 0.17,
+  beatDistanceRatio: 0.68,
+  railExitEndRatio: 0.78,
+  graphExitStartRatio: 0.75,
+  graphExitEndRatio: 0.6
 });
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
@@ -637,20 +664,20 @@ export function projectKpInlineStickyParagraphMotionCorridor(input: {
 
 export function projectKpAnimationStationMotionCorridor(input: {
   readonly corridor: KpTutorialMotionCorridor;
-  readonly stageBottomPx: number;
+  readonly motionStartPx: number;
   readonly viewportHeightPx: number;
   readonly runwayPx: number;
 }): KpTutorialMotionCorridor {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
-  const stageBottom = clamp(
-    finiteNonNegative(input.stageBottomPx),
+  const motionStart = clamp(
+    finiteNonNegative(input.motionStartPx),
     1,
     viewportHeight
   );
   const runway = clamp(
     finitePositive(input.runwayPx, viewportHeight * 0.3),
     1,
-    stageBottom
+    motionStart
   );
   const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
   const finalProgress = input.corridor.keyframes.at(-1)?.progress ??
@@ -681,8 +708,8 @@ export function projectKpAnimationStationMotionCorridor(input: {
   }));
   return Object.freeze({
     ...input.corridor,
-    startViewportRatio: stageBottom / viewportHeight,
-    endViewportRatio: (stageBottom - runway) / viewportHeight,
+    startViewportRatio: motionStart / viewportHeight,
+    endViewportRatio: (motionStart - runway) / viewportHeight,
     keyframes: Object.freeze([
       Object.freeze({ travel: 0, progress: firstProgress }),
       Object.freeze({ travel: handoffEnd, progress: firstProgress }),
@@ -725,6 +752,13 @@ export function projectKpAnimationStationGeometry(input: {
   const railBottomY = y(rhythm.railBottomRatio);
   const graphTopY = y(rhythm.graphTopRatio);
   const graphBottomY = y(rhythm.graphBottomRatio);
+  const cuePinStartY = y(rhythm.cuePinStartRatio);
+  const cuePinEndY = Math.max(
+    usableTop,
+    cuePinStartY - usableHeight * clamp(rhythm.cuePinDistanceRatio, 0, 1)
+  );
+  const cueExitEndY = graphTopY +
+    (graphBottomY - graphTopY) * clamp(rhythm.cueExitGraphRatio, 0, 1);
 
   return Object.freeze({
     usableTopPx: usableTop,
@@ -738,10 +772,14 @@ export function projectKpAnimationStationGeometry(input: {
     graphHeightPx: Math.max(1, graphBottomY - graphTopY),
     cueRevealStartY: y(rhythm.cueRevealStartRatio),
     cueRevealEndY: y(rhythm.cueRevealEndRatio),
-    cueExitEndY: y(rhythm.cueExitEndRatio),
+    cuePinStartY,
+    cuePinEndY,
+    cueExitEndY,
     motionEndY: y(rhythm.motionEndRatio),
     beatDistancePx: usableHeight * clamp(rhythm.beatDistanceRatio, 0.1, 1),
-    terminalExitEndY: y(rhythm.terminalExitEndRatio)
+    railExitEndY: y(rhythm.railExitEndRatio),
+    graphExitStartY: y(rhythm.graphExitStartRatio),
+    graphExitEndY: y(rhythm.graphExitEndRatio)
   });
 }
 
@@ -753,8 +791,10 @@ export function projectKpAnimationStationCuePresence(input: {
     ? input.cueTopPx
     : input.geometry.usableBottomPx;
   const geometry = input.geometry;
+  const boundaryEpsilon = 1e-6;
   let phase: KpAnimationStationCuePresenceProjection["phase"];
   let presence: number;
+  let pinOffsetPx = 0;
   if (cueTop >= geometry.cueRevealStartY) {
     phase = "waiting";
     presence = 0;
@@ -766,25 +806,71 @@ export function projectKpAnimationStationCuePresence(input: {
       0,
       1
     ));
-  } else if (cueTop >= geometry.graphBottomY) {
+  } else if (cueTop >= geometry.cuePinStartY - boundaryEpsilon) {
     phase = "bright";
     presence = 1;
+  } else if (cueTop >= geometry.cuePinEndY - boundaryEpsilon) {
+    phase = "pinned";
+    presence = 1;
+    pinOffsetPx = geometry.cuePinStartY - cueTop;
   } else if (cueTop > geometry.cueExitEndY) {
     phase = "dissolving";
+    pinOffsetPx = geometry.cuePinStartY - cueTop;
     presence = smoothstep(clamp(
       (cueTop - geometry.cueExitEndY) /
-        Math.max(1, geometry.graphBottomY - geometry.cueExitEndY),
+        Math.max(1, geometry.cuePinEndY - geometry.cueExitEndY),
       0,
       1
     ));
   } else {
     phase = "gone";
     presence = 0;
+    pinOffsetPx = geometry.cuePinStartY - geometry.cueExitEndY;
   }
   return Object.freeze({
     phase,
     presence,
-    blurPx: (1 - presence) * 2
+    blurPx: (1 - presence) * 2,
+    pinOffsetPx
+  });
+}
+
+export function projectKpAnimationStationExit(input: {
+  readonly releaseCueTopPx: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+}): KpAnimationStationExitProjection {
+  const cueTop = Number.isFinite(input.releaseCueTopPx)
+    ? input.releaseCueTopPx
+    : input.geometry.usableBottomPx;
+  const geometry = input.geometry;
+  const descendingProgress = (startY: number, endY: number): number =>
+    smoothstep(clamp(
+      (startY - cueTop) / Math.max(1, startY - endY),
+      0,
+      1
+    ));
+  const railProgress = descendingProgress(
+    geometry.railBottomY,
+    geometry.railExitEndY
+  );
+  const graphProgress = descendingProgress(
+    geometry.graphExitStartY,
+    geometry.graphExitEndY
+  );
+  const presence = (start: number, end: number): number => 1 - smoothstep(
+    clamp((graphProgress - start) / Math.max(Number.EPSILON, end - start), 0, 1)
+  );
+
+  return Object.freeze({
+    railProgress,
+    graphProgress,
+    gridPresence: presence(0, 0.55),
+    guidePresence: presence(0.08, 0.63),
+    axisPresence: presence(0.16, 0.71),
+    supplyPresence: presence(0.24, 0.79),
+    demandPresence: presence(0.32, 0.87),
+    pointPresence: presence(0.4, 0.95),
+    labelPresence: presence(0.48, 1)
   });
 }
 

@@ -41,6 +41,7 @@
   } from "./economics-demand-shift-deep-link.ts";
   import {
     projectKpAnimationStationCuePresence,
+    projectKpAnimationStationExit,
     projectKpAnimationStationGeometry,
     projectKpAnimationStationMotionCorridor,
     projectKpInlineStickyLessonLayout,
@@ -427,7 +428,7 @@
       theme,
       projection: projectKpEconomicsSalience({
         ...lessonMotionProjection.scene,
-        focusTarget: checkpoint.attention.target
+        focusTarget: animationStation ? "market" : checkpoint.attention.target
       })
     })
   ));
@@ -547,8 +548,9 @@
         owner,
         projection: next,
         theme,
-        focusTarget:
-          kpEconomicsDemandShiftCheckpoints[checkpointIndex]!.attention.target,
+        focusTarget: animationStation
+          ? "market"
+          : kpEconomicsDemandShiftCheckpoints[checkpointIndex]!.attention.target,
         playbackDirection: direction
       });
     }
@@ -994,6 +996,7 @@
 
   function ensureSemanticTransitProxyLayer(): void {
     if (
+      animationStation ||
       semanticTransitProxyLayer !== undefined ||
       semanticTransit === undefined ||
       shell === undefined
@@ -1564,6 +1567,16 @@
         timeline: cachedTwoColumnPassageTimeline
       }).phase;
     }
+    if (animationStation) {
+      const releaseParagraph = shell?.querySelector<HTMLElement>(
+        "[data-kp-animation-station-release-cue] p"
+      );
+      writeAnimationStationExit(projectKpAnimationStationExit({
+        releaseCueTopPx: releaseParagraph?.getBoundingClientRect().top ??
+          window.innerHeight,
+        geometry: readCachedAnimationStationGeometry()
+      }));
+    }
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
       const { element, paragraphBounds } = measurement;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
@@ -1602,6 +1615,10 @@
         element.style.setProperty(
           "--kp-animation-station-cue-blur",
           `${presence.blurPx.toFixed(3)}px`
+        );
+        element.style.setProperty(
+          "--kp-animation-station-cue-pin-offset",
+          `${presence.pinOffsetPx.toFixed(3)}px`
         );
       }
       return {
@@ -1685,32 +1702,6 @@
       ".kp-economics-tutorial__motion-passage-body"
     )?.getBoundingClientRect();
     const top = inlineStickyTopInset();
-    if (animationStation && shell !== undefined) {
-      // Once the bounded station releases, native document travel withdraws
-      // its one live surface; reverse scroll reconstructs the same endpoint.
-      const geometry = readCachedAnimationStationGeometry();
-      const exitSpan = Math.max(
-        1,
-        geometry.railBottomY - geometry.terminalExitEndY
-      );
-      const exitProgress = clamp(
-        (geometry.railTopY - stageBounds.top) / exitSpan,
-        0,
-        1
-      );
-      shell.style.setProperty(
-        "--kp-animation-station-exit-progress",
-        exitProgress.toFixed(4)
-      );
-      shell.style.setProperty(
-        "--kp-animation-station-exit-offset",
-        `${(-geometry.usableHeightPx * 0.12 * exitProgress).toFixed(3)}px`
-      );
-      shell.style.setProperty(
-        "--kp-animation-station-rail-spread",
-        `${(Math.min(40, window.innerWidth * 0.03) * exitProgress).toFixed(3)}px`
-      );
-    }
     inlineStickyStageState = stageBounds.top > top + 1
       ? "embedded"
       : passageBounds !== undefined &&
@@ -1784,11 +1775,11 @@
       const geometry = readCachedAnimationStationGeometry();
       return projectKpAnimationStationMotionCorridor({
         corridor: block.corridor,
-        // Registration can happen before the stage pins. The station's local
-        // edge, not that transient document position, owns every cue handoff.
-        stageBottomPx: geometry.graphBottomY,
+        // Text disappears before motion opens; the graph's lower edge is only
+        // the visual handoff boundary, never a second clock.
+        motionStartPx: geometry.cueExitEndY,
         viewportHeightPx: window.innerHeight,
-        runwayPx: geometry.graphBottomY - geometry.motionEndY
+        runwayPx: geometry.cueExitEndY - geometry.motionEndY
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1846,6 +1837,40 @@
     } as const;
     for (const [name, value] of Object.entries(properties)) {
       shell.style.setProperty(name, `${value}px`);
+    }
+  }
+
+  function writeAnimationStationExit(
+    projection: ReturnType<typeof projectKpAnimationStationExit>
+  ): void {
+    if (shell === undefined) return;
+    shell.dataset["kpAnimationStationRailExit"] =
+      projection.railProgress.toFixed(4);
+    shell.dataset["kpAnimationStationGraphExit"] =
+      projection.graphProgress.toFixed(4);
+    const geometry = readCachedAnimationStationGeometry();
+    const properties = {
+      "--kp-animation-station-rail-exit": projection.railProgress,
+      "--kp-animation-station-graph-exit": projection.graphProgress,
+      "--kp-animation-station-exit-offset":
+        -geometry.usableHeightPx * 0.08 * projection.graphProgress,
+      "--kp-animation-station-rail-spread":
+        Math.min(64, window.innerWidth * 0.045) * projection.railProgress,
+      "--kp-animation-station-grid-presence": projection.gridPresence,
+      "--kp-animation-station-guide-presence": projection.guidePresence,
+      "--kp-animation-station-axis-presence": projection.axisPresence,
+      "--kp-animation-station-supply-presence": projection.supplyPresence,
+      "--kp-animation-station-demand-presence": projection.demandPresence,
+      "--kp-animation-station-point-presence": projection.pointPresence,
+      "--kp-animation-station-label-presence": projection.labelPresence
+    } as const;
+    for (const [name, value] of Object.entries(properties)) {
+      shell.style.setProperty(
+        name,
+        name.endsWith("offset") || name.endsWith("spread")
+          ? `${value.toFixed(3)}px`
+          : value.toFixed(4)
+      );
     }
   }
 
@@ -2587,7 +2612,8 @@
 {#snippet lessonPassage(
   passage: KpEconomicsDemandShiftLessonPassage,
   scrollCue: boolean,
-  motionBridgePosition?: "before" | "after"
+  motionBridgePosition?: "before" | "after",
+  animationStationRelease = false
 )}
   {@const renderedMotionBlock = findKpEconomicsMotionBlock(
     passage.motionBlockId
@@ -2620,6 +2646,9 @@
       ? true
       : undefined}
     data-kp-animation-station-cue={animationStation && scrollCue
+      ? true
+      : undefined}
+    data-kp-animation-station-release-cue={animationStationRelease
       ? true
       : undefined}
     data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
@@ -2922,6 +2951,13 @@
                       {@render lessonPassage(passage, true)}
                     {/if}
                   {/each}
+                  {#if animationStation}
+                    {#each section.passages.filter(
+                      ({ id }) => id === "equation-check"
+                    ) as passage}
+                      {@render lessonPassage(passage, false, undefined, true)}
+                    {/each}
+                  {/if}
                 </div>
               </div>
               <div
@@ -2929,7 +2965,9 @@
                 aria-hidden="true"
               ></div>
             </div>
-            {#each section.passages.filter(({ role }) => role === "reflection") as passage}
+            {#each section.passages.filter(({ id, role }) =>
+              role === "reflection" &&
+                (!animationStation || id !== "equation-check")) as passage}
               {@render lessonPassage(passage, false)}
             {/each}
           {:else}

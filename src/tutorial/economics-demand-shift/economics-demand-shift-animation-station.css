@@ -1,19 +1,28 @@
 /* The query-local station owns one reversible cue rhythm while lesson and graph semantics remain shared. */
 .kp-economics-tutorial--animation-station {
-  --kp-animation-station-rail-top: 25dvh;
-  --kp-animation-station-rail-height: 50dvh;
-  --kp-animation-station-graph-offset: 10dvh;
-  --kp-animation-station-graph-height: 30dvh;
-  --kp-animation-station-beat: 45dvh;
-  --kp-animation-station-width: min(36rem, calc(100vw - 2rem));
-  --kp-animation-station-rail: var(--kp-graph-line-effective, 1px);
-  --kp-animation-station-exit-progress: 0;
+  --kp-animation-station-rail-top: 15dvh;
+  --kp-animation-station-rail-height: 70dvh;
+  --kp-animation-station-graph-offset: 2dvh;
+  --kp-animation-station-graph-height: 33dvh;
+  --kp-animation-station-beat: 68dvh;
+  --kp-animation-station-width: min(42rem, calc(100vw - 2rem));
+  --kp-animation-station-rail: 2px;
+  --kp-animation-station-rail-exit: 0;
+  --kp-animation-station-graph-exit: 0;
   --kp-animation-station-exit-offset: 0px;
   --kp-animation-station-rail-spread: 0px;
+  --kp-animation-station-grid-presence: 1;
+  --kp-animation-station-guide-presence: 1;
+  --kp-animation-station-axis-presence: 1;
+  --kp-animation-station-supply-presence: 1;
+  --kp-animation-station-demand-presence: 1;
+  --kp-animation-station-point-presence: 1;
+  --kp-animation-station-label-presence: 1;
+  --kp-animation-station-graph-brightness: 1.14;
   --kp-inline-sticky-top: var(--kp-animation-station-rail-top);
   --kp-inline-sticky-stage-height: var(--kp-animation-station-rail-height);
   --kp-inline-sticky-stage-width: var(--kp-animation-station-width);
-  --kp-inline-sticky-measure: min(34rem, calc(100vw - 3rem));
+  --kp-inline-sticky-measure: min(36rem, calc(100vw - 3rem));
   --kp-inline-sticky-scene-gap: 0px;
 }
 
@@ -28,19 +37,6 @@
   .kp-economics-tutorial__motion-passage-body {
   position: relative;
   isolation: isolate;
-}
-
-.kp-economics-tutorial--animation-station
-  .kp-economics-tutorial__motion-passage-body::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 12;
-  height: var(--kp-animation-station-rail);
-  background: var(--kp-lesson-theme-stage-divider);
-  pointer-events: none;
 }
 
 .kp-economics-tutorial--animation-station
@@ -63,7 +59,7 @@
   width: var(--kp-animation-station-rail);
   height: auto;
   background: var(--kp-lesson-theme-stage-divider);
-  opacity: calc(1 - var(--kp-animation-station-exit-progress));
+  opacity: calc(1 - var(--kp-animation-station-rail-exit));
   pointer-events: none;
 }
 
@@ -88,7 +84,7 @@
   right: 0;
   left: 0;
   height: var(--kp-animation-station-graph-height);
-  opacity: calc(1 - var(--kp-animation-station-exit-progress));
+  filter: brightness(var(--kp-animation-station-graph-brightness));
   transform: translateY(var(--kp-animation-station-exit-offset));
 }
 
@@ -120,7 +116,73 @@
 
 .kp-economics-tutorial--animation-station
   .editor-graph-stage__economics-screen-space-label {
+  background: transparent;
   font-size: 0.82em;
+  opacity: var(--kp-animation-station-label-presence);
+  filter: var(--kp-economics-semantic-filter, opacity(1));
+}
+
+.kp-economics-tutorial--animation-station
+  .editor-graph-stage__economics-grid-line {
+  opacity: var(--kp-animation-station-grid-presence);
+  filter: opacity(var(--kp-economics-salience-market-grid-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  :is([data-kp-editor-graph-axis], .editor-graph-stage__economics-tick) {
+  opacity: var(--kp-animation-station-axis-presence);
+  filter: opacity(var(--kp-economics-salience-market-axes-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  :is(
+    [data-kp-economics-equilibrium-quantity-guide],
+    [data-kp-economics-equilibrium-price-guide]
+  ) {
+  opacity: var(--kp-animation-station-guide-presence);
+  filter: opacity(var(--kp-economics-salience-market-guides-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-economics-supply-line] {
+  opacity: var(--kp-animation-station-supply-presence);
+  filter: opacity(var(--kp-economics-salience-market-supply-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-economics-demand-line] {
+  opacity: var(--kp-animation-station-demand-presence);
+  filter:
+    opacity(var(--kp-economics-salience-market-demand-current-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-economics-equilibrium-point] {
+  opacity: var(--kp-animation-station-point-presence);
+  filter:
+    opacity(var(--kp-economics-salience-market-equilibrium-current-opacity, 1));
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-economics-supply-movement] {
+  filter: opacity(var(--kp-animation-station-supply-presence));
+}
+
+.kp-economics-tutorial--animation-station
+  .editor-graph-stage__economics-demand-reference {
+  filter:
+    opacity(var(--kp-economics-salience-market-demand-initial-opacity, 1))
+    opacity(var(--kp-animation-station-demand-presence));
+}
+
+.kp-economics-tutorial--animation-station
+  :is(
+    [data-kp-economics-initial-equilibrium-guides],
+    [data-kp-economics-initial-equilibrium-reference]
+  ) {
+  filter:
+    opacity(var(--kp-economics-salience-market-equilibrium-initial-opacity, 1))
+    opacity(var(--kp-animation-station-guide-presence));
 }
 
 .kp-economics-tutorial--animation-station
@@ -150,6 +212,19 @@
   opacity: 1;
   transform: none;
   transition: none;
+}
+
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  .kp-economics-tutorial__passage--active[data-kp-animation-station-cue],
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  [data-kp-animation-station-cue]
+  [data-kp-tutorial-text-reference] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
 }
 
 .kp-economics-tutorial--animation-station
@@ -187,11 +262,48 @@
 }
 
 .kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  [data-kp-animation-station-cue]
+  > p
+  > .kp-economics-tutorial__passage-ink {
+  /* Measure the paragraph's untouched flow box while its ink holds position. */
+  display: block;
+  transform: translate3d(
+    0,
+    var(--kp-animation-station-cue-pin-offset, 0px),
+    0
+  );
+}
+
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  [data-kp-animation-station-release-cue] {
+  width: min(100%, var(--kp-inline-sticky-measure));
+  margin-inline: auto;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kp-economics-tutorial--animation-station
   .kp-economics-tutorial__motion-passage-gate--exit {
   min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .kp-economics-tutorial--animation-station {
+    --kp-animation-station-rail-exit: 0 !important;
+    --kp-animation-station-grid-presence: 1 !important;
+    --kp-animation-station-guide-presence: 1 !important;
+    --kp-animation-station-axis-presence: 1 !important;
+    --kp-animation-station-supply-presence: 1 !important;
+    --kp-animation-station-demand-presence: 1 !important;
+    --kp-animation-station-point-presence: 1 !important;
+    --kp-animation-station-label-presence: 1 !important;
+    --kp-animation-station-cue-pin-offset: 0px !important;
+  }
+
   .kp-economics-tutorial--animation-station
     .kp-economics-tutorial__stage--inline::before,
   .kp-economics-tutorial--animation-station
@@ -199,7 +311,6 @@
   .kp-economics-tutorial--animation-station
     .kp-economics-tutorial__stage--inline
     .kp-economics-tutorial__stage-card {
-    opacity: 1;
     transform: none;
   }
 
@@ -208,5 +319,12 @@
     > p {
     opacity: 1;
     filter: none;
+  }
+
+  .kp-economics-tutorial--animation-station
+    [data-kp-animation-station-cue]
+    > p
+    > .kp-economics-tutorial__passage-ink {
+    transform: none;
   }
 }

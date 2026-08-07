@@ -25,6 +25,8 @@ test("compact station hands short cues to one bounded graph", async ({
   const demandCue = passage(root, "follow-shift");
   const demandText = demandCue.locator("p");
   const resultText = passage(root, "new-equilibrium").locator("p");
+  const releasePassage = passage(root, "equation-check");
+  const releaseText = releasePassage.locator("p").first();
 
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
@@ -33,11 +35,15 @@ test("compact station hands short cues to one bounded graph", async ({
   await expect(cues).toHaveCount(4);
   await expect(station.locator("[data-kp-tutorial-motion-block]"))
     .toHaveCount(1);
-  await expect(passage(root, "equation-check"))
+  await expect(releasePassage)
     .not.toHaveAttribute("data-kp-animation-station-cue", "true");
+  await expect(releasePassage).toHaveAttribute(
+    "data-kp-animation-station-release-cue",
+    "true"
+  );
   await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
 
-  await alignTop(page, stage, 200);
+  await alignTop(page, stage, 120);
   const geometry = await stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const before = getComputedStyle(element, "::before");
@@ -54,11 +60,11 @@ test("compact station hands short cues to one bounded graph", async ({
     };
   });
   expect(geometry).toEqual({
-    height: 400,
-    top: 200,
-    width: 576,
-    leftRail: 1,
-    rightRail: 1,
+    height: 560,
+    top: 120,
+    width: 672,
+    leftRail: 2,
+    rightRail: 2,
     leftRailColor: "rgb(98, 103, 117)",
     rightRailColor: "rgb(98, 103, 117)",
     background: "rgba(0, 0, 0, 0)"
@@ -70,10 +76,10 @@ test("compact station hands short cues to one bounded graph", async ({
   await expect.poll(() => graph.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     return [bounds.top, bounds.bottom, bounds.height];
-  })).toEqual([280, 520, 240]);
+  })).toEqual([136, 400, 264]);
   await expect.poll(() => cues.first().evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(600, 0);
+  )).toBeCloseTo(680, 0);
   const cueChrome = await cues.first().evaluate((element) => {
     const style = getComputedStyle(element);
     const paragraphStyle = getComputedStyle(element.querySelector("p")!);
@@ -90,6 +96,12 @@ test("compact station hands short cues to one bounded graph", async ({
     paragraphBackground: "rgba(0, 0, 0, 0)",
     paragraphOutline: "none"
   });
+  await expect.poll(() => stationBody.evaluate((element) =>
+    getComputedStyle(element, "::after").content
+  )).toBe("none");
+  await expect.poll(() => graph.evaluate((element) =>
+    getComputedStyle(element).filter
+  )).toContain("brightness(1.14)");
   await expect(
     stage.locator('[data-kp-economics-screen-space-label="equilibrium-current"]')
   ).toBeHidden();
@@ -98,60 +110,115 @@ test("compact station hands short cues to one bounded graph", async ({
     fullPage: false
   });
 
-  await alignTop(page, demandText, 660);
+  await alignTop(page, demandText, 805);
   await expect.poll(() => paragraphOpacity(demandText)).toBeLessThan(0.05);
   await expect(demandCue).toHaveAttribute(
     "data-kp-animation-station-cue-phase",
     "waiting"
   );
 
-  await alignTop(page, demandText, 628);
+  await alignTop(page, demandText, 680);
   await expect.poll(() => paragraphOpacity(demandText)).toBeCloseTo(0.5, 1);
 
-  await alignTop(page, demandText, 600);
+  await alignTop(page, demandText, 560);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.98);
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-cue-focused.png`,
+    fullPage: false
+  });
 
-  await alignTop(page, demandText, 520);
+  await alignTop(page, demandText, 440);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.98);
+  await expect.poll(() => passageInkTop(demandText)).toBeCloseTo(440, 0);
 
-  await alignTop(page, demandText, 500);
+  await alignTop(page, demandText, 400);
+  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.98);
+  await expect.poll(() => passageInkTop(demandText)).toBeCloseTo(440, 0);
+
+  await alignTop(page, demandText, 360);
+  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.98);
+  await expect.poll(() => passageInkTop(demandText)).toBeCloseTo(440, 0);
+
+  await alignTop(page, demandText, 347);
   await expect.poll(() => paragraphOpacity(demandText)).toBeCloseTo(0.5, 1);
-  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
+  await expect.poll(() => passageInkTop(demandText)).toBeCloseTo(440, 0);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await page.screenshot({
     path: `${evidenceDirectory}/station-handoff.png`,
     fullPage: false
   });
 
-  await alignTop(page, demandText, 480);
+  await alignTop(page, demandText, 334);
   await expect.poll(() => paragraphOpacity(demandText)).toBeLessThan(0.05);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
 
   await alignTop(page, demandText, 320);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0);
+
+  await alignTop(page, demandText, 136);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
   await expect.poll(() => resultText.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(680, 0);
-  await expect.poll(() => paragraphOpacity(resultText)).toBeLessThan(0.05);
+  await expect.poll(() => paragraphOpacity(resultText)).toBeCloseTo(0.5, 1);
+  await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
   await page.screenshot({
     path: `${evidenceDirectory}/station-settled.png`,
     fullPage: false
   });
 
-  await alignBottom(page, stationBody, 600);
-  await page.evaluate(() => window.scrollBy(0, 80));
-  await expect.poll(() => root.evaluate((element) => Number.parseFloat(
-    getComputedStyle(element).getPropertyValue(
-      "--kp-animation-station-exit-progress"
-    )
-  ))).toBeGreaterThan(0.5);
-  await expect.poll(() => graph.evaluate(
-    (element) => Number.parseFloat(getComputedStyle(element).opacity)
-  )).toBeLessThan(0.5);
+  await alignTop(page, resultText, 347);
+  await expect.poll(() => paragraphOpacity(resultText)).toBeCloseTo(0.5, 1);
+  await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+
+  await alignTop(page, releaseText, 680);
+  await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+
+  await alignTop(page, releaseText, 652);
+  await expect.poll(() => stationExit(root, "rail")).toBeCloseTo(0.5, 1);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+
+  await alignTop(page, releaseText, 540);
+  await expect.poll(() => stationExit(root, "rail")).toBeGreaterThan(0.999);
+  await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
+  const stagger = await root.evaluate((element) => {
+    const style = getComputedStyle(element);
+    const value = (role: string) => Number.parseFloat(
+      style.getPropertyValue(`--kp-animation-station-${role}-presence`)
+    );
+    return ["grid", "guide", "axis", "supply", "demand", "point", "label"]
+      .map(value);
+  });
+  for (let index = 1; index < stagger.length; index += 1) {
+    expect(stagger[index]!).toBeGreaterThan(stagger[index - 1]!);
+  }
+  await expect.poll(() => paragraphOpacity(releaseText)).toBeGreaterThan(0.98);
   await page.screenshot({
     path: `${evidenceDirectory}/station-exit.png`,
     fullPage: false
   });
+
+  await alignTop(page, releaseText, 480);
+  await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
+  await expect.poll(() => root.evaluate((element) => Number.parseFloat(
+    getComputedStyle(element).getPropertyValue(
+      "--kp-animation-station-label-presence"
+    )
+  ))).toBeLessThan(0.001);
+
+  await alignTop(page, releaseText, 680);
+  await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+  await expect.poll(() => root.evaluate((element) => Number.parseFloat(
+    getComputedStyle(element).getPropertyValue(
+      "--kp-animation-station-supply-presence"
+    )
+  ))).toBeGreaterThan(0.999);
 });
 
 function passage(root: Locator, id: string): Locator {
@@ -170,6 +237,23 @@ async function paragraphOpacity(paragraph: Locator): Promise<number> {
   );
 }
 
+async function passageInkTop(paragraph: Locator): Promise<number> {
+  return paragraph.locator(".kp-economics-tutorial__passage-ink").evaluate(
+    (element) => element.getBoundingClientRect().top
+  );
+}
+
+async function stationExit(
+  root: Locator,
+  role: "rail" | "graph"
+): Promise<number> {
+  return root.evaluate((element, exitRole) => Number.parseFloat(
+    getComputedStyle(element).getPropertyValue(
+      `--kp-animation-station-${exitRole}-exit`
+    )
+  ), role);
+}
+
 async function alignTop(
   page: Page,
   locator: Locator,
@@ -185,21 +269,4 @@ async function alignTop(
   await expect.poll(() => locator.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(desiredTop, 0);
-}
-
-async function alignBottom(
-  page: Page,
-  locator: Locator,
-  desiredBottom: number
-): Promise<void> {
-  const currentBottom = await locator.evaluate(
-    (element) => element.getBoundingClientRect().bottom
-  );
-  await page.evaluate(
-    ({ delta }) => window.scrollBy(0, delta),
-    { delta: currentBottom - desiredBottom }
-  );
-  await expect.poll(() => locator.evaluate(
-    (element) => element.getBoundingClientRect().bottom
-  )).toBeCloseTo(desiredBottom, 0);
 }

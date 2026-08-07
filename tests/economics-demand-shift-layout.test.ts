@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   projectKpAnimationStationCuePresence,
+  projectKpAnimationStationExit,
   projectKpAnimationStationGeometry,
   projectKpAnimationStationMotionCorridor,
   projectKpInlineStickyLessonLayout,
@@ -539,25 +540,28 @@ test("animation station projects one usable-viewport rhythm", () => {
     usableBottomPx: 850
   });
 
-  assert.deepEqual({
-    ...geometry,
-    terminalExitEndY: Math.round(geometry.terminalExitEndY)
-  }, {
+  assert.deepEqual(Object.fromEntries(Object.entries(geometry).map(
+    ([key, value]) => [key, Math.round(value * 1_000) / 1_000]
+  )), {
     usableTopPx: 50,
     usableBottomPx: 850,
     usableHeightPx: 800,
-    railTopY: 250,
-    railBottomY: 650,
-    railHeightPx: 400,
-    graphTopY: 330,
-    graphBottomY: 570,
-    graphHeightPx: 240,
-    cueRevealStartY: 706,
-    cueRevealEndY: 650,
-    cueExitEndY: 530,
-    motionEndY: 370,
-    beatDistancePx: 360,
-    terminalExitEndY: 490
+    railTopY: 170,
+    railBottomY: 730,
+    railHeightPx: 560,
+    graphTopY: 186,
+    graphBottomY: 450,
+    graphHeightPx: 264,
+    cueRevealStartY: 850,
+    cueRevealEndY: 610,
+    cuePinStartY: 490,
+    cuePinEndY: 410,
+    cueExitEndY: 384,
+    motionEndY: 186,
+    beatDistancePx: 544,
+    railExitEndY: 674,
+    graphExitStartY: 650,
+    graphExitEndY: 530
   });
 });
 
@@ -565,7 +569,7 @@ test("animation station cue presence is reversible at every boundary", () => {
   const geometry = projectKpAnimationStationGeometry({
     viewportHeightPx: 800
   });
-  const samples = [656, 628, 600, 520, 500, 480].map((cueTopPx) =>
+  const samples = [800, 680, 560, 440, 400, 360, 347, 334].map((cueTopPx) =>
     projectKpAnimationStationCuePresence({ cueTopPx, geometry })
   );
 
@@ -574,21 +578,62 @@ test("animation station cue presence is reversible at every boundary", () => {
     "materializing",
     "bright",
     "bright",
+    "pinned",
+    "pinned",
     "dissolving",
     "gone"
   ]);
-  assert.deepEqual(samples.map(({ presence }) => presence), [
-    0, 0.5, 1, 1, 0.5, 0
+  assert.deepEqual(samples.map(({ presence }) =>
+    Math.round(presence * 1_000) / 1_000), [
+    0, 0.5, 1, 1, 1, 1, 0.5, 0
   ]);
-  assert.deepEqual(samples.map(({ blurPx }) => blurPx), [
-    2, 1, 0, 0, 1, 2
+  assert.deepEqual(samples.map(({ blurPx }) =>
+    Math.round(blurPx * 1_000) / 1_000), [
+    2, 1, 0, 0, 0, 0, 1, 2
+  ]);
+  assert.deepEqual(samples.map(({ pinOffsetPx }) =>
+    Math.round(pinOffsetPx * 1_000) / 1_000), [
+    0, 0, 0, 0, 40, 80, 93, 106
   ]);
   assert.deepEqual(
     [...samples].reverse(),
-    [480, 500, 520, 600, 628, 656].map((cueTopPx) =>
+    [334, 347, 360, 400, 440, 560, 680, 800].map((cueTopPx) =>
       projectKpAnimationStationCuePresence({ cueTopPx, geometry })
     )
   );
+});
+
+test("animation station release passage staggers rails before graph roles", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 800
+  });
+  const initial = projectKpAnimationStationExit({
+    releaseCueTopPx: 680,
+    geometry
+  });
+  const midpoint = projectKpAnimationStationExit({
+    releaseCueTopPx: 540,
+    geometry
+  });
+  const final = projectKpAnimationStationExit({
+    releaseCueTopPx: 480,
+    geometry
+  });
+
+  assert.equal(initial.railProgress, 0);
+  assert.equal(initial.graphProgress, 0);
+  assert.deepEqual(Object.values(initial).slice(2), [1, 1, 1, 1, 1, 1, 1]);
+  assert.equal(midpoint.railProgress, 1);
+  assert.equal(midpoint.graphProgress, 0.5);
+  assert.ok(midpoint.gridPresence < midpoint.guidePresence);
+  assert.ok(midpoint.guidePresence < midpoint.axisPresence);
+  assert.ok(midpoint.axisPresence < midpoint.supplyPresence);
+  assert.ok(midpoint.supplyPresence < midpoint.demandPresence);
+  assert.ok(midpoint.demandPresence < midpoint.pointPresence);
+  assert.ok(midpoint.pointPresence < midpoint.labelPresence);
+  assert.equal(final.railProgress, 1);
+  assert.equal(final.graphProgress, 1);
+  assert.deepEqual(Object.values(final).slice(2), [0, 0, 0, 0, 0, 0, 0]);
 });
 
 test("animation station spends its graph runway on a deterministic cue handoff", () => {
@@ -605,34 +650,36 @@ test("animation station spends its graph runway on a deterministic cue handoff",
         { travel: 1, progress: 1 }
       ]
     },
-    stageBottomPx: 520,
+    motionStartPx: 334,
     viewportHeightPx: 800,
-    runwayPx: 200
+    runwayPx: 198
   });
 
-  assert.equal(corridor.startViewportRatio, 0.65);
-  assert.equal(corridor.endViewportRatio, 0.4);
+  assert.equal(corridor.startViewportRatio, 0.4175);
+  assert.equal(corridor.endViewportRatio, 0.17);
   assert.deepEqual(corridor.keyframes.map(({ progress }) => progress), [
     0, 0, 0.72, 0.72, 1, 1, 1
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 520,
+    anchorTop: 334,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
-  assert.deepEqual(projectKpTutorialMotionCorridor({
+  const handoff = projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 516,
+    anchorTop: 330.04,
     viewportHeight: 800
-  }), { travel: 0.02, progress: 0 });
+  });
+  assert.ok(Math.abs(handoff.travel - 0.02) < 1e-12);
+  assert.equal(handoff.progress, 0);
   assert.ok(Math.abs(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 428,
+    anchorTop: 242.92,
     viewportHeight: 800
   }).progress - 0.72) < 1e-12);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 320,
+    anchorTop: 136,
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
 });
