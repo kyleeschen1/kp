@@ -31,6 +31,10 @@
     projectKpEconomicsSalienceCssProperties,
     serializeKpEconomicsSalienceCssProperties
   } from "./economics-demand-shift-salience-style.ts";
+  import {
+    kpEconomicsOrdinaryStationPhaseBoundaries,
+    projectKpEconomicsStationPhase
+  } from "./economics-animation-station-phase.ts";
   import type {
     KpEconomicsDemandShiftLesson,
     KpEconomicsDemandShiftLessonPassage
@@ -1602,10 +1606,11 @@
             viewportHeightPx: window.innerHeight
           }));
       if (animationStation) {
+        const stationGeometry = readCachedAnimationStationGeometry();
         const presence = projectKpAnimationStationCuePresence({
           cueTopPx: paragraphBounds.top,
           cueBottomPx: paragraphBounds.bottom,
-          geometry: readCachedAnimationStationGeometry()
+          geometry: stationGeometry
         });
         element.dataset["kpAnimationStationCuePhase"] = presence.phase;
         element.dataset["kpAnimationStationCuePresence"] =
@@ -1622,6 +1627,26 @@
           "--kp-animation-station-cue-pin-offset",
           `${presence.pinOffsetPx.toFixed(3)}px`
         );
+        if (motionBlockId === undefined) {
+          const stationPhase = projectKpEconomicsStationPhase({
+            passageId,
+            cueKind: "ordinary",
+            anchorPx: paragraphBounds.top,
+            boundaries:
+              kpEconomicsOrdinaryStationPhaseBoundaries(stationGeometry),
+            beforeCheckpointId: "market-initial",
+            afterCheckpointId: "market-initial"
+          });
+          element.dataset["kpAnimationStationPhase"] = stationPhase.phase;
+          element.dataset["kpAnimationStationOwnership"] =
+            stationPhase.ownership;
+          element.dataset["kpAnimationStationActivePassage"] =
+            stationPhase.activePassageId ?? "";
+        } else {
+          delete element.dataset["kpAnimationStationPhase"];
+          delete element.dataset["kpAnimationStationOwnership"];
+          delete element.dataset["kpAnimationStationActivePassage"];
+        }
       }
       return {
         passageId,
@@ -1813,6 +1838,10 @@
       const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
       return Number.isFinite(value) ? Math.max(0, value) : 0;
     };
+    const number = (name: string, fallback: number): number => {
+      const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
+      return Number.isFinite(value) ? value : fallback;
+    };
     const viewport = projectKpTutorialUsableViewport({
       viewportHeightPx: window.innerHeight,
       persistentTopInsetPx: pixels("--kp-tutorial-persistent-top-inset"),
@@ -1821,7 +1850,12 @@
     return projectKpAnimationStationGeometry({
       viewportHeightPx: viewport.viewportHeightPx,
       usableTopPx: viewport.topPx,
-      usableBottomPx: viewport.bottomPx
+      usableBottomPx: viewport.bottomPx,
+      rhythm: {
+        cuePinDistanceRatio: Math.max(0, Math.min(1,
+          number("--kp-animation-station-reading-hold-vh", 10) / 100
+        ))
+      }
     });
   }
 

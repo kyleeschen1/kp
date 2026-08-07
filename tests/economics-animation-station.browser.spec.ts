@@ -22,6 +22,8 @@ test("compact station hands short cues to one bounded graph", async ({
   const stage = station.locator("[data-kp-inline-sticky-stage]");
   const graph = stage.locator(".kp-economics-tutorial__stage-card");
   const cues = station.locator("[data-kp-animation-station-cue]");
+  const shortOrdinaryCue = passage(station, "graph-at-rest");
+  const longOrdinaryCue = passage(station, "initial-equilibrium");
   const demandCue = passage(root, "follow-shift");
   const demandText = demandCue.locator("p");
   const resultText = passage(root, "new-equilibrium").locator("p");
@@ -124,6 +126,39 @@ test("compact station hands short cues to one bounded graph", async ({
     path: `${evidenceDirectory}/station-ready.png`,
     fullPage: false
   });
+
+  await alignTop(page, shortOrdinaryCue.locator("p"), 400);
+  await expect(shortOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "ready"
+  );
+  await expect(shortOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-ownership",
+    "active-passage"
+  );
+  await alignTop(page, shortOrdinaryCue.locator("p"), 320);
+  await expect(shortOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "handoff"
+  );
+  await alignTop(page, shortOrdinaryCue.locator("p"), 400);
+  await expect(shortOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "ready"
+  );
+
+  await alignTop(page, longOrdinaryCue.locator("p"), 400);
+  await expect(longOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "ready"
+  );
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await alignTop(page, longOrdinaryCue.locator("p"), 450);
+  await expect(longOrdinaryCue).toHaveAttribute(
+    "data-kp-animation-station-phase",
+    "ready"
+  );
+  await page.setViewportSize({ width: 1280, height: 800 });
 
   await alignBottom(page, demandText, 805);
   await expect.poll(() => paragraphOpacity(demandText)).toBeLessThan(0.05);

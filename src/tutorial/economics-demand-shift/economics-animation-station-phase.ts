@@ -42,6 +42,30 @@ export interface KpEconomicsStationPhaseProjection {
   readonly phaseProgress: number;
 }
 
+export interface KpEconomicsOrdinaryStationGeometry {
+  readonly usableBottomPx: number;
+  readonly cuePinStartY: number;
+  readonly cuePinEndY: number;
+  readonly cueExitEndY: number;
+}
+
+/**
+ * Keeps the ordinary reading hold tied to station geometry, never prose height.
+ * The duplicated scrub boundary lets ordinary cues reuse the phase projector
+ * without manufacturing a semantic motion interval.
+ */
+export function kpEconomicsOrdinaryStationPhaseBoundaries(
+  geometry: KpEconomicsOrdinaryStationGeometry
+): KpEconomicsStationPhaseBoundaries {
+  return Object.freeze({
+    approachStartPx: geometry.usableBottomPx,
+    readyStartPx: geometry.cuePinStartY,
+    scrubStartPx: geometry.cuePinEndY,
+    scrubEndPx: geometry.cuePinEndY,
+    handoffEndPx: geometry.cueExitEndY
+  });
+}
+
 /**
  * Projects station truth directly from one local anchor. It stays economics-
  * local until the stacked exemplar and a second projection prove the seam.

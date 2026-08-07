@@ -107,6 +107,30 @@
       "status": "passed",
       "scope": "s04 typed cue projection",
       "checkedAt": "2026-08-07T15:34:15.401Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s05 ordinary cue phase and height independence",
+      "checkedAt": "2026-08-07T15:41:56.974Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s05 reading hold token ownership",
+      "checkedAt": "2026-08-07T15:41:59.135Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s05 short and long cue, fast direct seek, reverse, and resize",
+      "checkedAt": "2026-08-07T15:42:00.497Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 typed station presenter integration",
+      "checkedAt": "2026-08-07T15:42:01.821Z"
     }
   ],
   "allowedWork": [
@@ -158,7 +182,8 @@
     {
       "id": "s05",
       "title": "ordinary-cue-rhythm",
-      "status": "planned"
+      "summary": "Ordinary cues now expose a tokenized 10vh reading hold and deterministic settle/handoff projection independent of paragraph height; semantic progress remains zero. Short/long cue, direct seek, reverse, resize, CSS, type, and full tutorial checks pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

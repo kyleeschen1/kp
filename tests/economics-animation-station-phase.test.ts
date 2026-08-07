@@ -2,10 +2,18 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  kpEconomicsOrdinaryStationPhaseBoundaries,
   projectKpEconomicsStationPhase,
   type KpEconomicsStationPhaseBoundaries
 } from
   "../src/tutorial/economics-demand-shift/economics-animation-station-phase.ts";
+
+const ordinaryGeometry = Object.freeze({
+  usableBottomPx: 800,
+  cuePinStartY: 440,
+  cuePinEndY: 360,
+  cueExitEndY: 334
+});
 
 const boundaries: KpEconomicsStationPhaseBoundaries = Object.freeze({
   approachStartPx: 800,
@@ -81,6 +89,47 @@ test("ordinary cues skip scrub without inventing semantic motion", () => {
   assert.ok(samples.every(({ checkpointId }) =>
     checkpointId === "market-initial"
   ));
+});
+
+test("ordinary reading hold is a 10vh local corridor independent of cue height", () => {
+  const localBoundaries = kpEconomicsOrdinaryStationPhaseBoundaries(
+    ordinaryGeometry
+  );
+  assert.equal(
+    localBoundaries.readyStartPx - localBoundaries.scrubStartPx,
+    80
+  );
+  assert.equal(localBoundaries.scrubStartPx, localBoundaries.scrubEndPx);
+
+  const input = {
+    ...motionInput,
+    cueKind: "ordinary" as const,
+    motionBlockId: undefined,
+    boundaries: localBoundaries
+  };
+  const shortCue = { top: 400, bottom: 448 };
+  const longCue = { top: 400, bottom: 640 };
+  const shortProjection = projectKpEconomicsStationPhase({
+    ...input,
+    anchorPx: shortCue.top
+  });
+  const longProjection = projectKpEconomicsStationPhase({
+    ...input,
+    anchorPx: longCue.top
+  });
+
+  assert.deepEqual(shortProjection, longProjection);
+  assert.equal(shortProjection.phase, "ready");
+  assert.equal(shortProjection.ownership, "active-passage");
+  assert.equal(shortProjection.semanticProgress, 0);
+  assert.equal(
+    projectKpEconomicsStationPhase({ ...input, anchorPx: 360 }).phase,
+    "settle"
+  );
+  assert.equal(
+    projectKpEconomicsStationPhase({ ...input, anchorPx: 334 }).phase,
+    "handoff"
+  );
 });
 
 test("station phase projection is monotonic, exactly reversible, and direct", () => {

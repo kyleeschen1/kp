@@ -14,6 +14,7 @@
   --kp-animation-station-graph-offset: 2dvh;
   --kp-animation-station-graph-height: 33dvh;
   --kp-animation-station-beat: 68dvh;
+  --kp-animation-station-reading-hold-vh: 10;
   --kp-animation-station-width: min(42rem, calc(100vw - 2rem));
   --kp-animation-station-rail: 2px;
   --kp-animation-station-stage-latch-progress: 0;
