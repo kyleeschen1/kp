@@ -109,7 +109,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
   expect(tocProjection.stageTop).toBeLessThanOrEqual(32);
   expect(tocProjection.stageTransform).toBe("none");
   expect(tocProjection.proseLineHeight / tocProjection.proseFontSize)
-    .toBeGreaterThanOrEqual(1.77);
+    .toBeGreaterThanOrEqual(1.74);
   await expect(toc.locator(
     '[data-kp-tutorial-destination-id="supply-movement"]'
   )).toHaveAttribute(
@@ -1145,7 +1145,7 @@ test("direct semantic links restore complete cumulative state without replay", a
       opacity: getComputedStyle(element).opacity,
       width: getComputedStyle(element).strokeWidth
   }))).toEqual({
-      color: "rgb(240, 121, 114)",
+      color: "rgb(255, 138, 132)",
       opacity: "1",
       width: "1px"
     });

@@ -251,6 +251,10 @@ test("compact station hands short cues to one bounded graph", async ({
   await alignTop(page, demandText, 170);
   await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 2);
   await expect(progressRail).toHaveAttribute("aria-valuenow", "72");
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-motion-midpoint.png`,
+    fullPage: false
+  });
   await alignTop(page, demandText, 14);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
   await expect(demandCue).toHaveAttribute(
@@ -374,6 +378,10 @@ test("phone and large text fall back to ordinary document flow", async ({
     await expect.poll(() => paragraphOpacity(cues.nth(index).locator("p")))
       .toBeGreaterThan(0.98);
   }
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-phone-reading.png`,
+    fullPage: false
+  });
   await page.addStyleTag({ content: "html { font-size: 175%; }" });
   await expect.poll(() => release.evaluate((element) =>
     Number.parseFloat(getComputedStyle(element).fontSize)
@@ -401,6 +409,10 @@ test("reduced motion settles as readable flow without sticky rails", async ({
   )).toBe("none");
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
   await expect(rail).toHaveAttribute("aria-valuenow", "100");
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-reduced-motion.png`,
+    fullPage: false
+  });
 });
 
 test("light theme preserves the terminal release", async ({ page }) => {

@@ -110,7 +110,26 @@ export interface KpAnimationStationExitProjection {
   readonly labelPresence: number;
 }
 
-export const kpEconomicsAnimationStationDefaultRhythm = Object.freeze({
+export interface KpEconomicsAnimationStationRhythm {
+  readonly railTopRatio: number;
+  readonly railBottomRatio: number;
+  readonly graphTopRatio: number;
+  readonly graphBottomRatio: number;
+  readonly cueRevealStartRatio: number;
+  readonly cueRevealEndRatio: number;
+  readonly cuePinStartRatio: number;
+  readonly cuePinDistanceRatio: number;
+  readonly cueExitGraphRatio: number;
+  readonly motionDistanceRatio: number;
+  readonly motionSettleDistanceRatio: number;
+  readonly beatDistanceRatio: number;
+  readonly railExitEndRatio: number;
+  readonly graphExitStartRatio: number;
+  readonly graphExitEndRatio: number;
+}
+
+export const kpEconomicsAnimationStationDefaultRhythm:
+Readonly<KpEconomicsAnimationStationRhythm> = Object.freeze({
   railTopRatio: 0.15,
   railBottomRatio: 0.85,
   graphTopRatio: 0.17,
@@ -740,9 +759,9 @@ export function projectKpAnimationStationGeometry(input: {
   readonly viewportHeightPx: number;
   readonly usableTopPx?: number | undefined;
   readonly usableBottomPx?: number | undefined;
-  readonly rhythm?: Partial<
-    typeof kpEconomicsAnimationStationDefaultRhythm
-  > | undefined;
+  // Runtime CSS tokens may refine any ratio without narrowing callers to the
+  // literal values used by the canonical default rhythm.
+  readonly rhythm?: Partial<KpEconomicsAnimationStationRhythm> | undefined;
 }): KpAnimationStationGeometryProjection {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
   const usableTop = clamp(finiteNonNegative(input.usableTopPx ?? 0), 0,

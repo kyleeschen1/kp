@@ -48,8 +48,11 @@
     "station-ready.png",
     "station-cue-focused.png",
     "station-handoff.png",
+    "station-motion-midpoint.png",
     "station-settled.png",
-    "station-exit.png"
+    "station-exit.png",
+    "station-phone-reading.png",
+    "station-reduced-motion.png"
   ],
   "performanceBudgets": {
     "initialTransferBytes": 250000,
@@ -61,12 +64,12 @@
     "activeLongestTaskMs": 100
   },
   "lastObservedPressure": {
-    "initialTransferBytes": 250869,
-    "initialScriptBytes": 149990,
+    "initialTransferBytes": 255555,
+    "initialScriptBytes": 153278,
     "initialResourceCount": 42,
     "cumulativeLayoutShift": 0,
-    "initialLongestTaskMs": 160,
-    "activeP95FrameMs": 34.2,
+    "initialLongestTaskMs": 168,
+    "activeP95FrameMs": 34.4,
     "activeLongestTaskCount": 0
   },
   "rollback": {
@@ -74,4 +77,3 @@
     "preserve": "Economics semantics, compiled lesson source, retained SVG session, shared player, themes, review capture, direct seek and rewind, and the split projection."
   }
 }
-

@@ -209,6 +209,61 @@
       "status": "passed",
       "scope": "s08 typed responsive release integration",
       "checkedAt": "2026-08-07T16:08:50.835Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: 81 focused checks",
+      "checkedAt": "2026-08-07T16:28:20.911Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: 17 stylesheet checks",
+      "checkedAt": "2026-08-07T16:28:22.230Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: 59 lifecycle and page-scale checks",
+      "checkedAt": "2026-08-07T16:28:23.206Z"
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: 12 Chromium regression checks",
+      "checkedAt": "2026-08-07T16:28:24.169Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: 7 Chromium visual and progressive-enhancement checks",
+      "checkedAt": "2026-08-07T16:28:25.132Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: typed CSS-derived rhythm boundary",
+      "checkedAt": "2026-08-07T16:28:26.160Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s09 stacked checkpoint: production build",
+      "checkedAt": "2026-08-07T16:28:27.127Z"
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s09 focused performance smoke",
+      "checkedAt": "2026-08-07T16:28:28.098Z",
+      "notes": "Startup pressure recorded for slices 10-18: transfer 255555 B, script 153278 B, longest startup task 168 ms. Active p95 34.4 ms, active long tasks 0, CLS 0, no SVG reconstruction or subtree replacement."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s09 checkpoint integrity: 905 nodes and 18560 events",
+      "checkedAt": "2026-08-07T16:28:49.269Z"
     }
   ],
   "allowedWork": [
@@ -284,7 +339,8 @@
     {
       "id": "s09",
       "title": "stacked-human-checkpoint",
-      "status": "planned"
+      "summary": "Stabilized the economics stacked exemplar, widened runtime rhythm typing for CSS-derived ratios, refreshed the review capture set, and published the human checkpoint report. Focused, CSS, page-scale, broad Chromium, visual, type, build, and workspace checks pass. Performance smoke records bounded startup overages while active motion remains within budget. Stop for mandatory human review before s10.",
+      "status": "complete"
     },
     {
       "id": "s10",
