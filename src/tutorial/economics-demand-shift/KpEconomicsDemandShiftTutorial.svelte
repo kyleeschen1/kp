@@ -1190,7 +1190,7 @@
   function handleReducedMotionChange(event: MediaQueryListEvent): void {
     reducedMotion = event.matches;
     if (event.matches) hideSemanticTransitProxy("reduced-motion-static");
-    scrollCoordinator?.scheduleProjection();
+    updateInlineStickyLayoutProjection();
     if (motionOwner === "untouched") {
       scrollTimelineStatus = event.matches ? "reduced-motion" : "idle";
     }
@@ -1747,7 +1747,13 @@
       viewportHeightPx: window.innerHeight,
       proseLineHeightPx: proseLineHeight
     });
-    inlineStickyFit = layout.fit;
+    // The station becomes an ordinary embedded reading sequence when spatial
+    // coordination is unavailable or intentionally reduced.
+    inlineStickyFit = animationStation && (
+      window.innerWidth <= 760 || reducedMotion
+    )
+      ? "reading"
+      : layout.fit;
     if (animationStation) {
       cachedAnimationStationGeometry = measureAnimationStationGeometry();
       inlineStickyStageHeightPx =
@@ -1979,6 +1985,14 @@
       projection.railProgress.toFixed(4);
     shell.dataset["kpAnimationStationGraphExit"] =
       projection.graphProgress.toFixed(4);
+    shell.dataset["kpAnimationStationExitPhase"] =
+      projection.graphProgress >= 0.999
+        ? "released"
+        : projection.graphProgress > 0.001
+          ? "withdrawing-stage"
+          : projection.railProgress > 0.001
+            ? "releasing-rails"
+            : "stationed";
     const geometry = readCachedAnimationStationGeometry();
     const properties = {
       "--kp-animation-station-rail-exit": projection.railProgress,
@@ -2477,6 +2491,9 @@
       scrollTimelineStatus = "reduced-motion";
     }
     reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
+    if (animationStation && reducedMotion) {
+      updateInlineStickyLayoutProjection();
+    }
     document.fonts.addEventListener("loadingdone", handleFontMetricsChange);
     void document.fonts.ready.then(() => {
       handleFontMetricsChange();

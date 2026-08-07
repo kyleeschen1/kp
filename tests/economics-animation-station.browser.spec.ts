@@ -286,16 +286,32 @@ test("compact station hands short cues to one bounded graph", async ({
   await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
 
   await alignTop(page, releaseText, 680);
+  await expect.poll(() => paragraphOpacity(releaseText)).toBeGreaterThan(0.98);
+  await expect(releasePassage).not.toHaveAttribute(
+    "data-kp-animation-station-cue"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-exit-phase",
+    "stationed"
+  );
   await expect.poll(() => stationExit(root, "rail")).toBeLessThan(0.001);
   await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
 
   await alignTop(page, releaseText, 652);
   await expect.poll(() => stationExit(root, "rail")).toBeCloseTo(0.5, 1);
   await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-exit-phase",
+    "releasing-rails"
+  );
 
   await alignTop(page, releaseText, 540);
   await expect.poll(() => stationExit(root, "rail")).toBeGreaterThan(0.999);
   await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-exit-phase",
+    "withdrawing-stage"
+  );
   const stagger = await root.evaluate((element) => {
     const style = getComputedStyle(element);
     const value = (role: string) => Number.parseFloat(
@@ -315,6 +331,10 @@ test("compact station hands short cues to one bounded graph", async ({
 
   await alignTop(page, releaseText, 480);
   await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-exit-phase",
+    "released"
+  );
   await expect.poll(() => root.evaluate((element) => Number.parseFloat(
     getComputedStyle(element).getPropertyValue(
       "--kp-animation-station-label-presence"
@@ -329,6 +349,75 @@ test("compact station hands short cues to one bounded graph", async ({
       "--kp-animation-station-supply-presence"
     )
   ))).toBeGreaterThan(0.999);
+});
+
+test("phone and large text fall back to ordinary document flow", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const station = root.locator('[data-kp-motion-passage="demand-change"]');
+  const stage = station.locator("[data-kp-inline-sticky-stage]");
+  const cues = station.locator("[data-kp-animation-station-cue]");
+  const release = passage(root, "equation-check").locator("p").first();
+
+  await expect(root).toHaveAttribute("data-kp-inline-sticky-fit", "reading");
+  await expect(stage).toHaveCSS("position", "relative");
+  await expect.poll(() => stage.evaluate((element) =>
+    getComputedStyle(element, "::before").content
+  )).toBe("none");
+  for (let index = 0; index < 4; index += 1) {
+    await expect.poll(() => cues.nth(index).evaluate((element) =>
+      element.getBoundingClientRect().height
+    )).toBeLessThan(240);
+    await expect.poll(() => paragraphOpacity(cues.nth(index).locator("p")))
+      .toBeGreaterThan(0.98);
+  }
+  await page.addStyleTag({ content: "html { font-size: 175%; }" });
+  await expect.poll(() => release.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).fontSize)
+  )).toBeGreaterThan(27);
+  await expect.poll(() => page.evaluate(() =>
+    document.documentElement.scrollWidth - window.innerWidth
+  )).toBeLessThanOrEqual(1);
+});
+
+test("reduced motion settles as readable flow without sticky rails", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(`${route}#kp-checkpoint-shift-settled`);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const station = root.locator('[data-kp-motion-passage="demand-change"]');
+  const stage = station.locator("[data-kp-inline-sticky-stage]");
+  const rail = station.locator("kp-tutorial-progress-rail");
+
+  await expect(root).toHaveAttribute("data-kp-inline-sticky-fit", "reading");
+  await expect(stage).toHaveCSS("position", "relative");
+  await expect.poll(() => stage.evaluate((element) =>
+    getComputedStyle(element, "::before").content
+  )).toBe("none");
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
+  await expect(rail).toHaveAttribute("aria-valuenow", "100");
+});
+
+test("light theme preserves the terminal release", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(
+    "/tutorials/economics/demand-shift/?layout=animation-station&theme=light"
+  );
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const release = passage(root, "equation-check").locator("p").first();
+  await alignTop(page, release, 540);
+  await expect.poll(() => stationExit(root, "rail")).toBeGreaterThan(0.999);
+  await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
+  await expect.poll(() => paragraphOpacity(release)).toBeGreaterThan(0.98);
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-exit-light.png`,
+    fullPage: false
+  });
 });
 
 test("station checkpoint URLs restore the shared playhead directly", async ({

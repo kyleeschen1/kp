@@ -318,6 +318,70 @@
   min-height: 0;
 }
 
+/* Phone and reduced-motion readers get one ordinary embedded document flow. */
+@media (max-width: 760px), (prefers-reduced-motion: reduce) {
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__motion-passage {
+    width: 100%;
+  }
+
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline {
+    position: relative;
+    top: auto;
+    width: 100%;
+    height: 50dvh;
+  }
+
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline::before,
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline::after {
+    content: none;
+  }
+
+  .kp-economics-tutorial--animation-station
+    #kp-section-market-clearing
+    [data-kp-animation-station-cue]
+    + [data-kp-animation-station-cue] {
+    height: auto;
+    margin-top: 2.5rem;
+  }
+
+  .kp-economics-tutorial--animation-station
+    #kp-section-market-clearing
+    [data-kp-animation-station-cue]:first-child {
+    height: auto;
+  }
+
+  .kp-economics-tutorial--animation-station
+    #kp-section-market-clearing
+    [data-kp-animation-station-cue]
+    > p,
+  .kp-economics-tutorial--animation-station
+    [data-kp-animation-station-cue]
+    > kp-tutorial-progress-rail {
+    opacity: 1;
+  }
+
+  .kp-economics-tutorial--animation-station
+    #kp-section-market-clearing
+    [data-kp-animation-station-cue]
+    > p
+    > .kp-economics-tutorial__passage-ink,
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline
+    .kp-economics-tutorial__stage-card {
+    transform: none;
+  }
+
+  .kp-economics-tutorial--animation-station
+    #kp-section-market-clearing
+    [data-kp-animation-station-release-cue] {
+    margin-top: 2.5rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce), (forced-colors: active) {
   .kp-economics-tutorial--animation-station {
     --kp-animation-station-rail-exit: 0 !important;

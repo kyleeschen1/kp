@@ -185,6 +185,30 @@
       "status": "passed",
       "scope": "s07 typed shared-player corridor integration",
       "checkedAt": "2026-08-07T15:59:54.465Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s08 deterministic terminal release laws",
+      "checkedAt": "2026-08-07T16:08:47.157Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s08 ordinary-flow fallbacks and no scroll-jacking CSS",
+      "checkedAt": "2026-08-07T16:08:48.594Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s08 long prose, reverse, phone, large text, reduced motion, midnight and light",
+      "checkedAt": "2026-08-07T16:08:49.725Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 typed responsive release integration",
+      "checkedAt": "2026-08-07T16:08:50.835Z"
     }
   ],
   "allowedWork": [
@@ -254,7 +278,8 @@
     {
       "id": "s08",
       "title": "long-prose-release",
-      "status": "planned"
+      "summary": "Terminal prose remains full-width ordinary document content while the station releases rails, withdraws graph roles in a reversible stagger, and records stationed/releasing/withdrawing/released lifecycle phases. Phone, large-text, and reduced-motion modes use embedded readable flow with no sticky rails; midnight and light captures, reverse checks, CSS, tutorial, and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s09",
