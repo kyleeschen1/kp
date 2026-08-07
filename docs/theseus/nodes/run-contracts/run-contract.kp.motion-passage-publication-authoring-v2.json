@@ -59,6 +59,30 @@
       "status": "passed",
       "scope": "s02 typed phase contract",
       "checkedAt": "2026-08-07T15:23:34.209Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s03 local geometry and latch laws",
+      "checkedAt": "2026-08-07T15:28:15.138Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s03 CSS ownership",
+      "checkedAt": "2026-08-07T15:28:16.384Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s03 graph latch and rail entrance",
+      "checkedAt": "2026-08-07T15:28:17.396Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 typed presenter integration",
+      "checkedAt": "2026-08-07T15:28:18.339Z"
     }
   ],
   "allowedWork": [
@@ -98,7 +122,8 @@
     {
       "id": "s03",
       "title": "local-station-geometry",
-      "status": "planned"
+      "summary": "Station geometry now derives from one usable viewport with persistent/safe-area insets; graph latch and rail entrance share one projection, and rails remain absent until the graph latches. Unit, CSS, Chromium visual, and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s04",

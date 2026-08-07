@@ -43,7 +43,22 @@ test("compact station hands short cues to one bounded graph", async ({
   );
   await expect(root.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
 
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-entrance-phase",
+    "approaching"
+  );
+  await expect.poll(() => stage.evaluate((element) => Number.parseFloat(
+    getComputedStyle(element, "::before").opacity
+  ))).toBeLessThan(0.001);
+
   await alignTop(page, stage, 120);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-entrance-phase",
+    "latched"
+  );
+  await expect.poll(() => stage.evaluate((element) => Number.parseFloat(
+    getComputedStyle(element, "::before").opacity
+  ))).toBeGreaterThan(0.999);
   const geometry = await stage.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const before = getComputedStyle(element, "::before");

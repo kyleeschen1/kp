@@ -88,6 +88,13 @@ export interface KpAnimationStationCuePresenceProjection {
   readonly pinOffsetPx: number;
 }
 
+export interface KpAnimationStationEntranceProjection {
+  readonly phase: "approaching" | "latched";
+  readonly distanceToLatchPx: number;
+  readonly stageProgress: number;
+  readonly railPresence: number;
+}
+
 export interface KpAnimationStationExitProjection {
   readonly railProgress: number;
   readonly graphProgress: number;
@@ -780,6 +787,36 @@ export function projectKpAnimationStationGeometry(input: {
     railExitEndY: y(rhythm.railExitEndRatio),
     graphExitStartY: y(rhythm.graphExitStartRatio),
     graphExitEndY: y(rhythm.graphExitEndRatio)
+  });
+}
+
+export function projectKpAnimationStationEntrance(input: {
+  readonly stageTopPx: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+  readonly approachDistancePx?: number | undefined;
+  readonly latchTolerancePx?: number | undefined;
+}): KpAnimationStationEntranceProjection {
+  const stageTop = Number.isFinite(input.stageTopPx)
+    ? input.stageTopPx
+    : input.geometry.usableBottomPx;
+  const distanceToLatch = Math.max(0, stageTop - input.geometry.railTopY);
+  const approachDistance = finitePositive(
+    input.approachDistancePx ?? input.geometry.usableHeightPx * 0.15,
+    Math.max(1, input.geometry.usableHeightPx * 0.15)
+  );
+  const tolerance = finiteNonNegative(input.latchTolerancePx ?? 1);
+  const latched = distanceToLatch <= tolerance;
+  return Object.freeze({
+    phase: latched ? "latched" : "approaching",
+    distanceToLatchPx: distanceToLatch,
+    stageProgress: smoothstep(clamp(
+      1 - distanceToLatch / approachDistance,
+      0,
+      1
+    )),
+    // Rails announce the station, not an approaching embedded figure. Their
+    // later entrance choreography may refine this binary ownership boundary.
+    railPresence: latched ? 1 : 0
   });
 }
 

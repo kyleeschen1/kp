@@ -1,5 +1,14 @@
 /* The query-local station owns one reversible cue rhythm while lesson and graph semantics remain shared. */
 .kp-economics-tutorial--animation-station {
+  --kp-animation-station-safe-area-top: env(safe-area-inset-top, 0px);
+  --kp-animation-station-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --kp-tutorial-persistent-top-inset:
+    var(--kp-animation-station-safe-area-top);
+  --kp-tutorial-persistent-bottom-inset:
+    var(--kp-animation-station-safe-area-bottom);
+  --kp-animation-station-usable-top: 0px;
+  --kp-animation-station-usable-bottom: 100dvh;
+  --kp-animation-station-usable-height: 100dvh;
   --kp-animation-station-rail-top: 15dvh;
   --kp-animation-station-rail-height: 70dvh;
   --kp-animation-station-graph-offset: 2dvh;
@@ -7,6 +16,8 @@
   --kp-animation-station-beat: 68dvh;
   --kp-animation-station-width: min(42rem, calc(100vw - 2rem));
   --kp-animation-station-rail: 2px;
+  --kp-animation-station-stage-latch-progress: 0;
+  --kp-animation-station-rail-entrance: 0;
   --kp-animation-station-rail-exit: 0;
   --kp-animation-station-graph-exit: 0;
   --kp-animation-station-exit-offset: 0px;
@@ -59,7 +70,11 @@
   width: var(--kp-animation-station-rail);
   height: auto;
   background: var(--kp-lesson-theme-stage-divider);
-  opacity: calc(1 - var(--kp-animation-station-rail-exit));
+  opacity:
+    calc(
+      var(--kp-animation-station-rail-entrance) *
+      (1 - var(--kp-animation-station-rail-exit))
+    );
   pointer-events: none;
 }
 

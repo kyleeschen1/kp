@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   projectKpAnimationStationCuePresence,
+  projectKpAnimationStationEntrance,
   projectKpAnimationStationExit,
   projectKpAnimationStationGeometry,
   projectKpAnimationStationMotionCorridor,
@@ -563,6 +564,45 @@ test("animation station projects one usable-viewport rhythm", () => {
     graphExitStartY: 650,
     graphExitEndY: 530
   });
+});
+
+test("animation station rails wait for the graph's local latch", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 900,
+    usableTopPx: 50,
+    usableBottomPx: 850
+  });
+  const approaching = projectKpAnimationStationEntrance({
+    stageTopPx: 250,
+    geometry
+  });
+  const near = projectKpAnimationStationEntrance({
+    stageTopPx: 171.01,
+    geometry
+  });
+  const latched = projectKpAnimationStationEntrance({
+    stageTopPx: 170,
+    geometry
+  });
+  const releasedAbove = projectKpAnimationStationEntrance({
+    stageTopPx: 120,
+    geometry
+  });
+
+  assert.equal(approaching.phase, "approaching");
+  assert.equal(approaching.distanceToLatchPx, 80);
+  assert.equal(approaching.railPresence, 0);
+  assert.ok(approaching.stageProgress > 0);
+  assert.ok(approaching.stageProgress < 1);
+  assert.equal(near.phase, "approaching");
+  assert.equal(near.railPresence, 0);
+  assert.deepEqual(latched, {
+    phase: "latched",
+    distanceToLatchPx: 0,
+    stageProgress: 1,
+    railPresence: 1
+  });
+  assert.deepEqual(releasedAbove, latched);
 });
 
 test("animation station cue presence is reversible at every boundary", () => {

@@ -41,6 +41,7 @@
   } from "./economics-demand-shift-deep-link.ts";
   import {
     projectKpAnimationStationCuePresence,
+    projectKpAnimationStationEntrance,
     projectKpAnimationStationExit,
     projectKpAnimationStationGeometry,
     projectKpAnimationStationMotionCorridor,
@@ -1698,6 +1699,13 @@
       return;
     }
     const stageBounds = inlineStage.getBoundingClientRect();
+    if (animationStation) {
+      writeAnimationStationEntrance(projectKpAnimationStationEntrance({
+        stageTopPx: stageBounds.top,
+        geometry: readCachedAnimationStationGeometry(),
+        latchTolerancePx: kpEconomicsScrollLatchEpsilonPx
+      }));
+    }
     const passageBounds = inlineStage.closest<HTMLElement>(
       ".kp-economics-tutorial__motion-passage-body"
     )?.getBoundingClientRect();
@@ -1828,6 +1836,9 @@
   ): void {
     if (shell === undefined) return;
     const properties = {
+      "--kp-animation-station-usable-top": geometry.usableTopPx,
+      "--kp-animation-station-usable-bottom": geometry.usableBottomPx,
+      "--kp-animation-station-usable-height": geometry.usableHeightPx,
       "--kp-animation-station-rail-top": geometry.railTopY,
       "--kp-animation-station-rail-height": geometry.railHeightPx,
       "--kp-animation-station-graph-offset":
@@ -1838,6 +1849,21 @@
     for (const [name, value] of Object.entries(properties)) {
       shell.style.setProperty(name, `${value}px`);
     }
+  }
+
+  function writeAnimationStationEntrance(
+    projection: ReturnType<typeof projectKpAnimationStationEntrance>
+  ): void {
+    if (shell === undefined) return;
+    shell.dataset["kpAnimationStationEntrancePhase"] = projection.phase;
+    shell.style.setProperty(
+      "--kp-animation-station-stage-latch-progress",
+      projection.stageProgress.toFixed(4)
+    );
+    shell.style.setProperty(
+      "--kp-animation-station-rail-entrance",
+      projection.railPresence.toFixed(4)
+    );
   }
 
   function writeAnimationStationExit(
