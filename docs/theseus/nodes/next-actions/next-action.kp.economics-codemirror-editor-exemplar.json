@@ -4,6 +4,12 @@
   "title": "Add an internal CodeMirror lesson editor exemplar",
   "status": "resolved",
   "summary": "Bounded economics editor exemplar implemented and verified; promotion to shared lesson-authoring infrastructure remains a human visual and workflow decision.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-06-lesson-card-editor-next-step-review.md"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:economics-demand-shift-tutorial",

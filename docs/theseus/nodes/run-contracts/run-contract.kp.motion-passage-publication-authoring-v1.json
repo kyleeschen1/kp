@@ -1,0 +1,192 @@
+{
+  "id": "run-contract.kp.motion-passage-publication-authoring-v1",
+  "kind": "run-contract",
+  "title": "Motion passage publication and authoring tranche",
+  "status": "deferred",
+  "summary": "Superseded before execution by a hygiene-complete v2 contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-gap-scroll-modal-editor.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md",
+      "summary": "User-approved exact 30-slice contract with mandatory human checkpoints after slices 9 and 22."
+    }
+  ],
+  "verification": [
+    "npm run --silent loop:status",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-animation-station",
+    "npm run build",
+    "npm run performance:economics-demand-shift-tutorial",
+    "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Never; retain as contract-creation history."
+  ],
+  "allowedWork": [
+    "Economics lesson publication, station and split presenters, proven lesson contracts, practical editor, TOC/navigation, focused tests, performance diagnostics, and project memory.",
+    "Exact per-slice commits and stable npm verification entrypoints."
+  ],
+  "disallowedWork": [
+    "Animation-rank changes, Lisp or linear algebra work, algebra caller, broad vignette schema, Canvas/WebGL/Graph3D promotion, SvelteKit, Internal Studio, Public Web, or Public Editor.",
+    "Arbitrary source evaluation, universal renderer/schema, scroll-jacking, duplicate clocks, CSS semantic motion, or overwriting user-owned dirty files."
+  ],
+  "goal": "Deliver the approved stacked exemplar, publication boundary, split parity, practical CodeMirror loop, and navigation in strict order.",
+  "target": "next-action.kp.economics-gap-scroll-modal-editor",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "preserve-station-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "pure-station-phase-model",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "local-station-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "cue-approach-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "ordinary-cue-rhythm",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "progress-rail-publication",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "motion-cue-scroll-corridor",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "long-prose-release",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "stacked-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "startup-attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "static-narrative-shell",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "static-stage-shell",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "progressive-enhancement-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "tutorial-foundation-css",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "graph-domain-css-split",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "presenter-route-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "font-theme-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "publication-performance-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "shared-station-progress-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "split-progress-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "projection-driver-parity",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "split-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "whole-lesson-buffer-schema",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "incremental-last-valid-preview",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "semantic-repository-completion",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "reversible-passage-commands",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "practical-editor-chrome",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "progressive-floating-toc",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "direct-navigation-transaction",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "immediate-tranche-release",
+      "status": "planned"
+    }
+  ]
+}

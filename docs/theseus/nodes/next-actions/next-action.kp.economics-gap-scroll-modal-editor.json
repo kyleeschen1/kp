@@ -4,6 +4,24 @@
   "title": "Refine economics gap choreography and modal editor",
   "status": "ready",
   "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.economics-editor-source-save"
+    ]
+  },
+  "affects": [
+    "run-contract.kp.motion-passage-publication-authoring-v2"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run visual:economics-animation-station"
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:economics-demand-shift-tutorial",
@@ -93,5 +111,28 @@
   "progress": {
     "state": "partial",
     "summary": "Minimal Vim editor refinement is implemented and verified: buffer plus native ex panel plus modeline only, 1rem/1.5 editor type, Escape retained by Vim, :q closes the locally autosaved draft, :w validates and writes source, and :wq closes only after a successful write. Awaiting human choice on replacing the 21 KB Source Serif asset with a cross-platform system serif stack and on a separate whole-document authoring migration; no format or font migration was inferred."
-  }
+  },
+  "expectedLearning": [
+    "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
+  ],
+  "allowedWork": [
+    "Execute only the approved 30 slices in the recorded order."
+  ],
+  "disallowedWork": [
+    "Do not overwrite user-owned dirty lesson files or enter deferred product and renderer work."
+  ],
+  "criteria": [
+    {
+      "id": "stacked-exemplar-approved",
+      "weight": "high"
+    },
+    {
+      "id": "progressive-publication-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "split-editor-navigation-delivered",
+      "weight": "high"
+    }
+  ]
 }

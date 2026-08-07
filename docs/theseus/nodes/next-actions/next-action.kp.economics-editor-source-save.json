@@ -5,6 +5,12 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "Explicit economics lesson source persistence is implemented and verified; broader editor promotion remains outside this bounded slice.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "server/economics-lesson-source-http-adapter.ts"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:economics-lesson-source-save",

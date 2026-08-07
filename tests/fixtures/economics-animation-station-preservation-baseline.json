@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v1",
+  "capturedAt": "2026-08-07",
+  "canonicalRoute": "/tutorials/economics/demand-shift/?layout=animation-station",
+  "canonicalViewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "ownership": {
+    "host": "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
+    "stationStyle": "src/tutorial/economics-demand-shift/economics-demand-shift-animation-station.css",
+    "geometry": "src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts",
+    "motion": "src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts",
+    "lessonSource": "content/lessons/economics-demand-shift-two-column.json",
+    "publication": "src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
+    "visualCheck": "tests/economics-animation-station.browser.spec.ts"
+  },
+  "requiredSelectors": [
+    "data-kp-motion-passage=\"demand-change\"",
+    "data-kp-inline-sticky-stage",
+    "data-kp-animation-station-cue",
+    "data-kp-animation-station-release-cue",
+    "data-kp-tutorial-stage=\"demand-shift-graph\""
+  ],
+  "geometryTokens": {
+    "--kp-animation-station-rail-top": "15dvh",
+    "--kp-animation-station-rail-height": "70dvh",
+    "--kp-animation-station-graph-offset": "2dvh",
+    "--kp-animation-station-graph-height": "33dvh",
+    "--kp-animation-station-beat": "68dvh",
+    "--kp-animation-station-rail": "2px"
+  },
+  "canonicalGeometryPx": {
+    "railTop": 120,
+    "railBottom": 680,
+    "railHeight": 560,
+    "graphTop": 136,
+    "graphBottom": 400,
+    "graphHeight": 264,
+    "stageWidth": 672
+  },
+  "structure": {
+    "cueCount": 4,
+    "motionBlockCount": 1,
+    "scrubBarCount": 0
+  },
+  "screenshotAnchors": [
+    "station-ready.png",
+    "station-cue-focused.png",
+    "station-handoff.png",
+    "station-settled.png",
+    "station-exit.png"
+  ],
+  "performanceBudgets": {
+    "initialTransferBytes": 250000,
+    "initialScriptBytes": 150000,
+    "initialResourceCount": 42,
+    "cumulativeLayoutShift": 0.02,
+    "initialLongestTaskMs": 150,
+    "activeP95FrameMs": 42,
+    "activeLongestTaskMs": 100
+  },
+  "lastObservedPressure": {
+    "initialTransferBytes": 250869,
+    "initialScriptBytes": 149990,
+    "initialResourceCount": 42,
+    "cumulativeLayoutShift": 0,
+    "initialLongestTaskMs": 160,
+    "activeP95FrameMs": 34.2,
+    "activeLongestTaskCount": 0
+  },
+  "rollback": {
+    "unit": "The animation-station query presenter, its station stylesheet, and the station-only browser assertions.",
+    "preserve": "Economics semantics, compiled lesson source, retained SVG session, shared player, themes, review capture, direct seek and rewind, and the split projection."
+  }
+}
+
