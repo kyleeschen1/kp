@@ -1,17 +1,14 @@
 # Explanation and Attention Thread
 
 Status: active-supporting
-Last Updated: 2026-08-04
-Current Next Action: Execute approved Phases 1–4 from
-`../reviews/2026-08-04-economics-runtime-scroll-next-step-review.md`: measure
-the real SVG and cue hot paths, retain one economics SVG runtime tree, replace
-all-cue scroll measurement with cached local-anchor projection plus
-IntersectionObserver-assisted lifecycle, then add the internal `0–100vh`
-spacing tuner and one canonical non-KaTeX lesson font. Stop at the mandatory
-economics visual and performance checkpoint. Do not begin route/CSS
-consolidation, a second renderer caller, or 2D/3D protocol promotion. The
-code-native S-expression contract is durably deferred with slices 26 and 27
-preserved; this priority change does not alter animation-promotion rank.
+Last Updated: 2026-08-07
+Current Next Action: Obtain explicit approval for the exact contract in
+`../reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md`,
+then refine the economics stacked-station and progress-rail exemplar through
+its mandatory human checkpoint. Do not begin publication-boundary extraction,
+split projection parity, editor expansion, or navigation until the preceding
+rank and checkpoint allow it. This priority change does not alter the separate
+animation-promotion rank.
 
 ## Goal
 
@@ -20,6 +17,21 @@ without reducing prose to atomic captions or asking learners to read new ideas
 while watching essential motion.
 
 ## Current Decision
+
+The canonical vocabulary for this thread now lives in
+`../principles/motion-passage-vocabulary.md`. A **motion passage** is content
+structure, the **station lifecycle** is interaction behavior, and **stacked**
+or **split projection** is presentation. A framework-neutral **motion block**
+remains the animation timeline and never names a page-layout container.
+
+The accepted ordered horizon is recorded in
+`../decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`
+and
+`../reviews/2026-08-07-motion-passage-publication-authoring-next-step-review.md`.
+The bounded lesson editor remains approved in substance but moves behind the
+stacked exemplar, static publication repair, and split parity. The older
+runtime-correction queue below is completed historical evidence, not the
+current next action.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.
@@ -271,10 +283,10 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 - a generic programming-language pack, universal scene graph, or catalogue-
   wide lesson rollout inside the two-caller loop.
 
-## Queued Economics Runtime And Optical Correction
+## Completed Economics Runtime And Optical Correction
 
-The next approved economics loop should consolidate the tutorial back onto
-KP's existing runtime boundary rather than introduce another animation engine.
+The completed economics correction consolidated the tutorial back onto KP's
+existing runtime boundary rather than introducing another animation engine.
 Preserve the semantic asset, deterministic samplers, retained SVG session,
 direct seek and rewind, publication truth, and reviewed lesson composition.
 The bounded correction should:

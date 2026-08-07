@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-06
+Last Updated: 2026-08-07
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -35,6 +35,16 @@ The implementation boundary, release evidence, and exclusions are recorded in
 `reviews/2026-08-06-semantic-visual-salience-theme-closeout.md`. This is not a
 catalogue-wide, Canvas, WebGL, or Graph3D rollout, and it does not clear the
 remaining economics payload budget.
+
+The motion-passage workstream now uses the canonical vocabulary in
+`principles/motion-passage-vocabulary.md` and the accepted order in
+`decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`.
+Its immediate tranche is stacked-station refinement, static-publication and
+route-boundary repair, split-projection parity, the practical CodeMirror loop,
+then robust TOC and motion-passage navigation. The detailed ranking and gates
+live in
+`reviews/2026-08-07-motion-passage-publication-authoring-next-step-review.md`.
+This workstream order does not alter the animation-library promotion rank.
 
 The accepted long-term plan is recorded in
 `decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
@@ -321,14 +331,16 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The semantic visual-salience theme run is complete.** The immediate proposed
-successor is a bounded lesson-card authoring proof, recorded in
-`reviews/2026-08-06-lesson-card-editor-next-step-review.md`: one active
-CodeMirror editor, semantic-object-ID autocomplete, typed add/delete/reorder,
-and structured versioned persistence. It is not yet an executable run contract
-and does not activate the full Internal Studio, SvelteKit, arbitrary Svelte
-evaluation, or public authoring. The stable animation-promotion rank remains
-unchanged.
+**The semantic visual-salience theme run is complete, and the next
+motion-passage tranche has an accepted order.** First perfect the economics
+stacked-station and progress-rail exemplar; then repair static publication and
+route closure before porting the approved grammar to the split projection.
+The bounded CodeMirror authoring proof follows at rank 4, and robust floating
+TOC/navigation follows at rank 5. The exact proposed 30-slice contract is in
+`reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md`
+and still requires explicit approval before execution. The full Internal
+Studio, SvelteKit, arbitrary source evaluation, public authoring, and ranks
+6–11 remain deferred. The stable animation-promotion rank is unchanged.
 
 **The code-native S-expression Lisp tutorial is at its mandatory slice-25 human
 visual checkpoint; two later slices remain approval-gated.** The exact
@@ -680,35 +692,31 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Approve and execute the bounded lesson-card authoring proof: one active
-   CodeMirror editor, semantic-object-ID autocomplete, typed card commands, and
-   a versioned framework-neutral lesson record. Keep lifecycle metadata,
-   arbitrary code, full Internal Studio, and public persistence deferred.
-2. Review the completed publication/page-scale/graph-runtime tranche at its
-   required human checkpoint. Inspect the preserved economics two-column
-   reference and the existing internal Graph3D host; do not infer a visual
-   redesign from infrastructure completion.
-3. Schedule zero additional broad infrastructure passes. Return to visible
-   exemplar work; permit at most one bounded infrastructure repair only when a
-   real next caller demonstrates a failed generic invariant.
-4. Review the code-native S-expression choreography, especially recursive
-   ownership, binding/evaluation causality, timing, rewind, and phone behavior.
-5. After explicit S-expression approval, run the repeated-variable pressure
-   caller and botanical-renderer retirement slices.
-6. Select a nearer non-linear-algebra transformation when animation-library
-   promotion resumes; place-value subtraction remains the recommended default.
-7. Let that visible caller determine whether another narrow Graph2D, Graph3D,
-   publication, or page-scale seam is actually required. Do not pre-schedule a
-   universal renderer or compositor pass.
-8. After lesson-layout approval and a structurally different layout caller,
-   decide whether the one-axis grammar should replace the split default.
-9. Later use generated solve-x as a third semantic lesson caller before broad
-   lesson rollout or public tutorial API declaration.
-10. Keep SvelteKit/Public Web deferred until those caller and publication gates
-   pass.
-11. Complete M4 before internal M5 editorial candidates, and build the
-   constrained Public Editor only after internal authoring, publication,
-   untrusted-text, and public safety contracts pass.
+1. Refine the economics stacked-projection station and progress-rail rhythm,
+   then stop at its mandatory human visual checkpoint.
+2. After approval, repair static publication and the Svelte/CSS/JavaScript
+   route boundary without changing the reviewed choreography.
+3. Port the approved semantic progress grammar to the split projection and
+   stop at a second projection-parity checkpoint.
+4. Complete the practical whole-lesson CodeMirror loop with stable IDs,
+   incremental last-valid preview, semantic autocomplete, reversible passage
+   commands, diagnostics, and explicit save state.
+5. Build progressive floating TOC and motion-passage navigation with direct
+   state restoration, browser-history parity, and no replay or scroll-jacking.
+6. Use multi-step algebra as the next structurally different lesson caller.
+7. Extract a shared motion-passage and vignette authoring contract only after
+   economics and algebra prove the seam.
+8. Run named single, representative, and stress document profiles with
+   explicit passage/block/capability/live-stage/playhead counts.
+9. Add advanced CodeMirror semantic exploration and structured-history tools.
+10. Add Canvas/WebGL salience adapters and 3D optical parity.
+11. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
+    publication, authoring, navigation, and performance gates pass.
+
+The rank detail and dependency rationale are owned by
+`reviews/2026-08-07-motion-passage-publication-authoring-next-step-review.md`.
+Lisp review, the separate animation-promotion ledger, and tabled linear algebra
+retain their prior status; this list does not silently rerank them.
 
 ## Deferred
 
