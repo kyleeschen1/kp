@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  projectKpAnimationStationCuePresence,
+  projectKpAnimationStationGeometry,
   projectKpAnimationStationMotionCorridor,
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
@@ -530,7 +532,66 @@ test("paragraph crossing is the exact semantic motion corridor", () => {
   }), { travel: 1, progress: 1 });
 });
 
-test("animation station spends one stage-height on a deterministic cue handoff", () => {
+test("animation station projects one usable-viewport rhythm", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 900,
+    usableTopPx: 50,
+    usableBottomPx: 850
+  });
+
+  assert.deepEqual({
+    ...geometry,
+    terminalExitEndY: Math.round(geometry.terminalExitEndY)
+  }, {
+    usableTopPx: 50,
+    usableBottomPx: 850,
+    usableHeightPx: 800,
+    railTopY: 250,
+    railBottomY: 650,
+    railHeightPx: 400,
+    graphTopY: 330,
+    graphBottomY: 570,
+    graphHeightPx: 240,
+    cueRevealStartY: 706,
+    cueRevealEndY: 650,
+    cueExitEndY: 530,
+    motionEndY: 370,
+    beatDistancePx: 360,
+    terminalExitEndY: 490
+  });
+});
+
+test("animation station cue presence is reversible at every boundary", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 800
+  });
+  const samples = [656, 628, 600, 520, 500, 480].map((cueTopPx) =>
+    projectKpAnimationStationCuePresence({ cueTopPx, geometry })
+  );
+
+  assert.deepEqual(samples.map(({ phase }) => phase), [
+    "waiting",
+    "materializing",
+    "bright",
+    "bright",
+    "dissolving",
+    "gone"
+  ]);
+  assert.deepEqual(samples.map(({ presence }) => presence), [
+    0, 0.5, 1, 1, 0.5, 0
+  ]);
+  assert.deepEqual(samples.map(({ blurPx }) => blurPx), [
+    2, 1, 0, 0, 1, 2
+  ]);
+  assert.deepEqual(
+    [...samples].reverse(),
+    [480, 500, 520, 600, 628, 656].map((cueTopPx) =>
+      projectKpAnimationStationCuePresence({ cueTopPx, geometry })
+    )
+  );
+});
+
+test("animation station spends its graph runway on a deterministic cue handoff", () => {
   const corridor = projectKpAnimationStationMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -544,34 +605,34 @@ test("animation station spends one stage-height on a deterministic cue handoff",
         { travel: 1, progress: 1 }
       ]
     },
-    stageBottomPx: 240,
+    stageBottomPx: 520,
     viewportHeightPx: 800,
-    runwayPx: 240
+    runwayPx: 200
   });
 
-  assert.equal(corridor.startViewportRatio, 0.3);
-  assert.equal(corridor.endViewportRatio, 0);
+  assert.equal(corridor.startViewportRatio, 0.65);
+  assert.equal(corridor.endViewportRatio, 0.4);
   assert.deepEqual(corridor.keyframes.map(({ progress }) => progress), [
     0, 0, 0.72, 0.72, 1, 1, 1
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 240,
+    anchorTop: 520,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 216,
+    anchorTop: 516,
     viewportHeight: 800
-  }), { travel: 0.1, progress: 0 });
+  }), { travel: 0.02, progress: 0 });
   assert.ok(Math.abs(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 120,
+    anchorTop: 428,
     viewportHeight: 800
   }).progress - 0.72) < 1e-12);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 0,
+    anchorTop: 320,
     viewportHeight: 800
   }), { travel: 1, progress: 1 });
 });

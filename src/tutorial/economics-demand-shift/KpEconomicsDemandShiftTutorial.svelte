@@ -40,6 +40,8 @@
     type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
+    projectKpAnimationStationCuePresence,
+    projectKpAnimationStationGeometry,
     projectKpAnimationStationMotionCorridor,
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
@@ -52,6 +54,7 @@
     type KpEconomicsMotionBridgeDwellProfile,
     type KpEconomicsScrollScrubStrategy,
     type KpEconomicsTwoColumnTextSide,
+    type KpAnimationStationGeometryProjection,
     type KpInlineStickyParagraphProjection,
     type KpInlineStickyLessonFit
   } from "./economics-demand-shift-layout.ts";
@@ -351,6 +354,8 @@
   );
   let cachedTwoColumnScrollGeometry:
     KpEconomicsTwoColumnScrollGeometry | undefined;
+  let cachedAnimationStationGeometry:
+    KpAnimationStationGeometryProjection | undefined;
   let cachedTwoColumnPassageTimeline:
     KpTutorialScrollPassageTimeline | undefined;
   let reducedMotionQuery: MediaQueryList | undefined;
@@ -1577,9 +1582,28 @@
         : projectKpInlineStickyParagraph({
             paragraphTopPx: paragraphBounds.top,
             paragraphBottomPx: paragraphBounds.bottom,
-            stageBottomPx: stageBounds?.bottom ?? 0,
+            stageBottomPx: animationStation
+              ? readCachedAnimationStationGeometry().graphBottomY
+              : stageBounds?.bottom ?? 0,
             viewportHeightPx: window.innerHeight
           }));
+      if (animationStation) {
+        const presence = projectKpAnimationStationCuePresence({
+          cueTopPx: paragraphBounds.top,
+          geometry: readCachedAnimationStationGeometry()
+        });
+        element.dataset["kpAnimationStationCuePhase"] = presence.phase;
+        element.dataset["kpAnimationStationCuePresence"] =
+          presence.presence.toFixed(4);
+        element.style.setProperty(
+          "--kp-animation-station-cue-presence",
+          presence.presence.toFixed(4)
+        );
+        element.style.setProperty(
+          "--kp-animation-station-cue-blur",
+          `${presence.blurPx.toFixed(3)}px`
+        );
+      }
       return {
         passageId,
         motionBlockId,
@@ -1617,11 +1641,18 @@
       proseLineHeightPx: proseLineHeight
     });
     inlineStickyFit = layout.fit;
-    inlineStickyStageHeightPx = usesTwoColumnDesktopGeometry() ||
-        animationStation
-      ? inlineStage?.getBoundingClientRect().height ??
-        Math.round(window.innerHeight * (animationStation ? 0.3 : 0.68))
-      : layout.stageHeightPx;
+    if (animationStation) {
+      cachedAnimationStationGeometry = measureAnimationStationGeometry();
+      inlineStickyStageHeightPx =
+        cachedAnimationStationGeometry.railHeightPx;
+      writeAnimationStationGeometry(cachedAnimationStationGeometry);
+    } else {
+      cachedAnimationStationGeometry = undefined;
+      inlineStickyStageHeightPx = usesTwoColumnDesktopGeometry()
+        ? inlineStage?.getBoundingClientRect().height ??
+          Math.round(window.innerHeight * 0.68)
+        : layout.stageHeightPx;
+    }
     if (usesTwoColumnDesktopGeometry()) {
       const geometry = measureTwoColumnScrollGeometry();
       twoColumnStageTopPx = geometry.stageTopY;
@@ -1657,14 +1688,27 @@
     if (animationStation && shell !== undefined) {
       // Once the bounded station releases, native document travel withdraws
       // its one live surface; reverse scroll reconstructs the same endpoint.
+      const geometry = readCachedAnimationStationGeometry();
+      const exitSpan = Math.max(
+        1,
+        geometry.railBottomY - geometry.terminalExitEndY
+      );
       const exitProgress = clamp(
-        -stageBounds.top / Math.max(1, stageBounds.height * 0.35),
+        (geometry.railTopY - stageBounds.top) / exitSpan,
         0,
         1
       );
       shell.style.setProperty(
         "--kp-animation-station-exit-progress",
         exitProgress.toFixed(4)
+      );
+      shell.style.setProperty(
+        "--kp-animation-station-exit-offset",
+        `${(-geometry.usableHeightPx * 0.12 * exitProgress).toFixed(3)}px`
+      );
+      shell.style.setProperty(
+        "--kp-animation-station-rail-spread",
+        `${(Math.min(40, window.innerWidth * 0.03) * exitProgress).toFixed(3)}px`
       );
     }
     inlineStickyStageState = stageBounds.top > top + 1
@@ -1676,11 +1720,17 @@
   }
 
   function inlineStickyTopInset(): number {
+    if (animationStation) {
+      return readCachedAnimationStationGeometry().railTopY;
+    }
     if (!usesTwoColumnDesktopGeometry()) return 0;
     return readCachedTwoColumnScrollGeometry().stageTopY;
   }
 
   function inlineStickyHandoffStartY(): number {
+    if (animationStation) {
+      return readCachedAnimationStationGeometry().graphBottomY;
+    }
     if (usesTwoColumnDesktopGeometry()) {
       return readCachedTwoColumnScrollGeometry().textAnchorY;
     }
@@ -1731,13 +1781,14 @@
       });
     }
     if (animationStation) {
+      const geometry = readCachedAnimationStationGeometry();
       return projectKpAnimationStationMotionCorridor({
         corridor: block.corridor,
         // Registration can happen before the stage pins. The station's local
         // edge, not that transient document position, owns every cue handoff.
-        stageBottomPx: inlineStickyTopInset() + inlineStickyStageHeightPx,
+        stageBottomPx: geometry.graphBottomY,
         viewportHeightPx: window.innerHeight,
-        runwayPx: inlineStickyStageHeightPx
+        runwayPx: geometry.graphBottomY - geometry.motionEndY
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1753,6 +1804,49 @@
     return twoColumnScroll && (twoColumnGeometryQuery ?? window.matchMedia(
       "(min-width: 60rem) and (min-height: 32rem)"
     )).matches;
+  }
+
+  function measureAnimationStationGeometry():
+  KpAnimationStationGeometryProjection {
+    const style = shell === undefined ? undefined : getComputedStyle(shell);
+    const pixels = (name: string): number => {
+      const value = Number.parseFloat(style?.getPropertyValue(name) ?? "");
+      return Number.isFinite(value) ? Math.max(0, value) : 0;
+    };
+    const viewport = projectKpTutorialUsableViewport({
+      viewportHeightPx: window.innerHeight,
+      persistentTopInsetPx: pixels("--kp-tutorial-persistent-top-inset"),
+      persistentBottomInsetPx: pixels("--kp-tutorial-persistent-bottom-inset")
+    });
+    return projectKpAnimationStationGeometry({
+      viewportHeightPx: viewport.viewportHeightPx,
+      usableTopPx: viewport.topPx,
+      usableBottomPx: viewport.bottomPx
+    });
+  }
+
+  function readCachedAnimationStationGeometry():
+  KpAnimationStationGeometryProjection {
+    return cachedAnimationStationGeometry ?? projectKpAnimationStationGeometry({
+      viewportHeightPx: window.innerHeight
+    });
+  }
+
+  function writeAnimationStationGeometry(
+    geometry: KpAnimationStationGeometryProjection
+  ): void {
+    if (shell === undefined) return;
+    const properties = {
+      "--kp-animation-station-rail-top": geometry.railTopY,
+      "--kp-animation-station-rail-height": geometry.railHeightPx,
+      "--kp-animation-station-graph-offset":
+        geometry.graphTopY - geometry.railTopY,
+      "--kp-animation-station-graph-height": geometry.graphHeightPx,
+      "--kp-animation-station-beat": geometry.beatDistancePx
+    } as const;
+    for (const [name, value] of Object.entries(properties)) {
+      shell.style.setProperty(name, `${value}px`);
+    }
   }
 
   async function invalidateGeometryAfterPresentationChange(): Promise<void> {
@@ -2547,9 +2641,7 @@
       : `${renderedMotionBlock.label} animation step`}
     style={twoColumnParagraphPresentation !== undefined
       ? `--kp-two-column-paragraph-salience:${twoColumnParagraphPresentation.salience}`
-      : animationStation && inlineParagraphProjection !== undefined
-        ? `--kp-animation-station-cue-exit:${inlineParagraphProjection.crossingProgress}`
-        : undefined}
+      : undefined}
   >
     {#if renderedMotionBlock !== undefined}
       {#each renderedMotionBlock.checkpoints as motionCheckpoint}

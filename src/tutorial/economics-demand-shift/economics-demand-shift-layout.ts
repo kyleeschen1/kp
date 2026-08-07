@@ -53,6 +53,43 @@ export interface KpTwoColumnScrollSequenceProjection {
   readonly attentionIndex: number;
 }
 
+export interface KpAnimationStationGeometryProjection {
+  readonly usableTopPx: number;
+  readonly usableBottomPx: number;
+  readonly usableHeightPx: number;
+  readonly railTopY: number;
+  readonly railBottomY: number;
+  readonly railHeightPx: number;
+  readonly graphTopY: number;
+  readonly graphBottomY: number;
+  readonly graphHeightPx: number;
+  readonly cueRevealStartY: number;
+  readonly cueRevealEndY: number;
+  readonly cueExitEndY: number;
+  readonly motionEndY: number;
+  readonly beatDistancePx: number;
+  readonly terminalExitEndY: number;
+}
+
+export interface KpAnimationStationCuePresenceProjection {
+  readonly phase: "waiting" | "materializing" | "bright" | "dissolving" | "gone";
+  readonly presence: number;
+  readonly blurPx: number;
+}
+
+export const kpEconomicsAnimationStationDefaultRhythm = Object.freeze({
+  railTopRatio: 0.25,
+  railBottomRatio: 0.75,
+  graphTopRatio: 0.35,
+  graphBottomRatio: 0.65,
+  cueRevealStartRatio: 0.82,
+  cueRevealEndRatio: 0.75,
+  cueExitEndRatio: 0.6,
+  motionEndRatio: 0.4,
+  beatDistanceRatio: 0.45,
+  terminalExitEndRatio: 0.55
+});
+
 const inlineStickyLayoutQueryValue = "inline-sticky";
 const animationStationLayoutQueryValue = "animation-station";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
@@ -631,7 +668,7 @@ export function projectKpAnimationStationMotionCorridor(input: {
   const activeKeyframes = input.corridor.keyframes.filter(
     ({ travel }) => travel > authoredMotionStart
   );
-  const handoffEnd = 0.1;
+  const handoffEnd = 0.02;
   const settleStart = 0.9;
 
   // The cue relinquishes attention first; the remaining local interval is the
@@ -652,6 +689,102 @@ export function projectKpAnimationStationMotionCorridor(input: {
       ...projected.map((keyframe) => Object.freeze(keyframe)),
       Object.freeze({ travel: 1, progress: finalProgress })
     ])
+  });
+}
+
+export function projectKpAnimationStationGeometry(input: {
+  readonly viewportHeightPx: number;
+  readonly usableTopPx?: number | undefined;
+  readonly usableBottomPx?: number | undefined;
+  readonly rhythm?: Partial<
+    typeof kpEconomicsAnimationStationDefaultRhythm
+  > | undefined;
+}): KpAnimationStationGeometryProjection {
+  const viewportHeight = finitePositive(input.viewportHeightPx, 640);
+  const usableTop = clamp(finiteNonNegative(input.usableTopPx ?? 0), 0,
+    viewportHeight - 1);
+  const usableBottom = clamp(
+    input.usableBottomPx === undefined ||
+        !Number.isFinite(input.usableBottomPx)
+      ? viewportHeight
+      : input.usableBottomPx,
+    usableTop + 1,
+    viewportHeight
+  );
+  const usableHeight = usableBottom - usableTop;
+  const rhythm = {
+    ...kpEconomicsAnimationStationDefaultRhythm,
+    ...input.rhythm
+  };
+  const y = (ratio: number): number => usableTop + usableHeight * clamp(
+    Number.isFinite(ratio) ? ratio : 0,
+    0,
+    1
+  );
+  const railTopY = y(rhythm.railTopRatio);
+  const railBottomY = y(rhythm.railBottomRatio);
+  const graphTopY = y(rhythm.graphTopRatio);
+  const graphBottomY = y(rhythm.graphBottomRatio);
+
+  return Object.freeze({
+    usableTopPx: usableTop,
+    usableBottomPx: usableBottom,
+    usableHeightPx: usableHeight,
+    railTopY,
+    railBottomY,
+    railHeightPx: Math.max(1, railBottomY - railTopY),
+    graphTopY,
+    graphBottomY,
+    graphHeightPx: Math.max(1, graphBottomY - graphTopY),
+    cueRevealStartY: y(rhythm.cueRevealStartRatio),
+    cueRevealEndY: y(rhythm.cueRevealEndRatio),
+    cueExitEndY: y(rhythm.cueExitEndRatio),
+    motionEndY: y(rhythm.motionEndRatio),
+    beatDistancePx: usableHeight * clamp(rhythm.beatDistanceRatio, 0.1, 1),
+    terminalExitEndY: y(rhythm.terminalExitEndRatio)
+  });
+}
+
+export function projectKpAnimationStationCuePresence(input: {
+  readonly cueTopPx: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+}): KpAnimationStationCuePresenceProjection {
+  const cueTop = Number.isFinite(input.cueTopPx)
+    ? input.cueTopPx
+    : input.geometry.usableBottomPx;
+  const geometry = input.geometry;
+  let phase: KpAnimationStationCuePresenceProjection["phase"];
+  let presence: number;
+  if (cueTop >= geometry.cueRevealStartY) {
+    phase = "waiting";
+    presence = 0;
+  } else if (cueTop > geometry.cueRevealEndY) {
+    phase = "materializing";
+    presence = smoothstep(clamp(
+      (geometry.cueRevealStartY - cueTop) /
+        Math.max(1, geometry.cueRevealStartY - geometry.cueRevealEndY),
+      0,
+      1
+    ));
+  } else if (cueTop >= geometry.graphBottomY) {
+    phase = "bright";
+    presence = 1;
+  } else if (cueTop > geometry.cueExitEndY) {
+    phase = "dissolving";
+    presence = smoothstep(clamp(
+      (cueTop - geometry.cueExitEndY) /
+        Math.max(1, geometry.graphBottomY - geometry.cueExitEndY),
+      0,
+      1
+    ));
+  } else {
+    phase = "gone";
+    presence = 0;
+  }
+  return Object.freeze({
+    phase,
+    presence,
+    blurPx: (1 - presence) * 2
   });
 }
 

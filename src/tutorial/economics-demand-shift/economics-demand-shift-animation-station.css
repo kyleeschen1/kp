@@ -1,11 +1,17 @@
-/* The query-local animation station owns only its bounded cue rhythm and release treatment. */
+/* The query-local station owns one reversible cue rhythm while lesson and graph semantics remain shared. */
 .kp-economics-tutorial--animation-station {
-  --kp-animation-station-height: clamp(13rem, 30dvh, 16rem);
-  --kp-animation-station-beat: var(--kp-animation-station-height);
+  --kp-animation-station-rail-top: 25dvh;
+  --kp-animation-station-rail-height: 50dvh;
+  --kp-animation-station-graph-offset: 10dvh;
+  --kp-animation-station-graph-height: 30dvh;
+  --kp-animation-station-beat: 45dvh;
   --kp-animation-station-width: min(36rem, calc(100vw - 2rem));
   --kp-animation-station-rail: var(--kp-graph-line-effective, 1px);
   --kp-animation-station-exit-progress: 0;
-  --kp-inline-sticky-stage-height: var(--kp-animation-station-height);
+  --kp-animation-station-exit-offset: 0px;
+  --kp-animation-station-rail-spread: 0px;
+  --kp-inline-sticky-top: var(--kp-animation-station-rail-top);
+  --kp-inline-sticky-stage-height: var(--kp-animation-station-rail-height);
   --kp-inline-sticky-stage-width: var(--kp-animation-station-width);
   --kp-inline-sticky-measure: min(34rem, calc(100vw - 3rem));
   --kp-inline-sticky-scene-gap: 0px;
@@ -14,21 +20,35 @@
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__motion-passage {
   width: var(--kp-animation-station-width);
-  border-color: var(--kp-lesson-theme-stage-divider);
+  border-block: 0;
   background: transparent;
 }
 
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__motion-passage-body {
+  position: relative;
   isolation: isolate;
 }
 
 .kp-economics-tutorial--animation-station
+  .kp-economics-tutorial__motion-passage-body::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 12;
+  height: var(--kp-animation-station-rail);
+  background: var(--kp-lesson-theme-stage-divider);
+  pointer-events: none;
+}
+
+.kp-economics-tutorial--animation-station
   .kp-economics-tutorial__stage--inline {
-  height: var(--kp-animation-station-height);
-  padding: clamp(0.5rem, 1.5dvh, 0.8rem) clamp(0.65rem, 2vw, 1rem);
-  background: var(--kp-lesson-theme-stage-occlusion);
-  opacity: calc(1 - var(--kp-animation-station-exit-progress));
+  height: var(--kp-animation-station-rail-height);
+  padding: 0;
+  background: transparent;
+  opacity: 1;
 }
 
 .kp-economics-tutorial--animation-station
@@ -42,37 +62,71 @@
   z-index: 10;
   width: var(--kp-animation-station-rail);
   height: auto;
-  background: var(--kp-lesson-theme-reader-rail);
+  background: var(--kp-lesson-theme-stage-divider);
+  opacity: calc(1 - var(--kp-animation-station-exit-progress));
   pointer-events: none;
-  transform: none;
 }
 
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__stage--inline::before {
   left: 0;
+  transform: translateX(calc(0px - var(--kp-animation-station-rail-spread)));
 }
 
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__stage--inline::after {
   right: 0;
   left: auto;
+  transform: translateX(var(--kp-animation-station-rail-spread));
 }
 
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__stage--inline
   .kp-economics-tutorial__stage-card {
-  height: 100%;
+  position: absolute;
+  top: var(--kp-animation-station-graph-offset);
+  right: 0;
+  left: 0;
+  height: var(--kp-animation-station-graph-height);
+  opacity: calc(1 - var(--kp-animation-station-exit-progress));
+  transform: translateY(var(--kp-animation-station-exit-offset));
 }
 
 .kp-economics-tutorial--animation-station
-  .kp-economics-tutorial__verification-aperture {
+  .kp-economics-tutorial__stage-card {
+  --kp-stage-graph-block: 0%;
+  --kp-stage-graph-inline: 0%;
+  --kp-stage-graph-block-size: 100%;
+  --kp-stage-graph-inline-size: 100%;
+}
+
+.kp-economics-tutorial--animation-station
+  :is(
+    .kp-economics-tutorial__stage-card,
+    .editor-animation-player,
+    .editor-animation-player__stage,
+    .editor-animation-player__surface,
+    .editor-graph-stage
+  ) {
+  background: transparent;
+}
+
+.kp-economics-tutorial--animation-station
+  .kp-economics-tutorial__verification-aperture,
+.kp-economics-tutorial--animation-station
+  [data-kp-economics-screen-space-label="equilibrium-current"] {
   display: none;
 }
 
 .kp-economics-tutorial--animation-station
+  .editor-graph-stage__economics-screen-space-label {
+  font-size: 0.82em;
+}
+
+.kp-economics-tutorial--animation-station
   [data-kp-economics-screen-space-label="axis-quantity"] {
-  /* The compact stage has no spare line below the horizontal axis. */
-  transform: translate(-50%, -1.15rem);
+  /* The compact graph keeps Q inside its lower edge without touching the axis. */
+  transform: translate(-50%, -0.95rem);
 }
 
 .kp-economics-tutorial--animation-station
@@ -89,7 +143,13 @@
   width: 100%;
   height: var(--kp-animation-station-beat);
   margin: 0;
-  padding: clamp(0.65rem, 1.5dvh, 0.9rem) 0 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .kp-economics-tutorial--animation-station
@@ -105,23 +165,48 @@
 
 .kp-economics-tutorial--animation-station
   #kp-section-market-clearing
+  [data-kp-animation-station-cue]::before,
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  [data-kp-animation-station-cue]
+  > p::before {
+  content: none;
+}
+
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
   [data-kp-animation-station-cue]
   > p {
   margin: 0;
-  opacity: calc(1 - var(--kp-animation-station-cue-exit, 0));
+  border: 0;
+  outline: 0;
+  background: transparent;
+  opacity: var(--kp-animation-station-cue-presence, 0);
+  filter: blur(var(--kp-animation-station-cue-blur, 2px));
+  transition: none;
 }
 
 .kp-economics-tutorial--animation-station
   .kp-economics-tutorial__motion-passage-gate--exit {
-  min-height: clamp(0.75rem, 2dvh, 1.25rem);
+  min-height: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
   .kp-economics-tutorial--animation-station
-    .kp-economics-tutorial__stage--inline,
+    .kp-economics-tutorial__stage--inline::before,
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline::after,
+  .kp-economics-tutorial--animation-station
+    .kp-economics-tutorial__stage--inline
+    .kp-economics-tutorial__stage-card {
+    opacity: 1;
+    transform: none;
+  }
+
   .kp-economics-tutorial--animation-station
     [data-kp-animation-station-cue]
     > p {
     opacity: 1;
+    filter: none;
   }
 }
