@@ -2,12 +2,13 @@
 
 Status: active-supporting
 Last Updated: 2026-08-08
-Current Next Action: Execute the approved quiet economics-local stacked
-revision, then advance layout-independent publication, route closure,
-practical CodeMirror, semantic TOC/direct navigation, and objective hardening.
-Stop for human visual review before shared station extraction, split parity,
-final floating-navigation geometry, or release approval. This priority change
-does not alter the separate animation-promotion rank.
+Current Next Action: Hold the delayed human visual checkpoint for the quiet
+economics-local stacked choreography. Approve, refine, or reject that exemplar
+before shared station extraction, split parity, final floating-navigation
+geometry, or release approval. Static publication, route closure, the practical
+whole-lesson CodeMirror loop, semantic navigation, accessibility, and
+performance hardening are complete and survive any visual rollback. This
+priority boundary does not alter the separate animation-promotion rank.
 
 ## Goal
 
@@ -30,10 +31,16 @@ and
 The active execution order is revised by
 `../decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md` and
 `../reviews/2026-08-08-animation-transition-packet-checkpoint-next-step-review.md`.
-The practical editor and semantic navigation now follow static publication and
-route closure while visual review, shared station extraction, split parity,
-and final floating geometry wait for the user. The older runtime-correction
-queue below is completed historical evidence, not the current next action.
+The reordered autonomous tranche is complete through its objective closeout,
+recorded in
+`../reviews/2026-08-08-motion-passage-independent-infrastructure-closeout.md`.
+The public lesson now publishes complete searchable HTML/MathML/SVG before
+enhancement; optional presenter and whole-lesson CodeMirror capabilities load
+outside the default learner closure; semantic TOC, direct state restoration,
+accessibility, and performance gates are in place. Human visual review, shared
+station extraction, split parity, and final floating geometry still wait for
+the user. The older runtime-correction queue below is completed historical
+evidence, not the current next action.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.

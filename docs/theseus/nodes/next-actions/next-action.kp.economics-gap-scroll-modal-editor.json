@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-08-economics-startup-attribution.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-08-motion-passage-independent-infrastructure-closeout.md"
     }
   ],
   "dependsOn": {
@@ -799,11 +803,32 @@
       "scope": "r19 repository-wide baseline audit outside tranche scope",
       "checkedAt": "2026-08-08T20:44:56.011Z",
       "notes": "The broad command stops at an existing reader app-to-compiler architecture violation in fraction-composition-salience-adapter.ts. Separate inference and concept-catalog gates pass; promotion-memory also has pre-existing queue text drift. A direct all-unit audit passed 3811 of 3847 tests; its 36 failures are sandbox listen EPERM cases and existing catalogue count, inventory, and roadmap snapshot drift unrelated to this tranche. Scoped economics, editor, runtime, publication, accessibility, CSS, and performance gates all pass."
+    },
+    {
+      "command": "npm run --silent theseus -- workspace validate",
+      "status": "passed",
+      "scope": "Theseus workspace and durable closeout records",
+      "checkedAt": "2026-08-08T20:49:23.187Z",
+      "notes": "Validated 907 nodes and 18754 events before slice completion."
+    },
+    {
+      "command": "npm run test:loop-reliability",
+      "status": "passed",
+      "scope": "Approved-run stop guard and logical slice reporting",
+      "checkedAt": "2026-08-08T20:49:24.609Z",
+      "notes": "15 tests passed; the guard preserves the required human checkpoint."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "Closeout project-memory patch",
+      "checkedAt": "2026-08-08T20:49:25.910Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R19 closes scoped integration and performance hardening with repository-wide baseline debt explicitly separated. R20 next writes autonomous closeout evidence, validates Theseus/workspace state, and prepares the delayed human layout checkpoint without executing r21."
+    "summary": "Autonomous slices r01-r20 are complete. The only remaining approved slice is the delayed human decision on the economics-local quiet stacked choreography; no shared visual promotion is authorized before it."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

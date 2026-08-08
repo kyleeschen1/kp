@@ -165,7 +165,8 @@
     {
       "id": "r20",
       "title": "autonomous-closeout-evidence",
-      "status": "planned"
+      "summary": "Recorded autonomous closeout evidence, refreshed the roadmap and explanation-attention thread, validated the Theseus workspace and loop guard, and isolated the delayed human visual decision from all durable infrastructure.",
+      "status": "complete"
     },
     {
       "id": "r21",

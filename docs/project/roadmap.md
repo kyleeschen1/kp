@@ -39,14 +39,16 @@ remaining economics payload budget.
 The motion-passage workstream now uses the canonical vocabulary in
 `principles/motion-passage-vocabulary.md` and the accepted order in
 `decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`.
-The execution order is temporarily revised by
-`decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md`: one
-quiet economics-local stacked revision comes first, followed by
-static-publication and route closure, the practical CodeMirror loop, semantic
-TOC/direct navigation, and objective hardening. Human visual review, shared
-station extraction, split parity, and final navigation geometry follow when
-the user returns. The durable horizon outside this run remains unchanged.
-This workstream order does not alter the animation-library promotion rank.
+The execution order was temporarily revised by
+`decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md`. The
+quiet economics-local stacked revision and all approved layout-independent
+static-publication, route, CodeMirror, semantic-navigation, accessibility, and
+performance work are now complete. The current checkpoint is human review of
+the local stacked choreography, as recorded in
+`reviews/2026-08-08-motion-passage-independent-infrastructure-closeout.md`.
+Shared station extraction, split parity, and final navigation geometry remain
+blocked on that visual decision. The durable horizon outside this run and the
+animation-library promotion rank remain unchanged.
 
 The accepted long-term plan is recorded in
 `decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
