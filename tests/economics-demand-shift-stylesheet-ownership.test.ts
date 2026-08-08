@@ -167,8 +167,9 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.match(station, /--kp-animation-station/);
   assert.match(station, /--kp-animation-station-reading-hold-vh:\s*15/);
   assert.match(station, /--kp-animation-station-motion-corridor-vh:\s*28dvh/);
-  assert.match(station, /--kp-animation-station-motion-settle-vh:\s*4/);
+  assert.doesNotMatch(station, /--kp-animation-station-motion-settle-vh/);
   assert.match(station, /data-kp-animation-station-transition/);
+  assert.match(station, /data-kp-animation-station-packet/);
   assert.doesNotMatch(station, /--kp-animation-station-reading-presence/);
   assert.match(station, /Phone and reduced-motion readers get one ordinary/);
   assert.doesNotMatch(station, /scroll-snap|scroll-behavior/);

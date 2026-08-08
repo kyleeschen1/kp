@@ -19,7 +19,6 @@ const ordinaryGeometry = Object.freeze({
 const motionGeometry = Object.freeze({
   ...ordinaryGeometry,
   graphBottomY: 400,
-  motionScrubEndY: 208,
   motionEndY: 176
 });
 
@@ -140,12 +139,12 @@ test("ordinary reading hold is a 10vh local corridor independent of cue height",
   );
 });
 
-test("motion station reserves 24vh for scrub and 4vh for settlement", () => {
+test("motion station spends its full 28vh corridor on scrub", () => {
   const localBoundaries = kpEconomicsMotionStationPhaseBoundaries(
     motionGeometry
   );
-  assert.equal(localBoundaries.scrubStartPx - localBoundaries.scrubEndPx, 192);
-  assert.equal(localBoundaries.scrubEndPx - localBoundaries.handoffEndPx, 32);
+  assert.equal(localBoundaries.scrubStartPx - localBoundaries.scrubEndPx, 224);
+  assert.equal(localBoundaries.scrubEndPx, localBoundaries.handoffEndPx);
 
   const input = {
     ...motionInput,
@@ -160,8 +159,8 @@ test("motion station reserves 24vh for scrub and 4vh for settlement", () => {
   assert.equal(projected.semanticProgress, 0.72);
   assert.equal(projected.activeMotionBlockId, "demand-shift");
   assert.equal(
-    projectKpEconomicsStationPhase({ ...input, anchorPx: 208 }).phase,
-    "settle"
+    projectKpEconomicsStationPhase({ ...input, anchorPx: 177 }).phase,
+    "scrub"
   );
   assert.equal(
     projectKpEconomicsStationPhase({ ...input, anchorPx: 176 }).phase,

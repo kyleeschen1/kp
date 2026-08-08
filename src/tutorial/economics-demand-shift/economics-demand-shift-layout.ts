@@ -69,8 +69,6 @@ export interface KpAnimationStationGeometryProjection {
   readonly cuePinEndY: number;
   readonly cueExitEndY: number;
   readonly motionDistancePx: number;
-  readonly motionScrubEndY: number;
-  readonly motionSettleDistancePx: number;
   readonly motionEndY: number;
   readonly beatDistancePx: number;
   readonly railExitEndY: number;
@@ -96,7 +94,6 @@ export interface KpEconomicsAnimationStationRhythm {
   readonly cuePinDistanceRatio: number;
   readonly cueExitGraphRatio: number;
   readonly motionDistanceRatio: number;
-  readonly motionSettleDistanceRatio: number;
   readonly beatDistanceRatio: number;
   readonly railExitEndRatio: number;
   readonly graphExitStartRatio: number;
@@ -115,7 +112,6 @@ Readonly<KpEconomicsAnimationStationRhythm> = Object.freeze({
   cuePinDistanceRatio: 0.15,
   cueExitGraphRatio: 0.6,
   motionDistanceRatio: 0.28,
-  motionSettleDistanceRatio: 0.04,
   beatDistanceRatio: 0.74,
   railExitEndRatio: 0.78,
   graphExitStartRatio: 0.75,
@@ -672,7 +668,6 @@ export function projectKpAnimationStationMotionCorridor(input: {
   readonly motionStartPx: number;
   readonly viewportHeightPx: number;
   readonly runwayPx: number;
-  readonly settleRunwayPx?: number | undefined;
 }): KpTutorialMotionCorridor {
   const viewportHeight = finitePositive(input.viewportHeightPx, 640);
   const motionStart = clamp(
@@ -684,11 +679,6 @@ export function projectKpAnimationStationMotionCorridor(input: {
     finitePositive(input.runwayPx, viewportHeight * 0.3),
     1,
     viewportHeight
-  );
-  const settleRunway = clamp(
-    finitePositive(input.settleRunwayPx ?? runway * 0.2, runway * 0.2),
-    0,
-    runway
   );
   const firstProgress = input.corridor.keyframes[0]?.progress ?? 0;
   const finalProgress = input.corridor.keyframes.at(-1)?.progress ??
@@ -706,15 +696,10 @@ export function projectKpAnimationStationMotionCorridor(input: {
   const activeKeyframes = input.corridor.keyframes.filter(
     ({ travel }) => travel > authoredMotionStart
   );
-  const onsetHoldEnd = 0.02;
-  const settleStart = clamp(1 - settleRunway / runway, onsetHoldEnd, 1);
-
-  // A two-percent threshold makes the seam visibly settle before the existing
-  // semantic motion consumes the rest of its native-scroll runway.
+  // The station owns no dead time: the first post-dock pixel enters the
+  // authored motion and the final runway pixel reaches its exact endpoint.
   const projected = activeKeyframes.map(({ travel, progress }) => ({
-    travel: onsetHoldEnd +
-      ((travel - authoredMotionStart) / authoredMotionSpan) *
-        (settleStart - onsetHoldEnd),
+    travel: (travel - authoredMotionStart) / authoredMotionSpan,
     progress
   }));
   return Object.freeze({
@@ -723,7 +708,6 @@ export function projectKpAnimationStationMotionCorridor(input: {
     endViewportRatio: (motionStart - runway) / viewportHeight,
     keyframes: Object.freeze([
       Object.freeze({ travel: 0, progress: firstProgress }),
-      Object.freeze({ travel: onsetHoldEnd, progress: firstProgress }),
       ...projected.map((keyframe) => Object.freeze(keyframe)),
       Object.freeze({ travel: 1, progress: finalProgress })
     ])
@@ -775,11 +759,6 @@ export function projectKpAnimationStationGeometry(input: {
     0,
     1
   );
-  const motionSettleDistancePx = Math.min(
-    motionDistancePx,
-    usableHeight * clamp(rhythm.motionSettleDistanceRatio, 0, 1)
-  );
-
   return Object.freeze({
     usableTopPx: usableTop,
     usableBottomPx: usableBottom,
@@ -796,9 +775,6 @@ export function projectKpAnimationStationGeometry(input: {
     cuePinEndY,
     cueExitEndY,
     motionDistancePx,
-    motionScrubEndY:
-      graphBottomY - (motionDistancePx - motionSettleDistancePx),
-    motionSettleDistancePx,
     motionEndY: graphBottomY - motionDistancePx,
     beatDistancePx: usableHeight * clamp(rhythm.beatDistanceRatio, 0.1, 1),
     railExitEndY: y(rhythm.railExitEndRatio),

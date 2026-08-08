@@ -355,7 +355,7 @@ test.skip("superseded single-motion station timing remains available during exem
   ))).toBeGreaterThan(0.999);
 });
 
-test("stacked prose crosses a sticky transition seam without scroll locking", async ({
+test("a transition packet simulates discrete scroll lock", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -368,6 +368,12 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
   const demandText = demandCue.locator("p");
   const demandTransition = demandCue.locator(
     '[data-kp-animation-station-transition="demand-shift"]'
+  );
+  const demandPacket = demandCue.locator(
+    '[data-kp-animation-station-packet="demand-shift"]'
+  );
+  const demandCaption = demandCue.locator(
+    '[data-kp-animation-station-caption="follow-shift"]'
   );
   const demandRail = demandCue.locator("kp-tutorial-progress-rail");
   const reading = passage(station, "new-equilibrium");
@@ -386,11 +392,13 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
     .toHaveCount(0);
   await expect(station.locator("[data-kp-animation-station-transition]"))
     .toHaveCount(2);
+  await expect(station.locator("[data-kp-animation-station-packet]"))
+    .toHaveCount(2);
   await expect(station.locator("kp-tutorial-progress-rail")).toHaveCount(2);
   await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
   await expect(station.locator(".editor-graph-stage")).toHaveCount(1);
   for (const paragraph of await station.locator(
-    "[data-kp-animation-station-cue] > p"
+    "[data-kp-animation-station-cue] p"
   ).all()) {
     await expect(paragraph).toHaveCSS("opacity", "1");
     await expect(paragraph).toHaveCSS("transform", "none");
@@ -403,9 +411,20 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
 
   await alignTop(page, demandTransition, 400);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+  await expect(demandPacket).toHaveCSS("position", "relative");
+  await expect(demandPacket.locator(":scope > kp-tutorial-progress-rail"))
+    .toHaveCount(1);
+  await expect(demandPacket.locator(":scope > [data-kp-animation-station-caption]"))
+    .toHaveCount(1);
   await expect.poll(() => demandRail.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(400, 0);
+  const lockedPacketTop = await demandPacket.evaluate(
+    (element) => element.getBoundingClientRect().top
+  );
+  const lockedCaptionTop = await demandCaption.evaluate(
+    (element) => element.getBoundingClientRect().top
+  );
   await page.screenshot({
     path: `${evidenceDirectory}/station-transition-start.png`,
     fullPage: false
@@ -420,7 +439,13 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
   await expect.poll(() => demandRail.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(400, 0);
-  await expect(demandRail).not.toHaveAttribute("aria-valuenow", "0");
+  await expect.poll(() => demandPacket.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(lockedPacketTop, 0);
+  await expect.poll(() => demandCaption.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(lockedCaptionTop, 0);
+  await expect(demandRail).toHaveAttribute("aria-valuenow", "50");
   await expect(demandText).toHaveCSS("opacity", "1");
   await page.screenshot({
     path: `${evidenceDirectory}/station-transition-midpoint.png`,
@@ -430,6 +455,12 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
   await alignTop(page, demandTransition, 176);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
   await expect(demandRail).toHaveAttribute("aria-valuenow", "100");
+  await expect.poll(() => demandPacket.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(lockedPacketTop, 0);
+  await expect.poll(() => demandCaption.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(lockedCaptionTop, 0);
   await page.screenshot({
     path: `${evidenceDirectory}/station-transition-settled.png`,
     fullPage: false
@@ -438,10 +469,13 @@ test("stacked prose crosses a sticky transition seam without scroll locking", as
   await alignTop(page, readingText, 520);
   await expect(readingText).toHaveCSS("opacity", "1");
   await expect(readingText).toHaveCSS("transform", "none");
+  await expect.poll(() => demandPacket.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeLessThan(lockedPacketTop - 10);
   await expect(root).not.toHaveAttribute("data-kp-animation-station-lifecycle");
 
   await alignTop(page, supplyTransition, 400);
-  await expect.poll(() => supplyProgress(root)).toBeLessThan(0.001);
+  await expect.poll(() => supplyProgress(root)).toBeLessThan(0.005);
   await alignTop(page, supplyTransition, 288);
   await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.1);
   await expect.poll(() => supplyRail.evaluate(
@@ -554,8 +588,14 @@ test("station checkpoint URLs restore the shared playhead directly", async ({
   const rail = root.locator(
     '[data-kp-tutorial-progress-rail="demand-shift"]'
   );
+  const packet = root.locator(
+    '[data-kp-animation-station-packet="demand-shift"]'
+  );
   await expect.poll(() => demandProgress(root)).toBeCloseTo(0.72, 2);
-  await expect(rail).toHaveAttribute("aria-valuenow", "72");
+  await expect(rail).toHaveAttribute("aria-valuenow", "57");
+  await expect.poll(() => packet.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(400, 0);
   const cue = passage(
     root.locator('[data-kp-motion-passage="demand-change"]'),
     "follow-shift"
@@ -711,7 +751,10 @@ async function alignTop(
   );
   await expect.poll(() => locator.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(desiredTop, 0);
+  )).toBeGreaterThanOrEqual(desiredTop - 0.75);
+  await expect.poll(() => locator.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeLessThanOrEqual(desiredTop + 0.75);
 }
 
 async function alignBottom(

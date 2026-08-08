@@ -17,7 +17,6 @@
   --kp-animation-station-beat: 74dvh;
   --kp-animation-station-reading-hold-vh: 15;
   --kp-animation-station-motion-corridor-vh: 28dvh;
-  --kp-animation-station-motion-settle-vh: 4;
   --kp-animation-station-passage-gap: clamp(1.75rem, 4dvh, 3rem);
   --kp-animation-station-width: min(42rem, calc(100vw - 2rem));
   --kp-animation-station-rail: 2px;
@@ -287,22 +286,59 @@
 }
 
 .kp-economics-tutorial--animation-station
-  [data-kp-animation-station-transition]
-  > kp-tutorial-progress-rail {
-  position: sticky;
-  top: var(--kp-animation-station-graph-bottom);
+  [data-kp-animation-station-packet] {
+  --kp-animation-station-packet-offset: 0px;
+  position: relative;
   z-index: 5;
-  grid-template-rows: 1px 1rem;
   width: min(100%, var(--kp-inline-sticky-measure));
   margin-inline: auto;
+  background: var(--kp-lesson-theme-page);
+  opacity: 1;
+  /* Equal-and-opposite paint travel simulates a lock without removing this
+     packet from document flow or introducing a second scroll clock. */
+  transform: translateY(var(--kp-animation-station-packet-offset));
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-animation-station-packet]
+  > kp-tutorial-progress-rail {
+  grid-template-rows: 1px 1rem;
+  width: 100%;
   opacity: 1;
   transform: none;
 }
 
 .kp-economics-tutorial--animation-station
-  [data-kp-animation-station-transition]
+  [data-kp-animation-station-packet]
   .kp-tutorial-progress-rail__track {
   margin-block: 0;
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-animation-station-caption] {
+  margin-top: 0.35rem;
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-animation-station-caption]
+  > p {
+  margin: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+.kp-economics-tutorial--animation-station
+  [data-kp-animation-station-caption]
+  > p
+  > .kp-economics-tutorial__passage-ink {
+  display: inline;
+  opacity: 1;
+  transform: none;
 }
 
 .kp-economics-tutorial--animation-station
@@ -319,11 +355,9 @@
   #kp-section-market-clearing
   [data-kp-animation-station-transition] {
   position: relative;
-  min-height:
-    calc(
-      var(--kp-animation-station-motion-corridor-vh) + 1.5rem
-    );
-  margin-top: clamp(1.25rem, 3dvh, 2rem);
+  min-height: 0;
+  margin-top: 0;
+  padding-bottom: var(--kp-animation-station-motion-corridor-vh);
 }
 
 .kp-economics-tutorial--animation-station
@@ -364,10 +398,10 @@
     [data-kp-animation-station-cue]
     > p,
   .kp-economics-tutorial--animation-station
-    [data-kp-animation-station-transition]
-    > kp-tutorial-progress-rail {
+    [data-kp-animation-station-packet] {
     position: static;
     opacity: 1;
+    transform: none;
   }
 
   .kp-economics-tutorial--animation-station
@@ -376,7 +410,7 @@
     > p
     > .kp-economics-tutorial__passage-ink,
   .kp-economics-tutorial--animation-station
-    [data-kp-animation-station-transition]
+    [data-kp-animation-station-packet]
     > kp-tutorial-progress-rail,
   .kp-economics-tutorial--animation-station
     .kp-economics-tutorial__stage--inline
@@ -388,6 +422,7 @@
     #kp-section-market-clearing
     [data-kp-animation-station-transition] {
     min-height: 0;
+    padding-bottom: 0;
   }
 }
 

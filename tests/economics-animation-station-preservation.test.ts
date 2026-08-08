@@ -9,7 +9,7 @@ import baseline from
 test("animation-station preservation baseline freezes ownership and anchors", async () => {
   assert.equal(
     baseline.schemaVersion,
-    "kp.economics-animation-station-preservation-baseline.v2"
+    "kp.economics-animation-station-preservation-baseline.v3"
   );
   assert.equal(
     baseline.canonicalRoute,
@@ -44,6 +44,7 @@ test("animation-station preservation baseline freezes ownership and anchors", as
     cueCount: 6,
     motionBlockCount: 2,
     transitionSeamCount: 2,
+    transitionPacketCount: 2,
     readingPassageCount: 0,
     scrubBarCount: 0
   });

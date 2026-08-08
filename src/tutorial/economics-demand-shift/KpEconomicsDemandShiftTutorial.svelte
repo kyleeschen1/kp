@@ -305,6 +305,8 @@
   let supplyScrubBar = $state<KpTutorialScrubBarElement | undefined>();
   let demandProgressRail: HTMLElement | undefined;
   let supplyProgressRail: HTMLElement | undefined;
+  let demandTransitionPacket: HTMLElement | undefined;
+  let supplyTransitionPacket: HTMLElement | undefined;
   let tutorialToc = $state<KpTutorialTocElement | undefined>();
   let checkpointIndex = $state(initialDeepLink.checkpointIndex);
   // Playback changes every frame. This retained record is deliberately not a
@@ -579,6 +581,14 @@
 
   function syncMotionScrubBars(): void {
     const activeBlock = motionRuntime.projection.activeBlockId;
+    const demandTravel = animationStationProgress(
+      "demand-shift",
+      motionRuntime.semanticProgress
+    );
+    const supplyTravel = animationStationProgress(
+      "supply-movement",
+      motionRuntime.supplyMovementProgress
+    );
     writeScrubBarAttributes(demandScrubBar, {
       progress: motionRuntime.semanticProgress,
       "playback-status": activeBlock === "demand-shift"
@@ -607,23 +617,55 @@
     writeProgressRailAttributes(
       demandProgressRail,
       findKpEconomicsMotionBlock("demand-shift")!,
+      demandTravel,
       motionRuntime.semanticProgress
     );
     writeProgressRailAttributes(
       supplyProgressRail,
       findKpEconomicsMotionBlock("supply-movement")!,
+      supplyTravel,
       motionRuntime.supplyMovementProgress
+    );
+    writeAnimationStationPacketOffset(demandTransitionPacket, demandTravel);
+    writeAnimationStationPacketOffset(supplyTransitionPacket, supplyTravel);
+  }
+
+  function animationStationProgress(
+    blockId: KpEconomicsMotionBlockId,
+    semanticProgress: number
+  ): number {
+    if (
+      !animationStation ||
+      inlineStickyFit === "reading" ||
+      reducedMotion
+    ) return semanticProgress;
+    return latestScrollProjection?.blocks.find(
+      ({ id }) => id === blockId
+    )?.travel ?? semanticProgress;
+  }
+
+  function writeAnimationStationPacketOffset(
+    packet: HTMLElement | undefined,
+    travel: number
+  ): void {
+    if (!animationStation || packet === undefined) return;
+    const offset = clamp(travel, 0, 1) *
+      readCachedAnimationStationGeometry().motionDistancePx;
+    packet.style.setProperty(
+      "--kp-animation-station-packet-offset",
+      `${offset.toFixed(3)}px`
     );
   }
 
   function writeProgressRailAttributes(
     rail: HTMLElement | undefined,
     block: KpEconomicsMotionBlock,
-    progress: number
+    progress: number,
+    labelProgress: number
   ): void {
     if (rail === undefined) return;
     const label = [...block.checkpoints].reverse().find(
-      (candidate) => candidate.progress <= progress + 0.001
+      (candidate) => candidate.progress <= labelProgress + 0.001
     )?.label ?? block.checkpoints[0]!.label;
     const serializedProgress = progress.toFixed(4);
     if (rail.getAttribute("progress") !== serializedProgress) {
@@ -1243,6 +1285,7 @@
   ): void {
     if (lessonEditorModalOpen) return;
     latestScrollProjection = projection;
+    if (animationStation) syncMotionScrubBars();
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
     const previousAttentionPassageId = attentionPassageId;
@@ -1533,7 +1576,10 @@
     attentionPassageId = passageId;
     attentionCursorState = "within-region";
     scrollActiveMotionBlock = motionBlockId ?? "";
-    if (checkpoint.passageId !== passageId) {
+    if (
+      !navigationProjectionPending &&
+      checkpoint.passageId !== passageId
+    ) {
       const nextIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
         (candidate) => candidate.passageId === passageId
       );
@@ -1854,12 +1900,11 @@
       const geometry = readCachedAnimationStationGeometry();
       return projectKpAnimationStationMotionCorridor({
         corridor: block.corridor,
-        // The non-sticky runway keeps moving while its child seam pins, so
-        // native scroll remains the clock even though the visible line holds.
+        // The runway keeps moving while its packet cancels that travel in
+        // paint, so native scroll remains the sole clock for the visible lock.
         motionStartPx: geometry.graphBottomY,
         viewportHeightPx: window.innerHeight,
-        runwayPx: geometry.motionDistancePx,
-        settleRunwayPx: geometry.motionSettleDistancePx
+        runwayPx: geometry.motionDistancePx
       });
     }
     return projectKpInlineStickyParagraphMotionCorridor({
@@ -1903,9 +1948,6 @@
         )),
         motionDistanceRatio: Math.max(0, Math.min(1,
           number("--kp-animation-station-motion-corridor-vh", 28) / 100
-        )),
-        motionSettleDistanceRatio: Math.max(0, Math.min(1,
-          number("--kp-animation-station-motion-settle-vh", 4) / 100
         ))
       }
     });
@@ -2284,6 +2326,12 @@
     ) ?? undefined;
     supplyProgressRail = shell.querySelector<HTMLElement>(
       '[data-kp-tutorial-progress-rail="supply-movement"]'
+    ) ?? undefined;
+    demandTransitionPacket = shell.querySelector<HTMLElement>(
+      '[data-kp-animation-station-packet="demand-shift"]'
+    ) ?? undefined;
+    supplyTransitionPacket = shell.querySelector<HTMLElement>(
+      '[data-kp-animation-station-packet="supply-movement"]'
     ) ?? undefined;
     syncMotionScrubBars();
     player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
@@ -2783,7 +2831,32 @@
         ></span>
       {/each}
     {/if}
-    {#if passage.id === "prediction"}
+    {#if animationStation && renderedMotionBlock !== undefined}
+      <div
+        class="kp-economics-tutorial__transition-runway"
+        data-kp-animation-station-transition={renderedMotionBlock.id}
+        aria-label={`${renderedMotionBlock.label} scroll transition`}
+      >
+        <div
+          class="kp-economics-tutorial__transition-packet"
+          data-kp-animation-station-packet={renderedMotionBlock.id}
+        >
+          {@html animationStationProgressRailHtml[renderedMotionBlock.id]}
+          <div
+            class="kp-economics-tutorial__transition-caption"
+            data-kp-animation-station-caption={passage.id}
+          >
+            {#each passage.paragraphs as paragraph}
+              <p>
+                <span class="kp-economics-tutorial__passage-ink">
+                  {@html paragraph.html}
+                </span>
+              </p>
+            {/each}
+          </div>
+        </div>
+      </div>
+    {:else if passage.id === "prediction"}
       <p>{@html passage.paragraphs[0]!.html}</p>
       <details>
         <summary>Reveal what happens at the old price</summary>
@@ -2815,15 +2888,6 @@
           {/if}
         </p>
       {/each}
-    {/if}
-    {#if animationStation && renderedMotionBlock !== undefined}
-      <div
-        class="kp-economics-tutorial__transition-runway"
-        data-kp-animation-station-transition={renderedMotionBlock.id}
-        aria-label={`${renderedMotionBlock.label} scroll transition`}
-      >
-        {@html animationStationProgressRailHtml[renderedMotionBlock.id]}
-      </div>
     {/if}
     {#if !scrollPassageLayout && renderedMotionBlock?.id === "demand-shift"}
       {@html motionScrubBarHtml["demand-shift"]}

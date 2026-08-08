@@ -557,8 +557,6 @@ test("animation station projects one usable-viewport rhythm", () => {
     cuePinEndY: 370,
     cueExitEndY: 344.4,
     motionDistancePx: 224,
-    motionScrubEndY: 258,
-    motionSettleDistancePx: 32,
     motionEndY: 226,
     beatDistancePx: 592,
     railExitEndY: 674,
@@ -606,7 +604,7 @@ test("animation station rails wait for the graph's local latch", () => {
   assert.deepEqual(releasedAbove, latched);
 });
 
-test("animation station spends its graph runway on a deterministic transition seam", () => {
+test("animation station spends every runway pixel on its transition timeline", () => {
   const corridor = projectKpAnimationStationMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,
@@ -622,30 +620,29 @@ test("animation station spends its graph runway on a deterministic transition se
     },
     motionStartPx: 334,
     viewportHeightPx: 800,
-    runwayPx: 400,
-    settleRunwayPx: 80
+    runwayPx: 400
   });
 
   assert.equal(corridor.startViewportRatio, 0.4175);
   assert.equal(corridor.endViewportRatio, -0.0825);
   assert.deepEqual(corridor.keyframes.map(({ progress }) => progress), [
-    0, 0, 0.72, 0.72, 1, 1, 1
+    0, 0.72, 0.72, 1, 1, 1
   ]);
   assert.deepEqual(projectKpTutorialMotionCorridor({
     corridor,
     anchorTop: 334,
     viewportHeight: 800
   }), { travel: 0, progress: 0 });
-  const handoff = projectKpTutorialMotionCorridor({
+  const firstPostDockPixel = projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 326,
+    anchorTop: 333,
     viewportHeight: 800
   });
-  assert.ok(Math.abs(handoff.travel - 0.02) < 1e-12);
-  assert.equal(handoff.progress, 0);
+  assert.ok(Math.abs(firstPostDockPixel.travel - 0.0025) < 1e-12);
+  assert.ok(firstPostDockPixel.progress > 0);
   assert.ok(Math.abs(projectKpTutorialMotionCorridor({
     corridor,
-    anchorTop: 170,
+    anchorTop: 134,
     viewportHeight: 800
   }).progress - 0.72) < 1e-12);
   assert.deepEqual(projectKpTutorialMotionCorridor({

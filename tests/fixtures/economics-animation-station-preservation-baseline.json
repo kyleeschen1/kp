@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v2",
+  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v3",
   "capturedAt": "2026-08-07",
   "canonicalRoute": "/tutorials/economics/demand-shift/?layout=animation-station",
   "canonicalViewport": {
@@ -20,6 +20,7 @@
     "data-kp-inline-sticky-stage",
     "data-kp-animation-station-cue",
     "data-kp-animation-station-transition",
+    "data-kp-animation-station-packet",
     "data-kp-tutorial-stage=\"demand-shift-graph\""
   ],
   "geometryTokens": {
@@ -44,6 +45,7 @@
     "cueCount": 6,
     "motionBlockCount": 2,
     "transitionSeamCount": 2,
+    "transitionPacketCount": 2,
     "readingPassageCount": 0,
     "scrubBarCount": 0
   },
@@ -66,12 +68,12 @@
     "activeLongestTaskMs": 100
   },
   "lastObservedPressure": {
-    "initialTransferBytes": 254862,
-    "initialScriptBytes": 152565,
+    "initialTransferBytes": 254981,
+    "initialScriptBytes": 152664,
     "initialResourceCount": 42,
     "cumulativeLayoutShift": 0,
-    "initialLongestTaskMs": 181,
-    "activeP95FrameMs": 34.1,
+    "initialLongestTaskMs": 147,
+    "activeP95FrameMs": 33.8,
     "activeLongestTaskCount": 0
   },
   "rollback": {
