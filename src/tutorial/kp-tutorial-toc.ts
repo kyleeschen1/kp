@@ -23,10 +23,13 @@ export interface KpTutorialTocModel {
 
 export function renderKpTutorialToc(model: KpTutorialTocModel): string {
   return `<kp-tutorial-toc data-kp-tutorial-toc data-kp-tutorial-toc-enhancement="pending">
-    <nav class="kp-tutorial-toc" aria-label="${escapeHtml(model.label)}">
-      <p class="kp-tutorial-toc__label">${escapeHtml(model.label)}</p>
-      ${renderItems(model.items, 0)}
-    </nav>
+    <details class="kp-tutorial-toc__disclosure" data-kp-tutorial-toc-disclosure open>
+      <summary class="kp-tutorial-toc__summary">${escapeHtml(model.label)}</summary>
+      <nav class="kp-tutorial-toc" aria-label="${escapeHtml(model.label)}">
+        <p class="kp-tutorial-toc__label">${escapeHtml(model.label)}</p>
+        ${renderItems(model.items, 0)}
+      </nav>
+    </details>
   </kp-tutorial-toc>`;
 }
 

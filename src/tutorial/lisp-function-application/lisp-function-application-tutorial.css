@@ -165,6 +165,7 @@ button, input { font: inherit; }
 .kp-lisp-tutorial a { color: var(--kp-lesson-theme-link); }
 
 .kp-lisp-tutorial__toc kp-tutorial-toc { display: block; }
+.kp-lisp-tutorial__toc .kp-tutorial-toc__summary { display: none; }
 .kp-lisp-tutorial__toc .kp-tutorial-toc__label {
   margin: 0 0 1rem;
   color: var(--kp-lisp-muted);

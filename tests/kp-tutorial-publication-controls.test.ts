@@ -42,6 +42,11 @@ test("both lesson callers obey one shared publication contract", async () => {
       ids
     );
     assert.match(publication.tocHtml, /^<kp-tutorial-toc/);
+    assert.match(
+      publication.tocHtml,
+      /<details[^>]+data-kp-tutorial-toc-disclosure[^>]+open>/
+    );
+    assert.match(publication.tocHtml, /<summary[^>]*>In this lesson<\/summary>/);
     assert.equal(
       (publication.tocHtml.match(/data-kp-tutorial-destination-kind="checkpoint"/g) ?? []).length,
       0

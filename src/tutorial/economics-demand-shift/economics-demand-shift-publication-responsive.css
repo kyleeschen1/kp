@@ -87,6 +87,30 @@
 }
 
 @media (max-width: 760px) {
+  .kp-tutorial-toc__summary {
+    display: list-item;
+    border-block: 1px solid var(--kp-lesson-theme-subtle-border);
+    padding: 0.55rem 0;
+    color: var(--kp-tutorial-muted);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .kp-tutorial-toc__disclosure:not([open]) > .kp-tutorial-toc {
+    display: none;
+  }
+
+  .kp-tutorial-toc__disclosure[open] > .kp-tutorial-toc {
+    display: block;
+  }
+
+  .kp-tutorial-toc__label {
+    display: none;
+  }
+
   .kp-economics-tutorial__reading-band-marker {
     display: none;
   }

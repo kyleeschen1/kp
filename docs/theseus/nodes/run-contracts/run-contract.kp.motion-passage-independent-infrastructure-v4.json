@@ -141,7 +141,8 @@
     {
       "id": "r16",
       "title": "semantic-toc-publication",
-      "status": "planned"
+      "summary": "Published one hierarchical TOC containing lesson sections and motion-passage starts but no scrub moments. Complete light DOM and native links remain useful without JavaScript; a native details disclosure is compact on mobile and expanded on wide/no-JS views; the progressive host opts into sparse IntersectionObserver active-heading projection while presenter hosts retain their own semantic authority.",
+      "status": "complete"
     },
     {
       "id": "r17",

@@ -126,6 +126,11 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   defineKpTutorialScrubBar();
   defineKpTutorialProgressRail();
   defineKpTutorialToc();
+  const toc = requiredElement<KpTutorialTocElement>(
+    publicationRoot,
+    "kp-tutorial-toc"
+  );
+  toc.observeReadingOutline();
   input.root.dataset["kpEconomicsDemandShiftTutorialMounted"] = "true";
   publicationRoot.dataset["kpEconomicsDemandShiftTutorial"] = "published";
   publicationRoot.dataset["kpEconomicsStaticEnhancement"] = "ready";
@@ -267,11 +272,8 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     });
     stopPlayback();
     apply(destination.blockId, destination.progress);
-    const toc = publicationRoot.querySelector<KpTutorialTocElement>(
-      "kp-tutorial-toc"
-    );
     if (destination.destination !== undefined) {
-      toc?.setActiveDestination(destination.destination);
+      toc.setActiveDestination(destination.destination);
     }
   };
 
@@ -309,6 +311,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       onNext
     );
     window.removeEventListener("hashchange", onHashChange);
+    toc.stopObservingReadingOutline();
     // Teardown restores the deterministic publication state without deleting
     // any adopted light-DOM node.
     const initial = economicsFrame(animation, model, 0);

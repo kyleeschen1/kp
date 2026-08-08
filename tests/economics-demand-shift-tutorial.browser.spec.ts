@@ -1076,6 +1076,38 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
   await expect(toc.locator("[aria-current]")).toHaveCount(1);
 });
 
+test("published TOC tracks semantic headings and uses a native mobile disclosure", async ({
+  page
+}) => {
+  await page.goto(publicRoute);
+  const root = page.locator("[data-kp-economics-static-publication]");
+  const toc = root.locator("kp-tutorial-toc");
+  await expect(toc).toHaveAttribute(
+    "data-kp-tutorial-toc-enhancement",
+    "ready"
+  );
+  await root.locator("#kp-section-model-scope").scrollIntoViewIfNeeded();
+  await expect(toc.locator(
+    '[data-kp-tutorial-destination-id="model-scope"]'
+  )).toHaveAttribute("aria-current", "location");
+  await expect(toc.locator("[aria-current]"))
+    .toHaveCount(1);
+
+  await page.setViewportSize({ width: 720, height: 800 });
+  await page.reload();
+  const disclosure = toc.locator("[data-kp-tutorial-toc-disclosure]");
+  const summary = disclosure.locator("summary");
+  await expect(summary).toBeVisible();
+  await expect(disclosure).not.toHaveAttribute("open", "");
+  await expect(toc.getByRole("navigation", { name: "In this lesson" }))
+    .toBeHidden();
+  await summary.focus();
+  await summary.press("Enter");
+  await expect(disclosure).toHaveAttribute("open", "");
+  await expect(toc.getByRole("navigation", { name: "In this lesson" }))
+    .toBeVisible();
+});
+
 test("floating tutorial TOC reserves a non-overlapping narrow-desktop gutter", async ({
   page
 }) => {

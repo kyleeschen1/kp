@@ -638,11 +638,60 @@
       "scope": "r15 public reader isolation",
       "checkedAt": "2026-08-08T20:01:10.568Z",
       "notes": "Published route passed: 135790 B transfer, 99571 B script, 29 resources, zero CLS, 74 ms startup longest task, 1.7 ms active p95, and no active long task."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r16 published TOC model",
+      "checkedAt": "2026-08-08T20:16:09.849Z",
+      "notes": "103 tests passed; TOC remains hierarchical at section and motion-block level with no scrub checkpoint entries."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r16 semantic TOC publication",
+      "checkedAt": "2026-08-08T20:16:11.311Z",
+      "notes": "17 Chromium checks passed: published active heading updates, cancelable navigation, history preservation, wide non-overlap, keyboard-operated compact mobile details, and no-JavaScript links."
+    },
+    {
+      "command": "npm run test:browser:botanical-lisp-tutorial -- --grep Back-and-Forward-or-scroll-ownership",
+      "status": "passed",
+      "scope": "r16 shared TOC host preservation",
+      "checkedAt": "2026-08-08T20:16:12.896Z",
+      "notes": "The two initially affected Lisp navigation and scroll-ownership checks passed after active-outline observation became an explicit progressive-host opt-in; the other 15 checks had already passed unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r16 custom-element and publication boundary",
+      "checkedAt": "2026-08-08T20:16:14.190Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r16 responsive TOC styling",
+      "checkedAt": "2026-08-08T20:16:15.531Z",
+      "notes": "21 stylesheet ownership and visual-token checks passed."
+    },
+    {
+      "command": "npm run test:browser:botanical-lisp-tutorial -- --grep Back-and-Forward-pipe-scroll-owns-one-block",
+      "status": "passed",
+      "scope": "r16 shared TOC host preservation (command label normalized; executed grep alternation)",
+      "checkedAt": "2026-08-08T20:16:26.068Z",
+      "notes": "Executed npm run test:browser:botanical-lisp-tutorial with Playwright grep matching Back and Forward or scroll owns one block; both checks passed after active-outline observation became progressive-host opt-in. Earlier full run had 15 other checks pass unchanged."
+    },
+    {
+      "command": "npm run test:browser:botanical-lisp-tutorial -- --grep 'Back and Forward|scroll owns one block'",
+      "status": "passed",
+      "scope": "r16 shared TOC host preservation",
+      "checkedAt": "2026-08-08T20:16:37.060Z",
+      "notes": "Both focused checks passed after active-outline observation became progressive-host opt-in; the prior full run's other 15 checks passed unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R15 closes the practical whole-lesson authoring checkpoint. R16 next publishes a hierarchical semantic TOC with stable light-DOM anchors and responsive progressive enhancement, without listing scrub moments."
+    "summary": "R16 closes semantic TOC publication and active outline tracking. R17 next consolidates direct navigation into one state-before-viewport transaction with history, adjacent motion-passage actions, skip, settle, and exit semantics."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
