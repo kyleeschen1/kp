@@ -184,8 +184,14 @@ export class KpTutorialScrubBarElement extends HTMLElement {
     const reducedMotion = this.reducedMotion;
     const playing = playbackStatus === "playing";
 
-    this.scrubber.value = String(progress);
-    this.progressOutput.value = `${Math.round(progress * 100)}%`;
+    const scrubberValue = String(progress);
+    const progressValue = `${Math.round(progress * 100)}%`;
+    if (this.scrubber.value !== scrubberValue) {
+      this.scrubber.value = scrubberValue;
+    }
+    if (this.progressOutput.value !== progressValue) {
+      this.progressOutput.value = progressValue;
+    }
     this.previousLink.setAttribute("aria-disabled", String(
       disabled || booleanAttribute(this, "previous-disabled")
     ));
@@ -198,13 +204,18 @@ export class KpTutorialScrubBarElement extends HTMLElement {
       String(disabled || progress <= 0.001)
     );
     this.scrubber.disabled = disabled;
-    this.toggleButton.textContent = playing
+    const toggleText = playing
       ? "Pause"
       : direction === "rewind" && playbackStatus === "paused"
         ? "Continue"
         : progress >= 0.999
           ? "Replay"
           : "Play";
+    // Hosts commonly set several attributes for one semantic frame. Avoid
+    // replacing an unchanged text node on every attribute callback.
+    if (this.toggleButton.textContent !== toggleText) {
+      this.toggleButton.textContent = toggleText;
+    }
     this.toggleButton.setAttribute("aria-label", playing
       ? "Pause animation"
       : direction === "rewind" && playbackStatus === "paused"

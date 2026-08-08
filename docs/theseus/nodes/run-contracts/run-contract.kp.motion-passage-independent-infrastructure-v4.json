@@ -105,7 +105,8 @@
     {
       "id": "r10",
       "title": "publication-performance-gate",
-      "status": "planned"
+      "summary": "The production gate now measures the published learner route: 135252 B transfer, 99029 B script, 29 resources, zero CLS, 1.5-1.7 ms active p95, no active long tasks, retained graph nodes, and a 120-mutation ceiling after removing redundant custom-element text writes. Presenter and CodeMirror capabilities remain outside startup.",
+      "status": "complete"
     },
     {
       "id": "r11",

@@ -53,7 +53,11 @@ export class KpTutorialProgressRailElement extends HTMLElement {
       "aria-valuetext",
       this.getAttribute("progress-label") ?? `${projection.percent}%`
     );
-    status.textContent = projection.statusText;
+    // Progress and label attributes may settle in the same host transaction;
+    // retaining equal text prevents duplicate child-list churn.
+    if (status.textContent !== projection.statusText) {
+      status.textContent = projection.statusText;
+    }
   }
 }
 

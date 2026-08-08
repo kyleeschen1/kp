@@ -505,11 +505,39 @@
       "scope": "r09 font theme and geometry",
       "checkedAt": "2026-08-08T18:43:59.693Z",
       "notes": "16 Chromium checks passed. Public prose uses Source Serif 300 before enhancement, light and midnight graph roles differ intentionally, forced colors remains operable, initial font CLS is at most 0.02, and New Computer Modern and CodeMirror remain absent. One prior full-suite phone check showed a transient 0.98 px subpixel delta; isolated and final full reruns passed unchanged."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r10 published route closure",
+      "checkedAt": "2026-08-08T18:58:03.710Z",
+      "notes": "Production build and all TypeScript, Svelte, domain, and static-publication checks passed; the learner route kept presenter and CodeMirror chunks dynamic."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r10 published learner performance",
+      "checkedAt": "2026-08-08T18:58:04.726Z",
+      "notes": "Two stable runs passed: 135252 B transfer, 99029 B script, 29 resources, zero CLS, 62-67 ms startup longest task, 1.5-1.7 ms active p95, zero active long tasks, and 98-100 active DOM mutations against a 120 ceiling."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r10 public behavior preservation",
+      "checkedAt": "2026-08-08T18:58:05.644Z",
+      "notes": "16 Chromium checks passed across publication, retained motion, direct navigation, route switching, no-JavaScript, theme, and phone behavior."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r10 semantic and runtime preservation",
+      "checkedAt": "2026-08-08T18:58:06.517Z",
+      "notes": "86 economics publication, layout, salience, retained-runtime, and lesson tests passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R09 closed font and theme loading while preserving geometry. R10 next moves the production performance harness from the legacy two-column presenter to the published public route and ratchets real-route budgets."
+    "summary": "R10 gates the real published learner route with measured startup and active-motion budgets. R11 next defines the bounded whole-lesson authoring buffer and stable-ID serialization without executable source."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

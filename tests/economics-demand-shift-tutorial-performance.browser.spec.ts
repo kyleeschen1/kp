@@ -2,35 +2,30 @@ import { expect, test } from "@playwright/test";
 import { readFileSync, statSync } from "node:fs";
 import { basename, resolve } from "node:path";
 
-import type {
-  KpTutorialScrollCoordinatorMetrics
-} from "../src/tutorial/kp-tutorial-motion.ts";
-import type {
-  KpEconomicsGraphRuntimeMetrics
-} from "../src/editor/graph-svg-viewport.ts";
-
-const route = "/tutorials/economics/demand-shift/?layout=two-column-scroll";
+const route = "/tutorials/economics/demand-shift/";
 const routeEntry =
-  "src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts";
+  "src/tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts";
+const progressiveEntry =
+  "src/tutorial/economics-demand-shift/economics-demand-shift-progressive-entry.ts";
+const routeThemeEntry = "tutorials/economics/demand-shift/index.html";
 // These ceilings leave bounded machine variance above the production exemplar,
 // while making an eager heavy renderer or duplicated scroll clock fail loudly.
 const budgets = Object.freeze({
-  initialTransferBytes: 250_000,
-  initialScriptBytes: 150_000,
-  initialResourceCount: 42,
-  economicsCssBytes: 77_000,
+  initialTransferBytes: 150_000,
+  initialScriptBytes: 110_000,
+  initialResourceCount: 32,
+  economicsCssBytes: 16_000,
   cumulativeLayoutShift: 0.02,
-  initialLongestTaskMs: 150,
-  activeP95FrameMs: 42,
-  activeLongestTaskMs: 100
+  initialLongestTaskMs: 120,
+  activeP95UpdateMs: 8,
+  activeLongestTaskMs: 50,
+  activeDomChurnMutations: 120
 });
 
 // These are measured debts, not permissions to grow the route. Later slices
 // ratchet each list to empty as its owning capability is removed.
 const routeClosureDebt = Object.freeze({
-  catalogue: [
-    "animation-catalogue-player-host"
-  ],
+  catalogue: [],
   runtimeKatex: [],
   unrelatedGraphDomains: []
 });
@@ -40,16 +35,6 @@ interface KpTutorialPerformanceProbe {
   geometryReads: number;
   longTasks: number[];
   shiftSources: string[];
-}
-
-interface KpTutorialRuntimePerformanceApi {
-  readonly resetScrollCoordinator: () => void;
-  readonly snapshotScrollCoordinator: () => KpTutorialScrollCoordinatorMetrics;
-}
-
-interface KpGraphRuntimePerformanceApi {
-  readonly reset: () => void;
-  readonly snapshot: () => KpEconomicsGraphRuntimeMetrics;
 }
 
 interface ViteManifestChunk {
@@ -75,8 +60,19 @@ function readEconomicsRouteBuildAttribution(): {
     "utf8"
   )) as Record<string, ViteManifestChunk>;
   const entry = manifest[routeEntry];
+  const progressive = manifest[progressiveEntry];
+  const routeTheme = manifest[routeThemeEntry];
   if (entry === undefined) throw new Error(`Missing Vite entry ${routeEntry}.`);
-  const directImports = new Set(entry.imports ?? []);
+  if (progressive === undefined) {
+    throw new Error(`Missing Vite entry ${progressiveEntry}.`);
+  }
+  if (routeTheme === undefined) {
+    throw new Error(`Missing Vite entry ${routeThemeEntry}.`);
+  }
+  const directImports = new Set([
+    ...(entry.imports ?? []),
+    ...(progressive.imports ?? [])
+  ]);
   const visited = new Set<string>();
   const visit = (key: string): void => {
     if (visited.has(key)) return;
@@ -86,6 +82,7 @@ function readEconomicsRouteBuildAttribution(): {
     for (const imported of chunk.imports ?? []) visit(imported);
   };
   visit(routeEntry);
+  visit(progressiveEntry);
 
   const javascript = [...visited].map((key): RouteBuildFile => {
     const chunk = manifest[key]!;
@@ -93,7 +90,8 @@ function readEconomicsRouteBuildAttribution(): {
       key,
       file: chunk.file,
       ...(chunk.name === undefined ? {} : { name: chunk.name }),
-      direct: key === routeEntry || directImports.has(key)
+      direct: key === routeEntry || key === progressiveEntry ||
+        directImports.has(key)
     });
   }).sort(compareRouteBuildFiles);
   const cssFiles = new Set<string>();
@@ -103,6 +101,7 @@ function readEconomicsRouteBuildAttribution(): {
     for (const file of chunk.css ?? []) cssFiles.add(file);
     for (const file of chunk.assets ?? []) assetFiles.add(file);
   }
+  if (routeTheme.file.endsWith(".css")) cssFiles.add(routeTheme.file);
   const css = [...cssFiles].map((file) => routeBuildFile({ file }))
     .sort(compareRouteBuildFiles);
   const assets = [...assetFiles].map((file) => routeBuildFile({ file }))
@@ -129,7 +128,7 @@ function readEconomicsRouteBuildAttribution(): {
     .filter(({ file }) => !file.endsWith(".js") && !file.endsWith(".css"))
     .sort(compareRouteBuildFiles);
   return {
-    entry: entry.file,
+    entry: `${entry.file} -> ${progressive.file}`,
     javascript,
     css,
     assets,
@@ -269,8 +268,8 @@ test("production economics tutorial stays inside publication and motion budgets"
   await page.goto(route, { waitUntil: "networkidle" });
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   await expect(root).toHaveAttribute(
-    "data-kp-economics-tutorial-scroll-coordinator",
-    "connected"
+    "data-kp-economics-static-enhancement",
+    "ready"
   );
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -315,18 +314,12 @@ test("production economics tutorial stays inside publication and motion budgets"
   const active = await page.evaluate(async () => {
     const target = window as typeof window & {
       __kpEconomicsTutorialPerformance?: KpTutorialPerformanceProbe;
-      __kpEconomicsTutorialRuntimePerformance?: KpTutorialRuntimePerformanceApi;
-      __kpEconomicsGraphRuntimePerformance?: KpGraphRuntimePerformanceApi;
     };
     const probe = target.__kpEconomicsTutorialPerformance!;
-    const runtime = target.__kpEconomicsTutorialRuntimePerformance!;
-    const graphRuntime = target.__kpEconomicsGraphRuntimePerformance!;
     probe.cls = 0;
     probe.geometryReads = 0;
     probe.longTasks.length = 0;
     probe.shiftSources.length = 0;
-    runtime.resetScrollCoordinator();
-    graphRuntime.reset();
     const readGeometry = Element.prototype.getBoundingClientRect;
     Element.prototype.getBoundingClientRect = function (): DOMRect {
       probe.geometryReads += 1;
@@ -342,6 +335,7 @@ test("production economics tutorial stays inside publication and motion budgets"
     let graphAddedNodes = 0;
     let graphRemovedNodes = 0;
     let graphChildListMutations = 0;
+    let graphProgressWrites = 0;
     const graphContent = tutorial.querySelector<SVGGElement>(
       "[data-kp-editor-graph-content]"
     )!;
@@ -368,6 +362,9 @@ test("production economics tutorial stays inside publication and motion budgets"
             : record.target.nodeName;
           childListTargets.set(key, (childListTargets.get(key) ?? 0) + 1);
         }
+        if (record.attributeName === "data-kp-editor-graph-progress") {
+          graphProgressWrites += 1;
+        }
         if (record.attributeName?.includes("-progress")) {
           changedProgressAttributes.add(record.attributeName);
         }
@@ -378,8 +375,9 @@ test("production economics tutorial stays inside publication and motion budgets"
       childList: true,
       subtree: true,
       attributeFilter: [
-        "data-kp-economics-tutorial-demand-progress",
-        "data-kp-economics-tutorial-supply-movement-progress"
+        "data-kp-economics-tutorial-motion-progress",
+        "data-kp-economics-tutorial-supply-movement-progress",
+        "data-kp-editor-graph-progress"
       ]
     });
 
@@ -387,101 +385,67 @@ test("production economics tutorial stays inside publication and motion budgets"
       new Promise((resolve) => requestAnimationFrame(() =>
         requestAnimationFrame(() => resolve())
       ));
-    const frameDurations: number[] = [];
+    const updateDurations: number[] = [];
     const changedAttributeCounts: number[] = [];
-    const observedOwners: string[] = [];
+    const observedBlocks: string[] = [];
     for (const blockId of ["demand-shift", "supply-movement"] as const) {
-      const boundary = tutorial.querySelector<HTMLElement>(
-        `[data-kp-tutorial-motion-block="${blockId}"]`
+      const controls = tutorial.querySelector<HTMLElement>(
+        `kp-tutorial-scrub-bar[data-kp-tutorial-motion-controls="${blockId}"]`
       )!;
-      const anchor = boundary.querySelector<HTMLElement>("p") ?? boundary;
-      const anchorDocumentTop = scrollY + anchor.getBoundingClientRect().top;
       for (let index = 0; index <= 12; index += 1) {
-        const travel = index / 12;
-        const desiredTop = innerHeight * (0.72 - travel * 0.56);
+        const progress = index / 12;
         changedProgressAttributes.clear();
         const startedAt = performance.now();
-        scrollTo(0, Math.max(0, anchorDocumentTop - desiredTop));
+        controls.dispatchEvent(new CustomEvent("kp:tutorial-scrub-seek", {
+          bubbles: true,
+          composed: true,
+          detail: { progress }
+        }));
+        updateDurations.push(performance.now() - startedAt);
         await waitForProjection();
-        frameDurations.push(performance.now() - startedAt);
         changedAttributeCounts.push(changedProgressAttributes.size);
-        observedOwners.push(
-          tutorial.dataset["kpEconomicsTutorialScrollActiveBlock"] ?? ""
+        observedBlocks.push(
+          tutorial.dataset["kpEconomicsTutorialMotionBlock"] ?? ""
         );
       }
     }
+
+    const demandControls = tutorial.querySelector<HTMLElement>(
+      'kp-tutorial-scrub-bar[data-kp-tutorial-motion-controls="demand-shift"]'
+    )!;
+    demandControls.dispatchEvent(new CustomEvent("kp:tutorial-scrub-toggle", {
+      bubbles: true,
+      composed: true
+    }));
+    await new Promise((resolve) => setTimeout(resolve, 360));
+    const playbackProgress = Number(
+      tutorial.dataset["kpEconomicsTutorialMotionProgress"] ?? "0"
+    );
+    demandControls.dispatchEvent(new CustomEvent("kp:tutorial-scrub-toggle", {
+      bubbles: true,
+      composed: true
+    }));
+    await waitForProjection();
     observer.disconnect();
-    const sorted = [...frameDurations].sort((left, right) => left - right);
+    const sorted = [...updateDurations].sort((left, right) => left - right);
     const percentile = (ratio: number): number =>
       sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * ratio))] ?? 0;
-    const scrollCoordinator = runtime.snapshotScrollCoordinator();
-    const graph = graphRuntime.snapshot();
     const canonicalGeometryReads = probe.geometryReads;
     const canonicalCls = probe.cls;
     const canonicalShiftSources = [...probe.shiftSources];
     const canonicalLongTasks = [...probe.longTasks];
-    const cueHost = tutorial.querySelector<HTMLElement>(
-      ".kp-economics-tutorial__motion-passage-prose"
-    )!;
-    const baseCues = [...cueHost.querySelectorAll<HTMLElement>(
-      ":scope > [data-kp-scroll-cue]"
-    )];
-    const cueDensity: Array<{
-      cueCount: number;
-      executedFrames: number;
-      geometryReads: number;
-      coordinatorExecutionMs: number;
-    }> = [];
-    for (const cueCount of [6, 24, 48]) {
-      const fixtureNodes: HTMLElement[] = [];
-      for (let index = baseCues.length; index < cueCount; index += 1) {
-        const clone = baseCues[index % baseCues.length]!.cloneNode(true) as
-          HTMLElement;
-        clone.dataset["kpEconomicsTutorialPassage"] =
-          `performance-cue-${cueCount}-${index}`;
-        delete clone.dataset["kpTutorialMotionBlock"];
-        delete clone.dataset["kpTutorialDestination"];
-        delete clone.dataset["kpTutorialDestinationId"];
-        clone.removeAttribute("id");
-        for (const identified of clone.querySelectorAll<HTMLElement>("[id]")) {
-          identified.removeAttribute("id");
-        }
-        cueHost.append(clone);
-        fixtureNodes.push(clone);
-      }
-      await waitForProjection();
-      probe.geometryReads = 0;
-      runtime.resetScrollCoordinator();
-      const maximumScrollY = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-      scrollTo(0, scrollY < maximumScrollY ? Math.min(maximumScrollY, scrollY + 1) :
-        Math.max(0, scrollY - 1));
-      await waitForProjection();
-      const densityMetrics = runtime.snapshotScrollCoordinator();
-      cueDensity.push({
-        cueCount,
-        executedFrames: densityMetrics.executedFrames,
-        geometryReads: probe.geometryReads,
-        coordinatorExecutionMs: densityMetrics.totalExecutionMs
-      });
-      for (const node of fixtureNodes) node.remove();
-      await waitForProjection();
-    }
     Element.prototype.getBoundingClientRect = readGeometry;
     return {
-      samples: frameDurations.length,
-      p95FrameMs: percentile(0.95),
-      maxFrameMs: Math.max(...frameDurations),
+      samples: updateDurations.length,
+      p95UpdateMs: percentile(0.95),
+      maxUpdateMs: Math.max(...updateDurations),
       longTaskCount: canonicalLongTasks.length,
       longestTaskMs: Math.max(0, ...canonicalLongTasks),
       cls: canonicalCls,
       shiftSources: canonicalShiftSources,
       geometryReads: canonicalGeometryReads,
-      geometryReadsPerFrame: canonicalGeometryReads /
-        Math.max(1, scrollCoordinator.executedFrames),
-      scrollCoordinator,
-      averageCoordinatorExecutionMs: scrollCoordinator.totalExecutionMs /
-        Math.max(1, scrollCoordinator.executedFrames),
-      graph,
+      playbackProgress,
+      graphProgressWrites,
       domChurn: {
         childListMutations,
         addedNodes,
@@ -494,11 +458,9 @@ test("production economics tutorial stays inside publication and motion budgets"
         addedNodes: graphAddedNodes,
         removedNodes: graphRemovedNodes
       },
-      baseCueCount: baseCues.length,
-      cueDensity,
       maxChangedProgressAttributes: Math.max(...changedAttributeCounts),
-      demandOwnerSamples: observedOwners.filter((id) => id === "demand-shift").length,
-      supplyOwnerSamples: observedOwners.filter((id) => id === "supply-movement").length
+      demandBlockSamples: observedBlocks.filter((id) => id === "demand-shift").length,
+      supplyBlockSamples: observedBlocks.filter((id) => id === "supply-movement").length
     };
   });
 
@@ -559,8 +521,9 @@ test("production economics tutorial stays inside publication and motion budgets"
   const economicsCss = loadedRouteBuild.css.filter(
     ({ category }) => category === "economics"
   );
-  expect(economicsCss).toHaveLength(1);
-  expect(economicsCss[0]!.bytes).toBeLessThanOrEqual(budgets.economicsCssBytes);
+  expect(economicsCss.length).toBeGreaterThan(0);
+  expect(economicsCss.reduce((total, { bytes }) => total + bytes, 0))
+    .toBeLessThanOrEqual(budgets.economicsCssBytes);
   expect(loadedRouteBuild.totals["runtime-katex-js"] ?? 0).toBe(0);
   expect(loadedRouteNames(loadedRouteBuild.javascript, "catalogue"))
     .toEqual(routeClosureDebt.catalogue);
@@ -573,37 +536,28 @@ test("production economics tutorial stays inside publication and motion budgets"
       .test(file))
     .map(({ name, file }) => name ?? file))
     .toEqual([]);
+  expect(loadedRouteBuild.javascript
+    .filter(({ file }) => /tutorial-entry|codemirror|presenter-capability/i
+      .test(file))
+    .map(({ name, file }) => name ?? file))
+    .toEqual([]);
   expect(active.samples).toBe(26);
-  expect(active.p95FrameMs, JSON.stringify(evidence, null, 2))
-    .toBeLessThanOrEqual(budgets.activeP95FrameMs);
+  expect(active.p95UpdateMs, JSON.stringify(evidence, null, 2))
+    .toBeLessThanOrEqual(budgets.activeP95UpdateMs);
   expect(active.longestTaskMs).toBeLessThanOrEqual(budgets.activeLongestTaskMs);
   expect(active.cls).toBeLessThanOrEqual(budgets.cumulativeLayoutShift);
-  expect(active.maxChangedProgressAttributes).toBeLessThanOrEqual(1);
-  expect(active.scrollCoordinator.executedFrames).toBeGreaterThanOrEqual(26);
-  expect(active.scrollCoordinator.requestedFrames)
-    .toBe(active.scrollCoordinator.executedFrames);
-  expect(active.scrollCoordinator.layoutReads)
-    .toBe(active.scrollCoordinator.registrationReads);
-  expect(active.geometryReads).toBeGreaterThan(active.scrollCoordinator.layoutReads);
-  expect(active.graph.renderCalls).toBe(active.graph.semanticSamples);
-  // The retained economics session samples semantic truth every render, but
-  // ordinary progress may no longer rebuild strings or replace its subtree.
-  expect(active.graph.svgStringsBuilt).toBe(0);
-  expect(active.graph.svgStringCharacters).toBe(0);
-  expect(active.graph.subtreeReplacements).toBe(0);
-  expect(active.graph.removedElements).toBe(0);
-  expect(active.graph.addedElements).toBe(0);
+  expect(active.maxChangedProgressAttributes).toBeLessThanOrEqual(3);
+  expect(active.geometryReads).toBe(0);
+  expect(active.graphProgressWrites).toBeGreaterThanOrEqual(active.samples);
+  expect(active.playbackProgress).toBeGreaterThan(0);
+  expect(active.playbackProgress).toBeLessThan(1);
+  expect(active.domChurn.childListMutations)
+    .toBeLessThanOrEqual(budgets.activeDomChurnMutations);
+  // The publication runtime owns retained nodes. Attribute patches may change
+  // every sample, but semantic motion must not reconstruct the SVG subtree.
   expect(active.graphDomChurn.childListMutations).toBeLessThan(10);
   expect(active.graphDomChurn.addedNodes).toBeLessThan(10);
   expect(active.graphDomChurn.removedNodes).toBeLessThan(10);
-  expect(active.baseCueCount).toBe(6);
-  expect(active.cueDensity.map(({ cueCount }) => cueCount)).toEqual([6, 24, 48]);
-  expect(active.cueDensity.every(({ executedFrames }) => executedFrames === 1))
-    .toBe(true);
-  expect(new Set(active.cueDensity.map(({ geometryReads }) => geometryReads)).size)
-    .toBe(1);
-  expect(active.cueDensity.every(({ geometryReads }) => geometryReads <= 3))
-    .toBe(true);
-  expect(active.demandOwnerSamples).toBeGreaterThan(0);
-  expect(active.supplyOwnerSamples).toBeGreaterThan(0);
+  expect(active.demandBlockSamples).toBe(13);
+  expect(active.supplyBlockSamples).toBe(13);
 });
