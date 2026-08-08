@@ -52,6 +52,9 @@ export interface KpEconomicsCodeMirrorCompletion {
   readonly apply?: string | undefined;
   readonly detail: string;
   readonly info?: string | undefined;
+  readonly contexts?: readonly (
+    "kp-ref" | "kp-directive" | "semantic-id"
+  )[] | undefined;
 }
 
 export interface KpEconomicsCodeMirrorMount {
@@ -70,26 +73,53 @@ export function mountKpEconomicsCodeMirror(input: {
   readonly onVimModeChange?: ((mode: string) => void) | undefined;
 }): KpEconomicsCodeMirrorMount {
   let applyingExternalValue = false;
-  const completions: readonly Completion[] = input.completions.map(
-    (completion) => ({
+  const completions = (context: NonNullable<
+    KpEconomicsCodeMirrorCompletion["contexts"]
+  >[number]): readonly Completion[] => input.completions
+    .filter((completion) => completion.contexts?.includes(context) ?? true)
+    .map((completion) => ({
       label: completion.label,
       detail: completion.detail,
       ...(completion.apply === undefined ? {} : { apply: completion.apply }),
       ...(completion.info === undefined ? {} : { info: completion.info }),
       type: "variable"
-    })
-  );
+    }));
   const completeSemanticReference = (context: CompletionContext) => {
     const reference = context.matchBefore(/[a-z0-9-]*/);
     const prefix = context.state.sliceDoc(
       Math.max(0, reference?.from ?? context.pos) - 7,
       reference?.from ?? context.pos
     );
-    if (!context.explicit && prefix !== "kp-ref:") return null;
+    if (prefix !== "kp-ref:") return null;
     return {
       from: reference?.from ?? context.pos,
-      options: completions,
+      options: completions("kp-ref"),
       validFor: /^[a-z0-9-]*$/
+    };
+  };
+  const completeDirective = (context: CompletionContext) => {
+    const directive = context.matchBefore(/<!-- kp:[a-z-]*/);
+    if (directive === null) return null;
+    const colon = directive.text.lastIndexOf(":");
+    return {
+      from: directive.from + colon + 1,
+      options: completions("kp-directive"),
+      validFor: /^[a-z-]*$/
+    };
+  };
+  const completeSemanticId = (context: CompletionContext) => {
+    const id = context.matchBefore(/[a-z0-9.-]*/);
+    const before = context.state.sliceDoc(
+      Math.max(0, (id?.from ?? context.pos) - 28),
+      id?.from ?? context.pos
+    );
+    if (!context.explicit && !/"[A-Za-z]+Id"\s*:\s*"$/u.test(before)) {
+      return null;
+    }
+    return {
+      from: id?.from ?? context.pos,
+      options: completions("semantic-id"),
+      validFor: /^[a-z0-9.-]*$/
     };
   };
   const view = new EditorView({
@@ -108,7 +138,13 @@ export function mountKpEconomicsCodeMirror(input: {
           ...historyKeymap,
           ...completionKeymap
         ]),
-        autocompletion({ override: [completeSemanticReference] }),
+        autocompletion({
+          override: [
+            completeSemanticReference,
+            completeDirective,
+            completeSemanticId
+          ]
+        }),
         placeholder("Write one instructional passage…"),
         EditorView.lineWrapping,
         EditorView.contentAttributes.of({

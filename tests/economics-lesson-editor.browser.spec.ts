@@ -224,6 +224,21 @@ test("semantic reference completion exposes only supported authoring IDs", async
   await expect(completion).toBeVisible();
   await expect(completion).toContainText("price-axis-inline");
   await expect(completion).toContainText("axis-price");
+
+  await content.press("Escape");
+  await content.press("i");
+  await content.fill("<!-- kp:");
+  await content.press("Control+Space");
+  await expect(completion).toBeVisible();
+  await expect(completion).toContainText("passage");
+  await expect(completion).toContainText("semantic-reference");
+
+  await content.press("Escape");
+  await content.press("i");
+  await content.fill('<!-- kp:motion-block {"id":"');
+  await content.press("Control+Space");
+  await expect(completion).toBeVisible();
+  await expect(completion).toContainText("demand-shift");
 });
 
 test("invalid Markdown preserves the last valid preview and reports the error", async ({

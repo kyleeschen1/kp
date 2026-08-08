@@ -123,7 +123,8 @@
     {
       "id": "r13",
       "title": "semantic-repository-completion",
-      "status": "planned"
+      "summary": "Replaced the hard-coded completion list with a lazy repository-backed semantic index covering actual lesson, stage, passage, motion-block, checkpoint, animation, stage-object, reference, and transit IDs. CodeMirror now provides contextual kp-ref, directive, and ID completion plus stale-reference diagnostics; no fictitious vignette contract was introduced.",
+      "status": "complete"
     },
     {
       "id": "r14",

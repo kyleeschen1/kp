@@ -9,6 +9,18 @@
   import type {
     KpEconomicsLessonDraftState
   } from "./economics-demand-shift-lesson-draft.ts";
+  import {
+    createKpEconomicsLessonBuffer
+  } from "./economics-demand-shift-lesson-buffer.ts";
+  import {
+    createKpEconomicsLessonSemanticIndex
+  } from "./economics-demand-shift-semantic-index.ts";
+  import {
+    kpEconomicsTwoColumnSourceSchema
+  } from "./economics-demand-shift-two-column-source.ts";
+  import {
+    kpEconomicsTwoColumnParagraphs
+  } from "./economics-demand-shift-two-column-scroll.ts";
 
   let {
     id,
@@ -26,13 +38,21 @@
     readonly onClose: () => void;
   } = $props();
 
-  const completions = Object.freeze<KpEconomicsCodeMirrorCompletion[]>([
-    Object.freeze({
-      label: "price-axis-inline",
-      detail: "text reference → stage object axis-price",
-      info: "Use inside [$P$](kp-ref:price-axis-inline) to bind prose to the price axis."
+  const completions = createKpEconomicsLessonSemanticIndex(
+    createKpEconomicsLessonBuffer({
+      schemaVersion: kpEconomicsTwoColumnSourceSchema,
+      // Completion reflects committed repository truth even while the draft is
+      // temporarily invalid or names not-yet-saved local passages.
+      passages: kpEconomicsTwoColumnParagraphs.map((passage) => ({
+        id: passage.id,
+        role: passage.role,
+        ...(passage.motionBlockId === undefined
+          ? {}
+          : { motionBlockId: passage.motionBlockId }),
+        sourceText: passage.paragraphs[0]!.sourceText
+      }))
     })
-  ]);
+  ).completions satisfies readonly KpEconomicsCodeMirrorCompletion[];
 
   let host = $state<HTMLElement | undefined>();
   let dialog = $state<HTMLDialogElement | undefined>();
