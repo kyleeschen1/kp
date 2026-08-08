@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-08-economics-startup-attribution.md"
     }
   ],
   "dependsOn": {
@@ -267,6 +271,13 @@
       "scope": "r01 canonical economics exemplar",
       "checkedAt": "2026-08-08T17:02:35.520Z",
       "notes": "Seven browser checkpoints passed; captures reviewed at stacked prose and transition midpoint"
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "r02 production startup attribution",
+      "checkedAt": "2026-08-08T17:07:04.418Z",
+      "notes": "Diagnostic succeeded and active path passed; strict cold gate remains transfer 255232/250000 B, script 152720/150000 B, startup task 180/150 ms. Resources 42, CLS 0, active p95 34.7 ms, active long tasks 0, retained SVG rebuilds 0."
     }
   ],
   "progress": {

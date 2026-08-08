@@ -57,7 +57,8 @@
     {
       "id": "r02",
       "title": "startup-attribution",
-      "status": "planned"
+      "summary": "Reproduced and attributed startup debt without product changes: 255232 B transfer, 152720 B script, 42 resources, one 180 ms startup task; active motion remains healthy at 34.7 ms p95, zero active long tasks/CLS/SVG rebuilds. Evidence orders static publication, CSS ownership, fixed-route closure, and font/theme work.",
+      "status": "complete"
     },
     {
       "id": "r03",
