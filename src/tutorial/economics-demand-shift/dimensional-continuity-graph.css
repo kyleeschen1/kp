@@ -1,0 +1,28 @@
+/* Route-scoped dimensional-continuity plane and axis paint preserve the shared profile without claiming domain labels. */
+.kp-economics-tutorial__player-host
+  .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"] {
+  color: var(--kp-graph-focal);
+  background: var(--kp-graph-plane);
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"]
+  .editor-graph-stage__plot-plane {
+  fill: var(--kp-graph-plane);
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage[data-kp-graph-language-profile="kp.graph.dimensional-continuity.v1"]
+  [data-kp-editor-graph-axis] {
+  stroke: var(--kp-graph-axis);
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+.kp-economics-tutorial__player-host
+  .editor-graph-stage[data-kp-graph-presentation-profile="kp.graph.dimensional-continuity.economics.v1"]
+  [data-kp-editor-graph-axis] {
+  shape-rendering: crispEdges;
+  stroke-width: var(--kp-graph-line-width);
+  vector-effect: non-scaling-stroke;
+}

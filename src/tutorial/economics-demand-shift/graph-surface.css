@@ -1,0 +1,29 @@
+/* Route-scoped graph host and surface scaffolding; importing this file does not promote lesson paint into the catalogue. */
+.kp-economics-tutorial__player-host .editor-animation-player__stage {
+  display: grid;
+  place-items: stretch;
+}
+
+.kp-economics-tutorial__player-host .editor-animation-player__surface {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage {
+  display: block;
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage__plot-plane {
+  fill: url("#kp-editor-graph-grid");
+}
+
+.kp-economics-tutorial__player-host .editor-graph-stage__default-grid-line {
+  stroke: #dce6ed;
+  stroke-width: 1;
+}

@@ -379,11 +379,39 @@
       "scope": "r06-pre-r10-baseline",
       "checkedAt": "2026-08-08T18:00:33.324Z",
       "notes": "Production route measured 252218 transfer bytes with a 133 ms startup task zero CLS and no active motion long tasks. It remains 2218 bytes above the transfer budget and 4889 bytes above the script budget. Slices r08 through r10 own fixed route and budget closure."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r07-graph-domain-css-split",
+      "checkedAt": "2026-08-08T18:08:58.893Z",
+      "notes": "19 ownership theme token and no selector drift tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r07-graph-domain-css-split",
+      "checkedAt": "2026-08-08T18:08:59.873Z",
+      "notes": "85 economics semantic salience publication and retained runtime tests passed."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r07-graph-domain-css-split",
+      "checkedAt": "2026-08-08T18:09:00.782Z",
+      "notes": "14 Chromium preservation checkpoints passed after the exact cascade split."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r07-graph-domain-css-split",
+      "checkedAt": "2026-08-08T18:09:01.685Z",
+      "notes": "TypeScript Svelte domain publication and production build passed. Economics CSS remains 83323 raw bytes and 12250 gzip bytes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice r06 isolated framework neutral tutorial foundation CSS and removed the economics public entry dependency on catalogue wide styles. The production check now fails only the known transfer and script budgets reserved for slices r08 through r10."
+    "summary": "Slice r07 separated graph host language domain and lesson paint behind the existing route facade. Axis owned stroke tokens and theme roles are unchanged and no selector was promoted catalogue wide."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

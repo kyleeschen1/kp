@@ -20,8 +20,19 @@ const ownedStylesheets = [
   "economics-demand-shift-layout-responsive.css"
 ] as const;
 
+const graphStylesheets = [
+  "graph-surface.css",
+  "dimensional-continuity-graph.css",
+  "economics-equilibrium-graph.css",
+  "economics-demand-shift-lesson.css"
+] as const;
+
 function read(name: string): string {
   return readFileSync(new URL(name, directory), "utf8");
+}
+
+function readGraphCascade(): string {
+  return graphStylesheets.map(read).join("\n");
 }
 
 test("economics stylesheet entry preserves one explicit ownership cascade", () => {
@@ -46,6 +57,40 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
   );
   for (const name of ownedStylesheets) {
     assert.match(read(name), /^\/\* [^\n]+ \*\//);
+  }
+  for (const name of graphStylesheets) {
+    assert.match(read(name), /^\/\* [^\n]+ \*\//);
+  }
+});
+
+test("graph facade preserves four route-scoped responsibility owners", () => {
+  const facade = read("economics-demand-shift-graph.css");
+  const surface = read("graph-surface.css");
+  const dimensional = read("dimensional-continuity-graph.css");
+  const equilibrium = read("economics-equilibrium-graph.css");
+  const lesson = read("economics-demand-shift-lesson.css");
+
+  assert.deepEqual(
+    [...facade.matchAll(/@import "([^"]+)";/g)].map((match) => match[1]),
+    graphStylesheets.map((name) => `./${name}`)
+  );
+  assert.match(surface, /editor-animation-player__surface/);
+  assert.doesNotMatch(surface, /data-kp-graph-language-profile|__economics-/);
+  assert.match(dimensional, /data-kp-graph-language-profile/);
+  assert.match(dimensional, /data-kp-editor-graph-axis/);
+  assert.doesNotMatch(dimensional, /__economics-|kp-economics-tutorial__stage/);
+  assert.match(equilibrium, /editor-graph-stage__economics-curve/);
+  assert.match(equilibrium, /editor-graph-stage__economics-equilibrium/);
+  assert.doesNotMatch(equilibrium, /kp-economics-tutorial__stage/);
+  assert.match(lesson, /kp-economics-tutorial__stage/);
+  assert.match(lesson, /data-kp-economics-supply-line/);
+
+  for (const css of graphStylesheets.map(read)) {
+    assert.doesNotMatch(
+      css,
+      /^\.editor-(?:animation-player|graph-stage)/m,
+      "Graph owners must stay under the economics route boundary until a separate promotion decision."
+    );
   }
 });
 
@@ -100,7 +145,7 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
     "utf8"
   );
   const theme = read("economics-demand-shift-theme.css");
-  const graph = read("economics-demand-shift-graph.css");
+  const graph = readGraphCascade();
 
   assert.equal(
     [
@@ -161,7 +206,7 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   const theme = read("economics-demand-shift-theme.css");
   const publication = read("economics-demand-shift-publication.css");
   const controls = read("economics-demand-shift-controls.css");
-  const graph = read("economics-demand-shift-graph.css");
+  const graph = readGraphCascade();
   const responsive = read("economics-demand-shift-publication-responsive.css");
   const inline = read("economics-demand-shift-inline-sticky.css");
   const station = read("economics-demand-shift-animation-station.css");
@@ -275,7 +320,7 @@ test("one optical line token owns graph roles and the two-column divider", () =>
 });
 
 test("animation-owned graph paint follows the shared clock without CSS interpolation", () => {
-  const graph = read("economics-demand-shift-graph.css");
+  const graph = readGraphCascade();
   const responsive = read("economics-demand-shift-publication-responsive.css");
   const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
 

@@ -59,7 +59,7 @@ test("economics route mounts the semantic property seam for local consumers", ()
     import.meta.url
   ), "utf8");
   const graph = readFileSync(new URL(
-    "../src/tutorial/economics-demand-shift/economics-demand-shift-graph.css",
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-lesson.css",
     import.meta.url
   ), "utf8");
   assert.match(theme, /--kp-economics-salience-market-supply-color/);
