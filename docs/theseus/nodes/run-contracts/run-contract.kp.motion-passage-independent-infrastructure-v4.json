@@ -2,7 +2,8 @@
   "id": "run-contract.kp.motion-passage-independent-infrastructure-v4",
   "kind": "run-contract",
   "title": "Motion passage independent infrastructure tranche",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -171,7 +172,8 @@
     {
       "id": "r21",
       "title": "delayed-human-layout-decision",
-      "status": "planned"
+      "summary": "User postponed layout work without approving or rejecting the economics-local exemplar. Preserve all variants as evidence and move the next design review to canonical authoring syntax.",
+      "status": "skipped"
     }
   ]
 }

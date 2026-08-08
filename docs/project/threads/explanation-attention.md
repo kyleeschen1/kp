@@ -2,13 +2,13 @@
 
 Status: active-supporting
 Last Updated: 2026-08-08
-Current Next Action: Hold the delayed human visual checkpoint for the quiet
-economics-local stacked choreography. Approve, refine, or reject that exemplar
-before shared station extraction, split parity, final floating-navigation
-geometry, or release approval. Static publication, route closure, the practical
-whole-lesson CodeMirror loop, semantic navigation, accessibility, and
-performance hardening are complete and survive any visual rollback. This
-priority boundary does not alter the separate animation-promotion rank.
+Current Next Action: Layout discovery is paused. Prepare a bounded review of
+the authoring-format mismatch between the full Markdown article, the
+layout-specific JSON passage source, and the synthesized JSON-in-comment
+CodeMirror buffer. Select one readable article-level syntax before migration or
+more editor work. Shared station extraction, split parity, final
+floating-navigation geometry, and release approval remain deferred. This pause
+does not alter the separate animation-promotion rank.
 
 ## Goal
 
@@ -41,6 +41,14 @@ accessibility, and performance gates are in place. Human visual review, shared
 station extraction, split parity, and final floating geometry still wait for
 the user. The older runtime-correction queue below is completed historical
 evidence, not the current next action.
+
+The later decision in
+`../decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`
+closes that pending visual-decision slice as postponed rather than approved or
+rejected. The economics presentation variants remain evidence. The next design
+question is one canonical, readable article source with explicit semantic links
+and typed metadata; the current JSON-in-comment editor serialization is not a
+settled authoring standard.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.

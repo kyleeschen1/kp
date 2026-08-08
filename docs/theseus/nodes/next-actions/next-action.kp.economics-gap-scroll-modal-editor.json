@@ -2,7 +2,7 @@
   "id": "next-action.kp.economics-gap-scroll-modal-editor",
   "kind": "next-action",
   "title": "Refine economics gap choreography and modal editor",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -16,6 +16,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-08-motion-passage-independent-infrastructure-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md"
     }
   ],
   "dependsOn": {
@@ -828,7 +832,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Autonomous slices r01-r20 are complete. The only remaining approved slice is the delayed human decision on the economics-local quiet stacked choreography; no shared visual promotion is authorized before it."
+    "summary": "USER_PAUSED layout discovery. The autonomous infrastructure tranche is closed; the next reviewable question is one readable article-level source replacing the current Markdown, layout JSON, and synthesized comment-buffer mismatch."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

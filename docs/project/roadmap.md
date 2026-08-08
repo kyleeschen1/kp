@@ -43,11 +43,13 @@ The execution order was temporarily revised by
 `decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md`. The
 quiet economics-local stacked revision and all approved layout-independent
 static-publication, route, CodeMirror, semantic-navigation, accessibility, and
-performance work are now complete. The current checkpoint is human review of
-the local stacked choreography, as recorded in
-`reviews/2026-08-08-motion-passage-independent-infrastructure-closeout.md`.
-Shared station extraction, split parity, and final navigation geometry remain
-blocked on that visual decision. The durable horizon outside this run and the
+performance work are now complete. The user subsequently paused layout
+discovery rather than selecting the local stacked choreography. The next
+reviewable question is convergence on one readable article-level authoring
+format, recorded in
+`decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`.
+Shared station extraction, split parity, final navigation geometry, and syntax
+migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
 
 The accepted long-term plan is recorded in
@@ -335,15 +337,18 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The semantic visual-salience theme run is complete, and the revised
-motion-passage tranche is approved.** One bounded economics-local stacked
-revision now reduces interface motion and publishes the initial passage in its
-correct focused state. Static publication and route closure then unblock the
-practical CodeMirror loop and semantic navigation core. The user deliberately
-delayed human visual judgment until the independent tranche finishes; shared
-station extraction, split parity, final floating-navigation geometry, and
-release approval remain gated. The exact revised order is in
-`reviews/2026-08-08-animation-transition-packet-checkpoint-next-step-review.md`.
+**The semantic visual-salience theme run and the layout-independent
+motion-passage tranche are complete; layout discovery is now paused.** The
+economics-local stacked revision remains reversible evidence rather than a
+selected grammar. Static publication, route closure, the practical CodeMirror
+session, semantic navigation, accessibility, and performance work remain
+durable. The current authoring surface exposes a full Markdown article, a
+layout-specific JSON passage source, and a synthesized JSON-in-comment editor
+buffer; the next review must converge these into one readable article-level
+source before more editor work. The pause and preservation boundary are in
+`decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`.
+Shared station extraction, split parity, final floating-navigation geometry,
+and release approval remain deferred.
 The full Internal Studio, SvelteKit, arbitrary source evaluation, public
 authoring, and later horizon remain deferred. The stable animation-promotion
 rank is unchanged.
@@ -698,25 +703,24 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Refine the economics stacked-projection station and progress-rail rhythm,
-   then stop at its mandatory human visual checkpoint.
-2. After approval, repair static publication and the Svelte/CSS/JavaScript
-   route boundary without changing the reviewed choreography.
-3. Port the approved semantic progress grammar to the split projection and
-   stop at a second projection-parity checkpoint.
-4. Complete the practical whole-lesson CodeMirror loop with stable IDs,
-   incremental last-valid preview, semantic autocomplete, reversible passage
-   commands, diagnostics, and explicit save state.
-5. Build progressive floating TOC and motion-passage navigation with direct
-   state restoration, browser-history parity, and no replay or scroll-jacking.
-6. Use multi-step algebra as the next structurally different lesson caller.
-7. Extract a shared motion-passage and vignette authoring contract only after
+1. Review and select one readable article-level authoring format, including
+   semantic-link and typed-directive syntax; do not implement a migration
+   before approval.
+2. Reconcile the full Markdown article, layout-specific passage source, and
+   synthesized CodeMirror buffer only after that format decision.
+3. Keep the completed static publication, optional editor, semantic TOC/direct
+   navigation, accessibility, and performance boundaries green.
+4. Keep economics layout refinement, shared station extraction, split parity,
+   and final floating-navigation geometry paused.
+5. Use multi-step algebra as the next structurally different lesson caller
+   only after the authoring-source boundary is coherent.
+6. Extract a shared motion-passage and vignette authoring contract only after
    economics and algebra prove the seam.
-8. Run named single, representative, and stress document profiles with
+7. Run named single, representative, and stress document profiles with
    explicit passage/block/capability/live-stage/playhead counts.
-9. Add advanced CodeMirror semantic exploration and structured-history tools.
-10. Add Canvas/WebGL salience adapters and 3D optical parity.
-11. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
+8. Add advanced CodeMirror semantic exploration and structured-history tools.
+9. Add Canvas/WebGL salience adapters and 3D optical parity.
+10. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
     publication, authoring, navigation, and performance gates pass.
 
 The rank detail and dependency rationale are owned by
