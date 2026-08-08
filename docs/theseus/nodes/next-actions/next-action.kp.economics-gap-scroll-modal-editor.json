@@ -596,11 +596,25 @@
       "scope": "r13 public route isolation",
       "checkedAt": "2026-08-08T19:31:31.388Z",
       "notes": "Published route passed at 135790 B transfer, 99570 B script, 29 resources, zero CLS, 71 ms startup longest task, 2.2 ms active p95, and no active long tasks."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r14 complete-buffer passage commands",
+      "checkedAt": "2026-08-08T19:37:44.560Z",
+      "notes": "103 tests passed. Add, duplicate, update, move, confirmed delete, semantic-owner protection, stable IDs, and full-source undo/redo values are verified."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r14 command type boundary",
+      "checkedAt": "2026-08-08T19:37:45.533Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R13 closes repository-backed discovery and lazy completion. R14 next unifies add, duplicate, delete, reorder, undo, and redo around the whole-buffer history rather than a separate card state."
+    "summary": "R14 supplies one structured transaction boundary for all passage operations. R15 next replaces the per-passage modal with the practical whole-lesson buffer and wires these transactions into CodeMirror history and explicit save state."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

@@ -129,7 +129,8 @@
     {
       "id": "r14",
       "title": "reversible-passage-commands",
-      "status": "planned"
+      "summary": "Added pure complete-buffer transactions for add, duplicate, move, confirmed delete, and source update. Commands preserve stable IDs, strip copied semantic authority, protect motion/reference owners, and return one replacement suitable for CodeMirror's sole undo/redo history.",
+      "status": "complete"
     },
     {
       "id": "r15",
