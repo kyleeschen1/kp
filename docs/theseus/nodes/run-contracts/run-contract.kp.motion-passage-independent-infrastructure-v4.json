@@ -117,7 +117,8 @@
     {
       "id": "r12",
       "title": "incremental-last-valid-preview",
-      "status": "planned"
+      "summary": "Added a framework-neutral debounced whole-buffer preview session. It recompiles only changed passages, preserves the last valid preview and one stage-session identity through invalid edits, emits deterministic diagnostics, and restores the nearest surviving passage ID after structural edits.",
+      "status": "complete"
     },
     {
       "id": "r13",

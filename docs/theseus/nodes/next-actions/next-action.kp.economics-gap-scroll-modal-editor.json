@@ -547,11 +547,32 @@
       "scope": "r11 buffer type boundary",
       "checkedAt": "2026-08-08T19:12:52.900Z",
       "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r12 incremental preview session",
+      "checkedAt": "2026-08-08T19:19:52.656Z",
+      "notes": "95 tests passed. Debounce coalesces edits, only changed passages recompile, invalid source retains last-valid preview, repairs settle, stable passage restoration works, and the stage-session token never changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r12 preview type boundary",
+      "checkedAt": "2026-08-08T19:19:53.678Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "r12 existing editor preservation",
+      "checkedAt": "2026-08-08T19:19:54.593Z",
+      "notes": "4 Chromium checks passed for lazy CodeMirror, persistence, semantic completion, and last-valid invalid-Markdown behavior."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R11 establishes the safe whole-lesson buffer and exact reconstruction boundary. R12 next adds debounced incremental compilation with last-valid preview and stable-passage restoration without remounting the stage runtime."
+    "summary": "R12 closes debounce, incremental recompilation, last-valid retention, deterministic diagnostics, and stable anchor restoration. R13 next replaces hard-coded editor completion with a lazy repository-backed semantic index."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
