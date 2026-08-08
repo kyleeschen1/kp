@@ -14,13 +14,16 @@
         kpEconomicsRouteParameters.get("theme") === "light"
           ? "light"
           : "dark";
-      // This pre-paint branch keeps the published document visible for no-JS
-      // and in-place enhancement while the provisional presenter remains a
-      // separately reversible compatibility path through r08.
+      // Publication is the public default. Explicit layout URLs keep their
+      // reversible presenter capability without flashing the static document.
+      const kpEconomicsExplicitEnhancement =
+        kpEconomicsRouteParameters.get("enhancement");
       document.documentElement.dataset.kpEconomicsEnhancement =
-        kpEconomicsRouteParameters.get("enhancement") === "published"
-          ? "published"
-          : "presenter";
+        kpEconomicsExplicitEnhancement === "presenter" ||
+          (kpEconomicsExplicitEnhancement !== "published" &&
+            kpEconomicsRouteParameters.has("layout"))
+          ? "presenter"
+          : "published";
     </script>
     <style>
       html, body, #app { min-height: 100%; }

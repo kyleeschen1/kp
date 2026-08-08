@@ -9,7 +9,8 @@ import {
   compileKpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 
-const route = "/tutorials/economics/demand-shift/";
+const publicRoute = "/tutorials/economics/demand-shift/";
+const route = `${publicRoute}?enhancement=presenter`;
 const animationId =
   "animation.economics.supply-demand-equilibrium-shift";
 const evidenceDirectory = "tmp/codex/economics-demand-shift-tutorial";
@@ -633,7 +634,7 @@ test("approved economics prose and semantic controls form one persistent tutoria
     "data-kp-economics-demand-intercept",
     "18"
   );
-  expect(new URL(page.url()).pathname).toBe(route);
+  expect(new URL(page.url()).pathname).toBe(publicRoute);
   expect(pageErrors).toEqual([]);
 
   await page.screenshot({
@@ -1055,7 +1056,7 @@ test("tutorial TOC enhances light DOM and emits cancelable navigation intent", a
     detail: {
       kind: "block",
       id: "supply-movement",
-      href: `${new URL(route, page.url()).origin}${route}#kp-block-supply-movement`
+      href: `${new URL(route, page.url()).origin}${publicRoute}#kp-block-supply-movement`
     },
     bubbles: true,
     cancelable: true,
@@ -1111,7 +1112,7 @@ test("floating tutorial TOC reserves a non-overlapping narrow-desktop gutter", a
 test("direct semantic links restore complete cumulative state without replay", async ({
   page
 }) => {
-  await page.goto(`${route}?direct=handoff#kp-checkpoint-shift-handoff`);
+  await page.goto(`${route}&direct=handoff#kp-checkpoint-shift-handoff`);
   let root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   let player = root.locator("[data-kp-editor-animation-player]");
   let toc = root.locator("kp-tutorial-toc");
@@ -1158,7 +1159,7 @@ test("direct semantic links restore complete cumulative state without replay", a
     "0.72"
   );
 
-  await page.goto(`${route}?direct=verified#kp-checkpoint-movement-verified`);
+  await page.goto(`${route}&direct=verified#kp-checkpoint-movement-verified`);
   root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   player = root.locator("[data-kp-editor-animation-player]");
   toc = root.locator("kp-tutorial-toc");
@@ -1199,7 +1200,7 @@ test("direct semantic links restore complete cumulative state without replay", a
     fullPage: false
   });
 
-  await page.goto(`${route}?direct=scope#kp-section-model-scope`);
+  await page.goto(`${route}&direct=scope#kp-section-model-scope`);
   root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   toc = root.locator("kp-tutorial-toc");
   await expect(root).toHaveAttribute(
@@ -1227,7 +1228,7 @@ test("direct semantic links restore complete cumulative state without replay", a
 test("TOC transactions and history restore exact states without intermediate replay", async ({
   page
 }) => {
-  await page.goto(`${route}?keep=1`);
+  await page.goto(`${route}&keep=1`);
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const toc = root.locator("kp-tutorial-toc");
   await expect(root).toHaveAttribute(
@@ -1260,7 +1261,7 @@ test("TOC transactions and history restore exact states without intermediate rep
     '[data-kp-tutorial-destination-id="supply-movement"]'
   ).click();
   await expect(page).toHaveURL(
-    `${route}?keep=1#kp-block-supply-movement`
+    `${route}&keep=1#kp-block-supply-movement`
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-initial-destination",
@@ -1282,7 +1283,7 @@ test("TOC transactions and history restore exact states without intermediate rep
   await toc.locator(
     '[data-kp-tutorial-destination-id="demand-shift"]'
   ).click();
-  await expect(page).toHaveURL(`${route}?keep=1#kp-block-demand-shift`);
+  await expect(page).toHaveURL(`${route}&keep=1#kp-block-demand-shift`);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-demand-progress",
     "0.000"
@@ -1301,7 +1302,7 @@ test("TOC transactions and history restore exact states without intermediate rep
 
   await page.goBack();
   await expect(page).toHaveURL(
-    `${route}?keep=1#kp-block-supply-movement`
+    `${route}&keep=1#kp-block-supply-movement`
   );
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-supply-movement-progress",
@@ -1313,7 +1314,7 @@ test("TOC transactions and history restore exact states without intermediate rep
   );
 
   await page.goForward();
-  await expect(page).toHaveURL(`${route}?keep=1#kp-block-demand-shift`);
+  await expect(page).toHaveURL(`${route}&keep=1#kp-block-demand-shift`);
   await expect(root).toHaveAttribute(
     "data-kp-economics-tutorial-demand-progress",
     "0.000"
@@ -1523,7 +1524,7 @@ test("published lesson enhancement adopts static truth in place", async ({
     });
     observer.observe(document, { childList: true, subtree: true });
   });
-  await page.goto(`${route}?enhancement=published#kp-checkpoint-shift-handoff`);
+  await page.goto(`${publicRoute}#kp-checkpoint-shift-handoff`);
 
   const publication = page.locator("[data-kp-economics-static-publication]");
   const svg = publication.locator("[data-kp-editor-graph-svg]");
@@ -1598,6 +1599,66 @@ test("published lesson enhancement adopts static truth in place", async ({
     "0.580"
   );
   await expect(svg).toHaveAttribute("data-kp-editor-graph-progress", "1");
+});
+
+test("route capabilities switch without reload or overlapping runtimes", async ({
+  page
+}) => {
+  await page.goto(publicRoute);
+  const navigationCount = await page.evaluate(() =>
+    performance.getEntriesByType("navigation").length
+  );
+  await expect(page.locator("[data-kp-economics-static-publication]"))
+    .toHaveAttribute("data-kp-economics-static-enhancement", "ready");
+  await page.waitForLoadState("networkidle");
+  const initialResources = await page.evaluate(() =>
+    performance.getEntriesByType("resource").map(({ name }) => name).join("\n")
+  );
+  expect(initialResources).not.toContain(
+    "economics-demand-shift-tutorial-entry"
+  );
+  expect(initialResources).not.toContain(
+    "economics-demand-shift-codemirror-runtime"
+  );
+  expect(initialResources).not.toMatch(/presenter-capability/);
+
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent(
+      "kp-economics-demand-shift-route-request",
+      { detail: { search: "?layout=animation-station", hash: "" } }
+    ));
+  });
+  const presenter = page.locator(
+    "[data-kp-economics-demand-shift-tutorial]"
+  );
+  await expect(presenter).toHaveAttribute(
+    "data-kp-economics-tutorial-layout",
+    "animation-station"
+  );
+  await expect(page.locator("[data-kp-editor-animation-player]"))
+    .toHaveCount(1);
+  await expect(page.locator("[data-kp-economics-static-publication]"))
+    .toHaveCount(0);
+
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent(
+      "kp-economics-demand-shift-route-request",
+      { detail: { search: "?enhancement=published", hash: "" } }
+    ));
+  });
+  const publication = page.locator("[data-kp-economics-static-publication]");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-static-enhancement",
+    "ready"
+  );
+  await expect(page.locator("[data-kp-editor-animation-player]"))
+    .toHaveCount(0);
+  await expect(page.locator(
+    "[data-kp-economics-demand-shift-tutorial]"
+  )).toHaveCount(1);
+  expect(await page.evaluate(() =>
+    performance.getEntriesByType("navigation").length
+  )).toBe(navigationCount);
 });
 
 test("static scrubber keeps native links and geometry when it upgrades", async ({

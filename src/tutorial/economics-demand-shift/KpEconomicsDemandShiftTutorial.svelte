@@ -1188,7 +1188,7 @@
       semanticTransitProxyId === undefined
     ) return;
     semanticTransitProxyLayer.hideProxy(semanticTransitProxyId, state);
-    if (shell !== undefined) {
+    if (shell != null) {
       shell.dataset["kpEconomicsSemanticTransitState"] = state;
     }
   }
@@ -2555,7 +2555,7 @@
     semanticTransitGeometryCache = undefined;
     semanticTransitProxyId = undefined;
     semanticTransitSourcePassageId = undefined;
-    if (shell !== undefined) {
+    if (shell != null) {
       delete shell.dataset["kpEconomicsSemanticTransitLayer"];
       delete shell.dataset["kpEconomicsSemanticTransitProgress"];
       delete shell.dataset["kpEconomicsSemanticTransitGeometryReads"];

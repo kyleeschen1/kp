@@ -28,6 +28,9 @@ import {
 import {
   readKpEconomicsDemandShiftTheme
 } from "./economics-demand-shift-theme.ts";
+import {
+  loadKpEconomicsDemandShiftPresenterCapability
+} from "./economics-demand-shift-presenter-capability.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialProgressRail } from
   "../kp-tutorial-progress-rail.ts";
@@ -39,21 +42,27 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly search: string;
   readonly hash: string;
 }): Promise<() => void> {
-  // The legacy presenter still owns its complete tree until r08. Remove the
-  // pre-published compatibility document before Svelte appends so hidden
-  // duplicate IDs, TOCs, and graph labels cannot leak into page semantics.
+  // The optional presenter owns its complete tree. Remove the published
+  // document before Svelte appends so hidden duplicate IDs, TOCs, and graph
+  // labels cannot leak into page semantics during a capability transition.
   input.root.querySelector("[data-kp-economics-static-publication]")?.remove();
   input.root.querySelector(
     "[data-kp-economics-static-publication-styles]"
   )?.remove();
   const initialTheme = readKpEconomicsDemandShiftTheme(input.search);
+  const presentationLayout = readKpEconomicsDemandShiftPresentationLayout(
+    input.search
+  );
   const previousDocumentTheme = document.documentElement.dataset[
     "kpLessonTheme"
   ];
   document.documentElement.dataset["kpLessonTheme"] = initialTheme;
   // Typography is lesson geometry: resolve the one local prose face before
   // scroll and attention observers can sample fallback-font dimensions.
-  await document.fonts.load('300 1rem "Source Serif 4"');
+  await Promise.all([
+    document.fonts.load('300 1rem "Source Serif 4"'),
+    loadKpEconomicsDemandShiftPresenterCapability(presentationLayout)
+  ]);
   defineKpTutorialScrubBar();
   defineKpTutorialProgressRail();
   defineKpTutorialToc();
@@ -92,9 +101,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
       verificationSurfaceHtml: publication.verificationSurfaceHtml,
       twoColumnParagraphs: publication.twoColumnParagraphs,
       initialDestination,
-      presentationLayout: readKpEconomicsDemandShiftPresentationLayout(
-        input.search
-      ),
+      presentationLayout,
       scrubStrategy,
       motionBridgeDwellProfile:
         readKpEconomicsMotionBridgeDwellProfile(input.search),

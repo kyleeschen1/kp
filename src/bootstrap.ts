@@ -14,9 +14,6 @@ import {
   isKpEconomicsDemandShiftTutorialRoute
 } from "./tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 import {
-  readKpEconomicsDemandShiftEnhancementMode
-} from "./tutorial/economics-demand-shift/economics-demand-shift-enhancement-mode.ts";
-import {
   isKpLispFunctionApplicationTutorialRoute
 } from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
 
@@ -34,13 +31,15 @@ async function bootstrap(): Promise<void> {
     return;
   }
   if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
-    const mode = readKpEconomicsDemandShiftEnhancementMode(
-      window.location.search
+    const route = await import(
+      "./tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts"
     );
-    const dispose = mode === "published"
-      ? await mountPublishedEconomicsTutorial(root)
-      : await mountPresenterEconomicsTutorial(root);
-    window.addEventListener("pagehide", dispose, { once: true });
+    const session = await route.mountKpEconomicsDemandShiftRoute({
+      root,
+      search: window.location.search,
+      hash: window.location.hash
+    });
+    window.addEventListener("pagehide", session.dispose, { once: true });
     return;
   }
   const entry = conceptCatalog.find((candidate) =>
@@ -91,32 +90,6 @@ async function bootstrap(): Promise<void> {
   }
   window.addEventListener("pagehide", () => handle.dispose(), { once: true });
   root.dataset["kpConceptRoomMounted"] = "true";
-}
-
-async function mountPublishedEconomicsTutorial(
-  root: HTMLElement
-): Promise<() => void> {
-  const tutorial = await import(
-    "./tutorial/economics-demand-shift/economics-demand-shift-progressive-entry.ts"
-  );
-  return tutorial.enhanceKpEconomicsDemandShiftPublication({
-    root,
-    search: window.location.search,
-    hash: window.location.hash
-  });
-}
-
-async function mountPresenterEconomicsTutorial(
-  root: HTMLElement
-): Promise<() => void> {
-  const tutorial = await import(
-    "./tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts"
-  );
-  return tutorial.mountKpEconomicsDemandShiftTutorial({
-    root,
-    search: window.location.search,
-    hash: window.location.hash
-  });
 }
 
 void bootstrap();

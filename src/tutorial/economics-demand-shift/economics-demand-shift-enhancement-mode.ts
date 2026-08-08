@@ -9,7 +9,11 @@ export type KpEconomicsDemandShiftEnhancementMode =
 export function readKpEconomicsDemandShiftEnhancementMode(
   search: string
 ): KpEconomicsDemandShiftEnhancementMode {
-  return new URLSearchParams(search).get("enhancement") === "published"
-    ? "published"
-    : "presenter";
+  const parameters = new URLSearchParams(search);
+  const explicit = parameters.get("enhancement");
+  if (explicit === "published") return "published";
+  if (explicit === "presenter") return "presenter";
+  // Existing layout URLs remain exact review links while the public route
+  // defaults to the smaller published-document enhancement.
+  return parameters.has("layout") ? "presenter" : "published";
 }

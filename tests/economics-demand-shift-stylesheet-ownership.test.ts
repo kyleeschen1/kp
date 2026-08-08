@@ -37,9 +37,13 @@ function readGraphCascade(): string {
 
 test("economics stylesheet entry preserves one explicit ownership cascade", () => {
   const entry = read("economics-demand-shift-tutorial.css");
-  const learnerStylesheets = ownedStylesheets.filter(
-    (name) => name !== "economics-demand-shift-lesson-editor.css"
-  );
+  const learnerStylesheets = [
+    "economics-demand-shift-theme.css",
+    "economics-demand-shift-publication.css",
+    "economics-demand-shift-controls.css",
+    "economics-demand-shift-graph.css",
+    "economics-demand-shift-publication-responsive.css"
+  ] as const;
   assert.equal(entry.includes("{"), false);
   assert.deepEqual(
     [...entry.matchAll(/@import "([^"]+)";/g)].map((match) => match[1]),
@@ -60,6 +64,42 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
   }
   for (const name of graphStylesheets) {
     assert.match(read(name), /^\/\* [^\n]+ \*\//);
+  }
+});
+
+test("presenter capabilities load only their selected layout styles", () => {
+  const capabilityDirectory = new URL("presenters/", directory);
+  const readCapability = (name: string): string => readFileSync(
+    new URL(name, capabilityDirectory),
+    "utf8"
+  );
+  const expected = {
+    "split-presenter-capability.ts": [
+      "../economics-demand-shift-layout-responsive.css"
+    ],
+    "inline-sticky-presenter-capability.ts": [
+      "../economics-demand-shift-inline-sticky.css",
+      "../economics-demand-shift-layout-responsive.css"
+    ],
+    "animation-station-presenter-capability.ts": [
+      "../economics-demand-shift-inline-sticky.css",
+      "../economics-demand-shift-animation-station.css",
+      "../economics-demand-shift-layout-responsive.css"
+    ],
+    "two-column-scroll-presenter-capability.ts": [
+      "../economics-demand-shift-inline-sticky.css",
+      "../economics-demand-shift-two-column.css",
+      "../economics-demand-shift-layout-responsive.css"
+    ]
+  } as const;
+
+  for (const [name, imports] of Object.entries(expected)) {
+    const source = readCapability(name);
+    assert.deepEqual(
+      [...source.matchAll(/import "([^"]+\.css)";/g)]
+        .map((match) => match[1]),
+      imports
+    );
   }
 });
 
