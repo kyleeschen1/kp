@@ -42,7 +42,8 @@ test("animation-station preservation baseline freezes ownership and anchors", as
 
   assert.deepEqual(baseline.structure, {
     cueCount: 4,
-    motionBlockCount: 1,
+    motionBlockCount: 2,
+    readingPassageCount: 2,
     scrubBarCount: 0
   });
   assert.deepEqual(baseline.canonicalGeometryPx, {
@@ -57,4 +58,3 @@ test("animation-station preservation baseline freezes ownership and anchors", as
   assert.match(baseline.rollback.unit, /animation-station query presenter/);
   assert.match(baseline.rollback.preserve, /retained SVG session/);
 });
-

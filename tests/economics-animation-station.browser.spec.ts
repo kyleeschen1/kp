@@ -11,7 +11,7 @@ test.beforeAll(() => {
   mkdirSync(evidenceDirectory, { recursive: true });
 });
 
-test("compact station hands short cues to one bounded graph", async ({
+test.skip("superseded single-motion station timing remains available during exemplar review", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -355,6 +355,127 @@ test("compact station hands short cues to one bounded graph", async ({
   ))).toBeGreaterThan(0.999);
 });
 
+test("station retains motion prose, releases for reading, and revives one graph", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const station = root.locator('[data-kp-motion-passage="demand-change"]');
+  const stage = station.locator("[data-kp-inline-sticky-stage]");
+  const demandCue = passage(station, "follow-shift");
+  const demandText = demandCue.locator("p");
+  const demandRail = demandCue.locator("kp-tutorial-progress-rail");
+  const reading = passage(station, "new-equilibrium");
+  const readingText = reading.locator("p");
+  const supplyCue = passage(station, "shift-versus-movement");
+  const supplyText = supplyCue.locator("p");
+  const supplyRail = supplyCue.locator("kp-tutorial-progress-rail");
+  const terminal = passage(station, "movement-along-supply");
+  const terminalText = terminal.locator("p");
+
+  await expect(station.locator("[data-kp-animation-station-cue]"))
+    .toHaveCount(4);
+  await expect(station.locator("[data-kp-tutorial-motion-block]"))
+    .toHaveCount(2);
+  await expect(station.locator("[data-kp-animation-station-reading]"))
+    .toHaveCount(2);
+  await expect(station.locator("kp-tutorial-progress-rail")).toHaveCount(2);
+  await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
+  await expect(reading).toHaveAttribute(
+    "data-kp-animation-station-reading",
+    "interlude"
+  );
+  await expect(terminal).toHaveAttribute(
+    "data-kp-animation-station-reading",
+    "terminal"
+  );
+
+  await alignTop(page, demandText, 294);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
+  const pinnedStart = {
+    ink: await passageInkTop(demandText),
+    rail: await demandRail.evaluate(
+      (element) => element.getBoundingClientRect().top
+    )
+  };
+  await alignTop(page, demandText, 100);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.1);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.99);
+  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.99);
+  await expect.poll(() => passageInkTop(demandText))
+    .toBeCloseTo(pinnedStart.ink, 0);
+  await expect.poll(() => demandRail.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(pinnedStart.rail, 0);
+  await expect(demandRail).not.toHaveAttribute("aria-valuenow", "0");
+
+  await alignTop(page, demandText, -25);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
+  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.99);
+  await expect(demandRail).toHaveAttribute("aria-valuenow", "100");
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-motion-retained.png`,
+    fullPage: false
+  });
+
+  await alignTop(page, readingText, 620);
+  await expect.poll(() => paragraphOpacity(readingText)).toBeCloseTo(0.5, 1);
+  await expect.poll(() => paragraphOpacity(demandText)).toBeCloseTo(0.5, 1);
+  await alignTop(page, readingText, 480);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-lifecycle",
+    "reading"
+  );
+  await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
+  await expect.poll(() => paragraphOpacity(readingText)).toBeGreaterThan(0.99);
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-reading-release.png`,
+    fullPage: false
+  });
+
+  await alignTop(page, supplyText, 620);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-lifecycle",
+    "reviving"
+  );
+  await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
+  await alignTop(page, supplyText, 560);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-lifecycle",
+    "revived"
+  );
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+  await expect(stage).toBeVisible();
+
+  await alignTop(page, supplyText, 294);
+  await expect.poll(() => supplyProgress(root)).toBeLessThan(0.001);
+  const supplyRailStart = await supplyRail.evaluate(
+    (element) => element.getBoundingClientRect().top
+  );
+  await alignTop(page, supplyText, 100);
+  await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.1);
+  await expect.poll(() => paragraphOpacity(supplyText)).toBeGreaterThan(0.99);
+  await expect.poll(() => supplyRail.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(supplyRailStart, 0);
+
+  await alignTop(page, terminalText, 480);
+  await expect(root).toHaveAttribute(
+    "data-kp-animation-station-lifecycle",
+    "terminal-release"
+  );
+  await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-terminal-release.png`,
+    fullPage: false
+  });
+
+  await alignTop(page, terminalText, 680);
+  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+  await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
+});
+
 test("phone and large text fall back to ordinary document flow", async ({
   page
 }) => {
@@ -408,7 +529,7 @@ test("reduced motion settles as readable flow without sticky rails", async ({
     getComputedStyle(element, "::before").content
   )).toBe("none");
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.999);
-  await expect(rail).toHaveAttribute("aria-valuenow", "100");
+  await expect(rail.first()).toHaveAttribute("aria-valuenow", "100");
   await page.screenshot({
     path: `${evidenceDirectory}/station-reduced-motion.png`,
     fullPage: false
@@ -421,7 +542,7 @@ test("light theme preserves the terminal release", async ({ page }) => {
     "/tutorials/economics/demand-shift/?layout=animation-station&theme=light"
   );
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
-  const release = passage(root, "equation-check").locator("p").first();
+  const release = passage(root, "movement-along-supply").locator("p").first();
   await alignTop(page, release, 540);
   await expect.poll(() => stationExit(root, "rail")).toBeGreaterThan(0.999);
   await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
@@ -552,6 +673,12 @@ function passage(root: Locator, id: string): Locator {
 async function demandProgress(root: Locator): Promise<number> {
   return Number(await root.getAttribute(
     "data-kp-economics-tutorial-demand-progress"
+  ));
+}
+
+async function supplyProgress(root: Locator): Promise<number> {
+  return Number(await root.getAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress"
   ));
 }
 

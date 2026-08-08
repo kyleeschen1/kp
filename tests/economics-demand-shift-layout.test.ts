@@ -6,7 +6,10 @@ import {
   projectKpAnimationStationEntrance,
   projectKpAnimationStationExit,
   projectKpAnimationStationGeometry,
+  projectKpAnimationStationMotionCuePresence,
   projectKpAnimationStationMotionCorridor,
+  projectKpAnimationStationReadingCycle,
+  projectKpAnimationStationReadingPresence,
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
@@ -556,13 +559,13 @@ test("animation station projects one usable-viewport rhythm", () => {
     cueRevealStartY: 730,
     cueRevealEndY: 610,
     cuePinStartY: 490,
-    cuePinEndY: 410,
-    cueExitEndY: 384,
+    cuePinEndY: 370,
+    cueExitEndY: 344.4,
     motionDistancePx: 400,
-    motionScrubEndY: 64,
+    motionScrubEndY: 24.4,
     motionSettleDistancePx: 80,
-    motionEndY: -16,
-    beatDistancePx: 544,
+    motionEndY: -55.6,
+    beatDistancePx: 592,
     railExitEndY: 674,
     graphExitStartY: 650,
     graphExitEndY: 530
@@ -619,8 +622,8 @@ test("animation station cue presence is reversible at every boundary", () => {
     { cueTopPx: 480, cueBottomPx: 560 },
     { cueTopPx: 440, cueBottomPx: 520 },
     { cueTopPx: 400, cueBottomPx: 480 },
-    { cueTopPx: 347, cueBottomPx: 427 },
-    { cueTopPx: 334, cueBottomPx: 414 }
+    { cueTopPx: 307.2, cueBottomPx: 387.2 },
+    { cueTopPx: 294.4, cueBottomPx: 374.4 }
   ].map(({ cueTopPx, cueBottomPx }) =>
     projectKpAnimationStationCuePresence({
       cueTopPx,
@@ -649,13 +652,13 @@ test("animation station cue presence is reversible at every boundary", () => {
   ]);
   assert.deepEqual(samples.map(({ pinOffsetPx }) =>
     Math.round(pinOffsetPx * 1_000) / 1_000), [
-    0, 0, 0, 0, 0, 40, 93, 106
+    0, 0, 0, 0, 0, 40, 132.8, 145.6
   ]);
   assert.deepEqual(
     [...samples].reverse(),
     [
-      { cueTopPx: 334, cueBottomPx: 414 },
-      { cueTopPx: 347, cueBottomPx: 427 },
+      { cueTopPx: 294.4, cueBottomPx: 374.4 },
+      { cueTopPx: 307.2, cueBottomPx: 387.2 },
       { cueTopPx: 400, cueBottomPx: 480 },
       { cueTopPx: 440, cueBottomPx: 520 },
       { cueTopPx: 480, cueBottomPx: 560 },
@@ -670,6 +673,75 @@ test("animation station cue presence is reversible at every boundary", () => {
       })
     )
   );
+});
+
+test("animation station motion prose stays pinned through semantic motion", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 800
+  });
+  const duringScrub = projectKpAnimationStationMotionCuePresence({
+    cueTopPx: 100,
+    cueBottomPx: 180,
+    successorPresence: 0.8,
+    geometry
+  });
+  const duringSettle = projectKpAnimationStationMotionCuePresence({
+    cueTopPx: -50,
+    cueBottomPx: 30,
+    successorPresence: 0.8,
+    geometry
+  });
+
+  assert.equal(duringScrub.phase, "pinned");
+  assert.equal(duringScrub.presence, 1);
+  assert.equal(duringScrub.pinOffsetPx, geometry.cuePinStartY - 100);
+  assert.ok(Math.abs(duringSettle.presence - 0.2) < 1e-12);
+  assert.equal(duringSettle.phase, "dissolving");
+});
+
+test("animation station reading release revives the same stage directly", () => {
+  const geometry = projectKpAnimationStationGeometry({
+    viewportHeightPx: 800
+  });
+  assert.equal(projectKpAnimationStationReadingPresence({
+    paragraphAnchorPx: 620,
+    geometry
+  }), 0.5);
+
+  const reading = projectKpAnimationStationReadingCycle({
+    readingCueTopPx: 480,
+    revivalCueTopPx: 800,
+    terminalCueTopPx: 800,
+    geometry
+  });
+  const reviving = projectKpAnimationStationReadingCycle({
+    readingCueTopPx: 480,
+    revivalCueTopPx: 620,
+    terminalCueTopPx: 800,
+    geometry
+  });
+  const revived = projectKpAnimationStationReadingCycle({
+    readingCueTopPx: 480,
+    revivalCueTopPx: 560,
+    terminalCueTopPx: 800,
+    geometry
+  });
+  const terminal = projectKpAnimationStationReadingCycle({
+    readingCueTopPx: 480,
+    revivalCueTopPx: 560,
+    terminalCueTopPx: 540,
+    geometry
+  });
+
+  assert.equal(reading.phase, "reading");
+  assert.equal(reading.exit.graphProgress, 1);
+  assert.equal(reviving.phase, "reviving");
+  assert.equal(reviving.revivalProgress, 0.5);
+  assert.equal(reviving.exit.graphProgress, 0.5);
+  assert.equal(revived.phase, "revived");
+  assert.equal(revived.exit.graphProgress, 0);
+  assert.equal(terminal.phase, "terminal-release");
+  assert.equal(terminal.exit.graphProgress, 0.5);
 });
 
 test("animation station release passage staggers rails before graph roles", () => {

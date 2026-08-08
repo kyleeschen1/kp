@@ -13,8 +13,8 @@
   --kp-animation-station-rail-height: 70dvh;
   --kp-animation-station-graph-offset: 2dvh;
   --kp-animation-station-graph-height: 33dvh;
-  --kp-animation-station-beat: 68dvh;
-  --kp-animation-station-reading-hold-vh: 10;
+  --kp-animation-station-beat: 74dvh;
+  --kp-animation-station-reading-hold-vh: 15;
   --kp-animation-station-motion-corridor-vh: 50;
   --kp-animation-station-motion-settle-vh: 10;
   --kp-animation-station-width: min(42rem, calc(100vw - 2rem));
@@ -285,6 +285,11 @@
   width: min(100%, var(--kp-inline-sticky-measure));
   margin-inline: auto;
   opacity: var(--kp-animation-station-cue-presence, 0);
+  transform: translate3d(
+    0,
+    var(--kp-animation-station-cue-pin-offset, 0px),
+    0
+  );
 }
 
 .kp-economics-tutorial--animation-station
@@ -304,13 +309,21 @@
 
 .kp-economics-tutorial--animation-station
   #kp-section-market-clearing
-  [data-kp-animation-station-release-cue] {
+  [data-kp-animation-station-reading] {
   width: min(100%, var(--kp-inline-sticky-measure));
-  margin-inline: auto;
+  margin: clamp(3rem, 10dvh, 6rem) auto clamp(5rem, 16dvh, 10rem);
   border: 0;
   padding: 0;
   background: transparent;
   box-shadow: none;
+}
+
+.kp-economics-tutorial--animation-station
+  #kp-section-market-clearing
+  [data-kp-animation-station-reading]
+  > p {
+  opacity: var(--kp-animation-station-reading-presence, 0);
+  transition: none;
 }
 
 .kp-economics-tutorial--animation-station
@@ -342,16 +355,9 @@
 
   .kp-economics-tutorial--animation-station
     #kp-section-market-clearing
-    [data-kp-animation-station-cue]
-    + [data-kp-animation-station-cue] {
+    [data-kp-animation-station-cue] {
     height: auto;
     margin-top: 2.5rem;
-  }
-
-  .kp-economics-tutorial--animation-station
-    #kp-section-market-clearing
-    [data-kp-animation-station-cue]:first-child {
-    height: auto;
   }
 
   .kp-economics-tutorial--animation-station
@@ -370,6 +376,9 @@
     > p
     > .kp-economics-tutorial__passage-ink,
   .kp-economics-tutorial--animation-station
+    [data-kp-animation-station-cue]
+    > kp-tutorial-progress-rail,
+  .kp-economics-tutorial--animation-station
     .kp-economics-tutorial__stage--inline
     .kp-economics-tutorial__stage-card {
     transform: none;
@@ -377,8 +386,14 @@
 
   .kp-economics-tutorial--animation-station
     #kp-section-market-clearing
-    [data-kp-animation-station-release-cue] {
+    [data-kp-animation-station-reading] {
     margin-top: 2.5rem;
+  }
+
+  .kp-economics-tutorial--animation-station
+    [data-kp-animation-station-reading]
+    > p {
+    opacity: 1;
   }
 }
 

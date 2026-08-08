@@ -19,7 +19,8 @@
     "data-kp-motion-passage=\"demand-change\"",
     "data-kp-inline-sticky-stage",
     "data-kp-animation-station-cue",
-    "data-kp-animation-station-release-cue",
+    "data-kp-animation-station-reading",
+    "kpAnimationStationLifecycle",
     "data-kp-tutorial-stage=\"demand-shift-graph\""
   ],
   "geometryTokens": {
@@ -27,7 +28,7 @@
     "--kp-animation-station-rail-height": "70dvh",
     "--kp-animation-station-graph-offset": "2dvh",
     "--kp-animation-station-graph-height": "33dvh",
-    "--kp-animation-station-beat": "68dvh",
+    "--kp-animation-station-beat": "74dvh",
     "--kp-animation-station-rail": "2px"
   },
   "canonicalGeometryPx": {
@@ -41,7 +42,8 @@
   },
   "structure": {
     "cueCount": 4,
-    "motionBlockCount": 1,
+    "motionBlockCount": 2,
+    "readingPassageCount": 2,
     "scrubBarCount": 0
   },
   "screenshotAnchors": [

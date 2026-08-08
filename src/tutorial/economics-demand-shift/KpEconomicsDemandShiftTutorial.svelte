@@ -51,7 +51,10 @@
     projectKpAnimationStationEntrance,
     projectKpAnimationStationExit,
     projectKpAnimationStationGeometry,
+    projectKpAnimationStationMotionCuePresence,
     projectKpAnimationStationMotionCorridor,
+    projectKpAnimationStationReadingCycle,
+    projectKpAnimationStationReadingPresence,
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
@@ -1618,14 +1621,43 @@
       }).phase;
     }
     if (animationStation) {
-      const releaseParagraph = shell?.querySelector<HTMLElement>(
-        "[data-kp-animation-station-release-cue] p"
+      const stationGeometry = readCachedAnimationStationGeometry();
+      const readingPassages = [...shell.querySelectorAll<HTMLElement>(
+        "[data-kp-animation-station-reading]"
+      )];
+      for (const passage of readingPassages) {
+        const paragraph = passage.querySelector<HTMLElement>("p");
+        const presence = projectKpAnimationStationReadingPresence({
+          paragraphAnchorPx: paragraph?.getBoundingClientRect().top ??
+            window.innerHeight,
+          geometry: stationGeometry
+        });
+        passage.style.setProperty(
+          "--kp-animation-station-reading-presence",
+          presence.toFixed(4)
+        );
+      }
+      const readingParagraph = shell.querySelector<HTMLElement>(
+        '[data-kp-animation-station-reading="interlude"] p'
       );
-      writeAnimationStationExit(projectKpAnimationStationExit({
-        releaseCueTopPx: releaseParagraph?.getBoundingClientRect().top ??
+      const revivalParagraph = shell.querySelector<HTMLElement>(
+        '[data-kp-economics-tutorial-passage="shift-versus-movement"] p'
+      );
+      const terminalParagraph = shell.querySelector<HTMLElement>(
+        '[data-kp-animation-station-reading="terminal"] p'
+      );
+      const cycle = projectKpAnimationStationReadingCycle({
+        readingCueTopPx: readingParagraph?.getBoundingClientRect().top ??
           window.innerHeight,
-        geometry: readCachedAnimationStationGeometry()
-      }));
+        revivalCueTopPx:
+          revivalParagraph?.getBoundingClientRect().top ??
+            window.innerHeight,
+        terminalCueTopPx: terminalParagraph?.getBoundingClientRect().top ??
+          window.innerHeight,
+        geometry: stationGeometry
+      });
+      shell.dataset["kpAnimationStationLifecycle"] = cycle.phase;
+      writeAnimationStationExit(cycle.exit);
     }
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
       const { element, paragraphBounds } = measurement;
@@ -1652,11 +1684,28 @@
           }));
       if (animationStation) {
         const stationGeometry = readCachedAnimationStationGeometry();
-        const presence = projectKpAnimationStationCuePresence({
-          cueTopPx: paragraphBounds.top,
-          cueBottomPx: paragraphBounds.bottom,
-          geometry: stationGeometry
-        });
+        const successorParagraph = element.nextElementSibling
+          ?.querySelector<HTMLElement>("p");
+        const successorPresence = successorParagraph === undefined ||
+            successorParagraph === null
+          ? 0
+          : projectKpAnimationStationReadingPresence({
+              paragraphAnchorPx:
+                successorParagraph.getBoundingClientRect().top,
+              geometry: stationGeometry
+            });
+        const presence = motionBlockId === undefined
+          ? projectKpAnimationStationCuePresence({
+              cueTopPx: paragraphBounds.top,
+              cueBottomPx: paragraphBounds.bottom,
+              geometry: stationGeometry
+            })
+          : projectKpAnimationStationMotionCuePresence({
+              cueTopPx: paragraphBounds.top,
+              cueBottomPx: paragraphBounds.bottom,
+              successorPresence,
+              geometry: stationGeometry
+            });
         element.dataset["kpAnimationStationCuePhase"] = presence.phase;
         element.dataset["kpAnimationStationCuePresence"] =
           presence.presence.toFixed(4);
@@ -1878,8 +1927,8 @@
       const geometry = readCachedAnimationStationGeometry();
       return projectKpAnimationStationMotionCorridor({
         corridor: block.corridor,
-        // Text disappears before motion opens; the graph's lower edge is only
-        // the visual handoff boundary, never a second clock.
+        // The graph and pinned instruction share this one semantic clock; only
+        // the post-motion settle interval may hand prose to its successor.
         motionStartPx: geometry.cueExitEndY,
         viewportHeightPx: window.innerHeight,
         runwayPx: geometry.motionDistancePx,
@@ -2776,7 +2825,7 @@
   passage: KpEconomicsDemandShiftLessonPassage,
   scrollCue: boolean,
   motionBridgePosition?: "before" | "after",
-  animationStationRelease = false
+  animationStationReading?: "interlude" | "terminal"
 )}
   {@const renderedMotionBlock = findKpEconomicsMotionBlock(
     passage.motionBlockId
@@ -2811,9 +2860,7 @@
     data-kp-animation-station-cue={animationStation && scrollCue
       ? true
       : undefined}
-    data-kp-animation-station-release-cue={animationStationRelease
-      ? true
-      : undefined}
+    data-kp-animation-station-reading={animationStationReading}
     data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
@@ -3105,25 +3152,28 @@
                 ></span>
                 <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll || animationStation
-                    ? animationStation
-                      ? editableTwoColumnParagraphs.slice(0, 4)
-                      : editableTwoColumnParagraphs
+                    ? editableTwoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {#if motionBridgeEnabled &&
                         passage.id === motionBridge?.beforePassageId}
                       {@render demandShiftMotionBridge()}
                     {:else if !motionBridgeEnabled ||
                         passage.id !== motionBridge?.afterPassageId}
-                      {@render lessonPassage(passage, true)}
+                      {@const stationReading = animationStation
+                        ? passage.id === "new-equilibrium"
+                          ? "interlude"
+                          : passage.id === "movement-along-supply"
+                            ? "terminal"
+                            : undefined
+                        : undefined}
+                      {@render lessonPassage(
+                        passage,
+                        stationReading === undefined,
+                        undefined,
+                        stationReading
+                      )}
                     {/if}
                   {/each}
-                  {#if animationStation}
-                    {#each section.passages.filter(
-                      ({ id }) => id === "equation-check"
-                    ) as passage}
-                      {@render lessonPassage(passage, false, undefined, true)}
-                    {/each}
-                  {/if}
                 </div>
               </div>
               <div
@@ -3131,9 +3181,8 @@
                 aria-hidden="true"
               ></div>
             </div>
-            {#each section.passages.filter(({ id, role }) =>
-              role === "reflection" &&
-                (!animationStation || id !== "equation-check")) as passage}
+            {#each section.passages.filter(({ role }) =>
+              role === "reflection") as passage}
               {@render lessonPassage(passage, false)}
             {/each}
           {:else}

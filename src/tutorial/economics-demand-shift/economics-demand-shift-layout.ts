@@ -110,6 +110,18 @@ export interface KpAnimationStationExitProjection {
   readonly labelPresence: number;
 }
 
+export interface KpAnimationStationReadingCycleProjection {
+  readonly phase:
+    | "stationed"
+    | "releasing-to-reading"
+    | "reading"
+    | "reviving"
+    | "revived"
+    | "terminal-release";
+  readonly revivalProgress: number;
+  readonly exit: KpAnimationStationExitProjection;
+}
+
 export interface KpEconomicsAnimationStationRhythm {
   readonly railTopRatio: number;
   readonly railBottomRatio: number;
@@ -137,11 +149,11 @@ Readonly<KpEconomicsAnimationStationRhythm> = Object.freeze({
   cueRevealStartRatio: 0.85,
   cueRevealEndRatio: 0.7,
   cuePinStartRatio: 0.55,
-  cuePinDistanceRatio: 0.1,
-  cueExitGraphRatio: 0.75,
+  cuePinDistanceRatio: 0.15,
+  cueExitGraphRatio: 0.6,
   motionDistanceRatio: 0.5,
   motionSettleDistanceRatio: 0.1,
-  beatDistanceRatio: 0.68,
+  beatDistanceRatio: 0.74,
   railExitEndRatio: 0.78,
   graphExitStartRatio: 0.75,
   graphExitEndRatio: 0.6
@@ -918,6 +930,53 @@ export function projectKpAnimationStationCuePresence(input: {
   });
 }
 
+/** Keeps a motion instruction and its rail fixed until semantic motion ends. */
+export function projectKpAnimationStationMotionCuePresence(input: {
+  readonly cueTopPx: number;
+  readonly cueBottomPx: number;
+  readonly successorPresence: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+}): KpAnimationStationCuePresenceProjection {
+  const base = projectKpAnimationStationCuePresence(input);
+  const cueTop = Number.isFinite(input.cueTopPx)
+    ? input.cueTopPx
+    : input.geometry.usableBottomPx;
+  if (cueTop >= input.geometry.cuePinStartY) return base;
+
+  const presence = cueTop >= input.geometry.motionScrubEndY
+    ? 1
+    : 1 - clamp(input.successorPresence, 0, 1);
+  return Object.freeze({
+    phase: presence <= Number.EPSILON
+      ? "gone"
+      : presence >= 1 - Number.EPSILON
+        ? "pinned"
+        : "dissolving",
+    presence,
+    scale: 0.95 + presence * 0.05,
+    pinOffsetPx: input.geometry.cuePinStartY - cueTop
+  });
+}
+
+/** Reading prose enters normally; unlike a station cue, it is never pinned. */
+export function projectKpAnimationStationReadingPresence(input: {
+  readonly paragraphAnchorPx: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+}): number {
+  const anchor = Number.isFinite(input.paragraphAnchorPx)
+    ? input.paragraphAnchorPx
+    : input.geometry.usableBottomPx;
+  if (anchor >= input.geometry.cueRevealStartY) return 0;
+  if (anchor <= input.geometry.cueRevealEndY) return 1;
+  return smoothstep(clamp(
+    (input.geometry.cueRevealStartY - anchor) /
+      Math.max(1, input.geometry.cueRevealStartY -
+        input.geometry.cueRevealEndY),
+    0,
+    1
+  ));
+}
+
 export function projectKpAnimationStationExit(input: {
   readonly releaseCueTopPx: number;
   readonly geometry: KpAnimationStationGeometryProjection;
@@ -954,6 +1013,88 @@ export function projectKpAnimationStationExit(input: {
     demandPresence: presence(0.32, 0.87),
     pointPresence: presence(0.4, 0.95),
     labelPresence: presence(0.48, 1)
+  });
+}
+
+/**
+ * Releases one retained scene for ordinary reading, then reverses that exact
+ * release as the next motion cue arrives. A later reading passage can perform
+ * the terminal release without constructing a second graph instance.
+ */
+export function projectKpAnimationStationReadingCycle(input: {
+  readonly readingCueTopPx: number;
+  readonly revivalCueTopPx: number;
+  readonly terminalCueTopPx: number;
+  readonly geometry: KpAnimationStationGeometryProjection;
+}): KpAnimationStationReadingCycleProjection {
+  const readingExit = projectKpAnimationStationExit({
+    releaseCueTopPx: input.readingCueTopPx,
+    geometry: input.geometry
+  });
+  const terminalExit = projectKpAnimationStationExit({
+    releaseCueTopPx: input.terminalCueTopPx,
+    geometry: input.geometry
+  });
+  const revivalProgress = projectKpAnimationStationReadingPresence({
+    paragraphAnchorPx: input.revivalCueTopPx,
+    geometry: input.geometry
+  });
+  const revivedExit = interpolateAnimationStationExit(
+    readingExit,
+    emptyAnimationStationExit(),
+    revivalProgress
+  );
+  const terminalStarted = terminalExit.railProgress > Number.EPSILON ||
+    terminalExit.graphProgress > Number.EPSILON;
+  const exit = terminalStarted ? terminalExit : revivedExit;
+  const phase: KpAnimationStationReadingCycleProjection["phase"] =
+    terminalStarted
+      ? "terminal-release"
+      : revivalProgress >= 1 - Number.EPSILON
+        ? "revived"
+        : revivalProgress > Number.EPSILON
+          ? "reviving"
+          : readingExit.graphProgress >= 1 - Number.EPSILON
+            ? "reading"
+            : readingExit.railProgress > Number.EPSILON ||
+                readingExit.graphProgress > Number.EPSILON
+              ? "releasing-to-reading"
+              : "stationed";
+  return Object.freeze({ phase, revivalProgress, exit });
+}
+
+function emptyAnimationStationExit(): KpAnimationStationExitProjection {
+  return Object.freeze({
+    railProgress: 0,
+    graphProgress: 0,
+    gridPresence: 1,
+    guidePresence: 1,
+    axisPresence: 1,
+    supplyPresence: 1,
+    demandPresence: 1,
+    pointPresence: 1,
+    labelPresence: 1
+  });
+}
+
+function interpolateAnimationStationExit(
+  from: KpAnimationStationExitProjection,
+  to: KpAnimationStationExitProjection,
+  progress: number
+): KpAnimationStationExitProjection {
+  const t = clamp(progress, 0, 1);
+  const interpolate = (start: number, end: number): number =>
+    start + (end - start) * t;
+  return Object.freeze({
+    railProgress: interpolate(from.railProgress, to.railProgress),
+    graphProgress: interpolate(from.graphProgress, to.graphProgress),
+    gridPresence: interpolate(from.gridPresence, to.gridPresence),
+    guidePresence: interpolate(from.guidePresence, to.guidePresence),
+    axisPresence: interpolate(from.axisPresence, to.axisPresence),
+    supplyPresence: interpolate(from.supplyPresence, to.supplyPresence),
+    demandPresence: interpolate(from.demandPresence, to.demandPresence),
+    pointPresence: interpolate(from.pointPresence, to.pointPresence),
+    labelPresence: interpolate(from.labelPresence, to.labelPresence)
   });
 }
 

@@ -264,6 +264,13 @@
       "status": "passed",
       "scope": "s09 checkpoint integrity: 905 nodes and 18560 events",
       "checkedAt": "2026-08-07T16:28:49.269Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s09 checkpoint memory integrity",
+      "checkedAt": "2026-08-08T01:51:21.944Z",
+      "notes": "905 nodes and 18572 events valid"
     }
   ],
   "allowedWork": [
@@ -339,7 +346,7 @@
     {
       "id": "s09",
       "title": "stacked-human-checkpoint",
-      "summary": "Stabilized the economics stacked exemplar, widened runtime rhythm typing for CSS-derived ratios, refreshed the review capture set, and published the human checkpoint report. Focused, CSS, page-scale, broad Chromium, visual, type, build, and workspace checks pass. Performance smoke records bounded startup overages while active motion remains within budget. Stop for mandatory human review before s10.",
+      "summary": "Revised stacked exemplar now retains motion prose and its stationary filled rail for the whole semantic playhead, hands off to readable prose during settle, releases one retained graph for an ordinary reading interval, revives that same graph for supply motion, and exits again into document flow. Focused semantics, styles, Chromium lifecycle, phone, reduced motion, light theme, deep link, progressive enhancement, and production build pass. Mandatory human checkpoint reached; no shared promotion performed.",
       "status": "complete"
     },
     {

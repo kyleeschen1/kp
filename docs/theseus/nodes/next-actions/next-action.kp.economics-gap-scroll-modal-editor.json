@@ -106,11 +106,46 @@
       "scope": "strict initial learner budget",
       "checkedAt": "2026-08-06T21:39:53.252Z",
       "notes": "Initial script is now green at 149990/150000 bytes; 42 resources, zero CLS, 34.2 ms active p95, and zero active long tasks remain healthy. Total initial transfer is 250869/250000 and sampled cold longest task is 160/150 ms. The route-loaded Source Serif 300 file is 21068 bytes; the 227.26 KB gzip CodeMirror/Vim chunk remains lazy and excluded from initial transfer."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "station projection, retained graph, direct seek, lesson source",
+      "checkedAt": "2026-08-08T01:50:37.851Z",
+      "notes": "83 focused tests passed"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "station style ownership and responsive fallback",
+      "checkedAt": "2026-08-08T01:50:38.966Z",
+      "notes": "17 tests passed"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "canonical Chromium exemplar, phone, reduced motion, theme, deep link, progressive enhancement",
+      "checkedAt": "2026-08-08T01:50:39.859Z",
+      "notes": "7 passed; superseded pre-revision choreography check intentionally skipped pending human selection"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production typecheck, compiled publication freshness, and Vite build",
+      "checkedAt": "2026-08-08T01:50:40.785Z",
+      "notes": "Svelte reported zero errors and zero warnings; production build passed"
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository-wide pre-existing architecture gate",
+      "checkedAt": "2026-08-08T01:50:41.747Z",
+      "notes": "Unrelated frozen dependency-direction failure: src/reader/app/fraction-composition-salience-adapter.ts imports compiler/fraction-composition-salience-inventory.ts"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Minimal Vim editor refinement is implemented and verified: buffer plus native ex panel plus modeline only, 1rem/1.5 editor type, Escape retained by Vim, :q closes the locally autosaved draft, :w validates and writes source, and :wq closes only after a successful write. Awaiting human choice on replacing the 21 KB Source Serif asset with a cross-platform system serif stack and on a separate whole-document authoring migration; no format or font migration was inferred."
+    "summary": "Checkpoint revision implemented on the canonical animation-station route: 15vh cue hold, stationary percentage rail, motion prose retained through semantic completion, synchronized reading handoff, ordinary reading release, deterministic revival of the same retained graph, second supply-motion passage, and terminal return to document flow. Awaiting required human visual approval before shared-contract promotion."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
