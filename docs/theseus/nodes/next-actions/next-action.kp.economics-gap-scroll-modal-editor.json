@@ -533,11 +533,25 @@
       "scope": "r10 semantic and runtime preservation",
       "checkedAt": "2026-08-08T18:58:06.517Z",
       "notes": "86 economics publication, layout, salience, retained-runtime, and lesson tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r11 whole-lesson schema and preservation",
+      "checkedAt": "2026-08-08T19:12:51.910Z",
+      "notes": "91 tests passed, including deterministic buffer round-trip, compiled narrative identity, stable-ID reorder, reversible escaping, version rejection, typed ownership, and executable-source rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r11 buffer type boundary",
+      "checkedAt": "2026-08-08T19:12:52.900Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R10 gates the real published learner route with measured startup and active-motion budgets. R11 next defines the bounded whole-lesson authoring buffer and stable-ID serialization without executable source."
+    "summary": "R11 establishes the safe whole-lesson buffer and exact reconstruction boundary. R12 next adds debounced incremental compilation with last-valid preview and stable-passage restoration without remounting the stage runtime."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

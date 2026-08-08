@@ -111,7 +111,8 @@
     {
       "id": "r11",
       "title": "whole-lesson-buffer-schema",
-      "status": "planned"
+      "summary": "Added one economics-local, layout-neutral whole-lesson buffer with deterministic Markdown-like typed directives for lesson, stage, motion-passage, passage, motion-block, and semantic-reference identities. The current six-passage compiled narrative reconstructs exactly; escaping, reorder, schema version, ownership, and executable-source rejection are verified.",
+      "status": "complete"
     },
     {
       "id": "r12",
