@@ -26,6 +26,13 @@ import { renderKpLispFunctionApplicationStaticPublication } from
   "./src/tutorial/lisp-function-application/lisp-function-application-static-publication.ts";
 import { createKpLispLessonStageProjector } from
   "./src/tutorial/lisp-function-application/lisp-function-application-stage-projector.ts";
+import {
+  readKpEconomicsDemandShiftCompiledPublication
+} from "./src/tutorial/economics-demand-shift/economics-demand-shift-compiled-publication.ts";
+import {
+  renderKpEconomicsDemandShiftStaticNarrative,
+  renderKpEconomicsDemandShiftStaticNarrativeStyles
+} from "./src/tutorial/economics-demand-shift/economics-demand-shift-static-publication.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -43,6 +50,12 @@ const lispTutorialFilename = resolve(
   "tutorials/programming/lisp-function-application/index.html"
 );
 const lispTutorialStaticFallback = compileLispTutorialStaticFallback();
+const economicsTutorialFilename = resolve(
+  projectRoot,
+  "tutorials/economics/demand-shift/index.html"
+);
+const economicsTutorialStaticNarrative =
+  compileEconomicsTutorialStaticNarrative();
 
 export default defineConfig({
   define: {
@@ -100,6 +113,20 @@ export default defineConfig({
             ? html.replace(
                 "<!-- kp:lisp-static-fallback -->",
                 lispTutorialStaticFallback
+              )
+            : html;
+        }
+      }
+    },
+    {
+      name: "kp-economics-tutorial-static-narrative",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          return context.filename === economicsTutorialFilename
+            ? html.replace(
+                "<!-- kp:economics-static-narrative -->",
+                economicsTutorialStaticNarrative
               )
             : html;
         }
@@ -194,6 +221,11 @@ function readReviewBuildIdentity(): { commit: string; fingerprint: string; dirty
   } catch {
     return { commit: "unknown", fingerprint: "dev-unknown", dirty: true };
   }
+}
+
+function compileEconomicsTutorialStaticNarrative(): string {
+  const publication = readKpEconomicsDemandShiftCompiledPublication();
+  return `${renderKpEconomicsDemandShiftStaticNarrativeStyles()}${renderKpEconomicsDemandShiftStaticNarrative(publication)}`;
 }
 
 function compileLispTutorialStaticFallback(): string {

@@ -63,7 +63,8 @@
     {
       "id": "r03",
       "title": "static-narrative-shell",
-      "status": "planned"
+      "summary": "Published the complete ordered economics narrative into production route HTML for no-JavaScript readers: headings, 11 passages, TOC links, stable section/block/checkpoint IDs, and build-time KaTeX HTML/MathML. Current enhanced presenter remains unchanged; stage adoption is reserved for r04-r05.",
+      "status": "complete"
     },
     {
       "id": "r04",

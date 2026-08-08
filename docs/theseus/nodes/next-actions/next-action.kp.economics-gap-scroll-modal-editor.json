@@ -278,6 +278,27 @@
       "scope": "r02 production startup attribution",
       "checkedAt": "2026-08-08T17:07:04.418Z",
       "notes": "Diagnostic succeeded and active path passed; strict cold gate remains transfer 255232/250000 B, script 152720/150000 B, startup task 180/150 ms. Resources 42, CLS 0, active p95 34.7 ms, active long tasks 0, retained SVG rebuilds 0."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r03 static narrative compiler and route shell",
+      "checkedAt": "2026-08-08T17:15:59.790Z",
+      "notes": "82 focused tests passed, including ordered narrative, stable destinations, build-time MathML, and semantic links."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r03 production static narrative publication",
+      "checkedAt": "2026-08-08T17:16:00.833Z",
+      "notes": "Production route HTML contains 46.99 KB raw / 5.20 KB gzip complete narrative before client execution; publication freshness and typechecks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r03 no-JavaScript narrative and existing learner behavior",
+      "checkedAt": "2026-08-08T17:16:01.739Z",
+      "notes": "13 Chromium checks passed; no-JS route exposes 11 ordered passages, math, motion destinations, and searchable conclusion."
     }
   ],
   "progress": {

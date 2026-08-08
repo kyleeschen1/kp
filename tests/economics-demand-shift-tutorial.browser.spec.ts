@@ -1462,6 +1462,40 @@ test("static publication controls remain useful with JavaScript disabled", async
   }
 });
 
+test("the learner route publishes complete searchable narrative without JavaScript", async ({
+  browser
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 820, height: 700 }
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto(route);
+    const publication = page.locator("[data-kp-economics-static-publication]");
+    await expect(publication).toBeVisible();
+    await expect(publication).toHaveAttribute(
+      "data-kp-economics-static-projection",
+      "narrative"
+    );
+    await expect(publication.getByRole("heading", {
+      name: /Why does an increase in demand/
+    })).toBeVisible();
+    await expect(publication.locator(
+      "[data-kp-economics-tutorial-passage]"
+    )).toHaveCount(11);
+    await expect(publication.locator("#kp-block-demand-shift")).toHaveCount(1);
+    await expect(publication.locator("#kp-checkpoint-shift-handoff"))
+      .toHaveCount(1);
+    await expect(publication.locator("math").first()).toBeVisible();
+    await expect(publication).toContainText(
+      "Quantity supplied rose because equilibrium selected a new point"
+    );
+  } finally {
+    await context.close();
+  }
+});
+
 test("static scrubber keeps native links and geometry when it upgrades", async ({
   page
 }) => {
