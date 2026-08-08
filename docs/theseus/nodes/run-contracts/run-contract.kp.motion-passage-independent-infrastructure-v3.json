@@ -1,0 +1,146 @@
+{
+  "id": "run-contract.kp.motion-passage-independent-infrastructure-v3",
+  "kind": "run-contract",
+  "title": "Motion passage independent infrastructure tranche",
+  "status": "superseded",
+  "summary": "Superseded before product execution because the bounded help omitted required typed-autonomy flags; no slice started.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.economics-gap-scroll-modal-editor.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-08-animation-transition-packet-checkpoint-next-step-review.md",
+      "summary": "User-approved revised execution order with delayed visual checkpoint and explicit layout-independent boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-demand-shift-css",
+    "npm run typecheck",
+    "npm run build",
+    "npm run performance:economics-demand-shift-tutorial",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Economics-local animation-station presenter, local salience projection, and focused visual preservation tests.",
+    "Static lesson publication, route and capability closure, CSS ownership, font and theme loading, practical whole-lesson CodeMirror, semantic TOC, direct navigation, accessibility, performance, and project evidence.",
+    "Framework-neutral semantic IDs, published light DOM, one shared clock, direct state restoration, and exact reversible commits."
+  ],
+  "disallowedWork": [
+    "Shared station visual grammar, split-projection parity, final floating TOC geometry, visual promotion, or release approval before the delayed human checkpoint.",
+    "Animation-rank changes, Lisp or linear algebra work, algebra caller, broad vignette schema, Canvas/WebGL/Graph3D promotion, SvelteKit, Internal Studio, Public Web, or Public Editor.",
+    "Arbitrary source evaluation, universal renderer or schema, scroll-jacking, duplicate clocks, CSS semantic motion, or overwriting user-owned dirty files."
+  ],
+  "goal": "Implement one provisional quiet stacked exemplar, then complete layout-independent publication, authoring, semantic navigation, and hardening before delayed human review.",
+  "target": "next-action.kp.economics-gap-scroll-modal-editor",
+  "slices": [
+    {
+      "id": "r01",
+      "title": "quiet-stacked-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "r02",
+      "title": "startup-attribution",
+      "status": "planned"
+    },
+    {
+      "id": "r03",
+      "title": "static-narrative-shell",
+      "status": "planned"
+    },
+    {
+      "id": "r04",
+      "title": "static-stage-shell",
+      "status": "planned"
+    },
+    {
+      "id": "r05",
+      "title": "progressive-enhancement-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "r06",
+      "title": "tutorial-foundation-css",
+      "status": "planned"
+    },
+    {
+      "id": "r07",
+      "title": "graph-domain-css-split",
+      "status": "planned"
+    },
+    {
+      "id": "r08",
+      "title": "presenter-route-closure",
+      "status": "planned"
+    },
+    {
+      "id": "r09",
+      "title": "font-theme-closure",
+      "status": "planned"
+    },
+    {
+      "id": "r10",
+      "title": "publication-performance-gate",
+      "status": "planned"
+    },
+    {
+      "id": "r11",
+      "title": "whole-lesson-buffer-schema",
+      "status": "planned"
+    },
+    {
+      "id": "r12",
+      "title": "incremental-last-valid-preview",
+      "status": "planned"
+    },
+    {
+      "id": "r13",
+      "title": "semantic-repository-completion",
+      "status": "planned"
+    },
+    {
+      "id": "r14",
+      "title": "reversible-passage-commands",
+      "status": "planned"
+    },
+    {
+      "id": "r15",
+      "title": "practical-editor-chrome",
+      "status": "planned"
+    },
+    {
+      "id": "r16",
+      "title": "semantic-toc-publication",
+      "status": "planned"
+    },
+    {
+      "id": "r17",
+      "title": "direct-navigation-transaction",
+      "status": "planned"
+    },
+    {
+      "id": "r18",
+      "title": "no-js-accessibility-hardening",
+      "status": "planned"
+    },
+    {
+      "id": "r19",
+      "title": "integration-performance-hardening",
+      "status": "planned"
+    },
+    {
+      "id": "r20",
+      "title": "autonomous-closeout-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "r21",
+      "title": "delayed-human-layout-decision",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,14 +1,13 @@
 # Explanation and Attention Thread
 
 Status: active-supporting
-Last Updated: 2026-08-07
-Current Next Action: Obtain explicit approval for the exact contract in
-`../reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md`,
-then refine the economics stacked-station and progress-rail exemplar through
-its mandatory human checkpoint. Do not begin publication-boundary extraction,
-split projection parity, editor expansion, or navigation until the preceding
-rank and checkpoint allow it. This priority change does not alter the separate
-animation-promotion rank.
+Last Updated: 2026-08-08
+Current Next Action: Execute the approved quiet economics-local stacked
+revision, then advance layout-independent publication, route closure,
+practical CodeMirror, semantic TOC/direct navigation, and objective hardening.
+Stop for human visual review before shared station extraction, split parity,
+final floating-navigation geometry, or release approval. This priority change
+does not alter the separate animation-promotion rank.
 
 ## Goal
 
@@ -28,10 +27,13 @@ The accepted ordered horizon is recorded in
 `../decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`
 and
 `../reviews/2026-08-07-motion-passage-publication-authoring-next-step-review.md`.
-The bounded lesson editor remains approved in substance but moves behind the
-stacked exemplar, static publication repair, and split parity. The older
-runtime-correction queue below is completed historical evidence, not the
-current next action.
+The active execution order is revised by
+`../decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md` and
+`../reviews/2026-08-08-animation-transition-packet-checkpoint-next-step-review.md`.
+The practical editor and semantic navigation now follow static publication and
+route closure while visual review, shared station extraction, split parity,
+and final floating geometry wait for the user. The older runtime-correction
+queue below is completed historical evidence, not the current next action.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.

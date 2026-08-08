@@ -2,7 +2,8 @@
   "id": "run-contract.kp.motion-passage-publication-authoring-v2",
   "kind": "run-contract",
   "title": "Motion passage publication and authoring tranche",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Completed slices s01-s09 remain evidence; the user approved layout-independent publication, authoring, and semantic navigation before delayed visual review.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-07
+Last Updated: 2026-08-08
 Status: active
 Active Thread: `threads/animation-library-promotion.md`
 Supporting Threads:
@@ -39,11 +39,13 @@ remaining economics payload budget.
 The motion-passage workstream now uses the canonical vocabulary in
 `principles/motion-passage-vocabulary.md` and the accepted order in
 `decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`.
-Its immediate tranche is stacked-station refinement, static-publication and
-route-boundary repair, split-projection parity, the practical CodeMirror loop,
-then robust TOC and motion-passage navigation. The detailed ranking and gates
-live in
-`reviews/2026-08-07-motion-passage-publication-authoring-next-step-review.md`.
+The execution order is temporarily revised by
+`decisions/2026-08-08-kp-layout-independent-autonomous-reordering.md`: one
+quiet economics-local stacked revision comes first, followed by
+static-publication and route closure, the practical CodeMirror loop, semantic
+TOC/direct navigation, and objective hardening. Human visual review, shared
+station extraction, split parity, and final navigation geometry follow when
+the user returns. The durable horizon outside this run remains unchanged.
 This workstream order does not alter the animation-library promotion rank.
 
 The accepted long-term plan is recorded in
@@ -331,16 +333,18 @@ both operation-specific tuning and a speculative universal scene graph.
 
 ## Active Focus
 
-**The semantic visual-salience theme run is complete, and the next
-motion-passage tranche has an accepted order.** First perfect the economics
-stacked-station and progress-rail exemplar; then repair static publication and
-route closure before porting the approved grammar to the split projection.
-The bounded CodeMirror authoring proof follows at rank 4, and robust floating
-TOC/navigation follows at rank 5. The exact proposed 30-slice contract is in
-`reviews/2026-08-07-motion-passage-publication-authoring-long-loop-proposal.md`
-and still requires explicit approval before execution. The full Internal
-Studio, SvelteKit, arbitrary source evaluation, public authoring, and ranks
-6–11 remain deferred. The stable animation-promotion rank is unchanged.
+**The semantic visual-salience theme run is complete, and the revised
+motion-passage tranche is approved.** One bounded economics-local stacked
+revision now reduces interface motion and publishes the initial passage in its
+correct focused state. Static publication and route closure then unblock the
+practical CodeMirror loop and semantic navigation core. The user deliberately
+delayed human visual judgment until the independent tranche finishes; shared
+station extraction, split parity, final floating-navigation geometry, and
+release approval remain gated. The exact revised order is in
+`reviews/2026-08-08-animation-transition-packet-checkpoint-next-step-review.md`.
+The full Internal Studio, SvelteKit, arbitrary source evaluation, public
+authoring, and later horizon remain deferred. The stable animation-promotion
+rank is unchanged.
 
 **The code-native S-expression Lisp tutorial is at its mandatory slice-25 human
 visual checkpoint; two later slices remain approval-gated.** The exact

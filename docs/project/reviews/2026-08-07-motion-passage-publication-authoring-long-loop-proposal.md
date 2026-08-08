@@ -1,13 +1,19 @@
 # Motion Passage, Publication, And Authoring Long-Loop Proposal
 
 Date: 2026-08-07
-Status: proposed; explicit approval required before execution
+Status: superseded in execution order on 2026-08-08; retained evidence
 Source Decision:
 `../decisions/2026-08-07-kp-motion-passage-vocabulary-and-ordered-horizon.md`
 Ordering Authority:
 `2026-08-07-motion-passage-publication-authoring-next-step-review.md`
 
 ## Objective
+
+> The first nine slices remain completed evidence. The remaining split-first
+> order is superseded by
+> `2026-08-08-animation-transition-packet-checkpoint-next-step-review.md`,
+> which advances layout-independent publication, authoring, and semantic
+> navigation before the delayed human checkpoint.
 
 Deliver the accepted immediate tranche in strict order: perfect one stacked
 station exemplar, repair static publication and route closure, prove split
@@ -171,4 +177,3 @@ After explicit approval, create one Theseus run contract sourced from this
 document, persist these 30 slices in this order, and begin at slice 1. If the
 current stale Theseus next action conflicts, supersede that execution boundary
 without deleting its historical evidence.
-
