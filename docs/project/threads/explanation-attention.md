@@ -6,7 +6,9 @@ Current Next Action: Layout discovery is paused. Prepare a bounded review of
 the authoring-format mismatch between the full Markdown article, the
 layout-specific JSON passage source, and the synthesized JSON-in-comment
 CodeMirror buffer. Select one readable article-level syntax before migration or
-more editor work. Shared station extraction, split parity, final
+more editor work, using the bounded comparison in
+`../reviews/2026-08-08-authoring-format-convergence-next-step-review.md`.
+Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.
 

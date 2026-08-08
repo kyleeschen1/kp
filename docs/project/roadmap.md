@@ -48,6 +48,8 @@ discovery rather than selecting the local stacked choreography. The next
 reviewable question is convergence on one readable article-level authoring
 format, recorded in
 `decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`.
+The recommended decision process and successor sequence are in
+`reviews/2026-08-08-authoring-format-convergence-next-step-review.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
