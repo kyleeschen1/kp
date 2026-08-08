@@ -1108,6 +1108,80 @@ test("published TOC tracks semantic headings and uses a native mobile disclosure
     .toBeVisible();
 });
 
+test("published navigation restores state before viewport and exposes semantic actions", async ({
+  page
+}) => {
+  await page.goto(`${publicRoute}#kp-block-demand-shift`);
+  const root = page.locator("[data-kp-economics-static-publication]");
+  const toc = root.locator("kp-tutorial-toc");
+  const graph = root.locator("[data-kp-editor-graph-svg]");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-block",
+    "demand-shift"
+  );
+  await page.evaluate(() => {
+    const root = document.querySelector<HTMLElement>(
+      "[data-kp-economics-static-publication]"
+    )!;
+    const graph = root.querySelector<SVGSVGElement>(
+      "[data-kp-editor-graph-svg]"
+    )!;
+    const samples: string[] = [];
+    const observer = new MutationObserver(() => samples.push(
+      `${graph.dataset["kpEditorGraphProgress"]}|` +
+      `${root.dataset["kpEconomicsTutorialSupplyMovementProgress"]}`
+    ));
+    observer.observe(root, { attributes: true, subtree: true });
+    (window as typeof window & { kpPublishedNavigationSamples?: string[] })
+      .kpPublishedNavigationSamples = samples;
+  });
+
+  await toc.locator(
+    '[data-kp-tutorial-destination-id="supply-movement"]'
+  ).click();
+  await expect(page).toHaveURL(
+    `${publicRoute}#kp-block-supply-movement`
+  );
+  await expect(graph).toHaveAttribute("data-kp-editor-graph-progress", "1");
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  expect(await page.evaluate(() => [
+    ...new Set((window as typeof window & {
+      kpPublishedNavigationSamples?: string[];
+    }).kpPublishedNavigationSamples)
+  ])).toEqual(["1|0.000"]);
+
+  const canceled = await root.evaluate((element) => !element.dispatchEvent(
+    new CustomEvent("kp:economics-navigation-action", {
+      bubbles: true,
+      cancelable: true,
+      detail: { action: "settle-motion" }
+    })
+  ));
+  expect(canceled).toBe(true);
+  await expect(page).toHaveURL(
+    `${publicRoute}#kp-checkpoint-movement-verified`
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "1.000"
+  );
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    `${publicRoute}#kp-block-supply-movement`
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-economics-tutorial-supply-movement-progress",
+    "0.000"
+  );
+  await page.goBack();
+  await expect(page).toHaveURL(`${publicRoute}#kp-block-demand-shift`);
+  await expect(graph).toHaveAttribute("data-kp-editor-graph-progress", "0");
+});
+
 test("floating tutorial TOC reserves a non-overlapping narrow-desktop gutter", async ({
   page
 }) => {

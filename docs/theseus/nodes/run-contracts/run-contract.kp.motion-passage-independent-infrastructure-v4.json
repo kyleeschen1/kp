@@ -147,7 +147,8 @@
     {
       "id": "r17",
       "title": "direct-navigation-transaction",
-      "status": "planned"
+      "summary": "Published and presenter economics hosts now share the state-before-viewport navigation transaction. Cold deep links, TOC clicks, and history restore exact semantic frames directly without replay; typed previous/next, skip, settle, and exit actions resolve stable block, checkpoint, or section IDs through the same controller, while final navigation chrome remains deferred.",
+      "status": "complete"
     },
     {
       "id": "r18",

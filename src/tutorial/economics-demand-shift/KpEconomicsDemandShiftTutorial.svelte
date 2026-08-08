@@ -156,6 +156,12 @@
     KpEconomicsLessonDraftState
   } from "./economics-demand-shift-lesson-draft.ts";
   import {
+    isKpEconomicsNavigationActionDetail,
+    KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+    resolveKpEconomicsNavigationAction,
+    type KpEconomicsNavigationActionDetail
+  } from "./economics-demand-shift-navigation-actions.ts";
+  import {
     resolveKpEconomicsDemandShiftTocDestination
   } from "./economics-demand-shift-toc.ts";
   import {
@@ -2330,6 +2336,20 @@
     }
   }
 
+  function handleEconomicsNavigationAction(event: Event): void {
+    if (!(event instanceof CustomEvent) ||
+        !isKpEconomicsNavigationActionDetail(event.detail)) return;
+    const detail = event.detail as KpEconomicsNavigationActionDetail;
+    const destination = resolveKpEconomicsNavigationAction({
+      action: detail.action,
+      blockId: detail.blockId ?? lessonMotionProjection.activeBlockId
+    });
+    if (destination !== undefined &&
+        navigationController?.navigate(destination) === true) {
+      event.preventDefault();
+    }
+  }
+
   onMount(() => {
     if (shell === undefined) return;
     player = shell.querySelector<HTMLElement>(
@@ -2468,6 +2488,10 @@
       });
       navigationController.connect();
     }
+    shell.addEventListener(
+      KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+      handleEconomicsNavigationAction
+    );
     if (
       initialDeepLink.destination === undefined ||
       navigationController?.apply(initialDeepLink.destination, {
@@ -2518,6 +2542,10 @@
     scrollCoordinator?.disconnect();
     cueActivationObserver?.disconnect();
     navigationController?.dispose();
+    shell?.removeEventListener(
+      KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+      handleEconomicsNavigationAction
+    );
     player?.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
     player?.removeEventListener(KP_EDITOR_ANIMATION_LOAD_EVENT, handleLoad);
     for (const scrubBar of [demandScrubBar, supplyScrubBar]) {

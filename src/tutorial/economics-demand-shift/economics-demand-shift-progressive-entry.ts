@@ -51,13 +51,29 @@ import type {
   KpTutorialTocDestination
 } from "../kp-tutorial-toc.ts";
 import {
+  createKpTutorialNavigationController
+} from "../kp-tutorial-navigation.ts";
+import {
   parseKpTutorialDestinationHash
 } from "../kp-tutorial-url.ts";
+import {
+  isKpEconomicsNavigationActionDetail,
+  KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+  resolveKpEconomicsNavigationAction,
+  type KpEconomicsNavigationActionDetail
+} from "./economics-demand-shift-navigation-actions.ts";
 
 interface KpPublishedEconomicsPlayback {
   blockId: KpEconomicsMotionBlockId;
   progress: number;
   status: "paused" | "playing";
+}
+
+interface KpPublishedEconomicsDestination {
+  readonly blockId: KpEconomicsMotionBlockId;
+  readonly destination: KpTutorialTocDestination;
+  readonly element: HTMLElement;
+  readonly progress: number;
 }
 
 const enhancementSessions = new WeakMap<HTMLElement, () => void>();
@@ -95,21 +111,24 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   const model = createKpSupplyDemandEquilibriumModel();
   const animation = createEconomicsEquilibriumAnimationAsset(model);
   const viewport = createKpEditorGraphSvgViewportModel(animation);
-  const initialDestination = resolvePublishedDestination({
-    root: publicationRoot,
-    hash: input.hash
-  });
+  const parsedInitialDestination = parseKpTutorialDestinationHash(input.hash);
+  const initialDestination = parsedInitialDestination === undefined
+    ? undefined
+    : resolvePublishedDestination({
+      root: publicationRoot,
+      destination: parsedInitialDestination
+    });
   const playback: KpPublishedEconomicsPlayback = {
-    blockId: initialDestination.blockId,
-    progress: initialDestination.progress,
+    blockId: initialDestination?.blockId ?? "demand-shift",
+    progress: initialDestination?.progress ?? 0,
     status: "paused"
   };
   const initialRuntimeFrame = economicsFrame(
     animation,
     model,
     projectKpEconomicsLessonMotion({
-      activeBlockId: initialDestination.blockId,
-      localProgress: initialDestination.progress
+      activeBlockId: playback.blockId,
+      localProgress: playback.progress
     }).demandShiftProgress
   );
   const runtimeSession = createKpEconomicsEquilibriumRuntimeSession({
@@ -265,16 +284,50 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
 
   const onPrevious = (event: Event): void => stepCheckpoint(event, -1);
   const onNext = (event: Event): void => stepCheckpoint(event, 1);
-  const onHashChange = (): void => {
-    const destination = resolvePublishedDestination({
+  const navigationController = createKpTutorialNavigationController({
+    root: publicationRoot,
+    toc,
+    resolve: (destination) => resolvePublishedDestination({
       root: publicationRoot,
-      hash: window.location.hash
+      destination
+    }),
+    restore: (destination) => {
+      stopPlayback();
+      apply(destination.blockId, destination.progress);
+    },
+    scroll: (destination) => {
+      destination.element.scrollIntoView({ block: "start", behavior: "auto" });
+    },
+    projectTocDestination: (target, destination) =>
+      destination.kind === "checkpoint"
+        ? { kind: "block", id: target.blockId }
+        : destination
+  });
+  const onNavigationAction = (event: Event): void => {
+    if (!(event instanceof CustomEvent) ||
+        !isKpEconomicsNavigationActionDetail(event.detail)) return;
+    const detail = event.detail as KpEconomicsNavigationActionDetail;
+    const destination = resolveKpEconomicsNavigationAction({
+      action: detail.action,
+      blockId: detail.blockId ?? playback.blockId
     });
-    stopPlayback();
-    apply(destination.blockId, destination.progress);
-    if (destination.destination !== undefined) {
-      toc.setActiveDestination(destination.destination);
+    if (destination !== undefined && navigationController.navigate(destination)) {
+      event.preventDefault();
     }
+  };
+
+  navigationController.connect();
+
+  const restoreInitialDestination = (): void => {
+    stopPlayback();
+    if (initialDestination === undefined) {
+      apply("demand-shift", 0);
+      return;
+    }
+    navigationController.apply(initialDestination.destination, {
+      source: "initial",
+      scroll: true
+    });
   };
 
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);
@@ -285,9 +338,11 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     onPrevious
   );
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_NEXT_EVENT, onNext);
-  window.addEventListener("hashchange", onHashChange);
-  apply(playback.blockId, playback.progress);
-  onHashChange();
+  publicationRoot.addEventListener(
+    KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+    onNavigationAction
+  );
+  restoreInitialDestination();
 
   const dispose = (): void => {
     if (disposed) return;
@@ -310,7 +365,11 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       KP_TUTORIAL_SCRUB_NEXT_EVENT,
       onNext
     );
-    window.removeEventListener("hashchange", onHashChange);
+    publicationRoot.removeEventListener(
+      KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
+      onNavigationAction
+    );
+    navigationController.dispose();
     toc.stopObservingReadingOutline();
     // Teardown restores the deterministic publication state without deleting
     // any adopted light-DOM node.
@@ -384,54 +443,51 @@ function economicsFrame(
 
 function resolvePublishedDestination(input: {
   readonly root: HTMLElement;
-  readonly hash: string;
-}): {
-  readonly blockId: KpEconomicsMotionBlockId;
-  readonly destination: KpTutorialTocDestination | undefined;
-  readonly progress: number;
-} {
-  const destination = parseKpTutorialDestinationHash(input.hash);
-  if (destination?.kind === "block") {
+  readonly destination: KpTutorialTocDestination;
+}): KpPublishedEconomicsDestination | undefined {
+  const destination = input.destination;
+  const elementId = `kp-${destination.kind}-${destination.id}`;
+  const element = input.root.querySelector<HTMLElement>(
+    `#${CSS.escape(elementId)}`
+  );
+  if (element === null) return undefined;
+  if (destination.kind === "block") {
     const block = findKpEconomicsMotionBlock(destination.id);
     if (block !== undefined) {
-      return { blockId: block.id, destination, progress: 0 };
+      return { blockId: block.id, destination, element, progress: 0 };
     }
   }
-  if (destination?.kind === "checkpoint") {
+  if (destination.kind === "checkpoint") {
     for (const block of kpEconomicsMotionBlocks) {
       const checkpoint = block.checkpoints.find(
         ({ id }) => id === destination.id
       );
       if (checkpoint !== undefined) {
-        return { blockId: block.id, destination, progress: checkpoint.progress };
+        return {
+          blockId: block.id,
+          destination,
+          element,
+          progress: checkpoint.progress
+        };
       }
     }
   }
-  if (destination?.kind === "section") {
-    const section = input.root.querySelector<HTMLElement>(
-      `#kp-section-${CSS.escape(destination.id)}`
-    );
-    if (section !== null) {
-      const precedingBlocks = kpEconomicsMotionBlocks.filter((block) => {
-        const element = input.root.querySelector(
+  if (destination.kind === "section") {
+    const precedingBlocks = kpEconomicsMotionBlocks.filter((block) => {
+        const blockElement = input.root.querySelector(
           `#kp-block-${CSS.escape(block.id)}`
         );
-        return element !== null && Boolean(
-          element.compareDocumentPosition(section) &
+        return blockElement !== null && Boolean(
+          blockElement.compareDocumentPosition(element) &
             Node.DOCUMENT_POSITION_FOLLOWING
         );
       });
-      const settled = precedingBlocks.at(-1);
-      return settled === undefined
-        ? { blockId: "demand-shift", destination, progress: 0 }
-        : { blockId: settled.id, destination, progress: 1 };
-    }
+    const settled = precedingBlocks.at(-1);
+    return settled === undefined
+      ? { blockId: "demand-shift", destination, element, progress: 0 }
+      : { blockId: settled.id, destination, element, progress: 1 };
   }
-  return {
-    blockId: "demand-shift",
-    destination,
-    progress: 0
-  };
+  return undefined;
 }
 
 function requiredElement<ElementType extends Element>(

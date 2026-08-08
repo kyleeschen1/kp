@@ -687,11 +687,32 @@
       "scope": "r16 shared TOC host preservation",
       "checkedAt": "2026-08-08T20:16:37.060Z",
       "notes": "Both focused checks passed after active-outline observation became progressive-host opt-in; the prior full run's other 15 checks passed unchanged."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r17 semantic navigation actions",
+      "checkedAt": "2026-08-08T20:25:53.305Z",
+      "notes": "105 tests passed, including stable previous, next, skip, settle, and exit destination resolution with foreign action rejection."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r17 direct navigation transaction",
+      "checkedAt": "2026-08-08T20:25:54.752Z",
+      "notes": "18 Chromium checks passed. Published and presenter hosts restore semantic state before auto anchor placement; cold links, TOC clicks, action events, back/forward, phone, reduced motion, and no-JavaScript preservation remain green with no intermediate graph sample."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r17 shared controller integration",
+      "checkedAt": "2026-08-08T20:25:56.062Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R16 closes semantic TOC publication and active outline tracking. R17 next consolidates direct navigation into one state-before-viewport transaction with history, adjacent motion-passage actions, skip, settle, and exit semantics."
+    "summary": "R17 closes direct semantic navigation and action transactions. R18 next hardens the published route's no-JavaScript, accessibility, keyboard, reduced-motion, forced-colors, and searchable-document behavior without changing provisional layout choreography."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
