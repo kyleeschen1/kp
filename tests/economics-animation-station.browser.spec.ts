@@ -364,6 +364,7 @@ test("a transition packet simulates discrete scroll lock", async ({
   const station = root.locator('[data-kp-motion-passage="demand-change"]');
   const stage = station.locator("[data-kp-inline-sticky-stage]");
   const graph = stage.locator(".kp-economics-tutorial__stage-card");
+  const initialCue = passage(station, "graph-at-rest");
   const demandCue = passage(station, "follow-shift");
   const demandText = demandCue.locator("p");
   const demandTransition = demandCue.locator(
@@ -397,13 +398,29 @@ test("a transition packet simulates discrete scroll lock", async ({
   await expect(station.locator("kp-tutorial-progress-rail")).toHaveCount(2);
   await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
   await expect(station.locator(".editor-graph-stage")).toHaveCount(1);
-  for (const paragraph of await station.locator(
-    "[data-kp-animation-station-cue] p"
-  ).all()) {
-    await expect(paragraph).toHaveCSS("opacity", "1");
-    await expect(paragraph).toHaveCSS("transform", "none");
-  }
+  await expect(initialCue).toHaveAttribute(
+    "data-kp-animation-station-salience",
+    "upcoming"
+  );
+  await expect.poll(() => paragraphOpacity(initialCue.locator("p")))
+    .toBeCloseTo(0.56, 2);
+  await expect.poll(() => paragraphScale(initialCue.locator("p")))
+    .toBeCloseTo(0.985, 3);
   await expect(graph).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(graph).toHaveCSS("filter", "none");
+
+  await alignTop(page, stage, 120);
+  await expect(initialCue).toHaveAttribute(
+    "data-kp-animation-station-salience",
+    "active"
+  );
+  await expect.poll(() => initialCue.locator("p").evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(412, 0);
+  await expect.poll(() => paragraphOpacity(initialCue.locator("p")))
+    .toBeGreaterThan(0.99);
+  await expect.poll(() => paragraphScale(initialCue.locator("p")))
+    .toBeGreaterThan(0.999);
   await page.screenshot({
     path: `${evidenceDirectory}/station-stacked-prose.png`,
     fullPage: false
@@ -418,7 +435,7 @@ test("a transition packet simulates discrete scroll lock", async ({
     .toHaveCount(1);
   await expect.poll(() => demandRail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(400, 0);
+  )).toBeCloseTo(412, 0);
   const lockedPacketTop = await demandPacket.evaluate(
     (element) => element.getBoundingClientRect().top
   );
@@ -438,7 +455,7 @@ test("a transition packet simulates discrete scroll lock", async ({
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.99);
   await expect.poll(() => demandRail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(400, 0);
+  )).toBeCloseTo(412, 0);
   await expect.poll(() => demandPacket.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeCloseTo(lockedPacketTop, 0);
@@ -447,6 +464,10 @@ test("a transition packet simulates discrete scroll lock", async ({
   )).toBeCloseTo(lockedCaptionTop, 0);
   await expect(demandRail).toHaveAttribute("aria-valuenow", "50");
   await expect(demandText).toHaveCSS("opacity", "1");
+  await expect(demandCue).toHaveAttribute(
+    "data-kp-animation-station-salience",
+    "active"
+  );
   await page.screenshot({
     path: `${evidenceDirectory}/station-transition-midpoint.png`,
     fullPage: false
@@ -466,9 +487,9 @@ test("a transition packet simulates discrete scroll lock", async ({
     fullPage: false
   });
 
-  await alignTop(page, readingText, 520);
+  await alignTop(page, readingText, 400);
   await expect(readingText).toHaveCSS("opacity", "1");
-  await expect(readingText).toHaveCSS("transform", "none");
+  await expect.poll(() => paragraphScale(readingText)).toBeGreaterThan(0.999);
   await expect.poll(() => demandPacket.evaluate(
     (element) => element.getBoundingClientRect().top
   )).toBeLessThan(lockedPacketTop - 10);
@@ -480,7 +501,7 @@ test("a transition packet simulates discrete scroll lock", async ({
   await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.1);
   await expect.poll(() => supplyRail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(400, 0);
+  )).toBeCloseTo(412, 0);
 
   await alignTop(page, demandTransition, 288);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.1);
@@ -554,7 +575,7 @@ test("reduced motion settles as readable flow without sticky rails", async ({
   });
 });
 
-test("light theme preserves opaque stage and readable seams", async ({ page }) => {
+test("light theme preserves a continuous stage and readable seams", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(
     "/tutorials/economics/demand-shift/?layout=animation-station&theme=light"
@@ -568,11 +589,13 @@ test("light theme preserves opaque stage and readable seams", async ({ page }) =
   const rail = transition.locator("kp-tutorial-progress-rail");
   await alignTop(page, transition, 288);
   await expect(graph).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(graph).toHaveCSS("filter", "none");
   await expect.poll(() => rail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(400, 0);
-  await expect(passage(root, "new-equilibrium").locator("p"))
-    .toHaveCSS("opacity", "1");
+  )).toBeCloseTo(412, 0);
+  await expect.poll(() => paragraphOpacity(
+    passage(root, "new-equilibrium").locator("p")
+  )).toBeGreaterThan(0.5);
   await page.screenshot({
     path: `${evidenceDirectory}/station-seam-light.png`,
     fullPage: false
@@ -595,7 +618,7 @@ test("station checkpoint URLs restore the shared playhead directly", async ({
   await expect(rail).toHaveAttribute("aria-valuenow", "57");
   await expect.poll(() => packet.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(400, 0);
+  )).toBeCloseTo(412, 0);
   const cue = passage(
     root.locator('[data-kp-motion-passage="demand-change"]'),
     "follow-shift"
@@ -718,6 +741,13 @@ async function paragraphOpacity(paragraph: Locator): Promise<number> {
   return paragraph.evaluate(
     (element) => Number.parseFloat(getComputedStyle(element).opacity)
   );
+}
+
+async function paragraphScale(paragraph: Locator): Promise<number> {
+  return paragraph.evaluate((element) => {
+    const transform = getComputedStyle(element).transform;
+    return transform === "none" ? 1 : new DOMMatrixReadOnly(transform).a;
+  });
 }
 
 async function passageInkTop(paragraph: Locator): Promise<number> {

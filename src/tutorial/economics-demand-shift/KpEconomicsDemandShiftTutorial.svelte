@@ -1702,11 +1702,7 @@
             beforeCheckpointId: "market-initial",
             afterCheckpointId: "market-initial"
           });
-          element.dataset["kpAnimationStationPhase"] = stationPhase.phase;
-          element.dataset["kpAnimationStationOwnership"] =
-            stationPhase.ownership;
-          element.dataset["kpAnimationStationActivePassage"] =
-            stationPhase.activePassageId ?? "";
+          writeAnimationStationCueSalience(element, stationPhase);
         } else {
           const block = findKpEconomicsMotionBlock(motionBlockId)!;
           const transitionAnchor = scrollAnchorForMotionBoundary(element);
@@ -1726,11 +1722,7 @@
             motionBlockId,
             projectedSemanticProgress: scrollBlock?.progress
           });
-          element.dataset["kpAnimationStationPhase"] = stationPhase.phase;
-          element.dataset["kpAnimationStationOwnership"] =
-            stationPhase.ownership;
-          element.dataset["kpAnimationStationActivePassage"] =
-            stationPhase.activePassageId ?? "";
+          writeAnimationStationCueSalience(element, stationPhase);
         }
       }
       return {
@@ -1750,6 +1742,33 @@
     )));
     updateSemanticTransitProxy(frames);
     return Object.freeze(frames);
+  }
+
+  function writeAnimationStationCueSalience(
+    element: HTMLElement,
+    projection: ReturnType<typeof projectKpEconomicsStationPhase>
+  ): void {
+    const salience = projection.phase === "approach"
+      ? "upcoming"
+      : projection.phase === "handoff"
+        ? "completed"
+        : "active";
+    const focus = projection.phase === "approach"
+      ? projection.phaseProgress
+      : projection.phase === "handoff"
+        ? 0
+        : 1;
+    element.dataset["kpAnimationStationPhase"] = projection.phase;
+    element.dataset["kpAnimationStationOwnership"] = projection.ownership;
+    element.dataset["kpAnimationStationActivePassage"] =
+      projection.activePassageId ?? "";
+    element.dataset["kpAnimationStationSalience"] = salience;
+    // Station phase already owns the reading transition. Exposing one scalar
+    // keeps the paint reversible without adding CSS timing or Svelte state.
+    element.style.setProperty(
+      "--kp-animation-station-cue-focus",
+      focus.toFixed(4)
+    );
   }
 
   function updateInlineStickyLayoutProjection(): void {

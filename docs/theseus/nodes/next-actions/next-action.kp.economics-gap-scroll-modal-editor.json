@@ -239,6 +239,34 @@
       "scope": "s09 focused performance smoke",
       "checkedAt": "2026-08-08T06:42:10.071Z",
       "notes": "Known startup pressure remains for slices 10-18: transfer 254981 B over 250000 and script 152664 B over 150000. Initial longest task now passes at 147 ms. Active p95 33.8 ms, active long tasks 0, CLS 0, max changed progress attributes 1, no SVG reconstruction or subtree replacement."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r01 quiet stacked exemplar behavior",
+      "checkedAt": "2026-08-08T17:02:32.783Z",
+      "notes": "79 focused tests passed"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r01 stylesheet ownership and visual tokens",
+      "checkedAt": "2026-08-08T17:02:33.758Z",
+      "notes": "17 focused tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r01 static types and Svelte diagnostics",
+      "checkedAt": "2026-08-08T17:02:34.639Z",
+      "notes": "TypeScript domains and Svelte checks passed with zero diagnostics"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "r01 canonical economics exemplar",
+      "checkedAt": "2026-08-08T17:02:35.520Z",
+      "notes": "Seven browser checkpoints passed; captures reviewed at stacked prose and transition midpoint"
     }
   ],
   "progress": {

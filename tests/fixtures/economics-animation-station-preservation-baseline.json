@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v3",
-  "capturedAt": "2026-08-07",
+  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v4",
+  "capturedAt": "2026-08-08",
   "canonicalRoute": "/tutorials/economics/demand-shift/?layout=animation-station",
   "canonicalViewport": {
     "width": 1280,
@@ -30,6 +30,7 @@
     "--kp-animation-station-graph-height": "33dvh",
     "--kp-animation-station-graph-bottom": "50dvh",
     "--kp-animation-station-motion-corridor-vh": "28dvh",
+    "--kp-animation-station-stage-progress-gap": "clamp(0.75rem, 1.5dvh, 1.25rem)",
     "--kp-animation-station-rail": "2px"
   },
   "canonicalGeometryPx": {
@@ -39,7 +40,9 @@
     "graphTop": 136,
     "graphBottom": 400,
     "graphHeight": 264,
-    "stageWidth": 672
+    "stageWidth": 672,
+    "initialPassageTop": 412,
+    "transitionPacketTop": 412
   },
   "structure": {
     "cueCount": 6,

@@ -9,7 +9,7 @@ import baseline from
 test("animation-station preservation baseline freezes ownership and anchors", async () => {
   assert.equal(
     baseline.schemaVersion,
-    "kp.economics-animation-station-preservation-baseline.v3"
+    "kp.economics-animation-station-preservation-baseline.v4"
   );
   assert.equal(
     baseline.canonicalRoute,
@@ -55,7 +55,9 @@ test("animation-station preservation baseline freezes ownership and anchors", as
     graphTop: 136,
     graphBottom: 400,
     graphHeight: 264,
-    stageWidth: 672
+    stageWidth: 672,
+    initialPassageTop: 412,
+    transitionPacketTop: 412
   });
   assert.match(baseline.rollback.unit, /animation-station query presenter/);
   assert.match(baseline.rollback.preserve, /retained SVG session/);
