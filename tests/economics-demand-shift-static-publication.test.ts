@@ -41,3 +41,14 @@ test("static economics narrative publishes math semantic links and destinations"
   assert.match(html, /data-kp-tutorial-destination="section"/);
   assert.match(html, /data-kp-tutorial-destination="checkpoint"/);
 });
+
+test("static economics publication reserves one initial SVG and final controls", () => {
+  assert.equal((html.match(/data-kp-editor-graph-svg/g) ?? []).length, 1);
+  assert.match(html, /data-kp-economics-static-stage-state="initial"/);
+  assert.match(html, /data-kp-economics-demand-intercept="14"/);
+  assert.match(html, /data-kp-economics-equilibrium-quantity="6"/);
+  assert.match(html, /data-kp-editor-graph-origin-policy="shared-endpoint"/);
+  assert.match(html, /data-kp-axis-arrow-length="9"/);
+  assert.equal((html.match(/data-kp-tutorial-progress-rail=/g) ?? []).length, 2);
+  assert.equal((html.match(/<kp-tutorial-scrub-bar/g) ?? []).length, 2);
+});

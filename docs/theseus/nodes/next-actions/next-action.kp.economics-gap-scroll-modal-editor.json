@@ -299,6 +299,27 @@
       "scope": "r03 no-JavaScript narrative and existing learner behavior",
       "checkedAt": "2026-08-08T17:16:01.739Z",
       "notes": "13 Chromium checks passed; no-JS route exposes 11 ordered passages, math, motion destinations, and searchable conclusion."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r04 deterministic static stage and controls",
+      "checkedAt": "2026-08-08T17:26:57.008Z",
+      "notes": "83 focused tests passed; one initial SVG uses the shared viewport shell, exact initial equilibrium, two progress rails, and two native scrub controls."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r04 no-JavaScript stage and enhanced-route preservation",
+      "checkedAt": "2026-08-08T17:26:58.032Z",
+      "notes": "13 Chromium checks passed; no-JS route has one visible initial SVG and final light-DOM controls while the enhanced route remains unchanged."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r04 static route artifact and client-closure preservation",
+      "checkedAt": "2026-08-08T17:26:58.938Z",
+      "notes": "Route HTML is 74.25 KB raw / 8.15 KB gzip with stage and controls; client entry remains 183.39 KB raw / 33.92 KB gzip after rejecting duplication through client JSON."
     }
   ],
   "progress": {

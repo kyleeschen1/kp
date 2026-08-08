@@ -69,7 +69,8 @@
     {
       "id": "r04",
       "title": "static-stage-shell",
-      "status": "planned"
+      "summary": "Published one deterministic initial economics SVG plus reserved progress and native scrub geometry in route HTML. Static and runtime graphs share the exact viewport/axis shell. The route artifact grew to 8.15 KB gzip, while client entry remained at 183.39 KB raw rather than downloading duplicate markup.",
+      "status": "complete"
     },
     {
       "id": "r05",

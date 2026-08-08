@@ -1488,6 +1488,14 @@ test("the learner route publishes complete searchable narrative without JavaScri
     await expect(publication.locator("#kp-checkpoint-shift-handoff"))
       .toHaveCount(1);
     await expect(publication.locator("math").first()).toBeVisible();
+    await expect(publication.locator("[data-kp-editor-graph-svg]"))
+      .toHaveCount(1);
+    await expect(publication.locator("[data-kp-economics-demand-line]"))
+      .toBeVisible();
+    await expect(publication.locator("[data-kp-tutorial-progress-rail]"))
+      .toHaveCount(2);
+    await expect(publication.locator("kp-tutorial-scrub-bar"))
+      .toHaveCount(2);
     await expect(publication).toContainText(
       "Quantity supplied rose because equilibrium selected a new point"
     );
