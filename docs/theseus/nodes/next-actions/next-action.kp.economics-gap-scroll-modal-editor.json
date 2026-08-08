@@ -610,11 +610,39 @@
       "scope": "r14 command type boundary",
       "checkedAt": "2026-08-08T19:37:45.533Z",
       "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r15 whole-lesson editor integration",
+      "checkedAt": "2026-08-08T20:01:06.556Z",
+      "notes": "103 tests passed: buffer compilation, last-valid preview, semantic indexing, structural commands, runtime preservation, and source compatibility remain green."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "r15 CodeMirror Vim authoring checkpoint",
+      "checkedAt": "2026-08-08T20:01:07.939Z",
+      "notes": "5 Chromium checks passed for whole-buffer editing, lazy loading, modeline and ex placement, q/w/wq, focus return, invalid-source retention, completion, single-history structural commands, save, and reload."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r15 production and lazy editor closure",
+      "checkedAt": "2026-08-08T20:01:09.264Z",
+      "notes": "TypeScript, Svelte, publication check, and Vite build passed. The 227.53 kB gzip CodeMirror runtime remains a dynamic editor-only chunk."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r15 public reader isolation",
+      "checkedAt": "2026-08-08T20:01:10.568Z",
+      "notes": "Published route passed: 135790 B transfer, 99571 B script, 29 resources, zero CLS, 74 ms startup longest task, 1.7 ms active p95, and no active long task."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R14 supplies one structured transaction boundary for all passage operations. R15 next replaces the per-passage modal with the practical whole-lesson buffer and wires these transactions into CodeMirror history and explicit save state."
+    "summary": "R15 closes the practical whole-lesson authoring checkpoint. R16 next publishes a hierarchical semantic TOC with stable light-DOM anchors and responsive progressive enhancement, without listing scrub moments."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

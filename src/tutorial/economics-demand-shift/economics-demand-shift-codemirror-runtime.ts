@@ -7,10 +7,12 @@ import {
 import {
   defaultKeymap,
   history,
-  historyKeymap
+  historyKeymap,
+  redo,
+  undo
 } from "@codemirror/commands";
 import { markdown } from "@codemirror/lang-markdown";
-import { EditorState } from "@codemirror/state";
+import { EditorState, Transaction } from "@codemirror/state";
 import {
   EditorView,
   drawSelection,
@@ -59,7 +61,12 @@ export interface KpEconomicsCodeMirrorCompletion {
 
 export interface KpEconomicsCodeMirrorMount {
   readonly destroy: () => void;
+  readonly getValue: () => string;
+  readonly replaceValue: (value: string) => void;
+  readonly revealText: (text: string) => void;
+  readonly redo: () => boolean;
   readonly setValue: (value: string) => void;
+  readonly undo: () => boolean;
   readonly view: EditorView;
 }
 
@@ -165,7 +172,7 @@ export function mountKpEconomicsCodeMirror(input: {
             caretColor: "var(--kp-lesson-theme-reader-rail)",
             lineHeight: "1.5",
             minHeight: "7.5rem",
-            padding: "0.75rem"
+            padding: "1.5rem 2rem"
           },
           ".cm-cursor, .cm-dropCursor": {
             borderLeftColor: "var(--kp-lesson-theme-reader-rail)"
@@ -206,6 +213,25 @@ export function mountKpEconomicsCodeMirror(input: {
   reportVimMode();
   return Object.freeze({
     view,
+    getValue: () => view.state.doc.toString(),
+    replaceValue: (value: string) => {
+      const current = view.state.doc.toString();
+      if (current === value) return;
+      view.dispatch({
+        changes: { from: 0, to: current.length, insert: value },
+        annotations: Transaction.userEvent.of("input.kp-structure")
+      });
+    },
+    revealText: (text: string) => {
+      const position = view.state.doc.toString().indexOf(text);
+      if (position < 0) return;
+      view.dispatch({
+        selection: { anchor: position },
+        effects: EditorView.scrollIntoView(position, { y: "center" })
+      });
+    },
+    undo: () => undo(view),
+    redo: () => redo(view),
     destroy: () => {
       cm?.off("vim-mode-change", reportVimMode);
       if (cm !== null) kpEconomicsVimExHandlers.delete(cm as object);
@@ -216,7 +242,8 @@ export function mountKpEconomicsCodeMirror(input: {
       if (current === value) return;
       applyingExternalValue = true;
       view.dispatch({
-        changes: { from: 0, to: current.length, insert: value }
+        changes: { from: 0, to: current.length, insert: value },
+        annotations: Transaction.addToHistory.of(false)
       });
       applyingExternalValue = false;
     }

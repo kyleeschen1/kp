@@ -939,18 +939,23 @@
   function closeLessonEditorModal(): void {
     lessonEditorModalOpen = false;
     scrollCoordinator?.scheduleProjection();
+    requestAnimationFrame(() => {
+      shell?.querySelector<HTMLElement>(
+        `[data-kp-economics-passage-select='${lessonDraft?.selectedPassageId ?? ""}']`
+      )?.focus();
+    });
   }
 
-  function updateLessonDraftSource(sourceText: string): void {
-    if (lessonDraftRuntime === undefined || lessonDraft === undefined) return;
-    const next = lessonDraftRuntime.updateKpEconomicsLessonDraftSource({
-      draft: lessonDraft,
-      passageId: lessonDraft.selectedPassageId,
-      sourceText
-    });
-    lessonDraft = next;
-    persistLessonDraft(next);
-    compileAndPresentLessonDraft(next);
+  function presentLessonBufferPreview(input: {
+    readonly draft: KpEconomicsLessonDraftState;
+    readonly passages: readonly KpEconomicsDemandShiftLessonPassage[];
+    readonly validation: string;
+  }): void {
+    lessonDraft = input.draft;
+    editableTwoColumnParagraphs = input.passages;
+    lessonEditorValidation = input.validation;
+    persistLessonDraft(input.draft);
+    scheduleLessonEditorGeometryRefresh();
   }
 
   function persistLessonDraft(draft: KpEconomicsLessonDraftState): void {
@@ -3220,10 +3225,9 @@
     LessonPassageEditor !== undefined}
   <LessonPassageEditor
     id={selectedLessonDraftPassage.id}
-    value={selectedLessonDraftPassage.sourceText}
     draft={lessonDraft}
     validation={lessonEditorValidation}
-    onChange={updateLessonDraftSource}
+    onPreview={presentLessonBufferPreview}
     onClose={closeLessonEditorModal}
   />
 {/if}

@@ -4,6 +4,7 @@ import { mkdirSync } from "node:fs";
 const route =
   "/tutorials/economics/demand-shift/?layout=two-column-scroll";
 const storageKey = "kp.economics.demand-shift.lesson-draft.v1";
+const bufferStorageKey = "kp.economics.demand-shift.lesson-buffer.v1";
 const evidenceDirectory = "tmp/codex/economics-lesson-editor";
 
 test.beforeAll(() => mkdirSync(evidenceDirectory, { recursive: true }));
@@ -21,11 +22,31 @@ async function runExCommand(page: Page, command: string): Promise<void> {
   await content.press(":");
   const minibuffer = editor.locator(".cm-vim-panel input");
   await expect(minibuffer).toBeVisible();
+  const [modelineBounds, exBounds] = await Promise.all([
+    editor.locator("[data-kp-economics-editor-modeline]").boundingBox(),
+    editor.locator(".cm-vim-panel").boundingBox()
+  ]);
+  expect(exBounds!.y).toBeGreaterThanOrEqual(
+    modelineBounds!.y + modelineBounds!.height - 1
+  );
   await minibuffer.fill(command);
   await minibuffer.press("Enter");
 }
 
-test("CodeMirror edits one passage at a time and persists a live draft", async ({
+async function replaceBufferText(input: {
+  readonly page: Page;
+  readonly from: string;
+  readonly to: string;
+}): Promise<string> {
+  const editor = input.page.locator("[data-kp-economics-lesson-editor]");
+  const source = await editor.locator("textarea").inputValue();
+  expect(source).toContain(input.from);
+  const next = source.replace(input.from, input.to);
+  await editor.locator(".cm-content").fill(next);
+  return next;
+}
+
+test("CodeMirror edits the whole lesson and persists a live draft", async ({
   page
 }) => {
   const sourceSaveRequests: unknown[] = [];
@@ -99,10 +120,14 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
   expect(await page.evaluate(() => performance.getEntriesByType("resource")
     .some(({ name }) => name.toLowerCase().includes("codemirror")))).toBe(true);
 
-  const content = editor.locator(".cm-content");
-  await content.fill(
-    "Read [$P$](kp-ref:price-axis-inline), then compare $D_0$ with $S$."
-  );
+  const initialBuffer = await editor.locator("textarea").inputValue();
+  expect(initialBuffer).toContain("<!-- kp:lesson ");
+  expect(initialBuffer.match(/<!-- kp:passage /gu)).toHaveLength(6);
+  await replaceBufferText({
+    page,
+    from: "Begin with the graph at rest. Price, [$P$](kp-ref:price-axis-inline), is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls. ",
+    to: "Read [$P$](kp-ref:price-axis-inline), then compare $D_0$ with $S$."
+  });
   expect(sourceSaveRequests).toHaveLength(0);
   await expect(editor.locator(
     "[data-kp-economics-lesson-editor-source-status]"
@@ -124,6 +149,10 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
     const stored = localStorage.getItem(key);
     return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
   }, storageKey)).toContain("then compare");
+  await expect.poll(() => page.evaluate((key) => {
+    const stored = localStorage.getItem(key);
+    return stored === null ? "" : JSON.parse(stored).source;
+  }, bufferStorageKey)).toContain("<!-- kp:motion-passage ");
 
   await runExCommand(page, "w");
   await expect(editor.locator(
@@ -150,14 +179,17 @@ test("CodeMirror edits one passage at a time and persists a live draft", async (
 
   await runExCommand(page, "q");
   await expect(editor).toHaveCount(0);
+  await expect(firstEdit).toBeFocused();
   expect(sourceSaveRequests).toHaveLength(1);
 
   await root.locator(
     "[data-kp-economics-passage-select='graph-at-rest']"
   ).click();
-  await editor.locator(".cm-content").fill(
-    "Read [$P$](kp-ref:price-axis-inline), then compare $D_1$ with $S$."
-  );
+  await replaceBufferText({
+    page,
+    from: "then compare $D_0$ with $S$.",
+    to: "then compare $D_1$ with $S$."
+  });
   await runExCommand(page, "wq");
   await expect(editor).toHaveCount(0);
   expect(sourceSaveRequests).toHaveLength(2);
@@ -188,9 +220,11 @@ test("source-save failures remain visible without losing the local draft", async
     "[data-kp-economics-passage-select='graph-at-rest']"
   ).click();
   const editor = page.locator("[data-kp-economics-lesson-editor]");
-  await editor.locator(".cm-content").fill(
-    "A locally retained edit with [$P$](kp-ref:price-axis-inline)."
-  );
+  await replaceBufferText({
+    page,
+    from: "Begin with the graph at rest. Price, [$P$](kp-ref:price-axis-inline), is vertical and quantity, $Q$, is horizontal. The blue supply schedule, $S$, rises while the red demand schedule, $D_0$, falls. ",
+    to: "A locally retained edit with [$P$](kp-ref:price-axis-inline)."
+  });
   await runExCommand(page, "wq");
 
   await expect(editor.locator(
@@ -199,8 +233,8 @@ test("source-save failures remain visible without losing the local draft", async
   await expect(editor).toBeVisible();
   await expect.poll(() => page.evaluate((key) => {
     const stored = localStorage.getItem(key);
-    return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
-  }, storageKey)).toContain("locally retained edit");
+    return stored === null ? "" : JSON.parse(stored).source;
+  }, bufferStorageKey)).toContain("locally retained edit");
 });
 
 test("semantic reference completion exposes only supported authoring IDs", async ({
@@ -256,16 +290,96 @@ test("invalid Markdown preserves the last valid preview and reports the error", 
     "[data-kp-economics-passage-select='graph-at-rest']"
   ).click();
   const editor = page.locator("[data-kp-economics-lesson-editor]");
-  await editor.locator(".cm-content").fill("An unfinished $expression");
+  await replaceBufferText({
+    page,
+    from: "[$P$](kp-ref:price-axis-inline)",
+    to: "[$P](kp-ref:price-axis-inline)"
+  });
 
   await expect(editor.locator(
     "[data-kp-economics-lesson-editor-validation]"
-  )).toContainText("Unclosed inline math delimiter");
+  )).toContainText("Malformed semantic text reference");
   await expect.poll(() => firstPassage.locator(
     ".kp-economics-tutorial__passage-ink"
   ).evaluate((element) => element.innerHTML)).toBe(initialHtml);
   await expect.poll(() => page.evaluate((key) => {
     const stored = localStorage.getItem(key);
     return stored === null ? "" : JSON.parse(stored).passages[0].sourceText;
-  }, storageKey)).toBe("An unfinished $expression");
+  }, storageKey)).toContain("Begin with the graph at rest");
+  await expect.poll(() => page.evaluate((key) => {
+    const stored = localStorage.getItem(key);
+    return stored === null ? "" : JSON.parse(stored).source;
+  }, bufferStorageKey)).toContain("[$P](kp-ref:price-axis-inline)");
+});
+
+test("structural commands share CodeMirror history and survive reload", async ({
+  page
+}) => {
+  const sourceSaveRequests: unknown[] = [];
+  await page.route(
+    "**/api/dev/lesson-sources/economics-demand-shift-two-column",
+    async (route) => {
+      sourceSaveRequests.push(route.request().postDataJSON());
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          schemaVersion: "kp.economics-lesson-source-save-result.v1",
+          sourcePath:
+            "content/lessons/economics-demand-shift-two-column.json",
+          changed: true
+        })
+      });
+    }
+  );
+  const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
+  const passages = root.locator("[data-kp-two-column-scroll-paragraph]");
+  await root.locator("[data-kp-economics-lesson-editor-toggle]").click();
+  await root.locator(
+    "[data-kp-economics-passage-select='graph-at-rest']"
+  ).click();
+  const editor = page.locator("[data-kp-economics-lesson-editor]");
+  const command = (name: string) => editor.locator(
+    `[data-kp-economics-buffer-command='${name}']`
+  );
+
+  await expect(editor).toHaveAttribute(
+    "data-kp-economics-lesson-editor-enhanced",
+    "true"
+  );
+  await expect(editor).toHaveAttribute(
+    "data-kp-economics-lesson-editor-status",
+    "valid"
+  );
+  await command("add").click();
+  await expect(passages).toHaveCount(7);
+  await expect(editor).toHaveAttribute(
+    "data-kp-economics-lesson-editor-passage",
+    /^draft-passage-/u
+  );
+  await command("undo").click();
+  await expect(passages).toHaveCount(6);
+  await command("redo").click();
+  await expect(passages).toHaveCount(7);
+
+  await command("duplicate").click();
+  await expect(passages).toHaveCount(8);
+  await command("undo").click();
+  await expect(passages).toHaveCount(7);
+
+  await runExCommand(page, "w");
+  await expect.poll(() => sourceSaveRequests.length).toBe(1);
+  expect(sourceSaveRequests[0]).toMatchObject({
+    schemaVersion: "kp.economics-lesson-source-save.v1",
+    draft: { version: 1 }
+  });
+  const saved = sourceSaveRequests[0] as {
+    draft: { passages: { id: string }[] };
+  };
+  expect(saved.draft.passages).toHaveLength(7);
+
+  await runExCommand(page, "q");
+  await page.reload();
+  await root.locator("[data-kp-economics-lesson-editor-toggle]").click();
+  await expect(passages).toHaveCount(7);
 });

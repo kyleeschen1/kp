@@ -135,7 +135,8 @@
     {
       "id": "r15",
       "title": "practical-editor-chrome",
-      "status": "planned"
+      "summary": "Replaced per-passage editing with one large whole-lesson CodeMirror/Vim buffer. The editor now exposes dirty, validity, save, selected-passage, modeline, and native ex state; structural operations enter CodeMirror's sole history; invalid source retains the last valid preview; q/w/wq, local recovery, source save, and focus return are verified while the public reader remains isolated.",
+      "status": "complete"
     },
     {
       "id": "r16",

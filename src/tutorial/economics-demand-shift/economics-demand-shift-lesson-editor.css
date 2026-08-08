@@ -26,6 +26,8 @@
 }
 
 .kp-economics-lesson-editor {
+  --kp-economics-editor-modeline-height: 1.75rem;
+  --kp-economics-editor-ex-command-height: 2.25rem;
   box-sizing: border-box;
   width: min(92vw, 76rem);
   height: min(88dvh, 56rem);
@@ -43,7 +45,10 @@
 
 .kp-economics-lesson-editor[open] {
   display: grid;
-  grid-template-rows: minmax(15rem, 1fr) auto;
+  grid-template-rows:
+    minmax(15rem, 1fr)
+    var(--kp-economics-editor-modeline-height)
+    var(--kp-economics-editor-ex-command-height);
 }
 
 .kp-economics-lesson-editor::backdrop {
@@ -54,7 +59,7 @@
 .kp-economics-lesson-editor__surface {
   min-block-size: 0;
   background: var(--kp-lesson-theme-page);
-  overflow: auto;
+  overflow: visible;
 }
 
 .kp-economics-lesson-editor__fallback {
@@ -76,6 +81,8 @@
 }
 
 .kp-economics-lesson-editor__surface .cm-editor {
+  position: relative;
+  block-size: 100%;
   min-block-size: 100%;
 }
 
@@ -88,6 +95,10 @@
 }
 
 .kp-economics-lesson-editor__surface .cm-panels-bottom {
+  position: absolute;
+  inset-block-start: calc(100% + var(--kp-economics-editor-modeline-height));
+  inset-inline: 0;
+  z-index: 1;
   border-block-start: var(--kp-graph-line-effective) solid
     var(--kp-lesson-theme-subtle-border);
   color: var(--kp-lesson-theme-ink);
@@ -98,6 +109,11 @@
 .kp-economics-lesson-editor__surface .cm-vim-panel input {
   color: inherit;
   font: 400 1rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-economics-lesson-editor__ex-command {
+  min-block-size: var(--kp-economics-editor-ex-command-height);
+  background: var(--kp-lesson-theme-page);
 }
 
 .kp-economics-lesson-editor__modeline {
@@ -125,6 +141,29 @@
 
 .kp-economics-lesson-editor__modeline-spacer {
   flex: 1;
+}
+
+.kp-economics-lesson-editor__modeline-commands {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.kp-economics-lesson-editor__modeline-commands button {
+  appearance: none;
+  border: 0;
+  border-inline-start: 1px solid currentColor;
+  border-radius: 0;
+  padding: 0.12rem 0.3rem;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.kp-economics-lesson-editor__modeline-commands button:focus-visible {
+  outline: 2px solid var(--kp-lesson-theme-focus);
+  outline-offset: -2px;
 }
 
 .kp-economics-tutorial__passage-select:focus-visible {
