@@ -38,7 +38,6 @@ function readGraphCascade(): string {
 test("economics stylesheet entry preserves one explicit ownership cascade", () => {
   const entry = read("economics-demand-shift-tutorial.css");
   const learnerStylesheets = [
-    "economics-demand-shift-theme.css",
     "economics-demand-shift-publication.css",
     "economics-demand-shift-controls.css",
     "economics-demand-shift-graph.css",
@@ -59,6 +58,7 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
     read("KpEconomicsPassageEditor.svelte"),
     /import "\.\/economics-demand-shift-lesson-editor\.css";/
   );
+  assert.doesNotMatch(entry, /economics-demand-shift-theme\.css/);
   for (const name of ownedStylesheets) {
     assert.match(read(name), /^\/\* [^\n]+ \*\//);
   }
@@ -223,6 +223,30 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
   ), "utf8");
   assert.match(handoff, /Source Serif 4/);
   assert.match(handoff, /lesson prose/);
+});
+
+test("published HTML discovers its one prose face before enhancement", () => {
+  const html = readFileSync(
+    new URL("../tutorials/economics/demand-shift/index.html", import.meta.url),
+    "utf8"
+  );
+  const publication = readFileSync(new URL(
+    "../src/tutorial/economics-demand-shift/economics-demand-shift-static-publication.ts",
+    import.meta.url
+  ), "utf8");
+  assert.match(
+    html,
+    /rel="preload"[\s\S]*source-serif-4-latin-300-normal\.woff2[\s\S]*as="font"/
+  );
+  assert.match(
+    html,
+    /href="\/src\/tutorial\/economics-demand-shift\/economics-demand-shift-theme\.css"/
+  );
+  assert.match(
+    publication,
+    /font-family: var\(--kp-economics-non-katex-font-family/
+  );
+  assert.doesNotMatch(html, /new-computer-modern/i);
 });
 
 test("prose controls and companion math consume semantic theme sources", () => {

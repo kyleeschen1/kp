@@ -1407,6 +1407,7 @@ test("static publication controls remain useful with JavaScript disabled", async
       <html>
         <head>
           <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/kp-tutorial-scrub-bar.css">
+          <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/economics-demand-shift/economics-demand-shift-theme.css">
           <link rel="stylesheet" href="http://127.0.0.1:4173/src/tutorial/economics-demand-shift/economics-demand-shift-tutorial.css">
           <style>
             body { width: 780px; padding: 20px; }
@@ -1659,6 +1660,82 @@ test("route capabilities switch without reload or overlapping runtimes", async (
   expect(await page.evaluate(() =>
     performance.getEntriesByType("navigation").length
   )).toBe(navigationCount);
+});
+
+test("published route resolves prose and theme before enhancement", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    const target = window as typeof window & { __kpThemeCls?: number };
+    target.__kpThemeCls = 0;
+    if (!PerformanceObserver.supportedEntryTypes.includes("layout-shift")) {
+      return;
+    }
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const shift = entry as PerformanceEntry & {
+          readonly value: number;
+          readonly hadRecentInput: boolean;
+        };
+        if (!shift.hadRecentInput) target.__kpThemeCls! += shift.value;
+      }
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+  await page.goto(publicRoute, { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  const prose = page.locator(
+    "[data-kp-economics-static-publication] p"
+  ).first();
+  await expect.poll(() => prose.evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  )).toContain("Source Serif 4");
+  await expect(prose).toHaveCSS("font-weight", "300");
+  await expect(page.locator("html")).toHaveCSS(
+    "background-color",
+    "rgb(13, 14, 28)"
+  );
+  const resources = await page.evaluate(() =>
+    performance.getEntriesByType("resource").map(({ name }) => name)
+  );
+  expect(resources.filter((name) => name.includes(
+    "source-serif-4-latin-300-normal"
+  ))).toHaveLength(1);
+  expect(resources.join("\n")).not.toMatch(
+    /new-computer-modern|codemirror-runtime/i
+  );
+  await expect(page.locator(
+    ".editor-graph-stage__economics-curve--supply"
+  ).first()).toHaveCSS("stroke", "rgb(124, 189, 255)");
+  await expect(page.locator("[data-kp-editor-graph-axis]").first())
+    .toHaveCSS("stroke", "rgb(98, 103, 117)");
+  expect(await page.evaluate(() => (
+    window as typeof window & { __kpThemeCls?: number }
+  ).__kpThemeCls ?? 0)).toBeLessThanOrEqual(0.02);
+
+  await page.goto(`${publicRoute}?theme=light`, { waitUntil: "networkidle" });
+  await expect(page.locator("html")).toHaveCSS(
+    "background-color",
+    "rgb(244, 241, 233)"
+  );
+  await expect.poll(() => page.locator(
+    "[data-kp-economics-static-publication] p"
+  ).first().evaluate((element) => getComputedStyle(element).fontFamily))
+    .toContain("Source Serif 4");
+  await expect(page.locator(
+    ".editor-graph-stage__economics-curve--supply"
+  ).first()).toHaveCSS("stroke", "rgb(37, 110, 168)");
+  await expect(page.locator("[data-kp-editor-graph-axis]").first())
+    .toHaveCSS("stroke", "rgb(21, 22, 34)");
+
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto(publicRoute, { waitUntil: "networkidle" });
+  expect(await page.evaluate(() =>
+    matchMedia("(forced-colors: active)").matches
+  )).toBe(true);
+  await expect.poll(() => page.locator(
+    "[data-kp-economics-static-publication] p"
+  ).first().evaluate((element) => getComputedStyle(element).fontFamily))
+    .toContain("Source Serif 4");
 });
 
 test("static scrubber keeps native links and geometry when it upgrades", async ({

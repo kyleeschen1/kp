@@ -470,11 +470,46 @@
       "scope": "pre-r10 legacy presenter budget",
       "checkedAt": "2026-08-08T18:30:55.158Z",
       "notes": "Explicit two-column presenter measured 256058 B transfer, 157521 B script, 49 resources, 170 ms startup task, zero CLS, 33.4 ms active p95, and no active long task or SVG rebuild. Publication performance harness migration belongs to r10."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r09 font and theme closure",
+      "checkedAt": "2026-08-08T18:43:55.931Z",
+      "notes": "86 economics semantic, publication, runtime, and theme unit tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r09 font and theme ownership",
+      "checkedAt": "2026-08-08T18:43:56.939Z",
+      "notes": "21 checks passed, including head font discovery, single theme ownership, and Source Serif separation from KaTeX."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "r09 static publication preservation",
+      "checkedAt": "2026-08-08T18:43:57.863Z",
+      "notes": "6 deterministic artifact, retained math, and route ownership checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r09 production font and CSS closure",
+      "checkedAt": "2026-08-08T18:43:58.781Z",
+      "notes": "Production build passed. Source Serif 300 is one 21.06 kB preloaded asset; standalone route theme is 8.65 kB raw and presenter CSS fell from 48.02 kB to 39.37 kB by removing duplicate theme rules."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r09 font theme and geometry",
+      "checkedAt": "2026-08-08T18:43:59.693Z",
+      "notes": "16 Chromium checks passed. Public prose uses Source Serif 300 before enhancement, light and midnight graph roles differ intentionally, forced colors remains operable, initial font CLS is at most 0.02, and New Computer Modern and CodeMirror remain absent. One prior full-suite phone check showed a transient 0.98 px subpixel delta; isolated and final full reruns passed unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R08 closed public-route presenter ownership without promoting the provisional layout. R09 next closes Source Serif and theme loading; r10 migrates the production budget gate to the published route."
+    "summary": "R09 closed font and theme loading while preserving geometry. R10 next moves the production performance harness from the legacy two-column presenter to the published public route and ratchets real-route budgets."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

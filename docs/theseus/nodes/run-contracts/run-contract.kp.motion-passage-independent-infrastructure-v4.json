@@ -99,7 +99,8 @@
     {
       "id": "r09",
       "title": "font-theme-closure",
-      "status": "planned"
+      "summary": "Source Serif 300 is discovered and preloaded before publication paint, the route owns one standalone theme sheet, static prose and graph use semantic light and midnight tokens, and editor fonts stay out of the learner closure with no measured CLS.",
+      "status": "complete"
     },
     {
       "id": "r10",

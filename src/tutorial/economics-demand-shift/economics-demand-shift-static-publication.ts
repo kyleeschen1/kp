@@ -47,20 +47,22 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication__prose { margin: 0 auto; max-width: 68ch; }
     .kp-economics-static-publication h1 { font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.2; }
     .kp-economics-static-publication h3 { font-size: 1.2rem; margin-top: 2.5rem; }
-    .kp-economics-static-publication p { font-family: Georgia, "Times New Roman", serif; font-size: 1rem; line-height: 1.75; }
+    .kp-economics-static-publication p { font-family: var(--kp-economics-non-katex-font-family, Georgia, "Times New Roman", serif); font-size: 1rem; font-weight: var(--kp-lesson-theme-prose-weight, 300); line-height: 1.75; }
     .kp-economics-static-publication__eyebrow { letter-spacing: 0.08em; text-transform: uppercase; }
     .kp-economics-static-publication__stage { margin: 2rem auto; max-width: 46rem; }
     .kp-economics-static-publication__stage-slot { aspect-ratio: 640 / 420; width: 100%; }
     .kp-economics-static-publication__stage figcaption { font-size: 0.875rem; margin-top: 0.5rem; }
     .kp-economics-static-publication .editor-graph-stage { display: block; height: 100%; width: 100%; }
     .kp-economics-static-publication .editor-graph-stage__plot-plane { fill: transparent; }
-    .kp-economics-static-publication [data-kp-editor-graph-axis] { stroke: currentColor; stroke-width: 1; }
+    .kp-economics-static-publication [data-kp-editor-graph-axis] { stroke: var(--kp-graph-axis, currentColor); stroke-width: var(--kp-graph-stroke-axis, 1px); }
     .kp-economics-static-publication .editor-graph-stage__economics-curve,
     .kp-economics-static-publication .editor-graph-stage__economics-guide,
-    .kp-economics-static-publication .editor-graph-stage__economics-grid-line { fill: none; stroke: #7f8793; stroke-width: 1; }
-    .kp-economics-static-publication .editor-graph-stage__economics-curve--supply { stroke: #7db9ff; }
-    .kp-economics-static-publication .editor-graph-stage__economics-curve--demand { stroke: #ff7b72; }
-    .kp-economics-static-publication .editor-graph-stage__economics-equilibrium { fill: #0d0e1c; stroke: #f3f4fa; }
+    .kp-economics-static-publication .editor-graph-stage__economics-grid-line { fill: none; stroke-width: var(--kp-graph-line-effective, 1px); }
+    .kp-economics-static-publication .editor-graph-stage__economics-grid-line { stroke: var(--kp-graph-grid, #7f8793); }
+    .kp-economics-static-publication .editor-graph-stage__economics-guide { stroke: var(--kp-graph-guide, #7f8793); }
+    .kp-economics-static-publication .editor-graph-stage__economics-curve--supply { stroke: var(--kp-graph-stable, #7db9ff); }
+    .kp-economics-static-publication .editor-graph-stage__economics-curve--demand { stroke: var(--kp-graph-changing, #ff7b72); }
+    .kp-economics-static-publication .editor-graph-stage__economics-equilibrium { fill: var(--kp-graph-intersection-fill, #0d0e1c); stroke: var(--kp-graph-intersection-stroke, #f3f4fa); }
     .kp-economics-static-publication [data-kp-economics-screen-space-label] { color: currentColor; font-size: 16px; }
     .kp-economics-static-publication__motion-controls { margin-block: 1.25rem 2rem; }
     .kp-economics-static-publication kp-tutorial-progress-rail,
