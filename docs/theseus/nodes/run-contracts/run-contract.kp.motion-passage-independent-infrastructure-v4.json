@@ -75,7 +75,8 @@
     {
       "id": "r05",
       "title": "progressive-enhancement-boundary",
-      "status": "planned"
+      "summary": "Published route HTML is now the real searchable document. The Svelte-free ?enhancement=published path adopts the exact prose, IDs, controls, and SVG, uses one retained runtime and clock, restores semantic hashes directly, and downloads no duplicate compiled prose; the default legacy presenter is isolated for r08.",
+      "status": "complete"
     },
     {
       "id": "r06",

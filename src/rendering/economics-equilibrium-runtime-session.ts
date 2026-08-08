@@ -38,6 +38,7 @@ export interface KpEconomicsEquilibriumRuntimeSession {
 
 export interface KpEconomicsEquilibriumMountedScaffold {
   readonly content: SVGGElement;
+  readonly ownership: "adopted" | "created";
   readonly view: SVGGElement;
   readonly status: "mounted" | "disposed";
   dispose(): void;
@@ -106,16 +107,22 @@ export function mountKpEconomicsEquilibriumRuntimeScaffold(
   const extant = mountedScaffolds.get(input.content);
   if (extant?.status === "mounted") return extant;
 
-  // Complete markup remains the deterministic mount and export authority;
-  // later progress patches retain this parsed tree instead of rebuilding it.
-  input.content.innerHTML = renderKpEconomicsEquilibriumRuntimeContent({
-    frame: input.frame,
-    viewport: input.viewport,
-    renderInlineLatex: input.renderInlineLatex
-  });
-  const view = input.content.querySelector<SVGGElement>(
+  let view = input.content.querySelector<SVGGElement>(
     ":scope > [data-kp-economics-equilibrium-view]"
   );
+  const ownership = view === null ? "created" : "adopted";
+  if (view === null) {
+    // Runtime-only callers still receive the deterministic complete scaffold;
+    // published routes instead retain their already parsed SVG subtree.
+    input.content.innerHTML = renderKpEconomicsEquilibriumRuntimeContent({
+      frame: input.frame,
+      viewport: input.viewport,
+      renderInlineLatex: input.renderInlineLatex
+    });
+    view = input.content.querySelector<SVGGElement>(
+      ":scope > [data-kp-economics-equilibrium-view]"
+    );
+  }
   if (view === null) {
     throw new Error("Economics runtime scaffold did not mount its view root.");
   }
@@ -123,6 +130,7 @@ export function mountKpEconomicsEquilibriumRuntimeScaffold(
   let disposed = false;
   const scaffold: KpEconomicsEquilibriumMountedScaffold = Object.freeze({
     content: input.content,
+    ownership,
     view,
     get status() {
       return disposed ? "disposed" as const : "mounted" as const;
@@ -130,11 +138,15 @@ export function mountKpEconomicsEquilibriumRuntimeScaffold(
     dispose() {
       if (disposed) return;
       disposed = true;
-      view.remove();
+      // An adopted publication remains useful after controller teardown;
+      // only runtime-owned geometry may be removed with its session.
+      if (ownership === "created") view.remove();
+      delete input.content.dataset["kpEconomicsRuntimeScaffoldOwnership"];
       mountedScaffolds.delete(input.content);
     }
   });
   mountedScaffolds.set(input.content, scaffold);
+  input.content.dataset["kpEconomicsRuntimeScaffoldOwnership"] = ownership;
   scaffoldStates.set(scaffold, {
     stableGeometryKey: stableGeometryKey(input.frame, input.viewport),
     renderInlineLatex: input.renderInlineLatex

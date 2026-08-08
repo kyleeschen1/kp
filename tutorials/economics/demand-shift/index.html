@@ -9,10 +9,18 @@
     />
     <title>Demand shifts and equilibrium · Kinetic Press</title>
     <script>
+      const kpEconomicsRouteParameters = new URLSearchParams(location.search);
       document.documentElement.dataset.kpLessonTheme =
-        new URLSearchParams(location.search).get("theme") === "light"
+        kpEconomicsRouteParameters.get("theme") === "light"
           ? "light"
           : "dark";
+      // This pre-paint branch keeps the published document visible for no-JS
+      // and in-place enhancement while the provisional presenter remains a
+      // separately reversible compatibility path through r08.
+      document.documentElement.dataset.kpEconomicsEnhancement =
+        kpEconomicsRouteParameters.get("enhancement") === "published"
+          ? "published"
+          : "presenter";
     </script>
     <style>
       html, body, #app { min-height: 100%; }
@@ -29,14 +37,16 @@
         background: #0d0e1c;
         color-scheme: dark;
       }
+      html[data-kp-economics-enhancement="presenter"]
+        [data-kp-economics-static-publication],
+      html[data-kp-economics-enhancement="presenter"]
+        [data-kp-economics-static-publication-styles] {
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <div id="app">
-      <noscript data-kp-economics-static-fallback>
-        <!-- kp:economics-static-narrative -->
-      </noscript>
-    </div>
+    <div id="app"><!-- kp:economics-static-narrative --></div>
     <script type="module" src="/src/bootstrap.ts"></script>
   </body>
 </html>

@@ -320,11 +320,35 @@
       "scope": "r04 static route artifact and client-closure preservation",
       "checkedAt": "2026-08-08T17:26:58.938Z",
       "notes": "Route HTML is 74.25 KB raw / 8.15 KB gzip with stage and controls; client entry remains 183.39 KB raw / 33.92 KB gzip after rejecting duplication through client JSON."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial (85 passed)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-08T17:46:27.872Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial (14 Chromium checks passed)",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-08T17:46:28.801Z"
+    },
+    {
+      "command": "npm run build (typecheck, publication check, production build)",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-08T17:46:29.721Z"
+    },
+    {
+      "command": "runtime-session browser checks (2 passed) and economics CSS checks (17 passed)",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-08T17:46:30.598Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The stacked exemplar now uses two zero-dead-zone 28vh transition packets. Each read-only rail and its short caption share one deterministic scroll projection; an equal-and-opposite paint transform simulates a lock while native document flow and the retained graph clock continue unchanged. Rail fill reports linear corridor travel, graph motion preserves authored sub-beats, direct links seek without replay, reverse is exact, and reduced-motion/phone readers retain ordinary flow. Mandatory human review remains before startup-attribution or promotion."
+    "summary": "r05 complete: build-published prose, IDs, controls, and SVG are actual light DOM; ?enhancement=published adopts them with a Svelte-free retained controller, direct checkpoint restoration, one clock, and no compiled prose payload. Legacy presenter remains isolated for r08 closure."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

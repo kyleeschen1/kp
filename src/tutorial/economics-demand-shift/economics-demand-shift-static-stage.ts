@@ -1,12 +1,15 @@
 import {
-  sampleKpSupplyDemandEquilibriumFrame
-} from "../../../domains/economics/supply-demand-equilibrium-frame.ts";
-import {
   createKpSupplyDemandEquilibriumModel
 } from "../../../domains/economics/supply-demand-equilibrium-model.ts";
 import {
   createEconomicsEquilibriumAnimationAsset
 } from "../../animation/economics-equilibrium-adapter.ts";
+import {
+  sampleKpEconomicsEquilibriumRuntimeFrame
+} from "../../animation/economics-equilibrium-runtime-frame.ts";
+import {
+  sampleKpAnimationRuntimeFrame
+} from "../../animation/runtime-sampler.ts";
 import {
   createKpEditorGraphSvgViewportModel,
   renderKpEditorGraphSvgViewportStaticShell
@@ -14,7 +17,7 @@ import {
 import {
   kpEconomicsGraphPlotInsets,
   kpEconomicsGraphPresentationProfile,
-  renderKpEconomicsEquilibriumStaticContent
+  renderKpEconomicsEquilibriumRuntimeContent
 } from "../../rendering/economics-equilibrium-svg.ts";
 import {
   renderKpEconomicsRetainedInlineLatex
@@ -24,11 +27,16 @@ export function renderKpEconomicsDemandShiftStaticStage(): string {
   const model = createKpSupplyDemandEquilibriumModel();
   const animation = createEconomicsEquilibriumAnimationAsset(model);
   const viewport = createKpEditorGraphSvgViewportModel(animation);
-  const frame = sampleKpSupplyDemandEquilibriumFrame({
+  const frame = sampleKpEconomicsEquilibriumRuntimeFrame({
+    animation,
     model,
-    progress: { numerator: "0", denominator: "1" }
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      direction: "forward",
+      progress: 0
+    })
   });
-  const contentHtml = renderKpEconomicsEquilibriumStaticContent({
+  const contentHtml = renderKpEconomicsEquilibriumRuntimeContent({
     frame,
     viewport,
     renderInlineLatex: renderKpEconomicsRetainedInlineLatex

@@ -12,13 +12,14 @@ import {
 const publication = readKpEconomicsDemandShiftCompiledPublication();
 const html = renderKpEconomicsDemandShiftStaticNarrative(publication);
 
-test("economics route source reserves a compiled static narrative", () => {
+test("economics route source publishes a compiled static narrative", () => {
   const route = readFileSync(
     "tutorials/economics/demand-shift/index.html",
     "utf8"
   );
-  assert.match(route, /data-kp-economics-static-fallback/);
   assert.match(route, /kp:economics-static-narrative/);
+  assert.doesNotMatch(route, /<noscript/);
+  assert.match(route, /kpEconomicsEnhancement/);
 });
 
 test("static economics narrative preserves ordered searchable lesson truth", () => {

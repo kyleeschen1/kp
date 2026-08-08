@@ -1504,6 +1504,102 @@ test("the learner route publishes complete searchable narrative without JavaScri
   }
 });
 
+test("published lesson enhancement adopts static truth in place", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    const target = window as Window & {
+      __kpFirstPublishedEconomicsSvg?: SVGSVGElement | null;
+    };
+    const observer = new MutationObserver(() => {
+      const svg = document.querySelector<SVGSVGElement>(
+        "[data-kp-economics-static-publication] [data-kp-editor-graph-svg]"
+      );
+      if (svg === null || target.__kpFirstPublishedEconomicsSvg !== undefined) {
+        return;
+      }
+      target.__kpFirstPublishedEconomicsSvg = svg;
+      observer.disconnect();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  });
+  await page.goto(`${route}?enhancement=published#kp-checkpoint-shift-handoff`);
+
+  const publication = page.locator("[data-kp-economics-static-publication]");
+  const svg = publication.locator("[data-kp-editor-graph-svg]");
+  const demandControls = publication.locator(
+    'kp-tutorial-scrub-bar[data-kp-tutorial-motion-controls="demand-shift"]'
+  );
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-economics-enhancement",
+    "published"
+  );
+  await expect(publication).toBeVisible();
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-static-enhancement",
+    "ready"
+  );
+  await expect(page.locator("#app")).toHaveAttribute(
+    "data-kp-economics-demand-shift-tutorial-mounted",
+    "true"
+  );
+  await expect(publication.locator("[data-kp-economics-tutorial-passage]"))
+    .toHaveCount(11);
+  await expect(publication.locator("[data-kp-editor-graph-svg]"))
+    .toHaveCount(1);
+  await expect(publication.locator("kp-tutorial-scrub-bar")).toHaveCount(2);
+  await expect(publication.locator("kp-tutorial-progress-rail"))
+    .toHaveCount(2);
+  await expect(publication.locator("[data-kp-editor-animation-player]"))
+    .toHaveCount(0);
+  await expect(publication.locator("[data-kp-editor-graph-content]"))
+    .toHaveAttribute("data-kp-economics-runtime-scaffold-ownership", "adopted");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-block",
+    "demand-shift"
+  );
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-progress",
+    "0.720"
+  );
+  await expect(svg).toHaveAttribute("data-kp-editor-graph-progress", "0.72");
+  expect(await svg.evaluate((element) => {
+    const target = window as Window & {
+      __kpFirstPublishedEconomicsSvg?: SVGSVGElement | null;
+    };
+    return target.__kpFirstPublishedEconomicsSvg === element;
+  })).toBe(true);
+  expect(await publication.evaluate((element) => {
+    const ids = [...element.querySelectorAll<HTMLElement>("[id]")]
+      .map(({ id }) => id);
+    return ids.length === new Set(ids).size;
+  })).toBe(true);
+
+  const slider = demandControls.getByRole("slider", {
+    name: "Scrub animation progress"
+  });
+  await expect(slider).toBeEnabled();
+  await slider.fill("0.42");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-progress",
+    "0.420"
+  );
+  await expect(svg).toHaveAttribute("data-kp-editor-graph-progress", "0.42");
+
+  await page.evaluate(() => {
+    window.location.hash = "#kp-checkpoint-movement-traced";
+  });
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-block",
+    "supply-movement"
+  );
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-progress",
+    "0.580"
+  );
+  await expect(svg).toHaveAttribute("data-kp-editor-graph-progress", "1");
+});
+
 test("static scrubber keeps native links and geometry when it upgrades", async ({
   page
 }) => {

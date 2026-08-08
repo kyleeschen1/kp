@@ -14,6 +14,9 @@ import {
   isKpEconomicsDemandShiftTutorialRoute
 } from "./tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 import {
+  readKpEconomicsDemandShiftEnhancementMode
+} from "./tutorial/economics-demand-shift/economics-demand-shift-enhancement-mode.ts";
+import {
   isKpLispFunctionApplicationTutorialRoute
 } from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
 
@@ -31,14 +34,12 @@ async function bootstrap(): Promise<void> {
     return;
   }
   if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
-    const tutorial = await import(
-      "./tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts"
+    const mode = readKpEconomicsDemandShiftEnhancementMode(
+      window.location.search
     );
-    const dispose = await tutorial.mountKpEconomicsDemandShiftTutorial({
-      root,
-      search: window.location.search,
-      hash: window.location.hash
-    });
+    const dispose = mode === "published"
+      ? await mountPublishedEconomicsTutorial(root)
+      : await mountPresenterEconomicsTutorial(root);
     window.addEventListener("pagehide", dispose, { once: true });
     return;
   }
@@ -90,6 +91,32 @@ async function bootstrap(): Promise<void> {
   }
   window.addEventListener("pagehide", () => handle.dispose(), { once: true });
   root.dataset["kpConceptRoomMounted"] = "true";
+}
+
+async function mountPublishedEconomicsTutorial(
+  root: HTMLElement
+): Promise<() => void> {
+  const tutorial = await import(
+    "./tutorial/economics-demand-shift/economics-demand-shift-progressive-entry.ts"
+  );
+  return tutorial.enhanceKpEconomicsDemandShiftPublication({
+    root,
+    search: window.location.search,
+    hash: window.location.hash
+  });
+}
+
+async function mountPresenterEconomicsTutorial(
+  root: HTMLElement
+): Promise<() => void> {
+  const tutorial = await import(
+    "./tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts"
+  );
+  return tutorial.mountKpEconomicsDemandShiftTutorial({
+    root,
+    search: window.location.search,
+    hash: window.location.hash
+  });
 }
 
 void bootstrap();

@@ -40,6 +40,13 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly search: string;
   readonly hash: string;
 }): Promise<() => void> {
+  // The legacy presenter still owns its complete tree until r08. Remove the
+  // pre-published compatibility document before Svelte appends so hidden
+  // duplicate IDs, TOCs, and graph labels cannot leak into page semantics.
+  input.root.querySelector("[data-kp-economics-static-publication]")?.remove();
+  input.root.querySelector(
+    "[data-kp-economics-static-publication-styles]"
+  )?.remove();
   const initialTheme = readKpEconomicsDemandShiftTheme(input.search);
   const previousDocumentTheme = document.documentElement.dataset[
     "kpLessonTheme"
