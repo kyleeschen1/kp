@@ -355,7 +355,7 @@ test.skip("superseded single-motion station timing remains available during exem
   ))).toBeGreaterThan(0.999);
 });
 
-test("station retains motion prose, releases for reading, and revives one graph", async ({
+test("stacked prose crosses a sticky transition seam without scroll locking", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -363,116 +363,100 @@ test("station retains motion prose, releases for reading, and revives one graph"
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const station = root.locator('[data-kp-motion-passage="demand-change"]');
   const stage = station.locator("[data-kp-inline-sticky-stage]");
+  const graph = stage.locator(".kp-economics-tutorial__stage-card");
   const demandCue = passage(station, "follow-shift");
   const demandText = demandCue.locator("p");
+  const demandTransition = demandCue.locator(
+    '[data-kp-animation-station-transition="demand-shift"]'
+  );
   const demandRail = demandCue.locator("kp-tutorial-progress-rail");
   const reading = passage(station, "new-equilibrium");
   const readingText = reading.locator("p");
   const supplyCue = passage(station, "shift-versus-movement");
-  const supplyText = supplyCue.locator("p");
+  const supplyTransition = supplyCue.locator(
+    '[data-kp-animation-station-transition="supply-movement"]'
+  );
   const supplyRail = supplyCue.locator("kp-tutorial-progress-rail");
-  const terminal = passage(station, "movement-along-supply");
-  const terminalText = terminal.locator("p");
 
   await expect(station.locator("[data-kp-animation-station-cue]"))
-    .toHaveCount(4);
+    .toHaveCount(6);
   await expect(station.locator("[data-kp-tutorial-motion-block]"))
     .toHaveCount(2);
   await expect(station.locator("[data-kp-animation-station-reading]"))
+    .toHaveCount(0);
+  await expect(station.locator("[data-kp-animation-station-transition]"))
     .toHaveCount(2);
   await expect(station.locator("kp-tutorial-progress-rail")).toHaveCount(2);
   await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
-  await expect(reading).toHaveAttribute(
-    "data-kp-animation-station-reading",
-    "interlude"
-  );
-  await expect(terminal).toHaveAttribute(
-    "data-kp-animation-station-reading",
-    "terminal"
-  );
+  await expect(station.locator(".editor-graph-stage")).toHaveCount(1);
+  for (const paragraph of await station.locator(
+    "[data-kp-animation-station-cue] > p"
+  ).all()) {
+    await expect(paragraph).toHaveCSS("opacity", "1");
+    await expect(paragraph).toHaveCSS("transform", "none");
+  }
+  await expect(graph).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-stacked-prose.png`,
+    fullPage: false
+  });
 
-  await alignTop(page, demandText, 294);
+  await alignTop(page, demandTransition, 400);
   await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
-  const pinnedStart = {
-    ink: await passageInkTop(demandText),
-    rail: await demandRail.evaluate(
-      (element) => element.getBoundingClientRect().top
-    )
-  };
-  await alignTop(page, demandText, 100);
-  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.1);
-  await expect.poll(() => demandProgress(root)).toBeLessThan(0.99);
-  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.99);
-  await expect.poll(() => passageInkTop(demandText))
-    .toBeCloseTo(pinnedStart.ink, 0);
   await expect.poll(() => demandRail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(pinnedStart.rail, 0);
-  await expect(demandRail).not.toHaveAttribute("aria-valuenow", "0");
+  )).toBeCloseTo(400, 0);
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-transition-start.png`,
+    fullPage: false
+  });
 
-  await alignTop(page, demandText, -25);
+  const scrollAtStart = await page.evaluate(() => window.scrollY);
+  await alignTop(page, demandTransition, 288);
+  const scrollAtMidpoint = await page.evaluate(() => window.scrollY);
+  expect(scrollAtMidpoint).toBeGreaterThan(scrollAtStart + 100);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.1);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.99);
+  await expect.poll(() => demandRail.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(400, 0);
+  await expect(demandRail).not.toHaveAttribute("aria-valuenow", "0");
+  await expect(demandText).toHaveCSS("opacity", "1");
+  await page.screenshot({
+    path: `${evidenceDirectory}/station-transition-midpoint.png`,
+    fullPage: false
+  });
+
+  await alignTop(page, demandTransition, 176);
   await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.99);
-  await expect.poll(() => paragraphOpacity(demandText)).toBeGreaterThan(0.99);
   await expect(demandRail).toHaveAttribute("aria-valuenow", "100");
   await page.screenshot({
-    path: `${evidenceDirectory}/station-motion-retained.png`,
+    path: `${evidenceDirectory}/station-transition-settled.png`,
     fullPage: false
   });
 
-  await alignTop(page, readingText, 620);
-  await expect.poll(() => paragraphOpacity(readingText)).toBeCloseTo(0.5, 1);
-  await expect.poll(() => paragraphOpacity(demandText)).toBeCloseTo(0.5, 1);
-  await alignTop(page, readingText, 480);
-  await expect(root).toHaveAttribute(
-    "data-kp-animation-station-lifecycle",
-    "reading"
-  );
-  await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
-  await expect.poll(() => paragraphOpacity(readingText)).toBeGreaterThan(0.99);
-  await page.screenshot({
-    path: `${evidenceDirectory}/station-reading-release.png`,
-    fullPage: false
-  });
+  await alignTop(page, readingText, 520);
+  await expect(readingText).toHaveCSS("opacity", "1");
+  await expect(readingText).toHaveCSS("transform", "none");
+  await expect(root).not.toHaveAttribute("data-kp-animation-station-lifecycle");
 
-  await alignTop(page, supplyText, 620);
-  await expect(root).toHaveAttribute(
-    "data-kp-animation-station-lifecycle",
-    "reviving"
-  );
-  await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
-  await alignTop(page, supplyText, 560);
-  await expect(root).toHaveAttribute(
-    "data-kp-animation-station-lifecycle",
-    "revived"
-  );
-  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
-  await expect(stage).toBeVisible();
-
-  await alignTop(page, supplyText, 294);
+  await alignTop(page, supplyTransition, 400);
   await expect.poll(() => supplyProgress(root)).toBeLessThan(0.001);
-  const supplyRailStart = await supplyRail.evaluate(
-    (element) => element.getBoundingClientRect().top
-  );
-  await alignTop(page, supplyText, 100);
+  await alignTop(page, supplyTransition, 288);
   await expect.poll(() => supplyProgress(root)).toBeGreaterThan(0.1);
-  await expect.poll(() => paragraphOpacity(supplyText)).toBeGreaterThan(0.99);
   await expect.poll(() => supplyRail.evaluate(
     (element) => element.getBoundingClientRect().top
-  )).toBeCloseTo(supplyRailStart, 0);
+  )).toBeCloseTo(400, 0);
 
-  await alignTop(page, terminalText, 480);
-  await expect(root).toHaveAttribute(
-    "data-kp-animation-station-lifecycle",
-    "terminal-release"
-  );
-  await expect.poll(() => stationExit(root, "graph")).toBeGreaterThan(0.999);
+  await alignTop(page, demandTransition, 288);
+  await expect.poll(() => demandProgress(root)).toBeGreaterThan(0.1);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.99);
   await page.screenshot({
-    path: `${evidenceDirectory}/station-terminal-release.png`,
+    path: `${evidenceDirectory}/station-transition-reverse.png`,
     fullPage: false
   });
-
-  await alignTop(page, terminalText, 680);
-  await expect.poll(() => stationExit(root, "graph")).toBeLessThan(0.001);
+  await alignTop(page, demandTransition, 400);
+  await expect.poll(() => demandProgress(root)).toBeLessThan(0.001);
   await expect(station.locator("[data-kp-inline-sticky-stage]")).toHaveCount(1);
 });
 
@@ -492,7 +476,7 @@ test("phone and large text fall back to ordinary document flow", async ({
   await expect.poll(() => stage.evaluate((element) =>
     getComputedStyle(element, "::before").content
   )).toBe("none");
-  for (let index = 0; index < 4; index += 1) {
+  for (let index = 0; index < 6; index += 1) {
     await expect.poll(() => cues.nth(index).evaluate((element) =>
       element.getBoundingClientRect().height
     )).toBeLessThan(240);
@@ -536,19 +520,27 @@ test("reduced motion settles as readable flow without sticky rails", async ({
   });
 });
 
-test("light theme preserves the terminal release", async ({ page }) => {
+test("light theme preserves opaque stage and readable seams", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(
     "/tutorials/economics/demand-shift/?layout=animation-station&theme=light"
   );
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
-  const release = passage(root, "movement-along-supply").locator("p").first();
-  await alignTop(page, release, 540);
-  await expect.poll(() => stationExit(root, "rail")).toBeGreaterThan(0.999);
-  await expect.poll(() => stationExit(root, "graph")).toBeCloseTo(0.5, 1);
-  await expect.poll(() => paragraphOpacity(release)).toBeGreaterThan(0.98);
+  const station = root.locator('[data-kp-motion-passage="demand-change"]');
+  const graph = station.locator(".kp-economics-tutorial__stage-card");
+  const transition = station.locator(
+    '[data-kp-animation-station-transition="demand-shift"]'
+  );
+  const rail = transition.locator("kp-tutorial-progress-rail");
+  await alignTop(page, transition, 288);
+  await expect(graph).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect.poll(() => rail.evaluate(
+    (element) => element.getBoundingClientRect().top
+  )).toBeCloseTo(400, 0);
+  await expect(passage(root, "new-equilibrium").locator("p"))
+    .toHaveCSS("opacity", "1");
   await page.screenshot({
-    path: `${evidenceDirectory}/station-exit-light.png`,
+    path: `${evidenceDirectory}/station-seam-light.png`,
     fullPage: false
   });
 });

@@ -18,9 +18,9 @@ const ordinaryGeometry = Object.freeze({
 
 const motionGeometry = Object.freeze({
   ...ordinaryGeometry,
-  cueExitEndY: 334,
-  motionScrubEndY: 14,
-  motionEndY: -66
+  graphBottomY: 400,
+  motionScrubEndY: 208,
+  motionEndY: 176
 });
 
 const boundaries: KpEconomicsStationPhaseBoundaries = Object.freeze({
@@ -140,12 +140,12 @@ test("ordinary reading hold is a 10vh local corridor independent of cue height",
   );
 });
 
-test("motion station reserves 40vh for scrub and 10vh for settlement", () => {
+test("motion station reserves 24vh for scrub and 4vh for settlement", () => {
   const localBoundaries = kpEconomicsMotionStationPhaseBoundaries(
     motionGeometry
   );
-  assert.equal(localBoundaries.scrubStartPx - localBoundaries.scrubEndPx, 320);
-  assert.equal(localBoundaries.scrubEndPx - localBoundaries.handoffEndPx, 80);
+  assert.equal(localBoundaries.scrubStartPx - localBoundaries.scrubEndPx, 192);
+  assert.equal(localBoundaries.scrubEndPx - localBoundaries.handoffEndPx, 32);
 
   const input = {
     ...motionInput,
@@ -153,18 +153,18 @@ test("motion station reserves 40vh for scrub and 10vh for settlement", () => {
   };
   const projected = projectKpEconomicsStationPhase({
     ...input,
-    anchorPx: 170,
+    anchorPx: 300,
     projectedSemanticProgress: 0.72
   });
   assert.equal(projected.phase, "scrub");
   assert.equal(projected.semanticProgress, 0.72);
   assert.equal(projected.activeMotionBlockId, "demand-shift");
   assert.equal(
-    projectKpEconomicsStationPhase({ ...input, anchorPx: 14 }).phase,
+    projectKpEconomicsStationPhase({ ...input, anchorPx: 208 }).phase,
     "settle"
   );
   assert.equal(
-    projectKpEconomicsStationPhase({ ...input, anchorPx: -66 }).phase,
+    projectKpEconomicsStationPhase({ ...input, anchorPx: 176 }).phase,
     "handoff"
   );
 });

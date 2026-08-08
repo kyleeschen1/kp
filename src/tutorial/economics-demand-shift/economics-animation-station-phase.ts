@@ -52,6 +52,7 @@ export interface KpEconomicsOrdinaryStationGeometry {
 
 export interface KpEconomicsMotionStationGeometry extends
     KpEconomicsOrdinaryStationGeometry {
+  readonly graphBottomY: number;
   readonly motionScrubEndY: number;
   readonly motionEndY: number;
 }
@@ -78,8 +79,8 @@ export function kpEconomicsMotionStationPhaseBoundaries(
 ): KpEconomicsStationPhaseBoundaries {
   return Object.freeze({
     approachStartPx: geometry.usableBottomPx,
-    readyStartPx: geometry.cuePinStartY,
-    scrubStartPx: geometry.cueExitEndY,
+    readyStartPx: geometry.graphBottomY,
+    scrubStartPx: geometry.graphBottomY,
     scrubEndPx: geometry.motionScrubEndY,
     handoffEndPx: geometry.motionEndY
   });

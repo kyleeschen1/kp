@@ -47,14 +47,9 @@
     type KpEconomicsDemandShiftInitialDestination
   } from "./economics-demand-shift-deep-link.ts";
   import {
-    projectKpAnimationStationCuePresence,
     projectKpAnimationStationEntrance,
-    projectKpAnimationStationExit,
     projectKpAnimationStationGeometry,
-    projectKpAnimationStationMotionCuePresence,
     projectKpAnimationStationMotionCorridor,
-    projectKpAnimationStationReadingCycle,
-    projectKpAnimationStationReadingPresence,
     projectKpInlineStickyLessonLayout,
     projectKpInlineStickyParagraph,
     projectKpInlineStickyParagraphMotionCorridor,
@@ -1284,11 +1279,17 @@
       navigationScrollIntent = false;
       navigationResume = undefined;
     }
-    const active = tutorialAttention.activeMotionBlockId === undefined
+    const activeMotionBlockId = animationStation
+      ? projection.activeBlockId
+      : tutorialAttention.activeMotionBlockId;
+    const active = activeMotionBlockId === undefined
       ? undefined
       : projection.blocks.find(
-        ({ id }) => id === tutorialAttention.activeMotionBlockId
+        ({ id }) => id === activeMotionBlockId
       );
+    if (animationStation && active !== undefined) {
+      scrollActiveMotionBlock = active.id;
+    }
     const activeScrubBar = active?.id === "supply-movement"
       ? supplyScrubBar
       : demandScrubBar;
@@ -1620,45 +1621,6 @@
         timeline: cachedTwoColumnPassageTimeline
       }).phase;
     }
-    if (animationStation) {
-      const stationGeometry = readCachedAnimationStationGeometry();
-      const readingPassages = [...shell.querySelectorAll<HTMLElement>(
-        "[data-kp-animation-station-reading]"
-      )];
-      for (const passage of readingPassages) {
-        const paragraph = passage.querySelector<HTMLElement>("p");
-        const presence = projectKpAnimationStationReadingPresence({
-          paragraphAnchorPx: paragraph?.getBoundingClientRect().top ??
-            window.innerHeight,
-          geometry: stationGeometry
-        });
-        passage.style.setProperty(
-          "--kp-animation-station-reading-presence",
-          presence.toFixed(4)
-        );
-      }
-      const readingParagraph = shell.querySelector<HTMLElement>(
-        '[data-kp-animation-station-reading="interlude"] p'
-      );
-      const revivalParagraph = shell.querySelector<HTMLElement>(
-        '[data-kp-economics-tutorial-passage="shift-versus-movement"] p'
-      );
-      const terminalParagraph = shell.querySelector<HTMLElement>(
-        '[data-kp-animation-station-reading="terminal"] p'
-      );
-      const cycle = projectKpAnimationStationReadingCycle({
-        readingCueTopPx: readingParagraph?.getBoundingClientRect().top ??
-          window.innerHeight,
-        revivalCueTopPx:
-          revivalParagraph?.getBoundingClientRect().top ??
-            window.innerHeight,
-        terminalCueTopPx: terminalParagraph?.getBoundingClientRect().top ??
-          window.innerHeight,
-        geometry: stationGeometry
-      });
-      shell.dataset["kpAnimationStationLifecycle"] = cycle.phase;
-      writeAnimationStationExit(cycle.exit);
-    }
     const frames = measurements.map((measurement, index): KpEconomicsInlineParagraphFrame => {
       const { element, paragraphBounds } = measurement;
       const passageId = element.dataset["kpEconomicsTutorialPassage"] ?? "";
@@ -1684,43 +1646,6 @@
           }));
       if (animationStation) {
         const stationGeometry = readCachedAnimationStationGeometry();
-        const successorParagraph = element.nextElementSibling
-          ?.querySelector<HTMLElement>("p");
-        const successorPresence = successorParagraph === undefined ||
-            successorParagraph === null
-          ? 0
-          : projectKpAnimationStationReadingPresence({
-              paragraphAnchorPx:
-                successorParagraph.getBoundingClientRect().top,
-              geometry: stationGeometry
-            });
-        const presence = motionBlockId === undefined
-          ? projectKpAnimationStationCuePresence({
-              cueTopPx: paragraphBounds.top,
-              cueBottomPx: paragraphBounds.bottom,
-              geometry: stationGeometry
-            })
-          : projectKpAnimationStationMotionCuePresence({
-              cueTopPx: paragraphBounds.top,
-              cueBottomPx: paragraphBounds.bottom,
-              successorPresence,
-              geometry: stationGeometry
-            });
-        element.dataset["kpAnimationStationCuePhase"] = presence.phase;
-        element.dataset["kpAnimationStationCuePresence"] =
-          presence.presence.toFixed(4);
-        element.style.setProperty(
-          "--kp-animation-station-cue-presence",
-          presence.presence.toFixed(4)
-        );
-        element.style.setProperty(
-          "--kp-animation-station-cue-scale",
-          presence.scale.toFixed(4)
-        );
-        element.style.setProperty(
-          "--kp-animation-station-cue-pin-offset",
-          `${presence.pinOffsetPx.toFixed(3)}px`
-        );
         if (motionBlockId === undefined) {
           const stationPhase = projectKpEconomicsStationPhase({
             passageId,
@@ -1738,13 +1663,15 @@
             stationPhase.activePassageId ?? "";
         } else {
           const block = findKpEconomicsMotionBlock(motionBlockId)!;
+          const transitionAnchor = scrollAnchorForMotionBoundary(element);
           const scrollBlock = latestScrollProjection?.blocks.find(
             ({ id }) => id === motionBlockId
           );
           const stationPhase = projectKpEconomicsStationPhase({
             passageId,
             cueKind: "motion",
-            anchorPx: paragraphBounds.top,
+            anchorPx: transitionAnchor?.getBoundingClientRect().top ??
+              paragraphBounds.top,
             boundaries: kpEconomicsMotionStationPhaseBoundaries(
               stationGeometry
             ),
@@ -1927,9 +1854,9 @@
       const geometry = readCachedAnimationStationGeometry();
       return projectKpAnimationStationMotionCorridor({
         corridor: block.corridor,
-        // The graph and pinned instruction share this one semantic clock; only
-        // the post-motion settle interval may hand prose to its successor.
-        motionStartPx: geometry.cueExitEndY,
+        // The non-sticky runway keeps moving while its child seam pins, so
+        // native scroll remains the clock even though the visible line holds.
+        motionStartPx: geometry.graphBottomY,
         viewportHeightPx: window.innerHeight,
         runwayPx: geometry.motionDistancePx,
         settleRunwayPx: geometry.motionSettleDistancePx
@@ -1975,10 +1902,10 @@
           number("--kp-animation-station-reading-hold-vh", 10) / 100
         )),
         motionDistanceRatio: Math.max(0, Math.min(1,
-          number("--kp-animation-station-motion-corridor-vh", 50) / 100
+          number("--kp-animation-station-motion-corridor-vh", 28) / 100
         )),
         motionSettleDistanceRatio: Math.max(0, Math.min(1,
-          number("--kp-animation-station-motion-settle-vh", 10) / 100
+          number("--kp-animation-station-motion-settle-vh", 4) / 100
         ))
       }
     });
@@ -2004,6 +1931,7 @@
       "--kp-animation-station-graph-offset":
         geometry.graphTopY - geometry.railTopY,
       "--kp-animation-station-graph-height": geometry.graphHeightPx,
+      "--kp-animation-station-graph-bottom": geometry.graphBottomY,
       "--kp-animation-station-beat": geometry.beatDistancePx
     } as const;
     for (const [name, value] of Object.entries(properties)) {
@@ -2024,48 +1952,6 @@
       "--kp-animation-station-rail-entrance",
       projection.railPresence.toFixed(4)
     );
-  }
-
-  function writeAnimationStationExit(
-    projection: ReturnType<typeof projectKpAnimationStationExit>
-  ): void {
-    if (shell === undefined) return;
-    shell.dataset["kpAnimationStationRailExit"] =
-      projection.railProgress.toFixed(4);
-    shell.dataset["kpAnimationStationGraphExit"] =
-      projection.graphProgress.toFixed(4);
-    shell.dataset["kpAnimationStationExitPhase"] =
-      projection.graphProgress >= 0.999
-        ? "released"
-        : projection.graphProgress > 0.001
-          ? "withdrawing-stage"
-          : projection.railProgress > 0.001
-            ? "releasing-rails"
-            : "stationed";
-    const geometry = readCachedAnimationStationGeometry();
-    const properties = {
-      "--kp-animation-station-rail-exit": projection.railProgress,
-      "--kp-animation-station-graph-exit": projection.graphProgress,
-      "--kp-animation-station-exit-offset":
-        -geometry.usableHeightPx * 0.08 * projection.graphProgress,
-      "--kp-animation-station-rail-spread":
-        Math.min(64, window.innerWidth * 0.045) * projection.railProgress,
-      "--kp-animation-station-grid-presence": projection.gridPresence,
-      "--kp-animation-station-guide-presence": projection.guidePresence,
-      "--kp-animation-station-axis-presence": projection.axisPresence,
-      "--kp-animation-station-supply-presence": projection.supplyPresence,
-      "--kp-animation-station-demand-presence": projection.demandPresence,
-      "--kp-animation-station-point-presence": projection.pointPresence,
-      "--kp-animation-station-label-presence": projection.labelPresence
-    } as const;
-    for (const [name, value] of Object.entries(properties)) {
-      shell.style.setProperty(
-        name,
-        name.endsWith("offset") || name.endsWith("spread")
-          ? `${value.toFixed(3)}px`
-          : value.toFixed(4)
-      );
-    }
   }
 
   async function invalidateGeometryAfterPresentationChange(): Promise<void> {
@@ -2704,6 +2590,11 @@
     boundary: HTMLElement | null | undefined
   ): HTMLElement | undefined {
     if (boundary === undefined || boundary === null) return undefined;
+    if (animationStation) {
+      return boundary.querySelector<HTMLElement>(
+        "[data-kp-animation-station-transition]"
+      ) ?? boundary;
+    }
     return boundary.querySelector<HTMLElement>("p") ?? boundary;
   }
 
@@ -2824,8 +2715,7 @@
 {#snippet lessonPassage(
   passage: KpEconomicsDemandShiftLessonPassage,
   scrollCue: boolean,
-  motionBridgePosition?: "before" | "after",
-  animationStationReading?: "interlude" | "terminal"
+  motionBridgePosition?: "before" | "after"
 )}
   {@const renderedMotionBlock = findKpEconomicsMotionBlock(
     passage.motionBlockId
@@ -2858,9 +2748,8 @@
       ? true
       : undefined}
     data-kp-animation-station-cue={animationStation && scrollCue
-      ? true
+      ? "true"
       : undefined}
-    data-kp-animation-station-reading={animationStationReading}
     data-kp-inline-sticky-passage-role={scrollCue ? passage.role : undefined}
     data-kp-inline-sticky-paragraph-phase={inlineParagraphProjection?.phase}
     data-kp-inline-sticky-scene-travel={inlineParagraphProjection?.travel.toFixed(4)}
@@ -2894,9 +2783,6 @@
         ></span>
       {/each}
     {/if}
-    {#if animationStation && renderedMotionBlock !== undefined}
-      {@html animationStationProgressRailHtml[renderedMotionBlock.id]}
-    {/if}
     {#if passage.id === "prediction"}
       <p>{@html passage.paragraphs[0]!.html}</p>
       <details>
@@ -2929,6 +2815,15 @@
           {/if}
         </p>
       {/each}
+    {/if}
+    {#if animationStation && renderedMotionBlock !== undefined}
+      <div
+        class="kp-economics-tutorial__transition-runway"
+        data-kp-animation-station-transition={renderedMotionBlock.id}
+        aria-label={`${renderedMotionBlock.label} scroll transition`}
+      >
+        {@html animationStationProgressRailHtml[renderedMotionBlock.id]}
+      </div>
     {/if}
     {#if !scrollPassageLayout && renderedMotionBlock?.id === "demand-shift"}
       {@html motionScrubBarHtml["demand-shift"]}
@@ -3159,18 +3054,9 @@
                       {@render demandShiftMotionBridge()}
                     {:else if !motionBridgeEnabled ||
                         passage.id !== motionBridge?.afterPassageId}
-                      {@const stationReading = animationStation
-                        ? passage.id === "new-equilibrium"
-                          ? "interlude"
-                          : passage.id === "movement-along-supply"
-                            ? "terminal"
-                            : undefined
-                        : undefined}
                       {@render lessonPassage(
                         passage,
-                        stationReading === undefined,
-                        undefined,
-                        stationReading
+                        true
                       )}
                     {/if}
                   {/each}

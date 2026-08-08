@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v1",
+  "schemaVersion": "kp.economics-animation-station-preservation-baseline.v2",
   "capturedAt": "2026-08-07",
   "canonicalRoute": "/tutorials/economics/demand-shift/?layout=animation-station",
   "canonicalViewport": {
@@ -19,8 +19,7 @@
     "data-kp-motion-passage=\"demand-change\"",
     "data-kp-inline-sticky-stage",
     "data-kp-animation-station-cue",
-    "data-kp-animation-station-reading",
-    "kpAnimationStationLifecycle",
+    "data-kp-animation-station-transition",
     "data-kp-tutorial-stage=\"demand-shift-graph\""
   ],
   "geometryTokens": {
@@ -28,7 +27,8 @@
     "--kp-animation-station-rail-height": "70dvh",
     "--kp-animation-station-graph-offset": "2dvh",
     "--kp-animation-station-graph-height": "33dvh",
-    "--kp-animation-station-beat": "74dvh",
+    "--kp-animation-station-graph-bottom": "50dvh",
+    "--kp-animation-station-motion-corridor-vh": "28dvh",
     "--kp-animation-station-rail": "2px"
   },
   "canonicalGeometryPx": {
@@ -41,18 +41,18 @@
     "stageWidth": 672
   },
   "structure": {
-    "cueCount": 4,
+    "cueCount": 6,
     "motionBlockCount": 2,
-    "readingPassageCount": 2,
+    "transitionSeamCount": 2,
+    "readingPassageCount": 0,
     "scrubBarCount": 0
   },
   "screenshotAnchors": [
-    "station-ready.png",
-    "station-cue-focused.png",
-    "station-handoff.png",
-    "station-motion-midpoint.png",
-    "station-settled.png",
-    "station-exit.png",
+    "station-stacked-prose.png",
+    "station-transition-start.png",
+    "station-transition-midpoint.png",
+    "station-transition-settled.png",
+    "station-transition-reverse.png",
     "station-phone-reading.png",
     "station-reduced-motion.png"
   ],
@@ -66,12 +66,12 @@
     "activeLongestTaskMs": 100
   },
   "lastObservedPressure": {
-    "initialTransferBytes": 255555,
-    "initialScriptBytes": 153278,
+    "initialTransferBytes": 254862,
+    "initialScriptBytes": 152565,
     "initialResourceCount": 42,
     "cumulativeLayoutShift": 0,
-    "initialLongestTaskMs": 168,
-    "activeP95FrameMs": 34.4,
+    "initialLongestTaskMs": 181,
+    "activeP95FrameMs": 34.1,
     "activeLongestTaskCount": 0
   },
   "rollback": {

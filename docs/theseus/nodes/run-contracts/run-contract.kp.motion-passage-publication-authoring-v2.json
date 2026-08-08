@@ -346,7 +346,7 @@
     {
       "id": "s09",
       "title": "stacked-human-checkpoint",
-      "summary": "Revised stacked exemplar now retains motion prose and its stationary filled rail for the whole semantic playhead, hands off to readable prose during settle, releases one retained graph for an ordinary reading interval, revives that same graph for supply motion, and exits again into document flow. Focused semantics, styles, Chromium lifecycle, phone, reduced motion, light theme, deep link, progressive enhancement, and production build pass. Mandatory human checkpoint reached; no shared promotion performed.",
+      "summary": "Human-checkpoint revision replaces opacity, pinning, and scene release/revival with six ordinary stacked passages plus two 28vh transition runways. Each read-only progress seam pins at the opaque graph's lower edge while native scroll drives the existing shared playhead; forward, reverse, direct-link, phone, reduced-motion, theme, no-JS, and production checks pass. Stop remains HUMAN_CHECKPOINT; startup budget pressure is queued for s10-s18.",
       "status": "complete"
     },
     {

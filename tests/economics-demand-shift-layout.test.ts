@@ -2,14 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  projectKpAnimationStationCuePresence,
   projectKpAnimationStationEntrance,
-  projectKpAnimationStationExit,
   projectKpAnimationStationGeometry,
-  projectKpAnimationStationMotionCuePresence,
   projectKpAnimationStationMotionCorridor,
-  projectKpAnimationStationReadingCycle,
-  projectKpAnimationStationReadingPresence,
   projectKpInlineStickyLessonLayout,
   projectKpInlineStickyParagraph,
   projectKpInlineStickyParagraphMotionCorridor,
@@ -561,10 +556,10 @@ test("animation station projects one usable-viewport rhythm", () => {
     cuePinStartY: 490,
     cuePinEndY: 370,
     cueExitEndY: 344.4,
-    motionDistancePx: 400,
-    motionScrubEndY: 24.4,
-    motionSettleDistancePx: 80,
-    motionEndY: -55.6,
+    motionDistancePx: 224,
+    motionScrubEndY: 258,
+    motionSettleDistancePx: 32,
+    motionEndY: 226,
     beatDistancePx: 592,
     railExitEndY: 674,
     graphExitStartY: 650,
@@ -611,173 +606,7 @@ test("animation station rails wait for the graph's local latch", () => {
   assert.deepEqual(releasedAbove, latched);
 });
 
-test("animation station cue presence is reversible at every boundary", () => {
-  const geometry = projectKpAnimationStationGeometry({
-    viewportHeightPx: 800
-  });
-  const samples = [
-    { cueTopPx: 720, cueBottomPx: 800 },
-    { cueTopPx: 600, cueBottomPx: 680 },
-    { cueTopPx: 540, cueBottomPx: 620 },
-    { cueTopPx: 480, cueBottomPx: 560 },
-    { cueTopPx: 440, cueBottomPx: 520 },
-    { cueTopPx: 400, cueBottomPx: 480 },
-    { cueTopPx: 307.2, cueBottomPx: 387.2 },
-    { cueTopPx: 294.4, cueBottomPx: 374.4 }
-  ].map(({ cueTopPx, cueBottomPx }) =>
-    projectKpAnimationStationCuePresence({
-      cueTopPx,
-      cueBottomPx,
-      geometry
-    })
-  );
-
-  assert.deepEqual(samples.map(({ phase }) => phase), [
-    "waiting",
-    "waiting",
-    "materializing",
-    "bright",
-    "bright",
-    "pinned",
-    "dissolving",
-    "gone"
-  ]);
-  assert.deepEqual(samples.map(({ presence }) =>
-    Math.round(presence * 1_000) / 1_000), [
-    0, 0, 0.5, 1, 1, 1, 0.5, 0
-  ]);
-  assert.deepEqual(samples.map(({ scale }) =>
-    Math.round(scale * 1_000) / 1_000), [
-    0.95, 0.95, 0.975, 1, 1, 1, 0.975, 0.95
-  ]);
-  assert.deepEqual(samples.map(({ pinOffsetPx }) =>
-    Math.round(pinOffsetPx * 1_000) / 1_000), [
-    0, 0, 0, 0, 0, 40, 132.8, 145.6
-  ]);
-  assert.deepEqual(
-    [...samples].reverse(),
-    [
-      { cueTopPx: 294.4, cueBottomPx: 374.4 },
-      { cueTopPx: 307.2, cueBottomPx: 387.2 },
-      { cueTopPx: 400, cueBottomPx: 480 },
-      { cueTopPx: 440, cueBottomPx: 520 },
-      { cueTopPx: 480, cueBottomPx: 560 },
-      { cueTopPx: 540, cueBottomPx: 620 },
-      { cueTopPx: 600, cueBottomPx: 680 },
-      { cueTopPx: 720, cueBottomPx: 800 }
-    ].map(({ cueTopPx, cueBottomPx }) =>
-      projectKpAnimationStationCuePresence({
-        cueTopPx,
-        cueBottomPx,
-        geometry
-      })
-    )
-  );
-});
-
-test("animation station motion prose stays pinned through semantic motion", () => {
-  const geometry = projectKpAnimationStationGeometry({
-    viewportHeightPx: 800
-  });
-  const duringScrub = projectKpAnimationStationMotionCuePresence({
-    cueTopPx: 100,
-    cueBottomPx: 180,
-    successorPresence: 0.8,
-    geometry
-  });
-  const duringSettle = projectKpAnimationStationMotionCuePresence({
-    cueTopPx: -50,
-    cueBottomPx: 30,
-    successorPresence: 0.8,
-    geometry
-  });
-
-  assert.equal(duringScrub.phase, "pinned");
-  assert.equal(duringScrub.presence, 1);
-  assert.equal(duringScrub.pinOffsetPx, geometry.cuePinStartY - 100);
-  assert.ok(Math.abs(duringSettle.presence - 0.2) < 1e-12);
-  assert.equal(duringSettle.phase, "dissolving");
-});
-
-test("animation station reading release revives the same stage directly", () => {
-  const geometry = projectKpAnimationStationGeometry({
-    viewportHeightPx: 800
-  });
-  assert.equal(projectKpAnimationStationReadingPresence({
-    paragraphAnchorPx: 620,
-    geometry
-  }), 0.5);
-
-  const reading = projectKpAnimationStationReadingCycle({
-    readingCueTopPx: 480,
-    revivalCueTopPx: 800,
-    terminalCueTopPx: 800,
-    geometry
-  });
-  const reviving = projectKpAnimationStationReadingCycle({
-    readingCueTopPx: 480,
-    revivalCueTopPx: 620,
-    terminalCueTopPx: 800,
-    geometry
-  });
-  const revived = projectKpAnimationStationReadingCycle({
-    readingCueTopPx: 480,
-    revivalCueTopPx: 560,
-    terminalCueTopPx: 800,
-    geometry
-  });
-  const terminal = projectKpAnimationStationReadingCycle({
-    readingCueTopPx: 480,
-    revivalCueTopPx: 560,
-    terminalCueTopPx: 540,
-    geometry
-  });
-
-  assert.equal(reading.phase, "reading");
-  assert.equal(reading.exit.graphProgress, 1);
-  assert.equal(reviving.phase, "reviving");
-  assert.equal(reviving.revivalProgress, 0.5);
-  assert.equal(reviving.exit.graphProgress, 0.5);
-  assert.equal(revived.phase, "revived");
-  assert.equal(revived.exit.graphProgress, 0);
-  assert.equal(terminal.phase, "terminal-release");
-  assert.equal(terminal.exit.graphProgress, 0.5);
-});
-
-test("animation station release passage staggers rails before graph roles", () => {
-  const geometry = projectKpAnimationStationGeometry({
-    viewportHeightPx: 800
-  });
-  const initial = projectKpAnimationStationExit({
-    releaseCueTopPx: 680,
-    geometry
-  });
-  const midpoint = projectKpAnimationStationExit({
-    releaseCueTopPx: 540,
-    geometry
-  });
-  const final = projectKpAnimationStationExit({
-    releaseCueTopPx: 480,
-    geometry
-  });
-
-  assert.equal(initial.railProgress, 0);
-  assert.equal(initial.graphProgress, 0);
-  assert.deepEqual(Object.values(initial).slice(2), [1, 1, 1, 1, 1, 1, 1]);
-  assert.equal(midpoint.railProgress, 1);
-  assert.equal(midpoint.graphProgress, 0.5);
-  assert.ok(midpoint.gridPresence < midpoint.guidePresence);
-  assert.ok(midpoint.guidePresence < midpoint.axisPresence);
-  assert.ok(midpoint.axisPresence < midpoint.supplyPresence);
-  assert.ok(midpoint.supplyPresence < midpoint.demandPresence);
-  assert.ok(midpoint.demandPresence < midpoint.pointPresence);
-  assert.ok(midpoint.pointPresence < midpoint.labelPresence);
-  assert.equal(final.railProgress, 1);
-  assert.equal(final.graphProgress, 1);
-  assert.deepEqual(Object.values(final).slice(2), [0, 0, 0, 0, 0, 0, 0]);
-});
-
-test("animation station spends its graph runway on a deterministic cue handoff", () => {
+test("animation station spends its graph runway on a deterministic transition seam", () => {
   const corridor = projectKpAnimationStationMotionCorridor({
     corridor: {
       startViewportRatio: 0.72,

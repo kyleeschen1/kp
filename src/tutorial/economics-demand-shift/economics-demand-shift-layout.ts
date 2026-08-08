@@ -78,48 +78,11 @@ export interface KpAnimationStationGeometryProjection {
   readonly graphExitEndY: number;
 }
 
-export interface KpAnimationStationCuePresenceProjection {
-  readonly phase:
-    | "waiting"
-    | "materializing"
-    | "bright"
-    | "pinned"
-    | "dissolving"
-    | "gone";
-  readonly presence: number;
-  readonly scale: number;
-  readonly pinOffsetPx: number;
-}
-
 export interface KpAnimationStationEntranceProjection {
   readonly phase: "approaching" | "latched";
   readonly distanceToLatchPx: number;
   readonly stageProgress: number;
   readonly railPresence: number;
-}
-
-export interface KpAnimationStationExitProjection {
-  readonly railProgress: number;
-  readonly graphProgress: number;
-  readonly gridPresence: number;
-  readonly guidePresence: number;
-  readonly axisPresence: number;
-  readonly supplyPresence: number;
-  readonly demandPresence: number;
-  readonly pointPresence: number;
-  readonly labelPresence: number;
-}
-
-export interface KpAnimationStationReadingCycleProjection {
-  readonly phase:
-    | "stationed"
-    | "releasing-to-reading"
-    | "reading"
-    | "reviving"
-    | "revived"
-    | "terminal-release";
-  readonly revivalProgress: number;
-  readonly exit: KpAnimationStationExitProjection;
 }
 
 export interface KpEconomicsAnimationStationRhythm {
@@ -151,8 +114,8 @@ Readonly<KpEconomicsAnimationStationRhythm> = Object.freeze({
   cuePinStartRatio: 0.55,
   cuePinDistanceRatio: 0.15,
   cueExitGraphRatio: 0.6,
-  motionDistanceRatio: 0.5,
-  motionSettleDistanceRatio: 0.1,
+  motionDistanceRatio: 0.28,
+  motionSettleDistanceRatio: 0.04,
   beatDistanceRatio: 0.74,
   railExitEndRatio: 0.78,
   graphExitStartRatio: 0.75,
@@ -743,15 +706,15 @@ export function projectKpAnimationStationMotionCorridor(input: {
   const activeKeyframes = input.corridor.keyframes.filter(
     ({ travel }) => travel > authoredMotionStart
   );
-  const handoffEnd = 0.02;
-  const settleStart = clamp(1 - settleRunway / runway, handoffEnd, 1);
+  const onsetHoldEnd = 0.02;
+  const settleStart = clamp(1 - settleRunway / runway, onsetHoldEnd, 1);
 
-  // The cue relinquishes attention first; the remaining local interval is the
-  // existing semantic motion sampled over one stage-height of native scroll.
+  // A two-percent threshold makes the seam visibly settle before the existing
+  // semantic motion consumes the rest of its native-scroll runway.
   const projected = activeKeyframes.map(({ travel, progress }) => ({
-    travel: handoffEnd +
+    travel: onsetHoldEnd +
       ((travel - authoredMotionStart) / authoredMotionSpan) *
-        (settleStart - handoffEnd),
+        (settleStart - onsetHoldEnd),
     progress
   }));
   return Object.freeze({
@@ -760,7 +723,7 @@ export function projectKpAnimationStationMotionCorridor(input: {
     endViewportRatio: (motionStart - runway) / viewportHeight,
     keyframes: Object.freeze([
       Object.freeze({ travel: 0, progress: firstProgress }),
-      Object.freeze({ travel: handoffEnd, progress: firstProgress }),
+      Object.freeze({ travel: onsetHoldEnd, progress: firstProgress }),
       ...projected.map((keyframe) => Object.freeze(keyframe)),
       Object.freeze({ travel: 1, progress: finalProgress })
     ])
@@ -834,9 +797,9 @@ export function projectKpAnimationStationGeometry(input: {
     cueExitEndY,
     motionDistancePx,
     motionScrubEndY:
-      cueExitEndY - (motionDistancePx - motionSettleDistancePx),
+      graphBottomY - (motionDistancePx - motionSettleDistancePx),
     motionSettleDistancePx,
-    motionEndY: cueExitEndY - motionDistancePx,
+    motionEndY: graphBottomY - motionDistancePx,
     beatDistancePx: usableHeight * clamp(rhythm.beatDistanceRatio, 0.1, 1),
     railExitEndY: y(rhythm.railExitEndRatio),
     graphExitStartY: y(rhythm.graphExitStartRatio),
@@ -871,230 +834,6 @@ export function projectKpAnimationStationEntrance(input: {
     // Rails announce the station, not an approaching embedded figure. Their
     // later entrance choreography may refine this binary ownership boundary.
     railPresence: latched ? 1 : 0
-  });
-}
-
-export function projectKpAnimationStationCuePresence(input: {
-  readonly cueTopPx: number;
-  readonly cueBottomPx: number;
-  readonly geometry: KpAnimationStationGeometryProjection;
-}): KpAnimationStationCuePresenceProjection {
-  const cueTop = Number.isFinite(input.cueTopPx)
-    ? input.cueTopPx
-    : input.geometry.usableBottomPx;
-  const cueBottom = Number.isFinite(input.cueBottomPx)
-    ? input.cueBottomPx
-    : cueTop;
-  const geometry = input.geometry;
-  const boundaryEpsilon = 1e-6;
-  let phase: KpAnimationStationCuePresenceProjection["phase"];
-  let presence: number;
-  let pinOffsetPx = 0;
-  if (cueBottom >= geometry.cueRevealStartY) {
-    phase = "waiting";
-    presence = 0;
-  } else if (cueBottom > geometry.cueRevealEndY) {
-    phase = "materializing";
-    presence = smoothstep(clamp(
-      (geometry.cueRevealStartY - cueBottom) /
-        Math.max(1, geometry.cueRevealStartY - geometry.cueRevealEndY),
-      0,
-      1
-    ));
-  } else if (cueTop >= geometry.cuePinStartY - boundaryEpsilon) {
-    phase = "bright";
-    presence = 1;
-  } else if (cueTop >= geometry.cuePinEndY - boundaryEpsilon) {
-    phase = "pinned";
-    presence = 1;
-    pinOffsetPx = geometry.cuePinStartY - cueTop;
-  } else if (cueTop > geometry.cueExitEndY) {
-    phase = "dissolving";
-    pinOffsetPx = geometry.cuePinStartY - cueTop;
-    presence = smoothstep(clamp(
-      (cueTop - geometry.cueExitEndY) /
-        Math.max(1, geometry.cuePinEndY - geometry.cueExitEndY),
-      0,
-      1
-    ));
-  } else {
-    phase = "gone";
-    presence = 0;
-    pinOffsetPx = geometry.cuePinStartY - geometry.cueExitEndY;
-  }
-  return Object.freeze({
-    phase,
-    presence,
-    scale: 0.95 + presence * 0.05,
-    pinOffsetPx
-  });
-}
-
-/** Keeps a motion instruction and its rail fixed until semantic motion ends. */
-export function projectKpAnimationStationMotionCuePresence(input: {
-  readonly cueTopPx: number;
-  readonly cueBottomPx: number;
-  readonly successorPresence: number;
-  readonly geometry: KpAnimationStationGeometryProjection;
-}): KpAnimationStationCuePresenceProjection {
-  const base = projectKpAnimationStationCuePresence(input);
-  const cueTop = Number.isFinite(input.cueTopPx)
-    ? input.cueTopPx
-    : input.geometry.usableBottomPx;
-  if (cueTop >= input.geometry.cuePinStartY) return base;
-
-  const presence = cueTop >= input.geometry.motionScrubEndY
-    ? 1
-    : 1 - clamp(input.successorPresence, 0, 1);
-  return Object.freeze({
-    phase: presence <= Number.EPSILON
-      ? "gone"
-      : presence >= 1 - Number.EPSILON
-        ? "pinned"
-        : "dissolving",
-    presence,
-    scale: 0.95 + presence * 0.05,
-    pinOffsetPx: input.geometry.cuePinStartY - cueTop
-  });
-}
-
-/** Reading prose enters normally; unlike a station cue, it is never pinned. */
-export function projectKpAnimationStationReadingPresence(input: {
-  readonly paragraphAnchorPx: number;
-  readonly geometry: KpAnimationStationGeometryProjection;
-}): number {
-  const anchor = Number.isFinite(input.paragraphAnchorPx)
-    ? input.paragraphAnchorPx
-    : input.geometry.usableBottomPx;
-  if (anchor >= input.geometry.cueRevealStartY) return 0;
-  if (anchor <= input.geometry.cueRevealEndY) return 1;
-  return smoothstep(clamp(
-    (input.geometry.cueRevealStartY - anchor) /
-      Math.max(1, input.geometry.cueRevealStartY -
-        input.geometry.cueRevealEndY),
-    0,
-    1
-  ));
-}
-
-export function projectKpAnimationStationExit(input: {
-  readonly releaseCueTopPx: number;
-  readonly geometry: KpAnimationStationGeometryProjection;
-}): KpAnimationStationExitProjection {
-  const cueTop = Number.isFinite(input.releaseCueTopPx)
-    ? input.releaseCueTopPx
-    : input.geometry.usableBottomPx;
-  const geometry = input.geometry;
-  const descendingProgress = (startY: number, endY: number): number =>
-    smoothstep(clamp(
-      (startY - cueTop) / Math.max(1, startY - endY),
-      0,
-      1
-    ));
-  const railProgress = descendingProgress(
-    geometry.railBottomY,
-    geometry.railExitEndY
-  );
-  const graphProgress = descendingProgress(
-    geometry.graphExitStartY,
-    geometry.graphExitEndY
-  );
-  const presence = (start: number, end: number): number => 1 - smoothstep(
-    clamp((graphProgress - start) / Math.max(Number.EPSILON, end - start), 0, 1)
-  );
-
-  return Object.freeze({
-    railProgress,
-    graphProgress,
-    gridPresence: presence(0, 0.55),
-    guidePresence: presence(0.08, 0.63),
-    axisPresence: presence(0.16, 0.71),
-    supplyPresence: presence(0.24, 0.79),
-    demandPresence: presence(0.32, 0.87),
-    pointPresence: presence(0.4, 0.95),
-    labelPresence: presence(0.48, 1)
-  });
-}
-
-/**
- * Releases one retained scene for ordinary reading, then reverses that exact
- * release as the next motion cue arrives. A later reading passage can perform
- * the terminal release without constructing a second graph instance.
- */
-export function projectKpAnimationStationReadingCycle(input: {
-  readonly readingCueTopPx: number;
-  readonly revivalCueTopPx: number;
-  readonly terminalCueTopPx: number;
-  readonly geometry: KpAnimationStationGeometryProjection;
-}): KpAnimationStationReadingCycleProjection {
-  const readingExit = projectKpAnimationStationExit({
-    releaseCueTopPx: input.readingCueTopPx,
-    geometry: input.geometry
-  });
-  const terminalExit = projectKpAnimationStationExit({
-    releaseCueTopPx: input.terminalCueTopPx,
-    geometry: input.geometry
-  });
-  const revivalProgress = projectKpAnimationStationReadingPresence({
-    paragraphAnchorPx: input.revivalCueTopPx,
-    geometry: input.geometry
-  });
-  const revivedExit = interpolateAnimationStationExit(
-    readingExit,
-    emptyAnimationStationExit(),
-    revivalProgress
-  );
-  const terminalStarted = terminalExit.railProgress > Number.EPSILON ||
-    terminalExit.graphProgress > Number.EPSILON;
-  const exit = terminalStarted ? terminalExit : revivedExit;
-  const phase: KpAnimationStationReadingCycleProjection["phase"] =
-    terminalStarted
-      ? "terminal-release"
-      : revivalProgress >= 1 - Number.EPSILON
-        ? "revived"
-        : revivalProgress > Number.EPSILON
-          ? "reviving"
-          : readingExit.graphProgress >= 1 - Number.EPSILON
-            ? "reading"
-            : readingExit.railProgress > Number.EPSILON ||
-                readingExit.graphProgress > Number.EPSILON
-              ? "releasing-to-reading"
-              : "stationed";
-  return Object.freeze({ phase, revivalProgress, exit });
-}
-
-function emptyAnimationStationExit(): KpAnimationStationExitProjection {
-  return Object.freeze({
-    railProgress: 0,
-    graphProgress: 0,
-    gridPresence: 1,
-    guidePresence: 1,
-    axisPresence: 1,
-    supplyPresence: 1,
-    demandPresence: 1,
-    pointPresence: 1,
-    labelPresence: 1
-  });
-}
-
-function interpolateAnimationStationExit(
-  from: KpAnimationStationExitProjection,
-  to: KpAnimationStationExitProjection,
-  progress: number
-): KpAnimationStationExitProjection {
-  const t = clamp(progress, 0, 1);
-  const interpolate = (start: number, end: number): number =>
-    start + (end - start) * t;
-  return Object.freeze({
-    railProgress: interpolate(from.railProgress, to.railProgress),
-    graphProgress: interpolate(from.graphProgress, to.graphProgress),
-    gridPresence: interpolate(from.gridPresence, to.gridPresence),
-    guidePresence: interpolate(from.guidePresence, to.guidePresence),
-    axisPresence: interpolate(from.axisPresence, to.axisPresence),
-    supplyPresence: interpolate(from.supplyPresence, to.supplyPresence),
-    demandPresence: interpolate(from.demandPresence, to.demandPresence),
-    pointPresence: interpolate(from.pointPresence, to.pointPresence),
-    labelPresence: interpolate(from.labelPresence, to.labelPresence)
   });
 }
 

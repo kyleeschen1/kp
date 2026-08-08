@@ -9,7 +9,7 @@ import baseline from
 test("animation-station preservation baseline freezes ownership and anchors", async () => {
   assert.equal(
     baseline.schemaVersion,
-    "kp.economics-animation-station-preservation-baseline.v1"
+    "kp.economics-animation-station-preservation-baseline.v2"
   );
   assert.equal(
     baseline.canonicalRoute,
@@ -41,9 +41,10 @@ test("animation-station preservation baseline freezes ownership and anchors", as
   }
 
   assert.deepEqual(baseline.structure, {
-    cueCount: 4,
+    cueCount: 6,
     motionBlockCount: 2,
-    readingPassageCount: 2,
+    transitionSeamCount: 2,
+    readingPassageCount: 0,
     scrubBarCount: 0
   });
   assert.deepEqual(baseline.canonicalGeometryPx, {

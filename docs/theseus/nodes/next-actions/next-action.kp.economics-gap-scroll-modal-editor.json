@@ -141,11 +141,60 @@
       "scope": "repository-wide pre-existing architecture gate",
       "checkedAt": "2026-08-08T01:50:41.747Z",
       "notes": "Unrelated frozen dependency-direction failure: src/reader/app/fraction-composition-salience-adapter.ts imports compiler/fraction-composition-salience-inventory.ts"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 revision: 79 deterministic lesson, seam, publication, salience, runtime, and preservation checks",
+      "checkedAt": "2026-08-08T05:53:08.452Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "s09 revision: 17 stylesheet ownership and visual baseline checks",
+      "checkedAt": "2026-08-08T05:53:09.619Z"
+    },
+    {
+      "command": "npm run visual:economics-animation-station",
+      "status": "passed",
+      "scope": "s09 revision: 7 Chromium station checks passed; one explicitly superseded discovery test remains skipped",
+      "checkedAt": "2026-08-08T05:53:10.575Z"
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s09 revision: 12 Chromium tutorial integration checks",
+      "checkedAt": "2026-08-08T05:53:11.523Z"
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "s09 revision: retained session direct-seek and rewind parity",
+      "checkedAt": "2026-08-08T05:53:12.628Z"
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "s09 revision: 59 page-scale, lifecycle, shared-coordinator, and static fallback checks",
+      "checkedAt": "2026-08-08T05:53:13.733Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s09 revision: typecheck, publication parity, and production build; economics entry 182.70 kB minified and 33.77 kB gzip",
+      "checkedAt": "2026-08-08T05:53:14.881Z"
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "s09 revision performance pressure",
+      "checkedAt": "2026-08-08T05:53:15.917Z",
+      "notes": "Known startup budget remains for slices 10-18: transfer 254862 B over 250000, script 152565 B over 150000, longest startup task 181 ms over 150. Active p95 34.1 ms, zero active long tasks, CLS 0, two geometry reads per frame, no SVG reconstruction or subtree replacement."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Checkpoint revision implemented on the canonical animation-station route: 15vh cue hold, stationary percentage rail, motion prose retained through semantic completion, synchronized reading handoff, ordinary reading release, deterministic revival of the same retained graph, second supply-motion passage, and terminal return to document flow. Awaiting required human visual approval before shared-contract promotion."
+    "summary": "Stacked human-checkpoint revision now uses six ordinary visible passages and two sticky transition seams. Each 28vh native-scroll runway advances the existing semantic playhead, retains one opaque graph, and reverses exactly; release/revival and paragraph-presence machinery was removed. Remaining contract work begins at startup attribution after human approval."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
