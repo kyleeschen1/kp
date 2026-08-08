@@ -22,6 +22,9 @@ import {
 import {
   renderKpEconomicsRetainedInlineLatex
 } from "../../rendering/economics-equilibrium-retained-math.ts";
+import {
+  kpEconomicsMotionBlocks
+} from "./economics-demand-shift-motion-blocks.ts";
 
 export function renderKpEconomicsDemandShiftStaticStage(): string {
   const model = createKpSupplyDemandEquilibriumModel();
@@ -55,8 +58,11 @@ export function renderKpEconomicsDemandShiftStaticStage(): string {
     title: "Supply and demand equilibrium",
     contentHtml
   });
+  const initialBlock = kpEconomicsMotionBlocks[0]!;
+  const initialCheckpoint = initialBlock.checkpoints[0]!;
   return `<figure class="kp-economics-static-publication__stage" data-kp-economics-static-stage data-kp-economics-static-stage-state="initial">
     <div class="kp-economics-static-publication__stage-slot" data-kp-economics-static-stage-slot>${svg}</div>
     <figcaption>Initial supply and demand equilibrium before demand increases.</figcaption>
+    <p class="kp-economics-static-publication__accessible-state" data-kp-economics-accessible-state role="status" aria-live="polite" aria-atomic="true">${initialBlock.label}. ${initialCheckpoint.label}. ${initialCheckpoint.description}</p>
   </figure>`;
 }

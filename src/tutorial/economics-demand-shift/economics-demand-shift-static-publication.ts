@@ -52,6 +52,7 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication__stage { margin: 2rem auto; max-width: 46rem; }
     .kp-economics-static-publication__stage-slot { aspect-ratio: 640 / 420; width: 100%; }
     .kp-economics-static-publication__stage figcaption { font-size: 0.875rem; margin-top: 0.5rem; }
+    .kp-economics-static-publication__accessible-state { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); border: 0; white-space: nowrap; }
     .kp-economics-static-publication .editor-graph-stage { display: block; height: 100%; width: 100%; }
     .kp-economics-static-publication .editor-graph-stage__plot-plane { fill: transparent; }
     .kp-economics-static-publication [data-kp-editor-graph-axis] { stroke: var(--kp-graph-axis, currentColor); stroke-width: var(--kp-graph-stroke-axis, 1px); }

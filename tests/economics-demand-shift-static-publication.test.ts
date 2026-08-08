@@ -52,4 +52,8 @@ test("static economics publication reserves one initial SVG and final controls",
   assert.match(html, /data-kp-axis-arrow-length="9"/);
   assert.equal((html.match(/data-kp-tutorial-progress-rail=/g) ?? []).length, 2);
   assert.equal((html.match(/<kp-tutorial-scrub-bar/g) ?? []).length, 2);
+  assert.match(html, /data-kp-economics-accessible-state/);
+  assert.match(html, /role="status"/);
+  assert.match(html, /aria-live="polite"/);
+  assert.match(html, /Supply and demand meet at quantity six hundred boxes/);
 });

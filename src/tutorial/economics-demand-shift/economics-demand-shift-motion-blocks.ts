@@ -42,7 +42,9 @@ export interface KpEconomicsMotionSceneState {
 }
 
 export interface KpEconomicsMotionCheckpoint
-  extends KpTutorialMotionCheckpoint<KpEconomicsMotionCheckpointId> {}
+  extends KpTutorialMotionCheckpoint<KpEconomicsMotionCheckpointId> {
+  readonly description: string;
+}
 
 export interface KpEconomicsMotionCorridorKeyframe
   extends KpTutorialMotionCorridorKeyframe {}
@@ -99,9 +101,24 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
       entry: scene("initial", "graph-only"),
       settled: scene("shifted", "graph-only"),
       checkpoints: [
-        checkpoint("shift-ready", "Before the shift", 0),
-        checkpoint("shift-handoff", "Equilibrium handoff", 0.72),
-        checkpoint("shift-settled", "New equilibrium", 1)
+        checkpoint(
+          "shift-ready",
+          "Before the shift",
+          0,
+          "Supply and demand meet at quantity six hundred boxes and price eight dollars."
+        ),
+        checkpoint(
+          "shift-handoff",
+          "Equilibrium handoff",
+          0.72,
+          "Demand is moving right while the supply curve remains fixed."
+        ),
+        checkpoint(
+          "shift-settled",
+          "New equilibrium",
+          1,
+          "Supply and demand now meet at quantity eight hundred boxes and price ten dollars."
+        )
       ],
       corridor: corridor([
         [0, 0],
@@ -119,9 +136,24 @@ export const kpEconomicsMotionBlocks: readonly KpEconomicsMotionBlock[] =
       entry: scene("shifted", "graph-only"),
       settled: scene("shifted", "comparison-verified"),
       checkpoints: [
-        checkpoint("movement-ready", "Hold supply fixed", 0),
-        checkpoint("movement-traced", "Trace movement along supply", 0.58),
-        checkpoint("movement-verified", "Compare price and quantity", 1)
+        checkpoint(
+          "movement-ready",
+          "Hold supply fixed",
+          0,
+          "The market begins at the new equilibrium while the supply curve remains unchanged."
+        ),
+        checkpoint(
+          "movement-traced",
+          "Trace movement along supply",
+          0.58,
+          "The equilibrium point moves upward and rightward along the unchanged supply curve."
+        ),
+        checkpoint(
+          "movement-verified",
+          "Compare price and quantity",
+          1,
+          "Price and quantity are both higher even though the supply curve did not shift."
+        )
       ],
       corridor: corridor([
         [0, 0],
@@ -236,9 +268,10 @@ function scene(
 function checkpoint(
   id: KpEconomicsMotionCheckpointId,
   label: string,
-  progress: number
+  progress: number,
+  description: string
 ): KpEconomicsMotionCheckpoint {
-  return Object.freeze({ id, label, progress });
+  return Object.freeze({ id, label, progress, description });
 }
 
 function motionBlock(

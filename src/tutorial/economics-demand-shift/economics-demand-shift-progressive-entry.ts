@@ -108,6 +108,10 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     publicationRoot,
     "[data-kp-economics-static-stage]"
   );
+  const accessibleState = requiredElement<HTMLElement>(
+    publicationRoot,
+    "[data-kp-economics-accessible-state]"
+  );
   const model = createKpSupplyDemandEquilibriumModel();
   const animation = createEconomicsEquilibriumAnimationAsset(model);
   const viewport = createKpEditorGraphSvgViewportModel(animation);
@@ -141,6 +145,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   let animationFrame: number | undefined;
   let playbackStartedAt = 0;
   let playbackStartedProgress = 0;
+  let accessibleStateKey = "";
 
   defineKpTutorialScrubBar();
   defineKpTutorialProgressRail();
@@ -189,6 +194,11 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       boundedProgress(
         (motion.supplyMovementProgress - 0.12) / 0.46
       ).toFixed(3)
+    );
+    accessibleStateKey = syncAccessibleState(
+      accessibleState,
+      playback,
+      accessibleStateKey
     );
     syncControls(publicationRoot, playback, motion.blocks);
   };
@@ -268,6 +278,14 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
 
   const stepCheckpoint = (event: Event, direction: -1 | 1): void => {
     const blockId = blockForEvent(event);
+    if (blockId === undefined) return;
+    stepBlockCheckpoint(blockId, direction);
+  };
+
+  const stepBlockCheckpoint = (
+    blockId: KpEconomicsMotionBlockId,
+    direction: -1 | 1
+  ): void => {
     const block = findKpEconomicsMotionBlock(blockId);
     if (block === undefined) return;
     stopPlayback();
@@ -284,6 +302,18 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
 
   const onPrevious = (event: Event): void => stepCheckpoint(event, -1);
   const onNext = (event: Event): void => stepCheckpoint(event, 1);
+  const onKeydown = (event: KeyboardEvent): void => {
+    if (
+      !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
+      (event.key !== "ArrowLeft" && event.key !== "ArrowRight") ||
+      isEditableTarget(event.target)
+    ) return;
+    event.preventDefault();
+    stepBlockCheckpoint(
+      playback.blockId,
+      event.key === "ArrowLeft" ? -1 : 1
+    );
+  };
   const navigationController = createKpTutorialNavigationController({
     root: publicationRoot,
     toc,
@@ -342,6 +372,10 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
     onNavigationAction
   );
+  publicationRoot.ownerDocument.defaultView?.addEventListener(
+    "keydown",
+    onKeydown
+  );
   restoreInitialDestination();
 
   const dispose = (): void => {
@@ -369,6 +403,10 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
       onNavigationAction
     );
+    publicationRoot.ownerDocument.defaultView?.removeEventListener(
+      "keydown",
+      onKeydown
+    );
     navigationController.dispose();
     toc.stopObservingReadingOutline();
     // Teardown restores the deterministic publication state without deleting
@@ -383,6 +421,30 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   };
   enhancementSessions.set(input.root, dispose);
   return dispose;
+}
+
+function syncAccessibleState(
+  element: HTMLElement,
+  playback: KpPublishedEconomicsPlayback,
+  previousKey: string
+): string {
+  const block = findKpEconomicsMotionBlock(playback.blockId);
+  if (block === undefined) return previousKey;
+  const checkpoint = [...block.checkpoints].reverse().find(
+    ({ progress }) => progress <= playback.progress + 0.001
+  ) ?? block.checkpoints[0]!;
+  const key = `${block.id}:${checkpoint.id}`;
+  if (key === previousKey) return key;
+  element.textContent = `${block.label}. ${checkpoint.label}. ${checkpoint.description}`;
+  return key;
+}
+
+function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  return target.isContentEditable ||
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement;
 }
 
 function syncControls(

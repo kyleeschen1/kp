@@ -153,7 +153,8 @@
     {
       "id": "r18",
       "title": "no-js-accessibility-hardening",
-      "status": "planned"
+      "summary": "The published route now exposes one checkpoint-driven polite graph-state description, implements its advertised Alt+Arrow semantic checkpoint commands without capturing editable fields, and has a dedicated browser gate for searchable no-JavaScript phone navigation, native disclosure, reduced motion, forced colors, visible focus, and semantic graph/control roles. Provisional layout choreography is unchanged.",
+      "status": "complete"
     },
     {
       "id": "r19",
