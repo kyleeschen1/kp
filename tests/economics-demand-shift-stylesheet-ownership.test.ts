@@ -33,6 +33,7 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
   assert.deepEqual(
     [...entry.matchAll(/@import "([^"]+)";/g)].map((match) => match[1]),
     [
+      "../kp-tutorial-foundation.css",
       "../kp-tutorial-lesson-shell.css",
       "../kp-tutorial-motion-bridge.css",
       "../kp-tutorial-semantic-transit.css",
@@ -75,7 +76,22 @@ test("economics learner entry loads one route-local stylesheet facade", () => {
     .filter((path) => path.startsWith("./"));
 
   assert.deepEqual(cssImports, ["./economics-demand-shift-tutorial.css"]);
+  assert.doesNotMatch(entry, /\.\.\/\.\.\/styles\.css/);
   assert.doesNotMatch(entry, /katex-adapter|from\s+["']katex/);
+});
+
+test("tutorial foundation contains only framework-neutral document primitives", () => {
+  const foundation = readFileSync(new URL(
+    "../src/tutorial/kp-tutorial-foundation.css",
+    import.meta.url
+  ), "utf8");
+  assert.match(foundation, /\*,\s*\*::before,\s*\*::after/);
+  assert.match(foundation, /button,\s*input,\s*textarea,\s*select/);
+  assert.match(foundation, /forced-colors: active/);
+  assert.doesNotMatch(
+    foundation,
+    /kp-economics|editor-graph|animation-station|two-column|inline-sticky/
+  );
 });
 
 test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {

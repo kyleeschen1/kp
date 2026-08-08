@@ -344,11 +344,46 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-08T17:46:30.598Z"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r06-tutorial-foundation-css",
+      "checkedAt": "2026-08-08T18:00:29.634Z",
+      "notes": "18 stylesheet ownership and cascade tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r06-tutorial-foundation-css",
+      "checkedAt": "2026-08-08T18:00:30.605Z",
+      "notes": "85 focused economics publication motion and semantic tests passed."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r06-tutorial-foundation-css",
+      "checkedAt": "2026-08-08T18:00:31.515Z",
+      "notes": "14 Chromium preservation checks passed with no subjective choreography change."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "r06-tutorial-foundation-css",
+      "checkedAt": "2026-08-08T18:00:32.420Z",
+      "notes": "TypeScript Svelte domain publication and Vite production build passed. The economics manifest no longer imports global styles.css."
+    },
+    {
+      "command": "npm run performance:economics-demand-shift-tutorial",
+      "status": "failed",
+      "scope": "r06-pre-r10-baseline",
+      "checkedAt": "2026-08-08T18:00:33.324Z",
+      "notes": "Production route measured 252218 transfer bytes with a 133 ms startup task zero CLS and no active motion long tasks. It remains 2218 bytes above the transfer budget and 4889 bytes above the script budget. Slices r08 through r10 own fixed route and budget closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "r05 complete: build-published prose, IDs, controls, and SVG are actual light DOM; ?enhancement=published adopts them with a Svelte-free retained controller, direct checkpoint restoration, one clock, and no compiled prose payload. Legacy presenter remains isolated for r08 closure."
+    "summary": "Slice r06 isolated framework neutral tutorial foundation CSS and removed the economics public entry dependency on catalogue wide styles. The production check now fails only the known transfer and script budgets reserved for slices r08 through r10."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."

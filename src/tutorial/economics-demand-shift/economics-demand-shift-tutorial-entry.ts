@@ -1,4 +1,3 @@
-import "../../styles.css";
 import "katex/dist/katex.min.css";
 import "../kp-tutorial-progress-rail.css";
 import "../kp-tutorial-scrub-bar.css";

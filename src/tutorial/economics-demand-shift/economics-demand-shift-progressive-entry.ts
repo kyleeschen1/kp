@@ -1,3 +1,4 @@
+import "../kp-tutorial-foundation.css";
 import "../kp-tutorial-progress-rail.css";
 import "../kp-tutorial-scrub-bar.css";
 
