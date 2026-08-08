@@ -159,7 +159,8 @@
     {
       "id": "r19",
       "title": "integration-performance-hardening",
-      "status": "planned"
+      "summary": "Broad scoped integration is green across production build, deterministic publication, whole-lesson editor, retained graph runtime, source saving, page-scale infrastructure, accessibility, and production performance. The learner route remains below every budget with zero CLS and no active long tasks. Repository-wide npm test remains red only on documented pre-existing reader architecture, promotion-memory, catalogue-count, snapshot, and sandbox-listener debt outside the approved boundary; no unrelated repair or provisional layout change was made.",
+      "status": "complete"
     },
     {
       "id": "r20",

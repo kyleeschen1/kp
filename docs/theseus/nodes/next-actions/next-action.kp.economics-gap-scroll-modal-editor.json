@@ -708,11 +708,102 @@
       "scope": "r17 shared controller integration",
       "checkedAt": "2026-08-08T20:25:56.062Z",
       "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r18 static accessibility semantics",
+      "checkedAt": "2026-08-08T20:37:02.630Z",
+      "notes": "105 economics unit and publication checks passed, including one static live graph-state region sourced from typed checkpoint descriptions."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-accessibility",
+      "status": "passed",
+      "scope": "r18 no-JavaScript and accessibility gate",
+      "checkedAt": "2026-08-08T20:37:04.095Z",
+      "notes": "Four Chromium checks passed: published keyboard checkpoints and live graph descriptions, searchable no-JavaScript phone navigation, reduced-motion semantic stepping, and forced-colors graph/control focus visibility."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r18 published and presenter preservation",
+      "checkedAt": "2026-08-08T20:37:05.437Z",
+      "notes": "All 18 economics browser checks passed after accessibility hardening."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r18 typed accessibility metadata and runtime",
+      "checkedAt": "2026-08-08T20:37:06.743Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "r18 visual ownership preservation",
+      "checkedAt": "2026-08-08T20:37:08.051Z",
+      "notes": "All 21 CSS ownership and baseline checks passed; no provisional layout choreography changed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r19 production build and publication freshness",
+      "checkedAt": "2026-08-08T20:44:46.754Z",
+      "notes": "TypeScript, Svelte, domains, compiled economics publication, and Vite production build passed; the default economics route remains a static published document with lazy presenter and editor capabilities."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "r19 production learner route performance",
+      "checkedAt": "2026-08-08T20:44:48.144Z",
+      "notes": "Passed at 138383 transfer bytes, 101965 script bytes, 30 resources, zero CLS, 70 ms startup longest task, 2 ms active p95, zero active long tasks, and 106 bounded mutations. Six live-region changes occur only at semantic checkpoint boundaries."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "r19 whole-lesson editor integration",
+      "checkedAt": "2026-08-08T20:44:49.492Z",
+      "notes": "All five CodeMirror/Vim whole-buffer, save failure, semantic completion, last-valid preview, history, and reload checks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-runtime-session",
+      "status": "passed",
+      "scope": "r19 retained graph runtime integration",
+      "checkedAt": "2026-08-08T20:44:50.823Z",
+      "notes": "Both retained runtime mount/disposal and direct-seek/rewind checks passed."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact",
+      "status": "passed",
+      "scope": "r19 deterministic publication boundary",
+      "checkedAt": "2026-08-08T20:44:52.127Z",
+      "notes": "All six compiled publication, source digest, static math, and retained fragment checks passed."
+    },
+    {
+      "command": "npm run test:tutorial-motion-page-scale",
+      "status": "passed",
+      "scope": "r19 shared page-scale preservation",
+      "checkedAt": "2026-08-08T20:44:53.417Z",
+      "notes": "All 59 one, three, and twelve passage lifecycle, page-scale, performance, direct seek, and accessibility checks passed."
+    },
+    {
+      "command": "npm run test:economics-lesson-source-save",
+      "status": "passed",
+      "scope": "r19 editor source-save boundary",
+      "checkedAt": "2026-08-08T20:44:54.703Z",
+      "notes": "All four capability, save, validation, and rollback checks passed in the stable scoped command."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "r19 repository-wide baseline audit outside tranche scope",
+      "checkedAt": "2026-08-08T20:44:56.011Z",
+      "notes": "The broad command stops at an existing reader app-to-compiler architecture violation in fraction-composition-salience-adapter.ts. Separate inference and concept-catalog gates pass; promotion-memory also has pre-existing queue text drift. A direct all-unit audit passed 3811 of 3847 tests; its 36 failures are sandbox listen EPERM cases and existing catalogue count, inventory, and roadmap snapshot drift unrelated to this tranche. Scoped economics, editor, runtime, publication, accessibility, CSS, and performance gates all pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "R17 closes direct semantic navigation and action transactions. R18 next hardens the published route's no-JavaScript, accessibility, keyboard, reduced-motion, forced-colors, and searchable-document behavior without changing provisional layout choreography."
+    "summary": "R19 closes scoped integration and performance hardening with repository-wide baseline debt explicitly separated. R20 next writes autonomous closeout evidence, validates Theseus/workspace state, and prepares the delayed human layout checkpoint without executing r21."
   },
   "expectedLearning": [
     "Whether one local station phase model can coordinate readable cues and the existing semantic playhead without duplicating clocks or projection geometry."
