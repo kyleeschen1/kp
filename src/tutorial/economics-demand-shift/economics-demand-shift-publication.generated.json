@@ -3,7 +3,7 @@
   "kind": "compiled-publication-artifact",
   "artifactId": "publication.economics.demand-shift",
   "source": {
-    "path": "content/lessons/economics-demand-shift.kp.md",
+    "path": "economics-demand-shift.kp.md",
     "sha256": "sha256:332486545c35820bcedbbad61ac61b64c15d683c4e323b38d8f453a395c1fc96"
   },
   "compiler": {

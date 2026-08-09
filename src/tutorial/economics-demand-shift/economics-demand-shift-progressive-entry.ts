@@ -222,7 +222,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
         (motion.supplyMovementProgress - 0.12) / 0.46
       ).toFixed(3)
     );
-    stageCaption.textContent = motion.supplyMovementProgress >= 1
+    const caption = motion.supplyMovementProgress >= 1
       ? "Demand shifted; the trace confirms movement along unchanged supply."
       : motion.supplyMovementProgress > 0
         ? "Tracing movement between equilibria along unchanged supply."
@@ -231,6 +231,9 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
           : motion.demandShiftProgress > 0
             ? "Demand is shifting while supply remains fixed."
             : "Initial supply and demand equilibrium before demand increases.";
+    // The caption is checkpoint language, not a moving readout. Retain its
+    // text node across frames so semantic playback does not rebuild live DOM.
+    if (stageCaption.textContent !== caption) stageCaption.textContent = caption;
     accessibleStateKey = syncAccessibleState(
       accessibleState,
       playback,

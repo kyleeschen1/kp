@@ -72,7 +72,7 @@ test("generated economics publication is an exact deterministic artifact", () =>
   });
 
   assert.equal(serializeKpCompiledPublicationArtifact(compiled), artifactSource);
-  assert.equal(artifact.source.path, "content/lessons/economics-demand-shift.kp.md");
+  assert.equal(artifact.source.path, "economics-demand-shift.kp.md");
   assert.equal(artifact.compiler.version, "2");
   assert.equal(artifact.source.sha256, digest(articleText));
   assert.equal(artifact.payloadSha256, digest(JSON.stringify(artifact.payload)));

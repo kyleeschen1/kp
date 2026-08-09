@@ -189,7 +189,8 @@
     {
       "id": "s23-exemplar-gate",
       "title": "Economics exemplar release gate and human checkpoint",
-      "status": "planned"
+      "summary": "Passed the RC1 economics source, preservation, browser, accessibility, editor, deck, build, production-closure, and performance gates; repaired initial split placement, exact navigation retention, retained-node churn, provenance leakage, and a run-introduced kernel boundary; published the review package and stopped for human approval.",
+      "status": "complete"
     },
     {
       "id": "s24-v1-promotion",

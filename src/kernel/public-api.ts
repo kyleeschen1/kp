@@ -22,3 +22,5 @@ export {
   type KpConceptRoomSnapshot,
   type KpConceptRoomState
 } from "./concept-room-state.ts";
+
+export { sha256 } from "./sha256.ts";

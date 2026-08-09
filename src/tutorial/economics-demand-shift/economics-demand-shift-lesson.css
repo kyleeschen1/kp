@@ -10,6 +10,16 @@
   transform: none;
 }
 
+/* The split stage is top-anchored from first paint, not only after sticky
+   engagement. Cancel the shell's document inset without changing prose flow. */
+.kp-economics-tutorial:not(.kp-economics-tutorial--inline-sticky)
+  .kp-economics-tutorial__layout
+  > .kp-economics-tutorial__stage {
+  margin-block-start: calc(
+    -1 * var(--kp-tutorial-shell-layout-start-padding)
+  );
+}
+
 .kp-economics-tutorial__stage-card {
   position: relative;
   display: block;

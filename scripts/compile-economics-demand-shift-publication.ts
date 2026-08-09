@@ -34,6 +34,9 @@ import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
 const sourcePath = "content/lessons/economics-demand-shift.kp.md";
+// Publication provenance needs a stable identity, not a build-machine path that
+// would leak the private authoring tree into the learner bundle.
+const publicationSourcePath = "economics-demand-shift.kp.md";
 const importLockPath = "content/lessons/economics-demand-shift.kp.lock.json";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceUrl = new URL(`../${sourcePath}`, import.meta.url);
@@ -63,7 +66,7 @@ export function compileKpEconomicsDemandShiftPublicationArtifact(input: {
   return createKpCompiledPublicationArtifact({
     artifactId: "publication.economics.demand-shift",
     source: {
-      path: sourcePath,
+      path: publicationSourcePath,
       sha256: digest(input.articleText)
     },
     compiler: {

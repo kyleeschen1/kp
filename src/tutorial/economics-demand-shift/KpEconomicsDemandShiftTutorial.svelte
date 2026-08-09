@@ -1005,6 +1005,16 @@
       playbackRuntime.status =
         detail.playbackStatus as KpEditorAnimationPlayerState["playbackStatus"];
     }
+    if (navigationProjectionPending && navigationResume !== undefined) {
+      // A retained player can emit a frame while history restoration is
+      // moving the viewport. The semantic destination owns that interval;
+      // playback resumes only after explicit reader scroll intent.
+      commitLessonMotionProjection(projectKpEconomicsLessonMotion({
+        activeBlockId: navigationResume.blockId,
+        localProgress: navigationResume.progress
+      }), "forward");
+      return;
+    }
     ensureSemanticTransitProxyLayer();
     const playhead = projectKpEconomicsLessonPlayhead({
       activeBlockId: motionRuntime.projection.activeBlockId,

@@ -8,7 +8,7 @@ import {
   protocolString,
   type InferProtocolSchema
 } from "../../protocols/public-api.ts";
-import { sha256 } from "../kernel/sha256.ts";
+import { sha256 } from "../kernel/public-api.ts";
 
 import {
   conceptCapabilityRefSchema,

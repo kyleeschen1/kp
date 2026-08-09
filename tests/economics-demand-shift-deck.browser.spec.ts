@@ -25,7 +25,7 @@ test("deck projects six explicit scenes through one retained stage", async ({
     "1 of 6"
   );
   expect(await page.locator("body").innerText()).toContain(
-    "Follow red demand and its intersection"
+    "follow only the red demand curve and the intersection it determines"
   );
 
   await deck.getByRole("button", { name: "Continue" }).click();

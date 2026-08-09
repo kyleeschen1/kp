@@ -751,12 +751,18 @@ function syncPlayerDom(
   );
   if (scrubber !== null) scrubber.value = String(state.progress);
 
-  player.querySelector<HTMLOutputElement>(
-    "[data-kp-editor-animation-progress-label]"
-  )?.replaceChildren(document.createTextNode(`${Math.round(state.progress * 100)}%`));
-  player.querySelector<HTMLElement>(
-    "[data-kp-editor-animation-status-label]"
-  )?.replaceChildren(document.createTextNode(playerStatusLabel(session)));
+  replacePlayerText(
+    player.querySelector<HTMLOutputElement>(
+      "[data-kp-editor-animation-progress-label]"
+    ),
+    `${Math.round(state.progress * 100)}%`
+  );
+  replacePlayerText(
+    player.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-status-label]"
+    ),
+    playerStatusLabel(session)
+  );
 
   const toggleButton = player.querySelector<HTMLButtonElement>(
     '[data-action="toggle-editor-animation"]'
@@ -769,7 +775,7 @@ function syncPlayerDom(
         : "Play";
     toggleButton.disabled =
       player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
-    toggleButton.textContent = label;
+    replacePlayerText(toggleButton, label);
     toggleButton.setAttribute("aria-label", `${label} animation`);
   }
   animationPlayerGestaltCapability
@@ -779,6 +785,17 @@ function syncPlayerDom(
     bubbles: true,
     detail: state
   }));
+}
+
+function replacePlayerText(
+  element: HTMLElement | null,
+  value: string
+): void {
+  // Text replacement emits child-list mutations even when the string is
+  // unchanged. Retained controls share the frame clock, so no-op guards keep
+  // assistive labels from becoming per-frame DOM reconstruction.
+  if (element === null || element.textContent === value) return;
+  element.textContent = value;
 }
 
 function loadAnimationPlayerGestaltCapability():

@@ -28,6 +28,7 @@
 }
 
 .kp-tutorial-shell__layout {
+  --kp-tutorial-shell-layout-start-padding: 4rem;
   display: grid;
   grid-template-columns:
     minmax(9rem, 13rem)
@@ -36,7 +37,7 @@
   gap: clamp(3rem, 5vw, 6.5rem);
   width: min(100% - 3rem, 94rem);
   margin: 0 auto;
-  padding: 4rem 0 8rem;
+  padding: var(--kp-tutorial-shell-layout-start-padding) 0 8rem;
   align-items: start;
 }
 
@@ -115,10 +116,11 @@
 @media (max-width: 52rem) {
   .kp-tutorial-shell__layout,
   .kp-tutorial-shell__layout--prose-toc {
+    --kp-tutorial-shell-layout-start-padding: 2rem;
     display: flex;
     flex-direction: column;
     width: min(100% - 2rem, 42rem);
-    padding-top: 2rem;
+    padding-top: var(--kp-tutorial-shell-layout-start-padding);
   }
 
   .kp-tutorial-shell__prose {
