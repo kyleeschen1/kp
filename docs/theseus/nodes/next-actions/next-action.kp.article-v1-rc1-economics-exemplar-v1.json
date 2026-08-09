@@ -38,6 +38,20 @@
       "scope": "s01 golden RC1 source fixture",
       "checkedAt": "2026-08-09T04:24:40.923Z",
       "notes": "Four tests prove the accepted frontmatter, four directive names, motion after-slot, Markdown prose/list/math/refs, and absence of executable or layout-specific escape hatches."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s02 lossless source spans",
+      "checkedAt": "2026-08-09T04:28:53.416Z",
+      "notes": "Eight RC1 tests pass, including exact LF/CRLF offsets, UTF-16 editor positions, reversible line-column mapping, exact slicing, EOF spans, and invalid-range rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 source position boundary",
+      "checkedAt": "2026-08-09T04:28:59.816Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass with the new immutable source primitives."
     }
   ],
   "expectedLearning": [

@@ -63,7 +63,8 @@
     {
       "id": "s02-source-spans",
       "title": "Lossless source spans",
-      "status": "planned"
+      "summary": "Added immutable source text, one-based diagnostic positions over zero-based UTF-16 offsets, reversible LF/CRLF line maps, exact spans, and guarded slicing.",
+      "status": "complete"
     },
     {
       "id": "s03-frontmatter-parser",
