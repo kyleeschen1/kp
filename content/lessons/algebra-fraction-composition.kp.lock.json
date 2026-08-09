@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.algebra.fraction-composition.article",
+  "entries": [
+    {
+      "alias": "fractionSolve",
+      "request": "vignette.algebra.fraction-composition@1",
+      "vignetteId": "vignette.algebra.fraction-composition",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:de784b886b89bb49a92b33ca0cbc3eb5da386455a22a354a4824731e5fb60655",
+      "moduleSpecifier": "../../animation/fraction-composition-equation-adapter.ts"
+    }
+  ]
+}
