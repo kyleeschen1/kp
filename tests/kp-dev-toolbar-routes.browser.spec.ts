@@ -38,7 +38,7 @@ for (const route of [
       name: "Solve x",
       exact: true
     })).toHaveAttribute("href", "/reader/solve-x/");
-    await expect(navigation.getByRole("link")).toHaveCount(23);
+    await expect(navigation.getByRole("link")).toHaveCount(24);
 
     const current = navigation.locator("[aria-current='page']");
     await expect(current).toHaveCount(1);

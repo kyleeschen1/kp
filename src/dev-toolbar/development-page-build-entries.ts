@@ -23,6 +23,10 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
       htmlPath: "tutorials/economics/demand-shift/index.html"
     }),
     Object.freeze({
+      name: "algebraFractionCompositionTutorial",
+      htmlPath: "tutorials/algebra/fraction-composition/index.html"
+    }),
+    Object.freeze({
       name: "lispFunctionApplicationTutorial",
       htmlPath: "tutorials/programming/lisp-function-application/index.html"
     })

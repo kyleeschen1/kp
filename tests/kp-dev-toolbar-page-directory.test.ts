@@ -12,7 +12,7 @@ import {
 } from "../src/dev-toolbar/development-page-descriptor.ts";
 
 test("the page directory contains the supported first-party development surfaces", () => {
-  assert.equal(kpDevelopmentPages.length, 23);
+  assert.equal(kpDevelopmentPages.length, 24);
   assert.deepEqual(kpDevelopmentPages.map(({ id }) => id), [
     "studio.catalogue",
     "studio.editor",
@@ -22,6 +22,7 @@ test("the page directory contains the supported first-party development surfaces
     "tutorial.ftc",
     "tutorial.linear-equation-concept",
     "tutorial.economics-demand-shift",
+    "tutorial.algebra-fraction-composition",
     "tutorial.lisp-function-application",
     "reader.solve-x",
     "reader.generated-solve-x",

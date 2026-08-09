@@ -11,6 +11,8 @@ const readySelectors: Readonly<Record<string, string>> = Object.freeze({
   "tutorial.ftc": "[data-kp-ftc-tutorial-host]",
   "tutorial.linear-equation-concept": "[data-kp-concept-room-shell]",
   "tutorial.economics-demand-shift": "[data-kp-economics-static-publication]",
+  "tutorial.algebra-fraction-composition":
+    "[data-kp-algebra-fraction-composition-publication]",
   "tutorial.lisp-function-application":
     "[data-kp-lisp-function-application-tutorial]",
   "diagnostic.canonical-animation-review":
@@ -25,6 +27,7 @@ const reviewOwnerIds = new Set([
   "studio.animation-library-host",
   "studio.animation-workbench",
   "tutorial.economics-demand-shift",
+  "tutorial.algebra-fraction-composition",
   "tutorial.lisp-function-application",
   "diagnostic.canonical-animation-review",
   "diagnostic.glyph-reconciliation",

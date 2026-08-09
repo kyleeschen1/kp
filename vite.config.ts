@@ -40,6 +40,14 @@ import {
   renderKpEconomicsDemandShiftStaticNarrative,
   renderKpEconomicsDemandShiftStaticNarrativeStyles
 } from "./src/tutorial/economics-demand-shift/economics-demand-shift-static-publication.ts";
+import type { KpArticleImportLock } from
+  "./src/article/kp-article-import-lock.ts";
+import {
+  compileKpFractionCompositionArticle
+} from "./src/tutorial/algebra-fraction-composition/fraction-composition-article-compiler.ts";
+import {
+  renderKpFractionCompositionStaticPublication
+} from "./src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -80,6 +88,12 @@ const economicsAuthoringOutputFilenames = new Set([
 ]);
 let economicsTutorialStaticNarrative =
   compileEconomicsTutorialStaticNarrative();
+const algebraFractionCompositionTutorialFilename = resolve(
+  projectRoot,
+  "tutorials/algebra/fraction-composition/index.html"
+);
+const algebraFractionCompositionStaticPublication =
+  compileAlgebraFractionCompositionStaticPublication();
 
 export default defineConfig({
   define: {
@@ -177,6 +191,20 @@ export default defineConfig({
             ? html.replace(
                 "<!-- kp:economics-static-narrative -->",
                 economicsTutorialStaticNarrative
+              )
+            : html;
+        }
+      }
+    },
+    {
+      name: "kp-algebra-fraction-composition-static-publication",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          return context.filename === algebraFractionCompositionTutorialFilename
+            ? html.replace(
+                "<!-- kp:algebra-fraction-composition-static-publication -->",
+                algebraFractionCompositionStaticPublication
               )
             : html;
         }
@@ -326,4 +354,18 @@ function compileLispTutorialStaticFallback(): string {
     })
   });
   return `<style>${sharedCss}\n${scrubCss}\n${lessonCss}\n${stage.css}</style>${publicationHtml}`;
+}
+
+function compileAlgebraFractionCompositionStaticPublication(): string {
+  const text = readFileSync(resolve(
+    projectRoot,
+    "content/lessons/algebra-fraction-composition.kp.md"
+  ), "utf8");
+  const lock = JSON.parse(readFileSync(resolve(
+    projectRoot,
+    "content/lessons/algebra-fraction-composition.kp.lock.json"
+  ), "utf8")) as KpArticleImportLock;
+  return renderKpFractionCompositionStaticPublication(
+    compileKpFractionCompositionArticle({ text, lock })
+  );
 }

@@ -1,0 +1,71 @@
+import { renderLatexToHtml } from
+  "../../rendering/katex-adapter.ts";
+import {
+  createKpFractionCompositionStaticStepExport
+} from "../fraction-composition-static-step-export.ts";
+import type {
+  KpFractionCompositionArticleCompilation
+} from "./fraction-composition-article-compiler.ts";
+
+/**
+ * The static article asks for immutable image assets, while this first-party
+ * route can preserve native KaTeX directly. Resolve both from the same
+ * certified endpoint export so static and interactive readers cannot disagree.
+ */
+export function renderKpFractionCompositionStaticPublication(
+  compilation: KpFractionCompositionArticleCompilation
+): string {
+  const endpointSequence = createKpFractionCompositionStaticStepExport();
+  let articleHtml = compilation.staticHtml.articleHtml;
+
+  for (const asset of compilation.staticHtml.assets) {
+    const step = endpointSequence.steps.find(({ frame }) =>
+      frame.state.objectId.endsWith(`.${asset.checkpointId}`)
+    );
+    if (step === undefined) {
+      throw new Error(
+        `Static algebra checkpoint ${asset.checkpointId} lacks a canonical endpoint.`
+      );
+    }
+    const image = new RegExp(
+      `<img src="${escapeRegExp(asset.assetPath)}"[^>]*>`,
+      "u"
+    );
+    articleHtml = articleHtml.replace(image, [
+      `<svg class="kp-algebra-article__equation-stage"`,
+      ` data-kp-algebra-static-checkpoint="${escapeAttribute(asset.checkpointId)}"`,
+      ` viewBox="0 0 640 180" role="img"`,
+      ` aria-label="${escapeAttribute(step.frame.state.accessibilityLabel)}">`,
+      `<foreignObject x="20" y="20" width="600" height="140">`,
+      `<div xmlns="http://www.w3.org/1999/xhtml" class="kp-algebra-article__equation">`,
+      renderLatexToHtml(step.frame.state.latex, {
+        displayMode: true,
+        output: "htmlAndMathml"
+      }),
+      `</div></foreignObject></svg>`
+    ].join(""));
+  }
+
+  if (articleHtml.includes("./kp-static/")) {
+    throw new Error("Static algebra publication left an asset unresolved.");
+  }
+
+  return `<main class="kp-algebra-article" data-kp-algebra-fraction-composition-publication>
+    <aside class="kp-algebra-article__toc" aria-label="In this lesson">
+      ${compilation.staticHtml.tocHtml}
+    </aside>
+    ${articleHtml}
+  </main>`;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
+function escapeAttribute(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}

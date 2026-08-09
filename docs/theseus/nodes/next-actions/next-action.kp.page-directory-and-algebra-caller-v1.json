@@ -285,6 +285,27 @@
       "scope": "s22 compiler types",
       "checkedAt": "2026-08-09T23:03:17.029Z",
       "notes": "TypeScript, Svelte, and domain typechecks passed after the second caller and generic root-selection repair."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-08-09T23:13:53.731Z",
+      "notes": "93 Article v1 tests passed, including static route and six canonical endpoint figures."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-08-09T23:13:54.805Z",
+      "notes": "Production build emitted the stable algebra route with static content and no type errors."
+    },
+    {
+      "command": "npm run test:browser:page-directory",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-08-09T23:13:55.736Z",
+      "notes": "All 24 declared pages plus directory inventory passed; algebra route identity and Review host verified."
     }
   ],
   "progress": {

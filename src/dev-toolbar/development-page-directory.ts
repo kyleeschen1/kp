@@ -44,6 +44,12 @@ export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
       "/tutorials/economics/demand-shift/"
     ),
     page(
+      "tutorial.algebra-fraction-composition",
+      "Algebra · fraction composition",
+      "tutorials",
+      "/tutorials/algebra/fraction-composition/"
+    ),
+    page(
       "tutorial.lisp-function-application",
       "Programming · Lisp function application",
       "tutorials",

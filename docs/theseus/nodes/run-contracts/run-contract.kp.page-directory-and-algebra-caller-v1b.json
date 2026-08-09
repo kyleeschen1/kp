@@ -185,7 +185,8 @@
     {
       "id": "s23",
       "title": "algebra-tutorial-route",
-      "status": "planned"
+      "summary": "Published a stable static-first algebra route with complete searchable Article v1 prose, native KaTeX/MathML inside six canonical endpoint SVG stages, and universal Pages/Review tooling in development.",
+      "status": "complete"
     },
     {
       "id": "s24",
