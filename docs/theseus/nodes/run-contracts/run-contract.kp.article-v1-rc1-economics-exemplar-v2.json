@@ -81,7 +81,8 @@
     {
       "id": "s05-typed-validation",
       "title": "Typed validation and diagnostics",
-      "status": "planned"
+      "summary": "Added closed-schema RC1 validation, stable source-located diagnostics, typed directive normalization, raw HTML rejection, and focused regression coverage.",
+      "status": "complete"
     },
     {
       "id": "s06-stable-identities",

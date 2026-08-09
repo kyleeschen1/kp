@@ -43,7 +43,7 @@ test("frontmatter accepts quoted scalars and retains CRLF source offsets", () =>
   const parsed = parseKpArticleFrontmatter(source);
 
   assert.equal(parsed.id, "lesson.economics.market");
-  assert.equal(parsed.imports.market, "vignette.economics.market@1");
+  assert.equal(parsed.imports["market"], "vignette.economics.market@1");
   assert.equal(sliceKpArticleSource(source, parsed.bodySpan), "Body.");
   assert.equal(parsed.bodySpan.start.line, 8);
   assert.equal(parsed.bodySpan.start.column, 1);
@@ -93,4 +93,3 @@ function assertFrontmatterError(text: string, code: string, line: number): void 
     }
   );
 }
-

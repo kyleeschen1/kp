@@ -47,7 +47,6 @@ test("motion prose remains searchable on both sides of the transition", () => {
     /^:::kp-motion\{[^}]+\}\n(?<before>[\s\S]+?)\n::after\n(?<after>[\s\S]+?)\n:::\s*$/mu
   );
   assert.ok(motion?.groups);
-  assert.match(motion.groups.before ?? "", /At the same price/u);
-  assert.match(motion.groups.after ?? "", /new intersection/u);
+  assert.match(motion.groups["before"] ?? "", /At the same price/u);
+  assert.match(motion.groups["after"] ?? "", /new intersection/u);
 });
-

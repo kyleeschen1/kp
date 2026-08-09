@@ -80,6 +80,20 @@
       "scope": "s04 scanner type boundary",
       "checkedAt": "2026-08-09T04:39:16.215Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass with immutable directive and attribute scan records."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "slice 5 parser and typed validation",
+      "checkedAt": "2026-08-09T04:50:22.526Z",
+      "notes": "23 RC1 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript and Svelte boundaries",
+      "checkedAt": "2026-08-09T04:50:23.511Z",
+      "notes": "TypeScript, Svelte, and domain checks passed after index-signature-safe test accessors."
     }
   ],
   "expectedLearning": [
