@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.economics.demand-shift",
+  "entries": [
+    {
+      "alias": "demandShift",
+      "request": "vignette.economics.demand-shift@1",
+      "vignetteId": "vignette.economics.demand-shift",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:aac10ec8a22ccb27294b7ec48d7f3ce365950740083467f61e4892f2ffd18088",
+      "moduleSpecifier": "../../tutorial/economics-demand-shift/economics-demand-shift-animation-capability.ts"
+    }
+  ]
+}

@@ -122,6 +122,34 @@
       "scope": "s07 CommonMark and semantic reference boundary",
       "checkedAt": "2026-08-09T05:04:46.900Z",
       "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s08 vignette import lock",
+      "checkedAt": "2026-08-09T05:13:55.425Z",
+      "notes": "39 focused tests pass for deterministic major resolution, exact lock replay, explicit updates, integrity drift, semantic export paths, and the economics release digest."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 import lock type boundary",
+      "checkedAt": "2026-08-09T05:13:56.418Z",
+      "notes": "Application, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository-wide known baseline",
+      "checkedAt": "2026-08-09T05:13:57.346Z",
+      "notes": "Stopped at the pre-existing unrelated reader app-to-compiler violation in fraction-composition-salience-adapter.ts, already recorded on 2026-08-08; the RC1 focused suite passes."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s08 production build and economics publication closure",
+      "checkedAt": "2026-08-09T05:13:58.321Z",
+      "notes": "Typecheck, generated economics publication freshness, and Vite production build pass."
     }
   ],
   "expectedLearning": [

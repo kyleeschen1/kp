@@ -99,7 +99,8 @@
     {
       "id": "s08-import-lock",
       "title": "Vignette import lock model",
-      "status": "planned"
+      "summary": "Added deterministic major-version resolution, exact lock replay, explicit update behavior, fail-closed registry and drift checks, semantic export validation, and a hashed economics vignette 1.0.0 release plus golden lock.",
+      "status": "complete"
     },
     {
       "id": "s09-article-ir",
