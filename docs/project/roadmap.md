@@ -708,21 +708,24 @@ activating heavy animation capabilities lazily.
 1. Review and select one readable article-level authoring format, including
    semantic-link and typed-directive syntax; do not implement a migration
    before approval.
-2. Reconcile the full Markdown article, layout-specific passage source, and
+2. Add one development-only bottom toolbar on every route, with Review capture,
+   available layout/view switching, and contextual internal controls; keep it
+   framework-neutral at the host boundary and absent from production.
+3. Reconcile the full Markdown article, layout-specific passage source, and
    synthesized CodeMirror buffer only after that format decision.
-3. Keep the completed static publication, optional editor, semantic TOC/direct
+4. Keep the completed static publication, optional editor, semantic TOC/direct
    navigation, accessibility, and performance boundaries green.
-4. Keep economics layout refinement, shared station extraction, split parity,
+5. Keep economics layout refinement, shared station extraction, split parity,
    and final floating-navigation geometry paused.
-5. Use multi-step algebra as the next structurally different lesson caller
+6. Use multi-step algebra as the next structurally different lesson caller
    only after the authoring-source boundary is coherent.
-6. Extract a shared motion-passage and vignette authoring contract only after
+7. Extract a shared motion-passage and vignette authoring contract only after
    economics and algebra prove the seam.
-7. Run named single, representative, and stress document profiles with
+8. Run named single, representative, and stress document profiles with
    explicit passage/block/capability/live-stage/playhead counts.
-8. Add advanced CodeMirror semantic exploration and structured-history tools.
-9. Add Canvas/WebGL salience adapters and 3D optical parity.
-10. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
+9. Add advanced CodeMirror semantic exploration and structured-history tools.
+10. Add Canvas/WebGL salience adapters and 3D optical parity.
+11. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
     publication, authoring, navigation, and performance gates pass.
 
 The rank detail and dependency rationale are owned by
