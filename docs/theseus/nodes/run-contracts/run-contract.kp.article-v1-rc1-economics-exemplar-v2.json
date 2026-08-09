@@ -93,7 +93,8 @@
     {
       "id": "s07-semantic-refs",
       "title": "Semantic reference resolution",
-      "status": "planned"
+      "summary": "Added CommonMark-native link scanning and typed semantic-address resolution through article-local stage aliases, with source-located failure for unknown, mismatched, or timeline-bearing links and explicit no-timeline authority.",
+      "status": "complete"
     },
     {
       "id": "s08-import-lock",

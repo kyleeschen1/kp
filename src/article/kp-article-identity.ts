@@ -3,6 +3,7 @@ import {
   type KpArticleSource,
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
+import { scanKpArticleMarkdownLinks } from "./kp-article-markdown-links.ts";
 import {
   validateKpArticleRc1,
   type KpValidatedArticleDirective
@@ -168,66 +169,19 @@ function markdownReferenceEdits(
   to: string
 ): KpArticleTextEdit[] {
   const edits: KpArticleTextEdit[] = [];
-  let fence: { marker: string; length: number } | undefined;
-
-  for (let index = 0; index < source.lineStarts.length; index += 1) {
-    const lineStart = source.lineStarts[index]!;
-    const next = source.lineStarts[index + 1] ?? source.text.length;
-    const line = source.text.slice(lineStart, next).replace(/\r?\n$/u, "");
-    const fenceRun = line.match(/^ {0,3}(`{3,}|~{3,})/u)?.[1];
-    if (fence !== undefined) {
-      if (fenceRun?.[0] === fence.marker && fenceRun.length >= fence.length) fence = undefined;
-      continue;
-    }
-    if (fenceRun !== undefined) {
-      fence = { marker: fenceRun[0]!, length: fenceRun.length };
-      continue;
-    }
-
-    const protectedRanges = inlineCodeRanges(line);
-    const links = line.matchAll(/\]\((kp-ref:|#)([^)\s]+)\)/gu);
-    for (const link of links) {
-      if (link.index === undefined || isProtected(link.index, protectedRanges)) continue;
-      const prefix = link[1]!;
-      const destination = link[2]!;
-      const isStageReference = prefix === "kp-ref:" && (destination === from || destination.startsWith(`${from}/`));
-      const isFragmentReference = prefix === "#" && destination === from;
+  for (const link of scanKpArticleMarkdownLinks(source)) {
+      const isStageReference = link.url.startsWith("kp-ref:")
+        && (link.url.slice("kp-ref:".length) === from || link.url.slice("kp-ref:".length).startsWith(`${from}/`));
+      const isFragmentReference = link.url === `#${from}`;
       if (!isStageReference && !isFragmentReference) continue;
-      const destinationStart = lineStart + link.index + link[0].indexOf(destination);
+      const prefixLength = isStageReference ? "kp-ref:".length : 1;
+      const destinationStart = link.destinationSpan.start.offset + prefixLength;
       edits.push(textEdit(
         createKpArticleSourceSpan(source, destinationStart, destinationStart + from.length),
         to
       ));
-    }
   }
   return edits;
-}
-
-function inlineCodeRanges(line: string): readonly Readonly<{ start: number; end: number }>[] {
-  const ranges: Array<Readonly<{ start: number; end: number }>> = [];
-  let opening: { start: number; length: number } | undefined;
-  for (let index = 0; index < line.length;) {
-    if (line[index] !== "`") {
-      index += 1;
-      continue;
-    }
-    let end = index + 1;
-    while (line[end] === "`") end += 1;
-    const length = end - index;
-    if (opening === undefined) {
-      opening = { start: index, length };
-    } else if (opening.length === length) {
-      ranges.push(Object.freeze({ start: opening.start, end }));
-      opening = undefined;
-    }
-    index = end;
-  }
-  if (opening !== undefined) ranges.push(Object.freeze({ start: opening.start, end: line.length }));
-  return Object.freeze(ranges);
-}
-
-function isProtected(offset: number, ranges: readonly Readonly<{ start: number; end: number }>[]): boolean {
-  return ranges.some(({ start, end }) => offset >= start && offset < end);
 }
 
 function textEdit(span: KpArticleSourceSpan, replacement: string): KpArticleTextEdit {

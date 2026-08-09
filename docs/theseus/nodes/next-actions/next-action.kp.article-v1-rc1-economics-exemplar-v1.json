@@ -108,6 +108,20 @@
       "scope": "s06 identity and edit boundary",
       "checkedAt": "2026-08-09T04:57:24.649Z",
       "notes": "Application, test, Svelte, and domain types pass."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s07 semantic reference resolution",
+      "checkedAt": "2026-08-09T05:04:45.984Z",
+      "notes": "34 focused tests pass, including CommonMark source spans, local-stage resolution, range addresses, invalid links, and no timeline authority for prose links."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 CommonMark and semantic reference boundary",
+      "checkedAt": "2026-08-09T05:04:46.900Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
     }
   ],
   "expectedLearning": [
