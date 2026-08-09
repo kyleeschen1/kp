@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "node --disable-warning=ExperimentalWarning scripts/dev.ts",
     "dev:browser-test": "node --disable-warning=ExperimentalWarning scripts/dev.ts --browser-test",
+    "dev:authoring-save-test": "node --disable-warning=ExperimentalWarning scripts/dev.ts --authoring-save-test",
     "dev:client": "vite",
     "dev:server": "node --disable-warning=ExperimentalWarning --watch server/main.ts",
     "dashboard:extension": "node --disable-warning=ExperimentalWarning scripts/project-dashboard-extension.ts",
@@ -45,6 +46,7 @@
     "test:browser:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "test:browser:economics-demand-shift-accessibility": "playwright test tests/economics-demand-shift-accessibility.browser.spec.ts --project=chromium --workers=1",
     "test:browser:economics-lesson-editor": "playwright test --config playwright.economics-lesson-editor.config.ts --project=chromium --workers=1",
+    "test:browser:economics-authoring-save": "playwright test --config playwright.economics-authoring-save.config.ts --project=chromium --workers=1",
     "test:browser:economics-runtime-session": "playwright test tests/kp-economics-equilibrium-runtime-session.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-deck": "playwright test tests/economics-demand-shift-deck.browser.spec.ts --project=chromium --workers=1",

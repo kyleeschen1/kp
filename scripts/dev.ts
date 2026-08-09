@@ -10,8 +10,13 @@ interface DevProcess {
 }
 
 const browserTestMode = process.argv.slice(2).includes("--browser-test");
-const browserTestApiPort = "4174";
-const reviewRoot = browserTestMode
+const authoringSaveTestMode = process.argv.slice(2).includes(
+  "--authoring-save-test"
+);
+const isolatedTestMode = browserTestMode || authoringSaveTestMode;
+const testApiPort = authoringSaveTestMode ? "4274" : "4174";
+const testWebPort = authoringSaveTestMode ? "4273" : "4173";
+const reviewRoot = isolatedTestMode
   ? resolve(process.cwd(), "tmp/codex/browser-inbox")
   : process.env["KP_DEV_REVIEW_ROOT"] ??
     resolve(process.cwd(), ".kp/review-logs");
@@ -26,19 +31,19 @@ const processes: readonly DevProcess[] = [
       KP_DEV_REVIEW: "1",
       KP_DEV_REVIEW_ROOT: reviewRoot,
       KP_ARTICLE_SOURCE_WRITE: browserTestMode ? "0" : "1",
-      ...(browserTestMode ? { PORT: browserTestApiPort } : {})
+      ...(isolatedTestMode ? { PORT: testApiPort } : {})
     }
   },
   {
     name: "web",
     command: resolveBin("vite"),
-    args: browserTestMode
-      ? ["--host", "127.0.0.1", "--port", "4173", "--strictPort"]
+    args: isolatedTestMode
+      ? ["--host", "127.0.0.1", "--port", testWebPort, "--strictPort"]
       : [],
-    env: browserTestMode
+    env: isolatedTestMode
       ? {
           ...process.env,
-          API_TARGET: `http://127.0.0.1:${browserTestApiPort}`
+          API_TARGET: `http://127.0.0.1:${testApiPort}`
         }
       : process.env
   }

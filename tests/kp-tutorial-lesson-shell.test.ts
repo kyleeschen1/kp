@@ -78,3 +78,12 @@ test("production consolidates shared lesson seams into one lazy chunk", async ()
   assert.match(config, /src\/tutorial\/kp-tutorial-/);
   assert.doesNotMatch(config, /return "kp-tutorial-core"[\s\S]{0,120}domain/);
 });
+
+test("canonical economics saves invalidate without reloading the authoring page", async () => {
+  const config = await readFile(viteConfigUrl, "utf8");
+  assert.match(config, /kp-economics-authoring-save-boundary/);
+  assert.match(config, /economicsAuthoringOutputFilenames/);
+  assert.match(config, /configFileDependencies\.splice/);
+  assert.match(config, /handleHotUpdate\(context\)/);
+  assert.match(config, /return \[\];/);
+});
