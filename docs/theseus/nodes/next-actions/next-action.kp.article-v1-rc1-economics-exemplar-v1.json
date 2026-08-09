@@ -52,6 +52,20 @@
       "scope": "s02 source position boundary",
       "checkedAt": "2026-08-09T04:28:59.816Z",
       "notes": "Application, Node, test, Svelte, and domain type checks pass with the new immutable source primitives."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s03 minimal frontmatter parser",
+      "checkedAt": "2026-08-09T04:33:38.641Z",
+      "notes": "Twelve tests pass; RC1 identity and imports parse losslessly across LF/CRLF while missing, duplicate, unknown, complex, and misindented metadata fail with source spans."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 frontmatter type boundary",
+      "checkedAt": "2026-08-09T04:33:50.701Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass with the strict build-time frontmatter parser."
     }
   ],
   "expectedLearning": [

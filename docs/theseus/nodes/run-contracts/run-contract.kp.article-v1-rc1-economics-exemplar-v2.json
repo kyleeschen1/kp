@@ -69,7 +69,8 @@
     {
       "id": "s03-frontmatter-parser",
       "title": "Minimal frontmatter parser",
-      "status": "planned"
+      "summary": "Implemented a strict source-located parser for the root kp mapping, schema, document ID, and import aliases with quoted scalar and CRLF support and no YAML/runtime dependency.",
+      "status": "complete"
     },
     {
       "id": "s04-directive-scanner",
