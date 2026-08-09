@@ -82,6 +82,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:54:21.194Z",
       "notes": "Four Chromium toolbar tests passed; Pages exposes 23 native links on economics, Lisp, and catalogue routes."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:57:00.674Z",
+      "notes": "Four Chromium cases passed with native Enter/Tab navigation and Escape focus restoration."
     }
   ],
   "progress": {

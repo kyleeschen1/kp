@@ -89,7 +89,8 @@
     {
       "id": "s07",
       "title": "keyboard-focus-behavior",
-      "status": "planned"
+      "summary": "Made the native Pages disclosure keyboard-predictable with accurate expanded state, Escape close and focus return, Enter reopening, and direct Tab entry into real links.",
+      "status": "complete"
     },
     {
       "id": "s08",

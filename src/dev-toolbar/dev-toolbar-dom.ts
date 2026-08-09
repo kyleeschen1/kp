@@ -103,6 +103,8 @@ function renderLinks(
   disclosure.className = "kp-dev-toolbar__pages";
   const summary = ownerDocument.createElement("summary");
   summary.textContent = control.label;
+  summary.setAttribute("aria-haspopup", "true");
+  summary.setAttribute("aria-expanded", "false");
   const navigation = ownerDocument.createElement("nav");
   navigation.setAttribute("aria-label", "Development pages");
 
@@ -125,6 +127,15 @@ function renderLinks(
     section.append(heading, list);
     navigation.append(section);
   }
+  disclosure.addEventListener("toggle", () => {
+    summary.setAttribute("aria-expanded", String(disclosure.open));
+  });
+  disclosure.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !disclosure.open) return;
+    event.preventDefault();
+    disclosure.open = false;
+    summary.focus();
+  });
   disclosure.append(summary, navigation);
   return disclosure;
 }

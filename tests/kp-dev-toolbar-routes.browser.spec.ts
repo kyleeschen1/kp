@@ -41,6 +41,20 @@ for (const route of [
     const current = navigation.locator("[aria-current='page']");
     await expect(current).toHaveCount(1);
 
+    await page.keyboard.press("Escape");
+    await expect(pages).not.toHaveAttribute("open", "");
+    await expect(pages.getByText("Pages", { exact: true })).toBeFocused();
+    await expect(pages.getByText("Pages", { exact: true }))
+      .toHaveAttribute("aria-expanded", "false");
+    await page.keyboard.press("Enter");
+    await expect(pages).toHaveAttribute("open", "");
+    await expect(pages.getByText("Pages", { exact: true }))
+      .toHaveAttribute("aria-expanded", "true");
+    await page.keyboard.press("Tab");
+    await expect(navigation.getByRole("link", {
+      name: "Animation catalogue"
+    })).toBeFocused();
+
     await expect.poll(() => page.locator("[data-kp-dev-review-shell]").evaluate(
       (shell) => shell.shadowRoot?.querySelector<HTMLElement>(".launcher")
         ?.style.display
