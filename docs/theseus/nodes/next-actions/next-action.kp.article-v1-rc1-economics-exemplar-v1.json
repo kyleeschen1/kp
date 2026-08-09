@@ -241,6 +241,20 @@
       "scope": "s13-stage-manifests",
       "checkedAt": "2026-08-09T05:49:49.794Z",
       "notes": "Framework_neutral_manifest_and_activation_types_pass_all_TypeScript_Svelte_and_domain_boundaries"
+    },
+    {
+      "command": "npm_run_test_kp_article_rc1",
+      "status": "passed",
+      "scope": "s14-deck-derivation",
+      "checkedAt": "2026-08-09T05:53:23.470Z",
+      "notes": "64_RC1_tests_passed_with_heading_started_reading_scenes_one_indivisible_motion_scene_complete_prose_coverage_and_retained_focus_meaning"
+    },
+    {
+      "command": "npm_run_typecheck",
+      "status": "passed",
+      "scope": "s14-deck-derivation",
+      "checkedAt": "2026-08-09T05:53:24.691Z",
+      "notes": "Article_deck_projection_passed_all_TypeScript_Svelte_and_domain_boundaries"
     }
   ],
   "expectedLearning": [
