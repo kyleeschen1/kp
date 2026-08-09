@@ -94,6 +94,20 @@
       "scope": "repository TypeScript and Svelte boundaries",
       "checkedAt": "2026-08-09T04:50:23.511Z",
       "notes": "TypeScript, Svelte, and domain checks passed after index-signature-safe test accessors."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s06 stable identities and atomic rename",
+      "checkedAt": "2026-08-09T04:57:23.648Z",
+      "notes": "29 focused tests pass, including document scoping, collision diagnostics, deterministic slug suggestions, code-safe references, and atomic rename edits."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 identity and edit boundary",
+      "checkedAt": "2026-08-09T04:57:24.649Z",
+      "notes": "Application, test, Svelte, and domain types pass."
     }
   ],
   "expectedLearning": [

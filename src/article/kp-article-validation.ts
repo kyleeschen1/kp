@@ -131,6 +131,20 @@ export function validateKpArticleRc1(
     const validated = validateDirective(source, directive, diagnostics);
     if (validated !== undefined) directives.push(validated);
   }
+  const firstIdentity = new Map<string, KpValidatedArticleDirective>();
+  for (const directive of directives) {
+    const previous = firstIdentity.get(directive.id);
+    if (previous === undefined) {
+      firstIdentity.set(directive.id, directive);
+      continue;
+    }
+    const idAttribute = directive.source.attributes.find(({ kind }) => kind === "id")!;
+    diagnostics.push(diagnostic(
+      "directive-id-collision",
+      `Article-local identity ${directive.id} is already declared by ${previous.source.name}.`,
+      idAttribute.span
+    ));
+  }
   return result(frontmatter, directives, diagnostics);
 }
 

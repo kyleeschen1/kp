@@ -87,7 +87,8 @@
     {
       "id": "s06-stable-identities",
       "title": "Stable identities and rename",
-      "status": "planned"
+      "summary": "Added document-scoped identity indexing, duplicate rejection, persisted collision-safe slug suggestions, and atomic rename edits for declarations, stage references, semantic links, and fragments while leaving code examples untouched.",
+      "status": "complete"
     },
     {
       "id": "s07-semantic-refs",
