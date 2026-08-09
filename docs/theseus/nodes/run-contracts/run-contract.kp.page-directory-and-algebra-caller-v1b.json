@@ -83,7 +83,8 @@
     {
       "id": "s06",
       "title": "grouped-real-link-renderer",
-      "status": "planned"
+      "summary": "Rendered the Pages control as four grouped native-anchor sections with one current-page marker and 23 verified links.",
+      "status": "complete"
     },
     {
       "id": "s07",

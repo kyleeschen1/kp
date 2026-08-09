@@ -23,6 +23,23 @@ for (const route of [
     await expect(page.locator("[data-kp-dev-toolbar]")).toHaveCount(1);
     await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
     await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
+    const pages = toolbar.locator("[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']");
+    await expect(pages.getByText("Pages", { exact: true })).toBeVisible();
+    await pages.getByText("Pages", { exact: true }).click();
+    const navigation = pages.getByRole("navigation", {
+      name: "Development pages"
+    });
+    await expect(navigation.getByRole("link", {
+      name: "Economics · demand shift"
+    })).toHaveAttribute("href", "/tutorials/economics/demand-shift/");
+    await expect(navigation.getByRole("link", {
+      name: "Solve x",
+      exact: true
+    })).toHaveAttribute("href", "/reader/solve-x/");
+    await expect(navigation.getByRole("link")).toHaveCount(23);
+
+    const current = navigation.locator("[aria-current='page']");
+    await expect(current).toHaveCount(1);
 
     await expect.poll(() => page.locator("[data-kp-dev-review-shell]").evaluate(
       (shell) => shell.shadowRoot?.querySelector<HTMLElement>(".launcher")

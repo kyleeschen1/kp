@@ -75,6 +75,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:51:52.774Z",
       "notes": "25 tests passed; Pages is host-owned, immutable, current-aware, and collision-protected."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:54:21.194Z",
+      "notes": "Four Chromium toolbar tests passed; Pages exposes 23 native links on economics, Lisp, and catalogue routes."
     }
   ],
   "progress": {

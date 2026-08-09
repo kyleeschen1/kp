@@ -6,9 +6,13 @@ import {
   type KpDevToolbarChoice,
   type KpDevToolbarCommand,
   type KpDevToolbarControl,
+  type KpDevToolbarLinks,
   type KpDevToolbarRouteContribution,
   type KpDevToolbarSnapshot
 } from "./dev-toolbar-protocol.ts";
+import {
+  createKpDevelopmentPagesControl
+} from "./development-page-toolbar-control.ts";
 
 export interface KpMountedDevToolbar {
   readonly update: (contribution: KpDevToolbarRouteContribution) => void;
@@ -28,7 +32,18 @@ export function mountKpDevToolbar(input: {
   const toolbar = ownerDocument.createElement("aside");
   toolbar.dataset["kpDevToolbar"] = "true";
   toolbar.setAttribute("aria-label", "Development tools");
-  const host = createKpDevToolbarHost({ execute: input.execute });
+  const location = ownerDocument.defaultView?.location;
+  const host = createKpDevToolbarHost({
+    execute: input.execute,
+    ...(location === undefined
+      ? {}
+      : {
+          pages: createKpDevelopmentPagesControl({
+            pathname: location.pathname,
+            search: location.search
+          })
+        })
+  });
 
   const render = (snapshot: KpDevToolbarSnapshot): void => {
     toolbar.replaceChildren(...snapshot.controls.map((control) => renderControl(
@@ -63,6 +78,7 @@ function renderControl(
   if (control.kind === "choice") {
     return renderChoice(ownerDocument, control, routeId, dispatch);
   }
+  if (control.kind === "links") return renderLinks(ownerDocument, control);
   const button = ownerDocument.createElement("button");
   button.type = "button";
   button.dataset["kpDevToolbarControl"] = control.id;
@@ -76,6 +92,41 @@ function renderControl(
     ...(control.kind === "toggle" ? { value: !control.pressed } : {})
   }));
   return button;
+}
+
+function renderLinks(
+  ownerDocument: Document,
+  control: KpDevToolbarLinks
+): HTMLElement {
+  const disclosure = ownerDocument.createElement("details");
+  disclosure.dataset["kpDevToolbarControl"] = control.id;
+  disclosure.className = "kp-dev-toolbar__pages";
+  const summary = ownerDocument.createElement("summary");
+  summary.textContent = control.label;
+  const navigation = ownerDocument.createElement("nav");
+  navigation.setAttribute("aria-label", "Development pages");
+
+  for (const group of control.groups) {
+    const section = ownerDocument.createElement("section");
+    section.dataset["kpDevToolbarPageGroup"] = group.id;
+    const heading = ownerDocument.createElement("h3");
+    heading.textContent = group.label;
+    const list = ownerDocument.createElement("ul");
+    for (const link of group.links) {
+      const item = ownerDocument.createElement("li");
+      const anchor = ownerDocument.createElement("a");
+      anchor.dataset["kpDevToolbarPage"] = link.id;
+      anchor.href = link.href;
+      anchor.textContent = link.label;
+      if (link.current) anchor.setAttribute("aria-current", "page");
+      item.append(anchor);
+      list.append(item);
+    }
+    section.append(heading, list);
+    navigation.append(section);
+  }
+  disclosure.append(summary, navigation);
+  return disclosure;
 }
 
 function renderChoice(
