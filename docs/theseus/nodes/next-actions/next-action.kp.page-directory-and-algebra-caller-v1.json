@@ -117,6 +117,13 @@
       "scope": "s11 root SPA coverage",
       "checkedAt": "2026-08-09T22:15:31.673Z",
       "notes": "Fifteen Chromium cases passed; catalogue, editor, dashboard, animation host, workbench, FTC, and concept room each expose exactly one toolbar and one correct current page marker."
+    },
+    {
+      "command": "npm run visual:lisp-function-application-tutorial",
+      "status": "passed",
+      "scope": "s12 Lisp preservation",
+      "checkedAt": "2026-08-09T22:17:18.723Z",
+      "notes": "Four existing Chromium visual cases passed across reader cues, full checkpoint story, phone stage, and reduced motion; the focused toolbar test also passed with exact Lisp current identity and Review modal."
     }
   ],
   "progress": {

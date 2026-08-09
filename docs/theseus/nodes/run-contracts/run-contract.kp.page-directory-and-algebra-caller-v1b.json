@@ -119,7 +119,8 @@
     {
       "id": "s12",
       "title": "lisp-page-coverage",
-      "status": "planned"
+      "summary": "Verified the Lisp tutorial shares the universal page directory and Review host with exact current identity while preserving its unresolved visual choreography unchanged.",
+      "status": "complete"
     },
     {
       "id": "s13",

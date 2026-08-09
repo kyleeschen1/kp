@@ -4,12 +4,14 @@ for (const route of [
   {
     name: "Lisp tutorial",
     href: "/tutorials/programming/lisp-function-application/",
-    ready: "[data-kp-lisp-function-application-tutorial]"
+    ready: "[data-kp-lisp-function-application-tutorial]",
+    pageId: "tutorial.lisp-function-application"
   },
   {
     name: "animation catalogue",
     href: "/?artifact=animation.dot-projection.basic",
-    ready: "[data-kp-svelte-catalogue-shell]"
+    ready: "[data-kp-svelte-catalogue-shell]",
+    pageId: "studio.catalogue"
   }
 ] as const) {
   test(`${route.name} adopts the shared development toolbar`, async ({ page }) => {
@@ -40,6 +42,9 @@ for (const route of [
 
     const current = navigation.locator("[aria-current='page']");
     await expect(current).toHaveCount(1);
+    await expect(navigation.locator(
+      `[data-kp-dev-toolbar-page="${route.pageId}"]`
+    )).toHaveAttribute("aria-current", "page");
 
     await page.keyboard.press("Escape");
     await expect(pages).not.toHaveAttribute("open", "");
