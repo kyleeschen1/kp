@@ -8,7 +8,7 @@ import {
 import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import {
-  economicsDemandShiftVignetteRelease
+  kpArticleVignetteRegistry
 } from "../src/article/vignettes/economics-demand-shift-vignette.ts";
 
 test("golden source compiles to one ordered framework-neutral article document", () => {
@@ -43,7 +43,7 @@ test("stage, focus, passage, and motion retain typed source meaning", () => {
   const passage = document.blocks.find((block) => block.kind === "passage")!;
   const motion = document.blocks.find((block) => block.kind === "motion")!;
 
-  assert.equal(stage.vignette.version, "1.0.0");
+  assert.equal(stage.vignette.version, "1.1.0");
   assert.equal(stage.vignette.integrity, goldenLock().entries[0]!.integrity);
   assert.deepEqual(focus.targets, [
     "lesson.economics.demand-shift#market/demand",
@@ -105,7 +105,7 @@ test("compiled authority and nested collections are immutable data", () => {
 function compileGolden() {
   return compileKpArticleDocument({
     source: goldenSource(),
-    registry: [economicsDemandShiftVignetteRelease],
+    registry: kpArticleVignetteRegistry,
     lock: goldenLock()
   });
 }

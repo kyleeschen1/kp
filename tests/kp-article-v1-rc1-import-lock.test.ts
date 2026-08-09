@@ -13,7 +13,9 @@ import {
 } from "../src/article/kp-article-import-lock.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import {
-  economicsDemandShiftVignetteRelease
+  economicsDemandShiftVignetteRelease,
+  economicsDemandShiftVignetteStaticRelease,
+  kpArticleVignetteRegistry
 } from "../src/article/vignettes/economics-demand-shift-vignette.ts";
 import {
   economicsEquilibriumAnimationId
@@ -105,12 +107,21 @@ test("the economics vignette has a reproducible exact release identity", () => {
   assert.equal(economicsDemandShiftVignetteRelease.integrity, integrity);
   assert.deepEqual(economicsDemandShiftVignetteRelease.transitionPaths, ["shift-demand"]);
   assert.deepEqual(economicsDemandShiftVignetteRelease.checkpointPaths, ["initial", "settled"]);
+  const staticIntegrity = `sha256:${createHash("sha256")
+    .update(serializeKpVignetteReleasePayload(economicsDemandShiftVignetteStaticRelease))
+    .digest("hex")}`;
+  assert.equal(economicsDemandShiftVignetteStaticRelease.integrity, staticIntegrity);
+  assert.equal(economicsDemandShiftVignetteStaticRelease.version, "1.1.0");
+  assert.deepEqual(
+    economicsDemandShiftVignetteStaticRelease.staticProjection?.transitions,
+    [{ id: "shift-demand", from: "initial", to: "settled" }]
+  );
   const fixture = JSON.parse(readFileSync(
     new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   ));
   assert.deepEqual(
-    resolveKpArticleImports(goldenSource(), [economicsDemandShiftVignetteRelease]).lock,
+    resolveKpArticleImports(goldenSource(), kpArticleVignetteRegistry).lock,
     fixture
   );
 });

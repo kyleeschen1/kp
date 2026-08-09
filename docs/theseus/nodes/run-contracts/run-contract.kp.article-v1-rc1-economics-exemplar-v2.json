@@ -111,7 +111,8 @@
     {
       "id": "s10-static-markdown",
       "title": "Static Markdown checkpoint fallback",
-      "status": "planned"
+      "summary": "Added layout-free static Markdown projection with directive removal, preserved prose order, real semantic fragments, vignette-owned initial and settled figure metadata, exact-release asset requests, and an explicit compatible 1.1.0 economics release update.",
+      "status": "complete"
     },
     {
       "id": "s11-static-html-math",

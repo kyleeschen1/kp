@@ -14,6 +14,26 @@ export interface KpVignetteReleasePayload {
   readonly objectPaths: readonly string[];
   readonly transitionPaths: readonly string[];
   readonly checkpointPaths: readonly string[];
+  readonly staticProjection?: KpVignetteStaticProjection;
+}
+
+export interface KpVignetteStaticProjection {
+  readonly checkpoints: readonly KpVignetteStaticCheckpoint[];
+  readonly transitions: readonly KpVignetteStaticTransition[];
+}
+
+export interface KpVignetteStaticCheckpoint {
+  readonly id: string;
+  readonly label: string;
+  readonly alt: string;
+  readonly caption: string;
+  readonly assetPath: string;
+}
+
+export interface KpVignetteStaticTransition {
+  readonly id: string;
+  readonly from: string;
+  readonly to: string;
 }
 
 export interface KpVignetteRelease extends KpVignetteReleasePayload {
@@ -91,6 +111,9 @@ export function createKpVignetteRelease(
   const objectPaths = normalizedPaths(input.objectPaths);
   const transitionPaths = normalizedPaths(input.transitionPaths);
   const checkpointPaths = normalizedPaths(input.checkpointPaths);
+  const staticProjection = input.staticProjection === undefined
+    ? undefined
+    : normalizeStaticProjection(input.staticProjection, checkpointPaths, transitionPaths);
   return Object.freeze({
     schemaVersion: input.schemaVersion,
     id: input.id,
@@ -100,7 +123,8 @@ export function createKpVignetteRelease(
     animationId: input.animationId,
     objectPaths,
     transitionPaths,
-    checkpointPaths
+    checkpointPaths,
+    ...(staticProjection === undefined ? {} : { staticProjection })
   });
 }
 
@@ -115,7 +139,8 @@ export function serializeKpVignetteReleasePayload(
     animationId: release.animationId,
     objectPaths: release.objectPaths,
     transitionPaths: release.transitionPaths,
-    checkpointPaths: release.checkpointPaths
+    checkpointPaths: release.checkpointPaths,
+    ...(release.staticProjection === undefined ? {} : { staticProjection: release.staticProjection })
   };
   return JSON.stringify(payload);
 }
@@ -291,6 +316,49 @@ function normalizedPaths(paths: readonly string[]): readonly string[] {
     throw new KpArticleImportLockError("import-release-invalid", "Vignette semantic paths must use lowercase slash-separated slugs.");
   }
   return Object.freeze([...new Set(paths)].sort());
+}
+
+function normalizeStaticProjection(
+  projection: KpVignetteStaticProjection,
+  checkpointPaths: readonly string[],
+  transitionPaths: readonly string[]
+): KpVignetteStaticProjection {
+  const checkpoints = [...projection.checkpoints]
+    .sort((left, right) => left.id.localeCompare(right.id))
+    .map((checkpoint) => {
+      if (
+        !checkpointPaths.includes(checkpoint.id)
+        || checkpoint.label.trim().length === 0
+        || checkpoint.alt.trim().length === 0
+        || checkpoint.caption.trim().length === 0
+        || !/^\.\/[a-zA-Z0-9./_-]+\.svg$/u.test(checkpoint.assetPath)
+      ) {
+        throw new KpArticleImportLockError("import-release-invalid", `Invalid static checkpoint ${checkpoint.id}.`);
+      }
+      return Object.freeze({ ...checkpoint });
+    });
+  if (new Set(checkpoints.map(({ id }) => id)).size !== checkpoints.length) {
+    throw new KpArticleImportLockError("import-release-invalid", "Static checkpoint IDs must be unique.");
+  }
+  const transitions = [...projection.transitions]
+    .sort((left, right) => left.id.localeCompare(right.id))
+    .map((transition) => {
+      if (
+        !transitionPaths.includes(transition.id)
+        || !checkpointPaths.includes(transition.from)
+        || !checkpointPaths.includes(transition.to)
+      ) {
+        throw new KpArticleImportLockError("import-release-invalid", `Invalid static transition ${transition.id}.`);
+      }
+      return Object.freeze({ ...transition });
+    });
+  if (new Set(transitions.map(({ id }) => id)).size !== transitions.length) {
+    throw new KpArticleImportLockError("import-release-invalid", "Static transition IDs must be unique.");
+  }
+  return Object.freeze({
+    checkpoints: Object.freeze(checkpoints),
+    transitions: Object.freeze(transitions)
+  });
 }
 
 function parseRequest(request: string): Readonly<{ id: string; major: number }> {

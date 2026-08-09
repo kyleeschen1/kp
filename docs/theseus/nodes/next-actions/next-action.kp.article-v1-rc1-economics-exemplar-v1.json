@@ -164,6 +164,20 @@
       "scope": "s09 article IR boundary",
       "checkedAt": "2026-08-09T05:21:25.385Z",
       "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s10 static Markdown checkpoint fallback",
+      "checkedAt": "2026-08-09T05:29:27.735Z",
+      "notes": "48 focused tests pass; directives disappear, prose order and uniqueness remain, initial and settled figure requests are exact-release bound, and semantic links become real fragments."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 static Markdown compiler boundary",
+      "checkedAt": "2026-08-09T05:29:28.971Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
     }
   ],
   "expectedLearning": [
