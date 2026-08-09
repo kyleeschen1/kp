@@ -227,6 +227,20 @@
       "scope": "s12-environment",
       "checkedAt": "2026-08-09T05:46:36.084Z",
       "notes": "Browser_suite_could_not_start_because_user_owned_dev_browser_server_PID_61294_occupies_4173_and_config_intentionally_forbids_reuse_no_product_assertion_ran"
+    },
+    {
+      "command": "npm_run_test_kp_article_rc1",
+      "status": "passed",
+      "scope": "s13-stage-manifests",
+      "checkedAt": "2026-08-09T05:49:48.600Z",
+      "notes": "60_RC1_tests_passed_with_one_exact_release_manifest_per_stage_idle_initial_state_direct_address_near_viewport_deduplication_and_retry"
+    },
+    {
+      "command": "npm_run_typecheck",
+      "status": "passed",
+      "scope": "s13-stage-manifests",
+      "checkedAt": "2026-08-09T05:49:49.794Z",
+      "notes": "Framework_neutral_manifest_and_activation_types_pass_all_TypeScript_Svelte_and_domain_boundaries"
     }
   ],
   "expectedLearning": [

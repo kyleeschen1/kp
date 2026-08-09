@@ -129,7 +129,8 @@
     {
       "id": "s13-stage-manifests",
       "title": "Per-stage interaction manifests",
-      "status": "planned"
+      "summary": "Added_one_immutable_exact_release_interaction_manifest_per_stage_and_a_framework_neutral_on_demand_activation_controller_for_direct_addresses_and_near_viewport_signals.",
+      "status": "complete"
     },
     {
       "id": "s14-deck-derivation",
