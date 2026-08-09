@@ -197,7 +197,8 @@
     {
       "id": "s25",
       "title": "algebra-semantic-navigation",
-      "status": "planned"
+      "summary": "Bound prose hover, keyboard focus, persistent pin, and explicit checkpoint controls to locked algebra object paths. Inline semantic links remain non-temporal; the existing player clock owns all seeks.",
+      "status": "complete"
     },
     {
       "id": "s26",

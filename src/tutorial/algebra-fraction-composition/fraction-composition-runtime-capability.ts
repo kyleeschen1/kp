@@ -7,6 +7,7 @@ import {
   createKpEditorAnimationDescriptor
 } from "../../editor/animation-descriptor.ts";
 import {
+  KP_EDITOR_ANIMATION_FRAME_EVENT,
   dispatchKpEditorAnimationPlaybackAction,
   disposeKpEditorAnimationPlayer,
   hydrateKpPreparedEditorAnimationPlayer
@@ -25,14 +26,23 @@ import type {
   KpArticleStageManifest
 } from "../../article/kp-article-stage-manifest.ts";
 import {
+  createKpFractionCompositionArticleRuntimeCheckpoints,
   createKpFractionCompositionArticleRuntimeRanges,
+  type KpFractionCompositionArticleRuntimeCheckpoint,
   type KpFractionCompositionArticleRuntimeRange
 } from "./fraction-composition-runtime-ranges.ts";
+import {
+  resolveKpFractionCompositionArticleSemanticReference
+} from "./fraction-composition-semantic-navigation.ts";
 
 export interface KpFractionCompositionArticleRuntimeSession {
   readonly player: HTMLElement;
   readonly ranges: readonly KpFractionCompositionArticleRuntimeRange[];
+  readonly checkpoints:
+    readonly KpFractionCompositionArticleRuntimeCheckpoint[];
   readonly seekRange: (path: string, progress: number) => void;
+  readonly seekCheckpoint: (path: string) => void;
+  readonly setSemanticFocus: (addresses: readonly string[]) => void;
   readonly dispose: () => void;
 }
 
@@ -94,12 +104,57 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
   runtimeRoot.dataset["kpAlgebraRuntimeStage"] = "ready";
   input.host.dataset["kpAlgebraRuntimeAnimation"] = animation.id;
   const ranges = createKpFractionCompositionArticleRuntimeRanges();
+  const checkpoints = createKpFractionCompositionArticleRuntimeCheckpoints();
   input.host.dataset["kpAlgebraRuntimeRangeCount"] = String(ranges.length);
+  input.host.dataset["kpAlgebraRuntimeCheckpointCount"] = String(
+    checkpoints.length
+  );
+  let semanticFocusTargetIds: readonly string[] = [];
+  let activeCheckpointPath = "";
   let disposed = false;
+
+  const syncSemanticFocus = (): void => {
+    for (const element of player.querySelectorAll<HTMLElement>(
+      "[data-kp-article-semantic-salience]"
+    )) element.removeAttribute("data-kp-article-semantic-salience");
+    for (const targetId of semanticFocusTargetIds) {
+      for (const element of player.querySelectorAll<HTMLElement>(
+        `[data-kp-reader-selector-id="${CSS.escape(targetId)}"],` +
+        `[data-kp-editor-equation-object-id="${CSS.escape(targetId)}"],` +
+        `[data-kp-motion-id$=".${CSS.escape(targetId)}"]`
+      )) element.dataset["kpArticleSemanticSalience"] = "focus";
+    }
+    input.host.dataset["kpAlgebraSemanticFocusTargetCount"] = String(
+      player.querySelectorAll("[data-kp-article-semantic-salience=\"focus\"]")
+        .length
+    );
+  };
+  const syncCheckpoint = (): void => {
+    const progress = Number(player.dataset["kpEditorAnimationProgress"] ?? 0);
+    const checkpoint = [...checkpoints].reverse().find(
+      (candidate) => progress + Number.EPSILON >= candidate.progress
+    ) ?? checkpoints[0]!;
+    if (checkpoint.path === activeCheckpointPath) return;
+    activeCheckpointPath = checkpoint.path;
+    input.host.dataset["kpAlgebraRuntimeCheckpoint"] = checkpoint.path;
+    input.host.dispatchEvent(new CustomEvent("kp-algebra-article-checkpoint-change", {
+      bubbles: true,
+      detail: Object.freeze({ path: checkpoint.path })
+    }));
+  };
+  const onFrame = (): void => {
+    // Equation frames may replace endpoint subtrees; reapply article focus
+    // after the renderer owns the new nodes, without adding a second clock.
+    syncSemanticFocus();
+    syncCheckpoint();
+  };
+  player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, onFrame);
+  syncCheckpoint();
 
   return Object.freeze({
     player,
     ranges,
+    checkpoints,
     seekRange(path: string, progress: number) {
       const range = ranges.find((candidate) => candidate.path === path);
       if (range === undefined) throw new Error(`Unknown article motion ${path}.`);
@@ -110,15 +165,44 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
       });
       input.host.dataset["kpAlgebraRuntimeRange"] = path;
     },
+    seekCheckpoint(path: string) {
+      const checkpoint = checkpoints.find((candidate) => candidate.path === path);
+      if (checkpoint === undefined) {
+        throw new Error(`Unknown article checkpoint ${path}.`);
+      }
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: checkpoint.progress
+      });
+    },
+    setSemanticFocus(addresses: readonly string[]) {
+      semanticFocusTargetIds = Object.freeze([...new Set(addresses.flatMap(
+        (address) => {
+          const reference =
+            resolveKpFractionCompositionArticleSemanticReference(address);
+          if (reference === undefined) {
+            throw new Error(`Unknown article semantic reference ${address}.`);
+          }
+          return reference.paintTargetIds;
+        }
+      ))]);
+      input.host.dataset["kpAlgebraSemanticFocus"] = addresses.join(" ");
+      syncSemanticFocus();
+    },
     dispose() {
       if (disposed) return;
       disposed = true;
+      player.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, onFrame);
       disposeKpEditorAnimationPlayer(player);
       runtimeRoot.remove();
       fallback?.removeAttribute("hidden");
       delete input.host.dataset["kpAlgebraRuntimeAnimation"];
       delete input.host.dataset["kpAlgebraRuntimeRangeCount"];
       delete input.host.dataset["kpAlgebraRuntimeRange"];
+      delete input.host.dataset["kpAlgebraRuntimeCheckpointCount"];
+      delete input.host.dataset["kpAlgebraRuntimeCheckpoint"];
+      delete input.host.dataset["kpAlgebraSemanticFocus"];
+      delete input.host.dataset["kpAlgebraSemanticFocusTargetCount"];
     }
   });
 }

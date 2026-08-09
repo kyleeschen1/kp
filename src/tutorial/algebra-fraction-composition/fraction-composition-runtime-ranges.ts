@@ -16,6 +16,11 @@ export interface KpFractionCompositionArticleRuntimeRange {
   readonly end: number;
 }
 
+export interface KpFractionCompositionArticleRuntimeCheckpoint {
+  readonly path: string;
+  readonly progress: number;
+}
+
 export function createKpFractionCompositionArticleRuntimeRanges():
 readonly KpFractionCompositionArticleRuntimeRange[] {
   const tree = createKpFractionCompositionEvaluationTree();
@@ -45,4 +50,24 @@ readonly KpFractionCompositionArticleRuntimeRange[] {
       });
     }
   ));
+}
+
+export function createKpFractionCompositionArticleRuntimeCheckpoints():
+readonly KpFractionCompositionArticleRuntimeCheckpoint[] {
+  const ranges = createKpFractionCompositionArticleRuntimeRanges();
+  const transitions = kpFractionCompositionArticleTransitionBindings;
+  const first = transitions[0];
+  if (first === undefined || first.from !== "factored") {
+    throw new Error("Fraction composition runtime lacks its canonical initial checkpoint.");
+  }
+  return Object.freeze([
+    Object.freeze({ path: first.from, progress: 0 }),
+    ...transitions.map((transition) => {
+      const range = ranges.find(({ path }) => path === transition.path);
+      if (range === undefined) {
+        throw new Error(`Fraction composition runtime lacks range ${transition.path}.`);
+      }
+      return Object.freeze({ path: transition.to, progress: range.end });
+    })
+  ]);
 }

@@ -334,6 +334,41 @@
       "scope": "s24",
       "checkedAt": "2026-08-09T23:27:02.357Z",
       "notes": "All six Chromium/Firefox canonical fraction determinism and resource-lifecycle checks passed."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "slice-25 semantic reference and checkpoint contracts",
+      "checkedAt": "2026-08-09T23:53:29.565Z",
+      "notes": "98 Article v1 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-25 TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-09T23:53:30.706Z",
+      "notes": "All typecheck stages passed."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "slice-25 hover focus pin and checkpoint navigation",
+      "checkedAt": "2026-08-09T23:53:31.687Z",
+      "notes": "Three Chromium interaction tests passed."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "slice-25 canonical fraction preservation",
+      "checkedAt": "2026-08-09T23:53:32.618Z",
+      "notes": "63 architecture tests passed."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "slice-25 renderer preservation",
+      "checkedAt": "2026-08-09T23:53:33.569Z",
+      "notes": "Six Chromium and Firefox determinism tests passed."
     }
   ],
   "progress": {

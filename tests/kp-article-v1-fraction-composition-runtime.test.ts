@@ -11,8 +11,13 @@ import {
   kpFractionCompositionArticleRuntimeManifest
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-manifest.ts";
 import {
+  createKpFractionCompositionArticleRuntimeCheckpoints,
   createKpFractionCompositionArticleRuntimeRanges
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-ranges.ts";
+import {
+  kpFractionCompositionArticleSemanticReferences,
+  resolveKpFractionCompositionArticleSemanticReference
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-semantic-navigation.ts";
 
 const compiled = compileKpFractionCompositionArticle({
   text: readFileSync(
@@ -43,6 +48,43 @@ test("five named ranges partition all thirteen canonical operations", () => {
   }
 });
 
+test("six checkpoint seeks derive from the same five canonical ranges", () => {
+  const ranges = createKpFractionCompositionArticleRuntimeRanges();
+  const checkpoints = createKpFractionCompositionArticleRuntimeCheckpoints();
+
+  assert.deepEqual(checkpoints.map(({ path }) => path), [
+    "factored",
+    "normalized",
+    "constant-quotient",
+    "difference-simplified",
+    "right-product-simplified",
+    "solved"
+  ]);
+  assert.deepEqual(checkpoints.map(({ progress }) => progress), [
+    0,
+    ...ranges.map(({ end }) => end)
+  ]);
+});
+
+test("article semantic addresses resolve only through locked object bindings", () => {
+  assert.equal(kpFractionCompositionArticleSemanticReferences.length, 12);
+  const factor = resolveKpFractionCompositionArticleSemanticReference(
+    "solve/factor"
+  );
+  assert.equal(factor?.address, "solve/factor");
+  assert.equal(factor?.stageId, "solve");
+  assert.equal(factor?.objectPath, "factor");
+  assert.deepEqual(factor?.targetIds, ["fraction-fan-out.source.factor"]);
+  assert.deepEqual(factor?.paintTargetIds, [
+    "fraction-fan-out.source.factor.numerator",
+    "fraction-fan-out.source.factor.denominator"
+  ]);
+  assert.equal(
+    resolveKpFractionCompositionArticleSemanticReference("solve/not-authored"),
+    undefined
+  );
+});
+
 test("article activation keeps the renderer behind one dynamic capability", () => {
   const entry = readFileSync(
     "src/tutorial/algebra-fraction-composition/fraction-composition-progressive-entry.ts",
@@ -51,4 +93,5 @@ test("article activation keeps the renderer behind one dynamic capability", () =
   assert.match(entry, /IntersectionObserver/u);
   assert.match(entry, /import\("\.\/fraction-composition-runtime-capability\.ts"\)/u);
   assert.doesNotMatch(entry, /requestAnimationFrame|setInterval|setTimeout/u);
+  assert.doesNotMatch(entry, /seekCheckpoint\([^)]*kpFocus/u);
 });

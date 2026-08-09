@@ -16,6 +16,7 @@ export function renderKpFractionCompositionStaticPublication(
   compilation: KpFractionCompositionArticleCompilation
 ): string {
   const endpointSequence = createKpFractionCompositionStaticStepExport();
+  const checkpointNavigation = renderCheckpointNavigation(compilation);
   let articleHtml = compilation.staticHtml.articleHtml;
 
   for (const asset of compilation.staticHtml.assets) {
@@ -50,7 +51,7 @@ export function renderKpFractionCompositionStaticPublication(
     articleHtml = articleHtml.replace(
       image,
       asset.checkpointId === "factored"
-        ? `<div data-kp-algebra-stage-host>${equationSvg}</div>`
+        ? `<div data-kp-algebra-stage-host>${equationSvg}${checkpointNavigation}</div>`
         : equationSvg
     );
   }
@@ -67,6 +68,31 @@ export function renderKpFractionCompositionStaticPublication(
   </main>`;
 }
 
+function renderCheckpointNavigation(
+  compilation: KpFractionCompositionArticleCompilation
+): string {
+  const stage = compilation.stageManifests.find(({ stageId }) =>
+    stageId === "solve"
+  );
+  if (stage === undefined) {
+    throw new Error("Static algebra publication lacks the solve stage manifest.");
+  }
+  return [
+    `<nav class="kp-algebra-article__checkpoint-navigation"`,
+    ` data-kp-algebra-checkpoint-navigation aria-label="Equation checkpoints">`,
+    stage.accessibility.checkpoints.map((checkpoint, index) => {
+      const path = checkpoint.fullId.slice(checkpoint.fullId.lastIndexOf("/") + 1);
+      return [
+        `<a href="#kp-ref:solve/${escapeAttribute(path)}"`,
+        ` data-kp-algebra-checkpoint-link="${escapeAttribute(path)}"`,
+        index === 0 ? ` aria-current="step"` : "",
+        `>${escapeHtml(checkpoint.label)}</a>`
+      ].join("");
+    }).join(""),
+    `</nav>`
+  ].join("");
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
@@ -77,4 +103,8 @@ function escapeAttribute(value: string): string {
     .replaceAll('"', "&quot;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+function escapeHtml(value: string): string {
+  return escapeAttribute(value).replaceAll("'", "&#39;");
 }

@@ -2,8 +2,18 @@ import {
   createKpArticleStageActivationController
 } from "../../article/kp-article-stage-activation.ts";
 import {
+  bindKpReaderSemanticLinks
+} from "../../reader/runtime/semantic-focus-bindings.ts";
+import {
+  createKpReaderSemanticFocusService
+} from "../../reader/runtime/semantic-focus.ts";
+import {
   kpFractionCompositionArticleRuntimeManifest
 } from "./fraction-composition-runtime-manifest.ts";
+import {
+  kpFractionCompositionArticleSemanticReferences,
+  resolveKpFractionCompositionArticleSemanticReference
+} from "./fraction-composition-semantic-navigation.ts";
 import type {
   KpFractionCompositionArticleRuntimeSession
 } from "./fraction-composition-runtime-capability.ts";
@@ -15,6 +25,13 @@ export function mountKpFractionCompositionArticleEnhancement(
     "[data-kp-algebra-stage-host]"
   );
   if (host === null) return () => undefined;
+  const article = ownerWindow.document.querySelector<HTMLElement>(
+    "[data-kp-algebra-fraction-composition-publication]"
+  ) ?? ownerWindow.document.body;
+  const focus = createKpReaderSemanticFocusService(
+    kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
+  );
+  const semanticLinks = decorateSemanticLinks(article);
   let runtimeSession: KpFractionCompositionArticleRuntimeSession | undefined;
   const activation = createKpArticleStageActivationController({
     manifests: [kpFractionCompositionArticleRuntimeManifest],
@@ -24,6 +41,7 @@ export function mountKpFractionCompositionArticleEnhancement(
         host,
         manifest
       });
+      runtimeSession.setSemanticFocus(focus.getSnapshot().objectRefs);
       return runtimeSession;
     },
     onChange: ({ state }) => {
@@ -46,8 +64,140 @@ export function mountKpFractionCompositionArticleEnhancement(
       // Direct addressing is an enhancement; static anchors still navigate.
     });
   }
+  const applyFocus = (): void => {
+    const snapshot = focus.getSnapshot();
+    article.dataset["kpArticleSemanticFocusSource"] =
+      snapshot.activeSource ?? "none";
+    const session = runtimeSession;
+    if (session !== undefined) {
+      session.setSemanticFocus(snapshot.objectRefs);
+      return;
+    }
+    const address = snapshot.objectRefs[0];
+    if (address === undefined) return;
+    void activation.activateAddress(`#kp-ref:${address}`).then((ready) => {
+      ready?.setSemanticFocus(focus.getSnapshot().objectRefs);
+    }).catch(() => {
+      // Static semantic anchors remain usable when the stage cannot enhance.
+    });
+  };
+  const unsubscribeFocus = focus.subscribe(applyFocus);
+  const semanticBindings = bindKpReaderSemanticLinks({
+    root: article,
+    selector: "[data-kp-article-semantic-link]",
+    setFocus: (source, refs) => focus.set(source, refs),
+    clearFocus: (source) => focus.clear(source)
+  });
+  let pinnedAddress: string | undefined;
+  const syncPinnedLink = (): void => {
+    for (const link of semanticLinks) {
+      const pinned = link.dataset["kpFocus"] === pinnedAddress;
+      link.toggleAttribute("data-kp-article-semantic-pinned", pinned);
+    }
+  };
+  const onSemanticClick = (event: MouseEvent): void => {
+    if (!plainActivation(event)) return;
+    const link = semanticLinkOwner(event.target, article);
+    const address = link?.dataset["kpFocus"];
+    if (address === undefined) return;
+    pinnedAddress = pinnedAddress === address ? undefined : address;
+    if (pinnedAddress === undefined) focus.clear("url");
+    else focus.set("url", [pinnedAddress]);
+    syncPinnedLink();
+  };
+  const onEscape = (event: KeyboardEvent): void => {
+    if (event.key !== "Escape" || pinnedAddress === undefined) return;
+    pinnedAddress = undefined;
+    focus.clear("url");
+    syncPinnedLink();
+  };
+  const checkpointLinks = [...article.querySelectorAll<HTMLAnchorElement>(
+    "[data-kp-algebra-checkpoint-link]"
+  )];
+  const selectCheckpoint = (path: string): void => {
+    for (const link of checkpointLinks) {
+      if (link.dataset["kpAlgebraCheckpointLink"] === path) {
+        link.setAttribute("aria-current", "step");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    }
+  };
+  const onCheckpointChange = (event: Event): void => {
+    if (!(event instanceof CustomEvent)) return;
+    const path = (event.detail as { readonly path?: unknown }).path;
+    if (typeof path === "string") selectCheckpoint(path);
+  };
+  const onCheckpointClick = (event: MouseEvent): void => {
+    if (!plainActivation(event)) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const link = target.closest<HTMLAnchorElement>(
+      "[data-kp-algebra-checkpoint-link]"
+    );
+    if (link === null || !article.contains(link)) return;
+    const path = link.dataset["kpAlgebraCheckpointLink"];
+    if (path === undefined) return;
+    event.preventDefault();
+    void activation.activateStage("solve", "direct-address").then((session) => {
+      session.seekCheckpoint(path);
+    }).catch(() => {
+      // A failed enhancement falls back to the static checkpoint anchor.
+      ownerWindow.location.hash = link.hash;
+    });
+  };
+  article.addEventListener("click", onSemanticClick);
+  article.addEventListener("click", onCheckpointClick);
+  ownerWindow.addEventListener("keydown", onEscape);
+  host.addEventListener(
+    "kp-algebra-article-checkpoint-change",
+    onCheckpointChange
+  );
   return () => {
     observer.disconnect();
+    article.removeEventListener("click", onSemanticClick);
+    article.removeEventListener("click", onCheckpointClick);
+    ownerWindow.removeEventListener("keydown", onEscape);
+    host.removeEventListener(
+      "kp-algebra-article-checkpoint-change",
+      onCheckpointChange
+    );
+    semanticBindings.dispose();
+    unsubscribeFocus();
+    focus.dispose();
     runtimeSession?.dispose();
   };
+}
+
+function decorateSemanticLinks(root: HTMLElement): readonly HTMLAnchorElement[] {
+  return [...root.querySelectorAll<HTMLAnchorElement>('a[href^="#kp-ref:"]')]
+    .filter((link) => {
+      const address = link.getAttribute("href")?.slice("#kp-ref:".length);
+      const reference = address === undefined
+        ? undefined
+        : resolveKpFractionCompositionArticleSemanticReference(address);
+      if (reference === undefined) return false;
+      link.dataset["kpArticleSemanticLink"] = "";
+      link.dataset["kpFocus"] = reference.address;
+      return true;
+    });
+}
+
+function semanticLinkOwner(
+  target: EventTarget | null,
+  root: HTMLElement
+): HTMLAnchorElement | null {
+  if (!(target instanceof Element)) return null;
+  const link = target.closest<HTMLAnchorElement>(
+    "[data-kp-article-semantic-link]"
+  );
+  return link !== null && root.contains(link) ? link : null;
+}
+
+function plainActivation(event: MouseEvent): boolean {
+  return event.button === 0
+    && !event.metaKey
+    && !event.ctrlKey
+    && !event.altKey
+    && !event.shiftKey;
 }

@@ -64,6 +64,9 @@ import {
   createKpGeneratedLinearSolveSelectorAnnotatedLatex
 } from "../rendering/generated-linear-solve-selector-annotated-latex.ts";
 import {
+  createKpFractionCompositionSelectorAnnotatedLatex
+} from "../rendering/fraction-composition-selector-annotated-latex.ts";
+import {
   createKpDerivativePowerSelectorAnnotatedLatex
 } from "./derivative-power-semantic-latex.ts";
 import {
@@ -511,7 +514,12 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       const transitionElement = transitionNodes.element;
 
       transitionElement.dataset["kpEditorEquationMotif"] = motif.kind;
+      // Fraction composition can expose annotated focus identities now, but
+      // its structural fraction rules still use the established layer-motion
+      // path until their token geometry is promoted as a separate renderer slice.
       const semanticMotionApplied = transition.semanticStatus === "ready" &&
+        state.animationId !==
+          "animation.fraction-composition.two-thirds-solve" &&
         applySemanticTokenMotion({
           stage,
           transitionElement,
@@ -3768,6 +3776,7 @@ function annotatedLatexForStates(
     objectId: state.objectId,
     selectorIds: state.selectors.map((selector) => selector.id)
   }) ?? createKpGeneratedLinearSolveSelectorAnnotatedLatex(state)
+    ?? createKpFractionCompositionSelectorAnnotatedLatex(state.objectId)
     ?? createKpFractionSelectorAnnotatedLatex(state)
     ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
     ?? createKpDistributionSelectorAnnotatedLatex(state)
@@ -3792,7 +3801,9 @@ function annotatedLatexForObject(
   }) ?? createKpGeneratedLinearSolveSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
-  }) ?? createKpFractionSelectorAnnotatedLatex({
+  }) ?? createKpFractionCompositionSelectorAnnotatedLatex(
+    object.id
+  ) ?? createKpFractionSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpFunctionWrapSelectorAnnotatedLatex({
