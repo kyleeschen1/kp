@@ -165,7 +165,8 @@
     {
       "id": "s19-language-service",
       "title": "RC1 editor language service",
-      "status": "planned"
+      "summary": "Added one editor-neutral RC1 language service for incomplete-source completion, diagnostics, folds, hover, go-to, references, atomic rename, and directive-only formatting over immutable source edits.",
+      "status": "complete"
     },
     {
       "id": "s20-draft-save",

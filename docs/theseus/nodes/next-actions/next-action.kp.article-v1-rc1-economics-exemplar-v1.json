@@ -339,6 +339,27 @@
       "scope": "slice 18 generated publication and closure",
       "checkedAt": "2026-08-09T06:35:02.793Z",
       "notes": "Six artifact tests, publication freshness, production build, and 10-marker tooling closure passed."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "slice 19 RC1 language service and rename integrity",
+      "checkedAt": "2026-08-09T06:47:09.596Z",
+      "notes": "70 tests passed, including completion on incomplete syntax, diagnostics, folds, hover, definitions, references, atomic rename, and directive-only formatting."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "slice 19 editor-neutral service boundary",
+      "checkedAt": "2026-08-09T06:47:10.576Z",
+      "notes": "TypeScript, Svelte, domain checks, publication freshness, and production build passed; language-service results contain only immutable data and source edits."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/article/kp-article-language-service.ts",
+      "status": "passed",
+      "scope": "slice 19 impact selection",
+      "checkedAt": "2026-08-09T06:47:11.483Z",
+      "notes": "Selector classified the new unmatched compiler/editor seam as high risk; focused RC1, typecheck, and build gates were completed while the known unrelated full-suite architecture failure remains baseline."
     }
   ],
   "expectedLearning": [

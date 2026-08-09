@@ -10,6 +10,7 @@ import {
   suggestKpArticleLocalId
 } from "../src/article/kp-article-identity.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
+import { resolveKpArticleSemanticReferences } from "../src/article/kp-article-semantic-references.ts";
 import { validateKpArticleRc1 } from "../src/article/kp-article-validation.ts";
 
 test("identities are explicit, document scoped, and source located", () => {
@@ -88,14 +89,18 @@ test("stage rename returns one atomic edit set for declarations and references",
   const renamedText = applyKpArticleTextEdits(source, rename.edits);
 
   assert.equal(rename.documentId, "lesson.economics.demand-shift");
-  assert.equal(rename.edits.length, 6);
+  assert.equal(rename.edits.length, 10);
   assert.match(renamedText, /#market-model use=demandShift/u);
   assert.equal((renamedText.match(/stage=market-model/gu) ?? []).length, 2);
+  assert.match(renamedText, /target="market-model\/demand market-model\/supply"/u);
+  assert.match(renamedText, /run=market-model\/shift-demand/u);
   assert.match(renamedText, /kp-ref:market-model\/demand/u);
   assert.match(renamedText, /\]\(#market-model\)/u);
   assert.match(renamedText, /`\[inert\]\(kp-ref:market\/demand\)`/u);
   assert.match(renamedText, /\[also inert\]\(kp-ref:market\/demand\)/u);
-  assert.equal(validateKpArticleRc1(createKpArticleSource("renamed.md", renamedText)).valid, true);
+  const renamedSource = createKpArticleSource("renamed.md", renamedText);
+  assert.equal(validateKpArticleRc1(renamedSource).valid, true);
+  assert.equal(resolveKpArticleSemanticReferences(renamedSource).valid, true);
 });
 
 test("non-stage identities rename fragment links without changing prose-derived suggestions", () => {

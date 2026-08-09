@@ -1,8 +1,10 @@
 import {
   createKpArticleSourceSpan,
+  sliceKpArticleSource,
   type KpArticleSource,
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
+import type { KpArticleDirectiveAttribute } from "./kp-article-directives.ts";
 import { scanKpArticleMarkdownLinks } from "./kp-article-markdown-links.ts";
 import {
   validateKpArticleRc1,
@@ -98,6 +100,12 @@ export function renameKpArticleIdentity(
       if (attribute.kind === "property" && attribute.name === "stage" && attribute.value === from) {
         edits.push(textEdit(attributeValueSpan(source, attribute.span, attribute.raw), to));
       }
+      if (
+        attribute.kind === "property" &&
+        ["target", "context", "run", "range"].includes(attribute.name ?? "")
+      ) {
+        edits.push(...semanticAttributeEdits(source, attribute, from, to));
+      }
     }
   }
   edits.push(...markdownReferenceEdits(source, from, to));
@@ -109,6 +117,27 @@ export function renameKpArticleIdentity(
     from,
     to,
     edits: Object.freeze(edits)
+  });
+}
+
+function semanticAttributeEdits(
+  source: KpArticleSource,
+  attribute: KpArticleDirectiveAttribute,
+  from: string,
+  to: string
+): KpArticleTextEdit[] {
+  const span = attributeValueSpan(source, attribute.span, attribute.raw);
+  const rawValue = sliceKpArticleSource(source, span);
+  const matches = [...rawValue.matchAll(
+    new RegExp(`(^|\\s|\\.\\.)${from}(?=/)`, "gu")
+  )];
+  return matches.map((match) => {
+    const prefixLength = match[1]?.length ?? 0;
+    const start = span.start.offset + match.index + prefixLength;
+    return textEdit(
+      createKpArticleSourceSpan(source, start, start + from.length),
+      to
+    );
   });
 }
 
