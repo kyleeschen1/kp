@@ -1,0 +1,71 @@
+{
+  "id": "next-action.kp.article-v1-rc1-economics-exemplar-v1",
+  "kind": "next-action",
+  "title": "Implement KP Article V1 RC1 through the economics exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Execute the approved 24-slice authoring, compiler, development-toolbar, editor, and economics migration plan through the required human checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/kp-article-v1-rc1.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.economics-projection-deck-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-lesson-source-save",
+    "npm run test:browser:economics-demand-shift-tutorial",
+    "npm run test:browser:economics-lesson-editor",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether four closed Markdown directives can replace three writable economics representations without source noise or learner-visible drift.",
+    "Whether one framework-neutral article IR can drive static, interactive, deck, navigation, accessibility, and editor projections.",
+    "Whether a universal development toolbar can preserve route state while remaining absent from production."
+  ],
+  "allowedWork": [
+    "RC1 parser, validator, source maps, import lock, IR, static compilation, accessibility, stage manifests, deck derivation, CodeMirror language tooling and persistence, development toolbar, and economics migration."
+  ],
+  "disallowedWork": [
+    "Layout, graph style, salience, choreography, arbitrary executable article code, another lesson migration, Public Web, Public Editor, SvelteKit, Canvas, WebGL, Graph3D, or animation-promotion work."
+  ],
+  "criteria": [
+    {
+      "id": "rc1-four-directive-source-is-readable",
+      "weight": "high"
+    },
+    {
+      "id": "rc1-static-and-interactive-projections-share-one-ir",
+      "weight": "high"
+    },
+    {
+      "id": "economics-has-one-writable-article-source",
+      "weight": "high"
+    },
+    {
+      "id": "editor-preserves-invalid-drafts-and-last-valid-preview",
+      "weight": "high"
+    },
+    {
+      "id": "dev-toolbar-is-universal-in-dev-and-absent-in-production",
+      "weight": "high"
+    },
+    {
+      "id": "economics-semantic-and-visual-parity-is-preserved",
+      "weight": "high"
+    }
+  ]
+}

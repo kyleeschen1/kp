@@ -5,6 +5,12 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "Deck proof is complete; no layout promotion or second caller is implied.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/economics-demand-shift/economics-demand-shift-deck.ts"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:economics-demand-shift-tutorial",

@@ -1,7 +1,7 @@
 # KP Article V1 RC1 Long-Loop Proposal
 
 Date: 2026-08-08
-Status: proposal; execution requires approval
+Status: approved; execution active
 Source decision: `../decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md`
 
 ## Objective
@@ -110,4 +110,3 @@ Stop if:
 - Public Web, Public Editor, and SvelteKit expansion;
 - Canvas/WebGL/Graph3D changes;
 - animation-library promotion work.
-

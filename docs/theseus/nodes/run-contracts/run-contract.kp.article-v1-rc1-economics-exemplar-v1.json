@@ -1,0 +1,179 @@
+{
+  "id": "run-contract.kp.article-v1-rc1-economics-exemplar-v1",
+  "kind": "run-contract",
+  "title": "KP Article V1 RC1 economics exemplar",
+  "status": "superseded",
+  "summary": "Superseded before execution so v2 can target the fully specified ready next-action; exact approved slices and run fields are unchanged.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md",
+      "summary": "User-approved 24-slice plan, preservation boundary, verification cadence, stop conditions, and human checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/kp-article-v1-rc1.md",
+      "summary": "Accepted provisional authoring grammar and compilation contract."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:economics-lesson-source-save",
+    "npm run test:browser:economics-demand-shift-tutorial",
+    "npm run test:browser:economics-lesson-editor",
+    "npm run visual:economics-demand-shift-deck",
+    "npm run build",
+    "npm run check:promotion-memory",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "RC1 documentation, parser, validator, source maps, lock resolution, static compilation, accessibility, interaction manifests, deck derivation, CodeMirror language tooling, draft persistence, universal development toolbar, and the economics source migration.",
+    "Focused and boundary tests, visual captures, production-closure checks, performance checks, Theseus records, and one independently reversible commit per slice."
+  ],
+  "disallowedWork": [
+    "Lesson layout, graph styling, salience, or choreography redesign.",
+    "Arbitrary executable article code, prose transclusion, explicit slide syntax, advanced semantic-history tooling, or another lesson migration.",
+    "Public Web, Public Editor, SvelteKit expansion, Canvas/WebGL/Graph3D work, animation-library promotion, or deletion of legacy economics sources before the human checkpoint."
+  ],
+  "goal": "Implement the approved KP article RC1 contract through one trustworthy economics authoring path, then stop for human review before freezing v1 or deleting legacy sources.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at HUMAN_CHECKPOINT after s23; s24 requires fresh human approval of the economics RC1 exemplar.",
+    "Stop if the grammar requires a fifth directive, layout syntax, executable article code, prose duplication, or more than 25 percent source noise.",
+    "Stop if import locking cannot reproduce the selected vignette or migration changes learner-visible semantics or animation checkpoints.",
+    "Stop if toolbar rollout introduces production JavaScript or layout shift, or if static search, HTML/MathML/SVG, direct links, accessibility, or last-valid preview regresses.",
+    "Stop if unrelated dirty-worktree files would need modification or required verification cannot be repaired inside the current slice rollback boundary."
+  ],
+  "slices": [
+    {
+      "id": "s01-golden-fixture",
+      "title": "Golden RC1 fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s02-source-spans",
+      "title": "Lossless source spans",
+      "status": "planned"
+    },
+    {
+      "id": "s03-frontmatter-parser",
+      "title": "Minimal frontmatter parser",
+      "status": "planned"
+    },
+    {
+      "id": "s04-directive-scanner",
+      "title": "Four-directive scanner",
+      "status": "planned"
+    },
+    {
+      "id": "s05-typed-validation",
+      "title": "Typed validation and diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s06-stable-identities",
+      "title": "Stable identities and rename",
+      "status": "planned"
+    },
+    {
+      "id": "s07-semantic-refs",
+      "title": "Semantic reference resolution",
+      "status": "planned"
+    },
+    {
+      "id": "s08-import-lock",
+      "title": "Vignette import lock model",
+      "status": "planned"
+    },
+    {
+      "id": "s09-article-ir",
+      "title": "KpArticleDocument IR and source map",
+      "status": "planned"
+    },
+    {
+      "id": "s10-static-markdown",
+      "title": "Static Markdown checkpoint fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s11-static-html-math",
+      "title": "Static HTML and build-time math",
+      "status": "planned"
+    },
+    {
+      "id": "s12-accessibility",
+      "title": "Accessibility and reduced-motion contract",
+      "status": "planned"
+    },
+    {
+      "id": "s13-stage-manifests",
+      "title": "Per-stage interaction manifests",
+      "status": "planned"
+    },
+    {
+      "id": "s14-deck-derivation",
+      "title": "Deck scene derivation",
+      "status": "planned"
+    },
+    {
+      "id": "s15-toolbar-protocol",
+      "title": "Development toolbar capability protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s16-toolbar-exemplar",
+      "title": "Economics toolbar exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s17-toolbar-rollout",
+      "title": "Development-route toolbar rollout",
+      "status": "planned"
+    },
+    {
+      "id": "s18-toolbar-state",
+      "title": "Toolbar state handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s19-language-service",
+      "title": "RC1 editor language service",
+      "status": "planned"
+    },
+    {
+      "id": "s20-draft-save",
+      "title": "Whole-file draft and Vim save lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s21-legacy-importer",
+      "title": "Legacy economics importer",
+      "status": "planned"
+    },
+    {
+      "id": "s22-economics-cutover",
+      "title": "Economics RC1 source cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s23-exemplar-gate",
+      "title": "Economics exemplar release gate and human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s24-v1-promotion",
+      "title": "Post-approval v1 promotion and legacy retirement",
+      "status": "planned"
+    }
+  ]
+}
