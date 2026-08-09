@@ -31,8 +31,11 @@ export function renderKpFractionCompositionStaticPublication(
       `<img src="${escapeRegExp(asset.assetPath)}"[^>]*>`,
       "u"
     );
-    articleHtml = articleHtml.replace(image, [
+    const equationSvg = [
       `<svg class="kp-algebra-article__equation-stage"`,
+      asset.checkpointId === "factored"
+        ? ` data-kp-algebra-stage-fallback`
+        : "",
       ` data-kp-algebra-static-checkpoint="${escapeAttribute(asset.checkpointId)}"`,
       ` viewBox="0 0 640 180" role="img"`,
       ` aria-label="${escapeAttribute(step.frame.state.accessibilityLabel)}">`,
@@ -43,7 +46,13 @@ export function renderKpFractionCompositionStaticPublication(
         output: "htmlAndMathml"
       }),
       `</div></foreignObject></svg>`
-    ].join(""));
+    ].join("");
+    articleHtml = articleHtml.replace(
+      image,
+      asset.checkpointId === "factored"
+        ? `<div data-kp-algebra-stage-host>${equationSvg}</div>`
+        : equationSvg
+    );
   }
 
   if (articleHtml.includes("./kp-static/")) {

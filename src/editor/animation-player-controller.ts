@@ -85,6 +85,29 @@ export function hydrateKpEditorAnimationPlayers(
     });
 }
 
+/**
+ * Publication hosts already hold an exact locked asset and descriptor. They
+ * must not load the catalogue pack again merely to initialize the shared
+ * player clock and renderer.
+ */
+export async function hydrateKpPreparedEditorAnimationPlayer(input: {
+  readonly player: HTMLElement;
+  readonly animation: KpAnimationAsset;
+  readonly descriptor: KpEditorAnimationDescriptor;
+}): Promise<void> {
+  try {
+    await hydrateKpEditorAnimationPlayer(
+      input.player,
+      input.animation,
+      input.descriptor,
+      true
+    );
+  } catch (error: unknown) {
+    markPlayerLoadFailure(input.player, error);
+    throw error;
+  }
+}
+
 export function pauseKpEditorAnimationPlayers(
   root: ParentNode,
   nowMs: number = performance.now()
@@ -193,7 +216,8 @@ export function applyKpEditorAnimationPresentationTuning(
 async function hydrateKpEditorAnimationPlayer(
   player: HTMLElement,
   animationOverride?: KpAnimationAsset | undefined,
-  descriptorOverride?: KpEditorAnimationDescriptor | undefined
+  descriptorOverride?: KpEditorAnimationDescriptor | undefined,
+  prepared = false
 ): Promise<void> {
   if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
     player.dataset["kpEditorAnimationLoading"] === "true") return;
@@ -215,7 +239,13 @@ async function hydrateKpEditorAnimationPlayer(
     );
   }
   const [loaded, gestaltCapability] = await Promise.all([
-    loadKpAnimationAsset(animationId),
+    prepared && animationOverride !== undefined
+      ? Promise.resolve({
+          animation: animationOverride,
+          catalog: [animationOverride],
+          packId: "pack.prepared-publication"
+        })
+      : loadKpAnimationAsset(animationId),
     player.querySelector("[data-kp-editor-animation-gestalt-diagnostics]") ===
         null
       ? Promise.resolve(undefined)

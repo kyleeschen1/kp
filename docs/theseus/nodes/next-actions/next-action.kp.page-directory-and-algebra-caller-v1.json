@@ -306,6 +306,34 @@
       "scope": "s23",
       "checkedAt": "2026-08-09T23:13:55.736Z",
       "notes": "All 24 declared pages plus directory inventory passed; algebra route identity and Review host verified."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-09T23:26:59.440Z",
+      "notes": "96 tests passed; runtime manifest matches build projection and five ranges partition 13 canonical operations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-09T23:27:00.489Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-09T23:27:01.434Z",
+      "notes": "Lazy route smoke mounted exactly one prepared canonical player, hid fallback only after readiness, and advanced the shared playback clock."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-09T23:27:02.357Z",
+      "notes": "All six Chromium/Firefox canonical fraction determinism and resource-lifecycle checks passed."
     }
   ],
   "progress": {

@@ -191,7 +191,8 @@
     {
       "id": "s24",
       "title": "fraction-composition-runtime-binding",
-      "status": "planned"
+      "summary": "Bound the article stage through one near-viewport dynamic capability to the exact locked fraction asset, existing player clock and equation renderer; added a prepared-player seam that avoids redundant catalogue-pack loading and five tree-derived motion ranges.",
+      "status": "complete"
     },
     {
       "id": "s25",

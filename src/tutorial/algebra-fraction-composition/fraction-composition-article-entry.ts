@@ -1,3 +1,10 @@
+import {
+  mountKpFractionCompositionArticleEnhancement
+} from "./fraction-composition-progressive-entry.ts";
+
+const disposeEnhancement = mountKpFractionCompositionArticleEnhancement(window);
+window.addEventListener("pagehide", disposeEnhancement, { once: true });
+
 if (import.meta.env.DEV) {
   void Promise.all([
     import("../../dev-review/reader-review-bootstrap.ts"),

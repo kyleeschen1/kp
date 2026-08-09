@@ -1,4 +1,4 @@
-:root {
+html:root {
   color: #ececf0;
   background: #0d0e1c;
   color-scheme: dark;
@@ -7,7 +7,7 @@
 
 * { box-sizing: border-box; }
 
-body {
+html body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
@@ -59,6 +59,45 @@ body {
   max-height: 11rem;
   color: inherit;
   overflow: visible;
+}
+
+[data-kp-algebra-stage-host] {
+  min-height: 11rem;
+}
+
+[data-kp-algebra-runtime-stage="loading"] {
+  visibility: hidden;
+}
+
+[data-kp-algebra-runtime-stage="ready"] +
+[data-kp-algebra-stage-fallback] {
+  display: none;
+}
+
+.kp-algebra-article [data-kp-algebra-runtime-stage] .editor-animation-player {
+  border: 1px solid #555968;
+  color: #ececf0;
+  background: #0d0e1c;
+}
+
+.kp-algebra-article [data-kp-algebra-runtime-stage]
+.editor-animation-player__stage,
+.kp-algebra-article [data-kp-algebra-runtime-stage]
+.editor-animation-player__surface:has(.editor-equation-stage),
+.kp-algebra-article [data-kp-algebra-runtime-stage]
+.editor-animation-player__controls {
+  color: #ececf0;
+  background: #0d0e1c;
+}
+
+.kp-algebra-article [data-kp-algebra-runtime-stage]
+.editor-animation-player__surface {
+  border: 0;
+}
+
+.kp-algebra-article [data-kp-algebra-runtime-stage]
+.editor-animation-player__controls {
+  border-color: #555968;
 }
 
 .kp-algebra-article__equation {
