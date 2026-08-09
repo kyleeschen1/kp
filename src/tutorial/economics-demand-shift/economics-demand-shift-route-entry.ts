@@ -1,6 +1,11 @@
 import {
   readKpEconomicsDemandShiftEnhancementMode
 } from "./economics-demand-shift-enhancement-mode.ts";
+import {
+  readKpEconomicsDemandShiftView,
+  writeKpEconomicsDemandShiftView,
+  type KpEconomicsDemandShiftView
+} from "./economics-demand-shift-view.ts";
 
 export const KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT =
   "kp-economics-demand-shift-route-request";
@@ -50,6 +55,9 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     activeDispose?.();
     activeDispose = undefined;
     activeSearch = search;
+    const view = readKpEconomicsDemandShiftView(search);
+    document.documentElement.dataset["kpEconomicsView"] = view;
+    syncViewSelector(input.root, view);
     const mode = readKpEconomicsDemandShiftEnhancementMode(search);
     document.documentElement.dataset["kpEconomicsEnhancement"] = mode;
     if (mode === "published") {
@@ -63,6 +71,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
         search,
         hash
       });
+      syncViewSelector(input.root, view);
       return;
     }
     const tutorial = await import(
@@ -74,6 +83,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       search,
       hash
     });
+    syncViewSelector(input.root, view);
   };
 
   const enqueueMount = (search: string, hash: string): Promise<void> => {
@@ -97,6 +107,26 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   const onPopState = (): void => {
     void enqueueMount(window.location.search, window.location.hash);
   };
+  const onViewClick = (event: MouseEvent): void => {
+    if (!(event.target instanceof Element) || event.defaultPrevented ||
+        event.button !== 0 || event.metaKey || event.ctrlKey ||
+        event.shiftKey || event.altKey) return;
+    const link = event.target.closest<HTMLAnchorElement>(
+      "a[data-kp-economics-view-link]"
+    );
+    if (link === null) return;
+    const view = link.dataset["kpEconomicsViewLink"];
+    if (!isView(view)) return;
+    event.preventDefault();
+    void navigate({
+      search: writeKpEconomicsDemandShiftView({
+        search: window.location.search,
+        view
+      }),
+      hash: "",
+      history: "push"
+    });
+  };
   const onRouteRequest = (event: Event): void => {
     if (!(event instanceof CustomEvent)) return;
     const request = (event as CustomEvent<KpEconomicsDemandShiftRouteRequest>)
@@ -106,6 +136,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   };
 
   window.addEventListener("popstate", onPopState);
+  input.root.addEventListener("click", onViewClick);
   window.addEventListener(
     KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT,
     onRouteRequest
@@ -120,10 +151,32 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       activeDispose?.();
       activeDispose = undefined;
       window.removeEventListener("popstate", onPopState);
+      input.root.removeEventListener("click", onViewClick);
       window.removeEventListener(
         KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT,
         onRouteRequest
       );
     }
   };
+}
+
+function syncViewSelector(
+  root: ParentNode,
+  view: KpEconomicsDemandShiftView
+): void {
+  for (const link of root.querySelectorAll<HTMLAnchorElement>(
+    "a[data-kp-economics-view-link]"
+  )) {
+    if (link.dataset["kpEconomicsViewLink"] === view) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  }
+}
+
+function isView(value: string | undefined): value is KpEconomicsDemandShiftView {
+  return value === "reader" || value === "deck" || value === "split" ||
+    value === "inline-sticky" || value === "two-column-scroll" ||
+    value === "animation-station";
 }

@@ -17,6 +17,14 @@ test("published enhancement is an explicit reversible route projection", () => {
   );
   assert.equal(readKpEconomicsDemandShiftEnhancementMode(""), "published");
   assert.equal(
+    readKpEconomicsDemandShiftEnhancementMode("?view=deck"),
+    "published"
+  );
+  assert.equal(
+    readKpEconomicsDemandShiftEnhancementMode("?view=inline-sticky"),
+    "presenter"
+  );
+  assert.equal(
     readKpEconomicsDemandShiftEnhancementMode("?layout=animation-station"),
     "presenter"
   );

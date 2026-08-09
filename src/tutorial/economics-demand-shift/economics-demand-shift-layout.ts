@@ -1,4 +1,8 @@
 import type { KpTutorialMotionCorridor } from "../kp-tutorial-motion.ts";
+import {
+  isKpEconomicsPresenterView,
+  readKpEconomicsDemandShiftView
+} from "./economics-demand-shift-view.ts";
 
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
@@ -143,6 +147,8 @@ export const kpEconomicsTwoColumnParagraphGapDefaultVh = 30;
 export function readKpEconomicsDemandShiftPresentationLayout(
   search: string
 ): KpEconomicsDemandShiftPresentationLayout {
+  const canonicalView = readKpEconomicsDemandShiftView(search);
+  if (isKpEconomicsPresenterView(canonicalView)) return canonicalView;
   const value = new URLSearchParams(search).get("layout");
   return value === inlineStickyLayoutQueryValue
     ? "inline-sticky"

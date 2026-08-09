@@ -57,3 +57,13 @@ test("static economics publication reserves one initial SVG and final controls",
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /Supply and demand meet at quantity six hundred boxes/);
 });
+
+test("static economics publication exposes one selector and a searchable six-scene deck", () => {
+  assert.equal((html.match(/data-kp-economics-view-selector/g) ?? []).length, 1);
+  assert.match(html, /data-kp-economics-view-link="reader"/);
+  assert.match(html, /data-kp-economics-view-link="deck"/);
+  assert.equal((html.match(/data-kp-economics-deck-scene=/g) ?? []).length, 6);
+  assert.match(html, /data-kp-economics-deck-scene="shift-demand"/);
+  assert.match(html, /Follow red demand and its intersection/);
+  assert.equal((html.match(/data-kp-editor-graph-svg/g) ?? []).length, 1);
+});

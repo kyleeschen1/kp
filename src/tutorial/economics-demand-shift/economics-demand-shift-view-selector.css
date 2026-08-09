@@ -1,0 +1,65 @@
+.kp-economics-view-selector {
+  align-items: center;
+  background: color-mix(in srgb, var(--kp-lesson-theme-page) 92%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  display: flex;
+  font: 500 0.78rem/1 var(--kp-economics-ui-font-family, system-ui, sans-serif);
+  gap: 0.35rem;
+  inline-size: fit-content;
+  margin: 0.75rem auto 0;
+  padding: 0.28rem;
+  position: relative;
+  z-index: 20;
+}
+
+.kp-economics-view-selector a,
+.kp-economics-view-selector summary {
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.6rem 0.75rem;
+  text-decoration: none;
+}
+
+.kp-economics-view-selector__primary {
+  display: flex;
+}
+
+.kp-economics-view-selector a[aria-current="page"] {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  color: var(--kp-lesson-theme-strong-ink);
+}
+
+.kp-economics-view-selector__experiments {
+  position: relative;
+}
+
+.kp-economics-view-selector__experiments summary {
+  list-style: none;
+}
+
+.kp-economics-view-selector__experiments summary::-webkit-details-marker {
+  display: none;
+}
+
+.kp-economics-view-selector__experiments > div {
+  background: var(--kp-lesson-theme-page);
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  display: grid;
+  inset: calc(100% + 0.35rem) 0 auto auto;
+  min-inline-size: 9rem;
+  padding: 0.3rem;
+  position: absolute;
+}
+
+@media (forced-colors: active) {
+  .kp-economics-view-selector,
+  .kp-economics-view-selector__experiments > div {
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .kp-economics-view-selector a[aria-current="page"] {
+    outline: 2px solid Highlight;
+  }
+}

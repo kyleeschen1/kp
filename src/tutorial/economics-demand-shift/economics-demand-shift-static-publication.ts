@@ -13,6 +13,12 @@ import {
 import {
   renderKpTutorialProgressRail
 } from "../kp-tutorial-progress-rail-renderer.ts";
+import {
+  kpEconomicsDemandShiftDeckScenes
+} from "./economics-demand-shift-deck.ts";
+import type {
+  KpEconomicsDemandShiftView
+} from "./economics-demand-shift-view.ts";
 
 /**
  * The route publishes complete narrative truth without requiring Svelte,
@@ -23,15 +29,21 @@ export function renderKpEconomicsDemandShiftStaticNarrative(
   publication: KpEconomicsDemandShiftPublication
 ): string {
   const { lesson } = publication;
-  return `<main class="kp-economics-static-publication" data-kp-economics-static-publication data-kp-economics-static-projection="narrative">
+  return `${renderViewSelector()}<main class="kp-economics-static-publication" data-kp-economics-static-publication data-kp-economics-static-projection="narrative">
     <article class="kp-economics-static-publication__prose" aria-label="Economics lesson">
       <header class="kp-economics-static-publication__intro">
         <p class="kp-economics-static-publication__eyebrow">${escapeHtml(lesson.kicker)}</p>
         <h1>${escapeHtml(lesson.title)}</h1>
         <p>${escapeHtml(lesson.assumption)}</p>
       </header>
-      ${renderKpEconomicsDemandShiftStaticStage()}
+      <div class="kp-economics-static-publication__projection">
+        ${renderKpEconomicsDemandShiftStaticStage()}
+        ${renderDeck(publication)}
+      </div>
       ${publication.tocHtml}
+      <div class="kp-economics-static-publication__reader-seam" data-kp-economics-reader-seam>
+        <span>Full lesson</span>
+      </div>
       ${lesson.sections.map((section) => `<section id="kp-section-${escapeAttribute(section.id)}" data-kp-tutorial-destination="section" data-kp-tutorial-destination-id="${escapeAttribute(section.id)}" aria-labelledby="kp-heading-${escapeAttribute(section.id)}">
         <h3 id="kp-heading-${escapeAttribute(section.id)}">${escapeHtml(section.heading)}</h3>
         ${section.passages.map((passage) =>
@@ -71,7 +83,93 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication [data-kp-tutorial-toc-list] { padding-inline-start: 1.25rem; }
     .kp-economics-static-publication .katex-html { display: none; }
     .kp-economics-static-publication math { display: inline math; }
+    .kp-economics-static-publication__deck { display: none; margin: 1.25rem auto 2.5rem; max-width: 46rem; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication { max-width: 82rem; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose { max-width: 76rem; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__intro,
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose > section,
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose > kp-tutorial-toc,
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__reader-seam { margin-inline: auto; max-width: 68ch; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__projection { margin: 1.5rem auto 4rem; max-width: 54rem; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__stage { inline-size: min(100%, 73vh); margin-bottom: 1.5rem; max-width: 46rem; }
+    html[data-kp-economics-view="deck"] .kp-economics-static-publication__deck { display: block; }
+    .kp-economics-static-publication__deck-progress { display: grid; gap: 0.55rem; grid-template-columns: auto 1fr; align-items: center; }
+    .kp-economics-static-publication__deck-progress output { font: 500 0.78rem/1.2 var(--kp-economics-ui-font-family, system-ui, sans-serif); letter-spacing: 0.04em; white-space: nowrap; }
+    .kp-economics-static-publication__deck-progress progress { accent-color: var(--kp-salience-green, #65d6a6); block-size: 0.18rem; border: 0; inline-size: 100%; }
+    .kp-economics-static-publication__deck-viewport { margin-block: 1.4rem 1.25rem; overflow: hidden; }
+    .kp-economics-static-publication__deck-track { display: grid; grid-auto-columns: 100%; grid-auto-flow: column; transform: translateX(calc(var(--kp-economics-deck-scene-index, 0) * -100%)); transition: transform 260ms cubic-bezier(.2,.8,.2,1); }
+    .kp-economics-static-publication__deck-scene { align-content: center; box-sizing: border-box; min-block-size: clamp(8rem, 20vh, 12rem); padding: clamp(0.5rem, 2vw, 1.25rem); opacity: 0.42; transform: scale(0.985); transition: opacity 180ms ease, transform 220ms cubic-bezier(.2,.8,.2,1); }
+    .kp-economics-static-publication__deck-scene[data-kp-economics-deck-scene-active="true"] { opacity: 1; transform: scale(1); }
+    .kp-economics-static-publication__deck-scene h3 { margin: 0 0 0.4rem; }
+    .kp-economics-static-publication__deck-scene p { margin: 0; }
+    .kp-economics-static-publication__deck-controls { display: flex; gap: 0.75rem; justify-content: space-between; }
+    .kp-economics-static-publication__deck-controls button { appearance: none; background: transparent; border: 1px solid color-mix(in srgb, currentColor 32%, transparent); color: inherit; cursor: pointer; font: 500 0.9rem/1 var(--kp-economics-ui-font-family, system-ui, sans-serif); min-block-size: 2.5rem; padding: 0.7rem 1rem; }
+    .kp-economics-static-publication__deck-controls button:disabled { cursor: default; opacity: 0.35; }
+    .kp-economics-static-publication__reader-seam { align-items: center; display: flex; gap: 0.75rem; margin-block: 3rem 1rem; color: color-mix(in srgb, currentColor 62%, transparent); font: 500 0.75rem/1.2 var(--kp-economics-ui-font-family, system-ui, sans-serif); letter-spacing: 0.08em; text-transform: uppercase; }
+    .kp-economics-static-publication__reader-seam::before,
+    .kp-economics-static-publication__reader-seam::after { background: currentColor; content: ""; block-size: 1px; flex: 1; }
+    html:not([data-kp-economics-view="deck"]) .kp-economics-static-publication__reader-seam { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .kp-economics-static-publication__deck-track,
+      .kp-economics-static-publication__deck-scene { transition: none; }
+    }
+    @media (max-width: 42rem) {
+      .kp-economics-static-publication { padding: 1.25rem; }
+      .kp-economics-static-publication__deck-scene { min-block-size: 10rem; padding-inline: 0; }
+    }
   </style>`;
+}
+
+function renderViewSelector(): string {
+  return `<nav class="kp-economics-view-selector" data-kp-economics-view-selector aria-label="Lesson view">
+    <div class="kp-economics-view-selector__primary">
+      ${viewLink("reader", "Reader")}
+      ${viewLink("deck", "Deck")}
+    </div>
+    <details class="kp-economics-view-selector__experiments">
+      <summary>Experiments</summary>
+      <div>
+        ${viewLink("split", "Split")}
+        ${viewLink("inline-sticky", "Sticky")}
+        ${viewLink("two-column-scroll", "Columns")}
+        ${viewLink("animation-station", "Station")}
+      </div>
+    </details>
+  </nav>`;
+}
+
+function viewLink(view: KpEconomicsDemandShiftView, label: string): string {
+  return `<a href="?view=${view}" data-kp-economics-view-link="${view}">${label}</a>`;
+}
+
+function renderDeck(publication: KpEconomicsDemandShiftPublication): string {
+  const passages = new Map(publication.twoColumnParagraphs.map(
+    (passage) => [passage.id, passage] as const
+  ));
+  return `<section class="kp-economics-static-publication__deck" data-kp-economics-deck aria-label="Interactive lesson deck">
+    <div class="kp-economics-static-publication__deck-progress">
+      <output data-kp-economics-deck-count>1 of ${kpEconomicsDemandShiftDeckScenes.length}</output>
+      <progress data-kp-economics-deck-progress max="${kpEconomicsDemandShiftDeckScenes.length}" value="1">Scene 1 of ${kpEconomicsDemandShiftDeckScenes.length}</progress>
+    </div>
+    <div class="kp-economics-static-publication__deck-viewport">
+      <div class="kp-economics-static-publication__deck-track" data-kp-economics-deck-track>
+        ${kpEconomicsDemandShiftDeckScenes.map((scene, index) => {
+          const passage = passages.get(scene.passageId);
+          if (passage === undefined) {
+            throw new Error(`Deck scene ${scene.id} references missing passage ${scene.passageId}.`);
+          }
+          return `<section class="kp-economics-static-publication__deck-scene" data-kp-economics-deck-scene="${escapeAttribute(scene.id)}" data-kp-economics-deck-scene-active="${index === 0}" aria-labelledby="kp-economics-deck-heading-${escapeAttribute(scene.id)}">
+            <h3 id="kp-economics-deck-heading-${escapeAttribute(scene.id)}">${escapeHtml(scene.label)}</h3>
+            ${passage.paragraphs.map(({ html }) => `<p>${html}</p>`).join("")}
+          </section>`;
+        }).join("")}
+      </div>
+    </div>
+    <div class="kp-economics-static-publication__deck-controls">
+      <button type="button" data-kp-economics-deck-previous disabled>Back</button>
+      <button type="button" data-kp-economics-deck-next>Continue</button>
+    </div>
+  </section>`;
 }
 
 function renderPassage(

@@ -18,10 +18,16 @@
       // reversible presenter capability without flashing the static document.
       const kpEconomicsExplicitEnhancement =
         kpEconomicsRouteParameters.get("enhancement");
+      const kpEconomicsView = kpEconomicsRouteParameters.get("view");
+      document.documentElement.dataset.kpEconomicsView =
+        kpEconomicsView ??
+          (kpEconomicsRouteParameters.get("layout") ?? "reader");
       document.documentElement.dataset.kpEconomicsEnhancement =
         kpEconomicsExplicitEnhancement === "presenter" ||
           (kpEconomicsExplicitEnhancement !== "published" &&
-            kpEconomicsRouteParameters.has("layout"))
+            (kpEconomicsRouteParameters.has("layout") ||
+              ["split", "inline-sticky", "two-column-scroll", "animation-station"]
+                .includes(kpEconomicsView ?? "")))
           ? "presenter"
           : "published";
     </script>
@@ -35,6 +41,10 @@
     <link
       rel="stylesheet"
       href="/src/tutorial/economics-demand-shift/economics-demand-shift-theme.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/src/tutorial/economics-demand-shift/economics-demand-shift-view-selector.css"
     />
     <style>
       html, body, #app { min-height: 100%; }

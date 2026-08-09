@@ -1,0 +1,34 @@
+{
+  "id": "next-action.kp.economics-projection-deck-exemplar-v0",
+  "kind": "next-action",
+  "title": "Consolidate economics projections and prove an interactive deck",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T02:27:41.584Z",
+      "notes": "110 deterministic economics tutorial tests passed."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "visual-exemplar",
+      "checkedAt": "2026-08-09T02:27:43.306Z",
+      "notes": "Three Chromium checks passed: choreography, no-reload projection switching, and reduced-motion phone/direct seek."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-08-09T02:27:44.949Z",
+      "notes": "Typecheck, publication freshness, and production build passed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Implementation and verification complete; waiting at the required human visual checkpoint before any promotion or second caller."
+  }
+}

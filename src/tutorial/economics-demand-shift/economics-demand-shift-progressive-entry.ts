@@ -62,6 +62,15 @@ import {
   resolveKpEconomicsNavigationAction,
   type KpEconomicsNavigationActionDetail
 } from "./economics-demand-shift-navigation-actions.ts";
+import {
+  kpEconomicsDemandShiftDeckScenes,
+  projectKpEconomicsDeckMotionScalar,
+  readKpEconomicsDemandShiftDeckSceneIndex,
+  writeKpEconomicsDemandShiftDeckScene
+} from "./economics-demand-shift-deck.ts";
+import {
+  readKpEconomicsDemandShiftView
+} from "./economics-demand-shift-view.ts";
 
 interface KpPublishedEconomicsPlayback {
   blockId: KpEconomicsMotionBlockId;
@@ -78,6 +87,7 @@ interface KpPublishedEconomicsDestination {
 
 const enhancementSessions = new WeakMap<HTMLElement, () => void>();
 const playbackDurationMs = 2_400;
+const deckTransitionDurationMs = 1_600;
 
 /**
  * Adopts the build-published lesson in place. This deliberately owns only
@@ -112,10 +122,17 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     publicationRoot,
     "[data-kp-economics-accessible-state]"
   );
+  const stageCaption = requiredElement<HTMLElement>(
+    publicationRoot,
+    "[data-kp-economics-stage-caption]"
+  );
   const model = createKpSupplyDemandEquilibriumModel();
   const animation = createEconomicsEquilibriumAnimationAsset(model);
   const viewport = createKpEditorGraphSvgViewportModel(animation);
   const parsedInitialDestination = parseKpTutorialDestinationHash(input.hash);
+  const deckEnabled = readKpEconomicsDemandShiftView(input.search) === "deck";
+  let deckSceneIndex = readKpEconomicsDemandShiftDeckSceneIndex(input.search);
+  const initialDeckScene = kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!;
   const initialDestination = parsedInitialDestination === undefined
     ? undefined
     : resolvePublishedDestination({
@@ -123,8 +140,12 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       destination: parsedInitialDestination
     });
   const playback: KpPublishedEconomicsPlayback = {
-    blockId: initialDestination?.blockId ?? "demand-shift",
-    progress: initialDestination?.progress ?? 0,
+    blockId: deckEnabled
+      ? initialDeckScene.target.blockId
+      : initialDestination?.blockId ?? "demand-shift",
+    progress: deckEnabled
+      ? initialDeckScene.target.progress
+      : initialDestination?.progress ?? 0,
     status: "paused"
   };
   const initialRuntimeFrame = economicsFrame(
@@ -146,6 +167,9 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   let playbackStartedAt = 0;
   let playbackStartedProgress = 0;
   let accessibleStateKey = "";
+  let deckTransitionStartedAt = 0;
+  let deckTransitionFromScalar = 0;
+  let deckTransitionToScalar = 0;
 
   defineKpTutorialScrubBar();
   defineKpTutorialProgressRail();
@@ -195,12 +219,75 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
         (motion.supplyMovementProgress - 0.12) / 0.46
       ).toFixed(3)
     );
+    stageCaption.textContent = motion.supplyMovementProgress >= 1
+      ? "Demand shifted; the trace confirms movement along unchanged supply."
+      : motion.supplyMovementProgress > 0
+        ? "Tracing movement between equilibria along unchanged supply."
+        : motion.demandShiftProgress >= 1
+          ? "New equilibrium after demand increases."
+          : motion.demandShiftProgress > 0
+            ? "Demand is shifting while supply remains fixed."
+            : "Initial supply and demand equilibrium before demand increases.";
     accessibleStateKey = syncAccessibleState(
       accessibleState,
       playback,
       accessibleStateKey
     );
     syncControls(publicationRoot, playback, motion.blocks);
+  };
+
+  const deck = requiredElement<HTMLElement>(
+    publicationRoot,
+    "[data-kp-economics-deck]"
+  );
+  const deckTrack = requiredElement<HTMLElement>(
+    deck,
+    "[data-kp-economics-deck-track]"
+  );
+  const deckCount = requiredElement<HTMLOutputElement>(
+    deck,
+    "[data-kp-economics-deck-count]"
+  );
+  const deckProgress = requiredElement<HTMLProgressElement>(
+    deck,
+    "[data-kp-economics-deck-progress]"
+  );
+  const deckPrevious = requiredElement<HTMLButtonElement>(
+    deck,
+    "[data-kp-economics-deck-previous]"
+  );
+  const deckNext = requiredElement<HTMLButtonElement>(
+    deck,
+    "[data-kp-economics-deck-next]"
+  );
+
+  const syncDeck = (progress = deckSceneIndex + 1): void => {
+    deckTrack.style.setProperty(
+      "--kp-economics-deck-scene-index",
+      String(deckSceneIndex)
+    );
+    for (const [index, scene] of [...deckTrack.querySelectorAll<HTMLElement>(
+      "[data-kp-economics-deck-scene]"
+    )].entries()) {
+      scene.dataset["kpEconomicsDeckSceneActive"] = String(
+        index === deckSceneIndex
+      );
+      if (index === deckSceneIndex) {
+        scene.setAttribute("aria-current", "step");
+      } else {
+        scene.removeAttribute("aria-current");
+      }
+    }
+    deckCount.value = `${deckSceneIndex + 1} of ${kpEconomicsDemandShiftDeckScenes.length}`;
+    deckProgress.value = progress;
+    deckProgress.textContent = deckCount.value;
+    deckPrevious.disabled = deckSceneIndex === 0;
+    deckNext.textContent = deckSceneIndex ===
+        kpEconomicsDemandShiftDeckScenes.length - 1
+      ? "Read the full lesson"
+      : "Continue";
+    publicationRoot.dataset["kpEconomicsDeckScene"] =
+      kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!.id;
   };
 
   const stopPlayback = (): void => {
@@ -221,6 +308,95 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     }
     apply(playback.blockId, progress);
     animationFrame = requestAnimationFrame(tick);
+  };
+
+  const applyDeckScalar = (scalar: number): void => {
+    const bounded = Math.max(0, Math.min(2, scalar));
+    if (bounded <= 1) {
+      apply("demand-shift", bounded);
+    } else {
+      apply("supply-movement", bounded - 1);
+    }
+  };
+
+  const tickDeck = (now: number): void => {
+    if (disposed || playback.status !== "playing") return;
+    const duration = deckTransitionDurationMs * Math.max(
+      0.5,
+      Math.abs(deckTransitionToScalar - deckTransitionFromScalar)
+    );
+    const linear = boundedProgress((now - deckTransitionStartedAt) / duration);
+    const eased = 1 - Math.pow(1 - linear, 3);
+    applyDeckScalar(
+      deckTransitionFromScalar +
+        (deckTransitionToScalar - deckTransitionFromScalar) * eased
+    );
+    const direction = deckTransitionToScalar >= deckTransitionFromScalar
+      ? 1
+      : -1;
+    syncDeck(deckSceneIndex + 1 - direction * (1 - eased));
+    if (linear >= 1) {
+      stopPlayback();
+      applyDeckScalar(deckTransitionToScalar);
+      syncDeck();
+      return;
+    }
+    animationFrame = requestAnimationFrame(tickDeck);
+  };
+
+  const selectDeckScene = (
+    nextIndex: number,
+    animate: boolean,
+    updateLocation: boolean
+  ): void => {
+    const boundedIndex = Math.max(0, Math.min(
+      kpEconomicsDemandShiftDeckScenes.length - 1,
+      Math.trunc(nextIndex)
+    ));
+    const previousIndex = deckSceneIndex;
+    const fromScalar = playback.blockId === "demand-shift"
+      ? playback.progress
+      : 1 + playback.progress;
+    deckSceneIndex = boundedIndex;
+    const target = kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!;
+    const toScalar = projectKpEconomicsDeckMotionScalar(target);
+    stopPlayback();
+    syncDeck(previousIndex + 1);
+    if (updateLocation) {
+      const search = writeKpEconomicsDemandShiftDeckScene({
+        search: window.location.search,
+        sceneIndex: deckSceneIndex
+      });
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${search}`
+      );
+    }
+    if (!animate || fromScalar === toScalar ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      applyDeckScalar(toScalar);
+      syncDeck();
+      return;
+    }
+    deckTransitionFromScalar = fromScalar;
+    deckTransitionToScalar = toScalar;
+    deckTransitionStartedAt = performance.now();
+    playback.status = "playing";
+    animationFrame = requestAnimationFrame(tickDeck);
+  };
+
+  const onDeckPrevious = (): void => {
+    selectDeckScene(deckSceneIndex - 1, true, true);
+  };
+  const onDeckNext = (): void => {
+    if (deckSceneIndex >= kpEconomicsDemandShiftDeckScenes.length - 1) {
+      publicationRoot.querySelector<HTMLElement>(
+        "[data-kp-economics-reader-seam]"
+      )?.scrollIntoView({ block: "start", behavior: "smooth" });
+      return;
+    }
+    selectDeckScene(deckSceneIndex + 1, true, true);
   };
 
   const barForEvent = (event: Event): HTMLElement | undefined => {
@@ -350,6 +526,10 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
 
   const restoreInitialDestination = (): void => {
     stopPlayback();
+    if (deckEnabled) {
+      selectDeckScene(deckSceneIndex, false, false);
+      return;
+    }
     if (initialDestination === undefined) {
       apply("demand-shift", 0);
       return;
@@ -361,6 +541,8 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   };
 
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);
+  deckPrevious.addEventListener("click", onDeckPrevious);
+  deckNext.addEventListener("click", onDeckNext);
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_TOGGLE_EVENT, onToggle);
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_REWIND_EVENT, onRewind);
   publicationRoot.addEventListener(
@@ -383,6 +565,8 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     disposed = true;
     stopPlayback();
     publicationRoot.removeEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);
+    deckPrevious.removeEventListener("click", onDeckPrevious);
+    deckNext.removeEventListener("click", onDeckNext);
     publicationRoot.removeEventListener(
       KP_TUTORIAL_SCRUB_TOGGLE_EVENT,
       onToggle
