@@ -2,8 +2,9 @@
   "id": "next-action.kp.economics-projection-deck-exemplar-v0",
   "kind": "next-action",
   "title": "Consolidate economics projections and prove an interactive deck",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Deck proof is complete; no layout promotion or second caller is implied.",
   "verificationRecords": [
     {
       "command": "npm run test:economics-demand-shift-tutorial",
@@ -28,7 +29,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Implementation and verification complete; waiting at the required human visual checkpoint before any promotion or second caller."
+    "state": "complete",
+    "summary": "Interactive economics deck exemplar implemented and verified at commit 5e669449; layout promotion remains deferred while authoring convergence proceeds."
   }
 }
