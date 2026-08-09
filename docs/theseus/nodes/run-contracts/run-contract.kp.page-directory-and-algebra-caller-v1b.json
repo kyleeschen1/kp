@@ -155,7 +155,8 @@
     {
       "id": "s18",
       "title": "navigation-tranche-closeout",
-      "status": "planned"
+      "summary": "Closed the navigation tranche with a mechanically checked 23-page inspection ledger, direct local links, source-of-truth guidance, and a compact evidence index.",
+      "status": "complete"
     },
     {
       "id": "s19",

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -68,3 +69,25 @@ test("all canonical groups are labeled, ordered, and non-empty", () => {
     assert.ok(Object.isFrozen(pages));
   }
 });
+
+test("the durable inspection ledger covers the executable directory", () => {
+  const closeout = readFileSync(
+    "docs/project/reviews/2026-08-09-kp-development-page-directory-closeout.md",
+    "utf8"
+  );
+
+  for (const page of kpDevelopmentPages) {
+    assert.match(
+      closeout,
+      new RegExp("\\| `" + escapeRegExp(page.id) + "` \\|")
+    );
+    assert.match(
+      closeout,
+      new RegExp(`http://localhost:5173${escapeRegExp(page.href)}[)]`)
+    );
+  }
+});
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}

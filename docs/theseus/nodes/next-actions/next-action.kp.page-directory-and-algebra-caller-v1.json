@@ -222,6 +222,20 @@
       "scope": "s17 reader closure and payload",
       "checkedAt": "2026-08-09T22:39:20.069Z",
       "notes": "All 12 manifest routes remain production-safe and every route remains below its baseline budget; shared runtime is 124778 gzip bytes."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "s18 durable inventory agreement",
+      "checkedAt": "2026-08-09T22:42:27.161Z",
+      "notes": "26 tests passed; every executable page ID and canonical development URL is present in the human inspection ledger."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18 navigation closeout",
+      "checkedAt": "2026-08-09T22:42:28.168Z",
+      "notes": "The durable graph validates after the navigation closeout evidence and inspection ledger were added."
     }
   ],
   "progress": {
