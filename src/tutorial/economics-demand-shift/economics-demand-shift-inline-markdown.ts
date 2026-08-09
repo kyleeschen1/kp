@@ -17,7 +17,7 @@ export function renderKpEconomicsDemandShiftInlineMarkdown(
     readonly html: string;
   }> = [];
   const source = value.replace(
-    /\[\$([^$]+)\$\]\(kp-ref:([a-z0-9]+(?:-[a-z0-9]+)*)\)/g,
+    /\[\$([^$]+)\$\]\(kp-ref:([a-z0-9]+(?:[/-][a-z0-9]+)*)\)/g,
     (_match, latexSource: string, referenceId: string) => {
       const latex = latexSource.trim();
       const token = `\u{e000}${retainedReferences.length}\u{e001}`;

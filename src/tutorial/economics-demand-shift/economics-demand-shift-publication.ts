@@ -1,8 +1,14 @@
 import {
   compileKpEconomicsDemandShiftLesson,
+  validateKpEconomicsDemandShiftProseMotionAuthoring,
   type KpEconomicsDemandShiftLesson,
   type KpEconomicsDemandShiftLessonCompileOptions
 } from "./economics-demand-shift-lesson-compiler.ts";
+import type { KpArticleImportLock } from
+  "../../article/kp-article-import-lock.ts";
+import {
+  compileKpEconomicsDemandShiftArticle
+} from "./economics-demand-shift-article-compiler.ts";
 import {
   kpEconomicsMotionBlocks,
   type KpEconomicsMotionBlockId
@@ -68,6 +74,41 @@ export function compileKpEconomicsDemandShiftPublication(
   const twoColumnParagraphs = options.twoColumnSource === undefined
     ? kpEconomicsTwoColumnParagraphs
     : compileKpEconomicsTwoColumnParagraphs(options.twoColumnSource);
+  return compilePublicationProjection({ lesson, twoColumnParagraphs });
+}
+
+export function compileKpEconomicsDemandShiftArticlePublication(input: {
+  readonly articleText: string;
+  readonly importLock: KpArticleImportLock;
+  readonly proseMotion?: KpEconomicsDemandShiftLessonCompileOptions["proseMotion"];
+}): KpEconomicsDemandShiftPublication {
+  const compiled = compileKpEconomicsDemandShiftArticle({
+    text: input.articleText,
+    lock: input.importLock
+  });
+  const proseMotion = validateKpEconomicsDemandShiftProseMotionAuthoring(
+    input.proseMotion ?? [],
+    compiled.lesson.sections
+  );
+  const lesson = Object.freeze({
+    ...compiled.lesson,
+    ...(proseMotion.length === 0 ? {} : { proseMotion })
+  });
+  return compilePublicationProjection({
+    lesson,
+    twoColumnParagraphs: compiled.twoColumnParagraphs
+  });
+}
+
+function compilePublicationProjection(input: {
+  readonly lesson: KpEconomicsDemandShiftLesson;
+  readonly twoColumnParagraphs: readonly KpEconomicsDemandShiftLesson["sections"][number]["passages"][number][];
+  readonly semanticReference?: Readonly<{
+    referenceId: string;
+    passageId: string;
+  }> | undefined;
+}): KpEconomicsDemandShiftPublication {
+  const { lesson, twoColumnParagraphs } = input;
   const document = adaptKpEconomicsDemandShiftLessonDocument(lesson);
   const controls = compileKpTutorialPublicationControls({
     publication: document,
@@ -90,7 +131,8 @@ export function compileKpEconomicsDemandShiftPublication(
     })
   ));
   const semanticTransit = compileKpEconomicsDemandShiftSemanticTransitExemplar(
-    twoColumnParagraphs.map(({ id }) => id)
+    twoColumnParagraphs.map(({ id }) => id),
+    input.semanticReference
   );
   validateTextReferenceMarkup(
     twoColumnParagraphs,

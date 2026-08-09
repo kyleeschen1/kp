@@ -172,6 +172,14 @@
   import {
     projectKpEconomicsMotionBridgeCorridor
   } from "./economics-demand-shift-motion-bridge.ts";
+  // Authoring stays behind a compile-time DEV branch so the canonical source,
+  // CodeMirror, and its draft runtime cannot enter the published route closure.
+  const loadKpEconomicsLessonEditorModules = import.meta.env.DEV
+    ? () => Promise.all([
+        import("./KpEconomicsPassageEditor.svelte"),
+        import("./economics-demand-shift-lesson-draft.ts")
+      ])
+    : undefined;
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
   const kpEconomicsScrollLatchEpsilonPx = 1;
@@ -336,7 +344,6 @@
     typeof KpEconomicsPassageEditor | undefined
   >();
   let lessonEditorGeometryRefreshPending = false;
-  let lessonEditorCompileRevision = 0;
   let lessonEditorValidation = $state("");
   let selectedLessonDraftPassage = $derived(
     lessonDraft?.passages.find(({ id }) => id === lessonDraft?.selectedPassageId)
@@ -888,6 +895,7 @@
   }
 
   function toggleLessonEditor(): void {
+    if (loadKpEconomicsLessonEditorModules === undefined) return;
     lessonEditorOpen = !lessonEditorOpen;
     if (!lessonEditorOpen) lessonEditorModalOpen = false;
     if (lessonEditorOpen) void loadLessonEditor();
@@ -895,31 +903,17 @@
   }
 
   async function loadLessonEditor(): Promise<void> {
+    if (loadKpEconomicsLessonEditorModules === undefined) return;
     if (LessonPassageEditor === undefined || lessonDraftRuntime === undefined) {
-      const [componentModule, draftModule] = await Promise.all([
-        import("./KpEconomicsPassageEditor.svelte"),
-        import("./economics-demand-shift-lesson-draft.ts")
-      ]);
+      const [componentModule, draftModule] =
+        await loadKpEconomicsLessonEditorModules();
       LessonPassageEditor = componentModule.default;
       lessonDraftRuntime = draftModule;
     }
     if (lessonDraft === undefined) {
-      const serialized = window.localStorage.getItem(
-        lessonDraftRuntime.kpEconomicsLessonDraftStorageKey
-      );
-      const retained = lessonDraftRuntime.readKpEconomicsLessonDraft({
-        serialized,
-        publicationPassages: twoColumnParagraphs
-      });
-      lessonDraft = retained ?? lessonDraftRuntime.createKpEconomicsLessonDraft(
+      lessonDraft = lessonDraftRuntime.createKpEconomicsLessonDraft(
         twoColumnParagraphs
       );
-      if (retained !== undefined) {
-        void compileAndPresentLessonDraft(retained);
-      } else if (serialized !== null) {
-        lessonEditorValidation =
-          lessonDraftRuntime.kpEconomicsLessonDraftMessages.invalidStored;
-      }
     }
     if (attentionPassageId !== undefined && lessonDraft !== undefined &&
         lessonDraft.passages.some(({ id }) => id === attentionPassageId)) {
@@ -939,7 +933,6 @@
       passageId
     );
     lessonEditorModalOpen = true;
-    persistLessonDraft(lessonDraft);
   }
 
   function closeLessonEditorModal(): void {
@@ -960,43 +953,7 @@
     lessonDraft = input.draft;
     editableTwoColumnParagraphs = input.passages;
     lessonEditorValidation = input.validation;
-    persistLessonDraft(input.draft);
     scheduleLessonEditorGeometryRefresh();
-  }
-
-  function persistLessonDraft(draft: KpEconomicsLessonDraftState): void {
-    if (lessonDraftRuntime === undefined) return;
-    try {
-      window.localStorage.setItem(
-        lessonDraftRuntime.kpEconomicsLessonDraftStorageKey,
-        lessonDraftRuntime.serializeKpEconomicsLessonDraft(draft)
-      );
-    } catch {
-      lessonEditorValidation =
-        lessonDraftRuntime.kpEconomicsLessonDraftMessages.persistenceFailed;
-    }
-  }
-
-  async function compileAndPresentLessonDraft(
-    draft: KpEconomicsLessonDraftState
-  ): Promise<void> {
-    const revision = ++lessonEditorCompileRevision;
-    try {
-      const { compileKpEconomicsLessonDraftPassages } = await import(
-        "./economics-demand-shift-lesson-draft-compiler.ts"
-      );
-      const compiled = compileKpEconomicsLessonDraftPassages(draft);
-      if (revision !== lessonEditorCompileRevision) return;
-      editableTwoColumnParagraphs = compiled;
-      lessonEditorValidation =
-        lessonDraftRuntime!.kpEconomicsLessonDraftMessages.compiled;
-      scheduleLessonEditorGeometryRefresh();
-    } catch (error) {
-      if (revision !== lessonEditorCompileRevision) return;
-      lessonEditorValidation = error instanceof Error
-        ? error.message
-        : lessonDraftRuntime!.kpEconomicsLessonDraftMessages.compileFailed;
-    }
   }
 
   function scheduleLessonEditorGeometryRefresh(): void {
@@ -2968,7 +2925,7 @@
         </div>
       </details>
     {/if}
-    {#if lessonEditorOpen && lessonDraft !== undefined &&
+    {#if import.meta.env.DEV && lessonEditorOpen && lessonDraft !== undefined &&
         twoColumnScroll && scrollCue}
       <button
         type="button"
@@ -3223,13 +3180,15 @@
         <span aria-hidden="true">⇄</span>
         <span>Text {twoColumnTextSide}</span>
       </button>
-      <button
-        class="kp-economics-tutorial__column-toggle"
-        type="button"
-        aria-pressed={lessonEditorOpen}
-        data-kp-economics-lesson-editor-toggle
-        onclick={toggleLessonEditor}
-      >{lessonEditorOpen ? "Done" : "Edit"}</button>
+      {#if import.meta.env.DEV}
+        <button
+          class="kp-economics-tutorial__column-toggle"
+          type="button"
+          aria-pressed={lessonEditorOpen}
+          data-kp-economics-lesson-editor-toggle
+          onclick={toggleLessonEditor}
+        >{lessonEditorOpen ? "Done" : "Edit"}</button>
+      {/if}
     {/if}
     <button
       class="kp-economics-tutorial__theme-toggle"
@@ -3248,7 +3207,7 @@
   {/snippet}
 </KpTutorialLessonShell>
 
-{#if lessonEditorOpen && lessonEditorModalOpen && lessonDraft !== undefined &&
+{#if import.meta.env.DEV && lessonEditorOpen && lessonEditorModalOpen && lessonDraft !== undefined &&
     selectedLessonDraftPassage !== undefined &&
     LessonPassageEditor !== undefined}
   <LessonPassageEditor

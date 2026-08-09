@@ -9,8 +9,7 @@ import {
 import { createKpArticleSource } from "../../article/kp-article-source.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import {
-  economicsDemandShiftVignetteArticleRelease,
-  kpArticleVignetteRegistry
+  kpEconomicsDemandShiftArticleVignetteRegistry
 } from "../../article/vignettes/economics-demand-shift-vignette.ts";
 import {
   compileKpEconomicsDemandShiftLesson,
@@ -57,10 +56,7 @@ export interface KpEconomicsRc1ImportResult {
 }
 
 const sourceId = "content/lessons/economics-demand-shift.kp.md" as const;
-const migrationRegistry = Object.freeze([
-  ...kpArticleVignetteRegistry,
-  economicsDemandShiftVignetteArticleRelease
-]);
+const migrationRegistry = kpEconomicsDemandShiftArticleVignetteRegistry;
 const motionAfter = new Map([
   ["follow-shift", "new-equilibrium"],
   ["shift-versus-movement", "equation-check"]
@@ -149,8 +145,7 @@ function serializeArticle(
   for (const section of lesson.sections) {
     lines.push(`### ${section.heading}`, "");
     aliases.push(alias(section.id, headingSlug(section.heading), "section"));
-    for (let index = 0; index < section.passages.length; index += 1) {
-      const passage = section.passages[index]!;
+    for (const passage of section.passages) {
       if (skipped.has(passage.id)) continue;
       const afterId = motionAfter.get(passage.id);
       const after = afterId === undefined
@@ -167,11 +162,7 @@ function serializeArticle(
           passage.id === "demand-change") {
         aliases.push(alias(passage.id, passage.id, "block"));
       } else {
-        aliases.push(alias(
-          passage.id,
-          `${headingSlug(section.heading)}:${index}`,
-          "ordinary-markdown"
-        ));
+        aliases.push(alias(passage.id, passage.id, "block"));
       }
     }
   }
@@ -219,7 +210,11 @@ function serializePassage(
       ":::"
     ];
   }
-  return body;
+  return [
+    `:::kp-passage{#${passage.id}}`,
+    ...body,
+    ":::"
+  ];
 }
 
 function addFirstSemanticLink(passageId: string, sourceText: string): string {
@@ -268,7 +263,7 @@ function measureSourceNoise(text: string): KpEconomicsRc1ImportResult["sourceNoi
   });
 }
 
-function wrap(text: string, width = 68): string[] {
+function wrap(text: string, width = 64): string[] {
   const words = text.split(/\s+/u);
   const lines: string[] = [];
   let line = "";

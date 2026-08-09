@@ -7,9 +7,11 @@ import {
   type KpCompiledPublicationArtifact
 } from "../src/tutorial/kp-compiled-publication-artifact.ts";
 import {
-  compileKpEconomicsDemandShiftPublication,
+  compileKpEconomicsDemandShiftArticlePublication,
   type KpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from
+  "../src/article/kp-article-import-lock.ts";
 import {
   kpEconomicsDemandShiftMotionBridgeExemplar
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-bridge-exemplar.ts";
@@ -31,17 +33,11 @@ import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
   renderKpEconomicsEquilibriumRuntimeContent
 } from "../src/rendering/economics-equilibrium-svg.ts";
-import {
-  parseKpEconomicsTwoColumnSource,
-  type KpEconomicsTwoColumnSource
-} from "../src/tutorial/economics-demand-shift/economics-demand-shift-two-column-source.ts";
-
-const sourcePath = "content/lessons/economics-demand-shift.md";
-const twoColumnSourcePath =
-  "content/lessons/economics-demand-shift-two-column.json";
+const sourcePath = "content/lessons/economics-demand-shift.kp.md";
+const importLockPath = "content/lessons/economics-demand-shift.kp.lock.json";
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceUrl = new URL(`../${sourcePath}`, import.meta.url);
-const twoColumnSourceUrl = new URL(`../${twoColumnSourcePath}`, import.meta.url);
+const importLockUrl = new URL(`../${importLockPath}`, import.meta.url);
 const outputUrl = new URL(
   "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
   import.meta.url
@@ -53,15 +49,14 @@ const retainedMathOutputUrl = new URL(
 const katexPackageUrl = new URL("../node_modules/katex/package.json", import.meta.url);
 
 export function compileKpEconomicsDemandShiftPublicationArtifact(input: {
-  readonly markdown: string;
+  readonly articleText: string;
+  readonly importLock: KpArticleImportLock;
   readonly katexVersion: string;
-  readonly twoColumnSource?: KpEconomicsTwoColumnSource | undefined;
 }): KpCompiledPublicationArtifact<KpEconomicsDemandShiftPublication> {
-  const payload = compileKpEconomicsDemandShiftPublication(input.markdown, {
-    proseMotion: [kpEconomicsDemandShiftMotionBridgeExemplar],
-    ...(input.twoColumnSource === undefined
-      ? {}
-      : { twoColumnSource: input.twoColumnSource })
+  const payload = compileKpEconomicsDemandShiftArticlePublication({
+    articleText: input.articleText,
+    importLock: input.importLock,
+    proseMotion: [kpEconomicsDemandShiftMotionBridgeExemplar]
   });
   const mathSources = collectMathSources(payload);
 
@@ -69,11 +64,11 @@ export function compileKpEconomicsDemandShiftPublicationArtifact(input: {
     artifactId: "publication.economics.demand-shift",
     source: {
       path: sourcePath,
-      sha256: digest(input.markdown)
+      sha256: digest(input.articleText)
     },
     compiler: {
       id: "kp.economics-demand-shift-publication",
-      version: "1"
+      version: "2"
     },
     math: {
       engine: "katex",
@@ -190,15 +185,15 @@ function readKatexVersion(): string {
 export function generateKpEconomicsDemandShiftPublicationArtifact(
   checkOnly: boolean
 ): void {
-  const markdown = readFileSync(sourceUrl, "utf8");
-  const twoColumnSource = parseKpEconomicsTwoColumnSource(JSON.parse(
-    readFileSync(twoColumnSourceUrl, "utf8")
-  ));
+  const articleText = readFileSync(sourceUrl, "utf8");
+  const importLock = JSON.parse(
+    readFileSync(importLockUrl, "utf8")
+  ) as KpArticleImportLock;
   const output = serializeKpCompiledPublicationArtifact(
     compileKpEconomicsDemandShiftPublicationArtifact({
-      markdown,
+      articleText,
+      importLock,
       katexVersion: readKatexVersion(),
-      twoColumnSource
     })
   );
   const retainedMathOutput = `${JSON.stringify(

@@ -227,7 +227,7 @@ export function compileKpEconomicsDemandShiftLesson(
     throw new Error("Every lesson section and passage must contain prose.");
   }
 
-  const proseMotion = validateProseMotionAuthoring(
+  const proseMotion = validateKpEconomicsDemandShiftProseMotionAuthoring(
     options.proseMotion ?? [],
     sections
   );
@@ -241,7 +241,7 @@ export function compileKpEconomicsDemandShiftLesson(
   };
 }
 
-function validateProseMotionAuthoring(
+export function validateKpEconomicsDemandShiftProseMotionAuthoring(
   authoring: readonly KpTutorialProseMotionAuthoring[],
   sections: readonly KpEconomicsDemandShiftLessonSection[]
 ): readonly KpTutorialProseMotionAuthoring[] {

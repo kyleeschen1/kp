@@ -15,11 +15,17 @@ import {
 import type {
   KpEconomicsDemandShiftPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from
+  "../src/article/kp-article-import-lock.ts";
 
-const markdown = readFileSync(
-  new URL("../content/lessons/economics-demand-shift.md", import.meta.url),
+const articleText = readFileSync(
+  new URL("../content/lessons/economics-demand-shift.kp.md", import.meta.url),
   "utf8"
 );
+const importLock = JSON.parse(readFileSync(
+  new URL("../content/lessons/economics-demand-shift.kp.lock.json", import.meta.url),
+  "utf8"
+)) as KpArticleImportLock;
 const artifactSource = readFileSync(
   new URL(
     "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
@@ -60,12 +66,15 @@ const inlineMathSource = readFileSync(
 test("generated economics publication is an exact deterministic artifact", () => {
   assert.doesNotThrow(() => assertKpCompiledPublicationArtifact(artifact));
   const compiled = compileKpEconomicsDemandShiftPublicationArtifact({
-    markdown,
+    articleText,
+    importLock,
     katexVersion: artifact.math.engineVersion
   });
 
   assert.equal(serializeKpCompiledPublicationArtifact(compiled), artifactSource);
-  assert.equal(artifact.source.sha256, digest(markdown));
+  assert.equal(artifact.source.path, "content/lessons/economics-demand-shift.kp.md");
+  assert.equal(artifact.compiler.version, "2");
+  assert.equal(artifact.source.sha256, digest(articleText));
   assert.equal(artifact.payloadSha256, digest(JSON.stringify(artifact.payload)));
   assert.equal(artifact.math.rendering, "build-time");
   assert.equal(artifact.math.output, "htmlAndMathml");

@@ -173,16 +173,16 @@ export function moveKpEconomicsLessonDraftPassage(input: {
 function toDraftPassage(
   passage: KpEconomicsDemandShiftLessonPassage
 ): KpEconomicsLessonDraftPassage {
-  if (passage.paragraphs.length !== 1) {
-    throw new Error(`Passage ${passage.id} is not a single editable card.`);
-  }
+  // The RC1 article may project several Markdown paragraphs into one stable
+  // presenter beat. The compatibility draft only carries selection state now,
+  // so preserve that beat as one lossless Markdown string instead of rejecting it.
   return Object.freeze({
     id: passage.id,
     role: passage.role,
     ...(passage.motionBlockId === undefined
       ? {}
       : { motionBlockId: passage.motionBlockId }),
-    sourceText: passage.paragraphs[0]!.sourceText
+    sourceText: passage.paragraphs.map(({ sourceText }) => sourceText).join("\n\n")
   });
 }
 

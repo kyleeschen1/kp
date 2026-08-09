@@ -22,7 +22,7 @@ import {
 import { getCM, Vim, vim } from "@replit/codemirror-vim";
 
 interface KpEconomicsVimExHandlers {
-  readonly quit: (force: boolean) => boolean;
+  readonly quit: (force: boolean) => Promise<boolean>;
   readonly write: () => Promise<boolean>;
 }
 
@@ -35,7 +35,7 @@ const kpEconomicsVimExHandlers = new WeakMap<
 // them through the mounted CM instance so HMR and future editor callers cannot
 // accidentally save or close a different buffer.
 Vim.defineEx("quit", "q", (cm, params) => {
-  kpEconomicsVimExHandlers.get(cm as object)?.quit(
+  void kpEconomicsVimExHandlers.get(cm as object)?.quit(
     (params.argString ?? "").trim() === "!"
   );
 });
@@ -43,13 +43,16 @@ Vim.defineEx("write", "w", (cm) => {
   const handlers = kpEconomicsVimExHandlers.get(cm as object);
   if (handlers !== undefined) void handlers.write();
 });
-Vim.defineEx("wq", "wq", (cm) => {
+// Keep the combined command outside the `w` abbreviation family, then map the
+// exact spelling. Otherwise the Vim resolver can let `:w` select write-and-quit.
+Vim.defineEx("kpwq", "kpwq", (cm) => {
   const handlers = kpEconomicsVimExHandlers.get(cm as object);
   if (handlers === undefined) return;
   void handlers.write().then((written) => {
-    if (written) handlers.quit(false);
+    if (written) void handlers.quit(false);
   });
 });
+Vim.map(":wq", ":kpwq", "");
 
 export interface KpEconomicsCodeMirrorCompletion {
   readonly label: string;
@@ -77,7 +80,7 @@ export function mountKpEconomicsCodeMirror(input: {
   readonly value: string;
   readonly completions: readonly KpEconomicsCodeMirrorCompletion[];
   readonly onChange: (value: string) => void;
-  readonly onQuit?: ((force: boolean) => boolean) | undefined;
+  readonly onQuit?: ((force: boolean) => Promise<boolean>) | undefined;
   readonly onWrite?: (() => Promise<boolean>) | undefined;
   readonly onVimModeChange?: ((mode: string) => void) | undefined;
 }): KpEconomicsCodeMirrorMount {
@@ -94,7 +97,7 @@ export function mountKpEconomicsCodeMirror(input: {
       type: "variable"
     }));
   const completeSemanticReference = (context: CompletionContext) => {
-    const reference = context.matchBefore(/[a-z0-9-]*/);
+    const reference = context.matchBefore(/[a-z0-9/-]*/);
     const prefix = context.state.sliceDoc(
       Math.max(0, reference?.from ?? context.pos) - 7,
       reference?.from ?? context.pos
@@ -103,11 +106,11 @@ export function mountKpEconomicsCodeMirror(input: {
     return {
       from: reference?.from ?? context.pos,
       options: completions("kp-ref"),
-      validFor: /^[a-z0-9-]*$/
+      validFor: /^[a-z0-9/-]*$/
     };
   };
   const completeDirective = (context: CompletionContext) => {
-    const directive = context.matchBefore(/<!-- kp:[a-z-]*/);
+    const directive = context.matchBefore(/:::kp-[a-z-]*/);
     if (directive === null) return null;
     const colon = directive.text.lastIndexOf(":");
     return {
@@ -208,7 +211,7 @@ export function mountKpEconomicsCodeMirror(input: {
   cm?.on("vim-mode-change", reportVimMode);
   if (cm !== null) {
     kpEconomicsVimExHandlers.set(cm as object, {
-      quit: input.onQuit ?? (() => true),
+      quit: input.onQuit ?? (async () => true),
       write: input.onWrite ?? (async () => true)
     });
   }

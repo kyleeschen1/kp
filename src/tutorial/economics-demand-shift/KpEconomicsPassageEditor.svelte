@@ -1,41 +1,58 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
+  import articleSourceText from
+    "../../../content/lessons/economics-demand-shift.kp.md?raw";
+  import articleImportLockValue from
+    "../../../content/lessons/economics-demand-shift.kp.lock.json" with { type: "json" };
   import "./economics-demand-shift-lesson-editor.css";
 
+  import {
+    KpArticleDraftSession,
+    type KpArticleDraftSnapshot
+  } from "../../article/kp-article-draft-session.ts";
+  import type { KpArticleImportLock } from
+    "../../article/kp-article-import-lock.ts";
   import type {
     KpEconomicsCodeMirrorCompletion,
     KpEconomicsCodeMirrorMount
   } from "./economics-demand-shift-codemirror-runtime.ts";
-  import type {
-    KpEconomicsDemandShiftLessonPassage
-  } from "./economics-demand-shift-lesson-compiler.ts";
-  import type {
-    KpEconomicsLessonDraftState
+  import {
+    compileKpEconomicsDemandShiftArticle,
+    kpEconomicsDemandShiftArticleSemanticCompletions,
+    kpEconomicsDemandShiftArticleSourceId
+  } from "./economics-demand-shift-article-compiler.ts";
+  import type { KpEconomicsDemandShiftLessonPassage } from
+    "./economics-demand-shift-lesson-compiler.ts";
+  import {
+    createKpEconomicsLessonDraft,
+    selectKpEconomicsLessonDraftPassage,
+    type KpEconomicsLessonDraftState
   } from "./economics-demand-shift-lesson-draft.ts";
-  import {
-    applyKpEconomicsLessonBufferCommand,
-    type KpEconomicsLessonBufferCommand
-  } from "./economics-demand-shift-lesson-buffer-commands.ts";
-  import {
-    KpEconomicsLessonBufferPreviewSession,
-    type KpEconomicsLessonBufferPreviewSnapshot
-  } from "./economics-demand-shift-lesson-buffer-preview.ts";
-  import {
-    compileKpEconomicsLessonBufferSource,
-    createKpEconomicsLessonBuffer,
-    serializeKpEconomicsLessonBuffer
-  } from "./economics-demand-shift-lesson-buffer.ts";
-  import {
-    createKpEconomicsLessonSemanticIndex
-  } from "./economics-demand-shift-semantic-index.ts";
-  import {
-    kpEconomicsTwoColumnSourceSchema
-  } from "./economics-demand-shift-two-column-source.ts";
-  import {
-    kpEconomicsTwoColumnParagraphs
-  } from "./economics-demand-shift-two-column-scroll.ts";
 
-  const bufferStorageKey = "kp.economics.demand-shift.lesson-buffer.v1";
+  const articleImportLock = articleImportLockValue as KpArticleImportLock;
+  const articleDraftStorageKey = "kp.economics.demand-shift.article-draft.v1";
+  const presenterToSourceId = new Map([
+    ["graph-at-rest", "context"],
+    ["movement-along-supply", "equation-check"]
+  ]);
+  const completions = Object.freeze([
+    ...kpEconomicsDemandShiftArticleSemanticCompletions.map((completion) =>
+      Object.freeze({
+        label: completion.address,
+        apply: completion.address,
+        detail: completion.detail ?? "economics vignette semantic path",
+        contexts: Object.freeze(["kp-ref", "semantic-id"] as const)
+      })
+    ),
+    ...["kp-stage", "kp-passage", "kp-focus", "kp-motion"].map((label) =>
+      Object.freeze({
+        label,
+        apply: label,
+        detail: "KP Article RC1 directive",
+        contexts: Object.freeze(["kp-directive"] as const)
+      })
+    )
+  ]) satisfies readonly KpEconomicsCodeMirrorCompletion[];
 
   let {
     id,
@@ -55,35 +72,20 @@
     readonly onClose: () => void;
   } = $props();
 
-  const canonicalBuffer = createKpEconomicsLessonBuffer({
-    schemaVersion: kpEconomicsTwoColumnSourceSchema,
-    passages: kpEconomicsTwoColumnParagraphs.map((passage) => ({
-      id: passage.id,
-      role: passage.role,
-      ...(passage.motionBlockId === undefined
-        ? {}
-        : { motionBlockId: passage.motionBlockId }),
-      sourceText: passage.paragraphs[0]!.sourceText
-    }))
-  });
-  const completions = createKpEconomicsLessonSemanticIndex(canonicalBuffer)
-    .completions satisfies readonly KpEconomicsCodeMirrorCompletion[];
-  const initialSource = untrack(() => initialBufferSource(draft));
-
   let host = $state<HTMLElement | undefined>();
   let dialog = $state<HTMLDialogElement | undefined>();
   let runtime: KpEconomicsCodeMirrorMount | undefined;
-  let preview: KpEconomicsLessonBufferPreviewSession | undefined;
+  let session: KpArticleDraftSession | undefined;
   let enhanced = $state(false);
   let vimMode = $state("normal");
-  let sourceSavePending = $state(false);
+  let selectedPassageId = $state(untrack(() => id || draft.selectedPassageId));
+  let bufferSource = $state(articleSourceText);
+  let dirty = $state(false);
+  let previewStatus = $state<"valid" | "invalid">("valid");
+  let previewValidation = $state(untrack(() =>
+    validation || "Article source is valid."
+  ));
   let sourceSaveStatus = $state("");
-  let previewStatus = $state<"valid" | "pending" | "invalid">("valid");
-  let previewValidation = $state("");
-  let selectedPassageId = $state(untrack(() => id));
-  let bufferSource = $state(initialSource);
-  let savedSource = $state(initialSource);
-  let dirty = $derived(bufferSource !== savedSource);
 
   onMount(() => {
     let disposed = false;
@@ -92,30 +94,29 @@
     root.style.overflow = "hidden";
     dialog?.showModal();
 
-    preview = new KpEconomicsLessonBufferPreviewSession({
-      source: initialSource,
-      passageId: selectedPassageId,
-      onSnapshot: handlePreviewSnapshot
+    const retained = readStoredDraft();
+    session = new KpArticleDraftSession({
+      sourceId: kpEconomicsDemandShiftArticleSourceId,
+      persistedText: retained?.persistedSource ?? articleSourceText,
+      ...(retained === undefined ? {} : { draftText: retained.source }),
+      semantic: kpEconomicsDemandShiftArticleSemanticCompletions,
+      save: async (request) => {
+        const { saveKpEconomicsDemandShiftArticleSource } = await import(
+          "./economics-demand-shift-article-source-client.ts"
+        );
+        return saveKpEconomicsDemandShiftArticleSource(request);
+      },
+      onSnapshot: handleSnapshot
     });
-    const retained = readStoredBuffer();
-    if (retained !== undefined) {
-      bufferSource = retained.source;
-      selectedPassageId = retained.selectedPassageId;
-      if (retained.source !== initialSource) {
-        preview.update({
-          source: retained.source,
-          passageId: retained.selectedPassageId
-        });
-      }
-    }
-    handlePreviewSnapshot(preview.snapshot);
+    if (retained !== undefined) selectedPassageId = retained.selectedPassageId;
+    handleSnapshot(session.snapshot);
 
     void import("./economics-demand-shift-codemirror-runtime.ts").then(
       ({ mountKpEconomicsCodeMirror }) => {
-        if (disposed || host === undefined) return;
+        if (disposed || host === undefined || session === undefined) return;
         runtime = mountKpEconomicsCodeMirror({
           parent: host,
-          value: bufferSource,
+          value: session.snapshot.draftText,
           completions,
           onChange: updateSource,
           onQuit: quitEditor,
@@ -124,21 +125,15 @@
         });
         enhanced = true;
         runtime.view.focus();
-        runtime.revealText(`\"id\":\"${selectedPassageId}\"`);
+        runtime.revealText(`#${sourcePassageId(selectedPassageId)}`);
       }
     );
     return () => {
       disposed = true;
-      preview?.dispose();
-      preview = undefined;
       runtime?.destroy();
       runtime = undefined;
       root.style.overflow = previousOverflow;
     };
-  });
-
-  $effect(() => {
-    runtime?.setValue(bufferSource);
   });
 
   function updateFallback(event: Event): void {
@@ -148,194 +143,117 @@
   }
 
   function updateSource(nextValue: string): void {
-    bufferSource = nextValue;
     sourceSaveStatus = "";
-    persistBuffer();
-    preview?.update({ source: nextValue, passageId: selectedPassageId });
+    session?.update(nextValue);
   }
 
-  function handlePreviewSnapshot(
-    snapshot: KpEconomicsLessonBufferPreviewSnapshot
-  ): void {
-    previewStatus = snapshot.status;
-    selectedPassageId = snapshot.restoredPassageId;
-    if (snapshot.status === "pending") {
-      previewValidation = "Checking lesson buffer…";
-      return;
-    }
-    if (snapshot.status === "invalid") {
-      const diagnostic = snapshot.diagnostics[0];
-      previewValidation = diagnostic === undefined
-        ? "The lesson buffer is invalid."
-        : `L${diagnostic.line}:${diagnostic.column} ${diagnostic.message}`;
-      return;
-    }
-    previewValidation = "Lesson buffer is valid. Preview updated.";
-    const source = compileKpEconomicsLessonBufferSource(snapshot.buffer);
-    const nextDraft: KpEconomicsLessonDraftState = Object.freeze({
-      version: 1,
-      selectedPassageId: snapshot.restoredPassageId,
-      passages: source.passages
-    });
-    onPreview({
-      draft: nextDraft,
-      passages: snapshot.passages,
-      validation: previewValidation
-    });
-  }
-
-  function applyCommand(command: KpEconomicsLessonBufferCommand): void {
-    if (runtime === undefined || previewStatus !== "valid") return;
+  function handleSnapshot(snapshot: KpArticleDraftSnapshot): void {
+    bufferSource = snapshot.draftText;
+    dirty = snapshot.dirty;
+    previewStatus = snapshot.validity;
+    previewValidation = snapshot.message;
+    sourceSaveStatus = snapshot.saveStatus === "idle" ? "" : snapshot.message;
+    persistDraft(snapshot);
+    if (snapshot.validity !== "valid") return;
     try {
-      const result = applyKpEconomicsLessonBufferCommand({
-        source: runtime.getValue(),
-        command
+      const compiled = compileKpEconomicsDemandShiftArticle({
+        text: snapshot.previewText,
+        lock: articleImportLock
       });
-      selectedPassageId = result.selectedPassageId;
-      runtime.replaceValue(result.source);
-      runtime.revealText(`\"id\":\"${result.selectedPassageId}\"`);
-      sourceSaveStatus = result.description;
+      const passages = compiled.twoColumnParagraphs;
+      const selected = passages.some(({ id }) => id === selectedPassageId)
+        ? selectedPassageId
+        : passages[0]!.id;
+      selectedPassageId = selected;
+      const nextDraft = createKpEconomicsLessonDraft(passages);
+      onPreview({
+        draft: selectKpEconomicsLessonDraftPassage(nextDraft, selected),
+        passages,
+        validation: "KP Article RC1 is valid. Preview updated."
+      });
     } catch (error) {
-      sourceSaveStatus = error instanceof Error
+      previewStatus = "invalid";
+      previewValidation = error instanceof Error
         ? error.message
-        : "The lesson command failed.";
+        : "The KP article cannot produce an economics preview.";
     }
-  }
-
-  function addPassage(): void {
-    applyCommand({
-      kind: "add-passage",
-      afterPassageId: selectedPassageId
-    });
-  }
-
-  function duplicatePassage(): void {
-    applyCommand({ kind: "duplicate-passage", passageId: selectedPassageId });
-  }
-
-  function movePassage(direction: -1 | 1): void {
-    applyCommand({
-      kind: "move-passage",
-      passageId: selectedPassageId,
-      direction
-    });
-  }
-
-  function deletePassage(): void {
-    if (!window.confirm(`Delete passage ${selectedPassageId}?`)) return;
-    applyCommand({
-      kind: "delete-passage",
-      passageId: selectedPassageId,
-      confirmed: true
-    });
-  }
-
-  function undoCommand(): void {
-    runtime?.undo();
-  }
-
-  function redoCommand(): void {
-    runtime?.redo();
   }
 
   async function saveToSource(): Promise<boolean> {
-    if (sourceSavePending || preview === undefined) return false;
-    const snapshot = preview.flush();
-    if (snapshot.status !== "valid") {
-      sourceSaveStatus = "Repair the lesson buffer before saving.";
-      return false;
-    }
-    sourceSavePending = true;
-    sourceSaveStatus = "Saving the lesson source…";
-    const source = compileKpEconomicsLessonBufferSource(snapshot.buffer);
-    const submittedDraft: KpEconomicsLessonDraftState = Object.freeze({
-      version: 1,
-      selectedPassageId: snapshot.restoredPassageId,
-      passages: source.passages
-    });
-    try {
-      const { saveKpEconomicsLessonSource } = await import(
-        "./economics-demand-shift-source-save-client.ts"
-      );
-      const result = await saveKpEconomicsLessonSource(submittedDraft);
-      savedSource = snapshot.source;
-      sourceSaveStatus = result.changed
-        ? `Saved to ${result.sourcePath}.`
-        : `${result.sourcePath} already matches this buffer.`;
-      return true;
-    } catch (error) {
-      sourceSaveStatus = error instanceof Error
-        ? error.message
-        : "The lesson source could not be saved.";
-      return false;
-    } finally {
-      sourceSavePending = false;
-    }
+    if (session === undefined) return false;
+    const result = await session.execute(":w");
+    handleSnapshot(result.snapshot);
+    return result.saved;
   }
 
-  function quitEditor(force: boolean): boolean {
-    if (dirty && !force) {
-      sourceSaveStatus = "No write since last change (add ! to override).";
+  async function quitEditor(force: boolean): Promise<boolean> {
+    if (session === undefined) return false;
+    const { snapshot } = await session.execute(force ? ":q!" : ":q");
+    handleSnapshot(snapshot);
+    if (snapshot.open) {
+      sourceSaveStatus = snapshot.message;
       return false;
     }
-    if (force && dirty) {
-      bufferSource = savedSource;
-      runtime?.setValue(savedSource);
-      preview?.update({ source: savedSource, passageId: selectedPassageId });
-      if (preview !== undefined) handlePreviewSnapshot(preview.flush());
-      persistBuffer();
-    }
+    runtime?.setValue(snapshot.draftText);
     onClose();
     return true;
   }
 
-  function persistBuffer(): void {
+  function persistDraft(snapshot: KpArticleDraftSnapshot): void {
     try {
-      window.localStorage.setItem(bufferStorageKey, JSON.stringify({
+      window.localStorage.setItem(articleDraftStorageKey, JSON.stringify({
         version: 1,
-        source: bufferSource,
+        sourceId: snapshot.sourceId,
+        baseSource: articleSourceText,
+        persistedSource: snapshot.persistedText,
+        source: snapshot.draftText,
         selectedPassageId
       }));
     } catch {
-      sourceSaveStatus = "The browser could not autosave this buffer.";
+      sourceSaveStatus = "The browser could not autosave this article draft.";
     }
   }
 
-  function readStoredBuffer(): {
+  function readStoredDraft(): {
+    readonly persistedSource: string;
     readonly source: string;
     readonly selectedPassageId: string;
   } | undefined {
     try {
-      const serialized = window.localStorage.getItem(bufferStorageKey);
+      const serialized = window.localStorage.getItem(articleDraftStorageKey);
       if (serialized === null) return undefined;
       const value: unknown = JSON.parse(serialized);
-      if (typeof value !== "object" || value === null ||
-          (value as { version?: unknown }).version !== 1 ||
-          typeof (value as { source?: unknown }).source !== "string" ||
-          typeof (value as { selectedPassageId?: unknown }).selectedPassageId !==
-            "string") {
+      if (typeof value !== "object" || value === null) return undefined;
+      const stored = value as {
+        version?: unknown;
+        sourceId?: unknown;
+        baseSource?: unknown;
+        persistedSource?: unknown;
+        source?: unknown;
+        selectedPassageId?: unknown;
+      };
+      if (stored.version !== 1 ||
+          stored.sourceId !== kpEconomicsDemandShiftArticleSourceId ||
+          typeof stored.baseSource !== "string" ||
+          typeof stored.persistedSource !== "string" ||
+          (stored.baseSource !== articleSourceText &&
+            stored.persistedSource !== articleSourceText) ||
+          typeof stored.source !== "string" ||
+          typeof stored.selectedPassageId !== "string") {
         return undefined;
       }
-      return value as { source: string; selectedPassageId: string };
+      return {
+        persistedSource: stored.persistedSource,
+        source: stored.source,
+        selectedPassageId: stored.selectedPassageId
+      };
     } catch {
       return undefined;
     }
   }
 
-  function initialBufferSource(
-    lessonDraft: KpEconomicsLessonDraftState
-  ): string {
-    try {
-      return serializeKpEconomicsLessonBuffer(createKpEconomicsLessonBuffer({
-        schemaVersion: kpEconomicsTwoColumnSourceSchema,
-        passages: lessonDraft.passages
-      }));
-    } catch {
-      // Legacy per-passage drafts could remove required semantic markup. Keep
-      // the repository-valid buffer available while raw v1 buffer recovery,
-      // when present, remains the first authoring source loaded on mount.
-      return serializeKpEconomicsLessonBuffer(canonicalBuffer);
-    }
+  function sourcePassageId(presenterId: string): string {
+    return presenterToSourceId.get(presenterId) ?? presenterId;
   }
 </script>
 
@@ -347,6 +265,11 @@
   data-kp-economics-lesson-editor-enhanced={enhanced}
   data-kp-economics-lesson-editor-status={previewStatus}
   data-kp-economics-lesson-editor-dirty={dirty}
+  onkeydown={(event) => {
+    // CodeMirror sees the key first; prevent the dialog's later native Escape
+    // default so an extra Vim Escape never closes the modal behind the editor.
+    if (event.key === "Escape") event.preventDefault();
+  }}
   oncancel={(event) => {
     // Escape belongs to Vim's mode machine; closing the dialog here would
     // make the normal-mode escape key destroy the editing session.
@@ -357,7 +280,7 @@
     <textarea
       class="kp-economics-lesson-editor__fallback"
       class:kp-economics-lesson-editor__fallback--hidden={enhanced}
-      aria-label="Whole lesson buffer"
+      aria-label="Whole KP article"
       oninput={updateFallback}
       value={bufferSource}
     ></textarea>
@@ -378,15 +301,6 @@
       aria-live="polite"
     >{sourceSaveStatus || (dirty ? "Autosaved locally." : "Source saved.")}</span>
     <span class="kp-economics-lesson-editor__modeline-spacer"></span>
-    <span class="kp-economics-lesson-editor__modeline-commands">
-      <button type="button" data-kp-economics-buffer-command="add" onclick={addPassage}>Add</button>
-      <button type="button" data-kp-economics-buffer-command="duplicate" onclick={duplicatePassage}>Copy</button>
-      <button type="button" aria-label="Move passage earlier" data-kp-economics-buffer-command="earlier" onclick={() => movePassage(-1)}>↑</button>
-      <button type="button" aria-label="Move passage later" data-kp-economics-buffer-command="later" onclick={() => movePassage(1)}>↓</button>
-      <button type="button" data-kp-economics-buffer-command="delete" onclick={deletePassage}>Delete</button>
-      <button type="button" data-kp-economics-buffer-command="undo" onclick={undoCommand}>Undo</button>
-      <button type="button" data-kp-economics-buffer-command="redo" onclick={redoCommand}>Redo</button>
-    </span>
     <span data-kp-economics-editor-vim-mode>VIM · {vimMode}</span>
   </div>
   <div

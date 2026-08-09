@@ -64,6 +64,6 @@ test("static economics publication exposes one selector and a searchable six-sce
   assert.match(html, /data-kp-economics-view-link="deck"/);
   assert.equal((html.match(/data-kp-economics-deck-scene=/g) ?? []).length, 6);
   assert.match(html, /data-kp-economics-deck-scene="shift-demand"/);
-  assert.match(html, /Follow red demand and its intersection/);
+  assert.match(html, /Hold the blue supply curve fixed and follow only/);
   assert.equal((html.match(/data-kp-editor-graph-svg/g) ?? []).length, 1);
 });

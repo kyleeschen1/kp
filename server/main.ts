@@ -1,8 +1,8 @@
 import { createAppServer } from "./app.ts";
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { createKpDevReviewServicesFromEnvironment } from "./dev-review-config.ts";
-import { createKpEconomicsLessonSourceStoreFromEnvironment } from
-  "./economics-lesson-source-config.ts";
+import { createKpArticleSourceStoreFromEnvironment } from
+  "./kp-article-source-config.ts";
 
 const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 8001;
@@ -15,8 +15,7 @@ const server = createAppServer({
   devReviewService: devReviewServices?.legacy,
   devReviewRoundService: devReviewServices?.rounds,
   devReviewScreenshotService: devReviewServices?.screenshots,
-  economicsLessonSourceStore:
-    createKpEconomicsLessonSourceStoreFromEnvironment(process.env)
+  articleSourceStore: createKpArticleSourceStoreFromEnvironment(process.env)
 });
 
 server.listen(port, host, () => {

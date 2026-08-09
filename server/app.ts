@@ -14,6 +14,9 @@ import { createKpEconomicsLessonSourceHttpAdapter } from
   "./economics-lesson-source-http-adapter.ts";
 import type { KpEconomicsLessonSourceStore } from
   "./economics-lesson-source-store.ts";
+import { createKpArticleSourceHttpAdapter } from
+  "./kp-article-source-http-adapter.ts";
+import type { KpArticleSourceStore } from "./kp-article-source-store.ts";
 
 interface HealthResponse {
   status: "ok";
@@ -38,6 +41,7 @@ export function createAppServer(options: {
     KpDevReviewScreenshotService | undefined;
   readonly economicsLessonSourceStore?:
     KpEconomicsLessonSourceStore | undefined;
+  readonly articleSourceStore?: KpArticleSourceStore | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
   const conceptReviewAdapter = createCanonicalConceptReviewHttpAdapter(options.linearProblemProvider);
@@ -49,6 +53,9 @@ export function createAppServer(options: {
   const lessonSourceAdapter = createKpEconomicsLessonSourceHttpAdapter(
     options.economicsLessonSourceStore
   );
+  const articleSourceAdapter = createKpArticleSourceHttpAdapter(
+    options.articleSourceStore
+  );
   return createServer((request, response) => {
     handleRequest(
       request,
@@ -56,7 +63,8 @@ export function createAppServer(options: {
       linearProblemAdapter,
       conceptReviewAdapter,
       devReviewAdapter,
-      lessonSourceAdapter
+      lessonSourceAdapter,
+      articleSourceAdapter
     ).catch((error: unknown) => {
       console.error(error);
       sendJson(response, 400, { error: "invalid_request" });
@@ -72,7 +80,8 @@ async function handleRequest(
   devReviewAdapter: ReturnType<typeof createKpDevReviewHttpAdapter>,
   lessonSourceAdapter: ReturnType<
     typeof createKpEconomicsLessonSourceHttpAdapter
-  >
+  >,
+  articleSourceAdapter: ReturnType<typeof createKpArticleSourceHttpAdapter>
 ): Promise<void> {
   const url = new URL(
     request.url ?? "/",
@@ -83,6 +92,7 @@ async function handleRequest(
   if (conceptReviewAdapter.handle(request, response, url)) return;
   if (await devReviewAdapter.handle(request, response, url)) return;
   if (await lessonSourceAdapter.handle(request, response, url)) return;
+  if (await articleSourceAdapter.handle(request, response, url)) return;
 
   if (request.method === "GET" && url.pathname === "/api/health") {
     sendJson(response, 200, {

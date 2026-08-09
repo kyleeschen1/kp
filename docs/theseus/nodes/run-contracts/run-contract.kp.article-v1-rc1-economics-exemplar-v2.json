@@ -183,7 +183,8 @@
     {
       "id": "s22-economics-cutover",
       "title": "Economics RC1 source cutover",
-      "status": "planned"
+      "summary": "Cut economics publication, six-beat presenter, whole-article editor, and atomic dev persistence to one pinned RC1 Markdown authority while retaining legacy inputs only as read-only rollback evidence.",
+      "status": "complete"
     },
     {
       "id": "s23-exemplar-gate",
