@@ -187,6 +187,13 @@
       "scope": "s15 diagnostic types",
       "checkedAt": "2026-08-09T22:31:31.040Z",
       "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:browser:page-directory",
+      "status": "passed",
+      "scope": "s16 all-page link audit",
+      "checkedAt": "2026-08-09T22:34:24.596Z",
+      "notes": "All 24 Chromium cases passed: one directory inventory plus all 23 declared pages, each with a successful document, exactly one toolbar/current marker, no fixture link, and Review ownership where supported. Vite reported two non-failing pre-existing ResizeObserver delivery warnings on catalogue startup."
     }
   ],
   "progress": {

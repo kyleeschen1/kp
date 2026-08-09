@@ -34,6 +34,7 @@
     "test:kp-article-v1": "node --disable-warning=ExperimentalWarning --test tests/kp-article-v1-*.test.ts",
     "test:kp-article-rc1": "npm run test:kp-article-v1",
     "test:dev-toolbar": "node --disable-warning=ExperimentalWarning --test tests/kp-dev-toolbar-*.test.ts",
+    "test:browser:page-directory": "playwright test --config playwright.page-directory.config.ts --project=chromium --workers=1",
     "visual:economics-dev-toolbar": "playwright test --config playwright.economics-dev-toolbar.config.ts --project=chromium --workers=1",
     "test:economics-demand-shift-css": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-stylesheet-ownership.test.ts tests/economics-demand-shift-visual-baseline.test.ts",
     "test:economics-article-source-save": "node --disable-warning=ExperimentalWarning --test server/kp-article-source-http-adapter.test.ts",
