@@ -31,6 +31,15 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s01 golden RC1 source fixture",
+      "checkedAt": "2026-08-09T04:24:40.923Z",
+      "notes": "Four tests prove the accepted frontmatter, four directive names, motion after-slot, Markdown prose/list/math/refs, and absence of executable or layout-specific escape hatches."
+    }
+  ],
   "expectedLearning": [
     "Whether four closed Markdown directives can replace three writable economics representations without source noise or learner-visible drift.",
     "Whether one framework-neutral article IR can drive static, interactive, deck, navigation, accessibility, and editor projections.",

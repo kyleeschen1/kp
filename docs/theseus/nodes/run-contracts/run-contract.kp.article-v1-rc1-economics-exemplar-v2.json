@@ -57,7 +57,8 @@
     {
       "id": "s01-golden-fixture",
       "title": "Golden RC1 fixture",
-      "status": "planned"
+      "summary": "Added a golden economics RC1 Markdown fixture and four focused tests covering all approved syntax classes while rejecting executable and layout-specific escape hatches.",
+      "status": "complete"
     },
     {
       "id": "s02-source-spans",
