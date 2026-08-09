@@ -40,6 +40,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:41:56.388Z",
       "notes": "17 tests passed; the new manifest contains 23 unique grouped first-party pages and no fixtures."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:46:30.087Z",
+      "notes": "20 tests passed including exact reader, concept, and physical entry drift gates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-09T21:46:35.999Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed with zero Svelte diagnostics."
     }
   ],
   "progress": {

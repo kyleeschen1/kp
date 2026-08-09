@@ -7,6 +7,10 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 
 import {
+  kpDevelopmentBuildEntries
+} from "./src/dev-toolbar/development-page-build-entries.ts";
+
+import {
   kpReaderRouteEntryName,
   kpReaderRouteHtmlPath
 } from "./src/reader/compiler/reader-route-descriptor.ts";
@@ -186,14 +190,10 @@ export default defineConfig({
     modulePreload: { polyfill: false },
     rollupOptions: {
       input: {
-        main: resolve(projectRoot, "index.html"),
-        glyphReconciliationExperiment: resolve(projectRoot, "glyph-reconciliation-experiment.html"),
-        canonicalAnimationReview: resolve(projectRoot, "canonical-animation-review.html"),
-        economicsDemandShiftTutorial: resolve(
-          projectRoot,
-          "tutorials/economics/demand-shift/index.html"
-        ),
-        lispFunctionApplicationTutorial: lispTutorialFilename,
+        ...Object.fromEntries(kpDevelopmentBuildEntries.map((entry) => [
+          entry.name,
+          resolve(projectRoot, entry.htmlPath)
+        ])),
         ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
           kpReaderRouteEntryName(descriptor.route),
           filename
