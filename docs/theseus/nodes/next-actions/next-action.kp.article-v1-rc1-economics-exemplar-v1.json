@@ -388,6 +388,34 @@
       "scope": "slice 20 type and production boundary",
       "checkedAt": "2026-08-09T07:15:25.332Z",
       "notes": "TypeScript, Svelte, domain checks, publication freshness, and production build passed"
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s21 RC1 importer, release identity, source authority, and prose parity",
+      "checkedAt": "2026-08-09T07:32:58.072Z",
+      "notes": "78 tests passed."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "s21 legacy economics preservation boundary",
+      "checkedAt": "2026-08-09T07:32:59.085Z",
+      "notes": "110 tests passed."
+    },
+    {
+      "command": "node --test tests/concept-publisher.test.ts",
+      "status": "passed",
+      "scope": "s21 browser-safe SHA-256 extraction",
+      "checkedAt": "2026-08-09T07:33:00.011Z",
+      "notes": "Existing deterministic published-artifact identities remain exact."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21 production compilation",
+      "checkedAt": "2026-08-09T07:33:00.954Z",
+      "notes": "Typecheck, economics publication check, and Vite build passed."
     }
   ],
   "expectedLearning": [

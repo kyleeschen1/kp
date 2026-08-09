@@ -14,6 +14,7 @@ import {
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import {
   economicsDemandShiftVignetteRelease,
+  economicsDemandShiftVignetteArticleRelease,
   economicsDemandShiftVignetteStaticRelease,
   kpArticleVignetteRegistry
 } from "../src/article/vignettes/economics-demand-shift-vignette.ts";
@@ -116,6 +117,15 @@ test("the economics vignette has a reproducible exact release identity", () => {
     economicsDemandShiftVignetteStaticRelease.staticProjection?.transitions,
     [{ id: "shift-demand", from: "initial", to: "settled" }]
   );
+  const articleIntegrity = `sha256:${createHash("sha256")
+    .update(serializeKpVignetteReleasePayload(economicsDemandShiftVignetteArticleRelease))
+    .digest("hex")}`;
+  assert.equal(economicsDemandShiftVignetteArticleRelease.integrity, articleIntegrity);
+  assert.equal(economicsDemandShiftVignetteArticleRelease.version, "1.2.0");
+  assert.deepEqual(economicsDemandShiftVignetteArticleRelease.transitionPaths, [
+    "shift-demand",
+    "trace-supply-movement"
+  ]);
   const fixture = JSON.parse(readFileSync(
     new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"

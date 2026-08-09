@@ -177,7 +177,8 @@
     {
       "id": "s21-legacy-importer",
       "title": "Legacy economics importer",
-      "status": "planned"
+      "summary": "Reconciled legacy Markdown, two-column JSON, and synthesized buffer into one validated RC1 article authority with immutable aliases, source fingerprints, parity evidence, and a pinned 1.2 vignette release.",
+      "status": "complete"
     },
     {
       "id": "s22-economics-cutover",
