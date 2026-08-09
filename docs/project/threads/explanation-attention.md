@@ -2,12 +2,12 @@
 
 Status: active-supporting
 Last Updated: 2026-08-08
-Current Next Action: Layout discovery is paused. Prepare a bounded review of
-the authoring-format mismatch between the full Markdown article, the
-layout-specific JSON passage source, and the synthesized JSON-in-comment
-CodeMirror buffer. Select one readable article-level syntax before migration or
-more editor work, using the bounded comparison in
-`../reviews/2026-08-08-authoring-format-convergence-next-step-review.md`.
+Current Next Action: Layout discovery remains paused. Implement the accepted
+`kp.article.v1-rc1` contract through the universal development toolbar and one
+economics authoring exemplar, using
+`../reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md`. Freeze `v1`
+and retire migrated writable duplicates only after the human exemplar
+checkpoint.
 Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.
@@ -47,10 +47,13 @@ evidence, not the current next action.
 The later decision in
 `../decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`
 closes that pending visual-decision slice as postponed rather than approved or
-rejected. The economics presentation variants remain evidence. The next design
-question is one canonical, readable article source with explicit semantic links
-and typed metadata; the current JSON-in-comment editor serialization is not a
-settled authoring standard.
+rejected. The economics presentation variants remain evidence. That source
+question is now resolved provisionally by
+`../decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md` and
+`../principles/kp-article-v1-rc1.md`: one Markdown article, four closed typed
+directives, `kp-ref:` links, external versioned vignettes, derived IR, and
+layout-neutral projections. The current JSON-in-comment editor serialization
+is migration evidence, not a settled authoring standard.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.

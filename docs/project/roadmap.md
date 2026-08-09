@@ -44,12 +44,19 @@ The execution order was temporarily revised by
 quiet economics-local stacked revision and all approved layout-independent
 static-publication, route, CodeMirror, semantic-navigation, accessibility, and
 performance work are now complete. The user subsequently paused layout
-discovery rather than selecting the local stacked choreography. The next
-reviewable question is convergence on one readable article-level authoring
-format, recorded in
+discovery rather than selecting the local stacked choreography. The
+authoring-format mismatch is recorded in
 `decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`.
 The recommended decision process and successor sequence are in
-`reviews/2026-08-08-authoring-format-convergence-next-step-review.md`.
+`reviews/2026-08-08-authoring-format-convergence-next-step-review.md`. That
+review is now resolved provisionally by the accepted `kp.article.v1-rc1`
+contract in
+`decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md` and
+`principles/kp-article-v1-rc1.md`. One economics article must prove the format
+across authoring, static publication, interactive and deck projection, search,
+navigation, and accessibility before the schema freezes or another lesson
+migrates. The implementation proposal is
+`reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
@@ -705,14 +712,15 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Review and select one readable article-level authoring format, including
-   semantic-link and typed-directive syntax; do not implement a migration
-   before approval.
+1. Implement the accepted `kp.article.v1-rc1` contract through one economics
+   exemplar; do not freeze `v1` or migrate a second lesson before its human
+   checkpoint.
 2. Add one development-only bottom toolbar on every route, with Review capture,
    available layout/view switching, and contextual internal controls; keep it
    framework-neutral at the host boundary and absent from production.
 3. Reconcile the full Markdown article, layout-specific passage source, and
-   synthesized CodeMirror buffer only after that format decision.
+   synthesized CodeMirror buffer through the RC1 parser and temporary importer;
+   retain one writable Markdown truth after parity is approved.
 4. Keep the completed static publication, optional editor, semantic TOC/direct
    navigation, accessibility, and performance boundaries green.
 5. Keep economics layout refinement, shared station extraction, split parity,
