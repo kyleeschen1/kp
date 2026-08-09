@@ -3,6 +3,7 @@ import {
   type KpArticleAccessibleStage
 } from "./kp-article-accessibility.ts";
 import type { KpArticleDocument, KpArticleStageBlock } from "./kp-article-document.ts";
+import { selectKpVignetteInitialCheckpoint } from "./kp-vignette-static-projection.ts";
 
 export const kpArticleStageManifestSchema = "kp.article-stage-manifest.v1" as const;
 
@@ -48,8 +49,7 @@ function compileStage(
   stage: KpArticleStageBlock,
   accessibility: KpArticleAccessibleStage
 ): KpArticleStageManifest {
-  const projection = stage.vignette.staticProjection!;
-  const initialCheckpointId = projection.transitions[0]?.from ?? projection.checkpoints[0]!.id;
+  const initialCheckpointId = selectKpVignetteInitialCheckpoint(stage.vignette).id;
   return Object.freeze({
     kind: "kp-article-stage-manifest" as const,
     schemaVersion: kpArticleStageManifestSchema,

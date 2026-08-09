@@ -271,6 +271,20 @@
       "scope": "s21 algebra source and exact lock",
       "checkedAt": "2026-08-09T22:55:44.250Z",
       "notes": "All 85 tests passed; the canonical algebra source validates, resolves one exact vignette lock, keeps eight stable block identities and exact source maps, addresses five motion ranges, and gives no prose link timeline authority."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s22 second caller projections",
+      "checkedAt": "2026-08-09T23:03:15.978Z",
+      "notes": "All 90 Article v1 tests passed across both callers, including deterministic document, static Markdown, build-time KaTeX HTML/MathML, six SVG requests, stage manifest, five-motion deck, accessibility, and root checkpoint selection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 compiler types",
+      "checkedAt": "2026-08-09T23:03:17.029Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed after the second caller and generic root-selection repair."
     }
   ],
   "progress": {

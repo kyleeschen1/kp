@@ -10,6 +10,10 @@ import type {
   KpVignetteRelease,
   KpVignetteStaticCheckpoint
 } from "./kp-article-import-lock.ts";
+import {
+  requireKpVignetteStaticProjection,
+  selectKpVignetteInitialCheckpoint
+} from "./kp-vignette-static-projection.ts";
 
 export interface KpArticleStaticAssetRequest {
   readonly id: string;
@@ -86,18 +90,14 @@ function compileBlock(
 }
 
 function initialCheckpoint(release: KpVignetteRelease): KpVignetteStaticCheckpoint {
-  const projection = requireStaticProjection(release);
-  const initialId = projection.transitions[0]?.from ?? projection.checkpoints[0]?.id;
-  const checkpoint = projection.checkpoints.find(({ id }) => id === initialId);
-  if (checkpoint === undefined) throw new Error(`${release.id}@${release.version} has no initial static checkpoint.`);
-  return checkpoint;
+  return selectKpVignetteInitialCheckpoint(release);
 }
 
 function motionTargetCheckpoint(
   motion: KpArticleMotionBlock,
   release: KpVignetteRelease
 ): KpVignetteStaticCheckpoint {
-  const projection = requireStaticProjection(release);
+  const projection = requireKpVignetteStaticProjection(release);
   const transition = motion.transition;
   const targetId = transition.kind === "range"
     ? objectPath(transition.to)
@@ -107,13 +107,6 @@ function motionTargetCheckpoint(
     throw new Error(`${release.id}@${release.version} lacks a static target for motion ${motion.id}.`);
   }
   return checkpoint;
-}
-
-function requireStaticProjection(release: KpVignetteRelease) {
-  if (release.staticProjection === undefined) {
-    throw new Error(`${release.id}@${release.version} does not provide a static checkpoint projection.`);
-  }
-  return release.staticProjection;
 }
 
 function renderFigure(
