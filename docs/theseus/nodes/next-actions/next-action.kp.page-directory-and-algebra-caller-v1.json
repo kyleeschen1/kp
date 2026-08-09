@@ -68,6 +68,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:49:09.251Z",
       "notes": "23 tests passed including addressable dashboard route semantics."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:51:52.774Z",
+      "notes": "25 tests passed; Pages is host-owned, immutable, current-aware, and collision-protected."
     }
   ],
   "progress": {

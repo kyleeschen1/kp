@@ -77,7 +77,8 @@
     {
       "id": "s05",
       "title": "host-owned-pages-control",
-      "status": "planned"
+      "summary": "Added a typed immutable host-owned Pages control with current-page links and route-contribution collision protection.",
+      "status": "complete"
     },
     {
       "id": "s06",

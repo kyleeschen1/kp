@@ -1,10 +1,12 @@
 export const kpDevToolbarProtocolSchema = "kp.dev-toolbar.v1" as const;
 export const kpDevToolbarReviewControlId = "kp.dev-toolbar.review" as const;
+export const kpDevToolbarPagesControlId = "kp.dev-toolbar.pages" as const;
 
 export type KpDevToolbarControl =
   | KpDevToolbarAction
   | KpDevToolbarToggle
-  | KpDevToolbarChoice;
+  | KpDevToolbarChoice
+  | KpDevToolbarLinks;
 
 interface KpDevToolbarControlBase {
   readonly id: string;
@@ -27,6 +29,24 @@ export interface KpDevToolbarChoice extends KpDevToolbarControlBase {
   readonly kind: "choice";
   readonly value: string;
   readonly options: readonly Readonly<{ value: string; label: string }>[];
+}
+
+export interface KpDevToolbarLink {
+  readonly id: string;
+  readonly label: string;
+  readonly href: string;
+  readonly current: boolean;
+}
+
+export interface KpDevToolbarLinkGroup {
+  readonly id: string;
+  readonly label: string;
+  readonly links: readonly KpDevToolbarLink[];
+}
+
+export interface KpDevToolbarLinks extends KpDevToolbarControlBase {
+  readonly kind: "links";
+  readonly groups: readonly KpDevToolbarLinkGroup[];
 }
 
 export interface KpDevToolbarRouteContribution {
@@ -62,6 +82,7 @@ export interface KpDevToolbarHost {
  */
 export function createKpDevToolbarHost(input: {
   readonly execute: (command: KpDevToolbarCommand) => void;
+  readonly pages?: KpDevToolbarLinks;
 }): KpDevToolbarHost {
   let contribution: KpDevToolbarRouteContribution | undefined;
   const listeners = new Set<(snapshot: KpDevToolbarSnapshot) => void>();
@@ -72,6 +93,7 @@ export function createKpDevToolbarHost(input: {
     ...(contribution === undefined ? {} : { routeId: contribution.routeId }),
     controls: Object.freeze([
       reviewControl,
+      ...(input.pages === undefined ? [] : [freezeLinks(input.pages)]),
       ...(contribution?.controls ?? [])
     ])
   });
@@ -136,6 +158,8 @@ function validateContribution(
       || control.label.trim() === ""
       || !Number.isFinite(control.order)
       || control.id === kpDevToolbarReviewControlId
+      || control.id === kpDevToolbarPagesControlId
+      || control.kind === "links"
       || ids.has(control.id)
     ) throw new Error(`Invalid or duplicate toolbar control ${control.id}.`);
     ids.add(control.id);
@@ -164,6 +188,9 @@ function compareControls(left: KpDevToolbarControl, right: KpDevToolbarControl):
 }
 
 function validateCommandValue(control: KpDevToolbarControl, value: string | boolean | undefined): void {
+  if (control.kind === "links") {
+    throw new Error(`Toolbar links ${control.id} use native anchor navigation.`);
+  }
   if (control.kind === "action" && value !== undefined) {
     throw new Error(`Toolbar action ${control.id} does not accept a value.`);
   }
@@ -174,4 +201,16 @@ function validateCommandValue(control: KpDevToolbarControl, value: string | bool
     control.kind === "choice"
     && (typeof value !== "string" || !control.options.some((option) => option.value === value))
   ) throw new Error(`Toolbar choice ${control.id} requires a declared option.`);
+}
+
+function freezeLinks(control: KpDevToolbarLinks): KpDevToolbarLinks {
+  return Object.freeze({
+    ...control,
+    groups: Object.freeze(control.groups.map((group) => Object.freeze({
+      ...group,
+      links: Object.freeze(group.links.map((link) => Object.freeze({
+        ...link
+      })))
+    })))
+  });
 }
