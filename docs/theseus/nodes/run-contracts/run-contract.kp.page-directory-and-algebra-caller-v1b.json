@@ -167,7 +167,8 @@
     {
       "id": "s20",
       "title": "fraction-composition-vignette",
-      "status": "planned"
+      "summary": "Added an exact-integrity fraction-composition vignette whose author paths resolve only to canonical KaTeX authority and whose five ranges cover the existing evaluation groups with accessible static endpoints.",
+      "status": "complete"
     },
     {
       "id": "s21",

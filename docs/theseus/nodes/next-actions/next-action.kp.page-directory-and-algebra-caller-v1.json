@@ -243,6 +243,27 @@
       "scope": "s19 canonical algebra audit",
       "checkedAt": "2026-08-09T22:45:59.064Z",
       "notes": "All 63 tests passed, confirming the 14 exact states, 13 lawful operations, six narrated checkpoints, five operation groups, static export, salience inventory, URL codec, and one-clock renderer boundary."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s20 vignette and import lock",
+      "checkedAt": "2026-08-09T22:51:08.428Z",
+      "notes": "All 81 Article v1 tests passed, including exact vignette integrity, object authority, five transition groups, six static checkpoints, accessibility, and reduced-motion metadata."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s20 canonical preservation",
+      "checkedAt": "2026-08-09T22:51:09.434Z",
+      "notes": "All 63 canonical fraction tests passed; the vignette adds no semantic trace, renderer, clock, or route change."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 vignette types",
+      "checkedAt": "2026-08-09T22:51:10.400Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte diagnostics."
     }
   ],
   "progress": {
