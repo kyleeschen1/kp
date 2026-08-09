@@ -96,6 +96,13 @@
       "scope": "s08 wide toolbar fit",
       "checkedAt": "2026-08-09T22:02:36.526Z",
       "notes": "Five Chromium checks passed after one transient development-server reload; deterministic rerun passed and the captured Pages surface stays inside the 1440x900 viewport above the toolbar with four groups and visible Review/Edit controls."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "s09 responsive toolbar fit",
+      "checkedAt": "2026-08-09T22:07:34.326Z",
+      "notes": "Seven Chromium cases passed across 1440x900, 390x844, and 900x420. The directory stays bounded above the toolbar, scrolls internally, retains 44px phone links, and the document remains scrollable."
     }
   ],
   "progress": {

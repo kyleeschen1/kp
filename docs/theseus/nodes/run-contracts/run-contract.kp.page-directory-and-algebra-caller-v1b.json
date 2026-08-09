@@ -101,7 +101,8 @@
     {
       "id": "s09",
       "title": "responsive-toolbar-fit",
-      "status": "planned"
+      "summary": "Made the page directory and toolbar usable on phones and short viewports with bounded internal overflow, two-column groups, preserved labels, and full-size link targets.",
+      "status": "complete"
     },
     {
       "id": "s10",

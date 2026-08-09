@@ -2,8 +2,10 @@
   position: fixed;
   z-index: 2147482999;
   bottom: 18px;
-  left: 50%;
+  right: 0;
+  left: 0;
   display: flex;
+  width: max-content;
   max-width: calc(100vw - 2rem);
   min-height: 42px;
   gap: 0.4rem;
@@ -16,7 +18,7 @@
   box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow, rgb(0 0 0 / 24%));
   font-family: var(--kp-economics-non-katex-font-family, ui-sans-serif, system-ui, sans-serif);
   font-size: 0.75rem;
-  transform: translateX(-50%);
+  margin-inline: auto;
 }
 
 [data-kp-dev-toolbar] button,
@@ -101,9 +103,9 @@
 }
 
 [data-kp-dev-toolbar] .kp-dev-toolbar__pages > nav {
-  position: absolute;
-  bottom: calc(100% + 0.7rem);
-  left: 0;
+  position: fixed;
+  bottom: 4.45rem;
+  left: 50%;
   display: grid;
   width: min(44rem, calc(100vw - 2rem));
   max-height: calc(100vh - 6rem);
@@ -116,6 +118,7 @@
   color: var(--kp-lesson-theme-control-ink, #f4f5f7);
   background: var(--kp-lesson-theme-control-surface, #171a24);
   box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow, rgb(0 0 0 / 24%));
+  transform: translateX(-50%);
 }
 
 [data-kp-dev-toolbar] .kp-dev-toolbar__pages h3 {
@@ -163,8 +166,17 @@ html[data-kp-dev-toolbar-active] .kp-economics-tutorial__bottom-controls {
     right: 8px;
     bottom: 8px;
     left: 8px;
+    width: auto;
+    flex-wrap: wrap;
     justify-content: center;
-    transform: none;
+    margin-inline: 0;
+  }
+
+  [data-kp-dev-toolbar] button,
+  [data-kp-dev-toolbar] label,
+  [data-kp-dev-toolbar] summary {
+    min-height: 40px;
+    padding-inline: 0.55rem;
   }
 
   [data-kp-dev-toolbar] label > span {
@@ -173,6 +185,25 @@ html[data-kp-dev-toolbar-active] .kp-economics-tutorial__bottom-controls {
     height: 1px;
     overflow: hidden;
     clip-path: inset(50%);
+  }
+
+  [data-kp-dev-toolbar] .kp-dev-toolbar__pages > nav {
+    position: fixed;
+    right: 8px;
+    bottom: 7.5rem;
+    left: 8px;
+    width: auto;
+    max-height: calc(100dvh - 8.5rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    padding: 0.85rem;
+    transform: none;
+  }
+
+  [data-kp-dev-toolbar] .kp-dev-toolbar__pages a {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
   }
 }
 

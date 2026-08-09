@@ -1,6 +1,22 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const route = "/tutorials/economics/demand-shift/";
+
+async function openPagesDirectory(toolbar: Locator): Promise<Locator> {
+  const pages = toolbar.locator(
+    "[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']"
+  );
+  // The development compiler may replace the shell once after source startup.
+  await expect(async () => {
+    if (await pages.getAttribute("open") === null) {
+      await pages.locator("summary").click();
+    }
+    await expect(pages).toHaveAttribute("open", "");
+  }).toPass({ timeout: 5_000 });
+  const navigation = pages.getByRole("navigation", { name: "Development pages" });
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
 
 test("economics exposes one persistent bottom development toolbar", async ({ page }) => {
   await page.goto(route);
@@ -45,11 +61,7 @@ test("the Pages directory fits the accepted wide toolbar surface", async ({ page
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(route);
   const toolbar = page.getByRole("complementary", { name: "Development tools" });
-  const pages = toolbar.locator("[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']");
-
-  await pages.getByText("Pages", { exact: true }).click();
-  const navigation = pages.getByRole("navigation", { name: "Development pages" });
-  await expect(navigation).toBeVisible();
+  const navigation = await openPagesDirectory(toolbar);
   const geometry = await navigation.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
     const toolbarBounds = element.closest("[data-kp-dev-toolbar]")!
@@ -76,6 +88,50 @@ test("the Pages directory fits the accepted wide toolbar surface", async ({ page
     fullPage: false
   });
 });
+
+for (const viewport of [
+  { name: "phone", width: 390, height: 844 },
+  { name: "short viewport", width: 900, height: 420 }
+] as const) {
+  test(`the Pages directory remains reachable in a ${viewport.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto(route);
+    const toolbar = page.getByRole("complementary", { name: "Development tools" });
+    const navigation = await openPagesDirectory(toolbar);
+    const geometry = await navigation.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const toolbarBounds = element.closest("[data-kp-dev-toolbar]")!
+        .getBoundingClientRect();
+      const firstLink = element.querySelector("a")!.getBoundingClientRect();
+      return {
+        left: bounds.left,
+        right: bounds.right,
+        top: bounds.top,
+        bottom: bounds.bottom,
+        toolbarTop: toolbarBounds.top,
+        overflowY: getComputedStyle(element).overflowY,
+        firstLinkHeight: firstLink.height
+      };
+    });
+
+    expect(geometry.left).toBeGreaterThanOrEqual(8);
+    expect(geometry.right).toBeLessThanOrEqual(viewport.width - 8);
+    expect(geometry.top).toBeGreaterThanOrEqual(8);
+    expect(geometry.bottom).toBeLessThan(geometry.toolbarTop);
+    expect(geometry.overflowY).toBe("auto");
+    if (viewport.name === "phone") {
+      expect(geometry.firstLinkHeight).toBeGreaterThanOrEqual(44);
+      await page.screenshot({
+        path: "tmp/codex/economics-dev-toolbar-pages-phone.png",
+        fullPage: false
+      });
+    }
+
+    await page.keyboard.press("Escape");
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  });
+}
 
 test("toolbar view changes retain semantic state without replay", async ({ page }) => {
   await page.goto(
