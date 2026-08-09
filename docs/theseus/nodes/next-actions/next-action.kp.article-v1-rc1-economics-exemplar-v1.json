@@ -66,6 +66,20 @@
       "scope": "s03 frontmatter type boundary",
       "checkedAt": "2026-08-09T04:33:50.701Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass with the strict build-time frontmatter parser."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s04 four-directive scanner",
+      "checkedAt": "2026-08-09T04:39:06.048Z",
+      "notes": "Seventeen tests pass; scanner finds exact directive/attribute/body spans, preserves motion slots, ignores fenced examples, retains unknown names for validation, and rejects nesting or malformed structure."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 scanner type boundary",
+      "checkedAt": "2026-08-09T04:39:16.215Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass with immutable directive and attribute scan records."
     }
   ],
   "expectedLearning": [

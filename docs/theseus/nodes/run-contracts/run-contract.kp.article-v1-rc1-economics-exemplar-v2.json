@@ -75,7 +75,8 @@
     {
       "id": "s04-directive-scanner",
       "title": "Four-directive scanner",
-      "status": "planned"
+      "summary": "Added a framework-neutral line scanner for the four RC1 directives, exact attribute and Markdown body spans, one motion after-slot, fenced-code isolation, and fail-closed structural errors.",
+      "status": "complete"
     },
     {
       "id": "s05-typed-validation",
