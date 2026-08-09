@@ -360,6 +360,34 @@
       "scope": "slice 19 impact selection",
       "checkedAt": "2026-08-09T06:47:11.483Z",
       "notes": "Selector classified the new unmatched compiler/editor seam as high risk; focused RC1, typecheck, and build gates were completed while the known unrelated full-suite architecture failure remains baseline."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "slice 20 RC1 draft and language lifecycle",
+      "checkedAt": "2026-08-09T07:15:22.432Z",
+      "notes": "74 tests passed; invalid drafts retain last-valid preview and exact write quit semantics are transactional"
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "slice 20 CodeMirror Vim integration",
+      "checkedAt": "2026-08-09T07:15:23.409Z",
+      "notes": "5 Chromium tests passed for lazy whole-file editing, dirty quit refusal, write, write-quit, forced discard, invalid preview retention, completion, and structural history"
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "slice 20 editor reachability",
+      "checkedAt": "2026-08-09T07:15:24.358Z",
+      "notes": "9 tests passed and the universal development toolbar exposes the editor only for its supported two-column projection"
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "slice 20 type and production boundary",
+      "checkedAt": "2026-08-09T07:15:25.332Z",
+      "notes": "TypeScript, Svelte, domain checks, publication freshness, and production build passed"
     }
   ],
   "expectedLearning": [

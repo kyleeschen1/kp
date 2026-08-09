@@ -118,7 +118,7 @@
           value: bufferSource,
           completions,
           onChange: updateSource,
-          onQuit: onClose,
+          onQuit: quitEditor,
           onWrite: saveToSource,
           onVimModeChange: (mode) => vimMode = mode
         });
@@ -271,6 +271,22 @@
     } finally {
       sourceSavePending = false;
     }
+  }
+
+  function quitEditor(force: boolean): boolean {
+    if (dirty && !force) {
+      sourceSaveStatus = "No write since last change (add ! to override).";
+      return false;
+    }
+    if (force && dirty) {
+      bufferSource = savedSource;
+      runtime?.setValue(savedSource);
+      preview?.update({ source: savedSource, passageId: selectedPassageId });
+      if (preview !== undefined) handlePreviewSnapshot(preview.flush());
+      persistBuffer();
+    }
+    onClose();
+    return true;
   }
 
   function persistBuffer(): void {

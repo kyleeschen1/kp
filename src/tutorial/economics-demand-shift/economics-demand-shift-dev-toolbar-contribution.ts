@@ -13,6 +13,7 @@ export function createKpEconomicsDevToolbarContribution(
   search: string
 ): KpDevToolbarRouteContribution {
   const theme = readKpEconomicsDemandShiftTheme(search);
+  const view = readKpEconomicsDemandShiftView(search);
   return {
     schemaVersion: kpDevToolbarProtocolSchema,
     routeId: "tutorial.economics.demand-shift",
@@ -22,11 +23,18 @@ export function createKpEconomicsDevToolbarContribution(
       label: "Layout",
       group: "context",
       order: 10,
-      value: readKpEconomicsDemandShiftView(search),
+      value: view,
       options: kpEconomicsDemandShiftViews.map((value) => ({
         value,
         label: viewLabel(value)
       }))
+    }, {
+      kind: "action",
+      id: "economics.edit-article",
+      label: "Edit article",
+      group: "context",
+      order: 15,
+      disabled: view !== "two-column-scroll"
     }, {
       kind: "toggle",
       id: "economics.theme",

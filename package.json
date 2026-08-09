@@ -42,7 +42,7 @@
     "test:compiled-publication-artifact": "node --disable-warning=ExperimentalWarning --test tests/kp-compiled-publication-artifact.test.ts tests/economics-demand-shift-publication-artifact.test.ts",
     "test:browser:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "test:browser:economics-demand-shift-accessibility": "playwright test tests/economics-demand-shift-accessibility.browser.spec.ts --project=chromium --workers=1",
-    "test:browser:economics-lesson-editor": "playwright test tests/economics-lesson-editor.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:economics-lesson-editor": "playwright test --config playwright.economics-lesson-editor.config.ts --project=chromium --workers=1",
     "test:browser:economics-runtime-session": "playwright test tests/kp-economics-equilibrium-runtime-session.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-tutorial": "playwright test tests/economics-demand-shift-tutorial.browser.spec.ts --project=chromium --workers=1",
     "visual:economics-demand-shift-deck": "playwright test tests/economics-demand-shift-deck.browser.spec.ts --project=chromium --workers=1",

@@ -211,9 +211,10 @@ function completions(input: {
   if (value !== null) {
     const name = value[1]!;
     const completeValue = value[2] ?? value[3] ?? value[4] ?? "";
+    const rangeSeparator = completeValue.lastIndexOf("..");
     const wordStart = Math.max(
       completeValue.lastIndexOf(" ") + 1,
-      completeValue.lastIndexOf("..") + 2
+      rangeSeparator < 0 ? 0 : rangeSeparator + 2
     );
     const wordPrefix = completeValue.slice(wordStart);
     const start = input.offset - wordPrefix.length;

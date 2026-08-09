@@ -22,7 +22,7 @@ import {
 import { getCM, Vim, vim } from "@replit/codemirror-vim";
 
 interface KpEconomicsVimExHandlers {
-  readonly quit: () => void;
+  readonly quit: (force: boolean) => boolean;
   readonly write: () => Promise<boolean>;
 }
 
@@ -34,8 +34,10 @@ const kpEconomicsVimExHandlers = new WeakMap<
 // Ex commands are registered globally by the CM5-compatible Vim API. Route
 // them through the mounted CM instance so HMR and future editor callers cannot
 // accidentally save or close a different buffer.
-Vim.defineEx("quit", "q", (cm) => {
-  kpEconomicsVimExHandlers.get(cm as object)?.quit();
+Vim.defineEx("quit", "q", (cm, params) => {
+  kpEconomicsVimExHandlers.get(cm as object)?.quit(
+    (params.argString ?? "").trim() === "!"
+  );
 });
 Vim.defineEx("write", "w", (cm) => {
   const handlers = kpEconomicsVimExHandlers.get(cm as object);
@@ -45,7 +47,7 @@ Vim.defineEx("wq", "wq", (cm) => {
   const handlers = kpEconomicsVimExHandlers.get(cm as object);
   if (handlers === undefined) return;
   void handlers.write().then((written) => {
-    if (written) handlers.quit();
+    if (written) handlers.quit(false);
   });
 });
 
@@ -75,7 +77,7 @@ export function mountKpEconomicsCodeMirror(input: {
   readonly value: string;
   readonly completions: readonly KpEconomicsCodeMirrorCompletion[];
   readonly onChange: (value: string) => void;
-  readonly onQuit?: (() => void) | undefined;
+  readonly onQuit?: ((force: boolean) => boolean) | undefined;
   readonly onWrite?: (() => Promise<boolean>) | undefined;
   readonly onVimModeChange?: ((mode: string) => void) | undefined;
 }): KpEconomicsCodeMirrorMount {
@@ -206,7 +208,7 @@ export function mountKpEconomicsCodeMirror(input: {
   cm?.on("vim-mode-change", reportVimMode);
   if (cm !== null) {
     kpEconomicsVimExHandlers.set(cm as object, {
-      quit: input.onQuit ?? (() => undefined),
+      quit: input.onQuit ?? (() => true),
       write: input.onWrite ?? (async () => true)
     });
   }

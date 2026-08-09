@@ -44,6 +44,12 @@ export function mountKpEconomicsDemandShiftDevToolbar(input: {
         search,
         theme: command.value ? "dark" : "light"
       }));
+      return;
+    }
+    if (command.controlId === "economics.edit-article") {
+      ownerWindow.document.querySelector<HTMLButtonElement>(
+        "[data-kp-economics-lesson-editor-toggle]"
+      )?.click();
     }
   };
   toolbar.setRoute(createKpEconomicsDevToolbarContribution(search), execute);

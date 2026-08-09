@@ -13,11 +13,17 @@ test("economics contributes compact URL-derived layout and theme controls", () =
   assert.equal(contribution.routeId, "tutorial.economics.demand-shift");
   assert.deepEqual(contribution.controls.map(({ id }) => id), [
     "economics.view",
+    "economics.edit-article",
     "economics.theme"
   ]);
   assert.equal(contribution.controls[0]!.kind, "choice");
   assert.equal(contribution.controls[0]!.kind === "choice" && contribution.controls[0]!.value, "deck");
-  assert.equal(contribution.controls[1]!.kind === "toggle" && contribution.controls[1]!.pressed, false);
+  assert.equal(contribution.controls[1]!.disabled, true);
+  assert.equal(contribution.controls[2]!.kind === "toggle" && contribution.controls[2]!.pressed, false);
+  const twoColumn = createKpEconomicsDevToolbarContribution(
+    "?view=two-column-scroll"
+  );
+  assert.equal(twoColumn.controls[1]!.disabled, false);
   assert.doesNotMatch(JSON.stringify(contribution), new RegExp(kpDevToolbarReviewControlId, "u"));
 });
 

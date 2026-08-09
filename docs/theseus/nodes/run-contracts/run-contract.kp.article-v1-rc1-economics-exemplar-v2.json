@@ -171,7 +171,8 @@
     {
       "id": "s20-draft-save",
       "title": "Whole-file draft and Vim save lifecycle",
-      "status": "planned"
+      "summary": "Added a framework-neutral RC1 draft session with last-valid preview, transactional persistence, exact w wq q and q! semantics, and a reachable lazy CodeMirror/Vim economics integration.",
+      "status": "complete"
     },
     {
       "id": "s21-legacy-importer",
