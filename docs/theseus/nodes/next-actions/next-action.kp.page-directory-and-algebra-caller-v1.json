@@ -194,6 +194,34 @@
       "scope": "s16 all-page link audit",
       "checkedAt": "2026-08-09T22:34:24.596Z",
       "notes": "All 24 Chromium cases passed: one directory inventory plus all 23 declared pages, each with a successful document, exactly one toolbar/current marker, no fixture link, and Review ownership where supported. Vite reported two non-failing pre-existing ResizeObserver delivery warnings on catalogue startup."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "s17 layout and host contract",
+      "checkedAt": "2026-08-09T22:39:17.217Z",
+      "notes": "25 tests passed, including fixed positioning with no document-flow reservation or layout animation."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s17 production build",
+      "checkedAt": "2026-08-09T22:39:18.231Z",
+      "notes": "TypeScript, Svelte, domain, publication-lock, and Vite production build checks passed."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s17 learner closure",
+      "checkedAt": "2026-08-09T22:39:19.147Z",
+      "notes": "362 production files contain none of 12 forbidden Review or Pages toolbar markers."
+    },
+    {
+      "command": "npm run check:reader-production and npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s17 reader closure and payload",
+      "checkedAt": "2026-08-09T22:39:20.069Z",
+      "notes": "All 12 manifest routes remain production-safe and every route remains below its baseline budget; shared runtime is 124778 gzip bytes."
     }
   ],
   "progress": {

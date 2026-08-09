@@ -149,7 +149,8 @@
     {
       "id": "s17",
       "title": "production-isolation-gate",
-      "status": "planned"
+      "summary": "Proved the universal development page directory is fixed and non-reserving in development, absent from learner closures, and neutral to every reader payload budget.",
+      "status": "complete"
     },
     {
       "id": "s18",
