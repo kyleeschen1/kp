@@ -117,6 +117,11 @@ import {
 import {
   writeKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
+import {
+  readKpInternalStudioView,
+  writeKpInternalStudioView,
+  type KpInternalStudioView
+} from "./editor/internal-studio-route.ts";
 import { loadKpAnimationAsset } from "./animation/catalog-loader.ts";
 import {
   deriveKpAnimationAcceptanceBrief,
@@ -312,9 +317,7 @@ window.addEventListener("popstate", () => {
 });
 
 function renderViewFromLocation(): void {
-  const requestedView = new URLSearchParams(window.location.search).get(
-    "view"
-  );
+  const requestedView = readKpInternalStudioView(window.location.search);
   if (requestedView === "ftc-tutorial") {
     void renderFtcTutorialView();
   } else if (requestedView === "animation-library-host") {
@@ -323,6 +326,8 @@ function renderViewFromLocation(): void {
     readKpSemanticAnimationWorkbenchRoute(window.location.search).active
   ) {
     void renderAnimationWorkbenchView();
+  } else if (requestedView === "dashboard") {
+    void renderProjectDashboardView();
   } else if (readKpAnimationCatalogueRoute(window.location.search).active) {
     void renderAnimationCatalogueView();
   } else {
@@ -432,6 +437,7 @@ appRoot.addEventListener("click", (event) => {
 
   switch (button.dataset["action"]) {
     case "show-project-dashboard":
+      navigateToView("dashboard");
       void renderProjectDashboardView();
       return;
     case "show-editor":
@@ -1905,15 +1911,11 @@ function loadFtcTutorialEditorClient(): Promise<FtcTutorialEditorClient> {
 }
 
 function navigateToView(
-  view: "editor" | "ftc-tutorial" | "animation-workbench"
+  view: KpInternalStudioView
 ): void {
   const url = new URL(window.location.href);
-  if (view === "ftc-tutorial") url.searchParams.set("view", view);
-  else if (view === "animation-workbench") {
-    url.searchParams.set("view", KP_ANIMATION_WORKBENCH_VIEW);
-  }
-  else url.searchParams.set("view", "editor");
-  window.history.replaceState(null, "", url);
+  url.search = writeKpInternalStudioView(url.search, view);
+  window.history.pushState(null, "", url);
 }
 
 function selectEditorAnimation(select: HTMLSelectElement): void {

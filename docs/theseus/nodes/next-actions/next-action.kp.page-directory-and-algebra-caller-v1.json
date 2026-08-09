@@ -54,6 +54,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-09T21:46:35.999Z",
       "notes": "TypeScript, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:49:08.763Z",
+      "notes": "Chromium dashboard round-trip passed."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:49:09.251Z",
+      "notes": "23 tests passed including addressable dashboard route semantics."
     }
   ],
   "progress": {

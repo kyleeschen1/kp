@@ -71,7 +71,8 @@
     {
       "id": "s04",
       "title": "addressable-dashboard-route",
-      "status": "planned"
+      "summary": "Made the project dashboard addressable at ?view=dashboard and moved internal view changes onto push-state history.",
+      "status": "complete"
     },
     {
       "id": "s05",
