@@ -7,6 +7,13 @@ import {
   type KpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
 
+type KpEconomicsDevToolbarClient = typeof import("./economics-demand-shift-dev-toolbar.ts");
+
+// This module-scope branch lets Vite erase the complete toolbar and review
+// capture graph from production rather than mounting dormant development UI.
+const loadKpEconomicsDevToolbar: (() => Promise<KpEconomicsDevToolbarClient>) | undefined =
+  import.meta.env.DEV ? () => import("./economics-demand-shift-dev-toolbar.ts") : undefined;
+
 export const KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT =
   "kp-economics-demand-shift-route-request";
 
@@ -40,6 +47,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   let activeSearch: string | undefined;
   let disposed = false;
   let transition = Promise.resolve();
+  let devToolbar: ReturnType<KpEconomicsDevToolbarClient["mountKpEconomicsDemandShiftDevToolbar"]> | undefined;
 
   const ensurePublication = (): void => {
     if (input.root.querySelector("[data-kp-economics-static-publication]")) {
@@ -72,6 +80,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
         hash
       });
       syncViewSelector(input.root, view);
+      devToolbar?.update(search);
       return;
     }
     const tutorial = await import(
@@ -84,6 +93,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       hash
     });
     syncViewSelector(input.root, view);
+    devToolbar?.update(search);
   };
 
   const enqueueMount = (search: string, hash: string): Promise<void> => {
@@ -142,6 +152,17 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     onRouteRequest
   );
   await enqueueMount(input.search, input.hash);
+  if (loadKpEconomicsDevToolbar !== undefined) {
+    const client = await loadKpEconomicsDevToolbar();
+    if (!disposed) {
+      devToolbar = client.mountKpEconomicsDemandShiftDevToolbar({
+        search: input.search,
+        navigate: (search) => {
+          void navigate({ search, hash: window.location.hash, history: "push" });
+        }
+      });
+    }
+  }
 
   return {
     navigate,
@@ -150,6 +171,8 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       disposed = true;
       activeDispose?.();
       activeDispose = undefined;
+      devToolbar?.dispose();
+      devToolbar = undefined;
       window.removeEventListener("popstate", onPopState);
       input.root.removeEventListener("click", onViewClick);
       window.removeEventListener(

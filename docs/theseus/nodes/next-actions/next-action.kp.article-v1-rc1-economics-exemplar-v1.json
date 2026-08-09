@@ -269,6 +269,34 @@
       "scope": "s15-toolbar-protocol",
       "checkedAt": "2026-08-09T05:57:30.673Z",
       "notes": "Framework_neutral_toolbar_protocol_passed_all_type_boundaries"
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "slice 16 economics toolbar browser exemplar",
+      "checkedAt": "2026-08-09T06:08:16.337Z",
+      "notes": "persistent bottom toolbar, review bridge, and reload-free layout switch passed"
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "slice 16 development toolbar protocol and economics contribution",
+      "checkedAt": "2026-08-09T06:08:16.855Z",
+      "notes": "7 tests passed"
+    },
+    {
+      "command": "npm run build and npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice 16 production closure",
+      "checkedAt": "2026-08-09T06:08:17.268Z",
+      "notes": "production build passed; toolbar and dev review markers absent from emitted assets"
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice 16 economics preservation",
+      "checkedAt": "2026-08-09T06:08:17.627Z",
+      "notes": "110 tests passed"
     }
   ],
   "expectedLearning": [

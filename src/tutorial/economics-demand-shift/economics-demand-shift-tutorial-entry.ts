@@ -35,7 +35,6 @@ import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialProgressRail } from
   "../kp-tutorial-progress-rail.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
-import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
 
 export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
@@ -111,12 +110,9 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
         prepared.economicsParameters?.demandInterceptAfter ?? 18
     }
   });
-  const reviewHost = createKpTutorialReviewHost();
   input.root.dataset["kpEconomicsDemandShiftTutorialMounted"] = "true";
-  void reviewHost.mount();
 
   return () => {
-    reviewHost.dispose();
     delete input.root.dataset["kpEconomicsDemandShiftTutorialMounted"];
     if (previousDocumentTheme === undefined) {
       delete document.documentElement.dataset["kpLessonTheme"];

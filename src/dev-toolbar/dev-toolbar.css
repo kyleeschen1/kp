@@ -1,0 +1,95 @@
+[data-kp-dev-toolbar] {
+  position: fixed;
+  z-index: 2147482999;
+  bottom: 18px;
+  left: 50%;
+  display: flex;
+  max-width: calc(100vw - 2rem);
+  min-height: 42px;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.28rem;
+  border: 1px solid var(--kp-lesson-theme-control-border, #56606b);
+  border-radius: 999px;
+  color: var(--kp-lesson-theme-control-ink, #f4f5f7);
+  background: var(--kp-lesson-theme-control-surface, #171a24);
+  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow, rgb(0 0 0 / 24%));
+  font-family: var(--kp-economics-non-katex-font-family, ui-sans-serif, system-ui, sans-serif);
+  font-size: 0.75rem;
+  transform: translateX(-50%);
+}
+
+[data-kp-dev-toolbar] button,
+[data-kp-dev-toolbar] label,
+[data-kp-dev-toolbar] select {
+  color: inherit;
+  font: inherit;
+}
+
+[data-kp-dev-toolbar] button,
+[data-kp-dev-toolbar] label {
+  display: inline-flex;
+  min-height: 34px;
+  gap: 0.4rem;
+  align-items: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  background: transparent;
+}
+
+[data-kp-dev-toolbar] button {
+  cursor: pointer;
+}
+
+[data-kp-dev-toolbar] button:hover,
+[data-kp-dev-toolbar] label:focus-within {
+  background: color-mix(in srgb, currentcolor 9%, transparent);
+}
+
+[data-kp-dev-toolbar] button:focus-visible,
+[data-kp-dev-toolbar] select:focus-visible {
+  outline: 2px solid var(--kp-lesson-theme-focus, #6ea8fe);
+  outline-offset: 2px;
+}
+
+[data-kp-dev-toolbar] select {
+  max-width: 10rem;
+  border: 0;
+  background: transparent;
+}
+
+[data-kp-dev-toolbar] .kp-dev-toolbar__review {
+  padding-inline: 0.85rem;
+  color: var(--kp-lesson-theme-control-surface, #171a24);
+  background: var(--kp-lesson-theme-control-ink, #f4f5f7);
+  font-weight: 650;
+}
+
+html[data-kp-dev-toolbar-active] .kp-economics-tutorial__bottom-controls {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  [data-kp-dev-toolbar] {
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    justify-content: center;
+    transform: none;
+  }
+
+  [data-kp-dev-toolbar] label > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-kp-dev-toolbar] {
+    scroll-behavior: auto;
+  }
+}

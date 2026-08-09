@@ -147,7 +147,8 @@
     {
       "id": "s16-toolbar-exemplar",
       "title": "Economics toolbar exemplar",
-      "status": "planned"
+      "summary": "Mounted the persistent economics development toolbar with Review, layout, and theme controls; verified browser behavior, preservation, and production absence.",
+      "status": "complete"
     },
     {
       "id": "s17-toolbar-rollout",
