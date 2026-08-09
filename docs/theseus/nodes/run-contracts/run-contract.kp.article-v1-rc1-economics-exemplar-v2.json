@@ -117,7 +117,8 @@
     {
       "id": "s11-static-html-math",
       "title": "Static HTML and build-time math",
-      "status": "planned"
+      "summary": "Added_a_build_only_semantic_HTML_compiler_with_searchable_prose_stable_links_TOC_figures_and_accessible_KaTeX_HTML_MathML_without_client_runtime.",
+      "status": "complete"
     },
     {
       "id": "s12-accessibility",

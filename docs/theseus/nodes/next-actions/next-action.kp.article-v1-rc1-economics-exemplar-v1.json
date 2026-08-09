@@ -178,6 +178,27 @@
       "scope": "s10 static Markdown compiler boundary",
       "checkedAt": "2026-08-09T05:29:28.971Z",
       "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm_run_test_kp_article_rc1",
+      "status": "passed",
+      "scope": "s11-static-html-math",
+      "checkedAt": "2026-08-09T05:38:41.445Z",
+      "notes": "52_RC1_tests_passed_including_semantic_HTML_build_time_KaTeX_HTML_MathML_and_runtime_closure"
+    },
+    {
+      "command": "npm_run_typecheck",
+      "status": "passed",
+      "scope": "s11-static-html-math",
+      "checkedAt": "2026-08-09T05:38:42.392Z",
+      "notes": "TypeScript_Svelte_and_domain_typechecks_passed"
+    },
+    {
+      "command": "npm_run_build",
+      "status": "passed",
+      "scope": "s11-static-html-math",
+      "checkedAt": "2026-08-09T05:38:43.397Z",
+      "notes": "Production_build_passed_with_build_only_KaTeX_compiler_tree_shaken_from_client_entries"
     }
   ],
   "expectedLearning": [
