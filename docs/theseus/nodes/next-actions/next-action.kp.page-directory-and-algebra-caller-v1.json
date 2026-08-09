@@ -33,6 +33,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:39:14.728Z",
       "notes": "14 toolbar tests passed, including five new descriptor and matching cases."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:41:56.388Z",
+      "notes": "17 tests passed; the new manifest contains 23 unique grouped first-party pages and no fixtures."
     }
   ],
   "progress": {

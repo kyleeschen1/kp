@@ -59,7 +59,8 @@
     {
       "id": "s02",
       "title": "page-directory-manifest",
-      "status": "planned"
+      "summary": "Declared and verified a fixture-free 23-page development directory across four stable groups.",
+      "status": "complete"
     },
     {
       "id": "s03",
