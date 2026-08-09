@@ -64,8 +64,15 @@ Release evidence is in
 `reviews/2026-08-09-kp-article-v1-promotion-closeout.md`. The next order is one
 real economics editing session, bounded recovery of the pre-existing shared
 reader-route payload regression, and then one compact multi-step algebra
-article. The rationale and candidate ranking are in
-`reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
+article. The real editing session and payload recovery are now complete. The
+editing session exposed full-stack capability and page-reload defects rather
+than a grammar defect; both are repaired with browser coverage. The payload
+recovery restored a governed learner-core dependency boundary and reduced the
+common equation-reader closure to 124,778 gzip bytes without raising its
+145,000-byte ceiling. The immediate next action is the algebra caller. The
+ranking and recovery evidence are in
+`reviews/2026-08-09-kp-post-authoring-next-step-review.md` and
+`reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
@@ -721,26 +728,25 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Exercise the frozen `kp.article.v1` economics source through one real
-   whole-file editing session and record concrete authoring friction.
-2. Repair only defects revealed by that use, preferring language-service and
-   editor affordances over additions to the frozen grammar.
-3. Recover the reader-route payload baselines from the shared
-   `kp-tutorial-core` chunk regression without duplicating the runtime into
-   individual routes.
-4. Use one compact multi-step algebra article as the first structurally
+The first real economics whole-file editing session and bounded reader-payload
+recovery are complete. The verified save-capability and no-reload defects are
+repaired without changing the frozen grammar, and the common equation-reader
+closure is 20,222 gzip bytes below its established ceiling.
+
+1. Use one compact multi-step algebra article as the first structurally
    different v1 caller.
-5. Keep the completed static publication, optional editor, semantic TOC/direct
+2. Keep the completed static publication, optional editor, semantic TOC/direct
    navigation, accessibility, and performance boundaries green.
-6. Keep economics layout refinement, shared station extraction, split parity,
+3. Keep economics layout refinement, shared station extraction, split parity,
    and final floating-navigation geometry paused.
-7. Extract a shared motion-passage and vignette authoring contract only after
+4. Extract a shared motion-passage and vignette authoring contract only after
    economics and algebra prove the seam.
-8. Run named single, representative, and stress document profiles with
+5. Run named single, representative, and stress document profiles with
    explicit passage/block/capability/live-stage/playhead counts.
-9. Add advanced CodeMirror semantic exploration and structured-history tools.
-10. Add Canvas/WebGL salience adapters and 3D optical parity.
-11. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
+6. Add advanced CodeMirror semantic exploration and structured-history tools
+   only in response to observed authoring friction.
+7. Add Canvas/WebGL salience adapters and 3D optical parity.
+8. Adopt SvelteKit and build Internal Studio/Public Web only after the reader,
     publication, authoring, navigation, and performance gates pass.
 
 The rank detail and dependency rationale are owned by

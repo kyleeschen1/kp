@@ -7,31 +7,27 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-1. Use the frozen economics `.kp.md` in one real whole-file CodeMirror editing
-   session. Record friction before changing syntax or building more editor UI.
-2. Fix only verified authoring defects, keeping invalid-draft recovery,
-   source-mapped diagnostics, semantic completion, and exact Vim save/quit
-   behavior green.
-3. Recover the reader-route payload baselines from the shared
-   `kp-tutorial-core` chunk regression before broad article rollout. Preserve
-   shared runtime ownership; do not solve the budget by duplicating it into
-   individual routes.
-4. Author one compact multi-step algebra article as the first structurally
+The first real whole-file CodeMirror editing session and the bounded reader
+payload recovery are complete. Source-save capability and the page-reload
+regression are repaired; the frozen grammar did not need to change. The common
+equation-reader closure is now 124,778 gzip bytes, 20,222 below its ceiling.
+
+1. Author one compact multi-step algebra article as the first structurally
    different KP Article v1 caller. Reuse a canonical algebra animation rather
    than reopening linear algebra or layout discovery.
-5. Generalize article, vignette, or motion-passage seams only when economics
+2. Generalize article, vignette, or motion-passage seams only when economics
    and algebra demonstrate the same requirement.
-6. Keep economics layout alternatives available through their existing URLs,
+3. Keep economics layout alternatives available through their existing URLs,
    but postpone selecting or polishing a default while authoring is evaluated.
-7. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
+4. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
    animation-promotion rank; its place in this queue is retrievability, not
    permission to resume it.
-8. Add advanced CodeMirror semantic exploration and structured-history tools
-   only after the real authoring pass identifies their highest-value order.
-9. Build Internal Studio v0, then the portable publication bundle and Public
+5. Add advanced CodeMirror semantic exploration and structured-history tools
+   only when another real authoring pass demonstrates concrete friction.
+6. Build Internal Studio v0, then the portable publication bundle and Public
    Web v0, after the reader, authoring, navigation, and performance boundaries
    survive the second article caller.
-10. Keep Graph3D mesh-to-donut and programming addition/comparison internal.
+7. Keep Graph3D mesh-to-donut and programming addition/comparison internal.
    Do not spend current learner-product effort on them or advance rank-23 BFS.
 
 ## Historical Queue Snapshot

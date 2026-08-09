@@ -1,0 +1,30 @@
+{
+  "id": "next-action.kp.article-v1-reader-payload-recovery-v0",
+  "kind": "next-action",
+  "title": "Restore",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Superseded immediately because an unquoted compatibility command truncated its human-readable fields; no implementation used this node.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-post-authoring-next-step-review.md"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "npm",
+    "npm",
+    "npm"
+  ],
+  "allowedWork": [
+    "Measure",
+    "Preserve"
+  ],
+  "disallowedWork": [
+    "Do",
+    "Do"
+  ]
+}

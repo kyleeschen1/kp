@@ -1,0 +1,68 @@
+{
+  "id": "next-action.kp.article-v1-reader-payload-recovery-v1",
+  "kind": "next-action",
+  "title": "Restore KP Article v1 reader payload baselines",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Payload regression recovered; durable queue advances to the compact multi-step algebra article.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-post-authoring-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "npm run check:reader-budgets",
+    "npm run check:reader-production",
+    "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "all 12 manifest reader routes",
+      "checkedAt": "2026-08-09T18:51:26.446Z",
+      "notes": "Common equation closure 124778 gzip bytes; all route issues empty."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "production route closure",
+      "checkedAt": "2026-08-09T18:51:35.834Z",
+      "notes": "All 12 manifest routes passed exact production closure."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build and type boundaries",
+      "checkedAt": "2026-08-09T18:51:44.818Z",
+      "notes": "TypeScript, Svelte, domains, canonical economics publication, and Vite production build passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "complete deterministic suite",
+      "checkedAt": "2026-08-09T18:51:52.076Z",
+      "notes": "3922 tests passed after caller-ledger and durable-memory convergence repairs."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Reader preload and learner-core dependency boundaries restored; common equation closure reduced from 177816 to 124778 gzip bytes without raising budgets."
+  },
+  "allowedWork": [
+    "Measure and recover the shared reader closure.",
+    "Preserve one shared runtime and static publication."
+  ],
+  "disallowedWork": [
+    "Do not duplicate runtime code into individual routes.",
+    "Do not change article grammar, layout, or algebra content."
+  ]
+}

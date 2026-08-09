@@ -48,6 +48,19 @@ test("semantic reader permits only public imports in the allowed direction", () 
   ]), []);
 });
 
+test("semantic reader permits governed learner-core public entry points", () => {
+  assert.deepEqual(checkKpSemanticReaderImports([
+    {
+      path: "src/reader/renderers/equation.ts",
+      source: 'import type { ReaderClock } from "../runtime/learner-public-api.ts";'
+    },
+    {
+      path: "src/reader/app/mount.ts",
+      source: 'import { render } from "../renderers/learner-public-api.ts";'
+    }
+  ]), []);
+});
+
 test("semantic reader rejects backward and cross-layer deep imports", () => {
   const violations = checkKpSemanticReaderImports([
     {

@@ -30,7 +30,7 @@ import {
   type KpReaderEquationRenderPlan,
   type KpReaderEquationResponsiveFitPlan,
   type KpReaderEquationSymbolMotionFrame
-} from "../renderers/public-api.ts";
+} from "../renderers/learner-public-api.ts";
 import type {
   KpReaderCanonicalEquationSession
 } from "./reader-canonical-equation-session.ts";
@@ -69,7 +69,7 @@ import {
   type KpReaderFocusSnapshot,
   type KpReaderMotionPreference,
   type KpReaderAttentionProjection
-} from "../runtime/public-api.ts";
+} from "../runtime/learner-public-api.ts";
 import type {
   KpLessonAttentionPhaseKind,
   KpLessonAttentionPlan
@@ -137,21 +137,12 @@ const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const fractionCompositionSalience = lessonDescriptor.id === "fraction-composition"
-  ? await import("./fraction-composition-salience-adapter.ts")
+  ? (await import("./fraction-composition-salience-adapter.ts"))
+      .createKpFractionCompositionSalienceReaderCapability({
+        root: document.body,
+        href: window.location.href
+      })
   : undefined;
-const semanticVisualDomTheme = fractionCompositionSalience === undefined
-  ? undefined
-  : await import("../../rendering/semantic-visual-dom-theme.ts");
-const fractionCompositionTheme =
-  new URL(window.location.href).searchParams.get("kpTheme") === "dark"
-    ? "dark" as const
-    : "light" as const;
-if (semanticVisualDomTheme !== undefined) {
-  semanticVisualDomTheme.applyKpSemanticVisualDomTheme({
-    root: document.body,
-    theme: fractionCompositionTheme
-  });
-}
 const usesCanonicalEquationRenderer =
   lessonDescriptor.canonicalTransitionSelection !== undefined;
 const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
@@ -923,37 +914,16 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
   applyFocus(focusSnapshot);
-  let semanticSaliencePresentationRevision = "none";
-  if (fractionCompositionSalience !== undefined) {
-    const transition = context.renderPlan.transitions[0];
-    const sourceStateId = transition?.source[0]?.objectId;
-    const targetStateId = transition?.target[0]?.objectId;
-    if (sourceStateId === undefined || targetStateId === undefined) {
-      throw new Error("Fraction salience requires one native endpoint pair.");
-    }
-    const salienceScene =
-      fractionCompositionSalience.projectKpFractionCompositionSalienceScene({
-        theme: fractionCompositionTheme,
-        sourceStateId,
-        targetStateId,
-        operationIds: runtimeFrame.activeTransformationIds,
-        phaseProgress,
-        focusTargetIds: focusedRefs
-      });
-    fractionCompositionSalience.applyKpFractionCompositionSalienceSceneToDom({
-      root: context.element,
-      projections: salienceScene.endpoints,
-      presentationRevision: salienceScene.presentationRevision
-    });
-    semanticSaliencePresentationRevision = salienceScene.presentationRevision;
-    setDatasetIfChanged(stage, "kpReaderSemanticSalienceScene", JSON.stringify({
-      sourceStateId,
-      targetStateId,
-      operationIds: salienceScene.operationIds,
-      focusTargetIds: salienceScene.focusTargetIds,
-      phaseProgressPermille: Math.round(phaseProgress * 1_000)
-    }));
-  }
+  const transition = context.renderPlan.transitions[0];
+  const semanticSaliencePresentationRevision = fractionCompositionSalience?.render({
+    root: context.element,
+    stage,
+    sourceStateId: transition?.source[0]?.objectId,
+    targetStateId: transition?.target[0]?.objectId,
+    operationIds: runtimeFrame.activeTransformationIds,
+    phaseProgress,
+    focusTargetIds: focusedRefs
+  }) ?? "none";
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;

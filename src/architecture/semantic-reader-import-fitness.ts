@@ -70,13 +70,17 @@ export function checkKpSemanticReaderImports(
         });
         continue;
       }
-      if (targetFile !== targetLayer.publicEntryPoint) {
+      const publicEntryPoints = [
+        targetLayer.publicEntryPoint,
+        ...(targetLayer.additionalPublicEntryPoints ?? [])
+      ];
+      if (!publicEntryPoints.includes(targetFile)) {
         violations.push({
           sourceFile: file.path,
           specifier,
           sourceLayer: sourceLayer.id,
           kind: "cross-layer-deep-import",
-          message: `${sourceLayer.id} must import ${targetLayer.publicEntryPoint}`
+          message: `${sourceLayer.id} must import one of ${publicEntryPoints.join(", ")}`
         });
       }
     }

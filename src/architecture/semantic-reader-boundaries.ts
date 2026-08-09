@@ -9,6 +9,7 @@ export interface KpSemanticReaderLayer {
   readonly id: KpSemanticReaderLayerId;
   readonly root: string;
   readonly publicEntryPoint: string;
+  readonly additionalPublicEntryPoints?: readonly string[];
   readonly mayImport: readonly KpSemanticReaderLayerId[];
 }
 
@@ -31,12 +32,18 @@ export const kpSemanticReaderLayers = [
     id: "runtime",
     root: "src/reader/runtime",
     publicEntryPoint: "src/reader/runtime/public-api.ts",
+    additionalPublicEntryPoints: [
+      "src/reader/runtime/learner-public-api.ts"
+    ],
     mayImport: ["document"]
   },
   {
     id: "renderers",
     root: "src/reader/renderers",
     publicEntryPoint: "src/reader/renderers/public-api.ts",
+    additionalPublicEntryPoints: [
+      "src/reader/renderers/learner-public-api.ts"
+    ],
     mayImport: ["document", "runtime"]
   },
   {

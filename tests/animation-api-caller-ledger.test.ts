@@ -73,7 +73,7 @@ test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.reader-compiler").sourceCallers, [
     "src/reader/compiler/reader-route-manifest.ts"
   ]);
-  assert.equal(record("facade.reader-runtime").sourceCallers.length, 21);
+  assert.equal(record("facade.reader-runtime").sourceCallers.length, 16);
   assert.ok(record("facade.reader-runtime").sourceCallers.every((path) =>
     path.startsWith("src/reader/") ||
     path === "src/editor/operation-evaluation-surface-adapter.ts"
@@ -81,8 +81,17 @@ test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.reader-renderers").sourceCallers, [
     "src/reader/app/distribution-area-renderer-runtime.ts",
     "src/reader/app/distribution-area-runtime.ts",
-    "src/reader/app/exemplar-entry.ts",
     "src/reader/app/reader-canonical-equation-session.ts"
+  ]);
+  assert.deepEqual(record("facade.reader-runtime-learner").sourceCallers, [
+    "src/reader/app/exemplar-entry.ts",
+    "src/reader/renderers/equation-layout-snapshot.ts",
+    "src/reader/renderers/equation-perceptual-alignment.ts",
+    "src/reader/renderers/equation-responsive-fit.ts",
+    "src/reader/renderers/scheduled-adapter.ts"
+  ]);
+  assert.deepEqual(record("facade.reader-renderers-learner").sourceCallers, [
+    "src/reader/app/exemplar-entry.ts"
   ]);
   assert.deepEqual(record("facade.equation-motifs").sourceCallers, []);
   assert.deepEqual(record("facade.equation-motifs").testCallers, [

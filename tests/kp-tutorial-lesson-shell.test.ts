@@ -79,6 +79,27 @@ test("production consolidates shared lesson seams into one lazy chunk", async ()
   assert.doesNotMatch(config, /return "kp-tutorial-core"[\s\S]{0,120}domain/);
 });
 
+test("dynamic reader imports do not inherit the tutorial closure", async () => {
+  const config = await readFile(viteConfigUrl, "utf8");
+  const preloadBoundary = config.indexOf('id.includes("vite/preload-helper")');
+  const tutorialBoundary = config.indexOf('return "kp-tutorial-core"');
+  assert.notEqual(preloadBoundary, -1);
+  assert.notEqual(tutorialBoundary, -1);
+  assert.ok(preloadBoundary < tutorialBoundary);
+  assert.match(config, /vite\/preload-helper"\)\) return "kp-preload-helper"/);
+});
+
+test("the initial reader imports learner-core rather than comprehensive barrels", async () => {
+  const source = await readFile(
+    new URL("../src/reader/app/exemplar-entry.ts", import.meta.url),
+    "utf8"
+  );
+  assert.match(source, /renderers\/learner-public-api\.ts/);
+  assert.match(source, /runtime\/learner-public-api\.ts/);
+  assert.doesNotMatch(source, /renderers\/public-api\.ts/);
+  assert.doesNotMatch(source, /runtime\/public-api\.ts/);
+});
+
 test("canonical economics saves invalidate without reloading the authoring page", async () => {
   const config = await readFile(viteConfigUrl, "utf8");
   assert.match(config, /kp-economics-authoring-save-boundary/);

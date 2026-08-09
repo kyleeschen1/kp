@@ -114,6 +114,16 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
       "Reader lifecycle and browser state are not authoring inputs."
   }),
   target({
+    id: "facade.reader-runtime-learner",
+    targetPath: "src/reader/runtime/learner-public-api.ts",
+    tier: "reader-facade",
+    disposition: "retain-internal",
+    authority:
+      "Expose only the shared runtime capabilities required by the initial learner-route closure.",
+    preservationBoundary:
+      "Variant-specific layout and URL capabilities remain lazy and the comprehensive internal facade remains available."
+  }),
+  target({
     id: "facade.reader-renderers",
     targetPath: "src/reader/renderers/public-api.ts",
     tier: "renderer-facade",
@@ -121,6 +131,16 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
     authority: "Own reader render plans and DOM-facing presentation contracts.",
     preservationBoundary:
       "DOM, material layers, layout, and compositor details stay out of the public authoring facade."
+  }),
+  target({
+    id: "facade.reader-renderers-learner",
+    targetPath: "src/reader/renderers/learner-public-api.ts",
+    tier: "renderer-facade",
+    disposition: "retain-internal",
+    authority:
+      "Expose the shared equation rendering capabilities required by the initial learner-route closure.",
+    preservationBoundary:
+      "Specialized route renderers remain lazy and renderer authority stays outside the public authoring facade."
   }),
   target({
     id: "facade.equation-motifs",

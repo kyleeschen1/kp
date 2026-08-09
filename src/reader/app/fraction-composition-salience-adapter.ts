@@ -13,6 +13,9 @@ import {
 import {
   createKpFractionCompositionSalienceInventory
 } from "../../semantic/fraction-composition-salience-inventory.ts";
+import {
+  applyKpSemanticVisualDomTheme
+} from "../../rendering/semantic-visual-dom-theme.ts";
 
 const fractionSalienceInventory =
   createKpFractionCompositionSalienceInventory();
@@ -71,6 +74,62 @@ export interface KpFractionCompositionSalienceSceneProjection {
   readonly operationIds: readonly string[];
   readonly focusTargetIds: readonly string[];
   readonly endpoints: readonly KpFractionCompositionSalienceProjection[];
+}
+
+export interface KpFractionCompositionSalienceReaderFrame {
+  readonly root: HTMLElement;
+  readonly stage: HTMLElement;
+  readonly sourceStateId?: string | undefined;
+  readonly targetStateId?: string | undefined;
+  readonly operationIds: readonly string[];
+  readonly phaseProgress: number;
+  readonly focusTargetIds: readonly string[];
+}
+
+export interface KpFractionCompositionSalienceReaderCapability {
+  readonly render: (input: KpFractionCompositionSalienceReaderFrame) => string;
+}
+
+/** Keeps fraction-only theme and DOM projection code out of ordinary readers. */
+export function createKpFractionCompositionSalienceReaderCapability(input: {
+  readonly root: HTMLElement;
+  readonly href: string;
+}): KpFractionCompositionSalienceReaderCapability {
+  const theme = new URL(input.href).searchParams.get("kpTheme") === "dark"
+    ? "dark" as const
+    : "light" as const;
+  applyKpSemanticVisualDomTheme({ root: input.root, theme });
+  return Object.freeze({
+    render(frame: KpFractionCompositionSalienceReaderFrame) {
+      if (frame.sourceStateId === undefined || frame.targetStateId === undefined) {
+        throw new Error("Fraction salience requires one native endpoint pair.");
+      }
+      const scene = projectKpFractionCompositionSalienceScene({
+        theme,
+        sourceStateId: frame.sourceStateId,
+        targetStateId: frame.targetStateId,
+        operationIds: frame.operationIds,
+        phaseProgress: frame.phaseProgress,
+        focusTargetIds: frame.focusTargetIds
+      });
+      applyKpFractionCompositionSalienceSceneToDom({
+        root: frame.root,
+        projections: scene.endpoints,
+        presentationRevision: scene.presentationRevision
+      });
+      const serializedScene = JSON.stringify({
+        sourceStateId: frame.sourceStateId,
+        targetStateId: frame.targetStateId,
+        operationIds: scene.operationIds,
+        focusTargetIds: scene.focusTargetIds,
+        phaseProgressPermille: Math.round(frame.phaseProgress * 1_000)
+      });
+      if (frame.stage.dataset["kpReaderSemanticSalienceScene"] !== serializedScene) {
+        frame.stage.dataset["kpReaderSemanticSalienceScene"] = serializedScene;
+      }
+      return scene.presentationRevision;
+    }
+  });
 }
 
 export function projectKpFractionCompositionSalience(input: {

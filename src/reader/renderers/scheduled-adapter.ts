@@ -2,11 +2,11 @@ import {
   defineKpReaderFrameScheduler,
   type KpReaderFrameSchedulerOptions,
   type KpReaderLayoutInvalidationReason
-} from "../runtime/public-api.ts";
+} from "../runtime/learner-public-api.ts";
 import type { KpReaderRendererAdapter } from "./adapter-contract.ts";
 import type { KpReaderRendererRequest } from "./adapter-contract.ts";
 import type { KpReaderArtifactRef } from "../document/public-api.ts";
-import type { KpReaderSessionSnapshot } from "../runtime/public-api.ts";
+import type { KpReaderSessionSnapshot } from "../runtime/learner-public-api.ts";
 
 export interface KpReaderRendererMountContext {
   readonly blockId: string;

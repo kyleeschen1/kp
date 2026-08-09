@@ -201,6 +201,11 @@ export default defineConfig({
       },
       output: {
         manualChunks(id) {
+          // Vite injects this helper into every entry that performs a dynamic
+          // import. If Rollup adopts it into the tutorial chunk, unrelated
+          // readers inherit the entire Svelte/tutorial closure just to preload
+          // their own runtime capability.
+          if (id.includes("vite/preload-helper")) return "kp-preload-helper";
           // Both tutorial routes should pay for one lazy platform seam, not a
           // request per extracted primitive. Domain assets remain separately
           // lazy and the catalogue entry does not eagerly import this chunk.

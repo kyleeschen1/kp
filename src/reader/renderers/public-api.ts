@@ -66,17 +66,11 @@ export {
   type KpReaderEquationMaterialTotalityIssue,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
-export type KpReaderEquationSceneCompositorFactory =
-  typeof import("./equation-scene-compositor-adapter.ts")[
-    "createKpReaderEquationSceneCompositorSession"
-  ];
-export type KpReaderEquationPureScenePlanCompiler =
-  typeof import("./equation-scene-compositor-adapter.ts")[
-    "compileKpReaderEquationPureScenePlan"
-  ];
-export async function loadKpReaderEquationSceneCompositorAdapter() {
-  return import("./equation-scene-compositor-adapter.ts");
-}
+export {
+  loadKpReaderEquationSceneCompositorAdapter,
+  type KpReaderEquationPureScenePlanCompiler,
+  type KpReaderEquationSceneCompositorFactory
+} from "./equation-scene-compositor-loader.ts";
 export { projectKpCertifiedTransferMaterialPlan } from "./certified-transfer-material-projection.ts";
 export {
   createKpReaderEquationLayoutSnapshot,

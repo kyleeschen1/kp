@@ -3,10 +3,12 @@
 Status: active
 Last Updated: 2026-08-09
 Current Next Action: KP Article v1 is frozen and its temporary economics
-compatibility paths are retired. Keep layout discovery paused. Exercise the
-whole-file economics authoring path once, then use a compact multi-step algebra
-article as the second format caller. See
-`../reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
+compatibility paths are retired. The first real whole-file economics authoring
+pass and the bounded reader-payload recovery are complete. Its two integration
+defects are repaired without changing the grammar, and the common reader
+closure is again below its established ceiling. Keep layout discovery paused.
+Use a compact multi-step algebra article as the second format caller next. See
+`../reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md`.
 Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.

@@ -5,10 +5,10 @@ import {
   assertKpEquationStageMeasurementIdentity,
   createKpEquationStageMeasurementIdentity,
   type KpEquationStageMeasurementIdentity
-} from "../runtime/public-api.ts";
+} from "../runtime/learner-public-api.ts";
 import type {
   KpCorridorCertifiedEquationStageLayout
-} from "../runtime/public-api.ts";
+} from "../runtime/learner-public-api.ts";
 
 export interface KpReaderEquationResponsiveFitPlan {
   readonly id: string;
