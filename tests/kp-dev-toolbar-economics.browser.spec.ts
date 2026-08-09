@@ -61,6 +61,7 @@ test("the Pages directory fits the accepted wide toolbar surface", async ({ page
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(route);
   const toolbar = page.getByRole("complementary", { name: "Development tools" });
+  await expect(toolbar.getByRole("button", { name: "Edit" })).toBeVisible();
   const navigation = await openPagesDirectory(toolbar);
   const geometry = await navigation.evaluate((element) => {
     const bounds = element.getBoundingClientRect();
@@ -89,6 +90,61 @@ test("the Pages directory fits the accepted wide toolbar surface", async ({ page
   });
 });
 
+test("economics opens a real page link without disturbing article state", async ({ page }) => {
+  await page.goto(
+    `${route}?view=two-column-scroll&theme=light` +
+    "#kp-checkpoint-shift-handoff"
+  );
+  const toolbar = page.getByRole("complementary", { name: "Development tools" });
+  await expect(toolbar.getByRole("button", { name: "Edit" })).toBeVisible();
+  const controlOrder = await toolbar.locator("[data-kp-dev-toolbar-control]")
+    .evaluateAll((controls) => controls.map(
+      (control) => control.getAttribute("data-kp-dev-toolbar-control")
+    ));
+  expect(controlOrder).toEqual([
+    "kp.dev-toolbar.review",
+    "kp.dev-toolbar.pages",
+    "economics.view",
+    "economics.edit-article",
+    "economics.theme"
+  ]);
+  const presenter = page.locator("[data-kp-tutorial-review-root]");
+  await expect(presenter).toHaveAttribute("data-kp-tutorial-review-progress", "0.7200");
+  await presenter.evaluate((element) => {
+    element.dataset["kpTestArticleIdentity"] = "retained";
+  });
+
+  const navigation = await openPagesDirectory(toolbar);
+  await expect(navigation.getByRole("link", {
+    name: "Economics · demand shift"
+  })).toHaveAttribute("aria-current", "page");
+  const destinationLink = navigation.getByRole("link", {
+    name: "Programming · Lisp function application"
+  });
+  const destinationHref = await destinationLink.getAttribute("href");
+  expect(destinationHref).toBe("/tutorials/programming/lisp-function-application/");
+  const destination = await page.context().newPage();
+  await destination.goto(destinationHref!);
+  await expect(destination.locator(
+    "[data-kp-lisp-function-application-tutorial]"
+  )).toBeVisible();
+  const destinationToolbar = destination.getByRole("complementary", {
+    name: "Development tools"
+  });
+  const destinationNavigation = await openPagesDirectory(destinationToolbar);
+  await expect(destinationNavigation.getByRole("link", {
+    name: "Programming · Lisp function application"
+  })).toHaveAttribute("aria-current", "page");
+
+  await page.bringToFront();
+  await expect(page).toHaveURL(/view=two-column-scroll/u);
+  await expect(page).toHaveURL(/theme=light/u);
+  await expect(page).toHaveURL(/#kp-checkpoint-shift-handoff$/u);
+  await expect(page.locator(
+    '[data-kp-tutorial-review-root][data-kp-test-article-identity="retained"]'
+  )).toHaveAttribute("data-kp-tutorial-review-progress", "0.7200");
+});
+
 for (const viewport of [
   { name: "phone", width: 390, height: 844 },
   { name: "short viewport", width: 900, height: 420 }
@@ -97,6 +153,7 @@ for (const viewport of [
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(route);
     const toolbar = page.getByRole("complementary", { name: "Development tools" });
+    await expect(toolbar.getByRole("button", { name: "Edit" })).toBeVisible();
     const navigation = await openPagesDirectory(toolbar);
     const geometry = await navigation.evaluate((element) => {
       const bounds = element.getBoundingClientRect();

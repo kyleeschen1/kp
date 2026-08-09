@@ -103,6 +103,13 @@
       "scope": "s09 responsive toolbar fit",
       "checkedAt": "2026-08-09T22:07:34.326Z",
       "notes": "Seven Chromium cases passed across 1440x900, 390x844, and 900x420. The directory stays bounded above the toolbar, scrolls internally, retains 44px phone links, and the document remains scrollable."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "s10 economics Pages exemplar",
+      "checkedAt": "2026-08-09T22:13:06.941Z",
+      "notes": "Eight Chromium cases passed, including Review/Pages/Layout/Edit/Theme order, current economics marker, Lisp link navigation in a second tab, and retained original economics checkpoint and 0.7200 progress."
     }
   ],
   "progress": {
