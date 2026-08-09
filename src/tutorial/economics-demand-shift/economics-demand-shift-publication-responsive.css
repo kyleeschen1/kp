@@ -153,9 +153,9 @@
     transition: height 180ms ease;
   }
 
-  .kp-economics-tutorial:not(.kp-economics-tutorial--inline-sticky)
-    .kp-economics-tutorial__layout
-    > .kp-economics-tutorial__stage {
+  /* The desktop split cancels the shell inset to align its sticky stage with
+     the document top; the fixed phone dock owns the viewport top directly. */
+  .kp-economics-tutorial__layout > .kp-economics-tutorial__stage {
     margin-block-start: 0;
   }
 

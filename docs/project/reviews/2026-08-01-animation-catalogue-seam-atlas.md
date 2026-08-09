@@ -5,9 +5,9 @@ Status: updated after native programming host integration
 
 ## Outcome
 
-The internal catalogue now has one row for each of 36 concrete lazy-loadable
+The internal catalogue now has one row for each of 37 concrete lazy-loadable
 assets across 12 packs. The catalogue load probe loaded and routed every row:
-36 meaningfully painted through a native adapter, with no remaining native-host
+37 meaningfully painted through a native adapter, with no remaining native-host
 capability gaps, no loading failures, and no iframes. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
@@ -60,17 +60,18 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
 | `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Approved exemplar |
 | `animation.programming.add.execution-trace` | programming | programming | Painted · native programming trace | 1 | Keep? |
+| `animation.programming.lisp-lambda-application` | programming | programming | Painted · Lisp material stage | 1 | Keep? |
 | `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
 
 ## Shared Seams
 
 The catalogue crosses five surface shapes: 24 equation, seven graph, three
-diagram, one composite, and one programming asset. Adapter reuse is strong:
+diagram, one composite, and two programming assets. Adapter reuse is strong:
 the general KaTeX adapter participates in 22 rows, the SVG graph adapter in six,
 the canonical operation-evaluation adapter in three, the bounded Graph3D
-adapter in one, the programming trace adapter in two, and three specialized
-diagram adapters each cover one row.
+adapter in one, the programming trace adapter in two, the Lisp material adapter
+in one, and three specialized diagram adapters each cover one row.
 This is evidence for keeping the adapter registry seam, not for inventing a
 universal renderer.
 
@@ -85,8 +86,8 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 36 assets currently carry 78 related display contexts: 55 editor, 17 card,
-four reader, and two diagnostic. These contexts stay under Details and do not
+The 37 assets currently carry 80 related display contexts: 56 editor, 17 card,
+five reader, and two diagnostic. These contexts stay under Details and do not
 mint additional catalogue rows.
 
 The highest-information consolidation audits are:

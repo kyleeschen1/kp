@@ -21,7 +21,7 @@ const server = createAppServer({
 server.listen(port, host, () => {
   console.log(`[api] listening on http://${host}:${port}`);
   if (devReviewServices !== undefined) console.log("[api] local visual review inbox enabled");
-  if (process.env["KP_LESSON_SOURCE_WRITE"] === "1") {
+  if (process.env["KP_ARTICLE_SOURCE_WRITE"] === "1") {
     console.log("[api] explicit lesson source writes enabled");
   }
 });

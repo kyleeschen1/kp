@@ -20,7 +20,7 @@ const importLock = JSON.parse(readFileSync(
   "utf8"
 )) as KpArticleImportLock;
 
-test("canonical economics RC1 source derives stable lesson and presenter passages", () => {
+test("canonical economics v1 source derives stable lesson and presenter passages", () => {
   const compiled = compileKpEconomicsDemandShiftArticle({
     text: articleText,
     lock: importLock
@@ -64,7 +64,7 @@ test("canonical economics RC1 source derives stable lesson and presenter passage
   );
 });
 
-test("document references, TOC, deck, and static output share the RC1 IR", () => {
+test("document references, TOC, deck, and static output share the v1 IR", () => {
   const compiled = compileKpEconomicsDemandShiftArticle({
     text: articleText,
     lock: importLock
@@ -118,7 +118,7 @@ test("canonical source stays under the accepted authoring-noise limit", () => {
   assert.ok(metadata.length / meaningful.length <= 0.25);
 });
 
-test("the build and dev write stack have one RC1 source authority", () => {
+test("the build and dev write stack have one v1 source authority", () => {
   const buildSource = readFileSync(
     "scripts/compile-economics-demand-shift-publication.ts",
     "utf8"

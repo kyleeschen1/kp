@@ -9,15 +9,17 @@ import {
   stepKpEconomicsDemandShiftCheckpoint
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-checkpoints.ts";
 import {
-  compileKpEconomicsDemandShiftLesson
+  type KpEconomicsDemandShiftLessonCompileOptions
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-lesson-compiler.ts";
 import {
   defineKpTutorialMotionBridge,
   defineKpTutorialOrdinaryBeat
 } from "../src/tutorial/kp-tutorial-motion-bridge-authoring.ts";
 import {
-  compileKpEconomicsDemandShiftPublication
+  compileKpEconomicsDemandShiftArticlePublication as compileCanonicalEconomicsPublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from
+  "../src/article/kp-article-import-lock.ts";
 import {
   resolveKpEconomicsDemandShiftInitialDestination
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-deep-link.ts";
@@ -68,6 +70,29 @@ import {
   serializeKpTutorialDestinationHref
 } from "../src/tutorial/kp-tutorial-url.ts";
 
+const economicsImportLock = JSON.parse(readFileSync(new URL(
+  "../content/lessons/economics-demand-shift.kp.lock.json",
+  import.meta.url
+), "utf8")) as KpArticleImportLock;
+
+function compileKpEconomicsDemandShiftPublication(
+  articleText: string,
+  options: KpEconomicsDemandShiftLessonCompileOptions = {}
+) {
+  return compileCanonicalEconomicsPublication({
+    articleText,
+    importLock: economicsImportLock,
+    ...options
+  });
+}
+
+function compileKpEconomicsDemandShiftLesson(
+  articleText: string,
+  options: KpEconomicsDemandShiftLessonCompileOptions = {}
+) {
+  return compileKpEconomicsDemandShiftPublication(articleText, options).lesson;
+}
+
 test("economics demand-shift tutorial owns one stable route", () => {
   assert.equal(
     kpEconomicsDemandShiftTutorialPath,
@@ -84,7 +109,7 @@ test("economics demand-shift tutorial owns one stable route", () => {
 
 test("economics compiler validates semantic prose motion without changing defaults", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   assert.equal(
@@ -120,7 +145,7 @@ test("economics compiler validates semantic prose motion without changing defaul
 
 test("economics compiler rejects ambiguous or invalid bridge semantics", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const bridge = defineKpTutorialMotionBridge({
@@ -168,7 +193,7 @@ test("economics compiler rejects ambiguous or invalid bridge semantics", () => {
 
 test("economics publication emits an optional progressive bridge payload", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   assert.equal(
@@ -202,7 +227,7 @@ test("economics publication emits an optional progressive bridge payload", () =>
 
 test("economics publication compiles stable semantic transit endpoints", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const publication = compileKpEconomicsDemandShiftPublication(markdown);
@@ -401,7 +426,7 @@ test("semantic tutorial URLs round-trip without choreography coordinates", () =>
 
 test("semantic deep links resolve complete cumulative economics state", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
@@ -910,7 +935,7 @@ test("manual corridor takeover rebases the next scroll without a jump", () => {
 
 test("approved Markdown compiles into the complete annotated lesson", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
@@ -970,7 +995,7 @@ test("approved Markdown compiles into the complete annotated lesson", () => {
 
 test("active TOC destinations stop at lesson sections and animation blocks", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const lesson = compileKpEconomicsDemandShiftLesson(markdown);
@@ -1029,7 +1054,7 @@ test("static progress rail reserves read-only accessible light DOM", () => {
 
 test("concise lesson authoring expands into one complete static publication", () => {
   const markdown = readFileSync(new URL(
-    "../content/lessons/economics-demand-shift.md",
+    "../content/lessons/economics-demand-shift.kp.md",
     import.meta.url
   ), "utf8");
   const publication = compileKpEconomicsDemandShiftPublication(markdown);

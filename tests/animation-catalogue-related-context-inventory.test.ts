@@ -27,17 +27,17 @@ test("concrete assets keep related contexts subordinate to one loadable id", () 
     ({ representations }) => representations
   );
 
-  assert.equal(loadable.length, 36);
-  assert.equal(descriptors.length, 53);
+  assert.equal(loadable.length, 37);
+  assert.equal(descriptors.length, 54);
   assert.equal(
     workbenchEntries.reduce(
       (sum, entry) => sum + entry.representations.length,
       0
     ),
-    72
+    73
   );
-  assert.equal(displayEntries.length, 36);
-  assert.equal(representations.length, 78);
+  assert.equal(displayEntries.length, 37);
+  assert.equal(representations.length, 80);
   assert.deepEqual(
     Object.fromEntries(
       [
@@ -56,8 +56,8 @@ test("concrete assets keep related contexts subordinate to one loadable id", () 
       ])
     ),
     {
-      reader: 4,
-      editor: 55,
+      reader: 5,
+      editor: 56,
       card: 17,
       "concept-room": 0,
       diagnostic: 2,

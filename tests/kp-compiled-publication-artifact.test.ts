@@ -12,7 +12,7 @@ test("compiled publication artifact freezes deterministic static-math truth", ()
   const artifact = createKpCompiledPublicationArtifact({
     artifactId: "publication.economics.demand-shift",
     source: {
-      path: "content/lessons/economics-demand-shift.md",
+      path: "content/lessons/economics-demand-shift.kp.md",
       sha256: digest
     },
     compiler: { id: "kp.economics-demand-shift", version: "1" },
@@ -45,7 +45,7 @@ test("compiled publication artifact rejects runtime or ambiguous math", () => {
     kind: "compiled-publication-artifact",
     artifactId: "publication.economics.demand-shift",
     source: {
-      path: "content/lessons/economics-demand-shift.md",
+      path: "content/lessons/economics-demand-shift.kp.md",
       sha256: digest
     },
     compiler: { id: "kp.economics-demand-shift", version: "1" },

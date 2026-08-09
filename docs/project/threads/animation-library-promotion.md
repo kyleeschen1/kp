@@ -30,7 +30,7 @@ Short harvest promotions may run after their prerequisite frontier exemplar is
 approved. They expand a proven family without changing the frontier order.
 
 The catalogue-first decision paused execution without recomputing this order.
-The completed convergence run now records 36 concrete assets across 12 packs,
+The completed convergence run now records 37 concrete assets across 12 packs,
 all meaningfully painted by native adapters with no load failures, host gaps,
 or iframe ports. Graph3D and the two programming callers close through bounded
 selected-caller adapters. This does not alter promotion rank. The

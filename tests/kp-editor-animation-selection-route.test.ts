@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 53);
+  assert.equal(descriptors.length, 54);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -228,13 +228,15 @@ test("matrix products are selectable through concrete linear-algebra family desc
       sampleId: "sample.animation.matrix-vector.basic",
       animationId:
         "animation.generated.linear-algebra.matrix-vector.two-by-two",
-      familyId: "family.linear-algebra.matrix-vector"
+      familyId: "family.linear-algebra.matrix-vector",
+      surface: "composite"
     },
     {
       sampleId: "sample.animation.matrix-matrix.basic",
       animationId:
         "animation.generated.linear-algebra.matrix-matrix.two-by-two",
-      familyId: "family.linear-algebra.matrix-matrix-composition"
+      familyId: "family.linear-algebra.matrix-matrix-composition",
+      surface: "equation"
     }
   ] as const;
 
@@ -248,7 +250,10 @@ test("matrix products are selectable through concrete linear-algebra family desc
     const html = renderEditorDocument(createInitialEditorDocument(), {
       editorAnimationDescriptorId: descriptor.id
     });
-    assert.match(html, /data-kp-editor-animation-surface="equation"/);
+    assert.match(
+      html,
+      new RegExp(`data-kp-editor-animation-surface="${sample.surface}"`)
+    );
     assert.match(html, new RegExp(sample.familyId.replaceAll(".", "\\.")));
   }
 });

@@ -8,7 +8,7 @@ import type {
   KpArticleMotionBlock
 } from "./kp-article-document.ts";
 
-export const kpArticleDeckSchema = "kp.article-deck.v1-rc1" as const;
+export const kpArticleDeckSchema = "kp.article-deck.v1" as const;
 
 export type KpArticleDeckScene = KpArticleDeckReadingScene | KpArticleDeckMotionScene;
 

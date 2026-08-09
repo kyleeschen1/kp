@@ -14,11 +14,11 @@ import {
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
 import {
-  validateKpArticleRc1,
+  validateKpArticle,
   type KpValidatedArticleDirective
 } from "./kp-article-validation.ts";
 
-export const kpArticleDocumentSchema = "kp.article-document.v1-rc1" as const;
+export const kpArticleDocumentSchema = "kp.article-document.v1" as const;
 
 export type KpArticleBlock =
   | KpArticleMarkdownBlock
@@ -95,7 +95,7 @@ export interface KpArticleDocument {
   /** Authoring/compiler IR; reader publication still adapts through KpLessonDocument. */
   readonly kind: "kp-article-document";
   readonly schemaVersion: typeof kpArticleDocumentSchema;
-  readonly articleSchema: "kp.article.v1-rc1";
+  readonly articleSchema: "kp.article.v1";
   readonly id: string;
   readonly sourceId: string;
   readonly importLock: KpArticleImportLock;
@@ -132,9 +132,9 @@ export function compileKpArticleDocument(input: {
   readonly registry: readonly KpVignetteRelease[];
   readonly lock: KpArticleImportLock;
 }): KpCompiledArticleDocument {
-  const validation = validateKpArticleRc1(input.source);
+  const validation = validateKpArticle(input.source);
   if (!validation.valid || validation.frontmatter === undefined) {
-    throw new Error("KpArticleDocument compilation requires a valid RC1 source.");
+    throw new Error("KpArticleDocument compilation requires a valid v1 source.");
   }
   const semantic = resolveKpArticleSemanticReferences(input.source);
   if (!semantic.valid) {
@@ -197,7 +197,7 @@ export function compileKpArticleDocument(input: {
   const document: KpArticleDocument = Object.freeze({
     kind: "kp-article-document" as const,
     schemaVersion: kpArticleDocumentSchema,
-    articleSchema: "kp.article.v1-rc1" as const,
+    articleSchema: "kp.article.v1" as const,
     id: validation.frontmatter.id,
     sourceId: input.source.sourceId,
     importLock: imports.lock,

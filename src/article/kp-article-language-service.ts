@@ -18,9 +18,9 @@ import {
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
 import {
-  validateKpArticleRc1,
+  validateKpArticle,
   type KpArticleDiagnostic,
-  type KpArticleRc1ValidationResult,
+  type KpArticleValidationResult,
   type KpValidatedArticleDirective
 } from "./kp-article-validation.ts";
 
@@ -79,7 +79,7 @@ export function createKpArticleLanguageService(input: {
   readonly semantic?: readonly KpArticleSemanticCompletion[] | undefined;
 }): KpArticleLanguageService {
   const source = createKpArticleSource(input.sourceId, input.text);
-  const validation = validateKpArticleRc1(source);
+  const validation = validateKpArticle(source);
   const semanticResolution = validation.valid
     ? resolveKpArticleSemanticReferences(source)
     : undefined;
@@ -143,7 +143,7 @@ export function createKpArticleLanguageService(input: {
 
 function provisionalIdentities(
   source: KpArticleSource,
-  validation: KpArticleRc1ValidationResult
+  validation: KpArticleValidationResult
 ): readonly KpArticleIdentity[] {
   const identities: KpArticleIdentity[] = [];
   const pattern = /^:::(kp-(stage|passage|focus|motion))\{[^}\n]*#([a-z][a-z0-9]*(?:-[a-z0-9]+)*)/gmu;
@@ -164,7 +164,7 @@ function provisionalIdentities(
 
 function completions(input: {
   readonly source: KpArticleSource;
-  readonly validation: KpArticleRc1ValidationResult;
+  readonly validation: KpArticleValidationResult;
   readonly identities: readonly KpArticleIdentity[];
   readonly semantic: readonly KpArticleSemanticCompletion[];
   readonly offset: number;
@@ -182,7 +182,7 @@ function completions(input: {
         input.source,
         "directive",
         name,
-        "KP Article RC1 directive",
+        "KP Article v1 directive",
         start,
         input.offset,
         name
@@ -270,7 +270,7 @@ function identityCompletions(
 
 function importCompletions(
   source: KpArticleSource,
-  validation: KpArticleRc1ValidationResult,
+  validation: KpArticleValidationResult,
   prefix: string,
   start: number,
   end: number
@@ -330,7 +330,7 @@ function completion(
 
 function languageFolds(
   source: KpArticleSource,
-  validation: KpArticleRc1ValidationResult
+  validation: KpArticleValidationResult
 ): readonly KpArticleLanguageFold[] {
   if (validation.frontmatter === undefined) return Object.freeze([]);
   return Object.freeze([
@@ -353,7 +353,7 @@ function languageFolds(
 
 interface LanguageLookupInput {
   readonly source: KpArticleSource;
-  readonly validation: KpArticleRc1ValidationResult;
+  readonly validation: KpArticleValidationResult;
   readonly identities: readonly KpArticleIdentity[];
   readonly references: readonly KpArticleSemanticReference[];
   readonly offset: number;
@@ -468,7 +468,7 @@ function referencesAt(input: LanguageLookupInput): readonly KpArticleLanguageLoc
 
 function formatDirectiveAt(
   source: KpArticleSource,
-  validation: KpArticleRc1ValidationResult,
+  validation: KpArticleValidationResult,
   offset: number
 ): readonly KpArticleTextEdit[] {
   assertOffset(source, offset);

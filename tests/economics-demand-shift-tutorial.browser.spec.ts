@@ -6,8 +6,10 @@ import {
   renderKpTutorialScrubBar
 } from "../src/tutorial/kp-tutorial-scrub-bar-renderer.ts";
 import {
-  compileKpEconomicsDemandShiftPublication
+  compileKpEconomicsDemandShiftArticlePublication
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from
+  "../src/article/kp-article-import-lock.ts";
 
 const publicRoute = "/tutorials/economics/demand-shift/";
 const route = `${publicRoute}?enhancement=presenter`;
@@ -1499,10 +1501,17 @@ test("static publication controls remain useful with JavaScript disabled", async
   browser
 }) => {
   const markdown = await readFile(
-    "content/lessons/economics-demand-shift.md",
+    "content/lessons/economics-demand-shift.kp.md",
     "utf8"
   );
-  const publication = compileKpEconomicsDemandShiftPublication(markdown);
+  const importLock = JSON.parse(await readFile(
+    "content/lessons/economics-demand-shift.kp.lock.json",
+    "utf8"
+  )) as KpArticleImportLock;
+  const publication = compileKpEconomicsDemandShiftArticlePublication({
+    articleText: markdown,
+    importLock
+  });
   const context = await browser.newContext({
     javaScriptEnabled: false,
     viewport: { width: 820, height: 700 }

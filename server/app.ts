@@ -10,10 +10,6 @@ import { createKpDevReviewHttpAdapter } from "./dev-review-http-adapter.ts";
 import type { KpDevReviewInboxService } from "./dev-review-inbox.ts";
 import type { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
 import type { KpDevReviewScreenshotService } from "./dev-review-screenshot.ts";
-import { createKpEconomicsLessonSourceHttpAdapter } from
-  "./economics-lesson-source-http-adapter.ts";
-import type { KpEconomicsLessonSourceStore } from
-  "./economics-lesson-source-store.ts";
 import { createKpArticleSourceHttpAdapter } from
   "./kp-article-source-http-adapter.ts";
 import type { KpArticleSourceStore } from "./kp-article-source-store.ts";
@@ -39,8 +35,6 @@ export function createAppServer(options: {
   readonly devReviewRoundService?: KpDevReviewRoundInboxService | undefined;
   readonly devReviewScreenshotService?:
     KpDevReviewScreenshotService | undefined;
-  readonly economicsLessonSourceStore?:
-    KpEconomicsLessonSourceStore | undefined;
   readonly articleSourceStore?: KpArticleSourceStore | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
@@ -49,9 +43,6 @@ export function createAppServer(options: {
     options.devReviewService,
     options.devReviewRoundService,
     options.devReviewScreenshotService
-  );
-  const lessonSourceAdapter = createKpEconomicsLessonSourceHttpAdapter(
-    options.economicsLessonSourceStore
   );
   const articleSourceAdapter = createKpArticleSourceHttpAdapter(
     options.articleSourceStore
@@ -63,7 +54,6 @@ export function createAppServer(options: {
       linearProblemAdapter,
       conceptReviewAdapter,
       devReviewAdapter,
-      lessonSourceAdapter,
       articleSourceAdapter
     ).catch((error: unknown) => {
       console.error(error);
@@ -78,9 +68,6 @@ async function handleRequest(
   linearProblemAdapter: ReturnType<typeof createLinearProblemHttpAdapter>,
   conceptReviewAdapter: ReturnType<typeof createCanonicalConceptReviewHttpAdapter>,
   devReviewAdapter: ReturnType<typeof createKpDevReviewHttpAdapter>,
-  lessonSourceAdapter: ReturnType<
-    typeof createKpEconomicsLessonSourceHttpAdapter
-  >,
   articleSourceAdapter: ReturnType<typeof createKpArticleSourceHttpAdapter>
 ): Promise<void> {
   const url = new URL(
@@ -91,7 +78,6 @@ async function handleRequest(
   if (await linearProblemAdapter.handle(request, response, url)) return;
   if (conceptReviewAdapter.handle(request, response, url)) return;
   if (await devReviewAdapter.handle(request, response, url)) return;
-  if (await lessonSourceAdapter.handle(request, response, url)) return;
   if (await articleSourceAdapter.handle(request, response, url)) return;
 
   if (request.method === "GET" && url.pathname === "/api/health") {

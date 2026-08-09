@@ -12,7 +12,7 @@ import {
 } from "../../semantic/fraction-composition-equation-asset.ts";
 import {
   createKpFractionCompositionSalienceInventory
-} from "../compiler/fraction-composition-salience-inventory.ts";
+} from "../../semantic/fraction-composition-salience-inventory.ts";
 
 const fractionSalienceInventory =
   createKpFractionCompositionSalienceInventory();

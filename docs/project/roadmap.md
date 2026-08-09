@@ -49,20 +49,22 @@ authoring-format mismatch is recorded in
 `decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`.
 The recommended decision process and successor sequence are in
 `reviews/2026-08-08-authoring-format-convergence-next-step-review.md`. That
-review is now resolved provisionally by the accepted `kp.article.v1-rc1`
-contract in
+review is now resolved by the frozen `kp.article.v1` contract in
 `decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md` and
-`principles/kp-article-v1-rc1.md`. The economics article has now proved the
+`principles/kp-article-v1.md`. The economics article proved the
 format across authoring, static publication, interactive and deck projection,
 search, navigation, and accessibility. The implementation proposal is
 `reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md`.
 The economics exemplar passed its required human checkpoint on 2026-08-09.
 The release evidence and bounded approval decision are recorded in
-`reviews/2026-08-09-kp-article-v1-rc1-economics-checkpoint.md`. The recommended
-closeout order is now to repair the two pre-existing broad-gate debts, execute
-the already bounded v1-promotion/legacy-retirement slice, exercise one real
-economics editing session, and then pressure the frozen format with one compact
-multi-step algebra article. The rationale and candidate ranking are in
+`reviews/2026-08-09-kp-article-v1-rc1-economics-checkpoint.md`. The two broad
+gate debts are repaired, v1 is frozen, and the legacy writable sources,
+importer, compatibility compiler, draft/buffer stack, and save API are retired.
+Release evidence is in
+`reviews/2026-08-09-kp-article-v1-promotion-closeout.md`. The next order is one
+real economics editing session, bounded recovery of the pre-existing shared
+reader-route payload regression, and then one compact multi-step algebra
+article. The rationale and candidate ranking are in
 `reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
@@ -86,7 +88,7 @@ successor in
 has delivered persistent catalogue switching, an approved solve-x compact
 stage, compatible equation-surface centering, bounded curation, and two exact
 human-approved synchronized-model exemplars. The chained successor now leaves
-the catalogue with 36 concrete assets across 12 packs, 36 meaningful native
+the catalogue with 37 concrete assets across 12 packs, 37 meaningful native
 paints, no host gaps, no load failures, and no iframes. Ordinary selection stays
 inside one shell. Economics and physics
 promote four shared contracts—reversible projection progress, bounded integer
@@ -402,7 +404,7 @@ three ordered positions.
 The release-baseline recovery and catalogue simplification matrices are green.
 The catalogue hosts the concrete registry directly and switches assets inside
 one persistent shell. Its stricter meaningful-hostability contract now records
-36 meaningful native paints for all 36 concrete assets, including bounded
+37 meaningful native paints for all 37 concrete assets, including bounded
 Graph3D and programming adapters; no host gaps, load failures, or iframes
 remain. Human review approved the solve-x compact centered stage; compatible
 equation centering passed radical and diagram pressure. No new human
@@ -719,21 +721,19 @@ activating heavy animation capabilities lazily.
 
 ## Near-Term Priorities
 
-1. Implement the accepted `kp.article.v1-rc1` contract through one economics
-   exemplar; do not freeze `v1` or migrate a second lesson before its human
-   checkpoint.
-2. Add one development-only bottom toolbar on every route, with Review capture,
-   available layout/view switching, and contextual internal controls; keep it
-   framework-neutral at the host boundary and absent from production.
-3. Reconcile the full Markdown article, layout-specific passage source, and
-   synthesized CodeMirror buffer through the RC1 parser and temporary importer;
-   retain one writable Markdown truth after parity is approved.
-4. Keep the completed static publication, optional editor, semantic TOC/direct
+1. Exercise the frozen `kp.article.v1` economics source through one real
+   whole-file editing session and record concrete authoring friction.
+2. Repair only defects revealed by that use, preferring language-service and
+   editor affordances over additions to the frozen grammar.
+3. Recover the reader-route payload baselines from the shared
+   `kp-tutorial-core` chunk regression without duplicating the runtime into
+   individual routes.
+4. Use one compact multi-step algebra article as the first structurally
+   different v1 caller.
+5. Keep the completed static publication, optional editor, semantic TOC/direct
    navigation, accessibility, and performance boundaries green.
-5. Keep economics layout refinement, shared station extraction, split parity,
+6. Keep economics layout refinement, shared station extraction, split parity,
    and final floating-navigation geometry paused.
-6. Use multi-step algebra as the next structurally different lesson caller
-   only after the authoring-source boundary is coherent.
 7. Extract a shared motion-passage and vignette authoring contract only after
    economics and algebra prove the seam.
 8. Run named single, representative, and stress document profiles with

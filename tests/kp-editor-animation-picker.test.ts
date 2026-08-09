@@ -26,7 +26,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
     selectedDescriptorId: descriptors[13]?.id
   });
 
-  assert.equal(model.optionCount, 36);
+  assert.equal(model.optionCount, 37);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
@@ -36,7 +36,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
       ["equation", 12],
       ["diagram", 3],
       ["graph", 3],
-      ["programming", 1],
+      ["programming", 2],
       ["composite", 1]
     ]
   );

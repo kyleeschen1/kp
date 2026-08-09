@@ -13,7 +13,7 @@ const lispUrl = new URL(
   import.meta.url
 );
 const economicsCssUrl = new URL(
-  "../src/tutorial/economics-demand-shift/economics-demand-shift-tutorial.css",
+  "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.css",
   import.meta.url
 );
 const lispCssUrl = new URL(

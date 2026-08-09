@@ -52,6 +52,10 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "svg-text"
   ]),
+  retain("src/article/kp-article-static-html.ts", "compiler", [
+    "html-text",
+    "html-attribute"
+  ]),
   retain("src/compiler/html-asset.ts", "compiler", [
     "html-text",
     "html-attribute"
@@ -87,8 +91,10 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
-  retain("src/editor/graph-svg-viewport.ts", "editor", [
-    "html-attribute",
+  retain("src/editor/graph-svg-domain-renderers.ts", "editor", [
+    "html-attribute"
+  ]),
+  retain("src/editor/graph-svg-viewport-lifecycle.ts", "editor", [
     "svg-attribute"
   ]),
   retain("src/editor/hermeneutic-tutorial-inspector.ts", "editor", [
@@ -132,6 +138,34 @@ export const kpHtmlEncodingOwners = [
   retain("src/rendering/graph-webgl.ts", "rendering", [
     "html-attribute"
   ]),
+  retain("src/rendering/lisp-application-motion-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/lisp-evaluation-motion-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/lisp-lambda-application-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/lisp-s-expression-bead-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/lisp-s-expression-material-dom.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/lisp-structural-motion-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/matrix-linear-map-svg.ts", "rendering", [
+    "html-attribute",
+    "svg-text"
+  ]),
   retain("src/rendering/programming-addition-trace-html.ts", "rendering", [
     "html-text",
     "html-attribute"
@@ -141,6 +175,21 @@ export const kpHtmlEncodingOwners = [
     "svg-text",
     "svg-attribute"
   ]),
+  retain(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-inline-markdown.ts",
+    "tutorial",
+    ["html-text", "html-attribute"]
+  ),
+  retain(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-static-publication.ts",
+    "tutorial",
+    ["html-text", "html-attribute"]
+  ),
+  retain(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-verification-surface.ts",
+    "tutorial",
+    ["html-attribute"]
+  ),
   retain("src/tutorial/ftc-surface.ts", "tutorial", [
     "html-text",
     "html-attribute"
@@ -148,7 +197,34 @@ export const kpHtmlEncodingOwners = [
   retain("src/tutorial/hermeneutic-learner-shell.ts", "tutorial", [
     "html-text",
     "html-attribute"
-  ])
+  ]),
+  retain("src/tutorial/kp-tutorial-progress-rail-renderer.ts", "tutorial", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/tutorial/kp-tutorial-scrub-bar-renderer.ts", "tutorial", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/tutorial/kp-tutorial-toc.ts", "tutorial", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain(
+    "src/tutorial/lisp-function-application/lisp-function-application-lesson-compiler.ts",
+    "tutorial",
+    ["html-text"]
+  ),
+  retain(
+    "src/tutorial/lisp-function-application/lisp-function-application-stage-projector.ts",
+    "tutorial",
+    ["html-text"]
+  ),
+  retain(
+    "src/tutorial/lisp-function-application/lisp-function-application-static-publication.ts",
+    "tutorial",
+    ["html-text", "html-attribute"]
+  )
 ] as const satisfies readonly KpHtmlEncodingOwner[];
 
 export const kpHtmlEncodingConsolidations = [

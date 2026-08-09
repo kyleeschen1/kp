@@ -184,7 +184,7 @@ function createPassage(
     return Object.freeze<KpEconomicsDemandShiftLessonParagraph>({
       sourceText,
       html: renderKpEconomicsDemandShiftInlineMarkdown(
-        // The retained presenter transit still uses its pre-RC1 DOM token;
+        // The retained presenter transit still uses its legacy DOM token;
         // canonical source/reference authority remains market/price-axis.
         sourceText.replace(
           "kp-ref:market/price-axis",

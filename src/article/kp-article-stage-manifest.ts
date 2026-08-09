@@ -4,7 +4,7 @@ import {
 } from "./kp-article-accessibility.ts";
 import type { KpArticleDocument, KpArticleStageBlock } from "./kp-article-document.ts";
 
-export const kpArticleStageManifestSchema = "kp.article-stage-manifest.v1-rc1" as const;
+export const kpArticleStageManifestSchema = "kp.article-stage-manifest.v1" as const;
 
 export interface KpArticleStageManifest {
   readonly kind: "kp-article-stage-manifest";

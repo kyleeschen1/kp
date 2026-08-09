@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
-import { validateKpArticleRc1 } from "../src/article/kp-article-validation.ts";
+import { validateKpArticle } from "../src/article/kp-article-validation.ts";
 
-test("golden RC1 article validates into four typed directives", () => {
-  const validation = validateKpArticleRc1(goldenSource());
+test("golden v1 article validates into four typed directives", () => {
+  const validation = validateKpArticle(goldenSource());
 
   assert.equal(validation.valid, true);
   assert.deepEqual(validation.diagnostics, []);
@@ -28,7 +28,7 @@ test("frontmatter schema, IDs, and imports fail with stable diagnostics", () => 
     "animation.economics.shift@latest",
     stage()
   );
-  const validation = validateKpArticleRc1(createKpArticleSource("invalid.md", invalid));
+  const validation = validateKpArticle(createKpArticleSource("invalid.md", invalid));
 
   assert.equal(validation.valid, false);
   assert.deepEqual(validation.diagnostics.map(({ code }) => code), [
@@ -41,7 +41,7 @@ test("frontmatter schema, IDs, and imports fail with stable diagnostics", () => 
 
 test("directive validation is closed, typed, and source located", () => {
   const invalid = article(
-    "kp.article.v1-rc1",
+    "kp.article.v1",
     "lesson.economics.invalid",
     "vignette.economics.shift@1",
     [
@@ -63,7 +63,7 @@ test("directive validation is closed, typed, and source located", () => {
       ":::"
     ].join("\n")
   );
-  const validation = validateKpArticleRc1(createKpArticleSource("invalid.md", invalid));
+  const validation = validateKpArticle(createKpArticleSource("invalid.md", invalid));
 
   assert.equal(validation.valid, false);
   assert.deepEqual(validation.diagnostics.map(({ code }) => code), [
@@ -80,7 +80,7 @@ test("directive validation is closed, typed, and source located", () => {
 
 test("required attributes and bodies cannot disappear silently", () => {
   const invalid = article(
-    "kp.article.v1-rc1",
+    "kp.article.v1",
     "lesson.economics.invalid",
     "vignette.economics.shift@1",
     [
@@ -99,7 +99,7 @@ test("required attributes and bodies cannot disappear silently", () => {
       ":::"
     ].join("\n")
   );
-  const validation = validateKpArticleRc1(createKpArticleSource("invalid.md", invalid));
+  const validation = validateKpArticle(createKpArticleSource("invalid.md", invalid));
 
   assert.deepEqual(validation.diagnostics.map(({ code }) => code), [
     "directive-attribute-required",
@@ -119,9 +119,9 @@ test("raw HTML is rejected outside code fences but inert examples remain valid",
     "",
     stage()
   ].join("\n");
-  const validation = validateKpArticleRc1(createKpArticleSource(
+  const validation = validateKpArticle(createKpArticleSource(
     "html.md",
-    article("kp.article.v1-rc1", "lesson.economics.html", "vignette.economics.shift@1", markdown)
+    article("kp.article.v1", "lesson.economics.html", "vignette.economics.shift@1", markdown)
   ));
 
   assert.equal(validation.valid, false);
@@ -130,17 +130,17 @@ test("raw HTML is rejected outside code fences but inert examples remain valid",
 });
 
 test("frontmatter and scanner exceptions become diagnostics", () => {
-  const malformedFrontmatter = validateKpArticleRc1(
+  const malformedFrontmatter = validateKpArticle(
     createKpArticleSource("frontmatter.md", "# Missing frontmatter\n")
   );
   assert.deepEqual(malformedFrontmatter.diagnostics.map(({ code }) => code), [
     "frontmatter-opening"
   ]);
 
-  const malformedDirective = validateKpArticleRc1(createKpArticleSource(
+  const malformedDirective = validateKpArticle(createKpArticleSource(
     "directive.md",
     article(
-      "kp.article.v1-rc1",
+      "kp.article.v1",
       "lesson.economics.directive",
       "vignette.economics.shift@1",
       ":::kp-stage{#market use=shift}\n"
@@ -155,7 +155,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
@@ -179,4 +179,3 @@ function article(schema: string, id: string, imported: string, body: string): st
 function stage(): string {
   return ":::kp-stage{#market use=shift}\n:::\n";
 }
-

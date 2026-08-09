@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const source = readFileSync(
-  new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+  new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
   "utf8"
 );
 
-test("golden RC1 source exercises the complete bounded grammar", () => {
-  assert.match(source, /^---\nkp:\n  schema: kp\.article\.v1-rc1\n/m);
+test("golden v1 source exercises the complete bounded grammar", () => {
+  assert.match(source, /^---\nkp:\n  schema: kp\.article\.v1\n/m);
   assert.match(source, /id: lesson\.economics\.demand-shift/);
   assert.match(source, /demandShift: vignette\.economics\.demand-shift@1/);
 
@@ -19,7 +19,7 @@ test("golden RC1 source exercises the complete bounded grammar", () => {
   assert.match(source, /^::after$/mu);
 });
 
-test("golden RC1 source keeps ordinary prose, math, and links portable", () => {
+test("golden v1 source keeps ordinary prose, math, and links portable", () => {
   assert.match(source, /^### When demand changes$/mu);
   assert.match(source, /^- A curve collects possible price–quantity combinations\.$/mu);
   assert.match(source, /\$Q\$/u);
@@ -28,7 +28,7 @@ test("golden RC1 source keeps ordinary prose, math, and links portable", () => {
   assert.match(source, /\[demand schedule\]\(kp-ref:market\/demand\)/u);
 });
 
-test("golden RC1 source contains no executable or layout-specific escape hatch", () => {
+test("golden v1 source contains no executable or layout-specific escape hatch", () => {
   assert.doesNotMatch(source, /<!--\s*kp:/u);
   assert.doesNotMatch(source, /```\s*(?:kp|svelte|js|javascript|ts|typescript)\b/iu);
   assert.doesNotMatch(source, /<(?:script|svelte):?/iu);

@@ -125,7 +125,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
@@ -135,7 +135,7 @@ function sourceFromBody(body: string) {
   return createKpArticleSource("semantic.md", [
     "---",
     "kp:",
-    "  schema: kp.article.v1-rc1",
+    "  schema: kp.article.v1",
     "  id: lesson.economics.semantic",
     "  imports:",
     "    shift: vignette.economics.shift@1",

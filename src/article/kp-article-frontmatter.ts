@@ -4,7 +4,7 @@ import {
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
 
-export const kpArticleRc1Schema = "kp.article.v1-rc1" as const;
+export const kpArticleSchema = "kp.article.v1" as const;
 
 export interface KpArticleFrontmatter {
   readonly kind: "kp-article-frontmatter";

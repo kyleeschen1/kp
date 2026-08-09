@@ -6,7 +6,7 @@ import {
 } from "./kp-article-directives.ts";
 import {
   KpArticleFrontmatterSyntaxError,
-  kpArticleRc1Schema,
+  kpArticleSchema,
   parseKpArticleFrontmatter,
   type KpArticleFrontmatter
 } from "./kp-article-frontmatter.ts";
@@ -65,7 +65,7 @@ export type KpValidatedArticleDirective =
   | KpValidatedFocusDirective
   | KpValidatedMotionDirective;
 
-export interface KpArticleRc1ValidationResult {
+export interface KpArticleValidationResult {
   readonly valid: boolean;
   readonly frontmatter?: KpArticleFrontmatter;
   readonly directives: readonly KpValidatedArticleDirective[];
@@ -76,9 +76,9 @@ const documentIdPattern = /^lesson\.[a-z0-9]+(?:[.-][a-z0-9]+)*$/u;
 const localIdPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u;
 const importPattern = /^vignette\.[a-z0-9]+(?:[.-][a-z0-9]+)*@[1-9][0-9]*$/u;
 
-export function validateKpArticleRc1(
+export function validateKpArticle(
   source: KpArticleSource
-): KpArticleRc1ValidationResult {
+): KpArticleValidationResult {
   const diagnostics: KpArticleDiagnostic[] = [];
   let frontmatter: KpArticleFrontmatter;
   try {
@@ -90,7 +90,7 @@ export function validateKpArticleRc1(
     throw error;
   }
 
-  if (frontmatter.schema !== kpArticleRc1Schema) {
+  if (frontmatter.schema !== kpArticleSchema) {
     diagnostics.push(diagnostic(
       "schema-unsupported",
       `Unsupported KP article schema: ${frontmatter.schema}.`,
@@ -385,7 +385,7 @@ function rawHtmlDiagnostics(
     if (match?.index === undefined) continue;
     diagnostics.push(diagnostic(
       "raw-html-forbidden",
-      "RC1 articles use Markdown and typed KP directives rather than raw HTML.",
+      "KP Article v1 uses Markdown and typed KP directives rather than raw HTML.",
       createKpArticleSourceSpan(
         source,
         start + match.index,
@@ -400,7 +400,7 @@ function result(
   frontmatter: KpArticleFrontmatter | undefined,
   directives: readonly KpValidatedArticleDirective[],
   diagnostics: readonly KpArticleDiagnostic[]
-): KpArticleRc1ValidationResult {
+): KpArticleValidationResult {
   return Object.freeze({
     valid: diagnostics.length === 0,
     ...(frontmatter === undefined ? {} : { frontmatter }),

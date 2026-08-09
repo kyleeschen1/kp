@@ -177,13 +177,21 @@ export function evaluateKpPromotionMemory(
       `Thread Current Next Action does not name ${current.referenceKey}.`
     );
   }
+  const promotionExecutionPaused = containsReference(
+    currentAction,
+    current.referenceKey
+  ) && /\b(?:paused|tabled)\b/u.test(normalizeReference(currentAction));
   // The promotion ledger owns rank; the roadmap-selected active thread is a
-  // projection and must name that frontier without copying the rank table.
+  // projection. A deliberately tabled frontier remains retrievable without
+  // taking priority back from the product work the user selected instead.
   const activeThreadAction = extractFrontmatterField(
     input.activeThreadMarkdown,
     "Current Next Action"
   );
-  if (!containsReference(activeThreadAction, current.referenceKey)) {
+  if (
+    !promotionExecutionPaused &&
+    !containsReference(activeThreadAction, current.referenceKey)
+  ) {
     diagnostics.push(
       `Active thread Current Next Action does not name ${current.referenceKey}.`
     );
@@ -205,9 +213,14 @@ export function evaluateKpPromotionMemory(
   const firstQueueItem = currentQueue.match(
     /^\s*1\.\s+([\s\S]*?)(?=^\s*2\.\s+|(?![\s\S]))/mu
   )?.[1] ?? "";
-  if (!containsReference(firstQueueItem, current.referenceKey)) {
+  const queueProjection = promotionExecutionPaused
+    ? currentQueue
+    : firstQueueItem;
+  if (!containsReference(queueProjection, current.referenceKey)) {
     diagnostics.push(
-      `Current Queue item 1 does not name ${current.referenceKey}.`
+      promotionExecutionPaused
+        ? `Current Queue does not retain tabled frontier ${current.referenceKey}.`
+        : `Current Queue item 1 does not name ${current.referenceKey}.`
     );
   }
 

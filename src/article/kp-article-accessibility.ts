@@ -4,7 +4,7 @@ import type {
   KpVignetteStaticCheckpoint
 } from "./kp-article-import-lock.ts";
 
-export const kpArticleAccessibilitySchema = "kp.article-accessibility.v1-rc1" as const;
+export const kpArticleAccessibilitySchema = "kp.article-accessibility.v1" as const;
 
 export interface KpArticleAccessibleCheckpoint extends KpVignetteStaticCheckpoint {
   readonly fullId: string;

@@ -79,7 +79,7 @@ function fulfillSave(route: Route, changed = true): Promise<void> {
   });
 }
 
-test("CodeMirror edits the canonical RC1 article and implements Vim writes", async ({
+test("CodeMirror edits the canonical v1 article and implements Vim writes", async ({
   page
 }) => {
   const sourceSaveRequests: unknown[] = [];
@@ -126,7 +126,7 @@ test("CodeMirror edits the canonical RC1 article and implements Vim writes", asy
   })).toEqual({ fontSize: "16px", lineHeight: "24px" });
 
   const initialBuffer = await editor.locator("textarea").inputValue();
-  expect(initialBuffer).toContain("schema: kp.article.v1-rc1");
+  expect(initialBuffer).toContain("schema: kp.article.v1");
   expect(initialBuffer.match(/:::kp-passage/gu)).toHaveLength(5);
   await replaceBufferText({
     page,
@@ -216,7 +216,7 @@ test("source-save failures retain the editable local article", async ({ page }) 
   }, articleStorageKey)).toContain("locally retained edit");
 });
 
-test("RC1 completion exposes directives and vignette semantic paths", async ({ page }) => {
+test("v1 completion exposes directives and vignette semantic paths", async ({ page }) => {
   await openFirstPassageEditor(page);
   const editor = page.locator("[data-kp-economics-lesson-editor]");
   const content = editor.locator(".cm-content");
@@ -243,7 +243,7 @@ test("RC1 completion exposes directives and vignette semantic paths", async ({ p
   await expect(completion).toContainText("market/shift-demand");
 });
 
-test("invalid RC1 source preserves the last valid preview", async ({ page }) => {
+test("invalid v1 source preserves the last valid preview", async ({ page }) => {
   const root = page.locator("[data-kp-economics-demand-shift-tutorial]");
   const firstPassage = root.locator(
     "[data-kp-two-column-scroll-paragraph]"

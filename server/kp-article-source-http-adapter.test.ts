@@ -19,7 +19,7 @@ const legacyEndpoint =
   "/api/dev/lesson-sources/economics-demand-shift-two-column";
 const capability = { "x-kp-article-source-write": "1" };
 const sourcePath = "content/lessons/economics-demand-shift.kp.md";
-const original = "---\nkp:\n  schema: kp.article.v1-rc1\n---\n\nValid article.\n";
+const original = "---\nkp:\n  schema: kp.article.v1\n---\n\nValid article.\n";
 
 test("canonical article route is capability gated and legacy writes stay absent", async (
   context
@@ -41,7 +41,7 @@ test("canonical article route is capability gated and legacy writes stay absent"
   })).status, 404);
 });
 
-test("valid RC1 source writes atomically and regenerates once", async (context) => {
+test("valid v1 source writes atomically and regenerates once", async (context) => {
   let regenerations = 0;
   const fixture = await createFixture(context, async () => {
     regenerations += 1;

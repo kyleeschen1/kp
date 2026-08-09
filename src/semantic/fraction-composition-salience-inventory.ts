@@ -1,18 +1,18 @@
 import {
   createKpFractionCompositionEquationAsset
-} from "../../semantic/fraction-composition-equation-asset.ts";
+} from "./fraction-composition-equation-asset.ts";
 import {
   createKpFractionCompositionEndpointSpecs
-} from "../../semantic/fraction-composition-endpoint-spec.ts";
+} from "./fraction-composition-endpoint-spec.ts";
 import {
   createKpFractionCompositionEvaluationTree
-} from "../../semantic/fraction-composition-evaluation-tree.ts";
+} from "./fraction-composition-evaluation-tree.ts";
 import {
   createKpLawfulFractionSolveMacro
-} from "../../semantic/fraction-solve-macro.ts";
+} from "./fraction-solve-macro.ts";
 import {
   semanticTransformationLeafRefs
-} from "../../semantic/transformation-composition.ts";
+} from "./transformation-composition.ts";
 
 export const kpFractionCompositionSalienceCheckpointIds = Object.freeze([
   "factored",

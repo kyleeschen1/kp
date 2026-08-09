@@ -2,11 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-09
-Current Next Action: The economics RC1 exemplar passed human review. Keep
-layout discovery paused, clear the two pre-existing broad-gate debts, then run
-the bounded v1-promotion and legacy-retirement slice. Exercise the resulting
-authoring path once before using a compact multi-step algebra article as the
-second format caller. See
+Current Next Action: KP Article v1 is frozen and its temporary economics
+compatibility paths are retired. Keep layout discovery paused. Exercise the
+whole-file economics authoring path once, then use a compact multi-step algebra
+article as the second format caller. See
 `../reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
 Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
@@ -48,12 +47,13 @@ The later decision in
 `../decisions/2026-08-08-kp-pause-layout-and-reconcile-authoring-format.md`
 closes that pending visual-decision slice as postponed rather than approved or
 rejected. The economics presentation variants remain evidence. That source
-question is now resolved provisionally by
+question is now resolved by
 `../decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md` and
-`../principles/kp-article-v1-rc1.md`: one Markdown article, four closed typed
+`../principles/kp-article-v1.md`: one Markdown article, four closed typed
 directives, `kp-ref:` links, external versioned vignettes, derived IR, and
-layout-neutral projections. The current JSON-in-comment editor serialization
-is migration evidence, not a settled authoring standard.
+layout-neutral projections. The completed promotion and compatibility
+retirement are recorded in
+`../reviews/2026-08-09-kp-article-v1-promotion-closeout.md`.
 
 The accepted model is recorded in
 `decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`.

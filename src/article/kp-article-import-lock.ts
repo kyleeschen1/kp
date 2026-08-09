@@ -1,6 +1,6 @@
 import type { KpArticleFrontmatter } from "./kp-article-frontmatter.ts";
 import type { KpArticleSource } from "./kp-article-source.ts";
-import { validateKpArticleRc1 } from "./kp-article-validation.ts";
+import { validateKpArticle } from "./kp-article-validation.ts";
 import { resolveKpArticleSemanticReferences } from "./kp-article-semantic-references.ts";
 
 export const kpArticleImportLockSchema = "kp.article-import-lock.v1" as const;
@@ -162,11 +162,11 @@ export function resolveKpArticleImports(
   registry: readonly KpVignetteRelease[],
   existingLock?: KpArticleImportLock
 ): KpArticleResolvedImports {
-  const validation = validateKpArticleRc1(source);
+  const validation = validateKpArticle(source);
   if (!validation.valid || validation.frontmatter === undefined) {
     throw new KpArticleImportLockError(
       "import-source-invalid",
-      "Vignette imports require a valid kp.article.v1-rc1 source."
+      "Vignette imports require a valid kp.article.v1 source."
     );
   }
   const releases = validateRegistry(registry);

@@ -4,7 +4,7 @@
   "artifactId": "publication.economics.demand-shift",
   "source": {
     "path": "economics-demand-shift.kp.md",
-    "sha256": "sha256:332486545c35820bcedbbad61ac61b64c15d683c4e323b38d8f453a395c1fc96"
+    "sha256": "sha256:570db1e3ab0e24084a601dadeda4738a210dee189d93def87747d81519dc98fc"
   },
   "compiler": {
     "id": "kp.economics-demand-shift-publication",

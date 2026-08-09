@@ -18,7 +18,7 @@ test("the economics vignette publishes a reusable accessible stage contract", ()
   const manifest = compileAccessibility();
   const stage = manifest.stages[0]!;
 
-  assert.equal(manifest.schemaVersion, "kp.article-accessibility.v1-rc1");
+  assert.equal(manifest.schemaVersion, "kp.article-accessibility.v1");
   assert.equal(stage.accessibleName, "Supply and demand equilibrium graph");
   assert.match(stage.semanticSummary, /supply curve stays fixed while demand shifts right/u);
   assert.deepEqual(stage.checkpoints.map(({ id, alt }) => ({ id, alt })), [
@@ -90,7 +90,7 @@ function compileAccessibility() {
 
 function compileDocument(source = goldenSource()) {
   const lock = JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   )) as KpArticleImportLock;
   return compileKpArticleDocument({ source, registry: kpArticleVignetteRegistry, lock }).document;
@@ -100,7 +100,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );

@@ -7,7 +7,7 @@ import {
   type KpArticleDraftSaveRequest
 } from "../src/article/kp-article-draft-session.ts";
 
-test("invalid RC1 drafts remain editable while preview retains last valid source", () => {
+test("invalid v1 drafts remain editable while preview retains last valid source", () => {
   const source = goldenText();
   const session = createSession(source);
   const validEdit = source.replace("When demand changes", "When demand rises");
@@ -111,7 +111,7 @@ function createSession(source: string): KpArticleDraftSession {
 
 function goldenText(): string {
   return readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
     "utf8"
   );
 }

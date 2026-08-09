@@ -6,7 +6,7 @@ import {
   type KpArticleSourceSpan
 } from "./kp-article-source.ts";
 import {
-  validateKpArticleRc1,
+  validateKpArticle,
   type KpArticleDiagnostic,
   type KpValidatedArticleDirective
 } from "./kp-article-validation.ts";
@@ -51,7 +51,7 @@ const semanticSegmentPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u;
 export function resolveKpArticleSemanticReferences(
   source: KpArticleSource
 ): KpArticleSemanticResolution {
-  const validation = validateKpArticleRc1(source);
+  const validation = validateKpArticle(source);
   if (!validation.valid || validation.frontmatter === undefined) {
     return result([], [], validation.diagnostics);
   }

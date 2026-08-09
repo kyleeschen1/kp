@@ -76,12 +76,12 @@ function compileStatic() {
   const source = createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
   const lock = JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   )) as KpArticleImportLock;
   return compileKpArticleStaticMarkdown(compileKpArticleDocument({

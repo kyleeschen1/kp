@@ -73,7 +73,10 @@ test("createProgramTraceAnimationAsset wraps SourceFile execution trace semantic
 test("programming animation assets are available through the animation catalog", () => {
   assert.deepEqual(
     createProgrammingAnimationAssets().map((animation) => animation.id),
-    ["animation.programming.add.execution-trace"]
+    [
+      "animation.programming.add.execution-trace",
+      "animation.programming.lisp-lambda-application"
+    ]
   );
   assert.ok(
     createKpAnimationAssets()

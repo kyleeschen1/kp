@@ -3,11 +3,16 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import { validateKpLessonDocument } from "../src/reader/document/lesson-document.ts";
-import { compileKpEconomicsDemandShiftPublication } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
+import { compileKpEconomicsDemandShiftArticlePublication } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 import { compileKpLispFunctionApplicationPublication } from "../src/tutorial/lisp-function-application/lisp-function-application-publication.ts";
 
 const economicsUrl = new URL(
-  "../content/lessons/economics-demand-shift.md",
+  "../content/lessons/economics-demand-shift.kp.md",
+  import.meta.url
+);
+const economicsLockUrl = new URL(
+  "../content/lessons/economics-demand-shift.kp.lock.json",
   import.meta.url
 );
 const lispUrl = new URL(
@@ -16,9 +21,7 @@ const lispUrl = new URL(
 );
 
 test("economics adapts to the existing KpLessonDocument authority", async () => {
-  const publication = compileKpEconomicsDemandShiftPublication(
-    await readFile(economicsUrl, "utf8")
-  );
+  const publication = await compileEconomicsPublication();
   const { document, metadata } = publication.document;
   assert.deepEqual(validateKpLessonDocument(document), []);
   assert.equal(document.kind, "lesson-document");
@@ -46,7 +49,7 @@ test("Lisp adapts to the same document without losing native source syntax", asy
   assert.equal(document.blocks.filter(({ kind }) => kind === "heading").length, 4);
   assert.deepEqual(
     document.blocks.filter(({ kind }) => kind === "animation-story").map(({ id }) => id),
-    ["bind-and-reconstruct", "evaluate-and-gather"]
+    ["structure", "application", "evaluation"]
   );
   const text = document.blocks
     .filter((block) => block.kind === "paragraph")
@@ -58,7 +61,7 @@ test("Lisp adapts to the same document without losing native source syntax", asy
 
 test("both adapters preserve h3 headings and typed animation assets", async () => {
   const publications = await Promise.all([
-    readFile(economicsUrl, "utf8").then(compileKpEconomicsDemandShiftPublication),
+    compileEconomicsPublication(),
     readFile(lispUrl, "utf8").then(compileKpLispFunctionApplicationPublication)
   ]);
   for (const publication of publications) {
@@ -71,3 +74,14 @@ test("both adapters preserve h3 headings and typed animation assets", async () =
         block.presentation === "scroll-scrub"));
   }
 });
+
+async function compileEconomicsPublication() {
+  const [articleText, importLockText] = await Promise.all([
+    readFile(economicsUrl, "utf8"),
+    readFile(economicsLockUrl, "utf8")
+  ]);
+  return compileKpEconomicsDemandShiftArticlePublication({
+    articleText,
+    importLock: JSON.parse(importLockText) as KpArticleImportLock
+  });
+}

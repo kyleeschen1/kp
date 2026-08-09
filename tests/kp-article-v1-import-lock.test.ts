@@ -127,7 +127,7 @@ test("the economics vignette has a reproducible exact release identity", () => {
     "trace-supply-movement"
   ]);
   const fixture = JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   ));
   assert.deepEqual(
@@ -168,7 +168,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
@@ -178,7 +178,7 @@ function sourceWithImports(importLines: readonly string[]) {
   return createKpArticleSource("ordered.md", [
     "---",
     "kp:",
-    "  schema: kp.article.v1-rc1",
+    "  schema: kp.article.v1",
     "  id: lesson.economics.ordered",
     "  imports:",
     ...importLines,

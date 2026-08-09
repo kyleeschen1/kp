@@ -16,7 +16,7 @@ test("golden source compiles to one ordered framework-neutral article document",
   const { document } = compiled;
 
   assert.equal(document.kind, "kp-article-document");
-  assert.equal(document.schemaVersion, "kp.article-document.v1-rc1");
+  assert.equal(document.schemaVersion, "kp.article-document.v1");
   assert.equal(document.id, "lesson.economics.demand-shift");
   assert.deepEqual(document.blocks.map((block) => block.kind), [
     "markdown",
@@ -114,7 +114,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
@@ -122,7 +122,7 @@ function goldenSource() {
 
 function goldenLock(): KpArticleImportLock {
   return JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   )) as KpArticleImportLock;
 }

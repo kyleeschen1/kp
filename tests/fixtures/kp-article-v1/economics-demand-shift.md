@@ -1,6 +1,6 @@
 ---
 kp:
-  schema: kp.article.v1-rc1
+  schema: kp.article.v1
   id: lesson.economics.demand-shift
   imports:
     demandShift: vignette.economics.demand-shift@1

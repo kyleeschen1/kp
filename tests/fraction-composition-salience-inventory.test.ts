@@ -3,7 +3,7 @@ import test from "node:test";
 import {
   createKpFractionCompositionSalienceInventory,
   kpFractionCompositionSalienceCheckpointIds
-} from "../src/reader/compiler/fraction-composition-salience-inventory.ts";
+} from "../src/semantic/fraction-composition-salience-inventory.ts";
 import {
   createKpLawfulFractionSolveMacro
 } from "../src/semantic/fraction-solve-macro.ts";

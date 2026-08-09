@@ -150,6 +150,58 @@ test("an ordered platform gate may precede a planned content frontier", () => {
   assert.deepEqual(report.diagnostics, []);
 });
 
+test("a tabled frontier remains durable without owning the product queue", () => {
+  const input = base();
+  const report = evaluateKpPromotionMemory({
+    ...input,
+    threadMarkdown: input.threadMarkdown.replace(
+      "Complete `1/3 + 1/6 = 1/2`.",
+      "Keep `1/3 + 1/6 = 1/2` tabled at its review checkpoint."
+    ),
+    activeThreadMarkdown: `# Active Thread
+
+Status: active
+Current Next Action: Complete the article authoring release.
+`,
+    nextActionsMarkdown: `# Next
+
+## Current Queue
+
+1. Complete the article authoring release.
+2. Keep \`1/3 + 1/6 = 1/2\` tabled.
+`
+  });
+
+  assert.deepEqual(report.diagnostics, []);
+});
+
+test("a tabled frontier must remain retrievable in the current queue", () => {
+  const input = base();
+  const report = evaluateKpPromotionMemory({
+    ...input,
+    threadMarkdown: input.threadMarkdown.replace(
+      "Complete `1/3 + 1/6 = 1/2`.",
+      "Keep `1/3 + 1/6 = 1/2` tabled at its review checkpoint."
+    ),
+    activeThreadMarkdown: `# Active Thread
+
+Status: active
+Current Next Action: Complete the article authoring release.
+`,
+    nextActionsMarkdown: `# Next
+
+## Current Queue
+
+1. Complete the article authoring release.
+2. Continue later.
+`
+  });
+
+  assert.ok(report.diagnostics.includes(
+    "Current Queue does not retain tabled frontier 1/3 + 1/6 = 1/2."
+  ));
+});
+
 test("a stale current action and Theseus phase fail together", () => {
   const input = base();
   const report = evaluateKpPromotionMemory({

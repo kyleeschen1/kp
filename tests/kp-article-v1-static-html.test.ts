@@ -56,7 +56,7 @@ test("static HTML retains real semantic links, anchors, TOC, and immutable asset
 });
 
 test("the build compiler fails closed on arbitrary HTML and unsafe URLs", () => {
-  assert.throws(() => compileSource("Unsafe <button>markup</button>."), /valid RC1 source/u);
+  assert.throws(() => compileSource("Unsafe <button>markup</button>."), /valid v1 source/u);
   assert.throws(() => compileSource("[unsafe](javascript:alert(1))"), /unsafe link URL/u);
 });
 
@@ -64,12 +64,12 @@ function compileStatic() {
   const source = createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
   const lock = JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   )) as KpArticleImportLock;
   return compileKpArticleStaticHtml(compileKpArticleDocument({
@@ -81,11 +81,11 @@ function compileStatic() {
 
 function compileSource(markdown: string) {
   const original = readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
     "utf8"
   );
   const lock = JSON.parse(readFileSync(
-    new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.lock.json", import.meta.url),
+    new URL("./fixtures/kp-article-v1/economics-demand-shift.lock.json", import.meta.url),
     "utf8"
   )) as KpArticleImportLock;
   const source = createKpArticleSource("variant.md", `${original}\n${markdown}\n`);

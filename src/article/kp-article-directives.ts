@@ -140,7 +140,7 @@ function scanDirective(
         source,
         line,
         "directive-nesting",
-        "RC1 KP directives cannot be nested."
+        "KP Article v1 directives cannot be nested."
       );
     }
     if (line.text === "::after") {

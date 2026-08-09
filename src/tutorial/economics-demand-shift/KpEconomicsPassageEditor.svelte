@@ -23,11 +23,6 @@
   } from "./economics-demand-shift-article-compiler.ts";
   import type { KpEconomicsDemandShiftLessonPassage } from
     "./economics-demand-shift-lesson-compiler.ts";
-  import {
-    createKpEconomicsLessonDraft,
-    selectKpEconomicsLessonDraftPassage,
-    type KpEconomicsLessonDraftState
-  } from "./economics-demand-shift-lesson-draft.ts";
 
   const articleImportLock = articleImportLockValue as KpArticleImportLock;
   const articleDraftStorageKey = "kp.economics.demand-shift.article-draft.v1";
@@ -48,7 +43,7 @@
       Object.freeze({
         label,
         apply: label,
-        detail: "KP Article RC1 directive",
+        detail: "KP Article v1 directive",
         contexts: Object.freeze(["kp-directive"] as const)
       })
     )
@@ -56,16 +51,16 @@
 
   let {
     id,
-    draft,
+    selectedPassageId: initialSelectedPassageId,
     validation,
     onPreview,
     onClose
   }: {
     readonly id: string;
-    readonly draft: KpEconomicsLessonDraftState;
+    readonly selectedPassageId: string;
     readonly validation: string;
     readonly onPreview: (input: {
-      readonly draft: KpEconomicsLessonDraftState;
+      readonly selectedPassageId: string;
       readonly passages: readonly KpEconomicsDemandShiftLessonPassage[];
       readonly validation: string;
     }) => void;
@@ -78,7 +73,7 @@
   let session: KpArticleDraftSession | undefined;
   let enhanced = $state(false);
   let vimMode = $state("normal");
-  let selectedPassageId = $state(untrack(() => id || draft.selectedPassageId));
+  let selectedPassageId = $state(untrack(() => id || initialSelectedPassageId));
   let bufferSource = $state(articleSourceText);
   let dirty = $state(false);
   let previewStatus = $state<"valid" | "invalid">("valid");
@@ -165,11 +160,10 @@
         ? selectedPassageId
         : passages[0]!.id;
       selectedPassageId = selected;
-      const nextDraft = createKpEconomicsLessonDraft(passages);
       onPreview({
-        draft: selectKpEconomicsLessonDraftPassage(nextDraft, selected),
+        selectedPassageId: selected,
         passages,
-        validation: "KP Article RC1 is valid. Preview updated."
+        validation: "KP Article v1 is valid. Preview updated."
       });
     } catch (error) {
       previewStatus = "invalid";

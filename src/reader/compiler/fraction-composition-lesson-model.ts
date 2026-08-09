@@ -12,7 +12,7 @@ import {
 } from "../../semantic/fraction-composition-evaluation-tree.ts";
 import {
   createKpFractionCompositionSalienceInventory
-} from "./fraction-composition-salience-inventory.ts";
+} from "../../semantic/fraction-composition-salience-inventory.ts";
 
 export interface KpFractionCompositionTranscriptEntry {
   readonly beatId: string;

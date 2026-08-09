@@ -11,7 +11,7 @@ import {
 } from "../src/article/kp-article-identity.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import { resolveKpArticleSemanticReferences } from "../src/article/kp-article-semantic-references.ts";
-import { validateKpArticleRc1 } from "../src/article/kp-article-validation.ts";
+import { validateKpArticle } from "../src/article/kp-article-validation.ts";
 
 test("identities are explicit, document scoped, and source located", () => {
   const source = goldenSource();
@@ -66,7 +66,7 @@ test("duplicate directive IDs fail publication at the second declaration", () =>
     "A collision.",
     ":::"
   ].join("\n"));
-  const validation = validateKpArticleRc1(source);
+  const validation = validateKpArticle(source);
 
   assert.equal(validation.valid, false);
   assert.deepEqual(validation.diagnostics.map(({ code }) => code), ["directive-id-collision"]);
@@ -99,7 +99,7 @@ test("stage rename returns one atomic edit set for declarations and references",
   assert.match(renamedText, /`\[inert\]\(kp-ref:market\/demand\)`/u);
   assert.match(renamedText, /\[also inert\]\(kp-ref:market\/demand\)/u);
   const renamedSource = createKpArticleSource("renamed.md", renamedText);
-  assert.equal(validateKpArticleRc1(renamedSource).valid, true);
+  assert.equal(validateKpArticle(renamedSource).valid, true);
   assert.equal(resolveKpArticleSemanticReferences(renamedSource).valid, true);
 });
 
@@ -136,7 +136,7 @@ function goldenSource() {
   return createKpArticleSource(
     "economics-demand-shift.md",
     readFileSync(
-      new URL("./fixtures/kp-article-v1-rc1/economics-demand-shift.md", import.meta.url),
+      new URL("./fixtures/kp-article-v1/economics-demand-shift.md", import.meta.url),
       "utf8"
     )
   );
@@ -146,7 +146,7 @@ function sourceFromBody(body: string) {
   return createKpArticleSource("identity.md", [
     "---",
     "kp:",
-    "  schema: kp.article.v1-rc1",
+    "  schema: kp.article.v1",
     "  id: lesson.economics.identity",
     "  imports:",
     "    shift: vignette.economics.shift@1",

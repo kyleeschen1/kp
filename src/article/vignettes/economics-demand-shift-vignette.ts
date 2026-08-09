@@ -124,7 +124,7 @@ export const kpArticleVignetteRegistry = Object.freeze([
 ]);
 
 /**
- * RC1 economics uses the candidate release without promoting it for every
+ * KP Article v1 uses this release without promoting it for every
  * article until the exemplar clears its human release gate.
  */
 export const kpEconomicsDemandShiftArticleVignetteRegistry = Object.freeze([

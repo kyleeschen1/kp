@@ -7,7 +7,7 @@ import {
 import type { KpArticleDirectiveAttribute } from "./kp-article-directives.ts";
 import { scanKpArticleMarkdownLinks } from "./kp-article-markdown-links.ts";
 import {
-  validateKpArticleRc1,
+  validateKpArticle,
   type KpValidatedArticleDirective
 } from "./kp-article-validation.ts";
 
@@ -158,11 +158,11 @@ export function applyKpArticleTextEdits(
 }
 
 function requireValidArticle(source: KpArticleSource) {
-  const validation = validateKpArticleRc1(source);
+  const validation = validateKpArticle(source);
   if (!validation.valid || validation.frontmatter === undefined) {
     throw new KpArticleIdentityError(
       "identity-source-invalid",
-      "Identity operations require a valid kp.article.v1-rc1 source."
+      "Identity operations require a valid kp.article.v1 source."
     );
   }
   return validation;

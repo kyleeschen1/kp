@@ -20,7 +20,7 @@ test("catalogue rows equal concrete registry and resolved asset identities", asy
   const registryIds = registry.map(({ animationId }) => animationId);
   const resolvedIds = resolved.map(({ animation }) => animation.id).sort();
 
-  assert.equal(new Set(rowIds).size, 36);
+  assert.equal(new Set(rowIds).size, 37);
   assert.deepEqual(rowIds, registryIds);
   assert.deepEqual(rowIds, resolvedIds);
   assert.deepEqual(
@@ -39,10 +39,10 @@ test("descriptors and contexts remain subordinate to their concrete row", () => 
     ({ relatedContexts }) => relatedContexts.map(({ id }) => id)
   );
 
-  assert.equal(projection.entries.length, 36);
-  assert.equal(descriptors.length, 53);
-  assert.equal(contextIds.length, 78);
-  assert.equal(new Set(contextIds).size, 78);
+  assert.equal(projection.entries.length, 37);
+  assert.equal(descriptors.length, 54);
+  assert.equal(contextIds.length, 80);
+  assert.equal(new Set(contextIds).size, 80);
   assert.equal(
     descriptors.some(({ id }) => rowIds.has(id)),
     false

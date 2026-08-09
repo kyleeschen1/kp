@@ -1,5 +1,4 @@
 import {
-  compileKpEconomicsDemandShiftLesson,
   validateKpEconomicsDemandShiftProseMotionAuthoring,
   type KpEconomicsDemandShiftLesson,
   type KpEconomicsDemandShiftLessonCompileOptions
@@ -25,13 +24,6 @@ import {
 import {
   adaptKpEconomicsDemandShiftLessonDocument
 } from "./economics-demand-shift-document.ts";
-import {
-  compileKpEconomicsTwoColumnParagraphs,
-  kpEconomicsTwoColumnParagraphs
-} from "./economics-demand-shift-two-column-scroll.ts";
-import type {
-  KpEconomicsTwoColumnSource
-} from "./economics-demand-shift-two-column-source.ts";
 import type {
   KpTutorialLessonPublicationDocument
 } from "../kp-tutorial-lesson-document.ts";
@@ -55,26 +47,6 @@ export interface KpEconomicsDemandShiftPublication {
     readonly KpEconomicsDemandShiftLesson["sections"][number]["passages"][number][];
   readonly motionBridgeHtml?: Readonly<Record<string, string>> | undefined;
   readonly semanticTransit: KpTutorialSemanticTransitAuthoringBundle;
-}
-
-export interface KpEconomicsDemandShiftPublicationCompileOptions extends
-    KpEconomicsDemandShiftLessonCompileOptions {
-  readonly twoColumnSource?: KpEconomicsTwoColumnSource | undefined;
-}
-
-/**
- * Expands the concise Markdown annotations and local motion metadata into the
- * complete static payload. Authors never maintain custom-element internals.
- */
-export function compileKpEconomicsDemandShiftPublication(
-  markdown: string,
-  options: KpEconomicsDemandShiftPublicationCompileOptions = {}
-): KpEconomicsDemandShiftPublication {
-  const lesson = compileKpEconomicsDemandShiftLesson(markdown, options);
-  const twoColumnParagraphs = options.twoColumnSource === undefined
-    ? kpEconomicsTwoColumnParagraphs
-    : compileKpEconomicsTwoColumnParagraphs(options.twoColumnSource);
-  return compilePublicationProjection({ lesson, twoColumnParagraphs });
 }
 
 export function compileKpEconomicsDemandShiftArticlePublication(input: {

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.article-v1-rc1-economics-exemplar-v2",
   "kind": "run-contract",
   "title": "KP Article V1 RC1 economics exemplar",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -195,7 +196,8 @@
     {
       "id": "s24-v1-promotion",
       "title": "Post-approval v1 promotion and legacy retirement",
-      "status": "planned"
+      "summary": "Promoted the approved RC1 contract to frozen KP Article v1, retired every legacy writable economics authority, repaired prerequisite release gates, preserved learner-visible behavior, passed broad release verification, and recorded the separate pre-existing reader-budget debt.",
+      "status": "complete"
     }
   ]
 }

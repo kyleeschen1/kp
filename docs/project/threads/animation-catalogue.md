@@ -39,7 +39,7 @@ playhead, parameters, tuning, render ownership, viewport, build identity, and
 one bounded selected-stage screenshot. The bitmap is attached to the same
 immutable note; it does not create a parallel review history.
 
-The catalogue-wide truth pass now shows 36 meaningfully painted assets with
+The catalogue-wide truth pass now shows 37 meaningfully painted assets with
 zero host gaps, load failures, or iframes. The
 earlier structural 33-paint count was first corrected to 32 because plot chrome
 had masked the 3D gap; the same row now genuinely paints through a bounded

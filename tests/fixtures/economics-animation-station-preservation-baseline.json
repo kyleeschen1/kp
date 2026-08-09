@@ -11,7 +11,7 @@
     "stationStyle": "src/tutorial/economics-demand-shift/economics-demand-shift-animation-station.css",
     "geometry": "src/tutorial/economics-demand-shift/economics-demand-shift-layout.ts",
     "motion": "src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts",
-    "lessonSource": "content/lessons/economics-demand-shift-two-column.json",
+    "lessonSource": "content/lessons/economics-demand-shift.kp.md",
     "publication": "src/tutorial/economics-demand-shift/economics-demand-shift-publication.generated.json",
     "visualCheck": "tests/economics-animation-station.browser.spec.ts"
   },

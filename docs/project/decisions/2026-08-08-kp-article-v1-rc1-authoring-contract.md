@@ -1,7 +1,17 @@
 # Adopt The KP Article V1 RC1 Authoring Contract
 
 Date: 2026-08-08
-Status: accepted
+Status: fulfilled; superseded by the frozen v1 contract
+
+## Outcome
+
+The economics exemplar passed its human checkpoint on 2026-08-09. The
+candidate was promoted without broadening its grammar to `kp.article.v1`, and
+the temporary importer, writable Markdown/JSON duplicates, compatibility
+compiler, passage-buffer draft model, and legacy source-save endpoint were
+retired. The frozen contract is
+[`../principles/kp-article-v1.md`](../principles/kp-article-v1.md); this file
+remains the historical adoption decision and proof plan.
 
 ## Decision
 
@@ -73,4 +83,3 @@ second writable truth.
 - `2026-08-08-kp-universal-dev-toolbar-queue.md`
 - `../reviews/2026-08-08-authoring-format-convergence-next-step-review.md`
 - `../principles/kp-article-v1-rc1.md`
-

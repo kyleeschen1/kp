@@ -2,9 +2,9 @@
   "id": "next-action.kp.article-v1-rc1-economics-exemplar-v1",
   "kind": "next-action",
   "title": "Implement KP Article V1 RC1 through the economics exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Execute the approved 24-slice authoring, compiler, development-toolbar, editor, and economics migration plan through the required human checkpoint.",
+  "summary": "All 24 approved slices are complete. KP Article v1 is frozen around one canonical economics source and legacy writable paths are retired; the next work is a real authoring session, bounded reader-budget recovery, then an algebra pressure caller.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -514,6 +514,111 @@
       "scope": "s23 durable checkpoint integrity",
       "checkedAt": "2026-08-09T09:07:05.675Z",
       "notes": "Workspace validates with 912 nodes and 18942 events after release-gate evidence."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:23.560Z",
+      "notes": "Full deterministic repository suite passed (3918/3918), including architecture, inference, concept-catalogue, and promotion-memory gates."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:24.770Z",
+      "notes": "Production typecheck, Svelte diagnostics, deterministic economics publication check, and Vite build passed."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:25.658Z",
+      "notes": "Frozen KP Article v1 suite passed (78/78)."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:26.599Z",
+      "notes": "Economics publication and runtime suite passed (89/89)."
+    },
+    {
+      "command": "npm run test:economics-article-source-save",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:27.550Z",
+      "notes": "Canonical whole-article source-save adapter passed (4/4); legacy writable endpoint remains absent."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:28.612Z",
+      "notes": "Economics Chromium/Firefox/WebKit tutorial matrix passed (18/18), including repaired phone geometry."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-accessibility",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:29.575Z",
+      "notes": "Economics accessibility browser checks passed (4/4)."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:30.501Z",
+      "notes": "Whole-article CodeMirror/Vim editor checks passed (5/5)."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:31.409Z",
+      "notes": "Derived economics deck visual checks passed (3/3)."
+    },
+    {
+      "command": "npm run check:performance:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:32.312Z",
+      "notes": "Production economics budgets passed on repeat: 143940 transfer bytes, 104572 script bytes, 31 resources, CLS 0, 88 ms initial longest task, 1.5 ms active p95, no active long task. A preceding cold sample measured 162 ms and is recorded as host-sensitive variance."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:33.208Z",
+      "notes": "Development review tooling remains erased from production."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:34.192Z",
+      "notes": "All 12 reader manifest routes passed production-closure checks."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:35.112Z",
+      "notes": "Promotion memory is aligned while the matrix frontier remains explicitly tabled."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:36.039Z",
+      "notes": "Theseus workspace validated: 912 nodes and 18946 events before final closeout records."
+    },
+    {
+      "command": "npm run verify:impact -- --path content/lessons/economics-demand-shift.kp.md --path src/article/kp-article-document.ts --path server/kp-article-source-http-adapter.test.ts --path src/tutorial/economics-demand-shift/economics-demand-shift-lesson.css",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-09T16:21:37.010Z",
+      "notes": "Impact selection classified the promotion as high risk and selected the broad typecheck, test, and build gates; all three passed."
     }
   ],
   "expectedLearning": [

@@ -2,21 +2,28 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-import { compileKpEconomicsDemandShiftPublication } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
+import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
+import { compileKpEconomicsDemandShiftArticlePublication } from "../src/tutorial/economics-demand-shift/economics-demand-shift-publication.ts";
 import { kpEconomicsMotionBlocks } from "../src/tutorial/economics-demand-shift/economics-demand-shift-motion-blocks.ts";
 import { compileKpLispFunctionApplicationPublication } from "../src/tutorial/lisp-function-application/lisp-function-application-publication.ts";
 import { kpLispLessonMotionBlocks } from "../src/tutorial/lisp-function-application/lisp-function-application-motion-blocks.ts";
 import { compileKpTutorialPublicationControls } from "../src/tutorial/kp-tutorial-publication-controls.ts";
 
-const economicsUrl = new URL("../content/lessons/economics-demand-shift.md", import.meta.url);
+const economicsUrl = new URL("../content/lessons/economics-demand-shift.kp.md", import.meta.url);
+const economicsLockUrl = new URL("../content/lessons/economics-demand-shift.kp.lock.json", import.meta.url);
 const lispUrl = new URL("../content/lessons/programming-lisp-function-application.md", import.meta.url);
 
 test("both lesson callers obey one shared publication contract", async () => {
+  const [articleText, importLockText] = await Promise.all([
+    readFile(economicsUrl, "utf8"),
+    readFile(economicsLockUrl, "utf8")
+  ]);
   const callers = [
     {
-      publication: compileKpEconomicsDemandShiftPublication(
-        await readFile(economicsUrl, "utf8")
-      ),
+      publication: compileKpEconomicsDemandShiftArticlePublication({
+        articleText,
+        importLock: JSON.parse(importLockText) as KpArticleImportLock
+      }),
       ids: kpEconomicsMotionBlocks.map(({ id }) => id)
     },
     {

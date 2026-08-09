@@ -23,7 +23,7 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   assert.ok(solveX);
   assert.ok(economics);
 
-  assert.equal(projection.entries.length, 36);
+  assert.equal(projection.entries.length, 37);
   assert.equal(solveX.primaryDescriptorId,
     "editor-animation.animation.linear-solve.solve-x");
   assert.equal(solveX.packId, "algebra");
@@ -33,7 +33,7 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
     projection.entries.filter(
       ({ humanDisposition }) => humanDisposition === "unreviewed"
     ).length,
-    35
+    36
   );
   assert.equal(
     projection.entries.find(
@@ -83,7 +83,7 @@ test("asset-first projection keeps one lightweight entry with subordinate contex
   assert.equal(economics.durationMs, 2400);
   assert.equal(economics.beatCount, 48);
   assert.ok(economics.searchTerms.includes("economics"));
-  assert.equal(economics.relatedContexts.length, 1);
+  assert.equal(economics.relatedContexts.length, 2);
 });
 
 test("display-only playability and planned identities cannot enter projection", () => {

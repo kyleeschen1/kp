@@ -152,9 +152,6 @@
   import KpTutorialLessonShell from "../KpTutorialLessonShell.svelte";
   import type KpEconomicsPassageEditor from "./KpEconomicsPassageEditor.svelte";
   import KpInlineMath from "./KpInlineMath.svelte";
-  import type {
-    KpEconomicsLessonDraftState
-  } from "./economics-demand-shift-lesson-draft.ts";
   import {
     isKpEconomicsNavigationActionDetail,
     KP_ECONOMICS_NAVIGATION_ACTION_EVENT,
@@ -175,10 +172,7 @@
   // Authoring stays behind a compile-time DEV branch so the canonical source,
   // CodeMirror, and its draft runtime cannot enter the published route closure.
   const loadKpEconomicsLessonEditorModules = import.meta.env.DEV
-    ? () => Promise.all([
-        import("./KpEconomicsPassageEditor.svelte"),
-        import("./economics-demand-shift-lesson-draft.ts")
-      ])
+    ? () => import("./KpEconomicsPassageEditor.svelte")
     : undefined;
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
@@ -334,10 +328,10 @@
   let theme = $state(untrack(() => initialTheme));
   const twoColumnParagraphGapVh = kpEconomicsTwoColumnParagraphGapDefaultVh;
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
-  let lessonDraft = $state<KpEconomicsLessonDraftState | undefined>();
-  let lessonDraftRuntime:
-    typeof import("./economics-demand-shift-lesson-draft.ts") | undefined;
   let editableTwoColumnParagraphs = $state(untrack(() => twoColumnParagraphs));
+  let lessonEditorSelectedPassageId = $state(untrack(() =>
+    twoColumnParagraphs[0]?.id ?? ""
+  ));
   let lessonEditorOpen = $state(false);
   let lessonEditorModalOpen = $state(false);
   let LessonPassageEditor = $state<
@@ -345,8 +339,10 @@
   >();
   let lessonEditorGeometryRefreshPending = false;
   let lessonEditorValidation = $state("");
-  let selectedLessonDraftPassage = $derived(
-    lessonDraft?.passages.find(({ id }) => id === lessonDraft?.selectedPassageId)
+  let selectedLessonEditorPassage = $derived(
+    editableTwoColumnParagraphs.find(({ id }) =>
+      id === lessonEditorSelectedPassageId
+    )
   );
   let ready = $state(false);
   let stageExpanded = $state(false);
@@ -904,34 +900,21 @@
 
   async function loadLessonEditor(): Promise<void> {
     if (loadKpEconomicsLessonEditorModules === undefined) return;
-    if (LessonPassageEditor === undefined || lessonDraftRuntime === undefined) {
-      const [componentModule, draftModule] =
-        await loadKpEconomicsLessonEditorModules();
+    if (LessonPassageEditor === undefined) {
+      const componentModule = await loadKpEconomicsLessonEditorModules();
       LessonPassageEditor = componentModule.default;
-      lessonDraftRuntime = draftModule;
     }
-    if (lessonDraft === undefined) {
-      lessonDraft = lessonDraftRuntime.createKpEconomicsLessonDraft(
-        twoColumnParagraphs
-      );
-    }
-    if (attentionPassageId !== undefined && lessonDraft !== undefined &&
-        lessonDraft.passages.some(({ id }) => id === attentionPassageId)) {
-      lessonDraft = lessonDraftRuntime.selectKpEconomicsLessonDraftPassage(
-        lessonDraft,
-        attentionPassageId
-      );
+    if (attentionPassageId !== undefined &&
+        editableTwoColumnParagraphs.some(({ id }) => id === attentionPassageId)) {
+      lessonEditorSelectedPassageId = attentionPassageId;
     }
     scheduleLessonEditorGeometryRefresh();
   }
 
   function selectLessonDraftPassage(passageId: string): void {
-    if (!lessonEditorOpen || lessonDraftRuntime === undefined ||
-        lessonDraft === undefined) return;
-    lessonDraft = lessonDraftRuntime.selectKpEconomicsLessonDraftPassage(
-      lessonDraft,
-      passageId
-    );
+    if (!lessonEditorOpen ||
+        !editableTwoColumnParagraphs.some(({ id }) => id === passageId)) return;
+    lessonEditorSelectedPassageId = passageId;
     lessonEditorModalOpen = true;
   }
 
@@ -940,17 +923,17 @@
     scrollCoordinator?.scheduleProjection();
     requestAnimationFrame(() => {
       shell?.querySelector<HTMLElement>(
-        `[data-kp-economics-passage-select='${lessonDraft?.selectedPassageId ?? ""}']`
+        `[data-kp-economics-passage-select='${lessonEditorSelectedPassageId}']`
       )?.focus();
     });
   }
 
   function presentLessonBufferPreview(input: {
-    readonly draft: KpEconomicsLessonDraftState;
+    readonly selectedPassageId: string;
     readonly passages: readonly KpEconomicsDemandShiftLessonPassage[];
     readonly validation: string;
   }): void {
-    lessonDraft = input.draft;
+    lessonEditorSelectedPassageId = input.selectedPassageId;
     editableTwoColumnParagraphs = input.passages;
     lessonEditorValidation = input.validation;
     scheduleLessonEditorGeometryRefresh();
@@ -2935,14 +2918,14 @@
         </div>
       </details>
     {/if}
-    {#if import.meta.env.DEV && lessonEditorOpen && lessonDraft !== undefined &&
+    {#if import.meta.env.DEV && lessonEditorOpen &&
         twoColumnScroll && scrollCue}
       <button
         type="button"
         class="kp-economics-tutorial__passage-select"
         aria-label={`Edit passage ${passage.id}`}
         aria-pressed={lessonEditorModalOpen &&
-          lessonDraft.selectedPassageId === passage.id}
+          lessonEditorSelectedPassageId === passage.id}
         data-kp-economics-passage-select={passage.id}
         onclick={() => selectLessonDraftPassage(passage.id)}
       >Edit</button>
@@ -3011,9 +2994,8 @@
     "data-kp-economics-lesson-editor-open": lessonEditorOpen
       ? "true"
       : "false",
-    "data-kp-economics-lesson-editor-selected": lessonEditorOpen &&
-        lessonDraft !== undefined
-      ? lessonDraft.selectedPassageId
+    "data-kp-economics-lesson-editor-selected": lessonEditorOpen
+      ? lessonEditorSelectedPassageId
       : "",
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
@@ -3217,12 +3199,12 @@
   {/snippet}
 </KpTutorialLessonShell>
 
-{#if import.meta.env.DEV && lessonEditorOpen && lessonEditorModalOpen && lessonDraft !== undefined &&
-    selectedLessonDraftPassage !== undefined &&
+{#if import.meta.env.DEV && lessonEditorOpen && lessonEditorModalOpen &&
+    selectedLessonEditorPassage !== undefined &&
     LessonPassageEditor !== undefined}
   <LessonPassageEditor
-    id={selectedLessonDraftPassage.id}
-    draft={lessonDraft}
+    id={selectedLessonEditorPassage.id}
+    selectedPassageId={lessonEditorSelectedPassageId}
     validation={lessonEditorValidation}
     onPreview={presentLessonBufferPreview}
     onClose={closeLessonEditorModal}
