@@ -125,7 +125,8 @@
     {
       "id": "s13",
       "title": "common-reader-page-coverage",
-      "status": "planned"
+      "summary": "Mounted the page directory through the common reader's existing development-only Review seam, removed duplicate Review chrome, and proved the 124778-byte learner closure did not change.",
+      "status": "complete"
     },
     {
       "id": "s14",

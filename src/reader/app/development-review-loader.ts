@@ -14,7 +14,14 @@ export const mountKpReaderDevelopmentReview: KpReaderDevelopmentReviewMount | un
         ) {
           return;
         }
-        void import("../../dev-review/reader-review-bootstrap.ts")
-          .then(({ mountKpReaderDevReview }) => mountKpReaderDevReview(ownerWindow));
+        void Promise.all([
+          import("../../dev-review/reader-review-bootstrap.ts"),
+          import("../../dev-toolbar/development-toolbar-bootstrap.ts")
+        ]).then(([review, toolbar]) => {
+          review.mountKpReaderDevReview(ownerWindow);
+          // The toolbar observes the just-mounted shell and replaces its
+          // duplicate launcher without taking ownership of review capture.
+          toolbar.mountKpDevelopmentToolbar(ownerWindow);
+        });
       }
     : undefined;

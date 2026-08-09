@@ -71,7 +71,12 @@ export async function assertKpSemanticReaderConformance(input: {
   // that never mounted the standard review integration.
   const reviewShell = page.locator("[data-kp-dev-review-shell]");
   await expect(reviewShell).toHaveCount(1);
-  await expect(reviewShell.locator("button.launcher")).toBeVisible();
+  await expect(reviewShell.locator("button.launcher")).toBeHidden();
+  const toolbar = page.getByRole("complementary", {
+    name: "Development tools"
+  });
+  await expect(toolbar).toHaveCount(1);
+  await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
   await expect(reviewShell).toHaveAttribute(
     "data-kp-dev-review-placement",
     /^(left-prose-rail|captured-moment-sheet)$/

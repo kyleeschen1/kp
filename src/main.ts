@@ -111,7 +111,6 @@ import {
   disposeKpEditorEquationStageHotPathCaches
 } from "./editor/equation-stage-hot-path-cache.ts";
 import {
-  KP_ANIMATION_WORKBENCH_VIEW,
   readKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
 import {

@@ -124,6 +124,41 @@
       "scope": "s12 Lisp preservation",
       "checkedAt": "2026-08-09T22:17:18.723Z",
       "notes": "Four existing Chromium visual cases passed across reader cues, full checkpoint story, phone stage, and reduced motion; the focused toolbar test also passed with exact Lisp current identity and Review modal."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s13 common reader build",
+      "checkedAt": "2026-08-09T22:25:28.495Z",
+      "notes": "Production build completed after zero TypeScript, Svelte, and domain diagnostics."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s13 development isolation",
+      "checkedAt": "2026-08-09T22:25:29.566Z",
+      "notes": "Scanned 362 production files against 10 forbidden development markers with no leakage."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s13 reader production closure",
+      "checkedAt": "2026-08-09T22:25:30.496Z",
+      "notes": "All 12 declared reader routes passed closure checks."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s13 reader budgets",
+      "checkedAt": "2026-08-09T22:25:31.437Z",
+      "notes": "All reader routes passed; the ten-route common equation closure remains exactly 124778 gzip bytes."
+    },
+    {
+      "command": "playwright common equation reader toolbar smoke",
+      "status": "passed",
+      "scope": "s13 common reader browser",
+      "checkedAt": "2026-08-09T22:25:32.360Z",
+      "notes": "Solve-x exposed one toolbar, one hidden duplicate launcher, correct current identity, and a working Review dialog."
     }
   ],
   "progress": {
