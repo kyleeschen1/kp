@@ -35,3 +35,38 @@ test("the common equation reader exposes one development toolbar", async ({
   await expect(page.getByRole("dialog", { name: "Review this moment" }))
     .toBeVisible();
 });
+
+for (const route of [
+  {
+    name: "distribution-area specialized reader",
+    href: "/reader/distribution-area/",
+    pageId: "reader.distribution-area"
+  },
+  {
+    name: "quadratic-branching specialized reader",
+    href: "/reader/quadratic-branching/",
+    pageId: "reader.quadratic-branching"
+  }
+] as const) {
+  test(`${route.name} shares the development directory`, async ({ page }) => {
+    await page.goto(route.href, { waitUntil: "networkidle" });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-hydrated",
+      "true"
+    );
+    const toolbar = page.getByRole("complementary", {
+      name: "Development tools"
+    });
+    await expect(toolbar).toHaveCount(1);
+    await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
+    await expect(page.locator("[data-kp-dev-review-shell] button.launcher"))
+      .toBeHidden();
+    const pages = toolbar.locator(
+      "[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']"
+    );
+    await pages.locator("summary").click();
+    await expect(pages.locator(
+      `[data-kp-dev-toolbar-page="${route.pageId}"]`
+    )).toHaveAttribute("aria-current", "page");
+  });
+}

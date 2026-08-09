@@ -131,7 +131,8 @@
     {
       "id": "s14",
       "title": "specialized-reader-page-coverage",
-      "status": "planned"
+      "summary": "Verified the distribution-area and quadratic-branching readers share Pages and Review in development while retaining their independent low-cost production closures.",
+      "status": "complete"
     },
     {
       "id": "s15",
