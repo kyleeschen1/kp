@@ -255,6 +255,20 @@
       "scope": "s14-deck-derivation",
       "checkedAt": "2026-08-09T05:53:24.691Z",
       "notes": "Article_deck_projection_passed_all_TypeScript_Svelte_and_domain_boundaries"
+    },
+    {
+      "command": "npm_run_test_dev_toolbar",
+      "status": "passed",
+      "scope": "s15-toolbar-protocol",
+      "checkedAt": "2026-08-09T05:57:28.573Z",
+      "notes": "Four_protocol_tests_passed_for_universal_Review_sorted_contextual_capabilities_typed_commands_route_replacement_and_immutable_DOM_free_snapshots"
+    },
+    {
+      "command": "npm_run_typecheck",
+      "status": "passed",
+      "scope": "s15-toolbar-protocol",
+      "checkedAt": "2026-08-09T05:57:30.673Z",
+      "notes": "Framework_neutral_toolbar_protocol_passed_all_type_boundaries"
     }
   ],
   "expectedLearning": [

@@ -141,7 +141,8 @@
     {
       "id": "s15-toolbar-protocol",
       "title": "Development toolbar capability protocol",
-      "status": "planned"
+      "summary": "Defined_a_framework_neutral_development_only_toolbar_host_with_system_owned_Review_typed_route_contributions_immutable_snapshots_and_stale_command_rejection.",
+      "status": "complete"
     },
     {
       "id": "s16-toolbar-exemplar",
