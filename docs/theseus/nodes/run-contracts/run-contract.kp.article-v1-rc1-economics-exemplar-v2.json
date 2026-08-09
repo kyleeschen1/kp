@@ -105,7 +105,8 @@
     {
       "id": "s09-article-ir",
       "title": "KpArticleDocument IR and source map",
-      "status": "planned"
+      "summary": "Compiled validated RC1 source and exact locks into one immutable layout-free KpArticleDocument plus source map, preserving ordinary Markdown order, typed semantic blocks, resolved references, and existing KpLessonDocument runtime authority.",
+      "status": "complete"
     },
     {
       "id": "s10-static-markdown",

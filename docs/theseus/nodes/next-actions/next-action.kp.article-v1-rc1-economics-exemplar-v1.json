@@ -150,6 +150,20 @@
       "scope": "s08 production build and economics publication closure",
       "checkedAt": "2026-08-09T05:13:58.321Z",
       "notes": "Typecheck, generated economics publication freshness, and Vite production build pass."
+    },
+    {
+      "command": "npm run test:kp-article-rc1",
+      "status": "passed",
+      "scope": "s09 KpArticleDocument IR and source map",
+      "checkedAt": "2026-08-09T05:21:24.449Z",
+      "notes": "44 focused tests pass, including ordered blocks, typed stage/focus/passage/motion meaning, exact source-map slices, immutable data, and layout-free JSON."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 article IR boundary",
+      "checkedAt": "2026-08-09T05:21:25.385Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
     }
   ],
   "expectedLearning": [
