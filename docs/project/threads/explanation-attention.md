@@ -1,13 +1,13 @@
 # Explanation and Attention Thread
 
-Status: active-supporting
-Last Updated: 2026-08-08
-Current Next Action: Layout discovery remains paused. Implement the accepted
-`kp.article.v1-rc1` contract through the universal development toolbar and one
-economics authoring exemplar, using
-`../reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md`. Freeze `v1`
-and retire migrated writable duplicates only after the human exemplar
-checkpoint.
+Status: active
+Last Updated: 2026-08-09
+Current Next Action: The economics RC1 exemplar passed human review. Keep
+layout discovery paused, clear the two pre-existing broad-gate debts, then run
+the bounded v1-promotion and legacy-retirement slice. Exercise the resulting
+authoring path once before using a compact multi-step algebra article as the
+second format caller. See
+`../reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
 Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.
@@ -208,10 +208,11 @@ Lisp callers demonstrate the same lifecycle.
 
 ## Delivered Economics Exemplar
 
-The approved source is `content/lessons/economics-demand-shift.md`. A bounded
+The approved sole writable source is
+`content/lessons/economics-demand-shift.kp.md`. A bounded
 local compiler projects its sparse passage annotations into an internal Svelte
 5 route at `/tutorials/economics/demand-shift/`. The integrated human checkpoint
-is in `reviews/2026-08-02-economics-text-animation-integrated-checkpoint.md`.
+is in `reviews/2026-08-09-kp-article-v1-rc1-economics-checkpoint.md`.
 
 The delivered exemplar includes:
 

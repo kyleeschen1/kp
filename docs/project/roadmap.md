@@ -1,13 +1,13 @@
 # KP Roadmap
 
-Last Updated: 2026-08-08
+Last Updated: 2026-08-09
 Status: active
-Active Thread: `threads/animation-library-promotion.md`
+Active Thread: `threads/explanation-attention.md`
 Supporting Threads:
+- `threads/animation-library-promotion.md`
 - `threads/semantic-runtime.md`
 - `threads/animation-catalogue.md`
 - `threads/cross-domain-tutorial-platform.md`
-- `threads/explanation-attention.md`
 
 ## Current Source Of Truth
 
@@ -52,11 +52,18 @@ The recommended decision process and successor sequence are in
 review is now resolved provisionally by the accepted `kp.article.v1-rc1`
 contract in
 `decisions/2026-08-08-kp-article-v1-rc1-authoring-contract.md` and
-`principles/kp-article-v1-rc1.md`. One economics article must prove the format
-across authoring, static publication, interactive and deck projection, search,
-navigation, and accessibility before the schema freezes or another lesson
-migrates. The implementation proposal is
+`principles/kp-article-v1-rc1.md`. The economics article has now proved the
+format across authoring, static publication, interactive and deck projection,
+search, navigation, and accessibility. The implementation proposal is
 `reviews/2026-08-08-kp-article-v1-rc1-long-loop-proposal.md`.
+The economics exemplar passed its required human checkpoint on 2026-08-09.
+The release evidence and bounded approval decision are recorded in
+`reviews/2026-08-09-kp-article-v1-rc1-economics-checkpoint.md`. The recommended
+closeout order is now to repair the two pre-existing broad-gate debts, execute
+the already bounded v1-promotion/legacy-retirement slice, exercise one real
+economics editing session, and then pressure the frozen format with one compact
+multi-step algebra article. The rationale and candidate ranking are in
+`reviews/2026-08-09-kp-article-v1-post-checkpoint-next-step-review.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
