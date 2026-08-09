@@ -173,6 +173,20 @@
       "scope": "s14 specialized reader budgets",
       "checkedAt": "2026-08-09T22:27:11.805Z",
       "notes": "Distribution-area remains 14993 gzip bytes with 572 bytes headroom; quadratic-branching remains 14800 with 715 bytes headroom; neither adopted the 124778-byte common runtime."
+    },
+    {
+      "command": "playwright diagnostic toolbar smoke",
+      "status": "passed",
+      "scope": "s15 diagnostics",
+      "checkedAt": "2026-08-09T22:31:30.003Z",
+      "notes": "Canonical animation review and glyph reconciliation each expose one toolbar, one Review owner, a correct current marker, a working dialog, and no toolbar inside the canonical review iframe."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 diagnostic types",
+      "checkedAt": "2026-08-09T22:31:31.040Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte diagnostics."
     }
   ],
   "progress": {

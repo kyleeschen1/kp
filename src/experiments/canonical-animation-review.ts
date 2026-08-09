@@ -10,9 +10,12 @@ import {
 
 // Keep the development branch at module scope so production erases the
 // feedback client while local review always mounts one persistent shell.
-const loadAnimationLibraryReview =
+const loadAnimationLibraryDevelopmentTools =
   import.meta.env.DEV
-    ? () => import("../dev-review/animation-library-review-bootstrap.ts")
+    ? () => Promise.all([
+        import("../dev-review/animation-library-review-bootstrap.ts"),
+        import("../dev-toolbar/development-toolbar-bootstrap.ts")
+      ])
     : undefined;
 
 const defaultAnimationId =
@@ -160,9 +163,10 @@ window.addEventListener("popstate", () => {
 });
 
 root.dataset["catalogReady"] = "true";
-void loadAnimationLibraryReview?.().then(
-  ({ mountKpAnimationLibraryDevReview }) => {
-    mountKpAnimationLibraryDevReview(window);
+void loadAnimationLibraryDevelopmentTools?.().then(
+  ([review, toolbar]) => {
+    review.mountKpAnimationLibraryDevReview(window);
+    toolbar.mountKpDevelopmentToolbar(window);
   }
 );
 

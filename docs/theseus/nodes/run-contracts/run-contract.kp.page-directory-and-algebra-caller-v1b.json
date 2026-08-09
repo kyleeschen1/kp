@@ -137,7 +137,8 @@
     {
       "id": "s15",
       "title": "diagnostic-page-coverage",
-      "status": "planned"
+      "summary": "Added the universal page directory to both direct diagnostics while preserving their Review capture and suppressing nested embedded toolbars.",
+      "status": "complete"
     },
     {
       "id": "s16",

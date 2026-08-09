@@ -940,8 +940,11 @@ reviewGallery.markReady();
 markKpAnimationHostReady(window);
 
 if (import.meta.env.DEV) {
-  const { mountKpDevReview } = await import("../dev-review/review-bootstrap.ts");
-  mountKpDevReview({
+  const [reviewClient, toolbarClient] = await Promise.all([
+    import("../dev-review/review-bootstrap.ts"),
+    import("../dev-toolbar/development-toolbar-bootstrap.ts")
+  ]);
+  reviewClient.mountKpDevReview({
     provider: {
       id: "experiment.real-katex-glyph-compositor",
       matches: () => true,
@@ -971,6 +974,10 @@ if (import.meta.env.DEV) {
     placement: (width) =>
       width >= 881 ? "left-prose-rail" : "captured-moment-sheet"
   });
+  // Embedded Animation Library representations defer to their outer host.
+  if (window.frameElement?.hasAttribute("data-animation-library-frame") !== true) {
+    toolbarClient.mountKpDevelopmentToolbar(window);
+  }
 }
 
 function guideRect(selector: string): KpStageRelativeRect {
