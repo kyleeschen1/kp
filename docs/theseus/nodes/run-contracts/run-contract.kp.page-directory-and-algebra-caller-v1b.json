@@ -95,7 +95,8 @@
     {
       "id": "s08",
       "title": "wide-toolbar-fit",
-      "status": "planned"
+      "summary": "Fit the four-group Pages overlay into the accepted wide toolbar using existing theme tokens, bounded overflow, real focus styles, and geometry-backed visual coverage.",
+      "status": "complete"
     },
     {
       "id": "s09",

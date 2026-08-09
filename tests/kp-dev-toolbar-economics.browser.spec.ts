@@ -41,6 +41,42 @@ test("economics exposes one persistent bottom development toolbar", async ({ pag
   });
 });
 
+test("the Pages directory fits the accepted wide toolbar surface", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(route);
+  const toolbar = page.getByRole("complementary", { name: "Development tools" });
+  const pages = toolbar.locator("[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']");
+
+  await pages.getByText("Pages", { exact: true }).click();
+  const navigation = pages.getByRole("navigation", { name: "Development pages" });
+  await expect(navigation).toBeVisible();
+  const geometry = await navigation.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const toolbarBounds = element.closest("[data-kp-dev-toolbar]")!
+      .getBoundingClientRect();
+    return {
+      left: bounds.left,
+      right: bounds.right,
+      top: bounds.top,
+      bottom: bounds.bottom,
+      toolbarTop: toolbarBounds.top,
+      columns: getComputedStyle(element).gridTemplateColumns.split(" ").length
+    };
+  });
+
+  expect(geometry.left).toBeGreaterThanOrEqual(16);
+  expect(geometry.right).toBeLessThanOrEqual(1424);
+  expect(geometry.top).toBeGreaterThanOrEqual(16);
+  expect(geometry.bottom).toBeLessThan(geometry.toolbarTop);
+  expect(geometry.columns).toBe(4);
+  await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
+  await expect(toolbar.getByRole("button", { name: "Edit" })).toBeVisible();
+  await page.screenshot({
+    path: "tmp/codex/economics-dev-toolbar-pages-wide.png",
+    fullPage: false
+  });
+});
+
 test("toolbar view changes retain semantic state without replay", async ({ page }) => {
   await page.goto(
     `${route}?view=two-column-scroll&theme=light` +

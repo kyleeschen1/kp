@@ -89,6 +89,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-09T21:57:00.674Z",
       "notes": "Four Chromium cases passed with native Enter/Tab navigation and Escape focus restoration."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "s08 wide toolbar fit",
+      "checkedAt": "2026-08-09T22:02:36.526Z",
+      "notes": "Five Chromium checks passed after one transient development-server reload; deterministic rerun passed and the captured Pages surface stays inside the 1440x900 viewport above the toolbar with four groups and visible Review/Edit controls."
     }
   ],
   "progress": {
