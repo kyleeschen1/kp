@@ -110,6 +110,13 @@
       "scope": "s10 economics Pages exemplar",
       "checkedAt": "2026-08-09T22:13:06.941Z",
       "notes": "Eight Chromium cases passed, including Review/Pages/Layout/Edit/Theme order, current economics marker, Lisp link navigation in a second tab, and retained original economics checkpoint and 0.7200 progress."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "s11 root SPA coverage",
+      "checkedAt": "2026-08-09T22:15:31.673Z",
+      "notes": "Fifteen Chromium cases passed; catalogue, editor, dashboard, animation host, workbench, FTC, and concept room each expose exactly one toolbar and one correct current page marker."
     }
   ],
   "progress": {

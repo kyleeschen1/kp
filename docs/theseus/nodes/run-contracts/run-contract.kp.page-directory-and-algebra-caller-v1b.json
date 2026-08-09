@@ -113,7 +113,8 @@
     {
       "id": "s11",
       "title": "root-spa-page-coverage",
-      "status": "planned"
+      "summary": "Covered all seven root-SPA and concept-room surfaces with one development page directory and exact query-aware current-page identity.",
+      "status": "complete"
     },
     {
       "id": "s12",

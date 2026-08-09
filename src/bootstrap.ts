@@ -77,6 +77,7 @@ async function bootstrap(): Promise<void> {
     return;
   }
 
+  await mountDevelopmentToolbar();
   await import("katex/dist/katex.min.css");
   const [shell, runtimeModule, themeModule] = await Promise.all([
     import("./app-adapters/concept-room-shell.ts"),
