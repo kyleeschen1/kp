@@ -1,0 +1,75 @@
+{
+  "id": "next-action.kp.page-directory-and-algebra-caller-v1",
+  "kind": "next-action",
+  "title": "Deliver the universal development page directory and second algebra article caller",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-page-directory-and-algebra-caller-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.article-v1-reader-payload-recovery-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:dev-toolbar",
+    "npm run test:kp-article-v1",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run check:reader-budgets",
+    "npm test"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-09T21:39:14.728Z",
+      "notes": "14 toolbar tests passed, including five new descriptor and matching cases."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice s01 defined and verified the dependency-free page descriptor and current-page matching contract."
+  },
+  "expectedLearning": [
+    "Whether one host-owned page directory can cover every supported development route without entering production closure.",
+    "Whether the second kp.article.v1 caller is materially cheaper and reveals one caller-proven seam."
+  ],
+  "allowedWork": [
+    "Universal development page directory and route mounts.",
+    "Compact fraction-composition article caller through the frozen article contract."
+  ],
+  "disallowedWork": [
+    "User economics edits, layout redesign, grammar expansion, new semantic truth, new renderer, or new clock."
+  ],
+  "criteria": [
+    {
+      "id": "page-directory-all-supported-pages",
+      "weight": "high"
+    },
+    {
+      "id": "development-only-production-isolation",
+      "weight": "high"
+    },
+    {
+      "id": "algebra-second-caller-static-interactive-authoring",
+      "weight": "high"
+    },
+    {
+      "id": "existing-runtime-reuse",
+      "weight": "high"
+    },
+    {
+      "id": "human-teaching-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

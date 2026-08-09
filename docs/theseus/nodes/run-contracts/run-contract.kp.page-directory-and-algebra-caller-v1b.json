@@ -1,0 +1,205 @@
+{
+  "id": "run-contract.kp.page-directory-and-algebra-caller-v1b",
+  "kind": "run-contract",
+  "title": "KP page directory and algebra caller",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.page-directory-and-algebra-caller-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-page-directory-and-algebra-caller-long-loop-proposal.md",
+      "summary": "Human-approved exact 30-slice proposal, boundaries, checks, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:dev-toolbar",
+    "npm run visual:economics-dev-toolbar",
+    "npm run test:kp-article-v1",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run test:browser:reader-conformance",
+    "npm test",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Development toolbar protocol, DOM, CSS, dependency-light page directory metadata, supported development-only route mounts, and scoped checks.",
+    "A new fraction-composition kp.article.v1 source, lock, vignette, static-first route, minimum caller-proven shared seams, and exact verification evidence."
+  ],
+  "disallowedWork": [
+    "Learner-facing global navigation, layout redesign, article grammar changes, a new semantic model, renderer, or clock.",
+    "User economics edits, advanced CodeMirror features, Internal Studio, Public Web, Graph3D, Lisp promotion, and matrix-vector work."
+  ],
+  "goal": "Make every supported development page reachable from a host-owned bottom Pages directory, then publish and verify a compact fraction-composition algebra article as the second kp.article.v1 caller.",
+  "target": "next-action.kp.page-directory-and-algebra-caller-v1",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each independently verified slice without staging user economics edits or unrelated files.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if development page-directory code enters production output or an established reader budget regresses.",
+    "Stop if a supported link requires test-fixture exposure, cross-repository mutation, or destructive work.",
+    "Stop if the algebra caller requires changing the frozen article grammar, replacing canonical fraction-composition semantics, or introducing another clock.",
+    "Stop if user-owned economics changes would need to be overwritten or committed.",
+    "Stop if deterministic checks cannot establish semantic correctness or direct state reconstruction.",
+    "Stop at slice s30 for mandatory human visual and editorial review."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "page-descriptor-contract",
+      "summary": "Added a frozen root-relative development page descriptor and query-aware current-page matcher with focused conformance tests.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "page-directory-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "page-directory-drift-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "addressable-dashboard-route",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "host-owned-pages-control",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "grouped-real-link-renderer",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "keyboard-focus-behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "wide-toolbar-fit",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "responsive-toolbar-fit",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "economics-pages-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "root-spa-page-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "lisp-page-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "common-reader-page-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "specialized-reader-page-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "diagnostic-page-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "all-page-link-audit",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "production-isolation-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "navigation-tranche-closeout",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "algebra-teaching-brief",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "fraction-composition-vignette",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "algebra-article-source",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "second-caller-compilation",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "algebra-tutorial-route",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "fraction-composition-runtime-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "algebra-semantic-navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "algebra-url-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "algebra-whole-file-authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "algebra-publication-conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "algebra-release-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "algebra-human-checkpoint",
+      "status": "planned"
+    }
+  ]
+}
