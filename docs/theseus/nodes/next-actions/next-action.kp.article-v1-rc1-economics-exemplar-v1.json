@@ -199,6 +199,34 @@
       "scope": "s11-static-html-math",
       "checkedAt": "2026-08-09T05:38:43.397Z",
       "notes": "Production_build_passed_with_build_only_KaTeX_compiler_tree_shaken_from_client_entries"
+    },
+    {
+      "command": "npm_run_test_kp_article_rc1",
+      "status": "passed",
+      "scope": "s12-accessibility",
+      "checkedAt": "2026-08-09T05:46:33.325Z",
+      "notes": "56_RC1_tests_passed_including_required_names_summaries_checkpoint_fallbacks_context_labels_and_direct_reduced_motion_seeks"
+    },
+    {
+      "command": "npm_run_test_economics_demand_shift_tutorial",
+      "status": "passed",
+      "scope": "s12-accessibility-preservation",
+      "checkedAt": "2026-08-09T05:46:34.309Z",
+      "notes": "110_existing_economics_tests_passed_without_semantic_or_choreography_drift"
+    },
+    {
+      "command": "npm_run_build",
+      "status": "passed",
+      "scope": "s12-accessibility-production",
+      "checkedAt": "2026-08-09T05:46:35.202Z",
+      "notes": "Typecheck_publication_freshness_and_production_build_passed"
+    },
+    {
+      "command": "npm_run_test_browser_economics_demand_shift_accessibility",
+      "status": "failed",
+      "scope": "s12-environment",
+      "checkedAt": "2026-08-09T05:46:36.084Z",
+      "notes": "Browser_suite_could_not_start_because_user_owned_dev_browser_server_PID_61294_occupies_4173_and_config_intentionally_forbids_reuse_no_product_assertion_ran"
     }
   ],
   "expectedLearning": [

@@ -8,7 +8,7 @@
       "vignetteId": "vignette.economics.demand-shift",
       "requestedMajor": 1,
       "version": "1.1.0",
-      "integrity": "sha256:aabe5552ae410aec4d2aa4a51843eed3f847dcab19c1fa3df5c8fcdf9ede56c6",
+      "integrity": "sha256:c21624c64a35a5e26302639ffe8c1a3b89ab6a3dc447a5f3b0dfc75ad26bb393",
       "moduleSpecifier": "../../tutorial/economics-demand-shift/economics-demand-shift-animation-capability.ts"
     }
   ]

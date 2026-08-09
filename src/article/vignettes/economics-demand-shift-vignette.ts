@@ -24,7 +24,7 @@ export const economicsDemandShiftVignetteStaticRelease = createKpVignetteRelease
   schemaVersion: "kp.vignette-release.v1",
   id: "vignette.economics.demand-shift",
   version: "1.1.0",
-  integrity: "sha256:aabe5552ae410aec4d2aa4a51843eed3f847dcab19c1fa3df5c8fcdf9ede56c6",
+  integrity: "sha256:c21624c64a35a5e26302639ffe8c1a3b89ab6a3dc447a5f3b0dfc75ad26bb393",
   moduleSpecifier:
     "../../tutorial/economics-demand-shift/economics-demand-shift-animation-capability.ts",
   animationId: "animation.economics.supply-demand-equilibrium-shift",
@@ -38,6 +38,11 @@ export const economicsDemandShiftVignetteStaticRelease = createKpVignetteRelease
   ],
   transitionPaths: ["shift-demand"],
   checkpointPaths: ["initial", "settled"],
+  accessibility: {
+    accessibleName: "Supply and demand equilibrium graph",
+    semanticSummary: "A supply curve stays fixed while demand shifts right, moving equilibrium to a higher price and quantity.",
+    reducedMotion: "direct-checkpoint-seek"
+  },
   staticProjection: {
     checkpoints: [
       {

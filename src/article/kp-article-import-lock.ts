@@ -15,6 +15,13 @@ export interface KpVignetteReleasePayload {
   readonly transitionPaths: readonly string[];
   readonly checkpointPaths: readonly string[];
   readonly staticProjection?: KpVignetteStaticProjection;
+  readonly accessibility?: KpVignetteAccessibility;
+}
+
+export interface KpVignetteAccessibility {
+  readonly accessibleName: string;
+  readonly semanticSummary: string;
+  readonly reducedMotion: "direct-checkpoint-seek";
 }
 
 export interface KpVignetteStaticProjection {
@@ -114,6 +121,9 @@ export function createKpVignetteRelease(
   const staticProjection = input.staticProjection === undefined
     ? undefined
     : normalizeStaticProjection(input.staticProjection, checkpointPaths, transitionPaths);
+  const accessibility = input.accessibility === undefined
+    ? undefined
+    : normalizeAccessibility(input.accessibility);
   return Object.freeze({
     schemaVersion: input.schemaVersion,
     id: input.id,
@@ -124,7 +134,8 @@ export function createKpVignetteRelease(
     objectPaths,
     transitionPaths,
     checkpointPaths,
-    ...(staticProjection === undefined ? {} : { staticProjection })
+    ...(staticProjection === undefined ? {} : { staticProjection }),
+    ...(accessibility === undefined ? {} : { accessibility })
   });
 }
 
@@ -140,7 +151,8 @@ export function serializeKpVignetteReleasePayload(
     objectPaths: release.objectPaths,
     transitionPaths: release.transitionPaths,
     checkpointPaths: release.checkpointPaths,
-    ...(release.staticProjection === undefined ? {} : { staticProjection: release.staticProjection })
+    ...(release.staticProjection === undefined ? {} : { staticProjection: release.staticProjection }),
+    ...(release.accessibility === undefined ? {} : { accessibility: release.accessibility })
   };
   return JSON.stringify(payload);
 }
@@ -359,6 +371,19 @@ function normalizeStaticProjection(
     checkpoints: Object.freeze(checkpoints),
     transitions: Object.freeze(transitions)
   });
+}
+
+function normalizeAccessibility(
+  accessibility: KpVignetteAccessibility
+): KpVignetteAccessibility {
+  if (
+    accessibility.accessibleName.trim().length === 0
+    || accessibility.semanticSummary.trim().length === 0
+    || accessibility.reducedMotion !== "direct-checkpoint-seek"
+  ) {
+    throw new KpArticleImportLockError("import-release-invalid", "Invalid vignette accessibility contract.");
+  }
+  return Object.freeze({ ...accessibility });
 }
 
 function parseRequest(request: string): Readonly<{ id: string; major: number }> {

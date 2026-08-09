@@ -123,7 +123,8 @@
     {
       "id": "s12-accessibility",
       "title": "Accessibility and reduced-motion contract",
-      "status": "planned"
+      "summary": "Added_locked_vignette_accessibility_metadata_article_stage_manifests_and_direct_reduced_motion_checkpoint_seeks_with_fail_closed_public_compilation.",
+      "status": "complete"
     },
     {
       "id": "s13-stage-manifests",
