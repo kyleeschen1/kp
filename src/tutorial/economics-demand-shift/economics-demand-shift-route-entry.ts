@@ -6,6 +6,12 @@ import {
   writeKpEconomicsDemandShiftView,
   type KpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
+import {
+  captureKpEconomicsDemandShiftRouteHandoff,
+  projectKpEconomicsDemandShiftHandoffSearch,
+  restoreKpEconomicsDemandShiftRouteScroll,
+  type KpEconomicsDemandShiftRouteHandoff
+} from "./economics-demand-shift-route-handoff.ts";
 
 type KpEconomicsDevToolbarClient = typeof import("./economics-demand-shift-dev-toolbar.ts");
 
@@ -58,11 +64,16 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     );
   };
 
-  const mount = async (search: string, hash: string): Promise<void> => {
-    if (disposed || activeSearch === search) return;
+  const mount = async (
+    search: string,
+    hash: string,
+    handoff?: KpEconomicsDemandShiftRouteHandoff
+  ): Promise<void> => {
+    const routeKey = `${search}${hash}`;
+    if (disposed || activeSearch === routeKey) return;
     activeDispose?.();
     activeDispose = undefined;
-    activeSearch = search;
+    activeSearch = routeKey;
     const view = readKpEconomicsDemandShiftView(search);
     document.documentElement.dataset["kpEconomicsView"] = view;
     syncViewSelector(input.root, view);
@@ -73,11 +84,17 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       const tutorial = await import(
         "./economics-demand-shift-progressive-entry.ts"
       );
-      if (disposed || activeSearch !== search) return;
+      if (disposed || activeSearch !== routeKey) return;
       activeDispose = await tutorial.enhanceKpEconomicsDemandShiftPublication({
         root: input.root,
         search,
-        hash
+        hash,
+        handoff
+      });
+      if (handoff !== undefined) restoreKpEconomicsDemandShiftRouteScroll({
+        root: input.root,
+        ownerWindow: window,
+        handoff
       });
       syncViewSelector(input.root, view);
       devToolbar?.update(search);
@@ -86,32 +103,50 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     const tutorial = await import(
       "./economics-demand-shift-tutorial-entry.ts"
     );
-    if (disposed || activeSearch !== search) return;
+    if (disposed || activeSearch !== routeKey) return;
     activeDispose = await tutorial.mountKpEconomicsDemandShiftTutorial({
       root: input.root,
       search,
-      hash
+      hash,
+      handoff
+    });
+    if (handoff !== undefined) restoreKpEconomicsDemandShiftRouteScroll({
+      root: input.root,
+      ownerWindow: window,
+      handoff
     });
     syncViewSelector(input.root, view);
     devToolbar?.update(search);
   };
 
-  const enqueueMount = (search: string, hash: string): Promise<void> => {
-    transition = transition.then(() => mount(search, hash));
+  const enqueueMount = (
+    search: string,
+    hash: string,
+    handoff?: KpEconomicsDemandShiftRouteHandoff
+  ): Promise<void> => {
+    transition = transition.then(() => mount(search, hash, handoff));
     return transition;
   };
 
   const navigate = async (
     request: KpEconomicsDemandShiftRouteRequest
   ): Promise<void> => {
+    const handoff = captureKpEconomicsDemandShiftRouteHandoff({
+      root: input.root,
+      scrollY: window.scrollY
+    });
+    const search = projectKpEconomicsDemandShiftHandoffSearch({
+      search: request.search,
+      handoff
+    });
     const hash = request.hash ?? window.location.hash;
-    const url = `${window.location.pathname}${request.search}${hash}`;
+    const url = `${window.location.pathname}${search}${hash}`;
     if (request.history === "replace") {
       window.history.replaceState(window.history.state, "", url);
     } else {
       window.history.pushState(window.history.state, "", url);
     }
-    await enqueueMount(request.search, hash);
+    await enqueueMount(search, hash, handoff);
   };
 
   const onPopState = (): void => {
@@ -133,7 +168,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
         search: window.location.search,
         view
       }),
-      hash: "",
+      hash: window.location.hash,
       history: "push"
     });
   };

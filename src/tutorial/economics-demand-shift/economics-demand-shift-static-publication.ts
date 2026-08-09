@@ -158,7 +158,7 @@ function renderDeck(publication: KpEconomicsDemandShiftPublication): string {
           if (passage === undefined) {
             throw new Error(`Deck scene ${scene.id} references missing passage ${scene.passageId}.`);
           }
-          return `<section class="kp-economics-static-publication__deck-scene" data-kp-economics-deck-scene="${escapeAttribute(scene.id)}" data-kp-economics-deck-scene-active="${index === 0}" aria-labelledby="kp-economics-deck-heading-${escapeAttribute(scene.id)}">
+          return `<section class="kp-economics-static-publication__deck-scene" data-kp-economics-deck-scene="${escapeAttribute(scene.id)}" data-kp-economics-deck-passage="${escapeAttribute(scene.passageId)}" data-kp-economics-deck-scene-active="${index === 0}" aria-labelledby="kp-economics-deck-heading-${escapeAttribute(scene.id)}">
             <h3 id="kp-economics-deck-heading-${escapeAttribute(scene.id)}">${escapeHtml(scene.label)}</h3>
             ${passage.paragraphs.map(({ html }) => `<p>${html}</p>`).join("")}
           </section>`;

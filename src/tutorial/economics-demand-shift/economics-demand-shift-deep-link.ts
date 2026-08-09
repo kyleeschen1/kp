@@ -83,6 +83,43 @@ export function resolveKpEconomicsDemandShiftInitialDestination(input: {
   });
 }
 
+export function applyKpEconomicsDemandShiftRouteHandoff(input: {
+  readonly initial: KpEconomicsDemandShiftInitialDestination;
+  readonly blockId: KpEconomicsMotionBlockId;
+  readonly progress: number;
+  readonly passageId: string;
+}): KpEconomicsDemandShiftInitialDestination {
+  const block = findKpEconomicsMotionBlock(input.blockId)!;
+  const destination = input.initial.destination ?? Object.freeze({
+    kind: "block" as const,
+    id: block.id
+  });
+  const checkpointIndex = kpEconomicsDemandShiftCheckpoints.findIndex(
+    ({ passageId }) => passageId === input.passageId
+  );
+  const motion = projectKpEconomicsLessonMotion({
+    activeBlockId: block.id,
+    localProgress: input.progress
+  });
+  return Object.freeze({
+    destination,
+    targetElementId: `kp-${destination.kind}-${destination.id}`,
+    passageId: input.passageId,
+    checkpointIndex: checkpointIndex < 0
+      ? input.initial.checkpointIndex
+      : checkpointIndex,
+    motion,
+    motionScroll: Object.freeze({
+      blockId: block.id,
+      travel: resolveKpTutorialCorridorTravelForProgress({
+        corridor: block.corridor,
+        progress: input.progress,
+        preferredTravel: 0.5
+      })
+    })
+  });
+}
+
 function projectionForPassage(
   lesson: KpEconomicsDemandShiftLesson,
   passageId: string,

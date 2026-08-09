@@ -71,6 +71,8 @@ import {
 import {
   readKpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
+import type { KpEconomicsDemandShiftRouteHandoff } from
+  "./economics-demand-shift-route-handoff.ts";
 
 interface KpPublishedEconomicsPlayback {
   blockId: KpEconomicsMotionBlockId;
@@ -98,6 +100,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   readonly root: HTMLElement;
   readonly search: string;
   readonly hash: string;
+  readonly handoff?: KpEconomicsDemandShiftRouteHandoff | undefined;
 }): Promise<() => void> {
   const extant = enhancementSessions.get(input.root);
   if (extant !== undefined) return extant;
@@ -140,12 +143,12 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       destination: parsedInitialDestination
     });
   const playback: KpPublishedEconomicsPlayback = {
-    blockId: deckEnabled
+    blockId: input.handoff?.blockId ?? (deckEnabled
       ? initialDeckScene.target.blockId
-      : initialDestination?.blockId ?? "demand-shift",
-    progress: deckEnabled
+      : initialDestination?.blockId ?? "demand-shift"),
+    progress: input.handoff?.progress ?? (deckEnabled
       ? initialDeckScene.target.progress
-      : initialDestination?.progress ?? 0,
+      : initialDestination?.progress ?? 0),
     status: "paused"
   };
   const initialRuntimeFrame = economicsFrame(
@@ -528,16 +531,25 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     stopPlayback();
     if (deckEnabled) {
       selectDeckScene(deckSceneIndex, false, false);
+      if (input.handoff !== undefined) {
+        apply(input.handoff.blockId, input.handoff.progress);
+      }
       return;
     }
     if (initialDestination === undefined) {
-      apply("demand-shift", 0);
+      apply(
+        input.handoff?.blockId ?? "demand-shift",
+        input.handoff?.progress ?? 0
+      );
       return;
     }
     navigationController.apply(initialDestination.destination, {
       source: "initial",
       scroll: true
     });
+    if (input.handoff !== undefined) {
+      apply(input.handoff.blockId, input.handoff.progress);
+    }
   };
 
   publicationRoot.addEventListener(KP_TUTORIAL_SCRUB_SEEK_EVENT, onSeek);

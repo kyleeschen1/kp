@@ -159,7 +159,8 @@
     {
       "id": "s18-toolbar-state",
       "title": "Toolbar state handoff",
-      "status": "planned"
+      "summary": "Preserved exact economics playhead, passage-relative viewport position, semantic hash, theme, derived deck scene, and one persistent Review identity across toolbar view changes.",
+      "status": "complete"
     },
     {
       "id": "s19-language-service",

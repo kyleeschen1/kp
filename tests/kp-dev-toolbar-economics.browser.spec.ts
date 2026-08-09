@@ -40,3 +40,58 @@ test("economics exposes one persistent bottom development toolbar", async ({ pag
     fullPage: false
   });
 });
+
+test("toolbar view changes retain semantic state without replay", async ({ page }) => {
+  await page.goto(
+    `${route}?view=two-column-scroll&theme=light` +
+    "#kp-checkpoint-shift-handoff"
+  );
+  const toolbar = page.getByRole("complementary", { name: "Development tools" });
+  const presenter = page.locator("[data-kp-tutorial-review-root]");
+  await expect(presenter).toHaveAttribute("data-kp-tutorial-review-progress", "0.7200");
+  await expect(presenter).toHaveAttribute(
+    "data-kp-tutorial-review-passage",
+    "follow-shift"
+  );
+  const initialAnchorTop = await presenter.locator(
+    '[data-kp-economics-tutorial-passage="follow-shift"]'
+  ).evaluate((element) => element.getBoundingClientRect().top);
+  await page.locator("[data-kp-dev-review-shell]").evaluate((shell) => {
+    shell.dataset["kpTestReviewIdentity"] = "retained";
+  });
+
+  await toolbar.getByRole("combobox", { name: "Layout" }).selectOption("deck");
+  await expect(page).toHaveURL(/view=deck/u);
+  await expect(page).toHaveURL(/theme=light/u);
+  await expect(page).toHaveURL(/scene=shift-demand/u);
+  await expect(page).toHaveURL(/#kp-checkpoint-shift-handoff$/u);
+  const publication = page.locator("[data-kp-economics-static-publication]");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-tutorial-motion-progress",
+    "0.720"
+  );
+  const deckAnchor = publication.locator(
+    '[data-kp-economics-deck-passage="follow-shift"]'
+  );
+  await expect(deckAnchor).toHaveAttribute(
+    "data-kp-economics-deck-scene-active",
+    "true"
+  );
+  await expect.poll(async () => Math.abs(
+    await deckAnchor.evaluate((element) => element.getBoundingClientRect().top) -
+      initialAnchorTop
+  )).toBeLessThan(8);
+  await expect(page.locator(
+    '[data-kp-dev-review-shell][data-kp-test-review-identity="retained"]'
+  )).toHaveCount(1);
+
+  await toolbar.getByRole("combobox", { name: "Layout" }).selectOption("reader");
+  await expect(page).toHaveURL(/view=reader/u);
+  await expect(page).toHaveURL(/theme=light/u);
+  await expect(page).toHaveURL(/#kp-checkpoint-shift-handoff$/u);
+  await expect(page.locator("[data-kp-economics-static-publication]"))
+    .toHaveAttribute("data-kp-economics-tutorial-motion-progress", "0.720");
+  await expect(page.locator(
+    '[data-kp-dev-review-shell][data-kp-test-review-identity="retained"]'
+  )).toHaveCount(1);
+});

@@ -17,8 +17,11 @@ import {
   readKpEconomicsDemandShiftCompiledPublication
 } from "./economics-demand-shift-compiled-publication.ts";
 import {
+  applyKpEconomicsDemandShiftRouteHandoff,
   resolveKpEconomicsDemandShiftInitialDestination
 } from "./economics-demand-shift-deep-link.ts";
+import type { KpEconomicsDemandShiftRouteHandoff } from
+  "./economics-demand-shift-route-handoff.ts";
 import {
   readKpEconomicsDemandShiftPresentationLayout,
   readKpEconomicsMotionBridgeDwellProfile,
@@ -40,6 +43,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
   readonly search: string;
   readonly hash: string;
+  readonly handoff?: KpEconomicsDemandShiftRouteHandoff | undefined;
 }): Promise<() => void> {
   // The optional presenter owns its complete tree. Remove the published
   // document before Svelte appends so hidden duplicate IDs, TOCs, and graph
@@ -69,10 +73,16 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
     createKpEconomicsDemandShiftAnimationCapability();
   const publication = readKpEconomicsDemandShiftCompiledPublication();
   const scrubStrategy = readKpEconomicsScrollScrubStrategy(input.search);
-  const initialDestination = resolveKpEconomicsDemandShiftInitialDestination({
+  const resolvedInitialDestination = resolveKpEconomicsDemandShiftInitialDestination({
     lesson: publication.lesson,
     hash: input.hash
   });
+  const initialDestination = input.handoff === undefined
+    ? resolvedInitialDestination
+    : applyKpEconomicsDemandShiftRouteHandoff({
+      initial: resolvedInitialDestination,
+      ...input.handoff
+    });
   const prepared = await createKpAnimationCatalogueSelectionPreparationService({
     descriptors
   }).prepare({

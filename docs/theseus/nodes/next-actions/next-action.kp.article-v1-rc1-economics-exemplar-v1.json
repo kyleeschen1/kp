@@ -318,6 +318,27 @@
       "scope": "slice 17 production closure",
       "checkedAt": "2026-08-09T06:21:59.666Z",
       "notes": "Production build passed and 10 forbidden review/toolbar markers were absent from 368 emitted files."
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "slice 18 direct-navigation state handoff",
+      "checkedAt": "2026-08-09T06:35:00.929Z",
+      "notes": "Four browser checks passed; a 0.72 playhead round-tripped from two-column to deck to reader with theme, semantic hash, derived scene, passage viewport position, and the same Review shell."
+    },
+    {
+      "command": "npm run test:dev-toolbar and npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice 18 handoff and economics preservation",
+      "checkedAt": "2026-08-09T06:35:01.895Z",
+      "notes": "Nine toolbar/handoff tests and 110 economics tests passed."
+    },
+    {
+      "command": "npm run test:compiled-publication-artifact and npm run build and npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice 18 generated publication and closure",
+      "checkedAt": "2026-08-09T06:35:02.793Z",
+      "notes": "Six artifact tests, publication freshness, production build, and 10-marker tooling closure passed."
     }
   ],
   "expectedLearning": [
