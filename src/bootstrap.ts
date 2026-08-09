@@ -17,12 +17,24 @@ import {
   isKpLispFunctionApplicationTutorialRoute
 } from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
 
+type KpDevelopmentToolbarClient = typeof import(
+  "./dev-toolbar/development-toolbar-bootstrap.ts"
+);
+
+// Vite can erase this branch and its entire tooling graph from production.
+const loadKpDevelopmentToolbar:
+  | (() => Promise<KpDevelopmentToolbarClient>)
+  | undefined = import.meta.env.DEV
+    ? () => import("./dev-toolbar/development-toolbar-bootstrap.ts")
+    : undefined;
+
 const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
 
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>("#app");
   if (root === null) throw new Error("Expected #app root element to exist.");
   if (isKpLispFunctionApplicationTutorialRoute(window.location.pathname)) {
+    await mountDevelopmentToolbar();
     const tutorial = await import(
       "./tutorial/lisp-function-application/lisp-function-application-tutorial-entry.ts"
     );
@@ -31,6 +43,7 @@ async function bootstrap(): Promise<void> {
     return;
   }
   if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
+    await mountDevelopmentToolbar();
     const route = await import(
       "./tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts"
     );
@@ -48,6 +61,7 @@ async function bootstrap(): Promise<void> {
   );
   if (entry === undefined) {
     if (readKpAnimationCatalogueRoute(window.location.search).active) {
+      await mountDevelopmentToolbar();
       const catalogue = await import(
         "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
       );
@@ -58,6 +72,7 @@ async function bootstrap(): Promise<void> {
       window.addEventListener("pagehide", dispose, { once: true });
       return;
     }
+    await mountDevelopmentToolbar();
     await import("./main.ts");
     return;
   }
@@ -90,6 +105,13 @@ async function bootstrap(): Promise<void> {
   }
   window.addEventListener("pagehide", () => handle.dispose(), { once: true });
   root.dataset["kpConceptRoomMounted"] = "true";
+}
+
+async function mountDevelopmentToolbar(): Promise<void> {
+  if (loadKpDevelopmentToolbar === undefined) return;
+  const client = await loadKpDevelopmentToolbar();
+  const session = client.mountKpDevelopmentToolbar(window);
+  window.addEventListener("pagehide", session.dispose, { once: true });
 }
 
 void bootstrap();

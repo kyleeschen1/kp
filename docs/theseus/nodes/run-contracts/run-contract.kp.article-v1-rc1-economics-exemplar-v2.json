@@ -153,7 +153,8 @@
     {
       "id": "s17-toolbar-rollout",
       "title": "Development-route toolbar rollout",
-      "status": "planned"
+      "summary": "Installed one application-shell toolbar across Lisp, economics, catalogue, and main development routes; routes retain review providers and contextual contributions while production erases the complete tooling graph.",
+      "status": "complete"
     },
     {
       "id": "s18-toolbar-state",

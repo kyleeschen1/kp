@@ -297,6 +297,27 @@
       "scope": "slice 16 economics preservation",
       "checkedAt": "2026-08-09T06:08:17.627Z",
       "notes": "110 tests passed"
+    },
+    {
+      "command": "npm run visual:economics-dev-toolbar",
+      "status": "passed",
+      "scope": "slice 17 shared development-route toolbar",
+      "checkedAt": "2026-08-09T06:21:57.764Z",
+      "notes": "Economics, Lisp, and animation catalogue each expose one persistent toolbar; Review opens the existing route-specific shell and legacy launchers stay hidden."
+    },
+    {
+      "command": "npm run typecheck and npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "slice 17 toolbar lifecycle and types",
+      "checkedAt": "2026-08-09T06:21:58.768Z",
+      "notes": "TypeScript, Svelte, domain checks and seven focused toolbar tests passed."
+    },
+    {
+      "command": "npm run build and npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice 17 production closure",
+      "checkedAt": "2026-08-09T06:21:59.666Z",
+      "notes": "Production build passed and 10 forbidden review/toolbar markers were absent from 368 emitted files."
     }
   ],
   "expectedLearning": [

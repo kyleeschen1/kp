@@ -55,7 +55,7 @@ test("interaction remains unloaded until direct address or near-viewport demand"
 test("semantic fragments directly activate their owning stage without replay", async () => {
   let resolveLoad!: (session: { id: string }) => void;
   const changes: KpArticleStageActivation[] = [];
-  const controller = createKpArticleStageActivationController({
+  const controller = createKpArticleStageActivationController<{ id: string }>({
     manifests: compileManifests(),
     load: () => new Promise((resolve) => { resolveLoad = resolve; }),
     onChange: (change) => changes.push(change)

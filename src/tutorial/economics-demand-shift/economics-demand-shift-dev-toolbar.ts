@@ -1,10 +1,5 @@
-import {
-  mountKpDevToolbar,
-  type KpMountedDevToolbar
-} from "../../dev-toolbar/dev-toolbar-dom.ts";
-import {
-  kpDevToolbarReviewControlId,
-} from "../../dev-toolbar/dev-toolbar-protocol.ts";
+import { getKpDevelopmentToolbar } from
+  "../../dev-toolbar/development-toolbar-bootstrap.ts";
 import { mountKpTutorialDevReview } from "../../dev-review/tutorial-review-bootstrap.ts";
 import {
   writeKpEconomicsDemandShiftTheme
@@ -27,44 +22,38 @@ export function mountKpEconomicsDemandShiftDevToolbar(input: {
   readonly navigate: (search: string) => void;
 }): KpEconomicsDemandShiftDevToolbar {
   const ownerWindow = input.ownerWindow ?? window;
+  const toolbar = getKpDevelopmentToolbar(ownerWindow);
+  if (toolbar === undefined) {
+    throw new Error("The application development toolbar is not mounted.");
+  }
   const disposeReview = mountKpTutorialDevReview(ownerWindow);
-  const reviewShell = ownerWindow.document.querySelector<HTMLElement>(
-    "[data-kp-dev-review-shell]"
-  );
-  const launcher = reviewShell?.shadowRoot?.querySelector<HTMLButtonElement>(".launcher");
-  if (launcher !== undefined && launcher !== null) launcher.style.display = "none";
   let search = input.search;
-  let toolbar: KpMountedDevToolbar;
-  toolbar = mountKpDevToolbar({
-    ownerDocument: ownerWindow.document,
-    contribution: createKpEconomicsDevToolbarContribution(search),
-    execute: (command) => {
-      if (command.controlId === kpDevToolbarReviewControlId) {
-        launcher?.click();
-        return;
-      }
-      if (command.controlId === "economics.view" && typeof command.value === "string") {
-        input.navigate(writeKpEconomicsDemandShiftView({
-          search,
-          view: command.value as KpEconomicsDemandShiftView
-        }));
-        return;
-      }
-      if (command.controlId === "economics.theme" && typeof command.value === "boolean") {
-        input.navigate(writeKpEconomicsDemandShiftTheme({
-          search,
-          theme: command.value ? "dark" : "light"
-        }));
-      }
+  const execute = (command: {
+    readonly controlId: string;
+    readonly value?: string | boolean;
+  }): void => {
+    if (command.controlId === "economics.view" && typeof command.value === "string") {
+      input.navigate(writeKpEconomicsDemandShiftView({
+        search,
+        view: command.value as KpEconomicsDemandShiftView
+      }));
+      return;
     }
-  });
+    if (command.controlId === "economics.theme" && typeof command.value === "boolean") {
+      input.navigate(writeKpEconomicsDemandShiftTheme({
+        search,
+        theme: command.value ? "dark" : "light"
+      }));
+    }
+  };
+  toolbar.setRoute(createKpEconomicsDevToolbarContribution(search), execute);
   return Object.freeze({
     update: (nextSearch: string) => {
       search = nextSearch;
-      toolbar.update(createKpEconomicsDevToolbarContribution(search));
+      toolbar.setRoute(createKpEconomicsDevToolbarContribution(search), execute);
     },
     dispose: () => {
-      toolbar.dispose();
+      toolbar.clearRoute("tutorial.economics.demand-shift");
       disposeReview();
     }
   });

@@ -12,12 +12,13 @@ import {
 
 export interface KpMountedDevToolbar {
   readonly update: (contribution: KpDevToolbarRouteContribution) => void;
+  readonly clear: (routeId: string) => void;
   readonly dispose: () => void;
 }
 
 export function mountKpDevToolbar(input: {
   readonly ownerDocument?: Document;
-  readonly contribution: KpDevToolbarRouteContribution;
+  readonly contribution?: KpDevToolbarRouteContribution;
   readonly execute: (command: KpDevToolbarCommand) => void;
 }): KpMountedDevToolbar {
   const ownerDocument = input.ownerDocument ?? document;
@@ -38,12 +39,13 @@ export function mountKpDevToolbar(input: {
     )));
   };
   const unsubscribe = host.subscribe(render);
-  host.setRoute(input.contribution);
+  if (input.contribution !== undefined) host.setRoute(input.contribution);
   ownerDocument.documentElement.dataset["kpDevToolbarActive"] = "true";
   ownerDocument.body.append(toolbar);
 
   return Object.freeze({
     update: host.setRoute,
+    clear: host.clearRoute,
     dispose: () => {
       unsubscribe();
       toolbar.remove();

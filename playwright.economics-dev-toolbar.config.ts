@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: ".",
-  testMatch: "tests/kp-dev-toolbar-economics.browser.spec.ts",
+  testMatch: "tests/kp-dev-toolbar-*.browser.spec.ts",
   outputDir: "tmp/codex/playwright-economics-dev-toolbar",
   timeout: 30_000,
   use: {

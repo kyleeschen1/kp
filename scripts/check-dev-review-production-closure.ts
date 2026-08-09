@@ -9,7 +9,10 @@ const forbidden = [
   "Review this moment",
   "reader-review-bootstrap",
   "data-kp-dev-review-shell",
-  "kp-exact-review-sheet"
+  "kp-exact-review-sheet",
+  "data-kp-dev-toolbar",
+  "Development tools",
+  "kp.dev-toolbar.v1"
 ] as const;
 const candidates = await collectFiles(distRoot);
 const violations: string[] = [];
