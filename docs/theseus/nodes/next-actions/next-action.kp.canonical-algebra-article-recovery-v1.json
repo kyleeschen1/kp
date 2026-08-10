@@ -64,6 +64,20 @@
       "scope": "s01 rejected-presenter removal",
       "checkedAt": "2026-08-10T16:10:49.151Z",
       "notes": "TypeScript and domain checks completed without diagnostics."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-article-v1-fraction-composition-runtime.test.ts",
+      "status": "passed",
+      "scope": "s02 canonical-host provenance",
+      "checkedAt": "2026-08-10T16:17:37.117Z",
+      "notes": "8 focused checks pass; animation identity, canonical representation, route, reader runtime family, and lesson descriptor are jointly locked."
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "s02 catalog provenance compatibility",
+      "checkedAt": "2026-08-10T16:17:38.102Z",
+      "notes": "19 display-catalog checks pass."
     }
   ],
   "expectedLearning": [

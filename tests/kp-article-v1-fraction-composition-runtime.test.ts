@@ -15,6 +15,12 @@ import {
   kpFractionCompositionArticleRuntimeManifest
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-manifest.ts";
 import {
+  fractionCompositionCanonicalHostProvenance
+} from "../src/reader/app/equation-lesson-descriptors/fraction-composition-host-provenance.ts";
+import {
+  createKpAnimationLibraryDisplayCatalog
+} from "../src/editor/animation-library-display-catalog.ts";
+import {
   createKpFractionCompositionArticleRuntimeCheckpoints,
   createKpFractionCompositionArticleRuntimeRanges
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-ranges.ts";
@@ -39,6 +45,40 @@ test("browser runtime manifest equals the build-owned stage projection", () => {
     kpFractionCompositionArticleRuntimeManifest,
     compiled.stageManifests[0]
   );
+});
+
+test("the article locks the certified reader host, not only the animation id", () => {
+  const provenance = fractionCompositionCanonicalHostProvenance;
+  const catalogEntry = createKpAnimationLibraryDisplayCatalog().find(
+    ({ animationId }) => animationId === provenance.animationId
+  );
+  const canonicalHost = catalogEntry?.representations.find(
+    ({ role }) => role === "canonical-host"
+  );
+
+  assert.equal(
+    kpFractionCompositionArticleRuntimeManifest.release.animationId,
+    provenance.animationId
+  );
+  assert.deepEqual(
+    canonicalHost === undefined
+      ? undefined
+      : {
+          id: canonicalHost.id,
+          kind: canonicalHost.kind,
+          href: canonicalHost.href,
+          role: canonicalHost.role
+        },
+    provenance.representation
+  );
+  assert.equal(
+    catalogEntry?.primaryRepresentationId,
+    provenance.representation.id
+  );
+  assert.deepEqual(provenance.runtime, {
+    family: "reader-canonical-equation",
+    lessonDescriptorId: "fraction-composition"
+  });
 });
 
 test("five named ranges partition all thirteen canonical operations", () => {

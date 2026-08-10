@@ -57,7 +57,8 @@
     {
       "id": "s02",
       "title": "Canonical-host-provenance",
-      "status": "planned"
+      "summary": "Added an immutable canonical equation host provenance contract and a fraction-composition lock that identifies the animation, canonical reader representation and route, reader-canonical-equation runtime family, and fraction-composition descriptor; tests fail if catalog or article identity drifts.",
+      "status": "complete"
     },
     {
       "id": "s03",
