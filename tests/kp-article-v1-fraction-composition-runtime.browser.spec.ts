@@ -96,6 +96,12 @@ test("semantic links remain searchable and pinnable without becoming timeline co
     "[data-kp-algebra-fraction-composition-publication]"
   );
   const factor = page.getByRole("link", { name: "factor", exact: true }).first();
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  await host.locator("[data-kp-algebra-range-scrubber]").fill("500");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    /^(?:7[67]|77)$/u
+  );
 
   await factor.hover();
   await expect(publication).toHaveAttribute(
@@ -110,6 +116,10 @@ test("semantic links remain searchable and pinnable without becoming timeline co
     "url"
   );
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    /^(?:7[67]|77)$/u
+  );
 
   await page.keyboard.press("Escape");
   await expect(factor).not.toHaveAttribute("data-kp-article-semantic-pinned", "");
@@ -127,14 +137,44 @@ test("checkpoint URLs restore static navigation directly across browser history"
   );
   await expect(host).toHaveAttribute("data-kp-algebra-static-checkpoint", "normalized");
   await expect(normalized).toHaveAttribute("aria-current", "step");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    "154"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-clock-source",
+    "url"
+  );
+  await expect(host.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  )).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
 
   await page.locator('[data-kp-algebra-checkpoint-link="solved"]').click();
   await expect(page).toHaveURL(/#kp-ref:solve\/solved$/u);
   await expect(host).toHaveAttribute("data-kp-algebra-static-checkpoint", "solved");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    "1000"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-range-status",
+    "paused"
+  );
   await page.goBack();
   await expect(host).toHaveAttribute("data-kp-algebra-static-checkpoint", "normalized");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    "154"
+  );
   await page.goForward();
   await expect(host).toHaveAttribute("data-kp-algebra-static-checkpoint", "solved");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    "1000"
+  );
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });
 
@@ -148,6 +188,10 @@ test("reduced motion preserves the same static checkpoint endpoint", async ({
   await expect(page.locator("[data-kp-algebra-stage-host]")).toHaveAttribute(
     "data-kp-algebra-static-checkpoint",
     "difference-simplified"
+  );
+  await expect(page.locator("[data-kp-algebra-stage-host]")).toHaveAttribute(
+    "data-kp-algebra-canonical-clock-source",
+    "url"
   );
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });

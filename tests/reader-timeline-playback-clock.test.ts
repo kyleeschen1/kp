@@ -89,3 +89,20 @@ test("invalid stops and use after disposal fail closed", () => {
   clock.dispose();
   assert.throws(() => clock.seek(0), /disposed/u);
 });
+
+test("direct URL seeks publish once without replaying intermediate frames", () => {
+  const fake = fakeScheduler();
+  const clock = createKpReaderTimelinePlaybackClock({
+    id: "clock.test",
+    durationMs: 1_000,
+    scheduler: fake.scheduler
+  });
+  const samples: number[] = [];
+  clock.subscribe((sample) => samples.push(sample.progress));
+  const target = clock.seek(0.8, "url");
+  assert.equal(target.source, "url");
+  assert.equal(target.progress, 0.8);
+  assert.equal(target.settled, true);
+  assert.deepEqual(samples, [0.8]);
+  assert.equal(fake.pending(), 0);
+});

@@ -31,6 +31,7 @@ import {
   encodeKpFractionCompositionArticleCheckpointLocation
 } from "./fraction-composition-article-location.ts";
 import {
+  createKpFractionCompositionArticleRuntimeCheckpoints,
   createKpFractionCompositionArticleRuntimeRanges
 } from "./fraction-composition-runtime-ranges.ts";
 import {
@@ -57,7 +58,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   const article = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-fraction-composition-publication]"
   ) ?? ownerWindow.document.body;
-  const disposeCanonicalStage = mountFirstCanonicalRange({
+  const canonicalStage = mountFirstCanonicalRange({
     ownerWindow,
     article,
     host
@@ -114,6 +115,7 @@ export function mountKpFractionCompositionArticleEnhancement(
       }
     }
     host.dataset["kpAlgebraStaticCheckpoint"] = path;
+    canonicalStage.seekCheckpoint(path);
   };
   let lastRestoredHash: string | undefined;
   const restoreLocation = (hash: string): void => {
@@ -163,7 +165,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   ownerWindow.addEventListener("hashchange", onLocationChange);
   onLocationChange();
   return () => {
-    disposeCanonicalStage();
+    canonicalStage.dispose();
     article.removeEventListener("click", onSemanticClick);
     article.removeEventListener("click", onCheckpointClick);
     ownerWindow.removeEventListener("keydown", onEscape);
@@ -175,15 +177,25 @@ export function mountKpFractionCompositionArticleEnhancement(
   };
 }
 
+interface KpFractionCompositionCanonicalStageMount {
+  seekCheckpoint(path: string): void;
+  dispose(): void;
+}
+
 function mountFirstCanonicalRange(input: {
   readonly ownerWindow: Window;
   readonly article: HTMLElement;
   readonly host: HTMLElement;
-}): () => void {
+}): KpFractionCompositionCanonicalStageMount {
   const template = input.article.querySelector<HTMLTemplateElement>(
     "template[data-kp-reader-exemplar-template]"
   );
-  if (template === null) return () => undefined;
+  if (template === null) {
+    return Object.freeze({
+      seekCheckpoint() {},
+      dispose() {}
+    });
+  }
   const profile = resolveKpReaderEquationPresentationProfile("standard");
   const animation = fractionCompositionDescriptor.createAnimation();
   const durationMs = animation.timeline?.durationMs;
@@ -217,6 +229,12 @@ function mountFirstCanonicalRange(input: {
   let disposed = false;
   let session: KpChromeFreeCanonicalEquationSession | undefined;
   let transport: KpFractionCompositionArticleTransport | undefined;
+  let pendingCheckpointPath: string | undefined;
+  const checkpoints = new Map(
+    createKpFractionCompositionArticleRuntimeCheckpoints().map(
+      (checkpoint) => [checkpoint.path, checkpoint.progress]
+    )
+  );
   input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
   void createKpChromeFreeCanonicalEquationSession({
     shell,
@@ -247,24 +265,43 @@ function mountFirstCanonicalRange(input: {
     });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
     input.host.dataset["kpAlgebraCanonicalRange"] = firstRange.path;
+    if (pendingCheckpointPath !== undefined) {
+      const progress = checkpoints.get(pendingCheckpointPath);
+      if (progress === undefined) {
+        throw new Error(`Unknown algebra checkpoint ${pendingCheckpointPath}.`);
+      }
+      transport.seekGlobal(progress, "url");
+    }
     fallback?.toggleAttribute("hidden", true);
   }).catch((error: unknown) => {
     if (disposed) return;
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "failed";
-    shell.stage.remove();
-    fallback?.removeAttribute("hidden");
-    console.error("Canonical algebra stage failed to mount.", error);
-  });
-  return () => {
-    disposed = true;
     transport?.dispose();
     session?.dispose();
     shell.stage.remove();
     fallback?.removeAttribute("hidden");
-    delete input.host.dataset["kpAlgebraCanonicalHostStatus"];
-    delete input.host.dataset["kpAlgebraCanonicalRange"];
-    delete input.host.dataset["kpAlgebraCanonicalGlobalProgress"];
-  };
+    console.error("Canonical algebra stage failed to mount.", error);
+  });
+  return Object.freeze({
+    seekCheckpoint(path: string) {
+      const progress = checkpoints.get(path);
+      if (progress === undefined) {
+        throw new Error(`Unknown algebra checkpoint ${path}.`);
+      }
+      pendingCheckpointPath = path;
+      transport?.seekGlobal(progress, "url");
+    },
+    dispose() {
+      disposed = true;
+      transport?.dispose();
+      session?.dispose();
+      shell.stage.remove();
+      fallback?.removeAttribute("hidden");
+      delete input.host.dataset["kpAlgebraCanonicalHostStatus"];
+      delete input.host.dataset["kpAlgebraCanonicalRange"];
+      delete input.host.dataset["kpAlgebraCanonicalGlobalProgress"];
+    }
+  });
 }
 
 function decorateSemanticLinks(root: HTMLElement): readonly HTMLAnchorElement[] {

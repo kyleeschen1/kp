@@ -375,11 +375,35 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-10T18:45:10.868Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-timeline-playback-clock.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T18:50:59.702Z"
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:51:00.647Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:51:01.555Z"
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:51:02.462Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 binds play, pause, replay, and local scrub to one canonical 8.4-second timeline clock; no generic player or passage clock was introduced."
+    "summary": "Slice 17 restores direct checkpoint URL seeks through the canonical clock and proves semantic links remain non-temporal."
   },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."

@@ -14,6 +14,10 @@ import type {
 
 export interface KpFractionCompositionArticleTransport {
   readonly element: HTMLElement;
+  seekGlobal(
+    progress: number,
+    source?: "controls" | "url"
+  ): void;
   dispose(): void;
 }
 
@@ -111,6 +115,9 @@ export function mountKpFractionCompositionArticleTransport(input: {
       String(clockSample.progressPermille);
     input.host.dataset["kpAlgebraCanonicalLocalProgress"] =
       String(localPermille);
+    input.host.dataset["kpAlgebraCanonicalClockSource"] = clockSample.source;
+    input.host.dataset["kpAlgebraCanonicalRangeBoundary"] =
+      rangeSample.boundary;
     scrubber.value = String(localPermille);
     scrubber.setAttribute("aria-valuetext", `${localPermille / 10}%`);
     progressBar?.style.setProperty(
@@ -167,6 +174,12 @@ export function mountKpFractionCompositionArticleTransport(input: {
 
   return Object.freeze({
     element,
+    seekGlobal(
+      progress: number,
+      source: "controls" | "url" = "controls"
+    ) {
+      clock.seek(progress, source);
+    },
     dispose() {
       if (disposed) return;
       disposed = true;
@@ -179,6 +192,8 @@ export function mountKpFractionCompositionArticleTransport(input: {
       element.remove();
       delete input.host.dataset["kpAlgebraCanonicalClock"];
       delete input.host.dataset["kpAlgebraCanonicalLocalProgress"];
+      delete input.host.dataset["kpAlgebraCanonicalClockSource"];
+      delete input.host.dataset["kpAlgebraCanonicalRangeBoundary"];
       delete input.host.dataset["kpAlgebraCanonicalRangeStatus"];
     }
   });

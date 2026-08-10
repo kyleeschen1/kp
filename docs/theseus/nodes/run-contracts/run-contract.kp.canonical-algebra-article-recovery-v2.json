@@ -147,7 +147,8 @@
     {
       "id": "s17",
       "title": "Restore-links-and-URLs",
-      "status": "planned"
+      "summary": "Reconnected checkpoint URLs and history as exact no-replay seeks while preserving semantic prose links as focus-only controls.",
+      "status": "complete"
     },
     {
       "id": "s18",

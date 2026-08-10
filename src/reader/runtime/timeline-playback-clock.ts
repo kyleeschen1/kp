@@ -18,7 +18,10 @@ export interface KpReaderTimelinePlaybackClock
   extends KpReaderPlaybackClock {
   readonly durationMs: number;
   getStatus(): KpReaderTimelinePlaybackStatus;
-  seek(progress: number): KpReaderClockSample;
+  seek(
+    progress: number,
+    source?: "controls" | "url"
+  ): KpReaderClockSample;
   play(input: {
     readonly direction: "forward" | "rewind";
     readonly stopAt: number;
@@ -112,13 +115,13 @@ export function createKpReaderTimelinePlaybackClock(input: {
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    seek(progress: number) {
+    seek(progress: number, source: "controls" | "url" = "controls") {
       assertLive();
       cancelFrame();
       status = "paused";
       sequence += 1;
       return publish(createKpReaderClockSample({
-        source: "controls",
+        source,
         progress: boundedProgress(progress),
         previousProgress: snapshot.progress,
         sequence,
