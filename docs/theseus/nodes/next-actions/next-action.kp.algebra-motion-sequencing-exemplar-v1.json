@@ -2,8 +2,9 @@
   "id": "next-action.kp.algebra-motion-sequencing-exemplar-v1",
   "kind": "next-action",
   "title": "Bind the first algebra motion passage end to end",
-  "status": "ready",
+  "status": "superseded",
   "domain": "kp",
+  "summary": "Human review rejected the generic editor-player presenter because matching the canonical asset id did not preserve the registered canonical reader host.",
   "sourceRefs": [
     {
       "kind": "file",

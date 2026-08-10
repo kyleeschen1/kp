@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-09
+Last Updated: 2026-08-10
 Status: active
 Active Thread: `threads/explanation-attention.md`
 Supporting Threads:
@@ -69,8 +69,15 @@ editing session exposed full-stack capability and page-reload defects rather
 than a grammar defect; both are repaired with browser coverage. The payload
 recovery restored a governed learner-core dependency boundary and reduced the
 common equation-reader closure to 124,778 gzip bytes without raising its
-145,000-byte ceiling. The immediate next action is the algebra caller. The
-ranking and recovery evidence are in
+145,000-byte ceiling. The first algebra interaction checkpoint was rejected
+because it loaded the right asset through a noncanonical generic editor host.
+The immediate next action is the approved canonical-host recovery in
+`reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md`:
+extract one chrome-free canonical equation session, keep the existing reader
+as its reference caller, and bind the article only after sampled parity is
+proven. This correction is recorded in
+`decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`. The prior
+ranking and recovery evidence remain in
 `reviews/2026-08-09-kp-post-authoring-next-step-review.md` and
 `reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md`.
 Shared station extraction, split parity, final navigation geometry, and syntax

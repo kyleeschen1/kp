@@ -48,30 +48,6 @@ test("captures the wide opening and intermediate teaching states", async ({ page
   });
 });
 
-test("captures the first authored motion passage before and after playback", async ({
-  page
-}) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(route, { waitUntil: "domcontentloaded" });
-  const passage = page.locator(
-    '[data-kp-algebra-motion-passage="distribute"]'
-  );
-  await passage.scrollIntoViewIfNeeded();
-  await expect(passage.locator("[data-kp-editor-animation-player]")).toHaveCount(1);
-  await page.evaluate(() => document.fonts.ready);
-  await passage.screenshot({
-    path: resolve(outputRoot, "wide-motion-ready.png"),
-    animations: "disabled"
-  });
-
-  await passage.getByRole("button", { name: "Play distribution" }).click();
-  await expect(passage).toHaveAttribute("data-kp-algebra-motion-state", "settled");
-  await passage.screenshot({
-    path: resolve(outputRoot, "wide-motion-settled.png"),
-    animations: "disabled"
-  });
-});
-
 test("captures the phone settled state without horizontal overflow", async ({ page }) => {
   await openCheckpoint(page, "solved", { width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth))

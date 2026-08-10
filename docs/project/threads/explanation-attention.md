@@ -1,14 +1,16 @@
 # Explanation and Attention Thread
 
 Status: active
-Last Updated: 2026-08-09
-Current Next Action: KP Article v1 is frozen and its temporary economics
-compatibility paths are retired. The first real whole-file economics authoring
-pass and the bounded reader-payload recovery are complete. Its two integration
-defects are repaired without changing the grammar, and the common reader
-closure is again below its established ceiling. Keep layout discovery paused.
-Use a compact multi-step algebra article as the second format caller next. See
-`../reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md`.
+Last Updated: 2026-08-10
+Current Next Action: KP Article v1 remains frozen and layout discovery remains
+paused. The first algebra interaction checkpoint is rejected: it reused the
+fraction-composition asset id through a generic editor player rather than the
+registered canonical reader host. Execute the approved recovery in
+`../reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md`.
+Extract the real canonical equation session, preserve the reader reference,
+prove sampled parity, and stop at the first article-range human checkpoint
+before binding the remaining four ranges. See
+`../decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`.
 Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.

@@ -1,0 +1,163 @@
+{
+  "id": "run-contract.kp.canonical-algebra-article-recovery-v1",
+  "kind": "run-contract",
+  "title": "Canonical algebra Article v1 recovery",
+  "status": "superseded",
+  "summary": "Replaced before execution because bounded CLI help omitted required typed run-mode hygiene fields; v2 preserves the exact approved scope and slice order.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.canonical-algebra-article-recovery-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md",
+      "summary": "User-approved 24-slice recovery contract with mandatory slice-20 human checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:browser:algebra-article",
+    "npm run test:browser:fraction-composition:determinism",
+    "npm run visual:fraction-composition-canonical",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Canonical equation reader session and fraction-composition descriptor",
+    "Algebra Article v1 presenter, named-range and URL adapters",
+    "Focused architecture, unit, browser, accessibility, performance, and visual evidence",
+    "Durable roadmap, decision, checkpoint, and Theseus control records"
+  ],
+  "disallowedWork": [
+    "New animation, duplicate renderer, iframe, or Svelte-owned animation state",
+    "Article v1 syntax changes, layout discovery, visual redesign, curriculum expansion, or catalogue-wide promotion",
+    "Economics, Lisp, editor feature work, or unrelated dirty files"
+  ],
+  "goal": "Make the algebra article consume the same certified fraction-composition equation session as the canonical reader, prove sampled parity, and stop for human review before five-range promotion.",
+  "target": "next-action.kp.canonical-algebra-article-recovery-v1",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reject-generic-presenter",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Canonical-host-provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Generic-host-architecture-guard",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Pure-range-windowing",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Canonical-frame-planning",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Canonical-stage-shell",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Structural-anchor-mount",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Certified-layout-extraction",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Canonical-compositor-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Fraction-salience-focus",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Native-endpoint-accessibility",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Chrome-free-canonical-session",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Migrate-canonical-reader",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Canonical-visual-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Mount-first-article-range",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Bind-local-transport",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Restore-links-and-URLs",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Article-accessibility-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Cross-host-sampled-parity",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Human-exemplar-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Bind-five-ranges",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Retained-session-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Complete-lesson-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Release-closeout",
+      "status": "planned"
+    }
+  ]
+}

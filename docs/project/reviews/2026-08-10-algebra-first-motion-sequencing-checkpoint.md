@@ -1,10 +1,18 @@
 # Algebra First Motion Sequencing Checkpoint
 
 Date: 2026-08-10
-Outcome: `HUMAN_CHECKPOINT`
+Outcome: `REJECTED`
 Canonical route: `/tutorials/algebra/fraction-composition/`
 Canonical passage: `distribute`
 Canonical range: `distribute-and-normalize`
+
+> This checkpoint was rejected because it matched only the canonical asset ID
+> while presenting that asset through the generic editor animation player. It
+> did not embed the certified canonical reader host. The rejected presenter is
+> being removed under
+> `docs/project/reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md`;
+> the preservation rule is recorded in
+> `docs/project/decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`.
 
 ## What Is Ready
 

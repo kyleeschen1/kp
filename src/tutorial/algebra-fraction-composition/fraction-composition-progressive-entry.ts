@@ -18,9 +18,6 @@ import {
   kpFractionCompositionArticleSemanticReferences,
   resolveKpFractionCompositionArticleSemanticReference
 } from "./fraction-composition-semantic-navigation.ts";
-import {
-  createKpFractionCompositionMotionExemplar
-} from "./fraction-composition-motion-exemplar.ts";
 import type {
   KpFractionCompositionArticleRuntimeSession
 } from "./fraction-composition-runtime-capability.ts";
@@ -69,25 +66,6 @@ export function mountKpFractionCompositionArticleEnhancement(
     activateNearViewport();
   }, { rootMargin: "50% 0px" });
   observer.observe(host);
-  const motionExemplar = createKpFractionCompositionMotionExemplar({
-    article,
-    activate: () => activation.activateStage("solve", "near-viewport")
-  });
-  const motionObserver = motionExemplar === undefined
-    ? undefined
-    : new IntersectionObserver((entries) => {
-      if (!entries.some(({ isIntersecting }) => isIntersecting)) return;
-      if (decodeKpFractionCompositionArticleLocation(
-        ownerWindow.location.hash
-      ) !== undefined) return;
-      motionObserver?.disconnect();
-      void activation.activateStage("solve", "near-viewport").then((ready) => {
-        if (!disposed) motionExemplar.prepare(ready);
-      }).catch(() => {
-        // The settled static endpoint remains the no-enhancement fallback.
-      });
-    }, { rootMargin: "75% 0px" });
-  if (motionExemplar !== undefined) motionObserver?.observe(motionExemplar.root);
   const applyFocus = (): void => {
     const snapshot = focus.getSnapshot();
     article.dataset["kpArticleSemanticFocusSource"] =
@@ -220,8 +198,6 @@ export function mountKpFractionCompositionArticleEnhancement(
     disposed = true;
     locationRevision += 1;
     observer.disconnect();
-    motionObserver?.disconnect();
-    motionExemplar?.dispose();
     article.removeEventListener("click", onSemanticClick);
     article.removeEventListener("click", onCheckpointClick);
     ownerWindow.removeEventListener("keydown", onEscape);
