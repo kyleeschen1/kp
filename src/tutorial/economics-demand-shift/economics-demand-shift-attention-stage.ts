@@ -8,6 +8,23 @@ export type KpEconomicsDemandShiftAttentionFraming =
   | "inspect"
   | "quiet-reference";
 
+export const kpEconomicsDemandShiftAttentionVisualRoles = Object.freeze([
+  "axes",
+  "axis-labels",
+  "supply",
+  "supply-label",
+  "demand-current",
+  "demand-labels",
+  "equilibrium-current",
+  "equilibrium-reference",
+  "guides-current",
+  "guides-reference",
+  "supply-trace"
+] as const);
+
+export type KpEconomicsDemandShiftAttentionVisualRole =
+  typeof kpEconomicsDemandShiftAttentionVisualRoles[number];
+
 const framingBySceneId: Readonly<Record<
   string,
   KpEconomicsDemandShiftAttentionFraming
@@ -29,6 +46,36 @@ const cueBySceneId: Readonly<Record<string, string>> = Object.freeze({
   conclude: "Demand shifted; quantity supplied changed along the unchanged supply curve."
 });
 
+const visualRolesBySceneId: Readonly<Record<
+  string,
+  readonly KpEconomicsDemandShiftAttentionVisualRole[]
+>> = Object.freeze({
+  orient: roles(
+    "axes", "axis-labels", "supply", "supply-label", "demand-current",
+    "demand-labels", "equilibrium-current"
+  ),
+  equilibrium: roles(
+    "axes", "axis-labels", "supply", "supply-label", "demand-current",
+    "demand-labels", "equilibrium-current"
+  ),
+  "shift-demand": roles(
+    "axes", "axis-labels", "supply", "supply-label", "demand-current"
+  ),
+  "interpret-equilibrium": roles(
+    "axes", "axis-labels", "supply", "demand-current",
+    "equilibrium-current", "equilibrium-reference", "guides-current",
+    "guides-reference"
+  ),
+  "trace-supply": roles(
+    "axes", "axis-labels", "supply", "supply-label", "equilibrium-current",
+    "equilibrium-reference", "supply-trace"
+  ),
+  conclude: roles(
+    "axes", "axis-labels", "supply", "supply-label", "demand-current",
+    "equilibrium-current", "equilibrium-reference", "supply-trace"
+  )
+});
+
 /**
  * Projects semantic lesson beats into responsive framing instructions. The
  * presenter owns geometry; the deck and animation remain semantic authority.
@@ -44,4 +91,17 @@ export function projectKpEconomicsDemandShiftAttentionCue(
   scene: KpEconomicsDemandShiftDeckScene
 ): string {
   return cueBySceneId[scene.id] ?? scene.label;
+}
+
+/** Projects instructional necessity; CSS only translates these roles to paint. */
+export function projectKpEconomicsDemandShiftAttentionVisualRoles(
+  scene: KpEconomicsDemandShiftDeckScene
+): readonly KpEconomicsDemandShiftAttentionVisualRole[] {
+  return visualRolesBySceneId[scene.id] ?? visualRolesBySceneId["orient"]!;
+}
+
+function roles(
+  ...values: readonly KpEconomicsDemandShiftAttentionVisualRole[]
+): readonly KpEconomicsDemandShiftAttentionVisualRole[] {
+  return Object.freeze(values);
 }

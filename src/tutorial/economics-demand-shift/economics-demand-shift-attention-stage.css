@@ -49,8 +49,7 @@ html[data-kp-economics-view="attention-stage"]
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__stage figcaption {
-  min-block-size: 1.5rem;
-  margin-block-start: 0.35rem;
+  display: none;
 }
 
 html[data-kp-economics-view="attention-stage"]
@@ -98,8 +97,7 @@ html[data-kp-economics-view="attention-stage"]
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-scene h3 {
-  margin-block-end: 0.3rem;
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  display: none;
 }
 
 html[data-kp-economics-view="attention-stage"]
@@ -135,12 +133,123 @@ html[data-kp-economics-view="attention-stage"]
   inline-size: 7.75rem;
   min-block-size: 3.25rem;
   padding: 0.4rem 0.65rem;
+  border-color: color-mix(in srgb, currentcolor 22%, transparent);
   line-height: 1.1;
 }
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-controls button:last-child {
   justify-self: end;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-progress progress {
+  --kp-attention-stage-transport-color:
+    var(--kp-lesson-theme-graph-axis, var(--kp-graph-axis, #727986));
+  -webkit-appearance: none;
+  appearance: none;
+  background: color-mix(in srgb, var(--kp-attention-stage-transport-color) 34%, transparent);
+  color: var(--kp-attention-stage-transport-color);
+  accent-color: var(--kp-attention-stage-transport-color);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-progress progress::-webkit-progress-bar {
+  background: color-mix(in srgb, var(--kp-attention-stage-transport-color) 34%, transparent);
+}
+
+/* Keep vendor pseudos separate: an unsupported pseudo invalidates its selector list. */
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-progress progress::-webkit-progress-value {
+  background: var(--kp-attention-stage-transport-color);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-progress progress::-moz-progress-bar {
+  background: var(--kp-attention-stage-transport-color);
+}
+
+/* Scene roles own instructional presence; selectors only bind those roles to
+   the retained SVG scaffold without changing its semantic or a11y source. */
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible]
+  :is(
+    [data-kp-editor-graph-axis],
+    .editor-graph-stage__economics-grid,
+    [data-kp-economics-supply-line],
+    [data-kp-economics-demand-line],
+    .editor-graph-stage__economics-demand-reference,
+    [data-kp-economics-supply-movement],
+    [data-kp-economics-equilibrium-quantity-guide],
+    [data-kp-economics-equilibrium-price-guide],
+    [data-kp-economics-initial-equilibrium-guides],
+    [data-kp-economics-equilibrium-point],
+    [data-kp-economics-initial-equilibrium-reference],
+    [data-kp-economics-math-label],
+    .editor-graph-stage__economics-explanation-foreign-object
+  ) {
+  display: none;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="axes"]
+  [data-kp-editor-graph-axis],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="supply"]
+  [data-kp-economics-supply-line],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="demand-current"]
+  [data-kp-economics-demand-line],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="supply-trace"]
+  [data-kp-economics-supply-movement],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="equilibrium-current"]
+  [data-kp-economics-equilibrium-point],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="equilibrium-reference"]
+  [data-kp-economics-initial-equilibrium-reference],
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="guides-reference"]
+  [data-kp-economics-initial-equilibrium-guides] {
+  display: inline;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="guides-current"]
+  :is(
+    [data-kp-economics-equilibrium-quantity-guide],
+    [data-kp-economics-equilibrium-price-guide]
+  ),
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="axis-labels"]
+  :is(
+    [data-kp-economics-math-label="axis-quantity"],
+    [data-kp-economics-math-label="axis-price"]
+  ),
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="demand-labels"]
+  :is(
+    [data-kp-economics-math-label="curve-demand-current"],
+    [data-kp-economics-math-label="curve-demand-reference"]
+  ),
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="supply-label"]
+  [data-kp-economics-math-label="curve-supply"] {
+  display: inline;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="supply-trace"]
+  [data-kp-economics-supply-movement] {
+  opacity: 1;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-visible~="supply-trace"]
+  [data-kp-economics-supply-movement-trace] {
+  opacity: var(--kp-tutorial-supply-emphasis, 1);
+  stroke-dashoffset: calc(1 - var(--kp-tutorial-supply-trace, 1));
 }
 
 html[data-kp-economics-view="attention-stage"]

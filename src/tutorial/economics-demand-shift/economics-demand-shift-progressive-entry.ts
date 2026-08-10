@@ -72,7 +72,8 @@ import {
   readKpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
 import {
-  projectKpEconomicsDemandShiftAttentionFraming
+  projectKpEconomicsDemandShiftAttentionFraming,
+  projectKpEconomicsDemandShiftAttentionVisualRoles
 } from "./economics-demand-shift-attention-stage.ts";
 import type { KpEconomicsDemandShiftRouteHandoff } from
   "./economics-demand-shift-route-handoff.ts";
@@ -308,6 +309,10 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
         projectKpEconomicsDemandShiftAttentionFraming(
           kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!
         );
+      publicationRoot.dataset["kpEconomicsAttentionVisible"] =
+        projectKpEconomicsDemandShiftAttentionVisualRoles(
+          kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!
+        ).join(" ");
     }
   };
 
@@ -633,6 +638,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     delete publicationRoot.dataset["kpEconomicsDemandShiftTutorial"];
     delete publicationRoot.dataset["kpEconomicsStaticEnhancement"];
     delete publicationRoot.dataset["kpEconomicsAttentionFraming"];
+    delete publicationRoot.dataset["kpEconomicsAttentionVisible"];
     enhancementSessions.delete(input.root);
   };
   enhancementSessions.set(input.root, dispose);

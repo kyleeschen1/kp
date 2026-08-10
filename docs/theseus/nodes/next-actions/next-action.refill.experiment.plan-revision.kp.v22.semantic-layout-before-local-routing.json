@@ -74,11 +74,41 @@
       "scope": "durable-state",
       "checkedAt": "2026-08-10T20:20:36.810Z",
       "notes": "Project memory validates after recording the viewport-contained stage refinement."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T22:17:48.693Z"
+    },
+    {
+      "command": "npm run visual:economics-attention-stage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T22:17:49.884Z"
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-10T22:17:50.911Z"
+    },
+    {
+      "command": "app, node, Svelte, and domain typechecks",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T22:17:51.933Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-08-10T22:18:22.253Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Human-approved refinement complete: every attention-stage scene fits within one viewport, concise cues preserve full stage meaning, and the Back/Continue transport stays at invariant accessible coordinates."
+    "summary": "Austere six-frame demand-shift attention-stage exemplar is implemented and verified; stop at the named human visual checkpoint before any promotion."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
