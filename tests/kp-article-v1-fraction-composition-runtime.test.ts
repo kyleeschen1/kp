@@ -185,6 +185,10 @@ test("algebra forbids the rejected generic editor-player host", () => {
   assert.doesNotMatch(tutorialRuntime, /createKpEditorAnimationDescriptor/u);
   assert.doesNotMatch(tutorialRuntime, /hydrateKpPreparedEditorAnimationPlayer/u);
   assert.doesNotMatch(tutorialRuntime, /renderKpEditorAnimationPlayerShell/u);
+  assert.match(entry, /createKpChromeFreeCanonicalEquationSession/u);
+  assert.match(entry, /mountKpCanonicalEquationStageShell/u);
+  assert.match(entry, /fractionCompositionDescriptor/u);
   assert.doesNotMatch(entry, /requestAnimationFrame|setInterval|setTimeout/u);
+  assert.doesNotMatch(entry, /createKpReaderContinuousScrollClock/u);
   assert.doesNotMatch(entry, /seekCheckpoint\([^)]*kpFocus/u);
 });

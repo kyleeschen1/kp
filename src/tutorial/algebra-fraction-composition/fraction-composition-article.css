@@ -1,3 +1,5 @@
+@import "../../reader/app/exemplar.css";
+
 html:root {
   --kp-algebra-focus-ink: #ffffff;
   --kp-algebra-focus-glow: rgb(101 214 166 / 35%);
@@ -5,6 +7,15 @@ html:root {
   background: #0d0e1c;
   color-scheme: dark;
   font-family: Georgia, "Times New Roman", serif;
+  --kp-paper: #0d0e1c;
+  --kp-surface: #171827;
+  --kp-ink: #ececf0;
+  --kp-muted: #b7b9c4;
+  --kp-accent: #65d6a6;
+  --kp-relation: #80bfff;
+  --kp-line: #555968;
+  --kp-serif: Georgia, "Times New Roman", serif;
+  --kp-equation-type-size: clamp(1.1rem, 1.55vw, 1.2rem);
 }
 
 * { box-sizing: border-box; }
@@ -65,6 +76,27 @@ html body {
 
 [data-kp-algebra-stage-host] {
   min-height: 11rem;
+  --kp-surface: var(--kp-semantic-surface, #fffaf0);
+  --kp-ink: var(--kp-semantic-ink, #16231d);
+  --kp-muted: var(--kp-semantic-ink-secondary, #59645e);
+  --kp-accent: var(--kp-semantic-focus, #df7047);
+  --kp-relation: var(--kp-semantic-relation, #1f6371);
+  --kp-line: var(--kp-semantic-line, #d2d7cd);
+}
+
+[data-kp-algebra-stage-host] [data-kp-algebra-stage-fallback][hidden] {
+  display: none;
+}
+
+[data-kp-algebra-stage-host] .kp-reader-equation-stage-heading,
+[data-kp-algebra-stage-host] .kp-reader-equation-hint {
+  display: none;
+}
+
+[data-kp-algebra-stage-host] [data-kp-fraction-salience-bound] {
+  color: var(--kp-semantic-salience-color) !important;
+  opacity: var(--kp-semantic-salience-opacity);
+  transition: none;
 }
 
 .kp-algebra-article__checkpoint-navigation {

@@ -40,6 +40,10 @@ test("static algebra publication contains all prose, links, and native math", ()
   assert.match(publication, /Check the result in the original equation/u);
   assert.match(publication, /href="#kp-ref:solve\/factor"/u);
   assert.match(publication, /class="katex-mathml"/u);
+  assert.equal(
+    (publication.match(/data-kp-reader-exemplar-template/gu) ?? []).length,
+    1
+  );
   assert.doesNotMatch(publication, /<script|kp-static\//u);
 });
 

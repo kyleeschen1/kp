@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const route = "/tutorials/algebra/fraction-composition/";
 
-test("algebra article keeps its complete static projection during canonical-host recovery", async ({
+test("algebra article mounts the canonical host for its first range over the static projection", async ({
   page
 }) => {
   await page.goto(route, { waitUntil: "domcontentloaded" });
@@ -11,7 +11,26 @@ test("algebra article keeps its complete static projection during canonical-host
 
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
   await expect(page.locator("[data-kp-algebra-runtime-stage]")).toHaveCount(0);
-  await expect(host.locator("[data-kp-algebra-stage-fallback]")).toBeVisible();
+  const canonical = host.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-canonical-equation-session-active",
+    "true"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    "distribute-and-normalize"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    "0"
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-native-endpoint",
+    "source"
+  );
+  await expect(host.locator("[data-kp-algebra-stage-fallback]")).toBeHidden();
   await expect(page.locator(
     "[data-kp-algebra-fraction-composition-publication] svg[role='img']"
   )).toHaveCount(6);

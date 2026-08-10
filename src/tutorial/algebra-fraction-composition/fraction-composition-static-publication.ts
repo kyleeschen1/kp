@@ -3,6 +3,18 @@ import { renderLatexToHtml } from
 import {
   createKpFractionCompositionStaticStepExport
 } from "../fraction-composition-static-step-export.ts";
+import {
+  compileKpEquationExemplarTemplate
+} from "../../reader/compiler/equation-exemplar-page.ts";
+import {
+  fractionCompositionDescriptor
+} from "../../reader/app/equation-lesson-descriptors/fraction-composition.ts";
+import {
+  kpReaderEquationPresentationCapability
+} from "../../reader/document/equation-presentation.ts";
+import {
+  createKpFractionCompositionSelectorAnnotatedLatex
+} from "../../rendering/fraction-composition-selector-annotated-latex.ts";
 import type {
   KpFractionCompositionArticleCompilation
 } from "./fraction-composition-article-compiler.ts";
@@ -60,11 +72,21 @@ export function renderKpFractionCompositionStaticPublication(
     throw new Error("Static algebra publication left an asset unresolved.");
   }
 
+  const canonicalTemplate = compileKpEquationExemplarTemplate(
+    fractionCompositionDescriptor.createAnimation(),
+    (state) => createKpFractionCompositionSelectorAnnotatedLatex(state.id),
+    {
+      equationPresentation: kpReaderEquationPresentationCapability,
+      readerControls: "fraction-composition-v1"
+    }
+  );
+
   return `<main class="kp-algebra-article" data-kp-algebra-fraction-composition-publication>
     <aside class="kp-algebra-article__toc" aria-label="In this lesson">
       ${compilation.staticHtml.tocHtml}
     </aside>
     ${articleHtml}
+    ${canonicalTemplate}
   </main>`;
 }
 

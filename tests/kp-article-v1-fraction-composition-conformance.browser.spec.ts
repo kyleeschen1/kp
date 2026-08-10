@@ -30,7 +30,9 @@ test("the static-first algebra article remains complete without JavaScript", asy
   await context.close();
 });
 
-test("phone enhancement fits math and preserves searchable prose", async ({ page }) => {
+test("phone enhancement fits canonical and static math while preserving prose", async ({
+  page
+}) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto(articleRoute);
   const publication = page.locator(
@@ -38,10 +40,14 @@ test("phone enhancement fits math and preserves searchable prose", async ({ page
   );
   await publication.locator("[data-kp-algebra-stage-host]").scrollIntoViewIfNeeded();
   await expect(publication.locator("[data-kp-algebra-stage-fallback]"))
-    .toBeVisible();
+    .toBeHidden();
+  await expect(publication.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  )).toBeVisible();
   const geometry = await page.evaluate(() => {
     const stages = [...document.querySelectorAll<HTMLElement>(
-      ".kp-algebra-article__equation-stage"
+      ".kp-algebra-article__equation-stage:not([hidden]), " +
+      '[data-kp-canonical-equation-host="chrome-free-v1"]'
     )];
     return {
       documentWidth: document.documentElement.scrollWidth,

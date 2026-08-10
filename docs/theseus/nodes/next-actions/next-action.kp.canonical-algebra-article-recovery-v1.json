@@ -330,11 +330,32 @@
       "scope": "s14 shared-host migration boundary",
       "checkedAt": "2026-08-10T18:15:49.534Z",
       "notes": "Application Node test Svelte and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s15 compiler-owned template and architecture",
+      "checkedAt": "2026-08-10T18:28:59.240Z",
+      "notes": "All 101 Article v1 tests pass. The static publication emits one canonical reader template and the algebra runtime still forbids generic players and autonomous clocks."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s15 first canonical Article range mount",
+      "checkedAt": "2026-08-10T18:29:00.239Z",
+      "notes": "All 11 Chromium checks pass. The article mounts chrome-free-v1 at the factored native endpoint for distribute-and-normalize while retaining six static figures and the no-JavaScript publication."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 canonical Article mount",
+      "checkedAt": "2026-08-10T18:29:01.154Z",
+      "notes": "Application Node test Svelte and domain typechecks pass with the shared host mounted from the Article runtime."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical shared host is visually parity checked and lifecycle safe for Article embedding. Six unrelated contact families remain exactly equal to the pre-loop baseline and are recorded as separate clearance debt."
+    "summary": "The algebra Article now mounts one compiler-owned chrome-free canonical fraction session at the source endpoint of distribute-and-normalize. Static no-JavaScript output remains complete and no local transport is bound yet."
   },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."

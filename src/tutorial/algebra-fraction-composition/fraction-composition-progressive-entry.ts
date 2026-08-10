@@ -5,9 +5,34 @@ import {
   createKpReaderSemanticFocusService
 } from "../../reader/runtime/semantic-focus.ts";
 import {
+  mountKpCanonicalEquationStageShell
+} from "../../reader/app/canonical-equation-stage-shell.ts";
+import {
+  createKpChromeFreeCanonicalEquationSession,
+  type KpChromeFreeCanonicalEquationSession
+} from "../../reader/app/chrome-free-canonical-equation-session.ts";
+import {
+  bindKpReaderEquationLessonStructuralAnchors
+} from "../../reader/app/equation-lesson-descriptor.ts";
+import {
+  fractionCompositionDescriptor
+} from "../../reader/app/equation-lesson-descriptors/fraction-composition.ts";
+import {
+  resolveKpReaderEquationPresentationProfile
+} from "../../reader/document/equation-presentation.ts";
+import {
+  planKpFractionCompositionLayout
+} from "../../reader/runtime/fraction-composition-layout.ts";
+import {
+  createKpFractionCompositionSalienceReaderCapability
+} from "../../reader/app/fraction-composition-salience-adapter.ts";
+import {
   decodeKpFractionCompositionArticleLocation,
   encodeKpFractionCompositionArticleCheckpointLocation
 } from "./fraction-composition-article-location.ts";
+import {
+  createKpFractionCompositionArticleRuntimeRanges
+} from "./fraction-composition-runtime-ranges.ts";
 import {
   kpFractionCompositionArticleSemanticReferences,
   resolveKpFractionCompositionArticleSemanticReference
@@ -28,6 +53,11 @@ export function mountKpFractionCompositionArticleEnhancement(
   const article = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-fraction-composition-publication]"
   ) ?? ownerWindow.document.body;
+  const disposeCanonicalStage = mountFirstCanonicalRange({
+    ownerWindow,
+    article,
+    host
+  });
   const focus = createKpReaderSemanticFocusService(
     kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
   );
@@ -129,6 +159,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   ownerWindow.addEventListener("hashchange", onLocationChange);
   onLocationChange();
   return () => {
+    disposeCanonicalStage();
     article.removeEventListener("click", onSemanticClick);
     article.removeEventListener("click", onCheckpointClick);
     ownerWindow.removeEventListener("keydown", onEscape);
@@ -137,6 +168,83 @@ export function mountKpFractionCompositionArticleEnhancement(
     semanticBindings.dispose();
     unsubscribeFocus();
     focus.dispose();
+  };
+}
+
+function mountFirstCanonicalRange(input: {
+  readonly ownerWindow: Window;
+  readonly article: HTMLElement;
+  readonly host: HTMLElement;
+}): () => void {
+  const template = input.article.querySelector<HTMLTemplateElement>(
+    "template[data-kp-reader-exemplar-template]"
+  );
+  if (template === null) return () => undefined;
+  const profile = resolveKpReaderEquationPresentationProfile("standard");
+  const animation = fractionCompositionDescriptor.createAnimation();
+  const firstRange = createKpFractionCompositionArticleRuntimeRanges()[0];
+  if (firstRange === undefined || firstRange.path !== "distribute-and-normalize") {
+    throw new Error("Algebra Article lacks its canonical first motion range.");
+  }
+  const fallback = input.host.querySelector<Element>(
+    "[data-kp-algebra-stage-fallback]"
+  );
+  const shell = mountKpCanonicalEquationStageShell({
+    target: input.host,
+    template,
+    bindStructuralAnchors: (root) => {
+      bindKpReaderEquationLessonStructuralAnchors({
+        root,
+        animation,
+        descriptor: fractionCompositionDescriptor
+      });
+    }
+  });
+  input.host.querySelector("[data-kp-algebra-checkpoint-navigation]")
+    ?.before(shell.stage);
+  const salience = createKpFractionCompositionSalienceReaderCapability({
+    root: input.host,
+    href: input.ownerWindow.location.href
+  });
+  let disposed = false;
+  let session: KpChromeFreeCanonicalEquationSession | undefined;
+  input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
+  void createKpChromeFreeCanonicalEquationSession({
+    shell,
+    animation,
+    descriptor: fractionCompositionDescriptor,
+    equationPresentationProfile: profile,
+    linkRoot: input.article,
+    createStageLayoutIntent: planKpFractionCompositionLayout,
+    renderSalience: (frame) => salience.render(frame)
+  }).then((mounted) => {
+    if (disposed) {
+      mounted.dispose();
+      shell.stage.remove();
+      return;
+    }
+    session = mounted;
+    const snapshot = mounted.seek(firstRange.start);
+    input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
+    input.host.dataset["kpAlgebraCanonicalRange"] = firstRange.path;
+    input.host.dataset["kpAlgebraCanonicalGlobalProgress"] =
+      String(snapshot.progressPermille);
+    fallback?.toggleAttribute("hidden", true);
+  }).catch((error: unknown) => {
+    if (disposed) return;
+    input.host.dataset["kpAlgebraCanonicalHostStatus"] = "failed";
+    shell.stage.remove();
+    fallback?.removeAttribute("hidden");
+    console.error("Canonical algebra stage failed to mount.", error);
+  });
+  return () => {
+    disposed = true;
+    session?.dispose();
+    shell.stage.remove();
+    fallback?.removeAttribute("hidden");
+    delete input.host.dataset["kpAlgebraCanonicalHostStatus"];
+    delete input.host.dataset["kpAlgebraCanonicalRange"];
+    delete input.host.dataset["kpAlgebraCanonicalGlobalProgress"];
   };
 }
 
