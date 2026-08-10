@@ -504,6 +504,22 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
         ? {}
         : { layoutPolicy: context.appliedStageLayout.certificate.policy })
     });
+    // Host-neutral review evidence lets embedding surfaces prove that they
+    // sampled the same semantic frame without reaching into compositor state.
+    stage.dataset["kpReaderCanonicalReviewFrame"] = JSON.stringify([
+      snapshot.animationProgressPermille,
+      snapshot.phaseProgressPermille,
+      snapshot.activePhase,
+      snapshot.activeTransformationIds
+    ]);
+    stage.dataset["kpReaderCanonicalPaintOwner"] =
+      String(snapshot.canonicalPaintOwner);
+    stage.dataset["kpReaderCanonicalFitStatus"] = snapshot.fitStatus;
+    if (snapshot.layoutPolicy === undefined) {
+      delete stage.dataset["kpReaderCanonicalLayoutPolicy"];
+    } else {
+      stage.dataset["kpReaderCanonicalLayoutPolicy"] = snapshot.layoutPolicy;
+    }
     for (const listener of listeners) listener(snapshot);
     previousProgress = sampleInput.clock.progress;
     sequence = Math.max(sequence, sampleInput.clock.sequence);

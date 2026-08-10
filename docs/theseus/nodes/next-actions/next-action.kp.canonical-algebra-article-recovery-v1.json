@@ -423,11 +423,41 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-10T18:56:52.048Z"
+    },
+    {
+      "command": "npm run test:browser:algebra-article-parity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-10T19:07:13.114Z"
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-10T19:07:14.012Z"
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-10T19:07:14.914Z"
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-10T19:07:15.814Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-10T19:07:16.687Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 18 closes the Article accessibility matrix for the one-range exemplar across static, phone, keyboard, reduced-motion, and forced-color modes."
+    "summary": "Slice 19 proves the one-range Article exemplar and canonical reader produce identical semantic and paint-ownership frames at exact shared clock samples."
   },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."

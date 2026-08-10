@@ -159,7 +159,8 @@
     {
       "id": "s19",
       "title": "Cross-host-sampled-parity",
-      "status": "planned"
+      "summary": "Proved exact cross-host sampled parity for phase, transformations, certified layout, salience, accessible/native endpoints, motion authority, and exclusive paint ownership across browser, viewport, and theme matrices.",
+      "status": "complete"
     },
     {
       "id": "s20",
