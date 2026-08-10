@@ -23,6 +23,13 @@ passage, progress, then transport buttons. It does not reopen general layout
 selection; the canonical algebra recovery remains paused at its prior slice
 boundary while this independently reversible interruption is reviewed.
 
+Verification cadence is governed by
+`../decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md`.
+Semantic authority, deterministic state, accessibility, and known regressions
+remain test-first. New attention choreography reaches one reversible human
+checkpoint before responsive matrices, broad regression coverage, or shared
+promotion work.
+
 ## Goal
 
 Make KP's explanatory text and animation behave as one coordinated argument
