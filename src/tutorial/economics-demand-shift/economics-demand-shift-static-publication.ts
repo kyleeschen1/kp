@@ -16,6 +16,9 @@ import {
 import {
   kpEconomicsDemandShiftDeckScenes
 } from "./economics-demand-shift-deck.ts";
+import {
+  projectKpEconomicsDemandShiftAttentionCue
+} from "./economics-demand-shift-attention-stage.ts";
 import type {
   KpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
@@ -102,6 +105,7 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication__deck-scene[data-kp-economics-deck-scene-active="true"] { opacity: 1; transform: scale(1); }
     .kp-economics-static-publication__deck-scene h3 { margin: 0 0 0.4rem; }
     .kp-economics-static-publication__deck-scene p { margin: 0; }
+    .kp-economics-static-publication [data-kp-economics-attention-cue] { display: none; }
     .kp-economics-static-publication__deck-controls { display: flex; gap: 0.75rem; justify-content: space-between; }
     .kp-economics-static-publication__deck-controls button { appearance: none; background: transparent; border: 1px solid color-mix(in srgb, currentColor 32%, transparent); color: inherit; cursor: pointer; font: 500 0.9rem/1 var(--kp-economics-ui-font-family, system-ui, sans-serif); min-block-size: 2.5rem; padding: 0.7rem 1rem; }
     .kp-economics-static-publication__deck-controls button:disabled { cursor: default; opacity: 0.35; }
@@ -161,7 +165,8 @@ function renderDeck(publication: KpEconomicsDemandShiftPublication): string {
           }
           return `<section class="kp-economics-static-publication__deck-scene" data-kp-economics-deck-scene="${escapeAttribute(scene.id)}" data-kp-economics-deck-passage="${escapeAttribute(scene.passageId)}" data-kp-economics-deck-scene-active="${index === 0}" aria-labelledby="kp-economics-deck-heading-${escapeAttribute(scene.id)}">
             <h3 id="kp-economics-deck-heading-${escapeAttribute(scene.id)}">${escapeHtml(scene.label)}</h3>
-            ${passage.paragraphs.map(({ html }) => `<p>${html}</p>`).join("")}
+            <div data-kp-economics-deck-passage-copy>${passage.paragraphs.map(({ html }) => `<p>${html}</p>`).join("")}</div>
+            <p data-kp-economics-attention-cue>${escapeHtml(projectKpEconomicsDemandShiftAttentionCue(scene))}</p>
           </section>`;
         }).join("")}
       </div>

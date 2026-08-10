@@ -46,8 +46,40 @@
       "scope": "durable-state",
       "checkedAt": "2026-08-10T19:53:45.111Z",
       "notes": "Project memory validates after resolving the bounded experiment at human checkpoint."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T20:20:17.430Z",
+      "notes": "All 91 economics semantic, publication, and preservation tests passed."
+    },
+    {
+      "command": "npm run visual:economics-attention-stage",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-10T20:20:18.643Z",
+      "notes": "All six scenes retain identical transport coordinates; desktop and phone stages fit one viewport, cues fit both axes, direct seek retains one SVG, and phone controls clear the dev toolbar."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-10T20:20:19.628Z",
+      "notes": "The canonical Deck view and its phone/direct-seek behavior still pass all three browser checks."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-08-10T20:20:36.810Z",
+      "notes": "Project memory validates after recording the viewport-contained stage refinement."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Human-approved refinement complete: every attention-stage scene fits within one viewport, concise cues preserve full stage meaning, and the Back/Continue transport stays at invariant accessible coordinates."
+  },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],
