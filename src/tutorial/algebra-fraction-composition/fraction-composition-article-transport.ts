@@ -14,6 +14,11 @@ import type {
 
 export interface KpFractionCompositionArticleTransport {
   readonly element: HTMLElement;
+  selectRange(
+    range: KpReaderPlaybackRangeWindow,
+    progress?: number,
+    source?: "controls" | "url"
+  ): void;
   seekGlobal(
     progress: number,
     source?: "controls" | "url"
@@ -34,7 +39,7 @@ export function mountKpFractionCompositionArticleTransport(input: {
   readonly range: KpReaderPlaybackRangeWindow;
   readonly durationMs: number;
 }): KpFractionCompositionArticleTransport {
-  const range = defineKpReaderPlaybackRangeWindow(input.range);
+  let range = defineKpReaderPlaybackRangeWindow(input.range);
   const document = input.ownerWindow.document;
   const element = document.createElement("div");
   element.className = "kp-algebra-article__range-transport";
@@ -71,12 +76,13 @@ export function mountKpFractionCompositionArticleTransport(input: {
     "(prefers-reduced-motion: reduce)"
   );
   const clock = createKpReaderTimelinePlaybackClock({
-    id: `reader.article.${range.id}.canonical-full-timeline`,
+    id: "reader.article.fraction-composition.canonical-full-timeline",
     durationMs: input.durationMs,
     initialProgress: range.start,
     ownerWindow: input.ownerWindow
   });
   input.host.dataset["kpAlgebraCanonicalClock"] = clock.id;
+  input.host.dataset["kpAlgebraCanonicalRange"] = range.id;
   let previousGlobalProgress = range.start;
   let disposed = false;
 
@@ -176,6 +182,26 @@ export function mountKpFractionCompositionArticleTransport(input: {
 
   return Object.freeze({
     element,
+    selectRange(
+      nextRange: KpReaderPlaybackRangeWindow,
+      progress: number = nextRange.start,
+      source: "controls" | "url" = "controls"
+    ) {
+      const selected = defineKpReaderPlaybackRangeWindow(nextRange);
+      if (progress < selected.start || progress > selected.end) {
+        throw new Error(
+          `Range ${selected.id} cannot select global progress ${progress}.`
+        );
+      }
+      clock.pause();
+      range = selected;
+      previousGlobalProgress = progress;
+      element.dataset["kpAlgebraRangeTransport"] = range.id;
+      input.host.dataset["kpAlgebraCanonicalRange"] = range.id;
+      // One direct clock seek changes both the range window and frame; no
+      // intermediate canonical operations are replayed during navigation.
+      clock.seek(progress, source);
+    },
     seekGlobal(
       progress: number,
       source: "controls" | "url" = "controls"
@@ -193,6 +219,7 @@ export function mountKpFractionCompositionArticleTransport(input: {
       clock.dispose();
       element.remove();
       delete input.host.dataset["kpAlgebraCanonicalClock"];
+      delete input.host.dataset["kpAlgebraCanonicalRange"];
       delete input.host.dataset["kpAlgebraCanonicalLocalProgress"];
       delete input.host.dataset["kpAlgebraCanonicalClockSource"];
       delete input.host.dataset["kpAlgebraCanonicalRangeBoundary"];

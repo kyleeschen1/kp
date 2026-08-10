@@ -28,6 +28,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-10-canonical-algebra-article-human-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md"
     }
   ],
   "dependsOn": {
@@ -478,6 +482,27 @@
       "scope": "s20 checkpoint capture and dossier",
       "checkedAt": "2026-08-10T19:19:37.732Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks pass with the stable capture entrypoint."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s21 authored five-range bindings",
+      "checkedAt": "2026-08-10T23:39:45.349Z",
+      "notes": "102 Article checks pass, including exact build-time motion markers for all five canonical ranges."
+    },
+    {
+      "command": "playwright focused five-range selection",
+      "status": "passed",
+      "scope": "s21 retained canonical transport",
+      "checkedAt": "2026-08-10T23:39:46.474Z",
+      "notes": "One Chromium check selects all five ranges through checkpoint data with one canonical host and one range-neutral full-timeline clock."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 five-range transport types",
+      "checkedAt": "2026-08-10T23:39:47.433Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {

@@ -171,7 +171,8 @@
     {
       "id": "s21",
       "title": "Bind-five-ranges",
-      "status": "planned"
+      "summary": "Bound all five authored motion ranges through build-emitted data and a range-neutral canonical transport. Checkpoint navigation selects each range by data, performs one direct global seek, and retains one canonical host and full-timeline clock without range-specific renderer code.",
+      "status": "complete"
     },
     {
       "id": "s22",

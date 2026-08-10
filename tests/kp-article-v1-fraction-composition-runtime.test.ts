@@ -28,6 +28,9 @@ import {
   kpFractionCompositionArticleSemanticReferences,
   resolveKpFractionCompositionArticleSemanticReference
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-semantic-navigation.ts";
+import {
+  renderKpFractionCompositionStaticPublication
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts";
 
 const compiled = compileKpFractionCompositionArticle({
   text: readFileSync(
@@ -108,6 +111,16 @@ test("six checkpoint seeks derive from the same five canonical ranges", () => {
     0,
     ...ranges.map(({ end }) => end)
   ]);
+});
+
+test("static publication binds every authored motion to a canonical range", () => {
+  const html = renderKpFractionCompositionStaticPublication(compiled);
+  const ranges = [...html.matchAll(
+    /data-kp-algebra-motion-range="([^"]+)"/gu
+  )].map((match) => match[1]);
+
+  assert.deepEqual(ranges, createKpFractionCompositionArticleRuntimeRanges()
+    .map(({ path }) => path));
 });
 
 test("article semantic addresses resolve only through locked object bindings", () => {

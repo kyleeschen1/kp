@@ -31,6 +31,17 @@ export function renderKpFractionCompositionStaticPublication(
   const checkpointNavigation = renderCheckpointNavigation(compilation);
   let articleHtml = compilation.staticHtml.articleHtml;
 
+  for (const motion of compilation.article.document.blocks) {
+    if (motion.kind !== "motion" || motion.transition.kind !== "run") continue;
+    const range = motion.transition.path.slice(
+      motion.transition.path.lastIndexOf("/") + 1
+    );
+    articleHtml = articleHtml.replace(
+      `<a id="${escapeAttribute(motion.id)}">`,
+      `<a id="${escapeAttribute(motion.id)}" data-kp-algebra-motion-range="${escapeAttribute(range)}">`
+    );
+  }
+
   for (const asset of compilation.staticHtml.assets) {
     const step = endpointSequence.steps.find(({ frame }) =>
       frame.state.objectId.endsWith(`.${asset.checkpointId}`)

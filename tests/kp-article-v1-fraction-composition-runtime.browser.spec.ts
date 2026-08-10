@@ -52,7 +52,7 @@ test("one Article transport scrubs and plays the named range on the canonical fu
   const host = page.locator("[data-kp-algebra-stage-host]");
   await expect(host).toHaveAttribute(
     "data-kp-algebra-canonical-clock",
-    "reader.article.distribute-and-normalize.canonical-full-timeline"
+    "reader.article.fraction-composition.canonical-full-timeline"
   );
   const scrubber = host.locator("[data-kp-algebra-range-scrubber]");
   await scrubber.fill("500");
@@ -86,6 +86,39 @@ test("one Article transport scrubs and plays the named range on the canonical fu
     "true"
   );
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+});
+
+test("checkpoint navigation selects all five canonical ranges through data", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  const selections = [
+    ["normalized", "distribute-and-normalize"],
+    ["constant-quotient", "evaluate-constant"],
+    ["difference-simplified", "subtract-and-simplify"],
+    ["right-product-simplified", "clear-denominator"],
+    ["solved", "divide-and-solve"]
+  ] as const;
+
+  await expect(page.locator("[data-kp-algebra-motion-range]")).toHaveCount(5);
+  for (const [checkpoint, range] of selections) {
+    await page.locator(
+      `[data-kp-algebra-checkpoint-link="${checkpoint}"]`
+    ).click();
+    await expect(host).toHaveAttribute("data-kp-algebra-canonical-range", range);
+    await expect(host.locator("[data-kp-algebra-range-transport]")).toHaveAttribute(
+      "data-kp-algebra-range-transport",
+      range
+    );
+    await expect(host).toHaveAttribute(
+      "data-kp-algebra-canonical-local-progress",
+      "1000"
+    );
+  }
+  await expect(host.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  )).toHaveCount(1);
 });
 
 test("semantic links remain searchable and pinnable without becoming timeline controls", async ({

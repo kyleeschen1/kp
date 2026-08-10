@@ -58,7 +58,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   const article = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-fraction-composition-publication]"
   ) ?? ownerWindow.document.body;
-  const canonicalStage = mountFirstCanonicalRange({
+  const canonicalStage = mountCanonicalRanges({
     ownerWindow,
     article,
     host
@@ -182,7 +182,7 @@ interface KpFractionCompositionCanonicalStageMount {
   dispose(): void;
 }
 
-function mountFirstCanonicalRange(input: {
+function mountCanonicalRanges(input: {
   readonly ownerWindow: Window;
   readonly article: HTMLElement;
   readonly host: HTMLElement;
@@ -202,7 +202,8 @@ function mountFirstCanonicalRange(input: {
   if (durationMs === undefined) {
     throw new Error("Algebra Article requires its canonical full timeline.");
   }
-  const firstRange = createKpFractionCompositionArticleRuntimeRanges()[0];
+  const ranges = createKpFractionCompositionArticleRuntimeRanges();
+  const firstRange = ranges[0];
   if (firstRange === undefined || firstRange.path !== "distribute-and-normalize") {
     throw new Error("Algebra Article lacks its canonical first motion range.");
   }
@@ -235,6 +236,26 @@ function mountFirstCanonicalRange(input: {
       (checkpoint) => [checkpoint.path, checkpoint.progress]
     )
   );
+  const rangesByTargetCheckpoint = new Map(
+    createKpFractionCompositionArticleRuntimeCheckpoints().slice(1).map(
+      (checkpoint, index) => [checkpoint.path, ranges[index]!]
+    )
+  );
+  const selectCheckpoint = (
+    mountedTransport: KpFractionCompositionArticleTransport,
+    path: string
+  ): void => {
+    const progress = checkpoints.get(path);
+    if (progress === undefined) {
+      throw new Error(`Unknown algebra checkpoint ${path}.`);
+    }
+    const range = rangesByTargetCheckpoint.get(path) ?? firstRange;
+    mountedTransport.selectRange({
+      id: range.path,
+      start: range.start,
+      end: range.end
+    }, progress, "url");
+  };
   input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
   void createKpChromeFreeCanonicalEquationSession({
     shell,
@@ -264,13 +285,8 @@ function mountFirstCanonicalRange(input: {
       durationMs
     });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
-    input.host.dataset["kpAlgebraCanonicalRange"] = firstRange.path;
     if (pendingCheckpointPath !== undefined) {
-      const progress = checkpoints.get(pendingCheckpointPath);
-      if (progress === undefined) {
-        throw new Error(`Unknown algebra checkpoint ${pendingCheckpointPath}.`);
-      }
-      transport.seekGlobal(progress, "url");
+      selectCheckpoint(transport, pendingCheckpointPath);
     }
     fallback?.toggleAttribute("hidden", true);
   }).catch((error: unknown) => {
@@ -289,7 +305,7 @@ function mountFirstCanonicalRange(input: {
         throw new Error(`Unknown algebra checkpoint ${path}.`);
       }
       pendingCheckpointPath = path;
-      transport?.seekGlobal(progress, "url");
+      if (transport !== undefined) selectCheckpoint(transport, path);
     },
     dispose() {
       disposed = true;
@@ -298,7 +314,6 @@ function mountFirstCanonicalRange(input: {
       shell.stage.remove();
       fallback?.removeAttribute("hidden");
       delete input.host.dataset["kpAlgebraCanonicalHostStatus"];
-      delete input.host.dataset["kpAlgebraCanonicalRange"];
       delete input.host.dataset["kpAlgebraCanonicalGlobalProgress"];
     }
   });
