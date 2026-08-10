@@ -210,6 +210,16 @@ function mountCanonicalRanges(input: {
   const fallback = input.host.querySelector<Element>(
     "[data-kp-algebra-stage-fallback]"
   );
+  const motionSlots = new Map(
+    [...input.article.querySelectorAll<HTMLElement>(
+      "[data-kp-algebra-motion-slot]"
+    )].map((slot) => [requiredRange(slot), slot] as const)
+  );
+  if (motionSlots.size !== ranges.length || ranges.some(({ path }) =>
+    !motionSlots.has(path)
+  )) {
+    throw new Error("Algebra Article requires one slot for every motion range.");
+  }
   const shell = mountKpCanonicalEquationStageShell({
     target: input.host,
     template,
@@ -221,10 +231,14 @@ function mountCanonicalRanges(input: {
       });
     }
   });
+  const liveSurface = input.ownerWindow.document.createElement("div");
+  liveSurface.dataset["kpAlgebraLiveSurface"] = "";
+  liveSurface.dataset["kpAlgebraLiveRange"] = "initial";
+  liveSurface.append(shell.stage);
   input.host.querySelector("[data-kp-algebra-checkpoint-navigation]")
-    ?.before(shell.stage);
+    ?.before(liveSurface);
   const salience = createKpFractionCompositionSalienceReaderCapability({
-    root: input.host,
+    root: liveSurface,
     href: input.ownerWindow.location.href
   });
   let disposed = false;
@@ -241,6 +255,31 @@ function mountCanonicalRanges(input: {
       (checkpoint, index) => [checkpoint.path, ranges[index]!]
     )
   );
+  let activeMotionSlot: HTMLElement | undefined;
+  const reattachLiveSurface = (rangePath: string | undefined): void => {
+    activeMotionSlot?.querySelector<HTMLElement>(
+      ":scope > [data-kp-algebra-static-checkpoint]"
+    )?.removeAttribute("hidden");
+    if (rangePath === undefined) {
+      input.host.querySelector("[data-kp-algebra-checkpoint-navigation]")
+        ?.before(liveSurface);
+      fallback?.toggleAttribute("hidden", true);
+      activeMotionSlot = undefined;
+    } else {
+      const nextSlot = motionSlots.get(rangePath);
+      if (nextSlot === undefined) {
+        throw new Error(`Unknown algebra motion slot ${rangePath}.`);
+      }
+      fallback?.removeAttribute("hidden");
+      nextSlot.querySelector<HTMLElement>(
+        ":scope > [data-kp-algebra-static-checkpoint]"
+      )?.toggleAttribute("hidden", true);
+      nextSlot.append(liveSurface);
+      activeMotionSlot = nextSlot;
+    }
+    liveSurface.dataset["kpAlgebraLiveRange"] = rangePath ?? "initial";
+    session?.invalidate();
+  };
   const selectCheckpoint = (
     mountedTransport: KpFractionCompositionArticleTransport,
     path: string
@@ -250,6 +289,7 @@ function mountCanonicalRanges(input: {
       throw new Error(`Unknown algebra checkpoint ${path}.`);
     }
     const range = rangesByTargetCheckpoint.get(path) ?? firstRange;
+    reattachLiveSurface(path === "factored" ? undefined : range.path);
     mountedTransport.selectRange({
       id: range.path,
       start: range.start,
@@ -269,6 +309,7 @@ function mountCanonicalRanges(input: {
     if (disposed) {
       mounted.dispose();
       shell.stage.remove();
+      liveSurface.remove();
       return;
     }
     session = mounted;
@@ -285,17 +326,23 @@ function mountCanonicalRanges(input: {
       durationMs
     });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
+    fallback?.toggleAttribute("hidden", true);
     if (pendingCheckpointPath !== undefined) {
       selectCheckpoint(transport, pendingCheckpointPath);
     }
-    fallback?.toggleAttribute("hidden", true);
   }).catch((error: unknown) => {
     if (disposed) return;
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "failed";
     transport?.dispose();
     session?.dispose();
     shell.stage.remove();
+    liveSurface.remove();
     fallback?.removeAttribute("hidden");
+    for (const slot of motionSlots.values()) {
+      slot.querySelector<HTMLElement>(
+        ":scope > [data-kp-algebra-static-checkpoint]"
+      )?.removeAttribute("hidden");
+    }
     console.error("Canonical algebra stage failed to mount.", error);
   });
   return Object.freeze({
@@ -312,11 +359,25 @@ function mountCanonicalRanges(input: {
       transport?.dispose();
       session?.dispose();
       shell.stage.remove();
+      liveSurface.remove();
       fallback?.removeAttribute("hidden");
+      for (const slot of motionSlots.values()) {
+        slot.querySelector<HTMLElement>(
+          ":scope > [data-kp-algebra-static-checkpoint]"
+        )?.removeAttribute("hidden");
+      }
       delete input.host.dataset["kpAlgebraCanonicalHostStatus"];
       delete input.host.dataset["kpAlgebraCanonicalGlobalProgress"];
     }
   });
+}
+
+function requiredRange(slot: HTMLElement): string {
+  const range = slot.dataset["kpAlgebraMotionSlot"];
+  if (range === undefined || range.length === 0) {
+    throw new Error("Algebra motion slot lacks its canonical range.");
+  }
+  return range;
 }
 
 function decorateSemanticLinks(root: HTMLElement): readonly HTMLAnchorElement[] {

@@ -74,7 +74,8 @@ html body {
   overflow: visible;
 }
 
-[data-kp-algebra-stage-host] {
+[data-kp-algebra-stage-host],
+[data-kp-algebra-live-surface] {
   min-height: 11rem;
   --kp-surface: var(--kp-semantic-surface, #fffaf0);
   --kp-ink: var(--kp-semantic-ink, #16231d);
@@ -84,16 +85,17 @@ html body {
   --kp-line: var(--kp-semantic-line, #d2d7cd);
 }
 
-[data-kp-algebra-stage-host] [data-kp-algebra-stage-fallback][hidden] {
+[data-kp-algebra-stage-host] [data-kp-algebra-stage-fallback][hidden],
+[data-kp-algebra-motion-slot] > [data-kp-algebra-static-checkpoint][hidden] {
   display: none;
 }
 
-[data-kp-algebra-stage-host] .kp-reader-equation-stage-heading,
-[data-kp-algebra-stage-host] .kp-reader-equation-hint {
+[data-kp-algebra-live-surface] .kp-reader-equation-stage-heading,
+[data-kp-algebra-live-surface] .kp-reader-equation-hint {
   display: none;
 }
 
-[data-kp-algebra-stage-host] [data-kp-fraction-salience-bound] {
+[data-kp-algebra-live-surface] [data-kp-fraction-salience-bound] {
   color: var(--kp-semantic-salience-color) !important;
   opacity: var(--kp-semantic-salience-opacity);
   transition: none;

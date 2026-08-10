@@ -102,23 +102,50 @@ test("checkpoint navigation selects all five canonical ranges through data", asy
   ] as const;
 
   await expect(page.locator("[data-kp-algebra-motion-range]")).toHaveCount(5);
+  const canonicalStage = page.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  );
+  await canonicalStage.evaluate((element) => {
+    element.setAttribute("data-kp-test-retained-stage", "true");
+  });
   for (const [checkpoint, range] of selections) {
     await page.locator(
       `[data-kp-algebra-checkpoint-link="${checkpoint}"]`
     ).click();
     await expect(host).toHaveAttribute("data-kp-algebra-canonical-range", range);
-    await expect(host.locator("[data-kp-algebra-range-transport]")).toHaveAttribute(
+    await expect(page.locator("[data-kp-algebra-range-transport]")).toHaveAttribute(
       "data-kp-algebra-range-transport",
       range
     );
+    await expect(page.locator("[data-kp-algebra-live-surface]")).toHaveAttribute(
+      "data-kp-algebra-live-range",
+      range
+    );
+    await expect(page.locator(
+      `[data-kp-algebra-motion-slot="${range}"] > [data-kp-algebra-live-surface]`
+    )).toHaveCount(1);
+    await expect(page.locator(
+      `[data-kp-algebra-motion-slot="${range}"] > [data-kp-algebra-static-checkpoint]`
+    )).toBeHidden();
+    await expect(host.locator("[data-kp-algebra-stage-fallback]")).toBeVisible();
     await expect(host).toHaveAttribute(
       "data-kp-algebra-canonical-local-progress",
       "1000"
     );
   }
-  await expect(host.locator(
-    '[data-kp-canonical-equation-host="chrome-free-v1"]'
-  )).toHaveCount(1);
+  await expect(canonicalStage).toHaveCount(1);
+  await expect(canonicalStage).toHaveAttribute("data-kp-test-retained-stage", "true");
+
+  await page.locator('[data-kp-algebra-checkpoint-link="factored"]').click();
+  await expect(host.locator(":scope > [data-kp-algebra-live-surface]"))
+    .toHaveCount(1);
+  await expect(page.locator("[data-kp-algebra-live-surface]")).toHaveAttribute(
+    "data-kp-algebra-live-range",
+    "initial"
+  );
+  await expect(host.locator("[data-kp-algebra-stage-fallback]")).toBeHidden();
+  await expect(host).toHaveAttribute("data-kp-algebra-canonical-range", selections[0][1]);
+  await expect(host).toHaveAttribute("data-kp-algebra-canonical-global-progress", "0");
 });
 
 test("semantic links remain searchable and pinnable without becoming timeline controls", async ({
@@ -178,7 +205,7 @@ test("checkpoint URLs restore static navigation directly across browser history"
     "data-kp-algebra-canonical-clock-source",
     "url"
   );
-  await expect(host.locator(
+  await expect(page.locator(
     '[data-kp-canonical-equation-host="chrome-free-v1"]'
   )).toHaveAttribute(
     "data-kp-reader-accessible-equation-state",

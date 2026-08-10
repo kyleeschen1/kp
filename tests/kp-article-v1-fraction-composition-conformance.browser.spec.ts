@@ -106,7 +106,7 @@ test("checkpoint and semantic controls remain keyboard-addressable", async ({ pa
   await expect(publication.locator("[data-kp-algebra-stage-host]"))
     .toHaveAttribute("data-kp-algebra-static-checkpoint", "normalized");
   const host = publication.locator("[data-kp-algebra-stage-host]");
-  const scrubber = host.locator("[data-kp-algebra-range-scrubber]");
+  const scrubber = publication.locator("[data-kp-algebra-range-scrubber]");
   await scrubber.focus();
   await expect(scrubber).toBeFocused();
   await scrubber.press("Home");
@@ -119,7 +119,7 @@ test("checkpoint and semantic controls remain keyboard-addressable", async ({ pa
     "data-kp-algebra-canonical-local-progress",
     "1000"
   );
-  await expect(host.locator('[data-kp-algebra-range-action="replay"]'))
+  await expect(publication.locator('[data-kp-algebra-range-action="replay"]'))
     .toHaveAttribute("type", "button");
 });
 

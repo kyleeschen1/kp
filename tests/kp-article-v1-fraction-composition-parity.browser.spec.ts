@@ -113,7 +113,7 @@ async function canonicalFrame(
   host: "article" | "reader"
 ) {
   const selector = host === "article"
-    ? '[data-kp-algebra-stage-host] [data-kp-reader-equation-stage]'
+    ? '[data-kp-algebra-live-surface] [data-kp-reader-equation-stage]'
     : "[data-kp-reader-equation-stage]";
   return page.locator(selector).evaluate((stage) => {
     const root = stage as HTMLElement;

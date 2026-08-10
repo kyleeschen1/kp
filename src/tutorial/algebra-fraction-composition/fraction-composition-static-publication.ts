@@ -15,6 +15,9 @@ import {
 import {
   createKpFractionCompositionSelectorAnnotatedLatex
 } from "../../rendering/fraction-composition-selector-annotated-latex.ts";
+import {
+  kpFractionCompositionArticleTransitionBindings
+} from "../../article/vignettes/fraction-composition-vignette.ts";
 import type {
   KpFractionCompositionArticleCompilation
 } from "./fraction-composition-article-compiler.ts";
@@ -29,6 +32,11 @@ export function renderKpFractionCompositionStaticPublication(
 ): string {
   const endpointSequence = createKpFractionCompositionStaticStepExport();
   const checkpointNavigation = renderCheckpointNavigation(compilation);
+  const motionRangeByCheckpoint = new Map(
+    kpFractionCompositionArticleTransitionBindings.map(
+      ({ path, to }) => [to, path] as const
+    )
+  );
   let articleHtml = compilation.staticHtml.articleHtml;
 
   for (const motion of compilation.article.document.blocks) {
@@ -71,11 +79,19 @@ export function renderKpFractionCompositionStaticPublication(
       }),
       `</div></foreignObject></svg>`
     ].join("");
+    const motionRange = motionRangeByCheckpoint.get(asset.checkpointId);
+    const equationProjection = motionRange === undefined
+      ? equationSvg
+      : [
+          `<div data-kp-algebra-motion-slot="${escapeAttribute(motionRange)}">`,
+          equationSvg,
+          `</div>`
+        ].join("");
     articleHtml = articleHtml.replace(
       image,
       asset.checkpointId === "factored"
-        ? `<div data-kp-algebra-stage-host>${equationSvg}${checkpointNavigation}</div>`
-        : equationSvg
+        ? `<div data-kp-algebra-stage-host>${equationProjection}${checkpointNavigation}</div>`
+        : equationProjection
     );
   }
 

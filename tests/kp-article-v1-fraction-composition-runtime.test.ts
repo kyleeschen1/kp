@@ -115,12 +115,17 @@ test("six checkpoint seeks derive from the same five canonical ranges", () => {
 
 test("static publication binds every authored motion to a canonical range", () => {
   const html = renderKpFractionCompositionStaticPublication(compiled);
-  const ranges = [...html.matchAll(
+  const markers = [...html.matchAll(
     /data-kp-algebra-motion-range="([^"]+)"/gu
   )].map((match) => match[1]);
+  const slots = [...html.matchAll(
+    /data-kp-algebra-motion-slot="([^"]+)"/gu
+  )].map((match) => match[1]);
+  const ranges = createKpFractionCompositionArticleRuntimeRanges()
+    .map(({ path }) => path);
 
-  assert.deepEqual(ranges, createKpFractionCompositionArticleRuntimeRanges()
-    .map(({ path }) => path));
+  assert.deepEqual(markers, ranges);
+  assert.deepEqual(slots, ranges);
 });
 
 test("article semantic addresses resolve only through locked object bindings", () => {

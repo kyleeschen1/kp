@@ -177,7 +177,8 @@
     {
       "id": "s22",
       "title": "Retained-session-handoff",
-      "status": "planned"
+      "summary": "Retained one canonical equation session, live stage, transport, and clock while reattaching the live surface to each selected motion slot. Inactive passages restore their static endpoints; checkpoint URLs, history, keyboard controls, initial-host return, and disposal preserve one paint owner.",
+      "status": "complete"
     },
     {
       "id": "s23",

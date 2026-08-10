@@ -503,6 +503,27 @@
       "scope": "s21 five-range transport types",
       "checkedAt": "2026-08-10T23:39:47.433Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s22 retained-session static contract",
+      "checkedAt": "2026-08-10T23:51:20.268Z",
+      "notes": "102 checks pass; every canonical range has one build-owned motion slot and the no-JavaScript article retains all six endpoints."
+    },
+    {
+      "command": "playwright retained-stage and keyboard focus",
+      "status": "passed",
+      "scope": "s22 session handoff",
+      "checkedAt": "2026-08-10T23:51:21.506Z",
+      "notes": "Focused Chromium checks move the same marked canonical stage through all five slots and back to the initial host, restore inactive static fallbacks, preserve direct URL/history, and keep moved controls keyboard-addressable."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 retained live-surface lifecycle",
+      "checkedAt": "2026-08-10T23:51:22.667Z",
+      "notes": "Typed stage, session, transport, and fallback ownership compile without diagnostics."
     }
   ],
   "progress": {
