@@ -104,11 +104,46 @@
       "status": "passed",
       "scope": "durable-state",
       "checkedAt": "2026-08-10T22:18:22.253Z"
+    },
+    {
+      "command": "npm run visual:economics-attention-stage",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-10T22:53:28.690Z",
+      "notes": "All three Chromium checks pass: stable geometry and stage-passage-progress-buttons order across scenes, direct phone restoration, safe stage insets, no horizontal overflow, and readable 200-percent text-zoom page flow with reachable controls."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T22:53:36.502Z",
+      "notes": "All 92 economics semantic, publication, runtime, salience, layout, and preservation tests pass."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-10T22:53:42.803Z",
+      "notes": "All three ordinary Deck desktop, navigation, direct-seek, and phone checks remain unchanged and pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-08-10T22:54:15.473Z",
+      "notes": "Validated 922 nodes and 19,363 events after recording the attention-stage and collaboration-tone experiment."
+    },
+    {
+      "command": "app, node, Svelte, and domain typechecks",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T22:55:24.938Z",
+      "notes": "Application and Node TypeScript, Svelte diagnostics, and domain TypeScript pass. The complete typecheck remains blocked only by the pre-existing unused Browser import in kp-article-v1-fraction-composition-parity.browser.spec.ts."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Austere six-frame demand-shift attention-stage exemplar is implemented and verified; stop at the named human visual checkpoint before any promotion."
+    "summary": "HUMAN_CHECKPOINT: the demand-shift attention stage now holds one graph geometry, provides label-safe padding and readable large-text page flow, and orders stage, passage, progress, then buttons. The candid, welcoming collaboration-tone experiment is durable; no layout generalization began."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

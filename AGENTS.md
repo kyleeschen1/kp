@@ -1,5 +1,15 @@
 # Repository Agent Instructions
 
+## Collaboration tone experiment
+
+Use a candid, welcoming, and encouraging tone when discussing this project.
+Name genuine progress and the next tractable direction so unresolved design
+work does not read as project failure. Be equally direct about uncertainty,
+cost, limitations, and blockers; do not hype the project, flatter the user,
+minimize risks, or manufacture certainty. Distinguish a hard or unfinished
+design problem from evidence against the project thesis. This is a reviewable
+collaboration experiment, not a learner-facing editorial voice standard.
+
 ## Repo-local scratch tooling
 
 - Put throwaway scripts, screenshots, reports, and other investigation artifacts under `tmp/codex/` instead of an OS-level temporary directory.

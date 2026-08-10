@@ -84,6 +84,17 @@ Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
 
+A bounded visual interruption is now at a human checkpoint, recorded in
+`decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`.
+The demand-shift attention stage keeps one graph geometry, adds a visual safe
+area and a large-text page-flow fallback, and orders stage, passage, progress,
+then transport buttons. This is one reversible exemplar, not a resumption or
+selection of universal layout work. The canonical algebra run remains paused
+at its existing boundary until this checkpoint returns control. The same
+decision records a repo-local collaboration-tone experiment: candid about
+tradeoffs and uncertainty while remaining welcoming, encouraging, and clear
+about real progress and next direction.
+
 The accepted long-term plan is recorded in
 `decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
 turning generated examples and visible demos into reusable semantic objects,

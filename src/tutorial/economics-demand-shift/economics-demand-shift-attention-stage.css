@@ -2,42 +2,49 @@ html[data-kp-economics-view="attention-stage"] {
   --kp-attention-stage-viewport-clearance: 2rem;
   --kp-attention-stage-max-block: 42rem;
   --kp-attention-stage-copy-block: 7.75rem;
-  --kp-attention-stage-graph-reading: 27rem;
-  --kp-attention-stage-graph-primary: 46rem;
-  --kp-attention-stage-graph-reference: 30rem;
-  --kp-attention-stage-shift-duration: 320ms;
+  --kp-attention-stage-graph-block-min: clamp(12rem, 42svh, 24rem);
+  --kp-attention-stage-graph-inline: 46rem;
+  --kp-attention-stage-safe-inline: clamp(0.75rem, 3vmin, 1.75rem);
+  --kp-attention-stage-safe-block: clamp(0.5rem, 1.5svh, 1rem);
+  --kp-attention-stage-section-gap: clamp(0.75rem, 1.5svh, 1.25rem);
 }
 
 html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
   --kp-attention-stage-viewport-clearance: 5.75rem;
 }
 
+html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__projection {
+  /* Reserve an actual scrollable tail as well as sizing clearance so text-only
+     zoom can move transport controls above the fixed development toolbar. */
+  margin-block-end: var(--kp-attention-stage-viewport-clearance);
+}
+
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__projection {
-  display: grid;
-  block-size: min(
+  display: flex;
+  flex-direction: column;
+  min-block-size: min(
     var(--kp-attention-stage-max-block),
     calc(100svh - var(--kp-attention-stage-viewport-clearance))
   );
-  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--kp-attention-stage-section-gap);
   max-inline-size: 54rem;
-  overflow: clip;
   scroll-margin-block-start: 1rem;
 }
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__stage {
   display: grid;
-  block-size: 100%;
-  inline-size: min(100%, var(--kp-attention-stage-graph-reading));
+  box-sizing: border-box;
+  block-size: var(--kp-attention-stage-graph-block-min);
+  inline-size: min(100%, var(--kp-attention-stage-graph-inline));
   min-block-size: 0;
+  flex: 0 0 var(--kp-attention-stage-graph-block-min);
   grid-template-rows: minmax(0, 1fr) auto;
   margin: 0 auto;
-  transform: scale(0.98);
-  transform-origin: 50% 100%;
-  transition:
-    inline-size var(--kp-attention-stage-shift-duration) cubic-bezier(.2,.8,.2,1),
-    transform var(--kp-attention-stage-shift-duration) cubic-bezier(.2,.8,.2,1);
+  padding: var(--kp-attention-stage-safe-block)
+    var(--kp-attention-stage-safe-inline);
 }
 
 html[data-kp-economics-view="attention-stage"]
@@ -53,25 +60,41 @@ html[data-kp-economics-view="attention-stage"]
 }
 
 html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-math-label] {
+  /* Text-only zoom may outgrow the renderer's fixed foreignObject bounds;
+     the stage safe area owns the overflow instead of clipping the math. */
+  overflow: visible;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__stage svg {
+  overflow: visible;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-static-publication]
   .kp-economics-static-publication__deck {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 46rem;
-  grid-template-rows: auto var(--kp-attention-stage-copy-block) auto;
   gap: 0.7rem;
   margin: 0 auto;
 }
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-progress {
+  order: 2;
   min-block-size: 1rem;
 }
 
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-viewport {
-  block-size: var(--kp-attention-stage-copy-block);
+  order: 1;
+  min-block-size: var(--kp-attention-stage-copy-block);
+  block-size: auto;
   inline-size: 100%;
   min-inline-size: 0;
   margin: 0;
@@ -81,7 +104,8 @@ html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-track,
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-scene {
-  block-size: 100%;
+  min-block-size: var(--kp-attention-stage-copy-block);
+  block-size: auto;
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -119,10 +143,11 @@ html[data-kp-economics-view="attention-stage"]
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-controls {
   display: grid;
+  order: 3;
   inline-size: 100%;
   min-inline-size: 0;
   min-block-size: 3.25rem;
-  grid-template-columns: minmax(7.75rem, 1fr) minmax(7.75rem, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: end;
 }
 
@@ -130,7 +155,7 @@ html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__deck-controls button {
   box-sizing: border-box;
   block-size: 3.25rem;
-  inline-size: 7.75rem;
+  inline-size: min(100%, 7.75rem);
   min-block-size: 3.25rem;
   padding: 0.4rem 0.65rem;
   border-color: color-mix(in srgb, currentcolor 22%, transparent);
@@ -252,34 +277,14 @@ html[data-kp-economics-view="attention-stage"]
   stroke-dashoffset: calc(1 - var(--kp-tutorial-supply-trace, 1));
 }
 
-html[data-kp-economics-view="attention-stage"]
-  :is(
-    [data-kp-economics-attention-framing="demonstration"],
-    [data-kp-economics-attention-framing="inspect"]
-  )
-  .kp-economics-static-publication__stage {
-  inline-size: min(100%, var(--kp-attention-stage-graph-primary));
-  transform: scale(1);
-}
-
-html[data-kp-economics-view="attention-stage"]
-  [data-kp-economics-attention-framing="quiet-reference"]
-  .kp-economics-static-publication__stage {
-  inline-size: min(100%, var(--kp-attention-stage-graph-reference));
-  transform: scale(0.96);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-kp-economics-view="attention-stage"]
-    .kp-economics-static-publication__stage {
-    transition: none;
-  }
-}
+/* Framing remains semantic metadata. This trial changes graph geometry only
+   when the containing viewport requires it, preserving object constancy. */
 
 @media (max-width: 42rem) {
   html[data-kp-economics-view="attention-stage"] {
     --kp-attention-stage-max-block: 32rem;
     --kp-attention-stage-copy-block: 8.25rem;
+    --kp-attention-stage-graph-block-min: clamp(11rem, 32svh, 16rem);
   }
 
   html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
@@ -293,12 +298,12 @@ html[data-kp-economics-view="attention-stage"]
 
   html[data-kp-economics-view="attention-stage"]
     .kp-economics-static-publication__deck-controls {
-    grid-template-columns: minmax(6.75rem, 1fr) minmax(6.75rem, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   html[data-kp-economics-view="attention-stage"]
     .kp-economics-static-publication__deck-controls button {
-    inline-size: 6.75rem;
+    inline-size: min(100%, 6.75rem);
   }
 
   html[data-kp-economics-view="attention-stage"]

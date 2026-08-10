@@ -27,6 +27,25 @@ test("attention stage recomposes one retained graph across semantic frames", asy
     "reading"
   );
   await expect(deck).toBeVisible();
+  expect(await deck.evaluate((element) => ({
+    display: getComputedStyle(element).display,
+    direction: getComputedStyle(element).flexDirection,
+    passageOrder: getComputedStyle(element.querySelector(
+      ".kp-economics-static-publication__deck-viewport"
+    )!).order,
+    progressOrder: getComputedStyle(element.querySelector(
+      ".kp-economics-static-publication__deck-progress"
+    )!).order,
+    controlsOrder: getComputedStyle(element.querySelector(
+      ".kp-economics-static-publication__deck-controls"
+    )!).order
+  }))).toEqual({
+    display: "flex",
+    direction: "column",
+    passageOrder: "1",
+    progressOrder: "2",
+    controlsOrder: "3"
+  });
   await expect(page.locator("[data-kp-editor-graph-svg]")).toHaveCount(1);
   await projection.evaluate((element) =>
     element.scrollIntoView({ block: "start", behavior: "auto" })
@@ -38,6 +57,10 @@ test("attention stage recomposes one retained graph across semantic frames", asy
   )).toBeHidden();
   await expectStageToFitViewport(page, projection);
   await expectAustereCommonFrame(publication);
+  await mkdir(evidenceDirectory, { recursive: true });
+  await captureProjection(publication, "desktop-01-orient.png");
+  await expectAttentionStageOrder(publication);
+  await expectGraphSafeArea(graph);
   const axisStroke = await publication.locator("[data-kp-editor-graph-axis]")
     .first().evaluate((element) => getComputedStyle(element).stroke);
   const progress = publication.locator("[data-kp-economics-deck-progress]");
@@ -50,8 +73,6 @@ test("attention stage recomposes one retained graph across semantic frames", asy
     .toBeVisible();
   await expect(publication.locator("[data-kp-economics-equilibrium-point]"))
     .toBeVisible();
-  await mkdir(evidenceDirectory, { recursive: true });
-  await captureProjection(publication, "desktop-01-orient.png");
   const readingWidth = (await graph.boundingBox())?.width ?? 0;
 
   await deck.getByRole("button", { name: "Continue" }).click();
@@ -71,7 +92,7 @@ test("attention stage recomposes one retained graph across semantic frames", asy
   )), { timeout: 4_000 }).toBeCloseTo(1, 1);
   await expectMotionProgress(publication, "demand", 1);
   const demonstrationWidth = (await graph.boundingBox())?.width ?? 0;
-  expect(demonstrationWidth).toBeGreaterThan(readingWidth + 100);
+  expect(Math.abs(demonstrationWidth - readingWidth)).toBeLessThanOrEqual(1);
   expect(await transportPosition(deck)).toEqual(initialTransport);
   await expectActiveCueToFit(deck);
   await expectAustereCommonFrame(publication);
@@ -116,6 +137,8 @@ test("attention stage recomposes one retained graph across semantic frames", asy
     await expectActiveCueToFit(deck);
     await expectStageToFitViewport(page, projection);
     await expectAustereCommonFrame(publication);
+    expect(Math.abs(((await graph.boundingBox())?.width ?? 0) - readingWidth))
+      .toBeLessThanOrEqual(1);
     if (sceneId === "trace-supply") {
       await expect.poll(async () => Number(await publication.getAttribute(
         "data-kp-economics-tutorial-supply-movement-progress"
@@ -169,6 +192,10 @@ test("direct attention frames remain stable and usable on a phone", async ({
   await expectStageToFitViewport(page, projection);
   await expectActiveCueToFit(deck);
   await expectActiveSceneToFitViewport(page, deck);
+  await expectAttentionStageOrder(publication);
+  await expectGraphSafeArea(publication.locator(
+    ".kp-economics-static-publication__stage"
+  ));
   await expect(deck.locator("[data-kp-economics-deck-previous]"))
     .toBeInViewport();
   await expect(deck.locator("[data-kp-economics-deck-next]"))
@@ -194,6 +221,74 @@ test("direct attention frames remain stable and usable on a phone", async ({
 
   await mkdir(evidenceDirectory, { recursive: true });
   await captureProjection(publication, "phone-quiet-reference.png");
+});
+
+test("large text remains readable and degrades to ordinary page flow", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${route}&scene=trace-supply`);
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = "200%";
+  });
+
+  const publication = page.locator("[data-kp-economics-static-publication]");
+  const projection = publication.locator(
+    ".kp-economics-static-publication__projection"
+  );
+  const deck = publication.locator("[data-kp-economics-deck]");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-static-enhancement",
+    "ready"
+  );
+  await projection.scrollIntoViewIfNeeded();
+  await expectActiveCueToFit(deck);
+  await expectAttentionStageOrder(publication);
+  await expectActiveSceneToFitViewport(page, deck);
+  expect(await deck.locator(
+    "[data-kp-economics-deck-scene-active=\"true\"] [data-kp-economics-attention-cue]"
+  ).evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)))
+    .toBeGreaterThanOrEqual(32);
+  expect(await projection.evaluate((element) =>
+    getComputedStyle(element).overflow
+  )).toBe("visible");
+  const viewportWidth = await page.evaluate(() =>
+    document.documentElement.clientWidth
+  );
+  const scrollWidth = await page.evaluate(() =>
+    document.documentElement.scrollWidth
+  );
+  expect(scrollWidth).toBeLessThanOrEqual(viewportWidth + 1);
+
+  await mkdir(evidenceDirectory, { recursive: true });
+  await captureProjection(publication, "desktop-large-text.png");
+
+  const controls = deck.locator(
+    ".kp-economics-static-publication__deck-controls"
+  );
+  await controls.evaluate((element) =>
+    element.scrollIntoView({ block: "end", behavior: "auto" })
+  );
+  // Fixed overlays are not considered by scrollIntoView. A reader's ordinary
+  // wheel gesture must still have enough document tail to expose the controls.
+  await page.mouse.wheel(0, 500);
+  const toolbar = page.locator("[data-kp-dev-toolbar]");
+  await expect.poll(async () => {
+    const controlsBox = await controls.boundingBox();
+    const toolbarBox = await toolbar.boundingBox();
+    return controlsBox === null || toolbarBox === null
+      ? Number.POSITIVE_INFINITY
+      : controlsBox.y + controlsBox.height - toolbarBox.y;
+  }).toBeLessThanOrEqual(0);
+  const controlsBox = await controls.boundingBox();
+  const toolbarBox = await toolbar.boundingBox();
+  expect(controlsBox).not.toBeNull();
+  expect(toolbarBox).not.toBeNull();
+  expect(controlsBox!.y + controlsBox!.height).toBeLessThanOrEqual(
+    toolbarBox!.y
+  );
+  await captureProjection(publication, "desktop-large-text-controls.png");
 });
 
 async function transportPosition(deck: Locator): Promise<{
@@ -272,6 +367,37 @@ async function expectAustereCommonFrame(publication: Locator): Promise<void> {
   await expect(publication.locator(
     "[data-kp-economics-deck-scene-active=\"true\"] h3"
   )).toBeHidden();
+}
+
+async function expectAttentionStageOrder(publication: Locator): Promise<void> {
+  const elements = [
+    publication.locator(".kp-economics-static-publication__stage"),
+    publication.locator(
+      "[data-kp-economics-deck-scene-active=\"true\"] [data-kp-economics-attention-cue]"
+    ),
+    publication.locator(".kp-economics-static-publication__deck-progress"),
+    publication.locator(".kp-economics-static-publication__deck-controls")
+  ];
+  const boxes = await Promise.all(elements.map((element) => element.boundingBox()));
+  for (const box of boxes) expect(box).not.toBeNull();
+  for (let index = 1; index < boxes.length; index += 1) {
+    expect(boxes[index]!.y).toBeGreaterThanOrEqual(
+      boxes[index - 1]!.y + boxes[index - 1]!.height - 1
+    );
+  }
+}
+
+async function expectGraphSafeArea(stage: Locator): Promise<void> {
+  const stageBox = await stage.boundingBox();
+  const svgBox = await stage.locator("[data-kp-editor-graph-svg]").boundingBox();
+  expect(stageBox).not.toBeNull();
+  expect(svgBox).not.toBeNull();
+  expect(svgBox!.x - stageBox!.x).toBeGreaterThanOrEqual(10);
+  expect(stageBox!.x + stageBox!.width - svgBox!.x - svgBox!.width)
+    .toBeGreaterThanOrEqual(10);
+  expect(svgBox!.y - stageBox!.y).toBeGreaterThanOrEqual(6);
+  expect(stageBox!.y + stageBox!.height - svgBox!.y - svgBox!.height)
+    .toBeGreaterThanOrEqual(6);
 }
 
 async function captureProjection(

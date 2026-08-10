@@ -15,6 +15,14 @@ Shared station extraction, split parity, final
 floating-navigation geometry, and release approval remain deferred. This pause
 does not alter the separate animation-promotion rank.
 
+Current Bounded Experiment: the demand-shift attention-stage refinement in
+`../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`
+is at a human visual checkpoint. It holds graph geometry stable, supplies a
+label-safe stage inset and readable large-text fallback, and presents stage,
+passage, progress, then transport buttons. It does not reopen general layout
+selection; the canonical algebra recovery remains paused at its prior slice
+boundary while this independently reversible interruption is reviewed.
+
 ## Goal
 
 Make KP's explanatory text and animation behave as one coordinated argument
