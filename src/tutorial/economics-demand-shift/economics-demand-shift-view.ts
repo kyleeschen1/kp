@@ -5,12 +5,14 @@ import type {
 export type KpEconomicsDemandShiftView =
   | "reader"
   | "deck"
+  | "attention-stage"
   | KpEconomicsDemandShiftPresentationLayout;
 
 export const kpEconomicsDemandShiftViews:
 readonly KpEconomicsDemandShiftView[] = Object.freeze([
   "reader",
   "deck",
+  "attention-stage",
   "split",
   "inline-sticky",
   "two-column-scroll",
@@ -60,5 +62,6 @@ function isKpEconomicsDemandShiftView(
   value: string | null
 ): value is KpEconomicsDemandShiftView {
   return value === "reader" || value === "deck" ||
+    value === "attention-stage" ||
     isKpEconomicsPresenterView(value);
 }

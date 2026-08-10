@@ -1,0 +1,70 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v22.semantic-layout-before-local-routing",
+  "kind": "next-action",
+  "title": "Test semantic-layout-before-local-routing",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Built one reversible demand-shift attention-stage view over the canonical published deck. Four semantic framings now recompose one retained graph at direct URLs; existing views, animation authority, prose, and scene state are preserved. Stop at the exemplar human checkpoint before any promotion.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v22.semantic-layout-before-local-routing: User approved one reversible demand-shift attentional-stage presenter to test whether semantic framing can drive responsive composition while preserving the animation, prose, and existing layouts.",
+      "occurredAt": "2026-08-10T19:40:36.818Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T19:52:27.400Z",
+      "notes": "All 90 economics preservation and semantic projection tests passed."
+    },
+    {
+      "command": "npm run visual:economics-attention-stage",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-10T19:52:28.504Z",
+      "notes": "Chromium desktop and phone passed; four semantic framings, direct seek, one retained SVG, and no horizontal overflow were observed."
+    },
+    {
+      "command": "npm run visual:economics-demand-shift-deck",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-10T19:52:29.507Z",
+      "notes": "The canonical deck remained intact across three browser checks."
+    },
+    {
+      "command": "theseus validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-08-10T19:53:45.111Z",
+      "notes": "Project memory validates after resolving the bounded experiment at human checkpoint."
+    }
+  ],
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: Semantic layout planning owns stable groups, rows, lanes, disclosure, and deterministic staging or folding; the local compositor owns measured paint routing and native DOM settlement."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

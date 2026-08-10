@@ -33,4 +33,12 @@ test("deck URLs resolve ids and ordinal compatibility without replay", () => {
     }),
     "?view=deck&theme=light&scene=trace-supply"
   );
+  assert.equal(
+    writeKpEconomicsDemandShiftDeckScene({
+      search: "?view=attention-stage&theme=dark",
+      sceneIndex: 2,
+      view: "attention-stage"
+    }),
+    "?view=attention-stage&theme=dark&scene=shift-demand"
+  );
 });

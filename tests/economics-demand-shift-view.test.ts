@@ -10,6 +10,10 @@ test("economics views prefer canonical view URLs while preserving legacy layouts
   assert.equal(readKpEconomicsDemandShiftView(""), "reader");
   assert.equal(readKpEconomicsDemandShiftView("?view=deck"), "deck");
   assert.equal(
+    readKpEconomicsDemandShiftView("?view=attention-stage"),
+    "attention-stage"
+  );
+  assert.equal(
     readKpEconomicsDemandShiftView("?layout=animation-station"),
     "animation-station"
   );

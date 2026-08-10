@@ -84,15 +84,15 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication .katex-html { display: none; }
     .kp-economics-static-publication math { display: inline math; }
     .kp-economics-static-publication__deck { display: none; margin: 1.25rem auto 2.5rem; max-width: 46rem; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication { max-width: 82rem; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose { max-width: 76rem; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__intro,
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose > section,
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__prose > kp-tutorial-toc,
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__reader-seam { margin-inline: auto; max-width: 68ch; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__projection { margin: 1.5rem auto 4rem; max-width: 54rem; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__stage { inline-size: min(100%, 73vh); margin-bottom: 1.5rem; max-width: 46rem; }
-    html[data-kp-economics-view="deck"] .kp-economics-static-publication__deck { display: block; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication { max-width: 82rem; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__prose { max-width: 76rem; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__intro,
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__prose > section,
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__prose > kp-tutorial-toc,
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__reader-seam { margin-inline: auto; max-width: 68ch; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__projection { margin: 1.5rem auto 4rem; max-width: 54rem; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__stage { inline-size: min(100%, 73vh); margin-bottom: 1.5rem; max-width: 46rem; }
+    html:is([data-kp-economics-view="deck"], [data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__deck { display: block; }
     .kp-economics-static-publication__deck-progress { display: grid; gap: 0.55rem; grid-template-columns: auto 1fr; align-items: center; }
     .kp-economics-static-publication__deck-progress output { font: 500 0.78rem/1.2 var(--kp-economics-ui-font-family, system-ui, sans-serif); letter-spacing: 0.04em; white-space: nowrap; }
     .kp-economics-static-publication__deck-progress progress { accent-color: var(--kp-salience-green, #65d6a6); block-size: 0.18rem; border: 0; inline-size: 100%; }
@@ -108,7 +108,7 @@ export function renderKpEconomicsDemandShiftStaticNarrativeStyles(): string {
     .kp-economics-static-publication__reader-seam { align-items: center; display: flex; gap: 0.75rem; margin-block: 3rem 1rem; color: color-mix(in srgb, currentColor 62%, transparent); font: 500 0.75rem/1.2 var(--kp-economics-ui-font-family, system-ui, sans-serif); letter-spacing: 0.08em; text-transform: uppercase; }
     .kp-economics-static-publication__reader-seam::before,
     .kp-economics-static-publication__reader-seam::after { background: currentColor; content: ""; block-size: 1px; flex: 1; }
-    html:not([data-kp-economics-view="deck"]) .kp-economics-static-publication__reader-seam { display: none; }
+    html:not([data-kp-economics-view="deck"]):not([data-kp-economics-view="attention-stage"]) .kp-economics-static-publication__reader-seam { display: none; }
     @media (prefers-reduced-motion: reduce) {
       .kp-economics-static-publication__deck-track,
       .kp-economics-static-publication__deck-scene { transition: none; }
@@ -129,6 +129,7 @@ function renderViewSelector(): string {
     <details class="kp-economics-view-selector__experiments">
       <summary>Experiments</summary>
       <div>
+        ${viewLink("attention-stage", "Attention stage")}
         ${viewLink("split", "Split")}
         ${viewLink("inline-sticky", "Sticky")}
         ${viewLink("two-column-scroll", "Columns")}

@@ -71,13 +71,14 @@ export function readKpEconomicsDemandShiftDeckSceneIndex(
 export function writeKpEconomicsDemandShiftDeckScene(input: {
   readonly search: string;
   readonly sceneIndex: number;
+  readonly view?: "deck" | "attention-stage";
 }): string {
   const bounded = Math.max(0, Math.min(
     kpEconomicsDemandShiftDeckScenes.length - 1,
     Math.trunc(input.sceneIndex)
   ));
   const parameters = new URLSearchParams(input.search);
-  parameters.set("view", "deck");
+  parameters.set("view", input.view ?? "deck");
   parameters.set("scene", kpEconomicsDemandShiftDeckScenes[bounded]!.id);
   parameters.delete("layout");
   parameters.delete("enhancement");

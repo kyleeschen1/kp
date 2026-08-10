@@ -1,0 +1,121 @@
+html[data-kp-economics-view="attention-stage"] {
+  --kp-attention-stage-graph-reading: min(72vw, 27rem);
+  --kp-attention-stage-graph-primary: min(100%, 46rem);
+  --kp-attention-stage-graph-reference: min(76vw, 30rem);
+  --kp-attention-stage-copy-reading: 50rem;
+  --kp-attention-stage-copy-caption: 40rem;
+  --kp-attention-stage-shift-duration: 320ms;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__projection {
+  display: flex;
+  flex-direction: column;
+  min-block-size: min(76vh, 48rem);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__stage {
+  inline-size: var(--kp-attention-stage-graph-reading);
+  margin: 0 auto 1.75rem;
+  transform: scale(0.98);
+  transform-origin: 50% 100%;
+  transition:
+    inline-size var(--kp-attention-stage-shift-duration) cubic-bezier(.2,.8,.2,1),
+    transform var(--kp-attention-stage-shift-duration) cubic-bezier(.2,.8,.2,1);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck {
+  inline-size: 100%;
+  margin: 0 auto;
+  transition: max-inline-size var(--kp-attention-stage-shift-duration)
+    cubic-bezier(.2,.8,.2,1);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-viewport {
+  margin-block: 1.75rem 1.25rem;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-scene {
+  min-block-size: clamp(8rem, 18vh, 11rem);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__deck-scene h3 {
+  transition: font-size var(--kp-attention-stage-shift-duration) ease;
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-framing="reading"]
+  .kp-economics-static-publication__deck,
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-framing="quiet-reference"]
+  .kp-economics-static-publication__deck {
+  max-inline-size: var(--kp-attention-stage-copy-reading);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-framing="reading"]
+  .kp-economics-static-publication__deck-scene h3,
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-framing="quiet-reference"]
+  .kp-economics-static-publication__deck-scene h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  :is(
+    [data-kp-economics-attention-framing="demonstration"],
+    [data-kp-economics-attention-framing="inspect"]
+  )
+  .kp-economics-static-publication__stage {
+  inline-size: var(--kp-attention-stage-graph-primary);
+  transform: scale(1);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  :is(
+    [data-kp-economics-attention-framing="demonstration"],
+    [data-kp-economics-attention-framing="inspect"]
+  )
+  .kp-economics-static-publication__deck {
+  max-inline-size: var(--kp-attention-stage-copy-caption);
+}
+
+html[data-kp-economics-view="attention-stage"]
+  [data-kp-economics-attention-framing="quiet-reference"]
+  .kp-economics-static-publication__stage {
+  inline-size: var(--kp-attention-stage-graph-reference);
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__stage,
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__deck,
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__deck-scene h3 {
+    transition: none;
+  }
+}
+
+@media (max-width: 42rem) {
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__projection {
+    min-block-size: auto;
+  }
+
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__stage {
+    margin-bottom: 1.25rem;
+  }
+
+  html[data-kp-economics-view="attention-stage"]
+    .kp-economics-static-publication__deck-viewport {
+    margin-block-start: 1.25rem;
+  }
+}

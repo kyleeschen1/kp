@@ -71,6 +71,9 @@ import {
 import {
   readKpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
+import {
+  projectKpEconomicsDemandShiftAttentionFraming
+} from "./economics-demand-shift-attention-stage.ts";
 import type { KpEconomicsDemandShiftRouteHandoff } from
   "./economics-demand-shift-route-handoff.ts";
 
@@ -105,6 +108,12 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   const extant = enhancementSessions.get(input.root);
   if (extant !== undefined) return extant;
 
+  const view = readKpEconomicsDemandShiftView(input.search);
+  const attentionStageEnabled = view === "attention-stage";
+  if (attentionStageEnabled) {
+    await import("./economics-demand-shift-attention-stage.css");
+  }
+
   const publicationRoot = requiredElement<HTMLElement>(
     input.root,
     "[data-kp-economics-static-publication]"
@@ -133,7 +142,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
   const animation = createEconomicsEquilibriumAnimationAsset(model);
   const viewport = createKpEditorGraphSvgViewportModel(animation);
   const parsedInitialDestination = parseKpTutorialDestinationHash(input.hash);
-  const deckEnabled = readKpEconomicsDemandShiftView(input.search) === "deck";
+  const deckEnabled = view === "deck" || attentionStageEnabled;
   let deckSceneIndex = readKpEconomicsDemandShiftDeckSceneIndex(input.search);
   const initialDeckScene = kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!;
   const initialDestination = parsedInitialDestination === undefined
@@ -294,6 +303,12 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
       : "Continue";
     publicationRoot.dataset["kpEconomicsDeckScene"] =
       kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!.id;
+    if (attentionStageEnabled) {
+      publicationRoot.dataset["kpEconomicsAttentionFraming"] =
+        projectKpEconomicsDemandShiftAttentionFraming(
+          kpEconomicsDemandShiftDeckScenes[deckSceneIndex]!
+        );
+    }
   };
 
   const stopPlayback = (): void => {
@@ -371,7 +386,8 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     if (updateLocation) {
       const search = writeKpEconomicsDemandShiftDeckScene({
         search: window.location.search,
-        sceneIndex: deckSceneIndex
+        sceneIndex: deckSceneIndex,
+        view: attentionStageEnabled ? "attention-stage" : "deck"
       });
       window.history.replaceState(
         window.history.state,
@@ -616,6 +632,7 @@ export async function enhanceKpEconomicsDemandShiftPublication(input: {
     delete input.root.dataset["kpEconomicsDemandShiftTutorialMounted"];
     delete publicationRoot.dataset["kpEconomicsDemandShiftTutorial"];
     delete publicationRoot.dataset["kpEconomicsStaticEnhancement"];
+    delete publicationRoot.dataset["kpEconomicsAttentionFraming"];
     enhancementSessions.delete(input.root);
   };
   enhancementSessions.set(input.root, dispose);

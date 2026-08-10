@@ -234,7 +234,8 @@ function syncViewSelector(
 }
 
 function isView(value: string | undefined): value is KpEconomicsDemandShiftView {
-  return value === "reader" || value === "deck" || value === "split" ||
+  return value === "reader" || value === "deck" ||
+    value === "attention-stage" || value === "split" ||
     value === "inline-sticky" || value === "two-column-scroll" ||
     value === "animation-station";
 }

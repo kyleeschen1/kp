@@ -50,6 +50,7 @@ function viewLabel(view: KpEconomicsDemandShiftView): string {
   switch (view) {
     case "reader": return "Reader";
     case "deck": return "Deck";
+    case "attention-stage": return "Attention stage";
     case "split": return "Split";
     case "inline-sticky": return "Inline sticky";
     case "two-column-scroll": return "Two columns";
