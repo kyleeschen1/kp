@@ -81,7 +81,8 @@
     {
       "id": "s06",
       "title": "Canonical-stage-shell",
-      "status": "planned"
+      "summary": "Added a canonical stage-shell mount that clones only compiler-owned markup, validates every transition and source/target measurement joint, preserves aria-hidden paint geometry and the live accessible equation region, and returns typed DOM references. The reader route now consumes it without changing compiled HTML.",
+      "status": "complete"
     },
     {
       "id": "s07",

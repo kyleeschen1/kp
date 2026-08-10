@@ -113,6 +113,13 @@
       "scope": "s05 canonical reader preservation after frame-planner extraction",
       "checkedAt": "2026-08-10T16:41:50.463Z",
       "notes": "6 Chromium and Firefox checks pass across history independence, DPR invariance, native endpoints, and resource release."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "s06 canonical DOM and accessibility shell",
+      "checkedAt": "2026-08-10T16:45:55.768Z",
+      "notes": "The canonical route retains one stage, one viewport/material owner, 13 transition/source/target pairs, aria-hidden measurement trees, and one live accessible equation state."
     }
   ],
   "expectedLearning": [

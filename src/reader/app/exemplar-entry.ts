@@ -76,6 +76,9 @@ import type {
 } from "../document/public-api.ts";
 import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
+import {
+  mountKpCanonicalEquationStageShell
+} from "./canonical-equation-stage-shell.ts";
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
   installKpReaderAnimationHostStatus
@@ -182,8 +185,10 @@ const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
 const story = requireElement<HTMLElement>("[data-kp-asset]");
 const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
-const templateContent = template.content.cloneNode(true);
-staticSurface.append(templateContent);
+const stageShell = mountKpCanonicalEquationStageShell({
+  target: staticSurface,
+  template
+});
 bindKpReaderEquationLessonStructuralAnchors({
   root: staticSurface,
   animation,
@@ -191,7 +196,7 @@ bindKpReaderEquationLessonStructuralAnchors({
 });
 document.body.dataset["kpReaderHydrated"] = "true";
 
-const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
+const stage = stageShell.stage;
 const stageKicker = requireElement<HTMLElement>("[data-kp-reader-stage-kicker]");
 const lessonStageKicker = lessonDescriptor.stageKicker?.(equationPresentationProfile);
 if (lessonStageKicker !== undefined) stageKicker.textContent = lessonStageKicker;
@@ -206,10 +211,8 @@ stage.dataset["kpReaderEquationContinuantRecipe"] = presentationProfile.continua
 stage.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
 stage.dataset["kpReaderEquationDerivationMode"] = equationPresentationProfile.derivation;
 stage.dataset["kpReaderEquationIdentityMode"] = equationPresentationProfile.identity;
-const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]");
-const materialFitSurface = requireElement<HTMLElement>(
-  "[data-kp-reader-material-fit-surface]"
-);
+const viewport = stageShell.viewport;
+const materialFitSurface = stageShell.materialFitSurface;
 const annihilationWitness = requireElement<HTMLElement>(
   "[data-kp-reader-annihilation-witness]"
 );
@@ -405,7 +408,7 @@ if (readerCanonicalEquationSession !== undefined) {
     readerCanonicalEquationSession.transitionIds.join(",");
 }
 const materialLayer = createKpReaderEquationMaterialLayer(
-  requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
+  stageShell.materialLayer
 );
 let lastMeasuredLayout: LayoutState | undefined;
 
