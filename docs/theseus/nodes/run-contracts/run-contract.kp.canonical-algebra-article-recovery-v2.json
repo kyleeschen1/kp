@@ -117,7 +117,8 @@
     {
       "id": "s12",
       "title": "Chrome-free-canonical-session",
-      "status": "planned"
+      "summary": "Assembled a chrome-free canonical equation session from the extracted shell, certified layout, canonical compositor, salience/focus, witnesses, endpoint, and accessibility seams. It observes caller clock samples and exposes direct seek, subscription, invalidation, and disposal without page chrome or an internal loop.",
+      "status": "complete"
     },
     {
       "id": "s13",

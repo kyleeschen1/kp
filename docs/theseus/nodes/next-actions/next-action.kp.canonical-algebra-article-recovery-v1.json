@@ -218,6 +218,27 @@
       "scope": "canonical endpoint ownership extraction",
       "checkedAt": "2026-08-10T17:15:13.321Z",
       "notes": "Typed native and accessible ownership APIs compile without diagnostics."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/chrome-free-canonical-equation-session.test.ts",
+      "status": "passed",
+      "scope": "chrome-free API and clock ownership",
+      "checkedAt": "2026-08-10T17:23:37.640Z",
+      "notes": "The mounted API exposes sample, direct seek, subscribe, invalidate, and dispose while importing no autonomous clock, animation frame loop, iframe, editor player, or page-body dependency."
+    },
+    {
+      "command": "playwright canonical-stage-shell grep chrome-free",
+      "status": "passed",
+      "scope": "live chrome-free canonical session lifecycle",
+      "checkedAt": "2026-08-10T17:23:38.709Z",
+      "notes": "A second compiler-owned stage mounts after canonical reader disposal, seeks source/middle/target, publishes snapshots, remeasures after invalidation, retains exact endpoints, and releases its material layer."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chrome-free canonical equation session",
+      "checkedAt": "2026-08-10T17:23:39.918Z",
+      "notes": "The composed stage/session API and browser consumer compile cleanly."
     }
   ],
   "expectedLearning": [

@@ -165,3 +165,108 @@ test("native endpoints and accessible equation state settle together", async ({
     "fraction-solve.state.solved"
   );
 });
+
+test("chrome-free session mounts, seeks, publishes, invalidates, and disposes", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/reader/fraction-composition/", {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-animation-host-status",
+    "ready"
+  );
+  const evidence = await page.evaluate(async () => {
+    dispatchEvent(new PageTransitionEvent("pagehide"));
+    const shellModule = await import(
+      "/src/reader/app/canonical-equation-stage-shell.ts"
+    );
+    const hostModule = await import(
+      "/src/reader/app/chrome-free-canonical-equation-session.ts"
+    );
+    const descriptorModule = await import(
+      "/src/reader/app/equation-lesson-descriptors/fraction-composition.ts"
+    );
+    const descriptorApi = await import(
+      "/src/reader/app/equation-lesson-descriptor.ts"
+    );
+    const presentation = await import(
+      "/src/reader/document/equation-presentation.ts"
+    );
+    const layout = await import(
+      "/src/reader/runtime/fraction-composition-layout.ts"
+    );
+    const salience = await import(
+      "/src/reader/app/fraction-composition-salience-adapter.ts"
+    );
+    const target = document.createElement("div");
+    target.style.width = "900px";
+    target.style.height = "600px";
+    document.body.append(target);
+    const template = document.querySelector<HTMLTemplateElement>(
+      "template[data-kp-reader-exemplar-template]"
+    );
+    if (template === null) throw new Error("Missing canonical template.");
+    const profile = presentation.resolveKpReaderEquationPresentationProfile(
+      "standard"
+    );
+    const descriptor = descriptorModule.fractionCompositionDescriptor;
+    const animation = descriptor.createAnimation(profile);
+    const shell = shellModule.mountKpCanonicalEquationStageShell({
+      target,
+      template,
+      bindStructuralAnchors: (root: HTMLElement) => {
+        descriptorApi.bindKpReaderEquationLessonStructuralAnchors({
+          root,
+          animation,
+          descriptor
+        });
+      }
+    });
+    const salienceCapability =
+      salience.createKpFractionCompositionSalienceReaderCapability({
+        root: target,
+        href: location.href
+      });
+    const session = await hostModule.createKpChromeFreeCanonicalEquationSession({
+      shell,
+      animation,
+      descriptor,
+      equationPresentationProfile: profile,
+      linkRoot: document,
+      createStageLayoutIntent: layout.planKpFractionCompositionLayout,
+      renderSalience: (frame) => salienceCapability.render(frame)
+    });
+    const published: string[] = [];
+    const unsubscribe = session.subscribe((snapshot) => {
+      published.push(snapshot.transitionId);
+    });
+    const source = session.seek(0);
+    const middle = session.seek(0.5);
+    session.invalidate();
+    const targetFrame = session.seek(1);
+    unsubscribe();
+    session.dispose();
+    const materialLayersAfterDispose = target.querySelectorAll(
+      ".kp-reader-canonical-equation-session-material"
+    ).length;
+    target.remove();
+    return {
+      source,
+      middle,
+      targetFrame,
+      published,
+      materialLayersAfterDispose
+    };
+  });
+  expect(evidence.source.nativeEndpoint).toBe("source");
+  expect(evidence.source.nativeEndpointPassed).toBe(true);
+  expect(evidence.middle.phaseProgressPermille).toBeGreaterThanOrEqual(0);
+  expect(evidence.targetFrame.nativeEndpoint).toBe("target");
+  expect(evidence.targetFrame.accessibleEquationState).toBe(
+    "fraction-solve.state.solved"
+  );
+  expect(evidence.published).toHaveLength(3);
+  expect(evidence.materialLayersAfterDispose).toBe(0);
+});
