@@ -215,7 +215,8 @@
     {
       "id": "s28",
       "title": "algebra-publication-conformance",
-      "status": "planned"
+      "summary": "Pressed the algebra publication at 320px and without JavaScript, proved complete searchable prose and native KaTeX/MathML, keyboard-operable semantic and checkpoint links, forced-color non-color focus, six accessible static endpoint explanations, and existing reduced-motion direct restoration.",
+      "status": "complete"
     },
     {
       "id": "s29",

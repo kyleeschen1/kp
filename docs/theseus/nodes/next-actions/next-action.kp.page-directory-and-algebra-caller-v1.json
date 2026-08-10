@@ -425,6 +425,27 @@
       "scope": "s27 authoring and source route types",
       "checkedAt": "2026-08-10T00:17:02.255Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s28 responsive accessibility static and lifecycle conformance",
+      "checkedAt": "2026-08-10T00:22:59.744Z",
+      "notes": "Twelve Chromium tests passed, including 320px enhanced fit, no-JavaScript reading, searchable prose, keyboard access, forced colors, six comprehensible static checkpoints, and reduced motion."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s28 static text and article projection conformance",
+      "checkedAt": "2026-08-10T00:23:00.798Z",
+      "notes": "100 Article v1 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s28 conformance test types",
+      "checkedAt": "2026-08-10T00:23:01.745Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {
