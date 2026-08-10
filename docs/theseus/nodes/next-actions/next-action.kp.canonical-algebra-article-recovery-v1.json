@@ -176,6 +176,27 @@
       "scope": "canonical session lifecycle inspection contract",
       "checkedAt": "2026-08-10T17:04:26.020Z",
       "notes": "Typed lifecycle inspection and post-dispose ownership guards compile cleanly."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-equation-semantic-focus.test.ts tests/fraction-composition-salience-adapter.test.ts tests/fraction-composition-salience-inventory.test.ts",
+      "status": "passed",
+      "scope": "host-neutral semantic focus and fraction salience projection",
+      "checkedAt": "2026-08-10T17:10:25.968Z",
+      "notes": "Story scope filtering, direct semantic refs, source-to-target salience handoff, inventories, and projection cache semantics pass."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "fraction salience and semantic-authority preservation",
+      "checkedAt": "2026-08-10T17:10:26.948Z",
+      "notes": "63 fraction composition architecture checks pass after focus extraction."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "identical canonical scene projection after focus extraction",
+      "checkedAt": "2026-08-10T17:10:27.802Z",
+      "notes": "History-independent rendered frames remain stable across Chromium and Firefox."
     }
   ],
   "expectedLearning": [

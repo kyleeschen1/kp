@@ -53,7 +53,6 @@ import {
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
   type KpReaderPiecewiseScrollGeometry,
-  type KpReaderFocusSnapshot,
   type KpReaderMotionPreference,
   type KpReaderAttentionProjection
 } from "../runtime/learner-public-api.ts";
@@ -83,6 +82,10 @@ import {
 import {
   planKpReaderCanonicalEquationFrame
 } from "./canonical-equation-frame-plan.ts";
+import {
+  applyKpCanonicalEquationSemanticFocus,
+  projectKpCanonicalEquationSemanticFocus
+} from "./canonical-equation-semantic-focus.ts";
 import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
@@ -764,11 +767,19 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       );
     }
   }
-  const focusedRefs = visualFocusRefs(focusSnapshot);
+  const semanticFocus = projectKpCanonicalEquationSemanticFocus({
+    snapshot: focusSnapshot,
+    equationObjectRefs
+  });
+  const focusedRefs = semanticFocus.visualFocusRefs;
   syncNativeEndpointEvidence(motion, context, phaseProgress);
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
-  applyFocus(focusSnapshot);
+  applyKpCanonicalEquationSemanticFocus({
+    stage,
+    linkRoot: document,
+    projection: semanticFocus
+  });
   const transition = context.renderPlan.transitions[0];
   const semanticSaliencePresentationRevision = fractionCompositionSalience?.render({
     root: context.element,
@@ -1305,38 +1316,6 @@ function setExplicitProgress(
   if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
   renderWithAdapter(controlSample);
   if (updateLocation) locationSettlement.settle();
-}
-
-function visualFocusRefs(snapshot: KpReaderFocusSnapshot): readonly string[] {
-  // Story-level object refs describe narrative scope, not a request to color an
-  // entire equation. Exact selector refs remain visibly salient.
-  return snapshot.activeSource === "story"
-    ? snapshot.objectRefs.filter((ref) => !equationObjectRefs.has(ref))
-    : snapshot.objectRefs;
-}
-
-function applyFocus(snapshot: KpReaderFocusSnapshot): void {
-  const refs = visualFocusRefs(snapshot);
-  if (snapshot.activeSource === undefined) {
-    delete stage.dataset["kpReaderFocusSource"];
-  } else {
-    stage.dataset["kpReaderFocusSource"] = snapshot.activeSource;
-  }
-  const matches = (selectorId: string): boolean => refs.some(
-    (ref) => selectorId === ref || selectorId.startsWith(`${ref}.`)
-  );
-  for (const element of stage.querySelectorAll<HTMLElement>("[data-kp-reader-selector-id]")) {
-    element.classList.toggle(
-      "kp-reader-semantic-focus",
-      matches(requiredData(element, "kpReaderSelectorId"))
-    );
-  }
-  for (const link of document.querySelectorAll<HTMLElement>(".kp-semantic-link")) {
-    link.classList.toggle(
-      "kp-reader-semantic-focus",
-      dataRefs(link).some((ref) => refs.includes(ref))
-    );
-  }
 }
 
 function ownerMatchesFocus(

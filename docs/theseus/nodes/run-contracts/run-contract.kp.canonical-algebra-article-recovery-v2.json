@@ -105,7 +105,8 @@
     {
       "id": "s10",
       "title": "Fraction-salience-focus",
-      "status": "planned"
+      "summary": "Extracted one host-neutral semantic-focus projection and DOM application boundary, retained the fraction-specific cached salience scene adapter, and migrated the canonical reader without changing its frame inputs.",
+      "status": "complete"
     },
     {
       "id": "s11",
