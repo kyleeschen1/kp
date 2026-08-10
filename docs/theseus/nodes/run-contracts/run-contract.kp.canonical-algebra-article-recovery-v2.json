@@ -153,7 +153,8 @@
     {
       "id": "s18",
       "title": "Article-accessibility-matrix",
-      "status": "planned"
+      "summary": "Verified and hardened static fallback, phone fit, keyboard transport, reduced motion, forced colors, and live-region behavior for the canonical Article exemplar.",
+      "status": "complete"
     },
     {
       "id": "s19",

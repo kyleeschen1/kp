@@ -21,6 +21,10 @@ test("the static-first algebra article remains complete without JavaScript", asy
   await expect(publication).toContainText("The exact solution is");
   await expect(publication).toContainText("The check succeeds");
   await expect(publication.locator("svg[role='img']")).toHaveCount(6);
+  await expect(publication.locator("[data-kp-algebra-range-transport]"))
+    .toHaveCount(0);
+  await expect(publication.locator("[data-kp-algebra-stage-fallback]"))
+    .toBeVisible();
   await expect(publication.locator(".katex-mathml").first()).toBeAttached();
   await expect(page.locator("[data-kp-dev-toolbar]")).toHaveCount(0);
   expect(await page.evaluate(() => ({
@@ -67,6 +71,19 @@ test("phone enhancement fits canonical and static math while preserving prose", 
   }
   expect(geometry.text).toContain("The denominator is gone");
   expect(geometry.text).toContain("before trusting the final line");
+  const transport = publication.locator("[data-kp-algebra-range-transport]");
+  await expect(transport).toBeVisible();
+  expect(await transport.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return { left: bounds.left, right: bounds.right };
+  })).toEqual(expect.objectContaining({
+    left: expect.any(Number),
+    right: expect.any(Number)
+  }));
+  expect(await transport.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return bounds.left >= -1 && bounds.right <= window.innerWidth + 1;
+  })).toBe(true);
 });
 
 test("checkpoint and semantic controls remain keyboard-addressable", async ({ page }) => {
@@ -88,6 +105,47 @@ test("checkpoint and semantic controls remain keyboard-addressable", async ({ pa
   await expect(checkpoint).toHaveAttribute("aria-current", "step");
   await expect(publication.locator("[data-kp-algebra-stage-host]"))
     .toHaveAttribute("data-kp-algebra-static-checkpoint", "normalized");
+  const host = publication.locator("[data-kp-algebra-stage-host]");
+  const scrubber = host.locator("[data-kp-algebra-range-scrubber]");
+  await scrubber.focus();
+  await expect(scrubber).toBeFocused();
+  await scrubber.press("Home");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "0"
+  );
+  await scrubber.press("End");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000"
+  );
+  await expect(host.locator('[data-kp-algebra-range-action="replay"]'))
+    .toHaveAttribute("type", "button");
+});
+
+test("reduced motion transport seeks the exact range endpoint without autoplay", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(articleRoute);
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  await host.locator('[data-kp-algebra-range-action="play"]').click();
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-range-status",
+    "paused"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-clock-source",
+    "controls"
+  );
+  await expect(host.locator('[data-kp-algebra-range-action="pause"]'))
+    .toBeDisabled();
+  await expect(host.locator("[data-kp-algebra-range-status]"))
+    .toHaveText("Complete");
 });
 
 test("forced colors gives pinned semantic controls a non-color outline", async ({
@@ -102,6 +160,15 @@ test("forced colors gives pinned semantic controls a non-color outline", async (
   await factor.click();
   await expect(factor).toHaveAttribute("data-kp-article-semantic-pinned", "");
   expect(await factor.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { style: style.outlineStyle, width: style.outlineWidth };
+  })).toEqual({ style: "solid", width: "2px" });
+  const play = publication.locator('[data-kp-algebra-range-action="play"]');
+  await play.focus();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Shift+Tab");
+  await expect(play).toBeFocused();
+  expect(await play.evaluate((element) => {
     const style = getComputedStyle(element);
     return { style: style.outlineStyle, width: style.outlineWidth };
   })).toEqual({ style: "solid", width: "2px" });

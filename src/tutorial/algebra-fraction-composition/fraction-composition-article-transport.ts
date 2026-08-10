@@ -88,13 +88,15 @@ export function mountKpFractionCompositionArticleTransport(input: {
     input.host.dataset["kpAlgebraCanonicalRangeStatus"] = rangeStatus;
     play.disabled = isPlaying;
     pause.disabled = !isPlaying;
-    status.value = isPlaying
+    const nextStatus = isPlaying
       ? "Playing"
       : localProgress === 1
         ? "Complete"
         : localProgress === 0
           ? "Ready"
           : "Paused";
+    // Avoid re-announcing the same live-region text on every animation frame.
+    if (status.value !== nextStatus) status.value = nextStatus;
   };
 
   const render = (clockSample: KpReaderClockSample): void => {

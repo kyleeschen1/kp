@@ -196,6 +196,15 @@ html body {
 }
 
 @media (forced-colors: active) {
+  .kp-algebra-article__range-transport button {
+    border-color: ButtonText;
+    color: ButtonText;
+    background: Canvas;
+  }
+  .kp-algebra-article__range-transport :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
   .kp-algebra-article [data-kp-article-semantic-pinned] {
     outline: 2px solid Highlight;
     outline-offset: 0.12em;
