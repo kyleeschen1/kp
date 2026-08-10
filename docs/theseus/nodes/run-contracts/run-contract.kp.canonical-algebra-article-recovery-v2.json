@@ -165,7 +165,8 @@
     {
       "id": "s20",
       "title": "Human-exemplar-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: committed a stable paired reader/Article capture command and review dossier; source, midpoint, and target match in inspected wide and phone evidence, automated cross-host gates pass, and no five-range promotion work began.",
+      "status": "complete"
     },
     {
       "id": "s21",

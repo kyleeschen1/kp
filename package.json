@@ -35,6 +35,7 @@
     "test:browser:algebra-article": "playwright test tests/kp-article-v1-fraction-composition-runtime.browser.spec.ts tests/kp-article-v1-fraction-composition-authoring.browser.spec.ts tests/kp-article-v1-fraction-composition-conformance.browser.spec.ts tests/kp-article-v1-fraction-composition-parity.browser.spec.ts --project=chromium --workers=1",
     "test:browser:algebra-article-parity": "playwright test tests/kp-article-v1-fraction-composition-parity.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "visual:algebra-fraction-composition": "playwright test tests/kp-article-v1-fraction-composition-review.browser.spec.ts --project=chromium --workers=1",
+    "visual:algebra-canonical-checkpoint": "node --disable-warning=ExperimentalWarning scripts/capture-algebra-canonical-checkpoint.ts",
     "test:kp-article-rc1": "npm run test:kp-article-v1",
     "test:dev-toolbar": "node --disable-warning=ExperimentalWarning --test tests/kp-dev-toolbar-*.test.ts",
     "test:browser:page-directory": "playwright test --config playwright.page-directory.config.ts --project=chromium --workers=1",

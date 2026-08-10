@@ -24,6 +24,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-28-canonical-fraction-composition-human-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-canonical-algebra-article-human-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -453,11 +457,32 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-10T19:07:16.687Z"
+    },
+    {
+      "command": "npm run visual:algebra-canonical-checkpoint",
+      "status": "passed",
+      "scope": "s20 direct side-by-side captured evidence",
+      "checkedAt": "2026-08-10T19:19:34.666Z",
+      "notes": "Generated and manually inspected paired canonical reader and Article source, midpoint, and target frames for wide and phone dark-theme profiles; the development toolbar is hidden only in capture so it cannot occlude the equation surface."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s20 human checkpoint preservation gate",
+      "checkedAt": "2026-08-10T19:19:36.313Z",
+      "notes": "All 17 Chromium Article runtime, authoring, static, accessibility, and sampled parity checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 checkpoint capture and dossier",
+      "checkedAt": "2026-08-10T19:19:37.732Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass with the stable capture entrypoint."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 19 proves the one-range Article exemplar and canonical reader produce identical semantic and paint-ownership frames at exact shared clock samples."
+    "summary": "HUMAN_CHECKPOINT: the one-range algebra Article exemplar now uses the exact canonical fraction session, paired live/captured evidence is ready, and slices s21 through s24 remain locked pending explicit human visual approval."
   },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."
