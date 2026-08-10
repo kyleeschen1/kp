@@ -87,3 +87,43 @@ for (const viewport of [
     }
   });
 }
+
+test("canonical compositor retires stale paint ownership during handoff", async ({
+  page
+}) => {
+  await page.goto("/reader/fraction-composition/", {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-animation-host-status",
+    "ready"
+  );
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const activeSessions = page.locator(
+    '[data-kp-reader-canonical-equation-session="active"]'
+  );
+  await expect(activeSessions).toHaveCount(1);
+  const firstTransition = await activeSessions.evaluate((surface) =>
+    surface.closest<HTMLElement>("[data-kp-reader-transition]")
+      ?.dataset["kpReaderTransition"]
+  );
+
+  await scrubber.evaluate((element) => {
+    const input = element as HTMLInputElement;
+    input.value = "760";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    "760"
+  );
+  await expect(activeSessions).toHaveCount(1);
+  await expect(page.locator(
+    ".kp-reader-canonical-equation-session-material"
+  )).toHaveCount(1);
+  const nextTransition = await activeSessions.evaluate((surface) =>
+    surface.closest<HTMLElement>("[data-kp-reader-transition]")
+      ?.dataset["kpReaderTransition"]
+  );
+  expect(nextTransition).not.toBe(firstTransition);
+});

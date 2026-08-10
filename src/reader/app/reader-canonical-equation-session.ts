@@ -57,6 +57,15 @@ export interface KpReaderCanonicalEquationSession {
   ) => void;
   readonly invalidate: () => void;
   readonly dispose: () => void;
+  readonly inspect: () => KpReaderCanonicalEquationSessionInspection;
+}
+
+export interface KpReaderCanonicalEquationSessionInspection {
+  readonly disposed: boolean;
+  readonly active: boolean;
+  readonly activeTransitionId?: string | undefined;
+  readonly purePlanCacheSize: number;
+  readonly adjacentPrewarmEnabled: boolean;
 }
 
 export function createKpReaderCanonicalEquationSession(input: {
@@ -82,6 +91,8 @@ export function createKpReaderCanonicalEquationSession(input: {
   let structuralSessionKey: string | undefined;
   let structuralFitSurface: HTMLElement | undefined;
   let materialLayer: HTMLElement | undefined;
+  let activeTransitionId: string | undefined;
+  let disposed = false;
   const purePlanCache = createKpReaderCompositorPurePlanCache<
     ReturnType<KpReaderEquationPureScenePlanCompiler>
   >();
@@ -104,7 +115,21 @@ export function createKpReaderCanonicalEquationSession(input: {
     session = undefined;
     sessionKey = undefined;
     structuralSessionKey = undefined;
+    if (structuralFitSurface !== undefined) {
+      delete structuralFitSurface.dataset["kpReaderCanonicalEquationSession"];
+      delete structuralFitSurface.dataset[
+        "kpReaderCanonicalEquationSessionLifecycle"
+      ];
+      delete structuralFitSurface.dataset["kpReaderCanonicalEquationSessionOwner"];
+      delete structuralFitSurface.dataset[
+        "kpReaderCanonicalEquationSessionTrackCount"
+      ];
+      delete structuralFitSurface.dataset[
+        "kpReaderCanonicalEquationPresentationMode"
+      ];
+    }
     structuralFitSurface = undefined;
+    activeTransitionId = undefined;
     materialLayer?.remove();
     materialLayer = undefined;
   };
@@ -178,6 +203,9 @@ export function createKpReaderCanonicalEquationSession(input: {
   return {
     transitionIds,
     apply: (frame) => {
+      if (disposed) {
+        throw new Error("Reader canonical equation session is disposed.");
+      }
       const transitionId = frame.renderPlan.transitions[0]?.id;
       if (
         transitionId === undefined ||
@@ -309,13 +337,14 @@ export function createKpReaderCanonicalEquationSession(input: {
       // static compatibility checkpoints may not masquerade as verified motion.
       frame.fitSurface.dataset["kpReaderCanonicalEquationPresentationMode"] =
         activeSession.presentationMode;
+      activeTransitionId = transitionId;
       return true;
     },
     prewarm(frames) {
       // Prewarming is promoted exemplar-by-exemplar because presentation
       // style is part of a pure plan. Unreviewed families retain safe
       // synchronous cache misses rather than speculatively sharing styles.
-      if (input.enableAdjacentPrewarm !== true) return;
+      if (disposed || input.enableAdjacentPrewarm !== true) return;
       const firstWindow =
         frames[0]?.fitSurface.ownerDocument.defaultView ?? null;
       if (firstWindow === null) return;
@@ -363,15 +392,27 @@ export function createKpReaderCanonicalEquationSession(input: {
       }));
     },
     invalidate() {
+      if (disposed) return;
       sessionHandoff.invalidate();
       prewarmQueue?.cancel();
       releaseCurrentSession("measurement-invalidated");
     },
     dispose() {
+      if (disposed) return;
+      disposed = true;
       sessionHandoff.invalidate();
       prewarmQueue?.dispose();
       releaseCurrentSession("surface-disposed");
       purePlanCache.clear();
+    },
+    inspect() {
+      return Object.freeze({
+        disposed,
+        active: session !== undefined,
+        ...(activeTransitionId === undefined ? {} : { activeTransitionId }),
+        purePlanCacheSize: purePlanCache.size,
+        adjacentPrewarmEnabled: input.enableAdjacentPrewarm === true
+      });
     }
   };
 }

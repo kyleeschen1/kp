@@ -155,6 +155,27 @@
       "scope": "layout extraction preservation",
       "checkedAt": "2026-08-10T17:00:36.337Z",
       "notes": "History independence and CSS-pixel invariance remain green in Chromium and Firefox."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "canonical compositor lifecycle and exclusive paint ownership",
+      "checkedAt": "2026-08-10T17:04:24.057Z",
+      "notes": "A cross-transition handoff leaves exactly one active session surface and one material layer; stale surface inspection state is retired."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "cache, adjacent prewarm, protected transit, and rapid bidirectional lifecycle",
+      "checkedAt": "2026-08-10T17:04:25.078Z",
+      "notes": "Canonical session lifecycle retains warmed pure plans and protected-transit certificates without material-owner churn."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "canonical session lifecycle inspection contract",
+      "checkedAt": "2026-08-10T17:04:26.020Z",
+      "notes": "Typed lifecycle inspection and post-dispose ownership guards compile cleanly."
     }
   ],
   "expectedLearning": [

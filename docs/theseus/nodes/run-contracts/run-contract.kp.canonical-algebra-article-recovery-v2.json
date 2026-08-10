@@ -99,7 +99,8 @@
     {
       "id": "s09",
       "title": "Canonical-compositor-lifecycle",
-      "status": "planned"
+      "summary": "Hardened the extracted canonical compositor session with explicit lifecycle inspection, idempotent disposal, use-after-dispose rejection, and stale paint-authority cleanup; browser and performance checks prove one active owner with cache/prewarm/protected-transit behavior intact.",
+      "status": "complete"
     },
     {
       "id": "s10",
