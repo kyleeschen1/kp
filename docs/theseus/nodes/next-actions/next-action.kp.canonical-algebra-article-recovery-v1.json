@@ -239,6 +239,27 @@
       "scope": "chrome-free canonical equation session",
       "checkedAt": "2026-08-10T17:23:39.918Z",
       "notes": "The composed stage/session API and browser consumer compile cleanly."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "canonical reader migration to chrome-free session",
+      "checkedAt": "2026-08-10T17:33:36.844Z",
+      "notes": "The canonical reader remains history-independent across seek, fold, resize, font invalidation, DPR, and resource release after delegating fraction paint to the shared host."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll:chromium",
+      "status": "passed",
+      "scope": "migrated canonical reader lifecycle and warm-path behavior",
+      "checkedAt": "2026-08-10T17:33:37.812Z",
+      "notes": "Rapid bidirectional scroll retains cached pure plans and protected-transit certificates with no material-owner churn."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "shared host identity, DOM, layout, endpoint, accessibility, and lifecycle",
+      "checkedAt": "2026-08-10T17:33:38.670Z",
+      "notes": "Six browser checks pass and the canonical reader stage declares chrome-free-v1 host identity."
     }
   ],
   "expectedLearning": [

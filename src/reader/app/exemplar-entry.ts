@@ -92,6 +92,9 @@ import {
 import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
+import type {
+  KpChromeFreeCanonicalEquationSession
+} from "./chrome-free-canonical-equation-session.ts";
 
 type TransitionContext = KpCanonicalEquationTransitionLayout;
 type LayoutState = KpCanonicalEquationStageLayout;
@@ -219,8 +222,11 @@ const attentionScrubber = requireElement<HTMLInputElement>(
 );
 const attentionCount = requireElement<HTMLElement>("[data-kp-reader-attention-count]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
-const accessibleEquationOwnership =
-  createKpCanonicalEquationAccessibleOwnership({ stage });
+const accessibleEquationOwnership = stage.querySelector(
+  "[data-kp-reader-accessible-equation-state]"
+) === null
+  ? undefined
+  : createKpCanonicalEquationAccessibleOwnership({ stage });
 const motionSelect = requireElement<HTMLSelectElement>(
   "[data-kp-reader-motion-preference]"
 );
@@ -317,6 +323,36 @@ const evaluationControls =
       ? (await import("./fraction-composition-reader-controls.ts"))
         .mountKpFractionCompositionReaderControls(evaluationControlInput)
       : undefined;
+const chromeFreeCanonicalEquationSession:
+  KpChromeFreeCanonicalEquationSession | undefined =
+  lessonDescriptor.id !== "fraction-composition"
+    ? undefined
+    : await import("./chrome-free-canonical-equation-session.ts")
+      .then(({ createKpChromeFreeCanonicalEquationSession }) =>
+        createKpChromeFreeCanonicalEquationSession({
+          shell: stageShell,
+          animation,
+          descriptor: lessonDescriptor,
+          equationPresentationProfile,
+          linkRoot: document,
+          createStageLayoutIntent: ({ viewport }) => {
+            const intent = evaluationControls?.readStageLayoutIntent() ??
+              lessonDescriptor.createStageLayoutIntent?.({ viewport });
+            if (intent === undefined) {
+              throw new Error(
+                "Canonical fraction host requires semantic stage layout intent."
+              );
+            }
+            return intent;
+          },
+          ...(fractionCompositionSalience === undefined
+            ? {}
+            : {
+                renderSalience: (frame) =>
+                  fractionCompositionSalience.render(frame)
+              })
+        })
+      );
 
 const staticPlans = new Map(phaseCohorts.map((cohort, index) => {
   const progress = (index + 0.5) / phaseCohorts.length;
@@ -360,7 +396,8 @@ for (const transitionId of canonicalTransitionIds) {
   ).classList.add("kp-canonical-equation-content");
 }
 const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefined =
-  readerCanonicalEquationSessionModule === undefined ||
+  chromeFreeCanonicalEquationSession !== undefined ||
+    readerCanonicalEquationSessionModule === undefined ||
     readerCanonicalEquationSessionAdapter === undefined ||
     canonicalTransitionIds.length === 0
     ? undefined
@@ -387,6 +424,7 @@ const materialLayer = createKpReaderEquationMaterialLayer(
   stageShell.materialLayer
 );
 let lastMeasuredLayout: LayoutState | undefined;
+let chromeFreeLayoutRevision = -1;
 
 const rendererRegistry = createKpReaderAdapterRegistry<
   EquationRendererHost,
@@ -629,6 +667,15 @@ function scheduleScrollSample(): void {
 }
 
 function measureLayout(revision: number): LayoutState {
+  if (chromeFreeCanonicalEquationSession !== undefined) {
+    if (chromeFreeLayoutRevision !== revision) {
+      chromeFreeCanonicalEquationSession.invalidate();
+      chromeFreeLayoutRevision = revision;
+    }
+    stage.dataset["kpReaderLayoutReads"] =
+      String(rendererInspection().readCount + 1);
+    return { contexts: new Map() };
+  }
   if (stage.getClientRects().length === 0 && lastMeasuredLayout !== undefined) {
     return lastMeasuredLayout;
   }
@@ -688,6 +735,112 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     evaluationControls?.projectAnimationProgress(
       visualSample.progress
     ) ?? visualSample.progress;
+  if (chromeFreeCanonicalEquationSession !== undefined) {
+    updateActiveBeat(projection.progressPermille, attentionProjection);
+    const focusSnapshot = focus.getSnapshot();
+    const snapshot = chromeFreeCanonicalEquationSession.sample({
+      clock: visualSample,
+      animationProgress,
+      motionMode: projection.mode,
+      focus: focusSnapshot,
+      presentationRevision: [
+        activeBeat === undefined
+          ? "no-active-beat"
+          : requiredData(activeBeat, "kpBeat"),
+        focusSnapshot.activeSource ?? "none"
+      ].join(":")
+    });
+    document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
+      snapshot.animationProgressPermille,
+      snapshot.phaseProgressPermille,
+      snapshot.activePhase,
+      snapshot.activeTransformationIds
+    ] satisfies KpReaderReviewFrame);
+    materialLayer.sync([]);
+    setStyleIfChanged(
+      progressBar.style,
+      "transform",
+      `scaleX(${projection.progressPermille / 1_000})`
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderProgress",
+      String(projection.progressPermille)
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderCheckpoint",
+      projection.checkpointId
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderVisualProgress",
+      String(visualProgressPermille)
+    );
+    setDatasetIfChanged(document.body, "kpReaderMotionMode", projection.mode);
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderMotionPreference",
+      motionPreference
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderPlaybackDirection",
+      visualSample.direction
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderTransition",
+      snapshot.transitionId
+    );
+    setDatasetIfChanged(
+      document.body,
+      "kpReaderFramePlans",
+      String(rendererInspection().framePlanCount + 1)
+    );
+    if (import.meta.env.DEV) {
+      const atMs = performance.now();
+      const schedulerState = rendererInspection();
+      window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", {
+        detail: {
+          atMs,
+          documentId,
+          documentVersion,
+          assetId: animation.id,
+          checkpointId: projection.checkpointId,
+          progressPermille: projection.progressPermille,
+          projectionId: "equation.symbolic",
+          activeTransformationIds: [...snapshot.activeTransformationIds],
+          activePhase: snapshot.activePhase,
+          attentionPhase: attentionProjection?.phaseId,
+          attentionKind: attentionProjection?.phaseKind,
+          attentionMotionGate: attentionProjection?.motionGate,
+          visualProgressPermille,
+          focusSource: focusSnapshot.activeSource,
+          focusRefs: [...focusSnapshot.objectRefs],
+          motionPreference,
+          motionMode: projection.mode,
+          playbackDirection: visualSample.direction,
+          rendererId: "reader.equation.material-layer",
+          motionAuthority: snapshot.motionAuthority,
+          fitStatus: snapshot.fitStatus,
+          fitScale: snapshot.fitScale,
+          layoutRevision: schedulerState.layoutRevision,
+          layoutReadCount: schedulerState.readCount,
+          fontRevision: snapshot.fontRevision,
+          fontReady: snapshot.fontReady,
+          ownerIds: [...snapshot.ownerIds],
+          ...(previousReviewFrameAtMs === undefined
+            ? {}
+            : { frameIntervalMs: atMs - previousReviewFrameAtMs }),
+          scrollDeltaY: window.scrollY - previousReviewScrollY
+        }
+      }));
+      previousReviewFrameAtMs = atMs;
+      previousReviewScrollY = window.scrollY;
+    }
+    return;
+  }
   const canonicalFramePlan = planKpReaderCanonicalEquationFrame({
     animation,
     clock: visualSample,
@@ -710,7 +863,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     ? context.renderPlan.transitions[0]?.source[0]?.objectId
     : context.renderPlan.transitions[0]?.target[0]?.objectId;
   if (accessibleObjectId !== undefined) {
-    accessibleEquationOwnership.sync(accessibleObjectId);
+    accessibleEquationOwnership?.sync(accessibleObjectId);
   }
   const choreographyStep = linearRearrangementBindings.find(
     (step) => step.transformationId === transitionId
@@ -1445,6 +1598,7 @@ function dispose(): void {
   window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
   readerCanonicalEquationSession?.dispose();
+  chromeFreeCanonicalEquationSession?.dispose();
   evaluationControls?.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();

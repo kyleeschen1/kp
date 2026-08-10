@@ -83,11 +83,18 @@ export interface KpChromeFreeCanonicalEquationSnapshot {
   readonly animationProgressPermille: number;
   readonly phaseProgressPermille: number;
   readonly transitionId: string;
+  readonly activePhase: string;
   readonly activeTransformationIds: readonly string[];
   readonly accessibleEquationState: string;
   readonly nativeEndpoint?: "source" | "target" | undefined;
   readonly nativeEndpointPassed: boolean;
   readonly canonicalPaintOwner: boolean;
+  readonly motionAuthority: string;
+  readonly fitStatus: string;
+  readonly fitScale: number;
+  readonly fontRevision: number;
+  readonly fontReady: boolean;
+  readonly ownerIds: readonly string[];
   readonly layoutPolicy?: string | undefined;
 }
 
@@ -189,6 +196,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   });
   stage.dataset["kpReaderCanonicalEquationSession"] =
     compositor.transitionIds.join(",");
+  stage.dataset["kpCanonicalEquationHost"] = "chrome-free-v1";
   stage.dataset["kpReaderAnimationId"] = input.animation.id;
   stage.dataset["kpReaderEquationPresentationRecipe"] = presentation.recipe;
   stage.dataset["kpReaderEquationHandoffRecipe"] = presentation.handoff;
@@ -338,6 +346,27 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
           : undefined,
       progress: framePlan.phaseProgress
     });
+    if (motion.linearRearrangement === undefined) {
+      delete stage.dataset["kpReaderEquationPersistentReflowProgress"];
+      delete stage.dataset["kpReaderEquationFocalTransitProgress"];
+      delete stage.dataset["kpReaderEquationBranchSchedule"];
+      delete stage.dataset["kpReaderEquationBranchProgress"];
+    } else {
+      stage.dataset["kpReaderEquationPersistentReflowProgress"] =
+        String(motion.linearRearrangement.persistentReflowProgress);
+      stage.dataset["kpReaderEquationFocalTransitProgress"] =
+        String(motion.linearRearrangement.focalTransitProgress);
+      if (motion.linearRearrangement.branchScheduleId === undefined) {
+        delete stage.dataset["kpReaderEquationBranchSchedule"];
+        delete stage.dataset["kpReaderEquationBranchProgress"];
+      } else {
+        stage.dataset["kpReaderEquationBranchSchedule"] =
+          motion.linearRearrangement.branchScheduleId;
+        stage.dataset["kpReaderEquationBranchProgress"] = JSON.stringify(
+          motion.linearRearrangement.scheduledBranchProgress
+        );
+      }
+    }
     const focus: KpReaderFocusSnapshot = sampleInput.focus ?? Object.freeze({
       objectRefs: Object.freeze([]),
       revision: 0
@@ -443,6 +472,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       animationProgressPermille: Math.round(animationProgress * 1_000),
       phaseProgressPermille: Math.round(framePlan.phaseProgress * 1_000),
       transitionId: framePlan.transitionId,
+      activePhase: framePlan.runtimeFrame.phase.phaseId,
       activeTransformationIds: Object.freeze([
         ...framePlan.runtimeFrame.activeTransformationIds
       ]),
@@ -452,6 +482,12 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
         : { nativeEndpoint: endpointEvidence.endpoint }),
       nativeEndpointPassed: endpointEvidence.passed,
       canonicalPaintOwner,
+      motionAuthority: motion.samplingAuthority,
+      fitStatus: context.fit.status,
+      fitScale: context.fit.scale,
+      fontRevision: fontReadiness.revision,
+      fontReady: fontReadiness.status === "ready",
+      ownerIds: Object.freeze(motion.owners.map((owner) => owner.ownerId)),
       ...(context.appliedStageLayout === undefined
         ? {}
         : { layoutPolicy: context.appliedStageLayout.certificate.policy })

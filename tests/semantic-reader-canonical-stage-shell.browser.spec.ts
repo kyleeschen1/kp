@@ -11,6 +11,10 @@ test("fraction composition mounts the compiler-owned canonical stage shell", asy
   });
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveCount(1);
+  await expect(stage).toHaveAttribute(
+    "data-kp-canonical-equation-host",
+    "chrome-free-v1"
+  );
   await expect(stage.locator("[data-kp-reader-equation-viewport]")).toHaveCount(1);
   await expect(stage.locator("[data-kp-reader-material-fit-surface]")).toHaveCount(1);
   await expect(stage.locator("[data-kp-reader-equation-material-layer]")).toHaveCount(1);

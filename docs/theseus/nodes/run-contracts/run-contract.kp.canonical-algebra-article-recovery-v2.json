@@ -123,7 +123,8 @@
     {
       "id": "s13",
       "title": "Migrate-canonical-reader",
-      "status": "planned"
+      "summary": "Migrated the fraction-composition canonical reader to the chrome-free shared stage session while preserving the reader scroll clock, attention controls, URL state, review telemetry, and unrelated lesson renderer path.",
+      "status": "complete"
     },
     {
       "id": "s14",
