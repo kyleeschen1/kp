@@ -2,7 +2,8 @@
   "id": "run-contract.kp.page-directory-and-algebra-caller-v1b",
   "kind": "run-contract",
   "title": "KP page directory and algebra caller",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -227,7 +228,8 @@
     {
       "id": "s30",
       "title": "algebra-human-checkpoint",
-      "status": "planned"
+      "summary": "Prepared deterministic wide, phone, reduced-motion, Pages-directory, and Article v1 editor review artifacts; documented the three human decisions; and stopped before visual or curriculum-wide promotion.",
+      "status": "complete"
     }
   ]
 }
