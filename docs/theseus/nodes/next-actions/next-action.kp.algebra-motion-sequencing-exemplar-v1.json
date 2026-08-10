@@ -1,0 +1,63 @@
+{
+  "id": "next-action.kp.algebra-motion-sequencing-exemplar-v1",
+  "kind": "next-action",
+  "title": "Bind the first algebra motion passage end to end",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-09-kp-fraction-composition-algebra-teaching-brief.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/lessons/algebra-fraction-composition.kp.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-algebra-first-motion-sequencing-checkpoint.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "Article v1 semantic and compiler preservation; 100 checks",
+      "checkedAt": "2026-08-10T03:53:54.136Z"
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "First learner path, semantic links, direct seek, authoring, accessibility, reduced motion; 13 Chromium checks",
+      "checkedAt": "2026-08-10T03:54:04.167Z"
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "Canonical renderer history independence and resource lifecycle; 6 Chromium and Firefox checks",
+      "checkedAt": "2026-08-10T03:54:12.432Z"
+    },
+    {
+      "command": "npm run visual:algebra-fraction-composition",
+      "status": "passed",
+      "scope": "Wide ready and settled motion-passage captures plus existing review matrix; 6 Chromium checks",
+      "checkedAt": "2026-08-10T03:54:18.516Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain diagnostics",
+      "checkedAt": "2026-08-10T03:54:28.326Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "Durable control and evidence graph; 918 nodes, 19192 events",
+      "checkedAt": "2026-08-10T03:55:13.389Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "First distribute-and-normalize learner path is implemented and verified; stopped at the required human exemplar checkpoint before binding the remaining four passages."
+  }
+}

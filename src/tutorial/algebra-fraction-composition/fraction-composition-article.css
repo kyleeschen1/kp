@@ -150,12 +150,99 @@ html body {
   text-align: center;
 }
 
+.kp-algebra-article__motion-passage {
+  margin-block: 2.5rem 3rem;
+}
+
+.kp-algebra-article__motion-passage > p {
+  margin-block: 0 1.25rem;
+}
+
+.kp-algebra-article__motion-controls {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  margin-block: 1.1rem 1.5rem;
+}
+
+.kp-algebra-article__motion-controls button {
+  min-block-size: 2.5rem;
+  padding-inline: 0.9rem;
+  border: 1px solid #555968;
+  border-radius: 0;
+  color: #ececf0;
+  background: #15172a;
+  font: 550 0.85rem/1 ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.kp-algebra-article__motion-controls button:hover,
+.kp-algebra-article__motion-controls button:focus-visible {
+  border-color: #65d6a6;
+}
+
+.kp-algebra-article__motion-controls button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.kp-algebra-article__motion-scrubber {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3ch;
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.kp-algebra-article__motion-scrubber input {
+  width: 100%;
+  accent-color: #65d6a6;
+}
+
+.kp-algebra-article__motion-scrubber output {
+  color: #b7b9c4;
+  font: 500 0.75rem/1 ui-sans-serif, system-ui, sans-serif;
+  text-align: end;
+}
+
+.kp-algebra-article__motion-figure {
+  margin-block: 1.5rem;
+}
+
+.kp-algebra-article__motion-figure [data-kp-algebra-runtime-stage]
+.editor-animation-player__controls {
+  display: none;
+}
+
+.kp-algebra-article__motion-figure[data-kp-algebra-motion-live="true"]
+> :not([data-kp-algebra-runtime-stage]),
+.kp-algebra-article__motion-figure [data-kp-algebra-runtime-stage]
+.editor-equation-stage__caption {
+  display: none;
+}
+
+.kp-algebra-article__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .kp-article-math--display { margin-block: 1.5rem; overflow-x: auto; }
 .kp-article-math--inline { font-size: 1em; }
 
 @media (max-width: 38rem) {
   .kp-algebra-article { width: min(100% - 1.5rem, 68rem); }
   .kp-algebra-article__toc > nav > ol { columns: 1; }
+  .kp-algebra-article__motion-controls {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (forced-colors: active) {

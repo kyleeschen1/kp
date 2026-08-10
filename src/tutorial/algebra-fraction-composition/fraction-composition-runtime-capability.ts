@@ -41,9 +41,24 @@ export interface KpFractionCompositionArticleRuntimeSession {
   readonly checkpoints:
     readonly KpFractionCompositionArticleRuntimeCheckpoint[];
   readonly seekRange: (path: string, progress: number) => void;
+  readonly playRange: (path: string) => void;
+  readonly pauseRange: (path: string) => void;
+  readonly attachTo: (input: {
+    readonly target: HTMLElement;
+    readonly fallback: Element;
+  }) => void;
+  readonly subscribeRange: (
+    listener: (snapshot: KpFractionCompositionArticleRangeSnapshot) => void
+  ) => () => void;
   readonly seekCheckpoint: (path: string) => void;
   readonly setSemanticFocus: (addresses: readonly string[]) => void;
   readonly dispose: () => void;
+}
+
+export interface KpFractionCompositionArticleRangeSnapshot {
+  readonly path?: string | undefined;
+  readonly progress: number;
+  readonly status: "idle" | "playing" | "paused" | "settled";
 }
 
 export async function mountKpFractionCompositionArticleRuntime(input: {
@@ -111,8 +126,40 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
   );
   let semanticFocusTargetIds: readonly string[] = [];
   let activeCheckpointPath = "";
+  let activeRangePath: string | undefined;
+  let attachedFallback: Element | undefined = fallback ?? undefined;
+  const rangeListeners = new Set<
+    (snapshot: KpFractionCompositionArticleRangeSnapshot) => void
+  >();
   let directSeekCount = 0;
   let disposed = false;
+
+  const rangeSnapshot = (): KpFractionCompositionArticleRangeSnapshot => {
+    const range = ranges.find(({ path }) => path === activeRangePath);
+    const globalProgress = Number(
+      player.dataset["kpEditorAnimationProgress"] ?? 0
+    );
+    if (range === undefined) {
+      return Object.freeze({ progress: 0, status: "idle" as const });
+    }
+    const width = range.end - range.start;
+    const progress = width <= 0
+      ? 1
+      : Math.max(0, Math.min(1, (globalProgress - range.start) / width));
+    const playerStatus = player.dataset["kpEditorAnimationStatus"];
+    const status = progress >= 1
+      ? "settled"
+      : playerStatus === "playing"
+        ? "playing"
+        : progress > 0
+          ? "paused"
+          : "idle";
+    return Object.freeze({ path: range.path, progress, status });
+  };
+  const notifyRange = (): void => {
+    const snapshot = rangeSnapshot();
+    for (const listener of rangeListeners) listener(snapshot);
+  };
 
   const syncSemanticFocus = (): void => {
     for (const element of player.querySelectorAll<HTMLElement>(
@@ -144,10 +191,26 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
     }));
   };
   const onFrame = (): void => {
+    const activeRange = ranges.find(({ path }) => path === activeRangePath);
+    const progress = Number(player.dataset["kpEditorAnimationProgress"] ?? 0);
+    if (
+      activeRange !== undefined &&
+      player.dataset["kpEditorAnimationStatus"] === "playing" &&
+      progress + Number.EPSILON >= activeRange.end
+    ) {
+      // The shared player owns time; the article presenter only closes its
+      // authored range at the certified endpoint instead of adding a clock.
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: activeRange.end
+      });
+      return;
+    }
     // Equation frames may replace endpoint subtrees; reapply article focus
     // after the renderer owns the new nodes, without adding a second clock.
     syncSemanticFocus();
     syncCheckpoint();
+    notifyRange();
   };
   player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, onFrame);
   syncCheckpoint();
@@ -159,12 +222,76 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
     seekRange(path: string, progress: number) {
       const range = ranges.find((candidate) => candidate.path === path);
       if (range === undefined) throw new Error(`Unknown article motion ${path}.`);
+      activeRangePath = path;
       const bounded = Math.max(0, Math.min(1, progress));
       dispatchKpEditorAnimationPlaybackAction(player, {
         type: "seek",
         progress: range.start + (range.end - range.start) * bounded
       });
       input.host.dataset["kpAlgebraRuntimeRange"] = path;
+      notifyRange();
+    },
+    playRange(path: string) {
+      const range = ranges.find((candidate) => candidate.path === path);
+      if (range === undefined) throw new Error(`Unknown article motion ${path}.`);
+      const previous = rangeSnapshot();
+      activeRangePath = path;
+      input.host.dataset["kpAlgebraRuntimeRange"] = path;
+      if (
+        player.dataset["kpEditorAnimationAccessibilityMode"] ===
+        "reduced-motion"
+      ) {
+        dispatchKpEditorAnimationPlaybackAction(player, {
+          type: "seek",
+          progress: range.end
+        });
+        notifyRange();
+        return;
+      }
+      if (
+        previous.path !== path ||
+        previous.status === "settled" ||
+        previous.status === "idle"
+      ) {
+        dispatchKpEditorAnimationPlaybackAction(player, { type: "reset" });
+        dispatchKpEditorAnimationPlaybackAction(player, {
+          type: "seek",
+          progress: range.start
+        });
+      }
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "forward",
+        nowMs: performance.now()
+      });
+      notifyRange();
+    },
+    pauseRange(path: string) {
+      if (activeRangePath !== path) return;
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "pause",
+        nowMs: performance.now()
+      });
+      notifyRange();
+    },
+    attachTo({
+      target,
+      fallback: nextFallback
+    }: {
+      readonly target: HTMLElement;
+      readonly fallback: Element;
+    }) {
+      if (runtimeRoot.parentElement === target) return;
+      attachedFallback?.removeAttribute("hidden");
+      target.prepend(runtimeRoot);
+      nextFallback.setAttribute("hidden", "");
+      attachedFallback = nextFallback;
+    },
+    subscribeRange(listener: (
+      snapshot: KpFractionCompositionArticleRangeSnapshot
+    ) => void) {
+      rangeListeners.add(listener);
+      listener(rangeSnapshot());
+      return () => rangeListeners.delete(listener);
     },
     seekCheckpoint(path: string) {
       const checkpoint = checkpoints.find((candidate) => candidate.path === path);
@@ -196,8 +323,10 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
       if (disposed) return;
       disposed = true;
       player.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, onFrame);
+      rangeListeners.clear();
       disposeKpEditorAnimationPlayer(player);
       runtimeRoot.remove();
+      attachedFallback?.removeAttribute("hidden");
       fallback?.removeAttribute("hidden");
       delete input.host.dataset["kpAlgebraRuntimeAnimation"];
       delete input.host.dataset["kpAlgebraRuntimeRangeCount"];

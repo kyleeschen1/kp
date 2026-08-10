@@ -2,30 +2,50 @@ import { expect, test } from "@playwright/test";
 
 const route = "/tutorials/algebra/fraction-composition/";
 
-test("algebra article lazily mounts one canonical player and advances it", async ({
+test("the first motion passage drives only its named range and settles before its interpretation", async ({
   page
 }) => {
   await page.goto(route, { waitUntil: "domcontentloaded" });
+  const passage = page.locator(
+    '[data-kp-algebra-motion-passage="distribute"]'
+  );
+  const before = passage.locator('[data-kp-algebra-motion-before="distribute"]');
+  const after = passage.locator('[data-kp-algebra-motion-after="distribute"]');
+  const beforeText = await before.textContent();
+  const afterText = await after.textContent();
+  await passage.scrollIntoViewIfNeeded();
   const host = page.locator("[data-kp-algebra-stage-host]");
-  await host.scrollIntoViewIfNeeded();
   await expect(host).toHaveAttribute(
     "data-kp-algebra-runtime-animation",
     "animation.fraction-composition.two-thirds-solve"
   );
   await expect(host).toHaveAttribute("data-kp-algebra-runtime-range-count", "5");
-  const player = host.locator("[data-kp-editor-animation-player]");
+  const player = passage.locator("[data-kp-editor-animation-player]");
   await expect(player).toHaveCount(1);
   await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
-  await expect(host.locator("[data-kp-algebra-stage-fallback]")).toBeHidden();
+  await expect(passage.locator(
+    '[data-kp-algebra-static-checkpoint="normalized"]'
+  )).toBeHidden();
+  await expect(player.locator(".editor-equation-stage__caption")).toBeHidden();
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-range", "distribute-and-normalize");
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-checkpoint", "factored");
+  const control = passage.getByRole("button", { name: "Play distribution" });
+  const scrubber = passage.getByRole("slider", {
+    name: "Distribution animation progress"
+  });
+  await expect(control).toBeEnabled();
+  await expect(scrubber).toHaveValue("0");
 
-  const before = Number(await player.getAttribute(
+  await control.click();
+  await expect(passage).toHaveAttribute("data-kp-algebra-motion-state", "playing");
+  await expect(passage).toHaveAttribute("data-kp-algebra-motion-state", "settled");
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-checkpoint", "normalized");
+  await expect(scrubber).toHaveValue("1");
+  expect(Number(await player.getAttribute(
     "data-kp-editor-animation-progress"
-  ));
-  await player.getByRole("button", { name: "Play animation" }).click();
-  await expect.poll(async () => Number(await player.getAttribute(
-    "data-kp-editor-animation-progress"
-  ))).toBeGreaterThan(before);
-  await player.getByRole("button", { name: "Pause animation" }).click();
+  ))).toBeLessThan(1);
+  expect(await before.textContent()).toBe(beforeText);
+  expect(await after.textContent()).toBe(afterText);
 });
 
 test("semantic links focus and pin objects without becoming timeline controls", async ({
@@ -38,7 +58,9 @@ test("semantic links focus and pin objects without becoming timeline controls", 
     "data-kp-algebra-runtime-animation",
     "animation.fraction-composition.two-thirds-solve"
   );
-  const player = host.locator("[data-kp-editor-animation-player]");
+  // The player is one durable runtime node whose presenter may move it into the
+  // active passage; semantic focus must not depend on that presentation choice.
+  const player = page.locator("[data-kp-editor-animation-player]");
   const factor = page.getByRole("link", { name: "factor", exact: true }).first();
   const before = await player.getAttribute("data-kp-editor-animation-progress");
 
@@ -77,7 +99,7 @@ test("explicit checkpoint links seek canonical endpoints directly", async ({ pag
     "normalized"
   );
   await expect(normalized).toHaveAttribute("aria-current", "step");
-  const progress = Number(await host.locator(
+  const progress = Number(await page.locator(
     "[data-kp-editor-animation-player]"
   ).getAttribute("data-kp-editor-animation-progress"));
   expect(progress).toBeGreaterThan(0);
@@ -168,4 +190,27 @@ test("reduced motion uses the same direct checkpoint endpoints", async ({ page }
     "data-kp-editor-animation-status",
     "playing"
   );
+});
+
+test("the local motion control settles immediately under reduced motion", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const passage = page.locator(
+    '[data-kp-algebra-motion-passage="distribute"]'
+  );
+  await passage.scrollIntoViewIfNeeded();
+  const control = passage.getByRole("button", { name: "Play distribution" });
+
+  await expect(control).toBeEnabled();
+  await control.click();
+  await expect(passage).toHaveAttribute("data-kp-algebra-motion-state", "settled");
+  await expect(page.locator("[data-kp-algebra-stage-host]")).toHaveAttribute(
+    "data-kp-algebra-runtime-checkpoint",
+    "normalized"
+  );
+  await expect(passage.getByRole("slider", {
+    name: "Distribution animation progress"
+  })).toHaveValue("1");
 });
