@@ -86,8 +86,10 @@ import {
   resolveKpReaderEquationLessonDescriptor
 } from "./equation-lesson-descriptor.ts";
 import {
-  compileKpAnimationTransformationPhaseCohorts,
-  findKpAnimationTransformationPhaseCohort
+  planKpReaderCanonicalEquationFrame
+} from "./canonical-equation-frame-plan.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
 
 interface TransitionContext {
@@ -823,26 +825,16 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     evaluationControls?.projectAnimationProgress(
       visualSample.progress
     ) ?? visualSample.progress;
-  const forwardClock = {
-    ...visualSample,
-    progress: animationProgress,
-    progressPermille: Math.round(animationProgress * 1_000),
-    direction: "forward" as const
-  };
-  const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock: forwardClock });
-  const cohort = findKpAnimationTransformationPhaseCohort({
-    cohorts: phaseCohorts,
-    transformationIds: runtimeFrame.activeTransformationIds
+  const canonicalFramePlan = planKpReaderCanonicalEquationFrame({
+    animation,
+    clock: visualSample,
+    animationProgress,
+    cohorts: phaseCohorts
   });
-  if (cohort === undefined) return;
-  const transitionId = cohort.id;
+  if (canonicalFramePlan === undefined) return;
+  const { runtimeFrame, transitionId, phaseProgress } = canonicalFramePlan;
   const context = layout.contexts.get(transitionId);
   if (context === undefined) throw new Error(`No measured transition ${transitionId}.`);
-  const phaseProgress = localPhaseProgress(
-    animationProgress,
-    runtimeFrame.phase.phaseIndex,
-    phaseCohorts.length
-  );
   // One typed envelope keeps review metadata atomic: mixing four independently
   // updated attributes could describe a frame that never actually existed.
   document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
@@ -1293,11 +1285,6 @@ function rendererInspection() {
     throw new Error(`Reader adapter ${renderer.adapterId} has no scheduler inspection.`);
   }
   return inspection;
-}
-
-function localPhaseProgress(progress: number, phaseIndex: number, phaseCount: number): number {
-  if (progress === 1) return 1;
-  return Math.max(0, Math.min(1, progress * phaseCount - phaseIndex));
 }
 
 function setAnchorOpacity(

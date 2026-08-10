@@ -99,6 +99,20 @@
       "scope": "s04 pure range windowing",
       "checkedAt": "2026-08-10T16:29:51.224Z",
       "notes": "5 focused checks pass for exact endpoints, local/global round trips, forward/rewind parity, paused interruption, overshoot settlement, and invalid ranges."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-canonical-equation-frame-plan.test.ts",
+      "status": "passed",
+      "scope": "s05 host-neutral canonical frame planning",
+      "checkedAt": "2026-08-10T16:41:49.455Z",
+      "notes": "3 focused checks compare extracted plans to the prior reader calculation across endpoints, intermediate samples, rewind traversal, and invalid inputs."
+    },
+    {
+      "command": "npm run test:browser:fraction-composition:determinism",
+      "status": "passed",
+      "scope": "s05 canonical reader preservation after frame-planner extraction",
+      "checkedAt": "2026-08-10T16:41:50.463Z",
+      "notes": "6 Chromium and Firefox checks pass across history independence, DPR invariance, native endpoints, and resource release."
     }
   ],
   "expectedLearning": [

@@ -75,7 +75,8 @@
     {
       "id": "s05",
       "title": "Canonical-frame-planning",
-      "status": "planned"
+      "summary": "Extracted canonical semantic frame planning into a pure host-neutral module; the reader entry now delegates active cohort, transition, phase, and exact local progress selection while retaining its existing attention and clock inputs. Sampled parity and the full cross-browser determinism suite pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
