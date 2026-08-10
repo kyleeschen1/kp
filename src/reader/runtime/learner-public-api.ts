@@ -20,6 +20,14 @@ export {
   type KpReaderClockSample
 } from "./playback-clock.ts";
 export {
+  defineKpReaderPlaybackRangeWindow,
+  projectKpReaderRangeGlobalProgress,
+  projectKpReaderRangeLocalProgress,
+  sampleKpReaderPlaybackRange,
+  type KpReaderPlaybackRangeSample,
+  type KpReaderPlaybackRangeWindow
+} from "./playback-range-window.ts";
+export {
   createKpReaderContinuousScrollClock,
   sampleKpReaderScrollPosition,
   type KpReaderContinuousScrollClock,

@@ -69,7 +69,8 @@
     {
       "id": "s04",
       "title": "Pure-range-windowing",
-      "status": "planned"
+      "summary": "Added a pure reader playback-range window that observes but never advances the external global clock, maps exact local/global progress, derives forward or rewind state, preserves paused interruptions, and reports exact clock clamps on overshoot; exported it through both reader runtime APIs.",
+      "status": "complete"
     },
     {
       "id": "s05",

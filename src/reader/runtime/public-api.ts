@@ -53,6 +53,14 @@ export {
   type KpReaderPlaybackClock
 } from "./playback-clock.ts";
 export {
+  defineKpReaderPlaybackRangeWindow,
+  projectKpReaderRangeGlobalProgress,
+  projectKpReaderRangeLocalProgress,
+  sampleKpReaderPlaybackRange,
+  type KpReaderPlaybackRangeSample,
+  type KpReaderPlaybackRangeWindow
+} from "./playback-range-window.ts";
+export {
   createKpReaderClockAuthorityState,
   reduceKpReaderClockAuthority,
   type KpReaderClockAuthorityDecision,
