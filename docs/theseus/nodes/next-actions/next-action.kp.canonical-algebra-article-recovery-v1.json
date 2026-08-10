@@ -260,8 +260,82 @@
       "scope": "shared host identity, DOM, layout, endpoint, accessibility, and lifecycle",
       "checkedAt": "2026-08-10T17:33:38.670Z",
       "notes": "Six browser checks pass and the canonical reader stage declares chrome-free-v1 host identity."
+    },
+    {
+      "command": "npm",
+      "status": "failed",
+      "scope": "s14",
+      "checkedAt": "2026-08-10T18:15:14.346Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-10T18:15:15.441Z",
+      "notes": "Chromium"
+    },
+    {
+      "command": "node",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-10T18:15:16.341Z",
+      "notes": "Session"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-10T18:15:17.300Z",
+      "notes": "Six"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-08-10T18:15:18.254Z",
+      "notes": "Application,"
+    },
+    {
+      "command": "npm run visual:fraction-composition-canonical",
+      "status": "failed",
+      "scope": "s14 complete migrated-host visual matrix",
+      "checkedAt": "2026-08-10T18:15:45.743Z",
+      "notes": "All 16 configurations and 1296 frames passed ownership endpoint fit overflow opacity review and runtime assertions. The final zero-contact gate reports six families exactly matching pre-loop commit e123bccb, so this is bounded pre-existing clearance debt rather than a migration regression."
+    },
+    {
+      "command": "npm run visual:fraction-composition-motif-fidelity",
+      "status": "passed",
+      "scope": "s14 canonical motif and lifecycle parity",
+      "checkedAt": "2026-08-10T18:15:46.693Z",
+      "notes": "Chromium and Firefox pass wide and phone cancellation paint seek and rewind parity Review navigation and zero page errors after the hidden-stage invalidation repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/chrome-free-canonical-equation-session.test.ts",
+      "status": "passed",
+      "scope": "s14 bounded shared-host lifecycle",
+      "checkedAt": "2026-08-10T18:15:47.629Z",
+      "notes": "The session remains clock-free and defers invalidation while its stage is outside paint."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "s14 canonical shell and shared-session lifecycle",
+      "checkedAt": "2026-08-10T18:15:48.590Z",
+      "notes": "Six Chromium checks pass for compiler-owned shell wide and phone certification handoff endpoints accessibility seek invalidation and disposal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 shared-host migration boundary",
+      "checkedAt": "2026-08-10T18:15:49.534Z",
+      "notes": "Application Node test Svelte and domain typechecks pass."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Canonical shared host is visually parity checked and lifecycle safe for Article embedding. Six unrelated contact families remain exactly equal to the pre-loop baseline and are recorded as separate clearance debt."
+  },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."
   ],

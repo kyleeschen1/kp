@@ -8,7 +8,8 @@ test("story scope does not paint whole equations as visual focus", () => {
   const projection = projectKpCanonicalEquationSemanticFocus({
     snapshot: {
       activeSource: "story",
-      objectRefs: ["equation.whole", "selector.term"]
+      objectRefs: ["equation.whole", "selector.term"],
+      revision: 1
     },
     equationObjectRefs: new Set(["equation.whole"])
   });
@@ -21,8 +22,9 @@ test("story scope does not paint whole equations as visual focus", () => {
 test("direct semantic focus retains equation and selector refs", () => {
   const projection = projectKpCanonicalEquationSemanticFocus({
     snapshot: {
-      activeSource: "link:term",
-      objectRefs: ["equation.whole", "selector.term"]
+      activeSource: "pointer",
+      objectRefs: ["equation.whole", "selector.term"],
+      revision: 1
     },
     equationObjectRefs: new Set(["equation.whole"])
   });

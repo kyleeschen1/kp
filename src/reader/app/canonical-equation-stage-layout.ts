@@ -186,7 +186,8 @@ export function measureKpCanonicalEquationStageLayout(input: {
       throw new Error(
         `Certified equation stage ${context.id} requires scale ` +
         `${certifiedFit.requiredScale.toFixed(3)}, below its readable ` +
-        `${certifiedFit.minimumReadableScale.toFixed(3)} floor.`
+        `${certifiedFit.minimumReadableScale.toFixed(3)} floor at ` +
+        `${input.viewport.clientWidth}x${input.viewport.clientHeight}.`
       );
     }
     const fit = certifiedFit?.fit ?? sequenceFit;

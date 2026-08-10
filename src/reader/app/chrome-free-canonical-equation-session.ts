@@ -266,18 +266,30 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   ) => void>();
   let layout: KpCanonicalEquationStageLayout | undefined;
   let layoutRevision = 0;
+  let layoutInvalidated = false;
   let sequence = 0;
   let previousProgress = 0;
   let disposed = false;
 
   const invalidate = (): void => {
     if (disposed) return;
-    layout = undefined;
-    layoutRevision += 1;
-    compositor.invalidate();
+    layoutInvalidated = true;
   };
   const unsubscribeFonts = fontReadiness.subscribe(invalidate);
   const readLayout = (): KpCanonicalEquationStageLayout => {
+    if (layoutInvalidated) {
+      // During page teardown ResizeObserver can invalidate after the stage has
+      // left paint. Reusing the last certificate matches the legacy reader
+      // boundary and prevents transient viewport collapse from becoming a
+      // false readability failure; the next visible sample remeasures.
+      if (layout !== undefined && stage.getClientRects().length === 0) {
+        return layout;
+      }
+      layout = undefined;
+      layoutRevision += 1;
+      compositor.invalidate();
+      layoutInvalidated = false;
+    }
     layout ??= measureKpCanonicalEquationStageLayout({
       animationId: input.animation.id,
       revision: layoutRevision,

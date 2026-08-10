@@ -53,6 +53,8 @@ test("fraction cancellation motif fidelity covers actual wide and phone paint", 
   for (const viewport of viewports) {
     const context = await browser.newContext({ viewport: viewport.size });
     const page = await context.newPage();
+    const pageErrors: string[] = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
     try {
       await page.goto(readerRoute(0), { waitUntil: "domcontentloaded" });
       await ready(page);
@@ -92,6 +94,7 @@ test("fraction cancellation motif fidelity covers actual wide and phone paint", 
       await seek(page, 1_000);
       await expectNativeEndpoint(page, "target");
       await expectReviewCaptureAccessible(page, viewport.id);
+      expect(pageErrors).toEqual([]);
     } finally {
       await context.close();
     }
@@ -427,7 +430,11 @@ async function expectReviewCaptureAccessible(
   );
   const review = page.locator("[data-kp-dev-review-shell]");
   await expect(review).toHaveCount(1);
-  const launcher = review.locator("button.launcher");
+  // The global development toolbar is the visible owner; the review shell's
+  // legacy launcher remains hidden to prevent competing route controls.
+  const launcher = page.locator(
+    '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+  );
   await expect(launcher).toBeVisible();
   const box = await launcher.boundingBox();
   const viewport = page.viewportSize();

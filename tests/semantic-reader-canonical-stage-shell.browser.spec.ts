@@ -183,27 +183,29 @@ test("chrome-free session mounts, seeks, publishes, invalidates, and disposes", 
   );
   const evidence = await page.evaluate(async () => {
     dispatchEvent(new PageTransitionEvent("pagehide"));
-    const shellModule = await import(
-      "/src/reader/app/canonical-equation-stage-shell.ts"
-    );
-    const hostModule = await import(
-      "/src/reader/app/chrome-free-canonical-equation-session.ts"
-    );
-    const descriptorModule = await import(
-      "/src/reader/app/equation-lesson-descriptors/fraction-composition.ts"
-    );
-    const descriptorApi = await import(
-      "/src/reader/app/equation-lesson-descriptor.ts"
-    );
-    const presentation = await import(
-      "/src/reader/document/equation-presentation.ts"
-    );
-    const layout = await import(
-      "/src/reader/runtime/fraction-composition-layout.ts"
-    );
-    const salience = await import(
-      "/src/reader/app/fraction-composition-salience-adapter.ts"
-    );
+    // Vite serves these browser-only module IDs; variables keep the Node
+    // typechecker from treating root-relative URLs as filesystem imports.
+    const shellModulePath =
+      "/src/reader/app/canonical-equation-stage-shell.ts";
+    const hostModulePath =
+      "/src/reader/app/chrome-free-canonical-equation-session.ts";
+    const descriptorModulePath =
+      "/src/reader/app/equation-lesson-descriptors/fraction-composition.ts";
+    const descriptorApiPath =
+      "/src/reader/app/equation-lesson-descriptor.ts";
+    const presentationPath =
+      "/src/reader/document/equation-presentation.ts";
+    const layoutPath =
+      "/src/reader/runtime/fraction-composition-layout.ts";
+    const saliencePath =
+      "/src/reader/app/fraction-composition-salience-adapter.ts";
+    const shellModule = await import(shellModulePath);
+    const hostModule = await import(hostModulePath);
+    const descriptorModule = await import(descriptorModulePath);
+    const descriptorApi = await import(descriptorApiPath);
+    const presentation = await import(presentationPath);
+    const layout = await import(layoutPath);
+    const salience = await import(saliencePath);
     const target = document.createElement("div");
     target.style.width = "900px";
     target.style.height = "600px";
@@ -240,10 +242,12 @@ test("chrome-free session mounts, seeks, publishes, invalidates, and disposes", 
       equationPresentationProfile: profile,
       linkRoot: document,
       createStageLayoutIntent: layout.planKpFractionCompositionLayout,
-      renderSalience: (frame) => salienceCapability.render(frame)
+      renderSalience: (frame: unknown) => salienceCapability.render(frame)
     });
     const published: string[] = [];
-    const unsubscribe = session.subscribe((snapshot) => {
+    const unsubscribe = session.subscribe((snapshot: {
+      readonly transitionId: string;
+    }) => {
       published.push(snapshot.transitionId);
     });
     const source = session.seek(0);

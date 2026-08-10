@@ -35,4 +35,6 @@ test("chrome-free canonical session exposes bounded host lifecycle", () => {
   ]) {
     assert.match(source, new RegExp(operation));
   }
+  assert.match(source, /stage\.getClientRects\(\)\.length === 0/);
+  assert.match(source, /layoutInvalidated = true/);
 });

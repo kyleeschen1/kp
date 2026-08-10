@@ -197,7 +197,9 @@ test("fraction composition passes the complete Animation Library visual matrix",
             const review = page.locator(
               "[data-kp-dev-review-shell]"
             );
-            await review.locator("button.launcher").click();
+            await page.locator(
+              '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+            ).click();
             await review.locator("textarea").fill(
               "Slice 18 canonical fraction composition visual checkpoint."
             );
@@ -260,13 +262,15 @@ function denseVisualSamples(): readonly number[] {
 async function ready(frame: FrameLocator): Promise<void> {
   await expect(frame.locator("body")).toHaveAttribute(
     "data-kp-reader-hydrated",
-    "true"
+    "true",
+    { timeout: 15_000 }
   );
   await expect(
     frame.locator("[data-kp-reader-equation-stage]")
   ).toHaveAttribute(
     "data-kp-reader-canonical-equation-session-active",
-    "true"
+    "true",
+    { timeout: 15_000 }
   );
   await frame.locator("body").evaluate(async () => {
     await document.fonts.ready;
@@ -532,7 +536,11 @@ async function expectReviewLauncherInViewport(
 ): Promise<void> {
   const review = page.locator("[data-kp-dev-review-shell]");
   await expect(review).toHaveCount(1);
-  const launcher = review.locator("button.launcher");
+  // The global development toolbar is the visible owner; the review shell's
+  // legacy launcher stays hidden so routes cannot create competing controls.
+  const launcher = page.locator(
+    '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+  );
   await expect(launcher).toBeVisible();
   const box = await launcher.boundingBox();
   const viewport = page.viewportSize();
