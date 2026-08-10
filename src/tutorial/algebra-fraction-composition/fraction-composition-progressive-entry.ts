@@ -34,6 +34,10 @@ import {
   createKpFractionCompositionArticleRuntimeRanges
 } from "./fraction-composition-runtime-ranges.ts";
 import {
+  mountKpFractionCompositionArticleTransport,
+  type KpFractionCompositionArticleTransport
+} from "./fraction-composition-article-transport.ts";
+import {
   kpFractionCompositionArticleSemanticReferences,
   resolveKpFractionCompositionArticleSemanticReference
 } from "./fraction-composition-semantic-navigation.ts";
@@ -182,6 +186,10 @@ function mountFirstCanonicalRange(input: {
   if (template === null) return () => undefined;
   const profile = resolveKpReaderEquationPresentationProfile("standard");
   const animation = fractionCompositionDescriptor.createAnimation();
+  const durationMs = animation.timeline?.durationMs;
+  if (durationMs === undefined) {
+    throw new Error("Algebra Article requires its canonical full timeline.");
+  }
   const firstRange = createKpFractionCompositionArticleRuntimeRanges()[0];
   if (firstRange === undefined || firstRange.path !== "distribute-and-normalize") {
     throw new Error("Algebra Article lacks its canonical first motion range.");
@@ -208,6 +216,7 @@ function mountFirstCanonicalRange(input: {
   });
   let disposed = false;
   let session: KpChromeFreeCanonicalEquationSession | undefined;
+  let transport: KpFractionCompositionArticleTransport | undefined;
   input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
   void createKpChromeFreeCanonicalEquationSession({
     shell,
@@ -224,11 +233,20 @@ function mountFirstCanonicalRange(input: {
       return;
     }
     session = mounted;
-    const snapshot = mounted.seek(firstRange.start);
+    transport = mountKpFractionCompositionArticleTransport({
+      ownerWindow: input.ownerWindow,
+      host: input.host,
+      stage: shell.stage,
+      session: mounted,
+      range: {
+        id: firstRange.path,
+        start: firstRange.start,
+        end: firstRange.end
+      },
+      durationMs
+    });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
     input.host.dataset["kpAlgebraCanonicalRange"] = firstRange.path;
-    input.host.dataset["kpAlgebraCanonicalGlobalProgress"] =
-      String(snapshot.progressPermille);
     fallback?.toggleAttribute("hidden", true);
   }).catch((error: unknown) => {
     if (disposed) return;
@@ -239,6 +257,7 @@ function mountFirstCanonicalRange(input: {
   });
   return () => {
     disposed = true;
+    transport?.dispose();
     session?.dispose();
     shell.stage.remove();
     fallback?.removeAttribute("hidden");

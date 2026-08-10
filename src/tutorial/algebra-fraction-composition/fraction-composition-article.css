@@ -99,6 +99,46 @@ html body {
   transition: none;
 }
 
+.kp-algebra-article__range-transport {
+  display: grid;
+  grid-template-columns: auto auto auto minmax(7rem, 1fr) 4.5rem;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block: 0.75rem 0.35rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
+}
+
+.kp-algebra-article__range-transport button {
+  min-height: 2rem;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 0.35rem;
+  color: var(--kp-ink);
+  background: var(--kp-surface);
+  font: inherit;
+}
+
+.kp-algebra-article__range-transport button:disabled {
+  color: var(--kp-muted);
+  opacity: 0.55;
+}
+
+.kp-algebra-article__range-scrubber {
+  display: flex;
+  min-width: 0;
+}
+
+.kp-algebra-article__range-scrubber input {
+  width: 100%;
+  accent-color: var(--kp-accent);
+}
+
+.kp-algebra-article__range-status {
+  color: var(--kp-muted);
+  text-align: right;
+}
+
 .kp-algebra-article__checkpoint-navigation {
   display: flex;
   flex-wrap: wrap;
@@ -146,6 +186,13 @@ html body {
 @media (max-width: 38rem) {
   .kp-algebra-article { width: min(100% - 1.5rem, 68rem); }
   .kp-algebra-article__toc > nav > ol { columns: 1; }
+  .kp-algebra-article__range-transport {
+    grid-template-columns: repeat(3, auto) minmax(0, 1fr);
+  }
+  .kp-algebra-article__range-status {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
 }
 
 @media (forced-colors: active) {

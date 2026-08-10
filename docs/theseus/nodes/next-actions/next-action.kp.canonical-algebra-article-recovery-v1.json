@@ -351,11 +351,35 @@
       "scope": "s15 canonical Article mount",
       "checkedAt": "2026-08-10T18:29:01.154Z",
       "notes": "Application Node test Svelte and domain typechecks pass with the shared host mounted from the Article runtime."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-timeline-playback-clock.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-10T18:45:07.989Z"
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:45:08.973Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:45:09.947Z"
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-10T18:45:10.868Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The algebra Article now mounts one compiler-owned chrome-free canonical fraction session at the source endpoint of distribute-and-normalize. Static no-JavaScript output remains complete and no local transport is bound yet."
+    "summary": "Slice 16 binds play, pause, replay, and local scrub to one canonical 8.4-second timeline clock; no generic player or passage clock was introduced."
   },
   "expectedLearning": [
     "Whether one chrome-free canonical reader session can be mounted in Article v1 and windowed by named ranges without rebuilding, rescaling, or weakening canonical behavior."

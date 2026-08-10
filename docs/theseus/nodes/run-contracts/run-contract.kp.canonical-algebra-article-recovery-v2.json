@@ -141,7 +141,8 @@
     {
       "id": "s16",
       "title": "Bind-local-transport",
-      "status": "planned"
+      "summary": "Bound distribute-and-normalize transport to one external full-timeline clock with pure local projection, reduced-motion direct seek, canonical endpoint ownership, and passing unit, type, and browser gates.",
+      "status": "complete"
     },
     {
       "id": "s17",

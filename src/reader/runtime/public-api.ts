@@ -61,6 +61,12 @@ export {
   type KpReaderPlaybackRangeWindow
 } from "./playback-range-window.ts";
 export {
+  createKpReaderTimelinePlaybackClock,
+  type KpReaderTimelinePlaybackClock,
+  type KpReaderTimelinePlaybackScheduler,
+  type KpReaderTimelinePlaybackStatus
+} from "./timeline-playback-clock.ts";
+export {
   createKpReaderClockAuthorityState,
   reduceKpReaderClockAuthority,
   type KpReaderClockAuthorityDecision,

@@ -172,6 +172,10 @@ test("algebra forbids the rejected generic editor-player host", () => {
     "src/tutorial/algebra-fraction-composition/fraction-composition-progressive-entry.ts",
     "utf8"
   );
+  const transport = readFileSync(
+    "src/tutorial/algebra-fraction-composition/fraction-composition-article-transport.ts",
+    "utf8"
+  );
   const tutorialRoot = "src/tutorial/algebra-fraction-composition";
   const tutorialRuntime = readdirSync(tutorialRoot)
     .filter((name) => name.endsWith(".ts") || name.endsWith(".css"))
@@ -189,6 +193,9 @@ test("algebra forbids the rejected generic editor-player host", () => {
   assert.match(entry, /mountKpCanonicalEquationStageShell/u);
   assert.match(entry, /fractionCompositionDescriptor/u);
   assert.doesNotMatch(entry, /requestAnimationFrame|setInterval|setTimeout/u);
+  assert.match(transport, /createKpReaderTimelinePlaybackClock/u);
+  assert.match(transport, /sampleKpReaderPlaybackRange/u);
+  assert.doesNotMatch(tutorialRuntime, /requestAnimationFrame/u);
   assert.doesNotMatch(entry, /createKpReaderContinuousScrollClock/u);
   assert.doesNotMatch(entry, /seekCheckpoint\([^)]*kpFocus/u);
 });

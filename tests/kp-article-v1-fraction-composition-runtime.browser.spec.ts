@@ -26,6 +26,15 @@ test("algebra article mounts the canonical host for its first range over the sta
     "data-kp-algebra-canonical-global-progress",
     "0"
   );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "0"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-range-status",
+    "idle"
+  );
+  await expect(host.locator("[data-kp-algebra-range-transport]")).toHaveCount(1);
   await expect(canonical).toHaveAttribute(
     "data-kp-reader-native-endpoint",
     "source"
@@ -34,6 +43,49 @@ test("algebra article mounts the canonical host for its first range over the sta
   await expect(page.locator(
     "[data-kp-algebra-fraction-composition-publication] svg[role='img']"
   )).toHaveCount(6);
+});
+
+test("one Article transport scrubs and plays the named range on the canonical full clock", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-clock",
+    "reader.article.distribute-and-normalize.canonical-full-timeline"
+  );
+  const scrubber = host.locator("[data-kp-algebra-range-scrubber]");
+  await scrubber.fill("500");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "500"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    /^(?:7[67]|77)$/u
+  );
+  await host.locator('[data-kp-algebra-range-action="replay"]').click();
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-range-status",
+    "playing"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000",
+    { timeout: 4_000 }
+  );
+  const canonical = host.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-native-endpoint-passed",
+    "true"
+  );
+  await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
 });
 
 test("semantic links remain searchable and pinnable without becoming timeline controls", async ({
