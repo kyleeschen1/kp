@@ -120,6 +120,20 @@
       "scope": "s06 canonical DOM and accessibility shell",
       "checkedAt": "2026-08-10T16:45:55.768Z",
       "notes": "The canonical route retains one stage, one viewport/material owner, 13 transition/source/target pairs, aria-hidden measurement trees, and one live accessible equation state."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "s07 structural anchor mount",
+      "checkedAt": "2026-08-10T16:49:23.127Z",
+      "notes": "Every certified fraction-composition structural anchor resolves exactly once in every rendered instance of its native state."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "s07 semantic and structural authority preservation",
+      "checkedAt": "2026-08-10T16:49:24.177Z",
+      "notes": "63 architecture, native endpoint, layout, salience, motif, and exact algebra checks pass."
     }
   ],
   "expectedLearning": [

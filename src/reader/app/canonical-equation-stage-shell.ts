@@ -15,6 +15,7 @@ export interface KpCanonicalEquationStageShell {
 export function mountKpCanonicalEquationStageShell(input: {
   readonly target: HTMLElement;
   readonly template: HTMLTemplateElement;
+  readonly bindStructuralAnchors: (stage: HTMLElement) => void;
 }): KpCanonicalEquationStageShell {
   const fragment = input.template.content.cloneNode(true) as DocumentFragment;
   const stage = requireDescendant<HTMLElement>(
@@ -55,6 +56,14 @@ export function mountKpCanonicalEquationStageShell(input: {
     "[data-kp-reader-accessible-equation]"
   ) ?? undefined;
   input.target.append(fragment);
+  try {
+    input.bindStructuralAnchors(stage);
+  } catch (error: unknown) {
+    // Mount and semantic binding are one transaction: a host must never keep a
+    // visually plausible stage whose certified selectors are absent.
+    stage.remove();
+    throw error;
+  }
   return Object.freeze({
     stage,
     viewport,

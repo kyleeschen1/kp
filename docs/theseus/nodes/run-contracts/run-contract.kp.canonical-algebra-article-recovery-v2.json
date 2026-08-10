@@ -87,7 +87,8 @@
     {
       "id": "s07",
       "title": "Structural-anchor-mount",
-      "status": "planned"
+      "summary": "Canonical stage mount now requires structural-anchor binding before returning and rolls back the whole mounted stage if binding fails. The reader delegates descriptor binding into that transaction; browser coverage proves every certified fraction selector resolves in each source and target instance.",
+      "status": "complete"
     },
     {
       "id": "s08",

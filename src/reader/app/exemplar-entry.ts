@@ -187,12 +187,14 @@ const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
 const stageShell = mountKpCanonicalEquationStageShell({
   target: staticSurface,
-  template
-});
-bindKpReaderEquationLessonStructuralAnchors({
-  root: staticSurface,
-  animation,
-  descriptor: lessonDescriptor
+  template,
+  bindStructuralAnchors: (root) => {
+    bindKpReaderEquationLessonStructuralAnchors({
+      root,
+      animation,
+      descriptor: lessonDescriptor
+    });
+  }
 });
 document.body.dataset["kpReaderHydrated"] = "true";
 
