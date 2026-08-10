@@ -93,7 +93,8 @@
     {
       "id": "s08",
       "title": "Certified-layout-extraction",
-      "status": "planned"
+      "summary": "Extracted one host-neutral canonical stage measurement, certification, responsive-fit, and application pass; canonical reader now delegates to it and wide/phone certificate checks pass.",
+      "status": "complete"
     },
     {
       "id": "s09",

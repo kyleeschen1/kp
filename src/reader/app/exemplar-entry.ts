@@ -14,21 +14,12 @@ import {
   createKpReaderEquationMaterialLayer,
   defineKpReaderScheduledRendererAdapter,
   loadKpReaderEquationSceneCompositorAdapter,
-  measureKpReaderAppliedEquationStageLayoutSnapshot,
-  measureKpReaderEquationLayoutSnapshot,
-  planKpReaderEquationPerceptualAlignment,
-  planKpReaderCertifiedEquationStageResponsiveFit,
-  planKpReaderEquationSequenceResponsiveFit,
   projectKpCertifiedTransferMaterialPlan,
   projectKpReaderEquationIdentityWitness,
   projectKpReaderEquationRenderPlan,
   sampleKpReaderEquationSymbolMotion,
   type KpReaderEquationLayoutSnapshot,
   type KpReaderEquationMaterialOwnerFrame,
-  type KpReaderEquationMaterialPlan,
-  type KpReaderEquationPerceptualAlignmentPlan,
-  type KpReaderEquationRenderPlan,
-  type KpReaderEquationResponsiveFitPlan,
   type KpReaderEquationSymbolMotionFrame
 } from "../renderers/learner-public-api.ts";
 import type {
@@ -44,7 +35,6 @@ import {
   createKpReaderSessionSnapshot,
   createKpReaderRuntimeRouteDescriptor,
   createKpReaderViewportAnchorCache,
-  createKpEquationStageMeasurementIdentity,
   decodeKpReaderSessionUrl,
   defineKpReaderEquationPresentationCapability,
   encodeKpReaderSessionUrl,
@@ -58,11 +48,8 @@ import {
   selectKpReaderEquationPresentation,
   sampleKpReaderScrollPosition,
   sampleKpReaderAnimationFrame,
-  resetKpAppliedEquationStageLayout,
   recordKpReaderScrollAnchorRead,
   recordKpReaderScrollGeometryRead,
-  type KpAppliedEquationStageLayout,
-  type KpCorridorCertifiedEquationStageLayout,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
   type KpReaderPiecewiseScrollGeometry,
@@ -79,6 +66,11 @@ import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycl
 import {
   mountKpCanonicalEquationStageShell
 } from "./canonical-equation-stage-shell.ts";
+import {
+  measureKpCanonicalEquationStageLayout,
+  type KpCanonicalEquationStageLayout,
+  type KpCanonicalEquationTransitionLayout
+} from "./canonical-equation-stage-layout.ts";
 import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
   installKpReaderAnimationHostStatus
@@ -95,26 +87,8 @@ import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
 
-interface TransitionContext {
-  readonly id: string;
-  readonly element: HTMLElement;
-  readonly fitSurface: HTMLElement;
-  readonly measurementRoot: HTMLElement;
-  readonly renderPlan: KpReaderEquationRenderPlan;
-  readonly materialPlan: KpReaderEquationMaterialPlan;
-  readonly anchorElements: ReadonlyMap<string, HTMLElement>;
-  readonly layout: KpReaderEquationLayoutSnapshot;
-  readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
-  readonly fit: KpReaderEquationResponsiveFitPlan;
-  readonly appliedStageLayout?:
-    KpAppliedEquationStageLayout<
-      KpCorridorCertifiedEquationStageLayout
-    > | undefined;
-}
-
-interface LayoutState {
-  readonly contexts: ReadonlyMap<string, TransitionContext>;
-}
+type TransitionContext = KpCanonicalEquationTransitionLayout;
+type LayoutState = KpCanonicalEquationStageLayout;
 
 const markKpAnimationHostReady = installKpReaderAnimationHostStatus(
   window,
@@ -658,140 +632,24 @@ function measureLayout(revision: number): LayoutState {
   if (stage.getClientRects().length === 0 && lastMeasuredLayout !== undefined) {
     return lastMeasuredLayout;
   }
-  const measured: Omit<TransitionContext, "fit">[] = [];
   const stageLayoutIntent =
     evaluationControls?.readStageLayoutIntent() ??
     lessonDescriptor.createStageLayoutIntent?.({
       viewport: window.innerWidth > 880 ? "wide" : "phone"
     });
-  const stageLayoutCompiler = lessonDescriptor.stageLayoutCompiler;
-  if ((stageLayoutIntent === undefined) !== (stageLayoutCompiler === undefined)) {
-    throw new Error(
-      "Reader stage layout requires both semantic intent and a descriptor compiler."
-    );
-  }
-  if (
-    stageLayoutIntent !== undefined &&
-    stageLayoutIntent.phases.length !== transitionElements.length
-  ) {
-    throw new Error(
-      "Reader stage layout must cover every equation transition exactly once."
-    );
-  }
-  for (const [index, element] of transitionElements.entries()) {
-    const id = requiredData(element, "kpReaderTransition");
-    const plans = staticPlans.get(id);
-    if (plans === undefined) {
-      throw new Error(`Equation transition ${id} is missing its reader plan.`);
-    }
-    const measurementRoot = requireDescendant<HTMLElement>(
-      element,
-      "[data-kp-reader-equation-measurement]"
-    );
-    const fitSurface = requireDescendant<HTMLElement>(
-      element,
-      "[data-kp-reader-fit-surface]"
-    );
-    fitSurface.style.transform = "none";
-    const coordinateSpaceId = `${animation.id}.equation-stage`;
-    const measurementIdentity = createKpEquationStageMeasurementIdentity({
-      revision,
-      coordinateSpaceId
-    });
-    const phaseIntent = stageLayoutIntent?.phases[index];
-    const cohort = phaseCohorts[index];
-    let appliedStageLayout:
-      KpAppliedEquationStageLayout<
-        KpCorridorCertifiedEquationStageLayout
-      > | undefined;
-    if (
-      stageLayoutCompiler !== undefined &&
-      phaseIntent !== undefined &&
-      cohort !== undefined
-    ) {
-      resetKpAppliedEquationStageLayout(measurementRoot);
-      appliedStageLayout = stageLayoutCompiler.apply({
-        phaseIntent,
-        sourceObjectIds: cohort.sourceObjectIds,
-        targetObjectIds: cohort.targetObjectIds,
-        measurementRoot,
-        measurementIdentity
-      });
-      element.dataset["kpReaderStageLayoutApplied"] =
-        appliedStageLayout.applicationId;
-      element.dataset["kpReaderStageLayoutPhase"] = phaseIntent.nodeId;
-      element.dataset["kpReaderStageLayoutPolicy"] =
-        appliedStageLayout.certificate.policy;
-    }
-    const layout = appliedStageLayout === undefined
-      ? measureKpReaderEquationLayoutSnapshot({
-          materialPlan: plans.materialPlan,
-          transitionId: id,
-          measurementRoot,
-          revision,
-          coordinateSpaceId
-        })
-      : measureKpReaderAppliedEquationStageLayoutSnapshot({
-          materialPlan: plans.materialPlan,
-          transitionId: id,
-          measurementRoot,
-          revision,
-          coordinateSpaceId,
-          appliedStageLayout
-        });
-    const alignment = planKpReaderEquationPerceptualAlignment({
-      materialPlan: plans.materialPlan,
-      layout
-    });
-    measured.push({
-      id,
-      element,
-      fitSurface,
-      measurementRoot,
-      renderPlan: plans.renderPlan,
-      materialPlan: plans.materialPlan,
-      anchorElements: anchorElementIndex(measurementRoot),
-      layout,
-      alignment,
-      ...(appliedStageLayout === undefined ? {} : { appliedStageLayout })
-    });
-  }
-  const fit = planKpReaderEquationSequenceResponsiveFit({
-    id: `${animation.id}.r${revision}`,
-    alignments: measured.map((context) => context.alignment),
-    viewportWidth: viewport.clientWidth,
-    viewportHeight: viewport.clientHeight,
-    horizontalPadding: 18,
-    verticalPadding: 18,
-    minScale: 0.68,
-    // Reader cards must contain every supported equation. The minimum scale is
-    // still diagnostic, while semantic staging/folding protects readability.
-    overflowStrategy: "contain"
+  lastMeasuredLayout = measureKpCanonicalEquationStageLayout({
+    animationId: animation.id,
+    revision,
+    viewport,
+    transitionElements,
+    phaseCohorts,
+    staticPlans,
+    ...(stageLayoutIntent === undefined ? {} : { stageLayoutIntent }),
+    ...(lessonDescriptor.stageLayoutCompiler === undefined
+      ? {}
+      : { stageLayoutCompiler: lessonDescriptor.stageLayoutCompiler })
   });
-  const contexts = new Map(measured.map((context) => {
-    const certifiedFit = context.appliedStageLayout === undefined
-      ? undefined
-      : planKpReaderCertifiedEquationStageResponsiveFit({
-          layout: context.appliedStageLayout.certificate,
-          viewportWidth: viewport.clientWidth,
-          viewportHeight: viewport.clientHeight,
-          horizontalPadding: 18,
-          verticalPadding: 18,
-          minScale: 0.68
-        });
-    if (certifiedFit?.kind === "unsatisfied") {
-      throw new Error(
-        `Certified equation stage ${context.id} requires scale ` +
-        `${certifiedFit.requiredScale.toFixed(3)}, below its readable ` +
-        `${certifiedFit.minimumReadableScale.toFixed(3)} floor.`
-      );
-    }
-    const contextFit = certifiedFit?.fit ?? fit;
-    applyKpReaderEquationResponsiveFit(context.fitSurface, contextFit);
-    return [context.id, { ...context, fit: contextFit }] as const;
-  }));
   stage.dataset["kpReaderLayoutReads"] = String(rendererInspection().readCount + 1);
-  lastMeasuredLayout = { contexts };
   return lastMeasuredLayout;
 }
 
@@ -1598,12 +1456,6 @@ function scrollToProgress(progressPermille: number): void {
 
 function lastSample(): KpReaderClockSample {
   return controlSample ?? scrollClock.getSnapshot();
-}
-
-function anchorElementIndex(root: HTMLElement): ReadonlyMap<string, HTMLElement> {
-  return new Map([...root.querySelectorAll<HTMLElement>(
-    "[data-kp-reader-equation-anchor-id]"
-  )].map((element) => [requiredData(element, "kpReaderEquationAnchorId"), element]));
 }
 
 function dataRefs(element: HTMLElement): readonly string[] {

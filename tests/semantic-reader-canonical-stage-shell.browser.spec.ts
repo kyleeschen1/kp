@@ -43,3 +43,47 @@ test("fraction composition mounts the compiler-owned canonical stage shell", asy
     }
   }
 });
+
+for (const viewport of [
+  { name: "wide", width: 1280, height: 900, policy: "single-row" },
+  {
+    name: "phone",
+    width: 390,
+    height: 844,
+    policy: "semantic-two-row-stage"
+  }
+] as const) {
+  test(`canonical stage certifies every ${viewport.name} transition`, async ({
+    page
+  }) => {
+    await page.setViewportSize({
+      width: viewport.width,
+      height: viewport.height
+    });
+    await page.goto("/reader/fraction-composition/", {
+      waitUntil: "domcontentloaded"
+    });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-animation-host-status",
+      "ready"
+    );
+    const stage = page.locator("[data-kp-reader-equation-stage]");
+    const transitions = stage.locator("[data-kp-reader-transition]");
+    await expect(transitions).toHaveCount(13);
+    await expect(stage.locator(
+      `[data-kp-reader-transition]` +
+      `[data-kp-reader-stage-layout-policy="${viewport.policy}"]`
+    )).toHaveCount(13);
+    for (let index = 0; index < 13; index += 1) {
+      const transition = transitions.nth(index);
+      await expect(transition).toHaveAttribute(
+        "data-kp-reader-stage-layout-applied",
+        /.+/
+      );
+      await expect(transition).toHaveAttribute(
+        "data-kp-reader-stage-layout-phase",
+        /.+/
+      );
+    }
+  });
+}
