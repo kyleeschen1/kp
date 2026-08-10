@@ -197,6 +197,27 @@
       "scope": "identical canonical scene projection after focus extraction",
       "checkedAt": "2026-08-10T17:10:27.802Z",
       "notes": "History-independent rendered frames remain stable across Chromium and Firefox."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-composition-native-endpoints.test.ts tests/equation-native-endpoint-law.test.ts",
+      "status": "passed",
+      "scope": "native endpoint semantic and paint law",
+      "checkedAt": "2026-08-10T17:15:03.016Z",
+      "notes": "All exact fraction endpoints remain native, structurally addressable, and governed by exact authority and coincident-geometry checks."
+    },
+    {
+      "command": "npm run test:browser:canonical-stage-shell",
+      "status": "passed",
+      "scope": "native endpoint and accessible-equation ownership",
+      "checkedAt": "2026-08-10T17:15:09.405Z",
+      "notes": "The stage exposes one live aria-current equation state and exact source/target native endpoint settlement through the shared ownership boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "canonical endpoint ownership extraction",
+      "checkedAt": "2026-08-10T17:15:13.321Z",
+      "notes": "Typed native and accessible ownership APIs compile without diagnostics."
     }
   ],
   "expectedLearning": [

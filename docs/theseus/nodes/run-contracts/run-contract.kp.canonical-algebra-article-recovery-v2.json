@@ -111,7 +111,8 @@
     {
       "id": "s11",
       "title": "Native-endpoint-accessibility",
-      "status": "planned"
+      "summary": "Extracted canonical accessible-equation ownership and native endpoint law reporting; the reader now delegates exact source/target settlement and maintains one live assistive state.",
+      "status": "complete"
     },
     {
       "id": "s12",

@@ -6,7 +6,6 @@ import {
 } from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import { kpEquationPresentationProfile } from "../../rendering/equation-presentation-policy.ts";
-import { checkKpEquationNativeEndpointLaw } from "../../rendering/equation-native-endpoint-law.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -86,6 +85,10 @@ import {
   applyKpCanonicalEquationSemanticFocus,
   projectKpCanonicalEquationSemanticFocus
 } from "./canonical-equation-semantic-focus.ts";
+import {
+  createKpCanonicalEquationAccessibleOwnership,
+  syncKpCanonicalEquationNativeEndpointEvidence
+} from "./canonical-equation-endpoint-ownership.ts";
 import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
@@ -216,14 +219,8 @@ const attentionScrubber = requireElement<HTMLInputElement>(
 );
 const attentionCount = requireElement<HTMLElement>("[data-kp-reader-attention-count]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
-const accessibleEquationStates = new Map(
-  [...stage.querySelectorAll<HTMLElement>(
-    "[data-kp-reader-accessible-equation-state]"
-  )].map((element) => [
-    requiredData(element, "kpReaderAccessibleEquationState"),
-    element
-  ])
-);
+const accessibleEquationOwnership =
+  createKpCanonicalEquationAccessibleOwnership({ stage });
 const motionSelect = requireElement<HTMLSelectElement>(
   "[data-kp-reader-motion-preference]"
 );
@@ -709,11 +706,12 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseId,
     runtimeFrame.activeTransformationIds
   ] satisfies KpReaderReviewFrame);
-  syncAccessibleEquation(
-    phaseProgress < 1
-      ? context.renderPlan.transitions[0]?.source[0]?.objectId
-      : context.renderPlan.transitions[0]?.target[0]?.objectId
-  );
+  const accessibleObjectId = phaseProgress < 1
+    ? context.renderPlan.transitions[0]?.source[0]?.objectId
+    : context.renderPlan.transitions[0]?.target[0]?.objectId;
+  if (accessibleObjectId !== undefined) {
+    accessibleEquationOwnership.sync(accessibleObjectId);
+  }
   const choreographyStep = linearRearrangementBindings.find(
     (step) => step.transformationId === transitionId
   );
@@ -772,7 +770,12 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     equationObjectRefs
   });
   const focusedRefs = semanticFocus.visualFocusRefs;
-  syncNativeEndpointEvidence(motion, context, phaseProgress);
+  syncKpCanonicalEquationNativeEndpointEvidence({
+    stage,
+    motion,
+    alignment: context.alignment,
+    phaseProgress
+  });
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
   applyKpCanonicalEquationSemanticFocus({
@@ -988,79 +991,6 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     previousReviewFrameAtMs = atMs;
     previousReviewScrollY = window.scrollY;
   }
-}
-
-function syncAccessibleEquation(objectId: string | undefined): void {
-  if (objectId === undefined) return;
-  if (stage.dataset["kpReaderAccessibleEquationState"] === objectId) return;
-  for (const [candidateId, element] of accessibleEquationStates) {
-    const active = candidateId === objectId;
-    if (element.hidden === active) element.hidden = !active;
-    if (active && element.getAttribute("aria-current") !== "step") {
-      element.setAttribute("aria-current", "step");
-    } else if (!active && element.hasAttribute("aria-current")) {
-      element.removeAttribute("aria-current");
-    }
-  }
-  setDatasetIfChanged(stage, "kpReaderAccessibleEquationState", objectId);
-}
-
-function syncNativeEndpointEvidence(
-  motion: KpReaderEquationSymbolMotionFrame,
-  context: TransitionContext,
-  phaseProgress: number
-): void {
-  const endpoint = phaseProgress === 0
-    ? "source" as const
-    : phaseProgress === 1
-      ? "target" as const
-      : undefined;
-  if (endpoint === undefined) {
-    delete stage.dataset["kpReaderNativeEndpoint"];
-    delete stage.dataset["kpReaderNativeEndpointPassed"];
-    delete stage.dataset["kpReaderNativeEndpointMaxResidual"];
-    delete stage.dataset["kpReaderNativeEndpointFailures"];
-    return;
-  }
-  const aligned = new Map(context.alignment.owners.map((owner) => [owner.ownerId, owner]));
-  const results = motion.owners.map((owner) => {
-    const endpoints = aligned.get(owner.ownerId);
-    const nativeBounds = endpoint === "source"
-      ? endpoints?.sourceBounds
-      : endpoints?.targetBounds;
-    return checkKpEquationNativeEndpointLaw({
-      endpoint,
-      nativePresent: nativeBounds !== undefined,
-      handoff: {
-        ownerId: owner.ownerId,
-        progress: phaseProgress,
-        materialOpacity: owner.materialOpacity,
-        sourceNativeOpacity: owner.sourceNativeOpacity,
-        targetNativeOpacity: owner.targetNativeOpacity,
-        nativeHandoff: owner.sourceNativeOpacity > 0
-          ? "source"
-          : owner.targetNativeOpacity > 0
-            ? "target"
-            : "material"
-      },
-      ...(nativeBounds === undefined
-        ? {}
-        : { nativeBounds, materialBounds: owner.currentBounds })
-    });
-  });
-  const residuals = results.flatMap((result) =>
-    result.maximumGeometryResidualPx === undefined
-      ? []
-      : [result.maximumGeometryResidualPx]
-  );
-  const failureCodes = results.flatMap((result) =>
-    result.failures.map((failure) => `${result.ownerId}:${failure.code}`)
-  );
-  stage.dataset["kpReaderNativeEndpoint"] = endpoint;
-  stage.dataset["kpReaderNativeEndpointPassed"] = String(failureCodes.length === 0);
-  stage.dataset["kpReaderNativeEndpointMaxResidual"] =
-    String(residuals.length === 0 ? 0 : Math.max(...residuals));
-  stage.dataset["kpReaderNativeEndpointFailures"] = failureCodes.join(" ");
 }
 
 function syncAnnihilationWitness(

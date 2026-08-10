@@ -127,3 +127,41 @@ test("canonical compositor retires stale paint ownership during handoff", async 
   );
   expect(nextTransition).not.toBe(firstTransition);
 });
+
+test("native endpoints and accessible equation state settle together", async ({
+  page
+}) => {
+  await page.goto("/reader/fraction-composition/", {
+    waitUntil: "domcontentloaded"
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-animation-host-status",
+    "ready"
+  );
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  await expect(stage).toHaveAttribute("data-kp-reader-native-endpoint", "source");
+  await expect(stage).toHaveAttribute("data-kp-reader-native-endpoint-passed", "true");
+  await expect(stage.locator(
+    '[data-kp-reader-accessible-equation-state][aria-current="step"]'
+  )).toHaveCount(1);
+
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  await scrubber.evaluate((element) => {
+    const input = element as HTMLInputElement;
+    input.value = "1000";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    "1000"
+  );
+  await expect(stage).toHaveAttribute("data-kp-reader-native-endpoint", "target");
+  await expect(stage).toHaveAttribute("data-kp-reader-native-endpoint-passed", "true");
+  await expect(stage.locator(
+    '[data-kp-reader-accessible-equation-state][aria-current="step"]'
+  )).toHaveCount(1);
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.solved"
+  );
+});
