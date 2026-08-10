@@ -221,7 +221,8 @@
     {
       "id": "s29",
       "title": "algebra-release-gate",
-      "status": "planned"
+      "summary": "Release gate passed: production and reader ceilings hold, the 396-byte common-reader delta is fully attributed to shared-chunk repartitioning, algebra startup and lazy activation closures are now measured and guarded, no authoring code leaks, and all 3962 repository tests pass.",
+      "status": "complete"
     },
     {
       "id": "s30",

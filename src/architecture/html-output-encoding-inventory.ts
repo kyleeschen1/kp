@@ -176,6 +176,11 @@ export const kpHtmlEncodingOwners = [
     "svg-attribute"
   ]),
   retain(
+    "src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts",
+    "tutorial",
+    ["html-text", "html-attribute"]
+  ),
+  retain(
     "src/tutorial/economics-demand-shift/economics-demand-shift-inline-markdown.ts",
     "tutorial",
     ["html-text", "html-attribute"]

@@ -85,8 +85,10 @@ test("static route owns markup once and keeps its controller bounded", async () 
     4
   );
   assert.doesNotMatch(controller, /root\.innerHTML\s*=/);
+  // The universal development toolbar added one bounded Pages mount here;
+  // keep the experiment compact without pretending that dev chrome is free.
   assert.ok(
-    Buffer.byteLength(controller) < 40_500,
+    Buffer.byteLength(controller) < 41_000,
     "Experiment controller must remain below its post-migration source ceiling."
   );
 });

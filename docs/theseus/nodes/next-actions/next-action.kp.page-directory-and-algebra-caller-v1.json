@@ -446,6 +446,69 @@
       "scope": "s28 conformance test types",
       "checkedAt": "2026-08-10T00:23:01.745Z",
       "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:53.881Z",
+      "notes": "TypeScript, Svelte, domain checks, publication freshness, and Vite production build passed."
+    },
+    {
+      "command": "npm run check:algebra-fraction-composition-budgets",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:54.904Z",
+      "notes": "Common readers 125174 gzip bytes; algebra static HTML 4434, startup 36219, lazy activation 274397; no authoring leakage."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:55.846Z",
+      "notes": "All twelve reader manifest routes retain the governed production closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:56.768Z",
+      "notes": "Common closure remains 19826 gzip bytes below its established ceiling; specialized routes also pass."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:57.729Z",
+      "notes": "Production output contains no development review or article authoring markers."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:58.686Z",
+      "notes": "All 100 frozen-grammar, compilation, navigation, accessibility, and authoring tests passed."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:56:59.638Z",
+      "notes": "All 12 static-first, phone, keyboard, reduced-motion, direct-navigation, runtime, and authoring checks passed."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:57:00.566Z",
+      "notes": "All 17 shared reader conformance checks passed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-10T00:57:01.490Z",
+      "notes": "All architecture gates and 3962 repository tests passed."
     }
   ],
   "progress": {

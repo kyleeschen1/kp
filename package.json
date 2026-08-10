@@ -125,6 +125,7 @@
     "check:dev-review-production": "node --disable-warning=ExperimentalWarning scripts/check-dev-review-production-closure.ts",
     "check:reader-production": "node --disable-warning=ExperimentalWarning scripts/check-reader-production-closure.ts",
     "check:reader-budgets": "node --disable-warning=ExperimentalWarning scripts/check-reader-route-budgets.ts",
+    "check:algebra-fraction-composition-budgets": "node --disable-warning=ExperimentalWarning scripts/check-algebra-fraction-composition-budgets.ts",
     "check:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning scripts/check-canonical-animation-construction-budgets.ts",
     "test:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning --test scripts/check-canonical-animation-construction-budgets.test.ts",
     "review:logs": "node --disable-warning=ExperimentalWarning scripts/dev-review-cli.ts",

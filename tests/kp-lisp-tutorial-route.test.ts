@@ -3,6 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  kpDevelopmentBuildEntries
+} from "../src/dev-toolbar/development-page-build-entries.ts";
+import {
   isKpLispFunctionApplicationTutorialRoute,
   kpLispFunctionApplicationTutorialPath
 } from "../src/tutorial/lisp-function-application/lisp-function-application-route.ts";
@@ -40,7 +43,17 @@ test("the Lisp route owns a build entry with a static fallback", async () => {
   ]);
   assert.match(html, /data-kp-lisp-static-fallback/);
   assert.match(html, /kp:lisp-static-fallback/);
-  assert.match(vite, /lispFunctionApplicationTutorial: lispTutorialFilename/);
+  assert.deepEqual(
+    kpDevelopmentBuildEntries.find(({ name }) =>
+      name === "lispFunctionApplicationTutorial"
+    ),
+    {
+      name: "lispFunctionApplicationTutorial",
+      htmlPath: "tutorials/programming/lisp-function-application/index.html"
+    }
+  );
+  // The directory-owned entry table is now the one Vite input authority.
+  assert.match(vite, /kpDevelopmentBuildEntries\.map/);
   assert.match(vite, /compileLispTutorialStaticFallback/);
 });
 
