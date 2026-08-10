@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
 
 import type { KpArticleImportLock } from
@@ -167,13 +167,24 @@ test("article checkpoint URLs preserve route and query state", () => {
   );
 });
 
-test("article activation keeps the renderer behind one dynamic capability", () => {
+test("algebra forbids the rejected generic editor-player host", () => {
   const entry = readFileSync(
     "src/tutorial/algebra-fraction-composition/fraction-composition-progressive-entry.ts",
     "utf8"
   );
-  assert.match(entry, /IntersectionObserver/u);
-  assert.match(entry, /import\("\.\/fraction-composition-runtime-capability\.ts"\)/u);
+  const tutorialRoot = "src/tutorial/algebra-fraction-composition";
+  const tutorialRuntime = readdirSync(tutorialRoot)
+    .filter((name) => name.endsWith(".ts") || name.endsWith(".css"))
+    .map((name) => readFileSync(`${tutorialRoot}/${name}`, "utf8"))
+    .join("\n");
+
+  assert.equal(existsSync(
+    "src/tutorial/algebra-fraction-composition/fraction-composition-runtime-capability.ts"
+  ), false);
+  assert.doesNotMatch(tutorialRuntime, /editor-animation-player/u);
+  assert.doesNotMatch(tutorialRuntime, /createKpEditorAnimationDescriptor/u);
+  assert.doesNotMatch(tutorialRuntime, /hydrateKpPreparedEditorAnimationPlayer/u);
+  assert.doesNotMatch(tutorialRuntime, /renderKpEditorAnimationPlayerShell/u);
   assert.doesNotMatch(entry, /requestAnimationFrame|setInterval|setTimeout/u);
   assert.doesNotMatch(entry, /seekCheckpoint\([^)]*kpFocus/u);
 });

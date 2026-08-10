@@ -78,6 +78,20 @@
       "scope": "s02 catalog provenance compatibility",
       "checkedAt": "2026-08-10T16:17:38.102Z",
       "notes": "19 display-catalog checks pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s03 generic-host architecture guard and static recovery baseline",
+      "checkedAt": "2026-08-10T16:24:32.544Z",
+      "notes": "101 checks pass; the guard scans all algebra tutorial TypeScript and CSS for rejected editor-player construction and hydration APIs."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s03 no-wrong-runtime browser baseline",
+      "checkedAt": "2026-08-10T16:24:33.755Z",
+      "notes": "11 Chromium checks pass with six static figures, searchable prose, URL/history navigation, keyboard and forced-color controls, and zero generic editor players."
     }
   ],
   "expectedLearning": [

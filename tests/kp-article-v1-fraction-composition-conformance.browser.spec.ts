@@ -37,11 +37,11 @@ test("phone enhancement fits math and preserves searchable prose", async ({ page
     "[data-kp-algebra-fraction-composition-publication]"
   );
   await publication.locator("[data-kp-algebra-stage-host]").scrollIntoViewIfNeeded();
-  await expect(publication.locator("[data-kp-algebra-runtime-stage='ready']"))
+  await expect(publication.locator("[data-kp-algebra-stage-fallback]"))
     .toBeVisible();
   const geometry = await page.evaluate(() => {
     const stages = [...document.querySelectorAll<HTMLElement>(
-      ".kp-algebra-article__equation-stage, [data-kp-algebra-runtime-stage]"
+      ".kp-algebra-article__equation-stage"
     )];
     return {
       documentWidth: document.documentElement.scrollWidth,
@@ -81,10 +81,10 @@ test("checkpoint and semantic controls remain keyboard-addressable", async ({ pa
   await checkpoint.press("Enter");
   await expect(checkpoint).toHaveAttribute("aria-current", "step");
   await expect(publication.locator("[data-kp-algebra-stage-host]"))
-    .toHaveAttribute("data-kp-algebra-runtime-checkpoint", "normalized");
+    .toHaveAttribute("data-kp-algebra-static-checkpoint", "normalized");
 });
 
-test("forced colors gives focused semantic paint a non-color outline", async ({
+test("forced colors gives pinned semantic controls a non-color outline", async ({
   page
 }) => {
   await page.emulateMedia({ forcedColors: "active" });
@@ -93,12 +93,9 @@ test("forced colors gives focused semantic paint a non-color outline", async ({
     "[data-kp-algebra-fraction-composition-publication]"
   );
   const factor = publication.getByRole("link", { name: "factor", exact: true });
-  await factor.hover();
-  const target = publication.locator(
-    "[data-kp-article-semantic-salience='focus']"
-  ).first();
-  await expect(target).toBeVisible();
-  expect(await target.evaluate((element) => {
+  await factor.click();
+  await expect(factor).toHaveAttribute("data-kp-article-semantic-pinned", "");
+  expect(await factor.evaluate((element) => {
     const style = getComputedStyle(element);
     return { style: style.outlineStyle, width: style.outlineWidth };
   })).toEqual({ style: "solid", width: "2px" });

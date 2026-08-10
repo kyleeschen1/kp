@@ -23,7 +23,7 @@ async function openCheckpoint(
   });
   const host = page.locator("[data-kp-algebra-stage-host]");
   await expect(host).toHaveAttribute(
-    "data-kp-algebra-runtime-checkpoint",
+    "data-kp-algebra-static-checkpoint",
     checkpoint
   );
   await host.scrollIntoViewIfNeeded();
@@ -39,7 +39,7 @@ test("captures the wide opening and intermediate teaching states", async ({ page
 
   await page.locator('[data-kp-algebra-checkpoint-link="normalized"]').click();
   await expect(page.locator("[data-kp-algebra-stage-host]")).toHaveAttribute(
-    "data-kp-algebra-runtime-checkpoint",
+    "data-kp-algebra-static-checkpoint",
     "normalized"
   );
   await page.screenshot({
@@ -65,10 +65,7 @@ test("captures the reduced-motion direct endpoint", async ({ page }) => {
     { width: 1440, height: 900 },
     true
   );
-  await expect(page.locator("[data-kp-editor-animation-player]")).toHaveAttribute(
-    "data-kp-editor-animation-accessibility-mode",
-    "reduced-motion"
-  );
+  await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
   await page.screenshot({
     path: resolve(outputRoot, "wide-reduced-motion.png"),
     animations: "disabled"

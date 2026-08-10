@@ -63,7 +63,8 @@
     {
       "id": "s03",
       "title": "Generic-host-architecture-guard",
-      "status": "planned"
+      "summary": "Deleted the generic editor-player runtime, removed its CSS, reduced progressive enhancement to honest static navigation and semantic-link state, and added a directory-wide source guard plus browser proof that no generic player is constructed or hydrated.",
+      "status": "complete"
     },
     {
       "id": "s04",

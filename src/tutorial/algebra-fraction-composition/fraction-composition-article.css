@@ -88,48 +88,6 @@ html body {
   text-decoration-thickness: 2px;
 }
 
-[data-kp-algebra-runtime-stage="loading"] {
-  visibility: hidden;
-}
-
-[data-kp-algebra-runtime-stage="ready"] +
-[data-kp-algebra-stage-fallback] {
-  display: none;
-}
-
-.kp-algebra-article [data-kp-algebra-runtime-stage] .editor-animation-player {
-  border: 1px solid #555968;
-  color: #ececf0;
-  background: #0d0e1c;
-}
-
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-.editor-animation-player__stage,
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-.editor-animation-player__surface:has(.editor-equation-stage),
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-.editor-animation-player__controls {
-  color: #ececf0;
-  background: #0d0e1c;
-}
-
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-.editor-animation-player__surface {
-  border: 0;
-}
-
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-.editor-animation-player__controls {
-  border-color: #555968;
-}
-
-.kp-algebra-article [data-kp-algebra-runtime-stage]
-[data-kp-article-semantic-salience="focus"] {
-  color: var(--kp-algebra-focus-ink) !important;
-  filter: brightness(1.2);
-  text-shadow: 0 0 0.45em var(--kp-algebra-focus-glow);
-}
-
 .kp-algebra-article [data-kp-article-semantic-pinned] {
   text-decoration-color: #65d6a6;
   text-decoration-thickness: 2px;
@@ -159,11 +117,8 @@ html body {
 }
 
 @media (forced-colors: active) {
-  .kp-algebra-article [data-kp-algebra-runtime-stage]
-  [data-kp-article-semantic-salience="focus"] {
-    filter: none;
+  .kp-algebra-article [data-kp-article-semantic-pinned] {
     outline: 2px solid Highlight;
     outline-offset: 0.12em;
-    text-shadow: none;
   }
 }
