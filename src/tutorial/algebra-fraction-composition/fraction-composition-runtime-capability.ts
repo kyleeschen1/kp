@@ -111,6 +111,7 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
   );
   let semanticFocusTargetIds: readonly string[] = [];
   let activeCheckpointPath = "";
+  let directSeekCount = 0;
   let disposed = false;
 
   const syncSemanticFocus = (): void => {
@@ -174,6 +175,8 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
         type: "seek",
         progress: checkpoint.progress
       });
+      directSeekCount += 1;
+      input.host.dataset["kpAlgebraDirectSeekCount"] = String(directSeekCount);
     },
     setSemanticFocus(addresses: readonly string[]) {
       semanticFocusTargetIds = Object.freeze([...new Set(addresses.flatMap(
@@ -203,6 +206,7 @@ export async function mountKpFractionCompositionArticleRuntime(input: {
       delete input.host.dataset["kpAlgebraRuntimeCheckpoint"];
       delete input.host.dataset["kpAlgebraSemanticFocus"];
       delete input.host.dataset["kpAlgebraSemanticFocusTargetCount"];
+      delete input.host.dataset["kpAlgebraDirectSeekCount"];
     }
   });
 }

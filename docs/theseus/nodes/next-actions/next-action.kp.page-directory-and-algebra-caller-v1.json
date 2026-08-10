@@ -369,6 +369,27 @@
       "scope": "slice-25 renderer preservation",
       "checkedAt": "2026-08-09T23:53:33.569Z",
       "notes": "Six Chromium and Firefox determinism tests passed."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s26 location codec and article contracts",
+      "checkedAt": "2026-08-10T00:03:37.446Z",
+      "notes": "100 Article v1 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26 lifecycle types",
+      "checkedAt": "2026-08-10T00:03:38.480Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s26 direct URL seek rewind reduced motion and history",
+      "checkedAt": "2026-08-10T00:03:39.409Z",
+      "notes": "Five Chromium tests passed; checkpoint restoration reused one player and remained non-playing."
     }
   ],
   "progress": {

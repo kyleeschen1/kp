@@ -83,3 +83,89 @@ test("explicit checkpoint links seek canonical endpoints directly", async ({ pag
   expect(progress).toBeGreaterThan(0);
   expect(progress).toBeLessThan(1);
 });
+
+test("checkpoint URLs restore directly across rewind and browser history", async ({
+  page
+}) => {
+  await page.goto(`${route}#kp-ref:solve/normalized`, {
+    waitUntil: "domcontentloaded"
+  });
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  const player = host.locator("[data-kp-editor-animation-player]");
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-runtime-checkpoint",
+    "normalized"
+  );
+  await expect(host).toHaveAttribute("data-kp-algebra-direct-seek-count", "1");
+  const normalizedProgress = Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ));
+  expect(normalizedProgress).toBeGreaterThan(0);
+  await expect(player).not.toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+
+  await page.locator('[data-kp-algebra-checkpoint-link="solved"]').click();
+  await expect(page).toHaveURL(/#kp-ref:solve\/solved$/u);
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-checkpoint", "solved");
+  await expect(host).toHaveAttribute("data-kp-algebra-direct-seek-count", "2");
+
+  await player.focus();
+  await page.keyboard.press("r");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
+  await expect.poll(async () => Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ))).toBeLessThan(1);
+  await player.getByRole("button", { name: "Pause animation" }).click();
+
+  await page.goBack();
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-runtime-checkpoint",
+    "normalized"
+  );
+  await expect(host).toHaveAttribute("data-kp-algebra-direct-seek-count", "3");
+  expect(Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ))).toBe(normalizedProgress);
+  await expect(player).not.toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+
+  await page.goForward();
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-checkpoint", "solved");
+  await expect(host).toHaveAttribute("data-kp-algebra-direct-seek-count", "4");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "1");
+  await expect(player).not.toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+});
+
+test("reduced motion uses the same direct checkpoint endpoints", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${route}#kp-ref:solve/difference-simplified`, {
+    waitUntil: "domcontentloaded"
+  });
+  const host = page.locator("[data-kp-algebra-stage-host]");
+  const player = host.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await expect(host).toHaveAttribute(
+    "data-kp-algebra-runtime-checkpoint",
+    "difference-simplified"
+  );
+  await page.locator('[data-kp-algebra-checkpoint-link="solved"]').click();
+  await expect(host).toHaveAttribute("data-kp-algebra-runtime-checkpoint", "solved");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "1");
+  await expect(player).not.toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+});

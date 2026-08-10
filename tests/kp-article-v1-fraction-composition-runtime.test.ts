@@ -8,6 +8,10 @@ import {
   compileKpFractionCompositionArticle
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-article-compiler.ts";
 import {
+  decodeKpFractionCompositionArticleLocation,
+  encodeKpFractionCompositionArticleCheckpointLocation
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-article-location.ts";
+import {
   kpFractionCompositionArticleRuntimeManifest
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-manifest.ts";
 import {
@@ -82,6 +86,44 @@ test("article semantic addresses resolve only through locked object bindings", (
   assert.equal(
     resolveKpFractionCompositionArticleSemanticReference("solve/not-authored"),
     undefined
+  );
+});
+
+test("article locations distinguish checkpoints from non-temporal object links", () => {
+  assert.deepEqual(
+    decodeKpFractionCompositionArticleLocation(
+      "#kp-ref:solve/difference-simplified"
+    ),
+    { kind: "checkpoint", path: "difference-simplified" }
+  );
+  assert.deepEqual(
+    decodeKpFractionCompositionArticleLocation("#kp-ref:solve/factor"),
+    { kind: "semantic-reference", address: "solve/factor" }
+  );
+  assert.equal(
+    decodeKpFractionCompositionArticleLocation("#read-the-expression"),
+    undefined
+  );
+  assert.equal(
+    decodeKpFractionCompositionArticleLocation("#kp-ref:solve/%E0%A4%A"),
+    undefined
+  );
+});
+
+test("article checkpoint URLs preserve route and query state", () => {
+  assert.equal(
+    encodeKpFractionCompositionArticleCheckpointLocation(
+      "https://kinetic.press/tutorials/algebra/fraction-composition/?review=1#old",
+      "solved"
+    ),
+    "/tutorials/algebra/fraction-composition/?review=1#kp-ref:solve/solved"
+  );
+  assert.throws(
+    () => encodeKpFractionCompositionArticleCheckpointLocation(
+      "https://kinetic.press/tutorials/algebra/fraction-composition/",
+      "not-authored"
+    ),
+    /Unknown algebra article checkpoint/u
   );
 });
 

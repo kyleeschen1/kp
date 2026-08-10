@@ -203,7 +203,8 @@
     {
       "id": "s26",
       "title": "algebra-url-lifecycle",
-      "status": "planned"
+      "summary": "Added typed checkpoint and semantic-reference URL decoding, direct initial/back/forward endpoint reconstruction, push-state checkpoint controls, deterministic rewind coverage, and reduced-motion endpoint jumps without replay or scroll-jacking.",
+      "status": "complete"
     },
     {
       "id": "s27",

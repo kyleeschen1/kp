@@ -11,6 +11,10 @@ import {
   kpFractionCompositionArticleRuntimeManifest
 } from "./fraction-composition-runtime-manifest.ts";
 import {
+  decodeKpFractionCompositionArticleLocation,
+  encodeKpFractionCompositionArticleCheckpointLocation
+} from "./fraction-composition-article-location.ts";
+import {
   kpFractionCompositionArticleSemanticReferences,
   resolveKpFractionCompositionArticleSemanticReference
 } from "./fraction-composition-semantic-navigation.ts";
@@ -33,6 +37,9 @@ export function mountKpFractionCompositionArticleEnhancement(
   );
   const semanticLinks = decorateSemanticLinks(article);
   let runtimeSession: KpFractionCompositionArticleRuntimeSession | undefined;
+  let disposed = false;
+  let locationRevision = 0;
+  let lastRestoredHash: string | undefined;
   const activation = createKpArticleStageActivationController({
     manifests: [kpFractionCompositionArticleRuntimeManifest],
     load: async (manifest) => {
@@ -59,11 +66,6 @@ export function mountKpFractionCompositionArticleEnhancement(
     activateNearViewport();
   }, { rootMargin: "50% 0px" });
   observer.observe(host);
-  if (ownerWindow.location.hash !== "") {
-    void activation.activateAddress(ownerWindow.location.hash).catch(() => {
-      // Direct addressing is an enhancement; static anchors still navigate.
-    });
-  }
   const applyFocus = (): void => {
     const snapshot = focus.getSnapshot();
     article.dataset["kpArticleSemanticFocusSource"] =
@@ -76,7 +78,7 @@ export function mountKpFractionCompositionArticleEnhancement(
     const address = snapshot.objectRefs[0];
     if (address === undefined) return;
     void activation.activateAddress(`#kp-ref:${address}`).then((ready) => {
-      ready?.setSemanticFocus(focus.getSnapshot().objectRefs);
+      if (!disposed) ready?.setSemanticFocus(focus.getSnapshot().objectRefs);
     }).catch(() => {
       // Static semantic anchors remain usable when the stage cannot enhance.
     });
@@ -101,14 +103,14 @@ export function mountKpFractionCompositionArticleEnhancement(
     const address = link?.dataset["kpFocus"];
     if (address === undefined) return;
     pinnedAddress = pinnedAddress === address ? undefined : address;
-    if (pinnedAddress === undefined) focus.clear("url");
-    else focus.set("url", [pinnedAddress]);
+    if (pinnedAddress === undefined) focus.clear("story");
+    else focus.set("story", [pinnedAddress]);
     syncPinnedLink();
   };
   const onEscape = (event: KeyboardEvent): void => {
     if (event.key !== "Escape" || pinnedAddress === undefined) return;
     pinnedAddress = undefined;
-    focus.clear("url");
+    focus.clear("story");
     syncPinnedLink();
   };
   const checkpointLinks = [...article.querySelectorAll<HTMLAnchorElement>(
@@ -128,6 +130,32 @@ export function mountKpFractionCompositionArticleEnhancement(
     const path = (event.detail as { readonly path?: unknown }).path;
     if (typeof path === "string") selectCheckpoint(path);
   };
+  const restoreLocation = async (hash: string): Promise<void> => {
+    if (hash === lastRestoredHash) return;
+    lastRestoredHash = hash;
+    const revision = ++locationRevision;
+    const location = decodeKpFractionCompositionArticleLocation(hash);
+    if (location?.kind === "semantic-reference") {
+      host.dataset["kpAlgebraLocationKind"] = location.kind;
+      focus.set("url", [location.address]);
+      await activation.activateAddress(`#kp-ref:${location.address}`);
+      return;
+    }
+    focus.clear("url");
+    if (location?.kind !== "checkpoint") {
+      delete host.dataset["kpAlgebraLocationKind"];
+      return;
+    }
+    host.dataset["kpAlgebraLocationKind"] = location.kind;
+    const session = await activation.activateStage("solve", "direct-address");
+    if (disposed || revision !== locationRevision) return;
+    session.seekCheckpoint(location.path);
+  };
+  const onLocationChange = (): void => {
+    void restoreLocation(ownerWindow.location.hash).catch(() => {
+      // A malformed or unavailable enhancement leaves the static anchor valid.
+    });
+  };
   const onCheckpointClick = (event: MouseEvent): void => {
     if (!plainActivation(event)) return;
     const target = event.target;
@@ -140,7 +168,17 @@ export function mountKpFractionCompositionArticleEnhancement(
     if (path === undefined) return;
     event.preventDefault();
     void activation.activateStage("solve", "direct-address").then((session) => {
+      if (disposed) return;
       session.seekCheckpoint(path);
+      const href = encodeKpFractionCompositionArticleCheckpointLocation(
+        ownerWindow.location.href,
+        path
+      );
+      if (ownerWindow.location.hash !== link.hash) {
+        ownerWindow.history.pushState(ownerWindow.history.state, "", href);
+      }
+      lastRestoredHash = link.hash;
+      host.dataset["kpAlgebraLocationKind"] = "checkpoint";
     }).catch(() => {
       // A failed enhancement falls back to the static checkpoint anchor.
       ownerWindow.location.hash = link.hash;
@@ -149,15 +187,22 @@ export function mountKpFractionCompositionArticleEnhancement(
   article.addEventListener("click", onSemanticClick);
   article.addEventListener("click", onCheckpointClick);
   ownerWindow.addEventListener("keydown", onEscape);
+  ownerWindow.addEventListener("popstate", onLocationChange);
+  ownerWindow.addEventListener("hashchange", onLocationChange);
   host.addEventListener(
     "kp-algebra-article-checkpoint-change",
     onCheckpointChange
   );
+  onLocationChange();
   return () => {
+    disposed = true;
+    locationRevision += 1;
     observer.disconnect();
     article.removeEventListener("click", onSemanticClick);
     article.removeEventListener("click", onCheckpointClick);
     ownerWindow.removeEventListener("keydown", onEscape);
+    ownerWindow.removeEventListener("popstate", onLocationChange);
+    ownerWindow.removeEventListener("hashchange", onLocationChange);
     host.removeEventListener(
       "kp-algebra-article-checkpoint-change",
       onCheckpointChange
