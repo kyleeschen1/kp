@@ -106,6 +106,55 @@ test("compiler failure restores canonical source before reporting failure", asyn
   assert.equal(await readFile(fixture.sourceFile, "utf8"), original);
 });
 
+test("registered article endpoints select one exact source store", async (context) => {
+  const economics = await createFixture(context, async () => undefined);
+  const algebraRoot = resolve(
+    "tmp/codex",
+    `article-source-save-algebra-${randomUUID()}`
+  );
+  await mkdir(algebraRoot, { recursive: true });
+  context.after(() => rm(algebraRoot, { recursive: true, force: true }));
+  const algebraSourcePath = "content/lessons/algebra-fraction-composition.kp.md";
+  const algebraSourceFile = resolve(algebraRoot, "algebra.kp.md");
+  await writeFile(algebraSourceFile, original);
+  const algebra = new KpArticleSourceStore({
+    sourceFile: algebraSourceFile,
+    sourcePath: algebraSourcePath,
+    validate: () => undefined,
+    regenerate: async () => undefined
+  });
+  const server = createAppServer({
+    linearProblemProvider: createExactRationalLinearProblemProvider(),
+    articleSourceRoutes: [{ endpoint, store: economics.store }, {
+      endpoint: "/api/dev/article-sources/algebra-fraction-composition",
+      store: algebra
+    }]
+  });
+  context.after(() => close(server));
+  const baseUrl = await listen(server);
+  const text = original.replace("Valid article.", "Algebra article.");
+  const response = await fetch(
+    `${baseUrl}/api/dev/article-sources/algebra-fraction-composition`,
+    {
+      method: "POST",
+      headers: { ...capability, "content-type": "application/json" },
+      body: JSON.stringify({
+        ...request(text),
+        sourceId: algebraSourcePath
+      })
+    }
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(await readFile(algebraSourceFile, "utf8"), text);
+  assert.equal(await readFile(economics.sourceFile, "utf8"), original);
+  const wrongStore = await post(baseUrl, {
+    ...request(text),
+    sourceId: algebraSourcePath
+  });
+  assert.equal(wrongStore.status, 400);
+});
+
 function request(text: string): KpArticleSourceSaveRequest {
   return {
     schemaVersion: kpArticleSourceSaveSchema,

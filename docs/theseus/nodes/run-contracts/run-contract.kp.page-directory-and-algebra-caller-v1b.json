@@ -209,7 +209,8 @@
     {
       "id": "s27",
       "title": "algebra-whole-file-authoring",
-      "status": "planned"
+      "summary": "Reused the whole-file CodeMirror/Vim draft path for the algebra Article v1 source with semantic completion, last-valid transactional preview, q/q!/w/wq, exact capability-gated source routing, and no-reload writes while preserving economics.",
+      "status": "complete"
     },
     {
       "id": "s28",

@@ -92,7 +92,11 @@ const algebraFractionCompositionTutorialFilename = resolve(
   projectRoot,
   "tutorials/algebra/fraction-composition/index.html"
 );
-const algebraFractionCompositionStaticPublication =
+const algebraFractionCompositionArticleSourceFilename = resolve(
+  projectRoot,
+  "content/lessons/algebra-fraction-composition.kp.md"
+);
+let algebraFractionCompositionStaticPublication =
   compileAlgebraFractionCompositionStaticPublication();
 
 export default defineConfig({
@@ -142,6 +146,29 @@ export default defineConfig({
           economicsTutorialStaticNarrative =
             compileEconomicsTutorialStaticNarrative();
         }
+        return [];
+      }
+    },
+    {
+      name: "kp-algebra-authoring-save-boundary",
+      configResolved(config) {
+        if (config.command !== "serve") return;
+        // The article editor replaces the live projection transactionally;
+        // source writes must not let Vite discard scroll and editor state.
+        for (let index = config.configFileDependencies.length - 1;
+          index >= 0; index -= 1) {
+          if (config.configFileDependencies[index] ===
+              algebraFractionCompositionArticleSourceFilename) {
+            config.configFileDependencies.splice(index, 1);
+          }
+        }
+      },
+      handleHotUpdate(context) {
+        if (context.file !== algebraFractionCompositionArticleSourceFilename) {
+          return;
+        }
+        algebraFractionCompositionStaticPublication =
+          compileAlgebraFractionCompositionStaticPublication();
         return [];
       }
     },

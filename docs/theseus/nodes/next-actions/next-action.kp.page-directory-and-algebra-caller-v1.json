@@ -390,6 +390,41 @@
       "scope": "s26 direct URL seek rewind reduced motion and history",
       "checkedAt": "2026-08-10T00:03:39.409Z",
       "notes": "Five Chromium tests passed; checkpoint restoration reused one player and remained non-playing."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s27 Article v1 authoring contracts",
+      "checkedAt": "2026-08-10T00:16:57.982Z",
+      "notes": "100 Article v1 tests passed."
+    },
+    {
+      "command": "npm run test:economics-article-source-save",
+      "status": "passed",
+      "scope": "s27 registered source write boundary",
+      "checkedAt": "2026-08-10T00:16:59.367Z",
+      "notes": "Five server tests passed, including exact multi-article endpoint routing."
+    },
+    {
+      "command": "npm run test:browser:algebra-article",
+      "status": "passed",
+      "scope": "s27 algebra whole-file authoring",
+      "checkedAt": "2026-08-10T00:17:00.334Z",
+      "notes": "Seven Chromium tests passed, including last-valid preview, Vim q/wq, source request, and no document reload."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor",
+      "status": "passed",
+      "scope": "s27 economics authoring preservation",
+      "checkedAt": "2026-08-10T00:17:01.291Z",
+      "notes": "Five Chromium tests passed after the shared source client seam."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s27 authoring and source route types",
+      "checkedAt": "2026-08-10T00:17:02.255Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
     }
   ],
   "progress": {

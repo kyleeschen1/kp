@@ -1,7 +1,7 @@
 import { createAppServer } from "./app.ts";
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { createKpDevReviewServicesFromEnvironment } from "./dev-review-config.ts";
-import { createKpArticleSourceStoreFromEnvironment } from
+import { createKpArticleSourceRoutesFromEnvironment } from
   "./kp-article-source-config.ts";
 
 const DEFAULT_HOST = "127.0.0.1";
@@ -15,7 +15,7 @@ const server = createAppServer({
   devReviewService: devReviewServices?.legacy,
   devReviewRoundService: devReviewServices?.rounds,
   devReviewScreenshotService: devReviewServices?.screenshots,
-  articleSourceStore: createKpArticleSourceStoreFromEnvironment(process.env)
+  articleSourceRoutes: createKpArticleSourceRoutesFromEnvironment(process.env)
 });
 
 server.listen(port, host, () => {

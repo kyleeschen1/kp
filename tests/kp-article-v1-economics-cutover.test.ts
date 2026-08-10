@@ -129,6 +129,6 @@ test("the build and dev write stack have one v1 source authority", () => {
   assert.match(buildSource, /economics-demand-shift\.kp\.lock\.json/u);
   assert.doesNotMatch(buildSource, /economics-demand-shift\.md["']/u);
   assert.doesNotMatch(buildSource, /economics-demand-shift-two-column\.json/u);
-  assert.match(serverSource, /createKpArticleSourceStoreFromEnvironment/u);
+  assert.match(serverSource, /createKpArticleSourceRoutesFromEnvironment/u);
   assert.doesNotMatch(serverSource, /economics-lesson-source-config/u);
 });

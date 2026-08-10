@@ -1,0 +1,119 @@
+.kp-article-source-editor {
+  --kp-economics-editor-modeline-height: 1.75rem;
+  --kp-economics-editor-ex-command-height: 2.25rem;
+  --kp-lesson-theme-page: #0d0e1c;
+  --kp-lesson-theme-ink: #ececf0;
+  --kp-lesson-theme-muted: #9295a3;
+  --kp-lesson-theme-reader-rail: #65d6a6;
+  box-sizing: border-box;
+  width: min(92vw, 76rem);
+  height: min(88dvh, 56rem);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  border: 1px solid #555968;
+  padding: 0;
+  color: var(--kp-lesson-theme-ink);
+  background: var(--kp-lesson-theme-page);
+  box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 55%);
+  overflow: hidden;
+}
+
+.kp-article-source-editor[open] {
+  display: grid;
+  grid-template-rows: minmax(15rem, 1fr)
+    var(--kp-economics-editor-modeline-height)
+    var(--kp-economics-editor-ex-command-height);
+}
+
+.kp-article-source-editor::backdrop {
+  background: rgb(13 14 28 / 76%);
+  backdrop-filter: blur(3px);
+}
+
+.kp-article-source-editor__surface {
+  min-block-size: 0;
+  background: var(--kp-lesson-theme-page);
+  overflow: visible;
+}
+
+.kp-article-source-editor__fallback {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 15rem;
+  resize: none;
+  border: 0;
+  padding: 1.5rem 2rem;
+  color: var(--kp-lesson-theme-ink);
+  background: transparent;
+  font: 400 1rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-article-source-editor__fallback[hidden] { display: none; }
+.kp-article-source-editor__surface .cm-editor { position: relative; block-size: 100%; }
+.kp-article-source-editor__surface .cm-scroller,
+.kp-article-source-editor__surface .cm-content { min-block-size: 100%; }
+
+.kp-article-source-editor__surface .cm-panels-bottom {
+  position: absolute;
+  inset-block-start: calc(100% + var(--kp-economics-editor-modeline-height));
+  inset-inline: 0;
+  z-index: 1;
+  border-block-start: 1px solid #555968;
+  color: var(--kp-lesson-theme-ink);
+  background: var(--kp-lesson-theme-page);
+}
+
+.kp-article-source-editor__surface .cm-vim-panel,
+.kp-article-source-editor__surface .cm-vim-panel input {
+  color: inherit;
+  font: 400 1rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-article-source-editor__modeline {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  padding: 0.32rem 0.8rem;
+  color: #0d0e1c;
+  background: #ececf0;
+  font: 400 0.72rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+.kp-article-source-editor__modeline code {
+  color: inherit;
+  font: 400 0.72rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kp-article-source-editor__status {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kp-article-source-editor__spacer { flex: 1; }
+.kp-article-source-editor__ex-command {
+  min-block-size: var(--kp-economics-editor-ex-command-height);
+  background: var(--kp-lesson-theme-page);
+}
+
+.kp-article-source-editor__visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (max-width: 59.999rem) {
+  .kp-article-source-editor {
+    width: calc(100vw - 1rem);
+    height: calc(100dvh - 1rem);
+  }
+}

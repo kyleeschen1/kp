@@ -12,6 +12,8 @@ import type { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
 import type { KpDevReviewScreenshotService } from "./dev-review-screenshot.ts";
 import { createKpArticleSourceHttpAdapter } from
   "./kp-article-source-http-adapter.ts";
+import type { KpArticleSourceRoute } from
+  "./kp-article-source-http-adapter.ts";
 import type { KpArticleSourceStore } from "./kp-article-source-store.ts";
 
 interface HealthResponse {
@@ -36,6 +38,7 @@ export function createAppServer(options: {
   readonly devReviewScreenshotService?:
     KpDevReviewScreenshotService | undefined;
   readonly articleSourceStore?: KpArticleSourceStore | undefined;
+  readonly articleSourceRoutes?: readonly KpArticleSourceRoute[] | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
   const conceptReviewAdapter = createCanonicalConceptReviewHttpAdapter(options.linearProblemProvider);
@@ -45,7 +48,7 @@ export function createAppServer(options: {
     options.devReviewScreenshotService
   );
   const articleSourceAdapter = createKpArticleSourceHttpAdapter(
-    options.articleSourceStore
+    options.articleSourceRoutes ?? options.articleSourceStore
   );
   return createServer((request, response) => {
     handleRequest(

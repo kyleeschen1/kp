@@ -11,14 +11,26 @@ export const kpArticleSourceEndpoint =
 export const kpArticleSourceCapabilityHeader = "x-kp-article-source-write";
 const requestBodyLimitBytes = 96 * 1024;
 
+export interface KpArticleSourceRoute {
+  readonly endpoint: string;
+  readonly store: KpArticleSourceStore;
+}
+
 export function createKpArticleSourceHttpAdapter(
-  store: KpArticleSourceStore | undefined
+  input: KpArticleSourceStore | readonly KpArticleSourceRoute[] | undefined
 ): {
   handle(request: IncomingMessage, response: ServerResponse, url: URL): Promise<boolean>;
 } {
+  const stores = new Map((Array.isArray(input)
+    ? input
+    : input === undefined
+      ? []
+      : [{ endpoint: kpArticleSourceEndpoint, store: input }]
+  ).map(({ endpoint, store }) => [endpoint, store] as const));
   return {
     async handle(request, response, url) {
-      if (url.pathname !== kpArticleSourceEndpoint || store === undefined ||
+      const store = stores.get(url.pathname);
+      if (store === undefined ||
           request.headers[kpArticleSourceCapabilityHeader] !== "1") {
         return false;
       }
