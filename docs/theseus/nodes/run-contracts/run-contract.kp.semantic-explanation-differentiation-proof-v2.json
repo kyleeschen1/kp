@@ -92,7 +92,8 @@
     {
       "id": "s07",
       "title": "discovery-smoke-and-capture",
-      "status": "planned"
+      "summary": "Captured one corrected Chromium exemplar after fixing stage overflow and static passage separators; focused semantic, no-JavaScript/searchability, canonical-clock, build, and visual checks pass. Payload observation exposes inherited eager-runtime budget debt without moving the discovery baseline.",
+      "status": "complete"
     },
     {
       "id": "s08",

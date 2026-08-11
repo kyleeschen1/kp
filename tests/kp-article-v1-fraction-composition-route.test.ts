@@ -70,4 +70,8 @@ test("attention-stage discovery is build-rendered over the same publication", ()
   assert.match(publication, /data-kp-algebra-attention-action="forward"/u);
   assert.match(publication, /data-kp-algebra-attention-range="distribute-and-normalize"/u);
   assert.match(publication, /class="katex-mathml"/u);
+  assert.doesNotMatch(
+    publication,
+    /<\/div>,<div class="kp-algebra-attention-stage__passage"/u
+  );
 });

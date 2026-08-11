@@ -147,7 +147,7 @@ function renderAttentionStage(
       ` data-kp-algebra-attention-context="${escapeAttribute(beat.contextAddresses.join(" "))}"`,
       index === 0 ? `` : ` hidden`,
       `>${attentionCue(beat)}</div>`
-    ].join("")),
+    ].join("")).join(""),
     `</div>`,
     `<div class="kp-algebra-attention-stage__progress">`,
     `<progress data-kp-algebra-attention-progress value="0"`,
