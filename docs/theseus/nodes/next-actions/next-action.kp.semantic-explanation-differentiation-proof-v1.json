@@ -1,0 +1,75 @@
+{
+  "id": "next-action.kp.semantic-explanation-differentiation-proof-v1",
+  "kind": "next-action",
+  "title": "Prove semantic explanation differentiation",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-kp-semantic-explanation-differentiation-proof-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.canonical-algebra-article-recovery-v1"
+    ]
+  },
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:browser:algebra-article"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 proof contract and control-record integrity",
+      "checkedAt": "2026-08-11T00:35:47.833Z",
+      "notes": "925 nodes and 19412 events valid; autonomy and done-contract gates pass."
+    }
+  ],
+  "expectedLearning": [
+    "Whether semantic attentional framing is a legible KP differentiator over the same canonical equation.",
+    "Whether authors can address objects while projections own responsive cinematography.",
+    "Whether Article, attention stage, and compact reference can share one retained lesson without duplicated motion authority."
+  ],
+  "allowedWork": [
+    "One canonical algebra attentional projection and, only after human approval, layout-neutral reuse and authoring support."
+  ],
+  "disallowedWork": [
+    "No new animation semantics, renderer, clock, Article syntax, catalogue rollout, or unrelated visual redesign."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-object-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "one-screen-attention-stage",
+      "weight": "high"
+    },
+    {
+      "id": "searchable-static-document",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-direct-restoration",
+      "weight": "high"
+    },
+    {
+      "id": "reversible-projection-boundary",
+      "weight": "medium"
+    }
+  ]
+}

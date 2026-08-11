@@ -1,0 +1,173 @@
+{
+  "id": "run-contract.kp.semantic-explanation-differentiation-proof-v2",
+  "kind": "run-contract",
+  "title": "The Equation Remembers differentiation proof",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-explanation-differentiation-proof-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-kp-semantic-explanation-differentiation-proof-long-loop-proposal.md",
+      "summary": "Approved 23-slice proof plan with human checkpoints after the exemplar and reuse boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md",
+      "summary": "Canonical algebra Article and retained equation-session prerequisite."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md",
+      "summary": "Discovery testing stops short of broad certification until human visual approval."
+    }
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:browser:algebra-article",
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Canonical fraction-composition Article projection adapter, derived semantic framing, scoped proof route and styles, focused semantic tests, one Chromium discovery smoke, disposable capture, and durable project control."
+  ],
+  "disallowedWork": [
+    "New animation, renderer, clock, Article directive, framework animation authority, responsive geometry in authored content, canonical reader redesign, catalogue-wide rollout, or unrelated curriculum and user-owned files."
+  ],
+  "goal": "Prove semantic explanation continuity through one canonical algebra exemplar, then only after human approval project it into reusable views and authoring support.",
+  "target": "next-action.kp.semantic-explanation-differentiation-proof-v1",
+  "runMode": "run",
+  "maxSlices": 23,
+  "commitCadence": "Commit after each focused slice is verified and recorded.",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Stop at s08 for human visual judgment before projection generalization.",
+    "Stop at s17 for human reuse judgment before authoring promotion.",
+    "Stop if work requires a new renderer, clock, animation model, or Article syntax.",
+    "Stop if direct restoration replays prior motion or duplicates the live equation stage.",
+    "Stop if the canonical reader changes visually or unrelated user files overlap.",
+    "Stop if one-screen preferred composition requires changing explanatory meaning."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "proof-contract-freeze",
+      "summary": "Approved proof plan and typed contract now own the claim, boundaries, 23 slices, two human checkpoints, and discovery-first evidence cadence.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "semantic-beat-attention-matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "attention-scene-determinism",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "prose-object-focus-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "algebra-attention-stage-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "stable-composition-and-fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "discovery-smoke-and-capture",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "human-exemplar-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "projection-state-codec",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "no-reload-projection-switch",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "retained-session-projection-switch",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "url-history-direct-restoration",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "compact-reference-static-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "compact-reference-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "compact-reference-runtime-reuse",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "alternate-prose-reexplanation",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "reuse-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "codemirror-semantic-completion",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "diagnostics-and-live-focus-preview",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "editor-save-reload-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "search-accessibility-projection-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "multi-reference-performance-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "release-closeout",
+      "status": "planned"
+    }
+  ]
+}

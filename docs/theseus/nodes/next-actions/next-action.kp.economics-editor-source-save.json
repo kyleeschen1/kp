@@ -8,7 +8,7 @@
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "server/economics-lesson-source-http-adapter.ts"
+      "path": "server/kp-article-source-http-adapter.ts"
     }
   ],
   "verificationRecords": [
