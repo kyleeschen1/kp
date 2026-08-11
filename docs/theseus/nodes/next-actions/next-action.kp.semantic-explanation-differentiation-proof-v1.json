@@ -16,6 +16,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-10-kp-semantic-explanation-differentiation-human-checkpoint.md"
     }
   ],
   "dependsOn": {

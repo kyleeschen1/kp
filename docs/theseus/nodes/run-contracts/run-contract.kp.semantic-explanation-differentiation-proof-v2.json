@@ -98,7 +98,8 @@
     {
       "id": "s08",
       "title": "human-exemplar-checkpoint",
-      "status": "planned"
+      "summary": "Human review is required for the single live algebra attention-stage exemplar. Slices s09-s17 remain locked; no generalization or broad visual certification has begun.",
+      "status": "in-progress"
     },
     {
       "id": "s09",
