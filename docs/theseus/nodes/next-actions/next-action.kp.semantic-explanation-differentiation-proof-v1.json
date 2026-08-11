@@ -51,6 +51,20 @@
       "scope": "s02 typed attention matrix",
       "checkedAt": "2026-08-11T00:42:48.023Z",
       "notes": "Application, node, tests, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s03 deterministic attention scenes",
+      "checkedAt": "2026-08-11T00:46:50.168Z",
+      "notes": "109 checks pass; scene sampling is exact across forward, reverse, interruption, endpoints, and invalid-input rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 pure attention scene projector",
+      "checkedAt": "2026-08-11T00:46:51.436Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass."
     }
   ],
   "expectedLearning": [

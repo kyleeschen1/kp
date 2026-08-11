@@ -68,7 +68,8 @@
     {
       "id": "s03",
       "title": "attention-scene-determinism",
-      "status": "planned"
+      "summary": "Added a pure range-neutral scene projector: each semantic beat yields one direct checkpoint or range seek against the canonical full timeline, with deterministic forward, reverse, interruption, and restoration behavior and no time authority.",
+      "status": "complete"
     },
     {
       "id": "s04",

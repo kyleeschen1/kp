@@ -11,6 +11,9 @@ import {
   createKpFractionCompositionAttentionMatrix
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-matrix.ts";
 import {
+  projectKpFractionCompositionAttentionScene
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-scene.ts";
+import {
   createKpFractionCompositionArticleRuntimeCheckpoints,
   createKpFractionCompositionArticleRuntimeRanges
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-ranges.ts";
@@ -112,5 +115,83 @@ test("attention derivation is deterministic", () => {
   assert.deepEqual(
     createKpFractionCompositionAttentionMatrix(compiled.article.document),
     createKpFractionCompositionAttentionMatrix(compiled.article.document)
+  );
+});
+
+test("attention scenes project range-local progress onto the canonical timeline", () => {
+  const matrix = createKpFractionCompositionAttentionMatrix(
+    compiled.article.document
+  );
+  const range = createKpFractionCompositionArticleRuntimeRanges()[0]!;
+
+  assert.deepEqual(
+    projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "distribute:motion",
+      rangeProgress: 0.25
+    }).temporalRequest,
+    {
+      kind: "range-seek",
+      rangePath: range.path,
+      rangeProgress: 0.25,
+      globalProgress: range.start + (range.end - range.start) * 0.25
+    }
+  );
+  assert.deepEqual(
+    projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "distribute:settled"
+    }).temporalRequest,
+    {
+      kind: "checkpoint-seek",
+      checkpointPath: "normalized",
+      globalProgress: range.end
+    }
+  );
+});
+
+test("attention scene seeking is order-independent through reverse and interruption", () => {
+  const matrix = createKpFractionCompositionAttentionMatrix(
+    compiled.article.document
+  );
+  const project = (rangeProgress: number) =>
+    projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "subtract-four:motion",
+      rangeProgress
+    });
+
+  const forward = [0, 0.2, 0.7, 1].map(project);
+  const reverse = [1, 0.7, 0.2, 0].map(project).reverse();
+  assert.deepEqual(reverse, forward);
+  project(0.9);
+  assert.deepEqual(project(0.35), project(0.35));
+  assert.ok(forward.every(({ seekBehavior }) => seekBehavior === "direct"));
+  assert.ok(forward.every(({ timelineAuthority }) =>
+    timelineAuthority === "none"
+  ));
+});
+
+test("attention scene selection fails closed on ambiguous temporal input", () => {
+  const matrix = createKpFractionCompositionAttentionMatrix(
+    compiled.article.document
+  );
+
+  assert.throws(
+    () => projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "not-authored"
+    }),
+    /Unknown fraction composition attention beat/u
+  );
+  assert.throws(
+    () => projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "read-scope",
+      rangeProgress: 0.5
+    }),
+    /does not accept range progress/u
+  );
+  assert.throws(
+    () => projectKpFractionCompositionAttentionScene(matrix, {
+      beatId: "clear-denominator:motion",
+      rangeProgress: 1.01
+    }),
+    /between 0 and 1/u
   );
 });
