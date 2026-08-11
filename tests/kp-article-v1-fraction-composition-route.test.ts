@@ -58,3 +58,16 @@ test("six static figures resolve through canonical endpoint truth", () => {
   assert.match(publication, /<foreignObject/u);
   assert.match(publication, /x equals 9/u);
 });
+
+test("attention-stage discovery is build-rendered over the same publication", () => {
+  assert.equal(
+    (publication.match(/data-kp-algebra-attention-beat=/gu) ?? []).length,
+    12
+  );
+  assert.match(publication, /data-kp-algebra-attention-stage hidden/u);
+  assert.match(publication, /data-kp-algebra-attention-visual/u);
+  assert.match(publication, /data-kp-algebra-attention-action="back"/u);
+  assert.match(publication, /data-kp-algebra-attention-action="forward"/u);
+  assert.match(publication, /data-kp-algebra-attention-range="distribute-and-normalize"/u);
+  assert.match(publication, /class="katex-mathml"/u);
+});

@@ -80,7 +80,8 @@
     {
       "id": "s05",
       "title": "algebra-attention-stage-projection",
-      "status": "planned"
+      "summary": "Added a query-selected, rollback-safe attention stage with twelve build-rendered semantic cues and Back/Forward navigation. It physically moves the one retained canonical equation stage, plays the existing ranges forward or backward, adds no clock or renderer, and leaves the searchable Article in document flow.",
+      "status": "complete"
     },
     {
       "id": "s06",

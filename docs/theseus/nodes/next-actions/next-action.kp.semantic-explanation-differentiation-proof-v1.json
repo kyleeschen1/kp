@@ -79,6 +79,20 @@
       "scope": "s04 retained-session focus plumbing",
       "checkedAt": "2026-08-11T00:53:04.767Z",
       "notes": "Typed focus projection and same-frame transport refresh pass all typechecks."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s05 algebra attention-stage static and semantic projection",
+      "checkedAt": "2026-08-11T01:01:13.991Z",
+      "notes": "113 checks pass; twelve build-rendered beats, canonical anchors, server KaTeX, default Article preservation, and explicit view selection are covered."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 retained-stage attention controller",
+      "checkedAt": "2026-08-11T01:01:15.281Z",
+      "notes": "Attention controller, canonical transport direction, and static presenter pass all typechecks."
     }
   ],
   "expectedLearning": [

@@ -1,4 +1,5 @@
 @import "../../reader/app/exemplar.css";
+@import "./fraction-composition-attention-stage.css";
 
 html:root {
   --kp-algebra-focus-ink: #ffffff;

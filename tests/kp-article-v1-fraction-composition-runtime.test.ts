@@ -33,6 +33,9 @@ import {
 import {
   renderKpFractionCompositionStaticPublication
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts";
+import {
+  isKpFractionCompositionAttentionStageRequested
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-stage.ts";
 
 const compiled = compileKpFractionCompositionArticle({
   text: readFileSync(
@@ -50,6 +53,18 @@ test("browser runtime manifest equals the build-owned stage projection", () => {
     kpFractionCompositionArticleRuntimeManifest,
     compiled.stageManifests[0]
   );
+});
+
+test("attention-stage selection is explicit and leaves Article as the default", () => {
+  assert.equal(
+    isKpFractionCompositionAttentionStageRequested("?view=attention-stage"),
+    true
+  );
+  assert.equal(
+    isKpFractionCompositionAttentionStageRequested("?view=article"),
+    false
+  );
+  assert.equal(isKpFractionCompositionAttentionStageRequested(""), false);
 });
 
 test("the article locks the certified reader host, not only the animation id", () => {

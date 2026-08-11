@@ -21,6 +21,10 @@ import {
 import type {
   KpFractionCompositionArticleCompilation
 } from "./fraction-composition-article-compiler.ts";
+import {
+  createKpFractionCompositionAttentionMatrix,
+  type KpFractionCompositionAttentionBeat
+} from "./fraction-composition-attention-matrix.ts";
 
 /**
  * The static article asks for immutable image assets, while this first-party
@@ -112,9 +116,79 @@ export function renderKpFractionCompositionStaticPublication(
     <aside class="kp-algebra-article__toc" aria-label="In this lesson">
       ${compilation.staticHtml.tocHtml}
     </aside>
+    ${renderAttentionStage(compilation)}
     ${articleHtml}
     ${canonicalTemplate}
   </main>`;
+}
+
+function renderAttentionStage(
+  compilation: KpFractionCompositionArticleCompilation
+): string {
+  const matrix = createKpFractionCompositionAttentionMatrix(
+    compilation.article.document
+  );
+  return [
+    `<section class="kp-algebra-attention-stage"`,
+    ` data-kp-algebra-attention-stage hidden`,
+    ` aria-label="The equation remembers">`,
+    `<div class="kp-algebra-attention-stage__visual"`,
+    ` data-kp-algebra-attention-visual></div>`,
+    `<div class="kp-algebra-attention-stage__passages"`,
+    ` aria-live="polite" aria-atomic="true">`,
+    matrix.beats.map((beat, index) => [
+      `<div class="kp-algebra-attention-stage__passage"`,
+      ` data-kp-algebra-attention-beat="${escapeAttribute(beat.id)}"`,
+      ` data-kp-algebra-attention-index="${index}"`,
+      beat.anchor.kind === "checkpoint"
+        ? ` data-kp-algebra-attention-checkpoint="${escapeAttribute(beat.anchor.path)}"`
+        : ` data-kp-algebra-attention-range="${escapeAttribute(beat.anchor.path)}"`,
+      index === 0 ? `` : ` hidden`,
+      `>${attentionCue(beat)}</div>`
+    ].join("")),
+    `</div>`,
+    `<div class="kp-algebra-attention-stage__progress">`,
+    `<progress data-kp-algebra-attention-progress value="0"`,
+    ` max="${Math.max(1, matrix.beats.length - 1)}">`,
+    `Step 1 of ${matrix.beats.length}</progress>`,
+    `<span data-kp-algebra-attention-status>1 / ${matrix.beats.length}</span>`,
+    `</div>`,
+    `<nav class="kp-algebra-attention-stage__controls"`,
+    ` aria-label="Explanation steps">`,
+    `<button type="button" data-kp-algebra-attention-action="back" disabled>Back</button>`,
+    `<button type="button" data-kp-algebra-attention-action="forward">Forward</button>`,
+    `</nav>`,
+    `</section>`
+  ].join("");
+}
+
+function attentionCue(beat: KpFractionCompositionAttentionBeat): string {
+  const link = (address: string, label: string): string =>
+    `<a href="#kp-ref:${escapeAttribute(address)}">${label}</a>`;
+  const math = (latex: string): string =>
+    `<span class="kp-article-math kp-article-math--inline">${renderLatexToHtml(latex, {
+      displayMode: false,
+      output: "htmlAndMathml"
+    })}</span>`;
+  const cues: Readonly<Record<string, string>> = Object.freeze({
+    "read-scope": `The ${link("solve/factor", "factor")} multiplies the complete ${link("solve/grouped-sum", "grouped expression")} ${math("x+6")}.`,
+    "distribute:motion": "Watch the outside factor distribute into both addends.",
+    "distribute:settled": `Both terms now carry the same factor; the equation still has the same solution.`,
+    "evaluate-constant:motion": `Hold the ${link("solve/variable-fraction", "variable fraction")} still while the constant becomes ${math("4")}.`,
+    "evaluate-constant:settled": `Only the ${link("solve/constant-term", "constant term")} changed form.`,
+    "subtract-four:motion": `Subtract ${math("4")} from the ${link("solve/left-side", "left")} and ${link("solve/right-side", "right")} together.`,
+    "subtract-four:settled": `The variable fraction is isolated because equality stayed balanced.`,
+    "clear-denominator:motion": `Multiply both sides by ${math("3")} and watch the ${link("solve/denominator", "denominator")} cancel.`,
+    "clear-denominator:settled": `The equation settles at ${math("2x=18")}.`,
+    "divide-by-two:motion": `Divide both sides by the ${link("solve/coefficient", "coefficient")} ${math("2")}.`,
+    "divide-by-two:settled": `The exact ${link("solve/solution", "solution")} is ${math("x=9")}.`,
+    "verify-solution": `Substituting ${math("9")} into the original equation returns ${math("10")}.`
+  });
+  const cue = cues[beat.id];
+  if (cue === undefined) {
+    throw new Error(`Fraction composition attention beat ${beat.id} lacks a cue.`);
+  }
+  return `<p>${cue}</p>`;
 }
 
 function renderCheckpointNavigation(

@@ -47,6 +47,10 @@ import {
 import type {
   KpReaderFocusSnapshot
 } from "../../reader/runtime/semantic-focus.ts";
+import {
+  isKpFractionCompositionAttentionStageRequested,
+  mountKpFractionCompositionAttentionStage
+} from "./fraction-composition-attention-stage.ts";
 
 /**
  * This enhancement intentionally preserves the static publication while the
@@ -66,13 +70,24 @@ export function mountKpFractionCompositionArticleEnhancement(
   const focus = createKpReaderSemanticFocusService(
     kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
   );
+  const attentionStageRequested =
+    isKpFractionCompositionAttentionStageRequested(ownerWindow.location.search);
   const canonicalStage = mountCanonicalRanges({
     ownerWindow,
     article,
     host,
     initialFocus: projectKpFractionCompositionArticleFocusSnapshot(
       focus.getSnapshot()
-    )
+    ),
+    fixedLiveSurface: attentionStageRequested
+  });
+  const attentionStage = mountKpFractionCompositionAttentionStage({
+    ownerWindow,
+    publication: article,
+    stageHost: host,
+    selectCheckpoint: (path) => canonicalStage.seekCheckpoint(path),
+    selectRange: (path, direction) =>
+      canonicalStage.selectRange(path, direction)
   });
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
@@ -205,6 +220,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   onLocationChange();
   applyFocus();
   return () => {
+    attentionStage.dispose();
     canonicalStage.dispose();
     article.removeEventListener("click", onSemanticClick);
     article.removeEventListener("click", onCheckpointClick);
@@ -219,6 +235,7 @@ export function mountKpFractionCompositionArticleEnhancement(
 
 interface KpFractionCompositionCanonicalStageMount {
   seekCheckpoint(path: string): void;
+  selectRange(path: string, direction: "forward" | "rewind"): void;
   setFocus(focus: KpReaderFocusSnapshot): void;
   dispose(): void;
 }
@@ -228,6 +245,7 @@ function mountCanonicalRanges(input: {
   readonly article: HTMLElement;
   readonly host: HTMLElement;
   readonly initialFocus: KpReaderFocusSnapshot;
+  readonly fixedLiveSurface: boolean;
 }): KpFractionCompositionCanonicalStageMount {
   const template = input.article.querySelector<HTMLTemplateElement>(
     "template[data-kp-reader-exemplar-template]"
@@ -235,6 +253,7 @@ function mountCanonicalRanges(input: {
   if (template === null) {
     return Object.freeze({
       seekCheckpoint() {},
+      selectRange() {},
       setFocus() {},
       dispose() {}
     });
@@ -304,7 +323,12 @@ function mountCanonicalRanges(input: {
     activeMotionSlot?.querySelector<HTMLElement>(
       ":scope > [data-kp-algebra-static-checkpoint]"
     )?.removeAttribute("hidden");
-    if (rangePath === undefined) {
+    if (input.fixedLiveSurface) {
+      input.host.querySelector("[data-kp-algebra-checkpoint-navigation]")
+        ?.before(liveSurface);
+      fallback?.toggleAttribute("hidden", true);
+      activeMotionSlot = undefined;
+    } else if (rangePath === undefined) {
       input.host.querySelector("[data-kp-algebra-checkpoint-navigation]")
         ?.before(liveSurface);
       fallback?.toggleAttribute("hidden", true);
@@ -398,6 +422,22 @@ function mountCanonicalRanges(input: {
       }
       pendingCheckpointPath = path;
       if (transport !== undefined) selectCheckpoint(transport, path);
+    },
+    selectRange(path: string, direction: "forward" | "rewind") {
+      const range = ranges.find((candidate) => candidate.path === path);
+      if (range === undefined) {
+        throw new Error(`Unknown algebra attention range ${path}.`);
+      }
+      pendingCheckpointPath = undefined;
+      reattachLiveSurface(range.path);
+      if (transport === undefined) return;
+      const progress = direction === "forward" ? range.start : range.end;
+      transport.selectRange({
+        id: range.path,
+        start: range.start,
+        end: range.end
+      }, progress, "controls");
+      transport.play(direction);
     },
     setFocus(nextFocus: KpReaderFocusSnapshot) {
       pendingFocus = nextFocus;

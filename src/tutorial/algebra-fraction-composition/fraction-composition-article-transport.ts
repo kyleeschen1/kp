@@ -27,6 +27,7 @@ export interface KpFractionCompositionArticleTransport {
     source?: "controls" | "url"
   ): void;
   setFocus(focus: KpReaderFocusSnapshot): void;
+  play(direction: "forward" | "rewind"): void;
   dispose(): void;
 }
 
@@ -154,6 +155,15 @@ export function mountKpFractionCompositionArticleTransport(input: {
     clock.play({ direction: "forward", stopAt: range.end });
     syncTransportStatus("playing", Number(scrubber.value) / 1_000);
   };
+  const playRange = (direction: "forward" | "rewind"): void => {
+    const stopAt = direction === "forward" ? range.end : range.start;
+    if (reducedMotion.matches) {
+      seekLocal(direction === "forward" ? 1 : 0);
+      return;
+    }
+    clock.play({ direction, stopAt });
+    syncTransportStatus("playing", Number(scrubber.value) / 1_000);
+  };
   const replayForward = (): void => {
     seekLocal(0);
     if (reducedMotion.matches) {
@@ -217,6 +227,9 @@ export function mountKpFractionCompositionArticleTransport(input: {
     setFocus(focus: KpReaderFocusSnapshot) {
       currentFocus = focus;
       input.session.sample({ clock: clock.getSnapshot(), focus: currentFocus });
+    },
+    play(direction: "forward" | "rewind") {
+      playRange(direction);
     },
     dispose() {
       if (disposed) return;

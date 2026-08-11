@@ -1,0 +1,149 @@
+html[data-kp-algebra-view="attention-stage"] {
+  --kp-algebra-attention-inline: 48rem;
+  --kp-algebra-attention-stage-block: clamp(13rem, 38svh, 22rem);
+  --kp-algebra-attention-passage-block: 5.5rem;
+  --kp-algebra-attention-gap: clamp(0.75rem, 1.7svh, 1.25rem);
+}
+
+html[data-kp-algebra-view="attention-stage"] .kp-algebra-article {
+  width: min(100% - 2rem, 72rem);
+  padding-block-start: clamp(1rem, 3svh, 2rem);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage {
+  display: grid;
+  width: min(100%, var(--kp-algebra-attention-inline));
+  min-height: min(42rem, calc(100svh - 2rem));
+  grid-template-rows:
+    var(--kp-algebra-attention-stage-block)
+    minmax(var(--kp-algebra-attention-passage-block), auto)
+    auto
+    auto;
+  gap: var(--kp-algebra-attention-gap);
+  margin-inline: auto;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__visual {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__visual
+  [data-kp-algebra-stage-host] {
+  width: 100%;
+  min-height: 0;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__visual
+  :is(.kp-algebra-article__checkpoint-navigation,
+    .kp-algebra-article__range-transport) {
+  display: none;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__passages {
+  display: grid;
+  min-height: var(--kp-algebra-attention-passage-block);
+  align-items: center;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__passage {
+  grid-area: 1 / 1;
+  max-width: 58ch;
+  margin-inline: auto;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__passage p {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  line-height: 1.55;
+  text-align: center;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  font: 0.72rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  color: var(--kp-muted);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__progress progress {
+  width: 100%;
+  height: 0.35rem;
+  accent-color: var(--kp-accent);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__controls button {
+  width: min(100%, 8rem);
+  min-height: 2.75rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 0.35rem;
+  color: var(--kp-ink);
+  background: var(--kp-surface);
+  font: 0.82rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__controls button:last-child {
+  justify-self: end;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__controls button:disabled {
+  color: var(--kp-muted);
+  opacity: 0.45;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-article__toc {
+  display: none;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage + article {
+  margin-top: clamp(3rem, 10svh, 7rem);
+  padding-top: 2rem;
+  border-top: 1px solid var(--kp-line);
+}
+
+@media (max-width: 38rem), (max-height: 40rem) {
+  html[data-kp-algebra-view="attention-stage"] {
+    --kp-algebra-attention-stage-block: clamp(10rem, 31svh, 15rem);
+    --kp-algebra-attention-passage-block: 6.5rem;
+  }
+
+  html[data-kp-algebra-view="attention-stage"]
+    .kp-algebra-attention-stage {
+    min-height: auto;
+    padding-inline: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  html[data-kp-algebra-view="attention-stage"]
+    .kp-algebra-attention-stage__controls button {
+    border-color: ButtonText;
+    color: ButtonText;
+    background: Canvas;
+  }
+}
