@@ -188,6 +188,34 @@
       "scope": "s08-revised-human-checkpoint",
       "checkedAt": "2026-08-11T03:38:35.139Z",
       "notes": "925 nodes and 19450 events validate after pacing revision evidence."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s08-attention-simplification",
+      "checkedAt": "2026-08-11T14:46:59.666Z",
+      "notes": "115 focused checks passed; the stage derives seven scenes while retaining all five canonical ranges and searchable after prose."
+    },
+    {
+      "command": "npm run visual:algebra-attention-stage",
+      "status": "passed",
+      "scope": "s08-attention-simplification",
+      "checkedAt": "2026-08-11T14:47:00.910Z",
+      "notes": "Chromium confirmed one retained equation, fully opaque structural math, two fixed controls, no progress UI, stable prose, held endpoints, and no canonical-time jump between scenes."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s08-attention-simplification",
+      "checkedAt": "2026-08-11T14:47:01.871Z",
+      "notes": "TypeScript, Svelte, domain, publication, and production build checks passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s08-attention-simplification",
+      "checkedAt": "2026-08-11T14:47:41.690Z",
+      "notes": "925 nodes and 19457 events validate after the second human-checkpoint revision."
     }
   ],
   "expectedLearning": [

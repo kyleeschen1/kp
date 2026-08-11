@@ -10,8 +10,8 @@ Open the live exemplar:
 [The Equation Remembers · attention stage](http://localhost:8000/tutorials/algebra/fraction-composition/?view=attention-stage)
 
 The canonical reference is one austere attentional stage over the existing
-fraction-composition equation: stage, passage, progress, then constant
-Back/Play/Forward controls. The complete searchable Article remains below it.
+fraction-composition equation: stage, one passage, then a compact Back/Continue
+control cluster. The complete searchable Article remains below it.
 
 The first review found that the canonical 8.4-second timeline moved too fast
 for explanation and that the light equation surface felt embedded rather than
@@ -20,6 +20,14 @@ system, prepares motion without autoplay, keeps the passage stable while the
 learner plays it, and derives deliberate duration from semantic operation
 groups. Two-operation ranges last about 4.8 seconds; three-operation ranges
 last about 7.2 seconds. Endpoints remain on screen until the learner moves on.
+
+The second review found that alternating motion and settled beats still felt
+like UI churn, while the progress counter, separated transport controls, and
+low-opacity structural numerals created too many attention targets. The
+current revision keeps each motion and endpoint in one scene, removes the
+counter and progress bar, uses one context-sensitive Continue control, and
+keeps all equation structure fully opaque. Luminance may distinguish a focal
+term, but required mathematical context remains readable.
 
 ## What This Exemplar Is Testing
 
@@ -38,8 +46,8 @@ Please judge:
    without feeling cramped?
 4. Does the deliberate pace make each operation legible without becoming
    tedious, especially in the three-operation ranges?
-5. Do fixed Back/Play/Forward controls, manual arming, and indefinite endpoint
-   holds make each state predictable and revisitable?
+5. Does the compact Back/Continue cluster make motion predictable without
+   feeling like an interface that must be managed?
 6. Does keeping the complete Article below preserve useful document context,
    or does it compete with the stage?
 
@@ -50,7 +58,8 @@ visual language.
 ## Preserved Boundaries
 
 - One retained canonical equation stage, renderer, session, and full clock.
-- Twelve presentation-neutral beats derived from Article v1 identities.
+- Seven presentation-neutral scenes derived from Article v1 identities: an
+  opening, five canonical motions with held endpoints, and verification.
 - Prose focus never owns or advances time.
 - No new animation, Article directive, renderer, clock, or responsive geometry
   in authored content.
@@ -65,10 +74,10 @@ visual language.
   searchability, server-rendered KaTeX, semantic identity, deterministic scene
   projection, operation-derived pacing, and the no-separator regression.
 - `npm run visual:algebra-attention-stage`: one Chromium smoke passed. It
-  verifies one retained stage, a manually prepared range, stable passage and
-  controls, intermediate canonical-clock samples, indefinite endpoint hold,
-  scene focus, Article continuity, and produces disposable opening and settled
-  captures under
+  verifies one retained stage, seven undoubled scenes, one manually prepared
+  range, two fixed controls, stable passage, fully opaque equation structure,
+  intermediate canonical-clock samples, indefinite endpoint hold, Article
+  continuity, and produces disposable opening and settled captures under
   `tmp/codex/algebra-attention-stage/`.
 - `npm run build`: typechecks, Svelte checks, domain checks, publication check,
   and production build passed.

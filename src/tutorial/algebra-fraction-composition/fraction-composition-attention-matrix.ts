@@ -73,10 +73,6 @@ export function createKpFractionCompositionAttentionMatrix(
     reference
   ]));
   const checkpoints = createKpFractionCompositionArticleRuntimeCheckpoints();
-  const checkpointByPath = new Map(checkpoints.map((checkpoint) => [
-    checkpoint.path,
-    checkpoint
-  ]));
   const ranges = createKpFractionCompositionArticleRuntimeRanges();
   const rangeByPath = new Map(ranges.map((range) => [range.path, range]));
   const initialCheckpoint = checkpoints[0];
@@ -138,20 +134,8 @@ export function createKpFractionCompositionAttentionMatrix(
     if (motion.afterMarkdown === undefined) {
       throw new Error(`Fraction composition motion ${motion.id} lacks its settled interpretation.`);
     }
-    const settled = checkpoints.find(({ progress }) => progress === range.end);
-    if (settled === undefined || checkpointByPath.get(settled.path) === undefined) {
-      throw new Error(`Fraction composition motion ${motion.id} lacks a settled checkpoint.`);
-    }
-    beats.push(beat({
-      id: `${motion.id}:settled`,
-      sourceBlockId: motion.id,
-      sourceSlot: "after",
-      framing: "interpret",
-      passageMarkdown: motion.afterMarkdown,
-      anchor: checkpointAnchor(settled),
-      primaryAddresses,
-      contextAddresses: contextFor(primaryAddresses)
-    }));
+    // A motion and its held endpoint are one attentional scene. The complete
+    // Article retains the after prose without turning it into another UI step.
   }
 
   const verification = document.blocks.find(

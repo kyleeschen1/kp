@@ -44,25 +44,13 @@ export function mountKpFractionCompositionAttentionStage(input: {
   const passages = [...root.querySelectorAll<HTMLElement>(
     "[data-kp-algebra-attention-beat]"
   )];
-  const progress = requireElement<HTMLProgressElement>(
-    root,
-    "[data-kp-algebra-attention-progress]"
-  );
-  const status = requireElement<HTMLElement>(
-    root,
-    "[data-kp-algebra-attention-status]"
-  );
   const back = requireElement<HTMLButtonElement>(
     root,
     '[data-kp-algebra-attention-action="back"]'
   );
-  const forward = requireElement<HTMLButtonElement>(
+  const primary = requireElement<HTMLButtonElement>(
     root,
-    '[data-kp-algebra-attention-action="forward"]'
-  );
-  const playback = requireElement<HTMLButtonElement>(
-    root,
-    '[data-kp-algebra-attention-action="playback"]'
+    '[data-kp-algebra-attention-action="continue"]'
   );
   if (passages.length === 0) {
     throw new Error("Algebra attention stage requires compiled passages.");
@@ -82,50 +70,33 @@ export function mountKpFractionCompositionAttentionStage(input: {
     const playing = rangeStatus === "playing";
     back.disabled = playing || activeIndex === 0;
     if (range === undefined) {
-      playback.dataset["kpAlgebraAttentionPlaybackState"] = "unavailable";
-      playback.textContent = "Play";
-      playback.disabled = true;
-      playback.setAttribute("aria-hidden", "true");
-      playback.tabIndex = -1;
-      forward.disabled = activeIndex === passages.length - 1;
+      primary.textContent = "Continue";
+      primary.dataset["kpAlgebraAttentionPrimaryState"] = "advance";
+      primary.disabled = activeIndex === passages.length - 1;
       root.dataset["kpAlgebraAttentionMotionState"] = "static";
       return;
     }
     const progressPermille = localProgress();
     const rangeReady = Number.isFinite(progressPermille) &&
       input.stageHost.dataset["kpAlgebraCanonicalRange"] === range;
-    playback.removeAttribute("aria-hidden");
-    playback.tabIndex = 0;
-    playback.disabled = !rangeReady;
+    primary.disabled = !rangeReady;
     if (playing) {
-      playback.textContent = "Pause";
-      playback.dataset["kpAlgebraAttentionPlaybackState"] = "playing";
+      primary.textContent = "Pause";
+      primary.dataset["kpAlgebraAttentionPrimaryState"] = "pause";
       root.dataset["kpAlgebraAttentionMotionState"] = "acting";
     } else if (progressPermille >= 1_000) {
-      playback.textContent = "Replay";
-      playback.dataset["kpAlgebraAttentionPlaybackState"] = "complete";
+      primary.textContent = "Continue";
+      primary.dataset["kpAlgebraAttentionPrimaryState"] = "advance";
       root.dataset["kpAlgebraAttentionMotionState"] = "inspect";
     } else if (progressPermille > 0) {
-      playback.textContent = "Resume";
-      playback.dataset["kpAlgebraAttentionPlaybackState"] = "paused";
+      primary.textContent = "Continue";
+      primary.dataset["kpAlgebraAttentionPrimaryState"] = "resume";
       root.dataset["kpAlgebraAttentionMotionState"] = "paused";
     } else {
-      playback.textContent = "Play";
-      playback.dataset["kpAlgebraAttentionPlaybackState"] = "prepared";
+      primary.textContent = "Continue";
+      primary.dataset["kpAlgebraAttentionPrimaryState"] = "play";
       root.dataset["kpAlgebraAttentionMotionState"] = "orient";
     }
-    forward.disabled = playing || !rangeReady || progressPermille < 1_000;
-  };
-  const updateProgress = (): void => {
-    const active = passages[activeIndex]!;
-    const isRange = active.dataset["kpAlgebraAttentionRange"] !== undefined;
-    const localPermille = Number(
-      input.stageHost.dataset["kpAlgebraCanonicalLocalProgress"] ?? "0"
-    );
-    progress.value = activeIndex + (
-      isRange && Number.isFinite(localPermille) ? localPermille / 1_000 : 0
-    );
-    updateControls();
   };
   const select = (index: number): void => {
     if (index < 0 || index >= passages.length) return;
@@ -144,26 +115,29 @@ export function mountKpFractionCompositionAttentionStage(input: {
     if (checkpoint !== undefined) input.selectCheckpoint(checkpoint);
     else if (range !== undefined) input.prepareRange(range);
     else throw new Error("Algebra attention beat lacks a temporal anchor.");
-    updateProgress();
-    status.textContent = `${activeIndex + 1} / ${passages.length}`;
+    updateControls();
     root.dataset["kpAlgebraAttentionActiveBeat"] =
       requiredData(active, "kpAlgebraAttentionBeat");
   };
   const onBack = (): void => select(activeIndex - 1);
-  const onForward = (): void => select(activeIndex + 1);
-  const onPlayback = (): void => {
+  const onPrimary = (): void => {
     const active = passages[activeIndex]!;
     const range = active.dataset["kpAlgebraAttentionRange"];
-    if (range === undefined || playback.disabled) return;
+    if (primary.disabled) return;
+    if (range === undefined) {
+      select(activeIndex + 1);
+      return;
+    }
     if (input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] === "playing") {
       input.pauseRange();
+    } else if (localProgress() >= 1_000) {
+      select(activeIndex + 1);
     } else {
-      if (localProgress() >= 1_000) input.prepareRange(range);
       input.playRange();
     }
-    updateProgress();
+    updateControls();
   };
-  const progressObserver = new MutationObserver(updateProgress);
+  const stageStateObserver = new MutationObserver(updateControls);
 
   input.ownerWindow.document.documentElement.dataset["kpAlgebraView"] =
     "attention-stage";
@@ -174,7 +148,7 @@ export function mountKpFractionCompositionAttentionStage(input: {
   root.dataset["kpAlgebraAttentionDurationMs"] =
     String(input.pacing.fullTimelineDurationMs);
   visual.append(input.stageHost);
-  progressObserver.observe(input.stageHost, {
+  stageStateObserver.observe(input.stageHost, {
     attributes: true,
     attributeFilter: [
       "data-kp-algebra-canonical-host-status",
@@ -184,17 +158,15 @@ export function mountKpFractionCompositionAttentionStage(input: {
     ]
   });
   back.addEventListener("click", onBack);
-  forward.addEventListener("click", onForward);
-  playback.addEventListener("click", onPlayback);
+  primary.addEventListener("click", onPrimary);
   select(0);
 
   return Object.freeze({
     active: true,
     dispose() {
       back.removeEventListener("click", onBack);
-      forward.removeEventListener("click", onForward);
-      playback.removeEventListener("click", onPlayback);
-      progressObserver.disconnect();
+      primary.removeEventListener("click", onPrimary);
+      stageStateObserver.disconnect();
       input.setAttention([]);
       if (originalParent !== null) {
         originalParent.insertBefore(input.stageHost, originalNextSibling);

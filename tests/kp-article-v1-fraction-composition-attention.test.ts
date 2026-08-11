@@ -33,7 +33,7 @@ const compiled = compileKpFractionCompositionArticle({
   )) as KpArticleImportLock
 });
 
-test("fraction attention matrix derives twelve semantic beats from Article IR", () => {
+test("fraction attention matrix keeps motion and its held endpoint in one scene", () => {
   const matrix = createKpFractionCompositionAttentionMatrix(
     compiled.article.document
   );
@@ -43,15 +43,10 @@ test("fraction attention matrix derives twelve semantic beats from Article IR", 
   assert.deepEqual(matrix.beats.map(({ id, framing }) => [id, framing]), [
     ["read-scope", "inspect"],
     ["distribute:motion", "demonstrate"],
-    ["distribute:settled", "interpret"],
     ["evaluate-constant:motion", "demonstrate"],
-    ["evaluate-constant:settled", "interpret"],
     ["subtract-four:motion", "demonstrate"],
-    ["subtract-four:settled", "interpret"],
     ["clear-denominator:motion", "demonstrate"],
-    ["clear-denominator:settled", "interpret"],
     ["divide-by-two:motion", "demonstrate"],
-    ["divide-by-two:settled", "interpret"],
     ["verify-solution", "verify"]
   ]);
 });
@@ -74,12 +69,10 @@ test("attention anchors reuse all canonical ranges and endpoint checkpoints", ()
     )
   );
   const checkpoints = createKpFractionCompositionArticleRuntimeCheckpoints();
-  assert.equal(checkpointAnchors[0]?.path, checkpoints[0]?.path);
   assert.deepEqual(
-    checkpointAnchors.slice(1, -1).map(({ path }) => path),
-    checkpoints.slice(1).map(({ path }) => path)
+    checkpointAnchors.map(({ path }) => path),
+    [checkpoints[0]?.path, checkpoints.at(-1)?.path]
   );
-  assert.equal(checkpointAnchors.at(-1)?.path, checkpoints.at(-1)?.path);
 });
 
 test("attention names only locked semantic addresses and never owns time", () => {
@@ -187,12 +180,12 @@ test("attention scenes project range-local progress onto the canonical timeline"
   );
   assert.deepEqual(
     projectKpFractionCompositionAttentionScene(matrix, {
-      beatId: "distribute:settled"
+      beatId: "verify-solution"
     }).temporalRequest,
     {
       kind: "checkpoint-seek",
-      checkpointPath: "normalized",
-      globalProgress: range.end
+      checkpointPath: "solved",
+      globalProgress: 1
     }
   );
 });

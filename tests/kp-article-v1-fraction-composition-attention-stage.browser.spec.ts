@@ -22,14 +22,10 @@ test("the attention stage re-frames one searchable canonical equation", async ({
   const passage = root.locator(
     "[data-kp-algebra-attention-beat]:not([hidden])"
   );
-  const progress = root.locator("[data-kp-algebra-attention-progress]");
   const controls = root.locator(".kp-algebra-attention-stage__controls");
   const back = root.locator('[data-kp-algebra-attention-action="back"]');
-  const playback = root.locator(
-    '[data-kp-algebra-attention-action="playback"]'
-  );
-  const forward = root.locator(
-    '[data-kp-algebra-attention-action="forward"]'
+  const primary = root.locator(
+    '[data-kp-algebra-attention-action="continue"]'
   );
   const stageHost = root.locator("[data-kp-algebra-stage-host]");
   const canonical = page.locator(
@@ -64,9 +60,6 @@ test("the attention stage re-frames one searchable canonical equation", async ({
     initialBoxes.passage.top
   );
   expect(initialBoxes.passage.bottom).toBeLessThanOrEqual(
-    initialBoxes.progress.top
-  );
-  expect(initialBoxes.progress.bottom).toBeLessThanOrEqual(
     initialBoxes.controls.top
   );
   expect(initialBoxes.root.top).toBeGreaterThanOrEqual(0);
@@ -99,12 +92,23 @@ test("the attention stage re-frames one searchable canonical equation", async ({
   });
   expect(stageColors.stage).not.toBe("rgb(255, 255, 255)");
   expect(stageColors.semanticSurface).toBe(stageColors.attentionSurface);
+  const salienceOpacities = await canonical.locator(
+    "[data-kp-fraction-salience-bound]"
+  ).evaluateAll((elements) => elements.map((element) =>
+    getComputedStyle(element).opacity
+  ));
+  expect(salienceOpacities.length).toBeGreaterThan(0);
+  expect([...new Set(salienceOpacities)]).toEqual(["1"]);
+  await expect(controls.locator("button")).toHaveCount(2);
+  await expect(root.locator(
+    "[data-kp-algebra-attention-progress]"
+  )).toHaveCount(0);
 
   await canonical.evaluate((element) => {
     element.setAttribute("data-kp-test-retained-attention-stage", "true");
   });
   const backBox = await requiredBox(back);
-  const forwardBox = await requiredBox(forward);
+  const primaryBox = await requiredBox(primary);
   await stageHost.evaluate((element) => {
     const samples: string[] = [];
     const record = () => {
@@ -129,7 +133,7 @@ test("the attention stage re-frames one searchable canonical equation", async ({
     });
     record();
   });
-  await forward.click();
+  await primary.click();
 
   await expect(root).toHaveAttribute(
     "data-kp-algebra-attention-active-beat",
@@ -147,17 +151,19 @@ test("the attention stage re-frames one searchable canonical equation", async ({
     "data-kp-algebra-canonical-local-progress",
     "0"
   );
-  await expect(playback).toHaveText("Play");
-  await expect(playback).toBeEnabled();
-  await expect(forward).toBeDisabled();
-  await expect(progress).toHaveJSProperty("value", 1);
+  await expect(primary).toHaveText("Continue");
+  await expect(primary).toHaveAttribute(
+    "data-kp-algebra-attention-primary-state",
+    "play"
+  );
+  await expect(primary).toBeEnabled();
 
-  await playback.click();
+  await primary.click();
   await expect(root).toHaveAttribute(
     "data-kp-algebra-attention-motion-state",
     "acting"
   );
-  await expect(playback).toHaveText("Pause");
+  await expect(primary).toHaveText("Pause");
   await expect(passage).toHaveText(motionPassage ?? "");
   await expect(stageHost).toHaveAttribute(
     "data-kp-algebra-canonical-local-progress",
@@ -180,11 +186,17 @@ test("the attention stage re-frames one searchable canonical equation", async ({
     "data-kp-algebra-attention-motion-state",
     "inspect"
   );
-  await expect(playback).toHaveText("Replay");
-  await expect(forward).toBeEnabled();
+  await expect(primary).toHaveText("Continue");
+  await expect(primary).toHaveAttribute(
+    "data-kp-algebra-attention-primary-state",
+    "advance"
+  );
   await expect(passage).toHaveText(motionPassage ?? "");
-  await expect(progress).toHaveJSProperty("value", 2);
   await expect(passage).toBeVisible();
+  const heldGlobalProgress = await stageHost.getAttribute(
+    "data-kp-algebra-canonical-global-progress"
+  );
+  expect(heldGlobalProgress).not.toBeNull();
   await expect(page.locator(
     "[data-kp-algebra-fraction-composition-publication]"
   )).toHaveAttribute("data-kp-article-semantic-focus-source", "story");
@@ -199,7 +211,7 @@ test("the attention stage re-frames one searchable canonical equation", async ({
   expectClose(settledBoxes.visual.width, initialBoxes.visual.width);
   expectClose(settledBoxes.visual.height, initialBoxes.visual.height);
   expectBoxClose(await requiredBox(back), backBox);
-  expectBoxClose(await requiredBox(forward), forwardBox);
+  expectBoxClose(await requiredBox(primary), primaryBox);
 
   const article = root.locator("+ article");
   await expect(article.getByRole("heading", {
@@ -213,15 +225,30 @@ test("the attention stage re-frames one searchable canonical equation", async ({
     animations: "disabled"
   });
 
+  await primary.click();
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-active-beat",
+    "evaluate-constant:motion"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-motion-state",
+    "orient"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "0"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-global-progress",
+    heldGlobalProgress!
+  );
+
   async function readCompositionBoxes() {
     return {
       root: await requiredBox(root),
       visual: await requiredBox(visual),
       passage: await requiredBox(root.locator(
         "[data-kp-algebra-attention-beat]:not([hidden])"
-      )),
-      progress: await requiredBox(root.locator(
-        ".kp-algebra-attention-stage__progress"
       )),
       controls: await requiredBox(controls)
     };

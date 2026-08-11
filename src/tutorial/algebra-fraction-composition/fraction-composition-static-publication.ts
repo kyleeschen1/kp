@@ -149,19 +149,10 @@ function renderAttentionStage(
       `>${attentionCue(beat)}</div>`
     ].join("")).join(""),
     `</div>`,
-    `<div class="kp-algebra-attention-stage__progress">`,
-    `<progress data-kp-algebra-attention-progress value="0"`,
-    ` max="${Math.max(1, matrix.beats.length - 1)}">`,
-    `Step 1 of ${matrix.beats.length}</progress>`,
-    `<span data-kp-algebra-attention-status>1 / ${matrix.beats.length}</span>`,
-    `</div>`,
     `<nav class="kp-algebra-attention-stage__controls"`,
     ` aria-label="Explanation steps">`,
     `<button type="button" data-kp-algebra-attention-action="back" disabled>Back</button>`,
-    `<button type="button" data-kp-algebra-attention-action="playback"`,
-    ` data-kp-algebra-attention-playback-state="unavailable"`,
-    ` aria-hidden="true" tabindex="-1" disabled>Play</button>`,
-    `<button type="button" data-kp-algebra-attention-action="forward">Forward</button>`,
+    `<button type="button" data-kp-algebra-attention-action="continue">Continue</button>`,
     `</nav>`,
     `</section>`
   ].join("");
@@ -178,15 +169,10 @@ function attentionCue(beat: KpFractionCompositionAttentionBeat): string {
   const cues: Readonly<Record<string, string>> = Object.freeze({
     "read-scope": `The ${link("solve/factor", "factor")} multiplies the complete ${link("solve/grouped-sum", "grouped expression")} ${math("x+6")}.`,
     "distribute:motion": "Watch the outside factor distribute into both addends.",
-    "distribute:settled": `Both terms now carry the same factor; the equation still has the same solution.`,
     "evaluate-constant:motion": `Hold the ${link("solve/variable-fraction", "variable fraction")} still while the constant becomes ${math("4")}.`,
-    "evaluate-constant:settled": `Only the ${link("solve/constant-term", "constant term")} changed form.`,
     "subtract-four:motion": `Subtract ${math("4")} from the ${link("solve/left-side", "left")} and ${link("solve/right-side", "right")} together.`,
-    "subtract-four:settled": `The variable fraction is isolated because equality stayed balanced.`,
     "clear-denominator:motion": `Multiply both sides by ${math("3")} and watch the ${link("solve/denominator", "denominator")} cancel.`,
-    "clear-denominator:settled": `The equation settles at ${math("2x=18")}.`,
     "divide-by-two:motion": `Divide both sides by the ${link("solve/coefficient", "coefficient")} ${math("2")}.`,
-    "divide-by-two:settled": `The exact ${link("solve/solution", "solution")} is ${math("x=9")}.`,
     "verify-solution": `Substituting ${math("9")} into the original equation returns ${math("10")}.`
   });
   const cue = cues[beat.id];

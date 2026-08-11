@@ -98,7 +98,7 @@
     {
       "id": "s08",
       "title": "human-exemplar-checkpoint",
-      "summary": "Revised the human exemplar after review: dark continuous surface, manual range arming, stable prose, operation-derived deliberate pacing, fixed controls, and indefinite endpoint holds. Awaiting renewed visual judgment before promotion.",
+      "summary": "Second bounded revision removes motion/settled duplication, compresses twelve beats to seven scenes, removes progress and count UI, groups Back and context-sensitive Continue, preserves full equation opacity, and holds canonical endpoints without timeline jumps. Awaiting renewed human judgment.",
       "status": "in-progress"
     },
     {
