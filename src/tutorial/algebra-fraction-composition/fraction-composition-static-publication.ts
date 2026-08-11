@@ -32,7 +32,7 @@ export function renderKpFractionCompositionStaticPublication(
 ): string {
   const endpointSequence = createKpFractionCompositionStaticStepExport();
   const checkpointNavigation = renderCheckpointNavigation(compilation);
-  const motionRangeByCheckpoint = new Map(
+  const motionRangeByCheckpoint = new Map<string, string>(
     kpFractionCompositionArticleTransitionBindings.map(
       ({ path, to }) => [to, path] as const
     )

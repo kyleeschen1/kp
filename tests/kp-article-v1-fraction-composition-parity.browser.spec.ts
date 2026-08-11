@@ -1,21 +1,36 @@
 import {
   expect,
   test,
-  type Browser,
   type Page
 } from "@playwright/test";
+import {
+  kpFractionCompositionArticleTransitionBindings
+} from "../src/article/vignettes/fraction-composition-vignette.ts";
+import {
+  createKpFractionCompositionArticleRuntimeRanges
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-ranges.ts";
 
 const articleRoute = "/tutorials/algebra/fraction-composition/";
 const readerRoute = "/reader/fraction-composition/";
-const firstRangeEnd = 2 / 13;
-const localSamples = [0, 0.2, 0.5, 0.8, 1] as const;
+const ranges = createKpFractionCompositionArticleRuntimeRanges().map(
+  (range, index) => Object.freeze({
+    ...range,
+    targetCheckpoint:
+      kpFractionCompositionArticleTransitionBindings[index]?.to ?? ""
+  })
+);
+// Deliberately avoid operation boundaries: this matrix compares live paint,
+// while exact endpoint ownership is covered by the endpoint suites.
+const localSamples = [0.173, 0.617, 0.841, 0.319] as const;
+
+test.setTimeout(45_000);
 
 for (const viewport of [
   { name: "wide", width: 1_100, height: 800 },
   { name: "phone", width: 390, height: 844 }
 ] as const) {
   for (const theme of ["light", "dark"] as const) {
-    test(`Article and reader share canonical sampled frames · ${viewport.name} · ${theme}`, async ({
+    test(`Article and reader share every canonical range · ${viewport.name} · ${theme}`, async ({
       browser
     }) => {
       const context = await browser.newContext({ viewport });
@@ -32,15 +47,26 @@ for (const viewport of [
       ]);
       await Promise.all([readyReader(reader), readyArticle(article)]);
 
-      for (const localProgress of localSamples) {
-        const globalProgress = firstRangeEnd * localProgress;
-        await Promise.all([
-          seekReader(reader, globalProgress),
-          seekArticle(article, localProgress)
-        ]);
-        expect(await canonicalFrame(article, "article")).toEqual(
-          await canonicalFrame(reader, "reader")
-        );
+      for (const range of ranges) {
+        await selectArticleRange(article, range.path, range.targetCheckpoint);
+        for (const localProgress of localSamples) {
+          const globalProgress = range.start +
+            (range.end - range.start) * localProgress;
+          await Promise.all([
+            seekReader(reader, globalProgress),
+            seekArticle(article, range, localProgress)
+          ]);
+          const articleFrame = await canonicalFrame(article, "article");
+          const readerFrame = await canonicalFrame(reader, "reader");
+          const { fitStatus: articleFit, ...articleCanonical } = articleFrame;
+          const { fitStatus: readerFit, ...readerCanonical } = readerFrame;
+          expect(articleCanonical).toEqual(readerCanonical);
+          // Responsive fitting is host geometry, not animation semantics. Both
+          // hosts must certify a non-overflowing fit, but need not choose the
+          // same scale inside differently sized publication columns.
+          expect(["native", "scaled"]).toContain(articleFit);
+          expect(["native", "scaled"]).toContain(readerFit);
+        }
       }
       await context.close();
     });
@@ -82,9 +108,30 @@ async function seekReader(page: Page, globalProgress: number): Promise<void> {
   await settle(page);
 }
 
-async function seekArticle(page: Page, localProgress: number): Promise<void> {
+async function selectArticleRange(
+  page: Page,
+  rangePath: string,
+  targetCheckpoint: string
+): Promise<void> {
+  if (targetCheckpoint === "") {
+    throw new Error(`Canonical range ${rangePath} lacks a target checkpoint.`);
+  }
+  await page.locator(
+    `[data-kp-algebra-checkpoint-link="${targetCheckpoint}"]`
+  ).click();
+  await expect(page.locator("[data-kp-algebra-stage-host]")).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    rangePath
+  );
+}
+
+async function seekArticle(
+  page: Page,
+  range: Readonly<{ start: number; end: number }>,
+  localProgress: number
+): Promise<void> {
   const host = page.locator("[data-kp-algebra-stage-host]");
-  await host.locator("[data-kp-algebra-range-scrubber]").evaluate(
+  await page.locator("[data-kp-algebra-range-scrubber]").evaluate(
     (element, progress) => {
       const scrubber = element as HTMLInputElement;
       scrubber.value = String(progress * 1_000);
@@ -94,7 +141,9 @@ async function seekArticle(page: Page, localProgress: number): Promise<void> {
   );
   await expect(host).toHaveAttribute(
     "data-kp-algebra-canonical-global-progress",
-    String(Math.round(firstRangeEnd * localProgress * 1_000))
+    String(Math.round(
+      (range.start + (range.end - range.start) * localProgress) * 1_000
+    ))
   );
   await settle(page);
 }

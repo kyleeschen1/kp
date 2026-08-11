@@ -183,7 +183,8 @@
     {
       "id": "s23",
       "title": "Complete-lesson-pressure",
-      "status": "planned"
+      "summary": "Pressure-tested the complete five-range lesson across 160 forward/reverse cross-host samples, Chromium and Firefox, wide and phone viewports, light and dark themes, static no-JS, keyboard, reduced motion, forced colors, direct URL/history restoration, and the unchanged algebra payload ceilings. Host-local responsive scale is now correctly excluded from semantic parity while both hosts must certify non-overflowing fit.",
+      "status": "complete"
     },
     {
       "id": "s24",
