@@ -139,6 +139,55 @@
       "scope": "payload observation, not visual-discovery certification",
       "checkedAt": "2026-08-11T01:27:47.313Z",
       "notes": "Observed inherited eager canonical closure: 10,034 B HTML gzip, 185,524 B startup/active JS+CSS gzip, no authoring leakage, and common reader closure 148,401 B versus 145,000 B. Baselines predate canonical Article recovery; no baseline was moved and no architecture was broadened before human review."
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "attention-stage-discovery",
+      "checkedAt": "2026-08-11T03:37:06.688Z",
+      "notes": "115"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "attention-stage-exemplar",
+      "checkedAt": "2026-08-11T03:37:08.562Z",
+      "notes": "Chromium"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-11T03:37:11.808Z",
+      "notes": "TypeScript"
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "attention-stage-discovery",
+      "checkedAt": "2026-08-11T03:37:25.140Z",
+      "notes": "115 focused Article v1 checks passed, including operation-derived pacing."
+    },
+    {
+      "command": "npm run visual:algebra-attention-stage",
+      "status": "passed",
+      "scope": "attention-stage-exemplar",
+      "checkedAt": "2026-08-11T03:37:27.179Z",
+      "notes": "Chromium smoke confirmed manual preparation, stable prose, deliberate canonical playback, and endpoint hold."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-11T03:37:29.801Z",
+      "notes": "TypeScript, Svelte, domain, publication, and Vite production build passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s08-revised-human-checkpoint",
+      "checkedAt": "2026-08-11T03:38:35.139Z",
+      "notes": "925 nodes and 19450 events validate after pacing revision evidence."
     }
   ],
   "expectedLearning": [

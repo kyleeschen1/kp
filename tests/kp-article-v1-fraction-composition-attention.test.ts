@@ -11,6 +11,10 @@ import {
   createKpFractionCompositionAttentionMatrix
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-matrix.ts";
 import {
+  createKpFractionCompositionAttentionPacingProfile,
+  readKpFractionCompositionAttentionTempo
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-pacing.ts";
+import {
   projectKpFractionCompositionAttentionScene
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-scene.ts";
 import {
@@ -115,6 +119,51 @@ test("attention derivation is deterministic", () => {
   assert.deepEqual(
     createKpFractionCompositionAttentionMatrix(compiled.article.document),
     createKpFractionCompositionAttentionMatrix(compiled.article.document)
+  );
+});
+
+test("attention pacing follows semantic operation groups", () => {
+  const profile = createKpFractionCompositionAttentionPacingProfile(
+    createKpFractionCompositionArticleRuntimeRanges()
+  );
+
+  assert.equal(profile.tempo, "deliberate");
+  assert.equal(profile.millisecondsPerOperation, 2_400);
+  assert.equal(profile.fullTimelineDurationMs, 31_200);
+  assert.deepEqual(Object.values(profile.rangeDurationsMs), [
+    4_800,
+    4_800,
+    7_200,
+    7_200,
+    7_200
+  ]);
+});
+
+test("attention tempo remains an internal presentation preference", () => {
+  const ranges = createKpFractionCompositionArticleRuntimeRanges();
+
+  assert.equal(readKpFractionCompositionAttentionTempo(""), "deliberate");
+  assert.equal(
+    readKpFractionCompositionAttentionTempo("?attentionTempo=slow"),
+    "slow"
+  );
+  assert.equal(
+    readKpFractionCompositionAttentionTempo("?attentionTempo=brisk"),
+    "brisk"
+  );
+  assert.equal(
+    readKpFractionCompositionAttentionTempo("?attentionTempo=unknown"),
+    "deliberate"
+  );
+  assert.equal(
+    createKpFractionCompositionAttentionPacingProfile(ranges, "slow")
+      .fullTimelineDurationMs,
+    39_000
+  );
+  assert.equal(
+    createKpFractionCompositionAttentionPacingProfile(ranges, "brisk")
+      .fullTimelineDurationMs,
+    23_400
   );
 });
 

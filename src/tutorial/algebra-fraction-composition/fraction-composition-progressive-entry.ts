@@ -51,6 +51,10 @@ import {
   isKpFractionCompositionAttentionStageRequested,
   mountKpFractionCompositionAttentionStage
 } from "./fraction-composition-attention-stage.ts";
+import {
+  createKpFractionCompositionAttentionPacingProfile,
+  readKpFractionCompositionAttentionTempo
+} from "./fraction-composition-attention-pacing.ts";
 
 /**
  * This enhancement intentionally preserves the static publication while the
@@ -72,6 +76,10 @@ export function mountKpFractionCompositionArticleEnhancement(
   );
   const attentionStageRequested =
     isKpFractionCompositionAttentionStageRequested(ownerWindow.location.search);
+  const attentionPacing = createKpFractionCompositionAttentionPacingProfile(
+    createKpFractionCompositionArticleRuntimeRanges(),
+    readKpFractionCompositionAttentionTempo(ownerWindow.location.search)
+  );
   const canonicalStage = mountCanonicalRanges({
     ownerWindow,
     article,
@@ -79,16 +87,21 @@ export function mountKpFractionCompositionArticleEnhancement(
     initialFocus: projectKpFractionCompositionArticleFocusSnapshot(
       focus.getSnapshot()
     ),
-    fixedLiveSurface: attentionStageRequested
+    fixedLiveSurface: attentionStageRequested,
+    playbackDurationMs: attentionStageRequested
+      ? attentionPacing.fullTimelineDurationMs
+      : undefined
   });
   const attentionStage = mountKpFractionCompositionAttentionStage({
     ownerWindow,
     publication: article,
     stageHost: host,
     selectCheckpoint: (path) => canonicalStage.seekCheckpoint(path),
-    selectRange: (path, direction) =>
-      canonicalStage.selectRange(path, direction),
-    setAttention: (addresses) => focus.set("story", addresses)
+    prepareRange: (path) => canonicalStage.prepareRange(path),
+    playRange: () => canonicalStage.playRange(),
+    pauseRange: () => canonicalStage.pauseRange(),
+    setAttention: (addresses) => focus.set("story", addresses),
+    pacing: attentionPacing
   });
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
@@ -233,7 +246,9 @@ export function mountKpFractionCompositionArticleEnhancement(
 
 interface KpFractionCompositionCanonicalStageMount {
   seekCheckpoint(path: string): void;
-  selectRange(path: string, direction: "forward" | "rewind"): void;
+  prepareRange(path: string): void;
+  playRange(): void;
+  pauseRange(): void;
   setFocus(focus: KpReaderFocusSnapshot): void;
   dispose(): void;
 }
@@ -244,6 +259,7 @@ function mountCanonicalRanges(input: {
   readonly host: HTMLElement;
   readonly initialFocus: KpReaderFocusSnapshot;
   readonly fixedLiveSurface: boolean;
+  readonly playbackDurationMs?: number | undefined;
 }): KpFractionCompositionCanonicalStageMount {
   const template = input.article.querySelector<HTMLTemplateElement>(
     "template[data-kp-reader-exemplar-template]"
@@ -251,14 +267,16 @@ function mountCanonicalRanges(input: {
   if (template === null) {
     return Object.freeze({
       seekCheckpoint() {},
-      selectRange() {},
+      prepareRange() {},
+      playRange() {},
+      pauseRange() {},
       setFocus() {},
       dispose() {}
     });
   }
   const profile = resolveKpReaderEquationPresentationProfile("standard");
   const animation = fractionCompositionDescriptor.createAnimation();
-  const durationMs = animation.timeline?.durationMs;
+  const durationMs = input.playbackDurationMs ?? animation.timeline?.durationMs;
   if (durationMs === undefined) {
     throw new Error("Algebra Article requires its canonical full timeline.");
   }
@@ -305,6 +323,7 @@ function mountCanonicalRanges(input: {
   let session: KpChromeFreeCanonicalEquationSession | undefined;
   let transport: KpFractionCompositionArticleTransport | undefined;
   let pendingCheckpointPath: string | undefined;
+  let pendingRangePath: string | undefined;
   let pendingFocus = input.initialFocus;
   const checkpoints = new Map(
     createKpFractionCompositionArticleRuntimeCheckpoints().map(
@@ -362,6 +381,21 @@ function mountCanonicalRanges(input: {
       end: range.end
     }, progress, "url");
   };
+  const prepareRange = (
+    mountedTransport: KpFractionCompositionArticleTransport,
+    path: string
+  ): void => {
+    const range = ranges.find((candidate) => candidate.path === path);
+    if (range === undefined) {
+      throw new Error(`Unknown algebra attention range ${path}.`);
+    }
+    reattachLiveSurface(range.path);
+    mountedTransport.selectRange({
+      id: range.path,
+      start: range.start,
+      end: range.end
+    }, range.start, "controls");
+  };
   input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
   void createKpChromeFreeCanonicalEquationSession({
     shell,
@@ -396,6 +430,8 @@ function mountCanonicalRanges(input: {
     fallback?.toggleAttribute("hidden", true);
     if (pendingCheckpointPath !== undefined) {
       selectCheckpoint(transport, pendingCheckpointPath);
+    } else if (pendingRangePath !== undefined) {
+      prepareRange(transport, pendingRangePath);
     }
   }).catch((error: unknown) => {
     if (disposed) return;
@@ -419,23 +455,27 @@ function mountCanonicalRanges(input: {
         throw new Error(`Unknown algebra checkpoint ${path}.`);
       }
       pendingCheckpointPath = path;
+      pendingRangePath = undefined;
       if (transport !== undefined) selectCheckpoint(transport, path);
     },
-    selectRange(path: string, direction: "forward" | "rewind") {
+    prepareRange(path: string) {
       const range = ranges.find((candidate) => candidate.path === path);
       if (range === undefined) {
         throw new Error(`Unknown algebra attention range ${path}.`);
       }
       pendingCheckpointPath = undefined;
-      reattachLiveSurface(range.path);
-      if (transport === undefined) return;
-      const progress = direction === "forward" ? range.start : range.end;
-      transport.selectRange({
-        id: range.path,
-        start: range.start,
-        end: range.end
-      }, progress, "controls");
-      transport.play(direction);
+      pendingRangePath = path;
+      if (transport === undefined) {
+        reattachLiveSurface(range.path);
+        return;
+      }
+      prepareRange(transport, path);
+    },
+    playRange() {
+      transport?.play("forward");
+    },
+    pauseRange() {
+      transport?.pause();
     },
     setFocus(nextFocus: KpReaderFocusSnapshot) {
       pendingFocus = nextFocus;

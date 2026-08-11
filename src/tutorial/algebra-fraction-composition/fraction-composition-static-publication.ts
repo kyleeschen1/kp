@@ -158,6 +158,9 @@ function renderAttentionStage(
     `<nav class="kp-algebra-attention-stage__controls"`,
     ` aria-label="Explanation steps">`,
     `<button type="button" data-kp-algebra-attention-action="back" disabled>Back</button>`,
+    `<button type="button" data-kp-algebra-attention-action="playback"`,
+    ` data-kp-algebra-attention-playback-state="unavailable"`,
+    ` aria-hidden="true" tabindex="-1" disabled>Play</button>`,
     `<button type="button" data-kp-algebra-attention-action="forward">Forward</button>`,
     `</nav>`,
     `</section>`

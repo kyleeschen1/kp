@@ -11,7 +11,15 @@ Open the live exemplar:
 
 The canonical reference is one austere attentional stage over the existing
 fraction-composition equation: stage, passage, progress, then constant
-Back/Forward controls. The complete searchable Article remains below it.
+Back/Play/Forward controls. The complete searchable Article remains below it.
+
+The first review found that the canonical 8.4-second timeline moved too fast
+for explanation and that the light equation surface felt embedded rather than
+continuous with the dark page. The bounded revision now uses one dark optical
+system, prepares motion without autoplay, keeps the passage stable while the
+learner plays it, and derives deliberate duration from semantic operation
+groups. Two-operation ranges last about 4.8 seconds; three-operation ranges
+last about 7.2 seconds. Endpoints remain on screen until the learner moves on.
 
 ## What This Exemplar Is Testing
 
@@ -28,9 +36,11 @@ Please judge:
    slideshow wrapped around an animation?
 3. Is the stage austere enough that the equation and passage fit in one screen
    without feeling cramped?
-4. Do the fixed Back/Forward controls and full-interval progress make each
-   state predictable and revisitable?
-5. Does keeping the complete Article below preserve useful document context,
+4. Does the deliberate pace make each operation legible without becoming
+   tedious, especially in the three-operation ranges?
+5. Do fixed Back/Play/Forward controls, manual arming, and indefinite endpoint
+   holds make each state predictable and revisitable?
+6. Does keeping the complete Article below preserve useful document context,
    or does it compete with the stage?
 
 An approval means the attentional exemplar is strong enough to test as a
@@ -51,13 +61,14 @@ visual language.
 
 ## Discovery Evidence
 
-- `npm run test:kp-article-v1`: 113 focused checks passed, including static
+- `npm run test:kp-article-v1`: 115 focused checks passed, including static
   searchability, server-rendered KaTeX, semantic identity, deterministic scene
-  projection, and the no-separator regression.
+  projection, operation-derived pacing, and the no-separator regression.
 - `npm run visual:algebra-attention-stage`: one Chromium smoke passed. It
-  verifies one retained stage, stable composition and controls, intermediate
-  canonical-clock samples, scene focus, Article continuity, and produces
-  disposable opening and settled captures under
+  verifies one retained stage, a manually prepared range, stable passage and
+  controls, intermediate canonical-clock samples, indefinite endpoint hold,
+  scene focus, Article continuity, and produces disposable opening and settled
+  captures under
   `tmp/codex/algebra-attention-stage/`.
 - `npm run build`: typechecks, Svelte checks, domain checks, publication check,
   and production build passed.

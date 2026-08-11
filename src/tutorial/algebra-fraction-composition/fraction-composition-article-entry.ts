@@ -3,6 +3,12 @@ import {
 } from "./fraction-composition-progressive-entry.ts";
 import type { KpArticleSourceEditorSession } from
   "../../article/kp-article-source-editor.ts";
+import {
+  isKpFractionCompositionAttentionStageRequested
+} from "./fraction-composition-attention-stage.ts";
+import {
+  readKpFractionCompositionAttentionTempo
+} from "./fraction-composition-attention-pacing.ts";
 
 let disposeEnhancement = mountKpFractionCompositionArticleEnhancement(window);
 
@@ -15,11 +21,29 @@ if (import.meta.env.DEV) {
     const disposeReview = review.mountKpReaderDevReview(window);
     const toolbarSession = toolbar.mountKpDevelopmentToolbar(window);
     let editor: KpArticleSourceEditorSession | undefined;
+    const attentionTempo = isKpFractionCompositionAttentionStageRequested(
+      window.location.search
+    )
+      ? readKpFractionCompositionAttentionTempo(window.location.search)
+      : undefined;
     const updateToolbar = (): void => toolbarSession.setRoute(
       contribution.createKpFractionCompositionDevToolbarContribution(
-        editor !== undefined
+        editor !== undefined,
+        attentionTempo
       ),
       (command) => {
+        if (command.controlId ===
+            contribution.kpFractionCompositionAttentionTempoControlId &&
+            typeof command.value === "string") {
+          const next = new URL(window.location.href);
+          if (command.value === "deliberate") {
+            next.searchParams.delete("attentionTempo");
+          } else {
+            next.searchParams.set("attentionTempo", command.value);
+          }
+          window.location.assign(next);
+          return;
+        }
         if (command.controlId !==
             contribution.kpFractionCompositionEditArticleControlId ||
             editor !== undefined) return;

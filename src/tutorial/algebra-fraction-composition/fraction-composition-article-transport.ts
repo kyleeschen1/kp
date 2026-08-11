@@ -28,6 +28,7 @@ export interface KpFractionCompositionArticleTransport {
   ): void;
   setFocus(focus: KpReaderFocusSnapshot): void;
   play(direction: "forward" | "rewind"): void;
+  pause(): void;
   dispose(): void;
 }
 
@@ -230,6 +231,9 @@ export function mountKpFractionCompositionArticleTransport(input: {
     },
     play(direction: "forward" | "rewind") {
       playRange(direction);
+    },
+    pause() {
+      pausePlayback();
     },
     dispose() {
       if (disposed) return;

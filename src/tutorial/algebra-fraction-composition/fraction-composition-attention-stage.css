@@ -4,6 +4,10 @@ html[data-kp-algebra-view="attention-stage"] {
   --kp-algebra-attention-passage-block: 5.5rem;
   --kp-algebra-attention-gap: clamp(0.75rem, 1.7svh, 1.25rem);
   --kp-algebra-attention-viewport-clearance: 2rem;
+  --kp-algebra-attention-surface: var(--kp-paper);
+  --kp-algebra-attention-ink: #f2f3f8;
+  --kp-algebra-attention-context: #aeb3c2;
+  --kp-algebra-attention-line: #3f4352;
 }
 
 html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
@@ -55,6 +59,12 @@ html[data-kp-algebra-view="attention-stage"]
   width: 100%;
   height: 100%;
   min-height: 0;
+  --kp-semantic-surface: var(--kp-algebra-attention-surface);
+  --kp-semantic-ink: var(--kp-algebra-attention-ink);
+  --kp-semantic-ink-secondary: var(--kp-algebra-attention-context);
+  --kp-semantic-line: var(--kp-algebra-attention-line);
+  --kp-semantic-focus: var(--kp-accent);
+  --kp-semantic-relation: var(--kp-relation);
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -73,6 +83,14 @@ html[data-kp-algebra-view="attention-stage"]
   /* Reader chrome normally owns a tall card. This projection retains its
      canonical equation viewport but lets the enclosing stage own geometry. */
   padding: clamp(0.75rem, 2svh, 1.15rem);
+  border-color: color-mix(
+    in srgb,
+    var(--kp-algebra-attention-line) 72%,
+    transparent
+  );
+  border-radius: 0;
+  background: var(--kp-algebra-attention-surface);
+  box-shadow: none;
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -144,7 +162,7 @@ html[data-kp-algebra-view="attention-stage"]
 html[data-kp-algebra-view="attention-stage"]
   .kp-algebra-attention-stage__controls {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -160,8 +178,26 @@ html[data-kp-algebra-view="attention-stage"]
 }
 
 html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__controls button:nth-child(2) {
+  justify-self: center;
+}
+
+html[data-kp-algebra-view="attention-stage"]
   .kp-algebra-attention-stage__controls button:last-child {
   justify-self: end;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-playback-state="unavailable"] {
+  visibility: hidden;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-playback-state="prepared"],
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-playback-state="paused"] {
+  border-color: var(--kp-accent);
+  color: var(--kp-algebra-attention-ink);
 }
 
 html[data-kp-algebra-view="attention-stage"]
