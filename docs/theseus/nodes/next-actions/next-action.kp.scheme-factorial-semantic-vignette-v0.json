@@ -65,11 +65,29 @@
       "status": "passed",
       "scope": "s02-control-plane",
       "checkedAt": "2026-08-11T23:49:52.304Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s03-source-identities",
+      "checkedAt": "2026-08-11T23:55:59.401Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03-type-safety",
+      "checkedAt": "2026-08-11T23:56:00.498Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s03-control-plane",
+      "checkedAt": "2026-08-11T23:56:01.477Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The old interpreter lineage and current KP Lisp stack now have a tested reuse boundary: pure motion, native DOM, responsive geometry, and scrubber seams are reusable; factorial semantic truth and scoring remain local; the current lambda exemplar is preserved."
+    "summary": "Factorial now has a framework-neutral immutable source model with address-derived occurrence IDs, explicit delimiter identities, exact source spans, syntax-only roles, and no glyph or geometry authority."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

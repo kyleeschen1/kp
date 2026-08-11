@@ -71,7 +71,8 @@
     {
       "id": "s03",
       "title": "Define Scheme source identities",
-      "status": "planned"
+      "summary": "Defined and tested the bounded factorial source text and its immutable address-derived occurrence, delimiter, span, and syntactic-role laws.",
+      "status": "complete"
     },
     {
       "id": "s04",
