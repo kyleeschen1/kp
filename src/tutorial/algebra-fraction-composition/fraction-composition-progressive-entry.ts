@@ -37,6 +37,7 @@ import {
 } from "./fraction-composition-runtime-ranges.ts";
 import {
   mountKpFractionCompositionArticleTransport,
+  type KpFractionCompositionArticleCanonicalSample,
   type KpFractionCompositionArticleTransport
 } from "./fraction-composition-article-transport.ts";
 import {
@@ -62,7 +63,10 @@ import {
  * accessible; substituting the generic editor player was not.
  */
 export function mountKpFractionCompositionArticleEnhancement(
-  ownerWindow: Window = window
+  ownerWindow: Window = window,
+  onCanonicalSample?: ((
+    sample: KpFractionCompositionArticleCanonicalSample
+  ) => void) | undefined
 ): () => void {
   const host = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-stage-host]"
@@ -90,16 +94,16 @@ export function mountKpFractionCompositionArticleEnhancement(
     fixedLiveSurface: attentionStageRequested,
     playbackDurationMs: attentionStageRequested
       ? attentionPacing.fullTimelineDurationMs
-      : undefined
+      : undefined,
+    onCanonicalSample
   });
   const attentionStage = mountKpFractionCompositionAttentionStage({
     ownerWindow,
     publication: article,
     stageHost: host,
-    selectCheckpoint: (path) => canonicalStage.seekCheckpoint(path),
-    prepareRange: (path) => canonicalStage.prepareRange(path),
-    playRange: () => canonicalStage.playRange(),
-    pauseRange: () => canonicalStage.pauseRange(),
+    seekGlobal: (progress) => canonicalStage.seekGlobal(progress),
+    playTimeline: () => canonicalStage.playRange(),
+    pauseTimeline: () => canonicalStage.pauseRange(),
     setAttention: (addresses) => focus.set("story", addresses),
     pacing: attentionPacing
   });
@@ -247,6 +251,7 @@ export function mountKpFractionCompositionArticleEnhancement(
 interface KpFractionCompositionCanonicalStageMount {
   seekCheckpoint(path: string): void;
   prepareRange(path: string): void;
+  seekGlobal(progress: number): void;
   playRange(): void;
   pauseRange(): void;
   setFocus(focus: KpReaderFocusSnapshot): void;
@@ -260,6 +265,9 @@ function mountCanonicalRanges(input: {
   readonly initialFocus: KpReaderFocusSnapshot;
   readonly fixedLiveSurface: boolean;
   readonly playbackDurationMs?: number | undefined;
+  readonly onCanonicalSample?: ((
+    sample: KpFractionCompositionArticleCanonicalSample
+  ) => void) | undefined;
 }): KpFractionCompositionCanonicalStageMount {
   const template = input.article.querySelector<HTMLTemplateElement>(
     "template[data-kp-reader-exemplar-template]"
@@ -268,6 +276,7 @@ function mountCanonicalRanges(input: {
     return Object.freeze({
       seekCheckpoint() {},
       prepareRange() {},
+      seekGlobal() {},
       playRange() {},
       pauseRange() {},
       setFocus() {},
@@ -285,6 +294,13 @@ function mountCanonicalRanges(input: {
   if (firstRange === undefined || firstRange.path !== "distribute-and-normalize") {
     throw new Error("Algebra Article lacks its canonical first motion range.");
   }
+  const initialTransportRange = input.fixedLiveSurface
+    ? Object.freeze({ id: "attention-full-timeline", start: 0, end: 1 })
+    : Object.freeze({
+        id: firstRange.path,
+        start: firstRange.start,
+        end: firstRange.end
+      });
   const fallback = input.host.querySelector<Element>(
     "[data-kp-algebra-stage-fallback]"
   );
@@ -375,6 +391,10 @@ function mountCanonicalRanges(input: {
     }
     const range = rangesByTargetCheckpoint.get(path) ?? firstRange;
     reattachLiveSurface(path === "factored" ? undefined : range.path);
+    if (input.fixedLiveSurface) {
+      mountedTransport.seekGlobal(progress, "url");
+      return;
+    }
     mountedTransport.selectRange({
       id: range.path,
       start: range.start,
@@ -390,6 +410,10 @@ function mountCanonicalRanges(input: {
       throw new Error(`Unknown algebra attention range ${path}.`);
     }
     reattachLiveSurface(range.path);
+    if (input.fixedLiveSurface) {
+      mountedTransport.seekGlobal(range.start, "controls");
+      return;
+    }
     mountedTransport.selectRange({
       id: range.path,
       start: range.start,
@@ -419,12 +443,13 @@ function mountCanonicalRanges(input: {
       stage: shell.stage,
       session: mounted,
       range: {
-        id: firstRange.path,
-        start: firstRange.start,
-        end: firstRange.end
+        id: initialTransportRange.id,
+        start: initialTransportRange.start,
+        end: initialTransportRange.end
       },
       durationMs,
-      initialFocus: pendingFocus
+      initialFocus: pendingFocus,
+      onCanonicalSample: input.onCanonicalSample
     });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
     fallback?.toggleAttribute("hidden", true);
@@ -470,6 +495,16 @@ function mountCanonicalRanges(input: {
         return;
       }
       prepareRange(transport, path);
+    },
+    seekGlobal(progress: number) {
+      if (!Number.isFinite(progress) || progress < 0 || progress > 1) {
+        throw new Error(
+          `Algebra attention progress ${progress} must be between 0 and 1.`
+        );
+      }
+      pendingCheckpointPath = undefined;
+      pendingRangePath = undefined;
+      transport?.seekGlobal(progress, "controls");
     },
     playRange() {
       transport?.play("forward");

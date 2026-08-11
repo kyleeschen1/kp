@@ -32,6 +32,14 @@ export const kpDistributionChoreographyPhaseIds = [
 export type KpDistributionChoreographyPhaseId =
   typeof kpDistributionChoreographyPhaseIds[number];
 
+export type KpDistributionConnectorMotionConstraint =
+  "follow-products-on-math-axis";
+
+export interface KpDistributionConnectorMotionDelta {
+  readonly x: number;
+  readonly y: number;
+}
+
 export interface KpDistributionChoreographyPlan {
   readonly kind: "distribution-choreography-plan";
   readonly id: string;
@@ -46,6 +54,7 @@ export interface KpDistributionChoreographyPlan {
     readonly sourceId: string;
     readonly targetId: string;
     readonly semanticIndex: number;
+    readonly motionConstraint: KpDistributionConnectorMotionConstraint;
   }[];
   readonly operatorGroups: readonly {
     readonly id: string;
@@ -54,6 +63,7 @@ export interface KpDistributionChoreographyPlan {
     readonly targetId: string;
     readonly leftProductGroupId: string;
     readonly rightProductGroupId: string;
+    readonly motionConstraint: KpDistributionConnectorMotionConstraint;
   }[];
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpDistributionChoreographyPhaseId[];
@@ -91,7 +101,12 @@ export function compileKpDistributionChoreography(input: {
   readonly sourceFactorId: string;
   readonly factorCopyIds: readonly string[];
   readonly addendPairs: KpDistributionChoreographyPlan["addendPairs"];
-  readonly connectorPairs: KpDistributionChoreographyPlan["connectorPairs"];
+  readonly connectorPairs: readonly {
+    readonly sourceId: string;
+    readonly targetId: string;
+    readonly semanticIndex: number;
+    readonly motionConstraint?: KpDistributionConnectorMotionConstraint | undefined;
+  }[];
   readonly groupingArtifactIds: readonly string[];
   readonly sourceMinimumScale?: number | undefined;
 }): KpDistributionChoreographyPlan {
@@ -190,7 +205,9 @@ export function compileKpDistributionChoreography(input: {
     leftProductGroupId:
       `${input.id}.product.${operator.semanticIndex}`,
     rightProductGroupId:
-      `${input.id}.product.${operator.semanticIndex + 1}`
+      `${input.id}.product.${operator.semanticIndex + 1}`,
+    motionConstraint:
+      operator.motionConstraint ?? "follow-products-on-math-axis"
   }));
   return {
     kind: "distribution-choreography-plan",
@@ -198,7 +215,11 @@ export function compileKpDistributionChoreography(input: {
     sourceFactorId: input.sourceFactorId,
     factorCopyIds: [...input.factorCopyIds],
     addendPairs: input.addendPairs.map((pair) => ({ ...pair })),
-    connectorPairs: input.connectorPairs.map((pair) => ({ ...pair })),
+    connectorPairs: input.connectorPairs.map((pair) => ({
+      ...pair,
+      motionConstraint:
+        pair.motionConstraint ?? "follow-products-on-math-axis"
+    })),
     operatorGroups,
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpDistributionChoreographyPhaseIds],
@@ -273,6 +294,35 @@ export function sampleKpDistributionChoreography(input: {
       };
     })
   };
+}
+
+/**
+ * A persistent operator belongs to the expression's math axis, not to the
+ * context-dependent center of either KaTeX wrapper that happens to contain it.
+ */
+export function constrainKpDistributionConnectorMotion(input: {
+  readonly constraint: KpDistributionConnectorMotionConstraint;
+  readonly measuredDelta: KpDistributionConnectorMotionDelta;
+  readonly axisTolerancePx?: number | undefined;
+}): KpDistributionConnectorMotionDelta {
+  const { x, y } = input.measuredDelta;
+  if (![x, y].every(Number.isFinite)) {
+    throw new Error("Distribution connector motion requires finite geometry.");
+  }
+  const axisTolerancePx = input.axisTolerancePx ?? 0.75;
+  if (!Number.isFinite(axisTolerancePx) || axisTolerancePx < 0) {
+    throw new Error("Distribution connector axis tolerance must be non-negative.");
+  }
+  if (
+    input.constraint === "follow-products-on-math-axis" &&
+    Math.abs(y) > axisTolerancePx
+  ) {
+    throw new Error(
+      `Distribution connector endpoints disagree on their math axis by ` +
+      `${Math.abs(y).toFixed(3)}px.`
+    );
+  }
+  return Object.freeze({ x, y: 0 });
 }
 
 function intervalProgress(progress: number, start: number, end: number): number {

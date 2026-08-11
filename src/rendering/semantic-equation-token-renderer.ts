@@ -50,6 +50,7 @@ import {
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
 import {
+  constrainKpDistributionConnectorMotion,
   type KpDistributionChoreographyFrame,
   type KpDistributionChoreographyPlan
 } from "../animation/distribution-choreography.ts";
@@ -2341,14 +2342,24 @@ function sampleDistributionRelation(
       ));
       const sourceInkCenter = rectCenter(sourceInk);
       const targetInkCenter = rectCenter(targetInk);
-      const inkDelta = {
+      const measuredInkDelta = {
         x: targetInkCenter.x - sourceInkCenter.x,
         y: targetInkCenter.y - sourceInkCenter.y
       };
+      const operator = context.plan.operatorGroups.find(
+        (candidate) => candidate.semanticIndex === operatorIndex
+      );
+      if (operator === undefined) {
+        throw new Error(`Distribution is missing operator ${operatorIndex}.`);
+      }
+      const inkDelta = constrainKpDistributionConnectorMotion({
+        constraint: operator.motionConstraint,
+        measuredDelta: measuredInkDelta
+      });
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
-          // Keep one visible glyph: move the source operator into exact native
-          // ink geometry, ignoring KaTeX's context-dependent wrapper spacing.
+          // Keep one visible glyph while the products reflow. The semantic
+          // axis constraint prevents wrapper-box centering from bending it.
           opacity: handoff.movingOpacity,
           x: inkDelta.x * reflow,
           y: inkDelta.y * reflow,

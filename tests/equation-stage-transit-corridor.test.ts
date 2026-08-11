@@ -10,6 +10,7 @@ import {
   type KpEquationStageRect
 } from "../src/reader/runtime/equation-stage-layout.ts";
 import {
+  alignKpEquationStageSequence,
   certifyKpEquationStageTransitCorridor
 } from "../src/reader/runtime/equation-stage-transit-corridor.ts";
 import {
@@ -88,6 +89,123 @@ function corridor() {
       }
     ]
   });
+}
+
+function sequenceLayout(input: {
+  readonly nodeId: string;
+  readonly sourceId: string;
+  readonly targetId: string;
+  readonly sourceLeft: number;
+  readonly sourceTop: number;
+  readonly targetLeft: number;
+  readonly targetTop: number;
+}) {
+  const rows = ["upper", "lower"] as const;
+  const intent = {
+    nodeId: input.nodeId,
+    policy: "semantic-two-row-stage" as const,
+    rows: rows.map((role) => ({
+      id: `${input.nodeId}.${role}`,
+      role,
+      envelopeIds: [
+        `${input.nodeId}.${input.sourceId}.${role}`,
+        `${input.nodeId}.${input.targetId}.${role}`
+      ]
+    }))
+  };
+  const definitions = intent.rows.flatMap((row, rowIndex) =>
+    row.envelopeIds.map((id, endpointIndex) => ({
+      id,
+      transitionId: input.nodeId,
+      endpointObjectId: endpointIndex === 0 ? input.sourceId : input.targetId,
+      memberOwnerIds: [`owner.${id}`],
+      rect: {
+        left: (endpointIndex === 0 ? input.sourceLeft : input.targetLeft),
+        top: (endpointIndex === 0 ? input.sourceTop : input.targetTop) +
+          rowIndex * 40,
+        width: 24,
+        height: 18
+      }
+    }))
+  );
+  const layout = certifyKpTwoRowEquationStageLayout(
+    compileKpMeasuredEquationStageInput({
+      intent,
+      definitions,
+      observations: definitions.map(({ rect, ...definition }) => ({
+        ...definition,
+        rect,
+        baselineY: rect.top + 14,
+        emSizePx: 16,
+        measurementIdentity: identity
+      })),
+      measurementIdentity: identity
+    })
+  );
+  return certifyKpEquationStageTransitCorridor({
+    layout,
+    transits: rows.map((role, index) => ({
+      id: `${input.nodeId}.${role}.transit`,
+      sourceRowId: intent.rows[index]!.id,
+      targetRowId: intent.rows[index]!.id,
+      sourceRect: definitions[index * 2]!.rect,
+      targetRect: definitions[index * 2 + 1]!.rect
+    }))
+  });
+}
+
+test("sequence alignment preserves shared endpoints and corridor capacity", () => {
+  const first = sequenceLayout({
+    nodeId: "phase.first",
+    sourceId: "state.a",
+    targetId: "state.shared",
+    sourceLeft: 10,
+    sourceTop: 8,
+    targetLeft: 120,
+    targetTop: 15
+  });
+  const second = sequenceLayout({
+    nodeId: "phase.second",
+    sourceId: "state.shared",
+    targetId: "state.c",
+    sourceLeft: 24,
+    sourceTop: 2,
+    targetLeft: 150,
+    targetTop: 20
+  });
+  const aligned = alignKpEquationStageSequence([first, second]);
+  for (const role of ["upper", "lower"]) {
+    assert.deepEqual(
+      placedEndpoint(aligned[0]!, role, "state.shared"),
+      placedEndpoint(aligned[1]!, role, "state.shared")
+    );
+  }
+  aligned.forEach((layout, index) => {
+    assert.ok(
+      layout.protectedTransitCorridor.rect.height + 1e-6 >=
+      [first, second][index]!.protectedTransitCorridor.rect.height
+    );
+    assert.equal(contains(layout.sweptBounds, layout.stageBounds), true);
+  });
+});
+
+function placedEndpoint(
+  layout: ReturnType<typeof sequenceLayout>,
+  role: string,
+  endpointId: string
+) {
+  const intentRow = layout.measuredInput.intent.rows.find(
+    (row) => row.role === role
+  )!;
+  const row = layout.rows.find(({ id }) => id === intentRow.id)!;
+  const envelope = layout.measuredInput.envelopes.find((candidate) =>
+    row.envelopeIds.includes(candidate.id) &&
+    candidate.endpointObjectId === endpointId
+  )!;
+  return {
+    left: envelope.rect.left + row.translateX,
+    top: envelope.rect.top + row.translateY
+  };
 }
 
 test("corridor separates rows and chooses direct versus lifted transit", () => {

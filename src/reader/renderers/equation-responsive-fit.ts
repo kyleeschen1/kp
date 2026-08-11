@@ -174,6 +174,50 @@ export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
   });
 }
 
+/**
+ * A sequence uses one camera transform for every certified phase. Per-phase
+ * fitting can make an otherwise identical shared endpoint jump when the next
+ * transition becomes active.
+ */
+export function planKpReaderCertifiedEquationStageSequenceResponsiveFit(input: {
+  readonly id: string;
+  readonly layouts: readonly KpCorridorCertifiedEquationStageLayout[];
+  readonly viewportWidth: number;
+  readonly viewportHeight?: number | undefined;
+  readonly horizontalPadding?: number | undefined;
+  readonly verticalPadding?: number | undefined;
+  readonly minScale?: number | undefined;
+}): KpReaderEquationResponsiveFitPlan {
+  if (input.id.trim() === "" || input.layouts.length === 0) {
+    throw new Error(
+      "Certified equation-stage sequence fit requires an id and layouts."
+    );
+  }
+  const measurementIdentity = input.layouts[0]!.measurementIdentity;
+  for (const layout of input.layouts.slice(1)) {
+    assertKpEquationStageMeasurementIdentity(
+      measurementIdentity,
+      layout.measurementIdentity,
+      `Certified equation-stage sequence fit ${input.id}`
+    );
+  }
+  return planFit({
+    id: `fit.stage-sequence.${input.id}.${input.viewportWidth}`,
+    alignmentPlanId: `certified-stage-sequence.${input.id}`,
+    geometrySource: "certified-stage-swept-envelope",
+    alignments: [],
+    contentBounds: unionRects(input.layouts.map(({ sweptBounds }) => sweptBounds)),
+    centeringBounds: unionRects(input.layouts.map(({ stageBounds }) => stageBounds)),
+    measurementIdentity,
+    viewportWidth: input.viewportWidth,
+    viewportHeight: input.viewportHeight,
+    horizontalPadding: input.horizontalPadding,
+    verticalPadding: input.verticalPadding,
+    minScale: input.minScale,
+    overflowStrategy: "report"
+  });
+}
+
 function planFit(input: {
   readonly id: string;
   readonly alignmentPlanId: string;

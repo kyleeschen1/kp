@@ -66,9 +66,13 @@ test("attention-stage discovery is build-rendered over the same publication", ()
   );
   assert.match(publication, /data-kp-algebra-attention-stage hidden/u);
   assert.match(publication, /data-kp-algebra-attention-visual/u);
-  assert.match(publication, /data-kp-algebra-attention-action="back"/u);
-  assert.match(publication, /data-kp-algebra-attention-action="continue"/u);
-  assert.doesNotMatch(publication, /data-kp-algebra-attention-progress/u);
+  assert.match(publication, /data-kp-algebra-attention-player/u);
+  assert.match(publication, /data-kp-algebra-attention-action="toggle"/u);
+  assert.match(publication, /data-kp-algebra-attention-scrubber/u);
+  assert.equal(
+    (publication.match(/--kp-algebra-attention-marker:/gu) ?? []).length,
+    6
+  );
   assert.doesNotMatch(publication, /data-kp-algebra-attention-status/u);
   assert.match(publication, /data-kp-algebra-attention-range="distribute-and-normalize"/u);
   assert.match(publication, /class="katex-mathml"/u);

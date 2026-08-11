@@ -52,6 +52,7 @@ export {
   type KpReaderRuntimeRouteDescriptor
 } from "./reader-route-descriptor.ts";
 export {
+  applyKpCertifiedEquationStageLayout,
   assertKpAppliedEquationStageLayout,
   assertKpEquationStageMeasurementIdentity,
   createKpEquationStageMeasurementIdentity,
@@ -59,8 +60,10 @@ export {
   type KpAppliedEquationStageLayout,
   type KpEquationStageMeasurementIdentity
 } from "./equation-stage-layout.ts";
-export type {
-  KpCorridorCertifiedEquationStageLayout
+export {
+  alignKpEquationStageSequence,
+  translateKpEquationStageLayoutRows,
+  type KpCorridorCertifiedEquationStageLayout
 } from "./equation-stage-transit-corridor.ts";
 export {
   createKpReaderSemanticFocusService,

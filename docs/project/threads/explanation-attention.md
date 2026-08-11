@@ -1,18 +1,22 @@
 # Explanation and Attention Thread
 
 Status: active
-Last Updated: 2026-08-10
+Last Updated: 2026-08-11
 Current Next Action: KP Article v1 remains frozen. Canonical algebra recovery
 is complete: all five fraction-composition motions now use one retained
 canonical equation session, live stage, transport, and clock while inactive
 passages preserve static endpoints. Release evidence is in
 `../reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md`.
-The approved successor is the bounded “The Equation Remembers” semantic
-explanation differentiation proof. It begins with one reversible algebra
-exemplar and stops at a human visual checkpoint before responsive matrices,
-second projections, or shared promotion. Shared station extraction, split
-parity, final floating-navigation geometry, and unrelated curriculum remain
-deferred.
+The bounded “The Equation Remembers” semantic-explanation proof is at its
+first human visual checkpoint. Before approval, the next loop should make one
+reversible correction to the canonical distribution motion profile: compress
+the low-information opening anticipation, eliminate the preview-pause-restart
+rhythm, and make the fraction's causal branch legible earlier without rushing
+travel or endpoint settlement. Preserve the semantic trace, renderer, retained
+session, native endpoints, Article source, attention-stage composition, and
+shared clock; then stop again for human review. Responsive matrices, second
+projections, shared promotion, unrelated curriculum, and further layout
+discovery remain deferred.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`

@@ -160,6 +160,7 @@ export interface KpCanonicalNativeKatexSceneInput {
   readonly operationChoreography?: KpEquationOperationChoreography;
   readonly fanInRouting?: boolean;
   readonly copyFanOutRouting?: boolean;
+  readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
   readonly reorderRouting?: boolean;
   readonly endpointDwellFraction?: number | undefined;
   readonly stageOccupancy?: O;
@@ -1691,6 +1692,11 @@ export function createKpCanonicalNativeKatexSceneSession(
     ownership
   } = prepared;
   const tracks = protectedTransit.tracks;
+  input.source.stage.dataset["kpNativeKatexHorizontalAxisTrackCount"] = String(
+    tracks.filter(({ motionAxisConstraint }) =>
+      motionAxisConstraint === "horizontal"
+    ).length
+  );
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1910,13 +1916,19 @@ function prepareKpCanonicalNativeKatexScene(
     source: input.source,
     target: input.target
   });
+  const axisConstrainedTracks = applyHorizontalAxisConstraints({
+    tracks: allTracks,
+    source: input.source,
+    target: input.target,
+    semanticEntityIds: input.horizontalAxisSemanticEntityIds ?? []
+  });
   const syntheses = compileKpNativeKatexSuccessorSynthesisScenePlans({
     source: input.source,
     target: input.target,
     intents: input.successorSyntheses ?? []
   });
   const operationTracks = applyKpNativeKatexOperationChoreography({
-    tracks: allTracks,
+    tracks: axisConstrainedTracks,
     source: input.source,
     target: input.target,
     choreography: input.operationChoreography
@@ -1935,7 +1947,7 @@ function prepareKpCanonicalNativeKatexScene(
   return {
     reconciliation,
     hierarchy,
-    allTracks,
+    allTracks: axisConstrainedTracks,
     syntheses,
     ownership,
     motifRoutedTracks,
@@ -1963,6 +1975,8 @@ function pureSceneInputSignature(
     relations: input.relations,
     fanInRouting: input.fanInRouting === true,
     copyFanOutRouting: input.copyFanOutRouting === true,
+    horizontalAxisSemanticEntityIds:
+      input.horizontalAxisSemanticEntityIds ?? [],
     reorderRouting: input.reorderRouting === true,
     stageOccupancy: input.stageOccupancy === undefined
       ? undefined
@@ -1972,6 +1986,49 @@ function pureSceneInputSignature(
           geometryAuthority: input.stageOccupancy.geometryAuthority
         }
   });
+}
+
+function applyHorizontalAxisConstraints(input: {
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly semanticEntityIds: readonly string[];
+}): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  if (input.semanticEntityIds.length === 0) return input.tracks;
+  const constrained = new Set(input.semanticEntityIds);
+  const sourceEntities = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntities = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const matched = new Set<string>();
+  const tracks = input.tracks.map((track) => {
+    const sourceEntity = sourceEntities.get(track.sourceAtomId ?? "");
+    const targetEntity = targetEntities.get(track.targetAtomId ?? "");
+    if (
+      sourceEntity === undefined ||
+      targetEntity === undefined ||
+      !constrained.has(sourceEntity) ||
+      !constrained.has(targetEntity)
+    ) return track;
+    matched.add(sourceEntity);
+    matched.add(targetEntity);
+    return Object.freeze({
+      ...track,
+      motionAxisConstraint: "horizontal" as const
+    });
+  });
+  const missing = input.semanticEntityIds.filter((id) => !matched.has(id));
+  if (missing.length > 0) {
+    throw new Error(
+      `Native KaTeX horizontal-axis constraints lack paint for ` +
+      `${missing.join(", ")}.`
+    );
+  }
+  return Object.freeze(tracks);
 }
 
 function pureSceneInputGeometry(

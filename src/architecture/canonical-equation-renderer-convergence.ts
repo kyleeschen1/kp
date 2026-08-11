@@ -57,16 +57,15 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-successor-synthesis.ts"
   ]),
   maximumProductionModules: 4,
-  // The complete hardening adds 5,648 audited bytes for the pure-plan/session
-  // split and exact reuse validation, while retaining four generic modules and
-  // the frozen vocabulary. This one-time ratchet leaves only 359 bytes of
-  // headroom, so a second renderer architecture still cannot hide here.
-  maximumProductionSourceBytes: 136_000,
+  // The axis-continuant contract adds generic routing authority to the one
+  // compositor instead of introducing an equation-specific renderer. Keep the
+  // ratchet close enough that a parallel implementation still cannot hide.
+  maximumProductionSourceBytes: 138_500,
   // Direct dependencies remain separate responsibilities, but freezing their
   // current closure prevents a core reduction from merely relocating bytes to
   // an unmeasured helper.
   maximumProductionDirectDependencyModules: 16,
-  maximumProductionDirectDependencySourceBytes: 248_260,
+  maximumProductionDirectDependencySourceBytes: 249_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -137,9 +136,9 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core has an unbounded direct dependency closure.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 136_000 ||
+    policy.maximumProductionSourceBytes !== 138_500 ||
     policy.maximumProductionDirectDependencyModules !== 16 ||
-    policy.maximumProductionDirectDependencySourceBytes !== 248_260 ||
+    policy.maximumProductionDirectDependencySourceBytes !== 249_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

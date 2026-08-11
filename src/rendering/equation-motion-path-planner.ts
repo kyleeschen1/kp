@@ -133,6 +133,11 @@ export interface KpEquationCollisionTrack {
   readonly endOpacity?: number | undefined;
   readonly motionPath?: KpEquationMotionPathCandidate | undefined;
   readonly motionPathSampling?: KpEquationMotionPathSampling | undefined;
+  /**
+   * Some continuants carry the expression's reading axis. Collision repair
+   * may retime them, but must route other paint around that semantic scaffold.
+   */
+  readonly motionAxisConstraint?: "horizontal" | undefined;
   readonly motionProgressRange?: {
     readonly start: number;
     readonly end: number;
@@ -1694,7 +1699,12 @@ function routeCandidateUnits(
             .map(({ id: trackId }) => trackId))
     });
   }
-  return [...units.values()].sort((leftUnit, rightUnit) => {
+  return [...units.values()].filter((unit) =>
+    tracks.every((track) =>
+      !unit.trackIds.includes(track.id) ||
+      track.motionAxisConstraint === undefined
+    )
+  ).sort((leftUnit, rightUnit) => {
     const left = tracks.filter(({ id }) => leftUnit.trackIds.includes(id));
     const right = tracks.filter(({ id }) => rightUnit.trackIds.includes(id));
     return routePriority(left) - routePriority(right) ||
@@ -1816,7 +1826,9 @@ function routeProtectedTransitUnit<
   );
   if (
     routeTracks.length !== input.unit.trackIds.length ||
-    routeTracks.some(({ motionPath }) => motionPath !== undefined)
+    routeTracks.some(({ motionPath, motionAxisConstraint }) =>
+      motionPath !== undefined || motionAxisConstraint !== undefined
+    )
   ) return undefined;
   const lanes = input.stageOccupancy === undefined
     ? []

@@ -115,6 +115,7 @@ export {
   checkKpReaderEquationMotionConformance,
   planKpReaderEquationResponsiveFit,
   planKpReaderCertifiedEquationStageResponsiveFit,
+  planKpReaderCertifiedEquationStageSequenceResponsiveFit,
   planKpReaderEquationSequenceResponsiveFit,
   type KpReaderCertifiedEquationStageResponsiveFitPlan,
   type KpReaderCertifiedEquationStageFitResult,

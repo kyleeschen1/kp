@@ -8,6 +8,7 @@ html[data-kp-algebra-view="attention-stage"] {
   --kp-algebra-attention-ink: #f2f3f8;
   --kp-algebra-attention-context: #aeb3c2;
   --kp-algebra-attention-line: #3f4352;
+  --kp-algebra-attention-player-progress: 0%;
 }
 
 html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
@@ -125,15 +126,17 @@ html[data-kp-algebra-view="attention-stage"]
 }
 
 html[data-kp-algebra-view="attention-stage"]
-  .kp-algebra-attention-stage__controls {
+  .kp-algebra-attention-stage__player {
   display: grid;
-  grid-template-columns: repeat(2, minmax(7rem, 8rem));
-  justify-content: center;
-  gap: 0.75rem;
+  width: min(100%, 42rem);
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  align-items: center;
+  justify-self: center;
+  gap: 1rem;
 }
 
 html[data-kp-algebra-view="attention-stage"]
-  .kp-algebra-attention-stage__controls button {
+  .kp-algebra-attention-stage__player button {
   width: 100%;
   min-height: 2.75rem;
   border: 1px solid var(--kp-line);
@@ -144,11 +147,108 @@ html[data-kp-algebra-view="attention-stage"]
 }
 
 html[data-kp-algebra-view="attention-stage"]
-  [data-kp-algebra-attention-primary-state="play"],
-html[data-kp-algebra-view="attention-stage"]
-  [data-kp-algebra-attention-primary-state="resume"] {
+  [data-kp-algebra-attention-primary-state="play"] {
   border-color: var(--kp-accent);
   color: var(--kp-algebra-attention-ink);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__scrubber,
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__timeline {
+  display: block;
+  width: 100%;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__timeline {
+  position: relative;
+  height: 1.5rem;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__chapter-marks {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__chapter-marks span {
+  position: absolute;
+  top: 50%;
+  left: var(--kp-algebra-attention-marker);
+  width: 1px;
+  height: 0.7rem;
+  background: var(--kp-algebra-attention-context);
+  transform: translate(-0.5px, -50%);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber] {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 1.5rem;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 0;
+  background: linear-gradient(
+    to right,
+    var(--kp-accent) 0 var(--kp-algebra-attention-player-progress),
+    var(--kp-algebra-attention-line)
+      var(--kp-algebra-attention-player-progress) 100%
+  );
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]::-moz-range-track {
+  height: 3px;
+  border-radius: 0;
+  background: var(--kp-algebra-attention-line);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]::-moz-range-progress {
+  height: 3px;
+  background: var(--kp-accent);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]::-webkit-slider-thumb {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-top: calc((3px - 0.9rem) / 2);
+  appearance: none;
+  border: 2px solid var(--kp-algebra-attention-surface);
+  border-radius: 50%;
+  background: var(--kp-algebra-attention-ink);
+  box-shadow: 0 0 0 1px var(--kp-algebra-attention-line);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]::-moz-range-thumb {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid var(--kp-algebra-attention-surface);
+  border-radius: 50%;
+  background: var(--kp-algebra-attention-ink);
+  box-shadow: 0 0 0 1px var(--kp-algebra-attention-line);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  [data-kp-algebra-attention-scrubber]:focus-visible {
+  outline: 2px solid var(--kp-accent);
+  outline-offset: 0.3rem;
 }
 
 /* Equation structure remains legible while luminance—not transparency—marks
@@ -169,7 +269,7 @@ html[data-kp-algebra-view="attention-stage"]
 }
 
 html[data-kp-algebra-view="attention-stage"]
-  .kp-algebra-attention-stage__controls button:disabled {
+  .kp-algebra-attention-stage__player button:disabled {
   color: var(--kp-muted);
   opacity: 0.45;
 }
@@ -197,6 +297,13 @@ html[data-kp-algebra-view="attention-stage"]
     min-height: auto;
     padding-inline: 0;
   }
+
+  html[data-kp-algebra-view="attention-stage"]
+    .kp-algebra-attention-stage__player {
+    grid-template-columns: 4.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-inline: 0.75rem;
+  }
 }
 
 @media (max-height: 34rem) {
@@ -208,9 +315,14 @@ html[data-kp-algebra-view="attention-stage"]
 
 @media (forced-colors: active) {
   html[data-kp-algebra-view="attention-stage"]
-    .kp-algebra-attention-stage__controls button {
+    .kp-algebra-attention-stage__player button {
     border-color: ButtonText;
     color: ButtonText;
     background: Canvas;
+  }
+
+  html[data-kp-algebra-view="attention-stage"]
+    [data-kp-algebra-attention-scrubber] {
+    appearance: auto;
   }
 }

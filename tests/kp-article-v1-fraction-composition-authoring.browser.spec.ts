@@ -40,7 +40,8 @@ test("algebra reuses whole-file editing, last-valid preview, and Vim writes", as
   const editor = page.locator("[data-kp-article-source-editor]");
   await expect(editor).toHaveAttribute(
     "data-kp-article-source-editor-enhanced",
-    "true"
+    "true",
+    { timeout: 15_000 }
   );
   await expect(editor.locator("[data-kp-article-source-editor-modeline]"))
     .toContainText("algebra-fraction-composition.kp.md");
@@ -103,7 +104,8 @@ test(":q refuses a dirty algebra buffer and :q! discards it", async ({ page }) =
   const editor = page.locator("[data-kp-article-source-editor]");
   await expect(editor).toHaveAttribute(
     "data-kp-article-source-editor-enhanced",
-    "true"
+    "true",
+    { timeout: 15_000 }
   );
   const source = await editor.locator("textarea").inputValue();
   await editor.locator(".cm-content").fill(

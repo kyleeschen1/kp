@@ -149,6 +149,7 @@ export interface KpAppliedEquationStageLayout<
   readonly certificate: TCertificate;
   readonly appliedRowIds: readonly string[];
   readonly appliedNativeMemberIds: readonly string[];
+  readonly nativeRows: readonly KpEquationStageNativeRowBinding[];
   readonly applicationId: string;
   readonly [appliedEquationStageLayoutAuthority]: true;
 }
@@ -552,6 +553,9 @@ export function applyKpCertifiedEquationStageLayout<
     appliedNativeMemberIds: Object.freeze(
       staged.map(({ ownerId }) => ownerId)
     ),
+    nativeRows: Object.freeze(input.rows.map(({ rowId, members }) =>
+      Object.freeze({ rowId, members: Object.freeze([...members]) })
+    )),
     applicationId,
     [appliedEquationStageLayoutAuthority]: true as const
   });

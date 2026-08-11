@@ -103,6 +103,236 @@ export function certifyKpEquationStageTransitCorridor(input: {
   });
 }
 
+/**
+ * A staged equation is one continuous coordinate system. Phase-local row
+ * fitting may choose different horizontal origins for the same endpoint, so
+ * propagate each shared semantic endpoint before any renderer owns motion.
+ */
+export function alignKpEquationStageSequence(
+  layouts: readonly KpCorridorCertifiedEquationStageLayout[]
+): readonly KpCorridorCertifiedEquationStageLayout[] {
+  if (layouts.length < 2) return Object.freeze([...layouts]);
+  const aligned = [layouts[0]!];
+  for (const layout of layouts.slice(1)) {
+    const previous = aligned.at(-1)!;
+    if (previous.policy !== layout.policy) {
+      throw new Error("Equation stage sequence cannot change layout policy.");
+    }
+    const previousRows = rowRoleIndex(previous);
+    const rows = rowRoleIndex(layout);
+    if (!sameValues([...previousRows.keys()].sort(), [...rows.keys()].sort())) {
+      throw new Error("Equation stage sequence changed its semantic row roles.");
+    }
+    const shiftByRowId = new Map<string, KpEquationStagePoint>();
+    for (const [role, row] of rows) {
+      const previousRow = previousRows.get(role)!;
+      const sharedEndpointIds = rowEndpointIds(previous, previousRow)
+        .filter((id) => rowEndpointIds(layout, row).includes(id));
+      if (sharedEndpointIds.length !== 1) {
+        throw new Error(
+          `Equation stage row ${role} must share exactly one adjacent endpoint.`
+        );
+      }
+      const endpointId = sharedEndpointIds[0]!;
+      const previousEnvelope = endpointEnvelope(previous, previousRow, endpointId);
+      const envelope = endpointEnvelope(layout, row, endpointId);
+      shiftByRowId.set(
+        row.id,
+        {
+          x: previousEnvelope.rect.left + previousRow.translateX -
+            (envelope.rect.left + row.translateX),
+          y: previousEnvelope.rect.top + previousRow.translateY -
+            (envelope.rect.top + row.translateY)
+        }
+      );
+    }
+    aligned.push(shiftCorridorLayout(layout, shiftByRowId));
+  }
+  if (aligned[0]!.rows.length !== 2) return Object.freeze(aligned);
+  const extraCorridorHeight = Math.max(0, ...aligned.map((layout, index) =>
+    layouts[index]!.protectedTransitCorridor.rect.height -
+      layout.protectedTransitCorridor.rect.height
+  ));
+  const expanded = aligned.map((layout) => shiftCorridorLayout(
+    layout,
+    new Map(layout.rows.map((row, index) => [
+      row.id,
+      { x: 0, y: index === 0
+        ? -extraCorridorHeight / 2
+        : extraCorridorHeight / 2 }
+    ]))
+  ));
+  expanded.forEach((layout, index) => {
+    if (
+      layout.protectedTransitCorridor.rect.height + 1e-6 <
+      layouts[index]!.protectedTransitCorridor.rect.height
+    ) {
+      throw new Error(
+        "Equation stage sequence cannot preserve its protected corridor."
+      );
+    }
+  });
+  return Object.freeze(expanded);
+}
+
+export function translateKpEquationStageLayoutRows(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  offsets: ReadonlyMap<string, KpEquationStagePoint>
+): KpCorridorCertifiedEquationStageLayout {
+  for (const [rowId, offset] of offsets) {
+    if (
+      !layout.rows.some(({ id }) => id === rowId) ||
+      !Number.isFinite(offset.x) ||
+      !Number.isFinite(offset.y)
+    ) {
+      throw new Error(`Equation stage row translation is invalid for ${rowId}.`);
+    }
+  }
+  if (offsets.size !== layout.rows.length) {
+    throw new Error("Equation stage translation must cover every semantic row.");
+  }
+  return shiftCorridorLayout(layout, offsets);
+}
+
+function shiftCorridorLayout(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  shiftByRowId: ReadonlyMap<string, KpEquationStagePoint>
+): KpCorridorCertifiedEquationStageLayout {
+  const rows = layout.rows.map((row) => {
+    const shift = shiftByRowId.get(row.id) ?? { x: 0, y: 0 };
+    return Object.freeze({
+      ...row,
+      rect: translateRect(row.rect, shift.x, shift.y),
+      translateX: row.translateX + shift.x,
+      translateY: row.translateY + shift.y
+    });
+  });
+  const stageBounds = unionRects(rows.map(({ rect }) => rect));
+  const corridorRect = sequenceCorridorRect(layout, rows, stageBounds);
+  const transits = layout.transits.map((transit) => {
+    const sourceShift = shiftByRowId.get(transit.sourceRowId) ?? { x: 0, y: 0 };
+    const targetShift = shiftByRowId.get(transit.targetRowId) ?? { x: 0, y: 0 };
+    const shifts = [sourceShift, targetShift];
+    const points = transit.route === "direct"
+      ? transit.points.map((point, index) => translatePoint(point, shifts[index]!))
+      : [
+          translatePoint(transit.points[0]!, sourceShift),
+          { x: transit.points[1]!.x + sourceShift.x,
+            y: corridorRect.top + corridorRect.height / 2 },
+          { x: transit.points[2]!.x + targetShift.x,
+            y: corridorRect.top + corridorRect.height / 2 },
+          translatePoint(transit.points[3]!, targetShift)
+        ];
+    const minimumX = Math.min(sourceShift.x, targetShift.x);
+    const maximumX = Math.max(sourceShift.x, targetShift.x);
+    const minimumY = Math.min(sourceShift.y, targetShift.y);
+    const maximumY = Math.max(sourceShift.y, targetShift.y);
+    return Object.freeze({
+      ...transit,
+      points: Object.freeze(points),
+      sweptBounds: Object.freeze({
+        ...transit.sweptBounds,
+        left: transit.sweptBounds.left + minimumX,
+        top: transit.sweptBounds.top + minimumY,
+        width: transit.sweptBounds.width + maximumX - minimumX,
+        height: transit.sweptBounds.height + maximumY - minimumY
+      })
+    });
+  });
+  const protectedTransitCorridor = Object.freeze({
+    ...layout.protectedTransitCorridor,
+    rect: corridorRect
+  });
+  return Object.freeze({
+    ...layout,
+    rows: Object.freeze(rows),
+    stageBounds,
+    minimumGutterPx: corridorRect.height,
+    protectedTransitCorridor,
+    transits: Object.freeze(transits),
+    sweptBounds: unionRects([
+      ...rows.map(({ rect }) => rect),
+      protectedTransitCorridor.rect,
+      ...transits.map(({ sweptBounds }) => sweptBounds)
+    ]),
+    [corridorCertifiedEquationStageLayoutAuthority]: true as const
+  });
+}
+
+function sequenceCorridorRect(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  rows: readonly KpCertifiedEquationStageRow[],
+  stageBounds: KpEquationStageRect
+): KpEquationStageRect {
+  if (rows.length === 1) {
+    const shiftY = rows[0]!.rect.top - layout.rows[0]!.rect.top;
+    return Object.freeze({
+      ...layout.protectedTransitCorridor.rect,
+      left: stageBounds.left,
+      top: layout.protectedTransitCorridor.rect.top + shiftY,
+      width: stageBounds.width
+    });
+  }
+  const top = rows[0]!.rect.top + rows[0]!.rect.height;
+  const height = Math.max(0, rows[1]!.rect.top - top);
+  return Object.freeze({ left: stageBounds.left, top,
+    width: stageBounds.width, height });
+}
+
+function translatePoint(
+  point: KpEquationStagePoint,
+  shift: KpEquationStagePoint
+): KpEquationStagePoint {
+  return { x: point.x + shift.x, y: point.y + shift.y };
+}
+
+function rowRoleIndex(
+  layout: KpCorridorCertifiedEquationStageLayout
+): ReadonlyMap<string, KpCertifiedEquationStageRow> {
+  const intents = new Map(
+    layout.measuredInput.intent.rows.map((row) => [row.id, row.role])
+  );
+  const rows = new Map<string, KpCertifiedEquationStageRow>();
+  for (const row of layout.rows) {
+    const role = intents.get(row.id);
+    if (role === undefined || rows.has(role)) {
+      throw new Error("Equation stage rows require unique semantic roles.");
+    }
+    rows.set(role, row);
+  }
+  return rows;
+}
+
+function rowEndpointIds(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  row: KpCertifiedEquationStageRow
+): readonly string[] {
+  const envelopes = new Map(
+    layout.measuredInput.envelopes.map((envelope) => [envelope.id, envelope])
+  );
+  return row.envelopeIds.map((id) => envelopes.get(id)!.endpointObjectId);
+}
+
+function endpointEnvelope(
+  layout: KpCorridorCertifiedEquationStageLayout,
+  row: KpCertifiedEquationStageRow,
+  endpointId: string
+) {
+  const envelope = layout.measuredInput.envelopes.find((candidate) =>
+    row.envelopeIds.includes(candidate.id) &&
+    candidate.endpointObjectId === endpointId
+  );
+  if (envelope === undefined) {
+    throw new Error(`Equation stage row ${row.id} lacks endpoint ${endpointId}.`);
+  }
+  return envelope;
+}
+
+function sameValues(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
+}
+
 function placeCorridorRows(
   layout: KpCertifiedEquationStageLayout,
   corridorHeight: number

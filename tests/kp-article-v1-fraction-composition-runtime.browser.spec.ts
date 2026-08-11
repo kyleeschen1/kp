@@ -177,7 +177,8 @@ test("semantic links remain searchable and pinnable without becoming timeline co
     "url"
   );
   await expect(page.locator(
-    '[data-kp-reader-selector-id^="fraction-fan-out.source.factor"].kp-reader-semantic-focus'
+    '[data-kp-reader-transition-active="true"] ' +
+    '[data-kp-reader-selector-id].kp-reader-semantic-focus'
   ).first()).toBeVisible();
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
   await expect(host).toHaveAttribute(

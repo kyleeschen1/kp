@@ -9,7 +9,8 @@ import {
   createKpReaderTimelinePlaybackClock
 } from "../../reader/runtime/timeline-playback-clock.ts";
 import type {
-  KpChromeFreeCanonicalEquationSession
+  KpChromeFreeCanonicalEquationSession,
+  KpChromeFreeCanonicalEquationSnapshot
 } from "../../reader/app/chrome-free-canonical-equation-session.ts";
 import type {
   KpReaderFocusSnapshot
@@ -32,6 +33,13 @@ export interface KpFractionCompositionArticleTransport {
   dispose(): void;
 }
 
+export interface KpFractionCompositionArticleCanonicalSample {
+  readonly clock: KpReaderClockSample;
+  readonly snapshot: KpChromeFreeCanonicalEquationSnapshot;
+  readonly focus: KpReaderFocusSnapshot;
+  readonly motionPreference: "reduce" | "no-preference";
+}
+
 /**
  * The Article owns transport but never owns animation time. Its local slider
  * projects into one canonical full-timeline clock, which the shared session
@@ -45,6 +53,9 @@ export function mountKpFractionCompositionArticleTransport(input: {
   readonly range: KpReaderPlaybackRangeWindow;
   readonly durationMs: number;
   readonly initialFocus: KpReaderFocusSnapshot;
+  readonly onCanonicalSample?: ((
+    sample: KpFractionCompositionArticleCanonicalSample
+  ) => void) | undefined;
 }): KpFractionCompositionArticleTransport {
   let range = defineKpReaderPlaybackRangeWindow(input.range);
   const document = input.ownerWindow.document;
@@ -125,7 +136,10 @@ export function mountKpFractionCompositionArticleTransport(input: {
         ? "playing"
         : clock.getStatus()
     });
-    input.session.sample({ clock: clockSample, focus: currentFocus });
+    const snapshot = input.session.sample({
+      clock: clockSample,
+      focus: currentFocus
+    });
     const localPermille = Math.round(rangeSample.localProgress * 1_000);
     input.host.dataset["kpAlgebraCanonicalGlobalProgress"] =
       String(clockSample.progressPermille);
@@ -141,6 +155,12 @@ export function mountKpFractionCompositionArticleTransport(input: {
       `scaleX(${rangeSample.localProgress})`
     );
     syncTransportStatus(rangeSample.status, rangeSample.localProgress);
+    input.onCanonicalSample?.(Object.freeze({
+      clock: clockSample,
+      snapshot,
+      focus: currentFocus,
+      motionPreference: reducedMotion.matches ? "reduce" : "no-preference"
+    }));
     previousGlobalProgress = clockSample.progress;
   };
   const unsubscribe = clock.subscribe(render);

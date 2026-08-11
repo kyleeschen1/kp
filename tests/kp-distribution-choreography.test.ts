@@ -5,6 +5,7 @@ import "../src/animation/fission-fusion-register.ts";
 
 import {
   compileKpDistributionChoreography,
+  constrainKpDistributionConnectorMotion,
   sampleKpDistributionChoreography
 } from "../src/animation/distribution-choreography.ts";
 
@@ -143,6 +144,23 @@ test("distribution compiles target products by semantic index", () => {
       ["target.factor.0", "target.term.0"]
     ]
   ]);
+  assert.deepEqual(plan.connectorPairs.map(({ motionConstraint }) =>
+    motionConstraint
+  ), ["follow-products-on-math-axis"]);
+  assert.deepEqual(plan.operatorGroups.map(({ motionConstraint }) =>
+    motionConstraint
+  ), ["follow-products-on-math-axis"]);
+});
+
+test("distribution connectors stay horizontal and reject mismatched math axes", () => {
+  assert.deepEqual(constrainKpDistributionConnectorMotion({
+    constraint: "follow-products-on-math-axis",
+    measuredDelta: { x: 42, y: 0.4 }
+  }), { x: 42, y: 0 });
+  assert.throws(() => constrainKpDistributionConnectorMotion({
+    constraint: "follow-products-on-math-axis",
+    measuredDelta: { x: 42, y: 1.25 }
+  }), /disagree on their math axis/);
 });
 
 test("distribution groups arbitrary three-term and nested products", () => {

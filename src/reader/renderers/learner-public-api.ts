@@ -36,6 +36,7 @@ export {
 export {
   applyKpReaderEquationResponsiveFit,
   planKpReaderCertifiedEquationStageResponsiveFit,
+  planKpReaderCertifiedEquationStageSequenceResponsiveFit,
   planKpReaderEquationSequenceResponsiveFit,
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";

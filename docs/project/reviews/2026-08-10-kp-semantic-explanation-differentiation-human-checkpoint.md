@@ -3,6 +3,25 @@
 Status: awaiting human judgment at slice `s08` of
 `run-contract.kp.semantic-explanation-differentiation-proof-v2`.
 
+## Open Refinement Request · 2026-08-11
+
+The checkpoint is not yet approved. The canonical animation and its operator
+continuity now read correctly, but the opening distribution has excessive
+startup latency. It spends too much of the interval on subtle factor focus and
+a small addend preview, pauses before committing, and does not make the visible
+factor branch legible until near the middle. This makes the playhead advance
+before the mathematical idea appears to advance, after which grouping removal,
+main reflow, transit, and settlement feel comparatively crowded.
+
+The next loop should revise only the renderer-neutral canonical distribution
+motion profile. Compress the anticipation, remove the start-stop reflow
+impression, and begin the visible causal split earlier while retaining readable
+travel and settlement. Preserve the semantic distribution plan, factor/addend
+identity, horizontal operator constraint, native KaTeX endpoints, retained
+session, Article v1 source, attention-stage composition, and shared clock.
+Stop at this same human checkpoint after the bounded revision; do not promote
+the timing across other motifs or resume general layout discovery.
+
 ## Review Surface
 
 Open the live exemplar:

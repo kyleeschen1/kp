@@ -21,10 +21,9 @@ export function mountKpFractionCompositionAttentionStage(input: {
   readonly ownerWindow: Window;
   readonly publication: HTMLElement;
   readonly stageHost: HTMLElement;
-  readonly selectCheckpoint: (path: string) => void;
-  readonly prepareRange: (path: string) => void;
-  readonly playRange: () => void;
-  readonly pauseRange: () => void;
+  readonly seekGlobal: (progress: number) => void;
+  readonly playTimeline: () => void;
+  readonly pauseTimeline: () => void;
   readonly setAttention: (addresses: readonly string[]) => void;
   readonly pacing: KpFractionCompositionAttentionPacingProfile;
 }): KpFractionCompositionAttentionStageController {
@@ -44,13 +43,13 @@ export function mountKpFractionCompositionAttentionStage(input: {
   const passages = [...root.querySelectorAll<HTMLElement>(
     "[data-kp-algebra-attention-beat]"
   )];
-  const back = requireElement<HTMLButtonElement>(
+  const toggle = requireElement<HTMLButtonElement>(
     root,
-    '[data-kp-algebra-attention-action="back"]'
+    '[data-kp-algebra-attention-action="toggle"]'
   );
-  const primary = requireElement<HTMLButtonElement>(
+  const scrubber = requireElement<HTMLInputElement>(
     root,
-    '[data-kp-algebra-attention-action="continue"]'
+    "[data-kp-algebra-attention-scrubber]"
   );
   if (passages.length === 0) {
     throw new Error("Algebra attention stage requires compiled passages.");
@@ -58,48 +57,12 @@ export function mountKpFractionCompositionAttentionStage(input: {
 
   const originalParent = input.stageHost.parentNode;
   const originalNextSibling = input.stageHost.nextSibling;
-  let activeIndex = 0;
-  const localProgress = (): number => Number(
-    input.stageHost.dataset["kpAlgebraCanonicalLocalProgress"] ?? "NaN"
-  );
-  const updateControls = (): void => {
-    const active = passages[activeIndex]!;
-    const range = active.dataset["kpAlgebraAttentionRange"];
-    const rangeStatus =
-      input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"];
-    const playing = rangeStatus === "playing";
-    back.disabled = playing || activeIndex === 0;
-    if (range === undefined) {
-      primary.textContent = "Continue";
-      primary.dataset["kpAlgebraAttentionPrimaryState"] = "advance";
-      primary.disabled = activeIndex === passages.length - 1;
-      root.dataset["kpAlgebraAttentionMotionState"] = "static";
-      return;
-    }
-    const progressPermille = localProgress();
-    const rangeReady = Number.isFinite(progressPermille) &&
-      input.stageHost.dataset["kpAlgebraCanonicalRange"] === range;
-    primary.disabled = !rangeReady;
-    if (playing) {
-      primary.textContent = "Pause";
-      primary.dataset["kpAlgebraAttentionPrimaryState"] = "pause";
-      root.dataset["kpAlgebraAttentionMotionState"] = "acting";
-    } else if (progressPermille >= 1_000) {
-      primary.textContent = "Continue";
-      primary.dataset["kpAlgebraAttentionPrimaryState"] = "advance";
-      root.dataset["kpAlgebraAttentionMotionState"] = "inspect";
-    } else if (progressPermille > 0) {
-      primary.textContent = "Continue";
-      primary.dataset["kpAlgebraAttentionPrimaryState"] = "resume";
-      root.dataset["kpAlgebraAttentionMotionState"] = "paused";
-    } else {
-      primary.textContent = "Continue";
-      primary.dataset["kpAlgebraAttentionPrimaryState"] = "play";
-      root.dataset["kpAlgebraAttentionMotionState"] = "orient";
-    }
-  };
+  let activeIndex = -1;
+  const globalProgress = (): number => Math.max(0, Math.min(1, Number(
+    input.stageHost.dataset["kpAlgebraCanonicalGlobalProgress"] ?? "0"
+  ) / 1_000));
   const select = (index: number): void => {
-    if (index < 0 || index >= passages.length) return;
+    if (index < 0 || index >= passages.length || index === activeIndex) return;
     activeIndex = index;
     passages.forEach((passage, passageIndex) => {
       const active = passageIndex === activeIndex;
@@ -107,37 +70,67 @@ export function mountKpFractionCompositionAttentionStage(input: {
       passage.setAttribute("aria-hidden", String(!active));
     });
     const active = passages[activeIndex]!;
-    const checkpoint = active.dataset["kpAlgebraAttentionCheckpoint"];
-    const range = active.dataset["kpAlgebraAttentionRange"];
     input.setAttention(readWords(
       requiredData(active, "kpAlgebraAttentionPrimary")
     ));
-    if (checkpoint !== undefined) input.selectCheckpoint(checkpoint);
-    else if (range !== undefined) input.prepareRange(range);
-    else throw new Error("Algebra attention beat lacks a temporal anchor.");
-    updateControls();
     root.dataset["kpAlgebraAttentionActiveBeat"] =
       requiredData(active, "kpAlgebraAttentionBeat");
   };
-  const onBack = (): void => select(activeIndex - 1);
-  const onPrimary = (): void => {
-    const active = passages[activeIndex]!;
-    const range = active.dataset["kpAlgebraAttentionRange"];
-    if (primary.disabled) return;
-    if (range === undefined) {
-      select(activeIndex + 1);
-      return;
-    }
-    if (input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] === "playing") {
-      input.pauseRange();
-    } else if (localProgress() >= 1_000) {
-      select(activeIndex + 1);
-    } else {
-      input.playRange();
-    }
-    updateControls();
+  const passageAt = (progress: number, playing: boolean): number => {
+    if (progress <= 0 && !playing) return 0;
+    if (progress >= 1) return passages.length - 1;
+    const rangeIndex = passages.findIndex((passage) => {
+      const start = Number(passage.dataset["kpAlgebraAttentionStart"]);
+      const end = Number(passage.dataset["kpAlgebraAttentionEnd"]);
+      return Number.isFinite(start) && Number.isFinite(end) &&
+        progress >= start && progress < end;
+    });
+    return rangeIndex >= 0 ? rangeIndex : 0;
   };
-  const stageStateObserver = new MutationObserver(updateControls);
+  const updatePlayer = (): void => {
+    const ready = input.stageHost.dataset["kpAlgebraCanonicalHostStatus"] ===
+      "active";
+    const progress = globalProgress();
+    const playing = input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] ===
+      "playing";
+    select(passageAt(progress, playing));
+    scrubber.disabled = !ready;
+    toggle.disabled = !ready;
+    scrubber.value = String(Math.round(progress * 1_000));
+    scrubber.setAttribute("aria-valuetext", `${Math.round(progress * 100)}%`);
+    root.style.setProperty(
+      "--kp-algebra-attention-player-progress",
+      `${progress * 100}%`
+    );
+    toggle.textContent = playing ? "Pause" : progress >= 1 ? "Replay" : "Play";
+    toggle.dataset["kpAlgebraAttentionPrimaryState"] = playing
+      ? "pause"
+      : progress >= 1
+        ? "replay"
+        : "play";
+    root.dataset["kpAlgebraAttentionMotionState"] = playing
+      ? "acting"
+      : progress <= 0
+        ? "orient"
+        : "inspect";
+  };
+  const onToggle = (): void => {
+    if (toggle.disabled) return;
+    if (input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] === "playing") {
+      input.pauseTimeline();
+    } else {
+      if (globalProgress() >= 1) input.seekGlobal(0);
+      input.playTimeline();
+    }
+    updatePlayer();
+  };
+  const onScrub = (): void => {
+    if (scrubber.disabled) return;
+    input.pauseTimeline();
+    input.seekGlobal(Number(scrubber.value) / 1_000);
+    updatePlayer();
+  };
+  const stageStateObserver = new MutationObserver(updatePlayer);
 
   input.ownerWindow.document.documentElement.dataset["kpAlgebraView"] =
     "attention-stage";
@@ -154,18 +147,18 @@ export function mountKpFractionCompositionAttentionStage(input: {
       "data-kp-algebra-canonical-host-status",
       "data-kp-algebra-canonical-range",
       "data-kp-algebra-canonical-range-status",
-      "data-kp-algebra-canonical-local-progress"
+      "data-kp-algebra-canonical-global-progress"
     ]
   });
-  back.addEventListener("click", onBack);
-  primary.addEventListener("click", onPrimary);
-  select(0);
+  toggle.addEventListener("click", onToggle);
+  scrubber.addEventListener("input", onScrub);
+  updatePlayer();
 
   return Object.freeze({
     active: true,
     dispose() {
-      back.removeEventListener("click", onBack);
-      primary.removeEventListener("click", onPrimary);
+      toggle.removeEventListener("click", onToggle);
+      scrubber.removeEventListener("input", onScrub);
       stageStateObserver.disconnect();
       input.setAttention([]);
       if (originalParent !== null) {

@@ -97,7 +97,14 @@ import type {
 } from "./chrome-free-canonical-equation-session.ts";
 
 type TransitionContext = KpCanonicalEquationTransitionLayout;
-type LayoutState = KpCanonicalEquationStageLayout;
+interface KpChromeFreeLayoutSentinel {
+  readonly kind: "chrome-free-layout-sentinel";
+  readonly contexts: ReadonlyMap<never, never>;
+}
+
+type LayoutState =
+  | KpCanonicalEquationStageLayout
+  | KpChromeFreeLayoutSentinel;
 
 const markKpAnimationHostReady = installKpReaderAnimationHostStatus(
   window,
@@ -674,7 +681,10 @@ function measureLayout(revision: number): LayoutState {
     }
     stage.dataset["kpReaderLayoutReads"] =
       String(rendererInspection().readCount + 1);
-    return { contexts: new Map() };
+    return {
+      kind: "chrome-free-layout-sentinel",
+      contexts: new Map<never, never>()
+    };
   }
   if (stage.getClientRects().length === 0 && lastMeasuredLayout !== undefined) {
     return lastMeasuredLayout;
@@ -848,6 +858,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     cohorts: phaseCohorts
   });
   if (canonicalFramePlan === undefined) return;
+  if ("kind" in layout) {
+    throw new Error("Legacy equation paint cannot use a chrome-free layout sentinel.");
+  }
   const { runtimeFrame, transitionId, phaseProgress } = canonicalFramePlan;
   const context = layout.contexts.get(transitionId);
   if (context === undefined) throw new Error(`No measured transition ${transitionId}.`);

@@ -220,6 +220,39 @@ test("protected transit routes one opaque component and preserves endpoints", ()
   assert.equal(routed.motionPathSampling, "planned-curve");
 });
 
+test("protected transit routes around a semantic axis continuant", () => {
+  const compilation = compileKpCollisionSafeTransitTracks({
+    tracks: [
+      track({
+        id: "track.axis-operator",
+        componentId: "component.axis-operator",
+        lifecycle: "persist",
+        startLeft: 0,
+        endLeft: 100,
+        motionAxisConstraint: "horizontal"
+      }),
+      track({
+        id: "track.crossing-material",
+        componentId: "component.crossing-material",
+        lifecycle: "persist",
+        startLeft: 100,
+        endLeft: 0
+      })
+    ],
+    sampleFrames
+  });
+
+  const axis = compilation.tracks.find(({ id }) =>
+    id === "track.axis-operator"
+  )!;
+  const crossing = compilation.tracks.find(({ id }) =>
+    id === "track.crossing-material"
+  )!;
+  assert.equal(axis.motionPath, undefined);
+  assert.equal(axis.motionAxisConstraint, "horizontal");
+  assert.notEqual(crossing.motionPath, undefined);
+});
+
 test("protected transit admits same-component fission contact", () => {
   const compilation = compileKpCollisionSafeTransitTracks({
     tracks: [
@@ -453,6 +486,7 @@ function track(input: {
   readonly endLeft: number;
   readonly startOpacity?: number;
   readonly endOpacity?: number;
+  readonly motionAxisConstraint?: "horizontal";
 }): KpEquationCollisionTrack {
   return {
     id: input.id,
@@ -460,6 +494,9 @@ function track(input: {
     lifecycle: input.lifecycle,
     startRect: { left: input.startLeft, top: 0, width: 10, height: 10 },
     endRect: { left: input.endLeft, top: 0, width: 10, height: 10 },
+    ...(input.motionAxisConstraint === undefined
+      ? {}
+      : { motionAxisConstraint: input.motionAxisConstraint }),
     ...(input.startOpacity === undefined
       ? {}
       : { startOpacity: input.startOpacity }),

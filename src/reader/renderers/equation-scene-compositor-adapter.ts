@@ -309,6 +309,7 @@ function prepareReaderEquationScene(
     | "factoring"
     | "operationChoreography"
     | "copyFanOutRouting"
+    | "horizontalAxisSemanticEntityIds"
     | "reorderRouting"
     | "successorSyntheses"
     | "structuralSuccession"
@@ -345,6 +346,7 @@ function dispatchReaderEquationPresentation(input: {
     | "factoring"
     | "operationChoreography"
     | "copyFanOutRouting"
+    | "horizontalAxisSemanticEntityIds"
     | "reorderRouting"
     | "successorSyntheses"
     | "structuralSuccession"
@@ -365,13 +367,17 @@ function dispatchReaderEquationPresentation(input: {
       return routedDispatch(
         plan.planKind,
         input.base,
-        plan.visualMotif.kind
+        plan.visualMotif.kind,
+        plan.visualMotif.kind === "copy-fan-out"
+          ? persistentOperatorAxisIds(input.renderTransition)
+          : undefined
       );
     case "distribution":
       return routedDispatch(
         plan.planKind,
         input.base,
-        plan.visualMotif.kind
+        plan.visualMotif.kind,
+        persistentOperatorAxisIds(input.renderTransition)
       );
     case "fraction-material":
       return routedDispatch(
@@ -510,7 +516,10 @@ function dispatchReaderEquationPresentation(input: {
 
 type KpReaderEquationRoutingFields = Pick<
   KpCanonicalNativeKatexSceneInput,
-  "fanInRouting" | "copyFanOutRouting" | "reorderRouting"
+  | "fanInRouting"
+  | "copyFanOutRouting"
+  | "reorderRouting"
+  | "horizontalAxisSemanticEntityIds"
 >;
 
 function routingFields(
@@ -531,15 +540,39 @@ function routedDispatch(
     | "distribution"
     | "fraction-material",
   base: KpReaderEquationCompositorDispatchBase["canonicalInput"],
-  motifKind: string | undefined
+  motifKind: string | undefined,
+  horizontalAxisSemanticEntityIds?: readonly string[] | undefined
 ): KpReaderEquationCompositorDispatch {
   const routed = routingFields(motifKind);
   return {
     planKind,
-    canonicalInput: { ...base, ...routed },
+    canonicalInput: {
+      ...base,
+      ...routed,
+      ...(horizontalAxisSemanticEntityIds === undefined
+        ? {}
+        : { horizontalAxisSemanticEntityIds })
+    },
     motionProfile: motionProfile(routed),
     successorSynthesisCount: 0
   };
+}
+
+function persistentOperatorAxisIds(
+  transition: KpReaderEquationTransitionPlan
+): readonly string[] {
+  const kinds = new Map([
+    ...transition.source.flatMap((state) => state.selectors),
+    ...transition.target.flatMap((state) => state.selectors)
+  ].map((selector) => [selector.id, selector.semanticKind] as const));
+  return Object.freeze([...new Set(transition.relations.flatMap((relation) =>
+    (relation.lifecycle === "persist" || relation.lifecycle === "role-change") &&
+      [...relation.sourceSelectorIds, ...relation.targetSelectorIds].every(
+        (selectorId) => kinds.get(selectorId) === "operator"
+      )
+      ? [...relation.sourceSelectorIds, ...relation.targetSelectorIds]
+      : []
+  ))]);
 }
 
 function plainDispatch(

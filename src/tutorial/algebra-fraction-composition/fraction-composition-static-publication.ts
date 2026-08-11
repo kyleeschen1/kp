@@ -128,6 +128,13 @@ function renderAttentionStage(
   const matrix = createKpFractionCompositionAttentionMatrix(
     compilation.article.document
   );
+  const chapterMarkers = uniqueNumbers([
+    0,
+    ...matrix.beats.flatMap(({ anchor }) =>
+      anchor.kind === "range" ? [anchor.start] : []
+    ),
+    1
+  ]);
   return [
     `<section class="kp-algebra-attention-stage"`,
     ` data-kp-algebra-attention-stage hidden`,
@@ -141,21 +148,44 @@ function renderAttentionStage(
       ` data-kp-algebra-attention-beat="${escapeAttribute(beat.id)}"`,
       ` data-kp-algebra-attention-index="${index}"`,
       beat.anchor.kind === "checkpoint"
-        ? ` data-kp-algebra-attention-checkpoint="${escapeAttribute(beat.anchor.path)}"`
-        : ` data-kp-algebra-attention-range="${escapeAttribute(beat.anchor.path)}"`,
+        ? [
+            ` data-kp-algebra-attention-checkpoint="${escapeAttribute(beat.anchor.path)}"`,
+            ` data-kp-algebra-attention-progress="${beat.anchor.progress}"`
+          ].join("")
+        : [
+            ` data-kp-algebra-attention-range="${escapeAttribute(beat.anchor.path)}"`,
+            ` data-kp-algebra-attention-start="${beat.anchor.start}"`,
+            ` data-kp-algebra-attention-end="${beat.anchor.end}"`
+          ].join(""),
       ` data-kp-algebra-attention-primary="${escapeAttribute(beat.primaryAddresses.join(" "))}"`,
       ` data-kp-algebra-attention-context="${escapeAttribute(beat.contextAddresses.join(" "))}"`,
       index === 0 ? `` : ` hidden`,
       `>${attentionCue(beat)}</div>`
     ].join("")).join(""),
     `</div>`,
-    `<nav class="kp-algebra-attention-stage__controls"`,
-    ` aria-label="Explanation steps">`,
-    `<button type="button" data-kp-algebra-attention-action="back" disabled>Back</button>`,
-    `<button type="button" data-kp-algebra-attention-action="continue">Continue</button>`,
-    `</nav>`,
+    `<div class="kp-algebra-attention-stage__player"`,
+    ` data-kp-algebra-attention-player role="group"`,
+    ` aria-label="Animation player">`,
+    `<button type="button" data-kp-algebra-attention-action="toggle" disabled>Play</button>`,
+    `<label class="kp-algebra-attention-stage__scrubber">`,
+    `<span class="kp-reader-visually-hidden">Animation progress</span>`,
+    `<span class="kp-algebra-attention-stage__timeline">`,
+    `<span class="kp-algebra-attention-stage__chapter-marks" aria-hidden="true">`,
+    chapterMarkers.map((progress) =>
+      `<span style="--kp-algebra-attention-marker:${progress * 100}%"></span>`
+    ).join(""),
+    `</span>`,
+    `<input type="range" min="0" max="1000" step="1" value="0"`,
+    ` data-kp-algebra-attention-scrubber disabled>`,
+    `</span>`,
+    `</label>`,
+    `</div>`,
     `</section>`
   ].join("");
+}
+
+function uniqueNumbers(values: readonly number[]): readonly number[] {
+  return Object.freeze([...new Set(values)].sort((left, right) => left - right));
 }
 
 function attentionCue(beat: KpFractionCompositionAttentionBeat): string {

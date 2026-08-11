@@ -149,7 +149,9 @@ export {
   type KpMeasuredEquationStageInput
 } from "./equation-stage-layout.ts";
 export {
+  alignKpEquationStageSequence,
   certifyKpEquationStageTransitCorridor,
+  translateKpEquationStageLayoutRows,
   type KpCorridorCertifiedEquationStageLayout,
   type KpEquationStageMaterialTransitIntent,
   type KpEquationStageMaterialTransitPlan,

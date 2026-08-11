@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-10
+Last Updated: 2026-08-11
 Status: active
 Active Thread: `threads/explanation-attention.md`
 Supporting Threads:
@@ -96,6 +96,18 @@ ranking and recovery evidence remain in
 Shared station extraction, split parity, final navigation geometry, and syntax
 migration remain deferred. The durable horizon outside this run and the
 animation-library promotion rank remain unchanged.
+
+The first human checkpoint remains open for one bounded choreography
+correction before approval. The initial fraction distribution spends too much
+of its normalized interval on low-information anticipation: a small addend
+preview moves and pauses, the leading factor eases slowly, and the visible
+factor branch arrives only near the middle. The next loop should correct that
+startup latency in the canonical distribution motion profile while preserving
+the semantic trace, retained equation session, native endpoints, Article v1,
+attention-stage layout, and shared clock. It should stop again for visual
+review rather than generalize the timing. The recovery rationale and alternate
+project directions are recorded in
+`reviews/2026-08-11-project-recovery-and-direction-next-step-review.md`.
 
 A bounded visual interruption is now at a human checkpoint, recorded in
 `decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`.

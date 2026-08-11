@@ -5,7 +5,7 @@ import {
   applyKpReaderEquationResponsiveFit,
   measureKpReaderAppliedEquationStageLayoutSnapshot,
   measureKpReaderEquationLayoutSnapshot,
-  planKpReaderCertifiedEquationStageResponsiveFit,
+  planKpReaderCertifiedEquationStageSequenceResponsiveFit,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
   type KpReaderEquationLayoutSnapshot,
@@ -15,8 +15,11 @@ import {
   type KpReaderEquationResponsiveFitPlan
 } from "../renderers/learner-public-api.ts";
 import {
+  alignKpEquationStageSequence,
+  applyKpCertifiedEquationStageLayout,
   createKpEquationStageMeasurementIdentity,
   resetKpAppliedEquationStageLayout,
+  translateKpEquationStageLayoutRows,
   type KpAppliedEquationStageLayout,
   type KpCorridorCertifiedEquationStageLayout
 } from "../runtime/learner-public-api.ts";
@@ -24,6 +27,15 @@ import type { KpEquationStageLayoutIntent } from "../runtime/public-api.ts";
 import type {
   KpReaderEquationStageLayoutCompiler
 } from "./equation-lesson-descriptor.ts";
+import {
+  alignKpCanonicalEquationStateBaselines,
+  type KpCanonicalEquationBaselineAlignmentCertificate
+} from "./canonical-equation-baseline-alignment.ts";
+import {
+  certifyKpCanonicalEquationTransitionContinuity,
+  planKpCanonicalEquationTransitionCorrections,
+  type KpCanonicalEquationTransitionContinuityCertificate
+} from "./canonical-equation-transition-continuity.ts";
 
 export interface KpCanonicalEquationStaticPlan {
   readonly renderPlan: KpReaderEquationRenderPlan;
@@ -50,6 +62,10 @@ export interface KpCanonicalEquationTransitionLayout {
 export interface KpCanonicalEquationStageLayout {
   readonly contexts:
     ReadonlyMap<string, KpCanonicalEquationTransitionLayout>;
+  readonly baselineAlignment:
+    KpCanonicalEquationBaselineAlignmentCertificate;
+  readonly transitionContinuity:
+    KpCanonicalEquationTransitionContinuityCertificate;
 }
 
 /**
@@ -82,7 +98,26 @@ export function measureKpCanonicalEquationStageLayout(input: {
       "Reader stage layout must cover every equation transition exactly once."
     );
   }
-  const measured: Omit<KpCanonicalEquationTransitionLayout, "fit">[] = [];
+  for (const element of input.transitionElements) {
+    requireDescendant<HTMLElement>(
+      element,
+      "[data-kp-reader-fit-surface]"
+    ).style.transform = "none";
+    resetKpAppliedEquationStageLayout(requireDescendant<HTMLElement>(
+      element,
+      "[data-kp-reader-equation-measurement]"
+    ));
+  }
+  // Baselines must be observed after every previous row transform is gone;
+  // measuring through stale applied geometry made resize/reseek revisions drift.
+  const baselineAlignment = alignKpCanonicalEquationStateBaselines({
+    viewport: input.viewport,
+    transitionElements: input.transitionElements
+  });
+  const staged: Omit<
+    KpCanonicalEquationTransitionLayout,
+    "layout" | "alignment" | "fit"
+  >[] = [];
   for (const [index, element] of input.transitionElements.entries()) {
     const id = requiredData(element, "kpReaderTransition");
     const plans = input.staticPlans.get(id);
@@ -97,7 +132,6 @@ export function measureKpCanonicalEquationStageLayout(input: {
       element,
       "[data-kp-reader-fit-surface]"
     );
-    fitSurface.style.transform = "none";
     const coordinateSpaceId = `${input.animationId}.equation-stage`;
     const measurementIdentity = createKpEquationStageMeasurementIdentity({
       revision: input.revision,
@@ -114,7 +148,6 @@ export function measureKpCanonicalEquationStageLayout(input: {
       phaseIntent !== undefined &&
       cohort !== undefined
     ) {
-      resetKpAppliedEquationStageLayout(measurementRoot);
       appliedStageLayout = input.stageLayoutCompiler.apply({
         phaseIntent,
         sourceObjectIds: cohort.sourceObjectIds,
@@ -128,27 +161,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
       element.dataset["kpReaderStageLayoutPolicy"] =
         appliedStageLayout.certificate.policy;
     }
-    const layout = appliedStageLayout === undefined
-      ? measureKpReaderEquationLayoutSnapshot({
-          materialPlan: plans.materialPlan,
-          transitionId: id,
-          measurementRoot,
-          revision: input.revision,
-          coordinateSpaceId
-        })
-      : measureKpReaderAppliedEquationStageLayoutSnapshot({
-          materialPlan: plans.materialPlan,
-          transitionId: id,
-          measurementRoot,
-          revision: input.revision,
-          coordinateSpaceId,
-          appliedStageLayout
-        });
-    const alignment = planKpReaderEquationPerceptualAlignment({
-      materialPlan: plans.materialPlan,
-      layout
-    });
-    measured.push({
+    staged.push({
       id,
       element,
       fitSurface,
@@ -156,11 +169,71 @@ export function measureKpCanonicalEquationStageLayout(input: {
       renderPlan: plans.renderPlan,
       materialPlan: plans.materialPlan,
       anchorElements: anchorElementIndex(measurementRoot),
-      layout,
-      alignment,
       ...(appliedStageLayout === undefined ? {} : { appliedStageLayout })
     });
   }
+  const applied = staged.flatMap(({ appliedStageLayout }) =>
+    appliedStageLayout === undefined ? [] : [appliedStageLayout]
+  );
+  if (applied.length !== 0 && applied.length !== staged.length) {
+    throw new Error(
+      "Canonical equation sequence cannot mix certified and uncertified phases."
+    );
+  }
+  const alignedCertificates = alignKpEquationStageSequence(
+    applied.map(({ certificate }) => certificate)
+  );
+  const alignedStaged = staged.map((context, index) => {
+    if (context.appliedStageLayout === undefined) return context;
+    const appliedStageLayout = applyKpCertifiedEquationStageLayout({
+      certificate: alignedCertificates[index]!,
+      measurementIdentity: context.appliedStageLayout.measurementIdentity,
+      rows: context.appliedStageLayout.nativeRows
+    });
+    return { ...context, appliedStageLayout };
+  });
+  const preliminary = measureTransitionLayouts({
+    staged: alignedStaged,
+    animationId: input.animationId,
+    revision: input.revision
+  });
+  const corrections = planKpCanonicalEquationTransitionCorrections({
+    cohorts: input.phaseCohorts,
+    contexts: new Map(preliminary.map((context) => [context.id, {
+      layout: context.layout,
+      ...(context.appliedStageLayout === undefined
+        ? {}
+        : { stageLayout: context.appliedStageLayout.certificate })
+    }]))
+  });
+  const correctedStaged = alignedStaged.map((context) => {
+    const correction = corrections.get(context.id) ?? new Map();
+    if (context.appliedStageLayout === undefined) {
+      if ([...correction.values()].some(({ x, y }) =>
+        Math.abs(x) > 0.5 || Math.abs(y) > 0.5
+      )) {
+        throw new Error(
+          `Canonical equation transition ${context.id} requires layout authority ` +
+          "to repair its rigid endpoint offset."
+        );
+      }
+      return context;
+    }
+    const appliedStageLayout = applyKpCertifiedEquationStageLayout({
+      certificate: translateKpEquationStageLayoutRows(
+        context.appliedStageLayout.certificate,
+        correction
+      ),
+      measurementIdentity: context.appliedStageLayout.measurementIdentity,
+      rows: context.appliedStageLayout.nativeRows
+    });
+    return { ...context, appliedStageLayout };
+  });
+  const measured = measureTransitionLayouts({
+    staged: correctedStaged,
+    animationId: input.animationId,
+    revision: input.revision
+  });
   const sequenceFit = planKpReaderEquationSequenceResponsiveFit({
     id: `${input.animationId}.r${input.revision}`,
     alignments: measured.map((context) => context.alignment),
@@ -171,30 +244,80 @@ export function measureKpCanonicalEquationStageLayout(input: {
     minScale: 0.68,
     overflowStrategy: "contain"
   });
+  const certifiedLayouts = measured.flatMap(({ appliedStageLayout }) =>
+    appliedStageLayout === undefined ? [] : [appliedStageLayout.certificate]
+  );
+  const certifiedSequenceFit = certifiedLayouts.length === 0
+    ? undefined
+    : planKpReaderCertifiedEquationStageSequenceResponsiveFit({
+        id: `${input.animationId}.r${input.revision}`,
+        layouts: certifiedLayouts,
+        viewportWidth: input.viewport.clientWidth,
+        viewportHeight: input.viewport.clientHeight,
+        horizontalPadding: 18,
+        verticalPadding: 18,
+        minScale: 0.68
+      });
+  if (certifiedSequenceFit?.status === "overflow") {
+    throw new Error(
+      `Certified equation-stage sequence ${input.animationId} requires scale ` +
+      `${certifiedSequenceFit.requiredScale.toFixed(3)}, below its readable ` +
+      `${certifiedSequenceFit.scale.toFixed(3)} floor at ` +
+      `${input.viewport.clientWidth}x${input.viewport.clientHeight}.`
+    );
+  }
   const contexts = new Map(measured.map((context) => {
-    const certifiedFit = context.appliedStageLayout === undefined
-      ? undefined
-      : planKpReaderCertifiedEquationStageResponsiveFit({
-          layout: context.appliedStageLayout.certificate,
-          viewportWidth: input.viewport.clientWidth,
-          viewportHeight: input.viewport.clientHeight,
-          horizontalPadding: 18,
-          verticalPadding: 18,
-          minScale: 0.68
-        });
-    if (certifiedFit?.kind === "unsatisfied") {
-      throw new Error(
-        `Certified equation stage ${context.id} requires scale ` +
-        `${certifiedFit.requiredScale.toFixed(3)}, below its readable ` +
-        `${certifiedFit.minimumReadableScale.toFixed(3)} floor at ` +
-        `${input.viewport.clientWidth}x${input.viewport.clientHeight}.`
-      );
-    }
-    const fit = certifiedFit?.fit ?? sequenceFit;
+    const fit = certifiedSequenceFit ?? sequenceFit;
     applyKpReaderEquationResponsiveFit(context.fitSurface, fit);
     return [context.id, { ...context, fit }] as const;
   }));
-  return Object.freeze({ contexts });
+  const transitionContinuity =
+    certifyKpCanonicalEquationTransitionContinuity({
+      cohorts: input.phaseCohorts,
+      contexts
+    });
+  return Object.freeze({
+    contexts,
+    baselineAlignment,
+    transitionContinuity
+  });
+}
+
+function measureTransitionLayouts(input: {
+  readonly staged: readonly Omit<
+    KpCanonicalEquationTransitionLayout,
+    "layout" | "alignment" | "fit"
+  >[];
+  readonly animationId: string;
+  readonly revision: number;
+}): Omit<KpCanonicalEquationTransitionLayout, "fit">[] {
+  return input.staged.map((context) => {
+    const coordinateSpaceId = `${input.animationId}.equation-stage`;
+    const layout = context.appliedStageLayout === undefined
+      ? measureKpReaderEquationLayoutSnapshot({
+          materialPlan: context.materialPlan,
+          transitionId: context.id,
+          measurementRoot: context.measurementRoot,
+          revision: input.revision,
+          coordinateSpaceId
+        })
+      : measureKpReaderAppliedEquationStageLayoutSnapshot({
+          materialPlan: context.materialPlan,
+          transitionId: context.id,
+          measurementRoot: context.measurementRoot,
+          revision: input.revision,
+          coordinateSpaceId,
+          appliedStageLayout: context.appliedStageLayout
+        });
+    return {
+      ...context,
+      layout,
+      alignment: planKpReaderEquationPerceptualAlignment({
+        materialPlan: context.materialPlan,
+        layout
+      })
+    };
+  });
 }
 
 function anchorElementIndex(

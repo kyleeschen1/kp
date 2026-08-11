@@ -35,6 +35,7 @@ import type {
 } from "../document/public-api.ts";
 import {
   applyKpCanonicalEquationSemanticFocus,
+  compileKpCanonicalEquationSemanticFocusLineage,
   projectKpCanonicalEquationSemanticFocus
 } from "./canonical-equation-semantic-focus.ts";
 import {
@@ -92,6 +93,8 @@ export interface KpChromeFreeCanonicalEquationSnapshot {
   readonly motionAuthority: string;
   readonly fitStatus: string;
   readonly fitScale: number;
+  readonly layoutRevision: number;
+  readonly layoutReadCount: number;
   readonly fontRevision: number;
   readonly fontReady: boolean;
   readonly ownerIds: readonly string[];
@@ -161,6 +164,9 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
         )
       })] as const;
     })
+  );
+  const semanticFocusLineage = compileKpCanonicalEquationSemanticFocusLineage(
+    [...staticPlans.values()].map(({ renderPlan }) => renderPlan)
   );
   const transitionPolicy = compileKpReaderCanonicalTransitionPolicy({
     descriptor: input.descriptor,
@@ -266,6 +272,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   ) => void>();
   let layout: KpCanonicalEquationStageLayout | undefined;
   let layoutRevision = 0;
+  let layoutReadCount = 0;
   let layoutInvalidated = false;
   let sequence = 0;
   let previousProgress = 0;
@@ -290,23 +297,26 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       compositor.invalidate();
       layoutInvalidated = false;
     }
-    layout ??= measureKpCanonicalEquationStageLayout({
-      animationId: input.animation.id,
-      revision: layoutRevision,
-      viewport,
-      transitionElements,
-      phaseCohorts: cohorts,
-      staticPlans,
-      stageLayoutIntent: input.createStageLayoutIntent({
-        viewport: viewport.ownerDocument.defaultView?.innerWidth !== undefined &&
-            viewport.ownerDocument.defaultView.innerWidth > 880
-          ? "wide"
-          : "phone"
-      }),
-      ...(input.descriptor.stageLayoutCompiler === undefined
-        ? {}
-        : { stageLayoutCompiler: input.descriptor.stageLayoutCompiler })
-    });
+    if (layout === undefined) {
+      layoutReadCount += 1;
+      layout = measureKpCanonicalEquationStageLayout({
+        animationId: input.animation.id,
+        revision: layoutRevision,
+        viewport,
+        transitionElements,
+        phaseCohorts: cohorts,
+        staticPlans,
+        stageLayoutIntent: input.createStageLayoutIntent({
+          viewport: viewport.ownerDocument.defaultView?.innerWidth !== undefined &&
+              viewport.ownerDocument.defaultView.innerWidth > 880
+            ? "wide"
+            : "phone"
+        }),
+        ...(input.descriptor.stageLayoutCompiler === undefined
+          ? {}
+          : { stageLayoutCompiler: input.descriptor.stageLayoutCompiler })
+      });
+    }
     return layout;
   };
   const sample = (
@@ -383,9 +393,15 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       objectRefs: Object.freeze([]),
       revision: 0
     });
-    const focusProjection = projectKpCanonicalEquationSemanticFocus({
+    const projectedFocus = projectKpCanonicalEquationSemanticFocus({
       snapshot: focus,
       equationObjectRefs
+    });
+    const focusProjection = Object.freeze({
+      ...projectedFocus,
+      visualFocusRefs: semanticFocusLineage.expand(
+        projectedFocus.visualFocusRefs
+      )
     });
     applyKpCanonicalEquationSemanticFocus({
       stage,
@@ -497,6 +513,8 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       motionAuthority: motion.samplingAuthority,
       fitStatus: context.fit.status,
       fitScale: context.fit.scale,
+      layoutRevision,
+      layoutReadCount,
       fontRevision: fontReadiness.revision,
       fontReady: fontReadiness.status === "ready",
       ownerIds: Object.freeze(motion.owners.map((owner) => owner.ownerId)),
@@ -515,6 +533,12 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     stage.dataset["kpReaderCanonicalPaintOwner"] =
       String(snapshot.canonicalPaintOwner);
     stage.dataset["kpReaderCanonicalFitStatus"] = snapshot.fitStatus;
+    stage.dataset["kpReaderCanonicalBaselineResidual"] =
+      String(measured.baselineAlignment.maximumResidualPx);
+    stage.dataset["kpReaderCanonicalContinuityResidual"] =
+      String(measured.transitionContinuity.maximumResidualPx);
+    stage.dataset["kpReaderCanonicalContinuitySeams"] =
+      String(measured.transitionContinuity.seams.length);
     if (snapshot.layoutPolicy === undefined) {
       delete stage.dataset["kpReaderCanonicalLayoutPolicy"];
     } else {

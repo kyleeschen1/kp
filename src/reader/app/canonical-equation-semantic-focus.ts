@@ -1,8 +1,50 @@
 import type { KpReaderFocusSnapshot } from "../runtime/public-api.ts";
+import type { KpReaderEquationRenderPlan } from "../renderers/public-api.ts";
 
 export interface KpCanonicalEquationSemanticFocusProjection {
   readonly activeSource?: string | undefined;
   readonly visualFocusRefs: readonly string[];
+}
+
+export interface KpCanonicalEquationSemanticFocusLineage {
+  readonly expand: (refs: readonly string[]) => readonly string[];
+}
+
+/** Focus follows canonical lineage so a link never points at hidden old paint. */
+export function compileKpCanonicalEquationSemanticFocusLineage(
+  plans: readonly KpReaderEquationRenderPlan[]
+): KpCanonicalEquationSemanticFocusLineage {
+  const neighbors = new Map<string, Set<string>>();
+  for (const relation of plans.flatMap(({ transitions }) =>
+    transitions.flatMap((transition) => transition.relations)
+  )) {
+    const selectors = [
+      ...relation.sourceSelectorIds,
+      ...relation.targetSelectorIds
+    ];
+    for (const selector of selectors) {
+      const adjacent = neighbors.get(selector) ?? new Set<string>();
+      selectors.forEach((candidate) => adjacent.add(candidate));
+      neighbors.set(selector, adjacent);
+    }
+  }
+  return Object.freeze({
+    expand(refs: readonly string[]) {
+      const expanded = new Set(refs);
+      const queue = [...neighbors.keys()].filter((selector) => refs.some(
+        (ref) => selector === ref || selector.startsWith(`${ref}.`)
+      ));
+      queue.forEach((selector) => expanded.add(selector));
+      for (const selector of queue) {
+        for (const adjacent of neighbors.get(selector) ?? []) {
+          if (expanded.has(adjacent)) continue;
+          expanded.add(adjacent);
+          queue.push(adjacent);
+        }
+      }
+      return Object.freeze([...expanded]);
+    }
+  });
 }
 
 /**

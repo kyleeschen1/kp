@@ -216,8 +216,30 @@
       "scope": "s08-attention-simplification",
       "checkedAt": "2026-08-11T14:47:41.690Z",
       "notes": "925 nodes and 19457 events validate after the second human-checkpoint revision."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-11T23:32:20.687Z"
+    },
+    {
+      "command": "npm run visual:algebra-attention-stage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-11T23:32:22.227Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-11T23:32:23.496Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Verified and preserved at the open s08 human checkpoint; user pivoted to the interpreter-grounded Scheme factorial exemplar, so the 16 remaining algebra slices must remain resumable and inactive."
+  },
   "expectedLearning": [
     "Whether semantic attentional framing is a legible KP differentiator over the same canonical equation.",
     "Whether authors can address objects while projections own responsive cinematography.",
