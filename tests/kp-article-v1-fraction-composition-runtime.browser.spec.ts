@@ -171,10 +171,14 @@ test("semantic links remain searchable and pinnable without becoming timeline co
   await factor.click();
   await page.locator("h1").click();
   await expect(factor).toHaveAttribute("data-kp-article-semantic-pinned", "");
+  await expect(page).toHaveURL(/#kp-ref:solve\/factor$/u);
   await expect(publication).toHaveAttribute(
     "data-kp-article-semantic-focus-source",
-    "url"
+    "story"
   );
+  await expect(page.locator(
+    '[data-kp-reader-selector-id^="fraction-fan-out.source.factor"].kp-reader-semantic-focus'
+  ).first()).toBeVisible();
   await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
   await expect(host).toHaveAttribute(
     "data-kp-algebra-canonical-global-progress",
@@ -183,6 +187,11 @@ test("semantic links remain searchable and pinnable without becoming timeline co
 
   await page.keyboard.press("Escape");
   await expect(factor).not.toHaveAttribute("data-kp-article-semantic-pinned", "");
+  await expect(page).not.toHaveURL(/#kp-ref:/u);
+  await expect(publication).toHaveAttribute(
+    "data-kp-article-semantic-focus-source",
+    "none"
+  );
 });
 
 test("checkpoint URLs restore static navigation directly across browser history", async ({

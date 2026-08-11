@@ -74,7 +74,8 @@
     {
       "id": "s04",
       "title": "prose-object-focus-binding",
-      "status": "planned"
+      "summary": "Prose hover, keyboard focus, pin, and reconstructible URL intent now resolve through locked object bindings into the retained canonical session. Focus refreshes the current clock sample without seeking or advancing time; pin and Escape keep URL state coherent.",
+      "status": "complete"
     },
     {
       "id": "s05",

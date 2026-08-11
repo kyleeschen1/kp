@@ -44,3 +44,18 @@ export function encodeKpFractionCompositionArticleCheckpointLocation(
   url.hash = `kp-ref:solve/${path}`;
   return `${url.pathname}${url.search}${url.hash}`;
 }
+
+export function encodeKpFractionCompositionArticleSemanticLocation(
+  baseUrl: string | URL,
+  address?: string
+): string {
+  if (
+    address !== undefined &&
+    resolveKpFractionCompositionArticleSemanticReference(address) === undefined
+  ) {
+    throw new Error(`Unknown algebra article semantic address ${address}.`);
+  }
+  const url = new URL(String(baseUrl));
+  url.hash = address === undefined ? "" : `kp-ref:${address}`;
+  return `${url.pathname}${url.search}${url.hash}`;
+}

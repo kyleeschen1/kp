@@ -9,7 +9,8 @@ import {
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-article-compiler.ts";
 import {
   decodeKpFractionCompositionArticleLocation,
-  encodeKpFractionCompositionArticleCheckpointLocation
+  encodeKpFractionCompositionArticleCheckpointLocation,
+  encodeKpFractionCompositionArticleSemanticLocation
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-article-location.ts";
 import {
   kpFractionCompositionArticleRuntimeManifest
@@ -26,6 +27,7 @@ import {
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-runtime-ranges.ts";
 import {
   kpFractionCompositionArticleSemanticReferences,
+  projectKpFractionCompositionArticleFocusSnapshot,
   resolveKpFractionCompositionArticleSemanticReference
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-semantic-navigation.ts";
 import {
@@ -147,6 +149,29 @@ test("article semantic addresses resolve only through locked object bindings", (
   );
 });
 
+test("article focus resolves public addresses to native paint identities", () => {
+  assert.deepEqual(projectKpFractionCompositionArticleFocusSnapshot({
+    activeSource: "pointer",
+    objectRefs: ["solve/factor", "solve/factor"],
+    revision: 7
+  }), {
+    activeSource: "pointer",
+    objectRefs: [
+      "fraction-fan-out.source.factor.numerator",
+      "fraction-fan-out.source.factor.denominator"
+    ],
+    revision: 7
+  });
+  assert.throws(
+    () => projectKpFractionCompositionArticleFocusSnapshot({
+      activeSource: "story",
+      objectRefs: ["solve/not-authored"],
+      revision: 8
+    }),
+    /Unknown fraction composition focus address/u
+  );
+});
+
 test("article locations distinguish checkpoints from non-temporal object links", () => {
   assert.deepEqual(
     decodeKpFractionCompositionArticleLocation(
@@ -182,6 +207,29 @@ test("article checkpoint URLs preserve route and query state", () => {
       "not-authored"
     ),
     /Unknown algebra article checkpoint/u
+  );
+});
+
+test("semantic focus URLs are reconstructible without becoming seeks", () => {
+  assert.equal(
+    encodeKpFractionCompositionArticleSemanticLocation(
+      "https://kinetic.press/tutorials/algebra/fraction-composition/?review=1",
+      "solve/factor"
+    ),
+    "/tutorials/algebra/fraction-composition/?review=1#kp-ref:solve/factor"
+  );
+  assert.equal(
+    encodeKpFractionCompositionArticleSemanticLocation(
+      "https://kinetic.press/tutorials/algebra/fraction-composition/?review=1#kp-ref:solve/factor"
+    ),
+    "/tutorials/algebra/fraction-composition/?review=1"
+  );
+  assert.throws(
+    () => encodeKpFractionCompositionArticleSemanticLocation(
+      "https://kinetic.press/tutorials/algebra/fraction-composition/",
+      "solve/not-authored"
+    ),
+    /Unknown algebra article semantic address/u
   );
 });
 

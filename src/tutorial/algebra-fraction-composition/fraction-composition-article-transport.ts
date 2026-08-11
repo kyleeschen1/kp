@@ -11,6 +11,9 @@ import {
 import type {
   KpChromeFreeCanonicalEquationSession
 } from "../../reader/app/chrome-free-canonical-equation-session.ts";
+import type {
+  KpReaderFocusSnapshot
+} from "../../reader/runtime/semantic-focus.ts";
 
 export interface KpFractionCompositionArticleTransport {
   readonly element: HTMLElement;
@@ -23,6 +26,7 @@ export interface KpFractionCompositionArticleTransport {
     progress: number,
     source?: "controls" | "url"
   ): void;
+  setFocus(focus: KpReaderFocusSnapshot): void;
   dispose(): void;
 }
 
@@ -38,6 +42,7 @@ export function mountKpFractionCompositionArticleTransport(input: {
   readonly session: KpChromeFreeCanonicalEquationSession;
   readonly range: KpReaderPlaybackRangeWindow;
   readonly durationMs: number;
+  readonly initialFocus: KpReaderFocusSnapshot;
 }): KpFractionCompositionArticleTransport {
   let range = defineKpReaderPlaybackRangeWindow(input.range);
   const document = input.ownerWindow.document;
@@ -84,6 +89,7 @@ export function mountKpFractionCompositionArticleTransport(input: {
   input.host.dataset["kpAlgebraCanonicalClock"] = clock.id;
   input.host.dataset["kpAlgebraCanonicalRange"] = range.id;
   let previousGlobalProgress = range.start;
+  let currentFocus = input.initialFocus;
   let disposed = false;
 
   const syncTransportStatus = (
@@ -117,7 +123,7 @@ export function mountKpFractionCompositionArticleTransport(input: {
         ? "playing"
         : clock.getStatus()
     });
-    input.session.sample({ clock: clockSample });
+    input.session.sample({ clock: clockSample, focus: currentFocus });
     const localPermille = Math.round(rangeSample.localProgress * 1_000);
     input.host.dataset["kpAlgebraCanonicalGlobalProgress"] =
       String(clockSample.progressPermille);
@@ -207,6 +213,10 @@ export function mountKpFractionCompositionArticleTransport(input: {
       source: "controls" | "url" = "controls"
     ) {
       clock.seek(progress, source);
+    },
+    setFocus(focus: KpReaderFocusSnapshot) {
+      currentFocus = focus;
+      input.session.sample({ clock: clock.getSnapshot(), focus: currentFocus });
     },
     dispose() {
       if (disposed) return;

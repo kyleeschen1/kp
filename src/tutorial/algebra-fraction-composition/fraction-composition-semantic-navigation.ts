@@ -5,6 +5,9 @@ import {
 import {
   createKpFractionCompositionSalienceInventory
 } from "../../semantic/fraction-composition-salience-inventory.ts";
+import type {
+  KpReaderFocusSnapshot
+} from "../../reader/runtime/semantic-focus.ts";
 
 export interface KpFractionCompositionArticleSemanticReference {
   readonly address: string;
@@ -54,6 +57,26 @@ export function resolveKpFractionCompositionArticleSemanticReference(
   address: string
 ): KpFractionCompositionArticleSemanticReference | undefined {
   return referenceByAddress.get(address);
+}
+
+/** Resolves public Article addresses to the canonical stage's paint identity. */
+export function projectKpFractionCompositionArticleFocusSnapshot(
+  snapshot: KpReaderFocusSnapshot
+): KpReaderFocusSnapshot {
+  const objectRefs = Object.freeze([...new Set(snapshot.objectRefs.flatMap((address) => {
+    const reference = referenceByAddress.get(address);
+    if (reference === undefined) {
+      throw new Error(`Unknown fraction composition focus address ${address}.`);
+    }
+    return reference.paintTargetIds;
+  }))]);
+  return Object.freeze({
+    ...(snapshot.activeSource === undefined
+      ? {}
+      : { activeSource: snapshot.activeSource }),
+    objectRefs,
+    revision: snapshot.revision
+  });
 }
 
 function paintTargets(targetId: string): readonly string[] {

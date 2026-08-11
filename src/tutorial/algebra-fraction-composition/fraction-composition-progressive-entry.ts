@@ -28,7 +28,8 @@ import {
 } from "../../reader/app/fraction-composition-salience-adapter.ts";
 import {
   decodeKpFractionCompositionArticleLocation,
-  encodeKpFractionCompositionArticleCheckpointLocation
+  encodeKpFractionCompositionArticleCheckpointLocation,
+  encodeKpFractionCompositionArticleSemanticLocation
 } from "./fraction-composition-article-location.ts";
 import {
   createKpFractionCompositionArticleRuntimeCheckpoints,
@@ -40,8 +41,12 @@ import {
 } from "./fraction-composition-article-transport.ts";
 import {
   kpFractionCompositionArticleSemanticReferences,
+  projectKpFractionCompositionArticleFocusSnapshot,
   resolveKpFractionCompositionArticleSemanticReference
 } from "./fraction-composition-semantic-navigation.ts";
+import type {
+  KpReaderFocusSnapshot
+} from "../../reader/runtime/semantic-focus.ts";
 
 /**
  * This enhancement intentionally preserves the static publication while the
@@ -58,18 +63,24 @@ export function mountKpFractionCompositionArticleEnhancement(
   const article = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-fraction-composition-publication]"
   ) ?? ownerWindow.document.body;
-  const canonicalStage = mountCanonicalRanges({
-    ownerWindow,
-    article,
-    host
-  });
   const focus = createKpReaderSemanticFocusService(
     kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
   );
+  const canonicalStage = mountCanonicalRanges({
+    ownerWindow,
+    article,
+    host,
+    initialFocus: projectKpFractionCompositionArticleFocusSnapshot(
+      focus.getSnapshot()
+    )
+  });
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
     article.dataset["kpArticleSemanticFocusSource"] =
       focus.getSnapshot().activeSource ?? "none";
+    canonicalStage.setFocus(projectKpFractionCompositionArticleFocusSnapshot(
+      focus.getSnapshot()
+    ));
   };
   const unsubscribeFocus = focus.subscribe(applyFocus);
   const semanticBindings = bindKpReaderSemanticLinks({
@@ -92,15 +103,38 @@ export function mountKpFractionCompositionArticleEnhancement(
     const link = semanticLinkOwner(event.target, article);
     const address = link?.dataset["kpFocus"];
     if (address === undefined) return;
+    event.preventDefault();
     pinnedAddress = pinnedAddress === address ? undefined : address;
-    if (pinnedAddress === undefined) focus.clear("story");
-    else focus.set("story", [pinnedAddress]);
+    focus.clear("url");
+    if (pinnedAddress === undefined) {
+      focus.clear("story");
+      delete host.dataset["kpAlgebraLocationKind"];
+    } else {
+      focus.set("story", [pinnedAddress]);
+      host.dataset["kpAlgebraLocationKind"] = "semantic-reference";
+    }
+    const href = encodeKpFractionCompositionArticleSemanticLocation(
+      ownerWindow.location.href,
+      pinnedAddress
+    );
+    ownerWindow.history.pushState(ownerWindow.history.state, "", href);
+    lastRestoredHash = ownerWindow.location.hash;
     syncPinnedLink();
   };
   const onEscape = (event: KeyboardEvent): void => {
     if (event.key !== "Escape" || pinnedAddress === undefined) return;
     pinnedAddress = undefined;
     focus.clear("story");
+    focus.clear("url");
+    ownerWindow.history.pushState(
+      ownerWindow.history.state,
+      "",
+      encodeKpFractionCompositionArticleSemanticLocation(
+        ownerWindow.location.href
+      )
+    );
+    lastRestoredHash = ownerWindow.location.hash;
+    delete host.dataset["kpAlgebraLocationKind"];
     syncPinnedLink();
   };
   const checkpointLinks = [...article.querySelectorAll<HTMLAnchorElement>(
@@ -124,10 +158,15 @@ export function mountKpFractionCompositionArticleEnhancement(
     const location = decodeKpFractionCompositionArticleLocation(hash);
     if (location?.kind === "semantic-reference") {
       host.dataset["kpAlgebraLocationKind"] = location.kind;
+      pinnedAddress = location.address;
       focus.set("url", [location.address]);
+      syncPinnedLink();
       return;
     }
+    pinnedAddress = undefined;
+    focus.clear("story");
     focus.clear("url");
+    syncPinnedLink();
     if (location?.kind !== "checkpoint") {
       delete host.dataset["kpAlgebraLocationKind"];
       return;
@@ -164,6 +203,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   ownerWindow.addEventListener("popstate", onLocationChange);
   ownerWindow.addEventListener("hashchange", onLocationChange);
   onLocationChange();
+  applyFocus();
   return () => {
     canonicalStage.dispose();
     article.removeEventListener("click", onSemanticClick);
@@ -179,6 +219,7 @@ export function mountKpFractionCompositionArticleEnhancement(
 
 interface KpFractionCompositionCanonicalStageMount {
   seekCheckpoint(path: string): void;
+  setFocus(focus: KpReaderFocusSnapshot): void;
   dispose(): void;
 }
 
@@ -186,6 +227,7 @@ function mountCanonicalRanges(input: {
   readonly ownerWindow: Window;
   readonly article: HTMLElement;
   readonly host: HTMLElement;
+  readonly initialFocus: KpReaderFocusSnapshot;
 }): KpFractionCompositionCanonicalStageMount {
   const template = input.article.querySelector<HTMLTemplateElement>(
     "template[data-kp-reader-exemplar-template]"
@@ -193,6 +235,7 @@ function mountCanonicalRanges(input: {
   if (template === null) {
     return Object.freeze({
       seekCheckpoint() {},
+      setFocus() {},
       dispose() {}
     });
   }
@@ -245,6 +288,7 @@ function mountCanonicalRanges(input: {
   let session: KpChromeFreeCanonicalEquationSession | undefined;
   let transport: KpFractionCompositionArticleTransport | undefined;
   let pendingCheckpointPath: string | undefined;
+  let pendingFocus = input.initialFocus;
   const checkpoints = new Map(
     createKpFractionCompositionArticleRuntimeCheckpoints().map(
       (checkpoint) => [checkpoint.path, checkpoint.progress]
@@ -323,7 +367,8 @@ function mountCanonicalRanges(input: {
         start: firstRange.start,
         end: firstRange.end
       },
-      durationMs
+      durationMs,
+      initialFocus: pendingFocus
     });
     input.host.dataset["kpAlgebraCanonicalHostStatus"] = "active";
     fallback?.toggleAttribute("hidden", true);
@@ -353,6 +398,10 @@ function mountCanonicalRanges(input: {
       }
       pendingCheckpointPath = path;
       if (transport !== undefined) selectCheckpoint(transport, path);
+    },
+    setFocus(nextFocus: KpReaderFocusSnapshot) {
+      pendingFocus = nextFocus;
+      transport?.setFocus(nextFocus);
     },
     dispose() {
       disposed = true;
