@@ -143,6 +143,8 @@ function renderAttentionStage(
       beat.anchor.kind === "checkpoint"
         ? ` data-kp-algebra-attention-checkpoint="${escapeAttribute(beat.anchor.path)}"`
         : ` data-kp-algebra-attention-range="${escapeAttribute(beat.anchor.path)}"`,
+      ` data-kp-algebra-attention-primary="${escapeAttribute(beat.primaryAddresses.join(" "))}"`,
+      ` data-kp-algebra-attention-context="${escapeAttribute(beat.contextAddresses.join(" "))}"`,
       index === 0 ? `` : ` hidden`,
       `>${attentionCue(beat)}</div>`
     ].join("")),

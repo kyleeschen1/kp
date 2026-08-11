@@ -174,7 +174,7 @@ test("semantic links remain searchable and pinnable without becoming timeline co
   await expect(page).toHaveURL(/#kp-ref:solve\/factor$/u);
   await expect(publication).toHaveAttribute(
     "data-kp-article-semantic-focus-source",
-    "story"
+    "url"
   );
   await expect(page.locator(
     '[data-kp-reader-selector-id^="fraction-fan-out.source.factor"].kp-reader-semantic-focus'

@@ -93,6 +93,20 @@
       "scope": "s05 retained-stage attention controller",
       "checkedAt": "2026-08-11T01:01:15.281Z",
       "notes": "Attention controller, canonical transport direction, and static presenter pass all typechecks."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s06 composition and fallback semantics",
+      "checkedAt": "2026-08-11T01:08:13.978Z",
+      "notes": "113 checks pass; Article remains default/static while the opt-in stage retains server-rendered passages and semantic anchors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 progress and attention coordination",
+      "checkedAt": "2026-08-11T01:08:15.358Z",
+      "notes": "Scene attention, canonical derived progress, early view reservation, and page-flow fallback pass all typechecks."
     }
   ],
   "expectedLearning": [

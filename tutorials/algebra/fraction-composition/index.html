@@ -8,6 +8,11 @@
       content="Distribute two thirds across a grouped expression and solve the resulting equation without losing equivalence."
     />
     <title>What does the fraction multiply? · Kinetic Press</title>
+    <script>
+      if (new URLSearchParams(location.search).get("view") === "attention-stage") {
+        document.documentElement.dataset.kpAlgebraView = "attention-stage";
+      }
+    </script>
     <link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css" />
     <link
       rel="stylesheet"

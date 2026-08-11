@@ -86,7 +86,8 @@
     {
       "id": "s06",
       "title": "stable-composition-and-fallback",
-      "status": "planned"
+      "summary": "Stabilized stage/passage/progress/buttons composition with reserved pre-enhancement geometry, safe stage insets, constant controls, animation-derived progress, scene-owned semantic attention, and ordinary page-flow fallbacks for short or zoomed viewports. The stage keeps one geometry unless the viewport constraint activates.",
+      "status": "complete"
     },
     {
       "id": "s07",

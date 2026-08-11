@@ -22,6 +22,7 @@ export function mountKpFractionCompositionAttentionStage(input: {
     path: string,
     direction: "forward" | "rewind"
   ) => void;
+  readonly setAttention: (addresses: readonly string[]) => void;
 }): KpFractionCompositionAttentionStageController {
   if (!isKpFractionCompositionAttentionStageRequested(
     input.ownerWindow.location.search
@@ -62,6 +63,16 @@ export function mountKpFractionCompositionAttentionStage(input: {
   const originalParent = input.stageHost.parentNode;
   const originalNextSibling = input.stageHost.nextSibling;
   let activeIndex = 0;
+  const updateProgress = (): void => {
+    const active = passages[activeIndex]!;
+    const isRange = active.dataset["kpAlgebraAttentionRange"] !== undefined;
+    const localPermille = Number(
+      input.stageHost.dataset["kpAlgebraCanonicalLocalProgress"] ?? "0"
+    );
+    progress.value = activeIndex + (
+      isRange && Number.isFinite(localPermille) ? localPermille / 1_000 : 0
+    );
+  };
   const select = (
     index: number,
     direction: "forward" | "rewind"
@@ -76,10 +87,13 @@ export function mountKpFractionCompositionAttentionStage(input: {
     const active = passages[activeIndex]!;
     const checkpoint = active.dataset["kpAlgebraAttentionCheckpoint"];
     const range = active.dataset["kpAlgebraAttentionRange"];
+    input.setAttention(readWords(
+      requiredData(active, "kpAlgebraAttentionPrimary")
+    ));
     if (checkpoint !== undefined) input.selectCheckpoint(checkpoint);
     else if (range !== undefined) input.selectRange(range, direction);
     else throw new Error("Algebra attention beat lacks a temporal anchor.");
-    progress.value = activeIndex;
+    updateProgress();
     status.textContent = `${activeIndex + 1} / ${passages.length}`;
     back.disabled = activeIndex === 0;
     forward.disabled = activeIndex === passages.length - 1;
@@ -88,11 +102,16 @@ export function mountKpFractionCompositionAttentionStage(input: {
   };
   const onBack = (): void => select(activeIndex - 1, "rewind");
   const onForward = (): void => select(activeIndex + 1, "forward");
+  const progressObserver = new MutationObserver(updateProgress);
 
   input.ownerWindow.document.documentElement.dataset["kpAlgebraView"] =
     "attention-stage";
   root.removeAttribute("hidden");
   visual.append(input.stageHost);
+  progressObserver.observe(input.stageHost, {
+    attributes: true,
+    attributeFilter: ["data-kp-algebra-canonical-local-progress"]
+  });
   back.addEventListener("click", onBack);
   forward.addEventListener("click", onForward);
   select(0, "forward");
@@ -102,6 +121,8 @@ export function mountKpFractionCompositionAttentionStage(input: {
     dispose() {
       back.removeEventListener("click", onBack);
       forward.removeEventListener("click", onForward);
+      progressObserver.disconnect();
+      input.setAttention([]);
       if (originalParent !== null) {
         originalParent.insertBefore(input.stageHost, originalNextSibling);
       }
@@ -109,6 +130,10 @@ export function mountKpFractionCompositionAttentionStage(input: {
       delete input.ownerWindow.document.documentElement.dataset["kpAlgebraView"];
     }
   });
+}
+
+function readWords(value: string): readonly string[] {
+  return Object.freeze(value.split(/\s+/u).filter(Boolean));
 }
 
 function requireElement<T extends Element>(

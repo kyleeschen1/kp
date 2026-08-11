@@ -87,7 +87,8 @@ export function mountKpFractionCompositionArticleEnhancement(
     stageHost: host,
     selectCheckpoint: (path) => canonicalStage.seekCheckpoint(path),
     selectRange: (path, direction) =>
-      canonicalStage.selectRange(path, direction)
+      canonicalStage.selectRange(path, direction),
+    setAttention: (addresses) => focus.set("story", addresses)
   });
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
@@ -120,12 +121,11 @@ export function mountKpFractionCompositionArticleEnhancement(
     if (address === undefined) return;
     event.preventDefault();
     pinnedAddress = pinnedAddress === address ? undefined : address;
-    focus.clear("url");
     if (pinnedAddress === undefined) {
-      focus.clear("story");
+      focus.clear("url");
       delete host.dataset["kpAlgebraLocationKind"];
     } else {
-      focus.set("story", [pinnedAddress]);
+      focus.set("url", [pinnedAddress]);
       host.dataset["kpAlgebraLocationKind"] = "semantic-reference";
     }
     const href = encodeKpFractionCompositionArticleSemanticLocation(
@@ -139,7 +139,6 @@ export function mountKpFractionCompositionArticleEnhancement(
   const onEscape = (event: KeyboardEvent): void => {
     if (event.key !== "Escape" || pinnedAddress === undefined) return;
     pinnedAddress = undefined;
-    focus.clear("story");
     focus.clear("url");
     ownerWindow.history.pushState(
       ownerWindow.history.state,
@@ -179,7 +178,6 @@ export function mountKpFractionCompositionArticleEnhancement(
       return;
     }
     pinnedAddress = undefined;
-    focus.clear("story");
     focus.clear("url");
     syncPinnedLink();
     if (location?.kind !== "checkpoint") {

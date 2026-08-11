@@ -3,6 +3,11 @@ html[data-kp-algebra-view="attention-stage"] {
   --kp-algebra-attention-stage-block: clamp(13rem, 38svh, 22rem);
   --kp-algebra-attention-passage-block: 5.5rem;
   --kp-algebra-attention-gap: clamp(0.75rem, 1.7svh, 1.25rem);
+  --kp-algebra-attention-viewport-clearance: 2rem;
+}
+
+html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
+  --kp-algebra-attention-viewport-clearance: 6rem;
 }
 
 html[data-kp-algebra-view="attention-stage"] .kp-algebra-article {
@@ -14,7 +19,10 @@ html[data-kp-algebra-view="attention-stage"]
   .kp-algebra-attention-stage {
   display: grid;
   width: min(100%, var(--kp-algebra-attention-inline));
-  min-height: min(42rem, calc(100svh - 2rem));
+  min-height: min(
+    42rem,
+    calc(100svh - var(--kp-algebra-attention-viewport-clearance))
+  );
   grid-template-rows:
     var(--kp-algebra-attention-stage-block)
     minmax(var(--kp-algebra-attention-passage-block), auto)
@@ -23,6 +31,14 @@ html[data-kp-algebra-view="attention-stage"]
   gap: var(--kp-algebra-attention-gap);
   margin-inline: auto;
   padding: clamp(0.75rem, 2vw, 1.5rem);
+  scroll-margin-block: 1rem;
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage[hidden] {
+  /* The opt-in view reserves its complete composition before enhancement;
+     the static Article remains the no-JavaScript fallback. */
+  display: grid;
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -30,6 +46,7 @@ html[data-kp-algebra-view="attention-stage"]
   display: grid;
   min-height: 0;
   place-items: center;
+  padding: clamp(0.5rem, 1.5svh, 1rem) clamp(0.75rem, 2.5vw, 1.5rem);
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -51,6 +68,7 @@ html[data-kp-algebra-view="attention-stage"]
   display: grid;
   min-height: var(--kp-algebra-attention-passage-block);
   align-items: center;
+  overflow: visible;
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -80,9 +98,27 @@ html[data-kp-algebra-view="attention-stage"]
 
 html[data-kp-algebra-view="attention-stage"]
   .kp-algebra-attention-stage__progress progress {
+  appearance: none;
   width: 100%;
   height: 0.35rem;
   accent-color: var(--kp-accent);
+  color: var(--kp-accent);
+  background: color-mix(in srgb, var(--kp-line) 62%, transparent);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__progress progress::-webkit-progress-bar {
+  background: color-mix(in srgb, var(--kp-line) 62%, transparent);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__progress progress::-webkit-progress-value {
+  background: var(--kp-accent);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage__progress progress::-moz-progress-bar {
+  background: var(--kp-accent);
 }
 
 html[data-kp-algebra-view="attention-stage"]
@@ -136,6 +172,13 @@ html[data-kp-algebra-view="attention-stage"]
     .kp-algebra-attention-stage {
     min-height: auto;
     padding-inline: 0;
+  }
+}
+
+@media (max-height: 34rem) {
+  html[data-kp-algebra-view="attention-stage"]
+    .kp-algebra-attention-stage {
+    grid-template-rows: minmax(10rem, 38svh) auto auto auto;
   }
 }
 
