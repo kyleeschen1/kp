@@ -37,6 +37,20 @@
       "scope": "s01 proof contract and control-record integrity",
       "checkedAt": "2026-08-11T00:35:47.833Z",
       "notes": "925 nodes and 19412 events valid; autonomy and done-contract gates pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s02 semantic beat matrix",
+      "checkedAt": "2026-08-11T00:42:46.752Z",
+      "notes": "106 Article checks pass, including four attention-matrix contracts."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 typed attention matrix",
+      "checkedAt": "2026-08-11T00:42:48.023Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks pass."
     }
   ],
   "expectedLearning": [

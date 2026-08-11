@@ -62,7 +62,8 @@
     {
       "id": "s02",
       "title": "semantic-beat-attention-matrix",
-      "status": "planned"
+      "summary": "Derived twelve presentation-neutral beats from Article IR: inspection, five canonical demonstrations, five settled interpretations, and verification. Every anchor and attention address reuses locked identities and grants prose no time authority.",
+      "status": "complete"
     },
     {
       "id": "s03",
