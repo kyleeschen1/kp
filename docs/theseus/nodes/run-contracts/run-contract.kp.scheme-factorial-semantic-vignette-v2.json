@@ -1,0 +1,181 @@
+{
+  "id": "run-contract.kp.scheme-factorial-semantic-vignette-v2",
+  "kind": "run-contract",
+  "title": "Scheme factorial semantic vignette",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.scheme-factorial-semantic-vignette-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-11-scheme-factorial-semantic-vignette-long-loop-proposal.md",
+      "summary": "User-approved 24-slice exemplar-first implementation contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-11-kp-interpreter-grounded-scheme-factorial-exemplar.md",
+      "summary": "Approved interpreter, score, motion, preservation, and promotion boundaries."
+    }
+  ],
+  "verification": [
+    "npm run test:scheme-factorial",
+    "npm run test:botanical-lisp-tutorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run visual:scheme-factorial",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "One bounded Scheme parser and evaluator sufficient for factorial 3.",
+    "Typed serializable trace events, causal dependencies, snapshots, provenance, and one declarative pedagogical score.",
+    "Factorial-local semantic, choreography, geometry, native DOM renderer, route, fallback, review, and performance evidence.",
+    "Exact reuse of existing framework-neutral KP primitives when their contracts match."
+  ],
+  "disallowedWork": [
+    "No complete Lisp implementation, live learner evaluator, CodeMirror work, or SICP curriculum expansion.",
+    "No replacement of the existing lambda route, universal programming renderer, generic language pack, or second caller.",
+    "No new clock, CSS-owned semantic animation, runtime LLM, Svelte semantic authority, or broad pre-approval browser matrix.",
+    "No resumption of the paused algebra contract within this run."
+  ],
+  "goal": "Build one interpreter-grounded, pedagogically scored, deterministic native-code Scheme factorial vignette and stop at human visual review before any shared promotion.",
+  "target": "next-action.kp.scheme-factorial-semantic-vignette-v0",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each focused slice is verified and recorded.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop at s24 for human visual judgment before any shared promotion.",
+    "Stop if source identities depend on glyphs or geometry.",
+    "Stop if the trace cannot be serialized deterministically or the score can violate causal dependencies.",
+    "Stop if implementation requires a new clock, renderer authority, or inaccessible settled code.",
+    "Stop if existing Lisp, algebra, or economics behavior must be migrated.",
+    "Stop if scope expands into a general language, live evaluator, editor, or curriculum system."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Record pivot and contract",
+      "summary": "Recorded the approved decision and proposal, preserved algebra at d38f06fe, deferred malformed pre-execution v1, activated hygienic v2, and passed source-ref, done-contract, run-contract, and workspace gates.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Audit old and current Lisp seams",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define Scheme source identities",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Parse the bounded Scheme subset",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Define environments and continuations",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Define causal trace events",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Evaluate literals symbols and closures",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Emit application and binding events",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Emit conditional branch events",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Evaluate trusted primitives",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Trace named recursion and returns",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Freeze the factorial trace artifact",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Define the pedagogical score",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Author the factorial score",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Project semantic checkpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Compile seed bloom and waiting shells",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Compile binding arcs and echoes",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Compile branch primitive and summary motifs",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Compile base case and return carrier",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Compile one deterministic timeline",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Add active jostle and responsive compaction",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Render native code and transient overlays",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Integrate route scrubber caption and fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Certify exemplar and stop for review",
+      "status": "planned"
+    }
+  ]
+}

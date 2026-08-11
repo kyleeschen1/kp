@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.scheme-factorial-semantic-vignette-v0",
+  "kind": "next-action",
+  "title": "Build interpreter-grounded Scheme factorial vignette",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-11-scheme-factorial-semantic-vignette-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-11-kp-interpreter-grounded-scheme-factorial-exemplar.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.s-expression-material-choreography-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
+  "verification": [
+    "npm run test:scheme-factorial",
+    "npm run typecheck",
+    "npm run build",
+    "npm run visual:scheme-factorial",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan checks quick",
+      "status": "passed",
+      "scope": "s01-control-plane",
+      "checkedAt": "2026-08-11T23:42:06.699Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01-control-plane",
+      "checkedAt": "2026-08-11T23:42:07.750Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved interpreter-grounded factorial direction, 24-slice v2 contract, project-memory pivot, and recoverable algebra pause are durable; next slice audits old and current Lisp seams."
+  },
+  "expectedLearning": [
+    "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
+    "Whether suspended code shells and one return-value lineage make recursive descent and unwind immediately legible.",
+    "Whether native searchable code and transient overlays can remain smooth under direct seek, reverse, narrow layout, and reduced motion."
+  ],
+  "allowedWork": [
+    "The approved factorial-local evaluator, trace, score, choreography, renderer, route, and evidence."
+  ],
+  "disallowedWork": [
+    "No existing Lisp replacement, general language framework, live evaluator, editor, curriculum expansion, or unrelated visual work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-truth-independent-of-presentation",
+      "weight": "high"
+    },
+    {
+      "id": "suspended-work-and-return-legibility",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-direct-seek-and-rewind",
+      "weight": "high"
+    },
+    {
+      "id": "native-searchable-code-endpoints",
+      "weight": "high"
+    },
+    {
+      "id": "reversible-parallel-exemplar",
+      "weight": "medium"
+    }
+  ]
+}

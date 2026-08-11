@@ -2,21 +2,15 @@
 
 Status: active
 Last Updated: 2026-08-11
-Current Next Action: KP Article v1 remains frozen. Canonical algebra recovery
-is complete: all five fraction-composition motions now use one retained
-canonical equation session, live stage, transport, and clock while inactive
-passages preserve static endpoints. Release evidence is in
-`../reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md`.
-The bounded “The Equation Remembers” semantic-explanation proof is at its
-first human visual checkpoint. Before approval, the next loop should make one
-reversible correction to the canonical distribution motion profile: compress
-the low-information opening anticipation, eliminate the preview-pause-restart
-rhythm, and make the fraction's causal branch legible earlier without rushing
-travel or endpoint settlement. Preserve the semantic trace, renderer, retained
-session, native endpoints, Article source, attention-stage composition, and
-shared clock; then stop again for human review. Responsive matrices, second
-projections, shared promotion, unrelated curriculum, and further layout
-discovery remain deferred.
+Current Next Action: Build one interpreter-grounded Scheme `(factorial 3)`
+vignette under
+`../reviews/2026-08-11-scheme-factorial-semantic-vignette-long-loop-proposal.md`.
+The evaluator owns a bounded frozen semantic trace; a typed pedagogical score
+owns compression, holds, captions, and emphasis; one native-code renderer and
+the existing shared clock own playback. Stop at the factorial human visual
+checkpoint before shared promotion. The algebra proof remains verified and
+user-paused at slice 8/23 in commit `d38f06fe`; its remaining 16 slices are
+recoverable but inactive.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`

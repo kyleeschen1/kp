@@ -2,7 +2,8 @@
   "id": "run-contract.kp.semantic-explanation-differentiation-proof-v2",
   "kind": "run-contract",
   "title": "The Equation Remembers differentiation proof",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "User-paused at s08 after verified checkpoint commit d38f06fe; 16 slices remain recoverable.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -31,6 +32,9 @@
     "npm run typecheck",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "The user explicitly resumes the algebra differentiation proof."
   ],
   "allowedWork": [
     "Canonical fraction-composition Article projection adapter, derived semantic framing, scoped proof route and styles, focused semantic tests, one Chromium discovery smoke, disposable capture, and durable project control."

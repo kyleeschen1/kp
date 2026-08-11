@@ -109,6 +109,17 @@ review rather than generalize the timing. The recovery rationale and alternate
 project directions are recorded in
 `reviews/2026-08-11-project-recovery-and-direction-next-step-review.md`.
 
+The user has now paused that algebra contract at its verified slice-8 human
+checkpoint and selected an interpreter-grounded Scheme factorial vignette as
+the active visual-discovery exemplar. The approved direction is recorded in
+`decisions/2026-08-11-kp-interpreter-grounded-scheme-factorial-exemplar.md` and
+the executable rationale in
+`reviews/2026-08-11-scheme-factorial-semantic-vignette-long-loop-proposal.md`.
+The interpreter supplies a bounded frozen semantic trace; a separate typed
+pedagogical score groups and emphasizes events without contradicting causal
+truth. The first caller is `(factorial 3)` and stops for human review before
+generalization, live evaluation, editor work, or curriculum expansion.
+
 A bounded visual interruption is now at a human checkpoint, recorded in
 `decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`.
 The demand-shift attention stage keeps one graph geometry, adds a visual safe

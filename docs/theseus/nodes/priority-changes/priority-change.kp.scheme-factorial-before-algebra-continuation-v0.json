@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.scheme-factorial-before-algebra-continuation-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.scheme-factorial-before-algebra-continuation-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user paused the verified algebra layout proof and approved one interpreter-grounded Scheme factorial exemplar to recover semantic-content momentum without broad curriculum or renderer promotion.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user paused the verified algebra layout proof and approved one interpreter-grounded Scheme factorial exemplar to recover semantic-content momentum without broad curriculum or renderer promotion.",
+      "occurredAt": "2026-08-11T23:36:07.250Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.semantic-explanation-differentiation-proof-v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.semantic-explanation-differentiation-proof-v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The user paused the verified algebra layout proof and approved one interpreter-grounded Scheme factorial exemplar to recover semantic-content momentum without broad curriculum or renderer promotion.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.semantic-explanation-differentiation-proof-v2"
+    ],
+    "changes": [
+      {
+        "subject": "scheme-factorial",
+        "to": "now"
+      },
+      {
+        "subject": "semantic-explanation-differentiation",
+        "to": "paused"
+      }
+    ],
+    "effectiveAt": "2026-08-11T23:36:07.250Z",
+    "requestedBy": "user"
+  }
+}

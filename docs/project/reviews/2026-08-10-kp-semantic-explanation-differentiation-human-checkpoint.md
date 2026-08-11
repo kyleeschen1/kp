@@ -1,7 +1,11 @@
 # KP Semantic Explanation Differentiation · Human Checkpoint
 
-Status: awaiting human judgment at slice `s08` of
-`run-contract.kp.semantic-explanation-differentiation-proof-v2`.
+Status: user-paused at slice `s08` of
+`run-contract.kp.semantic-explanation-differentiation-proof-v2`; verified
+checkpoint preserved in commit `d38f06fe`.
+
+The approved Scheme factorial semantic-vignette pivot is now active. The 16
+remaining algebra slices stay recoverable and must not be mixed into that run.
 
 ## Open Refinement Request · 2026-08-11
 

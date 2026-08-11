@@ -2,8 +2,9 @@
   "id": "next-action.kp.semantic-explanation-differentiation-proof-v1",
   "kind": "next-action",
   "title": "Prove semantic explanation differentiation",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "User-paused at the verified s08 human checkpoint while the approved Scheme factorial exemplar is active.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -240,6 +241,9 @@
     "state": "partial",
     "summary": "Verified and preserved at the open s08 human checkpoint; user pivoted to the interpreter-grounded Scheme factorial exemplar, so the 16 remaining algebra slices must remain resumable and inactive."
   },
+  "revisitWhen": [
+    "The user explicitly resumes the algebra differentiation proof."
+  ],
   "expectedLearning": [
     "Whether semantic attentional framing is a legible KP differentiator over the same canonical equation.",
     "Whether authors can address objects while projections own responsive cinematography.",
