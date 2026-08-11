@@ -65,7 +65,8 @@
     {
       "id": "s02",
       "title": "Audit old and current Lisp seams",
-      "status": "planned"
+      "summary": "Committed an executable reuse manifest and audit that separate evaluator authority, pedagogical scoring, reusable motion laws, preserved lambda assets, and rejected legacy runtime behavior.",
+      "status": "complete"
     },
     {
       "id": "s03",

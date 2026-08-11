@@ -41,11 +41,35 @@
       "status": "passed",
       "scope": "s01-control-plane",
       "checkedAt": "2026-08-11T23:42:07.750Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s02-reuse-boundary",
+      "checkedAt": "2026-08-11T23:49:49.129Z"
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "s02-current-lisp-preservation",
+      "checkedAt": "2026-08-11T23:49:50.287Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02-type-safety",
+      "checkedAt": "2026-08-11T23:49:51.269Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s02-control-plane",
+      "checkedAt": "2026-08-11T23:49:52.304Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved interpreter-grounded factorial direction, 24-slice v2 contract, project-memory pivot, and recoverable algebra pause are durable; next slice audits old and current Lisp seams."
+    "summary": "The old interpreter lineage and current KP Lisp stack now have a tested reuse boundary: pure motion, native DOM, responsive geometry, and scrubber seams are reusable; factorial semantic truth and scoring remain local; the current lambda exemplar is preserved."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
