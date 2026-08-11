@@ -2,7 +2,8 @@
   "id": "run-contract.kp.canonical-algebra-article-recovery-v2",
   "kind": "run-contract",
   "title": "Canonical algebra Article v1 recovery",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -189,7 +190,8 @@
     {
       "id": "s24",
       "title": "Release-closeout",
-      "status": "planned"
+      "summary": "Closed canonical algebra Article recovery with passing Article, cross-browser parity, determinism, motif-fidelity, type, build, accessibility, and payload gates; recorded the unchanged six-family canonical clearance debt; reconciled roadmap and explanation-attention memory; preserved all unrelated user files.",
+      "status": "complete"
     }
   ]
 }

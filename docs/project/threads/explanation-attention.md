@@ -2,26 +2,24 @@
 
 Status: active
 Last Updated: 2026-08-10
-Current Next Action: KP Article v1 remains frozen and layout discovery remains
-paused. The first algebra interaction checkpoint is rejected: it reused the
-fraction-composition asset id through a generic editor player rather than the
-registered canonical reader host. Execute the approved recovery in
-`../reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md`.
-Extract the real canonical equation session, preserve the reader reference,
-prove sampled parity, and stop at the first article-range human checkpoint
-before binding the remaining four ranges. See
-`../decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`.
-Shared station extraction, split parity, final
-floating-navigation geometry, and release approval remain deferred. This pause
-does not alter the separate animation-promotion rank.
+Current Next Action: KP Article v1 remains frozen. Canonical algebra recovery
+is complete: all five fraction-composition motions now use one retained
+canonical equation session, live stage, transport, and clock while inactive
+passages preserve static endpoints. Release evidence is in
+`../reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md`.
+The approved successor is the bounded “The Equation Remembers” semantic
+explanation differentiation proof. It begins with one reversible algebra
+exemplar and stops at a human visual checkpoint before responsive matrices,
+second projections, or shared promotion. Shared station extraction, split
+parity, final floating-navigation geometry, and unrelated curriculum remain
+deferred.
 
-Current Bounded Experiment: the demand-shift attention-stage refinement in
+Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`
-is at a human visual checkpoint. It holds graph geometry stable, supplies a
+remains at its human visual checkpoint. It holds graph geometry stable, supplies a
 label-safe stage inset and readable large-text fallback, and presents stage,
 passage, progress, then transport buttons. It does not reopen general layout
-selection; the canonical algebra recovery remains paused at its prior slice
-boundary while this independently reversible interruption is reviewed.
+selection and does not govern the new algebra proof.
 
 Verification cadence is governed by
 `../decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md`.

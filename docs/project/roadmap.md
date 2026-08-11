@@ -71,12 +71,25 @@ recovery restored a governed learner-core dependency boundary and reduced the
 common equation-reader closure to 124,778 gzip bytes without raising its
 145,000-byte ceiling. The first algebra interaction checkpoint was rejected
 because it loaded the right asset through a noncanonical generic editor host.
-The immediate next action is the approved canonical-host recovery in
-`reviews/2026-08-10-canonical-algebra-article-recovery-long-loop-proposal.md`:
-extract one chrome-free canonical equation session, keep the existing reader
-as its reference caller, and bind the article only after sampled parity is
-proven. This correction is recorded in
-`decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`. The prior
+The approved recovery is now complete. The reader and Article consume one
+chrome-free canonical equation session; all five authored motion ranges share
+one retained stage, transport, and clock while inactive passages preserve
+their static endpoints. Cross-host semantics, paint, salience, endpoints,
+accessibility, navigation, responsive fit certification, lifecycle, and
+payload gates are recorded in
+`reviews/2026-08-10-canonical-algebra-article-recovery-closeout.md`. The
+correction rationale remains in
+`decisions/2026-08-10-kp-canonical-host-not-asset-id-for-algebra.md`.
+
+The next active direction is the approved “The Equation Remembers” semantic
+explanation differentiation proof. It reuses this recovered algebra substrate
+to test whether authored prose can address persistent equation objects, carry
+focus across canonical motion, and project the same semantic scene into
+distinct reading contexts without new animation authority. It is a
+visual-discovery exemplar governed by
+`decisions/2026-08-10-kp-hybrid-experiment-verification-cadence.md`: cheap
+semantic, no-JavaScript, and single-browser checks precede a human checkpoint;
+broad matrices and generalization follow only after approval. The prior
 ranking and recovery evidence remain in
 `reviews/2026-08-09-kp-post-authoring-next-step-review.md` and
 `reviews/2026-08-09-kp-article-v1-reader-payload-recovery-closeout.md`.
@@ -89,8 +102,7 @@ A bounded visual interruption is now at a human checkpoint, recorded in
 The demand-shift attention stage keeps one graph geometry, adds a visual safe
 area and a large-text page-flow fallback, and orders stage, passage, progress,
 then transport buttons. This is one reversible exemplar, not a resumption or
-selection of universal layout work. The canonical algebra run remains paused
-at its existing boundary until this checkpoint returns control. The same
+selection of universal layout work and does not govern the algebra proof. The same
 decision records a repo-local collaboration-tone experiment: candid about
 tradeoffs and uncertainty while remaining welcoming, encouraging, and clear
 about real progress and next direction.
