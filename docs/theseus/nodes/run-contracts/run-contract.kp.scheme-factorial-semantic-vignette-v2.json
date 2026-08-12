@@ -167,7 +167,8 @@
     {
       "id": "s19",
       "title": "Compile base case and return carrier",
-      "status": "planned"
+      "summary": "Compiled and tested the base hold, one persistent carrier, deepest-first shell reopening, multiplication-only identity changes, readable products, and exact reversal.",
+      "status": "complete"
     },
     {
       "id": "s20",

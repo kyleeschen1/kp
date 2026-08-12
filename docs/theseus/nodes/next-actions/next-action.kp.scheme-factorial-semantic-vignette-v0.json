@@ -440,11 +440,39 @@
       "scope": "slice s18 durable evidence",
       "checkedAt": "2026-08-12T01:28:15.837Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s19 base and return choreography",
+      "checkedAt": "2026-08-12T01:32:59.217Z",
+      "notes": "All 88 focused tests passed. The exact base 1 holds, one carrier reopens the three waiting application-argument shells deepest-first, multiplication alone changes value identity, products 1 2 6 remain readable, and reverse sampling is exact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s19 repository types",
+      "checkedAt": "2026-08-12T01:33:00.318Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s19 patch hygiene",
+      "checkedAt": "2026-08-12T01:33:01.679Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s19 durable evidence",
+      "checkedAt": "2026-08-12T01:33:02.952Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Branch choice, dormant work, local primitives, and repeated-descent summary now have distinct trace-grounded motifs, preventing structural folding from falsely implying evaluation."
+    "summary": "The base case now anchors one return carrier that reopens pending multiplication shells deepest-first and exposes readable exact product checkpoints 1, 2, and 6."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
