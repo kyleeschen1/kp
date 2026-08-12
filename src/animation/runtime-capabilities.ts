@@ -6,6 +6,9 @@ import type {
   compileKpFactoringChoreography,
   sampleKpFactoringChoreography
 } from "./factoring-choreography.ts";
+import type {
+  KpCanonicalReverseChoreographyCapability
+} from "./canonical-reverse-capability.ts";
 
 export interface KpDistributionChoreographyCapability {
   readonly compile: (
@@ -29,6 +32,8 @@ export interface KpAnimationRuntimeCapabilities {
   readonly distributionChoreography?:
     KpDistributionChoreographyCapability | undefined;
   readonly factoringChoreography?: KpFactoringChoreographyCapability | undefined;
+  readonly canonicalReverseChoreography?:
+    KpCanonicalReverseChoreographyCapability | undefined;
 }
 
 export const kpNoAnimationRuntimeCapabilities:

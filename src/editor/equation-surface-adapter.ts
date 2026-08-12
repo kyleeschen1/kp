@@ -152,9 +152,6 @@ import {
   type KpMatrixMatrixCompositionChoreographyFrame
 } from "../animation/matrix-matrix-composition-choreography.ts";
 import {
-  canonicalReverseRuntimePlanForTransformationType
-} from "../animation/canonical-reverse-runtime.ts";
-import {
   applyKpAnimationEpistemicBranch,
   sampleKpAnimationEpistemicBranch,
   type KpEpistemicBranchRuntimeFrame
@@ -597,7 +594,8 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         animation,
         transformationId: transition.id,
         direction: state.direction,
-        announce: index === 0
+        announce: index === 0,
+        runtimeCapabilities: state.runtimeCapabilities
       });
       applyKpAnimationEpistemicBranch({
         transitionElement,
@@ -3209,15 +3207,15 @@ function applyCanonicalReverseChoreography(input: {
   readonly transformationId: string;
   readonly direction: "forward" | "rewind";
   readonly announce: boolean;
+  readonly runtimeCapabilities: KpEditorAnimationPlayerState["runtimeCapabilities"];
 }): void {
   const transformation = input.animation.transformations.find(
     (candidate) => candidate.id === input.transformationId
   );
   const plan = transformation === undefined
     ? undefined
-    : canonicalReverseRuntimePlanForTransformationType(
-        transformation.transformType
-      );
+    : input.runtimeCapabilities.canonicalReverseChoreography
+      ?.planForTransformationType(transformation.transformType);
   if (input.direction !== "rewind" || plan === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationReverseOperationId"];
     delete input.transitionElement.dataset["kpEditorEquationReverseChoreography"];

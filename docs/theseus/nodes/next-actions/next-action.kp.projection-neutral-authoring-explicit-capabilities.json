@@ -187,6 +187,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T23:09:45.511Z",
       "notes": "23 focused tests pass; the algebra pack carries immutable capabilities beside serializable assets, loader/session propagation is typed, and architecture plus full typing are green."
+    },
+    {
+      "command": "node canonical reverse and algebra choreography tests and npm run typecheck and focused distribution-factoring browser case",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T23:13:42.495Z",
+      "notes": "25 focused tests pass, full typing is green, and the browser proves rewind still exposes fusion/fission and mathematical-inverse metadata from the explicit pack table."
     }
   ],
   "expectedLearning": [

@@ -3,7 +3,7 @@ import {
   type KpCanonicalOperationRegistry,
   type KpCanonicalOperationRegistryEntry
 } from "../semantic/canonical-operation-registry.ts";
-import type { KpCanonicalReverseChoreographyPlan } from "./canonical-reverse-runtime.ts";
+import type { KpCanonicalReverseChoreographyPlan } from "./canonical-reverse-capability.ts";
 
 export interface KpCanonicalReverseLawIssue {
   readonly code:

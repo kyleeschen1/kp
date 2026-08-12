@@ -25,7 +25,6 @@ import type {
 import "../fission-fusion-register.ts";
 import "../distribution-choreography-register.ts";
 import "../factoring-choreography-register.ts";
-import "./algebra-reverse-runtime.ts";
 
 export interface KpAlgebraAnimationPack {
   readonly catalog: readonly KpAnimationAsset[];

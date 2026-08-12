@@ -6,8 +6,9 @@ import {
   evaluateKpCanonicalReverseChoreographyLaws
 } from "../src/animation/canonical-reverse-choreography.ts";
 import {
-  kpAlgebraReverseRuntimeRegistrations
-} from "../src/animation/catalog-packs/algebra-reverse-runtime.ts";
+  kpAlgebraReverseChoreographyCapability,
+  kpAlgebraReverseChoreographyEntries
+} from "../src/animation/catalog-packs/algebra-reverse-capability.ts";
 import { kpCanonicalOperationRegistry } from "../src/semantic/canonical-operation-registry.ts";
 
 test("canonical operations satisfy explicit reverse choreography laws", () => {
@@ -20,7 +21,7 @@ test("canonical operations satisfy explicit reverse choreography laws", () => {
 });
 
 test("lazy algebra reverse plans exactly match registry compilation", () => {
-  kpAlgebraReverseRuntimeRegistrations.forEach((registration) => {
+  kpAlgebraReverseChoreographyEntries.forEach((registration) => {
     assert.deepEqual(
       registration.plan,
       canonicalReversePlanForTransformationType({
@@ -28,6 +29,22 @@ test("lazy algebra reverse plans exactly match registry compilation", () => {
       })
     );
   });
+});
+
+test("lazy algebra reverse lookup is an immutable explicit table", () => {
+  assert.equal(Object.isFrozen(kpAlgebraReverseChoreographyCapability), true);
+  assert.equal(Object.isFrozen(kpAlgebraReverseChoreographyEntries), true);
+  assert.equal(kpAlgebraReverseChoreographyEntries.length, 8);
+  assert.equal(
+    kpAlgebraReverseChoreographyCapability.planForTransformationType(
+      "factorCommonTerm"
+    )?.choreographyKind,
+    "fission"
+  );
+  assert.equal(
+    kpAlgebraReverseChoreographyCapability.planForTransformationType("unknown"),
+    undefined
+  );
 });
 
 test("annihilation rewinds by opening its witness into an authored neutral pair", () => {

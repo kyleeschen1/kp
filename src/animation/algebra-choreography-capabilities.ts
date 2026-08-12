@@ -15,12 +15,17 @@ import type {
   KpDistributionChoreographyCapability,
   KpFactoringChoreographyCapability
 } from "./runtime-capabilities.ts";
+import {
+  kpAlgebraReverseChoreographyCapability
+} from "./catalog-packs/algebra-reverse-capability.ts";
 
 export interface KpAlgebraChoreographyCapabilities
 extends KpAnimationRuntimeCapabilities {
   readonly fissionFusion: KpFissionFusionCapability;
   readonly distributionChoreography: KpDistributionChoreographyCapability;
   readonly factoringChoreography: KpFactoringChoreographyCapability;
+  readonly canonicalReverseChoreography:
+    typeof kpAlgebraReverseChoreographyCapability;
 }
 
 export function createKpAlgebraChoreographyCapabilities(input: {
@@ -54,7 +59,8 @@ export function createKpAlgebraChoreographyCapabilities(input: {
   return Object.freeze({
     fissionFusion,
     distributionChoreography,
-    factoringChoreography
+    factoringChoreography,
+    canonicalReverseChoreography: kpAlgebraReverseChoreographyCapability
   });
 }
 

@@ -27,6 +27,12 @@ test("the algebra pack carries immutable runtime capabilities beside serializabl
     typeof pack.runtimeCapabilities.factoringChoreography?.sample,
     "function"
   );
+  assert.equal(
+    pack.runtimeCapabilities.canonicalReverseChoreography
+      ?.planForTransformationType("distributeMultiplication")
+      ?.choreographyKind,
+    "fusion"
+  );
   assert.equal("runtimeCapabilities" in pack.catalog[0]!, false);
 
   const loaded = await loadKpAnimationAsset(

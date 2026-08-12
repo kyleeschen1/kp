@@ -209,7 +209,8 @@
     {
       "id": "s27",
       "title": "Make reverse choreography explicit",
-      "status": "planned"
+      "summary": "Replaced reverse import registration with a frozen eight-entry capability table delivered through the algebra pack and playback state; equation rewind lookup now uses that explicit input.",
+      "status": "complete"
     },
     {
       "id": "s28",
