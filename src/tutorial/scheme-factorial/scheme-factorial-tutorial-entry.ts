@@ -38,6 +38,7 @@ import {
 } from "../kp-tutorial-scrub-bar.ts";
 import {
   readKpSchemeFactorialPublicationArtifact,
+  renderKpSchemeFactorialFocusPublication,
   renderKpSchemeFactorialStaticPublication
 } from "./scheme-factorial-publication.ts";
 import { findKpSchemeFactorialAdjacentCheckpoint } from
@@ -48,10 +49,20 @@ const durationMs = 18_000;
 export function mountKpSchemeFactorialTutorial(input: {
   readonly root: HTMLElement;
 }): () => void {
+  const ownerWindow = input.root.ownerDocument.defaultView;
+  if (ownerWindow === null) throw new Error("Factorial tutorial needs a window.");
+  const requestedView = new URLSearchParams(ownerWindow.location.search).get("view");
+  const linkedCheckpoint = ownerWindow.location.hash.startsWith("#kp-checkpoint-")
+    ? decodeURIComponent(ownerWindow.location.hash.slice("#kp-checkpoint-".length))
+    : null;
+  const requiresFullStory = linkedCheckpoint !== null &&
+    linkedCheckpoint !== "scheme-factorial.checkpoint.source" &&
+    linkedCheckpoint !== "scheme-factorial.checkpoint.first-descent";
+  if (requestedView !== "full" && !requiresFullStory) {
+    return mountKpSchemeFactorialFocusTutorial(input);
+  }
   defineKpTutorialScrubBar();
   const ownerDocument = input.root.ownerDocument;
-  const ownerWindow = ownerDocument.defaultView;
-  if (ownerWindow === null) throw new Error("Factorial tutorial needs a window.");
   const artifact = readKpSchemeFactorialPublicationArtifact(ownerDocument);
   const document = parseKpSchemeFactorialSource();
   input.root.innerHTML = renderKpSchemeFactorialStaticPublication({
@@ -203,6 +214,7 @@ export function mountKpSchemeFactorialTutorial(input: {
   ownerWindow.addEventListener("hashchange", onHashChange);
   reducedMotion.addEventListener("change", onMotionPreference);
   input.root.dataset["kpSchemeFactorialTutorialMounted"] = "true";
+  input.root.dataset["kpSchemeFactorialView"] = "full";
   render();
 
   return () => {
@@ -218,6 +230,95 @@ export function mountKpSchemeFactorialTutorial(input: {
     reducedMotion.removeEventListener("change", onMotionPreference);
     rendererStyle.remove();
     delete input.root.dataset["kpSchemeFactorialTutorialMounted"];
+    delete input.root.dataset["kpSchemeFactorialView"];
+  };
+}
+
+function mountKpSchemeFactorialFocusTutorial(input: {
+  readonly root: HTMLElement;
+}): () => void {
+  const ownerDocument = input.root.ownerDocument;
+  const ownerWindow = ownerDocument.defaultView;
+  if (ownerWindow === null) throw new Error("Factorial tutorial needs a window.");
+  const artifact = readKpSchemeFactorialPublicationArtifact(ownerDocument);
+  input.root.innerHTML = renderKpSchemeFactorialFocusPublication({ artifact });
+  const rendererStyle = ownerDocument.createElement("style");
+  rendererStyle.dataset["kpSchemeFactorialRenderer"] = "true";
+  rendererStyle.textContent = kpSchemeFactorialCss + kpSchemeFirstExpansionCss;
+  ownerDocument.head.append(rendererStyle);
+  const stage = required<HTMLElement>(input.root,
+    "[data-kp-scheme-factorial-focus-stage-host]");
+  const toggle = required<HTMLButtonElement>(input.root,
+    "button[data-action=focus-toggle]");
+  const seek = required<HTMLInputElement>(input.root,
+    "input[data-action=focus-seek]");
+  const progressOutput = required<HTMLOutputElement>(input.root,
+    "[data-focus-progress]");
+  const reducedMotion = ownerWindow.matchMedia("(prefers-reduced-motion: reduce)");
+  const clock = createKpReaderTimelinePlaybackClock({
+    id: "scheme-factorial.first-expansion.clock",
+    durationMs: 6_000,
+    initialProgress: 0,
+    ownerWindow
+  });
+
+  const render = (): void => {
+    const progress = clock.getSnapshot().progress;
+    const sampledProgress = reducedMotion.matches
+      ? progress < 0.5 ? 0 : 1
+      : progress;
+    stage.innerHTML = renderKpSchemeFirstExpansionHtml({
+      expansion: artifact.firstExpansion,
+      sample: sampleKpSchemeFactorialFirstExpansion(
+        artifact.firstExpansion,
+        sampledProgress
+      )
+    });
+    seek.value = String(progress);
+    progressOutput.value = `${Math.round(progress * 100)}%`;
+    toggle.textContent = clock.getStatus() === "playing"
+      ? "Pause"
+      : progress >= 0.999 ? "Replay" : "Play";
+    toggle.setAttribute("aria-label", toggle.textContent);
+    input.root.dataset["kpSchemeFactorialProgress"] = progress.toFixed(4);
+    input.root.dataset["kpSchemeFactorialCheckpoint"] = progress >= 0.999
+      ? "scheme-factorial.checkpoint.first-descent"
+      : "scheme-factorial.checkpoint.source";
+  };
+  const unsubscribe = clock.subscribe(render);
+  const onToggle = (): void => {
+    if (clock.getStatus() === "playing") {
+      clock.pause();
+    } else {
+      if (clock.getSnapshot().progress >= 0.999) clock.seek(0);
+      clock.play({ direction: "forward", stopAt: 1 });
+    }
+    render();
+  };
+  const onSeek = (): void => {
+    clock.pause();
+    clock.seek(Number(seek.value), "controls");
+    render();
+  };
+  const onMotionPreference = (): void => render();
+  toggle.disabled = false;
+  seek.disabled = false;
+  toggle.addEventListener("click", onToggle);
+  seek.addEventListener("input", onSeek);
+  reducedMotion.addEventListener("change", onMotionPreference);
+  input.root.dataset["kpSchemeFactorialTutorialMounted"] = "true";
+  input.root.dataset["kpSchemeFactorialView"] = "focus";
+  render();
+
+  return () => {
+    unsubscribe();
+    clock.dispose();
+    toggle.removeEventListener("click", onToggle);
+    seek.removeEventListener("input", onSeek);
+    reducedMotion.removeEventListener("change", onMotionPreference);
+    rendererStyle.remove();
+    delete input.root.dataset["kpSchemeFactorialTutorialMounted"];
+    delete input.root.dataset["kpSchemeFactorialView"];
   };
 }
 

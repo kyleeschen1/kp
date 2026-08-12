@@ -2,6 +2,7 @@ import { projectKpSchemeFactorialResponsiveFrame } from
   "../../animation/scheme-factorial-responsive-projection.ts";
 import {
   defineKpSchemeFactorialFirstExpansion,
+  sampleKpSchemeFactorialFirstExpansion,
   type KpSchemeFirstExpansion
 } from "../../animation/scheme-factorial-first-expansion.ts";
 import {
@@ -17,6 +18,8 @@ import {
 import {
   renderKpSchemeFactorialHtml
 } from "../../rendering/scheme-factorial-html.ts";
+import { renderKpSchemeFirstExpansionHtml } from
+  "../../rendering/scheme-factorial-first-expansion-html.ts";
 import type { KpSchemeCheckpointProjection } from
   "../../semantic/scheme-factorial-checkpoint-projector.ts";
 import type { KpSchemeSourceDocument } from
@@ -146,6 +149,38 @@ export function renderKpSchemeFactorialStaticPublication(input: {
       <ol>${transcript}</ol>
     </details>
     <footer><a href="/?view=animation-library-host">Open the animation library</a></footer>
+  </main>`;
+}
+
+/**
+ * Visual discovery defaults to one claim. The complete trace story remains a
+ * linked alternate projection rather than competing with the exemplar.
+ */
+export function renderKpSchemeFactorialFocusPublication(input: {
+  readonly artifact: KpSchemeFactorialPublicationArtifact;
+}): string {
+  const stage = renderKpSchemeFirstExpansionHtml({
+    expansion: input.artifact.firstExpansion,
+    sample: sampleKpSchemeFactorialFirstExpansion(
+      input.artifact.firstExpansion,
+      0
+    )
+  });
+  return `<main class="kp-scheme-factorial-focus" data-kp-scheme-factorial-focus-publication>
+    <header class="kp-scheme-factorial-focus__header">
+      <p class="kp-scheme-factorial-focus__eyebrow">One recursive step</p>
+      <h1>Watch the call open.</h1>
+    </header>
+    <figure class="kp-scheme-factorial-focus__figure">
+      <div data-kp-scheme-factorial-focus-stage-host>${stage}</div>
+      <figcaption>Three stays behind while the next call begins with two.</figcaption>
+    </figure>
+    <div class="kp-scheme-factorial-focus__transport" data-kp-scheme-factorial-focus-transport>
+      <button type="button" data-action="focus-toggle" disabled>Play</button>
+      <input type="range" min="0" max="1" step="0.001" value="0" data-action="focus-seek" aria-label="Scrub this recursive expansion" disabled />
+      <output data-focus-progress>0%</output>
+    </div>
+    <footer><a href="${kpSchemeFactorialTutorialPath}?view=full">Full factorial evaluation</a></footer>
   </main>`;
 }
 

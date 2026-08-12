@@ -12,6 +12,7 @@ import {
 } from "../src/tutorial/scheme-factorial/scheme-factorial-route.ts";
 import {
   defineKpSchemeFactorialPublicationArtifact,
+  renderKpSchemeFactorialFocusPublication,
   renderKpSchemeFactorialStaticPublication,
   serializeKpSchemeFactorialPublicationArtifact
 } from "../src/tutorial/scheme-factorial/scheme-factorial-publication.ts";
@@ -63,6 +64,16 @@ test("publishes a complete searchable no-JavaScript fallback", () => {
   assert.equal((html.match(/data-kp-scheme-checkpoint-transcript=/gu) ?? []).length,
     7);
   assert.match(html, /Open the animation library/u);
+});
+
+test("publishes one austere first-expansion review surface", () => {
+  const html = renderKpSchemeFactorialFocusPublication({ artifact });
+  assert.match(html, /Watch the call open/u);
+  assert.match(html, /data-kp-scheme-factorial-focus-stage-host/u);
+  assert.match(html, /data-action="focus-toggle"/u);
+  assert.match(html, /Full factorial evaluation/u);
+  assert.equal((html.match(/type="range"/gu) ?? []).length, 1);
+  assert.doesNotMatch(html, /Evaluation outline|Previous|Next|Rewind/u);
 });
 
 test("embeds compact publication truth rather than a learner evaluator", async () => {

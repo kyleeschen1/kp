@@ -17,6 +17,13 @@ membranes enter, and the decremented argument settles as `2`. The transition
 contains no SVG particles, detached parameter cell, branch card, waiting-shell
 row, or whole-checkpoint crossfade.
 
+The default route now isolates this proof on an austere focus surface: one
+short heading, one expression stage, one sentence, Play, and one scrub track.
+The definition fold, later recursion motifs, checkpoint transcript, previous /
+next / rewind controls, and animation-library navigation no longer compete in
+the default review. They remain intact behind the quiet `?view=full` link so
+this presentation correction does not discard the trace story.
+
 ## Durable proof
 
 `scheme-factorial-first-expansion.ts` compiles a closed action family from the
@@ -38,9 +45,11 @@ intermediate movement.
 - `npm run typecheck`: application, Node, test, Svelte, and domain typechecks
   passed.
 - `npm run visual:scheme-factorial`: six Chromium checks passed. The focused
-  browser assertion verifies eight code-material tokens, no transient SVG
-  overlay, the exact settled expression, compact layout, reduced motion,
-  static publication, and learner resource boundaries.
+  browser assertion verifies the isolated focus view, a single range control,
+  eight code-material tokens, no transient SVG overlay, the exact settled
+  expression, compact layout, reduced motion, static publication, and learner
+  resource boundaries. The legacy full story remains browser-checked through
+  its explicit query projection.
 
 Automated verification protects semantic truth and lifecycle behavior. It does
 not approve motion, timing, spacing, visual continuity, or the teaching claim.

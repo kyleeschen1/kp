@@ -17,13 +17,13 @@ import { kpSchemeFactorialFirstExpansion } from
   "./src/animation/scheme-factorial-canonical-first-expansion.ts";
 import { kpSchemeFactorialCss } from
   "./src/rendering/scheme-factorial-html.ts";
+import { kpSchemeFirstExpansionCss } from
+  "./src/rendering/scheme-factorial-first-expansion-html.ts";
 import { kpSchemeFactorialCheckpoints } from
   "./src/semantic/scheme-factorial-checkpoints.ts";
-import { parseKpSchemeFactorialSource } from
-  "./src/semantic/scheme-factorial-parser.ts";
 import {
   defineKpSchemeFactorialPublicationArtifact,
-  renderKpSchemeFactorialStaticPublication,
+  renderKpSchemeFactorialFocusPublication,
   serializeKpSchemeFactorialPublicationArtifact
 } from "./src/tutorial/scheme-factorial/scheme-factorial-publication.ts";
 
@@ -441,10 +441,8 @@ function compileSchemeFactorialStaticFallback(): string {
     projectRoot,
     "src/tutorial/kp-tutorial-scrub-bar.css"
   ), "utf8");
-  return `<style>${publicationCss}\n${scrubCss}\n${kpSchemeFactorialCss}</style>${renderKpSchemeFactorialStaticPublication({
-    document: parseKpSchemeFactorialSource(),
-    artifact: schemeFactorialPublicationArtifact,
-    availableWidthPx: 720
+  return `<style>${publicationCss}\n${scrubCss}\n${kpSchemeFactorialCss}\n${kpSchemeFirstExpansionCss}</style>${renderKpSchemeFactorialFocusPublication({
+    artifact: schemeFactorialPublicationArtifact
   })}`;
 }
 

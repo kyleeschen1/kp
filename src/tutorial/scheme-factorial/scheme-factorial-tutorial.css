@@ -64,7 +64,102 @@
 .kp-scheme-factorial-publication__transcript li { margin-block: .5rem; }
 .kp-scheme-factorial-publication a { color: #9bd1fb; }
 .kp-scheme-factorial-publication footer { font-size: .82rem; }
+
+.kp-scheme-factorial-focus {
+  --kp-lesson-theme-surface: #0d0e1c;
+  --kp-lesson-theme-math-foreground: #f0efea;
+  --kp-lesson-theme-focus: #88c9ff;
+  box-sizing: border-box;
+  color: var(--kp-lesson-theme-math-foreground);
+  display: grid;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  margin: 0 auto;
+  max-inline-size: 64rem;
+  min-block-size: 100vh;
+  padding: clamp(1.25rem, 5vw, 4rem);
+}
+.kp-scheme-factorial-focus,
+.kp-scheme-factorial-focus * { box-sizing: border-box; }
+.kp-scheme-factorial-focus__header {
+  align-self: end;
+  max-inline-size: 38rem;
+}
+.kp-scheme-factorial-focus__eyebrow {
+  color: #88c9ff;
+  font-size: .75rem;
+  letter-spacing: .1em;
+  margin: 0 0 .45rem;
+  text-transform: uppercase;
+}
+.kp-scheme-factorial-focus h1 {
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  font-weight: 520;
+  line-height: 1.2;
+  margin: 0;
+}
+.kp-scheme-factorial-focus__figure {
+  align-content: center;
+  display: grid;
+  margin: 0;
+  min-block-size: min(48vh, 30rem);
+}
+.kp-scheme-factorial-focus__figure figcaption {
+  color: #d0d0d5;
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0 auto;
+  max-inline-size: 34rem;
+  padding-block-start: 1rem;
+  text-align: center;
+}
+.kp-scheme-factorial-focus__transport {
+  align-items: center;
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: auto minmax(10rem, 1fr) 3rem;
+  margin: 0 auto;
+  max-inline-size: 42rem;
+  inline-size: 100%;
+}
+.kp-scheme-factorial-focus__transport button {
+  border: 1px solid #74bff8;
+  border-radius: 5px;
+  color: #0d0e1c;
+  background: #88c9ff;
+  cursor: pointer;
+  font: inherit;
+  min-inline-size: 4.5rem;
+  padding: .48rem .72rem;
+}
+.kp-scheme-factorial-focus__transport button:focus-visible,
+.kp-scheme-factorial-focus__transport input:focus-visible {
+  outline: 2px solid #f0efea;
+  outline-offset: 3px;
+}
+.kp-scheme-factorial-focus__transport input {
+  accent-color: #88c9ff;
+  inline-size: 100%;
+}
+.kp-scheme-factorial-focus__transport output {
+  color: #b4b5be;
+  font-size: .72rem;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+.kp-scheme-factorial-focus footer {
+  align-self: start;
+  font-size: .78rem;
+  text-align: center;
+}
+.kp-scheme-factorial-focus footer a { color: #9bd1fb; }
 @media (max-width: 560px) {
   .kp-scheme-factorial-publication { gap: .85rem; padding: 1rem .75rem 2rem; }
   .kp-scheme-factorial-publication__header > p:last-child { line-height: 1.55; }
+  .kp-scheme-factorial-focus {
+    gap: 1rem;
+    padding: 1rem .8rem 2rem;
+  }
+  .kp-scheme-factorial-focus__figure { min-block-size: 46vh; }
+  .kp-scheme-factorial-focus__figure figcaption { padding-inline: .75rem; }
 }

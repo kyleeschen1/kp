@@ -9,7 +9,7 @@ test.beforeEach(async () => {
   await mkdir(evidenceDirectory, { recursive: true });
 });
 
-test("captures the wide canonical story and direct checkpoint seeks", async ({
+test("isolates the first expansion while preserving full-story checkpoint seeks", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1_280, height: 900 });
@@ -19,27 +19,36 @@ test("captures the wide canonical story and direct checkpoint seeks", async ({
     "data-kp-scheme-factorial-tutorial-mounted",
     "true"
   );
+  await expect(root).toHaveAttribute("data-kp-scheme-factorial-view", "focus");
   await expect(page.getByRole("heading", {
-    name: "How does (factorial 3) come back?"
+    name: "Watch the call open."
   })).toBeVisible();
-  await expect(page.locator("[data-kp-scheme-factorial-stage]")).toHaveAttribute(
-    "data-kp-scheme-layout",
-    "wide"
-  );
-  await expect(page.locator("kp-tutorial-scrub-bar")).toHaveAttribute(
-    "data-kp-tutorial-scrub-enhancement",
-    "ready"
-  );
-  await expect(page.locator("[data-kp-scheme-factorial-caption]")).toContainText(
-    "definition"
-  );
+  await expect(page.locator("[data-kp-scheme-first-expansion]"))
+    .toHaveAttribute("data-kp-scheme-paint-owner", "code-material");
+  await expect(page.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Play" })).toBeVisible();
+  await expect(page.locator('input[data-action="focus-seek"]')).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Full factorial evaluation" }))
+    .toBeVisible();
+  const focusSeek = page.locator('input[data-action="focus-seek"]');
+  await focusSeek.fill("0.5");
+  await expect(page.locator("[data-kp-scheme-first-expansion]"))
+    .toHaveAttribute("data-kp-scheme-first-expansion-phase", "bind");
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-focus-midpoint.png`,
+    fullPage: true
+  });
+  await focusSeek.fill("1");
+  await expect(page.locator(".kp-scheme-first-expansion__accessible"))
+    .toHaveText("(* 3 (factorial 2))");
   await assertNoOverflow(page);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-source.png`,
     fullPage: true
   });
 
-  await page.goto(`${route}#kp-checkpoint-scheme-factorial.checkpoint.base-case`);
+  await page.goto(`${route}?view=full#kp-checkpoint-scheme-factorial.checkpoint.base-case`);
+  await expect(root).toHaveAttribute("data-kp-scheme-factorial-view", "full");
   await expect(root).toHaveAttribute(
     "data-kp-scheme-factorial-checkpoint",
     "scheme-factorial.checkpoint.base-case"
@@ -65,7 +74,7 @@ test("scrubs canonical motifs with native endpoints and one paint owner", async 
   page
 }) => {
   await page.setViewportSize({ width: 1_280, height: 900 });
-  await page.goto(route);
+  await page.goto(`${route}?view=full`);
   const seek = page.locator('input[data-action="seek"]');
   const firstExpansionProgress = await timelineProgress(page, "first-descent", 0.5);
   await seek.fill(firstExpansionProgress.toFixed(3));
@@ -116,7 +125,7 @@ test("scrubs canonical motifs with native endpoints and one paint owner", async 
 
 test("keeps fixed readable type on a compact phone stage", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${route}#kp-checkpoint-scheme-factorial.checkpoint.repeated-descent`);
+  await page.goto(`${route}?view=full#kp-checkpoint-scheme-factorial.checkpoint.repeated-descent`);
   await expect(page.locator("[data-kp-scheme-factorial-stage]")).toHaveAttribute(
     "data-kp-scheme-layout",
     "compact"
@@ -136,7 +145,7 @@ test("reduced motion preserves settled native code without overlays", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1_280, height: 900 });
-  await page.goto(route);
+  await page.goto(`${route}?view=full`);
   await page.locator('input[data-action="seek"]').fill("0.77");
   await expect(page.locator("[data-kp-scheme-transient-overlay]")).toHaveCount(0);
   await expect(page.locator("[data-kp-scheme-native-layer] code").first())
@@ -152,12 +161,12 @@ test("ships a searchable no-JavaScript fallback", async ({ browser }) => {
   const page = await context.newPage();
   await page.goto(route);
   await expect(page.getByRole("heading", {
-    name: "How does (factorial 3) come back?"
+    name: "Watch the call open."
   })).toBeVisible();
   const text = await page.locator("body").textContent();
-  expect(text).toContain("(define (factorial n)");
-  await expect(page.locator("[data-kp-scheme-checkpoint-transcript]")).toHaveCount(7);
-  await expect(page.locator('input[data-action="seek"]')).toBeDisabled();
+  expect(text).toContain("(factorial 3)");
+  await expect(page.locator("[data-kp-scheme-checkpoint-transcript]")).toHaveCount(0);
+  await expect(page.locator('input[data-action="focus-seek"]')).toBeDisabled();
   await context.close();
 });
 
