@@ -237,11 +237,46 @@
       "scope": "slice s11 durable evidence",
       "checkedAt": "2026-08-12T00:48:36.649Z",
       "notes": "Workspace validation passed with 929 nodes and 19558 events before slice completion."
+    },
+    {
+      "command": "npm run check:scheme-factorial-trace",
+      "status": "passed",
+      "scope": "slice s12 byte-exact generated artifact",
+      "checkedAt": "2026-08-12T00:56:13.070Z",
+      "notes": "The checked-in factorial trace reproduced byte for byte from canonical source under the bounded evaluator."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s12 trace artifact contract",
+      "checkedAt": "2026-08-12T00:56:14.221Z",
+      "notes": "All 53 focused tests passed, including deep freezing, schema validation, deterministic regeneration, and the evaluator-free learner artifact seam."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s12 repository types",
+      "checkedAt": "2026-08-12T00:56:15.267Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s12 patch hygiene",
+      "checkedAt": "2026-08-12T00:56:16.231Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s12 durable evidence",
+      "checkedAt": "2026-08-12T00:56:17.405Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s11 completes the factual evaluator: factorial 3 descends through named recursive calls, preserves waiting multiplication contexts, returns exact value identities in reverse order, and settles at 6."
+    "summary": "Canonical Scheme source now deterministically compiles into a checked-in frozen trace artifact; the learner-facing reader imports generated data and validation only, never the evaluator."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

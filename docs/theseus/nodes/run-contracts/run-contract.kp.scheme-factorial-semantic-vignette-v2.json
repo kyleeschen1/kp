@@ -125,7 +125,8 @@
     {
       "id": "s12",
       "title": "Freeze the factorial trace artifact",
-      "status": "planned"
+      "summary": "Added deterministic trace generation, exact staleness checks, a frozen schema-valid reader seam, and proof that publication does not import the evaluator.",
+      "status": "complete"
     },
     {
       "id": "s13",
