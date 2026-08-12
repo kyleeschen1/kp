@@ -7,7 +7,7 @@ export const kpPlaceValueAdditionPreservationManifest = Object.freeze({
   schemaVersion: "kp.place-value-addition-preservation.v1",
   stablePromotionId: "kp.promotion.place-value-addition",
   animationId: "animation.place-value-addition.278-plus-156",
-  baselineCommit: "0c1506d1",
+  baselineCommit: "d38f06fe",
   canonicalExpression: "278 + 156 = 434",
   primaryProjection: Object.freeze({
     kind: "stacked-written-algorithm",
@@ -104,15 +104,15 @@ export const kpPlaceValueAdditionPreservationManifest = Object.freeze({
     }),
     Object.freeze({
       path: "src/rendering/native-katex-scene-compositor.ts",
-      sha256: "2acdfe55f94d08e9d5a72f6b1b34096b2d767b746b24eda709816edcb7fb16a0"
+      sha256: "3e9cfee07a97f5434ab7d489d20d266103eb1f5962c39f014b386100eb20181e"
     }),
     Object.freeze({
       path: "src/reader/app/reader-canonical-equation-session.ts",
-      sha256: "d4243fdb443ece21bd9a237dac1fb76dc43e147b1b6a44d677042a96618a7ecb"
+      sha256: "b0e98954a0883356cab3f046c1760c918572b6f5ca3107a1b4cf3360ffe9ee23"
     }),
     Object.freeze({
       path: "src/reader/renderers/equation-scene-compositor-adapter.ts",
-      sha256: "da183e47c91b0cc18c91436a2ed8644951bce2a329a9934fd7ce2cb48206b0d7"
+      sha256: "38d5c38d3f91efd15e8b7ff2f729a66938624690cec27fef96843b4ef0e30649"
     }),
     Object.freeze({
       path: "src/reader/renderers/equation-render-plan.ts",

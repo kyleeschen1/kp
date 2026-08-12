@@ -85,6 +85,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-12T21:36:07.173Z",
       "notes": "All 25 unique first-party pages, including Scheme factorial, agree across executable authority, expected order, route contract, and the durable inspection ledger."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/place-value-addition-preservation-manifest.test.ts tests/native-katex-operation-choreography.test.ts tests/kp-article-v1-fraction-composition-attention-stage.test.ts tests/reader-runtime-lifecycle.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:38:54.569Z",
+      "notes": "All ten protected digests were audited. Exactly three changed: lifecycle hardening in 91a4b6d6 and paired adapter/compositor horizontal-axis constraints in d38f06fe. The rebase records d38f06fe as the later provenance boundary; preservation and adjacent behavior pass."
     }
   ],
   "expectedLearning": [

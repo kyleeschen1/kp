@@ -71,7 +71,8 @@
     {
       "id": "s04",
       "title": "Resolve place-value compositor preservation hash",
-      "status": "planned"
+      "summary": "Audited all ten protected files, traced the only three digest changes to approved lifecycle hardening and algebra attention-stage commits, rebased to d38f06fe, and passed preservation plus adjacent behavior tests.",
+      "status": "complete"
     },
     {
       "id": "s05",
