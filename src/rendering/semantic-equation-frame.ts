@@ -5,6 +5,9 @@ import {
   type KpEquationTokenMotionFrame
 } from "./semantic-equation-token-renderer.ts";
 import type { KpPrecomputedEquationMotionPlan } from "./precomputed-equation-motion.ts";
+import type {
+  KpAnimationRuntimeCapabilities
+} from "../animation/runtime-capabilities.ts";
 import {
   sampleKpEquationSemanticTimeline,
   type KpEquationSemanticTimelineFrame
@@ -44,6 +47,7 @@ export function createKpSemanticEquationTokenFrame(input: {
   readonly clock: KpSemanticEquationFrameClock;
   readonly precomputedPlan?: KpPrecomputedEquationMotionPlan | undefined;
   readonly accessibilityMode?: KpEquationMotifAccessibilityMode | undefined;
+  readonly runtimeCapabilities?: KpAnimationRuntimeCapabilities | undefined;
 }): KpSemanticEquationTokenFrame {
   const phaseLocalProgress = clamp01(input.clock.phaseLocalProgress);
   const semanticProgress = input.clock.direction === "forward"
@@ -68,7 +72,11 @@ export function createKpSemanticEquationTokenFrame(input: {
     globalProgress: input.clock.globalProgress,
     phaseLocalProgress,
     semanticProgress: accessibleProgress,
-    motion: sampleKpEquationTokenMotion(input.geometry, accessibleProgress),
+    motion: sampleKpEquationTokenMotion(
+      input.geometry,
+      accessibleProgress,
+      input.runtimeCapabilities
+    ),
     semanticTimeline: accessibility?.semanticTimeline ?? (
       semanticTimeline === undefined
         ? fallbackSemanticTimelineFrame(accessibleProgress)

@@ -58,8 +58,9 @@ import {
   kpLessonCanonicalDistributionMotionProfile
 } from "../animation/distribution-motion-profile.ts";
 import {
-  kpDistributionChoreographyRuntime
-} from "../animation/distribution-choreography-runtime.ts";
+  kpNoAnimationRuntimeCapabilities,
+  type KpAnimationRuntimeCapabilities
+} from "../animation/runtime-capabilities.ts";
 import {
   evaluateKpPresentationTransferReadiness,
   sampleKpDiscretePresentationHandoff
@@ -68,9 +69,6 @@ import type {
   KpFactoringChoreographyFrame,
   KpFactoringChoreographyPlan
 } from "../animation/factoring-choreography.ts";
-import {
-  kpFactoringChoreographyRuntime
-} from "../animation/factoring-choreography-runtime.ts";
 import {
   compileKpFractionChoreography,
   sampleKpFractionChoreography,
@@ -293,7 +291,9 @@ interface DerivativePowerChoreographyContext {
 
 export function sampleKpEquationTokenMotion(
   geometry: KpMeasuredEquationTransitionGeometry,
-  progress: number
+  progress: number,
+  runtimeCapabilities: KpAnimationRuntimeCapabilities =
+    kpNoAnimationRuntimeCapabilities
 ): KpEquationTokenMotionFrame {
   const p = clamp01(progress);
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
@@ -310,9 +310,14 @@ export function sampleKpEquationTokenMotion(
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
   const distributionChoreography = createDistributionChoreographyContext(
     geometry,
-    p
+    p,
+    runtimeCapabilities
   );
-  const factoringChoreography = createFactoringChoreographyContext(geometry, p);
+  const factoringChoreography = createFactoringChoreographyContext(
+    geometry,
+    p,
+    runtimeCapabilities
+  );
   const fractionChoreography = createFractionChoreographyContext(geometry, p);
   const exponentLawChoreography = createExponentLawChoreographyContext(geometry, p);
   const identityAbsorptionChoreography =
@@ -939,7 +944,8 @@ function unionBounds(
 
 function createDistributionChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
-  progress: number
+  progress: number,
+  runtimeCapabilities: KpAnimationRuntimeCapabilities
 ): DistributionChoreographyContext | undefined {
   if (geometry.distributionChoreographyKind !== "canonical-fan-out") {
     return undefined;
@@ -973,7 +979,10 @@ function createDistributionChoreographyContext(
   ) {
     throw new Error("Canonical distribution geometry is missing factor fan-out.");
   }
-  const runtime = kpDistributionChoreographyRuntime();
+  const runtime = runtimeCapabilities.distributionChoreography;
+  if (runtime === undefined) {
+    throw new Error("Canonical distribution requires its pack capability.");
+  }
   const plan = runtime.compile({
     id: `${geometry.transitionId}.distribution-choreography`,
     sourceFactorId,
@@ -1184,7 +1193,8 @@ function createDistributionChoreographyContext(
 
 function createFactoringChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
-  progress: number
+  progress: number,
+  runtimeCapabilities: KpAnimationRuntimeCapabilities
 ): FactoringChoreographyContext | undefined {
   if (geometry.factoringChoreographyKind !== "canonical-fan-in") {
     return undefined;
@@ -1218,7 +1228,10 @@ function createFactoringChoreographyContext(
   ) {
     throw new Error("Canonical factoring geometry is missing factor fan-in.");
   }
-  const runtime = kpFactoringChoreographyRuntime();
+  const runtime = runtimeCapabilities.factoringChoreography;
+  if (runtime === undefined) {
+    throw new Error("Canonical factoring requires its pack capability.");
+  }
   const plan = runtime.compile({
     id: `${geometry.transitionId}.factoring-choreography`,
     factorCopyIds: factorRelation.source.selectorIds,

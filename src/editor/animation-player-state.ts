@@ -13,6 +13,9 @@ import {
   dispatchKpEditorAnimationSurface,
   type KpEditorAnimationSurfaceDispatch
 } from "./animation-surface-dispatch.ts";
+import type {
+  KpAnimationRuntimeCapabilities
+} from "../animation/runtime-capabilities.ts";
 
 export type KpEditorAnimationPlaybackStatus =
   | "idle"
@@ -31,12 +34,14 @@ export interface KpEditorAnimationPlayerState {
   readonly beatCount?: number | undefined;
   readonly surface: KpEditorAnimationSurfaceDispatch;
   readonly runtimeFrame: KpAnimationRuntimeFrame;
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
 }
 
 export interface CreateKpEditorAnimationPlayerStateInput {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly animation: KpAnimationAsset;
   readonly catalog?: readonly KpAnimationAsset[] | undefined;
+  readonly runtimeCapabilities?: KpAnimationRuntimeCapabilities | undefined;
   readonly playbackStatus?: KpEditorAnimationPlaybackStatus | undefined;
   readonly direction?: KpAnimationAssetTransformationTreeDirection | undefined;
   readonly progress?: number | undefined;
@@ -84,6 +89,7 @@ export function createKpEditorAnimationPlayerState(
             input.descriptor.beatCount ?? input.animation.timeline?.beatCount
         },
     surface: dispatchKpEditorAnimationSurface(input.descriptor),
-    runtimeFrame
+    runtimeFrame,
+    runtimeCapabilities: input.runtimeCapabilities ?? Object.freeze({})
   };
 }

@@ -16,21 +16,35 @@ import {
 import {
   createKpVerifiedGeneratedLinearSolveRuntimeAsset
 } from "../verified-generated-linear-solve-runtime-asset.ts";
+import {
+  kpAlgebraChoreographyCapabilities
+} from "../algebra-choreography-capabilities.ts";
+import type {
+  KpAnimationRuntimeCapabilities
+} from "../runtime-capabilities.ts";
 import "../fission-fusion-register.ts";
 import "../distribution-choreography-register.ts";
 import "../factoring-choreography-register.ts";
 import "./algebra-reverse-runtime.ts";
 
-export function createKpAlgebraAnimationPack(): readonly KpAnimationAsset[] {
-  return [
-    createLinearSolveAnimationAsset(),
-    createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
-    createFractionSimplificationAnimationAsset(),
-    createExponentExpansionAnimationAsset(),
-    createExponentRadicalRewriteAnimationAsset(),
-    createFunctionWrapAnimationAsset(),
-    createDistributionExpansionAnimationAsset(),
-    createDistributionFactoringAnimationAsset(),
-    createInequalitySignFlipAnimationAsset()
-  ];
+export interface KpAlgebraAnimationPack {
+  readonly catalog: readonly KpAnimationAsset[];
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
+}
+
+export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
+  return Object.freeze({
+    catalog: Object.freeze([
+      createLinearSolveAnimationAsset(),
+      createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
+      createFractionSimplificationAnimationAsset(),
+      createExponentExpansionAnimationAsset(),
+      createExponentRadicalRewriteAnimationAsset(),
+      createFunctionWrapAnimationAsset(),
+      createDistributionExpansionAnimationAsset(),
+      createDistributionFactoringAnimationAsset(),
+      createInequalitySignFlipAnimationAsset()
+    ]),
+    runtimeCapabilities: kpAlgebraChoreographyCapabilities
+  });
 }

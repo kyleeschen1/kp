@@ -166,6 +166,27 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-12T22:51:17.268Z"
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-08-12T23:09:42.672Z",
+      "notes": "The pre-existing stage-reservation CLS ratchet fails identically at prior commit 79a146bc: equation 0.00571812 and graph about 0.002407 exceed 0.001. Functional hydration passes 3 of 5; this capability slice neither caused nor weakens the threshold."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/editor-animation-visuals.browser.spec.ts --grep distribution-and-factoring-family --project chromium --workers 1",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T23:09:44.425Z",
+      "notes": "The exact distribution/factoring family case passes with both semantic directions active and explicit algebra pack capabilities."
+    },
+    {
+      "command": "node focused algebra capability tests and npm run check:architecture and npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T23:09:45.511Z",
+      "notes": "23 focused tests pass; the algebra pack carries immutable capabilities beside serializable assets, loader/session propagation is typed, and architecture plus full typing are green."
     }
   ],
   "expectedLearning": [

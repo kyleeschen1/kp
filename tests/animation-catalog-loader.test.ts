@@ -31,7 +31,7 @@ test("lazy capability packs preserve the complete concrete catalog", async () =>
     loaded.map(({ animation }) => animation.id).sort(),
     expectedIds
   );
-  loaded.forEach(({ animation, catalog, packId }) => {
+  loaded.forEach(({ animation, catalog, packId, runtimeCapabilities }) => {
     assert.equal(kpAnimationCatalogPackId(animation.id), packId);
     assert.equal(catalog.some((candidate) => candidate.id === animation.id), true);
     assert.equal(
@@ -42,6 +42,18 @@ test("lazy capability packs preserve the complete concrete catalog", async () =>
       true,
       `${animation.id} has unresolved child animations in ${packId}`
     );
+    if (packId === "algebra") {
+      assert.equal(
+        typeof runtimeCapabilities.distributionChoreography?.compile,
+        "function"
+      );
+      assert.equal(
+        typeof runtimeCapabilities.factoringChoreography?.sample,
+        "function"
+      );
+    } else {
+      assert.deepEqual(runtimeCapabilities, {});
+    }
   });
 });
 

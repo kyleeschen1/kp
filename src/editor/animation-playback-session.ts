@@ -10,12 +10,16 @@ import {
 import type {
   KpEquationSemanticTimelineCheckpoint
 } from "../rendering/equation-visual-motif-timeline.ts";
+import type {
+  KpAnimationRuntimeCapabilities
+} from "../animation/runtime-capabilities.ts";
 
 export interface KpEditorAnimationPlaybackSession {
   readonly kind: "editor-animation-playback-session";
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly animation: KpAnimationAsset;
   readonly catalog: readonly KpAnimationAsset[];
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
   readonly player: KpEditorAnimationPlayerState;
   readonly tempoMultiplier: number;
   readonly lastTickMs?: number | undefined;
@@ -42,6 +46,7 @@ export function createKpEditorAnimationPlaybackSession(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly animation: KpAnimationAsset;
   readonly catalog?: readonly KpAnimationAsset[] | undefined;
+  readonly runtimeCapabilities?: KpAnimationRuntimeCapabilities | undefined;
   readonly progress?: number | undefined;
 }): KpEditorAnimationPlaybackSession {
   const catalog = [...(input.catalog ?? [])];
@@ -51,11 +56,13 @@ export function createKpEditorAnimationPlaybackSession(input: {
     descriptor: input.descriptor,
     animation: input.animation,
     catalog,
+    runtimeCapabilities: input.runtimeCapabilities ?? Object.freeze({}),
     tempoMultiplier: 1,
     player: createKpEditorAnimationPlayerState({
       descriptor: input.descriptor,
       animation: input.animation,
       catalog,
+      runtimeCapabilities: input.runtimeCapabilities,
       progress: input.progress
     })
   };
@@ -90,6 +97,7 @@ export function replaceKpEditorAnimationPlaybackSessionAsset(input: {
       descriptor: input.session.descriptor,
       animation: input.animation,
       catalog,
+      runtimeCapabilities: input.session.runtimeCapabilities,
       playbackStatus,
       direction: input.session.player.direction,
       progress: input.session.player.progress
@@ -231,6 +239,7 @@ function resampleSession(
       descriptor: session.descriptor,
       animation: session.animation,
       catalog: session.catalog,
+      runtimeCapabilities: session.runtimeCapabilities,
       playbackStatus: update.playbackStatus,
       direction: update.direction ?? session.player.direction,
       progress: update.progress

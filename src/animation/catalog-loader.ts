@@ -1,4 +1,8 @@
 import type { KpAnimationAsset } from "./asset.ts";
+import {
+  kpNoAnimationRuntimeCapabilities,
+  type KpAnimationRuntimeCapabilities
+} from "./runtime-capabilities.ts";
 
 export type KpAnimationCatalogPackId =
   | "exact-quantity"
@@ -18,23 +22,29 @@ export interface KpLoadedAnimationAsset {
   readonly animation: KpAnimationAsset;
   readonly catalog: readonly KpAnimationAsset[];
   readonly packId: KpAnimationCatalogPackId;
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
 }
 
 const packCache = new Map<
   KpAnimationCatalogPackId,
-  Promise<readonly KpAnimationAsset[]>
+  Promise<KpLoadedAnimationPack>
 >();
+
+interface KpLoadedAnimationPack {
+  readonly catalog: readonly KpAnimationAsset[];
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
+}
 
 export async function loadKpAnimationAsset(
   animationId: string
 ): Promise<KpLoadedAnimationAsset> {
   const packId = kpAnimationCatalogPackId(animationId);
-  const catalog = await loadPack(packId);
+  const { catalog, runtimeCapabilities } = await loadPack(packId);
   const animation = catalog.find((candidate) => candidate.id === animationId);
   if (animation === undefined) {
     throw new Error(`Animation pack ${packId} does not contain ${animationId}.`);
   }
-  return { animation, catalog, packId };
+  return { animation, catalog, packId, runtimeCapabilities };
 }
 
 export function kpAnimationCatalogPackId(
@@ -86,7 +96,7 @@ export function kpAnimationCatalogPackId(
 
 async function loadPack(
   packId: KpAnimationCatalogPackId
-): Promise<readonly KpAnimationAsset[]> {
+): Promise<KpLoadedAnimationPack> {
   const existing = packCache.get(packId);
   if (existing !== undefined) return existing;
 
@@ -99,43 +109,50 @@ async function loadPack(
 
 async function loadUncachedPack(
   packId: KpAnimationCatalogPackId
-): Promise<readonly KpAnimationAsset[]> {
+): Promise<KpLoadedAnimationPack> {
   switch (packId) {
     case "exact-quantity":
-      return (await import("./catalog-packs/exact-quantity.ts"))
-        .createKpExactQuantityAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/exact-quantity.ts"))
+        .createKpExactQuantityAnimationPack());
     case "place-value":
-      return (await import("./catalog-packs/place-value.ts"))
-        .createKpPlaceValueAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/place-value.ts"))
+        .createKpPlaceValueAnimationPack());
     case "operation-evaluation":
-      return (await import("./catalog-packs/operation-evaluation.ts"))
-        .createKpOperationEvaluationAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/operation-evaluation.ts"))
+        .createKpOperationEvaluationAnimationPack());
     case "algebra":
       return (await import("./catalog-packs/algebra.ts"))
         .createKpAlgebraAnimationPack();
     case "generated-drafts":
-      return (await import("./catalog-packs/generated-drafts.ts"))
-        .createKpGeneratedDraftAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/generated-drafts.ts"))
+        .createKpGeneratedDraftAnimationPack());
     case "generated-problems":
-      return (await import("./catalog-packs/generated.ts"))
-        .createKpGeneratedProblemAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/generated.ts"))
+        .createKpGeneratedProblemAnimationPack());
     case "graph":
-      return (await import("./catalog-packs/graph.ts"))
-        .createKpGraphAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/graph.ts"))
+        .createKpGraphAnimationPack());
     case "economics":
-      return (await import("./catalog-packs/economics.ts"))
-        .createKpEconomicsAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/economics.ts"))
+        .createKpEconomicsAnimationPack());
     case "physics":
-      return (await import("./catalog-packs/physics.ts"))
-        .createKpPhysicsAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/physics.ts"))
+        .createKpPhysicsAnimationPack());
     case "programming":
-      return (await import("./catalog-packs/programming.ts"))
-        .createKpProgrammingAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/programming.ts"))
+        .createKpProgrammingAnimationPack());
     case "comparison":
-      return (await import("./catalog-packs/comparison.ts"))
-        .createKpComparisonAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/comparison.ts"))
+        .createKpComparisonAnimationPack());
     case "complex-katex":
-      return (await import("./catalog-packs/complex-katex.ts"))
-        .createKpComplexKatexAnimationPack();
+      return dataOnlyPack((await import("./catalog-packs/complex-katex.ts"))
+        .createKpComplexKatexAnimationPack());
   }
+}
+
+function dataOnlyPack(catalog: readonly KpAnimationAsset[]): KpLoadedAnimationPack {
+  return Object.freeze({
+    catalog,
+    runtimeCapabilities: kpNoAnimationRuntimeCapabilities
+  });
 }

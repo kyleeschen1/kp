@@ -3,6 +3,9 @@ import type { KpAnimationAsset } from "../animation/asset.ts";
 import type {
   KpEditorAnimationDescriptor
 } from "./animation-descriptor.ts";
+import type {
+  KpAnimationRuntimeCapabilities
+} from "../animation/runtime-capabilities.ts";
 import {
   createKpEditorAnimationPlaybackSession,
   replaceKpEditorAnimationPlaybackSessionAsset,
@@ -94,13 +97,15 @@ export async function hydrateKpPreparedEditorAnimationPlayer(input: {
   readonly player: HTMLElement;
   readonly animation: KpAnimationAsset;
   readonly descriptor: KpEditorAnimationDescriptor;
+  readonly runtimeCapabilities?: KpAnimationRuntimeCapabilities | undefined;
 }): Promise<void> {
   try {
     await hydrateKpEditorAnimationPlayer(
       input.player,
       input.animation,
       input.descriptor,
-      true
+      true,
+      input.runtimeCapabilities
     );
   } catch (error: unknown) {
     markPlayerLoadFailure(input.player, error);
@@ -217,7 +222,8 @@ async function hydrateKpEditorAnimationPlayer(
   player: HTMLElement,
   animationOverride?: KpAnimationAsset | undefined,
   descriptorOverride?: KpEditorAnimationDescriptor | undefined,
-  prepared = false
+  prepared = false,
+  preparedRuntimeCapabilities?: KpAnimationRuntimeCapabilities | undefined
 ): Promise<void> {
   if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
     player.dataset["kpEditorAnimationLoading"] === "true") return;
@@ -243,7 +249,8 @@ async function hydrateKpEditorAnimationPlayer(
       ? Promise.resolve({
           animation: animationOverride,
           catalog: [animationOverride],
-          packId: "pack.prepared-publication"
+          packId: "pack.prepared-publication",
+          runtimeCapabilities: preparedRuntimeCapabilities ?? Object.freeze({})
         })
       : loadKpAnimationAsset(animationId),
     player.querySelector("[data-kp-editor-animation-gestalt-diagnostics]") ===
@@ -262,7 +269,7 @@ async function hydrateKpEditorAnimationPlayer(
         candidate.id === animation.id ? animation : candidate
       )
     : [...loaded.catalog, animation];
-  const { packId } = loaded;
+  const { packId, runtimeCapabilities } = loaded;
   if (!player.isConnected || player.dataset["kpEditorAnimationDisposed"] === "true") {
     return;
   }
@@ -272,6 +279,7 @@ async function hydrateKpEditorAnimationPlayer(
     descriptor,
     animation,
     catalog,
+    runtimeCapabilities,
     progress
   });
 

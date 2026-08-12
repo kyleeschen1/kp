@@ -203,7 +203,8 @@
     {
       "id": "s26",
       "title": "Inject algebra capabilities through the catalog pack",
-      "status": "planned"
+      "summary": "The lazy algebra pack now returns serializable catalog data plus frozen distribution/factoring capabilities, propagated explicitly through loader, playback session, equation frame, and renderer. Exact browser playback passes; an unrelated pre-existing CLS ratchet was reproduced unchanged at the prior commit.",
+      "status": "complete"
     },
     {
       "id": "s27",

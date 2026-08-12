@@ -28,7 +28,8 @@ export function createKpEditorSemanticEquationTokenFrame(input: {
       phaseLocalProgress: input.phaseLocalProgress
     },
     ...(input.precomputedPlan === undefined ? {} : { precomputedPlan: input.precomputedPlan }),
-    ...(input.accessibilityMode === undefined ? {} : { accessibilityMode: input.accessibilityMode })
+    ...(input.accessibilityMode === undefined ? {} : { accessibilityMode: input.accessibilityMode }),
+    runtimeCapabilities: input.playerState.runtimeCapabilities
   });
 }
 
