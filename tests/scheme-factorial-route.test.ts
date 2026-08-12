@@ -22,6 +22,8 @@ import { kpSchemeFactorialChoreography } from
   "../src/animation/scheme-factorial-canonical-choreography.ts";
 import { kpSchemeFactorialFirstExpansion } from
   "../src/animation/scheme-factorial-canonical-first-expansion.ts";
+import { kpSchemeFactorialFullEvaluation } from
+  "../src/animation/scheme-factorial-canonical-full-evaluation.ts";
 import { kpSchemeFactorialCheckpoints } from
   "../src/semantic/scheme-factorial-checkpoints.ts";
 import { parseKpSchemeFactorialSource } from
@@ -33,7 +35,8 @@ const artifact = defineKpSchemeFactorialPublicationArtifact({
   checkpoints: kpSchemeFactorialCheckpoints,
   timeline: kpSchemeFactorialTimeline,
   choreography: kpSchemeFactorialChoreography,
-  firstExpansion: kpSchemeFactorialFirstExpansion
+  firstExpansion: kpSchemeFactorialFirstExpansion,
+  fullEvaluation: kpSchemeFactorialFullEvaluation
 });
 
 test("owns one parallel canonical route and development catalogue entry", () => {
@@ -66,19 +69,19 @@ test("publishes a complete searchable no-JavaScript fallback", () => {
   assert.match(html, /Open the animation library/u);
 });
 
-test("publishes one austere first-expansion review surface", () => {
+test("publishes one austere full-evaluation review surface", () => {
   const html = renderKpSchemeFactorialFocusPublication({ artifact });
-  assert.match(html, /Watch the call open/u);
+  assert.match(html, /Watch the calls open—and return/u);
   assert.match(html, /data-kp-scheme-factorial-focus-stage-host/u);
   assert.match(html, /data-action="focus-toggle"/u);
-  assert.match(html, /Full factorial evaluation/u);
+  assert.match(html, /Detailed factorial trace/u);
   assert.equal((html.match(/type="range"/gu) ?? []).length, 1);
   assert.doesNotMatch(html, /Evaluation outline|Previous|Next|Rewind/u);
 });
 
 test("embeds compact publication truth rather than a learner evaluator", async () => {
   const serialized = serializeKpSchemeFactorialPublicationArtifact(artifact);
-  assert.ok(serialized.length < 100_000);
+  assert.ok(serialized.length < 155_000);
   assert.doesNotMatch(serialized, /snapshots|continuations|machine-state/u);
   assert.match(serialized, /binding-arc|branch-decision|return-step/u);
   const entry = await readFile(new URL(

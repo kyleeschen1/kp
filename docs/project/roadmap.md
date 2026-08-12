@@ -139,6 +139,18 @@ and primitive result; the learner route still uses one code-material paint
 owner and no SVG substitute overlay. No later factorial beat or CodeMirror
 adapter has been promoted.
 
+The user approved immediate extension through the complete factorial
+evaluation after accepting the corrected first expansion. The bounded scope is
+recorded in
+`decisions/2026-08-12-kp-factorial-full-evaluation-extension.md`: repeat the
+trace-certified activation pattern for `3`, `2`, `1`, and `0`, keep earlier
+calls as compact waiting multiplication shells, resolve the base, and return
+deepest-first to `6` on the same austere stage and clock. This remains one
+factorial-local visual-discovery proof, not a shared Scheme animation grammar.
+The proof is implemented and awaiting human review at
+`reviews/2026-08-12-scheme-factorial-full-evaluation-checkpoint.md`; promotion
+remains explicitly paused.
+
 A bounded visual interruption is now at a human checkpoint, recorded in
 `decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`.
 The demand-shift attention stage keeps one graph geometry, adds a visual safe

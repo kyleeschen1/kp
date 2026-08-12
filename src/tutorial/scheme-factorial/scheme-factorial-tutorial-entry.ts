@@ -5,6 +5,8 @@ import { projectKpSchemeFactorialResponsiveFrame } from
   "../../animation/scheme-factorial-responsive-projection.ts";
 import { sampleKpSchemeFactorialFirstExpansion } from
   "../../animation/scheme-factorial-first-expansion.ts";
+import { sampleKpSchemeFactorialFullEvaluation } from
+  "../../animation/scheme-factorial-full-evaluation.ts";
 import { projectKpSchemeFactorialMotion } from
   "../../animation/scheme-factorial-motion-projection.ts";
 import {
@@ -17,6 +19,7 @@ import {
 } from "../../rendering/scheme-factorial-html.ts";
 import {
   kpSchemeFirstExpansionCss,
+  renderKpSchemeFactorialFullEvaluationHtml,
   renderKpSchemeFirstExpansionHtml
 } from "../../rendering/scheme-factorial-first-expansion-html.ts";
 import { parseKpSchemeFactorialSource } from
@@ -254,26 +257,28 @@ function mountKpSchemeFactorialFocusTutorial(input: {
     "input[data-action=focus-seek]");
   const progressOutput = required<HTMLOutputElement>(input.root,
     "[data-focus-progress]");
+  const caption = required<HTMLElement>(input.root,
+    "[data-kp-scheme-factorial-focus-caption]");
   const reducedMotion = ownerWindow.matchMedia("(prefers-reduced-motion: reduce)");
   const clock = createKpReaderTimelinePlaybackClock({
-    id: "scheme-factorial.first-expansion.clock",
-    durationMs: 6_000,
+    id: "scheme-factorial.full-evaluation.clock",
+    durationMs: 30_000,
     initialProgress: 0,
     ownerWindow
   });
 
   const render = (): void => {
     const progress = clock.getSnapshot().progress;
-    const sampledProgress = reducedMotion.matches
-      ? progress < 0.5 ? 0 : 1
-      : progress;
-    stage.innerHTML = renderKpSchemeFirstExpansionHtml({
-      expansion: artifact.firstExpansion,
-      sample: sampleKpSchemeFactorialFirstExpansion(
-        artifact.firstExpansion,
-        sampledProgress
-      )
+    const sample = sampleKpSchemeFactorialFullEvaluation(
+      artifact.fullEvaluation,
+      progress,
+      { reducedMotion: reducedMotion.matches }
+    );
+    stage.innerHTML = renderKpSchemeFactorialFullEvaluationHtml({
+      evaluation: artifact.fullEvaluation,
+      sample
     });
+    if (caption.textContent !== sample.caption) caption.textContent = sample.caption;
     seek.value = String(progress);
     progressOutput.value = `${Math.round(progress * 100)}%`;
     toggle.textContent = clock.getStatus() === "playing"
@@ -281,9 +286,7 @@ function mountKpSchemeFactorialFocusTutorial(input: {
       : progress >= 0.999 ? "Replay" : "Play";
     toggle.setAttribute("aria-label", toggle.textContent);
     input.root.dataset["kpSchemeFactorialProgress"] = progress.toFixed(4);
-    input.root.dataset["kpSchemeFactorialCheckpoint"] = progress >= 0.999
-      ? "scheme-factorial.checkpoint.first-descent"
-      : "scheme-factorial.checkpoint.source";
+    input.root.dataset["kpSchemeFactorialCheckpoint"] = sample.settledStateId;
   };
   const unsubscribe = clock.subscribe(render);
   const onToggle = (): void => {

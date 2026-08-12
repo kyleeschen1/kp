@@ -9,7 +9,7 @@ test.beforeEach(async () => {
   await mkdir(evidenceDirectory, { recursive: true });
 });
 
-test("isolates the first expansion while preserving full-story checkpoint seeks", async ({
+test("shows the complete austere evaluation while preserving detailed checkpoint seeks", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1_280, height: 900 });
@@ -21,28 +21,28 @@ test("isolates the first expansion while preserving full-story checkpoint seeks"
   );
   await expect(root).toHaveAttribute("data-kp-scheme-factorial-view", "focus");
   await expect(page.getByRole("heading", {
-    name: "Watch the call open."
+    name: "Watch the calls open—and return."
   })).toBeVisible();
-  await expect(page.locator("[data-kp-scheme-first-expansion]"))
+  await expect(page.locator("[data-kp-scheme-full-evaluation]"))
     .toHaveAttribute("data-kp-scheme-paint-owner", "code-material");
   await expect(page.locator("kp-tutorial-scrub-bar")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Play" })).toBeVisible();
   await expect(page.locator('input[data-action="focus-seek"]')).toHaveCount(1);
-  await expect(page.getByRole("link", { name: "Full factorial evaluation" }))
+  await expect(page.getByRole("link", { name: "Detailed factorial trace" }))
     .toBeVisible();
   const focusSeek = page.locator('input[data-action="focus-seek"]');
-  await focusSeek.fill("0.44");
-  await expect(page.locator("[data-kp-scheme-first-expansion]"))
-    .toHaveAttribute("data-kp-scheme-first-expansion-phase", "bind");
-  await expect(page.locator('[data-kp-scheme-provenance-kind="binding-projection"]'))
-    .toHaveCount(3);
+  await focusSeek.fill("0.5");
+  await expect(page.locator("[data-kp-scheme-full-evaluation]"))
+    .not.toHaveAttribute("data-kp-scheme-full-evaluation-transition", "none");
+  await expect(page.locator("[data-kp-scheme-first-expansion-token]"))
+    .not.toHaveCount(0);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-focus-midpoint.png`,
     fullPage: true
   });
   await focusSeek.fill("1");
   await expect(page.locator(".kp-scheme-first-expansion__accessible"))
-    .toHaveText("(* 3 (factorial 2))");
+    .toHaveText("6");
   await assertNoOverflow(page);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-source.png`,
@@ -142,6 +142,40 @@ test("keeps fixed readable type on a compact phone stage", async ({ page }) => {
   });
 });
 
+test("keeps the full evaluation legible on a compact phone stage", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  const seek = page.locator('input[data-action="focus-seek"]');
+  await seek.fill("0.72");
+  const stage = page.locator("[data-kp-scheme-full-evaluation]");
+  const code = stage.locator(".kp-scheme-first-expansion__code");
+  const boxes = await Promise.all([stage, code].map((locator) => locator.boundingBox()));
+  expect(boxes[0]).not.toBeNull();
+  expect(boxes[1]).not.toBeNull();
+  expect(boxes[1]!.x).toBeGreaterThanOrEqual(boxes[0]!.x - 1);
+  expect(boxes[1]!.x + boxes[1]!.width)
+    .toBeLessThanOrEqual(boxes[0]!.x + boxes[0]!.width + 1);
+  const tokensFit = await stage.evaluate((element) => {
+    const stageBounds = element.getBoundingClientRect();
+    return [...element.querySelectorAll<HTMLElement>(
+      "[data-kp-scheme-first-expansion-token]"
+    )].filter((token) => Number(getComputedStyle(token).opacity) > 0.01)
+      .every((token) => {
+        const bounds = token.getBoundingClientRect();
+        return bounds.left >= stageBounds.left - 1 &&
+          bounds.right <= stageBounds.right + 1;
+      });
+  });
+  expect(tokensFit).toBe(true);
+  await assertNoOverflow(page);
+  await page.screenshot({
+    path: `${evidenceDirectory}/phone-full-evaluation.png`,
+    fullPage: true
+  });
+});
+
 test("reduced motion preserves settled native code without overlays", async ({
   page
 }) => {
@@ -163,7 +197,7 @@ test("ships a searchable no-JavaScript fallback", async ({ browser }) => {
   const page = await context.newPage();
   await page.goto(route);
   await expect(page.getByRole("heading", {
-    name: "Watch the call open."
+    name: "Watch the calls open—and return."
   })).toBeVisible();
   const text = await page.locator("body").textContent();
   expect(text).toContain("(factorial 3)");
@@ -184,7 +218,7 @@ test("keeps the learner resource boundary compact and evaluator-free", async ({
   const artifactBytes = await page.locator(
     "script[data-kp-scheme-factorial-publication]"
   ).evaluate((element) => element.textContent?.length ?? 0);
-  expect(artifactBytes).toBeLessThan(100_000);
+  expect(artifactBytes).toBeLessThan(155_000);
 });
 
 async function assertNoOverflow(page: Page): Promise<void> {

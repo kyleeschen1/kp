@@ -2,18 +2,16 @@
 
 Status: active
 Last Updated: 2026-08-12
-Current Next Action: Review the semantically corrected first Scheme expansion
-under
-`../decisions/2026-08-12-kp-exemplar-first-code-material-and-editor-boundary.md`.
-The implemented proof is `(factorial 3) -> (* 3 (factorial 2))`, but it now
-passes through a fresh procedure activation: the operator expands, the argument
-is consumed by parameter binding, body values are fresh binding projections,
-the branch closes, and subtraction resolves. Equal glyphs never manufacture
-material continuity. Evidence is in
-`../reviews/2026-08-12-scheme-factorial-first-expansion-checkpoint.md`. Preserve
-the bounded evaluator, trace, score, shared clock, URLs, static publication,
-and accessibility. Do not generalize the renderer or connect CodeMirror before
-the single expansion communicates unaided. The algebra proof remains verified and
+Current Next Action: Review the complete factorial visual-discovery exemplar at
+`/tutorials/programming/scheme-factorial/` under
+`../reviews/2026-08-12-scheme-factorial-full-evaluation-checkpoint.md`. It now
+runs from `(factorial 3)` through four trace-certified activations, visible
+waiting multiplication shells, the base value, and deepest-first returns to
+`6` on one code-material stage and clock. Preserve the bounded evaluator,
+trace, existing detailed view, URLs, static publication, and accessibility.
+Do not generalize the material grammar or connect CodeMirror until the human
+checkpoint is approved and a structurally different caller validates the
+seam. The algebra proof remains verified and
 user-paused at slice 8/23 in commit `d38f06fe`; its remaining 16 slices are
 recoverable but inactive.
 

@@ -2,6 +2,10 @@ import type {
   KpSchemeFirstExpansion,
   KpSchemeFirstExpansionSample
 } from "../animation/scheme-factorial-first-expansion.ts";
+import type {
+  KpSchemeFactorialFullEvaluation,
+  KpSchemeFactorialFullEvaluationSample
+} from "../animation/scheme-factorial-full-evaluation.ts";
 
 export interface KpSchemeFirstExpansionRenderInput {
   readonly expansion: KpSchemeFirstExpansion;
@@ -12,14 +16,41 @@ export interface KpSchemeFirstExpansionRenderInput {
 export function renderKpSchemeFirstExpansionHtml(
   input: KpSchemeFirstExpansionRenderInput
 ): string {
-  const widthCh = Math.max(...input.expansion.states.flatMap(({ nativeCode }) =>
+  return renderCodeMaterialStage({
+    states: input.expansion.states,
+    sample: input.sample,
+    accessibleDescription: input.expansion.accessibleDescription,
+    attributes: `data-kp-scheme-first-expansion data-kp-scheme-first-expansion-phase="${input.sample.phase}" data-kp-scheme-first-expansion-progress="${input.sample.progress}"`
+  });
+}
+
+/** Projects the complete score through the same single code-material owner. */
+export function renderKpSchemeFactorialFullEvaluationHtml(input: {
+  readonly evaluation: KpSchemeFactorialFullEvaluation;
+  readonly sample: KpSchemeFactorialFullEvaluationSample;
+}): string {
+  return renderCodeMaterialStage({
+    states: input.evaluation.states,
+    sample: input.sample,
+    accessibleDescription: input.evaluation.accessibleDescription,
+    attributes: `data-kp-scheme-full-evaluation data-kp-scheme-full-evaluation-phase="${input.sample.phase}" data-kp-scheme-full-evaluation-transition="${escapeAttribute(input.sample.transitionId ?? "none")}" data-kp-scheme-full-evaluation-progress="${input.sample.progress}"`
+  });
+}
+
+function renderCodeMaterialStage(input: {
+  readonly states: readonly { readonly nativeCode: string }[];
+  readonly sample: KpSchemeFirstExpansionSample | KpSchemeFactorialFullEvaluationSample;
+  readonly accessibleDescription: string;
+  readonly attributes: string;
+}): string {
+  const widthCh = Math.max(...input.states.flatMap(({ nativeCode }) =>
     nativeCode.split("\n").map((line) => line.length)));
-  const lineCount = Math.max(...input.expansion.states.map(({ nativeCode }) =>
+  const lineCount = Math.max(...input.states.map(({ nativeCode }) =>
     nativeCode.split("\n").length));
   const tokens = input.sample.tokens.map((material) =>
     `<span class="kp-scheme-first-expansion__token" data-kp-scheme-first-expansion-token="${escapeAttribute(material.materialId)}" data-kp-scheme-motion-id="${escapeAttribute(material.motionId)}" data-kp-scheme-provenance-kind="${escapeAttribute(material.provenance.kind)}" data-kp-scheme-source-occurrence-id="${escapeAttribute(material.provenance.sourceOccurrenceId)}"${renderRuntimeProvenance(material.provenance)} style="--kp-scheme-token-x:${material.xCh}ch;--kp-scheme-token-y:${material.yEm}em;--kp-scheme-token-opacity:${material.opacity};--kp-scheme-token-scale:${material.scale}">${escapeHtml(material.lexeme)}</span>`
   ).join("");
-  return `<section class="kp-scheme-first-expansion" data-kp-scheme-first-expansion data-kp-scheme-first-expansion-phase="${input.sample.phase}" data-kp-scheme-first-expansion-progress="${input.sample.progress}" data-kp-scheme-paint-owner="code-material" aria-label="${escapeAttribute(input.expansion.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${escapeHtml(input.sample.nativeCode)}</span></section>`;
+  return `<section class="kp-scheme-first-expansion" ${input.attributes} data-kp-scheme-paint-owner="code-material" aria-label="${escapeAttribute(input.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${escapeHtml(input.sample.nativeCode)}</span></section>`;
 }
 
 export const kpSchemeFirstExpansionCss = `
