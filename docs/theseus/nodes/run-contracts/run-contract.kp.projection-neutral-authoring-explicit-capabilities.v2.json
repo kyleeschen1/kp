@@ -95,7 +95,8 @@
     {
       "id": "s08",
       "title": "Adapt economics to shared whole-file editor",
-      "status": "planned"
+      "summary": "Added the economics adapter over the shared whole-file editor using the existing Article compiler, exact lock, semantic completions, local draft key, and capability-gated source-save endpoint; no editor or compiler fork was introduced.",
+      "status": "complete"
     },
     {
       "id": "s09",

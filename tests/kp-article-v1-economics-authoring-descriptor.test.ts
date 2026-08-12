@@ -38,3 +38,14 @@ test("the authoring descriptor owns no DOM or framework lifecycle", () => {
   );
   assert.doesNotMatch(source, /(?:Document|HTMLElement|svelte|mount|dialog)/u);
 });
+
+test("economics adapts the descriptor to the shared whole-file editor", () => {
+  const source = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-article-authoring.ts",
+    "utf8"
+  );
+  assert.match(source, /mountKpArticleSourceEditor/u);
+  assert.match(source, /compileKpEconomicsDemandShiftArticlePublication/u);
+  assert.match(source, /saveKpEconomicsDemandShiftArticleSource/u);
+  assert.doesNotMatch(source, /KpEconomicsPassageEditor|CodeMirror|KpArticleDraftSession/u);
+});
