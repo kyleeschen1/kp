@@ -50,3 +50,28 @@ test("both scroll layouts consume one neutral geometry owner", () => {
   }
   assert.match(audit.responsiveFallback, /single-column/u);
 });
+
+test("Inline Sticky remains a reachable independent projection", () => {
+  const view = readFileSync(new URL(
+    "economics-demand-shift-view.ts",
+    directory
+  ), "utf8");
+  const loader = readFileSync(new URL(
+    "economics-demand-shift-presenter-capability.ts",
+    directory
+  ), "utf8");
+  const capability = readFileSync(new URL(
+    "presenters/inline-sticky-presenter-capability.ts",
+    directory
+  ), "utf8");
+  const report = readFileSync(
+    "docs/project/reviews/2026-08-12-inline-sticky-reachability-after-layout-separation.md",
+    "utf8"
+  );
+
+  assert.match(view, /"inline-sticky"/u);
+  assert.match(loader, /inline-sticky-presenter-capability\.ts/u);
+  assert.match(capability, /kpEconomicsInlineStickyPresenterCapability/u);
+  assert.match(report, /Verdict\n\nRetain\./u);
+  assert.doesNotMatch(report, /Status: retired/u);
+});
