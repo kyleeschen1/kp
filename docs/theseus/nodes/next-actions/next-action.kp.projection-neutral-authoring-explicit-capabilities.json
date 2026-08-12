@@ -201,6 +201,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T23:17:20.504Z",
       "notes": "28 focused tests pass; eight obsolete modules are absent, six test-only registration imports are gone, compatibility paths drop from 16 to 15, and the retired inventory remains executable."
+    },
+    {
+      "command": "node import-order algebra tests and npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T23:20:10.940Z",
+      "notes": "Four clean-process import permutations, repeat pack construction, concurrent repeated lazy loads, 12 focused tests, full typing, and architecture gates all pass."
     }
   ],
   "expectedLearning": [

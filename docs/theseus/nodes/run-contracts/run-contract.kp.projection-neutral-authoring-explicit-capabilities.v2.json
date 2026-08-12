@@ -221,7 +221,8 @@
     {
       "id": "s29",
       "title": "Prove import-order independence",
-      "status": "planned"
+      "summary": "Proved clean-process compiler-first and pack-first import permutations yield identical nine-asset catalogs, four immutable capability keys, and eight reverse plans; repeated construction and cached lazy loads are deterministic.",
+      "status": "complete"
     },
     {
       "id": "s30",
