@@ -78,6 +78,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-12T21:33:56.466Z",
       "notes": "All three Scheme HTML emitters are now classified by their actual text and attribute sink contexts."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dev-toolbar-page-directory.test.ts tests/kp-dev-toolbar-page-directory-authority.test.ts tests/scheme-factorial-route.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:36:07.173Z",
+      "notes": "All 25 unique first-party pages, including Scheme factorial, agree across executable authority, expected order, route contract, and the durable inspection ledger."
     }
   ],
   "expectedLearning": [

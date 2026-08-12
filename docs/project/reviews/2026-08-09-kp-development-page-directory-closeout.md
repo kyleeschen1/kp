@@ -36,6 +36,7 @@ only one Review owner is present.
 | Tutorials | `tutorial.economics-demand-shift` | Economics · demand shift | [Open](http://localhost:5173/tutorials/economics/demand-shift/) |
 | Tutorials | `tutorial.algebra-fraction-composition` | Algebra · fraction composition | [Open](http://localhost:5173/tutorials/algebra/fraction-composition/) |
 | Tutorials | `tutorial.lisp-function-application` | Programming · Lisp function application | [Open](http://localhost:5173/tutorials/programming/lisp-function-application/) |
+| Tutorials | `tutorial.scheme-factorial` | Programming · Scheme factorial | [Open](http://localhost:5173/tutorials/programming/scheme-factorial/) |
 | Readers | `reader.solve-x` | Solve x | [Open](http://localhost:5173/reader/solve-x/) |
 | Readers | `reader.generated-solve-x` | Verified generated solve | [Open](http://localhost:5173/reader/generated-solve-x/) |
 | Readers | `reader.solve-x-teacher-zero` | Solve x · explicit zero | [Open](http://localhost:5173/reader/solve-x/teacher-zero/) |
@@ -55,7 +56,7 @@ only one Review owner is present.
 
 - `npm run test:dev-toolbar`: descriptor, grouping, route-authority, host
   ownership, layout non-reservation, and ledger agreement.
-- `npm run test:browser:page-directory`: directory inventory plus all 24 links,
+- `npm run test:browser:page-directory`: directory inventory plus all 25 links,
   exact current-page identity, successful documents, fixture exclusion, and
   Review ownership where supported.
 - `npm run visual:economics-dev-toolbar`: wide, phone, and short-viewport

@@ -65,7 +65,8 @@
     {
       "id": "s03",
       "title": "Restore Scheme page-directory coverage",
-      "status": "planned"
+      "summary": "Updated the page-directory expectation and closeout ledger to the executable 25-page authority, including the existing Scheme factorial route; directory and route tests pass.",
+      "status": "complete"
     },
     {
       "id": "s04",
