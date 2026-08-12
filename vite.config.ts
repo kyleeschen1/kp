@@ -13,6 +13,8 @@ import { kpSchemeFactorialTimeline } from
   "./src/animation/scheme-factorial-canonical-timeline.ts";
 import { kpSchemeFactorialChoreography } from
   "./src/animation/scheme-factorial-canonical-choreography.ts";
+import { kpSchemeFactorialFirstExpansion } from
+  "./src/animation/scheme-factorial-canonical-first-expansion.ts";
 import { kpSchemeFactorialCss } from
   "./src/rendering/scheme-factorial-html.ts";
 import { kpSchemeFactorialCheckpoints } from
@@ -88,7 +90,8 @@ const schemeFactorialPublicationArtifact =
   defineKpSchemeFactorialPublicationArtifact({
     checkpoints: kpSchemeFactorialCheckpoints,
     timeline: kpSchemeFactorialTimeline,
-    choreography: kpSchemeFactorialChoreography
+    choreography: kpSchemeFactorialChoreography,
+    firstExpansion: kpSchemeFactorialFirstExpansion
   });
 const schemeFactorialStaticFallback = compileSchemeFactorialStaticFallback();
 const economicsTutorialFilename = resolve(

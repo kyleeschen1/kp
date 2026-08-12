@@ -19,6 +19,8 @@ import { kpSchemeFactorialTimeline } from
   "../src/animation/scheme-factorial-canonical-timeline.ts";
 import { kpSchemeFactorialChoreography } from
   "../src/animation/scheme-factorial-canonical-choreography.ts";
+import { kpSchemeFactorialFirstExpansion } from
+  "../src/animation/scheme-factorial-canonical-first-expansion.ts";
 import { kpSchemeFactorialCheckpoints } from
   "../src/semantic/scheme-factorial-checkpoints.ts";
 import { parseKpSchemeFactorialSource } from
@@ -29,7 +31,8 @@ import { findKpSchemeFactorialAdjacentCheckpoint } from
 const artifact = defineKpSchemeFactorialPublicationArtifact({
   checkpoints: kpSchemeFactorialCheckpoints,
   timeline: kpSchemeFactorialTimeline,
-  choreography: kpSchemeFactorialChoreography
+  choreography: kpSchemeFactorialChoreography,
+  firstExpansion: kpSchemeFactorialFirstExpansion
 });
 
 test("owns one parallel canonical route and development catalogue entry", () => {

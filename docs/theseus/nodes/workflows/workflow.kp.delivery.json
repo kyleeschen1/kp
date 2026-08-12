@@ -55,11 +55,23 @@
       "scope": "semantic-glyph experiment proposal control plane",
       "checkedAt": "2026-07-25T01:25:56.308Z",
       "notes": "TypeScript application, Node, test, and domain projects passed; Vite production build completed."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T03:39:40.094Z"
+    },
+    {
+      "command": "npm run visual:scheme-factorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T03:39:49.252Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human explicitly approved the repaired slice-14 fraction checkpoint: the Range-derived glyph paint alignment and uniform size succession look great. The canonical renderer convergence run may proceed to slice 15; no slice-15 implementation has started in this review turn."
+    "summary": "Accepted exemplar-first correction: prove only factorial 3 opening into a retained multiplication before generalization; CodeMirror remains a lazy endpoint adapter, not semantic or per-frame animation authority. Decision recorded in docs/project/decisions/2026-08-12-kp-exemplar-first-code-material-and-editor-boundary.md."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",

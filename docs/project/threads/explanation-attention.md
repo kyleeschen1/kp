@@ -1,14 +1,16 @@
 # Explanation and Attention Thread
 
 Status: active
-Last Updated: 2026-08-11
-Current Next Action: Build one interpreter-grounded Scheme `(factorial 3)`
-vignette under
-`../reviews/2026-08-11-scheme-factorial-semantic-vignette-long-loop-proposal.md`.
-The evaluator owns a bounded frozen semantic trace; a typed pedagogical score
-owns compression, holds, captions, and emphasis; one native-code renderer and
-the existing shared clock own playback. Stop at the factorial human visual
-checkpoint before shared promotion. The algebra proof remains verified and
+Last Updated: 2026-08-12
+Current Next Action: Review the corrected first Scheme expansion under
+`../decisions/2026-08-12-kp-exemplar-first-code-material-and-editor-boundary.md`.
+The implemented proof is `(factorial 3) -> (* 3 (factorial 2))`: stable code
+material opens, binds, chooses, and settles without checkpoint-row crossfades
+or abstract substitute particles. Evidence is in
+`../reviews/2026-08-12-scheme-factorial-first-expansion-checkpoint.md`. Preserve
+the bounded evaluator, trace, score, shared clock, URLs, static publication,
+and accessibility. Do not generalize the renderer or connect CodeMirror before
+the single expansion communicates unaided. The algebra proof remains verified and
 user-paused at slice 8/23 in commit `d38f06fe`; its remaining 16 slices are
 recoverable but inactive.
 

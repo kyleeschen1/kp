@@ -67,10 +67,33 @@ test("scrubs canonical motifs with native endpoints and one paint owner", async 
   await page.setViewportSize({ width: 1_280, height: 900 });
   await page.goto(route);
   const seek = page.locator('input[data-action="seek"]');
+  const firstExpansionProgress = await timelineProgress(page, "first-descent", 0.5);
+  await seek.fill(firstExpansionProgress.toFixed(3));
+  await expect(page.locator("[data-kp-scheme-first-expansion]"))
+    .toHaveAttribute("data-kp-scheme-paint-owner", "code-material");
+  await expect(page.locator("[data-kp-scheme-first-expansion-token]"))
+    .toHaveCount(8);
+  await expect(page.locator("[data-kp-scheme-transient-overlay]"))
+    .toHaveCount(0);
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-first-expansion.png`,
+    fullPage: true
+  });
+  const settledFirstExpansion = await timelineHoldProgress(
+    page,
+    "first-descent"
+  );
+  await seek.fill(settledFirstExpansion.toFixed(3));
+  await expect(page.locator(".kp-scheme-first-expansion__accessible"))
+    .toHaveText("(* 3 (factorial 2))");
+  await page.screenshot({
+    path: `${evidenceDirectory}/wide-first-expansion-settled.png`,
+    fullPage: true
+  });
+
   for (const [interval, local, kind] of [
     ["definition-seed", 0.2, "structural"],
     ["definition-seed", 0.75, "binding"],
-    ["first-descent", 0.4, "primitive"],
     ["repeated-descent", 0.5, "summary"],
     ["base-case", 0.5, "branch"],
     ["return-cascade", 0.5, "return"]
@@ -179,4 +202,20 @@ async function timelineProgress(
       return interval.motion.start +
         (interval.motion.end - interval.motion.start) * input.local;
     }, { motionKind, local });
+}
+
+async function timelineHoldProgress(
+  page: Page,
+  motionKind: string
+): Promise<number> {
+  return page.locator("script[data-kp-scheme-factorial-publication]")
+    .evaluate((element, input) => {
+      const artifact = JSON.parse(element.textContent ?? "{}");
+      const interval = artifact.timeline.intervals.find(
+        (candidate: { motionKind: string }) =>
+          candidate.motionKind === input
+      );
+      if (interval === undefined) throw new Error("Missing timeline interval.");
+      return (interval.hold.start + interval.hold.end) / 2;
+    }, motionKind);
 }

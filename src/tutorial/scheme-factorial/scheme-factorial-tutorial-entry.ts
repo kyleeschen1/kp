@@ -3,6 +3,8 @@ import "./scheme-factorial-tutorial.css";
 
 import { projectKpSchemeFactorialResponsiveFrame } from
   "../../animation/scheme-factorial-responsive-projection.ts";
+import { sampleKpSchemeFactorialFirstExpansion } from
+  "../../animation/scheme-factorial-first-expansion.ts";
 import { projectKpSchemeFactorialMotion } from
   "../../animation/scheme-factorial-motion-projection.ts";
 import {
@@ -13,6 +15,10 @@ import {
   kpSchemeFactorialCss,
   renderKpSchemeFactorialHtml
 } from "../../rendering/scheme-factorial-html.ts";
+import {
+  kpSchemeFirstExpansionCss,
+  renderKpSchemeFirstExpansionHtml
+} from "../../rendering/scheme-factorial-first-expansion-html.ts";
 import { parseKpSchemeFactorialSource } from
   "../../semantic/scheme-factorial-parser.ts";
 import {
@@ -55,7 +61,7 @@ export function mountKpSchemeFactorialTutorial(input: {
   });
   const rendererStyle = ownerDocument.createElement("style");
   rendererStyle.dataset["kpSchemeFactorialRenderer"] = "true";
-  rendererStyle.textContent = kpSchemeFactorialCss;
+  rendererStyle.textContent = kpSchemeFactorialCss + kpSchemeFirstExpansionCss;
   ownerDocument.head.append(rendererStyle);
   const stage = required<HTMLElement>(input.root,
     "[data-kp-scheme-factorial-stage-host]");
@@ -81,24 +87,45 @@ export function mountKpSchemeFactorialTutorial(input: {
       progress,
       direction
     });
-    const frame = projectKpSchemeFactorialResponsiveFrame({
+    const firstDescentInterval = artifact.timeline.intervals.find(
+      ({ motionKind }) => motionKind === "first-descent"
+    );
+    const inFirstExpansion = firstDescentInterval !== undefined &&
+      progress >= firstDescentInterval.motion.start &&
+      progress <= firstDescentInterval.hold.end;
+    if (inFirstExpansion) {
+      const expansionProgress = sample.motionKind === "first-descent"
+        ? reducedMotion.matches
+          ? sample.localProgress < 0.5 ? 0 : 1
+          : sample.localProgress
+        : 1;
+      stage.innerHTML = renderKpSchemeFirstExpansionHtml({
+        expansion: artifact.firstExpansion,
+        sample: sampleKpSchemeFactorialFirstExpansion(
+          artifact.firstExpansion,
+          expansionProgress
+        )
+      });
+    } else {
+      const frame = projectKpSchemeFactorialResponsiveFrame({
       document,
       checkpoints: artifact.checkpoints,
       sample,
       availableWidthPx: availableWidth,
       reducedMotion: reducedMotion.matches
-    });
-    const motion = projectKpSchemeFactorialMotion({
-      choreography: artifact.choreography,
-      timeline: sample
-    });
-    stage.innerHTML = renderKpSchemeFactorialHtml({
-      checkpoints: artifact.checkpoints,
-      sample,
-      frame,
-      motion,
-      reducedMotion: reducedMotion.matches
-    });
+      });
+      const motion = projectKpSchemeFactorialMotion({
+        choreography: artifact.choreography,
+        timeline: sample
+      });
+      stage.innerHTML = renderKpSchemeFactorialHtml({
+        checkpoints: artifact.checkpoints,
+        sample,
+        frame,
+        motion,
+        reducedMotion: reducedMotion.matches
+      });
+    }
     const text = progress === 0
       ? artifact.timeline.initialCaption
       : sample.caption;

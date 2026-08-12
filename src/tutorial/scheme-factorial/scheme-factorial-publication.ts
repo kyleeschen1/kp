@@ -1,6 +1,10 @@
 import { projectKpSchemeFactorialResponsiveFrame } from
   "../../animation/scheme-factorial-responsive-projection.ts";
 import {
+  defineKpSchemeFactorialFirstExpansion,
+  type KpSchemeFirstExpansion
+} from "../../animation/scheme-factorial-first-expansion.ts";
+import {
   defineKpSchemeFactorialChoreography,
   type KpSchemeFactorialChoreography
 } from "../../animation/scheme-factorial-choreography.ts";
@@ -22,16 +26,18 @@ import { renderKpTutorialScrubBar } from
 import { kpSchemeFactorialTutorialPath } from "./scheme-factorial-route.ts";
 
 export interface KpSchemeFactorialPublicationArtifact {
-  readonly schemaVersion: "kp.scheme-factorial-publication.v2";
+  readonly schemaVersion: "kp.scheme-factorial-publication.v3";
   readonly checkpoints: KpSchemeCheckpointProjection;
   readonly timeline: KpSchemeFactorialTimeline;
   readonly choreography: KpSchemeFactorialChoreography;
+  readonly firstExpansion: KpSchemeFirstExpansion;
 }
 
 export function defineKpSchemeFactorialPublicationArtifact(input: {
   readonly checkpoints: KpSchemeCheckpointProjection;
   readonly timeline: KpSchemeFactorialTimeline;
   readonly choreography: KpSchemeFactorialChoreography;
+  readonly firstExpansion: KpSchemeFirstExpansion;
 }): KpSchemeFactorialPublicationArtifact {
   if (input.checkpoints.checkpoints.length !== 7 ||
       input.timeline.intervals.length !== 6) {
@@ -44,10 +50,11 @@ export function defineKpSchemeFactorialPublicationArtifact(input: {
     }
   }
   return deepFreeze({
-    schemaVersion: "kp.scheme-factorial-publication.v2",
+    schemaVersion: "kp.scheme-factorial-publication.v3",
     checkpoints: input.checkpoints,
     timeline: input.timeline,
-    choreography: defineKpSchemeFactorialChoreography(input.choreography)
+    choreography: defineKpSchemeFactorialChoreography(input.choreography),
+    firstExpansion: defineKpSchemeFactorialFirstExpansion(input.firstExpansion)
   });
 }
 
@@ -62,15 +69,17 @@ export function readKpSchemeFactorialPublicationArtifact(
   }
   const parsed: unknown = JSON.parse(source.textContent);
   if (!isRecord(parsed) ||
-      parsed["schemaVersion"] !== "kp.scheme-factorial-publication.v2" ||
+      parsed["schemaVersion"] !== "kp.scheme-factorial-publication.v3" ||
       !isRecord(parsed["checkpoints"]) || !isRecord(parsed["timeline"]) ||
-      !isRecord(parsed["choreography"])) {
+      !isRecord(parsed["choreography"]) ||
+      !isRecord(parsed["firstExpansion"])) {
     throw new Error("Scheme factorial publication data has an invalid schema.");
   }
   return defineKpSchemeFactorialPublicationArtifact({
     checkpoints: parsed["checkpoints"] as unknown as KpSchemeCheckpointProjection,
     timeline: parsed["timeline"] as unknown as KpSchemeFactorialTimeline,
-    choreography: parsed["choreography"] as unknown as KpSchemeFactorialChoreography
+    choreography: parsed["choreography"] as unknown as KpSchemeFactorialChoreography,
+    firstExpansion: parsed["firstExpansion"] as unknown as KpSchemeFirstExpansion
   });
 }
 
