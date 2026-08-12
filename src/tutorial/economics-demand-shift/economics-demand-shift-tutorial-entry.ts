@@ -16,6 +16,9 @@ import {
 import {
   readKpEconomicsDemandShiftCompiledPublication
 } from "./economics-demand-shift-compiled-publication.ts";
+import type {
+  KpEconomicsDemandShiftPublication
+} from "./economics-demand-shift-publication.ts";
 import {
   applyKpEconomicsDemandShiftRouteHandoff,
   resolveKpEconomicsDemandShiftInitialDestination
@@ -43,6 +46,7 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   readonly root: HTMLElement;
   readonly search: string;
   readonly hash: string;
+  readonly publication?: KpEconomicsDemandShiftPublication | undefined;
   readonly handoff?: KpEconomicsDemandShiftRouteHandoff | undefined;
 }): Promise<() => void> {
   // The optional presenter owns its complete tree. Remove the published
@@ -71,7 +75,8 @@ export async function mountKpEconomicsDemandShiftTutorial(input: {
   defineKpTutorialToc();
   const { descriptors, entry } =
     createKpEconomicsDemandShiftAnimationCapability();
-  const publication = readKpEconomicsDemandShiftCompiledPublication();
+  const publication = input.publication ??
+    readKpEconomicsDemandShiftCompiledPublication();
   const scrubStrategy = readKpEconomicsScrollScrubStrategy(input.search);
   const resolvedInitialDestination = resolveKpEconomicsDemandShiftInitialDestination({
     lesson: publication.lesson,

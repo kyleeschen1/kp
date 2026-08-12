@@ -119,7 +119,8 @@
     {
       "id": "s12",
       "title": "Preview valid edits through active projection",
-      "status": "planned"
+      "summary": "Valid drafts now compile into route-owned publication state and remount the active published or presenter projection with semantic handoff; invalid drafts never replace the last valid view.",
+      "status": "complete"
     },
     {
       "id": "s13",

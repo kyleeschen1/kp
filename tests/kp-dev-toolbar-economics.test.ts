@@ -77,6 +77,26 @@ test("the route owns the framework-neutral article editor lifecycle", () => {
   assert.doesNotMatch(toolbarSource, /lesson-editor-toggle|querySelector/u);
 });
 
+test("valid Article previews remount the active route projection", () => {
+  const routeSource = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts",
+    "utf8"
+  );
+  const presenterSource = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-tutorial-entry.ts",
+    "utf8"
+  );
+
+  assert.match(routeSource, /previewPublication = publication/u);
+  assert.match(routeSource, /renderKpEconomicsDemandShiftStaticNarrative/u);
+  assert.match(routeSource, /enqueueMount\(/u);
+  assert.match(routeSource, /publication: previewPublication/u);
+  assert.match(
+    presenterSource,
+    /input\.publication \?\?\s*readKpEconomicsDemandShiftCompiledPublication\(\)/u
+  );
+});
+
 test("fixed toolbar CSS does not reserve document flow or animate layout", () => {
   const css = readFileSync("src/dev-toolbar/dev-toolbar.css", "utf8");
 

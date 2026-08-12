@@ -16,10 +16,16 @@ import {
 import {
   resolveKpEconomicsDemandShiftArticleRevealText
 } from "./economics-demand-shift-article-authoring-descriptor.ts";
+import type {
+  KpEconomicsDemandShiftPublication
+} from "./economics-demand-shift-publication.ts";
 
 type KpEconomicsDevToolbarClient = typeof import("./economics-demand-shift-dev-toolbar.ts");
 type KpEconomicsArticleAuthoringClient = typeof import(
   "./economics-demand-shift-article-authoring.ts"
+);
+type KpEconomicsStaticPublicationClient = typeof import(
+  "./economics-demand-shift-static-publication.ts"
 );
 type KpEconomicsArticleEditorSession = ReturnType<
   KpEconomicsArticleAuthoringClient["mountKpEconomicsDemandShiftArticleEditor"]
@@ -32,6 +38,10 @@ const loadKpEconomicsDevToolbar: (() => Promise<KpEconomicsDevToolbarClient>) | 
 const loadKpEconomicsArticleAuthoring: (() => Promise<KpEconomicsArticleAuthoringClient>) | undefined =
   import.meta.env.DEV
     ? () => import("./economics-demand-shift-article-authoring.ts")
+    : undefined;
+const loadKpEconomicsStaticPublication: (() => Promise<KpEconomicsStaticPublicationClient>) | undefined =
+  import.meta.env.DEV
+    ? () => import("./economics-demand-shift-static-publication.ts")
     : undefined;
 
 export const KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT =
@@ -60,9 +70,11 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   readonly search: string;
   readonly hash: string;
 }): Promise<KpEconomicsDemandShiftRouteSession> {
-  const publicationSnapshot = [...input.root.childNodes].map((node) =>
+  let publicationSnapshot = [...input.root.childNodes].map((node) =>
     node.cloneNode(true)
   );
+  let previewPublication: KpEconomicsDemandShiftPublication | undefined;
+  let publicationNeedsReplacement = false;
   let activeDispose: (() => void) | undefined;
   let activeSearch: string | undefined;
   let disposed = false;
@@ -72,8 +84,12 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
 
   const editArticle = async (): Promise<void> => {
     if (disposed || articleEditor !== undefined ||
-        loadKpEconomicsArticleAuthoring === undefined) return;
-    const authoring = await loadKpEconomicsArticleAuthoring();
+        loadKpEconomicsArticleAuthoring === undefined ||
+        loadKpEconomicsStaticPublication === undefined) return;
+    const [authoring, staticPublication] = await Promise.all([
+      loadKpEconomicsArticleAuthoring(),
+      loadKpEconomicsStaticPublication()
+    ]);
     if (disposed || articleEditor !== undefined) return;
     const handoff = captureKpEconomicsDemandShiftRouteHandoff({
       root: input.root,
@@ -81,9 +97,27 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     });
     articleEditor = authoring.mountKpEconomicsDemandShiftArticleEditor({
       ownerDocument: document,
-      // Route-owned preview projection is introduced separately; mounting the
-      // editor must not make one presenter the source of authoring truth.
-      preview: () => undefined,
+      preview: (publication) => {
+        const previewHandoff = captureKpEconomicsDemandShiftRouteHandoff({
+          root: input.root,
+          scrollY: window.scrollY
+        });
+        previewPublication = publication;
+        publicationSnapshot = parsePublicationSnapshot({
+          ownerDocument: document,
+          html: staticPublication.renderKpEconomicsDemandShiftStaticNarrativeStyles() +
+            staticPublication.renderKpEconomicsDemandShiftStaticNarrative(
+              publication
+            )
+        });
+        publicationNeedsReplacement = true;
+        activeSearch = undefined;
+        void enqueueMount(
+          window.location.search,
+          window.location.hash,
+          previewHandoff
+        );
+      },
       revealText: resolveKpEconomicsDemandShiftArticleRevealText(
         handoff?.passageId
       ),
@@ -94,12 +128,14 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   };
 
   const ensurePublication = (): void => {
-    if (input.root.querySelector("[data-kp-economics-static-publication]")) {
+    if (!publicationNeedsReplacement &&
+        input.root.querySelector("[data-kp-economics-static-publication]")) {
       return;
     }
     input.root.replaceChildren(
       ...publicationSnapshot.map((node) => node.cloneNode(true))
     );
+    publicationNeedsReplacement = false;
   };
 
   const mount = async (
@@ -146,6 +182,7 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       root: input.root,
       search,
       hash,
+      publication: previewPublication,
       handoff
     });
     if (handoff !== undefined) restoreKpEconomicsDemandShiftRouteScroll({
@@ -271,6 +308,15 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       );
     }
   };
+}
+
+function parsePublicationSnapshot(input: {
+  readonly ownerDocument: Document;
+  readonly html: string;
+}): Node[] {
+  const template = input.ownerDocument.createElement("template");
+  template.innerHTML = input.html;
+  return [...template.content.childNodes].map((node) => node.cloneNode(true));
 }
 
 function syncViewSelector(
