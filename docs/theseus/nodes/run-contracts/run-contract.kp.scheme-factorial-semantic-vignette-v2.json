@@ -113,7 +113,8 @@
     {
       "id": "s10",
       "title": "Evaluate trusted primitives",
-      "status": "planned"
+      "summary": "Implemented and tested the three trusted primitives through real equality and decrement trace prefixes plus exact multiplication kernel coverage.",
+      "status": "complete"
     },
     {
       "id": "s11",

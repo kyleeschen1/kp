@@ -191,11 +191,29 @@
       "status": "passed",
       "scope": "s09-control-plane",
       "checkedAt": "2026-08-12T00:33:50.121Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s10-trusted-primitives",
+      "checkedAt": "2026-08-12T00:40:00.449Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10-type-safety",
+      "checkedAt": "2026-08-12T00:40:01.500Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s10-control-plane",
+      "checkedAt": "2026-08-12T00:40:02.450Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Conditional evaluation now records predicate isolation followed by boolean-governed branch selection with distinct selected and dormant source identities and restoration of the caller continuation."
+    "summary": "Equals, subtraction, and multiplication now evaluate only exact binary integers, emit result provenance and primitive-applied events, and reject arity, type, and overflow violations."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

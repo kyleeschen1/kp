@@ -36,6 +36,10 @@ export interface KpSchemeEvaluatorStepInput {
   readonly causedByEventIds?: readonly string[] | undefined;
 }
 
+export type KpSchemeTrustedPrimitiveResult =
+  | { readonly kind: "boolean"; readonly value: boolean }
+  | { readonly kind: "integer"; readonly exactInteger: number };
+
 const primitiveAddresses: Readonly<Record<KpSchemePrimitiveName,
   readonly number[]>> = Object.freeze({
     "=": Object.freeze([0, 2, 1, 0]),
@@ -389,8 +393,16 @@ function acceptApplicationArgument(
     });
   }
   const operator = requireValue(input.state, continuation.operatorValueId);
+  if (operator.kind === "primitive") {
+    return applyTrustedPrimitive(
+      input,
+      continuation,
+      operator,
+      evaluatedArgumentValueIds
+    );
+  }
   if (operator.kind !== "closure") {
-    throw new Error("Trusted primitive application is implemented in the next slice.");
+    throw new Error("Scheme application operator must be primitive or closure.");
   }
   return bindClosureParameter(
     input,
@@ -400,6 +412,78 @@ function acceptApplicationArgument(
     argumentValueId,
     evaluatedArgumentValueIds
   );
+}
+
+function applyTrustedPrimitive(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeApplicationArgumentsContinuation,
+  operator: Extract<KpSchemeValue, { readonly kind: "primitive" }>,
+  argumentValueIds: readonly string[]
+): KpSchemeEvaluatorTransition {
+  const arguments_ = argumentValueIds.map((id) => requireValue(input.state, id));
+  if (arguments_.some((value) => value.kind !== "integer")) {
+    throw new Error(`Scheme primitive ${operator.name} requires exact integers.`);
+  }
+  const result = evaluateKpSchemeTrustedPrimitive(
+    operator.name,
+    arguments_.map((value) => value.kind === "integer"
+      ? value.exactInteger
+      : Number.NaN)
+  );
+  const suffix = pad(input.eventIndex);
+  const resultValueId = result.kind === "boolean"
+    ? `scheme-factorial.value.boolean.${suffix}`
+    : `scheme-factorial.value.integer.${suffix}`;
+  const originExpressionIds = unique([
+    continuation.applicationExpressionId,
+    ...arguments_.flatMap(({ originExpressionIds }) => originExpressionIds)
+  ]);
+  const resultValue = result.kind === "boolean" ? {
+    kind: "boolean" as const,
+    id: resultValueId,
+    value: result.value,
+    originExpressionIds
+  } : {
+    kind: "integer" as const,
+    id: resultValueId,
+    exactInteger: result.exactInteger,
+    originExpressionIds
+  };
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "value", valueId: resultValueId },
+    activeEnvironmentId: continuation.environmentId,
+    activeContinuationId: continuation.parentContinuationId,
+    values: [...input.state.values, resultValue]
+  });
+  return transition(input, after, {
+    ...eventBase(input, originExpressionIds,
+      [operator.id, ...argumentValueIds], [resultValueId]),
+    kind: "primitive-applied",
+    applicationExpressionId: continuation.applicationExpressionId,
+    primitive: operator.name,
+    argumentValueIds,
+    resultValueId
+  });
+}
+
+export function evaluateKpSchemeTrustedPrimitive(
+  primitive: KpSchemePrimitiveName,
+  operands: readonly number[]
+): KpSchemeTrustedPrimitiveResult {
+  if (operands.length !== 2 || operands.some((operand) =>
+    !Number.isSafeInteger(operand))) {
+    throw new Error(`Scheme primitive ${primitive} requires two exact integers.`);
+  }
+  const [left, right] = operands as readonly [number, number];
+  if (primitive === "=") {
+    return Object.freeze({ kind: "boolean", value: left === right });
+  }
+  const exactInteger = primitive === "*" ? left * right : left - right;
+  if (!Number.isSafeInteger(exactInteger)) {
+    throw new Error(`Scheme primitive ${primitive} exceeded exact integer range.`);
+  }
+  return Object.freeze({ kind: "integer", exactInteger });
 }
 
 function bindClosureParameter(
@@ -665,4 +749,8 @@ function pad(value: number): string {
     throw new Error("Scheme evaluator indices must be non-negative safe integers.");
   }
   return String(value).padStart(3, "0");
+}
+
+function unique(values: readonly string[]): readonly string[] {
+  return Object.freeze([...new Set(values)]);
 }
