@@ -1,8 +1,8 @@
 {
   "schemaVersion": "kp.economics.scroll-layout-seam.v1",
-  "baseOwner": "economics-demand-shift-inline-sticky.css",
+  "baseOwner": "economics-demand-shift-scroll-passage.css",
   "dependentOwner": "presenters/two-column-scroll-presenter-capability.ts",
-  "directImport": "../economics-demand-shift-inline-sticky.css",
+  "directImport": "../economics-demand-shift-scroll-passage.css",
   "sharedSelectors": [
     ".kp-economics-tutorial__layout",
     ".kp-economics-tutorial__prose",

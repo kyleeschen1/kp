@@ -1,4 +1,4 @@
-import "../economics-demand-shift-inline-sticky.css";
+import "../economics-demand-shift-scroll-passage.css";
 import "../economics-demand-shift-layout-responsive.css";
 
 export const kpEconomicsInlineStickyPresenterCapability = Object.freeze({

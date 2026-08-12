@@ -155,7 +155,8 @@
     {
       "id": "s18",
       "title": "Extract projection-neutral shared geometry",
-      "status": "planned"
+      "summary": "Renamed the inherited layout owner to economics-demand-shift-scroll-passage.css and updated both presenter capabilities plus preservation inventories; selector and value geometry is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s19",

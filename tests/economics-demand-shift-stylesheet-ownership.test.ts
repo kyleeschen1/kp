@@ -13,7 +13,7 @@ const ownedStylesheets = [
   "economics-demand-shift-controls.css",
   "economics-demand-shift-graph.css",
   "economics-demand-shift-publication-responsive.css",
-  "economics-demand-shift-inline-sticky.css",
+  "economics-demand-shift-scroll-passage.css",
   "economics-demand-shift-two-column.css",
   "economics-demand-shift-layout-responsive.css"
 ] as const;
@@ -72,11 +72,11 @@ test("presenter capabilities load only their selected layout styles", () => {
       "../economics-demand-shift-layout-responsive.css"
     ],
     "inline-sticky-presenter-capability.ts": [
-      "../economics-demand-shift-inline-sticky.css",
+      "../economics-demand-shift-scroll-passage.css",
       "../economics-demand-shift-layout-responsive.css"
     ],
     "two-column-scroll-presenter-capability.ts": [
-      "../economics-demand-shift-inline-sticky.css",
+      "../economics-demand-shift-scroll-passage.css",
       "../economics-demand-shift-two-column.css",
       "../economics-demand-shift-layout-responsive.css"
     ]
@@ -261,7 +261,7 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   const controls = read("economics-demand-shift-controls.css");
   const graph = readGraphCascade();
   const responsive = read("economics-demand-shift-publication-responsive.css");
-  const inline = read("economics-demand-shift-inline-sticky.css");
+  const inline = read("economics-demand-shift-scroll-passage.css");
   const twoColumn = read("economics-demand-shift-two-column.css");
   const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
 
@@ -286,7 +286,7 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
 });
 
 test("economics layout owners do not restate settled passage paint", () => {
-  const inline = read("economics-demand-shift-inline-sticky.css");
+  const inline = read("economics-demand-shift-scroll-passage.css");
   const twoColumn = read("economics-demand-shift-two-column.css");
   const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
 

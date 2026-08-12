@@ -31,7 +31,7 @@ export const kpEconomicsPreSalienceVisualBaseline = Object.freeze({
     "economics-demand-shift-controls.css",
     "economics-demand-shift-graph.css",
     "economics-demand-shift-publication-responsive.css",
-    "economics-demand-shift-inline-sticky.css",
+    "economics-demand-shift-scroll-passage.css",
     "economics-demand-shift-two-column.css",
     "economics-demand-shift-layout-responsive.css"
   ]),
