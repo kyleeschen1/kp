@@ -137,11 +137,29 @@
       "status": "passed",
       "scope": "s06-control-plane",
       "checkedAt": "2026-08-12T00:17:01.609Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s07-atomic-evaluator",
+      "checkedAt": "2026-08-12T00:22:37.204Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07-type-safety",
+      "checkedAt": "2026-08-12T00:22:38.249Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s07-control-plane",
+      "checkedAt": "2026-08-12T00:22:39.223Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Factorial now has a frozen JSON-safe trace contract with adjacent state snapshots, typed semantic events, source and value provenance, and forward-only causal dependency validation."
+    "summary": "The deterministic evaluator now seeds trusted primitives and emits independently trace-valid transitions for integer literals, lexical symbol resolution, and creation of the recursive factorial closure as serializable data."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

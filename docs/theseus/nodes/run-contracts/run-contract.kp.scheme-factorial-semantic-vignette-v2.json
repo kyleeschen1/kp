@@ -95,7 +95,8 @@
     {
       "id": "s07",
       "title": "Evaluate literals symbols and closures",
-      "status": "planned"
+      "summary": "Implemented and tested initial evaluator state plus pure literal, symbol, and closure transitions with exact value identity and causal trace events.",
+      "status": "complete"
     },
     {
       "id": "s08",
