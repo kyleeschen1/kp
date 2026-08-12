@@ -173,7 +173,8 @@
     {
       "id": "s20",
       "title": "Compile one deterministic timeline",
-      "status": "planned"
+      "summary": "Compiled and tested one history-independent timeline across structural, binding, decision, summary, and return channels with stable captions and checkpoint magnetization.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -468,11 +468,39 @@
       "scope": "slice s19 durable evidence",
       "checkedAt": "2026-08-12T01:33:02.952Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s20 deterministic timeline",
+      "checkedAt": "2026-08-12T01:41:54.718Z",
+      "notes": "All 93 focused tests passed, including stable captions, one-clock motif channels, exact checkpoint seeks, and 1001-sample forward-rewind equivalence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s20 repository types",
+      "checkedAt": "2026-08-12T01:41:55.943Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s20 patch hygiene",
+      "checkedAt": "2026-08-12T01:41:56.934Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s20 durable evidence",
+      "checkedAt": "2026-08-12T01:41:57.933Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The base case now anchors one return carrier that reopens pending multiplication shells deepest-first and exposes readable exact product checkpoints 1, 2, and 6."
+    "summary": "All six score beats now share one normalized, reversible clock with explicit motion and reading intervals, stable captions, and direct semantic checkpoint seeks."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
