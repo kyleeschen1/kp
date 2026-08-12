@@ -101,7 +101,8 @@
     {
       "id": "s08",
       "title": "Emit application and binding events",
-      "status": "planned"
+      "summary": "Implemented and tested application and binding transitions through entry into the factorial body, preserving exact source and value identity.",
+      "status": "complete"
     },
     {
       "id": "s09",

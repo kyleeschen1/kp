@@ -1,6 +1,11 @@
 import {
   defineKpSchemeMachineState,
   resolveKpSchemeEnvironmentBinding,
+  type KpSchemeApplicationArgumentsContinuation,
+  type KpSchemeApplicationOperatorContinuation,
+  type KpSchemeClosureValue,
+  type KpSchemeContinuation,
+  type KpSchemeDefinitionContinuation,
   type KpSchemeMachineState,
   type KpSchemePrimitiveName,
   type KpSchemeValue
@@ -21,6 +26,13 @@ export interface KpSchemeEvaluatorTransition {
   readonly before: KpSchemeMachineState;
   readonly after: KpSchemeMachineState;
   readonly event: KpSchemeTraceEvent;
+}
+
+export interface KpSchemeEvaluatorStepInput {
+  readonly document: KpSchemeSourceDocument;
+  readonly state: KpSchemeMachineState;
+  readonly eventIndex: number;
+  readonly causedByEventIds?: readonly string[] | undefined;
 }
 
 const primitiveAddresses: Readonly<Record<KpSchemePrimitiveName,
@@ -88,6 +100,283 @@ export function evaluateKpSchemeAtomicControl(input: {
   throw new Error(
     `Scheme evaluator slice cannot yet evaluate ${expression.role} ${expression.id}.`
   );
+}
+
+export function stepKpSchemeFactorialEvaluator(
+  input: KpSchemeEvaluatorStepInput
+): KpSchemeEvaluatorTransition {
+  if (input.state.control.kind === "expression") {
+    const expression = expressionById(
+      input.document,
+      input.state.control.expressionId
+    );
+    if (expression.kind === "list" && expression.role === "application") {
+      return enterApplication(input, expression);
+    }
+    return evaluateKpSchemeAtomicControl(input);
+  }
+  if (input.state.control.kind === "complete") {
+    throw new Error("Completed Scheme evaluation has no next transition.");
+  }
+  const continuation = requireActiveContinuation(input.state);
+  if (continuation.kind === "definition") {
+    return bindDefinition(input, continuation);
+  }
+  if (continuation.kind === "application-operator") {
+    return scheduleFirstArgument(input, continuation);
+  }
+  if (continuation.kind === "application-arguments") {
+    return acceptApplicationArgument(input, continuation);
+  }
+  throw new Error(
+    `Scheme evaluator slice cannot yet resume ${continuation.kind}.`
+  );
+}
+
+function bindDefinition(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeDefinitionContinuation
+): KpSchemeEvaluatorTransition {
+  const valueId = controlledValueId(input.state);
+  const value = requireValue(input.state, valueId);
+  if (value.kind !== "closure" || value.name !== continuation.bindingName) {
+    throw new Error("Factorial definition can bind only its certified closure.");
+  }
+  const parent = continuation.parentContinuationId === null
+    ? undefined
+    : requireContinuation(input.state, continuation.parentContinuationId);
+  if (parent?.kind !== "sequence" || parent.remainingExpressionIds.length !== 1) {
+    throw new Error("Factorial definition requires its certified program sequence.");
+  }
+  const bindingId = "scheme-factorial.binding.definition.factorial";
+  const environments = input.state.environments.map((environment) =>
+    environment.id === continuation.environmentId ? {
+      ...environment,
+      bindings: [...environment.bindings, {
+        id: bindingId,
+        name: continuation.bindingName,
+        kind: "definition" as const,
+        binderOccurrenceId: continuation.binderOccurrenceId,
+        valueId
+      }]
+    } : environment);
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: {
+      kind: "expression",
+      expressionId: parent.remainingExpressionIds[0]!
+    },
+    activeEnvironmentId: parent.environmentId,
+    activeContinuationId: parent.parentContinuationId,
+    environments
+  });
+  return transition(input, after, {
+    ...eventBase(input, [
+      continuation.definitionExpressionId,
+      continuation.binderOccurrenceId
+    ], [valueId], [valueId]),
+    kind: "definition-bound",
+    definitionExpressionId: continuation.definitionExpressionId,
+    binderOccurrenceId: continuation.binderOccurrenceId,
+    environmentId: continuation.environmentId,
+    bindingId,
+    valueId
+  });
+}
+
+function enterApplication(
+  input: KpSchemeEvaluatorStepInput,
+  expression: Extract<KpSchemeSourceExpression, { readonly kind: "list" }>
+): KpSchemeEvaluatorTransition {
+  const operator = expression.children[0];
+  const arguments_ = expression.children.slice(1);
+  if (operator === undefined || arguments_.length === 0) {
+    throw new Error("Scheme applications require an operator and arguments.");
+  }
+  const continuationId =
+    `scheme-factorial.continuation.application-operator.${pad(input.eventIndex)}`;
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "expression", expressionId: operator.id },
+    activeContinuationId: continuationId,
+    continuations: [...input.state.continuations, {
+      kind: "application-operator",
+      id: continuationId,
+      parentContinuationId: input.state.activeContinuationId,
+      applicationExpressionId: expression.id,
+      argumentExpressionIds: arguments_.map(({ id }) => id),
+      environmentId: input.state.activeEnvironmentId
+    }]
+  });
+  return transition(input, after, {
+    ...eventBase(input, [
+      expression.id,
+      operator.id,
+      ...arguments_.map(({ id }) => id)
+    ], [], []),
+    kind: "application-entered",
+    applicationExpressionId: expression.id,
+    operatorExpressionId: operator.id,
+    argumentExpressionIds: arguments_.map(({ id }) => id),
+    continuationId
+  });
+}
+
+function scheduleFirstArgument(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeApplicationOperatorContinuation
+): KpSchemeEvaluatorTransition {
+  const operatorValueId = controlledValueId(input.state);
+  requireValue(input.state, operatorValueId);
+  const firstArgumentExpressionId = continuation.argumentExpressionIds[0];
+  if (firstArgumentExpressionId === undefined) {
+    throw new Error("Scheme application has no first argument.");
+  }
+  const continuationId =
+    `scheme-factorial.continuation.application-arguments.${pad(input.eventIndex)}`;
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "expression", expressionId: firstArgumentExpressionId },
+    activeContinuationId: continuationId,
+    continuations: [...input.state.continuations, {
+      kind: "application-arguments",
+      id: continuationId,
+      parentContinuationId: continuation.parentContinuationId,
+      applicationExpressionId: continuation.applicationExpressionId,
+      operatorValueId,
+      argumentExpressionIds: continuation.argumentExpressionIds,
+      evaluatedArgumentValueIds: [],
+      nextArgumentIndex: 0,
+      environmentId: continuation.environmentId
+    }]
+  });
+  return transition(input, after, {
+    ...eventBase(input, [
+      continuation.applicationExpressionId,
+      firstArgumentExpressionId
+    ], [operatorValueId], [operatorValueId]),
+    kind: "application-operator-resolved",
+    applicationExpressionId: continuation.applicationExpressionId,
+    operatorValueId,
+    firstArgumentExpressionId,
+    continuationId
+  });
+}
+
+function acceptApplicationArgument(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeApplicationArgumentsContinuation
+): KpSchemeEvaluatorTransition {
+  const argumentValueId = controlledValueId(input.state);
+  requireValue(input.state, argumentValueId);
+  const argumentIndex = continuation.nextArgumentIndex;
+  const argumentExpressionId = continuation.argumentExpressionIds[argumentIndex];
+  if (argumentExpressionId === undefined) {
+    throw new Error("Scheme argument continuation points outside its application.");
+  }
+  const evaluatedArgumentValueIds = [
+    ...continuation.evaluatedArgumentValueIds,
+    argumentValueId
+  ];
+  const nextArgumentIndex = argumentIndex + 1;
+  const nextArgumentExpressionId =
+    continuation.argumentExpressionIds[nextArgumentIndex] ?? null;
+  if (nextArgumentExpressionId !== null) {
+    const updated = {
+      ...continuation,
+      evaluatedArgumentValueIds,
+      nextArgumentIndex
+    };
+    const after = defineKpSchemeMachineState(input.document, {
+      ...input.state,
+      control: { kind: "expression", expressionId: nextArgumentExpressionId },
+      continuations: replaceContinuation(input.state, updated)
+    });
+    return transition(input, after, {
+      ...eventBase(input, [
+        continuation.applicationExpressionId,
+        argumentExpressionId,
+        nextArgumentExpressionId
+      ], [argumentValueId], [argumentValueId]),
+      kind: "application-argument-accepted",
+      applicationExpressionId: continuation.applicationExpressionId,
+      argumentExpressionId,
+      argumentValueId,
+      argumentIndex,
+      nextArgumentExpressionId,
+      continuationId: continuation.id
+    });
+  }
+  const operator = requireValue(input.state, continuation.operatorValueId);
+  if (operator.kind !== "closure") {
+    throw new Error("Trusted primitive application is implemented in the next slice.");
+  }
+  return bindClosureParameter(
+    input,
+    continuation,
+    operator,
+    argumentExpressionId,
+    argumentValueId,
+    evaluatedArgumentValueIds
+  );
+}
+
+function bindClosureParameter(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeApplicationArgumentsContinuation,
+  closure: KpSchemeClosureValue,
+  argumentExpressionId: string,
+  argumentValueId: string,
+  evaluatedArgumentValueIds: readonly string[]
+): KpSchemeEvaluatorTransition {
+  if (evaluatedArgumentValueIds.length !== 1) {
+    throw new Error("Factorial closure requires exactly one argument.");
+  }
+  const suffix = pad(input.eventIndex);
+  const environmentId = `scheme-factorial.environment.call.${suffix}`;
+  const bindingId = `scheme-factorial.binding.parameter.n.${suffix}`;
+  const continuationId = `scheme-factorial.continuation.call-return.${suffix}`;
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "expression", expressionId: closure.bodyExpressionId },
+    activeEnvironmentId: environmentId,
+    activeContinuationId: continuationId,
+    environments: [...input.state.environments, {
+      id: environmentId,
+      parentEnvironmentId: closure.environmentId,
+      bindings: [{
+        id: bindingId,
+        name: closure.parameterName,
+        kind: "parameter",
+        binderOccurrenceId: closure.parameterOccurrenceId,
+        valueId: argumentValueId
+      }]
+    }],
+    continuations: [...input.state.continuations, {
+      kind: "call-return",
+      id: continuationId,
+      parentContinuationId: continuation.parentContinuationId,
+      applicationExpressionId: continuation.applicationExpressionId,
+      calleeValueId: closure.id,
+      callerEnvironmentId: continuation.environmentId,
+      calleeEnvironmentId: environmentId
+    }]
+  });
+  return transition(input, after, {
+    ...eventBase(input, [
+      continuation.applicationExpressionId,
+      closure.parameterOccurrenceId,
+      argumentExpressionId,
+      closure.bodyExpressionId
+    ], [closure.id, argumentValueId], [argumentValueId]),
+    kind: "parameter-bound",
+    applicationExpressionId: continuation.applicationExpressionId,
+    parameterOccurrenceId: closure.parameterOccurrenceId,
+    argumentExpressionId,
+    argumentValueId,
+    calleeEnvironmentId: environmentId,
+    bindingId
+  });
 }
 
 function evaluateInteger(
@@ -242,6 +531,42 @@ function requireValue(state: KpSchemeMachineState, id: string): KpSchemeValue {
   const value = state.values.find((candidate) => candidate.id === id);
   if (value === undefined) throw new Error(`Unknown Scheme value ${id}.`);
   return value;
+}
+
+function controlledValueId(state: KpSchemeMachineState): string {
+  if (state.control.kind !== "value") {
+    throw new Error("Scheme continuation requires value control.");
+  }
+  return state.control.valueId;
+}
+
+function requireActiveContinuation(
+  state: KpSchemeMachineState
+): KpSchemeContinuation {
+  if (state.activeContinuationId === null) {
+    throw new Error("Scheme value has no continuation to receive it.");
+  }
+  return requireContinuation(state, state.activeContinuationId);
+}
+
+function requireContinuation(
+  state: KpSchemeMachineState,
+  id: string
+): KpSchemeContinuation {
+  const continuation = state.continuations.find((candidate) =>
+    candidate.id === id);
+  if (continuation === undefined) {
+    throw new Error(`Unknown Scheme continuation ${id}.`);
+  }
+  return continuation;
+}
+
+function replaceContinuation(
+  state: KpSchemeMachineState,
+  replacement: KpSchemeContinuation
+): readonly KpSchemeContinuation[] {
+  return state.continuations.map((continuation) =>
+    continuation.id === replacement.id ? replacement : continuation);
 }
 
 function primitiveValueId(name: KpSchemePrimitiveName): string {

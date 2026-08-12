@@ -155,11 +155,29 @@
       "status": "passed",
       "scope": "s07-control-plane",
       "checkedAt": "2026-08-12T00:22:39.223Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s08-application-binding",
+      "checkedAt": "2026-08-12T00:28:47.696Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08-type-safety",
+      "checkedAt": "2026-08-12T00:28:48.948Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s08-control-plane",
+      "checkedAt": "2026-08-12T00:28:49.890Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The deterministic evaluator now seeds trusted primitives and emits independently trace-valid transitions for integer literals, lexical symbol resolution, and creation of the recursive factorial closure as serializable data."
+    "summary": "The evaluator now composes definition binding, application entry, operator resolution, argument scheduling, exact argument acceptance, call-environment creation, and one-identity parameter binding into a valid trace prefix."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

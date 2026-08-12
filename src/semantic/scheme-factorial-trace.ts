@@ -26,6 +26,8 @@ export type KpSchemeTraceEvent =
   | KpSchemeClosureCreatedEvent
   | KpSchemeDefinitionBoundEvent
   | KpSchemeApplicationEnteredEvent
+  | KpSchemeApplicationOperatorResolvedEvent
+  | KpSchemeApplicationArgumentAcceptedEvent
   | KpSchemeParameterBoundEvent
   | KpSchemeBranchSelectedEvent
   | KpSchemePrimitiveAppliedEvent
@@ -68,6 +70,26 @@ export interface KpSchemeApplicationEnteredEvent extends KpSchemeTraceEventBase 
   readonly applicationExpressionId: string;
   readonly operatorExpressionId: string;
   readonly argumentExpressionIds: readonly string[];
+  readonly continuationId: string;
+}
+
+export interface KpSchemeApplicationOperatorResolvedEvent
+  extends KpSchemeTraceEventBase {
+  readonly kind: "application-operator-resolved";
+  readonly applicationExpressionId: string;
+  readonly operatorValueId: string;
+  readonly firstArgumentExpressionId: string;
+  readonly continuationId: string;
+}
+
+export interface KpSchemeApplicationArgumentAcceptedEvent
+  extends KpSchemeTraceEventBase {
+  readonly kind: "application-argument-accepted";
+  readonly applicationExpressionId: string;
+  readonly argumentExpressionId: string;
+  readonly argumentValueId: string;
+  readonly argumentIndex: number;
+  readonly nextArgumentExpressionId: string | null;
   readonly continuationId: string;
 }
 
@@ -292,6 +314,32 @@ function validateEvent(input: {
       `${path}.argumentExpressionIds`, sourceIds, issues);
     requireKnown(event.continuationId, afterContinuations,
       `${path}.continuationId`, "continuation", issues);
+  } else if (event.kind === "application-operator-resolved") {
+    requireSource(event.applicationExpressionId,
+      `${path}.applicationExpressionId`, sourceIds, issues);
+    requireSource(event.firstArgumentExpressionId,
+      `${path}.firstArgumentExpressionId`, sourceIds, issues);
+    requireKnown(event.operatorValueId, beforeValues,
+      `${path}.operatorValueId`, "operator value", issues);
+    requireKnown(event.continuationId, afterContinuations,
+      `${path}.continuationId`, "continuation", issues);
+  } else if (event.kind === "application-argument-accepted") {
+    requireSource(event.applicationExpressionId,
+      `${path}.applicationExpressionId`, sourceIds, issues);
+    requireSource(event.argumentExpressionId,
+      `${path}.argumentExpressionId`, sourceIds, issues);
+    if (event.nextArgumentExpressionId !== null) {
+      requireSource(event.nextArgumentExpressionId,
+        `${path}.nextArgumentExpressionId`, sourceIds, issues);
+    }
+    requireKnown(event.argumentValueId, beforeValues,
+      `${path}.argumentValueId`, "argument value", issues);
+    requireKnown(event.continuationId, afterContinuations,
+      `${path}.continuationId`, "continuation", issues);
+    if (!Number.isSafeInteger(event.argumentIndex) || event.argumentIndex < 0) {
+      issues.push(issue(`${path}.argumentIndex`,
+        "argument index must be a non-negative safe integer"));
+    }
   } else if (event.kind === "parameter-bound") {
     requireSource(event.applicationExpressionId,
       `${path}.applicationExpressionId`, sourceIds, issues);
