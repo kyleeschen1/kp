@@ -272,11 +272,39 @@
       "scope": "slice s12 durable evidence",
       "checkedAt": "2026-08-12T00:56:17.405Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s13 pedagogical score contract",
+      "checkedAt": "2026-08-12T01:02:33.429Z",
+      "notes": "All 58 focused tests passed, including valid grouping, explicit omission, semantic holds and focus, deep freezing, total event accounting, unknown identity rejection, and causal reorder rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 repository types",
+      "checkedAt": "2026-08-12T01:02:34.437Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s13 patch hygiene",
+      "checkedAt": "2026-08-12T01:02:35.426Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s13 durable evidence",
+      "checkedAt": "2026-08-12T01:02:36.393Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical Scheme source now deterministically compiles into a checked-in frozen trace artifact; the learner-facing reader imports generated data and validation only, never the evaluator."
+    "summary": "The framework-neutral pedagogical score can now group, omit with rationale, hold, caption, and emphasize trace-grounded identities while accounting for every event exactly once and preserving causal order."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

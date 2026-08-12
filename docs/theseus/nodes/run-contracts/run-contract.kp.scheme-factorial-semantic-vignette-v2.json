@@ -131,7 +131,8 @@
     {
       "id": "s13",
       "title": "Define the pedagogical score",
-      "status": "planned"
+      "summary": "Defined and tested the score schema, total event accounting, explicit editorial omissions, semantic holds and emphasis, deep immutability, and causal-order enforcement.",
+      "status": "complete"
     },
     {
       "id": "s14",
