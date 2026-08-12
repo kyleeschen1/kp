@@ -2,7 +2,10 @@ import type {
   KpFissionFusionFrame,
   KpFissionFusionPlan
 } from "./fission-fusion.ts";
-import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
+import {
+  kpFissionFusionCapability,
+  type KpFissionFusionCapability
+} from "./fission-fusion-capability.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 import {
   compileKpCompoundTargetDeclarations,
@@ -96,6 +99,13 @@ export interface KpDistributionChoreographyFrame {
   }[];
 }
 
+export interface KpDistributionChoreographyDependencies {
+  readonly fissionFusion: KpFissionFusionCapability;
+}
+
+const defaultDependencies: KpDistributionChoreographyDependencies =
+  Object.freeze({ fissionFusion: kpFissionFusionCapability });
+
 export function compileKpDistributionChoreography(input: {
   readonly id: string;
   readonly sourceFactorId: string;
@@ -109,7 +119,8 @@ export function compileKpDistributionChoreography(input: {
   }[];
   readonly groupingArtifactIds: readonly string[];
   readonly sourceMinimumScale?: number | undefined;
-}): KpDistributionChoreographyPlan {
+}, dependencies: KpDistributionChoreographyDependencies = defaultDependencies):
+KpDistributionChoreographyPlan {
   if (input.factorCopyIds.length < 2) {
     throw new Error("Distribution choreography requires at least two factor copies.");
   }
@@ -156,7 +167,7 @@ export function compileKpDistributionChoreography(input: {
   if (!(sourceMinimumScale > 0 && sourceMinimumScale <= 1)) {
     throw new Error("Distribution source minimum scale must be greater than zero and at most one.");
   }
-  const fissionPlan = kpFissionFusionRuntime().compile({
+  const fissionPlan = dependencies.fissionFusion.compile({
     id: `${input.id}.factor-fission`,
     mode: "fission",
     lineageGraph: createKpSemanticLineageGraph({
@@ -232,9 +243,10 @@ export function compileKpDistributionChoreography(input: {
 export function sampleKpDistributionChoreography(input: {
   readonly plan: KpDistributionChoreographyPlan;
   readonly progress: number;
-}): KpDistributionChoreographyFrame {
+}, dependencies: KpDistributionChoreographyDependencies = defaultDependencies):
+KpDistributionChoreographyFrame {
   const progress = clamp01(input.progress);
-  const fission = kpFissionFusionRuntime().sample({
+  const fission = dependencies.fissionFusion.sample({
     plan: input.plan.fissionPlan,
     progress
   });

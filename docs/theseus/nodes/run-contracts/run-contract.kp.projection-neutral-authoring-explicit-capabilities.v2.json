@@ -197,7 +197,8 @@
     {
       "id": "s25",
       "title": "Inject fission-fusion into distribution and factoring",
-      "status": "planned"
+      "summary": "Distribution and factoring compile/sample functions now consume a typed fission/fusion dependency; focused parity tests prove delegation and unchanged choreography.",
+      "status": "complete"
     },
     {
       "id": "s26",

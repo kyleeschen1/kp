@@ -160,6 +160,12 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-12T22:44:44.932Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-fission-fusion-capability.test.ts tests/fission-fusion.test.ts tests/kp-distribution-choreography.test.ts tests/kp-factoring-choreography.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T22:51:17.268Z"
     }
   ],
   "expectedLearning": [

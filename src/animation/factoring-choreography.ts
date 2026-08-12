@@ -1,9 +1,11 @@
 import {
-  compileKpFissionFusionPlan,
   type KpFissionFusionFrame,
   type KpFissionFusionPlan
 } from "./fission-fusion.ts";
-import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
+import {
+  kpFissionFusionCapability,
+  type KpFissionFusionCapability
+} from "./fission-fusion-capability.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 
 export const kpFactoringChoreographyPhaseIds = [
@@ -60,6 +62,13 @@ export interface KpFactoringChoreographyFrame {
   }[];
 }
 
+export interface KpFactoringChoreographyDependencies {
+  readonly fissionFusion: KpFissionFusionCapability;
+}
+
+const defaultDependencies: KpFactoringChoreographyDependencies =
+  Object.freeze({ fissionFusion: kpFissionFusionCapability });
+
 /**
  * The factor transfer is the canonical lineage core shared by full factoring
  * presentations and renderers that already have grouping structure in place.
@@ -69,7 +78,8 @@ export function compileKpFactoringFusionPlan(input: {
   readonly factorCopyIds: readonly string[];
   readonly commonFactorId: string;
   readonly factorMinimumScale?: number | undefined;
-}): KpFissionFusionPlan {
+}, dependencies: KpFactoringChoreographyDependencies = defaultDependencies):
+KpFissionFusionPlan {
   if (input.factorCopyIds.length < 2) {
     throw new Error("Factoring fusion requires at least two factor copies.");
   }
@@ -79,7 +89,7 @@ export function compileKpFactoringFusionPlan(input: {
       "Factoring factorMinimumScale must be greater than zero and at most one."
     );
   }
-  return compileKpFissionFusionPlan({
+  return dependencies.fissionFusion.compile({
     id: `${input.id}.factor-fusion`,
     mode: "fusion",
     lineageGraph: createKpSemanticLineageGraph({
@@ -118,7 +128,8 @@ export function compileKpFactoringChoreography(input: {
   readonly connectorPairs: KpFactoringChoreographyPlan["connectorPairs"];
   readonly groupingArtifactIds: readonly string[];
   readonly factorMinimumScale?: number | undefined;
-}): KpFactoringChoreographyPlan {
+}, dependencies: KpFactoringChoreographyDependencies = defaultDependencies):
+KpFactoringChoreographyPlan {
   if (input.factorCopyIds.length < 2) {
     throw new Error("Factoring choreography requires at least two factor copies.");
   }
@@ -140,7 +151,7 @@ export function compileKpFactoringChoreography(input: {
     factorCopyIds: input.factorCopyIds,
     commonFactorId: input.commonFactorId,
     factorMinimumScale
-  });
+  }, dependencies);
   return {
     kind: "factoring-choreography-plan",
     id: input.id,
@@ -159,9 +170,10 @@ export function compileKpFactoringChoreography(input: {
 export function sampleKpFactoringChoreography(input: {
   readonly plan: KpFactoringChoreographyPlan;
   readonly progress: number;
-}): KpFactoringChoreographyFrame {
+}, dependencies: KpFactoringChoreographyDependencies = defaultDependencies):
+KpFactoringChoreographyFrame {
   const progress = clamp01(input.progress);
-  const fusion = kpFissionFusionRuntime().sample({
+  const fusion = dependencies.fissionFusion.sample({
     plan: input.plan.fusionPlan,
     progress
   });
