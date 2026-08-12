@@ -19,6 +19,7 @@ export interface KpEconomicsDemandShiftDevToolbar {
 export function mountKpEconomicsDemandShiftDevToolbar(input: {
   readonly ownerWindow?: Window;
   readonly search: string;
+  readonly editArticle: () => void;
   readonly navigate: (search: string) => void;
 }): KpEconomicsDemandShiftDevToolbar {
   const ownerWindow = input.ownerWindow ?? window;
@@ -47,9 +48,7 @@ export function mountKpEconomicsDemandShiftDevToolbar(input: {
       return;
     }
     if (command.controlId === "economics.edit-article") {
-      ownerWindow.document.querySelector<HTMLButtonElement>(
-        "[data-kp-economics-lesson-editor-toggle]"
-      )?.click();
+      input.editArticle();
     }
   };
   toolbar.setRoute(createKpEconomicsDevToolbarContribution(search), execute);

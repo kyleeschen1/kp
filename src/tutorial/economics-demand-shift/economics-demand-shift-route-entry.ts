@@ -15,11 +15,21 @@ import {
 } from "./economics-demand-shift-route-handoff.ts";
 
 type KpEconomicsDevToolbarClient = typeof import("./economics-demand-shift-dev-toolbar.ts");
+type KpEconomicsArticleAuthoringClient = typeof import(
+  "./economics-demand-shift-article-authoring.ts"
+);
+type KpEconomicsArticleEditorSession = ReturnType<
+  KpEconomicsArticleAuthoringClient["mountKpEconomicsDemandShiftArticleEditor"]
+>;
 
 // This module-scope branch lets Vite erase the complete toolbar and review
 // capture graph from production rather than mounting dormant development UI.
 const loadKpEconomicsDevToolbar: (() => Promise<KpEconomicsDevToolbarClient>) | undefined =
   import.meta.env.DEV ? () => import("./economics-demand-shift-dev-toolbar.ts") : undefined;
+const loadKpEconomicsArticleAuthoring: (() => Promise<KpEconomicsArticleAuthoringClient>) | undefined =
+  import.meta.env.DEV
+    ? () => import("./economics-demand-shift-article-authoring.ts")
+    : undefined;
 
 export const KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT =
   "kp-economics-demand-shift-route-request";
@@ -55,6 +65,23 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   let disposed = false;
   let transition = Promise.resolve();
   let devToolbar: ReturnType<KpEconomicsDevToolbarClient["mountKpEconomicsDemandShiftDevToolbar"]> | undefined;
+  let articleEditor: KpEconomicsArticleEditorSession | undefined;
+
+  const editArticle = async (): Promise<void> => {
+    if (disposed || articleEditor !== undefined ||
+        loadKpEconomicsArticleAuthoring === undefined) return;
+    const authoring = await loadKpEconomicsArticleAuthoring();
+    if (disposed || articleEditor !== undefined) return;
+    articleEditor = authoring.mountKpEconomicsDemandShiftArticleEditor({
+      ownerDocument: document,
+      // Route-owned preview projection is introduced separately; mounting the
+      // editor must not make one presenter the source of authoring truth.
+      preview: () => undefined,
+      onClose: () => {
+        articleEditor = undefined;
+      }
+    });
+  };
 
   const ensurePublication = (): void => {
     if (input.root.querySelector("[data-kp-economics-static-publication]")) {
@@ -205,6 +232,9 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     if (!disposed) {
       devToolbar = client.mountKpEconomicsDemandShiftDevToolbar({
         search: initialSearch,
+        editArticle: () => {
+          void editArticle();
+        },
         navigate: (search) => {
           void navigate({ search, hash: window.location.hash, history: "push" });
         }
@@ -221,6 +251,8 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       activeDispose = undefined;
       devToolbar?.dispose();
       devToolbar = undefined;
+      void articleEditor?.close(true);
+      articleEditor = undefined;
       window.removeEventListener("popstate", onPopState);
       input.root.removeEventListener("click", onViewClick);
       window.removeEventListener(

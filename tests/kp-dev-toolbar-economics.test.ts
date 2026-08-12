@@ -43,6 +43,30 @@ test("the economics toolbar is a DEV-only dynamic route capability", () => {
   assert.doesNotMatch(presenterSource, /createKpTutorialReviewHost/u);
 });
 
+test("the route owns the framework-neutral article editor lifecycle", () => {
+  const routeSource = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts",
+    "utf8"
+  );
+  const toolbarSource = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-dev-toolbar.ts",
+    "utf8"
+  );
+
+  assert.match(routeSource, /import\.meta\.env\.DEV/u);
+  assert.match(
+    routeSource,
+    /import\("\.\/economics-demand-shift-article-authoring\.ts"\)/u
+  );
+  assert.doesNotMatch(
+    routeSource,
+    /from "\.\/economics-demand-shift-article-authoring\.ts"/u
+  );
+  assert.match(routeSource, /articleEditor\?\.close\(true\)/u);
+  assert.match(toolbarSource, /input\.editArticle\(\)/u);
+  assert.doesNotMatch(toolbarSource, /lesson-editor-toggle|querySelector/u);
+});
+
 test("fixed toolbar CSS does not reserve document flow or animate layout", () => {
   const css = readFileSync("src/dev-toolbar/dev-toolbar.css", "utf8");
 

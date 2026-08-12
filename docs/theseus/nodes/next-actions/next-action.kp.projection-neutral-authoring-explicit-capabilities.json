@@ -127,6 +127,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T22:06:32.209Z",
       "notes": "Economics now adapts the shared whole-file editor without importing CodeMirror or draft-session internals. Draft semantics, cutover, capability-gated atomic save, rollback on compiler failure, and full typing pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dev-toolbar-economics.test.ts tests/kp-article-v1-economics-authoring-descriptor.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T22:10:17.791Z",
+      "notes": "Route owns one DEV-only lazily loaded whole-file editor session; toolbar delegates through a capability callback; focused tests and full typecheck pass."
     }
   ],
   "expectedLearning": [

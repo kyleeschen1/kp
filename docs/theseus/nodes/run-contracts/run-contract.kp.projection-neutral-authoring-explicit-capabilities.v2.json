@@ -101,7 +101,8 @@
     {
       "id": "s09",
       "title": "Move editor lifecycle to route capability",
-      "status": "planned"
+      "summary": "Moved the lazily loaded whole-file editor session and forced disposal into the economics route capability; the toolbar now invokes an explicit editArticle callback instead of querying presenter DOM.",
+      "status": "complete"
     },
     {
       "id": "s10",
