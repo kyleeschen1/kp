@@ -71,6 +71,13 @@
       "scope": "broad",
       "checkedAt": "2026-08-12T21:31:46.775Z",
       "notes": "The previously reported Scheme full-evaluation resultValueId mismatch no longer reproduces; the current discriminated action union narrows ApplyPrimitive correctly and all TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/html-output-encoding-inventory.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:33:56.466Z",
+      "notes": "All three Scheme HTML emitters are now classified by their actual text and attribute sink contexts."
     }
   ],
   "expectedLearning": [

@@ -170,6 +170,14 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
+  retain("src/rendering/scheme-factorial-first-expansion-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
+  retain("src/rendering/scheme-factorial-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
   retain("src/rendering/vector-dot-projection-svg.ts", "rendering", [
     "html-attribute",
     "svg-text",
@@ -227,6 +235,11 @@ export const kpHtmlEncodingOwners = [
   ),
   retain(
     "src/tutorial/lisp-function-application/lisp-function-application-static-publication.ts",
+    "tutorial",
+    ["html-text", "html-attribute"]
+  ),
+  retain(
+    "src/tutorial/scheme-factorial/scheme-factorial-publication.ts",
     "tutorial",
     ["html-text", "html-attribute"]
   )
