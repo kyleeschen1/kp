@@ -209,11 +209,39 @@
       "status": "passed",
       "scope": "s10-control-plane",
       "checkedAt": "2026-08-12T00:40:02.450Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s11 named recursion and return trace",
+      "checkedAt": "2026-08-12T00:48:33.683Z",
+      "notes": "All 50 focused tests passed, including full factorial 3 descent, three suspended products, four identity-preserving call returns, exact products 1 2 6, deterministic serialization, and the final exact result 6."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 repository types",
+      "checkedAt": "2026-08-12T00:48:34.752Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s11 patch hygiene",
+      "checkedAt": "2026-08-12T00:48:35.701Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s11 durable evidence",
+      "checkedAt": "2026-08-12T00:48:36.649Z",
+      "notes": "Workspace validation passed with 929 nodes and 19558 events before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Equals, subtraction, and multiplication now evaluate only exact binary integers, emit result provenance and primitive-applied events, and reject arity, type, and overflow violations."
+    "summary": "Slice s11 completes the factual evaluator: factorial 3 descends through named recursive calls, preserves waiting multiplication contexts, returns exact value identities in reverse order, and settles at 6."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

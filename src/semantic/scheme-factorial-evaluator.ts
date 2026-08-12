@@ -3,6 +3,7 @@ import {
   resolveKpSchemeEnvironmentBinding,
   type KpSchemeApplicationArgumentsContinuation,
   type KpSchemeApplicationOperatorContinuation,
+  type KpSchemeCallReturnContinuation,
   type KpSchemeClosureValue,
   type KpSchemeConditionalContinuation,
   type KpSchemeContinuation,
@@ -126,6 +127,9 @@ export function stepKpSchemeFactorialEvaluator(
   if (input.state.control.kind === "complete") {
     throw new Error("Completed Scheme evaluation has no next transition.");
   }
+  if (input.state.activeContinuationId === null) {
+    return completeEvaluation(input);
+  }
   const continuation = requireActiveContinuation(input.state);
   if (continuation.kind === "definition") {
     return bindDefinition(input, continuation);
@@ -138,6 +142,9 @@ export function stepKpSchemeFactorialEvaluator(
   }
   if (continuation.kind === "conditional") {
     return selectConditionalBranch(input, continuation);
+  }
+  if (continuation.kind === "call-return") {
+    return returnFromCall(input, continuation);
   }
   throw new Error(
     `Scheme evaluator slice cannot yet resume ${continuation.kind}.`
@@ -377,12 +384,29 @@ function acceptApplicationArgument(
       control: { kind: "expression", expressionId: nextArgumentExpressionId },
       continuations: replaceContinuation(input.state, updated)
     });
+    const sourceExpressionIds = [
+      continuation.applicationExpressionId,
+      argumentExpressionId,
+      nextArgumentExpressionId
+    ];
+    if (suspendsForNamedRecursiveCall(
+      input.document,
+      input.state,
+      continuation,
+      nextArgumentExpressionId
+    )) {
+      return transition(input, after, {
+        ...eventBase(input, sourceExpressionIds,
+          [argumentValueId], [argumentValueId]),
+        kind: "call-suspended",
+        applicationExpressionId: continuation.applicationExpressionId,
+        continuationId: continuation.id,
+        pendingExpressionId: nextArgumentExpressionId
+      });
+    }
     return transition(input, after, {
-      ...eventBase(input, [
-        continuation.applicationExpressionId,
-        argumentExpressionId,
-        nextArgumentExpressionId
-      ], [argumentValueId], [argumentValueId]),
+      ...eventBase(input, sourceExpressionIds,
+        [argumentValueId], [argumentValueId]),
       kind: "application-argument-accepted",
       applicationExpressionId: continuation.applicationExpressionId,
       argumentExpressionId,
@@ -412,6 +436,64 @@ function acceptApplicationArgument(
     argumentValueId,
     evaluatedArgumentValueIds
   );
+}
+
+function returnFromCall(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeCallReturnContinuation
+): KpSchemeEvaluatorTransition {
+  const resultValueId = controlledValueId(input.state);
+  const result = requireValue(input.state, resultValueId);
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "value", valueId: resultValueId },
+    activeEnvironmentId: continuation.callerEnvironmentId,
+    activeContinuationId: continuation.parentContinuationId
+  });
+  return transition(input, after, {
+    ...eventBase(input, unique([
+      continuation.applicationExpressionId,
+      ...result.originExpressionIds
+    ]), [resultValueId], [resultValueId]),
+    kind: "call-returned",
+    applicationExpressionId: continuation.applicationExpressionId,
+    continuationId: continuation.id,
+    resultValueId
+  });
+}
+
+function completeEvaluation(
+  input: KpSchemeEvaluatorStepInput
+): KpSchemeEvaluatorTransition {
+  const resultValueId = controlledValueId(input.state);
+  const result = requireValue(input.state, resultValueId);
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "complete", valueId: resultValueId }
+  });
+  return transition(input, after, {
+    ...eventBase(input, result.originExpressionIds,
+      [resultValueId], [resultValueId]),
+    kind: "evaluation-completed",
+    resultValueId
+  });
+}
+
+function suspendsForNamedRecursiveCall(
+  document: KpSchemeSourceDocument,
+  state: KpSchemeMachineState,
+  continuation: KpSchemeApplicationArgumentsContinuation,
+  pendingExpressionId: string
+): boolean {
+  const operator = requireValue(state, continuation.operatorValueId);
+  const pending = expressionById(document, pendingExpressionId);
+  if (operator.kind !== "primitive" || operator.name !== "*" ||
+      pending.kind !== "list" || pending.role !== "application") {
+    return false;
+  }
+  const pendingOperator = pending.children[0];
+  return pendingOperator?.kind === "atom" &&
+    pendingOperator.lexeme === "factorial";
 }
 
 function applyTrustedPrimitive(

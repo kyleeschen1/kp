@@ -119,7 +119,8 @@
     {
       "id": "s11",
       "title": "Trace named recursion and returns",
-      "status": "planned"
+      "summary": "Implemented and tested named recursive suspension, base-case resolution, reverse call returns, identity-preserving handoff, deterministic completion, and exact result 6.",
+      "status": "complete"
     },
     {
       "id": "s12",
