@@ -34,7 +34,7 @@ export function createKpEconomicsDevToolbarContribution(
       label: "Edit article",
       group: "context",
       order: 15,
-      disabled: view !== "two-column-scroll"
+      disabled: false
     }, {
       kind: "toggle",
       id: "economics.theme",

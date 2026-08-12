@@ -107,7 +107,8 @@
     {
       "id": "s10",
       "title": "Expose Edit article from every economics projection",
-      "status": "planned"
+      "summary": "Enabled the single route-owned Edit article action in all six economics views; the contribution test now ratchets projection-wide availability.",
+      "status": "complete"
     },
     {
       "id": "s11",
