@@ -161,7 +161,8 @@
     {
       "id": "s18",
       "title": "Compile branch primitive and summary motifs",
-      "status": "planned"
+      "summary": "Compiled and tested exclusive branch decisions, dormant particles, local trusted reductions, semantic repeated-descent rhythm, and motif distinction from structural folding.",
+      "status": "complete"
     },
     {
       "id": "s19",

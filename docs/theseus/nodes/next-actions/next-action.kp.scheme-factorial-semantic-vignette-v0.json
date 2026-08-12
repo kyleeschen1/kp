@@ -412,11 +412,39 @@
       "scope": "slice s17 durable evidence",
       "checkedAt": "2026-08-12T01:23:30.067Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s18 decision primitive and summary motifs",
+      "checkedAt": "2026-08-12T01:28:12.439Z",
+      "notes": "All 83 focused tests passed. Four exclusive branch motifs collapse only dormant work, exact primitives reduce locally, repeated descent groups two exact calls, motif kinds remain distinct from structural folding, and samplers reverse exactly."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 repository types",
+      "checkedAt": "2026-08-12T01:28:13.537Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s18 patch hygiene",
+      "checkedAt": "2026-08-12T01:28:14.763Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 durable evidence",
+      "checkedAt": "2026-08-12T01:28:15.837Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Each recursive call now has an exact arched argument transfer into a persistent n cell, followed by demand-driven source-occurrence echoes that reuse rather than copy semantic value identity."
+    "summary": "Branch choice, dormant work, local primitives, and repeated-descent summary now have distinct trace-grounded motifs, preventing structural folding from falsely implying evaluation."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
