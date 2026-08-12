@@ -128,12 +128,16 @@ further infrastructure or promotion. The only active visual proof is
 `(factorial 3) -> (* 3 (factorial 2))`; code glyphs and parentheses must carry
 the transformation themselves. The same decision records CodeMirror as a lazy
 editing and endpoint adapter over framework-neutral semantic transformations,
-never as animation authority or a per-frame document store. The bounded
-correction is now implemented and awaiting human review at
+never as animation authority or a per-frame document store. The first bounded
+correction was rejected because its ledger inferred continuity from
+equal glyphs: the outer operator was incorrectly persisted as the recursive
+operator, and the argument glyph was incorrectly persisted as a body value.
+The replacement is now implemented and awaiting human review at
 `reviews/2026-08-12-scheme-factorial-first-expansion-checkpoint.md`. Its typed
-ledger accounts for every source and destination code token; the learner route
-uses one code-material paint owner and no SVG substitute overlay during the
-first descent. No later factorial beat or CodeMirror adapter has been promoted.
+model separates source syntax, fresh procedure activation, binding projection,
+and primitive result; the learner route still uses one code-material paint
+owner and no SVG substitute overlay. No later factorial beat or CodeMirror
+adapter has been promoted.
 
 A bounded visual interruption is now at a human checkpoint, recorded in
 `decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`.

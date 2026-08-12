@@ -2,11 +2,14 @@
 
 Status: active
 Last Updated: 2026-08-12
-Current Next Action: Review the corrected first Scheme expansion under
+Current Next Action: Review the semantically corrected first Scheme expansion
+under
 `../decisions/2026-08-12-kp-exemplar-first-code-material-and-editor-boundary.md`.
-The implemented proof is `(factorial 3) -> (* 3 (factorial 2))`: stable code
-material opens, binds, chooses, and settles without checkpoint-row crossfades
-or abstract substitute particles. Evidence is in
+The implemented proof is `(factorial 3) -> (* 3 (factorial 2))`, but it now
+passes through a fresh procedure activation: the operator expands, the argument
+is consumed by parameter binding, body values are fresh binding projections,
+the branch closes, and subtraction resolves. Equal glyphs never manufacture
+material continuity. Evidence is in
 `../reviews/2026-08-12-scheme-factorial-first-expansion-checkpoint.md`. Preserve
 the bounded evaluator, trace, score, shared clock, URLs, static publication,
 and accessibility. Do not generalize the renderer or connect CodeMirror before

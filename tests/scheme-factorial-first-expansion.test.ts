@@ -18,40 +18,87 @@ const expansion = compileKpSchemeFactorialFirstExpansion({
   trace: readKpSchemeFactorialTraceArtifact().trace
 });
 
-test("compiles one trace-certified call opening", () => {
+test("compiles one trace-certified procedure expansion", () => {
   assert.equal(expansion.source.nativeCode, "(factorial 3)");
   assert.equal(expansion.target.nativeCode, "(* 3 (factorial 2))");
   assert.deepEqual(expansion.actions.map(({ kind }) => kind), [
-    "OpenCall",
-    "BindValue",
+    "ExpandProcedure",
+    "BindArgument",
+    "ProjectBinding",
     "ChooseBranch",
     "SuspendExpression",
-    "ResolveExpression"
+    "ReducePrimitive"
   ]);
-  assert.equal(expansion.dispositions.length, expansion.source.tokens.length);
+  assert.deepEqual(expansion.states.map(({ id }) => id), [
+    "call",
+    "expanded-application",
+    "bound-body",
+    "selected-branch",
+    "suspended-product"
+  ]);
+  assert.match(expansion.states[1]!.nativeCode, /lambda \(n\)/u);
+  assert.match(expansion.states[2]!.nativeCode, /\(if \(= 3 0\)/u);
+  assert.equal(expansion.sourceDispositions.length, expansion.source.tokens.length);
   assert.equal(Object.isFrozen(expansion), true);
 });
 
-test("accounts for each source and target material exactly once", () => {
-  const sources = expansion.dispositions.map(({ sourceMaterialId }) =>
+test("separates source glyphs, activation syntax, bindings, and results", () => {
+  const sources = expansion.sourceDispositions.map(({ sourceMaterialId }) =>
     sourceMaterialId);
-  const continuedTargets = expansion.dispositions.map(({ targetMaterialId }) =>
-    targetMaterialId);
-  const introducedTargets = expansion.target.tokens
-    .filter(({ introducedByActionId }) => introducedByActionId !== null)
-    .map(({ id }) => id);
   assert.deepEqual(new Set(sources), new Set(expansion.source.tokens.map(({ id }) => id)));
-  assert.deepEqual(
-    new Set([...continuedTargets, ...introducedTargets]),
-    new Set(expansion.target.tokens.map(({ id }) => id))
-  );
+  const outerOperator = expansion.source.tokens.find(({ lexeme }) =>
+    lexeme === "factorial")!;
+  const recursiveOperator = expansion.target.tokens.find(({ lexeme }) =>
+    lexeme === "factorial")!;
+  assert.notEqual(outerOperator.id, recursiveOperator.id);
+  assert.equal(outerOperator.provenance.kind, "source");
+  assert.equal(recursiveOperator.provenance.kind, "activation");
+  assert.notEqual(outerOperator.provenance.sourceOccurrenceId,
+    recursiveOperator.provenance.sourceOccurrenceId);
+
+  const sourceArgument = expansion.source.tokens.find(({ lexeme }) =>
+    lexeme === "3")!;
+  const targetFactor = expansion.target.tokens.find(({ lexeme }) =>
+    lexeme === "3")!;
+  assert.notEqual(sourceArgument.id, targetFactor.id);
+  assert.equal(sourceArgument.provenance.kind, "source");
+  assert.equal(targetFactor.provenance.kind, "binding-projection");
+  const argumentDisposition = expansion.sourceDispositions.find(
+    ({ sourceMaterialId }) => sourceMaterialId === sourceArgument.id)!;
+  assert.equal(argumentDisposition.kind, "bind");
 
   const invalid = {
     ...structuredClone(expansion),
-    dispositions: expansion.dispositions.slice(1)
+    sourceDispositions: expansion.sourceDispositions.slice(1)
   };
   assert.throws(() => defineKpSchemeFactorialFirstExpansion(invalid),
-    /exactly one disposition/u);
+    /exactly one terminal disposition/u);
+});
+
+test("rejects glyph-equality continuity for operator and argument", () => {
+  const invalidOperator = structuredClone(expansion);
+  const outerOperator = invalidOperator.source.tokens.find(({ lexeme }) =>
+    lexeme === "factorial")!;
+  const recursiveOperator = invalidOperator.target.tokens.find(({ lexeme }) =>
+    lexeme === "factorial")!;
+  Object.assign(recursiveOperator, {
+    id: outerOperator.id,
+    provenance: outerOperator.provenance
+  });
+  assert.throws(() => defineKpSchemeFactorialFirstExpansion(invalidOperator),
+    /changes identity|recursive operator|cannot also terminate/u);
+
+  const invalidArgument = structuredClone(expansion);
+  const sourceArgument = invalidArgument.source.tokens.find(({ lexeme }) =>
+    lexeme === "3")!;
+  const targetFactor = invalidArgument.target.tokens.find(({ lexeme }) =>
+    lexeme === "3")!;
+  Object.assign(targetFactor, {
+    id: sourceArgument.id,
+    provenance: sourceArgument.provenance
+  });
+  assert.throws(() => defineKpSchemeFactorialFirstExpansion(invalidArgument),
+    /changes identity|Body values|cannot also terminate/u);
 });
 
 test("direct and reverse sampling are history independent with exact endpoints", () => {
@@ -74,6 +121,7 @@ test("renders code glyphs as the only visual material owner", () => {
   });
   assert.match(html, /data-kp-scheme-paint-owner="code-material"/u);
   assert.match(html, /data-kp-scheme-motion-id=/u);
-  assert.match(html, /retained-three/u);
+  assert.match(html, /data-kp-scheme-provenance-kind=/u);
+  assert.match(html, /binding-projection/u);
   assert.doesNotMatch(html, /<svg|<circle|particle|parameter-cell/u);
 });

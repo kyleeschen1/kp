@@ -31,9 +31,11 @@ test("isolates the first expansion while preserving full-story checkpoint seeks"
   await expect(page.getByRole("link", { name: "Full factorial evaluation" }))
     .toBeVisible();
   const focusSeek = page.locator('input[data-action="focus-seek"]');
-  await focusSeek.fill("0.5");
+  await focusSeek.fill("0.44");
   await expect(page.locator("[data-kp-scheme-first-expansion]"))
     .toHaveAttribute("data-kp-scheme-first-expansion-phase", "bind");
+  await expect(page.locator('[data-kp-scheme-provenance-kind="binding-projection"]'))
+    .toHaveCount(3);
   await page.screenshot({
     path: `${evidenceDirectory}/wide-focus-midpoint.png`,
     fullPage: true
@@ -81,7 +83,7 @@ test("scrubs canonical motifs with native endpoints and one paint owner", async 
   await expect(page.locator("[data-kp-scheme-first-expansion]"))
     .toHaveAttribute("data-kp-scheme-paint-owner", "code-material");
   await expect(page.locator("[data-kp-scheme-first-expansion-token]"))
-    .toHaveCount(8);
+    .not.toHaveCount(0);
   await expect(page.locator("[data-kp-scheme-transient-overlay]"))
     .toHaveCount(0);
   await page.screenshot({

@@ -36,21 +36,45 @@ opening into:
 (* 3 (factorial 2))
 ```
 
-The observable requirement is that code glyphs and parentheses are the
-material: the call opens, the argument survives as the retained factor, the
-chosen recursive branch blooms around it, and the next argument settles to
-`2`. Abstract particles, detached parameter rows, and whole-checkpoint
-crossfades cannot substitute for those claims.
+The initial implementation of this proof was rejected on 2026-08-12 because
+its material ledger inferred identity from equal spelling. It moved the outer
+`factorial` glyph into the recursive call and moved the argument glyph `3`
+into the retained product. Both continuities are semantically false even
+though the compressed endpoint is correct.
+
+The corrected observable requirement is that code glyphs and parentheses are
+the material while semantic identity remains exact:
+
+1. the outer operator occurrence resolves to the closure and is consumed as
+   the procedure opens into a fresh activation of its lambda/body;
+2. the argument occurrence arcs into parameter `n` and is consumed by the
+   binding rather than becoming a body glyph;
+3. occurrences of `n` in the activated body receive fresh projections of the
+   bound value `3`;
+4. the recursive `factorial` is a fresh runtime occurrence instantiated from
+   the function body, not the outer operator moving to a new position;
+5. the false predicate and dormant base branch fold away, and `(- 3 1)`
+   resolves into a fresh result value `2` before the compact suspended product
+   settles.
+
+Abstract particles, detached parameter rows, whole-checkpoint crossfades, and
+glyph-equality matching cannot substitute for these claims.
 
 ## Typed enforcement
 
-The semantic-to-visual seam must use a closed material-action family with
-stable source, destination, binding, branch, value, and continuation IDs.
-Every source material ID needs exactly one disposition: continue, transform,
-duplicate with explicit provenance, or withdraw for a named reason. Every
-destination material ID must be accounted for. Validation rejects unknown IDs,
-unaccounted material, duplicate ownership, and endpoint text that cannot be
-reconstructed from the typed tokens.
+The semantic-to-visual seam uses a closed material-action family with stable
+source-occurrence, activation, binding, value, branch, result, and continuation
+IDs. Every source material ID needs exactly one terminal disposition. Every
+introduced material must name its introducing action and one of four distinct
+provenance layers: source syntax, activated syntax, a binding projection, or a
+primitive result. Validation rejects unknown IDs, unaccounted material,
+duplicate introduction, endpoint text that cannot be reconstructed, and the
+two observed false-continuity errors.
+
+The first closed action family is `ExpandProcedure`, `BindArgument`,
+`ProjectBinding`, `ChooseBranch`, `SuspendExpression`, and `ReducePrimitive`.
+The governing rule is: **object constancy follows semantic identity, never
+equal glyphs, equal strings, or equal values.**
 
 Types prevent semantic substitution and incomplete material ledgers. They do
 not certify choreography, pacing, legibility, or taste; those remain the early

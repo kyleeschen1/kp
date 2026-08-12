@@ -29,7 +29,7 @@ import { renderKpTutorialScrubBar } from
 import { kpSchemeFactorialTutorialPath } from "./scheme-factorial-route.ts";
 
 export interface KpSchemeFactorialPublicationArtifact {
-  readonly schemaVersion: "kp.scheme-factorial-publication.v3";
+  readonly schemaVersion: "kp.scheme-factorial-publication.v4";
   readonly checkpoints: KpSchemeCheckpointProjection;
   readonly timeline: KpSchemeFactorialTimeline;
   readonly choreography: KpSchemeFactorialChoreography;
@@ -53,7 +53,7 @@ export function defineKpSchemeFactorialPublicationArtifact(input: {
     }
   }
   return deepFreeze({
-    schemaVersion: "kp.scheme-factorial-publication.v3",
+    schemaVersion: "kp.scheme-factorial-publication.v4",
     checkpoints: input.checkpoints,
     timeline: input.timeline,
     choreography: defineKpSchemeFactorialChoreography(input.choreography),
@@ -72,7 +72,7 @@ export function readKpSchemeFactorialPublicationArtifact(
   }
   const parsed: unknown = JSON.parse(source.textContent);
   if (!isRecord(parsed) ||
-      parsed["schemaVersion"] !== "kp.scheme-factorial-publication.v3" ||
+      parsed["schemaVersion"] !== "kp.scheme-factorial-publication.v4" ||
       !isRecord(parsed["checkpoints"]) || !isRecord(parsed["timeline"]) ||
       !isRecord(parsed["choreography"]) ||
       !isRecord(parsed["firstExpansion"])) {
@@ -173,7 +173,7 @@ export function renderKpSchemeFactorialFocusPublication(input: {
     </header>
     <figure class="kp-scheme-factorial-focus__figure">
       <div data-kp-scheme-factorial-focus-stage-host>${stage}</div>
-      <figcaption>Three stays behind while the next call begins with two.</figcaption>
+      <figcaption>The procedure opens first. Then the argument binds to <code>n</code>, and fresh values appear where that binding is used.</figcaption>
     </figure>
     <div class="kp-scheme-factorial-focus__transport" data-kp-scheme-factorial-focus-transport>
       <button type="button" data-action="focus-toggle" disabled>Play</button>
