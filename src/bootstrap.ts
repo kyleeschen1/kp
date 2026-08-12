@@ -16,6 +16,9 @@ import {
 import {
   isKpLispFunctionApplicationTutorialRoute
 } from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
+import {
+  isKpSchemeFactorialTutorialRoute
+} from "./tutorial/scheme-factorial/scheme-factorial-route.ts";
 
 type KpDevelopmentToolbarClient = typeof import(
   "./dev-toolbar/development-toolbar-bootstrap.ts"
@@ -33,6 +36,15 @@ const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConcept
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>("#app");
   if (root === null) throw new Error("Expected #app root element to exist.");
+  if (isKpSchemeFactorialTutorialRoute(window.location.pathname)) {
+    await mountDevelopmentToolbar();
+    const tutorial = await import(
+      "./tutorial/scheme-factorial/scheme-factorial-tutorial-entry.ts"
+    );
+    const dispose = tutorial.mountKpSchemeFactorialTutorial({ root });
+    window.addEventListener("pagehide", dispose, { once: true });
+    return;
+  }
   if (isKpLispFunctionApplicationTutorialRoute(window.location.pathname)) {
     await mountDevelopmentToolbar();
     const tutorial = await import(

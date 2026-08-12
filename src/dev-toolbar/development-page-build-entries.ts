@@ -29,5 +29,9 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
     Object.freeze({
       name: "lispFunctionApplicationTutorial",
       htmlPath: "tutorials/programming/lisp-function-application/index.html"
+    }),
+    Object.freeze({
+      name: "schemeFactorialTutorial",
+      htmlPath: "tutorials/programming/scheme-factorial/index.html"
     })
   ]);

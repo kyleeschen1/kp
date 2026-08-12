@@ -1,0 +1,66 @@
+.kp-scheme-factorial-publication {
+  --kp-lesson-theme-surface: #0d0e1c;
+  --kp-lesson-theme-math-foreground: #e7e5df;
+  --kp-lesson-theme-focus: #88c9ff;
+  --kp-tutorial-scrub-ink: #d7d7dc;
+  --kp-tutorial-scrub-divider: rgb(210 212 222 / .2);
+  --kp-tutorial-scrub-border: #3b3f54;
+  --kp-tutorial-scrub-surface: #171929;
+  --kp-tutorial-scrub-action-ink: #e7e5df;
+  --kp-tutorial-scrub-toggle-border: #74bff8;
+  --kp-tutorial-scrub-toggle-ink: #0d0e1c;
+  --kp-tutorial-scrub-toggle-surface: #88c9ff;
+  --kp-tutorial-scrub-accent: #88c9ff;
+  --kp-tutorial-scrub-progress: #b4b5be;
+  box-sizing: border-box;
+  color: #e7e5df;
+  display: grid;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  gap: 1.35rem;
+  margin: 0 auto;
+  max-inline-size: 60rem;
+  min-block-size: 100vh;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+}
+.kp-scheme-factorial-publication__header { max-inline-size: 42rem; }
+.kp-scheme-factorial-publication__eyebrow {
+  color: #88c9ff;
+  font-size: .78rem;
+  letter-spacing: .1em;
+  margin: 0 0 .4rem;
+  text-transform: uppercase;
+}
+.kp-scheme-factorial-publication h1 {
+  font-size: clamp(1.55rem, 4vw, 2.4rem);
+  font-weight: 520;
+  line-height: 1.15;
+  margin: 0;
+}
+.kp-scheme-factorial-publication__header > p:last-child {
+  color: #c4c5cc;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-block: .8rem 0;
+}
+.kp-scheme-factorial-publication__figure { margin: 0; }
+.kp-scheme-factorial-publication__figure figcaption {
+  box-sizing: border-box;
+  color: #f4f3ef;
+  line-height: 1.55;
+  min-block-size: 4.1rem;
+  padding: 1rem .2rem .25rem;
+}
+.kp-scheme-factorial-publication__transcript {
+  border-block: 1px solid rgb(210 212 222 / .16);
+  color: #b4b5be;
+  font-size: .86rem;
+  padding-block: .75rem;
+}
+.kp-scheme-factorial-publication__transcript summary { cursor: pointer; }
+.kp-scheme-factorial-publication__transcript li { margin-block: .5rem; }
+.kp-scheme-factorial-publication a { color: #9bd1fb; }
+.kp-scheme-factorial-publication footer { font-size: .82rem; }
+@media (max-width: 560px) {
+  .kp-scheme-factorial-publication { gap: .85rem; padding: 1rem .75rem 2rem; }
+  .kp-scheme-factorial-publication__header > p:last-child { line-height: 1.55; }
+}

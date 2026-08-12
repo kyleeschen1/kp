@@ -55,6 +55,12 @@ export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
       "tutorials",
       "/tutorials/programming/lisp-function-application/"
     ),
+    page(
+      "tutorial.scheme-factorial",
+      "Programming · Scheme factorial",
+      "tutorials",
+      "/tutorials/programming/scheme-factorial/"
+    ),
     page("reader.solve-x", "Solve x", "readers", "/reader/solve-x/"),
     page(
       "reader.generated-solve-x",

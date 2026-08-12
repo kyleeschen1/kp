@@ -9,6 +9,19 @@ import { defineConfig } from "vite";
 import {
   kpDevelopmentBuildEntries
 } from "./src/dev-toolbar/development-page-build-entries.ts";
+import { kpSchemeFactorialTimeline } from
+  "./src/animation/scheme-factorial-canonical-timeline.ts";
+import { kpSchemeFactorialCss } from
+  "./src/rendering/scheme-factorial-html.ts";
+import { kpSchemeFactorialCheckpoints } from
+  "./src/semantic/scheme-factorial-checkpoints.ts";
+import { parseKpSchemeFactorialSource } from
+  "./src/semantic/scheme-factorial-parser.ts";
+import {
+  defineKpSchemeFactorialPublicationArtifact,
+  renderKpSchemeFactorialStaticPublication,
+  serializeKpSchemeFactorialPublicationArtifact
+} from "./src/tutorial/scheme-factorial/scheme-factorial-publication.ts";
 
 import {
   kpReaderRouteEntryName,
@@ -65,6 +78,16 @@ const lispTutorialFilename = resolve(
   "tutorials/programming/lisp-function-application/index.html"
 );
 const lispTutorialStaticFallback = compileLispTutorialStaticFallback();
+const schemeFactorialTutorialFilename = resolve(
+  projectRoot,
+  "tutorials/programming/scheme-factorial/index.html"
+);
+const schemeFactorialPublicationArtifact =
+  defineKpSchemeFactorialPublicationArtifact({
+    checkpoints: kpSchemeFactorialCheckpoints,
+    timeline: kpSchemeFactorialTimeline
+  });
+const schemeFactorialStaticFallback = compileSchemeFactorialStaticFallback();
 const economicsTutorialFilename = resolve(
   projectRoot,
   "tutorials/economics/demand-shift/index.html"
@@ -210,6 +233,25 @@ export default defineConfig({
       }
     },
     {
+      name: "kp-scheme-factorial-static-fallback",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          return context.filename === schemeFactorialTutorialFilename
+            ? html.replace(
+                "<!-- kp:scheme-factorial-static-fallback -->",
+                schemeFactorialStaticFallback
+              ).replace(
+                "<!-- kp:scheme-factorial-publication-data -->",
+                serializeKpSchemeFactorialPublicationArtifact(
+                  schemeFactorialPublicationArtifact
+                )
+              )
+            : html;
+        }
+      }
+    },
+    {
       name: "kp-economics-tutorial-static-narrative",
       transformIndexHtml: {
         order: "pre",
@@ -275,8 +317,9 @@ export default defineConfig({
           // requests without pulling either tutorial implementation forward.
           if (
             id.includes("/src/editor/animation-catalogue-route.ts") ||
-            id.includes("/src/tutorial/economics-demand-shift/economics-demand-shift-route.ts") ||
-            id.includes("/src/tutorial/lisp-function-application/lisp-function-application-route.ts")
+              id.includes("/src/tutorial/economics-demand-shift/economics-demand-shift-route.ts") ||
+              id.includes("/src/tutorial/lisp-function-application/lisp-function-application-route.ts") ||
+              id.includes("/src/tutorial/scheme-factorial/scheme-factorial-route.ts")
           ) return "kp-route-table";
           // These dependency-free IDs travel together in the display catalog;
           // one metadata leaf avoids request overhead without creating a large
@@ -381,6 +424,22 @@ function compileLispTutorialStaticFallback(): string {
     })
   });
   return `<style>${sharedCss}\n${scrubCss}\n${lessonCss}\n${stage.css}</style>${publicationHtml}`;
+}
+
+function compileSchemeFactorialStaticFallback(): string {
+  const publicationCss = readFileSync(resolve(
+    projectRoot,
+    "src/tutorial/scheme-factorial/scheme-factorial-tutorial.css"
+  ), "utf8");
+  const scrubCss = readFileSync(resolve(
+    projectRoot,
+    "src/tutorial/kp-tutorial-scrub-bar.css"
+  ), "utf8");
+  return `<style>${publicationCss}\n${scrubCss}\n${kpSchemeFactorialCss}</style>${renderKpSchemeFactorialStaticPublication({
+    document: parseKpSchemeFactorialSource(),
+    artifact: schemeFactorialPublicationArtifact,
+    availableWidthPx: 720
+  })}`;
 }
 
 function compileAlgebraFractionCompositionStaticPublication(): string {

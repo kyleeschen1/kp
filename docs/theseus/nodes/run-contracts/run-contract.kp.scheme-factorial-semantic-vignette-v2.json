@@ -191,7 +191,8 @@
     {
       "id": "s23",
       "title": "Integrate route scrubber caption and fallback",
-      "status": "planned"
+      "summary": "Integrated and broadly verified the isolated route, compact static fallback artifact, shared clock and scrubber, stable caption, checkpoint URLs, responsive repaint, and development directory entry.",
+      "status": "complete"
     },
     {
       "id": "s24",
