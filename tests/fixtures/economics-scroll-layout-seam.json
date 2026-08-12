@@ -20,7 +20,7 @@
     "--kp-lesson-prose-line-height"
   ],
   "sharedDataHooks": [
-    "data-kp-inline-sticky-cue"
+    "data-kp-scroll-passage-cue"
   ],
   "responsiveFallback": "Two Columns deliberately uses the neutral single-column scroll-passage geometry below its desktop media boundary."
 }

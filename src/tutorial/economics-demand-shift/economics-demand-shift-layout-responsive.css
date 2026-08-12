@@ -60,7 +60,7 @@
 
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
-    [data-kp-inline-sticky-cue] {
+    [data-kp-scroll-passage-cue] {
     z-index: auto;
     margin-top: 2rem;
   }
@@ -79,7 +79,7 @@
 
   .kp-economics-tutorial--inline-sticky
     #kp-section-market-clearing
-    [data-kp-inline-sticky-cue] {
+    [data-kp-scroll-passage-cue] {
     z-index: 1;
     pointer-events: auto;
   }

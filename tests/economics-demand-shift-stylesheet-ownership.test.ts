@@ -293,7 +293,7 @@ test("economics layout owners do not restate settled passage paint", () => {
 
   assert.doesNotMatch(
     inline,
-    /\[data-kp-inline-sticky-cue\]\.kp-economics-tutorial__passage--active/
+    /\[data-kp-scroll-passage-cue\]\.kp-economics-tutorial__passage--active/
   );
   assert.doesNotMatch(
     twoColumn,
@@ -401,7 +401,7 @@ test("two-column progressive layout derives prose and graph from one latch", () 
   );
   assert.match(
     twoColumn,
-    /\[data-kp-inline-sticky-cue\]:first-child \{\s*margin-top: 0;/
+    /\[data-kp-scroll-passage-cue\]:first-child \{\s*margin-top: 0;/
   );
   assert.match(
     twoColumn,

@@ -44,12 +44,12 @@ test("wide paragraph-owned canvas synchronizes prose, graph, and motion", async 
   await expect(motionPassage.locator(
     ".kp-economics-tutorial__motion-passage-gate--entrance"
   )).toContainText("A change in demand");
-  await expect(root.locator("[data-kp-inline-sticky-cue]")).toHaveCount(3);
+  await expect(root.locator("[data-kp-scroll-passage-cue]")).toHaveCount(3);
   await expect(reflection).toHaveAttribute(
     "data-kp-lesson-passage-role",
     "reflection"
   );
-  await expect(reflection).not.toHaveAttribute("data-kp-inline-sticky-cue", "true");
+  await expect(reflection).not.toHaveAttribute("data-kp-scroll-passage-cue", "true");
   await expect(root.locator("[data-kp-inline-sticky-motion-track]"))
     .toHaveCount(0);
   await expect(root.locator("[data-kp-inline-sticky-runway]"))

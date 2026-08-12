@@ -2408,7 +2408,7 @@
       : undefined}
     data-kp-lesson-passage-role={passage.role}
     data-kp-scroll-cue={scrollCue ? true : undefined}
-    data-kp-inline-sticky-cue={scrollCue ? true : undefined}
+    data-kp-scroll-passage-cue={scrollCue ? true : undefined}
     data-kp-two-column-scroll-paragraph={twoColumnScroll && scrollCue
       ? true
       : undefined}

@@ -187,7 +187,7 @@
   .kp-economics-tutorial--two-column-scroll
     #kp-section-market-clearing
     .kp-economics-tutorial__motion-passage-prose
-    > [data-kp-inline-sticky-cue]:first-child {
+    > [data-kp-scroll-passage-cue]:first-child {
     margin-top: 0;
   }
 

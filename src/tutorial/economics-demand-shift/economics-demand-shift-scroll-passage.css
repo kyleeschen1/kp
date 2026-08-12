@@ -265,7 +265,7 @@
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue] {
+  [data-kp-scroll-passage-cue] {
   position: relative;
   z-index: 1;
   width: min(100%, var(--kp-scroll-passage-measure));
@@ -283,14 +283,14 @@
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
   .kp-economics-tutorial__motion-passage-prose
-  > [data-kp-inline-sticky-cue]:first-child {
+  > [data-kp-scroll-passage-cue]:first-child {
   margin-top: var(--kp-scroll-passage-scene-gap);
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]
-  + [data-kp-inline-sticky-cue] {
+  [data-kp-scroll-passage-cue]
+  + [data-kp-scroll-passage-cue] {
   margin-top: var(--kp-scroll-passage-scene-gap);
 }
 
@@ -302,7 +302,7 @@
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue]:focus-within {
+  [data-kp-scroll-passage-cue]:focus-within {
   z-index: 2;
 }
 
@@ -314,6 +314,6 @@
 
 .kp-economics-tutorial--inline-sticky[data-kp-inline-sticky-fit="reading"]
   #kp-section-market-clearing
-  [data-kp-inline-sticky-cue] {
+  [data-kp-scroll-passage-cue] {
   z-index: auto;
 }

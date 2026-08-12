@@ -173,7 +173,8 @@
     {
       "id": "s21",
       "title": "Add neutral layout hook contract",
-      "status": "planned"
+      "summary": "The shared cue contract is now data-kp-scroll-passage-cue in the Svelte renderer, neutral/base/responsive/Two Columns CSS, seam inventory, and Inline Sticky browser check; no legacy cue hook remains.",
+      "status": "complete"
     },
     {
       "id": "s22",
