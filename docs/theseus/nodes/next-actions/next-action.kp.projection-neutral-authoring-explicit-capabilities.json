@@ -99,6 +99,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T21:40:19.550Z",
       "notes": "The ApplyPrimitive assertion now uses an explicit reusable discriminant guard; runtime evaluation and the full TypeScript/Svelte/domain typecheck pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-12T21:57:06.106Z",
+      "notes": "All 4118 repository tests pass after updating the one dependent HTML-owner count ratchet from 46 to 49."
+    },
+    {
+      "command": "npm run typecheck && npm run build && theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-12T21:57:07.320Z",
+      "notes": "TypeScript, Svelte, domain projects, generated economics publication check, production build, and 934-node Theseus graph all pass. Build retains the known workbench chunk warning; no production implementation changed in this baseline slice."
     }
   ],
   "expectedLearning": [

@@ -83,7 +83,8 @@
     {
       "id": "s06",
       "title": "Establish honest broad verification baseline",
-      "status": "planned"
+      "summary": "Established a green honest baseline: 4118/4118 tests, full typecheck, Svelte diagnostics, domain typecheck, generated publication freshness, production build, architecture gates, and Theseus validation all pass.",
+      "status": "complete"
     },
     {
       "id": "s07",
