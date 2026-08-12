@@ -203,7 +203,7 @@
   overflow: visible;
   color: var(--kp-lesson-theme-math-foreground);
   font-family: KaTeX_Main, "Times New Roman", serif;
-  font-size: var(--kp-inline-sticky-prose-font-size, 1.125rem);
+  font-size: var(--kp-scroll-passage-prose-font-size, 1.125rem);
   font-weight: 400;
   letter-spacing: normal;
   line-height: 1;

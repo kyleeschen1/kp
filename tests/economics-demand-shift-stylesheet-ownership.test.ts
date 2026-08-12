@@ -275,7 +275,8 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.match(graph, /editor-graph-stage/);
   assert.match(responsive, /@media \(max-width: 980px\)/);
   assert.doesNotMatch(responsive, /--inline-sticky/);
-  assert.match(inline, /--inline-sticky/);
+  assert.match(inline, /--kp-scroll-passage/);
+  assert.doesNotMatch(inline, /--kp-inline-sticky/);
   assert.doesNotMatch(inline, /--two-column-scroll/);
   assert.match(twoColumn, /--two-column-scroll/);
   assert.match(layoutFallbacks, /prefers-reduced-motion/);

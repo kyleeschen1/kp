@@ -90,7 +90,7 @@
 
   .kp-economics-tutorial--two-column-scroll
     .kp-economics-tutorial__prose {
-    width: min(100%, var(--kp-inline-sticky-measure));
+    width: min(100%, var(--kp-scroll-passage-measure));
     font-weight: var(--kp-economics-prose-weight, 300);
   }
 

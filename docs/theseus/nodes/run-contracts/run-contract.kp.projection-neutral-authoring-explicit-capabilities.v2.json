@@ -161,7 +161,8 @@
     {
       "id": "s19",
       "title": "Extract projection-neutral responsive tokens",
-      "status": "planned"
+      "summary": "All shared scroll-passage geometry now consumes neutral --kp-scroll-passage-* tokens; dependent lesson, responsive, and desktop Two Columns rules use the same values with no legacy token references.",
+      "status": "complete"
     },
     {
       "id": "s20",

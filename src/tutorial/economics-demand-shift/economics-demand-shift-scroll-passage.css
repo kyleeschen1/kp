@@ -2,21 +2,21 @@
 /* Inline Sticky uses this directly. Two Columns overrides only its desktop
    composition and falls back here when its media boundary cannot hold. */
 .kp-economics-tutorial--inline-sticky {
-  --kp-inline-sticky-top: 0px;
-  --kp-inline-sticky-measure: 43rem;
-  --kp-inline-sticky-stage-width: min(60rem, calc(100vw - 2rem));
-  --kp-inline-sticky-stage-height: 50vh;
-  --kp-inline-sticky-scene-gap: 25vh;
-  --kp-inline-sticky-structural-line-width: 1px;
-  --kp-inline-sticky-curve-line-width:
-    calc(var(--kp-inline-sticky-structural-line-width) * 1.5);
-  --kp-inline-sticky-prose-font-size:
+  --kp-scroll-passage-top: 0px;
+  --kp-scroll-passage-measure: 43rem;
+  --kp-scroll-passage-stage-width: min(60rem, calc(100vw - 2rem));
+  --kp-scroll-passage-stage-height: 50vh;
+  --kp-scroll-passage-scene-gap: 25vh;
+  --kp-scroll-passage-structural-line-width: 1px;
+  --kp-scroll-passage-curve-line-width:
+    calc(var(--kp-scroll-passage-structural-line-width) * 1.5);
+  --kp-scroll-passage-prose-font-size:
     clamp(1.0625rem, 1.0125rem + 0.25vw, 1.1875rem);
   --kp-lesson-prose-line-height: 1.78;
   --kp-lesson-heading-line-height: 1.28;
   --kp-animation-block-margin-after: clamp(1.5rem, 3svh, 2.5rem);
-  --kp-inline-sticky-text-font: var(--kp-economics-non-katex-font-family);
-  font-family: var(--kp-inline-sticky-text-font);
+  --kp-scroll-passage-text-font: var(--kp-economics-non-katex-font-family);
+  font-family: var(--kp-scroll-passage-text-font);
 }
 
 .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__layout {
@@ -33,11 +33,11 @@
 
 .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__prose {
   display: block;
-  width: min(100%, var(--kp-inline-sticky-measure));
+  width: min(100%, var(--kp-scroll-passage-measure));
   margin-inline: auto;
   padding: 0 0 8rem;
-  font-family: var(--kp-inline-sticky-text-font);
-  font-size: var(--kp-inline-sticky-prose-font-size);
+  font-family: var(--kp-scroll-passage-text-font);
+  font-size: var(--kp-scroll-passage-prose-font-size);
   font-weight: var(--kp-lesson-theme-prose-weight);
   line-height: var(--kp-lesson-prose-line-height);
   word-spacing: normal;
@@ -91,16 +91,16 @@
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__motion-passage {
   position: relative;
-  width: var(--kp-inline-sticky-stage-width);
+  width: var(--kp-scroll-passage-stage-width);
   margin-inline-start:
-    calc((100% - var(--kp-inline-sticky-stage-width)) / 2);
+    calc((100% - var(--kp-scroll-passage-stage-width)) / 2);
   border-block: 1px solid var(--kp-lesson-theme-subtle-border);
   background: var(--kp-lesson-theme-page-wash);
 }
 
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__motion-passage-gate {
-  width: min(100%, var(--kp-inline-sticky-measure));
+  width: min(100%, var(--kp-scroll-passage-measure));
   margin-inline: auto;
 }
 
@@ -165,10 +165,10 @@
 .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__stage--inline {
   box-sizing: border-box;
   position: sticky;
-  top: var(--kp-inline-sticky-top);
+  top: var(--kp-scroll-passage-top);
   z-index: 8;
   width: 100%;
-  height: var(--kp-inline-sticky-stage-height);
+  height: var(--kp-scroll-passage-stage-height);
   min-height: 0;
   max-height: none;
   margin: 0;
@@ -187,7 +187,7 @@
   bottom: 0;
   z-index: 2;
   width: min(100vw, calc(100% + 2rem));
-  height: var(--kp-inline-sticky-curve-line-width);
+  height: var(--kp-scroll-passage-curve-line-width);
   background: var(--kp-lesson-theme-stage-divider);
   pointer-events: none;
   transform: translateX(50%);
@@ -242,7 +242,7 @@
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__stage--inline
   .editor-graph-stage__economics-math-label {
-  font-size: var(--kp-inline-sticky-prose-font-size);
+  font-size: var(--kp-scroll-passage-prose-font-size);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -254,7 +254,7 @@
 .kp-economics-tutorial--inline-sticky
   .kp-economics-tutorial__stage--inline
   .editor-graph-stage__economics-math-label--tick {
-  font-size: calc(var(--kp-inline-sticky-prose-font-size) * 0.75);
+  font-size: calc(var(--kp-scroll-passage-prose-font-size) * 0.75);
 }
 
 .kp-economics-tutorial--inline-sticky
@@ -268,7 +268,7 @@
   [data-kp-inline-sticky-cue] {
   position: relative;
   z-index: 1;
-  width: min(100%, var(--kp-inline-sticky-measure));
+  width: min(100%, var(--kp-scroll-passage-measure));
   margin-block: 0;
   margin-inline: auto;
   border-left: 0;
@@ -284,14 +284,14 @@
   #kp-section-market-clearing
   .kp-economics-tutorial__motion-passage-prose
   > [data-kp-inline-sticky-cue]:first-child {
-  margin-top: var(--kp-inline-sticky-scene-gap);
+  margin-top: var(--kp-scroll-passage-scene-gap);
 }
 
 .kp-economics-tutorial--inline-sticky
   #kp-section-market-clearing
   [data-kp-inline-sticky-cue]
   + [data-kp-inline-sticky-cue] {
-  margin-top: var(--kp-inline-sticky-scene-gap);
+  margin-top: var(--kp-scroll-passage-scene-gap);
 }
 
 .kp-economics-tutorial--inline-sticky

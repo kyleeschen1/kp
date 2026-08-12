@@ -17,7 +17,7 @@
   .kp-economics-tutorial--inline-sticky .kp-economics-tutorial__prose {
     width: 100%;
     padding: 0 1.125rem 6rem;
-    font-size: var(--kp-inline-sticky-prose-font-size);
+    font-size: var(--kp-scroll-passage-prose-font-size);
     line-height: var(--kp-lesson-prose-line-height);
   }
 

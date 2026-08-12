@@ -12,8 +12,8 @@
     ".kp-economics-tutorial__stage--inline"
   ],
   "sharedTokens": [
-    "--kp-inline-sticky-measure",
-    "--kp-inline-sticky-prose-font-size",
+    "--kp-scroll-passage-measure",
+    "--kp-scroll-passage-prose-font-size",
     "--kp-lesson-prose-line-height"
   ],
   "sharedDataHooks": [
