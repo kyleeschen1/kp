@@ -101,11 +101,29 @@
       "status": "passed",
       "scope": "s04-control-plane",
       "checkedAt": "2026-08-12T00:01:18.894Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s05-machine-state",
+      "checkedAt": "2026-08-12T00:08:21.906Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05-type-safety",
+      "checkedAt": "2026-08-12T00:08:23.083Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s05-control-plane",
+      "checkedAt": "2026-08-12T00:08:24.141Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The canonical factorial source now parses deterministically into 24 exact native source occurrences with syntax-only roles and rejects language features or shape changes outside the approved two-form subset."
+    "summary": "The evaluator now has frozen JSON-safe values, lexical environments, recursive closure references, lookup, and explicit continuation frames that preserve pending arguments and call-return work."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

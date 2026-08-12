@@ -83,7 +83,8 @@
     {
       "id": "s05",
       "title": "Define environments and continuations",
-      "status": "planned"
+      "summary": "Defined and tested immutable values, lexical environments, bindings, recursive closures, continuation chains, pending argument prefixes, and complete-state laws.",
+      "status": "complete"
     },
     {
       "id": "s06",
