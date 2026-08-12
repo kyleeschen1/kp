@@ -131,7 +131,8 @@
     {
       "id": "s14",
       "title": "Remove two-column passage-editor state",
-      "status": "planned"
+      "summary": "Removed the presenter-local passage buffer, modal state, dynamic component loader, edit buttons, geometry refresh path, and scroll pause; Two Columns now renders the compiled publication like every other projection.",
+      "status": "complete"
     },
     {
       "id": "s15",

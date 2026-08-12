@@ -139,7 +139,6 @@
   } from "../kp-tutorial-toc.ts";
   import { serializeKpTutorialDestinationHash } from "../kp-tutorial-url.ts";
   import KpTutorialLessonShell from "../KpTutorialLessonShell.svelte";
-  import type KpEconomicsPassageEditor from "./KpEconomicsPassageEditor.svelte";
   import KpInlineMath from "./KpInlineMath.svelte";
   import {
     isKpEconomicsNavigationActionDetail,
@@ -158,11 +157,6 @@
   import {
     projectKpEconomicsMotionBridgeCorridor
   } from "./economics-demand-shift-motion-bridge.ts";
-  // Authoring stays behind a compile-time DEV branch so the canonical source,
-  // CodeMirror, and its draft runtime cannot enter the published route closure.
-  const loadKpEconomicsLessonEditorModules = import.meta.env.DEV
-    ? () => import("./KpEconomicsPassageEditor.svelte")
-    : undefined;
   type KpEconomicsTutorialMotionOwner = "untouched" | "scroll" | "manual";
   const kpEconomicsScrollStartEpsilon = 0.002;
   const kpEconomicsScrollLatchEpsilonPx = 1;
@@ -302,22 +296,6 @@
   let theme = $state(untrack(() => initialTheme));
   const twoColumnParagraphGapVh = kpEconomicsTwoColumnParagraphGapDefaultVh;
   let twoColumnTextSide = $state(untrack(() => initialTwoColumnTextSide));
-  let editableTwoColumnParagraphs = $state(untrack(() => twoColumnParagraphs));
-  let lessonEditorSelectedPassageId = $state(untrack(() =>
-    twoColumnParagraphs[0]?.id ?? ""
-  ));
-  let lessonEditorOpen = $state(false);
-  let lessonEditorModalOpen = $state(false);
-  let LessonPassageEditor = $state<
-    typeof KpEconomicsPassageEditor | undefined
-  >();
-  let lessonEditorGeometryRefreshPending = false;
-  let lessonEditorValidation = $state("");
-  let selectedLessonEditorPassage = $derived(
-    editableTwoColumnParagraphs.find(({ id }) =>
-      id === lessonEditorSelectedPassageId
-    )
-  );
   let ready = $state(false);
   let stageExpanded = $state(false);
   let explorationOpen = $state(false);
@@ -789,64 +767,6 @@
     announcement = "Returned to the lesson example: demand intercept 14 to 18.";
   }
 
-  function toggleLessonEditor(): void {
-    if (loadKpEconomicsLessonEditorModules === undefined) return;
-    lessonEditorOpen = !lessonEditorOpen;
-    if (!lessonEditorOpen) lessonEditorModalOpen = false;
-    if (lessonEditorOpen) void loadLessonEditor();
-    scheduleLessonEditorGeometryRefresh();
-  }
-
-  async function loadLessonEditor(): Promise<void> {
-    if (loadKpEconomicsLessonEditorModules === undefined) return;
-    if (LessonPassageEditor === undefined) {
-      const componentModule = await loadKpEconomicsLessonEditorModules();
-      LessonPassageEditor = componentModule.default;
-    }
-    if (attentionPassageId !== undefined &&
-        editableTwoColumnParagraphs.some(({ id }) => id === attentionPassageId)) {
-      lessonEditorSelectedPassageId = attentionPassageId;
-    }
-    scheduleLessonEditorGeometryRefresh();
-  }
-
-  function selectLessonDraftPassage(passageId: string): void {
-    if (!lessonEditorOpen ||
-        !editableTwoColumnParagraphs.some(({ id }) => id === passageId)) return;
-    lessonEditorSelectedPassageId = passageId;
-    lessonEditorModalOpen = true;
-  }
-
-  function closeLessonEditorModal(): void {
-    lessonEditorModalOpen = false;
-    scrollCoordinator?.scheduleProjection();
-    requestAnimationFrame(() => {
-      shell?.querySelector<HTMLElement>(
-        `[data-kp-economics-passage-select='${lessonEditorSelectedPassageId}']`
-      )?.focus();
-    });
-  }
-
-  function presentLessonBufferPreview(input: {
-    readonly selectedPassageId: string;
-    readonly passages: readonly KpEconomicsDemandShiftLessonPassage[];
-    readonly validation: string;
-  }): void {
-    lessonEditorSelectedPassageId = input.selectedPassageId;
-    editableTwoColumnParagraphs = input.passages;
-    lessonEditorValidation = input.validation;
-    scheduleLessonEditorGeometryRefresh();
-  }
-
-  function scheduleLessonEditorGeometryRefresh(): void {
-    if (lessonEditorGeometryRefreshPending) return;
-    lessonEditorGeometryRefreshPending = true;
-    void tick().then(() => {
-      lessonEditorGeometryRefreshPending = false;
-      updateInlineStickyLayoutProjection();
-    });
-  }
-
   function toggleTheme(): void {
     theme = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset["kpLessonTheme"] = theme;
@@ -1142,7 +1062,6 @@
   function handleCoordinatedScroll(
     projection: KpTutorialCoordinatedScrollProjection<KpEconomicsMotionBlockId>
   ): void {
-    if (lessonEditorModalOpen) return;
     latestScrollProjection = projection;
     updateInlineStickyStageProjection();
     const inlineParagraphFrames = updateInlineStickyParagraphProjections();
@@ -2586,18 +2505,6 @@
         </div>
       </details>
     {/if}
-    {#if import.meta.env.DEV && lessonEditorOpen &&
-        twoColumnScroll && scrollCue}
-      <button
-        type="button"
-        class="kp-economics-tutorial__passage-select"
-        aria-label={`Edit passage ${passage.id}`}
-        aria-pressed={lessonEditorModalOpen &&
-          lessonEditorSelectedPassageId === passage.id}
-        data-kp-economics-passage-select={passage.id}
-        onclick={() => selectLessonDraftPassage(passage.id)}
-      >Edit</button>
-    {/if}
   </div>
 {/snippet}
 
@@ -2657,12 +2564,6 @@
     "data-kp-economics-two-column-text-side": twoColumnTextSide,
     "data-kp-economics-two-column-paragraph-gap-vh": twoColumnParagraphGapVh,
     "data-kp-economics-tutorial-theme": theme,
-    "data-kp-economics-lesson-editor-open": lessonEditorOpen
-      ? "true"
-      : "false",
-    "data-kp-economics-lesson-editor-selected": lessonEditorOpen
-      ? lessonEditorSelectedPassageId
-      : "",
     "data-kp-inline-sticky-fit": inlineStickyFit,
     "data-kp-inline-sticky-stage-state": inlineStickyStageState,
     "data-kp-animation-catalogue": true,
@@ -2778,7 +2679,7 @@
                 ></span>
                 <div class="kp-economics-tutorial__motion-passage-prose">
                   {#each (twoColumnScroll
-                    ? editableTwoColumnParagraphs
+                    ? twoColumnParagraphs
                     : section.passages.filter(({ role }) => role !== "reflection")) as passage}
                     {#if motionBridgeEnabled &&
                         passage.id === motionBridge?.beforePassageId}
@@ -2838,15 +2739,6 @@
         <span aria-hidden="true">⇄</span>
         <span>Text {twoColumnTextSide}</span>
       </button>
-      {#if import.meta.env.DEV}
-        <button
-          class="kp-economics-tutorial__column-toggle"
-          type="button"
-          aria-pressed={lessonEditorOpen}
-          data-kp-economics-lesson-editor-toggle
-          onclick={toggleLessonEditor}
-        >{lessonEditorOpen ? "Done" : "Edit"}</button>
-      {/if}
     {/if}
     <button
       class="kp-economics-tutorial__theme-toggle"
@@ -2864,15 +2756,3 @@
   </div>
   {/snippet}
 </KpTutorialLessonShell>
-
-{#if import.meta.env.DEV && lessonEditorOpen && lessonEditorModalOpen &&
-    selectedLessonEditorPassage !== undefined &&
-    LessonPassageEditor !== undefined}
-  <LessonPassageEditor
-    id={selectedLessonEditorPassage.id}
-    selectedPassageId={lessonEditorSelectedPassageId}
-    validation={lessonEditorValidation}
-    onPreview={presentLessonBufferPreview}
-    onClose={closeLessonEditorModal}
-  />
-{/if}

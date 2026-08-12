@@ -97,6 +97,19 @@ test("valid Article previews remount the active route projection", () => {
   );
 });
 
+test("the presenter owns no second economics editor state", () => {
+  const presenterSource = readFileSync(
+    "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
+    "utf8"
+  );
+
+  assert.doesNotMatch(
+    presenterSource,
+    /KpEconomicsPassageEditor|lessonEditor|editableTwoColumnParagraphs|passage-select/u
+  );
+  assert.match(presenterSource, /\? twoColumnParagraphs/u);
+});
+
 test("fixed toolbar CSS does not reserve document flow or animate layout", () => {
   const css = readFileSync("src/dev-toolbar/dev-toolbar.css", "utf8");
 
