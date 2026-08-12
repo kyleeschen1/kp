@@ -328,11 +328,39 @@
       "scope": "slice s14 durable evidence",
       "checkedAt": "2026-08-12T01:07:03.431Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s15 semantic checkpoint projection",
+      "checkedAt": "2026-08-12T01:13:39.161Z",
+      "notes": "All 68 focused tests passed. Seven endpoints expose full-to-seed definition state, one-to-three waiting shells across descent, exact base and result values, dormant branch truth, source provenance, and accessible text for every material item."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 repository types",
+      "checkedAt": "2026-08-12T01:13:40.261Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s15 patch hygiene",
+      "checkedAt": "2026-08-12T01:13:41.481Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s15 durable evidence",
+      "checkedAt": "2026-08-12T01:13:42.494Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The approved learner story is now encoded as six trace-grounded beats: definition seed, first descent, summarized repeated descent, base turn, explicit return cascade, and result."
+    "summary": "Every source and score endpoint now has a complete renderer-neutral material ledger for definition, invocation, active locus, parameter cell, waiting shells, dormant branch, current value, and accessibility."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
