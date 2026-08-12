@@ -311,51 +311,6 @@ export const kpSemanticAnimationCompatibilityLedger = [
     ],
     retirementCondition: "Lesson, card, Workbench, review, route, and export consumers use narrow projections."
   }),
-  compatibility({
-    id: "compatibility.module-scoped-choreography-registries",
-    category: "registry",
-    owner: reference(
-      "src/animation/catalog-packs/algebra.ts",
-      "distribution-choreography-register"
-    ),
-    authors: [
-      reference(
-        "src/animation/distribution-choreography-register.ts",
-        "registerKpDistributionChoreographyRuntime"
-      ),
-      reference(
-        "src/animation/factoring-choreography-register.ts",
-        "registerKpFactoringChoreographyRuntime"
-      ),
-      reference(
-        "src/animation/fission-fusion-register.ts",
-        "registerKpFissionFusionRuntime"
-      )
-    ],
-    consumers: [
-      reference(
-        "src/animation/distribution-choreography-runtime.ts",
-        "registeredRuntime"
-      ),
-      reference(
-        "src/animation/factoring-choreography-runtime.ts",
-        "registeredRuntime"
-      ),
-      reference(
-        "src/animation/fission-fusion-runtime.ts",
-        "registeredRuntime"
-      )
-    ],
-    status: "compatibility-only",
-    sunsetEvidence: [
-      sunsetEvidence(
-        "tests/canonical-reverse-choreography.test.ts",
-        "registry"
-      )
-    ],
-    requiredClosureEvidence: ["reference", "replacement", "fixture"],
-    retirementCondition: "Capability-pack loading supplies explicit runtime dependencies without import side effects."
-  })
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
 
 export const kpRetiredSemanticAnimationCompatibilityPaths = [
@@ -394,6 +349,19 @@ export const kpRetiredSemanticAnimationCompatibilityPaths = [
       "Typed kp.equation-presentation-profile.v1 depth and continuant policy.",
     closureTest:
       "tests/semantic-animation-compatibility-ledger.test.ts"
+  },
+  {
+    id: "compatibility.module-scoped-choreography-registries",
+    formerContractKey: "registeredRuntime",
+    removedFrom: [
+      "src/animation/fission-fusion-runtime.ts",
+      "src/animation/distribution-choreography-runtime.ts",
+      "src/animation/factoring-choreography-runtime.ts",
+      "src/animation/canonical-reverse-runtime.ts"
+    ],
+    replacement:
+      "Typed immutable algebra capabilities delivered by the lazy catalog pack.",
+    closureTest: "tests/algebra-registration-graph.test.ts"
   }
 ] as const;
 

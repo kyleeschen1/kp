@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "kp.algebra.registration-graph.v1",
+  "schemaVersion": "kp.algebra.registration-graph.v2",
+  "status": "retired",
   "pack": "src/animation/catalog-packs/algebra.ts",
   "sideEffectImports": [
     "../fission-fusion-register.ts",
@@ -53,5 +54,11 @@
       "rewritePowerAsRoot",
       "wrapFunction"
     ]
-  }
+  },
+  "replacementOwners": [
+    "src/animation/fission-fusion-capability.ts",
+    "src/animation/algebra-choreography-capabilities.ts",
+    "src/animation/catalog-packs/algebra-reverse-capability.ts",
+    "src/animation/runtime-capabilities.ts"
+  ]
 }

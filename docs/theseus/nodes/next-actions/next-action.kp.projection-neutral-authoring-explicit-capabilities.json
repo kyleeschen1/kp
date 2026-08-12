@@ -194,6 +194,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T23:13:42.495Z",
       "notes": "25 focused tests pass, full typing is green, and the browser proves rewind still exposes fusion/fission and mathematical-inverse metadata from the explicit pack table."
+    },
+    {
+      "command": "node registration closure and compatibility tests and npm run check:architecture and npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T23:17:20.504Z",
+      "notes": "28 focused tests pass; eight obsolete modules are absent, six test-only registration imports are gone, compatibility paths drop from 16 to 15, and the retired inventory remains executable."
     }
   ],
   "expectedLearning": [

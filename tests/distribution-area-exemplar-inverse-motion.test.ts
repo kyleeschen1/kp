@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import "../src/animation/fission-fusion-register.ts";
 import {
   createKpDistributionAreaForwardMotionPlan,
   sampleKpDistributionAreaForwardMotion

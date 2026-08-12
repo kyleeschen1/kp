@@ -22,9 +22,6 @@ import {
 import type {
   KpAnimationRuntimeCapabilities
 } from "../runtime-capabilities.ts";
-import "../fission-fusion-register.ts";
-import "../distribution-choreography-register.ts";
-import "../factoring-choreography-register.ts";
 
 export interface KpAlgebraAnimationPack {
   readonly catalog: readonly KpAnimationAsset[];

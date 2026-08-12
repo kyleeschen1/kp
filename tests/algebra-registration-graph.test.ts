@@ -8,6 +8,7 @@ const audit = JSON.parse(readFileSync(new URL(
   import.meta.url
 ), "utf8")) as {
   readonly schemaVersion: string;
+  readonly status: string;
   readonly pack: string;
   readonly sideEffectImports: readonly string[];
   readonly mutableRegistries: readonly {
@@ -25,51 +26,64 @@ const audit = JSON.parse(readFileSync(new URL(
     readonly consumer: string;
     readonly transformTypes: readonly string[];
   };
+  readonly replacementOwners: readonly string[];
 };
 
 function source(path: string): string {
   return readFileSync(new URL(path, projectRoot), "utf8");
 }
 
-test("the algebra pack owns four import-time registration edges", () => {
-  assert.equal(audit.schemaVersion, "kp.algebra.registration-graph.v1");
+test("the frozen algebra registration graph is retired without losing its inventory", () => {
+  assert.equal(audit.schemaVersion, "kp.algebra.registration-graph.v2");
+  assert.equal(audit.status, "retired");
   const pack = source(audit.pack);
   for (const importPath of audit.sideEffectImports) {
     assert.ok(
-      pack.includes(`import ${JSON.stringify(importPath)};`),
-      `missing side-effect import ${importPath}`
+      !pack.includes(`import ${JSON.stringify(importPath)};`),
+      `retired side-effect import remains: ${importPath}`
     );
   }
+  assert.equal(audit.sideEffectImports.length, 4);
 });
 
-test("three choreography registries expose mutable module-scoped slots", () => {
+test("registration-only modules and mutable slots no longer exist", () => {
   for (const registry of audit.mutableRegistries) {
-    const owner = source(registry.owner);
-    const registration = source(registry.registrationModule);
-    assert.match(owner, /let registeredRuntime:/u, registry.owner);
-    assert.ok(owner.includes(`function ${registry.register}(`), registry.register);
-    assert.ok(owner.includes(`function ${registry.lookup}(`), registry.lookup);
-    assert.ok(registration.includes(`${registry.register}({`), registry.registrationModule);
-    for (const consumerPath of registry.consumers) {
-      assert.ok(source(consumerPath).includes(registry.lookup), consumerPath);
-    }
+    assert.throws(() => source(registry.owner), registry.owner);
+    assert.throws(() => source(registry.registrationModule), registry.registrationModule);
   }
+  const production = sourceTree();
+  assert.doesNotMatch(production, /\bregisteredRuntime\b/u);
+  assert.doesNotMatch(production, /registerKp(?:FissionFusion|DistributionChoreography|FactoringChoreography)Runtime/u);
 });
 
-test("reverse choreography is registered into a mutable map for eight transform types", () => {
+test("the reverse mutable map is replaced by one immutable eight-entry capability", () => {
   const registry = audit.reverseRegistry;
-  const owner = source(registry.owner);
-  const registration = source(registry.registrationModule);
-  assert.match(owner, /new Map<string, KpCanonicalReverseChoreographyPlan>/u);
-  assert.ok(owner.includes(`function ${registry.register}(`));
-  assert.ok(owner.includes(`function ${registry.lookup}(`));
-  assert.ok(registration.includes(`${registry.register}(`));
-  assert.ok(source(registry.consumer).includes(registry.lookup));
+  assert.throws(() => source(registry.owner));
+  assert.throws(() => source(registry.registrationModule));
+  const replacement = source(
+    "src/animation/catalog-packs/algebra-reverse-capability.ts"
+  );
   for (const transformType of registry.transformTypes) {
     assert.match(
-      registration,
-      new RegExp(`registration\\(\\s*${JSON.stringify(transformType)},`, "u"),
+      replacement,
+      new RegExp(`entry\\(\\s*${JSON.stringify(transformType)},`, "u"),
       `missing reverse registration ${transformType}`
     );
   }
+  assert.equal(registry.transformTypes.length, 8);
 });
+
+test("every replacement owner exists and the pack exposes capability values", () => {
+  for (const path of audit.replacementOwners) assert.ok(source(path).length > 0);
+  const pack = source(audit.pack);
+  assert.match(pack, /runtimeCapabilities: kpAlgebraChoreographyCapabilities/u);
+});
+
+function sourceTree(): string {
+  return [
+    source("src/animation/catalog-packs/algebra.ts"),
+    source("src/animation/algebra-choreography-capabilities.ts"),
+    source("src/animation/runtime-capabilities.ts"),
+    source("src/rendering/semantic-equation-token-renderer.ts")
+  ].join("\n");
+}

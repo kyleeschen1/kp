@@ -215,7 +215,8 @@
     {
       "id": "s28",
       "title": "Delete registration-only modules and mutable slots",
-      "status": "planned"
+      "summary": "Deleted eight registration/runtime modules, removed all import-only callers, retired the compatibility ledger entry with replacement proof, and converted the frozen graph into an executable absence audit.",
+      "status": "complete"
     },
     {
       "id": "s29",
