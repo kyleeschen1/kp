@@ -92,6 +92,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-12T21:38:54.569Z",
       "notes": "All ten protected digests were audited. Exactly three changed: lifecycle hardening in 91a4b6d6 and paired adapter/compositor horizontal-axis constraints in d38f06fe. The rebase records d38f06fe as the later provenance boundary; preservation and adjacent behavior pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-full-evaluation.test.ts && npm run typecheck -- --pretty false",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T21:40:19.550Z",
+      "notes": "The ApplyPrimitive assertion now uses an explicit reusable discriminant guard; runtime evaluation and the full TypeScript/Svelte/domain typecheck pass."
     }
   ],
   "expectedLearning": [

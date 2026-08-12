@@ -3,7 +3,8 @@ import test from "node:test";
 
 import {
   compileKpSchemeFactorialFullEvaluation,
-  sampleKpSchemeFactorialFullEvaluation
+  sampleKpSchemeFactorialFullEvaluation,
+  type KpSchemeFullEvaluationAction
 } from "../src/animation/scheme-factorial-full-evaluation.ts";
 import { parseKpSchemeFactorialSource } from
   "../src/semantic/scheme-factorial-parser.ts";
@@ -34,11 +35,22 @@ test("compiles the complete factorial evaluation from certified trace events", (
     ["(* 3 (* 2 1))", "(* 3 2)", "6"]
   );
   assert.deepEqual(
-    evaluation.actions.filter(({ kind }) => kind === "ApplyPrimitive")
+    evaluation.actions.filter(isApplyPrimitive)
       .map(({ resultValueId }) => resultValueId),
     ["scheme-factorial.value.integer.093", "scheme-factorial.value.integer.095",
       "scheme-factorial.value.integer.097"]
-  );
+);
+
+type KpSchemeApplyPrimitiveAction = Extract<
+  KpSchemeFullEvaluationAction,
+  { readonly kind: "ApplyPrimitive" }
+>;
+
+function isApplyPrimitive(
+  action: KpSchemeFullEvaluationAction
+): action is KpSchemeApplyPrimitiveAction {
+  return action.kind === "ApplyPrimitive";
+}
   assert.equal(Object.isFrozen(evaluation), true);
 });
 

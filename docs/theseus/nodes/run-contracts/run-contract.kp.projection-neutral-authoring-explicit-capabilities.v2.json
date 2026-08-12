@@ -77,7 +77,8 @@
     {
       "id": "s05",
       "title": "Align Scheme full-evaluation typed test",
-      "status": "planned"
+      "summary": "Made the full-evaluation assertion narrow ApplyPrimitive through an explicit Extract-based type guard, preserving resultValueId access across compiler versions; focused runtime and broad typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
