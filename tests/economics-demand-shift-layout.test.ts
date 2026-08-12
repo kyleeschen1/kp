@@ -15,7 +15,6 @@ import {
   kpEconomicsTwoColumnParagraphGapMaximumVh,
   kpEconomicsMotionBridgeDwellExemplarSearch,
   kpEconomicsMotionBridgeExemplarSearch,
-  kpEconomicsAnimationStationExemplarSearch,
   kpEconomicsTwoColumnScrollCanonicalSearch,
   readKpEconomicsTwoColumnParagraphGapVh,
   readKpEconomicsDemandShiftPresentationLayout,
@@ -61,10 +60,8 @@ test("inline sticky economics layout is an explicit reversible query mode", () =
     "inline-sticky"
   );
   assert.equal(
-    readKpEconomicsDemandShiftPresentationLayout(
-      kpEconomicsAnimationStationExemplarSearch
-    ),
-    "animation-station"
+    readKpEconomicsDemandShiftPresentationLayout("?layout=animation-station"),
+    "split"
   );
   assert.equal(
     readKpEconomicsDemandShiftPresentationLayout("?layout=unknown&demand=18"),

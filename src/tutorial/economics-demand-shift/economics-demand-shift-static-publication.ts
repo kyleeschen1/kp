@@ -137,7 +137,6 @@ function renderViewSelector(): string {
         ${viewLink("split", "Split")}
         ${viewLink("inline-sticky", "Sticky")}
         ${viewLink("two-column-scroll", "Columns")}
-        ${viewLink("animation-station", "Station")}
       </div>
     </details>
   </nav>`;

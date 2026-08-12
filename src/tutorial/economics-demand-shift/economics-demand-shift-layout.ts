@@ -7,8 +7,12 @@ import {
 export type KpEconomicsDemandShiftPresentationLayout =
   | "split"
   | "inline-sticky"
-  | "animation-station"
   | "two-column-scroll";
+
+/** Dead implementation type retained only until the second retirement commit. */
+export type KpEconomicsDemandShiftHistoricalPresentationLayout =
+  | KpEconomicsDemandShiftPresentationLayout
+  | "animation-station";
 
 export type KpEconomicsScrollScrubStrategy =
   | "continuous-passage"
@@ -123,7 +127,6 @@ Readonly<KpEconomicsAnimationStationRhythm> = Object.freeze({
 });
 
 const inlineStickyLayoutQueryValue = "inline-sticky";
-const animationStationLayoutQueryValue = "animation-station";
 const twoColumnScrollLayoutQueryValue = "two-column-scroll";
 const motionBridgeScrubQueryValue = "motion-bridge";
 const motionBridgeDwellQueryKey = "dwell";
@@ -132,8 +135,6 @@ const twoColumnParagraphGapQueryKey = "gap";
 
 export const kpEconomicsTwoColumnScrollCanonicalSearch =
   "?layout=two-column-scroll";
-export const kpEconomicsAnimationStationExemplarSearch =
-  "?layout=animation-station";
 export const kpEconomicsMotionBridgeExemplarSearch =
   "?layout=two-column-scroll&scrub=motion-bridge";
 export const kpEconomicsMotionBridgeDwellExemplarSearch =
@@ -152,8 +153,6 @@ export function readKpEconomicsDemandShiftPresentationLayout(
   const value = new URLSearchParams(search).get("layout");
   return value === inlineStickyLayoutQueryValue
     ? "inline-sticky"
-    : value === animationStationLayoutQueryValue
-      ? "animation-station"
     : value === twoColumnScrollLayoutQueryValue
       ? "two-column-scroll"
       : "split";

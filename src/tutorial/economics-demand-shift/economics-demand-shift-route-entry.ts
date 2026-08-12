@@ -2,6 +2,7 @@ import {
   readKpEconomicsDemandShiftEnhancementMode
 } from "./economics-demand-shift-enhancement-mode.ts";
 import {
+  normalizeKpEconomicsDemandShiftViewSearch,
   readKpEconomicsDemandShiftView,
   writeKpEconomicsDemandShiftView,
   type KpEconomicsDemandShiftView
@@ -135,13 +136,17 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       root: input.root,
       scrollY: window.scrollY
     });
+    const normalizedRequestSearch = normalizeKpEconomicsDemandShiftViewSearch(
+      request.search
+    );
     const search = projectKpEconomicsDemandShiftHandoffSearch({
-      search: request.search,
+      search: normalizedRequestSearch,
       handoff
     });
     const hash = request.hash ?? window.location.hash;
     const url = `${window.location.pathname}${search}${hash}`;
-    if (request.history === "replace") {
+    if (request.history === "replace" ||
+        normalizedRequestSearch !== request.search) {
       window.history.replaceState(window.history.state, "", url);
     } else {
       window.history.pushState(window.history.state, "", url);
@@ -186,12 +191,20 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
     KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT,
     onRouteRequest
   );
-  await enqueueMount(input.search, input.hash);
+  const initialSearch = normalizeKpEconomicsDemandShiftViewSearch(input.search);
+  if (initialSearch !== input.search) {
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${initialSearch}${input.hash}`
+    );
+  }
+  await enqueueMount(initialSearch, input.hash);
   if (loadKpEconomicsDevToolbar !== undefined) {
     const client = await loadKpEconomicsDevToolbar();
     if (!disposed) {
       devToolbar = client.mountKpEconomicsDemandShiftDevToolbar({
-        search: input.search,
+        search: initialSearch,
         navigate: (search) => {
           void navigate({ search, hash: window.location.hash, history: "push" });
         }
@@ -236,6 +249,5 @@ function syncViewSelector(
 function isView(value: string | undefined): value is KpEconomicsDemandShiftView {
   return value === "reader" || value === "deck" ||
     value === "attention-stage" || value === "split" ||
-    value === "inline-sticky" || value === "two-column-scroll" ||
-    value === "animation-station";
+    value === "inline-sticky" || value === "two-column-scroll";
 }

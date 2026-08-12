@@ -1744,12 +1744,28 @@ test("route capabilities switch without reload or overlapping runtimes", async (
       { detail: { search: "?layout=animation-station", hash: "" } }
     ));
   });
+  const publication = page.locator("[data-kp-economics-static-publication]");
+  await expect(publication).toHaveAttribute(
+    "data-kp-economics-static-enhancement",
+    "ready"
+  );
+  await expect(page).toHaveURL(/\?view=reader$/);
+  expect(await page.evaluate(() =>
+    performance.getEntriesByType("navigation").length
+  )).toBe(navigationCount);
+
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent(
+      "kp-economics-demand-shift-route-request",
+      { detail: { search: "?view=split", hash: "" } }
+    ));
+  });
   const presenter = page.locator(
     "[data-kp-economics-demand-shift-tutorial]"
   );
   await expect(presenter).toHaveAttribute(
     "data-kp-economics-tutorial-layout",
-    "animation-station"
+    "split"
   );
   await expect(page.locator("[data-kp-editor-animation-player]"))
     .toHaveCount(1);
@@ -1762,7 +1778,6 @@ test("route capabilities switch without reload or overlapping runtimes", async (
       { detail: { search: "?enhancement=published", hash: "" } }
     ));
   });
-  const publication = page.locator("[data-kp-economics-static-publication]");
   await expect(publication).toHaveAttribute(
     "data-kp-economics-static-enhancement",
     "ready"

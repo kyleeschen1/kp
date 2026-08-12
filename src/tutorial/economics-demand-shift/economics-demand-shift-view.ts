@@ -15,7 +15,10 @@ readonly KpEconomicsDemandShiftView[] = Object.freeze([
   "attention-stage",
   "split",
   "inline-sticky",
-  "two-column-scroll",
+  "two-column-scroll"
+]);
+
+const retiredKpEconomicsDemandShiftViews = new Set([
   "animation-station"
 ]);
 
@@ -49,13 +52,35 @@ export function writeKpEconomicsDemandShiftView(input: {
   return `?${parameters.toString()}`;
 }
 
+/**
+ * Retired review URLs settle on searchable publication truth. Keeping this
+ * decoder at the route edge lets the removed projection leave every active
+ * type and import graph without turning old links into broken pages.
+ */
+export function normalizeKpEconomicsDemandShiftViewSearch(
+  search: string
+): string {
+  const parameters = new URLSearchParams(search);
+  const view = parameters.get("view");
+  const layout = parameters.get("layout");
+  const activeCanonicalView = isKpEconomicsDemandShiftView(view);
+  const retiredViewRequested = retiredKpEconomicsDemandShiftViews.has(
+    view ?? ""
+  );
+  const retiredLegacyLayoutRequested = !activeCanonicalView &&
+    retiredKpEconomicsDemandShiftViews.has(layout ?? "");
+  if (!retiredViewRequested && !retiredLegacyLayoutRequested) {
+    return search;
+  }
+  return writeKpEconomicsDemandShiftView({ search, view: "reader" });
+}
+
 export function isKpEconomicsPresenterView(
   value: string | null | undefined
 ): value is KpEconomicsDemandShiftPresentationLayout {
   return value === "split" ||
     value === "inline-sticky" ||
-    value === "two-column-scroll" ||
-    value === "animation-station";
+    value === "two-column-scroll";
 }
 
 function isKpEconomicsDemandShiftView(

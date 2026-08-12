@@ -30,7 +30,7 @@ test("published enhancement is an explicit reversible route projection", () => {
   );
   assert.equal(
     readKpEconomicsDemandShiftEnhancementMode("?layout=animation-station"),
-    "presenter"
+    "published"
   );
   assert.equal(
     readKpEconomicsDemandShiftEnhancementMode(
@@ -65,9 +65,9 @@ test("route and presenter capabilities remain dynamically selected", () => {
   for (const capability of [
     "split-presenter-capability",
     "inline-sticky-presenter-capability",
-    "animation-station-presenter-capability",
     "two-column-scroll-presenter-capability"
   ]) {
     assert.match(presenter, new RegExp(`${capability}\\.ts`));
   }
+  assert.doesNotMatch(presenter, /animation-station-presenter-capability/);
 });

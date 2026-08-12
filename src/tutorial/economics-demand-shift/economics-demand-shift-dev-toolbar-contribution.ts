@@ -54,6 +54,5 @@ function viewLabel(view: KpEconomicsDemandShiftView): string {
     case "split": return "Split";
     case "inline-sticky": return "Inline sticky";
     case "two-column-scroll": return "Two columns";
-    case "animation-station": return "Animation station";
   }
 }

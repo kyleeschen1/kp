@@ -25,5 +25,42 @@
       "kind": "file",
       "path": "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T20:44:46.369Z",
+      "notes": "93 deterministic economics tests passed; Station implementation tests intentionally remain until slice 2."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T20:44:48.041Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:browser:economics-demand-shift-tutorial -- --grep route capabilities switch",
+      "status": "passed",
+      "scope": "focused-browser",
+      "checkedAt": "2026-08-12T20:44:49.045Z",
+      "notes": "Retired Station request normalized to Reader and Split/published handoffs used one navigation entry."
+    },
+    {
+      "command": "npm run check:economics-demand-shift-publication",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T20:44:50.031Z",
+      "notes": "Canonical Article publication check passed without regenerating user-owned source."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "production-closure",
+      "checkedAt": "2026-08-12T20:44:50.995Z",
+      "notes": "Fresh production build emitted no animation-station capability or CSS asset."
+    }
   ]
 }

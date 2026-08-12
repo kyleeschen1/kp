@@ -15,8 +15,7 @@ export function readKpEconomicsDemandShiftEnhancementMode(
   if (explicit === "presenter") return "presenter";
   // Existing layout URLs remain exact review links while the public route
   // defaults to the smaller published-document enhancement.
-  return parameters.has("layout") ||
-      isKpEconomicsPresenterView(readKpEconomicsDemandShiftView(search))
+  return isKpEconomicsPresenterView(readKpEconomicsDemandShiftView(search))
     ? "presenter"
     : "published";
 }

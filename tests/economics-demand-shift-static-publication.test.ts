@@ -63,6 +63,7 @@ test("static economics publication exposes one selector and a searchable six-sce
   assert.match(html, /data-kp-economics-view-link="reader"/);
   assert.match(html, /data-kp-economics-view-link="deck"/);
   assert.match(html, /data-kp-economics-view-link="attention-stage"/);
+  assert.doesNotMatch(html, /data-kp-economics-view-link="animation-station"/);
   assert.equal((html.match(/data-kp-economics-deck-scene=/g) ?? []).length, 6);
   assert.match(html, /data-kp-economics-deck-scene="shift-demand"/);
   assert.match(html, /Hold the blue supply curve fixed and follow only/);

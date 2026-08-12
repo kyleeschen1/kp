@@ -18,12 +18,6 @@ export async function loadKpEconomicsDemandShiftPresenterCapability(
       );
       return module.kpEconomicsInlineStickyPresenterCapability;
     }
-    case "animation-station": {
-      const module = await import(
-        "./presenters/animation-station-presenter-capability.ts"
-      );
-      return module.kpEconomicsAnimationStationPresenterCapability;
-    }
     case "two-column-scroll": {
       const module = await import(
         "./presenters/two-column-scroll-presenter-capability.ts"

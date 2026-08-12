@@ -57,7 +57,7 @@
     projectKpTwoColumnScrollSequence,
     kpEconomicsTwoColumnParagraphGapDefaultVh,
     writeKpEconomicsTwoColumnTextSide,
-    type KpEconomicsDemandShiftPresentationLayout,
+    type KpEconomicsDemandShiftHistoricalPresentationLayout,
     type KpEconomicsMotionBridgeDwellProfile,
     type KpEconomicsScrollScrubStrategy,
     type KpEconomicsTwoColumnTextSide,
@@ -267,7 +267,7 @@
     readonly initialTheme: KpEconomicsDemandShiftTheme;
     readonly initialTwoColumnTextSide: KpEconomicsTwoColumnTextSide;
     readonly initialDestination: KpEconomicsDemandShiftInitialDestination;
-    readonly presentationLayout: KpEconomicsDemandShiftPresentationLayout;
+    readonly presentationLayout: KpEconomicsDemandShiftHistoricalPresentationLayout;
     readonly scrubStrategy: KpEconomicsScrollScrubStrategy;
     readonly motionBridgeDwellProfile: KpEconomicsMotionBridgeDwellProfile;
     readonly lesson: KpEconomicsDemandShiftLesson;
