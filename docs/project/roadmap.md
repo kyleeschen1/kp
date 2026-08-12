@@ -69,7 +69,9 @@ and vignette authority.
 
 The accepted rationale and ordering are recorded in
 `decisions/2026-08-12-kp-convergence-and-architecture-compression.md` and
-`reviews/2026-08-12-project-tightening-next-step-review.md`.
+`reviews/2026-08-12-project-tightening-next-step-review.md`. The active
+execution proposal is
+`reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md`.
 
 ### 1. Control-plane and language compression
 

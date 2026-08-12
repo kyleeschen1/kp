@@ -1,0 +1,192 @@
+{
+  "id": "run-contract.kp.projection-neutral-authoring-explicit-capabilities.v1",
+  "kind": "run-contract",
+  "title": "Projection-neutral authoring and explicit capabilities",
+  "status": "resolved",
+  "summary": "Superseded before execution because the compatibility command omitted required autonomy metadata; v2 preserves the same approved slices and boundaries with a complete typed contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.projection-neutral-authoring-explicit-capabilities.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md",
+      "summary": "Human-approved 30-slice rationale, ordering, verification, preservation boundary, deferrals, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:browser:economics-lesson-editor",
+    "npm run test:browser:economics-authoring-save",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Repair classified verification ratchets, refactor development-only Article editor ownership, separate existing layout dependencies with geometry preservation, replace algebra registration side effects, update focused tests and durable project evidence.",
+    "Delete only superseded editor or registration modules after exact reachability proof."
+  ],
+  "disallowedWork": [
+    "Do not modify user-owned economics Article source or generated publication.",
+    "No new layout experiment, layout retirement, aesthetic redesign, TypeScript or Python lesson, Graph3D promotion, SvelteKit migration, broad compatibility rewrite, or curriculum expansion."
+  ],
+  "goal": "Restore an honest verification baseline, make economics whole-file Article editing projection-neutral, separate surviving scroll-layout implementations without retiring them, and replace algebra import-time choreography registration with explicit capabilities.",
+  "target": "next-action.kp.projection-neutral-authoring-explicit-capabilities",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Classify broad baseline failures",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Reconcile Scheme HTML-helper inventory",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Restore Scheme page-directory coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Resolve place-value compositor preservation hash",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Align Scheme full-evaluation typed test",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Establish honest broad verification baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define economics Article-authoring descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Adapt economics to shared whole-file editor",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Move editor lifecycle to route capability",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Expose Edit article from every economics projection",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Preserve semantic reveal and focus",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Preview valid edits through active projection",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Preserve Vim write and quit commands",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Remove two-column passage-editor state",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Delete superseded economics passage editor",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Pressure editor across layouts and viewports",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Inventory scroll-layout dependency seam",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Extract neutral shared scroll geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Move shared responsive tokens",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Cut Two Columns import of Inline Sticky CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Migrate shared layout hooks to neutral names",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Audit Inline Sticky reachability after separation",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Freeze algebra registration graph",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Make fission-fusion capability explicit",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Inject fission-fusion into distribution and factoring",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Inject choreography capabilities through algebra pack",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Make reverse choreography table explicit",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Delete registration-only modules and mutable slots",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Prove algebra pack import-order independence",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run release verification and closeout",
+      "status": "planned"
+    }
+  ]
+}

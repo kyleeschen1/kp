@@ -1,0 +1,205 @@
+{
+  "id": "run-contract.kp.projection-neutral-authoring-explicit-capabilities.v2",
+  "kind": "run-contract",
+  "title": "Projection-neutral authoring and explicit capabilities",
+  "status": "ready",
+  "domain": "kp-architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.projection-neutral-authoring-explicit-capabilities.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md",
+      "summary": "Human-approved 30-slice rationale, ordering, verification, preservation boundary, deferrals, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run test:browser:economics-lesson-editor",
+    "npm run test:browser:economics-authoring-save",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Repair classified verification ratchets, refactor development-only Article editor ownership, separate existing layout dependencies with geometry preservation, replace algebra registration side effects, update focused tests and durable project evidence.",
+    "Delete only superseded editor or registration modules after exact reachability proof."
+  ],
+  "disallowedWork": [
+    "Do not modify user-owned economics Article source or generated publication.",
+    "No new layout experiment, layout retirement, aesthetic redesign, TypeScript or Python lesson, Graph3D promotion, SvelteKit migration, broad compatibility rewrite, or curriculum expansion."
+  ],
+  "goal": "Restore an honest verification baseline, make economics whole-file Article editing projection-neutral, separate surviving scroll-layout implementations without retiring them, and replace algebra import-time choreography registration with explicit capabilities.",
+  "target": "next-action.kp.projection-neutral-authoring-explicit-capabilities",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each independently verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on an unexplained semantic or visual regression.",
+    "Stop if provenance becomes invalid or static and accessibility behavior is lost.",
+    "Stop if bundle growth is unbounded or a second clock, runtime, or editor authority would be required.",
+    "Stop when a subjective design decision is needed.",
+    "Stop if persistence cannot remain development-only and safe.",
+    "Stop when approved slices are exhausted or work would leave scope."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Classify broad baseline failures",
+      "summary": "Classified three reproducible ratchet families: missing Scheme HTML owners, a 25th Scheme page absent from expected inventory and ledger, and a legitimate post-baseline compositor digest change. Current typecheck is green, so the reported resultValueId failure is stale/nonreproducing.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Reconcile Scheme HTML-helper inventory",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Restore Scheme page-directory coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Resolve place-value compositor preservation hash",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Align Scheme full-evaluation typed test",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Establish honest broad verification baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define economics Article-authoring descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Adapt economics to shared whole-file editor",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Move editor lifecycle to route capability",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Expose Edit article from every economics projection",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Preserve semantic reveal and focus",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Preview valid edits through active projection",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Preserve Vim write and quit commands",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Remove two-column passage-editor state",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Delete superseded economics passage editor",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Pressure editor across layouts and viewports",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Audit Inline Sticky and Two Columns dependency seam",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Extract projection-neutral shared geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Extract projection-neutral responsive tokens",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Remove Two Columns dependency on Inline Sticky CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Add neutral layout hook contract",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Re-audit fresh layout reachability without retirement",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Freeze algebra registration graph",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Define explicit fission-fusion capability",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Inject fission-fusion into distribution and factoring",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Inject algebra capabilities through the catalog pack",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Make reverse choreography explicit",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Delete registration-only modules and mutable slots",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Prove import-order independence",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run release verification and close out",
+      "status": "planned"
+    }
+  ]
+}

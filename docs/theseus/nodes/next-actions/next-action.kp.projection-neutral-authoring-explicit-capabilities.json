@@ -1,0 +1,109 @@
+{
+  "id": "next-action.kp.projection-neutral-authoring-explicit-capabilities",
+  "kind": "next-action",
+  "title": "Make Article authoring projection-neutral and algebra capabilities explicit",
+  "status": "ready",
+  "domain": "kp-architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/architecture-convergence.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/article/kp-article-source-editor.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog-packs/algebra.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.retire-animation-station"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run test:kp-article-v1",
+    "npm run test:economics-demand-shift-tutorial",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/html-output-encoding-inventory.test.ts",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:31:37.895Z",
+      "notes": "One inventory ratchet: three Scheme HTML emitters use local escapeHtml helpers but are absent from the classified owner table."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dev-toolbar-page-directory.test.ts tests/kp-dev-toolbar-page-directory-authority.test.ts",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:31:40.940Z",
+      "notes": "Two ratchets share one cause: the executable directory has the Scheme factorial tutorial, while the 24-entry expected list and durable closeout ledger still describe 24 pages without it."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/place-value-addition-preservation-manifest.test.ts",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T21:31:43.426Z",
+      "notes": "The only digest mismatch is native-katex-scene-compositor.ts. Commit d38f06fe added an explicit horizontal-axis semantic constraint used by the approved algebra attention-stage refinement; this is a legitimate post-baseline shared-compositor change requiring a provenance-backed rebase, not a place-value implementation leak."
+    },
+    {
+      "command": "npm run typecheck -- --pretty false",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-12T21:31:46.775Z",
+      "notes": "The previously reported Scheme full-evaluation resultValueId mismatch no longer reproduces; the current discriminated action union narrows ApplyPrimitive correctly and all TypeScript, Svelte, and domain checks pass."
+    }
+  ],
+  "expectedLearning": [
+    "Whether one route-owned Article editor can serve every surviving economics projection without changing the Article grammar or projection semantics.",
+    "Whether Inline Sticky and Two Columns can preserve geometry while removing their CSS dependency.",
+    "Whether algebra choreography can be assembled through explicit capabilities without import-time registration."
+  ],
+  "allowedWork": [
+    "Execute only the 30 user-approved slices in run-contract.kp.projection-neutral-authoring-explicit-capabilities.v2."
+  ],
+  "disallowedWork": [
+    "Do not change the user-owned economics source, redesign layouts, expand curriculum, or introduce a second runtime authority."
+  ],
+  "criteria": [
+    {
+      "id": "broad-baseline-green",
+      "weight": "high"
+    },
+    {
+      "id": "editor-projection-neutral",
+      "weight": "high"
+    },
+    {
+      "id": "layout-dependency-separated",
+      "weight": "medium"
+    },
+    {
+      "id": "algebra-import-order-independent",
+      "weight": "high"
+    },
+    {
+      "id": "preservation-boundaries-intact",
+      "weight": "high"
+    }
+  ]
+}
