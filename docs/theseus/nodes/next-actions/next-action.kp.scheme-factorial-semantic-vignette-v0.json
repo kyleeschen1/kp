@@ -384,11 +384,39 @@
       "scope": "slice s16 durable evidence",
       "checkedAt": "2026-08-12T01:18:59.167Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s17 binding arcs and echoes",
+      "checkedAt": "2026-08-12T01:23:26.964Z",
+      "notes": "All 78 focused tests passed. Four call-specific arches reach persistent parameter cells; absorption precedes echoes; each echo reuses the exact bound value and occurrence identity; direct and reverse sampling agree."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s17 repository types",
+      "checkedAt": "2026-08-12T01:23:28.073Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s17 patch hygiene",
+      "checkedAt": "2026-08-12T01:23:29.045Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s17 durable evidence",
+      "checkedAt": "2026-08-12T01:23:30.067Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Definition-to-seed, body bloom, and accumulating waiting-shell choreography are now pure deterministic projections with recursive content-before-membrane ordering and exact reverse sampling."
+    "summary": "Each recursive call now has an exact arched argument transfer into a persistent n cell, followed by demand-driven source-occurrence echoes that reuse rather than copy semantic value identity."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

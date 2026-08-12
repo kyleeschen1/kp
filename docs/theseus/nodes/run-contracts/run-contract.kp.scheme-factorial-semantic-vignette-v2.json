@@ -155,7 +155,8 @@
     {
       "id": "s17",
       "title": "Compile binding arcs and echoes",
-      "status": "planned"
+      "summary": "Compiled and tested four arched bindings, absorption ordering, persistent parameter cells, exact provenance echoes, and direct-seek reversibility.",
+      "status": "complete"
     },
     {
       "id": "s18",
