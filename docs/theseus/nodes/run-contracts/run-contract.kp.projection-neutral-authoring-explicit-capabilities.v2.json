@@ -125,7 +125,8 @@
     {
       "id": "s13",
       "title": "Preserve Vim write and quit commands",
-      "status": "planned"
+      "summary": "Ratcheted all four canonical Vim commands through the shared draft session and single CodeMirror runtime; dirty-buffer refusal and persistence-failure behavior remain covered.",
+      "status": "complete"
     },
     {
       "id": "s14",

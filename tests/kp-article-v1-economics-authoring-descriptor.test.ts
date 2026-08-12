@@ -65,3 +65,20 @@ test("economics adapts the descriptor to the shared whole-file editor", () => {
   assert.match(source, /saveKpEconomicsDemandShiftArticleSource/u);
   assert.doesNotMatch(source, /KpEconomicsPassageEditor|CodeMirror|KpArticleDraftSession/u);
 });
+
+test("the shared editor retains canonical Vim write and quit wiring", () => {
+  const editor = readFileSync(
+    "src/article/kp-article-source-editor.ts",
+    "utf8"
+  );
+  const runtime = readFileSync(
+    "src/tutorial/economics-demand-shift/economics-demand-shift-codemirror-runtime.ts",
+    "utf8"
+  );
+
+  assert.match(editor, /onQuit: close/u);
+  assert.match(editor, /onWrite: write/u);
+  assert.match(runtime, /Vim\.defineEx\("quit", "q"/u);
+  assert.match(runtime, /Vim\.defineEx\("write", "w"/u);
+  assert.match(runtime, /Vim\.map\(":wq", ":kpwq"/u);
+});
