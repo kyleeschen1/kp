@@ -37,6 +37,8 @@ test("base and result checkpoints expose exact value provenance", () => {
     kind === "value" && textEquivalent.endsWith("6.")));
   assert.ok(base.material.some(({ kind, textEquivalent }) =>
     kind === "dormant-branch" && textEquivalent.includes("recursive branch")));
+  assert.equal(base.material.find(({ kind }) =>
+    kind === "parameter-cell")?.nativeCode, "n = 0");
 });
 
 test("every visible material item has source provenance and accessible text", () => {
@@ -55,4 +57,13 @@ test("checkpoint snapshots and beat boundaries remain explicit", () => {
   assert.ok(checkpoints.slice(1).every(({ beatId, eventId, snapshotId }) =>
     beatId !== null && eventId !== null && snapshotId.length > 0));
   assert.equal(bySuffix("result").activeExpressionId, null);
+});
+
+test("anchored source forms are never duplicated as active material", () => {
+  const source = bySuffix("source");
+  assert.equal(source.material.filter(({ sourceExpressionIds }) =>
+    sourceExpressionIds.includes("scheme-source.factorial-3.occurrence.0"))
+    .length, 1);
+  assert.equal(source.material.filter(({ kind }) =>
+    kind === "active-expression").length, 0);
 });

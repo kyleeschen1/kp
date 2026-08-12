@@ -3,6 +3,10 @@ import test from "node:test";
 
 import { kpSchemeFactorialTimeline } from
   "../src/animation/scheme-factorial-canonical-timeline.ts";
+import { kpSchemeFactorialChoreography } from
+  "../src/animation/scheme-factorial-canonical-choreography.ts";
+import { projectKpSchemeFactorialMotion } from
+  "../src/animation/scheme-factorial-motion-projection.ts";
 import { projectKpSchemeFactorialResponsiveFrame } from
   "../src/animation/scheme-factorial-responsive-projection.ts";
 import {
@@ -32,10 +36,15 @@ function render(progress: number, reducedMotion = false): string {
     availableWidthPx: 760,
     reducedMotion
   });
+  const motion = projectKpSchemeFactorialMotion({
+    choreography: kpSchemeFactorialChoreography,
+    timeline: sample
+  });
   return renderKpSchemeFactorialHtml({
     checkpoints: kpSchemeFactorialCheckpoints,
     sample,
     frame,
+    motion,
     reducedMotion
   });
 }
@@ -62,7 +71,7 @@ test("uses one inert text-free overlay only during motion", () => {
   assert.equal(count(motion, "data-kp-scheme-transient-overlay"), 1);
   assert.match(motion, /data-kp-scheme-transient-overlay[^>]+aria-hidden="true" inert/);
   const svg = motion.match(/<svg[\s\S]*?<\/svg>/u)?.[0] ?? "";
-  assert.match(svg, /<path/u);
+  assert.match(svg, /<(?:path|circle|rect)/u);
   assert.doesNotMatch(svg, /<text|<foreignObject|<code/u);
   assert.match(motion, /<code>/u);
 });
@@ -79,6 +88,21 @@ test("keeps source and runtime identities on native material", () => {
   assert.match(html, /data-kp-scheme-runtime-ids="scheme-factorial\.binding\./u);
   assert.doesNotMatch(kpSchemeFactorialCss, /animation\s*:|transition\s*:/u);
   assert.match(kpSchemeFactorialCss, /user-select: text/u);
+});
+
+test("transient overlays identify the canonical sampled motif", () => {
+  const byKind = new Map(kpSchemeFactorialTimeline.intervals.map((interval) =>
+    [interval.motionKind, (interval.motion.start + interval.motion.end) / 2]));
+  assert.match(render(byKind.get("definition-seed")!),
+    /data-kp-scheme-motion-kind="binding"/u);
+  assert.match(render(byKind.get("repeated-descent")!),
+    /data-kp-scheme-motion-kind="summary"/u);
+  assert.match(render(byKind.get("base-case")!),
+    /data-kp-scheme-motion-kind="branch"/u);
+  assert.match(render(byKind.get("return-cascade")!),
+    /data-kp-scheme-motion-kind="return"/u);
+  assert.match(render(byKind.get("return-cascade")!),
+    /data-kp-scheme-carrier-value-id=/u);
 });
 
 function count(value: string, needle: string): number {

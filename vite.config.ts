@@ -11,6 +11,8 @@ import {
 } from "./src/dev-toolbar/development-page-build-entries.ts";
 import { kpSchemeFactorialTimeline } from
   "./src/animation/scheme-factorial-canonical-timeline.ts";
+import { kpSchemeFactorialChoreography } from
+  "./src/animation/scheme-factorial-canonical-choreography.ts";
 import { kpSchemeFactorialCss } from
   "./src/rendering/scheme-factorial-html.ts";
 import { kpSchemeFactorialCheckpoints } from
@@ -85,7 +87,8 @@ const schemeFactorialTutorialFilename = resolve(
 const schemeFactorialPublicationArtifact =
   defineKpSchemeFactorialPublicationArtifact({
     checkpoints: kpSchemeFactorialCheckpoints,
-    timeline: kpSchemeFactorialTimeline
+    timeline: kpSchemeFactorialTimeline,
+    choreography: kpSchemeFactorialChoreography
   });
 const schemeFactorialStaticFallback = compileSchemeFactorialStaticFallback();
 const economicsTutorialFilename = resolve(

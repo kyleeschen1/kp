@@ -22,6 +22,10 @@
   min-block-size: 100vh;
   padding: clamp(1.25rem, 4vw, 3.5rem);
 }
+.kp-scheme-factorial-publication,
+.kp-scheme-factorial-publication * { box-sizing: border-box; }
+.kp-scheme-factorial-publication button,
+.kp-scheme-factorial-publication input { font: inherit; }
 .kp-scheme-factorial-publication__header { max-inline-size: 42rem; }
 .kp-scheme-factorial-publication__eyebrow {
   color: #88c9ff;

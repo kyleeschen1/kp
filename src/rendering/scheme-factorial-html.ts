@@ -1,5 +1,7 @@
 import type { KpSchemeResponsiveFrame } from
   "../animation/scheme-factorial-responsive-projection.ts";
+import type { KpSchemeFactorialMotionProjection } from
+  "../animation/scheme-factorial-motion-projection.ts";
 import type { KpSchemeFactorialTimelineSample } from
   "../animation/scheme-factorial-timeline.ts";
 import type {
@@ -97,7 +99,9 @@ export const kpSchemeFactorialCss = `
   inline-size: 100%;
 }
 .kp-scheme-factorial-stage__motion-path,
-.kp-scheme-factorial-stage__motion-orbit {
+.kp-scheme-factorial-stage__motion-orbit,
+.kp-scheme-factorial-stage__membrane,
+.kp-scheme-factorial-stage__shell {
   fill: none;
   stroke: var(--kp-scheme-accent);
   stroke-linecap: round;
@@ -105,7 +109,11 @@ export const kpSchemeFactorialCss = `
   vector-effect: non-scaling-stroke;
 }
 .kp-scheme-factorial-stage__motion-orbit { opacity: .28; }
-.kp-scheme-factorial-stage__carrier { fill: var(--kp-scheme-accent); }
+.kp-scheme-factorial-stage__membrane,
+.kp-scheme-factorial-stage__shell { stroke: var(--kp-scheme-muted); }
+.kp-scheme-factorial-stage__carrier,
+.kp-scheme-factorial-stage__particle { fill: var(--kp-scheme-accent); }
+.kp-scheme-factorial-stage__particle--dormant { fill: var(--kp-scheme-muted); }
 @media (max-width: 639px) {
   .kp-scheme-factorial-stage { padding-inline: .8rem; }
   .kp-scheme-factorial-stage__native { gap: .55rem; }
@@ -119,6 +127,7 @@ export function renderKpSchemeFactorialHtml(input: {
   readonly checkpoints: KpSchemeCheckpointProjection;
   readonly sample: KpSchemeFactorialTimelineSample;
   readonly frame: KpSchemeResponsiveFrame;
+  readonly motion: KpSchemeFactorialMotionProjection;
   readonly reducedMotion?: boolean | undefined;
 }): string {
   const from = requiredCheckpoint(input.checkpoints, input.sample.fromCheckpointId);
@@ -129,8 +138,9 @@ export function renderKpSchemeFactorialHtml(input: {
     ? renderCheckpoint(atInitialEndpoint ? from : to)
     : renderTransition(from, to, input.sample.localProgress);
   const overlay = input.sample.phase === "motion" &&
-    input.sample.localProgress > 0 && input.reducedMotion !== true
-    ? renderOverlay(input.sample, input.frame)
+    input.sample.localProgress > 0 && input.reducedMotion !== true &&
+    input.motion.kind !== "none"
+    ? renderOverlay(input.motion, input.frame)
     : "";
   const description = input.sample.phase === "hold" || atInitialEndpoint
     ? (atInitialEndpoint ? from : to).accessibleDescription
@@ -193,18 +203,84 @@ function renderMaterial(
 }
 
 function renderOverlay(
-  sample: KpSchemeFactorialTimelineSample,
+  motion: Exclude<KpSchemeFactorialMotionProjection, { readonly kind: "none" }>,
   frame: KpSchemeResponsiveFrame
 ): string {
-  const progress = sample.localProgress;
-  const x = round(18 + progress * 64);
-  const y = sample.motionKind === "return-cascade"
-    ? round(72 - Math.sin(progress * Math.PI) * 46)
-    : round(58 - Math.sin(progress * Math.PI) * 28);
-  const path = sample.motionKind === "return-cascade"
-    ? "M18 72 C32 16 68 16 82 28"
-    : "M18 58 C34 22 66 22 82 58";
-  return `<div class="kp-scheme-factorial-stage__overlay" data-kp-scheme-transient-overlay data-kp-scheme-motion-kind="${sample.motionKind}" aria-hidden="true" inert><svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false"><path class="kp-scheme-factorial-stage__motion-orbit" d="${path}"></path><path class="kp-scheme-factorial-stage__motion-path" d="${path}" pathLength="1" stroke-dasharray="${round(progress)} 1"></path><circle class="kp-scheme-factorial-stage__carrier" cx="${x}" cy="${y}" r="1.25" data-kp-scheme-carrier></circle></svg><span data-kp-scheme-overlay-width="${round(frame.stage.widthEm)}"></span></div>`;
+  return `<div class="kp-scheme-factorial-stage__overlay" data-kp-scheme-transient-overlay data-kp-scheme-motion-kind="${motion.kind}" aria-hidden="true" inert><svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">${renderMotionSvg(motion, frame)}</svg></div>`;
+}
+
+function renderMotionSvg(
+  motion: Exclude<KpSchemeFactorialMotionProjection, { readonly kind: "none" }>,
+  frame: KpSchemeResponsiveFrame
+): string {
+  switch (motion.kind) {
+    case "structural": {
+      const outlines = motion.sample.expressions.flatMap((expression) => {
+        const geometry = frame.expressions.find(({ expressionId }) =>
+          expressionId === expression.expressionId);
+        if (geometry === undefined) return [];
+        const rect = percentRect(geometry.rect, frame);
+        const progress = expression.direction === "fold"
+          ? 1 - expression.membraneProgress
+          : expression.membraneProgress;
+        return [`<rect class="kp-scheme-factorial-stage__membrane" data-kp-scheme-expression-id="${escapeAttribute(expression.expressionId)}" x="${round(rect.x + rect.width * (1 - progress) / 2)}" y="${rect.y}" width="${round(rect.width * progress)}" height="${rect.height}" rx="1.5"></rect>`];
+      }).join("");
+      const shells = motion.sample.waitingShells.map((shell, index) => {
+        const width = round(12 + index * 5);
+        return `<path class="kp-scheme-factorial-stage__shell" data-kp-scheme-shell-id="${escapeAttribute(shell.materialId)}" d="M${round(50 - width / 2)} ${round(70 + index * 5)} H${round(50 + width / 2)}" opacity="${shell.progress}"></path>`;
+      }).join("");
+      return outlines + shells;
+    }
+    case "binding": {
+      const x = round(18 + motion.point.inline * 64);
+      const y = round(62 + motion.point.block * 34);
+      return `<path class="kp-scheme-factorial-stage__motion-orbit" d="M18 62 C35 22 65 22 82 62"></path><path class="kp-scheme-factorial-stage__motion-path" d="M18 62 C35 22 65 22 82 62" pathLength="1" stroke-dasharray="${motion.sample.arcProgress} 1"></path><circle class="kp-scheme-factorial-stage__carrier" data-kp-scheme-binding-id="${escapeAttribute(motion.arc.bindingId)}" cx="${x}" cy="${y}" r="1.35"></circle>`;
+    }
+    case "branch": {
+      const dormant = motion.sample.dormantParticleProgress;
+      const particles = [0, 1, 2].map((index) =>
+        `<circle class="kp-scheme-factorial-stage__particle kp-scheme-factorial-stage__particle--dormant" cx="${round(73 + dormant * (index - 1) * 4)}" cy="${round(58 + dormant * (index % 2 === 0 ? -3 : 3))}" r="${round(1.15 * (1 - dormant * .55))}"></circle>`
+      ).join("");
+      return `<circle class="kp-scheme-factorial-stage__motion-path" data-kp-scheme-selected-expression-id="${escapeAttribute(motion.motif.selectedExpressionId)}" cx="35" cy="52" r="${round(3 + motion.sample.selectedEmphasis * 2)}" opacity="${motion.sample.selectedEmphasis}"></circle>${particles}`;
+    }
+    case "primitive": {
+      const gather = motion.sample.inputGatherProgress;
+      const left = round(28 + gather * 20);
+      const right = round(72 - gather * 20);
+      return `<circle class="kp-scheme-factorial-stage__particle" cx="${left}" cy="52" r="1.25"></circle><circle class="kp-scheme-factorial-stage__particle" cx="${right}" cy="52" r="1.25"></circle><circle class="kp-scheme-factorial-stage__motion-path" data-kp-scheme-primitive="${motion.motif.primitive}" cx="50" cy="52" r="${round(2.4 + motion.sample.operatorPulse * 2.1)}" opacity="${round(.3 + motion.sample.resultRevealProgress * .7)}"></circle>`;
+    }
+    case "summary": {
+      return [0, 1, 2].map((index) => {
+        const visible = index < motion.sample.completedRepetitions
+          ? 1
+          : index === motion.sample.completedRepetitions
+            ? motion.sample.activeRepetitionProgress : 0;
+        return `<path class="kp-scheme-factorial-stage__shell" data-kp-scheme-summary-depth="${index + 1}" d="M${36 - index * 5} ${42 + index * 10} H${64 + index * 5}" opacity="${visible}"></path>`;
+      }).join("");
+    }
+    case "return": {
+      const step = motion.sample.activeStepIndex;
+      const local = motion.sample.phase === "base-hold" ? 0
+        : (motion.sample.travelProgress + motion.sample.shellReopenProgress +
+          motion.sample.productRevealProgress) / 3;
+      const startX = 26 + step * 16;
+      const x = round(startX + local * 16);
+      const y = round(70 - Math.sin(local * Math.PI) * 28 - step * 8);
+      return `<path class="kp-scheme-factorial-stage__motion-orbit" d="M${startX} ${70 - step * 8} C${startX + 4} ${35 - step * 8} ${startX + 12} ${35 - step * 8} ${startX + 16} ${62 - step * 8}"></path><circle class="kp-scheme-factorial-stage__carrier" data-kp-scheme-carrier data-kp-scheme-carrier-value-id="${escapeAttribute(motion.sample.carrierValueId)}" cx="${x}" cy="${y}" r="1.6"></circle>`;
+    }
+  }
+}
+
+function percentRect(
+  rect: KpSchemeResponsiveFrame["expressions"][number]["rect"],
+  frame: KpSchemeResponsiveFrame
+): { readonly x: number; readonly y: number; readonly width: number; readonly height: number } {
+  return {
+    x: round(rect.xEm / frame.stage.widthEm * 100),
+    y: round(rect.yEm / frame.stage.heightEm * 100),
+    width: round(rect.widthEm / frame.stage.widthEm * 100),
+    height: round(rect.heightEm / frame.stage.heightEm * 100)
+  };
 }
 
 function sameMaterial(

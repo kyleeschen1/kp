@@ -17,6 +17,8 @@ import {
 } from "../src/tutorial/scheme-factorial/scheme-factorial-publication.ts";
 import { kpSchemeFactorialTimeline } from
   "../src/animation/scheme-factorial-canonical-timeline.ts";
+import { kpSchemeFactorialChoreography } from
+  "../src/animation/scheme-factorial-canonical-choreography.ts";
 import { kpSchemeFactorialCheckpoints } from
   "../src/semantic/scheme-factorial-checkpoints.ts";
 import { parseKpSchemeFactorialSource } from
@@ -26,7 +28,8 @@ import { findKpSchemeFactorialAdjacentCheckpoint } from
 
 const artifact = defineKpSchemeFactorialPublicationArtifact({
   checkpoints: kpSchemeFactorialCheckpoints,
-  timeline: kpSchemeFactorialTimeline
+  timeline: kpSchemeFactorialTimeline,
+  choreography: kpSchemeFactorialChoreography
 });
 
 test("owns one parallel canonical route and development catalogue entry", () => {
@@ -61,13 +64,15 @@ test("publishes a complete searchable no-JavaScript fallback", () => {
 
 test("embeds compact publication truth rather than a learner evaluator", async () => {
   const serialized = serializeKpSchemeFactorialPublicationArtifact(artifact);
-  assert.ok(serialized.length < 40_000);
+  assert.ok(serialized.length < 100_000);
   assert.doesNotMatch(serialized, /snapshots|continuations|machine-state/u);
+  assert.match(serialized, /binding-arc|branch-decision|return-step/u);
   const entry = await readFile(new URL(
     "../src/tutorial/scheme-factorial/scheme-factorial-tutorial-entry.ts",
     import.meta.url
   ), "utf8");
   assert.doesNotMatch(entry, /scheme-factorial-evaluator|trace-artifact/u);
+  assert.doesNotMatch(entry, /import "\.\.\/\.\.\/styles\.css"/u);
   assert.match(entry, /createKpReaderTimelinePlaybackClock/u);
   assert.match(entry, /kp-tutorial-scrub-bar/u);
 });

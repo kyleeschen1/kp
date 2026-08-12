@@ -106,12 +106,18 @@ function checkpoint(input: {
   const activeExpressionId = state.control.kind === "expression"
     ? state.control.expressionId
     : null;
+  const definitionId = input.document.forms[0]!.id;
+  const invocationId = input.document.forms[1]!.id;
+  const anchoredExpressionIds = new Set([definitionId, invocationId]);
+  const parameterState = input.beatId?.endsWith("base-case") === true
+    ? baseCaseParameterState(input.trace, input.eventBoundary)
+    : state;
   const material = [
     createMaterial(
       "material.definition",
       "definition",
       input.definitionPresentation === "full" ? "expanded" : "seed",
-      [input.document.forms[0]!.id],
+      [definitionId],
       [],
       input.definitionPresentation === "full"
         ? sourceFor(input.document, input.document.forms[0]!.id)
@@ -124,12 +130,13 @@ function checkpoint(input: {
       "material.invocation",
       "invocation",
       "expanded",
-      [input.document.forms[1]!.id],
+      [invocationId],
       [],
       sourceFor(input.document, input.document.forms[1]!.id),
       "The invocation factorial of 3 remains anchored."
     ),
-    ...(activeExpressionId === null ? [] : [createMaterial(
+    ...(activeExpressionId === null || anchoredExpressionIds.has(activeExpressionId)
+      ? [] : [createMaterial(
       "material.active-expression",
       "active-expression",
       "active",
@@ -138,7 +145,7 @@ function checkpoint(input: {
       sourceFor(input.document, activeExpressionId),
       `Evaluation is currently at source expression ${activeExpressionId}.`
     )]),
-    ...parameterMaterial(state),
+    ...parameterMaterial(parameterState),
     ...waitingMaterial(input.document, state),
     ...dormantMaterial(input.document, input.trace, input.eventBoundary),
     ...valueMaterial(state)
@@ -156,6 +163,25 @@ function checkpoint(input: {
     accessibleDescription: `${input.caption} ${material.map(
       ({ textEquivalent }) => textEquivalent).join(" ")}`
   });
+}
+
+function baseCaseParameterState(
+  trace: KpSchemeTrace,
+  eventBoundary: number
+): KpSchemeMachineState {
+  const event = [...trace.events.slice(0, eventBoundary + 1)]
+    .reverse()
+    .find((candidate) =>
+      candidate.kind === "branch-selected" &&
+      candidate.branch === "consequent");
+  if (event === undefined) {
+    throw new Error("Base checkpoint requires its true branch event.");
+  }
+  const snapshot = trace.snapshots[event.index + 1];
+  if (snapshot === undefined) {
+    throw new Error("Base branch event has no settled snapshot.");
+  }
+  return snapshot.state;
 }
 
 function parameterMaterial(

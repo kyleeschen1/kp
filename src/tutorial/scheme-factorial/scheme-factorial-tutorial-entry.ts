@@ -1,9 +1,10 @@
-import "../../styles.css";
 import "../kp-tutorial-scrub-bar.css";
 import "./scheme-factorial-tutorial.css";
 
 import { projectKpSchemeFactorialResponsiveFrame } from
   "../../animation/scheme-factorial-responsive-projection.ts";
+import { projectKpSchemeFactorialMotion } from
+  "../../animation/scheme-factorial-motion-projection.ts";
 import {
   sampleKpSchemeFactorialTimeline,
   seekKpSchemeFactorialCheckpoint
@@ -87,10 +88,15 @@ export function mountKpSchemeFactorialTutorial(input: {
       availableWidthPx: availableWidth,
       reducedMotion: reducedMotion.matches
     });
+    const motion = projectKpSchemeFactorialMotion({
+      choreography: artifact.choreography,
+      timeline: sample
+    });
     stage.innerHTML = renderKpSchemeFactorialHtml({
       checkpoints: artifact.checkpoints,
       sample,
       frame,
+      motion,
       reducedMotion: reducedMotion.matches
     });
     const text = progress === 0

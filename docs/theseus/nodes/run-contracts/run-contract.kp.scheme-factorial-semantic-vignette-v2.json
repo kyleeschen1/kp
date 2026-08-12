@@ -2,7 +2,8 @@
   "id": "run-contract.kp.scheme-factorial-semantic-vignette-v2",
   "kind": "run-contract",
   "title": "Scheme factorial semantic vignette",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -197,7 +198,8 @@
     {
       "id": "s24",
       "title": "Certify exemplar and stop for review",
-      "status": "planned"
+      "summary": "Certified the isolated canonical exemplar with exact compiled choreography, wide and compact captures, reduced motion, direct checkpoint navigation, searchable no-JavaScript fallback, bundle and resource observations, architecture gates, and existing Lisp preservation; stopped for human visual review without promotion.",
+      "status": "complete"
     }
   ]
 }

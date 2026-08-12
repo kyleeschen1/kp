@@ -2,7 +2,7 @@
   "id": "next-action.kp.scheme-factorial-semantic-vignette-v0",
   "kind": "next-action",
   "title": "Build interpreter-grounded Scheme factorial vignette",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -615,11 +615,67 @@
       "scope": "slice s23 final repository types",
       "checkedAt": "2026-08-12T02:14:59.668Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed after extracting framework-neutral checkpoint navigation."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s24 canonical exemplar",
+      "checkedAt": "2026-08-12T02:41:09.545Z",
+      "notes": "All 112 focused tests passed, including compact publication choreography, exact motif selection, direct-seek reversal, base-case n=0, and anchored-source material conservation."
+    },
+    {
+      "command": "npm run visual:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s24 Chromium exemplar",
+      "checkedAt": "2026-08-12T02:41:11.890Z",
+      "notes": "All 6 scoped browser checks passed across wide, 390px compact, reduced motion, canonical motif scrubbing, direct checkpoint URLs, static no-JavaScript fallback, one paint owner, and learner resource boundaries."
+    },
+    {
+      "command": "npm run test:botanical-lisp-tutorial",
+      "status": "passed",
+      "scope": "slice s24 existing Lisp preservation",
+      "checkedAt": "2026-08-12T02:41:13.481Z",
+      "notes": "All 161 existing Lisp tests passed; the parallel factorial exemplar did not migrate or regress the current Lisp lesson."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s24 repository types",
+      "checkedAt": "2026-08-12T02:41:14.652Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed after final canonical choreography and route integration."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s24 architecture boundaries",
+      "checkedAt": "2026-08-12T02:41:15.734Z",
+      "notes": "Concept-room, semantic-reader, semantic-animation, and operation-evaluation boundary gates passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice s24 production and bundle observation",
+      "checkedAt": "2026-08-12T02:41:16.795Z",
+      "notes": "Full typecheck, generated economics consistency check, and Vite production build passed. Factorial HTML is 56.53 kB raw/7.84 kB gzip; route JS 35.35 kB raw/11.11 kB gzip; route CSS 2.07 kB raw/about 0.74 kB gzip. Existing unrelated over-500-kB warnings remain."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s24 patch hygiene",
+      "checkedAt": "2026-08-12T02:41:18.516Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s24 durable evidence",
+      "checkedAt": "2026-08-12T02:41:20.156Z",
+      "notes": "Workspace validation passed before the human checkpoint was recorded."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A parallel Scheme factorial URL now progressively enhances searchable static checkpoint truth with one shared clock, the existing scrubber, stable captions, exact checkpoint links, responsive rendering, and catalogue navigation."
+    "summary": "The isolated factorial exemplar is semantically and technically certified across its canonical choreography, route, native fallback, responsive and reduced-motion modes, direct seek, bundle boundary, and preserved Lisp caller; it is awaiting human visual judgment before any promotion."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
