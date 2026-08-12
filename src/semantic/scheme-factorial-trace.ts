@@ -29,6 +29,7 @@ export type KpSchemeTraceEvent =
   | KpSchemeApplicationOperatorResolvedEvent
   | KpSchemeApplicationArgumentAcceptedEvent
   | KpSchemeParameterBoundEvent
+  | KpSchemeConditionalEnteredEvent
   | KpSchemeBranchSelectedEvent
   | KpSchemePrimitiveAppliedEvent
   | KpSchemeCallSuspendedEvent
@@ -101,6 +102,13 @@ export interface KpSchemeParameterBoundEvent extends KpSchemeTraceEventBase {
   readonly argumentValueId: string;
   readonly calleeEnvironmentId: string;
   readonly bindingId: string;
+}
+
+export interface KpSchemeConditionalEnteredEvent extends KpSchemeTraceEventBase {
+  readonly kind: "conditional-entered";
+  readonly conditionalExpressionId: string;
+  readonly predicateExpressionId: string;
+  readonly continuationId: string;
 }
 
 export interface KpSchemeBranchSelectedEvent extends KpSchemeTraceEventBase {
@@ -353,6 +361,13 @@ function validateEvent(input: {
       `${path}.calleeEnvironmentId`, "callee environment", issues);
     requireKnown(event.bindingId, afterBindings, `${path}.bindingId`, "binding",
       issues);
+  } else if (event.kind === "conditional-entered") {
+    requireSource(event.conditionalExpressionId,
+      `${path}.conditionalExpressionId`, sourceIds, issues);
+    requireSource(event.predicateExpressionId,
+      `${path}.predicateExpressionId`, sourceIds, issues);
+    requireKnown(event.continuationId, afterContinuations,
+      `${path}.continuationId`, "continuation", issues);
   } else if (event.kind === "branch-selected") {
     requireSource(event.conditionalExpressionId,
       `${path}.conditionalExpressionId`, sourceIds, issues);

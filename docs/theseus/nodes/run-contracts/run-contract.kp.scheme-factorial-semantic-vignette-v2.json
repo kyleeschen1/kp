@@ -107,7 +107,8 @@
     {
       "id": "s09",
       "title": "Emit conditional branch events",
-      "status": "planned"
+      "summary": "Implemented and tested conditional entry and true/false branch events, including explicit dormant work and non-boolean rejection.",
+      "status": "complete"
     },
     {
       "id": "s10",

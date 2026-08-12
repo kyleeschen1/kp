@@ -173,11 +173,29 @@
       "status": "passed",
       "scope": "s08-control-plane",
       "checkedAt": "2026-08-12T00:28:49.890Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s09-conditional-events",
+      "checkedAt": "2026-08-12T00:33:48.107Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09-type-safety",
+      "checkedAt": "2026-08-12T00:33:49.182Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s09-control-plane",
+      "checkedAt": "2026-08-12T00:33:50.121Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The evaluator now composes definition binding, application entry, operator resolution, argument scheduling, exact argument acceptance, call-environment creation, and one-identity parameter binding into a valid trace prefix."
+    "summary": "Conditional evaluation now records predicate isolation followed by boolean-governed branch selection with distinct selected and dormant source identities and restoration of the caller continuation."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

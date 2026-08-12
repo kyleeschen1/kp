@@ -89,14 +89,15 @@ test("application events retain exact operator and argument source identities", 
   assert.equal(resolved.firstArgumentExpressionId, sourceId(1, 1));
 });
 
-test("stepper refuses conditional and primitive work before their slices", () => {
+test("stepper hands the completed call prefix to conditional evaluation", () => {
   const state = runPrefix(7).at(-1)!.after;
-  assert.throws(() => stepKpSchemeFactorialEvaluator({
+  const transition = stepKpSchemeFactorialEvaluator({
     document,
     state,
     eventIndex: 7,
     causedByEventIds: ["scheme-factorial.event.006"]
-  }), /cannot yet evaluate conditional/);
+  });
+  assert.equal(transition.event.kind, "conditional-entered");
 });
 
 function runPrefix(count: number): readonly KpSchemeEvaluatorTransition[] {

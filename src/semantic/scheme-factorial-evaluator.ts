@@ -4,6 +4,7 @@ import {
   type KpSchemeApplicationArgumentsContinuation,
   type KpSchemeApplicationOperatorContinuation,
   type KpSchemeClosureValue,
+  type KpSchemeConditionalContinuation,
   type KpSchemeContinuation,
   type KpSchemeDefinitionContinuation,
   type KpSchemeMachineState,
@@ -113,6 +114,9 @@ export function stepKpSchemeFactorialEvaluator(
     if (expression.kind === "list" && expression.role === "application") {
       return enterApplication(input, expression);
     }
+    if (expression.kind === "list" && expression.role === "conditional") {
+      return enterConditional(input, expression);
+    }
     return evaluateKpSchemeAtomicControl(input);
   }
   if (input.state.control.kind === "complete") {
@@ -128,9 +132,86 @@ export function stepKpSchemeFactorialEvaluator(
   if (continuation.kind === "application-arguments") {
     return acceptApplicationArgument(input, continuation);
   }
+  if (continuation.kind === "conditional") {
+    return selectConditionalBranch(input, continuation);
+  }
   throw new Error(
     `Scheme evaluator slice cannot yet resume ${continuation.kind}.`
   );
+}
+
+function enterConditional(
+  input: KpSchemeEvaluatorStepInput,
+  expression: Extract<KpSchemeSourceExpression, { readonly kind: "list" }>
+): KpSchemeEvaluatorTransition {
+  const [keyword, predicate, consequent, alternative] = expression.children;
+  if (keyword?.kind !== "atom" || keyword.lexeme !== "if" ||
+      predicate === undefined || consequent === undefined ||
+      alternative === undefined || expression.children.length !== 4) {
+    throw new Error("Scheme conditional requires the certified if shape.");
+  }
+  const continuationId =
+    `scheme-factorial.continuation.conditional.${pad(input.eventIndex)}`;
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "expression", expressionId: predicate.id },
+    activeContinuationId: continuationId,
+    continuations: [...input.state.continuations, {
+      kind: "conditional",
+      id: continuationId,
+      parentContinuationId: input.state.activeContinuationId,
+      conditionalExpressionId: expression.id,
+      predicateExpressionId: predicate.id,
+      consequentExpressionId: consequent.id,
+      alternativeExpressionId: alternative.id,
+      environmentId: input.state.activeEnvironmentId
+    }]
+  });
+  return transition(input, after, {
+    ...eventBase(input, [expression.id, predicate.id], [], []),
+    kind: "conditional-entered",
+    conditionalExpressionId: expression.id,
+    predicateExpressionId: predicate.id,
+    continuationId
+  });
+}
+
+function selectConditionalBranch(
+  input: KpSchemeEvaluatorStepInput,
+  continuation: KpSchemeConditionalContinuation
+): KpSchemeEvaluatorTransition {
+  const predicateValueId = controlledValueId(input.state);
+  const predicate = requireValue(input.state, predicateValueId);
+  if (predicate.kind !== "boolean") {
+    throw new Error("Factorial conditional predicate must produce a boolean.");
+  }
+  const branch = predicate.value ? "consequent" : "alternative";
+  const selectedExpressionId = predicate.value
+    ? continuation.consequentExpressionId
+    : continuation.alternativeExpressionId;
+  const dormantExpressionId = predicate.value
+    ? continuation.alternativeExpressionId
+    : continuation.consequentExpressionId;
+  const after = defineKpSchemeMachineState(input.document, {
+    ...input.state,
+    control: { kind: "expression", expressionId: selectedExpressionId },
+    activeEnvironmentId: continuation.environmentId,
+    activeContinuationId: continuation.parentContinuationId
+  });
+  return transition(input, after, {
+    ...eventBase(input, [
+      continuation.conditionalExpressionId,
+      continuation.predicateExpressionId,
+      selectedExpressionId,
+      dormantExpressionId
+    ], [predicateValueId], [predicateValueId]),
+    kind: "branch-selected",
+    conditionalExpressionId: continuation.conditionalExpressionId,
+    predicateValueId,
+    branch,
+    selectedExpressionId,
+    dormantExpressionId
+  });
 }
 
 function bindDefinition(
