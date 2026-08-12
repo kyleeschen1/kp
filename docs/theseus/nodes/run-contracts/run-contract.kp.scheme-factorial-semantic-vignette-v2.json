@@ -185,7 +185,8 @@
     {
       "id": "s22",
       "title": "Render native code and transient overlays",
-      "status": "planned"
+      "summary": "Implemented and tested native searchable checkpoint rendering, semantic material labels, exclusive paint ownership, and transient inert overlay cleanup.",
+      "status": "complete"
     },
     {
       "id": "s23",

@@ -2,7 +2,7 @@ import type { KpSchemeMachineState } from
   "./scheme-factorial-machine-state.ts";
 import type { KpSchemePedagogicalScore } from
   "./scheme-factorial-pedagogical-score.ts";
-import type { KpSchemeSourceDocument } from
+import type { KpSchemeSourceDocument, KpSchemeSourceExpression } from
   "./scheme-factorial-source-model.ts";
 import type {
   KpSchemeTrace,
@@ -26,6 +26,7 @@ export interface KpSchemeCheckpointMaterial {
     "settled";
   readonly sourceExpressionIds: readonly string[];
   readonly runtimeIds: readonly string[];
+  readonly nativeCode: string;
   readonly textEquivalent: string;
 }
 
@@ -113,6 +114,9 @@ function checkpoint(input: {
       [input.document.forms[0]!.id],
       [],
       input.definitionPresentation === "full"
+        ? sourceFor(input.document, input.document.forms[0]!.id)
+        : definitionName(input.document),
+      input.definitionPresentation === "full"
         ? "The complete factorial definition is visible."
         : "The factorial definition remains as a callable function seed."
     ),
@@ -122,6 +126,7 @@ function checkpoint(input: {
       "expanded",
       [input.document.forms[1]!.id],
       [],
+      sourceFor(input.document, input.document.forms[1]!.id),
       "The invocation factorial of 3 remains anchored."
     ),
     ...(activeExpressionId === null ? [] : [createMaterial(
@@ -130,11 +135,12 @@ function checkpoint(input: {
       "active",
       [activeExpressionId],
       [],
+      sourceFor(input.document, activeExpressionId),
       `Evaluation is currently at source expression ${activeExpressionId}.`
     )]),
     ...parameterMaterial(state),
-    ...waitingMaterial(state),
-    ...dormantMaterial(input.trace, input.eventBoundary),
+    ...waitingMaterial(input.document, state),
+    ...dormantMaterial(input.document, input.trace, input.eventBoundary),
     ...valueMaterial(state)
   ];
   const suffix = input.beatId?.split(".").at(-1) ?? "source";
@@ -167,11 +173,13 @@ function parameterMaterial(
     "active",
     [binding.binderOccurrenceId],
     [binding.id, binding.valueId],
+    `n = ${text}`,
     `The persistent parameter cell binds n to ${text}.`
   )];
 }
 
 function waitingMaterial(
+  document: KpSchemeSourceDocument,
   state: KpSchemeMachineState
 ): readonly KpSchemeCheckpointMaterial[] {
   const continuations = new Map(state.continuations.map((continuation) =>
@@ -193,6 +201,7 @@ function waitingMaterial(
         "waiting",
         [continuation.applicationExpressionId],
         [id, ...continuation.evaluatedArgumentValueIds],
+        sourceFor(document, continuation.applicationExpressionId),
         "A multiplication shell retains its first factor while recursion finishes."
       ));
     }
@@ -202,6 +211,7 @@ function waitingMaterial(
 }
 
 function dormantMaterial(
+  document: KpSchemeSourceDocument,
   trace: KpSchemeTrace,
   eventBoundary: number
 ): readonly KpSchemeCheckpointMaterial[] {
@@ -215,6 +225,7 @@ function dormantMaterial(
     "dormant",
     [branch.dormantExpressionId],
     [branch.id],
+    sourceFor(document, branch.dormantExpressionId),
     branch.branch === "consequent"
       ? "The recursive branch is dormant because the base case was selected."
       : "The base-case branch is dormant because recursive work was selected."
@@ -241,6 +252,7 @@ function valueMaterial(
     "settled",
     value.originExpressionIds,
     [value.id],
+    text,
     `The current exact value is ${text}.`
   )];
 }
@@ -251,9 +263,11 @@ function createMaterial(
   state: KpSchemeCheckpointMaterial["state"],
   sourceExpressionIds: readonly string[],
   runtimeIds: readonly string[],
+  nativeCode: string,
   textEquivalent: string
 ): KpSchemeCheckpointMaterial {
-  if (sourceExpressionIds.length === 0 || textEquivalent.trim().length === 0) {
+  if (sourceExpressionIds.length === 0 || nativeCode.trim().length === 0 ||
+      textEquivalent.trim().length === 0) {
     throw new Error(`Checkpoint material ${id} requires provenance and text.`);
   }
   return Object.freeze({
@@ -262,6 +276,34 @@ function createMaterial(
     state,
     sourceExpressionIds: Object.freeze([...sourceExpressionIds]),
     runtimeIds: Object.freeze([...runtimeIds]),
+    nativeCode,
     textEquivalent
   });
+}
+
+function sourceFor(document: KpSchemeSourceDocument, expressionId: string): string {
+  const expression = collectExpressions(document).find(({ id }) =>
+    id === expressionId);
+  if (expression === undefined) {
+    throw new Error(`Checkpoint source expression ${expressionId} is missing.`);
+  }
+  return document.sourceText.slice(expression.source.start, expression.source.end);
+}
+
+function definitionName(document: KpSchemeSourceDocument): string {
+  const definition = document.forms[0];
+  const signature = definition?.kind === "list" ? definition.children[1] : null;
+  const name = signature?.kind === "list" ? signature.children[0] : null;
+  if (name?.kind !== "atom") throw new Error("Factorial definition has no name.");
+  return name.lexeme;
+}
+
+function collectExpressions(document: KpSchemeSourceDocument): KpSchemeSourceExpression[] {
+  const result: KpSchemeSourceExpression[] = [];
+  const visit = (expression: KpSchemeSourceExpression): void => {
+    result.push(expression);
+    if (expression.kind === "list") expression.children.forEach(visit);
+  };
+  document.forms.forEach(visit);
+  return result;
 }

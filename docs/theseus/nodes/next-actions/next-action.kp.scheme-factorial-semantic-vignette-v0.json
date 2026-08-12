@@ -524,11 +524,39 @@
       "scope": "slice s21 durable evidence",
       "checkedAt": "2026-08-12T01:49:11.864Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s22 native renderer",
+      "checkedAt": "2026-08-12T01:58:57.041Z",
+      "notes": "All 103 focused tests passed. Every checkpoint retains native searchable code and semantic IDs; only active motion gets one text-free aria-hidden inert SVG; endpoints and reduced motion clean it up."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s22 repository types",
+      "checkedAt": "2026-08-12T01:58:58.194Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s22 patch hygiene",
+      "checkedAt": "2026-08-12T01:58:59.155Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s22 durable evidence",
+      "checkedAt": "2026-08-12T01:59:00.145Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The vignette now reflows certified source at syntax-safe rows while preserving 18px type, stable identities, reserved geometry, restrained playhead-derived jostle, and exact reduced-motion stillness."
+    "summary": "Every semantic checkpoint now renders through native selectable code with explicit source and runtime provenance; transient motion has one inert text-free overlay and is absent at endpoints and under reduced motion."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
