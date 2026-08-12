@@ -119,11 +119,29 @@
       "status": "passed",
       "scope": "s05-control-plane",
       "checkedAt": "2026-08-12T00:08:24.141Z"
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "s06-causal-trace",
+      "checkedAt": "2026-08-12T00:16:59.563Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06-type-safety",
+      "checkedAt": "2026-08-12T00:17:00.646Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s06-control-plane",
+      "checkedAt": "2026-08-12T00:17:01.609Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The evaluator now has frozen JSON-safe values, lexical environments, recursive closure references, lookup, and explicit continuation frames that preserve pending arguments and call-return work."
+    "summary": "Factorial now has a frozen JSON-safe trace contract with adjacent state snapshots, typed semantic events, source and value provenance, and forward-only causal dependency validation."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

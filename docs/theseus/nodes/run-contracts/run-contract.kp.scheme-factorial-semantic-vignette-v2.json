@@ -89,7 +89,8 @@
     {
       "id": "s06",
       "title": "Define causal trace events",
-      "status": "planned"
+      "summary": "Defined and tested typed trace events, deterministic event and snapshot IDs, immutable snapshots, provenance, adjacent transitions, and prior-cause validation.",
+      "status": "complete"
     },
     {
       "id": "s07",
