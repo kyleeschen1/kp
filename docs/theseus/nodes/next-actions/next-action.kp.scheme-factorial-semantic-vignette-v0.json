@@ -496,11 +496,39 @@
       "scope": "slice s20 durable evidence",
       "checkedAt": "2026-08-12T01:41:57.933Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s21 responsive projection",
+      "checkedAt": "2026-08-12T01:49:08.202Z",
+      "notes": "All 99 focused tests passed. Wide and compact frames preserve fixed 18px type, source identities, bounds, deterministic active-only jostle, reduced motion, and direct-seek reversal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 repository types",
+      "checkedAt": "2026-08-12T01:49:09.847Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s21 patch hygiene",
+      "checkedAt": "2026-08-12T01:49:10.879Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s21 durable evidence",
+      "checkedAt": "2026-08-12T01:49:11.864Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "All six score beats now share one normalized, reversible clock with explicit motion and reading intervals, stable captions, and direct semantic checkpoint seeks."
+    "summary": "The vignette now reflows certified source at syntax-safe rows while preserving 18px type, stable identities, reserved geometry, restrained playhead-derived jostle, and exact reduced-motion stillness."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

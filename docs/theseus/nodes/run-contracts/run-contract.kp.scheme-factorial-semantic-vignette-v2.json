@@ -179,7 +179,8 @@
     {
       "id": "s21",
       "title": "Add active jostle and responsive compaction",
-      "status": "planned"
+      "summary": "Compiled and tested wide and compact source geometry plus deterministic active-only jostle with fixed typography and reduced-motion settlement.",
+      "status": "complete"
     },
     {
       "id": "s22",
