@@ -11,7 +11,6 @@ const ownedStylesheets = [
   "economics-demand-shift-theme.css",
   "economics-demand-shift-publication.css",
   "economics-demand-shift-controls.css",
-  "economics-demand-shift-lesson-editor.css",
   "economics-demand-shift-graph.css",
   "economics-demand-shift-publication-responsive.css",
   "economics-demand-shift-inline-sticky.css",
@@ -52,10 +51,6 @@ test("economics stylesheet entry preserves one explicit ownership cascade", () =
       "../kp-tutorial-semantic-transit.css",
       ...learnerStylesheets.map((name) => `./${name}`)
     ]
-  );
-  assert.match(
-    read("KpEconomicsPassageEditor.svelte"),
-    /import "\.\/economics-demand-shift-lesson-editor\.css";/
   );
   assert.doesNotMatch(entry, /economics-demand-shift-theme\.css/);
   for (const name of ownedStylesheets) {

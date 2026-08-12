@@ -137,7 +137,8 @@
     {
       "id": "s15",
       "title": "Delete superseded economics passage editor",
-      "status": "planned"
+      "summary": "Deleted the unreachable KpEconomicsPassageEditor component and its dedicated stylesheet; exact source search, stylesheet ownership, architecture-adjacent tests, and full typing are green.",
+      "status": "complete"
     },
     {
       "id": "s16",
