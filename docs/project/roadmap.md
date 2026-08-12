@@ -69,9 +69,9 @@ and vignette authority.
 
 The accepted rationale and ordering are recorded in
 `decisions/2026-08-12-kp-convergence-and-architecture-compression.md` and
-`reviews/2026-08-12-project-tightening-next-step-review.md`. The active
-execution proposal is
-`reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md`.
+`reviews/2026-08-12-project-tightening-next-step-review.md`. The completed
+execution tranche and its evidence are recorded in
+`reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-closeout.md`.
 
 ### 1. Control-plane and language compression
 
@@ -87,7 +87,7 @@ Status: initial pass complete; maintain continuously
 
 ### 2. Product-surface pruning
 
-Status: first retirement complete
+Status: first retirement and authoring consolidation complete
 
 - Use
   `reviews/2026-08-12-economics-layout-production-reachability-audit.md` as the
@@ -100,18 +100,24 @@ Status: first retirement complete
 - `animation-station` is no longer production-reachable and its implementation
   has been deleted in two independently reversible commits. Historical URLs
   normalize in place to `reader`.
-- Keep `two-column-scroll` until Article
-  editing is projection-neutral; do not delete `inline-sticky` while the
-  two-column capability still imports its styles and geometry.
+- Whole-file Article editing is route-owned and available from all six
+  economics projections. The superseded two-column passage editor is deleted.
+- `two-column-scroll` and `inline-sticky` now import one neutral
+  scroll-passage geometry owner independently. Fresh reachability evidence
+  retains both; this result does not select either as the public default.
 - Preserve Article v1, economics semantics, canonical animations, URLs that are
   still part of review evidence, and user-authored source.
 
 ### 3. Dependency and compatibility compression
 
-Status: next
+Status: explicit algebra capability wave complete; caller-backed waves next
 
-- Replace module-scoped registration side effects with explicit capability-pack
-  dependencies.
+- Algebra's module-scoped choreography registrations have been replaced by
+  four immutable capabilities delivered through its lazy pack. Pack creation
+  is repeatable and import-order independent; eight registration-only modules
+  are gone.
+- First repair the bounded catalogue stage-reservation CLS failure without
+  weakening its threshold or changing visual choreography.
 - Converge timeline vocabularies onto one authored-beat input and one sampled
   clock without discarding authored checkpoints.
 - Derive lightweight transformation and selector-pair views from rich canonical

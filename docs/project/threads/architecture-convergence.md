@@ -2,13 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-12
-Current Next Action: execute the approved projection-neutral authoring and
-explicit-capabilities long loop in
-`../reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-long-loop.md`.
-Restore an honest verification baseline, detach whole-file Article editing from
-economics layout, separate Inline Sticky and Two Columns without retiring
-either, then replace algebra's import-time choreography registration with
-explicit capability inputs.
+Current Next Action: repair the bounded catalogue stage-reservation layout
+shift recorded by `npm run test:browser:animation-equation-capability` without
+changing stage choreography or weakening the `0.001` CLS ceiling. Then resume
+caller-backed compatibility compression before the TypeScript exemplar. The
+projection-neutral authoring and explicit-capabilities tranche is complete;
+see
+`../reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-closeout.md`.
 
 ## Goal
 
@@ -39,13 +39,15 @@ not a mandate to encode one universal layout in Article or animation semantics.
    comparison; deck and attention-stage are retained comparisons; two-column
    is an editor dependency; inline-sticky has a two-column dependent; and
    animation-station is the first retirement candidate.
-3. **Pruning wave:** Animation Station retirement complete in two reversible
-   commits. Next, make Article editing projection-neutral and separate the
-   remaining scroll-layout implementation dependencies without retiring
-   another layout.
-4. **Dependency cleanup:** active in the approved long loop; make
-   capability-pack inputs explicit and remove
-   module-import registration effects.
+3. **Pruning wave:** Animation Station is retired. Economics now has one
+   route-owned, projection-neutral whole-file Article editor; its superseded
+   passage editor is deleted. Inline Sticky and Two Columns consume neutral
+   shared geometry independently and remain deliberately reachable.
+4. **Dependency cleanup:** the first explicit-capability wave is complete.
+   Algebra's fission/fusion, distribution, factoring, and reverse behavior now
+   arrives through its lazy pack without mutable registries or import-order
+   effects. Repair the bounded catalogue CLS gate, then continue with one
+   caller-backed compatibility wave.
 5. **Compatibility waves:** converge timelines, transformation refs,
    correspondences, and equation presentation recipes through real caller
    migrations.

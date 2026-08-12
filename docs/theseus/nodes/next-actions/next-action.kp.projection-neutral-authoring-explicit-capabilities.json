@@ -2,8 +2,9 @@
   "id": "next-action.kp.projection-neutral-authoring-explicit-capabilities",
   "kind": "next-action",
   "title": "Make Article authoring projection-neutral and algebra capabilities explicit",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp-architecture",
+  "summary": "Completed all 30 approved slices. Economics authoring is projection-neutral, scroll layouts are independently owned, and algebra choreography is explicit and import-order independent.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -208,8 +209,19 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T23:20:10.940Z",
       "notes": "Four clean-process import permutations, repeat pack construction, concurrent repeated lazy loads, 12 focused tests, full typing, and architecture gates all pass."
+    },
+    {
+      "command": "npm run test:kp-article-v1; npm run test:economics-demand-shift-tutorial; npm run test:browser:economics-lesson-editor; npm run test:browser:economics-authoring-save; npm run check:architecture; npm run typecheck; npm test; npm run build; theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-12T23:34:19.193Z",
+      "notes": "Release boundary is green: 120 Article checks, 83 economics checks, 11 browser checks, all architecture and type gates, 4140 repository tests, production build, and workspace validation pass. The separately recorded pre-existing catalogue stage-reservation CLS debt remains unchanged and its threshold was not weakened."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Projection-neutral economics Article editing, independent neutral scroll-layout ownership, and explicit import-order-independent algebra capabilities are complete with broad release evidence."
+  },
   "expectedLearning": [
     "Whether one route-owned Article editor can serve every surviving economics projection without changing the Article grammar or projection semantics.",
     "Whether Inline Sticky and Two Columns can preserve geometry while removing their CSS dependency.",

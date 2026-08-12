@@ -2,8 +2,9 @@
   "id": "run-contract.kp.projection-neutral-authoring-explicit-capabilities.v2",
   "kind": "run-contract",
   "title": "Projection-neutral authoring and explicit capabilities",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp-architecture",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -227,7 +228,8 @@
     {
       "id": "s30",
       "title": "Run release verification and close out",
-      "status": "planned"
+      "summary": "Broad release verification passes; the closeout records net source reduction, retained projections, pre-existing bounded CLS debt, preserved user edits, and the next reversible catalogue reservation repair.",
+      "status": "complete"
     }
   ]
 }
