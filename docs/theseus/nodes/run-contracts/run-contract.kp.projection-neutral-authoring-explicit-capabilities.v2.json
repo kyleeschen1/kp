@@ -167,7 +167,8 @@
     {
       "id": "s20",
       "title": "Remove Two Columns dependency on Inline Sticky CSS",
-      "status": "planned"
+      "summary": "The executable seam is now symmetric: Inline Sticky and Two Columns each directly import the neutral scroll-passage owner, and no Inline Sticky-named stylesheet exists or appears in either capability.",
+      "status": "complete"
     },
     {
       "id": "s21",

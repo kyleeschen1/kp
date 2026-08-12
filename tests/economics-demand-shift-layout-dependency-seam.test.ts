@@ -12,7 +12,7 @@ const audit = JSON.parse(readFileSync(new URL(
 ), "utf8")) as {
   readonly schemaVersion: string;
   readonly baseOwner: string;
-  readonly dependentOwner: string;
+  readonly consumers: readonly string[];
   readonly directImport: string;
   readonly sharedSelectors: readonly string[];
   readonly sharedTokens: readonly string[];
@@ -20,17 +20,21 @@ const audit = JSON.parse(readFileSync(new URL(
   readonly responsiveFallback: string;
 };
 
-test("the Inline Sticky to Two Columns dependency seam is fully inventoried", () => {
-  assert.equal(audit.schemaVersion, "kp.economics.scroll-layout-seam.v1");
+test("both scroll layouts consume one neutral geometry owner", () => {
+  assert.equal(audit.schemaVersion, "kp.economics.scroll-layout-seam.v2");
   const base = readFileSync(new URL(audit.baseOwner, directory), "utf8");
-  const dependent = readFileSync(
-    new URL(audit.dependentOwner, directory),
-    "utf8"
-  );
-  assert.ok(
-    dependent.includes(`import ${JSON.stringify(audit.directImport)};`),
-    "the audited direct dependency changed"
-  );
+  for (const consumer of audit.consumers) {
+    const source = readFileSync(new URL(consumer, directory), "utf8");
+    assert.ok(
+      source.includes(`import ${JSON.stringify(audit.directImport)};`),
+      `${consumer} must import the neutral geometry owner directly`
+    );
+    assert.doesNotMatch(source, /economics-demand-shift-inline-sticky\.css/u);
+  }
+  assert.throws(() => readFileSync(new URL(
+    "economics-demand-shift-inline-sticky.css",
+    directory
+  ), "utf8"));
   for (const selector of audit.sharedSelectors) {
     assert.ok(base.includes(selector), `missing shared selector ${selector}`);
   }
