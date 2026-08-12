@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "kp.economics.scroll-layout-seam.v1",
+  "baseOwner": "economics-demand-shift-inline-sticky.css",
+  "dependentOwner": "presenters/two-column-scroll-presenter-capability.ts",
+  "directImport": "../economics-demand-shift-inline-sticky.css",
+  "sharedSelectors": [
+    ".kp-economics-tutorial__layout",
+    ".kp-economics-tutorial__prose",
+    ".kp-economics-tutorial__motion-passage",
+    ".kp-economics-tutorial__motion-passage-body",
+    ".kp-economics-tutorial__motion-passage-prose",
+    ".kp-economics-tutorial__stage--inline"
+  ],
+  "sharedTokens": [
+    "--kp-inline-sticky-measure",
+    "--kp-inline-sticky-prose-font-size",
+    "--kp-lesson-prose-line-height"
+  ],
+  "sharedDataHooks": [
+    "data-kp-inline-sticky-cue"
+  ],
+  "responsiveFallback": "Two Columns deliberately uses the single-column scroll-passage geometry below its desktop media boundary."
+}

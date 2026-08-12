@@ -149,7 +149,8 @@
     {
       "id": "s17",
       "title": "Audit Inline Sticky and Two Columns dependency seam",
-      "status": "planned"
+      "summary": "Added an executable seam inventory covering the one direct stylesheet import, six inherited geometry selectors, three inherited tokens, the shared cue hook, and the intentional mobile single-column fallback.",
+      "status": "complete"
     },
     {
       "id": "s18",
