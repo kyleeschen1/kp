@@ -300,11 +300,39 @@
       "scope": "slice s13 durable evidence",
       "checkedAt": "2026-08-12T01:02:36.393Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s14 canonical factorial score",
+      "checkedAt": "2026-08-12T01:07:00.382Z",
+      "notes": "All 63 focused tests passed. The score has six ordered beats, only middle descent is summarized, base and all four returns remain explicit, captions are semantic, and every trace event is accounted for exactly once."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 repository types",
+      "checkedAt": "2026-08-12T01:07:01.455Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s14 patch hygiene",
+      "checkedAt": "2026-08-12T01:07:02.432Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s14 durable evidence",
+      "checkedAt": "2026-08-12T01:07:03.431Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The framework-neutral pedagogical score can now group, omit with rationale, hold, caption, and emphasize trace-grounded identities while accounting for every event exactly once and preserving causal order."
+    "summary": "The approved learner story is now encoded as six trace-grounded beats: definition seed, first descent, summarized repeated descent, base turn, explicit return cascade, and result."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",

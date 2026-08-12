@@ -137,7 +137,8 @@
     {
       "id": "s14",
       "title": "Author the factorial score",
-      "status": "planned"
+      "summary": "Authored and tested the canonical six-beat score with semantic compression only for repeated middle descent and explicit base and return events.",
+      "status": "complete"
     },
     {
       "id": "s15",
