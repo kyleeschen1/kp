@@ -9,6 +9,7 @@ import {
 
 export const kpEconomicsDemandShiftArticleDraftStorageKey =
   "kp.economics.demand-shift.article-draft.v1";
+export const kpEconomicsDemandShiftDefaultArticleRevealText = "#context";
 
 export function createKpEconomicsDemandShiftArticleAuthoringDescriptor(
   persistedText: string
@@ -19,6 +20,14 @@ export function createKpEconomicsDemandShiftArticleAuthoringDescriptor(
     persistedText,
     storageKey: kpEconomicsDemandShiftArticleDraftStorageKey,
     semantic: kpEconomicsDemandShiftArticleSemanticCompletions,
-    defaultRevealText: "#context"
+    defaultRevealText: kpEconomicsDemandShiftDefaultArticleRevealText
   });
+}
+
+export function resolveKpEconomicsDemandShiftArticleRevealText(
+  passageId: string | undefined
+): string {
+  return passageId !== undefined && /^[a-z][a-z0-9-]*$/u.test(passageId)
+    ? `#${passageId}`
+    : kpEconomicsDemandShiftDefaultArticleRevealText;
 }

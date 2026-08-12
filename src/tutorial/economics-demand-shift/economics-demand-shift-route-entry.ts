@@ -13,6 +13,9 @@ import {
   restoreKpEconomicsDemandShiftRouteScroll,
   type KpEconomicsDemandShiftRouteHandoff
 } from "./economics-demand-shift-route-handoff.ts";
+import {
+  resolveKpEconomicsDemandShiftArticleRevealText
+} from "./economics-demand-shift-article-authoring-descriptor.ts";
 
 type KpEconomicsDevToolbarClient = typeof import("./economics-demand-shift-dev-toolbar.ts");
 type KpEconomicsArticleAuthoringClient = typeof import(
@@ -72,11 +75,18 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
         loadKpEconomicsArticleAuthoring === undefined) return;
     const authoring = await loadKpEconomicsArticleAuthoring();
     if (disposed || articleEditor !== undefined) return;
+    const handoff = captureKpEconomicsDemandShiftRouteHandoff({
+      root: input.root,
+      scrollY: window.scrollY
+    });
     articleEditor = authoring.mountKpEconomicsDemandShiftArticleEditor({
       ownerDocument: document,
       // Route-owned preview projection is introduced separately; mounting the
       // editor must not make one presenter the source of authoring truth.
       preview: () => undefined,
+      revealText: resolveKpEconomicsDemandShiftArticleRevealText(
+        handoff?.passageId
+      ),
       onClose: () => {
         articleEditor = undefined;
       }

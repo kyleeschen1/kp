@@ -113,7 +113,8 @@
     {
       "id": "s11",
       "title": "Preserve semantic reveal and focus",
-      "status": "planned"
+      "summary": "The route captures the active semantic passage before opening authoring and reveals its Article directive id; malformed or unavailable ids fall back to #context.",
+      "status": "complete"
     },
     {
       "id": "s12",

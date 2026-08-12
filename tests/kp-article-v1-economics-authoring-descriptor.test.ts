@@ -6,7 +6,8 @@ import { kpArticleSourceAuthoringSchema } from
   "../src/article/kp-article-source-authoring.ts";
 import {
   createKpEconomicsDemandShiftArticleAuthoringDescriptor,
-  kpEconomicsDemandShiftArticleDraftStorageKey
+  kpEconomicsDemandShiftArticleDraftStorageKey,
+  resolveKpEconomicsDemandShiftArticleRevealText
 } from "../src/tutorial/economics-demand-shift/economics-demand-shift-article-authoring-descriptor.ts";
 
 test("economics authoring is one framework-neutral whole-file descriptor", () => {
@@ -29,6 +30,21 @@ test("economics authoring is one framework-neutral whole-file descriptor", () =>
   ));
   assert.equal(Object.isFrozen(descriptor), true);
   assert.equal(Object.isFrozen(descriptor.semantic), true);
+});
+
+test("economics authoring reveals the active semantic passage", () => {
+  assert.equal(
+    resolveKpEconomicsDemandShiftArticleRevealText("follow-shift"),
+    "#follow-shift"
+  );
+  assert.equal(
+    resolveKpEconomicsDemandShiftArticleRevealText(undefined),
+    "#context"
+  );
+  assert.equal(
+    resolveKpEconomicsDemandShiftArticleRevealText("not a passage"),
+    "#context"
+  );
 });
 
 test("the authoring descriptor owns no DOM or framework lifecycle", () => {
