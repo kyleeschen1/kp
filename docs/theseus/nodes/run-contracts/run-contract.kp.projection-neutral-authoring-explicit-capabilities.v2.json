@@ -191,7 +191,8 @@
     {
       "id": "s24",
       "title": "Define explicit fission-fusion capability",
-      "status": "planned"
+      "summary": "Defined one frozen typed fission/fusion capability value over the canonical compiler and sampler; no consumer or runtime authority changed yet.",
+      "status": "complete"
     },
     {
       "id": "s25",

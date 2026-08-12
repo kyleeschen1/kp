@@ -154,6 +154,12 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-12T22:42:15.875Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-fission-fusion-capability.test.ts tests/fission-fusion.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T22:44:44.932Z"
     }
   ],
   "expectedLearning": [
