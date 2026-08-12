@@ -77,7 +77,8 @@
     {
       "id": "s04",
       "title": "Parse the bounded Scheme subset",
-      "status": "planned"
+      "summary": "Implemented and tested the bounded factorial parser with exact span preservation, address-stable identities, syntax classification, and strict out-of-scope rejection.",
+      "status": "complete"
     },
     {
       "id": "s05",
