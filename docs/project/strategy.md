@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-02
+Last Updated: 2026-08-12
 
 ## North Star
 
@@ -44,6 +44,26 @@ claim to be a complete curriculum. Before shaping that public product, the
 internal Animation Catalogue is the immediate pressure lab: it should make the
 executable library easy to search, play, tune, review, and compare across
 domains while revealing which abstractions and host seams are actually shared.
+
+## Current Strategic Stage
+
+KP is now in convergence and architecture compression. The semantic/runtime
+engine is not finished, but it is sufficiently capable that another broad
+infrastructure or domain-expansion tranche would produce less value than
+reducing the active surface around it.
+
+The primary learner-product bottleneck is product convergence: a small set of
+indisputably useful explanations, one release-worthy default projection,
+responsive and accessible presentation, navigation, and an efficient revision
+loop. Layout selection is part of this gate, but it is a product choice among
+replaceable projections rather than new semantic or Article authority. KP does
+not need one universal layout before it can ship a bounded public proof.
+
+The convergence phase should reduce historical representations, implicit
+registration, compatibility paths, terminology drift, and model retrieval
+cost. It should then measure marginal reuse through a TypeScript code-refactor
+exemplar and a Python second caller before selecting the Public Web v0
+projection.
 
 ## Strategic Architecture
 
@@ -124,6 +144,12 @@ When choosing the next slice, prefer work that improves:
   architecture;
 - **cross-session continuity:** clear docs and Theseus records that let future
   Codex runs continue without rediscovery.
+- **complexity reduction:** fewer production representations, compatibility
+  paths, implicit imports, caller-specific branches, and visual exceptions;
+- **marginal leverage:** a second caller that mainly adds semantic content and
+  bindings instead of another runtime or renderer mechanism; and
+- **governed generation:** valid typed drafts, explicit repair gaps, correct
+  operation and role selection, and zero silent generic fallback.
 
 Down-rank work that is mainly visual flourish, unverified math, broad
 infrastructure unrelated to KP, or a new UI before the semantic/runtime
@@ -155,3 +181,11 @@ contract is stable enough to support it.
 - Do not let Svelte or SvelteKit own animation assets, semantic truth, the
   shared playback clock, renderer-neutral frames, or public compiler/runtime
   contracts.
+- Do not make a universal layout a prerequisite for Public Web v0. Select one
+  competent release default from real symbolic, graph, and code content while
+  keeping layout a replaceable projection.
+- Do not feed the complete historical decision/review corpus to an LLM by
+  default. Start from the roadmap, active thread, canonical vocabulary, and
+  selected task refs; retrieve provenance on demand.
+- Do not accept generated DOM, geometry, timing tables, renderer choices, or
+  silent fallbacks as a shortcut around typed semantic authoring.

@@ -1,0 +1,59 @@
+{
+  "id": "priority-change.kp.architecture-compression",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.architecture-compression",
+  "status": "active",
+  "domain": "kp",
+  "summary": "User accepted a convergence phase before further expansion: compress project memory and language, prune rejected product representations, retire compatibility through caller migrations, improve governed LLM generation, then pressure TypeScript and Python before selecting a Public Web v0 projection.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "User accepted a convergence phase before further expansion: compress project memory and language, prune rejected product representations, retire compatibility through caller migrations, improve governed LLM generation, then pressure TypeScript and Python before selecting a Public Web v0 projection.",
+      "occurredAt": "2026-08-12T20:20:37.158Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "User accepted a convergence phase before further expansion: compress project memory and language, prune rejected product representations, retire compatibility through caller migrations, improve governed LLM generation, then pressure TypeScript and Python before selecting a Public Web v0 projection.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "architecture-compression",
+        "to": "now"
+      },
+      {
+        "subject": "explanation-attention",
+        "to": "paused"
+      },
+      {
+        "subject": "layout-discovery",
+        "to": "paused"
+      },
+      {
+        "subject": "typescript-code-proof",
+        "to": "next"
+      },
+      {
+        "subject": "python-code-proof",
+        "to": "later"
+      },
+      {
+        "subject": "public-web-projection",
+        "to": "later"
+      }
+    ],
+    "effectiveAt": "2026-08-12T20:20:37.158Z",
+    "requestedBy": "user"
+  }
+}

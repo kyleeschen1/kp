@@ -10,6 +10,25 @@ minimize risks, or manufacture certainty. Distinguish a hard or unfinished
 design problem from evidence against the project thesis. This is a reviewable
 collaboration experiment, not a learner-facing editorial voice standard.
 
+## Canonical context and generation routing
+
+- Start strategic or implementation work with `docs/project/roadmap.md` and the
+  active thread it names. Read `strategy.md` for rationale, not as a live task
+  queue.
+- Use `docs/project/principles/system-vocabulary.md` for system terms and
+  `docs/project/principles/motion-passage-vocabulary.md` for lesson-layout
+  terms.
+- Use `docs/project/authoring/llm-generation-entrypoint.md` before creating or
+  revising model-authored animations, articles, pedagogical scores, or
+  projections.
+- Treat unlinked historical decisions and reviews as provenance. Retrieve them
+  only for a named question; do not load the corpus as default context.
+- State the canonical artifact, host, renderer, and semantic source of truth
+  before changing a visible exemplar. A matching asset ID does not prove a
+  canonical host or animation path.
+- Unsupported generation must return a typed repair gap. Never silently choose
+  a generic fade, unrelated motif, geometry, timing, or framework-local path.
+
 ## Repo-local scratch tooling
 
 - Put throwaway scripts, screenshots, reports, and other investigation artifacts under `tmp/codex/` instead of an OS-level temporary directory.

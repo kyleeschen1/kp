@@ -52,8 +52,12 @@ conversation or design record
 
 ## Current Focus
 
-The current focus is the semantic animation runtime and dashboard-backed
-authoring/catalog system. The immediate product direction is to make
-`SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame ->
-renderer` the stable spine for equations, graphs, diagrams, code, and tutorial
-cards.
+The current focus is convergence and architecture compression. Preserve the
+stable semantic-to-renderer spine, reduce rejected product representations and
+compatibility, make capability dependencies explicit, improve bounded LLM
+retrieval/generation, and then pressure program animation through TypeScript
+and Python before selecting one Public Web v0 projection.
+
+Start new sessions with `roadmap.md`, then the active thread it names. Do not
+load the historical decision and review corpus unless a selected task requires
+specific provenance.

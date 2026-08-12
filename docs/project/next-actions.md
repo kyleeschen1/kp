@@ -1,34 +1,41 @@
 # KP Next Actions
 
-Last Updated: 2026-08-09
+Last Updated: 2026-08-12
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The first real whole-file CodeMirror editing session and the bounded reader
-payload recovery are complete. Source-save capability and the page-reload
-regression are repaired; the frozen grammar did not need to change. The common
-equation-reader closure is now 124,778 gzip bytes, 20,222 below its ceiling.
+KP is in a bounded convergence and architecture-compression phase. Article v1,
+the learner-core payload recovery, canonical algebra session, economics/physics
+Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
+preserved foundations rather than work to restart.
 
-1. Author one compact multi-step algebra article as the first structurally
-   different KP Article v1 caller. Reuse a canonical algebra animation rather
-   than reopening linear algebra or layout discovery.
-2. Generalize article, vignette, or motion-passage seams only when economics
-   and algebra demonstrate the same requirement.
-3. Keep economics layout alternatives available through their existing URLs,
-   but postpone selecting or polishing a default while authoring is evaluated.
-4. Keep `Apply a 2 × 2 matrix to a vector` tabled at the first unresolved
-   animation-promotion rank; its place in this queue is retrievability, not
-   permission to resume it.
-5. Add advanced CodeMirror semantic exploration and structured-history tools
-   only when another real authoring pass demonstrates concrete friction.
-6. Build Internal Studio v0, then the portable publication bundle and Public
-   Web v0, after the reader, authoring, navigation, and performance boundaries
-   survive the second article caller.
-7. Keep Graph3D mesh-to-donut and programming addition/comparison internal.
-   Do not spend current learner-product effort on them or advance rank-23 BFS.
+1. Review the completed economics layout reachability audit and approve or
+   reject its two-commit `animation-station` retirement: production
+   reachability first, unreachable implementation second.
+2. Decouple Article editing from `two-column-scroll`, then separate surviving
+   two-column geometry from the standalone inline-sticky projection before
+   deciding whether inline-sticky can retire.
+3. Replace module-scoped choreography registration with explicit capability
+   inputs, preserving route budgets and canonical hosts.
+4. Retire compatibility in caller-backed waves: timeline vocabularies,
+   lightweight transformation/correspondence views, then legacy equation
+   presentation recipes.
+5. Build the TypeScript free-shipping-threshold refactor through the existing
+   semantic/runtime path, then pressure the same boundary with Python.
+6. Use symbolic, graph, and code exemplars to select one Public Web v0 default
+   projection without changing Article semantics.
+7. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
+   when the Internal Studio/Public Web boundary becomes executable work.
+
+Keep algebra pacing, Scheme promotion, layout invention, advanced CodeMirror,
+Graph3D promotion, linear algebra, and curriculum expansion paused unless a
+convergence slice exposes them as a direct blocker.
+
+The audit and exact rollback boundary are in
+`reviews/2026-08-12-economics-layout-production-reachability-audit.md`.
 
 ## Historical Queue Snapshot
 

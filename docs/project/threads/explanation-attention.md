@@ -1,19 +1,13 @@
 # Explanation and Attention Thread
 
-Status: active
+Status: paused
 Last Updated: 2026-08-12
-Current Next Action: Review the complete factorial visual-discovery exemplar at
-`/tutorials/programming/scheme-factorial/` under
-`../reviews/2026-08-12-scheme-factorial-full-evaluation-checkpoint.md`. It now
-runs from `(factorial 3)` through four trace-certified activations, visible
-waiting multiplication shells, the base value, and deepest-first returns to
-`6` on one code-material stage and clock. Preserve the bounded evaluator,
-trace, existing detailed view, URLs, static publication, and accessibility.
-Do not generalize the material grammar or connect CodeMirror until the human
-checkpoint is approved and a structurally different caller validates the
-seam. The algebra proof remains verified and
-user-paused at slice 8/23 in commit `d38f06fe`; its remaining 16 slices are
-recoverable but inactive.
+Current Next Action: None during the convergence and architecture-compression
+phase. Preserve the complete factorial visual-discovery exemplar at
+`/tutorials/programming/scheme-factorial/`, its checkpoint in
+`../reviews/2026-08-12-scheme-factorial-full-evaluation-checkpoint.md`, and the
+recoverable algebra proof paused at slice 8/23 in commit `d38f06fe`. Resume
+only through an explicit roadmap decision after the tightening tranche.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`

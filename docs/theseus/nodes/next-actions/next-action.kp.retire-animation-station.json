@@ -1,0 +1,29 @@
+{
+  "id": "next-action.kp.retire-animation-station",
+  "kind": "next-action",
+  "title": "Retire economics animation-station projection in two reversible commits",
+  "status": "ready",
+  "domain": "kp-architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-economics-layout-production-reachability-audit.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/architecture-convergence.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/economics-demand-shift/economics-demand-shift-view.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/economics-demand-shift/economics-demand-shift-presenter-capability.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte"
+    }
+  ]
+}
