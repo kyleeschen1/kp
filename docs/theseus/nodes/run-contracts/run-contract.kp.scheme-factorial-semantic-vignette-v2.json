@@ -149,7 +149,8 @@
     {
       "id": "s16",
       "title": "Compile seed bloom and waiting shells",
-      "status": "planned"
+      "summary": "Compiled and tested deterministic structural fold, bloom, waiting-shell persistence, sequential shell entry, parenthesis lag, and direct-seek reversibility.",
+      "status": "complete"
     },
     {
       "id": "s17",

@@ -356,11 +356,39 @@
       "scope": "slice s15 durable evidence",
       "checkedAt": "2026-08-12T01:13:42.494Z",
       "notes": "Workspace validation passed before slice completion."
+    },
+    {
+      "command": "npm run test:scheme-factorial",
+      "status": "passed",
+      "scope": "slice s16 structural choreography",
+      "checkedAt": "2026-08-12T01:18:56.050Z",
+      "notes": "All 73 focused tests passed. Deep children fold first, contents lead parentheses, bloom reverses that dependency, waiting shells persist or enter sequentially, and dense direct seek equals reverse sampling."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s16 repository types",
+      "checkedAt": "2026-08-12T01:18:57.133Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s16 patch hygiene",
+      "checkedAt": "2026-08-12T01:18:58.143Z",
+      "notes": "No whitespace errors were found."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s16 durable evidence",
+      "checkedAt": "2026-08-12T01:18:59.167Z",
+      "notes": "Workspace validation passed before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Every source and score endpoint now has a complete renderer-neutral material ledger for definition, invocation, active locus, parameter cell, waiting shells, dormant branch, current value, and accessibility."
+    "summary": "Definition-to-seed, body bloom, and accumulating waiting-shell choreography are now pure deterministic projections with recursive content-before-membrane ordering and exact reverse sampling."
   },
   "expectedLearning": [
     "Whether interpreter-certified causal identity can support a more pedagogical recursion score than literal execution order.",
