@@ -1,7 +1,26 @@
 # Economics Layout Production-Reachability Audit
 
 Date: 2026-08-12
-Status: audit complete; first pruning wave proposed, not yet implemented
+Status: first pruning wave implemented in two reversible commits
+
+## Implementation Outcome
+
+The approved retirement completed without changing Article v1 source, its
+generated publication, economics semantic truth, or the remaining projection
+set. Commit `de85d0d5` removed production reachability; the following deletion
+commit removes the unreachable Station implementation and its focused
+certification surface.
+
+Historical `?view=animation-station` and `?layout=animation-station` inputs now
+normalize in place to `reader` while retaining unrelated preferences. The
+active presenter payload fell from 191,991 bytes to about 181.8 kB, and a fresh
+production build emits no Station capability chunk. The surviving views are
+`reader`, `split`, `deck`, `attention-stage`, `two-column-scroll`, and
+`inline-sticky`.
+
+The next independently reversible action is unchanged: make whole-file editing
+a projection-neutral Article capability before evaluating the two-column and
+inline-sticky relationship.
 
 ## Question
 
@@ -185,7 +204,8 @@ not repository tidiness, as its evidence.
   and
 - historical decision and review documents.
 
-## Decision Needed
+## Decision Record
 
-Approve or reject Pruning Wave 1 as one two-commit implementation slice. The
-audit itself authorizes no runtime change.
+Pruning Wave 1 was approved and implemented as the proposed two-commit slice.
+The audit remains the rationale and rollback record; it does not authorize a
+later projection retirement.

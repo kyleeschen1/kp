@@ -20,7 +20,6 @@
   --kp-lesson-theme-surface: #fffdf8;
   --kp-lesson-theme-ink: #4f5364;
   --kp-lesson-theme-muted: #4f5364;
-  --kp-animation-station-focus-ink: #252735;
   --kp-lesson-theme-math-foreground: #4f5364;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 300);
   --kp-graph-line-core: 1px;
@@ -89,7 +88,6 @@
   --kp-lesson-theme-surface: #15172a;
   --kp-lesson-theme-ink: #a6a9b7;
   --kp-lesson-theme-muted: #a6a9b7;
-  --kp-animation-station-focus-ink: #f3f4fa;
   --kp-lesson-theme-math-foreground: #a6a9b7;
   --kp-lesson-theme-prose-weight: var(--kp-economics-prose-weight, 300);
   --kp-graph-theme-line-multiplier: 1;

@@ -73,24 +73,32 @@ test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.reader-compiler").sourceCallers, [
     "src/reader/compiler/reader-route-manifest.ts"
   ]);
-  assert.equal(record("facade.reader-runtime").sourceCallers.length, 16);
+  assert.equal(record("facade.reader-runtime").sourceCallers.length, 20);
   assert.ok(record("facade.reader-runtime").sourceCallers.every((path) =>
     path.startsWith("src/reader/") ||
     path === "src/editor/operation-evaluation-surface-adapter.ts"
   ));
   assert.deepEqual(record("facade.reader-renderers").sourceCallers, [
+    "src/reader/app/canonical-equation-endpoint-ownership.ts",
+    "src/reader/app/canonical-equation-semantic-focus.ts",
+    "src/reader/app/chrome-free-canonical-equation-session.ts",
     "src/reader/app/distribution-area-renderer-runtime.ts",
     "src/reader/app/distribution-area-runtime.ts",
     "src/reader/app/reader-canonical-equation-session.ts"
   ]);
   assert.deepEqual(record("facade.reader-runtime-learner").sourceCallers, [
+    "src/reader/app/canonical-equation-stage-layout.ts",
+    "src/reader/app/canonical-equation-transition-continuity.ts",
     "src/reader/app/exemplar-entry.ts",
     "src/reader/renderers/equation-layout-snapshot.ts",
     "src/reader/renderers/equation-perceptual-alignment.ts",
     "src/reader/renderers/equation-responsive-fit.ts",
-    "src/reader/renderers/scheduled-adapter.ts"
+    "src/reader/renderers/scheduled-adapter.ts",
+    "src/tutorial/algebra-fraction-composition/fraction-composition-article-transport.ts"
   ]);
   assert.deepEqual(record("facade.reader-renderers-learner").sourceCallers, [
+    "src/reader/app/canonical-equation-stage-layout.ts",
+    "src/reader/app/canonical-equation-transition-continuity.ts",
     "src/reader/app/exemplar-entry.ts"
   ]);
   assert.deepEqual(record("facade.equation-motifs").sourceCallers, []);

@@ -10,6 +10,11 @@ Supporting Threads:
 - `threads/portable-publication-platform.md`
 - `threads/animation-library-promotion.md`
 
+The stable animation-promotion ledger still tables
+`Apply a 2 × 2 matrix to a vector`; convergence work changes neither its rank
+nor its evidence. The ledger remains retrievable at
+`threads/animation-library-promotion.md` without becoming the active thread.
+
 ## Executive Direction
 
 KP is a verified semantic-to-interactive compiler and, at the learner surface,
@@ -55,7 +60,7 @@ and vignette authority.
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | 37 native assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
+| Catalogue | 37 meaningful native paints, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
 | Layout | Many useful experiments, no selected public default | Pause invention; later choose a v0 default against real articles. |
 | Public product | Not yet converged | Build a small proof after tightening, not a curriculum platform. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Route tasks through one compact entry point and measure repair quality. |
@@ -80,7 +85,7 @@ Status: initial pass complete; maintain continuously
 
 ### 2. Product-surface pruning
 
-Status: economics reachability audited; first retirement awaiting approval
+Status: first retirement complete
 
 - Use
   `reviews/2026-08-12-economics-layout-production-reachability-audit.md` as the
@@ -90,7 +95,10 @@ Status: economics reachability audited; first retirement awaiting approval
   authoring surfaces that still answer a live question.
 - Remove rejected projections from production reachability before deleting
   their implementation or focused historical evidence.
-- Retire `animation-station` first. Keep `two-column-scroll` until Article
+- `animation-station` is no longer production-reachable and its implementation
+  has been deleted in two independently reversible commits. Historical URLs
+  normalize in place to `reader`.
+- Keep `two-column-scroll` until Article
   editing is projection-neutral; do not delete `inline-sticky` while the
   two-column capability still imports its styles and geometry.
 - Preserve Article v1, economics semantics, canonical animations, URLs that are

@@ -12,29 +12,30 @@ the learner-core payload recovery, canonical algebra session, economics/physics
 Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
 preserved foundations rather than work to restart.
 
-1. Review the completed economics layout reachability audit and approve or
-   reject its two-commit `animation-station` retirement: production
-   reachability first, unreachable implementation second.
-2. Decouple Article editing from `two-column-scroll`, then separate surviving
+1. Decouple real whole-file CodeMirror editing from `two-column-scroll`, then
+   separate surviving
    two-column geometry from the standalone inline-sticky projection before
    deciding whether inline-sticky can retire.
-3. Replace module-scoped choreography registration with explicit capability
+2. Replace module-scoped choreography registration with explicit capability
    inputs, preserving route budgets and canonical hosts.
-4. Retire compatibility in caller-backed waves: timeline vocabularies,
+3. Retire compatibility in caller-backed waves: timeline vocabularies,
    lightweight transformation/correspondence views, then legacy equation
    presentation recipes.
-5. Build the TypeScript free-shipping-threshold refactor through the existing
+4. Build the TypeScript free-shipping-threshold refactor through the existing
    semantic/runtime path, then pressure the same boundary with Python.
-6. Use symbolic, graph, and code exemplars to select one Public Web v0 default
+5. Use symbolic, graph, and code exemplars to select one Public Web v0 default
    projection without changing Article semantics.
-7. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
+6. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
    when the Internal Studio/Public Web boundary becomes executable work.
 
 Keep algebra pacing, Scheme promotion, layout invention, advanced CodeMirror,
 Graph3D promotion, linear algebra, and curriculum expansion paused unless a
 convergence slice exposes them as a direct blocker.
 
-The audit and exact rollback boundary are in
+Keep `Apply a 2 × 2 matrix to a vector` tabled as the rank-6 animation
+promotion frontier; this queue does not reactivate or rerank it.
+
+The completed retirement and exact rollback boundary are in
 `reviews/2026-08-12-economics-layout-production-reachability-audit.md`.
 
 ## Historical Queue Snapshot

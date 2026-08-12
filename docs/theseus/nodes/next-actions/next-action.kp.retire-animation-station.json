@@ -2,8 +2,9 @@
   "id": "next-action.kp.retire-animation-station",
   "kind": "next-action",
   "title": "Retire economics animation-station projection in two reversible commits",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp-architecture",
+  "summary": "Animation Station is retired. The next independent product-surface action is projection-neutral whole-file Article editing before reassessing two-column and inline-sticky.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -61,6 +62,59 @@
       "scope": "production-closure",
       "checkedAt": "2026-08-12T20:44:50.995Z",
       "notes": "Fresh production build emitted no animation-station capability or CSS asset."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-tutorial",
+      "status": "passed",
+      "scope": "slice-2 focused behavior",
+      "checkedAt": "2026-08-12T21:11:41.930Z",
+      "notes": "83 tests pass after deleting the unreachable Station implementation."
+    },
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "stylesheet ownership",
+      "checkedAt": "2026-08-12T21:11:43.266Z",
+      "notes": "21 tests pass; remaining presenter capability CSS ownership is exact."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-api-caller-ledger.test.ts tests/six-loop-product-convergence-checkpoint.test.ts",
+      "status": "passed",
+      "scope": "architecture and durable-memory ratchets",
+      "checkedAt": "2026-08-12T21:11:45.071Z",
+      "notes": "8 tests pass; algebra transport now consumes the learner runtime facade and the roadmap preserves prior convergence decisions."
+    },
+    {
+      "command": "./node_modules/.bin/vite build",
+      "status": "passed",
+      "scope": "production closure and bundle",
+      "checkedAt": "2026-08-12T21:11:46.194Z",
+      "notes": "Fresh production build emits no Station capability asset; presenter JavaScript falls from 191,991 bytes to about 181.8 kB."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad repository advisory",
+      "checkedAt": "2026-08-12T21:11:47.242Z",
+      "notes": "4113 of 4118 tests pass. Four unrelated pre-existing ratchets remain stale: Scheme HTML inventory, development page directory/ledger, place-value compositor hash, and Scheme convergence evidence; the retirement-owned convergence wording failure was repaired."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "broad repository advisory",
+      "checkedAt": "2026-08-12T21:11:48.310Z",
+      "notes": "Fails only in tests/scheme-factorial-full-evaluation.test.ts because KpSchemeFullEvaluationAction no longer exposes resultValueId; no retirement source reports a type error."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad repository advisory correction",
+      "checkedAt": "2026-08-12T21:13:54.125Z",
+      "notes": "4113 of 4118 tests passed during the run. After repairing the retirement-owned roadmap assertion, four unrelated stale tests remain across three areas: Scheme HTML helper inventory; development page directory plus its durable ledger; and the place-value compositor preservation hash."
     }
-  ]
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Removed Station reachability and then deleted its unreachable implementation in two reversible slices while preserving Article source, generated publication, canonical economics semantics, remaining views, editor save behavior, and retired URL normalization."
+  }
 }

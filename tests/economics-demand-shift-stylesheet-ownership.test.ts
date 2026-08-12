@@ -15,7 +15,6 @@ const ownedStylesheets = [
   "economics-demand-shift-graph.css",
   "economics-demand-shift-publication-responsive.css",
   "economics-demand-shift-inline-sticky.css",
-  "economics-demand-shift-animation-station.css",
   "economics-demand-shift-two-column.css",
   "economics-demand-shift-layout-responsive.css"
 ] as const;
@@ -79,11 +78,6 @@ test("presenter capabilities load only their selected layout styles", () => {
     ],
     "inline-sticky-presenter-capability.ts": [
       "../economics-demand-shift-inline-sticky.css",
-      "../economics-demand-shift-layout-responsive.css"
-    ],
-    "animation-station-presenter-capability.ts": [
-      "../economics-demand-shift-inline-sticky.css",
-      "../economics-demand-shift-animation-station.css",
       "../economics-demand-shift-layout-responsive.css"
     ],
     "two-column-scroll-presenter-capability.ts": [
@@ -273,7 +267,6 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   const graph = readGraphCascade();
   const responsive = read("economics-demand-shift-publication-responsive.css");
   const inline = read("economics-demand-shift-inline-sticky.css");
-  const station = read("economics-demand-shift-animation-station.css");
   const twoColumn = read("economics-demand-shift-two-column.css");
   const layoutFallbacks = read("economics-demand-shift-layout-responsive.css");
 
@@ -289,20 +282,6 @@ test("economics style owners retain disjoint anchor responsibilities", () => {
   assert.doesNotMatch(responsive, /--inline-sticky/);
   assert.match(inline, /--inline-sticky/);
   assert.doesNotMatch(inline, /--two-column-scroll/);
-  assert.match(station, /--kp-animation-station/);
-  assert.match(station, /--kp-animation-station-reading-hold-vh:\s*15/);
-  assert.match(station, /--kp-animation-station-motion-corridor-vh:\s*28dvh/);
-  assert.match(station, /--kp-animation-station-stage-progress-gap:/);
-  assert.match(station, /--kp-animation-station-upcoming-opacity:\s*0\.56/);
-  assert.match(station, /--kp-animation-station-upcoming-scale:\s*0\.985/);
-  assert.doesNotMatch(station, /--kp-animation-station-motion-settle-vh/);
-  assert.doesNotMatch(station, /brightness\(var\(--kp-animation-station-graph-brightness\)\)/);
-  assert.match(station, /data-kp-animation-station-transition/);
-  assert.match(station, /data-kp-animation-station-packet/);
-  assert.doesNotMatch(station, /--kp-animation-station-reading-presence/);
-  assert.match(station, /Phone and reduced-motion readers get one ordinary/);
-  assert.doesNotMatch(station, /scroll-snap|scroll-behavior/);
-  assert.doesNotMatch(station, /--two-column-scroll/);
   assert.match(twoColumn, /--two-column-scroll/);
   assert.match(layoutFallbacks, /prefers-reduced-motion/);
   assert.match(layoutFallbacks, /prefers-contrast/);

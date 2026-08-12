@@ -4,7 +4,7 @@ import {
   sampleKpReaderPlaybackRange,
   type KpReaderClockSample,
   type KpReaderPlaybackRangeWindow
-} from "../../reader/runtime/public-api.ts";
+} from "../../reader/runtime/learner-public-api.ts";
 import {
   createKpReaderTimelinePlaybackClock
 } from "../../reader/runtime/timeline-playback-clock.ts";
