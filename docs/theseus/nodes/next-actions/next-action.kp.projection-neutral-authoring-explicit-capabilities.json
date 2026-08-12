@@ -148,6 +148,12 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T22:26:31.843Z",
       "notes": "Ten Chromium checks prove shared whole-file authoring opens from all six projections, valid/invalid preview authority is correct, Vim saves without reload, and phone/short viewport containment holds."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/algebra-registration-graph.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-12T22:42:15.875Z"
     }
   ],
   "expectedLearning": [

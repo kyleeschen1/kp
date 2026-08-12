@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "kp.algebra.registration-graph.v1",
+  "pack": "src/animation/catalog-packs/algebra.ts",
+  "sideEffectImports": [
+    "../fission-fusion-register.ts",
+    "../distribution-choreography-register.ts",
+    "../factoring-choreography-register.ts",
+    "./algebra-reverse-runtime.ts"
+  ],
+  "mutableRegistries": [
+    {
+      "owner": "src/animation/fission-fusion-runtime.ts",
+      "register": "registerKpFissionFusionRuntime",
+      "lookup": "kpFissionFusionRuntime",
+      "registrationModule": "src/animation/fission-fusion-register.ts",
+      "consumers": [
+        "src/animation/distribution-choreography.ts",
+        "src/animation/factoring-choreography.ts"
+      ]
+    },
+    {
+      "owner": "src/animation/distribution-choreography-runtime.ts",
+      "register": "registerKpDistributionChoreographyRuntime",
+      "lookup": "kpDistributionChoreographyRuntime",
+      "registrationModule": "src/animation/distribution-choreography-register.ts",
+      "consumers": [
+        "src/rendering/semantic-equation-token-renderer.ts"
+      ]
+    },
+    {
+      "owner": "src/animation/factoring-choreography-runtime.ts",
+      "register": "registerKpFactoringChoreographyRuntime",
+      "lookup": "kpFactoringChoreographyRuntime",
+      "registrationModule": "src/animation/factoring-choreography-register.ts",
+      "consumers": [
+        "src/rendering/semantic-equation-token-renderer.ts"
+      ]
+    }
+  ],
+  "reverseRegistry": {
+    "owner": "src/animation/canonical-reverse-runtime.ts",
+    "register": "registerKpCanonicalReverseRuntimePlans",
+    "lookup": "canonicalReverseRuntimePlanForTransformationType",
+    "registrationModule": "src/animation/catalog-packs/algebra-reverse-runtime.ts",
+    "consumer": "src/editor/equation-surface-adapter.ts",
+    "transformTypes": [
+      "cancelAdditiveInverses",
+      "cancelMultiplicativeInverses",
+      "simplifyUnitFractionFactor",
+      "distributeMultiplication",
+      "factorCommonTerm",
+      "simplifyConstantDifference",
+      "rewritePowerAsRoot",
+      "wrapFunction"
+    ]
+  }
+}
