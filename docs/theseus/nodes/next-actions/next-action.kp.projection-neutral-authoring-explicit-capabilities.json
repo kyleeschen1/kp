@@ -113,6 +113,13 @@
       "scope": "broad",
       "checkedAt": "2026-08-12T21:57:07.320Z",
       "notes": "TypeScript, Svelte, domain projects, generated economics publication check, production build, and 934-node Theseus graph all pass. Build retains the known workbench chunk warning; no production implementation changed in this baseline slice."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-article-v1-economics-authoring-descriptor.test.ts tests/kp-article-v1-language-service.test.ts tests/kp-article-v1-economics-cutover.test.ts && npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T22:02:53.161Z",
+      "notes": "The descriptor is immutable, framework-neutral, whole-file scoped, and backed by the existing economics source identity and semantic completion set; Article cutover and full typing pass."
     }
   ],
   "expectedLearning": [

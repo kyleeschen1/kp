@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+import { kpArticleSourceAuthoringSchema } from
+  "../src/article/kp-article-source-authoring.ts";
+import {
+  createKpEconomicsDemandShiftArticleAuthoringDescriptor,
+  kpEconomicsDemandShiftArticleDraftStorageKey
+} from "../src/tutorial/economics-demand-shift/economics-demand-shift-article-authoring-descriptor.ts";
+
+test("economics authoring is one framework-neutral whole-file descriptor", () => {
+  const persistedText = "---\narticle: kp.article.v1\n---\n\n### Example\n";
+  const descriptor = createKpEconomicsDemandShiftArticleAuthoringDescriptor(
+    persistedText
+  );
+
+  assert.equal(descriptor.schemaVersion, kpArticleSourceAuthoringSchema);
+  assert.equal(
+    descriptor.sourceId,
+    "content/lessons/economics-demand-shift.kp.md"
+  );
+  assert.equal(descriptor.sourceFilename, "economics-demand-shift.kp.md");
+  assert.equal(descriptor.persistedText, persistedText);
+  assert.equal(descriptor.storageKey, kpEconomicsDemandShiftArticleDraftStorageKey);
+  assert.equal(descriptor.defaultRevealText, "#context");
+  assert.ok(descriptor.semantic.some(({ address }) =>
+    address === "market/shift-demand"
+  ));
+  assert.equal(Object.isFrozen(descriptor), true);
+  assert.equal(Object.isFrozen(descriptor.semantic), true);
+});
+
+test("the authoring descriptor owns no DOM or framework lifecycle", () => {
+  const source = readFileSync(
+    "src/article/kp-article-source-authoring.ts",
+    "utf8"
+  );
+  assert.doesNotMatch(source, /(?:Document|HTMLElement|svelte|mount|dialog)/u);
+});

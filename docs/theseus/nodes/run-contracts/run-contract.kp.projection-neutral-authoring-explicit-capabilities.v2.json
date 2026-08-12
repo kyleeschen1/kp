@@ -89,7 +89,8 @@
     {
       "id": "s07",
       "title": "Define economics Article-authoring descriptor",
-      "status": "planned"
+      "summary": "Added a pure Article authoring descriptor contract plus economics descriptor adapter over the existing source id, draft key, and semantic completions; no DOM, framework, compiler, or save authority moved into metadata.",
+      "status": "complete"
     },
     {
       "id": "s08",
