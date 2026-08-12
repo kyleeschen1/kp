@@ -141,6 +141,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-12T22:17:19.493Z",
       "notes": "Valid Article source compiles once and remounts the current economics projection from route-owned publication state with semantic handoff. Invalid drafts trigger no preview callback and preserve the last valid projection."
+    },
+    {
+      "command": "npm run test:browser:economics-lesson-editor and npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-12T22:26:31.843Z",
+      "notes": "Ten Chromium checks prove shared whole-file authoring opens from all six projections, valid/invalid preview authority is correct, Vim saves without reload, and phone/short viewport containment holds."
     }
   ],
   "expectedLearning": [
