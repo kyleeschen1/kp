@@ -1,6 +1,6 @@
 # TypeScript Public Lesson
 
-Status: approved on 2026-08-13
+Status: approved on 2026-08-13; verification-cost repair approved during phase 4
 
 ## Outcome
 
@@ -32,6 +32,7 @@ renderer authority, or deterministic clock.
 2. [Static public publication](02-static-publication.md)
 3. [Lazy player and route](03-player-and-route.md)
 4. [Verification and project memory](04-verification-and-memory.md)
+5. [Focused verification lane](05-focused-verification-lane.md)
 
 ## Deferred
 

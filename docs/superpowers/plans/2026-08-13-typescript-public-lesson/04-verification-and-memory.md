@@ -10,7 +10,9 @@ promoting the projection prematurely.
 ## Verification
 
 - focused unit and browser checks;
-- typecheck and production build;
+- focused typecheck and route-only production build during iteration;
+- repository-wide typecheck and all-route build remain explicit release gates
+  rather than being repeated inside the public-page loop;
 - route output contains static truth and route-local enhancement;
 - initial route closure excludes catalogue/editor and unrelated language
   implementations;
