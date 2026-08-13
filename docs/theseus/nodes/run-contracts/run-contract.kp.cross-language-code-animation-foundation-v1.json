@@ -57,7 +57,8 @@
     {
       "id": "s02",
       "title": "Protect highlight contract",
-      "status": "planned"
+      "summary": "Protected transparent focused and unfocused code backgrounds plus the dormant highlight token with computed-style browser assertions.",
+      "status": "complete"
     },
     {
       "id": "s03",

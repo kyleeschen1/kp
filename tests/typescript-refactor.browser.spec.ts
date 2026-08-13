@@ -84,6 +84,13 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
       expect(await shell.evaluate((node) => getComputedStyle(node).backgroundColor))
         .toBe("rgb(13, 14, 28)");
+      expect(await stage.evaluate((node) => getComputedStyle(node)
+        .getPropertyValue("--kp-code-highlight-background").trim()))
+        .toBe("rgb(92 173 255 / 10%)");
+      await expect(stage.locator('[data-kp-typescript-focus="true"]').first())
+        .toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+      await expect(stage.locator('[data-kp-typescript-focus="false"]').first())
+        .toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
       await expect(stage.locator(
         '[data-kp-typescript-projection-current="true"] ' +
         '[data-kp-typescript-syntax-kind="keyword"]'

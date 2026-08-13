@@ -48,11 +48,17 @@
       "status": "passed",
       "scope": "Approved TypeScript exemplar at wide, phone, and reduced-motion checkpoints",
       "checkedAt": "2026-08-13T17:33:59.441Z"
+    },
+    {
+      "command": "npm run visual:typescript-refactor",
+      "status": "passed",
+      "scope": "Computed transparent backgrounds for focused and unfocused code plus retained dormant highlight custom property",
+      "checkedAt": "2026-08-13T17:36:29.725Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Closed the approved TypeScript presentation: shared static/transit syntax roles, Neovim-derived dark catalogue treatment, and transparent code focus with the former highlight color retained as a dormant CSS token."
+    "summary": "Browser evidence now guards the absence of code highlight backgrounds in both focus states while preserving the theme token for future opt-in motifs."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",
