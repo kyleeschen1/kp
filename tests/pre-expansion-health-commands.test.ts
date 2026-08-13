@@ -24,7 +24,29 @@ test("pre-expansion health has focused and explicit release commands", () => {
     "health:pre-expansion",
     "test:browser:animation-equation-capability",
     "npm test",
-    "npm run build",
+    "npm run build:bundle",
     "workspace validate"
   ]) assert.ok(release.includes(gate), gate);
+
+  assert.match(scripts["test"] ?? "", /--test-concurrency=2/u);
+  assert.equal((scripts["build"] ?? "").includes("build:bundle"), true);
+  assert.equal((scripts["build:bundle"] ?? "").includes("typecheck"), false);
+});
+
+test("root TypeScript checks keep their caches in ignored scratch space", () => {
+  for (const path of [
+    "tsconfig.app.json",
+    "tsconfig.node.json",
+    "tsconfig.test.json",
+    "domains/tsconfig.json"
+  ]) {
+    const config = JSON.parse(readFileSync(path, "utf8")) as {
+      readonly compilerOptions?: {
+        readonly incremental?: boolean;
+        readonly tsBuildInfoFile?: string;
+      };
+    };
+    assert.equal(config.compilerOptions?.incremental, true, path);
+    assert.match(config.compilerOptions?.tsBuildInfoFile ?? "", /tmp\/codex\/tsbuildinfo/u);
+  }
 });

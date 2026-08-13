@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "incremental": true,
+    "tsBuildInfoFile": "./tmp/codex/tsbuildinfo/public-typescript.tsbuildinfo"
+  },
+  "files": [
+    "src/public-web/typescript-free-shipping-entry.ts",
+    "src/public-web/typescript-free-shipping-publication.ts",
+    "src/public-web/typescript-free-shipping-runtime.ts",
+    "tests/typescript-free-shipping-publication.test.ts",
+    "vite.public-typescript.config.ts"
+  ]
+}

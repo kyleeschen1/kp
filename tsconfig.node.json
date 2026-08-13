@@ -5,7 +5,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "types": ["node"],
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./tmp/codex/tsbuildinfo/node.tsbuildinfo"
   },
   "include": ["server", "scripts", "vite.config.ts"]
 }

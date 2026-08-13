@@ -5,7 +5,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "types": [],
-    "noEmit": true
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": "../tmp/codex/tsbuildinfo/domains.tsbuildinfo"
   },
   "include": ["**/*.ts"]
 }

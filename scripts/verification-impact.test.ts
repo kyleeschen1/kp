@@ -95,6 +95,44 @@ test("health-sensitive animation paths select their dedicated gates", () => {
   assert.deepEqual(publication.unmatchedPaths, []);
 });
 
+test("public TypeScript paths select the bounded route gate", () => {
+  for (const path of [
+    "src/public-web/typescript-free-shipping-entry.ts",
+    "content/lessons/typescript-free-shipping.kp.md",
+    "scripts/check-public-typescript-budgets.ts",
+    "vite.public-typescript.config.ts",
+    "tsconfig.public-typescript.json"
+  ]) {
+    const result = selectKpVerificationImpact([path]);
+    assert.deepEqual(ids(result), ["public-typescript"]);
+    assert.deepEqual(result.unmatchedPaths, []);
+  }
+});
+
+test("canonical TypeScript refactor paths add focused semantic coverage", () => {
+  const result = selectKpVerificationImpact([
+    "src/animation/typescript-refactor-motion-plan.ts"
+  ]);
+  assert.deepEqual(ids(result), ["typescript-refactor", "public-typescript"]);
+  assert.equal(ids(result).includes("focused-visual"), false);
+  assert.equal(ids(result).includes("typecheck"), false);
+  assert.deepEqual(result.unmatchedPaths, []);
+});
+
+test("public command composition does not turn package metadata into a broad gate", () => {
+  const result = selectKpVerificationImpact([
+    "package.json",
+    "src/public-web/typescript-free-shipping-entry.ts",
+    "scripts/verification-impact.ts",
+    "tests/pre-expansion-health-commands.test.ts"
+  ]);
+  assert.deepEqual(ids(result), [
+    "public-typescript-infrastructure",
+    "public-typescript"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+});
+
 test("cross-boundary changes union checks without duplication", () => {
   const result = selectKpVerificationImpact([
     "protocols/dev-review-v2.ts",
@@ -132,6 +170,10 @@ test("release mode is explicit, broad, and deterministic", () => {
     "test",
     "build"
   ]);
+  assert.deepEqual(
+    result.checks.find(({ id }) => id === "build")?.command,
+    ["npm", "run", "build:bundle"]
+  );
 });
 
 function ids(result: ReturnType<typeof selectKpVerificationImpact>): string[] {

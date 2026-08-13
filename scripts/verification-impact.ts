@@ -152,6 +152,29 @@ const checks = {
     "high",
     "Exercise distribution motion, direction, URL, review, TOC, and responsive browser behavior."
   ),
+  publicTypeScript: check(
+    "public-typescript",
+    ["npm", "run", "verify:public-typescript"],
+    "high",
+    "Type-check, test, build, budget, and browser-check the bounded public TypeScript route."
+  ),
+  publicTypeScriptInfrastructure: check(
+    "public-typescript-infrastructure",
+    [
+      "node", "--disable-warning=ExperimentalWarning", "--test",
+      "scripts/verification-impact.test.ts",
+      "scripts/verify-impact.test.ts",
+      "tests/pre-expansion-health-commands.test.ts"
+    ],
+    "medium",
+    "Exercise focused verification selection and release-command composition."
+  ),
+  typeScriptRefactor: check(
+    "typescript-refactor",
+    ["npm", "run", "test:typescript-refactor"],
+    "medium",
+    "Exercise the canonical TypeScript refactor semantics, motion, rendering, and public projection."
+  ),
   skill: check(
     "skill-validate",
     [
@@ -169,9 +192,9 @@ const checks = {
   ),
   build: check(
     "build",
-    ["npm", "run", "build"],
+    ["npm", "run", "build:bundle"],
     "high",
-    "Build the production application from clean type-checked sources."
+    "Build the production application after the separately selected typecheck."
   )
 } as const;
 
@@ -183,6 +206,28 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "public-typescript-infrastructure",
+    matches: (path) =>
+      path === "scripts/verification-impact.ts" ||
+      path === "scripts/verification-impact.test.ts" ||
+      path === "scripts/verify-impact.test.ts" ||
+      path === "tests/pre-expansion-health-commands.test.ts",
+    checks: [checks.publicTypeScriptInfrastructure],
+    reason: "Focused verification routing or explicit release composition changed."
+  },
+  {
+    id: "public-typescript",
+    matches: isPublicTypeScriptPath,
+    checks: [checks.publicTypeScript],
+    reason: "The bounded public TypeScript projection or its focused verification lane changed."
+  },
+  {
+    id: "typescript-refactor",
+    matches: isTypeScriptRefactorPath,
+    checks: [checks.typeScriptRefactor, checks.publicTypeScript],
+    reason: "The canonical TypeScript refactor that powers the public projection changed."
+  },
   {
     id: "theseus-state",
     matches: (path) => path === "theseus.config.json" || path.startsWith("docs/theseus/"),
@@ -273,7 +318,7 @@ const rules: readonly KpVerificationRule[] = [
   {
     id: "compiled-publication",
     matches: (path) =>
-      path.endsWith(".kp.md") ||
+      (path.endsWith(".kp.md") && !isPublicTypeScriptPath(path)) ||
       path.includes("publication.generated.json") ||
       path.includes("compile-economics-demand-shift-publication"),
     checks: [checks.publication, checks.typecheck],
@@ -291,7 +336,9 @@ const rules: readonly KpVerificationRule[] = [
     id: "visual-runtime",
     matches: (path) =>
       path.startsWith("src/semantic-reader/") ||
-      (path.startsWith("src/animation/") && path !== "src/animation/indexed-progress-schedule.ts") ||
+      (path.startsWith("src/animation/") &&
+        path !== "src/animation/indexed-progress-schedule.ts" &&
+        !isTypeScriptRefactorPath(path)) ||
       path.includes("equation") ||
       path.includes("visual"),
     checks: [checks.typecheck, checks.focusedVisual],
@@ -314,8 +361,8 @@ const rules: readonly KpVerificationRule[] = [
     matches: (path) =>
       path === "package.json" ||
       path === "package-lock.json" ||
-      path.startsWith("vite.config") ||
-      path.startsWith("tsconfig"),
+      (path.startsWith("vite.config") && !isPublicTypeScriptPath(path)) ||
+      (path.startsWith("tsconfig") && !isPublicTypeScriptPath(path)),
     checks: [checks.typecheck, checks.test, checks.build],
     reason: "A package, compiler, or build surface changed."
   }
@@ -339,6 +386,28 @@ const readerLessonSourcePaths = new Set<string>(
   kpReaderRouteManifest.map((descriptor) => descriptor.sourcePath)
 );
 
+function isPublicTypeScriptPath(path: string): boolean {
+  return path.startsWith("src/public-web/typescript-free-shipping-") ||
+    path === "content/lessons/typescript-free-shipping.kp.md" ||
+    path === "content/lessons/typescript-free-shipping.kp.lock.json" ||
+    path === "learn/code/free-shipping/index.html" ||
+    path === "tests/typescript-free-shipping-publication.test.ts" ||
+    path === "tests/typescript-free-shipping-public.browser.spec.ts" ||
+    path === "scripts/check-public-typescript-budgets.ts" ||
+    path === "vite.public-typescript.config.ts" ||
+    path === "playwright.public-typescript.config.ts" ||
+    path === "tsconfig.public-typescript.json";
+}
+
+function isTypeScriptRefactorPath(path: string): boolean {
+  return path.startsWith("src/animation/typescript-refactor-") ||
+    path.startsWith("src/rendering/typescript-refactor-") ||
+    path.startsWith("src/semantic/typescript-refactor-") ||
+    path.startsWith("src/semantic/typescript-free-shipping-") ||
+    (path.startsWith("tests/typescript-") &&
+      !isPublicTypeScriptPath(path));
+}
+
 /**
  * Maps touched paths to the smallest known-safe gate. Unknown paths deliberately
  * fail broad: saving a few minutes is not worth silently skipping a new subsystem.
@@ -360,7 +429,17 @@ export function selectKpVerificationImpact(
   const selected = new Map<string, KpVerificationCheck>();
   const reasons: string[] = [];
   const unmatchedPaths: string[] = [];
+  const boundedPackageJson = normalizedPaths.includes("package.json") &&
+    normalizedPaths.some((path) => isPublicTypeScriptPath(path) ||
+      path === "scripts/verification-impact.ts" ||
+      path === "tests/pre-expansion-health-commands.test.ts");
   for (const path of normalizedPaths) {
+    if (path === "package.json" && boundedPackageJson) {
+      reasons.push(
+        "package.json is covered by the bounded public TypeScript and verification-infrastructure gates."
+      );
+      continue;
+    }
     const matchingRules = rules.filter((rule) => rule.matches(path));
     if (matchingRules.length === 0) {
       unmatchedPaths.push(path);
