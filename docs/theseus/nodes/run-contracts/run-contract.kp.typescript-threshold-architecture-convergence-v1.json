@@ -61,7 +61,8 @@
     {
       "id": "s03",
       "title": "Set canonical next action",
-      "status": "planned"
+      "summary": "Set the TypeScript threshold run as canonical next action, preserved matrix promotion rank, and converted completed control-plane work from stale queue entries into foundations.",
+      "status": "complete"
     },
     {
       "id": "s04",

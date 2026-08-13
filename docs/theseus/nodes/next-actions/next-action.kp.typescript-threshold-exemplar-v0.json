@@ -46,10 +46,31 @@
       "scope": "s02 direction inventory",
       "checkedAt": "2026-08-13T03:45:17.761Z",
       "notes": "Valid 940-node workspace; no authority changes were made in the evidence-only inventory."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s03 canonical next-action reconciliation",
+      "checkedAt": "2026-08-13T03:46:55.821Z",
+      "notes": "Matrix promotion rank remains tabled and no animation-promotion implementation contract was activated."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/pre-expansion-health-commands.test.ts",
+      "status": "passed",
+      "scope": "s03 completed health command preservation",
+      "checkedAt": "2026-08-13T03:46:56.861Z",
+      "notes": "The durable focused and release health entrypoints remain present."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s03 current authority",
+      "checkedAt": "2026-08-13T03:46:57.777Z",
+      "notes": "Roadmap, active thread, queue, and executable TypeScript run remain graph-valid."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Classified stale CLS, CodeMirror, botanical Lisp, foldable distribution, and publication-bundle execution claims; confirmed roadmap and strategy agree on TypeScript before Python and found no competing newer user decision."
+    "summary": "Roadmap, active architecture thread, and current queue now name the approved TypeScript run; completed CodeMirror, capability, CLS, and health work no longer appear as future actions."
   }
 }

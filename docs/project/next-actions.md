@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-08-12
+Last Updated: 2026-08-13
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -12,21 +12,24 @@ the learner-core payload recovery, canonical algebra session, economics/physics
 Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
 preserved foundations rather than work to restart.
 
-1. Decouple real whole-file CodeMirror editing from `two-column-scroll`, then
-   separate surviving
-   two-column geometry from the standalone inline-sticky projection before
-   deciding whether inline-sticky can retire.
-2. Replace module-scoped choreography registration with explicit capability
-   inputs, preserving route budgets and canonical hosts.
-3. Retire compatibility in caller-backed waves: timeline vocabularies,
-   lightweight transformation/correspondence views, then legacy equation
-   presentation recipes.
-4. Build the TypeScript free-shipping-threshold refactor through the existing
-   semantic/runtime path, then pressure the same boundary with Python.
-5. Use symbolic, graph, and code exemplars to select one Public Web v0 default
+1. Complete
+   `run-contract.kp.typescript-threshold-architecture-convergence-v1`: retire
+   only the proven typed-gap-to-legacy-fade bridge, then build and review the
+   TypeScript free-shipping-threshold refactor through the existing
+   semantic/runtime path.
+2. After human approval of that exemplar, pressure the same boundary with
+   Python as the structurally different second caller.
+3. Retire the remaining compatibility paths only beside real caller
+   migrations; timeline and lightweight projection consolidation are not
+   prerequisites for the TypeScript proof.
+4. Use symbolic, graph, and code exemplars to select one Public Web v0 default
    projection without changing Article semantics.
-6. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
+5. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
    when the Internal Studio/Public Web boundary becomes executable work.
+
+Whole-file CodeMirror decoupling, neutral scroll geometry, explicit algebra
+capabilities, catalogue CLS repair, and the pre-expansion health release are
+complete foundations, not queue items to restart.
 
 Keep algebra pacing, Scheme promotion, layout invention, advanced CodeMirror,
 Graph3D promotion, linear algebra, and curriculum expansion paused unless a

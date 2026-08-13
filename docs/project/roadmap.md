@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-12
+Last Updated: 2026-08-13
 Status: active
 Active Thread: `threads/architecture-convergence.md`
 Supporting Threads:
@@ -110,14 +110,19 @@ Status: first retirement and authoring consolidation complete
 
 ### 3. Dependency and compatibility compression
 
-Status: explicit algebra capability wave complete; caller-backed waves next
+Status: health baseline complete; one bridge retirement is paired with the
+active TypeScript proof
 
 - Algebra's module-scoped choreography registrations have been replaced by
   four immutable capabilities delivered through its lazy pack. Pack creation
   is repeatable and import-order independent; eight registration-only modules
   are gone.
-- First repair the bounded catalogue stage-reservation CLS failure without
-  weakening its threshold or changing visual choreography.
+- The bounded catalogue stage-reservation CLS repair is complete at the
+  unchanged `0.001` ceiling. Keep it closed through the pre-expansion health
+  gate rather than treating it as future work.
+- Audit and retire the typed-gap-to-legacy-fade bridge if exact reachability
+  confirms that no live product route depends on it. Other compatibility paths
+  remain caller-backed future work rather than prerequisites for TypeScript.
 - Converge timeline vocabularies onto one authored-beat input and one sampled
   clock without discarding authored checkpoints.
 - Derive lightweight transformation and selector-pair views from rich canonical
@@ -135,7 +140,8 @@ points and dependency direction first; physical package moves come later.
 
 ### 4. Cross-language code proof
 
-Status: next after the compression baseline
+Status: active through
+`run-contract.kp.typescript-threshold-architecture-convergence-v1`
 
 1. Build the small TypeScript free-shipping-threshold refactor as the canonical
    novice-readable code transformation.

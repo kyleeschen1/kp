@@ -1,14 +1,14 @@
 # Architecture Convergence And Product Tightening
 
 Status: active
-Last Updated: 2026-08-12
-Current Next Action: repair the bounded catalogue stage-reservation layout
-shift recorded by `npm run test:browser:animation-equation-capability` without
-changing stage choreography or weakening the `0.001` CLS ceiling. Then resume
-caller-backed compatibility compression before the TypeScript exemplar. The
-projection-neutral authoring and explicit-capabilities tranche is complete;
-see
-`../reviews/2026-08-12-projection-neutral-authoring-explicit-capabilities-closeout.md`.
+Last Updated: 2026-08-13
+Current Next Action: execute the approved TypeScript free-shipping-threshold
+refactor proof through
+`run-contract.kp.typescript-threshold-architecture-convergence-v1`. Its first
+bounded architecture wave audits and retires only the typed-gap-to-legacy-fade
+bridge when safe. The catalogue CLS repair, projection-neutral authoring,
+explicit-capability migration, and pre-expansion health baseline are complete;
+see `../reviews/2026-08-13-pre-expansion-consistency-health-closeout.md`.
 
 ## Goal
 
@@ -46,13 +46,11 @@ not a mandate to encode one universal layout in Article or animation semantics.
 4. **Dependency cleanup:** the first explicit-capability wave is complete.
    Algebra's fission/fusion, distribution, factoring, and reverse behavior now
    arrives through its lazy pack without mutable registries or import-order
-   effects. Repair the bounded catalogue CLS gate, then continue with one
-   caller-backed compatibility wave.
-5. **Compatibility waves:** converge timelines, transformation refs,
-   correspondences, and equation presentation recipes through real caller
-   migrations.
-6. **TypeScript exemplar:** prove a novice-readable refactor through the
-   existing semantic/runtime spine.
+   effects. The catalogue CLS gate also passes at the unchanged threshold.
+5. **Current bridge retirement:** prove exact reachability, then remove only
+   typed-gap-to-legacy-fade if no live route depends on it.
+6. **TypeScript exemplar (active):** prove a novice-readable refactor through
+   the existing semantic/runtime spine and canonical governed authoring API.
 7. **Python caller:** reuse the same program semantics with a language-specific
    frontend and renderer adapter.
 8. **Product projection gate:** compare the same real sources through candidate
