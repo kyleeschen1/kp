@@ -32,10 +32,24 @@
       "scope": "s01 durable control plane",
       "checkedAt": "2026-08-13T03:42:35.745Z",
       "notes": "Valid 940-node workspace after superseding the malformed unstarted v0 contract and creating complete v1."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s02 promotion authority preservation",
+      "checkedAt": "2026-08-13T03:45:16.577Z",
+      "notes": "Rank-6 matrix remains tabled with no active implementation contract; drift inventory does not alter the promotion ledger."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s02 direction inventory",
+      "checkedAt": "2026-08-13T03:45:17.761Z",
+      "notes": "Valid 940-node workspace; no authority changes were made in the evidence-only inventory."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Captured revision, protected worktree hash, repository scale, seven compatibility paths, zero governed-API production callers, architecture baseline, and route-specific gzip headroom in a durable pre-exemplar baseline."
+    "summary": "Classified stale CLS, CodeMirror, botanical Lisp, foldable distribution, and publication-bundle execution claims; confirmed roadmap and strategy agree on TypeScript before Python and found no competing newer user decision."
   }
 }

@@ -55,7 +55,8 @@
     {
       "id": "s02",
       "title": "Inventory direction drift",
-      "status": "planned"
+      "summary": "Recorded an evidence-only current-direction drift inventory with exact authority order and bounded reconciliation targets; promotion memory and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
