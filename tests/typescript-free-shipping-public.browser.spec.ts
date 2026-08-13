@@ -1,6 +1,10 @@
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
+
 import { expect, test } from "@playwright/test";
 
 const route = "/learn/code/free-shipping/";
+const captureRoot = path.resolve("tmp/codex/public-typescript");
 
 test("public TypeScript lesson enhances static truth and seeks directly", async ({
   page
@@ -45,6 +49,7 @@ test("public TypeScript lesson enhances static truth and seeks directly", async 
   );
   expect(await stage.evaluate(size)).toEqual(initialSize);
 
+  await page.locator(".kp-public-stage__chapters summary").click();
   await page.locator(
     '[data-kp-public-typescript-checkpoint="stage.verify-parity"]'
   ).click();
@@ -63,6 +68,12 @@ test("public TypeScript lesson enhances static truth and seeks directly", async 
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 1
   )).toBe(true);
+  await page.locator("[data-kp-dev-toolbar]").evaluate((node) => {
+    (node as HTMLElement).style.display = "none";
+  });
+  await page.locator(".kp-public-stage__chapters summary").click();
+  await mkdir(captureRoot, { recursive: true });
+  await lesson.screenshot({ path: path.join(captureRoot, "wide.png") });
 });
 
 test("development mode mounts the shared Review and Pages chrome", async ({
@@ -72,6 +83,9 @@ test("development mode mounts the shared Review and Pages chrome", async ({
 
   await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(1);
   await expect(page.locator("[data-kp-dev-toolbar]")).toHaveCount(1);
+  const buildIdentity = await page.request.get("/__kp/dev-review/build");
+  expect(buildIdentity.ok()).toBe(true);
+  expect(await buildIdentity.json()).toMatchObject({ dirty: expect.any(Boolean) });
   await page.locator(
     '[data-kp-dev-toolbar-control="kp.dev-toolbar.pages"] summary'
   ).click();
@@ -142,6 +156,33 @@ test("phone composition preserves source and controls without overflow", async (
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 1
   )).toBe(true);
+  await page.locator("[data-kp-dev-toolbar]").evaluate((node) => {
+    (node as HTMLElement).style.display = "none";
+  });
+  await mkdir(captureRoot, { recursive: true });
+  await page.locator("[data-kp-public-typescript-lesson]").screenshot({
+    path: path.join(captureRoot, "phone.png")
+  });
+});
+
+test("the complete lesson remains readable without client JavaScript", async ({
+  browser,
+  baseURL
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  try {
+    await page.goto(new URL(route, baseURL).toString());
+    await expect(page.getByRole("heading", {
+      name: "One rule, one answer"
+    })).toBeVisible();
+    await expect(page.locator("[data-kp-typescript-refactor-stage]")).toBeVisible();
+    await expect(page.locator("[data-kp-public-typescript-play]")).toBeDisabled();
+    await page.locator(".kp-public-stage__transcript summary").click();
+    await expect(page.locator(".kp-public-stage__transcript pre")).toHaveCount(2);
+  } finally {
+    await context.close();
+  }
 });
 
 function size(node: Element): { width: number; height: number } {

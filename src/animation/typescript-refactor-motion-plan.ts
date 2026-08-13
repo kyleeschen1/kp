@@ -117,6 +117,19 @@ export function createKpTypeScriptRefactorMotionPlan(input: {
   return result.plan;
 }
 
+/**
+ * Reader projections may execute this built-in plan without importing the
+ * authoring graph that proved it. This accepts no external draft: the same
+ * canonical literal is still validated by the asset constructor at build and
+ * test time, while the public browser receives only executable playback data.
+ */
+export function createKpBuiltInTypeScriptRefactorMotionPlan():
+  KpVerifiedTypeScriptRefactorMotionPlan {
+  const plan = freezeDraft(defaultDraft()) as KpVerifiedTypeScriptRefactorMotionPlan;
+  verifiedPlans.add(plan);
+  return plan;
+}
+
 export function validateAndMintKpTypeScriptRefactorMotionPlan(input: {
   readonly draft: KpTypeScriptRefactorMotionPlanDraft;
   readonly semantics: KpTypeScriptRefactorSemanticArtifactV1;

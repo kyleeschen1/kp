@@ -1,13 +1,13 @@
 import type { KpTypeScriptRefactorMotionFrame } from
   "../animation/typescript-refactor-motion-frame.ts";
 import type {
-  KpTypeScriptRefactorTokenTheaterFrame,
+  KpTypeScriptTokenTheaterFrame,
   KpTypeScriptTheaterToken
 } from "../animation/typescript-refactor-token-theater.ts";
 
 export interface KpTypeScriptRefactorDomFrame {
   readonly motion: KpTypeScriptRefactorMotionFrame;
-  readonly theater: KpTypeScriptRefactorTokenTheaterFrame;
+  readonly theater: KpTypeScriptTokenTheaterFrame;
 }
 
 /**
@@ -88,7 +88,7 @@ export function renderKpTypeScriptRefactorDomFrame(
 
 function syncTokenTheater(
   shell: HTMLElement,
-  theater: KpTypeScriptRefactorTokenTheaterFrame
+  theater: KpTypeScriptTokenTheaterFrame
 ): void {
   const layer = shell.querySelector<HTMLElement>(
     "[data-kp-typescript-token-theater]"

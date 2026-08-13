@@ -26,7 +26,7 @@ function createPublicTypeScriptCaptureProvider(
     matches: () => ownerDocument.querySelector(
       "[data-kp-public-typescript-lesson]"
     ) !== null,
-    capture(context) {
+    capture() {
       const lesson = required<HTMLElement>(ownerDocument,
         "[data-kp-public-typescript-lesson]");
       const host = required<HTMLElement>(ownerDocument,
@@ -53,7 +53,7 @@ function createPublicTypeScriptCaptureProvider(
           motionPreference: view.matchMedia("(prefers-reduced-motion: reduce)")
             .matches ? "reduce" : "no-preference",
           motionMode: "scrub-player",
-          playbackDirection: "forward"
+          playbackDirection: "forward" as const
         },
         render: {
           rendererId: "kp.typescript-refactor.native-dom",

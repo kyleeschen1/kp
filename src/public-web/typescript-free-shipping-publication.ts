@@ -126,7 +126,7 @@ function renderStage(
   const chapters = checkpoints.map((checkpoint) =>
     `<li><a href="${kpTypeScriptFreeShippingPublicPath}?checkpoint=${encodeURIComponent(checkpoint.id)}#refactor-stage" data-kp-public-typescript-checkpoint="${escapeKpTutorialHtmlAttribute(checkpoint.id)}" data-kp-progress="${checkpoint.progress}">${escapeKpTutorialHtmlText(checkpoint.label)}</a></li>`
   ).join("");
-  return `<section class="kp-public-stage" id="refactor-stage" data-kp-public-typescript-stage>
+  return `<section class="kp-public-stage" id="refactor-stage" tabindex="0" aria-label="Interactive TypeScript refactor" data-kp-public-typescript-stage>
     <p class="kp-public-stage__eyebrow">Interactive explanation · TypeScript</p>
     <figure class="kp-public-stage__figure">
       <div class="kp-public-stage__viewport" data-kp-public-typescript-stage-host>${stageHtml}</div>
@@ -136,7 +136,10 @@ function renderStage(
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Scrub the refactor" data-kp-public-typescript-seek disabled>
       <output data-kp-public-typescript-progress>0%</output>
     </div>
-    <nav class="kp-public-stage__chapters" aria-label="Refactor stages"><ol>${chapters}</ol></nav>
+    <details class="kp-public-stage__chapters">
+      <summary>Jump to a stage</summary>
+      <nav aria-label="Refactor stages"><ol>${chapters}</ol></nav>
+    </details>
     <details class="kp-public-stage__transcript">
       <summary>Read the complete source and stage transcript</summary>
       <ol>${checkpoints.map(({ label }) => `<li>${escapeKpTutorialHtmlText(label)}</li>`).join("")}</ol>

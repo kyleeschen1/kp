@@ -11,12 +11,12 @@ import { createKpReaderTimelinePlaybackClock } from
   "../reader/runtime/timeline-playback-clock.ts";
 import { renderKpTypeScriptRefactorDomFrame } from
   "../rendering/typescript-refactor-dom-session.ts";
-import { createKpTypeScriptFreeShippingAnimationAsset } from
-  "../semantic/typescript-free-shipping-animation-asset.ts";
 import { kpTypeScriptFreeShippingPublicPath } from
   "./typescript-free-shipping-route.ts";
+import { createKpTypeScriptFreeShippingRuntimeProjection } from
+  "./typescript-free-shipping-runtime.ts";
 
-const exemplar = createKpTypeScriptFreeShippingAnimationAsset();
+const exemplar = createKpTypeScriptFreeShippingRuntimeProjection();
 type KpDevelopmentToolbarClient = typeof import(
   "../dev-toolbar/development-toolbar-bootstrap.ts"
 );
@@ -40,6 +40,9 @@ export function mountKpTypeScriptFreeShippingPublicLesson(input: {
   const ownerDocument = input.root instanceof Document
     ? input.root
     : input.root.ownerDocument;
+  if (ownerDocument === null) {
+    throw new Error("Public TypeScript lesson needs a document.");
+  }
   const ownerWindow = input.ownerWindow ?? ownerDocument.defaultView;
   if (ownerWindow === null) throw new Error("Public TypeScript lesson needs a window.");
   const stage = required<HTMLElement>(

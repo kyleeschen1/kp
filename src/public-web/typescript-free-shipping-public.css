@@ -148,11 +148,19 @@ a { color: #82b0ec; }
 
 .kp-public-stage__chapters { margin-top: 0.9rem; }
 
+.kp-public-stage__chapters summary {
+  width: fit-content;
+  color: #aaa99f;
+  cursor: pointer;
+  font: 400 0.72rem/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+}
+
 .kp-public-stage__chapters ol {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.7rem;
-  margin: 0;
+  margin: 0.75rem 0 0;
   padding: 0;
   list-style: none;
 }

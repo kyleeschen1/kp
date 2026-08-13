@@ -8,6 +8,10 @@ import {
   compileKpTypeScriptFreeShippingPublicLesson,
   renderKpTypeScriptFreeShippingPublicLesson
 } from "../src/public-web/typescript-free-shipping-publication.ts";
+import { createKpTypeScriptFreeShippingRuntimeProjection } from
+  "../src/public-web/typescript-free-shipping-runtime.ts";
+import { createKpTypeScriptFreeShippingAnimationAsset } from
+  "../src/semantic/typescript-free-shipping-animation-asset.ts";
 import {
   isKpTypeScriptFreeShippingPublicRoute,
   kpTypeScriptFreeShippingPublicPath
@@ -36,8 +40,9 @@ test("public TypeScript lesson resolves the approved versioned vignette", () => 
     "vignette.programming.typescript-free-shipping"
   );
   assert.equal(
-    compiled.article.document.blocks.find(({ kind }) => kind === "stage")
-      ?.vignette.animationId,
+    compiled.article.document.blocks.find(
+      (block) => block.kind === "stage"
+    )?.vignette.animationId,
     "animation.programming.typescript-free-shipping-refactor"
   );
   assert.deepEqual(
@@ -52,6 +57,16 @@ test("public TypeScript lesson resolves the approved versioned vignette", () => 
       "stage.verify-parity"
     ]
   );
+});
+
+test("public runtime projection preserves the canonical playback inputs", () => {
+  const canonical = createKpTypeScriptFreeShippingAnimationAsset();
+  const runtime = createKpTypeScriptFreeShippingRuntimeProjection();
+
+  assert.equal(runtime.id, canonical.id);
+  assert.deepEqual(runtime.semantics, canonical.semantics);
+  assert.deepEqual(runtime.score, canonical.score);
+  assert.deepEqual(runtime.motionPlan, canonical.motionPlan);
 });
 
 test("static public lesson contains searchable prose, source, and a settled stage", () => {
