@@ -144,11 +144,25 @@
       "status": "passed",
       "scope": "Python helper introduction, rule fusion, binding propagation, correspondence and score binding, negative misbinding, and anti-forgery authority",
       "checkedAt": "2026-08-13T18:10:10.418Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-motion-frame.test.ts tests/python-refactor-token-theater.test.ts",
+      "status": "passed",
+      "scope": "slice s14 Python deterministic motion",
+      "checkedAt": "2026-08-13T18:17:57.641Z",
+      "notes": "Eight focused invariants pass: direct seek and rewind, native endpoints, reduced motion, semantic ownership, rule fusion, helper propagation, and exact arrival before handoff."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 type boundary",
+      "checkedAt": "2026-08-13T18:17:59.007Z",
+      "notes": "Python motion and token theater compile without widening browser authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Browser evidence now guards the absence of code highlight backgrounds in both focus states while preserving the theme token for future opt-in motifs."
+    "summary": "Python motion is now pure and deterministic: native source projections and compiler-owned tokens sample from the existing shared clock with reversible seeks, reduced-motion endpoints, semantic rule fusion, helper propagation, and exact arrival before handoff."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

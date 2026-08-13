@@ -129,7 +129,8 @@
     {
       "id": "s14",
       "title": "Add Python deterministic motion",
-      "status": "planned"
+      "summary": "Added and verified Python deterministic projection and token-theater motion on one shared clock.",
+      "status": "complete"
     },
     {
       "id": "s15",
