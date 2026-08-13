@@ -171,7 +171,8 @@
     {
       "id": "s21",
       "title": "Enforce settlement law",
-      "status": "planned"
+      "summary": "Added the validator-minted, renderer-neutral settlement and accessible-native-owner law with dense invariant tests and no migration yet.",
+      "status": "complete"
     },
     {
       "id": "s22",

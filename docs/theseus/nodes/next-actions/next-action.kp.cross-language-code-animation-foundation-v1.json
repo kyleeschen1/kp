@@ -314,11 +314,32 @@
       "scope": "s20 semantic and presentation boundaries",
       "checkedAt": "2026-08-13T19:17:25.255Z",
       "notes": "The shared seam owns composition mechanics only; no language frontend, semantic model, or renderer dependency crossed the boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/code-motion-settlement.test.ts",
+      "status": "passed",
+      "scope": "s21 settlement causality and direct sampling",
+      "checkedAt": "2026-08-13T19:22:17.285Z",
+      "notes": "Four tests cover every causal phase, dense ownership laws, invalid milestone order, distinct native owners, and validator-minted authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 nominal settlement contract",
+      "checkedAt": "2026-08-13T19:22:19.283Z",
+      "notes": "Generic native-owner identities and immutable verified plans typecheck without importing either language."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 renderer-neutral settlement law",
+      "checkedAt": "2026-08-13T19:22:23.751Z",
+      "notes": "The shared law stores semantic phases and ownership only, with no geometry, CSS, renderer, or clock authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A framework-neutral complete-source projection seam now validates fragments, preserves caller whitespace and evidence, rebases exact entity and token ranges, and rejects duplicate identity. Language-specific recipes remain untouched pending caller migrations."
+    "summary": "Shared code settlement validation now enforces travel, arrival, recognition, native ownership handoff, and withdrawal in causal order with pure direct sampling. Numeric timing and paint realization remain caller-owned."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",
