@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-13-python-threshold-refactor-human-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-typescript-python-code-animation-caller-comparison.md"
     }
   ],
   "dependsOn": {
@@ -254,11 +258,25 @@
       "scope": "corrected approved Python checkpoint decision boundary",
       "checkedAt": "2026-08-13T19:03:44.787Z",
       "notes": "Three corrected ratchets pass and preserve approval without pre-selecting a shared API."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/code-animation-caller-comparison.test.ts tests/python-refactor-human-checkpoint.test.ts",
+      "status": "passed",
+      "scope": "s18 caller comparison and approval boundary",
+      "checkedAt": "2026-08-13T19:07:34.399Z",
+      "notes": "Six ratchets pass after correcting one whitespace-sensitive assertion; the comparison authorizes only demonstrated seams and protects both approved exemplars plus Scheme specialization."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 repository type boundary",
+      "checkedAt": "2026-08-13T19:07:35.554Z",
+      "notes": "The comparison slice introduces no runtime or type changes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Python visual approval is durable. The active cross-language objective resumes at caller comparison; no shared API has yet been selected or extracted."
+    "summary": "The approved TypeScript and Python callers justify shared syntax-token, source-projection, settlement/ownership, and explicit-exception seams. Frontends, semantic models, scores, numeric timing, geometry, language spellings, and Scheme choreography remain caller-owned."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

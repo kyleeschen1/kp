@@ -153,7 +153,8 @@
     {
       "id": "s18",
       "title": "Compare language callers",
-      "status": "planned"
+      "summary": "Compared both approved callers layer by layer and recorded the exact extraction order, preservation boundary, rollback rule, rejected abstractions, and Scheme boundary. Four bounded shared seams are justified; universal rendering is not.",
+      "status": "complete"
     },
     {
       "id": "s19",
