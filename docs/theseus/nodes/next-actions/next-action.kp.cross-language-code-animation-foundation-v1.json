@@ -398,11 +398,32 @@
       "scope": "s24 Python shared seam boundaries",
       "checkedAt": "2026-08-13T19:36:13.262Z",
       "notes": "Python retains its build-time AST/tokenize frontend and language-owned recipes while importing only the generic projection and settlement contracts."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test cross-language code animation conformance and shared contract suites",
+      "status": "passed",
+      "scope": "s25 dense TypeScript and Python conformance",
+      "checkedAt": "2026-08-13T19:41:39.852Z",
+      "notes": "Sixteen tests cover complete source, 101-point seek/rewind, accessible ownership, settlement, inactive endpoints, reduced motion, theme tokens, exception scope, and caller isolation."
+    },
+    {
+      "command": "npm run visual:typescript-refactor and npm run visual:python-refactor",
+      "status": "passed",
+      "scope": "s25 both approved browser surfaces",
+      "checkedAt": "2026-08-13T19:41:41.745Z",
+      "notes": "Both stable Chromium commands pass after migration with existing responsive, accessibility, motion, and performance checkpoints."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 shared contracts and repository boundaries",
+      "checkedAt": "2026-08-13T19:41:43.410Z",
+      "notes": "Conformance adds no shared frontend, score, geometry, renderer, CSS selector, or language identity authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Both approved imperative-language callers now use the same bounded token, projection, settlement, and native-ownership contracts while preserving their distinct frontends, semantics, scores, syntax, formatting, geometry, and visual behavior."
+    "summary": "Cross-language conformance now pressures both approved callers together. Shared contracts hold across dense seek/rewind, complete source, endpoint ownership, settlement, reduced motion, inactive theater, theme, architecture, and browser visual checks."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

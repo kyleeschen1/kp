@@ -195,7 +195,8 @@
     {
       "id": "s25",
       "title": "Run cross-language conformance",
-      "status": "planned"
+      "summary": "Added the joint conformance suite and passed both stable browser matrices, proving the extraction preserved behavior without collapsing language-owned syntax or choreography.",
+      "status": "complete"
     },
     {
       "id": "s26",
