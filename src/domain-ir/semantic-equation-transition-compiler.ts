@@ -233,16 +233,18 @@ function compileFailureDiagnostic(
       message
     };
   }
-  if (message.includes("references missing") || message.includes("missing source object") || message.includes("missing target object")) {
+  // Correspondence diagnostics also mention missing references, so the
+  // narrower repair category must win before the general reference matcher.
+  if (message.includes("invalid correspondence") || message.includes("correspondence references")) {
     return {
-      code: "semantic-transition.invalid-reference",
+      code: "semantic-transition.invalid-correspondence",
       severity: "error",
       message
     };
   }
-  if (message.includes("invalid correspondence") || message.includes("correspondence references")) {
+  if (message.includes("references missing") || message.includes("missing source object") || message.includes("missing target object")) {
     return {
-      code: "semantic-transition.invalid-correspondence",
+      code: "semantic-transition.invalid-reference",
       severity: "error",
       message
     };

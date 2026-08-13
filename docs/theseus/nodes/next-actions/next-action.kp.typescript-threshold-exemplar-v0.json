@@ -151,10 +151,24 @@
       "scope": "s07 reachability evidence",
       "checkedAt": "2026-08-13T03:58:31.434Z",
       "notes": "Valid 940-node workspace."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-transition-gap-contract.test.ts tests/semantic-equation-transition-compiler.test.ts",
+      "status": "passed",
+      "scope": "s08 typed gap contract",
+      "checkedAt": "2026-08-13T04:03:59.668Z",
+      "notes": "17 of 17 pass across all seven repair classes and compiler diagnostic mappings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 typed gap contracts",
+      "checkedAt": "2026-08-13T04:04:01.103Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact audit proves typed-gap-to-legacy-fade has no live paint, route, export, or serialization consumer. Its only unique assertion is one compiler test; other fallbacks have different owners and remain out of scope."
+    "summary": "Every semantic transition gap now has a deterministic repair class; compiler fixtures preserve missing, partial, binding, reference, correspondence, and unknown-failure diagnostics."
   }
 }

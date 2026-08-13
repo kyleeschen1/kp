@@ -91,7 +91,8 @@
     {
       "id": "s08",
       "title": "Preserve typed gap behavior",
-      "status": "planned"
+      "summary": "Frozen all seven typed-gap repair categories and compiler mappings; corrected invalid correspondence ordering so it no longer degrades to a generic invalid-reference repair.",
+      "status": "complete"
     },
     {
       "id": "s09",
