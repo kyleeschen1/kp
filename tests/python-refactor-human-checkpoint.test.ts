@@ -5,11 +5,12 @@ import test from "node:test";
 const checkpointPath =
   "docs/project/reviews/2026-08-13-python-threshold-refactor-human-checkpoint.md";
 
-test("Python checkpoint keeps promotion blocked until explicit human approval", async () => {
+test("Python checkpoint records approval without pre-approving a shared API", async () => {
   const checkpoint = await readFile(checkpointPath, "utf8");
 
-  assert.match(checkpoint, /Status: unreviewed — promotion is blocked/);
-  assert.match(checkpoint, /Slices 18-30 remain blocked until explicit approval/);
+  assert.match(checkpoint, /Status: approved 2026-08-13/);
+  assert.match(checkpoint, /proceed to\s+caller comparison before extracting shared contracts/);
+  assert.match(checkpoint, /does not pre-approve\s+any particular shared API/);
   assert.match(checkpoint, /approve the Python exemplar/);
   assert.match(checkpoint, /request changes/);
   assert.match(checkpoint, /hold or reject/);

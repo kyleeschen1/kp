@@ -1,6 +1,7 @@
 # Python threshold refactor human checkpoint
 
-Status: unreviewed — promotion is blocked on explicit human visual approval
+Status: approved 2026-08-13 — preserve the Python exemplar and proceed to
+caller comparison before extracting shared contracts
 
 This is the mandatory second-caller checkpoint for the approved TypeScript
 free-shipping refactor. It asks whether the same pedagogical motion survives a
@@ -149,5 +150,10 @@ The valid outcomes are:
 - **hold or reject** — retain the build/runtime learnings without promoting a
   cross-language motif.
 
-Slices 18-30 remain blocked until explicit approval. The protected economics
-draft and unrelated user-authored documents were not included in this run.
+Decision (2026-08-13): the Python exemplar is visually approved. This clears
+slice 18 to compare the TypeScript and Python callers. It does not pre-approve
+any particular shared API; extraction remains contingent on evidence from that
+comparison and the run contract's later verification gates.
+
+The protected economics draft and unrelated user-authored documents were not
+included in this run.
