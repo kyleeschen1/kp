@@ -73,7 +73,18 @@ export function createKpTypeScriptFreeShippingAnimationAsset():
         label: "Extract the duplicated threshold rule",
         children: leaves,
         summary: "Authored refactor order; compiler traversal does not determine pedagogy."
-      })
+      }),
+      annotations: operations.transformations.map((transformation, index) => ({
+        id: `annotation.typescript.refactor.${index + 1}`,
+        kind: "focus",
+        targetNodeId: transformation.id,
+        placement: "during",
+        selectorIds: transformation.correspondenceMap?.records.flatMap((record) => [
+          ...record.sourceSelectorIds,
+          ...record.targetSelectorIds
+        ]),
+        summary: transformation.title
+      }))
     }),
     timeline: {
       id: score.timeline.id,

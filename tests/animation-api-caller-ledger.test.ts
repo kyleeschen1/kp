@@ -32,7 +32,9 @@ test("animation API caller ledger targets live, uniquely classified surfaces", (
 test("governed construction has one explicit public authoring seam", () => {
   const surface = record("facade.canonical-animation-construction");
   assert.equal(surface.disposition, "retain-public-boundary");
-  assert.deepEqual(surface.sourceCallers, []);
+  assert.deepEqual(surface.sourceCallers, [
+    "src/article/vignettes/typescript-free-shipping-vignette.ts"
+  ]);
   assert.deepEqual(surface.scriptCallers, []);
   assert.deepEqual(surface.otherCallers, []);
   assert.deepEqual(surface.testCallers, [
@@ -47,7 +49,8 @@ test("governed construction has one explicit public authoring seam", () => {
     "tests/governed-exponent-absorption-fixture.test.ts",
     "tests/governed-fraction-split-merge-variation.test.ts",
     "tests/governed-radical-succession-fixture.test.ts",
-    "tests/pre-expansion-llm-generation-benchmark.test.ts"
+    "tests/pre-expansion-llm-generation-benchmark.test.ts",
+    "tests/typescript-free-shipping-vignette.test.ts"
   ]);
 });
 

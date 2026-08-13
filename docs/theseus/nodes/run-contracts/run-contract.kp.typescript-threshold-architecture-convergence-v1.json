@@ -169,7 +169,8 @@
     {
       "id": "s21",
       "title": "Add production vignette",
-      "status": "planned"
+      "summary": "Added the first production caller of the canonical construction facade: a validated TypeScript vignette release with portable semantic paths and accessibility; the exact caller ledger, architecture gates, and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

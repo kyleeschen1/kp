@@ -368,10 +368,24 @@
       "scope": "s20 compiler isolation and route closure",
       "checkedAt": "2026-08-13T04:51:21.467Z",
       "notes": "All measured route limits remain exactly at the established baseline before catalogue integration; compiler code is not browser reachable."
+    },
+    {
+      "command": "npm run check:architecture and npm run typecheck",
+      "status": "passed",
+      "scope": "s21 dependency direction",
+      "checkedAt": "2026-08-13T04:55:27.003Z",
+      "notes": "All architecture and type gates pass with zero frozen semantic-animation exceptions and no new compatibility path."
+    },
+    {
+      "command": "node --test TypeScript vignette, asset, and API caller ledger suites",
+      "status": "passed",
+      "scope": "s21 production vignette",
+      "checkedAt": "2026-08-13T04:55:28.295Z",
+      "notes": "Fifteen of fifteen pass; the public authoring seam has exactly one production caller, construction validation closes, and portable vignette paths and accessibility are present."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A product-safe TypeScript animation asset now composes generated semantics, validated operations, bounded behavior evidence, deterministic score, exact static endpoints, accessibility text, and a programming render target without compiler browser reach."
+    "summary": "The TypeScript exemplar is now a real production vignette compiled through the existing canonical public authoring facade; the facade has exactly one production caller and the release exposes portable paths plus reduced-motion accessibility."
   }
 }

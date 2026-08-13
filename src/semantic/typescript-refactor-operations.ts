@@ -160,6 +160,7 @@ function transformation(
 ): KpSemanticTransformation {
   return createKpSemanticTransformation({
     id,
+    definitionId: `definition.typescript.${transformType}`,
     transformType,
     title,
     sourceObjectIds: [objectId("before")],
