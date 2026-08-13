@@ -76,7 +76,8 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       input.animationId ===
         "animation.programming.typescript-free-shipping-refactor" ||
       input.animationId ===
-        "animation.programming.python-free-shipping-refactor"
+        "animation.programming.python-free-shipping-refactor" ||
+      input.animationId === "animation.programming.scheme-factorial"
     )
   ) {
     // This capability registers every specialized programming adapter; new

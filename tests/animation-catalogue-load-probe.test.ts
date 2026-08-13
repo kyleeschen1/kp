@@ -11,8 +11,8 @@ import {
 test("all concrete catalogue rows round trip their route and exact lazy asset", async () => {
   const results = await probeKpAnimationCatalogueLoads();
 
-  assert.equal(results.length, 39);
-  assert.equal(new Set(results.map(({ animationId }) => animationId)).size, 39);
+  assert.equal(results.length, 40);
+  assert.equal(new Set(results.map(({ animationId }) => animationId)).size, 40);
   assert.equal(results.every(({ status }) => status === "loaded"), true);
   assert.equal(new Set(results.map(({ packId }) => packId)).size, 12);
   for (const result of results) {
@@ -45,7 +45,7 @@ test("one load failure stays attached to its row without aborting the batch", as
     (result) => result.status === "load-failure"
   );
 
-  assert.equal(results.length, 39);
+  assert.equal(results.length, 40);
   assert.equal(failures.length, 1);
   assert.equal(failures[0]?.animationId, failedAnimationId);
   assert.equal(failures[0]?.outcome.status, "load-failure");
@@ -55,7 +55,7 @@ test("one load failure stays attached to its row without aborting the batch", as
   );
   assert.equal(
     results.filter(({ status }) => status === "loaded").length,
-    38
+    39
   );
 });
 

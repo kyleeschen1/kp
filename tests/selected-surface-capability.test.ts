@@ -51,6 +51,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["programming"]
   }), ["programming-trace"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.programming.scheme-factorial",
+    slotKinds: ["programming"]
+  }), ["programming-trace"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.comparison.linear-solve-programming",
     slotKinds: ["equation", "programming"]
   }), ["equation-katex", "programming-trace"]);

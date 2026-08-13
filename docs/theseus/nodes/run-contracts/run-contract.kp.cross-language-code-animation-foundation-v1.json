@@ -26,6 +26,29 @@
     "npm run health:pre-expansion:release",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused Scheme and catalogue suites",
+      "status": "passed",
+      "scope": "s29",
+      "checkedAt": "2026-08-13T20:47:02.892Z",
+      "notes": "62 tests passed: generated-data boundary, exact endpoints, lazy pack integration, search and URL identity, related-context counts, and specialized hostability."
+    },
+    {
+      "command": "npm run visual:scheme-factorial",
+      "status": "passed",
+      "scope": "s29",
+      "checkedAt": "2026-08-13T20:47:09.927Z",
+      "notes": "Nine Chromium checks passed across standalone and catalogue hosts: wide, phone, reduced motion, exact seek, animated rewind direction, no iframe, evaluator-free resources, and approved stage geometry."
+    },
+    {
+      "command": "npm run typecheck && npm run check:architecture && npm run check:scheme-factorial-full-evaluation",
+      "status": "passed",
+      "scope": "s29",
+      "checkedAt": "2026-08-13T20:47:19.256Z",
+      "notes": "All TypeScript, Svelte, domain, architecture, and generated-data drift gates passed."
+    }
+  ],
   "allowedWork": [
     "TypeScript visual closure; build-time Python frontend and generated semantic data; Python operations, behavior proof, score, projections, syntax roles, deterministic motion, native renderer, lazy catalogue integration, stable visual tooling, accessibility, performance evidence, and human checkpoint.",
     "After explicit approval of the Python checkpoint only: extract cross-language syntax, projection, settlement, and ownership contracts demonstrated by TypeScript and Python; migrate both callers; pressure conformance; audit and adapt Scheme while preserving its specialized choreography."
@@ -219,7 +242,8 @@
     {
       "id": "s29",
       "title": "Host Scheme library artifact",
-      "status": "planned"
+      "summary": "Hosted the approved Scheme factorial evaluation as the fortieth lazy catalogue artifact using checked-in compiled data, its existing sampler and renderer, a specialized native adapter, exact URL seeks, and a reader projection; browser and architecture gates passed without changing choreography.",
+      "status": "complete"
     },
     {
       "id": "s30",

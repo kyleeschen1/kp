@@ -34,7 +34,7 @@ test("result projection shares fuzzy rows and keeps selected identity stable", (
     query: "slvx"
   });
 
-  assert.equal(selectedRows.length, 39);
+  assert.equal(selectedRows.length, 40);
   assert.equal(selectedRows[0]?.entry.animationId, selectedAnimationId);
   assert.deepEqual(selectedRows[0], {
     entry: selectedRows[0]?.entry,

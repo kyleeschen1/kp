@@ -50,6 +50,9 @@ import {
 import {
   kpEditorPythonRefactorSurfaceAdapter
 } from "../src/editor/python-refactor-surface-adapter.ts";
+import {
+  kpEditorSchemeFactorialSurfaceAdapter
+} from "../src/editor/scheme-factorial-surface-adapter.ts";
 
 const graphSvgViewportAdapter = createKpEditorGraphSvgViewportAdapter(
   kpEditorGraphSvgAnimationIds
@@ -75,7 +78,8 @@ function currentHostability() {
     kpEditorProgrammingSurfaceAdapter,
     kpEditorLispMaterialSurfaceAdapter,
     kpEditorTypeScriptRefactorSurfaceAdapter,
-    kpEditorPythonRefactorSurfaceAdapter
+    kpEditorPythonRefactorSurfaceAdapter,
+    kpEditorSchemeFactorialSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -97,7 +101,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 39);
+  assert.equal(hostability.length, 40);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -106,7 +110,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 39,
+      ready: 40,
       "missing-adapter": 0,
       "unsupported-surface": 0
     }
@@ -124,6 +128,15 @@ test("hostability records exact generic and specialized adapter ownership", () =
   const hostability = currentHostability();
   const byId = new Map(
     hostability.map((entry) => [entry.animationId, entry])
+  );
+
+  assert.deepEqual(
+    byId.get("animation.programming.scheme-factorial")?.slots,
+    [{
+      slotKind: "programming",
+      status: "ready",
+      adapterId: "adapter.programming.scheme-factorial-full-evaluation"
+    }]
   );
 
   assert.deepEqual(

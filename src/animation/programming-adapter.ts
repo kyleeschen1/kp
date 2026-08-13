@@ -23,6 +23,9 @@ import {
 import {
   createKpPythonFreeShippingAnimationAsset
 } from "../semantic/python-free-shipping-animation-asset.ts";
+import {
+  createKpSchemeFactorialAnimationAsset
+} from "../semantic/scheme-factorial-animation-asset.ts";
 
 const programTraceAnimationId = "animation.programming.add.execution-trace";
 const programTraceTimelineId = "timeline.programming.add.execution-trace";
@@ -33,7 +36,8 @@ export function createProgrammingAnimationAssets(): readonly KpAnimationAsset[] 
     createProgramTraceAnimationAsset(),
     createKpLispLambdaApplicationAnimationAsset(),
     createKpTypeScriptFreeShippingAnimationAsset().animation,
-    createKpPythonFreeShippingAnimationAsset().animation
+    createKpPythonFreeShippingAnimationAsset().animation,
+    createKpSchemeFactorialAnimationAsset().animation
   ];
 }
 

@@ -56,6 +56,9 @@ import {
 import {
   kpEditorPythonRefactorSurfaceAdapter
 } from "../src/editor/python-refactor-surface-adapter.ts";
+import {
+  kpEditorSchemeFactorialSurfaceAdapter
+} from "../src/editor/scheme-factorial-surface-adapter.ts";
 
 const graphSvgViewportAdapter = createKpEditorGraphSvgViewportAdapter(
   kpEditorGraphSvgAnimationIds
@@ -81,7 +84,8 @@ function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[]
     kpEditorProgrammingSurfaceAdapter,
     kpEditorLispMaterialSurfaceAdapter,
     kpEditorTypeScriptRefactorSurfaceAdapter,
-    kpEditorPythonRefactorSurfaceAdapter
+    kpEditorPythonRefactorSurfaceAdapter,
+    kpEditorSchemeFactorialSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -138,7 +142,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 39, broken: 0 }
+    { ready: 0, review: 40, broken: 0 }
   );
   assert.deepEqual(
     health

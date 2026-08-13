@@ -337,6 +337,14 @@ const supplementalRepresentations = [
     kind: "reader",
     href: "/reader/generated-solve-x/",
     role: "canonical-host"
+  },
+  {
+    animationId: "animation.programming.scheme-factorial",
+    id: "library.reader.scheme-factorial-tutorial",
+    label: "Scheme factorial tutorial",
+    kind: "reader",
+    href: "/tutorials/programming/scheme-factorial/",
+    role: "projection"
   }
 ] as const satisfies readonly (
   KpAnimationLibraryDisplayRepresentation & { readonly animationId: string }

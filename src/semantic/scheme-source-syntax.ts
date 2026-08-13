@@ -27,9 +27,11 @@ export function createKpSchemeSourceSyntaxTokens(
 }
 
 /** Lexeme classification never mints semantic or runtime identity. */
-export function resolveKpSchemeMaterialSyntaxRole(input: {
+export function resolveKpSchemeMaterialSyntaxRole<
+  Provenance extends { readonly sourceOccurrenceId: string }
+>(input: {
   readonly lexeme: string;
-  readonly provenance: { readonly sourceOccurrenceId: string };
+  readonly provenance: Provenance;
 }): KpCodeSyntaxRole {
   if (input.provenance.sourceOccurrenceId.trim() === "") {
     throw new Error("Scheme material syntax requires source-owned provenance.");

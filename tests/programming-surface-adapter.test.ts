@@ -80,6 +80,15 @@ test("programming paint and style stay behind one dependency-light capability", 
   assert.doesNotMatch(closure, /iframe|eval\(|new Function|setInterval/);
 });
 
+test("programming capability registers each specialized code owner", async () => {
+  const capability = await readFile(
+    "src/editor/programming-surface-capability.ts", "utf8");
+
+  assert.match(capability, /registerKpEditorTypeScriptRefactorSurfaceAdapter/);
+  assert.match(capability, /registerKpEditorPythonRefactorSurfaceAdapter/);
+  assert.match(capability, /registerKpEditorSchemeFactorialSurfaceAdapter/);
+});
+
 function renderAt(progress: number): string {
   const frame = sampleKpProgrammingAdditionRuntimeFrame({
     animation: addition,

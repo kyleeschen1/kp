@@ -629,6 +629,40 @@
     ]
   },
   {
+    "animationId": "animation.programming.scheme-factorial",
+    "title": "Evaluate (factorial 3)",
+    "summary": "Recursive calls open toward the base case, then values return through waiting multiplication.",
+    "tags": [
+      "animation",
+      "editor",
+      "evaluation",
+      "factorial",
+      "programming",
+      "recursion",
+      "scheme"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.programming.scheme-factorial",
+    "representations": [
+      {
+        "id": "editor-animation.animation.programming.scheme-factorial",
+        "label": "Evaluate (factorial 3)",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.programming.scheme-factorial",
+        "role": "canonical-host"
+      },
+      {
+        "id": "library.reader.scheme-factorial-tutorial",
+        "label": "Scheme factorial tutorial",
+        "kind": "reader",
+        "href": "/tutorials/programming/scheme-factorial/",
+        "role": "projection"
+      }
+    ]
+  },
+  {
     "animationId": "animation.sample.fourier-transform-pair",
     "title": "Fourier transform pair",
     "summary": "Fourier transform pair",

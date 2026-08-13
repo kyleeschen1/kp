@@ -202,6 +202,20 @@
   }
 }
 
+/* The Scheme renderer owns paint, while this catalogue-only host supplies the
+   containing width that the standalone tutorial already receives from figure. */
+.editor-animation-player__surface:has([data-kp-editor-scheme-factorial-surface]) {
+  border-style: solid;
+  background: #0d0e1c;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+[data-kp-editor-scheme-factorial-surface] {
+  inline-size: min(calc(100% - 2rem), 54rem);
+  min-inline-size: 0;
+}
+
 .editor-animation-player__surface:has(.kp-typescript-refactor) {
   border-style: solid;
   color: #e8ebf2;

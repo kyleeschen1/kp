@@ -1622,6 +1622,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.programming.scheme-factorial",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.programming.scheme-factorial",
+    "title": "Evaluate (factorial 3)",
+    "summary": "Recursive calls open toward the base case, then values return through waiting multiplication.",
+    "renderTargetKinds": [
+      "programming"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 30000,
+    "beatCount": 19,
+    "tags": [
+      "animation",
+      "programming",
+      "scheme",
+      "recursion",
+      "factorial",
+      "evaluation"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.comparison.linear-solve-programming",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.comparison.linear-solve-programming",

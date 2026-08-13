@@ -39,7 +39,7 @@ test("convergence checkpoint preserves objective state and recorded review", asy
     /Status: checkpoint closed; rank-5 vector promotion certified/
   );
   assert.match(checkpoint, /36\/36 meaningful native paints/);
-  assert.match(atlas, /39 meaningfully painted through a native adapter/);
+  assert.match(atlas, /40 meaningfully painted through a native adapter/);
   assert.match(checkpoint, /Human catalogue dispositions.*were not inferred/s);
 
   for (const command of [
