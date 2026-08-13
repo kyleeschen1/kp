@@ -27,6 +27,28 @@ test("duplicate threshold bundles visibly converge on the helper rule", () => {
   }));
 });
 
+test("threshold bundles arrive fully before settled helper paint takes ownership", () => {
+  const arrived = sample(0.45);
+  const transit = arrived.tokens.filter(({ role }) => role === "transit");
+  const targetByText = new Map(arrived.tokens
+    .filter(({ entityId, role }) =>
+      entityId === "rule.qualifies.after" && role === "focus"
+    )
+    .map((token) => [token.text, token] as const));
+
+  assert.equal(arrived.activeTrackId, "motion.typescript.merge-threshold-rules");
+  assert.equal(transit.length, 6);
+  transit.forEach((token) => {
+    const target = targetByText.get(token.text);
+    assert.ok(target, `missing settled destination for ${token.text}`);
+    assert.equal(token.xCh, target.xCh);
+    assert.equal(token.yLine, target.yLine);
+    assert.equal(token.opacity, 1);
+    assert.equal(token.scale, 1);
+    assert.equal(target.opacity, 0);
+  });
+});
+
 test("helper binding propagates while the caller argument preserves identity", () => {
   const frame = sample(0.59);
   const transit = frame.tokens.filter(({ role, entityId }) =>

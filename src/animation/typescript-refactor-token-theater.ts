@@ -355,7 +355,12 @@ function sampleFusion(
     ...interval.track.sourceEntityIds,
     interval.track.targetEntityId
   ]);
-  const targetEntrance = smoothstep(normalize(progress, 0.68, 1));
+  // Arrival, recognition, and paint ownership are separate phases. The prior
+  // sampler faded and shrank the bundles while their paths were still moving,
+  // which made the semantic material disappear short of its destination.
+  const arrival = smoothstep(normalize(progress, 0, 0.7));
+  const settlementHandoff = smoothstep(normalize(progress, 0.84, 1));
+  const targetEntrance = settlementHandoff;
   const base = snapshot.tokens.map((token) => frameToken(token, {
     ...(token.entityId === interval.track.targetEntityId
       ? { opacity: targetEntrance, scale: lerp(0.76, 1, targetEntrance) }
@@ -364,7 +369,7 @@ function sampleFusion(
   }));
   const targetOrigin = target[0];
   if (targetOrigin === undefined) return base;
-  const slotExit = smoothstep(normalize(progress, 0.42, 0.78));
+  const slotExit = smoothstep(normalize(progress, 0.52, 0.72));
   base.push(frameToken(targetOrigin, {
     id: `slot.${interval.track.targetEntityId}`,
     text: "···",
@@ -387,14 +392,14 @@ function sampleFusion(
           y: lerp(source.yLine, destination.yLine, 0.5) - 0.8
         },
         { x: destination.xCh, y: destination.yLine },
-        progress
+        arrival
       );
       base.push(frameToken(source, {
         id: `fusion.${bundleIndex}.${source.id}`,
         xCh: point.x,
         yLine: point.y,
-        opacity: 1 - smoothstep(normalize(progress, 0.76, 1)),
-        scale: lerp(1, 0.88, progress),
+        opacity: 1 - settlementHandoff,
+        scale: 1,
         role: "transit"
       }));
     });

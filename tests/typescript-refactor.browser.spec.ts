@@ -16,6 +16,7 @@ const checkpoints = [
   checkpoint("duplicates-wide-160", "One idea, two copies", 0.16, "projection.typescript.before", wide),
   checkpoint("helper-wide-340", "Helper introduced", 0.34, "projection.typescript.helper-introduced", wide),
   checkpoint("fusion-wide-420", "Threshold rules converge", 0.42, "projection.typescript.helper-introduced", wide),
+  checkpoint("fusion-arrived-wide-450", "Threshold rules arrive", 0.45, "projection.typescript.helper-introduced", wide),
   checkpoint("cost-motion-wide-590", "Helper propagates to price", 0.59, "projection.typescript.helper-introduced", wide),
   checkpoint("cost-wide-680", "Price caller replaced", 0.68, "projection.typescript.cost-replaced", wide),
   checkpoint("message-wide-840", "Message caller replaced", 0.84, "projection.typescript.final", wide),
@@ -89,6 +90,15 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
         await expect(stage.locator(
           '[data-kp-typescript-token-role="transit"]'
         )).toHaveCount(6);
+      }
+      if (entry.progress === 0.45) {
+        const transit = stage.locator('[data-kp-typescript-token-role="transit"]');
+        await expect(transit).toHaveCount(6);
+        expect(await transit.evaluateAll((nodes) => nodes.every((node) => {
+          const element = node as HTMLElement;
+          return element.style.getPropertyValue("--kp-typescript-token-opacity") === "1" &&
+            element.style.getPropertyValue("--kp-typescript-token-scale") === "1";
+        }))).toBe(true);
       }
       if (entry.progress === 0.59) {
         await expect(stage).toHaveAttribute(
