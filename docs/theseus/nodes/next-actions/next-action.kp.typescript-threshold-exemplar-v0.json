@@ -130,10 +130,31 @@
       "scope": "s06 durable direction",
       "checkedAt": "2026-08-13T03:56:18.291Z",
       "notes": "Valid 940-node workspace."
+    },
+    {
+      "command": "rg -n adaptKpSemanticTransitionGapToLegacyFade legacy-fade whole-equation-fade source-and-tests",
+      "status": "passed",
+      "scope": "s07 exact reachability",
+      "checkedAt": "2026-08-13T03:58:28.561Z",
+      "notes": "Eight production callers outside the compiler, thirteen test callers, one compatibility assertion, zero payload paint consumers, zero serialized or route consumers."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-equation-transition-compiler.test.ts tests/semantic-animation-compatibility-ledger.test.ts",
+      "status": "passed",
+      "scope": "s07 current behavior and sunset evidence",
+      "checkedAt": "2026-08-13T03:58:30.068Z",
+      "notes": "15 of 15 pass before retirement; exact fallback and ledger behavior remain reproducible."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s07 reachability evidence",
+      "checkedAt": "2026-08-13T03:58:31.434Z",
+      "notes": "Valid 940-node workspace."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The pre-expansion health command now rejects drift between the current roadmap, active thread, queue, supporting statuses, and canonical authoring guide without treating historical provenance as executable policy."
+    "summary": "Exact audit proves typed-gap-to-legacy-fade has no live paint, route, export, or serialization consumer. Its only unique assertion is one compiler test; other fallbacks have different owners and remain out of scope."
   }
 }

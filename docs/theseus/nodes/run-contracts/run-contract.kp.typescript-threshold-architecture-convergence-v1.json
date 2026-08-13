@@ -85,7 +85,8 @@
     {
       "id": "s07",
       "title": "Audit legacy fade reachability",
-      "status": "planned"
+      "summary": "Classified the entire legacy-fade path and its callers; no stop condition fired, so typed-gap preservation and bounded retirement may proceed.",
+      "status": "complete"
     },
     {
       "id": "s08",
