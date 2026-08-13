@@ -18,6 +18,20 @@ export interface KpEditorSelectedSurfaceCapabilityHost {
   >[0]): Promise<void>;
 }
 
+export class KpEditorSelectedSurfaceCapabilityLoadError extends Error {
+  override readonly name = "KpEditorSelectedSurfaceCapabilityLoadError";
+  readonly code = "capability-load-failed" as const;
+  readonly capability: KpEditorSelectedSurfaceCapability;
+
+  constructor(
+    capability: KpEditorSelectedSurfaceCapability,
+    options: ErrorOptions = {}
+  ) {
+    super(`Editor surface capability ${capability} failed to load.`, options);
+    this.capability = capability;
+  }
+}
+
 export function createKpEditorSelectedSurfaceCapabilityHost(input: {
   readonly registry?: KpEditorAnimationSurfaceAdapterRegistry | undefined;
 } = {}): KpEditorSelectedSurfaceCapabilityHost {
@@ -34,7 +48,19 @@ export function createKpEditorSelectedSurfaceCapabilityHost(input: {
     if (existing !== undefined) return existing;
     // Cache only the optional module registration already owned by both old
     // hosts. Animation pack data remains solely in catalog-loader's cache.
-    const promise = loadCapability(capability, registry);
+    let promise: Promise<void>;
+    promise = loadCapability(capability, registry).catch((cause: unknown) => {
+      // Failed imports or registration are retryable; only fulfilled
+      // capabilities become durable host state.
+      if (pending.get(capability) === promise) pending.delete(capability);
+      if (cause instanceof KpEditorSelectedSurfaceCapabilityLoadError) {
+        throw cause;
+      }
+      throw new KpEditorSelectedSurfaceCapabilityLoadError(
+        capability,
+        { cause }
+      );
+    });
     pending.set(capability, promise);
     return promise;
   };

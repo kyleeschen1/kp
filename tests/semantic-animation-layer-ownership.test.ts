@@ -97,7 +97,11 @@ test("current ownership debt is explicit and scheduled", () => {
     ),
     []
   );
-  for (const debt of kpSemanticAnimationOwnershipMigrationDebt) {
+  for (const debt of kpSemanticAnimationOwnershipMigrationDebt as readonly {
+    readonly stageId: string;
+    readonly retirementSlice: string;
+    readonly currentSourcePath: string;
+  }[]) {
     const source = join(projectRoot, debt.currentSourcePath);
     assert.equal(existsSync(source), true, `missing ownership debt ${source}`);
     assert.notEqual(readFileSync(source, "utf8").trim(), "");

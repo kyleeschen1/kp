@@ -10,7 +10,8 @@ import {
   createKpAnimationCatalogueProjection
 } from "../src/editor/animation-catalogue-projection.ts";
 import {
-  createKpAnimationCatalogueSelectionPreparationService
+  createKpAnimationCatalogueSelectionPreparationService,
+  KpAnimationCatalogueSelectionPreparationError
 } from "../src/editor/animation-catalogue-selection-preparation.ts";
 import {
   KP_ANIMATION_CATALOGUE_EXEMPLAR_ID
@@ -161,7 +162,9 @@ test("preparation fails closed on loader identity and descriptor drift", async (
 
   await assert.rejects(
     wrongPack.prepare({ entry: selected, search: "" }),
-    /expected .* from algebra/
+    (error: unknown) =>
+      error instanceof KpAnimationCatalogueSelectionPreparationError &&
+      error.code === "identity-drift"
   );
   const missingDescriptor = createKpAnimationCatalogueSelectionPreparationService({
     descriptors: [],
@@ -169,7 +172,29 @@ test("preparation fails closed on loader identity and descriptor drift", async (
   });
   await assert.rejects(
     missingDescriptor.prepare({ entry: selected, search: "" }),
-    /missing descriptor/
+    (error: unknown) =>
+      error instanceof KpAnimationCatalogueSelectionPreparationError &&
+      error.code === "missing-descriptor"
+  );
+});
+
+test("preparation classifies dependency failure without returning partial state", async () => {
+  const selected = entry(KP_ANIMATION_CATALOGUE_EXEMPLAR_ID);
+  const service = createKpAnimationCatalogueSelectionPreparationService({
+    descriptors,
+    capabilityHost: passiveCapabilityHost,
+    async loadAsset() {
+      throw new Error("synthetic chunk failure");
+    }
+  });
+
+  await assert.rejects(
+    service.prepare({ entry: selected, search: "" }),
+    (error: unknown) =>
+      error instanceof KpAnimationCatalogueSelectionPreparationError &&
+      error.code === "asset-load-failed" &&
+      error.animationId === selected.animationId &&
+      error.cause instanceof Error
   );
 });
 
@@ -210,5 +235,9 @@ test("catalogue and legacy editor consume one browser-neutral preparation API", 
   assert.doesNotMatch(
     legacySource,
     /function prepareAnimationCatalogueSelection|function loadSelectedSurfaceCapability/
+  );
+  assert.match(
+    legacySource,
+    /Keep the last valid stage live during preparation/
   );
 });

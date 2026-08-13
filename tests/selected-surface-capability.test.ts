@@ -6,7 +6,8 @@ import {
   deriveKpEditorSelectedSurfaceCapabilities
 } from "../src/editor/selected-surface-capability.ts";
 import {
-  createKpEditorSelectedSurfaceCapabilityHost
+  createKpEditorSelectedSurfaceCapabilityHost,
+  KpEditorSelectedSurfaceCapabilityLoadError
 } from "../src/editor/selected-surface-capability-host.ts";
 import {
   createKpEditorAnimationSurfaceAdapterRegistry
@@ -49,6 +50,31 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     animationId: "animation.comparison.linear-solve-programming",
     slotKinds: ["equation", "programming"]
   }), ["equation-katex", "programming-trace"]);
+});
+
+test("capability failures are typed and remain retryable", async () => {
+  let attempts = 0;
+  const host = createKpEditorSelectedSurfaceCapabilityHost({
+    registry: {
+      list: () => [],
+      resolve: () => undefined,
+      register() {
+        attempts += 1;
+        throw new Error("synthetic registration failure");
+      }
+    }
+  });
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await assert.rejects(
+      host.load("exact-fraction-quantity"),
+      (error: unknown) =>
+        error instanceof KpEditorSelectedSurfaceCapabilityLoadError &&
+        error.code === "capability-load-failed" &&
+        error.capability === "exact-fraction-quantity"
+    );
+  }
+  assert.equal(attempts, 2);
 });
 
 test("specialized surface capabilities register explicitly and idempotently", async () => {

@@ -3,6 +3,7 @@ import test from "node:test";
 import { readFile } from "node:fs/promises";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
+  KpAnimationCatalogLoadError,
   kpAnimationCatalogPackId,
   loadKpAnimationAsset,
   type KpAnimationCatalogPackId
@@ -55,6 +56,21 @@ test("lazy capability packs preserve the complete concrete catalog", async () =>
       assert.deepEqual(runtimeCapabilities, {});
     }
   });
+});
+
+test("catalog loading reports typed ownership and pack-membership failures", async () => {
+  assert.throws(
+    () => kpAnimationCatalogPackId("animation.unowned.example"),
+    (error: unknown) => error instanceof KpAnimationCatalogLoadError &&
+      error.code === "unowned-animation" &&
+      error.animationId === "animation.unowned.example"
+  );
+  await assert.rejects(
+    loadKpAnimationAsset("animation.generated.linear-solve.absent"),
+    (error: unknown) => error instanceof KpAnimationCatalogLoadError &&
+      error.code === "asset-missing-from-pack" &&
+      error.packId === "algebra"
+  );
 });
 
 test("all declared pack boundaries are exercised by editor metadata", () => {

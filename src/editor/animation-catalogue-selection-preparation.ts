@@ -73,6 +73,31 @@ export interface KpAnimationCataloguePreparedSelection {
   readonly health: KpAnimationCatalogueHealth;
 }
 
+export type KpAnimationCatalogueSelectionPreparationFailureCode =
+  | "missing-descriptor"
+  | "asset-load-failed"
+  | "capability-load-failed"
+  | "parameterization-failed"
+  | "identity-drift"
+  | "reader-companion-load-failed";
+
+export class KpAnimationCatalogueSelectionPreparationError extends Error {
+  override readonly name = "KpAnimationCatalogueSelectionPreparationError";
+  readonly code: KpAnimationCatalogueSelectionPreparationFailureCode;
+  readonly animationId: string;
+
+  constructor(
+    code: KpAnimationCatalogueSelectionPreparationFailureCode,
+    animationId: string,
+    message: string,
+    options: ErrorOptions = {}
+  ) {
+    super(message, options);
+    this.code = code;
+    this.animationId = animationId;
+  }
+}
+
 export interface KpAnimationCatalogueSelectionPreparationService {
   prepare(input: {
     readonly entry: KpAnimationCatalogueEntry;
@@ -107,7 +132,9 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
         ({ id }) => id === selection.entry.primaryDescriptorId
       );
       if (descriptor === undefined) {
-        throw new Error(
+        throw new KpAnimationCatalogueSelectionPreparationError(
+          "missing-descriptor",
+          selection.entry.animationId,
           `Catalogue entry ${selection.entry.animationId} is missing ` +
           `descriptor ${selection.entry.primaryDescriptorId}.`
         );
@@ -116,18 +143,30 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
       // both here preserves the current direct-route latency without merging
       // either loader or its cache into this coordination service.
       const [loaded, , parameterized] = await Promise.all([
-        loadAsset(selection.entry.animationId),
-        Promise.all([
+        prepareBoundary(
+          "asset-load-failed",
+          selection.entry.animationId,
+          () => loadAsset(selection.entry.animationId)
+        ),
+        prepareBoundary(
+          "capability-load-failed",
+          selection.entry.animationId,
+          () => Promise.all([
           prepareKpAnimationCatalogueChromeFonts(),
           capabilityHost.loadSelected({
             animationId: selection.entry.animationId,
             slotKinds: dispatchKpEditorAnimationSurface(descriptor).slotKinds
           })
-        ]),
-        prepareParameterizedSelection({
-          animationId: selection.entry.animationId,
-          search: selection.search
-        })
+          ])
+        ),
+        prepareBoundary(
+          "parameterization-failed",
+          selection.entry.animationId,
+          () => prepareParameterizedSelection({
+            animationId: selection.entry.animationId,
+            search: selection.search
+          })
+        )
       ]);
       assertLoadedIdentity(selection.entry, loaded);
 
@@ -135,7 +174,11 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
       const animation = parameterized.animation ?? loaded.animation;
       const readerCompanion = selection.entry.animationId ===
           "animation.generated.linear-solve.linear-68c15d41"
-        ? await loadReaderCompanion()
+        ? await prepareBoundary(
+            "reader-companion-load-failed",
+            selection.entry.animationId,
+            loadReaderCompanion
+          )
         : undefined;
       const catalog = loaded.catalog.some(({ id }) => id === animation.id)
         ? loaded.catalog.map((candidate) =>
@@ -228,9 +271,31 @@ function assertLoadedIdentity(
     loaded.animation.id !== entry.animationId ||
     loaded.packId !== entry.packId
   ) {
-    throw new Error(
+    throw new KpAnimationCatalogueSelectionPreparationError(
+      "identity-drift",
+      entry.animationId,
       `Loaded catalogue asset ${loaded.animation.id} from ${loaded.packId}; ` +
       `expected ${entry.animationId} from ${entry.packId}.`
+    );
+  }
+}
+
+async function prepareBoundary<T>(
+  code: Exclude<
+    KpAnimationCatalogueSelectionPreparationFailureCode,
+    "missing-descriptor" | "identity-drift"
+  >,
+  animationId: string,
+  prepare: () => Promise<T>
+): Promise<T> {
+  try {
+    return await prepare();
+  } catch (cause: unknown) {
+    throw new KpAnimationCatalogueSelectionPreparationError(
+      code,
+      animationId,
+      `Catalogue selection ${animationId} failed at ${code}.`,
+      { cause }
     );
   }
 }

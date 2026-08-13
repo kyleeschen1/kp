@@ -25,6 +25,31 @@ export interface KpLoadedAnimationAsset {
   readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
 }
 
+export type KpAnimationCatalogLoadFailureCode =
+  | "unowned-animation"
+  | "pack-load-failed"
+  | "asset-missing-from-pack";
+
+export class KpAnimationCatalogLoadError extends Error {
+  override readonly name = "KpAnimationCatalogLoadError";
+  readonly code: KpAnimationCatalogLoadFailureCode;
+  readonly animationId: string;
+  readonly packId?: KpAnimationCatalogPackId | undefined;
+
+  constructor(
+    code: KpAnimationCatalogLoadFailureCode,
+    message: string,
+    animationId: string,
+    packId?: KpAnimationCatalogPackId | undefined,
+    options: ErrorOptions = {}
+  ) {
+    super(message, options);
+    this.code = code;
+    this.animationId = animationId;
+    this.packId = packId;
+  }
+}
+
 const packCache = new Map<
   KpAnimationCatalogPackId,
   Promise<KpLoadedAnimationPack>
@@ -39,10 +64,27 @@ export async function loadKpAnimationAsset(
   animationId: string
 ): Promise<KpLoadedAnimationAsset> {
   const packId = kpAnimationCatalogPackId(animationId);
-  const { catalog, runtimeCapabilities } = await loadPack(packId);
+  let loadedPack: KpLoadedAnimationPack;
+  try {
+    loadedPack = await loadPack(packId);
+  } catch (cause: unknown) {
+    throw new KpAnimationCatalogLoadError(
+      "pack-load-failed",
+      `Animation pack ${packId} failed to load ${animationId}.`,
+      animationId,
+      packId,
+      { cause }
+    );
+  }
+  const { catalog, runtimeCapabilities } = loadedPack;
   const animation = catalog.find((candidate) => candidate.id === animationId);
   if (animation === undefined) {
-    throw new Error(`Animation pack ${packId} does not contain ${animationId}.`);
+    throw new KpAnimationCatalogLoadError(
+      "asset-missing-from-pack",
+      `Animation pack ${packId} does not contain ${animationId}.`,
+      animationId,
+      packId
+    );
   }
   return { animation, catalog, packId, runtimeCapabilities };
 }
@@ -91,7 +133,11 @@ export function kpAnimationCatalogPackId(
   if (animationId.startsWith("animation.programming.")) return "programming";
   if (animationId.startsWith("animation.comparison.")) return "comparison";
   if (animationId.startsWith("animation.sample.")) return "complex-katex";
-  throw new Error(`No animation capability pack owns ${animationId}.`);
+  throw new KpAnimationCatalogLoadError(
+    "unowned-animation",
+    `No animation capability pack owns ${animationId}.`,
+    animationId
+  );
 }
 
 async function loadPack(
@@ -104,6 +150,11 @@ async function loadPack(
   // path would collapse this boundary or force the bundler to include a glob.
   const loaded = loadUncachedPack(packId);
   packCache.set(packId, loaded);
+  // A transient chunk failure must remain explicit without poisoning every
+  // later attempt in this host for the lifetime of the page.
+  void loaded.catch(() => {
+    if (packCache.get(packId) === loaded) packCache.delete(packId);
+  });
   return loaded;
 }
 

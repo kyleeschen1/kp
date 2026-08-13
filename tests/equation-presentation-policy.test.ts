@@ -101,6 +101,6 @@ test("unknown typed presentation recipes fail at the asset boundary", () => {
         ...animation.presentationProfile!.payload,
         successor: "teleport-v9"
       }
-    } as typeof animation.presentationProfile
+    } as unknown as typeof animation.presentationProfile
   }), /Unknown equation presentation successor recipe teleport-v9/);
 });

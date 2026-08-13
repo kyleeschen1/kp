@@ -317,8 +317,7 @@
   }
 
   $effect(() => {
-    if (selection === undefined || stageState !== "selected" ||
-      shell === undefined) return;
+    if (selection === undefined || shell === undefined) return;
     const mountedShell = shell;
     const mountedSelection = selection;
     return mountKpAnimationCataloguePlayerHost({
@@ -482,6 +481,9 @@
         data-kp-animation-catalogue-stage-state={stageState}
         aria-busy={stageState === "loading"}
       >
+        {#if selection !== undefined}
+          {@html playerHtml}
+        {/if}
         {#if stageState === "loading"}
           <p class="kp-animation-catalogue-shell__stage-status" role="status">
             {stageMessage}
@@ -490,7 +492,7 @@
           <p class="kp-animation-catalogue-shell__stage-status" role="alert">
             {stageMessage}
           </p>
-        {:else}
+        {:else if selection === undefined}
           {@html playerHtml}
         {/if}
       </div>

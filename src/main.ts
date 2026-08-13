@@ -738,10 +738,6 @@ async function renderAnimationCatalogueSelectionInShell(input: {
   }
 
   markKpAnimationHostLoading(window, `catalogue.${input.entry.animationId}`);
-  disposeAnimationCatalogueHostEvidenceObserver();
-  disposeKpEditorAnimationPlayers(stage);
-  disposeKpEditorEquationStageHotPathCaches(stage);
-  disposeGraph3DWebGL(stage);
   setAnimationCatalogueStageMessage(
     stage,
     `Loading ${input.entry.title}…`,
@@ -780,6 +776,12 @@ async function renderAnimationCatalogueSelectionInShell(input: {
       );
     }
     delete input.shell.dataset["kpAnimationCatalogueHostOutcome"];
+    // Keep the last valid stage live during preparation; retire its resources
+    // only after a complete replacement is ready to commit atomically.
+    disposeAnimationCatalogueHostEvidenceObserver();
+    disposeKpEditorAnimationPlayers(stage);
+    disposeKpEditorEquationStageHotPathCaches(stage);
+    disposeGraph3DWebGL(stage);
     stage.removeAttribute("aria-busy");
     stage.dataset["kpAnimationCatalogueStageState"] = "selected";
     stage.innerHTML = renderKpEditorAnimationPlayerShell({
@@ -990,7 +992,8 @@ function setAnimationCatalogueStageMessage(
   status.className = "kp-animation-catalogue-shell__stage-status";
   status.setAttribute("role", state === "error" ? "alert" : "status");
   status.textContent = message;
-  stage.replaceChildren(status);
+  stage.querySelector(".kp-animation-catalogue-shell__stage-status")?.remove();
+  stage.append(status);
 }
 
 function filterAnimationCatalogueFromInput(input: HTMLInputElement): void {
