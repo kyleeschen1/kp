@@ -7,6 +7,10 @@ import {
   kpPythonRefactorSourceProjectionIds,
   type KpPythonRefactorSourceProjectionId
 } from "../semantic/python-refactor-source-projections.ts";
+import {
+  mintKpCodeSettlementPlan,
+  sampleKpCodeSettlement
+} from "./code-motion-settlement.ts";
 
 export interface KpPythonRefactorProjectionFrame {
   readonly id: KpPythonRefactorSourceProjectionId;
@@ -22,6 +26,12 @@ export interface KpPythonRefactorMotionFrame {
   readonly accessibleProjectionId: KpPythonRefactorSourceProjectionId;
   readonly reducedMotion: boolean;
 }
+
+const nativeOwnershipPlans = new Map([
+  nativeOwnershipPlan("projection.python.before", "projection.python.helper-introduced"),
+  nativeOwnershipPlan("projection.python.helper-introduced", "projection.python.cost-replaced"),
+  nativeOwnershipPlan("projection.python.cost-replaced", "projection.python.final")
+].map((plan) => [`${plan.sourceNativeOwnerId}\u0000${plan.targetNativeOwnerId}`, plan]));
 
 export function sampleKpPythonRefactorMotionFrame(input: {
   readonly score: KpPythonRefactorScoreV1;
@@ -62,8 +72,42 @@ export function sampleKpPythonRefactorMotionFrame(input: {
       });
     })),
     focusStrength: round(focusStrength),
-    accessibleProjectionId: handoff.progress < 0.5 ? handoff.from : handoff.to,
+    accessibleProjectionId: accessibleNativeOwner(handoff),
     reducedMotion: input.reducedMotion === true
+  });
+}
+
+function accessibleNativeOwner(handoff: {
+  readonly from: KpPythonRefactorSourceProjectionId;
+  readonly to: KpPythonRefactorSourceProjectionId;
+  readonly progress: number;
+}): KpPythonRefactorSourceProjectionId {
+  if (handoff.from === handoff.to) return handoff.from;
+  const plan = nativeOwnershipPlans.get(`${handoff.from}\u0000${handoff.to}`);
+  if (plan === undefined) {
+    throw new Error(`Missing Python native ownership plan ${handoff.from} -> ${handoff.to}.`);
+  }
+  return sampleKpCodeSettlement({ plan, progress: handoff.progress })
+    .accessibleNativeOwnerId;
+}
+
+function nativeOwnershipPlan(
+  from: KpPythonRefactorSourceProjectionId,
+  to: KpPythonRefactorSourceProjectionId
+) {
+  return mintKpCodeSettlementPlan({
+    id: `settlement.python.native.${from}.${to}`,
+    sourcePaintOwnerId: `paint.python.native.${from}`,
+    targetPaintOwnerId: `paint.python.native.${to}`,
+    sourceNativeOwnerId: from,
+    targetNativeOwnerId: to,
+    milestones: {
+      travel: 0,
+      arrival: 0.35,
+      recognition: 0.45,
+      ownershipHandoff: 0.5,
+      withdrawal: 1
+    }
   });
 }
 

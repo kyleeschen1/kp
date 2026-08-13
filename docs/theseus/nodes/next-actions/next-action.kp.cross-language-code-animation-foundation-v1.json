@@ -377,11 +377,32 @@
       "scope": "s23 TypeScript shared seam boundaries",
       "checkedAt": "2026-08-13T19:32:35.690Z",
       "notes": "Paint ownership and accessible native ownership are now distinct types; no Python or renderer authority entered the TypeScript semantic recipe."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test Python source projection, motion frame, token theater, shared contract, and settlement suites",
+      "status": "passed",
+      "scope": "s24 approved Python migration preservation",
+      "checkedAt": "2026-08-13T19:36:00.887Z",
+      "notes": "Eighteen tests preserve exact source and tokenize evidence, AST entity ownership, projection order, token trajectories, full arrival, direct seek, rewind, reduced motion, and accessible ownership."
+    },
+    {
+      "command": "npm run visual:python-refactor",
+      "status": "passed",
+      "scope": "s24 approved Python visual checkpoint",
+      "checkedAt": "2026-08-13T19:36:05.691Z",
+      "notes": "Stable Chromium command preserves wide, phone, reduced-motion, direct-seek, accessibility, performance, and presentation checkpoints."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 Python shared seam boundaries",
+      "checkedAt": "2026-08-13T19:36:13.262Z",
+      "notes": "Python retains its build-time AST/tokenize frontend and language-owned recipes while importing only the generic projection and settlement contracts."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The canonical TypeScript caller now uses shared source composition, settlement, and native ownership contracts without changing its source bytes, semantics, score, trajectories, paint, seek/rewind, reduced motion, accessibility, or approved visual presentation."
+    "summary": "Both approved imperative-language callers now use the same bounded token, projection, settlement, and native-ownership contracts while preserving their distinct frontends, semantics, scores, syntax, formatting, geometry, and visual behavior."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

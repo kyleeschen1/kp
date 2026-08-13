@@ -15,6 +15,10 @@ import {
 import type { KpPythonRefactorSemanticArtifactV1 } from
   "../semantic/python-refactor-semantic-model.ts";
 import type { KpPythonTokenKind } from "../semantic/python-source-tokens.ts";
+import {
+  mintKpCodeSettlementPlan,
+  sampleKpCodeSettlement
+} from "./code-motion-settlement.ts";
 
 export interface KpPythonTheaterToken {
   readonly id: string;
@@ -62,6 +66,21 @@ interface TrackInterval {
   readonly startProgress: number;
   readonly endProgress: number;
 }
+
+const fusionSettlementPlan = mintKpCodeSettlementPlan({
+  id: "settlement.python.rule-fusion",
+  sourcePaintOwnerId: "paint.python.rule-fusion.transit",
+  targetPaintOwnerId: "paint.python.rule-fusion.native-target",
+  sourceNativeOwnerId: "projection.python.helper-introduced",
+  targetNativeOwnerId: "projection.python.helper-introduced",
+  milestones: {
+    travel: 0,
+    arrival: 0.68,
+    recognition: 0.76,
+    ownershipHandoff: 0.82,
+    withdrawal: 1
+  }
+});
 
 export function createKpPythonRefactorTokenProgram(
   semantics: KpPythonRefactorSemanticArtifactV1
@@ -296,8 +315,21 @@ function sampleFusion(
     ...interval.track.sourceEntityIds,
     interval.track.targetEntityId
   ]);
-  const arrival = smoothstep(normalize(progress, 0, 0.68));
-  const settlementHandoff = smoothstep(normalize(progress, 0.82, 1));
+  const settlement = sampleKpCodeSettlement({ plan: fusionSettlementPlan, progress });
+  const arrival = smoothstep(normalize(
+    progress,
+    fusionSettlementPlan.milestones.travel,
+    fusionSettlementPlan.milestones.arrival
+  ));
+  const settlementHandoff = smoothstep(normalize(
+    progress,
+    fusionSettlementPlan.milestones.ownershipHandoff,
+    fusionSettlementPlan.milestones.withdrawal
+  ));
+  if (settlement.paintOwner === "target-native" &&
+      settlement.destination !== "reached") {
+    throw new Error("Python fusion cannot hand off before full arrival.");
+  }
   const base = snapshot.tokens.map((token) => frameToken(token, {
     ...(token.entityId === interval.track.targetEntityId
       ? { opacity: settlementHandoff, scale: lerp(0.76, 1, settlementHandoff) }

@@ -189,7 +189,8 @@
     {
       "id": "s24",
       "title": "Migrate Python contracts",
-      "status": "planned"
+      "summary": "Migrated Python onto the shared seams, deleted local projection rebasing duplication, and preserved build-derived AST/token evidence plus the approved presentation.",
+      "status": "complete"
     },
     {
       "id": "s25",
