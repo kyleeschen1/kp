@@ -41,6 +41,9 @@ import {
   kpEditorSelectedSurfaceCapabilityHost,
   type KpEditorSelectedSurfaceCapabilityHost
 } from "./selected-surface-capability-host.ts";
+import {
+  prepareKpAnimationCatalogueChromeFonts
+} from "./animation-catalogue-font-reservation.ts";
 type GeneratedLinearSolveReaderClient = typeof import(
   "./verified-generated-linear-solve-reader.ts"
 );
@@ -114,10 +117,13 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
       // either loader or its cache into this coordination service.
       const [loaded, , parameterized] = await Promise.all([
         loadAsset(selection.entry.animationId),
-        capabilityHost.loadSelected({
-          animationId: selection.entry.animationId,
-          slotKinds: dispatchKpEditorAnimationSurface(descriptor).slotKinds
-        }),
+        Promise.all([
+          prepareKpAnimationCatalogueChromeFonts(),
+          capabilityHost.loadSelected({
+            animationId: selection.entry.animationId,
+            slotKinds: dispatchKpEditorAnimationSurface(descriptor).slotKinds
+          })
+        ]),
         prepareParameterizedSelection({
           animationId: selection.entry.animationId,
           search: selection.search

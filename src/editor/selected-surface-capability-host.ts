@@ -65,7 +65,7 @@ async function loadCapability(
 ): Promise<void> {
   if (capability === "equation-katex") {
     const client = await import("./equation-surface-capability.ts");
-    registerOnce(
+    await registerOnceAsync(
       registry,
       "editor-animation-surface.equation.katex",
       client.registerKpEditorEquationSurfaceCapability

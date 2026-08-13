@@ -90,22 +90,26 @@
     {
       "id": "s08",
       "title": "Attribute catalogue layout shifts",
-      "status": "planned"
+      "summary": "Attributed the stable-reservation CLS failures to late KaTeX family and catalogue reading-font metrics plus a narrow dev-toolbar stylesheet ordering shift; enhanced failure evidence with source nodes and rectangles.",
+      "status": "complete"
     },
     {
       "id": "s09",
       "title": "Repair equation-stage reservation",
-      "status": "planned"
+      "summary": "Equation and catalogue reading fonts now settle at the lazy capability boundary before first visible stage mount; solve-x passes the unchanged 0.001 CLS ceiling with stable outer geometry.",
+      "status": "complete"
     },
     {
       "id": "s10",
       "title": "Repair graph-stage reservation if shared",
-      "status": "planned"
+      "summary": "Graph SVG shares the KaTeX font-reservation cause; the same capability helper plus corrected dev-toolbar stylesheet ordering closes narrow-route CLS without graph-specific geometry or appearance changes.",
+      "status": "complete"
     },
     {
       "id": "s11",
       "title": "Verify capability and performance closure",
-      "status": "planned"
+      "summary": "Closed the repair with 5/5 browser capability checks, the unchanged CLS ceiling, typecheck, 15 focused route/capability/preparation tests, architecture, and bundle gates; measured catalogue-route script is 111425 gzip bytes against 190000.",
+      "status": "complete"
     },
     {
       "id": "s12",

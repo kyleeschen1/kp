@@ -21,6 +21,9 @@ import {
 import {
   createKpAnimationCatalogueReviewHost
 } from "../animation-catalogue-review-host.ts";
+import {
+  prepareKpAnimationCatalogueChromeFonts
+} from "../animation-catalogue-font-reservation.ts";
 import { createKpEditorAnimationLibrary } from "../animation-library.ts";
 import KpSvelteCatalogueExemplar from "./KpSvelteCatalogueExemplar.svelte";
 import type {
@@ -54,7 +57,9 @@ export async function mountKpSvelteCatalogueExemplar(input: {
       animationId: selection.requestedArtifactId
     });
   }
-  let component = mount(KpSvelteCatalogueExemplar, {
+  await prepareKpAnimationCatalogueChromeFonts();
+  let component: ReturnType<typeof mount> | undefined;
+  component = mount(KpSvelteCatalogueExemplar, {
     target: input.root,
     props: {
       state: {
@@ -99,7 +104,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
     const message = error instanceof Error
       ? error.message
       : "The selected catalogue asset failed to load.";
-    await unmount(component);
+    if (component !== undefined) await unmount(component);
     component = mount(KpSvelteCatalogueExemplar, {
       target: input.root,
       props: {
@@ -115,7 +120,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
   return () => {
     reviewHost.dispose();
     delete input.root.dataset["kpSvelteCatalogueExemplar"];
-    void unmount(component);
+    if (component !== undefined) void unmount(component);
   };
 }
 

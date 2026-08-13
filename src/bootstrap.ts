@@ -73,10 +73,13 @@ async function bootstrap(): Promise<void> {
   );
   if (entry === undefined) {
     if (readKpAnimationCatalogueRoute(window.location.search).active) {
-      await mountDevelopmentToolbar();
       const catalogue = await import(
         "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
       );
+      // The catalogue module owns the application-wide box model and reading
+      // fonts. Resolve it before mounting fixed dev chrome so later stylesheet
+      // injection cannot remeasure an already-painted toolbar.
+      await mountDevelopmentToolbar();
       const dispose = await catalogue.mountKpSvelteCatalogueExemplar({
         root,
         search: window.location.search

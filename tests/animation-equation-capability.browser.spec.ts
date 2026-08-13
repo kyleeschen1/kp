@@ -197,24 +197,66 @@ async function expectReservedCapabilitySettlement(input: {
     type ProbeWindow = Window & {
       __kpCatalogueLayoutShiftProbe?: {
         readonly values: number[];
+        readonly sources: Array<{
+          readonly node: string;
+          readonly previous: readonly number[];
+          readonly current: readonly number[];
+        }>;
         readonly observer: PerformanceObserver;
       };
     };
     const values: number[] = [];
+    const sources: Array<{
+      readonly node: string;
+      readonly previous: readonly number[];
+      readonly current: readonly number[];
+    }> = [];
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         const shift = entry as PerformanceEntry & {
           readonly value: number;
           readonly hadRecentInput: boolean;
+          readonly sources?: ReadonlyArray<{
+            readonly node?: Node | undefined;
+            readonly previousRect: DOMRectReadOnly;
+            readonly currentRect: DOMRectReadOnly;
+          }> | undefined;
         };
-        if (!shift.hadRecentInput) values.push(shift.value);
+        if (shift.hadRecentInput) continue;
+        values.push(shift.value);
+        for (const source of shift.sources ?? []) {
+          const element = source.node instanceof Element ? source.node : null;
+          sources.push({
+            node: element === null
+              ? source.node?.nodeName ?? "unknown"
+              : describeElement(element),
+            previous: rectTuple(source.previousRect),
+            current: rectTuple(source.currentRect)
+          });
+        }
       }
     });
     observer.observe({ type: "layout-shift", buffered: true });
     (window as ProbeWindow).__kpCatalogueLayoutShiftProbe = {
       values,
+      sources,
       observer
     };
+
+    function rectTuple(rect: DOMRectReadOnly): readonly number[] {
+      return [rect.x, rect.y, rect.width, rect.height].map((value) =>
+        Math.round(value * 100) / 100
+      );
+    }
+
+    function describeElement(element: Element): string {
+      const attributes = [...element.attributes]
+        .filter(({ name }) => name === "id" || name === "class" ||
+          name.startsWith("data-kp") || name === "aria-label")
+        .map(({ name, value }) => `${name}=${JSON.stringify(value)}`)
+        .join(" ");
+      return `${element.tagName.toLowerCase()}${attributes === "" ? "" : ` ${attributes}`}`;
+    }
   });
   await input.page.route(input.capabilityPattern, async (route) => {
     await capabilityGate;
@@ -244,12 +286,16 @@ async function expectReservedCapabilitySettlement(input: {
     type ProbeWindow = Window & {
       __kpCatalogueLayoutShiftProbe?: {
         readonly values: number[];
+        readonly sources: readonly unknown[];
         readonly observer: PerformanceObserver;
       };
     };
     const probe = (window as ProbeWindow).__kpCatalogueLayoutShiftProbe;
     probe?.observer.disconnect();
-    return probe?.values.reduce((sum, value) => sum + value, 0) ?? 0;
+    return {
+      total: probe?.values.reduce((sum, value) => sum + value, 0) ?? 0,
+      sources: probe?.sources ?? []
+    };
   });
 
   expect(before).not.toBeNull();
@@ -259,5 +305,5 @@ async function expectReservedCapabilitySettlement(input: {
       (after?.[dimension] ?? 0) - (before?.[dimension] ?? 0)
     )).toBeLessThan(0.5);
   }
-  expect(shift).toBeLessThan(0.001);
+  expect(shift.total, JSON.stringify(shift.sources, null, 2)).toBeLessThan(0.001);
 }
