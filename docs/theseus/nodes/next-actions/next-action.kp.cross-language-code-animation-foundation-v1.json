@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-python-threshold-refactor-human-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -214,11 +218,25 @@
       "scope": "pre-existing shared reader budget baseline outside Python tranche",
       "checkedAt": "2026-08-13T18:51:16.559Z",
       "notes": "Shared reader routes exceed stale baselines by 7834 gzip bytes and include two already-forbidden native KaTeX geometry assets. No files under src/reader changed between the prior TypeScript checkpoint and this Python slice; production closure passes and built reader assets contain no Python identifiers. This known red is disclosed for separate baseline repair, not waived or attributed to Python."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-human-checkpoint.test.ts",
+      "status": "passed",
+      "scope": "s17 checkpoint promotion and exact URL ratchets",
+      "checkedAt": "2026-08-13T18:57:37.017Z",
+      "notes": "Three tests protect unreviewed status, explicit human approval, all semantic playheads, canonical TypeScript comparison, preservation boundaries, and evidence commands."
+    },
+    {
+      "command": "curl -I Python review URL",
+      "status": "passed",
+      "scope": "s17 direct review availability",
+      "checkedAt": "2026-08-13T18:57:38.293Z",
+      "notes": "The built preview at 127.0.0.1 port 8000 returned HTTP 200 for the exact Python artifact URL."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Python is pressure-tested at eleven reproducible visual checkpoints across desktop, phone, reduced motion, direct seek, rewind, accessibility, capture, CLS, long-task, and resource-closure boundaries. TypeScript remains green; Python is absent from reader closures and the catalogue remains within its explicit budget. A pre-existing shared reader budget red is separately disclosed."
+    "summary": "Python second-caller implementation and pressure testing are complete through the mandatory visual checkpoint. Exact review URLs and evidence are live; shared extraction remains blocked pending explicit human approval."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

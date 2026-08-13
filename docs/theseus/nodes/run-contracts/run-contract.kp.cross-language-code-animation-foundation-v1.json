@@ -147,7 +147,8 @@
     {
       "id": "s17",
       "title": "Open Python human checkpoint",
-      "status": "planned"
+      "summary": "Opened the mandatory Python human checkpoint with exact deterministic review URLs, disposable contact sheet, architecture and marginal-cost evidence, known-baseline disclosure, and tests that block s18 until explicit approval.",
+      "status": "complete"
     },
     {
       "id": "s18",
