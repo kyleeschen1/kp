@@ -40,6 +40,7 @@ export interface KpSemanticAnimationCompatibilityLedgerEntry {
   readonly owner: KpCompatibilitySourceReference;
   readonly authors: readonly KpCompatibilitySourceReference[];
   readonly consumers: readonly KpCompatibilitySourceReference[];
+  readonly replacementEvidence: readonly KpCompatibilitySourceReference[];
   readonly status: KpSemanticAnimationCompatibilityStatus;
   readonly sunsetEvidence: readonly KpCompatibilitySunsetEvidence[];
   readonly requiredClosureEvidence:
@@ -50,6 +51,11 @@ export interface KpSemanticAnimationCompatibilityLedgerEntry {
 const equationPresentationDecoder = reference(
   "src/animation/equation-presentation-profile-decoder.ts",
   "decodeKpLegacyEquationPresentationMetadata"
+);
+
+const typedEquationPresentationProfile = reference(
+  "src/animation/equation-presentation-profile.ts",
+  "KpEquationPresentationProfileV1"
 );
 
 export const kpSemanticAnimationCompatibilityLedger = [
@@ -148,6 +154,9 @@ export const kpSemanticAnimationCompatibilityLedger = [
       reference("src/animation/runtime-sampler.ts", "transformation.correspondence"),
       reference("src/animation/visual-frame-laws.ts", "transformation.correspondence")
     ],
+    replacementEvidence: [
+      reference("src/semantic/correspondence.ts", "CorrespondenceMap")
+    ],
     status: "compatibility-only",
     sunsetEvidence: [
       sunsetEvidence(
@@ -171,6 +180,12 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "legacy-fade"
       )
     ],
+    replacementEvidence: [
+      reference(
+        "src/semantic/semantic-transition-gap.ts",
+        "KpSemanticTransitionGap"
+      )
+    ],
     status: "compatibility-only",
     sunsetEvidence: [
       sunsetEvidence(
@@ -191,6 +206,12 @@ export const kpSemanticAnimationCompatibilityLedger = [
     consumers: [
       reference("src/animation/asset.ts", "transformationRefs"),
       reference("src/animation/runtime-sampler.ts", "transformationRefs")
+    ],
+    replacementEvidence: [
+      reference(
+        "src/semantic/asset-transformation.ts",
+        "KpSemanticTransformation"
+      )
     ],
     status: "compatibility-only",
     sunsetEvidence: [
@@ -215,6 +236,9 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "sampleSaddleDenominatorAnimationFrames"
       )
     ],
+    replacementEvidence: [
+      reference("src/animation/graph-adapter.ts", "createGraphAnimationAssets")
+    ],
     status: "retained-fixture",
     sunsetEvidence: [
       sunsetEvidence("tests/tween.test.ts", "SaddleDenominator")
@@ -234,6 +258,9 @@ export const kpSemanticAnimationCompatibilityLedger = [
     consumers: [
       reference("src/animation/frame-descriptor.ts", "timelineId"),
       reference("src/rendering/equation-motion-sampler.ts", "SemanticBeatTimeline")
+    ],
+    replacementEvidence: [
+      reference("src/animation/runtime-sampler.ts", "KpAnimationRuntimeClock")
     ],
     status: "compatibility-only",
     sunsetEvidence: [
@@ -261,6 +288,12 @@ export const kpSemanticAnimationCompatibilityLedger = [
     consumers: [
       reference(
         "src/animation/llm-animation-draft-v2.ts",
+        "resolveKpCanonicalOperation"
+      )
+    ],
+    replacementEvidence: [
+      reference(
+        "src/semantic/canonical-operation-registry.ts",
         "resolveKpCanonicalOperation"
       )
     ],
@@ -293,6 +326,9 @@ export const kpSemanticAnimationCompatibilityLedger = [
         "src/editor/semantic-animation-workbench-shell.ts",
         "canonicalRepresentation"
       )
+    ],
+    replacementEvidence: [
+      reference("src/animation/asset-projections.ts", "projectKpAnimationAsset")
     ],
     status: "canonical",
     sunsetEvidence: [
@@ -379,6 +415,9 @@ function metadata(input: {
   readonly owner?: KpCompatibilitySourceReference | undefined;
   readonly authors: readonly KpCompatibilitySourceReference[];
   readonly consumers: readonly KpCompatibilitySourceReference[];
+  readonly replacementEvidence?:
+    | readonly KpCompatibilitySourceReference[]
+    | undefined;
   readonly status: KpSemanticAnimationCompatibilityStatus;
   readonly sunsetEvidence: readonly KpCompatibilitySunsetEvidence[];
   readonly retirementCondition: string;
@@ -390,6 +429,8 @@ function metadata(input: {
     owner: input.owner ?? equationPresentationDecoder,
     authors: input.authors,
     consumers: input.consumers,
+    replacementEvidence:
+      input.replacementEvidence ?? [typedEquationPresentationProfile],
     status: input.status,
     sunsetEvidence: input.sunsetEvidence,
     requiredClosureEvidence: ["reference", "replacement", "fixture"],

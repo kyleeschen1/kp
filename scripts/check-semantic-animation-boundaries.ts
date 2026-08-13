@@ -26,6 +26,7 @@ const compatibilityViolations = kpSemanticAnimationCompatibilityLedger.flatMap(
       entry.owner,
       ...entry.authors,
       ...entry.consumers,
+      ...entry.replacementEvidence,
       ...entry.sunsetEvidence
     ];
     return references.flatMap((reference) => {

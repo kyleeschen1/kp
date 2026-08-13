@@ -20,7 +20,8 @@ test("compatibility ledger references live owners, authors, and consumers", () =
     for (const sourceRef of [
       entry.owner,
       ...entry.authors,
-      ...entry.consumers
+      ...entry.consumers,
+      ...entry.replacementEvidence
     ]) {
       const absolutePath = join(projectRoot, sourceRef.path);
       assert.equal(existsSync(absolutePath), true, `missing ${sourceRef.path}`);
@@ -31,6 +32,11 @@ test("compatibility ledger references live owners, authors, and consumers", () =
     }
     assert.ok(entry.requiredClosureEvidence.includes("reference"));
     assert.ok(entry.retirementCondition.length >= 40);
+    assert.ok(entry.consumers.length > 0, `${entry.id} has no live caller evidence`);
+    assert.ok(
+      entry.replacementEvidence.length > 0,
+      `${entry.id} has no replacement evidence`
+    );
     assert.ok(entry.sunsetEvidence.length > 0);
     for (const sourceRef of entry.sunsetEvidence) {
       const absolutePath = join(projectRoot, sourceRef.path);
@@ -159,6 +165,7 @@ test("destructive compatibility candidates require replacement and fixture proof
     ) {
       assert.ok(entry.requiredClosureEvidence.includes("replacement"));
       assert.ok(entry.requiredClosureEvidence.includes("fixture"));
+      assert.ok(entry.replacementEvidence.length > 0);
     }
   }
   const crossSurface = kpSemanticAnimationCompatibilityLedger.find(

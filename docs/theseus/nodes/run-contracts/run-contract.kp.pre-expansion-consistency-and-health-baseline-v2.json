@@ -78,12 +78,14 @@
     {
       "id": "s06",
       "title": "Inventory runtime authorities",
-      "status": "planned"
+      "summary": "Added an executable 12-entry runtime authority inventory distinguishing pure sampling, playhead ownership, frame delivery, capability caches, adapter registries, presentation caches, and host lifecycles; classified four compatibility-managed owners and preserved the dashboard-only legacy exception outside runtime.",
+      "status": "complete"
     },
     {
       "id": "s07",
       "title": "Strengthen compatibility evidence",
-      "status": "planned"
+      "summary": "Required every active compatibility entry to carry live consumers, replacement source evidence, executable sunset tests, closure requirements, and an explicit retirement condition; the architecture gate now validates replacement references.",
+      "status": "complete"
     },
     {
       "id": "s08",
