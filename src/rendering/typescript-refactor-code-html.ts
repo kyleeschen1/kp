@@ -10,6 +10,10 @@ import {
 } from "../semantic/typescript-refactor-source-projections.ts";
 import { tokenizeKpTypeScriptSource } from
   "../semantic/typescript-source-tokens.ts";
+import {
+  encodeKpEditorHtmlAttribute,
+  encodeKpEditorHtmlText
+} from "../editor/html-output-encoding.ts";
 
 export interface KpTypeScriptRefactorCodeHtmlInput {
   readonly semantics: KpTypeScriptRefactorSemanticArtifactV1;
@@ -24,7 +28,7 @@ export function renderKpTypeScriptRefactorCodeHtml(
   input: KpTypeScriptRefactorCodeHtmlInput
 ): string {
   const projections = createKpTypeScriptRefactorSourceProjections(input.semantics);
-  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${escapeAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" aria-label="${escapeAttribute(input.accessibleDescription)}">
+  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
     <header class="kp-typescript-refactor__file"><span>free-shipping.ts</span><span>TypeScript</span></header>
     <div class="kp-typescript-refactor__source" data-kp-typescript-source-owner>
       ${projections.map((projection) => renderProjection({
@@ -34,8 +38,8 @@ export function renderKpTypeScriptRefactorCodeHtml(
       })).join("")}
       <div class="kp-typescript-refactor__token-theater" data-kp-typescript-token-theater aria-hidden="true"></div>
     </div>
-    <p class="kp-typescript-refactor__narration" data-kp-typescript-narration>${escapeHtml(input.narration)}</p>
-    <p class="editor-animation-player__visually-hidden" data-kp-typescript-accessible-state aria-live="polite">${escapeHtml(input.accessibleDescription)}</p>
+    <p class="kp-typescript-refactor__narration" data-kp-typescript-narration>${encodeKpEditorHtmlText(input.narration)}</p>
+    <p class="editor-animation-player__visually-hidden" data-kp-typescript-accessible-state aria-live="polite">${encodeKpEditorHtmlText(input.accessibleDescription)}</p>
   </section>`;
 }
 
@@ -63,7 +67,7 @@ function renderRevision(input: {
     tree,
     new Set(input.focusSelectorIds)
   );
-  return `<pre class="kp-typescript-refactor__revision" data-kp-typescript-revision="${input.revision.revision}" data-kp-typescript-revision-current="${input.current}"${input.current ? "" : " aria-hidden=\"true\" inert"}><code data-kp-semantic-entity-id="${escapeAttribute(program.id)}" data-kp-typescript-selector-id="${escapeAttribute(selectorId(program.id))}" data-kp-typescript-entity-kind="source-file">${code}</code></pre>`;
+  return `<pre class="kp-typescript-refactor__revision" data-kp-typescript-revision="${input.revision.revision}" data-kp-typescript-revision-current="${input.current}"${input.current ? "" : " aria-hidden=\"true\" inert"}><code data-kp-semantic-entity-id="${encodeKpEditorHtmlAttribute(program.id)}" data-kp-typescript-selector-id="${encodeKpEditorHtmlAttribute(selectorId(program.id))}" data-kp-typescript-entity-kind="source-file">${code}</code></pre>`;
 }
 
 interface EntityTreeNode {
@@ -85,9 +89,9 @@ function renderProjection(input: {
     new Set(input.focusSelectorIds)
   );
   const rootAttributes = input.projection.rootEntityId === undefined
-    ? `data-kp-typescript-source-projection-id="${escapeAttribute(input.projection.id)}"`
-    : `data-kp-semantic-entity-id="${escapeAttribute(input.projection.rootEntityId)}" data-kp-typescript-selector-id="${escapeAttribute(selectorId(input.projection.rootEntityId))}" data-kp-typescript-entity-kind="source-file"`;
-  return `<pre class="kp-typescript-refactor__revision" data-kp-typescript-projection-id="${escapeAttribute(input.projection.id)}" data-kp-typescript-projection-current="${input.current}" data-kp-typescript-projection-visible="${input.current}" style="--kp-typescript-revision-opacity:${input.current ? 1 : 0};--kp-typescript-revision-scale:1"${input.current ? "" : " aria-hidden=\"true\" inert"}><code ${rootAttributes}>${code}</code></pre>`;
+    ? `data-kp-typescript-source-projection-id="${encodeKpEditorHtmlAttribute(input.projection.id)}"`
+    : `data-kp-semantic-entity-id="${encodeKpEditorHtmlAttribute(input.projection.rootEntityId)}" data-kp-typescript-selector-id="${encodeKpEditorHtmlAttribute(selectorId(input.projection.rootEntityId))}" data-kp-typescript-entity-kind="source-file"`;
+  return `<pre class="kp-typescript-refactor__revision" data-kp-typescript-projection-id="${encodeKpEditorHtmlAttribute(input.projection.id)}" data-kp-typescript-projection-current="${input.current}" data-kp-typescript-projection-visible="${input.current}" style="--kp-typescript-revision-opacity:${input.current ? 1 : 0};--kp-typescript-revision-scale:1"${input.current ? "" : " aria-hidden=\"true\" inert"}><code ${rootAttributes}>${code}</code></pre>`;
 }
 
 function entityTree(
@@ -125,7 +129,7 @@ function renderRange(
     html += renderSyntaxRange(source, cursor, range.startOffset);
     const selector = selectorId(node.entity.id);
     const focused = focusSelectorIds.has(selector);
-    html += `<span data-kp-semantic-entity-id="${escapeAttribute(node.entity.id)}" data-kp-typescript-selector-id="${escapeAttribute(selector)}" data-kp-typescript-entity-kind="${node.entity.kind}" data-kp-typescript-focus="${focused}">${renderRange(source, range.startOffset, range.endOffset, node.children, focusSelectorIds)}</span>`;
+    html += `<span data-kp-semantic-entity-id="${encodeKpEditorHtmlAttribute(node.entity.id)}" data-kp-typescript-selector-id="${encodeKpEditorHtmlAttribute(selector)}" data-kp-typescript-entity-kind="${node.entity.kind}" data-kp-typescript-focus="${focused}">${renderRange(source, range.startOffset, range.endOffset, node.children, focusSelectorIds)}</span>`;
     cursor = range.endOffset;
   }
   html += renderSyntaxRange(source, cursor, end);
@@ -137,11 +141,11 @@ function renderSyntaxRange(source: string, start: number, end: number): string {
   let cursor = 0;
   let html = "";
   for (const token of tokenizeKpTypeScriptSource(value)) {
-    html += escapeHtml(value.slice(cursor, token.startOffset));
-    html += `<span data-kp-typescript-syntax-kind="${token.kind}">${escapeHtml(token.text)}</span>`;
+    html += encodeKpEditorHtmlText(value.slice(cursor, token.startOffset));
+    html += `<span data-kp-typescript-syntax-kind="${token.kind}">${encodeKpEditorHtmlText(token.text)}</span>`;
     cursor = token.endOffset;
   }
-  return html + escapeHtml(value.slice(cursor));
+  return html + encodeKpEditorHtmlText(value.slice(cursor));
 }
 
 function assertNonCrossing(nodes: readonly EntityTreeNode[]): void {
@@ -165,17 +169,4 @@ function contains(
 
 function selectorId(entityId: string): string {
   return `selector.typescript.${entityId}`;
-}
-
-function escapeAttribute(value: string): string {
-  return escapeHtml(value).replaceAll("`", "&#096;");
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

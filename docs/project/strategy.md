@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-12
+Last Updated: 2026-08-13
 
 ## North Star
 
@@ -61,9 +61,10 @@ not need one universal layout before it can ship a bounded public proof.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
-cost. It should then measure marginal reuse through a TypeScript code-refactor
-exemplar and a Python second caller before selecting the Public Web v0
-projection.
+cost. The TypeScript/Python comparison and bounded Scheme pressure have now
+proved marginal reuse without flattening language-specific pedagogy. The next
+strategic gate is selecting the Public Web v0 projection with the existing
+symbolic, graph, and code portfolio.
 
 ## Strategic Architecture
 

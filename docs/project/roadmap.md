@@ -35,11 +35,12 @@ an interpreter-grounded program trace, static publication, Article v1,
 whole-file editing, semantic navigation, review capture, accessibility, route
 budgets, and a native catalogue.
 
-The current strategic stage is **convergence and architecture compression**.
-Before expanding further, reduce the active product surface, retire obsolete
-compatibility, make dependency ownership explicit, improve LLM context and
-generation contracts, and prove that a second language caller is cheaper than
-the first.
+The current strategic stage is **product convergence after architecture
+compression**. The cross-language code-animation proof is closed: TypeScript,
+Python, and Scheme now pressure the same bounded continuity contracts without
+sharing a parser, semantic model, renderer, score, or choreography. The next
+proof should use the existing symbolic, graph, and code portfolio to select a
+Public Web v0 projection rather than add another animation subsystem.
 
 The primary learner-product bottleneck is **product convergence**, not the
 absence of another animation subsystem. A public proof needs one release-worthy
@@ -56,11 +57,11 @@ and vignette authority.
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
 | Equation animation | Canonical path proven; compatibility remains | Migrate accepted callers and retire old recipes incrementally. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
-| Program animation | Scheme factorial and the approved TypeScript refactor prove two specialized code-material paths | Build Python as the second imperative refactor caller; compare before extracting shared seams. |
+| Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | 38 meaningful native paints, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
+| Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
 | Layout | Many useful experiments, no selected public default | Pause invention; later choose a v0 default against real articles. |
 | Public product | Not yet converged | Build a small proof after tightening, not a curriculum platform. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Route tasks through one compact entry point and measure repair quality. |
@@ -140,24 +141,24 @@ points and dependency direction first; physical package moves come later.
 
 ### 4. Cross-language code proof
 
-Status: TypeScript exemplar approved; Python second caller active through
+Status: complete through
 `run-contract.kp.cross-language-code-animation-foundation-v1`
 
-1. Preserve the approved TypeScript free-shipping-threshold refactor as the
-   canonical novice-readable code transformation.
-2. Implement the same conceptual example in Python through a build-time
-   standard-library frontend and a checked-in generated semantic artifact.
-3. Reuse semantic identity, correspondence, the shared clock, native endpoint
-   ownership, deterministic sampling, and attention intent without importing
-   TypeScript-specific contracts into Python.
-4. Stop at the Python human checkpoint before generalization.
-5. Extract a language-neutral program-transformation seam only where both
-   approved callers demonstrate it; then audit Scheme for compatible
-   invariants without flattening recursive S-expression choreography.
+1. TypeScript remains the canonical novice-readable imperative refactor.
+2. Python proves a structurally different build-time frontend over the same
+   conceptual transformation.
+3. Scheme factorial is directly selectable as a specialized recursive caller.
+4. The callers share only syntax paint roles, complete-source projection
+   mechanics where applicable, settlement/native-owner laws, and explicit
+   exceptions.
+5. Language frontends, semantic records, scores, timing, trajectories,
+   renderers, and Scheme's recursive choreography remain local.
 
 The exact present ownership, candidate invariants, deliberate
 non-abstractions, and promotion gate are recorded in
 `decisions/2026-08-13-kp-code-animation-ownership-and-promotion-boundary.md`.
+The operational and performance closeout is recorded in
+`reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`.
 
 No language caller may introduce another clock, scheduler, stage lifecycle,
 or lesson-local semantic store. Scheme retains its specialized recursive
@@ -189,8 +190,8 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 
 ## Current Checkpoints And Pauses
 
-- Scheme factorial full evaluation is implemented and preserved as a bounded
-  visual-discovery proof. Promotion/generalization is paused during tightening.
+- Scheme factorial full evaluation is implemented, approved, and directly
+  hosted in the catalogue. Broader SICP or Scheme expansion remains paused.
 - The algebra explanation contract remains recoverable from its verified human
   checkpoint; its pacing correction and remaining slices are paused.
 - Economics layout discovery is paused. Existing variants are evidence, not

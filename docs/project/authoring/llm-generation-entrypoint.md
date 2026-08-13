@@ -28,6 +28,7 @@ Older experiments are evidence, not default implementation authority.
 | Revise learner prose or sparse semantic references | `kp.article.v1` source |
 | Reuse an existing animation in new prose or a flashcard | Versioned vignette import and a new Article/projection instance |
 | Propose a new semantic animation | `KpGovernedCanonicalConstructionRequest` through `src/authoring/canonical-animation-public-api.ts` |
+| Propose a code transformation | Begin with the closest approved TypeScript, Python, or Scheme exemplar; use a deterministic language-owned build-time frontend and checked-in semantic evidence |
 | Change how a known operation is taught | Typed pedagogical score or presentation profile |
 | Change paint for one medium | Renderer adapter or theme role, preserving semantic/frame contracts |
 | Change desktop/mobile composition | Projection, never Article semantics or motion truth |
@@ -116,6 +117,28 @@ repair gap names the rejected path, expected contract, available candidates,
 and preservation boundary. The previous valid artifact remains active while a
 draft is invalid.
 
+## Code Animation Boundary
+
+There is not yet a universal arbitrary-source code-animation generator. For
+code work, load exactly one approved exemplar:
+
+- TypeScript free-shipping threshold for an imperative refactor with native
+  token motion;
+- Python free-shipping threshold for a build-time AST/token frontend; or
+- Scheme factorial for evaluator-grounded recursive S-expression motion.
+
+The shared contracts cover syntax paint roles and exact source spans,
+complete-source projection composition where applicable, causal settlement and
+native ownership, and explicitly scoped exceptions. They reject unknown IDs,
+invalid or incomplete ranges, forged motion authority, premature native-paint
+handoff, and unavailable surface capabilities.
+
+Those contracts do not infer semantic correspondence, choose pedagogical
+beats, invent trajectories, normalize language identity, or turn an evaluator
+trace into a lesson. An LLM must retain a typed gap when those facts are absent
+and request a canonical exemplar plus human visual review. Do not add a new
+language or transformation topology merely to exercise the shared types.
+
 ## Compatibility Note
 
 `kp.llm-animation-draft.v1` and `.v2` are retained compatibility and research
@@ -152,3 +175,6 @@ useful rejected/repair example for every promoted generation pattern.
 - `../principles/kp-article-v1.md` defines Article source and vignette imports.
 - `../principles/codex-collaboration-protocol.md` governs implementation and
   visual review cadence.
+- `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
+  records the proved seams, operations, performance, and remaining generation
+  gaps for the code-animation portfolio.

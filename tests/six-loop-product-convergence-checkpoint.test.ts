@@ -70,7 +70,7 @@ test("convergence checkpoint preserves objective state and recorded review", asy
     priorityReview,
     /Close the conditional rank-5 vector correction[\s\S]*Prove one Svelte 5 catalogue shell[\s\S]*Pressure the host with rank-6 matrix\/linear map[\s\S]*Build Internal Studio v0[\s\S]*Publish Public Web mission and first lessons[\s\S]*Complete M4 and internal M5 editorial candidates[\s\S]*Build a constrained Public Editor/
   );
-  assert.match(roadmap, /38 meaningful native\s+paints/);
+  assert.match(roadmap, /40 meaningful lazy\s+assets/);
   assert.doesNotMatch(roadmap, /Two programming gaps remain/);
   assert.doesNotMatch(roadmap, /422,832 initial script bytes/);
 });

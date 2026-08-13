@@ -2,9 +2,9 @@
   "id": "next-action.kp.cross-language-code-animation-foundation-v1",
   "kind": "next-action",
   "title": "Cross-language code animation foundation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Reopened the active objective after the Python checkpoint approval; the prior resolved transition applied to the checkpoint but was too broad for the remaining approved contract.",
+  "summary": "Delivered and verified the approved TypeScript, Python, and Scheme code-animation foundation; the Public Web v0 projection gate is now the current project direction.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-13-scheme-cross-language-code-contract-audit.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md"
     }
   ],
   "dependsOn": {

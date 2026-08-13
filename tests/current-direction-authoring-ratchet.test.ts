@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const activeContract =
+const completedContract =
   "run-contract.kp.cross-language-code-animation-foundation-v1";
 
-test("current project direction and model entrypoint name one executable proof", async () => {
+test("current project direction closes the code proof and names product convergence next", async () => {
   const [roadmap, activeThread, nextActions, entrypoint] = await Promise.all([
     readFile("docs/project/roadmap.md", "utf8"),
     readFile("docs/project/threads/architecture-convergence.md", "utf8"),
@@ -14,10 +14,12 @@ test("current project direction and model entrypoint name one executable proof",
   ]);
 
   for (const currentSource of [roadmap, activeThread, nextActions]) {
-    assert.match(currentSource, new RegExp(activeContract.replaceAll(".", "\\.")));
-    assert.match(currentSource, /TypeScript free-shipping-threshold/i);
-    assert.match(currentSource, /Python/i);
+    assert.match(currentSource, /Public\s+Web v0/i);
   }
+  assert.match(roadmap, new RegExp(completedContract.replaceAll(".", "\\.")));
+  assert.match(activeThread, new RegExp(completedContract.replaceAll(".", "\\.")));
+  assert.match(roadmap, /TypeScript, Python, and Scheme/i);
+  assert.match(nextActions, /wrap\/unwrap/i);
   assert.doesNotMatch(
     activeThread.slice(0, activeThread.indexOf("## Goal")),
     /repair the bounded catalogue stage-reservation/i
@@ -29,6 +31,8 @@ test("current project direction and model entrypoint name one executable proof",
     entrypoint,
     /Propose a new semantic animation \| `kp\.llm-animation-draft\.v2`/
   );
+  assert.match(entrypoint, /There is not yet a universal arbitrary-source code-animation generator/i);
+  assert.match(entrypoint, /typed gap/i);
 });
 
 test("supporting threads cannot restart deferred tutorial or runtime work", async () => {

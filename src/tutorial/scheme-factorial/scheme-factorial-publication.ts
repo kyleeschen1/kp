@@ -37,6 +37,10 @@ import type { KpSchemeSourceDocument } from
 import { renderKpTutorialScrubBar } from
   "../kp-tutorial-scrub-bar-renderer.ts";
 import { kpSchemeFactorialTutorialPath } from "./scheme-factorial-route.ts";
+import {
+  escapeKpTutorialHtmlAttribute,
+  escapeKpTutorialHtmlText
+} from "../generated-html-escaping.ts";
 
 export interface KpSchemeFactorialPublicationArtifact {
   readonly schemaVersion: "kp.scheme-factorial-publication.v5";
@@ -151,7 +155,7 @@ export function renderKpSchemeFactorialStaticPublication(input: {
     checkpoints
   });
   const transcript = input.artifact.checkpoints.checkpoints.map((checkpoint) =>
-    `<li id="kp-checkpoint-${escapeAttribute(checkpoint.id)}" data-kp-scheme-checkpoint-transcript="${escapeAttribute(checkpoint.id)}"><a href="#kp-checkpoint-${escapeAttribute(checkpoint.id)}">${escapeHtml(checkpoint.caption)}</a></li>`
+    `<li id="kp-checkpoint-${escapeKpTutorialHtmlAttribute(checkpoint.id)}" data-kp-scheme-checkpoint-transcript="${escapeKpTutorialHtmlAttribute(checkpoint.id)}"><a href="#kp-checkpoint-${escapeKpTutorialHtmlAttribute(checkpoint.id)}">${escapeKpTutorialHtmlText(checkpoint.caption)}</a></li>`
   ).join("");
   return `<main class="kp-scheme-factorial-publication" data-kp-scheme-factorial-publication>
     <header class="kp-scheme-factorial-publication__header">
@@ -161,7 +165,7 @@ export function renderKpSchemeFactorialStaticPublication(input: {
     </header>
     <figure class="kp-scheme-factorial-publication__figure">
       <div data-kp-scheme-factorial-stage-host>${stage}</div>
-      <figcaption data-kp-scheme-factorial-caption>${escapeHtml(input.artifact.timeline.initialCaption)}</figcaption>
+      <figcaption data-kp-scheme-factorial-caption>${escapeKpTutorialHtmlText(input.artifact.timeline.initialCaption)}</figcaption>
     </figure>
     <div class="kp-scheme-factorial-publication__controls">${scrubber}</div>
     <details class="kp-scheme-factorial-publication__transcript">
@@ -212,14 +216,4 @@ function deepFreeze<Value>(value: Value): Value {
   }
   for (const nested of Object.values(value)) deepFreeze(nested);
   return Object.freeze(value);
-}
-
-function escapeHtml(value: string): string {
-  return value.replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttribute(value: string): string {
-  return escapeHtml(value).replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }

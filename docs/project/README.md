@@ -52,11 +52,10 @@ conversation or design record
 
 ## Current Focus
 
-The current focus is convergence and architecture compression. Preserve the
-stable semantic-to-renderer spine, reduce rejected product representations and
-compatibility, make capability dependencies explicit, improve bounded LLM
-retrieval/generation, and then pressure program animation through TypeScript
-and Python before selecting one Public Web v0 projection.
+The current focus is product convergence after architecture compression.
+TypeScript, Python, and Scheme have closed the bounded code-animation proof.
+Preserve that semantic-to-renderer spine and use the existing symbolic, graph,
+and code portfolio to select one Public Web v0 projection.
 
 Start new sessions with `roadmap.md`, then the active thread it names. Do not
 load the historical decision and review corpus unless a selected task requires

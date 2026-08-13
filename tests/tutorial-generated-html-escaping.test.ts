@@ -38,6 +38,10 @@ const consumers = [
     contexts: ["text", "attribute"]
   },
   {
+    path: "src/tutorial/scheme-factorial/scheme-factorial-publication.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
     path: "src/tutorial/static-step-export-smoke-fixture.ts",
     contexts: ["text", "attribute", "script-json"]
   },
@@ -94,7 +98,7 @@ test("only generated tutorial document consumers share the utility", async () =>
   const actualConsumers = (await Promise.all(tutorialSources.map(
     async (path) => ({ path, source: await readFile(path, "utf8") })
   )))
-    .filter(({ source }) => /from "\.\/generated-html-escaping\.ts"/.test(source))
+    .filter(({ source }) => /generated-html-escaping\.ts/.test(source))
     .map(({ path }) => path)
     .sort();
   assert.deepEqual(

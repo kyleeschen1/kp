@@ -27,7 +27,7 @@ test("native code renderer emits Neovim-guided syntax roles without changing sou
   assert.match(html, /data-kp-typescript-syntax-kind="function">qualifiesForFreeShipping<\/span>/);
   assert.match(html, /data-kp-typescript-syntax-kind="type">number<\/span>/);
   assert.match(html, /data-kp-typescript-syntax-kind="number">50<\/span>/);
-  assert.match(html, /data-kp-typescript-syntax-kind="string">&quot;Free shipping&quot;<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="string">"Free shipping"<\/span>/);
   assert.match(html, /data-kp-typescript-syntax-kind="operator">&gt;=<\/span>/);
   assert.equal(decodeHtml(stripTags(html)), exemplar.semantics.revisions[1]!.sourceText);
 });
@@ -53,6 +53,16 @@ test("renderer exposes one native owner per revision and no painted clone", () =
   assert.equal(count(html, "data-kp-typescript-focus=\"true\""), 5);
   assert.doesNotMatch(html, /canvas|svg|painted-clone|aria-label="Source code copy"/);
   assert.match(html, /data-kp-typescript-projection-current="false"[^>]+aria-hidden="true" inert/);
+});
+
+test("TypeScript renderer uses the context-specific shared HTML encoders", async () => {
+  const source = await import("node:fs/promises").then(({ readFile }) =>
+    readFile("src/rendering/typescript-refactor-code-html.ts", "utf8")
+  );
+
+  assert.match(source, /encodeKpEditorHtmlText/);
+  assert.match(source, /encodeKpEditorHtmlAttribute/);
+  assert.doesNotMatch(source, /function escapeHtml|function escapeAttribute/);
 });
 
 function stripTags(value: string): string {

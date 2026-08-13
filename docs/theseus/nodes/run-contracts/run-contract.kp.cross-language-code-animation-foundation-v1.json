@@ -2,8 +2,9 @@
   "id": "run-contract.kp.cross-language-code-animation-foundation-v1",
   "kind": "run-contract",
   "title": "Cross-language code animation foundation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,6 +15,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-long-loop-proposal.md",
       "summary": "Exact approved 30-slice order, verification tiers, preservation boundary, rollback cadence, deferrals, Python human checkpoint, and post-approval Scheme boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md"
     }
   ],
   "verification": [
@@ -47,6 +52,41 @@
       "scope": "s29",
       "checkedAt": "2026-08-13T20:47:19.256Z",
       "notes": "All TypeScript, Svelte, domain, architecture, and generated-data drift gates passed."
+    },
+    {
+      "command": "npm run visual:typescript-refactor; npm run visual:python-refactor; npm run visual:scheme-factorial",
+      "status": "passed",
+      "scope": "s30",
+      "checkedAt": "2026-08-13T21:22:10.007Z",
+      "notes": "Canonical TypeScript and Python visuals pass; Scheme tutorial and catalogue pass nine Chromium checkpoints after human approval."
+    },
+    {
+      "command": "npm run health:pre-expansion",
+      "status": "passed",
+      "scope": "s30",
+      "checkedAt": "2026-08-13T21:22:11.228Z",
+      "notes": "Architecture, TypeScript/Svelte/domain checks, convergence suites, LLM health fixtures, catalogue bundle boundary, and economics generated-drift checks pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s30",
+      "checkedAt": "2026-08-13T21:22:12.205Z",
+      "notes": "All 4306 repository tests pass after aligning exact catalogue and HTML-helper inventory ratchets with the delivered foundation."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s30",
+      "checkedAt": "2026-08-13T21:22:13.170Z",
+      "notes": "Production build, typecheck, Svelte diagnostics, domain types, and economics publication drift pass."
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "s30",
+      "checkedAt": "2026-08-13T21:22:14.164Z",
+      "notes": "Theseus workspace validates before final slice completion."
     }
   ],
   "allowedWork": [
@@ -248,7 +288,8 @@
     {
       "id": "s30",
       "title": "Close cross-language tranche",
-      "status": "planned"
+      "summary": "Closed the cross-language foundation with three approved governed exemplars, four bounded shared seams, consolidated HTML output encoding, explicit LLM repair limits, passing visual/unit/build/workspace gates, measured lazy bundle budgets, and Public Web projection convergence as the durable next direction.",
+      "status": "complete"
     }
   ]
 }

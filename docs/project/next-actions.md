@@ -12,25 +12,23 @@ the learner-core payload recovery, canonical algebra session, economics/physics
 Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
 preserved foundations rather than work to restart.
 
-1. Complete
-   `run-contract.kp.cross-language-code-animation-foundation-v1`: preserve the
-   approved TypeScript free-shipping-threshold exemplar, build Python as the
-   structurally different second caller, and stop at its human checkpoint.
-2. After explicit Python approval, compare both imperative callers and extract
-   only demonstrated language-neutral contracts before auditing Scheme reuse.
-3. Retire the remaining compatibility paths only beside real caller
-   migrations; timeline and lightweight projection consolidation are not
-   prerequisites for the Python proof.
-4. Use symbolic, graph, and code exemplars to select one Public Web v0 default
-   projection without changing Article semantics.
-5. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
+1. Use the approved symbolic, graph, and code exemplars to select one Public
+   Web v0 default projection without changing Article or animation semantics.
+2. Build the smallest public proof around that projection: a mission page, two
+   or three curated explanations, stable direct links, and one portable embed.
+3. Retire remaining compatibility only beside a real caller migration; do not
+   reopen the closed code-animation foundation to perform abstract cleanup.
+4. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
    when the Internal Studio/Public Web boundary becomes executable work.
+5. After the product gate, pressure the code library with one structurally
+   different transformation topology, preferably wrap/unwrap, before designing
+   broader LLM code-animation authoring.
 
 Whole-file CodeMirror decoupling, neutral scroll geometry, explicit algebra
 capabilities, catalogue CLS repair, and the pre-expansion health release are
 complete foundations, not queue items to restart.
 
-Keep algebra pacing, Scheme promotion, layout invention, advanced CodeMirror,
+Keep algebra pacing, broad Scheme/SICP expansion, layout invention, advanced CodeMirror,
 Graph3D promotion, linear algebra, and curriculum expansion paused unless a
 convergence slice exposes them as a direct blocker.
 

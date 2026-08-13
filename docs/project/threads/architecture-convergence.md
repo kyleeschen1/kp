@@ -2,12 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: preserve the approved TypeScript free-shipping-threshold
-exemplar and build Python as its structurally different second caller through
-`run-contract.kp.cross-language-code-animation-foundation-v1`. Shared
-code-animation extraction remains blocked until the Python human checkpoint.
-The ownership and promotion boundary is recorded in
-`../decisions/2026-08-13-kp-code-animation-ownership-and-promotion-boundary.md`.
+Current Next Action: use the approved symbolic, graph, and three-caller code
+portfolio to select one Public Web v0 projection. The cross-language proof is
+closed in `run-contract.kp.cross-language-code-animation-foundation-v1`; do not
+restart language or shared-contract expansion during the product gate.
 
 ## Goal
 
@@ -48,12 +46,12 @@ not a mandate to encode one universal layout in Article or animation semantics.
    effects. The catalogue CLS gate also passes at the unchanged threshold.
 5. **Current bridge retirement:** prove exact reachability, then remove only
    typed-gap-to-legacy-fade if no live route depends on it.
-6. **TypeScript exemplar (approved):** preserve the novice-readable refactor,
+6. **TypeScript exemplar (complete):** preserve the novice-readable refactor,
    native source ownership, deterministic motion, and visual presentation.
-7. **Python caller (active):** reproduce the same pedagogical claim with a
-   language-specific build-time frontend and local vertical slice; stop for
-   human review before extracting common contracts.
-8. **Product projection gate:** compare the same real sources through candidate
+7. **Cross-language pressure (complete):** Python proves the second imperative
+   caller; Scheme adopts only paint and settlement invariants while preserving
+   recursive choreography. The bounded shared seams are closed.
+8. **Product projection gate (current):** compare the same real sources through candidate
    projections and select one public v0 default.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
@@ -130,8 +128,8 @@ Generation quality is measured by:
 
 - Which current layout variants still answer a distinct live product question?
 - Which compatibility wave yields the greatest reduction per migrated caller?
-- Can TypeScript and Python share program identity and transformations without
-  flattening language-specific pedagogy?
+- Which structurally different code transformation should pressure the bounded
+  seams after the product gate: wrap/unwrap or another equally clear topology?
 - Which default projection best handles symbolic, graph, and code material
   while preserving search, static truth, and phone fit?
 
@@ -143,5 +141,6 @@ Generation quality is measured by:
 - `../authoring/llm-generation-entrypoint.md`
 - `../reviews/2026-08-12-project-tightening-next-step-review.md`
 - `../reviews/2026-08-12-economics-layout-production-reachability-audit.md`
+- `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../../../src/architecture/semantic-animation-layer-ownership.ts`
 - `../../../src/architecture/semantic-animation-compatibility-ledger.ts`

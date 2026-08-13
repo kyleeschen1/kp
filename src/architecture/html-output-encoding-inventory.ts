@@ -170,18 +170,6 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
-  retain("src/rendering/scheme-factorial-first-expansion-html.ts", "rendering", [
-    "html-text",
-    "html-attribute"
-  ]),
-  retain("src/rendering/scheme-factorial-html.ts", "rendering", [
-    "html-text",
-    "html-attribute"
-  ]),
-  retain("src/rendering/typescript-refactor-code-html.ts", "rendering", [
-    "html-text",
-    "html-attribute"
-  ]),
   retain("src/rendering/vector-dot-projection-svg.ts", "rendering", [
     "html-attribute",
     "svg-text",
@@ -242,11 +230,6 @@ export const kpHtmlEncodingOwners = [
     "tutorial",
     ["html-text", "html-attribute"]
   ),
-  retain(
-    "src/tutorial/scheme-factorial/scheme-factorial-publication.ts",
-    "tutorial",
-    ["html-text", "html-attribute"]
-  )
 ] as const satisfies readonly KpHtmlEncodingOwner[];
 
 export const kpHtmlEncodingConsolidations = [
