@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.programming.typescript-free-shipping",
+  "entries": [
+    {
+      "alias": "shippingRule",
+      "request": "vignette.programming.typescript-free-shipping@1",
+      "vignetteId": "vignette.programming.typescript-free-shipping",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:afc9ddf7ad2e6d5481485365e7501d101f7681e4df2d7506d0e4504fd9889376",
+      "moduleSpecifier": "../../semantic/typescript-free-shipping-animation-asset.ts"
+    }
+  ]
+}

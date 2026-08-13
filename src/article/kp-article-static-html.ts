@@ -78,6 +78,22 @@ export function compileKpArticleStaticHtml(
   });
 }
 
+/**
+ * Public projections sometimes interleave Article-owned prose with a native
+ * interactive stage. Reuse the build-only Markdown boundary so those hosts do
+ * not grow a second escaping or CommonMark implementation.
+ */
+export function compileKpArticleMarkdownFragmentHtml(markdown: string): string {
+  const root = fromMarkdown(markdown);
+  const context: RenderContext = {
+    inlineMathCount: 0,
+    displayMathCount: 0,
+    headingIds: new Map(),
+    headings: []
+  };
+  return renderRoot(root.children, context);
+}
+
 function renderRoot(nodes: readonly RootContent[], context: RenderContext): string {
   const output: string[] = [];
   for (let index = 0; index < nodes.length; index += 1) {
