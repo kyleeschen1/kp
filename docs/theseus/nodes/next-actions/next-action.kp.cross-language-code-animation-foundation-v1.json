@@ -66,6 +66,18 @@
       "status": "passed",
       "scope": "One active run contract and Python second-caller direction across roadmap, active thread, queue, supporting runtime thread, and LLM entrypoint",
       "checkedAt": "2026-08-13T17:42:35.874Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-free-shipping-refactor-contract.test.ts",
+      "status": "passed",
+      "scope": "Frozen Python source bytes, novice claim, stage/entity closure, behavior cases, and build/runtime authority boundary",
+      "checkedAt": "2026-08-13T17:46:49.306Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Python authored contract and repository TypeScript compatibility",
+      "checkedAt": "2026-08-13T17:46:50.831Z"
     }
   ],
   "progress": {

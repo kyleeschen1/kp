@@ -1,0 +1,23 @@
+[
+  {
+    "id": "below-threshold",
+    "total": 49,
+    "freeShipping": false,
+    "shippingCost": 5,
+    "shippingMessage": "Shipping: $5"
+  },
+  {
+    "id": "at-threshold",
+    "total": 50,
+    "freeShipping": true,
+    "shippingCost": 0,
+    "shippingMessage": "Free shipping"
+  },
+  {
+    "id": "above-threshold",
+    "total": 75,
+    "freeShipping": true,
+    "shippingCost": 0,
+    "shippingMessage": "Free shipping"
+  }
+]

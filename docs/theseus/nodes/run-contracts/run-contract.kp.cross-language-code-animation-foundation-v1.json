@@ -75,7 +75,8 @@
     {
       "id": "s05",
       "title": "Freeze Python fixtures",
-      "status": "planned"
+      "summary": "Froze Python before/after fixtures, behavior boundaries, novice motivation, semantic entity intentions, authored stage order, visual acceptance, and build-only syntax authority.",
+      "status": "complete"
     },
     {
       "id": "s06",
