@@ -126,6 +126,18 @@
       "status": "passed",
       "scope": "Exact Python endpoints, staged helper and caller replacement, AST-derived ranges, native indentation, and stable function separation",
       "checkedAt": "2026-08-13T18:04:12.421Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-source-tokens.test.ts tests/python-refactor-source-projections.test.ts tests/python-refactor-semantic-compiler.test.ts",
+      "status": "passed",
+      "scope": "Python syntax-role coverage, exact token ranges, immutable stream, unique projected occurrences, source projection preservation, and generated semantic parity",
+      "checkedAt": "2026-08-13T18:07:25.049Z"
+    },
+    {
+      "command": "npm run generate:python-refactor-semantics",
+      "status": "passed",
+      "scope": "Regenerated checked-in Python tokens from stdlib lexical evidence",
+      "checkedAt": "2026-08-13T18:07:26.086Z"
     }
   ],
   "progress": {

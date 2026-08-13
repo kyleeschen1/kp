@@ -7,6 +7,8 @@ import {
   type KpPythonRefactorSemanticArtifactV1,
   type KpPythonSemanticEntity
 } from "../src/semantic/python-refactor-semantic-model.ts";
+import { createKpPythonSourceTokens } from
+  "../src/semantic/python-source-tokens.ts";
 import {
   compileKpPythonFrontend,
   type KpPythonFrontendResult,
@@ -54,6 +56,7 @@ function compileRevision(
     path: frontend.path,
     revisionId: frontend.revisionId,
     sourceText: frontend.sourceText,
+    tokens: createKpPythonSourceTokens(frontend.tokens),
     entities: specifications.map((specification) =>
       compileEntity(frontend, specification)
     )

@@ -26,6 +26,7 @@ export interface KpPythonRefactorSemanticArtifactV1 {
     readonly path: string;
     readonly revisionId: string;
     readonly sourceText: string;
+    readonly tokens: readonly import("./python-source-tokens.ts").KpPythonSourceToken[];
     readonly entities: readonly KpPythonSemanticEntity[];
   }[];
 }
@@ -40,6 +41,15 @@ export function defineKpPythonRefactorSemanticArtifact(
     throw new Error("Python refactor semantic entity ids must be unique.");
   }
   for (const revision of artifact.revisions) {
+    for (const token of revision.tokens) {
+      if (
+        token.startOffset < 0 ||
+        token.endOffset > revision.sourceText.length ||
+        revision.sourceText.slice(token.startOffset, token.endOffset) !== token.text
+      ) {
+        throw new Error(`Python source token ${token.id} has an invalid source range.`);
+      }
+    }
     for (const entity of revision.entities) {
       if (
         entity.sourceRange.revisionId !== revision.revisionId ||

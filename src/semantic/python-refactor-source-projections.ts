@@ -2,6 +2,7 @@ import type {
   KpPythonRefactorSemanticArtifactV1,
   KpPythonSemanticEntity
 } from "./python-refactor-semantic-model.ts";
+import type { KpPythonSourceToken } from "./python-source-tokens.ts";
 
 export const kpPythonRefactorSourceProjectionIds = [
   "projection.python.before",
@@ -27,6 +28,7 @@ export interface KpPythonRefactorSourceProjection {
   readonly id: KpPythonRefactorSourceProjectionId;
   readonly sourceText: string;
   readonly rootEntityId?: "program.before" | "program.after";
+  readonly tokens: readonly KpPythonSourceToken[];
   readonly entities: readonly KpPythonProjectedEntity[];
 }
 
@@ -56,6 +58,7 @@ export function createKpPythonRefactorSourceProjections(
 
 interface SourceFragment {
   readonly sourceText: string;
+  readonly tokens: readonly KpPythonSourceToken[];
   readonly entities: readonly KpPythonProjectedEntity[];
 }
 
@@ -93,8 +96,17 @@ function fragment(
         endOffset: entity.sourceRange.endOffset - start
       })
     }));
+  const tokens = source.tokens
+    .filter((token) => token.startOffset >= start && token.endOffset <= end)
+    .map((token) => Object.freeze({
+      ...token,
+      id: `${token.id}.${functionId}`,
+      startOffset: token.startOffset - start,
+      endOffset: token.endOffset - start
+    }));
   return Object.freeze({
     sourceText: source.sourceText.slice(start, end),
+    tokens: Object.freeze(tokens),
     entities: Object.freeze(entities)
   });
 }
@@ -105,11 +117,17 @@ function projection(
   rootEntityId?: "program.before" | "program.after"
 ): KpPythonRefactorSourceProjection {
   let sourceText = "";
+  const tokens: KpPythonSourceToken[] = [];
   const entities: KpPythonProjectedEntity[] = [];
   for (const fragment of fragments) {
     if (sourceText !== "") sourceText += "\n\n\n";
     const offset = sourceText.length;
     sourceText += fragment.sourceText;
+    tokens.push(...fragment.tokens.map((token) => Object.freeze({
+      ...token,
+      startOffset: token.startOffset + offset,
+      endOffset: token.endOffset + offset
+    })));
     entities.push(...fragment.entities.map((entity) => Object.freeze({
       ...entity,
       sourceRange: Object.freeze({
@@ -126,6 +144,7 @@ function projection(
     id,
     sourceText,
     ...(rootEntityId === undefined ? {} : { rootEntityId }),
+    tokens: Object.freeze(tokens),
     entities: Object.freeze(entities)
   });
 }

@@ -117,7 +117,8 @@
     {
       "id": "s12",
       "title": "Add Python syntax roles",
-      "status": "planned"
+      "summary": "Added Python-local syntax paint roles derived from stdlib tokenize evidence, threaded immutable exact-range tokens through generated semantics and projections, and preserved AST entities as semantic authority.",
+      "status": "complete"
     },
     {
       "id": "s13",
