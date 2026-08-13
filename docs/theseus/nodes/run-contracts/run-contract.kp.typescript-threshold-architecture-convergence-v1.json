@@ -67,7 +67,8 @@
     {
       "id": "s04",
       "title": "Record explicit deferrals",
-      "status": "planned"
+      "summary": "Reconciled three stale supporting-thread headers into explicit deferrals without deleting provenance or changing promotion rank.",
+      "status": "complete"
     },
     {
       "id": "s05",

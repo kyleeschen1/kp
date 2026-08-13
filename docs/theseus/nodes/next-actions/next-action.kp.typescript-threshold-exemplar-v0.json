@@ -67,10 +67,24 @@
       "scope": "s03 current authority",
       "checkedAt": "2026-08-13T03:46:57.777Z",
       "notes": "Roadmap, active thread, queue, and executable TypeScript run remain graph-valid."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s04 supporting-thread deferrals",
+      "checkedAt": "2026-08-13T03:48:22.029Z",
+      "notes": "Promotion rank remains tabled and no deferred tutorial or publication work became executable."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s04 explicit deferrals",
+      "checkedAt": "2026-08-13T03:48:24.028Z",
+      "notes": "Valid 940-node workspace after header-only supporting-thread reconciliation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Roadmap, active architecture thread, and current queue now name the approved TypeScript run; completed CodeMirror, capability, CLS, and health work no longer appear as future actions."
+    "summary": "Botanical/Scheme restart, foldable-distribution review, publication-bundle reconciliation, layout, Python, and SvelteKit now read as explicit deferrals; their historical rationale remains retrievable."
   }
 }

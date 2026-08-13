@@ -1,11 +1,12 @@
 # Cross-domain Tutorial Platform Thread
 
-Status: active-supporting
-Last Updated: 2026-08-03
-Current Next Action: Build botanical Lisp as the second tutorial caller, then
-extract only lesson mechanics proven by both it and the completed economics
-route. Generated solve remains the third caller; shared-domain schemas, M4,
-SvelteKit, and live-model work do not advance in this loop.
+Status: stable-supporting; tutorial expansion deferred
+Last Updated: 2026-08-13
+Current Next Action: None during the TypeScript threshold architecture proof.
+The completed botanical/Scheme work remains bounded evidence rather than a
+caller to restart. Layout, shared lesson promotion, generated-solve expansion,
+publication bundles, SvelteKit, and live-model work stay deferred until the
+roadmap explicitly selects them.
 
 ## Goal
 

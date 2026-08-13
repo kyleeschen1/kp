@@ -1,11 +1,12 @@
 # Semantic Runtime Thread
 
 Status: stable-supporting
-Last Updated: 2026-07-27
+Last Updated: 2026-08-13
 Current Next Action: Preserve the released canonical construction, native KaTeX
-session, radical promotion kit, and bounded resource leases while the active
-product thread reviews one foldable distribution exemplar. No global
-equation-family migration is authorized.
+session, foldable-distribution evidence, radical promotion kit, and bounded
+resource leases while the active architecture thread pressures those seams
+with one TypeScript caller. No global equation-family migration or new runtime
+authority is authorized.
 
 ## Goal
 
