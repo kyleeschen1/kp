@@ -33,5 +33,9 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
     Object.freeze({
       name: "schemeFactorialTutorial",
       htmlPath: "tutorials/programming/scheme-factorial/index.html"
+    }),
+    Object.freeze({
+      name: "publicTypeScriptFreeShipping",
+      htmlPath: "learn/code/free-shipping/index.html"
     })
   ]);

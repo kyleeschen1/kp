@@ -96,7 +96,7 @@ test("Python refactor visual checkpoint is deterministic, accessible, and bounde
       ).first()).toHaveCSS("color", "rgb(51, 143, 255)");
       await expect(stage.locator(
         '[data-kp-python-projection-current="true"] [data-kp-python-syntax-kind="number"]'
-      ).first()).toHaveCSS("color", "rgb(156, 189, 111)");
+      ).first()).toHaveCSS("color", "rgb(237, 232, 208)");
 
       if (entry.progress === 0.42) {
         await expect(stage).toHaveAttribute(

@@ -74,6 +74,7 @@ test("programming paint and style stay behind one dependency-light capability", 
   const closure = `${adapter}\n${capability}\n${css}\n${renderer}`;
 
   assert.match(capability, /import "\.\/programming-surface\.css"/);
+  assert.match(capability, /import "\.\.\/rendering\/typescript-refactor\.css"/);
   assert.match(adapter, /getKpEditorAnimationPlaybackSession/);
   assert.match(adapter, /runtimeFrame\.childFrames/);
   assert.doesNotMatch(closure, /from "three"|katex|shiki|highlight\.js|prismjs/i);

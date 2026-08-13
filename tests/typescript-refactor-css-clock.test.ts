@@ -4,7 +4,7 @@ import test from "node:test";
 
 test("TypeScript refactor CSS consumes sampled values without owning time", () => {
   const css = readFileSync(
-    new URL("../src/editor/programming-surface.css", import.meta.url),
+    new URL("../src/rendering/typescript-refactor.css", import.meta.url),
     "utf8"
   );
   const block = css.slice(css.indexOf(".kp-typescript-refactor"));

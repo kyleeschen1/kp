@@ -8,6 +8,14 @@ import {
   compileKpTypeScriptFreeShippingPublicLesson,
   renderKpTypeScriptFreeShippingPublicLesson
 } from "../src/public-web/typescript-free-shipping-publication.ts";
+import {
+  isKpTypeScriptFreeShippingPublicRoute,
+  kpTypeScriptFreeShippingPublicPath
+} from "../src/public-web/typescript-free-shipping-route.ts";
+import { kpDevelopmentBuildEntries } from
+  "../src/dev-toolbar/development-page-build-entries.ts";
+import { kpDevelopmentPages } from
+  "../src/dev-toolbar/development-page-directory.ts";
 
 const text = readFileSync(
   "content/lessons/typescript-free-shipping.kp.md",
@@ -77,4 +85,22 @@ test("checkpoint links carry semantic IDs and exact normalized progress", () => 
     html,
     /data-kp-public-typescript-checkpoint="stage\.verify-parity" data-kp-progress="1"/u
   );
+});
+
+test("public lesson owns one physical build route", () => {
+  assert.equal(kpTypeScriptFreeShippingPublicPath,
+    "/learn/code/free-shipping/");
+  assert.equal(isKpTypeScriptFreeShippingPublicRoute(
+    "/learn/code/free-shipping"), true);
+  assert.equal(isKpTypeScriptFreeShippingPublicRoute(
+    "/tutorials/programming/scheme-factorial/"), false);
+  assert.deepEqual(kpDevelopmentBuildEntries.find(
+    ({ name }) => name === "publicTypeScriptFreeShipping"
+  ), {
+    name: "publicTypeScriptFreeShipping",
+    htmlPath: "learn/code/free-shipping/index.html"
+  });
+  assert.ok(kpDevelopmentPages.some(({ id, href }) =>
+    id === "tutorial.public-typescript-free-shipping" &&
+    href === kpTypeScriptFreeShippingPublicPath));
 });

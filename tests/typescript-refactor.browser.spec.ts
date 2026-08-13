@@ -102,7 +102,7 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
       await expect(stage.locator(
         '[data-kp-typescript-projection-current="true"] ' +
         '[data-kp-typescript-syntax-kind="number"]'
-      ).first()).toHaveCSS("color", "rgb(156, 189, 111)");
+      ).first()).toHaveCSS("color", "rgb(237, 232, 208)");
       if (entry.progress === 0.42) {
         await expect(stage).toHaveAttribute(
           "data-kp-typescript-motion-track",

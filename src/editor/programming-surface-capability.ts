@@ -1,4 +1,5 @@
 import "./programming-surface.css";
+import "../rendering/typescript-refactor.css";
 
 import {
   registerKpEditorProgrammingSurfaceAdapter

@@ -140,10 +140,16 @@ test("token theaters are deterministic, inactive at endpoints, and absent in red
 });
 
 test("the approved callers share optical theme tokens without sharing language syntax", async () => {
-  const css = await readFile(
-    new URL("../src/editor/programming-surface.css", import.meta.url),
-    "utf8"
-  );
+  const css = [
+    await readFile(
+      new URL("../src/editor/programming-surface.css", import.meta.url),
+      "utf8"
+    ),
+    await readFile(
+      new URL("../src/rendering/typescript-refactor.css", import.meta.url),
+      "utf8"
+    )
+  ].join("\n");
   for (const value of [
     "--kp-code-foreground: #ede8d0",
     "--kp-code-keyword: #9099d9",

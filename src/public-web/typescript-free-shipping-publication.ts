@@ -18,9 +18,9 @@ import {
   escapeKpTutorialHtmlAttribute,
   escapeKpTutorialHtmlText
 } from "../tutorial/generated-html-escaping.ts";
+import { kpTypeScriptFreeShippingPublicPath } from
+  "./typescript-free-shipping-route.ts";
 
-export const kpTypeScriptFreeShippingPublicPath =
-  "/learn/code/free-shipping/" as const;
 export const kpTypeScriptFreeShippingPublicSourceId =
   "content/lessons/typescript-free-shipping.kp.md" as const;
 

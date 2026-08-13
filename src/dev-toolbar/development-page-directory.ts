@@ -61,6 +61,12 @@ export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
       "tutorials",
       "/tutorials/programming/scheme-factorial/"
     ),
+    page(
+      "tutorial.public-typescript-free-shipping",
+      "Public · TypeScript free shipping",
+      "tutorials",
+      "/learn/code/free-shipping/"
+    ),
     page("reader.solve-x", "Solve x", "readers", "/reader/solve-x/"),
     page(
       "reader.generated-solve-x",
