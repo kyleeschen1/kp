@@ -49,7 +49,7 @@ export interface KpSemanticEquationTransitionCompileDiagnostic {
 }
 
 export interface KpSemanticEquationTransitionCompileResult {
-  // The former legacy-fade result is intentionally absent: unsupported
+  // The former presentation fallback is intentionally absent: unsupported
   // transitions remain inspectable authoring gaps rather than hidden motion.
   readonly status: "semantic" | "gap";
   readonly ir?: KpEquationTransitionIr | undefined;

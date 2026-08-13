@@ -109,7 +109,8 @@
     {
       "id": "s11",
       "title": "Retire compatibility entry",
-      "status": "planned"
+      "summary": "Retired the live compatibility entry, recorded all three removed contract keys, and added exact production-reference closure; architecture now reports six classified paths instead of seven.",
+      "status": "complete"
     },
     {
       "id": "s12",

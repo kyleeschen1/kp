@@ -207,10 +207,24 @@
       "scope": "s10 deletion reachability",
       "checkedAt": "2026-08-13T04:10:25.786Z",
       "notes": "Zero adapter, legacy fallback type, or unsupportedPolicy references remain outside the compatibility ledger scheduled for s11."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test compatibility ledger and typed gap suites",
+      "status": "passed",
+      "scope": "s11 retirement closure",
+      "checkedAt": "2026-08-13T04:13:04.290Z",
+      "notes": "21 of 21 pass; retired identifiers have zero production references and typed gap repairs remain intact."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 live compatibility count",
+      "checkedAt": "2026-08-13T04:13:05.844Z",
+      "notes": "All boundaries pass with six classified compatibility paths, down from seven at baseline."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "All compiler callers now use the same unconditional typed-gap contract; the legacy fade adapter, payload type, and caller policy argument are deleted without replacement bridges."
+    "summary": "The typed-gap-to-fade path is fully retired: live compatibility count fell from seven to six, and exact negative closure prevents its adapter, payload type, or policy input from returning."
   }
 }

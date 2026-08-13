@@ -73,35 +73,6 @@ export const kpSemanticAnimationCompatibilityLedger = [
     retirementCondition: "Every consumer derives pair views from rich correspondence maps."
   }),
   compatibility({
-    id: "compatibility.typed-gap-to-legacy-fade",
-    category: "fallback",
-    owner: reference(
-      "src/semantic/semantic-transition-gap.ts",
-      "adaptKpSemanticTransitionGapToLegacyFade"
-    ),
-    consumers: [
-      reference(
-        "src/domain-ir/semantic-equation-transition-compiler.ts",
-        "legacy-fade"
-      )
-    ],
-    replacementEvidence: [
-      reference(
-        "src/semantic/semantic-transition-gap.ts",
-        "KpSemanticTransitionGap"
-      )
-    ],
-    status: "compatibility-only",
-    sunsetEvidence: [
-      sunsetEvidence(
-        "tests/semantic-equation-transition-compiler.test.ts",
-        "fallback"
-      )
-    ],
-    requiredClosureEvidence: ["reference", "replacement", "fixture"],
-    retirementCondition: "All supported transitions compile semantically and legacy policy has no callers."
-  }),
-  compatibility({
     id: "compatibility.lightweight-transformation-ref",
     category: "transformation-ref",
     owner: reference(
@@ -326,7 +297,22 @@ export const kpRetiredSemanticAnimationCompatibilityPaths = [
     replacement:
       "Typed immutable algebra capabilities delivered by the lazy catalog pack.",
     closureTest: "tests/algebra-registration-graph.test.ts"
-  }
+  },
+  ...[
+    "adaptKpSemanticTransitionGapToLegacyFade",
+    "KpLegacyEquationFadeFallback",
+    "unsupportedPolicy"
+  ].map((formerContractKey) => ({
+    id: `compatibility.typed-transition-gap.${formerContractKey}`,
+    formerContractKey,
+    removedFrom: [
+      "src/semantic/semantic-transition-gap.ts",
+      "src/domain-ir/semantic-equation-transition-compiler.ts"
+    ],
+    replacement:
+      "Typed KpSemanticTransitionGap diagnostics and repair instructions returned unconditionally.",
+    closureTest: "tests/semantic-animation-compatibility-ledger.test.ts"
+  }))
 ] as const;
 
 function compatibility(

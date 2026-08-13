@@ -90,7 +90,10 @@ test("every compatibility path has one enforced disposition and owner", () => {
       "rendering motif re-export facades",
       "equationSequenceEnvelopeRecipe",
       "equationFractionHierarchyRecipe",
-      "registeredRuntime"
+      "registeredRuntime",
+      "adaptKpSemanticTransitionGapToLegacyFade",
+      "KpLegacyEquationFadeFallback",
+      "unsupportedPolicy"
     ]
   );
 });
