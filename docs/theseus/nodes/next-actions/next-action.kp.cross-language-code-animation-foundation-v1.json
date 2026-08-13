@@ -102,6 +102,12 @@
       "status": "passed",
       "scope": "Checked-in Python semantic artifact drift",
       "checkedAt": "2026-08-13T17:55:32.332Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-operations.test.ts",
+      "status": "passed",
+      "scope": "Python canonical asset validity, transformation validity, correspondence rewind laws, lineage closure, and AST-derived selector identity",
+      "checkedAt": "2026-08-13T17:58:04.346Z"
     }
   ],
   "progress": {

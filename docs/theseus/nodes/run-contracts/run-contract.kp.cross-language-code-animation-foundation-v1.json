@@ -93,7 +93,8 @@
     {
       "id": "s08",
       "title": "Compile Python operations",
-      "status": "planned"
+      "summary": "Compiled Python entities into canonical assets, four explicit transformations, validated correspondence maps, lineage, and stable AST-derived selectors without geometry or paint authority.",
+      "status": "complete"
     },
     {
       "id": "s09",
