@@ -71,6 +71,10 @@ import {
   compileKpTypeScriptFreeShippingPublicLesson,
   renderKpTypeScriptFreeShippingPublicLesson
 } from "./src/public-web/typescript-free-shipping-publication.ts";
+import {
+  compileKpFractionCompositionPublicLesson,
+  renderKpFractionCompositionPublicLesson
+} from "./src/public-web/fraction-composition-publication.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -140,6 +144,12 @@ const typeScriptFreeShippingPublicFilename = resolve(
 );
 const typeScriptFreeShippingPublicPublication =
   compileTypeScriptFreeShippingPublicPublication();
+const fractionCompositionPublicFilename = resolve(
+  projectRoot,
+  "learn/math/fraction-composition/index.html"
+);
+const fractionCompositionPublicPublication =
+  compileFractionCompositionPublicPublication();
 
 export default defineConfig({
   define: {
@@ -307,6 +317,20 @@ export default defineConfig({
             ? html.replace(
                 "<!-- kp:typescript-free-shipping-publication -->",
                 typeScriptFreeShippingPublicPublication
+              )
+            : html;
+        }
+      }
+    },
+    {
+      name: "kp-fraction-composition-publication",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          return context.filename === fractionCompositionPublicFilename
+            ? html.replace(
+                "<!-- kp:fraction-composition-publication -->",
+                fractionCompositionPublicPublication
               )
             : html;
         }
@@ -498,5 +522,19 @@ function compileAlgebraFractionCompositionStaticPublication(): string {
   ), "utf8")) as KpArticleImportLock;
   return renderKpFractionCompositionStaticPublication(
     compileKpFractionCompositionArticle({ text, lock })
+  );
+}
+
+function compileFractionCompositionPublicPublication(): string {
+  const text = readFileSync(resolve(
+    projectRoot,
+    "content/lessons/algebra-fraction-composition.kp.md"
+  ), "utf8");
+  const lock = JSON.parse(readFileSync(resolve(
+    projectRoot,
+    "content/lessons/algebra-fraction-composition.kp.lock.json"
+  ), "utf8")) as KpArticleImportLock;
+  return renderKpFractionCompositionPublicLesson(
+    compileKpFractionCompositionPublicLesson({ text, lock })
   );
 }

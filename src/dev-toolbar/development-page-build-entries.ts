@@ -37,5 +37,9 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
     Object.freeze({
       name: "publicTypeScriptFreeShipping",
       htmlPath: "learn/code/free-shipping/index.html"
+    }),
+    Object.freeze({
+      name: "publicFractionComposition",
+      htmlPath: "learn/math/fraction-composition/index.html"
     })
   ]);

@@ -109,6 +109,19 @@ test("public TypeScript paths select the bounded route gate", () => {
   }
 });
 
+test("public symbolic paths select the bounded route gate", () => {
+  for (const path of [
+    "src/public-web/fraction-composition-public-entry.ts",
+    "learn/math/fraction-composition/index.html",
+    "vite.public-fraction-composition.config.ts",
+    "tsconfig.public-fraction-composition.json"
+  ]) {
+    const result = selectKpVerificationImpact([path]);
+    assert.deepEqual(ids(result), ["public-fraction-composition"]);
+    assert.deepEqual(result.unmatchedPaths, []);
+  }
+});
+
 test("canonical TypeScript refactor paths add focused semantic coverage", () => {
   const result = selectKpVerificationImpact([
     "src/animation/typescript-refactor-motion-plan.ts"

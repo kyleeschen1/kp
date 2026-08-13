@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "incremental": true,
+    "tsBuildInfoFile": "./tmp/codex/tsbuildinfo/public-fraction-composition.tsbuildinfo"
+  },
+  "files": [
+    "src/public-web/fraction-composition-public-entry.ts",
+    "src/public-web/fraction-composition-publication.ts",
+    "src/public-web/fraction-composition-public-route.ts",
+    "tests/fraction-composition-publication.test.ts",
+    "vite.public-fraction-composition.config.ts"
+  ]
+}

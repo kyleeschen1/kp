@@ -167,7 +167,7 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: code projection approved; symbolic pressure next
+Status: code projection approved; symbolic projection at human checkpoint
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -191,6 +191,16 @@ boundary without changing its semantics or choreography. After its checkpoint,
 use the canonical economics demand-shift graph as the third caller. Only those
 three approved callers may justify extraction of a shared Public Web v0
 projection contract.
+
+The bounded symbolic spike is now available at
+`/learn/math/fraction-composition/`. It reuses the existing Article v1 source,
+build-time KaTeX, attention matrix, canonical native equation session, semantic
+addresses, and deterministic timeline. The new code is a removable public
+route and presentation shell; it does not fork symbolic semantics or motion.
+Static/no-JavaScript truth, direct endpoint restoration, stable stage identity,
+the retained attention-stage regression, and a 390 px no-overflow composition
+pass focused checks. Human judgment is now required before presentation tuning,
+runtime slimming, economics pressure, or shared projection extraction.
 
 Choose one public v0 projection using at least three real content shapes:
 

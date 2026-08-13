@@ -21,15 +21,16 @@ export function mountKpFractionCompositionAttentionStage(input: {
   readonly ownerWindow: Window;
   readonly publication: HTMLElement;
   readonly stageHost: HTMLElement;
+  readonly requested?: boolean | undefined;
   readonly seekGlobal: (progress: number) => void;
   readonly playTimeline: () => void;
   readonly pauseTimeline: () => void;
   readonly setAttention: (addresses: readonly string[]) => void;
   readonly pacing: KpFractionCompositionAttentionPacingProfile;
 }): KpFractionCompositionAttentionStageController {
-  if (!isKpFractionCompositionAttentionStageRequested(
+  if (!(input.requested ?? isKpFractionCompositionAttentionStageRequested(
     input.ownerWindow.location.search
-  )) {
+  ))) {
     return Object.freeze({ active: false, dispose() {} });
   }
   const root = requireElement<HTMLElement>(

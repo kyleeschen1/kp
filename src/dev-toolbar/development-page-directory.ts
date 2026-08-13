@@ -67,6 +67,12 @@ export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
       "tutorials",
       "/learn/code/free-shipping/"
     ),
+    page(
+      "tutorial.public-fraction-composition",
+      "Public · Fraction composition",
+      "tutorials",
+      "/learn/math/fraction-composition/"
+    ),
     page("reader.solve-x", "Solve x", "readers", "/reader/solve-x/"),
     page(
       "reader.generated-solve-x",

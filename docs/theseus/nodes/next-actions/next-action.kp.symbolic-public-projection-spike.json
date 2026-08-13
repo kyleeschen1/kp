@@ -1,0 +1,45 @@
+{
+  "id": "next-action.kp.symbolic-public-projection-spike",
+  "kind": "next-action",
+  "title": "Build bounded fraction-composition public projection spike",
+  "status": "ready",
+  "domain": "kp.public-web",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-public-projection-pressure-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/lessons/algebra-fraction-composition.kp.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-typescript-public-lesson-checkpoint.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run verify:public-fraction-composition:fast",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-13T23:51:30.719Z"
+    },
+    {
+      "command": "npm run visual:public-fraction-composition",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-13T23:51:32.237Z"
+    },
+    {
+      "command": "npm run visual:algebra-attention-stage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-13T23:51:33.217Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Implemented the bounded public fraction-composition projection and stopped at its required human visual checkpoint; semantics, Article v1, canonical KaTeX choreography, direct seek, no-JS truth, and phone fit are preserved."
+  }
+}

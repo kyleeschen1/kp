@@ -66,7 +66,10 @@ export function mountKpFractionCompositionArticleEnhancement(
   ownerWindow: Window = window,
   onCanonicalSample?: ((
     sample: KpFractionCompositionArticleCanonicalSample
-  ) => void) | undefined
+  ) => void) | undefined,
+  projection?: Readonly<{
+    attentionStageRequested?: boolean | undefined;
+  }> | undefined
 ): () => void {
   const host = ownerWindow.document.querySelector<HTMLElement>(
     "[data-kp-algebra-stage-host]"
@@ -78,7 +81,9 @@ export function mountKpFractionCompositionArticleEnhancement(
   const focus = createKpReaderSemanticFocusService(
     kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
   );
-  const attentionStageRequested =
+  // Public projections can request the fixed stage without leaking an
+  // internal layout query parameter into their canonical learner URL.
+  const attentionStageRequested = projection?.attentionStageRequested ??
     isKpFractionCompositionAttentionStageRequested(ownerWindow.location.search);
   const attentionPacing = createKpFractionCompositionAttentionPacingProfile(
     createKpFractionCompositionArticleRuntimeRanges(),
@@ -101,6 +106,7 @@ export function mountKpFractionCompositionArticleEnhancement(
     ownerWindow,
     publication: article,
     stageHost: host,
+    requested: attentionStageRequested,
     seekGlobal: (progress) => canonicalStage.seekGlobal(progress),
     playTimeline: () => canonicalStage.playRange(),
     pauseTimeline: () => canonicalStage.pauseRange(),

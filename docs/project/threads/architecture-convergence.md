@@ -2,12 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: preserve the approved TypeScript public projection at
-`/learn/code/free-shipping/`, then project the existing Article v1
-fraction-composition lesson and its canonical native-KaTeX animation through
-the same public-product boundary. Stop for its human checkpoint before using
-the economics demand-shift graph as the third caller or extracting a shared
-projection contract. The cross-language proof is closed in
+Current Next Action: review the bounded symbolic public projection at
+`/learn/math/fraction-composition/`. Judge whether one austere stage, one
+continuous scrubber, one active cue, and normal searchable Article prose form a
+credible second public content shape. Stop before presentation tuning, runtime
+slimming, economics pressure, or shared projection extraction. The
+cross-language proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -56,9 +56,10 @@ not a mandate to encode one universal layout in Article or animation semantics.
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
 8. **Product projection gate (current):** the TypeScript public lesson passed
-   its static-first code checkpoint. Project the canonical fraction-composition
-   lesson next, stop for review, then compare the economics demand-shift graph
-   before selecting a public v0 default.
+   its static-first code checkpoint. The canonical fraction-composition public
+   spike is implemented and stopped at its human checkpoint. Resolve that
+   checkpoint before comparing the economics demand-shift graph or selecting a
+   public v0 default.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 

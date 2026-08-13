@@ -158,6 +158,12 @@ const checks = {
     "high",
     "Type-check, test, build, budget, and browser-check the bounded public TypeScript route."
   ),
+  publicFractionComposition: check(
+    "public-fraction-composition",
+    ["npm", "run", "verify:public-fraction-composition"],
+    "high",
+    "Type-check, test, build, and browser-check the bounded public symbolic route."
+  ),
   publicTypeScriptInfrastructure: check(
     "public-typescript-infrastructure",
     [
@@ -215,6 +221,12 @@ const rules: readonly KpVerificationRule[] = [
       path === "tests/pre-expansion-health-commands.test.ts",
     checks: [checks.publicTypeScriptInfrastructure],
     reason: "Focused verification routing or explicit release composition changed."
+  },
+  {
+    id: "public-fraction-composition",
+    matches: isPublicFractionCompositionPath,
+    checks: [checks.publicFractionComposition],
+    reason: "The bounded public symbolic projection changed."
   },
   {
     id: "public-typescript",
@@ -361,8 +373,8 @@ const rules: readonly KpVerificationRule[] = [
     matches: (path) =>
       path === "package.json" ||
       path === "package-lock.json" ||
-      (path.startsWith("vite.config") && !isPublicTypeScriptPath(path)) ||
-      (path.startsWith("tsconfig") && !isPublicTypeScriptPath(path)),
+      (path.startsWith("vite.config") && !isFocusedPublicPath(path)) ||
+      (path.startsWith("tsconfig") && !isFocusedPublicPath(path)),
     checks: [checks.typecheck, checks.test, checks.build],
     reason: "A package, compiler, or build surface changed."
   }
@@ -397,6 +409,21 @@ function isPublicTypeScriptPath(path: string): boolean {
     path === "vite.public-typescript.config.ts" ||
     path === "playwright.public-typescript.config.ts" ||
     path === "tsconfig.public-typescript.json";
+}
+
+function isPublicFractionCompositionPath(path: string): boolean {
+  return path.startsWith("src/public-web/fraction-composition-public") ||
+    path === "learn/math/fraction-composition/index.html" ||
+    path === "tests/fraction-composition-publication.test.ts" ||
+    path === "tests/fraction-composition-public.browser.spec.ts" ||
+    path === "vite.public-fraction-composition.config.ts" ||
+    path === "playwright.public-fraction-composition.config.ts" ||
+    path === "tsconfig.public-fraction-composition.json";
+}
+
+function isFocusedPublicPath(path: string): boolean {
+  return isPublicTypeScriptPath(path) ||
+    isPublicFractionCompositionPath(path);
 }
 
 function isTypeScriptRefactorPath(path: string): boolean {
