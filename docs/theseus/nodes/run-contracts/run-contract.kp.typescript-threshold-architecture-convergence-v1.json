@@ -187,7 +187,8 @@
     {
       "id": "s24",
       "title": "Integrate catalogue",
-      "status": "planned"
+      "summary": "Integrated the TypeScript exemplar into the existing programming pack and catalogue as one searchable row with generated metadata, standard playback controls, shareable artifact/playhead URLs, specialized native adapter ownership, and shared review capture; 89 catalogue tests and all boundary checks pass.",
+      "status": "complete"
     },
     {
       "id": "s25",

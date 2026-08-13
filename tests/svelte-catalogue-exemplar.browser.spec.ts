@@ -110,7 +110,7 @@ test("canonical Svelte catalogue mounts through the shared selected-host model",
   const originalUrl = page.url();
   await expect(results).toHaveAttribute(
     "data-kp-animation-catalogue-result-count",
-    "36"
+    "37"
   );
   await expect(results.locator("li").first()).toHaveAttribute(
     "data-kp-animation-catalogue-row",

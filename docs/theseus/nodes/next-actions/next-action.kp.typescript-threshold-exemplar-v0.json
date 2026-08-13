@@ -410,10 +410,24 @@
       "scope": "s23 motion authority",
       "checkedAt": "2026-08-13T05:15:35.465Z",
       "notes": "All type and architecture gates pass; source projections derive from compiler spans and CSS owns no time."
+    },
+    {
+      "command": "node --test catalogue, TypeScript integration, programming asset, and presentation inventory suites",
+      "status": "passed",
+      "scope": "s24 catalogue integration",
+      "checkedAt": "2026-08-13T05:26:09.420Z",
+      "notes": "Eighty-nine of eighty-nine pass; the 38th concrete row lazy-loads from programming, resolves its specialized adapter, preserves exact inventory identity, standard controls, direct playhead URLs, and review lifecycle."
+    },
+    {
+      "command": "npm run typecheck, npm run check:architecture, npm run check:animation-library-bundle-boundary, and npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "s24 catalogue boundary",
+      "checkedAt": "2026-08-13T05:26:10.483Z",
+      "notes": "Types, architecture, generated display metadata, and route budgets pass; outer, main host, measured route, and place-value closures remain at baseline."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The TypeScript exemplar now samples four compiler-derived native source projections from one clock, revealing the helper and each caller in pedagogical order with reversible handoffs, semantic focus, and reduced-motion endpoints."
+    "summary": "The exemplar is now the 38th concrete catalogue asset: lazy programming-pack loading, compact generated metadata, exact fuzzy-search terms, standard controls, direct playhead URLs, native selected-host rendering, and the existing review lifecycle all converge on one asset identity."
   }
 }

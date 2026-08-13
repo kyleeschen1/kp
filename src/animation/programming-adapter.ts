@@ -17,6 +17,9 @@ import {
 import {
   createKpLispLambdaApplicationAnimationAsset
 } from "./lisp-lambda-application-adapter.ts";
+import {
+  createKpTypeScriptFreeShippingAnimationAsset
+} from "../semantic/typescript-free-shipping-animation-asset.ts";
 
 const programTraceAnimationId = "animation.programming.add.execution-trace";
 const programTraceTimelineId = "timeline.programming.add.execution-trace";
@@ -25,7 +28,8 @@ const programTraceRenderTargetId = "render.programming.add.execution-trace";
 export function createProgrammingAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     createProgramTraceAnimationAsset(),
-    createKpLispLambdaApplicationAnimationAsset()
+    createKpLispLambdaApplicationAnimationAsset(),
+    createKpTypeScriptFreeShippingAnimationAsset().animation
   ];
 }
 

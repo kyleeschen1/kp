@@ -44,6 +44,9 @@ import {
 import {
   kpEditorProgrammingSurfaceAdapter
 } from "../src/editor/programming-surface-adapter.ts";
+import {
+  kpEditorTypeScriptRefactorSurfaceAdapter
+} from "../src/editor/typescript-refactor-surface-adapter.ts";
 
 const graphSvgViewportAdapter = createKpEditorGraphSvgViewportAdapter(
   kpEditorGraphSvgAnimationIds
@@ -67,7 +70,8 @@ function currentHostability() {
     kpEditorExactFractionQuantitySurfaceAdapter,
     kpEditorPlaceValueAdditionSurfaceAdapter,
     kpEditorProgrammingSurfaceAdapter,
-    kpEditorLispMaterialSurfaceAdapter
+    kpEditorLispMaterialSurfaceAdapter,
+    kpEditorTypeScriptRefactorSurfaceAdapter
   ]);
 
   return createKpAnimationCatalogueLoadableRegistry().map((entry) => {
@@ -89,7 +93,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 37);
+  assert.equal(hostability.length, 38);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -98,7 +102,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 37,
+      ready: 38,
       "missing-adapter": 0,
       "unsupported-surface": 0
     }

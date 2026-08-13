@@ -18,9 +18,9 @@ test("seam atlas enumerates every concrete asset without assigning review", asyn
   const projectedIds = createKpAnimationCatalogueProjection().entries
     .map(({ animationId }) => animationId);
 
-  assert.equal(recordedIds.length, 37);
+  assert.equal(recordedIds.length, 38);
   assert.deepEqual([...recordedIds].sort(), [...projectedIds].sort());
-  assert.match(source, /37 meaningfully painted/);
+  assert.match(source, /38 meaningfully painted/);
   assert.match(source, /no remaining native-host\s+capability gaps/);
   assert.match(source, /Every human disposition remains `Unreviewed`/);
 });

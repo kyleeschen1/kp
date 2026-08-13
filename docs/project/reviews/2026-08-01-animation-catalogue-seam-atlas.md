@@ -5,17 +5,17 @@ Status: updated after native programming host integration
 
 ## Outcome
 
-The internal catalogue now has one row for each of 37 concrete lazy-loadable
+The internal catalogue now has one row for each of 38 concrete lazy-loadable
 assets across 12 packs. The catalogue load probe loaded and routed every row:
-37 meaningfully painted through a native adapter, with no remaining native-host
+38 meaningfully painted through a native adapter, with no remaining native-host
 capability gaps, no loading failures, and no iframes. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
 
 This collapses most of the apparent port backlog while correcting one earlier
 false positive. There is no remaining catalogue-host port in this concrete
-inventory. The programming seam is shared by one pure execution trace and one
-composite comparison through the same selected-caller native adapter.
+inventory. The programming seam now hosts an execution trace, a Lisp material
+evaluation, and one TypeScript refactor through selected-caller native adapters.
 
 Every human disposition remains `Unreviewed`. The final column below is a
 provisional question, not approval: `Keep?` means only that the asset is
@@ -61,17 +61,19 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Approved exemplar |
 | `animation.programming.add.execution-trace` | programming | programming | Painted · native programming trace | 1 | Keep? |
 | `animation.programming.lisp-lambda-application` | programming | programming | Painted · Lisp material stage | 1 | Keep? |
+| `animation.programming.typescript-free-shipping-refactor` | programming | programming | Painted · native TypeScript refactor | 1 | Keep? |
 | `animation.sample.fourier-transform-pair` | complex-katex | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.sample.fundamental-theorem-calculus` | complex-katex | equation | Painted · KaTeX | 3 | Keep? |
 
 ## Shared Seams
 
 The catalogue crosses five surface shapes: 24 equation, seven graph, three
-diagram, one composite, and two programming assets. Adapter reuse is strong:
+diagram, one composite, and three programming assets. Adapter reuse is strong:
 the general KaTeX adapter participates in 22 rows, the SVG graph adapter in six,
 the canonical operation-evaluation adapter in three, the bounded Graph3D
 adapter in one, the programming trace adapter in two, the Lisp material adapter
-in one, and three specialized diagram adapters each cover one row.
+in one, the TypeScript refactor adapter in one, and three specialized diagram
+adapters each cover one row.
 This is evidence for keeping the adapter registry seam, not for inventing a
 universal renderer.
 
@@ -86,7 +88,7 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 37 assets currently carry 80 related display contexts: 56 editor, 17 card,
+The 38 assets currently carry 81 related display contexts: 57 editor, 17 card,
 five reader, and two diagnostic. These contexts stay under Details and do not
 mint additional catalogue rows.
 

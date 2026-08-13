@@ -122,7 +122,22 @@ export function createKpTypeScriptFreeShippingAnimationAsset():
       artifactId: "animation.programming.typescript-free-shipping-refactor",
       summary: "Exact before and after source remain available without motion."
     }],
+    dashboard: {
+      rowId: "animation-programming-typescript-free-shipping-refactor",
+      tags: [
+        "animation",
+        "programming",
+        "typescript",
+        "refactor",
+        "duplicate-rule",
+        "behavior-parity"
+      ],
+      sampleTargetIds: ["render.typescript.free-shipping-threshold"],
+      sourceRefIds: [kpTypeScriptFreeShippingRefactorContract.id]
+    },
     metadata: {
+      domain: "programming",
+      summary: kpTypeScriptFreeShippingRefactorContract.noviceMotivation,
       language: "typescript",
       threshold: kpTypeScriptFreeShippingRefactorContract.threshold,
       proofScope: behavior.scope,
