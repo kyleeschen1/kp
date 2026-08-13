@@ -120,6 +120,12 @@
       "status": "passed",
       "scope": "Python authored stage order, gapless 14-second score, canonical selectors, direct seek, rewind, and geometry exclusion",
       "checkedAt": "2026-08-13T18:02:05.115Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-source-projections.test.ts",
+      "status": "passed",
+      "scope": "Exact Python endpoints, staged helper and caller replacement, AST-derived ranges, native indentation, and stable function separation",
+      "checkedAt": "2026-08-13T18:04:12.421Z"
     }
   ],
   "progress": {

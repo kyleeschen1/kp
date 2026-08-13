@@ -111,7 +111,8 @@
     {
       "id": "s11",
       "title": "Build Python projections",
-      "status": "planned"
+      "summary": "Built four native Python source projections from complete AST-identified function fragments, preserving exact endpoints, indentation, entity ranges, and price-before-message replacement order.",
+      "status": "complete"
     },
     {
       "id": "s12",
