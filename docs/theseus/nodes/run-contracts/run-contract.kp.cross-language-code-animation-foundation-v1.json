@@ -99,7 +99,8 @@
     {
       "id": "s09",
       "title": "Prove Python behavior",
-      "status": "planned"
+      "summary": "Added a bounded Python behavior certificate proving before/after parity at 49, 50, and 75 against exact AST-backed rule and call evidence, without executing learner source.",
+      "status": "complete"
     },
     {
       "id": "s10",
