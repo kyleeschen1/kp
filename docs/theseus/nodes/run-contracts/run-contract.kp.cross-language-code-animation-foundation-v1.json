@@ -135,7 +135,8 @@
     {
       "id": "s15",
       "title": "Integrate Python vertical slice",
-      "status": "planned"
+      "summary": "Integrated the Python exemplar end to end through existing product seams while keeping presentation local until human review.",
+      "status": "complete"
     },
     {
       "id": "s16",

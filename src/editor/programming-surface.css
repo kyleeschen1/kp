@@ -406,3 +406,199 @@
   animation: none;
   transition: none;
 }
+
+/* Python remains a deliberately local second caller until visual review. Its
+   duplication makes the later shared/exceptions comparison evidence-based. */
+.editor-animation-player__surface:has(.kp-python-refactor) {
+  border-style: solid;
+  color: #e8ebf2;
+  background: #0d0e1c;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.kp-python-refactor {
+  --kp-code-foreground: #ede8d0;
+  --kp-code-keyword: #9099d9;
+  --kp-code-function: #338fff;
+  --kp-code-property: #76afbf;
+  --kp-code-type: #c0965b;
+  --kp-code-boolean: #319aaa;
+  --kp-code-number: #9cbd6f;
+  --kp-code-string: #82b0ec;
+  --kp-code-comment: #db7b5f;
+  --kp-code-delimiter: #989898;
+  --kp-code-highlight-background: rgb(92 173 255 / 10%);
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(100% - 2rem, 54rem);
+  min-height: 22rem;
+  overflow: hidden;
+  border: 1px solid rgb(224 230 244 / 14%);
+  background: #0d0e1c;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 18%);
+}
+
+.kp-python-refactor__file {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid rgb(224 230 244 / 12%);
+  color: #a5adbd;
+  font: 600 0.72rem/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+.kp-python-refactor__source {
+  display: grid;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.25rem 1.5rem;
+}
+
+.kp-python-refactor__revision {
+  grid-area: 1 / 1;
+  align-self: center;
+  margin: 0;
+  color: var(--kp-code-foreground);
+  font: 400 clamp(0.72rem, 1.3vw, 0.95rem)/1.75 ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre-wrap;
+  tab-size: 4;
+  opacity: var(--kp-python-revision-opacity, 1);
+  transform: scale(var(--kp-python-revision-scale, 1));
+  transform-origin: 50% 50%;
+}
+
+.kp-python-refactor__revision[data-kp-python-projection-visible="false"] {
+  visibility: hidden;
+}
+
+.kp-python-refactor__revision code,
+.kp-python-refactor__revision span {
+  font: inherit;
+}
+
+.kp-python-refactor__token-theater {
+  position: relative;
+  display: block;
+  grid-area: 1 / 1;
+  align-self: center;
+  min-width: 46ch;
+  height: calc(var(--kp-python-theater-lines, 11) * 1.75em);
+  visibility: hidden;
+  color: var(--kp-code-foreground);
+  font: 400 clamp(0.72rem, 1.3vw, 0.95rem)/1.75 ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.kp-python-refactor__token-theater[data-kp-python-token-theater-active="true"] {
+  visibility: visible;
+}
+
+.kp-python-refactor__token-theater [data-kp-python-token-id] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  color: inherit;
+  font: inherit;
+  opacity: var(--kp-python-token-opacity, 1);
+  transform: translate3d(
+    var(--kp-python-token-x, 0),
+    var(--kp-python-token-y, 0),
+    0
+  ) scale(var(--kp-python-token-scale, 1));
+  transform-origin: 50% 56%;
+  will-change: transform, opacity;
+}
+
+.kp-python-refactor__token-theater [data-kp-python-token-role="transit"] {
+  z-index: 2;
+  text-shadow: 0 0 0.55rem currentcolor;
+}
+
+.kp-python-refactor__token-theater [data-kp-python-token-role="withdrawal"] {
+  filter: saturate(0.72) brightness(0.88);
+}
+
+.kp-python-refactor [data-kp-python-focus="true"] {
+  text-shadow: 0 0 0.55rem rgb(207 229 255 / var(--kp-python-focus-shadow-alpha, 0));
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="keyword"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="keyword"] {
+  color: var(--kp-code-keyword);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="function"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="function"] {
+  color: var(--kp-code-function);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="type"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="type"] {
+  color: var(--kp-code-type);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="boolean"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="boolean"] {
+  color: var(--kp-code-boolean);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="number"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="number"] {
+  color: var(--kp-code-number);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="string"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="string"] {
+  color: var(--kp-code-string);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="comment"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="comment"] {
+  color: var(--kp-code-comment);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="operator"],
+.kp-python-refactor [data-kp-python-syntax-kind="punctuation"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="operator"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="punctuation"] {
+  color: var(--kp-code-delimiter);
+}
+
+.kp-python-refactor__narration {
+  min-height: 3.25rem;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid rgb(224 230 244 / 12%);
+  color: #e8ebf2;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .kp-python-refactor {
+    width: calc(100% - 1rem);
+    min-height: 18rem;
+  }
+
+  .kp-python-refactor__source {
+    padding: 0.8rem;
+  }
+
+  .kp-python-refactor__revision,
+  .kp-python-refactor__token-theater {
+    font-size: clamp(0.62rem, 2.6vw, 0.78rem);
+  }
+}
+
+.kp-python-refactor,
+.kp-python-refactor * {
+  animation: none;
+  transition: none;
+}

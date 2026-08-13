@@ -74,7 +74,9 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       input.animationId === "animation.programming.add.execution-trace" ||
       input.animationId === "animation.comparison.linear-solve-programming" ||
       input.animationId ===
-        "animation.programming.typescript-free-shipping-refactor"
+        "animation.programming.typescript-free-shipping-refactor" ||
+      input.animationId ===
+        "animation.programming.python-free-shipping-refactor"
     )
   ) {
     // This capability registers every specialized programming adapter; new

@@ -9,12 +9,17 @@ import {
 import {
   registerKpEditorTypeScriptRefactorSurfaceAdapter
 } from "./typescript-refactor-surface-adapter.ts";
+import {
+  registerKpEditorPythonRefactorSurfaceAdapter
+} from "./python-refactor-surface-adapter.ts";
 
 export function registerKpEditorProgrammingSurfaceCapability(): () => void {
   const disposeTrace = registerKpEditorProgrammingSurfaceAdapter();
   const disposeLisp = registerKpEditorLispMaterialSurfaceAdapter();
   const disposeTypeScript = registerKpEditorTypeScriptRefactorSurfaceAdapter();
+  const disposePython = registerKpEditorPythonRefactorSurfaceAdapter();
   return () => {
+    disposePython();
     disposeTypeScript();
     disposeLisp();
     disposeTrace();

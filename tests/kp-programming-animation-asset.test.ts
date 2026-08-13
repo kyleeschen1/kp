@@ -76,7 +76,8 @@ test("programming animation assets are available through the animation catalog",
     [
       "animation.programming.add.execution-trace",
       "animation.programming.lisp-lambda-application",
-      "animation.programming.typescript-free-shipping-refactor"
+      "animation.programming.typescript-free-shipping-refactor",
+      "animation.programming.python-free-shipping-refactor"
     ]
   );
   assert.ok(
@@ -88,5 +89,10 @@ test("programming animation assets are available through the animation catalog",
     createKpAnimationAssets()
       .map((animation) => animation.id)
       .includes("animation.programming.typescript-free-shipping-refactor")
+  );
+  assert.ok(
+    createKpAnimationAssets()
+      .map((animation) => animation.id)
+      .includes("animation.programming.python-free-shipping-refactor")
   );
 });

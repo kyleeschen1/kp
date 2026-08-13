@@ -1590,6 +1590,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.programming.python-free-shipping-refactor",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.programming.python-free-shipping-refactor",
+    "title": "One free-shipping rule",
+    "summary": "If only one copy of the $50 threshold changes, the checkout price and customer message can disagree.",
+    "renderTargetKinds": [
+      "programming"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 14000,
+    "beatCount": 7,
+    "tags": [
+      "animation",
+      "programming",
+      "python",
+      "refactor",
+      "duplicate-rule",
+      "behavior-parity"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.comparison.linear-solve-programming",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.comparison.linear-solve-programming",

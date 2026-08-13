@@ -20,6 +20,9 @@ import {
 import {
   createKpTypeScriptFreeShippingAnimationAsset
 } from "../semantic/typescript-free-shipping-animation-asset.ts";
+import {
+  createKpPythonFreeShippingAnimationAsset
+} from "../semantic/python-free-shipping-animation-asset.ts";
 
 const programTraceAnimationId = "animation.programming.add.execution-trace";
 const programTraceTimelineId = "timeline.programming.add.execution-trace";
@@ -29,7 +32,8 @@ export function createProgrammingAnimationAssets(): readonly KpAnimationAsset[] 
   return [
     createProgramTraceAnimationAsset(),
     createKpLispLambdaApplicationAnimationAsset(),
-    createKpTypeScriptFreeShippingAnimationAsset().animation
+    createKpTypeScriptFreeShippingAnimationAsset().animation,
+    createKpPythonFreeShippingAnimationAsset().animation
   ];
 }
 

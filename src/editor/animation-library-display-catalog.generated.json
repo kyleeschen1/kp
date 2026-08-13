@@ -1309,6 +1309,33 @@
     ]
   },
   {
+    "animationId": "animation.programming.python-free-shipping-refactor",
+    "title": "One free-shipping rule",
+    "summary": "If only one copy of the $50 threshold changes, the checkout price and customer message can disagree.",
+    "tags": [
+      "animation",
+      "behavior-parity",
+      "duplicate-rule",
+      "editor",
+      "programming",
+      "python",
+      "refactor"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.programming.python-free-shipping-refactor",
+    "representations": [
+      {
+        "id": "editor-animation.animation.programming.python-free-shipping-refactor",
+        "label": "One free-shipping rule",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.programming.python-free-shipping-refactor",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.programming.typescript-free-shipping-refactor",
     "title": "One free-shipping rule",
     "summary": "If only one copy of the $50 threshold changes, the checkout price and customer message can disagree.",

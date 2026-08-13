@@ -158,11 +158,32 @@
       "scope": "slice s14 type boundary",
       "checkedAt": "2026-08-13T18:17:59.007Z",
       "notes": "Python motion and token theater compile without widening browser authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test Python asset renderer adapter catalogue and catalogue inventory suites",
+      "status": "passed",
+      "scope": "slice s15 Python vertical integration",
+      "checkedAt": "2026-08-13T18:37:37.983Z",
+      "notes": "Sixty-eight focused asset, native source, escaping, catalogue, hostability, URL, and inventory checks pass; the catalogue now has 39 concrete rows."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 repository types",
+      "checkedAt": "2026-08-13T18:37:38.961Z",
+      "notes": "Python vertical slice and generated catalogue projections typecheck."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s15 architecture boundary",
+      "checkedAt": "2026-08-13T18:37:39.876Z",
+      "notes": "Semantic and presentation boundaries remain closed with the Python renderer added."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Python motion is now pure and deterministic: native source projections and compiler-owned tokens sample from the existing shared clock with reversible seeks, reduced-motion endpoints, semantic rule fusion, helper propagation, and exact arrival before handoff."
+    "summary": "The Python second caller is now one native, selectable, accessible catalogue artifact in the lazy programming pack, with standard controls, review capture host, stable artifact/playhead URLs, generated metadata, and no runtime parser or extra clock."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

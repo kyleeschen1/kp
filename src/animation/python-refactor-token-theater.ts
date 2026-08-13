@@ -292,7 +292,7 @@ function sampleFusion(
   const target = snapshot.tokens.filter(
     (token) => token.entityId === interval.track.targetEntityId
   );
-  const focused = new Set([
+  const focused = new Set<string>([
     ...interval.track.sourceEntityIds,
     interval.track.targetEntityId
   ]);
