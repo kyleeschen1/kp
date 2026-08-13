@@ -115,7 +115,8 @@
     {
       "id": "s12",
       "title": "Verify semantic boundary",
-      "status": "planned"
+      "summary": "Certified the compatibility cutover across 252 semantic convergence tests, full typecheck, all architecture gates, production build, and unchanged route bundle closure; no stop condition fired.",
+      "status": "complete"
     },
     {
       "id": "s13",

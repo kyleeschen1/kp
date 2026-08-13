@@ -221,10 +221,31 @@
       "scope": "s11 live compatibility count",
       "checkedAt": "2026-08-13T04:13:05.844Z",
       "notes": "All boundaries pass with six classified compatibility paths, down from seven at baseline."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s12 broad semantic boundary",
+      "checkedAt": "2026-08-13T04:16:14.130Z",
+      "notes": "252 of 252 semantic asset, projection, lineage, compiler, clock, runtime, and compatibility tests pass."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture and npm run build",
+      "status": "passed",
+      "scope": "s12 compile architecture build",
+      "checkedAt": "2026-08-13T04:16:17.428Z",
+      "notes": "All TypeScript, Svelte, domain, architecture, publication, and production-build checks pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s12 route closure",
+      "checkedAt": "2026-08-13T04:16:23.206Z",
+      "notes": "All route ceilings match baseline exactly; compiler remains absent from browser closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The typed-gap-to-fade path is fully retired: live compatibility count fell from seven to six, and exact negative closure prevents its adapter, payload type, or policy input from returning."
+    "summary": "The post-retirement boundary is clean: 252 convergence tests, typecheck, architecture, build, and every route bundle ceiling pass, so the TypeScript exemplar may begin."
   }
 }
