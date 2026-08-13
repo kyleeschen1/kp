@@ -167,7 +167,21 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: next after the proof portfolio
+Status: first code projection implemented; human checkpoint pending
+
+The first bounded public projection is available at
+`/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
+Article v1 into static searchable HTML, then progressively enhances it with one
+deterministic scrubber and direct semantic checkpoint links. Its route-only
+production build is 3,138 gzip bytes of HTML plus a 14,171-byte gzip JS/CSS
+startup closure and imports neither the catalogue/editor nor unrelated language
+implementations. This is a code-content checkpoint, not the selected universal
+layout.
+
+Routine work on this projection now uses a cached focused typecheck, focused
+tests, a 37-module route-only Vite build, and one-worker Chromium checks.
+Repository-wide typecheck, the complete capped-concurrency test suite, and the
+all-route bundle remain explicit release gates rather than inner-loop work.
 
 Choose one public v0 projection using at least three real content shapes:
 

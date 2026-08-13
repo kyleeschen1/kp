@@ -1,6 +1,6 @@
 # TypeScript Public Lesson
 
-Status: approved on 2026-08-13; verification-cost repair approved during phase 4
+Status: implemented on 2026-08-13; human visual checkpoint pending
 
 ## Outcome
 

@@ -2,10 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: use the approved symbolic, graph, and three-caller code
-portfolio to select one Public Web v0 projection. The cross-language proof is
-closed in `run-contract.kp.cross-language-code-animation-foundation-v1`; do not
-restart language or shared-contract expansion during the product gate.
+Current Next Action: review the TypeScript public projection at
+`/learn/code/free-shipping/`. If its composition passes the human checkpoint,
+pressure the same projection boundary with one symbolic and one graph lesson
+before selecting Public Web v0. The cross-language proof is closed in
+`run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
+language or shared-contract expansion during the product gate.
 
 ## Goal
 
@@ -51,8 +53,9 @@ not a mandate to encode one universal layout in Article or animation semantics.
 7. **Cross-language pressure (complete):** Python proves the second imperative
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
-8. **Product projection gate (current):** compare the same real sources through candidate
-   projections and select one public v0 default.
+8. **Product projection gate (current):** the TypeScript public lesson is the
+   first static-first code checkpoint. Review it, then compare one symbolic and
+   one graph caller before selecting a public v0 default.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 
