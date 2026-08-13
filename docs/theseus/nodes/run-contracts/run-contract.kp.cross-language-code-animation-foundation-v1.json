@@ -105,7 +105,8 @@
     {
       "id": "s10",
       "title": "Author Python score",
-      "status": "planned"
+      "summary": "Authored a gapless 14-second Python score that follows novice teaching order, holds semantic focus, replaces price before message, and samples deterministically through the existing timeline.",
+      "status": "complete"
     },
     {
       "id": "s11",

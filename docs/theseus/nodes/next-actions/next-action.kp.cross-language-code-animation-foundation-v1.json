@@ -114,6 +114,12 @@
       "status": "passed",
       "scope": "Below, exact, and above threshold parity; source-evidence drift rejection; absence of source execution",
       "checkedAt": "2026-08-13T18:00:01.665Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-score.test.ts",
+      "status": "passed",
+      "scope": "Python authored stage order, gapless 14-second score, canonical selectors, direct seek, rewind, and geometry exclusion",
+      "checkedAt": "2026-08-13T18:02:05.115Z"
     }
   ],
   "progress": {
