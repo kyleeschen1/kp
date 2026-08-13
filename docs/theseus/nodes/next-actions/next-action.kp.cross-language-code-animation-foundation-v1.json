@@ -138,6 +138,12 @@
       "status": "passed",
       "scope": "Regenerated checked-in Python tokens from stdlib lexical evidence",
       "checkedAt": "2026-08-13T18:07:26.086Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "Python helper introduction, rule fusion, binding propagation, correspondence and score binding, negative misbinding, and anti-forgery authority",
+      "checkedAt": "2026-08-13T18:10:10.418Z"
     }
   ],
   "progress": {

@@ -123,7 +123,8 @@
     {
       "id": "s13",
       "title": "Mint Python motion plans",
-      "status": "planned"
+      "summary": "Defined and validator-minted Python helper introduction, duplicate-rule fusion, and ordered caller propagation tracks; invalid correspondence and structurally forged plans cannot paint.",
+      "status": "complete"
     },
     {
       "id": "s14",
