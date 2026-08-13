@@ -98,6 +98,7 @@ function nativeOwnershipPlan(
   return mintKpCodeSettlementPlan({
     id: `settlement.python.native.${from}.${to}`,
     sourcePaintOwnerId: `paint.python.native.${from}`,
+    transitPaintOwnerId: `paint.python.native-handoff.${from}.${to}`,
     targetPaintOwnerId: `paint.python.native.${to}`,
     sourceNativeOwnerId: from,
     targetNativeOwnerId: to,

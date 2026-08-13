@@ -79,7 +79,8 @@ interface TrackInterval {
 
 const fusionSettlementPlan = mintKpCodeSettlementPlan({
   id: "settlement.typescript.rule-fusion",
-  sourcePaintOwnerId: "paint.typescript.rule-fusion.transit",
+  sourcePaintOwnerId: "paint.typescript.rule-fusion.native-target",
+  transitPaintOwnerId: "paint.typescript.rule-fusion.transit",
   targetPaintOwnerId: "paint.typescript.rule-fusion.native-target",
   sourceNativeOwnerId: "projection.typescript.helper-introduced",
   targetNativeOwnerId: "projection.typescript.helper-introduced",

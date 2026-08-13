@@ -21,6 +21,7 @@ export interface KpCodeSettlementPlanDraft<
 > {
   readonly id: string;
   readonly sourcePaintOwnerId: PaintOwnerId;
+  readonly transitPaintOwnerId: PaintOwnerId;
   readonly targetPaintOwnerId: PaintOwnerId;
   readonly sourceNativeOwnerId: NativeOwnerId;
   readonly targetNativeOwnerId: NativeOwnerId;
@@ -69,11 +70,15 @@ export function mintKpCodeSettlementPlan<
 ): KpVerifiedCodeSettlementPlan<PaintOwnerId, NativeOwnerId> {
   assertText(draft.id, "id");
   assertText(draft.sourcePaintOwnerId, "sourcePaintOwnerId");
+  assertText(draft.transitPaintOwnerId, "transitPaintOwnerId");
   assertText(draft.targetPaintOwnerId, "targetPaintOwnerId");
   assertText(draft.sourceNativeOwnerId, "sourceNativeOwnerId");
   assertText(draft.targetNativeOwnerId, "targetNativeOwnerId");
-  if (draft.sourcePaintOwnerId === draft.targetPaintOwnerId) {
-    throw new Error(`Code settlement ${draft.id} requires distinct paint owners.`);
+  if (draft.transitPaintOwnerId === draft.sourcePaintOwnerId ||
+      draft.transitPaintOwnerId === draft.targetPaintOwnerId) {
+    throw new Error(
+      `Code settlement ${draft.id} requires transit paint to be distinct from native paint.`
+    );
   }
 
   const entries = kpCodeSettlementMilestoneOrder.map((name) =>
@@ -148,7 +153,9 @@ export function sampleKpCodeSettlement<
         : "source-native",
     paintOwnerId: handedOff
       ? input.plan.targetPaintOwnerId
-      : input.plan.sourcePaintOwnerId,
+      : progress >= milestones.travel
+        ? input.plan.transitPaintOwnerId
+        : input.plan.sourcePaintOwnerId,
     accessibleNativeOwnerId: handedOff
       ? input.plan.targetNativeOwnerId
       : input.plan.sourceNativeOwnerId

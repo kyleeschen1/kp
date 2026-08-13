@@ -60,7 +60,13 @@ function renderCodeMaterialStage(input: {
     });
     return `<span class="kp-scheme-first-expansion__token" data-kp-scheme-first-expansion-token="${encodeKpEditorHtmlAttribute(material.materialId)}" data-kp-scheme-motion-id="${encodeKpEditorHtmlAttribute(material.motionId)}" data-kp-scheme-syntax-kind="${syntaxRole}" data-kp-scheme-provenance-kind="${encodeKpEditorHtmlAttribute(material.provenance.kind)}" data-kp-scheme-source-occurrence-id="${encodeKpEditorHtmlAttribute(material.provenance.sourceOccurrenceId)}"${renderRuntimeProvenance(material.provenance)} style="--kp-scheme-token-x:${material.xCh}ch;--kp-scheme-token-y:${material.yEm}em;--kp-scheme-token-opacity:${material.opacity};--kp-scheme-token-scale:${material.scale}">${encodeKpEditorHtmlText(material.lexeme)}</span>`;
   }).join("");
-  return `<section class="kp-scheme-first-expansion" ${input.attributes} data-kp-scheme-paint-owner="code-material" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${encodeKpEditorHtmlText(input.sample.nativeCode)}</span></section>`;
+  const settlement = "settlement" in input.sample
+    ? input.sample.settlement
+    : null;
+  const settlementAttributes = settlement === null
+    ? ""
+    : ` data-kp-scheme-settlement-phase="${settlement.sample.phase}" data-kp-scheme-native-owner="${settlement.sample.accessibleNativeOwnerId}"`;
+  return `<section class="kp-scheme-first-expansion" ${input.attributes} data-kp-scheme-paint-owner="code-material"${settlementAttributes} aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${encodeKpEditorHtmlText(input.sample.nativeCode)}</span></section>`;
 }
 
 export const kpSchemeFirstExpansionCss = `

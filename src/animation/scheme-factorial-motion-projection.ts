@@ -27,38 +27,46 @@ import {
 } from "./scheme-factorial-structural-choreography.ts";
 import type { KpSchemeFactorialTimelineSample } from
   "./scheme-factorial-timeline.ts";
+import {
+  sampleKpSchemeFactorialSettlement,
+  type KpSchemeFactorialSettlementEvidence
+} from "./scheme-factorial-settlement.ts";
+
+interface KpSchemeSettlementProjection {
+  readonly settlement: KpSchemeFactorialSettlementEvidence;
+}
 
 export type KpSchemeFactorialMotionProjection =
   | { readonly kind: "none" }
-  | {
+  | (KpSchemeSettlementProjection & {
       readonly kind: "structural";
       readonly transition: KpSchemeStructuralTransition;
       readonly sample: KpSchemeStructuralSample;
-    }
-  | {
+    })
+  | (KpSchemeSettlementProjection & {
       readonly kind: "binding";
       readonly arc: KpSchemeBindingArc;
       readonly sample: KpSchemeBindingSample;
       readonly point: { readonly inline: number; readonly block: number };
-    }
-  | {
+    })
+  | (KpSchemeSettlementProjection & {
       readonly kind: "branch";
       readonly motif: KpSchemeBranchMotif;
       readonly sample: KpSchemeBranchMotifSample;
-    }
-  | {
+    })
+  | (KpSchemeSettlementProjection & {
       readonly kind: "primitive";
       readonly motif: KpSchemePrimitiveMotif;
       readonly sample: KpSchemePrimitiveMotifSample;
-    }
-  | {
+    })
+  | (KpSchemeSettlementProjection & {
       readonly kind: "summary";
       readonly sample: KpSchemeSummaryMotifSample;
-    }
-  | {
+    })
+  | (KpSchemeSettlementProjection & {
       readonly kind: "return";
       readonly sample: KpSchemeReturnSample;
-    };
+    });
 
 /** Chooses one primary attention carrier while retaining compiled truth. */
 export function projectKpSchemeFactorialMotion(input: {
@@ -83,7 +91,13 @@ export function projectKpSchemeFactorialMotion(input: {
           return Object.freeze({
             kind: "primitive",
             motif: primitive,
-            sample: sampleKpSchemePrimitiveMotif(range(progress, 0.26, 0.58))
+            sample: sampleKpSchemePrimitiveMotif(range(progress, 0.26, 0.58)),
+            settlement: sampleKpSchemeFactorialSettlement({
+              motif: "primitive",
+              transitionId: input.timeline.intervalId,
+              materialIds: [primitive.applicationExpressionId, primitive.resultValueId],
+              progress: range(progress, 0.26, 0.58)
+            })
           });
         }
       }
@@ -91,12 +105,19 @@ export function projectKpSchemeFactorialMotion(input: {
         ? structural(input.choreography, 1, range(progress, 0.58, 0.76))
         : binding(input.choreography, 1, range(progress, 0.76, 1));
     case "repeated-descent":
+      const summaryProgress = progress;
       return Object.freeze({
         kind: "summary",
         sample: sampleKpSchemeSummaryMotif(
           input.choreography.evaluation.summary,
-          progress
-        )
+          summaryProgress
+        ),
+        settlement: sampleKpSchemeFactorialSettlement({
+          motif: "summary",
+          transitionId: input.timeline.intervalId,
+          materialIds: input.choreography.evaluation.summary.eventIds,
+          progress: summaryProgress
+        })
       });
     case "base-case":
       return branch(
@@ -110,7 +131,17 @@ export function projectKpSchemeFactorialMotion(input: {
         sample: sampleKpSchemeFactorialReturn(
           input.choreography.returns,
           progress
-        )
+        ),
+        settlement: sampleKpSchemeFactorialSettlement({
+          motif: "return",
+          transitionId: input.timeline.intervalId,
+          materialIds: [
+            input.choreography.returns.carrierId,
+            ...input.choreography.returns.steps.map(({ outgoingValueId }) =>
+              outgoingValueId)
+          ],
+          progress
+        })
       });
     case "result":
       return Object.freeze({ kind: "none" });
@@ -127,7 +158,16 @@ function structural(
   return Object.freeze({
     kind: "structural",
     transition,
-    sample: sampleKpSchemeStructuralTransition(transition, progress)
+    sample: sampleKpSchemeStructuralTransition(transition, progress),
+    settlement: sampleKpSchemeFactorialSettlement({
+      motif: "structural",
+      transitionId: transition.id,
+      materialIds: [
+        ...transition.expressionMotions.map(({ expressionId }) => expressionId),
+        ...transition.waitingShells.map(({ materialId }) => materialId)
+      ],
+      progress
+    })
   });
 }
 
@@ -143,7 +183,13 @@ function binding(
     kind: "binding",
     arc,
     sample,
-    point: pointOnKpSchemeBindingArc(arc, sample.arcProgress)
+    point: pointOnKpSchemeBindingArc(arc, sample.arcProgress),
+    settlement: sampleKpSchemeFactorialSettlement({
+      motif: "binding",
+      transitionId: arc.id,
+      materialIds: [arc.argumentExpressionId, arc.parameterOccurrenceId],
+      progress
+    })
   });
 }
 
@@ -157,7 +203,17 @@ function branch(
   return Object.freeze({
     kind: "branch",
     motif,
-    sample: sampleKpSchemeBranchMotif(progress)
+    sample: sampleKpSchemeBranchMotif(progress),
+    settlement: sampleKpSchemeFactorialSettlement({
+      motif: "branch",
+      transitionId: motif.id,
+      materialIds: [motif.selectedExpressionId, motif.dormantExpressionId],
+      progress,
+      semanticDeletion: {
+        operationId: motif.eventId,
+        materialIds: [motif.dormantExpressionId]
+      }
+    })
   });
 }
 

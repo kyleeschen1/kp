@@ -6,6 +6,12 @@ import type { KpSchemeIntegerValue } from
   "../semantic/scheme-factorial-machine-state.ts";
 import type { KpSchemeTrace, KpSchemeTraceEvent } from
   "../semantic/scheme-factorial-trace.ts";
+import {
+  mintKpSchemeReducedMotionSettlementException,
+  sampleKpSchemeFactorialSettlement,
+  type KpSchemeFactorialSettlementEvidence,
+  type KpSchemeFactorialSettlementMotif
+} from "./scheme-factorial-settlement.ts";
 
 export type KpSchemeFullEvaluationAction =
   | KpSchemeFullMaterialAction<"ExpandProcedure"> & {
@@ -101,6 +107,7 @@ export interface KpSchemeFactorialFullEvaluationSample {
   readonly settledStateId: string;
   readonly nativeCode: string;
   readonly caption: string;
+  readonly settlement: KpSchemeFactorialSettlementEvidence | null;
   readonly tokens: readonly {
     readonly motionId: string;
     readonly materialId: string;
@@ -594,11 +601,11 @@ export function sampleKpSchemeFactorialFullEvaluation(
     sum + transition.weight, 0);
   if (normalized === 0) {
     return settledSample(evaluation, stateById.get(evaluation.sourceStateId)!,
-      0, "orient", null, "Factorial begins with one call.");
+      0, "orient", null, "Factorial begins with one call.", null);
   }
   if (normalized === 1) {
     return settledSample(evaluation, stateById.get(evaluation.targetStateId)!,
-      1, "settle", null, "Factorial of three is six.");
+      1, "settle", null, "Factorial of three is six.", null);
   }
   const position = normalized * total;
   let cursor = 0;
@@ -610,8 +617,14 @@ export function sampleKpSchemeFactorialFullEvaluation(
       const to = stateById.get(transition.toStateId)!;
       const actions = transition.actionIds.map((id) => actionById.get(id)!);
       if (options.reducedMotion === true || local >= transition.motionFraction) {
+        const settlement = fullEvaluationSettlement({
+          actions,
+          transition,
+          progress: 1,
+          reducedMotion: options.reducedMotion === true
+        });
         return settledSample(evaluation, to, normalized, "settle",
-          transition.id, transition.caption);
+          transition.id, transition.caption, settlement);
       }
       return transitionSample({
         evaluation,
@@ -683,6 +696,12 @@ function transitionSample(input: {
     settledStateId: input.from.id,
     nativeCode: input.from.nativeCode,
     caption: input.transition.caption,
+    settlement: fullEvaluationSettlement({
+      actions: input.actions,
+      transition: input.transition,
+      progress: input.progress,
+      reducedMotion: false
+    }),
     tokens: Object.freeze(tokens)
   });
 }
@@ -693,7 +712,8 @@ function settledSample(
   progress: number,
   phase: "orient" | "settle",
   transitionId: string | null,
-  caption: string
+  caption: string,
+  settlement: KpSchemeFactorialSettlementEvidence | null
 ): KpSchemeFactorialFullEvaluationSample {
   const metrics = stateMetrics(evaluation.states);
   return Object.freeze({
@@ -703,9 +723,59 @@ function settledSample(
     settledStateId: state.id,
     nativeCode: state.nativeCode,
     caption,
+    settlement,
     tokens: Object.freeze(state.tokens.map((token) =>
       sampledToken(token, token.id, pointForToken(state, token, metrics), 1, 1)))
   });
+}
+
+function fullEvaluationSettlement(input: {
+  readonly actions: readonly KpSchemeFullEvaluationAction[];
+  readonly transition: KpSchemeFullEvaluationTransition;
+  readonly progress: number;
+  readonly reducedMotion: boolean;
+}): KpSchemeFactorialSettlementEvidence {
+  const materialIds = [...new Set(input.actions.flatMap((action) => [
+    ...action.introducedMaterialIds,
+    ...action.withdrawnMaterialIds
+  ]))];
+  const primary = input.actions.at(-1)!;
+  const motif = settlementMotif(primary.kind);
+  const branch = input.actions.find((action) => action.kind === "ChooseBranch");
+  const evidence = sampleKpSchemeFactorialSettlement({
+    motif,
+    transitionId: input.transition.id,
+    materialIds,
+    progress: input.progress,
+    ...(branch === undefined ? {} : {
+      semanticDeletion: {
+        operationId: branch.id,
+        materialIds: branch.withdrawnMaterialIds
+      }
+    })
+  });
+  if (!input.reducedMotion) return evidence;
+  return Object.freeze({
+    ...evidence,
+    exception: mintKpSchemeReducedMotionSettlementException({
+      transitionId: input.transition.id,
+      materialIds
+    })
+  });
+}
+
+function settlementMotif(
+  kind: KpSchemeFullEvaluationAction["kind"]
+): KpSchemeFactorialSettlementMotif {
+  switch (kind) {
+    case "ExpandProcedure": return "structural";
+    case "BindArgument":
+    case "ProjectBinding": return "binding";
+    case "ChooseBranch": return "branch";
+    case "ApplyPrimitive": return "return";
+    case "ReducePrimitive":
+    case "ResolveBase": return "primitive";
+  }
 }
 
 function registerActivationMaterials(input: {

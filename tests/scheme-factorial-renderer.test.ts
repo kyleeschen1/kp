@@ -74,6 +74,9 @@ test("uses one inert text-free overlay only during motion", () => {
   assert.match(svg, /<(?:path|circle|rect)/u);
   assert.doesNotMatch(svg, /<text|<foreignObject|<code/u);
   assert.match(motion, /<code>/u);
+  assert.match(motion, /data-kp-scheme-settlement-phase=/u);
+  assert.match(motion, /data-kp-scheme-native-owner="native\.scheme\.semantic-dom"/u);
+  assert.match(motion, /data-kp-scheme-transit-paint-owner="paint\.scheme\./u);
 });
 
 test("removes transient overlays for reduced motion and settled holds", () => {

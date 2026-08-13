@@ -451,11 +451,32 @@
       "scope": "s27 Scheme syntax adapter boundary",
       "checkedAt": "2026-08-13T19:52:57.662Z",
       "notes": "The adapter depends only on the shared paint protocol and Scheme source contracts; it imports no imperative frontend, projection, theater, or renderer."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test code settlement and Scheme choreography suites",
+      "status": "passed",
+      "scope": "s28 shared paint-owner correction and Scheme settlement invariants",
+      "checkedAt": "2026-08-13T20:18:41.951Z",
+      "notes": "Fifty-four tests cover three explicit paint phases, native ownership, direct seek and rewind, binding arcs, branch deletion, fold and bloom, primitive work, summaries, return cascades, reduced-motion exceptions, and renderer evidence without changing evaluator facts, score, geometry, or timing."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s28 cross-language and Scheme architecture",
+      "checkedAt": "2026-08-13T20:18:43.060Z",
+      "notes": "The third caller corrected the shared source/transit/target paint-owner type seam; Scheme remains an adapter over its specialized choreography."
+    },
+    {
+      "command": "npm run visual:scheme-factorial",
+      "status": "passed",
+      "scope": "s28 approved Scheme presentation preservation",
+      "checkedAt": "2026-08-13T20:18:43.990Z",
+      "notes": "Seven Chromium checks pass for focus and detailed views, motif scrubbing, phone fit, reduced motion, no-JavaScript fallback, and evaluator-free resource closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Scheme atoms, delimiters, and evaluator-derived code material now carry shared optical syntax roles while preserving Scheme occurrence IDs, delimiter IDs, runtime provenance, native code ownership, and every existing trajectory."
+    "summary": "Scheme now exposes validated causal settlement and native-owner evidence across every canonical motif while retaining evaluator-derived identities, recursive timing, geometry, and the approved presentation; the shared paint model now names source native, transit overlay, and target native owners exactly."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

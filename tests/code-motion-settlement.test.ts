@@ -9,7 +9,8 @@ import {
 
 const plan = mintKpCodeSettlementPlan({
   id: "settlement.refactor.helper",
-  sourcePaintOwnerId: "paint.transit",
+  sourcePaintOwnerId: "paint.native-source",
+  transitPaintOwnerId: "paint.transit",
   targetPaintOwnerId: "paint.native-target",
   sourceNativeOwnerId: "projection.before",
   targetNativeOwnerId: "projection.after",
@@ -30,10 +31,11 @@ test("settlement law makes every causal phase directly seekable", () => {
     recognition: "pending",
     transit: "absent",
     paintOwner: "source-native",
-    paintOwnerId: "paint.transit",
+    paintOwnerId: "paint.native-source",
     accessibleNativeOwnerId: "projection.before"
   });
   assert.equal(sample(0.2).phase, "travel");
+  assert.equal(sample(0.2).paintOwnerId, "paint.transit");
   assert.equal(sample(0.6).phase, "arrival");
   assert.equal(sample(0.7).phase, "recognition");
   assert.equal(sample(0.9).phase, "ownership-handoff");
@@ -66,7 +68,8 @@ test("native ownership cannot precede arrival and recognition", () => {
 test("settlement law separates paint ownership from native accessibility", () => {
   const sameNative = mintKpCodeSettlementPlan({
     id: "settlement.overlay",
-    sourcePaintOwnerId: "paint.overlay",
+    sourcePaintOwnerId: "paint.native",
+    transitPaintOwnerId: "paint.overlay",
     targetPaintOwnerId: "paint.native",
     sourceNativeOwnerId: "projection.same",
     targetNativeOwnerId: "projection.same",
@@ -79,22 +82,48 @@ test("settlement law separates paint ownership from native accessibility", () =>
 
   assert.throws(
     () => mintKpCodeSettlementPlan({
-      id: "settlement.same-paint-owner",
+      id: "settlement.same-transit-owner",
       sourcePaintOwnerId: "paint.same",
+      transitPaintOwnerId: "paint.same",
       targetPaintOwnerId: "paint.same",
       sourceNativeOwnerId: "projection.before",
       targetNativeOwnerId: "projection.after",
       milestones: plan.milestones
     }),
-    /distinct paint owners/
+    /transit paint to be distinct/
   );
+});
+
+test("native endpoint paint may persist while one distinct transit overlay moves", () => {
+  const persistentNative = mintKpCodeSettlementPlan({
+    id: "settlement.persistent-native",
+    sourcePaintOwnerId: "paint.native",
+    transitPaintOwnerId: "paint.overlay",
+    targetPaintOwnerId: "paint.native",
+    sourceNativeOwnerId: "projection.same",
+    targetNativeOwnerId: "projection.same",
+    milestones: plan.milestones
+  });
+  assert.equal(sampleKpCodeSettlement({
+    plan: persistentNative,
+    progress: 0
+  }).paintOwnerId, "paint.native");
+  assert.equal(sampleKpCodeSettlement({
+    plan: persistentNative,
+    progress: 0.2
+  }).paintOwnerId, "paint.overlay");
+  assert.equal(sampleKpCodeSettlement({
+    plan: persistentNative,
+    progress: 1
+  }).paintOwnerId, "paint.native");
 });
 
 test("settlement law rejects invalid milestone order", () => {
   assert.throws(
     () => mintKpCodeSettlementPlan({
       id: "settlement.early-handoff",
-      sourcePaintOwnerId: "paint.transit",
+      sourcePaintOwnerId: "paint.native-source",
+      transitPaintOwnerId: "paint.transit",
       targetPaintOwnerId: "paint.native-target",
       sourceNativeOwnerId: "projection.before",
       targetNativeOwnerId: "projection.after",
@@ -114,6 +143,7 @@ test("unminted structurally similar plans cannot sample", () => {
   const forged = {
     id: plan.id,
     sourcePaintOwnerId: plan.sourcePaintOwnerId,
+    transitPaintOwnerId: plan.transitPaintOwnerId,
     targetPaintOwnerId: plan.targetPaintOwnerId,
     sourceNativeOwnerId: plan.sourceNativeOwnerId,
     targetNativeOwnerId: plan.targetNativeOwnerId,

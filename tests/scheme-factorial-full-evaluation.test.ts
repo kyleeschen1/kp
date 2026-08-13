@@ -104,4 +104,8 @@ test("reduced motion seeks directly to a settled semantic state", () => {
   assert.equal(evaluation.states.some(({ id }) => id === sample.settledStateId), true);
   assert.equal(sample.tokens.every(({ opacity, scale }) =>
     opacity === 1 && scale === 1), true);
+  assert.equal(sample.settlement?.exception?.kind,
+    "reduced-motion-endpoint-jump");
+  assert.equal(sample.settlement?.sample.accessibleNativeOwnerId,
+    "native.scheme.semantic-dom");
 });

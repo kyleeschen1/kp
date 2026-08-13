@@ -213,7 +213,8 @@
     {
       "id": "s28",
       "title": "Apply Scheme invariants",
-      "status": "planned"
+      "summary": "Applied shared settlement, ownership, semantic-deletion, and reduced-motion laws through a Scheme-local evidence adapter; corrected the shared three-owner type seam and preserved every canonical trajectory and endpoint.",
+      "status": "complete"
     },
     {
       "id": "s29",
