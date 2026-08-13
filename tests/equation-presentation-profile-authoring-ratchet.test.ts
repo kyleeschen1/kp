@@ -3,11 +3,8 @@ import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
-  kpLegacyEquationPresentationMetadataKeys
-} from "../src/animation/equation-presentation-profile-decoder.ts";
-import {
-  kpCancellationTeachingGoalMetadataKey
-} from "../src/semantic/cancellation-presentation-authoring.ts";
+  validateKpAnimationAsset
+} from "../src/animation/asset.ts";
 import {
   kpSemanticAnimationCompatibilityLedger
 } from "../src/architecture/semantic-animation-compatibility-ledger.ts";
@@ -31,8 +28,15 @@ test("every concrete equation surface selects a typed presentation profile", () 
 
 test("concrete assets cannot author legacy equation presentation metadata", () => {
   const forbiddenKeys = [
-    ...kpLegacyEquationPresentationMetadataKeys,
-    kpCancellationTeachingGoalMetadataKey
+    "equationMotionPresentationRecipe",
+    "equationNativeHandoffRecipe",
+    "equationCancellationPresentationRecipe",
+    "equationZeroWitnessPresentationRecipe",
+    "equationSuccessorPresentationRecipe",
+    "equationDepthPresentationRecipe",
+    "equationContinuantPresentationRecipe",
+    "equationBranchPresentationStrategy",
+    "equationCancellationTeachingGoal"
   ];
   const violations = createKpAnimationAssets().flatMap((animation) =>
     forbiddenKeys
@@ -42,8 +46,22 @@ test("concrete assets cannot author legacy equation presentation metadata", () =
 
   assert.deepEqual(violations, []);
   assert.ok(
-    kpSemanticAnimationCompatibilityLedger
-      .filter(({ category }) => category === "presentation-metadata")
-      .every(({ authors }) => authors.length === 0)
+    kpSemanticAnimationCompatibilityLedger.every(
+      ({ contractKey }) => !forbiddenKeys.includes(contractKey ?? "")
+    )
+  );
+
+  const base = createKpAnimationAssets().find((animation) =>
+    animation.renderTargets.some(({ kind }) => kind === "equation")
+  )!;
+  assert.match(
+    validateKpAnimationAsset({
+      ...base,
+      metadata: {
+        ...base.metadata,
+        equationMotionPresentationRecipe: "continuity-v1"
+      }
+    })[0]?.message ?? "",
+    /unsupported; author presentationProfile instead/
   );
 });

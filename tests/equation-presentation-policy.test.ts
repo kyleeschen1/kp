@@ -9,7 +9,7 @@ import { createFractionSimplificationAnimationAsset } from "../src/animation/fra
 import {
   kpEquationPresentationPolicy,
   kpEquationPresentationProfile
-} from "../src/rendering/equation-presentation-policy.ts";
+} from "../src/animation/equation-presentation-policy.ts";
 import {
   createKpEquationPresentationProfileV1
 } from "../src/animation/equation-presentation-profile.ts";
@@ -83,24 +83,24 @@ test("presentation motifs can be selected independently without changing semanti
   assert.equal(animation.transformations.length, 3);
 });
 
-test("inferred cancellation intent cannot be combined with a raw renderer recipe", () => {
+test("an equation surface without a typed profile fails explicitly", () => {
   const animation = createLinearSolveTeacherZeroAnimationAsset();
   assert.throws(() => kpEquationPresentationProfile({
     ...animation,
-    metadata: {
-      ...animation.metadata,
-      equationCancellationPresentationRecipe: "counter-orbit-v1"
-    }
-  }), /cannot combine a teaching goal with a renderer recipe id/);
+    presentationProfile: undefined
+  }), /no typed equation presentation profile/);
 });
 
-test("unknown independent presentation recipes fail at the asset boundary", () => {
+test("unknown typed presentation recipes fail at the asset boundary", () => {
   const animation = createLinearSolveTeacherZeroAnimationAsset();
   assert.throws(() => kpEquationPresentationProfile({
     ...animation,
-    metadata: {
-      ...animation.metadata,
-      equationSuccessorPresentationRecipe: "teleport-v9"
-    }
-  }), /Unknown equationSuccessorPresentationRecipe recipe teleport-v9/);
+    presentationProfile: {
+      ...animation.presentationProfile!,
+      payload: {
+        ...animation.presentationProfile!.payload,
+        successor: "teleport-v9"
+      }
+    } as typeof animation.presentationProfile
+  }), /Unknown equation presentation successor recipe teleport-v9/);
 });

@@ -1,4 +1,4 @@
-import type { KpEquationDepthPresentationRecipe } from "./equation-presentation-policy.ts";
+import type { KpEquationDepthPresentationRecipe } from "../animation/equation-presentation-policy.ts";
 
 export interface KpEquationSemanticDepthPlan {
   readonly kind: "equation-semantic-depth-plan";

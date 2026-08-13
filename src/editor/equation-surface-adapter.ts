@@ -126,7 +126,7 @@ import {
 import "../rendering/equation-witnessed-annihilation-register.ts";
 import {
   kpEquationPresentationPolicy
-} from "../rendering/equation-presentation-policy.ts";
+} from "../animation/equation-presentation-policy.ts";
 import {
   createKpDotProductTraversalChoreography,
   sampleKpDotProductTraversalChoreography,

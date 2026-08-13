@@ -13,7 +13,7 @@ import {
 } from "../../rendering/equation-font-readiness.ts";
 import {
   kpEquationPresentationProfile
-} from "../../rendering/equation-presentation-policy.ts";
+} from "../../animation/equation-presentation-policy.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,

@@ -585,6 +585,15 @@ export function validateKpAnimationAsset(
       });
     });
   }
+  for (const key of Object.keys(animation.metadata ?? {})) {
+    if (/^equation[A-Z].*(Recipe|Strategy|TeachingGoal)$/.test(key)) {
+      issues.push({
+        path: `metadata.${key}`,
+        message:
+          `Legacy equation presentation metadata ${key} is unsupported; author presentationProfile instead.`
+      });
+    }
+  }
   if (animation.presentationConstraints !== undefined) {
     validateKpAnimationPresentationConstraintsV1(
       animation.presentationConstraints

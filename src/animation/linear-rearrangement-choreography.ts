@@ -49,7 +49,7 @@ import {
 } from "./equation-balanced-branch-scheduling.ts";
 import {
   resolveKpEquationPresentationBranchStrategy
-} from "./equation-presentation-profile-decoder.ts";
+} from "./equation-presentation-policy.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,

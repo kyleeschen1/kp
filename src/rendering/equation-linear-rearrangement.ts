@@ -19,7 +19,7 @@ import type {
   KpEquationContinuantPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
-} from "./equation-presentation-policy.ts";
+} from "../animation/equation-presentation-policy.ts";
 import { kpFractionalLinearCertifiedTransferProxyRecordId } from "../semantic/fractional-linear-certified-transfer-contract.ts";
 import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
 import type {

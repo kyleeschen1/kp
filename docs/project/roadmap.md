@@ -122,11 +122,13 @@ Status: explicit algebra capability wave complete; caller-backed waves next
   clock without discarding authored checkpoints.
 - Derive lightweight transformation and selector-pair views from rich canonical
   transformation, correspondence, and lineage records.
-- Migrate accepted equation callers from legacy metadata recipes to typed
-  presentation profiles, deleting each compatibility branch beside its caller
-  migration.
-- Move presentation-profile and sampled-payload ownership out of renderer-owned
-  source locations when the affected callers are already under migration.
+- Equation presentation-profile migration is complete: all concrete equation
+  targets author the typed profile, the legacy metadata decoder is retired,
+  and the policy now belongs to the neutral animation domain.
+- Canonical sampled payload ownership is already neutral. Retain the older
+  public SDK's `EquationMotionFrame` in its renderer-coupled pipeline until
+  those public consumers can retire together; a file-only move would reverse
+  the dependency graph.
 
 Do not perform a broad rewrite or directory shuffle. Enforce public entry
 points and dependency direction first; physical package moves come later.

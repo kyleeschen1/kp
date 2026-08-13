@@ -14,7 +14,7 @@ import {
 } from "../animation/equation-balanced-branch-scheduling.ts";
 import {
   resolveKpEquationPresentationBranchStrategy
-} from "../animation/equation-presentation-profile-decoder.ts";
+} from "../animation/equation-presentation-policy.ts";
 
 export interface KpEquationLinearRearrangementBinding {
   readonly transformationId: string;

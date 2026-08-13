@@ -95,10 +95,7 @@ test("current ownership debt is explicit and scheduled", () => {
     kpSemanticAnimationOwnershipMigrationDebt.map(
       ({ stageId, retirementSlice }) => [stageId, retirementSlice]
     ),
-    [
-      ["presentation-profile", "s14"],
-      ["domain-payload", "s21"]
-    ]
+    []
   );
   for (const debt of kpSemanticAnimationOwnershipMigrationDebt) {
     const source = join(projectRoot, debt.currentSourcePath);

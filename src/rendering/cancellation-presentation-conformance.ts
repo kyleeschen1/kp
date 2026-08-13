@@ -2,15 +2,10 @@ import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
   kpCancellationOperationIdForTransformType
 } from "../semantic/cancellation-presentation-authoring.ts";
-import {
-  inspectKpLegacyEquationPresentationMetadataPresence
-} from "../animation/equation-presentation-profile-decoder.ts";
-import { kpEquationPresentationProfile } from "./equation-presentation-policy.ts";
+import { kpEquationPresentationProfile } from "../animation/equation-presentation-policy.ts";
 
 export type KpCancellationCatalogIssueCode =
-  | "raw-recipe-authority"
-  | "missing-teaching-goal"
-  | "orphaned-teaching-goal"
+  | "missing-typed-profile"
   | "unresolved-policy";
 
 export interface KpCancellationCatalogIssue {
@@ -27,24 +22,15 @@ export function checkKpCancellationPresentationCatalog(
     const hasCancellationAuthority = asset.transformations.some((transformation) =>
       kpCancellationOperationIdForTransformType(transformation.transformType) !== undefined
     );
-    const presence = inspectKpLegacyEquationPresentationMetadataPresence(
-      asset.metadata
-    );
-    const hasTeachingGoal = presence.teachingGoalPresent;
     const hasTypedProfile = asset.presentationProfile?.domain === "equation";
-    const hasRawCancellationRecipe = presence.presentKeys.includes(
-      "equationCancellationPresentationRecipe"
-    );
-    if (hasRawCancellationRecipe) {
-      issues.push(issue(asset, "raw-recipe-authority", "Raw cancellation recipe ids are forbidden in catalog assets."));
+    if (hasCancellationAuthority && !hasTypedProfile) {
+      issues.push(issue(
+        asset,
+        "missing-typed-profile",
+        "Cancellation authority requires a typed equation presentation profile."
+      ));
     }
-    if (hasCancellationAuthority && !hasTeachingGoal && !hasTypedProfile) {
-      issues.push(issue(asset, "missing-teaching-goal", "Cancellation authority requires an inferred teaching goal."));
-    }
-    if (!hasCancellationAuthority && hasTeachingGoal) {
-      issues.push(issue(asset, "orphaned-teaching-goal", "A cancellation teaching goal requires semantic cancellation authority."));
-    }
-    if (hasCancellationAuthority && (hasTeachingGoal || hasTypedProfile)) {
+    if (hasCancellationAuthority && hasTypedProfile) {
       try {
         kpEquationPresentationProfile(asset);
       } catch (error) {

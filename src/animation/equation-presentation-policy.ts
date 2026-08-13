@@ -1,32 +1,35 @@
-import type { KpAnimationAsset } from "../animation/asset.ts";
-import { resolveKpCancellationPresentation } from "./cancellation-presentation-resolver.ts";
+import type { KpAnimationAsset } from "./asset.ts";
 import type {
   KpEquationCancellationPresentationRecipe
-} from "../animation/cancellation-presentation-contract.ts";
-import {
-  decodeKpEquationPresentationProfile
-} from "../animation/equation-presentation-profile-decoder.ts";
+} from "./cancellation-presentation-contract.ts";
 import type {
   KpEquationContinuantPresentationRecipe,
   KpEquationDepthPresentationRecipe,
   KpEquationMotionPresentationRecipe,
   KpEquationNativeHandoffRecipe,
+  KpEquationPresentationProfileV1,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
-} from "../animation/equation-presentation-profile.ts";
+} from "./equation-presentation-profile.ts";
+import {
+  validateKpEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
+import type {
+  KpBalancedBranchPresentationStrategy
+} from "./equation-balanced-branch-scheduling.ts";
 
 export type KpEquationPresentationRecipe =
   KpEquationMotionPresentationRecipe;
 
 export type {
   KpEquationCancellationPresentationRecipe
-} from "../animation/cancellation-presentation-contract.ts";
+} from "./cancellation-presentation-contract.ts";
 export type {
   KpEquationContinuantPresentationRecipe,
   KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
-} from "../animation/equation-presentation-profile.ts";
+} from "./equation-presentation-profile.ts";
 
 export interface KpEquationPresentationProfile {
   readonly recipe: KpEquationPresentationRecipe;
@@ -38,22 +41,32 @@ export interface KpEquationPresentationProfile {
   readonly continuants: KpEquationContinuantPresentationRecipe;
 }
 
-export interface KpEquationPresentationPolicy extends KpEquationPresentationProfile {
+export interface KpEquationPresentationPolicy
+  extends KpEquationPresentationProfile {
   readonly applyWitnessedAnnihilation: boolean;
   readonly applySuccessorSynthesis: boolean;
+}
+
+export function requireKpEquationPresentationProfile(
+  animation: KpAnimationAsset
+): KpEquationPresentationProfileV1 {
+  const profile = animation.presentationProfile;
+  if (profile === undefined || profile.domain !== "equation") {
+    throw new Error(
+      `Animation ${animation.id} has an equation surface but no typed equation presentation profile.`
+    );
+  }
+  const issues = validateKpEquationPresentationProfileV1(profile);
+  if (issues.length > 0) {
+    throw new Error(issues.map(({ message }) => message).join(" "));
+  }
+  return profile;
 }
 
 export function kpEquationPresentationProfile(
   animation: KpAnimationAsset
 ): KpEquationPresentationProfile {
-  const result = decodeKpEquationPresentationProfile({
-    animation,
-    resolveCancellation: resolveKpCancellationPresentation
-  });
-  if (result.status === "rejected") {
-    throw new Error(result.diagnostics.map(({ message }) => message).join(" "));
-  }
-  const payload = result.profile.payload;
+  const payload = requireKpEquationPresentationProfile(animation).payload;
   return Object.freeze({
     recipe: payload.motion,
     handoff: payload.nativeHandoff,
@@ -71,11 +84,16 @@ export function kpEquationPresentationPolicy(
   const profile = kpEquationPresentationProfile(animation);
   return Object.freeze({
     ...profile,
-    // These compatibility flags keep the existing editor runtime stable while
-    // the independent recipes gain dedicated renderers one exemplar at a time.
     applyWitnessedAnnihilation:
       profile.cancellation === "witnessed-annihilation-v1",
     applySuccessorSynthesis:
       profile.successor === "successor-synthesis-v1"
   });
+}
+
+export function resolveKpEquationPresentationBranchStrategy(
+  animation: KpAnimationAsset
+): KpBalancedBranchPresentationStrategy | undefined {
+  return requireKpEquationPresentationProfile(animation)
+    .payload.branchStrategy;
 }

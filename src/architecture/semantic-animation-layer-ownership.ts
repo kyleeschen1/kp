@@ -165,10 +165,6 @@ export const kpSemanticAnimationPublicSeams = [
         scope: "generic"
       },
       {
-        representation: "KpEquationMotionFrame",
-        scope: "equation-domain"
-      },
-      {
         representation: "KpDerivativeTangentRuntimeFrame",
         scope: "graph-domain"
       },
@@ -180,24 +176,8 @@ export const kpSemanticAnimationPublicSeams = [
   })
 ] as const satisfies readonly KpSemanticAnimationPublicSeamContract[];
 
-export const kpSemanticAnimationOwnershipMigrationDebt = [
-  {
-    stageId: "presentation-profile",
-    currentSourcePath: "src/rendering/equation-presentation-policy.ts",
-    targetLayer: "neutral-animation-domain",
-    retirementSlice: "s14",
-    reason:
-      "The current equation profile imports renderer-owned handoff and resolver contracts."
-  },
-  {
-    stageId: "domain-payload",
-    currentSourcePath: "src/rendering/equation-motion-sampler.ts",
-    targetLayer: "presentation",
-    retirementSlice: "s21",
-    reason:
-      "The equation frame payload remains colocated with its current renderer sampler."
-  }
-] as const satisfies readonly KpSemanticAnimationOwnershipMigrationDebt[];
+export const kpSemanticAnimationOwnershipMigrationDebt =
+  [] as const satisfies readonly KpSemanticAnimationOwnershipMigrationDebt[];
 
 export function assertKpSemanticAnimationLayerOwnership(input: {
   readonly stages?: readonly KpSemanticAnimationCompilerStage[];

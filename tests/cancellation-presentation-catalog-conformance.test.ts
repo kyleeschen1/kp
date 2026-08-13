@@ -22,24 +22,11 @@ test("every catalog cancellation asset conforms to inferred policy", () => {
   assert.deepEqual(checkKpCancellationPresentationCatalog(assets), []);
 });
 
-test("catalog conformance reports raw and missing presentation authority", () => {
+test("catalog conformance reports missing typed presentation authority", () => {
   const base = createDivideBothSidesEquationAnimationAsset();
-  const { equationCancellationTeachingGoal: _goal, ...withoutGoal } =
-    base.metadata ?? {};
   assert.deepEqual(checkKpCancellationPresentationCatalog([
-    { ...base, presentationProfile: undefined, metadata: withoutGoal },
-    {
-      ...base,
-      id: `${base.id}.raw`,
-      presentationProfile: undefined,
-      metadata: {
-        ...withoutGoal,
-        equationCancellationPresentationRecipe: "counter-orbit-v1"
-      }
-    }
+    { ...base, presentationProfile: undefined }
   ]).map(({ animationId, code }) => [animationId, code]), [
-    [base.id, "missing-teaching-goal"],
-    [`${base.id}.raw`, "raw-recipe-authority"],
-    [`${base.id}.raw`, "missing-teaching-goal"]
+    [base.id, "missing-typed-profile"]
   ]);
 });

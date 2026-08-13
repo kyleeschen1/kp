@@ -114,7 +114,7 @@ export const kpSemanticAnimationCompilerStages = [
   }),
   stage({
     id: "presentation-profile",
-    owner: "presentation",
+    owner: "animation",
     authority: "presentation-policy",
     representations: [
       "KpEquationPresentationProfileV1",
@@ -123,12 +123,11 @@ export const kpSemanticAnimationCompilerStages = [
     ],
     sourcePaths: [
       "src/animation/cancellation-presentation-contract.ts",
-      "src/animation/equation-presentation-profile-decoder.ts",
       "src/animation/equation-presentation-profile.ts",
-      "src/rendering/equation-presentation-policy.ts"
+      "src/animation/equation-presentation-policy.ts"
     ],
     dependsOn: ["correspondence-lineage"],
-    migrationStatus: "target-owner"
+    migrationStatus: "canonical"
   }),
   stage({
     id: "choreography",
@@ -211,7 +210,6 @@ export const kpSemanticAnimationCompilerStages = [
       "KpEquationSampledFramePayload",
       "KpGraphDiagramSampledFramePayload",
       "KpProgramTraceSampledFramePayload",
-      "KpEquationMotionFrame",
       "KpDerivativeTangentRuntimeFrame",
       "KpProgramTraceFramePreview"
     ],
@@ -219,12 +217,11 @@ export const kpSemanticAnimationCompilerStages = [
       "src/animation/sampled-frame-payload.ts",
       "src/animation/equation-sampled-frame-adapter.ts",
       "src/animation/non-equation-sampled-frame-adapter.ts",
-      "src/rendering/equation-motion-sampler.ts",
       "src/animation/derivative-tangent-runtime-frame.ts",
       "src/animation/program-trace-frame-preview.ts"
     ],
     dependsOn: ["sampled-frame"],
-    migrationStatus: "target-owner"
+    migrationStatus: "canonical"
   }),
   stage({
     id: "renderer-adapter",
@@ -232,11 +229,13 @@ export const kpSemanticAnimationCompilerStages = [
     authority: "renderer-output",
     representations: [
       "KpEquationMaterialOwner",
+      "EquationMotionFrame",
       "KpAnimationSurfaceAdapter",
       "KpAnimationRuntimeVisualFrameSampleFactory"
     ],
     sourcePaths: [
       "src/rendering/equation-material-owner.ts",
+      "src/rendering/equation-motion-sampler.ts",
       "src/animation/runtime-visual-frame-sample.ts",
       "src/editor/animation-surface-adapter-registry.ts"
     ],

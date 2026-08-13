@@ -6,7 +6,7 @@ import { createKpLinearRearrangementChoreography } from "../src/animation/linear
 import { checkKpCancellationPresentationLaws } from "../src/animation/cancellation-presentation-laws.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
-import { kpEquationPresentationProfile } from "../src/rendering/equation-presentation-policy.ts";
+import { kpEquationPresentationProfile } from "../src/animation/equation-presentation-policy.ts";
 import type {
   KpMeasuredEquationTransitionEndpoint,
   KpMeasuredEquationTransitionGeometry

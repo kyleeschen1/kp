@@ -42,7 +42,7 @@ import type {
   KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
-} from "./equation-presentation-policy.ts";
+} from "../animation/equation-presentation-policy.ts";
 import {
   createKpEquationSemanticDepthPlan,
   sampleKpEquationSemanticDepth

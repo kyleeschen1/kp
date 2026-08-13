@@ -13,9 +13,6 @@ export interface KpCancellationPresentationRequest {
   readonly teachingGoal: KpCancellationTeachingGoal;
 }
 
-export const kpCancellationTeachingGoalMetadataKey =
-  "equationCancellationTeachingGoal";
-
 export function kpCancellationOperationIdForTransformType(
   transformType: string
 ): KpCancellationOperationId | undefined {
@@ -30,18 +27,7 @@ export function kpCancellationOperationIdForTransformType(
   }
 }
 
-export function createKpCancellationPresentationAuthoringMetadata(
-  teachingGoal: KpCancellationTeachingGoal
-): Readonly<Record<typeof kpCancellationTeachingGoalMetadataKey, KpCancellationTeachingGoal>> {
-  return Object.freeze({
-    [kpCancellationTeachingGoalMetadataKey]: teachingGoal
-  });
-}
-
-/**
- * Authors state semantic authority and a teaching goal; renderer policy remains
- * inferred. This keeps generated lessons durable as visual recipes improve.
- */
+/** Generated requests may express intent without selecting renderer recipes. */
 export function inferKpCancellationPresentationIntent(
   request: KpCancellationPresentationRequest
 ): KpCancellationPresentationIntent {

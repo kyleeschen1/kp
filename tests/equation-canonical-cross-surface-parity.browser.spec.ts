@@ -7,7 +7,7 @@ import {
   type KpEquationSurfaceFragmentInput,
   type KpEquationSurfaceKind
 } from "../src/rendering/equation-cross-surface-frame.ts";
-import { kpEquationPresentationProfile } from "../src/rendering/equation-presentation-policy.ts";
+import { kpEquationPresentationProfile } from "../src/animation/equation-presentation-policy.ts";
 
 const animation = createLinearSolveAnimationAsset();
 const presentation = kpEquationPresentationProfile(animation);

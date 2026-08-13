@@ -5,7 +5,7 @@ import {
   createKpWitnessedAnnihilationBinding
 } from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
-import { kpEquationPresentationProfile } from "../../rendering/equation-presentation-policy.ts";
+import { kpEquationPresentationProfile } from "../../animation/equation-presentation-policy.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,

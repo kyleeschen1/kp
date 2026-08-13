@@ -17,7 +17,7 @@ import {
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
   kpEquationPresentationProfile
-} from "../../rendering/equation-presentation-policy.ts";
+} from "../../animation/equation-presentation-policy.ts";
 import {
   compileKpEquationCancellationPresentationPlan
 } from "../../animation/equation-cancellation-presentation.ts";

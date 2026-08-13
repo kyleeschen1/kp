@@ -126,28 +126,32 @@
     {
       "id": "s14",
       "title": "Prove legacy decoder reachability",
-      "summary": "Tracing every decoder and legacy presentation metadata ingress across production, public exports, serialized assets, and tests before any deletion.",
-      "status": "in-progress"
+      "summary": "Proved the legacy decoder has no public export, serialized ingress, production author, or concrete catalogue dependency; all 25 equation-target assets carry typed profiles. Durable audit selects explicit stale-input failure and bounded retirement.",
+      "status": "complete"
     },
     {
       "id": "s15",
       "title": "Retire proven legacy recipe paths",
-      "status": "planned"
+      "summary": "Deleted the 466-line legacy profile decoder and 200-line decoder suite, removed nine obsolete metadata compatibility paths plus the metadata authoring helper, and added explicit stale-key validation. The 251-test convergence suite, typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "s16",
       "title": "Move presentation profile ownership",
-      "status": "planned"
+      "summary": "Moved the equation presentation policy and branch-strategy reader into src/animation, updated every production/test caller, marked the compiler stage canonical, removed the ownership-debt entry, and updated the roadmap. No renderer resources entered the neutral owner.",
+      "status": "complete"
     },
     {
       "id": "s17",
       "title": "Resolve sampled payload ownership debt",
-      "status": "planned"
+      "summary": "Separated canonical closed sampled payloads from the older public SDK EquationMotionFrame: the former are already neutral and canonical; the latter remains renderer-owned because a file-only move would reverse dependencies. Removed false debt and documented the justified retention; 36 focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s18",
       "title": "Ratchet touched public seams",
-      "status": "planned"
+      "summary": "Ratchet the newly migrated presentation-policy seam and touched production callers against renderer-owner and legacy-decoder bypasses.",
+      "status": "in-progress"
     },
     {
       "id": "s19",

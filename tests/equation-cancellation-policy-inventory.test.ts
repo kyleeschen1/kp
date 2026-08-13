@@ -11,7 +11,7 @@ import {
   createLinearSolveAnimationAsset,
   createLinearSolveTeacherZeroAnimationAsset
 } from "../src/animation/linear-solve-adapter.ts";
-import { kpEquationPresentationProfile } from "../src/rendering/equation-presentation-policy.ts";
+import { kpEquationPresentationProfile } from "../src/animation/equation-presentation-policy.ts";
 
 const cancellationTransformTypes = new Set([
   "cancelAdditiveInverses",
@@ -29,19 +29,7 @@ test("approved equation assets expose the current cancellation-policy inventory"
   ];
 
   for (const asset of assets) {
-    assert.equal(
-      asset.metadata?.["equationCancellationPresentationRecipe"],
-      undefined
-    );
-    if (asset.presentationProfile !== undefined) {
-      assert.equal(asset.presentationProfile?.domain, "equation");
-      assert.equal(asset.metadata?.["equationCancellationTeachingGoal"], undefined);
-    } else {
-      assert.equal(
-        asset.metadata?.["equationCancellationTeachingGoal"],
-        "preserve-flow"
-      );
-    }
+    assert.equal(asset.presentationProfile?.domain, "equation");
   }
 
   assert.deepEqual(assets.map((asset) => ({

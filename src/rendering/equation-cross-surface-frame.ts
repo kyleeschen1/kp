@@ -1,4 +1,4 @@
-import type { KpEquationPresentationProfile } from "./equation-presentation-policy.ts";
+import type { KpEquationPresentationProfile } from "../animation/equation-presentation-policy.ts";
 import type { KpEquationVisualRect } from "./equation-visual-frame.ts";
 
 export type KpEquationSurfaceKind = "editor" | "reader";

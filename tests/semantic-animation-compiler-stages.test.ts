@@ -61,10 +61,7 @@ test("migration targets expose current package debt without hiding authority", (
     .filter(({ migrationStatus }) => migrationStatus === "target-owner")
     .map(({ id }) => id);
 
-  assert.deepEqual(targets, [
-    "presentation-profile",
-    "domain-payload"
-  ]);
+  assert.deepEqual(targets, []);
   assert.deepEqual(
     kpSemanticAnimationCompilerStages
       .filter(({ id }) => id === "motion-plan")

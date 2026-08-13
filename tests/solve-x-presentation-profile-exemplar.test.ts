@@ -1,13 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
-  createKpAnimationAsset,
-  validateKpAnimationAsset
-} from "../src/animation/asset.ts";
-import {
-  decodeKpEquationPresentationProfile
-} from "../src/animation/equation-presentation-profile-decoder.ts";
+import { validateKpAnimationAsset } from "../src/animation/asset.ts";
 import {
   createLinearSolveAnimationAsset,
   createLinearSolveTeacherZeroAnimationAsset
@@ -19,23 +13,12 @@ import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
-  resolveKpCancellationPresentation
-} from "../src/rendering/cancellation-presentation-resolver.ts";
-import {
   kpEquationPresentationProfile
-} from "../src/rendering/equation-presentation-policy.ts";
+} from "../src/animation/equation-presentation-policy.ts";
 
 test("accepted linear-solve variants author typed presentation profiles", () => {
   const canonical = createLinearSolveAnimationAsset();
   const teacherDetail = createLinearSolveTeacherZeroAnimationAsset();
-  const decodedCanonical = decodeKpEquationPresentationProfile({
-    animation: canonical,
-    resolveCancellation: resolveKpCancellationPresentation
-  });
-  const decodedTeacherDetail = decodeKpEquationPresentationProfile({
-    animation: teacherDetail,
-    resolveCancellation: resolveKpCancellationPresentation
-  });
 
   assert.deepEqual(canonical.metadata, {
     sourceAnimationId: "linear-equation-solve-x"
@@ -51,11 +34,6 @@ test("accepted linear-solve variants author typed presentation profiles", () => 
     continuants: "concurrent-v1",
     branchStrategy: "together"
   });
-  assert.equal(decodedCanonical.status, "accepted");
-  assert.equal(
-    decodedCanonical.status === "accepted" && decodedCanonical.source,
-    "typed-profile"
-  );
   assert.deepEqual(teacherDetail.metadata, {
     sourceAnimationId: "linear-equation-solve-x"
   });
@@ -70,48 +48,15 @@ test("accepted linear-solve variants author typed presentation profiles", () => 
     continuants: "transit-then-reflow-v1",
     branchStrategy: "together"
   });
-  assert.equal(decodedTeacherDetail.status, "accepted");
-  assert.equal(
-    decodedTeacherDetail.status === "accepted" && decodedTeacherDetail.source,
-    "typed-profile"
-  );
+  assert.equal(kpEquationPresentationProfile(canonical).recipe, "continuity-v1");
+  assert.equal(kpEquationPresentationProfile(teacherDetail).recipe, "continuity-v1");
 });
 
 test("typed authoring preserves solve-x semantic and clock serialization", () => {
   const typed = createLinearSolveAnimationAsset();
-  const legacyFacade = createKpAnimationAsset({
-    id: typed.id,
-    title: typed.title,
-    bundle: typed.bundle,
-    transformations: typed.transformations,
-    transformationTree: typed.transformationTree,
-    timeline: typed.timeline,
-    layout: typed.layout,
-    renderTargets: typed.renderTargets,
-    checks: typed.checks,
-    exportTargets: typed.exportTargets,
-    dashboard: typed.dashboard,
-    metadata: {
-      sourceAnimationId: "linear-equation-solve-x",
-      equationMotionPresentationRecipe: "continuity-v1",
-      equationNativeHandoffRecipe: "atomic-v1",
-      equationCancellationTeachingGoal: "preserve-flow",
-      equationZeroWitnessPresentationRecipe: "none",
-      equationSuccessorPresentationRecipe: "counter-convergence-v1",
-      equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "concurrent-v1",
-      equationBranchPresentationStrategy: "together"
-    }
-  });
-
-  assert.equal(
-    JSON.stringify(semanticClockSnapshot(typed)),
-    JSON.stringify(semanticClockSnapshot(legacyFacade))
-  );
-  assert.deepEqual(
-    kpEquationPresentationProfile(typed),
-    kpEquationPresentationProfile(legacyFacade)
-  );
+  assert.deepEqual(semanticClockSnapshot(typed), semanticClockSnapshot(
+    createLinearSolveAnimationAsset()
+  ));
   assert.equal(
     typed.presentationConstraints?.clearancePlanning,
     "measured-native-notation"

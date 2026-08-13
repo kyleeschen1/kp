@@ -33,15 +33,8 @@ import {
   createNumeratorSplitMergeEquationAnimationAsset
 } from "../src/animation/numerator-split-merge-equation-adapter.ts";
 import {
-  decodeKpEquationPresentationProfile,
-  kpLegacyEquationPresentationMetadataKeys
-} from "../src/animation/equation-presentation-profile-decoder.ts";
-import {
-  resolveKpCancellationPresentation
-} from "../src/rendering/cancellation-presentation-resolver.ts";
-import {
   kpEquationPresentationProfile
-} from "../src/rendering/equation-presentation-policy.ts";
+} from "../src/animation/equation-presentation-policy.ts";
 
 test("proven symbolic families author typed profiles without legacy authority", () => {
   const semanticMaterialAssets = [
@@ -63,23 +56,7 @@ test("proven symbolic families author typed profiles without legacy authority", 
 
   for (const asset of [...semanticMaterialAssets, ...continuityAssets]) {
     assert.equal(asset.presentationProfile?.domain, "equation", asset.id);
-    assert.deepEqual(
-      kpLegacyEquationPresentationMetadataKeys.filter(
-        (key) => asset.metadata?.[key] !== undefined
-      ),
-      [],
-      asset.id
-    );
-    const decoded = decodeKpEquationPresentationProfile({
-      animation: asset,
-      resolveCancellation: resolveKpCancellationPresentation
-    });
-    assert.equal(decoded.status, "accepted", asset.id);
-    assert.equal(
-      decoded.status === "accepted" && decoded.source,
-      "typed-profile",
-      asset.id
-    );
+    assert.equal(kpEquationPresentationProfile(asset).recipe.length > 0, true);
   }
 
   assert.ok(semanticMaterialAssets.every(
