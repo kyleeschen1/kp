@@ -382,10 +382,24 @@
       "scope": "s21 production vignette",
       "checkedAt": "2026-08-13T04:55:28.295Z",
       "notes": "Fifteen of fifteen pass; the public authoring seam has exactly one production caller, construction validation closes, and portable vignette paths and accessibility are present."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 programming capability extension",
+      "checkedAt": "2026-08-13T05:00:53.670Z",
+      "notes": "All type and architecture gates pass; no new renderer authority or compatibility path was added."
+    },
+    {
+      "command": "node --test TypeScript native code renderer and surface adapter suites",
+      "status": "passed",
+      "scope": "s22 native code renderer",
+      "checkedAt": "2026-08-13T05:00:54.811Z",
+      "notes": "Six of six pass; exact source round-trips, semantic ids are unique per revision, inactive source is inert, and no canvas, SVG, or painted text clone exists."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The TypeScript exemplar is now a real production vignette compiled through the existing canonical public authoring facade; the facade has exactly one production caller and the release exposes portable paths plus reduced-motion accessibility."
+    "summary": "The existing programming capability now renders the TypeScript exemplar as exact native selectable source with stable semantic DOM ids, one visible revision owner, inert hidden source, responsive dark styling, and synchronized accessible narration."
   }
 }
