@@ -9,6 +9,8 @@ import {
 
 const plan = mintKpCodeSettlementPlan({
   id: "settlement.refactor.helper",
+  sourcePaintOwnerId: "paint.transit",
+  targetPaintOwnerId: "paint.native-target",
   sourceNativeOwnerId: "projection.before",
   targetNativeOwnerId: "projection.after",
   milestones: {
@@ -28,6 +30,7 @@ test("settlement law makes every causal phase directly seekable", () => {
     recognition: "pending",
     transit: "absent",
     paintOwner: "source-native",
+    paintOwnerId: "paint.transit",
     accessibleNativeOwnerId: "projection.before"
   });
   assert.equal(sample(0.2).phase, "travel");
@@ -41,6 +44,7 @@ test("settlement law makes every causal phase directly seekable", () => {
     recognition: "complete",
     transit: "withdrawn",
     paintOwner: "target-native",
+    paintOwnerId: "paint.native-target",
     accessibleNativeOwnerId: "projection.after"
   });
 });
@@ -59,19 +63,39 @@ test("native ownership cannot precede arrival and recognition", () => {
   }
 });
 
-test("settlement law rejects invalid ownership and milestone order", () => {
+test("settlement law separates paint ownership from native accessibility", () => {
+  const sameNative = mintKpCodeSettlementPlan({
+    id: "settlement.overlay",
+    sourcePaintOwnerId: "paint.overlay",
+    targetPaintOwnerId: "paint.native",
+    sourceNativeOwnerId: "projection.same",
+    targetNativeOwnerId: "projection.same",
+    milestones: plan.milestones
+  });
+  assert.equal(
+    sampleKpCodeSettlement({ plan: sameNative, progress: 0.9 }).accessibleNativeOwnerId,
+    "projection.same"
+  );
+
   assert.throws(
     () => mintKpCodeSettlementPlan({
-      id: "settlement.same-owner",
-      sourceNativeOwnerId: "projection.same",
-      targetNativeOwnerId: "projection.same",
+      id: "settlement.same-paint-owner",
+      sourcePaintOwnerId: "paint.same",
+      targetPaintOwnerId: "paint.same",
+      sourceNativeOwnerId: "projection.before",
+      targetNativeOwnerId: "projection.after",
       milestones: plan.milestones
     }),
-    /distinct native owners/
+    /distinct paint owners/
   );
+});
+
+test("settlement law rejects invalid milestone order", () => {
   assert.throws(
     () => mintKpCodeSettlementPlan({
       id: "settlement.early-handoff",
+      sourcePaintOwnerId: "paint.transit",
+      targetPaintOwnerId: "paint.native-target",
       sourceNativeOwnerId: "projection.before",
       targetNativeOwnerId: "projection.after",
       milestones: {
@@ -89,6 +113,8 @@ test("settlement law rejects invalid ownership and milestone order", () => {
 test("unminted structurally similar plans cannot sample", () => {
   const forged = {
     id: plan.id,
+    sourcePaintOwnerId: plan.sourcePaintOwnerId,
+    targetPaintOwnerId: plan.targetPaintOwnerId,
     sourceNativeOwnerId: plan.sourceNativeOwnerId,
     targetNativeOwnerId: plan.targetNativeOwnerId,
     milestones: plan.milestones

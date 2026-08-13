@@ -18,6 +18,10 @@ import {
   tokenizeKpTypeScriptSource,
   type KpTypeScriptTokenKind
 } from "../semantic/typescript-source-tokens.ts";
+import {
+  mintKpCodeSettlementPlan,
+  sampleKpCodeSettlement
+} from "./code-motion-settlement.ts";
 
 export type { KpTypeScriptTokenKind } from
   "../semantic/typescript-source-tokens.ts";
@@ -72,6 +76,21 @@ interface TrackInterval {
   readonly startProgress: number;
   readonly endProgress: number;
 }
+
+const fusionSettlementPlan = mintKpCodeSettlementPlan({
+  id: "settlement.typescript.rule-fusion",
+  sourcePaintOwnerId: "paint.typescript.rule-fusion.transit",
+  targetPaintOwnerId: "paint.typescript.rule-fusion.native-target",
+  sourceNativeOwnerId: "projection.typescript.helper-introduced",
+  targetNativeOwnerId: "projection.typescript.helper-introduced",
+  milestones: {
+    travel: 0,
+    arrival: 0.7,
+    recognition: 0.78,
+    ownershipHandoff: 0.84,
+    withdrawal: 1
+  }
+});
 
 export function createKpTypeScriptRefactorTokenProgram(
   semantics: KpTypeScriptRefactorSemanticArtifactV1
@@ -343,8 +362,24 @@ function sampleFusion(
   // Arrival, recognition, and paint ownership are separate phases. The prior
   // sampler faded and shrank the bundles while their paths were still moving,
   // which made the semantic material disappear short of its destination.
-  const arrival = smoothstep(normalize(progress, 0, 0.7));
-  const settlementHandoff = smoothstep(normalize(progress, 0.84, 1));
+  const settlement = sampleKpCodeSettlement({
+    plan: fusionSettlementPlan,
+    progress
+  });
+  const arrival = smoothstep(normalize(
+    progress,
+    fusionSettlementPlan.milestones.travel,
+    fusionSettlementPlan.milestones.arrival
+  ));
+  const settlementHandoff = smoothstep(normalize(
+    progress,
+    fusionSettlementPlan.milestones.ownershipHandoff,
+    fusionSettlementPlan.milestones.withdrawal
+  ));
+  if (settlement.paintOwner === "target-native" &&
+      settlement.destination !== "reached") {
+    throw new Error("TypeScript fusion cannot hand off before full arrival.");
+  }
   const targetEntrance = settlementHandoff;
   const base = snapshot.tokens.map((token) => frameToken(token, {
     ...(token.entityId === interval.track.targetEntityId

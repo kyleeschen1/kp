@@ -7,6 +7,10 @@ import {
   kpTypeScriptRefactorSourceProjectionIds,
   type KpTypeScriptRefactorSourceProjectionId
 } from "../semantic/typescript-refactor-source-projections.ts";
+import {
+  mintKpCodeSettlementPlan,
+  sampleKpCodeSettlement
+} from "./code-motion-settlement.ts";
 
 export interface KpTypeScriptRefactorProjectionFrame {
   readonly id: KpTypeScriptRefactorSourceProjectionId;
@@ -22,6 +26,12 @@ export interface KpTypeScriptRefactorMotionFrame {
   readonly accessibleProjectionId: KpTypeScriptRefactorSourceProjectionId;
   readonly reducedMotion: boolean;
 }
+
+const nativeOwnershipPlans = new Map([
+  nativeOwnershipPlan("projection.typescript.before", "projection.typescript.helper-introduced"),
+  nativeOwnershipPlan("projection.typescript.helper-introduced", "projection.typescript.cost-replaced"),
+  nativeOwnershipPlan("projection.typescript.cost-replaced", "projection.typescript.final")
+].map((plan) => [`${plan.sourceNativeOwnerId}\u0000${plan.targetNativeOwnerId}`, plan]));
 
 export function sampleKpTypeScriptRefactorMotionFrame(input: {
   readonly score: KpTypeScriptRefactorScoreV1;
@@ -67,8 +77,42 @@ export function sampleKpTypeScriptRefactorMotionFrame(input: {
       });
     })),
     focusStrength: round(focusStrength),
-    accessibleProjectionId: handoff.progress < 0.5 ? handoff.from : handoff.to,
+    accessibleProjectionId: accessibleNativeOwner(handoff),
     reducedMotion: input.reducedMotion === true
+  });
+}
+
+function accessibleNativeOwner(handoff: {
+  readonly from: KpTypeScriptRefactorSourceProjectionId;
+  readonly to: KpTypeScriptRefactorSourceProjectionId;
+  readonly progress: number;
+}): KpTypeScriptRefactorSourceProjectionId {
+  if (handoff.from === handoff.to) return handoff.from;
+  const plan = nativeOwnershipPlans.get(`${handoff.from}\u0000${handoff.to}`);
+  if (plan === undefined) {
+    throw new Error(`Missing TypeScript native ownership plan ${handoff.from} -> ${handoff.to}.`);
+  }
+  return sampleKpCodeSettlement({ plan, progress: handoff.progress })
+    .accessibleNativeOwnerId;
+}
+
+function nativeOwnershipPlan(
+  from: KpTypeScriptRefactorSourceProjectionId,
+  to: KpTypeScriptRefactorSourceProjectionId
+) {
+  return mintKpCodeSettlementPlan({
+    id: `settlement.typescript.native.${from}.${to}`,
+    sourcePaintOwnerId: `paint.typescript.native.${from}`,
+    targetPaintOwnerId: `paint.typescript.native.${to}`,
+    sourceNativeOwnerId: from,
+    targetNativeOwnerId: to,
+    milestones: {
+      travel: 0,
+      arrival: 0.35,
+      recognition: 0.45,
+      ownershipHandoff: 0.5,
+      withdrawal: 1
+    }
   });
 }
 

@@ -27,11 +27,12 @@ export interface KpCodeSourceFragment<
 export interface KpCompleteCodeSourceProjection<
   ProjectionId extends string = string,
   Entity extends KpCodeProjectionEntity = KpCodeProjectionEntity,
-  Token extends KpCodeSourceToken = KpCodeSourceToken
+  Token extends KpCodeSourceToken = KpCodeSourceToken,
+  RootEntityId extends string = string
 > {
   readonly id: ProjectionId;
   readonly sourceText: string;
-  readonly rootEntityId?: string;
+  readonly rootEntityId?: RootEntityId;
   readonly entities: readonly Entity[];
   readonly tokens: readonly Token[];
 }
@@ -43,14 +44,15 @@ export interface KpCompleteCodeSourceProjection<
 export function composeKpCompleteCodeSourceProjection<
   ProjectionId extends string,
   Entity extends KpCodeProjectionEntity,
-  Token extends KpCodeSourceToken
+  Token extends KpCodeSourceToken,
+  RootEntityId extends string = string
 >(input: {
   readonly id: ProjectionId;
   readonly fragments: readonly KpCodeSourceFragment<Entity, Token>[];
   readonly separator: string;
-  readonly rootEntityId?: string;
+  readonly rootEntityId?: RootEntityId;
   readonly tokenId?: ((token: Token) => string) | undefined;
-}): KpCompleteCodeSourceProjection<ProjectionId, Entity, Token> {
+}): KpCompleteCodeSourceProjection<ProjectionId, Entity, Token, RootEntityId> {
   if (input.fragments.length === 0) {
     throw new Error(`Code source projection ${input.id} requires at least one fragment.`);
   }

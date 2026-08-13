@@ -183,7 +183,8 @@
     {
       "id": "s23",
       "title": "Migrate TypeScript contracts",
-      "status": "planned"
+      "summary": "Migrated TypeScript onto the shared seams and strengthened the settlement type model so transient paint ownership remains separate from accessible native-source ownership.",
+      "status": "complete"
     },
     {
       "id": "s24",

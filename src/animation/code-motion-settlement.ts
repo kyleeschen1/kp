@@ -15,15 +15,22 @@ export interface KpCodeSettlementMilestones {
   readonly withdrawal: number;
 }
 
-export interface KpCodeSettlementPlanDraft<OwnerId extends string = string> {
+export interface KpCodeSettlementPlanDraft<
+  PaintOwnerId extends string = string,
+  NativeOwnerId extends string = string
+> {
   readonly id: string;
-  readonly sourceNativeOwnerId: OwnerId;
-  readonly targetNativeOwnerId: OwnerId;
+  readonly sourcePaintOwnerId: PaintOwnerId;
+  readonly targetPaintOwnerId: PaintOwnerId;
+  readonly sourceNativeOwnerId: NativeOwnerId;
+  readonly targetNativeOwnerId: NativeOwnerId;
   readonly milestones: KpCodeSettlementMilestones;
 }
 
-export interface KpVerifiedCodeSettlementPlan<OwnerId extends string = string>
-  extends KpCodeSettlementPlanDraft<OwnerId> {
+export interface KpVerifiedCodeSettlementPlan<
+  PaintOwnerId extends string = string,
+  NativeOwnerId extends string = string
+> extends KpCodeSettlementPlanDraft<PaintOwnerId, NativeOwnerId> {
   readonly [verifiedCodeSettlementPlan]: true;
 }
 
@@ -35,14 +42,18 @@ export type KpCodeSettlementPhase =
   | "ownership-handoff"
   | "withdrawal";
 
-export interface KpCodeSettlementSample<OwnerId extends string = string> {
+export interface KpCodeSettlementSample<
+  PaintOwnerId extends string = string,
+  NativeOwnerId extends string = string
+> {
   readonly progress: number;
   readonly phase: KpCodeSettlementPhase;
   readonly destination: "pending" | "reached";
   readonly recognition: "pending" | "complete";
   readonly transit: "absent" | "moving" | "arrived" | "withdrawn";
   readonly paintOwner: "source-native" | "transit" | "target-native";
-  readonly accessibleNativeOwnerId: OwnerId;
+  readonly paintOwnerId: PaintOwnerId;
+  readonly accessibleNativeOwnerId: NativeOwnerId;
 }
 
 /**
@@ -50,14 +61,19 @@ export interface KpCodeSettlementSample<OwnerId extends string = string> {
  * causal order, so renderers cannot hand native paint off before material has
  * arrived and been recognized.
  */
-export function mintKpCodeSettlementPlan<OwnerId extends string>(
-  draft: KpCodeSettlementPlanDraft<OwnerId>
-): KpVerifiedCodeSettlementPlan<OwnerId> {
+export function mintKpCodeSettlementPlan<
+  PaintOwnerId extends string,
+  NativeOwnerId extends string
+>(
+  draft: KpCodeSettlementPlanDraft<PaintOwnerId, NativeOwnerId>
+): KpVerifiedCodeSettlementPlan<PaintOwnerId, NativeOwnerId> {
   assertText(draft.id, "id");
+  assertText(draft.sourcePaintOwnerId, "sourcePaintOwnerId");
+  assertText(draft.targetPaintOwnerId, "targetPaintOwnerId");
   assertText(draft.sourceNativeOwnerId, "sourceNativeOwnerId");
   assertText(draft.targetNativeOwnerId, "targetNativeOwnerId");
-  if (draft.sourceNativeOwnerId === draft.targetNativeOwnerId) {
-    throw new Error(`Code settlement ${draft.id} requires distinct native owners.`);
+  if (draft.sourcePaintOwnerId === draft.targetPaintOwnerId) {
+    throw new Error(`Code settlement ${draft.id} requires distinct paint owners.`);
   }
 
   const entries = kpCodeSettlementMilestoneOrder.map((name) =>
@@ -85,8 +101,11 @@ export function mintKpCodeSettlementPlan<OwnerId extends string>(
   });
 }
 
-export function assertKpVerifiedCodeSettlementPlan<OwnerId extends string>(
-  plan: KpVerifiedCodeSettlementPlan<OwnerId>
+export function assertKpVerifiedCodeSettlementPlan<
+  PaintOwnerId extends string,
+  NativeOwnerId extends string
+>(
+  plan: KpVerifiedCodeSettlementPlan<PaintOwnerId, NativeOwnerId>
 ): void {
   if (plan[verifiedCodeSettlementPlan] !== true) {
     throw new Error("Code settlement plans must be minted by the shared validator.");
@@ -94,10 +113,13 @@ export function assertKpVerifiedCodeSettlementPlan<OwnerId extends string>(
 }
 
 /** Pure direct sampling makes seek, rewind, and interruption equivalent. */
-export function sampleKpCodeSettlement<OwnerId extends string>(input: {
-  readonly plan: KpVerifiedCodeSettlementPlan<OwnerId>;
+export function sampleKpCodeSettlement<
+  PaintOwnerId extends string,
+  NativeOwnerId extends string
+>(input: {
+  readonly plan: KpVerifiedCodeSettlementPlan<PaintOwnerId, NativeOwnerId>;
   readonly progress: number;
-}): KpCodeSettlementSample<OwnerId> {
+}): KpCodeSettlementSample<PaintOwnerId, NativeOwnerId> {
   assertKpVerifiedCodeSettlementPlan(input.plan);
   const progress = clamp(input.progress);
   const { milestones } = input.plan;
@@ -124,6 +146,9 @@ export function sampleKpCodeSettlement<OwnerId extends string>(input: {
       : progress >= milestones.travel
         ? "transit"
         : "source-native",
+    paintOwnerId: handedOff
+      ? input.plan.targetPaintOwnerId
+      : input.plan.sourcePaintOwnerId,
     accessibleNativeOwnerId: handedOff
       ? input.plan.targetNativeOwnerId
       : input.plan.sourceNativeOwnerId
