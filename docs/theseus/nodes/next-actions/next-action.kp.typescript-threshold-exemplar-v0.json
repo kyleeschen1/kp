@@ -242,10 +242,24 @@
       "scope": "s12 route closure",
       "checkedAt": "2026-08-13T04:16:23.206Z",
       "notes": "All route ceilings match baseline exactly; compiler remains absent from browser closure."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-free-shipping-refactor-contract.test.ts",
+      "status": "passed",
+      "scope": "s13 exemplar contract",
+      "checkedAt": "2026-08-13T04:20:50.589Z",
+      "notes": "Five contract tests freeze novice motivation, exact source, stage order, identities, behavior cases, and visual authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 contract types",
+      "checkedAt": "2026-08-13T04:20:52.744Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The post-retirement boundary is clean: 252 convergence tests, typecheck, architecture, build, and every route bundle ceiling pass, so the TypeScript exemplar may begin."
+    "summary": "The TypeScript proof now has an immutable pedagogical contract: one novice-readable reason to refactor, exact before and after source, seven authored stages, stable ids, boundary cases, and a no-execution visual authority boundary."
   }
 }
