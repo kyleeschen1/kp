@@ -88,6 +88,16 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
       "A narrow public facade must not turn the entire internal asset module into a compatibility promise."
   }),
   target({
+    id: "core.equation-presentation-policy",
+    targetPath: "src/animation/equation-presentation-policy.ts",
+    tier: "semantic-core",
+    disposition: "retain-internal",
+    authority:
+      "Own the validated renderer-neutral view of each typed equation presentation profile.",
+    preservationBoundary:
+      "The policy may be consumed by choreography and rendering but cannot import renderer modules, decode legacy metadata, or infer a missing profile."
+  }),
+  target({
     id: "facade.concept-authoring",
     targetPath: "src/authoring/public-api.ts",
     tier: "integration-facade",

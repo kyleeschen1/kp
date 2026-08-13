@@ -63,6 +63,36 @@ test("internal balanced solve seam has only its public facade production caller"
   assert.deepEqual(surface.otherCallers, []);
 });
 
+test("typed equation presentation policy has one neutral owner and bounded callers", () => {
+  const surface = record("core.equation-presentation-policy");
+  assert.deepEqual(surface.sourceCallers, [
+    "src/animation/linear-rearrangement-choreography.ts",
+    "src/editor/equation-surface-adapter.ts",
+    "src/reader/app/chrome-free-canonical-equation-session.ts",
+    "src/reader/app/exemplar-entry.ts",
+    "src/reader/renderers/equation-operation-choreography-compiler.ts",
+    "src/reader/renderers/equation-symbol-motion.ts",
+    "src/rendering/cancellation-presentation-conformance.ts",
+    "src/rendering/equation-cross-surface-frame.ts",
+    "src/rendering/equation-linear-rearrangement-bindings.ts",
+    "src/rendering/equation-linear-rearrangement-owner-motion.ts",
+    "src/rendering/equation-linear-rearrangement.ts",
+    "src/rendering/equation-motion-dom.ts",
+    "src/rendering/equation-semantic-depth.ts"
+  ]);
+  const source = readFileSync(join(projectRoot, surface.targetPath), "utf8");
+  assert.doesNotMatch(source, /from ["']\.\.\/rendering\//);
+  assert.doesNotMatch(source, /legacy|metadata/i);
+  assert.equal(
+    existsSync(join(projectRoot, "src/rendering/equation-presentation-policy.ts")),
+    false
+  );
+  assert.equal(
+    existsSync(join(projectRoot, "src/animation/equation-presentation-profile-decoder.ts")),
+    false
+  );
+});
+
 test("animation facade has exactly the two approved production callers", () => {
   const surface = record("facade.animation-authoring");
   assert.equal(surface.disposition, "retain-public-boundary");
@@ -154,7 +184,10 @@ test("retirement-adjacent metadata and compatibility targets have no unknown cal
   ]);
   assert.deepEqual(
     record("ledger.semantic-animation-compatibility").testCallers,
-    ["tests/semantic-animation-compatibility-ledger.test.ts"]
+    [
+      "tests/equation-presentation-profile-authoring-ratchet.test.ts",
+      "tests/semantic-animation-compatibility-ledger.test.ts"
+    ]
   );
   assert.deepEqual(
     record("ledger.semantic-animation-compatibility").sourceCallers,
