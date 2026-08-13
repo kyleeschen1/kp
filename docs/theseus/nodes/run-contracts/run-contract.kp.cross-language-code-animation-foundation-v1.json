@@ -87,7 +87,8 @@
     {
       "id": "s07",
       "title": "Generate Python semantics",
-      "status": "planned"
+      "summary": "Compiled authored Python identities into stable AST-backed entities with exact UTF-16 ranges, scopes, declarations, deterministic checked-in semantic data, drift checking, and a browser-safe generated artifact reader.",
+      "status": "complete"
     },
     {
       "id": "s08",

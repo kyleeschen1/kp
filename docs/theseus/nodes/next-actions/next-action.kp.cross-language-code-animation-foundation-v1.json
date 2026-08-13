@@ -90,6 +90,18 @@
       "status": "passed",
       "scope": "Build-only Python frontend wrapper and repository contracts",
       "checkedAt": "2026-08-13T17:52:37.337Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-semantic-compiler.test.ts tests/python-refactor-frontend.test.ts",
+      "status": "passed",
+      "scope": "Python authored identities to real AST ranges, scopes, declarations, deterministic generation, no-execution frontend, and browser isolation",
+      "checkedAt": "2026-08-13T17:55:31.381Z"
+    },
+    {
+      "command": "npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "Checked-in Python semantic artifact drift",
+      "checkedAt": "2026-08-13T17:55:32.332Z"
     }
   ],
   "progress": {
