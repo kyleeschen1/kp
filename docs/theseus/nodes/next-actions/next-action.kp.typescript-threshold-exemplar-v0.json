@@ -347,10 +347,31 @@
       "scope": "s19 pedagogical score",
       "checkedAt": "2026-08-13T04:46:04.419Z",
       "notes": "Seven of seven pass; authored checkpoint order, gapless timeline coverage, direct seek, rewind, serialization, and geometry independence are green."
+    },
+    {
+      "command": "node --test TypeScript animation asset, score, and operation suites",
+      "status": "passed",
+      "scope": "s20 assembled asset",
+      "checkedAt": "2026-08-13T04:51:18.384Z",
+      "notes": "Ten of ten pass for reference closure, transformation phases, static and accessible endpoints, generated-data isolation, score laws, and operation lineage."
+    },
+    {
+      "command": "npm run check:typescript-refactor-semantics, npm run typecheck, and npm run build",
+      "status": "passed",
+      "scope": "s20 generated artifact",
+      "checkedAt": "2026-08-13T04:51:20.862Z",
+      "notes": "Generated semantics are fresh; all type and production build checks pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s20 compiler isolation and route closure",
+      "checkedAt": "2026-08-13T04:51:21.467Z",
+      "notes": "All measured route limits remain exactly at the established baseline before catalogue integration; compiler code is not browser reachable."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The seven-stage authored pedagogical score now uses the shared deterministic timeline, covers the full duration without gaps, and yields identical semantic states for forward sampling, direct seek, rewind, and clamped endpoints."
+    "summary": "A product-safe TypeScript animation asset now composes generated semantics, validated operations, bounded behavior evidence, deterministic score, exact static endpoints, accessibility text, and a programming render target without compiler browser reach."
   }
 }

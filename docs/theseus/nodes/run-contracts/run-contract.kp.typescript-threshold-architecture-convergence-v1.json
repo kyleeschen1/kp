@@ -163,7 +163,8 @@
     {
       "id": "s20",
       "title": "Construct animation asset",
-      "status": "planned"
+      "summary": "Constructed the product-safe TypeScript animation asset with generated semantic data, canonical transformations, bounded parity, deterministic timeline, programming render target, exact static endpoints, and accessibility ownership; build and bundle boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
