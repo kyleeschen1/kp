@@ -157,7 +157,8 @@
     {
       "id": "s19",
       "title": "Author pedagogical score",
-      "status": "planned"
+      "summary": "Authored the seven-stage pedagogical score on the canonical timeline with gapless beat coverage, stable narration and focus ids, and deterministic direct-seek and rewind laws; focused tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s20",

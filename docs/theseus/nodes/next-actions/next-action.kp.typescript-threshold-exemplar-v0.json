@@ -333,10 +333,24 @@
       "scope": "s18 bounded parity",
       "checkedAt": "2026-08-13T04:42:33.603Z",
       "notes": "Six of six pass; declared cases match before, after, and expected observations, altered semantic evidence fails closed, and no arbitrary execution mechanism exists."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 timeline types",
+      "checkedAt": "2026-08-13T04:46:02.894Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "node --test TypeScript score and behavior suites",
+      "status": "passed",
+      "scope": "s19 pedagogical score",
+      "checkedAt": "2026-08-13T04:46:04.419Z",
+      "notes": "Seven of seven pass; authored checkpoint order, gapless timeline coverage, direct seek, rewind, serialization, and geometry independence are green."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A fail-closed bounded behavior certificate now ties exact parsed rule and call evidence to before/after parity at totals 49, 50, and 75 without arbitrary source execution or universal-equivalence claims."
+    "summary": "The seven-stage authored pedagogical score now uses the shared deterministic timeline, covers the full duration without gaps, and yields identical semantic states for forward sampling, direct seek, rewind, and clamped endpoints."
   }
 }
