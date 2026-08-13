@@ -14,14 +14,13 @@ import {
 } from "../semantic/typescript-refactor-source-projections.ts";
 import type { KpTypeScriptRefactorSemanticArtifactV1 } from
   "../semantic/typescript-refactor-semantic-model.ts";
+import {
+  tokenizeKpTypeScriptSource,
+  type KpTypeScriptTokenKind
+} from "../semantic/typescript-source-tokens.ts";
 
-export type KpTypeScriptTokenKind =
-  | "keyword"
-  | "identifier"
-  | "number"
-  | "string"
-  | "operator"
-  | "punctuation";
+export type { KpTypeScriptTokenKind } from
+  "../semantic/typescript-source-tokens.ts";
 
 export interface KpTypeScriptTheaterToken {
   readonly id: string;
@@ -73,20 +72,6 @@ interface TrackInterval {
   readonly startProgress: number;
   readonly endProgress: number;
 }
-
-const tokenPattern = /(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[A-Za-z_$][\w$]*|\d+(?:\.\d+)?|===|!==|=>|>=|<=|==|!=|&&|\|\||\?\?|\+\+|--|\+=|-=|\*=|\/=|[{}()[\].,:;?+\-*/%=<>!&|])/g;
-const keywords = new Set([
-  "export",
-  "function",
-  "return",
-  "const",
-  "let",
-  "boolean",
-  "number",
-  "string",
-  "true",
-  "false"
-]);
 
 export function createKpTypeScriptRefactorTokenProgram(
   semantics: KpTypeScriptRefactorSemanticArtifactV1
@@ -426,23 +411,23 @@ function snapshot(
   const tokens: KpTypeScriptSnapshotToken[] = [];
   const occurrences = new Map<string, number>();
   const yOffset = (maxLineCount - lineCount(projection.sourceText)) / 2;
-  for (const match of projection.sourceText.matchAll(tokenPattern)) {
-    const text = match[0];
-    const offset = match.index;
-    if (text === undefined || offset === undefined) continue;
-    const owner = smallestOwner(projection.entities, offset, offset + text.length);
+  for (const lexicalToken of tokenizeKpTypeScriptSource(projection.sourceText)) {
+    const { text, startOffset, endOffset, kind } = lexicalToken;
+    const owner = smallestOwner(projection.entities, startOffset, endOffset);
     if (owner === undefined) {
-      throw new Error(`TypeScript token ${text} at ${offset} has no compiler-derived owner.`);
+      throw new Error(
+        `TypeScript token ${text} at ${startOffset} has no compiler-derived owner.`
+      );
     }
     const ownerId = stableOwnerId(owner);
     const occurrenceKey = `${ownerId}\u0000${text}`;
     const occurrence = occurrences.get(occurrenceKey) ?? 0;
     occurrences.set(occurrenceKey, occurrence + 1);
-    const location = lineAndColumn(projection.sourceText, offset);
+    const location = lineAndColumn(projection.sourceText, startOffset);
     tokens.push(Object.freeze({
-      id: `token.${ownerId}.${tokenKind(text)}.${encodeToken(text)}.${occurrence}`,
+      id: `token.${ownerId}.${kind}.${encodeToken(text)}.${occurrence}`,
       text,
-      kind: tokenKind(text),
+      kind,
       entityId: owner.id,
       xCh: location.column,
       yLine: location.line + yOffset
@@ -475,17 +460,6 @@ function stableOwnerId(entity: KpTypeScriptProjectedEntity): string {
   if (entity.id.includes("shipping-cost")) return "function.shipping-cost";
   if (entity.id.includes("shipping-message")) return "function.shipping-message";
   return entity.id;
-}
-
-function tokenKind(text: string): KpTypeScriptTokenKind {
-  if (keywords.has(text)) return "keyword";
-  if (/^[A-Za-z_$]/.test(text)) return "identifier";
-  if (/^\d/.test(text)) return "number";
-  if (text.startsWith('"') || text.startsWith("'")) return "string";
-  if (/^(?:===|!==|=>|>=|<=|==|!=|&&|\|\||\?\?|\+\+|--|\+=|-=|\*=|\/=|[?+\-*/%=<>!&|])$/.test(text)) {
-    return "operator";
-  }
-  return "punctuation";
 }
 
 function frameToken(

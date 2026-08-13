@@ -1,0 +1,203 @@
+{
+  "id": "run-contract.kp.cross-language-code-animation-foundation-v1",
+  "kind": "run-contract",
+  "title": "Cross-language code animation foundation",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.cross-language-code-animation-foundation-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-long-loop-proposal.md",
+      "summary": "Exact approved 30-slice order, verification tiers, preservation boundary, rollback cadence, deferrals, Python human checkpoint, and post-approval Scheme boundary."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test focused code-animation suites",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run visual:typescript-refactor",
+    "npm run visual:python-refactor",
+    "npm run verify:impact -- --path changed-path --release",
+    "npm run health:pre-expansion:release",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "TypeScript visual closure; build-time Python frontend and generated semantic data; Python operations, behavior proof, score, projections, syntax roles, deterministic motion, native renderer, lazy catalogue integration, stable visual tooling, accessibility, performance evidence, and human checkpoint.",
+    "After explicit approval of the Python checkpoint only: extract cross-language syntax, projection, settlement, and ownership contracts demonstrated by TypeScript and Python; migrate both callers; pressure conformance; audit and adapt Scheme while preserving its specialized choreography."
+  ],
+  "disallowedWork": [
+    "No CodeMirror work, public website/editor, curriculum expansion, universal scene graph or renderer, catalogue-wide theme promotion, new runtime parser dependency, arbitrary source execution, new clock or scheduler, layout work, economics edits, or unrelated documentation changes.",
+    "No shared presentation extraction before Python human approval; no forcing Scheme through the imperative-language source renderer; no inferred identity from glyph equality or token text."
+  ],
+  "goal": "Close the approved TypeScript code presentation, deliver a governed Python free-shipping second caller, extract only proven language-neutral code-motion invariants after human review, and adapt Scheme without flattening its recursive choreography.",
+  "target": "next-action.kp.cross-language-code-animation-foundation-v1",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit each independently reversible verified slice with its completed Theseus evidence; never stage protected economics files or unrelated documents.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on any change to approved TypeScript semantics, trajectory, timing, source truth, accessibility, direct seek, or layout geometry while closing the visual treatment.",
+    "Stop if Python requires a browser-reachable parser/compiler, a new package, arbitrary execution, a new semantic store, clock, scheduler, stage lifecycle, or paint authority.",
+    "Stop on unresolved behavior parity, source validity, accessibility, direct-link, seek, rewind, bundle, CLS, long-task, or existing-exemplar regression.",
+    "Stop at slice s17 for mandatory Python human visual judgment; do not begin s18 without explicit approval.",
+    "After approval, stop if two callers do not justify a shared seam or if Scheme adoption would erase recursive S-expression pedagogy."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Close TypeScript visual",
+      "summary": "Closed the approved TypeScript presentation with one syntax-role stream across static and moving code, an artifact-scoped dark catalogue theme, transparent focused code, and the former highlight color preserved as a dormant CSS variable.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Protect highlight contract",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Harden TypeScript syntax stream",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Record code ownership map",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Freeze Python fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Build Python frontend",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Generate Python semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Compile Python operations",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Prove Python behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Author Python score",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Build Python projections",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Add Python syntax roles",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Mint Python motion plans",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Add Python deterministic motion",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Integrate Python vertical slice",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Pressure Python runtime",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Open Python human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Compare language callers",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Extract syntax role protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Extract source projection seam",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Enforce settlement law",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Model explicit exceptions",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Migrate TypeScript contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Migrate Python contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run cross-language conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Audit Scheme reuse",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Add Scheme syntax adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Apply Scheme invariants",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Host Scheme library artifact",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Close cross-language tranche",
+      "status": "planned"
+    }
+  ]
+}

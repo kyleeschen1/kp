@@ -1,0 +1,87 @@
+{
+  "id": "next-action.kp.cross-language-code-animation-foundation-v1",
+  "kind": "next-action",
+  "title": "Cross-language code animation foundation",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-cross-language-code-animation-foundation-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typescript-threshold-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run visual:typescript-refactor",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-refactor-code-html.test.ts tests/typescript-refactor-token-theater.test.ts tests/typescript-refactor-css-clock.test.ts tests/typescript-refactor-surface-adapter.test.ts tests/typescript-refactor-motion-plan.test.ts tests/typescript-refactor-catalogue-integration.test.ts tests/animation-catalogue-shell.test.ts",
+      "status": "passed",
+      "scope": "TypeScript semantic source, token theater, styling, adapter, motion, and catalogue integration",
+      "checkedAt": "2026-08-13T17:33:56.657Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Repository TypeScript contracts",
+      "checkedAt": "2026-08-13T17:33:57.626Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Architecture and promotion boundaries",
+      "checkedAt": "2026-08-13T17:33:58.536Z"
+    },
+    {
+      "command": "npm run visual:typescript-refactor",
+      "status": "passed",
+      "scope": "Approved TypeScript exemplar at wide, phone, and reduced-motion checkpoints",
+      "checkedAt": "2026-08-13T17:33:59.441Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Closed the approved TypeScript presentation: shared static/transit syntax roles, Neovim-derived dark catalogue treatment, and transparent code focus with the former highlight color retained as a dormant CSS token."
+  },
+  "expectedLearning": [
+    "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",
+    "Determine which settlement and ownership invariants Scheme can adopt without flattening recursive S-expression pedagogy."
+  ],
+  "allowedWork": [
+    "Execute only the approved cross-language code-animation proposal through the Python human checkpoint at s17.",
+    "Preserve the approved TypeScript exemplar while adding a build-time Python caller with native accessible code rendering and deterministic motion."
+  ],
+  "disallowedWork": [
+    "Do not begin shared extraction or Scheme adaptation before explicit approval of the Python visual checkpoint.",
+    "Do not touch economics work, unrelated documents, layout, CodeMirror, public product work, or introduce new clocks, schedulers, runtime parsers, scene graphs, or semantic stores."
+  ],
+  "criteria": [
+    {
+      "id": "typescript-presentation-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "python-second-caller-verified",
+      "weight": "high"
+    },
+    {
+      "id": "cross-language-reuse-measured",
+      "weight": "high"
+    },
+    {
+      "id": "python-human-checkpoint-opened",
+      "weight": "high"
+    }
+  ]
+}

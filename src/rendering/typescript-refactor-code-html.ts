@@ -8,6 +8,8 @@ import {
   type KpTypeScriptRefactorSourceProjection,
   type KpTypeScriptRefactorSourceProjectionId
 } from "../semantic/typescript-refactor-source-projections.ts";
+import { tokenizeKpTypeScriptSource } from
+  "../semantic/typescript-source-tokens.ts";
 
 export interface KpTypeScriptRefactorCodeHtmlInput {
   readonly semantics: KpTypeScriptRefactorSemanticArtifactV1;
@@ -120,14 +122,26 @@ function renderRange(
   let html = "";
   for (const node of nodes) {
     const range = node.entity.sourceRange;
-    html += escapeHtml(source.slice(cursor, range.startOffset));
+    html += renderSyntaxRange(source, cursor, range.startOffset);
     const selector = selectorId(node.entity.id);
     const focused = focusSelectorIds.has(selector);
     html += `<span data-kp-semantic-entity-id="${escapeAttribute(node.entity.id)}" data-kp-typescript-selector-id="${escapeAttribute(selector)}" data-kp-typescript-entity-kind="${node.entity.kind}" data-kp-typescript-focus="${focused}">${renderRange(source, range.startOffset, range.endOffset, node.children, focusSelectorIds)}</span>`;
     cursor = range.endOffset;
   }
-  html += escapeHtml(source.slice(cursor, end));
+  html += renderSyntaxRange(source, cursor, end);
   return html;
+}
+
+function renderSyntaxRange(source: string, start: number, end: number): string {
+  const value = source.slice(start, end);
+  let cursor = 0;
+  let html = "";
+  for (const token of tokenizeKpTypeScriptSource(value)) {
+    html += escapeHtml(value.slice(cursor, token.startOffset));
+    html += `<span data-kp-typescript-syntax-kind="${token.kind}">${escapeHtml(token.text)}</span>`;
+    cursor = token.endOffset;
+  }
+  return html + escapeHtml(value.slice(cursor));
 }
 
 function assertNonCrossing(nodes: readonly EntityTreeNode[]): void {

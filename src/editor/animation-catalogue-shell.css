@@ -514,6 +514,119 @@
   font-size: 0.67rem;
 }
 
+/* Keep the TypeScript visual-discovery checkpoint independently reversible:
+   only its catalogue route adopts the Neovim-derived dark optical system. */
+:is(
+  .kp-animation-catalogue-shell,
+  .kp-animation-catalogue-bootstrap
+)[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"] {
+  --kp-catalogue-border: rgb(237 232 208 / 14%);
+  --kp-catalogue-muted: #989898;
+  color-scheme: dark;
+  color: #ede8d0;
+  background: #0d0e1c;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  :is(
+    .kp-animation-catalogue-shell__rail,
+    .kp-animation-catalogue-shell__inspector,
+    .kp-animation-catalogue-shell__stage,
+    .kp-animation-catalogue-shell__stage-host,
+    .editor-animation-player,
+    .editor-animation-player__stage
+  ),
+.kp-animation-catalogue-bootstrap[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .kp-animation-catalogue-bootstrap__stage {
+  color: #ede8d0;
+  background: #0d0e1c;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  :is(
+    .kp-animation-catalogue-shell__search,
+    .kp-animation-catalogue-shell__inspector-switcher select,
+    .kp-animation-catalogue-shell__tuning-controls select,
+    .editor-animation-player__transport button,
+    .editor-animation-player__accessibility select,
+    .editor-animation-player__quality select,
+    .editor-animation-player__gestalt-style select,
+    .editor-animation-player__focus-experiment select
+  ) {
+  border-color: var(--kp-catalogue-border);
+  color: #ede8d0;
+  background: #111424;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .kp-animation-catalogue-shell__result[data-kp-animation-catalogue-row-selected="true"] {
+  border-left-color: #9099d9;
+  background: rgb(144 153 217 / 10%);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .kp-animation-catalogue-shell__health {
+  color: #c0965b;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  :is(
+    .kp-animation-catalogue-shell__inspector p,
+    .kp-animation-catalogue-shell__plain-list,
+    .kp-animation-catalogue-shell__explanation-section ol,
+    .kp-animation-catalogue-shell__explanation details ol,
+    .editor-animation-player__scrubber,
+    .editor-animation-player__scrubber output,
+    .editor-animation-player__status,
+    .editor-animation-player__accessibility,
+    .editor-animation-player__quality,
+    .editor-animation-player__gestalt-style,
+    .editor-animation-player__focus-experiment
+  ) {
+  color: #c9c5b5;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  :is(
+    .kp-animation-catalogue-shell__context-list a,
+    .kp-animation-catalogue-shell__explanation summary
+  ) {
+  color: #76afbf;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .editor-animation-player__controls {
+  border-color: var(--kp-catalogue-border);
+  background: #111424;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .editor-animation-player__transport button:first-child {
+  border-color: #76afbf;
+  color: #0d0e1c;
+  background: #76afbf;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .editor-animation-player__scrubber input {
+  accent-color: #76afbf;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+  .kp-animation-catalogue-shell__stage-status {
+  color: #c9c5b5;
+  background: rgb(13 14 28 / 90%);
+}
+
+@media (max-width: 56rem) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.programming.typescript-free-shipping-refactor"]
+    .kp-animation-catalogue-shell__narrow-nav button {
+    border-color: var(--kp-catalogue-border);
+    color: #ede8d0;
+    background: rgb(17 20 36 / 94%);
+  }
+}
+
 @media (max-width: 56rem) {
   .kp-animation-catalogue-shell,
   .kp-animation-catalogue-bootstrap {

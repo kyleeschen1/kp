@@ -20,6 +20,18 @@ test("native code renderer preserves exact selectable source text", () => {
   }
 });
 
+test("native code renderer emits Neovim-guided syntax roles without changing source", () => {
+  const html = renderKpTypeScriptRevisionCodeHtml(exemplar.semantics.revisions[1]!);
+
+  assert.match(html, /data-kp-typescript-syntax-kind="keyword">function<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="function">qualifiesForFreeShipping<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="type">number<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="number">50<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="string">&quot;Free shipping&quot;<\/span>/);
+  assert.match(html, /data-kp-typescript-syntax-kind="operator">&gt;=<\/span>/);
+  assert.equal(decodeHtml(stripTags(html)), exemplar.semantics.revisions[1]!.sourceText);
+});
+
 test("renderer exposes one native owner per revision and no painted clone", () => {
   const html = renderKpTypeScriptRefactorCodeHtml({
     semantics: exemplar.semantics,

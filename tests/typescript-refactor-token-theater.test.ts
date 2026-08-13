@@ -64,6 +64,23 @@ test("helper binding propagates while the caller argument preserves identity", (
   assert.ok(frame.tokens.some(({ text, role }) => text === ")" && role === "focus"));
 });
 
+test("animated tokens retain the same syntax roles as settled source", () => {
+  const frame = sample(0.59);
+  const movingFunction = frame.tokens.find(({ text, role }) =>
+    text === "qualifiesForFreeShipping" && role === "transit"
+  );
+  const movingArgument = frame.tokens.find(({ text, role }) =>
+    text === "total" && role === "transit"
+  );
+
+  assert.equal(movingFunction?.kind, "function");
+  assert.equal(movingArgument?.kind, "identifier");
+  assert.ok(frame.tokens.some(({ text, kind }) => text === "50" && kind === "number"));
+  assert.ok(frame.tokens.some(({ text, kind }) =>
+    text === '"Free shipping"' && kind === "string"
+  ));
+});
+
 test("direct seek, rewind sampling, and native endpoints are deterministic", () => {
   const points = [0, 0.2, 0.3, 0.37, 0.47, 0.59, 0.76, 0.84, 1];
   const forward = points.map((progress) => sample(progress));

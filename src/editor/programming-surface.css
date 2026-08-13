@@ -211,6 +211,20 @@
 }
 
 .kp-typescript-refactor {
+  /* The palette follows the user's Neovim syntax roles. These tokens describe
+     optical paint only; compiler entities and the motion plan retain meaning. */
+  --kp-code-foreground: #ede8d0;
+  --kp-code-keyword: #9099d9;
+  --kp-code-function: #338fff;
+  --kp-code-property: #76afbf;
+  --kp-code-type: #c0965b;
+  --kp-code-boolean: #319aaa;
+  --kp-code-number: #9cbd6f;
+  --kp-code-string: #82b0ec;
+  --kp-code-comment: #db7b5f;
+  --kp-code-delimiter: #989898;
+  --kp-code-highlight-background: rgb(92 173 255 / 10%);
+
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: min(100% - 2rem, 54rem);
@@ -242,7 +256,7 @@
   grid-area: 1 / 1;
   align-self: center;
   margin: 0;
-  color: #d9dce5;
+  color: var(--kp-code-foreground);
   font: 400 clamp(0.72rem, 1.3vw, 0.95rem)/1.75 ui-monospace,
     SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   white-space: pre-wrap;
@@ -269,7 +283,7 @@
   min-width: 46ch;
   height: calc(var(--kp-typescript-theater-lines, 11) * 1.75em);
   visibility: hidden;
-  color: #d9dce5;
+  color: var(--kp-code-foreground);
   font: 400 clamp(0.72rem, 1.3vw, 0.95rem)/1.75 ui-monospace,
     SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   white-space: pre;
@@ -297,32 +311,64 @@
   will-change: transform, opacity;
 }
 
-.kp-typescript-refactor__token-theater [data-kp-typescript-token-role="focus"] {
-  color: #f5f7fb;
-}
-
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-role="transit"] {
   z-index: 2;
-  color: var(--kp-salience-green, #65d6a6);
-  text-shadow: 0 0 0.55rem rgb(101 214 166 / 24%);
+  text-shadow: 0 0 0.55rem currentcolor;
 }
 
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-role="withdrawal"] {
-  color: #a5adbd;
+  filter: saturate(0.72) brightness(0.88);
 }
 
 .kp-typescript-refactor [data-kp-typescript-focus="true"] {
-  color: color-mix(
-    in srgb,
-    #d9dce5,
-    #fff var(--kp-typescript-focus-percent, 0%)
-  );
   text-shadow: 0 0 0.55rem rgb(207 229 255 / var(--kp-typescript-focus-shadow-alpha, 0));
-  background: color-mix(
-    in srgb,
-    transparent,
-    rgb(92 173 255 / 10%) var(--kp-typescript-focus-percent, 0%)
-  );
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="keyword"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="keyword"] {
+  color: var(--kp-code-keyword);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="function"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="function"] {
+  color: var(--kp-code-function);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="property"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="property"] {
+  color: var(--kp-code-property);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="type"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="type"] {
+  color: var(--kp-code-type);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="boolean"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="boolean"] {
+  color: var(--kp-code-boolean);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="number"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="number"] {
+  color: var(--kp-code-number);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="string"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="string"] {
+  color: var(--kp-code-string);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="comment"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="comment"] {
+  color: var(--kp-code-comment);
+}
+
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="operator"],
+.kp-typescript-refactor [data-kp-typescript-syntax-kind="punctuation"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="operator"],
+.kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="punctuation"] {
+  color: var(--kp-code-delimiter);
 }
 
 .kp-typescript-refactor__narration {

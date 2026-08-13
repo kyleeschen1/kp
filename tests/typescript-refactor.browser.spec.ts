@@ -82,6 +82,20 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
         '[data-kp-typescript-projection-current="false"][aria-hidden="true"][inert]'
       )).toHaveCount(3);
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
+      expect(await shell.evaluate((node) => getComputedStyle(node).backgroundColor))
+        .toBe("rgb(13, 14, 28)");
+      await expect(stage.locator(
+        '[data-kp-typescript-projection-current="true"] ' +
+        '[data-kp-typescript-syntax-kind="keyword"]'
+      ).first()).toHaveCSS("color", "rgb(144, 153, 217)");
+      await expect(stage.locator(
+        '[data-kp-typescript-projection-current="true"] ' +
+        '[data-kp-typescript-syntax-kind="function"]'
+      ).first()).toHaveCSS("color", "rgb(51, 143, 255)");
+      await expect(stage.locator(
+        '[data-kp-typescript-projection-current="true"] ' +
+        '[data-kp-typescript-syntax-kind="number"]'
+      ).first()).toHaveCSS("color", "rgb(156, 189, 111)");
       if (entry.progress === 0.42) {
         await expect(stage).toHaveAttribute(
           "data-kp-typescript-motion-track",
@@ -108,6 +122,10 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
         await expect(stage.locator(
           '[data-kp-typescript-token-role="transit"]'
         )).toHaveCount(2);
+        await expect(stage.locator(
+          '[data-kp-typescript-token-role="transit"]' +
+          '[data-kp-typescript-token-kind="function"]'
+        )).toHaveCSS("color", "rgb(51, 143, 255)");
       }
 
       const stageSize = await stage.evaluate((node) => {
@@ -165,6 +183,12 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
 
       const imageFile = path.join(outputRoot, `${entry.id}.png`);
       const image = await stage.screenshot({ path: imageFile, animations: "disabled" });
+      if (entry.progress === 0.59 && entry.viewport.width === wide.width) {
+        await page.screenshot({
+          path: path.join(outputRoot, "artifact-page-wide-590.png"),
+          animations: "disabled"
+        });
+      }
       items.push({
         id: entry.id,
         label: entry.label,

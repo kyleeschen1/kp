@@ -11,7 +11,15 @@ test("TypeScript refactor CSS consumes sampled values without owning time", () =
 
   assert.match(block, /--kp-typescript-revision-opacity/);
   assert.match(block, /--kp-typescript-revision-scale/);
-  assert.match(block, /--kp-typescript-focus-percent/);
+  assert.match(
+    block,
+    /--kp-code-highlight-background:\s*rgb\(92 173 255 \/ 10%\)/
+  );
+  const focusBlock = block.match(
+    /\.kp-typescript-refactor \[data-kp-typescript-focus="true"\] \{([^}]*)\}/
+  )?.[1];
+  assert.ok(focusBlock);
+  assert.doesNotMatch(focusBlock, /background(?:-color)?\s*:/);
   assert.doesNotMatch(block, /@keyframes/);
   assert.match(block, /animation:\s*none/);
   assert.match(block, /transition:\s*none/);
