@@ -29,6 +29,27 @@ test("animation API caller ledger targets live, uniquely classified surfaces", (
   }
 });
 
+test("governed construction has one explicit public authoring seam", () => {
+  const surface = record("facade.canonical-animation-construction");
+  assert.equal(surface.disposition, "retain-public-boundary");
+  assert.deepEqual(surface.sourceCallers, []);
+  assert.deepEqual(surface.scriptCallers, []);
+  assert.deepEqual(surface.otherCallers, []);
+  assert.deepEqual(surface.testCallers, [
+    "tests/canonical-animation-construction-request.test.ts",
+    "tests/canonical-reader-unit-exponent-cost-proof.test.ts",
+    "tests/foldable-distribution-governed-authoring-cost.test.ts",
+    "tests/fraction-composition-promotion-certificate.test.ts",
+    "tests/governed-canonical-compound-construction.test.ts",
+    "tests/governed-canonical-construction-cohort.test.ts",
+    "tests/governed-canonical-construction-compiler.test.ts",
+    "tests/governed-canonical-construction-repair.test.ts",
+    "tests/governed-exponent-absorption-fixture.test.ts",
+    "tests/governed-fraction-split-merge-variation.test.ts",
+    "tests/governed-radical-succession-fixture.test.ts"
+  ]);
+});
+
 test("internal balanced solve seam has only its public facade production caller", () => {
   const surface = record("authoring.canonical-balanced-solve");
   assert.deepEqual(surface.sourceCallers, [

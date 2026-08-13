@@ -31,6 +31,33 @@ test("canonical construction guide closes every released authority boundary", as
   );
 });
 
+test("current model guidance selects the released construction seam", async () => {
+  const [entrypoint, assetSpec, vocabulary] = await Promise.all([
+    readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8"),
+    readFile(
+      "docs/project/authoring/kp-animation-asset-llm-authoring-spec.md",
+      "utf8"
+    ),
+    readFile("docs/project/principles/system-vocabulary.md", "utf8")
+  ]);
+  for (const source of [entrypoint, assetSpec, vocabulary]) {
+    assert.match(source, /canonical-animation-public-api\.ts/);
+    assert.match(source, /KpGovernedCanonicalConstructionRequest/);
+  }
+  assert.match(entrypoint, /compileKpGovernedCanonicalConstruction/);
+  assert.match(entrypoint, /planKpGovernedConstructionRepairs/);
+  assert.match(entrypoint, /sharing an asset id|equal asset id/i);
+  assert.match(assetSpec, /compatibility and research\s+evidence/);
+  assert.doesNotMatch(
+    entrypoint,
+    /Propose a new semantic animation \| `kp\.llm-animation-draft\.v2`/
+  );
+  assert.doesNotMatch(
+    assetSpec,
+    /New model-authored work should target `kp\.llm-animation-draft\.v2`/
+  );
+});
+
 test("closeout keeps one product migration and an explicit compatibility ledger", async () => {
   const closeout = await readFile(
     `${reviewRoot}/2026-07-26-canonical-animation-construction-governed-round-trip-closeout.md`,

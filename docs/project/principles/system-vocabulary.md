@@ -23,6 +23,8 @@ lesson vocabulary remains in `motion-passage-vocabulary.md`.
 | **Sampled frame** | The complete deterministic semantic and presentation state at one playhead position. |
 | **Renderer adapter** | A medium-specific projection that paints sampled state in KaTeX/DOM, SVG, Canvas, WebGL, or a code surface. It owns paint, not meaning or time. |
 | **Animation asset** | A reusable executable semantic animation: objects, transformations, capabilities, motion, checks, and projection metadata. |
+| **Governed construction request** | The canonical `KpGovernedCanonicalConstructionRequest` human/model input for new animation: approved semantic object and operation refs plus bounded explanation, detail, and composition intent. |
+| **Canonical representation** | The registered host/session that preserves an animation's certified presentation behavior; sharing an asset id alone does not establish representation parity. |
 | **Vignette** | A versioned reusable preset that binds an animation asset to named checkpoints, transitions, object paths, accessibility, and a projection contract. |
 | **Article** | A canonical `kp.article.v1` Markdown source containing ordinary prose plus sparse typed references to vignettes, focus, and motion. |
 | **Lesson document** | The general content category for an article, tutorial, or essay; use **Article** when referring to the v1 source contract. |
@@ -49,6 +51,10 @@ solver / interpreter / authored proof
 Downstream layers may add presentation information but may not rewrite upstream
 truth. Layout never becomes semantic identity. Renderer nodes never become
 canonical objects. The Article never owns frame-by-frame geometry.
+
+For new governed animation work, the executable public entry is
+`src/authoring/canonical-animation-public-api.ts`. Historical LLM draft schemas
+remain compatibility inputs, not a second construction authority.
 
 ## Usage Rules
 

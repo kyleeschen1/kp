@@ -60,17 +60,20 @@
     {
       "id": "s03",
       "title": "Audit canonical extension path",
-      "status": "planned"
+      "summary": "Audited the end-to-end extension chain and found one concrete guidance conflict: the released governed canonical-construction public API is the new-work authority, while llm-animation-draft v2 is retained compatibility evidence. Classified adjacent internal, renderer, host, Article, and metadata paths.",
+      "status": "complete"
     },
     {
       "id": "s04",
       "title": "Reconcile current instructions",
-      "status": "planned"
+      "summary": "Reconciled current LLM entrypoint, asset authoring spec, and system vocabulary with the released governed canonical-construction public API; explicitly demoted llm-animation-draft v2 to compatibility/research and added an executable guidance regression.",
+      "status": "complete"
     },
     {
       "id": "s05",
       "title": "Inventory public APIs and deep imports",
-      "status": "planned"
+      "summary": "Classified 13 named public modules by authority, added the omitted governed construction facade to the executable 19-surface caller ledger, and rejected raw deep-import counts as a repository-wide migration metric in favor of cross-owner ratchets.",
+      "status": "complete"
     },
     {
       "id": "s06",

@@ -48,6 +48,16 @@ export interface KpAnimationApiSurfaceCallerRecord {
  */
 export const kpAnimationApiCallerAuditTargets = Object.freeze([
   target({
+    id: "facade.canonical-animation-construction",
+    targetPath: "src/authoring/canonical-animation-public-api.ts",
+    tier: "authoring-seam",
+    disposition: "retain-public-boundary",
+    authority:
+      "Expose the governed semantic construction request, compiler, bounded repair, composition, and projection contracts for new human or model-authored animation.",
+    preservationBoundary:
+      "The facade accepts verified references and pedagogical intent; it excludes renderer state, geometry, clocks, host lifecycle, and unverified mathematical truth."
+  }),
+  target({
     id: "facade.animation-authoring",
     targetPath: "src/animation/public-api.ts",
     tier: "authoring-seam",

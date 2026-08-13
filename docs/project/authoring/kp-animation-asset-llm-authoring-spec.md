@@ -113,10 +113,18 @@ consume.
 
 ## Governed Semantic Motion Operations
 
-New model-authored work should target `kp.llm-animation-draft.v2`, not author a
-`KpAnimationAsset` or visual timeline directly. Load
-`createKpLlmSemanticMotionOperationCatalog()` and give the model only its exact
-pack pins, operation ids, semantic role contracts, motif names, and phase ids.
+New model-authored work should target a
+`KpGovernedCanonicalConstructionRequest` through
+`src/authoring/canonical-animation-public-api.ts`, not author a
+`KpAnimationAsset` or visual timeline directly. Load the registered operation
+catalog and give the model only exact pack pins, approved object and operation
+refs, semantic role contracts, explanation purpose, detail, and composition
+intent.
+
+The older `kp.llm-animation-draft.v2` schema remains compatibility and research
+evidence for broad generated inputs and typed repair gaps. It must not become a
+parallel production construction API. Accepted legacy drafts should be
+migrated to the governed canonical construction boundary.
 
 The catalog currently joins two domain packs to the universal core:
 
@@ -127,13 +135,13 @@ The catalog currently joins two domain packs to the universal core:
   substitution, inequality pivot, derivative and antiderivative rules, dot
   products, matrix-vector traversal, and matrix-matrix cell composition.
 
-An LLM draft names a high-level operation and binds its required semantic
-roles. The compiler validates cardinality and references, resolves the exact
-pack, and emits a resolved operation containing the existing KP transform type
-and its universal core composition. The authoring catalog maps that transform
-type to the established visual motif and semantic phases. This is the contract
-that makes generated matrix multiplication use `matrix-cell-compose`, for
-example, instead of falling back to an unrelated fade.
+A governed request names approved semantic operations and objects from one
+verified source revision. The compiler validates closure and pack pins, then
+emits an immutable canonical construction with exact role and lineage evidence.
+Existing presentation compilers map the resolved transform type to established
+visual motifs and semantic phases. This is the contract that makes generated
+matrix multiplication use `matrix-cell-compose`, for example, instead of
+falling back to an unrelated fade.
 
 Models must not provide paint fragments, geometry or bounds, coordinates,
 paths, keyframes, timing tables, per-token delays, styles or typography,
