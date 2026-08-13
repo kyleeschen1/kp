@@ -9,7 +9,7 @@ test("factorial reuse boundary covers each intended disposition exactly", () => 
   assert.equal(new Set(boundary.map(({ id }) => id)).size, boundary.length);
   assert.deepEqual(
     [...new Set(boundary.map(({ disposition }) => disposition))].sort(),
-    ["adapt", "factorial-local", "preserve", "reject", "reuse"]
+    ["adapt", "preserve-specialized", "reject", "reuse"]
   );
 });
 
@@ -24,8 +24,29 @@ test("factorial semantic truth stays independent from the lambda fixture", () =>
   );
   assert.equal(
     boundary.find(({ id }) => id === "current-lambda-exemplar")?.disposition,
-    "preserve"
+    "preserve-specialized"
   );
+});
+
+test("cross-language seams are adopted selectively rather than as a renderer", () => {
+  assert.equal(
+    boundary.find(({ id }) => id === "shared-code-syntax-role-protocol")?.disposition,
+    "adapt"
+  );
+  assert.equal(
+    boundary.find(({ id }) => id === "shared-complete-source-projection")?.disposition,
+    "reject"
+  );
+  assert.equal(
+    boundary.find(({ id }) => id === "shared-settlement-law")?.disposition,
+    "adapt"
+  );
+  assert.equal(
+    boundary.find(({ id }) => id === "shared-settlement-exceptions")?.disposition,
+    "adapt"
+  );
+  assert.ok(boundary.filter(({ disposition }) => disposition === "preserve-specialized")
+    .some(({ id }) => id === "evaluator-trace"));
 });
 
 test("factorial reuses pure presentation seams and rejects the old runtime", () => {

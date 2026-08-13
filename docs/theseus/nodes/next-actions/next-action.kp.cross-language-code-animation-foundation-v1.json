@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-13-typescript-python-code-animation-caller-comparison.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-scheme-cross-language-code-contract-audit.md"
     }
   ],
   "dependsOn": {
@@ -419,11 +423,25 @@
       "scope": "s25 shared contracts and repository boundaries",
       "checkedAt": "2026-08-13T19:41:43.410Z",
       "notes": "Conformance adds no shared frontend, score, geometry, renderer, CSS selector, or language identity authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test Scheme reuse boundary, contract audit, renderer, and full-evaluation suites",
+      "status": "passed",
+      "scope": "s26 Scheme preservation and adaptation boundary",
+      "checkedAt": "2026-08-13T19:45:43.854Z",
+      "notes": "Seventeen tests protect source/runtime identity, recursive choreography, direct seek, reduced motion, native searchable ownership, inert overlays, and selective shared-seam adoption."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 Scheme architecture audit",
+      "checkedAt": "2026-08-13T19:45:45.839Z",
+      "notes": "The audit changes classification and evidence only; no renderer, evaluator, score, or runtime authority changed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Cross-language conformance now pressures both approved callers together. Shared contracts hold across dense seek/rewind, complete source, endpoint ownership, settlement, reduced motion, inactive theater, theme, architecture, and browser visual checks."
+    "summary": "Scheme will adapt shared syntax roles and settlement laws, reuse native searchable ownership, reject flat function projections and imperative token theater, and preserve its evaluator trace plus recursive S-expression choreography as specialized authority."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

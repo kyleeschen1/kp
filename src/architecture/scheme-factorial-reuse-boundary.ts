@@ -1,8 +1,7 @@
 export type KpSchemeFactorialReuseDisposition =
   | "reuse"
   | "adapt"
-  | "factorial-local"
-  | "preserve"
+  | "preserve-specialized"
   | "reject";
 
 export interface KpSchemeFactorialReuseEntry {
@@ -20,6 +19,42 @@ export interface KpSchemeFactorialReuseEntry {
  */
 export const kpSchemeFactorialReuseBoundary = Object.freeze([
   entry({
+    id: "shared-code-syntax-role-protocol",
+    concern: "Exact offset-bearing syntax paint roles",
+    sources: ["src/semantic/code-source-token-protocol.ts"],
+    disposition: "adapt",
+    authority: "presentation",
+    rationale:
+      "Adopt the paint vocabulary and range law while retaining occurrence and delimiter IDs from the Scheme tree."
+  }),
+  entry({
+    id: "shared-complete-source-projection",
+    concern: "Flat fragment composition into imperative-language source snapshots",
+    sources: ["src/semantic/code-source-projection.ts"],
+    disposition: "reject",
+    authority: "semantic",
+    rationale:
+      "Factorial checkpoints project recursive runtime material, not edits to a flat sequence of complete function fragments."
+  }),
+  entry({
+    id: "shared-settlement-law",
+    concern: "Travel, arrival, recognition, paint handoff, and withdrawal order",
+    sources: ["src/animation/code-motion-settlement.ts"],
+    disposition: "adapt",
+    authority: "presentation",
+    rationale:
+      "Apply the causal law through motif-local adapters without replacing binding, branch, structural, or return samplers."
+  }),
+  entry({
+    id: "shared-settlement-exceptions",
+    concern: "Explicit semantic deletion and reduced-motion endpoint jumps",
+    sources: ["src/animation/code-motion-settlement-exceptions.ts"],
+    disposition: "adapt",
+    authority: "presentation",
+    rationale:
+      "Bind exceptions to exact Scheme transitions and material IDs; unsupported exception kinds remain unavailable."
+  }),
+  entry({
     id: "scheme-source-model",
     concern: "Stable source occurrences, delimiters, roles, and spans",
     sources: ["src/semantic/lisp-semantic-model.ts"],
@@ -32,7 +67,7 @@ export const kpSchemeFactorialReuseBoundary = Object.freeze([
     id: "evaluator-trace",
     concern: "Evaluation order, environments, continuations, and value lineage",
     sources: ["src/tutorial/programming-execution-trace.ts"],
-    disposition: "factorial-local",
+    disposition: "preserve-specialized",
     authority: "semantic",
     rationale:
       "The generic program trace omits the causal and provenance detail required for recursion."
@@ -41,7 +76,7 @@ export const kpSchemeFactorialReuseBoundary = Object.freeze([
     id: "pedagogical-score",
     concern: "Grouping, omission, compression, holds, and emphasis",
     sources: [],
-    disposition: "factorial-local",
+    disposition: "preserve-specialized",
     authority: "pedagogical",
     rationale:
       "A declarative score may edit presentation but must preserve trace causality."
@@ -87,7 +122,7 @@ export const kpSchemeFactorialReuseBoundary = Object.freeze([
     id: "waiting-contexts-and-return-lineage",
     concern: "Suspended recursive work and one returning value identity",
     sources: ["src/animation/lisp-s-expression-beads.ts"],
-    disposition: "factorial-local",
+    disposition: "preserve-specialized",
     authority: "semantic",
     rationale:
       "Bead material can inform the projection, but continuations and return identity come from the trace."
@@ -139,7 +174,7 @@ export const kpSchemeFactorialReuseBoundary = Object.freeze([
       "src/semantic/lisp-lambda-application-asset.ts",
       "src/tutorial/lisp-function-application/"
     ],
-    disposition: "preserve",
+    disposition: "preserve-specialized",
     authority: "host",
     rationale:
       "Factorial is a parallel exemplar and must not replace or acquire semantic truth from this fixture."

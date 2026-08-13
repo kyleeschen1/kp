@@ -201,7 +201,8 @@
     {
       "id": "s26",
       "title": "Audit Scheme reuse",
-      "status": "planned"
+      "summary": "Completed the pre-change Scheme reuse audit with four canonical dispositions, exact preservation boundaries, authorized order, and regression ratchets.",
+      "status": "complete"
     },
     {
       "id": "s27",
