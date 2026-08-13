@@ -15,6 +15,8 @@ const checkpoints = [
   checkpoint("before-wide-000", "Duplicated rule", 0, "projection.typescript.before", wide),
   checkpoint("duplicates-wide-160", "One idea, two copies", 0.16, "projection.typescript.before", wide),
   checkpoint("helper-wide-340", "Helper introduced", 0.34, "projection.typescript.helper-introduced", wide),
+  checkpoint("fusion-wide-420", "Threshold rules converge", 0.42, "projection.typescript.helper-introduced", wide),
+  checkpoint("cost-motion-wide-590", "Helper propagates to price", 0.59, "projection.typescript.helper-introduced", wide),
   checkpoint("cost-wide-680", "Price caller replaced", 0.68, "projection.typescript.cost-replaced", wide),
   checkpoint("message-wide-840", "Message caller replaced", 0.84, "projection.typescript.final", wide),
   checkpoint("settled-wide-1000", "One source of truth", 1, "projection.typescript.final", wide),
@@ -54,6 +56,8 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
           requestAnimationFrame(() => resolve())
         ));
       });
+      await resetPerformanceProbe(page);
+      await exerciseRenderer(page, entry.progress);
 
       const shell = page.locator("[data-kp-animation-catalogue]");
       const player = shell.locator("[data-kp-editor-animation-player]");
@@ -77,6 +81,24 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
         '[data-kp-typescript-projection-current="false"][aria-hidden="true"][inert]'
       )).toHaveCount(3);
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
+      if (entry.progress === 0.42) {
+        await expect(stage).toHaveAttribute(
+          "data-kp-typescript-motion-track",
+          "motion.typescript.merge-threshold-rules"
+        );
+        await expect(stage.locator(
+          '[data-kp-typescript-token-role="transit"]'
+        )).toHaveCount(6);
+      }
+      if (entry.progress === 0.59) {
+        await expect(stage).toHaveAttribute(
+          "data-kp-typescript-motion-track",
+          "motion.typescript.propagate-helper-to-cost"
+        );
+        await expect(stage.locator(
+          '[data-kp-typescript-token-role="transit"]'
+        )).toHaveCount(2);
+      }
 
       const stageSize = await stage.evaluate((node) => {
         const rect = node.getBoundingClientRect();
@@ -110,6 +132,12 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
           .toBe(2);
       }
 
+      // Measure the direct renderer seek above, not unrelated Vite bootstrap,
+      // review-provider loading, PNG encoding, or contact-sheet work.
+      const performanceResult = await readPerformanceProbe(page);
+      expect(performanceResult.layoutShift).toBeLessThanOrEqual(0.01);
+      expect(performanceResult.maxLongTaskMs).toBeLessThan(100);
+
       const capture = await page.evaluate(async (providerPath) => {
         const module = await import(providerPath);
         return module.createKpAnimationCatalogueCaptureProvider(document).capture({
@@ -135,9 +163,6 @@ test("TypeScript refactor visual checkpoint is deterministic, accessible, and bo
         file: path.relative(process.cwd(), imageFile),
         dataUrl: `data:image/png;base64,${image.toString("base64")}`
       });
-      const performanceResult = await readPerformanceProbe(page);
-      expect(performanceResult.layoutShift).toBeLessThanOrEqual(0.01);
-      expect(performanceResult.maxLongTaskMs).toBeLessThan(100);
     } finally {
       await context.close();
     }
@@ -228,6 +253,20 @@ async function seek(page: import("@playwright/test").Page, progress: number): Pr
   }, progress);
 }
 
+async function exerciseRenderer(
+  page: import("@playwright/test").Page,
+  progress: number
+): Promise<void> {
+  const probe = progress < 0.995 ? progress + 0.005 : progress - 0.005;
+  await seek(page, probe);
+  await waitForTypeScriptPaint(page, probe);
+  await seek(page, progress);
+  await waitForTypeScriptPaint(page, progress);
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() =>
+    requestAnimationFrame(() => resolve())
+  )));
+}
+
 async function installPerformanceProbe(page: import("@playwright/test").Page): Promise<void> {
   await page.addInitScript(() => {
     const scope = window as typeof window & {
@@ -250,6 +289,17 @@ async function installPerformanceProbe(page: import("@playwright/test").Page): P
         );
       }
     }).observe({ type: "longtask", buffered: true });
+  });
+}
+
+async function resetPerformanceProbe(
+  page: import("@playwright/test").Page
+): Promise<void> {
+  await page.evaluate(() => {
+    const scope = window as typeof window & {
+      __kpTypeScriptPerformance: { layoutShift: number; maxLongTaskMs: number };
+    };
+    scope.__kpTypeScriptPerformance = { layoutShift: 0, maxLongTaskMs: 0 };
   });
 }
 

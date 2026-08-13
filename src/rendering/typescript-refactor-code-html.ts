@@ -30,6 +30,7 @@ export function renderKpTypeScriptRefactorCodeHtml(
         current: projection.id === input.activeProjectionId,
         focusSelectorIds: input.focusSelectorIds
       })).join("")}
+      <div class="kp-typescript-refactor__token-theater" data-kp-typescript-token-theater aria-hidden="true"></div>
     </div>
     <p class="kp-typescript-refactor__narration" data-kp-typescript-narration>${escapeHtml(input.narration)}</p>
     <p class="editor-animation-player__visually-hidden" data-kp-typescript-accessible-state aria-live="polite">${escapeHtml(input.accessibleDescription)}</p>

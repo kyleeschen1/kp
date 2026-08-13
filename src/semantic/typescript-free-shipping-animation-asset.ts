@@ -3,6 +3,10 @@ import {
   createKpAnimationAsset,
   type KpAnimationAsset
 } from "../animation/asset.ts";
+import {
+  createKpTypeScriptRefactorMotionPlan,
+  type KpVerifiedTypeScriptRefactorMotionPlan
+} from "../animation/typescript-refactor-motion-plan.ts";
 import { createSemanticTransformationRef } from "./animation.ts";
 import {
   createEditableSemanticTransformationTree,
@@ -35,6 +39,7 @@ export interface KpTypeScriptFreeShippingAnimationAsset {
   readonly operations: KpTypeScriptRefactorOperationSet;
   readonly behavior: KpTypeScriptRefactorBehaviorCertificateV1;
   readonly score: KpTypeScriptRefactorScoreV1;
+  readonly motionPlan: KpVerifiedTypeScriptRefactorMotionPlan;
   readonly staticEndpoints: {
     readonly before: string;
     readonly after: string;
@@ -52,6 +57,11 @@ export function createKpTypeScriptFreeShippingAnimationAsset():
   const operations = createKpTypeScriptRefactorOperationSet(semantics);
   const behavior = createKpTypeScriptRefactorBehaviorCertificate(semantics);
   const score = createKpTypeScriptRefactorScore();
+  const motionPlan = createKpTypeScriptRefactorMotionPlan({
+    semantics,
+    operations,
+    score
+  });
   const leaves = operations.transformations.map((transformation) =>
     createSemanticTransformationLeaf(createSemanticTransformationRef({
       id: transformation.id,
@@ -154,6 +164,7 @@ export function createKpTypeScriptFreeShippingAnimationAsset():
     operations,
     behavior,
     score,
+    motionPlan,
     staticEndpoints: Object.freeze({
       before: kpTypeScriptFreeShippingRefactorContract.before.source,
       after: kpTypeScriptFreeShippingRefactorContract.after.source
