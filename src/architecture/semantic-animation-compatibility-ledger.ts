@@ -61,7 +61,7 @@ const typedEquationPresentationProfile = reference(
 export const kpSemanticAnimationCompatibilityLedger = [
   metadata({
     key: "equationMotionPresentationRecipe",
-    authors: equationRecipeAuthors(),
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -69,7 +69,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationNativeHandoffRecipe",
-    authors: equationRecipeAuthors(),
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -91,12 +91,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationZeroWitnessPresentationRecipe",
-    authors: [
-      reference(
-        "src/animation/linear-solve-adapter.ts",
-        "equationZeroWitnessPresentationRecipe"
-      )
-    ],
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -104,7 +99,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationSuccessorPresentationRecipe",
-    authors: equationRecipeAuthors(),
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -112,7 +107,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationDepthPresentationRecipe",
-    authors: equationRecipeAuthors(),
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -120,7 +115,7 @@ export const kpSemanticAnimationCompatibilityLedger = [
   }),
   metadata({
     key: "equationContinuantPresentationRecipe",
-    authors: equationRecipeAuthors(),
+    authors: [],
     consumers: [equationPresentationDecoder],
     status: "compatibility-only",
     sunsetEvidence: [decoderEvidence()],
@@ -400,15 +395,6 @@ export const kpRetiredSemanticAnimationCompatibilityPaths = [
     closureTest: "tests/algebra-registration-graph.test.ts"
   }
 ] as const;
-
-function equationRecipeAuthors(): KpCompatibilitySourceReference[] {
-  return [
-    reference(
-      "src/animation/linear-solve-adapter.ts",
-      "equation"
-    )
-  ];
-}
 
 function metadata(input: {
   readonly key: string;

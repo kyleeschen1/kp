@@ -114,12 +114,14 @@
     {
       "id": "s12",
       "title": "Migrate linear solve typed profile",
-      "status": "planned"
+      "summary": "Migrated canonical and teacher-detail linear solve assets from recipe metadata to typed equation presentation profiles; exact semantic serialization, direct seek, rewind, source lineage, focused tests, architecture, and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s13",
       "title": "Forbid new legacy recipe authoring",
-      "status": "planned"
+      "summary": "Making every concrete equation-target catalogue asset explicitly select a typed presentation profile and ratcheting legacy metadata authoring to zero.",
+      "status": "in-progress"
     },
     {
       "id": "s14",

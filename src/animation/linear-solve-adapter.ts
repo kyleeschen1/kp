@@ -7,7 +7,6 @@ import {
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
-import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
 import {
   createLinearSolveKpAssetBundle,
   createLinearSolveTeacherZeroKpAssetBundle,
@@ -211,41 +210,27 @@ function createLinearSolveAnimationFromSource(
                 "responsive",
                 "rewind"
               ]
-            }),
-          presentationProfile: createKpEquationPresentationProfileV1({
-            payload: {
-              kind: "equation-presentation",
-              motion: "continuity-v1",
-              nativeHandoff: "atomic-v1",
-              cancellation: "counter-orbit-v1",
-              zeroWitness: "none",
-              successor: "counter-convergence-v1",
-              depth: "semantic-depth-v1",
-              // The measured reconciliation planner now owns continuant
-              // clearance; the legacy renderer keeps only its neutral fallback.
-              continuants: "concurrent-v1",
-              branchStrategy: "together"
-            }
-          })
+            })
         }
       : {}),
+    presentationProfile: createKpEquationPresentationProfileV1({
+      payload: {
+        kind: "equation-presentation",
+        motion: "continuity-v1",
+        nativeHandoff: "atomic-v1",
+        cancellation: "counter-orbit-v1",
+        zeroWitness: "none",
+        successor: "counter-convergence-v1",
+        depth: "semantic-depth-v1",
+        // The accepted exemplar uses measured reconciliation. Teacher detail
+        // retains its independently tuned transit policy as typed presentation
+        // rather than reviving the legacy metadata decoder.
+        continuants: canonical ? "concurrent-v1" : "transit-then-reflow-v1",
+        branchStrategy: "together"
+      }
+    }),
     metadata: {
-      sourceAnimationId: source.sourceAnimationId,
-      // Keep the teacher-detail variant on the compatibility decoder until its
-      // choreography is independently promoted after the canonical exemplar.
-      ...(!canonical
-        ? {
-            equationMotionPresentationRecipe: "continuity-v1",
-            equationNativeHandoffRecipe: "atomic-v1",
-            ...createKpCancellationPresentationAuthoringMetadata(
-              "preserve-flow"
-            ),
-            equationZeroWitnessPresentationRecipe: "none",
-            equationSuccessorPresentationRecipe: "counter-convergence-v1",
-            equationDepthPresentationRecipe: "semantic-depth-v1",
-            equationContinuantPresentationRecipe: "transit-then-reflow-v1"
-          }
-        : {})
+      sourceAnimationId: source.sourceAnimationId
     }
   });
 }

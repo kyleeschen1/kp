@@ -128,16 +128,16 @@ test("promoted profiles preserve exact prior recipe views", () => {
   );
 });
 
-test("fraction assets retain source lineage while teacher detail stays legacy", () => {
+test("fraction and teacher-detail assets retain lineage after typed promotion", () => {
   const fraction = createNumeratorSplitMergeEquationAnimationAsset();
   const teacherDetail = createLinearSolveTeacherZeroAnimationAsset();
 
   assert.deepEqual(fraction.metadata, {
     sourceTraceId: "trace.algebra-canonical-numerator-split-merge"
   });
-  assert.equal(teacherDetail.presentationProfile, undefined);
-  assert.equal(
-    teacherDetail.metadata?.["equationMotionPresentationRecipe"],
-    "continuity-v1"
-  );
+  assert.equal(teacherDetail.presentationProfile?.payload.motion, "continuity-v1");
+  assert.equal(teacherDetail.metadata?.["equationMotionPresentationRecipe"], undefined);
+  assert.deepEqual(teacherDetail.metadata, {
+    sourceAnimationId: "linear-equation-solve-x"
+  });
 });

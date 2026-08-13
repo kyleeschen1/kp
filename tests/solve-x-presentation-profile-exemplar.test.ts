@@ -25,7 +25,7 @@ import {
   kpEquationPresentationProfile
 } from "../src/rendering/equation-presentation-policy.ts";
 
-test("only the canonical solve-x exemplar authors the typed profile", () => {
+test("accepted linear-solve variants author typed presentation profiles", () => {
   const canonical = createLinearSolveAnimationAsset();
   const teacherDetail = createLinearSolveTeacherZeroAnimationAsset();
   const decodedCanonical = decodeKpEquationPresentationProfile({
@@ -56,11 +56,24 @@ test("only the canonical solve-x exemplar authors the typed profile", () => {
     decodedCanonical.status === "accepted" && decodedCanonical.source,
     "typed-profile"
   );
-  assert.equal(teacherDetail.presentationProfile, undefined);
+  assert.deepEqual(teacherDetail.metadata, {
+    sourceAnimationId: "linear-equation-solve-x"
+  });
+  assert.deepEqual(teacherDetail.presentationProfile?.payload, {
+    kind: "equation-presentation",
+    motion: "continuity-v1",
+    nativeHandoff: "atomic-v1",
+    cancellation: "counter-orbit-v1",
+    zeroWitness: "none",
+    successor: "counter-convergence-v1",
+    depth: "semantic-depth-v1",
+    continuants: "transit-then-reflow-v1",
+    branchStrategy: "together"
+  });
   assert.equal(decodedTeacherDetail.status, "accepted");
   assert.equal(
     decodedTeacherDetail.status === "accepted" && decodedTeacherDetail.source,
-    "legacy-metadata"
+    "typed-profile"
   );
 });
 
