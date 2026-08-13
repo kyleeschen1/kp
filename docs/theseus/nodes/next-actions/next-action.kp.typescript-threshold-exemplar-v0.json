@@ -2,8 +2,14 @@
   "id": "next-action.kp.typescript-threshold-exemplar-v0",
   "kind": "next-action",
   "title": "TypeScript",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-typescript-threshold-refactor-human-checkpoint.md"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run check:architecture",
@@ -473,10 +479,17 @@
       "scope": "generated-truth",
       "checkedAt": "2026-08-13T06:15:01.685Z",
       "notes": "Generated TypeScript semantic artifact is fresh."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s26 human checkpoint",
+      "checkedAt": "2026-08-13T06:22:31.704Z",
+      "notes": "Valid 940-node workspace with the durable review package linked; exemplar promotion remains withheld pending human judgment."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Release verification is complete: the focused visual gate, 49 TypeScript tests, existing programming and Scheme exemplars, 4202-test release suite, production build, bundle/architecture/type gates, generated semantics, and workspace validation pass. The visual gate found and closed one missing selected-capability registration; promotion remains blocked only on s26 human review."
+    "summary": "HUMAN_CHECKPOINT open: the TypeScript threshold exemplar is technically certified and directly reviewable, with architecture and marginal-cost evidence recorded. Cross-language promotion and Python remain withheld pending human visual judgment."
   }
 }

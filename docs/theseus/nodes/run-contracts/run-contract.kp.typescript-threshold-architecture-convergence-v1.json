@@ -2,8 +2,9 @@
   "id": "run-contract.kp.typescript-threshold-architecture-convergence-v1",
   "kind": "run-contract",
   "title": "TypeScript threshold architecture convergence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -199,7 +200,8 @@
     {
       "id": "s26",
       "title": "Open human checkpoint",
-      "status": "planned"
+      "summary": "Opened the durable HUMAN_CHECKPOINT with direct artifact/playhead links, eight-view contact-sheet provenance, architecture delta, marginal runtime-cost table, release evidence, and exact approve/change/hold outcomes. No cross-language promotion or Python work began.",
+      "status": "complete"
     }
   ]
 }
