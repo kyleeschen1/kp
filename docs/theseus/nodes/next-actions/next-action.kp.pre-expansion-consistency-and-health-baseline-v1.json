@@ -2,8 +2,9 @@
   "id": "next-action.kp.pre-expansion-consistency-and-health-baseline-v1",
   "kind": "next-action",
   "title": "Establish pre-expansion consistency and health baseline",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp-architecture",
+  "summary": "Expansion-ready for bounded established-vocabulary work: canonical authoring route reconciled, all 25 equation assets use typed profiles, compatibility paths reduced from 15 to 7, release matrix is green, and three fresh bounded-context LLM trials achieved two first-pass outcomes plus one exact typed repair with zero silent fallbacks. Novel motif choreography remains exemplar-first and human-reviewed.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.pre-expansion-consistency-and-health-baseline-v2",
   "kind": "run-contract",
   "title": "Pre-expansion consistency and health baseline",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -198,7 +199,8 @@
     {
       "id": "s26",
       "title": "Benchmark LLM generation and close out",
-      "status": "planned"
+      "summary": "Three fresh read-only bounded-context model trials are durably measured: composition valid first pass, variation valid after one exact TypeScript repair, and unsupported operation returned a typed choose-approved-operation gap; all use zero obsolete APIs and zero fallbacks. Committed laws replay endpoint, direct-seek/rewind, projection, and rejection behavior. Closeout marks established-vocabulary expansion ready while retaining human visual checkpoints.",
+      "status": "complete"
     }
   ]
 }

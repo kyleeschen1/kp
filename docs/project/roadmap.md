@@ -222,6 +222,12 @@ Track outcomes rather than infrastructure volume:
 - percentage of human feedback about pedagogy versus engine correctness; and
 - whether the second and third callers are materially cheaper than the first.
 
+The 2026-08-13 pre-expansion closeout establishes the first bounded benchmark:
+existing-operation variation succeeds after one typed repair, governed
+multi-operation composition succeeds first pass, and an unsupported operation
+returns a typed repair gap without fallback. Treat model-reported provenance as
+untrusted metadata and keep typecheck plus executable laws authoritative.
+
 ## Stable Foundations
 
 Do not restart work already closed:
