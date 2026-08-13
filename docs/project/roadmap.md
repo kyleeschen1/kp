@@ -60,7 +60,7 @@ and vignette authority.
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | 37 meaningful native paints, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
+| Catalogue | 38 meaningful native paints, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
 | Layout | Many useful experiments, no selected public default | Pause invention; later choose a v0 default against real articles. |
 | Public product | Not yet converged | Build a small proof after tightening, not a curriculum platform. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Route tasks through one compact entry point and measure repair quality. |

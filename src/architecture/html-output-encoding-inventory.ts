@@ -178,6 +178,10 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
+  retain("src/rendering/typescript-refactor-code-html.ts", "rendering", [
+    "html-text",
+    "html-attribute"
+  ]),
   retain("src/rendering/vector-dot-projection-svg.ts", "rendering", [
     "html-attribute",
     "svg-text",

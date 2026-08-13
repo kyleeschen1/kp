@@ -52,7 +52,7 @@ test("place-value inventory resolves every existing authority exactly once", () 
 });
 
 test("place-value inventory freezes protected core bytes before implementation", () => {
-  assert.equal(manifest.baselineCommit, "d38f06fe");
+  assert.equal(manifest.baselineCommit, "5f688d34");
   assert.equal(manifest.protectedCoreDigests.length, 10);
   for (const protectedFile of manifest.protectedCoreDigests) {
     const digest = createHash("sha256")

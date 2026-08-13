@@ -72,9 +72,14 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
     input.slotKinds.includes("programming") &&
     (
       input.animationId === "animation.programming.add.execution-trace" ||
-      input.animationId === "animation.comparison.linear-solve-programming"
+      input.animationId === "animation.comparison.linear-solve-programming" ||
+      input.animationId ===
+        "animation.programming.typescript-free-shipping-refactor"
     )
   ) {
+    // This capability registers every specialized programming adapter; new
+    // programming assets must enter through this selection boundary as well
+    // as the pack, or the catalogue can load data it cannot paint.
     capabilities.push("programming-trace");
   }
   return Object.freeze(capabilities);

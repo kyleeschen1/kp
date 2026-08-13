@@ -193,7 +193,8 @@
     {
       "id": "s25",
       "title": "Run release verification",
-      "status": "planned"
+      "summary": "Release verification passed. Added a stable focused visual command and eight-checkpoint contact sheet; closed the missing TypeScript selected-capability registration exposed by the browser gate; rebased exact catalogue, escaping-sink, historical direction, and approved typed-gap-retirement ratchets; 49 focused TypeScript tests, four existing programming browser tests, 123 Scheme factorial tests, 4202/4202 full tests, five capability browser tests, typecheck, architecture, production build, bundle ceilings, generated semantics, review/direct-link/accessibility/phone/reduced-motion/CLS/long-task checks, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s26",

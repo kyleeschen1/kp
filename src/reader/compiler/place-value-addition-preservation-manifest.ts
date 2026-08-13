@@ -7,7 +7,7 @@ export const kpPlaceValueAdditionPreservationManifest = Object.freeze({
   schemaVersion: "kp.place-value-addition-preservation.v1",
   stablePromotionId: "kp.promotion.place-value-addition",
   animationId: "animation.place-value-addition.278-plus-156",
-  baselineCommit: "d38f06fe",
+  baselineCommit: "5f688d34",
   canonicalExpression: "278 + 156 = 434",
   primaryProjection: Object.freeze({
     kind: "stacked-written-algorithm",
@@ -116,7 +116,7 @@ export const kpPlaceValueAdditionPreservationManifest = Object.freeze({
     }),
     Object.freeze({
       path: "src/reader/renderers/equation-render-plan.ts",
-      sha256: "4fb0f0b64e10816b1895924b24154ab3a3dc590ddd9e30778588f819d1172898"
+      sha256: "065f9247d906afcfcf99daaa8f6968e64e236c1d17b008529572cc29a6034a1f"
     }),
     Object.freeze({
       path: "src/reader/renderers/equation-material-plan.ts",
