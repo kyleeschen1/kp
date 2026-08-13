@@ -13,6 +13,7 @@ test("pre-expansion health has focused and explicit release commands", () => {
     "typecheck",
     "test:semantic-animation-convergence",
     "test:svelte-catalogue-shell",
+    "current-direction-authoring-ratchet.test.ts",
     "pre-expansion-negative-health-fixtures.test.ts",
     "check:animation-library-bundle-boundary",
     "check:economics-demand-shift-publication"

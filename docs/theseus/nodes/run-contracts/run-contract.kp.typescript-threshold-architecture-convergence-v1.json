@@ -79,7 +79,8 @@
     {
       "id": "s06",
       "title": "Add direction ratchet",
-      "status": "planned"
+      "summary": "Added an executable current-direction and authoring ratchet to the focused health gate; seven focused checks, architecture, full typecheck, and workspace validation pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

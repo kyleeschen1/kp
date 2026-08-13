@@ -102,10 +102,38 @@
       "scope": "s05 guidance evidence",
       "checkedAt": "2026-08-13T03:53:08.254Z",
       "notes": "Valid 940-node workspace."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts tests/pre-expansion-health-commands.test.ts tests/canonical-animation-construction-closeout.test.ts",
+      "status": "passed",
+      "scope": "s06 current direction and authoring ratchet",
+      "checkedAt": "2026-08-13T03:56:15.472Z",
+      "notes": "7 of 7 pass; only current roadmap/thread/queue/guidance are enforced."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 architecture",
+      "checkedAt": "2026-08-13T03:56:16.484Z",
+      "notes": "All four architecture boundaries pass with seven classified compatibility paths."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 health command update",
+      "checkedAt": "2026-08-13T03:56:17.392Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s06 durable direction",
+      "checkedAt": "2026-08-13T03:56:18.291Z",
+      "notes": "Valid 940-node workspace."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The canonical LLM entrypoint now includes a minimal compilable governed example, distinguishes pre-compilation validation from verified output, and directs unsupported intent to typed repair rather than invented ids or fallback."
+    "summary": "The pre-expansion health command now rejects drift between the current roadmap, active thread, queue, supporting statuses, and canonical authoring guide without treating historical provenance as executable policy."
   }
 }
