@@ -151,7 +151,8 @@
     {
       "id": "s18",
       "title": "Prove behavior parity",
-      "status": "planned"
+      "summary": "Added a fail-closed, declared-cases-only behavior certificate tied to exact semantic source evidence; totals 49, 50, and 75 match before, after, and expected observations without arbitrary TypeScript execution.",
+      "status": "complete"
     },
     {
       "id": "s19",

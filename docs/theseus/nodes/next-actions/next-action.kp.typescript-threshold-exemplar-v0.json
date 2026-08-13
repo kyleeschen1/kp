@@ -319,10 +319,24 @@
       "scope": "s17 operations and lineage",
       "checkedAt": "2026-08-13T04:39:29.031Z",
       "notes": "Seven of seven pass; correspondence rewind laws, bundle and transformation validation, complete lineage, serialization, and source-derived identities are green."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 proof types",
+      "checkedAt": "2026-08-13T04:42:31.319Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "node --test TypeScript behavior proof and operation suites",
+      "status": "passed",
+      "scope": "s18 bounded parity",
+      "checkedAt": "2026-08-13T04:42:33.603Z",
+      "notes": "Six of six pass; declared cases match before, after, and expected observations, altered semantic evidence fails closed, and no arbitrary execution mechanism exists."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The TypeScript refactor now has validated canonical asset objects, typed transformations, reversible correspondence maps, and complete source-to-target lineage over source-derived identities."
+    "summary": "A fail-closed bounded behavior certificate now ties exact parsed rule and call evidence to before/after parity at totals 49, 50, and 75 without arbitrary source execution or universal-equivalence claims."
   }
 }
