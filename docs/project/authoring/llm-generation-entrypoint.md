@@ -1,7 +1,7 @@
 # KP LLM Generation Entrypoint
 
 Status: canonical routing guide
-Updated: 2026-08-12
+Updated: 2026-08-13
 
 ## Purpose
 
@@ -49,6 +49,44 @@ Older experiments are evidence, not default implementation authority.
    host or presentation parity.
 8. Verify semantic endpoints, direct seek/rewind, accessibility, and the
    smallest relevant visual checkpoint.
+
+## Minimal Successful Construction
+
+This example deliberately varies an already verified operation. The trusted
+fixture supplies source authority; the caller supplies only approved semantic
+references and pedagogical intent.
+
+```ts
+import {
+  compileKpGovernedCanonicalConstruction,
+  createKpGovernedCanonicalConstructionRequest,
+  createKpGovernedFractionSplitMergeVariation
+} from "./src/authoring/canonical-animation-public-api.ts";
+
+const verifiedSource = createKpGovernedFractionSplitMergeVariation();
+const request = createKpGovernedCanonicalConstructionRequest({
+  ...verifiedSource.request,
+  id: "request.example.fraction-key-steps.v1",
+  detailLevel: "key-steps"
+});
+
+const result = compileKpGovernedCanonicalConstruction({
+  request,
+  authority: verifiedSource.authority
+});
+```
+
+`result` is already a verified compilation. Do not pass it to
+`validateKpGovernedCanonicalConstructionCompilation`; that validator accepts
+the pre-compilation pair `{ request, authority }`. Call the validator only when
+an editor needs an issue list before compiling. The compiler performs the same
+verification and throws `KpGovernedConstructionVerificationError` on failure.
+
+Do not copy this example by inventing object or operation ids. Resolve a
+trusted authority first, then select ids it actually exposes. If no approved
+operation matches the intended explanation, use
+`planKpGovernedConstructionRepairs({ request, authority })` and retain the typed
+gap instead of substituting a generic animation.
 
 ## The Model May Author
 

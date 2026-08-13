@@ -46,6 +46,19 @@ test("current model guidance selects the released construction seam", async () =
   }
   assert.match(entrypoint, /compileKpGovernedCanonicalConstruction/);
   assert.match(entrypoint, /planKpGovernedConstructionRepairs/);
+  assert.match(entrypoint, /Minimal Successful Construction/);
+  assert.match(
+    entrypoint,
+    /compileKpGovernedCanonicalConstruction\(\{[\s\S]*request,[\s\S]*authority: verifiedSource\.authority/
+  );
+  assert.match(
+    entrypoint,
+    /validator accepts[\s\S]*\{ request, authority \}/
+  );
+  assert.doesNotMatch(
+    entrypoint,
+    /validateKpGovernedCanonicalConstructionCompilation\(result\)/
+  );
   assert.match(entrypoint, /sharing an asset id|equal asset id/i);
   assert.match(assetSpec, /compatibility and research\s+evidence/);
   assert.doesNotMatch(

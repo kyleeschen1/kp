@@ -81,10 +81,31 @@
       "scope": "s04 explicit deferrals",
       "checkedAt": "2026-08-13T03:48:24.028Z",
       "notes": "Valid 940-node workspace after header-only supporting-thread reconciliation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-animation-construction-closeout.test.ts tests/governed-canonical-construction-compiler.test.ts tests/governed-canonical-construction-repair.test.ts",
+      "status": "passed",
+      "scope": "s05 canonical LLM example",
+      "checkedAt": "2026-08-13T03:53:06.175Z",
+      "notes": "10 of 10 guide, compile, failure, and repair tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 public authoring symbols",
+      "checkedAt": "2026-08-13T03:53:07.295Z",
+      "notes": "TypeScript, Svelte, and domain checks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s05 guidance evidence",
+      "checkedAt": "2026-08-13T03:53:08.254Z",
+      "notes": "Valid 940-node workspace."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Botanical/Scheme restart, foldable-distribution review, publication-bundle reconciliation, layout, Python, and SvelteKit now read as explicit deferrals; their historical rationale remains retrievable."
+    "summary": "The canonical LLM entrypoint now includes a minimal compilable governed example, distinguishes pre-compilation validation from verified output, and directs unsupported intent to typed repair rather than invented ids or fallback."
   }
 }

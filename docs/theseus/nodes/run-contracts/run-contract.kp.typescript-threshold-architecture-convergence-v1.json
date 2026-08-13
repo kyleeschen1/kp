@@ -67,13 +67,14 @@
     {
       "id": "s04",
       "title": "Record explicit deferrals",
-      "summary": "Reconciled three stale supporting-thread headers into explicit deferrals without deleting provenance or changing promotion rank.",
+      "summary": "Reconciled the two tracked stale supporting-thread headers into explicit deferrals without deleting provenance or changing promotion rank; detected the untracked publication thread as protected user work, restored it byte-for-byte, and excluded it from the amended commit.",
       "status": "complete"
     },
     {
       "id": "s05",
       "title": "Improve LLM authoring example",
-      "status": "planned"
+      "summary": "Added and ratcheted one minimal successful governed-construction example using only the public facade; clarified the validator-input trap and typed repair path; focused tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
