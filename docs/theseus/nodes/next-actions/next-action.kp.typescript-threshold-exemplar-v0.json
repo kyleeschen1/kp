@@ -3,5 +3,39 @@
   "kind": "next-action",
   "title": "TypeScript",
   "status": "ready",
-  "domain": "kp"
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s01 architecture baseline",
+      "checkedAt": "2026-08-13T03:42:32.666Z",
+      "notes": "102 concept-room files, 156 reader files, 468 semantic-animation files, zero frozen semantic-animation exceptions, seven classified compatibility paths."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s01 route closure baseline",
+      "checkedAt": "2026-08-13T03:42:33.777Z",
+      "notes": "Outer 10148, main host 186429, measured catalogue route 112449, and place-value incremental 70481 gzip bytes; all pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/pre-expansion-health-commands.test.ts tests/animation-api-caller-ledger.test.ts tests/semantic-animation-compatibility-ledger.test.ts",
+      "status": "passed",
+      "scope": "s01 exact baseline ratchets",
+      "checkedAt": "2026-08-13T03:42:34.735Z",
+      "notes": "14 of 14 pass after updating the stale exact test-caller list for the already-committed LLM benchmark; production caller count remains zero."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 durable control plane",
+      "checkedAt": "2026-08-13T03:42:35.745Z",
+      "notes": "Valid 940-node workspace after superseding the malformed unstarted v0 contract and creating complete v1."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Captured revision, protected worktree hash, repository scale, seven compatibility paths, zero governed-API production callers, architecture baseline, and route-specific gzip headroom in a durable pre-exemplar baseline."
+  }
 }

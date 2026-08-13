@@ -1,0 +1,181 @@
+{
+  "id": "run-contract.kp.typescript-threshold-architecture-convergence-v1",
+  "kind": "run-contract",
+  "title": "TypeScript threshold architecture convergence",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typescript-threshold-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-typescript-threshold-architecture-convergence-long-loop-proposal.md",
+      "summary": "Exact user-approved 26-slice proposal, preservation boundary, verification cadence, rollback units, and human stop condition."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path changed-path",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run health:pre-expansion:release",
+    "npm run visual:typescript-refactor",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Control-plane reconciliation, canonical LLM authoring guidance, exact legacy-fade retirement, one build-time TypeScript frontend, one semantic refactor asset, one production vignette, one native code-renderer extension, catalogue integration, stable visual tooling, verification, and closeout evidence.",
+    "Preserve and reuse the canonical public authoring API, existing deterministic clock, semantic identity, correspondence, static endpoints, accessibility, review capture, and route budgets."
+  ],
+  "disallowedWork": [
+    "No Python, cross-language promotion, new clocks, schedulers, scene graphs, stage lifecycles, semantic stores, renderer authorities, public facades, layout work, CodeMirror work, public-site work, broad registry consolidation, directory shuffles, or size-only file splitting.",
+    "No new packages, arbitrary TypeScript execution, runtime TypeScript compiler code, live LLM calls, protected economics edits, or unrelated untracked documents."
+  ],
+  "goal": "Deliver a governed TypeScript free-shipping-threshold refactor exemplar after bounded control-plane and compatibility tightening, then stop for visual review.",
+  "target": "next-action.kp.typescript-threshold-exemplar-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit each independently reversible verified slice with completed Theseus evidence; never stage protected economics files or unrelated documents.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if legacy fade has a live product caller that cannot be migrated without approved visual change.",
+    "Stop if TypeScript parsing requires a new package or makes compiler code browser-reachable.",
+    "Stop if the exemplar requires another runtime authority, public facade, geometry-derived identity, or arbitrary source execution.",
+    "Stop on unresolved semantic, static, accessibility, direct-link, review, seek, rewind, bundle, CLS, long-task, or existing-exemplar regression.",
+    "Stop before Python or cross-language promotion and stop at slice s26 for human visual judgment."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Capture baseline",
+      "summary": "Captured protected worktree and architecture, compatibility, governed-caller, and route-closure baselines; corrected one stale exact test-caller ratchet from the completed health tranche; all focused checks and workspace validation pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Inventory direction drift",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Set canonical next action",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Record explicit deferrals",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Improve LLM authoring example",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Add direction ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Audit legacy fade reachability",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Preserve typed gap behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Remove fallback policy",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Delete legacy adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Retire compatibility entry",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Verify semantic boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Freeze exemplar contract",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Add TypeScript fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Build TypeScript frontend",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Compile semantic identities",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Compile refactor operations",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Prove behavior parity",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Author pedagogical score",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Construct animation asset",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Add production vignette",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Build native code renderer",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add deterministic motion",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Integrate catalogue",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run release verification",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Open human checkpoint",
+      "status": "planned"
+    }
+  ]
+}

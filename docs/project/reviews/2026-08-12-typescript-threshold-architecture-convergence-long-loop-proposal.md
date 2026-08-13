@@ -6,7 +6,11 @@ Status: approved
 
 Theseus target: `next-action.kp.typescript-threshold-exemplar-v0`
 
-Run contract: `run-contract.kp.typescript-threshold-architecture-convergence-v0`
+Run contract: `run-contract.kp.typescript-threshold-architecture-convergence-v1`
+
+The initial `v0` control record was superseded before product work because its
+shell invocation truncated quoted multiword fields. `v1` preserves the exact
+approved scope and slice order with complete typed-autonomy metadata.
 
 ## Objective
 

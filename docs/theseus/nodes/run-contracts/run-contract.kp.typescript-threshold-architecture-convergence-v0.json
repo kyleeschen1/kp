@@ -2,7 +2,8 @@
   "id": "run-contract.kp.typescript-threshold-architecture-convergence-v0",
   "kind": "run-contract",
   "title": "TypeScript",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Superseded before product implementation because shell argument grouping truncated multiword contract fields; v1 preserves the exact approved slices and boundaries.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,7 +38,7 @@
     {
       "id": "s01",
       "title": "Baseline",
-      "status": "planned"
+      "status": "in-progress"
     },
     {
       "id": "s02",
