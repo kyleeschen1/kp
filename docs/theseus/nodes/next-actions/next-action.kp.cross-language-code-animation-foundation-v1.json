@@ -179,11 +179,46 @@
       "scope": "slice s15 architecture boundary",
       "checkedAt": "2026-08-13T18:37:39.876Z",
       "notes": "Semantic and presentation boundaries remain closed with the Python renderer added."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s16 production reader closure",
+      "checkedAt": "2026-08-13T18:50:30.879Z",
+      "notes": "All 12 production reader manifest routes close successfully; built reader assets contain no Python refactor identifiers."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s16 catalogue route budget",
+      "checkedAt": "2026-08-13T18:50:33.181Z",
+      "notes": "Catalogue route 112861/190000 gzip bytes; outer shell 10328/50000; main host 187252/490000. Python remains selected through the lazy programming pack."
+    },
+    {
+      "command": "npm run visual:python-refactor",
+      "status": "passed",
+      "scope": "s16 Python wide phone reduced-motion seek rewind accessibility performance and review capture",
+      "checkedAt": "2026-08-13T18:51:14.269Z",
+      "notes": "Eleven deterministic checkpoints passed; CLS at most 0.01, direct-sampled long tasks under 100 ms, one native accessible projection, no fallback canvas SVG or iframe, stable geometry, phone containment, and no browser Python frontend."
+    },
+    {
+      "command": "npm run visual:typescript-refactor",
+      "status": "passed",
+      "scope": "s16 TypeScript preservation",
+      "checkedAt": "2026-08-13T18:51:15.480Z",
+      "notes": "The approved TypeScript exemplar remains visually and behaviorally green after Python integration."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "pre-existing shared reader budget baseline outside Python tranche",
+      "checkedAt": "2026-08-13T18:51:16.559Z",
+      "notes": "Shared reader routes exceed stale baselines by 7834 gzip bytes and include two already-forbidden native KaTeX geometry assets. No files under src/reader changed between the prior TypeScript checkpoint and this Python slice; production closure passes and built reader assets contain no Python identifiers. This known red is disclosed for separate baseline repair, not waived or attributed to Python."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The Python second caller is now one native, selectable, accessible catalogue artifact in the lazy programming pack, with standard controls, review capture host, stable artifact/playhead URLs, generated metadata, and no runtime parser or extra clock."
+    "summary": "Python is pressure-tested at eleven reproducible visual checkpoints across desktop, phone, reduced motion, direct seek, rewind, accessibility, capture, CLS, long-task, and resource-closure boundaries. TypeScript remains green; Python is absent from reader closures and the catalogue remains within its explicit budget. A pre-existing shared reader budget red is separately disclosed."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

@@ -198,6 +198,8 @@
     "visual:programming-addition": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts --scope programming-addition",
     "dev:typescript-refactor-visual": "vite --host 127.0.0.1 --port 4183 --strictPort",
     "visual:typescript-refactor": "playwright test --config playwright.typescript-refactor.config.ts --project=chromium --workers=1",
+    "dev:python-refactor-visual": "vite --host 127.0.0.1 --port 4184 --strictPort",
+    "visual:python-refactor": "playwright test --config playwright.python-refactor.config.ts --project=chromium --workers=1",
     "visual:generated-linear-solve": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-generated-linear-solve-review.ts",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",
     "visual:fraction-canonical-checkpoint": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts --exemplar split-merge-fractions --output tmp/codex/fraction-canonical-checkpoint",

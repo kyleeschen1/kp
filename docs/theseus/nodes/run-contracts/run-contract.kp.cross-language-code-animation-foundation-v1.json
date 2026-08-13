@@ -141,7 +141,8 @@
     {
       "id": "s16",
       "title": "Pressure Python runtime",
-      "status": "planned"
+      "summary": "Added stable Python browser pressure tooling and proved deterministic native presentation across wide, phone, reduced-motion, seek, rewind, accessibility, review capture, resource, layout-shift, long-task, and catalogue-budget boundaries. Preserved TypeScript and identified an unrelated pre-existing shared reader-budget baseline failure.",
+      "status": "complete"
     },
     {
       "id": "s17",
