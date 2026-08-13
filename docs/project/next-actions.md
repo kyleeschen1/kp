@@ -13,15 +13,14 @@ Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
 preserved foundations rather than work to restart.
 
 1. Complete
-   `run-contract.kp.typescript-threshold-architecture-convergence-v1`: retire
-   only the proven typed-gap-to-legacy-fade bridge, then build and review the
-   TypeScript free-shipping-threshold refactor through the existing
-   semantic/runtime path.
-2. After human approval of that exemplar, pressure the same boundary with
-   Python as the structurally different second caller.
+   `run-contract.kp.cross-language-code-animation-foundation-v1`: preserve the
+   approved TypeScript free-shipping-threshold exemplar, build Python as the
+   structurally different second caller, and stop at its human checkpoint.
+2. After explicit Python approval, compare both imperative callers and extract
+   only demonstrated language-neutral contracts before auditing Scheme reuse.
 3. Retire the remaining compatibility paths only beside real caller
    migrations; timeline and lightweight projection consolidation are not
-   prerequisites for the TypeScript proof.
+   prerequisites for the Python proof.
 4. Use symbolic, graph, and code exemplars to select one Public Web v0 default
    projection without changing Article semantics.
 5. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit

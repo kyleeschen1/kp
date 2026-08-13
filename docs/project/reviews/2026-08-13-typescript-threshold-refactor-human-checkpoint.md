@@ -1,6 +1,7 @@
 # TypeScript threshold refactor human checkpoint
 
-Status: `HUMAN_CHECKPOINT` — motion revision implemented, visually unapproved
+Status: approved 2026-08-13 — preserve as the canonical imperative refactor
+reference while building the Python second caller
 
 Revision note (2026-08-13): the first checkpoint exposed whole-source
 crossfades where the acceptance contract required visible refactor
@@ -21,8 +22,9 @@ Fusion now has explicit arrival, hold, and settlement-handoff phases. Both
 complete bundles reach the helper's exact coordinates at full opacity and
 scale before the native helper paint receives ownership at the same location.
 
-This revision is still one reversible TypeScript exemplar. It does not promote
-a shared code-refactor motif or authorize Python/catalogue-wide rollout.
+This revision remains one TypeScript exemplar. Its approval authorizes the
+separately governed Python second-caller tranche, but does not promote a shared
+code-refactor motif or catalogue-wide rollout.
 
 This checkpoint closes the approved architecture-convergence run without
 promoting a cross-language refactor motif. The candidate is ready for human

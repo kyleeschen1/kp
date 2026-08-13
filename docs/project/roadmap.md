@@ -56,7 +56,7 @@ and vignette authority.
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
 | Equation animation | Canonical path proven; compatibility remains | Migrate accepted callers and retire old recipes incrementally. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
-| Program animation | Scheme factorial proves trace-backed code material locally | Pressure with a TypeScript refactor, then Python. |
+| Program animation | Scheme factorial and the approved TypeScript refactor prove two specialized code-material paths | Build Python as the second imperative refactor caller; compare before extracting shared seams. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
@@ -140,19 +140,24 @@ points and dependency direction first; physical package moves come later.
 
 ### 4. Cross-language code proof
 
-Status: active through
-`run-contract.kp.typescript-threshold-architecture-convergence-v1`
+Status: TypeScript exemplar approved; Python second caller active through
+`run-contract.kp.cross-language-code-animation-foundation-v1`
 
-1. Build the small TypeScript free-shipping-threshold refactor as the canonical
-   novice-readable code transformation.
-2. Reuse semantic identity, scopes, bindings, data/control flow, correspondence,
-   the shared clock, and attention intent.
-3. Add only a language frontend and code-renderer adapter where the existing
-   program contracts are insufficient.
-4. Implement the same conceptual example in Python as the structurally
-   different second caller.
+1. Preserve the approved TypeScript free-shipping-threshold refactor as the
+   canonical novice-readable code transformation.
+2. Implement the same conceptual example in Python through a build-time
+   standard-library frontend and a checked-in generated semantic artifact.
+3. Reuse semantic identity, correspondence, the shared clock, native endpoint
+   ownership, deterministic sampling, and attention intent without importing
+   TypeScript-specific contracts into Python.
+4. Stop at the Python human checkpoint before generalization.
 5. Extract a language-neutral program-transformation seam only where both
-   callers demonstrate it.
+   approved callers demonstrate it; then audit Scheme for compatible
+   invariants without flattening recursive S-expression choreography.
+
+The exact present ownership, candidate invariants, deliberate
+non-abstractions, and promotion gate are recorded in
+`decisions/2026-08-13-kp-code-animation-ownership-and-promotion-boundary.md`.
 
 No language caller may introduce another clock, scheduler, stage lifecycle,
 or lesson-local semantic store. Scheme retains its specialized recursive

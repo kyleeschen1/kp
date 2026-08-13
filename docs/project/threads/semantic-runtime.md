@@ -4,9 +4,9 @@ Status: stable-supporting
 Last Updated: 2026-08-13
 Current Next Action: Preserve the released canonical construction, native KaTeX
 session, foldable-distribution evidence, radical promotion kit, and bounded
-resource leases while the active architecture thread pressures those seams
-with one TypeScript caller. No global equation-family migration or new runtime
-authority is authorized.
+resource leases while the active architecture thread preserves the approved
+TypeScript caller and pressures those seams with a Python second caller. No
+global equation-family migration or new runtime authority is authorized.
 
 ## Goal
 

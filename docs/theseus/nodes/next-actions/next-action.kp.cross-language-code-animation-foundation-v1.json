@@ -60,6 +60,12 @@
       "status": "passed",
       "scope": "Exact source reconstruction, immutable deterministic tokens, syntax roles, native HTML, and animated token paint",
       "checkedAt": "2026-08-13T17:38:24.941Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "One active run contract and Python second-caller direction across roadmap, active thread, queue, supporting runtime thread, and LLM entrypoint",
+      "checkedAt": "2026-08-13T17:42:35.874Z"
     }
   ],
   "progress": {

@@ -69,7 +69,8 @@
     {
       "id": "s04",
       "title": "Record code ownership map",
-      "status": "planned"
+      "summary": "Recorded exact TypeScript layer ownership, Python build/runtime boundary, candidate cross-language invariants, deliberate non-abstractions, Scheme preservation, promotion gate, and one current project direction.",
+      "status": "complete"
     },
     {
       "id": "s05",

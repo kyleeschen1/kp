@@ -2,13 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: execute the approved TypeScript free-shipping-threshold
-refactor proof through
-`run-contract.kp.typescript-threshold-architecture-convergence-v1`. Its first
-bounded architecture wave audits and retires only the typed-gap-to-legacy-fade
-bridge when safe. The catalogue CLS repair, projection-neutral authoring,
-explicit-capability migration, and pre-expansion health baseline are complete;
-see `../reviews/2026-08-13-pre-expansion-consistency-health-closeout.md`.
+Current Next Action: preserve the approved TypeScript free-shipping-threshold
+exemplar and build Python as its structurally different second caller through
+`run-contract.kp.cross-language-code-animation-foundation-v1`. Shared
+code-animation extraction remains blocked until the Python human checkpoint.
+The ownership and promotion boundary is recorded in
+`../decisions/2026-08-13-kp-code-animation-ownership-and-promotion-boundary.md`.
 
 ## Goal
 
@@ -49,10 +48,11 @@ not a mandate to encode one universal layout in Article or animation semantics.
    effects. The catalogue CLS gate also passes at the unchanged threshold.
 5. **Current bridge retirement:** prove exact reachability, then remove only
    typed-gap-to-legacy-fade if no live route depends on it.
-6. **TypeScript exemplar (active):** prove a novice-readable refactor through
-   the existing semantic/runtime spine and canonical governed authoring API.
-7. **Python caller:** reuse the same program semantics with a language-specific
-   frontend and renderer adapter.
+6. **TypeScript exemplar (approved):** preserve the novice-readable refactor,
+   native source ownership, deterministic motion, and visual presentation.
+7. **Python caller (active):** reproduce the same pedagogical claim with a
+   language-specific build-time frontend and local vertical slice; stop for
+   human review before extracting common contracts.
 8. **Product projection gate:** compare the same real sources through candidate
    projections and select one public v0 default.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web

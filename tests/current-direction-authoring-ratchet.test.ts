@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const activeContract =
-  "run-contract.kp.typescript-threshold-architecture-convergence-v1";
+  "run-contract.kp.cross-language-code-animation-foundation-v1";
 
 test("current project direction and model entrypoint name one executable proof", async () => {
   const [roadmap, activeThread, nextActions, entrypoint] = await Promise.all([
@@ -16,6 +16,7 @@ test("current project direction and model entrypoint name one executable proof",
   for (const currentSource of [roadmap, activeThread, nextActions]) {
     assert.match(currentSource, new RegExp(activeContract.replaceAll(".", "\\.")));
     assert.match(currentSource, /TypeScript free-shipping-threshold/i);
+    assert.match(currentSource, /Python/i);
   }
   assert.doesNotMatch(
     activeThread.slice(0, activeThread.indexOf("## Goal")),
