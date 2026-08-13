@@ -272,11 +272,32 @@
       "scope": "s18 repository type boundary",
       "checkedAt": "2026-08-13T19:07:35.554Z",
       "notes": "The comparison slice introduces no runtime or type changes."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test shared code token and both caller syntax renderer theater suites",
+      "status": "passed",
+      "scope": "s19 shared syntax role and source token protocol",
+      "checkedAt": "2026-08-13T19:11:52.746Z",
+      "notes": "Twenty-eight focused tests pass across shared validation, TypeScript and Python classifiers, exact source, native rendering, and animated syntax continuity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 shared syntax protocol types",
+      "checkedAt": "2026-08-13T19:11:53.925Z",
+      "notes": "Both language-owned token types conform to the shared paint-only contract."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 semantic authority boundary",
+      "checkedAt": "2026-08-13T19:11:55.147Z",
+      "notes": "The shared protocol owns roles and exact spans only; tokenization and semantic identity remain language-owned."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The approved TypeScript and Python callers justify shared syntax-token, source-projection, settlement/ownership, and explicit-exception seams. Frontends, semantic models, scores, numeric timing, geometry, language spellings, and Scheme choreography remain caller-owned."
+    "summary": "A shared code syntax-role and exact source-token protocol now serves TypeScript and Python. The protocol validates ordered half-open source spans but does not parse code, infer bindings, or own language identity."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

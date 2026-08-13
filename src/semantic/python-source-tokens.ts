@@ -1,21 +1,13 @@
-export type KpPythonTokenKind =
-  | "keyword"
-  | "identifier"
-  | "function"
-  | "type"
-  | "boolean"
-  | "number"
-  | "string"
-  | "comment"
-  | "operator"
-  | "punctuation";
+import {
+  type KpCodeSourceToken,
+  type KpCodeSyntaxRole
+} from "./code-source-token-protocol.ts";
 
-export interface KpPythonSourceToken {
+export type KpPythonTokenKind = Exclude<KpCodeSyntaxRole, "property">;
+
+export interface KpPythonSourceToken extends KpCodeSourceToken {
   readonly id: string;
-  readonly text: string;
   readonly kind: KpPythonTokenKind;
-  readonly startOffset: number;
-  readonly endOffset: number;
 }
 
 export interface KpPythonLexicalEvidence {

@@ -1,3 +1,5 @@
+import { assertKpCodeSourceTokenStream } from "./code-source-token-protocol.ts";
+
 export interface KpPythonSemanticSourceRange {
   readonly path: string;
   readonly revisionId: string;
@@ -41,6 +43,7 @@ export function defineKpPythonRefactorSemanticArtifact(
     throw new Error("Python refactor semantic entity ids must be unique.");
   }
   for (const revision of artifact.revisions) {
+    assertKpCodeSourceTokenStream(revision.sourceText, revision.tokens);
     for (const token of revision.tokens) {
       if (
         token.startOffset < 0 ||

@@ -1,21 +1,13 @@
-export type KpTypeScriptTokenKind =
-  | "keyword"
-  | "identifier"
-  | "function"
-  | "property"
-  | "type"
-  | "boolean"
-  | "number"
-  | "string"
-  | "comment"
-  | "operator"
-  | "punctuation";
+import {
+  assertKpCodeSourceTokenStream,
+  type KpCodeSourceToken,
+  type KpCodeSyntaxRole
+} from "./code-source-token-protocol.ts";
 
-export interface KpTypeScriptSourceToken {
-  readonly text: string;
+export type KpTypeScriptTokenKind = KpCodeSyntaxRole;
+
+export interface KpTypeScriptSourceToken extends KpCodeSourceToken {
   readonly kind: KpTypeScriptTokenKind;
-  readonly startOffset: number;
-  readonly endOffset: number;
 }
 
 const tokenPattern = /(?:\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|[A-Za-z_$][\w$]*|\d+(?:\.\d+)?|===|!==|=>|>=|<=|==|!=|&&|\|\||\?\?|\+\+|--|\+=|-=|\*=|\/=|[{}()[\].,:;?+\-*/%=<>!&|])/g;
@@ -87,7 +79,7 @@ export function tokenizeKpTypeScriptSource(
     return { text, startOffset, endOffset: startOffset + text.length };
   });
 
-  return Object.freeze(lexical.map((token, index) => Object.freeze({
+  const tokens = Object.freeze(lexical.map((token, index) => Object.freeze({
     ...token,
     kind: classifyToken(
       token.text,
@@ -95,6 +87,8 @@ export function tokenizeKpTypeScriptSource(
       lexical[index + 1]?.text
     )
   })));
+  assertKpCodeSourceTokenStream(source, tokens);
+  return tokens;
 }
 
 function classifyToken(

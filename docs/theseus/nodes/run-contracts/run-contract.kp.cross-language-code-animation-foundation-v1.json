@@ -159,7 +159,8 @@
     {
       "id": "s19",
       "title": "Extract syntax role protocol",
-      "status": "planned"
+      "summary": "Extracted the demonstrated shared syntax-role and source-token shape; adapted both callers while retaining TypeScript and Python classifiers, evidence, and semantic authority locally.",
+      "status": "complete"
     },
     {
       "id": "s20",
