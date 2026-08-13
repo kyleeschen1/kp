@@ -2,10 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: review the TypeScript public projection at
-`/learn/code/free-shipping/`. If its composition passes the human checkpoint,
-pressure the same projection boundary with one symbolic and one graph lesson
-before selecting Public Web v0. The cross-language proof is closed in
+Current Next Action: preserve the approved TypeScript public projection at
+`/learn/code/free-shipping/`, then project the existing Article v1
+fraction-composition lesson and its canonical native-KaTeX animation through
+the same public-product boundary. Stop for its human checkpoint before using
+the economics demand-shift graph as the third caller or extracting a shared
+projection contract. The cross-language proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -53,9 +55,10 @@ not a mandate to encode one universal layout in Article or animation semantics.
 7. **Cross-language pressure (complete):** Python proves the second imperative
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
-8. **Product projection gate (current):** the TypeScript public lesson is the
-   first static-first code checkpoint. Review it, then compare one symbolic and
-   one graph caller before selecting a public v0 default.
+8. **Product projection gate (current):** the TypeScript public lesson passed
+   its static-first code checkpoint. Project the canonical fraction-composition
+   lesson next, stop for review, then compare the economics demand-shift graph
+   before selecting a public v0 default.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 

@@ -167,7 +167,7 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: first code projection implemented; human checkpoint pending
+Status: code projection approved; symbolic pressure next
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -182,6 +182,15 @@ Routine work on this projection now uses a cached focused typecheck, focused
 tests, a 37-module route-only Vite build, and one-worker Chromium checks.
 Repository-wide typecheck, the complete capped-concurrency test suite, and the
 all-route bundle remain explicit release gates rather than inner-loop work.
+
+The human visual checkpoint passed on 2026-08-13. Freeze the TypeScript page as
+the approved code exemplar rather than continuing local layout discovery. The
+next bounded caller is the existing Article v1 fraction-composition lesson;
+project its canonical native-KaTeX animation through the same public-product
+boundary without changing its semantics or choreography. After its checkpoint,
+use the canonical economics demand-shift graph as the third caller. Only those
+three approved callers may justify extraction of a shared Public Web v0
+projection contract.
 
 Choose one public v0 projection using at least three real content shapes:
 

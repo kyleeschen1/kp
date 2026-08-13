@@ -1,6 +1,6 @@
 # TypeScript Public Lesson
 
-Status: implemented on 2026-08-13; human visual checkpoint pending
+Status: implemented and human-approved on 2026-08-13
 
 ## Outcome
 
