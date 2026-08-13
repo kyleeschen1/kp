@@ -133,7 +133,8 @@
     {
       "id": "s15",
       "title": "Build TypeScript frontend",
-      "status": "planned"
+      "summary": "Built and verified the Node-only TypeScript frontend: deterministic plain-data syntax, exact positions, typed diagnostics, no execution path, green build, and no compiler in browser closure.",
+      "status": "complete"
     },
     {
       "id": "s16",

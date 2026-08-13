@@ -263,10 +263,31 @@
       "scope": "s14 typed fixtures",
       "checkedAt": "2026-08-13T04:23:01.475Z",
       "notes": "Eight of eight pass; exact source hashes are stable, both revisions have zero TypeScript diagnostics, and boundary cases match the contract."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test TypeScript frontend and fixture suites",
+      "status": "passed",
+      "scope": "s15 frontend",
+      "checkedAt": "2026-08-13T04:26:46.786Z",
+      "notes": "Seven of seven pass for deterministic serializable syntax, exact spans, parent closure, compiler diagnostics, malformed input, and no execution hooks."
+    },
+    {
+      "command": "npm run typecheck and npm run build",
+      "status": "passed",
+      "scope": "s15 build-time boundary",
+      "checkedAt": "2026-08-13T04:26:49.453Z",
+      "notes": "Repository typecheck and production build pass with frontend source confined to scripts."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s15 browser closure",
+      "checkedAt": "2026-08-13T04:26:52.367Z",
+      "notes": "All route limits pass; TypeScript compiler is absent from browser files and measured closures remain at or below baseline."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The exemplar now has immutable build-time inputs: exact source files, deterministic revision hashes, zero TypeScript diagnostics, and serializable below/at/above behavior cases."
+    "summary": "A narrow build-only TypeScript frontend now produces deterministic serializable syntax spans and typed diagnostics; it rejects bad source, exposes no execution hook, and adds zero browser compiler closure."
   }
 }
