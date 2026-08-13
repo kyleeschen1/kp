@@ -165,7 +165,8 @@
     {
       "id": "s20",
       "title": "Extract source projection seam",
-      "status": "planned"
+      "summary": "Extracted and verified the second approved common seam: exact complete-source composition and range rebasing, without absorbing TypeScript or Python projection recipes.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -293,11 +293,32 @@
       "scope": "s19 semantic authority boundary",
       "checkedAt": "2026-08-13T19:11:55.147Z",
       "notes": "The shared protocol owns roles and exact spans only; tokenization and semantic identity remain language-owned."
+    },
+    {
+      "command": "npm test -- focused code source projection and token protocol suites",
+      "status": "passed",
+      "scope": "s20 complete-source composition and exact range rebasing",
+      "checkedAt": "2026-08-13T19:17:18.485Z",
+      "notes": "Focused projection tests pass inside the complete repository test command; fragment validation, exact token spans, uniqueness, caller whitespace, and immutable rebasing are protected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 generic source projection types",
+      "checkedAt": "2026-08-13T19:17:22.057Z",
+      "notes": "The projection seam preserves caller-specific entity and token evidence through generic rebasing."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 semantic and presentation boundaries",
+      "checkedAt": "2026-08-13T19:17:25.255Z",
+      "notes": "The shared seam owns composition mechanics only; no language frontend, semantic model, or renderer dependency crossed the boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A shared code syntax-role and exact source-token protocol now serves TypeScript and Python. The protocol validates ordered half-open source spans but does not parse code, infer bindings, or own language identity."
+    "summary": "A framework-neutral complete-source projection seam now validates fragments, preserves caller whitespace and evidence, rebases exact entity and token ranges, and rejects duplicate identity. Language-specific recipes remain untouched pending caller migrations."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",
