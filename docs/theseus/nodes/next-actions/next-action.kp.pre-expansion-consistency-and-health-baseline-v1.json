@@ -1,0 +1,66 @@
+{
+  "id": "next-action.kp.pre-expansion-consistency-and-health-baseline-v1",
+  "kind": "next-action",
+  "title": "Establish pre-expansion consistency and health baseline",
+  "status": "ready",
+  "domain": "kp-architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-pre-expansion-consistency-health-long-loop.md",
+      "summary": "Approved rationale, ordered slices, preservation boundary, verification cadence, and stop conditions."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.governed-semantic-animation-grammar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether KP now exposes one reliable extension path that fresh LLMs can use without rediscovering obsolete APIs.",
+    "Which remaining size reflects justified vocabulary rather than inconsistent authorities or duplicated compatibility."
+  ],
+  "allowedWork": [
+    "Audit and enforce canonical extension paths, runtime ownership, compatibility evidence, public seams, impact verification, and bounded health gates.",
+    "Repair the existing catalogue CLS defect without changing approved appearance or interaction."
+  ],
+  "disallowedWork": [
+    "Do not modify user-owned economics source or generated publication, unrelated untracked documents, or deferred product and layout work."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-extension-path",
+      "weight": "high"
+    },
+    {
+      "id": "release-gates-green",
+      "weight": "high"
+    },
+    {
+      "id": "runtime-authorities-classified",
+      "weight": "high"
+    },
+    {
+      "id": "compatibility-growth-closed",
+      "weight": "high"
+    },
+    {
+      "id": "llm-generation-measured",
+      "weight": "high"
+    },
+    {
+      "id": "preservation-intact",
+      "weight": "high"
+    }
+  ]
+}

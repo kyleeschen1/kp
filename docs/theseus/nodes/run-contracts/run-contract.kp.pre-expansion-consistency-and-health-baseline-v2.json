@@ -1,0 +1,181 @@
+{
+  "id": "run-contract.kp.pre-expansion-consistency-and-health-baseline-v2",
+  "kind": "run-contract",
+  "title": "Pre-expansion consistency and health baseline",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.pre-expansion-consistency-and-health-baseline-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-12-pre-expansion-consistency-health-long-loop.md",
+      "summary": "User-approved 26-slice health rationale, order, LLM benchmark, preservation boundary, verification policy, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:browser:animation-equation-capability",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Audit and enforce canonical extension paths, ownership, public seams, runtime authorities, compatibility evidence, and impact verification.",
+    "Repair catalogue equation and graph stage reservation while preserving visible choreography and existing thresholds.",
+    "Migrate legacy equation presentation metadata to existing typed profiles and delete only proven last-caller compatibility.",
+    "Add bounded health commands, negative fixtures, release evidence, and fresh LLM generation benchmarks."
+  ],
+  "disallowedWork": [
+    "Do not modify user-owned economics source or generated publication, or unrelated untracked documents.",
+    "No layout pruning quota, visual redesign, TypeScript or Python exemplar, matrix or curriculum expansion, Graph3D promotion, SvelteKit migration, public projection choice, universal scene graph, package reorganization, repository-wide deep-import rewrite, or full timeline unification."
+  ],
+  "goal": "Reduce KP's effective decision surface, repair known health defects, align standards with executable APIs, and prove whether established animation vocabulary is materially easier for a fresh LLM to compose.",
+  "target": "next-action.kp.pre-expansion-consistency-and-health-baseline-v1",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit each independently reversible verified slice with completed Theseus evidence; never stage user-owned economics files or unrelated documents.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop for an unexplained semantic or visual regression, loss of static or accessibility behavior, invalid provenance, unsafe persistence, threshold relaxation, or a second runtime authority.",
+    "Stop at a human checkpoint if the catalogue repair requires subjective visual judgment or changes approved choreography.",
+    "Stop if compatibility cannot be retired without an unplanned migration, bundle growth is unbounded, protected user files overlap, or work expands beyond the approved scope."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Capture pre-expansion baseline",
+      "summary": "Captured revision, source/test scale, public seams, classified compatibility, build size, architecture status, exact equation and graph CLS failures, ResizeObserver symptom, and protected dirty-file hashes in an immutable baseline.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Classify regression families",
+      "summary": "Classified five evidence-backed regression families: representation substitution, semantic-identity substitution, late visual proof, lifecycle/reservation churn, and timing-policy leakage; assigned each to typed, architecture, browser, or human gates.",
+      "status": "complete"
+    },
+    {
+      "id": "s03",
+      "title": "Audit canonical extension path",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Reconcile current instructions",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Inventory public APIs and deep imports",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Inventory runtime authorities",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Strengthen compatibility evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Attribute catalogue layout shifts",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Repair equation-stage reservation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Repair graph-stage reservation if shared",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Verify capability and performance closure",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Migrate linear solve typed profile",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Forbid new legacy recipe authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Prove legacy decoder reachability",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Retire proven legacy recipe paths",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Move presentation profile ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Resolve sampled payload ownership debt",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Ratchet touched public seams",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Standardize equivalent capability packs",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Standardize typed failure boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Expand impact verification mapping",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Consolidate redundant touched tests",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add negative health fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Add pre-expansion health commands",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run complete release matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Benchmark LLM generation and close out",
+      "status": "planned"
+    }
+  ]
+}
