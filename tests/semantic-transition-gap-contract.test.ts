@@ -251,5 +251,5 @@ function assertGap(
   assert.equal(result.diagnostics[0]?.code, diagnosticCode);
   assert.equal(result.gap?.reason, reason);
   assert.equal(result.gap?.repair.kind, repairKind);
-  assert.equal(result.fallback, undefined);
+  assert.equal("fallback" in result, false);
 }

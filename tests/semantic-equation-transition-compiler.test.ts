@@ -333,7 +333,7 @@ test("compile result selects semantic rendering only with total selector lifecyc
   }).status, "semantic");
 });
 
-test("compile result diagnoses incomplete correspondence and whole-equation fallback", () => {
+test("compile result diagnoses incomplete correspondence as a typed gap by default", () => {
   const transformation = createKpSemanticTransformation({
     id: "transform.partial-lifecycle",
     transformType: "simplify",
@@ -353,11 +353,10 @@ test("compile result diagnoses incomplete correspondence and whole-equation fall
     bundle
   });
 
-  assert.equal(result.status, "fallback");
-  assert.equal(result.fallback?.kind, "whole-equation-fade");
-  assert.deepEqual(result.fallback?.reasons, [
-    "semantic-transition.incomplete-lifecycle"
-  ]);
+  assert.equal(result.status, "gap");
+  assert.equal(result.gap?.reason, "incomplete-lifecycle");
+  assert.equal(result.gap?.repair.kind, "supply-correspondence");
+  assert.equal("fallback" in result, false);
   assert.match(result.diagnostics[0]?.message ?? "", /before.equals/);
 });
 
@@ -385,7 +384,7 @@ test("generated compilation exposes an incomplete lifecycle as a typed gap witho
   assert.equal(result.status, "gap");
   assert.equal(result.gap?.reason, "incomplete-lifecycle");
   assert.equal(result.gap?.repair.kind, "supply-correspondence");
-  assert.equal(result.fallback, undefined);
+  assert.equal("fallback" in result, false);
 });
 
 test("compile result classifies missing definition bindings", () => {
@@ -413,7 +412,9 @@ test("compile result classifies missing definition bindings", () => {
     definition
   });
 
-  assert.equal(result.status, "fallback");
+  assert.equal(result.status, "gap");
+  assert.equal(result.gap?.reason, "missing-definition-binding");
+  assert.equal(result.gap?.repair.kind, "bind-operation");
   assert.equal(
     result.diagnostics[0]?.code,
     "semantic-transition.missing-definition-binding"

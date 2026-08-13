@@ -20,9 +20,7 @@ import {
   type KpEquationTransitionIrState
 } from "./equation-transition-ir.ts";
 import {
-  adaptKpSemanticTransitionGapToLegacyFade,
   createKpSemanticTransitionGap,
-  type KpLegacyEquationFadeFallback,
   type KpSemanticTransitionGap,
   type KpSemanticTransitionGapReason
 } from "../semantic/semantic-transition-gap.ts";
@@ -33,7 +31,8 @@ export interface CompileKpSemanticEquationTransitionInput {
   readonly definition?: KpSemanticTransformationDefinition | undefined;
   readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
   readonly operationExecution?: KpCanonicalOperationExecutionResult | undefined;
-  readonly unsupportedPolicy?: "typed-gap" | "legacy-fade" | undefined;
+  /** @deprecated Typed gaps are now unconditional; omit this migration shim. */
+  readonly unsupportedPolicy?: "typed-gap" | undefined;
 }
 
 export type KpSemanticEquationTransitionCompileDiagnosticCode =
@@ -52,11 +51,12 @@ export interface KpSemanticEquationTransitionCompileDiagnostic {
 }
 
 export interface KpSemanticEquationTransitionCompileResult {
-  readonly status: "semantic" | "gap" | "fallback";
+  // The former legacy-fade result is intentionally absent: unsupported
+  // transitions remain inspectable authoring gaps rather than hidden motion.
+  readonly status: "semantic" | "gap";
   readonly ir?: KpEquationTransitionIr | undefined;
   readonly diagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
   readonly gap?: KpSemanticTransitionGap | undefined;
-  readonly fallback?: KpLegacyEquationFadeFallback | undefined;
 }
 
 export function compileKpSemanticEquationTransitionResult(
@@ -178,20 +178,11 @@ function unsupportedResult(
     reason: gapReason(diagnostics[0]?.code),
     diagnostics
   });
-  if (input.unsupportedPolicy === "typed-gap") {
-    return {
-      status: "gap",
-      ...(ir === undefined ? {} : { ir }),
-      diagnostics,
-      gap
-    };
-  }
   return {
-    status: "fallback",
+    status: "gap",
     ...(ir === undefined ? {} : { ir }),
     diagnostics,
-    gap,
-    fallback: adaptKpSemanticTransitionGapToLegacyFade(gap)
+    gap
   };
 }
 

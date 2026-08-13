@@ -165,10 +165,31 @@
       "scope": "s08 typed gap contracts",
       "checkedAt": "2026-08-13T04:04:01.103Z",
       "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test five semantic equation suites",
+      "status": "passed",
+      "scope": "s09 typed-gap default",
+      "checkedAt": "2026-08-13T04:07:34.393Z",
+      "notes": "27 of 27 pass; supported transforms remain semantic and unsupported transforms return typed gaps without fallback payloads."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 compiler result shape",
+      "checkedAt": "2026-08-13T04:07:37.091Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass after removing fallback from the result union."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 compatibility boundary",
+      "checkedAt": "2026-08-13T04:07:38.786Z",
+      "notes": "All architecture boundaries pass; the deprecated typed-gap-only migration shim retains temporary ledger evidence without restoring fallback behavior."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Every semantic transition gap now has a deterministic repair class; compiler fixtures preserve missing, partial, binding, reference, correspondence, and unknown-failure diagnostics."
+    "summary": "The semantic equation compiler no longer defaults to legacy fading and cannot return a fallback-shaped result; unsupported transitions always expose typed gap diagnostics and repair instructions."
   }
 }

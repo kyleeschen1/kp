@@ -97,7 +97,8 @@
     {
       "id": "s09",
       "title": "Remove fallback policy",
-      "status": "planned"
+      "summary": "Removed implicit legacy-fade behavior and the fallback result branch; typed gaps are unconditional, with only a deprecated typed-gap input shim retained for bounded caller migration in s10.",
+      "status": "complete"
     },
     {
       "id": "s10",
