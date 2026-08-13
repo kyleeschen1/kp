@@ -161,8 +161,7 @@ export function projectKpReaderEquationRenderPlan(input: {
 
     const compiled = compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle: input.animation.bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle: input.animation.bundle
     });
     if (compiled.ir === undefined) {
       diagnostics.push({

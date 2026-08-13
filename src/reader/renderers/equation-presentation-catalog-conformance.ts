@@ -214,8 +214,7 @@ export function checkKpEquationPresentationCatalog(
       const transformation = transformations.get(transformationId)!;
       const semantic = compileKpSemanticEquationTransitionResult({
         transformation,
-        bundle: animation.bundle,
-        unsupportedPolicy: "typed-gap"
+        bundle: animation.bundle
       });
       if (semantic.ir === undefined) {
         exclusions.push(Object.freeze({

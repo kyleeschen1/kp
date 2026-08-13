@@ -103,7 +103,8 @@
     {
       "id": "s10",
       "title": "Delete legacy adapter",
-      "status": "planned"
+      "summary": "Deleted the typed-gap policy shim and legacy fade adapter/type, migrated every explicit production and test caller, and retained green compiler, choreography, reader, asset, and type checks.",
+      "status": "complete"
     },
     {
       "id": "s11",

@@ -88,8 +88,7 @@ test("split and merge own total reversible selector lineage", () => {
 
     const compiled = compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle: asset.bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle: asset.bundle
     });
     assert.equal(compiled.status, "semantic", transformation.id);
   }

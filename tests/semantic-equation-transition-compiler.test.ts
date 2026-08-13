@@ -377,8 +377,7 @@ test("generated compilation exposes an incomplete lifecycle as a typed gap witho
 
   const result = compileKpSemanticEquationTransitionResult({
     transformation,
-    bundle,
-    unsupportedPolicy: "typed-gap"
+    bundle
   });
 
   assert.equal(result.status, "gap");

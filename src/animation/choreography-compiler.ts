@@ -95,8 +95,7 @@ export function compileKpChoreographyPlan(input: {
   const gaps: KpChoreographyCompileGap[] = [];
   const transition = compileKpSemanticEquationTransitionResult({
     transformation: input.transformation,
-    bundle: input.bundle,
-    unsupportedPolicy: "typed-gap"
+    bundle: input.bundle
   });
   if (transition.status !== "semantic" || transition.ir === undefined) {
     return {

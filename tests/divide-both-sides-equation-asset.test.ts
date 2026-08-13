@@ -95,8 +95,7 @@ test("divide-both-sides trace owns every selector through total reversible corre
 
     const compiled = compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle: asset.bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle: asset.bundle
     });
     assert.equal(compiled.status, "semantic", transformation.id);
     assert.ok(compiled.ir, transformation.id);

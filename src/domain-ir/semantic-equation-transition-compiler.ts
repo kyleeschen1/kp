@@ -31,8 +31,6 @@ export interface CompileKpSemanticEquationTransitionInput {
   readonly definition?: KpSemanticTransformationDefinition | undefined;
   readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
   readonly operationExecution?: KpCanonicalOperationExecutionResult | undefined;
-  /** @deprecated Typed gaps are now unconditional; omit this migration shim. */
-  readonly unsupportedPolicy?: "typed-gap" | undefined;
 }
 
 export type KpSemanticEquationTransitionCompileDiagnosticCode =

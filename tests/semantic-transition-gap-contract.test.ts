@@ -101,8 +101,7 @@ test("compiler preserves typed diagnostics for missing and partial correspondenc
   assertGap(
     compileKpSemanticEquationTransitionResult({
       transformation: missing,
-      bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle
     }),
     "semantic-transition.no-correspondence",
     "missing-correspondence",
@@ -111,8 +110,7 @@ test("compiler preserves typed diagnostics for missing and partial correspondenc
   assertGap(
     compileKpSemanticEquationTransitionResult({
       transformation: partial,
-      bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle
     }),
     "semantic-transition.incomplete-lifecycle",
     "incomplete-lifecycle",
@@ -143,8 +141,7 @@ test("compiler preserves typed diagnostics for missing definition bindings", () 
     compileKpSemanticEquationTransitionResult({
       transformation,
       bundle,
-      definition,
-      unsupportedPolicy: "typed-gap"
+      definition
     }),
     "semantic-transition.missing-definition-binding",
     "missing-definition-binding",
@@ -165,8 +162,7 @@ test("compiler preserves typed diagnostics for invalid references", () => {
   assertGap(
     compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle
     }),
     "semantic-transition.invalid-reference",
     "invalid-reference",
@@ -192,8 +188,7 @@ test("compiler preserves typed diagnostics for invalid correspondence", () => {
   assertGap(
     compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle
     }),
     "semantic-transition.invalid-correspondence",
     "invalid-correspondence",
@@ -232,8 +227,7 @@ test("compiler preserves a typed author-operation repair for unknown failures", 
     compileKpSemanticEquationTransitionResult({
       transformation,
       bundle,
-      operationExecution,
-      unsupportedPolicy: "typed-gap"
+      operationExecution
     }),
     "semantic-transition.compile-failed",
     "compile-failed",

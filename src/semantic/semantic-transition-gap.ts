@@ -26,11 +26,6 @@ export interface KpSemanticTransitionGap {
   };
 }
 
-export interface KpLegacyEquationFadeFallback {
-  readonly kind: "whole-equation-fade";
-  readonly reasons: readonly string[];
-}
-
 export function createKpSemanticTransitionGap(input: {
   readonly transformationId: string;
   readonly reason: KpSemanticTransitionGapReason;
@@ -47,16 +42,6 @@ export function createKpSemanticTransitionGap(input: {
       kind: repairKind(input.reason),
       targetId: input.transformationId
     }
-  };
-}
-
-// Generic fading remains available only through this named compatibility edge.
-export function adaptKpSemanticTransitionGapToLegacyFade(
-  gap: KpSemanticTransitionGap
-): KpLegacyEquationFadeFallback {
-  return {
-    kind: "whole-equation-fade",
-    reasons: [...new Set(gap.diagnostics.map((diagnostic) => diagnostic.code))]
   };
 }
 

@@ -154,8 +154,7 @@ function compileValidatedDraft(
     ? transformations.map((transformation) =>
         compileKpSemanticEquationTransitionResult({
           transformation,
-          bundle,
-          unsupportedPolicy: "typed-gap"
+          bundle
         })
       )
     : [];

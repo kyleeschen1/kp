@@ -25,8 +25,7 @@ test("fractional equation asset owns every structural fragment through six rever
     assert.deepEqual(validateKpSemanticTransformation(transformation, asset.bundle), []);
     const compiled = compileKpSemanticEquationTransitionResult({
       transformation,
-      bundle: asset.bundle,
-      unsupportedPolicy: "typed-gap"
+      bundle: asset.bundle
     });
     assert.equal(compiled.status, "semantic", transformation.id);
     assert.ok(compiled.ir, transformation.id);

@@ -186,10 +186,31 @@
       "scope": "s09 compatibility boundary",
       "checkedAt": "2026-08-13T04:07:38.786Z",
       "notes": "All architecture boundaries pass; the deprecated typed-gap-only migration shim retains temporary ledger evidence without restoring fallback behavior."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test nine semantic caller suites",
+      "status": "passed",
+      "scope": "s10 caller migration",
+      "checkedAt": "2026-08-13T04:10:23.232Z",
+      "notes": "32 of 32 pass across compiler, choreography, generated draft, reader render, catalog conformance, and three equation assets."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 deleted adapter and input",
+      "checkedAt": "2026-08-13T04:10:24.549Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass with no migrated caller using the removed policy."
+    },
+    {
+      "command": "rg exact legacy adapter type policy across src and tests",
+      "status": "passed",
+      "scope": "s10 deletion reachability",
+      "checkedAt": "2026-08-13T04:10:25.786Z",
+      "notes": "Zero adapter, legacy fallback type, or unsupportedPolicy references remain outside the compatibility ledger scheduled for s11."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The semantic equation compiler no longer defaults to legacy fading and cannot return a fallback-shaped result; unsupported transitions always expose typed gap diagnostics and repair instructions."
+    "summary": "All compiler callers now use the same unconditional typed-gap contract; the legacy fade adapter, payload type, and caller policy argument are deleted without replacement bridges."
   }
 }
