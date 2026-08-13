@@ -233,7 +233,9 @@
   --kp-code-property: #76afbf;
   --kp-code-type: #c0965b;
   --kp-code-boolean: #319aaa;
-  --kp-code-number: #9cbd6f;
+  /* Numbers retain their syntax role while yielding chromatic emphasis to
+     instructional focus and more meaningful lexical distinctions. */
+  --kp-code-number: var(--kp-code-foreground);
   --kp-code-string: #82b0ec;
   --kp-code-comment: #db7b5f;
   --kp-code-delimiter: #989898;
@@ -438,7 +440,7 @@
   --kp-code-property: #76afbf;
   --kp-code-type: #c0965b;
   --kp-code-boolean: #319aaa;
-  --kp-code-number: #9cbd6f;
+  --kp-code-number: var(--kp-code-foreground);
   --kp-code-string: #82b0ec;
   --kp-code-comment: #db7b5f;
   --kp-code-delimiter: #989898;

@@ -76,7 +76,7 @@ export const kpSchemeFirstExpansionCss = `
   --kp-scheme-accent: var(--kp-lesson-theme-focus, #88c9ff);
   --kp-scheme-code-keyword: var(--kp-code-keyword, #9099d9);
   --kp-scheme-code-function: var(--kp-code-function, #338fff);
-  --kp-scheme-code-number: var(--kp-code-number, #9cbd6f);
+  --kp-scheme-code-number: var(--kp-code-number, var(--kp-scheme-ink));
   --kp-scheme-code-delimiter: var(--kp-code-delimiter, #989898);
   align-items: center;
   background: var(--kp-scheme-bg);

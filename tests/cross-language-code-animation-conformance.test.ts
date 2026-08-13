@@ -148,7 +148,7 @@ test("the approved callers share optical theme tokens without sharing language s
     "--kp-code-foreground: #ede8d0",
     "--kp-code-keyword: #9099d9",
     "--kp-code-function: #338fff",
-    "--kp-code-number: #9cbd6f",
+    "--kp-code-number: var(--kp-code-foreground)",
     "--kp-code-string: #82b0ec",
     "--kp-code-highlight-background: rgb(92 173 255 / 10%)"
   ]) {
@@ -156,4 +156,13 @@ test("the approved callers share optical theme tokens without sharing language s
   }
   assert.match(css, /data-kp-typescript-syntax-kind/u);
   assert.match(css, /data-kp-python-syntax-kind/u);
+
+  const schemeCss = await readFile(
+    new URL("../src/rendering/scheme-factorial-first-expansion-html.ts", import.meta.url),
+    "utf8"
+  );
+  assert.match(
+    schemeCss,
+    /--kp-scheme-code-number: var\(--kp-code-number, var\(--kp-scheme-ink\)\)/u
+  );
 });
