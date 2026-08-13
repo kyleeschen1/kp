@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -52,6 +52,12 @@ test("capability loading and presentation caching do not register on import", ()
   assert.doesNotMatch(capabilityHost, /^registerKpEditor\w+\(\);/m);
   assert.doesNotMatch(presentationCache, /^registerKpOperationPresentationPlan\(/m);
   assert.match(presentationCache, /new WeakMap/);
+  for (const pack of readdirSync("src/animation/catalog-packs")) {
+    if (!pack.endsWith(".ts")) continue;
+    const source = readFileSync(`src/animation/catalog-packs/${pack}`, "utf8");
+    assert.doesNotMatch(source, /surface-register/);
+    assert.doesNotMatch(source, /\.\.\/\.\.\/editor\//);
+  }
 });
 
 test("sampling, clock arbitration, and frame delivery remain distinct", () => {

@@ -5,8 +5,26 @@ import test from "node:test";
 import {
   deriveKpEditorSelectedSurfaceCapabilities
 } from "../src/editor/selected-surface-capability.ts";
+import {
+  createKpEditorSelectedSurfaceCapabilityHost
+} from "../src/editor/selected-surface-capability-host.ts";
+import {
+  createKpEditorAnimationSurfaceAdapterRegistry
+} from "../src/editor/animation-surface-adapter-registry.ts";
 
 test("selected surface capabilities keep rich renderers explicit", () => {
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.exact-fraction-quantity.third-plus-sixth",
+    slotKinds: ["equation"]
+  }), ["exact-fraction-quantity", "equation-katex"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.operation-evaluation.one-plus-two",
+    slotKinds: ["equation"]
+  }), ["operation-evaluation", "equation-katex"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.place-value-addition.278-plus-156",
+    slotKinds: ["diagram"]
+  }), ["place-value-addition"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.linear-solve.solve-x",
     slotKinds: ["equation"]
@@ -33,12 +51,33 @@ test("selected surface capabilities keep rich renderers explicit", () => {
   }), ["equation-katex", "programming-trace"]);
 });
 
+test("specialized surface capabilities register explicitly and idempotently", async () => {
+  const registry = createKpEditorAnimationSurfaceAdapterRegistry();
+  const host = createKpEditorSelectedSurfaceCapabilityHost({ registry });
+
+  await host.loadAll([
+    "exact-fraction-quantity",
+    "operation-evaluation",
+    "place-value-addition",
+    "exact-fraction-quantity"
+  ]);
+
+  assert.deepEqual(registry.list().map(({ id }) => id).sort(), [
+    "editor-animation-surface.exact-fraction-quantity.synchronized",
+    "editor-animation-surface.operation-evaluation.canonical-native-katex",
+    "editor-animation-surface.place-value-addition.synchronized"
+  ]);
+});
+
 test("one capability host owns all dynamic selected-surface imports", async () => {
   const [
     mainSource,
     catalogueSource,
     capabilityHostSource,
     equationCapability,
+    exactQuantityCapability,
+    operationEvaluationCapability,
+    placeValueCapability,
     economicsGraphCapability,
     graphCapability,
     graph3DCapability,
@@ -53,6 +92,9 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     ),
     readFile("src/editor/selected-surface-capability-host.ts", "utf8"),
     readFile("src/editor/equation-surface-capability.ts", "utf8"),
+    readFile("src/editor/exact-fraction-quantity-surface-capability.ts", "utf8"),
+    readFile("src/editor/operation-evaluation-surface-capability.ts", "utf8"),
+    readFile("src/editor/place-value-addition-surface-capability.ts", "utf8"),
     readFile("src/editor/economics-graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-3d-surface-capability.ts", "utf8"),
@@ -77,6 +119,9 @@ test("one capability host owns all dynamic selected-surface imports", async () =
   assert.doesNotMatch(mainSource, /import\(\s*"\.\/editor\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
   assert.doesNotMatch(catalogueSource, /import\(\s*"\.\/(?:equation|graph-svg|graph-3d|programming)-surface-capability\.ts"\s*\)/);
   assert.match(capabilityHostSource, /import\("\.\/equation-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/exact-fraction-quantity-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/operation-evaluation-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/place-value-addition-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/economics-graph-svg-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/graph-svg-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/graph-3d-surface-capability\.ts"\)/);
@@ -86,6 +131,9 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     /loadKpAnimationAsset|window\.|document\.|from "svelte/
   );
   assert.match(equationCapability, /import "katex\/dist\/katex\.min\.css"/);
+  assert.match(exactQuantityCapability, /kpEditorExactFractionQuantitySurfaceAdapter/);
+  assert.match(operationEvaluationCapability, /kpEditorOperationEvaluationSurfaceAdapter/);
+  assert.match(placeValueCapability, /kpEditorPlaceValueAdditionSurfaceAdapter/);
   assert.doesNotMatch(economicsGraphCapability, /katex|three|matrix|physics/i);
   assert.match(
     economicsGraphCapability,

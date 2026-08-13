@@ -24,6 +24,9 @@ export function supportsKpEditorGraphSvgAnimation(
 
 export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"
+  | "exact-fraction-quantity"
+  | "operation-evaluation"
+  | "place-value-addition"
   | "graph-svg-economics"
   | "graph-svg-katex-labels"
   | "graph-webgl-3d"
@@ -34,6 +37,16 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   readonly slotKinds: readonly KpEditorAnimationSurfaceSlotKind[];
 }): readonly KpEditorSelectedSurfaceCapability[] {
   const capabilities: KpEditorSelectedSurfaceCapability[] = [];
+  if (
+    input.animationId ===
+      "animation.exact-fraction-quantity.third-plus-sixth"
+  ) capabilities.push("exact-fraction-quantity");
+  if (input.animationId.startsWith("animation.operation-evaluation.")) {
+    capabilities.push("operation-evaluation");
+  }
+  if (
+    input.animationId === "animation.place-value-addition.278-plus-156"
+  ) capabilities.push("place-value-addition");
   if (input.slotKinds.includes("equation")) {
     capabilities.push("equation-katex");
   }

@@ -150,18 +150,20 @@
     {
       "id": "s18",
       "title": "Ratchet touched public seams",
-      "summary": "Ratchet the newly migrated presentation-policy seam and touched production callers against renderer-owner and legacy-decoder bypasses.",
-      "status": "in-progress"
+      "summary": "Added the neutral equation presentation policy to the executable caller ledger with an exact 13-caller source set, no renderer imports, and tombstones for the old renderer policy and decoder paths. Focused seam tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s19",
       "title": "Standardize equivalent capability packs",
-      "status": "planned"
+      "summary": "Made all catalog packs data-only; moved exact quantity, operation evaluation, and place value surface registration behind explicit injected lazy capabilities; added all-pack import-side-effect ratchet. Focused tests, typecheck, architecture, and bundle boundary pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
       "title": "Standardize typed failure boundaries",
-      "status": "planned"
+      "summary": "Auditing authoring, asset, preparation, and capability failure semantics for typed failure and preservation of last valid state.",
+      "status": "in-progress"
     },
     {
       "id": "s21",

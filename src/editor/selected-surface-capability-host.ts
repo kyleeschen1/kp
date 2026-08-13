@@ -72,6 +72,33 @@ async function loadCapability(
     );
     return;
   }
+  if (capability === "exact-fraction-quantity") {
+    const client = await import("./exact-fraction-quantity-surface-capability.ts");
+    registerOnce(
+      registry,
+      "editor-animation-surface.exact-fraction-quantity.synchronized",
+      () => client.registerKpEditorExactFractionQuantitySurfaceCapability(registry)
+    );
+    return;
+  }
+  if (capability === "operation-evaluation") {
+    const client = await import("./operation-evaluation-surface-capability.ts");
+    registerOnce(
+      registry,
+      "editor-animation-surface.operation-evaluation.canonical-native-katex",
+      () => client.registerKpEditorOperationEvaluationSurfaceCapability(registry)
+    );
+    return;
+  }
+  if (capability === "place-value-addition") {
+    const client = await import("./place-value-addition-surface-capability.ts");
+    registerOnce(
+      registry,
+      "editor-animation-surface.place-value-addition.synchronized",
+      () => client.registerKpEditorPlaceValueAdditionSurfaceCapability(registry)
+    );
+    return;
+  }
   if (capability === "graph-webgl-3d") {
     const client = await import("./graph-3d-surface-capability.ts");
     registerOnce(
