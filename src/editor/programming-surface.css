@@ -246,9 +246,12 @@
     SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   white-space: pre-wrap;
   tab-size: 2;
+  opacity: var(--kp-typescript-revision-opacity, 1);
+  transform: scale(var(--kp-typescript-revision-scale, 1));
+  transform-origin: 50% 50%;
 }
 
-.kp-typescript-refactor__revision[data-kp-typescript-revision-current="false"] {
+.kp-typescript-refactor__revision[data-kp-typescript-projection-visible="false"] {
   visibility: hidden;
 }
 
@@ -258,8 +261,17 @@
 }
 
 .kp-typescript-refactor [data-kp-typescript-focus="true"] {
-  color: #fff;
-  text-shadow: 0 0 0.55rem rgb(207 229 255 / 18%);
+  color: color-mix(
+    in srgb,
+    #d9dce5,
+    #fff var(--kp-typescript-focus-percent, 0%)
+  );
+  text-shadow: 0 0 0.55rem rgb(207 229 255 / var(--kp-typescript-focus-shadow-alpha, 0));
+  background: color-mix(
+    in srgb,
+    transparent,
+    rgb(92 173 255 / 10%) var(--kp-typescript-focus-percent, 0%)
+  );
 }
 
 .kp-typescript-refactor__narration {
@@ -285,4 +297,11 @@
   .kp-typescript-refactor__revision {
     font-size: clamp(0.62rem, 2.6vw, 0.78rem);
   }
+}
+
+/* Timing is sampled by the shared animation clock; CSS only paints values. */
+.kp-typescript-refactor,
+.kp-typescript-refactor * {
+  animation: none;
+  transition: none;
 }

@@ -2,6 +2,8 @@ import { createKpTypeScriptFreeShippingAnimationAsset } from
   "../semantic/typescript-free-shipping-animation-asset.ts";
 import { sampleKpTypeScriptRefactorScore } from
   "../semantic/typescript-refactor-score.ts";
+import { sampleKpTypeScriptRefactorMotionFrame } from
+  "../animation/typescript-refactor-motion-frame.ts";
 import { renderKpTypeScriptRefactorCodeHtml } from
   "../rendering/typescript-refactor-code-html.ts";
 import {
@@ -29,13 +31,18 @@ export const kpEditorTypeScriptRefactorSurfaceAdapter:
         exemplar.score,
         state.progress * exemplar.score.durationMs
       );
+      const motion = sampleKpTypeScriptRefactorMotionFrame({
+        score: exemplar.score,
+        progress: state.progress,
+        reducedMotion: frameMode(player) !== "animated"
+      });
       let shell = sessions.get(player);
       if (shell === undefined) {
         slot.innerHTML = renderKpTypeScriptRefactorCodeHtml({
           semantics: exemplar.semantics,
           stageId: sample.stageId,
           narration: sample.narration,
-          activeRevision: activeRevision(sample.stageId),
+          activeProjectionId: motion.accessibleProjectionId,
           focusSelectorIds: sample.focusSelectorIds,
           accessibleDescription: accessibleDescription(sample.narration)
         });
@@ -51,7 +58,7 @@ export const kpEditorTypeScriptRefactorSurfaceAdapter:
           );
         }
       }
-      syncShell(shell, sample.stageId, sample.narration, sample.focusSelectorIds);
+      syncShell(shell, motion);
       slot.dataset["kpEditorProgrammingContract"] = "kp.typescript-refactor-score.v1";
     }
   };
@@ -64,38 +71,54 @@ export function registerKpEditorTypeScriptRefactorSurfaceAdapter(): () => void {
 
 function syncShell(
   shell: HTMLElement,
-  stageId: string,
-  narration: string,
-  focusSelectorIds: readonly string[]
+  motion: ReturnType<typeof sampleKpTypeScriptRefactorMotionFrame>
 ): void {
-  const revision = activeRevision(stageId);
-  shell.dataset["kpTypeScriptRefactorStage"] = stageId;
-  shell.dataset["kpTypescriptActiveRevision"] = revision;
-  shell.querySelectorAll<HTMLElement>("[data-kp-typescript-revision]").forEach((node) => {
-    const current = node.dataset["kpTypescriptRevision"] === revision;
-    node.dataset["kpTypescriptRevisionCurrent"] = String(current);
+  shell.dataset["kpTypeScriptRefactorStage"] = motion.stage.stageId;
+  shell.dataset["kpTypescriptActiveProjection"] = motion.accessibleProjectionId;
+  shell.dataset["kpTypescriptMotionMode"] = motion.reducedMotion ? "reduced" : "full";
+  shell.querySelectorAll<HTMLElement>("[data-kp-typescript-projection-id]").forEach((node) => {
+    const projection = motion.projections.find(
+      ({ id }) => id === node.dataset["kpTypescriptProjectionId"]
+    );
+    if (projection === undefined) return;
+    const current = projection.id === motion.accessibleProjectionId;
+    node.dataset["kpTypescriptProjectionCurrent"] = String(current);
+    node.dataset["kpTypescriptProjectionVisible"] = String(projection.opacity > 0);
+    node.style.setProperty("--kp-typescript-revision-opacity", String(projection.opacity));
+    node.style.setProperty("--kp-typescript-revision-scale", String(projection.scale));
+    node.style.pointerEvents = current ? "auto" : "none";
     node.toggleAttribute("inert", !current);
     if (current) node.removeAttribute("aria-hidden");
     else node.setAttribute("aria-hidden", "true");
   });
-  const focus = new Set(focusSelectorIds);
+  const focus = new Set(motion.stage.focusSelectorIds);
   shell.querySelectorAll<HTMLElement>("[data-kp-typescript-selector-id]").forEach((node) => {
-    node.dataset["kpTypescriptFocus"] = String(
-      focus.has(node.dataset["kpTypescriptSelectorId"] ?? "")
+    const focused = focus.has(node.dataset["kpTypescriptSelectorId"] ?? "");
+    node.dataset["kpTypescriptFocus"] = String(focused);
+    node.style.setProperty(
+      "--kp-typescript-focus-strength",
+      String(focused ? motion.focusStrength : 0)
+    );
+    node.style.setProperty(
+      "--kp-typescript-focus-percent",
+      `${focused ? motion.focusStrength * 100 : 0}%`
+    );
+    node.style.setProperty(
+      "--kp-typescript-focus-shadow-alpha",
+      String(focused ? motion.focusStrength * 0.18 : 0)
     );
   });
   shell.querySelector<HTMLElement>("[data-kp-typescript-narration]")
-    ?.replaceChildren(shell.ownerDocument.createTextNode(narration));
-  const description = accessibleDescription(narration);
+    ?.replaceChildren(shell.ownerDocument.createTextNode(motion.stage.narration));
+  const description = accessibleDescription(motion.stage.narration);
   shell.setAttribute("aria-label", description);
   shell.querySelector<HTMLElement>("[data-kp-typescript-accessible-state]")
     ?.replaceChildren(shell.ownerDocument.createTextNode(description));
 }
 
-function activeRevision(stageId: string): "before" | "after" {
-  return stageId === "stage.orient" || stageId === "stage.compare-duplicates"
-    ? "before"
-    : "after";
+function frameMode(player: HTMLElement): "animated" | "reduced-motion" | "static" {
+  const mode = player.dataset["kpEditorAnimationAccessibilityMode"];
+  return mode === "static" || mode === "reduced-motion" ? mode : "animated";
 }
 
 function accessibleDescription(narration: string): string {

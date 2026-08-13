@@ -181,7 +181,8 @@
     {
       "id": "s23",
       "title": "Add deterministic motion",
-      "status": "planned"
+      "summary": "Added deterministic motion over four compiler-derived source projections so the helper settles before the price call, which settles before the message call; CSS owns paint only, direct seek and rewind are stable, and focused, type, and architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

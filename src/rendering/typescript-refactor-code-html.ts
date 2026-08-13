@@ -2,12 +2,18 @@ import type {
   KpTypeScriptRefactorSemanticArtifactV1,
   KpTypeScriptSemanticEntity
 } from "../semantic/typescript-refactor-semantic-model.ts";
+import {
+  createKpTypeScriptRefactorSourceProjections,
+  type KpTypeScriptProjectedEntity,
+  type KpTypeScriptRefactorSourceProjection,
+  type KpTypeScriptRefactorSourceProjectionId
+} from "../semantic/typescript-refactor-source-projections.ts";
 
 export interface KpTypeScriptRefactorCodeHtmlInput {
   readonly semantics: KpTypeScriptRefactorSemanticArtifactV1;
   readonly stageId: string;
   readonly narration: string;
-  readonly activeRevision: "before" | "after";
+  readonly activeProjectionId: KpTypeScriptRefactorSourceProjectionId;
   readonly focusSelectorIds: readonly string[];
   readonly accessibleDescription: string;
 }
@@ -15,12 +21,13 @@ export interface KpTypeScriptRefactorCodeHtmlInput {
 export function renderKpTypeScriptRefactorCodeHtml(
   input: KpTypeScriptRefactorCodeHtmlInput
 ): string {
-  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${escapeAttribute(input.stageId)}" data-kp-typescript-active-revision="${input.activeRevision}" aria-label="${escapeAttribute(input.accessibleDescription)}">
+  const projections = createKpTypeScriptRefactorSourceProjections(input.semantics);
+  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${escapeAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" aria-label="${escapeAttribute(input.accessibleDescription)}">
     <header class="kp-typescript-refactor__file"><span>free-shipping.ts</span><span>TypeScript</span></header>
     <div class="kp-typescript-refactor__source" data-kp-typescript-source-owner>
-      ${input.semantics.revisions.map((revision) => renderRevision({
-        revision,
-        current: revision.revision === input.activeRevision,
+      ${projections.map((projection) => renderProjection({
+        projection,
+        current: projection.id === input.activeProjectionId,
         focusSelectorIds: input.focusSelectorIds
       })).join("")}
     </div>
@@ -57,11 +64,32 @@ function renderRevision(input: {
 }
 
 interface EntityTreeNode {
-  readonly entity: KpTypeScriptSemanticEntity;
+  readonly entity: KpTypeScriptSemanticEntity | KpTypeScriptProjectedEntity;
   readonly children: EntityTreeNode[];
 }
 
-function entityTree(entities: readonly KpTypeScriptSemanticEntity[]): readonly EntityTreeNode[] {
+function renderProjection(input: {
+  readonly projection: KpTypeScriptRefactorSourceProjection;
+  readonly current: boolean;
+  readonly focusSelectorIds: readonly string[];
+}): string {
+  const tree = entityTree(input.projection.entities);
+  const code = renderRange(
+    input.projection.sourceText,
+    0,
+    input.projection.sourceText.length,
+    tree,
+    new Set(input.focusSelectorIds)
+  );
+  const rootAttributes = input.projection.rootEntityId === undefined
+    ? `data-kp-typescript-source-projection-id="${escapeAttribute(input.projection.id)}"`
+    : `data-kp-semantic-entity-id="${escapeAttribute(input.projection.rootEntityId)}" data-kp-typescript-selector-id="${escapeAttribute(selectorId(input.projection.rootEntityId))}" data-kp-typescript-entity-kind="source-file"`;
+  return `<pre class="kp-typescript-refactor__revision" data-kp-typescript-projection-id="${escapeAttribute(input.projection.id)}" data-kp-typescript-projection-current="${input.current}" data-kp-typescript-projection-visible="${input.current}" style="--kp-typescript-revision-opacity:${input.current ? 1 : 0};--kp-typescript-revision-scale:1"${input.current ? "" : " aria-hidden=\"true\" inert"}><code ${rootAttributes}>${code}</code></pre>`;
+}
+
+function entityTree(
+  entities: readonly (KpTypeScriptSemanticEntity | KpTypeScriptProjectedEntity)[]
+): readonly EntityTreeNode[] {
   const sorted = [...entities].sort((left, right) =>
     left.sourceRange.startOffset - right.sourceRange.startOffset ||
     right.sourceRange.endOffset - left.sourceRange.endOffset
@@ -112,7 +140,10 @@ function assertNonCrossing(nodes: readonly EntityTreeNode[]): void {
   }
 }
 
-function contains(parent: KpTypeScriptSemanticEntity, child: KpTypeScriptSemanticEntity): boolean {
+function contains(
+  parent: KpTypeScriptSemanticEntity | KpTypeScriptProjectedEntity,
+  child: KpTypeScriptSemanticEntity | KpTypeScriptProjectedEntity
+): boolean {
   return parent.sourceRange.startOffset <= child.sourceRange.startOffset &&
     parent.sourceRange.endOffset >= child.sourceRange.endOffset;
 }

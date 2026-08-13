@@ -396,10 +396,24 @@
       "scope": "s22 native code renderer",
       "checkedAt": "2026-08-13T05:00:54.811Z",
       "notes": "Six of six pass; exact source round-trips, semantic ids are unique per revision, inactive source is inert, and no canvas, SVG, or painted text clone exists."
+    },
+    {
+      "command": "node --test TypeScript source projection, deterministic motion, renderer, surface adapter, and CSS clock suites",
+      "status": "passed",
+      "scope": "s23 deterministic source motion",
+      "checkedAt": "2026-08-13T05:15:27.915Z",
+      "notes": "Nine of nine pass; source stages reveal helper, cost caller, and message caller in authored order with reversible direct sampling and reduced-motion endpoints."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 motion authority",
+      "checkedAt": "2026-08-13T05:15:35.465Z",
+      "notes": "All type and architecture gates pass; source projections derive from compiler spans and CSS owns no time."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The existing programming capability now renders the TypeScript exemplar as exact native selectable source with stable semantic DOM ids, one visible revision owner, inert hidden source, responsive dark styling, and synchronized accessible narration."
+    "summary": "The TypeScript exemplar now samples four compiler-derived native source projections from one clock, revealing the helper and each caller in pedagogical order with reversible handoffs, semantic focus, and reduced-motion endpoints."
   }
 }

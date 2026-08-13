@@ -25,7 +25,7 @@ test("renderer exposes one native owner per revision and no painted clone", () =
     semantics: exemplar.semantics,
     stageId: "stage.compare-duplicates",
     narration: "These two expressions are one rule written in two places.",
-    activeRevision: "before",
+    activeProjectionId: "projection.typescript.before",
     focusSelectorIds: [
       "selector.typescript.rule.shipping-cost.before",
       "selector.typescript.rule.shipping-message.before"
@@ -34,11 +34,13 @@ test("renderer exposes one native owner per revision and no painted clone", () =
   });
 
   assert.equal(count(html, "data-kp-typescript-source-owner"), 1);
-  assert.equal(count(html, "data-kp-typescript-revision=\"before\""), 1);
-  assert.equal(count(html, "data-kp-typescript-revision=\"after\""), 1);
-  assert.equal(count(html, "data-kp-typescript-focus=\"true\""), 2);
+  assert.equal(count(html, "data-kp-typescript-projection-id="), 4);
+  assert.equal(count(html, "data-kp-typescript-projection-current=\"true\""), 1);
+  // Focus is projected into inert neighboring source states so direct seek
+  // never needs to rebuild markup.
+  assert.equal(count(html, "data-kp-typescript-focus=\"true\""), 5);
   assert.doesNotMatch(html, /canvas|svg|painted-clone|aria-label="Source code copy"/);
-  assert.match(html, /data-kp-typescript-revision-current="false" aria-hidden="true" inert/);
+  assert.match(html, /data-kp-typescript-projection-current="false"[^>]+aria-hidden="true" inert/);
 });
 
 function stripTags(value: string): string {
