@@ -256,10 +256,17 @@
       "scope": "s13 contract types",
       "checkedAt": "2026-08-13T04:20:52.744Z",
       "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test TypeScript contract and fixture suites",
+      "status": "passed",
+      "scope": "s14 typed fixtures",
+      "checkedAt": "2026-08-13T04:23:01.475Z",
+      "notes": "Eight of eight pass; exact source hashes are stable, both revisions have zero TypeScript diagnostics, and boundary cases match the contract."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The TypeScript proof now has an immutable pedagogical contract: one novice-readable reason to refactor, exact before and after source, seven authored stages, stable ids, boundary cases, and a no-execution visual authority boundary."
+    "summary": "The exemplar now has immutable build-time inputs: exact source files, deterministic revision hashes, zero TypeScript diagnostics, and serializable below/at/above behavior cases."
   }
 }

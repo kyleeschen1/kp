@@ -127,7 +127,8 @@
     {
       "id": "s14",
       "title": "Add TypeScript fixtures",
-      "status": "planned"
+      "summary": "Added exact before/after TypeScript fixtures, deterministic revision hashes, zero-diagnostic compiler proof, and a serializable three-case behavior fixture tied to the frozen contract.",
+      "status": "complete"
     },
     {
       "id": "s15",
