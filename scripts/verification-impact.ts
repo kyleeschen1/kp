@@ -91,6 +91,36 @@ const checks = {
     "high",
     "Check domain and reader import boundaries."
   ),
+  animationConvergence: check(
+    "semantic-animation-convergence",
+    ["npm", "run", "test:semantic-animation-convergence"],
+    "high",
+    "Exercise typed profiles, sampled frames, clocks, projections, and canonical animation laws."
+  ),
+  catalogueUnit: check(
+    "svelte-catalogue-unit",
+    ["npm", "run", "test:svelte-catalogue-shell"],
+    "medium",
+    "Exercise catalogue selection, lazy capabilities, stage hosting, and navigation."
+  ),
+  catalogueCapabilityBrowser: check(
+    "catalogue-capability-browser",
+    ["npm", "run", "test:browser:animation-equation-capability"],
+    "high",
+    "Prove lazy equation and graph capability loading retains stable stage geometry."
+  ),
+  catalogueBundle: check(
+    "catalogue-bundle-boundary",
+    ["npm", "run", "check:animation-library-bundle-boundary"],
+    "high",
+    "Enforce lazy catalogue and specialized capability payload ceilings."
+  ),
+  publication: check(
+    "economics-publication",
+    ["npm", "run", "check:economics-demand-shift-publication"],
+    "medium",
+    "Prove the checked-in economics publication matches its Article source."
+  ),
   focusedVisual: check(
     "focused-visual",
     ["npm", "run", "visual:linear-equation"],
@@ -193,6 +223,61 @@ const rules: readonly KpVerificationRule[] = [
       checks.productionClosure
     ],
     reason: "A manifest reader source, compiler, runtime, renderer, or build route changed."
+  },
+  {
+    id: "equation-presentation-profile",
+    matches: (path) =>
+      path.includes("equation-presentation-profile") ||
+      path.includes("equation-presentation-policy"),
+    checks: [checks.typecheck, checks.architecture, checks.animationConvergence],
+    reason: "Typed equation presentation policy or profiles changed."
+  },
+  {
+    id: "catalogue-capability",
+    matches: (path) =>
+      path.startsWith("src/animation/catalog-packs/") ||
+      path.includes("catalog-loader") ||
+      path.includes("selected-surface-capability") ||
+      path.includes("animation-catalogue-selection-preparation"),
+    checks: [
+      checks.typecheck,
+      checks.architecture,
+      checks.catalogueUnit,
+      checks.catalogueCapabilityBrowser,
+      checks.catalogueBundle
+    ],
+    reason: "A lazy catalogue data or renderer capability boundary changed."
+  },
+  {
+    id: "catalogue-stage-reservation",
+    matches: (path) =>
+      path.includes("animation-catalogue-font-reservation") ||
+      path.includes("animation-catalogue-shell.css") ||
+      path.includes("KpSvelteCatalogueExemplar.svelte"),
+    checks: [
+      checks.typecheck,
+      checks.catalogueUnit,
+      checks.catalogueCapabilityBrowser,
+      checks.catalogueBundle
+    ],
+    reason: "Catalogue reservation, typography, or persistent stage geometry changed."
+  },
+  {
+    id: "animation-ownership-seam",
+    matches: (path) =>
+      path.startsWith("src/architecture/") ||
+      path.startsWith("scripts/check-semantic-animation-boundaries"),
+    checks: [checks.typecheck, checks.architecture],
+    reason: "An executable animation ownership or compatibility seam changed."
+  },
+  {
+    id: "compiled-publication",
+    matches: (path) =>
+      path.endsWith(".kp.md") ||
+      path.includes("publication.generated.json") ||
+      path.includes("compile-economics-demand-shift-publication"),
+    checks: [checks.publication, checks.typecheck],
+    reason: "Article source or a checked-in compiled publication changed."
   },
   {
     id: "distribution-exemplar",

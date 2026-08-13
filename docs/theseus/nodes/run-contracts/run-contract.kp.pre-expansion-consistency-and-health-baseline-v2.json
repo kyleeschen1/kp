@@ -162,28 +162,32 @@
     {
       "id": "s20",
       "title": "Standardize typed failure boundaries",
-      "summary": "Auditing authoring, asset, preparation, and capability failure semantics for typed failure and preservation of last valid state.",
-      "status": "in-progress"
+      "summary": "Added typed catalog-load, selected-capability, and selection-preparation failures; failed pack/capability promises are retryable; selection preparation remains atomic; both catalogue hosts retain the last valid stage while loading and on failed replacement. 26 focused tests, typecheck, architecture, and diff checks pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
       "title": "Expand impact verification mapping",
-      "status": "planned"
+      "summary": "Added dedicated impact gates for equation presentation policy, lazy catalogue capability boundaries, stable stage reservation, animation ownership seams, and compiled Article publication paths. Sixteen selector/CLI tests and four representative CLI selections pass with no unmatched path.",
+      "status": "complete"
     },
     {
       "id": "s22",
       "title": "Consolidate redundant touched tests",
-      "status": "planned"
+      "summary": "Removed one redundant fixture-level legacy-key assertion now subsumed by the all-25-assets/all-nine-keys authoring ratchet, documented why semantic, architecture, browser, responsive, accessibility, and bundle proofs remain distinct, and retained the earlier decoder-suite deletion. Twenty-five touched tests and diff checks pass.",
+      "status": "complete"
     },
     {
       "id": "s23",
       "title": "Add negative health fixtures",
-      "status": "planned"
+      "summary": "Added executable architecture validators and one synthetic negative fixture suite rejecting a duplicate scoped clock, catalog-pack editor import/import-time registration, legacy recipe metadata, unclassified compatibility, and a neutral-to-renderer import. The architecture gate now runs the reusable validators; negative test, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s24",
       "title": "Add pre-expansion health commands",
-      "status": "planned"
+      "summary": "Added stable health:pre-expansion and health:pre-expansion:release commands. The focused command composes architecture, types, 252 convergence tests, 37 catalogue tests, negative fixtures, bundle ceilings, and publication parity; the release variant adds browser capability proof, full tests, production build, and Theseus validation. Focused health passes.",
+      "status": "complete"
     },
     {
       "id": "s25",

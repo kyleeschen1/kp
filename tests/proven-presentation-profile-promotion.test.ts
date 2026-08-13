@@ -113,7 +113,6 @@ test("fraction and teacher-detail assets retain lineage after typed promotion", 
     sourceTraceId: "trace.algebra-canonical-numerator-split-merge"
   });
   assert.equal(teacherDetail.presentationProfile?.payload.motion, "continuity-v1");
-  assert.equal(teacherDetail.metadata?.["equationMotionPresentationRecipe"], undefined);
   assert.deepEqual(teacherDetail.metadata, {
     sourceAnimationId: "linear-equation-solve-x"
   });

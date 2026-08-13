@@ -10,6 +10,14 @@ import {
 import {
   kpSemanticAnimationCompatibilityLedger
 } from "../src/architecture/semantic-animation-compatibility-ledger.ts";
+import {
+  checkKpCatalogPackPurity,
+  checkKpCompatibilityClassification,
+  checkKpRuntimeAuthorityClassification
+} from "../src/architecture/pre-expansion-health.ts";
+import {
+  kpRuntimeAuthorityInventory
+} from "../src/architecture/runtime-authority-inventory.ts";
 
 const projectRoot = process.cwd();
 const roots = ["src/semantic", "src/animation"] as const;
@@ -44,8 +52,22 @@ const compatibilityViolations = kpSemanticAnimationCompatibilityLedger.flatMap(
     });
   }
 );
+const catalogPackFiles = collectTypeScriptFiles(
+  join(projectRoot, "src/animation/catalog-packs")
+).map((path) => ({
+  path: relative(projectRoot, path),
+  source: readFileSync(path, "utf8")
+}));
+const healthViolations = [
+  ...checkKpRuntimeAuthorityClassification(kpRuntimeAuthorityInventory),
+  ...checkKpCatalogPackPurity(catalogPackFiles),
+  ...checkKpCompatibilityClassification(kpSemanticAnimationCompatibilityLedger)
+];
 
-if (violations.length > 0 || compatibilityViolations.length > 0) {
+if (
+  violations.length > 0 || compatibilityViolations.length > 0 ||
+  healthViolations.length > 0
+) {
   for (const violation of violations) {
     console.error(
       `${violation.kind}: ${violation.sourceFile} -> ` +
@@ -54,6 +76,9 @@ if (violations.length > 0 || compatibilityViolations.length > 0) {
   }
   for (const violation of compatibilityViolations) {
     console.error(`compatibility-status: ${violation}`);
+  }
+  for (const violation of healthViolations) {
+    console.error(`pre-expansion-health: ${violation}`);
   }
   process.exitCode = 1;
 } else {

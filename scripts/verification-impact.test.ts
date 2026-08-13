@@ -69,6 +69,32 @@ test("distribution schedule changes select topology and exemplar gates", () => {
   ]);
 });
 
+test("health-sensitive animation paths select their dedicated gates", () => {
+  const profile = selectKpVerificationImpact([
+    "src/animation/equation-presentation-policy.ts"
+  ]);
+  assert.ok(ids(profile).includes("semantic-animation-convergence"));
+  assert.ok(ids(profile).includes("architecture"));
+
+  const capability = selectKpVerificationImpact([
+    "src/animation/catalog-packs/place-value.ts"
+  ]);
+  assert.ok(ids(capability).includes("svelte-catalogue-unit"));
+  assert.ok(ids(capability).includes("catalogue-capability-browser"));
+  assert.ok(ids(capability).includes("catalogue-bundle-boundary"));
+
+  const reservation = selectKpVerificationImpact([
+    "src/editor/animation-catalogue-font-reservation.ts"
+  ]);
+  assert.ok(ids(reservation).includes("catalogue-capability-browser"));
+
+  const publication = selectKpVerificationImpact([
+    "content/lessons/economics-demand-shift.kp.md"
+  ]);
+  assert.ok(ids(publication).includes("economics-publication"));
+  assert.deepEqual(publication.unmatchedPaths, []);
+});
+
 test("cross-boundary changes union checks without duplication", () => {
   const result = selectKpVerificationImpact([
     "protocols/dev-review-v2.ts",
