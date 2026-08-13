@@ -78,6 +78,18 @@
       "status": "passed",
       "scope": "Python authored contract and repository TypeScript compatibility",
       "checkedAt": "2026-08-13T17:46:50.831Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-frontend.test.ts",
+      "status": "passed",
+      "scope": "Real Python AST/tokenize acceptance, no execution, deterministic parented records, UTF-16 offsets, diagnostics, and authority input rejection",
+      "checkedAt": "2026-08-13T17:52:36.389Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Build-only Python frontend wrapper and repository contracts",
+      "checkedAt": "2026-08-13T17:52:37.337Z"
     }
   ],
   "progress": {

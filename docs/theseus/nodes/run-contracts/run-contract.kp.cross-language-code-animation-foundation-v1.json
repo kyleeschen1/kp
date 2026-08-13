@@ -81,7 +81,8 @@
     {
       "id": "s06",
       "title": "Build Python frontend",
-      "status": "planned"
+      "summary": "Built a deterministic build-time Python stdlib AST/tokenize frontend that emits plain JSON with exact UTF-16 ranges and bounded diagnostics, never executes source, and remains outside browser imports.",
+      "status": "complete"
     },
     {
       "id": "s07",
