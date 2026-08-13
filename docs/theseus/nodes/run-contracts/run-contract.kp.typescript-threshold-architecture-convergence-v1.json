@@ -145,7 +145,8 @@
     {
       "id": "s17",
       "title": "Compile refactor operations",
-      "status": "planned"
+      "summary": "Compiled the TypeScript refactor into canonical asset objects, four validated semantic transformations, reversible correspondence maps, and complete lineage; focused tests, typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

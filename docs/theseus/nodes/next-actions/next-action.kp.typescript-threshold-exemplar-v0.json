@@ -305,10 +305,24 @@
       "scope": "s16 semantic identities",
       "checkedAt": "2026-08-13T04:33:52.938Z",
       "notes": "Thirteen of thirteen focused contract, frontend, and semantic compilation tests pass; duplicate identities remain scoped and replacement calls bind to the extracted helper."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s17 canonical authority reuse",
+      "checkedAt": "2026-08-13T04:39:28.490Z",
+      "notes": "All type and architecture gates pass with no new compatibility path or production exception."
+    },
+    {
+      "command": "node --test TypeScript refactor operation and semantic suites",
+      "status": "passed",
+      "scope": "s17 operations and lineage",
+      "checkedAt": "2026-08-13T04:39:29.031Z",
+      "notes": "Seven of seven pass; correspondence rewind laws, bundle and transformation validation, complete lineage, serialization, and source-derived identities are green."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Build-time semantic compilation now resolves the frozen before/after code inventory to stable syntax identities, scopes, declarations, bindings, and exact source ranges without geometry or browser compiler reach."
+    "summary": "The TypeScript refactor now has validated canonical asset objects, typed transformations, reversible correspondence maps, and complete source-to-target lineage over source-derived identities."
   }
 }
