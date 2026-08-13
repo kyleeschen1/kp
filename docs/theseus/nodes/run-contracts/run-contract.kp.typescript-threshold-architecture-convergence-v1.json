@@ -139,7 +139,8 @@
     {
       "id": "s16",
       "title": "Compile semantic identities",
-      "status": "planned"
+      "summary": "Compiled the frozen TypeScript revisions into stable semantic source identities, scopes, declarations, helper bindings, and exact ranges without geometry; focused tests, typecheck, architecture, build, and bundle boundaries pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
