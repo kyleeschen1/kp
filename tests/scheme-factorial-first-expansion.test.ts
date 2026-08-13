@@ -6,7 +6,7 @@ import {
   defineKpSchemeFactorialFirstExpansion,
   sampleKpSchemeFactorialFirstExpansion
 } from "../src/animation/scheme-factorial-first-expansion.ts";
-import { renderKpSchemeFirstExpansionHtml } from
+import { kpSchemeFirstExpansionCss, renderKpSchemeFirstExpansionHtml } from
   "../src/rendering/scheme-factorial-first-expansion-html.ts";
 import { parseKpSchemeFactorialSource } from
   "../src/semantic/scheme-factorial-parser.ts";
@@ -122,6 +122,14 @@ test("renders code glyphs as the only visual material owner", () => {
   assert.match(html, /data-kp-scheme-paint-owner="code-material"/u);
   assert.match(html, /data-kp-scheme-motion-id=/u);
   assert.match(html, /data-kp-scheme-provenance-kind=/u);
+  assert.match(html, /data-kp-scheme-syntax-kind="keyword"/u);
+  assert.match(html, /data-kp-scheme-syntax-kind="function"/u);
+  assert.match(html, /data-kp-scheme-syntax-kind="number"/u);
   assert.match(html, /binding-projection/u);
   assert.doesNotMatch(html, /<svg|<circle|particle|parameter-cell/u);
+  assert.ok(
+    kpSchemeFirstExpansionCss.indexOf("data-kp-scheme-provenance-kind") >
+      kpSchemeFirstExpansionCss.indexOf("data-kp-scheme-syntax-kind"),
+    "semantic provenance paint must outrank baseline syntax paint"
+  );
 });

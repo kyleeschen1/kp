@@ -207,7 +207,8 @@
     {
       "id": "s27",
       "title": "Add Scheme syntax adapter",
-      "status": "planned"
+      "summary": "Added the Scheme-owned shared-role adapter and annotated the existing code-material renderer without changing source, identity, motion, timing, or accessibility.",
+      "status": "complete"
     },
     {
       "id": "s28",

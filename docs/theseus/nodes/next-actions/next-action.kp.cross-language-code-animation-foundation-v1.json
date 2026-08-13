@@ -437,11 +437,25 @@
       "scope": "s26 Scheme architecture audit",
       "checkedAt": "2026-08-13T19:45:45.839Z",
       "notes": "The audit changes classification and evidence only; no renderer, evaluator, score, or runtime authority changed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test Scheme syntax, parser, first-expansion, full-evaluation, and renderer suites",
+      "status": "passed",
+      "scope": "s27 Scheme syntax-role adaptation and visual preservation",
+      "checkedAt": "2026-08-13T19:52:54.548Z",
+      "notes": "Twenty-three tests preserve syntax-address and delimiter identity, exact ranges, generated activation provenance, code-material ownership, seek/reverse, reduced motion, and existing choreography while adding shared paint roles."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s27 Scheme syntax adapter boundary",
+      "checkedAt": "2026-08-13T19:52:57.662Z",
+      "notes": "The adapter depends only on the shared paint protocol and Scheme source contracts; it imports no imperative frontend, projection, theater, or renderer."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Scheme will adapt shared syntax roles and settlement laws, reuse native searchable ownership, reject flat function projections and imperative token theater, and preserve its evaluator trace plus recursive S-expression choreography as specialized authority."
+    "summary": "Scheme atoms, delimiters, and evaluator-derived code material now carry shared optical syntax roles while preserving Scheme occurrence IDs, delimiter IDs, runtime provenance, native code ownership, and every existing trajectory."
   },
   "expectedLearning": [
     "Measure whether the Python second caller materially reuses TypeScript semantic, timing, correspondence, rendering, and catalogue infrastructure before extracting shared seams.",

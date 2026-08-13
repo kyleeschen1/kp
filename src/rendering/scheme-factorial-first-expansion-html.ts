@@ -6,6 +6,12 @@ import type {
   KpSchemeFactorialFullEvaluation,
   KpSchemeFactorialFullEvaluationSample
 } from "../animation/scheme-factorial-full-evaluation.ts";
+import { resolveKpSchemeMaterialSyntaxRole } from
+  "../semantic/scheme-source-syntax.ts";
+import {
+  encodeKpEditorHtmlAttribute,
+  encodeKpEditorHtmlText
+} from "../editor/html-output-encoding.ts";
 
 export interface KpSchemeFirstExpansionRenderInput {
   readonly expansion: KpSchemeFirstExpansion;
@@ -33,7 +39,7 @@ export function renderKpSchemeFactorialFullEvaluationHtml(input: {
     states: input.evaluation.states,
     sample: input.sample,
     accessibleDescription: input.evaluation.accessibleDescription,
-    attributes: `data-kp-scheme-full-evaluation data-kp-scheme-full-evaluation-phase="${input.sample.phase}" data-kp-scheme-full-evaluation-transition="${escapeAttribute(input.sample.transitionId ?? "none")}" data-kp-scheme-full-evaluation-progress="${input.sample.progress}"`
+    attributes: `data-kp-scheme-full-evaluation data-kp-scheme-full-evaluation-phase="${input.sample.phase}" data-kp-scheme-full-evaluation-transition="${encodeKpEditorHtmlAttribute(input.sample.transitionId ?? "none")}" data-kp-scheme-full-evaluation-progress="${input.sample.progress}"`
   });
 }
 
@@ -47,10 +53,14 @@ function renderCodeMaterialStage(input: {
     nativeCode.split("\n").map((line) => line.length)));
   const lineCount = Math.max(...input.states.map(({ nativeCode }) =>
     nativeCode.split("\n").length));
-  const tokens = input.sample.tokens.map((material) =>
-    `<span class="kp-scheme-first-expansion__token" data-kp-scheme-first-expansion-token="${escapeAttribute(material.materialId)}" data-kp-scheme-motion-id="${escapeAttribute(material.motionId)}" data-kp-scheme-provenance-kind="${escapeAttribute(material.provenance.kind)}" data-kp-scheme-source-occurrence-id="${escapeAttribute(material.provenance.sourceOccurrenceId)}"${renderRuntimeProvenance(material.provenance)} style="--kp-scheme-token-x:${material.xCh}ch;--kp-scheme-token-y:${material.yEm}em;--kp-scheme-token-opacity:${material.opacity};--kp-scheme-token-scale:${material.scale}">${escapeHtml(material.lexeme)}</span>`
-  ).join("");
-  return `<section class="kp-scheme-first-expansion" ${input.attributes} data-kp-scheme-paint-owner="code-material" aria-label="${escapeAttribute(input.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${escapeHtml(input.sample.nativeCode)}</span></section>`;
+  const tokens = input.sample.tokens.map((material) => {
+    const syntaxRole = resolveKpSchemeMaterialSyntaxRole({
+      lexeme: material.lexeme,
+      provenance: material.provenance
+    });
+    return `<span class="kp-scheme-first-expansion__token" data-kp-scheme-first-expansion-token="${encodeKpEditorHtmlAttribute(material.materialId)}" data-kp-scheme-motion-id="${encodeKpEditorHtmlAttribute(material.motionId)}" data-kp-scheme-syntax-kind="${syntaxRole}" data-kp-scheme-provenance-kind="${encodeKpEditorHtmlAttribute(material.provenance.kind)}" data-kp-scheme-source-occurrence-id="${encodeKpEditorHtmlAttribute(material.provenance.sourceOccurrenceId)}"${renderRuntimeProvenance(material.provenance)} style="--kp-scheme-token-x:${material.xCh}ch;--kp-scheme-token-y:${material.yEm}em;--kp-scheme-token-opacity:${material.opacity};--kp-scheme-token-scale:${material.scale}">${encodeKpEditorHtmlText(material.lexeme)}</span>`;
+  }).join("");
+  return `<section class="kp-scheme-first-expansion" ${input.attributes} data-kp-scheme-paint-owner="code-material" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}"><pre class="kp-scheme-first-expansion__code" style="--kp-scheme-code-width:${widthCh}ch;--kp-scheme-code-lines:${lineCount}"><code>${tokens}</code></pre><span class="kp-scheme-first-expansion__accessible">${encodeKpEditorHtmlText(input.sample.nativeCode)}</span></section>`;
 }
 
 export const kpSchemeFirstExpansionCss = `
@@ -58,6 +68,10 @@ export const kpSchemeFirstExpansionCss = `
   --kp-scheme-bg: var(--kp-lesson-theme-surface, #0d0e1c);
   --kp-scheme-ink: var(--kp-lesson-theme-math-foreground, #e7e5df);
   --kp-scheme-accent: var(--kp-lesson-theme-focus, #88c9ff);
+  --kp-scheme-code-keyword: var(--kp-code-keyword, #9099d9);
+  --kp-scheme-code-function: var(--kp-code-function, #338fff);
+  --kp-scheme-code-number: var(--kp-code-number, #9cbd6f);
+  --kp-scheme-code-delimiter: var(--kp-code-delimiter, #989898);
   align-items: center;
   background: var(--kp-scheme-bg);
   box-sizing: border-box;
@@ -100,6 +114,20 @@ export const kpSchemeFirstExpansionCss = `
   transform-origin: center;
   will-change: transform, opacity;
 }
+.kp-scheme-first-expansion__token[data-kp-scheme-syntax-kind="keyword"] {
+  color: var(--kp-scheme-code-keyword);
+}
+.kp-scheme-first-expansion__token[data-kp-scheme-syntax-kind="function"] {
+  color: var(--kp-scheme-code-function);
+}
+.kp-scheme-first-expansion__token[data-kp-scheme-syntax-kind="number"] {
+  color: var(--kp-scheme-code-number);
+}
+.kp-scheme-first-expansion__token[data-kp-scheme-syntax-kind="operator"],
+.kp-scheme-first-expansion__token[data-kp-scheme-syntax-kind="punctuation"] {
+  color: var(--kp-scheme-code-delimiter);
+}
+/* Provenance conveys the active semantic event, so it must outrank lexical paint. */
 .kp-scheme-first-expansion__token[data-kp-scheme-provenance-kind="binding-projection"],
 .kp-scheme-first-expansion__token[data-kp-scheme-provenance-kind="primitive-result"] {
   color: var(--kp-scheme-accent);
@@ -114,27 +142,17 @@ export const kpSchemeFirstExpansionCss = `
 }
 `;
 
-function escapeHtml(value: string): string {
-  return value.replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function escapeAttribute(value: string): string {
-  return escapeHtml(value).replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-}
-
 function renderRuntimeProvenance(
   provenance: KpSchemeFirstExpansionSample["tokens"][number]["provenance"]
 ): string {
   if (provenance.kind === "source") return "";
   const activation = "activationId" in provenance
-    ? ` data-kp-scheme-activation-id="${escapeAttribute(provenance.activationId)}"`
+    ? ` data-kp-scheme-activation-id="${encodeKpEditorHtmlAttribute(provenance.activationId)}"`
     : "";
   const binding = provenance.kind === "binding-projection"
-    ? ` data-kp-scheme-binding-id="${escapeAttribute(provenance.bindingId)}" data-kp-scheme-value-id="${escapeAttribute(provenance.valueId)}"`
+    ? ` data-kp-scheme-binding-id="${encodeKpEditorHtmlAttribute(provenance.bindingId)}" data-kp-scheme-value-id="${encodeKpEditorHtmlAttribute(provenance.valueId)}"`
     : provenance.kind === "primitive-result"
-      ? ` data-kp-scheme-value-id="${escapeAttribute(provenance.valueId)}"`
+      ? ` data-kp-scheme-value-id="${encodeKpEditorHtmlAttribute(provenance.valueId)}"`
       : "";
   return `${activation}${binding}`;
 }
