@@ -191,7 +191,7 @@ test("retirement-adjacent metadata and compatibility targets have no unknown cal
   );
   assert.deepEqual(
     record("ledger.semantic-animation-compatibility").sourceCallers,
-    []
+    ["src/architecture/pre-expansion-health.ts"]
   );
   assert.deepEqual(
     record("ledger.semantic-animation-compatibility").scriptCallers,

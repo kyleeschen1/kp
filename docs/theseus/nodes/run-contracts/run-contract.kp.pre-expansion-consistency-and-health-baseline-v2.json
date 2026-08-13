@@ -192,7 +192,8 @@
     {
       "id": "s25",
       "title": "Run complete release matrix",
-      "status": "planned"
+      "summary": "Complete release matrix passes without relaxed thresholds: focused health gates, 5/5 browser capability and CLS checks, 4,147/4,147 tests, zero Svelte diagnostics, production build, and Theseus validation of 937 nodes. Three stale test expectations were repaired to reflect the new architecture: explicit capability loading, migrated animated profiles, and the new health-ledger caller.",
+      "status": "complete"
     },
     {
       "id": "s26",

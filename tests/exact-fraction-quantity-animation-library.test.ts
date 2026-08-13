@@ -17,6 +17,9 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry
 } from "../src/editor/animation-surface-adapter-registry.ts";
 import {
+  kpEditorSelectedSurfaceCapabilityHost
+} from "../src/editor/selected-surface-capability-host.ts";
+import {
   createKpAnimationLibraryDisplayCatalog
 } from "../src/editor/animation-library-display-catalog.ts";
 import {
@@ -51,6 +54,7 @@ test("exact quantity asset is one valid lazy four-view library exemplar", async 
   const loaded = await loadKpAnimationAsset(asset.id);
   assert.equal(loaded.packId, "exact-quantity");
   assert.deepEqual(loaded.catalog.map(({ id }) => id), [asset.id]);
+  await kpEditorSelectedSurfaceCapabilityHost.load("exact-fraction-quantity");
   assert.ok(
     kpEditorAnimationSurfaceAdapterRegistry.list().some(
       ({ id }) =>

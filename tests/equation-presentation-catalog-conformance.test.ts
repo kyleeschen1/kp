@@ -64,9 +64,7 @@ test("catalog separates executable routes from generic presentation labels", () 
       .map(({ transformationId }) => transformationId))],
     [
       "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
-      "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
-      "transform.linear-solve.subtract-both-sides-3",
-      "transform.linear-solve.cancel-left-additive-inverse"
+      "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
     ]
   );
   assert.equal(
