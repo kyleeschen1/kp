@@ -26,6 +26,9 @@ import {
   createSemanticTransformationParallel,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 interface ComplexKatexSampleFormSpec {
   readonly id: string;
@@ -535,6 +538,8 @@ function createLatexPairComparisonAnimationAsset(
         formulaId: forms[index]!.id
       }
     })),
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     checks: [
       {
         id: `check.sample.${spec.id}.reference-closure`,

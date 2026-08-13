@@ -13,6 +13,9 @@ import {
 } from "../semantic/transformation-composition.ts";
 import { matrixVectorSemanticDurationMs } from "./matrix-vector-duration-contract.ts";
 import { matrixMatrixSemanticDurationMs } from "./matrix-matrix-duration-contract.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export function createGeneratedProblemAnimationAsset(
   fixture: GeneratedProblemAnimationFixture
@@ -71,6 +74,10 @@ export function createGeneratedProblemAnimationAsset(
         timelineId
       }
     ],
+    // Generated fixtures select the established generic equation treatment
+    // explicitly; absence must not silently become renderer policy.
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     checks: [
       {
         id: `check.${fixture.id}.generated-problem-animation.reference-closure`,

@@ -36,6 +36,9 @@ import {
 } from "../domain-ir/public-api.ts";
 import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
 import type { KpSemanticTransitionGap } from "../semantic/semantic-transition-gap.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export type KpLlmAnimationDraftCompileDiagnosticCode =
   | KpLlmAnimationDraftSchemaIssue["code"]
@@ -221,6 +224,12 @@ function compileValidatedDraft(
       ...(draft.timeline === undefined ? {} : { timelineId: draft.timeline.id }),
       summary: `${draft.renderTarget.kind} surface compiled from ${draft.schemaVersion}.`
     }],
+    ...(draft.renderTarget.kind === "equation"
+      ? {
+          presentationProfile:
+            createKpSemanticMaterialEquationPresentationProfileV1()
+        }
+      : {}),
     checks: [
       {
         id: `check.${draft.id}.reference-closure`,

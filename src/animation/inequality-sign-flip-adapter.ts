@@ -14,6 +14,9 @@ import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf
 } from "../semantic/transformation-composition.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 
 export const inequalitySignFlipAnimationId =
   "animation.inequality.sign-flip.basic";
@@ -180,6 +183,8 @@ export function createInequalitySignFlipAnimationAsset(): KpAnimationAsset {
           "Shows the relation pivot from less-than to greater-than as both sides scale by -2."
       }
     ],
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     checks: [
       {
         id: "check.inequality.sign-flip.reference-closure",

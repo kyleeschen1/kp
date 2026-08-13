@@ -15,7 +15,9 @@ import {
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
-import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
+import {
+  createKpSemanticMaterialEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
 import {
   createLatexComparisonObject,
   createLatexFormObject,
@@ -148,6 +150,7 @@ export function createLinearSolveProgrammingComparisonAnimationAsset():
         }
       }
     ],
+    presentationProfile: equation.presentationProfile,
     checks: [
       {
         id: "check.comparison.linear-solve-programming.reference-closure",
@@ -174,8 +177,7 @@ export function createLinearSolveProgrammingComparisonAnimationAsset():
     metadata: {
       childAnimationIds: `${equation.id} ${programming.id}`,
       compositionKind: "synchronized-comparison",
-      clockCoupling: "shared-progress",
-      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow")
+      clockCoupling: "shared-progress"
     }
   });
 }
@@ -449,6 +451,8 @@ export function createJacobianHessianComparisonAnimationAsset():
         }
       }
     ],
+    presentationProfile:
+      createKpSemanticMaterialEquationPresentationProfileV1(),
     checks: [
       {
         id: "check.comparison.jacobian-hessian.reference-closure",

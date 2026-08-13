@@ -120,13 +120,14 @@
     {
       "id": "s13",
       "title": "Forbid new legacy recipe authoring",
-      "summary": "Making every concrete equation-target catalogue asset explicitly select a typed presentation profile and ratcheting legacy metadata authoring to zero.",
-      "status": "in-progress"
+      "summary": "All 25 concrete equation-target catalogue assets now author typed profiles, including generated drafts, generated problems, comparisons, complex KaTeX samples, and inequality; a catalogue ratchet proves zero legacy metadata authors. Focused tests, typecheck, and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
       "title": "Prove legacy decoder reachability",
-      "status": "planned"
+      "summary": "Tracing every decoder and legacy presentation metadata ingress across production, public exports, serialized assets, and tests before any deletion.",
+      "status": "in-progress"
     },
     {
       "id": "s15",
