@@ -63,7 +63,8 @@
     {
       "id": "s03",
       "title": "Harden TypeScript syntax stream",
-      "status": "planned"
+      "summary": "Hardened the TypeScript syntax stream with exact-offset reconstruction, immutable deterministic output, representative role coverage, and static/transit parity evidence.",
+      "status": "complete"
     },
     {
       "id": "s04",

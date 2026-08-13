@@ -54,6 +54,12 @@
       "status": "passed",
       "scope": "Computed transparent backgrounds for focused and unfocused code plus retained dormant highlight custom property",
       "checkedAt": "2026-08-13T17:36:29.725Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-source-tokens.test.ts tests/typescript-refactor-code-html.test.ts tests/typescript-refactor-token-theater.test.ts",
+      "status": "passed",
+      "scope": "Exact source reconstruction, immutable deterministic tokens, syntax roles, native HTML, and animated token paint",
+      "checkedAt": "2026-08-13T17:38:24.941Z"
     }
   ],
   "progress": {
