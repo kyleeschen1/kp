@@ -48,6 +48,13 @@
       "scope": "baseline-salience",
       "checkedAt": "2026-08-14T20:31:50.355Z",
       "notes": "Shared salience seam passes all 20 baseline contracts before exemplar work."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s02-mathematics",
+      "checkedAt": "2026-08-14T20:35:25.378Z",
+      "notes": "Four focused tests prove the exact matrix action, unique approved survivor in the fan, linearity-based scalar prediction, and nonzero-eigenvector versus eigenspace distinction."
     }
   ],
   "expectedLearning": [

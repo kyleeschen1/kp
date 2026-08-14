@@ -223,6 +223,7 @@
     "build:public-normal-matrices": "vite build --config vite.public-normal-matrices.config.ts",
     "check:public-normal-matrices-budgets": "node --disable-warning=ExperimentalWarning scripts/check-public-normal-matrices-budgets.ts",
     "test:public-normal-matrices": "node --disable-warning=ExperimentalWarning --test tests/normal-matrix-proof-public*.test.ts",
+    "test:eigenvector-attentional-surface": "node --disable-warning=ExperimentalWarning --test tests/eigenvector-attentional-surface-*.test.ts",
     "test:browser:public-normal-matrices": "playwright test --config playwright.public-normal-matrices.config.ts --project=chromium --workers=1",
     "visual:normal-matrix-proof-checkpoint": "node --disable-warning=ExperimentalWarning scripts/capture-normal-matrix-proof-checkpoint.ts",
     "dev:python-refactor-visual": "vite --host 127.0.0.1 --port 4184 --strictPort",

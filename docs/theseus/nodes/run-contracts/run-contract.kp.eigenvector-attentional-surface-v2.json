@@ -59,7 +59,8 @@
     {
       "id": "s02",
       "title": "Mathematical fixture",
-      "status": "planned"
+      "summary": "Added a local exact matrix fixture, persistent vector identity, fan images, scalar prediction, and tested eigenspace/eigenvector distinction.",
+      "status": "complete"
     },
     {
       "id": "s03",
