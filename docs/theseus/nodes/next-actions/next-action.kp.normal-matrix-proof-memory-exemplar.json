@@ -469,11 +469,29 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-14T18:40:48.386Z"
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:44:56.773Z"
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:44:57.827Z"
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:44:58.895Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s21 complete: eleven prompt projections live in static searchable native-details HTML on a dedicated review route, and every prompt links to one canonical proof stage with exact checkpoint and semantic focus."
+    "summary": "Slice s22 complete: manual return rehearsal covers every prompt exactly once across three explicit returns and offers a static copyable capture template."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

@@ -7,7 +7,10 @@ import {
   "../tutorial/normal-matrix-proof/normal-matrix-proof-article-compiler.ts";
 import { renderKpNormalMatrixProofStaticPublication } from
   "../tutorial/normal-matrix-proof/normal-matrix-proof-static-publication.ts";
-import { renderKpNormalMatrixProofPromptSurfaceHtml } from
+import {
+  renderKpNormalMatrixProofPromptSurfaceHtml,
+  renderKpNormalMatrixProofReturnRehearsalHtml
+} from
   "../tutorial/normal-matrix-proof/normal-matrix-proof-prompt-publication.ts";
 
 export const kpNormalMatrixProofPublicSourceId =
@@ -62,6 +65,7 @@ export function renderKpNormalMatrixProofReviewIndex(): string {
     </header>
     <main class="kp-normal-proof-review-index">
       <p><a href="/learn/math/normal-matrices/">Read the complete proof</a></p>
+      ${renderKpNormalMatrixProofReturnRehearsalHtml()}
       ${renderKpNormalMatrixProofPromptSurfaceHtml()}
     </main>
   </div>`;
