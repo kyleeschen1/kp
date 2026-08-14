@@ -277,11 +277,39 @@
       "scope": "focused",
       "checkedAt": "2026-08-14T17:32:52.673Z",
       "notes": "All 20 shared salience contract tests remain green."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s15-cycle-a-rendering",
+      "checkedAt": "2026-08-14T17:45:08.407Z",
+      "notes": "48 focused tests pass, including dense order-independent projection, staggered handoff completion, native scene closure, and no low-level plan authority."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s15-cycle-a-rendering",
+      "checkedAt": "2026-08-14T17:45:09.474Z",
+      "notes": "Five Chromium tests pass; direct, reverse, and interrupted seeks preserve stage geometry, moving math remains fully opaque, and 7200ms settles to exactly one native norm-equation scene."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s15-cycle-a-rendering",
+      "checkedAt": "2026-08-14T17:45:10.453Z",
+      "notes": "The route-local deterministic renderer and custom seek boundary typecheck."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s15-cycle-a-rendering",
+      "checkedAt": "2026-08-14T17:45:24.498Z",
+      "notes": "Build passes at 9.91 KB gzip HTML, 1.06 KB startup, and 7.94 KB lazy capability, within approved route ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Cycle A now has a pure semantic orient-act-settle-inspect plan over authored proof paths and transformations; presentation authority remains deferred to the local adapter."
+    "summary": "Cycle A now renders row and column handoffs, native equation settlement, and unmatched-term inspection through direct writes from the one proof clock; no autoplay, scroll ownership, CSS animation, or second paint authority was added."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

@@ -51,8 +51,7 @@ const sceneMath: Readonly<Record<KpNormalMatrixProofCheckpointId, Readonly<{
   statement: Object.freeze({
     matrix: blockMatrix("statement", false),
     evidence: boundMath("statement.evidence", [
-      fragment("normality", String.raw`MM^{\dagger}=M^{\dagger}M`, "normality", "normality"),
-      latex(String.raw`\quad\Longrightarrow\quad U^{\dagger}MU=D`)
+      latex(String.raw`U^{\dagger}MU=D`)
     ])
   }),
   "row-column-norms": Object.freeze({
@@ -102,6 +101,15 @@ const sceneMath: Readonly<Record<KpNormalMatrixProofCheckpointId, Readonly<{
   })
 });
 
+const governingContext = boundMath("governing-context", [
+  fragment(
+    "normality",
+    String.raw`MM^{\dagger}=M^{\dagger}M`,
+    "normality",
+    "normality"
+  )
+]);
+
 export const kpNormalMatrixProofSettledScenes:
   readonly KpNormalMatrixProofSettledScene[] = Object.freeze(
     kpNormalMatrixProofCheckpoints.map((checkpoint) => {
@@ -137,6 +145,9 @@ export function renderKpNormalMatrixProofSettledStageHtml(): string {
     ` data-kp-normal-proof-stage-fallback`,
     ` data-kp-normal-proof-active-checkpoint="statement"`,
     ` aria-label="Normal matrix proof checkpoints">`,
+    `<div class="kp-normal-proof-stage__context" data-kp-normal-proof-context>`,
+    renderBoundNativeMath(governingContext),
+    `</div>`,
     `<div class="kp-normal-proof-stage__viewport" data-kp-normal-proof-stage-viewport>`,
     kpNormalMatrixProofSettledScenes.map((scene, index) => [
       `<div class="kp-normal-proof-stage__scene"`,

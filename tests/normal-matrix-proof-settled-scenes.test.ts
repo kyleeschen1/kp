@@ -35,8 +35,9 @@ test("settled stage uses native KaTeX and a single stable matrix lane", () => {
     html.split("data-kp-normal-proof-matrix-footprint").length - 1,
     6
   );
-  assert.equal(html.split('class="katex-mathml"').length - 1, 12);
-  assert.equal(html.split("<math").length - 1, 12);
+  assert.equal(html.split('class="katex-mathml"').length - 1, 13);
+  assert.equal(html.split("<math").length - 1, 13);
+  assert.equal(html.split("data-kp-normal-proof-context").length - 1, 1);
   assert.equal(html.split(" hidden").length - 1, 5);
   assert.match(html, /data-kp-normal-proof-active-checkpoint="statement"/u);
   assert.doesNotMatch(html, /<script|katex\.render|translate|scale|opacity/iu);

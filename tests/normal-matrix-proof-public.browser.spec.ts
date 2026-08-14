@@ -127,3 +127,73 @@ test("static evidence keeps the same proof without creating a session", async ({
   await expect(fallback.locator("math").first()).toBeAttached();
   await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
 });
+
+test("cycle A seeks deterministically and settles back to native KaTeX", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+  const viewportBox = await stage.locator(
+    "[data-kp-normal-proof-stage-viewport]"
+  ).boundingBox();
+
+  for (const [timeMs, phase] of [
+    [4_800, "orient"],
+    [5_500, "act"],
+    [6_500, "settle"],
+    [7_000, "inspect"]
+  ] as const) {
+    await seekNormalProofStage(stage, timeMs);
+    await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", String(timeMs));
+    await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", phase);
+    expect(await stage.locator(
+      "[data-kp-normal-proof-stage-viewport]"
+    ).boundingBox()).toEqual(viewportBox);
+  }
+
+  await seekNormalProofStage(stage, 5_500);
+  expect(await stage.locator(
+    '[data-kp-normal-proof-moving="true"]'
+  ).evaluateAll((nodes) => nodes.every((node) =>
+    getComputedStyle(node).opacity === "1"
+  ))).toBe(true);
+  const signature = await stage.evaluate((node) => ({
+    checkpoint: (node as HTMLElement).dataset["kpNormalProofActiveCheckpoint"],
+    phase: (node as HTMLElement).dataset["kpNormalProofAttentionPhase"],
+    moving: node.querySelectorAll('[data-kp-normal-proof-moving="true"]').length
+  }));
+  await seekNormalProofStage(stage, 7_100);
+  await seekNormalProofStage(stage, 5_500);
+  expect(await stage.evaluate((node) => ({
+    checkpoint: (node as HTMLElement).dataset["kpNormalProofActiveCheckpoint"],
+    phase: (node as HTMLElement).dataset["kpNormalProofAttentionPhase"],
+    moving: node.querySelectorAll('[data-kp-normal-proof-moving="true"]').length
+  }))).toEqual(signature);
+
+  await seekNormalProofStage(stage, 7_200);
+  await expect(stage).not.toHaveAttribute("data-kp-normal-proof-attention-phase", /.+/);
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "norm-equation"
+  );
+  await expect(stage.locator(
+    "[data-kp-normal-proof-settled-scene]:not([hidden])"
+  )).toHaveCount(1);
+  await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+});
+
+async function seekNormalProofStage(
+  stage: import("@playwright/test").Locator,
+  timeMs: number
+): Promise<void> {
+  await stage.evaluate((node, requestedTimeMs) => {
+    node.dispatchEvent(new CustomEvent("kp:normal-proof-seek", {
+      detail: { timeMs: requestedTimeMs }
+    }));
+  }, timeMs);
+}

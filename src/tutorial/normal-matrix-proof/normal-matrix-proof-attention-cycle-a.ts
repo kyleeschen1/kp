@@ -38,7 +38,7 @@ export interface KpNormalMatrixProofAttentionPhase {
 
 export interface KpNormalMatrixProofAttentionCycleA {
   readonly id: "attention.normal-proof.cycle-a";
-  readonly entryCheckpointId: "statement";
+  readonly entryCheckpointId: "eigenbasis";
   readonly settledCheckpointId: "norm-equation";
   readonly salience: KpAnimationSaliencePlan;
   readonly phases: readonly KpNormalMatrixProofAttentionPhase[];
@@ -125,7 +125,7 @@ const intents = Object.freeze([
 export const kpNormalMatrixProofAttentionCycleA:
   KpNormalMatrixProofAttentionCycleA = Object.freeze({
     id: "attention.normal-proof.cycle-a",
-    entryCheckpointId: "statement",
+    entryCheckpointId: "eigenbasis",
     settledCheckpointId: "norm-equation",
     salience: createKpAnimationSaliencePlan({
       id: "salience.normal-proof.cycle-a",

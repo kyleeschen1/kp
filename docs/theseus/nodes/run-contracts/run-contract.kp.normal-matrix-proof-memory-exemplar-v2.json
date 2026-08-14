@@ -138,7 +138,8 @@
     {
       "id": "s15",
       "title": "Attention cycle A rendering",
-      "status": "planned"
+      "summary": "Added deterministic cycle A projection and local native-KaTeX rendering with direct seek, reverse, interruption, stable geometry, and settlement evidence.",
+      "status": "complete"
     },
     {
       "id": "s16",
