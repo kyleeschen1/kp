@@ -1,23 +1,17 @@
 # Architecture Convergence And Product Tightening
 
 Status: active
-Last Updated: 2026-08-13
-Current Next Action: compare the opt-in algebra distributed-evidence motion
-route at `/learn/math/fraction-composition/?evidence=motion` with its exact
-static Article baseline at `?evidence=static`, alongside the earlier
-distribution attention arc. In motion mode, test whether selecting and carrying
-the variable or constant term across two operations offers a clear advantage
-over video or static diagrams. Do not reopen the approved full-timeline default
-or extract a shared layout, lineage, or inspection contract. After this bounded
-human checkpoint, pressure
-the approved code and symbolic public-product boundary with the canonical
-economics demand-shift graph.
-Preserve and audit the user's uncommitted economics Article and
-generated-publication edits before implementation. Reuse existing graph
-semantics, the retained SVG session, one deterministic clock, direct seeking,
-static Article truth, and accessibility; stop at a human graph checkpoint
-before runtime slimming or shared projection extraction. The cross-language
-proof is closed in
+Last Updated: 2026-08-14
+Current Next Action: write and review the bounded normal-matrix Proof Memory
+Loop exemplar specification. Define the original proof outline, prerequisite
+boundary, symbol-role ledger, roughly five semantic checkpoints, one minimal
+native-KaTeX matrix-attention sequence, eight to twelve prompt intents, direct
+state re-entry, delayed-return rehearsal, bundle budget, and rollback unit.
+Stop before implementing a scheduler, generic matrix motif, SVD sequence, or
+linear-algebra curriculum. After this checkpoint, resume the canonical
+economics demand-shift graph pressure. Preserve and audit the user's
+uncommitted economics Article and generated-publication edits before touching
+that caller. The cross-language proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -66,10 +60,11 @@ not a mandate to encode one universal layout in Article or animation semantics.
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
 8. **Product projection gate (current):** the TypeScript and canonical
-   fraction-composition public lessons passed their human checkpoints. Pressure
-   the same boundary with the economics demand-shift graph, then compare all
-   three callers before selecting a public v0 default or extracting shared
-   presentation.
+   fraction-composition public lessons passed their human checkpoints. First
+   specify and review one bounded normal-matrix Proof Memory Loop exemplar,
+   then pressure the same boundary with the economics demand-shift graph and
+   compare the approved callers before selecting a public v0 default or
+   extracting shared presentation.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 
@@ -149,6 +144,9 @@ Generation quality is measured by:
   seams after the product gate: wrap/unwrap or another equally clear topology?
 - Which default projection best handles symbolic, graph, and code material
   while preserving search, static truth, and phone fit?
+- Does one proof-memory object measurably improve symbol recovery, proof
+  reconstruction, delayed return, and useful variation over an article plus
+  ordinary flashcards?
 
 ## Links
 
@@ -159,5 +157,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-12-project-tightening-next-step-review.md`
 - `../reviews/2026-08-12-economics-layout-production-reachability-audit.md`
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
+- `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
+- `proof-memory-medium.md`
 - `../../../src/architecture/semantic-animation-layer-ownership.ts`
 - `../../../src/architecture/semantic-animation-compatibility-ledger.ts`

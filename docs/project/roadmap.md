@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-13
+Last Updated: 2026-08-14
 Status: active
 Active Thread: `threads/architecture-convergence.md`
 Supporting Threads:
@@ -9,6 +9,7 @@ Supporting Threads:
 - `threads/animation-catalogue.md`
 - `threads/portable-publication-platform.md`
 - `threads/animation-library-promotion.md`
+- `threads/proof-memory-medium.md`
 
 The stable animation-promotion ledger still tables
 `Apply a 2 × 2 matrix to a vector`; convergence work changes neither its rank
@@ -38,9 +39,11 @@ budgets, and a native catalogue.
 The current strategic stage is **product convergence after architecture
 compression**. The cross-language code-animation proof is closed: TypeScript,
 Python, and Scheme now pressure the same bounded continuity contracts without
-sharing a parser, semantic model, renderer, score, or choreography. The next
-proof should use the existing symbolic, graph, and code portfolio to select a
-Public Web v0 projection rather than add another animation subsystem.
+sharing a parser, semantic model, renderer, score, or choreography. A bounded
+Proof Memory Loop experiment now precedes the economics graph checkpoint. It
+tests whether the existing semantic and publication system can help a learner
+inspect, reconstruct, and retain one sophisticated proof. This is a product
+wedge experiment, not a linear-algebra expansion or replacement architecture.
 
 The primary learner-product bottleneck is **product convergence**, not the
 absence of another animation subsystem. A public proof needs one release-worthy
@@ -63,7 +66,7 @@ and vignette authority.
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
 | Layout | Many useful experiments, no selected public default | Pause invention; later choose a v0 default against real articles. |
-| Public product | Not yet converged | Build a small proof after tightening, not a curriculum platform. |
+| Public product | Proof-memory wedge accepted as a bounded experiment | Specify and review one normal-matrix proof before resuming graph pressure or expanding product infrastructure. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Route tasks through one compact entry point and measure repair quality. |
 
 ## Active Tightening Phase
@@ -167,7 +170,8 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: code and symbolic projections approved; graph pressure is next
+Status: code and symbolic projections approved; proof-memory experiment is
+next; graph pressure is paused behind its checkpoint
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -224,14 +228,25 @@ promoting a new layout or inspection contract. Its questions, measured costs,
 preservation boundary, and rollback are recorded in
 `reviews/2026-08-13-algebra-distributed-evidence-comparison-checkpoint.md`.
 
-The next bounded caller is the canonical economics demand-shift graph. Preserve
-and audit the user's current uncommitted economics Article and generated
-publication before touching that caller. Project its existing semantic model,
-retained SVG session, deterministic timeline, direct links, and static Article
-truth through the same public-product boundary, then stop at a human graph
-checkpoint. The symbolic route's approximately 106 KB gzip JavaScript closure
-remains a measured pressure finding; defer symbolic-only slimming and shared
-projection extraction until the three-caller comparison supplies evidence.
+Before the economics graph caller, run the bounded Proof Memory Loop experiment
+recorded in
+`decisions/2026-08-14-kp-proof-memory-product-experiment.md`. Its first
+candidate is the proof that complex normal matrices are unitarily
+diagonalizable. The immediate slice is a human-reviewable exemplar spec: one
+searchable proof, a symbol-role ledger, roughly five semantic checkpoints, one
+minimal native-KaTeX matrix-attention sequence, eight to twelve prompt intents,
+and direct re-entry to exact proof state. Do not build a scheduler, generic
+matrix API, SVD lesson, or linear-algebra curriculum for this checkpoint.
+
+The canonical economics demand-shift graph remains the next approved product
+caller after that checkpoint. Preserve and audit the user's current uncommitted
+economics Article and generated publication before touching that caller.
+Project its existing semantic model, retained SVG session, deterministic
+timeline, direct links, and static Article truth through the same
+public-product boundary, then stop at a human graph checkpoint. The symbolic
+route's approximately 106 KB gzip JavaScript closure remains a measured
+pressure finding; defer symbolic-only slimming and shared projection extraction
+until the three-caller comparison supplies evidence.
 
 Choose one public v0 projection using at least three real content shapes:
 
@@ -260,9 +275,10 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   checkpoint; its pacing correction and remaining slices are paused.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
-- Linear algebra, broad Graph3D promotion, live LLM editorial wording, advanced
-  CodeMirror history tools, Public Editor, and curriculum-scale work remain
-  parked.
+- Linear algebra remains parked except for the single bounded normal-matrix
+  proof-memory exemplar. SVD, broad matrix promotion, broad Graph3D promotion,
+  live LLM editorial wording, advanced CodeMirror history tools, Public Editor,
+  and curriculum-scale work remain parked.
 
 ## Architecture And Authoring Laws
 
@@ -331,7 +347,7 @@ Do not restart work already closed:
 - dynamic capability-package deployment;
 - GIF/video encoding beyond the accepted frame/export contracts;
 - matrix, Jacobian/Hessian, eigenvector, and other tabled linear-algebra
-  promotion; and
+  promotion beyond the bounded normal-matrix proof-memory experiment; and
 - broad live LLM editorial prose generation.
 
 ## Retrieval Guide

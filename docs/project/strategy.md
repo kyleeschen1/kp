@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-13
+Last Updated: 2026-08-14
 
 ## North Star
 
@@ -45,6 +45,15 @@ internal Animation Catalogue is the immediate pressure lab: it should make the
 executable library easy to search, play, tune, review, and compare across
 domains while revealing which abstractions and host seams are actually shared.
 
+A bounded **Proof Memory Loop** experiment now tests a sharper product wedge:
+KP helps a learner inspect, reconstruct, and retain a difficult symbolic
+argument instead of repeatedly relearning it. The learner moves between a full
+searchable proof, exact semantic focus, prediction or reconstruction prompts,
+delayed return, and boundary variations. Cards remain projections of one
+durable proof rather than isolated content. This is an experiment to validate
+demand and learning value, not a commitment to accounts, a scheduler, or a
+linear-algebra curriculum.
+
 ## Current Strategic Stage
 
 KP is now in convergence and architecture compression. The semantic/runtime
@@ -62,9 +71,12 @@ not need one universal layout before it can ship a bounded public proof.
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
 cost. The TypeScript/Python comparison and bounded Scheme pressure have now
-proved marginal reuse without flattening language-specific pedagogy. The next
-strategic gate is selecting the Public Web v0 projection with the existing
-symbolic, graph, and code portfolio.
+proved marginal reuse without flattening language-specific pedagogy. Before
+the economics graph pressure and final Public Web v0 comparison, one bounded
+normal-matrix proof will test the Proof Memory Loop with existing Article,
+native-KaTeX, semantic-address, deterministic-seek, and flashcard-projection
+authority. It may add semantic content and bindings, not another runtime or a
+generic matrix system.
 
 ## Strategic Architecture
 
