@@ -10,7 +10,12 @@ export function mountKpNormalMatrixProofStageCapability(
   );
   if (publication === null) return () => undefined;
   publication.dataset["kpNormalProofCapability"] = "ready";
+  const stage = publication.querySelector<HTMLElement>(
+    "[data-kp-normal-proof-stage]"
+  );
+  stage?.setAttribute("data-kp-normal-proof-native-owner", "settled-katex");
   return () => {
     delete publication.dataset["kpNormalProofCapability"];
+    stage?.removeAttribute("data-kp-normal-proof-native-owner");
   };
 }

@@ -200,11 +200,39 @@
       "scope": "s11 no-session browser proof",
       "checkedAt": "2026-08-14T17:10:37.231Z",
       "notes": "Both motion-shell and static-evidence Chromium checks passed; static mode retained MathML and created no capability or session."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s12 native settled scenes",
+      "checkedAt": "2026-08-14T17:19:29.001Z",
+      "notes": "All 38 proof tests passed, including six native scene definitions, KaTeX and MathML ownership, stable block decomposition, and static publication closure."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s12 settled scene types",
+      "checkedAt": "2026-08-14T17:19:30.110Z",
+      "notes": "The isolated route and settled-scene boundary typecheck passed."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s12 settled scene build",
+      "checkedAt": "2026-08-14T17:19:31.077Z",
+      "notes": "The build passed with six native endpoints; HTML remains 9.58 KB gzip, startup 1.06 KB gzip, and lazy capability 0.24 KB gzip."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s12 geometry and native smoke",
+      "checkedAt": "2026-08-14T17:19:32.056Z",
+      "notes": "Three Chromium tests passed; all six endpoints share one viewport and matrix-lane footprint, exactly one endpoint is visible, and static mode has no session."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The route now supports a deterministic evidence=static comparison over the identical Article and checkpoint endpoints; it preserves native MathML while suppressing the lazy capability and any animation session."
+    "summary": "The enhanced proof stage now contains six build-rendered native KaTeX and MathML checkpoints in one fixed viewport and stable matrix lane; native endpoint paint owns settlement and accessibility without introducing choreography."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

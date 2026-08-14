@@ -55,11 +55,15 @@ test("TOC, semantic anchors, and stage manifest derive from one Article", () => 
 test("static publication resolves every checkpoint as native KaTeX", () => {
   const publication = renderKpNormalMatrixProofStaticPublication(compile());
 
-  // One resolved checkpoint appears twice because two consecutive proof beats
-  // deliberately inspect the same row/column-norm endpoint.
+  assert.equal(
+    publication.split("data-kp-normal-proof-settled-scene=").length - 1,
+    6
+  );
+  // The stage owns six endpoints; later prose reuses five checkpoint assets,
+  // with row-column norms intentionally appearing twice.
   assert.equal(
     publication.split("data-kp-normal-proof-static-checkpoint=").length - 1,
-    7
+    6
   );
   assert.equal(
     publication.split('class="katex-mathml"').length - 1 >= 6,

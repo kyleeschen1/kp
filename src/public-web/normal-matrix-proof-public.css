@@ -130,6 +130,44 @@ body {
   padding: 0.25rem;
 }
 
+.kp-normal-proof-stage {
+  width: 100%;
+  color: #f2f0e7;
+}
+
+.kp-normal-proof-stage__viewport {
+  position: relative;
+  min-block-size: clamp(15rem, 42vw, 19rem);
+  overflow: hidden;
+}
+
+.kp-normal-proof-stage__scene {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: minmax(8.5rem, 1fr) minmax(5rem, auto);
+  align-content: center;
+}
+
+.kp-normal-proof-stage__scene[hidden] { display: none; }
+
+.kp-normal-proof-stage__matrix,
+.kp-normal-proof-stage__evidence {
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.4rem;
+}
+
+.kp-normal-proof-stage__matrix {
+  min-block-size: 8.5rem;
+  border-bottom: 1px solid #454a57;
+}
+
+.kp-normal-proof-stage__evidence { min-block-size: 5rem; }
+
 .kp-normal-proof-article .katex { font-size: 1em; }
 .kp-normal-proof-article .kp-article-math--display .katex,
 .kp-normal-proof-static-scene .katex { font-size: 1.08em; }

@@ -120,7 +120,8 @@
     {
       "id": "s12",
       "title": "Native settled scenes",
-      "status": "planned"
+      "summary": "Added six native settled scenes with one stable matrix footprint and verified static, geometry, accessibility, and build closure.",
+      "status": "complete"
     },
     {
       "id": "s13",
