@@ -74,11 +74,18 @@
       "scope": "s03 proof semantic registry",
       "checkedAt": "2026-08-14T16:33:12.904Z",
       "notes": "Seven focused tests pass, including unique addresses, repeated-label identity, claim provenance, parent closure, and negative duplicate/orphan cases."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s04 relations and transformations",
+      "checkedAt": "2026-08-14T16:36:41.236Z",
+      "notes": "Ten tests pass; all six transformations validate against one local bundle, row/column provenance closes, and zero-row/recursive relations retain mathematical authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The proof now has fifteen stable semantic addresses with explicit entity/group/region roles, continuity semantics, parent structure, and mathematical claim provenance."
+    "summary": "Six semantic transformations and six causal proof relations now bind the registry to the reviewed fixture without coordinates, timing, or paint instructions."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

@@ -72,7 +72,8 @@
     {
       "id": "s04",
       "title": "Relations and transformations",
-      "status": "planned"
+      "summary": "Added validated transformation correspondence and causal proof relations over the local semantic scene.",
+      "status": "complete"
     },
     {
       "id": "s05",
