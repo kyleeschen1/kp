@@ -168,7 +168,8 @@
     {
       "id": "s20",
       "title": "Semantic focus re-entry",
-      "status": "planned"
+      "summary": "Added exact semantic focus re-entry with direct activation, native path paint, refresh and history restoration, and no replay.",
+      "status": "complete"
     },
     {
       "id": "s21",

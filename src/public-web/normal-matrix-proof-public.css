@@ -301,6 +301,12 @@ body {
   box-shadow: inset 0 -0.09em 0 var(--kp-normal-proof-focus-ink);
 }
 
+.kp-normal-proof-stage [data-kp-normal-proof-reentry="target"] {
+  color: var(--kp-normal-proof-focus-ink);
+  filter: drop-shadow(0 0 0.22rem var(--kp-normal-proof-focus-glow));
+  box-shadow: inset 0 -0.1em 0 var(--kp-normal-proof-focus-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kp-normal-proof-stage [data-kp-normal-proof-moving="true"] {
     transform: none !important;

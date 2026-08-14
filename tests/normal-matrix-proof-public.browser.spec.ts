@@ -155,10 +155,42 @@ test("direct checkpoint URLs restore one endpoint without replay", async ({ page
   expect(new URL(page.url()).hash).toBe("#proof-stage");
 });
 
-test("static direct checkpoint projection creates no motion session", async ({
+test("direct semantic re-entry activates one endpoint and paints authored focus", async ({
   page
 }) => {
-  await page.goto(`${route}?checkpoint=remainder-zero&evidence=static`, {
+  const semanticUrl = `${route}?checkpoint=norm-equation#kp-ref:normal-proof/matrix/row-remainder`;
+  await page.goto(semanticUrl, { waitUntil: "domcontentloaded" });
+  const publication = page.locator("[data-kp-normal-proof-publication]");
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+
+  await expect(publication).toHaveAttribute(
+    "data-kp-normal-proof-capability",
+    "ready"
+  );
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
+  expect(await stage.locator(
+    '[data-kp-normal-proof-settled-scene="norm-equation"] [data-kp-normal-proof-path="normal-proof/matrix/row-remainder"]'
+  ).evaluateAll((nodes) => nodes.every((node) =>
+    (node as HTMLElement).dataset["kpNormalProofReentry"] === "target"
+  ))).toBe(true);
+  await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
+});
+
+test("static direct checkpoint and semantic focus create no motion session", async ({
+  page
+}) => {
+  await page.goto(`${route}?checkpoint=remainder-zero&evidence=static#kp-ref:normal-proof/inference/remainder-zero`, {
     waitUntil: "domcontentloaded"
   });
   const stage = page.locator("[data-kp-normal-proof-stage]");
@@ -170,8 +202,54 @@ test("static direct checkpoint projection creates no motion session", async ({
   await expect(stage.locator(
     '[data-kp-normal-proof-settled-scene="remainder-zero"]'
   )).toBeVisible();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/inference/remainder-zero"
+  );
+  expect(await stage.locator(
+    '[data-kp-normal-proof-settled-scene="remainder-zero"] [data-kp-normal-proof-path="normal-proof/inference/remainder-zero"]'
+  ).evaluateAll((nodes) => nodes.every((node) =>
+    (node as HTMLElement).dataset["kpNormalProofReentry"] === "target"
+  ))).toBe(true);
   await expect(stage.locator("[data-kp-normal-proof-scrub]")).toBeDisabled();
   await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
+});
+
+test("article semantic links change focus without acquiring timeline authority", async ({
+  page
+}) => {
+  await page.goto(`${route}?checkpoint=norm-equation`, {
+    waitUntil: "domcontentloaded"
+  });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  const rowLink = page.locator(
+    'a[href="#kp-ref:normal-proof/matrix/row-remainder"]'
+  ).first();
+  const eigenvalueLink = page.locator(
+    'a[href="#kp-ref:normal-proof/matrix/eigenvalue"]'
+  ).first();
+
+  await rowLink.click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  expect(new URL(page.url()).searchParams.get("checkpoint"))
+    .toBe("norm-equation");
+
+  await eigenvalueLink.click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/eigenvalue"
+  );
+  await page.goBack();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
 });
 
 test("scrubbing replaces checkpoint history and popstate restores directly", async ({

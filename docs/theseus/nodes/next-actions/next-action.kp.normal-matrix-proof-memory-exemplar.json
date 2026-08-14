@@ -410,11 +410,46 @@
       "scope": "s19-url-state",
       "checkedAt": "2026-08-14T18:18:23.301Z",
       "notes": "Build passes at 9.99 kB HTML, 4.24 kB startup, and 7.76 kB lazy capability gzip."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s20-semantic-reentry",
+      "checkedAt": "2026-08-14T18:25:17.824Z",
+      "notes": "60 tests pass, including strict semantic fragment decoding and route-preserving encoding."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s20-semantic-reentry",
+      "checkedAt": "2026-08-14T18:25:18.955Z",
+      "notes": "Semantic focus path typing, route entry activation, and native focus painting typecheck."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s20-semantic-reentry",
+      "checkedAt": "2026-08-14T18:25:42.136Z",
+      "notes": "13 Chromium checks pass for direct activation, authored focus paint, static focus, refresh, link activation, history, and no replay."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s20-protocol-preservation",
+      "checkedAt": "2026-08-14T18:25:43.293Z",
+      "notes": "All 20 shared salience protocol checks remain green; the exemplar adds no shared motif authority."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s20-route-closure",
+      "checkedAt": "2026-08-14T18:25:44.484Z",
+      "notes": "Build passes with HTML 9997 bytes gzip, startup 4.57 kB gzip, and lazy capability 7.76 kB gzip."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Checkpoint and evidence route state now use the existing composable reader URL codec. Direct loads, scrub replacement, static projection, and popstate restoration select one authored endpoint without replay or synthetic input."
+    "summary": "Semantic fragments now resolve strictly against the authored registry, directly activate the native stage, preserve route-owned checkpoint time, and paint only matching semantic wrappers across refresh and history traversal."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

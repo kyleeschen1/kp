@@ -6,12 +6,19 @@ import { kpNormalMatrixProofCheckpointTimeMs } from
 import { selectKpNormalMatrixProofSettledCheckpoint } from
   "../tutorial/normal-matrix-proof/normal-matrix-proof-settled-stage-state.ts";
 import {
+  decodeKpNormalMatrixProofSemanticLocation,
+  paintKpNormalMatrixProofSemanticFocus
+} from "../tutorial/normal-matrix-proof/normal-matrix-proof-semantic-focus.ts";
+import {
   decodeKpNormalMatrixProofUrl,
   encodeKpNormalMatrixProofUrl,
   type KpNormalMatrixProofUrlState
 } from "./normal-matrix-proof-url-codec.ts";
 
 let routeState = decodeKpNormalMatrixProofUrl(window.location.href);
+let semanticAddress = decodeKpNormalMatrixProofSemanticLocation(
+  window.location.hash
+);
 document.documentElement.dataset["kpNormalProofEvidence"] = routeState.evidence;
 
 const fallback = document.querySelector<HTMLElement>(
@@ -19,29 +26,46 @@ const fallback = document.querySelector<HTMLElement>(
 );
 if (fallback !== null) {
   selectKpNormalMatrixProofSettledCheckpoint(fallback, routeState.checkpoint);
+  paintKpNormalMatrixProofSemanticFocus(fallback, semanticAddress);
 }
 replaceCanonicalHistory(routeState);
 
 let capabilityHandle: ReturnType<
   KpNormalMatrixStageCapability["mountKpNormalMatrixProofStageCapability"]
 > | undefined;
+let requestCapability = (): void => undefined;
 
-window.addEventListener("popstate", () => {
+const restoreLocation = (): void => {
   const next = decodeKpNormalMatrixProofUrl(window.location.href);
+  const nextAddress = decodeKpNormalMatrixProofSemanticLocation(
+    window.location.hash
+  );
   if (next.evidence !== routeState.evidence) {
     window.location.reload();
     return;
   }
+  if (
+    next.checkpoint === routeState.checkpoint &&
+    nextAddress === semanticAddress
+  ) return;
   routeState = next;
+  semanticAddress = nextAddress;
   if (fallback !== null) {
     selectKpNormalMatrixProofSettledCheckpoint(fallback, next.checkpoint);
   }
   capabilityHandle?.seek(kpNormalMatrixProofCheckpointTimeMs(next.checkpoint));
-});
+  if (fallback !== null) {
+    paintKpNormalMatrixProofSemanticFocus(fallback, semanticAddress);
+  }
+  if (semanticAddress !== undefined) requestCapability();
+};
+
+window.addEventListener("popstate", restoreLocation);
+window.addEventListener("hashchange", restoreLocation);
 
 if (fallback !== null && routeState.evidence === "motion") {
   let requested = false;
-  const requestCapability = (): void => {
+  requestCapability = (): void => {
     if (requested) return;
     requested = true;
     void import(
@@ -72,6 +96,8 @@ if (fallback !== null && routeState.evidence === "motion") {
     requestCapability();
   }
 }
+
+if (semanticAddress !== undefined) requestCapability();
 
 function replaceCanonicalHistory(state: KpNormalMatrixProofUrlState): void {
   const canonical = encodeKpNormalMatrixProofUrl(window.location.href, state);
