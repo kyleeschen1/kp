@@ -3,6 +3,17 @@ import { expect, test } from "@playwright/test";
 const route = "/learn/math/normal-matrices/";
 const reviewRoute = "/learn/math/normal-matrices/review/";
 
+test("scoped server root returns to the proof instead of the catalogue", async ({
+  page
+}) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+
+  await expect(page).toHaveURL(new RegExp(`${route}$`, "u"));
+  await expect(page.getByRole("heading", {
+    name: "Why does a normal matrix have an orthonormal eigenbasis?"
+  })).toBeVisible();
+});
+
 test("public proof is readable before and after lazy capability load", async ({
   page
 }) => {

@@ -24,27 +24,46 @@ const reviewRouteFilename = resolve(
 
 /** Keep this proof experiment attributable outside the catalogue bundle. */
 export default defineConfig({
-  plugins: [{
-    name: "kp-public-normal-matrices-static-publication",
-    transformIndexHtml: {
-      order: "pre",
-      handler(html, context) {
-        if (context.filename === routeFilename) {
-          return html.replace(
-            "<!-- kp:normal-matrix-proof-publication -->",
-            compilePublication()
-          );
+  plugins: [
+    {
+      name: "kp-public-normal-matrices-scoped-root",
+      configureServer(server) {
+        server.middlewares.use((request, response, next) => {
+          if (request.url === undefined ||
+              new URL(request.url, "http://127.0.0.1").pathname !== "/") {
+            next();
+            return;
+          }
+          // This server intentionally excludes the catalogue's Svelte
+          // compiler; keep its root inside the proof projection boundary.
+          response.statusCode = 307;
+          response.setHeader("location", "/learn/math/normal-matrices/");
+          response.end();
+        });
+      }
+    },
+    {
+      name: "kp-public-normal-matrices-static-publication",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          if (context.filename === routeFilename) {
+            return html.replace(
+              "<!-- kp:normal-matrix-proof-publication -->",
+              compilePublication()
+            );
+          }
+          if (context.filename === reviewRouteFilename) {
+            return html.replace(
+              "<!-- kp:normal-matrix-proof-review -->",
+              renderKpNormalMatrixProofReviewIndex()
+            );
+          }
+          return html;
         }
-        if (context.filename === reviewRouteFilename) {
-          return html.replace(
-            "<!-- kp:normal-matrix-proof-review -->",
-            renderKpNormalMatrixProofReviewIndex()
-          );
-        }
-        return html;
       }
     }
-  }],
+  ],
   build: {
     outDir: "dist/public-normal-matrices",
     emptyOutDir: true,
