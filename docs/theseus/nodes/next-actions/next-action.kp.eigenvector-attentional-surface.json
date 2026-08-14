@@ -146,6 +146,13 @@
       "scope": "slice-s15-transport",
       "checkedAt": "2026-08-14T21:07:14.945Z",
       "notes": "Fifty-four tests prove stable neighbors, boundary semantics, native progress, live status, static deep links, and absence of redundant play/pause/rewind controls."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s16-interaction",
+      "checkedAt": "2026-08-14T21:10:02.427Z",
+      "notes": "Fifty-nine tests prove one reducer authority for scroll, transport, prediction, and scalar input; wrong answers stay put, correct answers reveal, and boundary events are no-ops."
     }
   ],
   "expectedLearning": [
