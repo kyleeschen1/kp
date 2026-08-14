@@ -83,7 +83,8 @@
     {
       "id": "s06",
       "title": "Geometric symbolic handoff",
-      "status": "planned"
+      "summary": "Bound the mapped geometric v to both v tokens in Av=3v through explicit semantic IDs and a direct handoff record; unsupported equation forms fail closed.",
+      "status": "complete"
     },
     {
       "id": "s07",

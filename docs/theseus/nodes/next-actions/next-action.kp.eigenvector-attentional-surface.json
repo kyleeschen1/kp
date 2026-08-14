@@ -76,6 +76,13 @@
       "scope": "slice-s05-fan",
       "checkedAt": "2026-08-14T20:42:39.282Z",
       "notes": "Sixteen tests prove source and mapped fan endpoints, exact vector images, the single lambda-three survivor, scalar image, and eigenspace segment."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s06-handoff",
+      "checkedAt": "2026-08-14T20:44:30.754Z",
+      "notes": "Twenty tests now prove the exact Av=3v token model and an explicit diagram-to-equation v handoff without glyph or DOM inference."
     }
   ],
   "expectedLearning": [
