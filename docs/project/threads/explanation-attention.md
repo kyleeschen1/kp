@@ -1,13 +1,11 @@
 # Explanation and Attention Thread
 
-Status: paused
-Last Updated: 2026-08-12
-Current Next Action: None during the convergence and architecture-compression
-phase. Preserve the complete factorial visual-discovery exemplar at
-`/tutorials/programming/scheme-factorial/`, its checkpoint in
-`../reviews/2026-08-12-scheme-factorial-full-evaluation-checkpoint.md`, and the
-recoverable algebra proof paused at slice 8/23 in commit `d38f06fe`. Resume
-only through an explicit roadmap decision after the tightening tranche.
+Status: active
+Last Updated: 2026-08-14
+Current Next Action: specify one hard-coded eigenvector attentional-surface
+experience with roughly six to nine beats, a persistent vector identity across
+geometry and notation, and one prediction/manipulation moment. Stop for review
+before implementation or shared authoring extraction.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`
@@ -30,6 +28,24 @@ without reducing prose to atomic captions or asking learners to read new ideas
 while watching essential motion.
 
 ## Current Decision
+
+The accepted product direction is now
+`../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`.
+KP should organize the active learner experience temporally: prose, semantic
+objects, transformations, notation, prompts, and learner actions take turns
+owning attention. An attentional beat is a cognitive ownership decision, not a
+slide or a replacement for the existing motion-block clock. Complete Article
+text remains searchable static truth, while the active projection decides what
+dominates now.
+
+The normal-matrix checkpoint demonstrates why this change is necessary. It
+preserves semantic identity and direct deterministic state but leaves Article
+and stage as competing streams, hides motion between scrubber stops, and does
+not make attention transfer self-evident. Preserve its architecture; do not
+promote its presentation treatment.
+
+Earlier economics, Lisp, algebra, stacked, split, deck, and sticky experiments
+remain discovery evidence below. None owns the new default.
 
 The canonical vocabulary for this thread now lives in
 `../principles/motion-passage-vocabulary.md`. A **motion passage** is content
@@ -306,7 +322,8 @@ inline KaTeX and section headings begin at the visual scale of `h3`.
 
 ## Out Of Scope
 
-- resuming or reranking the tabled linear algebra frontier;
+- broad linear-algebra expansion beyond the bounded eigenvector
+  attentional-surface candidate;
 - changing the approved economics graph during integrated review;
 - many inline players, unannounced or catalogue-wide autoplay, lesson-global
   scroll scrubbing, or prose auto-scrolling;
@@ -378,6 +395,7 @@ salience rollout is implied.
 
 - `docs/project/decisions/2026-08-02-kp-continuous-explanation-and-attention-coordination.md`
 - `docs/project/decisions/2026-08-02-kp-salience-transmission-engine.md`
+- `docs/project/decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
 - `docs/project/decisions/2026-08-03-kp-botanical-lisp-second-caller-and-shared-lesson-seams.md`
 - `docs/project/reviews/2026-08-03-botanical-lisp-shared-lesson-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-economics-demand-shift-lesson-draft.md`

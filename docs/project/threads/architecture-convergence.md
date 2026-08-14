@@ -2,18 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-14
-Current Next Action: review the normal-matrix Proof Memory Loop long-run
-proposal at
-`../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. On
-explicit approval, create its typed 27-slice Theseus contract and execute only
-through the mandatory exemplar checkpoint. Do not implement a scheduler,
-generic matrix motif, SVD sequence, or linear-algebra curriculum. After this
-checkpoint, resume the canonical economics demand-shift graph pressure.
-Preserve and audit the user's uncommitted economics Article and
-generated-publication edits before touching that caller. The cross-language
-proof is closed in
-`run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
-language or shared-contract expansion during the product gate.
+Current Next Action: write and review one bounded eigenvector
+attentional-surface prototype specification under
+`../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`.
+Do not implement or generalize it until that specification names its canonical
+experience, acceptance criteria, preservation boundary, rollback unit, and
+human checkpoint. Preserve the normal-matrix route as architecture evidence;
+its learner-facing checkpoint did not pass and s26-s27 remain unapproved.
 
 ## Goal
 
@@ -33,6 +28,12 @@ The bottleneck to a public product is product convergence: a small set of
 finished explanations, one release-worthy default projection, navigation and
 responsive fit, and coherent packaging. Layout selection is one required gate,
 not a mandate to encode one universal layout in Article or animation semantics.
+
+The accepted product refinement now places **attentional ownership** before
+default-layout selection. KP should first prove that prose, object,
+transformation, notation, prompt, and learner action can take turns owning one
+surface without losing semantic identity. This is a product-grammar discovery
+inside convergence, not permission for a new runtime or universal scene graph.
 
 ## Ordered Work
 
@@ -59,12 +60,12 @@ not a mandate to encode one universal layout in Article or animation semantics.
 7. **Cross-language pressure (complete):** Python proves the second imperative
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
-8. **Product projection gate (current):** the TypeScript and canonical
-   fraction-composition public lessons passed their human checkpoints. First
-   specify and review one bounded normal-matrix Proof Memory Loop exemplar,
-   then pressure the same boundary with the economics demand-shift graph and
-   compare the approved callers before selecting a public v0 default or
-   extracting shared presentation.
+8. **Product grammar gate (current):** TypeScript and canonical
+   fraction-composition public lessons passed their checkpoints. The
+   normal-matrix route proved architecture but failed its attentional
+   checkpoint. Specify one hard-coded eigenvector attentional-surface
+   experience before economics graph pressure, public-v0 layout selection, or
+   shared presentation extraction.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 
@@ -147,6 +148,8 @@ Generation quality is measured by:
 - Does one proof-memory object measurably improve symbol recovery, proof
   reconstruction, delayed return, and useful variation over an article plus
   ordinary flashcards?
+- Can one attentional surface make read, watch, predict, manipulate, and
+  inspect ownership self-evident without hiding the complete searchable text?
 
 ## Links
 
@@ -158,6 +161,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-12-economics-layout-production-reachability-audit.md`
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
+- `../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`
 - `proof-memory-medium.md`

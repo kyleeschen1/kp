@@ -18,16 +18,20 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-KP is a verified semantic-to-interactive compiler and, at the learner surface,
-a salience-transmission medium. Its durable center is:
+> **Kinetic Press turns explanations into reusable mental machinery.**
+
+KP is a semantic medium for acquiring, manipulating, retaining, and reusing
+ways of seeing. The verified semantic-to-interactive compiler is the machinery
+that preserves meaning and identity; it is not the complete product thesis.
+The durable center is:
 
 ```text
 verified meaning
 -> semantic objects, operations, identity, and lineage
--> renderer-neutral presentation planning
+-> attentional beats and renderer-neutral presentation planning
 -> one deterministic sampled timeline
--> medium-specific rendering
--> article, card, editor, embed, deck, or export projection
+-> prose, notation, diagram, code, motion, or learner-action focus
+-> retrieval, variation, compression, and reuse
 ```
 
 The engine is no longer the project's largest unknown. KP has canonical
@@ -36,22 +40,20 @@ an interpreter-grounded program trace, static publication, Article v1,
 whole-file editing, semantic navigation, review capture, accessibility, route
 budgets, and a native catalogue.
 
-The current strategic stage is **product convergence after architecture
-compression**. The cross-language code-animation proof is closed: TypeScript,
-Python, and Scheme now pressure the same bounded continuity contracts without
-sharing a parser, semantic model, renderer, score, or choreography. A bounded
-Proof Memory Loop experiment now precedes the economics graph checkpoint. It
-tests whether the existing semantic and publication system can help a learner
-inspect, reconstruct, and retain one sophisticated proof. This is a product
-wedge experiment, not a linear-algebra expansion or replacement architecture.
+The current strategic stage is **medium discovery within product
+convergence**. The normal-matrix proof validates the semantic, publication,
+prompt, direct-state, accessibility, and performance foundations. Its human
+checkpoint does not validate the attentional experience: Article and stage
+still compete, motion is difficult to discover, and the learner can still
+wonder where to look.
 
-The primary learner-product bottleneck is **product convergence**, not the
-absence of another animation subsystem. A public proof needs one release-worthy
-default projection, a small curated content set, navigation, responsive fit,
-and editorial finish. Selecting that default projection is necessary, but KP
-does not need to discover one universal layout before shipping. Stacked,
-split, deck, static, and embed projections remain consumers of the same Article
-and vignette authority.
+The next product question is therefore narrower than layout selection: can one
+hard-coded, three-to-five-minute experience let prose, object, transformation,
+notation, prediction, and manipulation take turns owning one attentional
+surface? Eigenvectors are the leading candidate because semantic identity can
+remain visible from a vector through `Av = lambda v` and into an invariant
+subspace. Do not generalize authoring or a beat runtime before that exemplar
+passes human review.
 
 ## Current State
 
@@ -65,9 +67,9 @@ and vignette authority.
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
-| Layout | Many useful experiments, no selected public default | Pause invention; later choose a v0 default against real articles. |
-| Public product | Proof-memory wedge accepted as a bounded experiment | Specify and review one normal-matrix proof before resuming graph pressure or expanding product infrastructure. |
-| LLM generation | Typed semantic draft path exists; context is too diffuse | Route tasks through one compact entry point and measure repair quality. |
+| Layout | Many useful experiments; permanent text/animation allocation has not solved split attention | Treat layout as a projection; test temporal attentional ownership before selecting a public default. |
+| Public product | Normal-matrix infrastructure proof complete; learner experience not approved | Specify one hard-coded eigenvector attentional-surface experience and stop at one human checkpoint. |
+| LLM generation | Typed semantic draft path exists; context is too diffuse | Constrain the model to semantic referents and pedagogical actions over KP-owned state. |
 
 ## Active Tightening Phase
 
@@ -170,9 +172,9 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: code and symbolic projections approved; proof-memory exemplar spec is
-complete and its long-loop proposal awaits approval; graph pressure is paused
-behind that experiment
+Status: code and symbolic projections approved; normal-matrix architecture
+proof complete but attentional treatment unapproved; one-surface eigenvector
+prototype specification is next; graph pressure remains paused
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -229,31 +231,30 @@ promoting a new layout or inspection contract. Its questions, measured costs,
 preservation boundary, and rollback are recorded in
 `reviews/2026-08-13-algebra-distributed-evidence-comparison-checkpoint.md`.
 
-Before the economics graph caller, run the bounded Proof Memory Loop experiment
-recorded in
-`decisions/2026-08-14-kp-proof-memory-product-experiment.md`. Its first
-candidate is the proof that complex normal matrices are unitarily
-diagonalizable. The immediate slice is a human-reviewable exemplar spec: one
-searchable proof, a symbol-role ledger, roughly five semantic checkpoints, one
-minimal native-KaTeX matrix-attention sequence, eight to twelve prompt intents,
-and direct re-entry to exact proof state. Do not build a scheduler, generic
-matrix API, SVD lesson, or linear-algebra curriculum for this checkpoint.
+The bounded Proof Memory Loop experiment reached its mandatory human
+checkpoint through
+`run-contract.kp.normal-matrix-proof-memory-exemplar-v2`. The route proves one
+searchable proof, semantic symbol identities, six directly addressable native
+states, two deterministic motion intervals, eleven prompt projections, manual
+return rehearsal, and bounded closure. The checkpoint is **not approved as a
+learner experience**: the Article/stage split remains attentionally ambiguous,
+direct entry hides the motion, and the current symbolic trajectories do not
+make ownership transfer obvious. Preserve the route as architecture and
+product-learning evidence; do not begin s26 hardening under the old treatment.
 
-That specification is now at a human checkpoint in
-`reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. Its eight
-high-level implementation phases remain the design boundary; do not maintain a
-second design plan.
+The accepted refinement is recorded in
+`decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`.
+The next bounded action is a specification—not implementation—for one
+hard-coded eigenvector experience with roughly six to nine attentional beats,
+one persistent semantic vector across geometry and notation, one prediction or
+manipulation, complete searchable fallback, and no permanent text/animation
+split. Do not create generic vector, matrix, beat, layout, or authoring APIs for
+that specification.
 
-The detailed execution proposal is recorded once at
-`reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. It
-expands the spec's eight phases into 27 independently verifiable slices and
-stops at a mandatory human exemplar checkpoint before post-approval hardening.
-It is not executable until explicitly approved and materialized as one Theseus
-contract.
-
-The canonical economics demand-shift graph remains the next approved product
-caller after that checkpoint. Preserve and audit the user's current uncommitted
-economics Article and generated publication before touching that caller.
+The canonical economics demand-shift graph remains an approved future product
+caller after the attentional-surface question is answered. Preserve and audit
+the user's current uncommitted economics Article and generated publication
+before touching that caller.
 Project its existing semantic model, retained SVG session, deterministic
 timeline, direct links, and static Article truth through the same
 public-product boundary, then stop at a human graph checkpoint. The symbolic
@@ -261,7 +262,7 @@ route's approximately 106 KB gzip JavaScript closure remains a measured
 pressure finding; defer symbolic-only slimming and shared projection extraction
 until the three-caller comparison supplies evidence.
 
-Choose one public v0 projection using at least three real content shapes:
+Later choose one public v0 projection using at least three real content shapes:
 
 - symbolic manipulation;
 - a graph/model explanation;
@@ -282,16 +283,22 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 
 ## Current Checkpoints And Pauses
 
+- The normal-matrix Proof Memory implementation is preserved at its mandatory
+  checkpoint. Architecture passed; attentional experience did not. Its s26-s27
+  continuation remains unapproved.
+- The eigenvector attentional-surface exemplar is a specification candidate,
+  not yet an approved implementation or linear-algebra expansion.
 - Scheme factorial full evaluation is implemented, approved, and directly
   hosted in the catalogue. Broader SICP or Scheme expansion remains paused.
 - The algebra explanation contract remains recoverable from its verified human
   checkpoint; its pacing correction and remaining slices are paused.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
-- Linear algebra remains parked except for the single bounded normal-matrix
-  proof-memory exemplar. SVD, broad matrix promotion, broad Graph3D promotion,
-  live LLM editorial wording, advanced CodeMirror history tools, Public Editor,
-  and curriculum-scale work remain parked.
+- Linear algebra remains parked except for the preserved normal-matrix evidence
+  and the bounded eigenvector attentional-surface specification candidate. SVD,
+  broad matrix promotion, broad Graph3D promotion, live LLM editorial wording,
+  advanced CodeMirror history tools, Public Editor, and curriculum-scale work
+  remain parked.
 
 ## Architecture And Authoring Laws
 
@@ -359,8 +366,8 @@ Do not restart work already closed:
 - broad Canvas/WebGL salience parity and Graph3D promotion;
 - dynamic capability-package deployment;
 - GIF/video encoding beyond the accepted frame/export contracts;
-- matrix, Jacobian/Hessian, eigenvector, and other tabled linear-algebra
-  promotion beyond the bounded normal-matrix proof-memory experiment; and
+- matrix, Jacobian/Hessian, and other broad linear-algebra promotion beyond the
+  bounded eigenvector attentional-surface candidate; and
 - broad live LLM editorial prose generation.
 
 ## Retrieval Guide

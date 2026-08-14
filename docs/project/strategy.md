@@ -4,19 +4,22 @@ Last Updated: 2026-08-14
 
 ## North Star
 
-Kinetic Press should become a verified semantic-to-interactive compiler, not a
-collection of one-off visual effects. LLMs should be able to propose and revise
-structured animations; KP should validate the semantics, execute computations,
-derive representations, preserve identity, render synchronized views, and
-export the result as interactive cards, lessons, static steps, GIFs, or videos.
+> **Kinetic Press turns explanations into reusable mental machinery.**
+
+KP is a semantic medium for acquiring, manipulating, retaining, and reusing
+ways of seeing. Its verified semantic-to-interactive compiler makes those ways
+inspectable and executable; the compiler is core machinery, not the complete
+learner-facing product definition.
 
 ## Product Thesis
 
-The durable artifact is an executable semantic animation. An animation contains
-semantic objects, semantic transformations, layouts, timelines, visual motifs,
-concept refs, checks, and export settings. Tutorials, cards, comparisons,
-problem solutions, and embeds are consumers of that animation artifact, not the
-artifact itself. The same source should support:
+The learner-facing durable artifact is a reusable **way of seeing**. Its
+technical substrate is an executable semantic object: stable objects,
+transformations, relationships, representations, attention decisions,
+checkpoints, checks, and deterministic state. Tutorials, prompts, cards,
+comparisons, problem solutions, embeds, and later reminders are projections of
+that shared structure rather than disconnected content. The same source should
+support:
 
 - interactive scrubbable cards;
 - synchronized equation, graph, diagram, and code views;
@@ -31,12 +34,14 @@ seek/rewind, responsive execution, accessibility, hover, annotations, Cloze,
 and renderer-independent compilation. Bespoke motion planning is not itself a
 product thesis.
 
-At the learner-facing level, KP is a salience-transmission engine. Semantic
-authority establishes what is true; checkpoint attention tells the learner
-what to inspect, what context must remain visible, and how attention should
-move through the argument. This is not license for decorative highlighting or
-a universal focus schema: target, context, and attenuation are proved through
-reviewed exemplars before promotion.
+At the learner-facing level, KP is a salience-transmission and semantic-memory
+medium. Semantic authority establishes what is true; an **attentional beat**
+combines a meaningful state with a decision about whether prose, an object, a
+transformation, a comparison, a prediction, or the learner should own
+attention. Text, notation, diagrams, code, motion, and interaction take turns
+rather than occupying permanent competing streams. This is not license for
+decorative highlighting or a universal beat schema: product grammar and
+visual treatments are proved through reviewed exemplars before promotion.
 
 KP is learner-facing in the long term. The first learner product should deepen
 understanding for people who have already encountered the notation rather than
@@ -54,29 +59,43 @@ durable proof rather than isolated content. This is an experiment to validate
 demand and learning value, not a commitment to accounts, a scheduler, or a
 linear-algebra curriculum.
 
+The LLM is ephemeral pedagogical intelligence operating on this persistent
+semantic world. It may diagnose confusion, choose a representation, introduce
+an analogy, or decide whether to explain or ask. KP owns semantic referents,
+state, transformations, learner actions, correctness, and retrieval context.
+Chat discovers an explanation; KP crystallizes it; practice internalizes it.
+
 ## Current Strategic Stage
 
-KP is now in convergence and architecture compression. The semantic/runtime
-engine is not finished, but it is sufficiently capable that another broad
-infrastructure or domain-expansion tranche would produce less value than
-reducing the active surface around it.
+KP is in **medium discovery within convergence**. The semantic/runtime engine
+is sufficiently capable; the largest unknown is whether one attentional
+surface can create a short conceptual experience in which the learner never
+has to decide where to look. Another broad infrastructure, authoring, layout,
+or domain-expansion tranche would produce less value than answering that
+question with one hard-coded exemplar.
 
-The primary learner-product bottleneck is product convergence: a small set of
-indisputably useful explanations, one release-worthy default projection,
-responsive and accessible presentation, navigation, and an efficient revision
-loop. Layout selection is part of this gate, but it is a product choice among
-replaceable projections rather than new semantic or Article authority. KP does
-not need one universal layout before it can ship a bounded public proof.
+The normal-matrix checkpoint validates searchable proof truth, semantic
+identity, direct state, prompts, native settlement, accessibility, and bounded
+runtime closure. It does not validate attention choreography: prose and stage
+still compete, motion is difficult to discover, and ownership transfers are
+not self-evident. Preserve that work as evidence and do not mistake local
+hardening for product validation.
+
+The immediate next product candidate is a three-to-five-minute eigenvector
+experience composed from a small number of attentional beats. Its goal is not
+to establish a generic matrix/vector API or universal layout. It should prove
+semantic identity from a visible vector through `Av = lambda v`, one learner
+prediction or manipulation, and an invariant-subspace conclusion.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
 cost. The TypeScript/Python comparison and bounded Scheme pressure have now
-proved marginal reuse without flattening language-specific pedagogy. Before
-the economics graph pressure and final Public Web v0 comparison, one bounded
-normal-matrix proof will test the Proof Memory Loop with existing Article,
-native-KaTeX, semantic-address, deterministic-seek, and flashcard-projection
-authority. It may add semantic content and bindings, not another runtime or a
-generic matrix system.
+proved marginal reuse without flattening language-specific pedagogy. The
+normal-matrix proof has now pressure-tested Article, native KaTeX, semantic
+addresses, deterministic seek, and prompt projection. Its unapproved
+attentional treatment establishes the next boundary: prove one excellent
+one-surface conceptual experience before economics graph pressure or a final
+Public Web v0 comparison.
 
 ## Strategic Architecture
 

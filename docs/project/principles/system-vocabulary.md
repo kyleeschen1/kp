@@ -17,6 +17,8 @@ lesson vocabulary remains in `motion-passage-vocabulary.md`.
 | **Semantic transformation** | A meaningful operation from source objects to target objects, with correspondence, assumptions, and lineage. |
 | **Canonical semantic trace** | Verified causal transformations supplied by a solver, interpreter, authored proof, or trusted fixture. |
 | **Pedagogical score** | A typed choice of grouping, disclosure, emphasis, and explanation order that may simplify a trace without contradicting it. |
+| **Attentional beat** | A meaningful semantic state plus an explicit decision about what owns learner attention: prose, object, transformation, comparison, prediction, learner action, or settled inference. It is a product/design primitive, not necessarily a slide or a new runtime type. |
+| **Attentional surface** | The learner-facing composition in which representations take turns owning attention. It is projection-neutral and does not imply a fixed DOM container, viewport geometry, or one simultaneous layout. |
 | **Presentation profile** | Reusable renderer-neutral policy for expressing a semantic operation through named motifs and phases. |
 | **Motion plan** | The resolved renderer-neutral choreography produced from semantic truth plus a presentation profile. |
 | **Motion block** | One seekable semantic timeline with meaningful beats. It is not a page-layout container. |
@@ -62,6 +64,10 @@ remain compatibility inputs, not a second construction authority.
   selection. Do not call the browser's execution order a lesson plan.
 - Use **motion block** for runtime time and **motion passage** for compound
   lesson content.
+- Use **attentional beat** for a cognitive ownership decision and **motion
+  beat** for a meaningful checkpoint or phase inside an animation timeline.
+  One attentional beat may contain no motion; one motion interval may serve a
+  larger attentional beat.
 - Use **stage** for the display instance and **projection** for the layout
   representation.
 - Use **vignette** for reusable presentation and **animation asset** for its

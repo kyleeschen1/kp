@@ -1,12 +1,25 @@
 # Proof-Memory Medium
 
-Status: experiment
+Status: stabilize
 Last Updated: 2026-08-14
-Current Next Action: approve, revise, or reject the 27-slice proposal at
-`../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. On
-approval, create the exact typed Theseus contract and execute only through its
-mandatory exemplar checkpoint. Do not implement a scheduler, broad matrix API,
-SVD sequence, or linear-algebra curriculum.
+Current Next Action: preserve the normal-matrix implementation as architecture
+and retrieval evidence, record its attentional checkpoint as unapproved, and
+do not execute s26-s27. Revisit proof-memory behavior only after one
+attentional-surface exemplar makes read/watch/predict ownership self-evident.
+
+## Checkpoint Result
+
+`run-contract.kp.normal-matrix-proof-memory-exemplar-v2` reached its mandatory
+human checkpoint with searchable static proof truth, six native states, two
+deterministic motion intervals, eleven prompts, exact semantic return, manual
+rehearsal, accessibility, and bounded route closure.
+
+The experiment did not yet establish the product experience. The learner still
+has to decide between prose and stage, direct state entry makes motion hard to
+discover, and the symbolic transitions do not clearly announce where to look.
+Classify the result as **architecture validated; attentional experience not
+validated**. Keep Proof Memory as a later lifecycle mode rather than using it
+as KP's primary product definition.
 
 ## Goal
 
@@ -119,6 +132,7 @@ renderer authority.
 ## Links
 
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
+- `../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
 - `../reviews/2026-08-14-proof-memory-experiment-next-step-review.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`
