@@ -137,7 +137,8 @@
     {
       "id": "s15",
       "title": "Fixed transport",
-      "status": "planned"
+      "summary": "Added fixed Back/Next/progress transport with static hash links, boundary semantics, polite status, and no competing media controls.",
+      "status": "complete"
     },
     {
       "id": "s16",
