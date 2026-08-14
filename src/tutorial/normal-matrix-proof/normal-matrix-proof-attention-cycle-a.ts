@@ -4,19 +4,13 @@ import {
   type KpAnimationSaliencePlan
 } from "../../animation/salience-plan.ts";
 import {
-  createKpSemanticEntity,
-  createKpSemanticEntityRegistry
-} from "../../semantic/semantic-entity-provenance.ts";
-import { createKpSemanticScene } from
-  "../../semantic/semantic-scene-protocol.ts";
-import {
   kpNormalMatrixProofTransformationPaths,
   type KpNormalMatrixProofTransformationPath
 } from "../../semantic/normal-matrix-proof-operations.ts";
-import {
-  kpNormalMatrixProofSemanticRegistry,
-  type KpNormalMatrixProofObjectPath
-} from "../../semantic/normal-matrix-proof-semantics.ts";
+import type { KpNormalMatrixProofObjectPath } from
+  "../../semantic/normal-matrix-proof-semantics.ts";
+import { kpNormalMatrixProofAttentionScene } from
+  "./normal-matrix-proof-attention-scene.ts";
 
 export const kpNormalMatrixProofAttentionPhaseKinds = Object.freeze([
   "orient",
@@ -49,29 +43,6 @@ export interface KpNormalMatrixProofAttentionPhaseProjection {
   readonly phase: KpNormalMatrixProofAttentionPhase;
   readonly intents: readonly KpAnimationSalienceIntent[];
 }
-
-const sourceId = "proof.linear-algebra.normal-matrix-unitary-diagonalization";
-
-// The shared salience validator consumes the standard scene protocol. This is
-// only a projection of the proof registry: authored proof paths remain identity.
-const semanticScene = createKpSemanticScene({
-  id: "scene.normal-proof.cycle-a",
-  surfaceKind: "equation",
-  title: "Row and column contributions in a normal matrix",
-  registry: createKpSemanticEntityRegistry({
-    entities: kpNormalMatrixProofSemanticRegistry.map((entity) =>
-      createKpSemanticEntity({
-        id: entity.path,
-        semanticKind: entity.kind,
-        label: entity.label,
-        ...(entity.parentPath === undefined
-          ? {}
-          : { parentId: entity.parentPath }),
-        provenance: { kind: "authored", sourceId }
-      })
-    )
-  })
-});
 
 const intents = Object.freeze([
   notice(
@@ -130,7 +101,7 @@ export const kpNormalMatrixProofAttentionCycleA:
     salience: createKpAnimationSaliencePlan({
       id: "salience.normal-proof.cycle-a",
       intents,
-      scenes: [semanticScene]
+      scenes: [kpNormalMatrixProofAttentionScene]
     }),
     phases: Object.freeze([
       phase("cycle-a.orient", "orient", [

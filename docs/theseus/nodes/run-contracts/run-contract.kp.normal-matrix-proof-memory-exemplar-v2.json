@@ -144,7 +144,8 @@
     {
       "id": "s16",
       "title": "Attention cycle B plan",
-      "status": "planned"
+      "summary": "Added and verified the renderer-neutral cycle B plan with prediction precedence and authored inference authority.",
+      "status": "complete"
     },
     {
       "id": "s17",

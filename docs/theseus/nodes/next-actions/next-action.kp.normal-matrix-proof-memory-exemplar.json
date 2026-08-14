@@ -305,11 +305,32 @@
       "scope": "s15-cycle-a-rendering",
       "checkedAt": "2026-08-14T17:45:24.498Z",
       "notes": "Build passes at 9.91 KB gzip HTML, 1.06 KB startup, and 7.94 KB lazy capability, within approved route ceilings."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s16-cycle-b-plan",
+      "checkedAt": "2026-08-14T17:49:05.310Z",
+      "notes": "52 focused tests pass; prediction precedes all reveals, phases close in order, and zero-row plus recursion retain authored transformation authority."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "s16-cycle-b-plan",
+      "checkedAt": "2026-08-14T17:49:06.368Z",
+      "notes": "All 20 shared salience contract tests remain green after the local cycle B plan."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s16-cycle-b-plan",
+      "checkedAt": "2026-08-14T17:49:07.344Z",
+      "notes": "The shared local attention-scene projection and cycle B plan typecheck in the public route boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Cycle A now renders row and column handoffs, native equation settlement, and unmatched-term inspection through direct writes from the one proof clock; no autoplay, scroll ownership, CSS animation, or second paint authority was added."
+    "summary": "Cycle B now asks for the row-remainder prediction before any reveal, then maps the zero-norm inference, block-diagonal settlement, and recursive focus to existing proof transformations and one shared local semantic scene."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
