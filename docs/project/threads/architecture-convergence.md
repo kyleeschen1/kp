@@ -2,13 +2,17 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: pressure the approved code and symbolic public-product
-boundary with the canonical economics demand-shift graph. Preserve and audit
-the user's uncommitted economics Article and generated-publication edits before
-implementation. Reuse existing graph semantics, the retained SVG session, one
-deterministic clock, direct seeking, static Article truth, and accessibility;
-stop at a human graph checkpoint before runtime slimming or shared projection
-extraction. The cross-language proof is closed in
+Current Next Action: review the opt-in algebra distribution attention arc at
+`/learn/math/fraction-composition/?attentionArc=distribution`, without
+reopening the approved full-timeline default or extracting a shared contract.
+After that bounded checkpoint, pressure the approved code and symbolic
+public-product boundary with the canonical economics demand-shift graph.
+Preserve and audit the user's uncommitted economics Article and
+generated-publication edits before implementation. Reuse existing graph
+semantics, the retained SVG session, one deterministic clock, direct seeking,
+static Article truth, and accessibility; stop at a human graph checkpoint
+before runtime slimming or shared projection extraction. The cross-language
+proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 

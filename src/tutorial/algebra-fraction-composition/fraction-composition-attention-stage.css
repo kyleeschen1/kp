@@ -111,6 +111,14 @@ html[data-kp-algebra-view="attention-stage"]
 }
 
 html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage[data-kp-algebra-attention-variant="distribution-arc"]
+  .kp-algebra-attention-stage__passages {
+  /* Reserve the longer settled interpretation so the canonical stage and
+     transport do not jump when motion gives way to evidence. */
+  min-height: 6.75rem;
+}
+
+html[data-kp-algebra-view="attention-stage"]
   .kp-algebra-attention-stage__passage {
   grid-area: 1 / 1;
   max-width: 58ch;
@@ -183,6 +191,12 @@ html[data-kp-algebra-view="attention-stage"]
   height: 0.7rem;
   background: var(--kp-algebra-attention-context);
   transform: translate(-0.5px, -50%);
+}
+
+html[data-kp-algebra-view="attention-stage"]
+  .kp-algebra-attention-stage[data-kp-algebra-attention-variant="distribution-arc"]
+  .kp-algebra-attention-stage__chapter-marks {
+  display: none;
 }
 
 html[data-kp-algebra-view="attention-stage"]

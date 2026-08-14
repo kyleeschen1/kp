@@ -107,6 +107,7 @@ export function mountKpFractionCompositionArticleEnhancement(
     publication: article,
     stageHost: host,
     requested: attentionStageRequested,
+    prepareRange: (path) => canonicalStage.prepareRange(path),
     seekGlobal: (progress) => canonicalStage.seekGlobal(progress),
     playTimeline: () => canonicalStage.playRange(),
     pauseTimeline: () => canonicalStage.pauseRange(),
@@ -416,10 +417,9 @@ function mountCanonicalRanges(input: {
       throw new Error(`Unknown algebra attention range ${path}.`);
     }
     reattachLiveSurface(range.path);
-    if (input.fixedLiveSurface) {
-      mountedTransport.seekGlobal(range.start, "controls");
-      return;
-    }
+    // An opt-in fixed projection may rehearse one canonical range. Selecting
+    // the transport window preserves its duration and stop boundary without
+    // introducing a projection-owned clock.
     mountedTransport.selectRange({
       id: range.path,
       start: range.start,

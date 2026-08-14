@@ -60,6 +60,14 @@ test("static public lesson contains searchable prose, math, and one stage", () =
   assert.match(html, /class="katex"/u);
   assert.match(searchable, /The goal is x\s*=\s*9/u);
   assert.match(searchable, /Follow the factor as it distributes/u);
+  assert.match(
+    html,
+    /data-kp-algebra-attention-arc-instruction hidden aria-hidden="true"/u
+  );
+  assert.match(
+    html,
+    /data-kp-algebra-attention-interpretation hidden aria-hidden="true"/u
+  );
   assert.match(searchable, /Hold the variable fraction in place/u);
   assert.doesNotMatch(html, /CodeMirror|animation library/iu);
 });

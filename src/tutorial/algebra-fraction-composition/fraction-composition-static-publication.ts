@@ -7,6 +7,9 @@ import {
   compileKpEquationExemplarTemplate
 } from "../../reader/compiler/equation-exemplar-page.ts";
 import {
+  compileKpArticleMarkdownFragmentHtml
+} from "../../article/kp-article-static-html.ts";
+import {
   fractionCompositionDescriptor
 } from "../../reader/app/equation-lesson-descriptors/fraction-composition.ts";
 import {
@@ -160,7 +163,12 @@ function renderAttentionStage(
       ` data-kp-algebra-attention-primary="${escapeAttribute(beat.primaryAddresses.join(" "))}"`,
       ` data-kp-algebra-attention-context="${escapeAttribute(beat.contextAddresses.join(" "))}"`,
       index === 0 ? `` : ` hidden`,
-      `>${attentionCue(beat)}</div>`
+      `><div data-kp-algebra-attention-instruction>`,
+      attentionCue(beat),
+      `</div>`,
+      attentionArcInstruction(beat),
+      attentionInterpretation(compilation, beat),
+      `</div>`
     ].join("")).join(""),
     `</div>`,
     `<div class="kp-algebra-attention-stage__player"`,
@@ -210,6 +218,37 @@ function attentionCue(beat: KpFractionCompositionAttentionBeat): string {
     throw new Error(`Fraction composition attention beat ${beat.id} lacks a cue.`);
   }
   return `<p>${cue}</p>`;
+}
+
+function attentionInterpretation(
+  compilation: KpFractionCompositionArticleCompilation,
+  beat: KpFractionCompositionAttentionBeat
+): string {
+  if (beat.id !== "distribute:motion") return "";
+  const block = compilation.article.document.blocks.find((candidate) =>
+    candidate.kind === "motion" && candidate.id === beat.sourceBlockId
+  );
+  if (block?.kind !== "motion" || block.afterMarkdown === undefined) {
+    throw new Error("Distribution attention requires its Article interpretation.");
+  }
+  return [
+    `<div data-kp-algebra-attention-interpretation`,
+    ` hidden aria-hidden="true">`,
+    compileKpArticleMarkdownFragmentHtml(block.afterMarkdown),
+    `</div>`
+  ].join("");
+}
+
+function attentionArcInstruction(
+  beat: KpFractionCompositionAttentionBeat
+): string {
+  if (beat.id !== "distribute:motion") return "";
+  return [
+    `<div data-kp-algebra-attention-arc-instruction`,
+    ` hidden aria-hidden="true">`,
+    compileKpArticleMarkdownFragmentHtml(beat.passageMarkdown),
+    `</div>`
+  ].join("");
 }
 
 function renderCheckpointNavigation(

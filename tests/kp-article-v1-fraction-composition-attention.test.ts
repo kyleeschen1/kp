@@ -15,6 +15,11 @@ import {
   readKpFractionCompositionAttentionTempo
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-pacing.ts";
 import {
+  isKpFractionCompositionDistributionAttentionArcRequested,
+  projectKpFractionCompositionDistributionAttentionArc,
+  projectKpFractionCompositionDistributionGlobalProgress
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-distribution-attention-arc.ts";
+import {
   projectKpFractionCompositionAttentionScene
 } from "../src/tutorial/algebra-fraction-composition/fraction-composition-attention-scene.ts";
 import {
@@ -235,5 +240,77 @@ test("attention scene selection fails closed on ambiguous temporal input", () =>
       rangeProgress: 1.01
     }),
     /between 0 and 1/u
+  );
+});
+
+test("distribution attention arc prepares, transforms, and settles one range", () => {
+  const range = createKpFractionCompositionArticleRuntimeRanges()[0]!;
+  const prepare = projectKpFractionCompositionDistributionAttentionArc({
+    globalProgress: range.start,
+    playing: false
+  });
+  const transform = projectKpFractionCompositionDistributionAttentionArc({
+    globalProgress: projectKpFractionCompositionDistributionGlobalProgress(0.5),
+    playing: true
+  });
+  const settle = projectKpFractionCompositionDistributionAttentionArc({
+    globalProgress: range.end,
+    playing: false
+  });
+
+  assert.equal(prepare.phase, "prepare");
+  assert.equal(prepare.passage, "instruction");
+  assert.deepEqual(prepare.primaryAddresses, [
+    "solve/factor",
+    "solve/grouped-sum"
+  ]);
+  assert.equal(transform.phase, "transform");
+  assert.equal(transform.passage, "instruction");
+  assert.deepEqual(transform.primaryAddresses, [
+    "solve/factor",
+    "solve/grouped-sum",
+    "solve/distributed-variable-term",
+    "solve/distributed-constant-term"
+  ]);
+  assert.equal(settle.phase, "settle");
+  assert.equal(settle.passage, "interpretation");
+  assert.deepEqual(settle.primaryAddresses, [
+    "solve/distributed-variable-term",
+    "solve/distributed-constant-term"
+  ]);
+  for (const address of [
+    ...prepare.primaryAddresses,
+    ...transform.primaryAddresses,
+    ...settle.primaryAddresses,
+    ...settle.contextAddresses
+  ]) {
+    assert.notEqual(
+      resolveKpFractionCompositionArticleSemanticReference(address),
+      undefined
+    );
+  }
+  assert.equal(transform.timelineAuthority, "none");
+  assert.equal(
+    projectKpFractionCompositionDistributionGlobalProgress(0.5),
+    range.start + (range.end - range.start) * 0.5
+  );
+});
+
+test("distribution attention arc is explicitly opt in", () => {
+  assert.equal(
+    isKpFractionCompositionDistributionAttentionArcRequested(""),
+    false
+  );
+  assert.equal(
+    isKpFractionCompositionDistributionAttentionArcRequested(
+      "?attentionArc=distribution"
+    ),
+    true
+  );
+  assert.equal(
+    isKpFractionCompositionDistributionAttentionArcRequested(
+      "?attentionArc=complete-timeline"
+    ),
+    false
   );
 });

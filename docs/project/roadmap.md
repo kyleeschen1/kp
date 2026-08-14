@@ -203,6 +203,15 @@ pass focused checks. The human visual checkpoint passed on 2026-08-13. Freeze
 the page as the approved symbolic exemplar rather than continuing local layout
 discovery.
 
+An opt-in rehearsal of the newer attention-choreography philosophy is at a
+human checkpoint at
+`/learn/math/fraction-composition/?attentionArc=distribution`. It compresses
+one canonical distribution range into prepare, transform, and settle phases;
+its cue remains stable during motion and its native-KaTeX endpoint persists.
+This challenger neither reopens the approved full-timeline default nor creates
+a shared attention contract. Its bounded evidence and rollback are recorded in
+`reviews/2026-08-13-algebra-distribution-attention-arc-checkpoint.md`.
+
 The next bounded caller is the canonical economics demand-shift graph. Preserve
 and audit the user's current uncommitted economics Article and generated
 publication before touching that caller. Project its existing semantic model,

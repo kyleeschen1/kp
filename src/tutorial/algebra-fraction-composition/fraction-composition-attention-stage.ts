@@ -1,6 +1,12 @@
 import type {
   KpFractionCompositionAttentionPacingProfile
 } from "./fraction-composition-attention-pacing.ts";
+import {
+  isKpFractionCompositionDistributionAttentionArcRequested,
+  kpFractionCompositionDistributionAttentionArcRange,
+  projectKpFractionCompositionDistributionAttentionArc,
+  projectKpFractionCompositionDistributionGlobalProgress
+} from "./fraction-composition-distribution-attention-arc.ts";
 
 export interface KpFractionCompositionAttentionStageController {
   readonly active: boolean;
@@ -22,6 +28,7 @@ export function mountKpFractionCompositionAttentionStage(input: {
   readonly publication: HTMLElement;
   readonly stageHost: HTMLElement;
   readonly requested?: boolean | undefined;
+  readonly prepareRange: (path: string) => void;
   readonly seekGlobal: (progress: number) => void;
   readonly playTimeline: () => void;
   readonly pauseTimeline: () => void;
@@ -55,10 +62,45 @@ export function mountKpFractionCompositionAttentionStage(input: {
   if (passages.length === 0) {
     throw new Error("Algebra attention stage requires compiled passages.");
   }
+  const distributionArcRequested =
+    isKpFractionCompositionDistributionAttentionArcRequested(
+      input.ownerWindow.location.search
+    );
+  const distributionPassageIndex = passages.findIndex((passage) =>
+    passage.dataset["kpAlgebraAttentionBeat"] === "distribute:motion"
+  );
+  if (distributionArcRequested && distributionPassageIndex < 0) {
+    throw new Error("Distribution attention arc requires its compiled passage.");
+  }
+  const distributionPassage = distributionArcRequested
+    ? passages[distributionPassageIndex]!
+    : undefined;
+  const distributionInstruction = distributionPassage?.querySelector<HTMLElement>(
+    "[data-kp-algebra-attention-instruction]"
+  );
+  const distributionArcInstruction =
+    distributionPassage?.querySelector<HTMLElement>(
+      "[data-kp-algebra-attention-arc-instruction]"
+    );
+  const distributionInterpretation = distributionPassage?.querySelector<HTMLElement>(
+    "[data-kp-algebra-attention-interpretation]"
+  );
+  if (distributionArcRequested &&
+      (distributionInstruction === null ||
+       distributionInstruction === undefined ||
+       distributionArcInstruction === null ||
+       distributionArcInstruction === undefined ||
+       distributionInterpretation === null ||
+       distributionInterpretation === undefined)) {
+    throw new Error(
+      "Distribution attention arc requires instruction and interpretation prose."
+    );
+  }
 
   const originalParent = input.stageHost.parentNode;
   const originalNextSibling = input.stageHost.nextSibling;
   let activeIndex = -1;
+  let attentionKey = "";
   const globalProgress = (): number => Math.max(0, Math.min(1, Number(
     input.stageHost.dataset["kpAlgebraCanonicalGlobalProgress"] ?? "0"
   ) / 1_000));
@@ -71,9 +113,11 @@ export function mountKpFractionCompositionAttentionStage(input: {
       passage.setAttribute("aria-hidden", String(!active));
     });
     const active = passages[activeIndex]!;
-    input.setAttention(readWords(
-      requiredData(active, "kpAlgebraAttentionPrimary")
-    ));
+    if (!distributionArcRequested) {
+      input.setAttention(readWords(
+        requiredData(active, "kpAlgebraAttentionPrimary")
+      ));
+    }
     root.dataset["kpAlgebraAttentionActiveBeat"] =
       requiredData(active, "kpAlgebraAttentionBeat");
   };
@@ -94,33 +138,85 @@ export function mountKpFractionCompositionAttentionStage(input: {
     const progress = globalProgress();
     const playing = input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] ===
       "playing";
-    select(passageAt(progress, playing));
+    const distributionArc = distributionArcRequested
+      ? projectKpFractionCompositionDistributionAttentionArc({
+          globalProgress: progress,
+          playing
+        })
+      : undefined;
+    select(distributionArcRequested
+      ? distributionPassageIndex
+      : passageAt(progress, playing));
+    if (distributionArc !== undefined) {
+      const showInterpretation = distributionArc.passage === "interpretation";
+      distributionInstruction!.toggleAttribute("hidden", true);
+      distributionInstruction!.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+      distributionArcInstruction!.toggleAttribute(
+        "hidden",
+        showInterpretation
+      );
+      distributionArcInstruction!.setAttribute(
+        "aria-hidden",
+        String(showInterpretation)
+      );
+      distributionInterpretation!.toggleAttribute("hidden", !showInterpretation);
+      distributionInterpretation!.setAttribute(
+        "aria-hidden",
+        String(!showInterpretation)
+      );
+      const nextAttentionKey = distributionArc.primaryAddresses.join(" ");
+      if (nextAttentionKey !== attentionKey) {
+        attentionKey = nextAttentionKey;
+        input.setAttention(distributionArc.primaryAddresses);
+      }
+      root.dataset["kpAlgebraAttentionArcPhase"] = distributionArc.phase;
+    }
+    const displayedProgress = distributionArc?.localProgress ?? progress;
     scrubber.disabled = !ready;
     toggle.disabled = !ready;
-    scrubber.value = String(Math.round(progress * 1_000));
-    scrubber.setAttribute("aria-valuetext", `${Math.round(progress * 100)}%`);
+    scrubber.value = String(Math.round(displayedProgress * 1_000));
+    scrubber.setAttribute(
+      "aria-valuetext",
+      `${Math.round(displayedProgress * 100)}%`
+    );
     root.style.setProperty(
       "--kp-algebra-attention-player-progress",
-      `${progress * 100}%`
+      `${displayedProgress * 100}%`
     );
-    toggle.textContent = playing ? "Pause" : progress >= 1 ? "Replay" : "Play";
+    toggle.textContent = playing
+      ? "Pause"
+      : displayedProgress >= 1
+        ? "Replay"
+        : "Play";
     toggle.dataset["kpAlgebraAttentionPrimaryState"] = playing
       ? "pause"
-      : progress >= 1
+      : displayedProgress >= 1
         ? "replay"
         : "play";
-    root.dataset["kpAlgebraAttentionMotionState"] = playing
-      ? "acting"
-      : progress <= 0
-        ? "orient"
-        : "inspect";
+    root.dataset["kpAlgebraAttentionMotionState"] = distributionArc === undefined
+      ? playing
+        ? "acting"
+        : progress <= 0
+          ? "orient"
+          : "inspect"
+      : distributionArc.phase;
   };
   const onToggle = (): void => {
     if (toggle.disabled) return;
     if (input.stageHost.dataset["kpAlgebraCanonicalRangeStatus"] === "playing") {
       input.pauseTimeline();
     } else {
-      if (globalProgress() >= 1) input.seekGlobal(0);
+      const displayedProgress = distributionArcRequested
+        ? Number(scrubber.value) / 1_000
+        : globalProgress();
+      if (displayedProgress >= 1) {
+        input.seekGlobal(distributionArcRequested
+          ? projectKpFractionCompositionDistributionGlobalProgress(0)
+          : 0);
+      }
       input.playTimeline();
     }
     updatePlayer();
@@ -128,7 +224,10 @@ export function mountKpFractionCompositionAttentionStage(input: {
   const onScrub = (): void => {
     if (scrubber.disabled) return;
     input.pauseTimeline();
-    input.seekGlobal(Number(scrubber.value) / 1_000);
+    const localProgress = Number(scrubber.value) / 1_000;
+    input.seekGlobal(distributionArcRequested
+      ? projectKpFractionCompositionDistributionGlobalProgress(localProgress)
+      : localProgress);
     updatePlayer();
   };
   const stageStateObserver = new MutationObserver(updatePlayer);
@@ -140,7 +239,15 @@ export function mountKpFractionCompositionAttentionStage(input: {
   root.dataset["kpAlgebraAttentionOperationMs"] =
     String(input.pacing.millisecondsPerOperation);
   root.dataset["kpAlgebraAttentionDurationMs"] =
-    String(input.pacing.fullTimelineDurationMs);
+    String(distributionArcRequested
+      ? input.pacing.rangeDurationsMs[
+          kpFractionCompositionDistributionAttentionArcRange
+        ]
+      : input.pacing.fullTimelineDurationMs);
+  if (distributionArcRequested) {
+    root.dataset["kpAlgebraAttentionVariant"] = "distribution-arc";
+    input.prepareRange(kpFractionCompositionDistributionAttentionArcRange);
+  }
   visual.append(input.stageHost);
   stageStateObserver.observe(input.stageHost, {
     attributes: true,
@@ -162,6 +269,16 @@ export function mountKpFractionCompositionAttentionStage(input: {
       scrubber.removeEventListener("input", onScrub);
       stageStateObserver.disconnect();
       input.setAttention([]);
+      if (distributionArcRequested) {
+        distributionInstruction!.removeAttribute("hidden");
+        distributionInstruction!.removeAttribute("aria-hidden");
+        distributionArcInstruction!.toggleAttribute("hidden", true);
+        distributionArcInstruction!.setAttribute("aria-hidden", "true");
+        distributionInterpretation!.toggleAttribute("hidden", true);
+        distributionInterpretation!.setAttribute("aria-hidden", "true");
+        delete root.dataset["kpAlgebraAttentionVariant"];
+        delete root.dataset["kpAlgebraAttentionArcPhase"];
+      }
       if (originalParent !== null) {
         originalParent.insertBefore(input.stageHost, originalNextSibling);
       }

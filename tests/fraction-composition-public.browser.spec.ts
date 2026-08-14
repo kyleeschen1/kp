@@ -66,6 +66,142 @@ test("public symbolic lesson enhances the canonical stage and seeks directly", a
   await lesson.screenshot({ path: path.join(captureRoot, "wide.png") });
 });
 
+test("opt-in distribution arc keeps its cue stable and holds native settlement", async ({
+  page
+}) => {
+  await page.goto(`${route}?attentionArc=distribution`, {
+    waitUntil: "domcontentloaded"
+  });
+
+  const root = page.locator("[data-kp-algebra-attention-stage]");
+  const stageHost = root.locator("[data-kp-algebra-stage-host]");
+  const canonical = root.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  );
+  const toggle = root.locator(
+    '[data-kp-algebra-attention-action="toggle"]'
+  );
+  const scrubber = root.locator("[data-kp-algebra-attention-scrubber]");
+  const arcInstruction = root.locator(
+    "[data-kp-algebra-attention-arc-instruction]"
+  );
+  const interpretation = root.locator(
+    "[data-kp-algebra-attention-interpretation]"
+  );
+
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-variant",
+    "distribution-arc"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-active-beat",
+    "distribute:motion"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-arc-phase",
+    "prepare"
+  );
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-duration-ms",
+    "4800"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    "distribute-and-normalize"
+  );
+  await expect(arcInstruction).toBeVisible();
+  await expect(arcInstruction).toContainText(
+    "Follow the factor as it distributes into both addends"
+  );
+  await expect(arcInstruction).toContainText(
+    "Keep the denominator"
+  );
+  await expect(arcInstruction).toContainText(
+    "attached to each resulting fraction"
+  );
+  await expect(interpretation).toBeHidden();
+  await mkdir(captureRoot, { recursive: true });
+  await root.screenshot({
+    path: path.join(captureRoot, "attention-arc-opening.png"),
+    animations: "disabled"
+  });
+
+  const instructionText = await arcInstruction.textContent();
+  await toggle.click();
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-arc-phase",
+    "transform"
+  );
+  await expect.poll(async () => Number(
+    await stageHost.getAttribute("data-kp-algebra-canonical-local-progress")
+  )).toBeGreaterThan(0);
+  expect(await arcInstruction.textContent()).toBe(instructionText);
+  await toggle.click();
+
+  await scrubber.fill("1000");
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-arc-phase",
+    "settle"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000"
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
+  await expect(arcInstruction).toBeHidden();
+  await expect(interpretation).toBeVisible();
+  await expect(interpretation).toContainText(
+    "Nothing crossed the equals sign"
+  );
+  await expect(toggle).toHaveText("Replay");
+  await root.screenshot({
+    path: path.join(captureRoot, "attention-arc-settled.png"),
+    animations: "disabled"
+  });
+
+  await scrubber.fill("500");
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-arc-phase",
+    "transform"
+  );
+  await expect(arcInstruction).toBeVisible();
+  await expect(interpretation).toBeHidden();
+  await expect(canonical).toHaveCount(1);
+});
+
+test("opt-in distribution arc reduces motion to its direct endpoint", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${route}?attentionArc=distribution`, {
+    waitUntil: "domcontentloaded"
+  });
+
+  const root = page.locator("[data-kp-algebra-attention-stage]");
+  const stageHost = root.locator("[data-kp-algebra-stage-host]");
+  await root.locator(
+    '[data-kp-algebra-attention-action="toggle"]'
+  ).click();
+
+  await expect(root).toHaveAttribute(
+    "data-kp-algebra-attention-arc-phase",
+    "settle"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000"
+  );
+  await expect(root.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  )).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
+});
+
 test("public symbolic route restores a semantic endpoint without replay", async ({
   page
 }) => {
@@ -120,7 +256,7 @@ test("the complete lesson remains searchable without client JavaScript", async (
     await expect(page.getByRole("heading", {
       name: "What does the fraction multiply?"
     }).first()).toBeVisible();
-    await expect(page.getByText(
+    await expect(page.getByRole("article").getByText(
       "Follow the factor as it distributes into both addends."
     )).toBeVisible();
     await expect(page.locator(
