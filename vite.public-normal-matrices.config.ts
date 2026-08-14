@@ -8,6 +8,7 @@ import type { KpArticleImportLock } from
   "./src/article/kp-article-import-lock.ts";
 import {
   compileKpNormalMatrixProofPublicLesson,
+  renderKpNormalMatrixProofReviewIndex,
   renderKpNormalMatrixProofPublicLesson
 } from "./src/public-web/normal-matrix-proof-publication.ts";
 
@@ -15,6 +16,10 @@ const projectRoot = fileURLToPath(new URL(".", import.meta.url));
 const routeFilename = resolve(
   projectRoot,
   "learn/math/normal-matrices/index.html"
+);
+const reviewRouteFilename = resolve(
+  projectRoot,
+  "learn/math/normal-matrices/review/index.html"
 );
 
 /** Keep this proof experiment attributable outside the catalogue bundle. */
@@ -24,12 +29,19 @@ export default defineConfig({
     transformIndexHtml: {
       order: "pre",
       handler(html, context) {
-        return context.filename === routeFilename
-          ? html.replace(
-              "<!-- kp:normal-matrix-proof-publication -->",
-              compilePublication()
-            )
-          : html;
+        if (context.filename === routeFilename) {
+          return html.replace(
+            "<!-- kp:normal-matrix-proof-publication -->",
+            compilePublication()
+          );
+        }
+        if (context.filename === reviewRouteFilename) {
+          return html.replace(
+            "<!-- kp:normal-matrix-proof-review -->",
+            renderKpNormalMatrixProofReviewIndex()
+          );
+        }
+        return html;
       }
     }
   }],
@@ -39,7 +51,10 @@ export default defineConfig({
     manifest: true,
     modulePreload: { polyfill: false },
     rollupOptions: {
-      input: { publicNormalMatrices: routeFilename }
+      input: {
+        publicNormalMatrices: routeFilename,
+        publicNormalMatricesReview: reviewRouteFilename
+      }
     }
   },
   server: {

@@ -9,9 +9,13 @@ import {
   renderKpNormalMatrixProofPublicLesson
 } from "../src/public-web/normal-matrix-proof-publication.ts";
 import {
+  isKpNormalMatrixProofReviewRoute,
   isKpNormalMatrixProofPublicRoute,
-  kpNormalMatrixProofPublicPath
+  kpNormalMatrixProofPublicPath,
+  kpNormalMatrixProofReviewPath
 } from "../src/public-web/normal-matrix-proof-public-route.ts";
+import { renderKpNormalMatrixProofReviewIndex } from
+  "../src/public-web/normal-matrix-proof-publication.ts";
 
 const text = readFileSync(
   "content/lessons/linear-algebra-normal-matrices.kp.md",
@@ -52,12 +56,32 @@ test("static route shell is complete before lazy enhancement", () => {
 
 test("normal-matrix proof owns one canonical public route", () => {
   assert.equal(kpNormalMatrixProofPublicPath, "/learn/math/normal-matrices/");
+  assert.equal(
+    kpNormalMatrixProofReviewPath,
+    "/learn/math/normal-matrices/review/"
+  );
   assert.equal(isKpNormalMatrixProofPublicRoute(
     "/learn/math/normal-matrices"
   ), true);
   assert.equal(isKpNormalMatrixProofPublicRoute(
     "/learn/math/fraction-composition/"
   ), false);
+  assert.equal(isKpNormalMatrixProofReviewRoute(
+    "/learn/math/normal-matrices/review"
+  ), true);
+  assert.equal(isKpNormalMatrixProofReviewRoute(
+    "/learn/math/normal-matrices/"
+  ), false);
+});
+
+test("review index keeps every prompt searchable without duplicating the stage", () => {
+  const html = renderKpNormalMatrixProofReviewIndex();
+  const searchable = html.replace(/<[^>]*>/gu, " ").replace(/\s+/gu, " ");
+
+  assert.equal(html.split("data-kp-normal-proof-prompt=").length - 1, 11);
+  assert.match(searchable, /unmatched nonnegative squared norm must be zero/iu);
+  assert.doesNotMatch(html, /data-kp-normal-proof-stage/u);
+  assert.doesNotMatch(html, /<script/iu);
 });
 
 test("public entry keeps the stage capability behind a dynamic boundary", () => {

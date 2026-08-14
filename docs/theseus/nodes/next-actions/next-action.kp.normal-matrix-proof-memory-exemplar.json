@@ -445,11 +445,35 @@
       "scope": "s20-route-closure",
       "checkedAt": "2026-08-14T18:25:44.484Z",
       "notes": "Build passes with HTML 9997 bytes gzip, startup 4.57 kB gzip, and lazy capability 7.76 kB gzip."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:40:45.320Z"
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:40:46.426Z"
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:40:47.401Z"
+    },
+    {
+      "command": "npm run build:public-normal-matrices; exact HTML gzip 9967 bytes, review HTML gzip 1933 bytes",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:40:48.386Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Semantic fragments now resolve strictly against the authored registry, directly activate the native stage, preserve route-owned checkpoint time, and paint only matching semantic wrappers across refresh and history traversal."
+    "summary": "Slice s21 complete: eleven prompt projections live in static searchable native-details HTML on a dedicated review route, and every prompt links to one canonical proof stage with exact checkpoint and semantic focus."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

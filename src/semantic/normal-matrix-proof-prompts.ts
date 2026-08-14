@@ -15,29 +15,36 @@ import {
 } from "./normal-matrix-proof-operations.ts";
 import type { KpNormalMatrixProofObjectPath } from
   "./normal-matrix-proof-semantics.ts";
+import {
+  kpNormalMatrixProofPromptIds,
+  type KpNormalMatrixProofPromptId
+} from "./normal-matrix-proof-prompt-ids.ts";
 
-export const kpNormalMatrixProofPromptIds = Object.freeze([
-  "define-normality",
-  "read-left-entry",
-  "read-right-entry",
-  "connect-normality-to-norms",
-  "explain-sparse-column",
-  "predict-row-remainder",
-  "explain-zero-norm",
-  "inherit-normality",
-  "reconstruct-proof",
-  "why-complex",
-  "diagonal-only-trap"
-] as const);
-
-export type KpNormalMatrixProofPromptId =
-  typeof kpNormalMatrixProofPromptIds[number];
+export { kpNormalMatrixProofPromptIds };
+export type { KpNormalMatrixProofPromptId };
 
 export interface KpNormalMatrixProofPrompt {
   readonly id: KpNormalMatrixProofPromptId;
   readonly checkpointId: KpNormalMatrixProofCheckpointId;
+  readonly focusPath: KpNormalMatrixProofObjectPath;
   readonly card: KpFlashcardSpec;
 }
+
+export const kpNormalMatrixProofPromptFocusPaths: Readonly<
+  Record<KpNormalMatrixProofPromptId, KpNormalMatrixProofObjectPath>
+> = Object.freeze({
+  "define-normality": "normality",
+  "read-left-entry": "product-left/first-entry",
+  "read-right-entry": "product-right/first-entry",
+  "connect-normality-to-norms": "normality",
+  "explain-sparse-column": "matrix/zero-column",
+  "predict-row-remainder": "matrix/row-remainder",
+  "explain-zero-norm": "inference/remainder-zero",
+  "inherit-normality": "proof/recursive-subproblem",
+  "reconstruct-proof": "proof/recursive-subproblem",
+  "why-complex": "eigenbasis",
+  "diagonal-only-trap": "normality"
+});
 
 const operationSet = createKpNormalMatrixProofOperationSet();
 
@@ -201,6 +208,11 @@ export function checkKpNormalMatrixProofPrompts(
     ) {
       issues.push(`Prompt ${promptSpec.id} time must derive from checkpoint ${promptSpec.checkpointId}.`);
     }
+    if (!promptSpec.card.selectorIds?.includes(
+      kpNormalMatrixProofSelectorId(promptSpec.focusPath)
+    )) {
+      issues.push(`Prompt ${promptSpec.id} focus must be one of its authored selectors.`);
+    }
     const answer = promptSpec.card.answer;
     if (answer?.kind === "selector" && !selectorIds.has(answer.value)) {
       issues.push(`Prompt ${promptSpec.id} answers with unknown selector ${answer.value}.`);
@@ -231,6 +243,7 @@ function prompt(
   return Object.freeze({
     id,
     checkpointId,
+    focusPath: kpNormalMatrixProofPromptFocusPaths[id],
     card: createKpFlashcardSpec({
       id: `card.normal-proof.${id}`,
       kind,

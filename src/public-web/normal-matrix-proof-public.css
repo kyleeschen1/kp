@@ -307,6 +307,56 @@ body {
   box-shadow: inset 0 -0.1em 0 var(--kp-normal-proof-focus-ink);
 }
 
+.kp-normal-proof-review {
+  margin: 3rem 0;
+  padding-block: 1.25rem;
+  border-block: 1px solid #454a57;
+}
+
+.kp-normal-proof-review-index {
+  width: min(100%, 42rem);
+  margin-inline: auto;
+  color: #d8d7d2;
+  font-size: clamp(1rem, 0.96rem + 0.18vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.kp-normal-proof-review-index a { color: #8fb9e8; }
+
+.kp-normal-proof-review > h3 { margin-top: 0; }
+
+.kp-normal-proof-review__prompts {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid #303541;
+}
+
+.kp-normal-proof-review details {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #303541;
+}
+
+.kp-normal-proof-review details[data-kp-normal-proof-prompt-selected="true"] {
+  border-color: var(--kp-normal-proof-focus-ink);
+}
+
+.kp-normal-proof-review summary {
+  color: #f2f0e7;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.kp-normal-proof-review details > p {
+  margin: 0.75rem 0 0;
+}
+
+.kp-normal-proof-review__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.86rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kp-normal-proof-stage [data-kp-normal-proof-moving="true"] {
     transform: none !important;

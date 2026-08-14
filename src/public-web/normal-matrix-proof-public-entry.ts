@@ -46,15 +46,20 @@ const restoreLocation = (): void => {
   }
   if (
     next.checkpoint === routeState.checkpoint &&
-    nextAddress === semanticAddress
+    nextAddress === semanticAddress &&
+    next.review === routeState.review
   ) return;
+  const proofStateChanged = next.checkpoint !== routeState.checkpoint ||
+    nextAddress !== semanticAddress;
   routeState = next;
   semanticAddress = nextAddress;
-  if (fallback !== null) {
+  if (fallback !== null && proofStateChanged) {
     selectKpNormalMatrixProofSettledCheckpoint(fallback, next.checkpoint);
   }
-  capabilityHandle?.seek(kpNormalMatrixProofCheckpointTimeMs(next.checkpoint));
-  if (fallback !== null) {
+  if (proofStateChanged) {
+    capabilityHandle?.seek(kpNormalMatrixProofCheckpointTimeMs(next.checkpoint));
+  }
+  if (fallback !== null && proofStateChanged) {
     paintKpNormalMatrixProofSemanticFocus(fallback, semanticAddress);
   }
   if (semanticAddress !== undefined) requestCapability();

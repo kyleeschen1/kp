@@ -7,6 +7,8 @@ import {
   "../tutorial/normal-matrix-proof/normal-matrix-proof-article-compiler.ts";
 import { renderKpNormalMatrixProofStaticPublication } from
   "../tutorial/normal-matrix-proof/normal-matrix-proof-static-publication.ts";
+import { renderKpNormalMatrixProofPromptSurfaceHtml } from
+  "../tutorial/normal-matrix-proof/normal-matrix-proof-prompt-publication.ts";
 
 export const kpNormalMatrixProofPublicSourceId =
   "content/lessons/linear-algebra-normal-matrices.kp.md" as const;
@@ -48,5 +50,19 @@ export function renderKpNormalMatrixProofPublicLesson(
       <span>Ideas you can recover</span>
     </header>
     ${publication}
+  </div>`;
+}
+
+/** Keep recall searchable without making the already-complete Article carry it. */
+export function renderKpNormalMatrixProofReviewIndex(): string {
+  return `<div class="kp-public-proof-memory" data-kp-public-proof-memory>
+    <header class="kp-public-proof-memory__masthead">
+      <a href="/" class="kp-public-proof-memory__wordmark">Kinetic Press</a>
+      <span>Ideas you can recover</span>
+    </header>
+    <main class="kp-normal-proof-review-index">
+      <p><a href="/learn/math/normal-matrices/">Read the complete proof</a></p>
+      ${renderKpNormalMatrixProofPromptSurfaceHtml()}
+    </main>
   </div>`;
 }

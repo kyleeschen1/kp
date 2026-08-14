@@ -10,7 +10,11 @@ import {
 test("normal-proof URLs round trip checkpoint and evidence independently", () => {
   const encoded = encodeKpNormalMatrixProofUrl(
     "https://kinetic.press/learn/math/normal-matrices/?review=predict-row-remainder&utm_source=return#kp-ref:normal-proof/matrix/row-remainder",
-    { checkpoint: "norm-equation", evidence: "static" }
+    {
+      checkpoint: "norm-equation",
+      evidence: "static",
+      review: "predict-row-remainder"
+    }
   );
   const url = new URL(encoded);
 
@@ -21,13 +25,14 @@ test("normal-proof URLs round trip checkpoint and evidence independently", () =>
   assert.equal(url.hash, "#kp-ref:normal-proof/matrix/row-remainder");
   assert.deepEqual(decodeKpNormalMatrixProofUrl(encoded), {
     checkpoint: "norm-equation",
-    evidence: "static"
+    evidence: "static",
+    review: "predict-row-remainder"
   });
 });
 
 test("canonicalization fails closed and omits default route state", () => {
   const canonical = canonicalizeKpNormalMatrixProofUrl(
-    "https://kinetic.press/learn/math/normal-matrices/?evidence=compare&checkpoint=missing&utm_source=teacher"
+    "https://kinetic.press/learn/math/normal-matrices/?evidence=compare&checkpoint=missing&review=missing&utm_source=teacher"
   );
   const url = new URL(canonical);
 

@@ -174,7 +174,8 @@
     {
       "id": "s21",
       "title": "Prompt projection surface",
-      "status": "planned"
+      "summary": "Added typed prompt/focus projection, native answer reveal, static review route, and deterministic links into the canonical proof stage without duplicating stage/runtime or exceeding Article HTML budget.",
+      "status": "complete"
     },
     {
       "id": "s22",

@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const route = "/learn/math/normal-matrices/";
+const reviewRoute = "/learn/math/normal-matrices/review/";
 
 test("public proof is readable before and after lazy capability load", async ({
   page
@@ -250,6 +251,47 @@ test("article semantic links change focus without acquiring timeline authority",
   );
   await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
   await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+});
+
+test("prompt projection reveals an answer and returns through the same stage", async ({
+  page
+}) => {
+  await page.goto(reviewRoute, { waitUntil: "domcontentloaded" });
+  let prompt = page.locator(
+    '[data-kp-normal-proof-prompt="predict-row-remainder"]'
+  );
+  await expect(page.locator("[data-kp-normal-proof-prompt]")).toHaveCount(11);
+  await prompt.locator("summary").click();
+  await expect(prompt).toHaveAttribute("open", "");
+  await expect(prompt).toContainText(
+    "The unmatched nonnegative squared norm must be zero"
+  );
+
+  await prompt.getByRole("link", { name: "Show this state" }).click();
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
+  expect(new URL(page.url()).searchParams.get("review"))
+    .toBe("predict-row-remainder");
+
+  await page.goBack({ waitUntil: "domcontentloaded" });
+  expect(new URL(page.url()).pathname).toBe(reviewRoute);
+  prompt = page.locator(
+    '[data-kp-normal-proof-prompt="predict-row-remainder"]'
+  );
+  if (!await prompt.evaluate((node) => (node as HTMLDetailsElement).open)) {
+    await prompt.locator("summary").click();
+  }
+  await prompt.getByRole("link", { name: "Return to proof context" }).click();
+  expect(new URL(page.url()).searchParams.has("review")).toBe(false);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-focus-address",
+    "normal-proof/matrix/row-remainder"
+  );
 });
 
 test("scrubbing replaces checkpoint history and popstate restores directly", async ({
