@@ -161,7 +161,8 @@
     {
       "id": "s19",
       "title": "Performance evidence",
-      "status": "planned"
+      "summary": "Added hard startup and deploy-storage budgets, forbidden closure and recurring-runtime checks, a stable six-view desktop/phone checkpoint command, and passing shared salience, architecture, and workspace release evidence.",
+      "status": "complete"
     },
     {
       "id": "s20",

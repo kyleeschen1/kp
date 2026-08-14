@@ -228,6 +228,8 @@
     "typecheck:public-eigenvectors": "tsc --project tsconfig.public-eigenvectors.json --noEmit",
     "build:public-eigenvectors": "vite build --config vite.public-eigenvectors.config.ts",
     "test:browser:public-eigenvectors": "playwright test --config playwright.public-eigenvectors.config.ts --project=chromium --workers=1",
+    "check:public-eigenvectors-budgets": "node --disable-warning=ExperimentalWarning scripts/check-public-eigenvectors-budgets.ts",
+    "visual:eigenvector-attentional-surface-checkpoint": "node --disable-warning=ExperimentalWarning scripts/capture-eigenvector-attentional-surface-checkpoint.ts",
     "test:browser:public-normal-matrices": "playwright test --config playwright.public-normal-matrices.config.ts --project=chromium --workers=1",
     "visual:normal-matrix-proof-checkpoint": "node --disable-warning=ExperimentalWarning scripts/capture-normal-matrix-proof-checkpoint.ts",
     "dev:python-refactor-visual": "vite --host 127.0.0.1 --port 4184 --strictPort",

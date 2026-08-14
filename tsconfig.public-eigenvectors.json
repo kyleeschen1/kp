@@ -12,6 +12,8 @@
   "files": [
     "src/public-web/eigenvector-attentional-surface-public-entry.ts",
     "src/public-web/eigenvector-attentional-surface-publication.ts",
+    "scripts/capture-eigenvector-attentional-surface-checkpoint.ts",
+    "scripts/check-public-eigenvectors-budgets.ts",
     "playwright.public-eigenvectors.config.ts",
     "tests/eigenvector-attentional-surface-public.browser.spec.ts",
     "tests/eigenvector-attentional-surface-publication.test.ts",

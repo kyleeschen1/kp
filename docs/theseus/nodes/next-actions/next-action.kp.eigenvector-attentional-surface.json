@@ -202,6 +202,41 @@
       "scope": "slice-s18-url-access",
       "checkedAt": "2026-08-14T21:32:01.942Z",
       "notes": "Eight Chromium checks pass for static truth, no-JS fallback, exact beat/object restoration, browser history, discrete scroll settlement, learner interactions, 390px reduced motion, forced colors, and keyboard focus."
+    },
+    {
+      "command": "npm run check:public-eigenvectors-budgets",
+      "status": "passed",
+      "scope": "slice-s19-performance",
+      "checkedAt": "2026-08-14T21:37:45.870Z",
+      "notes": "HTML is 3,853 gzip bytes; JS 9,912; CSS 10,386; combined startup 20,298; 59 declared KaTeX font assets total 1,072,948 deploy bytes; zero dynamic imports and no forbidden closure markers or recurring scroll/timer calls."
+    },
+    {
+      "command": "npm run visual:eigenvector-attentional-surface-checkpoint",
+      "status": "passed",
+      "scope": "slice-s19-performance",
+      "checkedAt": "2026-08-14T21:37:46.885Z",
+      "notes": "Generated six deterministic exact-URL captures and a desktop/phone contact sheet under tmp/codex/eigenvector-attentional-surface-checkpoint."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "slice-s19-performance",
+      "checkedAt": "2026-08-14T21:37:47.851Z",
+      "notes": "All 20 shared visual-salience contracts pass after the local adapter integration."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s19-performance",
+      "checkedAt": "2026-08-14T21:37:48.793Z",
+      "notes": "Concept-room, semantic-reader, semantic-animation, and operation-evaluation architecture gates pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s19-performance",
+      "checkedAt": "2026-08-14T21:37:49.750Z",
+      "notes": "Workspace validates with 950 nodes and 20,644 events before final slice recording."
     }
   ],
   "expectedLearning": [
