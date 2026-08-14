@@ -125,7 +125,8 @@
     {
       "id": "s13",
       "title": "Attention resolution",
-      "status": "planned"
+      "summary": "Projected all beats through shared semantic salience: one owning surface, explicit primary concepts, normal axes, quiet grid, and theme-aware local CSS variables.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -125,6 +125,13 @@
       "scope": "slice-s12-motion",
       "checkedAt": "2026-08-14T20:59:00.438Z",
       "notes": "Forty-two tests prove one clock, bounded durations, exact endpoints, deterministic reversal, reduced-motion settlement, and nonadjacent direct seek."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s13-attention",
+      "checkedAt": "2026-08-14T21:02:54.410Z",
+      "notes": "Forty-seven tests prove one owning surface per beat, normal interpretive axes, quiet grid, absent-before-reveal semantics, and shared dark/light treatment projection."
     }
   ],
   "expectedLearning": [
