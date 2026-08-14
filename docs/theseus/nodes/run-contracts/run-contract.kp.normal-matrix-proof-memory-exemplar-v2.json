@@ -84,7 +84,8 @@
     {
       "id": "s06",
       "title": "Prompt contract",
-      "status": "planned"
+      "summary": "Added the complete validated prompt suite without a scheduler or second timeline.",
+      "status": "complete"
     },
     {
       "id": "s07",
