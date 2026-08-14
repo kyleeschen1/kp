@@ -153,6 +153,27 @@
       "scope": "slice-s16-interaction",
       "checkedAt": "2026-08-14T21:10:02.427Z",
       "notes": "Fifty-nine tests prove one reducer authority for scroll, transport, prediction, and scalar input; wrong answers stay put, correct answers reveal, and boundary events are no-ops."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "public-route",
+      "checkedAt": "2026-08-14T21:22:35.621Z",
+      "notes": "62 focused semantic, endpoint, motion, attention, transport, static-publication, and reducer tests pass."
+    },
+    {
+      "command": "npm run typecheck:public-eigenvectors",
+      "status": "passed",
+      "scope": "public-route",
+      "checkedAt": "2026-08-14T21:22:36.691Z",
+      "notes": "The isolated framework-neutral public route typechecks."
+    },
+    {
+      "command": "npm run build:public-eigenvectors",
+      "status": "passed",
+      "scope": "public-route",
+      "checkedAt": "2026-08-14T21:22:37.666Z",
+      "notes": "Vite builds the isolated route with a 25.70 kB raw, 8.70 kB gzip client chunk and build-rendered KaTeX."
     }
   ],
   "expectedLearning": [

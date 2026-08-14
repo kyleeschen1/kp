@@ -90,7 +90,16 @@ export function updateKpEigenvectorExperience(
     };
   }
   const scalar = projectKpEigenvectorScalarManipulation(event.coefficient);
-  const nextBeatId = "reveal-the-eigenspace";
+  const nextBeatId: KpEigenvectorBeatId = "reveal-the-eigenspace";
+  const effects: KpEigenvectorExperienceEffect[] = [];
+  if (state.beatId !== nextBeatId) {
+    effects.push({
+      type: "transition",
+      fromBeatId: state.beatId,
+      toBeatId: nextBeatId
+    });
+  }
+  effects.push({ type: "announce", text: scalar.explanation });
   return {
     state: {
       ...state,
@@ -98,16 +107,7 @@ export function updateKpEigenvectorExperience(
       scalar,
       revision: state.revision + 1
     },
-    effects: [
-      ...(state.beatId === nextBeatId
-        ? []
-        : [{
-            type: "transition" as const,
-            fromBeatId: state.beatId,
-            toBeatId: nextBeatId
-          }]),
-      { type: "announce", text: scalar.explanation }
-    ]
+    effects
   };
 }
 

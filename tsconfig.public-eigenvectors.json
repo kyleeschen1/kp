@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "incremental": true,
+    "tsBuildInfoFile": "./tmp/codex/tsbuildinfo/public-eigenvectors.tsbuildinfo"
+  },
+  "files": [
+    "src/public-web/eigenvector-attentional-surface-public-entry.ts",
+    "src/public-web/eigenvector-attentional-surface-publication.ts",
+    "tests/eigenvector-attentional-surface-publication.test.ts",
+    "vite.public-eigenvectors.config.ts"
+  ]
+}

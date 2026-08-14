@@ -16,11 +16,10 @@ import {
   type KpEigenvectorEquationForm
 } from "./eigenvector-endpoints.ts";
 import { findKpEigenvectorPassage } from "./eigenvector-transcript.ts";
-
-const WIDTH = 520;
-const HEIGHT = 400;
-const ORIGIN = [260, 210] as const;
-const UNIT = 26;
+import {
+  kpEigenvectorSvgViewport,
+  projectKpEigenvectorSvgPoint
+} from "./eigenvector-svg-geometry.ts";
 
 export function renderKpEigenvectorSettledEndpointHtml(
   beatId: KpEigenvectorBeatId
@@ -44,21 +43,24 @@ function renderDiagram(beatId: KpEigenvectorBeatId): string {
   const grid = Array.from({ length: 13 }, (_, index) => index - 6)
     .filter((value) => value !== 0)
     .flatMap((value) => {
-      const x = ORIGIN[0] + value * UNIT;
-      const y = ORIGIN[1] - value * UNIT;
+      const x = kpEigenvectorSvgViewport.origin[0] +
+        value * kpEigenvectorSvgViewport.unit;
+      const y = kpEigenvectorSvgViewport.origin[1] -
+        value * kpEigenvectorSvgViewport.unit;
       return [
         `<line class="kp-eigenvector-stage__grid" x1="${x}" y1="54" x2="${x}" y2="366" />`,
         `<line class="kp-eigenvector-stage__grid" x1="104" y1="${y}" x2="416" y2="${y}" />`
       ];
     }).join("");
-  const line = diagram.invariantLine.visible
-    ? renderLine(
-        "kp-eigenvector-stage__invariant-line",
-        diagram.invariantLine.from,
-        diagram.invariantLine.to,
-        diagram.invariantLine.semanticObjectId
-      )
-    : "";
+  const line = renderLine(
+    "kp-eigenvector-stage__invariant-line",
+    diagram.invariantLine.from,
+    diagram.invariantLine.to,
+    diagram.invariantLine.semanticObjectId,
+    undefined,
+    "diagram.eigenvector-demo/eigenspace/lambda-3",
+    diagram.invariantLine.visible ? 1 : 0
+  );
   const vectors = diagram.vectors.map((vector) =>
     renderLine(
       `kp-eigenvector-stage__vector kp-eigenvector-stage__vector--${vector.role}`,
@@ -69,21 +71,31 @@ function renderDiagram(beatId: KpEigenvectorBeatId): string {
       vector.id
     )
   ).join("");
-  return `<svg class="kp-eigenvector-stage__diagram" data-kp-eigenvector-diagram viewBox="0 0 ${WIDTH} ${HEIGHT}" role="img" aria-labelledby="kp-eigenvector-desc-${beatId}">
+  return `<svg class="kp-eigenvector-stage__diagram" data-kp-eigenvector-diagram viewBox="0 0 ${kpEigenvectorSvgViewport.width} ${kpEigenvectorSvgViewport.height}" role="img" aria-labelledby="kp-eigenvector-desc-${beatId}">
     <title>${escapeKpTutorialHtmlText(passage.heading)}</title>
     <desc id="kp-eigenvector-desc-${beatId}">${escapeKpTutorialHtmlText(passage.text)}</desc>
     <defs><marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker></defs>
     <g class="kp-eigenvector-stage__grid-layer" aria-hidden="true">${grid}</g>
     <g class="kp-eigenvector-stage__axes" data-kp-object="transformation-A" data-kp-semantic-object="${diagram.transformationId}">
-      <line x1="92" y1="${ORIGIN[1]}" x2="428" y2="${ORIGIN[1]}" />
-      <line x1="${ORIGIN[0]}" y1="378" x2="${ORIGIN[0]}" y2="42" />
+      <line x1="92" y1="${kpEigenvectorSvgViewport.origin[1]}" x2="428" y2="${kpEigenvectorSvgViewport.origin[1]}" />
+      <line x1="${kpEigenvectorSvgViewport.origin[0]}" y1="378" x2="${kpEigenvectorSvgViewport.origin[0]}" y2="42" />
     </g>
     ${line}
     <g class="kp-eigenvector-stage__vectors">${vectors}</g>
   </svg>`;
 }
 
-function renderEquation(form: KpEigenvectorEquationForm): string {
+export function renderKpEigenvectorEquationBankHtml(): string {
+  const forms = ["Av=3v", "Av=lambda-v", "A(2v)=6v", "E3=span-v"] as const;
+  return `<div class="kp-eigenvector-stage__equation-bank" data-kp-eigenvector-equation-bank>${forms.map((form) =>
+    renderEquation(form, false)
+  ).join("")}</div>`;
+}
+
+function renderEquation(
+  form: KpEigenvectorEquationForm,
+  visible = true
+): string {
   if (form === "none") {
     return `<div class="kp-eigenvector-stage__equation" data-kp-eigenvector-equation hidden></div>`;
   }
@@ -114,7 +126,7 @@ function renderEquation(form: KpEigenvectorEquationForm): string {
       `data-kp-motion-id="${annotation.motionId}" data-kp-equation-token="${escapeKpTutorialHtmlAttribute(token.id)}" data-kp-semantic-object="${escapeKpTutorialHtmlAttribute(token.semanticObjectId)}"`
     );
   }
-  return `<div class="kp-eigenvector-stage__equation" data-kp-eigenvector-equation data-kp-equation-form="${escapeKpTutorialHtmlAttribute(form)}">${html}</div>`;
+  return `<div class="kp-eigenvector-stage__equation" data-kp-eigenvector-equation data-kp-equation-form="${escapeKpTutorialHtmlAttribute(form)}"${visible ? "" : " hidden"}>${html}</div>`;
 }
 
 function equationLayout(
@@ -139,16 +151,10 @@ function renderLine(
   to: readonly [number, number],
   semanticObjectId: string,
   markerId?: string,
-  representationId?: string
+  representationId?: string,
+  presence = 1
 ): string {
-  const [x1, y1] = point(from);
-  const [x2, y2] = point(to);
-  return `<line class="${className}" data-kp-semantic-object="${escapeKpTutorialHtmlAttribute(semanticObjectId)}"${representationId === undefined ? "" : ` data-kp-representation="${escapeKpTutorialHtmlAttribute(representationId)}"`} x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"${markerId === undefined ? "" : ` marker-end="url(#${markerId})"`} />`;
-}
-
-function point(coordinates: readonly [number, number]): readonly [number, number] {
-  return [
-    ORIGIN[0] + coordinates[0] * UNIT,
-    ORIGIN[1] - coordinates[1] * UNIT
-  ];
+  const [x1, y1] = projectKpEigenvectorSvgPoint(from);
+  const [x2, y2] = projectKpEigenvectorSvgPoint(to);
+  return `<line class="${className}" data-kp-semantic-object="${escapeKpTutorialHtmlAttribute(semanticObjectId)}"${representationId === undefined ? "" : ` data-kp-representation="${escapeKpTutorialHtmlAttribute(representationId)}"`} x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="--kp-eigen-presence:${presence}"${markerId === undefined ? "" : ` marker-end="url(#${markerId})"`} />`;
 }
