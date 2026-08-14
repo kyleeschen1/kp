@@ -5,7 +5,8 @@ import { projectKpEigenvectorEquation } from
   "../src/tutorial/eigenvector-attentional-surface/eigenvector-equations.ts";
 import {
   kpEigenvectorScalarControl,
-  projectKpEigenvectorScalarManipulation
+  projectKpEigenvectorScalarManipulation,
+  sampleKpEigenvectorScalarTransition
 } from "../src/tutorial/eigenvector-attentional-surface/eigenvector-manipulation.ts";
 
 test("scalar manipulation always derives both arrows from the matrix", () => {
@@ -56,4 +57,22 @@ test("verification and eigenspace equations are exact semantic endpoints", () =>
     projectKpEigenvectorEquation("E3=span-v").latex,
     String.raw`E_3=\operatorname{span}(\mathbf{v})`
   );
+});
+
+test("scalar retargeting interpolates from the currently painted point", () => {
+  const middle = sampleKpEigenvectorScalarTransition({
+    from: [3, 3],
+    to: [0, 0],
+    progress: 0.5
+  });
+  const finish = sampleKpEigenvectorScalarTransition({
+    from: middle.output,
+    to: [-4.5, -4.5],
+    progress: 1
+  });
+
+  assert.deepEqual(middle.output, [1.5, 1.5]);
+  assert.equal(middle.settled, false);
+  assert.deepEqual(finish.output, [-4.5, -4.5]);
+  assert.equal(finish.settled, true);
 });

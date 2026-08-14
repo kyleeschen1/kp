@@ -35,7 +35,7 @@ export function projectKpEigenvectorDiagramEndpoint(
   const endpoint = projectKpEigenvectorEndpoint(beatId);
   const fixture = kpEigenvectorAttentionalFixture;
   const vectors = endpoint.diagram.persistentVectorState === "scaled-multiple"
-    ? [scalarMultipleVector(endpoint.diagram.persistentVectorState)]
+    ? [scalarMultipleVector(beatId)]
     : fixture.fan.map(({ id, coordinates, image }) => {
         const persistent = id === fixture.persistentVector.id;
         const displayed = endpoint.diagram.fanState === "source"
@@ -68,18 +68,21 @@ export function projectKpEigenvectorDiagramEndpoint(
 }
 
 function scalarMultipleVector(
-  state: "scaled-multiple"
+  beatId: KpEigenvectorBeatId
 ): KpEigenvectorDiagramVector {
   const fixture = kpEigenvectorAttentionalFixture;
+  // Verification shows 2v -> 6v; the manipulation begins at the control's
+  // neutral coefficient v -> 3v instead of visually lying about its value.
+  const displayed = beatId === "reveal-the-eigenspace"
+    ? fixture.persistentVector.image
+    : fixture.prediction.image;
   return {
     id: "diagram.eigenvector-demo/vector/2v",
     semanticObjectId: fixture.persistentVector.id,
     role: "scalar-multiple",
     source: fixture.prediction.source,
     target: fixture.prediction.image,
-    displayed: state === "scaled-multiple"
-      ? fixture.prediction.image
-      : fixture.prediction.source,
+    displayed,
     directionChanged: false
   };
 }

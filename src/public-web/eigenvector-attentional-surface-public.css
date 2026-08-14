@@ -7,9 +7,11 @@
   --kp-eigen-line: #777984;
   --kp-eigen-line-width: 1px;
   --kp-eigen-reading-line: 56vh;
+  --kp-eigen-scrub-distance: 22vh;
   --kp-eigen-stage-top: 8vh;
   --kp-eigen-stage-height: 84vh;
   --kp-eigen-passage-gap: 28vh;
+  --kp-eigen-column-gap: clamp(2.5rem, 7vw, 7rem);
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   font-synthesis: none;
@@ -95,9 +97,10 @@ a { color: inherit; }
 }
 
 .kp-eigenvector-experience {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 0.9fr);
-  gap: clamp(2.5rem, 7vw, 7rem);
+  gap: var(--kp-eigen-column-gap);
   align-items: start;
 }
 
@@ -205,8 +208,20 @@ a { color: inherit; }
 .kp-eigenvector-stage__equation .katex { font-size: 1em; }
 
 .kp-eigenvector-experience__passages {
+  position: relative;
   min-width: 0;
   padding-block: 12vh 40vh;
+}
+
+.kp-eigenvector-experience__reading-line {
+  position: sticky;
+  z-index: 4;
+  top: var(--kp-eigen-reading-line);
+  width: calc(100% + var(--kp-eigen-column-gap) * 0.52);
+  height: var(--kp-eigen-line-width);
+  margin-left: calc(var(--kp-eigen-column-gap) * -0.52);
+  background: var(--kp-eigen-line);
+  pointer-events: none;
 }
 
 .kp-eigenvector-passage {
@@ -215,7 +230,9 @@ a { color: inherit; }
   color: var(--kp-eigen-ink);
   /* Land just beyond the selector seam so direct links cannot reselect the
      previous beat because of fractional-pixel equality at the reading line. */
-  scroll-margin-top: calc(var(--kp-eigen-reading-line) - 1.5rem);
+  scroll-margin-top: calc(
+    var(--kp-eigen-reading-line) - var(--kp-eigen-scrub-distance) - 1.5rem
+  );
 }
 
 .kp-eigenvector-passage:first-child { margin-top: 0; }
@@ -293,6 +310,13 @@ a { color: inherit; }
 }
 
 .kp-eigenvector-prediction button { padding-inline: 0.9rem; }
+
+.kp-eigenvector-prediction button:active,
+.kp-eigenvector-transport__button:active:not([aria-disabled="true"]) {
+  border-color: var(--kp-eigen-ink-strong);
+  background: color-mix(in srgb, var(--kp-eigen-page) 88%, var(--kp-eigen-ink-strong));
+  transform: translateY(1px);
+}
 
 .kp-eigenvector-prediction button:focus-visible,
 .kp-eigenvector-transport__button:focus-visible,
@@ -390,6 +414,10 @@ a { color: inherit; }
     width: min(100% - 1.5rem, 31rem);
     margin-inline: auto;
     padding-block: 18vh 42vh;
+  }
+  .kp-eigenvector-experience__reading-line {
+    width: calc(100% + 0.75rem);
+    margin-left: -0.75rem;
   }
   .kp-eigenvector-passage > div > p { font-size: 1.08rem; }
   .kp-eigenvector-transport {

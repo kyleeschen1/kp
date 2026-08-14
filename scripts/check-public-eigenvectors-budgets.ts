@@ -29,9 +29,7 @@ const forbiddenMarkers = [
   "three.module"
 ] as const;
 const forbiddenRuntimeCalls = [
-  "setinterval(",
-  'addeventlistener("scroll"',
-  "addeventlistener('scroll'"
+  "setinterval("
 ] as const;
 
 export const kpPublicEigenvectorBudgets = Object.freeze({
@@ -137,6 +135,12 @@ async function findForbidden(
     }
     for (const call of forbiddenRuntimeCalls) {
       if (source.includes(call)) findings.push(`${file} contains ${call}`);
+    }
+    const scrollListenerCount = [
+      ...source.matchAll(/addeventlistener\(["']scroll["']/gu)
+    ].length;
+    if (scrollListenerCount > 1) {
+      findings.push(`${file} contains ${scrollListenerCount} scroll listeners`);
     }
   }
   return Object.freeze(findings.sort());

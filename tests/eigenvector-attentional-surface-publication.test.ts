@@ -24,6 +24,7 @@ test("the publication contains one stable stage and minimal fixed transport", ()
 
   assert.equal((html.match(/data-kp-eigenvector-stage-host/g) ?? []).length, 1);
   assert.equal((html.match(/data-kp-eigenvector-transport-host/g) ?? []).length, 1);
+  assert.equal((html.match(/data-kp-eigenvector-reading-line/g) ?? []).length, 1);
   assert.doesNotMatch(html, /Play|Pause|Rewind|<iframe|<canvas/);
 });
 

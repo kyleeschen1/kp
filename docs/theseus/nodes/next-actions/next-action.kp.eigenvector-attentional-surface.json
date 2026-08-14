@@ -237,6 +237,48 @@
       "scope": "slice-s19-performance",
       "checkedAt": "2026-08-14T21:37:49.750Z",
       "notes": "Workspace validates with 950 nodes and 20,644 events before final slice recording."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "s20-human-feedback-focused",
+      "checkedAt": "2026-08-14T22:26:51.777Z",
+      "notes": "69 semantic, motion, publication, scalar, scroll-projection, transport, URL, and static-truth tests passed."
+    },
+    {
+      "command": "npm run typecheck:public-eigenvectors",
+      "status": "passed",
+      "scope": "s20-human-feedback-types",
+      "checkedAt": "2026-08-14T22:26:52.803Z",
+      "notes": "The isolated public eigenvector closure typechecks after scroll projection and retargeted scalar motion changes."
+    },
+    {
+      "command": "npm run build:public-eigenvectors && npm run check:public-eigenvectors-budgets",
+      "status": "passed",
+      "scope": "s20-human-feedback-production",
+      "checkedAt": "2026-08-14T22:26:53.763Z",
+      "notes": "Production build passed at 10,526 gzip JS, 10,528 gzip CSS, and 21,054 gzip startup code plus CSS, with one passive coalesced scroll invalidator and no forbidden closure."
+    },
+    {
+      "command": "npm run test:browser:public-eigenvectors",
+      "status": "passed",
+      "scope": "s20-human-feedback-browser",
+      "checkedAt": "2026-08-14T22:26:54.706Z",
+      "notes": "Nine Chromium scenarios passed, including reversible scroll progress, immediate direct seeks, stale-layer cleanup, pressed feedback, scalar tweening, phone, reduced motion, forced colors, and no-JS fallback."
+    },
+    {
+      "command": "npm run visual:eigenvector-attentional-surface-checkpoint",
+      "status": "passed",
+      "scope": "s20-renewed-human-checkpoint",
+      "checkedAt": "2026-08-14T22:26:55.654Z",
+      "notes": "Generated the stable six-view contact sheet after visible seam and scroll-scrub refinement; generalization remains blocked on human approval."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20-human-feedback-workspace",
+      "checkedAt": "2026-08-14T22:27:23.299Z",
+      "notes": "Workspace validates with 950 nodes and 20,660 events after renewed checkpoint evidence."
     }
   ],
   "expectedLearning": [

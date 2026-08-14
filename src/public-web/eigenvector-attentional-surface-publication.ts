@@ -31,7 +31,7 @@ export function renderKpEigenvectorPublicLesson(): string {
       <header class="kp-eigenvector-public__intro">
         <p>Three-minute conceptual experience</p>
         <h1>A direction that survives</h1>
-        <p>Read normally. When a passage crosses the quiet reading line, the diagram completes one thought and settles.</p>
+        <p>Read normally. When a passage crosses the quiet line, your scroll carries the diagram into its next settled thought.</p>
       </header>
       <section class="kp-eigenvector-experience" data-kp-eigenvector-experience aria-label="Eigenvector explanation">
         <div class="kp-eigenvector-experience__stage-column">
@@ -41,6 +41,7 @@ export function renderKpEigenvectorPublicLesson(): string {
           </div>
         </div>
         <div class="kp-eigenvector-experience__passages" data-kp-eigenvector-passages>
+          <div class="kp-eigenvector-experience__reading-line" data-kp-eigenvector-reading-line aria-hidden="true"></div>
           ${kpEigenvectorTranscript.map(renderPassage).join("\n")}
         </div>
       </section>
