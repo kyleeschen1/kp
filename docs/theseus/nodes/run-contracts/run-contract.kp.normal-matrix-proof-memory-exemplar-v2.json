@@ -126,7 +126,8 @@
     {
       "id": "s13",
       "title": "Fragment binding and geometry",
-      "status": "planned"
+      "summary": "Bound semantic fragments, observed native geometry, and verified geometry-compatible enhancement and phone fit under the HTML budget.",
+      "status": "complete"
     },
     {
       "id": "s14",

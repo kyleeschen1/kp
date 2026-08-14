@@ -37,7 +37,9 @@ export function renderKpNormalMatrixProofStaticPublication(
           ` data-kp-normal-proof-static-checkpoint="${escapeAttribute(checkpoint.id)}"`,
           ` aria-label="${escapeAttribute(checkpoint.accessibleDescription)}">`,
           `<div class="kp-normal-proof-static-scene__math">`,
-          renderLatexToHtml(scene.combinedLatex, {
+          // The inline Article figure recalls the checkpoint evidence; the
+          // single stage above already owns the complete stable matrix scene.
+          renderLatexToHtml(scene.evidenceLatex, {
             displayMode: true,
             output: "htmlAndMathml"
           }),

@@ -228,11 +228,39 @@
       "scope": "s12 geometry and native smoke",
       "checkedAt": "2026-08-14T17:19:32.056Z",
       "notes": "Three Chromium tests passed; all six endpoints share one viewport and matrix-lane footprint, exactly one endpoint is visible, and static mode has no session."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s13 semantic fragment binding",
+      "checkedAt": "2026-08-14T17:25:57.333Z",
+      "notes": "All 40 proof tests passed; at least 40 unique fragment bindings resolve authored semantic addresses without KaTeX DOM-shape inference."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s13 binding and observer types",
+      "checkedAt": "2026-08-14T17:25:58.508Z",
+      "notes": "The public route typecheck passed with native fragment observer integration."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s13 geometry enhancement smoke",
+      "checkedAt": "2026-08-14T17:25:59.514Z",
+      "notes": "Four Chromium tests passed, including six observed active fragments, fixed endpoint geometry, static-to-enhanced parity at 390 pixels, and no overflow."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s13 route closure after bindings",
+      "checkedAt": "2026-08-14T17:26:00.484Z",
+      "notes": "Build passed; deduplicating later matrix figures kept HTML at 9.90 KB gzip and lazy geometry capability at 1.48 KB gzip."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The enhanced proof stage now contains six build-rendered native KaTeX and MathML checkpoints in one fixed viewport and stable matrix lane; native endpoint paint owns settlement and accessibility without introducing choreography."
+    "summary": "Native KaTeX fragments now carry authored normal-proof semantic addresses and glyph keys, the shared observer verifies visible settled geometry after fonts load, and enhancement preserves the static stage footprint at desktop and 390-pixel widths."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

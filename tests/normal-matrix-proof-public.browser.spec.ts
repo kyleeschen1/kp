@@ -25,6 +25,14 @@ test("public proof is readable before and after lazy capability load", async ({
     "data-kp-normal-proof-native-owner",
     "settled-katex"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-geometry",
+    "settled"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-fragment-count",
+    "6"
+  );
   await expect(stage.locator(
     "[data-kp-normal-proof-settled-scene]"
   )).toHaveCount(6);
@@ -65,6 +73,32 @@ test("all settled checkpoints share one fixed stage footprint", async ({
 
   expect(new Set(sizes.map(({ viewport }) => viewport.join(":"))).size).toBe(1);
   expect(new Set(sizes.map(({ matrix }) => matrix.join(":"))).size).toBe(1);
+});
+
+test("enhancement preserves static geometry at phone width", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${route}?evidence=static`, { waitUntil: "domcontentloaded" });
+  const staticStage = page.locator("[data-kp-normal-proof-stage]");
+  await staticStage.scrollIntoViewIfNeeded();
+  const staticBox = await staticStage.locator(
+    "[data-kp-normal-proof-stage-viewport]"
+  ).boundingBox();
+
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const motionStage = page.locator("[data-kp-normal-proof-stage]");
+  await motionStage.scrollIntoViewIfNeeded();
+  await expect(motionStage).toHaveAttribute(
+    "data-kp-normal-proof-geometry",
+    "settled"
+  );
+  const motionBox = await motionStage.locator(
+    "[data-kp-normal-proof-stage-viewport]"
+  ).boundingBox();
+
+  expect(motionBox).toEqual(staticBox);
+  expect(await page.evaluate(() =>
+    document.documentElement.scrollWidth <= window.innerWidth + 1
+  )).toBe(true);
 });
 
 test("static evidence keeps the same proof without creating a session", async ({

@@ -3,6 +3,8 @@ import test from "node:test";
 
 import { kpNormalMatrixProofCheckpointIds } from
   "../src/semantic/normal-matrix-proof-checkpoints.ts";
+import { kpNormalMatrixProofSemanticRegistry } from
+  "../src/semantic/normal-matrix-proof-semantics.ts";
 import {
   kpNormalMatrixProofSettledScenes,
   renderKpNormalMatrixProofSettledStageHtml
@@ -52,4 +54,30 @@ test("settled proof math retains the stable block decomposition", () => {
     )?.matrixLatex ?? "",
     /=\\lambda\\oplus B/u
   );
+});
+
+test("authored fragment bindings resolve semantic identity before KaTeX paint", () => {
+  const semanticAddresses = new Set(
+    kpNormalMatrixProofSemanticRegistry.map(({ address }) => address)
+  );
+  const bindingIds = new Set<string>();
+
+  for (const scene of kpNormalMatrixProofSettledScenes) {
+    for (const binding of [...scene.matrix.bindings, ...scene.evidence.bindings]) {
+      assert.ok(semanticAddresses.has(binding.semanticEntityId));
+      assert.equal(bindingIds.has(binding.id), false, binding.id);
+      bindingIds.add(binding.id);
+      assert.match(binding.motionId, /^normal-proof\./u);
+      assert.ok(binding.glyphKey.length > 0);
+    }
+  }
+  assert.ok(bindingIds.size >= 40);
+});
+
+test("rendered wrappers carry authored paths without KaTeX-shape authority", () => {
+  const html = renderKpNormalMatrixProofSettledStageHtml();
+
+  assert.match(html, /data-kp-normal-proof-path="normal-proof\/matrix\/eigenvalue"/u);
+  assert.match(html, /data-kp-normal-proof-glyph-key="row-remainder"/u);
+  assert.doesNotMatch(html, /\.mord|nth-child|query-order/iu);
 });
