@@ -107,7 +107,8 @@
     {
       "id": "s10",
       "title": "Transcript and compression",
-      "status": "planned"
+      "summary": "Added the complete nine-passage searchable transcript, concise spoken equivalents, austere word budgets, and the final line-survives/lambda-records recall cue.",
+      "status": "complete"
     },
     {
       "id": "s11",
