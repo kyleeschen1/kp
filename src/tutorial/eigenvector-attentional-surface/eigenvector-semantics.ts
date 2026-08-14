@@ -6,6 +6,7 @@ export type KpEigenvectorSemanticKind =
   | "vector-family"
   | "eigenspace"
   | "eigenvalue"
+  | "scalar"
   | "relation";
 
 export type KpEigenvectorRepresentationKind =
@@ -108,6 +109,28 @@ export const kpEigenvectorSemanticRegistry = [
     representations: [
       representation("equation.relation.Av-lambda-v", "equation", "[data-kp-equation-object='relation-Av-lambda-v']"),
       representation("recall.relation.Av-lambda-v", "recall-cue", "[data-kp-recall-object='relation-Av-lambda-v']")
+    ]
+  }),
+  semanticObject({
+    id: "eigenvector-demo/scalar/c",
+    kind: "scalar",
+    label: "c",
+    meaning: "The learner-controlled scalar multiplying v.",
+    roles: ["coefficient", "manipulation"],
+    representations: [
+      representation("equation.scalar.c", "equation", "[data-kp-equation-object='scalar-c']"),
+      representation("manipulation.scalar.c", "manipulation", "[data-kp-manipulation-object='scalar-c']")
+    ]
+  }),
+  semanticObject({
+    id: "eigenvector-demo/scalar/lambda-c",
+    kind: "scalar",
+    label: "λc",
+    meaning: "The output coefficient obtained by multiplying c by the eigenvalue.",
+    roles: ["derived-coefficient", "result"],
+    representations: [
+      representation("equation.scalar.lambda-c", "equation", "[data-kp-equation-object='scalar-lambda-c']"),
+      representation("manipulation.scalar.lambda-c", "manipulation", "[data-kp-manipulation-object='scalar-lambda-c']")
     ]
   })
 ] as const satisfies readonly KpEigenvectorSemanticObject[];

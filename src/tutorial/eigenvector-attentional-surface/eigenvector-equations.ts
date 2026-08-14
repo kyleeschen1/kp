@@ -69,6 +69,32 @@ export function projectKpEigenvectorEquation(
       ]
     };
   }
+  if (form === "A(2v)=6v") {
+    return {
+      form,
+      latex: String.raw`A(2\mathbf{v})=6\mathbf{v}`,
+      tokens: [
+        token("equation.A2v6v.A", "A", "operator", fixture.transformation.id),
+        token("equation.A2v6v.2", "2", "scale", "eigenvector-demo/scalar/c"),
+        token("equation.A2v6v.v-input", String.raw`\mathbf{v}`, "vector", fixture.persistentVector.id),
+        token("equation.A2v6v.equals", "=", "relation", relationId),
+        token("equation.A2v6v.6", "6", "scale", "eigenvector-demo/scalar/lambda-c"),
+        token("equation.A2v6v.v-output", String.raw`\mathbf{v}`, "vector", fixture.persistentVector.id)
+      ]
+    };
+  }
+  if (form === "E3=span-v") {
+    return {
+      form,
+      latex: String.raw`E_3=\operatorname{span}(\mathbf{v})`,
+      tokens: [
+        token("equation.E3spanv.E3", String.raw`E_3`, "space", fixture.invariantLine.id),
+        token("equation.E3spanv.equals", "=", "relation", relationId),
+        token("equation.E3spanv.span", String.raw`\operatorname{span}`, "space", fixture.invariantLine.id),
+        token("equation.E3spanv.v", String.raw`\mathbf{v}`, "vector", fixture.persistentVector.id)
+      ]
+    };
+  }
   throw new Error(`Equation form ${form} is not available yet.`);
 }
 

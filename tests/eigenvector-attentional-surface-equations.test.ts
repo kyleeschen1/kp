@@ -46,7 +46,7 @@ test("the handoff names source and destinations without glyph inference", () => 
 
 test("unimplemented symbolic endpoints fail closed", () => {
   assert.throws(
-    () => projectKpEigenvectorEquation("A(2v)=6v"),
+    () => projectKpEigenvectorEquation("not-an-equation" as "Av=3v"),
     /not available yet/
   );
 });

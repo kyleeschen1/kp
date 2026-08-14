@@ -101,7 +101,8 @@
     {
       "id": "s09",
       "title": "Scalar manipulation",
-      "status": "planned"
+      "summary": "Added a bounded cv manipulation derived from A, exact A(2v)=6v and eigenspace equations, and the zero-is-in-the-space-but-not-an-eigenvector distinction.",
+      "status": "complete"
     },
     {
       "id": "s10",

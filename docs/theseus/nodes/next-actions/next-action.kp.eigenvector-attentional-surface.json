@@ -97,6 +97,13 @@
       "scope": "slice-s08-prediction",
       "checkedAt": "2026-08-14T20:47:53.546Z",
       "notes": "Twenty-five tests prove the scalar-multiple prediction precedes reveal, only 6v is correct, and feedback explains linearity without mutating state."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s09-manipulation",
+      "checkedAt": "2026-08-14T20:50:17.837Z",
+      "notes": "Twenty-nine tests prove bounded scalar projection, exact A(cv)=3cv geometry, zero distinction, semantic scalar identities, and exact verification/eigenspace equations."
     }
   ],
   "expectedLearning": [
