@@ -256,11 +256,32 @@
       "scope": "s13 route closure after bindings",
       "checkedAt": "2026-08-14T17:26:00.484Z",
       "notes": "Build passed; deduplicating later matrix figures kept HTML at 9.90 KB gzip and lazy geometry capability at 1.48 KB gzip."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T17:32:50.375Z",
+      "notes": "44 tests pass, including semantic plan closure, pure phase projection, and low-level instruction rejection."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T17:32:51.474Z",
+      "notes": "The route-local TypeScript boundary accepts the new attention plan."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T17:32:52.673Z",
+      "notes": "All 20 shared salience contract tests remain green."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Native KaTeX fragments now carry authored normal-proof semantic addresses and glyph keys, the shared observer verifies visible settled geometry after fonts load, and enhancement preserves the static stage footprint at desktop and 390-pixel widths."
+    "summary": "Cycle A now has a pure semantic orient-act-settle-inspect plan over authored proof paths and transformations; presentation authority remains deferred to the local adapter."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

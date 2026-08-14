@@ -132,7 +132,8 @@
     {
       "id": "s14",
       "title": "Attention cycle A plan",
-      "status": "planned"
+      "summary": "Added and verified the renderer-neutral row/column attention plan with low-level instruction rejection.",
+      "status": "complete"
     },
     {
       "id": "s15",
