@@ -42,6 +42,8 @@ test("settled stage uses native KaTeX and a single stable matrix lane", () => {
   assert.match(html, /type="range" min="0" max="12000"/u);
   assert.match(html, /data-kp-normal-proof-scrub[^>]+disabled/u);
   assert.equal(html.split(" hidden").length - 1, 5);
+  assert.match(html, /aria-describedby="kp-nps"/u);
+  assert.match(html, /<output id="kp-nps"[^>]*>The theorem/u);
   assert.match(html, /data-kp-normal-proof-active-checkpoint="statement"/u);
   assert.doesNotMatch(html, /<script|katex\.render|translate|scale|opacity/iu);
 });

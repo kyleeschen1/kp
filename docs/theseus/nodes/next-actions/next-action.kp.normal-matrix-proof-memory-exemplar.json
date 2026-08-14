@@ -487,11 +487,41 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-14T18:44:58.895Z"
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:53:03.878Z"
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:53:04.947Z"
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:53:05.923Z"
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:53:06.932Z"
+    },
+    {
+      "command": "npm run build:public-normal-matrices; exact Article HTML gzip 9997 bytes",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:53:07.918Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s22 complete: manual return rehearsal covers every prompt exactly once across three explicit returns and offers a static copyable capture template."
+    "summary": "Slice s23 complete: the proof remains complete and operable across no-JS, keyboard, reduced-motion, high-contrast, dark/light, and 390-pixel conditions with structural focus cues."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

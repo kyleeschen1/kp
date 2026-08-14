@@ -49,6 +49,35 @@ test("public proof is readable before and after lazy capability load", async ({
   )).toBe(true);
 });
 
+test("no-JavaScript publication retains proof math descriptions and controls", async ({
+  browser
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:4194",
+    javaScriptEnabled: false
+  });
+  const page = await context.newPage();
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+
+  await expect(page.getByRole("heading", {
+    name: "Why does a normal matrix have an orthonormal eigenbasis?"
+  })).toBeVisible();
+  await expect(page.locator("math").first()).toBeAttached();
+  await expect(page.locator(
+    '[data-kp-normal-proof-settled-scene="statement"]'
+  )).toBeVisible();
+  await expect(page.locator(
+    '[data-kp-normal-proof-settled-scene][hidden]'
+  )).toHaveCount(5);
+  await expect(page.getByRole("slider", { name: "Proof step" })).toBeDisabled();
+  await expect(page.locator("#kp-nps")).toContainText(
+    "The theorem"
+  );
+  await expect(page.locator("[data-kp-normal-proof-capability]"))
+    .toHaveCount(0);
+  await context.close();
+});
+
 test("all settled checkpoints share one fixed stage footprint", async ({
   page
 }) => {
@@ -103,6 +132,70 @@ test("enhancement preserves static geometry at phone width", async ({ page }) =>
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 1
   )).toBe(true);
+});
+
+test("review and proof remain readable at 390 pixels", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(reviewRoute, { waitUntil: "domcontentloaded" });
+
+  await expect(page.locator("[data-kp-normal-proof-return]")).toHaveCount(3);
+  await expect(page.locator("[data-kp-normal-proof-prompt]")).toHaveCount(11);
+  expect(await page.evaluate(() =>
+    document.documentElement.scrollWidth <= window.innerWidth + 1
+  )).toBe(true);
+  expect(await page.locator(
+    ".kp-normal-proof-rehearsal__sessions"
+  ).evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(" ").length))
+    .toBe(1);
+});
+
+test("light and forced-color modes preserve readable structural focus", async ({
+  page
+}) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  expect(await page.evaluate(() => ({
+    scheme: getComputedStyle(document.documentElement).colorScheme,
+    background: getComputedStyle(document.body).backgroundColor
+  }))).toEqual({ scheme: "light", background: "rgb(247, 245, 239)" });
+
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto(
+    `${route}?checkpoint=norm-equation#kp-ref:normal-proof/matrix/row-remainder`,
+    { waitUntil: "domcontentloaded" }
+  );
+  const focused = page.locator(
+    '[data-kp-normal-proof-settled-scene="norm-equation"] [data-kp-normal-proof-reentry="target"]'
+  ).first();
+  await expect(focused).toBeVisible();
+  expect(await focused.evaluate((node) => ({
+    outlineStyle: getComputedStyle(node).outlineStyle,
+    outlineWidth: getComputedStyle(node).outlineWidth,
+    opacity: getComputedStyle(node).opacity
+  }))).toEqual({
+    outlineStyle: "solid",
+    outlineWidth: "2px",
+    opacity: "1"
+  });
+});
+
+test("interactive proof and review controls expose visible keyboard focus", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  const scrub = page.getByRole("slider", { name: "Proof step" });
+  await expect(scrub).toBeEnabled();
+  await scrub.focus();
+  expect(await scrub.evaluate((node) => getComputedStyle(node).outlineWidth))
+    .toBe("2px");
+
+  await page.goto(reviewRoute, { waitUntil: "domcontentloaded" });
+  const summary = page.locator("[data-kp-normal-proof-prompt] summary").first();
+  await summary.focus();
+  expect(await summary.evaluate((node) => getComputedStyle(node).outlineWidth))
+    .toBe("2px");
 });
 
 test("static evidence keeps the same proof without creating a session", async ({

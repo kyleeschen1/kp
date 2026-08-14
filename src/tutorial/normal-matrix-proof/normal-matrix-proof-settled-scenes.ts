@@ -173,12 +173,16 @@ export function renderKpNormalMatrixProofSettledStageHtml(): string {
 }
 
 function renderCheckpointControlsHtml(): string {
+  const first = kpNormalMatrixProofCheckpoints[0]!;
   return [
     `<div class="kp-normal-proof-controls">`,
-    `<input class="kp-normal-proof-controls__scrub" aria-label="Proof step"`,
+    `<input class="kp-normal-proof-controls__scrub"`,
+    ` aria-label="Proof step" aria-describedby="kp-nps"`,
     ` data-kp-normal-proof-scrub type="range" min="0" max="${kpNormalMatrixProofDurationMs}"`,
     ` value="0" disabled>`,
-    `<output class="kp-nps"></output>`,
+    `<output id="kp-nps" class="kp-nps">`,
+    `${escapeAttribute(first.label)} · ${escapeAttribute(first.learnerQuestion)}`,
+    `</output>`,
     `</div>`
   ].join("");
 }

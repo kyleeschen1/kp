@@ -186,7 +186,8 @@
     {
       "id": "s23",
       "title": "Accessibility and responsive pressure",
-      "status": "planned"
+      "summary": "Added accessible static status, responsive theme variables, visible keyboard focus, non-color salience cues, and no-JS/light/forced-color/phone browser pressure without exceeding the Article budget.",
+      "status": "complete"
     },
     {
       "id": "s24",
