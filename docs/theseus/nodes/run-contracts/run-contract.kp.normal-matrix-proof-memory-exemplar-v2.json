@@ -198,7 +198,8 @@
     {
       "id": "s25",
       "title": "Canonical human checkpoint",
-      "status": "planned"
+      "summary": "Produced the canonical human checkpoint packet and stable scoped capture command without changing exemplar presentation; stopping before s26 for explicit human disposition.",
+      "status": "complete"
     },
     {
       "id": "s26",

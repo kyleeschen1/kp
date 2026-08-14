@@ -547,11 +547,53 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-14T19:02:47.938Z"
+    },
+    {
+      "command": "npm run visual:normal-matrix-proof-checkpoint",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:15:25.677Z",
+      "notes": "Generated eight deterministic captures plus contact sheet and manifest across motion, static, phone, Article, and prompt-return views."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:15:26.954Z",
+      "notes": "All 65 focused mathematical, semantic, Article, prompt, checkpoint, and projection tests pass."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:15:27.961Z",
+      "notes": "All 20 single-worker Chromium checks pass, including no-JS, phone, accessibility, direct seek, idle clock, and CLS evidence."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:15:29.645Z",
+      "notes": "The scoped public proof route and deterministic capture-facing contracts typecheck."
+    },
+    {
+      "command": "npm run check:public-normal-matrices-budgets",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:15:30.903Z",
+      "notes": "Scoped budgets remain 0 B common reader, 9997 B Article HTML, 15323 B startup, 7731 B activation, and 15100 B normal-proof-specific gzip with no forbidden imports."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25-human-checkpoint",
+      "checkedAt": "2026-08-14T19:16:20.704Z",
+      "notes": "Validated 947 nodes and 20533 events after recording the mandatory checkpoint boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s24 complete: stable budgets report 9997-byte HTML, 15323-byte startup, 7731-byte activation, 15100-byte normal-specific closure, zero common-reader closure, no forbidden imports, idle clocks, one-batch direct seeks, and CLS at or below 0.001."
+    "summary": "Slice s25 checkpoint packet is ready: eight deterministic captures, direct review and prompt-return links, static/motion and phone evidence, exact route costs, seven human questions, and an explicit no-promotion boundary."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
