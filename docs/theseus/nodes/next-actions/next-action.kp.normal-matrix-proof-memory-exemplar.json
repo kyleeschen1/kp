@@ -109,11 +109,25 @@
       "scope": "s07 asset and vignette boundary",
       "checkedAt": "2026-08-14T16:46:54.617Z",
       "notes": "Repository TypeScript, Svelte, and domain typechecks pass with the new local asset and vignette."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s08 original Article source",
+      "checkedAt": "2026-08-14T16:52:02.371Z",
+      "notes": "Twenty-six focused tests pass for Article grammar, exact import lock, all six motion refs, at least fifteen inline semantic refs, complete static proof text, and original-source boundary."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s08 Article v1 preservation",
+      "checkedAt": "2026-08-14T16:52:03.848Z",
+      "notes": "All 122 Article v1 parser, source, import, semantic, static, accessibility, and editor tests pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The reviewed proof semantics, six transformations, six endpoints, and eleven prompts are packaged as one lazy versioned vignette with static and accessible projections."
+    "summary": "A complete searchable Article now states prerequisites, the proof, six semantic motions, pressure tests, and a reconstructable proof map through one exact vignette lock."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

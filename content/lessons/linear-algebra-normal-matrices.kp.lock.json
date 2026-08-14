@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.linear-algebra.normal-matrix-proof.article",
+  "entries": [
+    {
+      "alias": "normalMatrixProof",
+      "request": "vignette.linear-algebra.normal-matrix-proof@1",
+      "vignetteId": "vignette.linear-algebra.normal-matrix-proof",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:b1df9de21f68d619b69f83de71b13111d365a8859e1ad85df70d67a520323c7a",
+      "moduleSpecifier": "../../semantic/normal-matrix-proof-animation-asset.ts"
+    }
+  ]
+}
