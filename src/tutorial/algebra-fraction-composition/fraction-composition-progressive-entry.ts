@@ -58,7 +58,8 @@ import {
 } from "./fraction-composition-attention-pacing.ts";
 import {
   mountKpFractionCompositionDistributedEvidence,
-  readKpFractionCompositionEvidenceProjection
+  readKpFractionCompositionEvidenceProjection,
+  type KpFractionCompositionDistributedEvidenceController
 } from "./fraction-composition-distributed-evidence.ts";
 
 /**
@@ -92,10 +93,12 @@ export function mountKpFractionCompositionArticleEnhancement(
     const evidence = mountKpFractionCompositionDistributedEvidence({
       ownerWindow,
       publication: article,
+      stageHost: host,
       projection: evidenceProjection,
       prepareRange() {},
       pauseRange() {},
-      setAttention() {}
+      setAttention() {},
+      selectSemanticAddress() {}
     });
     return () => {
       evidence.dispose();
@@ -137,16 +140,8 @@ export function mountKpFractionCompositionArticleEnhancement(
     setAttention: (addresses) => focus.set("story", addresses),
     pacing: attentionPacing
   });
-  const distributedEvidence = evidenceProjection === "motion"
-    ? mountKpFractionCompositionDistributedEvidence({
-        ownerWindow,
-        publication: article,
-        projection: evidenceProjection,
-        prepareRange: (path) => canonicalStage.prepareRange(path),
-        pauseRange: () => canonicalStage.pauseRange(),
-        setAttention: (addresses) => focus.set("story", addresses)
-      })
-    : undefined;
+  let distributedEvidence:
+    KpFractionCompositionDistributedEvidenceController | undefined;
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
     article.dataset["kpArticleSemanticFocusSource"] =
@@ -163,6 +158,7 @@ export function mountKpFractionCompositionArticleEnhancement(
     clearFocus: (source) => focus.clear(source)
   });
   let pinnedAddress: string | undefined;
+  let lastRestoredHash: string | undefined;
   const syncPinnedLink = (): void => {
     for (const link of semanticLinks) {
       link.toggleAttribute(
@@ -171,13 +167,8 @@ export function mountKpFractionCompositionArticleEnhancement(
       );
     }
   };
-  const onSemanticClick = (event: MouseEvent): void => {
-    if (!plainActivation(event)) return;
-    const link = semanticLinkOwner(event.target, article);
-    const address = link?.dataset["kpFocus"];
-    if (address === undefined) return;
-    event.preventDefault();
-    pinnedAddress = pinnedAddress === address ? undefined : address;
+  const setPinnedAddress = (address: string | undefined): void => {
+    pinnedAddress = address;
     if (pinnedAddress === undefined) {
       focus.clear("url");
       delete host.dataset["kpAlgebraLocationKind"];
@@ -192,21 +183,19 @@ export function mountKpFractionCompositionArticleEnhancement(
     ownerWindow.history.pushState(ownerWindow.history.state, "", href);
     lastRestoredHash = ownerWindow.location.hash;
     syncPinnedLink();
+    distributedEvidence?.syncSemanticAddress(pinnedAddress);
+  };
+  const onSemanticClick = (event: MouseEvent): void => {
+    if (!plainActivation(event)) return;
+    const link = semanticLinkOwner(event.target, article);
+    const address = link?.dataset["kpFocus"];
+    if (address === undefined) return;
+    event.preventDefault();
+    setPinnedAddress(pinnedAddress === address ? undefined : address);
   };
   const onEscape = (event: KeyboardEvent): void => {
     if (event.key !== "Escape" || pinnedAddress === undefined) return;
-    pinnedAddress = undefined;
-    focus.clear("url");
-    ownerWindow.history.pushState(
-      ownerWindow.history.state,
-      "",
-      encodeKpFractionCompositionArticleSemanticLocation(
-        ownerWindow.location.href
-      )
-    );
-    lastRestoredHash = ownerWindow.location.hash;
-    delete host.dataset["kpAlgebraLocationKind"];
-    syncPinnedLink();
+    setPinnedAddress(undefined);
   };
   const checkpointLinks = [...article.querySelectorAll<HTMLAnchorElement>(
     "[data-kp-algebra-checkpoint-link]"
@@ -222,7 +211,6 @@ export function mountKpFractionCompositionArticleEnhancement(
     host.dataset["kpAlgebraStaticCheckpoint"] = path;
     canonicalStage.seekCheckpoint(path);
   };
-  let lastRestoredHash: string | undefined;
   const restoreLocation = (hash: string): void => {
     if (hash === lastRestoredHash) return;
     lastRestoredHash = hash;
@@ -232,11 +220,13 @@ export function mountKpFractionCompositionArticleEnhancement(
       pinnedAddress = location.address;
       focus.set("url", [location.address]);
       syncPinnedLink();
+      distributedEvidence?.syncSemanticAddress(location.address);
       return;
     }
     pinnedAddress = undefined;
     focus.clear("url");
     syncPinnedLink();
+    distributedEvidence?.syncSemanticAddress(undefined);
     if (location?.kind !== "checkpoint") {
       delete host.dataset["kpAlgebraLocationKind"];
       return;
@@ -244,7 +234,10 @@ export function mountKpFractionCompositionArticleEnhancement(
     host.dataset["kpAlgebraLocationKind"] = location.kind;
     selectCheckpoint(location.path);
   };
-  const onLocationChange = (): void => restoreLocation(ownerWindow.location.hash);
+  const onLocationChange = (): void => {
+    restoreLocation(ownerWindow.location.hash);
+    distributedEvidence?.restoreProjection(ownerWindow.location.search);
+  };
   const onCheckpointClick = (event: MouseEvent): void => {
     if (!plainActivation(event)) return;
     const target = event.target;
@@ -267,6 +260,19 @@ export function mountKpFractionCompositionArticleEnhancement(
     host.dataset["kpAlgebraLocationKind"] = "checkpoint";
     selectCheckpoint(path);
   };
+  distributedEvidence = evidenceProjection === "motion"
+    ? mountKpFractionCompositionDistributedEvidence({
+        ownerWindow,
+        publication: article,
+        stageHost: host,
+        projection: evidenceProjection,
+        prepareRange: (path, localProgress) =>
+          canonicalStage.prepareRange(path, localProgress),
+        pauseRange: () => canonicalStage.pauseRange(),
+        setAttention: (addresses) => focus.set("story", addresses),
+        selectSemanticAddress: setPinnedAddress
+      })
+    : undefined;
   article.addEventListener("click", onSemanticClick);
   article.addEventListener("click", onCheckpointClick);
   ownerWindow.addEventListener("keydown", onEscape);
@@ -291,7 +297,7 @@ export function mountKpFractionCompositionArticleEnhancement(
 
 interface KpFractionCompositionCanonicalStageMount {
   seekCheckpoint(path: string): void;
-  prepareRange(path: string): void;
+  prepareRange(path: string, localProgress?: number): void;
   seekGlobal(progress: number): void;
   playRange(): void;
   pauseRange(): void;
@@ -384,6 +390,7 @@ function mountCanonicalRanges(input: {
   let transport: KpFractionCompositionArticleTransport | undefined;
   let pendingCheckpointPath: string | undefined;
   let pendingRangePath: string | undefined;
+  let pendingRangeLocalProgress = 0;
   let pendingFocus = input.initialFocus;
   const checkpoints = new Map(
     createKpFractionCompositionArticleRuntimeCheckpoints().map(
@@ -447,7 +454,8 @@ function mountCanonicalRanges(input: {
   };
   const prepareRange = (
     mountedTransport: KpFractionCompositionArticleTransport,
-    path: string
+    path: string,
+    localProgress: number = 0
   ): void => {
     const range = ranges.find((candidate) => candidate.path === path);
     if (range === undefined) {
@@ -461,7 +469,7 @@ function mountCanonicalRanges(input: {
       id: range.path,
       start: range.start,
       end: range.end
-    }, range.start, "controls");
+    }, range.start + (range.end - range.start) * localProgress, "controls");
   };
   input.host.dataset["kpAlgebraCanonicalHostStatus"] = "mounting";
   void createKpChromeFreeCanonicalEquationSession({
@@ -499,7 +507,7 @@ function mountCanonicalRanges(input: {
     if (pendingCheckpointPath !== undefined) {
       selectCheckpoint(transport, pendingCheckpointPath);
     } else if (pendingRangePath !== undefined) {
-      prepareRange(transport, pendingRangePath);
+      prepareRange(transport, pendingRangePath, pendingRangeLocalProgress);
     }
   }).catch((error: unknown) => {
     if (disposed) return;
@@ -524,20 +532,28 @@ function mountCanonicalRanges(input: {
       }
       pendingCheckpointPath = path;
       pendingRangePath = undefined;
+      pendingRangeLocalProgress = 0;
       if (transport !== undefined) selectCheckpoint(transport, path);
     },
-    prepareRange(path: string) {
+    prepareRange(path: string, localProgress: number = 0) {
       const range = ranges.find((candidate) => candidate.path === path);
       if (range === undefined) {
         throw new Error(`Unknown algebra attention range ${path}.`);
       }
+      if (!Number.isFinite(localProgress) ||
+          localProgress < 0 || localProgress > 1) {
+        throw new Error(
+          `Algebra range progress ${localProgress} must be between 0 and 1.`
+        );
+      }
       pendingCheckpointPath = undefined;
       pendingRangePath = path;
+      pendingRangeLocalProgress = localProgress;
       if (transport === undefined) {
         reattachLiveSurface(range.path);
         return;
       }
-      prepareRange(transport, path);
+      prepareRange(transport, path, localProgress);
     },
     seekGlobal(progress: number) {
       if (!Number.isFinite(progress) || progress < 0 || progress > 1) {
@@ -547,6 +563,7 @@ function mountCanonicalRanges(input: {
       }
       pendingCheckpointPath = undefined;
       pendingRangePath = undefined;
+      pendingRangeLocalProgress = 0;
       transport?.seekGlobal(progress, "controls");
     },
     playRange() {

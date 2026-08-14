@@ -115,3 +115,32 @@ test("scene projection hands focus from source to target deterministically", () 
   });
   assert.deepEqual(crossSurface.focusTargetIds, input.operationIds);
 });
+
+test("scene revisions change when retained semantic focus crosses endpoint pairs", () => {
+  const lineageTargets = [
+    "fraction-normalization.target.x.factor",
+    "constant-product.left.variable.numerator.2",
+    "constant-quotient.left.variable.numerator.2"
+  ];
+  const normalizedToProduct = projectKpFractionCompositionSalienceScene({
+    theme: "dark",
+    sourceStateId: "fraction-solve.state.normalized",
+    targetStateId: "fraction-solve.state.constant-product",
+    operationIds: ["fraction-solve.step.constant-product"],
+    phaseProgress: 0.75,
+    focusTargetIds: lineageTargets
+  });
+  const productToQuotient = projectKpFractionCompositionSalienceScene({
+    theme: "dark",
+    sourceStateId: "fraction-solve.state.constant-product",
+    targetStateId: "fraction-solve.state.constant-quotient",
+    operationIds: ["fraction-solve.step.constant-quotient"],
+    phaseProgress: 0.75,
+    focusTargetIds: lineageTargets
+  });
+
+  assert.notEqual(
+    normalizedToProduct.presentationRevision,
+    productToQuotient.presentationRevision
+  );
+});

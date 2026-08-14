@@ -16,10 +16,18 @@ export const kpFractionCompositionArticleObjectBindings = Object.freeze([
     target("factored", "fraction-fan-out.source.grouped-sum")
   ]),
   objectBinding("distributed-variable-term", [
-    target("normalized", "fraction-normalization.target.x")
+    target("factored", "fraction-fan-out.source.addend.x"),
+    target("distributed", "fraction-fan-out.target.term.x"),
+    target("normalized", "fraction-normalization.target.x"),
+    target("constant-product", "constant-product.left.variable"),
+    target("constant-quotient", "constant-quotient.left.variable")
   ]),
   objectBinding("distributed-constant-term", [
-    target("normalized", "fraction-normalization.target.6")
+    target("factored", "fraction-fan-out.source.addend.6"),
+    target("distributed", "fraction-fan-out.target.term.6"),
+    target("normalized", "fraction-normalization.target.6"),
+    target("constant-product", "constant-product.left.constant"),
+    target("constant-quotient", "constant-quotient.left.4")
   ]),
   objectBinding("constant-term", [
     target("constant-quotient", "constant-quotient.left.4")
@@ -183,6 +191,8 @@ type CheckpointPath =
   | "right-product-simplified"
   | "solved";
 
+type EquationStatePath = CheckpointPath | "distributed" | "constant-product";
+
 function objectBinding(
   path: string,
   targets: readonly ReturnType<typeof target>[]
@@ -190,8 +200,8 @@ function objectBinding(
   return Object.freeze({ path, targets: Object.freeze(targets) });
 }
 
-function target(checkpointPath: CheckpointPath, targetId: string) {
-  return Object.freeze({ checkpointPath, targetId });
+function target(statePath: EquationStatePath, targetId: string) {
+  return Object.freeze({ statePath, targetId });
 }
 
 function checkpoint(path: CheckpointPath, stateId: string, defaultFocusTargetId: string) {

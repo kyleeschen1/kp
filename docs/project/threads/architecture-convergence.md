@@ -5,8 +5,11 @@ Last Updated: 2026-08-13
 Current Next Action: compare the opt-in algebra distributed-evidence motion
 route at `/learn/math/fraction-composition/?evidence=motion` with its exact
 static Article baseline at `?evidence=static`, alongside the earlier
-distribution attention arc. Do not reopen the approved full-timeline default
-or extract a shared contract. After this bounded human checkpoint, pressure
+distribution attention arc. In motion mode, test whether selecting and carrying
+the variable or constant term across two operations offers a clear advantage
+over video or static diagrams. Do not reopen the approved full-timeline default
+or extract a shared layout, lineage, or inspection contract. After this bounded
+human checkpoint, pressure
 the approved code and symbolic public-product boundary with the canonical
 economics demand-shift graph.
 Preserve and audit the user's uncommitted economics Article and

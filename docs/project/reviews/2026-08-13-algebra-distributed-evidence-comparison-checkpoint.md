@@ -28,9 +28,28 @@ two consecutive canonical operations:
   one clock between the first two existing endpoint sockets.
 
 When the reader activates constant evaluation, distribution returns to its
-  certified `normalized` endpoint and the live surface begins the next range
-  at that same `normalized` state. No second renderer, timeline, or semantic
-  model is created.
+certified `normalized` endpoint and the live surface begins the next range at
+that same `normalized` state. No second renderer, timeline, or semantic model
+is created.
+
+## Semantic Inspection Proof
+
+The motion challenger now tests a capability that video and static diagrams do
+not natively provide. `variable term` and `constant term` are typed semantic
+tracks across the factored, distributed, normalized, constant-product, and
+constant-quotient equation states. A reader may select either track from the
+compact `Trace` control or directly from the live native-KaTeX equation. The
+selection persists when the one live renderer moves into the next operation.
+
+The URL records the active evidence range, exact endpoint when settled, and
+semantic Article address. Reloading or sharing that URL seeks directly to the
+requested endpoint and restores the selection without replay.
+
+This spike also establishes a useful separation of meanings. The canonical
+correspondence graph answers provenance; following the shared factor therefore
+branches into both distributed terms. The evidence projector answers the
+narrower attentional request, “show this term,” through typed branch membership
+on native selector owners. It does not weaken or relabel the provenance graph.
 
 ## Human Review
 
@@ -44,6 +63,13 @@ Compare the static and motion routes, then answer:
   interface for an inline evidence block?
 - Does the narrower Article measure and compact live stage reduce eye travel?
 - Would repeating this rhythm through a longer lesson feel calm or repetitive?
+- Does selecting a term answer “where did this go?” with less reconstruction
+  than scrubbing a video or comparing two static diagrams?
+- Is the selected term unmistakable while the rest of the equation remains
+  readable context?
+- Does the selection persist across the operation handoff in the way you
+  expect?
+- Are the two `Trace` buttons a worthwhile affordance or already too much UI?
 
 The challenger deliberately preserves the existing transport rather than
 polishing a new control. Its visible cost is evidence for the comparison.
@@ -59,6 +85,12 @@ polishing a new control. Its visible cost is evidence for the comparison.
 - the compact stage stays above the canonical equation fit floor;
 - the approved default, the distribution attention arc, no-JavaScript truth,
   semantic endpoint restoration, and 390 px composition retain focused checks.
+- term selection is available through controls and native equation targets;
+- a selected semantic track survives the renderer's range handoff;
+- URL restoration recovers range, endpoint, and selection without playback;
+- adjacent syntax stays context under the local branch-membership projection;
+- salience paint revisions include endpoint identity, preventing stale focus
+  attributes when retained DOM owners cross into a new state.
 
 Evidence:
 
@@ -71,9 +103,10 @@ Disposable comparison captures are written to
 `tmp/codex/public-fraction-composition/distributed-static.png` and
 `distributed-motion.png`.
 
-The route-only build is 9.33 KB gzip HTML, 14.69 KB gzip CSS, and 107.19 KB
-gzip entry JavaScript. This spike added roughly 0.15 KB HTML, 0.23 KB CSS, and
-0.48 KB JavaScript relative to the preceding public symbolic checkpoint. The
+The route-only build is 9.42 KB gzip HTML, 14.90 KB gzip CSS, and 108.43 KB
+gzip entry JavaScript. The complete distributed-evidence and semantic-
+inspection experiment added roughly 0.24 KB HTML, 0.44 KB CSS, and 1.72 KB
+JavaScript relative to the preceding public symbolic checkpoint. The
 static query avoids runtime session construction but does not yet split the
 shared entry bundle. The separate repository-wide common-reader budget check
 remains above its established ceiling (152,834 versus 145,000 gzip bytes); that
@@ -92,4 +125,6 @@ is still required before promotion.
 
 Rollback is the two opt-in query modes, their two server-rendered activation
 buttons, the local distributed-evidence controller and CSS, the explicit dark
-theme input, and their focused tests.
+theme input, typed inspection tracks, local branch-membership projector, and
+their focused tests. The endpoint-aware salience revision is a separately
+tested renderer correctness fix and is not part of the visual rollback unit.

@@ -216,9 +216,12 @@ A second bounded comparison now tests distributed evidence against the native
 static Article at `?evidence=motion` and `?evidence=static`. It reuses one live
 renderer across the canonical distribution and constant-evaluation sockets;
 the static baseline creates no session, and both retain the same searchable
-prose and certified endpoints. Review this comparison without promoting a new
-layout contract. Its questions, measured costs, preservation boundary, and
-rollback are recorded in
+prose and certified endpoints. The motion route now also carries a bounded
+semantic-inspection proof: typed variable and constant tracks remain directly
+selectable and URL-restorable across the operation handoff, with provenance
+kept distinct from branch-level attention. Review this comparison without
+promoting a new layout or inspection contract. Its questions, measured costs,
+preservation boundary, and rollback are recorded in
 `reviews/2026-08-13-algebra-distributed-evidence-comparison-checkpoint.md`.
 
 The next bounded caller is the canonical economics demand-shift graph. Preserve

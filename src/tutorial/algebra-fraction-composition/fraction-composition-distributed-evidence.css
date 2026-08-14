@@ -36,6 +36,7 @@ html[data-kp-algebra-view="distributed-evidence-motion"]
 
 html[data-kp-algebra-view="distributed-evidence-motion"]
   [data-kp-algebra-live-surface] {
+  order: 1;
   width: 100%;
   min-height: 11rem;
 }
@@ -67,7 +68,16 @@ html[data-kp-algebra-view="distributed-evidence-motion"]
 }
 
 html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-live-surface]
+  .kp-reader-equation-material-fit-surface {
+  /* Material paint remains visually authoritative, while pointer hit testing
+     reaches the native semantic selector owners underneath it. */
+  pointer-events: none;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
   [data-kp-algebra-evidence-activate] {
+  order: 2;
   justify-self: center;
   min-height: 2.5rem;
   padding-inline: 1rem;
@@ -76,6 +86,74 @@ html[data-kp-algebra-view="distributed-evidence-motion"]
   color: var(--kp-ink);
   background: var(--kp-surface);
   font: 0.78rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  .kp-algebra-evidence-lineage-controls {
+  display: flex;
+  min-height: 2.5rem;
+  order: 2;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  visibility: hidden;
+  color: var(--kp-muted);
+  font: 0.75rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-active]
+  > .kp-algebra-evidence-lineage-controls:not([hidden]) {
+  visibility: visible;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-lineage-select] {
+  min-height: 2rem;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 999px;
+  color: var(--kp-muted);
+  background: transparent;
+  font: inherit;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-lineage-select][aria-pressed="true"] {
+  border-color: var(--kp-accent);
+  color: var(--kp-ink);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kp-accent) 38%, transparent);
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-lineage-target] {
+  cursor: pointer;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-lineage-target]:hover {
+  filter: drop-shadow(0 0 0.18rem var(--kp-accent));
+}
+
+/* Canonical correspondence answers provenance and may branch through the
+   shared factor. This local evidence projector answers the narrower reader
+   request: retain context, but lift only members of the selected term. */
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-lineage]
+  [data-kp-algebra-live-surface]
+  [data-kp-fraction-salience-bound] {
+  color: var(--kp-muted) !important;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-lineage="variable-term"]
+  [data-kp-algebra-live-surface]
+  [data-kp-algebra-lineage-target="variable-term"],
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-lineage="constant-term"]
+  [data-kp-algebra-live-surface]
+  [data-kp-algebra-lineage-target="constant-term"] {
+  color: var(--kp-semantic-salience-color) !important;
 }
 
 html[data-kp-algebra-view="distributed-evidence-motion"]

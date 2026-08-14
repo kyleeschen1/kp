@@ -12,6 +12,12 @@ import {
   isKpFractionCompositionPublicRoute,
   kpFractionCompositionPublicPath
 } from "../src/public-web/fraction-composition-public-route.ts";
+import {
+  kpFractionCompositionInspectionLineages,
+  resolveKpFractionCompositionInspectionLineageByAddress,
+  resolveKpFractionCompositionInspectionLineageBySelector,
+  validateKpFractionCompositionInspectionLineages
+} from "../src/tutorial/algebra-fraction-composition/fraction-composition-inspection-lineage.ts";
 import { kpDevelopmentBuildEntries } from
   "../src/dev-toolbar/development-page-build-entries.ts";
 import { kpDevelopmentPages } from
@@ -77,7 +83,35 @@ test("static public lesson contains searchable prose, math, and one stage", () =
     html.match(/data-kp-algebra-evidence-activate=/gu)?.length,
     2
   );
+  assert.equal(
+    html.match(/data-kp-algebra-lineage-controls hidden/gu)?.length,
+    2
+  );
+  assert.equal(
+    html.match(/data-kp-algebra-lineage-select=/gu)?.length,
+    4
+  );
   assert.doesNotMatch(html, /CodeMirror|animation library/iu);
+});
+
+test("distributed evidence names two typed lineages over native selectors", () => {
+  assert.doesNotThrow(validateKpFractionCompositionInspectionLineages);
+  assert.deepEqual(
+    kpFractionCompositionInspectionLineages.map(({ id }) => id),
+    ["variable-term", "constant-term"]
+  );
+  assert.equal(resolveKpFractionCompositionInspectionLineageBySelector(
+    "fraction-normalization.target.x.addend"
+  )?.semanticAddress, "solve/distributed-variable-term");
+  assert.equal(resolveKpFractionCompositionInspectionLineageBySelector(
+    "constant-quotient.left.4"
+  )?.semanticAddress, "solve/distributed-constant-term");
+  assert.equal(resolveKpFractionCompositionInspectionLineageBySelector(
+    "constant-quotient.left.operator.1"
+  ), undefined);
+  assert.equal(resolveKpFractionCompositionInspectionLineageByAddress(
+    "solve/distributed-variable-term"
+  )?.id, "variable-term");
 });
 
 test("public symbolic lesson owns one route and development-directory entry", () => {

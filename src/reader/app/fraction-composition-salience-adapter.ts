@@ -260,6 +260,8 @@ export function projectKpFractionCompositionSalienceScene(input: {
     theme: input.theme,
     presentationRevision: [
       input.theme,
+      input.sourceStateId,
+      input.targetStateId,
       focusSource ? "source" : "target",
       ...focusTargets
     ].join(":"),

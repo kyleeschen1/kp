@@ -28,6 +28,9 @@ import {
   createKpFractionCompositionAttentionMatrix,
   type KpFractionCompositionAttentionBeat
 } from "./fraction-composition-attention-matrix.ts";
+import {
+  kpFractionCompositionInspectionLineages
+} from "./fraction-composition-inspection-lineage.ts";
 
 /**
  * The static article asks for immutable image assets, while this first-party
@@ -104,7 +107,19 @@ export function renderKpFractionCompositionStaticPublication(
             ? [
                 `<button type="button"`,
                 ` data-kp-algebra-evidence-activate="${escapeAttribute(motionRange)}"`,
-                ` aria-pressed="false" disabled>Animate this operation</button>`
+                ` aria-pressed="false" disabled>Animate this operation</button>`,
+                `<div class="kp-algebra-evidence-lineage-controls"`,
+                ` data-kp-algebra-lineage-controls hidden`,
+                ` role="group" aria-label="Inspect term lineage">`,
+                `<span>Trace</span>`,
+                kpFractionCompositionInspectionLineages.map((lineage) => [
+                  `<button type="button"`,
+                  ` data-kp-algebra-lineage-select="${escapeAttribute(lineage.id)}"`,
+                  ` aria-pressed="false" disabled>`,
+                  escapeHtml(lineage.label),
+                  `</button>`
+                ].join("")).join(""),
+                `</div>`
               ].join("")
             : "",
           `</div>`

@@ -274,11 +274,49 @@ test("distributed evidence reuses one live renderer across consecutive sockets",
   );
   await expect(canonical).toHaveCount(1);
   await expect(first.locator("[data-kp-algebra-live-surface]")).toHaveCount(1);
+  const firstLineageControls = first.locator(
+    "[data-kp-algebra-lineage-controls]"
+  );
+  await expect(firstLineageControls).toBeVisible();
   await first.locator("[data-kp-algebra-range-scrubber]").fill("1000");
   await expect(canonical).toHaveAttribute(
     "data-kp-reader-accessible-equation-state",
     "fraction-solve.state.normalized"
   );
+  await page.locator("[data-kp-dev-toolbar]").evaluate((node) => {
+    (node as HTMLElement).style.display = "none";
+  });
+  const activeTransition = canonical.locator(
+    '[data-kp-reader-transition-active="true"]'
+  );
+  const constantAddend = activeTransition.locator(
+    '[data-kp-reader-selector-id="fraction-normalization.target.6.addend"]'
+  );
+  const constantAddendBox = await constantAddend.boundingBox();
+  if (constantAddendBox === null) {
+    throw new Error("Normalized constant addend lacks pointer geometry.");
+  }
+  await page.mouse.click(
+    constantAddendBox.x + constantAddendBox.width / 2,
+    constantAddendBox.y + constantAddendBox.height / 2
+  );
+  await expect(publication).toHaveAttribute(
+    "data-kp-algebra-evidence-lineage",
+    "constant-term"
+  );
+  await expect(page).toHaveURL(/#kp-ref:solve\/distributed-constant-term$/u);
+
+  await firstLineageControls.locator(
+    '[data-kp-algebra-lineage-select="variable-term"]'
+  ).click();
+  await expect(publication).toHaveAttribute(
+    "data-kp-algebra-evidence-lineage",
+    "variable-term"
+  );
+  await expect(page).toHaveURL(/#kp-ref:solve\/distributed-variable-term$/u);
+  await expect(activeTransition.locator(
+    '[data-kp-reader-selector-id="fraction-normalization.target.x.addend"]'
+  )).toHaveAttribute("data-kp-semantic-salience-level", "focus");
 
   await second.locator("[data-kp-algebra-evidence-activate]").click();
   await expect(publication).toHaveAttribute(
@@ -298,10 +336,60 @@ test("distributed evidence reuses one live renderer across consecutive sockets",
     "data-kp-reader-accessible-equation-state",
     "fraction-solve.state.normalized"
   );
+  await expect(second.locator(
+    '[data-kp-algebra-lineage-select="variable-term"]'
+  )).toHaveAttribute("aria-pressed", "true");
+  await expect(page).toHaveURL(
+    /evidence=motion&evidenceRange=evaluate-constant#kp-ref:solve\/distributed-variable-term$/u
+  );
   await second.locator("[data-kp-algebra-range-scrubber]").fill("1000");
   await expect(canonical).toHaveAttribute(
     "data-kp-reader-accessible-equation-state",
     "fraction-solve.state.constant-quotient"
+  );
+  await expect(activeTransition.locator(
+    '[data-kp-reader-selector-id="constant-quotient.left.variable.numerator.x"]'
+  )).toHaveAttribute("data-kp-semantic-salience-level", "focus");
+  const lineageScene = await page.locator(
+    "[data-kp-reader-semantic-salience-scene]"
+  ).evaluate((node) => JSON.parse(
+    (node as HTMLElement).dataset["kpReaderSemanticSalienceScene"] ?? "{}"
+  ) as { focusTargetIds?: string[] });
+  expect(lineageScene.focusTargetIds).toContain(
+    "constant-quotient.left.variable.numerator.x"
+  );
+  expect(lineageScene.focusTargetIds).not.toContain(
+    "fraction-solve.step.constant-quotient"
+  );
+  const quotientVariable = activeTransition.locator(
+    '[data-kp-reader-selector-id="constant-quotient.left.variable.numerator.x"]'
+  );
+  const quotientOperator = activeTransition.locator(
+    '[data-kp-reader-selector-id="constant-quotient.left.operator.1"]'
+  );
+  const quotientConstant = activeTransition.locator(
+    '[data-kp-reader-selector-id="constant-quotient.left.4"]'
+  );
+  await expect(quotientVariable).toHaveAttribute(
+    "data-kp-algebra-lineage-target",
+    "variable-term"
+  );
+  await expect(quotientOperator).not.toHaveAttribute(
+    "data-kp-algebra-lineage-target"
+  );
+  await expect(quotientConstant).toHaveAttribute(
+    "data-kp-algebra-lineage-target",
+    "constant-term"
+  );
+  const [variableColor, operatorColor, constantColor] = await Promise.all([
+    quotientVariable.evaluate((node) => getComputedStyle(node).color),
+    quotientOperator.evaluate((node) => getComputedStyle(node).color),
+    quotientConstant.evaluate((node) => getComputedStyle(node).color)
+  ]);
+  expect(variableColor).not.toBe(operatorColor);
+  expect(operatorColor).toBe(constantColor);
+  await expect(page).toHaveURL(
+    /evidenceRange=evaluate-constant&evidenceProgress=1000#kp-ref:solve\/distributed-variable-term$/u
   );
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 1
@@ -315,6 +403,25 @@ test("distributed evidence reuses one live renderer across consecutive sockets",
     path: path.join(captureRoot, "distributed-motion.png"),
     animations: "disabled"
   });
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    "evaluate-constant"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-local-progress",
+    "1000"
+  );
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.constant-quotient"
+  );
+  await expect(publication).toHaveAttribute(
+    "data-kp-algebra-evidence-lineage",
+    "variable-term"
+  );
+  await expect(canonical).toHaveCount(1);
 });
 
 test("public symbolic route restores a semantic endpoint without replay", async ({
