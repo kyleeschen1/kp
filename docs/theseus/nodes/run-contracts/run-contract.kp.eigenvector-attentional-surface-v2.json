@@ -167,7 +167,8 @@
     {
       "id": "s20",
       "title": "Human checkpoint",
-      "status": "planned"
+      "summary": "The complete isolated eigenvector experience is ready for mandatory human visual and product review; no generalization or second caller has been attempted.",
+      "status": "in-progress"
     }
   ]
 }
