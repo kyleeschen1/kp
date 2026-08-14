@@ -12,7 +12,10 @@
   "files": [
     "src/public-web/eigenvector-attentional-surface-public-entry.ts",
     "src/public-web/eigenvector-attentional-surface-publication.ts",
+    "playwright.public-eigenvectors.config.ts",
+    "tests/eigenvector-attentional-surface-public.browser.spec.ts",
     "tests/eigenvector-attentional-surface-publication.test.ts",
+    "tests/eigenvector-attentional-surface-url.test.ts",
     "vite.public-eigenvectors.config.ts"
   ]
 }

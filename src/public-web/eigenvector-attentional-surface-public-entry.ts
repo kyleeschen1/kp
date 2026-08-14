@@ -27,6 +27,11 @@ import {
 } from "../tutorial/eigenvector-attentional-surface/eigenvector-transport.ts";
 import type { KpEigenvectorPredictionChoiceId } from
   "../tutorial/eigenvector-attentional-surface/eigenvector-prediction.ts";
+import {
+  decodeKpEigenvectorLocation,
+  encodeKpEigenvectorLocation,
+  paintKpEigenvectorDirectFocus
+} from "../tutorial/eigenvector-attentional-surface/eigenvector-url.ts";
 
 const root = document.querySelector<HTMLElement>("[data-kp-eigenvector-public]");
 const stage = root?.querySelector<HTMLElement>(
@@ -47,7 +52,8 @@ const announcer = root?.querySelector<HTMLElement>(
 
 if (root !== null && stage !== null && vectorLayer !== null &&
     invariantLine !== null && transportHost !== null) {
-  let state = createKpEigenvectorExperienceState();
+  let locationState = decodeKpEigenvectorLocation(window.location.href);
+  let state = createKpEigenvectorExperienceState(locationState.beatId);
   let animationFrame: number | undefined;
   let animationRevision = 0;
   const reducedMotion = window.matchMedia(
@@ -78,9 +84,16 @@ if (root !== null && stage !== null && vectorLayer !== null &&
       nextState.beatId
     );
     renderInteractionState(nextState);
+    paintKpEigenvectorDirectFocus(root, locationState.focusObjectId);
   };
 
-  const dispatch = (event: KpEigenvectorExperienceEvent): void => {
+  const dispatch = (
+    event: KpEigenvectorExperienceEvent,
+    options: {
+      readonly history?: "none" | "push" | "replace";
+      readonly immediate?: boolean;
+    } = {}
+  ): void => {
     const update = updateKpEigenvectorExperience(state, event);
     state = update.state;
     renderState(state);
@@ -88,19 +101,25 @@ if (root !== null && stage !== null && vectorLayer !== null &&
       if (effect.type === "announce") {
         if (announcer !== null) announcer.textContent = effect.text;
       } else {
-        runTransition(effect.fromBeatId, effect.toBeatId);
+        runTransition(
+          effect.fromBeatId,
+          effect.toBeatId,
+          options.immediate === true
+        );
       }
     }
+    writeLocation(options.history ?? "none");
   };
 
   const runTransition = (
     fromBeatId: KpEigenvectorBeatId,
-    toBeatId: KpEigenvectorBeatId
+    toBeatId: KpEigenvectorBeatId,
+    immediate = false
   ): void => {
     if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
     const revision = ++animationRevision;
     const plan = createKpEigenvectorTransitionPlan(fromBeatId, toBeatId);
-    const duration = reducedMotion.matches ? 0 : plan.durationMs;
+    const duration = immediate || reducedMotion.matches ? 0 : plan.durationMs;
     if (duration === 0) {
       paintMotionFrame(sampleKpEigenvectorTransition({
         plan,
@@ -145,6 +164,7 @@ if (root !== null && stage !== null && vectorLayer !== null &&
     paintEquation(frame.equation.fromForm, frame.equation.fromPresence);
     paintEquation(frame.equation.toForm, frame.equation.toPresence);
     if (frame.settled) settleEquations(frame.equation.toForm);
+    paintKpEigenvectorDirectFocus(root, locationState.focusObjectId);
   };
 
   const ensureVectorLine = (
@@ -168,6 +188,9 @@ if (root !== null && stage !== null && vectorLayer !== null &&
     const marker = root.querySelector<SVGMarkerElement>("marker");
     if (marker !== null) line.setAttribute("marker-end", `url(#${marker.id})`);
     vectorLayer.append(line);
+    if (semanticObjectId === locationState.focusObjectId) {
+      line.setAttribute("data-kp-direct-focus", "true");
+    }
     return line;
   };
 
@@ -224,6 +247,38 @@ if (root !== null && stage !== null && vectorLayer !== null &&
     }
   };
 
+  const writeLocation = (mode: "none" | "push" | "replace"): void => {
+    locationState = { ...locationState, beatId: state.beatId };
+    if (mode === "none") return;
+    const href = encodeKpEigenvectorLocation(
+      window.location.href,
+      locationState
+    );
+    if (href === window.location.href) return;
+    window.history[mode === "push" ? "pushState" : "replaceState"](
+      null,
+      "",
+      href
+    );
+  };
+
+  const restoreLocation = (): void => {
+    const restored = decodeKpEigenvectorLocation(window.location.href);
+    const fromBeatId = state.beatId;
+    locationState = restored;
+    const update = updateKpEigenvectorExperience(state, {
+      type: "select-beat",
+      beatId: restored.beatId
+    });
+    state = update.state;
+    renderState(state);
+    runTransition(fromBeatId, restored.beatId, true);
+    document.getElementById(restored.beatId)?.scrollIntoView({
+      behavior: "auto",
+      block: "start"
+    });
+  };
+
   root.addEventListener("click", (event) => {
     const target = event.target instanceof Element ? event.target : null;
     const transport = target?.closest<HTMLAnchorElement>(
@@ -233,10 +288,13 @@ if (root !== null && stage !== null && vectorLayer !== null &&
       event.preventDefault();
       const beatId = parseKpEigenvectorBeatHash(transport.hash);
       if (beatId === undefined) return;
-      dispatch({ type: "select-beat", beatId });
+      dispatch(
+        { type: "select-beat", beatId },
+        { history: "push" }
+      );
       document.getElementById(beatId)?.scrollIntoView({
         behavior: reducedMotion.matches ? "auto" : "smooth",
-        block: "center"
+        block: "start"
       });
       return;
     }
@@ -250,7 +308,7 @@ if (root !== null && stage !== null && vectorLayer !== null &&
       if (choiceId !== undefined) dispatch({
         type: "answer-prediction",
         choiceId: choiceId satisfies KpEigenvectorPredictionChoiceId
-      });
+      }, { history: "push" });
     }
   });
 
@@ -262,14 +320,32 @@ if (root !== null && stage !== null && vectorLayer !== null &&
     if (input !== null) dispatch({
       type: "set-scalar",
       coefficient: Number(input.value)
-    });
+    }, { history: "replace" });
   });
 
   renderState(state);
-  settleEquations(projectKpEigenvectorEndpoint(state.beatId).equation);
+  runTransition("most-vectors-turn", state.beatId, true);
+  const hashBeatId = parseKpEigenvectorBeatHash(window.location.hash);
+  if (hashBeatId !== undefined) {
+    document.getElementById(hashBeatId)?.scrollIntoView({
+      behavior: "auto",
+      block: "start"
+    });
+  }
+  let acceptsScrollSelection = false;
   enhanceKpEigenvectorScrollSelection({
     root,
     viewportHeight: () => window.innerHeight,
-    onBeatSelected: (beatId) => dispatch({ type: "select-beat", beatId })
+    initialBeatId: state.beatId,
+    onBeatSelected: (beatId) => {
+      if (!acceptsScrollSelection) return;
+      dispatch(
+        { type: "select-beat", beatId },
+        { history: "replace" }
+      );
+    }
   });
+  acceptsScrollSelection = true;
+  window.addEventListener("popstate", restoreLocation);
+  window.addEventListener("hashchange", restoreLocation);
 }

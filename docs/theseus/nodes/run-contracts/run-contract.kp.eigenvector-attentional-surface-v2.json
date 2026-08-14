@@ -155,7 +155,8 @@
     {
       "id": "s18",
       "title": "URL and access",
-      "status": "planned"
+      "summary": "Added deterministic beat and semantic-object deep links, direct non-replay restoration, history-aware fixed transport, exact reading-line alignment, static no-JS access, phone and reduced-motion fit, forced-color focus, and broad browser coverage.",
+      "status": "complete"
     },
     {
       "id": "s19",

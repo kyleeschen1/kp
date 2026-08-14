@@ -171,6 +171,14 @@ a { color: inherit; }
 
 .kp-eigenvector-stage marker path { fill: context-stroke; }
 
+[data-kp-direct-focus="true"] {
+  opacity: 1 !important;
+}
+
+.kp-eigenvector-stage [data-kp-direct-focus="true"] {
+  filter: drop-shadow(0 0 0.18rem currentColor);
+}
+
 .kp-eigenvector-stage__equation,
 .kp-eigenvector-stage__equation-bank {
   grid-row: 2;
@@ -205,7 +213,9 @@ a { color: inherit; }
   position: relative;
   margin-block: var(--kp-eigen-passage-gap);
   color: var(--kp-eigen-ink);
-  scroll-margin-top: var(--kp-eigen-reading-line);
+  /* Land just beyond the selector seam so direct links cannot reselect the
+     previous beat because of fractional-pixel equality at the reading line. */
+  scroll-margin-top: calc(var(--kp-eigen-reading-line) - 1.5rem);
 }
 
 .kp-eigenvector-passage:first-child { margin-top: 0; }
@@ -390,4 +400,18 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
+}
+
+@media (forced-colors: active) {
+  .kp-eigenvector-stage__grid,
+  .kp-eigenvector-stage__axes line,
+  .kp-eigenvector-stage__invariant-line {
+    stroke: CanvasText;
+  }
+  .kp-eigenvector-stage__vector { stroke: Highlight; }
+  .kp-eigenvector-passage__marker { background: CanvasText; }
+  .kp-eigenvector-passage.is-active .kp-eigenvector-passage__marker {
+    background: Highlight;
+  }
+  [data-kp-direct-focus="true"] { outline: 2px solid Highlight; }
 }

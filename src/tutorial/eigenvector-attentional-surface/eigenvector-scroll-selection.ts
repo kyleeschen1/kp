@@ -34,6 +34,7 @@ export function enhanceKpEigenvectorScrollSelection(input: {
   readonly root: ParentNode;
   readonly viewportHeight: () => number;
   readonly onBeatSelected: (beatId: KpEigenvectorBeatId) => void;
+  readonly initialBeatId?: KpEigenvectorBeatId;
   readonly observerFactory?: (
     callback: IntersectionObserverCallback,
     options: IntersectionObserverInit
@@ -46,7 +47,7 @@ export function enhanceKpEigenvectorScrollSelection(input: {
     const candidate = element.dataset["kpEigenvectorPassage"];
     return kpEigenvectorBeatIds.find((beatId) => beatId === candidate);
   };
-  let selected = selectKpEigenvectorBeatAtReadingLine({
+  let selected = input.initialBeatId ?? selectKpEigenvectorBeatAtReadingLine({
     passages: passages.flatMap((element) => {
       const beatId = readBeatId(element);
       return beatId === undefined
