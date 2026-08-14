@@ -123,11 +123,32 @@
       "scope": "s08 Article v1 preservation",
       "checkedAt": "2026-08-14T16:52:03.848Z",
       "notes": "All 122 Article v1 parser, source, import, semantic, static, accessibility, and editor tests pass."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s09 static publication",
+      "checkedAt": "2026-08-14T17:00:20.516Z",
+      "notes": "29 normal-matrix proof tests passed, including complete searchable HTML and seven resolved native checkpoint figures."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "s09 Article preservation",
+      "checkedAt": "2026-08-14T17:00:21.710Z",
+      "notes": "122 Article v1 tests passed; generic grammar, static publication, semantic anchors, and import locks remain intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 static publication types",
+      "checkedAt": "2026-08-14T17:00:22.682Z",
+      "notes": "App, node, tests, Svelte, and domains typechecks passed with zero Svelte diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A complete searchable Article now states prerequisites, the proof, six semantic motions, pressure tests, and a reconstructable proof map through one exact vignette lock."
+    "summary": "The normal-matrix Article now has a complete static publication: all proof prose is searchable, seven figure occurrences resolve from six canonical checkpoints, and KaTeX HTML plus MathML is built without client math runtime."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

@@ -102,7 +102,8 @@
     {
       "id": "s09",
       "title": "Static publication",
-      "status": "planned"
+      "summary": "Compiled searchable Article v1 publication with build-time KaTeX and complete resolved checkpoint figures.",
+      "status": "complete"
     },
     {
       "id": "s10",
