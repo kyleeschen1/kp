@@ -90,6 +90,13 @@
       "scope": "slice-s07-definition",
       "checkedAt": "2026-08-14T20:46:07.964Z",
       "notes": "Twenty-two tests prove 3-to-lambda semantic continuity and retention of A, v, and equality across the definition handoff."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s08-prediction",
+      "checkedAt": "2026-08-14T20:47:53.546Z",
+      "notes": "Twenty-five tests prove the scalar-multiple prediction precedes reveal, only 6v is correct, and feedback explains linearity without mutating state."
     }
   ],
   "expectedLearning": [

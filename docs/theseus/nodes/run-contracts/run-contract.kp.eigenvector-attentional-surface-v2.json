@@ -95,7 +95,8 @@
     {
       "id": "s08",
       "title": "Prediction contract",
-      "status": "planned"
+      "summary": "Added one semantic prediction: infer A(2v)=6v from linearity, with bounded choices, explanatory feedback, and reveal only after the correct answer.",
+      "status": "complete"
     },
     {
       "id": "s09",
