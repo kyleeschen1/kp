@@ -156,7 +156,8 @@
     {
       "id": "s18",
       "title": "Compact checkpoint controls",
-      "status": "planned"
+      "summary": "Added one compact deterministic scrub track with keyboard checkpoint navigation, static disabled fallback, stable geometry, and route closure under all approved ceilings.",
+      "status": "complete"
     },
     {
       "id": "s19",

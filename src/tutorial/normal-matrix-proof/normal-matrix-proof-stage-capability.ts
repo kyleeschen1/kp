@@ -1,7 +1,9 @@
 import { observeKpNativeKatexFragments } from
   "../../rendering/native-katex-fragment-observer.ts";
-import { projectKpNormalMatrixProofClock } from
-  "../../semantic/normal-matrix-proof-checkpoints.ts";
+import {
+  kpNormalMatrixProofCheckpoints,
+  projectKpNormalMatrixProofClock
+} from "../../semantic/normal-matrix-proof-checkpoints.ts";
 import {
   projectKpNormalMatrixProofCycleA,
   type KpNormalMatrixProofCycleAProjection,
@@ -62,6 +64,11 @@ interface KpNormalMatrixProofCycleBTransients {
   readonly remainderZero: HTMLElement;
 }
 
+interface KpNormalMatrixProofControlsRuntime {
+  readonly sync: (timeMs: number, checkpointId: string) => void;
+  readonly dispose: () => void;
+}
+
 interface KpNormalMatrixProofMeasuredPoint {
   readonly x: number;
   readonly y: number;
@@ -80,6 +87,7 @@ async function prepareStage(
   });
   let measurements = measureSettledScenes(stage);
   const transients = createCycleBTransients(stage);
+  let controls: KpNormalMatrixProofControlsRuntime | undefined;
   const view = stage.ownerDocument.defaultView;
   const reducedMotion = view?.matchMedia("(prefers-reduced-motion: reduce)")
     .matches ?? false;
@@ -100,6 +108,10 @@ async function prepareStage(
     stage.dataset["kpNormalProofFragmentCount"] = String(
       activeFragmentNodes(stage).length
     );
+    controls?.sync(
+      Number(stage.dataset["kpNormalProofTimeMs"] ?? 0),
+      stage.dataset["kpNormalProofActiveCheckpoint"] ?? "statement"
+    );
   };
   // The event is only a local input seam for controls and tests. The proof
   // clock remains the sole authority; this capability never starts a loop.
@@ -117,12 +129,14 @@ async function prepareStage(
   };
   view?.addEventListener("resize", resize, { passive: true });
   stage.dataset["kpNormalProofSession"] = "deterministic-seek";
+  controls = mountCheckpointControls(stage, render);
   render(0);
   observeActiveFragments(stage);
   return {
     dispose: () => {
       stage.removeEventListener(kpNormalMatrixProofSeekEvent, seek);
       view?.removeEventListener("resize", resize);
+      controls?.dispose();
       clearProjectionState(stage);
       transients.layer.remove();
       delete stage.dataset["kpNormalProofSession"];
@@ -130,6 +144,73 @@ async function prepareStage(
       delete stage.dataset["kpNormalProofAttentionPhase"];
     }
   };
+}
+
+function mountCheckpointControls(
+  stage: HTMLElement,
+  seek: (timeMs: number) => void
+): KpNormalMatrixProofControlsRuntime | undefined {
+  const input = stage.querySelector<HTMLInputElement>(
+    "[data-kp-normal-proof-scrub]"
+  );
+  const status = stage.querySelector<HTMLOutputElement>(
+    ".kp-nps"
+  );
+  if (input === null || status === null) return undefined;
+  const onInput = (): void => seek(input.valueAsNumber);
+  const onKeyDown = (event: KeyboardEvent): void => {
+    const direction = event.key === "ArrowRight" || event.key === "PageDown"
+      ? 1
+      : event.key === "ArrowLeft" || event.key === "PageUp"
+        ? -1
+        : 0;
+    if (direction !== 0) {
+      event.preventDefault();
+      seek(adjacentCheckpointTime(input.valueAsNumber, direction));
+      return;
+    }
+    if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      seek(event.key === "Home"
+        ? kpNormalMatrixProofCheckpoints[0]!.timeMs
+        : kpNormalMatrixProofCheckpoints.at(-1)!.timeMs);
+    }
+  };
+  input.disabled = false;
+  input.addEventListener("input", onInput);
+  input.addEventListener("keydown", onKeyDown);
+  return {
+    sync: (timeMs, checkpointId) => {
+      const checkpoint = kpNormalMatrixProofCheckpoints.find(
+        ({ id }) => id === checkpointId
+      ) ?? projectKpNormalMatrixProofClock(timeMs).from;
+      input.value = String(timeMs);
+      input.style.setProperty(
+        "--kp-normal-proof-progress",
+        `${timeMs / kpNormalMatrixProofCheckpoints.at(-1)!.timeMs * 100}%`
+      );
+      const description = `${checkpoint.label}: ${checkpoint.learnerQuestion}`;
+      input.setAttribute("aria-valuetext", description);
+      status.textContent = `${checkpoint.label} · ${checkpoint.learnerQuestion}`;
+    },
+    dispose: () => {
+      input.removeEventListener("input", onInput);
+      input.removeEventListener("keydown", onKeyDown);
+      input.disabled = true;
+      input.style.removeProperty("--kp-normal-proof-progress");
+    }
+  };
+}
+
+function adjacentCheckpointTime(currentTimeMs: number, direction: 1 | -1): number {
+  if (direction === 1) {
+    return kpNormalMatrixProofCheckpoints.find(
+      ({ timeMs }) => timeMs > currentTimeMs
+    )?.timeMs ?? kpNormalMatrixProofCheckpoints.at(-1)!.timeMs;
+  }
+  return [...kpNormalMatrixProofCheckpoints].reverse().find(
+    ({ timeMs }) => timeMs < currentTimeMs
+  )?.timeMs ?? kpNormalMatrixProofCheckpoints[0]!.timeMs;
 }
 
 function renderCycleAProjection(

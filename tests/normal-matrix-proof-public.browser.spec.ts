@@ -39,6 +39,9 @@ test("public proof is readable before and after lazy capability load", async ({
   await expect(stage.locator(
     "[data-kp-normal-proof-settled-scene]:not([hidden])"
   )).toHaveCount(1);
+  await expect(stage.locator(
+    "[data-kp-normal-proof-scrub]"
+  )).toBeEnabled();
   await expect(page.locator("iframe")).toHaveCount(0);
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 1
@@ -125,7 +128,52 @@ test("static evidence keeps the same proof without creating a session", async ({
     "ready"
   );
   await expect(fallback.locator("math").first()).toBeAttached();
+  await expect(fallback.locator(
+    "[data-kp-normal-proof-scrub]"
+  )).toBeDisabled();
   await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
+});
+
+test("one compact control seeks continuously and jumps among checkpoint stops", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+  const scrub = stage.locator("[data-kp-normal-proof-scrub]");
+  const status = stage.locator(".kp-nps");
+  const controlsBox = await stage.locator(
+    ".kp-normal-proof-controls"
+  ).boundingBox();
+  await expect(scrub).toBeEnabled();
+  await expect(scrub).toHaveValue("0");
+
+  await scrub.evaluate((input, timeMs) => {
+    (input as HTMLInputElement).value = String(timeMs);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  }, 5_500);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "5500");
+  await expect(scrub).toHaveValue("5500");
+  await expect(status).toContainText("Rows and columns become product entries");
+
+  await scrub.press("ArrowRight");
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await scrub.press("ArrowLeft");
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "4800");
+  await scrub.press("Home");
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "0");
+  await scrub.press("End");
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "12000");
+
+  await page.waitForTimeout(150);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "12000");
+  expect(await stage.locator(
+    ".kp-normal-proof-controls"
+  ).boundingBox()).toEqual(controlsBox);
 });
 
 test("cycle A seeks deterministically and hands its native endpoint to cycle B", async ({

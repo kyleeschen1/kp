@@ -354,11 +354,39 @@
       "scope": "s17-cycle-b-rendering",
       "checkedAt": "2026-08-14T17:57:29.367Z",
       "notes": "Build passes at 9.92 KB gzip HTML, 1.05 KB startup, and 9.52 KB lazy capability, within the approved ceilings."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:10:22.110Z",
+      "notes": "8 Chromium checks passed, including pointer input, keyboard stops, static disablement, stable geometry, and no autoplay."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:10:22.746Z",
+      "notes": "56 semantic, projection, publication, and native-stage checks passed."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-14T18:10:23.175Z",
+      "notes": "Public normal-matrix route typecheck passed."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T18:10:24.460Z",
+      "notes": "Route built with HTML 9.99 kB gzip, startup 1.05 kB gzip, and lazy capability 9.91 kB gzip."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Both proof attention cycles now render from the one deterministic clock. Cycle B preserves r until a fully completed native handoff, settles the same matrix block-diagonally, focuses the recursive block, and snaps reduced-motion seeks to checkpoints."
+    "summary": "A single progressively enhanced scrub control now maps pointer input and accessible keyboard checkpoint jumps into the existing deterministic proof clock, with no autoplay, no second clock, and stable reserved geometry."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

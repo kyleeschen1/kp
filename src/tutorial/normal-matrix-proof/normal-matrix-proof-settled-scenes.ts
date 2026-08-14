@@ -6,6 +6,7 @@ import {
 } from "../../rendering/selector-annotated-latex.ts";
 import {
   kpNormalMatrixProofCheckpoints,
+  kpNormalMatrixProofDurationMs,
   type KpNormalMatrixProofCheckpointId
 } from "../../semantic/normal-matrix-proof-checkpoints.ts";
 import type { KpNormalMatrixProofObjectPath } from
@@ -166,7 +167,19 @@ export function renderKpNormalMatrixProofSettledStageHtml(): string {
       `</div>`
     ].join("")).join(""),
     `</div>`,
+    renderCheckpointControlsHtml(),
     `</section>`
+  ].join("");
+}
+
+function renderCheckpointControlsHtml(): string {
+  return [
+    `<div class="kp-normal-proof-controls">`,
+    `<input class="kp-normal-proof-controls__scrub" aria-label="Proof step"`,
+    ` data-kp-normal-proof-scrub type="range" min="0" max="${kpNormalMatrixProofDurationMs}"`,
+    ` value="0" disabled>`,
+    `<output class="kp-nps"></output>`,
+    `</div>`
   ].join("");
 }
 
