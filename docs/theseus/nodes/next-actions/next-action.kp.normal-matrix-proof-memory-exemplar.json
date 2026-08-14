@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.normal-matrix-proof-memory-exemplar",
+  "kind": "next-action",
+  "title": "Build bounded normal-matrix Proof Memory Loop exemplar",
+  "status": "ready",
+  "domain": "product",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.exemplar-first-codex-collaboration-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:normal-matrix-proof",
+    "npm run build:public-normal-matrices",
+    "npm run test:browser:public-normal-matrices",
+    "npm run visual:normal-matrix-proof-checkpoint",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 contract integrity",
+      "checkedAt": "2026-08-14T16:24:11.140Z",
+      "notes": "Validated 947 nodes before baseline execution."
+    },
+    {
+      "command": "npm run typecheck:public-fraction-composition",
+      "status": "passed",
+      "scope": "s01 protected public exemplar baseline",
+      "checkedAt": "2026-08-14T16:24:12.287Z",
+      "notes": "Existing public fraction projection typechecks without source mutation."
+    },
+    {
+      "command": "npm run build:public-fraction-composition",
+      "status": "passed",
+      "scope": "s01 protected public exemplar baseline",
+      "checkedAt": "2026-08-14T16:24:13.352Z",
+      "notes": "Existing public fraction projection builds; no normal-matrix implementation exists yet."
+    },
+    {
+      "command": "npm run check:algebra-fraction-composition-budgets",
+      "status": "failed",
+      "scope": "s01 inherited budget baseline",
+      "checkedAt": "2026-08-14T16:24:14.577Z",
+      "notes": "Pre-existing shared-reader closure is 152834 gzip bytes against the unchanged 145000-byte ceiling. This slice records rather than repairs or widens unrelated baseline debt."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved 27-slice contract is active; protected economics changes remain untouched; public fraction type/build baseline passes and inherited 152834/145000 gzip reader debt is recorded."
+  },
+  "expectedLearning": [
+    "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
+  ],
+  "allowedWork": [
+    "Implement the approved local Article, semantic asset, vignette, native-KaTeX stage, prompt projections, direct state restoration, static comparison, and focused release evidence through the human checkpoint."
+  ],
+  "disallowedWork": [
+    "Do not build SVD, another theorem, generic matrix or proof-memory infrastructure, scheduler, learner state, new layouts, Graph3D, economics implementation, or shared promotion."
+  ],
+  "criteria": [
+    {
+      "id": "mathematical-proof-correct",
+      "weight": "high"
+    },
+    {
+      "id": "searchable-static-truth",
+      "weight": "high"
+    },
+    {
+      "id": "predict-r-zero-for-right-reason",
+      "weight": "high"
+    },
+    {
+      "id": "direct-proof-reentry",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-native-settlement",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-route-cost",
+      "weight": "high"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    }
+  ]
+}

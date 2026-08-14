@@ -2,9 +2,9 @@
   "id": "next-action.kp.economics-public-projection-spike",
   "kind": "next-action",
   "title": "Build bounded economics demand-shift public projection spike",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.public-web",
-  "summary": "Pressure the approved code and symbolic public-product boundary with the canonical economics graph while preserving user-authored source edits and existing graph semantics.",
+  "summary": "Deferred behind the approved bounded normal-matrix Proof Memory Loop exemplar.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,6 +32,9 @@
     "focused economics semantic and publication tests",
     "route-only static and direct-seek tests",
     "single-exemplar Chromium checkpoint"
+  ],
+  "revisitWhen": [
+    "Resume after the normal-matrix exemplar human checkpoint and product decision."
   ],
   "expectedLearning": [
     "Whether the same austere stage, cue, scrubber, and complete searchable Article composition remains credible for a retained SVG graph."

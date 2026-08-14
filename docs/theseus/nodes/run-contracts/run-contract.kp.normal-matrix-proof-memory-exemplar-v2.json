@@ -1,0 +1,191 @@
+{
+  "id": "run-contract.kp.normal-matrix-proof-memory-exemplar-v2",
+  "kind": "run-contract",
+  "title": "Normal-Matrix Proof Memory Exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.normal-matrix-proof-memory-exemplar.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md",
+      "summary": "Approved 27-slice exemplar plan; s01-s25 authorized, s25 mandatory human checkpoint, s26-s27 require explicit post-checkpoint approval. Supersedes the metadata-incomplete v1 contract before execution."
+    }
+  ],
+  "verification": [
+    "npm run test:normal-matrix-proof",
+    "npm run typecheck:public-normal-matrices",
+    "npm run build:public-normal-matrices",
+    "npm run check:public-normal-matrices-budgets",
+    "npm run test:browser:public-normal-matrices",
+    "npm run visual:normal-matrix-proof-checkpoint",
+    "npm run test:kp-article-v1",
+    "npm run test:visual-salience",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "One original normal-matrix Article, local semantic asset and vignette, static publication, route-local native-KaTeX stage, two attention cycles, compact checkpoint controls, eleven prompts, direct re-entry, focused accessibility and performance checks, visual checkpoint evidence, and required project-memory updates.",
+    "Exact independently reversible commits with bounded Theseus context and verification evidence."
+  ],
+  "disallowedWork": [
+    "SVD, a second theorem, generic matrix or proof-memory APIs, shared renderer or Article grammar changes without a hard gap, scheduler, accounts, learner state, analytics, classrooms, assessment, new lesson layouts, Graph3D, Canvas, WebGL, particles, advanced editor work, broad LLM prose generation, or economics implementation.",
+    "Execution of s26 or s27 before explicit approval of the mandatory s25 human checkpoint."
+  ],
+  "goal": "Implement one searchable normal-matrix proof, one deterministic native-KaTeX attention stage, eleven prompt projections, exact proof re-entry, and a static comparison through a mandatory human checkpoint without adding shared matrix, scheduler, or layout authority.",
+  "target": "next-action.kp.normal-matrix-proof-memory-exemplar",
+  "runMode": "run",
+  "maxSlices": 27,
+  "commitCadence": "Commit each independently reversible verified slice with its completed Theseus evidence; never stage protected economics files or unrelated documents.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if the proof or a prerequisite cannot be stated and reviewed rigorously.",
+    "Stop if implementation requires Article v2, a second clock, another paint owner, a generic matrix engine, or model-authored geometry or timing.",
+    "Stop if semantic identity must be inferred from glyph equality or KaTeX internals, or if static and motion evidence disagree mathematically.",
+    "Stop if direct restoration requires replay or if no-JavaScript truth, accessibility, 390-pixel fit, or approved route budgets fail without an independently removable correction.",
+    "Stop before modifying user-owned economics or unrelated untracked work.",
+    "Stop at s25 for mandatory human visual and product judgment; do not begin s26 without explicit approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Contract and protected baseline",
+      "summary": "Activated the approved contract, protected economics work, validated the graph, and froze the public fraction type/build/budget baseline without unrelated repair.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Mathematical fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Proof semantic registry",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Relations and transformations",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Checkpoint authority",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Prompt contract",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Versioned vignette",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Original Article source",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Static publication",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Public route shell",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Static evidence mode",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Native settled scenes",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Fragment binding and geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Attention cycle A plan",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Attention cycle A rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Attention cycle B plan",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Attention cycle B rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Compact checkpoint controls",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Checkpoint URL state",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Semantic focus re-entry",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Prompt projection surface",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Manual return rehearsal",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Accessibility and responsive pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Performance and closure gate",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Canonical human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Post-approval exemplar hardening",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Release and experiment closeout",
+      "status": "planned"
+    }
+  ]
+}
