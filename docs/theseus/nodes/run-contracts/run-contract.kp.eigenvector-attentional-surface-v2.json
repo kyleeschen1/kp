@@ -71,7 +71,8 @@
     {
       "id": "s04",
       "title": "Endpoint projection",
-      "status": "planned"
+      "summary": "Defined nine direct semantic endpoints with explicit attentional owners, stable hashes, and deterministic restoration independent of visitation order.",
+      "status": "complete"
     },
     {
       "id": "s05",

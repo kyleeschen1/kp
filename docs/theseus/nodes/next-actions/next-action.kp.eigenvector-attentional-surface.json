@@ -62,6 +62,13 @@
       "scope": "slice-s03-semantics",
       "checkedAt": "2026-08-14T20:38:01.824Z",
       "notes": "Eight tests now include semantic-registry closure and explicit v identity across diagram, equation, prose, prediction, manipulation, and recall."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s04-endpoints",
+      "checkedAt": "2026-08-14T20:40:32.028Z",
+      "notes": "Twelve tests prove nine ordered endpoints, one owner per beat, stable hashes, and order-independent direct restoration."
     }
   ],
   "expectedLearning": [
