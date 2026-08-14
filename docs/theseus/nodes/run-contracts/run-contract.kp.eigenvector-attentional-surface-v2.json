@@ -65,7 +65,8 @@
     {
       "id": "s03",
       "title": "Semantic registry",
-      "status": "planned"
+      "summary": "Added a closed local registry binding v and related concepts to explicit diagram, equation, prose, prediction, manipulation, and recall representations.",
+      "status": "complete"
     },
     {
       "id": "s04",
