@@ -25,3 +25,30 @@ test("public proof is readable before and after lazy capability load", async ({
     document.documentElement.scrollWidth <= window.innerWidth + 1
   )).toBe(true);
 });
+
+test("static evidence keeps the same proof without creating a session", async ({
+  page
+}) => {
+  await page.goto(`${route}?evidence=static`, {
+    waitUntil: "domcontentloaded"
+  });
+
+  const publication = page.locator("[data-kp-normal-proof-publication]");
+  const fallback = publication.locator(
+    "[data-kp-normal-proof-stage-fallback]"
+  );
+  await expect(publication).toBeVisible();
+  await fallback.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(150);
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-normal-proof-evidence",
+    "static"
+  );
+  await expect(publication).not.toHaveAttribute(
+    "data-kp-normal-proof-capability",
+    "ready"
+  );
+  await expect(fallback.locator("math")).toBeAttached();
+  await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
+});

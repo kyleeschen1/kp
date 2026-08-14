@@ -179,11 +179,32 @@
       "scope": "s10 proof preservation",
       "checkedAt": "2026-08-14T17:07:20.831Z",
       "notes": "All 33 normal-matrix proof and public route tests passed."
+    },
+    {
+      "command": "npm run test:public-normal-matrices",
+      "status": "passed",
+      "scope": "s11 static evidence contract",
+      "checkedAt": "2026-08-14T17:10:33.977Z",
+      "notes": "Six public proof tests passed, including explicit static mode and safe unknown-mode fallback."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s11 evidence mode types",
+      "checkedAt": "2026-08-14T17:10:35.921Z",
+      "notes": "The isolated public route typecheck passed."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s11 no-session browser proof",
+      "checkedAt": "2026-08-14T17:10:37.231Z",
+      "notes": "Both motion-shell and static-evidence Chromium checks passed; static mode retained MathML and created no capability or session."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The proof now has an isolated static-first public route at /learn/math/normal-matrices/: complete searchable HTML and MathML load before a near-viewport, route-local stage capability chunk."
+    "summary": "The route now supports a deterministic evidence=static comparison over the identical Article and checkpoint endpoints; it preserves native MathML while suppressing the lazy capability and any animation session."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

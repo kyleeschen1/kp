@@ -10,10 +10,12 @@
     "tsBuildInfoFile": "./tmp/codex/tsbuildinfo/public-normal-matrices.tsbuildinfo"
   },
   "files": [
+    "src/public-web/normal-matrix-proof-evidence-mode.ts",
     "src/public-web/normal-matrix-proof-public-entry.ts",
     "src/public-web/normal-matrix-proof-publication.ts",
     "src/public-web/normal-matrix-proof-public-route.ts",
     "tests/normal-matrix-proof-publication.test.ts",
+    "tests/normal-matrix-proof-public-evidence-mode.test.ts",
     "vite.public-normal-matrices.config.ts"
   ]
 }

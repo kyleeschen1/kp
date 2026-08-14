@@ -114,7 +114,8 @@
     {
       "id": "s11",
       "title": "Static evidence mode",
-      "status": "planned"
+      "summary": "Added and verified no-session static evidence mode over the same Article and endpoint truth.",
+      "status": "complete"
     },
     {
       "id": "s12",
