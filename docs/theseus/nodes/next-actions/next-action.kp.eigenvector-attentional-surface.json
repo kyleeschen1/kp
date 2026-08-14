@@ -1,0 +1,100 @@
+{
+  "id": "next-action.kp.eigenvector-attentional-surface",
+  "kind": "next-action",
+  "title": "Build the bounded eigenvector attentional surface",
+  "status": "ready",
+  "domain": "product",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.exemplar-first-codex-collaboration-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:eigenvector-attentional-surface",
+    "npm run typecheck:public-eigenvectors",
+    "npm run build:public-eigenvectors",
+    "npm run test:browser:public-eigenvectors",
+    "npm run check:public-eigenvectors-budgets",
+    "npm run visual:eigenvector-attentional-surface-checkpoint",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:public-fraction-composition",
+      "status": "passed",
+      "scope": "baseline-typecheck",
+      "checkedAt": "2026-08-14T20:31:46.571Z",
+      "notes": "Existing public lesson remains type-safe before the isolated eigenvector route."
+    },
+    {
+      "command": "npm run build:public-fraction-composition",
+      "status": "passed",
+      "scope": "baseline-build",
+      "checkedAt": "2026-08-14T20:31:48.526Z",
+      "notes": "Existing public lesson still builds; current bundle output is baseline evidence, not the eigenvector budget."
+    },
+    {
+      "command": "npm run test:visual-salience",
+      "status": "passed",
+      "scope": "baseline-salience",
+      "checkedAt": "2026-08-14T20:31:50.355Z",
+      "notes": "Shared salience seam passes all 20 baseline contracts before exemplar work."
+    }
+  ],
+  "expectedLearning": [
+    "Whether one persistent semantic plane with discrete scroll-selected beats and bounded transitions eliminates read-watch ambiguity while preserving searchable truth, direct access, prediction, and manipulation."
+  ],
+  "allowedWork": [
+    "Implement the approved isolated eigenvector route and its local semantic, projection, rendering, interaction, publication, access, performance, and checkpoint evidence."
+  ],
+  "disallowedWork": [
+    "Do not create shared beat, layout, vector, matrix, scrollytelling, tutor, SRS, editor, curriculum, or second-caller infrastructure."
+  ],
+  "criteria": [
+    {
+      "id": "one-dominant-attentional-owner",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-vector-identity-persists",
+      "weight": "high"
+    },
+    {
+      "id": "discrete-scroll-settles-deterministically",
+      "weight": "high"
+    },
+    {
+      "id": "prediction-and-manipulation-reveal-concept",
+      "weight": "high"
+    },
+    {
+      "id": "searchable-static-truth",
+      "weight": "high"
+    },
+    {
+      "id": "direct-state-restoration",
+      "weight": "high"
+    },
+    {
+      "id": "accessible-phone-fit",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-route-cost",
+      "weight": "high"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    }
+  ]
+}

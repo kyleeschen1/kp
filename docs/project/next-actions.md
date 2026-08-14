@@ -9,12 +9,12 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 There is one active next action:
 
-1. Write and review the bounded eigenvector attentional-surface prototype
-   specification described in
-   `reviews/2026-08-14-single-lane-product-convergence-next-step-review.md`.
+1. Execute the approved twenty-slice eigenvector attentional-surface contract
+   described in
+   `reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
+   through its mandatory human checkpoint.
 
-Do not implement it until the spec passes its human checkpoint. After approval,
-build only that reversible exemplar and stop again for evaluation. A pass may
+Build only that reversible exemplar and stop again for evaluation. A pass may
 unlock one delayed-return cue and one contrasting existing caller; a mixed or
 failed result does not unlock broader work.
 

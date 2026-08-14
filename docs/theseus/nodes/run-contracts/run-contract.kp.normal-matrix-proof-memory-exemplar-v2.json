@@ -2,8 +2,9 @@
   "id": "run-contract.kp.normal-matrix-proof-memory-exemplar-v2",
   "kind": "run-contract",
   "title": "Normal-Matrix Proof Memory Exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -204,12 +205,14 @@
     {
       "id": "s26",
       "title": "Post-approval exemplar hardening",
-      "status": "planned"
+      "summary": "Human checkpoint rejected the attentional treatment; post-approval hardening is intentionally not authorized.",
+      "status": "skipped"
     },
     {
       "id": "s27",
       "title": "Release and experiment closeout",
-      "status": "planned"
+      "summary": "The experiment closes as architecture evidence without learner-experience release; the eigenvector exemplar supersedes this continuation.",
+      "status": "skipped"
     }
   ]
 }

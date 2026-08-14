@@ -53,22 +53,21 @@ wonder where to look.
 The next product question is therefore narrower than layout selection: can one
 hard-coded, three-to-five-minute experience let prose, object, transformation,
 notation, prediction, and manipulation take turns owning one attentional
-surface? Eigenvectors are the leading candidate because semantic identity can
-remain visible from a vector through `Av = lambda v` and into an invariant
-subspace. Do not generalize authoring or a beat runtime before that exemplar
-passes human review.
+surface? The approved eigenvector exemplar preserves one transformation plane
+as a spatial memory surface while ordinary passages select discrete semantic
+beats and bounded transitions. Do not generalize authoring, scrollytelling, or
+a beat runtime before that exemplar passes human review.
 
 ## One Active Lane
 
 The repository contains a large evidence portfolio, not a large active queue.
 Until the next human product decision, only this sequence is active:
 
-1. **Specify:** write one bounded eigenvector attentional-surface exemplar with
-   six to nine beats, one persistent semantic identity, one learner prediction
-   or manipulation, complete searchable truth, and fixed minimal controls.
-2. **Review:** stop before implementation and approve, revise, or reject the
-   exact experience and checkpoint criteria.
-3. **Build:** if approved, implement one reversible hard-coded route using the
+1. **Specify:** complete. The nine-beat experience and Ordinary Abundance
+   scroll rhythm are approved in
+   `reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`.
+2. **Review:** complete. The user approved the exact long-loop contract.
+3. **Build:** active. Implement one reversible hard-coded route using the
    existing semantic, clock, salience, renderer, publication, and URL seams.
 4. **Evaluate:** allow at most one bounded revision cycle, then explicitly
    classify the medium proof as pass, mixed, or fail.
@@ -94,7 +93,7 @@ operational rationale is recorded in
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
 | Layout | Many useful experiments; permanent text/animation allocation has not solved split attention | Treat layout as a projection; test temporal attentional ownership before selecting a public default. |
-| Public product | Normal-matrix infrastructure proof complete; learner experience not approved | Specify one hard-coded eigenvector attentional-surface experience and stop at one human checkpoint. |
+| Public product | Normal-matrix infrastructure proof complete; eigenvector implementation approved | Execute the isolated nine-beat attentional-surface contract and stop at its human checkpoint. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Constrain the model to semantic referents and pedagogical actions over KP-owned state. |
 
 ## Active Tightening Phase
@@ -199,8 +198,9 @@ renderer.
 ### 5. Product convergence proof
 
 Status: code and symbolic projections approved; normal-matrix architecture
-proof complete but attentional treatment unapproved; one-surface eigenvector
-prototype specification is next; graph pressure remains paused
+proof complete but attentional treatment unapproved; the one-surface
+eigenvector prototype is approved for implementation; graph pressure remains
+paused
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -270,12 +270,13 @@ product-learning evidence; do not begin s26 hardening under the old treatment.
 
 The accepted refinement is recorded in
 `decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`.
-The next bounded action is a specification—not implementation—for one
-hard-coded eigenvector experience with roughly six to nine attentional beats,
-one persistent semantic vector across geometry and notation, one prediction or
-manipulation, complete searchable fallback, and no permanent text/animation
-split. Do not create generic vector, matrix, beat, layout, or authoring APIs for
-that specification.
+The exact nine-beat implementation and Ordinary Abundance-inspired discrete
+scroll projection are approved in
+`reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`.
+Execute only that isolated route, preserve one persistent semantic vector
+across geometry and notation, include one prediction and scalar manipulation,
+retain complete searchable truth, and stop at the human checkpoint. Do not
+create generic vector, matrix, beat, layout, scrollytelling, or authoring APIs.
 
 The canonical economics demand-shift graph remains an approved future product
 caller after the attentional-surface question is answered. Preserve and audit
@@ -311,9 +312,10 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
-  continuation remains unapproved.
-- The eigenvector attentional-surface exemplar is a specification candidate,
-  not yet an approved implementation or linear-algebra expansion.
+  continuation is closed without hardening or release.
+- The eigenvector attentional-surface exemplar is approved for one isolated
+  implementation through its mandatory human checkpoint. This does not reopen
+  broad linear-algebra expansion.
 - Scheme factorial full evaluation is implemented, approved, and directly
   hosted in the catalogue. Broader SICP or Scheme expansion remains paused.
 - The algebra explanation contract remains recoverable from its verified human

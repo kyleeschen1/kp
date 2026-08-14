@@ -2,7 +2,7 @@
   "id": "next-action.kp.normal-matrix-proof-memory-exemplar",
   "kind": "next-action",
   "title": "Build bounded normal-matrix Proof Memory Loop exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "product",
   "sourceRefs": [
     {

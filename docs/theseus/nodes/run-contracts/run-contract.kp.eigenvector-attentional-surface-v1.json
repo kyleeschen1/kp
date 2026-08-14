@@ -1,0 +1,142 @@
+{
+  "id": "run-contract.kp.eigenvector-attentional-surface-v1",
+  "kind": "run-contract",
+  "title": "Eigenvector Attentional Surface",
+  "status": "superseded",
+  "summary": "Metadata-incomplete contract created by the minimal CLI is superseded before execution by the fully typed v2 contract; no implementation slice ran.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.eigenvector-attentional-surface.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md",
+      "summary": "Approved canonical nine-beat experience, Ordinary Abundance persistent-plane and discrete-scroll adaptation, acceptance criteria, preservation boundary, rollback unit, twenty slices, and mandatory human checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run test:eigenvector-attentional-surface",
+    "npm run typecheck:public-eigenvectors",
+    "npm run build:public-eigenvectors",
+    "npm run test:browser:public-eigenvectors",
+    "npm run check:public-eigenvectors-budgets",
+    "npm run visual:eigenvector-attentional-surface-checkpoint",
+    "npm run test:visual-salience",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "One isolated framework-neutral eigenvector route, local semantic fixture and registry, nine deterministic beat endpoints, SVG and native KaTeX projection, bounded motion, discrete scroll selection, fixed transport, one prediction, scalar manipulation, searchable static transcript, exact URLs, accessibility, budgets, and checkpoint evidence.",
+    "Exact independently reversible commits with bounded Theseus context and focused verification evidence."
+  ],
+  "disallowedWork": [
+    "Generic Beat, vector, matrix, layout, scrollytelling, or authoring APIs; second caller; shared visual promotion; SVD; curriculum; tutor; SRS; editor; accounts; Graph3D; Canvas; WebGL; Svelte semantic or clock authority.",
+    "Modification of user-owned economics source or generated publication, existing approved exemplar choreography, unrelated drafts, or replay-based direct restoration."
+  ],
+  "goal": "Build one searchable nine-beat eigenvector experience with a persistent transformation plane, discrete scroll-selected states, bounded deterministic transitions, semantic identity across SVG and KaTeX, one prediction, scalar manipulation, and fixed alternate controls through a mandatory human checkpoint.",
+  "target": "next-action.kp.eigenvector-attentional-surface",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Contract and protected baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Mathematical fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Semantic registry",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Endpoint projection",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Fan transformation",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Geometric symbolic handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Definition handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Prediction contract",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Scalar manipulation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Transcript and compression",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Native endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Deterministic motion",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Attention resolution",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Discrete scroll projection",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Fixed transport",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Learner interaction",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Public route",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "URL and access",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Performance evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Human checkpoint",
+      "status": "planned"
+    }
+  ]
+}

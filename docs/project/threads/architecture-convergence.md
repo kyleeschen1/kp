@@ -2,13 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-14
-Current Next Action: write and review one bounded eigenvector
-attentional-surface prototype specification under
-`../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`.
-Do not implement or generalize it until that specification names its canonical
-experience, acceptance criteria, preservation boundary, rollback unit, and
-human checkpoint. Preserve the normal-matrix route as architecture evidence;
-its learner-facing checkpoint did not pass and s26-s27 remain unapproved.
+Current Next Action: execute the approved isolated eigenvector
+attentional-surface contract in
+`../reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
+through its mandatory human checkpoint. Preserve the normal-matrix route as
+architecture evidence; its learner-facing checkpoint did not pass and its
+post-checkpoint continuation is closed.
 
 ## Goal
 
@@ -63,9 +62,10 @@ inside convergence, not permission for a new runtime or universal scene graph.
 8. **Product grammar gate (current):** TypeScript and canonical
    fraction-composition public lessons passed their checkpoints. The
    normal-matrix route proved architecture but failed its attentional
-   checkpoint. Specify one hard-coded eigenvector attentional-surface
-   experience before economics graph pressure, public-v0 layout selection, or
-   shared presentation extraction.
+   checkpoint. Execute one hard-coded eigenvector attentional-surface
+   experience, including the approved persistent-plane/discrete-scroll rhythm,
+   before economics graph pressure, public-v0 layout selection, or shared
+   presentation extraction.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 
@@ -162,6 +162,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
+- `../reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`
 - `proof-memory-medium.md`
