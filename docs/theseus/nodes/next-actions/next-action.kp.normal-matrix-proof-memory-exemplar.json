@@ -95,11 +95,25 @@
       "scope": "s06 prompt contract",
       "checkedAt": "2026-08-14T16:42:55.378Z",
       "notes": "Nineteen tests pass; eleven prompts resolve to one asset, checkpoint times are derived, prediction targets the zero-row transformation, and unresolved selector/answer references fail explicitly."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s07 versioned vignette",
+      "checkedAt": "2026-08-14T16:46:52.553Z",
+      "notes": "Twenty-two tests pass; AnimationAsset reference closure, six checkpoints, eleven prompts, static projections, import metadata, and accessibility contract all agree."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 asset and vignette boundary",
+      "checkedAt": "2026-08-14T16:46:54.617Z",
+      "notes": "Repository TypeScript, Svelte, and domain typechecks pass with the new local asset and vignette."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Eleven original recall prompts now project the same proof semantic scene, transformations, and checkpoint times; prediction pauses at the norm equation before reveal."
+    "summary": "The reviewed proof semantics, six transformations, six endpoints, and eleven prompts are packaged as one lazy versioned vignette with static and accessible projections."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

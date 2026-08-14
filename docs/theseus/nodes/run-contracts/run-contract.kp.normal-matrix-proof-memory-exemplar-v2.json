@@ -90,7 +90,8 @@
     {
       "id": "s07",
       "title": "Versioned vignette",
-      "status": "planned"
+      "summary": "Packaged and typechecked the local AnimationAsset and vignette release without shared API promotion.",
+      "status": "complete"
     },
     {
       "id": "s08",
