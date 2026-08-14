@@ -150,7 +150,8 @@
     {
       "id": "s17",
       "title": "Attention cycle B rendering",
-      "status": "planned"
+      "summary": "Added cycle B projection and rendering with prediction hold, completed r handoff, stable block settlement, recursive focus, direct reversal, and reduced-motion endpoint evidence.",
+      "status": "complete"
     },
     {
       "id": "s18",

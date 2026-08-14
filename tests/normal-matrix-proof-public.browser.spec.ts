@@ -128,7 +128,7 @@ test("static evidence keeps the same proof without creating a session", async ({
   await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
 });
 
-test("cycle A seeks deterministically and settles back to native KaTeX", async ({
+test("cycle A seeks deterministically and hands its native endpoint to cycle B", async ({
   page
 }) => {
   await page.goto(route, { waitUntil: "domcontentloaded" });
@@ -176,7 +176,7 @@ test("cycle A seeks deterministically and settles back to native KaTeX", async (
   }))).toEqual(signature);
 
   await seekNormalProofStage(stage, 7_200);
-  await expect(stage).not.toHaveAttribute("data-kp-normal-proof-attention-phase", /.+/);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", "orient");
   await expect(stage).toHaveAttribute(
     "data-kp-normal-proof-active-checkpoint",
     "norm-equation"
@@ -185,6 +185,124 @@ test("cycle A seeks deterministically and settles back to native KaTeX", async (
     "[data-kp-normal-proof-settled-scene]:not([hidden])"
   )).toHaveCount(1);
   await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+});
+
+test("cycle B preserves r through handoff and settles the recursive endpoint", async ({
+  page
+}) => {
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+  const viewportBox = await stage.locator(
+    "[data-kp-normal-proof-stage-viewport]"
+  ).boundingBox();
+
+  await seekNormalProofStage(stage, 7_600);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", "orient");
+  await expect(stage.locator(
+    "[data-kp-normal-proof-transient-copy]:not([hidden])"
+  )).toHaveCount(0);
+
+  await seekNormalProofStage(stage, 9_000);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", "act");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "norm-equation"
+  );
+  await expect(stage.locator(
+    "[data-kp-normal-proof-transient-copy]:not([hidden])"
+  )).toHaveCount(2);
+  expect(await stage.locator(
+    '[data-kp-normal-proof-transient-copy]:not([hidden])'
+  ).evaluateAll((nodes) => nodes.every((node) =>
+    getComputedStyle(node).opacity === "1"
+  ))).toBe(true);
+
+  await seekNormalProofStage(stage, 9_590);
+  await expect(stage.locator(
+    '[data-kp-normal-proof-transient-copy="remainder-zero"]'
+  )).toHaveAttribute("data-kp-normal-proof-handoff", "complete");
+  await expect(stage.locator(
+    '[data-kp-normal-proof-settled-scene="norm-equation"] [data-kp-normal-proof-matrix-footprint] [data-kp-normal-proof-path="normal-proof/matrix/row-remainder"]'
+  )).toContainText("r");
+
+  await seekNormalProofStage(stage, 9_600);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", "settle");
+  await expect(stage.locator(
+    "[data-kp-normal-proof-transient-copy]:not([hidden])"
+  )).toHaveCount(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "remainder-zero"
+  );
+  await expect(stage.locator(
+    '[data-kp-normal-proof-settled-scene="remainder-zero"] [data-kp-normal-proof-matrix-footprint] [data-kp-normal-proof-path="normal-proof/matrix/row-remainder"]'
+  )).toContainText("0");
+
+  await seekNormalProofStage(stage, 10_800);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-attention-phase", "inspect");
+  await expect(stage.locator(
+    '[data-kp-normal-proof-settled-scene="recursion"] [data-kp-normal-proof-moving="true"]'
+  )).toHaveCount(1);
+  expect(await stage.locator(
+    "[data-kp-normal-proof-stage-viewport]"
+  ).boundingBox()).toEqual(viewportBox);
+
+  const inspectSignature = await stage.evaluate((node) => ({
+    checkpoint: (node as HTMLElement).dataset["kpNormalProofActiveCheckpoint"],
+    phase: (node as HTMLElement).dataset["kpNormalProofAttentionPhase"],
+    moving: node.querySelectorAll('[data-kp-normal-proof-moving="true"]').length
+  }));
+  await seekNormalProofStage(stage, 8_300);
+  await seekNormalProofStage(stage, 10_800);
+  expect(await stage.evaluate((node) => ({
+    checkpoint: (node as HTMLElement).dataset["kpNormalProofActiveCheckpoint"],
+    phase: (node as HTMLElement).dataset["kpNormalProofAttentionPhase"],
+    moving: node.querySelectorAll('[data-kp-normal-proof-moving="true"]').length
+  }))).toEqual(inspectSignature);
+
+  await seekNormalProofStage(stage, 12_000);
+  await expect(stage).not.toHaveAttribute("data-kp-normal-proof-attention-phase", /.+/);
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "recursion"
+  );
+  await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+});
+
+test("reduced motion snaps direct seeks to native checkpoint endpoints", async ({
+  page
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+
+  await seekNormalProofStage(stage, 9_590);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "norm-equation"
+  );
+  await expect(stage.locator("[data-kp-normal-proof-moving]")).toHaveCount(0);
+
+  await seekNormalProofStage(stage, 9_600);
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "9600");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "remainder-zero"
+  );
+  await expect(stage.locator(
+    "[data-kp-normal-proof-transient-copy]:not([hidden])"
+  )).toHaveCount(0);
 });
 
 async function seekNormalProofStage(

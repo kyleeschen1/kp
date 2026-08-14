@@ -326,11 +326,39 @@
       "scope": "s16-cycle-b-plan",
       "checkedAt": "2026-08-14T17:49:07.344Z",
       "notes": "The shared local attention-scene projection and cycle B plan typecheck in the public route boundary."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s17-cycle-b-rendering",
+      "checkedAt": "2026-08-14T17:57:11.614Z",
+      "notes": "56 focused tests pass, including prediction hold, completed pre-settlement r handoff, direct/reverse/interrupted order independence, and endpoint alignment."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s17-cycle-b-rendering",
+      "checkedAt": "2026-08-14T17:57:12.668Z",
+      "notes": "Seven Chromium tests pass; r remains present through handoff, transient copies stay fully opaque, matrix geometry is stable, recursion settles natively, and reduced motion snaps to authored endpoints."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s17-cycle-b-rendering",
+      "checkedAt": "2026-08-14T17:57:13.746Z",
+      "notes": "Cycle B projection, native transient handoff, and reduced-motion endpoint projection typecheck."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s17-cycle-b-rendering",
+      "checkedAt": "2026-08-14T17:57:29.367Z",
+      "notes": "Build passes at 9.92 KB gzip HTML, 1.05 KB startup, and 9.52 KB lazy capability, within the approved ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Cycle B now asks for the row-remainder prediction before any reveal, then maps the zero-norm inference, block-diagonal settlement, and recursive focus to existing proof transformations and one shared local semantic scene."
+    "summary": "Both proof attention cycles now render from the one deterministic clock. Cycle B preserves r until a fully completed native handoff, settles the same matrix block-diagonally, focuses the recursive block, and snaps reduced-motion seeks to checkpoints."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

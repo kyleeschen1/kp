@@ -1,10 +1,16 @@
 import { observeKpNativeKatexFragments } from
   "../../rendering/native-katex-fragment-observer.ts";
+import { projectKpNormalMatrixProofClock } from
+  "../../semantic/normal-matrix-proof-checkpoints.ts";
 import {
   projectKpNormalMatrixProofCycleA,
   type KpNormalMatrixProofCycleAProjection,
   type KpNormalMatrixProofCycleATransmissionProjection
 } from "./normal-matrix-proof-cycle-a-projection.ts";
+import {
+  projectKpNormalMatrixProofCycleB,
+  type KpNormalMatrixProofCycleBProjection
+} from "./normal-matrix-proof-cycle-b-projection.ts";
 
 export const kpNormalMatrixProofSeekEvent = "kp:normal-proof-seek";
 
@@ -50,6 +56,12 @@ interface KpNormalMatrixProofStageRuntime {
   readonly dispose: () => void;
 }
 
+interface KpNormalMatrixProofCycleBTransients {
+  readonly layer: HTMLElement;
+  readonly zeroNorm: HTMLElement;
+  readonly remainderZero: HTMLElement;
+}
+
 interface KpNormalMatrixProofMeasuredPoint {
   readonly x: number;
   readonly y: number;
@@ -67,8 +79,24 @@ async function prepareStage(
     );
   });
   let measurements = measureSettledScenes(stage);
-  const render = (timeMs: number): void => {
-    renderProjection(stage, projectKpNormalMatrixProofCycleA(timeMs), measurements);
+  const transients = createCycleBTransients(stage);
+  const view = stage.ownerDocument.defaultView;
+  const reducedMotion = view?.matchMedia("(prefers-reduced-motion: reduce)")
+    .matches ?? false;
+  const render = (requestedTimeMs: number): void => {
+    const timeMs = reducedMotion
+      ? projectKpNormalMatrixProofClock(requestedTimeMs).from.timeMs
+      : requestedTimeMs;
+    const cycleB = projectKpNormalMatrixProofCycleB(timeMs);
+    if (cycleB.active) {
+      renderCycleBProjection(stage, cycleB, measurements, transients);
+    } else {
+      renderCycleAProjection(
+        stage,
+        projectKpNormalMatrixProofCycleA(timeMs),
+        measurements
+      );
+    }
     stage.dataset["kpNormalProofFragmentCount"] = String(
       activeFragmentNodes(stage).length
     );
@@ -81,7 +109,6 @@ async function prepareStage(
     render(detail.timeMs);
   };
   stage.addEventListener(kpNormalMatrixProofSeekEvent, seek);
-  const view = stage.ownerDocument.defaultView;
   const resize = (): void => {
     const timeMs = Number(stage.dataset["kpNormalProofTimeMs"] ?? 0);
     clearProjectionState(stage);
@@ -97,6 +124,7 @@ async function prepareStage(
       stage.removeEventListener(kpNormalMatrixProofSeekEvent, seek);
       view?.removeEventListener("resize", resize);
       clearProjectionState(stage);
+      transients.layer.remove();
       delete stage.dataset["kpNormalProofSession"];
       delete stage.dataset["kpNormalProofTimeMs"];
       delete stage.dataset["kpNormalProofAttentionPhase"];
@@ -104,7 +132,7 @@ async function prepareStage(
   };
 }
 
-function renderProjection(
+function renderCycleAProjection(
   stage: HTMLElement,
   projection: KpNormalMatrixProofCycleAProjection,
   measurements: KpNormalMatrixProofMeasurements
@@ -123,6 +151,33 @@ function renderProjection(
   }
   if (projection.phaseKind === "settle") {
     renderEquationSettlement(activeScene, projection.equationProgress, measurements);
+  }
+}
+
+function renderCycleBProjection(
+  stage: HTMLElement,
+  projection: KpNormalMatrixProofCycleBProjection,
+  measurements: KpNormalMatrixProofMeasurements,
+  transients: KpNormalMatrixProofCycleBTransients
+): void {
+  clearProjectionState(stage);
+  const activeScene = showScene(stage, projection.checkpointId);
+  stage.dataset["kpNormalProofTimeMs"] = String(projection.timeMs);
+  stage.dataset["kpNormalProofActiveCheckpoint"] = projection.checkpointId;
+  if (projection.phaseKind === undefined) return;
+  stage.dataset["kpNormalProofAttentionPhase"] = projection.phaseKind;
+  applySalience(activeScene, projection);
+
+  if (projection.phaseKind === "act") {
+    fragments(activeScene, "matrix/eigenvalue").forEach((node) => {
+      if (node.closest("[data-kp-normal-proof-evidence]") !== null) {
+        node.dataset["kpNormalProofMatched"] = "true";
+      }
+    });
+    renderCycleBInference(transients, projection, measurements);
+  }
+  if (projection.phaseKind === "inspect") {
+    renderRecursiveHandoff(activeScene, projection.recursiveProgress, measurements);
   }
 }
 
@@ -176,14 +231,24 @@ function renderEquationSettlement(
     0
   )[0];
   const targets = [
-    { node: fragment(scene, "matrix/eigenvalue", 1), source: leftSource },
-    { node: fragment(scene, "matrix/row-remainder", 1), source: leftSource },
-    { node: fragment(scene, "matrix/eigenvalue", 2), source: rightSource }
+    {
+      node: fragment(scene, "matrix/eigenvalue", 1),
+      source: leftSource,
+      destination: point(measurements, "norm-equation", "matrix/eigenvalue", 1)[0]
+    },
+    {
+      node: fragment(scene, "matrix/row-remainder", 1),
+      source: leftSource,
+      destination: point(measurements, "norm-equation", "matrix/row-remainder", 1)[0]
+    },
+    {
+      node: fragment(scene, "matrix/eigenvalue", 2),
+      source: rightSource,
+      destination: point(measurements, "norm-equation", "matrix/eigenvalue", 2)[0]
+    }
   ];
-  for (const { node, source } of targets) {
-    if (node === undefined || source === undefined) continue;
-    const rect = node.getBoundingClientRect();
-    const destination = center(rect);
+  for (const { node, source, destination } of targets) {
+    if (node === undefined || source === undefined || destination === undefined) continue;
     const remaining = 1 - progress;
     node.style.transform = `translate3d(${(source.x - destination.x) * remaining}px, ${(source.y - destination.y) * remaining}px, 0)`;
     node.dataset["kpNormalProofMoving"] = "true";
@@ -191,9 +256,80 @@ function renderEquationSettlement(
   }
 }
 
+function renderCycleBInference(
+  transients: KpNormalMatrixProofCycleBTransients,
+  projection: KpNormalMatrixProofCycleBProjection,
+  measurements: KpNormalMatrixProofMeasurements
+): void {
+  const squaredNorm = point(
+    measurements,
+    "norm-equation",
+    "matrix/row-remainder",
+    1
+  )[0];
+  const zeroNorm = point(
+    measurements,
+    "remainder-zero",
+    "inference/norm-equality",
+    0
+  )[0];
+  const matrixZero = point(
+    measurements,
+    "remainder-zero",
+    "matrix/row-remainder",
+    0
+  )[0];
+  if (squaredNorm !== undefined && zeroNorm !== undefined) {
+    positionTransient(
+      transients.zeroNorm,
+      squaredNorm,
+      zeroNorm,
+      projection.zeroNormProgress
+    );
+  }
+  if (zeroNorm !== undefined && matrixZero !== undefined) {
+    positionTransient(
+      transients.remainderZero,
+      zeroNorm,
+      matrixZero,
+      projection.remainderZeroProgress
+    );
+  }
+}
+
+function renderRecursiveHandoff(
+  scene: HTMLElement,
+  progress: number,
+  measurements: KpNormalMatrixProofMeasurements
+): void {
+  const target = fragment(scene, "proof/recursive-subproblem", 0);
+  const source = point(
+    measurements,
+    "recursion",
+    "matrix/lower-block",
+    0
+  )[0];
+  const destination = point(
+    measurements,
+    "recursion",
+    "proof/recursive-subproblem",
+    0
+  )[0];
+  if (target === undefined || source === undefined || destination === undefined) return;
+  if (progress <= 0) {
+    target.style.visibility = "hidden";
+    return;
+  }
+  const remaining = 1 - progress;
+  target.style.transform = `translate3d(${(source.x - destination.x) * remaining}px, ${(source.y - destination.y) * remaining}px, 0)`;
+  target.dataset["kpNormalProofMoving"] = "true";
+  target.dataset["kpNormalProofHandoff"] = progress >= 1 ? "complete" : "moving";
+}
+
 function applySalience(
   scene: HTMLElement,
   projection: KpNormalMatrixProofCycleAProjection
+    | KpNormalMatrixProofCycleBProjection
 ): void {
   for (const path of projection.contextPaths) {
     fragments(scene, path).forEach((node) => {
@@ -243,7 +379,12 @@ function clearProjectionState(stage: HTMLElement): void {
     delete node.dataset["kpNormalProofHandoff"];
     delete node.dataset["kpNormalProofSalience"];
     delete node.dataset["kpNormalProofInspection"];
+    delete node.dataset["kpNormalProofMatched"];
   });
+  stage.querySelectorAll<HTMLElement>("[data-kp-normal-proof-transient-copy]")
+    .forEach((node) => {
+      node.hidden = true;
+    });
 }
 
 function measureSettledScenes(stage: HTMLElement): KpNormalMatrixProofMeasurements {
@@ -256,6 +397,11 @@ function measureSettledScenes(stage: HTMLElement): KpNormalMatrixProofMeasuremen
     hidden: scene.hidden,
     visibility: scene.style.visibility
   }));
+  const viewport = stage.querySelector<HTMLElement>(
+    "[data-kp-normal-proof-stage-viewport]"
+  );
+  if (viewport === null) throw new Error("Normal-proof stage lacks its viewport.");
+  const viewportRect = viewport.getBoundingClientRect();
   // Measure authored endpoints once so every seek is a pure transform write;
   // KaTeX structure is never inspected to infer semantic identity.
   for (const scene of scenes) {
@@ -270,7 +416,7 @@ function measureSettledScenes(stage: HTMLElement): KpNormalMatrixProofMeasuremen
       counts.set(path, index + 1);
       measurements.set(
         measurementKey(scene.dataset["kpNormalProofSettledScene"]!, path, index),
-        center(node.getBoundingClientRect())
+        relativeCenter(node.getBoundingClientRect(), viewportRect)
       );
     });
   }
@@ -279,6 +425,68 @@ function measureSettledScenes(stage: HTMLElement): KpNormalMatrixProofMeasuremen
     scene.style.visibility = visibility;
   });
   return measurements;
+}
+
+function createCycleBTransients(
+  stage: HTMLElement
+): KpNormalMatrixProofCycleBTransients {
+  const viewport = stage.querySelector<HTMLElement>(
+    "[data-kp-normal-proof-stage-viewport]"
+  );
+  const sourceScene = stage.querySelector<HTMLElement>(
+    '[data-kp-normal-proof-settled-scene="remainder-zero"]'
+  );
+  if (viewport === null || sourceScene === null) {
+    throw new Error("Normal-proof cycle B lacks native transient sources.");
+  }
+  const layer = stage.ownerDocument.createElement("div");
+  layer.className = "kp-normal-proof-stage__transients";
+  layer.dataset["kpNormalProofTransientLayer"] = "cycle-b";
+  layer.setAttribute("aria-hidden", "true");
+  const zeroNorm = cloneTransientFragment(
+    fragment(sourceScene, "inference/norm-equality", 0),
+    "zero-norm"
+  );
+  const remainderZero = cloneTransientFragment(
+    fragment(sourceScene, "inference/remainder-zero", 0),
+    "remainder-zero"
+  );
+  layer.append(zeroNorm, remainderZero);
+  viewport.append(layer);
+  return { layer, zeroNorm, remainderZero };
+}
+
+function cloneTransientFragment(
+  source: HTMLElement | undefined,
+  id: string
+): HTMLElement {
+  if (source === undefined) throw new Error(`Missing native transient source ${id}.`);
+  const clone = source.cloneNode(true) as HTMLElement;
+  clone.dataset["kpNormalProofTransientCopy"] = id;
+  clone.hidden = true;
+  [clone, ...clone.querySelectorAll<HTMLElement>("[data-kp-motion-id]")]
+    .forEach((node, index) => {
+      node.dataset["kpMotionId"] = `normal-proof.transient.${id}.${index}`;
+    });
+  return clone;
+}
+
+function positionTransient(
+  node: HTMLElement,
+  source: KpNormalMatrixProofMeasuredPoint,
+  destination: KpNormalMatrixProofMeasuredPoint,
+  progress: number
+): void {
+  if (progress <= 0) {
+    node.hidden = true;
+    return;
+  }
+  node.hidden = false;
+  node.style.left = `${source.x + (destination.x - source.x) * progress}px`;
+  node.style.top = `${source.y + (destination.y - source.y) * progress}px`;
+  node.style.transform = "translate3d(-50%, -50%, 0)";
+  node.dataset["kpNormalProofMoving"] = "true";
+  node.dataset["kpNormalProofHandoff"] = progress >= 1 ? "complete" : "moving";
 }
 
 function observeActiveFragments(stage: HTMLElement): number {
@@ -342,6 +550,14 @@ function stripAddress(address: string): string {
 
 function center(rect: DOMRect): KpNormalMatrixProofMeasuredPoint {
   return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+}
+
+function relativeCenter(
+  rect: DOMRect,
+  viewport: DOMRect
+): KpNormalMatrixProofMeasuredPoint {
+  const absolute = center(rect);
+  return { x: absolute.x - viewport.left, y: absolute.y - viewport.top };
 }
 
 function averagePoint(
