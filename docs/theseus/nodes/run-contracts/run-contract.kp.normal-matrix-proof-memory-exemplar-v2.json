@@ -162,7 +162,8 @@
     {
       "id": "s19",
       "title": "Checkpoint URL state",
-      "status": "planned"
+      "summary": "Added canonical checkpoint/evidence URL codec and direct history restoration over the same settled state authority.",
+      "status": "complete"
     },
     {
       "id": "s20",

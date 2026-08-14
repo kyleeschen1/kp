@@ -1,19 +1,45 @@
 type KpNormalMatrixStageCapability = typeof import(
   "../tutorial/normal-matrix-proof/normal-matrix-proof-stage-capability.ts"
 );
-import { resolveKpNormalMatrixProofEvidenceMode } from
-  "./normal-matrix-proof-evidence-mode.ts";
+import { kpNormalMatrixProofCheckpointTimeMs } from
+  "../semantic/normal-matrix-proof-checkpoints.ts";
+import { selectKpNormalMatrixProofSettledCheckpoint } from
+  "../tutorial/normal-matrix-proof/normal-matrix-proof-settled-stage-state.ts";
+import {
+  decodeKpNormalMatrixProofUrl,
+  encodeKpNormalMatrixProofUrl,
+  type KpNormalMatrixProofUrlState
+} from "./normal-matrix-proof-url-codec.ts";
 
-const evidenceMode = resolveKpNormalMatrixProofEvidenceMode(
-  window.location.search
-);
-document.documentElement.dataset["kpNormalProofEvidence"] = evidenceMode;
+let routeState = decodeKpNormalMatrixProofUrl(window.location.href);
+document.documentElement.dataset["kpNormalProofEvidence"] = routeState.evidence;
 
 const fallback = document.querySelector<HTMLElement>(
   "[data-kp-normal-proof-stage-fallback]"
 );
+if (fallback !== null) {
+  selectKpNormalMatrixProofSettledCheckpoint(fallback, routeState.checkpoint);
+}
+replaceCanonicalHistory(routeState);
 
-if (fallback !== null && evidenceMode === "motion") {
+let capabilityHandle: ReturnType<
+  KpNormalMatrixStageCapability["mountKpNormalMatrixProofStageCapability"]
+> | undefined;
+
+window.addEventListener("popstate", () => {
+  const next = decodeKpNormalMatrixProofUrl(window.location.href);
+  if (next.evidence !== routeState.evidence) {
+    window.location.reload();
+    return;
+  }
+  routeState = next;
+  if (fallback !== null) {
+    selectKpNormalMatrixProofSettledCheckpoint(fallback, next.checkpoint);
+  }
+  capabilityHandle?.seek(kpNormalMatrixProofCheckpointTimeMs(next.checkpoint));
+});
+
+if (fallback !== null && routeState.evidence === "motion") {
   let requested = false;
   const requestCapability = (): void => {
     if (requested) return;
@@ -21,7 +47,17 @@ if (fallback !== null && evidenceMode === "motion") {
     void import(
       "../tutorial/normal-matrix-proof/normal-matrix-proof-stage-capability.ts"
     ).then((capability: KpNormalMatrixStageCapability) => {
-      capability.mountKpNormalMatrixProofStageCapability(document);
+      capabilityHandle = capability.mountKpNormalMatrixProofStageCapability(
+        document,
+        {
+          initialTimeMs: kpNormalMatrixProofCheckpointTimeMs(routeState.checkpoint),
+          onCheckpointChange(checkpoint) {
+            if (checkpoint === routeState.checkpoint) return;
+            routeState = { ...routeState, checkpoint };
+            replaceCanonicalHistory(routeState);
+          }
+        }
+      );
     });
   };
 
@@ -34,5 +70,12 @@ if (fallback !== null && evidenceMode === "motion") {
     observer.observe(fallback);
   } else {
     requestCapability();
+  }
+}
+
+function replaceCanonicalHistory(state: KpNormalMatrixProofUrlState): void {
+  const canonical = encodeKpNormalMatrixProofUrl(window.location.href, state);
+  if (canonical !== window.location.href) {
+    window.history.replaceState(null, "", canonical);
   }
 }

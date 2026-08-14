@@ -2,8 +2,11 @@ import { observeKpNativeKatexFragments } from
   "../../rendering/native-katex-fragment-observer.ts";
 import {
   kpNormalMatrixProofCheckpoints,
-  projectKpNormalMatrixProofClock
+  projectKpNormalMatrixProofClock,
+  type KpNormalMatrixProofCheckpointId
 } from "../../semantic/normal-matrix-proof-checkpoints.ts";
+import { selectKpNormalMatrixProofSettledCheckpoint } from
+  "./normal-matrix-proof-settled-stage-state.ts";
 import {
   projectKpNormalMatrixProofCycleA,
   type KpNormalMatrixProofCycleAProjection,
@@ -16,13 +19,28 @@ import {
 
 export const kpNormalMatrixProofSeekEvent = "kp:normal-proof-seek";
 
+export interface KpNormalMatrixProofStageCapabilityOptions {
+  readonly initialTimeMs?: number;
+  readonly onCheckpointChange?: (
+    checkpointId: KpNormalMatrixProofCheckpointId
+  ) => void;
+}
+
+export interface KpNormalMatrixProofStageCapabilityHandle {
+  readonly seek: (timeMs: number) => void;
+  readonly dispose: () => void;
+}
+
 export function mountKpNormalMatrixProofStageCapability(
-  document: Document
-): () => void {
+  document: Document,
+  options: KpNormalMatrixProofStageCapabilityOptions = {}
+): KpNormalMatrixProofStageCapabilityHandle {
   const publication = document.querySelector<HTMLElement>(
     "[data-kp-normal-proof-publication]"
   );
-  if (publication === null) return () => undefined;
+  if (publication === null) {
+    return { seek: () => undefined, dispose: () => undefined };
+  }
   publication.dataset["kpNormalProofCapability"] = "ready";
   const stage = publication.querySelector<HTMLElement>(
     "[data-kp-normal-proof-stage]"
@@ -30,8 +48,9 @@ export function mountKpNormalMatrixProofStageCapability(
   stage?.setAttribute("data-kp-normal-proof-native-owner", "settled-katex");
   let disposed = false;
   let runtime: KpNormalMatrixProofStageRuntime | undefined;
+  let requestedTimeMs = options.initialTimeMs ?? 0;
   if (stage !== null) {
-    void prepareStage(stage).then((prepared) => {
+    void prepareStage(stage, options, () => requestedTimeMs).then((prepared) => {
       if (disposed) return;
       runtime = prepared;
       stage.dataset["kpNormalProofGeometry"] = "settled";
@@ -43,18 +62,25 @@ export function mountKpNormalMatrixProofStageCapability(
         : String(error);
     });
   }
-  return () => {
-    disposed = true;
-    runtime?.dispose();
-    delete publication.dataset["kpNormalProofCapability"];
-    stage?.removeAttribute("data-kp-normal-proof-native-owner");
-    delete stage?.dataset["kpNormalProofFragmentCount"];
-    delete stage?.dataset["kpNormalProofGeometry"];
-    delete stage?.dataset["kpNormalProofGeometryError"];
+  return {
+    seek: (timeMs) => {
+      requestedTimeMs = timeMs;
+      runtime?.seek(timeMs);
+    },
+    dispose: () => {
+      disposed = true;
+      runtime?.dispose();
+      delete publication.dataset["kpNormalProofCapability"];
+      stage?.removeAttribute("data-kp-normal-proof-native-owner");
+      delete stage?.dataset["kpNormalProofFragmentCount"];
+      delete stage?.dataset["kpNormalProofGeometry"];
+      delete stage?.dataset["kpNormalProofGeometryError"];
+    }
   };
 }
 
 interface KpNormalMatrixProofStageRuntime {
+  readonly seek: (timeMs: number) => void;
   readonly dispose: () => void;
 }
 
@@ -77,7 +103,9 @@ interface KpNormalMatrixProofMeasuredPoint {
 type KpNormalMatrixProofMeasurements = ReadonlyMap<string, KpNormalMatrixProofMeasuredPoint>;
 
 async function prepareStage(
-  stage: HTMLElement
+  stage: HTMLElement,
+  options: KpNormalMatrixProofStageCapabilityOptions,
+  initialTimeMs: () => number
 ): Promise<KpNormalMatrixProofStageRuntime> {
   await (stage.ownerDocument.fonts?.ready ?? Promise.resolve());
   await new Promise<void>((resolve) => {
@@ -96,22 +124,23 @@ async function prepareStage(
       ? projectKpNormalMatrixProofClock(requestedTimeMs).from.timeMs
       : requestedTimeMs;
     const cycleB = projectKpNormalMatrixProofCycleB(timeMs);
+    let activeCheckpointId: KpNormalMatrixProofCheckpointId;
     if (cycleB.active) {
       renderCycleBProjection(stage, cycleB, measurements, transients);
+      activeCheckpointId = cycleB.checkpointId;
     } else {
-      renderCycleAProjection(
-        stage,
-        projectKpNormalMatrixProofCycleA(timeMs),
-        measurements
-      );
+      const cycleA = projectKpNormalMatrixProofCycleA(timeMs);
+      renderCycleAProjection(stage, cycleA, measurements);
+      activeCheckpointId = cycleA.checkpointId;
     }
     stage.dataset["kpNormalProofFragmentCount"] = String(
       activeFragmentNodes(stage).length
     );
     controls?.sync(
       Number(stage.dataset["kpNormalProofTimeMs"] ?? 0),
-      stage.dataset["kpNormalProofActiveCheckpoint"] ?? "statement"
+      activeCheckpointId
     );
+    options.onCheckpointChange?.(activeCheckpointId);
   };
   // The event is only a local input seam for controls and tests. The proof
   // clock remains the sole authority; this capability never starts a loop.
@@ -130,9 +159,10 @@ async function prepareStage(
   view?.addEventListener("resize", resize, { passive: true });
   stage.dataset["kpNormalProofSession"] = "deterministic-seek";
   controls = mountCheckpointControls(stage, render);
-  render(0);
+  render(initialTimeMs());
   observeActiveFragments(stage);
   return {
+    seek: render,
     dispose: () => {
       stage.removeEventListener(kpNormalMatrixProofSeekEvent, seek);
       view?.removeEventListener("resize", resize);
@@ -219,7 +249,10 @@ function renderCycleAProjection(
   measurements: KpNormalMatrixProofMeasurements
 ): void {
   clearProjectionState(stage);
-  const activeScene = showScene(stage, projection.checkpointId);
+  const activeScene = selectKpNormalMatrixProofSettledCheckpoint(
+    stage,
+    projection.checkpointId
+  );
   stage.dataset["kpNormalProofTimeMs"] = String(projection.timeMs);
   stage.dataset["kpNormalProofActiveCheckpoint"] = projection.checkpointId;
   if (!projection.active || projection.phaseKind === undefined) return;
@@ -242,7 +275,10 @@ function renderCycleBProjection(
   transients: KpNormalMatrixProofCycleBTransients
 ): void {
   clearProjectionState(stage);
-  const activeScene = showScene(stage, projection.checkpointId);
+  const activeScene = selectKpNormalMatrixProofSettledCheckpoint(
+    stage,
+    projection.checkpointId
+  );
   stage.dataset["kpNormalProofTimeMs"] = String(projection.timeMs);
   stage.dataset["kpNormalProofActiveCheckpoint"] = projection.checkpointId;
   if (projection.phaseKind === undefined) return;
@@ -434,21 +470,6 @@ function applySalience(
       }
     });
   }
-}
-
-function showScene(stage: HTMLElement, checkpointId: string): HTMLElement {
-  const scenes = [
-    ...stage.querySelectorAll<HTMLElement>("[data-kp-normal-proof-settled-scene]")
-  ];
-  let active: HTMLElement | undefined;
-  for (const scene of scenes) {
-    const selected = scene.dataset["kpNormalProofSettledScene"] === checkpointId;
-    scene.hidden = !selected;
-    scene.setAttribute("aria-hidden", selected ? "false" : "true");
-    if (selected) active = scene;
-  }
-  if (active === undefined) throw new Error(`Missing settled proof scene ${checkpointId}.`);
-  return active;
 }
 
 function clearProjectionState(stage: HTMLElement): void {

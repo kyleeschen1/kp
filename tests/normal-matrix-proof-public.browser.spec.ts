@@ -134,6 +134,85 @@ test("static evidence keeps the same proof without creating a session", async ({
   await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
 });
 
+test("direct checkpoint URLs restore one endpoint without replay", async ({ page }) => {
+  await page.goto(
+    `${route}?checkpoint=norm-equation&utm_source=return#proof-stage`,
+    { waitUntil: "domcontentloaded" }
+  );
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "norm-equation"
+  );
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "7200");
+  await expect(stage.locator(
+    '[data-kp-normal-proof-settled-scene="norm-equation"]'
+  )).toBeVisible();
+  await expect(stage.locator("[data-kp-normal-proof-moving]"))
+    .toHaveCount(0);
+  expect(new URL(page.url()).searchParams.get("utm_source")).toBe("return");
+  expect(new URL(page.url()).hash).toBe("#proof-stage");
+});
+
+test("static direct checkpoint projection creates no motion session", async ({
+  page
+}) => {
+  await page.goto(`${route}?checkpoint=remainder-zero&evidence=static`, {
+    waitUntil: "domcontentloaded"
+  });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "remainder-zero"
+  );
+  await expect(stage.locator(
+    '[data-kp-normal-proof-settled-scene="remainder-zero"]'
+  )).toBeVisible();
+  await expect(stage.locator("[data-kp-normal-proof-scrub]")).toBeDisabled();
+  await expect(page.locator("[data-kp-normal-proof-session]")).toHaveCount(0);
+});
+
+test("scrubbing replaces checkpoint history and popstate restores directly", async ({
+  page
+}) => {
+  await page.goto(`${route}?checkpoint=row-column-norms&utm_source=return`, {
+    waitUntil: "domcontentloaded"
+  });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  const scrub = stage.locator("[data-kp-normal-proof-scrub]");
+  await expect(scrub).toBeEnabled();
+
+  await scrub.evaluate((input) => {
+    (input as HTMLInputElement).value = "9600";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "remainder-zero"
+  );
+  expect(new URL(page.url()).searchParams.get("checkpoint"))
+    .toBe("remainder-zero");
+  expect(new URL(page.url()).searchParams.get("utm_source")).toBe("return");
+
+  await page.evaluate(() => {
+    window.history.pushState(null, "", "?checkpoint=eigenbasis&utm_source=return");
+  });
+  await page.goBack();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "remainder-zero"
+  );
+  await page.goForward();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-active-checkpoint",
+    "eigenbasis"
+  );
+  await expect(stage).toHaveAttribute("data-kp-normal-proof-time-ms", "4800");
+});
+
 test("one compact control seeks continuously and jumps among checkpoint stops", async ({
   page
 }) => {

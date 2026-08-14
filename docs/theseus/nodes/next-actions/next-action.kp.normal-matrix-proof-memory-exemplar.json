@@ -382,11 +382,39 @@
       "scope": "broad",
       "checkedAt": "2026-08-14T18:10:24.460Z",
       "notes": "Route built with HTML 9.99 kB gzip, startup 1.05 kB gzip, and lazy capability 9.91 kB gzip."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s19-url-state",
+      "checkedAt": "2026-08-14T18:17:57.307Z",
+      "notes": "58 tests pass, including route codec round trip, canonicalization, invalid-state fallback, and preservation of review, UTM, and semantic fragment fields."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s19-url-state",
+      "checkedAt": "2026-08-14T18:18:05.587Z",
+      "notes": "Route codec, direct settled-state selector, capability handle, and history integration typecheck."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s19-url-state",
+      "checkedAt": "2026-08-14T18:18:14.969Z",
+      "notes": "11 Chromium checks pass; motion and static direct endpoints, scrub replacement, preserved unrelated fields, and popstate restoration all avoid replay."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s19-url-state",
+      "checkedAt": "2026-08-14T18:18:23.301Z",
+      "notes": "Build passes at 9.99 kB HTML, 4.24 kB startup, and 7.76 kB lazy capability gzip."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A single progressively enhanced scrub control now maps pointer input and accessible keyboard checkpoint jumps into the existing deterministic proof clock, with no autoplay, no second clock, and stable reserved geometry."
+    "summary": "Checkpoint and evidence route state now use the existing composable reader URL codec. Direct loads, scrub replacement, static projection, and popstate restoration select one authored endpoint without replay or synthetic input."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
