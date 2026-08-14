@@ -89,7 +89,8 @@
     {
       "id": "s07",
       "title": "Definition handoff",
-      "status": "planned"
+      "summary": "Added the explicit 3-to-lambda definition handoff while preserving the transformation, vector, equality relation, and eigenvalue identity.",
+      "status": "complete"
     },
     {
       "id": "s08",

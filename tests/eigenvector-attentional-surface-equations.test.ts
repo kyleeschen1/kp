@@ -4,6 +4,7 @@ import test from "node:test";
 import { kpEigenvectorAttentionalFixture } from
   "../src/tutorial/eigenvector-attentional-surface/eigenvector-math.ts";
 import {
+  projectKpEigenvectorDefinitionHandoff,
   projectKpEigenvectorEquation,
   projectKpEigenvectorGeometryEquationHandoff
 } from "../src/tutorial/eigenvector-attentional-surface/eigenvector-equations.ts";
@@ -45,7 +46,39 @@ test("the handoff names source and destinations without glyph inference", () => 
 
 test("unimplemented symbolic endpoints fail closed", () => {
   assert.throws(
-    () => projectKpEigenvectorEquation("Av=lambda-v"),
+    () => projectKpEigenvectorEquation("A(2v)=6v"),
     /not available yet/
   );
+});
+
+test("the observed 3 becomes lambda without replacing its meaning", () => {
+  const observed = projectKpEigenvectorEquation("Av=3v");
+  const definition = projectKpEigenvectorEquation("Av=lambda-v");
+  const handoff = projectKpEigenvectorDefinitionHandoff();
+  const source = observed.tokens.find(({ id }) => id === handoff.sourceTokenId);
+  const target = definition.tokens.find(({ id }) => id === handoff.targetTokenId);
+
+  assert.equal(source?.latex, "3");
+  assert.equal(target?.latex, String.raw`\lambda`);
+  assert.equal(source?.semanticObjectId, handoff.semanticObjectId);
+  assert.equal(target?.semanticObjectId, handoff.semanticObjectId);
+  assert.equal(
+    handoff.meaning,
+    "replace-observed-scale-with-general-eigenvalue"
+  );
+});
+
+test("A, v, and equality persist while the definition generalizes", () => {
+  const before = projectKpEigenvectorEquation("Av=3v");
+  const after = projectKpEigenvectorEquation("Av=lambda-v");
+  const handoff = projectKpEigenvectorDefinitionHandoff();
+
+  for (const objectId of handoff.retainedSemanticObjectIds) {
+    assert.ok(before.tokens.some(({ semanticObjectId }) =>
+      semanticObjectId === objectId
+    ));
+    assert.ok(after.tokens.some(({ semanticObjectId }) =>
+      semanticObjectId === objectId
+    ));
+  }
 });

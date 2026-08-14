@@ -83,6 +83,13 @@
       "scope": "slice-s06-handoff",
       "checkedAt": "2026-08-14T20:44:30.754Z",
       "notes": "Twenty tests now prove the exact Av=3v token model and an explicit diagram-to-equation v handoff without glyph or DOM inference."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s07-definition",
+      "checkedAt": "2026-08-14T20:46:07.964Z",
+      "notes": "Twenty-two tests prove 3-to-lambda semantic continuity and retention of A, v, and equality across the definition handoff."
     }
   ],
   "expectedLearning": [

@@ -25,6 +25,14 @@ export interface KpEigenvectorGeometryEquationHandoff {
   readonly destination: "equation.Av3v";
 }
 
+export interface KpEigenvectorDefinitionHandoff {
+  readonly semanticObjectId: string;
+  readonly sourceTokenId: "equation.Av3v.3";
+  readonly targetTokenId: "equation.Avlambdav.lambda";
+  readonly retainedSemanticObjectIds: readonly [string, string, string];
+  readonly meaning: "replace-observed-scale-with-general-eigenvalue";
+}
+
 const fixture = kpEigenvectorAttentionalFixture;
 const relationId = "eigenvector-demo/relation/Av-lambda-v";
 const eigenvalueId = "eigenvector-demo/eigenvalue/lambda-3";
@@ -48,6 +56,19 @@ export function projectKpEigenvectorEquation(
       ]
     };
   }
+  if (form === "Av=lambda-v") {
+    return {
+      form,
+      latex: String.raw`A\mathbf{v}=\lambda\mathbf{v}`,
+      tokens: [
+        token("equation.Avlambdav.A", "A", "operator", fixture.transformation.id),
+        token("equation.Avlambdav.v-input", String.raw`\mathbf{v}`, "vector", fixture.persistentVector.id),
+        token("equation.Avlambdav.equals", "=", "relation", relationId),
+        token("equation.Avlambdav.lambda", String.raw`\lambda`, "scale", eigenvalueId),
+        token("equation.Avlambdav.v-output", String.raw`\mathbf{v}`, "vector", fixture.persistentVector.id)
+      ]
+    };
+  }
   throw new Error(`Equation form ${form} is not available yet.`);
 }
 
@@ -62,6 +83,21 @@ KpEigenvectorGeometryEquationHandoff {
     ],
     sourceCoordinates: fixture.persistentVector.image,
     destination: "equation.Av3v"
+  };
+}
+
+export function projectKpEigenvectorDefinitionHandoff():
+KpEigenvectorDefinitionHandoff {
+  return {
+    semanticObjectId: eigenvalueId,
+    sourceTokenId: "equation.Av3v.3",
+    targetTokenId: "equation.Avlambdav.lambda",
+    retainedSemanticObjectIds: [
+      fixture.transformation.id,
+      fixture.persistentVector.id,
+      relationId
+    ],
+    meaning: "replace-observed-scale-with-general-eigenvalue"
   };
 }
 
