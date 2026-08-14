@@ -60,7 +60,8 @@
     {
       "id": "s02",
       "title": "Mathematical fixture",
-      "status": "planned"
+      "summary": "Added and tested the immutable mathematical proof fixture and stable focused test entrypoint.",
+      "status": "complete"
     },
     {
       "id": "s03",

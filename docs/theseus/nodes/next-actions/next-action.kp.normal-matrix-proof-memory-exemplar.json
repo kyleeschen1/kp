@@ -53,11 +53,25 @@
       "scope": "s01 inherited budget baseline",
       "checkedAt": "2026-08-14T16:24:14.577Z",
       "notes": "Pre-existing shared-reader closure is 152834 gzip bytes against the unchanged 145000-byte ceiling. This slice records rather than repairs or widens unrelated baseline debt."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s02 mathematical fixture",
+      "checkedAt": "2026-08-14T16:29:29.638Z",
+      "notes": "Four fixture tests pass for proof closure, row/column comparison, dimensions, induction, complex-field dependency, and a corrupted block negative case."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic/normal-matrix-proof-fixture.ts",
+      "status": "passed",
+      "scope": "s02 impact inspection",
+      "checkedAt": "2026-08-14T16:29:30.829Z",
+      "notes": "Selector classifies the new local semantic path as unmatched/high-risk and recommends broad gates; the approved discovery cadence keeps this slice focused and reserves broad gates for later boundaries."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved 27-slice contract is active; protected economics changes remain untouched; public fraction type/build baseline passes and inherited 152834/145000 gzip reader debt is recorded."
+    "summary": "Mathematical fixture now encodes normality, unitary basis invariance, eigenvector-first block dimensions, row/column product entries, zero-row inference, and the induction obligations."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
