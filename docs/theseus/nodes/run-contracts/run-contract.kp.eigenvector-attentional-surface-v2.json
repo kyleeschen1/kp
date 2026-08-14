@@ -119,7 +119,8 @@
     {
       "id": "s12",
       "title": "Deterministic motion",
-      "status": "planned"
+      "summary": "Added one-clock pure transition sampling with exact semantic endpoints, reversible interpolation, bounded timings, reduced-motion settlement, and immediate nonadjacent restoration.",
+      "status": "complete"
     },
     {
       "id": "s13",
