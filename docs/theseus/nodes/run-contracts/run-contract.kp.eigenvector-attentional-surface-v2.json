@@ -77,7 +77,8 @@
     {
       "id": "s05",
       "title": "Fan transformation",
-      "status": "planned"
+      "summary": "Projected exact source and transformed fan geometry; ordinary vectors turn while persistent v remains collinear and later scalar/eigenspace endpoints stay exact.",
+      "status": "complete"
     },
     {
       "id": "s06",

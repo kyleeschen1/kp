@@ -69,6 +69,13 @@
       "scope": "slice-s04-endpoints",
       "checkedAt": "2026-08-14T20:40:32.028Z",
       "notes": "Twelve tests prove nine ordered endpoints, one owner per beat, stable hashes, and order-independent direct restoration."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s05-fan",
+      "checkedAt": "2026-08-14T20:42:39.282Z",
+      "notes": "Sixteen tests prove source and mapped fan endpoints, exact vector images, the single lambda-three survivor, scalar image, and eigenspace segment."
     }
   ],
   "expectedLearning": [
