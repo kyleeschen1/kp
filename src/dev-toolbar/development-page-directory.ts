@@ -73,6 +73,12 @@ export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
       "tutorials",
       "/learn/math/fraction-composition/"
     ),
+    page(
+      "tutorial.public-normal-matrices",
+      "Public · Normal matrix proof memory",
+      "tutorials",
+      "/learn/math/normal-matrices/"
+    ),
     page("reader.solve-x", "Solve x", "readers", "/reader/solve-x/"),
     page(
       "reader.generated-solve-x",

@@ -144,11 +144,46 @@
       "scope": "s09 static publication types",
       "checkedAt": "2026-08-14T17:00:22.682Z",
       "notes": "App, node, tests, Svelte, and domains typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:public-normal-matrices",
+      "status": "passed",
+      "scope": "s10 route shell contract",
+      "checkedAt": "2026-08-14T17:07:16.109Z",
+      "notes": "Four route publication, static truth, canonical path, and lazy-boundary tests passed."
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "s10 isolated public typecheck",
+      "checkedAt": "2026-08-14T17:07:17.559Z",
+      "notes": "The route-only source and Vite configuration typecheck passed."
+    },
+    {
+      "command": "npm run build:public-normal-matrices",
+      "status": "passed",
+      "scope": "s10 isolated public build",
+      "checkedAt": "2026-08-14T17:07:18.674Z",
+      "notes": "Production build passed; startup entry is 0.97 KB gzip and lazy capability is 0.18 KB gzip with no unrelated runtime closure."
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "s10 Chromium route smoke",
+      "checkedAt": "2026-08-14T17:07:19.776Z",
+      "notes": "Static proof, MathML, near-viewport lazy capability, no iframe, and horizontal fit passed in one Chromium worker."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s10 proof preservation",
+      "checkedAt": "2026-08-14T17:07:20.831Z",
+      "notes": "All 33 normal-matrix proof and public route tests passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The normal-matrix Article now has a complete static publication: all proof prose is searchable, seven figure occurrences resolve from six canonical checkpoints, and KaTeX HTML plus MathML is built without client math runtime."
+    "summary": "The proof now has an isolated static-first public route at /learn/math/normal-matrices/: complete searchable HTML and MathML load before a near-viewport, route-local stage capability chunk."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

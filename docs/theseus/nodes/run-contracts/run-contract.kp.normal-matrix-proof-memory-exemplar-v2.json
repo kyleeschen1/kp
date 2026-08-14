@@ -108,7 +108,8 @@
     {
       "id": "s10",
       "title": "Public route shell",
-      "status": "planned"
+      "summary": "Added and verified the isolated static-first public route shell with a near-viewport lazy stage boundary.",
+      "status": "complete"
     },
     {
       "id": "s11",

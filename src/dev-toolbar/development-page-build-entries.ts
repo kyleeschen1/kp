@@ -41,5 +41,9 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
     Object.freeze({
       name: "publicFractionComposition",
       htmlPath: "learn/math/fraction-composition/index.html"
+    }),
+    Object.freeze({
+      name: "publicNormalMatrices",
+      htmlPath: "learn/math/normal-matrices/index.html"
     })
   ]);
