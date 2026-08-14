@@ -2,11 +2,11 @@
 
 Status: experiment
 Last Updated: 2026-08-14
-Current Next Action: review
-`../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. If the
-human checkpoint approves it, create an executable Theseus contract for the
-eight bounded implementation slices. Do not implement a scheduler, broad
-matrix API, SVD sequence, or linear-algebra curriculum.
+Current Next Action: approve, revise, or reject the 27-slice proposal at
+`../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. On
+approval, create the exact typed Theseus contract and execute only through its
+mandatory exemplar checkpoint. Do not implement a scheduler, broad matrix API,
+SVD sequence, or linear-algebra curriculum.
 
 ## Goal
 
@@ -121,6 +121,7 @@ renderer authority.
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../reviews/2026-08-14-proof-memory-experiment-next-step-review.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
+- `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`
 - `../roadmap.md`
 - `../strategy.md`
 - [Michael Nielsen, "Using spaced repetition systems to see through a piece of mathematics"](https://cognitivemedium.com/srs-mathematics)

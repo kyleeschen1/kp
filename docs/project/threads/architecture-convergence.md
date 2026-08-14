@@ -2,15 +2,16 @@
 
 Status: active
 Last Updated: 2026-08-14
-Current Next Action: review the completed normal-matrix Proof Memory Loop spec
-at `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. If
-approved, create an executable Theseus contract for its eight bounded slices
-and stop at the exemplar's human visual and product checkpoint. Do not
-implement a scheduler, generic matrix motif, SVD sequence, or linear-algebra
-curriculum. After this checkpoint, resume the canonical economics demand-shift
-graph pressure. Preserve and audit the user's uncommitted economics Article
-and generated-publication edits before touching that caller. The
-cross-language proof is closed in
+Current Next Action: review the normal-matrix Proof Memory Loop long-run
+proposal at
+`../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. On
+explicit approval, create its typed 27-slice Theseus contract and execute only
+through the mandatory exemplar checkpoint. Do not implement a scheduler,
+generic matrix motif, SVD sequence, or linear-algebra curriculum. After this
+checkpoint, resume the canonical economics demand-shift graph pressure.
+Preserve and audit the user's uncommitted economics Article and
+generated-publication edits before touching that caller. The cross-language
+proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -158,6 +159,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
+- `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`
 - `proof-memory-medium.md`
 - `../../../src/architecture/semantic-animation-layer-ownership.ts`
 - `../../../src/architecture/semantic-animation-compatibility-ledger.ts`

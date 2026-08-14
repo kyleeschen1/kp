@@ -171,7 +171,8 @@ renderer.
 ### 5. Product convergence proof
 
 Status: code and symbolic projections approved; proof-memory exemplar spec is
-at a human checkpoint; graph pressure is paused behind that experiment
+complete and its long-loop proposal awaits approval; graph pressure is paused
+behind that experiment
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -239,9 +240,16 @@ and direct re-entry to exact proof state. Do not build a scheduler, generic
 matrix API, SVD lesson, or linear-algebra curriculum for this checkpoint.
 
 That specification is now at a human checkpoint in
-`reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. If approved,
-create one Theseus contract from its eight bounded slices; do not maintain a
-second manual execution plan.
+`reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. Its eight
+high-level implementation phases remain the design boundary; do not maintain a
+second design plan.
+
+The detailed execution proposal is recorded once at
+`reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`. It
+expands the spec's eight phases into 27 independently verifiable slices and
+stops at a mandatory human exemplar checkpoint before post-approval hardening.
+It is not executable until explicitly approved and materialized as one Theseus
+contract.
 
 The canonical economics demand-shift graph remains the next approved product
 caller after that checkpoint. Preserve and audit the user's current uncommitted
