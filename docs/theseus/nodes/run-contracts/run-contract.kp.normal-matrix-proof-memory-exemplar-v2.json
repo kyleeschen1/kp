@@ -78,7 +78,8 @@
     {
       "id": "s05",
       "title": "Checkpoint authority",
-      "status": "planned"
+      "summary": "Added pure checkpoint and clock authority with dense direct-seek, rewind, and order-independence evidence.",
+      "status": "complete"
     },
     {
       "id": "s06",
