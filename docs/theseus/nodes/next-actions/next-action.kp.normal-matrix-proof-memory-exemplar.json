@@ -517,11 +517,41 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-14T18:53:07.918Z"
+    },
+    {
+      "command": "npm run build:public-normal-matrices && npm run check:public-normal-matrices-budgets",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T19:02:43.487Z"
+    },
+    {
+      "command": "npm run test:browser:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T19:02:44.774Z"
+    },
+    {
+      "command": "npm run typecheck:public-normal-matrices",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T19:02:45.924Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T19:02:46.976Z"
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-14T19:02:47.938Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s23 complete: the proof remains complete and operable across no-JS, keyboard, reduced-motion, high-contrast, dark/light, and 390-pixel conditions with structural focus cues."
+    "summary": "Slice s24 complete: stable budgets report 9997-byte HTML, 15323-byte startup, 7731-byte activation, 15100-byte normal-specific closure, zero common-reader closure, no forbidden imports, idle clocks, one-batch direct seeks, and CLS at or below 0.001."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."

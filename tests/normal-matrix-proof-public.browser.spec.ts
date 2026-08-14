@@ -645,6 +645,99 @@ test("reduced motion snaps direct seeks to native checkpoint endpoints", async (
   )).toHaveCount(0);
 });
 
+test("stage stays idle and a direct seek produces one projected time write", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    const target = window as typeof window & {
+      __kpNormalProofRafRequests?: number;
+    };
+    target.__kpNormalProofRafRequests = 0;
+    const nativeRaf = window.requestAnimationFrame.bind(window);
+    window.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+      target.__kpNormalProofRafRequests! += 1;
+      return nativeRaf(callback);
+    };
+  });
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+  await page.waitForTimeout(100);
+  const beforeIdle = await page.evaluate(() => {
+    const target = window as typeof window & {
+      __kpNormalProofRafRequests?: number;
+    };
+    return target.__kpNormalProofRafRequests ?? -1;
+  });
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() => {
+    const target = window as typeof window & {
+      __kpNormalProofRafRequests?: number;
+    };
+    return target.__kpNormalProofRafRequests ?? -1;
+  })).toEqual(beforeIdle);
+
+  expect(await stage.evaluate(async (node) => {
+    let batches = 0;
+    let timeWrites = 0;
+    const observer = new MutationObserver((records) => {
+      batches += 1;
+      timeWrites += records.filter(
+        ({ attributeName }) => attributeName === "data-kp-normal-proof-time-ms"
+      ).length;
+    });
+    observer.observe(node, { attributes: true, subtree: false });
+    node.dispatchEvent(new CustomEvent("kp:normal-proof-seek", {
+      detail: { timeMs: 8_300 }
+    }));
+    await new Promise<void>((resolve) => queueMicrotask(resolve));
+    observer.disconnect();
+    return {
+      batches,
+      timeWrites,
+      timeMs: (node as HTMLElement).dataset["kpNormalProofTimeMs"]
+    };
+  })).toEqual({ batches: 1, timeWrites: 1, timeMs: "8300" });
+});
+
+test("activation and representative seeks stay below the CLS ceiling", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    const target = window as typeof window & { __kpNormalProofCls?: number };
+    target.__kpNormalProofCls = 0;
+    if (!PerformanceObserver.supportedEntryTypes.includes("layout-shift")) return;
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const shift = entry as PerformanceEntry & {
+          readonly hadRecentInput: boolean;
+          readonly value: number;
+        };
+        if (!shift.hadRecentInput) target.__kpNormalProofCls! += shift.value;
+      }
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+  await page.goto(route, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-normal-proof-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute(
+    "data-kp-normal-proof-session",
+    "deterministic-seek"
+  );
+  for (const timeMs of [5_500, 7_200, 9_000, 12_000]) {
+    await seekNormalProofStage(stage, timeMs);
+  }
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() =>
+    (window as typeof window & { __kpNormalProofCls?: number })
+      .__kpNormalProofCls ?? 0
+  )).toBeLessThanOrEqual(0.001);
+});
+
 async function seekNormalProofStage(
   stage: import("@playwright/test").Locator,
   timeMs: number

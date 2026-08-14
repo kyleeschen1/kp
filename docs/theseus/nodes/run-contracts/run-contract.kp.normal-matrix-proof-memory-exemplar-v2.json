@@ -192,7 +192,8 @@
     {
       "id": "s24",
       "title": "Performance and closure gate",
-      "status": "planned"
+      "summary": "Added stable route budget tooling and browser closure evidence for idle/offscreen behavior, single-projection direct seek, CLS, and forbidden imports; every approved route ceiling passes.",
+      "status": "complete"
     },
     {
       "id": "s25",
