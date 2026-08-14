@@ -11,6 +11,9 @@ Supporting Threads:
 - `threads/animation-library-promotion.md`
 - `threads/proof-memory-medium.md`
 
+Supporting threads are retrieval indexes and preservation records, not
+concurrent execution queues. Only the active lane below authorizes new work.
+
 The stable animation-promotion ledger still tables
 `Apply a 2 × 2 matrix to a vector`; convergence work changes neither its rank
 nor its evidence. The ledger remains retrievable at
@@ -54,6 +57,29 @@ surface? Eigenvectors are the leading candidate because semantic identity can
 remain visible from a vector through `Av = lambda v` and into an invariant
 subspace. Do not generalize authoring or a beat runtime before that exemplar
 passes human review.
+
+## One Active Lane
+
+The repository contains a large evidence portfolio, not a large active queue.
+Until the next human product decision, only this sequence is active:
+
+1. **Specify:** write one bounded eigenvector attentional-surface exemplar with
+   six to nine beats, one persistent semantic identity, one learner prediction
+   or manipulation, complete searchable truth, and fixed minimal controls.
+2. **Review:** stop before implementation and approve, revise, or reject the
+   exact experience and checkpoint criteria.
+3. **Build:** if approved, implement one reversible hard-coded route using the
+   existing semantic, clock, salience, renderer, publication, and URL seams.
+4. **Evaluate:** allow at most one bounded revision cycle, then explicitly
+   classify the medium proof as pass, mixed, or fail.
+5. **Unlock:** only a pass unlocks a compressed delayed-return cue and one
+   contrasting existing caller. Public packaging follows those proofs.
+
+All layout variants, existing domain artifacts, catalogue pages, authoring
+ideas, LLM tutoring, SRS, Graph3D, curricula, and application work are frozen
+reference or parked horizon unless this lane exposes a named blocker. The
+operational rationale is recorded in
+`reviews/2026-08-14-single-lane-product-convergence-next-step-review.md`.
 
 ## Current State
 

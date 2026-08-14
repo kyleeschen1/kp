@@ -1,44 +1,42 @@
 # KP Next Actions
 
-Last Updated: 2026-08-13
+Last Updated: 2026-08-14
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-KP is in a bounded convergence and architecture-compression phase. Article v1,
-the learner-core payload recovery, canonical algebra session, economics/physics
-Graph2D pressure, catalogue shell, and Scheme factorial semantic proof are
-preserved foundations rather than work to restart.
+There is one active next action:
 
-1. Use the approved symbolic, graph, and code exemplars to select one Public
-   Web v0 default projection without changing Article or animation semantics.
-2. Build the smallest public proof around that projection: a mission page, two
-   or three curated explanations, stable direct links, and one portable embed.
-3. Retire remaining compatibility only beside a real caller migration; do not
-   reopen the closed code-animation foundation to perform abstract cleanup.
-4. Reconsider the physical `packages/` and `apps/` split and adopt SvelteKit
-   when the Internal Studio/Public Web boundary becomes executable work.
-5. After the product gate, pressure the code library with one structurally
-   different transformation topology, preferably wrap/unwrap, before designing
-   broader LLM code-animation authoring.
+1. Write and review the bounded eigenvector attentional-surface prototype
+   specification described in
+   `reviews/2026-08-14-single-lane-product-convergence-next-step-review.md`.
 
-Whole-file CodeMirror decoupling, neutral scroll geometry, explicit algebra
-capabilities, catalogue CLS repair, and the pre-expansion health release are
-complete foundations, not queue items to restart.
+Do not implement it until the spec passes its human checkpoint. After approval,
+build only that reversible exemplar and stop again for evaluation. A pass may
+unlock one delayed-return cue and one contrasting existing caller; a mixed or
+failed result does not unlock broader work.
 
-Keep algebra pacing, broad Scheme/SICP expansion, layout invention, advanced CodeMirror,
-Graph3D promotion, linear algebra, and curriculum expansion paused unless a
-convergence slice exposes them as a direct blocker.
+Everything else is frozen reference or parked horizon:
 
-Keep `Apply a 2 × 2 matrix to a vector` tabled as the rank-6 animation
-promotion frontier; this queue does not reactivate or rerank it.
+- the catalogue remains an internal laboratory and inventory;
+- TypeScript, Python, Scheme, algebra, and fraction composition are approved
+  evidence rather than active expansion;
+- economics variants and the normal-matrix route are preserved experiments;
+- layout comparison, Graph3D, broader linear algebra/SICP, advanced CodeMirror,
+  LLM tutoring, SRS, Public Web, Public Editor, accounts, and curriculum work
+  are not in the active queue; and
+- compatibility or architecture work occurs only when the exemplar exposes a
+  named blocker.
 
-The completed retirement and exact rollback boundary are in
-`reviews/2026-08-12-economics-layout-production-reachability-audit.md`.
+Keep `Apply a 2 × 2 matrix to a vector` tabled in the animation-promotion
+ledger; this queue does not reactivate or rerank it.
 
-## Historical Queue Snapshot
+## Historical Queue Snapshot — Superseded
+
+This snapshot remains for provenance only. None of its incomplete items is
+authorized by the current queue.
 
 1. Record the completed hermeneutic tutorial-contract grill. Complete.
 2. Complete the active semantic-motion promotion matrix. Complete.
