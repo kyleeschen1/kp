@@ -167,7 +167,7 @@ renderer.
 
 ### 5. Product convergence proof
 
-Status: code projection approved; symbolic projection at human checkpoint
+Status: code and symbolic projections approved; graph pressure is next
 
 The first bounded public projection is available at
 `/learn/code/free-shipping/`. It compiles the approved TypeScript refactor from
@@ -199,8 +199,18 @@ addresses, and deterministic timeline. The new code is a removable public
 route and presentation shell; it does not fork symbolic semantics or motion.
 Static/no-JavaScript truth, direct endpoint restoration, stable stage identity,
 the retained attention-stage regression, and a 390 px no-overflow composition
-pass focused checks. Human judgment is now required before presentation tuning,
-runtime slimming, economics pressure, or shared projection extraction.
+pass focused checks. The human visual checkpoint passed on 2026-08-13. Freeze
+the page as the approved symbolic exemplar rather than continuing local layout
+discovery.
+
+The next bounded caller is the canonical economics demand-shift graph. Preserve
+and audit the user's current uncommitted economics Article and generated
+publication before touching that caller. Project its existing semantic model,
+retained SVG session, deterministic timeline, direct links, and static Article
+truth through the same public-product boundary, then stop at a human graph
+checkpoint. The symbolic route's approximately 106 KB gzip JavaScript closure
+remains a measured pressure finding; defer symbolic-only slimming and shared
+projection extraction until the three-caller comparison supplies evidence.
 
 Choose one public v0 projection using at least three real content shapes:
 

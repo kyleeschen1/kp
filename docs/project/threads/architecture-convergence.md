@@ -2,12 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-13
-Current Next Action: review the bounded symbolic public projection at
-`/learn/math/fraction-composition/`. Judge whether one austere stage, one
-continuous scrubber, one active cue, and normal searchable Article prose form a
-credible second public content shape. Stop before presentation tuning, runtime
-slimming, economics pressure, or shared projection extraction. The
-cross-language proof is closed in
+Current Next Action: pressure the approved code and symbolic public-product
+boundary with the canonical economics demand-shift graph. Preserve and audit
+the user's uncommitted economics Article and generated-publication edits before
+implementation. Reuse existing graph semantics, the retained SVG session, one
+deterministic clock, direct seeking, static Article truth, and accessibility;
+stop at a human graph checkpoint before runtime slimming or shared projection
+extraction. The cross-language proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -55,11 +56,11 @@ not a mandate to encode one universal layout in Article or animation semantics.
 7. **Cross-language pressure (complete):** Python proves the second imperative
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
-8. **Product projection gate (current):** the TypeScript public lesson passed
-   its static-first code checkpoint. The canonical fraction-composition public
-   spike is implemented and stopped at its human checkpoint. Resolve that
-   checkpoint before comparing the economics demand-shift graph or selecting a
-   public v0 default.
+8. **Product projection gate (current):** the TypeScript and canonical
+   fraction-composition public lessons passed their human checkpoints. Pressure
+   the same boundary with the economics demand-shift graph, then compare all
+   three callers before selecting a public v0 default or extracting shared
+   presentation.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 

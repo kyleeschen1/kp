@@ -2,8 +2,9 @@
   "id": "next-action.kp.symbolic-public-projection-spike",
   "kind": "next-action",
   "title": "Build bounded fraction-composition public projection spike",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.public-web",
+  "summary": "Symbolic checkpoint passed; the next bounded caller is the canonical economics demand-shift graph with user-authored economics edits preserved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,7 +40,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Implemented the bounded public fraction-composition projection and stopped at its required human visual checkpoint; semantics, Article v1, canonical KaTeX choreography, direct seek, no-JS truth, and phone fit are preserved."
+    "state": "complete",
+    "summary": "Human approved the bounded symbolic public projection. Freeze the composition as the symbolic Public Web exemplar; defer runtime slimming and shared extraction until graph pressure."
   }
 }

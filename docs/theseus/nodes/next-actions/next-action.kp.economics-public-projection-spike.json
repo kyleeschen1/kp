@@ -1,0 +1,65 @@
+{
+  "id": "next-action.kp.economics-public-projection-spike",
+  "kind": "next-action",
+  "title": "Build bounded economics demand-shift public projection spike",
+  "status": "ready",
+  "domain": "kp.public-web",
+  "summary": "Pressure the approved code and symbolic public-product boundary with the canonical economics graph while preserving user-authored source edits and existing graph semantics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-fraction-composition-public-projection-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/lessons/economics-demand-shift.kp.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-13-typescript-public-lesson-checkpoint.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.symbolic-public-projection-spike"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.symbolic-public-projection-spike"
+  ],
+  "verification": [
+    "focused economics semantic and publication tests",
+    "route-only static and direct-seek tests",
+    "single-exemplar Chromium checkpoint"
+  ],
+  "expectedLearning": [
+    "Whether the same austere stage, cue, scrubber, and complete searchable Article composition remains credible for a retained SVG graph."
+  ],
+  "allowedWork": [
+    "Audit and preserve the user-modified economics Article and generated publication before implementation.",
+    "Add one removable Public Web graph projection adapter and its focused checks."
+  ],
+  "disallowedWork": [
+    "Do not change economics semantics, graph choreography, retained SVG ownership, or the approved code and symbolic routes.",
+    "Do not extract shared projection infrastructure, perform catalogue rollout, or optimize unrelated runtime closure."
+  ],
+  "criteria": [
+    {
+      "id": "user-edits-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-graph-reused",
+      "weight": "high"
+    },
+    {
+      "id": "static-direct-seek-truth",
+      "weight": "high"
+    },
+    {
+      "id": "graph-human-checkpoint",
+      "weight": "high"
+    }
+  ]
+}
