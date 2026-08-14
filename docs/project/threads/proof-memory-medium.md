@@ -2,9 +2,11 @@
 
 Status: experiment
 Last Updated: 2026-08-14
-Current Next Action: write and review the bounded normal-matrix exemplar spec;
-do not implement a scheduler, broad matrix API, SVD sequence, or linear-algebra
-curriculum before that checkpoint.
+Current Next Action: review
+`../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. If the
+human checkpoint approves it, create an executable Theseus contract for the
+eight bounded implementation slices. Do not implement a scheduler, broad
+matrix API, SVD sequence, or linear-algebra curriculum.
 
 ## Goal
 
@@ -118,6 +120,7 @@ renderer authority.
 
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../reviews/2026-08-14-proof-memory-experiment-next-step-review.md`
+- `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `../roadmap.md`
 - `../strategy.md`
 - [Michael Nielsen, "Using spaced repetition systems to see through a piece of mathematics"](https://cognitivemedium.com/srs-mathematics)

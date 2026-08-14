@@ -2,16 +2,15 @@
 
 Status: active
 Last Updated: 2026-08-14
-Current Next Action: write and review the bounded normal-matrix Proof Memory
-Loop exemplar specification. Define the original proof outline, prerequisite
-boundary, symbol-role ledger, roughly five semantic checkpoints, one minimal
-native-KaTeX matrix-attention sequence, eight to twelve prompt intents, direct
-state re-entry, delayed-return rehearsal, bundle budget, and rollback unit.
-Stop before implementing a scheduler, generic matrix motif, SVD sequence, or
-linear-algebra curriculum. After this checkpoint, resume the canonical
-economics demand-shift graph pressure. Preserve and audit the user's
-uncommitted economics Article and generated-publication edits before touching
-that caller. The cross-language proof is closed in
+Current Next Action: review the completed normal-matrix Proof Memory Loop spec
+at `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`. If
+approved, create an executable Theseus contract for its eight bounded slices
+and stop at the exemplar's human visual and product checkpoint. Do not
+implement a scheduler, generic matrix motif, SVD sequence, or linear-algebra
+curriculum. After this checkpoint, resume the canonical economics demand-shift
+graph pressure. Preserve and audit the user's uncommitted economics Article
+and generated-publication edits before touching that caller. The
+cross-language proof is closed in
 `run-contract.kp.cross-language-code-animation-foundation-v1`; do not restart
 language or shared-contract expansion during the product gate.
 
@@ -158,6 +157,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-12-economics-layout-production-reachability-audit.md`
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
+- `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `proof-memory-medium.md`
 - `../../../src/architecture/semantic-animation-layer-ownership.ts`
 - `../../../src/architecture/semantic-animation-compatibility-ledger.ts`
