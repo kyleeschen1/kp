@@ -13,7 +13,11 @@
       body { min-width: 320px; min-height: 100vh; margin: 0; background: #0d0e1c; }
     </style>
     <script>
-      document.documentElement.dataset.kpAlgebraView = "attention-stage";
+      const evidence = new URLSearchParams(location.search).get("evidence");
+      document.documentElement.dataset.kpAlgebraView =
+        evidence === "static" || evidence === "motion"
+          ? `distributed-evidence-${evidence}`
+          : "attention-stage";
     </script>
     <link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css" />
     <link

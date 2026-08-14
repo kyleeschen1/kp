@@ -69,6 +69,14 @@ test("static public lesson contains searchable prose, math, and one stage", () =
     /data-kp-algebra-attention-interpretation hidden aria-hidden="true"/u
   );
   assert.match(searchable, /Hold the variable fraction in place/u);
+  assert.equal(
+    html.match(/data-kp-algebra-evidence-range=/gu)?.length,
+    2
+  );
+  assert.equal(
+    html.match(/data-kp-algebra-evidence-activate=/gu)?.length,
+    2
+  );
   assert.doesNotMatch(html, /CodeMirror|animation library/iu);
 });
 

@@ -1,0 +1,107 @@
+html[data-kp-algebra-view^="distributed-evidence-"] {
+  --kp-algebra-evidence-inline: 42rem;
+}
+
+html[data-kp-algebra-view^="distributed-evidence-"]
+  .kp-algebra-attention-stage {
+  display: none;
+}
+
+html[data-kp-algebra-view^="distributed-evidence-"]
+  .kp-algebra-article > article {
+  max-width: var(--kp-algebra-evidence-inline);
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-range] {
+  display: grid;
+  min-height: 14rem;
+  align-content: center;
+  gap: 0.8rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--kp-line);
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-range]
+  > [data-kp-algebra-static-checkpoint] {
+  grid-area: 1 / 1;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-active]
+  > [data-kp-algebra-static-checkpoint] {
+  visibility: hidden;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-live-surface] {
+  width: 100%;
+  min-height: 11rem;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-live-surface]
+  .kp-reader-equation-stage {
+  min-height: 14rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--kp-paper);
+  box-shadow: none;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-live-surface]
+  .kp-reader-equation-viewport {
+  /* The canonical fit contract needs enough block size to keep every KaTeX
+     endpoint above its readable scale floor; this remains far below the
+     generic reader card's viewport-relative height. */
+  min-height: 14rem;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-live-surface]
+  .kp-reader-equation-progress {
+  display: none;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-activate] {
+  justify-self: center;
+  min-height: 2.5rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 0.25rem;
+  color: var(--kp-ink);
+  background: var(--kp-surface);
+  font: 0.78rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-evidence-active]
+  > [data-kp-algebra-evidence-activate] {
+  display: none;
+}
+
+html:not([data-kp-algebra-view="distributed-evidence-motion"])
+  [data-kp-algebra-evidence-activate] {
+  display: none;
+}
+
+html[data-kp-algebra-view="distributed-evidence-motion"]
+  [data-kp-algebra-stage-host]
+  > .kp-algebra-article__checkpoint-navigation {
+  display: none;
+}
+
+@media (max-width: 38rem) {
+  html[data-kp-algebra-view^="distributed-evidence-"] {
+    --kp-algebra-evidence-inline: 100%;
+  }
+
+  html[data-kp-algebra-view="distributed-evidence-motion"]
+    [data-kp-algebra-evidence-range] {
+    min-height: 12rem;
+  }
+}

@@ -212,6 +212,15 @@ This challenger neither reopens the approved full-timeline default nor creates
 a shared attention contract. Its bounded evidence and rollback are recorded in
 `reviews/2026-08-13-algebra-distribution-attention-arc-checkpoint.md`.
 
+A second bounded comparison now tests distributed evidence against the native
+static Article at `?evidence=motion` and `?evidence=static`. It reuses one live
+renderer across the canonical distribution and constant-evaluation sockets;
+the static baseline creates no session, and both retain the same searchable
+prose and certified endpoints. Review this comparison without promoting a new
+layout contract. Its questions, measured costs, preservation boundary, and
+rollback are recorded in
+`reviews/2026-08-13-algebra-distributed-evidence-comparison-checkpoint.md`.
+
 The next bounded caller is the canonical economics demand-shift graph. Preserve
 and audit the user's current uncommitted economics Article and generated
 publication before touching that caller. Project its existing semantic model,

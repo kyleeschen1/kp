@@ -202,6 +202,121 @@ test("opt-in distribution arc reduces motion to its direct endpoint", async ({
   );
 });
 
+test("distributed evidence compares two static operations without a live session", async ({
+  page
+}) => {
+  await page.goto(`${route}?evidence=static`, {
+    waitUntil: "domcontentloaded"
+  });
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-algebra-view",
+    "distributed-evidence-static"
+  );
+  await expect(page.locator(
+    "[data-kp-algebra-attention-stage]"
+  )).toBeHidden();
+  await expect(page.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  )).toHaveCount(0);
+  await expect(page.locator(
+    '[data-kp-algebra-evidence-range="distribute-and-normalize"]'
+  )).toBeVisible();
+  await expect(page.locator(
+    '[data-kp-algebra-evidence-range="evaluate-constant"]'
+  )).toBeVisible();
+  const article = page.getByRole("article");
+  await expect(article.getByText(
+    "Follow the factor as it distributes into both addends."
+  )).toBeVisible();
+  await expect(article.getByText(
+    "Hold the variable fraction in place while"
+  )).toBeVisible();
+  await page.locator("[data-kp-dev-toolbar]").evaluate((node) => {
+    (node as HTMLElement).style.display = "none";
+  });
+  await page.locator("#distribute").scrollIntoViewIfNeeded();
+  await mkdir(captureRoot, { recursive: true });
+  await page.screenshot({
+    path: path.join(captureRoot, "distributed-static.png"),
+    animations: "disabled"
+  });
+});
+
+test("distributed evidence reuses one live renderer across consecutive sockets", async ({
+  page
+}) => {
+  await page.goto(`${route}?evidence=motion`, {
+    waitUntil: "domcontentloaded"
+  });
+
+  const publication = page.locator(
+    "[data-kp-algebra-fraction-composition-publication]"
+  );
+  const stageHost = page.locator("[data-kp-algebra-stage-host]");
+  const first = page.locator(
+    '[data-kp-algebra-evidence-range="distribute-and-normalize"]'
+  );
+  const second = page.locator(
+    '[data-kp-algebra-evidence-range="evaluate-constant"]'
+  );
+  const canonical = page.locator(
+    '[data-kp-canonical-equation-host="chrome-free-v1"]'
+  );
+
+  await expect(publication).toHaveAttribute(
+    "data-kp-algebra-evidence-active-range",
+    "distribute-and-normalize"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    "distribute-and-normalize"
+  );
+  await expect(canonical).toHaveCount(1);
+  await expect(first.locator("[data-kp-algebra-live-surface]")).toHaveCount(1);
+  await first.locator("[data-kp-algebra-range-scrubber]").fill("1000");
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
+
+  await second.locator("[data-kp-algebra-evidence-activate]").click();
+  await expect(publication).toHaveAttribute(
+    "data-kp-algebra-evidence-active-range",
+    "evaluate-constant"
+  );
+  await expect(stageHost).toHaveAttribute(
+    "data-kp-algebra-canonical-range",
+    "evaluate-constant"
+  );
+  await expect(first.locator(
+    ':scope > [data-kp-algebra-static-checkpoint="normalized"]'
+  )).toBeVisible();
+  await expect(second.locator("[data-kp-algebra-live-surface]")).toHaveCount(1);
+  await expect(canonical).toHaveCount(1);
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.normalized"
+  );
+  await second.locator("[data-kp-algebra-range-scrubber]").fill("1000");
+  await expect(canonical).toHaveAttribute(
+    "data-kp-reader-accessible-equation-state",
+    "fraction-solve.state.constant-quotient"
+  );
+  expect(await page.evaluate(() =>
+    document.documentElement.scrollWidth <= window.innerWidth + 1
+  )).toBe(true);
+  await page.locator("[data-kp-dev-toolbar]").evaluate((node) => {
+    (node as HTMLElement).style.display = "none";
+  });
+  await second.scrollIntoViewIfNeeded();
+  await mkdir(captureRoot, { recursive: true });
+  await page.screenshot({
+    path: path.join(captureRoot, "distributed-motion.png"),
+    animations: "disabled"
+  });
+});
+
 test("public symbolic route restores a semantic endpoint without replay", async ({
   page
 }) => {

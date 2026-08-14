@@ -94,10 +94,12 @@ export interface KpFractionCompositionSalienceReaderCapability {
 export function createKpFractionCompositionSalienceReaderCapability(input: {
   readonly root: HTMLElement;
   readonly href: string;
+  readonly theme?: KpVisualThemeId;
 }): KpFractionCompositionSalienceReaderCapability {
-  const theme = new URL(input.href).searchParams.get("kpTheme") === "dark"
-    ? "dark" as const
-    : "light" as const;
+  const requestedTheme = new URL(input.href).searchParams.get("kpTheme");
+  const theme = requestedTheme === "dark" || requestedTheme === "light"
+    ? requestedTheme
+    : input.theme ?? "light";
   applyKpSemanticVisualDomTheme({ root: input.root, theme });
   return Object.freeze({
     render(frame: KpFractionCompositionSalienceReaderFrame) {

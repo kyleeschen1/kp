@@ -44,6 +44,10 @@ export function renderKpFractionCompositionStaticPublication(
       ({ path, to }) => [to, path] as const
     )
   );
+  const evidenceRanges = new Set([
+    "distribute-and-normalize",
+    "evaluate-constant"
+  ]);
   let articleHtml = compilation.staticHtml.articleHtml;
 
   for (const motion of compilation.article.document.blocks) {
@@ -90,8 +94,19 @@ export function renderKpFractionCompositionStaticPublication(
     const equationProjection = motionRange === undefined
       ? equationSvg
       : [
-          `<div data-kp-algebra-motion-slot="${escapeAttribute(motionRange)}">`,
+          `<div data-kp-algebra-motion-slot="${escapeAttribute(motionRange)}"`,
+          evidenceRanges.has(motionRange)
+            ? ` data-kp-algebra-evidence-range="${escapeAttribute(motionRange)}"`
+            : "",
+          `>`,
           equationSvg,
+          evidenceRanges.has(motionRange)
+            ? [
+                `<button type="button"`,
+                ` data-kp-algebra-evidence-activate="${escapeAttribute(motionRange)}"`,
+                ` aria-pressed="false" disabled>Animate this operation</button>`
+              ].join("")
+            : "",
           `</div>`
         ].join("");
     articleHtml = articleHtml.replace(

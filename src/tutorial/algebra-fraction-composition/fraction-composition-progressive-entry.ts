@@ -56,6 +56,10 @@ import {
   createKpFractionCompositionAttentionPacingProfile,
   readKpFractionCompositionAttentionTempo
 } from "./fraction-composition-attention-pacing.ts";
+import {
+  mountKpFractionCompositionDistributedEvidence,
+  readKpFractionCompositionEvidenceProjection
+} from "./fraction-composition-distributed-evidence.ts";
 
 /**
  * This enhancement intentionally preserves the static publication while the
@@ -81,10 +85,29 @@ export function mountKpFractionCompositionArticleEnhancement(
   const focus = createKpReaderSemanticFocusService(
     kpFractionCompositionArticleSemanticReferences.map(({ address }) => address)
   );
+  const evidenceProjection = readKpFractionCompositionEvidenceProjection(
+    ownerWindow.location.search
+  );
+  if (evidenceProjection === "static") {
+    const evidence = mountKpFractionCompositionDistributedEvidence({
+      ownerWindow,
+      publication: article,
+      projection: evidenceProjection,
+      prepareRange() {},
+      pauseRange() {},
+      setAttention() {}
+    });
+    return () => {
+      evidence.dispose();
+      focus.dispose();
+    };
+  }
   // Public projections can request the fixed stage without leaking an
   // internal layout query parameter into their canonical learner URL.
-  const attentionStageRequested = projection?.attentionStageRequested ??
-    isKpFractionCompositionAttentionStageRequested(ownerWindow.location.search);
+  const attentionStageRequested = evidenceProjection === "motion"
+    ? false
+    : projection?.attentionStageRequested ??
+      isKpFractionCompositionAttentionStageRequested(ownerWindow.location.search);
   const attentionPacing = createKpFractionCompositionAttentionPacingProfile(
     createKpFractionCompositionArticleRuntimeRanges(),
     readKpFractionCompositionAttentionTempo(ownerWindow.location.search)
@@ -114,6 +137,16 @@ export function mountKpFractionCompositionArticleEnhancement(
     setAttention: (addresses) => focus.set("story", addresses),
     pacing: attentionPacing
   });
+  const distributedEvidence = evidenceProjection === "motion"
+    ? mountKpFractionCompositionDistributedEvidence({
+        ownerWindow,
+        publication: article,
+        projection: evidenceProjection,
+        prepareRange: (path) => canonicalStage.prepareRange(path),
+        pauseRange: () => canonicalStage.pauseRange(),
+        setAttention: (addresses) => focus.set("story", addresses)
+      })
+    : undefined;
   const semanticLinks = decorateSemanticLinks(article);
   const applyFocus = (): void => {
     article.dataset["kpArticleSemanticFocusSource"] =
@@ -242,6 +275,7 @@ export function mountKpFractionCompositionArticleEnhancement(
   onLocationChange();
   applyFocus();
   return () => {
+    distributedEvidence?.dispose();
     attentionStage.dispose();
     canonicalStage.dispose();
     article.removeEventListener("click", onSemanticClick);
@@ -340,7 +374,10 @@ function mountCanonicalRanges(input: {
     ?.before(liveSurface);
   const salience = createKpFractionCompositionSalienceReaderCapability({
     root: liveSurface,
-    href: input.ownerWindow.location.href
+    href: input.ownerWindow.location.href,
+    // Both algebra Article projections are dark-first; do not let the
+    // reusable reader adapter infer a light palette from an absent URL flag.
+    theme: "dark"
   });
   let disposed = false;
   let session: KpChromeFreeCanonicalEquationSession | undefined;
