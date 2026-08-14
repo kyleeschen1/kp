@@ -113,7 +113,8 @@
     {
       "id": "s11",
       "title": "Native endpoints",
-      "status": "planned"
+      "summary": "Rendered all nine settled endpoints as native SVG plus server/build-rendered semantically annotated KaTeX, with accessible descriptions and standard escaping.",
+      "status": "complete"
     },
     {
       "id": "s12",

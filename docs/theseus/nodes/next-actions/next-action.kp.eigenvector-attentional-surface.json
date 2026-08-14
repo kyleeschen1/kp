@@ -111,6 +111,13 @@
       "scope": "slice-s10-transcript",
       "checkedAt": "2026-08-14T20:52:28.374Z",
       "notes": "Thirty-three tests prove nine ordered austere passages, complete searchable conceptual text, and a compact final reconstruction cue."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s11-native-endpoints",
+      "checkedAt": "2026-08-14T20:55:38.510Z",
+      "notes": "Thirty-seven tests prove all nine settled states render native SVG, accessible descriptions, build-rendered annotated KaTeX, standard escaping, and shared semantic v identity."
     }
   ],
   "expectedLearning": [
