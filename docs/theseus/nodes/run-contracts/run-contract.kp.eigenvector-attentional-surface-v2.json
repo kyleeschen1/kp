@@ -131,7 +131,8 @@
     {
       "id": "s14",
       "title": "Discrete scroll projection",
-      "status": "planned"
+      "summary": "Added IntersectionObserver-driven discrete passage selection at one reading line; ordinary scroll selects a beat once, then its bounded transition settles independently.",
+      "status": "complete"
     },
     {
       "id": "s15",

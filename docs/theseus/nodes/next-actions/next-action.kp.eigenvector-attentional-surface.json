@@ -132,6 +132,13 @@
       "scope": "slice-s13-attention",
       "checkedAt": "2026-08-14T21:02:54.410Z",
       "notes": "Forty-seven tests prove one owning surface per beat, normal interpretive axes, quiet grid, absent-before-reveal semantics, and shared dark/light treatment projection."
+    },
+    {
+      "command": "npm run test:eigenvector-attentional-surface",
+      "status": "passed",
+      "scope": "slice-s14-scroll",
+      "checkedAt": "2026-08-14T21:05:35.280Z",
+      "notes": "Fifty-one tests prove stable reading-line selection, first/last boundary retention, height/frequency independence, and static fallback; runtime uses IntersectionObserver rather than scroll scrubbing."
     }
   ],
   "expectedLearning": [
