@@ -66,7 +66,8 @@
     {
       "id": "s03",
       "title": "Proof semantic registry",
-      "status": "planned"
+      "summary": "Added the local proof semantic registry and reference-closure tests without renderer or glyph-derived identity.",
+      "status": "complete"
     },
     {
       "id": "s04",

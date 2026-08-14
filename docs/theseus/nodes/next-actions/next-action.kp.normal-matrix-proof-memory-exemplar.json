@@ -67,11 +67,18 @@
       "scope": "s02 impact inspection",
       "checkedAt": "2026-08-14T16:29:30.829Z",
       "notes": "Selector classifies the new local semantic path as unmatched/high-risk and recommends broad gates; the approved discovery cadence keeps this slice focused and reserves broad gates for later boundaries."
+    },
+    {
+      "command": "npm run test:normal-matrix-proof",
+      "status": "passed",
+      "scope": "s03 proof semantic registry",
+      "checkedAt": "2026-08-14T16:33:12.904Z",
+      "notes": "Seven focused tests pass, including unique addresses, repeated-label identity, claim provenance, parent closure, and negative duplicate/orphan cases."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Mathematical fixture now encodes normality, unitary basis invariance, eigenvector-first block dimensions, row/column product entries, zero-row inference, and the induction obligations."
+    "summary": "The proof now has fifteen stable semantic addresses with explicit entity/group/region roles, continuity semantics, parent structure, and mathematical claim provenance."
   },
   "expectedLearning": [
     "Whether one semantic proof with exact visual attention, reconstruction prompts, and direct re-entry improves durable proof understanding over a static article and disconnected cards."
