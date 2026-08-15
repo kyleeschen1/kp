@@ -26,6 +26,7 @@ export interface KpLogQuotientContract {
   readonly animationId: "animation.algebra.log-quotient.difference-to-quotient";
   readonly lawId: "law.logarithm.quotient";
   readonly direction: "combine-difference-into-quotient";
+  readonly domain: KpLogQuotientDomainContract;
   readonly source: KpLogQuotientState;
   readonly target: KpLogQuotientState;
   readonly assumptionIds: readonly KpLogQuotientAssumptionId[];
@@ -74,6 +75,7 @@ export function createKpCanonicalLogQuotientContract(input: {
     animationId: "animation.algebra.log-quotient.difference-to-quotient" as const,
     lawId: "law.logarithm.quotient" as const,
     direction: "combine-difference-into-quotient" as const,
+    domain,
     source,
     target,
     assumptionIds: Object.freeze(domain.assumptions.map(({ id }) => id)),
