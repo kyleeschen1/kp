@@ -9,6 +9,7 @@ import {
   type KpSemanticMotionCompilerRequestV1,
   type KpSemanticMotionEntityAuthorityV1,
   type KpSemanticMotionOperationStructureContract,
+  type KpSemanticMotionPrecedenceSpec,
   type KpSemanticMotionSourceAuthorityV1,
   type KpVerifiedSemanticMotionLifecycle,
   type KpVerifiedSemanticMotionPrecedence
@@ -37,6 +38,7 @@ interface FixtureInput {
   readonly sourceEntityIds: readonly string[];
   readonly targetEntityIds: readonly string[];
   readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+  readonly teachingKind?: KpSemanticMotionCompilerRequestV1["teachingIntent"]["kind"];
   readonly relations: readonly {
     readonly id: string;
     readonly relation: SelectorCorrespondenceRelationId;
@@ -45,7 +47,9 @@ interface FixtureInput {
   }[];
 }
 
-export function createQuotientSemanticMotionFixture(): KpSemanticMotionCompilerTestFixture {
+export function createQuotientSemanticMotionFixture(
+  teachingKind: KpSemanticMotionCompilerRequestV1["teachingIntent"]["kind"] = "cause"
+): KpSemanticMotionCompilerTestFixture {
   return createFixture({
     id: "quotient",
     sourceEntityIds: ["q.source.ln-left", "q.source.ln-right", "q.source.x", "q.source.y"],
@@ -56,6 +60,7 @@ export function createQuotientSemanticMotionFixture(): KpSemanticMotionCompilerT
       "target-operator": ["q.target.ln"],
       "target-arguments": ["q.target.x", "q.target.y"]
     },
+    teachingKind,
     relations: [{
       id: "operators-fuse",
       relation: "fan-in",
@@ -295,6 +300,38 @@ export function cancellationSemanticMotionStructureContract(): KpSemanticMotionO
   };
 }
 
+export function quotientSemanticMotionPrecedenceSpec(): KpSemanticMotionPrecedenceSpec {
+  return precedenceChain([
+    semanticEvent("event.orient", "orient", ["cohort.quotient.operator-fusion"]),
+    semanticEvent("event.clear-enclosures", "clearance", ["cohort.quotient.arguments"]),
+    semanticEvent("event.arguments-depart", "departure", ["cohort.quotient.arguments"]),
+    semanticEvent("event.arguments-arrive", "arrival", ["cohort.quotient.arguments"]),
+    semanticAttachmentEvent("event.target-attachment", "attachment.target-operator"),
+    semanticReadyEvent()
+  ]);
+}
+
+export function distributionSemanticMotionPrecedenceSpec(): KpSemanticMotionPrecedenceSpec {
+  return precedenceChain([
+    semanticEvent("event.reserve-products", "orient", ["cohort.distribution.addends"]),
+    semanticEvent("event.factor-departs", "departure", ["cohort.distribution.factors"]),
+    semanticEvent("event.factor-copies-arrive", "arrival", ["cohort.distribution.factors"]),
+    semanticAttachmentEvent("event.connector-attached", "attachment.distribution.connector"),
+    semanticEvent("event.products-settled", "settlement", ["cohort.distribution.addends"]),
+    semanticReadyEvent()
+  ]);
+}
+
+export function cancellationSemanticMotionPrecedenceSpec(): KpSemanticMotionPrecedenceSpec {
+  return precedenceChain([
+    semanticEvent("event.orient", "orient", ["cohort.cancellation.inverse-pair"]),
+    semanticEvent("event.contact", "contact", ["cohort.cancellation.inverse-pair"]),
+    semanticEvent("event.retire", "retirement", ["cohort.cancellation.inverse-pair"]),
+    semanticEvent("event.survivors-settle", "settlement", ["cohort.cancellation.survivors"]),
+    semanticReadyEvent()
+  ]);
+}
+
 function createFixture(input: FixtureInput): KpSemanticMotionCompilerTestFixture {
   const transformationId = `transform.${input.id}`;
   const sourceId = `semantic.${input.id}`;
@@ -324,7 +361,7 @@ function createFixture(input: FixtureInput): KpSemanticMotionCompilerTestFixture
     targetState: source.states[1]!,
     operation: { stepId: `step.${input.id}`, transformationId, operationId: `kp.semantic-motion.${input.id}`, roleBindings: input.roleBindings, correspondenceMap: { id: `correspondence.${input.id}`, records: correspondenceRecords } },
     rewriteFrontier: { sourceEntityIds: input.sourceEntityIds, targetEntityIds: input.targetEntityIds, contextEntityIds: [] },
-    teachingIntent: { kind: "cause", primaryEntityIds: [...input.sourceEntityIds, ...input.targetEntityIds], secondaryEntityIds: [], summary: input.id }
+    teachingIntent: { kind: input.teachingKind ?? "cause", primaryEntityIds: [...input.sourceEntityIds, ...input.targetEntityIds], secondaryEntityIds: [], summary: input.id }
   });
   const endpoints = validateKpSemanticMotionEndpointsAndFrontier({ request, source });
   if (endpoints.status !== "verified") throw new Error(`Fixture ${input.id} endpoint validation failed.`);
@@ -380,4 +417,35 @@ function attachment(
   attachedRoleIds: readonly string[]
 ) {
   return { id, kind, anchorRoleIds, attachedRoleIds };
+}
+
+function precedenceChain(
+  events: KpSemanticMotionPrecedenceSpec["events"]
+): KpSemanticMotionPrecedenceSpec {
+  return {
+    events,
+    edges: events.slice(1).map((current, index) => ({
+      beforeEventId: events[index]!.id,
+      afterEventId: current.id
+    }))
+  };
+}
+
+function semanticEvent(
+  id: string,
+  kind: Exclude<KpSemanticMotionPrecedenceSpec["events"][number]["kind"], "native-target-ready">,
+  cohortIds: readonly string[]
+): KpSemanticMotionPrecedenceSpec["events"][number] {
+  return { id, kind, cohortIds, attachmentIds: [], correspondenceRecordIds: [], summary: id };
+}
+
+function semanticAttachmentEvent(
+  id: string,
+  attachmentId: string
+): KpSemanticMotionPrecedenceSpec["events"][number] {
+  return { id, kind: "attachment", cohortIds: [], attachmentIds: [attachmentId], correspondenceRecordIds: [], summary: id };
+}
+
+function semanticReadyEvent(): KpSemanticMotionPrecedenceSpec["events"][number] {
+  return { id: "event.native-ready", kind: "native-target-ready", cohortIds: [], attachmentIds: [], correspondenceRecordIds: [], summary: "Native target ready." };
 }

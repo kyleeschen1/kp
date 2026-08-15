@@ -7,3 +7,4 @@ export * from "./semantic-motion-history-compiler.ts";
 export * from "./semantic-motion-lifecycle-ownership.ts";
 export * from "./semantic-motion-precedence-compiler.ts";
 export * from "./semantic-motion-role-cohort-compiler.ts";
+export * from "./semantic-motion-recipe-resolver.ts";

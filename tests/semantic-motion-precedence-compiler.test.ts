@@ -5,15 +5,17 @@ import {
   compileKpSemanticMotionPrecedence,
   compileKpSemanticMotionRoleCohorts,
   isKpVerifiedSemanticMotionPrecedence,
-  type KpSemanticMotionPrecedenceSpec,
   type KpVerifiedSemanticMotionRoleCohorts
 } from "../src/domain-ir/public-api.ts";
 import {
   cancellationSemanticMotionStructureContract,
+  cancellationSemanticMotionPrecedenceSpec,
   createCancellationSemanticMotionFixture,
   createDistributionSemanticMotionFixture,
   createQuotientSemanticMotionFixture,
   distributionSemanticMotionStructureContract,
+  distributionSemanticMotionPrecedenceSpec,
+  quotientSemanticMotionPrecedenceSpec,
   quotientSemanticMotionStructureContract,
   type KpSemanticMotionCompilerTestFixture
 } from "./fixtures/semantic-motion-compiler-fixtures.ts";
@@ -23,9 +25,9 @@ test("three operations compile distinct causal DAGs into deterministic semantic 
   const distributionFixture = createDistributionSemanticMotionFixture();
   const cancellationFixture = createCancellationSemanticMotionFixture();
   const cases = [
-    [quotientFixture, structureFor(quotientFixture, quotientSemanticMotionStructureContract()), quotientPrecedence()],
-    [distributionFixture, structureFor(distributionFixture, distributionSemanticMotionStructureContract()), distributionPrecedence()],
-    [cancellationFixture, structureFor(cancellationFixture, cancellationSemanticMotionStructureContract()), cancellationPrecedence()]
+    [quotientFixture, structureFor(quotientFixture, quotientSemanticMotionStructureContract()), quotientSemanticMotionPrecedenceSpec()],
+    [distributionFixture, structureFor(distributionFixture, distributionSemanticMotionStructureContract()), distributionSemanticMotionPrecedenceSpec()],
+    [cancellationFixture, structureFor(cancellationFixture, cancellationSemanticMotionStructureContract()), cancellationSemanticMotionPrecedenceSpec()]
   ] as const;
   for (const [fixture, structure, spec] of cases) {
     const first = compileKpSemanticMotionPrecedence({ request: fixture.request, structure, spec });
@@ -42,7 +44,7 @@ test("three operations compile distinct causal DAGs into deterministic semantic 
 test("cycle missing references disconnected events and authored physical timing fail closed", () => {
   const fixture = createCancellationSemanticMotionFixture();
   const structure = structureFor(fixture, cancellationSemanticMotionStructureContract());
-  const base = cancellationPrecedence();
+  const base = cancellationSemanticMotionPrecedenceSpec();
   const malformed = {
     ...base,
     durationMs: 800,
@@ -51,7 +53,7 @@ test("cycle missing references disconnected events and authored physical timing 
       ...base.edges,
       { beforeEventId: "event.native-ready", afterEventId: "event.contact" }
     ]
-  } as KpSemanticMotionPrecedenceSpec;
+  } as typeof base;
   const result = compileKpSemanticMotionPrecedence({
     request: fixture.request,
     structure,
@@ -76,64 +78,10 @@ function structureFor(
   return result.structure;
 }
 
-function quotientPrecedence(): KpSemanticMotionPrecedenceSpec {
-  return chain([
-    event("event.orient", "orient", ["cohort.quotient.operator-fusion"]),
-    event("event.clear-enclosures", "clearance", ["cohort.quotient.arguments"]),
-    event("event.arguments-depart", "departure", ["cohort.quotient.arguments"]),
-    event("event.arguments-arrive", "arrival", ["cohort.quotient.arguments"]),
-    attachmentEvent("event.target-attachment", "attachment.target-operator"),
-    readyEvent()
-  ]);
-}
-
-function distributionPrecedence(): KpSemanticMotionPrecedenceSpec {
-  return chain([
-    event("event.reserve-products", "orient", ["cohort.distribution.addends"]),
-    event("event.factor-departs", "departure", ["cohort.distribution.factors"]),
-    event("event.factor-copies-arrive", "arrival", ["cohort.distribution.factors"]),
-    attachmentEvent("event.connector-attached", "attachment.distribution.connector"),
-    event("event.products-settled", "settlement", ["cohort.distribution.addends"]),
-    readyEvent()
-  ]);
-}
-
-function cancellationPrecedence(): KpSemanticMotionPrecedenceSpec {
-  return chain([
-    event("event.orient", "orient", ["cohort.cancellation.inverse-pair"]),
-    event("event.contact", "contact", ["cohort.cancellation.inverse-pair"]),
-    event("event.retire", "retirement", ["cohort.cancellation.inverse-pair"]),
-    event("event.survivors-settle", "settlement", ["cohort.cancellation.survivors"]),
-    readyEvent()
-  ]);
-}
-
-function chain(events: readonly ReturnType<typeof event>[]): KpSemanticMotionPrecedenceSpec {
-  return {
-    events,
-    edges: events.slice(1).map((current, index) => ({
-      beforeEventId: events[index]!.id,
-      afterEventId: current.id
-    }))
-  };
-}
-
 function event(
   id: string,
-  kind: Exclude<Parameters<typeof semanticEvent>[0]["kind"], "native-target-ready">,
+  kind: "orient",
   cohortIds: readonly string[]
 ) {
-  return semanticEvent({ id, kind, cohortIds, attachmentIds: [], correspondenceRecordIds: [], summary: id });
-}
-
-function attachmentEvent(id: string, attachmentId: string) {
-  return semanticEvent({ id, kind: "attachment", cohortIds: [], attachmentIds: [attachmentId], correspondenceRecordIds: [], summary: id });
-}
-
-function readyEvent() {
-  return semanticEvent({ id: "event.native-ready", kind: "native-target-ready", cohortIds: [], attachmentIds: [], correspondenceRecordIds: [], summary: "Native target ready." });
-}
-
-function semanticEvent(input: KpSemanticMotionPrecedenceSpec["events"][number]) {
-  return input;
+  return { id, kind, cohortIds, attachmentIds: [], correspondenceRecordIds: [], summary: id } as const;
 }

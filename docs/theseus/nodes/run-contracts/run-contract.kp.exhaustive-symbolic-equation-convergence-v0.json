@@ -122,7 +122,8 @@
     {
       "id": "s13",
       "title": "Capability recipe resolution",
-      "status": "planned"
+      "summary": "Committed closed capability recipe resolution for quotient, distribution, and cancellation using exact semantic roles, cohesion variants, event multisets, and teaching intent, with zero generic fallback.",
+      "status": "complete"
     },
     {
       "id": "s14",

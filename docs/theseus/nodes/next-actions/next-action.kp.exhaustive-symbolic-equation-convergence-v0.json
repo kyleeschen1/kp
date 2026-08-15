@@ -213,10 +213,24 @@
       "scope": "s12 composition architecture static types and workspace integrity",
       "checkedAt": "2026-08-15T22:23:19.439Z",
       "notes": "Architecture gates, full static checks, and workspace validation pass."
+    },
+    {
+      "command": "node semantic-motion compiler chain through recipe resolution",
+      "status": "passed",
+      "scope": "s13 capability matrix exact shape and fail-closed outcomes",
+      "checkedAt": "2026-08-15T22:30:04.495Z",
+      "notes": "All 26 compiler-chain tests pass; quotient, distribution, and cancellation resolve to three distinct recipe capabilities, while unsupported operations, cohesion drift, unreviewed intent, and copied authority fail closed."
+    },
+    {
+      "command": "npm run check:architecture and npm run typecheck and theseus workspace validate",
+      "status": "passed",
+      "scope": "s13 recipe resolver boundaries static types and workspace integrity",
+      "checkedAt": "2026-08-15T22:30:05.747Z",
+      "notes": "Architecture gates, full TypeScript/Svelte/domain checks, and workspace validation pass; resolved capabilities expose no renderer, timing, path, geometry, opacity, or fade authority."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 complete: compiler outputs compose into one nominal authored history with stable semantic addresses and exact target-to-source seams. Direct state seek, semantic-event interruption, URL restoration, and rewind reuse the same authority objects; no rendered output, duplicated stage, or reconstructed identity is admitted."
+    "summary": "s13 complete: verified semantic operations resolve through a closed three-recipe capability matrix. Callers cannot name paths, timings, renderer modules, or raw motifs; unknown operations are explicit static, malformed known shapes require repair, and unreviewed teaching intent requires human review."
   }
 }
