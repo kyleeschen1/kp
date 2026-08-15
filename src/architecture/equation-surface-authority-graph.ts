@@ -88,6 +88,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/domain-ir/semantic-equation-transition-compiler.ts",
     "export function compileKpSemanticEquationTransitionResult",
     "The generic path compiles transformations into equation transition IR."),
+  node("compiler.semantic-motion-choreography", "compiler", "canonical",
+    "src/domain-ir/semantic-motion-compiler.ts",
+    "export function compileKpSemanticMotion",
+    "The semantic-motion front door validates and resolves one executable choreography."),
   node("compiler.operation-evaluation-render-plan", "compiler", "canonical",
     "src/reader/renderers/equation-render-plan.ts",
     "export function projectKpReaderEquationRenderPlan",
@@ -128,10 +132,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent timeline maps shared progress to operation-local time."),
-  node("timing.log-quotient-sequence", "local-timing", "local",
-    "src/animation/log-quotient-timeline.ts",
-    "export function sampleKpLogQuotientFrame",
-    "The log-quotient timeline maps shared progress to local fusion time."),
+  node("timing.semantic-motion-recipe-schedule", "local-timing", "canonical",
+    "src/domain-ir/semantic-motion-choreography-compiler.ts",
+    "function schedulePolicy(",
+    "The compiler lowers semantic precedence into recipe-owned nominal windows."),
   node("renderer.generic-dom-measurement", "renderer-inference", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "measureKpEquationTransitionGeometry({",
@@ -176,10 +180,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent adapter directly samples its local sequence."),
-  node("sampler.log-quotient-sequence", "direct-sampler", "local",
-    "src/animation/log-quotient-timeline.ts",
-    "export function sampleKpLogQuotientFrame",
-    "The log-quotient adapter directly samples its local sequence."),
+  node("sampler.semantic-motion-choreography", "direct-sampler", "canonical",
+    "src/domain-ir/semantic-motion-choreography-compiler.ts",
+    "export function sampleKpSemanticMotionChoreography",
+    "The compiler samples all admitted semantic choreography from shared progress."),
   node("sampler.function-wrap", "direct-sampler", "local",
     "src/animation/function-wrap-choreography.ts",
     "export function sampleKpFunctionWrapChoreography",
@@ -357,12 +361,15 @@ KpEquationSurfaceAuthorityRow {
       semantic: asset.transformations.length,
       nonSemantic: 0
     }, {
-      compiler: ["compiler.log-quotient-operation"],
+      compiler: [
+        "compiler.log-quotient-operation",
+        "compiler.semantic-motion-choreography"
+      ],
       motif: ["motif.log-quotient-homomorphic-fusion"],
-      timing: ["timing.log-quotient-sequence"],
+      timing: ["timing.semantic-motion-recipe-schedule"],
       renderer: ["renderer.log-quotient-transit"],
       fallback: ["fallback.log-quotient-failed-stage"],
-      samplers: ["sampler.log-quotient-sequence"]
+      samplers: ["sampler.semantic-motion-choreography"]
     });
   }
 

@@ -395,10 +395,58 @@
       "scope": "s19 durable workspace integrity",
       "checkedAt": "2026-08-15T23:26:38.092Z",
       "notes": "Workspace validates after architecture ratchets and slice closure."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:38:59.083Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:01.577Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:03.489Z"
+    },
+    {
+      "command": "npm run test:equation-surface-authority",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:05.040Z"
+    },
+    {
+      "command": "npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:06.527Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:08.070Z"
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:09.561Z"
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:39:11.126Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 complete: a full-source architecture gate now ratchets all inventoried equation authority nodes and rejects new raw motif selection, local timing modules, renderer inference, private clocks, direct production sampler modules, unclassified fallbacks, and parallel manual registries; deliberate fixtures prove every prohibition before cutover."
+    "summary": "Slice 20 routes log-quotient through the canonical semantic-motion compiler and sampler, binds matching compiler authority into transit, deletes the local timeline, and preserves the reviewed homomorphic-fusion presentation recipe."
   }
 }

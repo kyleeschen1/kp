@@ -38,7 +38,6 @@ const localTimingPaths = paths([
   "src/animation/counter-orbit-cancellation-timing.ts",
   "src/animation/distribution-motion-profile.ts",
   "src/animation/log-exponent-timeline.ts",
-  "src/animation/log-quotient-timeline.ts",
   "src/rendering/equation-visual-motif-timeline.ts",
   "src/semantic/foldable-distribution-fold-timeline.ts",
   "src/semantic/fraction-composition-fold-timeline.ts"
@@ -79,7 +78,6 @@ const directSamplerPaths = paths([
   "src/animation/inequality-pivot-choreography.ts",
   "src/animation/linear-rearrangement-choreography.ts",
   "src/animation/log-exponent-timeline.ts",
-  "src/animation/log-quotient-timeline.ts",
   "src/animation/matrix-linear-map-frame.ts",
   "src/animation/matrix-matrix-composition-choreography.ts",
   "src/animation/matrix-matrix-composition-progress.ts",

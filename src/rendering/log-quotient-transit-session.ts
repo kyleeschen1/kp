@@ -15,6 +15,10 @@ import type {
   KpLogQuotientNativeEndpoint
 } from "./log-quotient-native-endpoints.ts";
 import {
+  isKpCompiledSemanticMotionChoreography,
+  type KpCompiledSemanticMotionChoreography
+} from "../domain-ir/public-api.ts";
+import {
   isKpCompiledLogQuotientOperation,
   type KpCompiledLogQuotientOperation
 } from "../semantic/log-quotient-transformation-compiler.ts";
@@ -26,6 +30,7 @@ export interface KpLogQuotientTransitSession {
   readonly kind: "kp-log-quotient-transit-session";
   readonly lifecycle: "renderer-session";
   readonly transformationId: string;
+  readonly semanticMotionChoreographyId: string;
   readonly canonical: KpCanonicalNativeKatexSceneSession;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
   readonly retire: () => void;
@@ -62,6 +67,7 @@ export function projectKpLogQuotientNativePaintRelations(
 
 export function createKpLogQuotientTransitSession(input: {
   readonly operation: KpCompiledLogQuotientOperation;
+  readonly semanticMotion: KpCompiledSemanticMotionChoreography;
   readonly sourceEndpoint: KpLogQuotientNativeEndpoint;
   readonly targetEndpoint: KpLogQuotientNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
@@ -83,6 +89,7 @@ export function createKpLogQuotientTransitSession(input: {
     kind: "kp-log-quotient-transit-session" as const,
     lifecycle: "renderer-session" as const,
     transformationId: input.operation.transformation.id,
+    semanticMotionChoreographyId: input.semanticMotion.id,
     canonical,
     apply(progress: number) {
       if (retired) {
@@ -126,6 +133,7 @@ export function assertExclusiveKpLogQuotientTransitOwnership(
 
 function assertTransitInput(input: {
   readonly operation: KpCompiledLogQuotientOperation;
+  readonly semanticMotion: KpCompiledSemanticMotionChoreography;
   readonly sourceEndpoint: KpLogQuotientNativeEndpoint;
   readonly targetEndpoint: KpLogQuotientNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
@@ -133,6 +141,17 @@ function assertTransitInput(input: {
 }): void {
   if (!isKpCompiledLogQuotientOperation(input.operation)) {
     throw new Error("Log-quotient transit requires nominal compiler authority.");
+  }
+  if (
+    !isKpCompiledSemanticMotionChoreography(input.semanticMotion) ||
+    input.semanticMotion.recipeId !==
+      "recipe.semantic-motion.log-quotient-fusion.v1" ||
+    input.semanticMotion.compilation.transformationId !==
+      input.operation.transformation.id
+  ) {
+    throw new Error(
+      "Log-quotient transit requires matching semantic-motion compiler authority."
+    );
   }
   if (
     input.operation.contract.source.id !== input.sourceEndpoint.stateId ||

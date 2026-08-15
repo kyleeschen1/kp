@@ -35,6 +35,14 @@
       "summary": "The generic path compiles transformations into equation transition IR."
     },
     {
+      "id": "compiler.semantic-motion-choreography",
+      "category": "compiler",
+      "authority": "canonical",
+      "sourcePath": "src/domain-ir/semantic-motion-compiler.ts",
+      "sourceNeedle": "export function compileKpSemanticMotion",
+      "summary": "The semantic-motion front door validates and resolves one executable choreography."
+    },
+    {
       "id": "compiler.operation-evaluation-render-plan",
       "category": "compiler",
       "authority": "canonical",
@@ -115,12 +123,12 @@
       "summary": "The log-exponent timeline maps shared progress to operation-local time."
     },
     {
-      "id": "timing.log-quotient-sequence",
+      "id": "timing.semantic-motion-recipe-schedule",
       "category": "local-timing",
-      "authority": "local",
-      "sourcePath": "src/animation/log-quotient-timeline.ts",
-      "sourceNeedle": "export function sampleKpLogQuotientFrame",
-      "summary": "The log-quotient timeline maps shared progress to local fusion time."
+      "authority": "canonical",
+      "sourcePath": "src/domain-ir/semantic-motion-choreography-compiler.ts",
+      "sourceNeedle": "function schedulePolicy(",
+      "summary": "The compiler lowers semantic precedence into recipe-owned nominal windows."
     },
     {
       "id": "renderer.generic-dom-measurement",
@@ -211,12 +219,12 @@
       "summary": "The log-exponent adapter directly samples its local sequence."
     },
     {
-      "id": "sampler.log-quotient-sequence",
+      "id": "sampler.semantic-motion-choreography",
       "category": "direct-sampler",
-      "authority": "local",
-      "sourcePath": "src/animation/log-quotient-timeline.ts",
-      "sourceNeedle": "export function sampleKpLogQuotientFrame",
-      "summary": "The log-quotient adapter directly samples its local sequence."
+      "authority": "canonical",
+      "sourcePath": "src/domain-ir/semantic-motion-choreography-compiler.ts",
+      "sourceNeedle": "export function sampleKpSemanticMotionChoreography",
+      "summary": "The compiler samples all admitted semantic choreography from shared progress."
     },
     {
       "id": "sampler.function-wrap",
@@ -383,7 +391,8 @@
         "nonSemantic": 0
       },
       "compilerNodeIds": [
-        "compiler.log-quotient-operation"
+        "compiler.log-quotient-operation",
+        "compiler.semantic-motion-choreography"
       ],
       "registryNodeIds": [
         "registry.selected-capability",
@@ -393,7 +402,7 @@
         "motif.log-quotient-homomorphic-fusion"
       ],
       "localTimingNodeIds": [
-        "timing.log-quotient-sequence"
+        "timing.semantic-motion-recipe-schedule"
       ],
       "rendererInferenceNodeIds": [
         "renderer.log-quotient-transit"
@@ -405,7 +414,7 @@
         "fallback.log-quotient-failed-stage"
       ],
       "directSamplerNodeIds": [
-        "sampler.log-quotient-sequence"
+        "sampler.semantic-motion-choreography"
       ]
     },
     {

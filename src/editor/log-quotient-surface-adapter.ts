@@ -7,8 +7,8 @@ import {
   kpCanonicalLogQuotientHomomorphicFusionChoreography
 } from "../animation/log-quotient-homomorphic-fusion.ts";
 import {
-  sampleKpLogQuotientFrame
-} from "../animation/log-quotient-timeline.ts";
+  sampleKpSemanticMotionChoreography
+} from "../domain-ir/public-api.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
@@ -24,6 +24,9 @@ import {
 import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
+import {
+  kpCanonicalCompiledLogQuotientSemanticMotion
+} from "../semantic/log-quotient-semantic-motion.ts";
 import {
   kpCanonicalCompiledLogQuotientOperation
 } from "../semantic/log-quotient-transformation-compiler.ts";
@@ -85,6 +88,10 @@ function mountSurface(
   stage.className = "kp-log-quotient-stage";
   stage.dataset["kpLogQuotientStage"] = "preparing";
   stage.dataset["kpLogQuotientFractionTreatment"] = "compact-native";
+  stage.dataset["kpLogQuotientSemanticMotionChoreographyId"] =
+    kpCanonicalCompiledLogQuotientSemanticMotion.id;
+  stage.dataset["kpLogQuotientSemanticMotionRecipeId"] =
+    kpCanonicalCompiledLogQuotientSemanticMotion.recipeId;
   stage.setAttribute("aria-label", "Combine a difference of logarithms");
 
   const createRoot = (
@@ -148,6 +155,7 @@ async function prepareSurface(
     if (session.disposed || session.generation !== generation) return;
     session.transit = createKpLogQuotientTransitSession({
       operation: kpCanonicalCompiledLogQuotientOperation,
+      semanticMotion: kpCanonicalCompiledLogQuotientSemanticMotion,
       sourceEndpoint: kpCanonicalLogQuotientNativeEndpoints[0]!,
       targetEndpoint: kpCanonicalLogQuotientNativeEndpoints[1]!,
       source,
@@ -202,7 +210,8 @@ function applyFrame(
   const accessibilityMode =
     session.player.dataset["kpEditorAnimationAccessibilityMode"] ??
     "full-motion";
-  const frame = sampleKpLogQuotientFrame({
+  const frame = sampleKpSemanticMotionChoreography({
+    choreography: kpCanonicalCompiledLogQuotientSemanticMotion,
     progress: state.progress,
     direction: state.direction,
     reducedMotion:

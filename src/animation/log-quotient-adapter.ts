@@ -22,9 +22,12 @@ import {
 import {
   kpCanonicalCompiledLogQuotientOperation
 } from "../semantic/log-quotient-transformation-compiler.ts";
-
-export const kpLogQuotientAnimationId =
-  "animation.algebra.log-quotient.difference-to-quotient";
+export {
+  kpLogQuotientAnimationId
+} from "../semantic/log-quotient-ids.ts";
+import {
+  kpLogQuotientAnimationId
+} from "../semantic/log-quotient-ids.ts";
 
 export function createKpLogQuotientAnimationAsset(): KpAnimationAsset {
   const objects = kpCanonicalLogQuotientStates.map((state) => {

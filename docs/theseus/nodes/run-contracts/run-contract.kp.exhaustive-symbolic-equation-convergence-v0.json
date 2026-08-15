@@ -164,7 +164,8 @@
     {
       "id": "s20",
       "title": "Quotient adapter",
-      "status": "planned"
+      "summary": "Quotient adapter now compiles and samples through shared semantic-motion authority; local visual recipe and compact fraction geometry remain unchanged; all broad gates pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
