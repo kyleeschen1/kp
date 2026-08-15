@@ -3,7 +3,8 @@ import test from "node:test";
 
 import {
   kpCanonicalLogExponentSolveStates,
-  listKpLogExponentExpressionNodes
+  listKpLogExponentExpressionNodes,
+  renderKpLogExponentExpressionNodeLatex
 } from "../src/semantic/log-exponent-solve-states.ts";
 
 test("canonical log-exponent states encode the exact approved equation sequence", () => {
@@ -34,4 +35,16 @@ test("canonical states preserve semantic identity while occurrence identity stay
   assert.equal(extracted.equation.left.kind, "product");
   const solved = kpCanonicalLogExponentSolveStates[3]!;
   assert.equal(solved.equation.right.kind, "quotient");
+});
+
+test("the semantic tree owns exact unannotated LaTeX independently of renderers", () => {
+  for (const state of kpCanonicalLogExponentSolveStates) {
+    assert.equal(
+      renderKpLogExponentExpressionNodeLatex(state.equation),
+      state.latex
+    );
+    for (const node of listKpLogExponentExpressionNodes(state)) {
+      assert.notEqual(renderKpLogExponentExpressionNodeLatex(node), "");
+    }
+  }
 });

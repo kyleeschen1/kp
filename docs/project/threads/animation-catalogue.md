@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-15
-Current Next Action: Continue the approved log/exponent run at the bounded log
-quotient caller, then pressure candidate symbol-manipulation invariants with
-distribution and cancellation before any shared promotion. Each caller stops
-at a human checkpoint. Matrix-to-linear-map remains tabled.
+Current Next Action: Treat the repaired cancellation exemplar as human
+approved, complete the active three-caller comparison and invariant-promotion
+decision, then propose the separately bounded canonical semantic-motion
+compiler tranche. Matrix-to-linear-map remains tabled.
 
 ## Goal
 
@@ -95,6 +95,16 @@ separate checkpoint for each. The decision and complete invariant inventory
 are recorded in
 `../decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`.
 
+The repaired counter-orbit cancellation checkpoint is now accepted. After the
+active run compares all three callers and decides the promotion boundary, the
+next repository tranche is one canonical semantic-motion compiler thin waist,
+not another symbolic family. It must route the three approved callers through
+one entry point, enforce the author/compiler/renderer boundary, connect
+governed LLM drafts, and stop after one new clean-path animation measures
+marginal implementation cost. Historical migration remains incremental. The
+accepted ordering is recorded in
+`../decisions/2026-08-15-kp-canonical-semantic-motion-compiler-order.md`.
+
 ## Accepted Scope
 
 - `/` as the default catalogue route and `/?artifact=<id>` selection;
@@ -116,6 +126,9 @@ are recorded in
   quotient, distribution, and cancellation exemplars;
 - one nominal compiled authority consumed after endpoint measurement and
   before path planning and paint;
+- a separately proposed canonical compiler tranche after the active
+  three-caller promotion decision, with one clean-path pressure caller before
+  further symbolic-family expansion;
 
 ## Out Of Scope
 
@@ -163,6 +176,7 @@ are recorded in
 - `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
 - `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
 - `docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`
+- `docs/project/decisions/2026-08-15-kp-canonical-semantic-motion-compiler-order.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`

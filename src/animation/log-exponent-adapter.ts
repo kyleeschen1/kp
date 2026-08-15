@@ -16,11 +16,9 @@ import {
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
 import {
-  kpCanonicalLogExponentNativeEndpoints
-} from "../rendering/log-exponent-native-endpoints.ts";
-import {
   kpCanonicalLogExponentSolveStates,
-  listKpLogExponentExpressionNodes
+  listKpLogExponentExpressionNodes,
+  renderKpLogExponentExpressionNodeLatex
 } from "../semantic/log-exponent-solve-states.ts";
 import {
   kpCanonicalLogExponentTransformationTree
@@ -33,15 +31,8 @@ export const kpLogExponentAnimationId =
   "animation.algebra.log-exponent.solve-two-power-x";
 
 export function createKpLogExponentAnimationAsset(): KpAnimationAsset {
-  const objects = kpCanonicalLogExponentSolveStates.map((state, index) => {
-    const endpoint = kpCanonicalLogExponentNativeEndpoints[index]!;
-    const latexByOccurrence = new Map(
-      endpoint.annotated.annotations.map(({ selectorId, latex }) => [
-        selectorId,
-        latex
-      ])
-    );
-    return createKpSemanticAssetObject({
+  const objects = kpCanonicalLogExponentSolveStates.map((state) =>
+    createKpSemanticAssetObject({
       id: state.id,
       objectType: "equation",
       title: titleForState(state.kind),
@@ -52,7 +43,7 @@ export function createKpLogExponentAnimationAsset(): KpAnimationAsset {
       selectors: listKpLogExponentExpressionNodes(state).map((node) => ({
         id: node.id,
         kind: node.kind,
-        label: latexByOccurrence.get(node.id),
+        label: renderKpLogExponentExpressionNodeLatex(node),
         metadata: {
           semanticId: node.semanticId,
           representation: "native-katex"
@@ -60,11 +51,10 @@ export function createKpLogExponentAnimationAsset(): KpAnimationAsset {
       })),
       metadata: {
         latex: state.latex,
-        semanticStateId: state.id,
-        nativeEndpointSchema: endpoint.schemaVersion
+        semanticStateId: state.id
       }
-    });
-  });
+    })
+  );
   const operations = kpCanonicalLogExponentTransformationTree.operations;
   const transformations = operations.map(({ transformation }) => transformation);
   const root = createSemanticTransformationSequence({

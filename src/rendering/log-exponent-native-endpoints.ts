@@ -15,6 +15,7 @@ import type {
 import {
   kpCanonicalLogExponentSolveStates,
   listKpLogExponentExpressionNodes,
+  renderKpLogExponentExpressionNodeLatex,
   type KpLogExponentExpressionNode,
   type KpLogExponentSolveState,
   type KpLogExponentSolveStateId
@@ -160,7 +161,7 @@ function renderNode(
   node: KpLogExponentExpressionNode
 ): RenderedNode {
   const children = renderChildren(state, node);
-  const rawLatex = rawNodeLatex(node, children);
+  const rawLatex = renderKpLogExponentExpressionNodeLatex(node);
   const motionIdValue = motionId(state, node);
   const annotation = Object.freeze({
     selectorId: node.id,
@@ -219,13 +220,6 @@ function renderChildren(
         renderNode(state, node.right)
       ]);
   }
-}
-
-function rawNodeLatex(
-  node: KpLogExponentExpressionNode,
-  children: readonly RenderedNode[]
-): string {
-  return nodeLatex(node, children.map(({ rawLatex }) => rawLatex), false);
 }
 
 function annotatedNodeLatex(

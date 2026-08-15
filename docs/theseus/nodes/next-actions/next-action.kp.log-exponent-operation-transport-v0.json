@@ -695,11 +695,53 @@
       "scope": "focused",
       "checkedAt": "2026-08-15T19:00:31.820Z",
       "notes": "tsconfig-app-and-tsconfig-test-pass-full-typecheck-remains-blocked-by-pre-existing-normal-matrix-capture-exact-optional-property-error"
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:10.300Z",
+      "notes": "Three-caller comparison: quotient semantic, lifecycle, choreography, ownership, and deterministic sampling suite passed."
+    },
+    {
+      "command": "npm run test:distribution-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:12.231Z",
+      "notes": "Three-caller comparison: distribution semantic, attachment, provenance, and deterministic sampling suite passed."
+    },
+    {
+      "command": "npm run test:cancellation-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:13.484Z",
+      "notes": "Three-caller comparison: cancellation intent, provenance, contact ordering, endpoint, and rewind suite passed."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:16.284Z",
+      "notes": "Neutral semantic LaTeX projection preserves the approved log-exponent endpoints and all typed symbol-motion tests."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:17.702Z",
+      "notes": "All architecture fitness gates pass after removing the animation-to-rendering dependency reversal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:34:18.814Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reissued-s31-cancellation-checkpoint-now-uses-typed-preserve-flow-intent-counter-orbit-opposing-arcs-shared-contact-post-contact-retirement-implicit-identity-no-visible-zero-protected-continuants-native-endpoints-and-exact-reverse.-Awaiting-human-visual-approval-before-s32."
+    "summary": "Three approved callers now have a source-backed comparison: seven operation-independent compiler laws are supported; paths, timing, opacity, homomorphic fusion, counter-orbit contact, distribution axis constraints, and optical corrections remain local. The comparison also removed the last semantic-animation architecture violation by moving exact unannotated log-exponent LaTeX ownership into the semantic tree."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

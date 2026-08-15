@@ -70,6 +70,12 @@ Only this repository sequence is active:
 4. **Pressure before promotion:** active. Test quotient, distribution, and
    cancellation as independently reversible callers, stopping after each for
    human review. Promote only the invariant boundary evidenced by all three.
+5. **Canonical compiler thin waist:** next, after the active run's comparison
+   and promotion decision. Route the three approved callers through one
+   semantic-motion entry point, enforce the author/compiler/renderer boundary,
+   connect governed LLM drafts, and pressure the path with one new animation
+   before any further symbolic-family expansion. Migrate historical assets
+   incrementally rather than through a catalogue-wide rewrite.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -81,7 +87,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Canonical path and typed symbol-motion candidate proven; compatibility remains | Pressure quotient, distribution, and cancellation before shared promotion or incremental migration. |
+| Equation animation | Canonical path and typed symbol-motion candidate proven; compatibility remains | Finish three-caller promotion, then establish one compiler entry point before another symbolic family. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
@@ -90,7 +96,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Active pressure lab; select and perfect one missing transformation exemplar. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | Typed semantic draft path exists; context is too diffuse | Constrain the model to semantic referents and pedagogical actions over KP-owned state. |
+| LLM generation | Typed semantic draft path exists; presentation selection is not uniformly connected | After three-caller promotion, connect governed drafts to the canonical compiler; models own semantics and salience, while KP owns recipes, timing, geometry, and rendering. |
 
 ## Active Tightening Phase
 

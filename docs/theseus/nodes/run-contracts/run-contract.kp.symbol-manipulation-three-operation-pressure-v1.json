@@ -104,13 +104,14 @@
     {
       "id": "s31",
       "title": "Produce cancellation human checkpoint",
-      "summary": "Reissued-cancellation-checkpoint-after-repair-with-opposing-arcs-readable-to-exact-shared-contact-then-joint-retirement-no-zero-witness-survivor-compaction-after-contact-and-matching-forward-return-seeks.-Mandatory-human-review-remains-open.",
-      "status": "in-progress"
+      "summary": "Human approved the repaired counter-orbit cancellation checkpoint: opposing arcs remain readable through shared contact, retire together without a visible zero, preserve continuants, compact survivors afterward, and reverse exactly.",
+      "status": "complete"
     },
     {
       "id": "s32",
       "title": "Compare three operation callers",
-      "status": "planned"
+      "summary": "Compared quotient fusion, distribution fan-out, and counter-orbit cancellation; promoted seven candidate compiler laws for the final decision, kept paths/timing/opacity/operation geometry local, and removed the animation-to-rendering dependency reversal through neutral semantic LaTeX projection.",
+      "status": "complete"
     },
     {
       "id": "s33",
