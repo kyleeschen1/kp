@@ -140,11 +140,13 @@ export function buildKpVisualContactSheetHtml(
     readonly title?: string;
     readonly columns?: number;
     readonly imageFit?: "contain" | "cover";
+    readonly imageHeightPx?: number;
   } = {}
 ): string {
   const title = options.title ?? "Kinetic Press · solve x";
   const columns = options.columns ?? 2;
   const imageFit = options.imageFit ?? "cover";
+  const imageHeightPx = options.imageHeightPx ?? 390;
   const cards = items.map((item, index) => `
     <figure>
       <img src="${item.dataUrl}" alt="${escapeHtml(item.label)}">
@@ -159,7 +161,7 @@ export function buildKpVisualContactSheetHtml(
   header p { margin: 0; color: #736b60; font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
   main { display: grid; grid-template-columns: repeat(${columns}, minmax(0, 1fr)); gap: 22px; }
   figure { margin: 0; overflow: hidden; border: 1px solid #d4ccbf; border-radius: 12px; background: #fffdf8; box-shadow: 0 8px 24px rgba(53, 44, 31, 0.07); }
-  img { display: block; width: 100%; height: 390px; object-fit: ${imageFit}; object-position: top center; background: white; }
+  img { display: block; width: 100%; height: ${imageHeightPx}px; object-fit: ${imageFit}; object-position: top center; background: white; }
   figcaption { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 13px 16px; border-top: 1px solid #e3ddd3; }
   figcaption b, figcaption code { color: #8a4f3d; font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
   figcaption span { font-size: 16px; }

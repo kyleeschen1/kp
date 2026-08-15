@@ -79,6 +79,7 @@
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:log-exponent": "node --disable-warning=ExperimentalWarning scripts/capture-log-exponent.ts",
     "visual:log-quotient": "node --disable-warning=ExperimentalWarning scripts/capture-log-quotient.ts",
+    "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",
     "test:log-quotient": "node --disable-warning=ExperimentalWarning --test tests/log-quotient-*.test.ts tests/selected-surface-capability.test.ts",
     "test:browser:log-quotient": "playwright test tests/log-quotient-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:log-quotient:webkit": "playwright test tests/log-quotient-catalogue.browser.spec.ts --project=webkit --workers=1",

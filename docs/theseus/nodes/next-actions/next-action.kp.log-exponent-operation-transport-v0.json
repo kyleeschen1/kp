@@ -551,6 +551,13 @@
       "scope": "s27 durable distribution animation evidence",
       "checkedAt": "2026-08-15T17:01:29.108Z",
       "notes": "Validated 954 nodes and 20907 events after slice completion."
+    },
+    {
+      "command": "npm run visual:distribution-pressure",
+      "status": "passed",
+      "scope": "s28 deterministic distribution human checkpoint",
+      "checkedAt": "2026-08-15T17:08:14.969Z",
+      "notes": "Captured eleven forward-and-return semantic states with typed binding, native KaTeX endpoints, factor and connector ownership evidence, and a compact review contact sheet under tmp/codex/distribution-pressure-checkpoint."
     }
   ],
   "progress": {
