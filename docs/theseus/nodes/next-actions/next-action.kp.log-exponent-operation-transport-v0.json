@@ -16,10 +16,22 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T01:51:12.682Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-solve-states.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T01:54:56.901Z"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic/log-exponent-solve-states.ts --run",
+      "status": "failed",
+      "scope": "impact",
+      "checkedAt": "2026-08-15T01:54:57.958Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2 froze the canonical 2^x=7 exemplar identity, source references, visual acceptance criteria, preservation boundary, and independent rollback units."
+    "summary": "Slice 3 defines four immutable structured semantic states for 2^x=7 through x=ln7/ln2; focused checks pass and the broad gate remains blocked by an unrelated pre-existing normal-matrix capture type error."
   }
 }
