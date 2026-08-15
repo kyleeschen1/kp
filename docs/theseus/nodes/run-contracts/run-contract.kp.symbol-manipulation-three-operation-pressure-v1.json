@@ -1,0 +1,111 @@
+{
+  "id": "run-contract.kp.symbol-manipulation-three-operation-pressure-v1",
+  "kind": "run-contract",
+  "title": "Symbol manipulation three-operation pressure",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.log-exponent-operation-transport-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md",
+      "summary": "Approved amended 33-slice exemplar-first execution proposal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md",
+      "summary": "Accepted invariant inventory and three-operation promotion gate."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path> --run",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Family-local typed quotient, distribution, and cancellation semantics, provenance, lifecycle, rewrite frontiers, deterministic motion, native KaTeX rendering, catalogue assets, URLs, review evidence, and tests.",
+    "Candidate shared invariant types only when a pressure caller demonstrates the distinction; one reversible commit per verified slice."
+  ],
+  "disallowedWork": [
+    "Public lessons, layout, curriculum, LLM generation, SRS, authoring expansion, graph or matrix work, new runtimes or renderers, and catalogue-wide migration.",
+    "Shared promotion before approved quotient, distribution, and cancellation checkpoints; physical timing, paths, opacity, or renderer geometry as semantic authority."
+  ],
+  "goal": "Complete approved quotient, distribution, and cancellation exemplars, then promote only symbol-motion invariants evidenced across all three.",
+  "target": "next-action.kp.log-exponent-operation-transport-v0",
+  "runMode": "run",
+  "maxSlices": 12,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop at s25 for quotient human visual review.",
+    "Stop at s28 for distribution human visual review.",
+    "Stop at s31 for cancellation human visual review.",
+    "Stop if semantic provenance, single-owner paint, deterministic seek or rewind, native endpoint settlement, or accessibility cannot be proven.",
+    "Stop before any catalogue-wide migration or unapproved shared abstraction."
+  ],
+  "slices": [
+    {
+      "id": "s22",
+      "title": "Define log quotient contract",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Compile quotient fan-in",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Implement quotient animation",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Produce quotient human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Define distribution pressure contract",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Implement distribution pressure animation",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Produce distribution human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Define cancellation pressure contract",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Implement cancellation pressure animation",
+      "status": "planned"
+    },
+    {
+      "id": "s31",
+      "title": "Produce cancellation human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s32",
+      "title": "Compare three operation callers",
+      "status": "planned"
+    },
+    {
+      "id": "s33",
+      "title": "Promote or reject symbol-motion invariants",
+      "status": "planned"
+    }
+  ]
+}

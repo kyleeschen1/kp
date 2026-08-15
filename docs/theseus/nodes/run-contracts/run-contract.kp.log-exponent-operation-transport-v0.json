@@ -2,7 +2,8 @@
   "id": "run-contract.kp.log-exponent-operation-transport-v0",
   "kind": "run-contract",
   "title": "Exponent log operation transport",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Completed s01-s21 remain durable here; approved remaining s22-s33 moved unchanged into the hygiene-complete three-operation pressure contract.",
   "sourceRefs": [
     {
       "kind": "file",

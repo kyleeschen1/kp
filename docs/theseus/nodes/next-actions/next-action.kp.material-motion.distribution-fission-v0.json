@@ -50,11 +50,6 @@
       "kind": "file",
       "path": "tests/editor-animation-visuals.browser.spec.ts",
       "summary": "Live Chromium evidence for exclusive owner state, co-located shared birth, ordered arcs, and exact settlement."
-    },
-    {
-      "kind": "file",
-      "path": "src/animation/distribution-choreography-runtime.ts",
-      "summary": "Capability registry keeps operation-specific distribution and fission machinery out of the generic startup path."
     }
   ],
   "dependsOn": {

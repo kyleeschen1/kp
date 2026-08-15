@@ -13,8 +13,8 @@
     },
     {
       "kind": "file",
-      "path": "src/rendering/equation-presentation-policy.ts",
-      "summary": "Cross-cutting presentation policy selected by animation asset metadata."
+      "path": "src/animation/equation-presentation-policy.ts",
+      "summary": "Presentation policy moved from renderer ownership into the neutral animation domain."
     }
   ],
   "affects": [

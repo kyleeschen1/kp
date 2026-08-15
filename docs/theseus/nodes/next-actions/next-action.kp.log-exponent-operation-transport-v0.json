@@ -4,6 +4,25 @@
   "title": "Build exponent-log operation transport exemplars",
   "status": "ready",
   "domain": "animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.symbol-manipulation-three-caller-gate"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path> --run",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
   "verificationRecords": [
     {
       "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-animation-coverage.test.ts",
@@ -295,5 +314,36 @@
   "progress": {
     "state": "partial",
     "summary": "Corrected log/exponent exemplar approved. Continue with quotient, distribution, and cancellation as separate reviewed callers; promote only invariant behavior evidenced across all three."
-  }
+  },
+  "expectedLearning": [
+    "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."
+  ],
+  "allowedWork": [
+    "Build the three approved native-KaTeX pressure callers and candidate typed invariants inside the existing semantic, runtime, renderer, catalogue, and review seams."
+  ],
+  "disallowedWork": [
+    "Do not migrate the catalogue, add a renderer or clock, reopen layout or curriculum, or promote operation-specific paths and timing as semantic law."
+  ],
+  "criteria": [
+    {
+      "id": "quotient-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "distribution-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "cancellation-human-approved",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-single-owner-motion",
+      "weight": "high"
+    },
+    {
+      "id": "three-caller-promotion-evidence",
+      "weight": "high"
+    }
+  ]
 }
