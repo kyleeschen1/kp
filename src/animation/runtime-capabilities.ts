@@ -1,6 +1,7 @@
 import type {
   compileKpDistributionChoreography,
-  sampleKpDistributionChoreography
+  sampleKpDistributionChoreography,
+  KpDistributionChoreographyInput
 } from "./distribution-choreography.ts";
 import type {
   compileKpFactoringChoreography,
@@ -11,6 +12,9 @@ import type {
 } from "./canonical-reverse-capability.ts";
 
 export interface KpDistributionChoreographyCapability {
+  readonly bindingForAnimationId: (
+    animationId: string
+  ) => KpDistributionChoreographyInput | undefined;
   readonly compile: (
     input: Parameters<typeof compileKpDistributionChoreography>[0]
   ) => ReturnType<typeof compileKpDistributionChoreography>;

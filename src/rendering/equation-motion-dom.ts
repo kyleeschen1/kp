@@ -37,6 +37,9 @@ import type {
   KpWitnessedAnnihilationPlan
 } from "../animation/witnessed-annihilation.ts";
 import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
+import type {
+  KpDistributionChoreographyInput
+} from "../animation/distribution-choreography.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -75,6 +78,8 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
+  readonly distributionChoreographyBinding?:
+    KpDistributionChoreographyInput | undefined;
   readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
   readonly fractionChoreographyKind?:
     | "split-factors"
@@ -218,6 +223,8 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
+  readonly distributionChoreographyBinding?:
+    KpDistributionChoreographyInput | undefined;
   readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
   readonly fractionChoreographyKind?:
     | "split-factors"
@@ -288,6 +295,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.distributionChoreographyKind === undefined
       ? {}
       : { distributionChoreographyKind: input.distributionChoreographyKind }),
+    ...(input.distributionChoreographyBinding === undefined
+      ? {}
+      : { distributionChoreographyBinding: input.distributionChoreographyBinding }),
     ...(input.factoringChoreographyKind === undefined
       ? {}
       : { factoringChoreographyKind: input.factoringChoreographyKind }),

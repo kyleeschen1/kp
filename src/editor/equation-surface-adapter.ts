@@ -2849,6 +2849,11 @@ function applySemanticTokenMotion(input: {
           bundle: input.animation.bundle,
           cancellationRecordId: requiredCancellationRecordId(transformation)
         });
+    const distributionChoreographyBinding =
+      transformation.transformType === "distributeMultiplication"
+        ? input.state.runtimeCapabilities.distributionChoreography
+          ?.bindingForAnimationId(input.animation.id)
+        : undefined;
 
     // IR remains forward-oriented; rewind swaps the displayed roots and samples
     // semantic progress backward, so both directions share exactly one geometry.
@@ -2879,7 +2884,15 @@ function applySemanticTokenMotion(input: {
         ? { lineageChoreographyKind: motifKind }
         : {}),
       ...(transformation.transformType === "distributeMultiplication"
-        ? { distributionChoreographyKind: "canonical-fan-out" as const }
+        ? {
+            distributionChoreographyKind: "canonical-fan-out" as const,
+            ...(distributionChoreographyBinding === undefined
+              ? {}
+              : {
+                  distributionChoreographyBinding
+                }
+            )
+          }
         : {}),
       ...(transformation.transformType === "factorCommonTerm"
         ? { factoringChoreographyKind: "canonical-fan-in" as const }
@@ -3248,6 +3261,14 @@ function applyDistributionFactorFocus(input: {
 }): void {
   input.transition.dataset["kpEditorEquationDistributionChoreography"] =
     input.frame.planId;
+  input.transition.dataset["kpEditorEquationDistributionProgress"] =
+    String(input.frame.progress);
+  if (input.geometry.distributionChoreographyBinding !== undefined) {
+    input.transition.dataset["kpEditorEquationDistributionBinding"] =
+      input.geometry.distributionChoreographyBinding.id;
+  } else {
+    delete input.transition.dataset["kpEditorEquationDistributionBinding"];
+  }
   input.transition.dataset["kpEditorEquationDistributionPhase"] =
     activeDistributionPhase(input.frame);
   input.transition.dataset["kpEditorEquationDistributionAddendReflow"] =

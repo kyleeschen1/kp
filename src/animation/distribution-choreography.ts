@@ -103,10 +103,7 @@ export interface KpDistributionChoreographyDependencies {
   readonly fissionFusion: KpFissionFusionCapability;
 }
 
-const defaultDependencies: KpDistributionChoreographyDependencies =
-  Object.freeze({ fissionFusion: kpFissionFusionCapability });
-
-export function compileKpDistributionChoreography(input: {
+export interface KpDistributionChoreographyInput {
   readonly id: string;
   readonly sourceFactorId: string;
   readonly factorCopyIds: readonly string[];
@@ -119,7 +116,15 @@ export function compileKpDistributionChoreography(input: {
   }[];
   readonly groupingArtifactIds: readonly string[];
   readonly sourceMinimumScale?: number | undefined;
-}, dependencies: KpDistributionChoreographyDependencies = defaultDependencies):
+}
+
+const defaultDependencies: KpDistributionChoreographyDependencies =
+  Object.freeze({ fissionFusion: kpFissionFusionCapability });
+
+export function compileKpDistributionChoreography(
+  input: KpDistributionChoreographyInput,
+  dependencies: KpDistributionChoreographyDependencies = defaultDependencies
+):
 KpDistributionChoreographyPlan {
   if (input.factorCopyIds.length < 2) {
     throw new Error("Distribution choreography requires at least two factor copies.");

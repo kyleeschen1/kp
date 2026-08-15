@@ -18,6 +18,9 @@ import type {
 import {
   kpAlgebraReverseChoreographyCapability
 } from "./catalog-packs/algebra-reverse-capability.ts";
+import {
+  kpCanonicalDistributionPressureBinding
+} from "./distribution-pressure-animation.ts";
 
 export interface KpAlgebraChoreographyCapabilities
 extends KpAnimationRuntimeCapabilities {
@@ -35,6 +38,12 @@ export function createKpAlgebraChoreographyCapabilities(input: {
   const dependencies = Object.freeze({ fissionFusion });
   const distributionChoreography: KpDistributionChoreographyCapability =
   Object.freeze({
+    // Family-local bindings arrive with the lazy algebra pack; the generic
+    // equation surface must not import generated fixtures or semantic contracts.
+    bindingForAnimationId: (animationId: string) =>
+      animationId === "animation.generated.distribution.expand-a-sum"
+        ? kpCanonicalDistributionPressureBinding
+        : undefined,
     compile: (
       choreographyInput: Parameters<typeof compileKpDistributionChoreography>[0]
     ) =>

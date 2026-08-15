@@ -516,6 +516,41 @@
       "status": "passed",
       "scope": "s26 distribution contract evidence",
       "checkedAt": "2026-08-15T16:39:12.322Z"
+    },
+    {
+      "command": "npm run test:distribution-pressure",
+      "status": "passed",
+      "scope": "s27 typed distribution contract and sampler",
+      "checkedAt": "2026-08-15T17:00:51.659Z",
+      "notes": "9 focused tests passed."
+    },
+    {
+      "command": "npm run test:browser:distribution-pressure -- --reporter=list",
+      "status": "passed",
+      "scope": "s27 Chromium catalogue playback",
+      "checkedAt": "2026-08-15T17:00:52.788Z",
+      "notes": "3 tests passed: typed binding, direct seek and rewind continuity, visible play, reduced motion, and one native KaTeX surface."
+    },
+    {
+      "command": "tsc app and test projects without emit",
+      "status": "passed",
+      "scope": "s27 TypeScript",
+      "checkedAt": "2026-08-15T17:00:54.055Z",
+      "notes": "Both app and test configurations passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "s27 broad architecture audit",
+      "checkedAt": "2026-08-15T17:01:05.601Z",
+      "notes": "Relevant gates passed; command stops at the previously recorded out-of-scope log-exponent adapter rendering import. No distribution-pressure violation was reported."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s27 durable distribution animation evidence",
+      "checkedAt": "2026-08-15T17:01:29.108Z",
+      "notes": "Validated 954 nodes and 20907 events after slice completion."
     }
   ],
   "progress": {

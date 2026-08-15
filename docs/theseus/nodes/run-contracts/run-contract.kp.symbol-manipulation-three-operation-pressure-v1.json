@@ -80,7 +80,8 @@
     {
       "id": "s27",
       "title": "Implement distribution pressure animation",
-      "status": "planned"
+      "summary": "Implemented the canonical distribution pressure caller as a family-local typed binding over the existing distribution choreography, lazy algebra capability, native KaTeX equation compositor, and shared clock. Direct seek, play, rewind, reduced motion, factor provenance, connector attachment, and endpoint settlement pass.",
+      "status": "complete"
     },
     {
       "id": "s28",

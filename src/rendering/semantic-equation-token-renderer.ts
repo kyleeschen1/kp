@@ -950,11 +950,16 @@ function createDistributionChoreographyContext(
   if (geometry.distributionChoreographyKind !== "canonical-fan-out") {
     return undefined;
   }
+  const binding = geometry.distributionChoreographyBinding;
   const factorRelation = geometry.relations.find(
     (relation) =>
       relation.lifecycle === "split" &&
       relation.source !== undefined &&
-      relation.target !== undefined
+      relation.target !== undefined &&
+      (binding === undefined || (
+        relation.source.selectorIds.includes(binding.sourceFactorId) &&
+        sameStringSet(relation.target.selectorIds, binding.factorCopyIds)
+      ))
   );
   const persistentRelations = geometry.relations.filter(
     (relation) =>
@@ -962,14 +967,29 @@ function createDistributionChoreographyContext(
       relation.source !== undefined &&
       relation.target !== undefined
   );
-  const addendRelations = persistentRelations.filter((relation) =>
-    relation.recordId.includes("term")
-  );
-  const connectorRelations = persistentRelations.filter(
-    (relation) => !addendRelations.includes(relation)
-  );
+  const addendRelations = binding === undefined
+    ? persistentRelations.filter((relation) => relation.recordId.includes("term"))
+    : binding.addendPairs.map((pair) => requiredPersistentRelation(
+        persistentRelations,
+        pair.sourceId,
+        pair.targetId,
+        "addend"
+      ));
+  const connectorRelations = binding === undefined
+    ? persistentRelations.filter((relation) => !addendRelations.includes(relation))
+    : binding.connectorPairs.map((pair) => requiredPersistentRelation(
+        persistentRelations,
+        pair.sourceId,
+        pair.targetId,
+        "connector"
+      ));
   const groupingRelations = geometry.relations.filter(
-    (relation) => relation.lifecycle === "exit" && relation.source !== undefined
+    (relation) =>
+      relation.lifecycle === "exit" &&
+      relation.source !== undefined &&
+      (binding === undefined || binding.groupingArtifactIds.every((selectorId) =>
+        relation.source!.selectorIds.includes(selectorId)
+      ))
   );
   const sourceFactorId = factorRelation?.source?.selectorIds[0];
   if (
@@ -983,7 +1003,7 @@ function createDistributionChoreographyContext(
   if (runtime === undefined) {
     throw new Error("Canonical distribution requires its pack capability.");
   }
-  const plan = runtime.compile({
+  const plan = runtime.compile(binding ?? {
     id: `${geometry.transitionId}.distribution-choreography`,
     sourceFactorId,
     factorCopyIds: factorRelation.target.selectorIds,
@@ -1189,6 +1209,32 @@ function createDistributionChoreographyContext(
     operatorNativeOwnerReadyBySemanticIndex,
     groupingReflowByMotionId
   };
+}
+
+function requiredPersistentRelation(
+  relations: readonly KpMeasuredEquationTransitionRelationGeometry[],
+  sourceSelectorId: string,
+  targetSelectorId: string,
+  role: "addend" | "connector"
+): KpMeasuredEquationTransitionRelationGeometry {
+  const relation = relations.find((candidate) =>
+    candidate.source?.selectorIds.includes(sourceSelectorId) === true &&
+    candidate.target?.selectorIds.includes(targetSelectorId) === true
+  );
+  if (relation === undefined) {
+    throw new Error(
+      `Typed distribution binding is missing its ${role} relation ` +
+      `${sourceSelectorId} -> ${targetSelectorId}.`
+    );
+  }
+  return relation;
+}
+
+function sameStringSet(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length && left.every((value) => right.includes(value));
 }
 
 function createFactoringChoreographyContext(
