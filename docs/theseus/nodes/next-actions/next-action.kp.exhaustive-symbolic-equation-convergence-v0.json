@@ -142,10 +142,28 @@
       "status": "passed",
       "scope": "s08 total lifecycle provenance false identity and nominal authority",
       "checkedAt": "2026-08-15T21:54:14.908Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-compiler-contract.test.ts tests/semantic-motion-endpoint-validator.test.ts tests/semantic-motion-correspondence-validator.test.ts tests/semantic-motion-lifecycle-ownership.test.ts",
+      "status": "passed",
+      "scope": "s09 dense ownership salience separation opacity rejection and reduced motion",
+      "checkedAt": "2026-08-15T22:00:20.434Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 lifecycle ownership salience types",
+      "checkedAt": "2026-08-15T22:00:20.904Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 lifecycle ownership boundaries",
+      "checkedAt": "2026-08-15T22:00:21.288Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 complete: the compiler now proves total visible lifecycle coverage and explicit semantic identity/origin provenance for persistence, role change, fan-in, fan-out, introduction, removal, cancellation, artifacts, and focus. Quotient, distribution, and cancellation shapes pass one boundary; equal-glyph false identities and copied certificates fail closed."
+    "summary": "s09 complete: semantic lifecycle records, exclusive paint-ownership evidence, and instructional salience are now separate. Dense traces reject blank continuants, dual or stale paint ownership, opacity-based semantic routing, and bad endpoints; salience-only changes leave lifecycle fingerprints unchanged, and reduced motion exposes exact native endpoints."
   }
 }

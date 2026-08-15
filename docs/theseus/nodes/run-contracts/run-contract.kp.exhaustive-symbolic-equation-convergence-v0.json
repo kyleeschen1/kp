@@ -98,7 +98,8 @@
     {
       "id": "s09",
       "title": "Lifecycle ownership and salience separation",
-      "status": "planned"
+      "summary": "Committed nominal semantic lifecycle authority plus dense exclusive paint-owner trace laws, opacity rejection, salience independence, and exact reduced-motion endpoints.",
+      "status": "complete"
     },
     {
       "id": "s10",
