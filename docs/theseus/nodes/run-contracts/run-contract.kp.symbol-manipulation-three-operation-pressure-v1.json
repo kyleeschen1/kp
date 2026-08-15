@@ -92,7 +92,8 @@
     {
       "id": "s29",
       "title": "Define cancellation pressure contract",
-      "status": "planned"
+      "summary": "Defined the canonical generated x-plus-3 cancellation contract with exact endpoints, authored additive-inverse provenance, transient zero witness, protected equal-glyph identities, ordered retirement and survivor compaction, exact rewind, and negative fixtures.",
+      "status": "complete"
     },
     {
       "id": "s30",
