@@ -276,10 +276,38 @@
       "scope": "s15 durable workspace integrity",
       "checkedAt": "2026-08-15T22:49:39.455Z",
       "notes": "Workspace validates 956 nodes and 21,107 events after manifest and slice evidence."
+    },
+    {
+      "command": "npm run test:semantic-motion-diagnostics",
+      "status": "passed",
+      "scope": "s16 typed issue codes golden trace repair and migration",
+      "checkedAt": "2026-08-15T23:01:21.595Z",
+      "notes": "All 34 compiler-chain and diagnostic checks pass, including golden deterministic traces, semantic-only repair roots, v0 explicit migration, and unknown, missing, malformed, and excess-patch negatives."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s16 closed diagnostics and schema types",
+      "checkedAt": "2026-08-15T23:01:23.126Z",
+      "notes": "TypeScript, Svelte, domain, and architecture gates pass; all existing issue producers now compile against the closed code union and diagnostics expose no DOM, renderer-private geometry, timing, or easing."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans and npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s16 existing operation and route preservation",
+      "checkedAt": "2026-08-15T23:01:24.693Z",
+      "notes": "All 181 presentation-plan tests pass; outer, catalogue route, main host, and incremental capability bundle budgets are unchanged and below limits."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s16 durable workspace integrity",
+      "checkedAt": "2026-08-15T23:02:01.880Z",
+      "notes": "Workspace validates 956 nodes and 21,116 events after diagnostics evidence and slice closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 complete: one generated minimal manifest now reconciles durable identity, semantic source, pedagogical intent, capabilities, exact lazy-loader ownership, referenced static truth, accessibility, and display metadata for all 28 equation assets. The catalogue is derived through this manifest without importing it into runtime routes; no host layout, editor state, or clock entered the asset contract."
+    "summary": "s16 complete: every semantic-motion compiler issue now uses a closed stable code union; deterministic eight-phase traces stop at the first failure; repair plans expose semantic document roots to humans and governed drafts; and schema evolution requires an exact explicit v0-to-v1 teaching-intent patch while unknown, malformed, missing, and excess patches fail closed."
   }
 }

@@ -104,7 +104,11 @@ test("all four compiler outcomes are explicit and exhaustively consumable", () =
     mintKpSemanticMotionCompilerReady(request),
     createKpSemanticMotionCompilerRepairRequired({
       requestId: request.id,
-      issues: [{ code: "test.missing-role", path: "$.operation", message: "Missing role." }],
+      issues: [{
+        code: "semantic-motion.structure.missing-role",
+        path: "$.operation",
+        message: "Missing role."
+      }],
       repairTargets: [{ kind: "operation-binding", targetId: request.operation.stepId }]
     }),
     createKpSemanticMotionCompilerExplicitStatic({
@@ -177,4 +181,3 @@ function describeOutcome(outcome: KpSemanticMotionCompilerOutcomeV1): string {
 function assertNever(value: never): never {
   throw new Error(`Unexpected compiler outcome: ${String(value)}`);
 }
-

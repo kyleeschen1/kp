@@ -140,7 +140,8 @@
     {
       "id": "s16",
       "title": "Typed diagnostics and schema evolution",
-      "status": "planned"
+      "summary": "Committed closed compiler issue codes, golden deterministic traces, semantic-only dual-audience repair plans, explicit request migration, and fail-closed unknown-version and invalid-patch handling with all existing operation and bundle gates preserved.",
+      "status": "complete"
     },
     {
       "id": "s17",

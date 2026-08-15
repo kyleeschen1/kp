@@ -7,6 +7,7 @@ import {
   createKpSemanticMotionCompilerRepairRequired
 } from "./semantic-motion-compiler-authority.ts";
 import type {
+  KpSemanticMotionCompilerIssueCodeV1,
   KpSemanticMotionCompilerRepairRequiredV1,
   KpSemanticMotionCompilerRequestV1
 } from "./semantic-motion-compiler-contract.ts";
@@ -79,14 +80,8 @@ export interface KpSemanticMotionLifecycleTrace {
 }
 
 export interface KpSemanticMotionLifecycleTraceIssue {
-  readonly code:
-    | "semantic-motion.lifecycle.trace-shape"
-    | "semantic-motion.lifecycle.phase-order"
-    | "semantic-motion.lifecycle.endpoint"
-    | "semantic-motion.lifecycle.visibility-gap"
-    | "semantic-motion.lifecycle.paint-owner"
-    | "semantic-motion.lifecycle.salience-reference"
-    | "semantic-motion.lifecycle.opacity-authority";
+  readonly code: Extract<KpSemanticMotionCompilerIssueCodeV1,
+    `semantic-motion.lifecycle.${string}`>;
   readonly path: string;
   readonly message: string;
 }
@@ -395,4 +390,3 @@ function issue(
 function sameSet(left: ReadonlySet<string>, right: ReadonlySet<string>): boolean {
   return left.size === right.size && [...left].every((value) => right.has(value));
 }
-

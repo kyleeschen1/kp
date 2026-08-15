@@ -62,11 +62,11 @@ test("cycle missing references disconnected events and authored physical timing 
   assert.equal(result.status, "repair-required");
   if (result.status !== "repair-required") return;
   const codes = new Set(result.issues.map(({ code }) => code));
-  [
+  ([
     "semantic-motion.precedence.physical-authority",
     "semantic-motion.precedence.event-reference",
     "semantic-motion.precedence.cycle"
-  ].forEach((code) => assert.equal(codes.has(code), true, code));
+  ] as const).forEach((code) => assert.equal(codes.has(code), true, code));
 });
 
 function structureFor(

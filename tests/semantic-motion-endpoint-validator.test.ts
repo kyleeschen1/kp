@@ -149,14 +149,14 @@ test("frontier validation rejects foreign, overlapping, duplicated, and uncovere
   assert.equal(result.status, "repair-required");
   if (result.status !== "repair-required") return;
   const codes = new Set(result.issues.map(({ code }) => code));
-  [
+  ([
     "semantic-motion.frontier.duplicate",
     "semantic-motion.frontier.context-not-shared",
     "semantic-motion.frontier.overlap",
     "semantic-motion.frontier.foreign-source",
     "semantic-motion.frontier.incomplete-source",
     "semantic-motion.frontier.incomplete-target"
-  ].forEach((code) => assert.equal(codes.has(code), true, code));
+  ] as const).forEach((code) => assert.equal(codes.has(code), true, code));
 });
 
 test("serialized or structurally copied endpoint certificates lose authority", () => {

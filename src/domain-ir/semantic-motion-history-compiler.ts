@@ -312,7 +312,17 @@ function assertHistory(history: KpVerifiedSemanticMotionHistory): void {
 
 function addIssue(
   issues: KpSemanticMotionCompilerRepairRequiredV1["issues"][number][],
-  suffix: string,
+  suffix:
+    | "history-id"
+    | "empty"
+    | "authority-mismatch"
+    | "duplicate-request"
+    | "duplicate-transition"
+    | "duplicate-stage"
+    | "source-authority"
+    | "source-boundary"
+    | "endpoint-seam"
+    | "identity-seam",
   path: string,
   message: string
 ): void {

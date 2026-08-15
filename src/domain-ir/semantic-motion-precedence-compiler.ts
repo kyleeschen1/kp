@@ -227,7 +227,17 @@ function findPhysicalAuthority(value: unknown, path = "$"): readonly string[] {
 
 function addIssue(
   issues: KpSemanticMotionCompilerRepairRequiredV1["issues"][number][],
-  suffix: string,
+  suffix:
+    | "authority-mismatch"
+    | "physical-authority"
+    | "duplicate-event"
+    | "event-shape"
+    | "event-reference"
+    | "duplicate-edge"
+    | "edge-reference"
+    | "cycle"
+    | "target-ready"
+    | "disconnected-event",
   path: string,
   message: string
 ): void {

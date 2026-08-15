@@ -251,10 +251,26 @@ function cardinalityValid(cardinality: KpSemanticMotionRoleCardinality, count: n
 
 function addIssue(
   issues: KpSemanticMotionCompilerRepairRequiredV1["issues"][number][],
-  suffix: string,
+  suffix:
+    | "authority-mismatch"
+    | "operation-mismatch"
+    | "duplicate-role"
+    | "unknown-role"
+    | "missing-role"
+    | "role-cardinality"
+    | "duplicate-entity"
+    | "foreign-entity"
+    | "ambiguous-entity"
+    | "duplicate-cohort"
+    | "cohort-membership"
+    | "cohesion"
+    | "cohort-role"
+    | "cohort-closure"
+    | "duplicate-attachment"
+    | "attachment-closure"
+    | "attachment-role",
   path: string,
   message: string
 ): void {
   issues.push({ code: `semantic-motion.structure.${suffix}`, path, message });
 }
-

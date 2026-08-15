@@ -60,13 +60,13 @@ test("missing attachments duplicate cohorts bad cardinality and foreign roles fa
   assert.equal(result.status, "repair-required");
   if (result.status !== "repair-required") return;
   const codes = new Set(result.issues.map(({ code }) => code));
-  [
+  ([
     "semantic-motion.structure.unknown-role",
     "semantic-motion.structure.role-cardinality",
     "semantic-motion.structure.duplicate-cohort",
     "semantic-motion.structure.cohort-closure",
     "semantic-motion.structure.attachment-closure"
-  ].forEach((code) => assert.equal(codes.has(code), true, code));
+  ] as const).forEach((code) => assert.equal(codes.has(code), true, code));
 });
 
 test("structural copies cannot retain role and cohort authority", () => {

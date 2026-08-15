@@ -59,8 +59,88 @@ export interface KpSemanticMotionCompilerRequestV1 {
   readonly teachingIntent: KpSemanticMotionTeachingIntentV1;
 }
 
+export type KpSemanticMotionCompilerIssueCodeV1 =
+  | "semantic-motion.endpoint.source-revision"
+  | "semantic-motion.endpoint.foreign-asset"
+  | "semantic-motion.endpoint.missing-state"
+  | "semantic-motion.endpoint.object-mismatch"
+  | "semantic-motion.endpoint.entity-mismatch"
+  | "semantic-motion.frontier.context-not-shared"
+  | "semantic-motion.frontier.overlap"
+  | "semantic-motion.frontier.foreign-source"
+  | "semantic-motion.frontier.foreign-target"
+  | "semantic-motion.frontier.incomplete-source"
+  | "semantic-motion.frontier.incomplete-target"
+  | "semantic-motion.frontier.duplicate"
+  | "semantic-motion.provenance.authority-mismatch"
+  | "semantic-motion.provenance.correspondence"
+  | "semantic-motion.provenance.duplicate-entity-authority"
+  | "semantic-motion.provenance.foreign-source"
+  | "semantic-motion.provenance.foreign-target"
+  | "semantic-motion.provenance.false-identity"
+  | "semantic-motion.provenance.false-introduction"
+  | "semantic-motion.provenance.false-derivation"
+  | "semantic-motion.provenance.missing-entity-authority"
+  | "semantic-motion.provenance.incomplete-lifecycle"
+  | "semantic-motion.provenance.ambiguous-lifecycle"
+  | "semantic-motion.lifecycle.authority-mismatch"
+  | "semantic-motion.lifecycle.salience-overlap"
+  | "semantic-motion.lifecycle.salience-reference"
+  | "semantic-motion.lifecycle.opacity-authority"
+  | "semantic-motion.lifecycle.trace-shape"
+  | "semantic-motion.lifecycle.phase-order"
+  | "semantic-motion.lifecycle.endpoint"
+  | "semantic-motion.lifecycle.visibility-gap"
+  | "semantic-motion.lifecycle.paint-owner"
+  | "semantic-motion.structure.authority-mismatch"
+  | "semantic-motion.structure.operation-mismatch"
+  | "semantic-motion.structure.duplicate-role"
+  | "semantic-motion.structure.unknown-role"
+  | "semantic-motion.structure.missing-role"
+  | "semantic-motion.structure.role-cardinality"
+  | "semantic-motion.structure.duplicate-entity"
+  | "semantic-motion.structure.foreign-entity"
+  | "semantic-motion.structure.ambiguous-entity"
+  | "semantic-motion.structure.duplicate-cohort"
+  | "semantic-motion.structure.cohort-membership"
+  | "semantic-motion.structure.cohesion"
+  | "semantic-motion.structure.cohort-role"
+  | "semantic-motion.structure.cohort-closure"
+  | "semantic-motion.structure.duplicate-attachment"
+  | "semantic-motion.structure.attachment-closure"
+  | "semantic-motion.structure.attachment-role"
+  | "semantic-motion.precedence.authority-mismatch"
+  | "semantic-motion.precedence.physical-authority"
+  | "semantic-motion.precedence.duplicate-event"
+  | "semantic-motion.precedence.event-shape"
+  | "semantic-motion.precedence.event-reference"
+  | "semantic-motion.precedence.duplicate-edge"
+  | "semantic-motion.precedence.edge-reference"
+  | "semantic-motion.precedence.cycle"
+  | "semantic-motion.precedence.target-ready"
+  | "semantic-motion.precedence.disconnected-event"
+  | "semantic-motion.history.history-id"
+  | "semantic-motion.history.empty"
+  | "semantic-motion.history.authority-mismatch"
+  | "semantic-motion.history.duplicate-request"
+  | "semantic-motion.history.duplicate-transition"
+  | "semantic-motion.history.duplicate-stage"
+  | "semantic-motion.history.source-authority"
+  | "semantic-motion.history.source-boundary"
+  | "semantic-motion.history.endpoint-seam"
+  | "semantic-motion.history.identity-seam"
+  | "semantic-motion.recipe.unsupported-operation"
+  | "semantic-motion.recipe.cohesion-mismatch"
+  | "semantic-motion.recipe.teaching-intent"
+  | "semantic-motion.recipe.roles-mismatch"
+  | "semantic-motion.recipe.events-mismatch"
+  | "semantic-motion.schema.unknown-version"
+  | "semantic-motion.schema.invalid-document"
+  | "semantic-motion.schema.missing-patch"
+  | "semantic-motion.schema.invalid-patch";
+
 export interface KpSemanticMotionCompilerIssueV1 {
-  readonly code: string;
+  readonly code: KpSemanticMotionCompilerIssueCodeV1;
   readonly path: string;
   readonly message: string;
 }
@@ -71,7 +151,8 @@ export interface KpSemanticMotionRepairTargetV1 {
     | "operation-binding"
     | "correspondence"
     | "rewrite-frontier"
-    | "teaching-intent";
+    | "teaching-intent"
+    | "schema-document";
   readonly targetId: string;
 }
 
@@ -208,4 +289,3 @@ function deepFreeze<T>(value: T): T {
   Object.values(value).forEach((child) => deepFreeze(child));
   return Object.freeze(value);
 }
-
