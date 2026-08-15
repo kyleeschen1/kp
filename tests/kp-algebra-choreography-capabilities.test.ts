@@ -18,7 +18,7 @@ test("the algebra pack carries immutable runtime capabilities beside serializabl
   assert.equal(Object.isFrozen(pack), true);
   assert.equal(Object.isFrozen(pack.catalog), true);
   assert.equal(Object.isFrozen(pack.runtimeCapabilities), true);
-  assert.equal(pack.catalog.length, 9);
+  assert.equal(pack.catalog.length, 10);
   assert.equal(
     typeof pack.runtimeCapabilities.distributionChoreography?.compile,
     "function"

@@ -584,6 +584,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.algebra.log-exponent.solve-two-power-x",
+    "title": "Solve an exponential equation with logarithms",
+    "summary": "A typed native-KaTeX operation sequence for solving 2^x = 7.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 8400,
+    "beatCount": 168,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "exponent",
+      "katex",
+      "logarithm"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.operation-evaluation.one-plus-two",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.operation-evaluation.one-plus-two",

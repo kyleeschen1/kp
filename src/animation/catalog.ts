@@ -20,6 +20,9 @@ import { createGraphAnimationAssets } from "./graph-adapter.ts";
 import {
   createInequalitySignFlipAnimationAsset
 } from "./inequality-sign-flip-adapter.ts";
+import {
+  createKpLogExponentAnimationAsset
+} from "./log-exponent-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
@@ -92,7 +95,8 @@ export function createGeneratedAlgebraAnimationAssets():
     createFunctionWrapAnimationAsset(),
     createDistributionExpansionAnimationAsset(),
     createDistributionFactoringAnimationAsset(),
-    createInequalitySignFlipAnimationAsset()
+    createInequalitySignFlipAnimationAsset(),
+    createKpLogExponentAnimationAsset()
   ];
 }
 

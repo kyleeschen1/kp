@@ -1,0 +1,45 @@
+.kp-log-exponent-stage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: clamp(18rem, 48vh, 30rem);
+  place-items: center;
+  overflow: hidden;
+  color: inherit;
+  background: transparent;
+  isolation: isolate;
+}
+
+.kp-log-exponent-stage__endpoint,
+.kp-log-exponent-stage__material-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.kp-log-exponent-stage__endpoint,
+.kp-log-exponent-stage__material-layer {
+  font-size: clamp(2.5rem, 8vw, 5.75rem);
+}
+
+.kp-log-exponent-stage__endpoint {
+  display: grid;
+  place-items: center;
+}
+
+.kp-log-exponent-stage__endpoint .katex-display {
+  margin: 0;
+}
+
+.kp-log-exponent-stage__material-layer {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.kp-log-exponent-stage__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -14,6 +14,9 @@ import {
   createInequalitySignFlipAnimationAsset
 } from "../inequality-sign-flip-adapter.ts";
 import {
+  createKpLogExponentAnimationAsset
+} from "../log-exponent-adapter.ts";
+import {
   createKpVerifiedGeneratedLinearSolveRuntimeAsset
 } from "../verified-generated-linear-solve-runtime-asset.ts";
 import {
@@ -39,7 +42,8 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createFunctionWrapAnimationAsset(),
       createDistributionExpansionAnimationAsset(),
       createDistributionFactoringAnimationAsset(),
-      createInequalitySignFlipAnimationAsset()
+      createInequalitySignFlipAnimationAsset(),
+      createKpLogExponentAnimationAsset()
     ]),
     runtimeCapabilities: kpAlgebraChoreographyCapabilities
   });

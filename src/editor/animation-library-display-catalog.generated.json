@@ -1540,6 +1540,33 @@
     ]
   },
   {
+    "animationId": "animation.algebra.log-exponent.solve-two-power-x",
+    "title": "Solve an exponential equation with logarithms",
+    "summary": "A typed native-KaTeX operation sequence for solving 2^x = 7.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "exponent",
+      "katex",
+      "logarithm"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+        "label": "Solve an exponential equation with logarithms",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.economics.supply-demand-equilibrium-shift",
     "title": "Supply and demand equilibrium shift",
     "summary": "Shifts demand on an exact supply-demand graph and follows the resulting market equilibrium.",

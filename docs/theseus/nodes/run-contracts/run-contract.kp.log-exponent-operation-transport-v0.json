@@ -138,7 +138,8 @@
     {
       "id": "s18",
       "title": "Register canonical catalogue asset",
-      "status": "planned"
+      "summary": "Registered canonical catalogue asset, exact route, lazy surface capability, operation-session boundary cleanup, and review-ready browser host.",
+      "status": "complete"
     },
     {
       "id": "s19",

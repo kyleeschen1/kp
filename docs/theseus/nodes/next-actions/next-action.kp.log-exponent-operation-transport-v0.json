@@ -124,10 +124,31 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:42:47.816Z"
+    },
+    {
+      "command": "node focused log exponent catalogue tests",
+      "status": "passed",
+      "scope": "slice s18 asset pack capability and route integration",
+      "checkedAt": "2026-08-15T03:02:09.302Z",
+      "notes": "18 focused tests passed."
+    },
+    {
+      "command": "playwright log exponent catalogue chromium",
+      "status": "passed",
+      "scope": "slice s18 canonical catalogue host",
+      "checkedAt": "2026-08-15T03:02:10.376Z",
+      "notes": "Two browser checks passed including all operation-boundary seeks and direct URL seek."
+    },
+    {
+      "command": "npm run check inference",
+      "status": "passed",
+      "scope": "slice s18 type inference budget",
+      "checkedAt": "2026-08-15T03:02:11.333Z",
+      "notes": "Inference contracts passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 17 adds a family-local transit-session adapter over the shared native-KaTeX compositor, nominal correspondence projection, reduced-motion endpoint seeking, and browser-proven exclusive paint ownership."
+    "summary": "Slice s18 registered the canonical typed asset in the lazy algebra catalogue and mounted it through an exclusive native KaTeX renderer session."
   }
 }
