@@ -88,10 +88,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:22:05.492Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-choreography.test.ts tests/log-exponent-interpolation-obligations.test.ts tests/log-exponent-salience.test.ts tests/log-exponent-continuity.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:25:01.448Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 13 makes motion completeness typed: every lifecycle record owns one full-motion obligation, x requires measured position and scale, and balanced wrappers share a synchronization group."
+    "summary": "Slice 14 compiles each operation into the shared orient-reflow-act-settle-release envelope and binds every typed interpolation obligation exactly once."
   }
 }

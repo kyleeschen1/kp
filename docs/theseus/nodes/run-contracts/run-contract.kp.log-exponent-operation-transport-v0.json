@@ -114,7 +114,8 @@
     {
       "id": "s14",
       "title": "Compile choreography envelope",
-      "status": "planned"
+      "summary": "Compiled and verified the renderer-neutral five-phase choreography envelope.",
+      "status": "complete"
     },
     {
       "id": "s15",
