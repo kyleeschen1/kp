@@ -10,10 +10,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T01:48:06.992Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-exemplar-contract.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T01:51:12.682Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 freezes exact exponent-log semantic versus concrete animation coverage."
+    "summary": "Slice 2 froze the canonical 2^x=7 exemplar identity, source references, visual acceptance criteria, preservation boundary, and independent rollback units."
   }
 }

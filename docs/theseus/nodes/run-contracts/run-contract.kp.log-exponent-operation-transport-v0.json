@@ -42,7 +42,8 @@
     {
       "id": "s02",
       "title": "Record exemplar contract",
-      "status": "planned"
+      "summary": "Recorded and verified the exemplar contract before semantic implementation.",
+      "status": "complete"
     },
     {
       "id": "s03",
