@@ -393,11 +393,25 @@
       "scope": "s24 durable quotient animation evidence",
       "checkedAt": "2026-08-15T14:57:16.578Z",
       "notes": "Validated 954 nodes and 20857 events before slice closeout."
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "s25 deterministic human checkpoint",
+      "checkedAt": "2026-08-15T15:03:05.509Z",
+      "notes": "Captured nine dark-scheme stage samples across forward and return seeks; all samples retained one accessible equation and exclusive native/material paint ownership. Contact sheet and manifest are reproducible under tmp/codex/log-quotient-checkpoint."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 checkpoint evidence",
+      "checkedAt": "2026-08-15T15:03:30.637Z",
+      "notes": "Validated 954 nodes and 20863 events before the mandatory human stop."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Quotient semantic compiler complete. Next implement deterministic native-KaTeX endpoints, sampled motion, single-owner handoff, lazy catalogue asset, and exact URL without branching the canonical log exemplar."
+    "summary": "Quotient caller implementation and deterministic visual evidence are complete. Awaiting mandatory human judgment on whether x/y trajectories, persistent ln shell, retiring right wrapper, fraction structure entry, pacing, and reverse continuity are suitable before distribution work begins."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

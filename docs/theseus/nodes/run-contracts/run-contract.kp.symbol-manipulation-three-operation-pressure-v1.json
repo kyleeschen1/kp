@@ -68,7 +68,8 @@
     {
       "id": "s25",
       "title": "Produce quotient human checkpoint",
-      "status": "planned"
+      "summary": "Producing deterministic quotient visual evidence and bidirectional comparison; distribution remains gated on human approval.",
+      "status": "in-progress"
     },
     {
       "id": "s26",
