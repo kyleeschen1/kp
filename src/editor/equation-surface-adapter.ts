@@ -3264,6 +3264,15 @@ function applyDistributionFactorFocus(input: {
     input.frame.planId;
   input.transition.dataset["kpEditorEquationDistributionProgress"] =
     String(input.frame.progress);
+  if (input.frame.semanticMotionChoreographyId === undefined) {
+    delete input.transition.dataset[
+      "kpEditorEquationDistributionSemanticMotion"
+    ];
+  } else {
+    input.transition.dataset[
+      "kpEditorEquationDistributionSemanticMotion"
+    ] = input.frame.semanticMotionChoreographyId;
+  }
   if (input.geometry.distributionChoreographyBinding !== undefined) {
     input.transition.dataset["kpEditorEquationDistributionBinding"] =
       input.geometry.distributionChoreographyBinding.id;

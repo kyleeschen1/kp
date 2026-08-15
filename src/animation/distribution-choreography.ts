@@ -14,6 +14,11 @@ import {
 import {
   sampleKpLessonCanonicalDistributionMotion
 } from "./distribution-motion-profile.ts";
+import {
+  isKpCompiledSemanticMotionChoreography,
+  sampleKpSemanticMotionChoreography,
+  type KpCompiledSemanticMotionChoreography
+} from "../domain-ir/public-api.ts";
 export {
   kpLessonCanonicalDistributionMotionProfile,
   sampleKpLessonCanonicalDistributionMotion
@@ -73,11 +78,13 @@ export interface KpDistributionChoreographyPlan {
   readonly sourceMinimumScale: number;
   readonly productGroups: readonly KpPresentationGroupContract[];
   readonly fissionPlan: KpFissionFusionPlan;
+  readonly semanticMotion?: KpCompiledSemanticMotionChoreography | undefined;
 }
 
 export interface KpDistributionChoreographyFrame {
   readonly kind: "distribution-choreography-frame";
   readonly planId: string;
+  readonly semanticMotionChoreographyId?: string | undefined;
   readonly progress: number;
   readonly phases: Readonly<Record<KpDistributionChoreographyPhaseId, number>>;
   readonly focusStrength: number;
@@ -116,6 +123,7 @@ export interface KpDistributionChoreographyInput {
   }[];
   readonly groupingArtifactIds: readonly string[];
   readonly sourceMinimumScale?: number | undefined;
+  readonly semanticMotion?: KpCompiledSemanticMotionChoreography | undefined;
 }
 
 const defaultDependencies: KpDistributionChoreographyDependencies =
@@ -167,6 +175,18 @@ KpDistributionChoreographyPlan {
   }
   if (input.groupingArtifactIds.length === 0) {
     throw new Error("Distribution choreography requires explicit grouping artifacts.");
+  }
+  if (
+    input.semanticMotion !== undefined &&
+    (
+      !isKpCompiledSemanticMotionChoreography(input.semanticMotion) ||
+      input.semanticMotion.recipeId !==
+        "recipe.semantic-motion.distribution-fan-out.v1"
+    )
+  ) {
+    throw new Error(
+      "Distribution choreography requires matching semantic-motion compiler authority."
+    );
   }
   const sourceMinimumScale = input.sourceMinimumScale ?? 0.82;
   if (!(sourceMinimumScale > 0 && sourceMinimumScale <= 1)) {
@@ -241,7 +261,10 @@ KpDistributionChoreographyPlan {
     phaseIds: [...kpDistributionChoreographyPhaseIds],
     sourceMinimumScale,
     productGroups,
-    fissionPlan
+    fissionPlan,
+    ...(input.semanticMotion === undefined
+      ? {}
+      : { semanticMotion: input.semanticMotion })
   };
 }
 
@@ -250,7 +273,13 @@ export function sampleKpDistributionChoreography(input: {
   readonly progress: number;
 }, dependencies: KpDistributionChoreographyDependencies = defaultDependencies):
 KpDistributionChoreographyFrame {
-  const progress = clamp01(input.progress);
+  const progress = input.plan.semanticMotion === undefined
+    ? clamp01(input.progress)
+    : sampleKpSemanticMotionChoreography({
+        choreography: input.plan.semanticMotion,
+        progress: input.progress,
+        direction: "forward"
+      }).semanticProgress;
   const fission = dependencies.fissionFusion.sample({
     plan: input.plan.fissionPlan,
     progress
@@ -275,6 +304,9 @@ KpDistributionChoreographyFrame {
   return {
     kind: "distribution-choreography-frame",
     planId: input.plan.id,
+    ...(input.plan.semanticMotion === undefined
+      ? {}
+      : { semanticMotionChoreographyId: input.plan.semanticMotion.id }),
     progress,
     phases,
     focusStrength:

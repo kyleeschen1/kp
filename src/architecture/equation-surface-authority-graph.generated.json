@@ -123,6 +123,14 @@
       "summary": "The log-exponent timeline maps shared progress to operation-local time."
     },
     {
+      "id": "timing.distribution-presentation-profile",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/distribution-motion-profile.ts",
+      "sourceNeedle": "export const kpLessonCanonicalDistributionMotionProfile",
+      "summary": "Distribution retains its reviewed optical pacing after semantic compilation."
+    },
+    {
       "id": "timing.semantic-motion-recipe-schedule",
       "category": "local-timing",
       "authority": "canonical",
@@ -700,7 +708,8 @@
         "nonSemantic": 0
       },
       "compilerNodeIds": [
-        "compiler.generic-semantic-transition"
+        "compiler.generic-semantic-transition",
+        "compiler.semantic-motion-choreography"
       ],
       "registryNodeIds": [
         "registry.selected-capability",
@@ -710,7 +719,9 @@
         "motif.generic-transition"
       ],
       "localTimingNodeIds": [
-        "timing.generic-phase-easing"
+        "timing.generic-phase-easing",
+        "timing.semantic-motion-recipe-schedule",
+        "timing.distribution-presentation-profile"
       ],
       "rendererInferenceNodeIds": [
         "renderer.generic-dom-measurement"
@@ -723,7 +734,8 @@
       ],
       "directSamplerNodeIds": [
         "sampler.generic-semantic-token",
-        "sampler.distribution"
+        "sampler.distribution",
+        "sampler.semantic-motion-choreography"
       ]
     },
     {

@@ -25,6 +25,10 @@ test("the canonical catalogue route uses the typed distribution binding", async 
     "data-kp-editor-equation-distribution-choreography",
     /binding\.distribution\.expand-a-sum\.pressure$/
   );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-distribution-semantic-motion",
+    /choreography\..*distribution-fan-out\.v1$/
+  );
 
   for (const progress of [0, 0.18, 0.5, 0.68, 0.83, 0.94, 1]) {
     await seek.fill(String(progress));

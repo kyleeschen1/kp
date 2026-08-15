@@ -9,12 +9,23 @@ import {
 import {
   kpCanonicalDistributionPressureContract
 } from "../src/semantic/distribution-pressure-contract.ts";
+import {
+  kpCanonicalCompiledDistributionPressureSemanticMotion
+} from "../src/semantic/distribution-pressure-semantic-motion.ts";
 
 test("the distribution animation is only a typed binding over the existing choreography", () => {
   const binding = kpCanonicalDistributionPressureBinding;
   const contract = kpCanonicalDistributionPressureContract;
 
   assert.equal(binding.id, "binding.distribution.expand-a-sum.pressure");
+  assert.equal(
+    binding.semanticMotion,
+    kpCanonicalCompiledDistributionPressureSemanticMotion
+  );
+  assert.equal(
+    binding.semanticMotion.recipeId,
+    "recipe.semantic-motion.distribution-fan-out.v1"
+  );
   assert.equal(
     binding.sourceFactorId,
     contract.factorFanOut.sourceFactorSelectorId
@@ -58,6 +69,10 @@ test("distribution direct seeks are deterministic and settle the native endpoint
   }
 
   const source = sampleKpCanonicalDistributionPressureAnimation(0);
+  assert.equal(
+    source.semanticMotionChoreographyId,
+    kpCanonicalCompiledDistributionPressureSemanticMotion.id
+  );
   assert.equal(source.sourceFactor.opacity, 1);
   assert.ok(source.factorCopies.every(({ opacity }) => opacity === 0));
   assert.equal(source.groupingOpacity, 1);

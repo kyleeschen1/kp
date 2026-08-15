@@ -132,6 +132,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent timeline maps shared progress to operation-local time."),
+  node("timing.distribution-presentation-profile", "local-timing", "local",
+    "src/animation/distribution-motion-profile.ts",
+    "export const kpLessonCanonicalDistributionMotionProfile",
+    "Distribution retains its reviewed optical pacing after semantic compilation."),
   node("timing.semantic-motion-recipe-schedule", "local-timing", "canonical",
     "src/domain-ir/semantic-motion-choreography-compiler.ts",
     "function schedulePolicy(",
@@ -385,16 +389,37 @@ KpEquationSurfaceAuthorityRow {
       transformationTypes.includes(type)
     ) ? candidate.nodeIds : []
   );
+  const isDistributionPressure =
+    asset.id === "animation.generated.distribution.expand-a-sum";
   return row(asset.id, pathClass, transformationTypes, {
     semantic,
     nonSemantic: asset.transformations.length - semantic
   }, {
-    compiler: ["compiler.generic-semantic-transition"],
+    compiler: [
+      "compiler.generic-semantic-transition",
+      ...(isDistributionPressure
+        ? ["compiler.semantic-motion-choreography"]
+        : [])
+    ],
     motif: ["motif.generic-transition"],
-    timing: ["timing.generic-phase-easing"],
+    timing: [
+      "timing.generic-phase-easing",
+      ...(isDistributionPressure
+        ? [
+            "timing.semantic-motion-recipe-schedule",
+            "timing.distribution-presentation-profile"
+          ]
+        : [])
+    ],
     renderer: ["renderer.generic-dom-measurement"],
     fallback: ["fallback.generic-whole-equation"],
-    samplers: unique(["sampler.generic-semantic-token", ...specialSamplers])
+    samplers: unique([
+      "sampler.generic-semantic-token",
+      ...specialSamplers,
+      ...(isDistributionPressure
+        ? ["sampler.semantic-motion-choreography"]
+        : [])
+    ])
   });
 }
 

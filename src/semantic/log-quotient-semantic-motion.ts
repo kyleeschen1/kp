@@ -1,20 +1,15 @@
 import {
   compileKpSemanticMotion,
+  createKpSemanticMotionSourceAuthority,
   createKpSemanticMotionCompilerRequestV1,
   kpSemanticMotionCompilerRequestSchemaVersion,
   type KpCompiledSemanticMotionChoreography,
-  type KpSemanticMotionEntityAuthorityV1,
   type KpSemanticMotionEventSpec,
   type KpSemanticMotionOperationStructureContract,
-  type KpSemanticMotionPrecedenceSpec,
-  type KpSemanticMotionSourceAuthorityV1
+  type KpSemanticMotionPrecedenceSpec
 } from "../domain-ir/public-api.ts";
-import type {
-  SelectorCorrespondenceRecord
-} from "./correspondence.ts";
 import {
   listKpLogQuotientExpressionNodes,
-  type KpLogQuotientExpressionNode,
   type KpLogQuotientSemanticId,
   type KpLogQuotientState
 } from "./log-quotient-states.ts";
@@ -33,20 +28,26 @@ if (correspondenceMap === undefined) {
 const sourceState = stateRef(operation.contract.source);
 const targetState = stateRef(operation.contract.target);
 
-export const kpCanonicalLogQuotientSemanticMotionSource = Object.freeze({
-  sourceId: "semantic-source.log-quotient.difference-to-quotient",
-  revisionId: "revision.log-quotient.semantic-motion.v1",
-  assetIds: Object.freeze([kpLogQuotientAnimationId]),
-  states: Object.freeze([sourceState, targetState]),
-  entities: Object.freeze([
-    ...listKpLogQuotientExpressionNodes(operation.contract.source).map((node) =>
-      authoredEntity(node, "semantic-source.log-quotient.difference-to-quotient")
-    ),
-    ...listKpLogQuotientExpressionNodes(operation.contract.target).map((node) =>
-      targetEntity(node, correspondenceMap.records)
-    )
-  ])
-} satisfies KpSemanticMotionSourceAuthorityV1);
+const semanticIdentityIdByEntityId = Object.freeze(Object.fromEntries(
+  [operation.contract.source, operation.contract.target].flatMap((state) =>
+    listKpLogQuotientExpressionNodes(state).map((node) => [
+      node.id,
+      node.semanticId
+    ] as const)
+  )
+));
+
+export const kpCanonicalLogQuotientSemanticMotionSource =
+  createKpSemanticMotionSourceAuthority({
+    sourceId: "semantic-source.log-quotient.difference-to-quotient",
+    revisionId: "revision.log-quotient.semantic-motion.v1",
+    transformationId: transformation.id,
+    assetIds: Object.freeze([kpLogQuotientAnimationId]),
+    sourceState,
+    targetState,
+    correspondenceMap,
+    semanticIdentityIdByEntityId
+  });
 
 export const kpCanonicalLogQuotientSemanticMotionRequest =
   createKpSemanticMotionCompilerRequestV1({
@@ -214,63 +215,6 @@ function occurrence(
     throw new Error(`${semanticId} must name exactly one ${state.id} occurrence.`);
   }
   return matches[0]!.id;
-}
-
-function authoredEntity(
-  node: KpLogQuotientExpressionNode,
-  sourceId: string
-): KpSemanticMotionEntityAuthorityV1 {
-  return Object.freeze({
-    id: node.id,
-    semanticIdentityId: node.semanticId,
-    provenance: Object.freeze({ kind: "authored" as const, sourceId })
-  });
-}
-
-function targetEntity(
-  node: KpLogQuotientExpressionNode,
-  records: readonly SelectorCorrespondenceRecord[]
-): KpSemanticMotionEntityAuthorityV1 {
-  const record = records.find(({ targetSelectorIds }) =>
-    targetSelectorIds.includes(node.id)
-  );
-  if (record === undefined) {
-    throw new Error(`Target entity ${node.id} has no correspondence provenance.`);
-  }
-  const transformationId = transformation.id;
-  if (record.relation === "identity" || record.relation === "role-change") {
-    const sourceId = record.sourceSelectorIds[0]!;
-    const sourceNode = listKpLogQuotientExpressionNodes(operation.contract.source)
-      .find(({ id }) => id === sourceId);
-    if (sourceNode === undefined) {
-      throw new Error(`Identity successor ${node.id} has no source ${sourceId}.`);
-    }
-    return Object.freeze({
-      id: node.id,
-      semanticIdentityId: sourceNode.semanticId,
-      provenance: Object.freeze({
-        kind: "identity-successor" as const,
-        transformationId,
-        sourceEntityIds: Object.freeze([sourceId] as const)
-      })
-    });
-  }
-  if (record.relation === "introduction") {
-    return Object.freeze({
-      id: node.id,
-      semanticIdentityId: node.semanticId,
-      provenance: Object.freeze({ kind: "introduced" as const, transformationId })
-    });
-  }
-  return Object.freeze({
-    id: node.id,
-    semanticIdentityId: node.semanticId,
-    provenance: Object.freeze({
-      kind: "derived" as const,
-      transformationId,
-      sourceEntityIds: Object.freeze([...record.sourceSelectorIds])
-    })
-  });
 }
 
 function role(

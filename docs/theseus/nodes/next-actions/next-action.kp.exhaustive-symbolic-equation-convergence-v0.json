@@ -443,10 +443,58 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-15T23:39:11.126Z"
+    },
+    {
+      "command": "npm run test:distribution-pressure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:26.524Z"
+    },
+    {
+      "command": "node semantic-motion source-authority focused test",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T23:52:27.814Z"
+    },
+    {
+      "command": "npm run test:browser:distribution-pressure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:28.976Z"
+    },
+    {
+      "command": "npm run visual:distribution-pressure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:30.416Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:31.833Z"
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:32.947Z"
+    },
+    {
+      "command": "npm run test:equation-surface-authority and npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:33.981Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-15T23:52:36.784Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 20 routes log-quotient through the canonical semantic-motion compiler and sampler, binds matching compiler authority into transit, deletes the local timeline, and preserves the reviewed homomorphic-fusion presentation recipe."
+    "summary": "Slice 21 binds the generated distribution pressure caller to compiler-minted fan-out authority, preserves the local optical recipe, plus attachment, and product settlement, and adds a shared source-authority builder proven by quotient and distribution."
   }
 }

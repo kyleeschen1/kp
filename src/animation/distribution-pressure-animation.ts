@@ -6,6 +6,9 @@ import {
 import {
   kpCanonicalDistributionPressureContract
 } from "../semantic/distribution-pressure-contract.ts";
+import {
+  kpCanonicalCompiledDistributionPressureSemanticMotion
+} from "../semantic/distribution-pressure-semantic-motion.ts";
 
 const contract = kpCanonicalDistributionPressureContract;
 const addendContinuants = contract.continuants.filter(
@@ -34,7 +37,8 @@ export const kpCanonicalDistributionPressureBinding = Object.freeze({
     semanticIndex: 0,
     motionConstraint: contract.connectorAttachment.motionConstraint
   })]),
-  groupingArtifactIds: contract.groupingRetirement.sourceSelectorIds
+  groupingArtifactIds: contract.groupingRetirement.sourceSelectorIds,
+  semanticMotion: kpCanonicalCompiledDistributionPressureSemanticMotion
 } satisfies KpDistributionChoreographyInput);
 
 export const kpCanonicalDistributionPressurePlan =
