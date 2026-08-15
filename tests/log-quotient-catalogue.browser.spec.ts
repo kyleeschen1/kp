@@ -1,7 +1,42 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const animationId =
   "animation.algebra.log-quotient.difference-to-quotient";
+
+test("visible play control drives continuous log quotient motion", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-quotient-stage]");
+  const play = player.getByRole("button", { name: "Play animation" });
+
+  await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
+  await expect(play).toBeVisible();
+  await play.click();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-status", "playing");
+  await expect(player.getByRole("button", { name: "Pause animation" }))
+    .toBeVisible();
+
+  await expect.poll(async () => Number(
+    await stage.getAttribute("data-kp-log-quotient-progress")
+  )).toBeGreaterThan(0.08);
+  const firstProgress = Number(
+    await stage.getAttribute("data-kp-log-quotient-progress")
+  );
+  const firstPaint = await movingPaintSnapshot(stage);
+  expect(firstPaint.length).toBeGreaterThan(0);
+
+  await expect.poll(async () => Number(
+    await stage.getAttribute("data-kp-log-quotient-progress")
+  )).toBeGreaterThan(firstProgress + 0.05);
+  expect(await movingPaintSnapshot(stage)).not.toEqual(firstPaint);
+});
 
 test("log quotient mounts lazily and seeks through one native paint owner", async ({
   page
@@ -170,3 +205,19 @@ test("log quotient keeps one accessible endpoint under reduced motion", async ({
   expect(accessibility.inactiveAreInert).toBe(true);
   expect(accessibility.documentWidth).toBe(accessibility.viewportWidth);
 });
+
+async function movingPaintSnapshot(stage: Locator) {
+  return stage.evaluate((root) =>
+    [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].map((owner) => ({
+      id: owner.dataset["kpEquationMaterialOwnerId"],
+      left: owner.style.left,
+      top: owner.style.top,
+      width: owner.style.width,
+      height: owner.style.height,
+      opacity: owner.style.opacity,
+      transform: owner.style.transform
+    })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
+  );
+}

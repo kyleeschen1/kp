@@ -442,11 +442,18 @@
       "scope": "s25 broad architecture audit",
       "checkedAt": "2026-08-15T15:45:08.836Z",
       "notes": "The relevant concept-room, semantic-reader, and semantic-animation gates pass. The command stops only at the pre-existing log-exponent-adapter rendering import already recorded before this repair; no new quotient boundary violation is reported."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "s25 visible-control playback regression",
+      "checkedAt": "2026-08-15T15:58:27.051Z",
+      "notes": "Three Chromium checks now include the actual Play button: the shared clock advances, the surface adapter repaints changing material positions, Pause feedback appears, deterministic seek remains intact, and reduced motion stays accessible."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Corrected quotient checkpoint is ready: neither ln is an arbitrary survivor, both operator occurrences fuse into one successor, x/y arc into quotient roles, subtraction cannot become the fraction bar, and enclosures have typed causal lifecycle. The generic H(a) o H(b) to H(a star b) choreography remains explicitly candidate pending distribution and cancellation. Awaiting mandatory human visual approval."
+    "summary": "Initial human review reported no visible motion. The former browser evidence only injected isolated scrubber values, so it could not certify interactive playback. A visible Play-control regression now proves advancing clock and changing paint on a fresh host; the eleven-hour development server was restarted to remove stale HMR state. Awaiting repeat human review at s25."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

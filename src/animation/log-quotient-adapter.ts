@@ -100,7 +100,7 @@ export function createKpLogQuotientAnimationAsset(): KpAnimationAsset {
       transformationIds: [transformation.id],
       timelineId,
       summary:
-        "Move x and y into quotient roles while one logarithm wrapper persists."
+        "Fuse both logarithm operators while x and y move into quotient roles."
     }],
     checks: [{
       id: "check.log-quotient.reference-closure",

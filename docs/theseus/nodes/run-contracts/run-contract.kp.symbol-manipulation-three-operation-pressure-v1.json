@@ -68,7 +68,7 @@
     {
       "id": "s25",
       "title": "Produce quotient human checkpoint",
-      "summary": "Repaired and reissued the quotient human checkpoint after schema correction. Eleven deterministic forward/return samples, focused type/unit/browser evidence, and the exact direct route are ready; distribution remains gated on explicit human approval.",
+      "summary": "Human checkpoint remains open after the first served review showed no motion. User-path playback is now explicitly certified and the development host has been restarted; distribution remains gated on renewed human approval.",
       "status": "in-progress"
     },
     {
