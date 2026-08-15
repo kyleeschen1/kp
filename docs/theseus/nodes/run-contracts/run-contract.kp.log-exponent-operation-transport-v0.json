@@ -36,7 +36,8 @@
     {
       "id": "s01",
       "title": "Freeze exponent-log coverage",
-      "status": "planned"
+      "summary": "Added executable coverage inventory proving six declared laws, three concrete samples, two law-specific samples, and one generic wrap support sample.",
+      "status": "complete"
     },
     {
       "id": "s02",

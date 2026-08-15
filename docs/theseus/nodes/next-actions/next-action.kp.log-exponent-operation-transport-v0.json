@@ -3,5 +3,17 @@
   "kind": "next-action",
   "title": "Build exponent-log operation transport exemplars",
   "status": "ready",
-  "domain": "animation"
+  "domain": "animation",
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-animation-coverage.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T01:48:06.992Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 freezes exact exponent-log semantic versus concrete animation coverage."
+  }
 }
