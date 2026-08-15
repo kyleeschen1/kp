@@ -1,0 +1,202 @@
+{
+  "id": "run-contract.kp.exhaustive-symbolic-equation-convergence-v0",
+  "kind": "run-contract",
+  "title": "Exhaustive symbolic equation convergence",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exhaustive-symbolic-equation-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md",
+      "summary": "Human-approved 30-slice implementation plan with per-slice risk, verification, rollback, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md",
+      "summary": "Accepted exhaustive equation-domain migration decision and touch-tax laws."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md",
+      "summary": "Seven promoted compiler invariants and operation-local exclusions."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path> --run",
+    "npm run test:operation-presentation-plans",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Inventory and converge all current equation-surface assets through one semantic-motion compiler, including typed contracts, validators, composition, manifests, diagnostics, conformance, architecture gates, adapters, adjacent compatibility retirement, and release evidence.",
+    "Preserve approved quotient, distribution, cancellation, and existing equation behavior while adding one clean-path native-KaTeX log-product exemplar and its mandatory human checkpoint.",
+    "Connect governed LLM draft v2 operations only after supported equation migration is stable; keep models limited to semantic states, roles, lineage, teaching intent, and salience."
+  ],
+  "disallowedWork": [
+    "Do not change public layout, curriculum, SRS, SvelteKit, graph, code, diagram, matrix-spatial, Canvas, WebGL, Graph3D, or unrelated authoring systems.",
+    "Do not promote universal trajectories, fixed timing, opacity, optical exceptions, renderer geometry, DOM inference, or silent fallbacks as semantic authority.",
+    "Do not touch the user-authored economics files or unrelated untracked project documents; stop at s25 and s30 for required human review."
+  ],
+  "goal": "Route every supported symbolic equation animation through one canonical semantic-motion compiler, preserve reviewed behavior, retire competing authority paths, and prove the clean path with one new log-product caller.",
+  "target": "next-action.kp.exhaustive-symbolic-equation-convergence-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Canonical equation inventory",
+      "summary": "Generated the fail-closed 28-row equation inventory from compact catalogue truth, reconciled the historical 24-row snapshot through four audited additions, restored cancellation and log-quotient display rows, and verified identity, route, architecture, type, and workspace invariants.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Authority path graph",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Preservation matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Cost and bundle baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Disposition and rollback ledger",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Compiler request and outcome",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Endpoint and frontier validation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Correspondence and provenance validation",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Lifecycle ownership and salience separation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Cohorts roles and attachment closure",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Semantic precedence graph",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Compositional closure",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Capability recipe resolution",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Nominal choreography and renderer neutral tracks",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Minimal equation asset manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Typed diagnostics and schema evolution",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Caller proven equation policy",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Generated conformance harness",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Architecture ratchets",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Quotient adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Distribution adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Cancellation adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Three caller composition pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Log product semantic caller",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Log product executable human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Migration wave A operation plan families",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Migration wave B structural native math families",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Migration wave C generated bespoke diagnostic and static rows",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Governed LLM entry and marginal cost probe",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Release closeout and final catalogue checkpoint",
+      "status": "planned"
+    }
+  ]
+}

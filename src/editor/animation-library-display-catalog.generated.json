@@ -443,6 +443,60 @@
     ]
   },
   {
+    "animationId": "animation.generated.cancellation.additive-inverses",
+    "title": "Cancel an additive inverse pair",
+    "summary": "Cancel an additive inverse pair",
+    "tags": [
+      "algebra",
+      "animation",
+      "cancellation",
+      "editor",
+      "equation",
+      "generated",
+      "katex"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.generated.cancellation.additive-inverses",
+    "representations": [
+      {
+        "id": "editor-animation.animation.generated.cancellation.additive-inverses",
+        "label": "Cancel an additive inverse pair",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.generated.cancellation.additive-inverses",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.algebra.log-quotient.difference-to-quotient",
+    "title": "Combine a difference of logarithms",
+    "summary": "A typed native-KaTeX pressure caller for the logarithm quotient law.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "katex",
+      "logarithm",
+      "quotient"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+        "label": "Combine a difference of logarithms",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.fractional-linear.x-over-2.balanced-proof",
     "title": "Compare equation views",
     "summary": "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",

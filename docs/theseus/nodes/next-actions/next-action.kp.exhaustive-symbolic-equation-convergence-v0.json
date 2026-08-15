@@ -1,0 +1,27 @@
+{
+  "id": "next-action.kp.exhaustive-symbolic-equation-convergence-v0",
+  "kind": "next-action",
+  "title": "Converge all supported symbolic equations on one compiler",
+  "status": "ready",
+  "domain": "animation",
+  "verificationRecords": [
+    {
+      "command": "npm run test:equation-surface-inventory",
+      "status": "passed",
+      "scope": "s01 canonical inventory",
+      "checkedAt": "2026-08-15T20:36:32.671Z",
+      "notes": "Five focused checks pass: live/generated parity, 24 plus four reconciliation, unique current identities, duplicate rejection, missing display rejection, and primary-route rejection."
+    },
+    {
+      "command": "npm run check:architecture; npm run typecheck; generated inventory checks; theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 boundaries and generated truth",
+      "checkedAt": "2026-08-15T20:36:53.657Z",
+      "notes": "Semantic-animation architecture passes with zero exceptions and six classified compatibility paths; full TypeScript checks pass; both generated catalogue and equation inventory are current; workspace validates 956 nodes and 20994 events."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 complete: canonical generated inventory covers 28 current equation surfaces, reconciles the former 24-row snapshot through four audited additions, repairs two stale display rows, and fails closed on identity or route drift."
+  }
+}
