@@ -40,10 +40,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T01:58:59.966Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-compiler-authority.test.ts tests/log-exponent-authored-operations.test.ts tests/log-exponent-domain-assumptions.test.ts tests/log-exponent-solve-states.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:01:04.140Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 5 adds a closed authored program whose three typed actions cover every state seam and fail closed without their required assumptions."
+    "summary": "Slice 6 compiles every canonical state into exhaustive semantic roles behind copy-resistant nominal authority."
   }
 }

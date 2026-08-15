@@ -66,7 +66,8 @@
     {
       "id": "s06",
       "title": "Mint compiler authority and roles",
-      "status": "planned"
+      "summary": "Minted and verified compiler-only semantic role authority for log-exponent states.",
+      "status": "complete"
     },
     {
       "id": "s07",
