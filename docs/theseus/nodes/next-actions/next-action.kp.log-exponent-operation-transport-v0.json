@@ -112,10 +112,22 @@
       "status": "failed",
       "scope": "impact",
       "checkedAt": "2026-08-15T02:36:13.970Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-transit-session.test.ts tests/log-exponent-native-endpoints.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:42:46.797Z"
+    },
+    {
+      "command": "playwright chromium log-exponent transit ownership single worker",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:42:47.816Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 16 adds exact accessible native-KaTeX endpoints, total nested semantic ownership, and stable font-settled observation through the shared renderer seam; the broad impact gate remains stopped by the recorded unrelated normal-matrix capture type error."
+    "summary": "Slice 17 adds a family-local transit-session adapter over the shared native-KaTeX compositor, nominal correspondence projection, reduced-motion endpoint seeking, and browser-proven exclusive paint ownership."
   }
 }

@@ -132,7 +132,8 @@
     {
       "id": "s17",
       "title": "Implement transit ownership",
-      "status": "planned"
+      "summary": "Implemented and Chromium-verified bounded native-KaTeX transit ownership with no simultaneous source, material, and target paint.",
+      "status": "complete"
     },
     {
       "id": "s18",
