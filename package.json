@@ -82,6 +82,7 @@
     "test:log-quotient": "node --disable-warning=ExperimentalWarning --test tests/log-quotient-*.test.ts tests/selected-surface-capability.test.ts",
     "test:browser:log-quotient": "playwright test tests/log-quotient-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:log-quotient:webkit": "playwright test tests/log-quotient-catalogue.browser.spec.ts --project=webkit --workers=1",
+    "test:distribution-pressure": "node --disable-warning=ExperimentalWarning --test tests/distribution-pressure-*.test.ts",
     "test:browser:botanical-lisp-tutorial": "playwright test tests/kp-lisp-scroll-coordination.browser.spec.ts tests/kp-lisp-tutorial-visual.browser.spec.ts tests/kp-lisp-accessibility.browser.spec.ts tests/kp-lisp-lesson-navigation.browser.spec.ts --project=chromium --workers=1",
     "test:browser:tutorial-review": "playwright test tests/kp-tutorial-review.browser.spec.ts --project=chromium --workers=1",
     "visual:lisp-function-application-tutorial": "playwright test tests/kp-lisp-tutorial-visual.browser.spec.ts --project=chromium --workers=1",
