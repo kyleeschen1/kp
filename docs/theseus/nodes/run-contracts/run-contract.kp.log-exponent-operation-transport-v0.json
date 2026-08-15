@@ -84,7 +84,8 @@
     {
       "id": "s09",
       "title": "Compose canonical transformation tree",
-      "status": "planned"
+      "summary": "Compiled and verified the complete canonical transformation tree.",
+      "status": "complete"
     },
     {
       "id": "s10",

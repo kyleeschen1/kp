@@ -1,5 +1,6 @@
 import {
   type KpApplyNaturalLogBothSidesOperation,
+  type KpDivideByLogBaseOperation,
   type KpExtractLogPowerExponentOperation,
   type KpLogExponentAuthoredOperation
 } from "./log-exponent-authored-operations.ts";
@@ -157,6 +158,65 @@ export function compileKpExtractLogPowerExponent(input: {
   });
 }
 
+export function compileKpDivideByLogBase(input: {
+  readonly operation: KpDivideByLogBaseOperation;
+  readonly source: KpLogExponentSolveState;
+  readonly target: KpLogExponentSolveState;
+}): KpCompiledLogExponentOperation {
+  assertDivisionEndpoints(input.operation, input.source, input.target);
+  const sourceRoles = compileKpLogExponentStateRoles(input.source);
+  const targetRoles = compileKpLogExponentStateRoles(input.target);
+  const records: readonly SelectorCorrespondenceRecord[] = Object.freeze([
+    preserve("divide-log-base", "equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
+    preserve("divide-log-base", "unknown-x", sourceRoles, targetRoles, "role-change", "The same x moves from coefficient position to the isolated left side."),
+    preserve("divide-log-base", "log-right-value", sourceRoles, targetRoles, "role-change", "The right logarithm becomes the quotient numerator."),
+    preserve("divide-log-base", "right-value", sourceRoles, targetRoles, "role-change", "Seven remains inside the numerator logarithm."),
+    preserve("divide-log-base", "log-base-value", sourceRoles, targetRoles, "role-change", "The base logarithm becomes the quotient denominator."),
+    preserve("divide-log-base", "base", sourceRoles, targetRoles, "role-change", "Two remains inside the denominator logarithm."),
+    Object.freeze({
+      id: "correspondence.divide-log-base.retire-product-container",
+      relation: "removal" as const,
+      sourceSelectorIds: Object.freeze([occurrence(sourceRoles, "extracted-product")]),
+      targetSelectorIds: Object.freeze([]),
+      summary: "The product container retires after division isolates x."
+    }),
+    Object.freeze({
+      id: "correspondence.divide-log-base.introduce-quotient-container",
+      relation: "introduction" as const,
+      sourceSelectorIds: Object.freeze([]),
+      targetSelectorIds: Object.freeze([occurrence(targetRoles, "solved-quotient")]),
+      summary: "The quotient container records division of the right side by ln(2)."
+    })
+  ]);
+  const correspondenceMap: CorrespondenceMap = Object.freeze({
+    id: "correspondence.log-exponent.divide-by-log-base",
+    records
+  });
+  assertCorrespondenceComplete(input.source, input.target, correspondenceMap);
+  const transformation = Object.freeze(createKpSemanticTransformation({
+    id: "transformation.log-exponent.divide-by-log-base",
+    transformType: "divideBothSidesByLogBase",
+    title: "Divide both sides by the logarithm of the base",
+    sourceObjectIds: [input.source.id],
+    targetObjectIds: [input.target.id],
+    preserves: ["identity", "value"],
+    correspondenceMap,
+    assumptions: [...input.operation.assumptionIds],
+    lawRefs: [{
+      id: input.operation.lawId,
+      level: "strict",
+      summary: "Dividing both sides by the same nonzero value preserves equality."
+    }]
+  }));
+  return authorize({
+    schemaVersion: "kp.compiled-log-exponent-operation.v1",
+    operation: input.operation,
+    sourceRoles,
+    targetRoles,
+    transformation
+  });
+}
+
 export function isKpCompiledLogExponentOperation(
   value: unknown
 ): value is KpCompiledLogExponentOperation {
@@ -230,6 +290,21 @@ function assertExtractionEndpoints(
     target.kind !== "exponent-extracted"
   ) {
     throw new Error("Exponent extraction requires the canonical logged and extracted endpoint states.");
+  }
+}
+
+function assertDivisionEndpoints(
+  operation: KpDivideByLogBaseOperation,
+  source: KpLogExponentSolveState,
+  target: KpLogExponentSolveState
+): void {
+  if (
+    operation.sourceStateId !== source.id ||
+    operation.targetStateId !== target.id ||
+    source.kind !== "exponent-extracted" ||
+    target.kind !== "solved-equation"
+  ) {
+    throw new Error("Log-base division requires the canonical extracted and solved endpoint states.");
   }
 }
 
