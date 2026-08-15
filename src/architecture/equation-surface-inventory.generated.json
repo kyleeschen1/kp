@@ -31,8 +31,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "log-exponent",
+        "rendererAdapterId": "editor-animation-surface.log-exponent.canonical-native-katex",
+        "rendererSourcePath": "src/editor/log-exponent-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -69,8 +70,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "log-quotient",
+        "rendererAdapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
+        "rendererSourcePath": "src/editor/log-quotient-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -107,6 +109,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -146,6 +149,7 @@
       "catalogueSurface": {
         "kind": "composite",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -184,6 +188,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -222,6 +227,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -260,6 +266,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -298,6 +305,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -336,6 +344,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -374,6 +383,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -412,6 +422,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -450,6 +461,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -488,6 +500,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -526,6 +539,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -564,6 +578,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -602,6 +617,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -641,6 +657,7 @@
       "catalogueSurface": {
         "kind": "composite",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -679,6 +696,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -717,6 +735,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -755,6 +774,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -793,6 +813,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -831,6 +852,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -869,6 +891,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -907,8 +930,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "operation-evaluation",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "rendererSourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -945,8 +969,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "operation-evaluation",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "rendererSourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -983,8 +1008,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "operation-evaluation",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "rendererSourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -1021,6 +1047,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },
@@ -1059,6 +1086,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
+        "selectedCapabilityId": "equation-katex",
         "rendererAdapterId": "editor-animation-surface.equation.katex",
         "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
       },

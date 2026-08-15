@@ -18,10 +18,24 @@
       "scope": "s01 boundaries and generated truth",
       "checkedAt": "2026-08-15T20:36:53.657Z",
       "notes": "Semantic-animation architecture passes with zero exceptions and six classified compatibility paths; full TypeScript checks pass; both generated catalogue and equation inventory are current; workspace validates 956 nodes and 20994 events."
+    },
+    {
+      "command": "npm run test:equation-surface-authority; npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s02 authority reachability and operation preservation",
+      "checkedAt": "2026-08-15T20:54:07.001Z",
+      "notes": "Six authority/inventory checks and all 181 operation-presentation checks pass. The graph covers 28 rows through 41 source-reachable authority nodes and explicitly records five partially semantic generic rows plus the log-exponent planning gap."
+    },
+    {
+      "command": "npm run check:architecture; npm run typecheck; generated authority checks; theseus workspace validate",
+      "status": "passed",
+      "scope": "s02 architecture and generated graph",
+      "checkedAt": "2026-08-15T20:54:15.094Z",
+      "notes": "Architecture gates remain green with zero semantic-animation exceptions and six classified compatibility paths; full TypeScript checks pass; generated inventory and authority graph are current; workspace validates."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 complete: canonical generated inventory covers 28 current equation surfaces, reconciles the former 24-row snapshot through four audited additions, repairs two stale display rows, and fails closed on identity or route drift."
+    "summary": "s02 complete: all 28 equation rows map to source-reachable compiler, registry, motif, timing, renderer, clock, fallback, and sampler authorities. The graph freezes four live path classes, five non-semantic generic gaps, one log-exponent planning gap, and zero private-clock or CSS-animation owners."
   }
 }

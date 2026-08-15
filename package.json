@@ -268,8 +268,10 @@
     "perf:animation:attribution": "node --disable-warning=ExperimentalWarning scripts/animation-capability-attribution.ts",
     "perf:animation:strict": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts --strict-targets",
     "generate:animation-library-metadata": "node --disable-warning=ExperimentalWarning scripts/generate-animation-library-metadata.ts",
+    "generate:equation-surface-authority-graph": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-authority-graph.ts",
     "generate:equation-surface-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-inventory.ts",
-    "test:equation-surface-inventory": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-inventory.test.ts tests/animation-library-display-catalog-generation.test.ts"
+    "test:equation-surface-inventory": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-inventory.test.ts tests/animation-library-display-catalog-generation.test.ts",
+    "test:equation-surface-authority": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-authority-graph.test.ts tests/equation-surface-inventory.test.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

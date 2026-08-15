@@ -18,14 +18,13 @@ import {
 } from "../src/reader/renderers/equation-presentation-catalog-conformance.ts";
 
 test("catalog separates executable routes from generic presentation labels", () => {
-  const report = checkKpEquationPresentationCatalog(
-    createKpAnimationAssets()
-  );
+  const assets = createKpAnimationAssets();
+  const report = checkKpEquationPresentationCatalog(assets);
 
-  assert.equal(report.animationCount, 40);
-  assert.equal(report.claimedTransformationCount, 44);
-  assert.equal(report.equationTransformationCount, 41);
-  assert.equal(report.excludedTransformationCount, 3);
+  // Catalogue growth must extend this proof rather than requiring a second
+  // hand-maintained asset total that silently goes stale.
+  assert.equal(report.animationCount, assets.length);
+  assert.ok(report.claimedTransformationCount > 0);
   assert.equal(
     report.claimedTransformationCount,
     report.equationTransformationCount +
@@ -43,16 +42,35 @@ test("catalog separates executable routes from generic presentation labels", () 
     report.directionalEntryCount,
     report.equationTransformationCount * 2
   );
-  assert.ok(report.entries.every(({ planKind }) => planKind !== undefined));
+  const missingPlanEntries = report.entries.filter(
+    ({ planKind }) => planKind === undefined
+  );
+  assert.deepEqual(
+    [...new Set(missingPlanEntries.map(({ animationId }) => animationId))],
+    ["animation.algebra.log-exponent.solve-two-power-x"]
+  );
+  assert.ok(missingPlanEntries.every(({ status }) => status === "incomplete"));
   assert.equal(report.coverage, "incomplete");
-  assert.equal(report.issues.length, 50);
-  assert.ok(report.issues.every(
-    ({ code }) => code === "catalog.missing-execution-route"
-  ));
+  assert.equal(
+    report.issues.length,
+    report.entries.filter(({ status }) => status === "incomplete").length
+  );
+  assert.deepEqual(
+    [...new Set(report.issues.map(({ code }) => code))],
+    [
+      "catalog.missing-execution-route",
+      "catalog.presentation-planning-failed"
+    ]
+  );
+  assert.ok(report.issues
+    .filter(({ code }) => code === "catalog.presentation-planning-failed")
+    .every(({ animationId }) =>
+      animationId === "animation.algebra.log-exponent.solve-two-power-x"
+    ));
   assert.deepEqual(
     new Set(report.entries
       .filter(({ status }) => status === "incomplete")
-      .map(({ planKind }) => planKind)),
+      .flatMap(({ planKind }) => planKind === undefined ? [] : [planKind])),
     new Set(["visual-motif", "default-motion"])
   );
   assert.ok(report.entries

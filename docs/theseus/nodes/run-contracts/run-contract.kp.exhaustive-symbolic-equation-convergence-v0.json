@@ -56,7 +56,8 @@
     {
       "id": "s02",
       "title": "Authority path graph",
-      "status": "planned"
+      "summary": "Generated and source-verified a 41-node authority graph for all 28 equation surfaces; corrected specialized renderer ownership; classified four live path classes, five generic semantic gaps, one log-exponent planning gap, shared-clock ownership, local samplers, and fail-closed versus compatibility fallbacks; removed the stale 40-asset test constant.",
+      "status": "complete"
     },
     {
       "id": "s03",

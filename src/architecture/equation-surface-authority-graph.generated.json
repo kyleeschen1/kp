@@ -1,0 +1,1412 @@
+{
+  "schemaVersion": "kp.equation-surface-authority-graph.v1",
+  "kind": "equation-surface-authority-graph",
+  "nodes": [
+    {
+      "id": "registry.selected-capability",
+      "category": "registry",
+      "authority": "canonical",
+      "sourcePath": "src/editor/selected-surface-capability.ts",
+      "sourceNeedle": "export function deriveKpEditorSelectedSurfaceCapabilities",
+      "summary": "Selection maps an asset and its slots to lazy surface capabilities."
+    },
+    {
+      "id": "registry.priority-resolution",
+      "category": "registry",
+      "authority": "canonical",
+      "sourcePath": "src/editor/animation-surface-adapter-registry.ts",
+      "sourceNeedle": "resolve(slotKind, state)",
+      "summary": "The surface registry chooses the highest-priority supporting adapter."
+    },
+    {
+      "id": "clock.shared-editor-player",
+      "category": "clock",
+      "authority": "shared",
+      "sourcePath": "src/editor/animation-player-controller.ts",
+      "sourceNeedle": "requestAnimationFrame((nowMs) =>",
+      "summary": "One player requestAnimationFrame clock owns catalogue progress."
+    },
+    {
+      "id": "compiler.generic-semantic-transition",
+      "category": "compiler",
+      "authority": "canonical",
+      "sourcePath": "src/domain-ir/semantic-equation-transition-compiler.ts",
+      "sourceNeedle": "export function compileKpSemanticEquationTransitionResult",
+      "summary": "The generic path compiles transformations into equation transition IR."
+    },
+    {
+      "id": "compiler.operation-evaluation-render-plan",
+      "category": "compiler",
+      "authority": "canonical",
+      "sourcePath": "src/reader/renderers/equation-render-plan.ts",
+      "sourceNeedle": "export function projectKpReaderEquationRenderPlan",
+      "summary": "Operation evaluation compiles through the branded reader render plan."
+    },
+    {
+      "id": "compiler.log-exponent-operations",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/log-exponent-transformation-compiler.ts",
+      "sourceNeedle": "export function compileKpApplyNaturalLogBothSides",
+      "summary": "Log-exponent operations use their dedicated typed semantic compiler."
+    },
+    {
+      "id": "compiler.log-quotient-operation",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/log-quotient-transformation-compiler.ts",
+      "sourceNeedle": "export function compileKpLogQuotientOperation",
+      "summary": "Log quotient uses its dedicated typed semantic compiler."
+    },
+    {
+      "id": "motif.generic-transition",
+      "category": "motif",
+      "authority": "compatibility",
+      "sourcePath": "src/editor/equation-transition-motifs.ts",
+      "sourceNeedle": "export function createKpEditorEquationTransitionMotifFrame",
+      "summary": "The generic adapter still resolves broad motif labels per transition."
+    },
+    {
+      "id": "motif.operation-evaluation-material",
+      "category": "motif",
+      "authority": "canonical",
+      "sourcePath": "src/reader/renderers/equation-material-plan.ts",
+      "sourceNeedle": "export function compileKpReaderEquationMaterialPlan",
+      "summary": "Operation evaluation derives one role-complete material plan."
+    },
+    {
+      "id": "motif.log-exponent-symbol-motion",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/log-exponent-symbol-motion.ts",
+      "sourceNeedle": "export function compileKpLogExponentSymbolMotionPlans",
+      "summary": "Log-exponent symbols use a caller-local compiled motion contract."
+    },
+    {
+      "id": "motif.log-quotient-homomorphic-fusion",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/log-quotient-homomorphic-fusion.ts",
+      "sourceNeedle": "export function createKpCanonicalLogQuotientHomomorphicFusionChoreography",
+      "summary": "Log quotient owns its current homomorphic fusion choreography locally."
+    },
+    {
+      "id": "timing.generic-phase-easing",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourceNeedle": "const easedProgress = localProgress * localProgress",
+      "summary": "The generic surface currently owns phase-local easing."
+    },
+    {
+      "id": "timing.operation-endpoint-dwell",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/rendering/native-katex-scene-compositor.ts",
+      "sourceNeedle": "export function sampleKpNativeKatexEndpointDwellProgress",
+      "summary": "The native compositor currently owns operation endpoint dwell."
+    },
+    {
+      "id": "timing.log-exponent-sequence",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/log-exponent-timeline.ts",
+      "sourceNeedle": "export function sampleKpLogExponentSequenceFrame",
+      "summary": "The log-exponent timeline maps shared progress to operation-local time."
+    },
+    {
+      "id": "timing.log-quotient-sequence",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/log-quotient-timeline.ts",
+      "sourceNeedle": "export function sampleKpLogQuotientFrame",
+      "summary": "The log-quotient timeline maps shared progress to local fusion time."
+    },
+    {
+      "id": "renderer.generic-dom-measurement",
+      "category": "renderer-inference",
+      "authority": "compatibility",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourceNeedle": "measureKpEquationTransitionGeometry({",
+      "summary": "The generic path infers motion geometry from rendered KaTeX DOM."
+    },
+    {
+      "id": "renderer.operation-measured-compositor",
+      "category": "renderer-inference",
+      "authority": "canonical",
+      "sourcePath": "src/reader/renderers/equation-scene-compositor-adapter.ts",
+      "sourceNeedle": "export function createKpReaderEquationSceneCompositorSession",
+      "summary": "Operation evaluation executes through the measured native compositor."
+    },
+    {
+      "id": "renderer.log-exponent-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/log-exponent-transit-session.ts",
+      "sourceNeedle": "export function createKpLogExponentTransitSession",
+      "summary": "Log exponent owns a dedicated native endpoint transit session."
+    },
+    {
+      "id": "renderer.log-quotient-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/log-quotient-transit-session.ts",
+      "sourceNeedle": "export function createKpLogQuotientTransitSession",
+      "summary": "Log quotient owns a dedicated native endpoint transit session."
+    },
+    {
+      "id": "fallback.generic-whole-equation",
+      "category": "fallback",
+      "authority": "compatibility",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourceNeedle": "function applyLayerMotion(",
+      "summary": "Failed semantic motion falls back to whole-equation layer motion."
+    },
+    {
+      "id": "fallback.operation-failed-stage",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts",
+      "sourceNeedle": "} catch (error) {",
+      "summary": "Operation preparation fails closed instead of inventing a motif."
+    },
+    {
+      "id": "fallback.log-exponent-failed-stage",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/log-exponent-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpLogExponentStage\"] = \"failed\"",
+      "summary": "Log-exponent preparation records an explicit failed stage."
+    },
+    {
+      "id": "fallback.log-quotient-failed-stage",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/log-quotient-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpLogQuotientStage\"] = \"failed\"",
+      "summary": "Log-quotient preparation records an explicit failed stage."
+    },
+    {
+      "id": "sampler.generic-semantic-token",
+      "category": "direct-sampler",
+      "authority": "compatibility",
+      "sourcePath": "src/editor/semantic-equation-player-adapter.ts",
+      "sourceNeedle": "export function createKpEditorSemanticEquationTokenFrame",
+      "summary": "The generic adapter directly samples and applies its token frame."
+    },
+    {
+      "id": "sampler.operation-native-scene",
+      "category": "direct-sampler",
+      "authority": "canonical",
+      "sourcePath": "src/rendering/native-katex-scene-compositor.ts",
+      "sourceNeedle": "export function sampleKpNativeKatexSceneTracks(",
+      "summary": "The operation compositor samples its compiled native scene tracks."
+    },
+    {
+      "id": "sampler.log-exponent-sequence",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/log-exponent-timeline.ts",
+      "sourceNeedle": "export function sampleKpLogExponentSequenceFrame",
+      "summary": "The log-exponent adapter directly samples its local sequence."
+    },
+    {
+      "id": "sampler.log-quotient-sequence",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/log-quotient-timeline.ts",
+      "sourceNeedle": "export function sampleKpLogQuotientFrame",
+      "summary": "The log-quotient adapter directly samples its local sequence."
+    },
+    {
+      "id": "sampler.function-wrap",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/function-wrap-choreography.ts",
+      "sourceNeedle": "export function sampleKpFunctionWrapChoreography",
+      "summary": "Function wrapping has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.radical-succession",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/radical-succession-choreography.ts",
+      "sourceNeedle": "export function sampleKpRadicalSuccessionChoreography",
+      "summary": "Radical succession has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.linear-rearrangement",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/linear-rearrangement-choreography.ts",
+      "sourceNeedle": "export function sampleKpLinearRearrangementChoreography",
+      "summary": "Linear rearrangement has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.witnessed-annihilation",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/rendering/equation-witnessed-annihilation-runtime.ts",
+      "sourceNeedle": "export function kpEquationWitnessedAnnihilationRuntime",
+      "summary": "Cancellation can enter a renderer-registered annihilation runtime."
+    },
+    {
+      "id": "sampler.dot-product-traversal",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/dot-product-traversal-choreography.ts",
+      "sourceNeedle": "export function sampleKpDotProductTraversalChoreography",
+      "summary": "Dot product traversal has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.matrix-vector-composition",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/matrix-vector-composition-choreography.ts",
+      "sourceNeedle": "export function sampleKpMatrixVectorCompositionChoreography",
+      "summary": "Matrix-vector composition has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.matrix-matrix-composition",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/matrix-matrix-composition-choreography.ts",
+      "sourceNeedle": "export function sampleKpMatrixMatrixCompositionChoreography",
+      "summary": "Matrix-matrix composition has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.derivative-power",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/derivative-power-choreography.ts",
+      "sourceNeedle": "export function sampleKpDerivativePowerChoreography",
+      "summary": "The derivative power rule has a direct local choreography sampler."
+    },
+    {
+      "id": "sampler.distribution",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/distribution-choreography.ts",
+      "sourceNeedle": "export function sampleKpDistributionChoreography",
+      "summary": "Distribution enters its capability-provided local sampler."
+    },
+    {
+      "id": "sampler.factoring",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/factoring-choreography.ts",
+      "sourceNeedle": "export function sampleKpFactoringChoreography",
+      "summary": "Factoring enters its local fusion sampler."
+    },
+    {
+      "id": "sampler.fraction",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/fraction-choreography.ts",
+      "sourceNeedle": "export function sampleKpFractionChoreography",
+      "summary": "Fraction structure changes enter a local sampler."
+    },
+    {
+      "id": "sampler.exponent-law",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/exponent-law-choreography.ts",
+      "sourceNeedle": "export function sampleKpExponentLawChoreography",
+      "summary": "Exponent-law changes enter a local sampler."
+    },
+    {
+      "id": "sampler.identity-absorption",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/identity-absorption-choreography.ts",
+      "sourceNeedle": "export function sampleKpIdentityAbsorptionChoreography",
+      "summary": "Identity absorption enters a local sampler."
+    },
+    {
+      "id": "sampler.inequality-pivot",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/inequality-pivot-choreography.ts",
+      "sourceNeedle": "export function sampleKpInequalityPivotChoreography",
+      "summary": "Inequality reversal enters a local pivot sampler."
+    }
+  ],
+  "rows": [
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.log-exponent.solve-two-power-x",
+      "pathClass": "log-exponent-specialized",
+      "transformationTypes": [
+        "applyNaturalLogBothSides",
+        "extractLogPowerExponent",
+        "divideBothSidesByLogBase"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 3,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.log-exponent-operations"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.log-exponent-symbol-motion"
+      ],
+      "localTimingNodeIds": [
+        "timing.log-exponent-sequence"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.log-exponent-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.log-exponent-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.log-exponent-sequence"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.log-quotient.difference-to-quotient",
+      "pathClass": "log-quotient-specialized",
+      "transformationTypes": [
+        "combineLogDifferenceAsQuotient"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.log-quotient-operation"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.log-quotient-homomorphic-fusion"
+      ],
+      "localTimingNodeIds": [
+        "timing.log-quotient-sequence"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.log-quotient-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.log-quotient-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.log-quotient-sequence"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.comparison.jacobian-hessian",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "presentLatexForm",
+        "compareDerivativeMatrixForms"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 1
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.comparison.linear-solve-programming",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "subtractBothSides",
+        "cancelAdditiveInverses",
+        "simplifyConstantDifference",
+        "advanceExecutionTrace"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 3,
+        "nonSemantic": 4
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.linear-rearrangement",
+        "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.add-zero",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "simplify-additive-identity"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.identity-absorption"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "applyDerivativePowerRule"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.derivative-power"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "applyDerivativeSumRule",
+        "applyDerivativePowerRulesToTerms"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.calculus.integral.power-rule-quadratic",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "applyAntiderivativePowerRule",
+        "simplifyAntiderivativePowerRule"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.cancellation.additive-inverses",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "cancelAdditiveInverses"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.linear-rearrangement",
+        "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.distribution.expand-a-sum",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "distributeMultiplication"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.distribution"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.distribution.factor-common-a",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "factorCommonTerm"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.factoring"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.exponent.square-as-product",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "lowerExponent",
+        "unwrapUnitExponent"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.exponent-law"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.fraction-expression.two-fourths",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "splitFractionFactors",
+        "mergeFractionCommonFactor",
+        "simplifyUnitFractionFactor"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 3,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.fraction"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.function-wrap.apply-f",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "wrapFunction"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.function-wrap"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "computeDotProduct"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.dot-product-traversal"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "multiplyMatrices"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.matrix-matrix-composition"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "multiplyMatrixVector",
+        "applyLinearMapToVector"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 1
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.matrix-vector-composition"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.linear-solve.linear-68c15d41",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "subtractBothSides",
+        "cancelAdditiveInverses",
+        "simplifyConstantDifference",
+        "divideBothSides",
+        "cancelMultiplicativeInverses"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 5,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.linear-rearrangement",
+        "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.radical.square-root-as-power",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "rewritePowerAsRoot"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.radical-succession"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.substitute-three",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "substituteValue"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.generated.substitute-three.provisional-incorrect",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "substituteValue"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.inequality.sign-flip.basic",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "multiplyNegativeBothSidesInequality"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.inequality-pivot"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.linear-solve.solve-x",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "subtractBothSides",
+        "cancelAdditiveInverses",
+        "simplifyConstantDifference"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 3,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token",
+        "sampler.linear-rearrangement",
+        "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.operation-evaluation.five-plus-two",
+      "pathClass": "operation-evaluation-specialized",
+      "transformationTypes": [
+        "simplifyConstantSum"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.operation-evaluation-render-plan"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.operation-evaluation-material"
+      ],
+      "localTimingNodeIds": [
+        "timing.operation-endpoint-dwell"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.operation-measured-compositor"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.operation-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.operation-evaluation.one-plus-two",
+      "pathClass": "operation-evaluation-specialized",
+      "transformationTypes": [
+        "simplifyConstantSum"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.operation-evaluation-render-plan"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.operation-evaluation-material"
+      ],
+      "localTimingNodeIds": [
+        "timing.operation-endpoint-dwell"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.operation-measured-compositor"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.operation-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.operation-evaluation.three-sixths",
+      "pathClass": "operation-evaluation-specialized",
+      "transformationTypes": [
+        "simplifyConstantQuotient"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.operation-evaluation-render-plan"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.operation-evaluation-material"
+      ],
+      "localTimingNodeIds": [
+        "timing.operation-endpoint-dwell"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.operation-measured-compositor"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.operation-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.sample.fourier-transform-pair",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "presentLatexForm",
+        "compareFourierTransformPair"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 1
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.sample.fundamental-theorem-calculus",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "presentLatexForm",
+        "compareFundamentalTheoremForms"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 2,
+        "nonSemantic": 1
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    }
+  ]
+}

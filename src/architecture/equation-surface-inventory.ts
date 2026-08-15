@@ -62,8 +62,13 @@ export interface KpEquationSurfaceInventoryEntry {
   readonly catalogueSurface: {
     readonly kind: "equation" | "composite";
     readonly slotKind: "equation";
-    readonly rendererAdapterId: "editor-animation-surface.equation.katex";
-    readonly rendererSourcePath: "src/editor/equation-surface-adapter.ts";
+    readonly selectedCapabilityId:
+      | "equation-katex"
+      | "log-exponent"
+      | "log-quotient"
+      | "operation-evaluation";
+    readonly rendererAdapterId: string;
+    readonly rendererSourcePath: string;
   };
   readonly clockAuthority: {
     readonly ownerId: "editor-animation-player";
@@ -210,6 +215,7 @@ function projectInventoryEntry(
 ): KpEquationSurfaceInventoryEntry {
   const context = catalogue.relatedContexts.find(({ id }) => id === primary.id);
   const href = context?.href ?? primary.href;
+  const surfaceAuthority = equationSurfaceAuthority(catalogue.animationId);
   return Object.freeze({
     schemaVersion: "kp.equation-surface-inventory-entry.v1" as const,
     animationId: catalogue.animationId,
@@ -226,8 +232,7 @@ function projectInventoryEntry(
         ? "equation" as const
         : "composite" as const,
       slotKind: "equation" as const,
-      rendererAdapterId: "editor-animation-surface.equation.katex" as const,
-      rendererSourcePath: "src/editor/equation-surface-adapter.ts" as const
+      ...surfaceAuthority
     }),
     clockAuthority: Object.freeze({
       ownerId: "editor-animation-player" as const,
@@ -252,6 +257,46 @@ function projectInventoryEntry(
       sourcePath:
         "src/editor/animation-library-display-catalog-builder.ts" as const
     })
+  });
+}
+
+function equationSurfaceAuthority(animationId: string):
+Pick<
+  KpEquationSurfaceInventoryEntry["catalogueSurface"],
+  "selectedCapabilityId" | "rendererAdapterId" | "rendererSourcePath"
+> {
+  if (animationId.startsWith("animation.operation-evaluation.")) {
+    return Object.freeze({
+      selectedCapabilityId: "operation-evaluation" as const,
+      rendererAdapterId:
+        "editor-animation-surface.operation-evaluation.canonical-native-katex",
+      rendererSourcePath:
+        "src/editor/operation-evaluation-surface-adapter.ts"
+    });
+  }
+  if (animationId === "animation.algebra.log-exponent.solve-two-power-x") {
+    return Object.freeze({
+      selectedCapabilityId: "log-exponent" as const,
+      rendererAdapterId:
+        "editor-animation-surface.log-exponent.canonical-native-katex",
+      rendererSourcePath: "src/editor/log-exponent-surface-adapter.ts"
+    });
+  }
+  if (
+    animationId ===
+      "animation.algebra.log-quotient.difference-to-quotient"
+  ) {
+    return Object.freeze({
+      selectedCapabilityId: "log-quotient" as const,
+      rendererAdapterId:
+        "editor-animation-surface.log-quotient.canonical-native-katex",
+      rendererSourcePath: "src/editor/log-quotient-surface-adapter.ts"
+    });
+  }
+  return Object.freeze({
+    selectedCapabilityId: "equation-katex" as const,
+    rendererAdapterId: "editor-animation-surface.equation.katex",
+    rendererSourcePath: "src/editor/equation-surface-adapter.ts"
   });
 }
 
