@@ -1,0 +1,160 @@
+import {
+  compileKpSemanticMotionLifecycle,
+  createKpSemanticMotionCompilerRequestV1,
+  kpSemanticMotionCompilerRequestSchemaVersion,
+  validateKpSemanticMotionCorrespondenceAndProvenance,
+  validateKpSemanticMotionEndpointsAndFrontier,
+  type KpSemanticMotionCompilerRequestV1,
+  type KpSemanticMotionEntityAuthorityV1,
+  type KpSemanticMotionSourceAuthorityV1,
+  type KpVerifiedSemanticMotionLifecycle
+} from "../../src/domain-ir/public-api.ts";
+import type {
+  SelectorCorrespondenceRelationId,
+  SelectorCorrespondenceRecord
+} from "../../src/semantic/correspondence.ts";
+
+export interface KpSemanticMotionCompilerTestFixture {
+  readonly request: KpSemanticMotionCompilerRequestV1;
+  readonly source: KpSemanticMotionSourceAuthorityV1;
+  readonly lifecycle: KpVerifiedSemanticMotionLifecycle;
+}
+
+interface FixtureInput {
+  readonly id: string;
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+  readonly relations: readonly {
+    readonly id: string;
+    readonly relation: SelectorCorrespondenceRelationId;
+    readonly sourceEntityIds: readonly string[];
+    readonly targetEntityIds: readonly string[];
+  }[];
+}
+
+export function createQuotientSemanticMotionFixture(): KpSemanticMotionCompilerTestFixture {
+  return createFixture({
+    id: "quotient",
+    sourceEntityIds: ["q.source.ln-left", "q.source.ln-right", "q.source.x", "q.source.y"],
+    targetEntityIds: ["q.target.ln", "q.target.x", "q.target.y"],
+    roleBindings: {
+      "source-operators": ["q.source.ln-left", "q.source.ln-right"],
+      "source-arguments": ["q.source.x", "q.source.y"],
+      "target-operator": ["q.target.ln"],
+      "target-arguments": ["q.target.x", "q.target.y"]
+    },
+    relations: [{
+      id: "operators-fuse",
+      relation: "fan-in",
+      sourceEntityIds: ["q.source.ln-left", "q.source.ln-right"],
+      targetEntityIds: ["q.target.ln"]
+    }, roleChange("x-changes-role", "q.source.x", "q.target.x"), roleChange("y-changes-role", "q.source.y", "q.target.y")]
+  });
+}
+
+export function createDistributionSemanticMotionFixture(): KpSemanticMotionCompilerTestFixture {
+  return createFixture({
+    id: "distribution",
+    sourceEntityIds: ["d.source.factor", "d.source.left", "d.source.plus", "d.source.right"],
+    targetEntityIds: ["d.target.factor-left", "d.target.left", "d.target.plus", "d.target.factor-right", "d.target.right"],
+    roleBindings: {
+      "source-factor": ["d.source.factor"],
+      "factor-copies": ["d.target.factor-left", "d.target.factor-right"],
+      "source-addends": ["d.source.left", "d.source.right"],
+      "target-addends": ["d.target.left", "d.target.right"],
+      connector: ["d.source.plus", "d.target.plus"]
+    },
+    relations: [{
+      id: "factor-fans-out",
+      relation: "fan-out",
+      sourceEntityIds: ["d.source.factor"],
+      targetEntityIds: ["d.target.factor-left", "d.target.factor-right"]
+    }, roleChange("left-persists", "d.source.left", "d.target.left"), roleChange("plus-persists", "d.source.plus", "d.target.plus"), roleChange("right-persists", "d.source.right", "d.target.right")]
+  });
+}
+
+export function createCancellationSemanticMotionFixture(): KpSemanticMotionCompilerTestFixture {
+  return createFixture({
+    id: "cancellation",
+    sourceEntityIds: ["c.source.x", "c.source.plus-three", "c.source.minus-three", "c.source.equals", "c.source.seven"],
+    targetEntityIds: ["c.target.x", "c.target.equals", "c.target.seven"],
+    roleBindings: {
+      "inverse-pair": ["c.source.plus-three", "c.source.minus-three"],
+      "source-survivors": ["c.source.x", "c.source.equals", "c.source.seven"],
+      "target-survivors": ["c.target.x", "c.target.equals", "c.target.seven"]
+    },
+    relations: [{
+      id: "inverse-pair-cancels",
+      relation: "cancelation",
+      sourceEntityIds: ["c.source.plus-three", "c.source.minus-three"],
+      targetEntityIds: []
+    }, roleChange("x-persists", "c.source.x", "c.target.x"), roleChange("equals-persists", "c.source.equals", "c.target.equals"), roleChange("seven-persists", "c.source.seven", "c.target.seven")]
+  });
+}
+
+function createFixture(input: FixtureInput): KpSemanticMotionCompilerTestFixture {
+  const transformationId = `transform.${input.id}`;
+  const sourceId = `semantic.${input.id}`;
+  const correspondenceRecords: readonly SelectorCorrespondenceRecord[] = input.relations.map((relation) => ({
+    id: relation.id,
+    relation: relation.relation,
+    sourceSelectorIds: relation.sourceEntityIds,
+    targetSelectorIds: relation.targetEntityIds,
+    summary: relation.id
+  }));
+  const source: KpSemanticMotionSourceAuthorityV1 = {
+    sourceId,
+    revisionId: "revision.1",
+    assetIds: [`animation.${input.id}`],
+    states: [{ id: `state.${input.id}.source`, objectIds: [`object.${input.id}.source`], entityIds: input.sourceEntityIds }, { id: `state.${input.id}.target`, objectIds: [`object.${input.id}.target`], entityIds: input.targetEntityIds }],
+    entities: [
+      ...input.sourceEntityIds.map((id) => authored(id, sourceId)),
+      ...input.targetEntityIds.map((id) => targetAuthority(id, transformationId, correspondenceRecords))
+    ]
+  };
+  const request = createKpSemanticMotionCompilerRequestV1({
+    schemaVersion: kpSemanticMotionCompilerRequestSchemaVersion,
+    id: `request.${input.id}`,
+    assetId: `animation.${input.id}`,
+    semanticSource: { sourceId, revisionId: source.revisionId, operationPacks: [{ packId: "kp.semantic-motion", version: "0.1.0" }] },
+    sourceState: source.states[0]!,
+    targetState: source.states[1]!,
+    operation: { stepId: `step.${input.id}`, transformationId, operationId: `kp.semantic-motion.${input.id}`, roleBindings: input.roleBindings, correspondenceMap: { id: `correspondence.${input.id}`, records: correspondenceRecords } },
+    rewriteFrontier: { sourceEntityIds: input.sourceEntityIds, targetEntityIds: input.targetEntityIds, contextEntityIds: [] },
+    teachingIntent: { kind: "cause", primaryEntityIds: [...input.sourceEntityIds, ...input.targetEntityIds], secondaryEntityIds: [], summary: input.id }
+  });
+  const endpoints = validateKpSemanticMotionEndpointsAndFrontier({ request, source });
+  if (endpoints.status !== "verified") throw new Error(`Fixture ${input.id} endpoint validation failed.`);
+  const provenance = validateKpSemanticMotionCorrespondenceAndProvenance({ request, source, endpointFrontier: endpoints.endpointFrontier });
+  if (provenance.status !== "verified") throw new Error(`Fixture ${input.id} provenance validation failed.`);
+  const lifecycle = compileKpSemanticMotionLifecycle({ request, provenance: provenance.provenance });
+  if (lifecycle.status !== "verified") throw new Error(`Fixture ${input.id} lifecycle compilation failed.`);
+  return { request, source, lifecycle: lifecycle.lifecycle };
+}
+
+function targetAuthority(
+  id: string,
+  transformationId: string,
+  records: readonly SelectorCorrespondenceRecord[]
+): KpSemanticMotionEntityAuthorityV1 {
+  const record = records.find(({ targetSelectorIds }) => targetSelectorIds.includes(id));
+  if (record === undefined) throw new Error(`Target ${id} has no fixture provenance.`);
+  if (record.relation === "identity" || record.relation === "role-change") {
+    const sourceEntityId = record.sourceSelectorIds[0]!;
+    return { id, semanticIdentityId: `identity.${sourceEntityId}`, provenance: { kind: "identity-successor", transformationId, sourceEntityIds: [sourceEntityId] } };
+  }
+  if (record.relation === "introduction") {
+    return { id, semanticIdentityId: `identity.${id}`, provenance: { kind: "introduced", transformationId } };
+  }
+  return { id, semanticIdentityId: `identity.${id}`, provenance: { kind: "derived", transformationId, sourceEntityIds: record.sourceSelectorIds } };
+}
+
+function authored(id: string, sourceId: string): KpSemanticMotionEntityAuthorityV1 {
+  return { id, semanticIdentityId: `identity.${id}`, provenance: { kind: "authored", sourceId } };
+}
+
+function roleChange(id: string, sourceEntityId: string, targetEntityId: string): FixtureInput["relations"][number] {
+  return { id, relation: "role-change", sourceEntityIds: [sourceEntityId], targetEntityIds: [targetEntityId] };
+}
+

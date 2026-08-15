@@ -160,10 +160,28 @@
       "status": "passed",
       "scope": "s09 lifecycle ownership boundaries",
       "checkedAt": "2026-08-15T22:00:21.288Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 exhaustive operation structure types",
+      "checkedAt": "2026-08-15T22:06:39.133Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-compiler-contract.test.ts tests/semantic-motion-endpoint-validator.test.ts tests/semantic-motion-correspondence-validator.test.ts tests/semantic-motion-lifecycle-ownership.test.ts tests/semantic-motion-role-cohort-compiler.test.ts",
+      "status": "passed",
+      "scope": "s10 role cohort attachment closure and three-family variants",
+      "checkedAt": "2026-08-15T22:06:39.756Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s10 structural compiler boundaries",
+      "checkedAt": "2026-08-15T22:06:40.203Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 complete: semantic lifecycle records, exclusive paint-ownership evidence, and instructional salience are now separate. Dense traces reject blank continuants, dual or stale paint ownership, opacity-based semantic routing, and bad endpoints; salience-only changes leave lifecycle fingerprints unchanged, and reduced motion exposes exact native endpoints."
+    "summary": "s10 complete: exact operation role sets and cardinalities now compile into total semantic cohorts and closed operator/sign/punctuation attachments. Quotient, distribution, and cancellation share validation while retaining distinct family-local cohesion variants; malformed, foreign, ambiguous, missing, duplicate, or copied structure fails closed."
   }
 }
