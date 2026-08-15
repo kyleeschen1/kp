@@ -5,8 +5,15 @@ import {
   kpLogExponentAnimationId
 } from "../animation/log-exponent-adapter.ts";
 import {
+  createKpCanonicalFunctionWrapChoreography,
   createKpCausalStructuralIntroductionChoreography
 } from "../animation/equation-operation-choreography.ts";
+import {
+  kpCanonicalLogExponentSymbolMotionPlans
+} from "../animation/log-exponent-symbol-motion.ts";
+import type {
+  KpCompiledSymbolMotionContract
+} from "../animation/symbol-motion-contract.ts";
 import {
   sampleKpLogExponentSequenceFrame
 } from "../animation/log-exponent-timeline.ts";
@@ -74,6 +81,7 @@ interface KpLogExponentPreparedOperation {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly symbolMotionContract: KpCompiledSymbolMotionContract;
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }
 
@@ -168,6 +176,13 @@ async function prepareSurface(
         kpCanonicalLogExponentTransformationTree.operations[index]!;
       const sourceEndpoint = kpCanonicalLogExponentNativeEndpoints[index]!;
       const targetEndpoint = kpCanonicalLogExponentNativeEndpoints[index + 1]!;
+      const symbolMotionPlan =
+        kpCanonicalLogExponentSymbolMotionPlans[index]!;
+      if (symbolMotionPlan.operationId !== operation.operation.id) {
+        throw new Error(
+          `Log-exponent symbol motion crossed operation ${operation.operation.id}.`
+        );
+      }
       const sourceRoot = session.endpointRoots[index]!;
       const targetRoot = session.endpointRoots[index + 1]!;
       const source = await settleAndObserveKpLogExponentNativeEndpoint({
@@ -185,21 +200,19 @@ async function prepareSurface(
         fontReadiness: session.fontReadiness
       });
       if (session.disposed || session.generation !== generation) return;
-      const compiledOperationChoreography =
-        compileKpEquationOperationChoreography({
-          animation: canonicalAnimation,
-          transformation: operation.transformation,
-          motifKind: "append-after-shift",
-          direction: "forward",
-          ...(index === 0
-            ? {
-                balancedIntroductionEntryWindow: {
-                  start: 0.78,
-                  end: 0.98
-                }
-              }
-            : {})
-        });
+      const compiledOperationChoreography = index === 0
+        ? createKpCanonicalFunctionWrapChoreography({
+            contract: symbolMotionPlan.contract,
+            motifId:
+              `motif.${operation.transformation.id}.canonical-wrap`,
+            direction: "forward"
+          })
+        : compileKpEquationOperationChoreography({
+            animation: canonicalAnimation,
+            transformation: operation.transformation,
+            motifKind: "append-after-shift",
+            direction: "forward"
+          });
       const operationChoreography = index === 2
         ? createKpCausalStructuralIntroductionChoreography({
             id: "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward",
@@ -211,6 +224,7 @@ async function prepareSurface(
         : compiledOperationChoreography;
       preparedOperations.push({
         operation,
+        symbolMotionContract: symbolMotionPlan.contract,
         sourceEndpoint,
         targetEndpoint,
         source,
@@ -276,6 +290,8 @@ function applyFrame(
     session.activeTransit = activeTransit;
     session.stage.dataset["kpLogExponentOperationChoreographyId"] =
       prepared.operationChoreography?.id ?? "none";
+    session.stage.dataset["kpLogExponentSymbolMotionContractId"] =
+      prepared.symbolMotionContract.id;
   }
   const operationProgress = frame.obligationFrames[0]?.progress ?? 0;
 

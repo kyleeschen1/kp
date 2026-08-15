@@ -21,6 +21,9 @@ import {
 import type {
   SelectorCorrespondenceRecord
 } from "../semantic/correspondence.ts";
+import type {
+  KpCompiledSymbolMotionContract
+} from "../animation/symbol-motion-contract.ts";
 
 export interface KpLogExponentTransitApplication {
   readonly progress: number;
@@ -67,6 +70,7 @@ export function createKpLogExponentTransitSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly symbolMotionContract: KpCompiledSymbolMotionContract;
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): KpLogExponentTransitSession {
   assertTransitInput(input);
@@ -74,6 +78,7 @@ export function createKpLogExponentTransitSession(input: {
     source: input.source,
     target: input.target,
     relations: projectKpLogExponentNativePaintRelations(input.operation),
+    symbolMotionContract: input.symbolMotionContract,
     ...(input.operationChoreography === undefined
       ? {}
       : { operationChoreography: input.operationChoreography }),
@@ -84,6 +89,31 @@ export function createKpLogExponentTransitSession(input: {
             input.horizontalAxisSemanticEntityIds
         })
   });
+  const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntityByAtomId = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  input.source.stage.dataset["kpLogExponentSymbolMotionTracks"] =
+    JSON.stringify(canonical.session.tracks.flatMap((track) =>
+      track.semanticContinuantId === undefined
+        ? []
+        : [{
+            trackId: track.id,
+            continuantId: track.semanticContinuantId,
+            motionUnitId: track.semanticMotionUnitId,
+            metricTransition: track.semanticMetricTransition,
+            sourceEntityId: sourceEntityByAtomId.get(
+              track.sourceAtomId ?? ""
+            ),
+            targetEntityId: targetEntityByAtomId.get(
+              track.targetAtomId ?? ""
+            )
+          }]
+    ));
   let retired = false;
 
   return Object.freeze({
@@ -176,11 +206,20 @@ function assertTransitInput(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly symbolMotionContract: KpCompiledSymbolMotionContract;
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): void {
   if (!isKpCompiledLogExponentOperation(input.operation)) {
     throw new Error(
       "Log-exponent transit requires a nominal compiled operation."
+    );
+  }
+  if (
+    input.symbolMotionContract.transformationId !==
+      input.operation.transformation.id
+  ) {
+    throw new Error(
+      `Log-exponent transit ${input.operation.operation.id} lacks matching symbol-motion authority.`
     );
   }
   if (

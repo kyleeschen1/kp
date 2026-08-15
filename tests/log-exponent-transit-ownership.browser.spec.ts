@@ -5,15 +5,17 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
 }) => {
   await page.goto("/");
 
-  const samples = await page.evaluate(async () => {
+  const result = await page.evaluate(async () => {
     const endpointPath = "/src/rendering/log-exponent-native-endpoints.ts";
     const transitPath = "/src/rendering/log-exponent-transit-session.ts";
     const treePath = "/src/semantic/log-exponent-transformation-tree.ts";
     const fontPath = "/src/rendering/equation-font-readiness.ts";
+    const motionPath = "/src/animation/log-exponent-symbol-motion.ts";
     const endpointModule = await import(/* @vite-ignore */ endpointPath);
     const transitModule = await import(/* @vite-ignore */ transitPath);
     const treeModule = await import(/* @vite-ignore */ treePath);
     const fontModule = await import(/* @vite-ignore */ fontPath);
+    const motionModule = await import(/* @vite-ignore */ motionPath);
 
     const stage = document.createElement("section");
     stage.style.cssText = [
@@ -78,10 +80,12 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
       sourceEndpoint,
       targetEndpoint,
       source,
-      target
+      target,
+      symbolMotionContract:
+        motionModule.kpCanonicalLogExponentSymbolMotionPlans[1].contract
     });
     const exponentDisposition = session.canonical.reconciliation.dispositions
-      .find(({ semanticEntityIds }) =>
+      .find(({ semanticEntityIds }: { semanticEntityIds: string[] }) =>
         semanticEntityIds.includes("logged.exponent") &&
         semanticEntityIds.includes("extracted.coefficient")
       );
@@ -89,7 +93,17 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
       throw new Error("Exponent continuity did not compile to one native paint transit.");
     }
 
-    const result = [0, 0.01, 0.5, 0.999, 1].map((progress) => {
+    const xTrack = session.canonical.session.tracks.find(
+      ({ semanticContinuantId }: { semanticContinuantId?: string }) =>
+        semanticContinuantId?.endsWith("extract-exponent.unknown-x")
+    );
+    const lnTrack = session.canonical.session.tracks.find(
+      ({ semanticContinuantId }: { semanticContinuantId?: string }) =>
+        semanticContinuantId?.endsWith(
+          "extract-exponent.log-left-operator"
+        )
+    );
+    const samples = [0, 0.01, 0.5, 0.999, 1].map((progress) => {
       const ownership = session.apply({ progress, direction: "forward" });
       const visibleMaterialOwners = [
         ...stage.querySelectorAll<HTMLElement>(
@@ -112,9 +126,16 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
     session.retire();
     fontReadiness.dispose();
     stage.remove();
-    return result;
+    return {
+      samples,
+      xMetricTransition: xTrack?.semanticMetricTransition,
+      xOpacity: [xTrack?.startOpacity, xTrack?.endOpacity],
+      lnLifecycle: lnTrack?.lifecycle,
+      lnOpacity: [lnTrack?.startOpacity, lnTrack?.endOpacity]
+    };
   });
 
+  const { samples } = result;
   expect(samples.map(({ visualOwner }) => visualOwner)).toEqual([
     "source-native",
     "material-scene",
@@ -135,4 +156,8 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
   expect(samples[1]!.visibleMaterialOwners).toBeGreaterThan(0);
   expect(samples[2]!.visibleMaterialOwners).toBeGreaterThan(0);
   expect(samples[3]!.visibleMaterialOwners).toBeGreaterThan(0);
+  expect(result.xMetricTransition).toBe("interpolate-to-target-metrics");
+  expect(result.xOpacity).toEqual([1, 1]);
+  expect(result.lnLifecycle).toBe("persist");
+  expect(result.lnOpacity).toEqual([1, 1]);
 });

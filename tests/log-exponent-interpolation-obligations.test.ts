@@ -42,7 +42,11 @@ test("x transfer and balanced wrappers carry explicit typed guarantees", () => {
   );
   assert.deepEqual(wrappers?.targetEntityIds, [
     "logged.left.log",
-    "logged.right.log"
+    "logged.left.log.operator",
+    "logged.left.log.open",
+    "logged.left.log.close",
+    "logged.right.log",
+    "logged.right.log.operator"
   ]);
   assert.equal(
     wrappers?.synchronizationGroupId,

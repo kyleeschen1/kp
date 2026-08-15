@@ -39,6 +39,8 @@ test("final division moves values into quotient roles without duplicating materi
     "role-change",
     "role-change",
     "role-change",
+    "role-change",
+    "role-change",
     "removal",
     "introduction"
   ]);

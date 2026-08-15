@@ -1,4 +1,5 @@
 import type {
+  KpCanonicalFunctionWrapChoreography,
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
@@ -32,6 +33,9 @@ export type KpRegisteredEquationOperationChoreography =
         KpVerifiedOperationPresentationPlan | undefined;
     })
   | (KpCausalStructuralIntroductionChoreography & {
+      readonly operationPresentationPlan?: undefined;
+    })
+  | (KpCanonicalFunctionWrapChoreography & {
       readonly operationPresentationPlan?: undefined;
     });
 

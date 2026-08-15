@@ -50,6 +50,12 @@ import { applyKpNativeKatexOperationChoreography, type KpEquationOperationChoreo
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
+import {
+  applyKpNativeKatexSymbolMotionContract
+} from "./native-katex-symbol-motion.ts";
+import type {
+  KpCompiledSymbolMotionContract
+} from "../animation/symbol-motion-contract.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrackFrameContract,
   KpNativeKatexPaintPreservingRetirement,
@@ -158,6 +164,7 @@ export interface KpCanonicalNativeKatexSceneInput {
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly factoring?: KpNativeKatexFactoringSceneBinding;
   readonly operationChoreography?: KpEquationOperationChoreography;
+  readonly symbolMotionContract?: KpCompiledSymbolMotionContract | undefined;
   readonly fanInRouting?: boolean;
   readonly copyFanOutRouting?: boolean;
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
@@ -1927,8 +1934,14 @@ function prepareKpCanonicalNativeKatexScene(
     target: input.target,
     intents: input.successorSyntheses ?? []
   });
-  const operationTracks = applyKpNativeKatexOperationChoreography({
+  const semanticMotionTracks = applyKpNativeKatexSymbolMotionContract({
     tracks: axisConstrainedTracks,
+    source: input.source,
+    target: input.target,
+    contract: input.symbolMotionContract
+  });
+  const operationTracks = applyKpNativeKatexOperationChoreography({
+    tracks: semanticMotionTracks,
     source: input.source,
     target: input.target,
     choreography: input.operationChoreography
@@ -1973,6 +1986,7 @@ function pureSceneInputSignature(
     source: atoms(input.source),
     target: atoms(input.target),
     relations: input.relations,
+    symbolMotionContract: input.symbolMotionContract,
     fanInRouting: input.fanInRouting === true,
     copyFanOutRouting: input.copyFanOutRouting === true,
     horizontalAxisSemanticEntityIds:

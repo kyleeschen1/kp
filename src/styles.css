@@ -2185,12 +2185,16 @@ h2 {
   text-transform: uppercase;
 }
 
+.editor-animation-player__surface--equation {
+  /* Equation hosts must not leak placeholder label typography into KaTeX. */
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 .editor-animation-player__surface:has(.editor-equation-stage) {
   border-style: solid;
   color: #172033;
   background: #ffffff;
-  letter-spacing: normal;
-  text-transform: none;
 }
 
 .editor-animation-player__surface:has(.editor-graph-stage) {

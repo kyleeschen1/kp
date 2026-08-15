@@ -215,10 +215,78 @@
       "scope": "s20 broad repository gate",
       "checkedAt": "2026-08-15T03:54:04.715Z",
       "notes": "Blocked by pre-existing out-of-scope exactOptionalPropertyTypes error at scripts/capture-normal-matrix-proof-checkpoint.ts:244; exemplar-focused TypeScript, Chromium, and production bundle checks pass."
+    },
+    {
+      "command": "node focused log-exponent tests",
+      "status": "passed",
+      "scope": "s21 typed semantic motion, correspondences, lifecycle, endpoints, transit, choreography: 28 passed",
+      "checkedAt": "2026-08-15T04:49:07.321Z"
+    },
+    {
+      "command": "playwright log-exponent catalogue chromium",
+      "status": "passed",
+      "scope": "canonical wrap, lowercase typography, direct seek, reverse, reduced motion, accessibility: 3 passed",
+      "checkedAt": "2026-08-15T04:49:10.909Z"
+    },
+    {
+      "command": "playwright log-exponent transit ownership chromium",
+      "status": "passed",
+      "scope": "persistent x and natural-log identities, rigid ln(2) compound, synchronized wrapper branches: 1 passed",
+      "checkedAt": "2026-08-15T04:49:17.415Z"
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "deterministic canonical checkpoint contact sheet",
+      "checkedAt": "2026-08-15T04:49:21.008Z"
+    },
+    {
+      "command": "tsc application no emit",
+      "status": "passed",
+      "scope": "application type authority",
+      "checkedAt": "2026-08-15T04:49:25.695Z"
+    },
+    {
+      "command": "tsc tests no emit",
+      "status": "passed",
+      "scope": "test type authority",
+      "checkedAt": "2026-08-15T04:49:32.388Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production bundle",
+      "checkedAt": "2026-08-15T04:49:35.760Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "catalogue and incremental bundle budgets",
+      "checkedAt": "2026-08-15T04:49:41.953Z"
+    },
+    {
+      "command": "operation evaluation presentation boundary",
+      "status": "passed",
+      "scope": "native operation choreography boundary",
+      "checkedAt": "2026-08-15T04:49:49.912Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "repository-wide architecture",
+      "checkedAt": "2026-08-15T04:50:02.788Z",
+      "notes": "Unchanged pre-existing import src/animation/log-exponent-adapter.ts to rendering/log-exponent-native-endpoints.ts remains unapproved; new s21 files did not produce the reported violation."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s21 durable project evidence",
+      "checkedAt": "2026-08-15T04:50:54.820Z",
+      "notes": "Validated 952 nodes and 20817 events after closing the typed symbol-motion slice."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s20 produced the mandatory canonical human checkpoint with deterministic visual evidence, reduced-motion and narrow-fit accessibility, exact direct routes, review readiness, production bundle and budget evidence; broad typecheck retains one unrelated normal-matrix blocker."
+    "summary": "Canonical log-exponent refinements are implemented and verified. Await human visual checkpoint before s22 applies the typed contract to the quotient caller and later families."
   }
 }

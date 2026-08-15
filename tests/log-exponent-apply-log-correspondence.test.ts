@@ -35,7 +35,14 @@ test("apply-log compilation preserves all material and introduces one balanced w
         id: "correspondence.apply-log.introduce-balanced-wrappers",
         relation: "introduction",
         source: [],
-        target: ["logged.left.log", "logged.right.log"]
+        target: [
+          "logged.left.log",
+          "logged.left.log.operator",
+          "logged.left.log.open",
+          "logged.left.log.close",
+          "logged.right.log",
+          "logged.right.log.operator"
+        ]
       }
     ]
   );

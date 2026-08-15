@@ -156,7 +156,8 @@
     {
       "id": "s21",
       "title": "Apply approved canonical refinements",
-      "status": "planned"
+      "summary": "Encoded symbol identity, rigid compounds, canonical function wrapping, shell causality, and opacity lifecycle as typed obligations; projected them into the native KaTeX pipeline and corrected the log-exponent exemplar.",
+      "status": "complete"
     },
     {
       "id": "s22",

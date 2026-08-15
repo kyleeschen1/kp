@@ -2,37 +2,39 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpLogExponentAnimationAsset
-} from "../src/animation/log-exponent-adapter.ts";
-import {
+  createKpCanonicalFunctionWrapChoreography,
   createKpCausalStructuralIntroductionChoreography
 } from "../src/animation/equation-operation-choreography.ts";
 import {
-  compileKpEquationOperationChoreography
-} from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
+  kpCanonicalLogExponentSymbolMotionPlans
+} from "../src/animation/log-exponent-symbol-motion.ts";
 
-test("apply-log mints one synchronized balanced wrapper choreography", () => {
-  const animation = createKpLogExponentAnimationAsset();
-  const transformation = animation.transformations.find(
-    ({ transformType }) => transformType === "applyNaturalLogBothSides"
-  );
-  assert.ok(transformation);
-  const choreography = compileKpEquationOperationChoreography({
-    animation,
-    transformation,
-    motifKind: "append-after-shift",
-    direction: "forward",
-    balancedIntroductionEntryWindow: { start: 0.78, end: 0.98 }
+test("apply-log mints two synchronized branches from canonical wrap authority", () => {
+  const plan = kpCanonicalLogExponentSymbolMotionPlans[0]!;
+  const choreography = createKpCanonicalFunctionWrapChoreography({
+    contract: plan.contract,
+    motifId:
+      "motif.transformation.log-exponent.apply-log-both-sides.canonical-wrap",
+    direction: "forward"
   });
 
-  assert.equal(choreography?.kind, "synchronized-balanced-introduction");
-  if (choreography?.kind !== "synchronized-balanced-introduction") return;
-  assert.equal(choreography.branchSchedule.strategy.kind, "together");
-  assert.deepEqual(choreography.entryWindow, { start: 0.78, end: 0.98 });
-  assert.deepEqual([...choreography.semanticEntityIds].sort(), [
-    "logged.left.log",
-    "logged.right.log"
+  assert.equal(choreography.kind, "canonical-function-wrap");
+  assert.equal(choreography.canonicalOperationId, "kp.core.wrap");
+  assert.deepEqual(choreography.branches.map(({ wrapperEntityIds }) =>
+    wrapperEntityIds
+  ), [
+    [
+      "logged.left.log",
+      "logged.left.log.operator",
+      "logged.left.log.open",
+      "logged.left.log.close"
+    ],
+    ["logged.right.log", "logged.right.log.operator"]
   ]);
+  assert.ok(
+    choreography.argumentReflowWindow.start <
+      choreography.wrapperEntryWindow.start
+  );
 });
 
 test("division authors a typed causal fraction structure entry", () => {

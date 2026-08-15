@@ -1,4 +1,5 @@
 import type {
+  KpCanonicalFunctionWrapChoreography,
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
@@ -48,7 +49,102 @@ export function applyKpNativeKatexOperationChoreography(input: {
       return applySynchronizedIntroduction(input, input.choreography);
     case "causal-structural-introduction":
       return applyCausalStructuralIntroduction(input, input.choreography);
+    case "canonical-function-wrap":
+      return applyCanonicalFunctionWrap(input, input.choreography);
   }
+}
+
+function applyCanonicalFunctionWrap(
+  input: Parameters<typeof applyKpNativeKatexOperationChoreography>[0],
+  choreography: KpCanonicalFunctionWrapChoreography
+): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  const sourceEntities = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntities = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const argumentBranchByPair = new Map(choreography.branches.flatMap(
+    (branch) => branch.sourceArgumentEntityIds.flatMap((sourceEntityId) =>
+      branch.targetArgumentEntityIds.map((targetEntityId) => [
+        `${sourceEntityId}\u0000${targetEntityId}`,
+        branch.id
+      ] as const)
+    )
+  ));
+  const wrapperBranchByEntity = new Map(choreography.branches.flatMap(
+    (branch) => branch.wrapperEntityIds.map((entityId) => [
+      entityId,
+      branch.id
+    ] as const)
+  ));
+  const argumentPaintByBranch = new Set<string>();
+  const wrapperPaintByBranch = new Set<string>();
+  const tracks = input.tracks.map((track) => {
+    const sourceEntityId = track.sourceAtomId === undefined
+      ? undefined
+      : sourceEntities.get(track.sourceAtomId);
+    const targetEntityId = track.targetAtomId === undefined
+      ? undefined
+      : targetEntities.get(track.targetAtomId);
+    const argumentBranch =
+      sourceEntityId === undefined || targetEntityId === undefined
+        ? undefined
+        : argumentBranchByPair.get(
+            `${sourceEntityId}\u0000${targetEntityId}`
+          );
+    if (argumentBranch !== undefined && track.lifecycle === "persist") {
+      argumentPaintByBranch.add(argumentBranch);
+      return Object.freeze({
+        ...track,
+        timingGroupId: `${choreography.id}.${argumentBranch}.argument`,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: (progress: number) => smoothWindow(
+          progress,
+          choreography.argumentReflowWindow.start,
+          choreography.argumentReflowWindow.end
+        )
+      });
+    }
+    const wrapperEntityId = choreography.direction === "forward"
+      ? targetEntityId
+      : sourceEntityId;
+    const wrapperBranch = wrapperEntityId === undefined
+      ? undefined
+      : wrapperBranchByEntity.get(wrapperEntityId);
+    const expectedLifecycle = choreography.direction === "forward"
+      ? "introduce"
+      : "eliminate";
+    if (wrapperBranch === undefined || track.lifecycle !== expectedLifecycle) {
+      return track;
+    }
+    wrapperPaintByBranch.add(wrapperBranch);
+    const sample = (progress: number) => smoothWindow(
+      progress,
+      choreography.wrapperEntryWindow.start,
+      choreography.wrapperEntryWindow.end
+    );
+    return Object.freeze({
+      ...track,
+      timingGroupId: choreography.id,
+      opacityScheduleAuthority: "semantic-choreography" as const,
+      sampleProgress: sample,
+      sampleOpacityProgress: sample
+    });
+  });
+  for (const branch of choreography.branches) {
+    if (
+      !argumentPaintByBranch.has(branch.id) ||
+      !wrapperPaintByBranch.has(branch.id)
+    ) {
+      throw new Error(
+        `Canonical function-wrap ${choreography.id} lacks argument or wrapper paint for ${branch.id}.`
+      );
+    }
+  }
+  return Object.freeze(tracks);
 }
 
 function applyCausalStructuralIntroduction(

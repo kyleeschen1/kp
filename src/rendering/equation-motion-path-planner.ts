@@ -155,6 +155,17 @@ export interface KpEquationCollisionTrack {
    */
   readonly timingGroupId?: string | undefined;
   /**
+   * A compiler-owned semantic unit may contain several independently
+   * addressable symbols. Collision repair must schedule and route that unit
+   * together rather than turning its children into unrelated glyph motion.
+   */
+  readonly semanticMotionUnitId?: string | undefined;
+  readonly semanticContinuantId?: string | undefined;
+  readonly semanticMetricTransition?:
+    | "preserve-source-metrics"
+    | "interpolate-to-target-metrics"
+    | undefined;
+  /**
    * Related components can retain shared routing provenance without gaining
    * permission to overlap. Lane selection remains component-local so the
    * collision compiler can separate members of the cohort when required.
@@ -1617,7 +1628,7 @@ function optimizeProtectedTransitContextTiming<
   )) {
     for (const range of kpProtectedTransitContextRanges) {
       const candidateTracks = Object.freeze(input.tracks.map((track) => {
-        if (track.componentId !== componentId) return track;
+        if (semanticSchedulingUnitId(track) !== componentId) return track;
         const { motionProgressRange: _existing, ...base } = track;
         return Object.freeze({ ...base, motionProgressRange: range }) as Track;
       }));
@@ -1664,11 +1675,11 @@ function protectedTransitContextComponentIds(
         candidate.lifecycle === "persist" &&
         (
           candidate.motionProgressRange === undefined ||
-          reschedulableComponentIds.has(candidate.componentId)
+          reschedulableComponentIds.has(semanticSchedulingUnitId(candidate))
         ) &&
         (counterpart.lifecycle === "split" || counterpart.lifecycle === "merge")
       ) {
-        candidates.add(candidate.componentId);
+        candidates.add(semanticSchedulingUnitId(candidate));
       }
     }
   }
@@ -1687,16 +1698,29 @@ function routeCandidateUnits(
   const units = new Map<string, KpProtectedTransitRouteUnit>();
   for (const track of implicated) {
     const branch = track.lifecycle === "split" || track.lifecycle === "merge";
-    const id = branch ? `track:${track.id}` : `component:${track.componentId}`;
+    const semanticUnitId = track.semanticMotionUnitId;
+    const id = semanticUnitId !== undefined
+      ? `semantic:${semanticUnitId}`
+      : branch
+        ? `track:${track.id}`
+        : `component:${track.componentId}`;
     if (units.has(id)) continue;
     units.set(id, {
       id,
-      componentId: track.componentId,
-      trackIds: branch
-        ? Object.freeze([track.id])
-        : Object.freeze(tracks
-            .filter(({ componentId }) => componentId === track.componentId)
+      componentId: semanticUnitId === undefined
+        ? track.componentId
+        : `semantic-motion-unit:${semanticUnitId}`,
+      trackIds: semanticUnitId !== undefined
+        ? Object.freeze(tracks
+            .filter((candidate) =>
+              candidate.semanticMotionUnitId === semanticUnitId
+            )
             .map(({ id: trackId }) => trackId))
+        : branch
+          ? Object.freeze([track.id])
+          : Object.freeze(tracks
+              .filter(({ componentId }) => componentId === track.componentId)
+              .map(({ id: trackId }) => trackId))
     });
   }
   return [...units.values()].filter((unit) =>
@@ -1712,6 +1736,10 @@ function routeCandidateUnits(
         Math.max(...left.map(trackTravel)) ||
       leftUnit.id.localeCompare(rightUnit.id);
   });
+}
+
+function semanticSchedulingUnitId(track: KpEquationCollisionTrack): string {
+  return track.semanticMotionUnitId ?? track.componentId;
 }
 
 function protectedTransitRouteStatus(

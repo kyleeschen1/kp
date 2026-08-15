@@ -22,14 +22,14 @@ test("canonical lifecycle distinguishes continuants from causal structure change
     ),
     [
       ["continuant", "continuant", "continuant", "continuant", "continuant", "introduction"],
-      ["continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "elimination", "introduction"],
-      ["continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "elimination", "introduction"]
+      ["continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "elimination", "elimination", "introduction"],
+      ["continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "continuant", "elimination", "introduction"]
     ]
   );
   const extractionIntroduction = kpCanonicalLogExponentLifecycles[1]!
     .lifecycle.records.at(-1)!;
   assert.equal(extractionIntroduction.kind, "introduction");
   if (extractionIntroduction.kind === "introduction") {
-    assert.equal(extractionIntroduction.cause.kind, "semantic-introduction");
+    assert.equal(extractionIntroduction.cause.kind, "structural-realization");
   }
 });

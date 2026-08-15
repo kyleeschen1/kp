@@ -186,6 +186,8 @@ function renderChildren(
   switch (node.kind) {
     case "number":
     case "symbol":
+    case "function-operator":
+    case "delimiter":
       return Object.freeze([]);
     case "power":
       return Object.freeze([
@@ -193,7 +195,17 @@ function renderChildren(
         renderNode(state, node.exponent)
       ]);
     case "natural-log":
-      return Object.freeze([renderNode(state, node.argument)]);
+      return node.enclosure === undefined
+        ? Object.freeze([
+            renderNode(state, node.operator),
+            renderNode(state, node.argument)
+          ])
+        : Object.freeze([
+            renderNode(state, node.operator),
+            renderNode(state, node.enclosure[0]),
+            renderNode(state, node.argument),
+            renderNode(state, node.enclosure[1])
+          ]);
     case "product":
       return Object.freeze(node.factors.map((factor) => renderNode(state, factor)));
     case "quotient":
@@ -237,6 +249,10 @@ function nodeLatex(
       return String(node.value);
     case "symbol":
       return node.name;
+    case "function-operator":
+      return "\\ln";
+    case "delimiter":
+      return node.value;
     case "power":
       // KaTeX requires a trusted annotation command to be grouped when used
       // as a superscript, while the raw endpoint preserves authored `2^x`.
@@ -244,9 +260,9 @@ function nodeLatex(
         ? `${children[0]}^{${children[1]}}`
         : `${children[0]}^${children[1]}`;
     case "natural-log":
-      return node.argument.kind === "power"
-        ? `\\ln(${children[0]})`
-        : `\\ln ${children[0]}`;
+      return node.enclosure === undefined
+        ? `${children[0]} ${children[1]}`
+        : `${children[0]}${children[1]}${children[2]}${children[3]}`;
     case "product":
       return children.join("");
     case "quotient":
@@ -286,11 +302,20 @@ function childNodes(
   switch (node.kind) {
     case "number":
     case "symbol":
+    case "function-operator":
+    case "delimiter":
       return [];
     case "power":
       return [node.base, node.exponent];
     case "natural-log":
-      return [node.argument];
+      return node.enclosure === undefined
+        ? [node.operator, node.argument]
+        : [
+            node.operator,
+            node.enclosure[0],
+            node.argument,
+            node.enclosure[1]
+          ];
     case "product":
       return node.factors;
     case "quotient":

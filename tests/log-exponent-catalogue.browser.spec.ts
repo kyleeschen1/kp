@@ -41,8 +41,9 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   )).toBeGreaterThan(0.45);
   await expect(stage).toHaveAttribute(
     "data-kp-log-exponent-operation-choreography-id",
-    "operation-choreography.transformation.log-exponent.apply-log-both-sides.forward"
+    "operation-choreography.transformation.log-exponent.apply-log-both-sides.canonical-wrap.forward"
   );
+  await expect(stage).toHaveCSS("text-transform", "none");
   const synchronizedOpacities = JSON.parse(
     await stage.getAttribute("data-kp-log-exponent-synchronized-opacities") ??
       "[]"
@@ -56,10 +57,16 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
     )) {
       const entityId =
         owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "";
-      if (entityId === "logged.left.log") {
+      if (
+        entityId === "logged.left.log" ||
+        entityId === "logged.left.log.operator"
+      ) {
         bySide.left.push(Number(getComputedStyle(owner).opacity));
       }
-      if (entityId === "logged.right.log") {
+      if (
+        entityId === "logged.right.log" ||
+        entityId === "logged.right.log.operator"
+      ) {
         bySide.right.push(Number(getComputedStyle(owner).opacity));
       }
     }
@@ -96,6 +103,22 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
     "data-kp-log-exponent-operation-id",
     "operation.log-exponent.divide-by-log-base"
   );
+  const symbolMotionTracks = JSON.parse(
+    await stage.getAttribute("data-kp-log-exponent-symbol-motion-tracks") ??
+      "[]"
+  ) as Array<{
+    sourceEntityId?: string;
+    motionUnitId?: string;
+  }>;
+  const logTwoUnitIds = symbolMotionTracks
+    .filter(({ sourceEntityId }) => [
+      "extracted.left.log.operator",
+      "extracted.base"
+    ].includes(sourceEntityId ?? ""))
+    .map(({ motionUnitId }) => motionUnitId);
+  expect(logTwoUnitIds).toHaveLength(2);
+  expect(new Set(logTwoUnitIds).size).toBe(1);
+  expect(logTwoUnitIds[0]).toContain("divide-by-log-base.log-two");
   await player.locator('[data-action="seek-editor-animation"]').fill("0.1");
   await expect(stage).toHaveAttribute(
     "data-kp-log-exponent-operation-id",

@@ -13,7 +13,7 @@ test("compiled log-exponent correspondence projects into native paint relations"
   const relations = kpCanonicalLogExponentTransformationTree.operations.map(
     projectKpLogExponentNativePaintRelations
   );
-  assert.deepEqual(relations.map((entries) => entries.length), [5, 6, 6]);
+  assert.deepEqual(relations.map((entries) => entries.length), [5, 8, 8]);
   assert.ok(relations[0]!.some(({ sourceEntityIds, targetEntityIds }) =>
     sourceEntityIds.includes("source.exponent") &&
     targetEntityIds.includes("logged.exponent")

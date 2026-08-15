@@ -25,16 +25,29 @@ test("exponent extraction compiles x continuity and explicit container lifecycle
       { id: "correspondence.extract-exponent.equality", relation: "identity" },
       { id: "correspondence.extract-exponent.base", relation: "identity" },
       { id: "correspondence.extract-exponent.unknown-x", relation: "role-change" },
+      { id: "correspondence.extract-exponent.log-left-operator", relation: "identity" },
       { id: "correspondence.extract-exponent.log-right-value", relation: "identity" },
+      { id: "correspondence.extract-exponent.log-right-operator", relation: "identity" },
       { id: "correspondence.extract-exponent.right-value", relation: "identity" },
       { id: "correspondence.extract-exponent.logged-power-value", relation: "role-change" },
+      { id: "correspondence.extract-exponent.retire-log-enclosure", relation: "removal" },
       { id: "correspondence.extract-exponent.retire-power-container", relation: "removal" },
-      { id: "correspondence.extract-exponent.derive-log-base-value", relation: "introduction" }
+      { id: "correspondence.extract-exponent.introduce-product-container", relation: "introduction" }
     ]
   );
   const x = records.find(({ id }) => id.endsWith("unknown-x"));
   assert.deepEqual(x?.sourceSelectorIds, ["logged.exponent"]);
   assert.deepEqual(x?.targetSelectorIds, ["extracted.coefficient"]);
+  const operator = records.find(({ id }) => id.endsWith("log-left-operator"));
+  assert.deepEqual(operator?.sourceSelectorIds, ["logged.left.log.operator"]);
+  assert.deepEqual(operator?.targetSelectorIds, ["extracted.left.log.operator"]);
+  const enclosure = records.find(({ id }) =>
+    id.endsWith("retire-log-enclosure")
+  );
+  assert.deepEqual(enclosure?.sourceSelectorIds, [
+    "logged.left.log.open",
+    "logged.left.log.close"
+  ]);
   assert.deepEqual(compiled.transformation.lawRefs?.map(({ id }) => id), [
     "law.logarithm.power"
   ]);

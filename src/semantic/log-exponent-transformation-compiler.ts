@@ -57,9 +57,13 @@ export function compileKpApplyNaturalLogBothSides(input: {
       sourceSelectorIds: Object.freeze([]),
       targetSelectorIds: Object.freeze([
         occurrence(targetRoles, "logged-power-value"),
-        occurrence(targetRoles, "log-right-value")
+        occurrence(targetRoles, "log-left-operator"),
+        occurrence(targetRoles, "log-left-open-delimiter"),
+        occurrence(targetRoles, "log-left-close-delimiter"),
+        occurrence(targetRoles, "log-right-value"),
+        occurrence(targetRoles, "log-right-operator")
       ]),
-      summary: "Introduce both natural-log wrappers as one balanced operation."
+      summary: "Introduce both natural-log operators and their wrappers as one balanced operation."
     })
   ]);
   const correspondenceMap: CorrespondenceMap = Object.freeze({
@@ -103,17 +107,29 @@ export function compileKpExtractLogPowerExponent(input: {
     preserve("extract-exponent", "equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
     preserve("extract-exponent", "base", sourceRoles, targetRoles, "identity", "The base remains the logarithm argument."),
     preserve("extract-exponent", "unknown-x", sourceRoles, targetRoles, "role-change", "The same x moves from exponent to coefficient."),
+    preserve("extract-exponent", "log-left-operator", sourceRoles, targetRoles, "identity", "The left natural-log operator remains visible while x leaves its argument."),
     preserve("extract-exponent", "log-right-value", sourceRoles, targetRoles, "identity", "The right logarithm remains unchanged."),
+    preserve("extract-exponent", "log-right-operator", sourceRoles, targetRoles, "identity", "The right natural-log operator remains unchanged."),
     preserve("extract-exponent", "right-value", sourceRoles, targetRoles, "identity", "Seven remains the right logarithm argument."),
     relate(
       "extract-exponent",
       "logged-power-value",
-      "extracted-product",
+      "log-base-value",
       sourceRoles,
       targetRoles,
       "role-change",
-      "The equivalent left value changes from log-of-power to exponent-times-log-base."
+      "The left logarithm application changes from a power argument to the base argument."
     ),
+    Object.freeze({
+      id: "correspondence.extract-exponent.retire-log-enclosure",
+      relation: "removal" as const,
+      sourceSelectorIds: Object.freeze([
+        occurrence(sourceRoles, "log-left-open-delimiter"),
+        occurrence(sourceRoles, "log-left-close-delimiter")
+      ]),
+      targetSelectorIds: Object.freeze([]),
+      summary: "The logarithm enclosure retires together after x clears the power argument."
+    }),
     Object.freeze({
       id: "correspondence.extract-exponent.retire-power-container",
       relation: "removal" as const,
@@ -122,11 +138,11 @@ export function compileKpExtractLogPowerExponent(input: {
       summary: "The power container retires after its exponent and base acquire their target roles."
     }),
     Object.freeze({
-      id: "correspondence.extract-exponent.derive-log-base-value",
+      id: "correspondence.extract-exponent.introduce-product-container",
       relation: "introduction" as const,
       sourceSelectorIds: Object.freeze([]),
-      targetSelectorIds: Object.freeze([occurrence(targetRoles, "log-base-value")]),
-      summary: "The power law introduces the natural logarithm of the base."
+      targetSelectorIds: Object.freeze([occurrence(targetRoles, "extracted-product")]),
+      summary: "The power law introduces product structure after x reaches coefficient position."
     })
   ]);
   const correspondenceMap: CorrespondenceMap = Object.freeze({
@@ -170,8 +186,10 @@ export function compileKpDivideByLogBase(input: {
     preserve("divide-log-base", "equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
     preserve("divide-log-base", "unknown-x", sourceRoles, targetRoles, "role-change", "The same x moves from coefficient position to the isolated left side."),
     preserve("divide-log-base", "log-right-value", sourceRoles, targetRoles, "role-change", "The right logarithm becomes the quotient numerator."),
+    preserve("divide-log-base", "log-right-operator", sourceRoles, targetRoles, "role-change", "The right natural-log operator travels with its argument into the numerator."),
     preserve("divide-log-base", "right-value", sourceRoles, targetRoles, "role-change", "Seven remains inside the numerator logarithm."),
     preserve("divide-log-base", "log-base-value", sourceRoles, targetRoles, "role-change", "The base logarithm becomes the quotient denominator."),
+    preserve("divide-log-base", "log-left-operator", sourceRoles, targetRoles, "role-change", "The left natural-log operator travels with its argument into the denominator."),
     preserve("divide-log-base", "base", sourceRoles, targetRoles, "role-change", "Two remains inside the denominator logarithm."),
     Object.freeze({
       id: "correspondence.divide-log-base.retire-product-container",
