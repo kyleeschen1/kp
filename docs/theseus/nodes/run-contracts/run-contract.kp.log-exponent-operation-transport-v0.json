@@ -60,7 +60,8 @@
     {
       "id": "s05",
       "title": "Type authored operation union",
-      "status": "planned"
+      "summary": "Typed and verified the canonical authored operation union and program adjacency.",
+      "status": "complete"
     },
     {
       "id": "s06",

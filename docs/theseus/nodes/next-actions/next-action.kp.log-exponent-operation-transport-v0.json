@@ -34,10 +34,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T01:56:48.817Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-authored-operations.test.ts tests/log-exponent-domain-assumptions.test.ts tests/log-exponent-solve-states.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T01:58:59.966Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 4 types seven given and derived logarithm assumptions and fails closed for invalid bases, log arguments, and division by ln(base)."
+    "summary": "Slice 5 adds a closed authored program whose three typed actions cover every state seam and fail closed without their required assumptions."
   }
 }
