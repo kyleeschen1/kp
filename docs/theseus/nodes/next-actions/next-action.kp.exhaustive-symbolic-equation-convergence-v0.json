@@ -32,10 +32,38 @@
       "scope": "s02 architecture and generated graph",
       "checkedAt": "2026-08-15T20:54:15.094Z",
       "notes": "Architecture gates remain green with zero semantic-animation exceptions and six classified compatibility paths; full TypeScript checks pass; generated inventory and authority graph are current; workspace validates."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s03 semantic endpoints and family evidence",
+      "checkedAt": "2026-08-15T21:14:00.933Z",
+      "notes": "9 focused tests passed across all 28 equation surfaces and 14 families."
+    },
+    {
+      "command": "npm run test:browser:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s03 direct seek accessibility settlement and narrow fit",
+      "checkedAt": "2026-08-15T21:14:07.498Z",
+      "notes": "One-worker Chromium traversed all 28 routes under reduced motion at 390px, verified adapter readiness, exact 0/1 seek, accessibility truth, and no document overflow."
+    },
+    {
+      "command": "npm run visual:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s03 deterministic family contact sheet",
+      "checkedAt": "2026-08-15T21:14:14.561Z",
+      "notes": "Captured and inspected 14 family representatives at deterministic progress 0.5 under one owned browser and server."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture and theseus workspace validate",
+      "status": "passed",
+      "scope": "s03 static and workspace integrity",
+      "checkedAt": "2026-08-15T21:14:23.841Z",
+      "notes": "Full TypeScript/Svelte/domain checks, architecture gates, and the 956-node workspace validation pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 complete: all 28 equation rows map to source-reachable compiler, registry, motif, timing, renderer, clock, fallback, and sampler authorities. The graph freezes four live path classes, five non-semantic generic gaps, one log-exponent planning gap, and zero private-clock or CSS-animation owners."
+    "summary": "s03 complete: all 28 equation surfaces now have exact semantic endpoint fingerprints, honest accessibility and native-settlement contracts, exact direct-seek routes, reduced-motion coverage, narrow no-overflow verification, and deterministic visual evidence across 14 families."
   }
 }

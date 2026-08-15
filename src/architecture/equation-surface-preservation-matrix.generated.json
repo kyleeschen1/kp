@@ -1,0 +1,2264 @@
+{
+  "schemaVersion": "kp.equation-surface-preservation-matrix.v1",
+  "kind": "equation-surface-preservation-matrix",
+  "entries": [
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.algebra.log-exponent.solve-two-power-x",
+      "familyId": "logarithm",
+      "pathClass": "log-exponent-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.log-exponent.apply-log-both-sides",
+          "transformationType": "applyNaturalLogBothSides",
+          "transformationFingerprint": "fnv1a32-97edcd8c",
+          "source": [
+            {
+              "objectId": "log-exponent.state.source",
+              "objectType": "equation",
+              "title": "Exponential equation",
+              "semanticFingerprint": "fnv1a32-74335103"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-exponent.state.logged-both-sides",
+              "objectType": "equation",
+              "title": "Natural logarithm applied to both sides",
+              "semanticFingerprint": "fnv1a32-2aec2770"
+            }
+          ]
+        },
+        {
+          "transformationId": "transformation.log-exponent.extract-exponent",
+          "transformationType": "extractLogPowerExponent",
+          "transformationFingerprint": "fnv1a32-f8a56459",
+          "source": [
+            {
+              "objectId": "log-exponent.state.logged-both-sides",
+              "objectType": "equation",
+              "title": "Natural logarithm applied to both sides",
+              "semanticFingerprint": "fnv1a32-2aec2770"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-exponent.state.exponent-extracted",
+              "objectType": "equation",
+              "title": "Exponent extracted by the logarithm power law",
+              "semanticFingerprint": "fnv1a32-46ce8793"
+            }
+          ]
+        },
+        {
+          "transformationId": "transformation.log-exponent.divide-by-log-base",
+          "transformationType": "divideBothSidesByLogBase",
+          "transformationFingerprint": "fnv1a32-646a3b52",
+          "source": [
+            {
+              "objectId": "log-exponent.state.exponent-extracted",
+              "objectType": "equation",
+              "title": "Exponent extracted by the logarithm power law",
+              "semanticFingerprint": "fnv1a32-46ce8793"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-exponent.state.solved",
+              "objectType": "equation",
+              "title": "Unknown isolated",
+              "semanticFingerprint": "fnv1a32-77e30e23"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.log-exponent.solve-two-power-x",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.log-exponent.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "semantic-native-katex"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.algebra.log-quotient.difference-to-quotient",
+      "familyId": "logarithm",
+      "pathClass": "log-quotient-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.log-quotient.difference-to-quotient",
+          "transformationType": "combineLogDifferenceAsQuotient",
+          "transformationFingerprint": "fnv1a32-0bf8bba2",
+          "source": [
+            {
+              "objectId": "log-quotient.state.difference",
+              "objectType": "equation",
+              "title": "Difference of logarithms",
+              "semanticFingerprint": "fnv1a32-071062dd"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-quotient.state.quotient",
+              "objectType": "equation",
+              "title": "Logarithm of a quotient",
+              "semanticFingerprint": "fnv1a32-7edcb931"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.log-quotient.difference-to-quotient",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "semantic-native-katex"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.comparison.jacobian-hessian",
+      "familyId": "comparison",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.comparison.jacobian-hessian.present-jacobian",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-0c490c8c",
+          "source": [
+            {
+              "objectId": "formula-jacobian",
+              "objectType": "latex-form",
+              "title": "Jacobian",
+              "semanticFingerprint": "fnv1a32-ced0f361"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-jacobian",
+              "objectType": "latex-form",
+              "title": "Jacobian",
+              "semanticFingerprint": "fnv1a32-ced0f361"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.comparison.jacobian-hessian.present-hessian",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-f7156696",
+          "source": [
+            {
+              "objectId": "formula-hessian",
+              "objectType": "latex-form",
+              "title": "Hessian",
+              "semanticFingerprint": "fnv1a32-30c549d1"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-hessian",
+              "objectType": "latex-form",
+              "title": "Hessian",
+              "semanticFingerprint": "fnv1a32-30c549d1"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.comparison.jacobian-hessian.compare-derivative-structure",
+          "transformationType": "compareDerivativeMatrixForms",
+          "transformationFingerprint": "fnv1a32-488e211c",
+          "source": [
+            {
+              "objectId": "formula-jacobian",
+              "objectType": "latex-form",
+              "title": "Jacobian",
+              "semanticFingerprint": "fnv1a32-ced0f361"
+            },
+            {
+              "objectId": "formula-hessian",
+              "objectType": "latex-form",
+              "title": "Hessian",
+              "semanticFingerprint": "fnv1a32-30c549d1"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "comparison-jacobian-hessian",
+              "objectType": "latex-comparison",
+              "title": "Jacobian / Hessian",
+              "semanticFingerprint": "fnv1a32-9b51a23a"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.comparison.jacobian-hessian",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.comparison.linear-solve-programming",
+      "familyId": "comparison",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.linear-solve.subtract-both-sides-3",
+          "transformationType": "subtractBothSides",
+          "transformationFingerprint": "fnv1a32-da4de75a",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.initial",
+              "objectType": "equation",
+              "title": "Initial equation",
+              "semanticFingerprint": "fnv1a32-f5eb1631"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.after-subtract",
+              "objectType": "equation",
+              "title": "After subtracting 3 from both sides",
+              "semanticFingerprint": "fnv1a32-b6f337ed"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.linear-solve.cancel-left-additive-inverse",
+          "transformationType": "cancelAdditiveInverses",
+          "transformationFingerprint": "fnv1a32-52691446",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.after-subtract",
+              "objectType": "equation",
+              "title": "After subtracting 3 from both sides",
+              "semanticFingerprint": "fnv1a32-b6f337ed"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.left-simplified",
+              "objectType": "equation",
+              "title": "After cancellation",
+              "semanticFingerprint": "fnv1a32-b5b851bd"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.linear-solve.simplify-right-difference",
+          "transformationType": "simplifyConstantDifference",
+          "transformationFingerprint": "fnv1a32-f1f1ade0",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.left-simplified",
+              "objectType": "equation",
+              "title": "After cancellation",
+              "semanticFingerprint": "fnv1a32-b5b851bd"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.solved",
+              "objectType": "equation",
+              "title": "Solved equation",
+              "semanticFingerprint": "fnv1a32-65e904fb"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.programming.add.call",
+          "transformationType": "advanceExecutionTrace",
+          "transformationFingerprint": "fnv1a32-8185c18e",
+          "source": [
+            {
+              "objectId": "source-file.programming.add",
+              "objectType": "source-file",
+              "title": "add.ts",
+              "semanticFingerprint": "fnv1a32-9b1e43ec"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "execution-step.programming.add.call",
+              "objectType": "execution-step",
+              "title": "Call add with two numeric arguments.",
+              "semanticFingerprint": "fnv1a32-b5febd9b"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.programming.add.evaluate-return",
+          "transformationType": "advanceExecutionTrace",
+          "transformationFingerprint": "fnv1a32-f9ced48b",
+          "source": [
+            {
+              "objectId": "execution-step.programming.add.call",
+              "objectType": "execution-step",
+              "title": "Call add with two numeric arguments.",
+              "semanticFingerprint": "fnv1a32-b5febd9b"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "execution-step.programming.add.evaluate-return",
+              "objectType": "execution-step",
+              "title": "Evaluate the return expression.",
+              "semanticFingerprint": "fnv1a32-1383e133"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.programming.add.return",
+          "transformationType": "advanceExecutionTrace",
+          "transformationFingerprint": "fnv1a32-d2adee4a",
+          "source": [
+            {
+              "objectId": "execution-step.programming.add.evaluate-return",
+              "objectType": "execution-step",
+              "title": "Evaluate the return expression.",
+              "semanticFingerprint": "fnv1a32-1383e133"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "execution-step.programming.add.return",
+              "objectType": "execution-step",
+              "title": "Return the computed value.",
+              "semanticFingerprint": "fnv1a32-49ea701a"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.programming.add.output",
+          "transformationType": "advanceExecutionTrace",
+          "transformationFingerprint": "fnv1a32-c355b591",
+          "source": [
+            {
+              "objectId": "execution-step.programming.add.return",
+              "objectType": "execution-step",
+              "title": "Return the computed value.",
+              "semanticFingerprint": "fnv1a32-49ea701a"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "execution-step.programming.add.output",
+              "objectType": "execution-step",
+              "title": "Expose the final result.",
+              "semanticFingerprint": "fnv1a32-b1ec36b6"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.comparison.linear-solve-programming",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.add-zero",
+      "familyId": "substitution",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.add-zero.remove",
+          "transformationType": "simplify-additive-identity",
+          "transformationFingerprint": "fnv1a32-d40a4378",
+          "source": [
+            {
+              "objectId": "equation.generated.add-zero.before",
+              "objectType": "equation",
+              "title": "Before removing zero",
+              "semanticFingerprint": "fnv1a32-48166d27"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.add-zero.after",
+              "objectType": "equation",
+              "title": "After removing zero",
+              "semanticFingerprint": "fnv1a32-bec0c126"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.add-zero",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "familyId": "calculus",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule",
+          "transformationType": "applyDerivativePowerRule",
+          "transformationFingerprint": "fnv1a32-c9083e0c",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+              "objectType": "expression",
+              "title": "Derivative expression",
+              "semanticFingerprint": "fnv1a32-e9c63ea2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.derived",
+              "objectType": "expression",
+              "title": "After applying the power rule",
+              "semanticFingerprint": "fnv1a32-66ca4318"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "familyId": "calculus",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.calculus.derivative.sum-rule-polynomial.distribute-sum-rule",
+          "transformationType": "applyDerivativeSumRule",
+          "transformationFingerprint": "fnv1a32-54623e35",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.derivative.sum-rule-polynomial.initial",
+              "objectType": "expression",
+              "title": "Derivative of a sum",
+              "semanticFingerprint": "fnv1a32-2ab3b2cb"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+              "objectType": "expression",
+              "title": "Derivative distributed across the sum",
+              "semanticFingerprint": "fnv1a32-c66209f1"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms",
+          "transformationType": "applyDerivativePowerRulesToTerms",
+          "transformationFingerprint": "fnv1a32-1f9f9d21",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+              "objectType": "expression",
+              "title": "Derivative distributed across the sum",
+              "semanticFingerprint": "fnv1a32-c66209f1"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.calculus.derivative.sum-rule-polynomial.derived",
+              "objectType": "expression",
+              "title": "After applying the derivative sum rule",
+              "semanticFingerprint": "fnv1a32-aa650f42"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.calculus.derivative.sum-rule-polynomial",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.calculus.integral.power-rule-quadratic",
+      "familyId": "calculus",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule",
+          "transformationType": "applyAntiderivativePowerRule",
+          "transformationFingerprint": "fnv1a32-38020232",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.integral.power-rule-quadratic.initial",
+              "objectType": "expression",
+              "title": "Integral expression",
+              "semanticFingerprint": "fnv1a32-0f2e05e8"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+              "objectType": "expression",
+              "title": "Antiderivative power rule exposed",
+              "semanticFingerprint": "fnv1a32-84555696"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule",
+          "transformationType": "simplifyAntiderivativePowerRule",
+          "transformationFingerprint": "fnv1a32-29535789",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+              "objectType": "expression",
+              "title": "Antiderivative power rule exposed",
+              "semanticFingerprint": "fnv1a32-84555696"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.calculus.integral.power-rule-quadratic.integrated",
+              "objectType": "expression",
+              "title": "After applying the integral power rule",
+              "semanticFingerprint": "fnv1a32-19faf147"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.calculus.integral.power-rule-quadratic",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.cancellation.additive-inverses",
+      "familyId": "cancellation",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse",
+          "transformationType": "cancelAdditiveInverses",
+          "transformationFingerprint": "fnv1a32-f505f35a",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.x-plus-3.after-subtract",
+              "objectType": "equation",
+              "title": "After subtracting the addend",
+              "semanticFingerprint": "fnv1a32-eb0611d0"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.x-plus-3.left-simplified",
+              "objectType": "equation",
+              "title": "After cancellation",
+              "semanticFingerprint": "fnv1a32-f9b0db83"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.cancellation.additive-inverses",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.distribution.expand-a-sum",
+      "familyId": "distribution-factoring",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.distribution.expand-a-sum.distribute",
+          "transformationType": "distributeMultiplication",
+          "transformationFingerprint": "fnv1a32-526adbef",
+          "source": [
+            {
+              "objectId": "expression.generated.distribution.expand-a-sum.factored",
+              "objectType": "expression",
+              "title": "Factored expression",
+              "semanticFingerprint": "fnv1a32-24786077"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.distribution.expand-a-sum.expanded",
+              "objectType": "expression",
+              "title": "Expanded expression",
+              "semanticFingerprint": "fnv1a32-d9965020"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.distribution.expand-a-sum",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.distribution.factor-common-a",
+      "familyId": "distribution-factoring",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.distribution.factor-common-a.factor",
+          "transformationType": "factorCommonTerm",
+          "transformationFingerprint": "fnv1a32-d4a2730b",
+          "source": [
+            {
+              "objectId": "expression.generated.distribution.factor-common-a.expanded",
+              "objectType": "expression",
+              "title": "Expanded expression",
+              "semanticFingerprint": "fnv1a32-f8c5a349"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.distribution.factor-common-a.factored",
+              "objectType": "expression",
+              "title": "Factored expression",
+              "semanticFingerprint": "fnv1a32-5bf2232c"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.distribution.factor-common-a",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.exponent.square-as-product",
+      "familyId": "exponent-radical",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.exponent.square-as-product.lower-exponent",
+          "transformationType": "lowerExponent",
+          "transformationFingerprint": "fnv1a32-7a6b0916",
+          "source": [
+            {
+              "objectId": "expression.generated.exponent.square-as-product.initial",
+              "objectType": "expression",
+              "title": "Initial exponent",
+              "semanticFingerprint": "fnv1a32-2e845fd2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.exponent.square-as-product.lowered",
+              "objectType": "expression",
+              "title": "Lowered exponent",
+              "semanticFingerprint": "fnv1a32-4815b4e0"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.exponent.square-as-product.unwrap-unit-exponent",
+          "transformationType": "unwrapUnitExponent",
+          "transformationFingerprint": "fnv1a32-b4b7a635",
+          "source": [
+            {
+              "objectId": "expression.generated.exponent.square-as-product.lowered",
+              "objectType": "expression",
+              "title": "Lowered exponent",
+              "semanticFingerprint": "fnv1a32-4815b4e0"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.exponent.square-as-product.expanded",
+              "objectType": "expression",
+              "title": "Expanded product",
+              "semanticFingerprint": "fnv1a32-d17a6251"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.exponent.square-as-product",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.fraction-expression.two-fourths",
+      "familyId": "fraction",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.fraction-expression.two-fourths.split-factors",
+          "transformationType": "splitFractionFactors",
+          "transformationFingerprint": "fnv1a32-db4cd375",
+          "source": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.initial",
+              "objectType": "expression",
+              "title": "Initial fraction",
+              "semanticFingerprint": "fnv1a32-4bb373bc"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.factored",
+              "objectType": "expression",
+              "title": "Factored fraction",
+              "semanticFingerprint": "fnv1a32-59c5d1de"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.fraction-expression.two-fourths.merge-common-factor",
+          "transformationType": "mergeFractionCommonFactor",
+          "transformationFingerprint": "fnv1a32-dc7d1e86",
+          "source": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.factored",
+              "objectType": "expression",
+              "title": "Factored fraction",
+              "semanticFingerprint": "fnv1a32-59c5d1de"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.common-factor",
+              "objectType": "expression",
+              "title": "Common factor separated",
+              "semanticFingerprint": "fnv1a32-b7d0a4ec"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.fraction-expression.two-fourths.simplify-unit-factor",
+          "transformationType": "simplifyUnitFractionFactor",
+          "transformationFingerprint": "fnv1a32-c50bb750",
+          "source": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.common-factor",
+              "objectType": "expression",
+              "title": "Common factor separated",
+              "semanticFingerprint": "fnv1a32-b7d0a4ec"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.fraction-expression.two-fourths.simplified",
+              "objectType": "expression",
+              "title": "Simplified fraction",
+              "semanticFingerprint": "fnv1a32-10d6b772"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.fraction-expression.two-fourths",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.function-wrap.apply-f",
+      "familyId": "function-wrap",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.function-wrap.apply-f.wrap-function",
+          "transformationType": "wrapFunction",
+          "transformationFingerprint": "fnv1a32-9a33f3d7",
+          "source": [
+            {
+              "objectId": "expression.generated.function-wrap.apply-f.input",
+              "objectType": "expression",
+              "title": "Input expression",
+              "semanticFingerprint": "fnv1a32-683c8afd"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.function-wrap.apply-f.wrapped",
+              "objectType": "expression",
+              "title": "Function application",
+              "semanticFingerprint": "fnv1a32-e5b4a7be"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.function-wrap.apply-f",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "familyId": "linear-algebra",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product",
+          "transformationType": "computeDotProduct",
+          "transformationFingerprint": "fnv1a32-ea51094d",
+          "source": [
+            {
+              "objectId": "expression.generated.linear-algebra.dot-product.three-vector.initial",
+              "objectType": "expression",
+              "title": "Dot product",
+              "semanticFingerprint": "fnv1a32-f2dcc40f"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.linear-algebra.dot-product.three-vector.result",
+              "objectType": "expression",
+              "title": "Computed dot product",
+              "semanticFingerprint": "fnv1a32-64c024f2"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.linear-algebra.dot-product.three-vector",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "familyId": "linear-algebra",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices",
+          "transformationType": "multiplyMatrices",
+          "transformationFingerprint": "fnv1a32-709894fe",
+          "source": [
+            {
+              "objectId": "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial",
+              "objectType": "expression",
+              "title": "Matrix-matrix product",
+              "semanticFingerprint": "fnv1a32-ab09698d"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.linear-algebra.matrix-matrix.two-by-two.result",
+              "objectType": "expression",
+              "title": "Computed matrix product",
+              "semanticFingerprint": "fnv1a32-30cdc2a4"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "familyId": "linear-algebra",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+          "transformationType": "multiplyMatrixVector",
+          "transformationFingerprint": "fnv1a32-ac7f78c1",
+          "source": [
+            {
+              "objectId": "expression.generated.linear-algebra.matrix-vector.two-by-two.initial",
+              "objectType": "expression",
+              "title": "Matrix-vector product",
+              "semanticFingerprint": "fnv1a32-a598bdda"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.linear-algebra.matrix-vector.two-by-two.result",
+              "objectType": "expression",
+              "title": "Computed product vector",
+              "semanticFingerprint": "fnv1a32-a9e1c98c"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map",
+          "transformationType": "applyLinearMapToVector",
+          "transformationFingerprint": "fnv1a32-4c0b6c4f",
+          "source": [
+            {
+              "objectId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+              "objectType": "linear-map",
+              "title": "T_A",
+              "semanticFingerprint": "fnv1a32-accdeb0e"
+            },
+            {
+              "objectId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.input",
+              "objectType": "vector",
+              "title": "v",
+              "semanticFingerprint": "fnv1a32-d527e8c3"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+              "objectType": "linear-map",
+              "title": "T_A",
+              "semanticFingerprint": "fnv1a32-accdeb0e"
+            },
+            {
+              "objectId": "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.output",
+              "objectType": "vector",
+              "title": "T_A(v)",
+              "semanticFingerprint": "fnv1a32-57342066"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.linear-solve.linear-68c15d41",
+      "familyId": "linear-solve",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+          "transformationType": "subtractBothSides",
+          "transformationFingerprint": "fnv1a32-6d57d952",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
+              "objectType": "equation",
+              "title": "Verified initial equation",
+              "semanticFingerprint": "fnv1a32-0c1d2abc"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+              "objectType": "equation",
+              "title": "Subtract the addend from both sides",
+              "semanticFingerprint": "fnv1a32-460d6cad"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+          "transformationType": "cancelAdditiveInverses",
+          "transformationFingerprint": "fnv1a32-c5621072",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+              "objectType": "equation",
+              "title": "Subtract the addend from both sides",
+              "semanticFingerprint": "fnv1a32-460d6cad"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+              "objectType": "equation",
+              "title": "Cancel the additive inverses",
+              "semanticFingerprint": "fnv1a32-33d4add2"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+          "transformationType": "simplifyConstantDifference",
+          "transformationFingerprint": "fnv1a32-473201e4",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+              "objectType": "equation",
+              "title": "Cancel the additive inverses",
+              "semanticFingerprint": "fnv1a32-33d4add2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+              "objectType": "equation",
+              "title": "Verified subtraction checkpoint",
+              "semanticFingerprint": "fnv1a32-47d51947"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+          "transformationType": "divideBothSides",
+          "transformationFingerprint": "fnv1a32-d90fe40d",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+              "objectType": "equation",
+              "title": "Verified subtraction checkpoint",
+              "semanticFingerprint": "fnv1a32-47d51947"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+              "objectType": "equation",
+              "title": "Divide both sides by the coefficient",
+              "semanticFingerprint": "fnv1a32-fa40ed4d"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses",
+          "transformationType": "cancelMultiplicativeInverses",
+          "transformationFingerprint": "fnv1a32-32801ec4",
+          "source": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+              "objectType": "equation",
+              "title": "Divide both sides by the coefficient",
+              "semanticFingerprint": "fnv1a32-fa40ed4d"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.linear-solve.linear-68c15d41.solved",
+              "objectType": "equation",
+              "title": "Verified solution checkpoint",
+              "semanticFingerprint": "fnv1a32-a4b1df51"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.linear-solve.linear-68c15d41",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.radical.square-root-as-power",
+      "familyId": "exponent-radical",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.radical.square-root-as-power.rewrite-power-as-root",
+          "transformationType": "rewritePowerAsRoot",
+          "transformationFingerprint": "fnv1a32-436bec2f",
+          "source": [
+            {
+              "objectId": "expression.generated.radical.square-root-as-power.power",
+              "objectType": "expression",
+              "title": "Power form",
+              "semanticFingerprint": "fnv1a32-8e82b7bb"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.generated.radical.square-root-as-power.radical",
+              "objectType": "expression",
+              "title": "Radical form",
+              "semanticFingerprint": "fnv1a32-86faec13"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.radical.square-root-as-power",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.substitute-three",
+      "familyId": "substitution",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.substitute-three",
+          "transformationType": "substituteValue",
+          "transformationFingerprint": "fnv1a32-928d7266",
+          "source": [
+            {
+              "objectId": "equation.generated.substitute-three.before",
+              "objectType": "equation",
+              "title": "Input value and expression before substitution",
+              "semanticFingerprint": "fnv1a32-e7ee5777"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.substitute-three.after",
+              "objectType": "equation",
+              "title": "Input value transmitted into the expression",
+              "semanticFingerprint": "fnv1a32-993e6a2d"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.substitute-three",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.generated.substitute-three.provisional-incorrect",
+      "familyId": "substitution",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.generated.substitute-three",
+          "transformationType": "substituteValue",
+          "transformationFingerprint": "fnv1a32-928d7266",
+          "source": [
+            {
+              "objectId": "equation.generated.substitute-three.before",
+              "objectType": "equation",
+              "title": "Input value and expression before substitution",
+              "semanticFingerprint": "fnv1a32-5b98e56d"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.generated.substitute-three.after",
+              "objectType": "equation",
+              "title": "Unvalidated learner proposal",
+              "semanticFingerprint": "fnv1a32-87ee07b7"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.generated.substitute-three.provisional-incorrect",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.inequality.sign-flip.basic",
+      "familyId": "inequality",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.inequality.sign-flip.multiply-negative",
+          "transformationType": "multiplyNegativeBothSidesInequality",
+          "transformationFingerprint": "fnv1a32-69ddb369",
+          "source": [
+            {
+              "objectId": "inequality.sign-flip.source",
+              "objectType": "equation",
+              "title": "Source inequality",
+              "semanticFingerprint": "fnv1a32-bb7b0fe6"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "inequality.sign-flip.target",
+              "objectType": "equation",
+              "title": "Inequality after multiplying by -2",
+              "semanticFingerprint": "fnv1a32-cc918871"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.inequality.sign-flip.basic",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.linear-solve.solve-x",
+      "familyId": "linear-solve",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.linear-solve.subtract-both-sides-3",
+          "transformationType": "subtractBothSides",
+          "transformationFingerprint": "fnv1a32-da4de75a",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.initial",
+              "objectType": "equation",
+              "title": "Initial equation",
+              "semanticFingerprint": "fnv1a32-f5eb1631"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.after-subtract",
+              "objectType": "equation",
+              "title": "After subtracting 3 from both sides",
+              "semanticFingerprint": "fnv1a32-b6f337ed"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.linear-solve.cancel-left-additive-inverse",
+          "transformationType": "cancelAdditiveInverses",
+          "transformationFingerprint": "fnv1a32-52691446",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.after-subtract",
+              "objectType": "equation",
+              "title": "After subtracting 3 from both sides",
+              "semanticFingerprint": "fnv1a32-b6f337ed"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.left-simplified",
+              "objectType": "equation",
+              "title": "After cancellation",
+              "semanticFingerprint": "fnv1a32-b5b851bd"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.linear-solve.simplify-right-difference",
+          "transformationType": "simplifyConstantDifference",
+          "transformationFingerprint": "fnv1a32-f1f1ade0",
+          "source": [
+            {
+              "objectId": "equation.linear-solve.left-simplified",
+              "objectType": "equation",
+              "title": "After cancellation",
+              "semanticFingerprint": "fnv1a32-b5b851bd"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "equation.linear-solve.solved",
+              "objectType": "equation",
+              "title": "Solved equation",
+              "semanticFingerprint": "fnv1a32-65e904fb"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.linear-solve.solve-x",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.operation-evaluation.five-plus-two",
+      "familyId": "operation-evaluation",
+      "pathClass": "operation-evaluation-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.operation-evaluation.five-plus-two.simplify-sum",
+          "transformationType": "simplifyConstantSum",
+          "transformationFingerprint": "fnv1a32-08d1313d",
+          "source": [
+            {
+              "objectId": "expression.operation-evaluation.five-plus-two.source",
+              "objectType": "expression",
+              "title": "Constant sum",
+              "semanticFingerprint": "fnv1a32-ef9431ac"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.operation-evaluation.five-plus-two.target",
+              "objectType": "expression",
+              "title": "Evaluated sum",
+              "semanticFingerprint": "fnv1a32-e591c75b"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.operation-evaluation.five-plus-two",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.operation-evaluation.one-plus-two",
+      "familyId": "operation-evaluation",
+      "pathClass": "operation-evaluation-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.operation-evaluation.one-plus-two.simplify-sum",
+          "transformationType": "simplifyConstantSum",
+          "transformationFingerprint": "fnv1a32-e5cd49ab",
+          "source": [
+            {
+              "objectId": "expression.operation-evaluation.one-plus-two.source",
+              "objectType": "expression",
+              "title": "Constant sum",
+              "semanticFingerprint": "fnv1a32-672619ea"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.operation-evaluation.one-plus-two.target",
+              "objectType": "expression",
+              "title": "Evaluated sum",
+              "semanticFingerprint": "fnv1a32-193fdedd"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.operation-evaluation.one-plus-two",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.operation-evaluation.three-sixths",
+      "familyId": "operation-evaluation",
+      "pathClass": "operation-evaluation-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.operation-evaluation.three-sixths.simplify-quotient",
+          "transformationType": "simplifyConstantQuotient",
+          "transformationFingerprint": "fnv1a32-8f82a3e2",
+          "source": [
+            {
+              "objectId": "expression.operation-evaluation.three-sixths.source",
+              "objectType": "expression",
+              "title": "Constant quotient",
+              "semanticFingerprint": "fnv1a32-d4ff497c"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.operation-evaluation.three-sixths.target",
+              "objectType": "expression",
+              "title": "Evaluated quotient",
+              "semanticFingerprint": "fnv1a32-1b341f61"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.operation-evaluation.three-sixths",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.sample.fourier-transform-pair",
+      "familyId": "transform-pair",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.sample.fourier-transform-pair.present-1",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-35f55797",
+          "source": [
+            {
+              "objectId": "formula-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Fourier transform",
+              "semanticFingerprint": "fnv1a32-edd37cf2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Fourier transform",
+              "semanticFingerprint": "fnv1a32-edd37cf2"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.sample.fourier-transform-pair.present-2",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-504a0392",
+          "source": [
+            {
+              "objectId": "formula-inverse-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Inverse Fourier transform",
+              "semanticFingerprint": "fnv1a32-a49ae6ef"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-inverse-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Inverse Fourier transform",
+              "semanticFingerprint": "fnv1a32-a49ae6ef"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.sample.fourier-transform-pair.compare",
+          "transformationType": "compareFourierTransformPair",
+          "transformationFingerprint": "fnv1a32-33b9fb89",
+          "source": [
+            {
+              "objectId": "formula-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Fourier transform",
+              "semanticFingerprint": "fnv1a32-edd37cf2"
+            },
+            {
+              "objectId": "formula-inverse-fourier-transform",
+              "objectType": "latex-form",
+              "title": "Inverse Fourier transform",
+              "semanticFingerprint": "fnv1a32-a49ae6ef"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "comparison-fourier-transform-pair",
+              "objectType": "latex-comparison",
+              "title": "Fourier transform pair",
+              "semanticFingerprint": "fnv1a32-8fb2551d"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.sample.fourier-transform-pair",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.sample.fundamental-theorem-calculus",
+      "familyId": "calculus",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.sample.fundamental-theorem-calculus.present-1",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-f9ad1792",
+          "source": [
+            {
+              "objectId": "formula-ftc-derivative",
+              "objectType": "latex-form",
+              "title": "FTC: derivative form",
+              "semanticFingerprint": "fnv1a32-6cddad95"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-ftc-derivative",
+              "objectType": "latex-form",
+              "title": "FTC: derivative form",
+              "semanticFingerprint": "fnv1a32-6cddad95"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.sample.fundamental-theorem-calculus.present-2",
+          "transformationType": "presentLatexForm",
+          "transformationFingerprint": "fnv1a32-13d4d1cb",
+          "source": [
+            {
+              "objectId": "formula-ftc-net-change",
+              "objectType": "latex-form",
+              "title": "FTC: net change form",
+              "semanticFingerprint": "fnv1a32-834a47c2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "formula-ftc-net-change",
+              "objectType": "latex-form",
+              "title": "FTC: net change form",
+              "semanticFingerprint": "fnv1a32-834a47c2"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.sample.fundamental-theorem-calculus.compare",
+          "transformationType": "compareFundamentalTheoremForms",
+          "transformationFingerprint": "fnv1a32-530bbbbb",
+          "source": [
+            {
+              "objectId": "formula-ftc-derivative",
+              "objectType": "latex-form",
+              "title": "FTC: derivative form",
+              "semanticFingerprint": "fnv1a32-6cddad95"
+            },
+            {
+              "objectId": "formula-ftc-net-change",
+              "objectType": "latex-form",
+              "title": "FTC: net change form",
+              "semanticFingerprint": "fnv1a32-834a47c2"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "comparison-ftc-forms",
+              "objectType": "latex-comparison",
+              "title": "Fundamental Theorem forms",
+              "semanticFingerprint": "fnv1a32-6087adac"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.sample.fundamental-theorem-calculus",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    }
+  ],
+  "families": [
+    {
+      "familyId": "calculus",
+      "animationIds": [
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "representativeAnimationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "cancellation",
+      "animationIds": [
+        "animation.generated.cancellation.additive-inverses"
+      ],
+      "representativeAnimationId": "animation.generated.cancellation.additive-inverses",
+      "semanticVerificationCommand": "npm run test:cancellation-pressure",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "comparison",
+      "animationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming"
+      ],
+      "representativeAnimationId": "animation.comparison.jacobian-hessian",
+      "semanticVerificationCommand": "npm run test:equation-surface-preservation",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "distribution-factoring",
+      "animationIds": [
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a"
+      ],
+      "representativeAnimationId": "animation.generated.distribution.expand-a-sum",
+      "semanticVerificationCommand": "npm run test:distribution-pressure",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "exponent-radical",
+      "animationIds": [
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.radical.square-root-as-power"
+      ],
+      "representativeAnimationId": "animation.generated.exponent.square-as-product",
+      "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "fraction",
+      "animationIds": [
+        "animation.generated.fraction-expression.two-fourths"
+      ],
+      "representativeAnimationId": "animation.generated.fraction-expression.two-fourths",
+      "semanticVerificationCommand": "npm run test:operation-presentation-plans",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "function-wrap",
+      "animationIds": [
+        "animation.generated.function-wrap.apply-f"
+      ],
+      "representativeAnimationId": "animation.generated.function-wrap.apply-f",
+      "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "inequality",
+      "animationIds": [
+        "animation.inequality.sign-flip.basic"
+      ],
+      "representativeAnimationId": "animation.inequality.sign-flip.basic",
+      "semanticVerificationCommand": "npm run test:operation-presentation-plans",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "linear-algebra",
+      "animationIds": [
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two"
+      ],
+      "representativeAnimationId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "semanticVerificationCommand": "npm run test:matrix-linear-map",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "linear-solve",
+      "animationIds": [
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.linear-solve.solve-x"
+      ],
+      "representativeAnimationId": "animation.generated.linear-solve.linear-68c15d41",
+      "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "logarithm",
+      "animationIds": [
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-quotient.difference-to-quotient"
+      ],
+      "representativeAnimationId": "animation.algebra.log-exponent.solve-two-power-x",
+      "semanticVerificationCommand": "npm run test:log-exponent && npm run test:log-quotient",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "operation-evaluation",
+      "animationIds": [
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths"
+      ],
+      "representativeAnimationId": "animation.operation-evaluation.five-plus-two",
+      "semanticVerificationCommand": "npm run test:operation-presentation-plans",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "substitution",
+      "animationIds": [
+        "animation.generated.add-zero",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect"
+      ],
+      "representativeAnimationId": "animation.generated.add-zero",
+      "semanticVerificationCommand": "npm run test:operation-presentation-plans",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    },
+    {
+      "familyId": "transform-pair",
+      "animationIds": [
+        "animation.sample.fourier-transform-pair"
+      ],
+      "representativeAnimationId": "animation.sample.fourier-transform-pair",
+      "semanticVerificationCommand": "npm run test:equation-surface-preservation",
+      "visualVerificationCommand": "npm run visual:equation-surface-preservation",
+      "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",
+      "visualEvidencePolicy": "deterministic-current-render"
+    }
+  ]
+}

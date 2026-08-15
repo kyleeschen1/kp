@@ -62,7 +62,8 @@
     {
       "id": "s03",
       "title": "Preservation matrix",
-      "status": "planned"
+      "summary": "Committed a source-derived preservation matrix and generated evidence contract for 28 equation surfaces in 14 families, with uniform browser and deterministic contact-sheet harnesses.",
+      "status": "complete"
     },
     {
       "id": "s04",
