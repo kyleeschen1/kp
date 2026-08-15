@@ -178,10 +178,24 @@
       "status": "passed",
       "scope": "s10 structural compiler boundaries",
       "checkedAt": "2026-08-15T22:06:40.203Z"
+    },
+    {
+      "command": "node focused semantic-motion compiler chain",
+      "status": "passed",
+      "scope": "s11 semantic event DAG ordering and physical-authority rejection",
+      "checkedAt": "2026-08-15T22:14:57.160Z",
+      "notes": "All 20 request, endpoint, correspondence, lifecycle, role/cohort, and precedence tests pass across quotient, distribution, and cancellation; malformed cycles, references, and physical scheduling fail closed."
+    },
+    {
+      "command": "npm run check:architecture and npm run typecheck and theseus workspace validate",
+      "status": "passed",
+      "scope": "s11 compiler boundaries and static authority",
+      "checkedAt": "2026-08-15T22:15:00.881Z",
+      "notes": "All architecture gates, TypeScript/Svelte/domain checks, and workspace validation pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s10 complete: exact operation role sets and cardinalities now compile into total semantic cohorts and closed operator/sign/punctuation attachments. Quotient, distribution, and cancellation share validation while retaining distinct family-local cohesion variants; malformed, foreign, ambiguous, missing, duplicate, or copied structure fails closed."
+    "summary": "s11 complete: quotient, distribution, and cancellation now express causal semantic events as validated acyclic precedence graphs. The compiler guarantees one terminal native-target-ready event and deterministic semantic layers while refusing milliseconds, easing, progress, paths, or geometry."
   }
 }

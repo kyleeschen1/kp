@@ -6,6 +6,7 @@ import {
   validateKpSemanticMotionEndpointsAndFrontier,
   type KpSemanticMotionCompilerRequestV1,
   type KpSemanticMotionEntityAuthorityV1,
+  type KpSemanticMotionOperationStructureContract,
   type KpSemanticMotionSourceAuthorityV1,
   type KpVerifiedSemanticMotionLifecycle
 } from "../../src/domain-ir/public-api.ts";
@@ -93,6 +94,65 @@ export function createCancellationSemanticMotionFixture(): KpSemanticMotionCompi
   });
 }
 
+export function quotientSemanticMotionStructureContract(): KpSemanticMotionOperationStructureContract {
+  return {
+    operationId: "kp.semantic-motion.quotient",
+    roles: [
+      role("source-operators", "one-or-more", "operator", "required"),
+      role("source-arguments", "one-or-more", "material", "none"),
+      role("target-operator", "exactly-one", "operator", "required"),
+      role("target-arguments", "one-or-more", "material", "none")
+    ],
+    cohorts: [
+      cohort("cohort.quotient.operator-fusion", ["source-operators", "target-operator"], "log-application-fusion"),
+      cohort("cohort.quotient.arguments", ["source-arguments", "target-arguments"], "quotient-argument-role-change")
+    ],
+    attachments: [
+      attachment("attachment.source-operators", "operator-argument", ["source-arguments"], ["source-operators"]),
+      attachment("attachment.target-operator", "operator-argument", ["target-arguments"], ["target-operator"])
+    ]
+  };
+}
+
+export function distributionSemanticMotionStructureContract(): KpSemanticMotionOperationStructureContract {
+  return {
+    operationId: "kp.semantic-motion.distribution",
+    roles: [
+      role("source-factor", "exactly-one", "material", "none"),
+      role("factor-copies", "one-or-more", "material", "none"),
+      role("source-addends", "one-or-more", "material", "none"),
+      role("target-addends", "one-or-more", "material", "none"),
+      role("connector", "one-or-more", "punctuation", "required")
+    ],
+    cohorts: [
+      cohort("cohort.distribution.factors", ["source-factor", "factor-copies"], "ordered-factor-fan-out"),
+      cohort("cohort.distribution.addends", ["source-addends", "target-addends"], "ordered-addend-continuity"),
+      cohort("cohort.distribution.connector", ["connector"], "connector-axis-local")
+    ],
+    attachments: [
+      attachment("attachment.distribution.connector", "connector-between", ["target-addends"], ["connector"])
+    ]
+  };
+}
+
+export function cancellationSemanticMotionStructureContract(): KpSemanticMotionOperationStructureContract {
+  return {
+    operationId: "kp.semantic-motion.cancellation",
+    roles: [
+      role("inverse-pair", "one-or-more", "operator", "required"),
+      role("source-survivors", "one-or-more", "material", "none"),
+      role("target-survivors", "one-or-more", "material", "none")
+    ],
+    cohorts: [
+      cohort("cohort.cancellation.inverse-pair", ["inverse-pair"], "inverse-shared-contact"),
+      cohort("cohort.cancellation.survivors", ["source-survivors", "target-survivors"], "survivor-compaction-local")
+    ],
+    attachments: [
+      attachment("attachment.cancellation.signs", "sign-term", ["source-survivors"], ["inverse-pair"])
+    ]
+  };
+}
+
 function createFixture(input: FixtureInput): KpSemanticMotionCompilerTestFixture {
   const transformationId = `transform.${input.id}`;
   const sourceId = `semantic.${input.id}`;
@@ -158,3 +218,24 @@ function roleChange(id: string, sourceEntityId: string, targetEntityId: string):
   return { id, relation: "role-change", sourceEntityIds: [sourceEntityId], targetEntityIds: [targetEntityId] };
 }
 
+function role(
+  id: string,
+  cardinality: "exactly-one" | "one-or-more",
+  participation: "material" | "operator" | "punctuation",
+  attachmentValue: "required" | "none"
+) {
+  return { id, cardinality, participation, attachment: attachmentValue } as const;
+}
+
+function cohort(id: string, memberRoleIds: readonly string[], variantId: string) {
+  return { id, memberRoleIds, cohesion: { scope: "family-local" as const, variantId } };
+}
+
+function attachment(
+  id: string,
+  kind: "operator-argument" | "connector-between" | "sign-term",
+  anchorRoleIds: readonly string[],
+  attachedRoleIds: readonly string[]
+) {
+  return { id, kind, anchorRoleIds, attachedRoleIds };
+}

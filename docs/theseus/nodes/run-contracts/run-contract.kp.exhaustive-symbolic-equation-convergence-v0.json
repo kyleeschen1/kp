@@ -110,7 +110,8 @@
     {
       "id": "s11",
       "title": "Semantic precedence graph",
-      "status": "planned"
+      "summary": "Committed renderer-free semantic event vocabulary, reference and DAG validation, deterministic topological layers, terminal target readiness, total event contribution, and physical scheduling rejection across three operation families.",
+      "status": "complete"
     },
     {
       "id": "s12",
