@@ -288,7 +288,7 @@ function applyFrame(
   const ownership = activeTransit.transit.apply({
     progress: operationProgress,
     direction: "forward",
-    reducedMotion: false
+    reducedMotion
   });
   const accessibleIndex = ownership.visualOwner === "source-native"
     ? frame.operationIndex

@@ -173,10 +173,52 @@
       "scope": "s19 repository type surface",
       "checkedAt": "2026-08-15T03:46:12.740Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-exponent-catalogue.browser.spec.ts tests/log-exponent-transit-ownership.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s20 canonical accessibility and integration checkpoint",
+      "checkedAt": "2026-08-15T03:53:48.597Z",
+      "notes": "Four Chromium checks passed: direct seek, transit ownership, reduced-motion native settlement, one accessible equation, narrow fit, and Review availability."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s20 production bundle",
+      "checkedAt": "2026-08-15T03:53:49.977Z",
+      "notes": "Vite production bundle passed; the lazy log-exponent adapter is 10.57 kB gzip, surface capability 3.46 kB gzip, and surface CSS 0.31 kB gzip."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s20 catalogue budget",
+      "checkedAt": "2026-08-15T03:53:50.928Z",
+      "notes": "Catalogue route and outer-shell budgets passed with no forbidden eager files."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "s20 human review evidence",
+      "checkedAt": "2026-08-15T03:54:02.632Z",
+      "notes": "Deterministic seven-state contact sheet regenerated after accessibility integration."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20 durable project evidence",
+      "checkedAt": "2026-08-15T03:54:03.741Z",
+      "notes": "Validated 952 nodes and 20792 events before final slice evidence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s20 broad repository gate",
+      "checkedAt": "2026-08-15T03:54:04.715Z",
+      "notes": "Blocked by pre-existing out-of-scope exactOptionalPropertyTypes error at scripts/capture-normal-matrix-proof-checkpoint.ts:244; exemplar-focused TypeScript, Chromium, and production bundle checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s19 tuned the canonical operation choreography: balanced log wrappers share one semantic opacity schedule, exponent identity persists on one measured arc, and the quotient bar grows causally from a measurable hairline."
+    "summary": "Slice s20 produced the mandatory canonical human checkpoint with deterministic visual evidence, reduced-motion and narrow-fit accessibility, exact direct routes, review readiness, production bundle and budget evidence; broad typecheck retains one unrelated normal-matrix blocker."
   }
 }

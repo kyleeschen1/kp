@@ -150,7 +150,8 @@
     {
       "id": "s20",
       "title": "Produce canonical human checkpoint",
-      "status": "planned"
+      "summary": "Canonical checkpoint packaged for human review; approved continuation must begin with s21 refinements and may not generalize before visual approval.",
+      "status": "complete"
     },
     {
       "id": "s21",

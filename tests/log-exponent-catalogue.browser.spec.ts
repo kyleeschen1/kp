@@ -126,3 +126,60 @@ test("catalogue route seeks the exact semantic sequence without replay", async (
     "0.625"
   );
 });
+
+test("canonical checkpoint fits narrow reduced-motion viewports with one accessible equation", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 760 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`/?artifact=${animationId}&playhead=0.5`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-exponent-stage]");
+
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await expect(stage.locator("[data-kp-editor-equation-material-layer]"))
+    .toHaveAttribute("aria-hidden", "true");
+  const accessibility = await stage.evaluate((root) => {
+    const endpoints = [...root.querySelectorAll<HTMLElement>(
+      ".kp-log-exponent-stage__endpoint"
+    )];
+    const active = endpoints.filter((endpoint) =>
+      endpoint.getAttribute("aria-hidden") === "false"
+    );
+    const stageRect = root.getBoundingClientRect();
+    return {
+      activeCount: active.length,
+      activeHasMathMl: active[0]?.querySelector("math") !== null,
+      materialPaintIsHidden: [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].every((owner) => Number(getComputedStyle(owner).opacity) === 0),
+      inactiveAreInert: endpoints
+        .filter((endpoint) => endpoint !== active[0])
+        .every((endpoint) => endpoint.hasAttribute("inert")),
+      stageLeft: stageRect.left,
+      stageRight: stageRect.right,
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth
+    };
+  });
+  expect(accessibility.activeCount).toBe(1);
+  expect(accessibility.activeHasMathMl).toBe(true);
+  expect(accessibility.materialPaintIsHidden).toBe(true);
+  expect(accessibility.inactiveAreInert).toBe(true);
+  expect(accessibility.stageLeft).toBeGreaterThanOrEqual(0);
+  expect(accessibility.stageRight).toBeLessThanOrEqual(
+    accessibility.viewportWidth
+  );
+  expect(accessibility.documentWidth).toBe(accessibility.viewportWidth);
+  await expect(stage.locator("[data-kp-log-exponent-status]"))
+    .toHaveAttribute("aria-live", "polite");
+  await expect(page.getByRole("button", { name: "Review" })).toBeVisible();
+});
