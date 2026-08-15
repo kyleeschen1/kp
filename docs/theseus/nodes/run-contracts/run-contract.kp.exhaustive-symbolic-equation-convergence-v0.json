@@ -80,7 +80,8 @@
     {
       "id": "s06",
       "title": "Compiler request and outcome",
-      "status": "planned"
+      "summary": "Committed public semantic-motion request/outcome contract with renderer-free semantic inputs, exhaustive fail-closed outcomes, serialization fixtures, and nominal copy-resistant compilation authority.",
+      "status": "complete"
     },
     {
       "id": "s07",

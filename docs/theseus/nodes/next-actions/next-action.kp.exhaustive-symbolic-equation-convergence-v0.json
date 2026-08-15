@@ -88,10 +88,28 @@
       "scope": "s05 generated ledger integrity",
       "checkedAt": "2026-08-15T21:31:09.115Z",
       "notes": "Full static checks, architecture gates, generated parity, and workspace validation pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 public contract and exhaustive outcome types",
+      "checkedAt": "2026-08-15T21:39:50.129Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-compiler-contract.test.ts",
+      "status": "passed",
+      "scope": "s06 compiler request outcomes nominal authority and serialization",
+      "checkedAt": "2026-08-15T21:39:50.579Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 compiler contract boundaries",
+      "checkedAt": "2026-08-15T21:39:50.974Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 complete: every equation row has one typed disposition, one 9/9/10 migration wave, an exact preservation boundary, an independently reversible single-row rollback unit, and blocked final-caller retirement evidence. No row is unclassified or marked retired."
+    "summary": "s06 complete: the public v1 request admits only pinned semantic states, canonical operation roles and correspondence, a bounded frontier, and teaching intent. Its exhaustive outcomes fail closed as ready, repair-required, explicit-static, or human-review; copied/serialized ready data cannot retain nominal compilation authority."
   }
 }
