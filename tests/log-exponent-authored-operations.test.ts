@@ -30,7 +30,7 @@ test("authored operations remain mathematically distinct and exhaustively inspec
   assert.deepEqual(descriptions, [
     "wrap semantic.power.two-to-x and semantic.value.seven",
     "extract semantic.unknown.x from semantic.power.two-to-x",
-    "divide by semantic.log.left"
+    "divide by semantic.value.log-two"
   ]);
 });
 

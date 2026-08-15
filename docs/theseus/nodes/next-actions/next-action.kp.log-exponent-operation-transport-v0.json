@@ -52,10 +52,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:04:06.348Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-extraction-correspondence.test.ts tests/log-exponent-apply-log-correspondence.test.ts tests/log-exponent-compiler-authority.test.ts tests/log-exponent-authored-operations.test.ts tests/log-exponent-domain-assumptions.test.ts tests/log-exponent-solve-states.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:08:26.602Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 7 compiles a nominal apply-log transformation with total reversible correspondence and one balanced two-wrapper introduction."
+    "summary": "Slice 8 compiles x from superscript to coefficient, preserves the other values, retires the power container, introduces ln(2), and distinguishes semantic identity from contextual role."
   }
 }

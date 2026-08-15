@@ -90,7 +90,7 @@ export function createKpLogExponentDomainContract(input: {
       assumption(
         "log-base-nonzero",
         "derived",
-        { kind: "nonzero", semanticId: "semantic.log.left" },
+        { kind: "nonzero", semanticId: "semantic.value.log-two" },
         "Because the base is not one, its natural logarithm is safe to divide by."
       )
     ])

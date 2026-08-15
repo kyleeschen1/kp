@@ -78,7 +78,8 @@
     {
       "id": "s08",
       "title": "Compile exponent extraction",
-      "status": "planned"
+      "summary": "Compiled and verified exponent extraction with explicit x continuity and lawful structural lifecycle.",
+      "status": "complete"
     },
     {
       "id": "s09",

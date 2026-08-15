@@ -18,7 +18,7 @@ test("compiler mints exhaustive semantic roles for each canonical state", () => 
     "source.left"
   );
   assert.equal(
-    findKpLogExponentRoleBinding(compiled[1]!, "left-log")?.occurrenceIds[0],
+    findKpLogExponentRoleBinding(compiled[1]!, "logged-power-value")?.occurrenceIds[0],
     "logged.left.log"
   );
   assert.equal(

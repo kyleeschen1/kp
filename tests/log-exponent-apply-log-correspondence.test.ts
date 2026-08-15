@@ -29,7 +29,7 @@ test("apply-log compilation preserves all material and introduces one balanced w
       { id: "correspondence.apply-log.equality", relation: "identity", source: ["source.equality"], target: ["logged.equality"] },
       { id: "correspondence.apply-log.power", relation: "role-change", source: ["source.left"], target: ["logged.left.power"] },
       { id: "correspondence.apply-log.base", relation: "identity", source: ["source.base"], target: ["logged.base"] },
-      { id: "correspondence.apply-log.exponent", relation: "identity", source: ["source.exponent"], target: ["logged.exponent"] },
+      { id: "correspondence.apply-log.unknown-x", relation: "identity", source: ["source.exponent"], target: ["logged.exponent"] },
       { id: "correspondence.apply-log.right-value", relation: "role-change", source: ["source.right"], target: ["logged.right"] },
       {
         id: "correspondence.apply-log.introduce-balanced-wrappers",

@@ -7,11 +7,12 @@ import {
 export type KpLogExponentSemanticRole =
   | "equality"
   | "base"
-  | "exponent"
+  | "unknown-x"
   | "right-value"
   | "power"
-  | "left-log"
-  | "right-log"
+  | "logged-power-value"
+  | "log-base-value"
+  | "log-right-value"
   | "extracted-product"
   | "solved-quotient";
 
@@ -34,11 +35,12 @@ export interface KpCompiledLogExponentStateRoles {
 const rolesBySemanticId = Object.freeze({
   "semantic.equality": "equality",
   "semantic.base.two": "base",
-  "semantic.unknown.x": "exponent",
+  "semantic.unknown.x": "unknown-x",
   "semantic.value.seven": "right-value",
   "semantic.power.two-to-x": "power",
-  "semantic.log.left": "left-log",
-  "semantic.log.right": "right-log",
+  "semantic.expression.log-two-power-x": "logged-power-value",
+  "semantic.value.log-two": "log-base-value",
+  "semantic.value.log-seven": "log-right-value",
   "semantic.product.x-log-two": "extracted-product",
   "semantic.quotient.log-seven-log-two": "solved-quotient"
 } as const satisfies Readonly<Record<string, KpLogExponentSemanticRole>>);

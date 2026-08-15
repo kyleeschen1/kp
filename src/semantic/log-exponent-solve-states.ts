@@ -83,8 +83,8 @@ export const kpCanonicalLogExponentSolveStates = Object.freeze([
     "\\ln(2^x)=\\ln 7",
     equality(
       "logged",
-      naturalLog("logged.left.log", "semantic.log.left", power("logged.left.power", two("logged.base"), x("logged.exponent"))),
-      naturalLog("logged.right.log", "semantic.log.right", seven("logged.right"))
+      naturalLog("logged.left.log", "semantic.expression.log-two-power-x", power("logged.left.power", two("logged.base"), x("logged.exponent"))),
+      naturalLog("logged.right.log", "semantic.value.log-seven", seven("logged.right"))
     )
   ),
   state(
@@ -95,9 +95,9 @@ export const kpCanonicalLogExponentSolveStates = Object.freeze([
       "extracted",
       product("extracted.left", [
         x("extracted.coefficient"),
-        naturalLog("extracted.left.log", "semantic.log.left", two("extracted.base"))
+        naturalLog("extracted.left.log", "semantic.value.log-two", two("extracted.base"))
       ]),
-      naturalLog("extracted.right.log", "semantic.log.right", seven("extracted.right"))
+      naturalLog("extracted.right.log", "semantic.value.log-seven", seven("extracted.right"))
     )
   ),
   state(
@@ -109,8 +109,8 @@ export const kpCanonicalLogExponentSolveStates = Object.freeze([
       x("solved.left"),
       quotient(
         "solved.right",
-        naturalLog("solved.numerator.log", "semantic.log.right", seven("solved.numerator")),
-        naturalLog("solved.denominator.log", "semantic.log.left", two("solved.denominator"))
+        naturalLog("solved.numerator.log", "semantic.value.log-seven", seven("solved.numerator")),
+        naturalLog("solved.denominator.log", "semantic.value.log-two", two("solved.denominator"))
       )
     )
   )

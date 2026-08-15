@@ -1,5 +1,6 @@
 import {
   type KpApplyNaturalLogBothSidesOperation,
+  type KpExtractLogPowerExponentOperation,
   type KpLogExponentAuthoredOperation
 } from "./log-exponent-authored-operations.ts";
 import {
@@ -44,18 +45,18 @@ export function compileKpApplyNaturalLogBothSides(input: {
   const sourceRoles = compileKpLogExponentStateRoles(input.source);
   const targetRoles = compileKpLogExponentStateRoles(input.target);
   const records: readonly SelectorCorrespondenceRecord[] = Object.freeze([
-    preserve("equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
-    preserve("power", sourceRoles, targetRoles, "role-change", "The full power becomes the left logarithm argument."),
-    preserve("base", sourceRoles, targetRoles, "identity", "The exponential base remains two."),
-    preserve("exponent", sourceRoles, targetRoles, "identity", "The unknown exponent remains x."),
-    preserve("right-value", sourceRoles, targetRoles, "role-change", "Seven becomes the right logarithm argument."),
+    preserve("apply-log", "equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
+    preserve("apply-log", "power", sourceRoles, targetRoles, "role-change", "The full power becomes the left logarithm argument."),
+    preserve("apply-log", "base", sourceRoles, targetRoles, "identity", "The exponential base remains two."),
+    preserve("apply-log", "unknown-x", sourceRoles, targetRoles, "identity", "The unknown remains x in exponent position."),
+    preserve("apply-log", "right-value", sourceRoles, targetRoles, "role-change", "Seven becomes the right logarithm argument."),
     Object.freeze({
       id: "correspondence.apply-log.introduce-balanced-wrappers",
       relation: "introduction" as const,
       sourceSelectorIds: Object.freeze([]),
       targetSelectorIds: Object.freeze([
-        occurrence(targetRoles, "left-log"),
-        occurrence(targetRoles, "right-log")
+        occurrence(targetRoles, "logged-power-value"),
+        occurrence(targetRoles, "log-right-value")
       ]),
       summary: "Introduce both natural-log wrappers as one balanced operation."
     })
@@ -89,6 +90,73 @@ export function compileKpApplyNaturalLogBothSides(input: {
   });
 }
 
+export function compileKpExtractLogPowerExponent(input: {
+  readonly operation: KpExtractLogPowerExponentOperation;
+  readonly source: KpLogExponentSolveState;
+  readonly target: KpLogExponentSolveState;
+}): KpCompiledLogExponentOperation {
+  assertExtractionEndpoints(input.operation, input.source, input.target);
+  const sourceRoles = compileKpLogExponentStateRoles(input.source);
+  const targetRoles = compileKpLogExponentStateRoles(input.target);
+  const records: readonly SelectorCorrespondenceRecord[] = Object.freeze([
+    preserve("extract-exponent", "equality", sourceRoles, targetRoles, "identity", "Equality remains the same relation."),
+    preserve("extract-exponent", "base", sourceRoles, targetRoles, "identity", "The base remains the logarithm argument."),
+    preserve("extract-exponent", "unknown-x", sourceRoles, targetRoles, "role-change", "The same x moves from exponent to coefficient."),
+    preserve("extract-exponent", "log-right-value", sourceRoles, targetRoles, "identity", "The right logarithm remains unchanged."),
+    preserve("extract-exponent", "right-value", sourceRoles, targetRoles, "identity", "Seven remains the right logarithm argument."),
+    relate(
+      "extract-exponent",
+      "logged-power-value",
+      "extracted-product",
+      sourceRoles,
+      targetRoles,
+      "role-change",
+      "The equivalent left value changes from log-of-power to exponent-times-log-base."
+    ),
+    Object.freeze({
+      id: "correspondence.extract-exponent.retire-power-container",
+      relation: "removal" as const,
+      sourceSelectorIds: Object.freeze([occurrence(sourceRoles, "power")]),
+      targetSelectorIds: Object.freeze([]),
+      summary: "The power container retires after its exponent and base acquire their target roles."
+    }),
+    Object.freeze({
+      id: "correspondence.extract-exponent.derive-log-base-value",
+      relation: "introduction" as const,
+      sourceSelectorIds: Object.freeze([]),
+      targetSelectorIds: Object.freeze([occurrence(targetRoles, "log-base-value")]),
+      summary: "The power law introduces the natural logarithm of the base."
+    })
+  ]);
+  const correspondenceMap: CorrespondenceMap = Object.freeze({
+    id: "correspondence.log-exponent.extract-exponent",
+    records
+  });
+  assertCorrespondenceComplete(input.source, input.target, correspondenceMap);
+  const transformation = Object.freeze(createKpSemanticTransformation({
+    id: "transformation.log-exponent.extract-exponent",
+    transformType: "extractLogPowerExponent",
+    title: "Extract the exponent with the logarithm power law",
+    sourceObjectIds: [input.source.id],
+    targetObjectIds: [input.target.id],
+    preserves: ["identity", "value"],
+    correspondenceMap,
+    assumptions: [...input.operation.assumptionIds],
+    lawRefs: [{
+      id: input.operation.lawId,
+      level: "strict",
+      summary: "For a positive base, ln(a^x) equals x ln(a)."
+    }]
+  }));
+  return authorize({
+    schemaVersion: "kp.compiled-log-exponent-operation.v1",
+    operation: input.operation,
+    sourceRoles,
+    targetRoles,
+    transformation
+  });
+}
+
 export function isKpCompiledLogExponentOperation(
   value: unknown
 ): value is KpCompiledLogExponentOperation {
@@ -96,17 +164,30 @@ export function isKpCompiledLogExponentOperation(
 }
 
 function preserve(
+  prefix: string,
   role: KpLogExponentSemanticRole,
   source: KpCompiledLogExponentStateRoles,
   target: KpCompiledLogExponentStateRoles,
   relation: "identity" | "role-change",
   summary: string
 ): SelectorCorrespondenceRecord {
+  return relate(prefix, role, role, source, target, relation, summary);
+}
+
+function relate(
+  prefix: string,
+  sourceRole: KpLogExponentSemanticRole,
+  targetRole: KpLogExponentSemanticRole,
+  source: KpCompiledLogExponentStateRoles,
+  target: KpCompiledLogExponentStateRoles,
+  relation: "identity" | "role-change",
+  summary: string
+): SelectorCorrespondenceRecord {
   return Object.freeze({
-    id: `correspondence.apply-log.${role}`,
+    id: `correspondence.${prefix}.${sourceRole}`,
     relation,
-    sourceSelectorIds: Object.freeze([occurrence(source, role)]),
-    targetSelectorIds: Object.freeze([occurrence(target, role)]),
+    sourceSelectorIds: Object.freeze([occurrence(source, sourceRole)]),
+    targetSelectorIds: Object.freeze([occurrence(target, targetRole)]),
     summary
   });
 }
@@ -134,6 +215,21 @@ function assertEndpoints(
     target.kind !== "logged-both-sides"
   ) {
     throw new Error("Apply-log compilation requires the canonical source and logged endpoint states.");
+  }
+}
+
+function assertExtractionEndpoints(
+  operation: KpExtractLogPowerExponentOperation,
+  source: KpLogExponentSolveState,
+  target: KpLogExponentSolveState
+): void {
+  if (
+    operation.sourceStateId !== source.id ||
+    operation.targetStateId !== target.id ||
+    source.kind !== "logged-both-sides" ||
+    target.kind !== "exponent-extracted"
+  ) {
+    throw new Error("Exponent extraction requires the canonical logged and extracted endpoint states.");
   }
 }
 

@@ -18,14 +18,15 @@ interface KpLogExponentAuthoredOperationBase {
 
 export interface KpApplyNaturalLogBothSidesOperation extends KpLogExponentAuthoredOperationBase {
   readonly kind: "apply-natural-log-both-sides";
-  readonly functionSemanticIds: readonly ["semantic.log.left", "semantic.log.right"];
+  readonly function: "natural-log";
   readonly argumentSemanticIds: readonly ["semantic.power.two-to-x", "semantic.value.seven"];
 }
 
 export interface KpExtractLogPowerExponentOperation extends KpLogExponentAuthoredOperationBase {
   readonly kind: "extract-log-power-exponent";
   readonly lawId: "law.logarithm.power";
-  readonly logSemanticId: "semantic.log.left";
+  readonly sourceLogValueSemanticId: "semantic.expression.log-two-power-x";
+  readonly targetLogBaseSemanticId: "semantic.value.log-two";
   readonly powerSemanticId: "semantic.power.two-to-x";
   readonly exponentSemanticId: "semantic.unknown.x";
   readonly baseSemanticId: "semantic.base.two";
@@ -35,7 +36,7 @@ export interface KpExtractLogPowerExponentOperation extends KpLogExponentAuthore
 export interface KpDivideByLogBaseOperation extends KpLogExponentAuthoredOperationBase {
   readonly kind: "divide-both-sides-by-log-base";
   readonly lawId: "law.equation.divide-both-sides";
-  readonly divisorSemanticId: "semantic.log.left";
+  readonly divisorSemanticId: "semantic.value.log-two";
   readonly solvedSemanticId: "semantic.unknown.x";
   readonly quotientSemanticId: "semantic.quotient.log-seven-log-two";
 }
@@ -69,10 +70,7 @@ export function createKpCanonicalLogExponentAuthoredProgram(input: {
         "assumption.log-exponent.right-positive",
         "assumption.log-exponent.log-injective"
       ] as const),
-      functionSemanticIds: Object.freeze([
-        "semantic.log.left",
-        "semantic.log.right"
-      ] as const),
+      function: "natural-log" as const,
       argumentSemanticIds: Object.freeze([
         "semantic.power.two-to-x",
         "semantic.value.seven"
@@ -87,7 +85,8 @@ export function createKpCanonicalLogExponentAuthoredProgram(input: {
         "assumption.log-exponent.base-positive"
       ] as const),
       lawId: "law.logarithm.power" as const,
-      logSemanticId: "semantic.log.left" as const,
+      sourceLogValueSemanticId: "semantic.expression.log-two-power-x" as const,
+      targetLogBaseSemanticId: "semantic.value.log-two" as const,
       powerSemanticId: "semantic.power.two-to-x" as const,
       exponentSemanticId: "semantic.unknown.x" as const,
       baseSemanticId: "semantic.base.two" as const,
@@ -102,7 +101,7 @@ export function createKpCanonicalLogExponentAuthoredProgram(input: {
         "assumption.log-exponent.log-base-nonzero"
       ] as const),
       lawId: "law.equation.divide-both-sides" as const,
-      divisorSemanticId: "semantic.log.left" as const,
+      divisorSemanticId: "semantic.value.log-two" as const,
       solvedSemanticId: "semantic.unknown.x" as const,
       quotientSemanticId: "semantic.quotient.log-seven-log-two" as const
     })
