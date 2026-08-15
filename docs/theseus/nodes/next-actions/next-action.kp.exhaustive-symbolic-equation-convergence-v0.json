@@ -106,10 +106,28 @@
       "status": "passed",
       "scope": "s06 compiler contract boundaries",
       "checkedAt": "2026-08-15T21:39:50.974Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s07 endpoint validator boundaries",
+      "checkedAt": "2026-08-15T21:45:14.852Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 endpoint and frontier authority",
+      "checkedAt": "2026-08-15T21:45:15.882Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-compiler-contract.test.ts tests/semantic-motion-endpoint-validator.test.ts",
+      "status": "passed",
+      "scope": "s07 exact endpoints frontier foreign context and copied authority",
+      "checkedAt": "2026-08-15T21:45:16.934Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 complete: the public v1 request admits only pinned semantic states, canonical operation roles and correspondence, a bounded frontier, and teaching intent. Its exhaustive outcomes fail closed as ready, repair-required, explicit-static, or human-review; copied/serialized ready data cannot retain nominal compilation authority."
+    "summary": "s07 complete: a source-pinned validator now proves exact ordered source/target states, asset ownership, and a total disjoint partition between the bounded rewrite frontier and unchanged shared context. Foreign, stale, duplicated, overlapping, or uncovered entities fail closed; copied certificates lose authority."
   }
 }

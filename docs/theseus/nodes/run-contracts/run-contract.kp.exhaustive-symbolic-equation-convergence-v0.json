@@ -86,7 +86,8 @@
     {
       "id": "s07",
       "title": "Endpoint and frontier validation",
-      "status": "planned"
+      "summary": "Committed source-pinned exact endpoint validation and a nominal total disjoint rewrite-frontier certificate with foreign and unaffected-context negatives.",
+      "status": "complete"
     },
     {
       "id": "s08",
