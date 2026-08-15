@@ -152,7 +152,8 @@
     {
       "id": "s18",
       "title": "Generated conformance harness",
-      "status": "planned"
+      "summary": "Committed bounded generated conformance matrix with deliberate broken-manifest and catalogue fixtures.",
+      "status": "complete"
     },
     {
       "id": "s19",

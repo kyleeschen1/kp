@@ -339,10 +339,38 @@
       "scope": "s17 durable workspace integrity",
       "checkedAt": "2026-08-15T23:11:12.443Z",
       "notes": "Workspace validates after shared equation policy evidence and slice closure."
+    },
+    {
+      "command": "npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "s18 generated matrix and broken fixtures",
+      "checkedAt": "2026-08-15T23:18:14.705Z",
+      "notes": "168 checks cover 28 rows across invariant, composition, clock, accessibility, lazy capability, and inventory laws; three focused tests pass in bounded time."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s18 lazy capability and route budget",
+      "checkedAt": "2026-08-15T23:18:15.336Z",
+      "notes": "All route and incremental capability budgets remain below limits."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s18 types and boundaries",
+      "checkedAt": "2026-08-15T23:18:16.000Z",
+      "notes": "Full TypeScript, Svelte, domain, and architecture gates pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18 durable workspace integrity",
+      "checkedAt": "2026-08-15T23:18:41.441Z",
+      "notes": "Workspace validates after generated conformance evidence and slice closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s17 complete: quotient, distribution, and cancellation now evidence one shared policy for typography, semantic visual roles, font readiness, two-frame settlement at 0.25px, reduced/static projection, and one normalized external clock; all operation geometry and timing remain local and reviewed visuals are unchanged."
+    "summary": "s18 complete: every one of 28 equation manifests now runs six generated laws for asset invariants, seek/rewind composition, one shared timeline, accessibility and reduced motion, exact lazy capability, and inventory closure; the matrix is capped at 128 assets and retains family visual suites separately."
   }
 }
