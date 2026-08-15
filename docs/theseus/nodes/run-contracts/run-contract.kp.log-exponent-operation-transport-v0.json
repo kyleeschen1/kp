@@ -126,7 +126,8 @@
     {
       "id": "s16",
       "title": "Build native KaTeX endpoints",
-      "status": "planned"
+      "summary": "Built and focused-verified four exact native-KaTeX endpoints with total semantic occurrence ownership and shared settled geometry observation.",
+      "status": "complete"
     },
     {
       "id": "s17",

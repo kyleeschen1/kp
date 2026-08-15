@@ -100,10 +100,22 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:28:03.790Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-native-endpoints.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:36:00.423Z"
+    },
+    {
+      "command": "npm run verify:impact for log-exponent native endpoints",
+      "status": "failed",
+      "scope": "impact",
+      "checkedAt": "2026-08-15T02:36:13.970Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 15 compiles one host clock, deterministic operation windows, pure seek and rewind frames, and monotone obligation progress through each act phase."
+    "summary": "Slice 16 adds exact accessible native-KaTeX endpoints, total nested semantic ownership, and stable font-settled observation through the shared renderer seam; the broad impact gate remains stopped by the recorded unrelated normal-matrix capture type error."
   }
 }
