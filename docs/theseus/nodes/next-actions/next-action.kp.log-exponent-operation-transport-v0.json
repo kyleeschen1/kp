@@ -562,7 +562,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human approved the quotient checkpoint. The distribution pressure caller now reuses the canonical a(b+c) asset and operation spec while adding typed exact endpoints, fan-out provenance, false-identity guards, ordered product membership, persistent connector attachment, grouping retirement, causal settlement, and exact rewind. Implementation and visual checkpoint remain."
+    "summary": "Quotient and distribution human checkpoints are approved. The next mandatory pressure caller is cancellation, before any shared invariant promotion."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."
