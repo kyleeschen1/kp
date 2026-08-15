@@ -68,7 +68,7 @@
     {
       "id": "s25",
       "title": "Produce quotient human checkpoint",
-      "summary": "Human checkpoint remains open after the first served review showed no motion. User-path playback is now explicitly certified and the development host has been restarted; distribution remains gated on renewed human approval.",
+      "summary": "Repaired the WebKit static-fallback defect with typed causal ordering and verified visible playback in WebKit and Chromium. The regenerated visual sheet is ready; distribution remains gated on renewed human approval.",
       "status": "in-progress"
     },
     {

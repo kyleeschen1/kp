@@ -87,6 +87,7 @@ export interface KpHomomorphicFusionChoreography
       readonly sourceEntityId: string;
       readonly targetEntityId: string;
     }[];
+    readonly exitWindow: KpEquationChoreographyWindow;
   };
   readonly sourceEnclosureRetirement: KpHomomorphicFusionRelation & {
     readonly exitWindow: KpEquationChoreographyWindow;
@@ -166,6 +167,7 @@ export function createKpHomomorphicFusionChoreography(input: {
   ];
   readonly operatorFusionWindow: KpEquationChoreographyWindow;
   readonly argumentTransferWindow: KpEquationChoreographyWindow;
+  readonly connectorRetirementWindow: KpEquationChoreographyWindow;
   readonly sourceRetirementWindow: KpEquationChoreographyWindow;
 }): KpHomomorphicFusionChoreography {
   const records = input.transformation.correspondenceMap?.records;
@@ -236,7 +238,25 @@ export function createKpHomomorphicFusionChoreography(input: {
   }) as unknown as KpHomomorphicFusionChoreography["targetStructureEntries"];
   assertUnitWindow(input.operatorFusionWindow, "Homomorphic operator fusion");
   assertUnitWindow(input.argumentTransferWindow, "Homomorphic argument transfer");
+  assertUnitWindow(input.connectorRetirementWindow, "Homomorphic connector retirement");
   assertUnitWindow(input.sourceRetirementWindow, "Homomorphic source retirement");
+  // A continuant cannot cross a still-visible enclosure reliably: native math
+  // metrics vary by browser and font. Releasing the boundary first is a
+  // semantic ordering law; collision repair must not invent per-browser paths.
+  if (input.sourceRetirementWindow.end > input.argumentTransferWindow.start) {
+    throw new Error(
+      "Homomorphic source enclosures must retire before arguments transfer."
+    );
+  }
+  const firstMaterialTransfer = Math.min(
+    input.operatorFusionWindow.start,
+    input.argumentTransferWindow.start
+  );
+  if (input.connectorRetirementWindow.end > firstMaterialTransfer) {
+    throw new Error(
+      "Homomorphic source connector must retire before material transfers."
+    );
+  }
   if (
     input.forbiddenConnectorIdentityPairs.length === 0 ||
     input.forbiddenConnectorIdentityPairs.some(
@@ -296,7 +316,8 @@ export function createKpHomomorphicFusionChoreography(input: {
         input.forbiddenConnectorIdentityPairs.map((pair) =>
           Object.freeze({ ...pair })
         )
-      )
+      ),
+      exitWindow: Object.freeze({ ...input.connectorRetirementWindow })
     }),
     sourceEnclosureRetirement: Object.freeze({
       ...relationProjection(sourceRetirement),

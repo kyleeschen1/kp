@@ -57,8 +57,9 @@ export function createKpCanonicalLogQuotientHomomorphicFusionChoreography(
       }
     ],
     operatorFusionWindow: { start: 0.18, end: 0.7 },
-    argumentTransferWindow: { start: 0.04, end: 0.74 },
-    sourceRetirementWindow: { start: 0.04, end: 0.14 }
+    argumentTransferWindow: { start: 0.16, end: 0.7 },
+    connectorRetirementWindow: { start: 0.12, end: 0.15 },
+    sourceRetirementWindow: { start: 0.03, end: 0.13 }
   });
 }
 

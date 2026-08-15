@@ -449,11 +449,32 @@
       "scope": "s25 visible-control playback regression",
       "checkedAt": "2026-08-15T15:58:27.051Z",
       "notes": "Three Chromium checks now include the actual Play button: the shared clock advances, the surface adapter repaints changing material positions, Pause feedback appears, deterministic seek remains intact, and reduced motion stays accessible."
+    },
+    {
+      "command": "playwright log quotient webkit before causal ordering repair",
+      "status": "failed",
+      "scope": "s25 Safari served-path diagnosis",
+      "checkedAt": "2026-08-15T16:09:46.785Z",
+      "notes": "All three WebKit checks failed during stage preparation because measured x/y and operator-fusion tracks intersected still-visible source parentheses and connector paint. The static source fallback explains the human report of no animation."
+    },
+    {
+      "command": "playwright log quotient webkit after causal ordering repair",
+      "status": "passed",
+      "scope": "s25 Safari visible playback",
+      "checkedAt": "2026-08-15T16:09:49.208Z",
+      "notes": "Three WebKit checks pass after typed ordering requires source enclosure release and connector retirement before material transfer. Visible Play advances changing paint; seek, reduced motion, accessibility, and protected transit remain valid."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "s25 Chromium regression after WebKit repair",
+      "checkedAt": "2026-08-15T16:09:51.199Z",
+      "notes": "Three Chromium checks pass with the same visible-control and protected-transit contract."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Initial human review reported no visible motion. The former browser evidence only injected isolated scrubber values, so it could not certify interactive playback. A visible Play-control regression now proves advancing clock and changing paint on a fresh host; the eleven-hour development server was restarted to remove stale HMR state. Awaiting repeat human review at s25."
+    "summary": "The human no-motion report was a real WebKit failure, not stale-server behavior: cross-browser KaTeX metrics caused protected-transit rejection and static fallback. The candidate homomorphic schema now types the reusable causal sequence enclosure release, connector retirement, material transfer/operator fusion, then target structure entry. WebKit and Chromium visible playback pass; awaiting renewed human review."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

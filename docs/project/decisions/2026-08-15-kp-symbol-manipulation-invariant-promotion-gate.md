@@ -86,9 +86,14 @@ linear maps, and differential operators. Its current governing principles are:
 - The source connector licenses construction of the target inner operation,
   but it never becomes target structure. In particular, subtraction does not
   become the fraction bar.
-- Source enclosures retire after their material departs. Target enclosures and
-  constructors are new structure introduced after the target argument becomes
-  recognizable.
+- Source enclosures release before continuants cross their boundary. This is a
+  causal ordering law rather than a browser-specific path adjustment: native
+  math metrics vary, while the enclosure/continuant relationship does not.
+- A source connector retires independently before continuants transfer or
+  repeated operators fuse. It licenses the rewrite semantically but does not
+  become an obstacle that moving material must cross. Target enclosures and
+  constructors remain newly introduced material rather than transformed source
+  punctuation.
 - Rewind uses the same correspondence and choreography in reverse; it does not
   compile an unrelated visual trick.
 

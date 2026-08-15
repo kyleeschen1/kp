@@ -179,10 +179,13 @@ function applyHomomorphicFusion(
         matchedRetirement.add(retirementEntityId);
       }
       if (connectorIds.has(retirementEntityId)) matchedConnectorPaint = true;
+      const exitWindow = connectorIds.has(retirementEntityId)
+        ? choreography.connectorDerivation.exitWindow
+        : choreography.sourceEnclosureRetirement.exitWindow;
       const sample = (progress: number) => directionalWindowProgress(
         choreography,
         progress,
-        choreography.sourceEnclosureRetirement.exitWindow
+        exitWindow
       );
       const fixedRect = forward ? track.startRect : track.endRect;
       const fixedPaintRect = forward
@@ -198,7 +201,9 @@ function applyHomomorphicFusion(
               startPaintRect: Object.freeze({ ...fixedPaintRect }),
               endPaintRect: Object.freeze({ ...fixedPaintRect })
             }),
-        timingGroupId: `${choreography.id}.source-retirement`,
+        timingGroupId: connectorIds.has(retirementEntityId)
+          ? `${choreography.id}.connector-retirement`
+          : `${choreography.id}.source-retirement`,
         opacityScheduleAuthority: "semantic-choreography" as const,
         sampleProgress: sample,
         sampleOpacityProgress: sample

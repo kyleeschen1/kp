@@ -49,6 +49,17 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
       targetEntityId: "target.quotient.bar"
     }]
   );
+  assert.ok(
+    choreography.sourceEnclosureRetirement.exitWindow.end <=
+      choreography.argumentTransferWindow.start
+  );
+  assert.ok(
+    choreography.connectorDerivation.exitWindow.end <=
+      Math.min(
+        choreography.operatorFusionWindow.start,
+        choreography.argumentTransferWindow.start
+      )
+  );
 });
 
 test("homomorphic choreography routes arguments but keeps operator fusion direct", () => {
@@ -173,8 +184,52 @@ test("homomorphic mint rejects a connector-to-structure identity", () => {
     ],
     operatorFusionWindow: { start: 0.1, end: 0.6 },
     argumentTransferWindow: { start: 0.1, end: 0.7 },
-    sourceRetirementWindow: { start: 0.2, end: 0.5 }
+    connectorRetirementWindow: { start: 0.08, end: 0.09 },
+    sourceRetirementWindow: { start: 0.01, end: 0.08 }
   }), /cannot preserve identity as target structure/);
+});
+
+test("homomorphic mint releases enclosures before continuants cross them", () => {
+  const base = kpCanonicalLogQuotientHomomorphicFusionChoreography;
+  assert.throws(() => createKpHomomorphicFusionChoreography({
+    transformation:
+      kpCanonicalCompiledLogQuotientOperation.transformation,
+    direction: "forward",
+    operatorApplicationFusionRecordId:
+      base.operatorApplicationFusion.relationRecordId,
+    operatorGlyphFusionRecordId: base.operatorGlyphFusion.relationRecordId,
+    argumentTransfers: [
+      {
+        id: "left",
+        role: "left",
+        relationRecordId: base.argumentTransfers[0].relationRecordId,
+        route: "arc-above"
+      },
+      {
+        id: "right",
+        role: "right",
+        relationRecordId: base.argumentTransfers[1].relationRecordId,
+        route: "arc-below"
+      }
+    ],
+    connectorDerivationRecordId:
+      base.connectorDerivation.relationRecordId,
+    forbiddenConnectorIdentityPairs:
+      base.connectorDerivation.forbiddenIdentityPairs,
+    sourceEnclosureRetirementRecordId:
+      base.sourceEnclosureRetirement.relationRecordId,
+    targetStructureEntries: base.targetStructureEntries.map((entry) => ({
+      relationRecordId: entry.relationRecordId,
+      entryWindow: entry.entryWindow
+    })) as unknown as [
+      { relationRecordId: string; entryWindow: { start: number; end: number } },
+      ...{ relationRecordId: string; entryWindow: { start: number; end: number } }[]
+    ],
+    operatorFusionWindow: base.operatorFusionWindow,
+    argumentTransferWindow: { start: 0.16, end: 0.7 },
+    connectorRetirementWindow: base.connectorDerivation.exitWindow,
+    sourceRetirementWindow: { start: 0.08, end: 0.2 }
+  }), /enclosures must retire before arguments transfer/);
 });
 
 function scene(
