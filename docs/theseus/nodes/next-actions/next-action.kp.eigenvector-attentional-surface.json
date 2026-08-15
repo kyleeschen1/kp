@@ -2,8 +2,9 @@
   "id": "next-action.kp.eigenvector-attentional-surface",
   "kind": "next-action",
   "title": "Build the bounded eigenvector attentional surface",
-  "status": "ready",
+  "status": "resolved",
   "domain": "product",
+  "summary": "The isolated eigenvector experience reached human evaluation. Its mixed result closes the build loop and supplies a usable discovery artifact; further layout development is paused pending observed educator use.",
   "sourceRefs": [
     {
       "kind": "file",

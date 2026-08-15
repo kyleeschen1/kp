@@ -43,42 +43,39 @@ an interpreter-grounded program trace, static publication, Article v1,
 whole-file editing, semantic navigation, review capture, accessibility, route
 budgets, and a native catalogue.
 
-The current strategic stage is **medium discovery within product
-convergence**. The normal-matrix proof validates the semantic, publication,
-prompt, direct-state, accessibility, and performance foundations. Its human
-checkpoint does not validate the attentional experience: Article and stage
-still compete, motion is difficult to discover, and the learner can still
-wonder where to look.
+The current strategic stage is **educator product discovery within
+convergence**. The engine and publication foundations are strong enough for
+research use. The refined eigenvector checkpoint is materially better but
+mixed: it does not establish a professional default layout or validate demand.
 
-The next product question is therefore narrower than layout selection: can one
-hard-coded, three-to-five-minute experience let prose, object, transformation,
-notation, prediction, and manipulation take turns owning one attentional
-surface? The approved eigenvector exemplar preserves one transformation plane
-as a spatial memory surface while ordinary passages select discrete semantic
-beats and bounded transitions. Do not generalize authoring, scrollytelling, or
-a beat runtime before that exemplar passes human review.
+The next product question is behavioral rather than architectural: will an
+educator actually use, reuse, or send a KP artifact because it preserves and
+reactivates conceptual machinery that ordinary explanations, videos, static
+diagrams, or worksheets do not? Pause layout and feature development until
+observed educator use answers that question.
 
 ## One Active Lane
 
 The repository contains a large evidence portfolio, not a large active queue.
-Until the next human product decision, only this sequence is active:
+Only this sequence is active:
 
-1. **Specify:** complete. The nine-beat experience and Ordinary Abundance
-   scroll rhythm are approved in
-   `reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`.
-2. **Review:** complete. The user approved the exact long-loop contract.
-3. **Build:** active. Implement one reversible hard-coded route using the
-   existing semantic, clock, salience, renderer, publication, and URL seams.
-4. **Evaluate:** allow at most one bounded revision cycle, then explicitly
-   classify the medium proof as pass, mixed, or fail.
-5. **Unlock:** only a pass unlocks a compressed delayed-return cue and one
-   contrasting existing caller. Public packaging follows those proofs.
+1. **Classify the medium proof:** complete. The eigenvector checkpoint is
+   useful and materially improved, but mixed; preserve it without promotion.
+2. **Specify discovery:** active. Use the grill-me review to choose one
+   reachable educator cohort, recurring teaching problem, existing artifact,
+   session protocol, and evidence threshold.
+3. **Observe use:** recruit a small cohort and watch real educator-learner
+   sessions rather than collecting general opinions about animations.
+4. **Measure behavior:** look for voluntary trial, reuse, sharing, learner
+   reconstruction, exact-state return, and educator disappointment if removed.
+5. **Decide:** classify the product hypothesis as supported, mixed, or
+   unsupported before authorizing further product development.
 
 All layout variants, existing domain artifacts, catalogue pages, authoring
 ideas, LLM tutoring, SRS, Graph3D, curricula, and application work are frozen
 reference or parked horizon unless this lane exposes a named blocker. The
 operational rationale is recorded in
-`reviews/2026-08-14-single-lane-product-convergence-next-step-review.md`.
+`reviews/2026-08-14-educator-product-discovery-next-step-review.md`.
 
 ## Current State
 
@@ -92,8 +89,8 @@ operational rationale is recorded in
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Retain as the pressure lab; remove rejected product representations. |
-| Layout | Many useful experiments; permanent text/animation allocation has not solved split attention | Treat layout as a projection; test temporal attentional ownership before selecting a public default. |
-| Public product | Normal-matrix infrastructure proof complete; eigenvector implementation approved | Execute the isolated nine-beat attentional-surface contract and stop at its human checkpoint. |
+| Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
+| Public product | Engine and routes are research-ready; educator demand is unvalidated | Run minimal-build educator discovery around one existing artifact. |
 | LLM generation | Typed semantic draft path exists; context is too diffuse | Constrain the model to semantic referents and pedagogical actions over KP-owned state. |
 
 ## Active Tightening Phase

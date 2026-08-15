@@ -67,12 +67,11 @@ Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
 
-KP is in **medium discovery within convergence**. The semantic/runtime engine
-is sufficiently capable; the largest unknown is whether one attentional
-surface can create a short conceptual experience in which the learner never
-has to decide where to look. Another broad infrastructure, authoring, layout,
-or domain-expansion tranche would produce less value than answering that
-question with one hard-coded exemplar.
+KP is in **educator product discovery within convergence**. The
+semantic/runtime engine is sufficiently capable, while the existence and shape
+of a valuable educator workflow remain unvalidated. Another infrastructure,
+authoring, layout, or domain-expansion tranche would produce less information
+than watching tutors or teachers use one existing artifact with real learners.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
 identity, direct state, prompts, native settlement, accessibility, and bounded
@@ -81,21 +80,22 @@ still compete, motion is difficult to discover, and ownership transfers are
 not self-evident. Preserve that work as evidence and do not mistake local
 hardening for product validation.
 
-The immediate next product candidate is a three-to-five-minute eigenvector
-experience composed from a small number of attentional beats. Its goal is not
-to establish a generic matrix/vector API or universal layout. It should prove
-semantic identity from a visible vector through `Av = lambda v`, one learner
-prediction or manipulation, and an invariant-subspace conclusion.
+The eigenvector experience is now a materially improved but mixed research
+artifact: useful enough for discovery, not approved as a professional default
+layout. The immediate product hypothesis is that an educator will reuse or
+send a KP artifact because its inspectable, manipulable, directly retrievable
+semantic state preserves conceptual machinery better than their ordinary
+explanation, video link, diagram, or worksheet.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
 cost. The TypeScript/Python comparison and bounded Scheme pressure have now
 proved marginal reuse without flattening language-specific pedagogy. The
 normal-matrix proof has now pressure-tested Article, native KaTeX, semantic
-addresses, deterministic seek, and prompt projection. Its unapproved
-attentional treatment establishes the next boundary: prove one excellent
-one-surface conceptual experience before economics graph pressure or a final
-Public Web v0 comparison.
+addresses, deterministic seek, and prompt projection. The next boundary is
+behavioral evidence from real educator-learner use. Pause presentation
+refinement until a session exposes a specific obstacle; then permit only the
+smallest correction needed to test the product hypothesis.
 
 ## Strategic Architecture
 

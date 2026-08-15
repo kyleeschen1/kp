@@ -2,8 +2,9 @@
   "id": "run-contract.kp.eigenvector-attentional-surface-v2",
   "kind": "run-contract",
   "title": "Eigenvector Attentional Surface",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -167,8 +168,8 @@
     {
       "id": "s20",
       "title": "Human checkpoint",
-      "summary": "Human feedback is implemented and verified in the isolated exemplar: the visible seam now drives reversible 22vh scroll scrubbing; direct controls and URLs paint atomic endpoints; controls depress visibly; scalar changes retarget smoothly; all stale SVG and equation layers are cleared. The renewed checkpoint remains open for human approval.",
-      "status": "in-progress"
+      "summary": "Human checkpoint classified the refined eigenvector surface as materially improved but mixed: useful as a research artifact, still flawed as a professional default. Preserve it without shared promotion; product work pivots to minimal-build educator discovery.",
+      "status": "complete"
     }
   ]
 }

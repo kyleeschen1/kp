@@ -2,12 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-14
-Current Next Action: execute the approved isolated eigenvector
-attentional-surface contract in
-`../reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
-through its mandatory human checkpoint. Preserve the normal-matrix route as
-architecture evidence; its learner-facing checkpoint did not pass and its
-post-checkpoint continuation is closed.
+Current Next Action: complete the educator product-discovery grill in
+`../reviews/2026-08-14-educator-product-discovery-next-step-review.md`, then
+observe a small cohort using one existing artifact. The eigenvector checkpoint
+is a materially improved but mixed research proof; preserve it without shared
+promotion or further open-ended layout iteration.
 
 ## Goal
 
@@ -59,13 +58,11 @@ inside convergence, not permission for a new runtime or universal scene graph.
 7. **Cross-language pressure (complete):** Python proves the second imperative
    caller; Scheme adopts only paint and settlement invariants while preserving
    recursive choreography. The bounded shared seams are closed.
-8. **Product grammar gate (current):** TypeScript and canonical
-   fraction-composition public lessons passed their checkpoints. The
-   normal-matrix route proved architecture but failed its attentional
-   checkpoint. Execute one hard-coded eigenvector attentional-surface
-   experience, including the approved persistent-plane/discrete-scroll rhythm,
-   before economics graph pressure, public-v0 layout selection, or shared
-   presentation extraction.
+8. **Educator discovery gate (current):** TypeScript and canonical
+   fraction-composition passed their checkpoints; normal-matrix proved
+   architecture; the refined eigenvector surface produced a mixed human
+   result. Freeze presentation extraction and test whether educators actually
+   use, reuse, send, and return to one existing semantic artifact.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
 
