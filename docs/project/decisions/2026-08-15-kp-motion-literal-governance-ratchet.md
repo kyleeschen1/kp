@@ -21,10 +21,12 @@ Apply this rule as a ratchet:
 - do not mechanically replace every numeric literal in the repository.
 
 The cancellation pressure exemplar establishes the first gate with
-`kpWitnessedAnnihilationMotionProfileV1` and
-`kpCanonicalCancellationPressureTimelinePolicy`. The repository command
-`npm run check:motion-literal-ratchet` rejects new unexplained motion literals
-in the governed files.
+`kpCounterOrbitCancellationTiming` and
+`kpCanonicalCancellationPressureTimelinePolicy`. Witnessed annihilation keeps
+its separate typed profile for teaching goals that explicitly expose an
+identity; preserve-flow cancellation does not inherit that recipe. The
+repository command `npm run check:motion-literal-ratchet` rejects new
+unexplained motion literals in the governed files.
 
 ## Why
 

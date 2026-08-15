@@ -2987,6 +2987,18 @@ function applySemanticTokenMotion(input: {
   }
 
   const geometry = precomputed.geometry;
+  if (geometry.cancellationPresentationRecipe === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationCancellationRecipe"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationCancellationRecipe"] =
+      geometry.cancellationPresentationRecipe;
+  }
+  if (geometry.zeroWitnessPresentationRecipe === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationZeroWitnessRecipe"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationZeroWitnessRecipe"] =
+      geometry.zeroWitnessPresentationRecipe;
+  }
   input.transitionElement.dataset["kpEditorEquationWitnessedAnnihilationActive"] =
     String(geometry.witnessedAnnihilationPlan !== undefined);
   const annihilationBindingId = geometry.witnessedAnnihilationBinding?.id;

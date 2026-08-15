@@ -3,13 +3,14 @@ import { resolve } from "node:path";
 import ts from "typescript";
 
 const governedMotionLiteralFiles = Object.freeze([
+  "src/animation/counter-orbit-cancellation-timing.ts",
   "src/animation/witnessed-annihilation.ts",
   "src/animation/cancellation-pressure-animation.ts"
 ]);
 
 const selfExplainingIntegerLiterals = new Set([0, 1, 2, 3]);
 const namedAuthorityPattern =
-  /(?:Profile(?:V\d+)?|Policy|Geometry|Thresholds|Checkpoints|Constants)$/;
+  /(?:Profile(?:V\d+)?|Policy|Timing|Geometry|Thresholds|Checkpoints|Constants)$/;
 const issues: string[] = [];
 
 for (const relativePath of governedMotionLiteralFiles) {

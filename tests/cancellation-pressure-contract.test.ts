@@ -23,9 +23,14 @@ test("the cancellation pressure contract fixes exact native endpoints", () => {
   assert.equal(contract.operationId, "kp.algebra.cancel-additive-inverses");
   assert.deepEqual(contract.inversePair.signedLabels, ["+3", "-3"]);
   assert.equal(contract.inversePair.relation, "cancelation");
-  assert.equal(contract.witness.descriptorId, "witness.additive-identity.zero");
-  assert.equal(contract.witness.semanticValue.latex, "0");
-  assert.equal(contract.witness.presentation.mode, "presentation-controlled-transient");
+  assert.equal(contract.presentation.teachingGoal, "preserve-flow");
+  assert.deepEqual(contract.presentation.intent, {
+    contact: "shared-center",
+    approach: "opposing-arcs",
+    identityBeat: "implicit",
+    retirement: "after-contact",
+    readability: "through-contact"
+  });
 });
 
 test("only the left inverse pair retires while all surrounding context persists", () => {
@@ -46,23 +51,22 @@ test("only the left inverse pair retires while all surrounding context persists"
   );
 });
 
-test("witness retirement and survivor compaction have explicit causal order", () => {
+test("contact, retirement, and survivor compaction have explicit causal order", () => {
   const contract = kpCanonicalCancellationPressureContract;
   const edges = contract.causalOrder.map(({ before, after }) =>
     `${before}->${after}`
   );
 
   assert.deepEqual(edges, [
-    "inverse-contact-established->zero-witness-readable",
-    "zero-witness-readable->cancelled-material-retired",
-    "cancelled-material-retired->zero-witness-absorbed",
-    "zero-witness-absorbed->survivors-compacted",
+    "inverse-approach-started->inverse-contact-established",
+    "inverse-contact-established->cancelled-material-retired",
+    "cancelled-material-retired->survivors-compacted",
     "survivors-compacted->native-target-ready"
   ]);
   assert.deepEqual(contract.rewind, {
     targetObjectId: contract.source.objectId,
     exactLatex: "x + 3 - 3 = 7 - 3",
-    reconstruction: "introduce-authored-inverse-pair-from-zero-witness"
+    reconstruction: "restore-authored-inverse-pair-from-shared-contact"
   });
 });
 

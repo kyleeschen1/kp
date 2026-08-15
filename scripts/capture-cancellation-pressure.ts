@@ -4,8 +4,8 @@ import path from "node:path";
 import type { Locator, Page } from "playwright";
 
 import {
-  kpWitnessedAnnihilationMotionProfileV1
-} from "../src/animation/witnessed-annihilation.ts";
+  kpCounterOrbitCancellationTiming
+} from "../src/animation/counter-orbit-cancellation-timing.ts";
 import {
   buildKpVisualContactSheetHtml,
   type KpVisualContactSheetItem
@@ -14,8 +14,8 @@ import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 const outputRoot = path.resolve("tmp/codex/cancellation-pressure-checkpoint");
 const animationId = "animation.generated.cancellation.additive-inverses";
-const bindingSuffix = "generated-additive-inverses-cancel";
-const timing = kpWitnessedAnnihilationMotionProfileV1.timing;
+const timing = kpCounterOrbitCancellationTiming;
+const survivorCompactionReviewProgress = 0.9;
 const cancellationCapturePolicy = Object.freeze({
   pageViewport: { width: 1_240, height: 760 },
   equationCrop: { width: 520, height: 140 },
@@ -27,20 +27,20 @@ const cancellationCapturePolicy = Object.freeze({
     phase: "forward",
     samples: [
       0,
-      timing.contactStart,
-      timing.contactEnd,
-      timing.witnessReadableAt,
-      timing.witnessDwellEnd,
-      timing.sourceAbsorptionEnd,
-      timing.compactionEnd,
+      timing.meetStart,
+      midpoint(timing.meetStart, timing.contactAt),
+      timing.contactAt,
+      midpoint(timing.contactAt, timing.retirementEnd),
+      timing.retirementEnd,
+      survivorCompactionReviewProgress,
       1
     ]
   }, {
     phase: "return",
     samples: [
-      timing.witnessDwellEnd,
-      timing.witnessReadableAt,
-      timing.contactEnd,
+      timing.retirementEnd,
+      timing.contactAt,
+      midpoint(timing.meetStart, timing.contactAt),
       0
     ]
   }]
@@ -51,14 +51,17 @@ interface CaptureEvidence {
   readonly phase: "forward" | "return";
   readonly progress: number;
   readonly choreographyPhase: string;
-  readonly bindingId: string;
+  readonly cancellationRecipe: string;
   readonly cancelingSourceOpacity: readonly [number, number];
+  readonly cancelingSourceCenters: readonly [
+    { readonly x: number; readonly y: number },
+    { readonly x: number; readonly y: number }
+  ];
   readonly protectedRightInverseOpacity: {
     readonly source: number;
     readonly target: number;
   };
-  readonly witnessLatex: string;
-  readonly witnessOpacity: number;
+  readonly witnessCount: number;
   readonly nativeEndpointCount: number;
   readonly file: string;
 }
@@ -139,7 +142,7 @@ async function capture(): Promise<void> {
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.cancellation-pressure-visual-checkpoint.v1",
       animationId,
-      motionProfileId: kpWitnessedAnnihilationMotionProfileV1.id,
+      motionProfileId: "counter-orbit-cancellation-v1",
       viewport: cancellationCapturePolicy.pageViewport,
       samples: evidence,
       sheet: path.relative(process.cwd(), sheet),
@@ -164,17 +167,17 @@ async function captureSample(input: {
   readonly progress: number;
 }): Promise<CaptureEvidence> {
   await input.seek.fill(String(input.progress));
-  await input.page.waitForFunction(({ progress, bindingSuffix }) => {
+  await input.page.waitForFunction((progress) => {
     const transition = document.querySelector<HTMLElement>(
       "[data-kp-animation-catalogue-stage] " +
       "[data-kp-editor-equation-transition-id]"
     );
-    return transition?.dataset[
-      "kpEditorEquationWitnessedAnnihilationBinding"
-    ]?.endsWith(bindingSuffix) === true &&
+    return transition?.dataset["kpEditorEquationCancellationRecipe"] ===
+        "counter-orbit-v1" &&
+      transition.dataset["kpEditorEquationZeroWitnessRecipe"] === "none" &&
       Number(transition.dataset["kpEditorEquationSemanticProgress"]) ===
         progress;
-  }, { progress: input.progress, bindingSuffix });
+  }, input.progress);
   await input.stage.evaluate(async (root) => {
     await root.ownerDocument.fonts.ready;
     await new Promise<void>((resolve) => requestAnimationFrame(() =>
@@ -189,16 +192,26 @@ async function captureSample(input: {
       const element = root.querySelector<HTMLElement>(selector);
       return element === null ? -1 : Number(getComputedStyle(element).opacity);
     };
-    const witness = root.querySelector<HTMLElement>(
-      "[data-kp-editor-annihilation-witness]"
-    );
+    const center = (selector: string) => {
+      const element = root.querySelector<HTMLElement>(selector);
+      if (element === null) return { x: -1, y: -1 };
+      const rect = element.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    };
+    const addendSelector =
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".lhs.addend"]';
+    const inverseSelector =
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".lhs.subtract"]';
     return {
-      choreographyPhase: root.dataset["kpEditorAnnihilationPhase"] ?? "",
-      bindingId:
-        root.dataset["kpEditorEquationWitnessedAnnihilationBinding"] ?? "",
+      cancellationRecipe:
+        root.dataset["kpEditorEquationCancellationRecipe"] ?? "",
       cancelingSourceOpacity: [
-        opacity('[data-kp-editor-equation-source] [data-kp-motion-id$=".lhs.addend"]'),
-        opacity('[data-kp-editor-equation-source] [data-kp-motion-id$=".lhs.subtract"]')
+        opacity(addendSelector),
+        opacity(inverseSelector)
+      ] as const,
+      cancelingSourceCenters: [
+        center(addendSelector),
+        center(inverseSelector)
       ] as const,
       protectedRightInverseOpacity: {
         source: opacity(
@@ -208,17 +221,19 @@ async function captureSample(input: {
           '[data-kp-editor-equation-target] [data-kp-motion-id$=".rhs.subtract"]'
         )
       },
-      witnessLatex: witness?.textContent?.trim() ?? "",
-      witnessOpacity: witness === null
-        ? -1
-        : Number(getComputedStyle(witness).opacity),
+      witnessCount: root.querySelectorAll(
+        "[data-kp-editor-annihilation-witness]"
+      ).length,
       nativeEndpointCount: root.querySelectorAll(
         "[data-kp-editor-equation-object-id] .katex"
       ).length
     };
   });
-  if (!state.bindingId.endsWith(bindingSuffix)) {
-    throw new Error(`${id} lost its typed cancellation binding.`);
+  if (state.cancellationRecipe !== "counter-orbit-v1") {
+    throw new Error(`${id} lost its typed counter-orbit policy.`);
+  }
+  if (state.witnessCount !== 0) {
+    throw new Error(`${id} fabricated a visible identity witness.`);
   }
   if (state.nativeEndpointCount !== 2) {
     throw new Error(
@@ -230,6 +245,7 @@ async function captureSample(input: {
     id,
     phase: input.phase,
     progress: input.progress,
+    choreographyPhase: phaseForProgress(input.progress),
     ...state,
     file: path.relative(process.cwd(), file)
   };
@@ -267,9 +283,10 @@ async function waitForReady(transition: Locator): Promise<void> {
   await transition.waitFor();
   await transition.evaluate((root, input) =>
     new Promise<void>((resolve, reject) => {
-      const isReady = () => root.dataset[
-        "kpEditorEquationWitnessedAnnihilationBinding"
-      ]?.endsWith(input.bindingSuffix) === true;
+      const isReady = () =>
+        root.dataset["kpEditorEquationCancellationRecipe"] ===
+          "counter-orbit-v1" &&
+        root.dataset["kpEditorEquationZeroWitnessRecipe"] === "none";
       if (isReady()) {
         resolve();
         return;
@@ -286,9 +303,21 @@ async function waitForReady(transition: Locator): Promise<void> {
       });
       observer.observe(root, { attributes: true });
     }), {
-      bindingSuffix,
       timeoutMs: cancellationCapturePolicy.preparationTimeoutMs
     });
+}
+
+function phaseForProgress(progress: number): string {
+  if (progress < timing.meetStart) return "readable pair";
+  if (progress < timing.contactAt) return "opposing arcs";
+  if (progress === timing.contactAt) return "shared contact";
+  if (progress < timing.retirementEnd) return "annihilation";
+  if (progress < 1) return "survivor compaction";
+  return "native endpoint";
+}
+
+function midpoint(start: number, end: number): number {
+  return start + (end - start) / 2;
 }
 
 await capture();

@@ -21,6 +21,9 @@ import {
   sampleKpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement.ts";
 import {
+  kpCounterOrbitCancellationTiming
+} from "../animation/counter-orbit-cancellation-timing.ts";
+import {
   inspectKpEquationProtectedTransitTracks,
   planKpEquationMotionPathBetweenPoints,
   type KpProtectedTransitAudit
@@ -950,8 +953,8 @@ function sampleCounterOrbitProgress(
     // premature-fade regression.
     const collapse = smoothWindow(
       choreography.direction === "forward" ? progress : 1 - progress,
-      0.68,
-      0.78
+      kpCounterOrbitCancellationTiming.contactAt,
+      kpCounterOrbitCancellationTiming.retirementEnd
     );
     return choreography.direction === "forward" ? collapse : 1 - collapse;
   }

@@ -667,11 +667,39 @@
       "scope": "s31 cancellation checkpoint evidence",
       "checkedAt": "2026-08-15T17:58:18.012Z",
       "notes": "Validated 954 nodes and 20941 events before the mandatory human stop."
+    },
+    {
+      "command": "npm-run-test-cancellation-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:00:28.345Z",
+      "notes": "9-unit-tests-pass-typed-preserve-flow-intent-counter-orbit-resolution-native-endpoints-and-negative-provenance"
+    },
+    {
+      "command": "npm-run-test-browser-cancellation-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:00:29.901Z",
+      "notes": "3-chromium-tests-pass-opposing-arcs-full-opacity-through-contact-post-contact-retirement-no-witness-seek-rewind-and-reduced-motion"
+    },
+    {
+      "command": "npm-run-visual-cancellation-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:00:30.872Z",
+      "notes": "12-frame-forward-return-contact-sheet-captured-and-inspected-with-exact-contact-zero-witness-exclusion-and-native-settlement"
+    },
+    {
+      "command": "focused-app-and-test-tsc",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T19:00:31.820Z",
+      "notes": "tsconfig-app-and-tsconfig-test-pass-full-typecheck-remains-blocked-by-pre-existing-normal-matrix-capture-exact-optional-property-error"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human rejected the s31 cancellation checkpoint. The pressure caller incorrectly bypasses the canonical cancellation intent/resolver and directly selects witnessed-annihilation with direct convergence and an explicit zero. Canonical repository authority already requires opposing arcs, counter-orbit contact, retirement only after overlap, and no visible zero by default. Repair must preserve semantic provenance, one-owner paint, native endpoints, seek, and rewind while restoring that operation-specific motif."
+    "summary": "Reissued-s31-cancellation-checkpoint-now-uses-typed-preserve-flow-intent-counter-orbit-opposing-arcs-shared-contact-post-contact-retirement-implicit-identity-no-visible-zero-protected-continuants-native-endpoints-and-exact-reverse.-Awaiting-human-visual-approval-before-s32."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

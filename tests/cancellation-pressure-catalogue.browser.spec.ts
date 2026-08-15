@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/test";
 import {
-  kpWitnessedAnnihilationMotionProfileV1
-} from "../src/animation/witnessed-annihilation.ts";
+  kpCounterOrbitCancellationTiming
+} from "../src/animation/counter-orbit-cancellation-timing.ts";
 
 const animationId = "animation.generated.cancellation.additive-inverses";
 const cancellationBrowserExpectations = Object.freeze({
   minimumObservablePlaybackProgress: 0.04
 });
 
-test("the catalogue realizes the typed additive cancellation binding", async ({
+test("the catalogue realizes the typed counter-orbit cancellation policy", async ({
   page
 }) => {
   const errors: string[] = [];
@@ -24,21 +24,33 @@ test("the catalogue realizes the typed additive cancellation binding", async ({
 
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-witnessed-annihilation-active",
-    "true"
+    "false"
   );
   await expect(transition).toHaveAttribute(
-    "data-kp-editor-equation-witnessed-annihilation-binding",
-    /annihilation.*generated-additive-inverses-cancel$/
+    "data-kp-editor-equation-cancellation-recipe",
+    "counter-orbit-v1"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-zero-witness-recipe",
+    "none"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-linear-rearrangement",
+    "cancel-additive-inverses"
+  );
+  await expect(transition).not.toHaveAttribute(
+    "data-kp-editor-equation-witnessed-annihilation-binding"
   );
 
-  const timing = kpWitnessedAnnihilationMotionProfileV1.timing;
   const deterministicCheckpoints = [
     0,
-    timing.contactStart,
-    timing.contactEnd,
-    timing.witnessReadableAt,
-    timing.witnessDwellEnd,
-    timing.witnessAbsorptionEnd,
+    kpCounterOrbitCancellationTiming.meetStart,
+    midpoint(
+      kpCounterOrbitCancellationTiming.meetStart,
+      kpCounterOrbitCancellationTiming.contactAt
+    ),
+    kpCounterOrbitCancellationTiming.contactAt,
+    kpCounterOrbitCancellationTiming.retirementEnd,
     1
   ];
   for (const progress of deterministicCheckpoints) {
@@ -51,7 +63,7 @@ test("the catalogue realizes the typed additive cancellation binding", async ({
   expect(errors).toEqual([]);
 });
 
-test("only the authored left inverse pair retires through the zero witness", async ({
+test("inverse terms counter-orbit, contact, and then retire together", async ({
   page
 }) => {
   await page.goto(`/?artifact=${animationId}`);
@@ -67,21 +79,35 @@ test("only the authored left inverse pair retires through the zero witness", asy
   const leftInverse = source.locator('[data-kp-motion-id$=".lhs.subtract"]');
   const rightInverse = source.locator('[data-kp-motion-id$=".rhs.subtract"]');
 
-  const timing = kpWitnessedAnnihilationMotionProfileV1.timing;
+  const orbitProgress = midpoint(
+    kpCounterOrbitCancellationTiming.meetStart,
+    kpCounterOrbitCancellationTiming.contactAt
+  );
+  await seek.fill(String(orbitProgress));
+  const orbit = await Promise.all([
+    motionEvidence(leftAddend),
+    motionEvidence(leftInverse)
+  ]);
+  expect(orbit[0].opacity).toBeCloseTo(1, 5);
+  expect(orbit[1].opacity).toBeCloseTo(1, 5);
+  expect(Math.sign(orbit[0].centerY - orbit[1].centerY)).not.toBe(0);
+
+  await seek.fill(String(kpCounterOrbitCancellationTiming.contactAt));
+  const contact = await Promise.all([
+    motionEvidence(leftAddend),
+    motionEvidence(leftInverse)
+  ]);
+  expect(contact[0].opacity).toBeCloseTo(1, 5);
+  expect(contact[1].opacity).toBeCloseTo(1, 5);
+  expect(Math.abs(contact[0].centerX - contact[1].centerX)).toBeLessThan(0.5);
+  expect(Math.abs(contact[0].centerY - contact[1].centerY)).toBeLessThan(0.5);
+
   await seek.fill(String(midpoint(
-    timing.witnessReadableAt,
-    timing.witnessDwellEnd
+    kpCounterOrbitCancellationTiming.contactAt,
+    kpCounterOrbitCancellationTiming.retirementEnd
   )));
-  await expect(transition).toHaveAttribute(
-    "data-kp-editor-annihilation-phase",
-    "witness-dwell"
-  );
   const witness = transition.locator("[data-kp-editor-annihilation-witness]");
-  await expect(witness).toContainText("0");
-  await expect(witness).toHaveAttribute(
-    "data-kp-editor-annihilation-descriptor-id",
-    "witness.additive-identity.zero"
-  );
+  await expect(witness).toHaveCount(0);
   expect(Number(await leftAddend.evaluate(
     (element) => getComputedStyle(element).opacity
   ))).toBeLessThan(1);
@@ -94,7 +120,7 @@ test("only the authored left inverse pair retires through the zero witness", asy
   await expect(target).toHaveCSS("opacity", "1");
   await expect(target.locator('[data-kp-motion-id$=".rhs.subtract"]'))
     .toHaveCSS("opacity", "1");
-  await expect(witness).toHaveCSS("opacity", "0");
+  await expect(witness).toHaveCount(0);
 
   await player.focus();
   await player.press("r");
@@ -135,8 +161,8 @@ test("visible play and reduced motion keep one accessible native equation", asyn
   );
   await expect(player).toHaveCount(1);
   await expect(transition).toHaveCount(1);
-  // The transient zero is inline KaTeX decoration outside the semantic object
-  // roots; each native equation endpoint still owns exactly one KaTeX tree.
+  // Each native equation endpoint owns exactly one KaTeX tree; counter-orbit
+  // cancellation does not introduce a third witness tree.
   await expect(transition.locator(
     "[data-kp-editor-equation-source] " +
     "[data-kp-editor-equation-object-id] .katex"
@@ -153,4 +179,19 @@ test("visible play and reduced motion keep one accessible native equation", asyn
 
 function midpoint(start: number, end: number): number {
   return start + (end - start) / 2;
+}
+
+async function motionEvidence(locator: import("@playwright/test").Locator): Promise<{
+  readonly centerX: number;
+  readonly centerY: number;
+  readonly opacity: number;
+}> {
+  return locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      centerX: rect.left + rect.width / 2,
+      centerY: rect.top + rect.height / 2,
+      opacity: Number(getComputedStyle(element).opacity)
+    };
+  });
 }

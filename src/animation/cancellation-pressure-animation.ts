@@ -3,11 +3,8 @@ import {
   type KpAnimationAsset
 } from "./asset.ts";
 import {
-  createKpSemanticMaterialEquationPresentationProfileV1
+  createKpEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
-import {
-  createKpWitnessedAnnihilationBinding
-} from "./witnessed-annihilation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import {
   kpCanonicalCancellationPressureContract
@@ -42,20 +39,8 @@ if (fixtureSpec === undefined) {
 const fixture = createGeneratedLinearSolveTutorialFixture(fixtureSpec);
 const transformation = requiredCancellationTransformation();
 
-/**
- * The pressure binding adds no motion vocabulary. It proves that the existing
- * witnessed-annihilation runtime is consuming the exact typed cancellation
- * relation and zero-witness slot selected by the semantic contract.
- */
-export const kpCanonicalCancellationPressureBinding = Object.freeze(
-  createKpWitnessedAnnihilationBinding({
-    operationId: contract.operationId,
-    transformation,
-    bundle: fixture.bundle,
-    cancellationRecordId: contract.inversePair.correspondenceRecordId,
-    slotId: contract.witness.slot.id
-  })
-);
+export const kpCanonicalCancellationPressurePresentation =
+  resolveCanonicalCancellationPresentation();
 
 export function createKpCanonicalCancellationPressureAnimationAsset():
 KpAnimationAsset {
@@ -128,7 +113,18 @@ KpAnimationAsset {
       sourceRefIds: [contract.fixtureId, fixture.trace.id]
     },
     presentationProfile:
-      createKpSemanticMaterialEquationPresentationProfileV1(),
+      createKpEquationPresentationProfileV1({
+        payload: {
+          kind: "equation-presentation",
+          motion: "semantic-material-v2",
+          nativeHandoff: "crossfade-v1",
+          cancellation: kpCanonicalCancellationPressurePresentation.recipe,
+          zeroWitness: "none",
+          successor: "successor-synthesis-v1",
+          depth: "flat-v1",
+          continuants: "concurrent-v1"
+        }
+      }),
     metadata: {
       sourceFixtureId: contract.fixtureId,
       sourceFixtureFamilyId: fixture.familyId,
@@ -138,6 +134,32 @@ KpAnimationAsset {
       settledEndpointAuthority: "native-katex"
     }
   });
+}
+
+function resolveCanonicalCancellationPresentation(): {
+  readonly recipe: "counter-orbit-v1";
+  readonly topology: {
+    readonly sourceCount: 2;
+    readonly sourceBaselines: "shared";
+  };
+} {
+  const topology = Object.freeze({
+    sourceCount: 2,
+    sourceBaselines: "shared"
+  } as const);
+  const intent = contract.presentation.intent;
+  if (
+    intent.approach !== "opposing-arcs" ||
+    intent.contact !== "shared-center" ||
+    intent.identityBeat !== "implicit" ||
+    intent.retirement !== "after-contact" ||
+    intent.readability !== "through-contact"
+  ) {
+    throw new Error(
+      "Generated additive cancellation requires the reviewed preserve-flow intent."
+    );
+  }
+  return Object.freeze({ recipe: "counter-orbit-v1", topology });
 }
 
 function requiredCancellationTransformation() {

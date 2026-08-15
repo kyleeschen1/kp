@@ -5,9 +5,12 @@ import type {
 } from "./asset.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
 import {
-  deriveKpCancellationWitness,
-  type KpCancellationWitness
-} from "./cancellation-witness.ts";
+  inferKpCancellationPresentationIntent,
+  type KpCancellationTeachingGoal
+} from "./cancellation-presentation-authoring.ts";
+import type {
+  KpCancellationPresentationIntent
+} from "./cancellation-presentation-intent.ts";
 import type { SelectorCorrespondenceRecord } from "./correspondence.ts";
 import {
   getGeneratedLinearSolveTutorialFixtureSpec
@@ -28,10 +31,9 @@ const SOURCE_LATEX = "x + 3 - 3 = 7 - 3";
 const TARGET_LATEX = "x = 7 - 3";
 
 export type KpCancellationPressureCausalEventId =
+  | "inverse-approach-started"
   | "inverse-contact-established"
-  | "zero-witness-readable"
   | "cancelled-material-retired"
-  | "zero-witness-absorbed"
   | "survivors-compacted"
   | "native-target-ready";
 
@@ -89,10 +91,14 @@ export interface KpCancellationPressureContract {
       readonly label: "-3";
     }
   ];
-  readonly witness: KpCancellationWitness;
+  readonly presentation: {
+    readonly teachingGoal: Extract<KpCancellationTeachingGoal, "preserve-flow">;
+    readonly intent: KpCancellationPresentationIntent;
+    readonly identityBeat: "implicit";
+  };
   readonly lifecycle: {
     readonly cancelledPair: "explicit-cancelation";
-    readonly witness: "transient-zero";
+    readonly identity: "implicit-additive-identity";
     readonly continuants: "identity-preserving";
     readonly introducedEndpointMaterial: readonly [];
   };
@@ -103,7 +109,7 @@ export interface KpCancellationPressureContract {
   readonly rewind: {
     readonly targetObjectId: string;
     readonly exactLatex: typeof SOURCE_LATEX;
-    readonly reconstruction: "introduce-authored-inverse-pair-from-zero-witness";
+    readonly reconstruction: "restore-authored-inverse-pair-from-shared-contact";
   };
 }
 
@@ -216,16 +222,10 @@ export function createKpCanonicalCancellationPressureContract(
     );
   }
 
-  const witness = deriveKpCancellationWitness({
+  const teachingGoal = "preserve-flow" as const;
+  const presentationIntent = inferKpCancellationPresentationIntent({
     operationId: OPERATION_ID,
-    transformation,
-    bundle: fixture.bundle,
-    cancellationRecordId: CANCELLATION_RECORD_ID,
-    slotId: "slot.generated-x-plus-3.left-inverses",
-    survivorAnchorSelectorIds: [
-      selectorBySuffix(source, "lhs.variable").id,
-      selectorBySuffix(source, "equals").id
-    ]
+    teachingGoal
   });
 
   if (
@@ -280,28 +280,28 @@ export function createKpCanonicalCancellationPressureContract(
         label: "-3"
       }
     ],
-    witness,
+    presentation: {
+      teachingGoal,
+      intent: presentationIntent,
+      identityBeat: "implicit"
+    },
     lifecycle: {
       cancelledPair: "explicit-cancelation",
-      witness: "transient-zero",
+      identity: "implicit-additive-identity",
       continuants: "identity-preserving",
       introducedEndpointMaterial: []
     },
     causalOrder: [
       {
-        before: "inverse-contact-established",
-        after: "zero-witness-readable"
+        before: "inverse-approach-started",
+        after: "inverse-contact-established"
       },
       {
-        before: "zero-witness-readable",
+        before: "inverse-contact-established",
         after: "cancelled-material-retired"
       },
       {
         before: "cancelled-material-retired",
-        after: "zero-witness-absorbed"
-      },
-      {
-        before: "zero-witness-absorbed",
         after: "survivors-compacted"
       },
       {
@@ -312,7 +312,7 @@ export function createKpCanonicalCancellationPressureContract(
     rewind: {
       targetObjectId: source.id,
       exactLatex: SOURCE_LATEX,
-      reconstruction: "introduce-authored-inverse-pair-from-zero-witness"
+      reconstruction: "restore-authored-inverse-pair-from-shared-contact"
     }
   });
 }

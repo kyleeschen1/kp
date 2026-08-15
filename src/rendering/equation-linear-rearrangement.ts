@@ -25,6 +25,9 @@ import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
 import type {
   KpEquationLinearRearrangementKind
 } from "../animation/equation-linear-rearrangement-kind.ts";
+import {
+  kpCounterOrbitCancellationTiming
+} from "../animation/counter-orbit-cancellation-timing.ts";
 
 export {
   kpEquationLinearRearrangementKindForTransformType
@@ -71,7 +74,7 @@ export function sampleKpEquationLinearRearrangementFrame(
   // Without a +0 teaching beat, begin survivor compaction as the canceled ink
   // finishes retiring instead of concentrating it at the phase boundary.
   const counterOrbitReflowStart = zeroWitnessPresentationRecipe === "none"
-    ? 0.78
+    ? kpCounterOrbitCancellationTiming.retirementEnd
     : 0.94;
   const persistentReflowProgress = isCancellationKind(kind) &&
       cancellationPresentationRecipe === "counter-orbit-v1"
@@ -89,7 +92,11 @@ export function sampleKpEquationLinearRearrangementFrame(
     reservationProgress,
     persistentReflowProgress,
     focalTransitProgress: smooth(windowProgress(p, reserveThenTransit ? 0.32 : 0.28, 0.7)),
-    meetProgress: smooth(windowProgress(p, 0.42, 0.68)),
+    meetProgress: smooth(windowProgress(
+      p,
+      kpCounterOrbitCancellationTiming.meetStart,
+      kpCounterOrbitCancellationTiming.contactAt
+    )),
     collapseProgress: smooth(windowProgress(p, 0.62, 0.8)),
     resultRevealProgress: smooth(windowProgress(p, 0.68, 0.88)),
     recognitionProgress: smooth(windowProgress(p, 0.76, 0.92)),
@@ -420,6 +427,11 @@ function sampleCounterOrbitCancellation(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   const groupCenter = center(input.relation.source?.bounds);
+  const retirement = smooth(windowProgress(
+    input.progress,
+    kpCounterOrbitCancellationTiming.contactAt,
+    kpCounterOrbitCancellationTiming.retirementEnd
+  ));
   return input.sourceTokens.map((token) => {
     const tokenCenter = center(token.localRect);
     const orbitDirection = tokenCenter.x <= groupCenter.x ? -1 : 1;
@@ -430,7 +442,7 @@ function sampleCounterOrbitCancellation(
       ? 0
       : Math.sin(Math.PI * travel);
     return frameToken(token, "source", {
-      opacity: 1 - input.frame.collapseProgress,
+      opacity: 1 - retirement,
       x: (groupCenter.x - tokenCenter.x) * travel,
       // Same-baseline inverse terms need only the orbit. Fraction factors can
       // begin above and below one another, so their measured vertical offset
@@ -441,7 +453,7 @@ function sampleCounterOrbitCancellation(
       scale:
         1 -
         0.08 * travel -
-        0.14 * input.frame.collapseProgress
+        0.14 * retirement
     });
   });
 }
