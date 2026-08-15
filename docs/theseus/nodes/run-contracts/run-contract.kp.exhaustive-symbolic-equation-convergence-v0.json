@@ -74,7 +74,8 @@
     {
       "id": "s05",
       "title": "Disposition and rollback ledger",
-      "status": "planned"
+      "summary": "Committed the exhaustive generated disposition and rollback ledger with explicit migration waves and caller-blocked retirement gates for all 28 equation surfaces.",
+      "status": "complete"
     },
     {
       "id": "s06",

@@ -272,6 +272,8 @@
     "generate:animation-library-metadata": "node --disable-warning=ExperimentalWarning scripts/generate-animation-library-metadata.ts",
     "visual:equation-surface-preservation": "node --disable-warning=ExperimentalWarning scripts/capture-equation-surface-preservation.ts",
     "generate:equation-surface-preservation-matrix": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-preservation-matrix.ts",
+    "generate:equation-surface-disposition-ledger": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-disposition-ledger.ts",
+    "test:equation-surface-disposition": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-disposition-ledger.test.ts",
     "generate:equation-surface-authority-graph": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-authority-graph.ts",
     "generate:equation-surface-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-inventory.ts",
     "test:equation-surface-inventory": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-inventory.test.ts tests/animation-library-display-catalog-generation.test.ts",

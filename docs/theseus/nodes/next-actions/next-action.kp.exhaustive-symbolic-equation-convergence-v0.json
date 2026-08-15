@@ -74,10 +74,24 @@
       "scope": "s04 stable cost contract and architecture",
       "checkedAt": "2026-08-15T21:24:30.705Z",
       "notes": "Four cost-plan tests, production bundle boundaries, architecture gates, and full TypeScript/Svelte/domain checks pass."
+    },
+    {
+      "command": "npm run test:equation-surface-disposition",
+      "status": "passed",
+      "scope": "s05 exhaustive dispositions waves rollback and retirement gates",
+      "checkedAt": "2026-08-15T21:31:02.505Z",
+      "notes": "Four focused tests prove 28 unique rows, 3/20/4/0/1 dispositions, 9/9/10 migration waves, single-row rollback, blocked retirement callers, and duplicate/missing rejection."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture and generated disposition check and theseus workspace validate",
+      "status": "passed",
+      "scope": "s05 generated ledger integrity",
+      "checkedAt": "2026-08-15T21:31:09.115Z",
+      "notes": "Full static checks, architecture gates, generated parity, and workspace validation pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 complete: the durable baseline records 28 surfaces, 14 families, 35 source files, 9-11 authority nodes and 10-12 touched files per exemplar, 72 common emitted files, exact route deltas, one-player active-frame behavior, 23 generic fallback rows, 8 non-semantic transitions, and 16 local samplers."
+    "summary": "s05 complete: every equation row has one typed disposition, one 9/9/10 migration wave, an exact preservation boundary, an independently reversible single-row rollback unit, and blocked final-caller retirement evidence. No row is unclassified or marked retired."
   }
 }
