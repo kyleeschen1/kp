@@ -60,10 +60,24 @@
       "scope": "s03 static and workspace integrity",
       "checkedAt": "2026-08-15T21:14:23.841Z",
       "notes": "Full TypeScript/Svelte/domain checks, architecture gates, and the 956-node workspace validation pass."
+    },
+    {
+      "command": "npm run measure:equation-surface-cost",
+      "status": "passed",
+      "scope": "s04 production route source and active-frame baseline",
+      "checkedAt": "2026-08-15T21:24:22.905Z",
+      "notes": "One build, server, and browser measured 14 families twice with exact closure reproducibility, one-player advancement, 72 common files, 35 source files, and zero unrelated capability owners."
+    },
+    {
+      "command": "npm run test:equation-surface-cost and npm run check:animation-library-bundle-boundary and npm run check:architecture and npm run typecheck",
+      "status": "passed",
+      "scope": "s04 stable cost contract and architecture",
+      "checkedAt": "2026-08-15T21:24:30.705Z",
+      "notes": "Four cost-plan tests, production bundle boundaries, architecture gates, and full TypeScript/Svelte/domain checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 complete: all 28 equation surfaces now have exact semantic endpoint fingerprints, honest accessibility and native-settlement contracts, exact direct-seek routes, reduced-motion coverage, narrow no-overflow verification, and deterministic visual evidence across 14 families."
+    "summary": "s04 complete: the durable baseline records 28 surfaces, 14 families, 35 source files, 9-11 authority nodes and 10-12 touched files per exemplar, 72 common emitted files, exact route deltas, one-player active-frame behavior, 23 generic fallback rows, 8 non-semantic transitions, and 16 local samplers."
   }
 }

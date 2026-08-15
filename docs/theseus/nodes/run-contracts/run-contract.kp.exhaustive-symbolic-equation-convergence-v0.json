@@ -68,7 +68,8 @@
     {
       "id": "s04",
       "title": "Cost and bundle baseline",
-      "status": "planned"
+      "summary": "Committed an equation-only cost model, reproducible production attribution command, active-frame probe, compatibility denominator, and durable baseline review.",
+      "status": "complete"
     },
     {
       "id": "s05",
