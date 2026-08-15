@@ -6,6 +6,9 @@ import {
 import type {
   KpEquationFontReadiness
 } from "./equation-font-readiness.ts";
+import {
+  kpEquationSettlementTolerancePx
+} from "../animation/equation-shared-presentation-policy.ts";
 
 export type KpNativeKatexPaintKind =
   | "glyph"
@@ -201,7 +204,7 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
   const first = observeKpNativeKatexRenderedScene(input);
   await nextSceneLayoutFrame(input.stage.ownerDocument);
   const second = observeKpNativeKatexRenderedScene(input);
-  const tolerance = input.geometryTolerancePx ?? 0.25;
+  const tolerance = input.geometryTolerancePx ?? kpEquationSettlementTolerancePx;
   if (first.atoms.length !== second.atoms.length) {
     throw new Error("Rendered scene paint inventory changed between layout frames.");
   }

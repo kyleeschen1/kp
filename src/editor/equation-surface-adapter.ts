@@ -128,6 +128,9 @@ import {
   kpEquationPresentationPolicy
 } from "../animation/equation-presentation-policy.ts";
 import {
+  resolveKpEquationMotionAccessibility
+} from "../animation/equation-shared-presentation-policy.ts";
+import {
   createKpDotProductTraversalChoreography,
   sampleKpDotProductTraversalChoreography,
   type KpDotProductTraversalChoreography,
@@ -1569,13 +1572,9 @@ function applyFunctionWrapChoreography(input: {
   readonly choreography: KpFunctionWrapChoreography;
   readonly frame: KpFunctionWrapChoreographyFrame;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpFunctionWrapChoreography({
@@ -1619,13 +1618,9 @@ function applyRadicalSuccessionChoreography(input: {
   readonly choreography: KpRadicalSuccessionChoreography;
   readonly frame: KpRadicalSuccessionChoreographyFrame;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpRadicalSuccessionChoreography({
@@ -1718,13 +1713,9 @@ function applyLinearRearrangementChoreography(input: {
   readonly frame: KpLinearRearrangementChoreographyFrame;
   readonly sequenceFrame: KpBridgedChoreographyFrame;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpLinearRearrangementChoreography({
@@ -1873,13 +1864,9 @@ function applyDotProductTraversalChoreography(input: {
   readonly choreography: KpDotProductTraversalChoreography;
   readonly frame: KpDotProductTraversalChoreographyFrame;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpDotProductTraversalChoreography({
@@ -2181,13 +2168,9 @@ function applyMatrixVectorCompositionChoreography(input: {
   readonly rank6Plan?: KpMatrixLinearMapPlan | undefined;
   readonly rank6Frame?: KpMatrixLinearMapFrame | undefined;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpMatrixVectorCompositionChoreography({
@@ -2529,13 +2512,9 @@ function applyMatrixMatrixCompositionChoreography(input: {
   readonly choreography: KpMatrixMatrixCompositionChoreography;
   readonly frame: KpMatrixMatrixCompositionChoreographyFrame;
 }): void {
-  const accessibilityMode = (() => {
-    switch (editorAccessibilityMode(input.transitionElement)) {
-      case "reduced-motion": return "reduced" as const;
-      case "static": return "no-depth" as const;
-      default: return "full" as const;
-    }
-  })();
+  const accessibilityMode = resolveKpEquationMotionAccessibility(
+    editorAccessibilityMode(input.transitionElement)
+  );
   const sampled = accessibilityMode === "full"
     ? input.frame
     : sampleKpMatrixMatrixCompositionChoreography({

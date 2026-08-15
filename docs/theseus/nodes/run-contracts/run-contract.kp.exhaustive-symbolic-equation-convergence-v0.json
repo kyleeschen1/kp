@@ -146,7 +146,8 @@
     {
       "id": "s17",
       "title": "Caller proven equation policy",
-      "status": "planned"
+      "summary": "Committed caller-proven shared equation policy and removed repeated accessibility projection without visual drift.",
+      "status": "complete"
     },
     {
       "id": "s18",
