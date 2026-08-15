@@ -49,12 +49,12 @@ working lane has returned to the internal Animation Catalogue: build durable
 semantic animation capabilities that remain useful under any later product
 layout. This does not validate demand or reopen learner-facing layout work.
 
-The catalogue contains 40 loadable assets, but several are equation fixtures
-or diagnostic proofs rather than polished teaching animations. The immediate
-decision is to select one missing transformation from
-`reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md` and perfect
-it as a reversible exemplar. Matrix-to-linear-map remains tabled; no stable
-promotion rank has been silently changed.
+The catalogue contains 40 loadable assets, including 24 equation surfaces, but
+several are fixtures or diagnostic proofs rather than polished teaching
+animations. The immediate decision is to converge every supported equation
+surface on one canonical compiler after a clean-path log-product checkpoint.
+Matrix-to-linear-map remains tabled; no stable promotion rank has been silently
+changed.
 
 ## One Active Lane
 
@@ -71,11 +71,13 @@ Only this repository sequence is active:
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
    requirements while retaining choreography and geometry locally.
-5. **Canonical compiler thin waist:** next. Route the three approved callers through one
-   semantic-motion entry point, enforce the author/compiler/renderer boundary,
-   connect governed LLM drafts, and pressure the path with one new animation
-   before any further symbolic-family expansion. Migrate historical assets
-   incrementally rather than through a catalogue-wide rewrite.
+5. **Exhaustive equation convergence:** next. Establish one semantic-motion
+   compiler, route the three approved callers, and pressure it with one new
+   log-product animation. After its mandatory human checkpoint, migrate every
+   supported equation-surface asset in family-sized reversible waves, classify
+   static/unsupported/retired rows explicitly, retire each bypass beside its
+   final caller, and connect governed LLM drafts only after the cutover is
+   stable. Graph, code, diagram, and 3D compilers remain separate.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -87,13 +89,13 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Three contrasting callers approved; seven shared compiler requirements promoted while motifs remain local | Establish one compiler entry point before another symbolic family. |
+| Equation animation | Three contrasting callers approved; seven shared compiler requirements promoted while motifs remain local | Complete one canonical compiler and exhaustive supported equation-domain cutover before another symbolic family. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | 40 meaningful lazy assets, one persistent shell, no iframes | Active pressure lab; select and perfect one missing transformation exemplar. |
+| Catalogue | 40 meaningful lazy assets, including 24 equation surfaces, one persistent shell, no iframes | Active pressure lab; complete the equation compiler and exhaustive supported equation cutover. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
 | LLM generation | Typed semantic draft path exists; presentation selection is not uniformly connected | After three-caller promotion, connect governed drafts to the canonical compiler; models own semantics and salience, while KP owns recipes, timing, geometry, and rendering. |
@@ -168,8 +170,10 @@ active TypeScript proof
   those public consumers can retire together; a file-only move would reverse
   the dependency graph.
 
-Do not perform a broad rewrite or directory shuffle. Enforce public entry
-points and dependency direction first; physical package moves come later.
+Do not perform a repository-wide rewrite or directory shuffle. The accepted
+exhaustive equation-domain cutover is the bounded exception: enforce one public
+entry point and dependency direction, migrate supported callers in reversible
+waves, and leave physical package moves for later.
 
 ### 4. Cross-language code proof
 
@@ -322,10 +326,11 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   hosted in the catalogue. Broader SICP or Scheme expansion remains paused.
 - The algebra explanation contract remains recoverable from its verified human
   checkpoint; its pacing correction and remaining slices are paused.
-- The corrected log/exponent exemplar is approved. Candidate symbol-motion
-  invariants are gated on quotient, distribution, and cancellation checkpoints
-  before promotion; see
-  `decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`.
+- The corrected log/exponent exemplar and quotient, distribution, and
+  cancellation pressure callers are approved. Seven shared compiler
+  requirements are promoted; exhaustive supported equation convergence is the
+  next lane. See
+  `decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence

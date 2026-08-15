@@ -1,7 +1,12 @@
 # Decision 2026-08-15: Canonical Semantic-Motion Compiler Order
 
 Date: 2026-08-15
-Status: accepted
+Status: accepted; migration sequencing superseded
+
+The compiler boundary remains authoritative. Its opportunistic historical
+migration sequence is superseded by
+`2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`, which requires an
+exhaustive supported equation-domain cutover after the clean-path checkpoint.
 
 ## Decision
 

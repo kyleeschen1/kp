@@ -2,9 +2,9 @@
 
 Status: active
 Last Updated: 2026-08-15
-Current Next Action: Propose the separately bounded canonical semantic-motion
-compiler tranche. The three-caller pressure gate and invariant decision are
-complete; matrix-to-linear-map remains tabled.
+Current Next Action: Review and approve the exhaustive symbolic-equation
+convergence long-loop proposal. The three-caller pressure gate and invariant
+decision are complete; matrix-to-linear-map remains tabled.
 
 ## Goal
 
@@ -97,14 +97,15 @@ are recorded in
 The repaired counter-orbit cancellation checkpoint is accepted, and the
 three-caller comparison is complete. Seven operation-independent compiler
 requirements are promoted; paths, timing, opacity, optical treatment, and
-operation geometry remain local. The next repository tranche is one canonical
-semantic-motion compiler thin waist, not another symbolic family. It must route
-the three approved callers through one entry point, enforce the
-author/compiler/renderer boundary, connect governed LLM drafts, and stop after
-one new clean-path animation measures marginal implementation cost. Historical
-migration remains incremental. The verdict and accepted ordering are recorded
-in `../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
-`../decisions/2026-08-15-kp-canonical-semantic-motion-compiler-order.md`.
+operation geometry remain local. The next repository tranche establishes one
+canonical compiler, validates it with a new log-product caller, then migrates
+every supported equation-surface animation in reversible family waves. Each
+row ends canonical, adapter-backed with a retirement condition, static-only,
+unsupported, or retired; no unclassified equation authority path remains.
+Graphs, code, diagrams, and 3D remain separate. The verdict and accepted scope
+are recorded in
+`../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
+`../decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`.
 
 ## Accepted Scope
 
@@ -130,6 +131,9 @@ in `../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
 - a separately proposed canonical compiler tranche after the active
   three-caller promotion decision, with one clean-path pressure caller before
   further symbolic-family expansion;
+- exhaustive supported equation-surface migration after the clean-path human
+  checkpoint, with one generated disposition per asset and adjacent
+  compatibility retirement;
 
 ## Out Of Scope
 
@@ -146,8 +150,8 @@ in `../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
 - making Svelte components part of animation, semantic, clock, sampled-frame,
   or renderer-port authority;
 - using catalogue state as roadmap priority, approval, or execution authority.
-- catalogue-wide symbolic migration before the three contrasting callers pass
-  their human checkpoints;
+- forcing static, unsupported, diagnostic, graph, code, diagram, or 3D assets
+  through equation-specific presentation recipes;
 - fixed paths, timing constants, opacity values, or KaTeX geometry as semantic
   authoring authority.
 
@@ -179,6 +183,8 @@ in `../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
 - `docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`
 - `docs/project/decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md`
 - `docs/project/decisions/2026-08-15-kp-canonical-semantic-motion-compiler-order.md`
+- `docs/project/decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`
+- `docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`

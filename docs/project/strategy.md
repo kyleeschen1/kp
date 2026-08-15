@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-14
+Last Updated: 2026-08-15
 
 ## North Star
 
@@ -74,10 +74,11 @@ discovery is being carried forward outside this Codex thread; repository work
 returns to the internal Catalogue because reusable semantic animations retain
 value across later layouts and product decisions.
 
-This is not permission for undirected domain expansion. Catalogue work should
-select one missing transformation law, perfect one reversible exemplar, and
-promote shared machinery only after human approval and a structurally different
-caller. Learner-facing layout, curriculum, SRS, LLM tutoring, and public-site
+This is not permission for undirected domain expansion. The active catalogue
+lane is now exhaustive convergence inside the finite equation domain: validate
+one canonical compiler with a new reversible log-product exemplar, stop for
+human review, then migrate every supported equation asset in reversible family
+waves. Learner-facing layout, curriculum, SRS, LLM tutoring, and public-site
 expansion remain paused.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
@@ -94,10 +95,12 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is narrower: which absent transformation
-will add the most reusable animation capability without creating another
-runtime or renderer path? The current candidate inventory is recorded in
-`reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md`.
+The immediate repository question is now architectural convergence within the
+finite equation domain. After the three-operation promotion gate, route every
+supported equation animation through one canonical semantic-motion compiler,
+prove the boundary with one new log-product caller, and retire competing
+authority paths beside their final callers. This is an exhaustive equation
+cutover, not a universal graph, code, diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
@@ -144,8 +147,10 @@ For structurally changing native-KaTeX equations, the canonical renderer is
 one ephemeral session driven by semantic lineage and measured native paint.
 Native DOM remains the sole authority for settled typography, accessibility,
 annotations, and interaction. Existing equation animations remain reference
-and compatibility coverage until migrated one exemplar at a time; a migrated
-transition must retire its old paint branch in the same rollback unit.
+and compatibility coverage until the clean-path compiler checkpoint passes.
+They then migrate in family-sized, independently reversible waves; a migrated
+transition must retire its old paint or authority branch in the same rollback
+unit.
 
 ## Project Docs And Theseus
 
