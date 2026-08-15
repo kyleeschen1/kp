@@ -104,7 +104,8 @@
     {
       "id": "s31",
       "title": "Produce cancellation human checkpoint",
-      "status": "planned"
+      "summary": "Producing a deterministic forward-and-return cancellation contact sheet from named witnessed-annihilation phase boundaries; no cross-operation promotion will begin before explicit human approval.",
+      "status": "in-progress"
     },
     {
       "id": "s32",
