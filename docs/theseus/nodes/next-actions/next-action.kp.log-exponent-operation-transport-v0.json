@@ -470,11 +470,39 @@
       "scope": "s25 Chromium regression after WebKit repair",
       "checkedAt": "2026-08-15T16:09:51.199Z",
       "notes": "Three Chromium checks pass with the same visible-control and protected-transit contract."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "s25 compact quotient and complete causal ordering",
+      "checkedAt": "2026-08-15T16:23:28.308Z",
+      "notes": "Thirty-six focused tests pass, including typed enclosure-to-connector-to-transfer-to-target-structure ordering and negative fixtures."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "s25 compact quotient Chromium geometry",
+      "checkedAt": "2026-08-15T16:23:29.788Z",
+      "notes": "Four Chromium checks pass, including visible playback and measured compact-fraction clearance without overlap."
+    },
+    {
+      "command": "npm run test:browser:log-quotient:webkit",
+      "status": "passed",
+      "scope": "s25 compact quotient WebKit geometry",
+      "checkedAt": "2026-08-15T16:23:31.153Z",
+      "notes": "Four WebKit checks pass with compact native fraction geometry, visible playback, protected transit, and reduced-motion accessibility."
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "s25 compact quotient human checkpoint",
+      "checkedAt": "2026-08-15T16:23:32.531Z",
+      "notes": "Regenerated eleven deterministic forward/return samples after the optical spacing correction and strict causal ordering."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The human no-motion report was a real WebKit failure, not stale-server behavior: cross-browser KaTeX metrics caused protected-transit rejection and static fallback. The candidate homomorphic schema now types the reusable causal sequence enclosure release, connector retirement, material transfer/operator fusion, then target structure entry. WebKit and Chromium visible playback pass; awaiting renewed human review."
+    "summary": "The quotient exemplar now uses a family-local compact native fraction: stable semantic wrappers move numerator and denominator inward by 0.08em while preserving the KaTeX bar, symbol sizes, accessibility, and measured settlement. The candidate schema enforces the reusable typed order enclosure release, connector retirement, material transfer/operator fusion, then target structure entry. Awaiting human visual approval before promotion or distribution."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

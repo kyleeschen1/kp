@@ -17,6 +17,10 @@ test("visible play control drives continuous log quotient motion", async ({
   const play = player.getByRole("button", { name: "Play animation" });
 
   await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-quotient-fraction-treatment",
+    "compact-native"
+  );
   await expect(play).toBeVisible();
   await play.click();
   await expect(player).toHaveAttribute("data-kp-editor-animation-status", "playing");
@@ -164,6 +168,39 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
   );
   await expect(page.getByRole("button", { name: "Review" })).toBeVisible();
   expect(pageErrors).toEqual([]);
+});
+
+test("compact native quotient tightens vertical clearance without overlap", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}&playhead=1`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-quotient-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
+  await seek.fill("1");
+
+  const geometry = await stage.evaluate((root) => {
+    const rect = (entityId: string) => root.querySelector<HTMLElement>(
+      `[data-kp-log-quotient-endpoint-state-id="log-quotient.state.quotient"] ` +
+      `[data-kp-semantic-entity-id="${entityId}"]`
+    )!.getBoundingClientRect();
+    const numerator = rect("target.numerator.x");
+    const denominator = rect("target.denominator.y");
+    const bar = rect("target.quotient.bar");
+    return {
+      numeratorGap: bar.top - numerator.bottom,
+      denominatorGap: denominator.top - bar.bottom,
+      symbolHeight: Math.min(numerator.height, denominator.height)
+    };
+  });
+  expect(geometry.numeratorGap).toBeGreaterThanOrEqual(0);
+  expect(geometry.denominatorGap).toBeGreaterThanOrEqual(0);
+  expect(Math.max(geometry.numeratorGap, geometry.denominatorGap))
+    .toBeLessThanOrEqual(geometry.symbolHeight * 0.28);
 });
 
 test("log quotient keeps one accessible endpoint under reduced motion", async ({

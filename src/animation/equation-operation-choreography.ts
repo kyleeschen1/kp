@@ -240,12 +240,12 @@ export function createKpHomomorphicFusionChoreography(input: {
   assertUnitWindow(input.argumentTransferWindow, "Homomorphic argument transfer");
   assertUnitWindow(input.connectorRetirementWindow, "Homomorphic connector retirement");
   assertUnitWindow(input.sourceRetirementWindow, "Homomorphic source retirement");
-  // A continuant cannot cross a still-visible enclosure reliably: native math
-  // metrics vary by browser and font. Releasing the boundary first is a
-  // semantic ordering law; collision repair must not invent per-browser paths.
-  if (input.sourceRetirementWindow.end > input.argumentTransferWindow.start) {
+  // A continuant cannot cross still-visible syntax reliably: native math
+  // metrics vary by browser and font. Releasing source structure in causal
+  // order is semantic authority; collision repair must not invent browser paths.
+  if (input.sourceRetirementWindow.end > input.connectorRetirementWindow.start) {
     throw new Error(
-      "Homomorphic source enclosures must retire before arguments transfer."
+      "Homomorphic source enclosures must retire before the connector."
     );
   }
   const firstMaterialTransfer = Math.min(
@@ -255,6 +255,18 @@ export function createKpHomomorphicFusionChoreography(input: {
   if (input.connectorRetirementWindow.end > firstMaterialTransfer) {
     throw new Error(
       "Homomorphic source connector must retire before material transfers."
+    );
+  }
+  const lastMaterialSettlement = Math.max(
+    input.operatorFusionWindow.end,
+    input.argumentTransferWindow.end
+  );
+  const earliestTargetEntry = Math.min(...input.targetStructureEntries.map(
+    ({ entryWindow }) => entryWindow.start
+  ));
+  if (lastMaterialSettlement > earliestTargetEntry) {
+    throw new Error(
+      "Homomorphic target structure must enter after material transfers settle."
     );
   }
   if (

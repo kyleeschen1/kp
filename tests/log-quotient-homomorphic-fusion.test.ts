@@ -51,7 +51,7 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
   );
   assert.ok(
     choreography.sourceEnclosureRetirement.exitWindow.end <=
-      choreography.argumentTransferWindow.start
+      choreography.connectorDerivation.exitWindow.start
   );
   assert.ok(
     choreography.connectorDerivation.exitWindow.end <=
@@ -59,6 +59,14 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
         choreography.operatorFusionWindow.start,
         choreography.argumentTransferWindow.start
       )
+  );
+  assert.ok(
+    Math.max(
+      choreography.operatorFusionWindow.end,
+      choreography.argumentTransferWindow.end
+    ) <= Math.min(...choreography.targetStructureEntries.map(
+      ({ entryWindow }) => entryWindow.start
+    ))
   );
 });
 
@@ -179,7 +187,7 @@ test("homomorphic mint rejects a connector-to-structure identity", () => {
       {
         relationRecordId:
           "correspondence.log-quotient.introduce-fraction-bar",
-        entryWindow: { start: 0.5, end: 0.7 }
+        entryWindow: { start: 0.72, end: 0.9 }
       }
     ],
     operatorFusionWindow: { start: 0.1, end: 0.6 },
@@ -190,8 +198,37 @@ test("homomorphic mint rejects a connector-to-structure identity", () => {
 });
 
 test("homomorphic mint releases enclosures before continuants cross them", () => {
-  const base = kpCanonicalLogQuotientHomomorphicFusionChoreography;
   assert.throws(() => createKpHomomorphicFusionChoreography({
+    ...canonicalHomomorphicInput(),
+    sourceRetirementWindow: { start: 0.08, end: 0.2 }
+  }), /enclosures must retire before the connector/);
+});
+
+test("homomorphic mint clears the connector before moving material", () => {
+  assert.throws(() => createKpHomomorphicFusionChoreography({
+    ...canonicalHomomorphicInput(),
+    connectorRetirementWindow: { start: 0.1, end: 0.2 }
+  }), /connector must retire before material transfers/);
+});
+
+test("homomorphic mint settles material before target structure enters", () => {
+  const input = canonicalHomomorphicInput();
+  assert.throws(() => createKpHomomorphicFusionChoreography({
+    ...input,
+    targetStructureEntries: [
+      {
+        ...input.targetStructureEntries[0],
+        entryWindow: { start: 0.6, end: 0.82 }
+      },
+      input.targetStructureEntries[1]!
+    ]
+  }), /target structure must enter after material transfers settle/);
+});
+
+function canonicalHomomorphicInput():
+  Parameters<typeof createKpHomomorphicFusionChoreography>[0] {
+  const base = kpCanonicalLogQuotientHomomorphicFusionChoreography;
+  return {
     transformation:
       kpCanonicalCompiledLogQuotientOperation.transformation,
     direction: "forward",
@@ -218,19 +255,23 @@ test("homomorphic mint releases enclosures before continuants cross them", () =>
       base.connectorDerivation.forbiddenIdentityPairs,
     sourceEnclosureRetirementRecordId:
       base.sourceEnclosureRetirement.relationRecordId,
-    targetStructureEntries: base.targetStructureEntries.map((entry) => ({
-      relationRecordId: entry.relationRecordId,
-      entryWindow: entry.entryWindow
-    })) as unknown as [
-      { relationRecordId: string; entryWindow: { start: number; end: number } },
-      ...{ relationRecordId: string; entryWindow: { start: number; end: number } }[]
+    targetStructureEntries: [
+      {
+        relationRecordId: base.targetStructureEntries[0].relationRecordId,
+        entryWindow: base.targetStructureEntries[0].entryWindow
+      },
+      {
+        relationRecordId: base.targetStructureEntries[1]!.relationRecordId,
+        entryWindow: base.targetStructureEntries[1]!.entryWindow
+      }
     ],
     operatorFusionWindow: base.operatorFusionWindow,
-    argumentTransferWindow: { start: 0.16, end: 0.7 },
+    argumentTransferWindow: base.argumentTransferWindow,
     connectorRetirementWindow: base.connectorDerivation.exitWindow,
-    sourceRetirementWindow: { start: 0.08, end: 0.2 }
-  }), /enclosures must retire before arguments transfer/);
-});
+    sourceRetirementWindow:
+      base.sourceEnclosureRetirement.exitWindow
+  };
+}
 
 function scene(
   endpoint: "source" | "target",

@@ -108,6 +108,11 @@ until the distribution and cancellation checkpoints complete the gate.
   scene-level salience may still render persistent material as context.
 - Native KaTeX owns settled typography and accessibility. Authored case and
   operator identity must survive host CSS.
+- Large display fractions may receive a family-local optical spacing
+  correction through stable semantic wrappers. The correction must preserve
+  native KaTeX's rule, symbol sizes, accessibility tree, and measured endpoint
+  authority; it must not depend on KaTeX's incidental internal DOM. The current
+  compact quotient inset remains exemplar-specific pending human review.
 - Collision repair may adjust geometry but may not split certified motion
   units, change provenance, or fade continuants.
 - Every trajectory settles on measured target geometry before target ownership

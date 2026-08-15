@@ -84,6 +84,7 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-log-quotient-stage";
   stage.dataset["kpLogQuotientStage"] = "preparing";
+  stage.dataset["kpLogQuotientFractionTreatment"] = "compact-native";
   stage.setAttribute("aria-label", "Combine a difference of logarithms");
 
   const createRoot = (

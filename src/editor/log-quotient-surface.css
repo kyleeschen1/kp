@@ -1,4 +1,6 @@
 .kp-log-quotient-stage {
+  --kp-log-quotient-compact-fraction-inset: 0.08em;
+
   position: relative;
   display: grid;
   width: 100%;
@@ -9,6 +11,21 @@
   background: transparent;
   isolation: isolate;
   text-transform: none;
+}
+
+/* Keep native KaTeX's fraction rule and symbol sizes, but correct the overly
+   loose display-style gap at this large animation scale. Stable semantic
+   wrappers own the paint adjustment; KaTeX's incidental DOM remains opaque. */
+.kp-log-quotient-stage[data-kp-log-quotient-fraction-treatment="compact-native"]
+  [data-kp-log-quotient-endpoint-state-id="log-quotient.state.quotient"]
+  [data-kp-semantic-entity-id="target.numerator.x"] {
+  transform: translateY(var(--kp-log-quotient-compact-fraction-inset));
+}
+
+.kp-log-quotient-stage[data-kp-log-quotient-fraction-treatment="compact-native"]
+  [data-kp-log-quotient-endpoint-state-id="log-quotient.state.quotient"]
+  [data-kp-semantic-entity-id="target.denominator.y"] {
+  transform: translateY(calc(-1 * var(--kp-log-quotient-compact-fraction-inset)));
 }
 
 .kp-log-quotient-stage__endpoint,
