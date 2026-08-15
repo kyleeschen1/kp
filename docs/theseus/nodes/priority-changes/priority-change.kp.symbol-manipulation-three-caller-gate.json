@@ -1,0 +1,45 @@
+{
+  "id": "priority-change.kp.symbol-manipulation-three-caller-gate",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.symbol-manipulation-three-caller-gate",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Human accepted quotient, distribution, and cancellation as the contrasting evidence required before symbol-motion promotion; this supersedes the planned linearity-only pressure gate in the active run.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Human accepted quotient, distribution, and cancellation as the contrasting evidence required before symbol-motion promotion; this supersedes the planned linearity-only pressure gate in the active run.",
+      "occurredAt": "2026-08-15T13:56:35.567Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.log-exponent-operation-transport-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.log-exponent-operation-transport-v0"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "Human accepted quotient, distribution, and cancellation as the contrasting evidence required before symbol-motion promotion; this supersedes the planned linearity-only pressure gate in the active run.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.log-exponent-operation-transport-v0"
+    ],
+    "changes": [
+      {
+        "subject": "symbol-motion-promotion",
+        "to": "quotient-distribution-cancellation"
+      }
+    ],
+    "effectiveAt": "2026-08-15T13:56:35.567Z",
+    "requestedBy": "human"
+  }
+}

@@ -283,10 +283,17 @@
       "scope": "s21 durable project evidence",
       "checkedAt": "2026-08-15T04:50:54.820Z",
       "notes": "Validated 952 nodes and 20817 events after closing the typed symbol-motion slice."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "three-operation invariant promotion amendment",
+      "checkedAt": "2026-08-15T13:57:54.476Z",
+      "notes": "Validated 953 nodes and 20830 events after recording quotient, distribution, and cancellation checkpoints and the accepted symbol-manipulation decision."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical log-exponent refinements are implemented and verified. Await human visual checkpoint before s22 applies the typed contract to the quotient caller and later families."
+    "summary": "Corrected log/exponent exemplar approved. Continue with quotient, distribution, and cancellation as separate reviewed callers; promote only invariant behavior evidenced across all three."
   }
 }

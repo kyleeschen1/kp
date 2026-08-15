@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-14
+Last Updated: 2026-08-15
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -63,13 +63,13 @@ Only this repository sequence is active:
 
 1. **Reconcile the backlog:** complete. Distinguish existing assets, partial
    or diagnostic implementations, and genuinely missing transformations.
-2. **Select one exemplar:** active. Choose place-value subtraction, fraction
-   equivalence, function-coordinate transformation, or another explicitly
-   accepted candidate without silently resuming tabled matrix work.
-3. **Perfect one asset:** build the smallest reversible exemplar inside the
-   existing semantic/runtime/catalogue boundaries and stop for human review.
-4. **Promote only on evidence:** after approval, test one structurally
-   different caller before extracting a family motif or shared API.
+2. **Select one exemplar:** complete. The accepted exponent/log caller is the
+   native-KaTeX `2^x = 7` transformation sequence.
+3. **Perfect one asset:** complete through the approved corrected exemplar and
+   its typed symbol-motion seam.
+4. **Pressure before promotion:** active. Test quotient, distribution, and
+   cancellation as independently reversible callers, stopping after each for
+   human review. Promote only the invariant boundary evidenced by all three.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -81,7 +81,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Canonical path proven; compatibility remains | Migrate accepted callers and retire old recipes incrementally. |
+| Equation animation | Canonical path and typed symbol-motion candidate proven; compatibility remains | Pressure quotient, distribution, and cancellation before shared promotion or incremental migration. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
@@ -316,6 +316,10 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   hosted in the catalogue. Broader SICP or Scheme expansion remains paused.
 - The algebra explanation contract remains recoverable from its verified human
   checkpoint; its pacing correction and remaining slices are paused.
+- The corrected log/exponent exemplar is approved. Candidate symbol-motion
+  invariants are gated on quotient, distribution, and cancellation checkpoints
+  before promotion; see
+  `decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence

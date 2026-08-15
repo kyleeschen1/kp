@@ -1,13 +1,11 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-14
-Current Next Action: Select one missing transformation from
-`../reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md`, then
-perfect one independently reversible catalogue exemplar. Place-value
-subtraction remains the evidence-backed architecture recommendation; fraction
-equivalence and function-coordinate transformations are the low-risk and
-graph-led alternatives. Matrix-to-linear-map remains tabled.
+Last Updated: 2026-08-15
+Current Next Action: Continue the approved log/exponent run at the bounded log
+quotient caller, then pressure candidate symbol-manipulation invariants with
+distribution and cancellation before any shared promotion. Each caller stops
+at a human checkpoint. Matrix-to-linear-map remains tabled.
 
 ## Goal
 
@@ -88,6 +86,15 @@ completed transformation families. The reconciled backlog is the selection
 authority for the next exemplar, while the stable promotion ledger retains its
 existing ranks and the matrix checkpoint remains tabled.
 
+The selected exponent/log exemplar now proves a typed semantic-motion seam for
+persistent operators, role-changing continuants, rigid subtrees, structural
+shells, and canonical function wrapping. Human review accepted the corrected
+direction. The candidate laws are not catalogue-wide policy: the approved
+promotion gate is quotient, then distribution, then cancellation, with a
+separate checkpoint for each. The decision and complete invariant inventory
+are recorded in
+`../decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`.
+
 ## Accepted Scope
 
 - `/` as the default catalogue route and `/?artifact=<id>` selection;
@@ -105,6 +112,10 @@ existing ranks and the matrix checkpoint remains tabled.
   disposition;
 - an approved solve-x exemplar, then catalogue-wide hosting and inventory;
 - retention of useful old routes as hidden diagnostics during migration.
+- typed, compiler-owned candidate symbol-motion invariants exercised through
+  quotient, distribution, and cancellation exemplars;
+- one nominal compiled authority consumed after endpoint measurement and
+  before path planning and paint;
 
 ## Out Of Scope
 
@@ -121,6 +132,10 @@ existing ranks and the matrix checkpoint remains tabled.
 - making Svelte components part of animation, semantic, clock, sampled-frame,
   or renderer-port authority;
 - using catalogue state as roadmap priority, approval, or execution authority.
+- catalogue-wide symbolic migration before the three contrasting callers pass
+  their human checkpoints;
+- fixed paths, timing constants, opacity values, or KaTeX geometry as semantic
+  authoring authority.
 
 ## Open Questions
 
@@ -147,6 +162,8 @@ existing ranks and the matrix checkpoint remains tabled.
 - `docs/project/decisions/2026-07-31-kp-exemplar-first-visual-verification-cadence.md`
 - `docs/project/decisions/2026-08-01-kp-six-loop-product-convergence-sequence.md`
 - `docs/project/decisions/2026-08-02-kp-checkpoint-and-product-surface-sequence.md`
+- `docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md`
+- `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
 - `docs/project/threads/animation-library-promotion.md`

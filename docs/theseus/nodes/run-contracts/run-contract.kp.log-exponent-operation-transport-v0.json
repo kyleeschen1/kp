@@ -13,6 +13,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md",
       "summary": "Approved 28-slice exemplar-first log, exponent, and operation-transport plan with mandatory human checkpoints after s20 and s25."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-15-kp-symbol-manipulation-invariant-promotion-gate.md"
     }
   ],
   "verification": [
@@ -23,12 +27,12 @@
     "theseus workspace validate"
   ],
   "allowedWork": [
-    "Family-local typed log and exponent operations, assumptions, semantic transformations, correspondence, lifecycle, lineage, salience, deterministic interpolation, native KaTeX rendering, lazy catalogue assets, exact URLs, review evidence, tests, and one bounded internal linearity pressure caller.",
-    "One independently reversible commit per verified slice, with impact-selected checks and stable visual commands."
+    "Family-local typed quotient, distribution, and cancellation operations; semantic assumptions, transformation, correspondence, provenance, lifecycle, rewrite frontiers, motion units, attachments, causal constraints, deterministic interpolation, native KaTeX rendering, lazy catalogue assets, exact URLs, review evidence, and tests.",
+    "Candidate shared invariant types only when a pressure caller demonstrates a missing semantic distinction; one independently reversible commit per verified slice."
   ],
   "disallowedWork": [
-    "Public lessons, layout work, full curriculum, LLM generation, SRS, authoring expansion, graph reflection, matrix visualization, Graph3D or WebGL, a new runtime or renderer, and catalogue-wide migration.",
-    "Shared homomorphism promotion before two approved log callers and a successful structurally different linearity pressure caller."
+    "Public lessons, layout work, curriculum, LLM generation, SRS, authoring expansion, graph reflection, matrix visualization, Graph3D or WebGL, a new runtime or renderer, and catalogue-wide migration.",
+    "Shared symbol-motion promotion before approved quotient, distribution, and cancellation checkpoints; semantic timing constants, paths, opacity values, or renderer geometry; automatic migration of existing assets."
   ],
   "goal": "Build and verify canonical exponent-log interpolations, pressure them with a log quotient caller, and promote operation transport only if a bounded linearity caller proves the seam.",
   "target": "next-action.kp.log-exponent-operation-transport-v0",
@@ -181,17 +185,50 @@
     },
     {
       "id": "s26",
-      "title": "Compare operation transport callers",
+      "title": "Define distribution pressure contract",
+      "summary": "Specify one bounded distribution rewrite frontier, explicit fan-out provenance, operator attachment, motion units, and preservation boundary without promoting shared types.",
       "status": "planned"
     },
     {
       "id": "s27",
-      "title": "Pressure with linearity caller",
+      "title": "Implement distribution pressure animation",
+      "summary": "Compile the bounded distribution contract into deterministic native-KaTeX motion with explicit fan-out, attached operators, exact ownership, seek, and rewind.",
       "status": "planned"
     },
     {
       "id": "s28",
-      "title": "Promote or reject and close out",
+      "title": "Produce distribution human checkpoint",
+      "summary": "Package stable visual evidence and stop before cancellation or shared promotion.",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Define cancellation pressure contract",
+      "summary": "Specify one bounded cancellation rewrite frontier, explicit cancellation provenance, attached operands and operators, witness semantics, and negative cases.",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Implement cancellation pressure animation",
+      "summary": "Compile deterministic native-KaTeX cancellation motion with a perceptible witness, exact ownership, seek, rewind, and settlement without generic fading.",
+      "status": "planned"
+    },
+    {
+      "id": "s31",
+      "title": "Produce cancellation human checkpoint",
+      "summary": "Package stable visual evidence and stop before comparing or promoting shared invariants.",
+      "status": "planned"
+    },
+    {
+      "id": "s32",
+      "title": "Compare three operation callers",
+      "summary": "Audit quotient, distribution, and cancellation to classify shared invariants, operation-local motifs, and rejected generalizations.",
+      "status": "planned"
+    },
+    {
+      "id": "s33",
+      "title": "Promote or reject symbol-motion invariants",
+      "summary": "Promote only three-caller-proven types and renderer obligations, run release gates, record non-promotions, and close the run without catalogue-wide migration.",
       "status": "planned"
     }
   ]
