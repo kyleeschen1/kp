@@ -28,8 +28,13 @@ export type KpSemanticMotionRecipeCapabilityId =
   | "semantic.compact-survivors"
   | "semantic.settle-native-target";
 
+export type KpSemanticMotionRecipeId =
+  | "recipe.semantic-motion.log-quotient-fusion.v1"
+  | "recipe.semantic-motion.distribution-fan-out.v1"
+  | "recipe.semantic-motion.inverse-cancellation.v1";
+
 interface KpSemanticMotionRecipeDefinition {
-  readonly id: string;
+  readonly id: KpSemanticMotionRecipeId;
   readonly familyId: string;
   readonly operationId: string;
   readonly roleIds: readonly string[];
@@ -44,7 +49,7 @@ declare const kpSemanticMotionRecipeResolutionAuthority: unique symbol;
 export type KpResolvedSemanticMotionRecipe = Readonly<{
   kind: "resolved-semantic-motion-recipe";
   requestId: string;
-  recipeId: string;
+  recipeId: KpSemanticMotionRecipeId;
   familyId: string;
   capabilityIds: readonly KpSemanticMotionRecipeCapabilityId[];
   precedence: KpVerifiedSemanticMotionPrecedence;
@@ -186,7 +191,7 @@ export function isKpResolvedSemanticMotionRecipe(value: unknown): value is KpRes
 }
 
 export function kpSemanticMotionRecipeCapabilityMatrix(): readonly Readonly<{
-  recipeId: string;
+  recipeId: KpSemanticMotionRecipeId;
   familyId: string;
   operationId: string;
   capabilityIds: readonly KpSemanticMotionRecipeCapabilityId[];

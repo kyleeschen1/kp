@@ -227,10 +227,31 @@
       "scope": "s13 recipe resolver boundaries static types and workspace integrity",
       "checkedAt": "2026-08-15T22:30:05.747Z",
       "notes": "Architecture gates, full TypeScript/Svelte/domain checks, and workspace validation pass; resolved capabilities expose no renderer, timing, path, geometry, opacity, or fade authority."
+    },
+    {
+      "command": "node semantic-motion compiler chain through executable choreography",
+      "status": "passed",
+      "scope": "s14 nominal tracks deterministic sampling DAG lowering endpoints and rewind",
+      "checkedAt": "2026-08-15T22:37:38.542Z",
+      "notes": "All 30 compiler-chain tests pass; three recipes mint complete tracks, incomparable events overlap, causal edges remain ordered, direct sampling mirrors exactly, reduced motion exposes native endpoints, and copied authority fails."
+    },
+    {
+      "command": "npm run check:architecture and npm run typecheck and npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s14 compiler waist renderer imports types and bundle isolation",
+      "checkedAt": "2026-08-15T22:37:40.163Z",
+      "notes": "All architecture and static gates pass; no renderer or timer imports enter the compiler waist; animation-library route budgets remain under limits."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s14 durable workspace integrity",
+      "checkedAt": "2026-08-15T22:37:41.409Z",
+      "notes": "Workspace validates 956 nodes and 21093 events."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 complete: verified semantic operations resolve through a closed three-recipe capability matrix. Callers cannot name paths, timings, renderer modules, or raw motifs; unknown operations are explicit static, malformed known shapes require repair, and unreviewed teaching intent requires human review."
+    "summary": "s14 complete: validated recipes now mint one executable choreography authority and deterministic renderer-neutral tracks. Semantic dependencies govern phase windows, incomparable events may overlap, shared external progress is the sole clock input, rewind is exact, and native endpoints settle without renderer inference."
   }
 }

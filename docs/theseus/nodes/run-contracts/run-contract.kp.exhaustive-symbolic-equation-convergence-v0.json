@@ -128,7 +128,8 @@
     {
       "id": "s14",
       "title": "Nominal choreography and renderer neutral tracks",
-      "status": "planned"
+      "summary": "Committed the nominal compiler waist, family-local DAG schedule lowering, complete semantic tracks, pure shared-progress sampling, exact native endpoints, mirrored rewind, reduced-motion projection, and renderer/bundle gates.",
+      "status": "complete"
     },
     {
       "id": "s15",

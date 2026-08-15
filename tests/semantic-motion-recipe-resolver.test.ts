@@ -2,18 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  compileKpSemanticMotionPrecedence,
-  compileKpSemanticMotionRoleCohorts,
   isKpResolvedSemanticMotionRecipe,
   kpSemanticMotionRecipeCapabilityMatrix,
   resolveKpSemanticMotionRecipe,
   type KpSemanticMotionOperationStructureContract,
-  type KpSemanticMotionPrecedenceSpec,
-  type KpVerifiedSemanticMotionPrecedence
 } from "../src/domain-ir/public-api.ts";
 import {
   cancellationSemanticMotionPrecedenceSpec,
   cancellationSemanticMotionStructureContract,
+  compileSemanticMotionPrecedenceFixture,
   createCancellationSemanticMotionFixture,
   createDistributionSemanticMotionFixture,
   createQuotientSemanticMotionFixture,
@@ -21,8 +18,7 @@ import {
   distributionSemanticMotionPrecedenceSpec,
   distributionSemanticMotionStructureContract,
   quotientSemanticMotionPrecedenceSpec,
-  quotientSemanticMotionStructureContract,
-  type KpSemanticMotionCompilerTestFixture
+  quotientSemanticMotionStructureContract
 } from "./fixtures/semantic-motion-compiler-fixtures.ts";
 
 test("three approved operation shapes resolve to distinct closed capability recipes", () => {
@@ -33,7 +29,7 @@ test("three approved operation shapes resolve to distinct closed capability reci
   ] as const;
   const capabilitySignatures = new Set<string>();
   for (const [fixture, contract, spec, recipeId] of cases) {
-    const precedence = compilePrecedence(fixture, contract, spec);
+    const precedence = compileSemanticMotionPrecedenceFixture(fixture, contract, spec);
     const result = resolveKpSemanticMotionRecipe(precedence);
     assert.equal(result.status, "resolved");
     if (result.status !== "resolved") continue;
@@ -64,7 +60,7 @@ test("unknown operation incomplete family shape and unreviewed teaching intent f
       : cohort)
   };
   const mismatch = resolveKpSemanticMotionRecipe(
-    compilePrecedence(fixture, malformedContract, quotientSemanticMotionPrecedenceSpec())
+    compileSemanticMotionPrecedenceFixture(fixture, malformedContract, quotientSemanticMotionPrecedenceSpec())
   );
   assert.equal(mismatch.status, "repair-required");
   if (mismatch.status === "repair-required") {
@@ -73,7 +69,7 @@ test("unknown operation incomplete family shape and unreviewed teaching intent f
 
   const noticeFixture = createQuotientSemanticMotionFixture("notice");
   const review = resolveKpSemanticMotionRecipe(
-    compilePrecedence(noticeFixture, quotientSemanticMotionStructureContract(), quotientSemanticMotionPrecedenceSpec())
+    compileSemanticMotionPrecedenceFixture(noticeFixture, quotientSemanticMotionStructureContract(), quotientSemanticMotionPrecedenceSpec())
   );
   assert.equal(review.status, "human-review");
   if (review.status === "human-review") assert.equal(review.reason, "unreviewed-recipe");
@@ -82,29 +78,9 @@ test("unknown operation incomplete family shape and unreviewed teaching intent f
 test("structural copies cannot claim resolved recipe authority", () => {
   const fixture = createCancellationSemanticMotionFixture();
   const result = resolveKpSemanticMotionRecipe(
-    compilePrecedence(fixture, cancellationSemanticMotionStructureContract(), cancellationSemanticMotionPrecedenceSpec())
+    compileSemanticMotionPrecedenceFixture(fixture, cancellationSemanticMotionStructureContract(), cancellationSemanticMotionPrecedenceSpec())
   );
   assert.equal(result.status, "resolved");
   if (result.status !== "resolved") return;
   assert.equal(isKpResolvedSemanticMotionRecipe({ ...result.resolution }), false);
 });
-
-function compilePrecedence(
-  fixture: KpSemanticMotionCompilerTestFixture,
-  contract: KpSemanticMotionOperationStructureContract,
-  spec: KpSemanticMotionPrecedenceSpec
-): KpVerifiedSemanticMotionPrecedence {
-  const structure = compileKpSemanticMotionRoleCohorts({
-    request: fixture.request,
-    lifecycle: fixture.lifecycle,
-    contract
-  });
-  if (structure.status !== "verified") throw new Error(`Structure ${fixture.request.id} failed.`);
-  const precedence = compileKpSemanticMotionPrecedence({
-    request: fixture.request,
-    structure: structure.structure,
-    spec
-  });
-  if (precedence.status !== "verified") throw new Error(`Precedence ${fixture.request.id} failed.`);
-  return precedence.precedence;
-}

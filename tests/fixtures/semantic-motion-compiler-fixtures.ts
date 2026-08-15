@@ -332,6 +332,26 @@ export function cancellationSemanticMotionPrecedenceSpec(): KpSemanticMotionPrec
   ]);
 }
 
+export function compileSemanticMotionPrecedenceFixture(
+  fixture: KpSemanticMotionCompilerTestFixture,
+  contract: KpSemanticMotionOperationStructureContract,
+  spec: KpSemanticMotionPrecedenceSpec
+): KpVerifiedSemanticMotionPrecedence {
+  const structure = compileKpSemanticMotionRoleCohorts({
+    request: fixture.request,
+    lifecycle: fixture.lifecycle,
+    contract
+  });
+  if (structure.status !== "verified") throw new Error(`Structure ${fixture.request.id} failed.`);
+  const precedence = compileKpSemanticMotionPrecedence({
+    request: fixture.request,
+    structure: structure.structure,
+    spec
+  });
+  if (precedence.status !== "verified") throw new Error(`Precedence ${fixture.request.id} failed.`);
+  return precedence.precedence;
+}
+
 function createFixture(input: FixtureInput): KpSemanticMotionCompilerTestFixture {
   const transformationId = `transform.${input.id}`;
   const sourceId = `semantic.${input.id}`;
