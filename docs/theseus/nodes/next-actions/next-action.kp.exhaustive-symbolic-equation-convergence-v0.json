@@ -248,10 +248,38 @@
       "scope": "s14 durable workspace integrity",
       "checkedAt": "2026-08-15T22:37:41.409Z",
       "notes": "Workspace validates 956 nodes and 21093 events."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 typed manifest boundary",
+      "checkedAt": "2026-08-15T22:49:12.796Z",
+      "notes": "TypeScript, Svelte, domain checks, and all architecture boundaries pass; the manifest has no host layout, editor session, or clock state."
+    },
+    {
+      "command": "npm run test:equation-asset-manifest and equation surface inventory and disposition suites",
+      "status": "passed",
+      "scope": "s15 manifest completeness lazy loading generated catalogue parity",
+      "checkedAt": "2026-08-15T22:49:13.252Z",
+      "notes": "All 15 focused tests pass across the manifest, display projection, inventory, and disposition; every one of 28 assets has durable static and accessibility truth and every declared pack imports its asset."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary and generated metadata freshness checks",
+      "status": "passed",
+      "scope": "s15 lazy route and generated catalogue budgets",
+      "checkedAt": "2026-08-15T22:49:13.687Z",
+      "notes": "Generated catalogue and manifest are current; outer 10,703/50,000, route 114,375/190,000, and all capability budgets remain below limits."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s15 durable workspace integrity",
+      "checkedAt": "2026-08-15T22:49:39.455Z",
+      "notes": "Workspace validates 956 nodes and 21,107 events after manifest and slice evidence."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s14 complete: validated recipes now mint one executable choreography authority and deterministic renderer-neutral tracks. Semantic dependencies govern phase windows, incomparable events may overlap, shared external progress is the sole clock input, rewind is exact, and native endpoints settle without renderer inference."
+    "summary": "s15 complete: one generated minimal manifest now reconciles durable identity, semantic source, pedagogical intent, capabilities, exact lazy-loader ownership, referenced static truth, accessibility, and display metadata for all 28 equation assets. The catalogue is derived through this manifest without importing it into runtime routes; no host layout, editor state, or clock entered the asset contract."
   }
 }

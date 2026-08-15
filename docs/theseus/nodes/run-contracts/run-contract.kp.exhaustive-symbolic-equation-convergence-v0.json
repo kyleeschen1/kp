@@ -134,7 +134,8 @@
     {
       "id": "s15",
       "title": "Minimal equation asset manifest",
-      "status": "planned"
+      "summary": "Committed a generated 28-asset equation manifest, manifest-derived catalogue projection, typed literal pack paths, exact lazy-import checks, static/accessibility truth, and route-budget preservation without host or editor state.",
+      "status": "complete"
     },
     {
       "id": "s16",

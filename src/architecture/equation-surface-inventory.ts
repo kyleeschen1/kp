@@ -2,7 +2,11 @@ import type {
   KpAnimationAssetRenderTargetKind
 } from "../animation/asset.ts";
 import type {
-  KpAnimationCatalogPackId
+  KpAnimationCatalogPackId,
+  KpAnimationCatalogPackSourcePath
+} from "../animation/catalog-loader.ts";
+import {
+  kpAnimationCatalogPackSourcePath
 } from "../animation/catalog-loader.ts";
 import {
   createKpAnimationCatalogueProjection,
@@ -79,7 +83,7 @@ export interface KpEquationSurfaceInventoryEntry {
   readonly lazyCapability: {
     readonly packId: KpAnimationCatalogPackId;
     readonly loaderSourcePath: "src/animation/catalog-loader.ts";
-    readonly packSourcePath: string;
+    readonly packSourcePath: KpAnimationCatalogPackSourcePath;
   };
   readonly currentPresentationAuthority: {
     readonly canonicalFormat: KpAnimationLibraryDisplayEntry["canonicalFormat"];
@@ -247,7 +251,7 @@ function projectInventoryEntry(
     lazyCapability: Object.freeze({
       packId: catalogue.packId,
       loaderSourcePath: "src/animation/catalog-loader.ts" as const,
-      packSourcePath: `src/animation/catalog-packs/${catalogue.packId}.ts`
+      packSourcePath: kpAnimationCatalogPackSourcePath(catalogue.packId)
     }),
     currentPresentationAuthority: Object.freeze({
       canonicalFormat: display.canonicalFormat,

@@ -18,6 +18,20 @@ export type KpAnimationCatalogPackId =
   | "comparison"
   | "complex-katex";
 
+export type KpAnimationCatalogPackSourcePath =
+  | "src/animation/catalog-packs/exact-quantity.ts"
+  | "src/animation/catalog-packs/place-value.ts"
+  | "src/animation/catalog-packs/operation-evaluation.ts"
+  | "src/animation/catalog-packs/algebra.ts"
+  | "src/animation/catalog-packs/generated-drafts.ts"
+  | "src/animation/catalog-packs/generated.ts"
+  | "src/animation/catalog-packs/graph.ts"
+  | "src/animation/catalog-packs/economics.ts"
+  | "src/animation/catalog-packs/physics.ts"
+  | "src/animation/catalog-packs/programming.ts"
+  | "src/animation/catalog-packs/comparison.ts"
+  | "src/animation/catalog-packs/complex-katex.ts";
+
 export interface KpLoadedAnimationAsset {
   readonly animation: KpAnimationAsset;
   readonly catalog: readonly KpAnimationAsset[];
@@ -141,6 +155,37 @@ export function kpAnimationCatalogPackId(
     `No animation capability pack owns ${animationId}.`,
     animationId
   );
+}
+
+export function kpAnimationCatalogPackSourcePath(
+  packId: KpAnimationCatalogPackId
+): KpAnimationCatalogPackSourcePath {
+  switch (packId) {
+    case "exact-quantity":
+      return "src/animation/catalog-packs/exact-quantity.ts";
+    case "place-value":
+      return "src/animation/catalog-packs/place-value.ts";
+    case "operation-evaluation":
+      return "src/animation/catalog-packs/operation-evaluation.ts";
+    case "algebra":
+      return "src/animation/catalog-packs/algebra.ts";
+    case "generated-drafts":
+      return "src/animation/catalog-packs/generated-drafts.ts";
+    case "generated-problems":
+      return "src/animation/catalog-packs/generated.ts";
+    case "graph":
+      return "src/animation/catalog-packs/graph.ts";
+    case "economics":
+      return "src/animation/catalog-packs/economics.ts";
+    case "physics":
+      return "src/animation/catalog-packs/physics.ts";
+    case "programming":
+      return "src/animation/catalog-packs/programming.ts";
+    case "comparison":
+      return "src/animation/catalog-packs/comparison.ts";
+    case "complex-katex":
+      return "src/animation/catalog-packs/complex-katex.ts";
+  }
 }
 
 async function loadPack(

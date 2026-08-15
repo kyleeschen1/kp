@@ -8,9 +8,18 @@ import {
 import {
   createKpAnimationLibraryDisplayCatalog as createSourceCatalog
 } from "../src/editor/animation-library-display-catalog-builder.ts";
+import {
+  createKpEquationAssetManifest,
+  deriveKpAnimationDisplayCatalogueFromEquationManifest
+} from "../src/architecture/equation-asset-manifest.ts";
 
 test("generated display metadata matches the source-rich catalog builder", () => {
-  assert.deepEqual(createGeneratedCatalog(), createSourceCatalog());
+  const source = createSourceCatalog();
+  assert.deepEqual(createGeneratedCatalog(),
+    deriveKpAnimationDisplayCatalogueFromEquationManifest({
+      source,
+      manifest: createKpEquationAssetManifest({ display: source })
+    }));
 });
 
 test("display runtime cannot import animation or renderer implementation graphs", async () => {

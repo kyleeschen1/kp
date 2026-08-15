@@ -1,0 +1,2535 @@
+{
+  "schemaVersion": "kp.equation-asset-manifest.v1",
+  "kind": "equation-asset-manifest",
+  "entries": [
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+      "title": "Solve an exponential equation with logarithms",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+        "transformationIds": [
+          "transformation.log-exponent.apply-log-both-sides",
+          "transformation.log-exponent.extract-exponent",
+          "transformation.log-exponent.divide-by-log-base"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A typed native-KaTeX operation sequence for solving 2^x = 7.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "exponent",
+          "katex",
+          "logarithm"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "log-exponent",
+        "familyId": "logarithm",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.log-exponent.solve-two-power-x",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-97edcd8c",
+          "fnv1a32-74335103",
+          "fnv1a32-2aec2770",
+          "fnv1a32-f8a56459",
+          "fnv1a32-46ce8793",
+          "fnv1a32-646a3b52",
+          "fnv1a32-77e30e23"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.log-exponent.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "semantic-native-katex"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+            "label": "Solve an exponential equation with logarithms",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.log-quotient.difference-to-quotient",
+      "title": "Combine a difference of logarithms",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+        "transformationIds": [
+          "transformation.log-quotient.difference-to-quotient"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A typed native-KaTeX pressure caller for the logarithm quotient law.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "katex",
+          "logarithm",
+          "quotient"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "log-quotient",
+        "familyId": "logarithm",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.log-quotient.difference-to-quotient",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-0bf8bba2",
+          "fnv1a32-071062dd",
+          "fnv1a32-7edcb931"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "semantic-native-katex"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+            "label": "Combine a difference of logarithms",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.log-quotient.difference-to-quotient",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.comparison.jacobian-hessian",
+      "title": "Jacobian and Hessian comparison",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.comparison.jacobian-hessian",
+        "transformationIds": [
+          "transform.comparison.jacobian-hessian.present-jacobian",
+          "transform.comparison.jacobian-hessian.present-hessian",
+          "transform.comparison.jacobian-hessian.compare-derivative-structure"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Jacobian and Hessian comparison",
+        "tags": [
+          "animation",
+          "calculus",
+          "comparison",
+          "editor",
+          "equation",
+          "layout",
+          "linear-algebra"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "comparison",
+        "disposition": "static-only",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "comparison",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/comparison.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.comparison.jacobian-hessian",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-0c490c8c",
+          "fnv1a32-ced0f361",
+          "fnv1a32-f7156696",
+          "fnv1a32-30c549d1",
+          "fnv1a32-488e211c",
+          "fnv1a32-9b51a23a"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.comparison.jacobian-hessian",
+        "representations": [
+          {
+            "id": "editor-animation.animation.comparison.jacobian-hessian",
+            "label": "Jacobian and Hessian comparison",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.comparison.jacobian-hessian",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.comparison.linear-solve-programming",
+      "title": "Linear solve and programming trace comparison",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.comparison.linear-solve-programming",
+        "transformationIds": [
+          "transform.linear-solve.subtract-both-sides-3",
+          "transform.linear-solve.cancel-left-additive-inverse",
+          "transform.linear-solve.simplify-right-difference",
+          "transform.programming.add.call",
+          "transform.programming.add.evaluate-return",
+          "transform.programming.add.return",
+          "transform.programming.add.output"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Linear solve and programming trace comparison",
+        "tags": [
+          "animation",
+          "comparison",
+          "editor",
+          "equation",
+          "layout",
+          "programming"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation",
+          "programming"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "comparison",
+        "disposition": "static-only",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "comparison",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/comparison.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.comparison.linear-solve-programming",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-da4de75a",
+          "fnv1a32-f5eb1631",
+          "fnv1a32-b6f337ed",
+          "fnv1a32-52691446",
+          "fnv1a32-b5b851bd",
+          "fnv1a32-f1f1ade0",
+          "fnv1a32-65e904fb",
+          "fnv1a32-8185c18e",
+          "fnv1a32-9b1e43ec",
+          "fnv1a32-b5febd9b",
+          "fnv1a32-f9ced48b",
+          "fnv1a32-1383e133",
+          "fnv1a32-d2adee4a",
+          "fnv1a32-49ea701a",
+          "fnv1a32-c355b591",
+          "fnv1a32-b1ec36b6"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.comparison.linear-solve-programming",
+        "representations": [
+          {
+            "id": "editor-animation.animation.comparison.linear-solve-programming",
+            "label": "Linear solve and programming trace comparison",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.comparison.linear-solve-programming",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.add-zero",
+      "title": "Generated: remove additive zero",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.add-zero",
+        "transformationIds": [
+          "transform.generated.add-zero.remove"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated: remove additive zero",
+        "tags": [
+          "animation",
+          "editor",
+          "equation",
+          "generated",
+          "llm-authored"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "substitution",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-drafts",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated-drafts.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.add-zero",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-d40a4378",
+          "fnv1a32-48166d27",
+          "fnv1a32-bec0c126"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.add-zero",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.add-zero",
+            "label": "Generated: remove additive zero",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.add-zero",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "title": "Generated derivative power rule for x cubed",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+        "transformationIds": [
+          "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated x-cubed derivative sample exercises the power-rule exponent drop into coefficient position.",
+        "tags": [
+          "animation",
+          "calculus",
+          "card",
+          "editor",
+          "family-backed",
+          "family.calculus.derivative-rules",
+          "generated-problem",
+          "generated.calculus.derivative"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "calculus",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-c9083e0c",
+          "fnv1a32-e9c63ea2",
+          "fnv1a32-66ca4318"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.derivative-rules.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.derivative-rules.basic",
+            "label": "Generated derivative power rule for x cubed",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.derivative-rules.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+            "label": "Generated derivative power rule for x cubed",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.derivative-rules.basic",
+            "label": "Generated derivative power rule for x cubed sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.derivative-rules.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "title": "Generated derivative sum rule for a polynomial",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+        "transformationIds": [
+          "transform.generated.calculus.derivative.sum-rule-polynomial.distribute-sum-rule",
+          "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated derivative sum rule for a polynomial",
+        "tags": [
+          "animation",
+          "editor",
+          "generated-problem",
+          "generated.calculus.derivative"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "calculus",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.calculus.derivative.sum-rule-polynomial",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-54623e35",
+          "fnv1a32-2ab3b2cb",
+          "fnv1a32-c66209f1",
+          "fnv1a32-1f9f9d21",
+          "fnv1a32-aa650f42"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+            "label": "Generated derivative sum rule for a polynomial",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
+      "title": "Generated integral power rule for a quadratic",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+        "transformationIds": [
+          "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule",
+          "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated integral power rule for a quadratic",
+        "tags": [
+          "animation",
+          "editor",
+          "generated-problem",
+          "generated.calculus.integral"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "calculus",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.calculus.integral.power-rule-quadratic",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-38020232",
+          "fnv1a32-0f2e05e8",
+          "fnv1a32-84555696",
+          "fnv1a32-29535789",
+          "fnv1a32-19faf147"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+            "label": "Generated integral power rule for a quadratic",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.cancellation.additive-inverses",
+      "title": "Cancel an additive inverse pair",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.cancellation.additive-inverses",
+        "transformationIds": [
+          "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Cancel an additive inverse pair",
+        "tags": [
+          "algebra",
+          "animation",
+          "cancellation",
+          "editor",
+          "equation",
+          "generated",
+          "katex"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "cancellation",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.cancellation.additive-inverses",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-f505f35a",
+          "fnv1a32-eb0611d0",
+          "fnv1a32-f9b0db83"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.cancellation.additive-inverses",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.cancellation.additive-inverses",
+            "label": "Cancel an additive inverse pair",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.cancellation.additive-inverses",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.distribution.expand-a-sum",
+      "title": "Generated distribute a over sum",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.distribution.expand-a-sum",
+        "transformationIds": [
+          "transform.generated.distribution.expand-a-sum.distribute"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The expand-a-sum animation copies a shared factor into both products with a reversible sweep.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "distribution",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.distribution-factoring",
+          "generated",
+          "lesson",
+          "prototype",
+          "scroll-lesson"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "distribution-factoring",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.distribution.expand-a-sum",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-526adbef",
+          "fnv1a32-24786077",
+          "fnv1a32-d9965020"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": true,
+        "primaryRepresentationId": "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2",
+        "representations": [
+          {
+            "id": "learner-experience.distribution-area-scroll-lesson.exemplar.distribution-area.3-times-x-plus-2",
+            "label": "See distribution become area",
+            "kind": "reader",
+            "href": "/reader/distribution-area/",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.distribution.expand-a-sum",
+            "label": "Generated distribute a over sum",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.distribution.expand-a-sum",
+            "role": "projection"
+          },
+          {
+            "id": "editor-animation.sample.animation.distribution.expand-a-sum",
+            "label": "Generated distribute a over sum",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.distribution.expand-a-sum",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.distribution.expand-a-sum",
+            "label": "Generated distribute a over sum sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.distribution.expand-a-sum",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.distribution.factor-common-a",
+      "title": "Generated factor common a",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.distribution.factor-common-a",
+        "transformationIds": [
+          "transform.generated.distribution.factor-common-a.factor"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The factor-common-a animation reconciles matching factor copies before wrapping the remaining sum.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "distribution",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.distribution-factoring",
+          "generated"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "distribution-factoring",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.distribution.factor-common-a",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-d4a2730b",
+          "fnv1a32-f8c5a349",
+          "fnv1a32-5bf2232c"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.factoring.factor-common-a",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.factoring.factor-common-a",
+            "label": "Generated factor common a",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.factoring.factor-common-a",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.distribution.factor-common-a",
+            "label": "Generated factor common a",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.distribution.factor-common-a",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.factoring.factor-common-a",
+            "label": "Generated factor common a sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.factoring.factor-common-a",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.exponent.square-as-product",
+      "title": "Generated expand square as product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.exponent.square-as-product",
+        "transformationIds": [
+          "transform.generated.exponent.square-as-product.lower-exponent",
+          "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "exponent",
+          "family-backed",
+          "family.algebra.exponent-log-laws",
+          "generated"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "exponent-radical",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.exponent.square-as-product",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-7a6b0916",
+          "fnv1a32-2e845fd2",
+          "fnv1a32-4815b4e0",
+          "fnv1a32-b4b7a635",
+          "fnv1a32-d17a6251"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.exponent-combine.square-as-product",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.exponent-combine.square-as-product",
+            "label": "Generated expand square as product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.exponent-combine.square-as-product",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.exponent.square-as-product",
+            "label": "Generated expand square as product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.exponent.square-as-product",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.exponent-combine.square-as-product",
+            "label": "Generated expand square as product sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.exponent-combine.square-as-product",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.fraction-expression.two-fourths",
+      "title": "Generated simplify two fourths",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.fraction-expression.two-fourths",
+        "transformationIds": [
+          "transform.generated.fraction-expression.two-fourths.split-factors",
+          "transform.generated.fraction-expression.two-fourths.merge-common-factor",
+          "transform.generated.fraction-expression.two-fourths.simplify-unit-factor"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Basic rational-expression sample exercises split, merge, simplify, common-denominator, and reciprocal forms.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.fraction-simplification",
+          "fraction",
+          "generated"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "fraction",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.fraction-expression.two-fourths",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-db4cd375",
+          "fnv1a32-4bb373bc",
+          "fnv1a32-59c5d1de",
+          "fnv1a32-dc7d1e86",
+          "fnv1a32-b7d0a4ec",
+          "fnv1a32-c50bb750",
+          "fnv1a32-10d6b772"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.fraction-simplification.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.fraction-simplification.basic",
+            "label": "Generated simplify two fourths",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.fraction-simplification.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
+            "label": "Generated simplify two fourths",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.fraction-expression.two-fourths",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.fraction-simplification.basic",
+            "label": "Generated simplify two fourths sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.fraction-simplification.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.function-wrap.apply-f",
+      "title": "Generated wrap x with f",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.function-wrap.apply-f",
+        "transformationIds": [
+          "transform.generated.function-wrap.apply-f.wrap-function"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The apply-f animation exercises the family function-wrap motif while preserving argument identity and wrapper ownership.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.exponent-log-laws",
+          "function-wrap",
+          "generated"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "function-wrap",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.function-wrap.apply-f",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-9a33f3d7",
+          "fnv1a32-683c8afd",
+          "fnv1a32-e5b4a7be"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.function-wrap.apply-f",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.function-wrap.apply-f",
+            "label": "Generated wrap x with f",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.function-wrap.apply-f",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.function-wrap.apply-f",
+            "label": "Generated wrap x with f",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.function-wrap.apply-f",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.function-wrap.apply-f",
+            "label": "Generated wrap x with f sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.function-wrap.apply-f",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "title": "Generated dot product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+        "transformationIds": [
+          "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated dot product",
+        "tags": [
+          "animation",
+          "editor",
+          "generated-problem",
+          "generated.linear-algebra.dot-product"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "linear-algebra",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.linear-algebra.dot-product.three-vector",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-ea51094d",
+          "fnv1a32-f2dcc40f",
+          "fnv1a32-64c024f2"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+            "label": "Generated dot product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "title": "Generated matrix-matrix product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "transformationIds": [
+          "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated matrix-matrix sample multiplies two two-by-two matrices and preserves the product matrix.",
+        "tags": [
+          "animation",
+          "card",
+          "editor",
+          "family-backed",
+          "family.linear-algebra.matrix-matrix-composition",
+          "generated-problem",
+          "generated.linear-algebra.matrix-matrix",
+          "linear-algebra"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "linear-algebra",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.linear-algebra.matrix-matrix.two-by-two",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-709894fe",
+          "fnv1a32-ab09698d",
+          "fnv1a32-30cdc2a4"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.matrix-matrix.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.matrix-matrix.basic",
+            "label": "Generated matrix-matrix product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.matrix-matrix.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+            "label": "Generated matrix-matrix product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.matrix-matrix.basic",
+            "label": "Generated matrix-matrix product sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.matrix-matrix.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "title": "Generated matrix-vector product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "transformationIds": [
+          "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+          "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated matrix-vector sample multiplies a two-by-two matrix by a vector and preserves each result component.",
+        "tags": [
+          "animation",
+          "card",
+          "editor",
+          "family-backed",
+          "family.linear-algebra.matrix-vector",
+          "generated-problem",
+          "generated.linear-algebra.matrix-vector",
+          "linear-algebra"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation",
+          "graph"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "linear-algebra",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-problems",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.linear-algebra.matrix-vector.two-by-two",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-ac7f78c1",
+          "fnv1a32-a598bdda",
+          "fnv1a32-a9e1c98c",
+          "fnv1a32-4c0b6c4f",
+          "fnv1a32-accdeb0e",
+          "fnv1a32-d527e8c3",
+          "fnv1a32-57342066"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.matrix-vector.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.matrix-vector.basic",
+            "label": "Generated matrix-vector product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.matrix-vector.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+            "label": "Generated matrix-vector product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.matrix-vector.basic",
+            "label": "Generated matrix-vector product sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.matrix-vector.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.linear-solve.linear-68c15d41",
+      "title": "Solve 2x+3=8",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+        "transformationIds": [
+          "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+          "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+          "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+          "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+          "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Solve 2x+3=8",
+        "tags": [
+          "animation",
+          "editor",
+          "equation",
+          "generated-problem",
+          "linear-solve",
+          "verified"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "linear-solve",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.linear-solve.linear-68c15d41",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-6d57d952",
+          "fnv1a32-0c1d2abc",
+          "fnv1a32-460d6cad",
+          "fnv1a32-c5621072",
+          "fnv1a32-33d4add2",
+          "fnv1a32-473201e4",
+          "fnv1a32-47d51947",
+          "fnv1a32-d90fe40d",
+          "fnv1a32-fa40ed4d",
+          "fnv1a32-32801ec4",
+          "fnv1a32-a4b1df51"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.linear-solve.linear-68c15d41",
+            "label": "Solve 2x+3=8",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.linear-solve.linear-68c15d41",
+            "role": "canonical-host"
+          },
+          {
+            "id": "library.reader.generated-linear-solve",
+            "label": "Reader integration",
+            "kind": "reader",
+            "href": "/reader/generated-solve-x/",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.radical.square-root-as-power",
+      "title": "Power to radical",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.radical.square-root-as-power",
+        "transformationIds": [
+          "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.exponent-log-laws",
+          "generated",
+          "radical"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "exponent-radical",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.radical.square-root-as-power",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-436bec2f",
+          "fnv1a32-8e82b7bb",
+          "fnv1a32-86faec13"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "ported",
+        "featured": true,
+        "primaryRepresentationId": "library.reader.radical-succession",
+        "representations": [
+          {
+            "id": "library.reader.radical-succession",
+            "label": "Reader integration",
+            "kind": "reader",
+            "href": "/reader/radical-succession/",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.generated.radical.square-root-as-power",
+            "label": "Generated rewrite square root as power",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.radical.square-root-as-power",
+            "role": "projection"
+          },
+          {
+            "id": "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+            "label": "Generated rewrite square root as power",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.radical-rewrite.square-root-as-power",
+            "label": "Generated rewrite square root as power sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+            "role": "projection"
+          },
+          {
+            "id": "library.diagnostic.radical-reconciliation",
+            "label": "Glyph diagnostics",
+            "kind": "diagnostic",
+            "href": "/glyph-reconciliation-experiment.html?radicalInventory=1&reviewGallery=radical&progress=500",
+            "role": "diagnostic"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.substitute-three",
+      "title": "Generated: substitute 3 for x",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.substitute-three",
+        "transformationIds": [
+          "transform.generated.substitute-three"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Generated: substitute 3 for x",
+        "tags": [
+          "animation",
+          "editor",
+          "equation",
+          "generated",
+          "llm-authored"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "substitution",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-drafts",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated-drafts.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.substitute-three",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-928d7266",
+          "fnv1a32-e7ee5777",
+          "fnv1a32-993e6a2d"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.substitute-three",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.substitute-three",
+            "label": "Generated: substitute 3 for x",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.substitute-three",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.generated.substitute-three.provisional-incorrect",
+      "title": "Provisional learner step: substitute 3 for x and 2",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+        "transformationIds": [
+          "transform.generated.substitute-three"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Provisional learner step: substitute 3 for x and 2",
+        "tags": [
+          "animation",
+          "editor",
+          "generated",
+          "incorrect",
+          "provisional"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "substitution",
+        "disposition": "retirement-candidate",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "generated-drafts",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/generated-drafts.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.generated.substitute-three.provisional-incorrect",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-928d7266",
+          "fnv1a32-5b98e56d",
+          "fnv1a32-87ee07b7"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+        "representations": [
+          {
+            "id": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+            "label": "Provisional learner step: substitute 3 for x and 2",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.generated.substitute-three.provisional-incorrect",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.inequality.sign-flip.basic",
+      "title": "Inequality sign flip",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.inequality.sign-flip.basic",
+        "transformationIds": [
+          "transform.inequality.sign-flip.multiply-negative"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Basic inequality sign-flip sample exercises relation.flip semantics for negative scaling.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.algebra.inequality",
+          "inequality",
+          "sign-flip"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "inequality",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.inequality.sign-flip.basic",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-69ddb369",
+          "fnv1a32-bb7b0fe6",
+          "fnv1a32-cc918871"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.inequality.sign-flip.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.inequality.sign-flip.basic",
+            "label": "Inequality sign flip",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.inequality.sign-flip.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.inequality.sign-flip.basic",
+            "label": "Inequality sign flip",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.inequality.sign-flip.basic",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.inequality.sign-flip.basic",
+            "label": "Inequality sign flip sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.inequality.sign-flip.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.linear-solve.solve-x",
+      "title": "Solve x + 3 = 7",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.linear-solve.solve-x",
+        "transformationIds": [
+          "transform.linear-solve.subtract-both-sides-3",
+          "transform.linear-solve.cancel-left-additive-inverse",
+          "transform.linear-solve.simplify-right-difference"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Existing x + 3 = 7 animation exercises subtract-both-sides.",
+        "tags": [
+          "algebra",
+          "animation",
+          "card",
+          "editor",
+          "equation",
+          "exemplar",
+          "family-backed",
+          "family.algebra.both-sides",
+          "family.algebra.cancel-combine",
+          "lesson",
+          "linear-solve",
+          "scroll-lesson"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "linear-solve",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.linear-solve.solve-x",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-da4de75a",
+          "fnv1a32-f5eb1631",
+          "fnv1a32-b6f337ed",
+          "fnv1a32-52691446",
+          "fnv1a32-b5b851bd",
+          "fnv1a32-f1f1ade0",
+          "fnv1a32-65e904fb"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "partial",
+        "featured": true,
+        "primaryRepresentationId": "learner-experience.solve-x-scroll-lesson.animation.linear-solve.solve-x",
+        "representations": [
+          {
+            "id": "learner-experience.solve-x-scroll-lesson.animation.linear-solve.solve-x",
+            "label": "Solve for x",
+            "kind": "reader",
+            "href": "/reader/solve-x/",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.linear-solve.solve-x",
+            "label": "Solve x + 3 = 7",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.linear-solve.solve-x",
+            "role": "projection"
+          },
+          {
+            "id": "editor-animation.sample.animation.solve-x.both-sides",
+            "label": "Solve x + 3 = 7",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.solve-x.both-sides",
+            "role": "projection"
+          },
+          {
+            "id": "editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+            "label": "Solve x + 3 = 7",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.solve-x.both-sides",
+            "label": "Solve x + 3 = 7 sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.solve-x.both-sides",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.solve-x.cancel-additive-inverses",
+            "label": "Solve x + 3 = 7 sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+            "role": "projection"
+          },
+          {
+            "id": "library.diagnostic.solve-x-reconciliation",
+            "label": "Solve-x diagnostics",
+            "kind": "diagnostic",
+            "href": "/glyph-reconciliation-experiment.html?progress=500#glyph-experiment",
+            "role": "diagnostic"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.operation-evaluation.five-plus-two",
+      "title": "5 + 2 → 7",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.five-plus-two",
+        "transformationIds": [
+          "transform.operation-evaluation.five-plus-two.simplify-sum"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+        "tags": [
+          "animation",
+          "arithmetic",
+          "editor",
+          "equation",
+          "operation-evaluation",
+          "presentation-compiler"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "operation-evaluation",
+        "familyId": "operation-evaluation",
+        "disposition": "canonical",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.operation-evaluation.five-plus-two",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-08d1313d",
+          "fnv1a32-ef9431ac",
+          "fnv1a32-e591c75b"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.operation-evaluation.five-plus-two",
+        "representations": [
+          {
+            "id": "editor-animation.animation.operation-evaluation.five-plus-two",
+            "label": "5 + 2 → 7",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.operation-evaluation.five-plus-two",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.operation-evaluation.one-plus-two",
+      "title": "1 + 2 → 3",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.one-plus-two",
+        "transformationIds": [
+          "transform.operation-evaluation.one-plus-two.simplify-sum"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+        "tags": [
+          "animation",
+          "arithmetic",
+          "editor",
+          "equation",
+          "operation-evaluation",
+          "presentation-compiler"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "operation-evaluation",
+        "familyId": "operation-evaluation",
+        "disposition": "canonical",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.operation-evaluation.one-plus-two",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-e5cd49ab",
+          "fnv1a32-672619ea",
+          "fnv1a32-193fdedd"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "partial",
+        "featured": true,
+        "primaryRepresentationId": "library.editor.operation-evaluation-focused-host",
+        "representations": [
+          {
+            "id": "library.editor.operation-evaluation-focused-host",
+            "label": "Animation + lesson",
+            "kind": "editor",
+            "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.one-plus-two",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.operation-evaluation.one-plus-two",
+            "label": "1 + 2 → 3",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.operation-evaluation.one-plus-two",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.operation-evaluation.three-sixths",
+      "title": "\\frac{3}{6} → \\frac{1}{2}",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.three-sixths",
+        "transformationIds": [
+          "transform.operation-evaluation.three-sixths.simplify-quotient"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+        "tags": [
+          "animation",
+          "arithmetic",
+          "editor",
+          "equation",
+          "operation-evaluation",
+          "presentation-compiler"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "operation-evaluation",
+        "familyId": "operation-evaluation",
+        "disposition": "canonical",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.operation-evaluation.three-sixths",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-8f82a3e2",
+          "fnv1a32-d4ff497c",
+          "fnv1a32-1b341f61"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.operation-evaluation.three-sixths",
+        "representations": [
+          {
+            "id": "editor-animation.animation.operation-evaluation.three-sixths",
+            "label": "\\frac{3}{6} → \\frac{1}{2}",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.operation-evaluation.three-sixths",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.sample.fourier-transform-pair",
+      "title": "Fourier transform pair",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.sample.fourier-transform-pair",
+        "transformationIds": [
+          "transform.sample.fourier-transform-pair.present-1",
+          "transform.sample.fourier-transform-pair.present-2",
+          "transform.sample.fourier-transform-pair.compare"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Fourier transform pair",
+        "tags": [
+          "analysis",
+          "animation",
+          "editor",
+          "equation",
+          "fourier",
+          "sample"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "transform-pair",
+        "disposition": "static-only",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "complex-katex",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/complex-katex.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.sample.fourier-transform-pair",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-35f55797",
+          "fnv1a32-edd37cf2",
+          "fnv1a32-504a0392",
+          "fnv1a32-a49ae6ef",
+          "fnv1a32-33b9fb89",
+          "fnv1a32-8fb2551d"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.sample.fourier-transform-pair",
+        "representations": [
+          {
+            "id": "editor-animation.animation.sample.fourier-transform-pair",
+            "label": "Fourier transform pair",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.sample.fourier-transform-pair",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.sample.fundamental-theorem-calculus",
+      "title": "Fundamental Theorem of Calculus forms",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.sample.fundamental-theorem-calculus",
+        "transformationIds": [
+          "transform.sample.fundamental-theorem-calculus.present-1",
+          "transform.sample.fundamental-theorem-calculus.present-2",
+          "transform.sample.fundamental-theorem-calculus.compare"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The FTC comparison sample links accumulation-derivative and net-change equation forms on one clock.",
+        "tags": [
+          "animation",
+          "calculus",
+          "card",
+          "editor",
+          "equation",
+          "family-backed",
+          "family.calculus.integral-ftc",
+          "fundamental-theorem",
+          "sample"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "equation-katex",
+        "familyId": "calculus",
+        "disposition": "static-only",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "complex-katex",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/complex-katex.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.sample.fundamental-theorem-calculus",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-f9ad1792",
+          "fnv1a32-6cddad95",
+          "fnv1a32-13d4d1cb",
+          "fnv1a32-834a47c2",
+          "fnv1a32-530bbbbb",
+          "fnv1a32-6087adac"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.sample.animation.integral-ftc.basic",
+        "representations": [
+          {
+            "id": "editor-animation.sample.animation.integral-ftc.basic",
+            "label": "Fundamental Theorem of Calculus forms",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.sample.animation.integral-ftc.basic",
+            "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.sample.fundamental-theorem-calculus",
+            "label": "Fundamental Theorem of Calculus forms",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.sample.fundamental-theorem-calculus",
+            "role": "projection"
+          },
+          {
+            "id": "sample.animation.integral-ftc.basic",
+            "label": "Fundamental Theorem of Calculus forms sample",
+            "kind": "card",
+            "href": "/?animation=editor-animation.sample.animation.integral-ftc.basic",
+            "role": "projection"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -240,7 +240,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
@@ -279,7 +279,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
@@ -318,7 +318,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
@@ -591,7 +591,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
@@ -630,7 +630,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
@@ -670,7 +670,7 @@
       "lazyCapability": {
         "packId": "generated-problems",
         "loaderSourcePath": "src/animation/catalog-loader.ts",
-        "packSourcePath": "src/animation/catalog-packs/generated-problems.ts"
+        "packSourcePath": "src/animation/catalog-packs/generated.ts"
       },
       "currentPresentationAuthority": {
         "canonicalFormat": "legacy",
