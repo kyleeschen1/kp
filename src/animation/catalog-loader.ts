@@ -111,6 +111,7 @@ export function kpAnimationCatalogPackId(
     animationId.startsWith("animation.generated.function-wrap.") ||
     animationId.startsWith("animation.generated.distribution.") ||
     animationId.startsWith("animation.algebra.log-exponent.") ||
+    animationId.startsWith("animation.algebra.log-quotient.") ||
     animationId.startsWith("animation.inequality.")
   ) return "algebra";
   if (animationId === "animation.generated.pipeline-diagram" ||

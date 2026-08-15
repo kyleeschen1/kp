@@ -365,6 +365,34 @@
       "scope": "s23 durable compiler evidence",
       "checkedAt": "2026-08-15T14:35:14.014Z",
       "notes": "Validated 954 nodes and 20847 events before slice closeout."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "s24 quotient semantic, endpoint, timeline, transit, catalogue, and capability contracts",
+      "checkedAt": "2026-08-15T14:56:35.897Z",
+      "notes": "Thirty focused tests passed, including false-identity rejection, native fraction-rule ownership, deterministic forward/rewind sampling, lazy catalogue routing, and capability isolation."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "s24 Chromium catalogue surface",
+      "checkedAt": "2026-08-15T14:56:46.173Z",
+      "notes": "Two browser checks passed: exact lazy route, native fraction-bar ownership, deterministic seeks and rewind, single paint owner, reduced motion, one accessible equation, narrow fit, and Review availability."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s24 broad repository gate",
+      "checkedAt": "2026-08-15T14:56:56.730Z",
+      "notes": "Application and Node checks reached the unchanged out-of-scope exactOptionalPropertyTypes error at scripts/capture-normal-matrix-proof-checkpoint.ts:244; quotient unit/browser checks and Svelte/domain checks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s24 durable quotient animation evidence",
+      "checkedAt": "2026-08-15T14:57:16.578Z",
+      "notes": "Validated 954 nodes and 20857 events before slice closeout."
     }
   ],
   "progress": {

@@ -107,6 +107,15 @@ async function loadCapability(
     );
     return;
   }
+  if (capability === "log-quotient") {
+    const client = await import("./log-quotient-surface-capability.ts");
+    registerOnce(
+      registry,
+      "editor-animation-surface.log-quotient.canonical-native-katex",
+      () => client.registerKpEditorLogQuotientSurfaceCapability(registry)
+    );
+    return;
+  }
   if (capability === "exact-fraction-quantity") {
     const client = await import("./exact-fraction-quantity-surface-capability.ts");
     registerOnce(

@@ -22,7 +22,7 @@ test("log quotient contract fixes exact endpoint trees and rewind text", () => {
       {
         id: "log-quotient.state.quotient",
         kind: "log-of-quotient",
-        latex: "\\ln\\left(\\frac{x}{y}\\right)"
+        latex: "\\ln(\\frac{x}{y})"
       }
     ]
   );

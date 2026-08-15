@@ -23,6 +23,9 @@ import {
 import {
   createKpLogExponentAnimationAsset
 } from "./log-exponent-adapter.ts";
+import {
+  createKpLogQuotientAnimationAsset
+} from "./log-quotient-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
@@ -96,7 +99,8 @@ export function createGeneratedAlgebraAnimationAssets():
     createDistributionExpansionAnimationAsset(),
     createDistributionFactoringAnimationAsset(),
     createInequalitySignFlipAnimationAsset(),
-    createKpLogExponentAnimationAsset()
+    createKpLogExponentAnimationAsset(),
+    createKpLogQuotientAnimationAsset()
   ];
 }
 

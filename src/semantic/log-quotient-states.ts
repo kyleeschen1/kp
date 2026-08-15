@@ -119,7 +119,7 @@ const source = Object.freeze({
 const target = Object.freeze({
   id: "log-quotient.state.quotient" as const,
   kind: "log-of-quotient" as const,
-  latex: "\\ln\\left(\\frac{x}{y}\\right)",
+  latex: "\\ln(\\frac{x}{y})",
   accessibleText: "natural log of x divided by y",
   root: naturalLog(
     "target.log",

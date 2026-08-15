@@ -35,6 +35,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["equation"]
   }), ["log-exponent"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.algebra.log-quotient.difference-to-quotient",
+    slotKinds: ["equation"]
+  }), ["log-quotient"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.dot-projection.basic",
     slotKinds: ["graph"]
   }), ["graph-svg-katex-labels"]);
@@ -116,6 +120,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     exactQuantityCapability,
     operationEvaluationCapability,
     logExponentCapability,
+    logQuotientCapability,
     placeValueCapability,
     economicsGraphCapability,
     graphCapability,
@@ -134,6 +139,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
     readFile("src/editor/exact-fraction-quantity-surface-capability.ts", "utf8"),
     readFile("src/editor/operation-evaluation-surface-capability.ts", "utf8"),
     readFile("src/editor/log-exponent-surface-capability.ts", "utf8"),
+    readFile("src/editor/log-quotient-surface-capability.ts", "utf8"),
     readFile("src/editor/place-value-addition-surface-capability.ts", "utf8"),
     readFile("src/editor/economics-graph-svg-surface-capability.ts", "utf8"),
     readFile("src/editor/graph-svg-surface-capability.ts", "utf8"),
@@ -162,6 +168,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
   assert.match(capabilityHostSource, /import\("\.\/exact-fraction-quantity-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/operation-evaluation-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/log-exponent-surface-capability\.ts"\)/);
+  assert.match(capabilityHostSource, /import\("\.\/log-quotient-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/place-value-addition-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/economics-graph-svg-surface-capability\.ts"\)/);
   assert.match(capabilityHostSource, /import\("\.\/graph-svg-surface-capability\.ts"\)/);
@@ -175,6 +182,7 @@ test("one capability host owns all dynamic selected-surface imports", async () =
   assert.match(exactQuantityCapability, /kpEditorExactFractionQuantitySurfaceAdapter/);
   assert.match(operationEvaluationCapability, /kpEditorOperationEvaluationSurfaceAdapter/);
   assert.match(logExponentCapability, /kpEditorLogExponentSurfaceAdapter/);
+  assert.match(logQuotientCapability, /kpEditorLogQuotientSurfaceAdapter/);
   assert.match(placeValueCapability, /kpEditorPlaceValueAdditionSurfaceAdapter/);
   assert.doesNotMatch(economicsGraphCapability, /katex|three|matrix|physics/i);
   assert.match(

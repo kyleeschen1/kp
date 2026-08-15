@@ -25,6 +25,7 @@ export function supportsKpEditorGraphSvgAnimation(
 export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"
   | "log-exponent"
+  | "log-quotient"
   | "exact-fraction-quantity"
   | "operation-evaluation"
   | "place-value-addition"
@@ -53,9 +54,15 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       "animation.algebra.log-exponent.solve-two-power-x"
   ) capabilities.push("log-exponent");
   if (
+    input.animationId ===
+      "animation.algebra.log-quotient.difference-to-quotient"
+  ) capabilities.push("log-quotient");
+  if (
     input.slotKinds.includes("equation") &&
     input.animationId !==
-      "animation.algebra.log-exponent.solve-two-power-x"
+      "animation.algebra.log-exponent.solve-two-power-x" &&
+    input.animationId !==
+      "animation.algebra.log-quotient.difference-to-quotient"
   ) {
     capabilities.push("equation-katex");
   }

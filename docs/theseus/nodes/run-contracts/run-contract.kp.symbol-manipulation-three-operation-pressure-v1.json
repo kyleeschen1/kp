@@ -62,7 +62,8 @@
     {
       "id": "s24",
       "title": "Implement quotient animation",
-      "status": "planned"
+      "summary": "Implemented a separate family-local log-quotient catalogue animation with exact native KaTeX endpoints, persistent ln and x/y semantic identity, quotient fan-in, causal native fraction-rule entry, pure deterministic seek and rewind, one paint owner, reduced-motion accessibility, lazy algebra capability loading, exact URL routing, and focused unit/browser evidence; the canonical log-exponent caller remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "s25",
