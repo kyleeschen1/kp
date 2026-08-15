@@ -23,6 +23,9 @@ import {
   createKpVerifiedGeneratedLinearSolveRuntimeAsset
 } from "../verified-generated-linear-solve-runtime-asset.ts";
 import {
+  createKpCanonicalCancellationPressureAnimationAsset
+} from "../cancellation-pressure-animation.ts";
+import {
   kpAlgebraChoreographyCapabilities
 } from "../algebra-choreography-capabilities.ts";
 import type {
@@ -39,6 +42,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
     catalog: Object.freeze([
       createLinearSolveAnimationAsset(),
       createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
+      createKpCanonicalCancellationPressureAnimationAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),
       createExponentRadicalRewriteAnimationAsset(),

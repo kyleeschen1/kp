@@ -2989,6 +2989,16 @@ function applySemanticTokenMotion(input: {
   const geometry = precomputed.geometry;
   input.transitionElement.dataset["kpEditorEquationWitnessedAnnihilationActive"] =
     String(geometry.witnessedAnnihilationPlan !== undefined);
+  const annihilationBindingId = geometry.witnessedAnnihilationBinding?.id;
+  if (annihilationBindingId === undefined) {
+    delete input.transitionElement.dataset[
+      "kpEditorEquationWitnessedAnnihilationBinding"
+    ];
+  } else {
+    input.transitionElement.dataset[
+      "kpEditorEquationWitnessedAnnihilationBinding"
+    ] = annihilationBindingId;
+  }
   input.transitionElement.dataset["kpEditorEquationSuccessorSynthesisActive"] =
     String(geometry.successorSynthesisPlan !== undefined);
 

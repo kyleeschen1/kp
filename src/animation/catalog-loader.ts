@@ -110,6 +110,7 @@ export function kpAnimationCatalogPackId(
     animationId.startsWith("animation.generated.radical.") ||
     animationId.startsWith("animation.generated.function-wrap.") ||
     animationId.startsWith("animation.generated.distribution.") ||
+    animationId.startsWith("animation.generated.cancellation.") ||
     animationId.startsWith("animation.algebra.log-exponent.") ||
     animationId.startsWith("animation.algebra.log-quotient.") ||
     animationId.startsWith("animation.inequality.")

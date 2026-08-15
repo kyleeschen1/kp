@@ -128,6 +128,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.generated.cancellation.additive-inverses",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.cancellation.additive-inverses",
+    "title": "Cancel an additive inverse pair",
+    "summary": "Cancel an additive inverse pair",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 4800,
+    "beatCount": 96,
+    "tags": [
+      "algebra",
+      "animation",
+      "cancellation",
+      "equation",
+      "generated",
+      "katex"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.fraction-expression.two-fourths",

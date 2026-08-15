@@ -48,9 +48,42 @@ export function createKpGeneratedLinearSolveSelectorAnnotatedLatex(
     segment(suffix),
     { kind: "latex" as const, latex: "\\;" }
   ];
+  const hasSelectors = (...suffixes: readonly string[]) =>
+    suffixes.every((suffix) => bySuffix.has(suffix));
 
   let segments: readonly KpSelectorAnnotatedLatexSegment[];
-  if (state.objectId.endsWith(".initial")) {
+  if (hasSelectors(
+    "lhs.variable",
+    "lhs.addend",
+    "lhs.subtract",
+    "equals",
+    "rhs.value",
+    "rhs.subtract"
+  ) && !bySuffix.has("lhs.coefficient")) {
+    // Additive-only generated fixtures use the same state suffix as older
+    // coefficient fixtures. Selector topology, not the filename-like id,
+    // therefore owns which equation grammar is valid.
+    segments = [
+      segment("lhs.variable"),
+      segment("lhs.addend"),
+      segment("lhs.subtract"),
+      ...relation("equals"),
+      segment("rhs.value"),
+      segment("rhs.subtract")
+    ];
+  } else if (hasSelectors(
+    "lhs.variable",
+    "equals",
+    "rhs.value",
+    "rhs.subtract"
+  ) && !bySuffix.has("lhs.coefficient")) {
+    segments = [
+      segment("lhs.variable"),
+      ...relation("equals"),
+      segment("rhs.value"),
+      segment("rhs.subtract")
+    ];
+  } else if (state.objectId.endsWith(".initial")) {
     segments = [
       segment("lhs.coefficient"),
       segment("lhs.variable"),

@@ -62,6 +62,9 @@ import {
 import {
   createKpVerifiedGeneratedLinearSolveRuntimeAsset
 } from "./verified-generated-linear-solve-runtime-asset.ts";
+import {
+  createKpCanonicalCancellationPressureAnimationAsset
+} from "./cancellation-pressure-animation.ts";
 import { enrichKpMatrixLinearMapAsset } from
   "./matrix-linear-map-asset-enrichment.ts";
 
@@ -92,6 +95,7 @@ export function createGeneratedAlgebraAnimationAssets():
   return [
     createLinearSolveAnimationAsset(),
     createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
+    createKpCanonicalCancellationPressureAnimationAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

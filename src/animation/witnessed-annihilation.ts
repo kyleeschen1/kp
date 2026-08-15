@@ -22,6 +22,77 @@ export interface KpWitnessedAnnihilationSource {
   readonly semanticRank: number;
 }
 
+export interface KpWitnessedAnnihilationMotionProfileV1 {
+  readonly schemaVersion: "kp.witnessed-annihilation-motion-profile.v1";
+  readonly id: string;
+  readonly timing: {
+    readonly contactStart: number;
+    readonly contactEnd: number;
+    readonly compressionEnd: number;
+    readonly witnessBirthStart: number;
+    readonly witnessReadableAt: number;
+    readonly witnessDwellEnd: number;
+    readonly sourceAbsorptionEnd: number;
+    readonly witnessAbsorptionEnd: number;
+    readonly compactionStart: number;
+    readonly compactionEnd: number;
+    readonly compressionLead: number;
+    readonly sourceAbsorptionDelay: number;
+    readonly inwardPulseLead: number;
+    readonly inwardPulseTail: number;
+  };
+  readonly geometry: {
+    readonly defaultCompressedScale: number;
+    readonly minimumSourceCount: number;
+    readonly binarySourceCount: number;
+    readonly minimumPairContactGapPx: number;
+    readonly multiSourceConvergenceRatio: number;
+    readonly alternatingArcHeightPx: number;
+    readonly alternatingVerticalNudgePx: number;
+    readonly witnessInitialScale: number;
+    readonly witnessScaleGrowth: number;
+    readonly witnessLiftPx: number;
+  };
+}
+
+/**
+ * Perceptual values belong to the motif, not to individual callers. Keeping
+ * them in one typed profile makes tuning explicit and lets tests sample named
+ * phase boundaries instead of copying anonymous decimals.
+ */
+export const kpWitnessedAnnihilationMotionProfileV1 = deepFreeze({
+  schemaVersion: "kp.witnessed-annihilation-motion-profile.v1",
+  id: "motion-profile.witnessed-annihilation.organic-subtle.v1",
+  timing: {
+    contactStart: 0.16,
+    contactEnd: 0.46,
+    compressionEnd: 0.58,
+    witnessBirthStart: 0.54,
+    witnessReadableAt: 0.64,
+    witnessDwellEnd: 0.78,
+    sourceAbsorptionEnd: 0.84,
+    witnessAbsorptionEnd: 0.9,
+    compactionStart: 0.9,
+    compactionEnd: 0.98,
+    compressionLead: 0.08,
+    sourceAbsorptionDelay: 0.04,
+    inwardPulseLead: 0.04,
+    inwardPulseTail: 0.03
+  },
+  geometry: {
+    defaultCompressedScale: 0.72,
+    minimumSourceCount: 2,
+    binarySourceCount: 2,
+    minimumPairContactGapPx: 16,
+    multiSourceConvergenceRatio: 0.48,
+    alternatingArcHeightPx: 7,
+    alternatingVerticalNudgePx: 1,
+    witnessInitialScale: 0.68,
+    witnessScaleGrowth: 0.32,
+    witnessLiftPx: 2
+  }
+} satisfies KpWitnessedAnnihilationMotionProfileV1);
+
 export function createKpWitnessedAnnihilationBinding(input: {
   readonly operationId: string;
   readonly transformation: KpSemanticTransformation;
@@ -97,6 +168,7 @@ export interface KpWitnessedAnnihilationPlan {
   readonly compactionStart: number;
   readonly compactionEnd: number;
   readonly compressedScale: number;
+  readonly motionProfile: KpWitnessedAnnihilationMotionProfileV1;
 }
 
 export interface KpWitnessedAnnihilationPose {
@@ -149,8 +221,11 @@ export function createKpWitnessedAnnihilationPlan(input: {
   readonly measurements: Readonly<Record<string, KpMaterialJunctionRect>>;
   readonly survivors: readonly KpWitnessedAnnihilationSurvivor[];
   readonly compressedScale?: number | undefined;
+  readonly motionProfile?: KpWitnessedAnnihilationMotionProfileV1 | undefined;
 }): KpWitnessedAnnihilationPlan {
-  if (input.sources.length < 2) {
+  const motionProfile = input.motionProfile ??
+    kpWitnessedAnnihilationMotionProfileV1;
+  if (input.sources.length < motionProfile.geometry.minimumSourceCount) {
     throw new Error("Witnessed annihilation requires at least two canceling sources.");
   }
   const witnessSources = new Set(input.witness.slot.sourceSelectorIds);
@@ -177,7 +252,8 @@ export function createKpWitnessedAnnihilationPlan(input: {
     validateRect(survivor.sourceRect, `${survivor.id}.sourceRect`);
     validateRect(survivor.targetRect, `${survivor.id}.targetRect`);
   });
-  const compressedScale = input.compressedScale ?? 0.72;
+  const compressedScale = input.compressedScale ??
+    motionProfile.geometry.defaultCompressedScale;
   if (!Number.isFinite(compressedScale) || compressedScale <= 0 || compressedScale > 1) {
     throw new Error("compressedScale must preserve visible material at or below native size.");
   }
@@ -196,17 +272,9 @@ export function createKpWitnessedAnnihilationPlan(input: {
       targetRect: { ...survivor.targetRect }
     })),
     contactPoint: center(bounds),
-    contactStart: 0.16,
-    contactEnd: 0.46,
-    compressionEnd: 0.58,
-    witnessBirthStart: 0.54,
-    witnessReadableAt: 0.64,
-    witnessDwellEnd: 0.78,
-    sourceAbsorptionEnd: 0.84,
-    witnessAbsorptionEnd: 0.9,
-    compactionStart: 0.9,
-    compactionEnd: 0.98,
-    compressedScale
+    ...motionProfile.timing,
+    compressedScale,
+    motionProfile
   };
 }
 
@@ -222,7 +290,7 @@ export function sampleKpWitnessedAnnihilation(input: {
   ));
   const compressionProgress = easeInOut(interval(
     p,
-    input.plan.contactEnd - 0.08,
+    input.plan.contactEnd - input.plan.motionProfile.timing.compressionLead,
     input.plan.compressionEnd
   ));
   const witnessBirth = easeOut(interval(
@@ -238,7 +306,8 @@ export function sampleKpWitnessedAnnihilation(input: {
   );
   const sourceAbsorption = easeInOut(interval(
     p,
-    input.plan.witnessBirthStart + 0.04,
+    input.plan.witnessBirthStart +
+      input.plan.motionProfile.timing.sourceAbsorptionDelay,
     input.plan.sourceAbsorptionEnd
   ));
   const witnessAbsorptionProgress = easeInOut(interval(
@@ -252,16 +321,24 @@ export function sampleKpWitnessedAnnihilation(input: {
     input.plan.compactionEnd
   ));
   const inwardPulse = Math.sin(
-    Math.PI * interval(p, input.plan.contactEnd - 0.04, input.plan.witnessReadableAt + 0.03)
+    Math.PI * interval(
+      p,
+      input.plan.contactEnd - input.plan.motionProfile.timing.inwardPulseLead,
+      input.plan.witnessReadableAt +
+        input.plan.motionProfile.timing.inwardPulseTail
+    )
   );
   const orderedSources = [...input.plan.sources].sort(
     (left, right) => left.semanticRank - right.semanticRank || left.id.localeCompare(right.id)
   );
-  const pairContactSpacing = orderedSources.length === 2
+  const geometryProfile = input.plan.motionProfile.geometry;
+  const pairContactSpacing =
+    orderedSources.length === geometryProfile.binarySourceCount
     ? Math.max(
-        16,
+        geometryProfile.minimumPairContactGapPx,
         orderedSources.reduce((sum, source) => sum + source.rect.width, 0) *
-          input.plan.compressedScale / 2 + 16
+          input.plan.compressedScale / geometryProfile.binarySourceCount +
+          geometryProfile.minimumPairContactGapPx
       )
     : 0;
   const sources = orderedSources.map((source, index) => {
@@ -269,14 +346,21 @@ export function sampleKpWitnessedAnnihilation(input: {
     const centeredIndex = index - (orderedSources.length - 1) / 2;
     // Binary inverses flank the witness; multi-token factors retain enough of
     // their internal topology to remain recognizable while compressing.
-    const contactSlot = orderedSources.length === 2
+    const contactSlot =
+      orderedSources.length === geometryProfile.binarySourceCount
       ? {
           x: input.plan.contactPoint.x + centeredIndex * pairContactSpacing,
-          y: input.plan.contactPoint.y + (index % 2 === 0 ? -1 : 1)
+          y: input.plan.contactPoint.y +
+            (index % 2 === 0 ? -1 : 1) *
+              geometryProfile.alternatingVerticalNudgePx
         }
       : {
-          x: input.plan.contactPoint.x + (origin.x - input.plan.contactPoint.x) * 0.48,
-          y: input.plan.contactPoint.y + (origin.y - input.plan.contactPoint.y) * 0.48
+          x: input.plan.contactPoint.x +
+            (origin.x - input.plan.contactPoint.x) *
+              geometryProfile.multiSourceConvergenceRatio,
+          y: input.plan.contactPoint.y +
+            (origin.y - input.plan.contactPoint.y) *
+              geometryProfile.multiSourceConvergenceRatio
         };
     const arc = index % 2 === 0 ? -1 : 1;
     return {
@@ -285,13 +369,15 @@ export function sampleKpWitnessedAnnihilation(input: {
         x: (contactSlot.x - origin.x) * contactProgress,
         y:
           (contactSlot.y - origin.y) * contactProgress +
-          arc * 7 * Math.sin(Math.PI * contactProgress),
+          arc * geometryProfile.alternatingArcHeightPx *
+            Math.sin(Math.PI * contactProgress),
         scale: mix(1, input.plan.compressedScale, compressionProgress),
         opacity: 1 - sourceAbsorption
       }
     };
   });
-  const witnessScale = 0.68 + 0.32 * witnessBirth;
+  const witnessScale = geometryProfile.witnessInitialScale +
+    geometryProfile.witnessScaleGrowth * witnessBirth;
   const witnessOpacity = witnessBirth * (1 - witnessAbsorptionProgress);
   const survivors = input.plan.survivors.map((survivor) => ({
     id: survivor.id,
@@ -334,7 +420,8 @@ export function sampleKpWitnessedAnnihilation(input: {
       slotId: input.plan.witness.slot.id,
       pose: {
         x: 0,
-        y: -2 * Math.sin(Math.PI * witnessBirth),
+        y: -geometryProfile.witnessLiftPx *
+          Math.sin(Math.PI * witnessBirth),
         scale: witnessScale,
         opacity: witnessOpacity
       }
@@ -388,4 +475,12 @@ function easeOut(value: number): number {
 
 function mix(from: number, to: number, progress: number): number {
   return from + (to - from) * progress;
+}
+
+function deepFreeze<T>(value: T): T {
+  if (typeof value !== "object" || value === null || Object.isFrozen(value)) {
+    return value;
+  }
+  Object.values(value).forEach((child) => deepFreeze(child));
+  return Object.freeze(value);
 }
