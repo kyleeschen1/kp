@@ -46,10 +46,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:01:04.140Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-apply-log-correspondence.test.ts tests/log-exponent-compiler-authority.test.ts tests/log-exponent-authored-operations.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:04:06.348Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 6 compiles every canonical state into exhaustive semantic roles behind copy-resistant nominal authority."
+    "summary": "Slice 7 compiles a nominal apply-log transformation with total reversible correspondence and one balanced two-wrapper introduction."
   }
 }

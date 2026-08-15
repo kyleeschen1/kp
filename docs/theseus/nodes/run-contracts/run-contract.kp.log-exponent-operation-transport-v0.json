@@ -72,7 +72,8 @@
     {
       "id": "s07",
       "title": "Compile apply-log correspondence",
-      "status": "planned"
+      "summary": "Compiled and verified the balanced apply-log correspondence seam.",
+      "status": "complete"
     },
     {
       "id": "s08",
