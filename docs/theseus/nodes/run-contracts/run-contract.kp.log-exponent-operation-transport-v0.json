@@ -108,7 +108,8 @@
     {
       "id": "s13",
       "title": "Type interpolation obligations",
-      "status": "planned"
+      "summary": "Typed and verified exhaustive interpolation obligations and copy-resistant compiler authority.",
+      "status": "complete"
     },
     {
       "id": "s14",
