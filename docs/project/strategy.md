@@ -67,11 +67,18 @@ Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
 
-KP is in **educator product discovery within convergence**. The
-semantic/runtime engine is sufficiently capable, while the existence and shape
-of a valuable educator workflow remain unvalidated. Another infrastructure,
-authoring, layout, or domain-expansion tranche would produce less information
-than watching tutors or teachers use one existing artifact with real learners.
+KP is in **catalogue animation development alongside external educator
+discovery**. The semantic/runtime engine is sufficiently capable, while the
+existence and shape of a valuable educator workflow remain unvalidated. Product
+discovery is being carried forward outside this Codex thread; repository work
+returns to the internal Catalogue because reusable semantic animations retain
+value across later layouts and product decisions.
+
+This is not permission for undirected domain expansion. Catalogue work should
+select one missing transformation law, perfect one reversible exemplar, and
+promote shared machinery only after human approval and a structurally different
+caller. Learner-facing layout, curriculum, SRS, LLM tutoring, and public-site
+expansion remain paused.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
 identity, direct state, prompts, native settlement, accessibility, and bounded
@@ -86,6 +93,11 @@ layout. The immediate product hypothesis is that an educator will reuse or
 send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
+
+The immediate repository question is narrower: which absent transformation
+will add the most reusable animation capability without creating another
+runtime or renderer path? The current candidate inventory is recorded in
+`reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md`.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

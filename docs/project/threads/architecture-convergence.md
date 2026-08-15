@@ -1,12 +1,11 @@
 # Architecture Convergence And Product Tightening
 
-Status: active
+Status: active-supporting
 Last Updated: 2026-08-14
-Current Next Action: complete the educator product-discovery grill in
-`../reviews/2026-08-14-educator-product-discovery-next-step-review.md`, then
-observe a small cohort using one existing artifact. The eigenvector checkpoint
-is a materially improved but mixed research proof; preserve it without shared
-promotion or further open-ended layout iteration.
+Current Next Action: Preserve the convergence boundary while the active
+Animation Catalogue lane selects and perfects one missing transformation.
+Educator product discovery continues outside this Codex thread; do not reopen
+layout or product infrastructure without observed evidence.
 
 ## Goal
 

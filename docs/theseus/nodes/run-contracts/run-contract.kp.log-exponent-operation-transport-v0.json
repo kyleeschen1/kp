@@ -1,0 +1,177 @@
+{
+  "id": "run-contract.kp.log-exponent-operation-transport-v0",
+  "kind": "run-contract",
+  "title": "Exponent log operation transport",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.log-exponent-operation-transport-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md",
+      "summary": "Approved 28-slice exemplar-first log, exponent, and operation-transport plan with mandatory human checkpoints after s20 and s25."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path> --run",
+    "npm run typecheck",
+    "npm run visual:log-exponent",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Family-local typed log and exponent operations, assumptions, semantic transformations, correspondence, lifecycle, lineage, salience, deterministic interpolation, native KaTeX rendering, lazy catalogue assets, exact URLs, review evidence, tests, and one bounded internal linearity pressure caller.",
+    "One independently reversible commit per verified slice, with impact-selected checks and stable visual commands."
+  ],
+  "disallowedWork": [
+    "Public lessons, layout work, full curriculum, LLM generation, SRS, authoring expansion, graph reflection, matrix visualization, Graph3D or WebGL, a new runtime or renderer, and catalogue-wide migration.",
+    "Shared homomorphism promotion before two approved log callers and a successful structurally different linearity pressure caller."
+  ],
+  "goal": "Build and verify canonical exponent-log interpolations, pressure them with a log quotient caller, and promote operation transport only if a bounded linearity caller proves the seam.",
+  "target": "next-action.kp.log-exponent-operation-transport-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze exponent-log coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Record exemplar contract",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define canonical semantic states",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Type domain assumptions",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Type authored operation union",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Mint compiler authority and roles",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Compile apply-log correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Compile exponent extraction",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Compose canonical transformation tree",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Classify visible lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Compile continuant lineage",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Author semantic salience",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Type interpolation obligations",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Compile choreography envelope",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Sample deterministic frames",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Build native KaTeX endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Implement transit ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Register canonical catalogue asset",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Tune canonical choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Produce canonical human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Apply approved canonical refinements",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Define log quotient contract",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Compile quotient fan-in",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Implement quotient animation",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Produce quotient human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Compare operation transport callers",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Pressure with linearity caller",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Promote or reject and close out",
+      "status": "planned"
+    }
+  ]
+}

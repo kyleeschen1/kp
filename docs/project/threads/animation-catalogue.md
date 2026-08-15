@@ -1,11 +1,13 @@
 # Animation Catalogue Thread
 
-Status: active-supporting
-Last Updated: 2026-08-02
-Current Next Action: Preserve the canonical Svelte 5 catalogue host while the
-matrix caller remains tabled, then use the selected nearer transformation to
-identify what host pressure is still missing. Keep assets, runtime clocks,
-renderer ports, URL truth, and Review authority outside the framework.
+Status: active
+Last Updated: 2026-08-14
+Current Next Action: Select one missing transformation from
+`../reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md`, then
+perfect one independently reversible catalogue exemplar. Place-value
+subtraction remains the evidence-backed architecture recommendation; fraction
+equivalence and function-coordinate transformations are the low-risk and
+graph-led alternatives. Matrix-to-linear-map remains tabled.
 
 ## Goal
 
@@ -77,6 +79,14 @@ canonical catalogue host, and the obsolete imperative composition has been
 removed; the framework-neutral loader, clock, renderer, URL, and Review seams
 remain authoritative. SvelteKit adoption still waits for rank-6 caller
 pressure.
+
+On 2026-08-14 the active repository lane returned to Catalogue animation
+development while educator discovery continued outside this Codex thread. The
+40 loadable assets are now explicitly separated from missing pedagogical
+coverage: generated equation fixtures and diagnostic samples do not count as
+completed transformation families. The reconciled backlog is the selection
+authority for the next exemplar, while the stable promotion ledger retains its
+existing ranks and the matrix checkpoint remains tabled.
 
 ## Accepted Scope
 
