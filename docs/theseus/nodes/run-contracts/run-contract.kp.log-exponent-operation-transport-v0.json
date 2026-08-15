@@ -90,7 +90,8 @@
     {
       "id": "s10",
       "title": "Classify visible lifecycle",
-      "status": "planned"
+      "summary": "Compiled and verified total causal lifecycle coverage for the canonical tree.",
+      "status": "complete"
     },
     {
       "id": "s11",

@@ -64,10 +64,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:11:06.248Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-lifecycle.test.ts tests/log-exponent-transformation-tree.test.ts tests/log-exponent-extraction-correspondence.test.ts tests/log-exponent-apply-log-correspondence.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:13:39.939Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 9 compiles division by ln(2) and assembles all three nominal transformations into one exact ordered tree from 2^x=7 to x=ln7/ln2."
+    "summary": "Slice 10 classifies every visible selector exactly once as a continuant, semantic or structural introduction, or structural elimination."
   }
 }
