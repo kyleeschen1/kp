@@ -96,7 +96,8 @@
     {
       "id": "s11",
       "title": "Compile continuant lineage",
-      "status": "planned"
+      "summary": "Compiled and verified renderer-neutral continuant lineage and object constancy.",
+      "status": "complete"
     },
     {
       "id": "s12",
