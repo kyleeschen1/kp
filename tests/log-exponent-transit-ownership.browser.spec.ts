@@ -80,6 +80,14 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
       source,
       target
     });
+    const exponentDisposition = session.canonical.reconciliation.dispositions
+      .find(({ semanticEntityIds }) =>
+        semanticEntityIds.includes("logged.exponent") &&
+        semanticEntityIds.includes("extracted.coefficient")
+      );
+    if (exponentDisposition?.lifecycle !== "persist") {
+      throw new Error("Exponent continuity did not compile to one native paint transit.");
+    }
 
     const result = [0, 0.01, 0.5, 0.999, 1].map((progress) => {
       const ownership = session.apply({ progress, direction: "forward" });

@@ -35,6 +35,62 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
     "data-kp-dev-review-ready",
     "true"
   );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.16");
+  await expect.poll(async () => Number(
+    await stage.getAttribute("data-kp-log-exponent-operation-progress")
+  )).toBeGreaterThan(0.45);
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-exponent-operation-choreography-id",
+    "operation-choreography.transformation.log-exponent.apply-log-both-sides.forward"
+  );
+  const synchronizedOpacities = JSON.parse(
+    await stage.getAttribute("data-kp-log-exponent-synchronized-opacities") ??
+      "[]"
+  ) as number[];
+  expect(synchronizedOpacities.length).toBeGreaterThan(0);
+  expect(Math.max(...synchronizedOpacities)).toBeGreaterThan(0);
+  const wrapperOpacity = await stage.evaluate((root) => {
+    const bySide = { left: [] as number[], right: [] as number[] };
+    for (const owner of root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )) {
+      const entityId =
+        owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "";
+      if (entityId === "logged.left.log") {
+        bySide.left.push(Number(getComputedStyle(owner).opacity));
+      }
+      if (entityId === "logged.right.log") {
+        bySide.right.push(Number(getComputedStyle(owner).opacity));
+      }
+    }
+    return bySide;
+  });
+  expect(wrapperOpacity.left.length).toBeGreaterThan(0);
+  expect(wrapperOpacity.right.length).toBeGreaterThan(0);
+  expect(Math.max(...wrapperOpacity.left)).toBeGreaterThan(0);
+  expect(Math.max(...wrapperOpacity.right)).toBeGreaterThan(0);
+  expect(new Set([...wrapperOpacity.left, ...wrapperOpacity.right]).size)
+    .toBe(1);
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.872");
+  await expect.poll(async () => Number(
+    await stage.getAttribute("data-kp-log-exponent-operation-progress")
+  )).toBeGreaterThan(0.75);
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-exponent-operation-choreography-id",
+    "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward"
+  );
+  const structuralRule = stage.locator(
+    '[data-kp-equation-material-semantic-entity-id="solved.right"]' +
+    '[data-kp-equation-material-fragment-role="rule:rule-length"]'
+  );
+  await expect(structuralRule).toHaveCount(1);
+  const ruleEntry = await structuralRule.evaluate((owner) => ({
+    opacity: Number(getComputedStyle(owner).opacity),
+    width: owner.getBoundingClientRect().width
+  }));
+  expect(ruleEntry.opacity).toBeGreaterThan(0);
+  expect(ruleEntry.opacity).toBeLessThan(1);
+  expect(ruleEntry.width).toBeGreaterThan(1);
   await player.locator('[data-action="seek-editor-animation"]').fill("0.95");
   await expect(stage).toHaveAttribute(
     "data-kp-log-exponent-operation-id",

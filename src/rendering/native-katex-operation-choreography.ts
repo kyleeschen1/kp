@@ -1,4 +1,5 @@
 import type {
+  KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "../animation/equation-operation-choreography.ts";
@@ -40,9 +41,71 @@ export function applyKpNativeKatexOperationChoreography(input: {
     KpRegisteredEquationOperationChoreography | undefined;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   if (input.choreography === undefined) return input.tracks;
-  return input.choreography.kind === "counter-orbit-cancellation"
-    ? applyCounterOrbit(input, input.choreography)
-    : applySynchronizedIntroduction(input, input.choreography);
+  switch (input.choreography.kind) {
+    case "counter-orbit-cancellation":
+      return applyCounterOrbit(input, input.choreography);
+    case "synchronized-balanced-introduction":
+      return applySynchronizedIntroduction(input, input.choreography);
+    case "causal-structural-introduction":
+      return applyCausalStructuralIntroduction(input, input.choreography);
+  }
+}
+
+function applyCausalStructuralIntroduction(
+  input: Parameters<typeof applyKpNativeKatexOperationChoreography>[0],
+  choreography: KpCausalStructuralIntroductionChoreography
+): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  const endpoint = choreography.direction === "forward"
+    ? input.target
+    : input.source;
+  const atomsById = new Map(endpoint.atoms.map((atom) => [atom.id, atom]));
+  const expectedLifecycle = choreography.direction === "forward"
+    ? "introduce"
+    : "eliminate";
+  const matched = new Set<string>();
+  const sample = (progress: number) => smoothWindow(
+    progress,
+    choreography.entryWindow.start,
+    choreography.entryWindow.end
+  );
+  const tracks = input.tracks.map((track) => {
+    if (track.lifecycle !== expectedLifecycle) return track;
+    const atomId = choreography.direction === "forward"
+      ? track.targetAtomId
+      : track.sourceAtomId;
+    const atom = atomId === undefined ? undefined : atomsById.get(atomId);
+    if (
+      atom === undefined ||
+      !choreography.semanticEntityIds.includes(atom.semanticEntityId)
+    ) return track;
+    matched.add(atom.semanticEntityId);
+    const collapseRule = atom.paintKind === "rule" &&
+      choreography.direction === "forward";
+    return Object.freeze({
+      ...track,
+      timingGroupId: choreography.id,
+      opacityScheduleAuthority: "semantic-choreography" as const,
+      sampleProgress: sample,
+      sampleOpacityProgress: sample,
+      ...(collapseRule
+        ? {
+            startRect: collapseToCenteredHairline(track.endRect),
+            ...(track.endPaintRect === undefined
+              ? {}
+              : {
+                  startPaintRect:
+                    collapseToCenteredHairline(track.endPaintRect)
+                })
+          }
+        : {})
+    });
+  });
+  assertEntityCoverage(
+    choreography.semanticEntityIds,
+    matched,
+    choreography.id
+  );
+  return Object.freeze(tracks);
 }
 
 function applySynchronizedIntroduction(
@@ -80,6 +143,10 @@ function applySynchronizedIntroduction(
     return Object.freeze({
       ...track,
       timingGroupId: choreography.id,
+      // The verified together schedule owns entry opacity. Without this
+      // authority marker, generic collision repair delays both branches to a
+      // late step and erases the balanced operation's visible causality.
+      opacityScheduleAuthority: "semantic-choreography" as const,
       sampleProgress: sample,
       sampleOpacityProgress: sample
     });
@@ -97,7 +164,11 @@ function sampleBalancedBranchProgress(
   branchId: string,
   progress: number
 ): number {
-  const local = windowProgress(progress, 0.38, 0.7);
+  const local = windowProgress(
+    progress,
+    choreography.entryWindow?.start ?? 0.38,
+    choreography.entryWindow?.end ?? 0.7
+  );
   const sampled = choreography.direction === "forward"
     ? choreography.branchSchedule.sample(local)
     : choreography.branchSchedule.sampleInverse(local);
@@ -575,6 +646,18 @@ type Rect = {
   readonly width: number;
   readonly height: number;
 };
+
+function collapseToCenteredHairline(rect: Rect): Rect {
+  // A literal zero-width DOM box has no measurable native clone. One device-
+  // independent pixel preserves renderer measurement while remaining a
+  // visually collapsed seed from which the structural rule can grow.
+  const width = Math.min(1, rect.width);
+  return {
+    ...rect,
+    left: rect.left + (rect.width - width) / 2,
+    width
+  };
+}
 
 function translateToCenter(
   layout: Rect,

@@ -16,6 +16,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
   switch (transformType) {
     case "subtractBothSides":
     case "multiplyBothSides":
+    case "applyNaturalLogBothSides":
       return "balanced-introduction";
     case "divideBothSides":
       return "divide-both-sides";

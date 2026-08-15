@@ -18,7 +18,7 @@
 
 .kp-log-exponent-stage__endpoint,
 .kp-log-exponent-stage__material-layer {
-  font-size: clamp(2.5rem, 8vw, 5.75rem);
+  font-size: clamp(2.25rem, 5vw, 4rem);
 }
 
 .kp-log-exponent-stage__endpoint {

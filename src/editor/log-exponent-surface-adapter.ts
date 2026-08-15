@@ -1,8 +1,12 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpLogExponentAnimationAsset,
   kpLogExponentAnimationId
 } from "../animation/log-exponent-adapter.ts";
+import {
+  createKpCausalStructuralIntroductionChoreography
+} from "../animation/equation-operation-choreography.ts";
 import {
   sampleKpLogExponentSequenceFrame
 } from "../animation/log-exponent-timeline.ts";
@@ -27,6 +31,12 @@ import type {
 import type {
   KpCompiledLogExponentOperation
 } from "../semantic/log-exponent-transformation-compiler.ts";
+import {
+  compileKpEquationOperationChoreography
+} from "../reader/renderers/equation-operation-choreography-compiler.ts";
+import type {
+  KpEquationOperationChoreography
+} from "../rendering/native-katex-operation-choreography.ts";
 import {
   kpCanonicalLogExponentTransformationTree
 } from "../semantic/log-exponent-transformation-tree.ts";
@@ -63,9 +73,12 @@ interface KpLogExponentPreparedOperation {
     (typeof kpCanonicalLogExponentNativeEndpoints)[number];
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }
 
 const sessions = new WeakMap<HTMLElement, KpLogExponentSurfaceSession>();
+const canonicalAnimation = createKpLogExponentAnimationAsset();
 
 export const kpEditorLogExponentSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.log-exponent.canonical-native-katex",
@@ -172,12 +185,45 @@ async function prepareSurface(
         fontReadiness: session.fontReadiness
       });
       if (session.disposed || session.generation !== generation) return;
+      const compiledOperationChoreography =
+        compileKpEquationOperationChoreography({
+          animation: canonicalAnimation,
+          transformation: operation.transformation,
+          motifKind: "append-after-shift",
+          direction: "forward",
+          ...(index === 0
+            ? {
+                balancedIntroductionEntryWindow: {
+                  start: 0.78,
+                  end: 0.98
+                }
+              }
+            : {})
+        });
+      const operationChoreography = index === 2
+        ? createKpCausalStructuralIntroductionChoreography({
+            id: "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward",
+            transformationId: operation.transformation.id,
+            direction: "forward",
+            semanticEntityIds: ["solved.right"],
+            entryWindow: { start: 0.62, end: 0.9 }
+          })
+        : compiledOperationChoreography;
       preparedOperations.push({
         operation,
         sourceEndpoint,
         targetEndpoint,
         source,
-        target
+        target,
+        ...(operationChoreography === undefined
+          ? {}
+          : { operationChoreography }),
+        ...(horizontalAxisSemanticEntityIds(index) === undefined
+          ? {}
+          : {
+              horizontalAxisSemanticEntityIds:
+                horizontalAxisSemanticEntityIds(index)
+            })
       });
     }
     if (session.disposed || session.generation !== generation) {
@@ -228,6 +274,8 @@ function applyFrame(
       transit: createKpLogExponentTransitSession(prepared)
     };
     session.activeTransit = activeTransit;
+    session.stage.dataset["kpLogExponentOperationChoreographyId"] =
+      prepared.operationChoreography?.id ?? "none";
   }
   const operationProgress = frame.obligationFrames[0]?.progress ?? 0;
 
@@ -295,4 +343,33 @@ function statusText(operationIndex: number, progress: number): string {
     "The exponent is now a coefficient.",
     "x is isolated as a quotient of logarithms."
   ][operationIndex + (progress >= 1 ? 1 : 0)]!;
+}
+
+function horizontalAxisSemanticEntityIds(
+  operationIndex: number
+): readonly string[] | undefined {
+  switch (operationIndex) {
+    case 0:
+      // Applying a function shifts existing terms only to reserve wrapper
+      // space; arcing a value away from its side suggests a false operation.
+      return Object.freeze([
+        "source.base",
+        "logged.base",
+        "source.exponent",
+        "logged.exponent",
+        "source.equality",
+        "logged.equality",
+        "source.right",
+        "logged.right"
+      ]);
+    case 2:
+      return Object.freeze([
+        "extracted.coefficient",
+        "solved.left",
+        "extracted.equality",
+        "solved.equality"
+      ]);
+    default:
+      return undefined;
+  }
 }

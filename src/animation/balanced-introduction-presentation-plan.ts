@@ -1,4 +1,5 @@
 import type {
+  KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "./equation-operation-choreography.ts";
@@ -29,6 +30,9 @@ export type KpRegisteredEquationOperationChoreography =
   | (KpSynchronizedBalancedIntroductionChoreography & {
       readonly operationPresentationPlan?:
         KpVerifiedOperationPresentationPlan | undefined;
+    })
+  | (KpCausalStructuralIntroductionChoreography & {
+      readonly operationPresentationPlan?: undefined;
     });
 
 export function compileKpBalancedIntroductionPresentationPlan(

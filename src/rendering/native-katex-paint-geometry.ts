@@ -16,6 +16,8 @@ export function attachKpNativeKatexTrackPaintGeometry<
   Track extends {
     readonly sourceAtomId?: string | undefined;
     readonly targetAtomId?: string | undefined;
+    readonly startPaintRect?: KpStageRelativeRect | undefined;
+    readonly endPaintRect?: KpStageRelativeRect | undefined;
   }
 >(input: {
   readonly tracks: readonly Track[];
@@ -50,8 +52,14 @@ export function attachKpNativeKatexTrackPaintGeometry<
     const targetAtom =
       targetAtoms.get(track.targetAtomId ?? "") ??
       sourceAtoms.get(track.targetAtomId ?? "");
-    const startPaintRect = paintRect(sourceAtom, input.source.stage);
-    const endPaintRect = paintRect(targetAtom, input.target.stage);
+    // A typed choreography may intentionally author structural paint geometry
+    // after endpoint measurement (for example, a fraction bar growing from a
+    // hairline). Preserve that renderer-session authority instead of silently
+    // overwriting it with the static endpoint measurement.
+    const startPaintRect = track.startPaintRect ??
+      paintRect(sourceAtom, input.source.stage);
+    const endPaintRect = track.endPaintRect ??
+      paintRect(targetAtom, input.target.stage);
     if (startPaintRect === undefined || endPaintRect === undefined) {
       throw new Error(
         "Native KaTeX render tracks require measured paint at both endpoints."

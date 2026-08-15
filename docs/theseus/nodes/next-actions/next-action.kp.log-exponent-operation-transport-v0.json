@@ -145,10 +145,38 @@
       "scope": "slice s18 type inference budget",
       "checkedAt": "2026-08-15T03:02:11.333Z",
       "notes": "Inference contracts passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-operation-choreography.test.ts tests/native-katex-operation-choreography.test.ts",
+      "status": "passed",
+      "scope": "s19 typed choreography",
+      "checkedAt": "2026-08-15T03:45:56.388Z",
+      "notes": "Seven focused operation and renderer tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-exponent-catalogue.browser.spec.ts tests/log-exponent-transit-ownership.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s19 canonical browser exemplar",
+      "checkedAt": "2026-08-15T03:45:57.516Z",
+      "notes": "Three Chromium checks passed, including synchronized wrappers, persistent exponent identity, causal rule entry, exact seek, and owner cleanup."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "s19 deterministic visual checkpoint",
+      "checkedAt": "2026-08-15T03:45:58.659Z",
+      "notes": "Seven sampled states rendered to the canonical contact sheet without stage failure."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 repository type surface",
+      "checkedAt": "2026-08-15T03:46:12.740Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s18 registered the canonical typed asset in the lazy algebra catalogue and mounted it through an exclusive native KaTeX renderer session."
+    "summary": "Slice s19 tuned the canonical operation choreography: balanced log wrappers share one semantic opacity schedule, exponent identity persists on one measured arc, and the quotient bar grows causally from a measurable hairline."
   }
 }

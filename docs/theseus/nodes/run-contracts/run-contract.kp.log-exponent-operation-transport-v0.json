@@ -144,7 +144,8 @@
     {
       "id": "s19",
       "title": "Tune canonical choreography",
-      "status": "planned"
+      "summary": "Canonical log/exponent choreography tuned and verified through deterministic visual capture, focused renderer tests, Chromium ownership checks, and full typecheck.",
+      "status": "complete"
     },
     {
       "id": "s20",

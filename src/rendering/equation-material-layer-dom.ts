@@ -65,6 +65,12 @@ export function syncKpEquationMaterialLayer(input: {
       // rule paint one pixel taller than the sampled native endpoint.
       if (frame.fragmentRole?.startsWith("rule:") === true) {
         setStyle(visual.style, "boxSizing", "border-box");
+        // Computed-style cloning freezes KaTeX rule widths in pixels. Rules
+        // are structural paint, so let their measured owner drive length
+        // during a semantic introduction instead of retaining the endpoint
+        // width and then popping into place.
+        setStyle(visual.style, "width", "100%");
+        setStyle(visual.style, "transformOrigin", "center center");
       }
       const focused = frame.sourceElement.classList.contains("kp-focus-group");
       if (visual.classList.contains("kp-focus-group") !== focused) {
@@ -192,7 +198,9 @@ export function syncKpEquationMaterialLayer(input: {
         if (widthResidual > 0.75 || heightResidual > 0.75) {
           throw new Error(
             `Material owner ${frame.ownerId} changed cloned paint size ` +
-            `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px).`
+            `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px; ` +
+            `visual=${visual.style.transform}; owner=${frame.rect.width}; ` +
+            `expected=${paintReference.width}; measured=${measured.width}).`
           );
         }
         setDataset(owner, "kpEquationMaterialPaintAlignmentKey", alignmentKey);
@@ -280,6 +288,7 @@ function setStyle(
     | "opacity"
     | "top"
     | "transform"
+    | "transformOrigin"
     | "width",
   value: string
 ): void {

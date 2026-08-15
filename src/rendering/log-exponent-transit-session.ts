@@ -9,6 +9,9 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
 import type {
+  KpEquationOperationChoreography
+} from "./native-katex-operation-choreography.ts";
+import type {
   KpLogExponentNativeEndpoint
 } from "./log-exponent-native-endpoints.ts";
 import {
@@ -63,12 +66,23 @@ export function createKpLogExponentTransitSession(input: {
   readonly targetEndpoint: KpLogExponentNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): KpLogExponentTransitSession {
   assertTransitInput(input);
   const canonical = createKpCanonicalNativeKatexSceneSession({
     source: input.source,
     target: input.target,
-    relations: projectKpLogExponentNativePaintRelations(input.operation)
+    relations: projectKpLogExponentNativePaintRelations(input.operation),
+    ...(input.operationChoreography === undefined
+      ? {}
+      : { operationChoreography: input.operationChoreography }),
+    ...(input.horizontalAxisSemanticEntityIds === undefined
+      ? {}
+      : {
+          horizontalAxisSemanticEntityIds:
+            input.horizontalAxisSemanticEntityIds
+        })
   });
   let retired = false;
 
@@ -98,6 +112,19 @@ export function createKpLogExponentTransitSession(input: {
         String(playbackProgress);
       input.source.stage.dataset["kpLogExponentVisualOwner"] =
         ownership.visualOwner;
+      if (input.operationChoreography !== undefined) {
+        const synchronizedTrackIds = new Set(canonical.session.tracks
+          .filter(({ timingGroupId }) =>
+            timingGroupId === input.operationChoreography?.id
+          )
+          .map(({ id }) => id));
+        input.source.stage.dataset["kpLogExponentSynchronizedOpacities"] =
+          JSON.stringify(ownership.frames
+            .filter(({ trackId }) => synchronizedTrackIds.has(trackId))
+            .map(({ opacity }) => opacity));
+      } else {
+        delete input.source.stage.dataset["kpLogExponentSynchronizedOpacities"];
+      }
       return ownership;
     },
     retire() {
@@ -148,6 +175,8 @@ function assertTransitInput(input: {
   readonly targetEndpoint: KpLogExponentNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): void {
   if (!isKpCompiledLogExponentOperation(input.operation)) {
     throw new Error(

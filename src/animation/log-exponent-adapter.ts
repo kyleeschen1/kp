@@ -3,7 +3,7 @@ import {
   type KpAnimationAsset
 } from "./asset.ts";
 import {
-  createKpSemanticMaterialEquationPresentationProfileV1
+  createKpCanonicalBalancedSolveEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import {
   createKpAssetBundle,
@@ -154,7 +154,7 @@ export function createKpLogExponentAnimationAsset(): KpAnimationAsset {
       ]
     },
     presentationProfile:
-      createKpSemanticMaterialEquationPresentationProfileV1(),
+      createKpCanonicalBalancedSolveEquationPresentationProfileV1(),
     metadata: {
       sourceFamilyId: "family.algebra.log-exponent",
       sequenceTimelineId: timelineId,

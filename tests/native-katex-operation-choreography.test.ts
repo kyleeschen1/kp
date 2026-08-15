@@ -5,6 +5,9 @@ import {
   createKpFractionCompositionEquationAnimationAsset
 } from "../src/animation/fraction-composition-equation-adapter.ts";
 import {
+  createKpCausalStructuralIntroductionChoreography
+} from "../src/animation/equation-operation-choreography.ts";
+import {
   compileKpEquationOperationChoreography
 } from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
 import {
@@ -66,8 +69,45 @@ test("balanced branch certificate synchronizes every introduced paint atom", () 
     new Set(synchronized.map(({ timingGroupId }) => timingGroupId)).size,
     1
   );
+  assert.ok(synchronized.every(({ opacityScheduleAuthority }) =>
+    opacityScheduleAuthority === "semantic-choreography"
+  ));
   assert.equal(new Set(entering.map(({ opacity }) => opacity)).size, 1);
   assert.ok(entering.every(({ opacity }) => opacity > 0 && opacity < 1));
+});
+
+test("causal structural introduction grows a fraction rule instead of popping it", () => {
+  const ruleAtom = {
+    ...atom("target", "solved.right", 40),
+    paintKind: "rule" as const,
+    rect: { left: 40, top: 28, width: 48, height: 1 }
+  };
+  const target = scene("target", [ruleAtom]);
+  const tracks = applyKpNativeKatexOperationChoreography({
+    source: scene("source", []),
+    target,
+    tracks: [introducedTrack(ruleAtom, 0)],
+    choreography: createKpCausalStructuralIntroductionChoreography({
+      id: "operation-choreography.test.structural-entry",
+      transformationId: "transformation.test.divide",
+      direction: "forward",
+      semanticEntityIds: ["solved.right"],
+      entryWindow: { start: 0.62, end: 0.9 }
+    })
+  });
+  const [track] = tracks;
+  assert.ok(track);
+  assert.equal(track.startRect.width, 1);
+  assert.equal(track.startPaintRect?.width, 1);
+  assert.equal(track.opacityScheduleAuthority, "semantic-choreography");
+  const [midpoint] = sampleKpNativeKatexSceneTrackFrames(
+    tracks,
+    0.76,
+    false
+  );
+  assert.ok(midpoint);
+  assert.ok(midpoint.rect.width > 0 && midpoint.rect.width < ruleAtom.rect.width);
+  assert.ok(midpoint.opacity > 0 && midpoint.opacity < 1);
 });
 
 test("counter-orbit certificate authors opposite paths through shared contact", () => {

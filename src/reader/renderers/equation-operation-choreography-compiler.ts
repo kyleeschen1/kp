@@ -51,6 +51,10 @@ export function compileKpEquationOperationChoreography(input: {
   readonly transformation: KpSemanticTransformation;
   readonly motifKind?: EquationVisualMotifKind | undefined;
   readonly direction: "forward" | "rewind";
+  readonly balancedIntroductionEntryWindow?: {
+    readonly start: number;
+    readonly end: number;
+  } | undefined;
 }): KpRegisteredEquationOperationChoreography | undefined {
   const decision = decideKpEquationOperationChoreography(input);
   return decision.status === "verified"
@@ -63,6 +67,10 @@ export function decideKpEquationOperationChoreography(input: {
   readonly transformation: KpSemanticTransformation;
   readonly motifKind?: EquationVisualMotifKind | undefined;
   readonly direction: "forward" | "rewind";
+  readonly balancedIntroductionEntryWindow?: {
+    readonly start: number;
+    readonly end: number;
+  } | undefined;
 }): KpEquationOperationChoreographyDecision {
   const binding = createKpEquationLinearRearrangementBinding({
     animation: input.animation,
@@ -96,6 +104,7 @@ export function decideKpEquationOperationChoreography(input: {
       semanticEntityIds,
       `balanced introduction ${input.transformation.id}`
     );
+    assertBalancedEntryWindow(input.balancedIntroductionEntryWindow);
     return {
       status: "verified",
       choreography: Object.freeze({
@@ -108,7 +117,14 @@ export function decideKpEquationOperationChoreography(input: {
         direction: input.direction,
         linearRearrangementKind: binding.kind,
         semanticEntityIds: Object.freeze(semanticEntityIds),
-        branchSchedule: binding.branchSchedule
+        branchSchedule: binding.branchSchedule,
+        ...(input.balancedIntroductionEntryWindow === undefined
+          ? {}
+          : {
+              entryWindow: Object.freeze({
+                ...input.balancedIntroductionEntryWindow
+              })
+            })
       }) as KpSynchronizedBalancedIntroductionChoreography
     };
   }
@@ -212,5 +228,22 @@ function requireUniqueNonempty(values: readonly string[], label: string): void {
     new Set(values).size !== values.length
   ) {
     throw new Error(`${label} requires unique, non-empty semantic entities.`);
+  }
+}
+
+function assertBalancedEntryWindow(
+  window: { readonly start: number; readonly end: number } | undefined
+): void {
+  if (window === undefined) return;
+  if (
+    !Number.isFinite(window.start) ||
+    !Number.isFinite(window.end) ||
+    window.start < 0 ||
+    window.end > 1 ||
+    window.start >= window.end
+  ) {
+    throw new Error(
+      "Balanced introduction entry window must increase within the host clock."
+    );
   }
 }
