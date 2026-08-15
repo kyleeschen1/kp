@@ -50,7 +50,8 @@
     {
       "id": "s22",
       "title": "Define log quotient contract",
-      "status": "planned"
+      "summary": "Defined exact ln(x)-ln(y) to ln(x/y) endpoint trees, explicit positivity and shared-base assumptions, persistent and retiring log-shell identities, a bounded standalone rewrite frontier, distinct subtraction and fraction-bar provenance, and exact rewind.",
+      "status": "complete"
     },
     {
       "id": "s23",

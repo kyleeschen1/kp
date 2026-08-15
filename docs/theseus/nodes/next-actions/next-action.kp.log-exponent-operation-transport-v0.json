@@ -309,11 +309,39 @@
       "scope": "three-operation invariant promotion amendment",
       "checkedAt": "2026-08-15T13:57:54.476Z",
       "notes": "Validated 953 nodes and 20830 events after recording quotient, distribution, and cancellation checkpoints and the accepted symbol-manipulation decision."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-quotient-domain-assumptions.test.ts tests/log-quotient-contract.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T14:26:15.298Z",
+      "notes": "Six quotient domain, endpoint, identity, false-identity, and rewind contract tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T14:26:18.573Z",
+      "notes": "Application TypeScript accepted the new family-local quotient contract."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T14:26:23.929Z",
+      "notes": "Test TypeScript accepted the new quotient fixtures and assertions."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s22 durable semantic contract",
+      "checkedAt": "2026-08-15T14:27:03.037Z",
+      "notes": "Validated 954 nodes and 20843 events before closing the quotient contract slice."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Corrected log/exponent exemplar approved. Continue with quotient, distribution, and cancellation as separate reviewed callers; promote only invariant behavior evidenced across all three."
+    "summary": "Quotient semantic contract complete. Next compile total correspondence, fan-in, lifecycle, false-identity rejection, and rewind before renderer work."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."
