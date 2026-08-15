@@ -124,10 +124,28 @@
       "status": "passed",
       "scope": "s07 exact endpoints frontier foreign context and copied authority",
       "checkedAt": "2026-08-15T21:45:16.934Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s08 preserve existing three-operation semantic and presentation laws",
+      "checkedAt": "2026-08-15T21:54:14.013Z"
+    },
+    {
+      "command": "npm run check:architecture and npm run typecheck",
+      "status": "passed",
+      "scope": "s08 provenance compiler boundary and static types",
+      "checkedAt": "2026-08-15T21:54:14.518Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-compiler-contract.test.ts tests/semantic-motion-endpoint-validator.test.ts tests/semantic-motion-correspondence-validator.test.ts",
+      "status": "passed",
+      "scope": "s08 total lifecycle provenance false identity and nominal authority",
+      "checkedAt": "2026-08-15T21:54:14.908Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 complete: a source-pinned validator now proves exact ordered source/target states, asset ownership, and a total disjoint partition between the bounded rewrite frontier and unchanged shared context. Foreign, stale, duplicated, overlapping, or uncovered entities fail closed; copied certificates lose authority."
+    "summary": "s08 complete: the compiler now proves total visible lifecycle coverage and explicit semantic identity/origin provenance for persistence, role change, fan-in, fan-out, introduction, removal, cancellation, artifacts, and focus. Quotient, distribution, and cancellation shapes pass one boundary; equal-glyph false identities and copied certificates fail closed."
   }
 }

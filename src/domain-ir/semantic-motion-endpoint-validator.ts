@@ -12,6 +12,31 @@ export interface KpSemanticMotionSourceAuthorityV1 {
   readonly revisionId: string;
   readonly assetIds: readonly string[];
   readonly states: readonly KpSemanticMotionStateRefV1[];
+  readonly entities: readonly KpSemanticMotionEntityAuthorityV1[];
+}
+
+export interface KpSemanticMotionEntityAuthorityV1 {
+  readonly id: string;
+  readonly semanticIdentityId: string;
+  readonly provenance:
+    | {
+        readonly kind: "authored";
+        readonly sourceId: string;
+      }
+    | {
+        readonly kind: "identity-successor";
+        readonly transformationId: string;
+        readonly sourceEntityIds: readonly [string];
+      }
+    | {
+        readonly kind: "derived";
+        readonly transformationId: string;
+        readonly sourceEntityIds: readonly string[];
+      }
+    | {
+        readonly kind: "introduced";
+        readonly transformationId: string;
+      };
 }
 
 declare const kpSemanticMotionEndpointFrontierAuthority: unique symbol;

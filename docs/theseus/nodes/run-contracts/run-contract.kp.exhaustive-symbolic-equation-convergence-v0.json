@@ -92,7 +92,8 @@
     {
       "id": "s08",
       "title": "Correspondence and provenance validation",
-      "status": "planned"
+      "summary": "Committed nominal total correspondence and explicit provenance validation across fusion, fan-out, and cancellation, with equal-glyph false-identity rejection.",
+      "status": "complete"
     },
     {
       "id": "s09",

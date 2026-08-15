@@ -27,7 +27,24 @@ function sourceFixture(): KpSemanticMotionSourceAuthorityV1 {
       id: "state.log-quotient",
       objectIds: ["equation.log-quotient"],
       entityIds: ["target.ln", "target.x", "target.y", "target.fraction-bar", contextEntityId]
-    }]
+    }],
+    entities: [
+      ...["source.ln-x", "source.ln-y", "source.x", "source.y", contextEntityId]
+        .map((id) => ({
+          id,
+          semanticIdentityId: `identity.${id}`,
+          provenance: { kind: "authored" as const, sourceId: "semantic.log-quotient" }
+        })),
+      ...["target.ln", "target.x", "target.y", "target.fraction-bar"]
+        .map((id) => ({
+          id,
+          semanticIdentityId: `identity.${id}`,
+          provenance: {
+            kind: "introduced" as const,
+            transformationId: "transform.log-difference-to-quotient"
+          }
+        }))
+    ]
   };
 }
 
@@ -157,4 +174,3 @@ test("serialized or structurally copied endpoint certificates lose authority", (
     /original endpoint\/frontier validator authority/
   );
 });
-
