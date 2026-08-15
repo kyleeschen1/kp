@@ -54,7 +54,8 @@
     {
       "id": "s04",
       "title": "Type domain assumptions",
-      "status": "planned"
+      "summary": "Typed and verified the canonical logarithm domain contract independently of rendering.",
+      "status": "complete"
     },
     {
       "id": "s05",

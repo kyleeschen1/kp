@@ -28,10 +28,16 @@
       "status": "failed",
       "scope": "impact",
       "checkedAt": "2026-08-15T01:54:57.958Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-domain-assumptions.test.ts tests/log-exponent-solve-states.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T01:56:48.817Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 3 defines four immutable structured semantic states for 2^x=7 through x=ln7/ln2; focused checks pass and the broad gate remains blocked by an unrelated pre-existing normal-matrix capture type error."
+    "summary": "Slice 4 types seven given and derived logarithm assumptions and fails closed for invalid bases, log arguments, and division by ln(base)."
   }
 }
