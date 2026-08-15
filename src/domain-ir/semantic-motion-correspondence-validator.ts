@@ -33,6 +33,11 @@ export interface KpSemanticMotionProvenanceRecord {
   readonly targetEntityIds: readonly string[];
 }
 
+export interface KpSemanticMotionIdentityBinding {
+  readonly entityId: string;
+  readonly semanticIdentityId: string;
+}
+
 declare const kpSemanticMotionProvenanceAuthority: unique symbol;
 
 export type KpVerifiedSemanticMotionProvenance = Readonly<{
@@ -40,6 +45,7 @@ export type KpVerifiedSemanticMotionProvenance = Readonly<{
   requestId: string;
   endpointFrontier: KpVerifiedSemanticMotionEndpointFrontier;
   records: readonly KpSemanticMotionProvenanceRecord[];
+  identityBindings: readonly KpSemanticMotionIdentityBinding[];
   [kpSemanticMotionProvenanceAuthority]: true;
 }>;
 
@@ -61,6 +67,7 @@ export function validateKpSemanticMotionCorrespondenceAndProvenance(input: {
   const { request, source, endpointFrontier } = input;
   const issues: KpSemanticMotionCompilerRepairRequiredV1["issues"][number][] = [];
   if (
+    endpointFrontier.request !== request ||
     endpointFrontier.requestId !== request.id ||
     endpointFrontier.sourceId !== source.sourceId ||
     endpointFrontier.revisionId !== source.revisionId
@@ -89,6 +96,20 @@ export function validateKpSemanticMotionCorrespondenceAndProvenance(input: {
       message: "Semantic source repeats one or more entity authority ids."
     });
   }
+  // Downstream composition must reuse validated semantic identity instead of
+  // consulting a fresh source table that could disagree at a transition seam.
+  const endpointEntityIds = [
+    ...request.sourceState.entityIds,
+    ...request.targetState.entityIds
+  ];
+  const identityBindings = [...new Set(endpointEntityIds)].flatMap((entityId) => {
+    const authority = authorityById.get(entityId);
+    if (authority === undefined) {
+      requireEntityAuthority(entityId, authorityById, "$.semanticSource.entities", issues);
+      return [];
+    }
+    return [{ entityId, semanticIdentityId: authority.semanticIdentityId }];
+  });
   const provenanceRecords: KpSemanticMotionProvenanceRecord[] = [];
   request.operation.correspondenceMap.records.forEach((record, index) => {
     const path = `$.operation.correspondenceMap.records[${index}]`;
@@ -143,7 +164,8 @@ export function validateKpSemanticMotionCorrespondenceAndProvenance(input: {
     kind: "verified-semantic-motion-provenance" as const,
     requestId: request.id,
     endpointFrontier,
-    records: Object.freeze(provenanceRecords)
+    records: Object.freeze(provenanceRecords),
+    identityBindings: Object.freeze(identityBindings.map((binding) => Object.freeze(binding)))
   }) as KpVerifiedSemanticMotionProvenance;
   verifiedProvenance.add(provenance);
   return { status: "verified", provenance };

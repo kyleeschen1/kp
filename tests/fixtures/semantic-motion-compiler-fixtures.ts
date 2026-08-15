@@ -1,5 +1,7 @@
 import {
+  compileKpSemanticMotionPrecedence,
   compileKpSemanticMotionLifecycle,
+  compileKpSemanticMotionRoleCohorts,
   createKpSemanticMotionCompilerRequestV1,
   kpSemanticMotionCompilerRequestSchemaVersion,
   validateKpSemanticMotionCorrespondenceAndProvenance,
@@ -8,7 +10,8 @@ import {
   type KpSemanticMotionEntityAuthorityV1,
   type KpSemanticMotionOperationStructureContract,
   type KpSemanticMotionSourceAuthorityV1,
-  type KpVerifiedSemanticMotionLifecycle
+  type KpVerifiedSemanticMotionLifecycle,
+  type KpVerifiedSemanticMotionPrecedence
 } from "../../src/domain-ir/public-api.ts";
 import type {
   SelectorCorrespondenceRelationId,
@@ -19,6 +22,14 @@ export interface KpSemanticMotionCompilerTestFixture {
   readonly request: KpSemanticMotionCompilerRequestV1;
   readonly source: KpSemanticMotionSourceAuthorityV1;
   readonly lifecycle: KpVerifiedSemanticMotionLifecycle;
+}
+
+export interface KpSequentialSemanticMotionFixture {
+  readonly source: KpSemanticMotionSourceAuthorityV1;
+  readonly steps: readonly {
+    readonly request: KpSemanticMotionCompilerRequestV1;
+    readonly precedence: KpVerifiedSemanticMotionPrecedence;
+  }[];
 }
 
 interface FixtureInput {
@@ -92,6 +103,137 @@ export function createCancellationSemanticMotionFixture(): KpSemanticMotionCompi
       targetEntityIds: []
     }, roleChange("x-persists", "c.source.x", "c.target.x"), roleChange("equals-persists", "c.source.equals", "c.target.equals"), roleChange("seven-persists", "c.source.seven", "c.target.seven")]
   });
+}
+
+export function createSequentialSemanticMotionFixture(
+  transitionCount = 3,
+  semanticIdentityId = "identity.sequence"
+): KpSequentialSemanticMotionFixture {
+  if (!Number.isInteger(transitionCount) || transitionCount < 1) {
+    throw new Error("Sequential semantic-motion fixture requires at least one transition.");
+  }
+  const sourceId = "semantic.sequence";
+  const revisionId = "revision.1";
+  const assetId = "animation.sequence";
+  const stateIds = Array.from({ length: transitionCount + 1 }, (_, index) => `state.sequence.${index}`);
+  const entityIds = Array.from({ length: transitionCount + 1 }, (_, index) => `sequence.entity.${index}`);
+  const transformationIds = Array.from({ length: transitionCount }, (_, index) => `transform.sequence.${index}`);
+  const source: KpSemanticMotionSourceAuthorityV1 = {
+    sourceId,
+    revisionId,
+    assetIds: [assetId],
+    states: stateIds.map((id, index) => ({
+      id,
+      objectIds: [`object.sequence.${index}`],
+      entityIds: [entityIds[index]!]
+    })),
+    entities: entityIds.map((id, index) => index === 0
+      ? { id, semanticIdentityId, provenance: { kind: "authored", sourceId } }
+      : {
+          id,
+          semanticIdentityId,
+          provenance: {
+            kind: "identity-successor",
+            transformationId: transformationIds[index - 1]!,
+            sourceEntityIds: [entityIds[index - 1]!]
+          }
+        })
+  };
+  const contract: KpSemanticMotionOperationStructureContract = {
+    operationId: "kp.semantic-motion.role-change",
+    roles: [
+      role("source-material", "exactly-one", "material", "none"),
+      role("target-material", "exactly-one", "material", "none")
+    ],
+    cohorts: [cohort("cohort.sequence.material", ["source-material", "target-material"], "identity-role-change")],
+    attachments: []
+  };
+  const steps = transformationIds.map((transformationId, index) => {
+    const request = createKpSemanticMotionCompilerRequestV1({
+      schemaVersion: kpSemanticMotionCompilerRequestSchemaVersion,
+      id: `request.sequence.${index}`,
+      assetId,
+      semanticSource: { sourceId, revisionId, operationPacks: [{ packId: "kp.semantic-motion", version: "0.1.0" }] },
+      sourceState: source.states[index]!,
+      targetState: source.states[index + 1]!,
+      operation: {
+        stepId: `step.sequence.${index}`,
+        transformationId,
+        operationId: contract.operationId,
+        roleBindings: {
+          "source-material": [entityIds[index]!],
+          "target-material": [entityIds[index + 1]!]
+        },
+        correspondenceMap: {
+          id: `correspondence.sequence.${index}`,
+          records: [{
+            id: `record.sequence.${index}`,
+            relation: "role-change",
+            sourceSelectorIds: [entityIds[index]!],
+            targetSelectorIds: [entityIds[index + 1]!],
+            summary: `sequence ${index}`
+          }]
+        }
+      },
+      rewriteFrontier: {
+        sourceEntityIds: [entityIds[index]!],
+        targetEntityIds: [entityIds[index + 1]!],
+        contextEntityIds: []
+      },
+      teachingIntent: {
+        kind: "transmit",
+        primaryEntityIds: [entityIds[index]!, entityIds[index + 1]!],
+        secondaryEntityIds: [],
+        summary: `sequence ${index}`
+      }
+    });
+    const endpoints = validateKpSemanticMotionEndpointsAndFrontier({ request, source });
+    if (endpoints.status !== "verified") throw new Error(`Sequence ${index} endpoint validation failed.`);
+    const provenance = validateKpSemanticMotionCorrespondenceAndProvenance({ request, source, endpointFrontier: endpoints.endpointFrontier });
+    if (provenance.status !== "verified") throw new Error(`Sequence ${index} provenance validation failed.`);
+    const lifecycle = compileKpSemanticMotionLifecycle({ request, provenance: provenance.provenance });
+    if (lifecycle.status !== "verified") throw new Error(`Sequence ${index} lifecycle compilation failed.`);
+    const structure = compileKpSemanticMotionRoleCohorts({ request, lifecycle: lifecycle.lifecycle, contract });
+    if (structure.status !== "verified") throw new Error(`Sequence ${index} structure compilation failed.`);
+    const precedence = compileKpSemanticMotionPrecedence({
+      request,
+      structure: structure.structure,
+      spec: {
+        events: [{
+          id: `event.sequence.${index}.orient`,
+          kind: "orient",
+          cohortIds: ["cohort.sequence.material"],
+          attachmentIds: [],
+          correspondenceRecordIds: [],
+          summary: "Orient the stable identity."
+        }, {
+          id: `event.sequence.${index}.settle`,
+          kind: "settlement",
+          cohortIds: ["cohort.sequence.material"],
+          attachmentIds: [],
+          correspondenceRecordIds: [],
+          summary: "Settle the successor representation."
+        }, {
+          id: `event.sequence.${index}.ready`,
+          kind: "native-target-ready",
+          cohortIds: [],
+          attachmentIds: [],
+          correspondenceRecordIds: [],
+          summary: "Native target ready."
+        }],
+        edges: [{
+          beforeEventId: `event.sequence.${index}.orient`,
+          afterEventId: `event.sequence.${index}.settle`
+        }, {
+          beforeEventId: `event.sequence.${index}.settle`,
+          afterEventId: `event.sequence.${index}.ready`
+        }]
+      }
+    });
+    if (precedence.status !== "verified") throw new Error(`Sequence ${index} precedence compilation failed.`);
+    return { request, precedence: precedence.precedence };
+  });
+  return { source, steps };
 }
 
 export function quotientSemanticMotionStructureContract(): KpSemanticMotionOperationStructureContract {

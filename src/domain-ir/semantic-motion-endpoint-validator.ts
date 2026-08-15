@@ -43,6 +43,7 @@ declare const kpSemanticMotionEndpointFrontierAuthority: unique symbol;
 
 export type KpVerifiedSemanticMotionEndpointFrontier = Readonly<{
   kind: "verified-semantic-motion-endpoint-frontier";
+  request: KpSemanticMotionCompilerRequestV1;
   requestId: string;
   sourceId: string;
   revisionId: string;
@@ -110,6 +111,7 @@ export function validateKpSemanticMotionEndpointsAndFrontier(input: {
 
   const endpointFrontier = Object.freeze({
     kind: "verified-semantic-motion-endpoint-frontier" as const,
+    request,
     requestId: request.id,
     sourceId: source.sourceId,
     revisionId: source.revisionId,

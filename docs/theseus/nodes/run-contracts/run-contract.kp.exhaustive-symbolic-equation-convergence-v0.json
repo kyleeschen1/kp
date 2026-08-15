@@ -116,7 +116,8 @@
     {
       "id": "s12",
       "title": "Compositional closure",
-      "status": "planned"
+      "summary": "Committed nominal compositional history, validated identity bindings, exact endpoint seams, stable addresses, object-preserving rewind, direct seek, semantic interruption, URL checkpoint restoration, and bounded chain property tests.",
+      "status": "complete"
     },
     {
       "id": "s13",
