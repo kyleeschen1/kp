@@ -1,7 +1,7 @@
 # Decision 2026-08-15: Symbol-Manipulation Invariants And Promotion Gate
 
 Date: 2026-08-15
-Status: accepted
+Status: accepted; gate complete
 
 ## Decision
 
@@ -22,6 +22,15 @@ Promotion requires three contrasting operations:
 Each caller must pass a human visual checkpoint before cross-caller promotion.
 Only the smallest boundary evidenced by all three may become shared typed
 infrastructure.
+
+## Outcome
+
+All three callers passed their human checkpoints and the source-backed
+comparison is complete. Seven operation-independent requirements are promoted;
+paths, timing, opacity, cohesion geometry, homomorphic fusion, counter-orbit
+contact, distribution-axis constraints, and optical corrections remain local.
+The complete verdict is recorded in
+`2026-08-15-kp-symbol-motion-invariant-promotion-result.md`.
 
 ## Candidate Invariants
 
@@ -184,10 +193,10 @@ recipes, but one caller is insufficient evidence for universal types.
 
 ## Follow-Ups
 
-1. Complete the quotient contract, implementation, and human checkpoint.
-2. Build one bounded distribution caller and stop for human review.
-3. Build one bounded cancellation caller and stop for human review.
-4. Compare all three callers, promote or reject each candidate invariant, and
-   retain operation-specific motifs locally.
-5. Only after promotion, propose a separately reviewable migration strategy
-   for existing symbolic assets.
+1. Quotient contract, implementation, and human checkpoint: complete.
+2. Bounded distribution caller and human checkpoint: complete.
+3. Bounded cancellation caller and human checkpoint: complete.
+4. Cross-caller comparison and invariant decision: complete.
+5. Propose the separately reviewable canonical compiler tranche recorded in
+   `2026-08-15-kp-canonical-semantic-motion-compiler-order.md`; do not infer a
+   catalogue-wide migration.

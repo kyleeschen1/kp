@@ -2,7 +2,7 @@
   "id": "next-action.kp.log-exponent-operation-transport-v0",
   "kind": "next-action",
   "title": "Build exponent-log operation transport exemplars",
-  "status": "ready",
+  "status": "resolved",
   "domain": "animation",
   "sourceRefs": [
     {
@@ -737,11 +737,130 @@
       "scope": "focused",
       "checkedAt": "2026-08-15T19:34:18.814Z",
       "notes": "Application, node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:46:56.099Z",
+      "notes": "All 50 log-exponent semantic, authority, lifecycle, endpoint, sampling, and rewind checks pass."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:46:59.360Z",
+      "notes": "All 36 quotient semantic, choreography, ownership, and capability checks pass."
+    },
+    {
+      "command": "npm run test:distribution-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:03.096Z",
+      "notes": "All 9 distribution provenance, attachment, ordering, and deterministic-seek checks pass."
+    },
+    {
+      "command": "npm run test:cancellation-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:05.651Z",
+      "notes": "All 9 cancellation provenance, contact-ordering, endpoint, and rewind checks pass."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:08.686Z",
+      "notes": "Chromium validates playback, continuous native ownership, compact fraction clearance, and reduced motion."
+    },
+    {
+      "command": "npm run test:browser:distribution-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:10.657Z",
+      "notes": "Chromium validates typed binding, fan-out continuity, rewind, playback, and accessible native settlement."
+    },
+    {
+      "command": "npm run test:browser:cancellation-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:12.729Z",
+      "notes": "Chromium validates counter-orbit realization, shared contact, joint retirement, playback, and reduced motion."
+    },
+    {
+      "command": "playwright log-exponent browser pair",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:15.013Z",
+      "notes": "Chromium validates lazy mount, direct semantic seek, narrow reduced motion, and exclusive native transit ownership."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:16.358Z",
+      "notes": "All four architecture fitness gates pass with zero semantic-animation exceptions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:17.565Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks pass after the exact-optional capture-helper repair."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:18.620Z",
+      "notes": "Animation-library bundle boundary and measured route budgets pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:20.283Z",
+      "notes": "Production bundle builds successfully; existing chunk-size warnings remain informational."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:21.570Z",
+      "notes": "Workspace validates 954 nodes and 20967 events."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:33.683Z",
+      "notes": "Deterministic seven-state contact sheet generated and inspected; semantic projection preserves canonical endpoints."
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:34.958Z",
+      "notes": "Deterministic approved quotient contact sheet generated."
+    },
+    {
+      "command": "npm run visual:distribution-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:36.128Z",
+      "notes": "Deterministic approved distribution contact sheet generated."
+    },
+    {
+      "command": "npm run visual:cancellation-pressure",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-15T19:47:37.242Z",
+      "notes": "Deterministic approved cancellation contact sheet generated."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Three approved callers now have a source-backed comparison: seven operation-independent compiler laws are supported; paths, timing, opacity, homomorphic fusion, counter-orbit contact, distribution axis constraints, and optical corrections remain local. The comparison also removed the last semantic-animation architecture violation by moving exact unannotated log-exponent LaTeX ownership into the semantic tree."
+    "state": "complete",
+    "summary": "Completed the approved log/exponent operation-transport program through three independently reviewed pressure callers. Promoted seven operation-independent compiler requirements, retained motif geometry and timing locally, passed semantic/browser/visual/architecture/type/bundle/workspace release gates, and advanced the roadmap to the separately bounded canonical semantic-motion compiler tranche."
   },
   "expectedLearning": [
     "Which symbol-motion laws remain operation-independent across quotient, distribution, and cancellation."

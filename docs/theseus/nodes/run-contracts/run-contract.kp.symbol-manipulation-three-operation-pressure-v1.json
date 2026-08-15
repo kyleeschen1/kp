@@ -2,7 +2,8 @@
   "id": "run-contract.kp.symbol-manipulation-three-operation-pressure-v1",
   "kind": "run-contract",
   "title": "Symbol manipulation three-operation pressure",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -116,7 +117,8 @@
     {
       "id": "s33",
       "title": "Promote or reject symbol-motion invariants",
-      "status": "planned"
+      "summary": "Promoted seven caller-proven compiler requirements, explicitly retained operation geometry and timing as local policy, recorded the canonical compiler tranche as next, passed focused semantic suites, four Chromium groups, four visual checkpoints, architecture, typecheck, bundle boundaries, production build, and workspace validation, and resolved the three-caller priority gate.",
+      "status": "complete"
     }
   ]
 }

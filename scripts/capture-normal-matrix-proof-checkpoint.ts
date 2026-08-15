@@ -243,7 +243,7 @@ async function captureMotion(input: {
   await assertNoOverflow(page, input.id);
   await recordCapture({
     page,
-    target: input.capture === "stage" ? stage : undefined,
+    ...(input.capture === "stage" ? { target: stage } : {}),
     items: input.items,
     evidence: input.evidence,
     id: input.id,

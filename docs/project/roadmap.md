@@ -67,11 +67,11 @@ Only this repository sequence is active:
    native-KaTeX `2^x = 7` transformation sequence.
 3. **Perfect one asset:** complete through the approved corrected exemplar and
    its typed symbol-motion seam.
-4. **Pressure before promotion:** active. Test quotient, distribution, and
-   cancellation as independently reversible callers, stopping after each for
-   human review. Promote only the invariant boundary evidenced by all three.
-5. **Canonical compiler thin waist:** next, after the active run's comparison
-   and promotion decision. Route the three approved callers through one
+4. **Pressure before promotion:** complete. Quotient, distribution, and
+   cancellation passed independently reversible implementation and human
+   checkpoints; the cross-caller decision promoted seven operation-independent
+   requirements while retaining choreography and geometry locally.
+5. **Canonical compiler thin waist:** next. Route the three approved callers through one
    semantic-motion entry point, enforce the author/compiler/renderer boundary,
    connect governed LLM drafts, and pressure the path with one new animation
    before any further symbolic-family expansion. Migrate historical assets
@@ -87,7 +87,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Canonical path and typed symbol-motion candidate proven; compatibility remains | Finish three-caller promotion, then establish one compiler entry point before another symbolic family. |
+| Equation animation | Three contrasting callers approved; seven shared compiler requirements promoted while motifs remain local | Establish one compiler entry point before another symbolic family. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
