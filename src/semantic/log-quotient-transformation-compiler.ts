@@ -36,37 +36,25 @@ export function compileKpLogQuotientOperation(
 ): KpCompiledLogQuotientOperation {
   assertCanonicalContract(contract);
   const records: readonly SelectorCorrespondenceRecord[] = Object.freeze([
-    relate(
-      "persistent-wrapper",
+    fanIn(
+      "application-fusion",
       contract,
-      "semantic.log-quotient.wrapper.persistent",
-      "semantic.log-quotient.wrapper.persistent",
-      "role-change",
-      "The left natural-log application persists while its argument changes from x to the quotient."
+      [
+        "semantic.log-quotient.wrapper.source-left",
+        "semantic.log-quotient.wrapper.source-right"
+      ],
+      "semantic.log-quotient.wrapper.fused",
+      "Both logarithm applications derive one fused target application; neither source shell survives alone."
     ),
-    relate(
-      "persistent-operator",
+    fanIn(
+      "operator-fusion",
       contract,
-      "semantic.log-quotient.wrapper.persistent.operator",
-      "semantic.log-quotient.wrapper.persistent.operator",
-      "identity",
-      "The same ln operator remains visible throughout the quotient rewrite."
-    ),
-    relate(
-      "persistent-open-delimiter",
-      contract,
-      "semantic.log-quotient.wrapper.persistent.open",
-      "semantic.log-quotient.wrapper.persistent.open",
-      "role-change",
-      "The opening delimiter remains attached to ln while adapting to the quotient argument."
-    ),
-    relate(
-      "persistent-close-delimiter",
-      contract,
-      "semantic.log-quotient.wrapper.persistent.close",
-      "semantic.log-quotient.wrapper.persistent.close",
-      "role-change",
-      "The closing delimiter remains attached to ln while adapting to the quotient argument."
+      [
+        "semantic.log-quotient.wrapper.source-left.operator",
+        "semantic.log-quotient.wrapper.source-right.operator"
+      ],
+      "semantic.log-quotient.wrapper.fused.operator",
+      "Both ln glyphs converge into one target ln successor without choosing an arbitrary survivor."
     ),
     relate(
       "x-to-numerator",
@@ -84,31 +72,39 @@ export function compileKpLogQuotientOperation(
       "role-change",
       "The same y moves from the second logarithm argument into denominator position."
     ),
+    fanIn(
+      "difference-derives-quotient",
+      contract,
+      [
+        "semantic.log-quotient.expression.difference",
+        "semantic.log-quotient.operator.subtract"
+      ],
+      "semantic.log-quotient.quotient.x-over-y",
+      "The source difference structure and subtraction law license quotient construction without preserving glyph identity."
+    ),
     Object.freeze({
-      id: "correspondence.log-quotient.difference-derives-quotient",
-      relation: "fan-in" as const,
-      sourceSelectorIds: Object.freeze([
-        occurrence(contract.source, "semantic.log-quotient.expression.difference"),
-        occurrence(contract.source, "semantic.log-quotient.operator.subtract")
-      ]),
-      targetSelectorIds: Object.freeze([
-        occurrence(contract.target, "semantic.log-quotient.quotient.x-over-y")
-      ]),
-      summary:
-        "The source difference structure and subtraction law derive quotient structure without preserving glyph identity."
-    }),
-    Object.freeze({
-      id: "correspondence.log-quotient.retire-right-wrapper",
+      id: "correspondence.log-quotient.retire-source-enclosures",
       relation: "removal" as const,
       sourceSelectorIds: Object.freeze([
-        occurrence(contract.source, "semantic.log-quotient.wrapper.retiring"),
-        occurrence(contract.source, "semantic.log-quotient.wrapper.retiring.operator"),
-        occurrence(contract.source, "semantic.log-quotient.wrapper.retiring.open"),
-        occurrence(contract.source, "semantic.log-quotient.wrapper.retiring.close")
+        occurrence(contract.source, "semantic.log-quotient.wrapper.source-left.open"),
+        occurrence(contract.source, "semantic.log-quotient.wrapper.source-left.close"),
+        occurrence(contract.source, "semantic.log-quotient.wrapper.source-right.open"),
+        occurrence(contract.source, "semantic.log-quotient.wrapper.source-right.close")
       ]),
       targetSelectorIds: Object.freeze([]),
       summary:
-        "The second logarithm shell retires only after y leaves for denominator position."
+        "Source argument enclosures retire after their material leaves for quotient roles."
+    }),
+    Object.freeze({
+      id: "correspondence.log-quotient.introduce-target-enclosure",
+      relation: "introduction" as const,
+      sourceSelectorIds: Object.freeze([]),
+      targetSelectorIds: Object.freeze([
+        occurrence(contract.target, "semantic.log-quotient.wrapper.fused.open"),
+        occurrence(contract.target, "semantic.log-quotient.wrapper.fused.close")
+      ]),
+      summary:
+        "The fused logarithm receives a new enclosure after its quotient argument becomes recognizable."
     }),
     Object.freeze({
       id: "correspondence.log-quotient.introduce-fraction-bar",
@@ -188,6 +184,26 @@ function relate(
   });
 }
 
+function fanIn(
+  suffix: string,
+  contract: KpLogQuotientContract,
+  sourceSemanticIds: readonly KpLogQuotientSemanticId[],
+  targetSemanticId: KpLogQuotientSemanticId,
+  summary: string
+): SelectorCorrespondenceRecord {
+  return Object.freeze({
+    id: `correspondence.log-quotient.${suffix}`,
+    relation: "fan-in" as const,
+    sourceSelectorIds: Object.freeze(sourceSemanticIds.map((semanticId) =>
+      occurrence(contract.source, semanticId)
+    )),
+    targetSelectorIds: Object.freeze([
+      occurrence(contract.target, targetSemanticId)
+    ]),
+    summary
+  });
+}
+
 function occurrence(
   state: KpLogQuotientState,
   semanticId: KpLogQuotientSemanticId
@@ -204,7 +220,7 @@ function occurrence(
 
 function assertCanonicalContract(contract: KpLogQuotientContract): void {
   if (
-    contract.schemaVersion !== "kp.log-quotient-contract.v1" ||
+    contract.schemaVersion !== "kp.log-quotient-contract.v2" ||
     contract.id !== "contract.log-quotient.difference-to-quotient" ||
     contract.source.id !== "log-quotient.state.difference" ||
     contract.target.id !== "log-quotient.state.quotient" ||

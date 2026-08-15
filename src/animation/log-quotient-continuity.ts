@@ -23,7 +23,9 @@ import {
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 
 export type KpLogQuotientCausalEventKind =
+  | "continuant-departed"
   | "continuant-settled"
+  | "fusion-recognizable"
   | "derivation-recognizable"
   | "structure-retired"
   | "structure-introduced";
@@ -291,31 +293,61 @@ function compileCausalEvents(
   };
   const x = "event.log-quotient.x-settled";
   const y = "event.log-quotient.y-settled";
-  const derived = "event.log-quotient.quotient-recognizable";
+  const xDeparted = "event.log-quotient.x-departed";
+  const yDeparted = "event.log-quotient.y-departed";
+  const sourceEnclosures = "event.log-quotient.source-enclosures-retired";
+  const quotient = "event.log-quotient.quotient-recognizable";
+  const operator = "event.log-quotient.operator-fusion-recognizable";
+  const bar = "event.log-quotient.fraction-bar-introduced";
+  const enclosure = "event.log-quotient.target-enclosure-introduced";
   return Object.freeze([
-    causalEvent(x, "continuant-settled", requireRecord(
+    causalEvent(xDeparted, "continuant-departed", requireRecord(
       "correspondence.log-quotient.x-to-numerator"
     )),
-    causalEvent(y, "continuant-settled", requireRecord(
+    causalEvent(yDeparted, "continuant-departed", requireRecord(
       "correspondence.log-quotient.y-to-denominator"
     )),
     causalEvent(
-      "event.log-quotient.right-wrapper-retired",
+      sourceEnclosures,
       "structure-retired",
-      requireRecord("correspondence.log-quotient.retire-right-wrapper"),
-      [y]
+      requireRecord("correspondence.log-quotient.retire-source-enclosures"),
+      [xDeparted, yDeparted]
+    ),
+    causalEvent(x, "continuant-settled", requireRecord(
+      "correspondence.log-quotient.x-to-numerator"
+    ), [xDeparted]),
+    causalEvent(y, "continuant-settled", requireRecord(
+      "correspondence.log-quotient.y-to-denominator"
+    ), [yDeparted]),
+    causalEvent(
+      operator,
+      "fusion-recognizable",
+      requireRecord("correspondence.log-quotient.operator-fusion"),
+      [sourceEnclosures]
     ),
     causalEvent(
-      derived,
+      quotient,
       "derivation-recognizable",
       requireRecord("correspondence.log-quotient.difference-derives-quotient"),
       [x, y]
     ),
     causalEvent(
-      "event.log-quotient.fraction-bar-introduced",
+      bar,
       "structure-introduced",
       requireRecord("correspondence.log-quotient.introduce-fraction-bar"),
-      [derived]
+      [quotient]
+    ),
+    causalEvent(
+      enclosure,
+      "structure-introduced",
+      requireRecord("correspondence.log-quotient.introduce-target-enclosure"),
+      [quotient]
+    ),
+    causalEvent(
+      "event.log-quotient.fused-application-settled",
+      "fusion-recognizable",
+      requireRecord("correspondence.log-quotient.application-fusion"),
+      [operator, bar, enclosure]
     )
   ]);
 }

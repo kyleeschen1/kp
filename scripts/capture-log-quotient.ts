@@ -15,11 +15,11 @@ const animationId =
 const progressions = [
   {
     phase: "forward",
-    samples: [0, 0.25, 0.5, 0.75, 1]
+    samples: [0, 0.25, 0.5, 0.75, 0.875, 1]
   },
   {
     phase: "return",
-    samples: [0.75, 0.5, 0.25, 0]
+    samples: [0.875, 0.75, 0.5, 0.25, 0]
   }
 ] as const;
 

@@ -4,8 +4,8 @@ import {
   kpLogQuotientAnimationId
 } from "../animation/log-quotient-adapter.ts";
 import {
-  createKpCausalStructuralIntroductionChoreography
-} from "../animation/equation-operation-choreography.ts";
+  kpCanonicalLogQuotientHomomorphicFusionChoreography
+} from "../animation/log-quotient-homomorphic-fusion.ts";
 import {
   sampleKpLogQuotientFrame
 } from "../animation/log-quotient-timeline.ts";
@@ -145,29 +145,38 @@ async function prepareSurface(
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
-    const operationChoreography =
-      createKpCausalStructuralIntroductionChoreography({
-        id: "operation-choreography.transformation.log-quotient.difference-to-quotient.structural-entry.forward",
-        transformationId:
-          kpCanonicalCompiledLogQuotientOperation.transformation.id,
-        direction: "forward",
-        semanticEntityIds: ["target.quotient.bar"],
-        entryWindow: { start: 0.62, end: 0.88 }
-      });
     session.transit = createKpLogQuotientTransitSession({
       operation: kpCanonicalCompiledLogQuotientOperation,
       sourceEndpoint: kpCanonicalLogQuotientNativeEndpoints[0]!,
       targetEndpoint: kpCanonicalLogQuotientNativeEndpoints[1]!,
       source,
       target,
-      operationChoreography
+      operationChoreography:
+        kpCanonicalLogQuotientHomomorphicFusionChoreography
     });
+    const sourceEntities = new Map(source.atoms.map((atom) => [
+      atom.id,
+      atom.semanticEntityId
+    ]));
+    const targetEntities = new Map(target.atoms.map((atom) => [
+      atom.id,
+      atom.semanticEntityId
+    ]));
     session.stage.dataset["kpLogQuotientTrackSummary"] = JSON.stringify(
       session.transit.canonical.session.tracks.map((track) => ({
         id: track.id,
         lifecycle: track.lifecycle,
         sourceAtomId: track.sourceAtomId,
-        targetAtomId: track.targetAtomId
+        targetAtomId: track.targetAtomId,
+        sourceEntityId: track.sourceAtomId === undefined
+          ? undefined
+          : sourceEntities.get(track.sourceAtomId),
+        targetEntityId: track.targetAtomId === undefined
+          ? undefined
+          : targetEntities.get(track.targetAtomId),
+        motionPathVariant: track.motionPath?.variant,
+        motionAxisConstraint: track.motionAxisConstraint,
+        timingGroupId: track.timingGroupId
       }))
     );
     session.stage.dataset["kpLogQuotientStage"] = "ready";

@@ -63,6 +63,39 @@ infrastructure.
 - Cancellation removes material only through an explicit cancellation relation
   and perceptible witness.
 
+### Candidate homomorphic-fusion grammar
+
+The quotient exemplar introduces one provisional operation shape:
+
+```text
+H(a) o H(b) -> H(a star b)
+```
+
+This covers logarithm laws directly and may later describe homomorphisms,
+linear maps, and differential operators. Its current governing principles are:
+
+- Repeated source operator applications form a many-to-one successor cohort.
+  No source occurrence is selected as the arbitrary survivor.
+- Operator-glyph fusion and application-level fusion are separate semantic
+  relations. A renderer may show restrained glyph convergence while the
+  application successor becomes recognizable only after its argument and
+  structural requirements settle.
+- Arguments preserve identity while changing grammatical roles. In the
+  quotient exemplar, the left and right arguments arc into numerator and
+  denominator positions; that path choice is presentation, not algebra.
+- The source connector licenses construction of the target inner operation,
+  but it never becomes target structure. In particular, subtraction does not
+  become the fraction bar.
+- Source enclosures retire after their material departs. Target enclosures and
+  constructors are new structure introduced after the target argument becomes
+  recognizable.
+- Rewind uses the same correspondence and choreography in reverse; it does not
+  compile an unrelated visual trick.
+
+The typed choreography is explicitly marked `candidate`. It may be reused by
+pressure callers, but it is not a promoted catalogue-wide symbol-motion API
+until the distribution and cancellation checkpoints complete the gate.
+
 ### Attention and rendering
 
 - Material presence, visual ownership, and instructional salience are separate

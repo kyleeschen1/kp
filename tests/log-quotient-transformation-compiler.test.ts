@@ -18,14 +18,13 @@ test("quotient compiler mints nominal authority over total correspondence", () =
   assert.equal(isKpCompiledLogQuotientOperation({ ...compiled }), false);
   const records = compiled.transformation.correspondenceMap?.records ?? [];
   assert.deepEqual(records.map(({ relation }) => relation), [
-    "role-change",
-    "identity",
-    "role-change",
-    "role-change",
+    "fan-in",
+    "fan-in",
     "role-change",
     "role-change",
     "fan-in",
     "removal",
+    "introduction",
     "introduction"
   ]);
   assert.deepEqual(
@@ -40,7 +39,7 @@ test("quotient compiler mints nominal authority over total correspondence", () =
   );
 });
 
-test("x and y move into numerator and denominator while one ln wrapper persists", () => {
+test("x and y persist while both ln occurrences fuse into one successor", () => {
   const records = kpCanonicalCompiledLogQuotientOperation
     .transformation.correspondenceMap?.records ?? [];
   assert.deepEqual(
@@ -51,22 +50,21 @@ test("x and y move into numerator and denominator while one ln wrapper persists"
     records.find(({ id }) => id.endsWith("y-to-denominator"))?.targetSelectorIds,
     ["target.denominator.y"]
   );
-  assert.deepEqual(
-    records.find(({ id }) => id.endsWith("persistent-operator")),
-    {
-      id: "correspondence.log-quotient.persistent-operator",
-      relation: "identity",
-      sourceSelectorIds: ["source.left.log.operator"],
-      targetSelectorIds: ["target.log.operator"],
-      summary: "The same ln operator remains visible throughout the quotient rewrite."
-    }
-  );
+  const operatorFusion = records.find(({ id }) => id.endsWith("operator-fusion"));
+  assert.equal(operatorFusion?.relation, "fan-in");
+  assert.deepEqual(operatorFusion?.sourceSelectorIds, [
+    "source.left.log.operator",
+    "source.right.log.operator"
+  ]);
+  assert.deepEqual(operatorFusion?.targetSelectorIds, ["target.log.operator"]);
 });
 
 test("difference fan-in derives a quotient without identifying minus and fraction bar", () => {
   const records = kpCanonicalCompiledLogQuotientOperation
     .transformation.correspondenceMap?.records ?? [];
-  const derivation = records.find(({ relation }) => relation === "fan-in");
+  const derivation = records.find(({ id }) =>
+    id.endsWith("difference-derives-quotient")
+  );
   assert.deepEqual(derivation?.sourceSelectorIds, [
     "source.difference",
     "source.subtract"

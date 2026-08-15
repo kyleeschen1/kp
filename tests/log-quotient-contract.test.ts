@@ -34,7 +34,7 @@ test("log quotient contract fixes exact endpoint trees and rewind text", () => {
   assert.deepEqual(kpCanonicalLogQuotientContract.rewriteFrontier.anchoredContextSemanticIds, []);
 });
 
-test("x, y, and one logarithm wrapper retain semantic identity across endpoints", () => {
+test("only x and y retain identity while logarithm shells form successors", () => {
   const sourceIds = listKpLogQuotientExpressionNodes(kpCanonicalLogQuotientContract.source)
     .map(({ semanticId }) => semanticId);
   const targetIds = listKpLogQuotientExpressionNodes(kpCanonicalLogQuotientContract.target)
@@ -44,9 +44,36 @@ test("x, y, and one logarithm wrapper retain semantic identity across endpoints"
     assert.equal(targetIds.includes(semanticId), true, `target lacks ${semanticId}`);
   }
   assert.deepEqual(
+    kpCanonicalLogQuotientContract.materialPolicy.successorCohorts.map(
+      ({ kind, sourceSemanticIds, targetSemanticIds }) => ({
+        kind,
+        sourceSemanticIds,
+        targetSemanticIds
+      })
+    ),
+    [
+      {
+        kind: "many-to-one",
+        sourceSemanticIds: [
+          "semantic.log-quotient.wrapper.source-left",
+          "semantic.log-quotient.wrapper.source-right"
+        ],
+        targetSemanticIds: ["semantic.log-quotient.wrapper.fused"]
+      },
+      {
+        kind: "many-to-one",
+        sourceSemanticIds: [
+          "semantic.log-quotient.wrapper.source-left.operator",
+          "semantic.log-quotient.wrapper.source-right.operator"
+        ],
+        targetSemanticIds: ["semantic.log-quotient.wrapper.fused.operator"]
+      }
+    ]
+  );
+  assert.deepEqual(
     kpCanonicalLogQuotientContract.structuralRequirements.map(({ kind }) => kind),
     [
-      "preserve-shell",
+      "fuse-operator-shells",
       "retire-shell-after-material-departs",
       "retire-operator-after-operands-depart",
       "introduce-shell-after-material-arrives"

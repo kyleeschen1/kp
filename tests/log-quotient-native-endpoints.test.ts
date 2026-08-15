@@ -49,20 +49,29 @@ test("every textual occurrence and the native fraction rule have one owner", () 
   });
 });
 
-test("persistent wrapper identity is separate from endpoint occurrence identity", () => {
+test("source wrappers and fused target wrapper keep distinct semantic identities", () => {
   const [source, target] = kpCanonicalLogQuotientNativeEndpoints;
-  const sourceWrapper = source!.nodes.find(
-    ({ semanticId }) => semanticId === "semantic.log-quotient.wrapper.persistent"
-  );
+  const sourceWrappers = source!.nodes.filter(({ kind }) => kind === "natural-log");
   const targetWrapper = target!.nodes.find(
-    ({ semanticId }) => semanticId === "semantic.log-quotient.wrapper.persistent"
+    ({ semanticId }) => semanticId === "semantic.log-quotient.wrapper.fused"
   );
-  assert.equal(sourceWrapper?.occurrenceId, "source.left.log");
+  assert.deepEqual(sourceWrappers.map(({ occurrenceId, semanticId }) => ({
+    occurrenceId,
+    semanticId
+  })), [
+    {
+      occurrenceId: "source.left.log",
+      semanticId: "semantic.log-quotient.wrapper.source-left"
+    },
+    {
+      occurrenceId: "source.right.log",
+      semanticId: "semantic.log-quotient.wrapper.source-right"
+    }
+  ]);
   assert.equal(targetWrapper?.occurrenceId, "target.log");
-  assert.equal(sourceWrapper?.semanticId, targetWrapper?.semanticId);
-  assert.notEqual(
-    sourceWrapper?.presentationGroupId,
-    targetWrapper?.presentationGroupId
+  assert.equal(
+    sourceWrappers.some(({ semanticId }) => semanticId === targetWrapper?.semanticId),
+    false
   );
   assert.equal(
     target!.nodes.find(({ occurrenceId }) => occurrenceId === "target.quotient.bar")

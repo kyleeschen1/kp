@@ -41,8 +41,22 @@ export function projectKpLogQuotientNativePaintRelations(
   if (records === undefined) {
     throw new Error("Log-quotient paint relations require correspondence.");
   }
+  const paintBearingRecordIds = new Set([
+    "correspondence.log-quotient.operator-fusion",
+    "correspondence.log-quotient.x-to-numerator",
+    "correspondence.log-quotient.y-to-denominator"
+  ]);
   return projectKpNativeKatexSemanticPaintRelations({
-    groups: records.map(projectRelationGroup)
+    // Application fusion and connector derivation govern meaning, but their
+    // container nodes own no glyph paint. Projecting them would make a minus
+    // sign or an entire expression impersonate the newly constructed target.
+    groups: records
+      .filter(({ id, relation }) =>
+        relation === "introduction" ||
+        relation === "removal" ||
+        paintBearingRecordIds.has(id)
+      )
+      .map(projectRelationGroup)
   });
 }
 
@@ -59,7 +73,6 @@ export function createKpLogQuotientTransitSession(input: {
     source: input.source,
     target: input.target,
     relations: projectKpLogQuotientNativePaintRelations(input.operation),
-    fanInRouting: true,
     endpointDwellFraction: 0,
     ...(input.operationChoreography === undefined
       ? {}

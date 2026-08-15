@@ -2,6 +2,7 @@ import type {
   KpCanonicalFunctionWrapChoreography,
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
+  KpHomomorphicFusionChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "../animation/equation-operation-choreography.ts";
 import type {
@@ -51,7 +52,247 @@ export function applyKpNativeKatexOperationChoreography(input: {
       return applyCausalStructuralIntroduction(input, input.choreography);
     case "canonical-function-wrap":
       return applyCanonicalFunctionWrap(input, input.choreography);
+    case "homomorphic-fusion":
+      return applyHomomorphicFusion(input, input.choreography);
   }
+}
+
+function applyHomomorphicFusion(
+  input: Parameters<typeof applyKpNativeKatexOperationChoreography>[0],
+  choreography: KpHomomorphicFusionChoreography
+): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  const sourceEntities = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntities = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const forward = choreography.direction === "forward";
+  const operatorStartIds = new Set(forward
+    ? choreography.operatorGlyphFusion.sourceEntityIds
+    : choreography.operatorGlyphFusion.targetEntityIds);
+  const operatorEndIds = new Set(forward
+    ? choreography.operatorGlyphFusion.targetEntityIds
+    : choreography.operatorGlyphFusion.sourceEntityIds);
+  const transferByPair = new Map(choreography.argumentTransfers.map((transfer) => {
+    const sourceId = forward
+      ? transfer.sourceEntityIds[0]!
+      : transfer.targetEntityIds[0]!;
+    const targetId = forward
+      ? transfer.targetEntityIds[0]!
+      : transfer.sourceEntityIds[0]!;
+    return [`${sourceId}\u0000${targetId}`, transfer] as const;
+  }));
+  const sourceRetirementIds = new Set(
+    choreography.sourceEnclosureRetirement.sourceEntityIds
+  );
+  const connectorIds = new Set(
+    choreography.connectorDerivation.sourceEntityIds
+  );
+  const targetEntryByEntityId = new Map(
+    choreography.targetStructureEntries.flatMap((entry) =>
+      entry.targetEntityIds.map((entityId) => [entityId, entry] as const)
+    )
+  );
+  const matchedOperators = new Set<string>();
+  const matchedTransfers = new Set<string>();
+  const matchedRetirement = new Set<string>();
+  const matchedTargetEntries = new Set<string>();
+  let matchedConnectorPaint = false;
+
+  const tracks = input.tracks.map((track) => {
+    const sourceEntityId = track.sourceAtomId === undefined
+      ? undefined
+      : sourceEntities.get(track.sourceAtomId);
+    const targetEntityId = track.targetAtomId === undefined
+      ? undefined
+      : targetEntities.get(track.targetAtomId);
+    if (
+      sourceEntityId !== undefined &&
+      targetEntityId !== undefined &&
+      operatorStartIds.has(sourceEntityId) &&
+      operatorEndIds.has(targetEntityId) &&
+      track.lifecycle === (forward ? "merge" : "split")
+    ) {
+      matchedOperators.add(sourceEntityId);
+      const sample = (progress: number) => directionalWindowProgress(
+        choreography,
+        progress,
+        choreography.operatorFusionWindow
+      );
+      return Object.freeze({
+        ...track,
+        // Operator fusion is a restrained convergence, not an argument arc.
+        // The axis constraint also prevents generic collision repair from
+        // silently turning the shared operator into a different motif.
+        motionAxisConstraint: "horizontal" as const,
+        timingGroupId: `${choreography.id}.operator-fusion`,
+        semanticMotionUnitId: `${choreography.id}.operator-fusion`,
+        sampleProgress: sample
+      });
+    }
+    if (sourceEntityId !== undefined && targetEntityId !== undefined) {
+      const transfer = transferByPair.get(
+        `${sourceEntityId}\u0000${targetEntityId}`
+      );
+      if (transfer !== undefined && track.lifecycle === "persist") {
+        matchedTransfers.add(transfer.id);
+        const startRect = track.startPaintRect ?? track.startRect;
+        const endRect = track.endPaintRect ?? track.endRect;
+        const localInkHeight = Math.max(startRect.height, endRect.height, 1);
+        const path = planKpEquationMotionPathBetweenPoints({
+          id: `operation-path.${choreography.id}.${transfer.id}.${track.id}`,
+          relationRecordId: transfer.relationRecordId,
+          start: center(startRect),
+          end: center(endRect),
+          variants: [transfer.route],
+          clearance: localInkHeight * 0.9
+        }).selected;
+        return Object.freeze({
+          ...track,
+          motionPath: path,
+          motionPathSampling: "planned-curve" as const,
+          timingGroupId: `${choreography.id}.argument-transfer`,
+          semanticMotionUnitId: `${choreography.id}.argument.${transfer.id}`,
+          sampleProgress: (progress: number) => directionalWindowProgress(
+            choreography,
+            progress,
+            choreography.argumentTransferWindow
+          )
+        });
+      }
+    }
+
+    const retirementEntityId = forward ? sourceEntityId : targetEntityId;
+    const retirementLifecycle = forward ? "eliminate" : "introduce";
+    if (
+      retirementEntityId !== undefined &&
+      track.lifecycle === retirementLifecycle &&
+      (
+        sourceRetirementIds.has(retirementEntityId) ||
+        connectorIds.has(retirementEntityId)
+      )
+    ) {
+      if (sourceRetirementIds.has(retirementEntityId)) {
+        matchedRetirement.add(retirementEntityId);
+      }
+      if (connectorIds.has(retirementEntityId)) matchedConnectorPaint = true;
+      const sample = (progress: number) => directionalWindowProgress(
+        choreography,
+        progress,
+        choreography.sourceEnclosureRetirement.exitWindow
+      );
+      const fixedRect = forward ? track.startRect : track.endRect;
+      const fixedPaintRect = forward
+        ? track.startPaintRect
+        : track.endPaintRect;
+      return Object.freeze({
+        ...track,
+        startRect: Object.freeze({ ...fixedRect }),
+        endRect: Object.freeze({ ...fixedRect }),
+        ...(fixedPaintRect === undefined
+          ? {}
+          : {
+              startPaintRect: Object.freeze({ ...fixedPaintRect }),
+              endPaintRect: Object.freeze({ ...fixedPaintRect })
+            }),
+        timingGroupId: `${choreography.id}.source-retirement`,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
+      });
+    }
+
+    const entryEntityId = forward ? targetEntityId : sourceEntityId;
+    const entryLifecycle = forward ? "introduce" : "eliminate";
+    const entry = entryEntityId === undefined
+      ? undefined
+      : targetEntryByEntityId.get(entryEntityId);
+    if (entry !== undefined && track.lifecycle === entryLifecycle) {
+      matchedTargetEntries.add(entryEntityId!);
+      const sample = (progress: number) => directionalWindowProgress(
+        choreography,
+        progress,
+        entry.entryWindow
+      );
+      const nativeRect = forward ? track.endRect : track.startRect;
+      const nativePaintRect = forward
+        ? track.endPaintRect
+        : track.startPaintRect;
+      const isEnteringRule = forward && track.paintKind === "rule";
+      const startRect = isEnteringRule
+        ? collapseToCenteredHairline(nativeRect)
+        : nativeRect;
+      const endRect = forward ? nativeRect : (
+        track.paintKind === "rule"
+          ? collapseToCenteredHairline(nativeRect)
+          : nativeRect
+      );
+      return Object.freeze({
+        ...track,
+        startRect: Object.freeze({ ...startRect }),
+        endRect: Object.freeze({ ...endRect }),
+        ...(nativePaintRect === undefined
+          ? {}
+          : {
+              startPaintRect: Object.freeze({
+                ...(isEnteringRule
+                  ? collapseToCenteredHairline(nativePaintRect)
+                  : nativePaintRect)
+              }),
+              endPaintRect: Object.freeze({
+                ...(!forward && track.paintKind === "rule"
+                  ? collapseToCenteredHairline(nativePaintRect)
+                  : nativePaintRect)
+              })
+            }),
+        timingGroupId: `${choreography.id}.target-structure`,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
+      });
+    }
+    return track;
+  });
+
+  assertEntityCoverage(
+    [...operatorStartIds],
+    matchedOperators,
+    `${choreography.id}.operator-fusion`
+  );
+  assertEntityCoverage(
+    choreography.argumentTransfers.map(({ id }) => id),
+    matchedTransfers,
+    `${choreography.id}.argument-transfer`
+  );
+  assertEntityCoverage(
+    choreography.sourceEnclosureRetirement.sourceEntityIds,
+    matchedRetirement,
+    `${choreography.id}.source-retirement`
+  );
+  assertEntityCoverage(
+    [...targetEntryByEntityId.keys()],
+    matchedTargetEntries,
+    `${choreography.id}.target-structure`
+  );
+  if (!matchedConnectorPaint) {
+    throw new Error(
+      `Operation choreography ${choreography.id} has no connector paint to retire.`
+    );
+  }
+  return Object.freeze(tracks);
+}
+
+function directionalWindowProgress(
+  choreography: KpHomomorphicFusionChoreography,
+  progress: number,
+  window: { readonly start: number; readonly end: number }
+): number {
+  return choreography.direction === "forward"
+    ? smoothWindow(progress, window.start, window.end)
+    : 1 - smoothWindow(1 - progress, window.start, window.end);
 }
 
 function applyCanonicalFunctionWrap(

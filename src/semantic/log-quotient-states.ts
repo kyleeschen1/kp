@@ -5,14 +5,18 @@ export type KpLogQuotientStateId =
 export type KpLogQuotientSemanticId =
   | "semantic.log-quotient.expression.difference"
   | "semantic.log-quotient.operator.subtract"
-  | "semantic.log-quotient.wrapper.persistent"
-  | "semantic.log-quotient.wrapper.persistent.operator"
-  | "semantic.log-quotient.wrapper.persistent.open"
-  | "semantic.log-quotient.wrapper.persistent.close"
-  | "semantic.log-quotient.wrapper.retiring"
-  | "semantic.log-quotient.wrapper.retiring.operator"
-  | "semantic.log-quotient.wrapper.retiring.open"
-  | "semantic.log-quotient.wrapper.retiring.close"
+  | "semantic.log-quotient.wrapper.source-left"
+  | "semantic.log-quotient.wrapper.source-left.operator"
+  | "semantic.log-quotient.wrapper.source-left.open"
+  | "semantic.log-quotient.wrapper.source-left.close"
+  | "semantic.log-quotient.wrapper.source-right"
+  | "semantic.log-quotient.wrapper.source-right.operator"
+  | "semantic.log-quotient.wrapper.source-right.open"
+  | "semantic.log-quotient.wrapper.source-right.close"
+  | "semantic.log-quotient.wrapper.fused"
+  | "semantic.log-quotient.wrapper.fused.operator"
+  | "semantic.log-quotient.wrapper.fused.open"
+  | "semantic.log-quotient.wrapper.fused.close"
   | "semantic.log-quotient.variable.x"
   | "semantic.log-quotient.variable.y"
   | "semantic.log-quotient.quotient.x-over-y"
@@ -99,7 +103,7 @@ const source = Object.freeze({
     "source.difference",
     naturalLog(
       "source.left.log",
-      "persistent",
+      "source-left",
       symbol("source.left.argument.x", "x")
     ),
     Object.freeze({
@@ -110,7 +114,7 @@ const source = Object.freeze({
     }),
     naturalLog(
       "source.right.log",
-      "retiring",
+      "source-right",
       symbol("source.right.argument.y", "y")
     )
   )
@@ -123,7 +127,7 @@ const target = Object.freeze({
   accessibleText: "natural log of x divided by y",
   root: naturalLog(
     "target.log",
-    "persistent",
+    "fused",
     quotient(
       "target.quotient",
       symbol("target.numerator.x", "x"),
@@ -156,7 +160,7 @@ function symbol(id: string, name: "x" | "y"): KpLogQuotientSymbolNode {
 
 function naturalLog(
   id: string,
-  lineage: "persistent" | "retiring",
+  lineage: "source-left" | "source-right" | "fused",
   argument: KpLogQuotientExpressionNode
 ): KpLogQuotientNaturalLogNode {
   const prefix = `semantic.log-quotient.wrapper.${lineage}` as const;

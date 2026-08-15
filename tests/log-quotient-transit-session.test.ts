@@ -13,12 +13,12 @@ test("compiled quotient correspondence projects complete native paint lineage", 
   const relations = projectKpLogQuotientNativePaintRelations(
     kpCanonicalCompiledLogQuotientOperation
   );
-  assert.equal(relations.length, 7);
+  assert.equal(relations.length, 3);
   assert.ok(relations.some(({ relation, sourceEntityIds, targetEntityIds }) =>
     relation === "merge" &&
-    sourceEntityIds.includes("source.difference") &&
-    sourceEntityIds.includes("source.subtract") &&
-    targetEntityIds.includes("target.quotient")
+    sourceEntityIds.includes("source.left.log.operator") &&
+    sourceEntityIds.includes("source.right.log.operator") &&
+    targetEntityIds.includes("target.log.operator")
   ));
   // Native entry/removal stays structural choreography, not fake glyph travel.
   assert.equal(relations.some(({ relation }) =>
@@ -26,7 +26,7 @@ test("compiled quotient correspondence projects complete native paint lineage", 
   ), false);
   assert.equal(relations.some(({ sourceEntityIds, targetEntityIds }) =>
     sourceEntityIds.includes("source.subtract") &&
-    targetEntityIds.includes("target.quotient.bar")
+    targetEntityIds.length > 0
   ), false);
 });
 

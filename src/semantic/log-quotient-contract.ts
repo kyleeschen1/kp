@@ -12,7 +12,7 @@ import {
 
 export interface KpLogQuotientStructuralRequirement {
   readonly kind:
-    | "preserve-shell"
+    | "fuse-operator-shells"
     | "retire-shell-after-material-departs"
     | "retire-operator-after-operands-depart"
     | "introduce-shell-after-material-arrives";
@@ -21,7 +21,7 @@ export interface KpLogQuotientStructuralRequirement {
 }
 
 export interface KpLogQuotientContract {
-  readonly schemaVersion: "kp.log-quotient-contract.v1";
+  readonly schemaVersion: "kp.log-quotient-contract.v2";
   readonly id: "contract.log-quotient.difference-to-quotient";
   readonly animationId: "animation.algebra.log-quotient.difference-to-quotient";
   readonly lawId: "law.logarithm.quotient";
@@ -40,6 +40,13 @@ export interface KpLogQuotientContract {
     readonly persistentSemanticIds: readonly KpLogQuotientSemanticId[];
     readonly retiringSemanticIds: readonly KpLogQuotientSemanticId[];
     readonly introducedSemanticIds: readonly KpLogQuotientSemanticId[];
+    readonly successorCohorts: readonly {
+      readonly id: string;
+      readonly kind: "many-to-one";
+      readonly sourceSemanticIds: readonly KpLogQuotientSemanticId[];
+      readonly targetSemanticIds: readonly KpLogQuotientSemanticId[];
+      readonly reason: string;
+    }[];
     readonly forbiddenIdentityPairs: readonly {
       readonly sourceSemanticId: KpLogQuotientSemanticId;
       readonly targetSemanticId: KpLogQuotientSemanticId;
@@ -70,7 +77,7 @@ export function createKpCanonicalLogQuotientContract(input: {
   }
 
   const contract = Object.freeze({
-    schemaVersion: "kp.log-quotient-contract.v1" as const,
+    schemaVersion: "kp.log-quotient-contract.v2" as const,
     id: "contract.log-quotient.difference-to-quotient" as const,
     animationId: "animation.algebra.log-quotient.difference-to-quotient" as const,
     lawId: "law.logarithm.quotient" as const,
@@ -87,25 +94,51 @@ export function createKpCanonicalLogQuotientContract(input: {
     }),
     materialPolicy: Object.freeze({
       persistentSemanticIds: Object.freeze([
-        "semantic.log-quotient.wrapper.persistent",
-        "semantic.log-quotient.wrapper.persistent.operator",
-        "semantic.log-quotient.wrapper.persistent.open",
-        "semantic.log-quotient.wrapper.persistent.close",
         "semantic.log-quotient.variable.x",
         "semantic.log-quotient.variable.y"
       ] as const),
       retiringSemanticIds: Object.freeze([
         "semantic.log-quotient.expression.difference",
         "semantic.log-quotient.operator.subtract",
-        "semantic.log-quotient.wrapper.retiring",
-        "semantic.log-quotient.wrapper.retiring.operator",
-        "semantic.log-quotient.wrapper.retiring.open",
-        "semantic.log-quotient.wrapper.retiring.close"
+        "semantic.log-quotient.wrapper.source-left.open",
+        "semantic.log-quotient.wrapper.source-left.close",
+        "semantic.log-quotient.wrapper.source-right.open",
+        "semantic.log-quotient.wrapper.source-right.close"
       ] as const),
       introducedSemanticIds: Object.freeze([
         "semantic.log-quotient.quotient.x-over-y",
-        "semantic.log-quotient.shell.fraction-bar"
+        "semantic.log-quotient.shell.fraction-bar",
+        "semantic.log-quotient.wrapper.fused.open",
+        "semantic.log-quotient.wrapper.fused.close"
       ] as const),
+      successorCohorts: Object.freeze([
+        Object.freeze({
+          id: "successor-cohort.log-quotient.log-applications",
+          kind: "many-to-one" as const,
+          sourceSemanticIds: Object.freeze([
+            "semantic.log-quotient.wrapper.source-left",
+            "semantic.log-quotient.wrapper.source-right"
+          ] as const),
+          targetSemanticIds: Object.freeze([
+            "semantic.log-quotient.wrapper.fused"
+          ] as const),
+          reason:
+            "Both source logarithm applications contribute to one fused target application."
+        }),
+        Object.freeze({
+          id: "successor-cohort.log-quotient.log-operators",
+          kind: "many-to-one" as const,
+          sourceSemanticIds: Object.freeze([
+            "semantic.log-quotient.wrapper.source-left.operator",
+            "semantic.log-quotient.wrapper.source-right.operator"
+          ] as const),
+          targetSemanticIds: Object.freeze([
+            "semantic.log-quotient.wrapper.fused.operator"
+          ] as const),
+          reason:
+            "Neither source ln glyph survives alone; both fuse into the target ln successor."
+        })
+      ]),
       forbiddenIdentityPairs: Object.freeze([
         Object.freeze({
           sourceSemanticId: "semantic.log-quotient.operator.subtract" as const,
@@ -116,24 +149,26 @@ export function createKpCanonicalLogQuotientContract(input: {
     }),
     structuralRequirements: Object.freeze([
       requirement(
-        "preserve-shell",
+        "fuse-operator-shells",
         [
-          "semantic.log-quotient.wrapper.persistent",
-          "semantic.log-quotient.wrapper.persistent.operator",
-          "semantic.log-quotient.wrapper.persistent.open",
-          "semantic.log-quotient.wrapper.persistent.close"
+          "semantic.log-quotient.wrapper.source-left",
+          "semantic.log-quotient.wrapper.source-left.operator",
+          "semantic.log-quotient.wrapper.source-right",
+          "semantic.log-quotient.wrapper.source-right.operator",
+          "semantic.log-quotient.wrapper.fused",
+          "semantic.log-quotient.wrapper.fused.operator"
         ],
         ["semantic.log-quotient.variable.x", "semantic.log-quotient.variable.y"]
       ),
       requirement(
         "retire-shell-after-material-departs",
         [
-          "semantic.log-quotient.wrapper.retiring",
-          "semantic.log-quotient.wrapper.retiring.operator",
-          "semantic.log-quotient.wrapper.retiring.open",
-          "semantic.log-quotient.wrapper.retiring.close"
+          "semantic.log-quotient.wrapper.source-left.open",
+          "semantic.log-quotient.wrapper.source-left.close",
+          "semantic.log-quotient.wrapper.source-right.open",
+          "semantic.log-quotient.wrapper.source-right.close"
         ],
-        ["semantic.log-quotient.variable.y"]
+        ["semantic.log-quotient.variable.x", "semantic.log-quotient.variable.y"]
       ),
       requirement(
         "retire-operator-after-operands-depart",
@@ -147,7 +182,9 @@ export function createKpCanonicalLogQuotientContract(input: {
         "introduce-shell-after-material-arrives",
         [
           "semantic.log-quotient.quotient.x-over-y",
-          "semantic.log-quotient.shell.fraction-bar"
+          "semantic.log-quotient.shell.fraction-bar",
+          "semantic.log-quotient.wrapper.fused.open",
+          "semantic.log-quotient.wrapper.fused.close"
         ],
         ["semantic.log-quotient.variable.x", "semantic.log-quotient.variable.y"]
       )
@@ -184,13 +221,36 @@ function validateMaterialCoverage(contract: KpLogQuotientContract): void {
   assertExactCoverage(
     "source",
     sourceIds,
-    [...policy.persistentSemanticIds, ...policy.retiringSemanticIds]
+    [
+      ...policy.persistentSemanticIds,
+      ...policy.retiringSemanticIds,
+      ...policy.successorCohorts.flatMap(({ sourceSemanticIds }) =>
+        sourceSemanticIds
+      )
+    ]
   );
   assertExactCoverage(
     "target",
     targetIds,
-    [...policy.persistentSemanticIds, ...policy.introducedSemanticIds]
+    [
+      ...policy.persistentSemanticIds,
+      ...policy.introducedSemanticIds,
+      ...policy.successorCohorts.flatMap(({ targetSemanticIds }) =>
+        targetSemanticIds
+      )
+    ]
   );
+  for (const cohort of policy.successorCohorts) {
+    if (
+      cohort.sourceSemanticIds.length < 2 ||
+      cohort.targetSemanticIds.length !== 1 ||
+      new Set(cohort.sourceSemanticIds).size !== cohort.sourceSemanticIds.length
+    ) {
+      throw new Error(
+        "A log-quotient successor cohort requires distinct many-to-one authority."
+      );
+    }
+  }
   for (const pair of policy.forbiddenIdentityPairs) {
     if (!sourceIds.has(pair.sourceSemanticId) || !targetIds.has(pair.targetSemanticId)) {
       throw new Error("A forbidden log-quotient identity pair must reference both endpoints.");

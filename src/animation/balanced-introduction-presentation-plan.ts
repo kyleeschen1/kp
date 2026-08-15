@@ -2,6 +2,7 @@ import type {
   KpCanonicalFunctionWrapChoreography,
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
+  KpHomomorphicFusionChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "./equation-operation-choreography.ts";
 import {
@@ -36,6 +37,9 @@ export type KpRegisteredEquationOperationChoreography =
       readonly operationPresentationPlan?: undefined;
     })
   | (KpCanonicalFunctionWrapChoreography & {
+      readonly operationPresentationPlan?: undefined;
+    })
+  | (KpHomomorphicFusionChoreography & {
       readonly operationPresentationPlan?: undefined;
     });
 

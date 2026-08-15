@@ -1,4 +1,6 @@
 import type { KpSemanticBranchSchedule } from "./branch-schedule.ts";
+import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
+import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 import {
   isKpCompiledSymbolMotionContract,
   type KpCompiledSymbolMotionContract
@@ -68,11 +70,243 @@ export interface KpCanonicalFunctionWrapChoreography
   };
 }
 
+export interface KpHomomorphicFusionChoreography
+  extends KpEquationOperationChoreographyBase {
+  readonly kind: "homomorphic-fusion";
+  /** This schema remains provisional until the three-operation promotion gate passes. */
+  readonly maturity: "candidate";
+  readonly canonicalShape: "H(a) o H(b) -> H(a star b)";
+  readonly operatorApplicationFusion: KpHomomorphicFusionRelation;
+  readonly operatorGlyphFusion: KpHomomorphicFusionRelation;
+  readonly argumentTransfers: readonly [
+    KpHomomorphicFusionArgumentTransfer,
+    KpHomomorphicFusionArgumentTransfer
+  ];
+  readonly connectorDerivation: KpHomomorphicFusionRelation & {
+    readonly forbiddenIdentityPairs: readonly {
+      readonly sourceEntityId: string;
+      readonly targetEntityId: string;
+    }[];
+  };
+  readonly sourceEnclosureRetirement: KpHomomorphicFusionRelation & {
+    readonly exitWindow: KpEquationChoreographyWindow;
+  };
+  readonly targetStructureEntries: readonly [
+    KpHomomorphicFusionStructuralEntry,
+    ...KpHomomorphicFusionStructuralEntry[]
+  ];
+  readonly operatorFusionWindow: KpEquationChoreographyWindow;
+  readonly argumentTransferWindow: KpEquationChoreographyWindow;
+}
+
+export interface KpHomomorphicFusionRelation {
+  readonly relationRecordId: string;
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+}
+
+export interface KpHomomorphicFusionArgumentTransfer
+  extends KpHomomorphicFusionRelation {
+  readonly id: string;
+  readonly role: "left" | "right";
+  readonly route: "arc-above" | "arc-below";
+}
+
+export interface KpHomomorphicFusionStructuralEntry
+  extends KpHomomorphicFusionRelation {
+  readonly entryWindow: KpEquationChoreographyWindow;
+}
+
+export interface KpEquationChoreographyWindow {
+  readonly start: number;
+  readonly end: number;
+}
+
 export type KpEquationOperationChoreography =
   | KpCounterOrbitCancellationChoreography
   | KpSynchronizedBalancedIntroductionChoreography
   | KpCausalStructuralIntroductionChoreography
-  | KpCanonicalFunctionWrapChoreography;
+  | KpCanonicalFunctionWrapChoreography
+  | KpHomomorphicFusionChoreography;
+
+export function createKpHomomorphicFusionChoreography(input: {
+  readonly transformation: KpSemanticTransformation;
+  readonly direction: "forward" | "rewind";
+  readonly operatorApplicationFusionRecordId: string;
+  readonly operatorGlyphFusionRecordId: string;
+  readonly argumentTransfers: readonly [
+    {
+      readonly id: string;
+      readonly role: "left";
+      readonly relationRecordId: string;
+      readonly route: "arc-above";
+    },
+    {
+      readonly id: string;
+      readonly role: "right";
+      readonly relationRecordId: string;
+      readonly route: "arc-below";
+    }
+  ];
+  readonly connectorDerivationRecordId: string;
+  readonly forbiddenConnectorIdentityPairs: readonly {
+    readonly sourceEntityId: string;
+    readonly targetEntityId: string;
+  }[];
+  readonly sourceEnclosureRetirementRecordId: string;
+  readonly targetStructureEntries: readonly [
+    {
+      readonly relationRecordId: string;
+      readonly entryWindow: KpEquationChoreographyWindow;
+    },
+    ...{
+      readonly relationRecordId: string;
+      readonly entryWindow: KpEquationChoreographyWindow;
+    }[]
+  ];
+  readonly operatorFusionWindow: KpEquationChoreographyWindow;
+  readonly argumentTransferWindow: KpEquationChoreographyWindow;
+  readonly sourceRetirementWindow: KpEquationChoreographyWindow;
+}): KpHomomorphicFusionChoreography {
+  const records = input.transformation.correspondenceMap?.records;
+  if (records === undefined) {
+    throw new Error("Homomorphic fusion requires correspondence authority.");
+  }
+  const application = requireRelation(
+    records,
+    input.operatorApplicationFusionRecordId,
+    "fan-in",
+    "operator application fusion"
+  );
+  const operator = requireRelation(
+    records,
+    input.operatorGlyphFusionRecordId,
+    "fan-in",
+    "operator glyph fusion"
+  );
+  for (const [label, record] of [
+    ["operator application fusion", application],
+    ["operator glyph fusion", operator]
+  ] as const) {
+    if (record.sourceSelectorIds.length < 2 || record.targetSelectorIds.length !== 1) {
+      throw new Error(`${label} requires a many-to-one successor.`);
+    }
+  }
+  const argumentTransfers = input.argumentTransfers.map((transfer) => {
+    const record = requireRelation(
+      records,
+      transfer.relationRecordId,
+      "role-change",
+      `${transfer.role} argument transfer`
+    );
+    if (record.sourceSelectorIds.length !== 1 || record.targetSelectorIds.length !== 1) {
+      throw new Error("Homomorphic argument transfer must preserve one continuant.");
+    }
+    return Object.freeze({
+      id: transfer.id,
+      role: transfer.role,
+      route: transfer.route,
+      ...relationProjection(record)
+    });
+  }) as unknown as KpHomomorphicFusionChoreography["argumentTransfers"];
+  const connector = requireRelation(
+    records,
+    input.connectorDerivationRecordId,
+    "fan-in",
+    "connector derivation"
+  );
+  const sourceRetirement = requireRelation(
+    records,
+    input.sourceEnclosureRetirementRecordId,
+    "removal",
+    "source enclosure retirement"
+  );
+  const targetStructureEntries = input.targetStructureEntries.map((entry) => {
+    const record = requireRelation(
+      records,
+      entry.relationRecordId,
+      "introduction",
+      "target structural entry"
+    );
+    assertUnitWindow(entry.entryWindow, "Homomorphic target structural entry");
+    return Object.freeze({
+      ...relationProjection(record),
+      entryWindow: Object.freeze({ ...entry.entryWindow })
+    });
+  }) as unknown as KpHomomorphicFusionChoreography["targetStructureEntries"];
+  assertUnitWindow(input.operatorFusionWindow, "Homomorphic operator fusion");
+  assertUnitWindow(input.argumentTransferWindow, "Homomorphic argument transfer");
+  assertUnitWindow(input.sourceRetirementWindow, "Homomorphic source retirement");
+  if (
+    input.forbiddenConnectorIdentityPairs.length === 0 ||
+    input.forbiddenConnectorIdentityPairs.some(
+      ({ sourceEntityId, targetEntityId }) =>
+        sourceEntityId.trim() === "" || targetEntityId.trim() === ""
+    ) ||
+    new Set(input.forbiddenConnectorIdentityPairs.map(
+      ({ sourceEntityId, targetEntityId }) =>
+        `${sourceEntityId}\u0000${targetEntityId}`
+    )).size !== input.forbiddenConnectorIdentityPairs.length
+  ) {
+    throw new Error(
+      "Homomorphic forbidden connector identities require unique non-empty pairs."
+    );
+  }
+  const chosenRecordIds = [
+    input.operatorApplicationFusionRecordId,
+    input.operatorGlyphFusionRecordId,
+    ...input.argumentTransfers.map(({ relationRecordId }) => relationRecordId),
+    input.connectorDerivationRecordId,
+    input.sourceEnclosureRetirementRecordId,
+    ...input.targetStructureEntries.map(({ relationRecordId }) => relationRecordId)
+  ];
+  requireUniqueNonempty(chosenRecordIds, "Homomorphic choreography relations");
+  const knownTargetEntityIds = new Set(records.flatMap(
+    ({ targetSelectorIds }) => targetSelectorIds
+  ));
+  for (const pair of input.forbiddenConnectorIdentityPairs) {
+    if (
+      !connector.sourceSelectorIds.includes(pair.sourceEntityId) ||
+      !knownTargetEntityIds.has(pair.targetEntityId)
+    ) {
+      throw new Error(
+        "A forbidden connector identity must name connector source and target material."
+      );
+    }
+    if (connector.targetSelectorIds.includes(pair.targetEntityId)) {
+      throw new Error(
+        "A homomorphic connector cannot preserve identity as target structure."
+      );
+    }
+  }
+  return Object.freeze({
+    schemaVersion: "kp.equation-operation-choreography.v1" as const,
+    kind: "homomorphic-fusion" as const,
+    maturity: "candidate" as const,
+    canonicalShape: "H(a) o H(b) -> H(a star b)" as const,
+    id: `operation-choreography.${input.transformation.id}.homomorphic-fusion.${input.direction}`,
+    transformationId: input.transformation.id,
+    direction: input.direction,
+    operatorApplicationFusion: relationProjection(application),
+    operatorGlyphFusion: relationProjection(operator),
+    argumentTransfers,
+    connectorDerivation: Object.freeze({
+      ...relationProjection(connector),
+      forbiddenIdentityPairs: Object.freeze(
+        input.forbiddenConnectorIdentityPairs.map((pair) =>
+          Object.freeze({ ...pair })
+        )
+      )
+    }),
+    sourceEnclosureRetirement: Object.freeze({
+      ...relationProjection(sourceRetirement),
+      exitWindow: Object.freeze({ ...input.sourceRetirementWindow })
+    }),
+    targetStructureEntries,
+    operatorFusionWindow: Object.freeze({ ...input.operatorFusionWindow }),
+    argumentTransferWindow: Object.freeze({ ...input.argumentTransferWindow })
+  }) as KpHomomorphicFusionChoreography;
+}
 
 export function createKpCanonicalFunctionWrapChoreography(input: {
   readonly contract: KpCompiledSymbolMotionContract;
@@ -185,6 +419,55 @@ export function createKpCausalStructuralIntroductionChoreography(input: {
     semanticEntityIds: Object.freeze([...input.semanticEntityIds]),
     entryWindow: Object.freeze({ ...input.entryWindow })
   }) as KpCausalStructuralIntroductionChoreography;
+}
+
+function requireRelation(
+  records: readonly SelectorCorrespondenceRecord[],
+  id: string,
+  relation: SelectorCorrespondenceRecord["relation"],
+  label: string
+): SelectorCorrespondenceRecord {
+  const record = records.find((candidate) => candidate.id === id);
+  if (record === undefined || record.relation !== relation) {
+    throw new Error(
+      `Homomorphic ${label} requires ${relation} correspondence ${id}.`
+    );
+  }
+  if (relation === "removal") {
+    requireUniqueNonempty(record.sourceSelectorIds, `${label} source`);
+    if (record.targetSelectorIds.length !== 0) {
+      throw new Error(`Homomorphic ${label} removal cannot own target material.`);
+    }
+  } else if (relation === "introduction") {
+    requireUniqueNonempty(record.targetSelectorIds, `${label} target`);
+    if (record.sourceSelectorIds.length !== 0) {
+      throw new Error(`Homomorphic ${label} introduction cannot own source material.`);
+    }
+  } else {
+    requireUniqueNonempty(record.sourceSelectorIds, `${label} source`);
+    requireUniqueNonempty(record.targetSelectorIds, `${label} target`);
+  }
+  return record;
+}
+
+function relationProjection(
+  record: SelectorCorrespondenceRecord
+): KpHomomorphicFusionRelation {
+  return Object.freeze({
+    relationRecordId: record.id,
+    sourceEntityIds: Object.freeze([...record.sourceSelectorIds]),
+    targetEntityIds: Object.freeze([...record.targetSelectorIds])
+  });
+}
+
+function requireUniqueNonempty(values: readonly string[], label: string): void {
+  if (
+    values.length === 0 ||
+    values.some((value) => value.trim() === "") ||
+    new Set(values).size !== values.length
+  ) {
+    throw new Error(`${label} requires unique non-empty ids.`);
+  }
 }
 
 function assertUnitWindow(

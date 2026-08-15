@@ -37,13 +37,37 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
 
   const trackSummary = JSON.parse(
     await stage.getAttribute("data-kp-log-quotient-track-summary") ?? "[]"
-  ) as Array<{ lifecycle?: string; sourceAtomId?: string; targetAtomId?: string }>;
+  ) as Array<{
+    lifecycle?: string;
+    sourceAtomId?: string;
+    targetAtomId?: string;
+    sourceEntityId?: string;
+    targetEntityId?: string;
+    motionPathVariant?: string;
+    motionAxisConstraint?: string;
+  }>;
   expect(trackSummary.length).toBeGreaterThan(0);
   expect(trackSummary.some(({ sourceAtomId, targetAtomId }) =>
     sourceAtomId !== undefined && targetAtomId !== undefined
   )).toBe(true);
+  const operatorFusion = trackSummary.filter(({ lifecycle, targetEntityId }) =>
+    lifecycle === "merge" && targetEntityId === "target.log.operator"
+  );
+  expect(operatorFusion.map(({ sourceEntityId }) => sourceEntityId).sort()).toEqual([
+    "source.left.log.operator",
+    "source.right.log.operator"
+  ]);
+  expect(operatorFusion.every(({ motionPathVariant, motionAxisConstraint }) =>
+    motionPathVariant === undefined && motionAxisConstraint === "horizontal"
+  )).toBe(true);
+  expect(trackSummary.find(({ sourceEntityId }) =>
+    sourceEntityId === "source.left.argument.x"
+  )?.motionPathVariant).toBe("arc-above");
+  expect(trackSummary.find(({ sourceEntityId }) =>
+    sourceEntityId === "source.right.argument.y"
+  )?.motionPathVariant).toBe("arc-below");
 
-  for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
+  for (const progress of [0, 0.25, 0.5, 0.75, 0.875, 1]) {
     await seek.fill(String(progress));
     await expect(stage).toHaveAttribute(
       "data-kp-log-quotient-progress",
@@ -72,6 +96,27 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
     });
     expect(ownership.visibleOwnerCount).toBe(1);
   }
+
+  const materialSnapshot = () => stage.evaluate((root) =>
+    [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].map((owner) => ({
+      id: owner.dataset["kpEquationMaterialOwnerId"],
+      entityId: owner.dataset["kpEquationMaterialSemanticEntityId"],
+      left: owner.style.left,
+      top: owner.style.top,
+      width: owner.style.width,
+      height: owner.style.height,
+      opacity: owner.style.opacity,
+      transform: owner.style.transform,
+      visual: owner.textContent
+    })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
+  );
+  await seek.fill("0.75");
+  const firstSeventyFive = await materialSnapshot();
+  await seek.fill("1");
+  await seek.fill("0.75");
+  expect(await materialSnapshot()).toEqual(firstSeventyFive);
 
   await seek.fill("0");
   await expect(stage).toHaveAttribute(
