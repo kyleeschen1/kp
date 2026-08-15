@@ -94,10 +94,16 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-15T02:25:01.448Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-timeline.test.ts tests/log-exponent-choreography.test.ts tests/log-exponent-interpolation-obligations.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-15T02:28:03.790Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 14 compiles each operation into the shared orient-reflow-act-settle-release envelope and binds every typed interpolation obligation exactly once."
+    "summary": "Slice 15 compiles one host clock, deterministic operation windows, pure seek and rewind frames, and monotone obligation progress through each act phase."
   }
 }

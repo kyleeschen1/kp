@@ -120,7 +120,8 @@
     {
       "id": "s15",
       "title": "Sample deterministic frames",
-      "status": "planned"
+      "summary": "Compiled and verified deterministic frame sampling on one normalized host clock.",
+      "status": "complete"
     },
     {
       "id": "s16",
