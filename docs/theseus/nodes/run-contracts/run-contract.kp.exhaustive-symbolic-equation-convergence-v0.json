@@ -158,7 +158,8 @@
     {
       "id": "s19",
       "title": "Architecture ratchets",
-      "status": "planned"
+      "summary": "Committed complete-source equation authority ratchets and integrated them into the architecture gate.",
+      "status": "complete"
     },
     {
       "id": "s20",

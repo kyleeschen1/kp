@@ -367,10 +367,38 @@
       "scope": "s18 durable workspace integrity",
       "checkedAt": "2026-08-15T23:18:41.441Z",
       "notes": "Workspace validates after generated conformance evidence and slice closure."
+    },
+    {
+      "command": "node --test tests/equation-compiler-authority-ratchet.test.ts and npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 complete source scan and architecture fixtures",
+      "checkedAt": "2026-08-15T23:26:08.825Z",
+      "notes": "Two focused tests pass; the integrated gate scans 1,497 source files and rejects seven deliberate bypass classes."
+    },
+    {
+      "command": "npm run typecheck and npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s19 static and bundle boundaries",
+      "checkedAt": "2026-08-15T23:26:09.817Z",
+      "notes": "Full TypeScript, Svelte, domain checks and all route/capability budgets pass."
+    },
+    {
+      "command": "npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "s19 manifest conformance preservation",
+      "checkedAt": "2026-08-15T23:26:10.729Z",
+      "notes": "All 168 generated checks remain green before caller cutover."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19 durable workspace integrity",
+      "checkedAt": "2026-08-15T23:26:38.092Z",
+      "notes": "Workspace validates after architecture ratchets and slice closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s18 complete: every one of 28 equation manifests now runs six generated laws for asset invariants, seek/rewind composition, one shared timeline, accessibility and reduced motion, exact lazy capability, and inventory closure; the matrix is capped at 128 assets and retains family visual suites separately."
+    "summary": "s19 complete: a full-source architecture gate now ratchets all inventoried equation authority nodes and rejects new raw motif selection, local timing modules, renderer inference, private clocks, direct production sampler modules, unclassified fallbacks, and parallel manual registries; deliberate fixtures prove every prohibition before cutover."
   }
 }
