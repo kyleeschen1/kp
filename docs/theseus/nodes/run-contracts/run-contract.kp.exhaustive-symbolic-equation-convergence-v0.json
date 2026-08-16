@@ -188,7 +188,8 @@
     {
       "id": "s24",
       "title": "Log product semantic caller",
-      "status": "planned"
+      "summary": "Built exact ln(xy) to ln(x)+ln(y) semantic endpoints, assumptions, total typed correspondence, roles, cohorts, attachments, and precedence. Introduced an immutable expression protocol kernel and isolated log-family packs so extension is data-driven without global registration or sibling imports.",
+      "status": "complete"
     },
     {
       "id": "s25",

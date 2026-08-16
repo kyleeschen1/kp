@@ -587,10 +587,45 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-16T00:12:27.129Z"
+    },
+    {
+      "command": "npm run test:expression-protocol",
+      "status": "passed",
+      "scope": "s24 typed protocol and isolated family imports",
+      "checkedAt": "2026-08-16T00:38:37.488Z",
+      "notes": "Typed handler closure, runtime drift rejection, exact log projections, and no sibling family imports passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "s24 semantic caller",
+      "checkedAt": "2026-08-16T00:38:46.150Z",
+      "notes": "Exact endpoints, domain assumptions, nominal correspondence, rewind coverage, total role coverage, and explicit-static recipe boundary passed."
+    },
+    {
+      "command": "npm run test:log-exponent; npm run test:log-quotient; npm run test:semantic-motion-diagnostics",
+      "status": "passed",
+      "scope": "s24 preservation and compiler pipeline",
+      "checkedAt": "2026-08-16T00:38:54.342Z",
+      "notes": "All existing log callers and 39 semantic-motion compiler diagnostics remain green after protocol migration."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "s24 static architecture and patch integrity",
+      "checkedAt": "2026-08-16T00:39:02.571Z",
+      "notes": "TypeScript, Svelte, domain, five architecture ratchets, and whitespace validation pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s24 durable workspace integrity",
+      "checkedAt": "2026-08-16T00:39:47.894Z",
+      "notes": "Workspace validates 956 nodes and 21212 events after the amended architecture slice."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "A branded stage-history layer now composes independent compiler choreographies by reference, uses one external progress coordinate, and exposes direction-aware native endpoint cuts with exactly one active owner."
+    "state": "complete",
+    "summary": "Slice 24 now owns exact log-product semantics and a compiler-ready explicit-static outcome. The closed visitor was replaced by a typed immutable protocol kernel plus isolated log-family structure and projection packs, preserving tree-shakable explicit imports."
   }
 }

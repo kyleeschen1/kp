@@ -16,9 +16,11 @@ import {
 } from "../semantic/transformation-composition.ts";
 import {
   kpCanonicalLogQuotientStates,
-  listKpLogQuotientExpressionNodes,
-  type KpLogQuotientExpressionNode
+  listKpLogQuotientExpressionNodes
 } from "../semantic/log-quotient-states.ts";
+import {
+  labelKpLogQuotientExpressionNode
+} from "../semantic/log-quotient-expression-protocol.ts";
 import {
   kpCanonicalCompiledLogQuotientOperation
 } from "../semantic/log-quotient-transformation-compiler.ts";
@@ -44,7 +46,7 @@ export function createKpLogQuotientAnimationAsset(): KpAnimationAsset {
       selectors: listKpLogQuotientExpressionNodes(state).map((node) => ({
         id: node.id,
         kind: node.kind === "fraction-bar" ? "artifact" : node.kind,
-        label: labelForNode(node),
+        label: labelKpLogQuotientExpressionNode(node),
         metadata: {
           semanticId: node.semanticId,
           representation: "native-katex"
@@ -142,25 +144,4 @@ export function createKpLogQuotientAnimationAsset(): KpAnimationAsset {
         "A typed native-KaTeX pressure caller for the logarithm quotient law."
     }
   });
-}
-
-function labelForNode(node: KpLogQuotientExpressionNode): string {
-  switch (node.kind) {
-    case "symbol":
-      return node.name;
-    case "function-operator":
-      return "\\ln";
-    case "delimiter":
-      return node.value;
-    case "subtraction-operator":
-      return node.value;
-    case "fraction-bar":
-      return "structural:frac-line";
-    case "natural-log":
-      return "natural-log-wrapper";
-    case "difference":
-      return "log-difference";
-    case "quotient":
-      return "quotient";
-  }
 }

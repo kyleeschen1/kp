@@ -1,3 +1,11 @@
+import { listKpExpressionNodes } from "./expression-node-protocol.ts";
+import {
+  kpLogExponentExpressionProtocol
+} from "./log-exponent-expression-protocol.ts";
+export {
+  renderKpLogExponentExpressionNodeLatex
+} from "./log-exponent-expression-protocol.ts";
+
 export type KpLogExponentSolveStateId =
   | "log-exponent.state.source"
   | "log-exponent.state.logged-both-sides"
@@ -168,50 +176,7 @@ export const kpCanonicalLogExponentSolveStates = Object.freeze([
 export function listKpLogExponentExpressionNodes(
   state: KpLogExponentSolveState
 ): readonly KpLogExponentExpressionNode[] {
-  const nodes: KpLogExponentExpressionNode[] = [];
-  visit(state.equation, (node) => nodes.push(node));
-  return Object.freeze(nodes);
-}
-
-/**
- * Native endpoint renderers may annotate this syntax, but the semantic tree
- * owns its exact unannotated LaTeX. Keeping that projection neutral prevents
- * animation assets from importing renderer-owned KaTeX endpoint machinery.
- */
-export function renderKpLogExponentExpressionNodeLatex(
-  node: KpLogExponentExpressionNode
-): string {
-  switch (node.kind) {
-    case "number":
-      return String(node.value);
-    case "symbol":
-      return node.name;
-    case "function-operator":
-      return "\\ln";
-    case "delimiter":
-      return node.value;
-    case "power":
-      return `${renderKpLogExponentExpressionNodeLatex(node.base)}^` +
-        renderKpLogExponentExpressionNodeLatex(node.exponent);
-    case "natural-log": {
-      const operator = renderKpLogExponentExpressionNodeLatex(node.operator);
-      const argument = renderKpLogExponentExpressionNodeLatex(node.argument);
-      return node.enclosure === undefined
-        ? `${operator} ${argument}`
-        : `${operator}${node.enclosure[0].value}${argument}` +
-          node.enclosure[1].value;
-    }
-    case "product":
-      return node.factors
-        .map(renderKpLogExponentExpressionNodeLatex)
-        .join("");
-    case "quotient":
-      return `\\frac{${renderKpLogExponentExpressionNodeLatex(node.numerator)}}` +
-        `{${renderKpLogExponentExpressionNodeLatex(node.denominator)}}`;
-    case "equality":
-      return `${renderKpLogExponentExpressionNodeLatex(node.left)}=` +
-        renderKpLogExponentExpressionNodeLatex(node.right);
-  }
+  return listKpExpressionNodes(state.equation, kpLogExponentExpressionProtocol);
 }
 
 function state(
@@ -307,38 +272,4 @@ function quotient(
   denominator: KpLogExponentExpressionNode
 ): KpLogExponentQuotientNode {
   return Object.freeze({ id, semanticId: "semantic.quotient.log-seven-log-two", kind: "quotient", numerator, denominator });
-}
-
-function visit(
-  node: KpLogExponentExpressionNode,
-  callback: (node: KpLogExponentExpressionNode) => void
-): void {
-  callback(node);
-  switch (node.kind) {
-    case "number":
-    case "symbol":
-    case "function-operator":
-    case "delimiter":
-      return;
-    case "power":
-      visit(node.base, callback);
-      visit(node.exponent, callback);
-      return;
-    case "natural-log":
-      visit(node.operator, callback);
-      node.enclosure?.forEach((delimiter) => visit(delimiter, callback));
-      visit(node.argument, callback);
-      return;
-    case "product":
-      node.factors.forEach((factor) => visit(factor, callback));
-      return;
-    case "quotient":
-      visit(node.numerator, callback);
-      visit(node.denominator, callback);
-      return;
-    case "equality":
-      visit(node.left, callback);
-      visit(node.right, callback);
-      return;
-  }
 }

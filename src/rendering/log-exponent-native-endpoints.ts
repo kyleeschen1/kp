@@ -20,6 +20,12 @@ import {
   type KpLogExponentSolveState,
   type KpLogExponentSolveStateId
 } from "../semantic/log-exponent-solve-states.ts";
+import {
+  defineKpExpressionProjection
+} from "../semantic/expression-node-protocol.ts";
+import {
+  kpLogExponentExpressionProtocol
+} from "../semantic/log-exponent-expression-protocol.ts";
 
 export interface KpLogExponentNativeEndpointNode {
   readonly occurrenceId: string;
@@ -44,6 +50,35 @@ interface RenderedNode {
   readonly annotatedLatex: string;
   readonly annotations: readonly KpSelectorLatexAnnotation[];
 }
+
+const kpLogExponentAnnotatedLatexProjection =
+  defineKpExpressionProjection<KpLogExponentExpressionNode, string>({
+    id: "kp.log-exponent.projection.annotated-latex.v1",
+    protocol: kpLogExponentExpressionProtocol,
+    handlers: {
+      number: { project: (node) => String(node.value) },
+      symbol: { project: (node) => node.name },
+      "function-operator": { project: () => "\\ln" },
+      delimiter: { project: (node) => node.value },
+      // KaTeX annotation commands need a group when they become superscripts.
+      power: {
+        project: (_node, children) => `${children[0]}^{${children[1]}}`
+      },
+      "natural-log": {
+        project: (node, children) => node.enclosure === undefined
+          ? `${children[0]} ${children[1]}`
+          : `${children[0]}${children[1]}${children[2]}${children[3]}`
+      },
+      product: { project: (_node, children) => children.join("") },
+      quotient: {
+        project: (_node, children) =>
+          `\\frac{${children[0]}}{${children[1]}}`
+      },
+      equality: {
+        project: (_node, children) => `${children[0]}=${children[1]}`
+      }
+    }
+  });
 
 export function createKpLogExponentNativeEndpoints(
   states: readonly KpLogExponentSolveState[] =
@@ -184,86 +219,21 @@ function renderChildren(
   state: KpLogExponentSolveState,
   node: KpLogExponentExpressionNode
 ): readonly RenderedNode[] {
-  switch (node.kind) {
-    case "number":
-    case "symbol":
-    case "function-operator":
-    case "delimiter":
-      return Object.freeze([]);
-    case "power":
-      return Object.freeze([
-        renderNode(state, node.base),
-        renderNode(state, node.exponent)
-      ]);
-    case "natural-log":
-      return node.enclosure === undefined
-        ? Object.freeze([
-            renderNode(state, node.operator),
-            renderNode(state, node.argument)
-          ])
-        : Object.freeze([
-            renderNode(state, node.operator),
-            renderNode(state, node.enclosure[0]),
-            renderNode(state, node.argument),
-            renderNode(state, node.enclosure[1])
-          ]);
-    case "product":
-      return Object.freeze(node.factors.map((factor) => renderNode(state, factor)));
-    case "quotient":
-      return Object.freeze([
-        renderNode(state, node.numerator),
-        renderNode(state, node.denominator)
-      ]);
-    case "equality":
-      return Object.freeze([
-        renderNode(state, node.left),
-        renderNode(state, node.right)
-      ]);
-  }
+  return Object.freeze(
+    kpLogExponentExpressionProtocol.children(node).map((child) =>
+      renderNode(state, child)
+    )
+  );
 }
 
 function annotatedNodeLatex(
   node: KpLogExponentExpressionNode,
   children: readonly RenderedNode[]
 ): string {
-  return nodeLatex(
+  return kpLogExponentAnnotatedLatexProjection.project(
     node,
-    children.map(({ annotatedLatex }) => annotatedLatex),
-    true
+    children.map(({ annotatedLatex }) => annotatedLatex)
   );
-}
-
-function nodeLatex(
-  node: KpLogExponentExpressionNode,
-  children: readonly string[],
-  annotated: boolean
-): string {
-  switch (node.kind) {
-    case "number":
-      return String(node.value);
-    case "symbol":
-      return node.name;
-    case "function-operator":
-      return "\\ln";
-    case "delimiter":
-      return node.value;
-    case "power":
-      // KaTeX requires a trusted annotation command to be grouped when used
-      // as a superscript, while the raw endpoint preserves authored `2^x`.
-      return annotated
-        ? `${children[0]}^{${children[1]}}`
-        : `${children[0]}^${children[1]}`;
-    case "natural-log":
-      return node.enclosure === undefined
-        ? `${children[0]} ${children[1]}`
-        : `${children[0]}${children[1]}${children[2]}${children[3]}`;
-    case "product":
-      return children.join("");
-    case "quotient":
-      return `\\frac{${children[0]}}{${children[1]}}`;
-    case "equality":
-      return `${children[0]}=${children[1]}`;
-  }
 }
 
 function motionId(
@@ -278,7 +248,7 @@ function collectParentOccurrences(
 ): ReadonlyMap<string, string> {
   const parents = new Map<string, string>();
   const visit = (node: KpLogExponentExpressionNode): void => {
-    for (const child of childNodes(node)) {
+    for (const child of kpLogExponentExpressionProtocol.children(node)) {
       if (parents.has(child.id)) {
         throw new Error(`Log-exponent endpoint repeats occurrence ${child.id}.`);
       }
@@ -288,35 +258,6 @@ function collectParentOccurrences(
   };
   visit(root);
   return parents;
-}
-
-function childNodes(
-  node: KpLogExponentExpressionNode
-): readonly KpLogExponentExpressionNode[] {
-  switch (node.kind) {
-    case "number":
-    case "symbol":
-    case "function-operator":
-    case "delimiter":
-      return [];
-    case "power":
-      return [node.base, node.exponent];
-    case "natural-log":
-      return node.enclosure === undefined
-        ? [node.operator, node.argument]
-        : [
-            node.operator,
-            node.enclosure[0],
-            node.argument,
-            node.enclosure[1]
-          ];
-    case "product":
-      return node.factors;
-    case "quotient":
-      return [node.numerator, node.denominator];
-    case "equality":
-      return [node.left, node.right];
-  }
 }
 
 function assertEndpointAnnotationClosure(

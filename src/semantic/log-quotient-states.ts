@@ -1,3 +1,8 @@
+import { listKpExpressionNodes } from "./expression-node-protocol.ts";
+import {
+  kpLogQuotientExpressionProtocol
+} from "./log-quotient-expression-protocol.ts";
+
 export type KpLogQuotientStateId =
   | "log-quotient.state.difference"
   | "log-quotient.state.quotient";
@@ -144,9 +149,7 @@ export const kpCanonicalLogQuotientStates = Object.freeze([
 export function listKpLogQuotientExpressionNodes(
   state: KpLogQuotientState
 ): readonly KpLogQuotientExpressionNode[] {
-  const nodes: KpLogQuotientExpressionNode[] = [];
-  visit(state.root, (node) => nodes.push(node));
-  return Object.freeze(nodes);
+  return listKpExpressionNodes(state.root, kpLogQuotientExpressionProtocol);
 }
 
 function symbol(id: string, name: "x" | "y"): KpLogQuotientSymbolNode {
@@ -225,34 +228,4 @@ function quotient(
     }),
     denominator
   });
-}
-
-function visit(
-  node: KpLogQuotientExpressionNode,
-  callback: (node: KpLogQuotientExpressionNode) => void
-): void {
-  callback(node);
-  switch (node.kind) {
-    case "symbol":
-    case "function-operator":
-    case "delimiter":
-    case "subtraction-operator":
-    case "fraction-bar":
-      return;
-    case "natural-log":
-      visit(node.operator, callback);
-      node.enclosure.forEach((delimiter) => visit(delimiter, callback));
-      visit(node.argument, callback);
-      return;
-    case "difference":
-      visit(node.left, callback);
-      visit(node.operator, callback);
-      visit(node.right, callback);
-      return;
-    case "quotient":
-      visit(node.numerator, callback);
-      visit(node.bar, callback);
-      visit(node.denominator, callback);
-      return;
-  }
 }

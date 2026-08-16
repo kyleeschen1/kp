@@ -17,6 +17,10 @@ import {
   type KpLogQuotientState,
   type KpLogQuotientStateId
 } from "../semantic/log-quotient-states.ts";
+import {
+  kpLogQuotientExpressionProtocol,
+  kpLogQuotientLatexProjection
+} from "../semantic/log-quotient-expression-protocol.ts";
 
 export interface KpLogQuotientNativeEndpointNode {
   readonly occurrenceId: string;
@@ -164,13 +168,19 @@ function renderNode(
     });
   }
   const children = renderChildren(state, node);
-  const rawLatex = nodeLatex(node, children.map(({ rawLatex: latex }) => latex));
+  const rawLatex = kpLogQuotientLatexProjection.project(
+    node,
+    children.map(({ rawLatex: latex }) => latex)
+  );
   const motionIdValue = motionId(state, node);
   return Object.freeze({
     rawLatex,
     annotatedLatex:
       `\\htmlData{kp-motion-id=${motionIdValue}}{` +
-      `${nodeLatex(node, children.map(({ annotatedLatex }) => annotatedLatex))}}`,
+      `${kpLogQuotientLatexProjection.project(
+        node,
+        children.map(({ annotatedLatex }) => annotatedLatex)
+      )}}`,
     annotations: Object.freeze([
       Object.freeze({
         selectorId: node.id,
@@ -186,31 +196,8 @@ function renderChildren(
   state: KpLogQuotientState,
   node: KpLogQuotientExpressionNode
 ): readonly RenderedNode[] {
-  return Object.freeze(childNodes(node)
-    .filter(({ kind }) => kind !== "fraction-bar")
+  return Object.freeze(kpLogQuotientExpressionProtocol.children(node)
     .map((child) => renderNode(state, child)));
-}
-
-function nodeLatex(
-  node: Exclude<KpLogQuotientExpressionNode, { readonly kind: "fraction-bar" }>,
-  children: readonly string[]
-): string {
-  switch (node.kind) {
-    case "symbol":
-      return node.name;
-    case "function-operator":
-      return "\\ln";
-    case "delimiter":
-      return node.value;
-    case "subtraction-operator":
-      return "-";
-    case "natural-log":
-      return `${children[0]}${children[1]}${children[2]}${children[3]}`;
-    case "difference":
-      return `${children[0]}${children[1]}${children[2]}`;
-    case "quotient":
-      return `\\frac{${children[0]}}{${children[1]}}`;
-  }
 }
 
 function motionId(
@@ -225,7 +212,7 @@ function collectParentOccurrences(
 ): ReadonlyMap<string, string> {
   const parents = new Map<string, string>();
   const visit = (node: KpLogQuotientExpressionNode): void => {
-    for (const child of childNodes(node)) {
+    for (const child of kpLogQuotientExpressionProtocol.children(node)) {
       if (parents.has(child.id)) {
         throw new Error(`Log-quotient endpoint repeats occurrence ${child.id}.`);
       }
@@ -235,25 +222,6 @@ function collectParentOccurrences(
   };
   visit(root);
   return parents;
-}
-
-function childNodes(
-  node: KpLogQuotientExpressionNode
-): readonly KpLogQuotientExpressionNode[] {
-  switch (node.kind) {
-    case "symbol":
-    case "function-operator":
-    case "delimiter":
-    case "subtraction-operator":
-    case "fraction-bar":
-      return [];
-    case "natural-log":
-      return [node.operator, node.enclosure[0], node.argument, node.enclosure[1]];
-    case "difference":
-      return [node.left, node.operator, node.right];
-    case "quotient":
-      return [node.numerator, node.bar, node.denominator];
-  }
 }
 
 function assertEndpointClosure(
