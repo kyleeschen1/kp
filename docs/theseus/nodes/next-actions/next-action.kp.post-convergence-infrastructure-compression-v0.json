@@ -227,6 +227,13 @@
       "scope": "slice-19 adjacent retirement A",
       "checkedAt": "2026-08-16T15:44:15.761Z",
       "notes": "70 focused tests pass; typecheck and architecture pass; measured bundles remain exactly at baseline."
+    },
+    {
+      "command": "npm run check:equation-reachability; npm run check:equation-fallback-audit; git diff --check",
+      "status": "passed",
+      "scope": "slice-20 adjacent retirement deferral",
+      "checkedAt": "2026-08-16T15:45:51.187Z",
+      "notes": "Generated 59-root reachability and 9-path fallback evidence are current; no second safe deletion exists."
     }
   ]
 }
