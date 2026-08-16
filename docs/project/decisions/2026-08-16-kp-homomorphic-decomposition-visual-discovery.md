@@ -23,17 +23,23 @@ Test this provisional visual rhythm:
 ```text
 hold the source
 -> withdraw the outer application as one cohesive shell
--> redistribute the persistent factors
+-> redistribute the persistent factors on direct horizontal paths
 -> grow target parentheses around the settled factors
--> introduce each function name just after its parentheses
--> resolve the target connector
+-> introduce both function names and the target connector together
 -> hold the native target
 ```
 
-The handoff must remain continuous. Shell withdrawal overlaps the beginning of
-factor redistribution, and target reception begins before the learner can read
-an empty or mathematically misleading intermediate expression. Exact timing,
-paths, opacity, easing, and staggering remain exemplar-local and provisional.
+The handoff must remain continuous. Shell withdrawal first clears the direct
+factor corridor; factor redistribution then begins without a visible crossing.
+Target reception reuses the approved canonical function-wrap cadence: material
+transit, enclosure reception, then syntax resolution. The two `ln` operators
+and `+` form one syntax cohort because the connector has no separate teaching
+role in this exemplar. Exact timing, opacity, easing, and staggering remain
+motif-owned and provisional.
+
+The routing default is now explicit: a persistent symbol takes the shortest
+clear path that preserves baseline and ordinal order. Curvature requires a
+named collision, correspondence, or structural reason; it is not decorative.
 
 ## Execution Timing
 
@@ -54,8 +60,9 @@ caller can justify promoting a reusable homomorphic-decomposition recipe.
 - **Canonical exemplar:** `animation.algebra.log-product.product-to-sum`.
 - **Observable acceptance:** the learner follows the factors without mistaking
   wrapper fan-out for identity duplication, cancellation, or a generic fade;
-  parentheses visibly receive each factor before `ln` completes the wrap; the
-  connector arrives only after the target applications are legible.
+  each factor moves directly on the common baseline; parentheses visibly
+  receive each factor before `ln` completes the wrap; and the two function
+  names and connector resolve together as the target syntax becomes legible.
 - **Durable checks:** semantic identity and provenance, exact native endpoints,
   deterministic direct seek, rewind, interruption, and reduced-motion
   settlement remain unchanged.

@@ -74,8 +74,9 @@ Only this repository sequence is active:
 5. **Exhaustive equation convergence:** active at its mandatory visual
    checkpoint. One semantic-motion compiler now routes the approved callers,
    and two- and three-factor log-product callers prove the clean path. Before
-   migration wave A, test the accepted bounded dissolve-spread-wrap candidate
-   on the binary exemplar and stop for human review. After approval, compress
+   migration wave A, test the accepted bounded dissolve-direct-wrap candidate
+   on the binary exemplar using canonical function reception and stop for
+   human review. After approval, compress
    the iteration path through explicit verification modes, typed open
    declarations, generated closed dispatch, and retirement of the first
    high-churn test clusters. Promote homomorphic decomposition through product

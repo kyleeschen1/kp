@@ -25,6 +25,10 @@ import {
   type KpCompiledSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
 import {
+  kpCanonicalFunctionWrapMotionProfile,
+  offsetKpFunctionWrapMotionWindow
+} from "../animation/function-wrap-motion-profile.ts";
+import {
   isKpCompiledLogProductOperation,
   kpCanonicalCompiledLogProductOperation,
   type KpCompiledLogProductOperation
@@ -32,13 +36,22 @@ import {
 
 const LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS = 0.75;
 const BINARY_VISUAL_DISCOVERY_FAMILY_ID = "family.log-product.xy";
+const BINARY_FUNCTION_WRAP_OFFSET = 0.18;
 
 const BINARY_VISUAL_PHASES = Object.freeze({
-  sourceApplicationWithdrawal: Object.freeze({ start: 0.06, end: 0.22 }),
-  factorTransit: Object.freeze({ start: 0.18, end: 0.62 }),
-  targetDelimiterIntroduction: Object.freeze({ start: 0.54, end: 0.7 }),
-  targetOperatorIntroduction: Object.freeze({ start: 0.64, end: 0.8 }),
-  connectorIntroduction: Object.freeze({ start: 0.8, end: 0.94 })
+  sourceApplicationWithdrawal: Object.freeze({ start: 0.04, end: 0.16 }),
+  factorTransit: offsetKpFunctionWrapMotionWindow(
+    kpCanonicalFunctionWrapMotionProfile.materialTransit,
+    BINARY_FUNCTION_WRAP_OFFSET
+  ),
+  targetDelimiterIntroduction: offsetKpFunctionWrapMotionWindow(
+    kpCanonicalFunctionWrapMotionProfile.enclosureReception,
+    BINARY_FUNCTION_WRAP_OFFSET
+  ),
+  targetSyntaxIntroduction: offsetKpFunctionWrapMotionWindow(
+    kpCanonicalFunctionWrapMotionProfile.syntaxResolution,
+    BINARY_FUNCTION_WRAP_OFFSET
+  )
 });
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
@@ -76,11 +89,17 @@ export function createKpLogProductSemanticMotionProjectionPolicy(
   const routeByTargetEntityId: Record<string, ReturnType<typeof fissionRoute>> = {};
   const factors = operation.contract.family.factors;
   factors.forEach((factor, index) => {
-    const argumentVariant = index === 0
-      ? "arc-below" as const
-      : index === factors.length - 1
-        ? "arc-above" as const
-        : "direct" as const;
+    // The binary exemplar has a clear same-baseline corridor, so curvature
+    // would imply a structural detour that the operation does not contain.
+    const directBinaryTransit =
+      operation.contract.family.id === BINARY_VISUAL_DISCOVERY_FAMILY_ID;
+    const argumentVariant = directBinaryTransit
+      ? "direct" as const
+      : index === 0
+        ? "arc-below" as const
+        : index === factors.length - 1
+          ? "arc-above" as const
+          : "direct" as const;
     routeByCorrespondenceRecordId[
       `correspondence.log-product.${factor.name}-argument-continuity`
     ] = fissionRoute({
@@ -278,10 +297,10 @@ function binaryVisualWindow(
     return BINARY_VISUAL_PHASES.targetDelimiterIntroduction;
   }
   if (lifecycle === "introduce" && targetKind === "function-operator") {
-    return BINARY_VISUAL_PHASES.targetOperatorIntroduction;
+    return BINARY_VISUAL_PHASES.targetSyntaxIntroduction;
   }
   if (lifecycle === "introduce" && targetKind === "plus-operator") {
-    return BINARY_VISUAL_PHASES.connectorIntroduction;
+    return BINARY_VISUAL_PHASES.targetSyntaxIntroduction;
   }
   return undefined;
 }

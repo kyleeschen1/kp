@@ -18,6 +18,22 @@ Semantic parity means each renderer expresses the same instructional hierarchy, 
 - Avoid relying on a single wrapper opacity when internal fragments need distinct semantic roles or when readability suffers.
 - Preserve server-rendered static math; progressive enhancement may add bindings without changing initial geometry.
 
+### Symbol motion and function reception
+
+- Default a persistent symbol to the shortest clear trajectory that preserves
+  identity, baseline, and ordinal order.
+- Use curvature only when it clears an actual collision, disambiguates
+  correspondence, or expresses a named structural operation. Do not add an
+  arc merely to make motion more noticeable.
+- For function wrapping, stage material transit first, enclosure reception
+  second, and operational-syntax resolution last, with enough overlap to keep
+  the handoff continuous.
+- Operators and connectors may share the final syntax-resolution cohort when
+  the lesson gives them no separate teaching role. Split them only for a named
+  instructional reason.
+- Treat exact paths and timing values as motif-owned presentation policy, not
+  semantic or renderer-wide authority.
+
 ## SVG graphs and diagrams
 
 - Use semantic IDs and CSS variables or resolved attributes rather than query-order or path geometry.

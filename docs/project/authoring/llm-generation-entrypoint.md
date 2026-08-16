@@ -18,6 +18,12 @@ animation object graph from prose.
 5. one relevant authoring contract or renderer guide
 6. a brief Theseus context packet for selected executable work
 
+For motion or choreography work, the relevant guide must include
+`../principles/animation-design-diagnostic-language.md`. In particular, an LLM
+must not invent curved trajectories when direct same-baseline motion is clear,
+and it must reuse a registered reception motif rather than authoring a new
+timing table.
+
 Retrieve historical decisions only to answer a named provenance question.
 Older experiments are evidence, not default implementation authority.
 

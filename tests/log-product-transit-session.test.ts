@@ -31,6 +31,15 @@ test("binary visual proof withdraws its source application while factors persist
   assert.equal(relations.some(({ targetEntityIds }) =>
     targetEntityIds.includes("target.sum.plus")
   ), false);
+  for (const factor of ["x", "y"] as const) {
+    assert.equal(
+      kpLogProductSemanticMotionProjectionPolicy
+        .routeByCorrespondenceRecordId[
+          `correspondence.log-product.${factor}-argument-continuity`
+        ]?.variant,
+      "direct"
+    );
+  }
 });
 
 test("multi-factor routing derives symmetric wrapper branches and ordinal argument lanes", () => {

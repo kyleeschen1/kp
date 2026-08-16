@@ -2,9 +2,9 @@
 
 Status: active
 Last Updated: 2026-08-16
-Current Next Action: Run one bounded dissolve-spread-wrap discovery pass on
-the binary log-product exemplar and stop for human visual review. Do not begin
-migration wave A or tune the quotient caller before that approval.
+Current Next Action: Review the bounded dissolve-direct-wrap binary log-product
+exemplar using canonical function reception. Do not begin migration wave A or
+tune the quotient caller before that approval.
 
 ## Goal
 
@@ -121,13 +121,14 @@ sheet remains the gate before the wave-A migration slices begin.
 
 Human review selected a clearer candidate before that gate can pass: withdraw
 the source logarithm application as one shell, redistribute the persistent
-factors, grow target parentheses around them, introduce the derived `ln`
-occurrences just afterward, then resolve the target connector. This reopens
-presentation choreography only; the accepted semantic family, identities,
-compiler, endpoints, clock, catalogue, and host remain the preservation
-boundary. Tune only the binary exemplar, then use three factors for cardinality
-pressure and log quotient as the structurally different promotion caller. The
-decision and discovery/promotion cadence are recorded in
+factors directly on their unobstructed baseline, grow target parentheses around
+them, then resolve the derived `ln` occurrences and `+` as one syntax cohort.
+This reuses the approved function-wrap cadence and reopens presentation
+choreography only; the accepted semantic family, identities, compiler,
+endpoints, clock, catalogue, and host remain the preservation boundary. Tune
+only the binary exemplar, then use three factors for cardinality pressure and
+log quotient as the structurally different promotion caller. The decision and
+discovery/promotion cadence are recorded in
 `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
 The approved follow-on order now inserts iteration-path compression before

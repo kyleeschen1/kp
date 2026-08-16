@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md"
     }
   ],
   "verificationRecords": [
@@ -741,10 +745,45 @@
       "scope": "s25b durable workspace integrity",
       "checkedAt": "2026-08-16T03:51:27.482Z",
       "notes": "Workspace validates 956 nodes and 21248 events after closing the binary visual-discovery slice and its context receipt."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "s25b direct factor routing and semantic preservation",
+      "checkedAt": "2026-08-16T04:18:11.443Z",
+      "notes": "12 focused tests pass; binary x and y routes are direct while three-factor pressure behavior remains unchanged."
+    },
+    {
+      "command": "node equation motion plan and function wrap semantic tests",
+      "status": "passed",
+      "scope": "s25b canonical function-wrap profile preservation",
+      "checkedAt": "2026-08-16T04:18:12.394Z",
+      "notes": "29 focused tests pass, including the exact established material, delimiter, and delayed syntax windows."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "s25b deterministic dissolve-direct-wrap capture",
+      "checkedAt": "2026-08-16T04:18:13.337Z",
+      "notes": "Collision-certified capture passes after the source shell clears the direct corridor; target delimiters receive settled factors and ln plus connector syntax resolves together."
+    },
+    {
+      "command": "playwright log-product chromium",
+      "status": "passed",
+      "scope": "s25b direct seek rewind reduced motion and pressure caller",
+      "checkedAt": "2026-08-16T04:18:14.358Z",
+      "notes": "3 Chromium checks pass for the binary exemplar, unchanged three-factor caller, and reduced-motion native settlement."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25b shared motion-profile boundary",
+      "checkedAt": "2026-08-16T04:18:15.320Z",
+      "notes": "All five architecture gates pass after both the canonical function-wrap fixture and log-product adapter consume one animation-owned profile."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s25b are complete. The revised binary log-product choreography is ready at the mandatory human checkpoint; architecture and migration slices remain gated until approval."
+    "summary": "Slices s01-s25b are complete. The collision-certified dissolve-direct-wrap binary exemplar is ready for mandatory human review; iteration-path architecture and migration remain gated until approval."
   }
 }

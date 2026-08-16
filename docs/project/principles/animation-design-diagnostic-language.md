@@ -23,6 +23,28 @@ broken layer.
 8. **Typographic integrity** — Do font, baseline, glyph dimensions, and
    structural geometry remain stable throughout motion?
 
+## Motion Routing And Reception Defaults
+
+Use the shortest clear trajectory that preserves semantic identity and
+ordering. Same-baseline continuants with an unobstructed corridor move
+directly. Curvature requires one named reason: collision clearance,
+correspondence disambiguation, or expression of a real structural operation.
+Decorative curvature is a diagnostic failure because it implies a relationship
+the semantic transformation does not contain.
+
+Function reception follows this causal phrase:
+
+```text
+material transit -> enclosure reception -> operational syntax resolution
+```
+
+The phases may overlap to preserve continuity, but the enclosure must not lead
+unsettled material and the function/operator syntax must not make an empty
+wrapper readable. Operators and connectors resolve in one cohort when they
+jointly complete the target grammar and neither has a separate instructional
+role. Exact timing, easing, and geometry remain owned by the reviewed motif
+profile rather than becoming semantic truth.
+
 Within typographic integrity, distinguish a glyph's **layout bounds** from its
 **ink bounds**. Layout bounds position the token and reserve advance width.
 Ink bounds include every painted pixel, including italic overhangs, radical

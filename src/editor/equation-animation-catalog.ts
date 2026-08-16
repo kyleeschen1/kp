@@ -4,6 +4,9 @@ import {
   type EquationTransition,
   type EquationTransitionToken
 } from "../math/equation-transform.ts";
+import {
+  kpCanonicalFunctionWrapMotionProfile
+} from "../animation/function-wrap-motion-profile.ts";
 import { findKatexTransformFixture } from "../rendering/katex-transform-fixtures.ts";
 import type { KatexTransformFixture } from "../rendering/katex-transform-fixtures.ts";
 
@@ -748,13 +751,19 @@ function createFunctionWrapFixtureTransition(
     operation: fixtureOperation(fixture),
     tokens: [
       fixtureTransitionToken(`${fixture.id}.x`, "group-wrap", "x", sourceX, targetX, {
-        motion: motionTiming(0, 0.4, "ease-in-out", identityPose(), identityPose())
+        motion: motionTiming(
+          kpCanonicalFunctionWrapMotionProfile.materialTransit.start,
+          kpCanonicalFunctionWrapMotionProfile.materialTransit.end,
+          "ease-in-out",
+          identityPose(),
+          identityPose()
+        )
       }),
       fixtureTransitionToken(`${fixture.id}.f`, "enter", "f", undefined, targetF, {
         entryEffect: "direct",
         motion: motionTiming(
-          0.5,
-          0.78,
+          kpCanonicalFunctionWrapMotionProfile.syntaxResolution.start,
+          kpCanonicalFunctionWrapMotionProfile.syntaxResolution.end,
           "ease-out",
           { opacity: 0, x: -10, y: 0, scale: 0.35 },
           identityPose()
@@ -769,8 +778,8 @@ function createFunctionWrapFixtureTransition(
         {
           entryEffect: "direct",
           motion: motionTiming(
-            0.42,
-            0.7,
+            kpCanonicalFunctionWrapMotionProfile.enclosureReception.start,
+            kpCanonicalFunctionWrapMotionProfile.enclosureReception.end,
             "ease-in-out",
             { opacity: 0, x: -8, y: 0, scale: 1 },
             identityPose()
@@ -786,8 +795,8 @@ function createFunctionWrapFixtureTransition(
         {
           entryEffect: "direct",
           motion: motionTiming(
-            0.42,
-            0.7,
+            kpCanonicalFunctionWrapMotionProfile.enclosureReception.start,
+            kpCanonicalFunctionWrapMotionProfile.enclosureReception.end,
             "ease-in-out",
             { opacity: 0, x: 8, y: 0, scale: 1 },
             identityPose()
