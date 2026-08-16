@@ -17,6 +17,10 @@ import {
 import {
   createKpSemanticMaterialEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
+import {
+  compileAndBindKpFunctionWrapAnimationAsset,
+  kpCanonicalFunctionWrapAssetDeclaration
+} from "./function-wrap-asset-binding.ts";
 
 export const defaultFunctionWrapFixtureId = "generated.function-wrap.apply-f";
 
@@ -54,7 +58,7 @@ export function createFunctionWrapAnimationAsset(
     )
   });
 
-  return createKpAnimationAsset({
+  const animation = createKpAnimationAsset({
     id: animationId,
     title: fixture.title,
     bundle: fixture.bundle,
@@ -112,7 +116,19 @@ export function createFunctionWrapAnimationAsset(
     metadata: {
       sourceFixtureId: fixture.id,
       sourceFixtureFamilyId: fixture.familyId,
-      sourceTraceId: fixture.trace.id
+      sourceTraceId: fixture.trace.id,
+      equationExtensionPackId:
+        kpCanonicalFunctionWrapAssetDeclaration.packId,
+      equationOperationKind:
+        kpCanonicalFunctionWrapAssetDeclaration.operationKind,
+      equationRecipeId:
+        kpCanonicalFunctionWrapAssetDeclaration.recipeId,
+      equationMotifId:
+        kpCanonicalFunctionWrapAssetDeclaration.motifId,
+      equationRendererCapabilityId:
+        kpCanonicalFunctionWrapAssetDeclaration.rendererCapabilityId
     }
   });
+  compileAndBindKpFunctionWrapAnimationAsset(animation);
+  return animation;
 }

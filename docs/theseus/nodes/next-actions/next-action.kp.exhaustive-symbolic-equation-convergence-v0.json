@@ -1270,11 +1270,60 @@
       "scope": "slice s12 static and preservation",
       "checkedAt": "2026-08-16T06:38:08.174Z",
       "notes": "Full types, architecture ratchets, and all 10 deterministic preservation obligations passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/function-wrap-motif-authority.test.ts tests/equation-motion-vocabulary.test.ts tests/native-katex-operation-choreography.test.ts tests/kp-function-wrap-choreography.test.ts tests/kp-function-wrap-animation-asset.test.ts tests/log-product-transit-session.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T06:52:07.866Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s13 exact semantic and sampled-frame preservation",
+      "checkedAt": "2026-08-16T06:52:15.840Z"
+    },
+    {
+      "command": "npm run test:browser:function-wrap-adapter",
+      "status": "passed",
+      "scope": "slice s13 copied-catalogue browser cutover",
+      "checkedAt": "2026-08-16T06:52:26.173Z"
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "slice s13 deterministic current fixture capture",
+      "checkedAt": "2026-08-16T06:52:33.206Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 repository types",
+      "checkedAt": "2026-08-16T06:52:39.915Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s13 architecture boundaries",
+      "checkedAt": "2026-08-16T06:52:47.498Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s13 lazy bundle closure",
+      "checkedAt": "2026-08-16T06:52:55.370Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "known aggregate compiler-cost ceiling",
+      "checkedAt": "2026-08-16T06:53:07.435Z",
+      "notes": "Inference contracts pass, but the pre-existing aggregate ceiling remains red: types 55992 exceeds 50000. No ceiling change or unrelated compiler-cost migration was made in s13."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s25c is complete and the binary outside-in function-wrap candidate is preserved pending visual review. A 26-slice architecture-first overnight reorder is proposed in docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md; it requires explicit approval and will replace direct migration with typed motif APIs, immutable registries, generated dispatch, test-owner retirement, and behavior-preserving waves."
+    "summary": "Slice s13 complete: the canonical x-to-f(x) asset declares the validated function-wrap extension pack and compiles exact semantic argument, function, and enclosure roles into motif.function-wrap.v1. Attention choreography consumes the minted binding rather than transform-name inference; plain-data catalogue copies recompile deterministically; current frames, browser behavior, reduced motion, and bundle closure are preserved. Next: apply-log cutover."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

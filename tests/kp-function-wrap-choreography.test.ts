@@ -28,6 +28,27 @@ test("function wrap compiles the full phase-ordered envelope", () => {
   );
   assert.equal(choreography.plan.semantic.canonicalOperationId, "kp.core.wrap");
   assert.deepEqual(choreography.plan.semantic.motifIds, ["wrap"]);
+  assert.equal(
+    choreography.extensionBinding.compiledMotifPlan.motifId,
+    "motif.function-wrap.v1"
+  );
+});
+
+test("raw wrap-shaped assets cannot bypass the compiler-minted motif binding", () => {
+  const animation = createFunctionWrapAnimationAsset();
+  assert.throws(
+    () => createKpFunctionWrapChoreography({ ...animation, metadata: {} }),
+    /no declared canonical function-wrap extension binding/
+  );
+});
+
+test("declared assets recompile after a plain-data catalogue boundary", () => {
+  const animation = createFunctionWrapAnimationAsset();
+  const copied = { ...animation };
+  assert.equal(
+    createKpFunctionWrapChoreography(copied).extensionBinding.assetId,
+    animation.id
+  );
 });
 
 test("argument reflow completes before wrapper execution begins", () => {

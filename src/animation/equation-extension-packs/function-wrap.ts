@@ -17,6 +17,9 @@ import { kpCanonicalEquationMotionVocabulary } from "../../domain-ir/equation-mo
 
 const vocabulary = kpCanonicalEquationMotionVocabulary;
 
+export const kpFunctionWrapEquationExtensionPackId =
+  "equation-pack.function-wrap.v1";
+
 export const kpFunctionWrapOperationRegistration = Object.freeze({
   id: vocabulary.operations.wrapFunctionV1,
   familyId: vocabulary.families.structuralWrapV1,
@@ -43,7 +46,7 @@ export const kpFunctionWrapMotifRegistration = Object.freeze({
 
 export function createKpFunctionWrapEquationExtensionPack() {
   return composeKpEquationExtensionPack({
-    id: "equation-pack.function-wrap.v1",
+    id: kpFunctionWrapEquationExtensionPackId,
     operations: createKpEquationOperationRegistry([
       kpFunctionWrapOperationRegistration
     ]),

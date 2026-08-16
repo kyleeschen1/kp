@@ -152,7 +152,8 @@
     {
       "id": "s13",
       "title": "Canonical-function-wrap-cutover",
-      "status": "planned"
+      "summary": "Canonical x-to-f(x) now crosses a validated declared extension boundary, compiles role-complete function-wrap motif authority, survives plain-data catalogue copies without globals, rejects undeclared visual inference, and preserves exact current frames and focused browser behavior.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -8,6 +8,13 @@ import {
 import { sampleKpAnimationFrameDescriptor } from "../src/animation/frame-descriptor.ts";
 import { createFunctionWrapAnimationAsset } from "../src/animation/function-wrap-adapter.ts";
 import {
+  requireKpFunctionWrapAssetBinding
+} from "../src/animation/function-wrap-asset-binding.ts";
+import { isKpCompiledMotifPlan } from
+  "../src/domain-ir/equation-motif-invocation.ts";
+import { isKpValidatedEquationExtensionPack } from
+  "../src/domain-ir/equation-extension-pack-validator.ts";
+import {
   checkKpAnimationAssetVisualMotifDefinitionCoverage,
   createKpAnimationAssetVisualMotifTimeline
 } from "../src/animation/visual-motif.ts";
@@ -31,6 +38,44 @@ test("createFunctionWrapAnimationAsset adapts f of x into AnimationAsset", () =>
       "expression.generated.function-wrap.apply-f.input",
       "expression.generated.function-wrap.apply-f.wrapped"
     ]
+  );
+  const binding = requireKpFunctionWrapAssetBinding(animation);
+  assert.deepEqual(
+    {
+      packId: binding.packId,
+      operationKind: binding.operationKind,
+      recipeId: binding.recipeId,
+      motifId: binding.invocation.motifId,
+      rendererCapabilityId: binding.rendererCapabilityId,
+      roles: Object.fromEntries(
+        binding.compiledMotifPlan.roleBindings.map(({ roleId, entities }) => [
+          roleId,
+          entities.map(({ entityId }) => entityId)
+        ])
+      )
+    },
+    {
+      packId: "equation-pack.function-wrap.v1",
+      operationKind: "operation.wrap-function.v1",
+      recipeId: "recipe.equation.function-application.v1",
+      motifId: "motif.function-wrap.v1",
+      rendererCapabilityId: "renderer-capability.equation.native-katex.v1",
+      roles: {
+        argument: ["expression.generated.function-wrap.apply-f.wrapped.argument"],
+        function: ["expression.generated.function-wrap.apply-f.wrapped.function"],
+        "leading-enclosure": [
+          "expression.generated.function-wrap.apply-f.wrapped.left-paren"
+        ],
+        "trailing-enclosure": [
+          "expression.generated.function-wrap.apply-f.wrapped.right-paren"
+        ]
+      }
+    }
+  );
+  assert.equal(isKpCompiledMotifPlan(binding.compiledMotifPlan), true);
+  assert.equal(
+    isKpValidatedEquationExtensionPack(binding.registryAuthority),
+    true
   );
   assert.deepEqual(
     animation.transformations.map((transformation) => [

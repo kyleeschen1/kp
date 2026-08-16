@@ -18,8 +18,13 @@ import {
   type KpFocusProfilePlan
 } from "./focus-profile.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+import {
+  requireKpFunctionWrapAssetBinding,
+  type KpFunctionWrapAssetBinding
+} from "./function-wrap-asset-binding.ts";
 
 export interface KpFunctionWrapChoreography {
+  readonly extensionBinding: KpFunctionWrapAssetBinding;
   readonly plan: KpCompiledChoreographyPlan;
   readonly timeline: KpChoreographyTimeline;
   readonly focus: KpFocusProfilePlan;
@@ -33,23 +38,26 @@ export interface KpFunctionWrapChoreographyFrame {
 export function createKpFunctionWrapChoreography(
   animation: KpAnimationAsset
 ): KpFunctionWrapChoreography {
+  const extensionBinding = requireKpFunctionWrapAssetBinding(animation);
   const transformation = animation.transformations.find(
-    (candidate) => candidate.transformType === "wrapFunction"
+    ({ id }) => id === extensionBinding.transformationId
   );
   if (transformation === undefined) {
-    throw new Error(`Animation ${animation.id} has no function-wrap transformation.`);
+    throw new Error(
+      `Animation ${animation.id} lost bound transformation ${extensionBinding.transformationId}.`
+    );
   }
   const roleChange = transformation.correspondenceMap?.records.find(
-    (candidate) => candidate.relation === "role-change"
+    ({ id }) => id === extensionBinding.argumentCorrespondenceRecordId
   );
   if (roleChange === undefined) {
-    throw new Error("Function-wrap choreography requires one argument role change.");
+    throw new Error(
+      "Function-wrap attention projection lost its bound argument role change."
+    );
   }
-  const wrapperTargets = transformation.correspondenceMap!.records
-    .filter((candidate) => candidate.relation === "introduction")
-    .flatMap((candidate) => candidate.targetSelectorIds);
-  const sourceArgument = roleChange.sourceSelectorIds[0]!;
-  const targetArgument = roleChange.targetSelectorIds[0]!;
+  const wrapperTargets = extensionBinding.wrapperEntityIds;
+  const sourceArgument = extensionBinding.sourceArgumentEntityIds[0]!;
+  const targetArgument = extensionBinding.targetArgumentEntityIds[0]!;
   const vocabulary: KpChoreographyVocabulary = {
     id: `vocabulary.${transformation.id}`,
     continuants: [{
@@ -204,6 +212,7 @@ export function createKpFunctionWrapChoreography(
     );
   }
   return {
+    extensionBinding,
     plan: result.plan,
     timeline: compileKpChoreographyTimeline({
       id: `timeline.${transformation.id}.choreography`,
