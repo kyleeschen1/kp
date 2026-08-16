@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3133,
+  "scannedFileCount": 3135,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -297,7 +297,8 @@
       "testCallers": [
         "tests/animation-library-display-catalog-generation.test.ts",
         "tests/equation-asset-conformance.test.ts",
-        "tests/equation-asset-manifest.test.ts"
+        "tests/equation-asset-manifest.test.ts",
+        "tests/manifest-projection-authority.test.ts"
       ],
       "scriptCallers": [
         "scripts/generate-animation-library-display-catalog.ts",
@@ -324,7 +325,8 @@
         "tests/equation-surface-authority-graph.test.ts",
         "tests/equation-surface-disposition-ledger.test.ts",
         "tests/equation-surface-inventory.test.ts",
-        "tests/equation-surface-preservation-matrix.test.ts"
+        "tests/equation-surface-preservation-matrix.test.ts",
+        "tests/manifest-projection-authority.test.ts"
       ],
       "scriptCallers": [
         "scripts/generate-equation-surface-inventory.ts"
@@ -345,7 +347,8 @@
       "testCallers": [
         "tests/equation-asset-manifest.test.ts",
         "tests/equation-compiler-authority-ratchet.test.ts",
-        "tests/equation-surface-disposition-ledger.test.ts"
+        "tests/equation-surface-disposition-ledger.test.ts",
+        "tests/manifest-projection-authority.test.ts"
       ],
       "scriptCallers": [
         "scripts/check-equation-compiler-authority.ts",
@@ -380,7 +383,9 @@
       "sourceCallers": [
         "src/public/kp-animation-sdk.ts"
       ],
-      "testCallers": [],
+      "testCallers": [
+        "tests/manifest-projection-authority.test.ts"
+      ],
       "scriptCallers": [],
       "otherCallers": [],
       "reachability": "live-callers"

@@ -295,6 +295,7 @@
     "generate:post-convergence-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-post-convergence-infrastructure-inventory.ts",
     "check:post-convergence-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-post-convergence-infrastructure-inventory.ts --check",
     "test:post-convergence-inventory": "node --disable-warning=ExperimentalWarning --test tests/post-convergence-infrastructure-inventory.test.ts",
+    "test:manifest-projection-authority": "node --disable-warning=ExperimentalWarning --test tests/manifest-projection-authority.test.ts",
     "generate:equation-extension-dispatch": "node --disable-warning=ExperimentalWarning scripts/generate-equation-extension-dispatch.ts",
     "check:equation-extension-dispatch": "node --disable-warning=ExperimentalWarning scripts/generate-equation-extension-dispatch.ts --check",
     "test:equation-extension-dispatch": "node --disable-warning=ExperimentalWarning --test tests/equation-extension-dispatch.test.ts",

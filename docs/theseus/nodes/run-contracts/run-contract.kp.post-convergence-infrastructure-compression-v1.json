@@ -140,7 +140,8 @@
     {
       "id": "s17",
       "title": "manifest-projection-authority-audit",
-      "status": "planned"
+      "summary": "Assigned seven manifest/projection facts to one owner each, proved exact-set equality for equation projections and derived counts, and kept the six-entry renderer-neutral SDK selection as an explicit independent compatibility surface.",
+      "status": "complete"
     },
     {
       "id": "s18",

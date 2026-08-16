@@ -206,6 +206,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T15:28:50.281Z",
       "notes": "Six focused audit/reachability tests passed; generated 9-path audit and 59-root graph are fresh; all architecture and TypeScript checks pass."
+    },
+    {
+      "command": "npm run test:manifest-projection-authority; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-17 manifest/projection authority exact sets",
+      "checkedAt": "2026-08-16T15:34:27.760Z",
+      "notes": "No runtime or visual behavior changed."
     }
   ]
 }
