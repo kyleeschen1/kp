@@ -49,3 +49,26 @@ Cancellation repeats the function-wrap entity-resolution gap. The stronger
 result is that canonical correspondence authority distinguishes the retiring
 left `-3` from the visually identical right `-3`; the request cannot select an
 inverse pair by glyph equality or proximity.
+
+## Distribution and factoring
+
+| Measure | Observation |
+| --- | --- |
+| Fixture | `pressure.equation.distribution-factoring` |
+| Catalogue first pass | accepted |
+| Canonical entity closure first pass | repair required |
+| Repair count | 1 validator round |
+| Repair | replace seven plausible aliases with the canonical source factor, source addends, derived factor copies, and product-attachment IDs |
+| Compiler authority | canonical distribution operation, authored fan-out correspondence, total distribution presentation plan, and inverse factoring plan |
+| Deterministic proof | one-to-two cardinality, derived-copy provenance, addend/connector persistence, grouping retirement, endpoint closure, and seek/rewind laws pass |
+| Focused proof time | 2.07 seconds for 26 distribution/factoring authority, cardinality, topology, endpoint, rewind, and no-guess tests on 2026-08-16 |
+| Presentation authorship | none |
+| Generic fallback | none |
+| Trial files touched | this evidence file, the distribution trial test, and one package command entry |
+
+This trial adds a second gap: the LLM-facing operation roles are intentionally
+smaller than the formal operation spec. Product membership, connectors, and
+grouping artifacts already exist in the canonical pressure contract, so a
+narrow facade should derive them rather than asking a model to restate them.
+That join must be explicit and typed; compiling the animation by ID while
+ignoring the request roles would be a hidden bypass.

@@ -98,7 +98,8 @@
     {
       "id": "s10",
       "title": "distribution-factoring-trial",
-      "status": "planned"
+      "summary": "Ran the distribution/factoring fixture through current authority. One semantic-ID repair was required; the repaired request preserved one-to-two factor cardinality, derived-copy identity, product topology, inverse factoring, endpoints, and rewind. The trial proved that the facade must derive canonical role complements rather than solicit or ignore them.",
+      "status": "complete"
     },
     {
       "id": "s11",
