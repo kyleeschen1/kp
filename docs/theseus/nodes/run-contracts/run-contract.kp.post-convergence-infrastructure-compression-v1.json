@@ -56,7 +56,8 @@
     {
       "id": "s03",
       "title": "durable-deferral-register",
-      "status": "planned"
+      "summary": "Recorded nine non-executable deferral classes with durable owners, explicit revisit triggers, and reasons, including visual policy, product/layout, SvelteKit, HTML encoding, compatibility, renderer expansion, live-model evaluation, physical moves, and broad test migration.",
+      "status": "complete"
     },
     {
       "id": "s04",

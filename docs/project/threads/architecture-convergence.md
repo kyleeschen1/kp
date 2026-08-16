@@ -167,6 +167,23 @@ Generation quality is measured by:
 - full curriculum, Public Editor, accounts, or learner modeling; and
 - polishing every historical experiment before pruning it.
 
+## Durable Deferral Register
+
+These items remain retrievable but are not executable queue entries. A revisit
+trigger is permission to propose bounded work, not automatic authorization.
+
+| Deferred item | Durable owner | Revisit trigger | Why it remains deferred |
+| --- | --- | --- | --- |
+| Binary log-product and broader homomorphic-decomposition visual policy | `animation-catalogue.md` and `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md` | Human approval of the binary exemplar, followed by a separately reviewed three-factor and quotient pressure proposal | The current infrastructure run cannot make subjective timing, geometry, or promotion decisions. |
+| Public reader, layout, navigation, educator discovery, curriculum, SRS, and learner modeling | `explanation-attention.md`, `proof-memory-medium.md`, and `../strategy.md` | Observed educator or learner use identifies one concrete product failure and target audience | More layout invention would not validate demand and would contaminate an architecture-only loop. |
+| SvelteKit application composition | this thread and `portable-publication-platform.md` | Internal Studio or Public Web has a bounded route, loading, persistence, and deployment requirement | Svelte may own application lifecycle later, but framework-neutral assets, semantic truth, clocks, frames, authoring commands, and publications must stay portable. |
+| HTML output-encoder consolidation | `../../../src/architecture/html-output-encoding-inventory.ts` | A context/security audit proves two encoders have identical input trust and HTML insertion contracts | Similar helper names do not prove interchangeable escaping behavior. |
+| Timeline, selector-pair, lightweight-ref, generated-fixture, saddle, and public SDK compatibility | `../../../src/architecture/semantic-animation-compatibility-ledger.ts` | An adjacent caller migration reaches zero production and conformance consumers with replacement evidence | Detached cleanup would risk deleting unique compatibility behavior or merely moving it. |
+| Graph3D, Canvas, WebGL, another program language, or a cross-domain compiler | `semantic-runtime.md` and `animation-catalogue.md` | A selected product proof needs one named renderer/domain capability and can preserve lazy isolation | Equation infrastructure does not authorize domain expansion or a universal renderer/compiler. |
+| Live or multi-model generation evaluation | `../authoring/llm-generation-entrypoint.md` | The deterministic request facade and three contrasting fixtures pass with stable typed diagnostics | First prove the tool contract; live-model variance would otherwise hide architecture failures. |
+| Directory, namespace, or repository-wide package reorganization | this thread | Dependency direction and public import-closure evidence make a move mechanical and complexity-negative | Moving files before ownership settles creates churn without reducing authority. |
+| Broad test migration or directory rewrite | this thread and the active infrastructure proposal | Duration, flake rate, unique historical failures, and invariant owners justify a separate measured tranche | This run retires only tests adjacent to a stronger owner; a test purge is not a health strategy. |
+
 ## Open Questions
 
 - Which current layout variants still answer a distinct live product question?
