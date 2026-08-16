@@ -1,3 +1,8 @@
+import {
+  kpCanonicalEquationMotionVocabulary,
+  type KpMotifId
+} from "../domain-ir/equation-motion-vocabulary.ts";
+
 export type KpFunctionWrapEnclosureSide = "leading" | "trailing";
 
 export interface KpFunctionWrapEnclosureEntityRole {
@@ -23,6 +28,7 @@ export interface KpFunctionWrapReceptionPlan {
   readonly schemaVersion: "kp.function-wrap-reception.v1";
   readonly kind: "function-wrap-reception";
   readonly id: string;
+  readonly motifId: KpMotifId;
   readonly direction: "forward" | "rewind";
   readonly branches: readonly KpFunctionWrapReceptionBranch[];
   readonly synchronization: "all-enclosures-together";
@@ -91,6 +97,7 @@ export function createKpFunctionWrapReceptionPlan(input: {
     schemaVersion: "kp.function-wrap-reception.v1" as const,
     kind: "function-wrap-reception" as const,
     id: input.id,
+    motifId: kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1,
     direction: input.direction,
     branches: Object.freeze(branches),
     synchronization: "all-enclosures-together" as const

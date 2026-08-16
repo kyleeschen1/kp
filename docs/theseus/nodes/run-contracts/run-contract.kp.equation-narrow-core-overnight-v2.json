@@ -104,7 +104,8 @@
     {
       "id": "s05",
       "title": "Canonical-vocabulary-and-ids",
-      "status": "planned"
+      "summary": "Added validated nominal MotifId, RecipeId, OperationKind, RendererCapabilityId, and FamilyId vocabulary with versioned namespaces and JSON-boundary guards. Function-wrap reception now carries motif.function-wrap.v1. No runtime choreography changed; the aggregate inference cost ceiling remains separately red and recorded.",
+      "status": "complete"
     },
     {
       "id": "s06",

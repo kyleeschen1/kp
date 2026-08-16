@@ -983,6 +983,48 @@
       "scope": "s04-architecture",
       "checkedAt": "2026-08-16T05:31:50.035Z",
       "notes": "Architecture and equation authority gates passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-vocabulary.test.ts tests/native-katex-operation-choreography.test.ts tests/kp-function-wrap-choreography.test.ts tests/kp-function-wrap-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "s05-vocabulary-and-function-wrap",
+      "checkedAt": "2026-08-16T05:40:28.033Z",
+      "notes": "17 vocabulary, nominal-boundary, function-wrap, native reception, rewind, and asset tests passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "s05-log-product-preservation",
+      "checkedAt": "2026-08-16T05:40:29.161Z",
+      "notes": "13 log-product semantic and reception tests passed."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "s05-log-exponent-preservation",
+      "checkedAt": "2026-08-16T05:40:30.107Z",
+      "notes": "50 log-exponent semantic, endpoint, clock, and function-wrap tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05-typescript",
+      "checkedAt": "2026-08-16T05:40:31.038Z",
+      "notes": "Application, tests, Svelte, and domain typechecks passed, including cross-kind nominal rejection."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s05-architecture",
+      "checkedAt": "2026-08-16T05:40:31.981Z",
+      "notes": "All architecture and equation authority gates passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s05-inference-health",
+      "checkedAt": "2026-08-16T05:40:32.924Z",
+      "notes": "Inference contracts compile, but the pre-existing aggregate cost ceiling remains red at 53911 types versus 50000; the added standalone fixture was removed rather than raising the ceiling."
     }
   ],
   "progress": {
