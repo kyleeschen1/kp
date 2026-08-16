@@ -1,6 +1,6 @@
 import type {
   KpProgrammingExecutionTraceFrame
-} from "../tutorial/programming-execution-trace.ts";
+} from "../domain-ir/programming-execution-trace.ts";
 import type {
   LinearMapVectorGraphRuntimeFrame
 } from "./graph-runtime-frame.ts";

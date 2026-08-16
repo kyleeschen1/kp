@@ -116,7 +116,8 @@
     {
       "id": "s11",
       "title": "migrate-semantic-and-animation-trace-consumers",
-      "status": "planned"
+      "summary": "All neutral program-trace consumers now import domain IR directly; nine upward edges and their exact ratchet exceptions were retired while trace samples and laws remained unchanged.",
+      "status": "complete"
     },
     {
       "id": "s12",

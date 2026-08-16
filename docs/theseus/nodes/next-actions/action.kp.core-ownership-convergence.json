@@ -175,6 +175,13 @@
       "scope": "slice s10 neutral trace fixture",
       "checkedAt": "2026-08-16T21:32:57.349Z",
       "notes": "Eight fixture, behavior, and frozen exemplar tests passed; architecture and test-project typecheck passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dependency-direction-exceptions.test.ts tests/kp-program-trace-asset.test.ts tests/program-trace-frame-preview.test.ts tests/non-equation-sampled-frame-adapter.test.ts tests/kp-animation-external-programming-port.test.ts tests/programming-addition-runtime-frame.test.ts",
+      "status": "passed",
+      "scope": "slice s11 program trace consumer migration",
+      "checkedAt": "2026-08-16T21:35:31.546Z",
+      "notes": "Eighteen trace, adapter, port, preview, runtime-law, and exception-ledger tests passed; architecture now reports 9 rather than 18 exceptions."
     }
   ],
   "expectedLearning": [

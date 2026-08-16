@@ -4,14 +4,12 @@ import type {
 } from "./kp-dependency-direction-policy.ts";
 
 export type KpDependencyRetirementOwner =
-  | "program-trace-neutralization"
   | "linear-solve-cycle-retirement"
   | "html-output-encoding-convergence"
   | "renderer-theme-inversion"
   | "legacy-equation-sdk-disposition";
 
 export type KpDependencyRetirementSlice =
-  | "s12"
   | "s15"
   | "s18"
   | "s20"
@@ -27,12 +25,6 @@ export interface KpDependencyDirectionException {
   readonly plannedSlice: KpDependencyRetirementSlice;
 }
 
-const programTraceRetirement = {
-  owner: "program-trace-neutralization",
-  retireWhen: "Program-trace contracts and fixtures are owned below tutorial composition.",
-  plannedSlice: "s12"
-} as const;
-
 const htmlEncodingRetirement = {
   owner: "html-output-encoding-convergence",
   retireWhen: "Code HTML renderers use the neutral context-specific output encoder.",
@@ -47,69 +39,6 @@ const legacySdkRetirement = {
 
 export const kpDependencyDirectionExceptions: readonly KpDependencyDirectionException[] =
   Object.freeze([
-    exception(
-      "program-trace.external-port.fixture",
-      "src/animation/external-programming-port.ts",
-      "src/tutorial/programming-execution-trace-fixture.ts",
-      "runtime",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.external-port.contract",
-      "src/animation/external-programming-port.ts",
-      "src/tutorial/programming-execution-trace.ts",
-      "type-only",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.sampled-frame.contract",
-      "src/animation/non-equation-sampled-frame-adapter.ts",
-      "src/tutorial/programming-execution-trace.ts",
-      "type-only",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.preview.fixture",
-      "src/animation/program-trace-frame-preview.ts",
-      "src/tutorial/programming-execution-trace-fixture.ts",
-      "runtime",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.preview.contract",
-      "src/animation/program-trace-frame-preview.ts",
-      "src/tutorial/programming-execution-trace.ts",
-      "type-only",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.runtime-frame.fixture",
-      "src/animation/programming-addition-runtime-frame.ts",
-      "src/tutorial/programming-execution-trace-fixture.ts",
-      "runtime",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.runtime-frame.contract",
-      "src/animation/programming-addition-runtime-frame.ts",
-      "src/tutorial/programming-execution-trace.ts",
-      "type-only",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.semantic-asset.fixture",
-      "src/semantic/program-trace-asset.ts",
-      "src/tutorial/programming-execution-trace-fixture.ts",
-      "runtime",
-      programTraceRetirement
-    ),
-    exception(
-      "program-trace.semantic-asset.contract",
-      "src/semantic/program-trace-asset.ts",
-      "src/tutorial/programming-execution-trace.ts",
-      "type-only",
-      programTraceRetirement
-    ),
     exception(
       "linear-solve.semantic-card-cycle",
       "src/semantic/linear-solve-asset.ts",

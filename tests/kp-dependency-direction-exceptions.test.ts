@@ -18,8 +18,8 @@ test("every current direction violation has one exact retirement entry", () => {
     .map(evaluateKpDependencyDirection)
     .filter((value) => value !== undefined);
 
-  assert.equal(violations.length, 18);
-  assert.equal(kpDependencyDirectionExceptions.length, 18);
+  assert.equal(violations.length, 9);
+  assert.equal(kpDependencyDirectionExceptions.length, 9);
   assert.deepEqual(
     violations.map(kpDependencyDirectionExceptionKey).sort(),
     kpDependencyDirectionExceptions
@@ -51,7 +51,7 @@ test("exception ledger is exact, unique, owned, and scheduled", () => {
         importer.startsWith("src/") &&
         target.startsWith("src/") &&
         retireWhen.length > 20 &&
-        /^s(?:12|15|18|20|22)$/.test(plannedSlice)
+        /^s(?:15|18|20|22)$/.test(plannedSlice)
     )
   );
 });

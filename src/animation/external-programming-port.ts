@@ -15,12 +15,12 @@ import type {
 } from "../semantic/asset-port.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../tutorial/programming-execution-trace-fixture.ts";
+} from "../domain-ir/programming-addition-trace-fixture.ts";
 import type {
   KpProgrammingExecutionTrace,
   KpProgrammingExecutionTraceStackFrame,
   KpProgrammingExecutionTraceStep
-} from "../tutorial/programming-execution-trace.ts";
+} from "../domain-ir/programming-execution-trace.ts";
 
 export interface CreateProgrammingTraceExternalAnimationPortInput {
   readonly id: string;

@@ -10,13 +10,13 @@ import {
 } from "./non-equation-sampled-frame-adapter.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../tutorial/programming-execution-trace-fixture.ts";
+} from "../domain-ir/programming-addition-trace-fixture.ts";
 import type {
   KpProgrammingExecutionTraceFrame,
   KpProgrammingExecutionTraceLocalBinding,
   KpProgrammingExecutionTraceStackFrame,
   KpProgrammingExecutionTraceStepKind
-} from "../tutorial/programming-execution-trace.ts";
+} from "../domain-ir/programming-execution-trace.ts";
 
 export interface CreateProgramTraceFramePreviewSampleInput {
   readonly progress?: number | undefined;

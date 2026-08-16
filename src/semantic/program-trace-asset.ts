@@ -26,11 +26,11 @@ import {
 } from "./source-file.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../tutorial/programming-execution-trace-fixture.ts";
+} from "../domain-ir/programming-addition-trace-fixture.ts";
 import type {
   KpProgrammingExecutionTraceFrame,
   KpProgrammingExecutionTraceStep
-} from "../tutorial/programming-execution-trace.ts";
+} from "../domain-ir/programming-execution-trace.ts";
 
 export interface ProgramTraceKpAsset {
   readonly sourceFixtureId: "fixture.programming.add.execution-trace";

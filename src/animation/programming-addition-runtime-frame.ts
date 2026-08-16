@@ -16,11 +16,11 @@ import type {
 import type { SourceFileObject } from "../semantic/source-file.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../tutorial/programming-execution-trace-fixture.ts";
+} from "../domain-ir/programming-addition-trace-fixture.ts";
 import type {
   KpProgrammingExecutionTraceLocalBinding,
   KpProgrammingExecutionTraceStackFrame
-} from "../tutorial/programming-execution-trace.ts";
+} from "../domain-ir/programming-execution-trace.ts";
 
 export type KpProgrammingAdditionFrameMode =
   | "animated"
