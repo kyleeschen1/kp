@@ -2,7 +2,8 @@
   "id": "run-contract.kp.exhaustive-symbolic-equation-convergence-v1",
   "kind": "run-contract",
   "title": "Exhaustive symbolic equation convergence continuation",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "User approved the architecture-first overnight reorder after s25c. The successor contract preserves the pending visual checkpoint while replacing direct migration with typed motif APIs, immutable registries, generated dispatch, test-owner retirement, and behavior-preserving migration slices.",
   "sourceRefs": [
     {
       "kind": "file",

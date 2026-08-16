@@ -871,6 +871,34 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T05:02:07.578Z",
       "notes": "Workspace validates 957 nodes and 21279 events after closing s25c and recording the proposed architecture-first reorder."
+    },
+    {
+      "command": "npm run test:equation-iteration-economics",
+      "status": "passed",
+      "scope": "s02-focused",
+      "checkedAt": "2026-08-16T05:14:41.567Z",
+      "notes": "Pure diagnostic compiler test passed."
+    },
+    {
+      "command": "npm run measure:equation-iteration-economics",
+      "status": "passed",
+      "scope": "s02-baseline",
+      "checkedAt": "2026-08-16T05:14:42.596Z",
+      "notes": "Measured 39 authority files, 22 closed switch sites, 3 function-wrap profile consumers, 1333 test files, 190 source-inspection tests, 26 aggregate count candidates, and 217 verification scripts."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02-standard",
+      "checkedAt": "2026-08-16T05:14:43.531Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s02-standard",
+      "checkedAt": "2026-08-16T05:14:44.481Z",
+      "notes": "All architecture boundaries passed."
     }
   ],
   "progress": {

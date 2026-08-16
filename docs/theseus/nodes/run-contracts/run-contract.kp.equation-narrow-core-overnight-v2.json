@@ -1,0 +1,213 @@
+{
+  "id": "run-contract.kp.equation-narrow-core-overnight-v2",
+  "kind": "run-contract",
+  "title": "Equation narrow-core overnight convergence",
+  "status": "ready",
+  "domain": "animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exhaustive-symbolic-equation-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md",
+      "summary": "Human-approved 26-slice reorder; checkpoint slice 1 completed before this 25-slice successor."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.symbolic-manipulation-animation-library"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:equation-surface-preservation",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run test:loop-reliability",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether typed motif invocations eliminate caller-local reimplementation while preserving exact approved animation behavior.",
+    "Whether immutable registries plus generated literal dispatch make new equation callers extension-only, exhaustive, and tree-shakable.",
+    "Whether stronger invariant owners can replace high-churn count and source-shape tests while reducing verification cost."
+  ],
+  "allowedWork": [
+    "Implement the approved 25 remaining slices from the equation narrow-core overnight proposal.",
+    "Preserve existing behavior while replacing caller-specific motif, registry, dispatch, loader, compatibility, and duplicate-test authority.",
+    "Defer individual callers whose exact visual equivalence cannot be proved, then continue independent deterministic slices."
+  ],
+  "disallowedWork": [
+    "Do not approve, tune, or promote the pending log-product visual candidate or any other subjective visual policy.",
+    "Do not change public layout, curriculum, user-authored economics files, unrelated untracked documents, or domain-specific graph, code, diagram, Canvas, WebGL, or Graph3D semantics.",
+    "Do not create a mutable global registry, side-effect registration, generic visual fallback, universal plugin system, or universal cross-domain compiler."
+  ],
+  "criteria": [
+    {
+      "id": "motif-single-authority",
+      "weight": "high"
+    },
+    {
+      "id": "behavior-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "open-declarations-closed-execution",
+      "weight": "high"
+    },
+    {
+      "id": "test-owner-retirement",
+      "weight": "medium"
+    },
+    {
+      "id": "bundle-closure",
+      "weight": "high"
+    }
+  ],
+  "goal": "Make equation motifs executable shared APIs, replace closed core dispatch with typed declarations and generated closure, retire low-value duplicate tests, and behavior-preservingly migrate supported equation callers without promoting pending visual policy.",
+  "target": "next-action.kp.exhaustive-symbolic-equation-convergence-v0",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on loss of semantic identity, native endpoints, deterministic seek or rewind, interruption, reduced motion, accessibility truth, or shared-clock ownership.",
+    "Stop on unexplained bundle-boundary regression, non-tree-shakable eager loading, or unrelated user-owned file changes.",
+    "When a caller cannot preserve presentation exactly, leave it on the existing path, record the gap, and continue only independent slices rather than tuning visuals.",
+    "Stop if the architecture begins merging equation, graph, code, diagram, Canvas, WebGL, or Graph3D domain compilers.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "s02",
+      "title": "Baseline-iteration-economics",
+      "summary": "Added a stable iteration-economics measurement command, pure diagnostic model and test, and durable baseline. The report establishes exact pre-refactor denominators without turning source shape into permanent policy.",
+      "status": "complete"
+    },
+    {
+      "id": "s03",
+      "title": "Typed-verification-modes",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Preservation-manifest-expansion",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Canonical-vocabulary-and-ids",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Motif-invocation-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Recipe-composition-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Registry-topology",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Build-time-registry-validator",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Generated-literal-dispatch",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Function-wrap-single-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Native-KaTeX-function-wrap-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Canonical-function-wrap-cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Apply-log-cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Log-product-composition-cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Log-quotient-composition-cutover",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Data-owned-tree-traversal",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Core-dispatch-retirement",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Loader-and-capability-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Test-cluster-retirement-counts",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Test-cluster-retirement-source-shape",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Migration-wave-A",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Migration-wave-B",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Migration-wave-C",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Governed-LLM-catalogue",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Cross-domain-upper-boundary-closeout",
+      "status": "planned"
+    }
+  ]
+}

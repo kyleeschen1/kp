@@ -276,6 +276,8 @@
     "perf:animation:attribution": "node --disable-warning=ExperimentalWarning scripts/animation-capability-attribution.ts",
     "measure:equation-surface-cost": "npm run build:bundle && node --disable-warning=ExperimentalWarning scripts/measure-equation-surface-cost.ts",
     "test:equation-surface-cost": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-cost-model.test.ts",
+    "measure:equation-iteration-economics": "node --disable-warning=ExperimentalWarning scripts/measure-equation-iteration-economics.ts",
+    "test:equation-iteration-economics": "node --disable-warning=ExperimentalWarning --test tests/equation-iteration-economics.test.ts",
     "perf:animation:strict": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts --strict-targets",
     "generate:animation-library-metadata": "node --disable-warning=ExperimentalWarning scripts/generate-animation-library-metadata.ts",
     "visual:equation-surface-preservation": "node --disable-warning=ExperimentalWarning scripts/capture-equation-surface-preservation.ts",

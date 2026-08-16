@@ -141,3 +141,7 @@ Resume these only after the overnight refactor is reviewed:
 - migrated families have no parallel authority or duplicate test owner; and
 - visual questions remain explicitly pending rather than being silently
   approved by an overnight refactor.
+
+The pre-refactor measurements are recorded in
+`2026-08-16-equation-narrow-core-iteration-economics-baseline.md` and reproduced
+with `npm run measure:equation-iteration-economics`.
