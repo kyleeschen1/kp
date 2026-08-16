@@ -105,7 +105,11 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
       "Reader compilation owns portable semantic artifacts, not product layout."
     ),
     ownershipRule("src/reader/renderers/", "renderer"),
-    ownershipRule("src/reader/document/", "experience"),
+    ownershipRule(
+      "src/reader/document/",
+      "neutral-core",
+      "Document contracts are portable semantic data shared by compilers and hosts."
+    ),
     ownershipRule("src/reader/runtime/", "experience"),
     ownershipRule("src/reader/app/", "application"),
     ownershipRule("src/architecture/", "governance"),

@@ -105,6 +105,20 @@
       "scope": "slice 4 type safety",
       "checkedAt": "2026-08-16T21:06:03.806Z",
       "notes": "Script and test TypeScript projects pass independently."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-module-ownership.test.ts tests/kp-dependency-direction-policy.test.ts",
+      "status": "passed",
+      "scope": "slice 5 dependency policy",
+      "checkedAt": "2026-08-16T21:11:15.473Z",
+      "notes": "Eleven tests pass across complete module ownership, policy totality, source-versus-runtime coupling, lower-layer use, and upward-inversion rejection."
+    },
+    {
+      "command": "tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice 5 type safety",
+      "checkedAt": "2026-08-16T21:11:16.477Z",
+      "notes": "Ownership and dependency policy declarations compile in the full test project."
     }
   ],
   "expectedLearning": [

@@ -44,6 +44,10 @@ test("specific reader seams override the broader product host", () => {
     resolveKpModuleOwnershipZone("src/reader/app/bootstrap.ts")?.id,
     "application"
   );
+  assert.equal(
+    resolveKpModuleOwnershipZone("src/reader/document/public-api.ts")?.id,
+    "neutral-core"
+  );
 });
 
 test("core, renderer, experience, public, and host examples resolve explicitly", () => {

@@ -80,7 +80,8 @@
     {
       "id": "s05",
       "title": "implement-dependency-direction-policies",
-      "status": "planned"
+      "summary": "Implemented total typed dependency-direction policies for source and runtime coupling, with source coupling at least as strict and portable reader documents retained in neutral ownership.",
+      "status": "complete"
     },
     {
       "id": "s06",
