@@ -110,6 +110,17 @@ const checks = {
     "high",
     "Exercise typed profiles, sampled frames, clocks, projections, and canonical animation laws."
   ),
+  equationMotionProtocol: check(
+    "equation-motion-protocol",
+    [
+      "node", "--disable-warning=ExperimentalWarning", "--test",
+      "tests/equation-motion-vocabulary.test.ts",
+      "tests/equation-motif-invocation.test.ts",
+      "tests/semantic-motion-compiler-contract.test.ts"
+    ],
+    "medium",
+    "Exercise nominal equation vocabulary and renderer-neutral motion compiler contracts."
+  ),
   catalogueUnit: check(
     "svelte-catalogue-unit",
     ["npm", "run", "test:svelte-catalogue-shell"],
@@ -248,6 +259,17 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "equation-motion-protocol",
+    matches: (path) => path.startsWith("src/domain-ir/"),
+    checks: [
+      checks.equationPreservation,
+      checks.equationMotionProtocol,
+      checks.typecheck,
+      checks.architecture
+    ],
+    reason: "Renderer-neutral equation motion protocol or compiler authority changed."
+  },
   {
     id: "function-wrap-presentation",
     matches: isFunctionWrapPath,
@@ -399,7 +421,8 @@ const rules: readonly KpVerificationRule[] = [
         path !== "src/animation/indexed-progress-schedule.ts" &&
         !isTypeScriptRefactorPath(path) &&
         !isFunctionWrapPath(path)) ||
-      (!isFunctionWrapPath(path) &&
+      (!path.startsWith("src/domain-ir/") &&
+        !isFunctionWrapPath(path) &&
         (path.includes("equation") || path.includes("visual"))),
     checks: [
       checks.equationPreservation,

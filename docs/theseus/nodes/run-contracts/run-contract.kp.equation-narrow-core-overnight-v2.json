@@ -110,7 +110,8 @@
     {
       "id": "s06",
       "title": "Motif-invocation-protocol",
-      "status": "planned"
+      "summary": "Added nominal role-complete motif invocations, fail-closed validation and diagnostics, capability-aware renderer-neutral compiled plans, and contract-mode verification routing for domain protocols.",
+      "status": "complete"
     },
     {
       "id": "s07",

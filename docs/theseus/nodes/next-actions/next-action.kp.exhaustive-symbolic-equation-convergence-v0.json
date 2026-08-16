@@ -1025,6 +1025,41 @@
       "scope": "s05-inference-health",
       "checkedAt": "2026-08-16T05:40:32.924Z",
       "notes": "Inference contracts compile, but the pre-existing aggregate cost ceiling remains red at 53911 types versus 50000; the added standalone fixture was removed rather than raising the ceiling."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts tests/equation-motion-vocabulary.test.ts tests/equation-motif-invocation.test.ts tests/semantic-motion-compiler-contract.test.ts",
+      "status": "passed",
+      "scope": "slice s06 motif invocation and impact routing",
+      "checkedAt": "2026-08-16T05:50:46.063Z",
+      "notes": "34 focused protocol and selector tests passed"
+    },
+    {
+      "command": "npm run --silent verify:impact -- --path src/domain-ir/equation-motif-invocation.ts --mode contract",
+      "status": "passed",
+      "scope": "slice s06 typed verification routing",
+      "checkedAt": "2026-08-16T05:50:47.078Z",
+      "notes": "Selected preservation, protocol, typecheck, and architecture without a visual gate"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s06 preservation",
+      "checkedAt": "2026-08-16T05:50:48.042Z",
+      "notes": "All 10 preservation and authority checks passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s06 repository types",
+      "checkedAt": "2026-08-16T05:50:48.992Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s06 architecture",
+      "checkedAt": "2026-08-16T05:50:49.970Z",
+      "notes": "All architecture and compiler-authority ratchets passed"
     }
   ],
   "progress": {

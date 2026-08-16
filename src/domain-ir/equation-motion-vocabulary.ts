@@ -27,26 +27,35 @@ const idPatterns = Object.freeze({
   family: /^family\.[a-z0-9]+(?:[.-][a-z0-9]+)*\.v[1-9][0-9]*$/
 } as const satisfies Readonly<Record<KpEquationMotionVocabularyKind, RegExp>>);
 
-export function createKpMotifId(value: string): KpMotifId {
-  return parseId("motif", value) as KpMotifId;
+export function createKpMotifId<const Value extends string>(
+  value: Value
+): KpMotifId & Value {
+  return parseId("motif", value) as KpMotifId & Value;
 }
 
-export function createKpRecipeId(value: string): KpRecipeId {
-  return parseId("recipe", value) as KpRecipeId;
+export function createKpRecipeId<const Value extends string>(
+  value: Value
+): KpRecipeId & Value {
+  return parseId("recipe", value) as KpRecipeId & Value;
 }
 
-export function createKpOperationKind(value: string): KpOperationKind {
-  return parseId("operation", value) as KpOperationKind;
+export function createKpOperationKind<const Value extends string>(
+  value: Value
+): KpOperationKind & Value {
+  return parseId("operation", value) as KpOperationKind & Value;
 }
 
-export function createKpRendererCapabilityId(
-  value: string
-): KpRendererCapabilityId {
-  return parseId("renderer-capability", value) as KpRendererCapabilityId;
+export function createKpRendererCapabilityId<const Value extends string>(
+  value: Value
+): KpRendererCapabilityId & Value {
+  return parseId("renderer-capability", value) as
+    KpRendererCapabilityId & Value;
 }
 
-export function createKpFamilyId(value: string): KpFamilyId {
-  return parseId("family", value) as KpFamilyId;
+export function createKpFamilyId<const Value extends string>(
+  value: Value
+): KpFamilyId & Value {
+  return parseId("family", value) as KpFamilyId & Value;
 }
 
 export function isKpMotifId(value: unknown): value is KpMotifId {

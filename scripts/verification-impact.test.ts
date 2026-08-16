@@ -114,6 +114,20 @@ test("verification modes accumulate durable checks without substituting an unrel
   assert.equal(ids(contract).includes("focused-visual"), false);
 });
 
+test("renderer-neutral equation protocols select contract proof instead of a visual exemplar", () => {
+  const result = selectKpVerificationImpact(
+    ["src/domain-ir/equation-motif-invocation.ts"],
+    { mode: "contract" }
+  );
+  assert.deepEqual(ids(result), [
+    "equation-surface-preservation",
+    "equation-motion-protocol",
+    "typecheck",
+    "architecture"
+  ]);
+  assert.equal(ids(result).includes("focused-visual"), false);
+});
+
 test("unknown paths fail broad even when discovery mode is requested", () => {
   const result = selectKpVerificationImpact(
     ["new-subsystem/unknown.ts"],

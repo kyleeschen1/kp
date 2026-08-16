@@ -1,5 +1,6 @@
 export * from "./equation-transition-ir.ts";
 export * from "./equation-motion-vocabulary.ts";
+export * from "./equation-motif-invocation.ts";
 export * from "./semantic-equation-transition-compiler.ts";
 export * from "./semantic-motion-compiler-contract.ts";
 export * from "./semantic-motion-compiler.ts";
