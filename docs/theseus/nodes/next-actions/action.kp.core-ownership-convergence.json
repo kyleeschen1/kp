@@ -35,6 +35,48 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T20:40:18.295Z",
       "notes": "Approved proposal and active/supporting thread order are internally consistent; promotion memory remains aligned and the workspace validates."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 2 architecture baseline",
+      "checkedAt": "2026-08-16T20:54:55.377Z",
+      "notes": "Five existing selected-seam gates pass; the global import graph is not yet governed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice 2 inference baseline",
+      "checkedAt": "2026-08-16T20:54:56.341Z",
+      "notes": "52,864 types and 71,006 instantiations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 2 type baseline",
+      "checkedAt": "2026-08-16T20:54:57.294Z",
+      "notes": "Application, node, test, Svelte, and domain projects pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice 2 full-suite baseline",
+      "checkedAt": "2026-08-16T20:54:58.234Z",
+      "notes": "4,752 tests pass; duration 439.12 seconds."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice 2 production baseline",
+      "checkedAt": "2026-08-16T20:54:59.288Z",
+      "notes": "1,446 modules; production build passes; Vite build 2.76 seconds."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice 2 bundle baseline",
+      "checkedAt": "2026-08-16T20:55:00.256Z",
+      "notes": "All current ceilings pass; place-value incremental closure has 20 bytes of headroom."
     }
   ],
   "expectedLearning": [

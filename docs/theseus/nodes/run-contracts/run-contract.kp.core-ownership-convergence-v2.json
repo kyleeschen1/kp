@@ -62,7 +62,8 @@
     {
       "id": "s02",
       "title": "capture-import-and-bundle-baselines",
-      "status": "planned"
+      "summary": "Captured the exact upward-import cohort, verification costs, production closure, bundle ceilings, and deferred debt without changing product code or budgets.",
+      "status": "complete"
     },
     {
       "id": "s03",
