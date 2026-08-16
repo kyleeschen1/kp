@@ -88,3 +88,24 @@ test("every capability loader remains a literal dynamic import", async () => {
   }
   assert.doesNotMatch(source, /import\(\s*`|import\(\s*[a-zA-Z_$]/);
 });
+
+test("equation capabilities no longer branch in the selected host", async () => {
+  const host = await readFile(
+    "src/editor/selected-surface-capability-host.ts",
+    "utf8"
+  );
+  assert.match(host, /kpEditorSelectedSurfaceCapabilityDeclarationSet\.find/);
+  for (const capabilityId of [
+    "equation-katex",
+    "log-exponent",
+    "log-quotient",
+    "log-product",
+    "exact-fraction-quantity",
+    "operation-evaluation",
+    "place-value-addition"
+  ]) {
+    assert.doesNotMatch(host, new RegExp(
+      `capability\\s*===\\s*[\"']${capabilityId}[\"']`
+    ));
+  }
+});

@@ -7,6 +7,9 @@ import {
   kpEditorGraphSvgAnimationIds,
   type KpEditorSelectedSurfaceCapability
 } from "./selected-surface-capability.ts";
+import {
+  kpEditorSelectedSurfaceCapabilityDeclarationSet
+} from "./selected-surface-capability-declarations.ts";
 
 export interface KpEditorSelectedSurfaceCapabilityHost {
   load(capability: KpEditorSelectedSurfaceCapability): Promise<void>;
@@ -89,67 +92,11 @@ async function loadCapability(
   capability: KpEditorSelectedSurfaceCapability,
   registry: KpEditorAnimationSurfaceAdapterRegistry
 ): Promise<void> {
-  if (capability === "equation-katex") {
-    const client = await import("./equation-surface-capability.ts");
-    await registerOnceAsync(
-      registry,
-      "editor-animation-surface.equation.katex",
-      client.registerKpEditorEquationSurfaceCapability
-    );
-    return;
-  }
-  if (capability === "log-exponent") {
-    const client = await import("./log-exponent-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.log-exponent.canonical-native-katex",
-      () => client.registerKpEditorLogExponentSurfaceCapability(registry)
-    );
-    return;
-  }
-  if (capability === "log-quotient") {
-    const client = await import("./log-quotient-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.log-quotient.canonical-native-katex",
-      () => client.registerKpEditorLogQuotientSurfaceCapability(registry)
-    );
-    return;
-  }
-  if (capability === "log-product") {
-    const client = await import("./log-product-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.log-product.canonical-native-katex",
-      () => client.registerKpEditorLogProductSurfaceCapability(registry)
-    );
-    return;
-  }
-  if (capability === "exact-fraction-quantity") {
-    const client = await import("./exact-fraction-quantity-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.exact-fraction-quantity.synchronized",
-      () => client.registerKpEditorExactFractionQuantitySurfaceCapability(registry)
-    );
-    return;
-  }
-  if (capability === "operation-evaluation") {
-    const client = await import("./operation-evaluation-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.operation-evaluation.canonical-native-katex",
-      () => client.registerKpEditorOperationEvaluationSurfaceCapability(registry)
-    );
-    return;
-  }
-  if (capability === "place-value-addition") {
-    const client = await import("./place-value-addition-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.place-value-addition.synchronized",
-      () => client.registerKpEditorPlaceValueAdditionSurfaceCapability(registry)
-    );
+  const declaration = kpEditorSelectedSurfaceCapabilityDeclarationSet.find(
+    capability
+  );
+  if (declaration.domain === "equation") {
+    await declaration.loadAndRegister(registry);
     return;
   }
   if (capability === "graph-webgl-3d") {

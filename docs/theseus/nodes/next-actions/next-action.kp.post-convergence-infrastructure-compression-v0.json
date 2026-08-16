@@ -241,6 +241,20 @@
       "scope": "slice-21 capability loader declarations",
       "checkedAt": "2026-08-16T15:52:27.977Z",
       "notes": "Four declaration laws pass, all TypeScript projects pass, and baseline chunk measurements are unchanged because the declaration module is not yet on the production host path."
+    },
+    {
+      "command": "npm-run-focused-equation-capability-migration-checks",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T15:59:40.828Z",
+      "notes": "16"
+    },
+    {
+      "command": "focused equation capability migration checks",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T16:00:00.557Z",
+      "notes": "Sixteen focused capability tests, full typecheck, architecture ratchets, equation-capability browser suite, bundle boundary, reachability generation, post-convergence inventory, and diff check passed."
     }
   ]
 }
