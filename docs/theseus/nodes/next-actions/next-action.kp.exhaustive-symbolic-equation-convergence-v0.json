@@ -1597,11 +1597,60 @@
       "scope": "slice s20 test-economics evidence",
       "checkedAt": "2026-08-16T07:53:38.608Z",
       "notes": "Aggregate-count ratchet files fell from the 26-file baseline to 25; no production behavior changed."
+    },
+    {
+      "command": "node focused dispatch motif loader capability and ratchet tests",
+      "status": "passed",
+      "scope": "slice s21 replacement public owners",
+      "checkedAt": "2026-08-16T07:58:52.512Z",
+      "notes": "16 runtime, declaration, generator, unknown-ID, registry, capability, and architecture-ratchet laws pass after source regex removal."
+    },
+    {
+      "command": "npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s21 generated freshness",
+      "checkedAt": "2026-08-16T07:58:53.555Z",
+      "notes": "Checked-in literal dispatch exactly matches validated declarations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s21 import and authority boundaries",
+      "checkedAt": "2026-08-16T07:58:54.495Z",
+      "notes": "Architecture and complete-source compiler authority ratchets pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s21 production import closure",
+      "checkedAt": "2026-08-16T07:58:55.429Z",
+      "notes": "Production chunks remain isolated and under exact gzip budgets."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "scope": "slice s21 selected capability runtime ownership",
+      "checkedAt": "2026-08-16T07:58:56.367Z",
+      "notes": "Five Chromium loading, settlement, and cross-capability isolation checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 repository types",
+      "checkedAt": "2026-08-16T07:58:57.322Z",
+      "notes": "Application, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run measure:equation-iteration-economics",
+      "status": "passed",
+      "scope": "slice s21 test-economics evidence",
+      "checkedAt": "2026-08-16T07:58:58.247Z",
+      "notes": "Source-inspection files fell from the 194-file baseline to 192 and test lines fell to 211883."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s20 complete: current catalogue totals, authority path buckets, disposition buckets, preservation totals, manifest totals, and load-probe totals no longer duplicate generated truth. Tests now compare exact declared/loadable animation-ID and pack-ID sets across projections, while the dated 24-surface historical baseline remains explicit evidence. Next: retire source-text and switch-shape assertions only where public protocol, architecture, generated closure, runtime, or bundle owners are stronger."
+    "summary": "Slice s21 complete: removed source-regex tests for motif geometry vocabulary, generated import spelling, catalogue loader import count, log-product source imports, and selected-capability module spelling. Generator freshness and malformed declarations, runtime load closure, complete-source architecture ratchets, production bundle attribution, and Chromium capability isolation remain as stronger owners. Next: migrate wave-A operation-plan families without presentation redesign."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

@@ -1,6 +1,4 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
@@ -52,16 +50,5 @@ test("phase grammar covers the exact role schema and drives the recipe pack", ()
       createKpFunctionWrapEquationExtensionPack()
     ).status,
     "valid"
-  );
-});
-
-test("renderer-neutral motif authority owns no native geometry", () => {
-  const source = readFileSync(fileURLToPath(new URL(
-    "../src/animation/function-wrap-motif.ts",
-    import.meta.url
-  )), "utf8");
-  assert.doesNotMatch(
-    source,
-    /(?:DOMRect|HTMLElement|SVGElement|nativeRect|PaintMeasured|offsetInNativeHeights)/
   );
 });

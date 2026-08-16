@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
 
@@ -35,20 +35,6 @@ test("generated literal dispatch is current and closes over every declaration", 
       ])
     )
   );
-});
-
-test("generated imports are literal named-export edges to existing modules", () => {
-  const source = readFileSync(generatedPath, "utf8");
-  const imports = [...source.matchAll(/import\("([^"]+)"\)\.then\(\(module\) => module\.([A-Za-z0-9_$]+)\)/gu)];
-  assert.equal(imports.length, createKpEquationExtensionDispatchManifest().length);
-  assert.doesNotMatch(source, /import\((?!")[^)]+\)/u);
-  for (const [, modulePath] of imports) {
-    assert.equal(
-      existsSync(resolve("src/generated", modulePath!)),
-      true,
-      modulePath ?? "missing generated module path"
-    );
-  }
 });
 
 test("all generated dispatch kinds load the declared named export", async () => {

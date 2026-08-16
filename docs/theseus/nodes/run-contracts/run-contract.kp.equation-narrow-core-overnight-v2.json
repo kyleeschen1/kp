@@ -200,7 +200,8 @@
     {
       "id": "s21",
       "title": "Test-cluster-retirement-source-shape",
-      "status": "planned"
+      "summary": "Retired low-value source-text and import-regex assertions after stronger protocol, generated freshness, architecture, runtime, bundle, and browser owners passed.",
+      "status": "complete"
     },
     {
       "id": "s22",
