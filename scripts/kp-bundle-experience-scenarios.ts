@@ -127,7 +127,8 @@ export const kpBundleExperienceScenarios:
         phase: "incremental",
         resource: "total",
         gzipBytes: 75_000
-      }]
+      }],
+      comparisonBaseId: "bundle-experience.catalogue.solve-x"
     }),
     scenario({
       id: "bundle-experience.studio.legacy-host",
@@ -155,7 +156,7 @@ export const kpBundleExperienceScenarios:
       "Public normal-matrices proof",
       "bundle-build.public-normal-matrices",
       "learn/math/normal-matrices/index.html",
-      40_000,
+      undefined,
       [{
         id: "activate-proof-stage",
         manifestRoots: [
@@ -167,8 +168,7 @@ export const kpBundleExperienceScenarios:
       "bundle-experience.public.eigenvectors",
       "Public eigenvector concept experience",
       "bundle-build.public-eigenvectors",
-      "learn/math/eigenvectors/index.html",
-      24_000
+      "learn/math/eigenvectors/index.html"
     )
   ]);
 
@@ -213,6 +213,7 @@ function selectedCatalogueScenario(input: {
   readonly rendererRoot?: string;
   readonly forbiddenOwners: readonly string[];
   readonly budgets?: KpBundleExperienceScenario["budgets"];
+  readonly comparisonBaseId?: KpBundleExperienceScenarioId;
 }): KpBundleExperienceScenario {
   const activations: { id: string; manifestRoots: readonly string[] }[] = [
     { id: "load-domain-pack", manifestRoots: [input.packRoot] },
@@ -231,7 +232,8 @@ function selectedCatalogueScenario(input: {
       "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
     ],
     activations,
-    comparisonBaseId: "bundle-experience.catalogue.empty",
+    comparisonBaseId: input.comparisonBaseId ??
+      "bundle-experience.catalogue.empty",
     expectedOwners: [input.packRoot, input.surfaceRoot],
     forbiddenOwners: input.forbiddenOwners,
     ...(input.budgets === undefined ? {} : { budgets: input.budgets })

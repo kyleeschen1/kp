@@ -79,6 +79,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T22:58:22.733Z",
       "notes": "Node-side bundle tooling typechecks."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/bundle-experience-scenario.test.ts scripts/vite-manifest-closure.test.ts scripts/kp-bundle-experience-scenarios.test.ts scripts/measure-kp-bundle-experiences.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:04:36.463Z",
+      "notes": "Twelve bundle model and measurement tests passed."
+    },
+    {
+      "command": "npm run --silent measure:bundle-experiences twice",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T23:04:37.383Z",
+      "notes": "Both runs exited zero and produced byte-identical 5,116-byte summaries; known place-value debt remains exactly 75,026 bytes."
     }
   ],
   "expectedLearning": [

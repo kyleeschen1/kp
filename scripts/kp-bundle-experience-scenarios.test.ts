@@ -41,20 +41,24 @@ test("scenario and build registries are immutable data-only declarations", () =>
   }
 });
 
-test("selected experiences preserve an explicit empty-catalogue comparison", () => {
+test("selected experiences preserve explicit comparable catalogue bases", () => {
   const selected = kpBundleExperienceScenarios.filter(({ id }) =>
     id.startsWith("bundle-experience.catalogue.") &&
     !id.endsWith("outer-shell") &&
     !id.endsWith("empty")
   );
   assert.ok(selected.length >= 5);
-  assert.ok(selected.every(({ comparisonBaseId }) =>
-    comparisonBaseId === "bundle-experience.catalogue.empty"
-  ));
-  assert.equal(
-    findKpBundleExperienceScenario(
-      "bundle-experience.catalogue.place-value"
-    ).budgets[0]?.gzipBytes,
-    75_000
+  const placeValue = findKpBundleExperienceScenario(
+    "bundle-experience.catalogue.place-value"
   );
+  assert.ok(selected.filter(({ id }) => id !== placeValue.id)
+    .every(({ comparisonBaseId }) =>
+      comparisonBaseId === "bundle-experience.catalogue.empty"
+    ));
+  // Place value preserves the old selected-math differential explicitly.
+  assert.equal(
+    placeValue.comparisonBaseId,
+    "bundle-experience.catalogue.solve-x"
+  );
+  assert.equal(placeValue.budgets[0]?.gzipBytes, 75_000);
 });

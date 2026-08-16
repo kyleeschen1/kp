@@ -85,7 +85,8 @@
     {
       "id": "s06",
       "title": "add-stable-scenario-measurement-command",
-      "status": "planned"
+      "summary": "Added a deterministic multi-build scenario measurement CLI, concise baseline, detailed attribution mode, owner gates, and explicit budget checks.",
+      "status": "complete"
     },
     {
       "id": "s07",
