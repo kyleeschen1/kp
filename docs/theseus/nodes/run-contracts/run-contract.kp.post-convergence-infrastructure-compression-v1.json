@@ -68,7 +68,8 @@
     {
       "id": "s05",
       "title": "inference-attribution",
-      "status": "planned"
+      "summary": "Added a stable per-fixture inference attribution command. Proved 27,947 of 57,283 Types arise from the empty standard-library baseline; broad barrels add avoidable closure, while operation-evaluation and factoring are the largest direct generic closures. No type or budget changed.",
+      "status": "complete"
     },
     {
       "id": "s06",

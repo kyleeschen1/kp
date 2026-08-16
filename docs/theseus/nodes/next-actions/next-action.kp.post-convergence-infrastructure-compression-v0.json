@@ -52,6 +52,13 @@
       "scope": "broad",
       "checkedAt": "2026-08-16T14:16:17.441Z",
       "notes": "Baseline stopped after 57.99 seconds at one stale hard-coded 25 equation-asset count; canonical inventory and direct inspection prove 30 assets and zero missing or wrong-domain profiles. Exact-set replacement is scheduled for s17-s18."
+    },
+    {
+      "command": "npm run measure:inference-attribution; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T14:23:01.158Z",
+      "notes": "Measured 21 fixtures plus library baseline and four direct-import comparisons. Empty baseline creates 27,947 Types; largest direct closures are operation-evaluation and factoring; broad theme and authoring barrels add 6,466 and 3,568 Types versus direct owners."
     }
   ]
 }
