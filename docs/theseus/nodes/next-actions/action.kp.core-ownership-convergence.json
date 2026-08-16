@@ -217,6 +217,13 @@
       "scope": "slice s16 HTML output context audit",
       "checkedAt": "2026-08-16T21:49:12.459Z",
       "notes": "Twenty-four encoder inventory and renderer preservation tests passed; architecture and test-project typecheck also passed."
+    },
+    {
+      "command": "node --test neutral and editor HTML output encoder tests",
+      "status": "passed",
+      "scope": "slice s17 neutral output encoder",
+      "checkedAt": "2026-08-16T21:53:21.655Z",
+      "notes": "Nine focused encoder and inventory tests passed. Architecture and test-project typecheck also passed."
     }
   ],
   "expectedLearning": [

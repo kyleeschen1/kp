@@ -152,7 +152,8 @@
     {
       "id": "s17",
       "title": "add-neutral-output-encoder",
-      "status": "planned"
+      "summary": "A renderer-owned, parser-context-specific encoder now preserves the established editor output contract byte for byte, with adversarial equivalence tests and no caller migration yet.",
+      "status": "complete"
     },
     {
       "id": "s18",
