@@ -1408,11 +1408,39 @@
       "scope": "known aggregate compiler-cost ceiling",
       "checkedAt": "2026-08-16T07:16:33.974Z",
       "notes": "Inference contracts pass; the unchanged aggregate ceiling remains red at 55664 types versus 50000."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "slice s16 quotient semantic and motif contracts",
+      "checkedAt": "2026-08-16T07:21:45.826Z",
+      "notes": "37 focused tests pass, including nominal function-wrap authority and copied-claim rejection."
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "slice s16 live quotient preservation",
+      "checkedAt": "2026-08-16T07:21:46.852Z",
+      "notes": "Four Chromium laws pass for continuous play, direct seek, compact layout, and reduced motion."
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "slice s16 deterministic visual checkpoint",
+      "checkedAt": "2026-08-16T07:21:47.886Z",
+      "notes": "Capture completed without a visual delta; review API proxy was unavailable but did not affect rendering."
+    },
+    {
+      "command": "npm run typecheck; npm run test:equation-surface-preservation; npm run check:architecture; npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s16 static preservation architecture and bundle closure",
+      "checkedAt": "2026-08-16T07:21:48.857Z",
+      "notes": "Types, 10 preservation laws, all architecture ratchets, and unchanged bundle budgets pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s15 complete: binary and multi-factor log-product decomposition now compile one canonical function-wrap invocation per target logarithm and project shared reception authority. The caller-local reception factory is gone; semantic identities, route policies, canonical timing windows, geometry, native endpoints, rewind, and visual capture remain unchanged. Next: log-quotient composition cutover."
+    "summary": "Slice s16 complete: log-quotient homomorphic fusion now carries a compiler-minted canonical function-wrap invocation for its fused target application while retaining its distinct operator-fusion, argument-transfer, compact-fraction, and timing recipe. Copied motif claims fail closed; exact browser and visual behavior is unchanged. Next: replace closed expression traversal with data-owned protocols."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

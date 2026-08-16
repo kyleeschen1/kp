@@ -5,8 +5,12 @@ import {
   createKpHomomorphicFusionChoreography
 } from "../src/animation/equation-operation-choreography.ts";
 import {
+  kpCanonicalLogQuotientFunctionWrapInvocationGroup,
   kpCanonicalLogQuotientHomomorphicFusionChoreography
 } from "../src/animation/log-quotient-homomorphic-fusion.ts";
+import {
+  isKpCompiledFunctionWrapInvocationGroup
+} from "../src/animation/function-wrap-invocation.ts";
 import {
   applyKpNativeKatexOperationChoreography
 } from "../src/rendering/native-katex-operation-choreography.ts";
@@ -27,6 +31,28 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
   assert.equal(choreography.kind, "homomorphic-fusion");
   assert.equal(choreography.maturity, "candidate");
   assert.equal(choreography.canonicalShape, "H(a) o H(b) -> H(a star b)");
+  assert.equal(
+    isKpCompiledFunctionWrapInvocationGroup(choreography.targetFunctionWrap),
+    true
+  );
+  assert.equal(choreography.targetFunctionWrap.motifId, "motif.function-wrap.v1");
+  assert.deepEqual(choreography.targetFunctionWrap.branches.map((branch) => ({
+    sourceArgumentEntityIds: branch.sourceArgumentEntityIds,
+    targetArgumentEntityIds: branch.targetArgumentEntityIds,
+    functionEntityIds: branch.functionEntityIds,
+    enclosureEntityRoles: branch.enclosureEntityRoles
+  })), [{
+    sourceArgumentEntityIds: [
+      "source.left.argument.x",
+      "source.right.argument.y"
+    ],
+    targetArgumentEntityIds: ["target.numerator.x", "target.denominator.y"],
+    functionEntityIds: ["target.log", "target.log.operator"],
+    enclosureEntityRoles: [
+      { entityId: "target.log.open", side: "leading" },
+      { entityId: "target.log.close", side: "trailing" }
+    ]
+  }]);
   assert.deepEqual(choreography.operatorGlyphFusion, {
     relationRecordId: "correspondence.log-quotient.operator-fusion",
     sourceEntityIds: [
@@ -157,6 +183,8 @@ test("homomorphic mint rejects a connector-to-structure identity", () => {
     transformation:
       kpCanonicalCompiledLogQuotientOperation.transformation,
     direction: "forward",
+    targetFunctionWrap:
+      kpCanonicalLogQuotientFunctionWrapInvocationGroup,
     operatorApplicationFusionRecordId:
       "correspondence.log-quotient.application-fusion",
     operatorGlyphFusionRecordId:
@@ -204,6 +232,16 @@ test("homomorphic mint releases enclosures before continuants cross them", () =>
   }), /enclosures must retire before the connector/);
 });
 
+test("homomorphic mint rejects copied function-wrap claims", () => {
+  const input = canonicalHomomorphicInput();
+  assert.throws(() => createKpHomomorphicFusionChoreography({
+    ...input,
+    targetFunctionWrap: {
+      ...input.targetFunctionWrap
+    }
+  }), /compiled function-wrap authority/);
+});
+
 test("homomorphic mint clears the connector before moving material", () => {
   assert.throws(() => createKpHomomorphicFusionChoreography({
     ...canonicalHomomorphicInput(),
@@ -232,6 +270,7 @@ function canonicalHomomorphicInput():
     transformation:
       kpCanonicalCompiledLogQuotientOperation.transformation,
     direction: "forward",
+    targetFunctionWrap: base.targetFunctionWrap,
     operatorApplicationFusionRecordId:
       base.operatorApplicationFusion.relationRecordId,
     operatorGlyphFusionRecordId: base.operatorGlyphFusion.relationRecordId,

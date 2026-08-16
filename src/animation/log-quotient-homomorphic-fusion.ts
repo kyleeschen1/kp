@@ -5,6 +5,31 @@ import {
 import {
   kpCanonicalCompiledLogQuotientOperation
 } from "../semantic/log-quotient-transformation-compiler.ts";
+import {
+  compileKpFunctionWrapInvocationGroup
+} from "./function-wrap-invocation.ts";
+
+export const kpCanonicalLogQuotientFunctionWrapInvocationGroup =
+  compileKpFunctionWrapInvocationGroup({
+    id: kpCanonicalCompiledLogQuotientOperation.transformation.id,
+    branches: [{
+      id: "function-wrap-branch.log-quotient.target",
+      semanticObjectId: "semantic.log-quotient.wrapper.fused",
+      sourceArgumentEntityIds: [
+        "source.left.argument.x",
+        "source.right.argument.y"
+      ],
+      targetArgumentEntityIds: [
+        "target.numerator.x",
+        "target.denominator.y"
+      ],
+      functionEntityIds: ["target.log", "target.log.operator"],
+      enclosureEntityRoles: [
+        { entityId: "target.log.open", side: "leading" },
+        { entityId: "target.log.close", side: "trailing" }
+      ]
+    }]
+  });
 
 /**
  * Binds the quotient-law exemplar to the provisional homomorphic-fusion
@@ -18,6 +43,8 @@ export function createKpCanonicalLogQuotientHomomorphicFusionChoreography(
     transformation:
       kpCanonicalCompiledLogQuotientOperation.transformation,
     direction,
+    targetFunctionWrap:
+      kpCanonicalLogQuotientFunctionWrapInvocationGroup,
     operatorApplicationFusionRecordId:
       "correspondence.log-quotient.application-fusion",
     operatorGlyphFusionRecordId:

@@ -86,6 +86,7 @@ export interface KpHomomorphicFusionChoreography
   /** This schema remains provisional until the three-operation promotion gate passes. */
   readonly maturity: "candidate";
   readonly canonicalShape: "H(a) o H(b) -> H(a star b)";
+  readonly targetFunctionWrap: KpCompiledFunctionWrapInvocationGroup;
   readonly operatorApplicationFusion: KpHomomorphicFusionRelation;
   readonly operatorGlyphFusion: KpHomomorphicFusionRelation;
   readonly argumentTransfers: readonly [
@@ -143,6 +144,7 @@ export type KpEquationOperationChoreography =
 export function createKpHomomorphicFusionChoreography(input: {
   readonly transformation: KpSemanticTransformation;
   readonly direction: "forward" | "rewind";
+  readonly targetFunctionWrap: KpCompiledFunctionWrapInvocationGroup;
   readonly operatorApplicationFusionRecordId: string;
   readonly operatorGlyphFusionRecordId: string;
   readonly argumentTransfers: readonly [
@@ -180,6 +182,14 @@ export function createKpHomomorphicFusionChoreography(input: {
   readonly connectorRetirementWindow: KpEquationChoreographyWindow;
   readonly sourceRetirementWindow: KpEquationChoreographyWindow;
 }): KpHomomorphicFusionChoreography {
+  if (
+    !isKpCompiledFunctionWrapInvocationGroup(input.targetFunctionWrap) ||
+    input.targetFunctionWrap.id !== input.transformation.id
+  ) {
+    throw new Error(
+      "Homomorphic fusion requires matching compiled function-wrap authority."
+    );
+  }
   const records = input.transformation.correspondenceMap?.records;
   if (records === undefined) {
     throw new Error("Homomorphic fusion requires correspondence authority.");
@@ -326,6 +336,7 @@ export function createKpHomomorphicFusionChoreography(input: {
     kind: "homomorphic-fusion" as const,
     maturity: "candidate" as const,
     canonicalShape: "H(a) o H(b) -> H(a star b)" as const,
+    targetFunctionWrap: input.targetFunctionWrap,
     id: `operation-choreography.${input.transformation.id}.homomorphic-fusion.${input.direction}`,
     transformationId: input.transformation.id,
     direction: input.direction,
