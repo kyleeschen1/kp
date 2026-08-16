@@ -100,6 +100,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T23:07:36.880Z",
       "notes": "Ownership audit agrees with the zero-exception dependency graph; no runtime files changed."
+    },
+    {
+      "command": "native KaTeX pack and compositor focused tests",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T23:10:02.123Z",
+      "notes": "Sixty-six tests passed, including immutable pack identity, concurrent loading, retry, native endpoints, handoff, reconciliation, direct seek, and reverse laws."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T23:10:03.001Z",
+      "notes": "All TypeScript and Svelte checks passed; architecture covers 1,566 modules with zero exact exceptions."
     }
   ],
   "expectedLearning": [

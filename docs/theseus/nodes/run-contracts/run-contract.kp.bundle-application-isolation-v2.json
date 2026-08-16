@@ -97,7 +97,8 @@
     {
       "id": "s08",
       "title": "define-native-katex-feature-pack",
-      "status": "planned"
+      "summary": "Defined the immutable canonical native-KaTeX feature-pack contract, implementation view, literal lazy loader, concurrency coalescing, and retry behavior without changing production callers.",
+      "status": "complete"
     },
     {
       "id": "s09",
