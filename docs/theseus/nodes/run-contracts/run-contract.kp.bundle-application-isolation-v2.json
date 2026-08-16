@@ -67,7 +67,8 @@
     {
       "id": "s03",
       "title": "define-typed-selected-experience-scenarios",
-      "status": "planned"
+      "summary": "Selected experiences now have one data-only typed declaration for static entry, ordered activations, comparison bases, positive and negative ownership, and per-phase budgets; invalid and ambiguous declarations fail closed.",
+      "status": "complete"
     },
     {
       "id": "s04",

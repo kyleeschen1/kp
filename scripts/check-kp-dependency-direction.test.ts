@@ -14,7 +14,7 @@ test("global dependency audit accepts only the exact retiring baseline", () => {
 
   assert.ok(audit.sourceModuleCount > 1_500);
   assert.ok(audit.localEdgeCount > 3_000);
-  assert.equal(audit.exactExceptionCount, 18);
+  assert.equal(audit.exactExceptionCount, 0);
   assert.deepEqual(audit.issues, []);
 });
 

@@ -51,6 +51,13 @@
       "scope": "slice s02 tooling and assumption audit",
       "checkedAt": "2026-08-16T22:39:39.343Z",
       "notes": "Eleven focused tests and the 1,444-module build passed. The existing budget command reproducibly exits 1 because place value is 75,026 bytes, 26 above its ceiling; this is the recorded structural debt owned by s11-s14, not a hidden pass."
+    },
+    {
+      "command": "node scenario and dependency-gate tests; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s03 typed experience scenarios",
+      "checkedAt": "2026-08-16T22:45:48.078Z",
+      "notes": "Seven focused tests passed; full typecheck including Svelte reported zero diagnostics; architecture covers 1,563 modules with zero exact exceptions."
     }
   ],
   "expectedLearning": [

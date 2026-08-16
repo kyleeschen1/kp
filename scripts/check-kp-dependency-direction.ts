@@ -21,6 +21,16 @@ export interface KpDependencyDirectionAudit {
   readonly issues: readonly string[];
 }
 
+export type KpDependencyDirectionAuditException = Omit<
+  KpDependencyDirectionException,
+  "owner" | "plannedSlice"
+> & Readonly<{
+  // Synthetic negative tests still need to exercise stale-exception handling
+  // after the live zero-exception ledger deliberately narrows these to never.
+  owner: string;
+  plannedSlice: string;
+}>;
+
 export function auditKpDependencyDirection(
   repositoryRoot: string
 ): KpDependencyDirectionAudit {
@@ -30,7 +40,7 @@ export function auditKpDependencyDirection(
 
 export function auditKpDependencyDirectionGraph(
   graph: KpTypescriptImportGraph,
-  exceptions: readonly KpDependencyDirectionException[] =
+  exceptions: readonly KpDependencyDirectionAuditException[] =
     kpDependencyDirectionExceptions
 ): KpDependencyDirectionAudit {
   const issues: string[] = [];
