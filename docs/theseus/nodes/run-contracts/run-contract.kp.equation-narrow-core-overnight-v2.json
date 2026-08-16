@@ -122,7 +122,8 @@
     {
       "id": "s08",
       "title": "Registry-topology",
-      "status": "planned"
+      "summary": "Added separate immutable registries for semantic operations, recipes, motifs, renderer capabilities, and families, composed through explicitly injected equation packs with no mutable global or side-effect registration.",
+      "status": "complete"
     },
     {
       "id": "s09",

@@ -125,6 +125,9 @@ const fallbackPaths = paths([
 const manualRegistryPaths = paths([
   "src/animation/operation-evaluation-presentation-registry.ts",
   "src/animation/symbolic-manipulation-family-registry.ts",
+  // This is the intended immutable declaration boundary; the older entries
+  // remain inventoried only until their callers migrate and they can retire.
+  "src/domain-ir/equation-extension-registry.ts",
   "src/semantic/generated-algebra-fixture-registry.ts",
   "src/semantic/generated-algebra-transform-definition-registry.ts"
 ]);

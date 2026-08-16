@@ -1,4 +1,5 @@
 export * from "./equation-transition-ir.ts";
+export * from "./equation-extension-registry.ts";
 export * from "./equation-motion-vocabulary.ts";
 export * from "./equation-motif-invocation.ts";
 export * from "./equation-recipe-composition.ts";

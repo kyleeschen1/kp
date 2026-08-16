@@ -1088,6 +1088,41 @@
       "scope": "slice s07 preservation",
       "checkedAt": "2026-08-16T05:57:11.005Z",
       "notes": "All 10 existing semantic, renderer, clock, and sampled-frame obligations passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-extension-registry.test.ts tests/equation-compiler-authority-ratchet.test.ts",
+      "status": "passed",
+      "scope": "slice s08 registry topology",
+      "checkedAt": "2026-08-16T06:03:37.932Z",
+      "notes": "Immutable separation, uniqueness, explicit injection, nested freezing, and architecture inventory laws passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 repository types",
+      "checkedAt": "2026-08-16T06:03:39.069Z",
+      "notes": "Application, test, Svelte, and domain typechecks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s08 architecture",
+      "checkedAt": "2026-08-16T06:03:40.009Z",
+      "notes": "Canonical immutable registry boundary is inventoried; all ratchets passed across 1529 source files"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s08 bundle boundary",
+      "checkedAt": "2026-08-16T06:03:40.965Z",
+      "notes": "All lazy closure budgets passed; no forbidden outer files"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s08 preservation",
+      "checkedAt": "2026-08-16T06:03:41.913Z",
+      "notes": "All 10 existing semantic, renderer, clock, and sampled-frame obligations passed"
     }
   ],
   "progress": {

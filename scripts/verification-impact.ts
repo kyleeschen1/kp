@@ -115,6 +115,7 @@ const checks = {
     [
       "node", "--disable-warning=ExperimentalWarning", "--test",
       "tests/equation-motion-vocabulary.test.ts",
+      "tests/equation-extension-registry.test.ts",
       "tests/equation-motif-invocation.test.ts",
       "tests/equation-recipe-composition.test.ts",
       "tests/semantic-motion-compiler-contract.test.ts"
