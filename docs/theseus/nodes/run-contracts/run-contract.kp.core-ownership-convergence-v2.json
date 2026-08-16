@@ -104,7 +104,8 @@
     {
       "id": "s09",
       "title": "extract-programming-source-fixture",
-      "status": "planned"
+      "summary": "The exact addition source revision, selectors, and shared clock now originate in one neutral domain fixture reused by trace and tutorial composition without output changes.",
+      "status": "complete"
     },
     {
       "id": "s10",

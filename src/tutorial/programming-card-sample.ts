@@ -1,9 +1,9 @@
 import type { KpAnimationSampler } from "../animation/kernel.ts";
-import {
-  createSourceFileObject,
-  createSourceRangeSelector,
-  type SourceFileObject,
-  type SourceRangeSelector
+import { createAdditionProgrammingSourceFixture } from
+  "../domain-ir/programming-addition-source-fixture.ts";
+import type {
+  SourceFileObject,
+  SourceRangeSelector
 } from "../semantic/source-file.ts";
 import { renderKpTutorialSourceFilePanelHtml } from "./card-html-shell.ts";
 import {
@@ -39,33 +39,11 @@ export interface ProgrammingTutorialCardSampleFrame {
 }
 
 export function createAdditionProgrammingTutorialCardSample(): ProgrammingTutorialCardSample {
-  const sourceFile = createSourceFileObject({
-    id: "source-file.programming.add",
-    label: "add.ts",
-    language: "typescript",
-    sourceText: "export function add(a: number, b: number) {\n  return a + b;\n}",
-    path: "src/add.ts",
-    revisionId: "rev-1"
-  });
-  const selectors = [
-    createSourceRangeSelector({
-      id: "selector.programming.add.signature",
-      sourceFileId: sourceFile.id,
-      start: { line: 1, column: 1 },
-      end: { line: 1, column: 44 },
-      summary: "Function signature."
-    }),
-    createSourceRangeSelector({
-      id: "selector.programming.add.return",
-      sourceFileId: sourceFile.id,
-      start: { line: 2, column: 3 },
-      end: { line: 2, column: 16 },
-      summary: "Return expression."
-    })
-  ];
+  const { sourceFile, selectors, sharedClockId } =
+    createAdditionProgrammingSourceFixture();
   const panel = createKpTutorialProgrammingPanelContract({
     panelId: "panel.programming.add.code",
-    sharedClockId: "clock.programming.add-demo",
+    sharedClockId,
     sourceFile,
     selectors,
     summary: "Code panel for a small addition function."

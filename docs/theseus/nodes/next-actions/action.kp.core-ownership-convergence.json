@@ -161,6 +161,13 @@
       "scope": "slice s08 neutral trace contract and compatibility",
       "checkedAt": "2026-08-16T21:27:13.735Z",
       "notes": "3 tests passed; npm architecture gate and test TypeScript project also passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-addition-source-fixture.test.ts tests/programming-tutorial-card-sample.test.ts tests/programming-execution-trace-fixture.test.ts",
+      "status": "passed",
+      "scope": "slice s09 source fixture convergence",
+      "checkedAt": "2026-08-16T21:30:18.696Z",
+      "notes": "Five fixture and projection tests passed; architecture and test-project typecheck also passed."
     }
   ],
   "expectedLearning": [

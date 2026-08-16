@@ -6,9 +6,8 @@ import type {
   SourceFileObject,
   SourceRangeSelector
 } from "../semantic/source-file.ts";
-import {
-  createAdditionProgrammingTutorialCardSample
-} from "./programming-card-sample.ts";
+import { createAdditionProgrammingSourceFixture } from
+  "../domain-ir/programming-addition-source-fixture.ts";
 import {
   createKpProgrammingExecutionTrace,
   createKpProgrammingExecutionTraceFrame,
@@ -36,13 +35,13 @@ export interface AdditionProgrammingCallstackLossyTraceFixture
 }
 
 export function createAdditionProgrammingExecutionTraceFixture(): AdditionProgrammingExecutionTraceFixture {
-  const sample = createAdditionProgrammingTutorialCardSample();
-  const signatureSelectorId = "selector.programming.add.signature";
-  const returnSelectorId = "selector.programming.add.return";
+  const sourceFixture = createAdditionProgrammingSourceFixture();
+  const signatureSelectorId = sourceFixture.signatureSelector.id;
+  const returnSelectorId = sourceFixture.returnSelector.id;
   const stackFrame: KpProgrammingExecutionTraceStackFrame = {
     frameId: "frame.programming.add",
     functionName: "add",
-    sourceFileId: sample.sourceFile.id,
+    sourceFileId: sourceFixture.sourceFile.id,
     selectorId: signatureSelectorId
   };
   const locals: readonly KpProgrammingExecutionTraceLocalBinding[] = [
@@ -51,8 +50,8 @@ export function createAdditionProgrammingExecutionTraceFixture(): AdditionProgra
   ];
   const trace = createKpProgrammingExecutionTrace({
     traceId: "trace.programming.add",
-    sourceFileId: sample.sourceFile.id,
-    sharedClockId: sample.panel.sharedClockId,
+    sourceFileId: sourceFixture.sourceFile.id,
+    sharedClockId: sourceFixture.sharedClockId,
     steps: [
       {
         stepId: "step.programming.add.call",
@@ -96,8 +95,8 @@ export function createAdditionProgrammingExecutionTraceFixture(): AdditionProgra
 
   return {
     id: "fixture.programming.add.execution-trace",
-    sourceFile: sample.sourceFile,
-    selectors: sample.selectors,
+    sourceFile: sourceFixture.sourceFile,
+    selectors: sourceFixture.selectors,
     trace,
     sample(progress) {
       const normalizedProgress = normalizeAnimationProgress(progress);
