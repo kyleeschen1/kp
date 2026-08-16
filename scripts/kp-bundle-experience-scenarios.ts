@@ -12,6 +12,8 @@ export interface KpBundleBuildDeclaration {
 }
 
 const MAIN_BUILD = "bundle-build.main" as const;
+const NATIVE_KATEX_FEATURE_PACK_OWNER =
+  "src/rendering/native-katex-feature-pack-implementation.ts";
 
 /**
  * Build ownership stays declarative so measurement can select an existing
@@ -67,7 +69,8 @@ export const kpBundleExperienceScenarios:
       forbiddenOwners: [
         "src/editor/equation-surface-capability.ts",
         "src/editor/place-value-addition-surface-capability.ts",
-        "src/rendering/graph-webgl-three.ts"
+        "src/rendering/graph-webgl-three.ts",
+        NATIVE_KATEX_FEATURE_PACK_OWNER
       ],
       budgets: []
     }),
@@ -88,7 +91,8 @@ export const kpBundleExperienceScenarios:
       surfaceRoot: "src/editor/economics-graph-svg-surface-capability.ts",
       forbiddenOwners: [
         "src/editor/programming-surface-capability.ts",
-        "src/rendering/graph-webgl-three.ts"
+        "src/rendering/graph-webgl-three.ts",
+        NATIVE_KATEX_FEATURE_PACK_OWNER
       ],
       budgets: [{
         phase: "experience",
@@ -103,7 +107,8 @@ export const kpBundleExperienceScenarios:
       surfaceRoot: "src/editor/programming-surface-capability.ts",
       forbiddenOwners: [
         "src/editor/equation-surface-capability.ts",
-        "src/rendering/graph-webgl-three.ts"
+        "src/rendering/graph-webgl-three.ts",
+        NATIVE_KATEX_FEATURE_PACK_OWNER
       ]
     }),
     selectedCatalogueScenario({
@@ -112,7 +117,10 @@ export const kpBundleExperienceScenarios:
       packRoot: "src/animation/catalog-packs/graph.ts",
       surfaceRoot: "src/editor/graph-3d-surface-capability.ts",
       rendererRoot: "src/rendering/graph-webgl-three.ts",
-      forbiddenOwners: ["src/editor/programming-surface-capability.ts"]
+      forbiddenOwners: [
+        "src/editor/programming-surface-capability.ts",
+        NATIVE_KATEX_FEATURE_PACK_OWNER
+      ]
     }),
     selectedCatalogueScenario({
       id: "bundle-experience.catalogue.place-value",

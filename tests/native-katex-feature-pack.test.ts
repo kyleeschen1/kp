@@ -10,9 +10,11 @@ import {
   kpNativeKatexFeaturePack
 } from "../src/rendering/native-katex-feature-pack-implementation.ts";
 import {
+  observeKpNativeKatexRenderedScene,
   settleAndObserveKpNativeKatexRenderedScene
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  compileKpCanonicalNativeKatexPureScenePlan,
   createKpCanonicalNativeKatexSceneSession,
   projectKpNativeKatexSemanticPaintRelations
 } from "../src/rendering/native-katex-scene-compositor.ts";
@@ -22,8 +24,16 @@ test("native KaTeX pack is an immutable view of the canonical renderer", () => {
   assert.ok(Object.isFrozen(kpNativeKatexFeaturePack.observe));
   assert.ok(Object.isFrozen(kpNativeKatexFeaturePack.compose));
   assert.equal(
+    kpNativeKatexFeaturePack.observe.observe,
+    observeKpNativeKatexRenderedScene
+  );
+  assert.equal(
     kpNativeKatexFeaturePack.observe.settleAndObserve,
     settleAndObserveKpNativeKatexRenderedScene
+  );
+  assert.equal(
+    kpNativeKatexFeaturePack.compose.compilePurePlan,
+    compileKpCanonicalNativeKatexPureScenePlan
   );
   assert.equal(
     kpNativeKatexFeaturePack.compose.createSession,
@@ -89,4 +99,22 @@ test("canonical operation evaluation consumes the pack at its async seam", async
     source,
     /from "\.\.\/rendering\/native-katex-rendered-scene\.ts"/u
   );
+});
+
+test("production application callers do not bypass the native KaTeX pack", async () => {
+  for (const path of [
+    "src/editor/exact-fraction-quantity-surface-adapter.ts",
+    "src/editor/log-exponent-surface-adapter.ts",
+    "src/reader/app/reader-canonical-equation-session.ts",
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    "src/rendering/log-exponent-native-endpoints.ts",
+    "src/rendering/log-exponent-transit-session.ts"
+  ]) {
+    const source = await readFile(path, "utf8");
+    assert.doesNotMatch(
+      source,
+      /import\s*\{[^}]*\b(?:observeKpNativeKatexRenderedScene|settleAndObserveKpNativeKatexRenderedScene|compileKpCanonicalNativeKatexPureScenePlan|createKpCanonicalNativeKatexSceneSession|projectKpNativeKatexSemanticPaintRelations)\b[^}]*\}\s*from/u,
+      `${path} bypasses the native KaTeX feature-pack boundary.`
+    );
+  }
 });

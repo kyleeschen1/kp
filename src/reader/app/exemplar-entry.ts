@@ -416,6 +416,9 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
         compilePurePlan:
           readerCanonicalEquationSessionAdapter
             .compileKpReaderEquationPureScenePlan,
+        observeScene:
+          readerCanonicalEquationSessionAdapter
+            .observeKpNativeKatexRenderedScene,
         enableAdjacentPrewarm:
           lessonDescriptor.id === "fraction-composition",
         enablePurePlanCache:

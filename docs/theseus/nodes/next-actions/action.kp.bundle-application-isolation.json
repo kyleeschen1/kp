@@ -135,6 +135,34 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T23:14:07.141Z",
       "notes": "Production build transformed 1,446 modules; one feature implementation chunk imports the existing shared compositor without duplication; representative closures and the 75,026-byte place-value baseline are unchanged."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:50:07.976Z",
+      "notes": "Dependency direction and semantic/equation authority gates remain green after feature-pack routing."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:50:08.496Z",
+      "notes": "Native KaTeX caller migration typechecks across application, node, tests, Svelte, and domains."
+    },
+    {
+      "command": "playwright exact-fraction mounts lazily chromium",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:50:08.970Z",
+      "notes": "The exact-fraction application surface mounts its canonical adapter through the feature pack; stale editor routing was made explicit."
+    },
+    {
+      "command": "npm run check:bundle-experiences",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:50:09.376Z",
+      "notes": "All eight experience closures pass; the native KaTeX implementation remains absent from empty, economics, programming, and Graph3D scenarios."
     }
   ],
   "expectedLearning": [

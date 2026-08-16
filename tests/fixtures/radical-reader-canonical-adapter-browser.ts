@@ -15,6 +15,9 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../../src/rendering/native-katex-rendered-scene.ts";
 import {
+  kpNativeKatexFeaturePack
+} from "../../src/rendering/native-katex-feature-pack-implementation.ts";
+import {
   createKpReaderEquationSceneCompositorSession
 } from "../../src/reader/renderers/equation-scene-compositor-adapter.ts";
 import {
@@ -73,6 +76,7 @@ const session = createKpReaderEquationSceneCompositorSession({
   renderPlan,
   materialPlan,
   transitionId: transition.id,
+  nativeKatex: kpNativeKatexFeaturePack,
   motionMode: "continuous",
   measurementIdentity: {
     revision: 1,

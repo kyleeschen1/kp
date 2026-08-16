@@ -854,7 +854,7 @@ async function openExactQuantity(
   viewport: { readonly width: number; readonly height: number }
 ) {
   await page.setViewportSize(viewport);
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(playerSelector);
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-hydrated",

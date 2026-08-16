@@ -1,7 +1,9 @@
 import {
+  observeKpNativeKatexRenderedScene,
   settleAndObserveKpNativeKatexRenderedScene
 } from "./native-katex-rendered-scene.ts";
 import {
+  compileKpCanonicalNativeKatexPureScenePlan,
   createKpCanonicalNativeKatexSceneSession,
   projectKpNativeKatexSemanticPaintRelations
 } from "./native-katex-scene-compositor.ts";
@@ -18,9 +20,11 @@ export const kpNativeKatexFeaturePack: KpNativeKatexFeaturePack =
     schemaVersion: "kp.native-katex-feature-pack.v1" as const,
     id: "feature-pack.native-katex.canonical" as const,
     observe: Object.freeze({
+      observe: observeKpNativeKatexRenderedScene,
       settleAndObserve: settleAndObserveKpNativeKatexRenderedScene
     }),
     compose: Object.freeze({
+      compilePurePlan: compileKpCanonicalNativeKatexPureScenePlan,
       createSession: createKpCanonicalNativeKatexSceneSession,
       projectRelations: projectKpNativeKatexSemanticPaintRelations
     })

@@ -45,7 +45,9 @@ function assertKpNativeKatexFeaturePack(
   if (
     candidate.schemaVersion !== "kp.native-katex-feature-pack.v1" ||
     candidate.id !== "feature-pack.native-katex.canonical" ||
+    typeof candidate.observe?.observe !== "function" ||
     typeof candidate.observe?.settleAndObserve !== "function" ||
+    typeof candidate.compose?.compilePurePlan !== "function" ||
     typeof candidate.compose?.createSession !== "function" ||
     typeof candidate.compose?.projectRelations !== "function"
   ) {

@@ -17,6 +17,9 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  kpNativeKatexFeaturePack
+} from "../src/rendering/native-katex-feature-pack-implementation.ts";
+import {
   compileKpReaderEquationMaterialPlan,
   projectKpReaderEquationRenderPlan,
   projectKpReaderEquationTransitionPresentation
@@ -426,6 +429,7 @@ test("explicit static plans clamp the canonical session to native checkpoints", 
     renderPlan,
     materialPlan,
     transitionId: transition.id,
+    nativeKatex: kpNativeKatexFeaturePack,
     measurementIdentity,
     source: fractionScene("source", [
       xRelation.sourceSelectorIds[0]!,
@@ -488,6 +492,7 @@ test("adapter rejects material plans that are detached from canonical lineage", 
       renderPlan,
       materialPlan: { ...materialPlan, renderPlanId: "equation-plan.forged" },
       transitionId: transition.id,
+      nativeKatex: kpNativeKatexFeaturePack,
       measurementIdentity,
       source: scene("source", xRelation.sourceSelectorIds[0]!),
       target: scene("target", xRelation.targetSelectorIds[0]!)
@@ -507,6 +512,7 @@ test("the same reader session adapter accepts both fraction fission and fusion p
       renderPlan,
       materialPlan,
       transitionId: transition.id,
+      nativeKatex: kpNativeKatexFeaturePack,
       measurementIdentity,
       source: fractionScene("source", structural.sourceSelectorIds),
       target: fractionScene("target", structural.targetSelectorIds)
@@ -534,6 +540,7 @@ test("reader sessions expose the exact executed program and phase telemetry", ()
     renderPlan,
     materialPlan,
     transitionId: transition.id,
+    nativeKatex: kpNativeKatexFeaturePack,
     measurementIdentity,
     source: fractionScene("source", sourceIds),
     target: fractionScene("target", targetIds)

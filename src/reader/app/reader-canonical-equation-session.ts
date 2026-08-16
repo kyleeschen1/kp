@@ -1,6 +1,6 @@
-import {
-  observeKpNativeKatexRenderedScene
-} from "../../rendering/native-katex-rendered-scene.ts";
+import type {
+  KpObserveNativeKatexScene
+} from "../../rendering/native-katex-feature-pack-contract.ts";
 import type {
   KpEquationFontReadiness
 } from "../../rendering/equation-font-readiness.ts";
@@ -72,6 +72,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionIds: readonly string[];
   readonly createSession: KpReaderEquationSceneCompositorFactory;
   readonly compilePurePlan: KpReaderEquationPureScenePlanCompiler;
+  readonly observeScene: KpObserveNativeKatexScene;
   readonly requireAppliedStageLayout?: boolean | undefined;
   readonly enablePurePlanCache?: boolean | undefined;
   readonly enableAdjacentPrewarm?: boolean | undefined;
@@ -170,7 +171,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       '[data-kp-reader-native="target"]'
     );
     const observe = (endpoint: "source" | "target", root: HTMLElement) =>
-      observeKpNativeKatexRenderedScene({
+      input.observeScene({
         endpoint,
         stage: frame.fitSurface,
         root,

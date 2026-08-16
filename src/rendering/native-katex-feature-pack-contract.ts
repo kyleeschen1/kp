@@ -2,6 +2,10 @@ export type KpSettleAndObserveNativeKatexScene = typeof import(
   "./native-katex-rendered-scene.ts"
 )["settleAndObserveKpNativeKatexRenderedScene"];
 
+export type KpObserveNativeKatexScene = typeof import(
+  "./native-katex-rendered-scene.ts"
+)["observeKpNativeKatexRenderedScene"];
+
 export type KpCreateCanonicalNativeKatexSceneSession = typeof import(
   "./native-katex-scene-compositor.ts"
 )["createKpCanonicalNativeKatexSceneSession"];
@@ -10,13 +14,19 @@ export type KpProjectNativeKatexSemanticPaintRelations = typeof import(
   "./native-katex-scene-compositor.ts"
 )["projectKpNativeKatexSemanticPaintRelations"];
 
+export type KpCompileCanonicalNativeKatexPureScenePlan = typeof import(
+  "./native-katex-scene-compositor.ts"
+)["compileKpCanonicalNativeKatexPureScenePlan"];
+
 export interface KpNativeKatexFeaturePack {
   readonly schemaVersion: "kp.native-katex-feature-pack.v1";
   readonly id: "feature-pack.native-katex.canonical";
   readonly observe: Readonly<{
+    observe: KpObserveNativeKatexScene;
     settleAndObserve: KpSettleAndObserveNativeKatexScene;
   }>;
   readonly compose: Readonly<{
+    compilePurePlan: KpCompileCanonicalNativeKatexPureScenePlan;
     createSession: KpCreateCanonicalNativeKatexSceneSession;
     projectRelations: KpProjectNativeKatexSemanticPaintRelations;
   }>;

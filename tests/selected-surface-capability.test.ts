@@ -16,7 +16,7 @@ import {
 test("selected surface capabilities keep rich renderers explicit", () => {
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.exact-fraction-quantity.third-plus-sixth",
-    slotKinds: ["equation"]
+    slotKinds: ["diagram"]
   }), ["exact-fraction-quantity", "equation-katex"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.operation-evaluation.one-plus-two",

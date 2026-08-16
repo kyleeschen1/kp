@@ -1,10 +1,11 @@
-import {
-  createKpCanonicalNativeKatexSceneSession,
-  projectKpNativeKatexSemanticPaintRelations,
-  type KpCanonicalNativeKatexSceneSession,
-  type KpNativeKatexSceneOwnershipFrame,
-  type KpNativeKatexSemanticPaintRelation
+import type {
+  KpCanonicalNativeKatexSceneSession,
+  KpNativeKatexSceneOwnershipFrame,
+  KpNativeKatexSemanticPaintRelation
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexFeaturePack
+} from "./native-katex-feature-pack-contract.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
@@ -45,7 +46,8 @@ export interface KpLogExponentTransitSession {
 }
 
 export function projectKpLogExponentNativePaintRelations(
-  operation: KpCompiledLogExponentOperation
+  operation: KpCompiledLogExponentOperation,
+  nativeKatex: KpNativeKatexFeaturePack
 ): readonly KpNativeKatexSemanticPaintRelation[] {
   if (!isKpCompiledLogExponentOperation(operation)) {
     throw new Error(
@@ -58,13 +60,14 @@ export function projectKpLogExponentNativePaintRelations(
       `Log-exponent operation ${operation.operation.id} lacks correspondence.`
     );
   }
-  return projectKpNativeKatexSemanticPaintRelations({
+  return nativeKatex.compose.projectRelations({
     groups: correspondence.records.map(projectRelationGroup)
   });
 }
 
 export function createKpLogExponentTransitSession(input: {
   readonly operation: KpCompiledLogExponentOperation;
+  readonly nativeKatex: KpNativeKatexFeaturePack;
   readonly sourceEndpoint: KpLogExponentNativeEndpoint;
   readonly targetEndpoint: KpLogExponentNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
@@ -74,10 +77,13 @@ export function createKpLogExponentTransitSession(input: {
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): KpLogExponentTransitSession {
   assertTransitInput(input);
-  const canonical = createKpCanonicalNativeKatexSceneSession({
+  const canonical = input.nativeKatex.compose.createSession({
     source: input.source,
     target: input.target,
-    relations: projectKpLogExponentNativePaintRelations(input.operation),
+    relations: projectKpLogExponentNativePaintRelations(
+      input.operation,
+      input.nativeKatex
+    ),
     symbolMotionContract: input.symbolMotionContract,
     ...(input.operationChoreography === undefined
       ? {}

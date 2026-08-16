@@ -15,7 +15,7 @@ const committedSceneSelector =
 test("exact quantity mounts lazily in the shared Animation Library", async ({
   page
 }) => {
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const library = page.locator("[data-kp-editor-animation-library]");
   const player = library.locator(
     `[data-kp-editor-animation-player]` +
@@ -60,7 +60,7 @@ test("fold and view disclosure preserve one live executable session", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -151,7 +151,7 @@ test("hidden phone projections defer native paint until the symbolic stage is vi
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -192,7 +192,7 @@ test("checkpoint, fold, pin, representation, and seek controls round-trip", asyn
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -251,7 +251,7 @@ test("Review atomically saves the exact phone animation moment", async ({
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-dev-review-ready",
     "true"
@@ -373,7 +373,7 @@ test("Review remains reachable and records the wide four-view layout", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1_100, height: 800 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-dev-review-ready",
     "true"
@@ -422,7 +422,7 @@ test("lazy wide and phone checkpoint review stays connected to the live player",
   page
 }) => {
   await page.setViewportSize({ width: 1_100, height: 800 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
@@ -504,7 +504,7 @@ test("accessibility, transcript, settled motion, and keyboard stay canonical", a
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`

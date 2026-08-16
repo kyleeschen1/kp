@@ -11,11 +11,17 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
     const treePath = "/src/semantic/log-exponent-transformation-tree.ts";
     const fontPath = "/src/rendering/equation-font-readiness.ts";
     const motionPath = "/src/animation/log-exponent-symbol-motion.ts";
+    const featurePackPath =
+      "/src/rendering/native-katex-feature-pack-implementation.ts";
     const endpointModule = await import(/* @vite-ignore */ endpointPath);
     const transitModule = await import(/* @vite-ignore */ transitPath);
     const treeModule = await import(/* @vite-ignore */ treePath);
     const fontModule = await import(/* @vite-ignore */ fontPath);
     const motionModule = await import(/* @vite-ignore */ motionPath);
+    const featurePackModule = await import(
+      /* @vite-ignore */ featurePackPath
+    );
+    const nativeKatex = featurePackModule.kpNativeKatexFeaturePack;
 
     const stage = document.createElement("section");
     stage.style.cssText = [
@@ -66,17 +72,20 @@ test("log-exponent transit keeps one visible paint owner across native handoff",
       stage,
       root: sourceRoot,
       endpoint: sourceEndpoint,
-      fontReadiness
+      fontReadiness,
+      observe: nativeKatex.observe.settleAndObserve
     });
     const target = await endpointModule.settleAndObserveKpLogExponentNativeEndpoint({
       endpointSide: "target",
       stage,
       root: targetRoot,
       endpoint: targetEndpoint,
-      fontReadiness
+      fontReadiness,
+      observe: nativeKatex.observe.settleAndObserve
     });
     const session = transitModule.createKpLogExponentTransitSession({
       operation: treeModule.kpCanonicalLogExponentTransformationTree.operations[1],
+      nativeKatex,
       sourceEndpoint,
       targetEndpoint,
       source,

@@ -43,13 +43,18 @@ import {
 import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
-import {
-  createKpCanonicalNativeKatexSceneSession,
-  projectKpNativeKatexSemanticPaintRelations,
-  type KpNativeKatexRendererSession
+import type {
+  KpNativeKatexRendererSession
 } from "../rendering/native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexFeaturePack,
+  KpSettleAndObserveNativeKatexScene
+} from "../rendering/native-katex-feature-pack-contract.ts";
 import {
-  settleAndObserveKpNativeKatexRenderedScene
+  kpNativeKatexFeaturePackLoader
+} from "../rendering/native-katex-feature-pack-loader.ts";
+import type {
+  KpNativeKatexRenderedSceneObservation
 } from "../rendering/native-katex-rendered-scene.ts";
 import type {
   KpExactFractionSymbolicEndpoint,
@@ -532,13 +537,15 @@ async function prepareSymbolicSequence(input: {
   };
   input.session.symbolicSequence = preparation;
   try {
+    const nativeKatex = await kpNativeKatexFeaturePackLoader.load();
+    if (input.session.symbolicSequence !== preparation) {
+      discardKpNativeSceneCandidate(candidate);
+      fontReadiness.dispose();
+      return;
+    }
     const observations = new Map<string, {
-      readonly source: Awaited<
-        ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
-      >;
-      readonly target: Awaited<
-        ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
-      >;
+      readonly source: Awaited<ReturnType<KpSettleAndObserveNativeKatexScene>>;
+      readonly target: Awaited<ReturnType<KpSettleAndObserveNativeKatexScene>>;
     }>();
     await Promise.all(exactSymbolicEndpoints(input.session.runtime).map(
       async (endpoint) => {
@@ -549,7 +556,7 @@ async function prepareSymbolicSequence(input: {
           );
         }
         const [source, target] = await Promise.all([
-          settleAndObserveKpNativeKatexRenderedScene({
+          nativeKatex.observe.settleAndObserve({
             endpoint: "source",
             stage,
             root,
@@ -558,7 +565,7 @@ async function prepareSymbolicSequence(input: {
               `group.exact-fraction.state.${endpoint.stateId}`,
             fontReadiness
           }),
-          settleAndObserveKpNativeKatexRenderedScene({
+          nativeKatex.observe.settleAndObserve({
             endpoint: "target",
             stage,
             root,
@@ -579,7 +586,8 @@ async function prepareSymbolicSequence(input: {
     const segments = compilePreparedSymbolicSegments({
       session: input.session.runtime,
       observations,
-      endpointRoots
+      endpointRoots,
+      nativeKatex
     });
     assertPreparedSymbolicAdjacency(segments);
     const playable: ExactSymbolicSequencePlayable = {
@@ -637,14 +645,11 @@ function exactSymbolicEndpoints(
 function compilePreparedSymbolicSegments(input: {
   readonly session: KpExactFractionQuantityRuntimeSession;
   readonly observations: ReadonlyMap<string, {
-    readonly source: Awaited<
-      ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
-    >;
-    readonly target: Awaited<
-      ReturnType<typeof settleAndObserveKpNativeKatexRenderedScene>
-    >;
+    readonly source: KpNativeKatexRenderedSceneObservation;
+    readonly target: KpNativeKatexRenderedSceneObservation;
   }>;
   readonly endpointRoots: ReadonlyMap<string, HTMLElement>;
+  readonly nativeKatex: KpNativeKatexFeaturePack;
 }): ReadonlyMap<string, ExactPreparedSymbolicSegment> {
   const segments = new Map<string, ExactPreparedSymbolicSegment>();
   input.session.symbolic.motionInputs.forEach((motionInput, beatIndex) => {
@@ -688,10 +693,10 @@ function compilePreparedSymbolicSegments(input: {
             : undefined;
       const canonical = continuity
         ? undefined
-        : createKpCanonicalNativeKatexSceneSession({
+        : input.nativeKatex.compose.createSession({
             source,
             target,
-            relations: symbolicPaintRelations(segment),
+            relations: symbolicPaintRelations(segment, input.nativeKatex),
             successorSyntheses: segment.successorSyntheses.map((binding) =>
               exactSuccessorIntent(binding, identityTransferProgram)
             ),
@@ -1091,9 +1096,10 @@ function bindEndpointOwnership(
 }
 
 function symbolicPaintRelations(
-  motion: KpExactFractionSymbolicMotionSegment
+  motion: KpExactFractionSymbolicMotionSegment,
+  nativeKatex: KpNativeKatexFeaturePack
 ) {
-  return projectKpNativeKatexSemanticPaintRelations({
+  return nativeKatex.compose.projectRelations({
     groups: [
       ...motion.selectorTransitions,
       ...motion.structuralTransitions

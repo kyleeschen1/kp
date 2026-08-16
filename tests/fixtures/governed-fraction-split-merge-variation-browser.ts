@@ -13,6 +13,9 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../../src/rendering/native-katex-rendered-scene.ts";
 import {
+  kpNativeKatexFeaturePack
+} from "../../src/rendering/native-katex-feature-pack-implementation.ts";
+import {
   bindKpNumeratorSplitMergeStructuralAnchors,
   createKpNumeratorSplitMergeSelectorAnnotatedLatex
 } from "../../src/rendering/numerator-split-merge-selector-annotated-latex.ts";
@@ -111,6 +114,7 @@ async function createBrowserSession(
     renderPlan,
     materialPlan,
     transitionId: transition.id,
+    nativeKatex: kpNativeKatexFeaturePack,
     measurementIdentity: {
       revision: 1,
       coordinateSpaceId: `fixture.${name}.stage`

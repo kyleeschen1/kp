@@ -535,6 +535,17 @@ export function projectKpEquationSurfaceFamily(
   });
 }
 
+export function hasKpSpecializedEquationSurfaceFamily(
+  animationId: string
+): boolean {
+  // Specialized equation families can own diagram slots (exact quantity and
+  // place value), so capability selection cannot infer this boundary from the
+  // renderer slot name alone.
+  return kpEquationSurfaceFamilyDeclarations
+    .slice(0, -1)
+    .some(({ matches }) => matches(animationId));
+}
+
 export function findKpWaveAEquationOperationPlanDeclaration(
   animationId: string
 ): KpWaveAEquationOperationPlanDeclaration | undefined {

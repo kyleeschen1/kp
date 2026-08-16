@@ -196,6 +196,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     transitionIds: transitionPolicy.transitionIds,
     createSession: adapter.createKpReaderEquationSceneCompositorSession,
     compilePurePlan: adapter.compileKpReaderEquationPureScenePlan,
+    observeScene: adapter.observeKpNativeKatexRenderedScene,
     enableAdjacentPrewarm: true,
     enablePurePlanCache: true,
     requireAppliedStageLayout: input.descriptor.stageLayoutCompiler !== undefined

@@ -249,6 +249,10 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
   );
   assert.equal(
     adapter.includes("createKpCanonicalNativeKatexSceneSession"),
+    false
+  );
+  assert.equal(
+    adapter.includes("input.nativeKatex.compose.createSession"),
     true
   );
   assert.equal(

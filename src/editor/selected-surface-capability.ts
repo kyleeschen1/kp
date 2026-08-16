@@ -2,6 +2,7 @@ import type {
   KpEditorAnimationSurfaceSlotKind
 } from "./animation-surface-dispatch.ts";
 import {
+  hasKpSpecializedEquationSurfaceFamily,
   projectKpEquationSurfaceFamily,
   type KpEquationSelectedSurfaceCapability
 } from "../domain-ir/equation-surface-family-declarations.ts";
@@ -60,7 +61,7 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   );
   if (
     input.slotKinds.includes("equation") ||
-    input.animationId === "animation.place-value-addition.278-plus-156"
+    hasKpSpecializedEquationSurfaceFamily(input.animationId)
   ) {
     capabilities.push(
       ...projectKpEquationSurfaceFamily(input.animationId)

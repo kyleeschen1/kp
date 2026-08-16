@@ -1,10 +1,8 @@
-import {
-  compileKpCanonicalNativeKatexPureScenePlan,
-  createKpCanonicalNativeKatexSceneSession,
-  type KpCanonicalNativeKatexPureScenePlan,
-  type KpCanonicalNativeKatexSceneInput,
-  type KpNativeKatexRendererSession,
-  type KpNativeKatexSemanticPaintRelation
+import type {
+  KpCanonicalNativeKatexPureScenePlan,
+  KpCanonicalNativeKatexSceneInput,
+  KpNativeKatexRendererSession,
+  KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-scene-compositor.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
@@ -12,6 +10,9 @@ import type {
 import type {
   KpNativeKatexFeaturePack
 } from "../../rendering/native-katex-feature-pack-contract.ts";
+import {
+  kpNativeKatexFeaturePackLoader
+} from "../../rendering/native-katex-feature-pack-loader.ts";
 import type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "../../rendering/native-katex-successor-synthesis.ts";
@@ -71,7 +72,7 @@ export interface KpReaderEquationSceneCompositorInput {
     KpCorridorCertifiedEquationStageLayout | undefined;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-  readonly nativeKatex?: KpNativeKatexFeaturePack | undefined;
+  readonly nativeKatex: KpNativeKatexFeaturePack;
 }
 
 export interface KpReaderEquationPureScenePlan {
@@ -79,6 +80,31 @@ export interface KpReaderEquationPureScenePlan {
   readonly lifecycle: "pure-measured-plan";
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly nativePlan: KpCanonicalNativeKatexPureScenePlan;
+}
+
+/**
+ * Reader hosts receive a bound client so application code cannot reach past
+ * the feature-pack boundary or accidentally construct a second compositor.
+ */
+export async function loadKpReaderEquationSceneCompositorClient() {
+  const nativeKatex = await kpNativeKatexFeaturePackLoader.load();
+  return Object.freeze({
+    createKpReaderEquationSceneCompositorSession: (
+      input: Omit<KpReaderEquationSceneCompositorInput, "nativeKatex"> & {
+        readonly purePlan?: KpReaderEquationPureScenePlan | undefined;
+      }
+    ) => createKpReaderEquationSceneCompositorSession({
+      ...input,
+      nativeKatex
+    }),
+    compileKpReaderEquationPureScenePlan: (
+      input: Omit<KpReaderEquationSceneCompositorInput, "nativeKatex">
+    ) => compileKpReaderEquationPureScenePlan({
+      ...input,
+      nativeKatex
+    }),
+    observeKpNativeKatexRenderedScene: nativeKatex.observe.observe
+  });
 }
 
 type KpReaderEquationPresentationPlanOf<
@@ -144,7 +170,7 @@ export function compileKpReaderEquationPureScenePlan(
     kind: "reader-equation-pure-scene-plan",
     lifecycle: "pure-measured-plan",
     measurementIdentity: prepared.measurementIdentity,
-    nativePlan: compileKpCanonicalNativeKatexPureScenePlan(
+    nativePlan: input.nativeKatex.compose.compilePurePlan(
       prepared.canonicalInput
     )
   });
@@ -211,9 +237,7 @@ export function createKpReaderEquationSceneCompositorSession(
     input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
       dispatch.staticCheckpoint.reason;
   }
-  const createNativeSession = input.nativeKatex?.compose.createSession ??
-    createKpCanonicalNativeKatexSceneSession;
-  const canonical = createNativeSession({
+  const canonical = input.nativeKatex.compose.createSession({
     ...prepared.canonicalInput,
     ...(input.purePlan === undefined
       ? {}

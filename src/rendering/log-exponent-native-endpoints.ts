@@ -4,10 +4,12 @@ import type {
 import {
   renderLatexToHtml
 } from "./katex-adapter.ts";
-import {
-  settleAndObserveKpNativeKatexRenderedScene,
-  type KpNativeKatexRenderedSceneObservation
+import type {
+  KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import type {
+  KpSettleAndObserveNativeKatexScene
+} from "./native-katex-feature-pack-contract.ts";
 import type {
   KpSelectorAnnotatedLatex,
   KpSelectorLatexAnnotation
@@ -122,13 +124,14 @@ export async function settleAndObserveKpLogExponentNativeEndpoint(input: {
   readonly root: HTMLElement;
   readonly endpoint: KpLogExponentNativeEndpoint;
   readonly fontReadiness: KpEquationFontReadiness;
+  readonly observe: KpSettleAndObserveNativeKatexScene;
   readonly geometryTolerancePx?: number | undefined;
 }): Promise<KpNativeKatexRenderedSceneObservation> {
   bindKpLogExponentNativeEndpointOwnership({
     root: input.root,
     endpoint: input.endpoint
   });
-  return settleAndObserveKpNativeKatexRenderedScene({
+  return input.observe({
     endpoint: input.endpointSide,
     stage: input.stage,
     root: input.root,

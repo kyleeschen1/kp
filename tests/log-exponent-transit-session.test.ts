@@ -6,12 +6,18 @@ import {
   projectKpLogExponentNativePaintRelations
 } from "../src/rendering/log-exponent-transit-session.ts";
 import {
+  kpNativeKatexFeaturePack
+} from "../src/rendering/native-katex-feature-pack-implementation.ts";
+import {
   kpCanonicalLogExponentTransformationTree
 } from "../src/semantic/log-exponent-transformation-tree.ts";
 
 test("compiled log-exponent correspondence projects into native paint relations", () => {
   const relations = kpCanonicalLogExponentTransformationTree.operations.map(
-    projectKpLogExponentNativePaintRelations
+    (operation) => projectKpLogExponentNativePaintRelations(
+      operation,
+      kpNativeKatexFeaturePack
+    )
   );
   assert.deepEqual(relations.map((entries) => entries.length), [5, 8, 8]);
   assert.ok(relations[0]!.some(({ sourceEntityIds, targetEntityIds }) =>

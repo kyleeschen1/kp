@@ -62,3 +62,19 @@ test("selected experiences preserve explicit comparable catalogue bases", () => 
   );
   assert.equal(placeValue.budgets[0]?.gzipBytes, 75_000);
 });
+
+test("non-equation catalogue experiences exclude the native KaTeX pack", () => {
+  const packOwner =
+    "src/rendering/native-katex-feature-pack-implementation.ts";
+  for (const id of [
+    "bundle-experience.catalogue.empty",
+    "bundle-experience.catalogue.economics",
+    "bundle-experience.catalogue.programming-trace",
+    "bundle-experience.catalogue.graph-3d"
+  ] as const) {
+    assert.ok(
+      findKpBundleExperienceScenario(id).forbiddenOwners.includes(packOwner),
+      `${id} must not acquire the native KaTeX feature pack.`
+    );
+  }
+});

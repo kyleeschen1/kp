@@ -36,6 +36,12 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "../rendering/native-katex-rendered-scene.ts";
 import type {
+  KpNativeKatexFeaturePack
+} from "../rendering/native-katex-feature-pack-contract.ts";
+import {
+  kpNativeKatexFeaturePackLoader
+} from "../rendering/native-katex-feature-pack-loader.ts";
+import type {
   KpCompiledLogExponentOperation
 } from "../semantic/log-exponent-transformation-compiler.ts";
 import {
@@ -79,6 +85,7 @@ interface KpLogExponentSurfaceSession {
 
 interface KpLogExponentPreparedOperation {
   readonly operation: KpCompiledLogExponentOperation;
+  readonly nativeKatex: KpNativeKatexFeaturePack;
   readonly sourceEndpoint:
     (typeof kpCanonicalLogExponentNativeEndpoints)[number];
   readonly targetEndpoint:
@@ -249,6 +256,8 @@ async function prepareSurface(
   generation: number
 ): Promise<void> {
   try {
+    const nativeKatex = await kpNativeKatexFeaturePackLoader.load();
+    if (session.disposed || session.generation !== generation) return;
     const preparedOperations: KpLogExponentPreparedOperation[] = [];
     for (
       let index = 0;
@@ -273,14 +282,16 @@ async function prepareSurface(
         stage: session.stage,
         root: sourceRoot,
         endpoint: sourceEndpoint,
-        fontReadiness: session.fontReadiness
+        fontReadiness: session.fontReadiness,
+        observe: nativeKatex.observe.settleAndObserve
       });
       const target = await settleAndObserveKpLogExponentNativeEndpoint({
         endpointSide: "target",
         stage: session.stage,
         root: targetRoot,
         endpoint: targetEndpoint,
-        fontReadiness: session.fontReadiness
+        fontReadiness: session.fontReadiness,
+        observe: nativeKatex.observe.settleAndObserve
       });
       if (session.disposed || session.generation !== generation) return;
       const surfaceDispatch = requireKpClosedDispatchEntry(
@@ -294,6 +305,7 @@ async function prepareSurface(
       });
       preparedOperations.push({
         operation,
+        nativeKatex,
         symbolMotionContract: symbolMotionPlan.contract,
         sourceEndpoint,
         targetEndpoint,

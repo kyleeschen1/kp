@@ -109,7 +109,8 @@
     {
       "id": "s10",
       "title": "migrate-katex-callers-and-enforce-negative-closure",
-      "status": "planned"
+      "summary": "Routed exact-fraction, log-exponent, and canonical reader consumers through the lazy native KaTeX pack; specialized diagram-slot equation capabilities now derive from typed family declarations; negative non-KaTeX closures and focused runtime evidence pass.",
+      "status": "complete"
     },
     {
       "id": "s11",
