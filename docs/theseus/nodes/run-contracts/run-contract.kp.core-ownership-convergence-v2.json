@@ -134,7 +134,8 @@
     {
       "id": "s14",
       "title": "remove-linear-solve-semantic-cycle",
-      "status": "planned"
+      "summary": "Semantic linear-solve construction no longer imports tutorial code; its behavior wrapper now lives beside the tutorial sampler with identical ID, duration, frames, and deterministic laws.",
+      "status": "complete"
     },
     {
       "id": "s15",

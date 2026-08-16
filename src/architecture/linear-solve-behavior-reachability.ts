@@ -1,7 +1,8 @@
 export interface KpLinearSolveBehaviorReachabilityAudit {
   readonly symbol: "createLinearSolveKpBehavior";
-  readonly currentOwner: "src/semantic/linear-solve-asset.ts";
-  readonly prohibitedDependency: "src/tutorial/linear-solve-card-sample.ts";
+  readonly priorOwner: "src/semantic/linear-solve-asset.ts";
+  readonly currentOwner: "src/tutorial/linear-solve-card-behavior.ts";
+  readonly wrappedProjection: "src/tutorial/linear-solve-card-sample.ts";
   readonly productionImporters: readonly [];
   readonly testImporters: readonly string[];
   readonly descriptiveMentions: readonly string[];
@@ -16,8 +17,9 @@ export interface KpLinearSolveBehaviorReachabilityAudit {
  */
 export const kpLinearSolveBehaviorReachabilityAudit = Object.freeze({
   symbol: "createLinearSolveKpBehavior",
-  currentOwner: "src/semantic/linear-solve-asset.ts",
-  prohibitedDependency: "src/tutorial/linear-solve-card-sample.ts",
+  priorOwner: "src/semantic/linear-solve-asset.ts",
+  currentOwner: "src/tutorial/linear-solve-card-behavior.ts",
+  wrappedProjection: "src/tutorial/linear-solve-card-sample.ts",
   productionImporters: Object.freeze([]),
   testImporters: Object.freeze([
     "tests/kp-asset-decomposition.test.ts",

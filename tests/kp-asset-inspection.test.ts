@@ -9,7 +9,7 @@ import {
 } from "../src/semantic/asset-inspection.ts";
 import {
   createLinearSolveKpBehavior
-} from "../src/semantic/linear-solve-asset.ts";
+} from "../src/tutorial/linear-solve-card-behavior.ts";
 
 test("inspectKpBehaviorAt returns sampled frame and extracted active ids", () => {
   const behavior = createKpBehavior({

@@ -21,9 +21,10 @@ import {
 } from "../src/semantic/asset-flashcard.ts";
 import { validateKpSemanticTransformation } from "../src/semantic/asset-transformation.ts";
 import {
-  createLinearSolveKpAssetBundle,
-  createLinearSolveKpBehavior
+  createLinearSolveKpAssetBundle
 } from "../src/semantic/linear-solve-asset.ts";
+import { createLinearSolveKpBehavior } from
+  "../src/tutorial/linear-solve-card-behavior.ts";
 
 test("createLinearSolveKpAssetBundle wraps canonical equation states", () => {
   const asset = createLinearSolveKpAssetBundle();

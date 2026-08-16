@@ -196,6 +196,13 @@
       "scope": "slice s13 linear-solve behavior reachability",
       "checkedAt": "2026-08-16T21:41:29.990Z",
       "notes": "The AST audit proves zero production importers and exactly three test importers; architecture and test-project typecheck remain green."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-asset.test.ts tests/kp-asset-decomposition.test.ts tests/kp-asset-inspection.test.ts tests/linear-solve-behavior-reachability.test.ts tests/kp-dependency-direction-exceptions.test.ts tests/linear-solve-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "slice s14 linear-solve cycle retirement",
+      "checkedAt": "2026-08-16T21:44:06.415Z",
+      "notes": "Sixteen behavior, reachability, semantic asset, tutorial, and exception tests passed; architecture reports 8 remaining exact exceptions and project dashboard remains green."
     }
   ],
   "expectedLearning": [

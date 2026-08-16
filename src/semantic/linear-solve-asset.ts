@@ -4,10 +4,6 @@ import {
   type KpAssetBundle
 } from "./asset.ts";
 import {
-  createKpBehavior,
-  type KpBehavior
-} from "./asset-behavior.ts";
-import {
   createKpTransformationDrillDownHook,
   type KpTransformationDrillDownHook
 } from "./asset-decomposition.ts";
@@ -24,10 +20,6 @@ import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
-import {
-  createLinearSolveTutorialCardSample,
-  type LinearSolveTutorialCardSampleFrame
-} from "../tutorial/linear-solve-card-sample.ts";
 
 export interface LinearSolveKpAsset {
   readonly sourceAnimationId: "linear-equation-solve-x";
@@ -37,9 +29,6 @@ export interface LinearSolveKpAsset {
   readonly drillDownHooks: readonly KpTransformationDrillDownHook[];
   readonly flashcards: readonly KpFlashcardSpec[];
 }
-
-export type LinearSolveKpBehavior =
-  KpBehavior<LinearSolveTutorialCardSampleFrame>;
 
 export const linearSolveAssetIds = {
   initial: "equation.linear-solve.initial",
@@ -297,16 +286,6 @@ export function createLinearSolveTeacherZeroKpAssetBundle(): LinearSolveKpAsset 
     drillDownHooks: canonical.drillDownHooks,
     flashcards: canonical.flashcards
   };
-}
-
-export function createLinearSolveKpBehavior(): LinearSolveKpBehavior {
-  const sample = createLinearSolveTutorialCardSample();
-
-  return createKpBehavior({
-    id: "behavior.linear-solve.card",
-    durationMs: sample.cardSampler.parentTimeline.durationMs,
-    sample: ({ progress }) => sample.sample(progress)
-  });
 }
 
 function createLinearSolveTransformations(): readonly KpSemanticTransformation[] {

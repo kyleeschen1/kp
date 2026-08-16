@@ -1126,6 +1126,10 @@ export const projectDashboardData: ProjectDashboardData = {
         {
           label: "Linear solve asset",
           href: "src/semantic/linear-solve-asset.ts"
+        },
+        {
+          label: "Linear solve tutorial behavior",
+          href: "src/tutorial/linear-solve-card-behavior.ts"
         }
       ],
       verification: [

@@ -4,13 +4,11 @@ import type {
 } from "./kp-dependency-direction-policy.ts";
 
 export type KpDependencyRetirementOwner =
-  | "linear-solve-cycle-retirement"
   | "html-output-encoding-convergence"
   | "renderer-theme-inversion"
   | "legacy-equation-sdk-disposition";
 
 export type KpDependencyRetirementSlice =
-  | "s15"
   | "s18"
   | "s20"
   | "s22";
@@ -39,17 +37,6 @@ const legacySdkRetirement = {
 
 export const kpDependencyDirectionExceptions: readonly KpDependencyDirectionException[] =
   Object.freeze([
-    exception(
-      "linear-solve.semantic-card-cycle",
-      "src/semantic/linear-solve-asset.ts",
-      "src/tutorial/linear-solve-card-sample.ts",
-      "runtime",
-      {
-        owner: "linear-solve-cycle-retirement",
-        retireWhen: "The unused tutorial behavior no longer owns semantic asset construction.",
-        plannedSlice: "s15"
-      }
-    ),
     exception(
       "html-output.python",
       "src/rendering/python-refactor-code-html.ts",

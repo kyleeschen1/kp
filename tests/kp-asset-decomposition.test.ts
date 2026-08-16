@@ -14,9 +14,10 @@ import {
   inspectKpBehaviorAt
 } from "../src/semantic/asset-inspection.ts";
 import {
-  createLinearSolveKpAssetBundle,
-  createLinearSolveKpBehavior
+  createLinearSolveKpAssetBundle
 } from "../src/semantic/linear-solve-asset.ts";
+import { createLinearSolveKpBehavior } from
+  "../src/tutorial/linear-solve-card-behavior.ts";
 
 const cancelExplainerAsset = createKpAssetBundle({
   id: "asset.cancel-additive-inverse-explainer",
