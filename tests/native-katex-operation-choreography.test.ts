@@ -23,6 +23,7 @@ import {
   applyKpNativeKatexOperationChoreography
 } from "../src/rendering/native-katex-operation-choreography.ts";
 import {
+  adaptKpNativeKatexFunctionWrapReception,
   applyKpNativeKatexFunctionWrapReception,
   kpNativeKatexFunctionWrapReceptionStyle
 } from "../src/rendering/native-katex-function-wrap-reception.ts";
@@ -78,6 +79,99 @@ test("function-wrap enclosures arrive outside and oversized before settling nati
   assert.equal(openTrack.timingGroupId, closeTrack.timingGroupId);
   const settled = sampleKpNativeKatexSceneTrackFrames(tracks, 1, false);
   assert.deepEqual(settled.map(({ rect }) => rect), [open.rect, close.rect]);
+});
+
+test("function-wrap adapter certifies reverse settlement and synchronized ownership", () => {
+  const open = atom("source", "source.wrap.open", 40);
+  const close = atom("source", "source.wrap.close", 80);
+  const source = scene("source", [open, close]);
+  const adaptation = adaptKpNativeKatexFunctionWrapReception({
+    source,
+    target: scene("target", []),
+    tracks: [eliminatedTrack(open, 0), eliminatedTrack(close, 1)],
+    plan: createKpFunctionWrapReceptionPlan({
+      id: "function-wrap-reception.reverse-test",
+      direction: "rewind",
+      branches: [{
+        id: "branch.reverse-test",
+        argumentEntityIds: ["source.argument"],
+        syntaxEntityIds: ["source.wrap.operator"],
+        enclosureEntityRoles: [
+          { entityId: "source.wrap.open", side: "leading" },
+          { entityId: "source.wrap.close", side: "trailing" }
+        ]
+      }]
+    }),
+    entryWindow: { start: 0.42, end: 0.7 }
+  });
+  assert.deepEqual(adaptation.certificate, {
+    schemaVersion: "kp.native-katex-function-wrap-certificate.v1",
+    motifId: "motif.function-wrap.v1",
+    rendererCapabilityId: "renderer-capability.equation.native-katex.v1",
+    direction: "rewind",
+    nativeEndpoint: "source",
+    timingGroupId: "function-wrap-reception.reverse-test",
+    matchedEnclosureEntityIds: ["source.wrap.open", "source.wrap.close"],
+    synchronization: "all-enclosures-together",
+    settlement: "native-measured-endpoint"
+  });
+  assert.equal(Object.isFrozen(adaptation.certificate), true);
+  assert.deepEqual(
+    sampleKpNativeKatexSceneTrackFrames(adaptation.tracks, 0, false)
+      .map(({ rect }) => rect),
+    [open.rect, close.rect]
+  );
+  const withdrawn = sampleKpNativeKatexSceneTrackFrames(
+    adaptation.tracks,
+    1,
+    false
+  );
+  assert.ok(withdrawn[0]!.expectedPaintRect!.left < open.rect.left);
+  assert.ok(withdrawn[1]!.expectedPaintRect!.left > close.rect.left);
+  assert.equal(
+    new Set(adaptation.tracks.map(({ timingGroupId }) => timingGroupId)).size,
+    1
+  );
+});
+
+test("function-wrap adapter rejects foreign motifs and malformed windows", () => {
+  const open = atom("target", "target.wrap.open", 40);
+  const close = atom("target", "target.wrap.close", 80);
+  const target = scene("target", [open, close]);
+  const plan = createKpFunctionWrapReceptionPlan({
+    id: "function-wrap-reception.invalid-test",
+    direction: "forward",
+    branches: [{
+      id: "branch.invalid-test",
+      argumentEntityIds: ["target.argument"],
+      syntaxEntityIds: ["target.wrap.operator"],
+      enclosureEntityRoles: [
+        { entityId: "target.wrap.open", side: "leading" },
+        { entityId: "target.wrap.close", side: "trailing" }
+      ]
+    }]
+  });
+  const input = {
+    source: scene("source", []),
+    target,
+    tracks: [introducedTrack(open, 0), introducedTrack(close, 1)],
+    plan,
+    entryWindow: { start: 0.42, end: 0.7 }
+  };
+  assert.throws(
+    () => adaptKpNativeKatexFunctionWrapReception({
+      ...input,
+      plan: { ...plan, motifId: "motif.foreign.v1" } as typeof plan
+    }),
+    /rejects motif/
+  );
+  assert.throws(
+    () => adaptKpNativeKatexFunctionWrapReception({
+      ...input,
+      entryWindow: { start: 0.8, end: 0.2 }
+    }),
+    /entry window must be ordered/
+  );
 });
 
 test("balanced branch certificate synchronizes every introduced paint atom", () => {

@@ -113,6 +113,9 @@ test("verification modes accumulate durable checks without substituting an unrel
     "function-wrap-visual"
   ]);
   assert.equal(ids(contract).includes("focused-visual"), false);
+
+  const promotion = selectKpVerificationImpact([path], { mode: "promotion" });
+  assert.ok(ids(promotion).includes("function-wrap-browser"));
 });
 
 test("renderer-neutral equation protocols select contract proof instead of a visual exemplar", () => {

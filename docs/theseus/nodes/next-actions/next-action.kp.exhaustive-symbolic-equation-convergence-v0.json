@@ -1235,6 +1235,41 @@
       "scope": "slice s11 preservation",
       "checkedAt": "2026-08-16T06:27:52.293Z",
       "notes": "All 10 existing semantic, endpoint, renderer, clock, and frame obligations passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-operation-choreography.test.ts tests/function-wrap-motif-authority.test.ts tests/log-product-transit-session.test.ts tests/equation-extension-dispatch.test.ts",
+      "status": "passed",
+      "scope": "slice s12 Native KaTeX adapter",
+      "checkedAt": "2026-08-16T06:38:04.266Z",
+      "notes": "20 measured geometry, reverse, settlement, synchronization, validation, dispatch, and caller tests passed"
+    },
+    {
+      "command": "npm run test:browser:function-wrap-adapter",
+      "status": "passed",
+      "scope": "slice s12 focused reduced-motion browser",
+      "checkedAt": "2026-08-16T06:38:05.376Z",
+      "notes": "Function-wrap passed exact 0/0.5/1/backward seek, native readiness, accessibility, and no page errors at 390px under reduced motion"
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "slice s12 deterministic visual",
+      "checkedAt": "2026-08-16T06:38:06.294Z",
+      "notes": "Eight function-wrap captures completed with zero capture warnings; optional dev-review proxy remained offline"
+    },
+    {
+      "command": "npm run test:browser:equation-surface-preservation",
+      "status": "failed",
+      "scope": "unrelated broad surface audit",
+      "checkedAt": "2026-08-16T06:38:07.247Z",
+      "notes": "Repeated existing apply-log protected-transit collision at progress 0.64-0.66; function-wrap-focused browser gate is green. Per contract, apply-log geometry was not tuned in this slice."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture and npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s12 static and preservation",
+      "checkedAt": "2026-08-16T06:38:08.174Z",
+      "notes": "Full types, architecture ratchets, and all 10 deterministic preservation obligations passed"
     }
   ],
   "progress": {

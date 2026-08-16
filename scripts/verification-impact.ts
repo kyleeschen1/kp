@@ -170,6 +170,13 @@ const checks = {
     "Capture the function-wrap exemplar through its current catalogue route.",
     "discovery"
   ),
+  functionWrapBrowser: check(
+    "function-wrap-browser",
+    ["npm", "run", "test:browser:function-wrap-adapter"],
+    "high",
+    "Exercise reduced motion, native endpoints, backward seek, and accessibility for function wrap.",
+    "promotion"
+  ),
   functionWrapContract: check(
     "function-wrap-contract",
     [
@@ -314,7 +321,8 @@ const rules: readonly KpVerificationRule[] = [
       checks.functionWrapContract,
       checks.typecheck,
       checks.architecture,
-      checks.functionWrapVisual
+      checks.functionWrapVisual,
+      checks.functionWrapBrowser
     ],
     reason: "Function-wrap authority, rendering, or checkpoint coverage changed."
   },

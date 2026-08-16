@@ -68,7 +68,14 @@ test("all generated dispatch kinds load the declared named export", async () => 
   assert.equal(Object.isFrozen(
     (recipe as { motifUses: readonly unknown[] }).motifUses
   ), true);
-  assert.equal(typeof capability, "function");
+  assert.equal(
+    (capability as { id: string }).id,
+    "renderer-capability.equation.native-katex.v1"
+  );
+  assert.equal(
+    (capability as { motifId: string }).motifId,
+    "motif.function-wrap.v1"
+  );
   assert.equal(typeof packFactory, "function");
 });
 

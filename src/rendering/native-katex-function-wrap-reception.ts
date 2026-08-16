@@ -1,9 +1,8 @@
 import {
-  kpCanonicalFunctionWrapMotionProfile
-} from "../animation/function-wrap-motion-profile.ts";
-import type {
-  KpFunctionWrapReceptionPlan
-} from "../animation/function-wrap-reception.ts";
+  kpCanonicalFunctionWrapMotionProfile,
+  type KpFunctionWrapReceptionPlan
+} from "../animation/function-wrap-motif.ts";
+import { kpCanonicalEquationMotionVocabulary } from "../domain-ir/equation-motion-vocabulary.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-scene-compositor.ts";
@@ -17,6 +16,24 @@ export const kpNativeKatexFunctionWrapReceptionStyle = Object.freeze({
   outwardOffsetInNativeHeights: 0.42
 });
 
+export interface KpNativeKatexFunctionWrapAdaptationCertificate {
+  readonly schemaVersion: "kp.native-katex-function-wrap-certificate.v1";
+  readonly motifId: KpFunctionWrapReceptionPlan["motifId"];
+  readonly rendererCapabilityId:
+    typeof kpCanonicalEquationMotionVocabulary.rendererCapabilities.nativeKatexV1;
+  readonly direction: "forward" | "rewind";
+  readonly nativeEndpoint: "source" | "target";
+  readonly timingGroupId: string;
+  readonly matchedEnclosureEntityIds: readonly string[];
+  readonly synchronization: "all-enclosures-together";
+  readonly settlement: "native-measured-endpoint";
+}
+
+export interface KpNativeKatexFunctionWrapAdaptation {
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly certificate: KpNativeKatexFunctionWrapAdaptationCertificate;
+}
+
 /**
  * Native KaTeX owns the physical expression of enclosure reception. The plan
  * supplies semantic leading/trailing roles, so this adapter never guesses
@@ -29,6 +46,28 @@ export function applyKpNativeKatexFunctionWrapReception(input: {
   readonly plan: KpFunctionWrapReceptionPlan;
   readonly entryWindow: { readonly start: number; readonly end: number };
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  return adaptKpNativeKatexFunctionWrapReception(input).tracks;
+}
+
+export function adaptKpNativeKatexFunctionWrapReception(input: {
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly plan: KpFunctionWrapReceptionPlan;
+  readonly entryWindow: { readonly start: number; readonly end: number };
+}): KpNativeKatexFunctionWrapAdaptation {
+  if (input.plan.motifId !== kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1) {
+    throw new Error(`Native KaTeX function-wrap adapter rejects motif ${input.plan.motifId}.`);
+  }
+  if (
+    !Number.isFinite(input.entryWindow.start) ||
+    !Number.isFinite(input.entryWindow.end) ||
+    input.entryWindow.start < 0 ||
+    input.entryWindow.end > 1 ||
+    input.entryWindow.start >= input.entryWindow.end
+  ) {
+    throw new Error("Native KaTeX function-wrap entry window must be ordered within unit progress.");
+  }
   const endpoint = input.plan.direction === "forward"
     ? input.target
     : input.source;
@@ -92,8 +131,30 @@ export function applyKpNativeKatexFunctionWrapReception(input: {
       `Function-wrap reception ${input.plan.id} lacks native enclosure paint: ${missing.join(", ")}.`
     );
   }
-  return Object.freeze(tracks);
+  const frozenTracks = Object.freeze(tracks);
+  return Object.freeze({
+    tracks: frozenTracks,
+    certificate: Object.freeze({
+      schemaVersion: "kp.native-katex-function-wrap-certificate.v1" as const,
+      motifId: input.plan.motifId,
+      rendererCapabilityId:
+        kpCanonicalEquationMotionVocabulary.rendererCapabilities.nativeKatexV1,
+      direction: input.plan.direction,
+      nativeEndpoint: input.plan.direction === "forward" ? "target" : "source",
+      timingGroupId: input.plan.id,
+      matchedEnclosureEntityIds: Object.freeze([...matched]),
+      synchronization: input.plan.synchronization,
+      settlement: "native-measured-endpoint" as const
+    })
+  });
 }
+
+export const kpNativeKatexFunctionWrapAdapterDefinition = Object.freeze({
+  schemaVersion: "kp.native-katex-function-wrap-adapter.v1" as const,
+  id: kpCanonicalEquationMotionVocabulary.rendererCapabilities.nativeKatexV1,
+  motifId: kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1,
+  adapt: adaptKpNativeKatexFunctionWrapReception
+});
 
 function outsideReceptionRect(
   nativeRect: KpNativeKatexPaintMeasuredSceneTrack["startRect"],

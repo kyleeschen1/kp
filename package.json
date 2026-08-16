@@ -214,6 +214,7 @@
     "visual:presentation-continuity": "node --disable-warning=ExperimentalWarning scripts/capture-presentation-continuity.ts",
     "visual:operation-evaluation-continuity": "playwright test tests/operation-evaluation-animation-library.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "visual:function-wrap": "node --disable-warning=ExperimentalWarning scripts/capture-function-wrap-visual.ts",
+    "test:browser:function-wrap-adapter": "playwright test tests/function-wrap-adapter.browser.spec.ts --project=chromium --workers=1",
     "visual:derivative-tangent": "node --disable-warning=ExperimentalWarning scripts/capture-derivative-tangent-visual.ts",
     "visual:quadratic-branching": "node --disable-warning=ExperimentalWarning scripts/capture-quadratic-branching.ts",
     "visual:animation-workbench": "node --disable-warning=ExperimentalWarning scripts/capture-animation-workbench.ts",

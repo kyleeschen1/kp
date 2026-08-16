@@ -51,7 +51,7 @@ readonly KpEquationDispatchDeclaration[] {
       "renderer-capability",
       id,
       "../rendering/native-katex-function-wrap-reception.ts",
-      "applyKpNativeKatexFunctionWrapReception"
+      "kpNativeKatexFunctionWrapAdapterDefinition"
     )),
     declaration(
       "lazy-pack",

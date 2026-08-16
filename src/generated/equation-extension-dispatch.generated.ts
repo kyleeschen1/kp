@@ -14,7 +14,7 @@ const kpEquationMotifLoaders: Readonly<Record<string, KpGeneratedLoader>> = Obje
 });
 
 const kpEquationRendererCapabilityLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "renderer-capability.equation.native-katex.v1": () => import("../rendering/native-katex-function-wrap-reception.ts").then((module) => module.applyKpNativeKatexFunctionWrapReception)
+  "renderer-capability.equation.native-katex.v1": () => import("../rendering/native-katex-function-wrap-reception.ts").then((module) => module.kpNativeKatexFunctionWrapAdapterDefinition)
 });
 
 const kpEquationLazyPackLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
