@@ -178,6 +178,13 @@
       "scope": "slice-s12-boundary",
       "checkedAt": "2026-08-16T14:56:47.047Z",
       "notes": "All architecture ratchets passed after the facade addition."
+    },
+    {
+      "command": "npm run test:compile-equation-intent-cli; tsc node; tsc test; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T15:05:37.453Z",
+      "notes": "Six CLI and production-closure tests passed; Node and test TypeScript projects and all architecture ratchets pass."
     }
   ]
 }

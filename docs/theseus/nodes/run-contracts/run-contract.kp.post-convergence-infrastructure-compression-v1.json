@@ -116,7 +116,8 @@
     {
       "id": "s13",
       "title": "tool-neutral-request-adapter",
-      "status": "planned"
+      "summary": "Added the tool-neutral equation-intent command. It lists canonical vocabularies, reads JSON from stdin or a file, returns compact accepted authority summaries or stable typed repairs, uses exit 0/2 predictably, and its runtime import closure excludes editor, Svelte, rendering, DOM, and browser modules.",
+      "status": "complete"
     },
     {
       "id": "s14",
