@@ -213,6 +213,13 @@
       "scope": "slice-17 manifest/projection authority exact sets",
       "checkedAt": "2026-08-16T15:34:27.760Z",
       "notes": "No runtime or visual behavior changed."
+    },
+    {
+      "command": "node test equation presentation profile and manifest authority; npm run typecheck",
+      "status": "passed",
+      "scope": "slice-18 fixture/test authority",
+      "checkedAt": "2026-08-16T15:39:01.370Z",
+      "notes": "Five focused tests and all TypeScript projects passed; the stale live total is now an exact identity-set comparison."
     }
   ]
 }

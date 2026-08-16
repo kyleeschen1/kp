@@ -146,7 +146,8 @@
     {
       "id": "s18",
       "title": "fixture-test-authority-audit",
-      "status": "planned"
+      "summary": "Mapped fixture and test forms to durable invariant owners, replaced the stale 25-asset assertion with exact equality against the canonical equation inventory, and retained tests only where their generated freshness, semantic cardinality, endpoint, compatibility, visual, or import-boundary failure remains distinct.",
+      "status": "complete"
     },
     {
       "id": "s19",

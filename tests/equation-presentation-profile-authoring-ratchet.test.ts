@@ -8,13 +8,22 @@ import {
 import {
   kpSemanticAnimationCompatibilityLedger
 } from "../src/architecture/semantic-animation-compatibility-ledger.ts";
+import {
+  createKpEquationSurfaceInventory
+} from "../src/architecture/equation-surface-inventory.ts";
 
 test("every concrete equation surface selects a typed presentation profile", () => {
   const equationAssets = createKpAnimationAssets().filter((animation) =>
     animation.renderTargets.some(({ kind }) => kind === "equation")
   );
+  const inventoryIds = createKpEquationSurfaceInventory().entries.map(
+    ({ animationId }) => animationId
+  );
 
-  assert.equal(equationAssets.length, 25);
+  assert.deepEqual(
+    equationAssets.map(({ id }) => id).sort(),
+    [...inventoryIds].sort()
+  );
   assert.deepEqual(
     equationAssets
       .filter(({ presentationProfile }) => presentationProfile === undefined)

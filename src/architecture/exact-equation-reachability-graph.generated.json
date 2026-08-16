@@ -322,6 +322,7 @@
       ],
       "testCallers": [
         "tests/equation-asset-manifest.test.ts",
+        "tests/equation-presentation-profile-authoring-ratchet.test.ts",
         "tests/equation-surface-authority-graph.test.ts",
         "tests/equation-surface-disposition-ledger.test.ts",
         "tests/equation-surface-inventory.test.ts",
