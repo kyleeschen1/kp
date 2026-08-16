@@ -119,7 +119,7 @@ export function kpAnimationCatalogPackId(
     animationId === "animation.place-value-addition.278-plus-156"
   ) return "place-value";
   if (
-    animationId === "animation.algebra.log-product.product-to-sum"
+    animationId.startsWith("animation.algebra.log-product.")
   ) return "log-product";
   if (
     animationId === "animation.linear-solve.solve-x" ||

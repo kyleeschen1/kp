@@ -10,7 +10,13 @@ import {
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 const outputRoot = path.resolve("tmp/codex/log-product-checkpoint");
-const animationId = "animation.algebra.log-product.product-to-sum";
+const animations = Object.freeze([{
+  id: "animation.algebra.log-product.product-to-sum",
+  label: "two factors"
+}, {
+  id: "animation.algebra.log-product.three-factors-to-sum",
+  label: "three factors"
+}] as const);
 const progressions = [
   { phase: "forward", samples: [0, 0.2, 0.4, 0.6, 0.8, 1] },
   { phase: "return", samples: [0.8, 0.6, 0.4, 0.2, 0] }
@@ -18,6 +24,7 @@ const progressions = [
 
 interface CaptureEvidence {
   readonly id: string;
+  readonly animationId: string;
   readonly phase: "forward" | "return";
   readonly progress: number;
   readonly visualOwner: string;
@@ -34,38 +41,43 @@ async function capture(): Promise<void> {
   const evidence: CaptureEvidence[] = [];
 
   try {
-    const page = await harness.page({ viewport, colorScheme: "dark" });
-    const url = new URL("/", harness.baseUrl);
-    url.searchParams.set("artifact", animationId);
-    await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
-    const stage = page.locator(
-      `[data-kp-animation-catalogue-stage] [data-kp-log-product-stage]`
-    );
-    const seek = page.locator(
-      `[data-kp-editor-animation-id="${animationId}"] ` +
-      `[data-action="seek-editor-animation"]`
-    );
-    await waitForReady(stage);
+    for (const animation of animations) {
+      const page = await harness.page({ viewport, colorScheme: "dark" });
+      const url = new URL("/", harness.baseUrl);
+      url.searchParams.set("artifact", animation.id);
+      await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
+      const stage = page.locator(
+        `[data-kp-animation-catalogue-stage] [data-kp-log-product-stage]`
+      );
+      const seek = page.locator(
+        `[data-kp-editor-animation-id="${animation.id}"] ` +
+        `[data-action="seek-editor-animation"]`
+      );
+      await waitForReady(stage);
 
-    for (const progression of progressions) {
-      for (const progress of progression.samples) {
-        const captured = await captureSample({
-          page,
-          stage,
-          seek,
-          phase: progression.phase,
-          progress
-        });
-        evidence.push(captured);
-        const image = await readFile(path.resolve(captured.file));
-        items.push({
-          id: captured.id,
-          label: `${progression.phase} · ${Math.round(progress * 100)}%`,
-          progress,
-          viewport,
-          file: captured.file,
-          dataUrl: `data:image/png;base64,${image.toString("base64")}`
-        });
+      for (const progression of progressions) {
+        for (const progress of progression.samples) {
+          const captured = await captureSample({
+            animationId: animation.id,
+            page,
+            stage,
+            seek,
+            phase: progression.phase,
+            progress
+          });
+          evidence.push(captured);
+          const image = await readFile(path.resolve(captured.file));
+          items.push({
+            id: captured.id,
+            label:
+              `${animation.label} · ${progression.phase} · ` +
+              `${Math.round(progress * 100)}%`,
+            progress,
+            viewport,
+            file: captured.file,
+            dataUrl: `data:image/png;base64,${image.toString("base64")}`
+          });
+        }
       }
     }
 
@@ -90,7 +102,7 @@ async function capture(): Promise<void> {
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.log-product-visual-checkpoint.v1",
-      animationId,
+      animationIds: animations.map(({ id }) => id),
       viewport,
       samples: evidence,
       sheet: path.relative(process.cwd(), sheet),
@@ -105,6 +117,7 @@ async function capture(): Promise<void> {
 }
 
 async function captureSample(input: {
+  readonly animationId: string;
   readonly page: Page;
   readonly stage: Locator;
   readonly seek: Locator;
@@ -124,7 +137,8 @@ async function captureSample(input: {
       requestAnimationFrame(() => resolve())
     ));
   });
-  const id = `${input.phase}-${String(input.progress).replace(".", "-")}`;
+  const familyKey = input.animationId.includes("three-factors") ? "xyz" : "xy";
+  const id = `${familyKey}-${input.phase}-${String(input.progress).replace(".", "-")}`;
   const file = path.join(outputRoot, `${id}.png`);
   await input.stage.screenshot({ path: file, animations: "disabled" });
   const state = await input.stage.evaluate((root) => ({
@@ -142,6 +156,7 @@ async function captureSample(input: {
   }
   return {
     id,
+    animationId: input.animationId,
     phase: input.phase,
     progress: input.progress,
     ...state,

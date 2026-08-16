@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  kpCanonicalLogProductNativeEndpoints
+  kpCanonicalLogProductNativeEndpoints,
+  kpMultiFactorLogProductNativeEndpoints
 } from "../src/rendering/log-product-native-endpoints.ts";
 import {
   kpCanonicalLogProductStates,
@@ -18,6 +19,22 @@ test("log-product states compile to exact native KaTeX endpoints", () => {
     assert.match(endpoint.nativeHtmlAndMathml, /class="katex-mathml"/);
     assert.match(endpoint.nativeHtmlAndMathml, /class="katex-html"/);
   });
+});
+
+test("multi-factor endpoints retain ordered native wrappers and connectors", () => {
+  const [source, target] = kpMultiFactorLogProductNativeEndpoints;
+  assert.equal(source.annotated.rawLatex, "\\ln(xyz)");
+  assert.equal(target.annotated.rawLatex, "\\ln(x)+\\ln(y)+\\ln(z)");
+  assert.equal(target.nodes.filter(({ kind }) => kind === "natural-log").length, 3);
+  assert.equal(target.nodes.filter(({ kind }) => kind === "plus-operator").length, 2);
+  assert.deepEqual(
+    target.nodes.filter(({ kind }) => kind === "symbol").map(({ semanticId }) => semanticId),
+    [
+      "semantic.log-product.variable.x",
+      "semantic.log-product.variable.y",
+      "semantic.log-product.variable.z"
+    ]
+  );
 });
 
 test("every log-product occurrence has one stable native owner", () => {

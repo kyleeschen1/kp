@@ -105,9 +105,9 @@
       "pathClass": "log-product-specialized",
       "semanticEndpoints": [
         {
-          "transformationId": "transformation.log-product.product-to-sum",
+          "transformationId": "transformation.log-product.xy-to-sum",
           "transformationType": "expandLogProductAsSum",
-          "transformationFingerprint": "fnv1a32-f87192df",
+          "transformationFingerprint": "fnv1a32-8a21d2c3",
           "source": [
             {
               "objectId": "log-product.state.product",
@@ -128,6 +128,60 @@
       ],
       "route": {
         "href": "/?artifact=animation.algebra.log-product.product-to-sum",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "animationId": "animation.algebra.log-product.three-factors-to-sum",
+      "familyId": "logarithm",
+      "pathClass": "log-product-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.log-product.xyz-to-sum",
+          "transformationType": "expandLogProductAsSum",
+          "transformationFingerprint": "fnv1a32-79df026b",
+          "source": [
+            {
+              "objectId": "log-product.state.product.xyz",
+              "objectType": "equation",
+              "title": "Logarithm of a product",
+              "semanticFingerprint": "fnv1a32-2de71806"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-product.state.sum.xyz",
+              "objectType": "equation",
+              "title": "Sum of logarithms",
+              "semanticFingerprint": "fnv1a32-f59e4f73"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.log-product.three-factors-to-sum",
         "selectionParameter": "artifact"
       },
       "directSeek": {
@@ -2270,6 +2324,7 @@
       "animationIds": [
         "animation.algebra.log-exponent.solve-two-power-x",
         "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
         "animation.algebra.log-quotient.difference-to-quotient"
       ],
       "representativeAnimationId": "animation.algebra.log-exponent.solve-two-power-x",

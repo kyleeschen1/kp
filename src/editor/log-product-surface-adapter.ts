@@ -1,18 +1,20 @@
 /// <reference types="vite/client" />
 
 import {
-  kpLogProductAnimationId
-} from "../animation/log-product-adapter.ts";
+  isKpLogProductAnimationId
+} from "../semantic/log-product-ids.ts";
 import {
-  sampleKpSemanticMotionChoreography
+  sampleKpSemanticMotionChoreography,
+  type KpCompiledSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
 import {
   bindKpLogProductNativeEndpointOwnership,
-  kpCanonicalLogProductNativeEndpoints,
-  settleAndObserveKpLogProductNativeEndpoint
+  kpLogProductNativeEndpointSets,
+  settleAndObserveKpLogProductNativeEndpoint,
+  type KpLogProductNativeEndpoint
 } from "../rendering/log-product-native-endpoints.ts";
 import {
   createKpLogProductTransitSession,
@@ -22,10 +24,10 @@ import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
 import {
-  kpCanonicalCompiledLogProductSemanticMotion
+  kpLogProductSemanticMotionBundles
 } from "../semantic/log-product-semantic-motion.ts";
 import {
-  kpCanonicalCompiledLogProductOperation
+  type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
@@ -41,6 +43,12 @@ interface KpLogProductSurfaceSession {
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
+  readonly operation: KpCompiledLogProductOperation;
+  readonly semanticMotion: KpCompiledSemanticMotionChoreography;
+  readonly endpoints: readonly [
+    KpLogProductNativeEndpoint,
+    KpLogProductNativeEndpoint
+  ];
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
@@ -55,7 +63,7 @@ export const kpEditorLogProductSurfaceAdapter = Object.freeze({
   slotKind: "equation" as const,
   priority: 132,
   supports(state) {
-    return state.animationId === kpLogProductAnimationId;
+    return isKpLogProductAnimationId(state.animationId);
   },
   render({ player, slot, state }) {
     let session = sessions.get(player);
@@ -81,17 +89,18 @@ function mountSurface(
   state: KpEditorAnimationPlayerState
 ): KpLogProductSurfaceSession {
   const document = player.ownerDocument;
+  const runtime = runtimeForAnimation(state.animationId);
   const stage = document.createElement("section");
   stage.className = "kp-log-product-stage";
   stage.dataset["kpLogProductStage"] = "preparing";
   stage.dataset["kpLogProductSemanticMotionChoreographyId"] =
-    kpCanonicalCompiledLogProductSemanticMotion.id;
+    runtime.semanticMotion.id;
   stage.dataset["kpLogProductSemanticMotionRecipeId"] =
-    kpCanonicalCompiledLogProductSemanticMotion.recipeId;
+    runtime.semanticMotion.recipeId;
   stage.setAttribute("aria-label", "Expand a logarithm of a product");
 
   const createRoot = (
-    endpoint: typeof kpCanonicalLogProductNativeEndpoints[number],
+    endpoint: KpLogProductNativeEndpoint,
     active: boolean
   ): HTMLElement => {
     const root = document.createElement("div");
@@ -104,8 +113,8 @@ function mountSurface(
     return root;
   };
   const roots: [HTMLElement, HTMLElement] = [
-    createRoot(kpCanonicalLogProductNativeEndpoints[0]!, true),
-    createRoot(kpCanonicalLogProductNativeEndpoints[1]!, false)
+    createRoot(runtime.endpoints[0], true),
+    createRoot(runtime.endpoints[1], false)
   ];
   const materialLayer = document.createElement("div");
   materialLayer.className = "kp-log-product-stage__material-layer";
@@ -122,6 +131,9 @@ function mountSurface(
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
+    operation: runtime.operation,
+    semanticMotion: runtime.semanticMotion,
+    endpoints: runtime.endpoints,
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
     pendingState: state,
@@ -138,22 +150,22 @@ async function prepareSurface(
       endpointSide: "source",
       stage: session.stage,
       root: session.endpointRoots[0],
-      endpoint: kpCanonicalLogProductNativeEndpoints[0]!,
+      endpoint: session.endpoints[0],
       fontReadiness: session.fontReadiness
     });
     const target = await settleAndObserveKpLogProductNativeEndpoint({
       endpointSide: "target",
       stage: session.stage,
       root: session.endpointRoots[1],
-      endpoint: kpCanonicalLogProductNativeEndpoints[1]!,
+      endpoint: session.endpoints[1],
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
     session.transit = createKpLogProductTransitSession({
-      operation: kpCanonicalCompiledLogProductOperation,
-      semanticMotion: kpCanonicalCompiledLogProductSemanticMotion,
-      sourceEndpoint: kpCanonicalLogProductNativeEndpoints[0]!,
-      targetEndpoint: kpCanonicalLogProductNativeEndpoints[1]!,
+      operation: session.operation,
+      semanticMotion: session.semanticMotion,
+      sourceEndpoint: session.endpoints[0],
+      targetEndpoint: session.endpoints[1],
       source,
       target
     });
@@ -202,7 +214,7 @@ function applyFrame(
     session.player.dataset["kpEditorAnimationAccessibilityMode"] ??
     "full-motion";
   const frame = sampleKpSemanticMotionChoreography({
-    choreography: kpCanonicalCompiledLogProductSemanticMotion,
+    choreography: session.semanticMotion,
     progress: state.progress,
     direction: state.direction,
     reducedMotion:
@@ -222,12 +234,33 @@ function applyFrame(
     "[data-kp-log-product-status]"
   );
   if (status !== null) {
+    const factorNames = session.operation.contract.family.factors.map(
+      ({ name }) => name
+    );
     status.textContent = frame.semanticProgress === 0
       ? "Logarithm of a product ready."
       : frame.semanticProgress === 1
         ? "The product is now a sum of logarithms."
-        : "One logarithm is becoming two while x and y keep identity.";
+        : `One logarithm is becoming ${factorNames.length} while ` +
+          `${factorNames.join(", ")} keep identity.`;
   }
+}
+
+function runtimeForAnimation(animationId: string) {
+  const semantic = kpLogProductSemanticMotionBundles.find(
+    ({ operation }) => operation.contract.animationId === animationId
+  );
+  const endpoints = kpLogProductNativeEndpointSets.find(
+    (entry) => entry.animationId === animationId
+  );
+  if (semantic === undefined || endpoints === undefined) {
+    throw new Error(`No compiled log-product runtime exists for ${animationId}.`);
+  }
+  return Object.freeze({
+    operation: semantic.operation,
+    semanticMotion: semantic.choreography,
+    endpoints: endpoints.endpoints
+  });
 }
 
 function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {

@@ -142,7 +142,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 40, broken: 0 }
+    { ready: 0, review: 45, broken: 0 }
   );
   assert.deepEqual(
     health

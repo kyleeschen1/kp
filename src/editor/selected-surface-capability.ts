@@ -59,8 +59,7 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       "animation.algebra.log-quotient.difference-to-quotient"
   ) capabilities.push("log-quotient");
   if (
-    input.animationId ===
-      "animation.algebra.log-product.product-to-sum"
+    input.animationId.startsWith("animation.algebra.log-product.")
   ) capabilities.push("log-product");
   if (
     input.slotKinds.includes("equation") &&
@@ -68,8 +67,7 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       "animation.algebra.log-exponent.solve-two-power-x" &&
     input.animationId !==
       "animation.algebra.log-quotient.difference-to-quotient" &&
-    input.animationId !==
-      "animation.algebra.log-product.product-to-sum"
+    !input.animationId.startsWith("animation.algebra.log-product.")
   ) {
     capabilities.push("equation-katex");
   }

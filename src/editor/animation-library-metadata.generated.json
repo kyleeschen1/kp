@@ -712,6 +712,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.algebra.log-product.three-factors-to-sum",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.algebra.log-product.three-factors-to-sum",
+    "title": "Expand a logarithm of multiple factors",
+    "summary": "A typed native-KaTeX exemplar for logarithm application fission.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 4800,
+    "beatCount": 96,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "katex",
+      "logarithm",
+      "product"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.operation-evaluation.one-plus-two",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.operation-evaluation.one-plus-two",

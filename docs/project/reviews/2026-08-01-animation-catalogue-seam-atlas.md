@@ -5,9 +5,9 @@ Status: updated after native programming host integration
 
 ## Outcome
 
-The internal catalogue now has one row for each of 40 concrete lazy-loadable
-assets across 12 packs. The catalogue load probe loaded and routed every row:
-40 meaningfully painted through a native adapter, with no remaining native-host
+The internal catalogue now has one row for each of 45 concrete lazy-loadable
+assets across 13 packs. The catalogue load probe loaded and routed every row:
+45 meaningfully painted through a native adapter, with no remaining native-host
 capability gaps, no loading failures, and no iframes. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
@@ -27,6 +27,10 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 
 | Concrete asset | Pack | Surface | Observed host | Contexts | Provisional question |
 | --- | --- | --- | --- | ---: | --- |
+| `animation.algebra.log-exponent.solve-two-power-x` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.algebra.log-product.product-to-sum` | log-product | equation | Painted · canonical native KaTeX | 1 | Human checkpoint |
+| `animation.algebra.log-product.three-factors-to-sum` | log-product | equation | Painted · canonical native KaTeX | 1 | Human checkpoint |
+| `animation.algebra.log-quotient.difference-to-quotient` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
 | `animation.comparison.jacobian-hessian` | comparison | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.comparison.linear-solve-programming` | comparison | composite | Painted · KaTeX + programming trace | 1 | Keep? |
 | `animation.derivative-rules.tangent-graph` | graph | graph | Painted · SVG graph | 3 | Keep? |
@@ -37,6 +41,7 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.generated.calculus.derivative.power-rule-x-cubed` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
 | `animation.generated.calculus.derivative.sum-rule-polynomial` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.calculus.integral.power-rule-quadratic` | generated-problems | equation | Painted · KaTeX | 1 | Keep? |
+| `animation.generated.cancellation.additive-inverses` | algebra | equation | Painted · native KaTeX cancellation | 1 | Keep? |
 | `animation.generated.distribution.expand-a-sum` | algebra | equation | Painted · KaTeX | 4 | Keep? |
 | `animation.generated.distribution.factor-common-a` | algebra | equation | Painted · KaTeX | 3 | Keep? |
 | `animation.generated.exponent.square-as-product` | algebra | equation | Painted · KaTeX | 3 | Keep? |
@@ -70,14 +75,15 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 
 ## Shared Seams
 
-The catalogue crosses five surface shapes: 24 equation, seven graph, three
+The catalogue crosses five surface shapes: 29 equation, seven graph, three
 diagram, one composite, and five programming assets. Adapter reuse is strong:
-the general KaTeX adapter participates in 22 rows, the SVG graph adapter in six,
+the general KaTeX adapter participates in 23 rows, the SVG graph adapter in six,
 the canonical operation-evaluation adapter in three, the bounded Graph3D
 adapter in one, the programming trace adapter in two, the Lisp material adapter
 in one, the TypeScript refactor adapter in one, the Python refactor adapter in
-one, the Scheme factorial adapter in one, and three specialized diagram
-adapters each cover one row.
+one, the Scheme factorial adapter in one, the log-exponent and log-quotient
+adapters in one each, the log-product adapter in two, and three specialized
+diagram adapters each cover one row.
 This is evidence for keeping the adapter registry seam, not for inventing a
 universal renderer.
 
@@ -92,9 +98,9 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 40 assets currently carry 84 related display contexts: 59 editor, 17 card,
-six reader, and two diagnostic. These contexts stay under Details and do not
-mint additional catalogue rows.
+The 45 assets retain their related display contexts beneath one row per asset.
+These subordinate contexts stay under Details and do not mint additional
+catalogue rows.
 
 The highest-information consolidation audits are:
 

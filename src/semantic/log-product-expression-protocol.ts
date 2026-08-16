@@ -34,7 +34,11 @@ export const kpLogProductExpressionProtocol =
       },
       "implicit-product": { children: (node) => node.factors },
       sum: {
-        children: (node) => [node.left, node.connector, node.right]
+        children: (node) => node.terms.flatMap((term, index) =>
+          index === node.terms.length - 1
+            ? [term]
+            : [term, node.connectors[index]!]
+        )
       }
     }
   });
@@ -56,8 +60,7 @@ export const kpLogProductLatexProjection =
         project: (_node, children) => children.join("")
       },
       sum: {
-        project: (_node, children) =>
-          `${children[0]}${children[1]}${children[2]}`
+        project: (_node, children) => children.join("")
       }
     }
   });

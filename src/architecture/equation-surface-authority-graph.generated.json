@@ -467,6 +467,44 @@
     },
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.log-product.three-factors-to-sum",
+      "pathClass": "log-product-specialized",
+      "transformationTypes": [
+        "expandLogProductAsSum"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.log-product-operation",
+        "compiler.semantic-motion-choreography"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.log-product-semantic-projection"
+      ],
+      "localTimingNodeIds": [
+        "timing.semantic-motion-recipe-schedule"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.log-product-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.log-product-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.semantic-motion-choreography"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.algebra.log-quotient.difference-to-quotient",
       "pathClass": "log-quotient-specialized",
       "transformationTypes": [

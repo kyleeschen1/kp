@@ -15,8 +15,12 @@ import {
   kpLogProductLatexProjection
 } from "../semantic/log-product-expression-protocol.ts";
 import {
+  kpCanonicalLogProductFamily,
   kpCanonicalLogProductStates,
+  kpLogProductFamilies,
+  kpMultiFactorLogProductFamily,
   listKpLogProductExpressionNodes,
+  type KpLogProductFamily,
   type KpLogProductExpressionNode,
   type KpLogProductState,
   type KpLogProductStateId
@@ -41,6 +45,15 @@ export interface KpLogProductNativeEndpoint {
   readonly nodes: readonly KpLogProductNativeEndpointNode[];
 }
 
+export interface KpLogProductNativeEndpointSet {
+  readonly animationId: KpLogProductFamily["animationId"];
+  readonly family: KpLogProductFamily;
+  readonly endpoints: readonly [
+    KpLogProductNativeEndpoint,
+    KpLogProductNativeEndpoint
+  ];
+}
+
 interface RenderedNode {
   readonly rawLatex: string;
   readonly annotatedLatex: string;
@@ -49,6 +62,31 @@ interface RenderedNode {
 
 export const kpCanonicalLogProductNativeEndpoints = Object.freeze(
   kpCanonicalLogProductStates.map(createEndpoint)
+) as readonly [KpLogProductNativeEndpoint, KpLogProductNativeEndpoint];
+
+export function createKpLogProductNativeEndpoints(
+  family: KpLogProductFamily
+): readonly [KpLogProductNativeEndpoint, KpLogProductNativeEndpoint] {
+  return Object.freeze(family.states.map(createEndpoint)) as readonly [
+    KpLogProductNativeEndpoint,
+    KpLogProductNativeEndpoint
+  ];
+}
+
+export const kpMultiFactorLogProductNativeEndpoints =
+  createKpLogProductNativeEndpoints(kpMultiFactorLogProductFamily);
+
+export const kpLogProductNativeEndpointSets:
+readonly KpLogProductNativeEndpointSet[] = Object.freeze(
+  kpLogProductFamilies.map((family) => Object.freeze({
+    animationId: family.animationId,
+    family,
+    endpoints: family === kpCanonicalLogProductFamily
+      ? kpCanonicalLogProductNativeEndpoints
+      : family === kpMultiFactorLogProductFamily
+        ? kpMultiFactorLogProductNativeEndpoints
+      : createKpLogProductNativeEndpoints(family)
+  }))
 );
 
 export function bindKpLogProductNativeEndpointOwnership(input: {

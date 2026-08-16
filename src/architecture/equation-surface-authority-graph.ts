@@ -519,7 +519,7 @@ function authorityPathClass(
     animationId ===
       "animation.algebra.log-quotient.difference-to-quotient"
   ) return "log-quotient-specialized";
-  if (animationId === "animation.algebra.log-product.product-to-sum") {
+  if (animationId.startsWith("animation.algebra.log-product.")) {
     return "log-product-specialized";
   }
   return "generic-semantic-equation";

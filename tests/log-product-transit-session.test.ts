@@ -4,10 +4,12 @@ import test from "node:test";
 
 import {
   kpLogProductSemanticMotionProjectionPolicy,
+  createKpLogProductSemanticMotionProjectionPolicy,
   projectKpLogProductNativePaintRelations
 } from "../src/rendering/log-product-transit-session.ts";
 import {
-  kpCanonicalCompiledLogProductOperation
+  kpCanonicalCompiledLogProductOperation,
+  kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
 
 test("compiled product correspondence projects complete native paint lineage", () => {
@@ -30,6 +32,45 @@ test("compiled product correspondence projects complete native paint lineage", (
   assert.equal(relations.some(({ targetEntityIds }) =>
     targetEntityIds.includes("target.sum.plus")
   ), false);
+});
+
+test("multi-factor routing derives symmetric wrapper branches and ordinal argument lanes", () => {
+  const policy = createKpLogProductSemanticMotionProjectionPolicy(
+    kpMultiFactorCompiledLogProductOperation
+  );
+  const factors = kpMultiFactorCompiledLogProductOperation.contract.family.factors;
+  for (const factor of factors) {
+    for (const suffix of ["operator", "open", "close"] as const) {
+      const route = policy.routeByTargetEntityId?.[
+        `${factor.targetWrapperOccurrenceId}.${suffix}`
+      ];
+      assert.equal(route?.variant, "direct");
+      assert.equal(route?.emergence, undefined);
+    }
+  }
+  assert.equal(
+    policy.routeByCorrespondenceRecordId?.[
+      "correspondence.log-product.x-argument-continuity"
+    ]?.variant,
+    "arc-below"
+  );
+  assert.equal(
+    policy.routeByCorrespondenceRecordId?.[
+      "correspondence.log-product.y-argument-continuity"
+    ]?.variant,
+    "direct"
+  );
+  assert.equal(
+    policy.routeByCorrespondenceRecordId?.[
+      "correspondence.log-product.z-argument-continuity"
+    ]?.variant,
+    "arc-above"
+  );
+  const relations = projectKpLogProductNativePaintRelations(
+    kpMultiFactorCompiledLogProductOperation
+  );
+  assert.equal(relations.filter(({ relation }) => relation === "split").length, 3);
+  assert.equal(relations.filter(({ relation }) => relation === "persist").length, 3);
 });
 
 test("log-product transit composes generic tracks without importing sibling motifs", () => {
@@ -64,6 +105,12 @@ test("log-product transit composes generic tracks without importing sibling moti
   );
   assert.equal(
     kpLogProductSemanticMotionProjectionPolicy.routeByTargetEntityId[
+      "target.left.log.operator"
+    ]?.emergence,
+    undefined
+  );
+  assert.equal(
+    kpLogProductSemanticMotionProjectionPolicy.routeByTargetEntityId[
       "target.right.log.open"
     ]?.variant,
     "direct"
@@ -72,6 +119,6 @@ test("log-product transit composes generic tracks without importing sibling moti
     kpLogProductSemanticMotionProjectionPolicy.routeByTargetEntityId[
       "target.right.log.operator"
     ]?.emergence,
-    "branch-from-source"
+    undefined
   );
 });

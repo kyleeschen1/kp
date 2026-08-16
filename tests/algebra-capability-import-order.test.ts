@@ -45,19 +45,23 @@ test("every compiler-first and pack-first clean-process order has the same resul
     assetIds: [
       "animation.linear-solve.solve-x",
       "animation.generated.linear-solve.linear-68c15d41",
+      "animation.generated.cancellation.additive-inverses",
       "animation.generated.fraction-expression.two-fourths",
       "animation.generated.exponent.square-as-product",
       "animation.generated.radical.square-root-as-power",
       "animation.generated.function-wrap.apply-f",
       "animation.generated.distribution.expand-a-sum",
       "animation.generated.distribution.factor-common-a",
-      "animation.inequality.sign-flip.basic"
+      "animation.inequality.sign-flip.basic",
+      "animation.algebra.log-exponent.solve-two-power-x",
+      "animation.algebra.log-quotient.difference-to-quotient"
     ],
     capabilityKeys: [
       "canonicalReverseChoreography",
       "distributionChoreography",
       "factoringChoreography",
-      "fissionFusion"
+      "fissionFusion",
+      "semanticMotion"
     ],
     reverseCount: 8
   });

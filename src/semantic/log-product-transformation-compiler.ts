@@ -1,5 +1,6 @@
 import {
   kpCanonicalLogProductContract,
+  kpLogProductContracts,
   type KpLogProductContract
 } from "./log-product-contract.ts";
 import {
@@ -34,90 +35,73 @@ export interface KpCompiledLogProductOperation {
 export function compileKpLogProductOperation(
   contract: KpLogProductContract = kpCanonicalLogProductContract
 ): KpCompiledLogProductOperation {
-  assertCanonicalContract(contract);
+  assertContract(contract);
+  const { family } = contract;
   const correspondenceMap: CorrespondenceMap = Object.freeze({
-    id: "correspondence.log-product.product-to-sum",
+    id: `correspondence.log-product.${factorKey(contract)}-to-sum`,
     records: Object.freeze([
       fanOut(
         "application-fission",
         contract,
-        "semantic.log-product.wrapper.source",
-        [
-          "semantic.log-product.wrapper.target-left",
-          "semantic.log-product.wrapper.target-right"
-        ],
-        "One logarithm application derives two ordered target applications."
+        family.sourceWrapper.application,
+        family.factors.map(({ targetWrapper }) => targetWrapper.application),
+        "One logarithm application derives one ordered target application per factor."
       ),
       fanOut(
         "operator-fission",
         contract,
-        "semantic.log-product.wrapper.source.operator",
-        [
-          "semantic.log-product.wrapper.target-left.operator",
-          "semantic.log-product.wrapper.target-right.operator"
-        ],
-        "The source ln operator derives both target operators without duplicating identity."
+        family.sourceWrapper.operator,
+        family.factors.map(({ targetWrapper }) => targetWrapper.operator),
+        "The source ln operator derives every target operator without duplicating identity."
       ),
       fanOut(
         "open-shell-fission",
         contract,
-        "semantic.log-product.wrapper.source.open",
-        [
-          "semantic.log-product.wrapper.target-left.open",
-          "semantic.log-product.wrapper.target-right.open"
-        ],
+        family.sourceWrapper.open,
+        family.factors.map(({ targetWrapper }) => targetWrapper.open),
         "The source opening delimiter derives one shell per target application."
       ),
       fanOut(
         "close-shell-fission",
         contract,
-        "semantic.log-product.wrapper.source.close",
-        [
-          "semantic.log-product.wrapper.target-left.close",
-          "semantic.log-product.wrapper.target-right.close"
-        ],
+        family.sourceWrapper.close,
+        family.factors.map(({ targetWrapper }) => targetWrapper.close),
         "The source closing delimiter derives one shell per target application."
       ),
-      relate(
-        "x-argument-continuity",
+      ...family.factors.map((factor) => relate(
+        `${factor.name}-argument-continuity`,
         contract,
-        "semantic.log-product.variable.x",
-        "semantic.log-product.variable.x",
-        "The same x becomes the left logarithm argument."
-      ),
-      relate(
-        "y-argument-continuity",
-        contract,
-        "semantic.log-product.variable.y",
-        "semantic.log-product.variable.y",
-        "The same y becomes the right logarithm argument."
-      ),
+        factor.semanticId,
+        factor.semanticId,
+        `The same ${factor.name} becomes target logarithm argument ${factor.ordinal + 1}.`
+      )),
       fanOut(
         "product-derives-sum",
         contract,
-        "semantic.log-product.product.xy",
-        [
-          "semantic.log-product.sum.logs",
-          "semantic.log-product.connector.plus"
-        ],
-        "Product structure derives additive structure and its plus connector without glyph identity."
+        family.sourceProductSemanticId,
+        [family.targetSumSemanticId, ...family.connectorSemanticIds],
+        "Product structure derives additive structure and its connectors without glyph identity."
       )
     ] satisfies readonly SelectorCorrespondenceRecord[])
   });
   validateCompiledCorrespondence(contract, correspondenceMap);
   const transformation = Object.freeze(createKpSemanticTransformation({
-    id: "transformation.log-product.product-to-sum",
+    id: `transformation.log-product.${factorKey(contract)}-to-sum`,
     transformType: "expandLogProductAsSum",
     title: "Expand a logarithm of a product as a sum of logarithms",
     sourceObjectIds: [contract.source.id],
     targetObjectIds: [contract.target.id],
+    // Identity is preserved only by factor continuants. Every wrapper branch
+    // is a derived successor governed by one-to-many correspondence.
     preserves: ["identity", "value", "role"],
     correspondenceMap,
     assumptions: [...contract.assumptionIds],
     lawRefs: [{
       id: contract.lawId,
       level: "strict",
-      summary: "For positive x and y, ln(xy) equals ln(x) plus ln(y)."
+      summary:
+        `For positive ${contract.family.factors.map(({ name }) => name).join(", ")}, ` +
+        "the logarithm of their product equals the sum of their logarithms."
     }]
   }));
   const compiled = Object.freeze({
@@ -143,8 +127,13 @@ export function isKpCompiledLogProductOperation(
   return typeof value === "object" && value !== null && compiledOperations.has(value);
 }
 
+export const kpLogProductCompiledOperations: readonly KpCompiledLogProductOperation[] = Object.freeze(
+  kpLogProductContracts.map(compileKpLogProductOperation)
+);
 export const kpCanonicalCompiledLogProductOperation =
-  compileKpLogProductOperation();
+  kpLogProductCompiledOperations[0]!;
+export const kpMultiFactorCompiledLogProductOperation =
+  kpLogProductCompiledOperations[1]!;
 
 function relate(
   suffix: string,
@@ -199,15 +188,14 @@ function occurrence(
   return matches[0]!.id;
 }
 
-function assertCanonicalContract(contract: KpLogProductContract): void {
+function assertContract(contract: KpLogProductContract): void {
   if (
     contract.schemaVersion !== "kp.log-product-contract.v1" ||
-    contract.id !== "contract.log-product.product-to-sum" ||
-    contract.source.latex !== "\\ln(xy)" ||
-    contract.target.latex !== "\\ln(x)+\\ln(y)" ||
+    contract.source !== contract.family.states[0] ||
+    contract.target !== contract.family.states[1] ||
     contract.domain.logarithmBase !== "e"
   ) {
-    throw new Error("Log-product compilation requires the exact natural-log product contract.");
+    throw new Error("Log-product compilation requires an authoritative natural-log product contract.");
   }
 }
 
@@ -255,4 +243,8 @@ function assertSameIds(
   ) {
     throw new Error(`Log-product ${label} must cover its endpoint exactly once.`);
   }
+}
+
+function factorKey(contract: KpLogProductContract): string {
+  return contract.family.factors.map(({ name }) => name).join("");
 }

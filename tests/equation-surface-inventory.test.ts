@@ -22,7 +22,7 @@ test("generated inventory matches all current equation catalogue surfaces", () =
 
   assert.deepEqual(generatedInventory, inventory);
   assert.equal(inventory.baseline.historicalCount, 24);
-  assert.equal(inventory.baseline.currentCount, 29);
+  assert.equal(inventory.baseline.currentCount, 30);
   assert.deepEqual(
     inventory.baseline.postBaselineAnimationIds,
     kpPostBaselineEquationSurfaceIds

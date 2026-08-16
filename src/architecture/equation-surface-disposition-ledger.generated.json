@@ -87,7 +87,7 @@
       "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
-          "fnv1a32-f87192df",
+          "fnv1a32-8a21d2c3",
           "fnv1a32-411915f6",
           "fnv1a32-3ef162f9"
         ],
@@ -138,6 +138,78 @@
           },
           {
             "id": "browser.animation.algebra.log-product.product-to-sum",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.logarithm",
+            "kind": "family-verification",
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.log-product.three-factors-to-sum",
+      "familyId": "logarithm",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-79df026b",
+          "fnv1a32-2de71806",
+          "fnv1a32-f59e4f73"
+        ],
+        "route": "/?artifact=animation.algebra.log-product.three-factors-to-sum",
+        "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.log-product.three-factors-to-sum",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "log-product-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/log-product.ts",
+          "src/animation/catalog.ts",
+          "src/editor/log-product-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.log-product.three-factors-to-sum",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.log-product.three-factors-to-sum",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/log-product.ts"
+          },
+          {
+            "id": "route.animation.algebra.log-product.three-factors-to-sum",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/log-product-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.log-product.three-factors-to-sum",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.log-product.three-factors-to-sum",
             "kind": "browser-conformance",
             "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
           },

@@ -1,16 +1,14 @@
-import { kpLogProductAnimationId } from "./log-product-ids.ts";
+import type { KpLogProductAnimationId } from "./log-product-ids.ts";
 import {
-  kpCanonicalLogProductStates,
+  kpCanonicalLogProductFamily,
+  kpMultiFactorLogProductFamily,
   listKpLogProductExpressionNodes,
+  type KpLogProductFamily,
   type KpLogProductSemanticId,
   type KpLogProductState
 } from "./log-product-states.ts";
 
-export type KpLogProductAssumptionId =
-  | "assumption.log-product.x-positive"
-  | "assumption.log-product.y-positive"
-  | "assumption.log-product.natural-base"
-  | "assumption.log-product.product-positive";
+export type KpLogProductAssumptionId = `assumption.log-product.${string}`;
 
 export interface KpLogProductDomainAssumption {
   readonly id: KpLogProductAssumptionId;
@@ -21,8 +19,9 @@ export interface KpLogProductDomainAssumption {
 
 export interface KpLogProductContract {
   readonly schemaVersion: "kp.log-product-contract.v1";
-  readonly id: "contract.log-product.product-to-sum";
-  readonly animationId: typeof kpLogProductAnimationId;
+  readonly id: string;
+  readonly animationId: KpLogProductAnimationId;
+  readonly family: KpLogProductFamily;
   readonly lawId: "law.logarithm.product";
   readonly direction: "expand-product-into-sum";
   readonly domain: {
@@ -39,10 +38,7 @@ export interface KpLogProductContract {
     readonly anchoredContextSemanticIds: readonly [];
   };
   readonly lineage: {
-    readonly persistentSemanticIds: readonly [
-      "semantic.log-product.variable.x",
-      "semantic.log-product.variable.y"
-    ];
+    readonly persistentSemanticIds: readonly KpLogProductSemanticId[];
     readonly derivedCohorts: readonly {
       readonly id: string;
       readonly relation: "one-to-many";
@@ -65,39 +61,22 @@ export interface KpLogProductContract {
     readonly entitySemanticIds: readonly KpLogProductSemanticId[];
   }[];
   readonly rewind: {
-    readonly targetStateId: "log-product.state.product";
-    readonly exactLatex: "\\ln(xy)";
+    readonly targetStateId: KpLogProductState["id"];
+    readonly exactLatex: string;
   };
 }
 
-export function createKpCanonicalLogProductContract(input: {
-  readonly states?: readonly KpLogProductState[] | undefined;
-} = {}): KpLogProductContract {
-  const states = input.states ?? kpCanonicalLogProductStates;
-  const source = states[0];
-  const target = states[1];
-  if (
-    states.length !== 2 ||
-    source?.id !== "log-product.state.product" ||
-    target?.id !== "log-product.state.sum" ||
-    source.latex !== "\\ln(xy)" ||
-    target.latex !== "\\ln(x)+\\ln(y)"
-  ) {
-    throw new Error("The log-product contract requires its exact ordered endpoint pair.");
-  }
+export function createKpLogProductContract(
+  family: KpLogProductFamily
+): KpLogProductContract {
+  const [source, target] = family.states;
   const assumptions = Object.freeze([
-    assumption(
-      "assumption.log-product.x-positive",
-      "x > 0",
+    ...family.factors.map((factor) => assumption(
+      assumptionId(`${factor.name}-positive`),
+      `${factor.name} > 0`,
       "required",
-      "The first factor lies in the natural logarithm domain."
-    ),
-    assumption(
-      "assumption.log-product.y-positive",
-      "y > 0",
-      "required",
-      "The second factor lies in the natural logarithm domain."
-    ),
+      `Factor ${factor.name} lies in the natural logarithm domain.`
+    )),
     assumption(
       "assumption.log-product.natural-base",
       "base = e",
@@ -105,16 +84,32 @@ export function createKpCanonicalLogProductContract(input: {
       "Every application uses the same natural-logarithm base."
     ),
     assumption(
-      "assumption.log-product.product-positive",
-      "xy > 0",
+      family === kpCanonicalLogProductFamily
+        ? "assumption.log-product.product-positive"
+        : assumptionId(`${family.factors.map(({ name }) => name).join("")}-positive`),
+      `${family.factors.map(({ name }) => name).join("")} > 0`,
       "derived",
-      "The product is positive because both factors are positive."
+      "The product is positive because every factor is positive."
     )
   ]);
+  const targetApplications = family.factors.map(({ targetWrapper }) =>
+    targetWrapper.application
+  );
+  const targetOperators = family.factors.map(({ targetWrapper }) =>
+    targetWrapper.operator
+  );
+  const targetOpens = family.factors.map(({ targetWrapper }) =>
+    targetWrapper.open
+  );
+  const targetCloses = family.factors.map(({ targetWrapper }) =>
+    targetWrapper.close
+  );
+  const persistentSemanticIds = family.factors.map(({ semanticId }) => semanticId);
   const contract = Object.freeze({
     schemaVersion: "kp.log-product-contract.v1" as const,
-    id: "contract.log-product.product-to-sum" as const,
-    animationId: kpLogProductAnimationId,
+    id: `contract.log-product.${family.factors.map(({ name }) => name).join("")}-to-sum`,
+    animationId: family.animationId,
+    family,
     lawId: "law.logarithm.product" as const,
     direction: "expand-product-into-sum" as const,
     domain: Object.freeze({
@@ -131,103 +126,82 @@ export function createKpCanonicalLogProductContract(input: {
       anchoredContextSemanticIds: Object.freeze([] as const)
     }),
     lineage: Object.freeze({
-      persistentSemanticIds: Object.freeze([
-        "semantic.log-product.variable.x",
-        "semantic.log-product.variable.y"
-      ] as const),
+      persistentSemanticIds: Object.freeze(persistentSemanticIds),
       derivedCohorts: Object.freeze([
         cohort(
-          "cohort.log-product.applications",
-          ["semantic.log-product.wrapper.source"],
-          [
-            "semantic.log-product.wrapper.target-left",
-            "semantic.log-product.wrapper.target-right"
-          ],
-          "One logarithm application derives two ordered applications."
+          `cohort.log-product.${family.id}.applications`,
+          [family.sourceWrapper.application],
+          targetApplications,
+          "One logarithm application derives one ordered application per factor."
         ),
         cohort(
-          "cohort.log-product.operators",
-          ["semantic.log-product.wrapper.source.operator"],
-          [
-            "semantic.log-product.wrapper.target-left.operator",
-            "semantic.log-product.wrapper.target-right.operator"
-          ],
-          "The source ln operator derives both target ln operators."
+          `cohort.log-product.${family.id}.operators`,
+          [family.sourceWrapper.operator],
+          targetOperators,
+          "The source ln operator derives every target ln operator."
         ),
         cohort(
-          "cohort.log-product.open-shells",
-          ["semantic.log-product.wrapper.source.open"],
-          [
-            "semantic.log-product.wrapper.target-left.open",
-            "semantic.log-product.wrapper.target-right.open"
-          ],
+          `cohort.log-product.${family.id}.open-shells`,
+          [family.sourceWrapper.open],
+          targetOpens,
           "The source opening shell derives one opening shell per target application."
         ),
         cohort(
-          "cohort.log-product.close-shells",
-          ["semantic.log-product.wrapper.source.close"],
-          [
-            "semantic.log-product.wrapper.target-left.close",
-            "semantic.log-product.wrapper.target-right.close"
-          ],
+          `cohort.log-product.${family.id}.close-shells`,
+          [family.sourceWrapper.close],
+          targetCloses,
           "The source closing shell derives one closing shell per target application."
         ),
         cohort(
-          "cohort.log-product.homomorphic-structure",
-          ["semantic.log-product.product.xy"],
-          [
-            "semantic.log-product.sum.logs",
-            "semantic.log-product.connector.plus"
-          ],
-          "Product structure derives the additive result and its connector without glyph identity."
+          `cohort.log-product.${family.id}.homomorphic-structure`,
+          [family.sourceProductSemanticId],
+          [family.targetSumSemanticId, ...family.connectorSemanticIds],
+          "Product structure derives the additive result and its connectors without glyph identity."
         )
       ]),
-      forbiddenIdentityPairs: Object.freeze([Object.freeze({
-        sourceSemanticId: "semantic.log-product.product.xy" as const,
-        targetSemanticId: "semantic.log-product.connector.plus" as const,
-        summary:
-          "The product law licenses the plus connector, but product structure is not plus-glyph identity."
-      })])
+      forbiddenIdentityPairs: Object.freeze(family.connectorSemanticIds.map(
+        (connectorSemanticId) => Object.freeze({
+          sourceSemanticId: family.sourceProductSemanticId,
+          targetSemanticId: connectorSemanticId,
+          summary:
+            "The product law licenses a plus connector, but product structure is not plus-glyph identity."
+        })
+      ))
     }),
     structuralRequirements: Object.freeze([
       requirement("split-application-shell", [
-        "semantic.log-product.wrapper.source",
-        "semantic.log-product.wrapper.source.operator",
-        "semantic.log-product.wrapper.source.open",
-        "semantic.log-product.wrapper.source.close",
-        "semantic.log-product.wrapper.target-left",
-        "semantic.log-product.wrapper.target-left.operator",
-        "semantic.log-product.wrapper.target-left.open",
-        "semantic.log-product.wrapper.target-left.close",
-        "semantic.log-product.wrapper.target-right",
-        "semantic.log-product.wrapper.target-right.operator",
-        "semantic.log-product.wrapper.target-right.open",
-        "semantic.log-product.wrapper.target-right.close"
+        ...Object.values(family.sourceWrapper),
+        ...family.factors.flatMap(({ targetWrapper }) => Object.values(targetWrapper))
       ]),
-      requirement("preserve-ordered-arguments", [
-        "semantic.log-product.variable.x",
-        "semantic.log-product.variable.y"
-      ]),
+      requirement("preserve-ordered-arguments", persistentSemanticIds),
       requirement("derive-additive-connector", [
-        "semantic.log-product.product.xy",
-        "semantic.log-product.sum.logs",
-        "semantic.log-product.connector.plus"
+        family.sourceProductSemanticId,
+        family.targetSumSemanticId,
+        ...family.connectorSemanticIds
       ]),
-      requirement("settle-native-target", [
-        "semantic.log-product.sum.logs"
-      ])
+      requirement("settle-native-target", [family.targetSumSemanticId])
     ]),
     rewind: Object.freeze({
-      targetStateId: "log-product.state.product" as const,
-      exactLatex: "\\ln(xy)" as const
+      targetStateId: source.id,
+      exactLatex: source.latex
     })
   } satisfies KpLogProductContract);
   validateContractCoverage(contract);
   return contract;
 }
 
+export function createKpCanonicalLogProductContract(): KpLogProductContract {
+  return createKpLogProductContract(kpCanonicalLogProductFamily);
+}
+
 export const kpCanonicalLogProductContract =
   createKpCanonicalLogProductContract();
+export const kpMultiFactorLogProductContract =
+  createKpLogProductContract(kpMultiFactorLogProductFamily);
+export const kpLogProductContracts: readonly KpLogProductContract[] = Object.freeze([
+  kpCanonicalLogProductContract,
+  kpMultiFactorLogProductContract
+]);
 
 function assumption(
   id: KpLogProductAssumptionId,
@@ -236,6 +210,10 @@ function assumption(
   summary: string
 ): KpLogProductDomainAssumption {
   return Object.freeze({ id, predicate, status, summary });
+}
+
+function assumptionId(suffix: string): KpLogProductAssumptionId {
+  return `assumption.log-product.${suffix}`;
 }
 
 function cohort(

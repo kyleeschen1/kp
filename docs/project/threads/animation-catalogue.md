@@ -79,7 +79,7 @@ pressure.
 
 On 2026-08-14 the active repository lane returned to Catalogue animation
 development while educator discovery continued outside this Codex thread. The
-40 loadable assets are now explicitly separated from missing pedagogical
+45 loadable assets are now explicitly separated from missing pedagogical
 coverage: generated equation fixtures and diagnostic samples do not count as
 completed transformation families. The reconciled backlog is the selection
 authority for the next exemplar, while the stable promotion ledger retains its
@@ -106,6 +106,18 @@ Graphs, code, diagrams, and 3D remain separate. The verdict and accepted scope
 are recorded in
 `../decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md` and
 `../decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`.
+
+The clean-path log-product checkpoint now has two callers: `ln(xy)` and the
+pressure case `ln(xyz)`. Both enter through one ordered-factor family contract,
+one correspondence compiler, the canonical semantic-motion compiler, one
+native-KaTeX endpoint projector and transit session, one lazy leaf pack, and
+one selected surface adapter. Only factor occurrences are identity continuants;
+all target logarithm wrappers are derived successors and plus connectors are
+introduced structure. The three-factor caller adds data and ordinals rather
+than a renderer or motif implementation. The current 30-row equation ledger is
+therefore 3 canonical, 22 adapter-backed, 4 static-only, and 1 retirement
+candidate. Human review of the corrected two-factor and three-factor contact
+sheet remains the gate before the wave-A migration slices begin.
 
 ## Accepted Scope
 

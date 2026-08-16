@@ -2,29 +2,14 @@ import { listKpExpressionNodes } from "./expression-node-protocol.ts";
 import {
   kpLogProductExpressionProtocol
 } from "./log-product-expression-protocol.ts";
+import {
+  kpLogProductAnimationId,
+  kpMultiFactorLogProductAnimationId,
+  type KpLogProductAnimationId
+} from "./log-product-ids.ts";
 
-export type KpLogProductStateId =
-  | "log-product.state.product"
-  | "log-product.state.sum";
-
-export type KpLogProductSemanticId =
-  | "semantic.log-product.wrapper.source"
-  | "semantic.log-product.wrapper.source.operator"
-  | "semantic.log-product.wrapper.source.open"
-  | "semantic.log-product.wrapper.source.close"
-  | "semantic.log-product.product.xy"
-  | "semantic.log-product.variable.x"
-  | "semantic.log-product.variable.y"
-  | "semantic.log-product.sum.logs"
-  | "semantic.log-product.connector.plus"
-  | "semantic.log-product.wrapper.target-left"
-  | "semantic.log-product.wrapper.target-left.operator"
-  | "semantic.log-product.wrapper.target-left.open"
-  | "semantic.log-product.wrapper.target-left.close"
-  | "semantic.log-product.wrapper.target-right"
-  | "semantic.log-product.wrapper.target-right.operator"
-  | "semantic.log-product.wrapper.target-right.open"
-  | "semantic.log-product.wrapper.target-right.close";
+export type KpLogProductStateId = `log-product.state.${string}`;
+export type KpLogProductSemanticId = `semantic.log-product.${string}`;
 
 interface KpLogProductNodeBase {
   readonly id: string;
@@ -42,7 +27,7 @@ export type KpLogProductExpressionNode =
 
 export interface KpLogProductSymbolNode extends KpLogProductNodeBase {
   readonly kind: "symbol";
-  readonly name: "x" | "y";
+  readonly name: string;
 }
 
 export interface KpLogProductFunctionOperatorNode extends KpLogProductNodeBase {
@@ -74,67 +59,82 @@ export interface KpLogProductProductNode extends KpLogProductNodeBase {
   readonly kind: "implicit-product";
   readonly factors: readonly [
     KpLogProductExpressionNode,
-    KpLogProductExpressionNode
+    KpLogProductExpressionNode,
+    ...KpLogProductExpressionNode[]
   ];
 }
 
 export interface KpLogProductSumNode extends KpLogProductNodeBase {
   readonly kind: "sum";
-  readonly left: KpLogProductExpressionNode;
-  readonly connector: KpLogProductPlusNode;
-  readonly right: KpLogProductExpressionNode;
+  readonly terms: readonly [
+    KpLogProductExpressionNode,
+    KpLogProductExpressionNode,
+    ...KpLogProductExpressionNode[]
+  ];
+  readonly connectors: readonly KpLogProductPlusNode[];
 }
 
 export interface KpLogProductState {
   readonly id: KpLogProductStateId;
   readonly kind: "log-of-product" | "sum-of-logs";
-  readonly latex: "\\ln(xy)" | "\\ln(x)+\\ln(y)";
-  readonly accessibleText:
-    | "natural log of x times y"
-    | "natural log of x plus natural log of y";
+  readonly latex: string;
+  readonly accessibleText: string;
   readonly root: KpLogProductExpressionNode;
 }
 
-const source = Object.freeze({
-  id: "log-product.state.product" as const,
-  kind: "log-of-product" as const,
-  latex: "\\ln(xy)" as const,
-  accessibleText: "natural log of x times y" as const,
-  root: naturalLog(
-    "source.log",
-    "source",
-    product(
-      "source.product",
-      symbol("source.product.x", "x"),
-      symbol("source.product.y", "y")
-    )
-  )
-} satisfies KpLogProductState);
+export interface KpLogProductWrapperSemanticIds {
+  readonly application: KpLogProductSemanticId;
+  readonly operator: KpLogProductSemanticId;
+  readonly open: KpLogProductSemanticId;
+  readonly close: KpLogProductSemanticId;
+}
 
-const target = Object.freeze({
-  id: "log-product.state.sum" as const,
-  kind: "sum-of-logs" as const,
-  latex: "\\ln(x)+\\ln(y)" as const,
-  accessibleText: "natural log of x plus natural log of y" as const,
-  root: sum(
-    "target.sum",
-    naturalLog(
-      "target.left.log",
-      "target-left",
-      symbol("target.left.argument.x", "x")
-    ),
-    naturalLog(
-      "target.right.log",
-      "target-right",
-      symbol("target.right.argument.y", "y")
-    )
-  )
-} satisfies KpLogProductState);
+export interface KpLogProductFactorDescriptor {
+  readonly ordinal: number;
+  readonly name: string;
+  readonly semanticId: KpLogProductSemanticId;
+  readonly sourceOccurrenceId: string;
+  readonly targetOccurrenceId: string;
+  readonly targetWrapper: KpLogProductWrapperSemanticIds;
+  readonly targetWrapperOccurrenceId: string;
+}
 
-export const kpCanonicalLogProductStates = Object.freeze([
-  source,
-  target
-] as const satisfies readonly KpLogProductState[]);
+export interface KpLogProductFamily {
+  readonly id: string;
+  readonly animationId: KpLogProductAnimationId;
+  readonly factors: readonly [
+    KpLogProductFactorDescriptor,
+    KpLogProductFactorDescriptor,
+    ...KpLogProductFactorDescriptor[]
+  ];
+  readonly sourceWrapper: KpLogProductWrapperSemanticIds;
+  readonly sourceProductSemanticId: KpLogProductSemanticId;
+  readonly targetSumSemanticId: KpLogProductSemanticId;
+  readonly connectorSemanticIds: readonly KpLogProductSemanticId[];
+  readonly states: readonly [KpLogProductState, KpLogProductState];
+}
+
+const canonicalFamily = createKpLogProductFamily({
+  id: "family.log-product.xy",
+  animationId: kpLogProductAnimationId,
+  factorNames: ["x", "y"],
+  legacyBinaryIds: true
+});
+
+const multiFactorFamily = createKpLogProductFamily({
+  id: "family.log-product.xyz",
+  animationId: kpMultiFactorLogProductAnimationId,
+  factorNames: ["x", "y", "z"]
+});
+
+export const kpCanonicalLogProductFamily = canonicalFamily;
+export const kpMultiFactorLogProductFamily = multiFactorFamily;
+export const kpLogProductFamilies: readonly KpLogProductFamily[] = Object.freeze([
+  canonicalFamily,
+  multiFactorFamily
+]);
+export const kpCanonicalLogProductStates = canonicalFamily.states;
+export const kpMultiFactorLogProductStates = multiFactorFamily.states;
 
 export function listKpLogProductExpressionNodes(
   state: KpLogProductState
@@ -144,11 +144,12 @@ export function listKpLogProductExpressionNodes(
 
 function symbol(
   id: string,
-  name: "x" | "y"
+  name: string,
+  semanticId: KpLogProductSemanticId
 ): KpLogProductSymbolNode {
   return Object.freeze({
     id,
-    semanticId: `semantic.log-product.variable.${name}`,
+    semanticId,
     kind: "symbol",
     name
   });
@@ -156,30 +157,29 @@ function symbol(
 
 function naturalLog(
   id: string,
-  lineage: "source" | "target-left" | "target-right",
+  semanticIds: KpLogProductWrapperSemanticIds,
   argument: KpLogProductExpressionNode
 ): KpLogProductNaturalLogNode {
-  const prefix = `semantic.log-product.wrapper.${lineage}` as const;
   return Object.freeze({
     id,
-    semanticId: prefix,
+    semanticId: semanticIds.application,
     kind: "natural-log",
     operator: Object.freeze({
       id: `${id}.operator`,
-      semanticId: `${prefix}.operator`,
+      semanticId: semanticIds.operator,
       kind: "function-operator" as const,
       name: "ln" as const
     }),
     enclosure: Object.freeze([
       Object.freeze({
         id: `${id}.open`,
-        semanticId: `${prefix}.open`,
+        semanticId: semanticIds.open,
         kind: "delimiter" as const,
         value: "(" as const
       }),
       Object.freeze({
         id: `${id}.close`,
-        semanticId: `${prefix}.close`,
+        semanticId: semanticIds.close,
         kind: "delimiter" as const,
         value: ")" as const
       })
@@ -190,33 +190,158 @@ function naturalLog(
 
 function product(
   id: string,
-  left: KpLogProductExpressionNode,
-  right: KpLogProductExpressionNode
+  semanticId: KpLogProductSemanticId,
+  factors: readonly [
+    KpLogProductExpressionNode,
+    KpLogProductExpressionNode,
+    ...KpLogProductExpressionNode[]
+  ]
 ): KpLogProductProductNode {
   return Object.freeze({
     id,
-    semanticId: "semantic.log-product.product.xy",
+    semanticId,
     kind: "implicit-product",
-    factors: Object.freeze([left, right] as const)
+    factors: Object.freeze([...factors]) as KpLogProductProductNode["factors"]
   });
 }
 
 function sum(
   id: string,
-  left: KpLogProductExpressionNode,
-  right: KpLogProductExpressionNode
+  semanticId: KpLogProductSemanticId,
+  terms: readonly [
+    KpLogProductExpressionNode,
+    KpLogProductExpressionNode,
+    ...KpLogProductExpressionNode[]
+  ],
+  connectorSemanticIds: readonly KpLogProductSemanticId[]
 ): KpLogProductSumNode {
+  if (connectorSemanticIds.length !== terms.length - 1) {
+    throw new Error("A log-product sum requires one connector between each ordered term.");
+  }
   return Object.freeze({
     id,
-    semanticId: "semantic.log-product.sum.logs",
+    semanticId,
     kind: "sum",
-    left,
-    connector: Object.freeze({
-      id: `${id}.plus`,
-      semanticId: "semantic.log-product.connector.plus",
-      kind: "plus-operator",
-      value: "+"
-    }),
-    right
+    terms: Object.freeze([...terms]) as KpLogProductSumNode["terms"],
+    connectors: Object.freeze(connectorSemanticIds.map((connectorSemanticId, index) =>
+      Object.freeze({
+        id: connectorSemanticIds.length === 1
+          ? `${id}.plus`
+          : `${id}.plus.${index}`,
+        semanticId: connectorSemanticId,
+        kind: "plus-operator" as const,
+        value: "+" as const
+      })
+    ))
   });
+}
+
+function createKpLogProductFamily(input: {
+  readonly id: string;
+  readonly animationId: KpLogProductAnimationId;
+  readonly factorNames: readonly [string, string, ...string[]];
+  readonly legacyBinaryIds?: boolean;
+}): KpLogProductFamily {
+  const familyKey = input.factorNames.join("");
+  const semanticPrefix = input.legacyBinaryIds === true
+    ? "semantic.log-product"
+    : `semantic.log-product.${familyKey}`;
+  const sourcePrefix = input.legacyBinaryIds === true ? "source" : `source.${familyKey}`;
+  const targetPrefix = input.legacyBinaryIds === true ? "target" : `target.${familyKey}`;
+  const sourceWrapper = wrapperSemanticIds(semanticId(`${semanticPrefix}.wrapper.source`));
+  const factors = input.factorNames.map((name, ordinal) => {
+    const position = input.legacyBinaryIds === true
+      ? ordinal === 0 ? "left" : "right"
+      : `term-${ordinal + 1}`;
+    const targetWrapperOccurrenceId = `${targetPrefix}.${position}.log`;
+    return Object.freeze({
+      ordinal,
+      name,
+      semanticId: `semantic.log-product.variable.${name}` as const,
+      sourceOccurrenceId: `${sourcePrefix}.product.${name}`,
+      targetOccurrenceId: `${targetPrefix}.${position}.argument.${name}`,
+      targetWrapper: wrapperSemanticIds(semanticId(`${semanticPrefix}.wrapper.target-${position}`)),
+      targetWrapperOccurrenceId
+    });
+  }) as unknown as KpLogProductFamily["factors"];
+  const sourceProductSemanticId = semanticId(`${semanticPrefix}.product.${familyKey}`);
+  const targetSumSemanticId = semanticId(`${semanticPrefix}.sum.logs`);
+  const connectorSemanticIds = Object.freeze(input.factorNames.slice(1).map((_, index) =>
+    semanticId(
+      input.legacyBinaryIds === true
+        ? `${semanticPrefix}.connector.plus`
+        : `${semanticPrefix}.connector.plus.${index}`
+    )
+  ));
+  const sourceRoot = naturalLog(
+    `${sourcePrefix}.log`,
+    sourceWrapper,
+    product(
+      `${sourcePrefix}.product`,
+      sourceProductSemanticId,
+      factors.map((factor) => symbol(
+        factor.sourceOccurrenceId,
+        factor.name,
+        factor.semanticId
+      )) as unknown as KpLogProductProductNode["factors"]
+    )
+  );
+  const targetTerms = factors.map((factor) => naturalLog(
+    factor.targetWrapperOccurrenceId,
+    factor.targetWrapper,
+    symbol(factor.targetOccurrenceId, factor.name, factor.semanticId)
+  )) as unknown as KpLogProductSumNode["terms"];
+  const sourceStateId = input.legacyBinaryIds === true
+    ? "log-product.state.product" as const
+    : `log-product.state.product.${familyKey}` as const;
+  const targetStateId = input.legacyBinaryIds === true
+    ? "log-product.state.sum" as const
+    : `log-product.state.sum.${familyKey}` as const;
+  const source: KpLogProductState = Object.freeze({
+    id: sourceStateId,
+    kind: "log-of-product",
+    latex: `\\ln(${input.factorNames.join("")})`,
+    accessibleText: `natural log of ${input.factorNames.join(" times ")}`,
+    root: sourceRoot
+  });
+  const target: KpLogProductState = Object.freeze({
+    id: targetStateId,
+    kind: "sum-of-logs",
+    latex: input.factorNames.map((name) => `\\ln(${name})`).join("+"),
+    accessibleText: input.factorNames.map((name) => `natural log of ${name}`).join(" plus "),
+    root: sum(
+      `${targetPrefix}.sum`,
+      targetSumSemanticId,
+      targetTerms,
+      connectorSemanticIds
+    )
+  });
+  return Object.freeze({
+    id: input.id,
+    animationId: input.animationId,
+    factors,
+    sourceWrapper,
+    sourceProductSemanticId,
+    targetSumSemanticId,
+    connectorSemanticIds,
+    states: Object.freeze([source, target] as const)
+  });
+}
+
+function wrapperSemanticIds(
+  application: KpLogProductSemanticId
+): KpLogProductWrapperSemanticIds {
+  return Object.freeze({
+    application,
+    operator: `${application}.operator`,
+    open: `${application}.open`,
+    close: `${application}.close`
+  });
+}
+
+function semanticId(value: string): KpLogProductSemanticId {
+  if (!value.startsWith("semantic.log-product.")) {
+    throw new Error(`Invalid log-product semantic id ${value}.`);
+  }
+  return value as KpLogProductSemanticId;
 }

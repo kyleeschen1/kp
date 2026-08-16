@@ -1,6 +1,8 @@
 import { expect, test, type Locator } from "@playwright/test";
 
 const animationId = "animation.algebra.log-product.product-to-sum";
+const multiFactorAnimationId =
+  "animation.algebra.log-product.three-factors-to-sum";
 
 test("log product mounts lazily and seeks through typed semantic tracks", async ({
   page
@@ -83,6 +85,47 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
     "source-native"
   );
   await seek.fill("1");
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-product-visual-owner",
+    "target-native"
+  );
+  expect(pageErrors).toEqual([]);
+});
+
+test("three-factor product uses the same lazy surface and deterministic clock", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.goto(`/?artifact=${multiFactorAnimationId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${multiFactorAnimationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-product-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-pack-id",
+    "log-product"
+  );
+  await expect(stage).toHaveAttribute("data-kp-log-product-stage", "ready");
+  await expect(stage.locator(".kp-log-product-stage__endpoint")).toHaveCount(2);
+  const tracks = JSON.parse(
+    await stage.getAttribute("data-kp-log-product-track-summary") ?? "[]"
+  ) as Array<{ lifecycle: string; sourceEntityId?: string }>;
+  for (const factor of ["x", "y", "z"] as const) {
+    expect(tracks.some(({ lifecycle, sourceEntityId }) =>
+      lifecycle === "persist" &&
+      sourceEntityId === `source.xyz.product.${factor}`
+    )).toBe(true);
+  }
+  for (const progress of [0, 0.35, 0.7, 1]) {
+    await seek.fill(String(progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-progress",
+      String(progress)
+    );
+  }
   await expect(stage).toHaveAttribute(
     "data-kp-log-product-visual-owner",
     "target-native"

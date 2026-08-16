@@ -18,24 +18,29 @@ import {
   labelKpLogProductExpressionNode
 } from "../semantic/log-product-expression-protocol.ts";
 import {
-  kpCanonicalLogProductStates,
   listKpLogProductExpressionNodes
 } from "../semantic/log-product-states.ts";
 import {
-  kpCanonicalCompiledLogProductOperation
+  kpCanonicalCompiledLogProductOperation,
+  kpLogProductCompiledOperations,
+  type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
 export {
-  kpLogProductAnimationId
-} from "../semantic/log-product-ids.ts";
-import {
-  kpLogProductAnimationId
+  kpLogProductAnimationId,
+  kpLogProductAnimationIds,
+  kpMultiFactorLogProductAnimationId
 } from "../semantic/log-product-ids.ts";
 
 const KP_LOG_PRODUCT_TIMELINE_DURATION_MS = 4_800;
 const KP_LOG_PRODUCT_TIMELINE_BEAT_COUNT = 96;
 
-export function createKpLogProductAnimationAsset(): KpAnimationAsset {
-  const objects = kpCanonicalLogProductStates.map((state) =>
+export function createKpLogProductAnimationAsset(
+  operation: KpCompiledLogProductOperation = kpCanonicalCompiledLogProductOperation
+): KpAnimationAsset {
+  const { contract } = operation;
+  const { animationId } = contract;
+  const factorKey = contract.family.factors.map(({ name }) => name).join("");
+  const objects = contract.family.states.map((state) =>
     createKpSemanticAssetObject({
       id: state.id,
       objectType: "equation",
@@ -62,7 +67,7 @@ export function createKpLogProductAnimationAsset(): KpAnimationAsset {
       }
     })
   );
-  const transformation = kpCanonicalCompiledLogProductOperation.transformation;
+  const transformation = operation.transformation;
   const root = createSemanticTransformationLeaf(
     createSemanticTransformationRef({
       id: transformation.id,
@@ -73,14 +78,16 @@ export function createKpLogProductAnimationAsset(): KpAnimationAsset {
       summary: transformation.title
     })
   );
-  const timelineId = `timeline.${kpLogProductAnimationId}`;
-  const renderTargetId = "render.log-product.product-to-sum.equation";
+  const timelineId = `timeline.${animationId}`;
+  const renderTargetId = `render.log-product.${factorKey}-to-sum.equation`;
 
   return createKpAnimationAsset({
-    id: kpLogProductAnimationId,
-    title: "Expand a logarithm of a product",
+    id: animationId,
+    title: contract.family.factors.length === 2
+      ? "Expand a logarithm of a product"
+      : "Expand a logarithm of multiple factors",
     bundle: createKpAssetBundle({
-      id: "asset.log-product.product-to-sum",
+      id: `asset.log-product.${factorKey}-to-sum`,
       title: "Natural-log product law",
       objects
     }),
@@ -93,7 +100,7 @@ export function createKpLogProductAnimationAsset(): KpAnimationAsset {
       markerIds: [transformation.id]
     },
     layout: {
-      id: "layout.log-product.product-to-sum",
+      id: `layout.log-product.${factorKey}-to-sum`,
       kind: "single",
       targetId: renderTargetId
     },
@@ -107,26 +114,27 @@ export function createKpLogProductAnimationAsset(): KpAnimationAsset {
       transformationIds: [transformation.id],
       timelineId,
       summary:
-        "Fission one logarithm application while x and y keep identity in ordered target applications."
+        `Fission one logarithm into ${contract.family.factors.length} applications ` +
+        "while every ordered factor keeps identity."
     }],
     checks: [{
-      id: "check.log-product.reference-closure",
+      id: `check.log-product.${factorKey}.reference-closure`,
       lawId: "animation.reference-closure",
       level: "strict",
-      targetId: kpLogProductAnimationId
+      targetId: animationId
     }, {
-      id: "check.log-product.seek-rewind",
+      id: `check.log-product.${factorKey}.seek-rewind`,
       lawId: "animation.seek-rewind",
       level: "strict",
       targetId: root.id
     }],
     exportTargets: [{
-      id: "export.log-product.frames",
+      id: `export.log-product.${factorKey}.frames`,
       kind: "frame-sequence",
-      artifactId: "artifact.log-product.product-to-sum.frames"
+      artifactId: `artifact.log-product.${factorKey}-to-sum.frames`
     }],
     dashboard: {
-      rowId: "animation-algebra-log-product-product-to-sum",
+      rowId: `animation-algebra-log-product-${factorKey}-to-sum`,
       tags: [
         "algebra",
         "animation",
@@ -146,4 +154,10 @@ export function createKpLogProductAnimationAsset(): KpAnimationAsset {
         "A typed native-KaTeX exemplar for logarithm application fission."
     }
   });
+}
+
+export function createKpLogProductAnimationAssets(): readonly KpAnimationAsset[] {
+  return Object.freeze(kpLogProductCompiledOperations.map(
+    createKpLogProductAnimationAsset
+  ));
 }

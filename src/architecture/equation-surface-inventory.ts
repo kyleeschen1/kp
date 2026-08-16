@@ -34,7 +34,8 @@ export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.generated.cancellation.additive-inverses",
   "animation.algebra.log-exponent.solve-two-power-x",
   "animation.algebra.log-quotient.difference-to-quotient",
-  "animation.algebra.log-product.product-to-sum"
+  "animation.algebra.log-product.product-to-sum",
+  "animation.algebra.log-product.three-factors-to-sum"
 ] as const);
 
 export interface KpEquationSurfaceInventory {
@@ -299,7 +300,7 @@ Pick<
       rendererSourcePath: "src/editor/log-quotient-surface-adapter.ts"
     });
   }
-  if (animationId === "animation.algebra.log-product.product-to-sum") {
+  if (animationId.startsWith("animation.algebra.log-product.")) {
     return Object.freeze({
       selectedCapabilityId: "log-product" as const,
       rendererAdapterId:

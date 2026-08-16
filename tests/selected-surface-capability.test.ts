@@ -43,6 +43,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["equation"]
   }), ["log-product"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.algebra.log-product.three-factors-to-sum",
+    slotKinds: ["equation"]
+  }), ["log-product"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.dot-projection.basic",
     slotKinds: ["graph"]
   }), ["graph-svg-katex-labels"]);
