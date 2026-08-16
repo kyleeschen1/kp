@@ -98,7 +98,8 @@
     {
       "id": "s04",
       "title": "Preservation-manifest-expansion",
-      "status": "planned"
+      "summary": "Expanded preservation matrix v2 across all 30 equation surfaces with semantic and endpoint fingerprints, renderer capability/adapter/source ownership, shared-clock authority, direct sampler ownership, and deterministic 0/0.5/1 frame fingerprints. Runtime behavior is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s05",

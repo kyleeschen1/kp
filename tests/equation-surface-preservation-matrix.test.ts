@@ -37,6 +37,37 @@ test("preservation matrix freezes every current equation endpoint", () => {
   );
 });
 
+test("every equation migration freezes semantic, renderer, clock, and sampled-frame authority", () => {
+  const matrix = createKpEquationSurfacePreservationMatrix();
+
+  for (const entry of matrix.entries) {
+    const obligations = entry.migrationObligations;
+    assert.match(obligations.semantic.assetFingerprint, /^fnv1a32-[0-9a-f]{8}$/);
+    assert.equal(obligations.semantic.objectIds.length > 0, true);
+    assert.deepEqual(
+      obligations.semantic.transformationIds,
+      entry.semanticEndpoints.map(({ transformationId }) => transformationId)
+    );
+    assert.match(obligations.endpoints.fingerprint, /^fnv1a32-[0-9a-f]{8}$/);
+    assert.equal(obligations.renderer.adapterId, entry.nativeSettlement.adapterId);
+    assert.equal(obligations.clock.ownerId, "editor-animation-player");
+    assert.equal(obligations.clock.privateClockAuthority, "none");
+    assert.equal(obligations.clock.cssAnimationAuthority, "none");
+    assert.equal(obligations.sampledFrames.samplerNodeIds.length > 0, true);
+    assert.deepEqual(obligations.sampledFrames.checkpoints, [0, 0.5, 1]);
+    assert.deepEqual(
+      obligations.sampledFrames.frames.map(({ progress }) => progress),
+      [0, 0.5, 1]
+    );
+    assert.equal(
+      obligations.sampledFrames.frames.every(({ envelopeFingerprint }) =>
+        /^fnv1a32-[0-9a-f]{8}$/.test(envelopeFingerprint)
+      ),
+      true
+    );
+  }
+});
+
 test("every equation family has semantic, visual, and uniform browser evidence", () => {
   const matrix = createKpEquationSurfacePreservationMatrix();
   const matrixIds = new Set(matrix.entries.map(({ animationId }) => animationId));

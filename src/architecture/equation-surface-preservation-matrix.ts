@@ -1,16 +1,20 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import { createKpAnimationAssets } from "../animation/catalog.ts";
+import { sampleKpAnimationRuntimeFrame } from
+  "../animation/runtime-sampler.ts";
 import type { KpSemanticAssetObject } from "../semantic/asset.ts";
 import type { KpSemanticTransformation } from
   "../semantic/asset-transformation.ts";
 import {
   createKpEquationSurfaceAuthorityGraph,
   type KpEquationSurfaceAuthorityGraph,
+  type KpEquationSurfaceAuthorityRow,
   type KpEquationSurfaceAuthorityPathClass
 } from "./equation-surface-authority-graph.ts";
 import {
   createKpEquationSurfaceInventory,
-  type KpEquationSurfaceInventory
+  type KpEquationSurfaceInventory,
+  type KpEquationSurfaceInventoryEntry
 } from "./equation-surface-inventory.ts";
 
 export type KpEquationSurfaceFamilyId =
@@ -45,7 +49,7 @@ export interface KpEquationSurfaceTransformationEndpoint {
 }
 
 export interface KpEquationSurfacePreservationRow {
-  readonly schemaVersion: "kp.equation-surface-preservation-row.v1";
+  readonly schemaVersion: "kp.equation-surface-preservation-row.v2";
   readonly animationId: string;
   readonly familyId: KpEquationSurfaceFamilyId;
   readonly pathClass: KpEquationSurfaceAuthorityPathClass;
@@ -75,6 +79,48 @@ export interface KpEquationSurfacePreservationRow {
       | "semantic-native-katex"
       | "labelled-semantic-stage";
   };
+  readonly migrationObligations: KpEquationSurfaceMigrationObligations;
+}
+
+export interface KpEquationSurfaceSampledFrameObligation {
+  readonly direction: "forward";
+  readonly progress: 0 | 0.5 | 1;
+  readonly phaseId: string;
+  readonly activeTransformationIds: readonly string[];
+  readonly activeSemanticObjectIds: readonly string[];
+  readonly envelopeFingerprint: string;
+}
+
+export interface KpEquationSurfaceMigrationObligations {
+  readonly semantic: {
+    readonly assetFingerprint: string;
+    readonly objectIds: readonly string[];
+    readonly transformationIds: readonly string[];
+  };
+  readonly endpoints: {
+    readonly fingerprint: string;
+    readonly authority:
+      | "semantic-native-katex"
+      | "labelled-semantic-stage";
+  };
+  readonly renderer: {
+    readonly selectedCapabilityId:
+      KpEquationSurfaceInventoryEntry["catalogueSurface"]["selectedCapabilityId"];
+    readonly adapterId: string;
+    readonly sourcePath: string;
+  };
+  readonly clock: {
+    readonly ownerId: "editor-animation-player";
+    readonly sourcePath: "src/editor/animation-player-controller.ts";
+    readonly authorityNodeId: string;
+    readonly privateClockAuthority: "none";
+    readonly cssAnimationAuthority: "none";
+  };
+  readonly sampledFrames: {
+    readonly samplerNodeIds: readonly string[];
+    readonly checkpoints: readonly [0, 0.5, 1];
+    readonly frames: readonly KpEquationSurfaceSampledFrameObligation[];
+  };
 }
 
 export interface KpEquationSurfaceFamilyEvidence {
@@ -89,7 +135,7 @@ export interface KpEquationSurfaceFamilyEvidence {
 }
 
 export interface KpEquationSurfacePreservationMatrix {
-  readonly schemaVersion: "kp.equation-surface-preservation-matrix.v1";
+  readonly schemaVersion: "kp.equation-surface-preservation-matrix.v2";
   readonly kind: "equation-surface-preservation-matrix";
   readonly entries: readonly KpEquationSurfacePreservationRow[];
   readonly families: readonly KpEquationSurfaceFamilyEvidence[];
@@ -159,8 +205,13 @@ export function compileKpEquationSurfacePreservationMatrix(input: {
       diagnostics.push(`Missing authority row ${inventoryEntry.animationId}.`);
       return [];
     }
-    return [preservationRow(asset, inventoryEntry.catalogueSurface.rendererAdapterId,
-      authority.pathClass, diagnostics)];
+    return [preservationRow({
+      asset,
+      inventoryEntry,
+      authority,
+      allAssets: input.assets,
+      diagnostics
+    })];
   });
 
   if (diagnostics.length > 0) {
@@ -198,19 +249,22 @@ export function compileKpEquationSurfacePreservationMatrix(input: {
     });
 
   return Object.freeze({
-    schemaVersion: "kp.equation-surface-preservation-matrix.v1" as const,
+    schemaVersion: "kp.equation-surface-preservation-matrix.v2" as const,
     kind: "equation-surface-preservation-matrix" as const,
     entries: Object.freeze(entries),
     families: Object.freeze(families)
   });
 }
 
-function preservationRow(
-  asset: KpAnimationAsset,
-  adapterId: string,
-  pathClass: KpEquationSurfaceAuthorityPathClass,
-  diagnostics: string[]
-): KpEquationSurfacePreservationRow {
+function preservationRow(input: {
+  readonly asset: KpAnimationAsset;
+  readonly inventoryEntry: KpEquationSurfaceInventoryEntry;
+  readonly authority: KpEquationSurfaceAuthorityRow;
+  readonly allAssets: readonly KpAnimationAsset[];
+  readonly diagnostics: string[];
+}): KpEquationSurfacePreservationRow {
+  const { asset, inventoryEntry, authority, diagnostics } = input;
+  const pathClass = authority.pathClass;
   const objectById = new Map(asset.bundle.objects.map((object) => [
     object.id,
     object
@@ -222,7 +276,7 @@ function preservationRow(
   }
 
   return Object.freeze({
-    schemaVersion: "kp.equation-surface-preservation-row.v1" as const,
+    schemaVersion: "kp.equation-surface-preservation-row.v2" as const,
     animationId: asset.id,
     familyId: familyForAnimation(asset.id),
     pathClass,
@@ -254,13 +308,101 @@ function preservationRow(
     }),
     nativeSettlement: Object.freeze({
       slotKind: "equation" as const,
-      adapterId,
+      adapterId: inventoryEntry.catalogueSurface.rendererAdapterId,
       adapterStatus: "ready" as const,
       endpointAuthority:
         pathClass === "log-exponent-specialized" ||
         pathClass === "log-quotient-specialized"
           ? "semantic-native-katex" as const
           : "labelled-semantic-stage" as const
+    }),
+    migrationObligations: migrationObligations({
+      asset,
+      inventoryEntry,
+      authority,
+      allAssets: input.allAssets,
+      semanticEndpoints,
+      diagnostics
+    })
+  });
+}
+
+const preservationCheckpoints = Object.freeze([0, 0.5, 1] as const);
+
+function migrationObligations(input: {
+  readonly asset: KpAnimationAsset;
+  readonly inventoryEntry: KpEquationSurfaceInventoryEntry;
+  readonly authority: KpEquationSurfaceAuthorityRow;
+  readonly allAssets: readonly KpAnimationAsset[];
+  readonly semanticEndpoints: readonly KpEquationSurfaceTransformationEndpoint[];
+  readonly diagnostics: string[];
+}): KpEquationSurfaceMigrationObligations {
+  const { asset, inventoryEntry, authority } = input;
+  if (authority.sharedClockNodeId.length === 0) {
+    input.diagnostics.push(`${asset.id} has no shared clock authority.`);
+  }
+  if (authority.directSamplerNodeIds.length === 0) {
+    input.diagnostics.push(`${asset.id} has no sampled-frame authority.`);
+  }
+  const endpointAuthority =
+    authority.pathClass === "log-exponent-specialized" ||
+    authority.pathClass === "log-quotient-specialized"
+      ? "semantic-native-katex" as const
+      : "labelled-semantic-stage" as const;
+  const frames = preservationCheckpoints.map((progress) => {
+    const frame = sampleKpAnimationRuntimeFrame({
+      animation: asset,
+      childAnimations: input.allAssets,
+      direction: "forward",
+      progress
+    });
+    return Object.freeze({
+      direction: "forward" as const,
+      progress,
+      phaseId: frame.envelope.activity.phaseId,
+      activeTransformationIds: Object.freeze([
+        ...frame.envelope.activity.transformationIds
+      ]),
+      activeSemanticObjectIds: Object.freeze([
+        ...frame.envelope.activity.semanticObjectIds
+      ]),
+      envelopeFingerprint: semanticFingerprint(frame.envelope)
+    });
+  });
+
+  return Object.freeze({
+    semantic: Object.freeze({
+      assetFingerprint: semanticFingerprint({
+        objects: asset.bundle.objects,
+        transformations: asset.transformations,
+        transformationTree: asset.transformationTree
+      }),
+      objectIds: Object.freeze(asset.bundle.objects.map(({ id }) => id)),
+      transformationIds: Object.freeze(
+        asset.transformations.map(({ id }) => id)
+      )
+    }),
+    endpoints: Object.freeze({
+      fingerprint: semanticFingerprint(input.semanticEndpoints),
+      authority: endpointAuthority
+    }),
+    renderer: Object.freeze({
+      selectedCapabilityId:
+        inventoryEntry.catalogueSurface.selectedCapabilityId,
+      adapterId: inventoryEntry.catalogueSurface.rendererAdapterId,
+      sourcePath: inventoryEntry.catalogueSurface.rendererSourcePath
+    }),
+    clock: Object.freeze({
+      ownerId: inventoryEntry.clockAuthority.ownerId,
+      sourcePath: inventoryEntry.clockAuthority.sourcePath,
+      authorityNodeId: authority.sharedClockNodeId,
+      privateClockAuthority: authority.privateClockAuthority,
+      cssAnimationAuthority: authority.cssAnimationAuthority
+    }),
+    sampledFrames: Object.freeze({
+      samplerNodeIds: Object.freeze([...authority.directSamplerNodeIds]),
+      checkpoints: preservationCheckpoints,
+      frames: Object.freeze(frames)
     })
   });
 }

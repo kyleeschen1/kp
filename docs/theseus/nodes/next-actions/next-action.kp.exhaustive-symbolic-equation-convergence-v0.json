@@ -941,6 +941,48 @@
       "scope": "durable-state",
       "checkedAt": "2026-08-16T05:26:16.488Z",
       "notes": "Workspace valid at 958 nodes and 21293 events before recording slice evidence."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s04-preservation-contract",
+      "checkedAt": "2026-08-16T05:31:45.177Z",
+      "notes": "10 generated inventory, authority, semantic endpoint, renderer, clock, and sampled-frame preservation tests passed across 30 equation surfaces."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/generate-equation-surface-preservation-matrix.ts --check",
+      "status": "passed",
+      "scope": "s04-generated-freshness",
+      "checkedAt": "2026-08-16T05:31:46.236Z",
+      "notes": "Version 2 preservation matrix is current and deterministic."
+    },
+    {
+      "command": "npm run check:equation-asset-manifest",
+      "status": "passed",
+      "scope": "s04-downstream-manifest",
+      "checkedAt": "2026-08-16T05:31:47.204Z",
+      "notes": "Downstream equation asset manifest remains current."
+    },
+    {
+      "command": "npm run test:equation-surface-disposition",
+      "status": "passed",
+      "scope": "s04-migration-disposition",
+      "checkedAt": "2026-08-16T05:31:48.161Z",
+      "notes": "Four disposition and rollback-gate tests remain green."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04-typescript",
+      "checkedAt": "2026-08-16T05:31:49.075Z",
+      "notes": "TypeScript and Svelte diagnostics passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s04-architecture",
+      "checkedAt": "2026-08-16T05:31:50.035Z",
+      "notes": "Architecture and equation authority gates passed."
     }
   ],
   "progress": {

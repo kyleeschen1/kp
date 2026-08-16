@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "kp.equation-surface-preservation-matrix.v1",
+  "schemaVersion": "kp.equation-surface-preservation-matrix.v2",
   "kind": "equation-surface-preservation-matrix",
   "entries": [
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-exponent.solve-two-power-x",
       "familyId": "logarithm",
       "pathClass": "log-exponent-specialized",
@@ -96,10 +96,99 @@
         "adapterId": "editor-animation-surface.log-exponent.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "semantic-native-katex"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-4d1cb21f",
+          "objectIds": [
+            "log-exponent.state.source",
+            "log-exponent.state.logged-both-sides",
+            "log-exponent.state.exponent-extracted",
+            "log-exponent.state.solved"
+          ],
+          "transformationIds": [
+            "transformation.log-exponent.apply-log-both-sides",
+            "transformation.log-exponent.extract-exponent",
+            "transformation.log-exponent.divide-by-log-base"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-07dc9df2",
+          "authority": "semantic-native-katex"
+        },
+        "renderer": {
+          "selectedCapabilityId": "log-exponent",
+          "adapterId": "editor-animation-surface.log-exponent.canonical-native-katex",
+          "sourcePath": "src/editor/log-exponent-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.log-exponent-sequence"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.log-exponent.solve-two-power-x.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-exponent.apply-log-both-sides"
+              ],
+              "activeSemanticObjectIds": [
+                "log-exponent.state.source",
+                "log-exponent.state.logged-both-sides",
+                "log-exponent.state.exponent-extracted",
+                "log-exponent.state.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-7d144a39"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.log-exponent.solve-two-power-x.forward.1",
+              "activeTransformationIds": [
+                "transformation.log-exponent.extract-exponent"
+              ],
+              "activeSemanticObjectIds": [
+                "log-exponent.state.source",
+                "log-exponent.state.logged-both-sides",
+                "log-exponent.state.exponent-extracted",
+                "log-exponent.state.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-690a1feb"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.log-exponent.solve-two-power-x.forward.2",
+              "activeTransformationIds": [
+                "transformation.log-exponent.divide-by-log-base"
+              ],
+              "activeSemanticObjectIds": [
+                "log-exponent.state.source",
+                "log-exponent.state.logged-both-sides",
+                "log-exponent.state.exponent-extracted",
+                "log-exponent.state.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-4db7bc1e"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-product.product-to-sum",
       "familyId": "logarithm",
       "pathClass": "log-product-specialized",
@@ -150,10 +239,89 @@
         "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-250fa4a6",
+          "objectIds": [
+            "log-product.state.product",
+            "log-product.state.sum"
+          ],
+          "transformationIds": [
+            "transformation.log-product.xy-to-sum"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-84b9c8aa",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "log-product",
+          "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+          "sourcePath": "src/editor/log-product-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.log-product.product-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum"
+              ],
+              "envelopeFingerprint": "fnv1a32-7975290e"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.log-product.product-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum"
+              ],
+              "envelopeFingerprint": "fnv1a32-88474660"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.log-product.product-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum"
+              ],
+              "envelopeFingerprint": "fnv1a32-fa5e0535"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-product.three-factors-to-sum",
       "familyId": "logarithm",
       "pathClass": "log-product-specialized",
@@ -204,10 +372,89 @@
         "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-4e0d8b3a",
+          "objectIds": [
+            "log-product.state.product.xyz",
+            "log-product.state.sum.xyz"
+          ],
+          "transformationIds": [
+            "transformation.log-product.xyz-to-sum"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-b595f509",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "log-product",
+          "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+          "sourcePath": "src/editor/log-product-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.log-product.three-factors-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xyz-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product.xyz",
+                "log-product.state.sum.xyz"
+              ],
+              "envelopeFingerprint": "fnv1a32-650bbdaa"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.log-product.three-factors-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xyz-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product.xyz",
+                "log-product.state.sum.xyz"
+              ],
+              "envelopeFingerprint": "fnv1a32-f2eb3a80"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.log-product.three-factors-to-sum.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xyz-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product.xyz",
+                "log-product.state.sum.xyz"
+              ],
+              "envelopeFingerprint": "fnv1a32-f8b18f47"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-quotient.difference-to-quotient",
       "familyId": "logarithm",
       "pathClass": "log-quotient-specialized",
@@ -258,10 +505,89 @@
         "adapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "semantic-native-katex"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-56df2bb9",
+          "objectIds": [
+            "log-quotient.state.difference",
+            "log-quotient.state.quotient"
+          ],
+          "transformationIds": [
+            "transformation.log-quotient.difference-to-quotient"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-a7a10e44",
+          "authority": "semantic-native-katex"
+        },
+        "renderer": {
+          "selectedCapabilityId": "log-quotient",
+          "adapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
+          "sourcePath": "src/editor/log-quotient-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.log-quotient.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-quotient.difference-to-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "log-quotient.state.difference",
+                "log-quotient.state.quotient"
+              ],
+              "envelopeFingerprint": "fnv1a32-f0f9ebba"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.log-quotient.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-quotient.difference-to-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "log-quotient.state.difference",
+                "log-quotient.state.quotient"
+              ],
+              "envelopeFingerprint": "fnv1a32-71681966"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.log-quotient.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-quotient.difference-to-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "log-quotient.state.difference",
+                "log-quotient.state.quotient"
+              ],
+              "envelopeFingerprint": "fnv1a32-fa4b1525"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.comparison.jacobian-hessian",
       "familyId": "comparison",
       "pathClass": "generic-semantic-equation",
@@ -360,10 +686,96 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-86d86840",
+          "objectIds": [
+            "formula-jacobian",
+            "formula-hessian",
+            "comparison-jacobian-hessian"
+          ],
+          "transformationIds": [
+            "transform.comparison.jacobian-hessian.present-jacobian",
+            "transform.comparison.jacobian-hessian.present-hessian",
+            "transform.comparison.jacobian-hessian.compare-derivative-structure"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-efb3ba66",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.comparison.jacobian-hessian.forward.0",
+              "activeTransformationIds": [
+                "transform.comparison.jacobian-hessian.present-jacobian",
+                "transform.comparison.jacobian-hessian.present-hessian"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-jacobian",
+                "comparison-jacobian-hessian",
+                "formula-hessian"
+              ],
+              "envelopeFingerprint": "fnv1a32-b9de3052"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.comparison.jacobian-hessian.forward.1",
+              "activeTransformationIds": [
+                "transform.comparison.jacobian-hessian.compare-derivative-structure"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-jacobian",
+                "comparison-jacobian-hessian",
+                "formula-hessian"
+              ],
+              "envelopeFingerprint": "fnv1a32-cfb91d7e"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.comparison.jacobian-hessian.forward.1",
+              "activeTransformationIds": [
+                "transform.comparison.jacobian-hessian.compare-derivative-structure"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-jacobian",
+                "comparison-jacobian-hessian",
+                "formula-hessian"
+              ],
+              "envelopeFingerprint": "fnv1a32-502e130e"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.comparison.linear-solve-programming",
       "familyId": "comparison",
       "pathClass": "generic-semantic-equation",
@@ -540,10 +952,143 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-a6270f30",
+          "objectIds": [
+            "equation.linear-solve.initial",
+            "equation.linear-solve.after-subtract",
+            "equation.linear-solve.left-simplified",
+            "equation.linear-solve.solved",
+            "source-file.programming.add",
+            "execution-step.programming.add.call",
+            "execution-step.programming.add.evaluate-return",
+            "execution-step.programming.add.return",
+            "execution-step.programming.add.output"
+          ],
+          "transformationIds": [
+            "transform.linear-solve.subtract-both-sides-3",
+            "transform.linear-solve.cancel-left-additive-inverse",
+            "transform.linear-solve.simplify-right-difference",
+            "transform.programming.add.call",
+            "transform.programming.add.evaluate-return",
+            "transform.programming.add.return",
+            "transform.programming.add.output"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-1b8ded44",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.linear-rearrangement",
+            "sampler.witnessed-annihilation"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.comparison.linear-solve-programming.forward.0",
+              "activeTransformationIds": [
+                "transform.linear-solve.subtract-both-sides-3",
+                "transform.linear-solve.cancel-left-additive-inverse",
+                "transform.linear-solve.simplify-right-difference",
+                "transform.programming.add.call",
+                "transform.programming.add.evaluate-return",
+                "transform.programming.add.return",
+                "transform.programming.add.output"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved",
+                "source-file.programming.add",
+                "execution-step.programming.add.call",
+                "execution-step.programming.add.evaluate-return",
+                "execution-step.programming.add.return",
+                "execution-step.programming.add.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-b4529c51"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.comparison.linear-solve-programming.forward.0",
+              "activeTransformationIds": [
+                "transform.linear-solve.subtract-both-sides-3",
+                "transform.linear-solve.cancel-left-additive-inverse",
+                "transform.linear-solve.simplify-right-difference",
+                "transform.programming.add.call",
+                "transform.programming.add.evaluate-return",
+                "transform.programming.add.return",
+                "transform.programming.add.output"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved",
+                "source-file.programming.add",
+                "execution-step.programming.add.call",
+                "execution-step.programming.add.evaluate-return",
+                "execution-step.programming.add.return",
+                "execution-step.programming.add.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-5167e5ef"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.comparison.linear-solve-programming.forward.0",
+              "activeTransformationIds": [
+                "transform.linear-solve.subtract-both-sides-3",
+                "transform.linear-solve.cancel-left-additive-inverse",
+                "transform.linear-solve.simplify-right-difference",
+                "transform.programming.add.call",
+                "transform.programming.add.evaluate-return",
+                "transform.programming.add.return",
+                "transform.programming.add.output"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved",
+                "source-file.programming.add",
+                "execution-step.programming.add.call",
+                "execution-step.programming.add.evaluate-return",
+                "execution-step.programming.add.return",
+                "execution-step.programming.add.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-2536dbd8"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.add-zero",
       "familyId": "substitution",
       "pathClass": "generic-semantic-equation",
@@ -594,10 +1139,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-25e2ae29",
+          "objectIds": [
+            "equation.generated.add-zero.before",
+            "equation.generated.add-zero.after"
+          ],
+          "transformationIds": [
+            "transform.generated.add-zero.remove"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-ea3fe3a2",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.identity-absorption"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.add-zero.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.add-zero.remove"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.add-zero.before",
+                "equation.generated.add-zero.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-17471f61"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.add-zero.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.add-zero.remove"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.add-zero.before",
+                "equation.generated.add-zero.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-95337315"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.add-zero.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.add-zero.remove"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.add-zero.before",
+                "equation.generated.add-zero.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-c726a948"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
       "familyId": "calculus",
       "pathClass": "generic-semantic-equation",
@@ -648,10 +1273,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-f830b872",
+          "objectIds": [
+            "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+            "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
+          ],
+          "transformationIds": [
+            "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-89cb1d1c",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.derivative-power"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-3665f96d"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-a897a64d"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-26ddaa44"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.calculus.derivative.sum-rule-polynomial",
       "familyId": "calculus",
       "pathClass": "generic-semantic-equation",
@@ -723,10 +1428,94 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-54d2cae4",
+          "objectIds": [
+            "expression.generated.calculus.derivative.sum-rule-polynomial.initial",
+            "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+            "expression.generated.calculus.derivative.sum-rule-polynomial.derived"
+          ],
+          "transformationIds": [
+            "transform.generated.calculus.derivative.sum-rule-polynomial.distribute-sum-rule",
+            "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-70371ae9",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.calculus.derivative.sum-rule-polynomial.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.sum-rule-polynomial.distribute-sum-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.sum-rule-polynomial.initial",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-54c963a0"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.calculus.derivative.sum-rule-polynomial.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.sum-rule-polynomial.initial",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-20dcfe79"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.calculus.derivative.sum-rule-polynomial.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.derivative.sum-rule-polynomial.initial",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.distributed",
+                "expression.generated.calculus.derivative.sum-rule-polynomial.derived"
+              ],
+              "envelopeFingerprint": "fnv1a32-15a5cef8"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.calculus.integral.power-rule-quadratic",
       "familyId": "calculus",
       "pathClass": "generic-semantic-equation",
@@ -798,10 +1587,94 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-07202095",
+          "objectIds": [
+            "expression.generated.calculus.integral.power-rule-quadratic.initial",
+            "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+            "expression.generated.calculus.integral.power-rule-quadratic.integrated"
+          ],
+          "transformationIds": [
+            "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule",
+            "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-60958165",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.calculus.integral.power-rule-quadratic.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.integral.power-rule-quadratic.initial",
+                "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+                "expression.generated.calculus.integral.power-rule-quadratic.integrated"
+              ],
+              "envelopeFingerprint": "fnv1a32-d74ac7a6"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.calculus.integral.power-rule-quadratic.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.integral.power-rule-quadratic.initial",
+                "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+                "expression.generated.calculus.integral.power-rule-quadratic.integrated"
+              ],
+              "envelopeFingerprint": "fnv1a32-95e0a2c8"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.calculus.integral.power-rule-quadratic.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.calculus.integral.power-rule-quadratic.initial",
+                "expression.generated.calculus.integral.power-rule-quadratic.expanded",
+                "expression.generated.calculus.integral.power-rule-quadratic.integrated"
+              ],
+              "envelopeFingerprint": "fnv1a32-9dba2683"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.cancellation.additive-inverses",
       "familyId": "cancellation",
       "pathClass": "generic-semantic-equation",
@@ -852,10 +1725,94 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-1ec0fbcd",
+          "objectIds": [
+            "equation.generated.linear-solve.x-plus-3.initial",
+            "equation.generated.linear-solve.x-plus-3.after-subtract",
+            "equation.generated.linear-solve.x-plus-3.left-simplified",
+            "equation.generated.linear-solve.x-plus-3.solved"
+          ],
+          "transformationIds": [
+            "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-7bd32e14",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.linear-rearrangement",
+            "sampler.witnessed-annihilation",
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.cancellation.additive-inverses.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.x-plus-3.after-subtract",
+                "equation.generated.linear-solve.x-plus-3.left-simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-11fe3dc0"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.cancellation.additive-inverses.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.x-plus-3.after-subtract",
+                "equation.generated.linear-solve.x-plus-3.left-simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-f6c7fd22"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.cancellation.additive-inverses.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.x-plus-3.after-subtract",
+                "equation.generated.linear-solve.x-plus-3.left-simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-013df41d"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.distribution.expand-a-sum",
       "familyId": "distribution-factoring",
       "pathClass": "generic-semantic-equation",
@@ -906,10 +1863,91 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-80067b94",
+          "objectIds": [
+            "expression.generated.distribution.expand-a-sum.factored",
+            "expression.generated.distribution.expand-a-sum.expanded"
+          ],
+          "transformationIds": [
+            "transform.generated.distribution.expand-a-sum.distribute"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-7eefbf77",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.distribution",
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.distribution.expand-a-sum.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.expand-a-sum.distribute"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.expand-a-sum.factored",
+                "expression.generated.distribution.expand-a-sum.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-f2ce278a"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.distribution.expand-a-sum.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.expand-a-sum.distribute"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.expand-a-sum.factored",
+                "expression.generated.distribution.expand-a-sum.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-ba63fc96"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.distribution.expand-a-sum.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.expand-a-sum.distribute"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.expand-a-sum.factored",
+                "expression.generated.distribution.expand-a-sum.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-a7bb411b"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.distribution.factor-common-a",
       "familyId": "distribution-factoring",
       "pathClass": "generic-semantic-equation",
@@ -960,10 +1998,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-059db6f6",
+          "objectIds": [
+            "expression.generated.distribution.factor-common-a.factored",
+            "expression.generated.distribution.factor-common-a.expanded"
+          ],
+          "transformationIds": [
+            "transform.generated.distribution.factor-common-a.factor"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-cc7e3fc1",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.factoring"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.distribution.factor-common-a.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.factor-common-a.factor"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.factor-common-a.factored",
+                "expression.generated.distribution.factor-common-a.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-6e18c25a"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.distribution.factor-common-a.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.factor-common-a.factor"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.factor-common-a.factored",
+                "expression.generated.distribution.factor-common-a.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-46c8fdb4"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.distribution.factor-common-a.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.distribution.factor-common-a.factor"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.distribution.factor-common-a.factored",
+                "expression.generated.distribution.factor-common-a.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-1df73469"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.exponent.square-as-product",
       "familyId": "exponent-radical",
       "pathClass": "generic-semantic-equation",
@@ -1035,10 +2153,95 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-0402ab4e",
+          "objectIds": [
+            "expression.generated.exponent.square-as-product.initial",
+            "expression.generated.exponent.square-as-product.lowered",
+            "expression.generated.exponent.square-as-product.expanded"
+          ],
+          "transformationIds": [
+            "transform.generated.exponent.square-as-product.lower-exponent",
+            "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-00722e15",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.exponent-law"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.exponent.square-as-product.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.exponent.square-as-product.lower-exponent"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.exponent.square-as-product.initial",
+                "expression.generated.exponent.square-as-product.lowered",
+                "expression.generated.exponent.square-as-product.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-d3a4d4d2"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.exponent.square-as-product.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.exponent.square-as-product.initial",
+                "expression.generated.exponent.square-as-product.lowered",
+                "expression.generated.exponent.square-as-product.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-dd18b8a8"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.exponent.square-as-product.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.exponent.square-as-product.initial",
+                "expression.generated.exponent.square-as-product.lowered",
+                "expression.generated.exponent.square-as-product.expanded"
+              ],
+              "envelopeFingerprint": "fnv1a32-37dde81b"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.fraction-expression.two-fourths",
       "familyId": "fraction",
       "pathClass": "generic-semantic-equation",
@@ -1131,10 +2334,100 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-2fac8ed9",
+          "objectIds": [
+            "expression.generated.fraction-expression.two-fourths.initial",
+            "expression.generated.fraction-expression.two-fourths.factored",
+            "expression.generated.fraction-expression.two-fourths.common-factor",
+            "expression.generated.fraction-expression.two-fourths.simplified"
+          ],
+          "transformationIds": [
+            "transform.generated.fraction-expression.two-fourths.split-factors",
+            "transform.generated.fraction-expression.two-fourths.merge-common-factor",
+            "transform.generated.fraction-expression.two-fourths.simplify-unit-factor"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-2a495c13",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.fraction"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.fraction-expression.two-fourths.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.fraction-expression.two-fourths.split-factors"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.fraction-expression.two-fourths.initial",
+                "expression.generated.fraction-expression.two-fourths.factored",
+                "expression.generated.fraction-expression.two-fourths.common-factor",
+                "expression.generated.fraction-expression.two-fourths.simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-c09ac0db"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.fraction-expression.two-fourths.forward.1",
+              "activeTransformationIds": [
+                "transform.generated.fraction-expression.two-fourths.merge-common-factor"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.fraction-expression.two-fourths.initial",
+                "expression.generated.fraction-expression.two-fourths.factored",
+                "expression.generated.fraction-expression.two-fourths.common-factor",
+                "expression.generated.fraction-expression.two-fourths.simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-58b6b20a"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.fraction-expression.two-fourths.forward.2",
+              "activeTransformationIds": [
+                "transform.generated.fraction-expression.two-fourths.simplify-unit-factor"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.fraction-expression.two-fourths.initial",
+                "expression.generated.fraction-expression.two-fourths.factored",
+                "expression.generated.fraction-expression.two-fourths.common-factor",
+                "expression.generated.fraction-expression.two-fourths.simplified"
+              ],
+              "envelopeFingerprint": "fnv1a32-f2010acb"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.function-wrap.apply-f",
       "familyId": "function-wrap",
       "pathClass": "generic-semantic-equation",
@@ -1185,10 +2478,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-153c9b28",
+          "objectIds": [
+            "expression.generated.function-wrap.apply-f.input",
+            "expression.generated.function-wrap.apply-f.wrapped"
+          ],
+          "transformationIds": [
+            "transform.generated.function-wrap.apply-f.wrap-function"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-afbb4ba6",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.function-wrap"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.function-wrap.apply-f.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.function-wrap.apply-f.wrap-function"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.function-wrap.apply-f.input",
+                "expression.generated.function-wrap.apply-f.wrapped"
+              ],
+              "envelopeFingerprint": "fnv1a32-fc9f6851"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.function-wrap.apply-f.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.function-wrap.apply-f.wrap-function"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.function-wrap.apply-f.input",
+                "expression.generated.function-wrap.apply-f.wrapped"
+              ],
+              "envelopeFingerprint": "fnv1a32-a677b6ef"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.function-wrap.apply-f.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.function-wrap.apply-f.wrap-function"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.function-wrap.apply-f.input",
+                "expression.generated.function-wrap.apply-f.wrapped"
+              ],
+              "envelopeFingerprint": "fnv1a32-ee3c97d8"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.linear-algebra.dot-product.three-vector",
       "familyId": "linear-algebra",
       "pathClass": "generic-semantic-equation",
@@ -1239,10 +2612,114 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-d0598a6a",
+          "objectIds": [
+            "expression.generated.linear-algebra.dot-product.three-vector.initial",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.0",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.0",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.1",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.1",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.2",
+            "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.2",
+            "expression.generated.linear-algebra.dot-product.three-vector.result"
+          ],
+          "transformationIds": [
+            "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-9a0f1db3",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.dot-product-traversal"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.linear-algebra.dot-product.three-vector.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.dot-product.three-vector.initial",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-05972797"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.linear-algebra.dot-product.three-vector.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.dot-product.three-vector.initial",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-e18d1e81"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.linear-algebra.dot-product.three-vector.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.dot-product.three-vector.initial",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.0",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.1",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.product.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.initial.intermediate.partial-sum.2",
+                "expression.generated.linear-algebra.dot-product.three-vector.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-8d3fe50c"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
       "familyId": "linear-algebra",
       "pathClass": "generic-semantic-equation",
@@ -1293,10 +2770,106 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-08a5116b",
+          "objectIds": [
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial",
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.0",
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.1",
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.0",
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.1",
+            "expression.generated.linear-algebra.matrix-matrix.two-by-two.result"
+          ],
+          "transformationIds": [
+            "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-df821aa4",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.matrix-matrix-composition"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.linear-algebra.matrix-matrix.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-f2cb7e6d"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.linear-algebra.matrix-matrix.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-5abed67e"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.linear-algebra.matrix-matrix.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.0.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.0",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.initial.intermediate.cell-dot-product.1.1",
+                "expression.generated.linear-algebra.matrix-matrix.two-by-two.result"
+              ],
+              "envelopeFingerprint": "fnv1a32-352e0d80"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
       "familyId": "linear-algebra",
       "pathClass": "generic-semantic-equation",
@@ -1380,10 +2953,138 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-29bf7d81",
+          "objectIds": [
+            "expression.generated.linear-algebra.matrix-vector.two-by-two.initial",
+            "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.0",
+            "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.1",
+            "expression.generated.linear-algebra.matrix-vector.two-by-two.result",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.matrix",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.domain.standard",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.codomain.standard",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.0",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.1",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.graph",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.input",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.output"
+          ],
+          "transformationIds": [
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+            "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-1fa9a518",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.matrix-vector-composition"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.linear-algebra.matrix-vector.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.0",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.1",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.result",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.matrix",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.domain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.codomain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.0",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.1",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.graph",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.input",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-c22955c0"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.linear-algebra.matrix-vector.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.0",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.1",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.result",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.matrix",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.domain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.codomain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.0",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.1",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.graph",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.input",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-1ccb8a34"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.linear-algebra.matrix-vector.two-by-two.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.0",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.initial.intermediate.row-dot-product.1",
+                "expression.generated.linear-algebra.matrix-vector.two-by-two.result",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.matrix",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.domain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.basis.codomain.standard",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.0",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.basis-image.1",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.graph",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.input",
+                "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.linear-map.vector.output"
+              ],
+              "envelopeFingerprint": "fnv1a32-56d544c6"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.linear-solve.linear-68c15d41",
       "familyId": "linear-solve",
       "pathClass": "generic-semantic-equation",
@@ -1518,10 +3219,111 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-73468328",
+          "objectIds": [
+            "equation.generated.linear-solve.linear-68c15d41.initial",
+            "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+            "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+            "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+            "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+            "equation.generated.linear-solve.linear-68c15d41.solved"
+          ],
+          "transformationIds": [
+            "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+            "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+            "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+            "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+            "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-0c08b200",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.linear-rearrangement",
+            "sampler.witnessed-annihilation"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.linear-solve.linear-68c15d41.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.linear-68c15d41.initial",
+                "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+                "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+                "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-9a6c77da"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.linear-solve.linear-68c15d41.forward.2",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.linear-68c15d41.simplify-difference"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.linear-68c15d41.initial",
+                "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+                "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+                "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-77fa60ea"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.linear-solve.linear-68c15d41.forward.4",
+              "activeTransformationIds": [
+                "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.linear-solve.linear-68c15d41.initial",
+                "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.additive-cancelled",
+                "equation.generated.linear-solve.linear-68c15d41.after-subtract",
+                "equation.generated.linear-solve.linear-68c15d41.divide-introduced",
+                "equation.generated.linear-solve.linear-68c15d41.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-4a7c4de0"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.radical.square-root-as-power",
       "familyId": "exponent-radical",
       "pathClass": "generic-semantic-equation",
@@ -1572,10 +3374,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-8d2a73dc",
+          "objectIds": [
+            "expression.generated.radical.square-root-as-power.power",
+            "expression.generated.radical.square-root-as-power.radical"
+          ],
+          "transformationIds": [
+            "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-d476a942",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.radical-succession"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.radical.square-root-as-power.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.radical.square-root-as-power.power",
+                "expression.generated.radical.square-root-as-power.radical"
+              ],
+              "envelopeFingerprint": "fnv1a32-cff4247a"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.radical.square-root-as-power.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.radical.square-root-as-power.power",
+                "expression.generated.radical.square-root-as-power.radical"
+              ],
+              "envelopeFingerprint": "fnv1a32-0dab8d8a"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.radical.square-root-as-power.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.generated.radical.square-root-as-power.power",
+                "expression.generated.radical.square-root-as-power.radical"
+              ],
+              "envelopeFingerprint": "fnv1a32-80a26485"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.substitute-three",
       "familyId": "substitution",
       "pathClass": "generic-semantic-equation",
@@ -1626,10 +3508,89 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-d23cc5a3",
+          "objectIds": [
+            "equation.generated.substitute-three.before",
+            "equation.generated.substitute-three.after"
+          ],
+          "transformationIds": [
+            "transform.generated.substitute-three"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-6d831ce1",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.substitute-three.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-e32a31a7"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.substitute-three.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-2571b1bb"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.substitute-three.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-a01886cf"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.substitute-three.provisional-incorrect",
       "familyId": "substitution",
       "pathClass": "generic-semantic-equation",
@@ -1680,10 +3641,89 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-576f82cc",
+          "objectIds": [
+            "equation.generated.substitute-three.before",
+            "equation.generated.substitute-three.after"
+          ],
+          "transformationIds": [
+            "transform.generated.substitute-three"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-b488d85a",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.generated.substitute-three.provisional-incorrect.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-a2aab3bb"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.generated.substitute-three.provisional-incorrect.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-5d41f9b3"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.generated.substitute-three.provisional-incorrect.forward.0",
+              "activeTransformationIds": [
+                "transform.generated.substitute-three"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.generated.substitute-three.before",
+                "equation.generated.substitute-three.after"
+              ],
+              "envelopeFingerprint": "fnv1a32-74b30a2f"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.inequality.sign-flip.basic",
       "familyId": "inequality",
       "pathClass": "generic-semantic-equation",
@@ -1734,10 +3774,90 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-cf199e21",
+          "objectIds": [
+            "inequality.sign-flip.source",
+            "inequality.sign-flip.target"
+          ],
+          "transformationIds": [
+            "transform.inequality.sign-flip.multiply-negative"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-f764f810",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.inequality-pivot"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.inequality.sign-flip.basic.forward.0",
+              "activeTransformationIds": [
+                "transform.inequality.sign-flip.multiply-negative"
+              ],
+              "activeSemanticObjectIds": [
+                "inequality.sign-flip.source",
+                "inequality.sign-flip.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-0a432b55"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.inequality.sign-flip.basic.forward.0",
+              "activeTransformationIds": [
+                "transform.inequality.sign-flip.multiply-negative"
+              ],
+              "activeSemanticObjectIds": [
+                "inequality.sign-flip.source",
+                "inequality.sign-flip.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-39ce046d"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.inequality.sign-flip.basic.forward.0",
+              "activeTransformationIds": [
+                "transform.inequality.sign-flip.multiply-negative"
+              ],
+              "activeSemanticObjectIds": [
+                "inequality.sign-flip.source",
+                "inequality.sign-flip.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-494965c2"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.linear-solve.solve-x",
       "familyId": "linear-solve",
       "pathClass": "generic-semantic-equation",
@@ -1830,10 +3950,101 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-5be1725b",
+          "objectIds": [
+            "equation.linear-solve.initial",
+            "equation.linear-solve.after-subtract",
+            "equation.linear-solve.left-simplified",
+            "equation.linear-solve.solved"
+          ],
+          "transformationIds": [
+            "transform.linear-solve.subtract-both-sides-3",
+            "transform.linear-solve.cancel-left-additive-inverse",
+            "transform.linear-solve.simplify-right-difference"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-7466d6eb",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token",
+            "sampler.linear-rearrangement",
+            "sampler.witnessed-annihilation"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.linear-solve.solve-x.forward.0",
+              "activeTransformationIds": [
+                "transform.linear-solve.subtract-both-sides-3"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-da945316"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.linear-solve.solve-x.forward.1",
+              "activeTransformationIds": [
+                "transform.linear-solve.cancel-left-additive-inverse"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-bc8a35d6"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.linear-solve.solve-x.forward.2",
+              "activeTransformationIds": [
+                "transform.linear-solve.simplify-right-difference"
+              ],
+              "activeSemanticObjectIds": [
+                "equation.linear-solve.initial",
+                "equation.linear-solve.after-subtract",
+                "equation.linear-solve.left-simplified",
+                "equation.linear-solve.solved"
+              ],
+              "envelopeFingerprint": "fnv1a32-b3749aea"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.operation-evaluation.five-plus-two",
       "familyId": "operation-evaluation",
       "pathClass": "operation-evaluation-specialized",
@@ -1884,10 +4095,89 @@
         "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-e9681012",
+          "objectIds": [
+            "expression.operation-evaluation.five-plus-two.source",
+            "expression.operation-evaluation.five-plus-two.target"
+          ],
+          "transformationIds": [
+            "transform.operation-evaluation.five-plus-two.simplify-sum"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-a8ebafc2",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "operation-evaluation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.operation-native-scene"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.operation-evaluation.five-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.five-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.five-plus-two.source",
+                "expression.operation-evaluation.five-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-505480e9"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.operation-evaluation.five-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.five-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.five-plus-two.source",
+                "expression.operation-evaluation.five-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-94fe1e5f"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.operation-evaluation.five-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.five-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.five-plus-two.source",
+                "expression.operation-evaluation.five-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-83c8f2e2"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.operation-evaluation.one-plus-two",
       "familyId": "operation-evaluation",
       "pathClass": "operation-evaluation-specialized",
@@ -1938,10 +4228,89 @@
         "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-a2cbd430",
+          "objectIds": [
+            "expression.operation-evaluation.one-plus-two.source",
+            "expression.operation-evaluation.one-plus-two.target"
+          ],
+          "transformationIds": [
+            "transform.operation-evaluation.one-plus-two.simplify-sum"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-74d20dab",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "operation-evaluation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.operation-native-scene"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.operation-evaluation.one-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.one-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.one-plus-two.source",
+                "expression.operation-evaluation.one-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-c22479fb"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.operation-evaluation.one-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.one-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.one-plus-two.source",
+                "expression.operation-evaluation.one-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-f0809697"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.operation-evaluation.one-plus-two.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.one-plus-two.simplify-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.one-plus-two.source",
+                "expression.operation-evaluation.one-plus-two.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-901da3ce"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.operation-evaluation.three-sixths",
       "familyId": "operation-evaluation",
       "pathClass": "operation-evaluation-specialized",
@@ -1992,10 +4361,89 @@
         "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-04178237",
+          "objectIds": [
+            "expression.operation-evaluation.three-sixths.source",
+            "expression.operation-evaluation.three-sixths.target"
+          ],
+          "transformationIds": [
+            "transform.operation-evaluation.three-sixths.simplify-quotient"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-25a6adfb",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "operation-evaluation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.operation-native-scene"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.operation-evaluation.three-sixths.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.three-sixths.simplify-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.three-sixths.source",
+                "expression.operation-evaluation.three-sixths.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-f4ad3fe7"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.operation-evaluation.three-sixths.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.three-sixths.simplify-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.three-sixths.source",
+                "expression.operation-evaluation.three-sixths.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-2f2b6da7"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.operation-evaluation.three-sixths.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.three-sixths.simplify-quotient"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.three-sixths.source",
+                "expression.operation-evaluation.three-sixths.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-6ee6affc"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.sample.fourier-transform-pair",
       "familyId": "transform-pair",
       "pathClass": "generic-semantic-equation",
@@ -2094,10 +4542,96 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-07c58f55",
+          "objectIds": [
+            "formula-fourier-transform",
+            "formula-inverse-fourier-transform",
+            "comparison-fourier-transform-pair"
+          ],
+          "transformationIds": [
+            "transform.sample.fourier-transform-pair.present-1",
+            "transform.sample.fourier-transform-pair.present-2",
+            "transform.sample.fourier-transform-pair.compare"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-f4b4f477",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.sample.fourier-transform-pair.forward.0",
+              "activeTransformationIds": [
+                "transform.sample.fourier-transform-pair.present-1",
+                "transform.sample.fourier-transform-pair.present-2"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-fourier-transform",
+                "comparison-fourier-transform-pair",
+                "formula-inverse-fourier-transform"
+              ],
+              "envelopeFingerprint": "fnv1a32-1e168671"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.sample.fourier-transform-pair.forward.1",
+              "activeTransformationIds": [
+                "transform.sample.fourier-transform-pair.compare"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-fourier-transform",
+                "comparison-fourier-transform-pair",
+                "formula-inverse-fourier-transform"
+              ],
+              "envelopeFingerprint": "fnv1a32-d083839d"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.sample.fourier-transform-pair.forward.1",
+              "activeTransformationIds": [
+                "transform.sample.fourier-transform-pair.compare"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-fourier-transform",
+                "comparison-fourier-transform-pair",
+                "formula-inverse-fourier-transform"
+              ],
+              "envelopeFingerprint": "fnv1a32-93d021d3"
+            }
+          ]
+        }
       }
     },
     {
-      "schemaVersion": "kp.equation-surface-preservation-row.v1",
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.sample.fundamental-theorem-calculus",
       "familyId": "calculus",
       "pathClass": "generic-semantic-equation",
@@ -2196,6 +4730,92 @@
         "adapterId": "editor-animation-surface.equation.katex",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-3b63c0f2",
+          "objectIds": [
+            "formula-ftc-derivative",
+            "formula-ftc-net-change",
+            "comparison-ftc-forms"
+          ],
+          "transformationIds": [
+            "transform.sample.fundamental-theorem-calculus.present-1",
+            "transform.sample.fundamental-theorem-calculus.present-2",
+            "transform.sample.fundamental-theorem-calculus.compare"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-559a8ea3",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "equation-katex",
+          "adapterId": "editor-animation-surface.equation.katex",
+          "sourcePath": "src/editor/equation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.sample.fundamental-theorem-calculus.forward.0",
+              "activeTransformationIds": [
+                "transform.sample.fundamental-theorem-calculus.present-1",
+                "transform.sample.fundamental-theorem-calculus.present-2"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-ftc-derivative",
+                "comparison-ftc-forms",
+                "formula-ftc-net-change"
+              ],
+              "envelopeFingerprint": "fnv1a32-c0c2a535"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.sample.fundamental-theorem-calculus.forward.1",
+              "activeTransformationIds": [
+                "transform.sample.fundamental-theorem-calculus.compare"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-ftc-derivative",
+                "comparison-ftc-forms",
+                "formula-ftc-net-change"
+              ],
+              "envelopeFingerprint": "fnv1a32-1b107fa2"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.sample.fundamental-theorem-calculus.forward.1",
+              "activeTransformationIds": [
+                "transform.sample.fundamental-theorem-calculus.compare"
+              ],
+              "activeSemanticObjectIds": [
+                "formula-ftc-derivative",
+                "comparison-ftc-forms",
+                "formula-ftc-net-change"
+              ],
+              "envelopeFingerprint": "fnv1a32-0b26773a"
+            }
+          ]
+        }
       }
     }
   ],
