@@ -80,7 +80,8 @@
     {
       "id": "s07",
       "title": "generation-pressure-contract",
-      "status": "planned"
+      "summary": "Added three strict LLM-shaped pressure fixtures for function wrap, cancellation, and distribution/factoring. Each names governed semantic vocabulary, demands zero-repair first-pass acceptance, records validator-round repairs, and forbids caller-authored presentation fields.",
+      "status": "complete"
     },
     {
       "id": "s08",

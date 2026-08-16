@@ -80,6 +80,20 @@
       "scope": "slice-s06-boundary",
       "checkedAt": "2026-08-16T14:29:30.682Z",
       "notes": "All architecture gates passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-pressure-contract.test.ts tests/equation-llm-authoring-catalogue.test.ts",
+      "status": "passed",
+      "scope": "slice-s07-focused",
+      "checkedAt": "2026-08-16T14:35:37.558Z",
+      "notes": "Nine pressure-contract and catalogue tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s07-types",
+      "checkedAt": "2026-08-16T14:35:38.731Z",
+      "notes": "The app TypeScript project accepts the new contract and fixtures."
     }
   ]
 }
