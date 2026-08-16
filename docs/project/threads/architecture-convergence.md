@@ -1,11 +1,11 @@
 # Architecture Convergence And Product Tightening
 
 Status: active-supporting
-Last Updated: 2026-08-14
+Last Updated: 2026-08-16
 Current Next Action: Preserve the convergence boundary while the active
-Animation Catalogue lane selects and perfects one missing transformation.
-Educator product discovery continues outside this Codex thread; do not reopen
-layout or product infrastructure without observed evidence.
+Animation Catalogue lane performs one bounded log-product choreography
+discovery before migration wave A. Measure time to reviewable evidence and do
+not run promotion-scale regeneration or certification during visual tuning.
 
 ## Goal
 
@@ -31,6 +31,15 @@ default-layout selection. KP should first prove that prose, object,
 transformation, notation, prompt, and learner action can take turns owning one
 surface without losing semantic identity. This is a product-grammar discovery
 inside convergence, not permission for a new runtime or universal scene graph.
+
+Visual discovery and infrastructure promotion now have separate verification
+cadences. A presentation alternative should be reviewable through one
+exemplar-local policy change, focused durable checks, and one deterministic
+capture. Only human approval plus a structurally different caller authorizes
+shared types, generated inventory churn, broad browser and bundle gates, or
+catalogue migration. The first application is the homomorphic-decomposition
+candidate recorded in
+`../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
 ## Ordered Work
 
@@ -158,6 +167,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
+- `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`
 - `../reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-exemplar-spec.md`
 - `../reviews/2026-08-14-normal-matrix-proof-memory-long-loop-proposal.md`

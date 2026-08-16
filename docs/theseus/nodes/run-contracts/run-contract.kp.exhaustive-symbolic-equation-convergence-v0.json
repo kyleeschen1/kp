@@ -23,6 +23,10 @@
       "kind": "file",
       "path": "docs/project/decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md",
       "summary": "Seven promoted compiler invariants and operation-local exclusions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md"
     }
   ],
   "verification": [
@@ -196,6 +200,12 @@
       "title": "Log product executable human checkpoint",
       "summary": "Amended the log-product checkpoint so factors alone are identity continuants, all wrapper branches are typed derived successors with symmetric fan-out, and a three-factor catalogue caller reuses the same family contract, semantic-motion compiler, native endpoints, transit session, lazy pack, and selected surface. Stopped at renewed human visual review before wave A.",
       "status": "complete"
+    },
+    {
+      "id": "s25b",
+      "title": "Homomorphic decomposition visual discovery",
+      "summary": "Before migration wave A, tune only the binary log-product presentation through source-shell withdrawal, factor redistribution, target-parenthesis reception, delayed ln wrapping, and final connector resolution. Preserve the accepted semantic family, compiler, endpoints, clock, catalogue, host, and accessibility contracts; run focused discovery checks and stop for human visual approval. After approval, pressure the existing three-factor caller and log quotient before any shared recipe promotion.",
+      "status": "planned"
     },
     {
       "id": "s26",

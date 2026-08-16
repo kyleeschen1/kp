@@ -1,10 +1,10 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-15
-Current Next Action: Review and approve the exhaustive symbolic-equation
-convergence long-loop proposal. The three-caller pressure gate and invariant
-decision are complete; matrix-to-linear-map remains tabled.
+Last Updated: 2026-08-16
+Current Next Action: Run one bounded dissolve-spread-wrap discovery pass on
+the binary log-product exemplar and stop for human visual review. Do not begin
+migration wave A or tune the quotient caller before that approval.
 
 ## Goal
 
@@ -119,6 +119,17 @@ therefore 3 canonical, 22 adapter-backed, 4 static-only, and 1 retirement
 candidate. Human review of the corrected two-factor and three-factor contact
 sheet remains the gate before the wave-A migration slices begin.
 
+Human review selected a clearer candidate before that gate can pass: withdraw
+the source logarithm application as one shell, redistribute the persistent
+factors, grow target parentheses around them, introduce the derived `ln`
+occurrences just afterward, then resolve the target connector. This reopens
+presentation choreography only; the accepted semantic family, identities,
+compiler, endpoints, clock, catalogue, and host remain the preservation
+boundary. Tune only the binary exemplar, then use three factors for cardinality
+pressure and log quotient as the structurally different promotion caller. The
+decision and discovery/promotion cadence are recorded in
+`../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
+
 ## Accepted Scope
 
 - `/` as the default catalogue route and `/?artifact=<id>` selection;
@@ -196,6 +207,7 @@ sheet remains the gate before the wave-A migration slices begin.
 - `docs/project/decisions/2026-08-15-kp-symbol-motion-invariant-promotion-result.md`
 - `docs/project/decisions/2026-08-15-kp-canonical-semantic-motion-compiler-order.md`
 - `docs/project/decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`
+- `docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`
 - `docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`

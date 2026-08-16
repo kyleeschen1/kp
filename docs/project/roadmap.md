@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-15
+Last Updated: 2026-08-16
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -71,13 +71,15 @@ Only this repository sequence is active:
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
    requirements while retaining choreography and geometry locally.
-5. **Exhaustive equation convergence:** next. Establish one semantic-motion
-   compiler, route the three approved callers, and pressure it with one new
-   log-product animation. After its mandatory human checkpoint, migrate every
-   supported equation-surface asset in family-sized reversible waves, classify
-   static/unsupported/retired rows explicitly, retire each bypass beside its
-   final caller, and connect governed LLM drafts only after the cutover is
-   stable. Graph, code, diagram, and 3D compilers remain separate.
+5. **Exhaustive equation convergence:** active at its mandatory visual
+   checkpoint. One semantic-motion compiler now routes the approved callers,
+   and two- and three-factor log-product callers prove the clean path. Before
+   migration wave A, test the accepted bounded dissolve-spread-wrap candidate
+   on the binary exemplar and stop for human review. After approval, migrate
+   every supported equation-surface asset in family-sized reversible waves,
+   classify static/unsupported/retired rows explicitly, retire each bypass
+   beside its final caller, and connect governed LLM drafts only after the
+   cutover is stable. Graph, code, diagram, and 3D compilers remain separate.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -331,6 +333,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   requirements are promoted; exhaustive supported equation convergence is the
   next lane. See
   `decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`.
+- The log-product semantic and multi-factor checkpoint is technically complete,
+  but its wrapper-splitting choreography is not approved. Run one bounded
+  dissolve-spread-wrap visual discovery on the binary caller before migration
+  wave A; quotient becomes the contrasting caller only after binary approval.
+  See
+  `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence
