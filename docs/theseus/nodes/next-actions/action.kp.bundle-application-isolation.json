@@ -65,6 +65,20 @@
       "scope": "slice s04 manifest closure model",
       "checkedAt": "2026-08-16T22:50:32.739Z",
       "notes": "Eight focused tests passed. The repository-local TypeScript compiler and the zero-exception architecture gate pass; no production route changed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/bundle-experience-scenario.test.ts scripts/vite-manifest-closure.test.ts scripts/kp-bundle-experience-scenarios.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T22:58:21.802Z",
+      "notes": "Eleven scenario, registry, and closure tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T22:58:22.733Z",
+      "notes": "Node-side bundle tooling typechecks."
     }
   ],
   "expectedLearning": [

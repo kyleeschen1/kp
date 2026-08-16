@@ -79,7 +79,8 @@
     {
       "id": "s05",
       "title": "declare-representative-experience-scenarios",
-      "status": "planned"
+      "summary": "Declared immutable build and experience registries for catalogue shell, five selected catalogue domains, Internal Studio, and four Public Web lessons.",
+      "status": "complete"
     },
     {
       "id": "s06",

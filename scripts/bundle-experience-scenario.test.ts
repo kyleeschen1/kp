@@ -8,6 +8,7 @@ import {
 const validScenario = () => defineKpBundleExperienceScenario({
   id: "bundle-experience.catalogue.place-value",
   title: "Catalogue with place-value selected",
+  buildId: "bundle-build.main",
   entryRoots: ["src/editor/svelte-catalogue/catalogue-entry.ts"],
   activations: [{
     id: "select-place-value",

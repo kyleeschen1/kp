@@ -1,4 +1,5 @@
 export type KpBundleExperienceScenarioId = `bundle-experience.${string}`;
+export type KpBundleBuildId = `bundle-build.${string}`;
 
 export type KpBundleExperiencePhase =
   | "entry"
@@ -27,6 +28,7 @@ export interface KpBundleExperienceScenario {
   readonly schemaVersion: "kp.bundle-experience-scenario.v1";
   readonly id: KpBundleExperienceScenarioId;
   readonly title: string;
+  readonly buildId: KpBundleBuildId;
   readonly entryRoots: readonly string[];
   readonly activations: readonly KpBundleExperienceActivation[];
   readonly comparisonBaseId?: KpBundleExperienceScenarioId | undefined;
@@ -50,6 +52,7 @@ export function defineKpBundleExperienceScenario(
 ): KpBundleExperienceScenario {
   assertNonEmpty("scenario id", input.id);
   assertNonEmpty("scenario title", input.title);
+  assertNonEmpty("scenario build id", input.buildId);
   if (input.entryRoots.length === 0) {
     throw new Error(`Bundle scenario ${input.id} requires an entry root.`);
   }
@@ -135,6 +138,7 @@ export function defineKpBundleExperienceScenario(
     schemaVersion: "kp.bundle-experience-scenario.v1" as const,
     id: input.id,
     title: input.title,
+    buildId: input.buildId,
     entryRoots,
     activations,
     ...(input.comparisonBaseId === undefined

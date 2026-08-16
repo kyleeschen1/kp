@@ -60,6 +60,7 @@ test("experience closure activates only declared dynamic roots in order", () => 
   const scenario = defineKpBundleExperienceScenario({
     id: "bundle-experience.synthetic",
     title: "Synthetic",
+    buildId: "bundle-build.synthetic",
     entryRoots: ["entry.ts"],
     activations: [
       { id: "pack", manifestRoots: ["pack.ts"] },
@@ -92,6 +93,7 @@ test("experience closure rejects an activation not discoverable from current sta
   const scenario = defineKpBundleExperienceScenario({
     id: "bundle-experience.invalid",
     title: "Invalid",
+    buildId: "bundle-build.synthetic",
     entryRoots: ["entry.ts"],
     activations: [{ id: "renderer", manifestRoots: ["renderer.ts"] }],
     expectedOwners: [],
