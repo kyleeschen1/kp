@@ -224,6 +224,13 @@
       "scope": "slice s17 neutral output encoder",
       "checkedAt": "2026-08-16T21:53:21.655Z",
       "notes": "Nine focused encoder and inventory tests passed. Architecture and test-project typecheck also passed."
+    },
+    {
+      "command": "node --test HTML encoder and code renderer preservation cohort",
+      "status": "passed",
+      "scope": "slice s18 renderer encoder migration",
+      "checkedAt": "2026-08-16T21:57:35.785Z",
+      "notes": "Thirty-five focused tests passed. Architecture reports four rather than eight exact exceptions, and test-project typecheck passed."
     }
   ],
   "expectedLearning": [

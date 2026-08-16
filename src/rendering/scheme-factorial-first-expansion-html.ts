@@ -9,9 +9,9 @@ import type {
 import { resolveKpSchemeMaterialSyntaxRole } from
   "../semantic/scheme-source-syntax.ts";
 import {
-  encodeKpEditorHtmlAttribute,
-  encodeKpEditorHtmlText
-} from "../editor/html-output-encoding.ts";
+  encodeKpHtmlAttribute as encodeKpEditorHtmlAttribute,
+  encodeKpHtmlText as encodeKpEditorHtmlText
+} from "./html-output-encoding.ts";
 
 export interface KpSchemeFirstExpansionRenderInput {
   readonly expansion: KpSchemeFirstExpansion;

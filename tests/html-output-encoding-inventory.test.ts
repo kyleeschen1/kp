@@ -32,27 +32,27 @@ test("shared text and attribute consumers have context-specific consolidation ta
     {
       sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
       outputContexts: ["html-text", "html-attribute"],
-      boundary: "src/editor/html-output-encoding.ts"
+      boundary: "src/rendering/html-output-encoding.ts"
     },
     {
       sourceFile: "src/rendering/python-refactor-code-html.ts",
       outputContexts: ["html-text", "html-attribute"],
-      boundary: "src/editor/html-output-encoding.ts"
+      boundary: "src/rendering/html-output-encoding.ts"
     },
     {
       sourceFile: "src/rendering/scheme-factorial-first-expansion-html.ts",
       outputContexts: ["html-text", "html-attribute"],
-      boundary: "src/editor/html-output-encoding.ts"
+      boundary: "src/rendering/html-output-encoding.ts"
     },
     {
       sourceFile: "src/rendering/scheme-factorial-html.ts",
       outputContexts: ["html-text", "html-attribute"],
-      boundary: "src/editor/html-output-encoding.ts"
+      boundary: "src/rendering/html-output-encoding.ts"
     },
     {
       sourceFile: "src/rendering/typescript-refactor-code-html.ts",
       outputContexts: ["html-text", "html-attribute"],
-      boundary: "src/editor/html-output-encoding.ts"
+      boundary: "src/rendering/html-output-encoding.ts"
     }
   ]);
 });

@@ -10,9 +10,9 @@ import {
 } from "../semantic/python-refactor-source-projections.ts";
 import type { KpPythonSourceToken } from "../semantic/python-source-tokens.ts";
 import {
-  encodeKpEditorHtmlAttribute,
-  encodeKpEditorHtmlText
-} from "../editor/html-output-encoding.ts";
+  encodeKpHtmlAttribute as encodeKpEditorHtmlAttribute,
+  encodeKpHtmlText as encodeKpEditorHtmlText
+} from "./html-output-encoding.ts";
 
 export interface KpPythonRefactorCodeHtmlInput {
   readonly semantics: KpPythonRefactorSemanticArtifactV1;

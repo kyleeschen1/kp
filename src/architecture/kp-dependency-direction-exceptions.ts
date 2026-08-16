@@ -4,12 +4,10 @@ import type {
 } from "./kp-dependency-direction-policy.ts";
 
 export type KpDependencyRetirementOwner =
-  | "html-output-encoding-convergence"
   | "renderer-theme-inversion"
   | "legacy-equation-sdk-disposition";
 
 export type KpDependencyRetirementSlice =
-  | "s18"
   | "s20"
   | "s22";
 
@@ -23,12 +21,6 @@ export interface KpDependencyDirectionException {
   readonly plannedSlice: KpDependencyRetirementSlice;
 }
 
-const htmlEncodingRetirement = {
-  owner: "html-output-encoding-convergence",
-  retireWhen: "Code HTML renderers use the neutral context-specific output encoder.",
-  plannedSlice: "s18"
-} as const;
-
 const legacySdkRetirement = {
   owner: "legacy-equation-sdk-disposition",
   retireWhen: "The legacy public equation SDK is retired or isolated behind a neutral API.",
@@ -37,34 +29,6 @@ const legacySdkRetirement = {
 
 export const kpDependencyDirectionExceptions: readonly KpDependencyDirectionException[] =
   Object.freeze([
-    exception(
-      "html-output.python",
-      "src/rendering/python-refactor-code-html.ts",
-      "src/editor/html-output-encoding.ts",
-      "runtime",
-      htmlEncodingRetirement
-    ),
-    exception(
-      "html-output.scheme-first-expansion",
-      "src/rendering/scheme-factorial-first-expansion-html.ts",
-      "src/editor/html-output-encoding.ts",
-      "runtime",
-      htmlEncodingRetirement
-    ),
-    exception(
-      "html-output.scheme-full",
-      "src/rendering/scheme-factorial-html.ts",
-      "src/editor/html-output-encoding.ts",
-      "runtime",
-      htmlEncodingRetirement
-    ),
-    exception(
-      "html-output.typescript",
-      "src/rendering/typescript-refactor-code-html.ts",
-      "src/editor/html-output-encoding.ts",
-      "runtime",
-      htmlEncodingRetirement
-    ),
     exception(
       "renderer-theme.distribution-area",
       "src/rendering/distribution-area-exemplar-svg.ts",

@@ -10,9 +10,9 @@ import type {
   KpSchemeSemanticCheckpoint
 } from "../semantic/scheme-factorial-checkpoint-projector.ts";
 import {
-  encodeKpEditorHtmlAttribute,
-  encodeKpEditorHtmlText
-} from "../editor/html-output-encoding.ts";
+  encodeKpHtmlAttribute as encodeKpEditorHtmlAttribute,
+  encodeKpHtmlText as encodeKpEditorHtmlText
+} from "./html-output-encoding.ts";
 
 export const kpSchemeFactorialCss = `
 .kp-scheme-factorial-stage {

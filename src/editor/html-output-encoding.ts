@@ -1,12 +1,6 @@
-/** Encode untrusted content for an HTML text node. */
-export function encodeKpEditorHtmlText(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-/** Encode untrusted content for a double-quoted HTML attribute value. */
-export function encodeKpEditorHtmlAttribute(value: string): string {
-  return encodeKpEditorHtmlText(value).replaceAll('"', "&quot;");
-}
+// Preserve the editor-facing names while the parser-context contract lives
+// with the lowest framework-neutral rendering boundary that owns HTML output.
+export {
+  encodeKpHtmlAttribute as encodeKpEditorHtmlAttribute,
+  encodeKpHtmlText as encodeKpEditorHtmlText
+} from "../rendering/html-output-encoding.ts";

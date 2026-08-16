@@ -88,7 +88,13 @@ test("escaping inventory ratchets the selected context consolidation", async () 
   assert.equal(kpHtmlEncodingOwners.length, 46);
   assert.deepEqual(
     kpHtmlEncodingConsolidations.map(({ sourceFile }) => sourceFile),
-    ["src/editor/exact-fraction-quantity-surface-adapter.ts"]
+    [
+      "src/editor/exact-fraction-quantity-surface-adapter.ts",
+      "src/rendering/python-refactor-code-html.ts",
+      "src/rendering/scheme-factorial-first-expansion-html.ts",
+      "src/rendering/scheme-factorial-html.ts",
+      "src/rendering/typescript-refactor-code-html.ts"
+    ]
   );
 
   const selected = await readFile(
@@ -98,6 +104,11 @@ test("escaping inventory ratchets the selected context consolidation", async () 
   assert.match(selected, /encodeKpEditorHtmlText/);
   assert.match(selected, /encodeKpEditorHtmlAttribute/);
   assert.doesNotMatch(selected, /function escapeHtml/);
+  assert.ok(
+    kpHtmlEncodingConsolidations.every(
+      ({ boundary }) => boundary === "src/rendering/html-output-encoding.ts"
+    )
+  );
 });
 
 test("canonical animation exports stay out of the concept authoring barrel", async () => {

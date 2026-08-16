@@ -19,7 +19,7 @@ export interface KpHtmlEncodingOwner {
 export interface KpHtmlEncodingConsolidation {
   readonly sourceFile: string;
   readonly outputContexts: readonly KpHtmlOutputContext[];
-  readonly boundary: "src/editor/html-output-encoding.ts";
+  readonly boundary: "src/rendering/html-output-encoding.ts";
 }
 
 const retain = (
@@ -236,26 +236,26 @@ export const kpHtmlEncodingConsolidations = [
   {
     sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
     outputContexts: ["html-text", "html-attribute"],
-    boundary: "src/editor/html-output-encoding.ts"
+    boundary: "src/rendering/html-output-encoding.ts"
   },
   {
     sourceFile: "src/rendering/python-refactor-code-html.ts",
     outputContexts: ["html-text", "html-attribute"],
-    boundary: "src/editor/html-output-encoding.ts"
+    boundary: "src/rendering/html-output-encoding.ts"
   },
   {
     sourceFile: "src/rendering/scheme-factorial-first-expansion-html.ts",
     outputContexts: ["html-text", "html-attribute"],
-    boundary: "src/editor/html-output-encoding.ts"
+    boundary: "src/rendering/html-output-encoding.ts"
   },
   {
     sourceFile: "src/rendering/scheme-factorial-html.ts",
     outputContexts: ["html-text", "html-attribute"],
-    boundary: "src/editor/html-output-encoding.ts"
+    boundary: "src/rendering/html-output-encoding.ts"
   },
   {
     sourceFile: "src/rendering/typescript-refactor-code-html.ts",
     outputContexts: ["html-text", "html-attribute"],
-    boundary: "src/editor/html-output-encoding.ts"
+    boundary: "src/rendering/html-output-encoding.ts"
   }
 ] as const satisfies readonly KpHtmlEncodingConsolidation[];
