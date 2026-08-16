@@ -194,7 +194,8 @@
     {
       "id": "s26",
       "title": "equation-adapter-extraction-a",
-      "status": "planned"
+      "summary": "Extracted 525 lines of deterministic equation stage-frame planning from the live DOM adapter, reduced the adapter to 3779 lines, preserved its public import via re-export, and regenerated authority/reachability evidence.",
+      "status": "complete"
     },
     {
       "id": "s27",

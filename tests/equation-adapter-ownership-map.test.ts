@@ -14,18 +14,20 @@ test("equation adapter ownership dependencies are complete and acyclic", () => {
   );
   assert.equal(
     kpEquationAdapterOwnershipMap.owners.filter(
-      ({ decision }) => decision === "extract-a"
+      ({ decision }) => decision === "extracted"
     ).length,
     1
   );
 });
 
 test("equation adapter ownership anchors remain grounded in the source", async () => {
-  const source = await readFile(
-    kpEquationAdapterOwnershipMap.sourcePath,
-    "utf8"
-  );
+  const sources = new Map<string, string>();
   for (const owner of kpEquationAdapterOwnershipMap.owners) {
+    let source = sources.get(owner.sourcePath);
+    if (source === undefined) {
+      source = await readFile(owner.sourcePath, "utf8");
+      sources.set(owner.sourcePath, source);
+    }
     assert.ok(owner.inputs.length > 0, `${owner.id} has no measurable input.`);
     assert.ok(owner.outputs.length > 0, `${owner.id} has no measurable output.`);
     for (const anchor of owner.sourceAnchors) {
@@ -56,5 +58,32 @@ test("planned extraction direction leaves the adapter as composition root", () =
         dependsOn.includes("host-orchestration")
     ),
     false
+  );
+});
+
+test("the extracted frame planner is DOM-free behind the adapter facade", async () => {
+  const [plannerSource, adapterSource] = await Promise.all([
+    readFile("src/editor/equation-stage-frame.ts", "utf8"),
+    readFile("src/editor/equation-surface-adapter.ts", "utf8")
+  ]);
+  for (const forbiddenDomAuthority of [
+    "HTMLElement",
+    "document.",
+    "window.",
+    "querySelector"
+  ]) {
+    assert.equal(
+      plannerSource.includes(forbiddenDomAuthority),
+      false,
+      `frame planner acquired DOM authority through ${forbiddenDomAuthority}`
+    );
+  }
+  assert.match(
+    adapterSource,
+    /export \{ createKpEditorEquationStageFrame \} from "\.\/equation-stage-frame\.ts";/
+  );
+  assert.doesNotMatch(
+    adapterSource,
+    /function create(?:RadicalSuccession|FunctionWrap|LinearRearrangement|DotProductTraversal|MatrixVectorComposition|MatrixMatrixComposition|DerivativePower)Frame\b/
   );
 });

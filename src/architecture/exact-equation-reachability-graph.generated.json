@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3135,
+  "scannedFileCount": 3138,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -120,6 +120,7 @@
       "sourcePath": "src/editor/equation-transition-motifs.ts",
       "authorityId": "motif.generic-transition",
       "sourceCallers": [
+        "src/editor/equation-stage-frame.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [
@@ -130,30 +131,14 @@
       "reachability": "live-callers"
     },
     {
-      "id": "reachability.generic-fallback.timing.generic-phase-easing.src/editor/equation-surface-adapter.ts",
+      "id": "reachability.generic-fallback.timing.generic-phase-easing.src/editor/equation-stage-frame.ts",
       "concern": "generic-fallback",
-      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourcePath": "src/editor/equation-stage-frame.ts",
       "authorityId": "timing.generic-phase-easing",
       "sourceCallers": [
-        "src/app-adapters/linear-equation-story-animation-stage.ts",
-        "src/editor/equation-surface-capability.ts"
+        "src/editor/equation-surface-adapter.ts"
       ],
-      "testCallers": [
-        "tests/animation-catalogue-health.test.ts",
-        "tests/animation-catalogue-solve-x-preservation.test.ts",
-        "tests/animation-catalogue-surface-hostability.test.ts",
-        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
-        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
-        "tests/kp-editor-epistemic-branch.test.ts",
-        "tests/kp-editor-equation-surface-adapter.test.ts",
-        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
-        "tests/kp-editor-fraction-visible-animation.test.ts",
-        "tests/kp-editor-function-wrap-visible-animation.test.ts",
-        "tests/kp-editor-inequality-visible-animation.test.ts",
-        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
-        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
-        "tests/matrix-linear-map-choreography-baseline.test.ts"
-      ],
+      "testCallers": [],
       "scriptCallers": [],
       "otherCallers": [],
       "reachability": "live-callers"
@@ -1041,6 +1026,7 @@
         "src/editor/animation-surface-dispatch.ts",
         "src/editor/diagram-svg-adapter.ts",
         "src/editor/equation-runtime-frame-projection.ts",
+        "src/editor/equation-stage-frame.ts",
         "src/editor/equation-surface-adapter.ts",
         "src/editor/graph-3d-surface-contract.ts",
         "src/editor/graph-svg-domain-renderers.ts",
@@ -1775,6 +1761,7 @@
         "src/editor/animation-surface-dispatch.ts",
         "src/editor/diagram-svg-adapter.ts",
         "src/editor/equation-runtime-frame-projection.ts",
+        "src/editor/equation-stage-frame.ts",
         "src/editor/equation-surface-adapter.ts",
         "src/editor/graph-3d-surface-contract.ts",
         "src/editor/graph-svg-domain-renderers.ts",

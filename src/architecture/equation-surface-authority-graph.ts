@@ -130,7 +130,7 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "export function createKpNativeKatexSemanticMotionTrackProjection",
     "Log product projects compiled semantic tracks without a family switch."),
   node("timing.generic-phase-easing", "local-timing", "local",
-    "src/editor/equation-surface-adapter.ts",
+    "src/editor/equation-stage-frame.ts",
     "const easedProgress = localProgress * localProgress",
     "The generic surface currently owns phase-local easing."),
   node("timing.operation-endpoint-dwell", "local-timing", "local",

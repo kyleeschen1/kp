@@ -118,7 +118,7 @@
       "id": "timing.generic-phase-easing",
       "category": "local-timing",
       "authority": "local",
-      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourcePath": "src/editor/equation-stage-frame.ts",
       "sourceNeedle": "const easedProgress = localProgress * localProgress",
       "summary": "The generic surface currently owns phase-local easing."
     },

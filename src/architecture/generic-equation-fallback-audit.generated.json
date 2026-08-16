@@ -32,6 +32,7 @@
         "animation.sample.fundamental-theorem-calculus"
       ],
       "sourceCallers": [
+        "src/editor/equation-stage-frame.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [
@@ -49,7 +50,7 @@
     },
     {
       "nodeId": "timing.generic-phase-easing",
-      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "sourcePath": "src/editor/equation-stage-frame.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
         "animation.comparison.jacobian-hessian",
@@ -77,25 +78,9 @@
         "animation.sample.fundamental-theorem-calculus"
       ],
       "sourceCallers": [
-        "src/app-adapters/linear-equation-story-animation-stage.ts",
-        "src/editor/equation-surface-capability.ts"
+        "src/editor/equation-surface-adapter.ts"
       ],
-      "testCallers": [
-        "tests/animation-catalogue-health.test.ts",
-        "tests/animation-catalogue-solve-x-preservation.test.ts",
-        "tests/animation-catalogue-surface-hostability.test.ts",
-        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
-        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
-        "tests/kp-editor-epistemic-branch.test.ts",
-        "tests/kp-editor-equation-surface-adapter.test.ts",
-        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
-        "tests/kp-editor-fraction-visible-animation.test.ts",
-        "tests/kp-editor-function-wrap-visible-animation.test.ts",
-        "tests/kp-editor-inequality-visible-animation.test.ts",
-        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
-        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
-        "tests/matrix-linear-map-choreography-baseline.test.ts"
-      ],
+      "testCallers": [],
       "scriptCallers": [],
       "replacementOwnerNodeIds": [
         "timing.operation-endpoint-dwell",

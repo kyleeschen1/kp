@@ -7,7 +7,7 @@ export type KpEquationAdapterOwnerId =
   | "stage-markup-projection";
 
 export type KpEquationAdapterExtractionDecision =
-  | "extract-a"
+  | "extracted"
   | "extract-b-candidate"
   | "retain-in-host"
   | "defer-tightly-coupled";
@@ -15,6 +15,7 @@ export type KpEquationAdapterExtractionDecision =
 export interface KpEquationAdapterOwner {
   readonly id: KpEquationAdapterOwnerId;
   readonly responsibility: string;
+  readonly sourcePath: string;
   readonly inputs: readonly string[];
   readonly outputs: readonly string[];
   readonly sourceAnchors: readonly string[];
@@ -50,6 +51,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
     owners: Object.freeze([
       owner({
         id: "stage-frame-planning",
+        sourcePath: "src/editor/equation-stage-frame.ts",
         responsibility:
           "Project one animation/player state into a deterministic, DOM-free equation stage frame and sampled specialized choreography frames.",
         inputs: [
@@ -77,13 +79,14 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
           "createDerivativePowerFrame"
         ],
         dependsOn: [],
-        decision: "extract-a",
+        decision: "extracted",
         proposedPath: "src/editor/equation-stage-frame.ts",
         reason:
-          "This is the strongest pure seam: existing tests call its public frame constructor directly, it owns no live DOM, and the adapter can preserve its current public import through a re-export."
+          "This pure seam is extracted: existing tests still call its public frame constructor through the adapter re-export, while the owner itself contains no live DOM."
       }),
       owner({
         id: "stage-markup-projection",
+        sourcePath: "src/editor/equation-surface-adapter.ts",
         responsibility:
           "Project a stage frame and semantic objects into KaTeX-backed stage markup, structural motion bindings, labels, and unavailable-state HTML.",
         inputs: [
@@ -119,6 +122,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
       }),
       owner({
         id: "stage-material-lifecycle",
+        sourcePath: "src/editor/equation-surface-adapter.ts",
         responsibility:
           "Own live stage invalidation, native measurement preparation, material-continuity handoff, native radical settlement, focus realization, and diagnostics cadence.",
         inputs: [
@@ -151,6 +155,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
       }),
       owner({
         id: "semantic-token-paint",
+        sourcePath: "src/editor/equation-surface-adapter.ts",
         responsibility:
           "Measure and apply generic semantic token motion, fallback layer motion, canonical reverse operations, witnessed overlays, and family-specific focus channels.",
         inputs: [
@@ -184,6 +189,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
       }),
       owner({
         id: "specialized-dom-choreography",
+        sourcePath: "src/editor/equation-surface-adapter.ts",
         responsibility:
           "Bind sampled function, radical, linear, dot-product, matrix, and derivative choreography frames to exact DOM tokens and overlays.",
         inputs: [
@@ -215,6 +221,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
       }),
       owner({
         id: "host-orchestration",
+        sourcePath: "src/editor/equation-surface-adapter.ts",
         responsibility:
           "Select the equation presentation route and coordinate frame planning, markup replacement, measurement, paint owners, diagnostics, and adapter registration.",
         inputs: [
@@ -276,7 +283,7 @@ export function validateKpEquationAdapterOwnershipMap(
       anchors.set(anchor, entry.id);
     }
     if (
-      (entry.decision === "extract-a" ||
+      (entry.decision === "extracted" ||
         entry.decision === "extract-b-candidate") &&
       entry.proposedPath === undefined
     ) {

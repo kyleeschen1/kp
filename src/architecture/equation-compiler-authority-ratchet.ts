@@ -30,7 +30,7 @@ export interface KpEquationAuthorityRatchetViolation {
 }
 
 const rawMotifPaths = paths([
-  "src/editor/equation-surface-adapter.ts",
+  "src/editor/equation-stage-frame.ts",
   "src/editor/equation-transition-motifs.ts"
 ]);
 

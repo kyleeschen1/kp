@@ -283,6 +283,41 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T16:23:34.716Z",
       "notes": "Three ownership graph tests passed, all TypeScript and Svelte projects passed, and architecture gates passed over 1,549 source files. No production behavior changed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-concurrency=2 focused equation frame and authority tests",
+      "status": "passed",
+      "scope": "slice s26 frame equality and ownership",
+      "checkedAt": "2026-08-16T17:39:23.450Z",
+      "notes": "34 tests passed; adapter facade preserves the existing frame constructor and the extracted planner is DOM-free."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s26 repository types",
+      "checkedAt": "2026-08-16T17:39:24.946Z",
+      "notes": "Application, node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s26 authority boundaries",
+      "checkedAt": "2026-08-16T17:39:26.356Z",
+      "notes": "All architecture gates passed after moving generic phase-easing and motif-selection authority to the extracted planner."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s26 bundle preservation",
+      "checkedAt": "2026-08-16T17:39:27.598Z",
+      "notes": "All bundle budgets passed; measured catalogue route remained under its declared budget."
+    },
+    {
+      "command": "npm run verify:equation:inner",
+      "status": "passed",
+      "scope": "slice s26 equation preservation",
+      "checkedAt": "2026-08-16T17:39:28.792Z",
+      "notes": "Equation preservation and generated extension dispatch checks passed."
     }
   ]
 }
