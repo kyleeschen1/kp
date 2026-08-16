@@ -72,3 +72,33 @@ grouping artifacts already exist in the canonical pressure contract, so a
 narrow facade should derive them rather than asking a model to restate them.
 That join must be explicit and typed; compiling the animation by ID while
 ignoring the request roles would be a hidden bypass.
+
+## Synthesis
+
+| Trial | Catalogue shape | Entity closure | Repairs | Canonical compile |
+| --- | --- | --- | ---: | --- |
+| Function wrap | accepted | five unresolved aliases | 1 | passed |
+| Cancellation | accepted | four unresolved aliases | 1 | passed |
+| Distribution/factoring | accepted | seven unresolved aliases | 1 | passed |
+
+The common failure is a **typed repair gap caused by a catalogue omission**:
+the lightweight operation catalogue exposes roles and cardinality but not the
+selected surface's resolvable semantic IDs. There was no missing semantic
+operation, missing visual motif, or compiler implementation bug. Distribution
+also exposes an **intentional role boundary**: the model-facing request omits
+canonical complements that the selected surface can derive safely.
+
+The authorized repair is deliberately narrow:
+
+1. Keep lightweight role-shape validation independent of asset loading.
+2. Add one shared `equation-llm.entity.unresolved` closure diagnostic for use
+   after a facade resolves the selected surface's semantic vocabulary.
+3. Let the facade derive canonical complements already owned by the surface;
+   never ask the caller for connectors, grouping artifacts, geometry, timing,
+   or renderer recipes.
+4. Return a typed repair when either entity closure or complement derivation
+   fails. Never compile by animation ID while ignoring request roles.
+
+The three trial tests now use the shared closure diagnostic instead of three
+ad hoc unresolved-ID implementations. The next slice can therefore build one
+narrow facade over existing authorities without inventing another compiler.

@@ -16,6 +16,7 @@ import {
   kpEquationGenerationPressureFixtures
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 import {
+  validateKpEquationLlmEntityClosure,
   validateKpEquationLlmAuthoringRequest,
   type KpEquationLlmAuthoringRequest
 } from "../src/authoring/equation-llm-authoring-catalogue.ts";
@@ -38,10 +39,10 @@ test("distribution first pass exposes unresolved semantic aliases", () => {
     validateKpEquationLlmAuthoringRequest(fixture.request).status,
     "accepted"
   );
-  assert.deepEqual(unresolvedEntityIds(
-    fixture.request,
-    canonicalSemanticIds()
-  ), [
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: fixture.request,
+    availableEntityIds: canonicalSemanticIds()
+  }).map(({ entityId }) => entityId), [
     "source.factor.a",
     "source.addend.x",
     "source.addend.y",
@@ -56,7 +57,10 @@ test("one semantic-id repair preserves cardinality and product topology", () => 
   const repaired = distributionRequestWithCanonicalEntityIds();
 
   assert.equal(validateKpEquationLlmAuthoringRequest(repaired).status, "accepted");
-  assert.deepEqual(unresolvedEntityIds(repaired, canonicalSemanticIds()), []);
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: repaired,
+    availableEntityIds: canonicalSemanticIds()
+  }), []);
   assert.deepEqual(repaired.operation.roleBindings, {
     "factor-before": [contract.source.factorSelectorId],
     "addends-before": [
@@ -140,14 +144,4 @@ function canonicalSemanticIds(): readonly string[] {
     ]),
     ...contract.productAttachments.map(({ id }) => id)
   ];
-}
-
-function unresolvedEntityIds(
-  request: KpEquationLlmAuthoringRequest,
-  availableEntityIds: readonly string[]
-): readonly string[] {
-  const available = new Set(availableEntityIds);
-  return Object.values(request.operation.roleBindings)
-    .flat()
-    .filter((entityId) => !available.has(entityId));
 }

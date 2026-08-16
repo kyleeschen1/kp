@@ -104,7 +104,8 @@
     {
       "id": "s11",
       "title": "generation-gap-synthesis",
-      "status": "planned"
+      "summary": "Classified the shared generation failure as a typed repair gap caused by omitted surface entity vocabulary. Added one reusable entity.unresolved diagnostic, removed three ad hoc closure checks, and authorized only a narrow facade that resolves canonical IDs and derives already-owned complements without adding motifs or presentation authority.",
+      "status": "complete"
     },
     {
       "id": "s12",

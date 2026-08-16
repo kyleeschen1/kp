@@ -69,6 +69,7 @@ export type KpEquationLlmRepairCode =
   | "equation-llm.role.missing"
   | "equation-llm.role.unknown"
   | "equation-llm.role.cardinality"
+  | "equation-llm.entity.unresolved"
   | "equation-llm.explanation-depth.invalid"
   | "equation-llm.field.forbidden";
 
@@ -77,6 +78,14 @@ export interface KpEquationLlmRepairDiagnostic {
   readonly path: string;
   readonly message: string;
   readonly repair: string;
+}
+
+export interface KpEquationLlmEntityClosureDiagnostic
+  extends KpEquationLlmRepairDiagnostic {
+  readonly code: "equation-llm.entity.unresolved";
+  readonly entityId: string;
+  readonly roleId: string;
+  readonly bindingIndex: number;
 }
 
 export interface KpEquationLlmAuthoringRequest {
@@ -134,6 +143,7 @@ const repairCodes: readonly KpEquationLlmRepairCode[] = Object.freeze([
   "equation-llm.role.missing",
   "equation-llm.role.unknown",
   "equation-llm.role.cardinality",
+  "equation-llm.entity.unresolved",
   "equation-llm.explanation-depth.invalid",
   "equation-llm.field.forbidden"
 ]);
@@ -293,6 +303,39 @@ export function validateKpEquationLlmAuthoringRequest(
     operation,
     diagnostics: []
   };
+}
+
+/**
+ * Role shape and entity closure are separate because the lightweight catalogue
+ * does not load every animation asset. A compiler facade must run this check
+ * after resolving the selected surface's canonical semantic vocabulary.
+ */
+export function validateKpEquationLlmEntityClosure(input: {
+  readonly request: KpEquationLlmAuthoringRequest;
+  readonly availableEntityIds: readonly string[];
+}): readonly KpEquationLlmEntityClosureDiagnostic[] {
+  const available = new Set(input.availableEntityIds);
+  const diagnostics: KpEquationLlmEntityClosureDiagnostic[] = [];
+  for (const [roleId, entityIds] of Object.entries(
+    input.request.operation.roleBindings
+  )) {
+    entityIds.forEach((entityId, bindingIndex) => {
+      if (available.has(entityId)) return;
+      diagnostics.push(Object.freeze({
+        code: "equation-llm.entity.unresolved" as const,
+        path: `$.operation.roleBindings.${roleId}[${bindingIndex}]`,
+        message:
+          `Semantic entity ${entityId} is unavailable on ` +
+          `${input.request.animationId}.`,
+        repair:
+          "Choose an entity id from the selected surface's canonical semantic vocabulary.",
+        entityId,
+        roleId,
+        bindingIndex
+      }));
+    });
+  }
+  return Object.freeze(diagnostics);
 }
 
 function createSurfaceDefinitions(): readonly KpEquationLlmSurfaceDefinition[] {

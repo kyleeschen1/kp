@@ -13,6 +13,7 @@ import {
   kpEquationGenerationPressureFixtures
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 import {
+  validateKpEquationLlmEntityClosure,
   validateKpEquationLlmAuthoringRequest,
   type KpEquationLlmAuthoringRequest
 } from "../src/authoring/equation-llm-authoring-catalogue.ts";
@@ -30,10 +31,12 @@ test("function-wrap first pass exposes unresolved entity ids before compilation"
     validateKpEquationLlmAuthoringRequest(fixture.request).status,
     "accepted"
   );
-  assert.deepEqual(
-    unresolvedEntityIds(fixture.request, animation.bundle.objects.flatMap(
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: fixture.request,
+    availableEntityIds: animation.bundle.objects.flatMap(
       ({ selectors }) => selectors.map(({ id }) => id)
-    )),
+    )
+  }).map(({ entityId }) => entityId),
     [
       "source.argument.x",
       "target.argument.x",
@@ -51,12 +54,12 @@ test("one semantic-id repair reaches the existing compiler authority", () => {
     validateKpEquationLlmAuthoringRequest(repairedRequest).status,
     "accepted"
   );
-  assert.deepEqual(unresolvedEntityIds(
-    repairedRequest,
-    animation.bundle.objects.flatMap(({ selectors }) =>
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: repairedRequest,
+    availableEntityIds: animation.bundle.objects.flatMap(({ selectors }) =>
       selectors.map(({ id }) => id)
     )
-  ), []);
+  }), []);
   assert.deepEqual(repairedRequest.operation.roleBindings, {
     "content-before": binding.sourceArgumentEntityIds,
     "content-after": binding.targetArgumentEntityIds,
@@ -92,14 +95,4 @@ function functionWrapRequestWithCanonicalEntityIds():
       }
     }
   };
-}
-
-function unresolvedEntityIds(
-  request: KpEquationLlmAuthoringRequest,
-  availableEntityIds: readonly string[]
-): readonly string[] {
-  const available = new Set(availableEntityIds);
-  return Object.values(request.operation.roleBindings)
-    .flat()
-    .filter((entityId) => !available.has(entityId));
 }

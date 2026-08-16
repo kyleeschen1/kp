@@ -15,6 +15,7 @@ import {
   kpEquationGenerationPressureFixtures
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 import {
+  validateKpEquationLlmEntityClosure,
   validateKpEquationLlmAuthoringRequest,
   type KpEquationLlmAuthoringRequest
 } from "../src/authoring/equation-llm-authoring-catalogue.ts";
@@ -39,10 +40,10 @@ test("cancellation first pass exposes unresolved semantic aliases", () => {
     validateKpEquationLlmAuthoringRequest(fixture.request).status,
     "accepted"
   );
-  assert.deepEqual(unresolvedEntityIds(
-    fixture.request,
-    canonicalEntityIds()
-  ), [
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: fixture.request,
+    availableEntityIds: canonicalEntityIds()
+  }).map(({ entityId }) => entityId), [
     "source.context.equation",
     "source.term.positive-three",
     "source.term.negative-three",
@@ -54,7 +55,10 @@ test("one semantic-id repair binds only the authored inverse pair", () => {
   const repaired = cancellationRequestWithCanonicalEntityIds();
 
   assert.equal(validateKpEquationLlmAuthoringRequest(repaired).status, "accepted");
-  assert.deepEqual(unresolvedEntityIds(repaired, canonicalEntityIds()), []);
+  assert.deepEqual(validateKpEquationLlmEntityClosure({
+    request: repaired,
+    availableEntityIds: canonicalEntityIds()
+  }), []);
   assert.deepEqual(repaired.operation.roleBindings, {
     "context-before": [contract.source.objectId],
     "inverse-terms": contract.inversePair.sourceSelectorIds,
@@ -124,14 +128,4 @@ function canonicalEntityIds(): readonly string[] {
     object.id,
     ...object.selectors.map(({ id }) => id)
   ]);
-}
-
-function unresolvedEntityIds(
-  request: KpEquationLlmAuthoringRequest,
-  availableEntityIds: readonly string[]
-): readonly string[] {
-  const available = new Set(availableEntityIds);
-  return Object.values(request.operation.roleBindings)
-    .flat()
-    .filter((entityId) => !available.has(entityId));
 }

@@ -136,6 +136,27 @@
       "scope": "slice-s10-types",
       "checkedAt": "2026-08-16T14:44:47.301Z",
       "notes": "Distribution/factoring trial evidence typechecks."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-llm-authoring-catalogue.test.ts tests/equation-generation-function-wrap-trial.test.ts tests/equation-generation-cancellation-trial.test.ts tests/equation-generation-distribution-trial.test.ts",
+      "status": "passed",
+      "scope": "slice-s11-focused",
+      "checkedAt": "2026-08-16T14:48:07.381Z",
+      "notes": "Seventeen catalogue, shared closure, and three-trial synthesis tests passed."
+    },
+    {
+      "command": "npm run verify:equation:inner",
+      "status": "passed",
+      "scope": "slice-s11-inner-loop",
+      "checkedAt": "2026-08-16T14:48:08.452Z",
+      "notes": "Equation preservation and extension dispatch remain green."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s11-types",
+      "checkedAt": "2026-08-16T14:48:09.443Z",
+      "notes": "Shared entity-closure diagnostics typecheck."
     }
   ]
 }

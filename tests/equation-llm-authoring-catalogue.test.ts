@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpEquationLlmAuthoringCatalogue,
+  validateKpEquationLlmEntityClosure,
   validateKpEquationLlmAuthoringRequest
 } from "../src/authoring/equation-llm-authoring-catalogue.ts";
 import {
@@ -136,4 +137,29 @@ test("repair diagnostics reject presentation authorship and incomplete semantics
     "equation-llm.field.forbidden"
   ]));
   assert.ok(result.diagnostics.every((entry) => entry.repair.length > 0));
+});
+
+test("resolved surface vocabulary produces typed entity-closure repairs", () => {
+  const request = createKpEquationLlmAuthoringCatalogue().examples[0]!.request;
+  const diagnostics = validateKpEquationLlmEntityClosure({
+    request,
+    availableEntityIds: ["source.x", "target.x", "target.function"]
+  });
+
+  assert.deepEqual(diagnostics.map((entry) => ({
+    code: entry.code,
+    entityId: entry.entityId,
+    roleId: entry.roleId,
+    bindingIndex: entry.bindingIndex
+  })), [{
+    code: "equation-llm.entity.unresolved",
+    entityId: "target.open-parenthesis",
+    roleId: "wrapper",
+    bindingIndex: 1
+  }, {
+    code: "equation-llm.entity.unresolved",
+    entityId: "target.close-parenthesis",
+    roleId: "wrapper",
+    bindingIndex: 2
+  }]);
 });
