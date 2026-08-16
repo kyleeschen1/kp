@@ -128,7 +128,8 @@
     {
       "id": "s15",
       "title": "exact-reachability-graph",
-      "status": "planned"
+      "summary": "Added a generated exact direct-caller graph over 55 compiler, fallback, manifest, loader, compatibility, and public-projection roots. It scans 3,129 source/test/script/server modules, includes literal dynamic imports, rejects unknown or duplicate roots, and currently proves every declared root has at least one observed caller; no deletion was inferred.",
+      "status": "complete"
     },
     {
       "id": "s16",

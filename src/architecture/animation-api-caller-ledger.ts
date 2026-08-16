@@ -41,6 +41,17 @@ export interface KpAnimationApiSurfaceCallerRecord {
   readonly otherCallers: readonly string[];
 }
 
+export interface KpDirectModuleCallerTarget {
+  readonly id: string;
+  readonly targetPath: string;
+}
+
+export interface KpDirectModuleCallerRecord {
+  readonly id: string;
+  readonly targetPath: string;
+  readonly callers: readonly string[];
+}
+
 /**
  * The targets distinguish similarly named public files by actual authority.
  * In particular, concept publication, provider integration, reader internals,
@@ -239,19 +250,12 @@ export const kpAnimationApiCallerAuditTargets = Object.freeze([
 export function deriveKpAnimationApiCallerLedger(
   files: readonly KpAnimationApiCallerSourceFile[]
 ): readonly KpAnimationApiSurfaceCallerRecord[] {
-  const importsByTarget = new Map<string, string[]>();
-  for (const file of files) {
-    for (const specifier of importSpecifiers(file.source)) {
-      if (!specifier.startsWith(".")) continue;
-      const resolved = resolveRelativeModule(file.path, specifier);
-      const callers = importsByTarget.get(resolved) ?? [];
-      if (!callers.includes(file.path)) callers.push(file.path);
-      importsByTarget.set(resolved, callers);
-    }
-  }
-
+  const directCallers = deriveKpDirectModuleCallers(
+    kpAnimationApiCallerAuditTargets,
+    files
+  );
   return kpAnimationApiCallerAuditTargets.map((surface) => {
-    const callers = [...(importsByTarget.get(surface.targetPath) ?? [])].sort();
+    const callers = directCallers.find(({ id }) => id === surface.id)!.callers;
     return Object.freeze({
       id: surface.id,
       targetPath: surface.targetPath,
@@ -265,6 +269,31 @@ export function deriveKpAnimationApiCallerLedger(
         !path.startsWith("tests/") &&
         !path.startsWith("scripts/")
       ))
+    });
+  });
+}
+
+export function deriveKpDirectModuleCallers(
+  targets: readonly KpDirectModuleCallerTarget[],
+  files: readonly KpAnimationApiCallerSourceFile[]
+): readonly KpDirectModuleCallerRecord[] {
+  const importsByTarget = new Map<string, string[]>();
+  for (const file of files) {
+    for (const specifier of importSpecifiers(file.source)) {
+      if (!specifier.startsWith(".")) continue;
+      const resolved = resolveRelativeModule(file.path, specifier);
+      const callers = importsByTarget.get(resolved) ?? [];
+      if (!callers.includes(file.path)) callers.push(file.path);
+      importsByTarget.set(resolved, callers);
+    }
+  }
+
+  return targets.map((target) => {
+    const callers = [...(importsByTarget.get(target.targetPath) ?? [])].sort();
+    return Object.freeze({
+      id: target.id,
+      targetPath: target.targetPath,
+      callers: Object.freeze(callers)
     });
   });
 }
