@@ -128,6 +128,20 @@ test("renderer-neutral equation protocols select contract proof instead of a vis
   assert.equal(ids(result).includes("focused-visual"), false);
 });
 
+test("generated equation dispatch selects closure proof without a visual exemplar", () => {
+  const result = selectKpVerificationImpact(
+    ["src/generated/equation-extension-dispatch.generated.ts"],
+    { mode: "promotion" }
+  );
+  assert.deepEqual(ids(result), [
+    "equation-extension-dispatch",
+    "typecheck",
+    "architecture",
+    "catalogue-bundle-boundary"
+  ]);
+  assert.equal(ids(result).includes("focused-visual"), false);
+});
+
 test("unknown paths fail broad even when discovery mode is requested", () => {
   const result = selectKpVerificationImpact(
     ["new-subsystem/unknown.ts"],

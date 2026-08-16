@@ -124,6 +124,12 @@ const checks = {
     "medium",
     "Exercise nominal equation vocabulary and renderer-neutral motion compiler contracts."
   ),
+  equationExtensionDispatch: check(
+    "equation-extension-dispatch",
+    ["npm", "run", "test:equation-extension-dispatch"],
+    "high",
+    "Prove generated literal dispatch freshness, closure, imports, and fail-closed lookup."
+  ),
   catalogueUnit: check(
     "svelte-catalogue-unit",
     ["npm", "run", "test:svelte-catalogue-shell"],
@@ -262,6 +268,19 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "equation-extension-dispatch",
+    matches: (path) =>
+      path.includes("equation-extension-dispatch") ||
+      path === "src/generated/equation-extension-dispatch.generated.ts",
+    checks: [
+      checks.equationExtensionDispatch,
+      checks.typecheck,
+      checks.architecture,
+      checks.catalogueBundle
+    ],
+    reason: "Generated equation extension dispatch or its declaration closure changed."
+  },
   {
     id: "equation-motion-protocol",
     matches: (path) => path.startsWith("src/domain-ir/"),
@@ -425,6 +444,7 @@ const rules: readonly KpVerificationRule[] = [
         !isTypeScriptRefactorPath(path) &&
         !isFunctionWrapPath(path)) ||
       (!path.startsWith("src/domain-ir/") &&
+        !path.includes("equation-extension-dispatch") &&
         !isFunctionWrapPath(path) &&
         (path.includes("equation") || path.includes("visual"))),
     checks: [

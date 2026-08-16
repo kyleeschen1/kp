@@ -4,6 +4,7 @@ export * from "./equation-extension-pack-validator.ts";
 export * from "./equation-motion-vocabulary.ts";
 export * from "./equation-motif-invocation.ts";
 export * from "./equation-recipe-composition.ts";
+export * from "./function-wrap-equation-extension-pack.ts";
 export * from "./semantic-equation-transition-compiler.ts";
 export * from "./semantic-motion-compiler-contract.ts";
 export * from "./semantic-motion-compiler.ts";

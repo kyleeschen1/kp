@@ -134,7 +134,8 @@
     {
       "id": "s10",
       "title": "Generated-literal-dispatch",
-      "status": "planned"
+      "summary": "Generated exhaustive operation, recipe, motif, renderer-capability, and lazy-pack dispatch from one validated function-wrap declaration pack using literal dynamic imports and named exports; unknown IDs fail without fallback and live bundle closure remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "s11",

@@ -1151,6 +1151,48 @@
       "scope": "slice s09 preservation",
       "checkedAt": "2026-08-16T06:11:56.929Z",
       "notes": "All 10 existing preservation obligations passed"
+    },
+    {
+      "command": "npm run test:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s10 literal dispatch",
+      "checkedAt": "2026-08-16T06:20:18.978Z",
+      "notes": "Five freshness, exhaustive ID closure, literal import, named export, runtime load, and unknown-ID failure tests passed"
+    },
+    {
+      "command": "npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s10 generated freshness",
+      "checkedAt": "2026-08-16T06:20:20.013Z",
+      "notes": "Checked-in dispatch exactly matches validated declarations"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 repository types",
+      "checkedAt": "2026-08-16T06:20:20.947Z",
+      "notes": "Application, generated dispatch, tests, Svelte, and domain typechecks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s10 architecture",
+      "checkedAt": "2026-08-16T06:20:21.888Z",
+      "notes": "All architecture and compiler authority ratchets passed across 1532 source files"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s10 bundle attribution",
+      "checkedAt": "2026-08-16T06:20:22.807Z",
+      "notes": "Generated dispatch remains outside live eager closure; all bundle limits pass with no forbidden outer files"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s10 preservation",
+      "checkedAt": "2026-08-16T06:20:23.760Z",
+      "notes": "All 10 current semantic, renderer, clock, and sampled-frame obligations passed"
     }
   ],
   "progress": {
