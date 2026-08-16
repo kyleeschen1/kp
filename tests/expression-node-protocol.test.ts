@@ -34,6 +34,10 @@ type TinyNode =
   | { readonly id: string; readonly kind: "leaf"; readonly value: string }
   | { readonly id: string; readonly kind: "pair"; readonly children: readonly TinyNode[] };
 
+type SyntheticNode =
+  | { readonly id: string; readonly kind: "atom" }
+  | { readonly id: string; readonly kind: "application"; readonly callee: SyntheticNode; readonly arguments: readonly SyntheticNode[] };
+
 test("typed expression protocols own structure independently from projections", () => {
   const protocol = defineKpExpressionNodeProtocol<TinyNode>({
     id: "test.tiny.structure.v1",
@@ -82,6 +86,33 @@ test("protocol definitions reject runtime handler drift", () => {
       } as never
     }),
     /must handle every declared node kind exactly once/u
+  );
+});
+
+test("a synthetic node kind extends traversal without changing walker core", () => {
+  const protocol = defineKpExpressionNodeProtocol<SyntheticNode>({
+    id: "test.synthetic-application.structure.v1",
+    kinds: ["atom", "application"],
+    handlers: {
+      atom: { children: () => [] },
+      application: {
+        children: (node) => [node.callee, ...node.arguments]
+      }
+    }
+  });
+  const root: SyntheticNode = {
+    id: "call",
+    kind: "application",
+    callee: { id: "fn", kind: "atom" },
+    arguments: [
+      { id: "x", kind: "atom" },
+      { id: "y", kind: "atom" }
+    ]
+  };
+
+  assert.deepEqual(
+    listKpExpressionNodes(root, protocol).map(({ id }) => id),
+    ["call", "fn", "x", "y"]
   );
 });
 

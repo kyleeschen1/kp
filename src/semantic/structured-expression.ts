@@ -68,9 +68,7 @@ export function createKpStructuredExpression(input: {
 export function listKpStructuredExpressionSubtrees(
   expression: KpStructuredExpression
 ): readonly KpStructuredExpressionNode[] {
-  const nodes: KpStructuredExpressionNode[] = [];
-  visitNode(expression.root, (node) => nodes.push(node));
-  return Object.freeze(nodes);
+  return listKpExpressionNodes(expression.root, kpStructuredExpressionProtocol);
 }
 
 export function resolveKpStructuredExpressionSubtree(
@@ -78,49 +76,14 @@ export function resolveKpStructuredExpressionSubtree(
   id: string
 ): KpStructuredExpressionNode | undefined {
   requireText(id, "Structured expression subtree id");
-  let resolved: KpStructuredExpressionNode | undefined;
-  visitNode(expression.root, (node) => {
-    if (node.id === id) resolved = node;
-  });
-  return resolved;
+  return listKpExpressionNodes(expression.root, kpStructuredExpressionProtocol)
+    .find((node) => node.id === id);
 }
 
 export function compileKpStructuredExpressionAccessibleText(
   expression: KpStructuredExpression
 ): string {
-  return speakNode(expression.root);
-}
-
-function speakNode(node: KpStructuredExpressionNode): string {
-  switch (node.kind) {
-    case "number":
-      return String(node.value);
-    case "symbol":
-      return node.name;
-    case "negate":
-      return `negative ${speakNode(node.value)}`;
-    case "sum":
-      return node.terms.map((term, index) => {
-        if (index === 0) return speakNode(term);
-        return term.kind === "negate"
-          ? `minus ${speakNode(term.value)}`
-          : `plus ${speakNode(term)}`;
-      }).join(" ");
-    case "product":
-      return node.factors.map((factor) =>
-        factor.kind === "sum"
-          ? `the quantity ${speakNode(factor)}`
-          : speakNode(factor)
-      ).join(" times ");
-    case "quotient":
-      return `${speakNode(node.numerator)} divided by ${
-        speakNode(node.denominator)
-      }`;
-    case "power":
-      return `${speakNode(node.base)} to the power ${
-        speakNode(node.exponent)
-      }`;
-  }
+  return projectKpStructuredExpressionAccessibleText(expression.root);
 }
 
 function cloneNode(
@@ -195,35 +158,6 @@ function cloneNode(
   return Object.freeze(cloned);
 }
 
-function visitNode(
-  node: KpStructuredExpressionNode,
-  visit: (node: KpStructuredExpressionNode) => void
-): void {
-  visit(node);
-  switch (node.kind) {
-    case "number":
-    case "symbol":
-      return;
-    case "sum":
-      node.terms.forEach((term) => visitNode(term, visit));
-      return;
-    case "product":
-      node.factors.forEach((factor) => visitNode(factor, visit));
-      return;
-    case "quotient":
-      visitNode(node.numerator, visit);
-      visitNode(node.denominator, visit);
-      return;
-    case "power":
-      visitNode(node.base, visit);
-      visitNode(node.exponent, visit);
-      return;
-    case "negate":
-      visitNode(node.value, visit);
-      return;
-  }
-}
-
 function requireArity(
   id: string,
   children: readonly KpStructuredExpressionNode[],
@@ -237,3 +171,10 @@ function requireArity(
 function requireText(value: string, label: string): void {
   if (value.trim().length === 0) throw new Error(`${label} must not be empty.`);
 }
+import {
+  listKpExpressionNodes
+} from "./expression-node-protocol.ts";
+import {
+  kpStructuredExpressionProtocol,
+  projectKpStructuredExpressionAccessibleText
+} from "./structured-expression-protocol.ts";

@@ -1436,11 +1436,39 @@
       "scope": "slice s16 static preservation architecture and bundle closure",
       "checkedAt": "2026-08-16T07:21:48.857Z",
       "notes": "Types, 10 preservation laws, all architecture ratchets, and unchanged bundle budgets pass."
+    },
+    {
+      "command": "node expression protocol and structured expression focused tests",
+      "status": "passed",
+      "scope": "slice s17 protocol traversal and structured equation behavior",
+      "checkedAt": "2026-08-16T07:26:28.476Z",
+      "notes": "17 traversal, accessible-text, rewrite, normal-form, identity, and synthetic-extension laws pass."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "slice s17 equation operation preservation",
+      "checkedAt": "2026-08-16T07:26:29.505Z",
+      "notes": "All 184 operation presentation laws pass."
+    },
+    {
+      "command": "npm run typecheck; npm run test:equation-surface-preservation; npm run check:architecture; npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s17 static preservation architecture and bundle closure",
+      "checkedAt": "2026-08-16T07:26:30.456Z",
+      "notes": "Types, 10 surface laws, architecture gates, and unchanged bundle budgets pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "known aggregate compiler-cost ceiling",
+      "checkedAt": "2026-08-16T07:26:31.369Z",
+      "notes": "Inference contracts pass; aggregate remains over the old ceiling at 56024 types. The new typed structured-expression protocol adds bounded compile-time generic work but no runtime bundle cost."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s16 complete: log-quotient homomorphic fusion now carries a compiler-minted canonical function-wrap invocation for its fused target application while retaining its distinct operator-fusion, argument-transfer, compact-fraction, and timing recipe. Copied motif claims fail closed; exact browser and visual behavior is unchanged. Next: replace closed expression traversal with data-owned protocols."
+    "summary": "Slice s17 complete: the structured-equation family now supplies its child and projection handlers through the same immutable expression protocol used by logarithm families. The local recursive visit switch and speech switch are gone; a synthetic application node proves new kinds extend traversal without core edits. Existing construction validation remains family-local. Next: retire handwritten core equation dispatch."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

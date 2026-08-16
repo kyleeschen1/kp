@@ -176,7 +176,8 @@
     {
       "id": "s17",
       "title": "Data-owned-tree-traversal",
-      "status": "planned"
+      "summary": "Structured equations now use family-owned traversal and projection protocols; synthetic kinds extend without walker edits.",
+      "status": "complete"
     },
     {
       "id": "s18",
