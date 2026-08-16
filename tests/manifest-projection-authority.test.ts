@@ -14,10 +14,6 @@ import { createKpPostConvergenceInfrastructureInventory } from
   "../src/architecture/post-convergence-infrastructure-inventory.ts";
 import { createKpAnimationCatalogueProjection } from
   "../src/editor/animation-catalogue-projection.ts";
-import { equationAnimationCatalogEntries } from
-  "../src/editor/equation-animation-catalog.ts";
-import { listKpEquationAnimationSelections } from
-  "../src/public/equation-animation-manifest.ts";
 
 test("every manifest and projection fact has one provenance owner", () => {
   assert.equal(kpManifestProjectionAuthorityDeclarations.length, 7);
@@ -52,23 +48,16 @@ test("equation manifests and ledgers preserve the inventory exact set", () => {
   assert.ok(inventoryIds.every((animationId) => catalogueIds.has(animationId)));
 });
 
-test("aggregate counts are derived and the public SDK remains a separate exact set", () => {
+test("aggregate counts are derived from current animation authorities", () => {
   const infrastructure = createKpPostConvergenceInfrastructureInventory();
   const equationIds = createKpEquationSurfaceInventory().entries.map(
     ({ animationId }) => animationId
   );
-  const sdkCatalogIds = equationAnimationCatalogEntries.map(({ id }) => id);
-  const sdkSelectionIds = listKpEquationAnimationSelections().map(({ id }) => id);
 
   assert.equal(infrastructure.equationSurfaces.count, equationIds.length);
   assert.equal(
     infrastructure.catalogue.loadableAssetCount,
     createKpAnimationCatalogueProjection().entries.length
-  );
-  assert.deepEqual(sorted(sdkSelectionIds), sorted(sdkCatalogIds));
-  assert.equal(
-    equationIds.some((id) => (sdkSelectionIds as readonly string[]).includes(id)),
-    false
   );
 });
 

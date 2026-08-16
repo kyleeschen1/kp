@@ -4,7 +4,7 @@ export const kpLegacyEquationSdkPaths = Object.freeze([
 ] as const);
 
 export interface KpLegacyEquationSdkReachabilityAudit {
-  readonly status: "retirement-authorized";
+  readonly status: "retired";
   readonly packageExposure: "private-without-exports";
   readonly productionImporters: Readonly<Record<
     typeof kpLegacyEquationSdkPaths[number],
@@ -28,7 +28,7 @@ export interface KpLegacyEquationSdkReachabilityAudit {
  * consumer set rather than a proxy for an undocumented public package API.
  */
 export const kpLegacyEquationSdkReachabilityAudit = Object.freeze({
-  status: "retirement-authorized",
+  status: "retired",
   packageExposure: "private-without-exports",
   productionImporters: Object.freeze({
     "src/public/equation-animation-manifest.ts": Object.freeze([

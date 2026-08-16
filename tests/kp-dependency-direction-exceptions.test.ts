@@ -18,8 +18,8 @@ test("every current direction violation has one exact retirement entry", () => {
     .map(evaluateKpDependencyDirection)
     .filter((value) => value !== undefined);
 
-  assert.equal(violations.length, 3);
-  assert.equal(kpDependencyDirectionExceptions.length, 3);
+  assert.equal(violations.length, 0);
+  assert.equal(kpDependencyDirectionExceptions.length, 0);
   assert.deepEqual(
     violations.map(kpDependencyDirectionExceptionKey).sort(),
     kpDependencyDirectionExceptions
@@ -34,7 +34,8 @@ test("every current direction violation has one exact retirement entry", () => {
   );
 });
 
-test("exception ledger is exact, unique, owned, and scheduled", () => {
+test("exception ledger is empty after convergence", () => {
+  assert.deepEqual(kpDependencyDirectionExceptions, []);
   assert.equal(
     new Set(kpDependencyDirectionExceptions.map(({ id }) => id)).size,
     kpDependencyDirectionExceptions.length
@@ -44,15 +45,6 @@ test("exception ledger is exact, unique, owned, and scheduled", () => {
       kpDependencyDirectionExceptions.map(kpDependencyDirectionExceptionKey)
     ).size,
     kpDependencyDirectionExceptions.length
-  );
-  assert.ok(
-    kpDependencyDirectionExceptions.every(
-      ({ importer, target, retireWhen, plannedSlice }) =>
-        importer.startsWith("src/") &&
-        target.startsWith("src/") &&
-        retireWhen.length > 20 &&
-        plannedSlice === "s22"
-    )
   );
 });
 

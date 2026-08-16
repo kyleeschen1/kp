@@ -252,6 +252,13 @@
       "scope": "slice s21 legacy SDK audit",
       "checkedAt": "2026-08-16T22:05:50.327Z",
       "notes": "Three focused package, import-graph, and replacement-authority tests passed. Architecture and test-project typecheck also passed."
+    },
+    {
+      "command": "node --test legacy SDK retirement and reachability cohort",
+      "status": "passed",
+      "scope": "slice s22 legacy SDK retirement",
+      "checkedAt": "2026-08-16T22:09:21.585Z",
+      "notes": "Seventeen focused retirement, dependency, ownership, manifest, and reachability tests passed. Architecture reports zero exact exceptions, and test-project typecheck passed."
     }
   ],
   "expectedLearning": [

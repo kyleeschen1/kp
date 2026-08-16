@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3149,
+  "scannedFileCount": 3169,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -358,21 +358,6 @@
         "tests/canonical-presentation-group-audit.test.ts",
         "tests/product-consumer-projections.test.ts",
         "tests/semantic-animation-preservation-manifest.test.ts"
-      ],
-      "scriptCallers": [],
-      "otherCallers": [],
-      "reachability": "live-callers"
-    },
-    {
-      "id": "reachability.manifest.manifest.src/public/equation-animation-manifest.ts.src/public/equation-animation-manifest.ts",
-      "concern": "manifest",
-      "sourcePath": "src/public/equation-animation-manifest.ts",
-      "authorityId": "manifest.src/public/equation-animation-manifest.ts",
-      "sourceCallers": [
-        "src/public/kp-animation-sdk.ts"
-      ],
-      "testCallers": [
-        "tests/manifest-projection-authority.test.ts"
       ],
       "scriptCallers": [],
       "otherCallers": [],
@@ -867,7 +852,6 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
-        "src/public/kp-animation-sdk.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
         "src/semantic/document.ts",
@@ -1418,7 +1402,6 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
-        "src/public/kp-animation-sdk.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
         "src/semantic/document.ts",
@@ -1914,7 +1897,6 @@
       "authorityId": "compatibility.timeline-vocabularies",
       "sourceCallers": [
         "src/editor/equation-motion-demo-controller.ts",
-        "src/public/kp-animation-sdk.ts",
         "src/rendering/equation-motion-player.ts",
         "src/tutorial/equation-frame-adapter.ts"
       ],

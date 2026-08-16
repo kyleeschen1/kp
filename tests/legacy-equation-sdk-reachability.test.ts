@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
@@ -12,7 +12,7 @@ import {
 
 const repositoryRoot = fileURLToPath(new URL("..", import.meta.url));
 
-test("legacy equation SDK has no supported package or production entrypoint", () => {
+test("legacy equation SDK is retired from the private package", () => {
   const packageJson = JSON.parse(
     readFileSync(new URL("../package.json", import.meta.url), "utf8")
   ) as { readonly private?: boolean; readonly exports?: unknown };
@@ -20,23 +20,22 @@ test("legacy equation SDK has no supported package or production entrypoint", ()
   assert.equal(packageJson.private, true);
   assert.equal(packageJson.exports, undefined);
   assert.equal(audit.packageExposure, "private-without-exports");
-  assert.equal(audit.status, "retirement-authorized");
+  assert.equal(audit.status, "retired");
+  for (const sourcePath of kpLegacyEquationSdkPaths) {
+    assert.equal(existsSync(new URL(`../${sourcePath}`, import.meta.url)), false);
+  }
 });
 
-test("legacy equation SDK reachability is exact across source, tests, and scripts", () => {
+test("no source, test, or script imports a retired SDK path", () => {
   for (const sourceDirectory of ["src", "tests", "scripts"] as const) {
     const graph = collectKpTypescriptImportGraph(repositoryRoot, sourceDirectory);
     for (const target of kpLegacyEquationSdkPaths) {
-      const importers = graph.localEdges
-        .filter((edge) => edge.target === target)
-        .map(({ importer }) => importer)
-        .sort();
-      const expected = sourceDirectory === "src"
-        ? audit.productionImporters[target]
-        : sourceDirectory === "tests"
-          ? audit.testImporters[target]
-          : audit.scriptImporters[target];
-      assert.deepEqual(importers, expected, `${sourceDirectory} -> ${target}`);
+      const basename = target.slice(target.lastIndexOf("/") + 1).replace(/\.ts$/, "");
+      assert.deepEqual(
+        graph.references.filter(({ specifier }) => specifier.includes(basename)),
+        [],
+        `${sourceDirectory} -> ${target}`
+      );
     }
   }
 });

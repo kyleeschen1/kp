@@ -182,7 +182,8 @@
     {
       "id": "s22",
       "title": "retire-or-stop-on-legacy-sdk",
-      "status": "planned"
+      "summary": "The unexported legacy equation SDK and duplicate manifest are removed, their compatibility-only tests retired, exact reachability regenerated, and the dependency exception ledger is empty.",
+      "status": "complete"
     },
     {
       "id": "s23",

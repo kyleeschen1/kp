@@ -61,8 +61,7 @@ const manifestPaths = Object.freeze([
   "src/architecture/equation-asset-manifest.ts",
   "src/architecture/equation-surface-inventory.ts",
   "src/architecture/equation-surface-disposition-ledger.ts",
-  "src/editor/semantic-animation-preservation-manifest.ts",
-  "src/public/equation-animation-manifest.ts"
+  "src/editor/semantic-animation-preservation-manifest.ts"
 ] as const);
 
 const capabilityLoaderPaths = Object.freeze([
