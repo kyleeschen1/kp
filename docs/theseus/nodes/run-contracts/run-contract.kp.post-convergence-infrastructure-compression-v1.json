@@ -164,7 +164,8 @@
     {
       "id": "s21",
       "title": "capability-loader-declarations",
-      "status": "planned"
+      "summary": "Added an immutable exhaustive 11-capability declaration protocol with literal lazy imports, adapter guards, domain and registration ownership, typed duplicate/missing/unknown diagnostics, and no mutable universal registry; production loading remains unchanged until the migration slices.",
+      "status": "complete"
     },
     {
       "id": "s22",

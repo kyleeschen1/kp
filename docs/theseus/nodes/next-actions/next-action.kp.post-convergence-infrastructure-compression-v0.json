@@ -234,6 +234,13 @@
       "scope": "slice-20 adjacent retirement deferral",
       "checkedAt": "2026-08-16T15:45:51.187Z",
       "notes": "Generated 59-root reachability and 9-path fallback evidence are current; no second safe deletion exists."
+    },
+    {
+      "command": "npm run test:selected-surface-capability-declarations; npm run typecheck; npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice-21 capability loader declarations",
+      "checkedAt": "2026-08-16T15:52:27.977Z",
+      "notes": "Four declaration laws pass, all TypeScript projects pass, and baseline chunk measurements are unchanged because the declaration module is not yet on the production host path."
     }
   ]
 }

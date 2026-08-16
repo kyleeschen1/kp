@@ -36,6 +36,20 @@ export type KpEditorSelectedSurfaceCapability =
   | "graph-svg-katex-labels"
   | "graph-webgl-3d";
 
+export const kpEditorSelectedSurfaceCapabilityValues = Object.freeze([
+  "equation-katex",
+  "log-exponent",
+  "log-quotient",
+  "log-product",
+  "exact-fraction-quantity",
+  "operation-evaluation",
+  "place-value-addition",
+  "graph-svg-economics",
+  "graph-svg-katex-labels",
+  "graph-webgl-3d",
+  "programming-trace"
+] as const satisfies readonly KpEditorSelectedSurfaceCapability[]);
+
 export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   readonly animationId: string;
   readonly slotKinds: readonly KpEditorAnimationSurfaceSlotKind[];

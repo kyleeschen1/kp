@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3133,
+  "scannedFileCount": 3135,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -424,6 +424,7 @@
         "src/editor/programming-surface-adapter.ts",
         "src/editor/python-refactor-surface-adapter.ts",
         "src/editor/scheme-factorial-surface-adapter.ts",
+        "src/editor/selected-surface-capability-declarations.ts",
         "src/editor/selected-surface-capability-host.ts",
         "src/editor/typescript-refactor-surface-adapter.ts",
         "src/main.ts"
@@ -468,6 +469,7 @@
       "sourceCallers": [
         "src/architecture/post-convergence-infrastructure-inventory.ts",
         "src/editor/graph-svg-surface-support.ts",
+        "src/editor/selected-surface-capability-declarations.ts",
         "src/editor/selected-surface-capability-host.ts",
         "src/main.ts"
       ],
@@ -477,6 +479,7 @@
         "tests/cross-domain-upper-boundary.test.ts",
         "tests/log-exponent-catalogue-integration.test.ts",
         "tests/log-quotient-catalogue-integration.test.ts",
+        "tests/selected-surface-capability-declarations.test.ts",
         "tests/selected-surface-capability.test.ts",
         "tests/vector-dot-projection-catalogue-integration.test.ts"
       ],
