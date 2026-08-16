@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3135,
+  "scannedFileCount": 3133,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -873,7 +873,6 @@
         "src/animation/quadratic-branching-asset.ts",
         "src/animation/representation-transform-samples.ts",
         "src/animation/runtime-sampler.ts",
-        "src/animation/tween.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
         "src/public/kp-animation-sdk.ts",
@@ -901,7 +900,6 @@
         "tests/semantic-transform-tree-metadata.test.ts",
         "tests/semantic-transformation-composition.test.ts",
         "tests/semantic.test.ts",
-        "tests/tween.test.ts",
         "tests/visual-motif-composition.test.ts"
       ],
       "scriptCallers": [],
@@ -1423,7 +1421,6 @@
         "src/animation/quadratic-branching-asset.ts",
         "src/animation/representation-transform-samples.ts",
         "src/animation/runtime-sampler.ts",
-        "src/animation/tween.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
         "src/public/kp-animation-sdk.ts",
@@ -1451,7 +1448,6 @@
         "tests/semantic-transform-tree-metadata.test.ts",
         "tests/semantic-transformation-composition.test.ts",
         "tests/semantic.test.ts",
-        "tests/tween.test.ts",
         "tests/visual-motif-composition.test.ts"
       ],
       "scriptCallers": [],
@@ -1459,16 +1455,37 @@
       "reachability": "live-callers"
     },
     {
-      "id": "reachability.compatibility.compatibility.saddle-animation-intent.src/animation/tween.ts",
+      "id": "reachability.compatibility.compatibility.saddle-animation-intent.src/semantic/document.ts",
       "concern": "compatibility",
-      "sourcePath": "src/animation/tween.ts",
+      "sourcePath": "src/semantic/document.ts",
       "authorityId": "compatibility.saddle-animation-intent",
-      "sourceCallers": [],
+      "sourceCallers": [
+        "src/compiler/html-asset.ts",
+        "src/editor/compile-client.ts",
+        "src/editor/editor.ts",
+        "src/editor/graph-3d-editor-controller.ts",
+        "src/editor/graph-3d-surface-contract.ts",
+        "src/editor/state.ts",
+        "src/main.ts",
+        "src/rendering/default-latex.ts",
+        "src/rendering/graph-2d-scene.ts",
+        "src/rendering/graph-svg.ts",
+        "src/rendering/graph-transitions.ts",
+        "src/rendering/graph-webgl-three.ts",
+        "src/rendering/graph-webgl.ts",
+        "src/semantic/computation-protocols.ts",
+        "src/semantic/derive-protocols.ts",
+        "src/semantic/validation.ts"
+      ],
       "testCallers": [
-        "tests/tween.test.ts"
+        "tests/editor-graph-3d-host-contract.test.ts",
+        "tests/rendering.test.ts",
+        "tests/semantic.test.ts"
       ],
       "scriptCallers": [],
-      "otherCallers": [],
+      "otherCallers": [
+        "server/app.ts"
+      ],
       "reachability": "live-callers"
     },
     {

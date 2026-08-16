@@ -78,6 +78,7 @@ test("every compatibility path has one enforced disposition and owner", () => {
       ({ formerContractKey }) => formerContractKey
     ),
     [
+      "sampleSaddleDenominatorAnimationFrames",
       "equationMotionPresentationRecipe",
       "equationNativeHandoffRecipe",
       "equationCancellationPresentationRecipe",

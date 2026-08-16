@@ -152,7 +152,8 @@
     {
       "id": "s19",
       "title": "adjacent-retirement-a",
-      "status": "planned"
+      "summary": "Retired the test-only saddle denominator tween prototype and its sole test. Preserved the semantic intent and validation, direct saddle morph sampler, editor control, renderers, bundle boundary, and compatibility evidence through one independently reversible deletion unit.",
+      "status": "complete"
     },
     {
       "id": "s20",

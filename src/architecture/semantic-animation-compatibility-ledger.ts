@@ -107,17 +107,14 @@ export const kpSemanticAnimationCompatibilityLedger = [
       "SaddleDenominatorAnimationIntent"
     ),
     consumers: [
-      reference(
-        "src/animation/tween.ts",
-        "sampleSaddleDenominatorAnimationFrames"
-      )
+      reference("src/semantic/document.ts", "KpSemanticObject")
     ],
     replacementEvidence: [
       reference("src/animation/graph-adapter.ts", "createGraphAnimationAssets")
     ],
     status: "retained-fixture",
     sunsetEvidence: [
-      sunsetEvidence("tests/tween.test.ts", "SaddleDenominator")
+      sunsetEvidence("tests/semantic.test.ts", "SaddleDenominator")
     ],
     requiredClosureEvidence: ["reference", "fixture"],
     retirementCondition: "A graph-domain replacement exists and the semantic fixture is migrated."
@@ -226,6 +223,14 @@ export const kpSemanticAnimationCompatibilityLedger = [
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
 
 export const kpRetiredSemanticAnimationCompatibilityPaths = [
+  {
+    id: "compatibility.prototype.saddle-denominator-tween",
+    formerContractKey: "sampleSaddleDenominatorAnimationFrames",
+    removedFrom: ["src/animation/tween.ts"],
+    replacement:
+      "Typed graph renderers sample the canonical saddle surface morph directly; the semantic intent remains validated as a retained document fixture.",
+    closureTest: "tests/rendering.test.ts"
+  },
   ...[
     "equationMotionPresentationRecipe",
     "equationNativeHandoffRecipe",
