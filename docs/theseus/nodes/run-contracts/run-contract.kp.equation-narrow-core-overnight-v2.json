@@ -212,7 +212,8 @@
     {
       "id": "s23",
       "title": "Migration-wave-B",
-      "status": "planned"
+      "summary": "Wave-B structural assets now declare exact recipes and asset-specific augmentations, while one typed transform registry replaces local fraction, exponent, identity, wrap, radical, dot, and matrix selection. Focused, specialized, type, architecture, bundle, function-wrap, and matrix browser checks pass; the known apply-log collision and unrelated reader-only flaky diagnostics remain explicitly deferred.",
+      "status": "complete"
     },
     {
       "id": "s24",

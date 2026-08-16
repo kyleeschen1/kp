@@ -13,8 +13,12 @@ import {
   compileKpSemanticEquationTransitionResult
 } from "../domain-ir/public-api.ts";
 import {
-  findKpWaveAEquationOperationPlanDeclaration
+  findKpWaveAEquationOperationPlanDeclaration,
+  findKpWaveBEquationStructuralDeclaration
 } from "../domain-ir/equation-surface-family-declarations.ts";
+import {
+  findKpEquationStructuralChoreographyDeclaration
+} from "../animation/equation-structural-choreography-declarations.ts";
 import type { KpSelectorAnnotatedLatex } from "../rendering/selector-annotated-latex.ts";
 import {
   projectKpEditorEquationRuntimeFrame,
@@ -660,8 +664,9 @@ function applyExponentExplanationProjection(input: {
   readonly profile: string;
 }): void {
   if (
-    input.animationId !==
-      "animation.generated.exponent.square-as-product" ||
+    findKpWaveBEquationStructuralDeclaration(input.animationId)
+      ?.explanationProjectionId !==
+      "explanation-projection.exponent-fluent-unit-omission.v1" ||
     input.profile !== "fluent"
   ) {
     delete input.stage.dataset["kpEditorEquationExplanationProjection"];
@@ -796,8 +801,9 @@ function applyEquationMaterialLayer(input: {
   readonly hotPath: KpEditorEquationStageHotPathCache;
 }): void {
   if (
-    input.animationId ===
-    "animation.generated.radical.square-root-as-power"
+    findKpWaveBEquationStructuralDeclaration(input.animationId)
+      ?.materialContinuityId ===
+      "material-continuity.radical-native-settlement.v1"
   ) {
     applyRadicalMaterialLayer(input);
     return;
@@ -1336,7 +1342,10 @@ function createRadicalSuccessionFrame(
 ): KpEditorEquationStageFrame["radicalSuccession"] {
   if (
     !animation.transformations.some(
-      (transformation) => transformation.transformType === "rewritePowerAsRoot"
+      (transformation) =>
+        findKpEquationStructuralChoreographyDeclaration(
+          transformation.transformType
+        )?.channel === "radical-succession"
     )
   ) {
     return undefined;
@@ -1364,7 +1373,10 @@ function createFunctionWrapFrame(
 ): KpEditorEquationStageFrame["functionWrap"] {
   if (
     !animation.transformations.some(
-      (transformation) => transformation.transformType === "wrapFunction"
+      (transformation) =>
+        findKpEquationStructuralChoreographyDeclaration(
+          transformation.transformType
+        )?.channel === "function-wrap"
     )
   ) {
     return undefined;
@@ -1434,7 +1446,9 @@ function createDotProductTraversalFrame(
     !animation.transformations.some(
       (transformation) =>
         transformation.id === transformationId &&
-        transformation.transformType === "computeDotProduct"
+        findKpEquationStructuralChoreographyDeclaration(
+          transformation.transformType
+        )?.channel === "dot-product-traversal"
     )
   ) {
     return undefined;
@@ -1466,7 +1480,9 @@ function createMatrixVectorCompositionFrame(
     !animation.transformations.some(
       (transformation) =>
         transformation.id === transformationId &&
-        transformation.transformType === "multiplyMatrixVector"
+        findKpEquationStructuralChoreographyDeclaration(
+          transformation.transformType
+        )?.channel === "matrix-vector-composition"
     )
   ) {
     return undefined;
@@ -1479,8 +1495,9 @@ function createMatrixVectorCompositionFrame(
   let rank6Plan: KpMatrixLinearMapPlan | undefined;
   let rank6Frame: KpMatrixLinearMapFrame | undefined;
   if (
-    animation.id ===
-    "animation.generated.linear-algebra.matrix-vector.two-by-two"
+    findKpWaveBEquationStructuralDeclaration(animation.id)
+      ?.structuralAugmentationId ===
+      "structural-augmentation.matrix-vector-rank6-linear-map.v1"
   ) {
     rank6Plan = matrixLinearMapPlanCache.get(animation.id);
     if (rank6Plan === undefined) {
@@ -1519,7 +1536,9 @@ function createMatrixMatrixCompositionFrame(
     !animation.transformations.some(
       (transformation) =>
         transformation.id === transformationId &&
-        transformation.transformType === "multiplyMatrices"
+        findKpEquationStructuralChoreographyDeclaration(
+          transformation.transformType
+        )?.channel === "matrix-matrix-composition"
     )
   ) {
     return undefined;
@@ -3439,12 +3458,11 @@ function activeFactoringPhase(frame: KpFactoringChoreographyFrame): string {
 function fractionChoreographyKind(
   transformType: string
 ): KpFractionChoreographyKind | undefined {
-  switch (transformType) {
-    case "splitFractionFactors": return "split-factors";
-    case "mergeFractionCommonFactor": return "separate-common-factor";
-    case "simplifyUnitFractionFactor": return "simplify-unit-factor";
-    default: return undefined;
-  }
+  const declaration =
+    findKpEquationStructuralChoreographyDeclaration(transformType);
+  return declaration?.channel === "fraction-material"
+    ? declaration.operationKind
+    : undefined;
 }
 
 function requiredCancellationRecordId(
@@ -3642,11 +3660,11 @@ function activeFractionPhase(frame: KpFractionChoreographyFrame): string {
 function exponentLawChoreographyKind(
   transformType: string
 ): KpExponentLawChoreographyKind | undefined {
-  switch (transformType) {
-    case "lowerExponent": return "peel-one-factor";
-    case "unwrapUnitExponent": return "absorb-unit-exponent";
-    default: return undefined;
-  }
+  const declaration =
+    findKpEquationStructuralChoreographyDeclaration(transformType);
+  return declaration?.channel === "exponent-law"
+    ? declaration.operationKind
+    : undefined;
 }
 
 function applyExponentLawFocus(input: {
@@ -3943,11 +3961,11 @@ function renderFocusTokens(labels: readonly string[]): string {
 function identityAbsorptionChoreographyKind(
   transformType: string
 ): KpIdentityAbsorptionChoreographyKind | undefined {
-  switch (transformType) {
-    case "simplify-additive-identity": return "absorb-additive-zero";
-    case "simplify-multiplicative-identity": return "absorb-multiplicative-one";
-    default: return undefined;
-  }
+  const declaration =
+    findKpEquationStructuralChoreographyDeclaration(transformType);
+  return declaration?.channel === "identity-absorption"
+    ? declaration.operationKind
+    : undefined;
 }
 
 function identityAbsorptionRoleRecordIds(

@@ -1688,11 +1688,88 @@
       "scope": "wave-A durable state",
       "checkedAt": "2026-08-16T08:13:21.613Z",
       "notes": "Workspace valid at 958 nodes and 21473 events."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-structural-family-declarations.test.ts tests/equation-operation-plan-family-declarations.test.ts tests/kp-editor-fraction-visible-animation.test.ts tests/kp-editor-exponent-radical-visible-animation.test.ts tests/kp-function-wrap-choreography.test.ts tests/kp-dot-product-traversal-choreography.test.ts tests/kp-matrix-vector-composition-choreography.test.ts tests/kp-matrix-matrix-composition-choreography.test.ts",
+      "status": "passed",
+      "scope": "wave-B structural declaration and frame preservation",
+      "checkedAt": "2026-08-16T08:23:46.992Z",
+      "notes": "34 tests passed across exact declarations and structural families."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "wave-B specialized log-exponent",
+      "checkedAt": "2026-08-16T08:23:48.029Z",
+      "notes": "52 semantic, timeline, endpoint, and reverse tests passed."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "wave-B specialized log-quotient",
+      "checkedAt": "2026-08-16T08:23:48.982Z",
+      "notes": "36 semantic, native endpoint, direct-seek, and capability tests passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "wave-B inventory and preservation matrix",
+      "checkedAt": "2026-08-16T08:24:06.453Z",
+      "notes": "All 10 generated authority, exact endpoint, renderer, clock, and sampled-frame checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "wave-B type closure",
+      "checkedAt": "2026-08-16T08:24:07.487Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:browser:function-wrap-adapter",
+      "status": "passed",
+      "scope": "wave-B function-wrap Chromium preservation",
+      "checkedAt": "2026-08-16T08:24:08.437Z",
+      "notes": "Reduced-motion endpoints and reverse seek passed."
+    },
+    {
+      "command": "npm run test:browser:matrix-linear-map",
+      "status": "passed",
+      "scope": "wave-B matrix augmentation Chromium preservation",
+      "checkedAt": "2026-08-16T08:24:09.360Z",
+      "notes": "Rank-6 row-dot playback passed."
+    },
+    {
+      "command": "npm run test:browser:equation-surface-preservation",
+      "status": "failed",
+      "scope": "non-gating known apply-log visual diagnostic",
+      "checkedAt": "2026-08-16T08:24:10.280Z",
+      "notes": "The previously recorded apply-log protected-transit collision at progress 0.64-0.66 reproduced; this slice did not change its geometry or timing and did not tune it."
+    },
+    {
+      "command": "npm run test:browser:radical-reader-promotion",
+      "status": "failed",
+      "scope": "non-gating reader diagnostics outside edited path",
+      "checkedAt": "2026-08-16T08:24:11.215Z",
+      "notes": "10 of 12 passed; an unrelated missing home-page link and a 1px radical reader raster tolerance failed. The editor declaration refactor does not enter reader compositor code."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "wave-B authority boundaries",
+      "checkedAt": "2026-08-16T08:24:12.161Z",
+      "notes": "All architecture gates passed with zero semantic-animation exceptions."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "wave-B lazy bundle closure",
+      "checkedAt": "2026-08-16T08:24:13.105Z",
+      "notes": "Bundle measurements remained identical and under limits."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Wave A now declares exact operation-plan recipes, runtime bindings, recipe owners, and material continuity; algebra capability and linear-rearrangement routing consume declarations instead of asset-ID or transform switches, with legacy trigger behavior preserved."
+    "summary": "Wave B now declares exact structural recipes and owns transform-to-choreography selection in one typed table. Radical settlement, exponent projection, and matrix augmentation are declaration-selected; specialized and focused preservation checks pass, while unrelated known/flaky browser diagnostics remain deferred without visual tuning."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."
