@@ -24,7 +24,14 @@ export interface KpEquationRecipeRegistration {
   readonly id: KpRecipeId;
   readonly familyId: KpFamilyId;
   readonly operationKind: KpOperationKind;
-  readonly motifIds: readonly KpMotifId[];
+  readonly motifUses: readonly KpEquationRecipeMotifUse[];
+  readonly dependencyRecipeIds: readonly KpRecipeId[];
+}
+
+export interface KpEquationRecipeMotifUse {
+  readonly id: string;
+  readonly motifId: KpMotifId;
+  readonly roleIds: readonly string[];
 }
 
 export interface KpEquationMotifRegistration {
@@ -40,11 +47,19 @@ export interface KpEquationRendererCapabilityRegistration {
 
 export interface KpEquationFamilyRegistration {
   readonly id: KpFamilyId;
+  readonly disposition: KpEquationFamilyDisposition;
   readonly operationKindIds: readonly KpOperationKind[];
   readonly recipeIds: readonly KpRecipeId[];
   readonly motifIds: readonly KpMotifId[];
   readonly rendererCapabilityIds: readonly KpRendererCapabilityId[];
 }
+
+export type KpEquationFamilyDisposition =
+  | "active"
+  | "deferred"
+  | "static-only"
+  | "unsupported"
+  | "retirement-candidate";
 
 export interface KpImmutableEquationRegistry<
   Kind extends KpEquationRegistryKind,
@@ -118,7 +133,11 @@ export function createKpEquationRecipeRegistry(
     "recipes",
     entries.map((entry) => Object.freeze({
       ...entry,
-      motifIds: freezeIds(entry.motifIds)
+      motifUses: Object.freeze(entry.motifUses.map((use) => Object.freeze({
+        ...use,
+        roleIds: freezeIds(use.roleIds)
+      }))),
+      dependencyRecipeIds: freezeIds(entry.dependencyRecipeIds)
     }))
   );
 }

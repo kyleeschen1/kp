@@ -58,7 +58,11 @@ test("equation extension packs inject five distinct immutable registries", () =>
     vocabulary.motifs.functionWrapV1
   );
   assert.equal(Object.isFrozen(pack.operations.entries[0]!.recipeIds), true);
-  assert.equal(Object.isFrozen(pack.recipes.entries[0]!.motifIds), true);
+  assert.equal(Object.isFrozen(pack.recipes.entries[0]!.motifUses), true);
+  assert.equal(
+    Object.isFrozen(pack.recipes.entries[0]!.motifUses[0]!.roleIds),
+    true
+  );
   assert.equal(
     Object.isFrozen(pack.families.entries[0]!.rendererCapabilityIds),
     true
@@ -118,7 +122,12 @@ function makeRegistries() {
       id: vocabulary.recipes.functionApplicationV1,
       familyId: vocabulary.families.structuralWrapV1,
       operationKind: vocabulary.operations.wrapFunctionV1,
-      motifIds: [vocabulary.motifs.functionWrapV1]
+      motifUses: [{
+        id: "wrap",
+        motifId: vocabulary.motifs.functionWrapV1,
+        roleIds: ["continuant"]
+      }],
+      dependencyRecipeIds: []
     }]),
     motifs: createKpEquationMotifRegistry([{
       id: vocabulary.motifs.functionWrapV1,
@@ -131,6 +140,7 @@ function makeRegistries() {
     }]),
     families: createKpEquationFamilyRegistry([{
       id: vocabulary.families.structuralWrapV1,
+      disposition: "active",
       operationKindIds: [vocabulary.operations.wrapFunctionV1],
       recipeIds: [vocabulary.recipes.functionApplicationV1],
       motifIds: [vocabulary.motifs.functionWrapV1],

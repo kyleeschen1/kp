@@ -128,7 +128,8 @@
     {
       "id": "s09",
       "title": "Build-time-registry-validator",
-      "status": "planned"
+      "summary": "Added fail-closed build-time pack validation for operation, recipe, motif, capability, and family closure; exact role compatibility; reciprocal ownership; recipe cycles; and explicit code-generation dispositions.",
+      "status": "complete"
     },
     {
       "id": "s10",
