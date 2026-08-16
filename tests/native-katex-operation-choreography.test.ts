@@ -8,6 +8,9 @@ import {
   createKpCausalStructuralIntroductionChoreography
 } from "../src/animation/equation-operation-choreography.ts";
 import {
+  createKpFunctionWrapReceptionPlan
+} from "../src/animation/function-wrap-reception.ts";
+import {
   compileKpEquationOperationChoreography
 } from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
 import {
@@ -20,6 +23,10 @@ import {
   applyKpNativeKatexOperationChoreography
 } from "../src/rendering/native-katex-operation-choreography.ts";
 import {
+  applyKpNativeKatexFunctionWrapReception,
+  kpNativeKatexFunctionWrapReceptionStyle
+} from "../src/rendering/native-katex-function-wrap-reception.ts";
+import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import type {
@@ -31,6 +38,47 @@ import type {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 
 const animation = createKpFractionCompositionEquationAnimationAsset();
+
+test("function-wrap enclosures arrive outside and oversized before settling natively", () => {
+  const open = atom("target", "target.wrap.open", 40);
+  const close = atom("target", "target.wrap.close", 80);
+  const target = scene("target", [open, close]);
+  const tracks = applyKpNativeKatexFunctionWrapReception({
+    source: scene("source", []),
+    target,
+    tracks: [introducedTrack(open, 0), introducedTrack(close, 1)],
+    plan: createKpFunctionWrapReceptionPlan({
+      id: "function-wrap-reception.test",
+      direction: "forward",
+      branches: [{
+        id: "branch.test",
+        argumentEntityIds: ["target.argument"],
+        syntaxEntityIds: ["target.wrap", "target.wrap.operator"],
+        enclosureEntityRoles: [
+          { entityId: "target.wrap.open", side: "leading" },
+          { entityId: "target.wrap.close", side: "trailing" }
+        ]
+      }]
+    }),
+    entryWindow: { start: 0.42, end: 0.7 }
+  });
+  const [openTrack, closeTrack] = tracks;
+  assert.ok(openTrack?.startPaintRect);
+  assert.ok(closeTrack?.startPaintRect);
+  assert.ok(openTrack.startPaintRect.left < open.rect.left);
+  assert.ok(closeTrack.startPaintRect.left > close.rect.left);
+  assert.equal(
+    openTrack.startPaintRect.height,
+    open.rect.height * kpNativeKatexFunctionWrapReceptionStyle.initialScale
+  );
+  assert.equal(
+    closeTrack.startPaintRect.height,
+    close.rect.height * kpNativeKatexFunctionWrapReceptionStyle.initialScale
+  );
+  assert.equal(openTrack.timingGroupId, closeTrack.timingGroupId);
+  const settled = sampleKpNativeKatexSceneTrackFrames(tracks, 1, false);
+  assert.deepEqual(settled.map(({ rect }) => rect), [open.rect, close.rect]);
+});
 
 test("balanced branch certificate synchronizes every introduced paint atom", () => {
   const transformation = animation.transformations[7]!;

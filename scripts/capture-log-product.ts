@@ -12,15 +12,19 @@ import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 const outputRoot = path.resolve("tmp/codex/log-product-checkpoint");
 const animations = Object.freeze([{
   id: "animation.algebra.log-product.product-to-sum",
-  label: "two factors"
+  label: "two factors",
+  progressions: [
+    { phase: "forward", samples: [0, 0.2, 0.4, 0.6, 0.66, 0.72, 0.78, 0.84, 1] },
+    { phase: "return", samples: [0.84, 0.78, 0.72, 0.66, 0.6, 0.4, 0.2, 0] }
+  ]
 }, {
   id: "animation.algebra.log-product.three-factors-to-sum",
-  label: "three factors"
+  label: "three factors",
+  progressions: [
+    { phase: "forward", samples: [0, 0.2, 0.4, 0.6, 0.8, 1] },
+    { phase: "return", samples: [0.8, 0.6, 0.4, 0.2, 0] }
+  ]
 }] as const);
-const progressions = [
-  { phase: "forward", samples: [0, 0.2, 0.4, 0.6, 0.8, 1] },
-  { phase: "return", samples: [0.8, 0.6, 0.4, 0.2, 0] }
-] as const;
 
 interface CaptureEvidence {
   readonly id: string;
@@ -55,7 +59,7 @@ async function capture(): Promise<void> {
       );
       await waitForReady(stage);
 
-      for (const progression of progressions) {
+      for (const progression of animation.progressions) {
         for (const progress of progression.samples) {
           const captured = await captureSample({
             animationId: animation.id,

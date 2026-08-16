@@ -42,8 +42,12 @@ The phases may overlap to preserve continuity, but the enclosure must not lead
 unsettled material and the function/operator syntax must not make an empty
 wrapper readable. Operators and connectors resolve in one cohort when they
 jointly complete the target grammar and neither has a separate instructional
-role. Exact timing, easing, and geometry remain owned by the reviewed motif
-profile rather than becoming semantic truth.
+role. Enclosure reception is outside-in: typed leading and trailing delimiters
+begin farther apart and slightly oversized, then contract onto their exact
+native endpoint rectangles. The semantic operation owns enclosure roles; the
+renderer owns measured offsets and scale and may not infer those roles from
+glyphs or DOM order. Exact timing, easing, and geometry remain owned by the
+reviewed motif profile rather than becoming semantic truth.
 
 Within typographic integrity, distinguish a glyph's **layout bounds** from its
 **ink bounds**. Layout bounds position the token and reserve advance width.

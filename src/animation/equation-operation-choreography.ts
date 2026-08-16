@@ -5,6 +5,11 @@ import {
   isKpCompiledSymbolMotionContract,
   type KpCompiledSymbolMotionContract
 } from "./symbol-motion-contract.ts";
+import {
+  createKpFunctionWrapReceptionPlan,
+  type KpFunctionWrapEnclosureEntityRoles,
+  type KpFunctionWrapReceptionPlan
+} from "./function-wrap-reception.ts";
 
 declare const kpEquationOperationChoreographyBrand: unique symbol;
 
@@ -59,6 +64,7 @@ export interface KpCanonicalFunctionWrapChoreography
     readonly sourceArgumentEntityIds: readonly string[];
     readonly targetArgumentEntityIds: readonly string[];
     readonly wrapperEntityIds: readonly string[];
+    readonly enclosureEntityRoles: KpFunctionWrapEnclosureEntityRoles;
   }[];
   readonly argumentReflowWindow: {
     readonly start: number;
@@ -68,6 +74,7 @@ export interface KpCanonicalFunctionWrapChoreography
     readonly start: number;
     readonly end: number;
   };
+  readonly reception: KpFunctionWrapReceptionPlan;
 }
 
 export interface KpHomomorphicFusionChoreography
@@ -389,7 +396,10 @@ export function createKpCanonicalFunctionWrapChoreography(input: {
       targetArgumentEntityIds: Object.freeze(rules.flatMap(
         ({ targetEntityIds }) => targetEntityIds
       )),
-      wrapperEntityIds: Object.freeze([...branch.wrapperEntityIds])
+      wrapperEntityIds: Object.freeze([...branch.wrapperEntityIds]),
+      enclosureEntityRoles: Object.freeze([
+        ...(branch.enclosureEntityRoles ?? [])
+      ]) as KpFunctionWrapEnclosureEntityRoles
     });
   });
   const argumentReflowWindow = input.argumentReflowWindow ?? {
@@ -407,6 +417,23 @@ export function createKpCanonicalFunctionWrapChoreography(input: {
       "Canonical function-wrap arguments must begin reflow before wrappers enter."
     );
   }
+  const reception = createKpFunctionWrapReceptionPlan({
+    id: `function-wrap-reception.${input.contract.transformationId}.${input.direction}`,
+    direction: input.direction,
+    branches: branches.map((branch) => {
+      const enclosureIds = new Set(
+        branch.enclosureEntityRoles.map(({ entityId }) => entityId)
+      );
+      return {
+        id: branch.id,
+        argumentEntityIds: branch.targetArgumentEntityIds,
+        syntaxEntityIds: branch.wrapperEntityIds.filter((entityId) =>
+          !enclosureIds.has(entityId)
+        ),
+        enclosureEntityRoles: branch.enclosureEntityRoles
+      };
+    })
+  });
   return Object.freeze({
     schemaVersion: "kp.equation-operation-choreography.v1" as const,
     kind: "canonical-function-wrap" as const,
@@ -416,7 +443,8 @@ export function createKpCanonicalFunctionWrapChoreography(input: {
     canonicalOperationId: motif.canonicalOperationId,
     branches: Object.freeze(branches),
     argumentReflowWindow: Object.freeze({ ...argumentReflowWindow }),
-    wrapperEntryWindow: Object.freeze({ ...wrapperEntryWindow })
+    wrapperEntryWindow: Object.freeze({ ...wrapperEntryWindow }),
+    reception
   }) as KpCanonicalFunctionWrapChoreography;
 }
 

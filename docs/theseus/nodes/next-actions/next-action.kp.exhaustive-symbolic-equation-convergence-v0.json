@@ -14,6 +14,20 @@
       "path": "docs/project/principles/animation-design-diagnostic-language.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.symbolic-manipulation-animation-library"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run test:log-product",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:equation-surface-inventory",
@@ -780,10 +794,110 @@
       "scope": "s25b shared motion-profile boundary",
       "checkedAt": "2026-08-16T04:18:15.320Z",
       "notes": "All five architecture gates pass after both the canonical function-wrap fixture and log-product adapter consume one animation-owned profile."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T05:00:58.113Z",
+      "notes": "13 log-product semantic, family, transit, and reception-plan checks passed."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T05:00:59.423Z",
+      "notes": "50 log-exponent checks passed, including canonical function-wrap role bindings."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-operation-choreography.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T05:01:01.118Z",
+      "notes": "Native KaTeX reception geometry and existing operation choreography checks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-function-wrap-animation-asset.test.ts tests/function-wrap-semantic-latex.test.ts tests/kp-editor-function-wrap-visible-animation.test.ts tests/kp-function-wrap-choreography.test.ts tests/equation-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T05:01:02.690Z",
+      "notes": "Canonical function-wrap semantics, choreography, visible motion, and fixture profile passed after binding expected scale to the shared profile."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-16T05:01:03.682Z",
+      "notes": "Deterministic contact sheet captured binary reception at dense checkpoints while retaining the three-factor baseline."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-product-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T05:01:04.675Z",
+      "notes": "Three catalogue browser checks passed for lazy mount, deterministic seek, three-factor pressure, and reduced motion."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T05:01:05.708Z",
+      "notes": "All five architecture gates passed."
+    },
+    {
+      "command": "npm run check:motion-literal-ratchet",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T05:01:06.702Z",
+      "notes": "Motion literal ratchet passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T05:01:07.681Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "failed",
+      "scope": "visual",
+      "checkedAt": "2026-08-16T05:01:08.892Z",
+      "notes": "Existing capture command timed out because the default catalogue route no longer exposes the legacy animation picker; canonical fixture and motion tests passed. Repair is deferred to verification-mode/test-tooling work."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T05:02:07.578Z",
+      "notes": "Workspace validates 957 nodes and 21279 events after closing s25c and recording the proposed architecture-first reorder."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices s01-s25b are complete. The collision-certified dissolve-direct-wrap binary exemplar is ready for mandatory human review; iteration-path architecture and migration remain gated until approval."
-  }
+    "summary": "Slice s25c is complete and the binary outside-in function-wrap candidate is preserved pending visual review. A 26-slice architecture-first overnight reorder is proposed in docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md; it requires explicit approval and will replace direct migration with typed motif APIs, immutable registries, generated dispatch, test-owner retirement, and behavior-preserving waves."
+  },
+  "expectedLearning": [
+    "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."
+  ],
+  "allowedWork": [
+    "Converge supported symbolic equation surfaces through the approved compiler and presentation seams, beginning with the bounded function-wrap enclosure reception checkpoint."
+  ],
+  "disallowedWork": [
+    "Do not change unrelated domains, public layout, user-authored economics files, or promote unreviewed geometry beyond the approved function-wrap callers."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-identity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-function-wrap",
+      "weight": "high"
+    },
+    {
+      "id": "focused-visual-verification",
+      "weight": "high"
+    }
+  ]
 }

@@ -781,7 +781,13 @@ function createFunctionWrapFixtureTransition(
             kpCanonicalFunctionWrapMotionProfile.enclosureReception.start,
             kpCanonicalFunctionWrapMotionProfile.enclosureReception.end,
             "ease-in-out",
-            { opacity: 0, x: -8, y: 0, scale: 1 },
+            {
+              opacity: 0,
+              x: -8,
+              y: 0,
+              scale:
+                kpCanonicalFunctionWrapMotionProfile.enclosureReception.initialScale
+            },
             identityPose()
           )
         }
@@ -798,7 +804,13 @@ function createFunctionWrapFixtureTransition(
             kpCanonicalFunctionWrapMotionProfile.enclosureReception.start,
             kpCanonicalFunctionWrapMotionProfile.enclosureReception.end,
             "ease-in-out",
-            { opacity: 0, x: 8, y: 0, scale: 1 },
+            {
+              opacity: 0,
+              x: 8,
+              y: 0,
+              scale:
+                kpCanonicalFunctionWrapMotionProfile.enclosureReception.initialScale
+            },
             identityPose()
           )
         }

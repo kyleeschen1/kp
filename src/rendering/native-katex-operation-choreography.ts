@@ -34,6 +34,9 @@ import type {
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
+import {
+  applyKpNativeKatexFunctionWrapReception
+} from "./native-katex-function-wrap-reception.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-scene-compositor.ts";
@@ -393,7 +396,13 @@ function applyCanonicalFunctionWrap(
       );
     }
   }
-  return Object.freeze(tracks);
+  return applyKpNativeKatexFunctionWrapReception({
+    tracks,
+    source: input.source,
+    target: input.target,
+    plan: choreography.reception,
+    entryWindow: choreography.wrapperEntryWindow
+  });
 }
 
 function applyCausalStructuralIntroduction(

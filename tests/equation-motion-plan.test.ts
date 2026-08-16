@@ -28,6 +28,9 @@ import {
   phaseIdsForEquationVisualMotifKind,
   primitiveIdsForEquationVisualMotifKind
 } from "../src/animation/motifs/visual-motif.ts";
+import {
+  kpCanonicalFunctionWrapMotionProfile
+} from "../src/animation/function-wrap-motion-profile.ts";
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
 type TokenRelationPair = [id: string, relation: string | undefined];
@@ -1137,7 +1140,13 @@ test("fixture function wrap stages moved x, parentheses, and delayed f entry", (
     start: 0.42,
     end: 0.7,
     easing: "ease-in-out",
-    from: { opacity: 0, x: -8, y: 0, scale: 1 },
+    from: {
+      opacity: 0,
+      x: -8,
+      y: 0,
+      scale:
+        kpCanonicalFunctionWrapMotionProfile.enclosureReception.initialScale
+    },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
   assert.deepEqual(trackFor(plan, "wrapper.function.wrap.close-paren"), {
@@ -1147,7 +1156,13 @@ test("fixture function wrap stages moved x, parentheses, and delayed f entry", (
     start: 0.42,
     end: 0.7,
     easing: "ease-in-out",
-    from: { opacity: 0, x: 8, y: 0, scale: 1 },
+    from: {
+      opacity: 0,
+      x: 8,
+      y: 0,
+      scale:
+        kpCanonicalFunctionWrapMotionProfile.enclosureReception.initialScale
+    },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
   assert.deepEqual(trackFor(plan, "wrapper.function.wrap.f"), {

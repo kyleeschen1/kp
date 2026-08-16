@@ -37,6 +37,15 @@ and `+` form one syntax cohort because the connector has no separate teaching
 role in this exemplar. Exact timing, opacity, easing, and staggering remain
 motif-owned and provisional.
 
+Function-wrap enclosure reception now has an explicit cross-caller contract.
+Semantic choreography names each delimiter as `leading` or `trailing`; Native
+KaTeX begins those delimiters farther apart and slightly oversized, then
+contracts them onto their measured endpoint rectangles. The operation does not
+own pixels, and the renderer does not guess from parenthesis glyphs or DOM
+order. The binary log-product candidate consumes that same reception plan for
+both derived logarithm applications while leaving the three-factor pressure
+caller visually unchanged until the binary checkpoint is approved.
+
 The routing default is now explicit: a persistent symbol takes the shortest
 clear path that preserves baseline and ordinal order. Curvature requires a
 named collision, correspondence, or structural reason; it is not decorative.

@@ -29,6 +29,13 @@ import {
   offsetKpFunctionWrapMotionWindow
 } from "../animation/function-wrap-motion-profile.ts";
 import {
+  createKpFunctionWrapReceptionPlan,
+  type KpFunctionWrapReceptionPlan
+} from "../animation/function-wrap-reception.ts";
+import {
+  applyKpNativeKatexFunctionWrapReception
+} from "./native-katex-function-wrap-reception.ts";
+import {
   isKpCompiledLogProductOperation,
   kpCanonicalCompiledLogProductOperation,
   type KpCompiledLogProductOperation
@@ -138,6 +145,36 @@ export const kpLogProductSemanticMotionProjectionPolicy =
     kpCanonicalCompiledLogProductOperation
   );
 
+export function createKpLogProductFunctionWrapReceptionPlan(
+  operation: KpCompiledLogProductOperation
+): KpFunctionWrapReceptionPlan {
+  if (!isKpCompiledLogProductOperation(operation)) {
+    throw new Error("Log-product function reception requires nominal compiler authority.");
+  }
+  return createKpFunctionWrapReceptionPlan({
+    id: `function-wrap-reception.${operation.contract.family.id}.targets`,
+    direction: "forward",
+    branches: operation.contract.family.factors.map((factor) => ({
+      id: `function-wrap-reception.${factor.targetWrapperOccurrenceId}`,
+      argumentEntityIds: [factor.targetOccurrenceId],
+      syntaxEntityIds: [
+        factor.targetWrapperOccurrenceId,
+        `${factor.targetWrapperOccurrenceId}.operator`
+      ],
+      enclosureEntityRoles: [
+        {
+          entityId: `${factor.targetWrapperOccurrenceId}.open`,
+          side: "leading" as const
+        },
+        {
+          entityId: `${factor.targetWrapperOccurrenceId}.close`,
+          side: "trailing" as const
+        }
+      ]
+    }))
+  });
+}
+
 export interface KpLogProductTransitSession {
   readonly kind: "kp-log-product-transit-session";
   readonly lifecycle: "renderer-session";
@@ -241,6 +278,8 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
   if (input.operation.contract.family.id !== BINARY_VISUAL_DISCOVERY_FAMILY_ID) {
     return semanticProjection;
   }
+  const functionWrapReception =
+    createKpLogProductFunctionWrapReceptionPlan(input.operation);
   const sourceKindByOccurrence = new Map(
     input.sourceEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
   );
@@ -257,7 +296,7 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
       const targetOccurrenceByAtom = new Map(
         projectionInput.target.atoms.map(({ id, semanticEntityId }) => [id, semanticEntityId])
       );
-      return Object.freeze(semanticTracks.map((track) => {
+      const timedTracks = Object.freeze(semanticTracks.map((track) => {
         const sourceKind = track.sourceAtomId === undefined
           ? undefined
           : sourceKindByOccurrence.get(sourceOccurrenceByAtom.get(track.sourceAtomId) ?? "");
@@ -275,6 +314,13 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
             : {})
         });
       }));
+      return applyKpNativeKatexFunctionWrapReception({
+        tracks: timedTracks,
+        source: projectionInput.source,
+        target: projectionInput.target,
+        plan: functionWrapReception,
+        entryWindow: BINARY_VISUAL_PHASES.targetDelimiterIntroduction
+      });
     }
   });
 }

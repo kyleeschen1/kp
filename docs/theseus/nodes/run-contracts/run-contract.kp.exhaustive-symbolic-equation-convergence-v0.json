@@ -2,7 +2,8 @@
   "id": "run-contract.kp.exhaustive-symbolic-equation-convergence-v0",
   "kind": "run-contract",
   "title": "Exhaustive symbolic equation convergence",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Replaced by schema-complete v1 continuation with the same approved remaining scope plus the user-approved s25c enclosure-reception refinement.",
   "sourceRefs": [
     {
       "kind": "file",

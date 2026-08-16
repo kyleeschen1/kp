@@ -28,6 +28,12 @@ Semantic parity means each renderer expresses the same instructional hierarchy, 
 - For function wrapping, stage material transit first, enclosure reception
   second, and operational-syntax resolution last, with enough overlap to keep
   the handoff continuous.
+- A function-wrap operation with authored enclosure roles uses outside-in
+  reception: the leading and trailing delimiters begin farther apart and
+  slightly oversized, then shrink and settle exactly onto the renderer's
+  native endpoint geometry. Semantic plans name `leading` and `trailing`;
+  renderers own offsets, scale, and measured rectangles and must not infer
+  roles from glyph text or incidental DOM order.
 - Operators and connectors may share the final syntax-resolution cohort when
   the lesson gives them no separate teaching role. Split them only for a named
   instructional reason.

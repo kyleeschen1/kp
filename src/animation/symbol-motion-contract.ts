@@ -1,5 +1,8 @@
 import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
+import type {
+  KpFunctionWrapEnclosureEntityRoles
+} from "./function-wrap-reception.ts";
 
 export type KpSymbolMetricTransition =
   | "preserve-source-metrics"
@@ -39,6 +42,7 @@ export interface KpFunctionWrapMotionBranch {
   readonly id: string;
   readonly argumentContinuantIds: readonly string[];
   readonly wrapperEntityIds: readonly string[];
+  readonly enclosureEntityRoles?: KpFunctionWrapEnclosureEntityRoles | undefined;
 }
 
 export interface KpCanonicalFunctionWrapMotionBinding {
@@ -284,6 +288,24 @@ function compileFunctionWrapBinding(input: {
     if (branch.wrapperEntityIds.length === 0) {
       throw new Error(`Function-wrap branch ${branch.id} requires wrapper paint.`);
     }
+    const enclosureRoles = branch.enclosureEntityRoles ?? [];
+    if (enclosureRoles.length !== 0) {
+      const [leading, trailing] = enclosureRoles;
+      if (leading.side !== "leading" || trailing.side !== "trailing") {
+        throw new Error(
+          `Function-wrap branch ${branch.id} requires leading then trailing enclosure roles.`
+        );
+      }
+      if (
+        leading.entityId === trailing.entityId ||
+        !branch.wrapperEntityIds.includes(leading.entityId) ||
+        !branch.wrapperEntityIds.includes(trailing.entityId)
+      ) {
+        throw new Error(
+          `Function-wrap branch ${branch.id} enclosure roles must name distinct wrapper entities.`
+        );
+      }
+    }
   }
   requireSameSet(
     wrapperEntityIds,
@@ -302,7 +324,12 @@ function compileFunctionWrapBinding(input: {
         argumentContinuantIds: Object.freeze([
           ...branch.argumentContinuantIds
         ]),
-        wrapperEntityIds: Object.freeze([...branch.wrapperEntityIds])
+        wrapperEntityIds: Object.freeze([...branch.wrapperEntityIds]),
+        enclosureEntityRoles: Object.freeze(
+          (branch.enclosureEntityRoles ?? []).map((role) =>
+            Object.freeze({ ...role })
+          )
+        ) as KpFunctionWrapEnclosureEntityRoles
       })
     )),
     synchronization: "together" as const

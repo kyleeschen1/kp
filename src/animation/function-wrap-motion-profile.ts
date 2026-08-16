@@ -5,7 +5,9 @@ export interface KpFunctionWrapMotionWindow {
 
 export interface KpFunctionWrapMotionProfile {
   readonly materialTransit: KpFunctionWrapMotionWindow;
-  readonly enclosureReception: KpFunctionWrapMotionWindow;
+  readonly enclosureReception: KpFunctionWrapMotionWindow & {
+    readonly initialScale: number;
+  };
   readonly syntaxResolution: KpFunctionWrapMotionWindow;
 }
 
@@ -17,7 +19,11 @@ export interface KpFunctionWrapMotionProfile {
  */
 export const kpCanonicalFunctionWrapMotionProfile = Object.freeze({
   materialTransit: Object.freeze({ start: 0, end: 0.4 }),
-  enclosureReception: Object.freeze({ start: 0.42, end: 0.7 }),
+  enclosureReception: Object.freeze({
+    start: 0.42,
+    end: 0.7,
+    initialScale: 1.18
+  }),
   syntaxResolution: Object.freeze({ start: 0.5, end: 0.78 })
 } satisfies KpFunctionWrapMotionProfile);
 

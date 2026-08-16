@@ -1,0 +1,88 @@
+{
+  "id": "run-contract.kp.exhaustive-symbolic-equation-convergence-v1",
+  "kind": "run-contract",
+  "title": "Exhaustive symbolic equation convergence continuation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.exhaustive-symbolic-equation-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md",
+      "summary": "Human-approved exhaustive convergence plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md",
+      "summary": "Approved function-wrap visual discovery and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md",
+      "summary": "Approved post-checkpoint architecture and migration order."
+    }
+  ],
+  "verification": [
+    "npm run test:log-product",
+    "npm run visual:log-product",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Promote the approved function-wrap enclosure reception through typed presentation roles and apply it to the binary log-product exemplar without changing semantic identity, endpoints, or host authority.",
+    "Continue the previously approved exhaustive equation convergence slices after the required human checkpoint."
+  ],
+  "disallowedWork": [
+    "Do not change public layout, curriculum, graph, code, diagram, Canvas, WebGL, Graph3D, SvelteKit, or unrelated authoring systems.",
+    "Do not touch user-authored economics files or unrelated untracked project documents."
+  ],
+  "goal": "Complete canonical function-wrap reception, then continue the approved exhaustive equation convergence program.",
+  "target": "next-action.kp.exhaustive-symbolic-equation-convergence-v0",
+  "runMode": "run",
+  "maxSlices": 6,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop after s25c for human visual review before migration wave A.",
+    "Stop if enclosure reception changes semantic identity, native endpoints, deterministic seek or rewind, or unrelated motifs.",
+    "Stop when verification fails in a way that requires human judgment.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "s25c",
+      "title": "Canonical function-wrap enclosure reception",
+      "summary": "Typed function-wrap enclosure reception now names leading/trailing semantic roles and Native KaTeX expresses one shared outside-in settlement. Canonical f(x), apply-log bindings, and the binary log-product candidate use the contract; required semantic, deterministic, browser, architecture, type, and log-product visual checks pass. Candidate aesthetics remain pending human review.",
+      "status": "complete"
+    },
+    {
+      "id": "s26",
+      "title": "Migration wave A operation plan families",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Migration wave B structural native math families",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Migration wave C generated bespoke diagnostic and static rows",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Governed LLM entry and marginal cost probe",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Release closeout and final catalogue checkpoint",
+      "status": "planned"
+    }
+  ]
+}

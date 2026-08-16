@@ -72,21 +72,19 @@ Only this repository sequence is active:
    checkpoints; the cross-caller decision promoted seven operation-independent
    requirements while retaining choreography and geometry locally.
 5. **Exhaustive equation convergence:** active at its mandatory visual
-   checkpoint. One semantic-motion compiler now routes the approved callers,
-   and two- and three-factor log-product callers prove the clean path. Before
-   migration wave A, test the accepted bounded dissolve-direct-wrap candidate
-   on the binary exemplar using canonical function reception and stop for
-   human review. After approval, compress
-   the iteration path through explicit verification modes, typed open
-   declarations, generated closed dispatch, and retirement of the first
-   high-churn test clusters. Promote homomorphic decomposition through product
-   and quotient pressure, then migrate every supported equation-surface asset
-   in family-sized reversible waves with adjacent switch, compatibility, and
-   redundant-test retirement. Connect governed LLM drafts only after the
-   cutover is stable, then pressure the shared upper boundary with one graph
-   and one code caller without merging their domain compilers. The approved
-   order is recorded in
-   `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+   checkpoint, with an architecture-first reorder proposed for overnight work.
+   One semantic-motion compiler now routes the approved callers, and two- and
+   three-factor log-product callers prove the clean path. Preserve the bounded
+   outside-in binary candidate as pending human review; do not let that review
+   block deterministic work on verification modes, typed motif invocations,
+   immutable registries, generated closed dispatch, test-owner retirement, and
+   behavior-preserving equation migration. `function-wrap` must become an
+   executable shared motif invoked by recipes rather than descriptive guidance
+   that callers can reimplement. Human approval is still required before
+   promoting the candidate aesthetics or pressuring a new visual caller. The
+   proposed 26-slice reorder is recorded in
+   `reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`;
+   execution still requires explicit approval.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

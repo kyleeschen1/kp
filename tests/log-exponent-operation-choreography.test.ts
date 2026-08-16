@@ -31,6 +31,18 @@ test("apply-log mints two synchronized branches from canonical wrap authority", 
     ],
     ["logged.right.log", "logged.right.log.operator"]
   ]);
+  assert.deepEqual(
+    choreography.reception.branches.map(({ enclosureEntityRoles }) =>
+      enclosureEntityRoles
+    ),
+    [
+      [
+        { entityId: "logged.left.log.open", side: "leading" },
+        { entityId: "logged.left.log.close", side: "trailing" }
+      ],
+      []
+    ]
+  );
   assert.ok(
     choreography.argumentReflowWindow.start <
       choreography.wrapperEntryWindow.start

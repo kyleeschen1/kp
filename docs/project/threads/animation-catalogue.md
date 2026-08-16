@@ -2,9 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-16
-Current Next Action: Review the bounded dissolve-direct-wrap binary log-product
-exemplar using canonical function reception. Do not begin migration wave A or
-tune the quotient caller before that approval.
+Current Next Action: Preserve the bounded dissolve-direct-wrap binary
+log-product exemplar as pending human review, then—after explicit approval of
+the revised run—perform deterministic narrow-core and behavior-preserving
+migration work without promoting visual policy.
 
 ## Goal
 
@@ -126,9 +127,12 @@ them, then resolve the derived `ln` occurrences and `+` as one syntax cohort.
 This reuses the approved function-wrap cadence and reopens presentation
 choreography only; the accepted semantic family, identities, compiler,
 endpoints, clock, catalogue, and host remain the preservation boundary. Tune
-only the binary exemplar, then use three factors for cardinality pressure and
-log quotient as the structurally different promotion caller. The decision and
-discovery/promotion cadence are recorded in
+only the binary exemplar. Its current checkpoint makes enclosure reception a
+typed function-wrap plan: delimiters arrive wider and oversized, then settle
+to native KaTeX geometry before the `ln`/connector syntax cohort completes.
+Human visual review remains required before using three factors for
+cardinality pressure and log quotient as the structurally different promotion
+caller. The decision and discovery/promotion cadence are recorded in
 `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
 The approved follow-on order now inserts iteration-path compression before
@@ -141,6 +145,15 @@ path. Governed LLM generation follows singular equation authority; one graph
 and one code caller then pressure only the shared upper host/runtime boundary.
 The eleven-step order is owned by
 `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+
+The proposed overnight reorder makes one missing boundary explicit: motif
+names are not suggestions. Recipes invoke nominal typed motifs with semantic
+role bindings; a shared motif compiler and renderer adapter supply the actual
+motion. This permits architecture and behavior-preserving migration to proceed
+while the current log-product look remains pending review. Its 26 independently
+reversible slices are owned by
+`../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md` and
+must not execute until explicitly approved.
 
 ## Accepted Scope
 
@@ -222,6 +235,7 @@ The eleven-step order is owned by
 - `docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`
 - `docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`
+- `docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`

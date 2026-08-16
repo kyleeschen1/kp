@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  createKpLogProductFunctionWrapReceptionPlan,
   kpLogProductSemanticMotionProjectionPolicy,
   createKpLogProductSemanticMotionProjectionPolicy,
   projectKpLogProductNativePaintRelations
@@ -11,6 +12,37 @@ import {
   kpCanonicalCompiledLogProductOperation,
   kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
+
+test("log-product declares synchronized function-wrap enclosure roles", () => {
+  const plan = createKpLogProductFunctionWrapReceptionPlan(
+    kpCanonicalCompiledLogProductOperation
+  );
+
+  assert.equal(plan.kind, "function-wrap-reception");
+  assert.equal(plan.synchronization, "all-enclosures-together");
+  assert.deepEqual(
+    plan.branches.map(({ argumentEntityIds, enclosureEntityRoles }) => ({
+      argumentEntityIds,
+      enclosureEntityRoles
+    })),
+    [
+      {
+        argumentEntityIds: ["target.left.argument.x"],
+        enclosureEntityRoles: [
+          { entityId: "target.left.log.open", side: "leading" },
+          { entityId: "target.left.log.close", side: "trailing" }
+        ]
+      },
+      {
+        argumentEntityIds: ["target.right.argument.y"],
+        enclosureEntityRoles: [
+          { entityId: "target.right.log.open", side: "leading" },
+          { entityId: "target.right.log.close", side: "trailing" }
+        ]
+      }
+    ]
+  );
+});
 
 test("binary visual proof withdraws its source application while factors persist", () => {
   const relations = projectKpLogProductNativePaintRelations(

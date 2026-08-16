@@ -74,6 +74,16 @@ function compileOperationContract(
                 "logged.left.log.operator",
                 "logged.left.log.open",
                 "logged.left.log.close"
+              ],
+              enclosureEntityRoles: [
+                {
+                  entityId: "logged.left.log.open",
+                  side: "leading"
+                },
+                {
+                  entityId: "logged.left.log.close",
+                  side: "trailing"
+                }
               ]
             },
             {
