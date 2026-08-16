@@ -276,6 +276,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T16:17:39.067Z",
       "notes": "Seventeen focused tests, full typecheck, architecture gates, bundle boundaries, and diff check passed; measured bundle values remain unchanged."
+    },
+    {
+      "command": "npm run test:equation-adapter-ownership-map; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T16:23:34.716Z",
+      "notes": "Three ownership graph tests passed, all TypeScript and Svelte projects passed, and architecture gates passed over 1,549 source files. No production behavior changed."
     }
   ]
 }

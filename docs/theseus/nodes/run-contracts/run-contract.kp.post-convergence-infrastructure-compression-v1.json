@@ -188,7 +188,8 @@
     {
       "id": "s25",
       "title": "equation-adapter-ownership-map",
-      "status": "planned"
+      "summary": "Added a typed, source-grounded, acyclic responsibility map for equation frame planning, markup, material lifecycle, semantic token paint, specialized choreography, and host orchestration; selected stage-frame planning for extraction A and markup projection as the conditional extraction B.",
+      "status": "complete"
     },
     {
       "id": "s26",
