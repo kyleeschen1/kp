@@ -8,20 +8,82 @@ import {
 import type {
   KpCompiledLogExponentOperation
 } from "../semantic/log-exponent-transformation-compiler.ts";
+import {
+  compileKpFunctionWrapInvocationGroup,
+  type KpCompiledFunctionWrapInvocationGroup
+} from "./function-wrap-invocation.ts";
 
 export interface KpLogExponentSymbolMotionPlan {
   readonly operationId: string;
   readonly contract: KpCompiledSymbolMotionContract;
+  readonly functionWrapInvocationGroup?:
+    KpCompiledFunctionWrapInvocationGroup | undefined;
 }
 
 export function compileKpLogExponentSymbolMotionPlans(
   operations: readonly KpCompiledLogExponentOperation[] =
     kpCanonicalLogExponentTransformationTree.operations
 ): readonly KpLogExponentSymbolMotionPlan[] {
-  return Object.freeze(operations.map((operation) => Object.freeze({
-    operationId: operation.operation.id,
-    contract: compileOperationContract(operation)
-  })));
+  return Object.freeze(operations.map((operation) => {
+    const contract = compileOperationContract(operation);
+    return Object.freeze({
+      operationId: operation.operation.id,
+      contract,
+      ...(operation.operation.kind === "apply-natural-log-both-sides"
+        ? {
+            functionWrapInvocationGroup:
+              compileApplyLogFunctionWrapInvocationGroup(operation, contract)
+          }
+        : {})
+    });
+  }));
+}
+
+function compileApplyLogFunctionWrapInvocationGroup(
+  operation: KpCompiledLogExponentOperation,
+  contract: KpCompiledSymbolMotionContract
+): KpCompiledFunctionWrapInvocationGroup {
+  const motif = contract.canonicalMotifs[0];
+  if (motif === undefined || contract.canonicalMotifs.length !== 1) {
+    throw new Error(
+      `Apply-log contract ${contract.id} requires one canonical wrap declaration.`
+    );
+  }
+  const continuants = new Map(contract.continuants.map((rule) => [
+    rule.id,
+    rule
+  ]));
+  return compileKpFunctionWrapInvocationGroup({
+    id: operation.transformation.id,
+    branches: motif.branches.map((branch) => {
+      const argumentRules = branch.argumentContinuantIds.map((id) => {
+        const rule = continuants.get(id);
+        if (rule === undefined) {
+          throw new Error(
+            `Apply-log function-wrap branch ${branch.id} lacks continuant ${id}.`
+          );
+        }
+        return rule;
+      });
+      const enclosureIds = new Set(
+        (branch.enclosureEntityRoles ?? []).map(({ entityId }) => entityId)
+      );
+      return {
+        id: branch.id,
+        semanticObjectId: operation.targetRoles.stateId,
+        sourceArgumentEntityIds: argumentRules.flatMap(
+          ({ sourceEntityIds }) => sourceEntityIds
+        ),
+        targetArgumentEntityIds: argumentRules.flatMap(
+          ({ targetEntityIds }) => targetEntityIds
+        ),
+        functionEntityIds: branch.wrapperEntityIds.filter(
+          (entityId) => !enclosureIds.has(entityId)
+        ),
+        enclosureEntityRoles: branch.enclosureEntityRoles ?? []
+      };
+    })
+  });
 }
 
 export const kpCanonicalLogExponentSymbolMotionPlans =

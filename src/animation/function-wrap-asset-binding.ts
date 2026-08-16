@@ -1,36 +1,25 @@
 import type { KpAnimationAsset } from "./asset.ts";
 import {
-  createKpFunctionWrapEquationExtensionPack,
-  kpFunctionWrapEquationExtensionPackId
-} from "./equation-extension-packs/function-wrap.ts";
-import { kpFunctionWrapMotifSchema } from "./function-wrap-motif.ts";
-import {
-  compileKpMotifInvocation,
   createKpMotifEntityBinding,
-  createKpMotifInvocation,
   type KpCompiledMotifPlan,
   type KpMotifInvocation
 } from "../domain-ir/equation-motif-invocation.ts";
-import {
-  validateKpEquationExtensionPack,
-  type KpValidatedEquationExtensionPack
+import type {
+  KpValidatedEquationExtensionPack
 } from "../domain-ir/equation-extension-pack-validator.ts";
 import {
-  kpCanonicalEquationMotionVocabulary,
   type KpOperationKind,
   type KpRecipeId,
   type KpRendererCapabilityId
 } from "../domain-ir/equation-motion-vocabulary.ts";
 import type { KpAssetSelector } from "../semantic/asset.ts";
-
-const vocabulary = kpCanonicalEquationMotionVocabulary;
+import {
+  compileKpFunctionWrapInvocation,
+  kpCanonicalFunctionWrapDeclaration
+} from "./function-wrap-invocation.ts";
 
 export const kpCanonicalFunctionWrapAssetDeclaration = Object.freeze({
-  packId: kpFunctionWrapEquationExtensionPackId,
-  operationKind: vocabulary.operations.wrapFunctionV1,
-  recipeId: vocabulary.recipes.functionApplicationV1,
-  motifId: vocabulary.motifs.functionWrapV1,
-  rendererCapabilityId: vocabulary.rendererCapabilities.nativeKatexV1
+  ...kpCanonicalFunctionWrapDeclaration
 });
 
 export interface KpFunctionWrapAssetBinding {
@@ -65,14 +54,6 @@ export function compileAndBindKpFunctionWrapAnimationAsset(
   const existing = bindings.get(animation);
   if (existing !== undefined) return existing;
 
-  const packResult = validateKpEquationExtensionPack(
-    createKpFunctionWrapEquationExtensionPack()
-  );
-  if (packResult.status !== "valid") {
-    throw new Error(
-      `Function-wrap extension pack is invalid: ${packResult.diagnostics[0]?.message ?? "unknown diagnostic"}`
-    );
-  }
   const transformation = requireOnly(
     animation.transformations.filter(
       ({ transformType }) => transformType === "wrapFunction"
@@ -134,10 +115,8 @@ export function compileAndBindKpFunctionWrapAnimationAsset(
     );
   }
 
-  const invocation = createKpMotifInvocation(kpFunctionWrapMotifSchema, {
+  const motif = compileKpFunctionWrapInvocation({
     id: `invocation.${transformation.id}.function-wrap`,
-    motifId: vocabulary.motifs.functionWrapV1,
-    operationKind: vocabulary.operations.wrapFunctionV1,
     roleBindings: {
       argument: targetArgumentSelectors.map(entityBinding),
       function: functionSelectors.map(entityBinding),
@@ -145,18 +124,6 @@ export function compileAndBindKpFunctionWrapAnimationAsset(
       "trailing-enclosure": trailingEnclosures.map(entityBinding)
     }
   });
-  const compilation = compileKpMotifInvocation({
-    schema: kpFunctionWrapMotifSchema,
-    invocation,
-    rendererCapabilityIds: [
-      vocabulary.rendererCapabilities.nativeKatexV1
-    ]
-  });
-  if (compilation.status !== "compiled") {
-    throw new Error(
-      `Function-wrap invocation ${invocation.id} is invalid: ${compilation.diagnostics[0]?.message ?? "unknown diagnostic"}`
-    );
-  }
 
   const binding = Object.freeze({
     schemaVersion: "kp.function-wrap-asset-binding.v1" as const,
@@ -179,9 +146,9 @@ export function compileAndBindKpFunctionWrapAnimationAsset(
     recipeId: kpCanonicalFunctionWrapAssetDeclaration.recipeId,
     rendererCapabilityId:
       kpCanonicalFunctionWrapAssetDeclaration.rendererCapabilityId,
-    invocation,
-    compiledMotifPlan: compilation.plan,
-    registryAuthority: packResult.validatedPack
+    invocation: motif.invocation,
+    compiledMotifPlan: motif.compiledMotifPlan,
+    registryAuthority: motif.registryAuthority
   });
   bindings.set(animation, binding);
   return binding;

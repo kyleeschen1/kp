@@ -2,14 +2,14 @@ import type { KpSemanticBranchSchedule } from "./branch-schedule.ts";
 import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 import {
-  isKpCompiledSymbolMotionContract,
-  type KpCompiledSymbolMotionContract
-} from "./symbol-motion-contract.ts";
-import {
-  createKpFunctionWrapReceptionPlan,
   type KpFunctionWrapEnclosureEntityRoles,
   type KpFunctionWrapReceptionPlan
 } from "./function-wrap-reception.ts";
+import {
+  createKpFunctionWrapInvocationGroupReception,
+  isKpCompiledFunctionWrapInvocationGroup,
+  type KpCompiledFunctionWrapInvocationGroup
+} from "./function-wrap-invocation.ts";
 
 declare const kpEquationOperationChoreographyBrand: unique symbol;
 
@@ -59,6 +59,9 @@ export interface KpCanonicalFunctionWrapChoreography
   extends KpEquationOperationChoreographyBase {
   readonly kind: "canonical-function-wrap";
   readonly canonicalOperationId: "kp.core.wrap";
+  readonly motifId: KpCompiledFunctionWrapInvocationGroup["motifId"];
+  readonly operationKind: KpCompiledFunctionWrapInvocationGroup["operationKind"];
+  readonly recipeId: KpCompiledFunctionWrapInvocationGroup["recipeId"];
   readonly branches: readonly {
     readonly id: string;
     readonly sourceArgumentEntityIds: readonly string[];
@@ -349,8 +352,7 @@ export function createKpHomomorphicFusionChoreography(input: {
 }
 
 export function createKpCanonicalFunctionWrapChoreography(input: {
-  readonly contract: KpCompiledSymbolMotionContract;
-  readonly motifId: string;
+  readonly invocationGroup: KpCompiledFunctionWrapInvocationGroup;
   readonly direction: "forward" | "rewind";
   readonly argumentReflowWindow?: {
     readonly start: number;
@@ -361,47 +363,12 @@ export function createKpCanonicalFunctionWrapChoreography(input: {
     readonly end: number;
   } | undefined;
 }): KpCanonicalFunctionWrapChoreography {
-  if (!isKpCompiledSymbolMotionContract(input.contract)) {
+  if (!isKpCompiledFunctionWrapInvocationGroup(input.invocationGroup)) {
     throw new Error(
-      "Canonical function-wrap choreography requires compiled symbol-motion authority."
+      "Canonical function-wrap choreography requires compiled motif invocation authority."
     );
   }
-  const motif = input.contract.canonicalMotifs.find(
-    ({ id }) => id === input.motifId
-  );
-  if (motif?.kind !== "canonical-function-wrap") {
-    throw new Error(
-      `Symbol-motion contract ${input.contract.id} has no canonical wrap ${input.motifId}.`
-    );
-  }
-  const continuants = new Map(input.contract.continuants.map((rule) => [
-    rule.id,
-    rule
-  ]));
-  const branches = motif.branches.map((branch) => {
-    const rules = branch.argumentContinuantIds.map((id) => {
-      const rule = continuants.get(id);
-      if (rule === undefined) {
-        throw new Error(
-          `Canonical function-wrap branch ${branch.id} lacks continuant ${id}.`
-        );
-      }
-      return rule;
-    });
-    return Object.freeze({
-      id: branch.id,
-      sourceArgumentEntityIds: Object.freeze(rules.flatMap(
-        ({ sourceEntityIds }) => sourceEntityIds
-      )),
-      targetArgumentEntityIds: Object.freeze(rules.flatMap(
-        ({ targetEntityIds }) => targetEntityIds
-      )),
-      wrapperEntityIds: Object.freeze([...branch.wrapperEntityIds]),
-      enclosureEntityRoles: Object.freeze([
-        ...(branch.enclosureEntityRoles ?? [])
-      ]) as KpFunctionWrapEnclosureEntityRoles
-    });
-  });
+  const branches = input.invocationGroup.branches;
   const argumentReflowWindow = input.argumentReflowWindow ?? {
     start: 0.04,
     end: 0.7
@@ -417,35 +384,25 @@ export function createKpCanonicalFunctionWrapChoreography(input: {
       "Canonical function-wrap arguments must begin reflow before wrappers enter."
     );
   }
-  const reception = createKpFunctionWrapReceptionPlan({
-    id: `function-wrap-reception.${input.contract.transformationId}.${input.direction}`,
-    direction: input.direction,
-    branches: branches.map((branch) => {
-      const enclosureIds = new Set(
-        branch.enclosureEntityRoles.map(({ entityId }) => entityId)
-      );
-      return {
-        id: branch.id,
-        argumentEntityIds: branch.targetArgumentEntityIds,
-        syntaxEntityIds: branch.wrapperEntityIds.filter((entityId) =>
-          !enclosureIds.has(entityId)
-        ),
-        enclosureEntityRoles: branch.enclosureEntityRoles
-      };
-    })
+  const reception = createKpFunctionWrapInvocationGroupReception({
+    group: input.invocationGroup,
+    direction: input.direction
   });
   return Object.freeze({
     schemaVersion: "kp.equation-operation-choreography.v1" as const,
     kind: "canonical-function-wrap" as const,
-    id: `operation-choreography.${input.contract.transformationId}.canonical-wrap.${input.direction}`,
-    transformationId: input.contract.transformationId,
+    id: `operation-choreography.${input.invocationGroup.id}.canonical-wrap.${input.direction}`,
+    transformationId: input.invocationGroup.id,
     direction: input.direction,
-    canonicalOperationId: motif.canonicalOperationId,
+    canonicalOperationId: "kp.core.wrap" as const,
+    motifId: input.invocationGroup.motifId,
+    operationKind: input.invocationGroup.operationKind,
+    recipeId: input.invocationGroup.recipeId,
     branches: Object.freeze(branches),
     argumentReflowWindow: Object.freeze({ ...argumentReflowWindow }),
     wrapperEntryWindow: Object.freeze({ ...wrapperEntryWindow }),
     reception
-  }) as KpCanonicalFunctionWrapChoreography;
+  }) as unknown as KpCanonicalFunctionWrapChoreography;
 }
 
 export function createKpCausalStructuralIntroductionChoreography(input: {

@@ -1319,11 +1319,60 @@
       "scope": "known aggregate compiler-cost ceiling",
       "checkedAt": "2026-08-16T06:53:07.435Z",
       "notes": "Inference contracts pass, but the pre-existing aggregate ceiling remains red: types 55992 exceeds 50000. No ceiling change or unrelated compiler-cost migration was made in s13."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "slice s14 log-exponent semantic and runtime laws",
+      "checkedAt": "2026-08-16T07:09:18.167Z",
+      "notes": "All 50 tests passed, including exact operation sequence, roles, correspondence, endpoint ownership, seek, rewind, and typed choreography."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/function-wrap-motif-authority.test.ts tests/function-wrap-invocation.test.ts tests/equation-motion-vocabulary.test.ts tests/native-katex-operation-choreography.test.ts tests/kp-function-wrap-choreography.test.ts tests/kp-function-wrap-animation-asset.test.ts tests/log-product-transit-session.test.ts",
+      "status": "passed",
+      "scope": "slice s14 shared function-wrap protocol",
+      "checkedAt": "2026-08-16T07:09:26.813Z",
+      "notes": "31 shared authority, invocation-group, Native KaTeX, caller, seek, rewind, and rejection laws passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s14 endpoint and sampled-frame equivalence",
+      "checkedAt": "2026-08-16T07:09:34.175Z",
+      "notes": "All 10 preservation matrix laws passed with unchanged semantic, renderer, clock, and 0/0.5/1 fingerprints."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run check:animation-library-bundle-boundary; npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s14 static registry and bundle closure",
+      "checkedAt": "2026-08-16T07:09:44.451Z",
+      "notes": "Full types and architecture pass; generated dispatch is fresh; outer 10819 B, main host 198600 B, and measured catalogue 114866 B remain under budget."
+    },
+    {
+      "command": "playwright test tests/log-exponent-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "known apply-log protected-transit collision",
+      "checkedAt": "2026-08-16T07:09:54.972Z",
+      "notes": "Direct URL seek and narrow reduced-motion tests pass. The full-motion mount still fails on the same unrelated protected-transit collision at progress 0.64-0.66 recorded in s12; s14 changed no geometry or timing and did not tune the pending visual."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "failed",
+      "scope": "known apply-log collision capture",
+      "checkedAt": "2026-08-16T07:10:03.046Z",
+      "notes": "Capture fails before screenshots on the same 0.64-0.66 collision audit; no visual judgment or geometry changes were made."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "known aggregate compiler-cost ceiling",
+      "checkedAt": "2026-08-16T07:10:10.453Z",
+      "notes": "Contracts pass; aggregate types remain above the old ceiling at 55664 versus 50000. This is lower than s13's 55992 types and 76100 versus 77121 instantiations, so s14 did not worsen the known debt."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s13 complete: the canonical x-to-f(x) asset declares the validated function-wrap extension pack and compiles exact semantic argument, function, and enclosure roles into motif.function-wrap.v1. Attention choreography consumes the minted binding rather than transform-name inference; plain-data catalogue copies recompile deterministically; current frames, browser behavior, reduced motion, and bundle closure are preserved. Next: apply-log cutover."
+    "summary": "Slice s14 complete: apply-natural-log-both-sides now compiles two synchronized invocations of motif.function-wrap.v1 through one immutable validated registry authority. Both wrapped and conventional bare function application carry explicit role sets; choreography consumes nominal invocation authority while retaining exact IDs, branches, 0.04-0.7 argument and 0.62-0.92 wrapper windows, semantic endpoints, seek/rewind, and frame fingerprints. The pre-existing 0.64-0.66 apply-log collision remains deferred without visual tuning. Next: log-product composition cutover."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

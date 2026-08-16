@@ -76,8 +76,8 @@ export const kpFunctionWrapMotifSchema = defineKpMotifSchema({
   roles: [
     { id: "argument", cardinality: "one-or-more", materialKind: "continuant" },
     { id: "function", cardinality: "one-or-more", materialKind: "syntax" },
-    { id: "leading-enclosure", cardinality: "one-or-more", materialKind: "enclosure" },
-    { id: "trailing-enclosure", cardinality: "one-or-more", materialKind: "enclosure" }
+    { id: "leading-enclosure", cardinality: "zero-or-more", materialKind: "enclosure" },
+    { id: "trailing-enclosure", cardinality: "zero-or-more", materialKind: "enclosure" }
   ],
   requiredRendererCapabilityIds: [
     vocabulary.rendererCapabilities.nativeKatexV1

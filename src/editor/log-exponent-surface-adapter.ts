@@ -202,9 +202,8 @@ async function prepareSurface(
       if (session.disposed || session.generation !== generation) return;
       const compiledOperationChoreography = index === 0
         ? createKpCanonicalFunctionWrapChoreography({
-            contract: symbolMotionPlan.contract,
-            motifId:
-              `motif.${operation.transformation.id}.canonical-wrap`,
+            invocationGroup:
+              symbolMotionPlan.functionWrapInvocationGroup!,
             direction: "forward"
           })
         : compileKpEquationOperationChoreography({

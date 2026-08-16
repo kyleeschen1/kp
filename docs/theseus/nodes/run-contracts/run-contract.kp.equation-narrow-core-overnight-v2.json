@@ -158,7 +158,8 @@
     {
       "id": "s14",
       "title": "Apply-log-cutover",
-      "status": "planned"
+      "summary": "Apply-log now invokes one shared typed function-wrap protocol twice under synchronized authority, supports explicit paired or absent enclosures, preserves exact current semantic/timing/frame behavior, and records the unchanged pre-existing collision separately without visual tuning.",
+      "status": "complete"
     },
     {
       "id": "s15",

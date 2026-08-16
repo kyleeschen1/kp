@@ -182,6 +182,7 @@ const checks = {
     [
       "node", "--disable-warning=ExperimentalWarning", "--test",
       "tests/function-wrap-motif-authority.test.ts",
+      "tests/function-wrap-invocation.test.ts",
       "tests/equation-motion-vocabulary.test.ts",
       "tests/native-katex-operation-choreography.test.ts",
       "tests/kp-function-wrap-choreography.test.ts",
