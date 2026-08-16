@@ -26,8 +26,27 @@ import {
   sampleKpSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
 import {
+  findKpWaveAEquationOperationPlanDeclaration,
+  type KpEquationRuntimeBindingId
+} from "../domain-ir/equation-surface-family-declarations.ts";
+import {
   kpCanonicalCompiledCancellationPressureSemanticMotion
 } from "../semantic/cancellation-pressure-semantic-motion.ts";
+
+const semanticMotionByBindingId:
+Readonly<Partial<Record<KpEquationRuntimeBindingId,
+  typeof kpCanonicalCompiledCancellationPressureSemanticMotion>>> =
+Object.freeze({
+  "runtime-binding.semantic-motion.inverse-cancellation.v1":
+    kpCanonicalCompiledCancellationPressureSemanticMotion
+});
+
+const distributionBindingById:
+Readonly<Partial<Record<KpEquationRuntimeBindingId,
+  typeof kpCanonicalDistributionPressureBinding>>> = Object.freeze({
+  "runtime-binding.distribution-pressure.v1":
+    kpCanonicalDistributionPressureBinding
+});
 
 export interface KpAlgebraChoreographyCapabilities
 extends KpAnimationRuntimeCapabilities {
@@ -47,24 +66,32 @@ export function createKpAlgebraChoreographyCapabilities(input: {
   const semanticMotion: KpSemanticMotionChoreographyCapability =
   Object.freeze({
     sampleForAnimationId: ({ animationId, progress, direction }:
-      Parameters<KpSemanticMotionChoreographyCapability["sampleForAnimationId"]>[0]) =>
-      animationId === "animation.generated.cancellation.additive-inverses"
-        ? sampleKpSemanticMotionChoreography({
-            choreography:
-              kpCanonicalCompiledCancellationPressureSemanticMotion,
+      Parameters<KpSemanticMotionChoreographyCapability["sampleForAnimationId"]>[0]) => {
+      const declaration =
+        findKpWaveAEquationOperationPlanDeclaration(animationId);
+      const choreography = declaration?.runtimeBindingIds
+        .map((bindingId) => semanticMotionByBindingId[bindingId])
+        .find((candidate) => candidate !== undefined);
+      return choreography === undefined
+        ? undefined
+        : sampleKpSemanticMotionChoreography({
+            choreography,
             progress,
             direction
-          })
-        : undefined
+          });
+    }
   });
   const distributionChoreography: KpDistributionChoreographyCapability =
   Object.freeze({
     // Family-local bindings arrive with the lazy algebra pack; the generic
     // equation surface must not import generated fixtures or semantic contracts.
-    bindingForAnimationId: (animationId: string) =>
-      animationId === "animation.generated.distribution.expand-a-sum"
-        ? kpCanonicalDistributionPressureBinding
-        : undefined,
+    bindingForAnimationId: (animationId: string) => {
+      const declaration =
+        findKpWaveAEquationOperationPlanDeclaration(animationId);
+      return declaration?.runtimeBindingIds
+        .map((bindingId) => distributionBindingById[bindingId])
+        .find((candidate) => candidate !== undefined);
+    },
     compile: (
       choreographyInput: Parameters<typeof compileKpDistributionChoreography>[0]
     ) =>

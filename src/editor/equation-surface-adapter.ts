@@ -12,6 +12,9 @@ import {
 import {
   compileKpSemanticEquationTransitionResult
 } from "../domain-ir/public-api.ts";
+import {
+  findKpWaveAEquationOperationPlanDeclaration
+} from "../domain-ir/equation-surface-family-declarations.ts";
 import type { KpSelectorAnnotatedLatex } from "../rendering/selector-annotated-latex.ts";
 import {
   projectKpEditorEquationRuntimeFrame,
@@ -118,6 +121,9 @@ import {
   type KpLinearRearrangementChoreographyFrame,
   type KpLinearRearrangementStep
 } from "../animation/linear-rearrangement-choreography.ts";
+import {
+  kpEquationLinearRearrangementActivatesLegacySurface
+} from "../animation/equation-linear-rearrangement-kind.ts";
 import {
   kpEquationWitnessedAnnihilationRuntime
 } from "../rendering/equation-witnessed-annihilation-runtime.ts";
@@ -796,7 +802,11 @@ function applyEquationMaterialLayer(input: {
     applyRadicalMaterialLayer(input);
     return;
   }
-  if (input.animationId !== "animation.linear-solve.solve-x") {
+  if (
+    findKpWaveAEquationOperationPlanDeclaration(input.animationId)
+      ?.materialContinuityId !==
+      "material-continuity.solve-x-linear-rearrangement.v1"
+  ) {
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
     delete input.stage.dataset["kpEditorEquationNativeSettlementProgress"];
     delete input.stage.dataset["kpEditorEquationNativeSettlementPhase"];
@@ -1383,10 +1393,9 @@ function createLinearRearrangementFrame(
 ): KpEditorEquationStageFrame["linearRearrangement"] {
   if (transformationId === undefined) return undefined;
   const hasLinearStep = animation.transformations.some(
-    (transformation) =>
-      transformation.transformType === "subtractBothSides" ||
-      transformation.transformType === "cancelAdditiveInverses" ||
-      transformation.transformType === "simplifyConstantDifference"
+    (transformation) => kpEquationLinearRearrangementActivatesLegacySurface(
+      transformation.transformType
+    )
   );
   if (!hasLinearStep) return undefined;
   let choreography = linearRearrangementChoreographyCache.get(animation.id);

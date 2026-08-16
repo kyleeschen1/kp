@@ -18,7 +18,23 @@ test("the algebra pack carries immutable runtime capabilities beside serializabl
   assert.equal(Object.isFrozen(pack), true);
   assert.equal(Object.isFrozen(pack.catalog), true);
   assert.equal(Object.isFrozen(pack.runtimeCapabilities), true);
-  assert.equal(pack.catalog.length, 10);
+  assert.deepEqual(
+    pack.catalog.map(({ id }) => id).sort(),
+    [
+      "animation.algebra.log-exponent.solve-two-power-x",
+      "animation.algebra.log-quotient.difference-to-quotient",
+      "animation.generated.cancellation.additive-inverses",
+      "animation.generated.distribution.expand-a-sum",
+      "animation.generated.distribution.factor-common-a",
+      "animation.generated.exponent.square-as-product",
+      "animation.generated.fraction-expression.two-fourths",
+      "animation.generated.function-wrap.apply-f",
+      "animation.generated.linear-solve.linear-68c15d41",
+      "animation.generated.radical.square-root-as-power",
+      "animation.inequality.sign-flip.basic",
+      "animation.linear-solve.solve-x"
+    ].sort()
+  );
   assert.equal(
     typeof pack.runtimeCapabilities.distributionChoreography?.compile,
     "function"
