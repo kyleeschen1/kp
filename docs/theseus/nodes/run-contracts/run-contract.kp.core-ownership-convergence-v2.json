@@ -128,7 +128,8 @@
     {
       "id": "s13",
       "title": "audit-linear-solve-behavior-reachability",
-      "status": "planned"
+      "summary": "The semantic-to-tutorial edge is isolated to an uncalled production behavior wrapper; typed audit and durable review authorize relocation to experience with exact behavior preservation.",
+      "status": "complete"
     },
     {
       "id": "s14",

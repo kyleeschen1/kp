@@ -189,6 +189,13 @@
       "scope": "slice s12 trace facade retirement",
       "checkedAt": "2026-08-16T21:38:19.636Z",
       "notes": "Thirty-six trace and tutorial tests passed; generated HTML, capability manifest, dashboard, architecture, and test-project type checks also passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-solve-behavior-reachability.test.ts",
+      "status": "passed",
+      "scope": "slice s13 linear-solve behavior reachability",
+      "checkedAt": "2026-08-16T21:41:29.990Z",
+      "notes": "The AST audit proves zero production importers and exactly three test importers; architecture and test-project typecheck remain green."
     }
   ],
   "expectedLearning": [
