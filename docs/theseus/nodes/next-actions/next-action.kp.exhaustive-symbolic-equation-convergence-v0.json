@@ -1464,11 +1464,116 @@
       "scope": "known aggregate compiler-cost ceiling",
       "checkedAt": "2026-08-16T07:26:31.369Z",
       "notes": "Inference contracts pass; aggregate remains over the old ceiling at 56024 types. The new typed structured-expression protocol adds bounded compile-time generic work but no runtime bundle cost."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "slice s18 closed operation and presentation dispatch",
+      "checkedAt": "2026-08-16T07:39:26.580Z",
+      "notes": "52 semantic, motion, timing, salience, registry closure, and no-fallback laws pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 repository types",
+      "checkedAt": "2026-08-16T07:39:27.638Z",
+      "notes": "Application, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 authority firewall",
+      "checkedAt": "2026-08-16T07:39:28.579Z",
+      "notes": "All architecture and equation compiler authority ratchets pass across 1538 source files."
+    },
+    {
+      "command": "npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s18 generated dispatch freshness",
+      "checkedAt": "2026-08-16T07:39:29.526Z",
+      "notes": "Generated literal dispatch remains fresh while loaded family internals use immutable closed registries."
+    },
+    {
+      "command": "playwright test tests/log-exponent-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "failed",
+      "scope": "known apply-log protected-transit collision",
+      "checkedAt": "2026-08-16T07:39:30.484Z",
+      "notes": "Direct seek and reduced-motion pass; full-motion mount reproduces the unchanged 0.64-0.66 collision recorded since s12. Routing changed no timing or geometry."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "known aggregate compiler-cost ceiling",
+      "checkedAt": "2026-08-16T07:39:31.445Z",
+      "notes": "Inference contracts pass; aggregate remains above the old ceiling at 56163 types versus 50000."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s18 semantic and sampled-frame preservation",
+      "checkedAt": "2026-08-16T07:39:54.116Z",
+      "notes": "All 10 semantic, renderer, clock, inventory, authority, and sampled-frame laws pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s18 lazy bundle closure",
+      "checkedAt": "2026-08-16T07:39:55.096Z",
+      "notes": "Outer 10819 B, main host 198600 B, and catalogue route 114866 B remain unchanged and under limits."
+    },
+    {
+      "command": "node focused loader capability inventory and disposition tests",
+      "status": "passed",
+      "scope": "slice s19 declaration projections",
+      "checkedAt": "2026-08-16T07:49:01.438Z",
+      "notes": "18 lazy-pack ownership, selected-capability, generated-inventory, disposition, retry, and import-boundary laws pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s19 repository types",
+      "checkedAt": "2026-08-16T07:49:02.481Z",
+      "notes": "Application, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "generated inventory disposition and asset-manifest freshness checks",
+      "status": "passed",
+      "scope": "slice s19 generated projection closure",
+      "checkedAt": "2026-08-16T07:49:03.405Z",
+      "notes": "All three checked-in projections remain byte-current from the consolidated declarations."
+    },
+    {
+      "command": "npm run test:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice s19 manifest loader equality",
+      "checkedAt": "2026-08-16T07:49:04.351Z",
+      "notes": "Six static truth, exact lazy pack/source, display losslessness, and incomplete-join rejection laws pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s19 boundaries",
+      "checkedAt": "2026-08-16T07:49:05.292Z",
+      "notes": "All architecture and compiler authority ratchets pass across 1539 source files."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s19 tree-shakable chunk closure",
+      "checkedAt": "2026-08-16T07:49:06.211Z",
+      "notes": "Outer 10819 B, main host 198600 B, and catalogue route 114866 B remain unchanged and under limits."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "scope": "slice s19 selected capability browser behavior",
+      "checkedAt": "2026-08-16T07:49:07.179Z",
+      "notes": "Five one-worker Chromium checks pass for loading, settlement, graph labels, programming/3D isolation, and app-specific capability loading."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s17 complete: the structured-equation family now supplies its child and projection handlers through the same immutable expression protocol used by logarithm families. The local recursive visit switch and speech switch are gone; a synthetic application node proves new kinds extend traversal without core edits. Existing construction validation remains family-local. Next: retire handwritten core equation dispatch."
+    "summary": "Slice s19 complete: one immutable pack declaration table now co-locates animation ownership, literal lazy imports, and pack source paths; one equation-family declaration source projects selected capabilities, renderer adapters, dispositions, and migration waves into the existing generated inventory, asset manifest, and disposition ledger. All projections remain byte-current, browser capability selection and lazy chunks are unchanged. Next: retire redundant count and membership assertions in favor of exact declaration/loadable-set equality."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

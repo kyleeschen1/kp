@@ -188,7 +188,8 @@
     {
       "id": "s19",
       "title": "Loader-and-capability-projection",
-      "status": "planned"
+      "summary": "Consolidated lazy pack ownership/loading and equation capability, renderer, disposition, and migration projections behind immutable declarations while preserving generated artifacts and bundle closure.",
+      "status": "complete"
     },
     {
       "id": "s20",

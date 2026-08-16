@@ -76,6 +76,76 @@ interface KpLoadedAnimationPack {
   readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
 }
 
+interface KpAnimationCatalogPackDeclaration {
+  readonly id: KpAnimationCatalogPackId;
+  readonly sourcePath: KpAnimationCatalogPackSourcePath;
+  readonly owns: (animationId: string) => boolean;
+  readonly load: () => Promise<KpLoadedAnimationPack>;
+}
+
+// These declarations are the build-visible lazy boundary. Literal imports
+// remain colocated with ownership so generated inventories cannot disagree
+// with the chunk that actually loads an asset.
+export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPackDeclaration[] =
+  Object.freeze([
+    pack("operation-evaluation", "src/animation/catalog-packs/operation-evaluation.ts",
+      (id) => id.startsWith("animation.operation-evaluation."),
+      async () => dataOnlyPack((await import("./catalog-packs/operation-evaluation.ts")).createKpOperationEvaluationAnimationPack())),
+    pack("exact-quantity", "src/animation/catalog-packs/exact-quantity.ts",
+      (id) => id === "animation.exact-fraction-quantity.third-plus-sixth",
+      async () => dataOnlyPack((await import("./catalog-packs/exact-quantity.ts")).createKpExactQuantityAnimationPack())),
+    pack("place-value", "src/animation/catalog-packs/place-value.ts",
+      (id) => id === "animation.place-value-addition.278-plus-156",
+      async () => dataOnlyPack((await import("./catalog-packs/place-value.ts")).createKpPlaceValueAnimationPack())),
+    pack("log-product", "src/animation/catalog-packs/log-product.ts",
+      (id) => id.startsWith("animation.algebra.log-product."),
+      async () => dataOnlyPack((await import("./catalog-packs/log-product.ts")).createKpLogProductAnimationPack())),
+    pack("algebra", "src/animation/catalog-packs/algebra.ts",
+      (id) => id === "animation.linear-solve.solve-x" ||
+        id.startsWith("animation.generated.linear-solve.") ||
+        id.startsWith("animation.generated.fraction-") ||
+        id.startsWith("animation.generated.exponent.") ||
+        id.startsWith("animation.generated.radical.") ||
+        id.startsWith("animation.generated.function-wrap.") ||
+        id.startsWith("animation.generated.distribution.") ||
+        id.startsWith("animation.generated.cancellation.") ||
+        id.startsWith("animation.algebra.log-exponent.") ||
+        id.startsWith("animation.algebra.log-quotient.") ||
+        id.startsWith("animation.inequality."),
+      async () => (await import("./catalog-packs/algebra.ts")).createKpAlgebraAnimationPack()),
+    pack("generated-drafts", "src/animation/catalog-packs/generated-drafts.ts",
+      (id) => id === "animation.generated.pipeline-diagram" ||
+        id === "animation.generated.add-zero" ||
+        id === "animation.generated.substitute-three" ||
+        id === "animation.generated.substitute-three.provisional-incorrect",
+      async () => dataOnlyPack((await import("./catalog-packs/generated-drafts.ts")).createKpGeneratedDraftAnimationPack())),
+    pack("generated-problems", "src/animation/catalog-packs/generated.ts",
+      (id) => id.startsWith("animation.generated.calculus.") ||
+        id.startsWith("animation.generated.linear-algebra."),
+      async () => dataOnlyPack((await import("./catalog-packs/generated.ts")).createKpGeneratedProblemAnimationPack())),
+    pack("graph", "src/animation/catalog-packs/graph.ts",
+      (id) => id.startsWith("animation.graph.") ||
+        id === "animation.derivative-rules.tangent-graph" ||
+        id === "animation.integral-ftc.area-sweep" ||
+        id === "animation.dot-projection.basic",
+      async () => dataOnlyPack((await import("./catalog-packs/graph.ts")).createKpGraphAnimationPack())),
+    pack("economics", "src/animation/catalog-packs/economics.ts",
+      (id) => id.startsWith("animation.economics."),
+      async () => dataOnlyPack((await import("./catalog-packs/economics.ts")).createKpEconomicsAnimationPack())),
+    pack("physics", "src/animation/catalog-packs/physics.ts",
+      (id) => id.startsWith("animation.physics."),
+      async () => dataOnlyPack((await import("./catalog-packs/physics.ts")).createKpPhysicsAnimationPack())),
+    pack("programming", "src/animation/catalog-packs/programming.ts",
+      (id) => id.startsWith("animation.programming."),
+      async () => dataOnlyPack((await import("./catalog-packs/programming.ts")).createKpProgrammingAnimationPack())),
+    pack("comparison", "src/animation/catalog-packs/comparison.ts",
+      (id) => id.startsWith("animation.comparison."),
+      async () => dataOnlyPack((await import("./catalog-packs/comparison.ts")).createKpComparisonAnimationPack())),
+    pack("complex-katex", "src/animation/catalog-packs/complex-katex.ts",
+      (id) => id.startsWith("animation.sample."),
+      async () => dataOnlyPack((await import("./catalog-packs/complex-katex.ts")).createKpComplexKatexAnimationPack()))
+  ]);
+
 export async function loadKpAnimationAsset(
   animationId: string
 ): Promise<KpLoadedAnimationAsset> {
@@ -108,53 +178,10 @@ export async function loadKpAnimationAsset(
 export function kpAnimationCatalogPackId(
   animationId: string
 ): KpAnimationCatalogPackId {
-  if (animationId.startsWith("animation.operation-evaluation.")) {
-    return "operation-evaluation";
-  }
-  if (
-    animationId ===
-      "animation.exact-fraction-quantity.third-plus-sixth"
-  ) return "exact-quantity";
-  if (
-    animationId === "animation.place-value-addition.278-plus-156"
-  ) return "place-value";
-  if (
-    animationId.startsWith("animation.algebra.log-product.")
-  ) return "log-product";
-  if (
-    animationId === "animation.linear-solve.solve-x" ||
-    animationId.startsWith("animation.generated.linear-solve.") ||
-    animationId.startsWith("animation.generated.fraction-") ||
-    animationId.startsWith("animation.generated.exponent.") ||
-    animationId.startsWith("animation.generated.radical.") ||
-    animationId.startsWith("animation.generated.function-wrap.") ||
-    animationId.startsWith("animation.generated.distribution.") ||
-    animationId.startsWith("animation.generated.cancellation.") ||
-    animationId.startsWith("animation.algebra.log-exponent.") ||
-    animationId.startsWith("animation.algebra.log-quotient.") ||
-    animationId.startsWith("animation.inequality.")
-  ) return "algebra";
-  if (animationId === "animation.generated.pipeline-diagram" ||
-    animationId === "animation.generated.add-zero" ||
-    animationId === "animation.generated.substitute-three" ||
-    animationId === "animation.generated.substitute-three.provisional-incorrect") {
-    return "generated-drafts";
-  }
-  if (animationId.startsWith("animation.generated.calculus.") ||
-    animationId.startsWith("animation.generated.linear-algebra.")) {
-    return "generated-problems";
-  }
-  if (animationId.startsWith("animation.graph.") ||
-    animationId === "animation.derivative-rules.tangent-graph" ||
-    animationId === "animation.integral-ftc.area-sweep" ||
-    animationId === "animation.dot-projection.basic") {
-    return "graph";
-  }
-  if (animationId.startsWith("animation.economics.")) return "economics";
-  if (animationId.startsWith("animation.physics.")) return "physics";
-  if (animationId.startsWith("animation.programming.")) return "programming";
-  if (animationId.startsWith("animation.comparison.")) return "comparison";
-  if (animationId.startsWith("animation.sample.")) return "complex-katex";
+  const declaration = kpAnimationCatalogPackDeclarations.find(
+    ({ owns }) => owns(animationId)
+  );
+  if (declaration !== undefined) return declaration.id;
   throw new KpAnimationCatalogLoadError(
     "unowned-animation",
     `No animation capability pack owns ${animationId}.`,
@@ -165,34 +192,7 @@ export function kpAnimationCatalogPackId(
 export function kpAnimationCatalogPackSourcePath(
   packId: KpAnimationCatalogPackId
 ): KpAnimationCatalogPackSourcePath {
-  switch (packId) {
-    case "exact-quantity":
-      return "src/animation/catalog-packs/exact-quantity.ts";
-    case "place-value":
-      return "src/animation/catalog-packs/place-value.ts";
-    case "operation-evaluation":
-      return "src/animation/catalog-packs/operation-evaluation.ts";
-    case "algebra":
-      return "src/animation/catalog-packs/algebra.ts";
-    case "log-product":
-      return "src/animation/catalog-packs/log-product.ts";
-    case "generated-drafts":
-      return "src/animation/catalog-packs/generated-drafts.ts";
-    case "generated-problems":
-      return "src/animation/catalog-packs/generated.ts";
-    case "graph":
-      return "src/animation/catalog-packs/graph.ts";
-    case "economics":
-      return "src/animation/catalog-packs/economics.ts";
-    case "physics":
-      return "src/animation/catalog-packs/physics.ts";
-    case "programming":
-      return "src/animation/catalog-packs/programming.ts";
-    case "comparison":
-      return "src/animation/catalog-packs/comparison.ts";
-    case "complex-katex":
-      return "src/animation/catalog-packs/complex-katex.ts";
-  }
+  return requirePackDeclaration(packId).sourcePath;
 }
 
 async function loadPack(
@@ -216,47 +216,28 @@ async function loadPack(
 async function loadUncachedPack(
   packId: KpAnimationCatalogPackId
 ): Promise<KpLoadedAnimationPack> {
-  switch (packId) {
-    case "exact-quantity":
-      return dataOnlyPack((await import("./catalog-packs/exact-quantity.ts"))
-        .createKpExactQuantityAnimationPack());
-    case "place-value":
-      return dataOnlyPack((await import("./catalog-packs/place-value.ts"))
-        .createKpPlaceValueAnimationPack());
-    case "operation-evaluation":
-      return dataOnlyPack((await import("./catalog-packs/operation-evaluation.ts"))
-        .createKpOperationEvaluationAnimationPack());
-    case "algebra":
-      return (await import("./catalog-packs/algebra.ts"))
-        .createKpAlgebraAnimationPack();
-    case "log-product":
-      return dataOnlyPack((await import("./catalog-packs/log-product.ts"))
-        .createKpLogProductAnimationPack());
-    case "generated-drafts":
-      return dataOnlyPack((await import("./catalog-packs/generated-drafts.ts"))
-        .createKpGeneratedDraftAnimationPack());
-    case "generated-problems":
-      return dataOnlyPack((await import("./catalog-packs/generated.ts"))
-        .createKpGeneratedProblemAnimationPack());
-    case "graph":
-      return dataOnlyPack((await import("./catalog-packs/graph.ts"))
-        .createKpGraphAnimationPack());
-    case "economics":
-      return dataOnlyPack((await import("./catalog-packs/economics.ts"))
-        .createKpEconomicsAnimationPack());
-    case "physics":
-      return dataOnlyPack((await import("./catalog-packs/physics.ts"))
-        .createKpPhysicsAnimationPack());
-    case "programming":
-      return dataOnlyPack((await import("./catalog-packs/programming.ts"))
-        .createKpProgrammingAnimationPack());
-    case "comparison":
-      return dataOnlyPack((await import("./catalog-packs/comparison.ts"))
-        .createKpComparisonAnimationPack());
-    case "complex-katex":
-      return dataOnlyPack((await import("./catalog-packs/complex-katex.ts"))
-        .createKpComplexKatexAnimationPack());
+  return requirePackDeclaration(packId).load();
+}
+
+function pack(
+  id: KpAnimationCatalogPackId,
+  sourcePath: KpAnimationCatalogPackSourcePath,
+  owns: (animationId: string) => boolean,
+  load: () => Promise<KpLoadedAnimationPack>
+): KpAnimationCatalogPackDeclaration {
+  return Object.freeze({ id, sourcePath, owns, load });
+}
+
+function requirePackDeclaration(
+  packId: KpAnimationCatalogPackId
+): KpAnimationCatalogPackDeclaration {
+  const declaration = kpAnimationCatalogPackDeclarations.find(
+    ({ id }) => id === packId
+  );
+  if (declaration === undefined) {
+    throw new Error(`Unknown animation pack declaration ${packId}.`);
   }
+  return declaration;
 }
 
 function dataOnlyPack(catalog: readonly KpAnimationAsset[]): KpLoadedAnimationPack {

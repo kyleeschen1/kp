@@ -18,6 +18,9 @@ import {
   type KpAnimationLibraryDisplayEntry,
   type KpAnimationLibraryDisplayRepresentation
 } from "../editor/animation-library-display-catalog.ts";
+import {
+  projectKpEquationSurfaceFamily
+} from "../domain-ir/equation-surface-family-declarations.ts";
 
 export const kpHistoricalEquationSurfaceBaseline = Object.freeze({
   sourceRef:
@@ -272,46 +275,11 @@ Pick<
   KpEquationSurfaceInventoryEntry["catalogueSurface"],
   "selectedCapabilityId" | "rendererAdapterId" | "rendererSourcePath"
 > {
-  if (animationId.startsWith("animation.operation-evaluation.")) {
-    return Object.freeze({
-      selectedCapabilityId: "operation-evaluation" as const,
-      rendererAdapterId:
-        "editor-animation-surface.operation-evaluation.canonical-native-katex",
-      rendererSourcePath:
-        "src/editor/operation-evaluation-surface-adapter.ts"
-    });
-  }
-  if (animationId === "animation.algebra.log-exponent.solve-two-power-x") {
-    return Object.freeze({
-      selectedCapabilityId: "log-exponent" as const,
-      rendererAdapterId:
-        "editor-animation-surface.log-exponent.canonical-native-katex",
-      rendererSourcePath: "src/editor/log-exponent-surface-adapter.ts"
-    });
-  }
-  if (
-    animationId ===
-      "animation.algebra.log-quotient.difference-to-quotient"
-  ) {
-    return Object.freeze({
-      selectedCapabilityId: "log-quotient" as const,
-      rendererAdapterId:
-        "editor-animation-surface.log-quotient.canonical-native-katex",
-      rendererSourcePath: "src/editor/log-quotient-surface-adapter.ts"
-    });
-  }
-  if (animationId.startsWith("animation.algebra.log-product.")) {
-    return Object.freeze({
-      selectedCapabilityId: "log-product" as const,
-      rendererAdapterId:
-        "editor-animation-surface.log-product.canonical-native-katex",
-      rendererSourcePath: "src/editor/log-product-surface-adapter.ts"
-    });
-  }
+  const family = projectKpEquationSurfaceFamily(animationId);
   return Object.freeze({
-    selectedCapabilityId: "equation-katex" as const,
-    rendererAdapterId: "editor-animation-surface.equation.katex",
-    rendererSourcePath: "src/editor/equation-surface-adapter.ts"
+    selectedCapabilityId: family.primaryCapabilityId,
+    rendererAdapterId: family.rendererAdapterId,
+    rendererSourcePath: family.rendererSourcePath
   });
 }
 

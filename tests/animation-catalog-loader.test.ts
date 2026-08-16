@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
   KpAnimationCatalogLoadError,
+  kpAnimationCatalogPackDeclarations,
   kpAnimationCatalogPackId,
   loadKpAnimationAsset,
   type KpAnimationCatalogPackId
@@ -96,6 +97,19 @@ test("all declared pack boundaries are exercised by editor metadata", () => {
   );
 
   assert.deepEqual([...actualPackIds].sort(), [...expectedPackIds].sort());
+  assert.deepEqual(
+    kpAnimationCatalogPackDeclarations.map(({ id }) => id).sort(),
+    [...expectedPackIds].sort()
+  );
+  for (const animation of createKpAnimationAssets()) {
+    assert.equal(
+      kpAnimationCatalogPackDeclarations.filter(({ owns }) =>
+        owns(animation.id)
+      ).length,
+      1,
+      `${animation.id} must have exactly one lazy pack declaration`
+    );
+  }
 });
 
 test("catalog loader retains literal dynamic-import boundaries", async () => {

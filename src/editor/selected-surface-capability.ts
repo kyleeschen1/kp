@@ -1,6 +1,10 @@
 import type {
   KpEditorAnimationSurfaceSlotKind
 } from "./animation-surface-dispatch.ts";
+import {
+  projectKpEquationSurfaceFamily,
+  type KpEquationSelectedSurfaceCapability
+} from "../domain-ir/equation-surface-family-declarations.ts";
 
 export const kpEditorGraphSvgAnimationIds = Object.freeze([
   "animation.generated.linear-algebra.matrix-vector.two-by-two",
@@ -23,13 +27,7 @@ export function supportsKpEditorGraphSvgAnimation(
 }
 
 export type KpEditorSelectedSurfaceCapability =
-  | "equation-katex"
-  | "log-exponent"
-  | "log-quotient"
-  | "log-product"
-  | "exact-fraction-quantity"
-  | "operation-evaluation"
-  | "place-value-addition"
+  | KpEquationSelectedSurfaceCapability
   | "graph-svg-economics"
   | "graph-svg-katex-labels"
   | "graph-webgl-3d"
@@ -41,35 +39,13 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
 }): readonly KpEditorSelectedSurfaceCapability[] {
   const capabilities: KpEditorSelectedSurfaceCapability[] = [];
   if (
-    input.animationId ===
-      "animation.exact-fraction-quantity.third-plus-sixth"
-  ) capabilities.push("exact-fraction-quantity");
-  if (input.animationId.startsWith("animation.operation-evaluation.")) {
-    capabilities.push("operation-evaluation");
-  }
-  if (
+    input.slotKinds.includes("equation") ||
     input.animationId === "animation.place-value-addition.278-plus-156"
-  ) capabilities.push("place-value-addition");
-  if (
-    input.animationId ===
-      "animation.algebra.log-exponent.solve-two-power-x"
-  ) capabilities.push("log-exponent");
-  if (
-    input.animationId ===
-      "animation.algebra.log-quotient.difference-to-quotient"
-  ) capabilities.push("log-quotient");
-  if (
-    input.animationId.startsWith("animation.algebra.log-product.")
-  ) capabilities.push("log-product");
-  if (
-    input.slotKinds.includes("equation") &&
-    input.animationId !==
-      "animation.algebra.log-exponent.solve-two-power-x" &&
-    input.animationId !==
-      "animation.algebra.log-quotient.difference-to-quotient" &&
-    !input.animationId.startsWith("animation.algebra.log-product.")
   ) {
-    capabilities.push("equation-katex");
+    capabilities.push(
+      ...projectKpEquationSurfaceFamily(input.animationId)
+        .selectedCapabilityIds
+    );
   }
   if (
     input.slotKinds.includes("graph") &&

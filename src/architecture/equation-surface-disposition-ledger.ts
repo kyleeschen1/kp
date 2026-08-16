@@ -12,6 +12,9 @@ import {
   type KpEquationSurfaceFamilyId,
   type KpEquationSurfacePreservationMatrix
 } from "./equation-surface-preservation-matrix.ts";
+import {
+  projectKpEquationSurfaceFamily
+} from "../domain-ir/equation-surface-family-declarations.ts";
 
 export const kpEquationSurfaceDispositionValues = Object.freeze([
   "canonical",
@@ -92,41 +95,6 @@ export class KpEquationSurfaceDispositionLedgerError extends Error {
     this.diagnostics = diagnostics;
   }
 }
-
-const staticOnlyIds = new Set([
-  "animation.comparison.jacobian-hessian",
-  "animation.comparison.linear-solve-programming",
-  "animation.sample.fourier-transform-pair",
-  "animation.sample.fundamental-theorem-calculus"
-]);
-
-const retirementCandidateIds = new Set([
-  "animation.generated.substitute-three.provisional-incorrect"
-]);
-
-const waveAIds = new Set([
-  "animation.generated.add-zero",
-  "animation.generated.cancellation.additive-inverses",
-  "animation.generated.distribution.expand-a-sum",
-  "animation.generated.distribution.factor-common-a",
-  "animation.generated.linear-solve.linear-68c15d41",
-  "animation.linear-solve.solve-x",
-  "animation.operation-evaluation.five-plus-two",
-  "animation.operation-evaluation.one-plus-two",
-  "animation.operation-evaluation.three-sixths"
-]);
-
-const waveBIds = new Set([
-  "animation.algebra.log-exponent.solve-two-power-x",
-  "animation.algebra.log-quotient.difference-to-quotient",
-  "animation.generated.exponent.square-as-product",
-  "animation.generated.fraction-expression.two-fourths",
-  "animation.generated.function-wrap.apply-f",
-  "animation.generated.linear-algebra.dot-product.three-vector",
-  "animation.generated.linear-algebra.matrix-matrix.two-by-two",
-  "animation.generated.linear-algebra.matrix-vector.two-by-two",
-  "animation.generated.radical.square-root-as-power"
-]);
 
 export function createKpEquationSurfaceDispositionLedger():
 KpEquationSurfaceDispositionLedger {
@@ -232,8 +200,9 @@ function dispositionEntry(input: {
   readonly familySemanticCommand: string;
   readonly familyVisualCommand: string;
 }): KpEquationSurfaceDispositionEntry {
-  const disposition = dispositionFor(input.animationId, input.pathClass);
-  const migrationWave = waveFor(input.animationId);
+  const family = projectKpEquationSurfaceFamily(input.animationId);
+  const disposition = family.disposition;
+  const migrationWave = family.migrationWave;
   return Object.freeze({
     schemaVersion: "kp.equation-surface-disposition-entry.v1" as const,
     animationId: input.animationId,
@@ -241,7 +210,9 @@ function dispositionEntry(input: {
     disposition,
     migrationWave,
     rationale: rationaleFor(disposition, input.animationId),
-    ...preCheckpointAdapterSlice(input.animationId),
+    ...(family.preCheckpointAdapterSlice === undefined
+      ? {}
+      : { preCheckpointAdapterSlice: family.preCheckpointAdapterSlice }),
     preservationBoundary: Object.freeze({
       semanticEndpointFingerprints: Object.freeze(unique(
         input.endpointFingerprints
@@ -289,22 +260,6 @@ function dispositionEntry(input: {
   });
 }
 
-function dispositionFor(
-  animationId: string,
-  pathClass: KpEquationSurfaceAuthorityPathClass
-): KpEquationSurfaceDisposition {
-  if (retirementCandidateIds.has(animationId)) return "retirement-candidate";
-  if (staticOnlyIds.has(animationId)) return "static-only";
-  if (pathClass === "operation-evaluation-specialized") return "canonical";
-  return "adapter-backed";
-}
-
-function waveFor(animationId: string): KpEquationSurfaceMigrationWave {
-  if (waveAIds.has(animationId)) return "wave-a-operation-plan";
-  if (waveBIds.has(animationId)) return "wave-b-structural-native-math";
-  return "wave-c-generated-bespoke-diagnostic-static";
-}
-
 function rationaleFor(
   disposition: KpEquationSurfaceDisposition,
   animationId: string
@@ -322,21 +277,6 @@ function rationaleFor(
     return `Equation surface ${animationId} has no supported semantic motion contract.`;
   }
   return "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.";
-}
-
-function preCheckpointAdapterSlice(animationId: string): {
-  readonly preCheckpointAdapterSlice?: "s20" | "s21" | "s22";
-} {
-  if (animationId.includes("log-quotient")) {
-    return { preCheckpointAdapterSlice: "s20" };
-  }
-  if (animationId.includes("distribution")) {
-    return { preCheckpointAdapterSlice: "s21" };
-  }
-  if (animationId.includes("cancellation")) {
-    return { preCheckpointAdapterSlice: "s22" };
-  }
-  return {};
 }
 
 function caller(
