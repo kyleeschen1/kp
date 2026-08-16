@@ -28,3 +28,24 @@ not currently expose or resolve the surface's available semantic entity IDs.
 The first request therefore looks valid but cannot be joined to the canonical
 asset without one repair. That is an authoring-boundary gap, not a motion or
 renderer defect; it remains evidence for the synthesis and facade slices.
+
+## Cancellation
+
+| Measure | Observation |
+| --- | --- |
+| Fixture | `pressure.equation.cancellation` |
+| Catalogue first pass | accepted |
+| Canonical entity closure first pass | repair required |
+| Repair count | 1 validator round |
+| Repair | replace four plausible semantic aliases with the canonical source object, authored inverse-pair selectors, and target object |
+| Compiler authority | compiler-generated transformation, canonical cancellation contract, inverse-cancellation presentation plan, and compiled semantic-motion recipe |
+| Deterministic proof | exact inverse membership, equal-glyph protection, reference closure, native endpoints, and seek/rewind laws pass |
+| Focused proof time | 3.01 seconds for 23 cancellation authority, endpoint, rewind, witness, and no-fallback tests on 2026-08-16 |
+| Presentation authorship | none |
+| Generic fallback | none |
+| Trial files touched | this evidence file, the cancellation trial test, and one package command entry |
+
+Cancellation repeats the function-wrap entity-resolution gap. The stronger
+result is that canonical correspondence authority distinguishes the retiring
+left `-3` from the visually identical right `-3`; the request cannot select an
+inverse pair by glyph equality or proximity.

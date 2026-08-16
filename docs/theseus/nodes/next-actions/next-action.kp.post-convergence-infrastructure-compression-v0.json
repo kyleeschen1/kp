@@ -108,6 +108,20 @@
       "scope": "slice-s08-types",
       "checkedAt": "2026-08-16T14:38:37.365Z",
       "notes": "Function-wrap trial evidence typechecks."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-cancellation-trial.test.ts tests/cancellation-pressure-animation.test.ts tests/semantic-motion-source-authority.test.ts tests/generated-cancellation-presentation-boundary.test.ts tests/witnessed-annihilation.test.ts tests/cancellation-presentation-authoring.test.ts",
+      "status": "passed",
+      "scope": "slice-s09-focused",
+      "checkedAt": "2026-08-16T14:41:52.586Z",
+      "notes": "Twenty-three cancellation authority, identity, witness, endpoint, rewind, and no-fallback tests passed in 3.01 seconds."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s09-types",
+      "checkedAt": "2026-08-16T14:41:53.724Z",
+      "notes": "Cancellation trial evidence typechecks."
     }
   ]
 }

@@ -92,7 +92,8 @@
     {
       "id": "s09",
       "title": "cancellation-trial",
-      "status": "planned"
+      "summary": "Ran the cancellation fixture through current authority. One semantic-ID repair was required; the repaired request selected only the authored inverse pair, protected the equal right-side glyph, reached compiler-generated witnessed annihilation, and preserved deterministic endpoints and rewind without fallback.",
+      "status": "complete"
     },
     {
       "id": "s10",
