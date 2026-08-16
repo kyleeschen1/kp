@@ -36,6 +36,7 @@ export interface KpSemanticEquationTokenFrame {
   readonly globalProgress: number;
   readonly phaseLocalProgress: number;
   readonly semanticProgress: number;
+  readonly semanticMotionChoreographyId?: string | undefined;
   readonly motion: KpEquationTokenMotionFrame;
   readonly semanticTimeline: KpEquationSemanticTimelineFrame;
   readonly accessibilityMode: KpEquationMotifAccessibilityMode;
@@ -50,9 +51,17 @@ export function createKpSemanticEquationTokenFrame(input: {
   readonly runtimeCapabilities?: KpAnimationRuntimeCapabilities | undefined;
 }): KpSemanticEquationTokenFrame {
   const phaseLocalProgress = clamp01(input.clock.phaseLocalProgress);
-  const semanticProgress = input.clock.direction === "forward"
-    ? phaseLocalProgress
-    : 1 - phaseLocalProgress;
+  const semanticMotionSample = input.runtimeCapabilities?.semanticMotion
+    ?.sampleForAnimationId({
+      animationId: input.clock.animationId,
+      progress: phaseLocalProgress,
+      direction: input.clock.direction
+    });
+  const semanticProgress = semanticMotionSample?.semanticProgress ?? (
+    input.clock.direction === "forward"
+      ? phaseLocalProgress
+      : 1 - phaseLocalProgress
+  );
   const semanticTimeline = input.precomputedPlan?.semanticTimeline;
   const accessibilityMode = input.accessibilityMode ?? "full-motion";
   const accessibility = semanticTimeline === undefined
@@ -72,6 +81,12 @@ export function createKpSemanticEquationTokenFrame(input: {
     globalProgress: input.clock.globalProgress,
     phaseLocalProgress,
     semanticProgress: accessibleProgress,
+    ...(semanticMotionSample === undefined
+      ? {}
+      : {
+          semanticMotionChoreographyId:
+            semanticMotionSample.choreographyId
+        }),
     motion: sampleKpEquationTokenMotion(
       input.geometry,
       accessibleProgress,

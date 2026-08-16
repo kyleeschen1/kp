@@ -131,6 +131,14 @@
       "summary": "Distribution retains its reviewed optical pacing after semantic compilation."
     },
     {
+      "id": "timing.cancellation-counter-orbit",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/counter-orbit-cancellation-timing.ts",
+      "sourceNeedle": "export const kpCounterOrbitCancellationTiming",
+      "summary": "Cancellation retains reviewed contact and retirement timing after semantic compilation."
+    },
+    {
       "id": "timing.semantic-motion-recipe-schedule",
       "category": "local-timing",
       "authority": "canonical",
@@ -669,7 +677,8 @@
         "nonSemantic": 0
       },
       "compilerNodeIds": [
-        "compiler.generic-semantic-transition"
+        "compiler.generic-semantic-transition",
+        "compiler.semantic-motion-choreography"
       ],
       "registryNodeIds": [
         "registry.selected-capability",
@@ -679,7 +688,9 @@
         "motif.generic-transition"
       ],
       "localTimingNodeIds": [
-        "timing.generic-phase-easing"
+        "timing.generic-phase-easing",
+        "timing.semantic-motion-recipe-schedule",
+        "timing.cancellation-counter-orbit"
       ],
       "rendererInferenceNodeIds": [
         "renderer.generic-dom-measurement"
@@ -693,7 +704,8 @@
       "directSamplerNodeIds": [
         "sampler.generic-semantic-token",
         "sampler.linear-rearrangement",
-        "sampler.witnessed-annihilation"
+        "sampler.witnessed-annihilation",
+        "sampler.semantic-motion-choreography"
       ]
     },
     {

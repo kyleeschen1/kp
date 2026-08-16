@@ -3068,6 +3068,15 @@ function applySemanticTokenMotion(input: {
   }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
     String(tokenFrame.semanticProgress);
+  if (tokenFrame.semanticMotionChoreographyId === undefined) {
+    delete input.transitionElement.dataset[
+      "kpEditorEquationSemanticMotionChoreography"
+    ];
+  } else {
+    input.transitionElement.dataset[
+      "kpEditorEquationSemanticMotionChoreography"
+    ] = tokenFrame.semanticMotionChoreographyId;
+  }
   input.transitionElement.dataset["kpEditorEquationMotionPlanId"] = precomputed.id;
   input.transitionElement.dataset["kpEditorEquationLayoutPlanRevision"] =
     String(precomputed.layoutPlan.revision);

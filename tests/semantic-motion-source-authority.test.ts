@@ -5,13 +5,19 @@ import {
   createKpSemanticMotionSourceAuthority
 } from "../src/domain-ir/public-api.ts";
 import {
+  kpCanonicalCancellationPressureContract
+} from "../src/semantic/cancellation-pressure-contract.ts";
+import {
+  kpCanonicalCancellationPressureSemanticMotionSource
+} from "../src/semantic/cancellation-pressure-semantic-motion.ts";
+import {
   kpCanonicalDistributionPressureSemanticMotionSource
 } from "../src/semantic/distribution-pressure-semantic-motion.ts";
 import {
   kpCanonicalLogQuotientSemanticMotionSource
 } from "../src/semantic/log-quotient-semantic-motion.ts";
 
-test("two real callers derive target provenance without glyph inference", () => {
+test("three real callers derive target provenance without glyph inference", () => {
   const distribution = kpCanonicalDistributionPressureSemanticMotionSource;
   const distributionFactor = distribution.entities.find(
     ({ id }) => id.endsWith(".expanded.left-factor")
@@ -27,6 +33,23 @@ test("two real callers derive target provenance without glyph inference", () => 
   const fusedLog = quotient.entities.find(({ id }) => id === "target.log");
   assert.equal(quotientX?.provenance.kind, "identity-successor");
   assert.equal(fusedLog?.provenance.kind, "derived");
+
+  const cancellation = kpCanonicalCancellationPressureSemanticMotionSource;
+  const rightInverse = kpCanonicalCancellationPressureContract.continuants.find(
+    ({ role }) => role === "right-inverse"
+  );
+  const survivingRightInverse = cancellation.entities.find(
+    ({ id }) => id === rightInverse?.targetSelectorId
+  );
+  const retiredLeftInverse = cancellation.entities.find(
+    ({ id }) => id ===
+      kpCanonicalCancellationPressureContract.inversePair.sourceSelectorIds[1]
+  );
+  assert.equal(
+    survivingRightInverse?.provenance.kind,
+    "identity-successor"
+  );
+  assert.equal(retiredLeftInverse?.provenance.kind, "authored");
 });
 
 test("source authority fails closed without authored target identity", () => {

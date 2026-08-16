@@ -136,6 +136,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/distribution-motion-profile.ts",
     "export const kpLessonCanonicalDistributionMotionProfile",
     "Distribution retains its reviewed optical pacing after semantic compilation."),
+  node("timing.cancellation-counter-orbit", "local-timing", "local",
+    "src/animation/counter-orbit-cancellation-timing.ts",
+    "export const kpCounterOrbitCancellationTiming",
+    "Cancellation retains reviewed contact and retirement timing after semantic compilation."),
   node("timing.semantic-motion-recipe-schedule", "local-timing", "canonical",
     "src/domain-ir/semantic-motion-choreography-compiler.ts",
     "function schedulePolicy(",
@@ -391,13 +395,17 @@ KpEquationSurfaceAuthorityRow {
   );
   const isDistributionPressure =
     asset.id === "animation.generated.distribution.expand-a-sum";
+  const isCancellationPressure =
+    asset.id === "animation.generated.cancellation.additive-inverses";
+  const usesCanonicalSemanticMotion =
+    isDistributionPressure || isCancellationPressure;
   return row(asset.id, pathClass, transformationTypes, {
     semantic,
     nonSemantic: asset.transformations.length - semantic
   }, {
     compiler: [
       "compiler.generic-semantic-transition",
-      ...(isDistributionPressure
+      ...(usesCanonicalSemanticMotion
         ? ["compiler.semantic-motion-choreography"]
         : [])
     ],
@@ -409,6 +417,12 @@ KpEquationSurfaceAuthorityRow {
             "timing.semantic-motion-recipe-schedule",
             "timing.distribution-presentation-profile"
           ]
+        : []),
+      ...(isCancellationPressure
+        ? [
+            "timing.semantic-motion-recipe-schedule",
+            "timing.cancellation-counter-orbit"
+          ]
         : [])
     ],
     renderer: ["renderer.generic-dom-measurement"],
@@ -416,7 +430,7 @@ KpEquationSurfaceAuthorityRow {
     samplers: unique([
       "sampler.generic-semantic-token",
       ...specialSamplers,
-      ...(isDistributionPressure
+      ...(usesCanonicalSemanticMotion
         ? ["sampler.semantic-motion-choreography"]
         : [])
     ])

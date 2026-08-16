@@ -38,6 +38,10 @@ test("the catalogue realizes the typed counter-orbit cancellation policy", async
     "data-kp-editor-equation-linear-rearrangement",
     "cancel-additive-inverses"
   );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-semantic-motion-choreography",
+    /recipe\.semantic-motion\.inverse-cancellation\.v1/u
+  );
   await expect(transition).not.toHaveAttribute(
     "data-kp-editor-equation-witnessed-annihilation-binding"
   );

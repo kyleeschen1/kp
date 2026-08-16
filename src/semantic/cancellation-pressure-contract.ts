@@ -11,7 +11,10 @@ import {
 import type {
   KpCancellationPresentationIntent
 } from "./cancellation-presentation-intent.ts";
-import type { SelectorCorrespondenceRecord } from "./correspondence.ts";
+import type {
+  CorrespondenceMap,
+  SelectorCorrespondenceRecord
+} from "./correspondence.ts";
 import {
   getGeneratedLinearSolveTutorialFixtureSpec
 } from "./generated-algebra-fixture-registry.ts";
@@ -57,6 +60,10 @@ export interface KpCancellationPressureContract {
   readonly fixtureId: typeof FIXTURE_ID;
   readonly operationId: typeof OPERATION_ID;
   readonly transformationId: string;
+  readonly operationExecution: {
+    readonly transformationId: string;
+    readonly correspondenceMap: CorrespondenceMap;
+  };
   readonly source: {
     readonly objectId: string;
     readonly exactLatex: typeof SOURCE_LATEX;
@@ -151,10 +158,11 @@ export function createKpCanonicalCancellationPressureContract(
   const leftInverse = selectorBySuffix(source, "lhs.subtract");
   const rightInverse = selectorBySuffix(source, "rhs.subtract");
   const expectedCanceled = [leftAddend.id, leftInverse.id] as const;
-  const records = transformation.correspondenceMap?.records;
-  if (records === undefined) {
+  const correspondenceMap = transformation.correspondenceMap;
+  if (correspondenceMap === undefined) {
     throw new Error("Cancellation pressure requires an explicit correspondence map.");
   }
+  const records = correspondenceMap.records;
   const cancellationRecord = records.find(
     ({ id }) => id === CANCELLATION_RECORD_ID
   );
@@ -246,6 +254,10 @@ export function createKpCanonicalCancellationPressureContract(
     fixtureId: FIXTURE_ID,
     operationId: OPERATION_ID,
     transformationId: transformation.id,
+    operationExecution: {
+      transformationId: transformation.id,
+      correspondenceMap
+    },
     source: {
       objectId: source.id,
       exactLatex: SOURCE_LATEX,

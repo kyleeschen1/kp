@@ -13,7 +13,8 @@ import {
 import type {
   KpAnimationRuntimeCapabilities,
   KpDistributionChoreographyCapability,
-  KpFactoringChoreographyCapability
+  KpFactoringChoreographyCapability,
+  KpSemanticMotionChoreographyCapability
 } from "./runtime-capabilities.ts";
 import {
   kpAlgebraReverseChoreographyCapability
@@ -21,10 +22,17 @@ import {
 import {
   kpCanonicalDistributionPressureBinding
 } from "./distribution-pressure-animation.ts";
+import {
+  sampleKpSemanticMotionChoreography
+} from "../domain-ir/public-api.ts";
+import {
+  kpCanonicalCompiledCancellationPressureSemanticMotion
+} from "../semantic/cancellation-pressure-semantic-motion.ts";
 
 export interface KpAlgebraChoreographyCapabilities
 extends KpAnimationRuntimeCapabilities {
   readonly fissionFusion: KpFissionFusionCapability;
+  readonly semanticMotion: KpSemanticMotionChoreographyCapability;
   readonly distributionChoreography: KpDistributionChoreographyCapability;
   readonly factoringChoreography: KpFactoringChoreographyCapability;
   readonly canonicalReverseChoreography:
@@ -36,6 +44,19 @@ export function createKpAlgebraChoreographyCapabilities(input: {
 } = {}): KpAlgebraChoreographyCapabilities {
   const fissionFusion = input.fissionFusion ?? kpFissionFusionCapability;
   const dependencies = Object.freeze({ fissionFusion });
+  const semanticMotion: KpSemanticMotionChoreographyCapability =
+  Object.freeze({
+    sampleForAnimationId: ({ animationId, progress, direction }:
+      Parameters<KpSemanticMotionChoreographyCapability["sampleForAnimationId"]>[0]) =>
+      animationId === "animation.generated.cancellation.additive-inverses"
+        ? sampleKpSemanticMotionChoreography({
+            choreography:
+              kpCanonicalCompiledCancellationPressureSemanticMotion,
+            progress,
+            direction
+          })
+        : undefined
+  });
   const distributionChoreography: KpDistributionChoreographyCapability =
   Object.freeze({
     // Family-local bindings arrive with the lazy algebra pack; the generic
@@ -67,6 +88,7 @@ export function createKpAlgebraChoreographyCapabilities(input: {
 
   return Object.freeze({
     fissionFusion,
+    semanticMotion,
     distributionChoreography,
     factoringChoreography,
     canonicalReverseChoreography: kpAlgebraReverseChoreographyCapability

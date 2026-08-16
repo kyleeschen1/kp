@@ -491,10 +491,70 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-15T23:52:36.784Z"
+    },
+    {
+      "command": "npm run test:cancellation-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T00:04:58.255Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-source-authority.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T00:04:59.464Z"
+    },
+    {
+      "command": "npm run test:browser:cancellation-pressure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:00.438Z"
+    },
+    {
+      "command": "npm run visual:cancellation-pressure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:01.406Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T00:05:02.445Z"
+    },
+    {
+      "command": "npm run test:equation-surface-authority",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:03.405Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:04.557Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:05.647Z"
+    },
+    {
+      "command": "npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:06.630Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:05:07.567Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 21 binds the generated distribution pressure caller to compiler-minted fan-out authority, preserves the local optical recipe, plus attachment, and product settlement, and adds a shared source-authority builder proven by quotient and distribution."
+    "summary": "Cancellation pressure now obtains semantic progress from the canonical compiler through a lazy algebra-pack runtime capability; existing counter-orbit presentation and native equation renderer remain the optical authority."
   }
 }

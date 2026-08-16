@@ -6,6 +6,9 @@ import {
   kpCanonicalCancellationPressurePresentation
 } from "../src/animation/cancellation-pressure-animation.ts";
 import {
+  kpAlgebraChoreographyCapabilities
+} from "../src/animation/algebra-choreography-capabilities.ts";
+import {
   compileKpEquationCancellationPresentationPlan
 } from "../src/animation/equation-cancellation-presentation.ts";
 import { kpAnimationCatalogPackId } from
@@ -13,6 +16,10 @@ import { kpAnimationCatalogPackId } from
 import {
   kpCanonicalCancellationPressureContract
 } from "../src/semantic/cancellation-pressure-contract.ts";
+import {
+  kpCanonicalCompiledCancellationPressureSemanticMotion,
+  kpCanonicalCancellationPressureSemanticMotionSource
+} from "../src/semantic/cancellation-pressure-semantic-motion.ts";
 import {
   isKpCompilerGeneratedAlgebraTransformation
 } from "../src/semantic/generated-algebra-transformation-authority.ts";
@@ -39,6 +46,33 @@ test("the cancellation animation resolves preserve-flow intent to counter orbit"
     kind: "resolved",
     recipe: kpCanonicalCancellationPressurePresentation.recipe
   });
+});
+
+test("the cancellation animation enters through compiler-minted semantic motion", () => {
+  const choreography =
+    kpCanonicalCompiledCancellationPressureSemanticMotion;
+  const sample = kpAlgebraChoreographyCapabilities.semanticMotion
+    .sampleForAnimationId({
+      animationId: kpCanonicalCancellationPressureContract.animationId,
+      progress: 0.68,
+      direction: "forward"
+    });
+
+  assert.equal(
+    choreography.recipeId,
+    "recipe.semantic-motion.inverse-cancellation.v1"
+  );
+  assert.equal(choreography.clockCoupling, "external-shared-progress");
+  assert.deepEqual(
+    choreography.tracks.map(({ eventKind }) => eventKind),
+    ["orient", "contact", "retirement", "settlement", "native-target-ready"]
+  );
+  assert.equal(sample?.choreographyId, choreography.id);
+  assert.equal(sample?.semanticProgress, 0.68);
+  assert.deepEqual(
+    kpCanonicalCancellationPressureSemanticMotionSource.assetIds,
+    [kpCanonicalCancellationPressureContract.animationId]
+  );
 });
 
 test("the isolated asset preserves compiler authority and native endpoints", () => {

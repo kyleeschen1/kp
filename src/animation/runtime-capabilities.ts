@@ -10,6 +10,9 @@ import type {
 import type {
   KpCanonicalReverseChoreographyCapability
 } from "./canonical-reverse-capability.ts";
+import type {
+  KpSemanticMotionChoreographySample
+} from "../domain-ir/public-api.ts";
 
 export interface KpDistributionChoreographyCapability {
   readonly bindingForAnimationId: (
@@ -32,7 +35,17 @@ export interface KpFactoringChoreographyCapability {
   ) => ReturnType<typeof sampleKpFactoringChoreography>;
 }
 
+export interface KpSemanticMotionChoreographyCapability {
+  readonly sampleForAnimationId: (input: {
+    readonly animationId: string;
+    readonly progress: number;
+    readonly direction: "forward" | "rewind";
+  }) => KpSemanticMotionChoreographySample | undefined;
+}
+
 export interface KpAnimationRuntimeCapabilities {
+  readonly semanticMotion?:
+    KpSemanticMotionChoreographyCapability | undefined;
   readonly distributionChoreography?:
     KpDistributionChoreographyCapability | undefined;
   readonly factoringChoreography?: KpFactoringChoreographyCapability | undefined;
