@@ -164,7 +164,8 @@
     {
       "id": "s19",
       "title": "add-injected-renderer-theme-reference",
-      "status": "planned"
+      "summary": "A renderer-owned theme reference now separates stable scene identity from application-owned token payloads, ready for behavior-preserving caller injection.",
+      "status": "complete"
     },
     {
       "id": "s20",
