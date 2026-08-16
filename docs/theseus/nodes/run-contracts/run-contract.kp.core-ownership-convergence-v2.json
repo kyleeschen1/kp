@@ -176,7 +176,8 @@
     {
       "id": "s21",
       "title": "prove-legacy-sdk-reachability",
-      "status": "planned"
+      "summary": "The private unexported legacy SDK has no production or script consumer, only dedicated compatibility tests, and complete lower-layer replacements; exact reachability authorizes retirement.",
+      "status": "complete"
     },
     {
       "id": "s22",
