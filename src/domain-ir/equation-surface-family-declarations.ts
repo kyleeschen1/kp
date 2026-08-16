@@ -26,6 +26,16 @@ export type KpDeclaredEquationMigrationWave =
   | "wave-b-structural-native-math"
   | "wave-c-generated-bespoke-diagnostic-static";
 
+export type KpEquationPresentationRoute =
+  | "declared-operation-plan"
+  | "declared-structural-recipe"
+  | "specialized-native-adapter"
+  | "declared-semantic-transition"
+  | "declared-static-layer-transition"
+  | "declared-diagnostic-transition"
+  | "retirement-negative-fixture"
+  | "unsupported-static-hold";
+
 export type KpEquationOperationPlanRecipeId =
   | "recipe.operation-plan.identity-absorption.v1"
   | "recipe.operation-plan.inverse-cancellation.v1"
@@ -83,6 +93,31 @@ export interface KpWaveBEquationStructuralDeclaration {
   readonly authority: "typed-structural-recipe";
 }
 
+export type KpWaveCEquationClassification =
+  | "generated-bespoke"
+  | "diagnostic"
+  | "static-only"
+  | "unsupported"
+  | "retirement-candidate";
+
+export interface KpWaveCEquationDispositionDeclaration {
+  readonly animationId: string;
+  readonly classification: KpWaveCEquationClassification;
+  readonly disposition: KpDeclaredEquationSurfaceDisposition;
+  readonly presentationRoute: Extract<
+    KpEquationPresentationRoute,
+    | "specialized-native-adapter"
+    | "declared-semantic-transition"
+    | "declared-static-layer-transition"
+    | "declared-diagnostic-transition"
+    | "retirement-negative-fixture"
+    | "unsupported-static-hold"
+  >;
+  readonly authoritySourcePath: string;
+  readonly genericLayerTransition: "declared" | "forbidden";
+  readonly rationale: string;
+}
+
 export interface KpEquationSurfaceFamilyProjection {
   readonly selectedCapabilityIds:
     readonly KpEquationSelectedSurfaceCapability[];
@@ -91,6 +126,9 @@ export interface KpEquationSurfaceFamilyProjection {
   readonly rendererSourcePath: string;
   readonly disposition: KpDeclaredEquationSurfaceDisposition;
   readonly migrationWave: KpDeclaredEquationMigrationWave;
+  readonly presentationRoute: KpEquationPresentationRoute;
+  readonly waveCClassification?: KpWaveCEquationClassification | undefined;
+  readonly genericLayerTransition: "declared" | "legacy" | "forbidden";
   readonly operationPlanRecipeIds:
     readonly KpEquationOperationPlanRecipeId[];
   readonly runtimeBindingIds: readonly KpEquationRuntimeBindingId[];
@@ -177,15 +215,6 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
   })
 ]);
 
-const staticOnlyIds = Object.freeze([
-  "animation.comparison.jacobian-hessian",
-  "animation.comparison.linear-solve-programming",
-  "animation.sample.fourier-transform-pair",
-  "animation.sample.fundamental-theorem-calculus"
-]);
-const retirementCandidateIds = Object.freeze([
-  "animation.generated.substitute-three.provisional-incorrect"
-]);
 export const kpWaveAEquationOperationPlanDeclarations:
 readonly KpWaveAEquationOperationPlanDeclaration[] = Object.freeze([
   operationPlan({
@@ -350,6 +379,86 @@ const waveBStructuralByAnimationId = Object.freeze(Object.fromEntries(
   ])
 )) as Readonly<Record<string, KpWaveBEquationStructuralDeclaration>>;
 
+export const kpWaveCEquationDispositionDeclarations:
+readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
+  waveC({
+    animationId: "animation.algebra.log-product.product-to-sum",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath: "src/editor/log-product-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The binary log-product candidate has a dedicated Native KaTeX adapter and remains pending human visual review."
+  }),
+  waveC({
+    animationId: "animation.algebra.log-product.three-factors-to-sum",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath: "src/editor/log-product-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The three-factor pressure caller uses the dedicated log-product adapter without promoting its pending visual policy."
+  }),
+  ...[
+    "animation.comparison.jacobian-hessian",
+    "animation.comparison.linear-solve-programming",
+    "animation.sample.fourier-transform-pair",
+    "animation.sample.fundamental-theorem-calculus"
+  ].map((animationId) => waveC({
+    animationId,
+    classification: "static-only",
+    disposition: "static-only",
+    presentationRoute: "declared-static-layer-transition",
+    authoritySourcePath: "src/editor/equation-surface-adapter.ts",
+    genericLayerTransition: "declared",
+    rationale:
+      "This row presents or compares endpoints without claiming a canonical executable equation operation."
+  })),
+  ...[
+    "animation.generated.calculus.derivative.power-rule-x-cubed",
+    "animation.generated.calculus.derivative.sum-rule-polynomial",
+    "animation.generated.calculus.integral.power-rule-quadratic",
+    "animation.inequality.sign-flip.basic"
+  ].map((animationId) => waveC({
+    animationId,
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "declared-semantic-transition",
+    authoritySourcePath: "src/editor/equation-surface-adapter.ts",
+    genericLayerTransition: "declared",
+    rationale:
+      "This generated operation has explicit semantic correspondence and a declared generic Native KaTeX transition, but no promoted narrow recipe."
+  })),
+  waveC({
+    animationId: "animation.generated.substitute-three",
+    classification: "diagnostic",
+    disposition: "adapter-backed",
+    presentationRoute: "declared-diagnostic-transition",
+    authoritySourcePath: "src/animation/llm-animation-draft-examples.ts",
+    genericLayerTransition: "declared",
+    rationale:
+      "The accepted LLM draft is retained as generation diagnostics with an explicit semantic transition route."
+  }),
+  waveC({
+    animationId: "animation.generated.substitute-three.provisional-incorrect",
+    classification: "retirement-candidate",
+    disposition: "retirement-candidate",
+    presentationRoute: "retirement-negative-fixture",
+    authoritySourcePath: "src/animation/llm-animation-draft-examples.ts",
+    genericLayerTransition: "declared",
+    rationale:
+      "The deliberately incorrect draft remains negative evidence and cannot satisfy promotion."
+  })
+]);
+const waveCDispositionByAnimationId = Object.freeze(Object.fromEntries(
+  kpWaveCEquationDispositionDeclarations.map((entry) => [
+    entry.animationId,
+    entry
+  ])
+)) as Readonly<Record<string, KpWaveCEquationDispositionDeclaration>>;
+
 export function projectKpEquationSurfaceFamily(
   animationId: string
 ): KpEquationSurfaceFamilyProjection {
@@ -359,13 +468,13 @@ export function projectKpEquationSurfaceFamily(
   const operationPlanDeclaration =
     waveAOperationPlanByAnimationId[animationId];
   const structuralDeclaration = waveBStructuralByAnimationId[animationId];
-  const disposition = retirementCandidateIds.includes(animationId)
-    ? "retirement-candidate" as const
-    : staticOnlyIds.includes(animationId)
-      ? "static-only" as const
-      : family.primaryCapabilityId === "operation-evaluation"
-        ? "canonical" as const
-        : "adapter-backed" as const;
+  const waveCDeclaration = waveCDispositionByAnimationId[animationId];
+  const disposition = operationPlanDeclaration !== undefined ||
+    structuralDeclaration !== undefined
+    ? family.primaryCapabilityId === "operation-evaluation"
+      ? "canonical" as const
+      : "adapter-backed" as const
+    : waveCDeclaration?.disposition ?? "unsupported" as const;
   const migrationWave = waveAIds.includes(animationId)
     ? "wave-a-operation-plan" as const
     : waveBIds.includes(animationId)
@@ -381,6 +490,19 @@ export function projectKpEquationSurfaceFamily(
     rendererSourcePath: family.rendererSourcePath,
     disposition,
     migrationWave,
+    presentationRoute: operationPlanDeclaration !== undefined
+      ? "declared-operation-plan" as const
+      : structuralDeclaration !== undefined
+        ? "declared-structural-recipe" as const
+        : waveCDeclaration?.presentationRoute ??
+          "unsupported-static-hold" as const,
+    ...(waveCDeclaration === undefined
+      ? {}
+      : { waveCClassification: waveCDeclaration.classification }),
+    genericLayerTransition: operationPlanDeclaration !== undefined ||
+      structuralDeclaration !== undefined
+      ? "legacy" as const
+      : waveCDeclaration?.genericLayerTransition ?? "forbidden" as const,
     operationPlanRecipeIds:
       operationPlanDeclaration?.recipeIds ?? Object.freeze([]),
     structuralRecipeIds:
@@ -423,6 +545,12 @@ export function findKpWaveBEquationStructuralDeclaration(
   animationId: string
 ): KpWaveBEquationStructuralDeclaration | undefined {
   return waveBStructuralByAnimationId[animationId];
+}
+
+export function findKpWaveCEquationDispositionDeclaration(
+  animationId: string
+): KpWaveCEquationDispositionDeclaration | undefined {
+  return waveCDispositionByAnimationId[animationId];
 }
 
 function declaration(
@@ -483,4 +611,9 @@ function structural(input: {
     recipeOwnerPaths: Object.freeze([...input.recipeOwnerPaths]),
     authority: "typed-structural-recipe" as const
   });
+}
+
+function waveC(input: KpWaveCEquationDispositionDeclaration):
+KpWaveCEquationDispositionDeclaration {
+  return Object.freeze({ ...input });
 }

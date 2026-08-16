@@ -218,7 +218,8 @@
     {
       "id": "s24",
       "title": "Migration-wave-C",
-      "status": "planned"
+      "summary": "Classified all 12 Wave-C surfaces with explicit presentation routes and generic-layer permissions, added fail-closed unknown handling, and preserved existing visuals and lazy capability boundaries.",
+      "status": "complete"
     },
     {
       "id": "s25",

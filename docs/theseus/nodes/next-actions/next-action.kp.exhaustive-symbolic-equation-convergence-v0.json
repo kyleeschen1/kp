@@ -1765,11 +1765,41 @@
       "scope": "wave-B lazy bundle closure",
       "checkedAt": "2026-08-16T08:24:13.105Z",
       "notes": "Bundle measurements remained identical and under limits."
+    },
+    {
+      "command": "focused wave-C declaration and adapter tests",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:19.019Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:20.026Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:20.985Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:21.909Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:22.851Z"
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:33:23.801Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Wave B now declares exact structural recipes and owns transform-to-choreography selection in one typed table. Radical settlement, exponent projection, and matrix augmentation are declaration-selected; specialized and focused preservation checks pass, while unrelated known/flaky browser diagnostics remain deferred without visual tuning."
+    "summary": "Wave C now classifies every remaining equation surface through explicit typed declarations; unknown future rows fail closed instead of inheriting generic motion."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

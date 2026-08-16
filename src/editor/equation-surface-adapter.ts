@@ -14,7 +14,9 @@ import {
 } from "../domain-ir/public-api.ts";
 import {
   findKpWaveAEquationOperationPlanDeclaration,
-  findKpWaveBEquationStructuralDeclaration
+  findKpWaveBEquationStructuralDeclaration,
+  findKpWaveCEquationDispositionDeclaration,
+  projectKpEquationSurfaceFamily
 } from "../domain-ir/equation-surface-family-declarations.ts";
 import {
   findKpEquationStructuralChoreographyDeclaration
@@ -439,6 +441,18 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       renderUnavailable(slot, `Missing equation animation ${state.animationId}.`);
       return;
     }
+    const family = projectKpEquationSurfaceFamily(animation.id);
+    const waveC = findKpWaveCEquationDispositionDeclaration(animation.id);
+    if (
+      family.disposition === "unsupported" ||
+      waveC?.genericLayerTransition === "forbidden"
+    ) {
+      renderUnavailable(
+        slot,
+        `Equation animation ${animation.id} has no declared generic presentation route.`
+      );
+      return;
+    }
 
     const authoringRevision = Number(
       player.dataset["kpEditorAnimationAuthoringRevision"] ?? 0
@@ -486,6 +500,15 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     }
 
     if (stage === null) return;
+
+    stage.dataset["kpEditorEquationPresentationRoute"] =
+      family.presentationRoute;
+    if (family.waveCClassification === undefined) {
+      delete stage.dataset["kpEditorEquationWaveCClassification"];
+    } else {
+      stage.dataset["kpEditorEquationWaveCClassification"] =
+        family.waveCClassification;
+    }
 
     const cacheReady = isKpEditorEquationStageHotPathCacheValid(
       stage,
