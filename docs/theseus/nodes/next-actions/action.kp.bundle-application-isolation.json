@@ -15,6 +15,10 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-08-16-kp-core-ownership-convergence-closeout.md",
       "summary": "Completed ownership evidence and measured bundle risks handed to this tranche."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-bundle-application-isolation-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
@@ -32,6 +36,15 @@
     "npm run build:bundle",
     "npm run check:animation-library-bundle-boundary",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run --silent check:promotion-memory; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s01 approved contract and baseline",
+      "checkedAt": "2026-08-16T22:35:35.225Z",
+      "notes": "Approved proposal, typed 26-slice v2 contract, protected worktree, and inherited baselines are consistent; promotion memory and Theseus validate."
+    }
   ],
   "expectedLearning": [
     "Which exact feature packs and application owners dominate each selected experience rather than the aggregate catalogue.",

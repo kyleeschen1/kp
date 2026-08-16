@@ -1,0 +1,173 @@
+{
+  "id": "run-contract.kp.bundle-application-isolation-v1",
+  "kind": "run-contract",
+  "title": "KP Bundle And Application Isolation",
+  "status": "superseded",
+  "summary": "Superseded before execution because the compact creation command omitted required typed-autonomy fields; v2 preserves the same approved 26 slices with run mode, slice limit, commit cadence, verification level, and stop conditions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/action.kp.bundle-application-isolation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-bundle-application-isolation-long-loop-proposal.md",
+      "summary": "User-approved 26-slice Tranche B proposal with preservation, verification, and stop boundaries."
+    }
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run test:semantic-animation-convergence",
+    "npm run check:animation-library-bundle-boundary",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Bundle scenarios, manifest closure analysis, attribution, budgets, and stable measurement commands.",
+    "Typed native-KaTeX pack ownership and behavior-preserving place-value closure repair.",
+    "Studio, Public Web, development-review, dashboard, CSS, algebra, Vite helper, and narrow-entrypoint isolation.",
+    "Adjacent tests, compatibility retirement, project memory, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No SvelteKit adoption, physical package extraction, new animation, curriculum, layout, or visual-design work.",
+    "No budget increases used instead of structural repair and no mutation of protected economics authoring files.",
+    "No Public Editor, accounts, SRS, learner modeling, or arbitrary plugin architecture."
+  ],
+  "goal": "Make each KP experience load only the capabilities it needs, repair place-value bundle headroom structurally, and isolate Internal Studio and Public Web production graphs without weakening the framework-neutral kernel.",
+  "target": "action.kp.bundle-application-isolation",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "record-approved-proposal-contract-and-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "audit-current-bundle-tools-and-assumptions",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "define-typed-selected-experience-scenarios",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "generalize-vite-manifest-closure-model",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "declare-representative-experience-scenarios",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "add-stable-scenario-measurement-command",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "audit-native-katex-consumers-and-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "define-native-katex-feature-pack",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "migrate-canonical-equation-katex-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "migrate-katex-callers-and-enforce-negative-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "attribute-place-value-production-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "separate-place-value-semantic-startup",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "isolate-heavy-place-value-rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "prove-place-value-headroom-and-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "declare-application-entry-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "isolate-internal-studio-production-entry",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "isolate-public-web-production-entries",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "narrow-legacy-root-bootstrap",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "prove-development-tool-production-erasure",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "make-dashboard-startup-data-only",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "attribute-algebra-pack-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "conditionally-subdivide-algebra-pack",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "extract-route-neutral-vite-helpers",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "split-route-owned-css-without-visual-change",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "enforce-narrow-framework-neutral-entrypoints",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "release-verify-closeout-and-restore-checkpoint",
+      "status": "planned"
+    }
+  ]
+}
