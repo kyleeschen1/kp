@@ -1060,6 +1060,34 @@
       "scope": "slice s06 architecture",
       "checkedAt": "2026-08-16T05:50:49.970Z",
       "notes": "All architecture and compiler-authority ratchets passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motif-invocation.test.ts tests/equation-recipe-composition.test.ts tests/equation-motion-vocabulary.test.ts scripts/verification-impact.test.ts",
+      "status": "passed",
+      "scope": "slice s07 recipe composition",
+      "checkedAt": "2026-08-16T05:57:08.116Z",
+      "notes": "30 focused protocol and selector tests passed, including ordering, overlap, cycle, seek, rewind, and interruption"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 repository types",
+      "checkedAt": "2026-08-16T05:57:09.139Z",
+      "notes": "Application, test, Svelte, and domain typechecks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s07 architecture",
+      "checkedAt": "2026-08-16T05:57:10.065Z",
+      "notes": "All boundaries and equation compiler authority ratchets passed"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s07 preservation",
+      "checkedAt": "2026-08-16T05:57:11.005Z",
+      "notes": "All 10 existing semantic, renderer, clock, and sampled-frame obligations passed"
     }
   ],
   "progress": {
