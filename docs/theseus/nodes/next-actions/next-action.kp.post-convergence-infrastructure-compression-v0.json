@@ -9,5 +9,14 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "git diff --check and theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T14:01:29.710Z",
+      "notes": "Roadmap, architecture thread, and catalogue thread now agree that the 26-slice narrow-core run completed and the approved infrastructure successor is active."
+    }
   ]
 }

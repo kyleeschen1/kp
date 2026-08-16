@@ -44,7 +44,8 @@
     {
       "id": "s01",
       "title": "control-plane-truth",
-      "status": "planned"
+      "summary": "Reconciled roadmap and active threads: the 26-slice narrow-core run is complete, the infrastructure-compression contract is active, and the pending log-product visual remains outside this run.",
+      "status": "complete"
     },
     {
       "id": "s02",

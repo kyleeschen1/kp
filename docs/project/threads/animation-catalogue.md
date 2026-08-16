@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-16
-Current Next Action: Preserve the bounded dissolve-direct-wrap binary
-log-product exemplar as pending human review, then—after explicit approval of
-the revised run—perform deterministic narrow-core and behavior-preserving
-migration work without promoting visual policy.
+Current Next Action: Preserve the completed equation narrow core and the
+bounded dissolve-direct-wrap binary log-product exemplar as pending human
+review while the active infrastructure-compression run pressures authoring,
+reachability, capability loading, ownership, and verification economics.
 
 ## Goal
 
@@ -146,14 +146,17 @@ and one code caller then pressure only the shared upper host/runtime boundary.
 The eleven-step order is owned by
 `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
 
-The proposed overnight reorder makes one missing boundary explicit: motif
+The completed overnight reorder made one missing boundary explicit: motif
 names are not suggestions. Recipes invoke nominal typed motifs with semantic
 role bindings; a shared motif compiler and renderer adapter supply the actual
-motion. This permits architecture and behavior-preserving migration to proceed
-while the current log-product look remains pending review. Its 26 independently
-reversible slices are owned by
-`../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md` and
-must not execute until explicitly approved.
+motion. Its 26 independently reversible slices completed, including supported
+surface disposition, governed authoring metadata, and the cross-domain upper
+host/runtime proof. The current log-product look remains pending review and is
+not being promoted by the successor infrastructure run. The completed order is
+owned by
+`../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`; the
+active successor is
+`../reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
 
 ## Accepted Scope
 
@@ -236,6 +239,7 @@ must not execute until explicitly approved.
 - `docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`
 - `docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`
+- `docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`

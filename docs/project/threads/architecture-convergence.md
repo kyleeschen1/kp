@@ -2,10 +2,10 @@
 
 Status: active-supporting
 Last Updated: 2026-08-16
-Current Next Action: Preserve the convergence boundary while the active
-Animation Catalogue lane performs one bounded log-product choreography
-discovery before migration wave A. Measure time to reviewable evidence and do
-not run promotion-scale regeneration or certification during visual tuning.
+Current Next Action: Execute the approved post-convergence infrastructure
+compression contract. Prove that the narrow equation core reduces generation
+repairs and extension edits, retire only exact unreachable authority, and
+improve compiler and verification economics without visual changes.
 
 ## Goal
 
@@ -51,6 +51,16 @@ totals retire beside migrated callers. The full order and measured success
 criteria are recorded in
 `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
 
+The 26-slice equation narrow-core run has now completed that convergence
+boundary. Typed motif invocations, structural recipes, immutable declarations,
+generated closed dispatch, disposition coverage, a governed authoring
+catalogue, and the graph/code upper-boundary probe are implemented. The active
+successor is
+`run-contract.kp.post-convergence-infrastructure-compression-v1`, backed by
+`../reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
+It is deliberately non-visual: any unexplained rendered delta returns to a
+human checkpoint rather than becoming infrastructure policy.
+
 ## Ordered Work
 
 1. **Control plane:** keep the roadmap compact, use one system vocabulary, and
@@ -83,6 +93,11 @@ criteria are recorded in
    use, reuse, send, and return to one existing semantic artifact.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
+10. **Post-convergence compression (active):** reconcile durable truth,
+    pressure three LLM-shaped authoring requests, attribute inference cost,
+    retire only proven redundancy, replace the remaining closed capability
+    loader, and extract high-churn ownership seams without semantic or visual
+    change.
 
 ## Accepted Scope
 

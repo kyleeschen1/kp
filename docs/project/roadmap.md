@@ -49,12 +49,15 @@ working lane has returned to the internal Animation Catalogue: build durable
 semantic animation capabilities that remain useful under any later product
 layout. This does not validate demand or reopen learner-facing layout work.
 
-The catalogue contains 40 loadable assets, including 24 equation surfaces, but
-several are fixtures or diagnostic proofs rather than polished teaching
-animations. The immediate decision is to converge every supported equation
-surface on one canonical compiler after a clean-path log-product checkpoint.
-Matrix-to-linear-map remains tabled; no stable promotion rank has been silently
-changed.
+The catalogue contains a mixture of teaching animations, fixtures, and
+diagnostic proofs. The supported equation domain has completed its narrow-core
+convergence: typed declarations, recipes, motif invocations, generated closed
+dispatch, preservation evidence, governed authoring metadata, and a
+cross-domain host boundary now replace the earlier caller-by-caller authority.
+The current decision is to prove that this architecture is cheaper to author
+against, attribute its remaining compiler and verification cost, and retire
+only redundancy with exact reachability evidence. Matrix-to-linear-map remains
+tabled; no stable promotion rank has been silently changed.
 
 ## One Active Lane
 
@@ -71,20 +74,19 @@ Only this repository sequence is active:
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
    requirements while retaining choreography and geometry locally.
-5. **Exhaustive equation convergence:** active at its mandatory visual
-   checkpoint, with an architecture-first reorder proposed for overnight work.
-   One semantic-motion compiler now routes the approved callers, and two- and
-   three-factor log-product callers prove the clean path. Preserve the bounded
-   outside-in binary candidate as pending human review; do not let that review
-   block deterministic work on verification modes, typed motif invocations,
-   immutable registries, generated closed dispatch, test-owner retirement, and
-   behavior-preserving equation migration. `function-wrap` must become an
-   executable shared motif invoked by recipes rather than descriptive guidance
-   that callers can reimplement. Human approval is still required before
-   promoting the candidate aesthetics or pressuring a new visual caller. The
-   proposed 26-slice reorder is recorded in
-   `reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`;
-   execution still requires explicit approval.
+5. **Exhaustive equation convergence:** complete. The approved 26-slice run
+   made `function-wrap` executable shared authority, replaced handwritten
+   extension points with typed declarations and generated dispatch, migrated
+   supported equation surfaces by disposition, generated the governed
+   authoring catalogue, and proved that graph and code callers share only the
+   upper host/runtime boundary.
+6. **Post-convergence infrastructure compression:** active under
+   `run-contract.kp.post-convergence-infrastructure-compression-v1`. Reconcile
+   the control plane, pressure three contrasting LLM-shaped equation requests,
+   attribute inference cost, retire only exact unreachable authority, finish
+   declaration-driven capability loading, and split high-churn modules only at
+   proven ownership seams. Preserve the bounded log-product candidate as
+   pending human review; this run does not tune or promote its aesthetics.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -96,16 +98,16 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Three contrasting callers approved; seven shared compiler requirements promoted while motifs remain local | Complete one canonical compiler and exhaustive supported equation-domain cutover before another symbolic family. |
+| Equation animation | Supported surfaces route through one narrow declaration/recipe/compiler path with explicit dispositions | Pressure the authoring and extension seams; do not add another symbolic family during infrastructure compression. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | 40 meaningful lazy assets, including 24 equation surfaces, one persistent shell, no iframes | Active pressure lab; complete the equation compiler and exhaustive supported equation cutover. |
+| Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | Typed semantic draft path exists; presentation selection is not uniformly connected | After three-caller promotion, connect governed drafts to the canonical compiler; models own semantics and salience, while KP owns recipes, timing, geometry, and rendering. |
+| LLM generation | A governed operation/role catalogue is generated from the same declarations as execution | Prove three LLM-shaped requests through one narrow compile facade; models own intent and bindings while KP owns recipes, timing, geometry, and rendering. |
 
 ## Active Tightening Phase
 
@@ -334,22 +336,25 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 - The algebra explanation contract remains recoverable from its verified human
   checkpoint; its pacing correction and remaining slices are paused.
 - The corrected log/exponent exemplar and quotient, distribution, and
-  cancellation pressure callers are approved. Seven shared compiler
-  requirements are promoted; exhaustive supported equation convergence is the
-  next lane. See
-  `decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`.
+  cancellation pressure callers are approved. The exhaustive supported
+  equation convergence run completed its 26 stored slices and resolved its
+  target. See
+  `decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md` and
+  `reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`.
 - The log-product semantic and multi-factor checkpoint is technically complete,
   but its wrapper-splitting choreography is not approved. Run one bounded
   dissolve-spread-wrap visual discovery on the binary caller before migration
   wave A; quotient becomes the contrasting caller only after binary approval.
   See
   `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
-- The eleven-step iteration-architecture sequence is approved across the
-  current or successor Theseus run. Its governing law is open typed
-  declarations compiled into generated, exhaustive, tree-shakable execution;
-  it rejects manually extended core switches, mutable global registries, a
-  universal plugin system, or a repository-wide test purge. See
-  `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+- The eleven-step iteration-architecture sequence supplied the completed
+  narrow core. Its successor infrastructure-compression run is active and
+  measures whether that core actually reduces generation repairs, import
+  closure, verification cost, and extension edits. It retains the governing
+  law of open typed declarations compiled into generated, exhaustive,
+  tree-shakable execution. See
+  `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md` and
+  `reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence
