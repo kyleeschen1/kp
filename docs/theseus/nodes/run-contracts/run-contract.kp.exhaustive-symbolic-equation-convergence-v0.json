@@ -182,7 +182,8 @@
     {
       "id": "s23",
       "title": "Three caller composition pressure",
-      "status": "planned"
+      "summary": "Three contrasting real callers now compose through one nominal stage history and shared clock with dense direct-seek, reverse, boundary interruption, and active-owner proof.",
+      "status": "complete"
     },
     {
       "id": "s24",

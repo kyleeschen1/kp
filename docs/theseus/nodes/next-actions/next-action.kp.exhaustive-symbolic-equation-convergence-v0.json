@@ -551,10 +551,46 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-08-16T00:05:07.567Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-three-caller-composition.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T00:12:22.121Z"
+    },
+    {
+      "command": "npm run test:semantic-motion-diagnostics",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:12:23.132Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T00:12:24.066Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:12:25.115Z"
+    },
+    {
+      "command": "npm run test:equation-asset-conformance",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:12:26.061Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T00:12:27.129Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Cancellation pressure now obtains semantic progress from the canonical compiler through a lazy algebra-pack runtime capability; existing counter-orbit presentation and native equation renderer remain the optical authority."
+    "summary": "A branded stage-history layer now composes independent compiler choreographies by reference, uses one external progress coordinate, and exposes direction-aware native endpoint cuts with exactly one active owner."
   }
 }
