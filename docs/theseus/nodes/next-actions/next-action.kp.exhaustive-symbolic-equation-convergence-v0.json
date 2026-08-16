@@ -2,7 +2,7 @@
   "id": "next-action.kp.exhaustive-symbolic-equation-convergence-v0",
   "kind": "next-action",
   "title": "Converge all supported symbolic equations on one compiler",
-  "status": "ready",
+  "status": "resolved",
   "domain": "animation",
   "sourceRefs": [
     {
@@ -1820,11 +1820,46 @@
       "command": "npm run check:inference",
       "status": "failed",
       "checkedAt": "2026-08-16T08:42:15.391Z"
+    },
+    {
+      "command": "focused cross-domain upper-boundary tests",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:19.090Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:20.084Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:21.016Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:21.974Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:22.918Z"
+    },
+    {
+      "command": "npm run test:loop-reliability",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:23.867Z"
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:49:24.798Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A governed opt-in LLM catalogue now projects all equation surfaces, compiler-owned recipes, promoted operations and roles, motif traits, two accepted examples, and typed repairs from canonical declarations without entering application bundles."
+    "summary": "The overnight convergence contract is implemented: equation callers use declared narrow pathways and governance, while graph and code share only lifecycle capabilities and retain independent packs, renderers, and semantic models."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

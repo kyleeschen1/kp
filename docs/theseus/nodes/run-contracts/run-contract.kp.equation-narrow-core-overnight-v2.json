@@ -2,8 +2,9 @@
   "id": "run-contract.kp.equation-narrow-core-overnight-v2",
   "kind": "run-contract",
   "title": "Equation narrow-core overnight convergence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "animation",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -230,7 +231,8 @@
     {
       "id": "s26",
       "title": "Cross-domain-upper-boundary-closeout",
-      "status": "planned"
+      "summary": "Proved the cross-domain upper boundary with economics graph and TypeScript refactor exemplars: independent lazy packs and renderers share catalogue loading, selected-host lifecycle, one player clock, and review capture while equation recipes remain explicitly inapplicable. All closeout checks passed.",
+      "status": "complete"
     }
   ]
 }

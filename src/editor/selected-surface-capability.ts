@@ -5,6 +5,10 @@ import {
   projectKpEquationSurfaceFamily,
   type KpEquationSelectedSurfaceCapability
 } from "../domain-ir/equation-surface-family-declarations.ts";
+import {
+  findKpCrossDomainUpperBoundaryDeclaration,
+  type KpCrossDomainSelectedSurfaceCapability
+} from "./cross-domain-upper-boundary.ts";
 
 export const kpEditorGraphSvgAnimationIds = Object.freeze([
   "animation.generated.linear-algebra.matrix-vector.two-by-two",
@@ -28,16 +32,18 @@ export function supportsKpEditorGraphSvgAnimation(
 
 export type KpEditorSelectedSurfaceCapability =
   | KpEquationSelectedSurfaceCapability
-  | "graph-svg-economics"
+  | KpCrossDomainSelectedSurfaceCapability
   | "graph-svg-katex-labels"
-  | "graph-webgl-3d"
-  | "programming-trace";
+  | "graph-webgl-3d";
 
 export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   readonly animationId: string;
   readonly slotKinds: readonly KpEditorAnimationSurfaceSlotKind[];
 }): readonly KpEditorSelectedSurfaceCapability[] {
   const capabilities: KpEditorSelectedSurfaceCapability[] = [];
+  const crossDomain = findKpCrossDomainUpperBoundaryDeclaration(
+    input.animationId
+  );
   if (
     input.slotKinds.includes("equation") ||
     input.animationId === "animation.place-value-addition.278-plus-156"
@@ -48,11 +54,10 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
     );
   }
   if (
-    input.slotKinds.includes("graph") &&
-    input.animationId ===
-      "animation.economics.supply-demand-equilibrium-shift"
+    crossDomain !== undefined &&
+    input.slotKinds.includes(crossDomain.slotKind)
   ) {
-    capabilities.push("graph-svg-economics");
+    capabilities.push(crossDomain.selectedCapabilityId);
   } else if (
     input.slotKinds.includes("graph") &&
     supportsKpEditorGraphSvgAnimation(input.animationId)
@@ -67,11 +72,10 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   }
   if (
     input.slotKinds.includes("programming") &&
+    crossDomain === undefined &&
     (
       input.animationId === "animation.programming.add.execution-trace" ||
       input.animationId === "animation.comparison.linear-solve-programming" ||
-      input.animationId ===
-        "animation.programming.typescript-free-shipping-refactor" ||
       input.animationId ===
         "animation.programming.python-free-shipping-refactor" ||
       input.animationId === "animation.programming.scheme-factorial"
