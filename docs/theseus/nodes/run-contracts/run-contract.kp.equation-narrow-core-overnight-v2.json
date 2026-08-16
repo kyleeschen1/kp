@@ -164,7 +164,8 @@
     {
       "id": "s15",
       "title": "Log-product-composition-cutover",
-      "status": "planned"
+      "summary": "Log-product target branches now invoke the shared typed function-wrap protocol; manual reception construction was removed without visual changes.",
+      "status": "complete"
     },
     {
       "id": "s16",

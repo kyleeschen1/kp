@@ -29,9 +29,10 @@ import {
   offsetKpFunctionWrapMotionWindow
 } from "../animation/function-wrap-motion-profile.ts";
 import {
-  createKpFunctionWrapReceptionPlan,
-  type KpFunctionWrapReceptionPlan
-} from "../animation/function-wrap-reception.ts";
+  compileKpFunctionWrapInvocationGroup,
+  createKpFunctionWrapInvocationGroupReception,
+  type KpCompiledFunctionWrapInvocationGroup
+} from "../animation/function-wrap-invocation.ts";
 import {
   applyKpNativeKatexFunctionWrapReception
 } from "./native-katex-function-wrap-reception.ts";
@@ -145,19 +146,20 @@ export const kpLogProductSemanticMotionProjectionPolicy =
     kpCanonicalCompiledLogProductOperation
   );
 
-export function createKpLogProductFunctionWrapReceptionPlan(
+export function compileKpLogProductFunctionWrapInvocationGroup(
   operation: KpCompiledLogProductOperation
-): KpFunctionWrapReceptionPlan {
+): KpCompiledFunctionWrapInvocationGroup {
   if (!isKpCompiledLogProductOperation(operation)) {
-    throw new Error("Log-product function reception requires nominal compiler authority.");
+    throw new Error("Log-product function wrapping requires nominal compiler authority.");
   }
-  return createKpFunctionWrapReceptionPlan({
-    id: `function-wrap-reception.${operation.contract.family.id}.targets`,
-    direction: "forward",
+  return compileKpFunctionWrapInvocationGroup({
+    id: `${operation.contract.family.id}.targets`,
     branches: operation.contract.family.factors.map((factor) => ({
-      id: `function-wrap-reception.${factor.targetWrapperOccurrenceId}`,
-      argumentEntityIds: [factor.targetOccurrenceId],
-      syntaxEntityIds: [
+      id: `function-wrap-branch.${factor.targetWrapperOccurrenceId}`,
+      semanticObjectId: factor.semanticId,
+      sourceArgumentEntityIds: [factor.sourceOccurrenceId],
+      targetArgumentEntityIds: [factor.targetOccurrenceId],
+      functionEntityIds: [
         factor.targetWrapperOccurrenceId,
         `${factor.targetWrapperOccurrenceId}.operator`
       ],
@@ -278,8 +280,10 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
   if (input.operation.contract.family.id !== BINARY_VISUAL_DISCOVERY_FAMILY_ID) {
     return semanticProjection;
   }
-  const functionWrapReception =
-    createKpLogProductFunctionWrapReceptionPlan(input.operation);
+  const functionWrapReception = createKpFunctionWrapInvocationGroupReception({
+    group: compileKpLogProductFunctionWrapInvocationGroup(input.operation),
+    direction: "forward"
+  });
   const sourceKindByOccurrence = new Map(
     input.sourceEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
   );

@@ -1368,11 +1368,51 @@
       "scope": "known aggregate compiler-cost ceiling",
       "checkedAt": "2026-08-16T07:10:10.453Z",
       "notes": "Contracts pass; aggregate types remain above the old ceiling at 55664 versus 50000. This is lower than s13's 55992 types and 76100 versus 77121 instantiations, so s14 did not worsen the known debt."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "slice s15 log-product semantic and transit contracts",
+      "checkedAt": "2026-08-16T07:16:14.832Z",
+      "notes": "14 focused tests pass for binary and multi-factor callers."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 static types",
+      "checkedAt": "2026-08-16T07:16:15.854Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s15 architectural boundaries",
+      "checkedAt": "2026-08-16T07:16:16.779Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "slice s15 canonical visual checkpoint",
+      "checkedAt": "2026-08-16T07:16:17.715Z",
+      "notes": "Capture completed; review API proxy was unavailable but did not affect rendered checkpoint."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s15 lazy bundle closure",
+      "checkedAt": "2026-08-16T07:16:32.961Z",
+      "notes": "Outer 10819 B, main host 198600 B, and measured catalogue 114866 B remain under budget."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "known aggregate compiler-cost ceiling",
+      "checkedAt": "2026-08-16T07:16:33.974Z",
+      "notes": "Inference contracts pass; the unchanged aggregate ceiling remains red at 55664 types versus 50000."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s14 complete: apply-natural-log-both-sides now compiles two synchronized invocations of motif.function-wrap.v1 through one immutable validated registry authority. Both wrapped and conventional bare function application carry explicit role sets; choreography consumes nominal invocation authority while retaining exact IDs, branches, 0.04-0.7 argument and 0.62-0.92 wrapper windows, semantic endpoints, seek/rewind, and frame fingerprints. The pre-existing 0.64-0.66 apply-log collision remains deferred without visual tuning. Next: log-product composition cutover."
+    "summary": "Slice s15 complete: binary and multi-factor log-product decomposition now compile one canonical function-wrap invocation per target logarithm and project shared reception authority. The caller-local reception factory is gone; semantic identities, route policies, canonical timing windows, geometry, native endpoints, rewind, and visual capture remain unchanged. Next: log-quotient composition cutover."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

@@ -3,21 +3,47 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
-  createKpLogProductFunctionWrapReceptionPlan,
+  compileKpLogProductFunctionWrapInvocationGroup,
   kpLogProductSemanticMotionProjectionPolicy,
   createKpLogProductSemanticMotionProjectionPolicy,
   projectKpLogProductNativePaintRelations
 } from "../src/rendering/log-product-transit-session.ts";
+import {
+  createKpFunctionWrapInvocationGroupReception,
+  isKpCompiledFunctionWrapInvocationGroup
+} from "../src/animation/function-wrap-invocation.ts";
 import {
   kpCanonicalCompiledLogProductOperation,
   kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
 
 test("log-product declares synchronized function-wrap enclosure roles", () => {
-  const plan = createKpLogProductFunctionWrapReceptionPlan(
+  const group = compileKpLogProductFunctionWrapInvocationGroup(
     kpCanonicalCompiledLogProductOperation
   );
+  const plan = createKpFunctionWrapInvocationGroupReception({
+    group,
+    direction: "forward"
+  });
 
+  assert.equal(isKpCompiledFunctionWrapInvocationGroup(group), true);
+  assert.equal(group.motifId, "motif.function-wrap.v1");
+  assert.deepEqual(
+    group.branches.map(({ sourceArgumentEntityIds, targetArgumentEntityIds }) => ({
+      sourceArgumentEntityIds,
+      targetArgumentEntityIds
+    })),
+    [
+      {
+        sourceArgumentEntityIds: ["source.product.x"],
+        targetArgumentEntityIds: ["target.left.argument.x"]
+      },
+      {
+        sourceArgumentEntityIds: ["source.product.y"],
+        targetArgumentEntityIds: ["target.right.argument.y"]
+      }
+    ]
+  );
   assert.equal(plan.kind, "function-wrap-reception");
   assert.equal(plan.synchronization, "all-enclosures-together");
   assert.deepEqual(
@@ -41,6 +67,27 @@ test("log-product declares synchronized function-wrap enclosure roles", () => {
         ]
       }
     ]
+  );
+});
+
+test("multi-factor log-product reuses one function-wrap invocation per target branch", () => {
+  const group = compileKpLogProductFunctionWrapInvocationGroup(
+    kpMultiFactorCompiledLogProductOperation
+  );
+
+  assert.equal(group.branches.length, 3);
+  assert.deepEqual(
+    group.branches.map(({ targetArgumentEntityIds, functionEntityIds }) => ({
+      targetArgumentEntityIds,
+      functionEntityIds
+    })),
+    kpMultiFactorCompiledLogProductOperation.contract.family.factors.map((factor) => ({
+      targetArgumentEntityIds: [factor.targetOccurrenceId],
+      functionEntityIds: [
+        factor.targetWrapperOccurrenceId,
+        `${factor.targetWrapperOccurrenceId}.operator`
+      ]
+    }))
   );
 });
 
