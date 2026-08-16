@@ -1,5 +1,8 @@
-import { linearEquationExemplarTheme } from "../app-adapters/concept-room-theme.ts";
 import { renderLatexToHtml } from "./katex-adapter.ts";
+import {
+  kpLinearEquationExemplarThemeReference,
+  type KpRendererThemeReference
+} from "./renderer-theme-reference.ts";
 import {
   createKpDistributionAreaExemplarCrossSurfaceModel,
   type KpDistributionAreaExemplarConceptId
@@ -37,8 +40,10 @@ export interface KpDistributionAreaExemplarSvgScene {
 }
 
 /** Exact reviewed scene geometry; it is not a generalized area-model API. */
-export function createKpDistributionAreaExemplarSvgScene():
-  KpDistributionAreaExemplarSvgScene {
+export function createKpDistributionAreaExemplarSvgScene(
+  themeReference: KpRendererThemeReference =
+    kpLinearEquationExemplarThemeReference
+): KpDistributionAreaExemplarSvgScene {
   const model = createKpDistributionAreaExemplarCrossSurfaceModel();
   const semanticId = (conceptId: KpDistributionAreaExemplarConceptId) => {
     const link = model.links.find((candidate) => candidate.conceptId === conceptId);
@@ -52,7 +57,7 @@ export function createKpDistributionAreaExemplarSvgScene():
 
   return {
     id: `${model.id}.svg-scene`,
-    themeId: linearEquationExemplarTheme.id,
+    themeId: themeReference.id,
     viewBox: "0 0 600 320",
     accessibleText:
       "A rectangle of height 3 split into widths x and 2, with areas 3x and 6.",

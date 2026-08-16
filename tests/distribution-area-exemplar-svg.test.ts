@@ -5,6 +5,8 @@ import { linearEquationExemplarTheme } from "../src/app-adapters/concept-room-th
 import {
   createKpDistributionAreaExemplarSvgScene
 } from "../src/rendering/distribution-area-exemplar-svg.ts";
+import { defineKpRendererThemeReference } from
+  "../src/rendering/renderer-theme-reference.ts";
 
 test("area SVG scene uses the shared KP theme and KaTeX typography", () => {
   const scene = createKpDistributionAreaExemplarSvgScene();
@@ -37,4 +39,14 @@ test("area SVG scene remains the exact two-region exemplar", () => {
   assert.equal(scene.viewBox, "0 0 600 320");
   assert.equal(scene.regions.length, 2);
   assert.match(scene.accessibleText, /height 3.*widths x and 2.*areas 3x and 6/);
+});
+
+test("area SVG scene accepts theme identity without application token ownership", () => {
+  const scene = createKpDistributionAreaExemplarSvgScene(
+    defineKpRendererThemeReference({ id: "theme.test.host" })
+  );
+
+  assert.equal(scene.themeId, "theme.test.host");
+  assert.equal(scene.viewBox, "0 0 600 320");
+  assert.deepEqual(scene.labels.map(({ latex }) => latex), ["3", "x", "2", "3x", "6"]);
 });

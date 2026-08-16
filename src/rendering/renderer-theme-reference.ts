@@ -2,9 +2,9 @@ export interface KpRendererThemeReference {
   readonly id: string;
 }
 
-export function defineKpRendererThemeReference(
-  reference: KpRendererThemeReference
-): KpRendererThemeReference {
+export function defineKpRendererThemeReference<const Id extends string>(
+  reference: { readonly id: Id }
+): Readonly<{ readonly id: Id }> {
   if (reference.id.trim().length === 0) {
     throw new Error("Renderer theme references require a stable non-empty id.");
   }

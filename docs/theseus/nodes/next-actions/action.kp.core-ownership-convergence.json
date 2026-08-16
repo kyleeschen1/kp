@@ -238,6 +238,13 @@
       "scope": "slice s19 injected theme reference",
       "checkedAt": "2026-08-16T21:59:54.315Z",
       "notes": "Three focused contract tests passed. Architecture and test-project typecheck also passed with the existing four exceptions unchanged."
+    },
+    {
+      "command": "node --test distribution theme reference cohort",
+      "status": "passed",
+      "scope": "slice s20 distribution theme migration",
+      "checkedAt": "2026-08-16T22:02:34.566Z",
+      "notes": "Thirteen focused scene, endpoint, reference, and exception tests passed. Architecture reports three remaining exact exceptions, and test-project typecheck passed."
     }
   ],
   "expectedLearning": [

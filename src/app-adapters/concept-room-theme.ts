@@ -1,3 +1,6 @@
+import { kpLinearEquationExemplarThemeReference } from
+  "../rendering/renderer-theme-reference.ts";
+
 export const conceptRoomStyleRoles = [
   "equation.expression",
   "equation.operation",
@@ -83,7 +86,7 @@ export const structuralConceptRoomTheme = defineConceptRoomTheme({
 
 // These values are trusted presentation code, while published content remains limited to semantic role names.
 export const linearEquationExemplarTheme = defineConceptRoomTheme({
-  id: "kp.concept-room.linear-equation-exemplar.v1",
+  id: kpLinearEquationExemplarThemeReference.id,
   roles: structuralConceptRoomTheme.roles,
   tokens: {
     color: {

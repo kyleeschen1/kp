@@ -4,12 +4,9 @@ import type {
 } from "./kp-dependency-direction-policy.ts";
 
 export type KpDependencyRetirementOwner =
-  | "renderer-theme-inversion"
-  | "legacy-equation-sdk-disposition";
+  "legacy-equation-sdk-disposition";
 
-export type KpDependencyRetirementSlice =
-  | "s20"
-  | "s22";
+export type KpDependencyRetirementSlice = "s22";
 
 export interface KpDependencyDirectionException {
   readonly id: string;
@@ -29,17 +26,6 @@ const legacySdkRetirement = {
 
 export const kpDependencyDirectionExceptions: readonly KpDependencyDirectionException[] =
   Object.freeze([
-    exception(
-      "renderer-theme.distribution-area",
-      "src/rendering/distribution-area-exemplar-svg.ts",
-      "src/app-adapters/concept-room-theme.ts",
-      "runtime",
-      {
-        owner: "renderer-theme-inversion",
-        retireWhen: "The distribution renderer receives a neutral theme reference from its host.",
-        plannedSlice: "s20"
-      }
-    ),
     exception(
       "legacy-sdk.manifest-type",
       "src/public/equation-animation-manifest.ts",

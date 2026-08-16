@@ -170,7 +170,8 @@
     {
       "id": "s20",
       "title": "migrate-distribution-theme-caller",
-      "status": "planned"
+      "summary": "The distribution renderer now consumes an injected neutral theme reference, the application theme shares its exact identity, and the final renderer-to-application exception is retired with output preserved.",
+      "status": "complete"
     },
     {
       "id": "s21",
