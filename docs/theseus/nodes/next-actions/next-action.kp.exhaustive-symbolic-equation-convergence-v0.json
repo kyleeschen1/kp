@@ -899,6 +899,48 @@
       "scope": "s02-standard",
       "checkedAt": "2026-08-16T05:14:44.481Z",
       "notes": "All architecture boundaries passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts scripts/adaptive-loop-workflow.test.ts",
+      "status": "passed",
+      "scope": "selector-and-cli",
+      "checkedAt": "2026-08-16T05:26:11.695Z",
+      "notes": "24 focused selector, CLI, and adaptive-loop tests passed."
+    },
+    {
+      "command": "npm run test:loop-reliability",
+      "status": "passed",
+      "scope": "loop-reliability",
+      "checkedAt": "2026-08-16T05:26:12.711Z",
+      "notes": "15 loop reliability tests passed."
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "function-wrap-exemplar",
+      "checkedAt": "2026-08-16T05:26:13.654Z",
+      "notes": "Eight deterministic forward/rewind captures completed with zero warnings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typescript",
+      "checkedAt": "2026-08-16T05:26:14.600Z",
+      "notes": "TypeScript and Svelte diagnostics passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-16T05:26:15.560Z",
+      "notes": "All architecture, authority, and presentation-boundary gates passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-08-16T05:26:16.488Z",
+      "notes": "Workspace valid at 958 nodes and 21293 events before recording slice evidence."
     }
   ],
   "progress": {

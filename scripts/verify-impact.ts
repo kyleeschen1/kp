@@ -6,6 +6,7 @@ import { parseArgs } from "node:util";
 import {
   selectKpVerificationImpact,
   type KpVerificationCheck,
+  type KpVerificationMode,
   type KpVerificationSelection
 } from "./verification-impact.ts";
 
@@ -28,16 +29,24 @@ export async function runKpVerifyImpactCli(
       path: { type: "string", multiple: true },
       staged: { type: "boolean", default: false },
       release: { type: "boolean", default: false },
+      mode: { type: "string" },
       run: { type: "boolean", default: false },
       help: { type: "boolean", short: "h", default: false }
     }
   });
+  const mode = parseMode(values.mode);
+  if (values.release && mode !== undefined) {
+    throw new Error("Use either --release or --mode, not both.");
+  }
   if (values.help) {
     dependencies.write(helpText);
-    return selectKpVerificationImpact([], { release: values.release });
+    return selectKpVerificationImpact([], selectionOptions(mode, values.release));
   }
   const paths = values.path ?? await dependencies.changedPaths(values.staged);
-  const selection = selectKpVerificationImpact(paths, { release: values.release });
+  const selection = selectKpVerificationImpact(
+    paths,
+    selectionOptions(mode, values.release)
+  );
   dependencies.write(`${JSON.stringify({ paths, ...selection }, null, 2)}\n`);
   if (values.run) {
     for (const check of selection.checks) {
@@ -46,6 +55,26 @@ export async function runKpVerifyImpactCli(
     }
   }
   return selection;
+}
+
+function selectionOptions(
+  mode: KpVerificationMode | undefined,
+  release: boolean
+): { readonly mode?: KpVerificationMode; readonly release: boolean } {
+  return mode === undefined ? { release } : { mode, release };
+}
+
+function parseMode(value: string | undefined): KpVerificationMode | undefined {
+  if (value === undefined) return undefined;
+  if (
+    value === "discovery" ||
+    value === "contract" ||
+    value === "promotion" ||
+    value === "release"
+  ) return value;
+  throw new Error(
+    `Unknown verification mode ${JSON.stringify(value)}; expected discovery, contract, promotion, or release.`
+  );
 }
 
 async function changedPaths(staged: boolean): Promise<readonly string[]> {
@@ -83,6 +112,7 @@ Inspect the selected checks by default. Add --run to execute them sequentially.
 
   --path <path>  Select from an explicit changed path (repeatable)
   --staged       Inspect staged changes only instead of all working-tree changes
+  --mode <mode>  discovery | contract | promotion | release (default: promotion)
   --release      Select the explicit broad release gate
   --run          Execute the selected argv-safe commands in order
 `;
@@ -96,4 +126,3 @@ const defaultDependencies: KpVerifyImpactDependencies = {
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   await runKpVerifyImpactCli(process.argv.slice(2));
 }
-

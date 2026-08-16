@@ -92,7 +92,8 @@
     {
       "id": "s03",
       "title": "Typed-verification-modes",
-      "status": "planned"
+      "summary": "Added typed discovery, contract, promotion, and release verification modes; unknown paths remain fail-broad; function-wrap changes now select semantic preservation plus their own self-contained deterministic visual harness rather than the unrelated linear-equation capture.",
+      "status": "complete"
     },
     {
       "id": "s04",

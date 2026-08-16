@@ -1,9 +1,10 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { chromium } from "playwright";
+import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
-const baseUrl = process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
+const animationId = "animation.generated.function-wrap.apply-f";
+const configuredBaseUrl = process.env["KP_VISUAL_BASE_URL"];
 const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/function-wrap-visual"
 );
@@ -18,25 +19,28 @@ const checkpoints = [
 ] as const;
 
 await mkdir(outputRoot, { recursive: true });
-const browser = await chromium.launch({ headless: true });
-const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const harness = createKpVisualReviewHarness(
+  configuredBaseUrl === undefined ? {} : { baseUrl: configuredBaseUrl }
+);
+const page = await harness.page({
+  viewport: { width: 1280, height: 900 },
+  colorScheme: "dark"
+});
 
 try {
-  await page.goto(baseUrl, { waitUntil: "networkidle" });
+  const url = new URL("/", harness.baseUrl);
+  url.searchParams.set("artifact", animationId);
+  await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
   await page.evaluate(async () => document.fonts.ready);
-  await page.locator('[data-action="set-editor-animation"]').selectOption(
-    "editor-animation.sample.animation.function-wrap.apply-f"
-  );
 
-  const player = page.locator("[data-kp-editor-animation-player]");
+  const player = page.locator(
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
   const stage = player.locator("[data-kp-editor-equation-stage]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   await player.waitFor();
-  await page.waitForFunction(() =>
-    document.querySelector<HTMLElement>(
-      "[data-kp-editor-animation-player]"
-    )?.dataset["kpEditorAnimationGestaltStatus"] === "ready"
-  );
+  await stage.waitFor();
+  await scrubber.waitFor();
   const warnings = await player.locator(
     "[data-kp-editor-gestalt-warnings] li"
   ).allInnerTexts();
@@ -61,14 +65,15 @@ try {
     captures.push({ id, progress: checkpoint.progress, direction: "forward" });
   }
 
-  await player.getByRole("button", { name: "Rewind animation" }).click();
+  // Seeking backward is the portable rewind contract; compact hosts need not
+  // project the optional transport button used by the full workbench.
+  await scrubber.fill("0.5");
   if (
     await stage.getAttribute("data-kp-function-wrap-visual-identity") !==
     "stable"
   ) {
     throw new Error("Function-wrap rewind replaced the measured stage.");
   }
-  await scrubber.fill("0.5");
   await nextPaint(page);
   await player.screenshot({
     path: path.join(outputRoot, "rewind-enclosure-exit.png")
@@ -83,7 +88,7 @@ try {
     path.join(outputRoot, "manifest.json"),
     `${JSON.stringify({
       schemaVersion: "kp.function-wrap-visual-review.v1",
-      baseUrl,
+      animationId,
       captures,
       warnings
     }, null, 2)}\n`,
@@ -95,7 +100,7 @@ try {
     warnings
   }, null, 2));
 } finally {
-  await browser.close();
+  await harness.close();
 }
 
 async function nextPaint(page: import("playwright").Page): Promise<void> {

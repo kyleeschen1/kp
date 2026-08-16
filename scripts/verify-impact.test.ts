@@ -32,6 +32,28 @@ test("release override selects the broad gate regardless of paths", async () => 
   assert.ok(result.checks.some((check) => check.id === "test"));
 });
 
+test("typed mode is reported and filters later lifecycle gates", async () => {
+  const harness = createHarness([]);
+  const result = await runKpVerifyImpactCli([
+    "--path", "src/animation/function-wrap-reception.ts",
+    "--mode", "discovery"
+  ], harness.dependencies);
+  assert.equal(result.mode, "discovery");
+  assert.deepEqual(result.checks.map(({ id }) => id), [
+    "equation-surface-preservation",
+    "function-wrap-visual"
+  ]);
+  assert.match(harness.output, /"mode": "discovery"/);
+});
+
+test("release compatibility flag cannot conflict with typed mode", async () => {
+  const harness = createHarness([]);
+  await assert.rejects(
+    runKpVerifyImpactCli(["--release", "--mode", "contract"], harness.dependencies),
+    /either --release or --mode/
+  );
+});
+
 function createHarness(paths: readonly string[]): {
   readonly dependencies: KpVerifyImpactDependencies;
   readonly executed: string[];

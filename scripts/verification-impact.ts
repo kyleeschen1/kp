@@ -1,15 +1,22 @@
 import { kpReaderRouteManifest } from "../src/reader/compiler/reader-route-manifest.ts";
 
 export type KpVerificationRisk = "low" | "medium" | "high";
+export type KpVerificationMode =
+  | "discovery"
+  | "contract"
+  | "promotion"
+  | "release";
 
 export interface KpVerificationCheck {
   readonly id: string;
   readonly command: readonly string[];
   readonly risk: KpVerificationRisk;
   readonly purpose: string;
+  readonly minimumMode: Exclude<KpVerificationMode, "release">;
 }
 
 export interface KpVerificationSelection {
+  readonly mode: KpVerificationMode;
   readonly risk: KpVerificationRisk;
   readonly checks: readonly KpVerificationCheck[];
   readonly reasons: readonly string[];
@@ -17,6 +24,7 @@ export interface KpVerificationSelection {
 }
 
 export interface KpVerificationSelectionOptions {
+  readonly mode?: KpVerificationMode;
   readonly release?: boolean;
 }
 
@@ -25,7 +33,8 @@ const checks = {
     "theseus-validate",
     ["npm", "run", "theseus", "--", "workspace", "validate"],
     "low",
-    "Validate durable project state and run-contract evidence."
+    "Validate durable project state and run-contract evidence.",
+    "discovery"
   ),
   protocol: check(
     "protocol-typecheck",
@@ -59,25 +68,29 @@ const checks = {
     "dev-review-browser",
     ["npx", "playwright", "test", "tests/dev-review-shell.browser.spec.ts", "--project=chromium"],
     "medium",
-    "Exercise the visible review shell and submission counter."
+    "Exercise the visible review shell and submission counter.",
+    "promotion"
   ),
   productionClosure: check(
     "dev-review-production-closure",
     ["npm", "run", "check:dev-review-production"],
     "high",
-    "Prove development review tooling remains unreachable in production."
+    "Prove development review tooling remains unreachable in production.",
+    "promotion"
   ),
   readerProductionClosure: check(
     "reader-production-closure",
     ["npm", "run", "check:reader-production"],
     "high",
-    "Prove the route manifest and deployed reader pages form an exact build-only closure."
+    "Prove the route manifest and deployed reader pages form an exact build-only closure.",
+    "promotion"
   ),
   readerBudgets: check(
     "reader-route-budgets",
     ["npm", "run", "check:reader-budgets"],
     "high",
-    "Enforce each manifest route's compiled HTML and transitive runtime payload baseline."
+    "Enforce each manifest route's compiled HTML and transitive runtime payload baseline.",
+    "promotion"
   ),
   typecheck: check(
     "typecheck",
@@ -107,13 +120,15 @@ const checks = {
     "catalogue-capability-browser",
     ["npm", "run", "test:browser:animation-equation-capability"],
     "high",
-    "Prove lazy equation and graph capability loading retains stable stage geometry."
+    "Prove lazy equation and graph capability loading retains stable stage geometry.",
+    "promotion"
   ),
   catalogueBundle: check(
     "catalogue-bundle-boundary",
     ["npm", "run", "check:animation-library-bundle-boundary"],
     "high",
-    "Enforce lazy catalogue and specialized capability payload ceilings."
+    "Enforce lazy catalogue and specialized capability payload ceilings.",
+    "promotion"
   ),
   publication: check(
     "economics-publication",
@@ -125,13 +140,29 @@ const checks = {
     "focused-visual",
     ["npm", "run", "visual:linear-equation"],
     "high",
-    "Capture the canonical motion exemplar at deterministic checkpoints."
+    "Capture the canonical motion exemplar at deterministic checkpoints.",
+    "discovery"
+  ),
+  functionWrapVisual: check(
+    "function-wrap-visual",
+    ["npm", "run", "visual:function-wrap"],
+    "medium",
+    "Capture the function-wrap exemplar through its current catalogue route.",
+    "discovery"
+  ),
+  equationPreservation: check(
+    "equation-surface-preservation",
+    ["npm", "run", "test:equation-surface-preservation"],
+    "medium",
+    "Protect equation semantics, endpoints, clocks, renderers, and sampled-frame obligations.",
+    "discovery"
   ),
   readerConformance: check(
     "reader-conformance",
     ["npm", "run", "test:browser:reader-conformance"],
     "high",
-    "Exercise shared reader hydration, URL, TOC, review, narrow-fit, and searchability laws."
+    "Exercise shared reader hydration, URL, TOC, review, narrow-fit, and searchability laws.",
+    "promotion"
   ),
   distributionUnit: check(
     "distribution-motion-laws",
@@ -150,19 +181,22 @@ const checks = {
     "distribution-visual",
     ["npm", "run", "visual:distribution-area"],
     "high",
-    "Exercise distribution motion, direction, URL, review, TOC, and responsive browser behavior."
+    "Exercise distribution motion, direction, URL, review, TOC, and responsive browser behavior.",
+    "discovery"
   ),
   publicTypeScript: check(
     "public-typescript",
     ["npm", "run", "verify:public-typescript"],
     "high",
-    "Type-check, test, build, budget, and browser-check the bounded public TypeScript route."
+    "Type-check, test, build, budget, and browser-check the bounded public TypeScript route.",
+    "promotion"
   ),
   publicFractionComposition: check(
     "public-fraction-composition",
     ["npm", "run", "verify:public-fraction-composition"],
     "high",
-    "Type-check, test, build, and browser-check the bounded public symbolic route."
+    "Type-check, test, build, and browser-check the bounded public symbolic route.",
+    "promotion"
   ),
   publicTypeScriptInfrastructure: check(
     "public-typescript-infrastructure",
@@ -188,7 +222,8 @@ const checks = {
       "/Users/kyleeschen/.codex/skills/kp-review-logs"
     ],
     "low",
-    "Validate personal skill structure and metadata."
+    "Validate personal skill structure and metadata.",
+    "discovery"
   ),
   test: check(
     "test",
@@ -200,7 +235,8 @@ const checks = {
     "build",
     ["npm", "run", "build:bundle"],
     "high",
-    "Build the production application after the separately selected typecheck."
+    "Build the production application after the separately selected typecheck.",
+    "promotion"
   )
 } as const;
 
@@ -212,6 +248,17 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "function-wrap-presentation",
+    matches: isFunctionWrapPath,
+    checks: [
+      checks.equationPreservation,
+      checks.typecheck,
+      checks.architecture,
+      checks.functionWrapVisual
+    ],
+    reason: "Function-wrap authority, rendering, or checkpoint coverage changed."
+  },
   {
     id: "public-typescript-infrastructure",
     matches: (path) =>
@@ -350,10 +397,15 @@ const rules: readonly KpVerificationRule[] = [
       path.startsWith("src/semantic-reader/") ||
       (path.startsWith("src/animation/") &&
         path !== "src/animation/indexed-progress-schedule.ts" &&
-        !isTypeScriptRefactorPath(path)) ||
-      path.includes("equation") ||
-      path.includes("visual"),
-    checks: [checks.typecheck, checks.focusedVisual],
+        !isTypeScriptRefactorPath(path) &&
+        !isFunctionWrapPath(path)) ||
+      (!isFunctionWrapPath(path) &&
+        (path.includes("equation") || path.includes("visual"))),
+    checks: [
+      checks.equationPreservation,
+      checks.typecheck,
+      checks.focusedVisual
+    ],
     reason: "A motion, equation, or visual-rendering path changed."
   },
   {
@@ -435,6 +487,10 @@ function isTypeScriptRefactorPath(path: string): boolean {
       !isPublicTypeScriptPath(path));
 }
 
+function isFunctionWrapPath(path: string): boolean {
+  return path.includes("function-wrap");
+}
+
 /**
  * Maps touched paths to the smallest known-safe gate. Unknown paths deliberately
  * fail broad: saving a few minutes is not worth silently skipping a new subsystem.
@@ -443,8 +499,10 @@ export function selectKpVerificationImpact(
   paths: readonly string[],
   options: KpVerificationSelectionOptions = {}
 ): KpVerificationSelection {
-  if (options.release) {
+  const mode = options.release ? "release" : options.mode ?? "promotion";
+  if (mode === "release") {
     return {
+      mode,
       risk: "high",
       checks: releaseChecks,
       reasons: ["Release verification explicitly requests the broad repository gate."],
@@ -488,9 +546,15 @@ export function selectKpVerificationImpact(
     );
   }
   const selectedChecks = [...selected.values()];
+  const checksForMode = unmatchedPaths.length > 0 || normalizedPaths.length === 0
+    ? selectedChecks
+    : selectedChecks.filter((candidate) =>
+      modeRank[candidate.minimumMode] <= modeRank[mode]
+    );
   return {
-    risk: maximumRisk(selectedChecks),
-    checks: selectedChecks,
+    mode,
+    risk: maximumRisk(checksForMode),
+    checks: checksForMode,
     reasons: [...new Set(reasons)],
     unmatchedPaths
   };
@@ -500,10 +564,18 @@ function check(
   id: string,
   command: readonly string[],
   risk: KpVerificationRisk,
-  purpose: string
+  purpose: string,
+  minimumMode: Exclude<KpVerificationMode, "release"> = "contract"
 ): KpVerificationCheck {
-  return { id, command, risk, purpose };
+  return { id, command, risk, purpose, minimumMode };
 }
+
+const modeRank: Readonly<Record<KpVerificationMode, number>> = Object.freeze({
+  discovery: 0,
+  contract: 1,
+  promotion: 2,
+  release: 3
+});
 
 function normalizePath(path: string): string {
   return path.trim().replaceAll("\\", "/").replace(/^\.\//, "");

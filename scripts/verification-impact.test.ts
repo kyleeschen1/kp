@@ -95,6 +95,33 @@ test("health-sensitive animation paths select their dedicated gates", () => {
   assert.deepEqual(publication.unmatchedPaths, []);
 });
 
+test("verification modes accumulate durable checks without substituting an unrelated exemplar", () => {
+  const path = "src/animation/function-wrap-reception.ts";
+  const discovery = selectKpVerificationImpact([path], { mode: "discovery" });
+  assert.equal(discovery.mode, "discovery");
+  assert.deepEqual(ids(discovery), [
+    "equation-surface-preservation",
+    "function-wrap-visual"
+  ]);
+
+  const contract = selectKpVerificationImpact([path], { mode: "contract" });
+  assert.deepEqual(ids(contract), [
+    "equation-surface-preservation",
+    "typecheck",
+    "architecture",
+    "function-wrap-visual"
+  ]);
+  assert.equal(ids(contract).includes("focused-visual"), false);
+});
+
+test("unknown paths fail broad even when discovery mode is requested", () => {
+  const result = selectKpVerificationImpact(
+    ["new-subsystem/unknown.ts"],
+    { mode: "discovery" }
+  );
+  assert.deepEqual(ids(result), ["typecheck", "test", "build"]);
+});
+
 test("public TypeScript paths select the bounded route gate", () => {
   for (const path of [
     "src/public-web/typescript-free-shipping-entry.ts",
@@ -170,6 +197,7 @@ test("unknown and build-system paths fail broad", () => {
 test("release mode is explicit, broad, and deterministic", () => {
   const result = selectKpVerificationImpact(["docs/theseus/example.json"], { release: true });
   assert.equal(result.risk, "high");
+  assert.equal(result.mode, "release");
   assert.deepEqual(ids(result), [
     "theseus-validate",
     "protocol-typecheck",
