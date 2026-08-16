@@ -33,6 +33,7 @@
       ],
       "sourceCallers": [
         "src/editor/equation-stage-frame.ts",
+        "src/editor/equation-stage-markup.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [
@@ -78,6 +79,7 @@
         "animation.sample.fundamental-theorem-calculus"
       ],
       "sourceCallers": [
+        "src/editor/equation-stage-markup.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [],

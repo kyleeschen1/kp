@@ -353,6 +353,41 @@
       "scope": "slice s27 scoped browser preservation",
       "checkedAt": "2026-08-16T17:50:53.951Z",
       "notes": "Five single-worker browser tests passed for generic equation settlement, responsive stage reservation, and selected capability loading."
+    },
+    {
+      "command": "focused symbolic family, metadata, resolver, picker, dispatch, and reachability tests",
+      "status": "passed",
+      "scope": "slice s28 registry decomposition",
+      "checkedAt": "2026-08-16T18:02:35.295Z",
+      "notes": "Seventy-three focused tests passed after deriving stale top-level totals; exact family order and pack validation are covered."
+    },
+    {
+      "command": "npm run generate:animation-library-metadata; git diff --exit-code generated metadata",
+      "status": "passed",
+      "scope": "slice s28 metadata equality",
+      "checkedAt": "2026-08-16T18:02:36.326Z",
+      "notes": "All 62 generated descriptors remained byte-for-byte unchanged."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s28 repository and catalogue boundaries",
+      "checkedAt": "2026-08-16T18:02:37.282Z",
+      "notes": "All type, architecture, and 36 catalogue shell tests passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s28 tree-shaking and bundle preservation",
+      "checkedAt": "2026-08-16T18:02:38.256Z",
+      "notes": "All measured bundle closures remained exactly at the pre-slice baseline; runtime metadata stays generated and does not import the source family packs."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "failed",
+      "scope": "advisory catalogue browser matrix",
+      "checkedAt": "2026-08-16T18:02:39.230Z",
+      "notes": "Twelve of fourteen passed. Known unrelated failures remain: stale-pack loading expects zero players while one retained player is present, and the Review composer timed out; retained economics math also logged its existing missing-fragment advisory."
     }
   ]
 }

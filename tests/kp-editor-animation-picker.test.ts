@@ -23,17 +23,18 @@ test("editor animation picker groups the concrete catalog by supported surface",
   });
   const model = createKpEditorAnimationPickerModel({
     descriptors,
-    selectedDescriptorId: descriptors[13]?.id
+    selectedDescriptorId:
+      "editor-animation.animation.generated.distribution.expand-a-sum"
   });
 
-  assert.equal(model.optionCount, 40);
+  assert.equal(model.optionCount, createKpAnimationAssets().length);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
-      ["algebra", 8],
+      ["algebra", 7],
       ["calculus", 4],
       ["linear-algebra", 4],
-      ["equation", 12],
+      ["equation", 18],
       ["diagram", 3],
       ["graph", 3],
       ["programming", 5],

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3138,
+  "scannedFileCount": 3144,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -121,6 +121,7 @@
       "authorityId": "motif.generic-transition",
       "sourceCallers": [
         "src/editor/equation-stage-frame.ts",
+        "src/editor/equation-stage-markup.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [
@@ -136,6 +137,7 @@
       "sourcePath": "src/editor/equation-stage-frame.ts",
       "authorityId": "timing.generic-phase-easing",
       "sourceCallers": [
+        "src/editor/equation-stage-markup.ts",
         "src/editor/equation-surface-adapter.ts"
       ],
       "testCallers": [],
@@ -520,7 +522,9 @@
         "src/animation/structural-succession-presentation.ts",
         "src/animation/successor-synthesis.ts",
         "src/animation/symbol-motion-contract.ts",
-        "src/animation/symbolic-manipulation-family-registry.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/animation/symbolic-manipulation-families/calculus.ts",
+        "src/animation/symbolic-manipulation-families/linear-algebra.ts",
         "src/animation/symbolic-manipulation-family.ts",
         "src/animation/symbolic-paused-frame-drilldown.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
@@ -1283,7 +1287,9 @@
         "src/animation/structural-succession-presentation.ts",
         "src/animation/successor-synthesis.ts",
         "src/animation/symbol-motion-contract.ts",
-        "src/animation/symbolic-manipulation-family-registry.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/animation/symbolic-manipulation-families/calculus.ts",
+        "src/animation/symbolic-manipulation-families/linear-algebra.ts",
         "src/animation/symbolic-manipulation-family.ts",
         "src/animation/symbolic-paused-frame-drilldown.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",

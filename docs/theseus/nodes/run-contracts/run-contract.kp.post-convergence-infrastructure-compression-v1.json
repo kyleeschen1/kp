@@ -206,7 +206,8 @@
     {
       "id": "s28",
       "title": "symbolic-family-registry-decomposition",
-      "status": "planned"
+      "summary": "Replaced the 5,236-line symbolic registry with a 37-line compatibility index, three independently importable domain packs, and a validated pack protocol; preserved exact family order, metadata, resolution, and production bundle output.",
+      "status": "complete"
     },
     {
       "id": "s29",

@@ -16,12 +16,13 @@ import {
 } from "../src/editor/animation-surface-dispatch.ts";
 
 test("editor animation surface dispatch covers every current concrete asset", () => {
-  const dispatches = projectKpAnimationAssetsToEditorDescriptors({
+  const descriptors = projectKpAnimationAssetsToEditorDescriptors({
     assets: createKpAnimationAssets(),
     families: createSymbolicManipulationFamilyRegistry()
-  }).map(dispatchKpEditorAnimationSurface);
+  });
+  const dispatches = descriptors.map(dispatchKpEditorAnimationSurface);
 
-  assert.equal(dispatches.length, 57);
+  assert.equal(dispatches.length, descriptors.length);
   assert.equal(
     dispatches.some((dispatch) => dispatch.kind === "unsupported"),
     false
@@ -34,7 +35,7 @@ test("editor animation surface dispatch covers every current concrete asset", ()
       ])
     ),
     {
-      equation: 35,
+      equation: 40,
       diagram: 3,
       graph: 11,
       programming: 5,
