@@ -1,0 +1,195 @@
+{
+  "id": "run-contract.kp.post-convergence-infrastructure-compression-v1",
+  "kind": "run-contract",
+  "title": "Post-convergence infrastructure compression",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.post-convergence-infrastructure-compression-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md",
+      "summary": "User-approved 30-slice proposal with exact scope, verification tiers, stop conditions, deferrals, preservation boundary, and done contract."
+    }
+  ],
+  "verification": [
+    "npm run measure:equation-iteration-economics",
+    "npm run check:inference",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run health:pre-expansion:release",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Project-control documentation and generated project counts.",
+    "Reproducible architecture, reachability, inference, bundle, and iteration-economics measurements.",
+    "Typed equation-authoring requests, repair diagnostics, one narrow compile facade, and a tool-neutral direct-import adapter over existing authority.",
+    "Immutable family, capability, and loader declarations with literal dynamic imports and exhaustive validated projections.",
+    "Behavior-preserving ownership extraction from equation-surface-adapter and symbolic-manipulation-family-registry.",
+    "Adjacent retirement only after exact last-caller reachability and stronger invariant ownership are proved."
+  ],
+  "disallowedWork": [
+    "Visual timing, geometry, choreography, salience, layout, typography, animation-content redesign, or promotion of the pending log-product candidate.",
+    "Protected economics source/publication, unrelated dirty files, package installation, directory-wide moves, formatting churn, or blanket test deletion.",
+    "Live LLM runtime, arbitrary model-authored code, universal plugin or domain compiler, new clock, new renderer authority, mutable global registry, or broad Graph3D/public-product work.",
+    "STOP on human visual judgment, semantic or endpoint drift, deterministic runtime drift, bundle regression, ambiguous deletion, circular ownership, weaker type safety, or scope expansion."
+  ],
+  "goal": "Reconcile durable truth, prove the governed equation authoring path, retire only reachable redundancy, open capability loading through typed declarations, clarify high-churn ownership, and reduce measured compiler and verification cost without visual or semantic change.",
+  "target": "next-action.kp.post-convergence-infrastructure-compression-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "control-plane-truth",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "derived-inventory-truth",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "durable-deferral-register",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "post-refactor-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "inference-attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "verification-tiers",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "generation-pressure-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "function-wrap-trial",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "cancellation-trial",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "distribution-factoring-trial",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "generation-gap-synthesis",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "compile-equation-intent-facade",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "tool-neutral-request-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "generation-boundary-proof",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "exact-reachability-graph",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "generic-fallback-audit",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "manifest-projection-authority-audit",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "fixture-test-authority-audit",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "adjacent-retirement-a",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "adjacent-retirement-b-or-deferral",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "capability-loader-declarations",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "equation-capability-migration",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "cross-domain-capability-migration",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "closed-loader-retirement",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "equation-adapter-ownership-map",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "equation-adapter-extraction-a",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "equation-adapter-extraction-b",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "symbolic-family-registry-decomposition",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "inference-command-closeout",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "release-closure",
+      "status": "planned"
+    }
+  ]
+}

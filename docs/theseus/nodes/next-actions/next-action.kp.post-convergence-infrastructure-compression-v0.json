@@ -1,0 +1,13 @@
+{
+  "id": "next-action.kp.post-convergence-infrastructure-compression-v0",
+  "kind": "next-action",
+  "title": "Compress post-convergence infrastructure and prove generation economics",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md"
+    }
+  ]
+}
