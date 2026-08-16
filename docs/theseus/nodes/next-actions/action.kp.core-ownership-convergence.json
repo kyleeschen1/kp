@@ -203,6 +203,13 @@
       "scope": "slice s14 linear-solve cycle retirement",
       "checkedAt": "2026-08-16T21:44:06.415Z",
       "notes": "Sixteen behavior, reachability, semantic asset, tutorial, and exception tests passed; architecture reports 8 remaining exact exceptions and project dashboard remains green."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "slice s15 core-to-tutorial neutrality",
+      "checkedAt": "2026-08-16T21:46:17.537Z",
+      "notes": "249 semantic-animation tests passed; the focused graph proof, architecture gate, and test-project typecheck also passed."
     }
   ],
   "expectedLearning": [

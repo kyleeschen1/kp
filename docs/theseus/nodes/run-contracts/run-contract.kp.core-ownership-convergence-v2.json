@@ -140,7 +140,8 @@
     {
       "id": "s15",
       "title": "prove-core-to-tutorial-neutrality",
-      "status": "planned"
+      "summary": "The full TypeScript graph now proves no neutral-core module imports tutorial composition through source or runtime coupling, and no exact exception masks such an edge.",
+      "status": "complete"
     },
     {
       "id": "s16",
