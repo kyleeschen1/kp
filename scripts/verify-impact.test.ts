@@ -54,6 +54,30 @@ test("release compatibility flag cannot conflict with typed mode", async () => {
   );
 });
 
+test("equation scope bypasses git discovery and selects a named tier", async () => {
+  const harness = createHarness(["should-not-be-read.ts"]);
+  const result = await runKpVerifyImpactCli([
+    "--scope", "equation",
+    "--mode", "discovery"
+  ], harness.dependencies);
+  assert.equal(harness.changedPathCalls, 0);
+  assert.deepEqual(result.checks.map(({ id }) => id), [
+    "equation-surface-preservation",
+    "equation-extension-dispatch"
+  ]);
+});
+
+test("scope cannot be mixed with path discovery", async () => {
+  const harness = createHarness([]);
+  await assert.rejects(
+    runKpVerifyImpactCli([
+      "--scope", "equation",
+      "--path", "src/domain-ir/equation-motif-invocation.ts"
+    ], harness.dependencies),
+    /scope cannot be combined/
+  );
+});
+
 function createHarness(paths: readonly string[]): {
   readonly dependencies: KpVerifyImpactDependencies;
   readonly executed: string[];

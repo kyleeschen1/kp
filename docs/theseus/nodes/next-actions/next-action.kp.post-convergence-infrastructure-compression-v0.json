@@ -59,6 +59,27 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T14:23:01.158Z",
       "notes": "Measured 21 fixtures plus library baseline and four direct-import comparisons. Empty baseline creates 27,947 Types; largest direct closures are operation-evaluation and factoring; broad theme and authoring barrels add 6,466 and 3,568 Types versus direct owners."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts",
+      "status": "passed",
+      "scope": "slice-s06-focused",
+      "checkedAt": "2026-08-16T14:29:27.655Z",
+      "notes": "26 selector and CLI tests passed."
+    },
+    {
+      "command": "npm run verify:equation:inner",
+      "status": "passed",
+      "scope": "slice-s06-inner-loop",
+      "checkedAt": "2026-08-16T14:29:28.771Z",
+      "notes": "Equation preservation and extension-dispatch tiers passed in about five seconds."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s06-boundary",
+      "checkedAt": "2026-08-16T14:29:30.682Z",
+      "notes": "All architecture gates passed."
     }
   ]
 }

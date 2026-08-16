@@ -5,8 +5,10 @@ import { parseArgs } from "node:util";
 
 import {
   selectKpVerificationImpact,
+  selectKpVerificationScope,
   type KpVerificationCheck,
   type KpVerificationMode,
+  type KpVerificationScope,
   type KpVerificationSelection
 } from "./verification-impact.ts";
 
@@ -30,23 +32,33 @@ export async function runKpVerifyImpactCli(
       staged: { type: "boolean", default: false },
       release: { type: "boolean", default: false },
       mode: { type: "string" },
+      scope: { type: "string" },
       run: { type: "boolean", default: false },
       help: { type: "boolean", short: "h", default: false }
     }
   });
   const mode = parseMode(values.mode);
+  const scope = parseScope(values.scope);
   if (values.release && mode !== undefined) {
     throw new Error("Use either --release or --mode, not both.");
+  }
+  if (
+    scope !== undefined &&
+    ((values.path?.length ?? 0) > 0 || values.staged)
+  ) {
+    throw new Error("--scope cannot be combined with --path or --staged.");
   }
   if (values.help) {
     dependencies.write(helpText);
     return selectKpVerificationImpact([], selectionOptions(mode, values.release));
   }
-  const paths = values.path ?? await dependencies.changedPaths(values.staged);
-  const selection = selectKpVerificationImpact(
-    paths,
-    selectionOptions(mode, values.release)
-  );
+  const selectedMode = values.release ? "release" : mode;
+  const paths = scope === undefined
+    ? values.path ?? await dependencies.changedPaths(values.staged)
+    : [];
+  const selection = scope === undefined
+    ? selectKpVerificationImpact(paths, selectionOptions(mode, values.release))
+    : selectKpVerificationScope(scope, selectedMode ?? "contract");
   dependencies.write(`${JSON.stringify({ paths, ...selection }, null, 2)}\n`);
   if (values.run) {
     for (const check of selection.checks) {
@@ -74,6 +86,14 @@ function parseMode(value: string | undefined): KpVerificationMode | undefined {
   ) return value;
   throw new Error(
     `Unknown verification mode ${JSON.stringify(value)}; expected discovery, contract, promotion, or release.`
+  );
+}
+
+function parseScope(value: string | undefined): KpVerificationScope | undefined {
+  if (value === undefined) return undefined;
+  if (value === "equation") return value;
+  throw new Error(
+    `Unknown verification scope ${JSON.stringify(value)}; expected equation.`
   );
 }
 
@@ -113,6 +133,7 @@ Inspect the selected checks by default. Add --run to execute them sequentially.
   --path <path>  Select from an explicit changed path (repeatable)
   --staged       Inspect staged changes only instead of all working-tree changes
   --mode <mode>  discovery | contract | promotion | release (default: promotion)
+  --scope <name> Select a stable subsystem profile; currently equation
   --release      Select the explicit broad release gate
   --run          Execute the selected argv-safe commands in order
 `;

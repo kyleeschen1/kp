@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { selectKpVerificationImpact } from "./verification-impact.ts";
+import {
+  selectKpVerificationImpact,
+  selectKpVerificationScope
+} from "./verification-impact.ts";
 
 test("Theseus-only changes keep verification focused", () => {
   const result = selectKpVerificationImpact(["docs/theseus/events/2026-07-21.jsonl"]);
@@ -247,6 +250,40 @@ test("release mode is explicit, broad, and deterministic", () => {
     result.checks.find(({ id }) => id === "build")?.command,
     ["npm", "run", "build:bundle"]
   );
+});
+
+test("equation scope exposes honest inner boundary promotion and release tiers", () => {
+  assert.deepEqual(
+    ids(selectKpVerificationScope("equation", "discovery")),
+    ["equation-surface-preservation", "equation-extension-dispatch"]
+  );
+  assert.deepEqual(
+    ids(selectKpVerificationScope("equation", "contract")),
+    [
+      "equation-surface-preservation",
+      "equation-extension-dispatch",
+      "equation-motion-protocol",
+      "typecheck",
+      "architecture"
+    ]
+  );
+  assert.deepEqual(
+    ids(selectKpVerificationScope("equation", "promotion")),
+    [
+      "equation-surface-preservation",
+      "equation-extension-dispatch",
+      "equation-motion-protocol",
+      "typecheck",
+      "architecture",
+      "catalogue-capability-browser",
+      "catalogue-bundle-boundary"
+    ]
+  );
+  const release = selectKpVerificationScope("equation", "release");
+  assert.deepEqual(ids(release), ["equation-release"]);
+  assert.deepEqual(release.checks[0]?.command, [
+    "npm", "run", "health:pre-expansion:release"
+  ]);
 });
 
 function ids(result: ReturnType<typeof selectKpVerificationImpact>): string[] {

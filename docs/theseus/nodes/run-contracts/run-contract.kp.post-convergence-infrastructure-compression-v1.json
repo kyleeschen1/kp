@@ -74,7 +74,8 @@
     {
       "id": "s06",
       "title": "verification-tiers",
-      "status": "planned"
+      "summary": "Added named equation verification tiers: inner, boundary, promotion, and release. Inner runs preservation plus extension dispatch in roughly five seconds; selector and CLI tests plus architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

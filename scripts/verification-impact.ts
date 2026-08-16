@@ -6,6 +6,7 @@ export type KpVerificationMode =
   | "contract"
   | "promotion"
   | "release";
+export type KpVerificationScope = "equation";
 
 export interface KpVerificationCheck {
   readonly id: string;
@@ -279,6 +280,13 @@ const checks = {
     "high",
     "Build the production application after the separately selected typecheck.",
     "promotion"
+  ),
+  equationRelease: check(
+    "equation-release",
+    ["npm", "run", "health:pre-expansion:release"],
+    "high",
+    "Run the broad pre-expansion release closure after equation infrastructure changes.",
+    "promotion"
   )
 } as const;
 
@@ -516,6 +524,33 @@ const releaseChecks = [
   checks.build
 ] as const;
 
+const equationScopeChecks = Object.freeze({
+  discovery: Object.freeze([
+    checks.equationPreservation,
+    checks.equationExtensionDispatch
+  ]),
+  contract: Object.freeze([
+    checks.equationPreservation,
+    checks.equationExtensionDispatch,
+    checks.equationMotionProtocol,
+    checks.typecheck,
+    checks.architecture
+  ]),
+  promotion: Object.freeze([
+    checks.equationPreservation,
+    checks.equationExtensionDispatch,
+    checks.equationMotionProtocol,
+    checks.typecheck,
+    checks.architecture,
+    checks.catalogueCapabilityBrowser,
+    checks.catalogueBundle
+  ]),
+  release: Object.freeze([checks.equationRelease])
+} satisfies Readonly<Record<
+  KpVerificationMode,
+  readonly KpVerificationCheck[]
+>>);
+
 const readerLessonSourcePaths = new Set<string>(
   kpReaderRouteManifest.map((descriptor) => descriptor.sourcePath)
 );
@@ -628,6 +663,26 @@ export function selectKpVerificationImpact(
     reasons: [...new Set(reasons)],
     unmatchedPaths
   };
+}
+
+export function selectKpVerificationScope(
+  scope: KpVerificationScope,
+  mode: KpVerificationMode
+): KpVerificationSelection {
+  if (scope !== "equation") {
+    const exhaustive: never = scope;
+    throw new Error(`Unknown verification scope ${String(exhaustive)}.`);
+  }
+  const selectedChecks = equationScopeChecks[mode];
+  return Object.freeze({
+    mode,
+    risk: maximumRisk(selectedChecks),
+    checks: selectedChecks,
+    reasons: Object.freeze([
+      `The equation ${mode} tier was selected explicitly.`
+    ]),
+    unmatchedPaths: Object.freeze([])
+  });
 }
 
 function check(
