@@ -185,6 +185,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T15:05:37.453Z",
       "notes": "Six CLI and production-closure tests passed; Node and test TypeScript projects and all architecture ratchets pass."
+    },
+    {
+      "command": "npm run prove:equation-generation-boundary; npm run test:equation-generation-boundary; npm run measure:inference-attribution; npm run check:animation-library-bundle-boundary; npm run check:architecture; tsc app/node/test",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T15:17:27.937Z",
+      "notes": "Three cases accepted with zero repairs; 12 boundary tests pass; tool closure is 87 modules/893,753 source bytes with no forbidden or broad barrels; inference remains 57,283 Types/79,220 Instantiations; production bundle measurements are unchanged from baseline."
     }
   ]
 }

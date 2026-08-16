@@ -3,8 +3,10 @@ import type { KpSemanticTransformation } from "../semantic/asset-transformation.
 import type { KpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 import {
   compileKpSemanticEquationTransitionResult
-} from "../domain-ir/public-api.ts";
-import type { KpEquationTransitionIr } from "../domain-ir/public-api.ts";
+} from "../domain-ir/semantic-equation-transition-compiler.ts";
+import type {
+  KpEquationTransitionIr
+} from "../domain-ir/equation-transition-ir.ts";
 import {
   activeKpChoreographyPhase,
   createKpChoreographyPlan,

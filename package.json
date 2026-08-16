@@ -307,6 +307,8 @@
     "test:compile-equation-intent": "node --disable-warning=ExperimentalWarning --test tests/compile-equation-intent.test.ts",
     "author:equation-intent": "node --disable-warning=ExperimentalWarning scripts/compile-equation-intent.ts",
     "test:compile-equation-intent-cli": "node --disable-warning=ExperimentalWarning --test tests/compile-equation-intent-cli.test.ts",
+    "prove:equation-generation-boundary": "node --disable-warning=ExperimentalWarning scripts/prove-equation-generation-boundary.ts",
+    "test:equation-generation-boundary": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-boundary-proof.test.ts tests/compile-equation-intent.test.ts tests/compile-equation-intent-cli.test.ts",
     "test:browser:equation-surface-preservation": "playwright test tests/equation-surface-preservation.browser.spec.ts --project=chromium --workers=1",
     "test:equation-surface-authority": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-authority-graph.test.ts tests/equation-surface-inventory.test.ts"
   },

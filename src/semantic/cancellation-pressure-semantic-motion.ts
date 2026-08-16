@@ -1,13 +1,23 @@
 import {
-  compileKpSemanticMotion,
   createKpSemanticMotionCompilerRequestV1,
-  createKpSemanticMotionSourceAuthority,
   kpSemanticMotionCompilerRequestSchemaVersion,
-  type KpCompiledSemanticMotionChoreography,
-  type KpSemanticMotionEventSpec,
-  type KpSemanticMotionOperationStructureContract,
-  type KpSemanticMotionPrecedenceSpec
-} from "../domain-ir/public-api.ts";
+} from "../domain-ir/semantic-motion-compiler-contract.ts";
+import {
+  compileKpSemanticMotion
+} from "../domain-ir/semantic-motion-compiler.ts";
+import type {
+  KpCompiledSemanticMotionChoreography
+} from "../domain-ir/semantic-motion-choreography-compiler.ts";
+import type {
+  KpSemanticMotionEventSpec,
+  KpSemanticMotionPrecedenceSpec
+} from "../domain-ir/semantic-motion-precedence-compiler.ts";
+import type {
+  KpSemanticMotionOperationStructureContract
+} from "../domain-ir/semantic-motion-role-cohort-compiler.ts";
+import {
+  createKpSemanticMotionSourceAuthority
+} from "../domain-ir/semantic-motion-source-authority.ts";
 import {
   kpCanonicalCancellationPressureContract
 } from "./cancellation-pressure-contract.ts";

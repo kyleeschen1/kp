@@ -122,7 +122,8 @@
     {
       "id": "s14",
       "title": "generation-boundary-proof",
-      "status": "planned"
+      "summary": "Proved the direct generation boundary across function wrap, cancellation, and distribution/factoring: zero repair rounds, existing compiler-owned plan kinds, and informational low-millisecond compile means. Removed one transitive Domain IR public-barrel edge, locked an 87-module tool-neutral runtime closure, and confirmed inference and production bundle baselines are unchanged.",
+      "status": "complete"
     },
     {
       "id": "s15",
