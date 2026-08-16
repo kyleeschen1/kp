@@ -19,7 +19,7 @@ import {
 } from "../src/animation/runtime-sampler.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../src/tutorial/programming-execution-trace-fixture.ts";
+} from "../src/domain-ir/programming-addition-trace-fixture.ts";
 
 function graphSample(direction: "forward" | "rewind", progress: number) {
   const animation = createLinearMapVectorAnimationAsset();

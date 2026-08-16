@@ -1,7 +1,8 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { createAdditionProgrammingExecutionTraceFixture } from "../src/tutorial/programming-execution-trace-fixture.ts";
+import { createAdditionProgrammingExecutionTraceFixture } from
+  "../src/domain-ir/programming-addition-trace-fixture.ts";
 import {
   renderKpProgrammingExecutionTracePanelHtml
 } from "../src/tutorial/programming-execution-trace-panel.ts";

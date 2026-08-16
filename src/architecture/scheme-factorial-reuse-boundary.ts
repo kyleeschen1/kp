@@ -66,7 +66,7 @@ export const kpSchemeFactorialReuseBoundary = Object.freeze([
   entry({
     id: "evaluator-trace",
     concern: "Evaluation order, environments, continuations, and value lineage",
-    sources: ["src/tutorial/programming-execution-trace.ts"],
+    sources: ["src/domain-ir/programming-execution-trace.ts"],
     disposition: "preserve-specialized",
     authority: "semantic",
     rationale:

@@ -182,6 +182,13 @@
       "scope": "slice s11 program trace consumer migration",
       "checkedAt": "2026-08-16T21:35:31.546Z",
       "notes": "Eighteen trace, adapter, port, preview, runtime-law, and exception-ledger tests passed; architecture now reports 9 rather than 18 exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-*.test.ts tests/kp-program-trace-asset.test.ts tests/kp-animation-external-programming-port.test.ts tests/non-equation-sampled-frame-adapter.test.ts tests/program-trace-frame-preview.test.ts",
+      "status": "passed",
+      "scope": "slice s12 trace facade retirement",
+      "checkedAt": "2026-08-16T21:38:19.636Z",
+      "notes": "Thirty-six trace and tutorial tests passed; generated HTML, capability manifest, dashboard, architecture, and test-project type checks also passed."
     }
   ],
   "expectedLearning": [

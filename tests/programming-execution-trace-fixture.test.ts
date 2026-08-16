@@ -3,7 +3,7 @@ import test from "node:test";
 
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../src/tutorial/programming-execution-trace-fixture.ts";
+} from "../src/domain-ir/programming-addition-trace-fixture.ts";
 
 test("addition programming execution trace fixture samples deterministic steps", () => {
   const fixture = createAdditionProgrammingExecutionTraceFixture();

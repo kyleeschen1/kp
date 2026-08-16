@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   createKpProgrammingExecutionTrace,
   createKpProgrammingExecutionTraceFrame
-} from "../src/tutorial/programming-execution-trace.ts";
+} from "../src/domain-ir/programming-execution-trace.ts";
 
 test("programming execution trace frame carries current step state", () => {
   const trace = createKpProgrammingExecutionTrace({

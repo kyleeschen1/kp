@@ -122,7 +122,8 @@
     {
       "id": "s12",
       "title": "project-tutorial-trace-and-retire-shims",
-      "status": "planned"
+      "summary": "Tutorials now project the neutral trace fixture directly; compatibility facades and facade-only tests are gone, and active architecture metadata points to domain IR.",
+      "status": "complete"
     },
     {
       "id": "s13",

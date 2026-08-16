@@ -14,7 +14,7 @@ import {
 import {
   createAdditionProgrammingCallstackLossyTraceFixture,
   createAdditionProgrammingExecutionTraceFixture
-} from "../src/tutorial/programming-execution-trace-fixture.ts";
+} from "../src/domain-ir/programming-addition-trace-fixture.ts";
 
 test("addition program trace imports as a sampleable AnimationAsset", () => {
   const fixture = createAdditionProgrammingExecutionTraceFixture();

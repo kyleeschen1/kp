@@ -411,7 +411,7 @@ export const defaultKpCapabilityPackageManifests:
         },
         {
           label: "Programming execution trace",
-          href: "src/tutorial/programming-execution-trace.ts"
+          href: "src/domain-ir/programming-execution-trace.ts"
         },
         {
           label: "Programming execution trace panel",

@@ -11,12 +11,12 @@ export const kpProgrammingAdditionReferenceInventory = Object.freeze([
     "preserve"
   ),
   reference(
-    "src/tutorial/programming-execution-trace-fixture.ts",
+    "src/domain-ir/programming-addition-trace-fixture.ts",
     "Precomputed four-step addition trace and deterministic progress sampler.",
     "preserve"
   ),
   reference(
-    "src/tutorial/programming-execution-trace.ts",
+    "src/domain-ir/programming-execution-trace.ts",
     "Typed source focus, stack, locals, output, and sampled-frame truth.",
     "evolve"
   ),

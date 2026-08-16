@@ -6,7 +6,7 @@ import { createAdditionProgrammingSourceFixture } from
 import { createAdditionProgrammingTutorialCardSample } from
   "../src/tutorial/programming-card-sample.ts";
 import { createAdditionProgrammingExecutionTraceFixture } from
-  "../src/tutorial/programming-execution-trace-fixture.ts";
+  "../src/domain-ir/programming-addition-trace-fixture.ts";
 
 test("addition source identity is shared by trace and tutorial projections", () => {
   const source = createAdditionProgrammingSourceFixture();

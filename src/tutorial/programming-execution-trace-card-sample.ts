@@ -9,7 +9,7 @@ import {
 import {
   createAdditionProgrammingExecutionTraceFixture,
   type AdditionProgrammingExecutionTraceFixture
-} from "./programming-execution-trace-fixture.ts";
+} from "../domain-ir/programming-addition-trace-fixture.ts";
 import {
   renderKpProgrammingExecutionTracePanelHtml
 } from "./programming-execution-trace-panel.ts";
@@ -17,7 +17,8 @@ import {
   createAdditionProgrammingTutorialCardSample,
   type ProgrammingTutorialCardSample
 } from "./programming-card-sample.ts";
-import type { KpProgrammingExecutionTraceFrame } from "./programming-execution-trace.ts";
+import type { KpProgrammingExecutionTraceFrame } from
+  "../domain-ir/programming-execution-trace.ts";
 import type { KpTutorialSourceFileFrame } from "./source-file-frame-adapter.ts";
 
 export interface ProgrammingExecutionTraceTutorialCardSample

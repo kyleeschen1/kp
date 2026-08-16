@@ -1242,7 +1242,7 @@ export const projectDashboardData: ProjectDashboardData = {
         },
         {
           label: "Execution trace fixture",
-          href: "src/tutorial/programming-execution-trace-fixture.ts"
+          href: "src/domain-ir/programming-addition-trace-fixture.ts"
         }
       ],
       verification: [

@@ -20,7 +20,7 @@ import {
 } from "../src/semantic/source-file.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
-} from "../src/tutorial/programming-execution-trace-fixture.ts";
+} from "../src/domain-ir/programming-addition-trace-fixture.ts";
 import { createKpEditorAnimationLibrary } from
   "../src/editor/animation-library.ts";
 import { parseKpPromotionLedger } from

@@ -1,4 +1,5 @@
-import type { KpProgrammingExecutionTraceFrame } from "./programming-execution-trace.ts";
+import type { KpProgrammingExecutionTraceFrame } from
+  "../domain-ir/programming-execution-trace.ts";
 import {
   escapeKpTutorialHtmlAttribute as escapeAttr,
   escapeKpTutorialHtmlText as escapeHtml
