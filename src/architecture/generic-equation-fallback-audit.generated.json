@@ -1,0 +1,349 @@
+{
+  "schemaVersion": "kp.generic-equation-fallback-audit.v1",
+  "kind": "generic-equation-fallback-audit",
+  "entries": [
+    {
+      "nodeId": "motif.generic-transition",
+      "sourcePath": "src/editor/equation-transition-motifs.ts",
+      "status": "live-compatibility",
+      "surfaceAnimationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "sourceCallers": [
+        "src/editor/equation-surface-adapter.ts"
+      ],
+      "testCallers": [
+        "tests/kp-editor-equation-transition-motifs.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "motif.operation-evaluation-material",
+        "motif.log-exponent-symbol-motion",
+        "motif.log-quotient-homomorphic-fusion",
+        "motif.log-product-semantic-projection"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "All named surfaces must migrate to a listed canonical owner, then exact source, route, conformance, endpoint, and bundle callers must reach zero."
+    },
+    {
+      "nodeId": "timing.generic-phase-easing",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "status": "live-compatibility",
+      "surfaceAnimationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "sourceCallers": [
+        "src/app-adapters/linear-equation-story-animation-stage.ts",
+        "src/editor/equation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-solve-x-preservation.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts",
+        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
+        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
+        "tests/kp-editor-epistemic-branch.test.ts",
+        "tests/kp-editor-equation-surface-adapter.test.ts",
+        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
+        "tests/kp-editor-fraction-visible-animation.test.ts",
+        "tests/kp-editor-function-wrap-visible-animation.test.ts",
+        "tests/kp-editor-inequality-visible-animation.test.ts",
+        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
+        "tests/matrix-linear-map-choreography-baseline.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "timing.operation-endpoint-dwell",
+        "timing.copy-fan-out-presentation-profile",
+        "timing.cancellation-counter-orbit",
+        "timing.semantic-motion-recipe-schedule"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "All named surfaces must migrate to a listed canonical owner, then exact source, route, conformance, endpoint, and bundle callers must reach zero."
+    },
+    {
+      "nodeId": "renderer.generic-dom-measurement",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "status": "live-compatibility",
+      "surfaceAnimationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "sourceCallers": [
+        "src/app-adapters/linear-equation-story-animation-stage.ts",
+        "src/editor/equation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-solve-x-preservation.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts",
+        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
+        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
+        "tests/kp-editor-epistemic-branch.test.ts",
+        "tests/kp-editor-equation-surface-adapter.test.ts",
+        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
+        "tests/kp-editor-fraction-visible-animation.test.ts",
+        "tests/kp-editor-function-wrap-visible-animation.test.ts",
+        "tests/kp-editor-inequality-visible-animation.test.ts",
+        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
+        "tests/matrix-linear-map-choreography-baseline.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "renderer.operation-measured-compositor",
+        "renderer.log-exponent-transit",
+        "renderer.log-quotient-transit",
+        "renderer.log-product-transit"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "All named surfaces must migrate to a listed canonical owner, then exact source, route, conformance, endpoint, and bundle callers must reach zero."
+    },
+    {
+      "nodeId": "fallback.generic-whole-equation",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "status": "live-compatibility",
+      "surfaceAnimationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "sourceCallers": [
+        "src/app-adapters/linear-equation-story-animation-stage.ts",
+        "src/editor/equation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-solve-x-preservation.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts",
+        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
+        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
+        "tests/kp-editor-epistemic-branch.test.ts",
+        "tests/kp-editor-equation-surface-adapter.test.ts",
+        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
+        "tests/kp-editor-fraction-visible-animation.test.ts",
+        "tests/kp-editor-function-wrap-visible-animation.test.ts",
+        "tests/kp-editor-inequality-visible-animation.test.ts",
+        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
+        "tests/matrix-linear-map-choreography-baseline.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "fallback.operation-failed-stage",
+        "fallback.log-exponent-failed-stage",
+        "fallback.log-quotient-failed-stage",
+        "fallback.log-product-failed-stage"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "All named surfaces must migrate to a listed canonical owner, then exact source, route, conformance, endpoint, and bundle callers must reach zero."
+    },
+    {
+      "nodeId": "sampler.generic-semantic-token",
+      "sourcePath": "src/editor/semantic-equation-player-adapter.ts",
+      "status": "live-compatibility",
+      "surfaceAnimationIds": [
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ],
+      "sourceCallers": [
+        "src/editor/equation-surface-adapter.ts"
+      ],
+      "testCallers": [
+        "tests/kp-editor-semantic-equation-player-adapter.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "sampler.operation-native-scene",
+        "sampler.semantic-motion-choreography"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "All named surfaces must migrate to a listed canonical owner, then exact source, route, conformance, endpoint, and bundle callers must reach zero."
+    },
+    {
+      "nodeId": "fallback.operation-failed-stage",
+      "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts",
+      "status": "live-canonical",
+      "surfaceAnimationIds": [
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths"
+      ],
+      "sourceCallers": [
+        "src/editor/operation-evaluation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts"
+      ],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "fallback.operation-failed-stage"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "Retain as explicit fail-closed behavior while its named specialized surfaces remain live."
+    },
+    {
+      "nodeId": "fallback.log-exponent-failed-stage",
+      "sourcePath": "src/editor/log-exponent-surface-adapter.ts",
+      "status": "live-canonical",
+      "surfaceAnimationIds": [
+        "animation.algebra.log-exponent.solve-two-power-x"
+      ],
+      "sourceCallers": [
+        "src/editor/log-exponent-surface-capability.ts"
+      ],
+      "testCallers": [],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "fallback.log-exponent-failed-stage"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "Retain as explicit fail-closed behavior while its named specialized surfaces remain live."
+    },
+    {
+      "nodeId": "fallback.log-quotient-failed-stage",
+      "sourcePath": "src/editor/log-quotient-surface-adapter.ts",
+      "status": "live-canonical",
+      "surfaceAnimationIds": [
+        "animation.algebra.log-quotient.difference-to-quotient"
+      ],
+      "sourceCallers": [
+        "src/editor/log-quotient-surface-capability.ts"
+      ],
+      "testCallers": [],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "fallback.log-quotient-failed-stage"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "Retain as explicit fail-closed behavior while its named specialized surfaces remain live."
+    },
+    {
+      "nodeId": "fallback.log-product-failed-stage",
+      "sourcePath": "src/editor/log-product-surface-adapter.ts",
+      "status": "live-canonical",
+      "surfaceAnimationIds": [
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum"
+      ],
+      "sourceCallers": [
+        "src/editor/log-product-surface-capability.ts"
+      ],
+      "testCallers": [],
+      "scriptCallers": [],
+      "replacementOwnerNodeIds": [
+        "fallback.log-product-failed-stage"
+      ],
+      "retirementDecision": "retain-live",
+      "retirementCondition": "Retain as explicit fail-closed behavior while its named specialized surfaces remain live."
+    }
+  ]
+}

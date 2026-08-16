@@ -312,6 +312,9 @@
     "generate:equation-reachability": "node --disable-warning=ExperimentalWarning scripts/generate-exact-equation-reachability-graph.ts",
     "check:equation-reachability": "node --disable-warning=ExperimentalWarning scripts/generate-exact-equation-reachability-graph.ts --check",
     "test:equation-reachability": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts tests/animation-api-caller-ledger.test.ts",
+    "generate:equation-fallback-audit": "node --disable-warning=ExperimentalWarning scripts/generate-generic-equation-fallback-audit.ts",
+    "check:equation-fallback-audit": "node --disable-warning=ExperimentalWarning scripts/generate-generic-equation-fallback-audit.ts --check",
+    "test:equation-fallback-audit": "node --disable-warning=ExperimentalWarning --test tests/generic-equation-fallback-audit.test.ts tests/exact-equation-reachability-graph.test.ts",
     "test:browser:equation-surface-preservation": "playwright test tests/equation-surface-preservation.browser.spec.ts --project=chromium --workers=1",
     "test:equation-surface-authority": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-authority-graph.test.ts tests/equation-surface-inventory.test.ts"
   },

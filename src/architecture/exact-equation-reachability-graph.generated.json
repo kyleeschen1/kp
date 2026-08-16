@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3129,
+  "scannedFileCount": 3133,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -115,6 +115,79 @@
       "reachability": "live-callers"
     },
     {
+      "id": "reachability.generic-fallback.motif.generic-transition.src/editor/equation-transition-motifs.ts",
+      "concern": "generic-fallback",
+      "sourcePath": "src/editor/equation-transition-motifs.ts",
+      "authorityId": "motif.generic-transition",
+      "sourceCallers": [
+        "src/editor/equation-surface-adapter.ts"
+      ],
+      "testCallers": [
+        "tests/kp-editor-equation-transition-motifs.test.ts"
+      ],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
+      "id": "reachability.generic-fallback.timing.generic-phase-easing.src/editor/equation-surface-adapter.ts",
+      "concern": "generic-fallback",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "authorityId": "timing.generic-phase-easing",
+      "sourceCallers": [
+        "src/app-adapters/linear-equation-story-animation-stage.ts",
+        "src/editor/equation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-solve-x-preservation.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts",
+        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
+        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
+        "tests/kp-editor-epistemic-branch.test.ts",
+        "tests/kp-editor-equation-surface-adapter.test.ts",
+        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
+        "tests/kp-editor-fraction-visible-animation.test.ts",
+        "tests/kp-editor-function-wrap-visible-animation.test.ts",
+        "tests/kp-editor-inequality-visible-animation.test.ts",
+        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
+        "tests/matrix-linear-map-choreography-baseline.test.ts"
+      ],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
+      "id": "reachability.generic-fallback.renderer.generic-dom-measurement.src/editor/equation-surface-adapter.ts",
+      "concern": "generic-fallback",
+      "sourcePath": "src/editor/equation-surface-adapter.ts",
+      "authorityId": "renderer.generic-dom-measurement",
+      "sourceCallers": [
+        "src/app-adapters/linear-equation-story-animation-stage.ts",
+        "src/editor/equation-surface-capability.ts"
+      ],
+      "testCallers": [
+        "tests/animation-catalogue-health.test.ts",
+        "tests/animation-catalogue-solve-x-preservation.test.ts",
+        "tests/animation-catalogue-surface-hostability.test.ts",
+        "tests/kp-editor-calculus-equation-visible-animations.test.ts",
+        "tests/kp-editor-distribution-factoring-visible-animations.test.ts",
+        "tests/kp-editor-epistemic-branch.test.ts",
+        "tests/kp-editor-equation-surface-adapter.test.ts",
+        "tests/kp-editor-exponent-radical-visible-animations.test.ts",
+        "tests/kp-editor-fraction-visible-animation.test.ts",
+        "tests/kp-editor-function-wrap-visible-animation.test.ts",
+        "tests/kp-editor-inequality-visible-animation.test.ts",
+        "tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+        "tests/kp-editor-matrix-vector-visible-animation.test.ts",
+        "tests/matrix-linear-map-choreography-baseline.test.ts"
+      ],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
       "id": "reachability.generic-fallback.fallback.generic-whole-equation.src/editor/equation-surface-adapter.ts",
       "concern": "generic-fallback",
       "sourcePath": "src/editor/equation-surface-adapter.ts",
@@ -194,6 +267,21 @@
         "src/editor/log-product-surface-capability.ts"
       ],
       "testCallers": [],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
+      "id": "reachability.generic-fallback.sampler.generic-semantic-token.src/editor/semantic-equation-player-adapter.ts",
+      "concern": "generic-fallback",
+      "sourcePath": "src/editor/semantic-equation-player-adapter.ts",
+      "authorityId": "sampler.generic-semantic-token",
+      "sourceCallers": [
+        "src/editor/equation-surface-adapter.ts"
+      ],
+      "testCallers": [
+        "tests/kp-editor-semantic-equation-player-adapter.test.ts"
+      ],
       "scriptCallers": [],
       "otherCallers": [],
       "reachability": "live-callers"

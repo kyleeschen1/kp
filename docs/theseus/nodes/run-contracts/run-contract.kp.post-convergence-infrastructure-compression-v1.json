@@ -134,7 +134,8 @@
     {
       "id": "s16",
       "title": "generic-fallback-audit",
-      "status": "planned"
+      "summary": "Audited nine whole-equation, generic-paint, and failed-stage paths. Five generic paths remain live compatibility owners for 23 surfaces; four specialized failed-stage paths are canonical for seven surfaces; none is diagnostic-only or unreachable. Recorded exact callers, replacement owners, and retirement conditions, so no fallback deletion is authorized.",
+      "status": "complete"
     },
     {
       "id": "s17",

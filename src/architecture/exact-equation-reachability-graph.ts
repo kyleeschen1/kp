@@ -71,12 +71,21 @@ const capabilityLoaderPaths = Object.freeze([
   "src/editor/selected-surface-capability.ts"
 ] as const);
 
+const genericEquationPresentationNodeIds = new Set([
+  "motif.generic-transition",
+  "timing.generic-phase-easing",
+  "renderer.generic-dom-measurement",
+  "sampler.generic-semantic-token"
+]);
+
 export const kpExactEquationReachabilityRootDeclarations = Object.freeze([
   ...kpEquationSurfaceAuthorityNodes
     .filter(({ category }) => category === "compiler")
     .map((node) => root("compiler", node.sourcePath, node.id)),
   ...kpEquationSurfaceAuthorityNodes
-    .filter(({ category }) => category === "fallback")
+    .filter(({ category, id }) =>
+      category === "fallback" || genericEquationPresentationNodeIds.has(id)
+    )
     .map((node) => root("generic-fallback", node.sourcePath, node.id)),
   ...manifestPaths.map((path) => root("manifest", path, `manifest.${path}`)),
   ...capabilityLoaderPaths.map((path) =>
