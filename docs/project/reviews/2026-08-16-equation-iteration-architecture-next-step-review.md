@@ -1,7 +1,7 @@
 # Equation Iteration Architecture Next-Step Review
 
 Date: 2026-08-16
-Status: proposed
+Status: approved for execution across the current or successor Theseus run
 
 ## Question
 

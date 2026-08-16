@@ -41,6 +41,16 @@ catalogue migration. The first application is the homomorphic-decomposition
 candidate recorded in
 `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
+The approved architecture order adds a complementary extensibility law: KP is
+open through typed immutable declarations and closed through validated,
+generated, exhaustive execution. Distinct family, semantic-operation,
+presentation-recipe, and renderer-capability registries are composed explicitly
+at pack or application boundaries. Handwritten core switches, prefix dispatch,
+side-effect registration, mutable global registries, and duplicated catalogue
+totals retire beside migrated callers. The full order and measured success
+criteria are recorded in
+`../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+
 ## Ordered Work
 
 1. **Control plane:** keep the roadmap compact, use one system vocabulary, and
@@ -165,6 +175,7 @@ Generation quality is measured by:
 - `../reviews/2026-08-12-project-tightening-next-step-review.md`
 - `../reviews/2026-08-12-economics-layout-production-reachability-audit.md`
 - `../reviews/2026-08-13-cross-language-code-animation-foundation-closeout.md`
+- `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`
 - `../decisions/2026-08-14-kp-proof-memory-product-experiment.md`
 - `../decisions/2026-08-14-kp-reusable-mental-machinery-and-attentional-beats.md`
 - `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`

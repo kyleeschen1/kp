@@ -27,6 +27,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md"
     }
   ],
   "verification": [

@@ -75,11 +75,17 @@ Only this repository sequence is active:
    checkpoint. One semantic-motion compiler now routes the approved callers,
    and two- and three-factor log-product callers prove the clean path. Before
    migration wave A, test the accepted bounded dissolve-spread-wrap candidate
-   on the binary exemplar and stop for human review. After approval, migrate
-   every supported equation-surface asset in family-sized reversible waves,
-   classify static/unsupported/retired rows explicitly, retire each bypass
-   beside its final caller, and connect governed LLM drafts only after the
-   cutover is stable. Graph, code, diagram, and 3D compilers remain separate.
+   on the binary exemplar and stop for human review. After approval, compress
+   the iteration path through explicit verification modes, typed open
+   declarations, generated closed dispatch, and retirement of the first
+   high-churn test clusters. Promote homomorphic decomposition through product
+   and quotient pressure, then migrate every supported equation-surface asset
+   in family-sized reversible waves with adjacent switch, compatibility, and
+   redundant-test retirement. Connect governed LLM drafts only after the
+   cutover is stable, then pressure the shared upper boundary with one graph
+   and one code caller without merging their domain compilers. The approved
+   order is recorded in
+   `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -339,6 +345,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   wave A; quotient becomes the contrasting caller only after binary approval.
   See
   `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
+- The eleven-step iteration-architecture sequence is approved across the
+  current or successor Theseus run. Its governing law is open typed
+  declarations compiled into generated, exhaustive, tree-shakable execution;
+  it rejects manually extended core switches, mutable global registries, a
+  universal plugin system, or a repository-wide test purge. See
+  `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence

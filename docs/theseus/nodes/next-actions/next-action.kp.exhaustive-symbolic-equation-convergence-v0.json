@@ -4,6 +4,12 @@
   "title": "Converge all supported symbolic equations on one compiler",
   "status": "ready",
   "domain": "animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:equation-surface-inventory",

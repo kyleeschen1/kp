@@ -130,6 +130,17 @@ pressure and log quotient as the structurally different promotion caller. The
 decision and discovery/promotion cadence are recorded in
 `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
+The approved follow-on order now inserts iteration-path compression before
+migration wave A: explicit verification modes, typed family/operation/recipe/
+surface declarations, generated exhaustive dispatch and projections, and
+retirement of the first high-churn count and source-shape test clusters. After
+product and quotient pressure, each equation migration wave must remove its
+manual switch branches and redundant test authority beside the old production
+path. Governed LLM generation follows singular equation authority; one graph
+and one code caller then pressure only the shared upper host/runtime boundary.
+The eleven-step order is owned by
+`../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+
 ## Accepted Scope
 
 - `/` as the default catalogue route and `/?artifact=<id>` selection;
@@ -209,6 +220,7 @@ decision and discovery/promotion cadence are recorded in
 - `docs/project/decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md`
 - `docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`
 - `docs/project/reviews/2026-08-15-exhaustive-symbolic-equation-convergence-long-loop-proposal.md`
+- `docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`
