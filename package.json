@@ -301,6 +301,7 @@
     "test:equation-surface-inventory": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-inventory.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:equation-surface-preservation": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-preservation-matrix.test.ts tests/equation-surface-authority-graph.test.ts tests/equation-surface-inventory.test.ts",
     "test:equation-generation-pressure-contract": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-pressure-contract.test.ts",
+    "test:equation-generation-function-wrap-trial": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-function-wrap-trial.test.ts",
     "test:browser:equation-surface-preservation": "playwright test tests/equation-surface-preservation.browser.spec.ts --project=chromium --workers=1",
     "test:equation-surface-authority": "node --disable-warning=ExperimentalWarning --test tests/equation-surface-authority-graph.test.ts tests/equation-surface-inventory.test.ts"
   },

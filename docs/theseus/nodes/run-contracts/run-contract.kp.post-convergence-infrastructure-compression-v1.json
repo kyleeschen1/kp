@@ -86,7 +86,8 @@
     {
       "id": "s08",
       "title": "function-wrap-trial",
-      "status": "planned"
+      "summary": "Ran the function-wrap fixture through current authority. Catalogue validation passed, canonical entity closure required one repair because entity IDs are not exposed, and the repaired request reached the existing extension pack and compiled motif with native endpoints, deterministic seek/rewind, and no generic fallback.",
+      "status": "complete"
     },
     {
       "id": "s09",
