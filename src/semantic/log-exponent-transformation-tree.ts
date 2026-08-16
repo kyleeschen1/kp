@@ -8,12 +8,12 @@ import {
   type KpLogExponentSolveStateId
 } from "./log-exponent-solve-states.ts";
 import {
-  compileKpApplyNaturalLogBothSides,
-  compileKpDivideByLogBase,
-  compileKpExtractLogPowerExponent,
   isKpCompiledLogExponentOperation,
   type KpCompiledLogExponentOperation
 } from "./log-exponent-transformation-compiler.ts";
+import {
+  compileKpRegisteredLogExponentOperation
+} from "./log-exponent-operation-dispatch.ts";
 
 declare const kpLogExponentTransformationTreeAuthority: unique symbol;
 const compiledTrees = new WeakSet<object>();
@@ -48,14 +48,11 @@ export function compileKpCanonicalLogExponentTransformationTree(input: {
     if (source === undefined || target === undefined) {
       throw new Error(`Operation ${operation.id} references a missing tree state.`);
     }
-    switch (operation.kind) {
-      case "apply-natural-log-both-sides":
-        return compileKpApplyNaturalLogBothSides({ operation, source, target });
-      case "extract-log-power-exponent":
-        return compileKpExtractLogPowerExponent({ operation, source, target });
-      case "divide-both-sides-by-log-base":
-        return compileKpDivideByLogBase({ operation, source, target });
-    }
+    return compileKpRegisteredLogExponentOperation({
+      operation,
+      source,
+      target
+    });
   }));
   if (!operations.every(isKpCompiledLogExponentOperation)) {
     throw new Error("Every canonical tree edge requires nominal compiler authority.");

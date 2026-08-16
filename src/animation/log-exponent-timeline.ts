@@ -9,6 +9,9 @@ import {
   type KpChoreographyTimelineFrame
 } from "./choreography-timeline.ts";
 import { kpCanonicalLogExponentInterpolationProgram } from "./log-exponent-interpolation-obligations.ts";
+import {
+  requireKpLogExponentOperationPresentation
+} from "./log-exponent-operation-presentation-registry.ts";
 
 export interface KpLogExponentOperationWindow {
   readonly operationId: string;
@@ -49,13 +52,15 @@ export function compileKpLogExponentSequenceTimeline(
   if (choreographies.length !== 3) {
     throw new Error("Canonical log-exponent timing requires exactly three operation windows.");
   }
-  const weights = [0.28, 0.42, 0.3] as const;
   let cursor = 0;
   const windows = Object.freeze(choreographies.map((choreography, index) => {
+    const presentation = requireKpLogExponentOperationPresentation(
+      choreography.operationId
+    );
     const start = cursor;
     const end = index === choreographies.length - 1
       ? 1
-      : round(cursor + weights[index]!);
+      : round(cursor + presentation.sequenceWeight);
     cursor = end;
     return Object.freeze({
       operationId: choreography.operationId,
@@ -66,7 +71,7 @@ export function compileKpLogExponentSequenceTimeline(
         plan: choreography.plan,
         focusReadinessThreshold: 0.62,
         recognitionDwell: 0.5,
-        phaseWeights: phaseWeights(index)
+        phaseWeights: presentation.phaseWeights
       })
     });
   }));
@@ -137,19 +142,6 @@ export function sampleKpLogExponentSequenceFrame(input: {
 
 export const kpCanonicalLogExponentSequenceTimeline =
   compileKpLogExponentSequenceTimeline();
-
-function phaseWeights(index: number) {
-  switch (index) {
-    case 0:
-      return Object.freeze({ orient: 0.14, reflow: 0.16, act: 0.3, settle: 0.28, release: 0.12 });
-    case 1:
-      return Object.freeze({ orient: 0.12, reflow: 0.18, act: 0.42, settle: 0.2, release: 0.08 });
-    case 2:
-      return Object.freeze({ orient: 0.12, reflow: 0.18, act: 0.34, settle: 0.26, release: 0.1 });
-    default:
-      throw new Error(`Unknown log-exponent operation timing index ${index}.`);
-  }
-}
 
 function operationActProgress(
   frame: KpChoreographyTimelineFrame,

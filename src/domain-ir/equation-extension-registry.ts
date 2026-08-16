@@ -73,6 +73,17 @@ export interface KpImmutableEquationRegistry<
   readonly byId: Readonly<Record<string, Entry>>;
 }
 
+export interface KpClosedDispatchRegistry<
+  Id extends string,
+  Entry extends { readonly id: Id }
+> {
+  readonly schemaVersion: "kp.closed-dispatch-registry.v1";
+  readonly label: string;
+  readonly ids: readonly Id[];
+  readonly entries: readonly Entry[];
+  readonly byId: Readonly<Record<string, Entry>>;
+}
+
 export type KpEquationOperationRegistry = KpImmutableEquationRegistry<
   "semantic-operations",
   KpOperationKind,
@@ -205,6 +216,47 @@ export function getKpEquationRegistryEntry<
   id: Id
 ): Entry | undefined {
   return registry.byId[id];
+}
+
+export function createKpClosedDispatchRegistry<
+  Id extends string,
+  Entry extends { readonly id: Id }
+>(
+  label: string,
+  inputEntries: readonly Entry[]
+): KpClosedDispatchRegistry<Id, Entry> {
+  if (label.trim() === "") {
+    throw new Error("Closed dispatch registry requires a non-empty label.");
+  }
+  const ids = inputEntries.map(({ id }) => id);
+  if (new Set(ids).size !== ids.length) {
+    throw new Error(`${label} dispatch ids must be unique.`);
+  }
+  const entries = Object.freeze([...inputEntries]);
+  const byId = Object.freeze(Object.fromEntries(
+    entries.map((entry) => [entry.id, entry])
+  )) as Readonly<Record<string, Entry>>;
+  return Object.freeze({
+    schemaVersion: "kp.closed-dispatch-registry.v1" as const,
+    label,
+    ids: Object.freeze(ids),
+    entries,
+    byId
+  });
+}
+
+export function requireKpClosedDispatchEntry<
+  Id extends string,
+  Entry extends { readonly id: Id }
+>(
+  registry: KpClosedDispatchRegistry<Id, Entry>,
+  id: Id
+): Entry {
+  const entry = registry.byId[id];
+  if (entry === undefined) {
+    throw new Error(`Unknown ${registry.label} dispatch id ${id}.`);
+  }
+  return entry;
 }
 
 function createRegistry<

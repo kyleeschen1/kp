@@ -10,6 +10,9 @@ import {
   createKpSemanticSalienceState,
   type KpSemanticSalienceState
 } from "./semantic-salience-state.ts";
+import {
+  requireKpLogExponentOperationPresentation
+} from "./log-exponent-operation-presentation-registry.ts";
 
 export type KpLogExponentAttentionPhase = "orient" | "act" | "settle";
 
@@ -44,7 +47,9 @@ export function compileKpLogExponentSalience(
         ...plan.lineage.targetEntityIds
       ])
     ]);
-    const focus = focusSequence(plan.operationId);
+    const focus = requireKpLogExponentOperationPresentation(
+      plan.operationId
+    ).focus;
     const stages = Object.freeze([
       stage(`${plan.operationId}.orient`, "orient", focus.orient, focus.orientSecondary, allEntityIds),
       stage(`${plan.operationId}.act`, "act", focus.act, focus.actSecondary, allEntityIds),
@@ -101,47 +106,6 @@ function compileTransferGraph(
     edges,
     branchGroups: Object.freeze([])
   });
-}
-
-function focusSequence(operationId: string): {
-  readonly orient: readonly string[];
-  readonly orientSecondary: readonly string[];
-  readonly act: readonly string[];
-  readonly actSecondary: readonly string[];
-  readonly settle: readonly string[];
-  readonly settleSecondary: readonly string[];
-} {
-  switch (operationId) {
-    case "operation.log-exponent.apply-log-both-sides":
-      return {
-        orient: ["source.left", "source.right"],
-        orientSecondary: ["source.equality"],
-        act: ["logged.left.log", "logged.right.log"],
-        actSecondary: ["logged.left.power", "logged.right"],
-        settle: ["logged.left.log", "logged.right.log"],
-        settleSecondary: ["logged.equality"]
-      };
-    case "operation.log-exponent.extract-exponent":
-      return {
-        orient: ["logged.exponent"],
-        orientSecondary: ["logged.left.log"],
-        act: ["logged.exponent", "extracted.coefficient"],
-        actSecondary: ["logged.left.log", "extracted.left"],
-        settle: ["extracted.coefficient", "extracted.left.log"],
-        settleSecondary: ["extracted.left"]
-      };
-    case "operation.log-exponent.divide-by-log-base":
-      return {
-        orient: ["extracted.left.log"],
-        orientSecondary: ["extracted.coefficient", "extracted.right.log"],
-        act: ["extracted.left.log", "solved.denominator.log"],
-        actSecondary: ["extracted.coefficient", "solved.left", "solved.right"],
-        settle: ["solved.left", "solved.right"],
-        settleSecondary: ["solved.equality"]
-      };
-    default:
-      throw new Error(`Unknown log-exponent salience operation ${operationId}.`);
-  }
 }
 
 function stage(

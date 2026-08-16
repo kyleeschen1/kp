@@ -182,7 +182,8 @@
     {
       "id": "s18",
       "title": "Core-dispatch-retirement",
-      "status": "planned"
+      "summary": "Retired log-exponent operation and motif routing branches in favor of immutable closed dispatch registries with exact declaration closure and no visual fallback.",
+      "status": "complete"
     },
     {
       "id": "s19",

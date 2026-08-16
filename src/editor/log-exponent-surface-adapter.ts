@@ -47,6 +47,11 @@ import type {
 import {
   kpCanonicalLogExponentTransformationTree
 } from "../semantic/log-exponent-transformation-tree.ts";
+import type { KpLogExponentOperationKind } from "../semantic/log-exponent-operation-dispatch.ts";
+import {
+  createKpClosedDispatchRegistry,
+  requireKpClosedDispatchEntry
+} from "../domain-ir/equation-extension-registry.ts";
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
@@ -87,6 +92,84 @@ interface KpLogExponentPreparedOperation {
 
 const sessions = new WeakMap<HTMLElement, KpLogExponentSurfaceSession>();
 const canonicalAnimation = createKpLogExponentAnimationAsset();
+
+interface KpLogExponentSurfaceDispatchEntry {
+  readonly id: KpLogExponentOperationKind;
+  readonly sourceStatus: string;
+  readonly activeStatus: string;
+  readonly targetStatus: string;
+  readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
+  readonly compileChoreography: (input: {
+    readonly operation: KpCompiledLogExponentOperation;
+    readonly functionWrapInvocationGroup:
+      (typeof kpCanonicalLogExponentSymbolMotionPlans)[number]["functionWrapInvocationGroup"];
+  }) => KpEquationOperationChoreography | undefined;
+}
+
+const kpLogExponentSurfaceDispatch =
+  createKpClosedDispatchRegistry<KpLogExponentOperationKind, KpLogExponentSurfaceDispatchEntry>(
+    "log-exponent surface",
+    [
+      surfaceDispatch({
+        id: "apply-natural-log-both-sides",
+        sourceStatus: "Exponential equation ready.",
+        activeStatus: "Applying the natural logarithm to both sides.",
+        targetStatus: "Both sides are inside natural logarithms.",
+        horizontalAxisSemanticEntityIds: [
+          "source.base",
+          "logged.base",
+          "source.exponent",
+          "logged.exponent",
+          "source.equality",
+          "logged.equality",
+          "source.right",
+          "logged.right"
+        ],
+        compileChoreography: ({ functionWrapInvocationGroup }) => {
+          if (functionWrapInvocationGroup === undefined) {
+            throw new Error("Apply-log surface requires function-wrap authority.");
+          }
+          return createKpCanonicalFunctionWrapChoreography({
+            invocationGroup: functionWrapInvocationGroup,
+            direction: "forward"
+          });
+        }
+      }),
+      surfaceDispatch({
+        id: "extract-log-power-exponent",
+        sourceStatus: "Both sides are inside natural logarithms.",
+        activeStatus: "Moving x from exponent to coefficient.",
+        targetStatus: "The exponent is now a coefficient.",
+        compileChoreography: ({ operation }) =>
+          compileKpEquationOperationChoreography({
+            animation: canonicalAnimation,
+            transformation: operation.transformation,
+            motifKind: "append-after-shift",
+            direction: "forward"
+          })
+      }),
+      surfaceDispatch({
+        id: "divide-both-sides-by-log-base",
+        sourceStatus: "The exponent is now a coefficient.",
+        activeStatus: "Dividing both sides by the logarithm of two.",
+        targetStatus: "x is isolated as a quotient of logarithms.",
+        horizontalAxisSemanticEntityIds: [
+          "extracted.coefficient",
+          "solved.left",
+          "extracted.equality",
+          "solved.equality"
+        ],
+        compileChoreography: ({ operation }) =>
+          createKpCausalStructuralIntroductionChoreography({
+            id: "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward",
+            transformationId: operation.transformation.id,
+            direction: "forward",
+            semanticEntityIds: ["solved.right"],
+            entryWindow: { start: 0.62, end: 0.9 }
+          })
+      })
+    ]
+  );
 
 export const kpEditorLogExponentSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.log-exponent.canonical-native-katex",
@@ -200,27 +283,15 @@ async function prepareSurface(
         fontReadiness: session.fontReadiness
       });
       if (session.disposed || session.generation !== generation) return;
-      const compiledOperationChoreography = index === 0
-        ? createKpCanonicalFunctionWrapChoreography({
-            invocationGroup:
-              symbolMotionPlan.functionWrapInvocationGroup!,
-            direction: "forward"
-          })
-        : compileKpEquationOperationChoreography({
-            animation: canonicalAnimation,
-            transformation: operation.transformation,
-            motifKind: "append-after-shift",
-            direction: "forward"
-          });
-      const operationChoreography = index === 2
-        ? createKpCausalStructuralIntroductionChoreography({
-            id: "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward",
-            transformationId: operation.transformation.id,
-            direction: "forward",
-            semanticEntityIds: ["solved.right"],
-            entryWindow: { start: 0.62, end: 0.9 }
-          })
-        : compiledOperationChoreography;
+      const surfaceDispatch = requireKpClosedDispatchEntry(
+        kpLogExponentSurfaceDispatch,
+        operation.operation.kind
+      );
+      const operationChoreography = surfaceDispatch.compileChoreography({
+        operation,
+        functionWrapInvocationGroup:
+          symbolMotionPlan.functionWrapInvocationGroup
+      });
       preparedOperations.push({
         operation,
         symbolMotionContract: symbolMotionPlan.contract,
@@ -231,11 +302,11 @@ async function prepareSurface(
         ...(operationChoreography === undefined
           ? {}
           : { operationChoreography }),
-        ...(horizontalAxisSemanticEntityIds(index) === undefined
+        ...(surfaceDispatch.horizontalAxisSemanticEntityIds === undefined
           ? {}
           : {
               horizontalAxisSemanticEntityIds:
-                horizontalAxisSemanticEntityIds(index)
+                surfaceDispatch.horizontalAxisSemanticEntityIds
             })
       });
     }
@@ -321,7 +392,10 @@ function applyFrame(
     "[data-kp-log-exponent-status]"
   );
   if (status !== null) {
-    status.textContent = statusText(frame.operationIndex, operationProgress);
+    status.textContent = statusText(
+      preparedOperations[frame.operationIndex]!.operation.operation.kind,
+      operationProgress
+    );
   }
 }
 
@@ -344,47 +418,31 @@ function disposeSurface(
   sessions.delete(player);
 }
 
-function statusText(operationIndex: number, progress: number): string {
+function statusText(
+  operationKind: KpLogExponentOperationKind,
+  progress: number
+): string {
+  const dispatch = requireKpClosedDispatchEntry(
+    kpLogExponentSurfaceDispatch,
+    operationKind
+  );
   if (progress > 0 && progress < 1) {
-    return [
-      "Applying the natural logarithm to both sides.",
-      "Moving x from exponent to coefficient.",
-      "Dividing both sides by the logarithm of two."
-    ][operationIndex]!;
+    return dispatch.activeStatus;
   }
-  return [
-    "Exponential equation ready.",
-    "Both sides are inside natural logarithms.",
-    "The exponent is now a coefficient.",
-    "x is isolated as a quotient of logarithms."
-  ][operationIndex + (progress >= 1 ? 1 : 0)]!;
+  return progress >= 1 ? dispatch.targetStatus : dispatch.sourceStatus;
 }
 
-function horizontalAxisSemanticEntityIds(
-  operationIndex: number
-): readonly string[] | undefined {
-  switch (operationIndex) {
-    case 0:
-      // Applying a function shifts existing terms only to reserve wrapper
-      // space; arcing a value away from its side suggests a false operation.
-      return Object.freeze([
-        "source.base",
-        "logged.base",
-        "source.exponent",
-        "logged.exponent",
-        "source.equality",
-        "logged.equality",
-        "source.right",
-        "logged.right"
-      ]);
-    case 2:
-      return Object.freeze([
-        "extracted.coefficient",
-        "solved.left",
-        "extracted.equality",
-        "solved.equality"
-      ]);
-    default:
-      return undefined;
-  }
+function surfaceDispatch(
+  input: KpLogExponentSurfaceDispatchEntry
+): KpLogExponentSurfaceDispatchEntry {
+  return Object.freeze({
+    ...input,
+    ...(input.horizontalAxisSemanticEntityIds === undefined
+      ? {}
+      : {
+          horizontalAxisSemanticEntityIds: Object.freeze([
+            ...input.horizontalAxisSemanticEntityIds
+          ])
+        })
+  });
 }

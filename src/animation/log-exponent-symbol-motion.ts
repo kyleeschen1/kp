@@ -12,6 +12,11 @@ import {
   compileKpFunctionWrapInvocationGroup,
   type KpCompiledFunctionWrapInvocationGroup
 } from "./function-wrap-invocation.ts";
+import {
+  createKpClosedDispatchRegistry,
+  requireKpClosedDispatchEntry
+} from "../domain-ir/equation-extension-registry.ts";
+import type { KpLogExponentOperationKind } from "../semantic/log-exponent-operation-dispatch.ts";
 
 export interface KpLogExponentSymbolMotionPlan {
   readonly operationId: string;
@@ -25,19 +30,54 @@ export function compileKpLogExponentSymbolMotionPlans(
     kpCanonicalLogExponentTransformationTree.operations
 ): readonly KpLogExponentSymbolMotionPlan[] {
   return Object.freeze(operations.map((operation) => {
-    const contract = compileOperationContract(operation);
+    const dispatch = requireKpClosedDispatchEntry(
+      kpLogExponentSymbolMotionDispatch,
+      operation.operation.kind
+    );
+    const contract = dispatch.compileContract(operation);
+    const functionWrapInvocationGroup =
+      dispatch.compileFunctionWrapInvocationGroup?.(operation, contract);
     return Object.freeze({
       operationId: operation.operation.id,
       contract,
-      ...(operation.operation.kind === "apply-natural-log-both-sides"
-        ? {
-            functionWrapInvocationGroup:
-              compileApplyLogFunctionWrapInvocationGroup(operation, contract)
-          }
-        : {})
+      ...(functionWrapInvocationGroup === undefined
+        ? {}
+        : { functionWrapInvocationGroup })
     });
   }));
 }
+
+interface KpLogExponentSymbolMotionDispatchEntry {
+  readonly id: KpLogExponentOperationKind;
+  readonly compileContract: (
+    operation: KpCompiledLogExponentOperation
+  ) => KpCompiledSymbolMotionContract;
+  readonly compileFunctionWrapInvocationGroup?: (
+    operation: KpCompiledLogExponentOperation,
+    contract: KpCompiledSymbolMotionContract
+  ) => KpCompiledFunctionWrapInvocationGroup;
+}
+
+export const kpLogExponentSymbolMotionDispatch =
+  createKpClosedDispatchRegistry<KpLogExponentOperationKind, KpLogExponentSymbolMotionDispatchEntry>(
+    "log-exponent symbol motion",
+    [
+      Object.freeze({
+        id: "apply-natural-log-both-sides" as const,
+        compileContract: compileApplyLogContract,
+        compileFunctionWrapInvocationGroup:
+          compileApplyLogFunctionWrapInvocationGroup
+      }),
+      Object.freeze({
+        id: "extract-log-power-exponent" as const,
+        compileContract: compileExtractExponentContract
+      }),
+      Object.freeze({
+        id: "divide-both-sides-by-log-base" as const,
+        compileContract: compileDivideByLogBaseContract
+      })
+    ]
+  );
 
 function compileApplyLogFunctionWrapInvocationGroup(
   operation: KpCompiledLogExponentOperation,
@@ -89,9 +129,9 @@ function compileApplyLogFunctionWrapInvocationGroup(
 export const kpCanonicalLogExponentSymbolMotionPlans =
   compileKpLogExponentSymbolMotionPlans();
 
-function compileOperationContract(
+function commonContractInput(
   operation: KpCompiledLogExponentOperation
-): KpCompiledSymbolMotionContract {
+) {
   const records = operation.transformation.correspondenceMap?.records;
   if (records === undefined) {
     throw new Error(
@@ -109,15 +149,18 @@ function compileOperationContract(
         ? "interpolate-to-target-metrics" as const
         : "preserve-source-metrics" as const
     }));
-  const common = {
+  return {
     id: `symbol-motion.${operation.transformation.id}`,
     transformation: operation.transformation,
     continuants
   };
-  switch (operation.operation.kind) {
-    case "apply-natural-log-both-sides":
-      return compileKpSymbolMotionContract({
-        ...common,
+}
+
+function compileApplyLogContract(
+  operation: KpCompiledLogExponentOperation
+): KpCompiledSymbolMotionContract {
+  return compileKpSymbolMotionContract({
+        ...commonContractInput(operation),
         canonicalMotifs: [{
           id: `motif.${operation.transformation.id}.canonical-wrap`,
           canonicalOperationId: "kp.core.wrap",
@@ -161,9 +204,13 @@ function compileOperationContract(
           ]
         }]
       });
-    case "extract-log-power-exponent":
-      return compileKpSymbolMotionContract({
-        ...common,
+}
+
+function compileExtractExponentContract(
+  operation: KpCompiledLogExponentOperation
+): KpCompiledSymbolMotionContract {
+  return compileKpSymbolMotionContract({
+        ...commonContractInput(operation),
         rigidCompounds: [
           {
             id: `motion-unit.${operation.transformation.id}.residual-log-two`,
@@ -211,9 +258,13 @@ function compileOperationContract(
           }
         ]
       });
-    case "divide-both-sides-by-log-base":
-      return compileKpSymbolMotionContract({
-        ...common,
+}
+
+function compileDivideByLogBaseContract(
+  operation: KpCompiledLogExponentOperation
+): KpCompiledSymbolMotionContract {
+  return compileKpSymbolMotionContract({
+        ...commonContractInput(operation),
         rigidCompounds: [
           {
             id: `motion-unit.${operation.transformation.id}.log-seven`,
@@ -255,7 +306,6 @@ function compileOperationContract(
           }
         ]
       });
-  }
 }
 
 function continuantId(correspondenceRecordId: string): string {
