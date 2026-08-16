@@ -68,7 +68,8 @@
     {
       "id": "s03",
       "title": "declare-module-ownership-zones",
-      "status": "planned"
+      "summary": "Declared typed neutral-core, presentation, renderer, experience, integration, public API, application, governance, and experiment zones with longest-prefix ownership and complete production classification.",
+      "status": "complete"
     },
     {
       "id": "s04",

@@ -77,6 +77,20 @@
       "scope": "slice 2 bundle baseline",
       "checkedAt": "2026-08-16T20:55:00.256Z",
       "notes": "All current ceilings pass; place-value incremental closure has 20 bytes of headroom."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-module-ownership.test.ts",
+      "status": "passed",
+      "scope": "slice 3 ownership declarations",
+      "checkedAt": "2026-08-16T21:00:54.914Z",
+      "notes": "Five focused tests pass, including complete classification of more than 1,500 production TS and Svelte modules."
+    },
+    {
+      "command": "tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice 3 type safety",
+      "checkedAt": "2026-08-16T21:00:55.827Z",
+      "notes": "Typed ownership declarations and tests compile."
     }
   ],
   "expectedLearning": [
