@@ -31,6 +31,27 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T14:09:45.262Z",
       "notes": "Nine excluded work classes now have an owner, revisit trigger, and reason; none was added to the executable queue."
+    },
+    {
+      "command": "npm run measure:equation-iteration-economics; npm run check:animation-library-bundle-boundary; npm run check:inference; npm run test:equation-extension-dispatch; npm run check:architecture; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T14:15:59.389Z",
+      "notes": "Reproducible post-refactor baseline captured. Inference structural tests pass but the locally chosen 50,000 Types cost ceiling is red at 57,283 and remains scheduled for attribution."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T14:16:08.967Z",
+      "notes": "Type fixtures compile, but the compiler-cost ratchet exits red at 57,283 Types versus the 50,000 local ceiling; slice s05 owns attribution before any budget change."
+    },
+    {
+      "command": "npm run health:pre-expansion:release",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T14:16:17.441Z",
+      "notes": "Baseline stopped after 57.99 seconds at one stale hard-coded 25 equation-asset count; canonical inventory and direct inspection prove 30 assets and zero missing or wrong-domain profiles. Exact-set replacement is scheduled for s17-s18."
     }
   ]
 }

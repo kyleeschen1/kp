@@ -62,7 +62,8 @@
     {
       "id": "s04",
       "title": "post-refactor-baseline",
-      "status": "planned"
+      "summary": "Captured reproducible post-refactor iteration, bundle, compiler, verification, compatibility, command-surface, and high-churn ownership baselines. Recorded two known red gates: inference Types budget 57,283 > 50,000 and a stale hard-coded 25-vs-30 equation count; both have approved repair slices and neither reflects semantic loss.",
+      "status": "complete"
     },
     {
       "id": "s05",
