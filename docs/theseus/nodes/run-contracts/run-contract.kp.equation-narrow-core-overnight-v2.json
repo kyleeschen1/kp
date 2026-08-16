@@ -224,7 +224,8 @@
     {
       "id": "s25",
       "title": "Governed-LLM-catalogue",
-      "status": "planned"
+      "summary": "Added an opt-in governed LLM equation catalogue generated from canonical surface and operation declarations, including compiler-owned recipe projections, semantic examples, and typed fail-closed repair diagnostics; preserved bundle boundaries and documented the known inference ceiling.",
+      "status": "complete"
     },
     {
       "id": "s26",

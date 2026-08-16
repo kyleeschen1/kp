@@ -1795,11 +1795,36 @@
       "command": "npm run test:browser:animation-equation-capability",
       "status": "passed",
       "checkedAt": "2026-08-16T08:33:23.801Z"
+    },
+    {
+      "command": "focused governed LLM catalogue tests",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:42:11.482Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:42:12.492Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:42:13.452Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "checkedAt": "2026-08-16T08:42:14.424Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "checkedAt": "2026-08-16T08:42:15.391Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Wave C now classifies every remaining equation surface through explicit typed declarations; unknown future rows fail closed instead of inheriting generic motion."
+    "summary": "A governed opt-in LLM catalogue now projects all equation surfaces, compiler-owned recipes, promoted operations and roles, motif traits, two accepted examples, and typed repairs from canonical declarations without entering application bundles."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."
