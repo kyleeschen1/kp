@@ -115,7 +115,8 @@
     {
       "id": "s11",
       "title": "attribute-place-value-production-closure",
-      "status": "planned"
+      "summary": "Attributed all 74,948 place-value comparison bytes and both activation phases; compositor plus surface own 73.7%, while data-only catalogue declaration is 136 bytes. Targeted measurement now exposes exact activation and delta files with transitive bases.",
+      "status": "complete"
     },
     {
       "id": "s12",

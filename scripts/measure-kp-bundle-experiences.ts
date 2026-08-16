@@ -44,6 +44,14 @@ export interface KpBundleExperienceMeasurement {
     readonly gzipBytes: number;
     readonly ownerSources: readonly string[];
   }[];
+  readonly incrementalFiles?:
+    KpBundleExperienceMeasurement["files"] | undefined;
+  readonly activationAttributions: readonly {
+    readonly id: string;
+    readonly incremental: KpBundleResourceMeasurement;
+    readonly chunkKeys: readonly string[];
+    readonly files: KpBundleExperienceMeasurement["files"];
+  }[];
   readonly ownerViolations: readonly string[];
   readonly budgetViolations: readonly string[];
 }
@@ -59,7 +67,7 @@ export interface KpBundleExperienceMeasurementSummary {
   readonly manifestSha256ByBuild: Readonly<Record<string, string>>;
   readonly scenarios: readonly Omit<
     KpBundleExperienceMeasurement,
-    "chunkKeys" | "files"
+    "chunkKeys" | "files" | "incrementalFiles" | "activationAttributions"
   >[];
 }
 
@@ -112,12 +120,36 @@ export async function measureKpBundleExperienceScenarios(input: {
           closure.experience,
           comparison.experience
         );
-    const [entry, experience, incrementalMeasurement] = await Promise.all([
+    const [
+      entry,
+      experience,
+      incrementalMeasurement,
+      incrementalFiles,
+      activationAttributions
+    ] = await Promise.all([
       measureResources(build.outputRoot, closure.entry.resources),
       measureResources(build.outputRoot, closure.experience.resources),
       incremental === undefined
         ? Promise.resolve(undefined)
-        : measureResources(build.outputRoot, incremental.resources)
+        : measureResources(build.outputRoot, incremental.resources),
+      incremental === undefined
+        ? Promise.resolve(undefined)
+        : measureFiles(build.outputRoot, incremental.resources),
+      Promise.all(closure.activations.map(async (activation) => {
+        const [measurement, files] = await Promise.all([
+          measureResources(
+            build.outputRoot,
+            activation.incremental.resources
+          ),
+          measureFiles(build.outputRoot, activation.incremental.resources)
+        ]);
+        return Object.freeze({
+          id: activation.id,
+          incremental: measurement,
+          chunkKeys: activation.incremental.chunkKeys,
+          files
+        });
+      }))
     ]);
     const files = await measureFiles(
       build.outputRoot,
@@ -153,6 +185,8 @@ export async function measureKpBundleExperienceScenarios(input: {
       ...(incrementalMeasurement === undefined
         ? {}
         : { incremental: incrementalMeasurement }),
+      ...(incrementalFiles === undefined ? {} : { incrementalFiles }),
+      activationAttributions: Object.freeze(activationAttributions),
       chunkKeys: closure.experience.chunkKeys,
       files,
       ownerViolations: Object.freeze(ownerViolations),
@@ -182,6 +216,8 @@ export function summarizeKpBundleExperienceMeasurement(
     scenarios: Object.freeze(report.scenarios.map(({
       chunkKeys: _chunkKeys,
       files: _files,
+      incrementalFiles: _incrementalFiles,
+      activationAttributions: _activationAttributions,
       ...scenario
     }) => Object.freeze(scenario)))
   });
@@ -300,18 +336,36 @@ function parseArguments(arguments_: readonly string[]): {
           scenario.buildId === "bundle-build.main")
       );
   if (selected.length === 0) throw new Error("No bundle scenarios selected.");
-  const requiredBaseIds = new Set(selected.flatMap(({ comparisonBaseId }) =>
-    comparisonBaseId === undefined ? [] : [comparisonBaseId]
-  ));
-  const withBases = kpBundleExperienceScenarios.filter((scenario) =>
-    selected.includes(scenario) || requiredBaseIds.has(scenario.id)
-  );
+  const withBases = includeKpBundleScenarioComparisonBases({
+    selected,
+    registry: kpBundleExperienceScenarios
+  });
   return {
     scenarios: withBases,
     check,
     details,
     ...(output === undefined ? {} : { output })
   };
+}
+
+export function includeKpBundleScenarioComparisonBases(input: {
+  readonly selected: readonly KpBundleExperienceScenario[];
+  readonly registry: readonly KpBundleExperienceScenario[];
+}): readonly KpBundleExperienceScenario[] {
+  const includedIds = new Set(input.selected.map(({ id }) => id));
+  const byId = new Map(input.registry.map((scenario) => [scenario.id, scenario]));
+  const queue = [...input.selected];
+  while (queue.length > 0) {
+    const baseId = queue.pop()!.comparisonBaseId;
+    if (baseId === undefined || includedIds.has(baseId)) continue;
+    const base = byId.get(baseId);
+    if (base === undefined) {
+      throw new Error(`Bundle scenario registry lacks comparison ${baseId}.`);
+    }
+    includedIds.add(baseId);
+    queue.push(base);
+  }
+  return Object.freeze(input.registry.filter(({ id }) => includedIds.has(id)));
 }
 
 async function run(): Promise<void> {

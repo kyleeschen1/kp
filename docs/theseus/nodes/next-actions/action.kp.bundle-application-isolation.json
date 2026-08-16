@@ -163,6 +163,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T23:50:09.376Z",
       "notes": "All eight experience closures pass; the native KaTeX implementation remains absent from empty, economics, programming, and Graph3D scenarios."
+    },
+    {
+      "command": "focused bundle attribution tests and node typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:57:44.531Z",
+      "notes": "Fourteen scenario, closure, and measurement tests pass; targeted selection now includes transitive comparison bases and detailed activation/delta files typecheck."
+    },
+    {
+      "command": "targeted place-value production closure check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:57:53.561Z",
+      "notes": "The deterministic three-scenario comparison measures 74,948 gzip bytes and attributes every delta file plus both ordered activations; current 75,000-byte ceiling passes but ten-percent headroom remains for s12-s14."
     }
   ],
   "expectedLearning": [

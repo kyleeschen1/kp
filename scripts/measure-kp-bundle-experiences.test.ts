@@ -9,7 +9,10 @@ import { defineKpBundleExperienceScenario } from
   "./bundle-experience-scenario.ts";
 import { measureKpBundleExperienceScenarios } from
   "./measure-kp-bundle-experiences.ts";
-import { summarizeKpBundleExperienceMeasurement } from
+import {
+  includeKpBundleScenarioComparisonBases,
+  summarizeKpBundleExperienceMeasurement
+} from
   "./measure-kp-bundle-experiences.ts";
 
 test("scenario measurement reports deterministic resource and incremental sizes", async () => {
@@ -78,8 +81,87 @@ test("scenario measurement reports deterministic resource and incremental sizes"
     measurement.files.map(({ file }) => file),
     ["assets/entry.js", "assets/pack.css", "assets/pack.js"]
   );
+  assert.deepEqual(
+    measurement.incrementalFiles?.map(({ file }) => file),
+    ["assets/pack.css", "assets/pack.js"]
+  );
+  assert.deepEqual(measurement.activationAttributions, [{
+    id: "pack",
+    incremental: {
+      script: gzipSync("pack").byteLength,
+      style: gzipSync("style").byteLength,
+      font: 0,
+      asset: 0,
+      total: gzipSync("pack").byteLength + gzipSync("style").byteLength
+    },
+    chunkKeys: ["pack.ts"],
+    files: [{
+      file: "assets/pack.css",
+      kind: "style",
+      gzipBytes: gzipSync("style").byteLength,
+      ownerSources: ["pack.ts"]
+    }, {
+      file: "assets/pack.js",
+      kind: "script",
+      gzipBytes: gzipSync("pack").byteLength,
+      ownerSources: ["pack.ts"]
+    }]
+  }]);
   assert.equal(
     "files" in summarizeKpBundleExperienceMeasurement(report).scenarios[1]!,
     false
+  );
+  assert.equal(
+    "incrementalFiles" in
+      summarizeKpBundleExperienceMeasurement(report).scenarios[1]!,
+    false
+  );
+  assert.equal(
+    "activationAttributions" in
+      summarizeKpBundleExperienceMeasurement(report).scenarios[1]!,
+    false
+  );
+});
+
+test("targeted measurement includes transitive comparison bases", () => {
+  const root = defineKpBundleExperienceScenario({
+    id: "bundle-experience.synthetic.root",
+    title: "Root",
+    buildId: "bundle-build.main",
+    entryRoots: ["root.ts"],
+    activations: [],
+    expectedOwners: [],
+    forbiddenOwners: [],
+    budgets: []
+  });
+  const middle = defineKpBundleExperienceScenario({
+    id: "bundle-experience.synthetic.middle",
+    title: "Middle",
+    buildId: "bundle-build.main",
+    entryRoots: ["root.ts"],
+    activations: [{ id: "middle", manifestRoots: ["middle.ts"] }],
+    comparisonBaseId: root.id,
+    expectedOwners: [],
+    forbiddenOwners: [],
+    budgets: []
+  });
+  const leaf = defineKpBundleExperienceScenario({
+    id: "bundle-experience.synthetic.leaf",
+    title: "Leaf",
+    buildId: "bundle-build.main",
+    entryRoots: ["root.ts"],
+    activations: [{ id: "leaf", manifestRoots: ["leaf.ts"] }],
+    comparisonBaseId: middle.id,
+    expectedOwners: [],
+    forbiddenOwners: [],
+    budgets: []
+  });
+
+  assert.deepEqual(
+    includeKpBundleScenarioComparisonBases({
+      selected: [leaf],
+      registry: [root, middle, leaf]
+    }).map(({ id }) => id),
+    [root.id, middle.id, leaf.id]
   );
 });
