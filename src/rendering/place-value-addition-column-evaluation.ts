@@ -102,7 +102,7 @@ export function compileKpPlaceValueColumnEvaluation(
 ): KpPlaceValueColumnEvaluation {
   if (!isKpPlaceValuePositionProgram(program)) {
     throw new Error(
-      "Column evaluation requires a compiler-owned position program."
+      "Column evaluation requires compiler-owned position authority."
     );
   }
   const spec = program.evaluation;
@@ -119,7 +119,7 @@ export function compileKpPlaceValueColumnEvaluation(
     !sameIds(operation.contributorIds, spec.contributorCellIds)
   ) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} evaluation requires its exhaustive presentation.`
+      `Position ${program.position.sequenceIndex} requires exhaustive evaluation presentation.`
     );
   }
   const executableProgram = operation.executableProgram;
@@ -136,7 +136,7 @@ export function compileKpPlaceValueColumnEvaluation(
     compiled.executableProgram !== executableProgram
   ) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} evaluation did not resolve the canonical program.`
+      `Position ${program.position.sequenceIndex} did not resolve the evaluation program.`
     );
   }
   const registered = Object.freeze({
@@ -161,7 +161,7 @@ export function compileKpPlaceValueColumnEvaluation(
     });
     if (candidate.programKind !== "operation-evaluation") {
       throw new Error(
-        `Position ${program.position.sequenceIndex} evaluation resolved the wrong motif adapter.`
+        `Position ${program.position.sequenceIndex} resolved the wrong evaluation motif.`
       );
     }
     return candidate;
@@ -203,7 +203,7 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
 }): KpPlaceValueColumnEvaluationDom {
   if (!isKpPlaceValueColumnEvaluation(input.evaluation)) {
     throw new Error(
-      "Column-evaluation DOM requires compiler-owned authority."
+      "Column-evaluation DOM requires compiler authority."
     );
   }
   const { program, writtenOwnership: ownership } = input.evaluation;
@@ -223,13 +223,13 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
   );
   if (targetGrid === null) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} evaluation target lacks its semantic grid.`
+      `Position ${program.position.sequenceIndex} target lacks its semantic grid.`
     );
   }
   for (const [index, digit] of program.evaluation.evaluationDigits.entries()) {
     const proxy = ownership.evaluationOutputProxies[index];
     if (proxy === undefined) {
-      throw new Error("Evaluation output lacks typed motion ownership.");
+      throw new Error("Evaluation output lacks motion ownership.");
     }
     const nativeTarget = target.cellElements.get(digit.semanticEntityId);
     if (nativeTarget === undefined) {
@@ -278,7 +278,7 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
     )
   ) {
     throw new Error(
-      "Contributor-fusion motif must be compiled from this evaluation's ownership."
+      "Fusion motif must derive from this evaluation ownership."
     );
   }
   const contributorFusion =
@@ -390,7 +390,7 @@ function configureOverlayEndpoints(input: {
 }): void {
   if (!isKpPlaceValueWrittenOwnershipPlan(input.ownership)) {
     throw new Error(
-      "Evaluation overlay endpoints require compiler-owned written authority."
+      "Evaluation overlay requires compiler-owned written authority."
     );
   }
   hideProjectionPaint(input.source);

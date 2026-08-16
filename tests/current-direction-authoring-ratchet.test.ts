@@ -4,8 +4,10 @@ import test from "node:test";
 
 const completedContract =
   "run-contract.kp.cross-language-code-animation-foundation-v1";
+const infrastructureCloseout =
+  "2026-08-16-post-convergence-infrastructure-compression-closeout.md";
 
-test("current project direction closes the code proof and names product convergence next", async () => {
+test("current project direction closes infrastructure compression and returns to visual review", async () => {
   const [roadmap, activeThread, nextActions, entrypoint] = await Promise.all([
     readFile("docs/project/roadmap.md", "utf8"),
     readFile("docs/project/threads/architecture-convergence.md", "utf8"),
@@ -13,12 +15,16 @@ test("current project direction closes the code proof and names product converge
     readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8")
   ]);
 
-  for (const currentSource of [roadmap, activeThread, nextActions]) {
-    assert.match(currentSource, /Public\s+Web v0/i);
+  for (const currentSource of [roadmap, activeThread]) {
+    assert.match(
+      currentSource,
+      new RegExp(infrastructureCloseout.replaceAll(".", "\\."))
+    );
   }
   assert.match(roadmap, new RegExp(completedContract.replaceAll(".", "\\.")));
-  assert.match(activeThread, new RegExp(completedContract.replaceAll(".", "\\.")));
   assert.match(roadmap, /TypeScript, Python, and Scheme/i);
+  assert.match(nextActions, /binary log-product/i);
+  assert.match(nextActions, /human review/i);
   assert.match(nextActions, /wrap\/unwrap/i);
   assert.doesNotMatch(
     activeThread.slice(0, activeThread.indexOf("## Goal")),

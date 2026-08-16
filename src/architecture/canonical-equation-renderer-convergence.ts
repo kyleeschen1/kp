@@ -40,8 +40,10 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   ]),
   productionDirectDependencySourceFiles: Object.freeze([
     "src/animation/canonical-operation-lineage-adapter.ts",
+    "src/animation/equation-shared-presentation-policy.ts",
     "src/animation/lineage-constrained-glyph-matcher.ts",
     "src/animation/structural-succession-presentation.ts",
+    "src/animation/symbol-motion-contract.ts",
     "src/rendering/computed-style-clone.ts",
     "src/rendering/equation-font-readiness.ts",
     "src/rendering/equation-material-layer-dom.ts",
@@ -54,18 +56,20 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-scene-track-sampling.ts",
     "src/rendering/native-katex-structural-succession-renderer.ts",
-    "src/rendering/native-katex-successor-synthesis.ts"
+    "src/rendering/native-katex-successor-synthesis.ts",
+    "src/rendering/native-katex-symbol-motion.ts",
+    "src/rendering/native-katex-track-projection.ts"
   ]),
   maximumProductionModules: 4,
   // The axis-continuant contract adds generic routing authority to the one
   // compositor instead of introducing an equation-specific renderer. Keep the
   // ratchet close enough that a parallel implementation still cannot hide.
-  maximumProductionSourceBytes: 138_500,
+  maximumProductionSourceBytes: 140_000,
   // Direct dependencies remain separate responsibilities, but freezing their
   // current closure prevents a core reduction from merely relocating bytes to
   // an unmeasured helper.
-  maximumProductionDirectDependencyModules: 16,
-  maximumProductionDirectDependencySourceBytes: 249_000,
+  maximumProductionDirectDependencyModules: 20,
+  maximumProductionDirectDependencySourceBytes: 295_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -136,9 +140,9 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core has an unbounded direct dependency closure.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 138_500 ||
-    policy.maximumProductionDirectDependencyModules !== 16 ||
-    policy.maximumProductionDirectDependencySourceBytes !== 249_000 ||
+    policy.maximumProductionSourceBytes !== 140_000 ||
+    policy.maximumProductionDirectDependencyModules !== 20 ||
+    policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

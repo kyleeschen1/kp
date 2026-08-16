@@ -1,34 +1,33 @@
 # KP Next Actions
 
-Last Updated: 2026-08-14
+Last Updated: 2026-08-16
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-There is one active next action:
+The post-convergence infrastructure-compression contract is complete. There is
+one active next action:
 
-1. Execute the approved twenty-slice eigenvector attentional-surface contract
-   described in
-   `reviews/2026-08-14-eigenvector-attentional-surface-long-loop-proposal.md`
-   through its mandatory human checkpoint.
-
-Build only that reversible exemplar and stop again for evaluation. A pass may
-unlock one delayed-return cue and one contrasting existing caller; a mixed or
-failed result does not unlock broader work.
+1. Return to the bounded binary log-product exemplar already waiting at its
+   human review boundary. Review canonical function wrap/unwrap timing and the
+   dissolve-direct-wrap treatment before changing or promoting any visual
+   policy. A pass may authorize one separately scoped three-factor and quotient
+   pressure proposal; a mixed result stays local.
 
 Everything else is frozen reference or parked horizon:
 
 - the catalogue remains an internal laboratory and inventory;
+- the eigenvector attentional-surface work remains a mixed, paused experiment;
 - TypeScript, Python, Scheme, algebra, and fraction composition are approved
   evidence rather than active expansion;
 - economics variants and the normal-matrix route are preserved experiments;
 - layout comparison, Graph3D, broader linear algebra/SICP, advanced CodeMirror,
   LLM tutoring, SRS, Public Web, Public Editor, accounts, and curriculum work
   are not in the active queue; and
-- compatibility or architecture work occurs only when the exemplar exposes a
-  named blocker.
+- further compatibility or architecture work requires a named measured
+  blocker rather than another broad cleanup pass.
 
 Keep `Apply a 2 × 2 matrix to a vector` tabled in the animation-promotion
 ledger; this queue does not reactivate or rerank it.

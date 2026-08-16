@@ -7,6 +7,7 @@ import {
   kpExactFractionQuantityAnimationId
 } from "../src/animation/exact-fraction-quantity-adapter.ts";
 import {
+  kpAnimationCatalogPackDeclarations,
   kpAnimationCatalogPackId,
   loadKpAnimationAsset
 } from "../src/animation/catalog-loader.ts";
@@ -110,7 +111,13 @@ test("exact renderer remains behind its lazy capability pack and adds no page", 
   ]);
 
   assert.ok(!main.includes("exact-fraction-quantity-surface-adapter"));
-  assert.ok(loader.includes('case "exact-quantity"'));
+  assert.ok(
+    kpAnimationCatalogPackDeclarations.some((declaration) =>
+      declaration.id === "exact-quantity" &&
+      declaration.sourcePath ===
+        "src/animation/catalog-packs/exact-quantity.ts")
+  );
+  assert.ok(loader.includes('pack("exact-quantity"'));
   assert.ok(!htmlFiles.includes("exact-fraction-quantity"));
 });
 

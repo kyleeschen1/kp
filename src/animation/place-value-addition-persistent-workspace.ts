@@ -199,7 +199,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
       endpointLifetime.kind !== "native-endpoint"
     ) {
       throw new Error(
-        `Missing persistent endpoint ${input.endpointEntityId}.`
+        `Missing endpoint ${input.endpointEntityId}.`
       );
     }
     const destination = defineKpSemanticDestination({
@@ -267,7 +267,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
             );
             if (endpointCell === undefined || materialDigit === undefined) {
               throw new Error(
-                `Position ${program.position.sequenceIndex} cannot bind its persistent output ${endpointEntityId}.`
+                `Position ${program.position.sequenceIndex} cannot bind output ${endpointEntityId}.`
               );
             }
             return {
@@ -280,7 +280,7 @@ export function compileKpPlaceValuePersistentWorkspacePlan(input: {
           });
       if (outputSpecs.length === 0) {
         throw new Error(
-          `Position ${program.position.sequenceIndex} has no persistent output.`
+          `Position ${program.position.sequenceIndex} has no output.`
         );
       }
       const outputs = outputSpecs.map((spec) => outputPlan({

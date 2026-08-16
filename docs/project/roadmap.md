@@ -80,13 +80,17 @@ Only this repository sequence is active:
    supported equation surfaces by disposition, generated the governed
    authoring catalogue, and proved that graph and code callers share only the
    upper host/runtime boundary.
-6. **Post-convergence infrastructure compression:** active under
-   `run-contract.kp.post-convergence-infrastructure-compression-v1`. Reconcile
-   the control plane, pressure three contrasting LLM-shaped equation requests,
-   attribute inference cost, retire only exact unreachable authority, finish
-   declaration-driven capability loading, and split high-churn modules only at
-   proven ownership seams. Preserve the bounded log-product candidate as
-   pending human review; this run does not tune or promote its aesthetics.
+6. **Post-convergence infrastructure compression:** complete. The 30-slice run
+   reduced all three fixed generation trials from one repair to zero, added one
+   narrow tool-neutral compile entrance, replaced selected-capability switch
+   extension with typed declarations, reduced compiler work, split the two
+   largest mixed-ownership modules, and retired only one exactly unreachable
+   prototype. See
+   `reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
+7. **Binary log-product human checkpoint:** current. Review the bounded
+   dissolve-spread-wrap choreography before any visual policy promotion. Do
+   not resume broad infrastructure or migrate the three-factor and quotient
+   pressure callers without that decision.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -107,7 +111,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | A governed operation/role catalogue is generated from the same declarations as execution | Prove three LLM-shaped requests through one narrow compile facade; models own intent and bindings while KP owns recipes, timing, geometry, and rendering. |
+| LLM generation | Three fixed requests compile with zero repair through one narrow direct entrance; live-model quality remains unmeasured | Preserve the boundary; evaluate live models only as a separately scoped experiment. |
 
 ## Active Tightening Phase
 
@@ -348,13 +352,13 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   See
   `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 - The eleven-step iteration-architecture sequence supplied the completed
-  narrow core. Its successor infrastructure-compression run is active and
-  measures whether that core actually reduces generation repairs, import
-  closure, verification cost, and extension edits. It retains the governing
-  law of open typed declarations compiled into generated, exhaustive,
-  tree-shakable execution. See
+  narrow core. Its successor infrastructure-compression run is complete: it
+  reduced generation repairs and compiler closure, made selected capability
+  loading declaration-driven, split proven ownership seams, and pruned only
+  exact redundancy. It retains the governing law of open typed declarations
+  compiled into generated, exhaustive, tree-shakable execution. See
   `reviews/2026-08-16-equation-iteration-architecture-next-step-review.md` and
-  `reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
+  `reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
 - Economics layout discovery is paused. Existing variants are evidence, not
   competing product defaults.
 - Linear algebra remains parked except for the preserved normal-matrix evidence

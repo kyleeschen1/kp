@@ -1,11 +1,10 @@
 # Architecture Convergence And Product Tightening
 
-Status: active-supporting
+Status: supporting
 Last Updated: 2026-08-16
-Current Next Action: Execute the approved post-convergence infrastructure
-compression contract. Prove that the narrow equation core reduces generation
-repairs and extension edits, retire only exact unreachable authority, and
-improve compiler and verification economics without visual changes.
+Current Next Action: none. The post-convergence infrastructure-compression
+contract is complete. Resume architecture work only for a named measured
+blocker exposed by the next bounded visual or product caller.
 
 ## Goal
 
@@ -41,7 +40,7 @@ catalogue migration. The first application is the homomorphic-decomposition
 candidate recorded in
 `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
 
-The approved architecture order adds a complementary extensibility law: KP is
+The approved architecture order established a complementary extensibility law: KP is
 open through typed immutable declarations and closed through validated,
 generated, exhaustive execution. Distinct family, semantic-operation,
 presentation-recipe, and renderer-capability registries are composed explicitly
@@ -51,15 +50,13 @@ totals retire beside migrated callers. The full order and measured success
 criteria are recorded in
 `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
 
-The 26-slice equation narrow-core run has now completed that convergence
-boundary. Typed motif invocations, structural recipes, immutable declarations,
-generated closed dispatch, disposition coverage, a governed authoring
-catalogue, and the graph/code upper-boundary probe are implemented. The active
-successor is
-`run-contract.kp.post-convergence-infrastructure-compression-v1`, backed by
-`../reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
-It is deliberately non-visual: any unexplained rendered delta returns to a
-human checkpoint rather than becoming infrastructure policy.
+The 26-slice equation narrow-core run completed that convergence boundary. Its
+30-slice successor has now proved the authoring boundary, reduced compiler
+work, replaced selected-capability switch extension, separated proven module
+owners, and closed exact reachability without broad pruning. See
+`../reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
+No visual policy changed; the repository returns to the pending binary
+log-product human checkpoint.
 
 ## Ordered Work
 
@@ -93,11 +90,10 @@ human checkpoint rather than becoming infrastructure policy.
    use, reuse, send, and return to one existing semantic artifact.
 9. **Application boundary:** use SvelteKit for Internal Studio and Public Web
    only after the preceding gates define what each app must load and own.
-10. **Post-convergence compression (active):** reconcile durable truth,
-    pressure three LLM-shaped authoring requests, attribute inference cost,
-    retire only proven redundancy, replace the remaining closed capability
-    loader, and extract high-churn ownership seams without semantic or visual
-    change.
+10. **Post-convergence compression (complete):** the direct generation
+    boundary, exact reachability graph, declaration-driven capability loader,
+    ownership extractions, inference reduction, and release evidence are
+    closed in the 2026-08-16 closeout.
 
 ## Accepted Scope
 
@@ -182,7 +178,7 @@ trigger is permission to propose bounded work, not automatic authorization.
 | Graph3D, Canvas, WebGL, another program language, or a cross-domain compiler | `semantic-runtime.md` and `animation-catalogue.md` | A selected product proof needs one named renderer/domain capability and can preserve lazy isolation | Equation infrastructure does not authorize domain expansion or a universal renderer/compiler. |
 | Live or multi-model generation evaluation | `../authoring/llm-generation-entrypoint.md` | The deterministic request facade and three contrasting fixtures pass with stable typed diagnostics | First prove the tool contract; live-model variance would otherwise hide architecture failures. |
 | Directory, namespace, or repository-wide package reorganization | this thread | Dependency direction and public import-closure evidence make a move mechanical and complexity-negative | Moving files before ownership settles creates churn without reducing authority. |
-| Broad test migration or directory rewrite | this thread and the active infrastructure proposal | Duration, flake rate, unique historical failures, and invariant owners justify a separate measured tranche | This run retires only tests adjacent to a stronger owner; a test purge is not a health strategy. |
+| Broad test migration or directory rewrite | this thread and the completed infrastructure closeout | Duration, flake rate, unique historical failures, and invariant owners justify a separate measured tranche | The completed run retired only tests adjacent to a stronger owner; a test purge is not a health strategy. |
 
 ## Open Questions
 

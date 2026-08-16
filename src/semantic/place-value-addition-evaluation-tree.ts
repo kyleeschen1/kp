@@ -32,7 +32,7 @@ EditableSemanticTransformationTree {
     evaluateHundreds === undefined ||
     settle === undefined
   ) {
-    throw new Error("Place-value evaluation tree requires all seven trace beats.");
+    throw new Error("Evaluation tree requires all seven place-value beats.");
   }
 
   const establishNode = traceLeaf(establish);

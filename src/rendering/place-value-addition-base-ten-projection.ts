@@ -124,7 +124,7 @@ export function compileKpPlaceValueBaseTenProjection(
 ): KpPlaceValueBaseTenProjection {
   if (!isKpVerifiedPlaceValueSemanticFoundation(foundation)) {
     throw new Error(
-      "Base-ten projection requires the sealed place-value semantic foundation."
+      "Base-ten projection requires the sealed semantic foundation."
     );
   }
   const initial = Object.freeze([

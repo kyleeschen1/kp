@@ -14,12 +14,24 @@ const consumers = [
     contexts: ["text", "attribute"]
   },
   {
+    path: "src/tutorial/eigenvector-attentional-surface/eigenvector-settled-html.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
+    path: "src/tutorial/eigenvector-attentional-surface/eigenvector-transport.ts",
+    contexts: ["text", "attribute"]
+  },
+  {
     path: "src/tutorial/frame-sequence-preview.ts",
     contexts: ["text", "attribute", "script-json"]
   },
   {
     path: "src/tutorial/iframe-export-document.ts",
     contexts: ["text", "attribute", "script-json"]
+  },
+  {
+    path: "src/tutorial/normal-matrix-proof/normal-matrix-proof-prompt-publication.ts",
+    contexts: ["text", "attribute"]
   },
   {
     path: "src/tutorial/place-value-addition-static-step-export.ts",

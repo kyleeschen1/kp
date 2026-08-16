@@ -21,7 +21,7 @@ import {
   quotientSemanticMotionStructureContract
 } from "./fixtures/semantic-motion-compiler-fixtures.ts";
 
-test("three approved operation shapes resolve to distinct closed capability recipes", () => {
+test("three contrasting operation shapes resolve within the closed capability recipes", () => {
   const cases = [
     [createQuotientSemanticMotionFixture(), quotientSemanticMotionStructureContract(), quotientSemanticMotionPrecedenceSpec(), "recipe.semantic-motion.log-quotient-fusion.v1"],
     [createDistributionSemanticMotionFixture(), distributionSemanticMotionStructureContract(), distributionSemanticMotionPrecedenceSpec(), "recipe.semantic-motion.distribution-fan-out.v1"],
@@ -40,7 +40,15 @@ test("three approved operation shapes resolve to distinct closed capability reci
     assert.doesNotMatch(JSON.stringify(result.resolution), /fade|opacity|renderer|duration|easing|path|geometry/i);
   }
   assert.equal(capabilitySignatures.size, 3);
-  assert.equal(kpSemanticMotionRecipeCapabilityMatrix().length, 3);
+  assert.deepEqual(
+    kpSemanticMotionRecipeCapabilityMatrix().map(({ recipeId }) => recipeId),
+    [
+      "recipe.semantic-motion.log-quotient-fusion.v1",
+      "recipe.semantic-motion.distribution-fan-out.v1",
+      "recipe.semantic-motion.inverse-cancellation.v1",
+      "recipe.semantic-motion.log-product-fission.v1"
+    ]
+  );
 });
 
 test("unknown operation incomplete family shape and unreviewed teaching intent fail closed", () => {

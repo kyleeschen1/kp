@@ -2,8 +2,9 @@
   "id": "next-action.kp.post-convergence-infrastructure-compression-v0",
   "kind": "next-action",
   "title": "Compress post-convergence infrastructure and prove generation economics",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "Completed all 30 approved slices. Generation pressure now passes with zero repairs; selected capabilities are declaration-driven; inference, ownership, reachability, bundle, browser, build, and full release gates are closed. Return to the bounded binary log-product human checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -409,6 +410,48 @@
       "scope": "slice-s29",
       "checkedAt": "2026-08-16T18:15:32.831Z",
       "notes": "All architecture gates pass after owner-local inference imports and command manifest additions."
+    },
+    {
+      "command": "npm run health:pre-expansion:release",
+      "status": "passed",
+      "scope": "slice s30 release closure",
+      "checkedAt": "2026-08-16T19:32:07.647Z",
+      "notes": "Architecture, TypeScript, Svelte, semantic convergence, generated freshness, five scoped browser checks, the complete 4,752-test suite, a 1,446-module production build, and workspace validation over 960 nodes and 21,708 events passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s30 post-build bundle closure",
+      "checkedAt": "2026-08-16T19:32:10.049Z",
+      "notes": "Fresh built output passed unchanged limits: outer 10,819 bytes, main 196,852, catalogue route 118,535, and place-value incremental 74,980 of 75,000 gzip bytes."
+    },
+    {
+      "command": "npm run prove:equation-generation-boundary",
+      "status": "passed",
+      "scope": "slice s30 generation economics",
+      "checkedAt": "2026-08-16T19:32:11.089Z",
+      "notes": "Function wrap, cancellation, and distribution/factoring each compiled with zero repairs through an 87-module, 893,753-source-byte direct closure with no forbidden application or renderer imports."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice s30 compiler economics",
+      "checkedAt": "2026-08-16T19:32:12.162Z",
+      "notes": "Strict inference fixtures passed at 52,864 compiler types and 71,006 instantiations without skipLibCheck."
+    },
+    {
+      "command": "npm run health:pre-expansion",
+      "status": "passed",
+      "scope": "slice s30 durable closeout truth",
+      "checkedAt": "2026-08-16T19:32:15.143Z",
+      "notes": "Architecture, all type checks, semantic convergence, Svelte shell, direction ratchets, negative generation fixtures, final bundle boundary, and economics publication freshness passed after durable roadmap updates."
+    },
+    {
+      "command": "npm run measure:equation-iteration-economics",
+      "status": "passed",
+      "scope": "slice s30 economics comparison",
+      "checkedAt": "2026-08-16T19:32:23.548Z",
+      "notes": "Final snapshot: 40 authority files, 16,718 authority lines, 14 closed switch diagnostics across 9 files, 1,363 test files, 200 source-inspection tests, 27 aggregate ratchets, 243 verification scripts, zero private clocks, and zero CSS animation authority."
     }
   ]
 }

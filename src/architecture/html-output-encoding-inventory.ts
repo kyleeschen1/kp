@@ -87,7 +87,7 @@ export const kpHtmlEncodingOwners = [
     "svg-text",
     "svg-attribute"
   ]),
-  retain("src/editor/equation-surface-adapter.ts", "editor", [
+  retain("src/editor/equation-stage-markup.ts", "editor", [
     "html-text",
     "html-attribute"
   ]),

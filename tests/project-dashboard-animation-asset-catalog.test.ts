@@ -18,15 +18,22 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
   assert.deepEqual(rows.map((row) => row.id), [
     "animation-linear-solve-solve-x",
     "animation-generated-linear-linear-68c15d41",
+    "animation-generated-cancellation-additive-inverses",
     "animation-generated-fraction-expression-two-fourths",
     "animation-generated-exponent-square-as-product",
     "animation-generated-radical-square-root-as-power",
     "animation-generated-function-wrap-apply-f",
     "animation-generated-distribution-expand-a-sum",
     "animation-generated-distribution-factor-common-a",
-    "animation-inequality-sign-flip-basic"
+    "animation-inequality-sign-flip-basic",
+    "animation-algebra-log-exponent-solve-two-power-x",
+    "animation-algebra-log-quotient-difference-to-quotient",
+    "animation-algebra-log-product-xy-to-sum",
+    "animation-algebra-log-product-xyz-to-sum"
   ]);
-  assert.deepEqual(rows[2]?.previewFields.slice(0, 6), [
+  const fractionRow = rows.find((row) =>
+    row.id === "animation-generated-fraction-expression-two-fourths");
+  assert.deepEqual(fractionRow?.previewFields.slice(0, 6), [
     {
       label: "Animation asset",
       value: "animation.generated.fraction-expression.two-fourths"

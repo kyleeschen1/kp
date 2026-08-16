@@ -3,9 +3,9 @@
 Status: active
 Last Updated: 2026-08-16
 Current Next Action: Preserve the completed equation narrow core and the
-bounded dissolve-direct-wrap binary log-product exemplar as pending human
-review while the active infrastructure-compression run pressures authoring,
-reachability, capability loading, ownership, and verification economics.
+bounded dissolve-direct-wrap binary log-product exemplar for human review.
+Infrastructure compression is complete; do not promote the visual policy or
+pressure the three-factor and quotient callers before the binary checkpoint.
 
 ## Goal
 
@@ -151,12 +151,12 @@ names are not suggestions. Recipes invoke nominal typed motifs with semantic
 role bindings; a shared motif compiler and renderer adapter supply the actual
 motion. Its 26 independently reversible slices completed, including supported
 surface disposition, governed authoring metadata, and the cross-domain upper
-host/runtime proof. The current log-product look remains pending review and is
-not being promoted by the successor infrastructure run. The completed order is
-owned by
+host/runtime proof. The current log-product look remains pending review and was
+not promoted by the completed successor infrastructure run. The completed
+order is owned by
 `../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`; the
-active successor is
-`../reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
+successor closeout is
+`../reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
 
 ## Current Derived Inventory
 
@@ -253,6 +253,7 @@ and compatibility ledger; they must not be maintained independently here.
 - `docs/project/reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`
 - `docs/project/reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`
 - `docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`
+- `docs/project/reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`
 - `docs/project/reviews/2026-08-14-log-exponent-operation-transport-long-loop-proposal.md`
 - `docs/project/reviews/2026-08-02-product-surface-priority-next-step-review.md`
 - `docs/project/reviews/2026-08-01-six-loop-product-convergence-long-loop-proposal.md`

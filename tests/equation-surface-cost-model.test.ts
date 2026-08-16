@@ -30,20 +30,20 @@ test("equation cost closure excludes unrelated Graph3D and programming capabilit
     /graph-3d|graph-webgl|programming-surface/.test(sourcePath)), false);
 });
 
-test("compatibility counts preserve the measured pre-migration authority split", () => {
+test("compatibility counts preserve the measured surface authority split", () => {
   const counts = createKpEquationSurfaceCostPlan().compatibility;
 
   assert.deepEqual(counts, {
-    equationSurfaceCount: 28,
+    equationSurfaceCount: 30,
     familyCount: 14,
     genericCompatibilityRows: 23,
-    specializedAdapterRows: 5,
+    specializedAdapterRows: 7,
     rowsWithNonSemanticTransitions: 5,
     nonSemanticTransitionCount: 8,
     wholeEquationFallbackRows: 23,
     privateClockRows: 0,
     cssAnimationAuthorityRows: 0,
-    uniqueLocalSamplerNodes: 16
+    uniqueLocalSamplerNodes: 15
   });
 });
 

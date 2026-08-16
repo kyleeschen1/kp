@@ -189,7 +189,7 @@ export function defineKpSemanticDestination<
     )
   ) {
     throw new Error(
-      "Semantic destination requires a sealed destination or endpoint region."
+      "Semantic destination requires a sealed region."
     );
   }
   const destination = Object.freeze({
@@ -214,7 +214,7 @@ export function defineKpMeasuredRouteIntent(input: {
     !isKpSemanticDestination(input.to)
   ) {
     throw new Error(
-      "Measured routes require sealed semantic regions and destinations."
+      "Measured routes require sealed regions and destinations."
     );
   }
   const route = Object.freeze({
@@ -236,7 +236,7 @@ export function defineKpTransitOwnership(input: {
     input.materialEntityId !== input.route.materialEntityId
   ) {
     throw new Error(
-      "Transit ownership must match one sealed measured route material."
+      "Transit ownership must match sealed route material."
     );
   }
   const transit = Object.freeze({

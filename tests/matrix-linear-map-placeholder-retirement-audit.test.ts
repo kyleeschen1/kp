@@ -68,7 +68,7 @@ test("linear-map placeholder keeps named product and conformance references", as
     ["src/editor/graph-svg-domain-renderers.ts", `case "${animationId}"`],
     ["src/editor/selected-surface-capability.ts", `"${animationId}"`],
     [
-      "src/animation/symbolic-manipulation-family-registry.ts",
+      "src/animation/symbolic-manipulation-families/linear-algebra.ts",
       "sample.animation.vector-add-scale.basic"
     ],
     ["tests/kp-graph-animation-asset.test.ts", animationId],

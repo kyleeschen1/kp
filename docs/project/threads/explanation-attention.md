@@ -1,11 +1,10 @@
 # Explanation and Attention Thread
 
-Status: active
-Last Updated: 2026-08-14
-Current Next Action: specify one hard-coded eigenvector attentional-surface
-experience with roughly six to nine beats, a persistent vector identity across
-geometry and notation, and one prediction/manipulation moment. Stop for review
-before implementation or shared authoring extraction.
+Status: paused
+Last Updated: 2026-08-16
+Current Next Action: none. Preserve the eigenvector attentional-surface as a
+mixed research artifact and resume only when observed learner or educator use
+identifies one specific attention failure.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`

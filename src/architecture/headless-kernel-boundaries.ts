@@ -59,13 +59,11 @@ export function headlessKernelBoundaryConformanceEntries(): readonly HeadlessKer
       rendererNeutral: true,
       sourceFiles: [
         "src/animation/kernel.ts",
-        "src/animation/tween.ts",
         "src/rendering/equation-motion-player.ts",
         "src/rendering/equation-motion-sampler.ts",
         "src/rendering/semantic-beat-compiler.ts"
       ],
       testFiles: [
-        "tests/tween.test.ts",
         "tests/equation-motion-player.test.ts",
         "tests/equation-motion-sampler.test.ts"
       ],

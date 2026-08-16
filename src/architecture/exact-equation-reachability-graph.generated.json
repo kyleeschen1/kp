@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3144,
+  "scannedFileCount": 3149,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -2175,9 +2175,7 @@
         "tests/concept-publisher.test.ts",
         "tests/concept-review-publication.test.ts",
         "tests/concept-room-boundaries.test.ts",
-        "tests/linear-equation-concept-runtime.test.ts",
-        "tests/type-fixtures/concept-manifest-inference.ts",
-        "tests/type-fixtures/concept-room-inference.ts"
+        "tests/linear-equation-concept-runtime.test.ts"
       ],
       "scriptCallers": [
         "scripts/generate-concept-catalog.ts"

@@ -123,7 +123,7 @@ export function compileKpPlaceValueColumnExchange(
 ): KpPlaceValueColumnExchange {
   if (!isKpPlaceValuePositionProgram(program) || program.exchange === undefined) {
     throw new Error(
-      "Column exchange requires a compiler-owned nonterminal position program."
+      "Column exchange requires compiler-owned nonterminal authority."
     );
   }
   const exchangeProgram = program as KpPlaceValuePositionProgram & {
@@ -151,7 +151,7 @@ export function compileKpPlaceValueColumnExchange(
     exchangeProof.proof !== carrySplit.lineage.exchange
   ) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} exchange requires its exact lineage and proof.`
+      `Position ${program.position.sequenceIndex} requires exact exchange lineage and proof.`
     );
   }
   const namespace = program.position.id;
@@ -187,7 +187,7 @@ export function compileKpPlaceValueColumnExchange(
     intent.executableProgram.kind !== "identity-fission"
   ) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} exchange lacks canonical fission authority.`
+      `Position ${program.position.sequenceIndex} lacks exchange fission authority.`
     );
   }
   const dispatch = (direction: "forward" | "rewind"): FissionDispatch => {
@@ -199,7 +199,7 @@ export function compileKpPlaceValueColumnExchange(
     });
     if (candidate.programKind !== "identity-fission") {
       throw new Error(
-        `Position ${program.position.sequenceIndex} exchange resolved the wrong motif adapter.`
+        `Position ${program.position.sequenceIndex} resolved the wrong exchange motif.`
       );
     }
     return candidate;
@@ -240,7 +240,7 @@ export function createKpPlaceValueColumnExchangeDom(input: {
 }): KpPlaceValueColumnExchangeDom {
   if (!isKpPlaceValueColumnExchange(input.exchange)) {
     throw new Error(
-      "Column-exchange DOM requires compiler-owned authority."
+      "Column-exchange DOM requires compiler authority."
     );
   }
   const { program, writtenOwnership: ownership } = input.exchange;
@@ -260,7 +260,7 @@ export function createKpPlaceValueColumnExchangeDom(input: {
   );
   if (sourceGrid === null) {
     throw new Error(
-      `Position ${program.position.sequenceIndex} exchange source lacks its semantic grid.`
+      `Position ${program.position.sequenceIndex} source lacks its semantic grid.`
     );
   }
   const total = input.document.createElement("span");

@@ -174,7 +174,7 @@ export function createKpPlaceValueAdditionPresentationPlan(
     beats.some((beat, index) => beat.beatId !== trace.beats[index]?.id)
   ) {
     throw new Error(
-      "Place-value presentation must bind every trace beat exactly once."
+      "Place-value presentation must bind each trace beat once."
     );
   }
   const plan = Object.freeze({
@@ -210,7 +210,7 @@ export function createKpGeneratedPlaceValueAdditionPresentationPlan(input: {
     !input.positionPrograms.every(isKpPlaceValuePositionProgram)
   ) {
     throw new Error(
-      "Generated place-value presentation requires a certified position sequence."
+      "Generated presentation requires a certified position sequence."
     );
   }
   const beats: KpPlaceValueAdditionPresentationBeat[] = [];
@@ -407,7 +407,7 @@ function evaluationProgram(
     beat.outputIds[0] !== resultId ||
     !sameIds(beat.contributorIds, program.evaluation.contributorCellIds)
   ) {
-    throw new Error(`Evaluation beat ${beat.id} lacks exact presentation inputs.`);
+    throw new Error(`Evaluation beat ${beat.id} lacks exact inputs.`);
   }
   return mintProgram({
     id: `presentation.${beat.id}.operation-evaluation`,
@@ -473,7 +473,7 @@ function persistentProgram(
 ): ProgramOf<"persistent-translation"> {
   const state = trace.states.find(({ id }) => id === beat.toStateId);
   if (state === undefined) {
-    throw new Error(`Presentation beat ${beat.id} targets an unknown state.`);
+    throw new Error(`Presentation beat ${beat.id} targets unknown state.`);
   }
   const entityIds = new Set<string>([
     ...trace.beats[0]!.contributorIds,
@@ -512,7 +512,7 @@ function generatedPersistence(
   entityIds: readonly string[]
 ): ProgramOf<"persistent-translation"> {
   if (entityIds.length === 0) {
-    throw new Error(`Generated presentation beat ${beatId} has no continuants.`);
+    throw new Error(`Generated beat ${beatId} has no continuants.`);
   }
   return mintProgram({
     id: `presentation.${beatId}.persistent-translation`,
@@ -542,7 +542,7 @@ function nativeSettlementProgram(
     beat.outputIds.length !== 1 ||
     !sameIdSet(beat.contributorIds, settledOutputIds)
   ) {
-    throw new Error("Native settlement must close the exact result decomposition.");
+    throw new Error("Native settlement must close exact result decomposition.");
   }
   return mintProgram({
     id: `presentation.${beat.id}.native-settlement`,
@@ -617,5 +617,5 @@ function sameIdSet(left: readonly string[], right: readonly string[]): boolean {
 }
 
 function assertNever(value: never): never {
-  throw new Error(`Unsupported place-value trace operation ${String(value)}.`);
+  throw new Error(`Unsupported trace operation ${String(value)}.`);
 }

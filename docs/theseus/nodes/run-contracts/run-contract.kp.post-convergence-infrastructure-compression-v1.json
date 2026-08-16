@@ -2,7 +2,8 @@
   "id": "run-contract.kp.post-convergence-infrastructure-compression-v1",
   "kind": "run-contract",
   "title": "Post-convergence infrastructure compression",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -218,7 +219,8 @@
     {
       "id": "s30",
       "title": "release-closure",
-      "status": "planned"
+      "summary": "Closed the 30-slice run with a clean release, post-build bundle gate, zero-repair generation proof, reduced inference workset, final iteration-economics comparison, durable closeout, and no visual-policy change.",
+      "status": "complete"
     }
   ]
 }

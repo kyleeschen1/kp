@@ -325,7 +325,7 @@ function assertPositionSequence(
       )
     ) {
       throw new Error(
-        "Place-value position programs must form one exact ordered radix sequence."
+        "Position programs require an exact ordered radix sequence."
       );
     }
     positionIds.add(program.position.id);
