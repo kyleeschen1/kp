@@ -48,6 +48,28 @@ test("specific reader seams override the broader product host", () => {
     resolveKpModuleOwnershipZone("src/reader/document/public-api.ts")?.id,
     "neutral-core"
   );
+  assert.equal(
+    resolveKpModuleOwnershipZone(
+      "src/reader/compiler/verified-generated-linear-solve-lesson.ts"
+    )?.id,
+    "experience"
+  );
+  assert.equal(
+    resolveKpModuleOwnershipZone("src/reader/compiler/public-api.ts")?.id,
+    "experience"
+  );
+  assert.equal(
+    resolveKpModuleOwnershipZone(
+      "src/reader/compiler/reader-route-manifest.ts"
+    )?.id,
+    "experience"
+  );
+  assert.equal(
+    resolveKpModuleOwnershipZone(
+      "src/projections/quadratic-equation-graph-sync.ts"
+    )?.id,
+    "application"
+  );
 });
 
 test("core, renderer, experience, public, and host examples resolve explicitly", () => {

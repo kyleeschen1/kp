@@ -100,6 +100,26 @@ export interface KpModuleOwnershipRule {
 export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
   Object.freeze([
     ownershipRule(
+      "src/reader/compiler/verified-generated-linear-solve-lesson.ts",
+      "experience",
+      "This module assembles a product lesson from an already verified session."
+    ),
+    ownershipRule(
+      "src/reader/compiler/public-api.ts",
+      "experience",
+      "The aggregate compiler facade exports complete product lessons."
+    ),
+    ownershipRule(
+      "src/reader/compiler/reader-route-manifest.ts",
+      "experience",
+      "The route manifest aggregates product-level reader lesson entries."
+    ),
+    ownershipRule(
+      "src/projections/quadratic-equation-graph-sync.ts",
+      "application",
+      "This projection synchronizes the concrete quadratic reader surface."
+    ),
+    ownershipRule(
       "src/reader/compiler/",
       "neutral-core",
       "Reader compilation owns portable semantic artifacts, not product layout."

@@ -119,6 +119,20 @@
       "scope": "slice 5 type safety",
       "checkedAt": "2026-08-16T21:11:16.477Z",
       "notes": "Ownership and dependency policy declarations compile in the full test project."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-module-ownership.test.ts tests/kp-dependency-direction-policy.test.ts tests/kp-dependency-direction-exceptions.test.ts",
+      "status": "passed",
+      "scope": "slice 6 exception ratchet",
+      "checkedAt": "2026-08-16T21:16:46.666Z",
+      "notes": "Fourteen tests pass; all 18 and only 18 current violations have unique exact owners, retirement conditions, and slices."
+    },
+    {
+      "command": "tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice 6 type safety",
+      "checkedAt": "2026-08-16T21:16:47.653Z",
+      "notes": "Ownership overrides and exception ledger compile."
     }
   ],
   "expectedLearning": [

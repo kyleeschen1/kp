@@ -86,7 +86,8 @@
     {
       "id": "s06",
       "title": "freeze-exact-known-exceptions",
-      "status": "planned"
+      "summary": "Corrected four app-specific path classifications and froze the exact 18-edge violation cohort across program trace, linear solve, HTML encoding, renderer theme, and legacy SDK retirement owners.",
+      "status": "complete"
     },
     {
       "id": "s07",
