@@ -1569,11 +1569,39 @@
       "scope": "slice s19 selected capability browser behavior",
       "checkedAt": "2026-08-16T07:49:07.179Z",
       "notes": "Five one-worker Chromium checks pass for loading, settlement, graph labels, programming/3D isolation, and app-specific capability loading."
+    },
+    {
+      "command": "node focused equation projection and load-probe tests",
+      "status": "passed",
+      "scope": "slice s20 stronger replacement owners",
+      "checkedAt": "2026-08-16T07:53:35.709Z",
+      "notes": "20 exact set, generated equality, negative compile, lazy load, and single-failure isolation laws pass after count removal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s20 test types",
+      "checkedAt": "2026-08-16T07:53:36.727Z",
+      "notes": "Application, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s20 architecture",
+      "checkedAt": "2026-08-16T07:53:37.673Z",
+      "notes": "All boundaries and compiler authority ratchets pass."
+    },
+    {
+      "command": "npm run measure:equation-iteration-economics",
+      "status": "passed",
+      "scope": "slice s20 test-economics evidence",
+      "checkedAt": "2026-08-16T07:53:38.608Z",
+      "notes": "Aggregate-count ratchet files fell from the 26-file baseline to 25; no production behavior changed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s19 complete: one immutable pack declaration table now co-locates animation ownership, literal lazy imports, and pack source paths; one equation-family declaration source projects selected capabilities, renderer adapters, dispositions, and migration waves into the existing generated inventory, asset manifest, and disposition ledger. All projections remain byte-current, browser capability selection and lazy chunks are unchanged. Next: retire redundant count and membership assertions in favor of exact declaration/loadable-set equality."
+    "summary": "Slice s20 complete: current catalogue totals, authority path buckets, disposition buckets, preservation totals, manifest totals, and load-probe totals no longer duplicate generated truth. Tests now compare exact declared/loadable animation-ID and pack-ID sets across projections, while the dated 24-surface historical baseline remains explicit evidence. Next: retire source-text and switch-shape assertions only where public protocol, architecture, generated closure, runtime, or bundle owners are stronger."
   },
   "expectedLearning": [
     "Whether typed function-wrap reception can preserve semantic identity while producing a reusable outside-in enclosure motif across the canonical wrapper and log-product caller."

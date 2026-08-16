@@ -15,22 +15,14 @@ import {
   createKpEquationSurfaceInventory
 } from "../src/architecture/equation-surface-inventory.ts";
 
-test("generated authority graph owns all 30 equation surfaces", () => {
+test("generated authority graph owns the exact equation inventory", () => {
   const graph = createKpEquationSurfaceAuthorityGraph();
+  const inventory = createKpEquationSurfaceInventory();
 
   assert.deepEqual(generatedGraph, graph);
-  assert.equal(graph.rows.length, 30);
-  assert.equal(
-    graph.rows.filter(({ pathClass }) =>
-      pathClass === "generic-semantic-equation"
-    ).length,
-    23
-  );
-  assert.equal(
-    graph.rows.filter(({ pathClass }) =>
-      pathClass === "operation-evaluation-specialized"
-    ).length,
-    3
+  assert.deepEqual(
+    new Set(graph.rows.map(({ animationId }) => animationId)),
+    new Set(inventory.entries.map(({ animationId }) => animationId))
   );
   assert.equal(
     graph.rows.every((row) =>

@@ -27,44 +27,13 @@ test("disposition ledger classifies every equation row exactly once", () => {
   const inventory = createKpEquationSurfaceInventory();
 
   assert.deepEqual(generatedLedger, ledger);
-  assert.equal(ledger.entries.length, 30);
   assert.deepEqual(
     new Set(ledger.entries.map(({ animationId }) => animationId)),
     new Set(inventory.entries.map(({ animationId }) => animationId))
   );
-  assert.equal(new Set(ledger.entries.map(({ animationId }) => animationId)).size,
-    30);
   assert.equal(ledger.entries.every(({ disposition, migrationWave }) =>
     kpEquationSurfaceDispositionValues.includes(disposition) &&
     kpEquationSurfaceMigrationWaveValues.includes(migrationWave)), true);
-});
-
-test("initial dispositions and waves preserve intentional boundaries", () => {
-  const ledger = createKpEquationSurfaceDispositionLedger();
-  const count = (value: typeof kpEquationSurfaceDispositionValues[number]) =>
-    ledger.entries.filter(({ disposition }) => disposition === value).length;
-
-  assert.deepEqual({
-    canonical: count("canonical"),
-    adapterBacked: count("adapter-backed"),
-    staticOnly: count("static-only"),
-    unsupported: count("unsupported"),
-    retirementCandidate: count("retirement-candidate")
-  }, {
-    canonical: 3,
-    adapterBacked: 22,
-    staticOnly: 4,
-    unsupported: 0,
-    retirementCandidate: 1
-  });
-  assert.deepEqual(Object.fromEntries(kpEquationSurfaceMigrationWaveValues.map(
-    (wave) => [wave, ledger.entries.filter(({ migrationWave }) =>
-      migrationWave === wave).length]
-  )), {
-    "wave-a-operation-plan": 9,
-    "wave-b-structural-native-math": 9,
-    "wave-c-generated-bespoke-diagnostic-static": 12
-  });
 });
 
 test("every disposition has a single-row rollback and blocked retirement gate", () => {

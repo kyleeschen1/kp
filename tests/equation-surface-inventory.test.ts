@@ -19,17 +19,23 @@ import {
 
 test("generated inventory matches all current equation catalogue surfaces", () => {
   const inventory = createKpEquationSurfaceInventory();
+  const catalogue = createKpAnimationCatalogueProjection();
+  const catalogueEquationIds = catalogue.entries
+    .filter(({ renderTargetKinds }) => renderTargetKinds.includes("equation"))
+    .map(({ animationId }) => animationId);
 
   assert.deepEqual(generatedInventory, inventory);
+  // Twenty-four is historical evidence from the cited snapshot, not a live
+  // catalogue total. Current closure is exact set equality below.
   assert.equal(inventory.baseline.historicalCount, 24);
-  assert.equal(inventory.baseline.currentCount, 30);
+  assert.equal(inventory.baseline.currentCount, inventory.entries.length);
   assert.deepEqual(
     inventory.baseline.postBaselineAnimationIds,
     kpPostBaselineEquationSurfaceIds
   );
-  assert.equal(
-    new Set(inventory.entries.map(({ animationId }) => animationId)).size,
-    inventory.entries.length
+  assert.deepEqual(
+    new Set(inventory.entries.map(({ animationId }) => animationId)),
+    new Set(catalogueEquationIds)
   );
   assert.equal(
     inventory.entries.every(({ currentPresentationAuthority }) =>

@@ -35,7 +35,6 @@ test("manifest covers every equation asset with durable static truth", () => {
   const inventory = createKpEquationSurfaceInventory();
 
   assert.deepEqual(generatedManifest, manifest);
-  assert.equal(manifest.entries.length, 30);
   assert.deepEqual(
     new Set(manifest.entries.map(({ assetId }) => assetId)),
     new Set(inventory.entries.map(({ animationId }) => animationId))

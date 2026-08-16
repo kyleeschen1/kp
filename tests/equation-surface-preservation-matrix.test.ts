@@ -17,10 +17,13 @@ import {
 
 test("preservation matrix freezes every current equation endpoint", () => {
   const matrix = createKpEquationSurfacePreservationMatrix();
+  const inventory = createKpEquationSurfaceInventory();
 
   assert.deepEqual(generatedMatrix, matrix);
-  assert.equal(matrix.entries.length, 30);
-  assert.equal(matrix.families.length, 14);
+  assert.deepEqual(
+    new Set(matrix.entries.map(({ animationId }) => animationId)),
+    new Set(inventory.entries.map(({ animationId }) => animationId))
+  );
   assert.equal(
     matrix.entries.every((entry) =>
       entry.semanticEndpoints.length > 0 &&

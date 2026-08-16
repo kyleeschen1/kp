@@ -2,19 +2,29 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  kpAnimationCatalogPackDeclarations,
   loadKpAnimationAsset
 } from "../src/animation/catalog-loader.ts";
 import {
   probeKpAnimationCatalogueLoads
 } from "../src/editor/animation-catalogue-load-probe.ts";
+import {
+  createKpAnimationCatalogueLoadableRegistry
+} from "../src/editor/animation-catalogue-loadable-registry.ts";
 
 test("all concrete catalogue rows round trip their route and exact lazy asset", async () => {
   const results = await probeKpAnimationCatalogueLoads();
+  const declared = createKpAnimationCatalogueLoadableRegistry();
 
-  assert.equal(results.length, 45);
-  assert.equal(new Set(results.map(({ animationId }) => animationId)).size, 45);
+  assert.deepEqual(
+    new Set(results.map(({ animationId }) => animationId)),
+    new Set(declared.map(({ animationId }) => animationId))
+  );
   assert.equal(results.every(({ status }) => status === "loaded"), true);
-  assert.equal(new Set(results.map(({ packId }) => packId)).size, 13);
+  assert.deepEqual(
+    new Set(results.map(({ packId }) => packId)),
+    new Set(kpAnimationCatalogPackDeclarations.map(({ id }) => id))
+  );
   for (const result of results) {
     assert.equal(
       result.route,
@@ -44,8 +54,13 @@ test("one load failure stays attached to its row without aborting the batch", as
   const failures = results.filter(
     (result) => result.status === "load-failure"
   );
+  const declaredIds = createKpAnimationCatalogueLoadableRegistry()
+    .map(({ animationId }) => animationId);
 
-  assert.equal(results.length, 45);
+  assert.deepEqual(
+    new Set(results.map(({ animationId }) => animationId)),
+    new Set(declaredIds)
+  );
   assert.equal(failures.length, 1);
   assert.equal(failures[0]?.animationId, failedAnimationId);
   assert.equal(failures[0]?.outcome.status, "load-failure");
@@ -53,10 +68,10 @@ test("one load failure stays attached to its row without aborting the batch", as
     failures[0]?.outcome.message,
     "Injected programming pack failure."
   );
-  assert.equal(
-    results.filter(({ status }) => status === "loaded").length,
-    44
-  );
+  assert.equal(results.every((result) =>
+    result.animationId === failedAnimationId
+      ? result.status === "load-failure"
+      : result.status === "loaded"), true);
 });
 
 test("identity drift becomes explicit load failure evidence", async () => {

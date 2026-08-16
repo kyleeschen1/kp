@@ -194,7 +194,8 @@
     {
       "id": "s20",
       "title": "Test-cluster-retirement-counts",
-      "status": "planned"
+      "summary": "Replaced redundant live count assertions with exact descriptor, declaration, inventory, manifest, authority, preservation, disposition, and loadable-set equality; retained the historical baseline number.",
+      "status": "complete"
     },
     {
       "id": "s21",
