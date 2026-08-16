@@ -10,6 +10,10 @@ import {
   type KpNativeKatexSemanticRouteRegistry,
   type KpNativeKatexSemanticMotionProjectionPolicy
 } from "./native-katex-semantic-motion-track-projection.ts";
+import {
+  createKpNativeKatexTrackProjection,
+  type KpNativeKatexTrackProjection
+} from "./native-katex-track-projection.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
@@ -27,6 +31,15 @@ import {
 } from "../semantic/log-product-transformation-compiler.ts";
 
 const LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS = 0.75;
+const BINARY_VISUAL_DISCOVERY_FAMILY_ID = "family.log-product.xy";
+
+const BINARY_VISUAL_PHASES = Object.freeze({
+  sourceApplicationWithdrawal: Object.freeze({ start: 0.06, end: 0.22 }),
+  factorTransit: Object.freeze({ start: 0.18, end: 0.62 }),
+  targetDelimiterIntroduction: Object.freeze({ start: 0.54, end: 0.7 }),
+  targetOperatorIntroduction: Object.freeze({ start: 0.64, end: 0.8 }),
+  connectorIntroduction: Object.freeze({ start: 0.8, end: 0.94 })
+});
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
   readonly clearanceInInkHeights?: number;
@@ -42,10 +55,10 @@ function fissionRoute<Route extends {
 
 /**
  * Product expansion has a semantic dependency cycle in the source setting:
- * the arguments are enclosed by shells beside the operator, yet all three
- * groups must survive into two target applications. The family adapter owns
- * how those named correspondences clear one another; the generic compositor
- * remains unaware of logarithms and receives only typed route policy.
+ * the persistent arguments are enclosed by one application that derives
+ * several successor applications. The family adapter owns how those named
+ * correspondences clear one another; the generic compositor remains unaware
+ * of logarithms and receives only typed route policy.
  */
 export function createKpLogProductSemanticMotionProjectionPolicy(
   operation: KpCompiledLogProductOperation
@@ -126,14 +139,22 @@ export function projectKpLogProductNativePaintRelations(
   if (records === undefined) {
     throw new Error("Log-product paint relations require correspondence.");
   }
+  const visuallyWithdrawSourceApplication =
+    operation.contract.family.id === BINARY_VISUAL_DISCOVERY_FAMILY_ID;
   return projectKpNativeKatexSemanticPaintRelations({
-    // Application and additive containers own meaning, not glyph paint. The
-    // unmatched plus glyph remains a native introduction governed by the same
-    // product-derivation correspondence in the semantic track projection.
+    // Application and additive containers own meaning, not glyph paint. In
+    // the binary discovery the source shell withdraws and its typed successor
+    // glyphs are introduced at their targets; their semantic derivation stays
+    // in the compiler rather than being misread as copied paint.
     groups: records
       .filter(({ id }) =>
         id !== "correspondence.log-product.application-fission" &&
-        id !== "correspondence.log-product.product-derives-sum"
+        id !== "correspondence.log-product.product-derives-sum" &&
+        (!visuallyWithdrawSourceApplication || ![
+          "correspondence.log-product.operator-fission",
+          "correspondence.log-product.open-shell-fission",
+          "correspondence.log-product.close-shell-fission"
+        ].includes(id))
       )
       .map((record) => Object.freeze({
         id: record.id,
@@ -161,10 +182,7 @@ export function createKpLogProductTransitSession(input: {
     relations: projectKpLogProductNativePaintRelations(input.operation),
     copyFanOutRouting: false,
     endpointDwellFraction: 0,
-    trackProjection: createKpNativeKatexSemanticMotionTrackProjection(
-      input.semanticMotion,
-      createKpLogProductSemanticMotionProjectionPolicy(input.operation)
-    )
+    trackProjection: createKpLogProductVisualDiscoveryTrackProjection(input)
   });
   let retired = false;
   return Object.freeze({
@@ -189,6 +207,93 @@ export function createKpLogProductTransitSession(input: {
       });
     }
   });
+}
+
+function createKpLogProductVisualDiscoveryTrackProjection(input: {
+  readonly operation: KpCompiledLogProductOperation;
+  readonly semanticMotion: KpCompiledSemanticMotionChoreography;
+  readonly sourceEndpoint: KpLogProductNativeEndpoint;
+  readonly targetEndpoint: KpLogProductNativeEndpoint;
+}): KpNativeKatexTrackProjection {
+  const semanticProjection = createKpNativeKatexSemanticMotionTrackProjection(
+    input.semanticMotion,
+    createKpLogProductSemanticMotionProjectionPolicy(input.operation)
+  );
+  if (input.operation.contract.family.id !== BINARY_VISUAL_DISCOVERY_FAMILY_ID) {
+    return semanticProjection;
+  }
+  const sourceKindByOccurrence = new Map(
+    input.sourceEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
+  );
+  const targetKindByOccurrence = new Map(
+    input.targetEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
+  );
+  return createKpNativeKatexTrackProjection({
+    id: `track-projection.log-product.binary-visual-discovery.${input.semanticMotion.id}`,
+    project(projectionInput) {
+      const semanticTracks = semanticProjection.project(projectionInput);
+      const sourceOccurrenceByAtom = new Map(
+        projectionInput.source.atoms.map(({ id, semanticEntityId }) => [id, semanticEntityId])
+      );
+      const targetOccurrenceByAtom = new Map(
+        projectionInput.target.atoms.map(({ id, semanticEntityId }) => [id, semanticEntityId])
+      );
+      return Object.freeze(semanticTracks.map((track) => {
+        const sourceKind = track.sourceAtomId === undefined
+          ? undefined
+          : sourceKindByOccurrence.get(sourceOccurrenceByAtom.get(track.sourceAtomId) ?? "");
+        const targetKind = track.targetAtomId === undefined
+          ? undefined
+          : targetKindByOccurrence.get(targetOccurrenceByAtom.get(track.targetAtomId) ?? "");
+        const window = binaryVisualWindow(track.lifecycle, sourceKind, targetKind);
+        if (window === undefined) return track;
+        const sample = (progress: number) => sampleVisualWindow(progress, window);
+        return Object.freeze({
+          ...track,
+          sampleProgress: sample,
+          ...(track.lifecycle === "introduce" || track.lifecycle === "eliminate"
+            ? { sampleOpacityProgress: sample }
+            : {})
+        });
+      }));
+    }
+  });
+}
+
+function binaryVisualWindow(
+  lifecycle: "persist" | "merge" | "split" | "introduce" | "eliminate" | "unsupported",
+  sourceKind: KpLogProductNativeEndpoint["nodes"][number]["kind"] | undefined,
+  targetKind: KpLogProductNativeEndpoint["nodes"][number]["kind"] | undefined
+): { readonly start: number; readonly end: number } | undefined {
+  if (
+    lifecycle === "eliminate" &&
+    (sourceKind === "function-operator" || sourceKind === "delimiter")
+  ) {
+    return BINARY_VISUAL_PHASES.sourceApplicationWithdrawal;
+  }
+  if (lifecycle === "persist" && targetKind === "symbol") {
+    return BINARY_VISUAL_PHASES.factorTransit;
+  }
+  if (lifecycle === "introduce" && targetKind === "delimiter") {
+    return BINARY_VISUAL_PHASES.targetDelimiterIntroduction;
+  }
+  if (lifecycle === "introduce" && targetKind === "function-operator") {
+    return BINARY_VISUAL_PHASES.targetOperatorIntroduction;
+  }
+  if (lifecycle === "introduce" && targetKind === "plus-operator") {
+    return BINARY_VISUAL_PHASES.connectorIntroduction;
+  }
+  return undefined;
+}
+
+function sampleVisualWindow(
+  progress: number,
+  window: { readonly start: number; readonly end: number }
+): number {
+  if (progress <= window.start) return 0;
+  if (progress >= window.end) return 1;
+  const local = (progress - window.start) / (window.end - window.start);
+  return local * local * (3 - 2 * local);
 }
 
 function assertTransitInput(input: {

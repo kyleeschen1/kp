@@ -713,10 +713,38 @@
       "scope": "mandatory amended s25 human checkpoint",
       "checkedAt": "2026-08-16T02:49:44.682Z",
       "notes": "Deterministic two-factor and three-factor forward/rewind contact sheet captured under tmp/codex/log-product-checkpoint; choreography remains awaiting human visual approval."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "s25b semantic preservation",
+      "checkedAt": "2026-08-16T03:50:13.293Z",
+      "notes": "12 focused log-product tests passed in 2.1 seconds; binary paint projection changed while semantic contracts and three-factor pressure remained intact."
+    },
+    {
+      "command": "playwright log-product chromium",
+      "status": "passed",
+      "scope": "s25b deterministic browser smoke",
+      "checkedAt": "2026-08-16T03:50:14.521Z",
+      "notes": "3 Chromium checks passed: binary deterministic seek, unchanged three-factor caller, and reduced-motion settlement."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "s25b canonical visual capture",
+      "checkedAt": "2026-08-16T03:50:15.476Z",
+      "notes": "Deterministic contact sheet captured under tmp/codex/log-product-checkpoint; binary source shell withdraws, factors redistribute, target punctuation and operators receive them, and connector resolves last."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25b durable workspace integrity",
+      "checkedAt": "2026-08-16T03:51:27.482Z",
+      "notes": "Workspace validates 956 nodes and 21248 events after closing the binary visual-discovery slice and its context receipt."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-25 are complete. The clean log-product caller now proves registry-driven semantic extension, native interpolation, exact seek/rewind, and leaf-pack loading; execution is paused at the mandatory visual checkpoint before migration waves A-C."
+    "summary": "Slices s01-s25b are complete. The revised binary log-product choreography is ready at the mandatory human checkpoint; architecture and migration slices remain gated until approval."
   }
 }

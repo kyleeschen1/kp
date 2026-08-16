@@ -12,19 +12,18 @@ import {
   kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
 
-test("compiled product correspondence projects complete native paint lineage", () => {
+test("binary visual proof withdraws its source application while factors persist", () => {
   const relations = projectKpLogProductNativePaintRelations(
     kpCanonicalCompiledLogProductOperation
   );
-  assert.equal(relations.length, 5);
-  assert.equal(relations.filter(({ relation }) => relation === "split").length, 3);
+  assert.equal(relations.length, 2);
+  assert.equal(relations.filter(({ relation }) => relation === "split").length, 0);
   assert.equal(relations.filter(({ relation }) => relation === "persist").length, 2);
-  assert.ok(relations.some(({ relation, sourceEntityIds, targetEntityIds }) =>
-    relation === "split" &&
-    sourceEntityIds.includes("source.log.operator") &&
-    targetEntityIds.includes("target.left.log.operator") &&
-    targetEntityIds.includes("target.right.log.operator")
-  ));
+  assert.equal(relations.some(({ sourceEntityIds }) =>
+    sourceEntityIds.includes("source.log.operator") ||
+    sourceEntityIds.includes("source.log.open") ||
+    sourceEntityIds.includes("source.log.close")
+  ), false);
   assert.ok(relations.some(({ sourceEntityIds, targetEntityIds }) =>
     sourceEntityIds.includes("source.product.x") &&
     targetEntityIds.includes("target.left.argument.x")

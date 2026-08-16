@@ -47,15 +47,8 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
     semanticMotionUnitId?: string;
     timingGroupId?: string;
   }>;
-  expect(tracks.filter(({ lifecycle }) => lifecycle === "split").length)
-    .toBeGreaterThanOrEqual(6);
-  for (const entityId of [
-    "source.log.operator",
-    "source.log.open",
-    "source.log.close",
-    "source.product.x",
-    "source.product.y"
-  ]) {
+  expect(tracks.filter(({ lifecycle }) => lifecycle === "split")).toHaveLength(0);
+  for (const entityId of ["source.product.x", "source.product.y"]) {
     const matching = tracks.filter(({ sourceEntityId }) =>
       sourceEntityId === entityId
     );
@@ -64,6 +57,32 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
       semanticMotionUnitId?.startsWith("correspondence.log-product.") &&
       timingGroupId?.startsWith("event.log-product.")
     )).toBe(true);
+  }
+  for (const entityId of [
+    "source.log.operator",
+    "source.log.open",
+    "source.log.close"
+  ]) {
+    const matching = tracks.filter(({ sourceEntityId }) =>
+      sourceEntityId === entityId
+    );
+    expect(matching.length).toBeGreaterThan(0);
+    expect(matching.every(({ lifecycle }) => lifecycle === "eliminate")).toBe(true);
+  }
+  for (const entityId of [
+    "target.left.log.operator",
+    "target.left.log.open",
+    "target.left.log.close",
+    "target.right.log.operator",
+    "target.right.log.open",
+    "target.right.log.close",
+    "target.sum.plus"
+  ]) {
+    const matching = tracks.filter(({ targetEntityId }) =>
+      targetEntityId === entityId
+    );
+    expect(matching.length).toBeGreaterThan(0);
+    expect(matching.every(({ lifecycle }) => lifecycle === "introduce")).toBe(true);
   }
 
   const snapshot = () => movingPaintSnapshot(stage);
