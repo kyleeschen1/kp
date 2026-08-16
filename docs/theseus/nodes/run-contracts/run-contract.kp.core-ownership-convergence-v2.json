@@ -110,7 +110,8 @@
     {
       "id": "s10",
       "title": "rebuild-neutral-trace-fixture",
-      "status": "planned"
+      "summary": "The addition trace fixture is now renderer- and tutorial-neutral, retains exact trace semantics, and remains available through a temporary behavior-identical tutorial facade.",
+      "status": "complete"
     },
     {
       "id": "s11",

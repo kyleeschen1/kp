@@ -168,6 +168,13 @@
       "scope": "slice s09 source fixture convergence",
       "checkedAt": "2026-08-16T21:30:18.696Z",
       "notes": "Five fixture and projection tests passed; architecture and test-project typecheck also passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-addition-trace-fixture-ownership.test.ts tests/programming-execution-trace-fixture.test.ts tests/programming-addition-exemplar-contract.test.ts",
+      "status": "passed",
+      "scope": "slice s10 neutral trace fixture",
+      "checkedAt": "2026-08-16T21:32:57.349Z",
+      "notes": "Eight fixture, behavior, and frozen exemplar tests passed; architecture and test-project typecheck passed."
     }
   ],
   "expectedLearning": [
