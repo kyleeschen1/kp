@@ -8,26 +8,14 @@ import {
   type KpEquationMotifRegistration,
   type KpEquationOperationRegistration,
   type KpEquationRecipeRegistration
-} from "./equation-extension-registry.ts";
-import { defineKpMotifSchema } from "./equation-motif-invocation.ts";
-import { kpCanonicalEquationMotionVocabulary } from "./equation-motion-vocabulary.ts";
+} from "../../domain-ir/equation-extension-registry.ts";
+import {
+  kpCanonicalFunctionWrapPhaseGrammar,
+  kpFunctionWrapMotifSchema
+} from "../function-wrap-motif.ts";
+import { kpCanonicalEquationMotionVocabulary } from "../../domain-ir/equation-motion-vocabulary.ts";
 
 const vocabulary = kpCanonicalEquationMotionVocabulary;
-
-export const kpFunctionWrapMotifSchema = defineKpMotifSchema({
-  id: vocabulary.motifs.functionWrapV1,
-  familyId: vocabulary.families.structuralWrapV1,
-  operationKinds: [vocabulary.operations.wrapFunctionV1],
-  roles: [
-    { id: "argument", cardinality: "one-or-more", materialKind: "continuant" },
-    { id: "function", cardinality: "one-or-more", materialKind: "syntax" },
-    { id: "leading-enclosure", cardinality: "one-or-more", materialKind: "enclosure" },
-    { id: "trailing-enclosure", cardinality: "one-or-more", materialKind: "enclosure" }
-  ],
-  requiredRendererCapabilityIds: [
-    vocabulary.rendererCapabilities.nativeKatexV1
-  ]
-});
 
 export const kpFunctionWrapOperationRegistration = Object.freeze({
   id: vocabulary.operations.wrapFunctionV1,
@@ -81,3 +69,7 @@ export function createKpFunctionWrapEquationExtensionPack() {
     }])
   });
 }
+
+export const kpFunctionWrapRecipePhaseIds = Object.freeze(
+  kpCanonicalFunctionWrapPhaseGrammar.map(({ id }) => id)
+);

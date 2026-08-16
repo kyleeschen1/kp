@@ -140,7 +140,8 @@
     {
       "id": "s11",
       "title": "Function-wrap-single-authority",
-      "status": "planned"
+      "summary": "Made motif.function-wrap.v1 the single executable owner of role schema, phase grammar, shared motion profile, and renderer-neutral reception plan. Existing imports are thin identity-preserving re-exports; the generated dispatcher targets the motif definition and no live choreography changed.",
+      "status": "complete"
     },
     {
       "id": "s12",

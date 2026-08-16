@@ -107,6 +107,7 @@ test("verification modes accumulate durable checks without substituting an unrel
   const contract = selectKpVerificationImpact([path], { mode: "contract" });
   assert.deepEqual(ids(contract), [
     "equation-surface-preservation",
+    "function-wrap-contract",
     "typecheck",
     "architecture",
     "function-wrap-visual"

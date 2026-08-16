@@ -1193,6 +1193,48 @@
       "scope": "slice s10 preservation",
       "checkedAt": "2026-08-16T06:20:23.760Z",
       "notes": "All 10 current semantic, renderer, clock, and sampled-frame obligations passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/function-wrap-motif-authority.test.ts tests/equation-motion-vocabulary.test.ts tests/native-katex-operation-choreography.test.ts tests/kp-function-wrap-choreography.test.ts tests/kp-function-wrap-animation-asset.test.ts tests/log-product-transit-session.test.ts",
+      "status": "passed",
+      "scope": "slice s11 function-wrap authority",
+      "checkedAt": "2026-08-16T06:27:47.543Z",
+      "notes": "24 single-authority, schema-phase closure, compatibility identity, choreography, reception, and caller tests passed"
+    },
+    {
+      "command": "npm run test:equation-extension-dispatch and npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s11 dispatch ownership",
+      "checkedAt": "2026-08-16T06:27:48.553Z",
+      "notes": "Generated motif dispatch now loads the canonical motif definition; freshness and literal import closure pass"
+    },
+    {
+      "command": "npm run test:log-product and npm run test:log-exponent",
+      "status": "passed",
+      "scope": "slice s11 caller preservation",
+      "checkedAt": "2026-08-16T06:27:49.494Z",
+      "notes": "All 13 log-product and 50 log-exponent semantic/runtime tests passed"
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "slice s11 deterministic exemplar",
+      "checkedAt": "2026-08-16T06:27:50.443Z",
+      "notes": "Eight deterministic captures completed with zero capture warnings; the optional dev-review proxy was not running"
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s11 static boundaries",
+      "checkedAt": "2026-08-16T06:27:51.362Z",
+      "notes": "Full TypeScript/Svelte/domain checks and architecture ratchets passed"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s11 preservation",
+      "checkedAt": "2026-08-16T06:27:52.293Z",
+      "notes": "All 10 existing semantic, endpoint, renderer, clock, and frame obligations passed"
     }
   ],
   "progress": {

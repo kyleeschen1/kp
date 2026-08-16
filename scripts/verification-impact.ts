@@ -170,6 +170,20 @@ const checks = {
     "Capture the function-wrap exemplar through its current catalogue route.",
     "discovery"
   ),
+  functionWrapContract: check(
+    "function-wrap-contract",
+    [
+      "node", "--disable-warning=ExperimentalWarning", "--test",
+      "tests/function-wrap-motif-authority.test.ts",
+      "tests/equation-motion-vocabulary.test.ts",
+      "tests/native-katex-operation-choreography.test.ts",
+      "tests/kp-function-wrap-choreography.test.ts",
+      "tests/kp-function-wrap-animation-asset.test.ts",
+      "tests/log-product-transit-session.test.ts"
+    ],
+    "medium",
+    "Protect single motif authority, canonical callers, and renderer-neutral function-wrap laws."
+  ),
   equationPreservation: check(
     "equation-surface-preservation",
     ["npm", "run", "test:equation-surface-preservation"],
@@ -297,6 +311,7 @@ const rules: readonly KpVerificationRule[] = [
     matches: isFunctionWrapPath,
     checks: [
       checks.equationPreservation,
+      checks.functionWrapContract,
       checks.typecheck,
       checks.architecture,
       checks.functionWrapVisual

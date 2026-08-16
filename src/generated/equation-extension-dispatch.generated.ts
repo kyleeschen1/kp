@@ -2,15 +2,15 @@
 type KpGeneratedLoader = () => Promise<unknown>;
 
 const kpEquationOperationLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "operation.wrap-function.v1": () => import("../domain-ir/function-wrap-equation-extension-pack.ts").then((module) => module.kpFunctionWrapOperationRegistration)
+  "operation.wrap-function.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapOperationRegistration)
 });
 
 const kpEquationRecipeLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "recipe.equation.function-application.v1": () => import("../domain-ir/function-wrap-equation-extension-pack.ts").then((module) => module.kpFunctionWrapRecipeRegistration)
+  "recipe.equation.function-application.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapRecipeRegistration)
 });
 
 const kpEquationMotifLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "motif.function-wrap.v1": () => import("../domain-ir/function-wrap-equation-extension-pack.ts").then((module) => module.kpFunctionWrapMotifRegistration)
+  "motif.function-wrap.v1": () => import("../animation/function-wrap-motif.ts").then((module) => module.kpFunctionWrapMotifDefinition)
 });
 
 const kpEquationRendererCapabilityLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
@@ -18,7 +18,7 @@ const kpEquationRendererCapabilityLoaders: Readonly<Record<string, KpGeneratedLo
 });
 
 const kpEquationLazyPackLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "equation-pack.function-wrap.v1": () => import("../domain-ir/function-wrap-equation-extension-pack.ts").then((module) => module.createKpFunctionWrapEquationExtensionPack)
+  "equation-pack.function-wrap.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.createKpFunctionWrapEquationExtensionPack)
 });
 
 export const kpGeneratedEquationDispatchIds = Object.freeze({

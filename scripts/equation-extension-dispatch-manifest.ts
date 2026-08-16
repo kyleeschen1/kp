@@ -1,6 +1,6 @@
 import {
   createKpFunctionWrapEquationExtensionPack
-} from "../src/domain-ir/function-wrap-equation-extension-pack.ts";
+} from "../src/animation/equation-extension-packs/function-wrap.ts";
 import {
   validateKpEquationExtensionPack
 } from "../src/domain-ir/equation-extension-pack-validator.ts";
@@ -32,20 +32,20 @@ readonly KpEquationDispatchDeclaration[] {
     ...pack.operations.ids.map((id) => declaration(
       "operation",
       id,
-      "../domain-ir/function-wrap-equation-extension-pack.ts",
+      "../animation/equation-extension-packs/function-wrap.ts",
       "kpFunctionWrapOperationRegistration"
     )),
     ...pack.recipes.ids.map((id) => declaration(
       "recipe",
       id,
-      "../domain-ir/function-wrap-equation-extension-pack.ts",
+      "../animation/equation-extension-packs/function-wrap.ts",
       "kpFunctionWrapRecipeRegistration"
     )),
     ...pack.motifs.ids.map((id) => declaration(
       "motif",
       id,
-      "../domain-ir/function-wrap-equation-extension-pack.ts",
-      "kpFunctionWrapMotifRegistration"
+      "../animation/function-wrap-motif.ts",
+      "kpFunctionWrapMotifDefinition"
     )),
     ...pack.rendererCapabilities.ids.map((id) => declaration(
       "renderer-capability",
@@ -56,7 +56,7 @@ readonly KpEquationDispatchDeclaration[] {
     declaration(
       "lazy-pack",
       pack.id,
-      "../domain-ir/function-wrap-equation-extension-pack.ts",
+      "../animation/equation-extension-packs/function-wrap.ts",
       "createKpFunctionWrapEquationExtensionPack"
     )
   ];
