@@ -14,7 +14,7 @@ export type KpEquationGenerationProofId =
   | "canonical-authority-compiled"
   | "native-endpoints-preserved"
   | "direct-seek-equivalent"
-  | "generic-fallback-absent"
+  | "visual-substitution-absent"
   | "presentation-authorship-absent";
 
 export interface KpEquationGenerationPressureFixture {
@@ -264,7 +264,7 @@ function pressureFixture(input: {
         "canonical-authority-compiled",
         "native-endpoints-preserved",
         "direct-seek-equivalent",
-        "generic-fallback-absent",
+        "visual-substitution-absent",
         "presentation-authorship-absent"
       ] as const
     },
@@ -286,7 +286,7 @@ function hasCanonicalCriteria(value: unknown): boolean {
       "canonical-authority-compiled",
       "native-endpoints-preserved",
       "direct-seek-equivalent",
-      "generic-fallback-absent",
+      "visual-substitution-absent",
       "presentation-authorship-absent"
     ]);
 }

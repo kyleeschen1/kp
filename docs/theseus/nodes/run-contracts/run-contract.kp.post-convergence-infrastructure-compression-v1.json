@@ -110,7 +110,8 @@
     {
       "id": "s12",
       "title": "compile-equation-intent-facade",
-      "status": "planned"
+      "summary": "Added the narrow compileEquationIntent facade and surface-vocabulary projection for the three pressure cases. It returns existing compiler-minted motif, semantic-motion, or operation plans; rejects unresolved entities, operation mismatches, and wrong ownership; has positive/negative type proof; and owns no timing, geometry, renderer, or fallback authority.",
+      "status": "complete"
     },
     {
       "id": "s13",

@@ -87,6 +87,8 @@ test("the repaired request reaches canonical fan-out and inverse factoring", () 
     targetSelectorIds: factoring.bundle.objects[0]!.selectors.map(({ id }) => id)
   });
 
+  assert.ok(distributionPlan);
+  assert.ok(factoringPlan);
   assert.equal(distributionPlan.planKind, "distribution");
   assert.equal(factoringPlan.planKind, "factoring");
   assert.equal(
