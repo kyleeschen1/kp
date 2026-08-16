@@ -61,7 +61,8 @@
     {
       "id": "s02",
       "title": "audit-current-bundle-tools-and-assumptions",
-      "status": "planned"
+      "summary": "The audit distinguishes static entry, declared activation, runtime request, incremental, common, exclusive, and negative closure; it also records the reproducible 75,026-byte place-value failure and the exact seams the generalized model must replace.",
+      "status": "complete"
     },
     {
       "id": "s03",

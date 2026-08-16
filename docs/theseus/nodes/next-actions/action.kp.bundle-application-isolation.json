@@ -44,6 +44,13 @@
       "scope": "slice s01 approved contract and baseline",
       "checkedAt": "2026-08-16T22:35:35.225Z",
       "notes": "Approved proposal, typed 26-slice v2 contract, protected worktree, and inherited baselines are consistent; promotion memory and Theseus validate."
+    },
+    {
+      "command": "bundle tooling unit cohort; fresh production build; repeated bundle baseline characterization",
+      "status": "passed",
+      "scope": "slice s02 tooling and assumption audit",
+      "checkedAt": "2026-08-16T22:39:39.343Z",
+      "notes": "Eleven focused tests and the 1,444-module build passed. The existing budget command reproducibly exits 1 because place value is 75,026 bytes, 26 above its ceiling; this is the recorded structural debt owned by s11-s14, not a hidden pass."
     }
   ],
   "expectedLearning": [
