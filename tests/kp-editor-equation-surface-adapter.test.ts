@@ -7,6 +7,7 @@ import { createKpEditorAnimationPlayerState } from "../src/editor/animation-play
 import {
   createKpEditorEquationStageFrame
 } from "../src/editor/equation-surface-adapter.ts";
+import { renderStage } from "../src/editor/equation-stage-markup.ts";
 
 function stageFrame(progress: number, direction: "forward" | "rewind" = "forward") {
   const catalog = createKpAnimationAssets();
@@ -96,4 +97,34 @@ test("equation stage math layout changes content without changing identity", () 
   assert.equal(inline.mathLayout, "inline");
   assert.equal(display.stageIdentityKey, inline.stageIdentityKey);
   assert.notEqual(display.contentKey, inline.contentKey);
+});
+
+test("equation stage markup projects every frame identity and semantic object", () => {
+  const frame = stageFrame(0.5);
+  const markup = renderStage(frame);
+
+  assert.match(
+    markup,
+    new RegExp(`data-kp-editor-equation-stage-identity-key="${frame.stageIdentityKey}"`)
+  );
+  assert.match(
+    markup,
+    new RegExp(`data-kp-editor-equation-content-key="${frame.contentKey}"`)
+  );
+  for (const transition of frame.projection.transitions) {
+    assert.match(
+      markup,
+      new RegExp(`data-kp-editor-equation-transition-id="${transition.id}"`)
+    );
+    for (const object of [...transition.source, ...transition.target]) {
+      assert.match(
+        markup,
+        new RegExp(`data-kp-editor-equation-object-id="${object.id}"`)
+      );
+    }
+  }
+  assert.equal(
+    markup.match(/data-kp-editor-equation-transition-id=/g)?.length,
+    frame.projection.transitions.length
+  );
 });

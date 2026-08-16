@@ -16,7 +16,7 @@ test("equation adapter ownership dependencies are complete and acyclic", () => {
     kpEquationAdapterOwnershipMap.owners.filter(
       ({ decision }) => decision === "extracted"
     ).length,
-    1
+    2
   );
 });
 
@@ -86,4 +86,17 @@ test("the extracted frame planner is DOM-free behind the adapter facade", async 
     adapterSource,
     /function create(?:RadicalSuccession|FunctionWrap|LinearRearrangement|DotProductTraversal|MatrixVectorComposition|MatrixMatrixComposition|DerivativePower)Frame\b/
   );
+});
+
+test("markup projection depends one-way on frames and not on the host", async () => {
+  const [markupSource, adapterSource] = await Promise.all([
+    readFile("src/editor/equation-stage-markup.ts", "utf8"),
+    readFile("src/editor/equation-surface-adapter.ts", "utf8")
+  ]);
+  assert.match(markupSource, /from "\.\/equation-stage-frame\.ts"/);
+  assert.doesNotMatch(markupSource, /from "\.\/equation-surface-adapter\.ts"/);
+  assert.match(adapterSource, /from "\.\/equation-stage-markup\.ts"/);
+  assert.doesNotMatch(adapterSource, /function renderStage\b/);
+  assert.doesNotMatch(adapterSource, /function annotatedLatexForStates\b/);
+  assert.doesNotMatch(adapterSource, /function bindStructuralMotionIds\b/);
 });

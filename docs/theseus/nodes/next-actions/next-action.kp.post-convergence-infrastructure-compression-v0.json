@@ -318,6 +318,41 @@
       "scope": "slice s26 equation preservation",
       "checkedAt": "2026-08-16T17:39:28.792Z",
       "notes": "Equation preservation and generated extension dispatch checks passed."
+    },
+    {
+      "command": "focused equation frame, markup, and ownership tests",
+      "status": "passed",
+      "scope": "slice s27 markup equivalence",
+      "checkedAt": "2026-08-16T17:50:50.032Z",
+      "notes": "Twenty-seven focused tests passed, including stage identity/object markup projection and one-way dependency ownership."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run verify:equation:inner",
+      "status": "passed",
+      "scope": "slice s27 repository preservation",
+      "checkedAt": "2026-08-16T17:50:51.048Z",
+      "notes": "All TypeScript/Svelte/domain checks, architecture ratchets, equation preservation, and extension dispatch passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice s27 bundle preservation",
+      "checkedAt": "2026-08-16T17:50:52.026Z",
+      "notes": "All bundle measurements remained exactly at the prior baseline."
+    },
+    {
+      "command": "npm run test:browser:equation-surface-preservation",
+      "status": "failed",
+      "scope": "advisory unrelated browser matrix",
+      "checkedAt": "2026-08-16T17:50:53.005Z",
+      "notes": "The matrix reached a pre-existing protected-transit collision in log-exponent-surface-adapter; neither extracted equation module appears in the stack."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "passed",
+      "scope": "slice s27 scoped browser preservation",
+      "checkedAt": "2026-08-16T17:50:53.951Z",
+      "notes": "Five single-worker browser tests passed for generic equation settlement, responsive stage reservation, and selected capability loading."
     }
   ]
 }

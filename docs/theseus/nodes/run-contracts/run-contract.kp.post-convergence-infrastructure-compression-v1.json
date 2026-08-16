@@ -200,7 +200,8 @@
     {
       "id": "s27",
       "title": "equation-adapter-extraction-b",
-      "status": "planned"
+      "summary": "Extracted 282 lines of KaTeX/selector markup projection and structural binding into a one-way frame-dependent owner, reduced live adapter orchestration to 3505 lines, and preserved scoped browser behavior and bundle output.",
+      "status": "complete"
     },
     {
       "id": "s28",

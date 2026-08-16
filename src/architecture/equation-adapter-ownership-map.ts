@@ -8,7 +8,6 @@ export type KpEquationAdapterOwnerId =
 
 export type KpEquationAdapterExtractionDecision =
   | "extracted"
-  | "extract-b-candidate"
   | "retain-in-host"
   | "defer-tightly-coupled";
 
@@ -86,7 +85,7 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
       }),
       owner({
         id: "stage-markup-projection",
-        sourcePath: "src/editor/equation-surface-adapter.ts",
+        sourcePath: "src/editor/equation-stage-markup.ts",
         responsibility:
           "Project a stage frame and semantic objects into KaTeX-backed stage markup, structural motion bindings, labels, and unavailable-state HTML.",
         inputs: [
@@ -111,14 +110,15 @@ export const kpEquationAdapterOwnershipMap: KpEquationAdapterOwnershipMap =
           "bindStructuralMotionIds",
           "motifLabel",
           "renderSolveXSequence",
+          "syncSolveXSequence",
           "renderUnavailable",
           "escapeHtml"
         ],
         dependsOn: ["stage-frame-planning"],
-        decision: "extract-b-candidate",
+        decision: "extracted",
         proposedPath: "src/editor/equation-stage-markup.ts",
         reason:
-          "After frame extraction this becomes a one-way frame-to-markup boundary and removes KaTeX/semantic-LaTeX imports from orchestration without changing paint behavior."
+          "This one-way frame-to-markup seam is extracted. It owns KaTeX projection, structural selector binding, and stage content replacement while live measurement and paint remain in the host."
       }),
       owner({
         id: "stage-material-lifecycle",
@@ -283,8 +283,7 @@ export function validateKpEquationAdapterOwnershipMap(
       anchors.set(anchor, entry.id);
     }
     if (
-      (entry.decision === "extracted" ||
-        entry.decision === "extract-b-candidate") &&
+      entry.decision === "extracted" &&
       entry.proposedPath === undefined
     ) {
       diagnostics.push(diagnostic(
