@@ -182,7 +182,8 @@
     {
       "id": "s24",
       "title": "closed-loader-retirement",
-      "status": "planned"
+      "summary": "Removed the final closed selected-capability loader function and routed host loading directly through the exhaustive declaration set without changing runtime semantics or chunk boundaries.",
+      "status": "complete"
     },
     {
       "id": "s25",

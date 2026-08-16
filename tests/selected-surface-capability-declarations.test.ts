@@ -94,7 +94,10 @@ test("equation capabilities no longer branch in the selected host", async () => 
     "src/editor/selected-surface-capability-host.ts",
     "utf8"
   );
-  assert.match(host, /kpEditorSelectedSurfaceCapabilityDeclarationSet\.find/);
+  assert.match(
+    host,
+    /kpEditorSelectedSurfaceCapabilityDeclarationSet\s*\.find/
+  );
   for (const capabilityId of [
     "equation-katex",
     "log-exponent",
@@ -126,4 +129,9 @@ test("non-equation capabilities no longer branch in the selected host", async ()
     ));
   }
   assert.doesNotMatch(host, /import\(\s*["']\.\/[^"']+-surface-capability\.ts["']\s*\)/);
+  assert.doesNotMatch(host, /function loadCapability\s*\(/);
+  assert.match(
+    host,
+    /kpEditorSelectedSurfaceCapabilityDeclarationSet\s*\.find\(capability\)\s*\.loadAndRegister\(registry\)/
+  );
 });

@@ -269,6 +269,13 @@
       "scope": "advisory",
       "checkedAt": "2026-08-16T16:14:29.690Z",
       "notes": "The explicit economics adapter loaded and exercised correctly, then an unrelated existing parameterized state requested an absent retained fragment E_t approximately 8.41 comma 10.41. Protected economics sources were not changed; release follow-up must reconcile retained-math generation."
+    },
+    {
+      "command": "closed capability loader retirement checks",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T16:17:39.067Z",
+      "notes": "Seventeen focused tests, full typecheck, architecture gates, bundle boundaries, and diff check passed; measured bundle values remain unchanged."
     }
   ]
 }

@@ -51,18 +51,22 @@ export function createKpEditorSelectedSurfaceCapabilityHost(input: {
     // Cache only the optional module registration already owned by both old
     // hosts. Animation pack data remains solely in catalog-loader's cache.
     let promise: Promise<void>;
-    promise = loadCapability(capability, registry).catch((cause: unknown) => {
-      // Failed imports or registration are retryable; only fulfilled
-      // capabilities become durable host state.
-      if (pending.get(capability) === promise) pending.delete(capability);
-      if (cause instanceof KpEditorSelectedSurfaceCapabilityLoadError) {
-        throw cause;
-      }
-      throw new KpEditorSelectedSurfaceCapabilityLoadError(
-        capability,
-        { cause }
-      );
-    });
+    promise = Promise.resolve()
+      .then(() => kpEditorSelectedSurfaceCapabilityDeclarationSet
+        .find(capability)
+        .loadAndRegister(registry))
+      .catch((cause: unknown) => {
+        // Failed imports or registration are retryable; only fulfilled
+        // capabilities become durable host state.
+        if (pending.get(capability) === promise) pending.delete(capability);
+        if (cause instanceof KpEditorSelectedSurfaceCapabilityLoadError) {
+          throw cause;
+        }
+        throw new KpEditorSelectedSurfaceCapabilityLoadError(
+          capability,
+          { cause }
+        );
+      });
     pending.set(capability, promise);
     return promise;
   };
@@ -86,13 +90,3 @@ export function createKpEditorSelectedSurfaceCapabilityHost(input: {
 
 export const kpEditorSelectedSurfaceCapabilityHost =
   createKpEditorSelectedSurfaceCapabilityHost();
-
-async function loadCapability(
-  capability: KpEditorSelectedSurfaceCapability,
-  registry: KpEditorAnimationSurfaceAdapterRegistry
-): Promise<void> {
-  const declaration = kpEditorSelectedSurfaceCapabilityDeclarationSet.find(
-    capability
-  );
-  await declaration.loadAndRegister(registry);
-}
