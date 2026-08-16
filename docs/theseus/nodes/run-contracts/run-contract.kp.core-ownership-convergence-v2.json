@@ -2,7 +2,8 @@
   "id": "run-contract.kp.core-ownership-convergence-v2",
   "kind": "run-contract",
   "title": "KP Core Ownership Convergence",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -194,7 +195,8 @@
     {
       "id": "s24",
       "title": "release-verify-closeout-and-promote-next-loop",
-      "status": "planned"
+      "summary": "All release gates passed; the closeout records 18-to-zero dependency exceptions, neutral ownership migrations, legacy SDK retirement, preserved behavior, measured bundle risk, and the ready but unstarted bundle/application-isolation action.",
+      "status": "complete"
     }
   ]
 }

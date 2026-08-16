@@ -1,0 +1,64 @@
+{
+  "id": "action.kp.bundle-application-isolation",
+  "kind": "next-action",
+  "title": "KP bundle and application isolation",
+  "status": "ready",
+  "domain": "architecture",
+  "summary": "Measure and reduce selected-experience closure, repair the place-value budget structurally, and isolate Internal Studio and Public Web entry graphs without weakening the framework-neutral kernel.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-core-ownership-convergence-long-loop-proposal.md",
+      "summary": "Approved ownership proposal whose follow-on section fixes this tranche's order and boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-core-ownership-convergence-closeout.md",
+      "summary": "Completed ownership evidence and measured bundle risks handed to this tranche."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "action.kp.core-ownership-convergence"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle",
+    "npm run check:animation-library-bundle-boundary",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Which exact feature packs and application owners dominate each selected experience rather than the aggregate catalogue.",
+    "Whether Internal Studio and Public Web can own isolated production entry graphs while sharing one framework-neutral KP kernel."
+  ],
+  "allowedWork": [
+    "The ordered twelve-part bundle and application isolation tranche recorded in the approved ownership proposal, after a dedicated long-loop contract is reviewed and approved."
+  ],
+  "disallowedWork": [
+    "No SvelteKit adoption, physical package extraction, visible choreography changes, curriculum expansion, or mutation of user-owned economics authoring files."
+  ],
+  "criteria": [
+    {
+      "id": "selected-experience-closure-is-measured",
+      "weight": "high"
+    },
+    {
+      "id": "place-value-has-meaningful-headroom",
+      "weight": "high"
+    },
+    {
+      "id": "studio-and-public-entry-graphs-are-isolated",
+      "weight": "high"
+    },
+    {
+      "id": "core-ownership-and-visible-behavior-are-preserved",
+      "weight": "high"
+    }
+  ]
+}

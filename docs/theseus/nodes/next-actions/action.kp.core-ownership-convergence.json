@@ -2,8 +2,9 @@
   "id": "action.kp.core-ownership-convergence",
   "kind": "next-action",
   "title": "KP-core-ownership-convergence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "Completed all 24 approved slices: the global TypeScript dependency gate has zero exceptions, neutral ownership migrations and legacy SDK retirement are closed, release gates pass, and bundle/application isolation is recorded separately as the next ready action.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -266,6 +267,13 @@
       "scope": "slice s23 diagnostics and authority projections",
       "checkedAt": "2026-08-16T22:12:33.571Z",
       "notes": "Sixty-seven focused tests passed. Architecture, test-project typecheck, and promotion-memory checks also passed."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run test:semantic-animation-convergence; npm run build:bundle; npm run check:animation-library-bundle-boundary; npm test; theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s24 release closeout",
+      "checkedAt": "2026-08-16T22:25:20.656Z",
+      "notes": "Typecheck, architecture, 249-test semantic convergence, 1,444-module production build, current bundle ceilings, 4,774-test full suite, and workspace validation passed. Dependency exceptions are zero; place-value retains only 20 gzip bytes of headroom for the recorded follow-on tranche."
     }
   ],
   "expectedLearning": [
