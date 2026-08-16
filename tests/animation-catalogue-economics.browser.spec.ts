@@ -40,7 +40,7 @@ test("economics catalogue preserves exact accessible seek, rewind, parameters, R
   );
   await expect(graphSlot).toHaveAttribute(
     "data-kp-editor-animation-adapter-id",
-    "editor-animation-surface.graph.svg"
+    "editor-animation-surface.graph.svg.economics"
   );
   await expect(graphSlot).toHaveAttribute(
     "data-kp-editor-animation-adapter-status",

@@ -4,7 +4,6 @@ import {
 } from "./animation-surface-adapter-registry.ts";
 import {
   deriveKpEditorSelectedSurfaceCapabilities,
-  kpEditorGraphSvgAnimationIds,
   type KpEditorSelectedSurfaceCapability
 } from "./selected-surface-capability.ts";
 import {
@@ -95,61 +94,5 @@ async function loadCapability(
   const declaration = kpEditorSelectedSurfaceCapabilityDeclarationSet.find(
     capability
   );
-  if (declaration.domain === "equation") {
-    await declaration.loadAndRegister(registry);
-    return;
-  }
-  if (capability === "graph-webgl-3d") {
-    const client = await import("./graph-3d-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.graph.webgl-3d",
-      client.registerKpEditorGraph3DSurfaceCapability
-    );
-    return;
-  }
-  if (capability === "programming-trace") {
-    const client = await import("./programming-surface-capability.ts");
-    registerOnce(
-      registry,
-      "editor-animation-surface.programming.trace",
-      client.registerKpEditorProgrammingSurfaceCapability
-    );
-    return;
-  }
-  if (capability === "graph-svg-economics") {
-    const client = await import("./economics-graph-svg-surface-capability.ts");
-    if (!registry.list().some(
-      ({ id }) => id === "editor-animation-surface.graph.svg.economics"
-    )) {
-      registry.register(
-        await client.createKpEconomicsGraphSvgSurfaceCapability()
-      );
-    }
-    return;
-  }
-  const client = await import("./graph-svg-surface-capability.ts");
-  await registerOnceAsync(
-    registry,
-    "editor-animation-surface.graph.svg",
-    () => client.registerKpEditorGraphSvgSurfaceCapability(
-      kpEditorGraphSvgAnimationIds
-    )
-  );
-}
-
-function registerOnce(
-  registry: KpEditorAnimationSurfaceAdapterRegistry,
-  adapterId: string,
-  register: () => void
-): void {
-  if (!registry.list().some(({ id }) => id === adapterId)) register();
-}
-
-async function registerOnceAsync(
-  registry: KpEditorAnimationSurfaceAdapterRegistry,
-  adapterId: string,
-  register: () => Promise<void | (() => void)>
-): Promise<void> {
-  if (!registry.list().some(({ id }) => id === adapterId)) await register();
+  await declaration.loadAndRegister(registry);
 }

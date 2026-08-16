@@ -176,7 +176,8 @@
     {
       "id": "s23",
       "title": "cross-domain-capability-migration",
-      "status": "planned"
+      "summary": "Migrated graph, economics, Graph3D, and programming selected capability loads to immutable declarations, removed handwritten host branches and helper duplication, and replaced two stale browser expectations with canonical projection and explicit adapter truth.",
+      "status": "complete"
     },
     {
       "id": "s24",

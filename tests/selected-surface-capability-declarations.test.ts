@@ -109,3 +109,21 @@ test("equation capabilities no longer branch in the selected host", async () => 
     ));
   }
 });
+
+test("non-equation capabilities no longer branch in the selected host", async () => {
+  const host = await readFile(
+    "src/editor/selected-surface-capability-host.ts",
+    "utf8"
+  );
+  for (const capabilityId of [
+    "graph-svg-economics",
+    "graph-svg-katex-labels",
+    "graph-webgl-3d",
+    "programming-trace"
+  ]) {
+    assert.doesNotMatch(host, new RegExp(
+      `capability\\s*===\\s*[\"']${capabilityId}[\"']`
+    ));
+  }
+  assert.doesNotMatch(host, /import\(\s*["']\.\/[^"']+-surface-capability\.ts["']\s*\)/);
+});

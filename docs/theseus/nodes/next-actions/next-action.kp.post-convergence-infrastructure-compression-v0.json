@@ -255,6 +255,20 @@
       "scope": "broad",
       "checkedAt": "2026-08-16T16:00:00.557Z",
       "notes": "Sixteen focused capability tests, full typecheck, architecture ratchets, equation-capability browser suite, bundle boundary, reachability generation, post-convergence inventory, and diff check passed."
+    },
+    {
+      "command": "cross-domain capability migration focused and browser checks",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-16T16:14:28.488Z",
+      "notes": "Eighteen focused tests, full typecheck, architecture and bundle boundaries, Graph SVG hydration, two Graph3D tests, and four programming tests passed. Canonical inventory remains current."
+    },
+    {
+      "command": "economics catalogue browser continuation",
+      "status": "failed",
+      "scope": "advisory",
+      "checkedAt": "2026-08-16T16:14:29.690Z",
+      "notes": "The explicit economics adapter loaded and exercised correctly, then an unrelated existing parameterized state requested an absent retained fragment E_t approximately 8.41 comma 10.41. Protected economics sources were not changed; release follow-up must reconcile retained-math generation."
     }
   ]
 }

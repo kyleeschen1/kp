@@ -1,6 +1,13 @@
 import { expect, test } from "@playwright/test";
 
+import {
+  createKpAnimationCatalogueProjection
+} from "../src/editor/animation-catalogue-projection.ts";
+
 const animationId = "animation.dot-projection.basic";
+const catalogueResultCount = String(
+  createKpAnimationCatalogueProjection().entries.length
+);
 
 test("canonical Svelte catalogue mounts through the shared selected-host model", async ({
   page
@@ -110,7 +117,7 @@ test("canonical Svelte catalogue mounts through the shared selected-host model",
   const originalUrl = page.url();
   await expect(results).toHaveAttribute(
     "data-kp-animation-catalogue-result-count",
-    "37"
+    catalogueResultCount
   );
   await expect(results.locator("li").first()).toHaveAttribute(
     "data-kp-animation-catalogue-row",
