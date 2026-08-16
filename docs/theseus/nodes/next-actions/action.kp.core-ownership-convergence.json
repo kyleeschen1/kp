@@ -133,6 +133,27 @@
       "scope": "slice 6 type safety",
       "checkedAt": "2026-08-16T21:16:47.653Z",
       "notes": "Ownership overrides and exception ledger compile."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/check-kp-dependency-direction.test.ts",
+      "status": "passed",
+      "scope": "slice 7 gate behavior",
+      "checkedAt": "2026-08-16T21:22:06.978Z",
+      "notes": "Three tests pass for the exact baseline, a synthetic new inversion, and a synthetic stale exception."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice 7 integrated architecture gate",
+      "checkedAt": "2026-08-16T21:22:07.942Z",
+      "notes": "Global direction gate passes over 1,559 TypeScript modules and 5,512 local references with 18 exact retiring exceptions; all prior architecture checks remain green."
+    },
+    {
+      "command": "tsc --project tsconfig.node.json --noEmit; tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice 7 type safety",
+      "checkedAt": "2026-08-16T21:22:08.964Z",
+      "notes": "Node scripts and tests compile."
     }
   ],
   "expectedLearning": [

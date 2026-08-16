@@ -92,7 +92,8 @@
     {
       "id": "s07",
       "title": "ratchet-global-architecture-gate",
-      "status": "planned"
+      "summary": "Added the global dependency-direction ratchet to check:architecture; it scans the full TypeScript graph and rejects unowned modules, unresolved locals, new inversions, ambiguous exceptions, and stale exceptions.",
+      "status": "complete"
     },
     {
       "id": "s08",
