@@ -17,6 +17,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T14:01:29.710Z",
       "notes": "Roadmap, architecture thread, and catalogue thread now agree that the 26-slice narrow-core run completed and the approved infrastructure successor is active."
+    },
+    {
+      "command": "npm run check:post-convergence-inventory; npm run test:post-convergence-inventory; npm run test:equation-surface-disposition; npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T14:07:47.521Z",
+      "notes": "Derived 45 loadable assets, 30 equation surfaces, 10 selected capability IDs, and 6 compatibility entries from canonical sources; all checks passed."
     }
   ]
 }

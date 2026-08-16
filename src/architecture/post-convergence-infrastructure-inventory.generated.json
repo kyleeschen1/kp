@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "kp.post-convergence-infrastructure-inventory.v1",
+  "catalogue": {
+    "loadableAssetCount": 45,
+    "renderTargetCounts": {
+      "diagram": 3,
+      "equation": 30,
+      "graph": 8,
+      "programming": 6
+    }
+  },
+  "equationSurfaces": {
+    "count": 30,
+    "dispositionCounts": {
+      "canonical": 3,
+      "adapter-backed": 22,
+      "static-only": 4,
+      "unsupported": 0,
+      "retirement-candidate": 1
+    }
+  },
+  "selectedCapabilities": {
+    "count": 10,
+    "ids": [
+      "equation-katex",
+      "graph-svg-economics",
+      "graph-svg-katex-labels",
+      "graph-webgl-3d",
+      "log-exponent",
+      "log-product",
+      "log-quotient",
+      "operation-evaluation",
+      "place-value-addition",
+      "programming-trace"
+    ],
+    "callerCounts": {
+      "equation-katex": 26,
+      "graph-svg-economics": 1,
+      "graph-svg-katex-labels": 6,
+      "graph-webgl-3d": 1,
+      "log-exponent": 1,
+      "log-product": 2,
+      "log-quotient": 1,
+      "operation-evaluation": 3,
+      "place-value-addition": 1,
+      "programming-trace": 5
+    }
+  },
+  "compatibility": {
+    "count": 6,
+    "statusCounts": {
+      "canonical": 1,
+      "compatibility-only": 3,
+      "retained-fixture": 2
+    },
+    "ids": [
+      "compatibility.cross-surface-animation-projections",
+      "compatibility.generated-fixture-resolution",
+      "compatibility.lightweight-transformation-ref",
+      "compatibility.saddle-animation-intent",
+      "compatibility.selector-pair-correspondence",
+      "compatibility.timeline-vocabularies"
+    ]
+  },
+  "sources": [
+    "src/editor/animation-catalogue-projection.ts",
+    "src/architecture/equation-surface-inventory.ts",
+    "src/architecture/equation-surface-disposition-ledger.ts",
+    "src/editor/selected-surface-capability.ts",
+    "src/architecture/semantic-animation-compatibility-ledger.ts"
+  ]
+}

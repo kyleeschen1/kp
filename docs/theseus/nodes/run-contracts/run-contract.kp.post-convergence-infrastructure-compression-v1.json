@@ -50,7 +50,8 @@
     {
       "id": "s02",
       "title": "derived-inventory-truth",
-      "status": "planned"
+      "summary": "Added one deterministic projection of canonical catalogue, equation disposition, selected capability, and compatibility truth; active prose now cites 45 loadable assets, 30 equation surfaces, 10 selected capabilities, and 6 compatibility entries without maintaining parallel totals.",
+      "status": "complete"
     },
     {
       "id": "s03",

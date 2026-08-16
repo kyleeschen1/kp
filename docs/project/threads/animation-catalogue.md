@@ -39,8 +39,8 @@ playhead, parameters, tuning, render ownership, viewport, build identity, and
 one bounded selected-stage screenshot. The bitmap is attached to the same
 immutable note; it does not create a parallel review history.
 
-The catalogue-wide truth pass now shows 37 meaningfully painted assets with
-zero host gaps, load failures, or iframes. The
+The earlier catalogue-wide hostability pass showed 37 meaningfully painted
+assets with zero host gaps, load failures, or iframes at that checkpoint. The
 earlier structural 33-paint count was first corrected to 32 because plot chrome
 had masked the 3D gap; the same row now genuinely paints through a bounded
 native `Graph3D` adapter over the existing lazy Three.js capability, semantic
@@ -157,6 +157,19 @@ owned by
 `../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`; the
 active successor is
 `../reviews/2026-08-16-post-convergence-infrastructure-compression-long-loop-proposal.md`.
+
+## Current Derived Inventory
+
+The deterministic projection in
+`../../../src/architecture/post-convergence-infrastructure-inventory.generated.json`
+is the count authority for current planning prose. It presently derives 45
+loadable assets, including 30 equation surfaces; those equation rows classify
+as 3 canonical, 22 adapter-backed, 4 static-only, and 1 retirement candidate.
+Ten selected capability IDs are exercised by current catalogue descriptors.
+The compatibility ledger contains six entries: one canonical projection,
+three compatibility-only paths, and two retained fixtures. These numbers are
+generated from the catalogue, equation declarations, capability selection,
+and compatibility ledger; they must not be maintained independently here.
 
 ## Accepted Scope
 
