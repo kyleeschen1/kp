@@ -91,6 +91,20 @@
       "scope": "slice 3 type safety",
       "checkedAt": "2026-08-16T21:00:55.827Z",
       "notes": "Typed ownership declarations and tests compile."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/typescript-import-extractor.test.ts tests/kp-typescript-import-graph.test.ts",
+      "status": "passed",
+      "scope": "slice 4 AST import graph",
+      "checkedAt": "2026-08-16T21:06:00.706Z",
+      "notes": "Five tests pass; the extractor resolves all current production TypeScript local imports including dynamic, type-only, index, emitted-JS, and Vite raw references."
+    },
+    {
+      "command": "tsc --project tsconfig.node.json --noEmit; tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "slice 4 type safety",
+      "checkedAt": "2026-08-16T21:06:03.806Z",
+      "notes": "Script and test TypeScript projects pass independently."
     }
   ],
   "expectedLearning": [

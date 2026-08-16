@@ -74,7 +74,8 @@
     {
       "id": "s04",
       "title": "build-typescript-ast-import-extractor",
-      "status": "planned"
+      "summary": "Added one AST-backed graph extractor with runtime/type coupling classification, precise source locations, local resolution, graph closure, and production integration coverage.",
+      "status": "complete"
     },
     {
       "id": "s05",
