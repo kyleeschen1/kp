@@ -154,6 +154,13 @@
       "scope": "slice 7 type safety",
       "checkedAt": "2026-08-16T21:22:08.964Z",
       "notes": "Node scripts and tests compile."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-execution-trace-frame.test.ts tests/programming-execution-trace-ownership.test.ts",
+      "status": "passed",
+      "scope": "slice s08 neutral trace contract and compatibility",
+      "checkedAt": "2026-08-16T21:27:13.735Z",
+      "notes": "3 tests passed; npm architecture gate and test TypeScript project also passed."
     }
   ],
   "expectedLearning": [

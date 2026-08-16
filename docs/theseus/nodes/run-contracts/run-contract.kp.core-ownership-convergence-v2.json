@@ -98,7 +98,8 @@
     {
       "id": "s08",
       "title": "move-program-trace-contracts",
-      "status": "planned"
+      "summary": "Program execution-trace contracts now live in neutral domain IR; the historical tutorial module is a behavior-identical compatibility facade for staged caller migration.",
+      "status": "complete"
     },
     {
       "id": "s09",
