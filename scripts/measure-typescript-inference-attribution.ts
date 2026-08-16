@@ -68,22 +68,22 @@ const directComparisons = await Promise.all([
   directComparison({
     fixture: "concept-manifest-inference.ts",
     barrelImport: "../../src/authoring/public-api.ts",
-    directImport: "../../../src/authoring/concept-manifest.ts"
+    directImport: "../../src/authoring/concept-manifest.ts"
   }),
   directComparison({
     fixture: "concept-room-inference.ts",
     barrelImport: "../../src/authoring/public-api.ts",
-    directImport: "../../../src/authoring/handles.ts"
+    directImport: "../../src/authoring/handles.ts"
   }),
   directComparison({
     fixture: "concept-room-state-inference.ts",
     barrelImport: "../../src/kernel/public-api.ts",
-    directImport: "../../../src/kernel/concept-room-state.ts"
+    directImport: "../../src/kernel/concept-room-state.ts"
   }),
   directComparison({
     fixture: "concept-room-theme-inference.ts",
     barrelImport: "../../src/app-adapters/public-api.ts",
-    directImport: "../../../src/app-adapters/concept-room-theme.ts"
+    directImport: "../../src/app-adapters/concept-room-theme.ts"
   })
 ]);
 
@@ -122,19 +122,19 @@ async function directComparison(input: {
 }) {
   const originalPath = join(fixtureRoot, input.fixture);
   const source = await readFile(originalPath, "utf8");
-  if (!source.includes(input.barrelImport)) {
+  if (!source.includes(input.directImport)) {
     throw new Error(
-      `${input.fixture} no longer imports ${input.barrelImport}.`
+      `${input.fixture} no longer imports its direct owner ${input.directImport}.`
     );
   }
-  const directPath = join(scratchRoot, `direct-${input.fixture}`);
+  const barrelPath = join(scratchRoot, `barrel-${input.fixture}`);
   await writeFile(
-    directPath,
-    source.replaceAll(input.barrelImport, input.directImport),
+    barrelPath,
+    source.replaceAll(input.directImport, `../${input.barrelImport}`),
     "utf8"
   );
-  const barrel = compileFiles(`barrel-${slug(input.fixture)}`, [originalPath]);
-  const direct = compileFiles(`direct-${slug(input.fixture)}`, [directPath]);
+  const barrel = compileFiles(`barrel-${slug(input.fixture)}`, [barrelPath]);
+  const direct = compileFiles(`direct-${slug(input.fixture)}`, [originalPath]);
   return Object.freeze({
     fixture: `tests/type-fixtures/${input.fixture}`,
     barrelImport: input.barrelImport,

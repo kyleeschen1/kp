@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import { typescriptInferenceBudget } from "../src/architecture/typescript-inference-budget.ts";
+
+test("inference ceilings retain measured, narrow structural headroom", () => {
+  const { measuredProject, ceilings } = typescriptInferenceBudget;
+  assert.ok(ceilings.types > measuredProject.types);
+  assert.ok(ceilings.instantiations > measuredProject.instantiations);
+  assert.ok(ceilings.types / measuredProject.types < 1.05);
+  assert.ok(ceilings.instantiations / measuredProject.instantiations < 1.08);
+  assert.equal(typescriptInferenceBudget.fixtureCount, 21);
+
+  const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
+    readonly compilerOptions?: { readonly skipLibCheck?: boolean };
+  };
+  assert.notEqual(config.compilerOptions?.skipLibCheck, true);
+});
+
+test("owner-local inference laws avoid broad public barrels", () => {
+  const imports = new Map([
+    ["concept-room-theme-inference.ts", "../../src/app-adapters/concept-room-theme.ts"],
+    ["concept-room-inference.ts", "../../src/authoring/handles.ts"],
+    ["concept-manifest-inference.ts", "../../src/authoring/concept-manifest.ts"],
+    ["concept-room-state-inference.ts", "../../src/kernel/concept-room-state.ts"]
+  ]);
+
+  for (const [fixture, owner] of imports) {
+    const source = readFileSync(`tests/type-fixtures/${fixture}`, "utf8");
+    assert.ok(source.includes(owner), `${fixture} imports its direct owner`);
+    assert.equal(source.includes("/public-api.ts"), false, fixture);
+  }
+
+  const publicContract = readFileSync(
+    "tests/type-fixtures/animation-authoring-public-api.ts",
+    "utf8"
+  );
+  assert.ok(publicContract.includes("/public-api.ts"));
+});
+

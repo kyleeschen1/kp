@@ -1,4 +1,4 @@
-import type { KpConceptRoomCommand } from "../../src/kernel/public-api.ts";
+import type { KpConceptRoomCommand } from "../../src/kernel/concept-room-state.ts";
 
 export function commandKind(command: KpConceptRoomCommand): KpConceptRoomCommand["kind"] {
   switch (command.kind) {

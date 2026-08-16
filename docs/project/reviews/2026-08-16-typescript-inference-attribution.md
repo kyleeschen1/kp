@@ -1,8 +1,28 @@
 # TypeScript Inference Attribution
 
 Date: 2026-08-16  
-Status: measured attribution for infrastructure-compression slice `s05`  
+Status: measured attribution in slice `s05`; evidence-backed closeout in `s29`
 Stable command: `npm run measure:inference-attribution`
+
+## Slice 29 Closeout
+
+The four owner-local fixtures now import their direct owners. The intentional
+animation public-surface fixture still imports `animation/public-api.ts`.
+Strictness and every inference assertion remain unchanged.
+
+| Measure | Before | After | Reduction |
+| --- | ---: | ---: | ---: |
+| Reachable files | 230 | 200 | 30 (13.0%) |
+| Reachable TypeScript lines | 31,039 | 26,303 | 4,736 (15.3%) |
+| Types | 57,283 | 52,864 | 4,419 (7.7%) |
+| Instantiations | 79,220 | 71,006 | 8,214 (10.4%) |
+
+The enforced ceilings are now 55,000 types and 75,000 instantiations. Those
+are measured compiler-work limits with roughly 4.0% and 5.6% headroom,
+respectively—not counts of source declarations. `skipLibCheck` remains off.
+The two largest direct closures remain operation-evaluation presentation and
+factoring motif binding; their generic contracts were not weakened merely to
+chase diagnostic counts.
 
 ## Answer
 

@@ -1,7 +1,7 @@
 import {
   defineConceptRoomTheme,
   linearEquationExemplarTheme
-} from "../../src/app-adapters/public-api.ts";
+} from "../../src/app-adapters/concept-room-theme.ts";
 
 type Equal<Left, Right> =
   (<Value>() => Value extends Left ? 1 : 2) extends

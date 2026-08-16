@@ -388,6 +388,27 @@
       "scope": "advisory catalogue browser matrix",
       "checkedAt": "2026-08-16T18:02:39.230Z",
       "notes": "Twelve of fourteen passed. Known unrelated failures remain: stale-pack loading expects zero players while one retained player is present, and the Review composer timed out; retained economics math also logged its existing missing-fragment advisory."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s29",
+      "checkedAt": "2026-08-16T18:15:30.779Z",
+      "notes": "21 strict fixtures pass at 52,864 types and 71,006 instantiations beneath measured ceilings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s29",
+      "checkedAt": "2026-08-16T18:15:31.838Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s29",
+      "checkedAt": "2026-08-16T18:15:32.831Z",
+      "notes": "All architecture gates pass after owner-local inference imports and command manifest additions."
     }
   ]
 }

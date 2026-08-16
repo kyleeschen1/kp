@@ -167,6 +167,8 @@
     "test:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning --test scripts/check-canonical-animation-construction-budgets.test.ts",
     "review:logs": "node --disable-warning=ExperimentalWarning scripts/dev-review-cli.ts",
     "verify:impact": "node --disable-warning=ExperimentalWarning scripts/verify-impact.ts",
+    "verify:commands": "node --disable-warning=ExperimentalWarning scripts/list-verification-commands.ts",
+    "verify:equation": "npm run verify:equation:inner",
     "verify:equation:inner": "npm run verify:impact -- --scope equation --mode discovery --run",
     "verify:equation:boundary": "npm run verify:impact -- --scope equation --mode contract --run",
     "verify:equation:promotion": "npm run verify:impact -- --scope equation --mode promotion --run",

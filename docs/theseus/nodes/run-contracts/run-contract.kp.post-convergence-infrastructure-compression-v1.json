@@ -212,7 +212,8 @@
     {
       "id": "s29",
       "title": "inference-command-closeout",
-      "status": "planned"
+      "summary": "Reduced aggregate inference closure by 4,419 types and 8,214 instantiations through four attribution-proven direct imports, established measured narrow-headroom budgets without weakened strictness, and added a discoverable verification command manifest plus retained inner alias.",
+      "status": "complete"
     },
     {
       "id": "s30",

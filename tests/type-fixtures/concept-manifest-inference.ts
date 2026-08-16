@@ -2,7 +2,7 @@ import {
   createConceptDraft,
   publishedConceptManifestSchema,
   type KpPublishedConceptManifest
-} from "../../src/authoring/public-api.ts";
+} from "../../src/authoring/concept-manifest.ts";
 
 declare const draftInput: Parameters<typeof createConceptDraft>[0];
 export const mutableDraft = createConceptDraft(draftInput);
@@ -15,4 +15,3 @@ published.checkpoints[0]!.title = "Cannot mutate";
 
 export type PublishedStatusIsLiteral = KpPublishedConceptManifest["publicationStatus"] extends
   "published" ? true : never;
-

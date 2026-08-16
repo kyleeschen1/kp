@@ -2,7 +2,7 @@ import {
   defineCapability,
   defineConceptScope,
   defineProviderRef
-} from "../../src/authoring/public-api.ts";
+} from "../../src/authoring/handles.ts";
 
 type Equal<Left, Right> =
   (<Value>() => Value extends Left ? 1 : 2) extends
@@ -66,4 +66,3 @@ export function fixtureCommandKey(command: FixtureRoomCommand): string {
     }
   }
 }
-

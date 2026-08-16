@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
+import { typescriptInferenceBudget } from "../src/architecture/typescript-inference-budget.ts";
 
 const result = runInferenceCheck();
 const output = `${result.stdout}${result.stderr}`;
@@ -13,10 +14,7 @@ if (result.status !== 0) {
   // Structural counts are deterministic; TypeScript's check-time diagnostic
   // varies with host contention, so report it without making local runs flaky.
   const checkSeconds = diagnosticSeconds(output, "Check time");
-  const ceilings = {
-    types: 50_000,
-    instantiations: 100_000
-  } as const;
+  const { ceilings } = typescriptInferenceBudget;
   const exceeded = [
     ...(types > ceilings.types ? [`types ${types} > ${ceilings.types}`] : []),
     ...(instantiations > ceilings.instantiations
