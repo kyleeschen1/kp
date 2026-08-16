@@ -146,7 +146,8 @@
     {
       "id": "s16",
       "title": "audit-html-output-contexts",
-      "status": "planned"
+      "summary": "The renderer cohort is proven compatible with one neutral HTML-text and double-quoted-attribute encoder, with byte-for-byte semantics and disallowed contexts documented.",
+      "status": "complete"
     },
     {
       "id": "s17",

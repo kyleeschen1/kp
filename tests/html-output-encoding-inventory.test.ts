@@ -27,10 +27,30 @@ test("every local generic HTML helper has one classified sink owner", async () =
   assert.equal(new Set(classified).size, classified.length);
 });
 
-test("the excess helper has one context-specific consolidation target", () => {
+test("shared text and attribute consumers have context-specific consolidation targets", () => {
   assert.deepEqual(kpHtmlEncodingConsolidations, [
     {
       sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
+      outputContexts: ["html-text", "html-attribute"],
+      boundary: "src/editor/html-output-encoding.ts"
+    },
+    {
+      sourceFile: "src/rendering/python-refactor-code-html.ts",
+      outputContexts: ["html-text", "html-attribute"],
+      boundary: "src/editor/html-output-encoding.ts"
+    },
+    {
+      sourceFile: "src/rendering/scheme-factorial-first-expansion-html.ts",
+      outputContexts: ["html-text", "html-attribute"],
+      boundary: "src/editor/html-output-encoding.ts"
+    },
+    {
+      sourceFile: "src/rendering/scheme-factorial-html.ts",
+      outputContexts: ["html-text", "html-attribute"],
+      boundary: "src/editor/html-output-encoding.ts"
+    },
+    {
+      sourceFile: "src/rendering/typescript-refactor-code-html.ts",
       outputContexts: ["html-text", "html-attribute"],
       boundary: "src/editor/html-output-encoding.ts"
     }

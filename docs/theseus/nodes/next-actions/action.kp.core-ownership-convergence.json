@@ -210,6 +210,13 @@
       "scope": "slice s15 core-to-tutorial neutrality",
       "checkedAt": "2026-08-16T21:46:17.537Z",
       "notes": "249 semantic-animation tests passed; the focused graph proof, architecture gate, and test-project typecheck also passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/html-output-encoding-inventory.test.ts tests/editor-html-output-encoding.test.ts tests/python-refactor-code-html.test.ts tests/scheme-factorial-first-expansion.test.ts tests/scheme-factorial-renderer.test.ts tests/typescript-refactor-code-html.test.ts",
+      "status": "passed",
+      "scope": "slice s16 HTML output context audit",
+      "checkedAt": "2026-08-16T21:49:12.459Z",
+      "notes": "Twenty-four encoder inventory and renderer preservation tests passed; architecture and test-project typecheck also passed."
     }
   ],
   "expectedLearning": [

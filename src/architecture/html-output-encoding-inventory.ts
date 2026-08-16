@@ -37,7 +37,7 @@ const retain = (
 /**
  * This inventory classifies sinks, not escaping algorithms. Identical-looking
  * replacement chains are not interchangeable when their HTML parser contexts
- * differ; the one consolidation candidate is therefore explicit and typed.
+ * differ; each consolidation candidate is therefore explicit and typed.
  */
 export const kpHtmlEncodingOwners = [
   retain("scripts/capture-animation-workbench.ts", "review-tool", [
@@ -235,6 +235,26 @@ export const kpHtmlEncodingOwners = [
 export const kpHtmlEncodingConsolidations = [
   {
     sourceFile: "src/editor/exact-fraction-quantity-surface-adapter.ts",
+    outputContexts: ["html-text", "html-attribute"],
+    boundary: "src/editor/html-output-encoding.ts"
+  },
+  {
+    sourceFile: "src/rendering/python-refactor-code-html.ts",
+    outputContexts: ["html-text", "html-attribute"],
+    boundary: "src/editor/html-output-encoding.ts"
+  },
+  {
+    sourceFile: "src/rendering/scheme-factorial-first-expansion-html.ts",
+    outputContexts: ["html-text", "html-attribute"],
+    boundary: "src/editor/html-output-encoding.ts"
+  },
+  {
+    sourceFile: "src/rendering/scheme-factorial-html.ts",
+    outputContexts: ["html-text", "html-attribute"],
+    boundary: "src/editor/html-output-encoding.ts"
+  },
+  {
+    sourceFile: "src/rendering/typescript-refactor-code-html.ts",
     outputContexts: ["html-text", "html-attribute"],
     boundary: "src/editor/html-output-encoding.ts"
   }
