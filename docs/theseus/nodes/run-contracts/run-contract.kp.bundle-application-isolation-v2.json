@@ -91,7 +91,8 @@
     {
       "id": "s07",
       "title": "audit-native-katex-consumers-and-ownership",
-      "status": "planned"
+      "summary": "Audited native-KaTeX costs and callers; fixed a narrow lazy feature-pack contract, operation-evaluation exemplar, preservation laws, and deferred place-value migration boundary.",
+      "status": "complete"
     },
     {
       "id": "s08",

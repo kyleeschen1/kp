@@ -93,6 +93,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T23:04:37.383Z",
       "notes": "Both runs exited zero and produced byte-identical 5,116-byte summaries; known place-value debt remains exactly 75,026 bytes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T23:07:36.880Z",
+      "notes": "Ownership audit agrees with the zero-exception dependency graph; no runtime files changed."
     }
   ],
   "expectedLearning": [
