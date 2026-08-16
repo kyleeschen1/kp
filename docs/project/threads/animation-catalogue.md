@@ -1,11 +1,12 @@
 # Animation Catalogue Thread
 
-Status: active
+Status: supporting
 Last Updated: 2026-08-16
-Current Next Action: Preserve the completed equation narrow core and the
-bounded dissolve-direct-wrap binary log-product exemplar for human review.
-Infrastructure compression is complete; do not promote the visual policy or
-pressure the three-factor and quotient callers before the binary checkpoint.
+Current Next Action: preserve the completed equation narrow core and bounded
+dissolve-direct-wrap binary log-product exemplar unchanged while the approved
+core-ownership and bundle/application-isolation tranches execute. Resume human
+review afterward; do not promote the visual policy or pressure the
+three-factor and quotient callers before that checkpoint.
 
 ## Goal
 

@@ -1,0 +1,68 @@
+{
+  "id": "action.kp.core-ownership-convergence",
+  "kind": "next-action",
+  "title": "KP-core-ownership-convergence",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-core-ownership-convergence-long-loop-proposal.md",
+      "summary": "User-approved ownership convergence plan and done contract."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.post-convergence-infrastructure-compression-v1"
+    ]
+  },
+  "affects": [
+    "run-contract.kp.core-ownership-convergence-v2",
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle",
+    "npm run check:animation-library-bundle-boundary",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run --silent check:promotion-memory; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-16T20:40:18.295Z",
+      "notes": "Approved proposal and active/supporting thread order are internally consistent; promotion memory remains aligned and the workspace validates."
+    }
+  ],
+  "expectedLearning": [
+    "Whether explicit source and runtime dependency direction can make KP core ownership mechanically enforceable without changing semantic or visual behavior.",
+    "Whether the legacy equation SDK and tutorial-owned core models can retire cleanly through exact reachability."
+  ],
+  "allowedWork": [
+    "The approved 24-slice framework-neutral ownership convergence proposal and adjacent compatibility retirement."
+  ],
+  "disallowedWork": [
+    "No visual changes, place-value work, bundle/application optimization, SvelteKit adoption, package moves, or economics authoring mutations."
+  ],
+  "criteria": [
+    {
+      "id": "framework-neutral-core",
+      "weight": "high"
+    },
+    {
+      "id": "no-visible-behavior-change",
+      "weight": "high"
+    },
+    {
+      "id": "caller-complete-compatibility-retirement",
+      "weight": "high"
+    },
+    {
+      "id": "release-and-bundle-nonregression",
+      "weight": "high"
+    }
+  ]
+}

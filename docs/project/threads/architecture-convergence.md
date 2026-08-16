@@ -1,10 +1,12 @@
 # Architecture Convergence And Product Tightening
 
-Status: supporting
+Status: active
 Last Updated: 2026-08-16
-Current Next Action: none. The post-convergence infrastructure-compression
-contract is complete. Resume architecture work only for a named measured
-blocker exposed by the next bounded visual or product caller.
+Current Next Action: execute
+`run-contract.kp.core-ownership-convergence-v2`. Enforce the framework-neutral
+core boundary, retire the named upward dependencies, and resolve the legacy
+public SDK without visual change. The next separately approved long-loop
+tranche owns bundle and application isolation.
 
 ## Goal
 
@@ -55,8 +57,10 @@ The 26-slice equation narrow-core run completed that convergence boundary. Its
 work, replaced selected-capability switch extension, separated proven module
 owners, and closed exact reachability without broad pruning. See
 `../reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
-No visual policy changed; the repository returns to the pending binary
-log-product human checkpoint.
+No visual policy changed. The user has now approved one further complexity-
+negative ownership tranche because concrete source-layer inversions and bundle
+isolation pressure remain measurable. The binary log-product human checkpoint
+is preserved behind these two architecture tranches rather than superseded.
 
 ## Ordered Work
 
@@ -94,6 +98,16 @@ log-product human checkpoint.
     boundary, exact reachability graph, declaration-driven capability loader,
     ownership extractions, inference reduction, and release evidence are
     closed in the 2026-08-16 closeout.
+11. **Core ownership convergence (current):** enforce source and runtime
+    dependency direction; migrate program-trace authority below tutorials;
+    remove the linear-solve semantic/tutorial cycle; invert renderer encoding
+    and theme dependencies; and give the legacy public SDK a caller-complete
+    disposition.
+12. **Bundle and application isolation (next approved planning order):** add
+    selected-experience closure scenarios, repair the place-value budget
+    structurally, isolate Internal Studio and Public Web entry graphs, make
+    dashboard startup data-only, and split packs/CSS/build helpers only when
+    attribution proves value.
 
 ## Accepted Scope
 

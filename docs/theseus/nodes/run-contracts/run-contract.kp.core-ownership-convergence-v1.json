@@ -1,0 +1,165 @@
+{
+  "id": "run-contract.kp.core-ownership-convergence-v1",
+  "kind": "run-contract",
+  "title": "KP Core Ownership Convergence",
+  "status": "superseded",
+  "summary": "Administrative replacement before execution: the installed bounded help omitted typed-autonomy flags, so v2 will preserve the exact approved 24 slices with run mode, slice ceiling, cadence, broad verification, and explicit stop conditions. No implementation slice ran under v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/action.kp.core-ownership-convergence.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-core-ownership-convergence-long-loop-proposal.md",
+      "summary": "User-approved 24-slice ownership tranche with an ordered bundle and application isolation deferral."
+    }
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run test:semantic-animation-convergence",
+    "npm run check:animation-library-bundle-boundary",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Architecture declarations, import analysis, and boundary gates.",
+    "Program-trace and linear-solve ownership migrations.",
+    "Context-safe HTML-output ownership and renderer theme inversion.",
+    "Legacy public SDK reachability, retirement, or isolation with adjacent tests and diagnostic metadata.",
+    "Project memory, Theseus evidence, and exact compatibility retirement adjacent to migrated callers."
+  ],
+  "disallowedWork": [
+    "Animation choreography, visual tuning, layout, new animations, or curriculum.",
+    "Place-value compositor work, catalogue pack splitting, CSS reorganization, or Vite consolidation.",
+    "Internal Studio or Public Web restructuring, SvelteKit adoption, or physical package extraction.",
+    "Mutation of current economics authoring source or generated publication."
+  ],
+  "goal": "Enforce the framework-neutral KP dependency graph, remove known upward dependencies, and resolve the legacy public equation SDK without changing visible behavior.",
+  "target": "action.kp.core-ownership-convergence",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "record-approved-proposal-and-deferral",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "capture-import-and-bundle-baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "declare-module-ownership-zones",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "build-typescript-ast-import-extractor",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "implement-dependency-direction-policies",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "freeze-exact-known-exceptions",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "ratchet-global-architecture-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "move-program-trace-contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "extract-programming-source-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "rebuild-neutral-trace-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "migrate-semantic-and-animation-trace-consumers",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "project-tutorial-trace-and-retire-shims",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "audit-linear-solve-behavior-reachability",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "remove-linear-solve-semantic-cycle",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "prove-core-to-tutorial-neutrality",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "audit-html-output-contexts",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "add-neutral-output-encoder",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "migrate-code-renderer-encoders",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "add-injected-renderer-theme-reference",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "migrate-distribution-theme-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "prove-legacy-sdk-reachability",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "retire-or-stop-on-legacy-sdk",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "update-diagnostics-and-authority-projections",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "release-verify-closeout-and-promote-next-loop",
+      "status": "planned"
+    }
+  ]
+}
