@@ -26,12 +26,16 @@ export type KpSemanticMotionRecipeCapabilityId =
   | "semantic.establish-inverse-contact"
   | "semantic.retire-inverse-pair"
   | "semantic.compact-survivors"
+  | "semantic.fission-operator-application"
+  | "semantic.release-application-shells"
+  | "semantic.settle-ordered-applications"
   | "semantic.settle-native-target";
 
 export type KpSemanticMotionRecipeId =
   | "recipe.semantic-motion.log-quotient-fusion.v1"
   | "recipe.semantic-motion.distribution-fan-out.v1"
-  | "recipe.semantic-motion.inverse-cancellation.v1";
+  | "recipe.semantic-motion.inverse-cancellation.v1"
+  | "recipe.semantic-motion.log-product-fission.v1";
 
 interface KpSemanticMotionRecipeDefinition {
   readonly id: KpSemanticMotionRecipeId;
@@ -117,6 +121,50 @@ const recipeDefinitions: readonly KpSemanticMotionRecipeDefinition[] = Object.fr
       "semantic.establish-inverse-contact",
       "semantic.retire-inverse-pair",
       "semantic.compact-survivors",
+      "semantic.settle-native-target"
+    ]
+  }),
+  recipe({
+    id: "recipe.semantic-motion.log-product-fission.v1",
+    familyId: "family.semantic-motion.homomorphic-fission",
+    operationId: "kp.semantic-motion.log-product",
+    roleIds: [
+      "source-application",
+      "target-applications",
+      "source-operator",
+      "target-operators",
+      "source-arguments",
+      "target-arguments",
+      "source-shells",
+      "target-shells",
+      "source-product",
+      "target-sum",
+      "connector"
+    ],
+    cohortVariants: {
+      "cohort.log-product.applications": "ordered-application-fission",
+      "cohort.log-product.operators": "ordered-operator-fission",
+      "cohort.log-product.arguments": "ordered-argument-continuity",
+      "cohort.log-product.shells": "ordered-shell-fission",
+      "cohort.log-product.homomorphism": "product-to-additive-structure"
+    },
+    eventKinds: [
+      "orient",
+      "clearance",
+      "departure",
+      "arrival",
+      "attachment",
+      "settlement",
+      "native-target-ready"
+    ],
+    teachingKinds: ["cause", "transmit"],
+    capabilityIds: [
+      "semantic.reserve-target-members",
+      "semantic.release-application-shells",
+      "semantic.fission-operator-application",
+      "semantic.transfer-arguments",
+      "semantic.attach-connector",
+      "semantic.settle-ordered-applications",
       "semantic.settle-native-target"
     ]
   })

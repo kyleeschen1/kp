@@ -9,6 +9,7 @@ export type KpAnimationCatalogPackId =
   | "place-value"
   | "operation-evaluation"
   | "algebra"
+  | "log-product"
   | "generated-drafts"
   | "generated-problems"
   | "graph"
@@ -23,6 +24,7 @@ export type KpAnimationCatalogPackSourcePath =
   | "src/animation/catalog-packs/place-value.ts"
   | "src/animation/catalog-packs/operation-evaluation.ts"
   | "src/animation/catalog-packs/algebra.ts"
+  | "src/animation/catalog-packs/log-product.ts"
   | "src/animation/catalog-packs/generated-drafts.ts"
   | "src/animation/catalog-packs/generated.ts"
   | "src/animation/catalog-packs/graph.ts"
@@ -117,6 +119,9 @@ export function kpAnimationCatalogPackId(
     animationId === "animation.place-value-addition.278-plus-156"
   ) return "place-value";
   if (
+    animationId === "animation.algebra.log-product.product-to-sum"
+  ) return "log-product";
+  if (
     animationId === "animation.linear-solve.solve-x" ||
     animationId.startsWith("animation.generated.linear-solve.") ||
     animationId.startsWith("animation.generated.fraction-") ||
@@ -169,6 +174,8 @@ export function kpAnimationCatalogPackSourcePath(
       return "src/animation/catalog-packs/operation-evaluation.ts";
     case "algebra":
       return "src/animation/catalog-packs/algebra.ts";
+    case "log-product":
+      return "src/animation/catalog-packs/log-product.ts";
     case "generated-drafts":
       return "src/animation/catalog-packs/generated-drafts.ts";
     case "generated-problems":
@@ -222,6 +229,9 @@ async function loadUncachedPack(
     case "algebra":
       return (await import("./catalog-packs/algebra.ts"))
         .createKpAlgebraAnimationPack();
+    case "log-product":
+      return dataOnlyPack((await import("./catalog-packs/log-product.ts"))
+        .createKpLogProductAnimationPack());
     case "generated-drafts":
       return dataOnlyPack((await import("./catalog-packs/generated-drafts.ts"))
         .createKpGeneratedDraftAnimationPack());

@@ -53,6 +53,10 @@ import {
 import {
   applyKpNativeKatexSymbolMotionContract
 } from "./native-katex-symbol-motion.ts";
+import {
+  applyKpNativeKatexTrackProjection,
+  type KpNativeKatexTrackProjection
+} from "./native-katex-track-projection.ts";
 import type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
@@ -164,6 +168,7 @@ export interface KpCanonicalNativeKatexSceneInput {
     readonly KpNativeKatexSuccessorSynthesisIntent[] | undefined;
   readonly factoring?: KpNativeKatexFactoringSceneBinding;
   readonly operationChoreography?: KpEquationOperationChoreography;
+  readonly trackProjection?: KpNativeKatexTrackProjection | undefined;
   readonly symbolMotionContract?: KpCompiledSymbolMotionContract | undefined;
   readonly fanInRouting?: boolean;
   readonly copyFanOutRouting?: boolean;
@@ -1946,9 +1951,15 @@ function prepareKpCanonicalNativeKatexScene(
     target: input.target,
     choreography: input.operationChoreography
   });
+  const projectedTracks = applyKpNativeKatexTrackProjection({
+    projection: input.trackProjection,
+    tracks: operationTracks,
+    source: input.source,
+    target: input.target
+  });
   const ownership = partitionKpNativeKatexSuccessorOwnedTracks(
     syntheses,
-    operationTracks,
+    projectedTracks,
     input.factoring
   );
   const routed = input.reorderRouting === true

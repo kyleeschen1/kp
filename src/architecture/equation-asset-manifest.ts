@@ -16,7 +16,8 @@ import {
   type KpAnimationLibraryDisplayRepresentation
 } from "../editor/animation-library-display-catalog-builder.ts";
 import {
-  createKpEquationSurfaceAuthorityGraph
+  compileKpEquationSurfaceAuthorityGraph,
+  kpEquationSurfaceAuthorityNodes
 } from "./equation-surface-authority-graph.ts";
 import {
   compileKpEquationSurfaceDispositionLedger,
@@ -60,6 +61,7 @@ export interface KpEquationAssetManifestEntry {
       | "equation-katex"
       | "log-exponent"
       | "log-quotient"
+      | "log-product"
       | "operation-evaluation";
     readonly familyId: KpEquationSurfaceFamilyId;
     readonly disposition: KpEquationSurfaceDisposition;
@@ -122,13 +124,23 @@ export function createKpEquationAssetManifest(input: {
     createKpSourceAnimationLibraryDisplayCatalog();
   const catalogue = createKpAnimationCatalogueProjection({ display });
   const inventory = compileKpEquationSurfaceInventory({ catalogue, display });
+  const assets = createKpAnimationAssets();
+  // Generators must derive every downstream ledger from the same in-memory
+  // display snapshot. Falling back to generated display data here creates a
+  // circular bootstrap whenever a new equation surface is added.
+  const authority = compileKpEquationSurfaceAuthorityGraph({
+    inventory,
+    assets,
+    nodes: kpEquationSurfaceAuthorityNodes
+  });
   const preservation = compileKpEquationSurfacePreservationMatrix({
     inventory,
-    assets: createKpAnimationAssets()
+    assets,
+    authority
   });
   const disposition = compileKpEquationSurfaceDispositionLedger({
     inventory,
-    authority: createKpEquationSurfaceAuthorityGraph(),
+    authority,
     preservation
   });
   return compileKpEquationAssetManifest({

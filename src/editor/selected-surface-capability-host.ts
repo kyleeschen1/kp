@@ -116,6 +116,15 @@ async function loadCapability(
     );
     return;
   }
+  if (capability === "log-product") {
+    const client = await import("./log-product-surface-capability.ts");
+    registerOnce(
+      registry,
+      "editor-animation-surface.log-product.canonical-native-katex",
+      () => client.registerKpEditorLogProductSurfaceCapability(registry)
+    );
+    return;
+  }
   if (capability === "exact-fraction-quantity") {
     const client = await import("./exact-fraction-quantity-surface-capability.ts");
     registerOnce(

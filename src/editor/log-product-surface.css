@@ -1,0 +1,38 @@
+.kp-log-product-stage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: clamp(18rem, 48vh, 30rem);
+  place-items: center;
+  overflow: hidden;
+  color: var(--kp-equation-foreground, currentColor);
+  background: transparent;
+  isolation: isolate;
+  text-transform: none;
+}
+
+.kp-log-product-stage__endpoint,
+.kp-log-product-stage__material-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+
+.kp-log-product-stage__endpoint .katex-display {
+  margin: 0;
+}
+
+.kp-log-product-stage__material-layer {
+  pointer-events: none;
+}
+
+.kp-log-product-stage__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -82,6 +82,7 @@
     "test:log-product": "node --disable-warning=ExperimentalWarning --test tests/log-product-*.test.ts",
     "test:log-exponent": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-*.test.ts",
     "visual:log-quotient": "node --disable-warning=ExperimentalWarning scripts/capture-log-quotient.ts",
+    "visual:log-product": "node --disable-warning=ExperimentalWarning scripts/capture-log-product.ts",
     "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",
     "visual:cancellation-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-cancellation-pressure.ts",
     "test:log-quotient": "node --disable-warning=ExperimentalWarning --test tests/log-quotient-*.test.ts tests/selected-surface-capability.test.ts",

@@ -22,6 +22,7 @@ export type KpEquationSurfaceAuthorityPathClass =
   | "generic-semantic-equation"
   | "log-exponent-specialized"
   | "log-quotient-specialized"
+  | "log-product-specialized"
   | "operation-evaluation-specialized";
 
 export interface KpEquationSurfaceAuthorityNode {
@@ -104,6 +105,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/semantic/log-quotient-transformation-compiler.ts",
     "export function compileKpLogQuotientOperation",
     "Log quotient uses its dedicated typed semantic compiler."),
+  node("compiler.log-product-operation", "compiler", "local",
+    "src/semantic/log-product-transformation-compiler.ts",
+    "export function compileKpLogProductOperation",
+    "Log product uses its dedicated typed semantic compiler."),
   node("motif.generic-transition", "motif", "compatibility",
     "src/editor/equation-transition-motifs.ts",
     "export function createKpEditorEquationTransitionMotifFrame",
@@ -120,6 +125,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-quotient-homomorphic-fusion.ts",
     "export function createKpCanonicalLogQuotientHomomorphicFusionChoreography",
     "Log quotient owns its current homomorphic fusion choreography locally."),
+  node("motif.log-product-semantic-projection", "motif", "shared",
+    "src/rendering/native-katex-semantic-motion-track-projection.ts",
+    "export function createKpNativeKatexSemanticMotionTrackProjection",
+    "Log product projects compiled semantic tracks without a family switch."),
   node("timing.generic-phase-easing", "local-timing", "local",
     "src/editor/equation-surface-adapter.ts",
     "const easedProgress = localProgress * localProgress",
@@ -132,10 +141,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent timeline maps shared progress to operation-local time."),
-  node("timing.distribution-presentation-profile", "local-timing", "local",
-    "src/animation/distribution-motion-profile.ts",
-    "export const kpLessonCanonicalDistributionMotionProfile",
-    "Distribution retains its reviewed optical pacing after semantic compilation."),
+  node("timing.copy-fan-out-presentation-profile", "local-timing", "canonical",
+    "src/animation/copy-fan-out-motion-profile.ts",
+    "export const kpCanonicalNativeKatexCopyFanOutMotionProfile",
+    "The shared native copy/fan-out sampler owns reviewed optical pacing without importing a symbolic family."),
   node("timing.cancellation-counter-orbit", "local-timing", "local",
     "src/animation/counter-orbit-cancellation-timing.ts",
     "export const kpCounterOrbitCancellationTiming",
@@ -160,6 +169,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/log-quotient-transit-session.ts",
     "export function createKpLogQuotientTransitSession",
     "Log quotient owns a dedicated native endpoint transit session."),
+  node("renderer.log-product-transit", "renderer-inference", "local",
+    "src/rendering/log-product-transit-session.ts",
+    "export function createKpLogProductTransitSession",
+    "Log product owns a dedicated native endpoint transit session."),
   node("fallback.generic-whole-equation", "fallback", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "function applyLayerMotion(",
@@ -176,6 +189,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/log-quotient-surface-adapter.ts",
     "session.stage.dataset[\"kpLogQuotientStage\"] = \"failed\"",
     "Log-quotient preparation records an explicit failed stage."),
+  node("fallback.log-product-failed-stage", "fallback", "canonical",
+    "src/editor/log-product-surface-adapter.ts",
+    "session.stage.dataset[\"kpLogProductStage\"] = \"failed\"",
+    "Log-product preparation records an explicit failed stage."),
   node("sampler.generic-semantic-token", "direct-sampler", "compatibility",
     "src/editor/semantic-equation-player-adapter.ts",
     "export function createKpEditorSemanticEquationTokenFrame",
@@ -380,6 +397,22 @@ KpEquationSurfaceAuthorityRow {
       samplers: ["sampler.semantic-motion-choreography"]
     });
   }
+  if (pathClass === "log-product-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: [
+        "compiler.log-product-operation",
+        "compiler.semantic-motion-choreography"
+      ],
+      motif: ["motif.log-product-semantic-projection"],
+      timing: ["timing.semantic-motion-recipe-schedule"],
+      renderer: ["renderer.log-product-transit"],
+      fallback: ["fallback.log-product-failed-stage"],
+      samplers: ["sampler.semantic-motion-choreography"]
+    });
+  }
 
   let semantic = 0;
   for (const transformation of asset.transformations) {
@@ -415,7 +448,7 @@ KpEquationSurfaceAuthorityRow {
       ...(isDistributionPressure
         ? [
             "timing.semantic-motion-recipe-schedule",
-            "timing.distribution-presentation-profile"
+            "timing.copy-fan-out-presentation-profile"
           ]
         : []),
       ...(isCancellationPressure
@@ -486,6 +519,9 @@ function authorityPathClass(
     animationId ===
       "animation.algebra.log-quotient.difference-to-quotient"
   ) return "log-quotient-specialized";
+  if (animationId === "animation.algebra.log-product.product-to-sum") {
+    return "log-product-specialized";
+  }
   return "generic-semantic-equation";
 }
 

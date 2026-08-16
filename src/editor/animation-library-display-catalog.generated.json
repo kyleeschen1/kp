@@ -717,6 +717,33 @@
     ]
   },
   {
+    "animationId": "animation.algebra.log-product.product-to-sum",
+    "title": "Expand a logarithm of a product",
+    "summary": "A typed native-KaTeX exemplar for logarithm application fission.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "katex",
+      "logarithm",
+      "product"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.log-product.product-to-sum",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.log-product.product-to-sum",
+        "label": "Expand a logarithm of a product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.log-product.product-to-sum",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.sample.fourier-transform-pair",
     "title": "Fourier transform pair",
     "summary": "Fourier transform pair",

@@ -5,6 +5,7 @@ import type { KpSemanticTransformation } from
   "../semantic/asset-transformation.ts";
 import {
   createKpEquationSurfaceAuthorityGraph,
+  type KpEquationSurfaceAuthorityGraph,
   type KpEquationSurfaceAuthorityPathClass
 } from "./equation-surface-authority-graph.ts";
 import {
@@ -115,7 +116,9 @@ const familyEvidence = Object.freeze({
   inequality: evidence("npm run test:operation-presentation-plans"),
   "linear-algebra": evidence("npm run test:matrix-linear-map"),
   "linear-solve": evidence("npm run test:semantic-animation-convergence"),
-  logarithm: evidence("npm run test:log-exponent && npm run test:log-quotient"),
+  logarithm: evidence(
+    "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
+  ),
   "operation-evaluation": evidence("npm run test:operation-presentation-plans"),
   substitution: evidence("npm run test:operation-presentation-plans"),
   "transform-pair": evidence("npm run test:equation-surface-preservation")
@@ -135,11 +138,12 @@ KpEquationSurfacePreservationMatrix {
 export function compileKpEquationSurfacePreservationMatrix(input: {
   readonly inventory: KpEquationSurfaceInventory;
   readonly assets: readonly KpAnimationAsset[];
+  readonly authority?: KpEquationSurfaceAuthorityGraph | undefined;
 }): KpEquationSurfacePreservationMatrix {
   const diagnostics: string[] = [];
   const assetById = uniqueAssets(input.assets, diagnostics);
   const authorityById = new Map(
-    createKpEquationSurfaceAuthorityGraph().rows.map((row) => [
+    (input.authority ?? createKpEquationSurfaceAuthorityGraph()).rows.map((row) => [
       row.animationId,
       row
     ])

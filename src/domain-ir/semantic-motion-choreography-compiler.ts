@@ -236,6 +236,30 @@ function schedulePolicy(recipeId: KpSemanticMotionRecipeId): RecipeSchedulePolic
           "native-target-ready": "semantic.settle-native-target"
         })
       });
+    case "recipe.semantic-motion.log-product-fission.v1":
+      return Object.freeze({
+        eventWeights: eventWeights({
+          orient: 0.7,
+          clearance: 1.6,
+          departure: 0.8,
+          arrival: 1.6,
+          attachment: 0.7,
+          settlement: 0.8
+        }),
+        interpolation: "smoothstep" as const,
+        eventCapabilities: Object.freeze({
+          orient: "semantic.reserve-target-members",
+          clearance: "semantic.release-application-shells",
+          departure: "semantic.fission-operator-application",
+          arrival: "semantic.transfer-arguments",
+          contact: undefined,
+          recognition: undefined,
+          retirement: undefined,
+          attachment: "semantic.attach-connector",
+          settlement: "semantic.settle-ordered-applications",
+          "native-target-ready": "semantic.settle-native-target"
+        })
+      });
   }
 }
 

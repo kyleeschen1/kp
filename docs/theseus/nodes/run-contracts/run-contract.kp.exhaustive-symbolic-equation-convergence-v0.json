@@ -194,7 +194,8 @@
     {
       "id": "s25",
       "title": "Log product executable human checkpoint",
-      "status": "planned"
+      "summary": "Built the mandatory log-product checkpoint with typed semantic choreography, data-driven entity route registries, native KaTeX interpolation, exact seek and rewind, reduced motion, collision certification, and an independently lazy data-only pack.",
+      "status": "complete"
     },
     {
       "id": "s26",

@@ -80,6 +80,7 @@ test("all declared pack boundaries are exercised by editor metadata", () => {
     "physics",
     "place-value",
     "algebra",
+    "log-product",
     "generated-drafts",
     "generated-problems",
     "graph",
@@ -106,6 +107,22 @@ test("catalog loader retains literal dynamic-import boundaries", async () => {
   assert.doesNotMatch(source, /from "\.\/catalog\.ts"/);
   assert.equal(
     [...source.matchAll(/import\("\.\/catalog-packs\/[^"]+\.ts"\)/g)].length,
-    12
+    13
   );
+});
+
+test("log product remains a leaf pack outside the algebra family chunk", async () => {
+  const [logProductPack, algebraPack] = await Promise.all([
+    readFile(new URL(
+      "../src/animation/catalog-packs/log-product.ts",
+      import.meta.url
+    ), "utf8"),
+    readFile(new URL(
+      "../src/animation/catalog-packs/algebra.ts",
+      import.meta.url
+    ), "utf8")
+  ]);
+
+  assert.doesNotMatch(logProductPack, /catalog-packs\/algebra|from "\.\/algebra/u);
+  assert.doesNotMatch(algebraPack, /log-product-adapter|log-product\.ts/u);
 });

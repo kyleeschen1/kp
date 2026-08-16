@@ -622,10 +622,53 @@
       "scope": "s24 durable workspace integrity",
       "checkedAt": "2026-08-16T00:39:47.894Z",
       "notes": "Workspace validates 956 nodes and 21212 events after the amended architecture slice."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "semantic and native log-product exemplar",
+      "checkedAt": "2026-08-16T01:52:02.155Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-product-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "chromium seek rewind reduced motion and native endpoints",
+      "checkedAt": "2026-08-16T01:52:03.195Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typescript svelte and domain type closure",
+      "checkedAt": "2026-08-16T01:52:04.144Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and compiler authority boundaries",
+      "checkedAt": "2026-08-16T01:52:05.087Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "lazy catalogue bundle budgets and import boundaries",
+      "checkedAt": "2026-08-16T01:52:06.045Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "mandatory deterministic human review contact sheet",
+      "checkedAt": "2026-08-16T01:52:07.025Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 durable workspace integrity",
+      "checkedAt": "2026-08-16T01:52:53.315Z",
+      "notes": "Workspace validates 956 nodes and 21225 events after recording the mandatory checkpoint."
     }
   ],
   "progress": {
-    "state": "complete",
-    "summary": "Slice 24 now owns exact log-product semantics and a compiler-ready explicit-static outcome. The closed visitor was replaced by a typed immutable protocol kernel plus isolated log-family structure and projection packs, preserving tree-shakable explicit imports."
+    "state": "partial",
+    "summary": "Slices 1-25 are complete. The clean log-product caller now proves registry-driven semantic extension, native interpolation, exact seek/rewind, and leaf-pack loading; execution is paused at the mandatory visual checkpoint before migration waves A-C."
   }
 }

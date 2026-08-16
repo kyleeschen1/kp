@@ -52,7 +52,7 @@
         "semanticEndpointFingerprints": [
           "fnv1a32-97edcd8c",
           "fnv1a32-74335103",
-          "fnv1a32-2aec2770",
+          "fnv1a32-18f79694",
           "fnv1a32-f8a56459",
           "fnv1a32-46ce8793",
           "fnv1a32-646a3b52",
@@ -82,6 +82,85 @@
             "label": "Solve an exponential equation with logarithms",
             "kind": "editor",
             "href": "/?animation=editor-animation.animation.algebra.log-exponent.solve-two-power-x",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.log-product.product-to-sum",
+      "title": "Expand a logarithm of a product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.log-product.product-to-sum",
+        "transformationIds": [
+          "transformation.log-product.product-to-sum"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A typed native-KaTeX exemplar for logarithm application fission.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "katex",
+          "logarithm",
+          "product"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "log-product",
+        "familyId": "logarithm",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "log-product",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/log-product.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.log-product.product-to-sum",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-f87192df",
+          "fnv1a32-411915f6",
+          "fnv1a32-3ef162f9"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.log-product.product-to-sum",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.log-product.product-to-sum",
+            "label": "Expand a logarithm of a product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.log-product.product-to-sum",
             "role": "canonical-host"
           }
         ]
@@ -134,8 +213,8 @@
         },
         "semanticEndpointFingerprints": [
           "fnv1a32-0bf8bba2",
-          "fnv1a32-071062dd",
-          "fnv1a32-7edcb931"
+          "fnv1a32-9f685b3f",
+          "fnv1a32-fb7da095"
         ],
         "nativeSettlement": {
           "slotKind": "equation",

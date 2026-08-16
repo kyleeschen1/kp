@@ -19,7 +19,7 @@ test("preservation matrix freezes every current equation endpoint", () => {
   const matrix = createKpEquationSurfacePreservationMatrix();
 
   assert.deepEqual(generatedMatrix, matrix);
-  assert.equal(matrix.entries.length, 28);
+  assert.equal(matrix.entries.length, 29);
   assert.equal(matrix.families.length, 14);
   assert.equal(
     matrix.entries.every((entry) =>

@@ -13,7 +13,7 @@
         "semanticEndpointFingerprints": [
           "fnv1a32-97edcd8c",
           "fnv1a32-74335103",
-          "fnv1a32-2aec2770",
+          "fnv1a32-18f79694",
           "fnv1a32-f8a56459",
           "fnv1a32-46ce8793",
           "fnv1a32-646a3b52",
@@ -34,7 +34,7 @@
           "src/editor/log-exponent-surface-adapter.ts"
         ],
         "verificationCommands": [
-          "npm run test:log-exponent && npm run test:log-quotient",
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
           "npm run visual:equation-surface-preservation",
           "npm run test:browser:equation-surface-preservation"
         ]
@@ -72,7 +72,79 @@
           {
             "id": "family.logarithm",
             "kind": "family-verification",
-            "command": "npm run test:log-exponent && npm run test:log-quotient"
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.log-product.product-to-sum",
+      "familyId": "logarithm",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-f87192df",
+          "fnv1a32-411915f6",
+          "fnv1a32-3ef162f9"
+        ],
+        "route": "/?artifact=animation.algebra.log-product.product-to-sum",
+        "adapterId": "editor-animation-surface.log-product.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.log-product.product-to-sum",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "log-product-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/log-product.ts",
+          "src/animation/catalog.ts",
+          "src/editor/log-product-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.log-product.product-to-sum",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.log-product.product-to-sum",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/log-product.ts"
+          },
+          {
+            "id": "route.animation.algebra.log-product.product-to-sum",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/log-product-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.log-product.product-to-sum",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.log-product.product-to-sum",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.logarithm",
+            "kind": "family-verification",
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
           }
         ],
         "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
@@ -89,8 +161,8 @@
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
           "fnv1a32-0bf8bba2",
-          "fnv1a32-071062dd",
-          "fnv1a32-7edcb931"
+          "fnv1a32-9f685b3f",
+          "fnv1a32-fb7da095"
         ],
         "route": "/?artifact=animation.algebra.log-quotient.difference-to-quotient",
         "adapterId": "editor-animation-surface.log-quotient.canonical-native-katex",
@@ -107,7 +179,7 @@
           "src/editor/log-quotient-surface-adapter.ts"
         ],
         "verificationCommands": [
-          "npm run test:log-exponent && npm run test:log-quotient",
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
           "npm run visual:equation-surface-preservation",
           "npm run test:browser:equation-surface-preservation"
         ]
@@ -145,7 +217,7 @@
           {
             "id": "family.logarithm",
             "kind": "family-verification",
-            "command": "npm run test:log-exponent && npm run test:log-quotient"
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
           }
         ],
         "retirementCondition": "zero-production-and-conformance-callers-after-replacement"

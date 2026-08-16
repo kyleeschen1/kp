@@ -1,7 +1,7 @@
 import {
-  kpLessonCanonicalDistributionMotionProfile,
-  sampleKpLessonCanonicalDistributionMotion
-} from "../animation/distribution-motion-profile.ts";
+  kpCanonicalNativeKatexCopyFanOutMotionProfile,
+  sampleKpCanonicalNativeKatexCopyFanOutMotion
+} from "../animation/copy-fan-out-motion-profile.ts";
 import {
   applyKpEquationMotionPathOffset,
   sampleKpEquationMotionTrackOpacityProgress,
@@ -27,7 +27,7 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
   paintProgress: number,
   opacityProgress?: number
 ] {
-  const motion = sampleKpLessonCanonicalDistributionMotion(input.progress);
+  const motion = sampleKpCanonicalNativeKatexCopyFanOutMotion(input.progress);
   if (input.track.lifecycle === "persist") {
     return [
       sampleKpEquationMotionTrackRect(
@@ -95,7 +95,7 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
         rectCenterY(leader.endRect),
         motion.leaderProgress
       ) +
-      kpLessonCanonicalDistributionMotionProfile.leader.arcPx *
+      kpCanonicalNativeKatexCopyFanOutMotionProfile.leader.arcPx *
         Math.sin(Math.PI * motion.leaderProgress)
   };
   const isLeader = input.track.id === leader.id;
@@ -118,7 +118,7 @@ export function sampleKpNativeKatexCopyFanOutTrack(input: {
             rectCenterY(input.track.endRect),
             motion.followerProgress
           ) +
-          kpLessonCanonicalDistributionMotionProfile.follower.arcPx *
+          kpCanonicalNativeKatexCopyFanOutMotionProfile.follower.arcPx *
             Math.sin(Math.PI * motion.followerProgress)
       };
   const leaderWidth = interpolate(

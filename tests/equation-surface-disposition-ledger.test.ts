@@ -27,13 +27,13 @@ test("disposition ledger classifies every equation row exactly once", () => {
   const inventory = createKpEquationSurfaceInventory();
 
   assert.deepEqual(generatedLedger, ledger);
-  assert.equal(ledger.entries.length, 28);
+  assert.equal(ledger.entries.length, 29);
   assert.deepEqual(
     new Set(ledger.entries.map(({ animationId }) => animationId)),
     new Set(inventory.entries.map(({ animationId }) => animationId))
   );
   assert.equal(new Set(ledger.entries.map(({ animationId }) => animationId)).size,
-    28);
+    29);
   assert.equal(ledger.entries.every(({ disposition, migrationWave }) =>
     kpEquationSurfaceDispositionValues.includes(disposition) &&
     kpEquationSurfaceMigrationWaveValues.includes(migrationWave)), true);
@@ -52,7 +52,7 @@ test("initial dispositions and waves preserve intentional boundaries", () => {
     retirementCandidate: count("retirement-candidate")
   }, {
     canonical: 3,
-    adapterBacked: 20,
+    adapterBacked: 21,
     staticOnly: 4,
     unsupported: 0,
     retirementCandidate: 1
@@ -63,7 +63,7 @@ test("initial dispositions and waves preserve intentional boundaries", () => {
   )), {
     "wave-a-operation-plan": 9,
     "wave-b-structural-native-math": 9,
-    "wave-c-generated-bespoke-diagnostic-static": 10
+    "wave-c-generated-bespoke-diagnostic-static": 11
   });
 });
 

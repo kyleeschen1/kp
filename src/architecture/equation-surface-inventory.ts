@@ -26,14 +26,15 @@ export const kpHistoricalEquationSurfaceBaseline = Object.freeze({
   capturedOn: "2026-08-01"
 } as const);
 
-// These are historical deltas, not a second asset registry. Keeping the four
+// These are historical deltas, not a second asset registry. Keeping the
 // additions explicit makes the formerly reported 24-surface snapshot
 // auditable while the current inventory remains derived from the catalogue.
 export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.generated.linear-solve.linear-68c15d41",
   "animation.generated.cancellation.additive-inverses",
   "animation.algebra.log-exponent.solve-two-power-x",
-  "animation.algebra.log-quotient.difference-to-quotient"
+  "animation.algebra.log-quotient.difference-to-quotient",
+  "animation.algebra.log-product.product-to-sum"
 ] as const);
 
 export interface KpEquationSurfaceInventory {
@@ -70,6 +71,7 @@ export interface KpEquationSurfaceInventoryEntry {
       | "equation-katex"
       | "log-exponent"
       | "log-quotient"
+      | "log-product"
       | "operation-evaluation";
     readonly rendererAdapterId: string;
     readonly rendererSourcePath: string;
@@ -295,6 +297,14 @@ Pick<
       rendererAdapterId:
         "editor-animation-surface.log-quotient.canonical-native-katex",
       rendererSourcePath: "src/editor/log-quotient-surface-adapter.ts"
+    });
+  }
+  if (animationId === "animation.algebra.log-product.product-to-sum") {
+    return Object.freeze({
+      selectedCapabilityId: "log-product" as const,
+      rendererAdapterId:
+        "editor-animation-surface.log-product.canonical-native-katex",
+      rendererSourcePath: "src/editor/log-product-surface-adapter.ts"
     });
   }
   return Object.freeze({

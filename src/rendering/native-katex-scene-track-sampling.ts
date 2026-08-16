@@ -22,15 +22,18 @@ export function sampleKpNativeKatexSceneTrackFrames(
   const bounded = Math.max(0, Math.min(1, progress));
   const eased = smoothstep(bounded);
   return Object.freeze(tracks.map((sceneTrack) => {
+    // A family-neutral topology sampler may shape local fan-out motion, but
+    // the compiled semantic track remains the authority for when it runs.
+    const semanticProgress = sceneTrack.sampleProgress?.(bounded);
     const copySample = copyFanOut
       ? sampleKpNativeKatexCopyFanOutTrack({
           track: sceneTrack,
           tracks,
-          progress: bounded
+          progress: semanticProgress ?? bounded
         })
       : undefined;
     const paintProgress = copySample?.[1] ??
-      sceneTrack.sampleProgress?.(bounded) ??
+      semanticProgress ??
       eased;
     const rect = Object.freeze(
       copySample?.[0] ??
@@ -71,7 +74,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
               sceneTrack.verifiedOperationCohortId
           }),
       opacity:
-        sceneTrack.startOpacity +
+        (sceneTrack.startOpacity +
         (sceneTrack.endOpacity - sceneTrack.startOpacity) *
         (
           copySample?.[2] ??
@@ -81,7 +84,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
               : undefined
           ) ??
           sampleKpEquationMotionTrackOpacityProgress(sceneTrack, bounded)
-        )
+        )) * (sceneTrack.samplePaintPresence?.(bounded) ?? 1)
     });
   }));
 }

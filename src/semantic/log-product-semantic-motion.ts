@@ -161,20 +161,31 @@ export const kpCanonicalLogProductSemanticMotionStructure = Object.freeze({
   ])
 } satisfies KpSemanticMotionOperationStructureContract);
 
-export const kpCanonicalLogProductSemanticMotionPrecedence = precedenceChain([
-  event("event.log-product.orient", "orient", ["cohort.log-product.applications"]),
-  event("event.log-product.depart", "departure", [
-    "cohort.log-product.operators",
-    "cohort.log-product.arguments",
-    "cohort.log-product.shells",
-    "cohort.log-product.homomorphism"
-  ]),
+export const kpCanonicalLogProductSemanticMotionPrecedence = coordinatedFissionPrecedence([
+  event(
+    "event.log-product.orient",
+    "orient",
+    ["cohort.log-product.applications"],
+    ["correspondence.log-product.application-fission"]
+  ),
   event("event.log-product.arrive", "arrival", [
-    "cohort.log-product.applications",
-    "cohort.log-product.operators",
-    "cohort.log-product.arguments",
-    "cohort.log-product.shells"
+    "cohort.log-product.arguments"
+  ], [
+    "correspondence.log-product.x-argument-continuity",
+    "correspondence.log-product.y-argument-continuity"
   ]),
+  event(
+    "event.log-product.release-shells",
+    "clearance",
+    ["cohort.log-product.shells"],
+    [
+      "correspondence.log-product.open-shell-fission",
+      "correspondence.log-product.close-shell-fission"
+    ]
+  ),
+  event("event.log-product.depart", "departure", [
+    "cohort.log-product.operators"
+  ], ["correspondence.log-product.operator-fission"]),
   Object.freeze({
     id: "event.log-product.attach-target",
     kind: "attachment" as const,
@@ -184,7 +195,9 @@ export const kpCanonicalLogProductSemanticMotionPrecedence = precedenceChain([
       "attachment.log-product.target-shells",
       "attachment.log-product.connector"
     ]),
-    correspondenceRecordIds: Object.freeze([]),
+    correspondenceRecordIds: Object.freeze([
+      "correspondence.log-product.product-derives-sum"
+    ]),
     summary: "Attach both target logarithm shells and place plus between the ordered applications."
   }),
   event("event.log-product.settle", "settlement", ["cohort.log-product.homomorphism"]),
@@ -198,15 +211,21 @@ export const kpCanonicalLogProductSemanticMotionPrecedence = precedenceChain([
   })
 ]);
 
-// Slice 24 proves the front door reaches the intentional unsupported-operation
-// boundary; slice 25 may add a reviewed recipe without changing semantic truth.
-export const kpCanonicalLogProductSemanticMotionOutcome =
-  compileKpSemanticMotion({
+const compiled = compileKpSemanticMotion({
     request: kpCanonicalLogProductSemanticMotionRequest,
     source: kpCanonicalLogProductSemanticMotionSource,
     structureContract: kpCanonicalLogProductSemanticMotionStructure,
     precedenceSpec: kpCanonicalLogProductSemanticMotionPrecedence
   });
+
+if (compiled.status !== "compiled") {
+  throw new Error(
+    `Canonical log-product semantic motion failed closed with ${compiled.status}.`
+  );
+}
+
+export const kpCanonicalCompiledLogProductSemanticMotion =
+  compiled.choreography;
 
 function stateRef(state: KpLogProductState) {
   return Object.freeze({
@@ -270,28 +289,59 @@ function attachment(
 function event(
   id: string,
   kind: KpSemanticMotionEventSpec["kind"],
-  cohortIds: readonly string[]
+  cohortIds: readonly string[],
+  correspondenceRecordIds: readonly string[] = []
 ): KpSemanticMotionEventSpec {
   return Object.freeze({
     id,
     kind,
     cohortIds: Object.freeze([...cohortIds]),
     attachmentIds: Object.freeze([]),
-    correspondenceRecordIds: Object.freeze([]),
+    correspondenceRecordIds: Object.freeze([...correspondenceRecordIds]),
     summary: `${kind} log-product semantic material.`
   });
 }
 
-function precedenceChain(
+function coordinatedFissionPrecedence(
   events: readonly KpSemanticMotionEventSpec[]
 ): KpSemanticMotionPrecedenceSpec {
+  const [orient, arrive, releaseShells, depart, attach, settle, nativeReady] =
+    events;
+  if (
+    orient === undefined || arrive === undefined ||
+    releaseShells === undefined || depart === undefined ||
+    attach === undefined || settle === undefined || nativeReady === undefined
+  ) {
+    throw new Error("Log-product fission precedence requires seven events.");
+  }
   return Object.freeze({
     events: Object.freeze([...events]),
-    edges: Object.freeze(events.slice(0, -1).map((current, index) =>
+    // Arguments, application shells, and the persistent operator must leave
+    // one nested source setting together. Running those independent cohorts
+    // in parallel avoids inventing a false semantic order merely to solve a
+    // renderer-routing problem; attachment still waits for all three.
+    edges: Object.freeze([
+      arrive,
+      releaseShells,
+      depart
+    ].flatMap((fissionEvent) => [
       Object.freeze({
-        beforeEventId: current.id,
-        afterEventId: events[index + 1]!.id
+        beforeEventId: orient.id,
+        afterEventId: fissionEvent.id
+      }),
+      Object.freeze({
+        beforeEventId: fissionEvent.id,
+        afterEventId: attach.id
       })
-    ))
+    ]).concat([
+      Object.freeze({
+        beforeEventId: attach.id,
+        afterEventId: settle.id
+      }),
+      Object.freeze({
+        beforeEventId: settle.id,
+        afterEventId: nativeReady.id
+      })
+    ]))
   });
 }

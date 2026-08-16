@@ -6,11 +6,14 @@ import {
   kpCanonicalLogProductContract
 } from "../src/semantic/log-product-contract.ts";
 import {
-  kpCanonicalLogProductSemanticMotionOutcome,
+  kpCanonicalCompiledLogProductSemanticMotion,
   kpCanonicalLogProductSemanticMotionPrecedence,
   kpCanonicalLogProductSemanticMotionRequest,
   kpCanonicalLogProductSemanticMotionStructure
 } from "../src/semantic/log-product-semantic-motion.ts";
+import {
+  sampleKpSemanticMotionChoreography
+} from "../src/domain-ir/public-api.ts";
 import {
   listKpLogProductExpressionNodes
 } from "../src/semantic/log-product-states.ts";
@@ -43,23 +46,53 @@ test("log product owns exact domain, endpoints, and reversible lineage", () => {
   );
 });
 
-test("log product reaches the compiler's intentional unsupported-recipe boundary", () => {
-  assert.equal(kpCanonicalLogProductSemanticMotionOutcome.status, "explicit-static");
-  if (kpCanonicalLogProductSemanticMotionOutcome.status !== "explicit-static") {
-    assert.fail("Slice 24 must stop before choosing a concrete motion recipe.");
+test("log product compiles one renderer-neutral fission recipe", () => {
+  assert.equal(
+    kpCanonicalCompiledLogProductSemanticMotion.recipeId,
+    "recipe.semantic-motion.log-product-fission.v1"
+  );
+  assert.equal(
+    kpCanonicalCompiledLogProductSemanticMotion.clockCoupling,
+    "external-shared-progress"
+  );
+  const source = sampleKpSemanticMotionChoreography({
+    choreography: kpCanonicalCompiledLogProductSemanticMotion,
+    progress: 0,
+    direction: "forward"
+  });
+  const target = sampleKpSemanticMotionChoreography({
+    choreography: kpCanonicalCompiledLogProductSemanticMotion,
+    progress: 1,
+    direction: "forward"
+  });
+  assert.equal(source.settledStateId, kpCanonicalLogProductContract.source.id);
+  assert.equal(target.settledStateId, kpCanonicalLogProductContract.target.id);
+  for (const progress of [0, 0.17, 0.5, 0.83, 1]) {
+    const forward = sampleKpSemanticMotionChoreography({
+      choreography: kpCanonicalCompiledLogProductSemanticMotion,
+      progress,
+      direction: "forward"
+    });
+    const rewind = sampleKpSemanticMotionChoreography({
+      choreography: kpCanonicalCompiledLogProductSemanticMotion,
+      progress: 1 - progress,
+      direction: "rewind"
+    });
+    assert.equal(forward.semanticProgress, rewind.semanticProgress);
+    assert.deepEqual(forward.tracks, rewind.tracks);
   }
-  assert.equal(
-    kpCanonicalLogProductSemanticMotionOutcome.reason,
-    "unsupported-operation"
-  );
-  assert.equal(
-    kpCanonicalLogProductSemanticMotionOutcome.staticStateId,
-    kpCanonicalLogProductContract.target.id
-  );
-  assert.match(
-    kpCanonicalLogProductSemanticMotionOutcome.issues[0]!.message,
-    /kp\.semantic-motion\.log-product/u
-  );
+  assert.equal(sampleKpSemanticMotionChoreography({
+    choreography: kpCanonicalCompiledLogProductSemanticMotion,
+    progress: 0.49,
+    direction: "forward",
+    reducedMotion: true
+  }).settledStateId, kpCanonicalLogProductContract.source.id);
+  assert.equal(sampleKpSemanticMotionChoreography({
+    choreography: kpCanonicalCompiledLogProductSemanticMotion,
+    progress: 0.5,
+    direction: "forward",
+    reducedMotion: true
+  }).settledStateId, kpCanonicalLogProductContract.target.id);
 });
 
 test("every frontier entity has one semantic role before presentation exists", () => {

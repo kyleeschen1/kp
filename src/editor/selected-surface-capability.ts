@@ -26,6 +26,7 @@ export type KpEditorSelectedSurfaceCapability =
   | "equation-katex"
   | "log-exponent"
   | "log-quotient"
+  | "log-product"
   | "exact-fraction-quantity"
   | "operation-evaluation"
   | "place-value-addition"
@@ -58,11 +59,17 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       "animation.algebra.log-quotient.difference-to-quotient"
   ) capabilities.push("log-quotient");
   if (
+    input.animationId ===
+      "animation.algebra.log-product.product-to-sum"
+  ) capabilities.push("log-product");
+  if (
     input.slotKinds.includes("equation") &&
     input.animationId !==
       "animation.algebra.log-exponent.solve-two-power-x" &&
     input.animationId !==
-      "animation.algebra.log-quotient.difference-to-quotient"
+      "animation.algebra.log-quotient.difference-to-quotient" &&
+    input.animationId !==
+      "animation.algebra.log-product.product-to-sum"
   ) {
     capabilities.push("equation-katex");
   }

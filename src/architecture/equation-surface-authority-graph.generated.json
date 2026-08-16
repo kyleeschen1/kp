@@ -67,6 +67,14 @@
       "summary": "Log quotient uses its dedicated typed semantic compiler."
     },
     {
+      "id": "compiler.log-product-operation",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/log-product-transformation-compiler.ts",
+      "sourceNeedle": "export function compileKpLogProductOperation",
+      "summary": "Log product uses its dedicated typed semantic compiler."
+    },
+    {
       "id": "motif.generic-transition",
       "category": "motif",
       "authority": "compatibility",
@@ -99,6 +107,14 @@
       "summary": "Log quotient owns its current homomorphic fusion choreography locally."
     },
     {
+      "id": "motif.log-product-semantic-projection",
+      "category": "motif",
+      "authority": "shared",
+      "sourcePath": "src/rendering/native-katex-semantic-motion-track-projection.ts",
+      "sourceNeedle": "export function createKpNativeKatexSemanticMotionTrackProjection",
+      "summary": "Log product projects compiled semantic tracks without a family switch."
+    },
+    {
       "id": "timing.generic-phase-easing",
       "category": "local-timing",
       "authority": "local",
@@ -123,12 +139,12 @@
       "summary": "The log-exponent timeline maps shared progress to operation-local time."
     },
     {
-      "id": "timing.distribution-presentation-profile",
+      "id": "timing.copy-fan-out-presentation-profile",
       "category": "local-timing",
-      "authority": "local",
-      "sourcePath": "src/animation/distribution-motion-profile.ts",
-      "sourceNeedle": "export const kpLessonCanonicalDistributionMotionProfile",
-      "summary": "Distribution retains its reviewed optical pacing after semantic compilation."
+      "authority": "canonical",
+      "sourcePath": "src/animation/copy-fan-out-motion-profile.ts",
+      "sourceNeedle": "export const kpCanonicalNativeKatexCopyFanOutMotionProfile",
+      "summary": "The shared native copy/fan-out sampler owns reviewed optical pacing without importing a symbolic family."
     },
     {
       "id": "timing.cancellation-counter-orbit",
@@ -179,6 +195,14 @@
       "summary": "Log quotient owns a dedicated native endpoint transit session."
     },
     {
+      "id": "renderer.log-product-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/log-product-transit-session.ts",
+      "sourceNeedle": "export function createKpLogProductTransitSession",
+      "summary": "Log product owns a dedicated native endpoint transit session."
+    },
+    {
       "id": "fallback.generic-whole-equation",
       "category": "fallback",
       "authority": "compatibility",
@@ -209,6 +233,14 @@
       "sourcePath": "src/editor/log-quotient-surface-adapter.ts",
       "sourceNeedle": "session.stage.dataset[\"kpLogQuotientStage\"] = \"failed\"",
       "summary": "Log-quotient preparation records an explicit failed stage."
+    },
+    {
+      "id": "fallback.log-product-failed-stage",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/log-product-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpLogProductStage\"] = \"failed\"",
+      "summary": "Log-product preparation records an explicit failed stage."
     },
     {
       "id": "sampler.generic-semantic-token",
@@ -393,6 +425,44 @@
       ],
       "directSamplerNodeIds": [
         "sampler.log-exponent-sequence"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.log-product.product-to-sum",
+      "pathClass": "log-product-specialized",
+      "transformationTypes": [
+        "expandLogProductAsSum"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.log-product-operation",
+        "compiler.semantic-motion-choreography"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.log-product-semantic-projection"
+      ],
+      "localTimingNodeIds": [
+        "timing.semantic-motion-recipe-schedule"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.log-product-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.log-product-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.semantic-motion-choreography"
       ]
     },
     {
@@ -733,7 +803,7 @@
       "localTimingNodeIds": [
         "timing.generic-phase-easing",
         "timing.semantic-motion-recipe-schedule",
-        "timing.distribution-presentation-profile"
+        "timing.copy-fan-out-presentation-profile"
       ],
       "rendererInferenceNodeIds": [
         "renderer.generic-dom-measurement"
