@@ -1,5 +1,10 @@
 # Manifest and projection authority audit
 
+> Superseded in part on 2026-08-16: the private legacy SDK and its six-item
+> projection retired after exact reachability found no supported consumer.
+> Current manifest authority now contains six derived facts and no independent
+> compatibility projection.
+
 The project has seven distinct facts that resemble registries. Each now has
 one declared owner in
 `src/architecture/manifest-projection-authority.ts`; everything else is a

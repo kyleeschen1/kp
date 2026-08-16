@@ -182,10 +182,9 @@ active TypeScript proof
 - Equation presentation-profile migration is complete: all concrete equation
   targets author the typed profile, the legacy metadata decoder is retired,
   and the policy now belongs to the neutral animation domain.
-- Canonical sampled payload ownership is already neutral. Retain the older
-  public SDK's `EquationMotionFrame` in its renderer-coupled pipeline until
-  those public consumers can retire together; a file-only move would reverse
-  the dependency graph.
+- Canonical sampled payload ownership is neutral. The unexported legacy
+  equation SDK and its parallel six-item manifest retired after exact
+  reachability proved there were no production or script consumers.
 
 Do not perform a repository-wide rewrite or directory shuffle. The accepted
 exhaustive equation-domain cutover is the bounded exception: enforce one public

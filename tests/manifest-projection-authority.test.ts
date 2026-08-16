@@ -16,7 +16,7 @@ import { createKpAnimationCatalogueProjection } from
   "../src/editor/animation-catalogue-projection.ts";
 
 test("every manifest and projection fact has one provenance owner", () => {
-  assert.equal(kpManifestProjectionAuthorityDeclarations.length, 7);
+  assert.equal(kpManifestProjectionAuthorityDeclarations.length, 6);
   assert.equal(
     new Set(kpManifestProjectionAuthorityDeclarations.map(
       ({ factId }) => factId

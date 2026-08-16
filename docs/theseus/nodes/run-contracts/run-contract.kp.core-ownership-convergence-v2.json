@@ -188,7 +188,8 @@
     {
       "id": "s23",
       "title": "update-diagnostics-and-authority-projections",
-      "status": "planned"
+      "summary": "Manifest authority, dashboard metadata, active roadmap and architecture thread now reflect the neutral kernel, lazy loader, zero-exception graph, and retired SDK; historical handoffs are marked superseded.",
+      "status": "complete"
     },
     {
       "id": "s24",

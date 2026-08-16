@@ -1,5 +1,11 @@
 # KP Animation SDK API Handoff
 
+> Historical specification. The private, unexported SDK and its parallel
+> manifest were retired on 2026-08-16 after caller-complete reachability found
+> no production or script consumer. Current hosts should use
+> `src/animation/kernel.ts`, `src/animation/catalog-loader.ts`, and the narrow
+> authoring APIs. The paths below remain as historical evidence only.
+
 ## Purpose
 
 This file explains the public animation SDK surface for a host application or
@@ -355,4 +361,3 @@ npm test
 These tests verify picker manifest metadata, manifest/catalog parity, lazy
 session creation, time sampling, and token metadata lookup for hover
 affordances.
-

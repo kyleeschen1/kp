@@ -938,9 +938,12 @@ export const projectDashboardData: ProjectDashboardData = {
       ],
       sourceRefs: [
         { label: "Animation kernel", href: "src/animation/kernel.ts" },
-        { label: "Public SDK", href: "src/public/kp-animation-sdk.ts" }
+        { label: "Lazy catalogue loader", href: "src/animation/catalog-loader.ts" }
       ],
-      verification: ["tests/kp-animation-sdk.test.ts"],
+      verification: [
+        "tests/kp-animation-runtime-sampler.test.ts",
+        "tests/animation-catalog-loader.test.ts"
+      ],
       relatedIds: ["work-rendering-time-protocol"]
     },
     {

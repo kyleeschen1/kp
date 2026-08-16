@@ -1,12 +1,9 @@
 # Architecture Convergence And Product Tightening
 
-Status: active
+Status: supporting
 Last Updated: 2026-08-16
-Current Next Action: execute
-`run-contract.kp.core-ownership-convergence-v2`. Enforce the framework-neutral
-core boundary, retire the named upward dependencies, and resolve the legacy
-public SDK without visual change. The next separately approved long-loop
-tranche owns bundle and application isolation.
+Current Next Action: core ownership convergence is complete. The next
+separately approved long-loop tranche owns bundle and application isolation.
 
 ## Goal
 
@@ -98,11 +95,11 @@ is preserved behind these two architecture tranches rather than superseded.
     boundary, exact reachability graph, declaration-driven capability loader,
     ownership extractions, inference reduction, and release evidence are
     closed in the 2026-08-16 closeout.
-11. **Core ownership convergence (current):** enforce source and runtime
-    dependency direction; migrate program-trace authority below tutorials;
-    remove the linear-solve semantic/tutorial cycle; invert renderer encoding
-    and theme dependencies; and give the legacy public SDK a caller-complete
-    disposition.
+11. **Core ownership convergence (complete):** source and runtime direction is
+    enforced across the full TypeScript graph; program trace and linear solve
+    no longer depend upward on tutorials; renderer encoding and theme
+    dependencies are inverted; and the unexported legacy SDK is retired. The
+    exact dependency exception ledger is empty.
 12. **Bundle and application isolation (next approved planning order):** add
     selected-experience closure scenarios, repair the place-value budget
     structurally, isolate Internal Studio and Public Web entry graphs, make
@@ -187,8 +184,7 @@ trigger is permission to propose bounded work, not automatic authorization.
 | Binary log-product and broader homomorphic-decomposition visual policy | `animation-catalogue.md` and `../decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md` | Human approval of the binary exemplar, followed by a separately reviewed three-factor and quotient pressure proposal | The current infrastructure run cannot make subjective timing, geometry, or promotion decisions. |
 | Public reader, layout, navigation, educator discovery, curriculum, SRS, and learner modeling | `explanation-attention.md`, `proof-memory-medium.md`, and `../strategy.md` | Observed educator or learner use identifies one concrete product failure and target audience | More layout invention would not validate demand and would contaminate an architecture-only loop. |
 | SvelteKit application composition | this thread and `portable-publication-platform.md` | Internal Studio or Public Web has a bounded route, loading, persistence, and deployment requirement | Svelte may own application lifecycle later, but framework-neutral assets, semantic truth, clocks, frames, authoring commands, and publications must stay portable. |
-| HTML output-encoder consolidation | `../../../src/architecture/html-output-encoding-inventory.ts` | A context/security audit proves two encoders have identical input trust and HTML insertion contracts | Similar helper names do not prove interchangeable escaping behavior. |
-| Timeline, selector-pair, lightweight-ref, generated-fixture, saddle, and public SDK compatibility | `../../../src/architecture/semantic-animation-compatibility-ledger.ts` | An adjacent caller migration reaches zero production and conformance consumers with replacement evidence | Detached cleanup would risk deleting unique compatibility behavior or merely moving it. |
+| Timeline, selector-pair, lightweight-ref, generated-fixture, and saddle compatibility | `../../../src/architecture/semantic-animation-compatibility-ledger.ts` | An adjacent caller migration reaches zero production and conformance consumers with replacement evidence | Detached cleanup would risk deleting unique compatibility behavior or merely moving it. |
 | Graph3D, Canvas, WebGL, another program language, or a cross-domain compiler | `semantic-runtime.md` and `animation-catalogue.md` | A selected product proof needs one named renderer/domain capability and can preserve lazy isolation | Equation infrastructure does not authorize domain expansion or a universal renderer/compiler. |
 | Live or multi-model generation evaluation | `../authoring/llm-generation-entrypoint.md` | The deterministic request facade and three contrasting fixtures pass with stable typed diagnostics | First prove the tool contract; live-model variance would otherwise hide architecture failures. |
 | Directory, namespace, or repository-wide package reorganization | this thread | Dependency direction and public import-closure evidence make a move mechanical and complexity-negative | Moving files before ownership settles creates churn without reducing authority. |

@@ -259,6 +259,13 @@
       "scope": "slice s22 legacy SDK retirement",
       "checkedAt": "2026-08-16T22:09:21.585Z",
       "notes": "Seventeen focused retirement, dependency, ownership, manifest, and reachability tests passed. Architecture reports zero exact exceptions, and test-project typecheck passed."
+    },
+    {
+      "command": "node --test authority dashboard and SDK retirement projections",
+      "status": "passed",
+      "scope": "slice s23 diagnostics and authority projections",
+      "checkedAt": "2026-08-16T22:12:33.571Z",
+      "notes": "Sixty-seven focused tests passed. Architecture, test-project typecheck, and promotion-memory checks also passed."
     }
   ],
   "expectedLearning": [

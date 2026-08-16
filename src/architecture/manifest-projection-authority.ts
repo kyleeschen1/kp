@@ -4,14 +4,13 @@ export type KpManifestProjectionFactId =
   | "equation-surface-membership"
   | "equation-surface-disposition"
   | "selected-surface-capability"
-  | "semantic-compatibility-membership"
-  | "renderer-neutral-sdk-selection";
+  | "semantic-compatibility-membership";
 
 export interface KpManifestProjectionAuthorityDeclaration {
   readonly factId: KpManifestProjectionFactId;
   readonly declarationOwnerPath: string;
   readonly projectionPaths: readonly string[];
-  readonly policy: "derive-only" | "independent-compatibility-surface";
+  readonly policy: "derive-only";
   readonly rationale: string;
 }
 
@@ -86,14 +85,6 @@ readonly KpManifestProjectionAuthorityDeclaration[] = Object.freeze([
     policy: "derive-only",
     rationale:
       "Compatibility entries are explicit debt records; summaries may count them but cannot create or omit them."
-  }),
-  authority({
-    factId: "renderer-neutral-sdk-selection",
-    declarationOwnerPath: "src/editor/equation-animation-catalog.ts",
-    projectionPaths: ["src/public/equation-animation-manifest.ts"],
-    policy: "independent-compatibility-surface",
-    rationale:
-      "The six SDK selections use legacy EquationAnimationId identities and are not the 30 KpAnimationAsset equation surfaces."
   })
 ]);
 
