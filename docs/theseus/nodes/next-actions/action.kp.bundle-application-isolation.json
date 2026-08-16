@@ -58,6 +58,13 @@
       "scope": "slice s03 typed experience scenarios",
       "checkedAt": "2026-08-16T22:45:48.078Z",
       "notes": "Seven focused tests passed; full typecheck including Svelte reported zero diagnostics; architecture covers 1,563 modules with zero exact exceptions."
+    },
+    {
+      "command": "node bundle scenario and Vite closure tests; repo-local node-project typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s04 manifest closure model",
+      "checkedAt": "2026-08-16T22:50:32.739Z",
+      "notes": "Eight focused tests passed. The repository-local TypeScript compiler and the zero-exception architecture gate pass; no production route changed."
     }
   ],
   "expectedLearning": [

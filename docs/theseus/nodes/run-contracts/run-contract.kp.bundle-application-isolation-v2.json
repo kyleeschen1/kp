@@ -73,7 +73,8 @@
     {
       "id": "s04",
       "title": "generalize-vite-manifest-closure-model",
-      "status": "planned"
+      "summary": "A pure deterministic Vite-manifest graph now models static entry closure, discoverable but unloaded dynamic roots, ordered activation, owner-attributed script/style/font/asset resources, and exact incremental deltas.",
+      "status": "complete"
     },
     {
       "id": "s05",
