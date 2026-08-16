@@ -10,6 +10,9 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "../../rendering/native-katex-rendered-scene.ts";
 import type {
+  KpNativeKatexFeaturePack
+} from "../../rendering/native-katex-feature-pack-contract.ts";
+import type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "../../rendering/native-katex-successor-synthesis.ts";
 import type {
@@ -68,6 +71,7 @@ export interface KpReaderEquationSceneCompositorInput {
     KpCorridorCertifiedEquationStageLayout | undefined;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly nativeKatex?: KpNativeKatexFeaturePack | undefined;
 }
 
 export interface KpReaderEquationPureScenePlan {
@@ -207,7 +211,9 @@ export function createKpReaderEquationSceneCompositorSession(
     input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
       dispatch.staticCheckpoint.reason;
   }
-  const canonical = createKpCanonicalNativeKatexSceneSession({
+  const createNativeSession = input.nativeKatex?.compose.createSession ??
+    createKpCanonicalNativeKatexSceneSession;
+  const canonical = createNativeSession({
     ...prepared.canonicalInput,
     ...(input.purePlan === undefined
       ? {}

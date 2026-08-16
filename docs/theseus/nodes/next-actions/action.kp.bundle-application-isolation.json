@@ -114,6 +114,27 @@
       "scope": "standard",
       "checkedAt": "2026-08-16T23:10:03.001Z",
       "notes": "All TypeScript and Svelte checks passed; architecture covers 1,566 modules with zero exact exceptions."
+    },
+    {
+      "command": "operation-evaluation and native-KaTeX focused tests",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T23:14:05.342Z",
+      "notes": "Eleven focused tests passed, including endpoint, session, static-checkpoint, lineage, and feature-pack routing checks."
+    },
+    {
+      "command": "npm run visual:animation-library-operation-evaluation",
+      "status": "passed",
+      "scope": "visual-exemplar",
+      "checkedAt": "2026-08-16T23:14:06.239Z",
+      "notes": "Chromium opened the canonical operation-evaluation host and reached the ready renderer session."
+    },
+    {
+      "command": "npm run build:bundle and npm run --silent measure:bundle-experiences",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-16T23:14:07.141Z",
+      "notes": "Production build transformed 1,446 modules; one feature implementation chunk imports the existing shared compositor without duplication; representative closures and the 75,026-byte place-value baseline are unchanged."
     }
   ],
   "expectedLearning": [

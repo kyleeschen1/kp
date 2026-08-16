@@ -76,3 +76,17 @@ test("production loader owns one literal implementation import", async () => {
     kpNativeKatexFeaturePack
   );
 });
+
+test("canonical operation evaluation consumes the pack at its async seam", async () => {
+  const source = await readFile(
+    "src/editor/operation-evaluation-surface-adapter.ts",
+    "utf8"
+  );
+  assert.match(source, /kpNativeKatexFeaturePackLoader\.load\(\)/u);
+  assert.match(source, /nativeKatex\.observe\.settleAndObserve/u);
+  assert.match(source, /target: targetScene,\s+nativeKatex/u);
+  assert.doesNotMatch(
+    source,
+    /from "\.\.\/rendering\/native-katex-rendered-scene\.ts"/u
+  );
+});

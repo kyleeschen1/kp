@@ -18,8 +18,8 @@ import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
 import {
-  settleAndObserveKpNativeKatexRenderedScene
-} from "../rendering/native-katex-rendered-scene.ts";
+  kpNativeKatexFeaturePackLoader
+} from "../rendering/native-katex-feature-pack-loader.ts";
 import {
   kpOpaqueGatherAndRecognizeRecognitionProgress,
   kpOpaqueGatherAndRecognizeSourceRetirementProgress
@@ -171,6 +171,13 @@ async function prepareOperationEvaluationSurface(input: {
   const source = annotateEndpoint(transition.source);
   const target = annotateEndpoint(transition.target);
   try {
+    const nativeKatex = await kpNativeKatexFeaturePackLoader.load();
+    if (
+      input.session.disposed ||
+      input.session.generation !== input.generation
+    ) {
+      return;
+    }
     let stageHost = input.slot;
     const measurementHostId =
       `operation-evaluation.${input.renderPlan.animationId}.` +
@@ -253,7 +260,7 @@ async function prepareOperationEvaluationSurface(input: {
       "[data-kp-operation-evaluation-target]"
     );
     const [sourceScene, targetScene] = await Promise.all([
-      settleAndObserveKpNativeKatexRenderedScene({
+      nativeKatex.observe.settleAndObserve({
         endpoint: "source",
         stage,
         root: sourceRoot,
@@ -261,7 +268,7 @@ async function prepareOperationEvaluationSurface(input: {
         presentationGroupId: `${transition.id}.source`,
         fontReadiness: input.session.fontReadiness
       }),
-      settleAndObserveKpNativeKatexRenderedScene({
+      nativeKatex.observe.settleAndObserve({
         endpoint: "target",
         stage,
         root: targetRoot,
@@ -324,7 +331,8 @@ async function prepareOperationEvaluationSurface(input: {
         revision: measurementCertificate.fontRevision
       }),
       source: sourceScene,
-      target: targetScene
+      target: targetScene,
+      nativeKatex
     });
     input.session.playback?.retire({
       kind: "native-katex-paint-preserving-retirement",

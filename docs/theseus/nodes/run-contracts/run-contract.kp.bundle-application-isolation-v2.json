@@ -103,7 +103,8 @@
     {
       "id": "s09",
       "title": "migrate-canonical-equation-katex-caller",
-      "status": "planned"
+      "summary": "Migrated canonical operation evaluation through the lazy native-KaTeX pack, preserving settled endpoints, accessibility, reader session identity, visual ownership, and bundle closure.",
+      "status": "complete"
     },
     {
       "id": "s10",
