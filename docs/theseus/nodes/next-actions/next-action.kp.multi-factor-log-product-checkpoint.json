@@ -2,8 +2,9 @@
   "id": "next-action.kp.multi-factor-log-product-checkpoint",
   "kind": "next-action",
   "title": "Review multi-factor log-product choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Approved synchronized syntax-resolution cohort; connector timing is no longer provisional.",
   "verificationRecords": [
     {
       "command": "npm run verify:impact -- --path src/animation/log-product-homomorphic-handoff.ts",
@@ -121,7 +122,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Connectors now share the derived-operator presence and expansion windows and grow from fixed centers in both factor counts; semantic identities, endpoints, direct seek, reverse, and reduced-motion behavior remain intact. Awaiting human visual approval."
+    "state": "complete",
+    "summary": "Human visual review approved the shared log-product choreography: connectors expand from fixed centers on the exact derived-operator presence and expansion windows in both two- and three-factor callers."
   }
 }
