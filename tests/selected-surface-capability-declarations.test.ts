@@ -75,7 +75,7 @@ test("every capability loader remains a literal dynamic import", async () => {
     "log-product-surface-capability.ts",
     "exact-fraction-quantity-surface-capability.ts",
     "operation-evaluation-surface-capability.ts",
-    "place-value-addition-surface-capability.ts",
+    "place-value-addition-surface-adapter.ts",
     "economics-graph-svg-surface-capability.ts",
     "graph-svg-surface-capability.ts",
     "graph-3d-surface-capability.ts",
@@ -87,6 +87,21 @@ test("every capability loader remains a literal dynamic import", async () => {
     ));
   }
   assert.doesNotMatch(source, /import\(\s*`|import\(\s*[a-zA-Z_$]/);
+});
+
+test("place-value capability keeps semantic registration separate from rendering", async () => {
+  const source = await readFile(
+    "src/editor/selected-surface-capability-declarations.ts",
+    "utf8"
+  );
+  assert.match(
+    source,
+    /import\(\s*["']\.\/place-value-addition-surface-adapter\.ts["']\s*\)/
+  );
+  assert.doesNotMatch(
+    source,
+    /from\s+["']\.\/place-value-addition-surface-adapter\.ts["']/
+  );
 });
 
 test("equation capabilities no longer branch in the selected host", async () => {

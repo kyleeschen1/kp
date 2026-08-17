@@ -15,7 +15,6 @@ import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import {
-  kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 
@@ -57,13 +56,6 @@ KpEditorAnimationSurfaceAdapter = {
     });
   }
 };
-
-export function registerKpEditorPlaceValueAdditionSurfaceAdapter():
-() => void {
-  return kpEditorAnimationSurfaceAdapterRegistry.register(
-    kpEditorPlaceValueAdditionSurfaceAdapter
-  );
-}
 
 function mountPlaceValueSurface(
   player: HTMLElement,

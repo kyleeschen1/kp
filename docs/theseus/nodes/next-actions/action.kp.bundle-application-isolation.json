@@ -177,6 +177,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-16T23:57:53.561Z",
       "notes": "The deterministic three-scenario comparison measures 74,948 gzip bytes and attributes every delta file plus both ordered activations; current 75,000-byte ceiling passes but ten-percent headroom remains for s12-s14."
+    },
+    {
+      "command": "place-value unit and Chromium catalogue lifecycle checks",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T00:08:55.618Z",
+      "notes": "All 120 place-value unit tests pass; canonical mount, phone capture, and selection-disposal browser behaviors pass after making the legacy editor route explicit."
+    },
+    {
+      "command": "typecheck architecture production build targeted place-value closure",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T00:09:04.922Z",
+      "notes": "The typed family declaration now directly owns the one literal place-value renderer import; the redundant production wrapper and unused global registration path are absent. Closure is 74,931 bytes, 17 below s11, with no heavy duplication."
     }
   ],
   "expectedLearning": [

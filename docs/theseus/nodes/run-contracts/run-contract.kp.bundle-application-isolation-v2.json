@@ -121,7 +121,8 @@
     {
       "id": "s12",
       "title": "separate-place-value-semantic-startup",
-      "status": "planned"
+      "summary": "Place-value semantic startup now remains in typed family declarations while one literal selected renderer import owns implementation loading; redundant registration was removed, full closure fell 17 bytes, and behavior stayed unchanged.",
+      "status": "complete"
     },
     {
       "id": "s13",

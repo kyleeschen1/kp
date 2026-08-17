@@ -61,6 +61,13 @@ test("selected experiences preserve explicit comparable catalogue bases", () => 
     "bundle-experience.catalogue.solve-x"
   );
   assert.equal(placeValue.budgets[0]?.gzipBytes, 75_000);
+  assert.deepEqual(placeValue.activations, [{
+    id: "load-domain-pack",
+    manifestRoots: ["src/animation/catalog-packs/place-value.ts"]
+  }, {
+    id: "load-selected-surface",
+    manifestRoots: ["src/editor/place-value-addition-surface-adapter.ts"]
+  }]);
 });
 
 test("non-equation catalogue experiences exclude the native KaTeX pack", () => {

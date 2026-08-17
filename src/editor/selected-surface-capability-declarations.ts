@@ -158,11 +158,11 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {
       const client = await import(
-        "./place-value-addition-surface-capability.ts"
+        "./place-value-addition-surface-adapter.ts"
       );
       await registerOnce(registry, registrationGuardAdapterId,
-        () => client.registerKpEditorPlaceValueAdditionSurfaceCapability(
-          registry
+        () => registry.register(
+          client.kpEditorPlaceValueAdditionSurfaceAdapter
         ));
     }
   }),

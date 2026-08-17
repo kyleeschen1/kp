@@ -126,7 +126,7 @@ export const kpBundleExperienceScenarios:
       id: "bundle-experience.catalogue.place-value",
       title: "Catalogue with place-value addition selected",
       packRoot: "src/animation/catalog-packs/place-value.ts",
-      surfaceRoot: "src/editor/place-value-addition-surface-capability.ts",
+      surfaceRoot: "src/editor/place-value-addition-surface-adapter.ts",
       forbiddenOwners: [
         "src/editor/programming-surface-capability.ts",
         "src/rendering/graph-webgl-three.ts"

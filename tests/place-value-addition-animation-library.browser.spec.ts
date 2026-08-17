@@ -183,7 +183,7 @@ test("phone review keeps the equation readable and captures the sealed beat", as
 test("switching catalog selections disposes the one place-value controller", async ({
   page
 }) => {
-  await page.goto(`/?animation=${descriptorId}`);
+  await page.goto(`/?view=editor&animation=${descriptorId}`);
   const player = page.locator(
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
