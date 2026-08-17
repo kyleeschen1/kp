@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s04",
+  "kind": "next-action",
+  "title": "Cross-domain-capability-plan",
+  "status": "resolved",
+  "summary": "Cross-domain capability planning now preserves domain and language ownership while sharing only the ordered planning envelope.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s04 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/cross-domain-animation-capability-plan.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/cross-domain-animation-capability-plan.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s03"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s03"
+  ],
+  "verification": [
+    "npm run test:animation-capability-plan",
+    "npm run check:architecture",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-plan",
+      "status": "passed",
+      "scope": "cross-domain capability order and frontend ownership",
+      "checkedAt": "2026-08-17T21:50:54.327Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and semantic authority boundaries",
+      "checkedAt": "2026-08-17T21:50:55.363Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-17T21:50:56.343Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added nine ordered matrix code Graph2D and Graph3D capability rows; every row requires one domain-owned frontend and no shared semantic or renderer vocabulary."
+  },
+  "expectedLearning": [
+    "Whether one capability plan can order matrix code Graph2D and Graph3D goals while every domain retains its own semantic frontend and renderer authority."
+  ],
+  "allowedWork": [
+    "Planned capability rows and exact domain-frontend requirements for matrix code Graph2D and Graph3D."
+  ],
+  "disallowedWork": [
+    "Shared cross-domain AST operations motif vocabulary geometry renderer or claims of general generation readiness."
+  ],
+  "criteria": [
+    {
+      "id": "every-domain-names-its-own-frontend",
+      "weight": "high"
+    },
+    {
+      "id": "shared-plan-does-not-flatten-domain-semantics",
+      "weight": "high"
+    },
+    {
+      "id": "cross-domain-order-follows-equations",
+      "weight": "medium"
+    }
+  ]
+}
