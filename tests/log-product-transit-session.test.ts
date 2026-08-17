@@ -85,6 +85,7 @@ test("binary homomorphic handoff stages a contracted operator match-dissolve", (
     topology: "matched-dissolve-to-derived-successors",
     sourceExit: "collapse-to-point",
     targetEntry: "expand-from-point",
+    receptionSynchronization: "closure-coupled",
     correspondenceRecordId: "correspondence.log-product.operator-fission",
     sourceEntityId: "source.log.operator",
     targetEntityIds: [
@@ -93,8 +94,8 @@ test("binary homomorphic handoff stages a contracted operator match-dissolve", (
     ],
     sourceContractionWindow: { start: 0.18, end: 0.28 },
     sourceReleaseWindow: { start: 0.24, end: 0.32 },
-    targetPresenceWindow: { start: 0.59, end: 0.67 },
-    targetExpansionWindow: { start: 0.63, end: 0.73 }
+    targetPresenceWindow: { start: 0.54, end: 0.62 },
+    targetExpansionWindow: { start: 0.55, end: 0.64 }
   });
   assert.deepEqual(handoff.payloadHandoff.transitWindow, {
     start: 0.2,
@@ -116,7 +117,7 @@ test("binary homomorphic handoff stages a contracted operator match-dissolve", (
     reception: "horizontal-squeeze",
     sizeBehavior: "native-size",
     targetPresenceWindow: { start: 0.44, end: 0.48 },
-    transitWindow: { start: 0.48, end: 0.66 },
+    transitWindow: { start: 0.48, end: 0.64 },
     sourceReleaseWindow: { start: 0.12, end: 0.2 }
   });
   assert.equal(handoff.payloadHandoff.topology, "ordered-continuity");
@@ -137,6 +138,18 @@ test("binary homomorphic handoff stages a contracted operator match-dissolve", (
   assert.ok(
     handoff.operatorHandoff.targetPresenceWindow.start <
       handoff.operatorHandoff.targetExpansionWindow.start
+  );
+  assert.ok(
+    handoff.operatorHandoff.targetPresenceWindow.start >
+      handoff.enclosureHandoff.transitWindow.start
+  );
+  assert.equal(
+    handoff.operatorHandoff.targetExpansionWindow.end,
+    handoff.enclosureHandoff.transitWindow.end
+  );
+  assert.equal(
+    handoff.targetHoldWindow.start,
+    handoff.enclosureHandoff.transitWindow.end
   );
   assert.ok(
     handoff.relationHandoff.receptionWindow.start >

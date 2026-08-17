@@ -23,6 +23,10 @@ export type KpNativeKatexFunctionWrapReceptionMotion =
   | "canonical-scale-settle"
   | "horizontal-squeeze";
 
+export interface KpNativeKatexHorizontalSqueezeTreatment {
+  readonly outwardOffsetInNativeHeights: number;
+}
+
 const kpNativeKatexHorizontalSqueezeReceptionStyle = Object.freeze({
   initialScale: 1,
   outwardOffsetInNativeHeights: 0.85,
@@ -63,6 +67,8 @@ export function applyKpNativeKatexFunctionWrapReception(input: {
     readonly end: number;
   } | undefined;
   readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
+  readonly horizontalSqueezeTreatment?:
+    KpNativeKatexHorizontalSqueezeTreatment | undefined;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   return adaptKpNativeKatexFunctionWrapReception(input).tracks;
 }
@@ -78,6 +84,8 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
     readonly end: number;
   } | undefined;
   readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
+  readonly horizontalSqueezeTreatment?:
+    KpNativeKatexHorizontalSqueezeTreatment | undefined;
 }): KpNativeKatexFunctionWrapAdaptation {
   if (input.plan.motifId !== kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1) {
     throw new Error(`Native KaTeX function-wrap adapter rejects motif ${input.plan.motifId}.`);
@@ -123,6 +131,10 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
   ));
   const matched = new Set<string>();
   const motion = input.motion ?? "canonical-scale-settle";
+  const horizontalSqueezeStyle = resolveHorizontalSqueezeStyle({
+    motion,
+    treatment: input.horizontalSqueezeTreatment
+  });
   const sample = (progress: number) => smoothWindow(
     progress,
     input.entryWindow.start,
@@ -165,7 +177,7 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
       ? track.endPaintRect ?? track.endRect
       : track.startPaintRect ?? track.startRect;
     const receptionStyle = motion === "horizontal-squeeze"
-      ? kpNativeKatexHorizontalSqueezeReceptionStyle
+      ? horizontalSqueezeStyle
       : kpNativeKatexFunctionWrapReceptionStyle;
     const receptivePaintRect = outsideReceptionRect(
       nativePaintRect,
@@ -238,6 +250,38 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
       synchronization: input.plan.synchronization,
       settlement: "native-measured-endpoint" as const
     })
+  });
+}
+
+function resolveHorizontalSqueezeStyle(input: {
+  readonly motion: KpNativeKatexFunctionWrapReceptionMotion;
+  readonly treatment?: KpNativeKatexHorizontalSqueezeTreatment | undefined;
+}): Readonly<{
+  initialScale: number;
+  outwardOffsetInNativeHeights: number;
+  opacityCompletionFraction: number;
+}> {
+  if (input.treatment === undefined) {
+    return kpNativeKatexHorizontalSqueezeReceptionStyle;
+  }
+  if (input.motion !== "horizontal-squeeze") {
+    throw new Error(
+      "Horizontal squeeze treatment requires horizontal-squeeze motion."
+    );
+  }
+  if (
+    !Number.isFinite(input.treatment.outwardOffsetInNativeHeights) ||
+    input.treatment.outwardOffsetInNativeHeights <= 0 ||
+    input.treatment.outwardOffsetInNativeHeights > 2
+  ) {
+    throw new Error(
+      "Horizontal squeeze offset must be within (0, 2] native heights."
+    );
+  }
+  return Object.freeze({
+    ...kpNativeKatexHorizontalSqueezeReceptionStyle,
+    outwardOffsetInNativeHeights:
+      input.treatment.outwardOffsetInNativeHeights
   });
 }
 

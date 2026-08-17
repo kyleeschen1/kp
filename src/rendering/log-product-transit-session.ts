@@ -33,7 +33,8 @@ import {
   compileKpBinaryLogProductHomomorphicHandoff
 } from "../animation/log-product-homomorphic-handoff.ts";
 import {
-  applyKpNativeKatexFunctionWrapReception
+  applyKpNativeKatexFunctionWrapReception,
+  type KpNativeKatexHorizontalSqueezeTreatment
 } from "./native-katex-function-wrap-reception.ts";
 import {
   applyKpNativeKatexLogProductHomomorphicHandoff
@@ -46,6 +47,9 @@ import {
 
 const LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS = 0.75;
 const BINARY_VISUAL_DISCOVERY_FAMILY_ID = "family.log-product.xy";
+const BINARY_CLOSURE_COUPLED_SQUEEZE = Object.freeze({
+  outwardOffsetInNativeHeights: 0.46
+}) satisfies KpNativeKatexHorizontalSqueezeTreatment;
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
   readonly clearanceInInkHeights?: number;
@@ -290,7 +294,8 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
         entryWindow: homomorphicHandoff.enclosureHandoff.transitWindow,
         presenceWindow:
           homomorphicHandoff.enclosureHandoff.targetPresenceWindow,
-        motion: "horizontal-squeeze"
+        motion: "horizontal-squeeze",
+        horizontalSqueezeTreatment: BINARY_CLOSURE_COUPLED_SQUEEZE
       });
     }
   });

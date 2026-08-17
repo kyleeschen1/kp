@@ -218,7 +218,7 @@ test("homomorphic operators contract and expand around a fixed ink center", () =
   assert.equal(sourceEcho[2]!.opacity, 0);
   const vacancy = sampleKpNativeKatexSceneTrackFrames(tracks, 0.48, false);
   assert.ok(vacancy.every(({ opacity }) => opacity === 0));
-  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.65, false);
+  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.6, false);
   assert.equal(reception[0]!.opacity, 0);
   assert.ok(reception[1]!.opacity > 0 && reception[1]!.opacity < 1);
   assert.ok(reception[2]!.opacity > 0 && reception[2]!.opacity < 1);
@@ -227,7 +227,7 @@ test("homomorphic operators contract and expand around a fixed ink center", () =
   assert.equal(reception[1]!.materialScale, reception[2]!.materialScale);
   assert.deepEqual(center(reception[1]!.rect), center(targetLeft.rect));
   assert.deepEqual(center(reception[2]!.rect), center(targetRight.rect));
-  const settled = sampleKpNativeKatexSceneTrackFrames(tracks, 0.73, false);
+  const settled = sampleKpNativeKatexSceneTrackFrames(tracks, 0.64, false);
   assert.equal(settled[1]!.materialScale, 1);
   assert.equal(settled[2]!.materialScale, 1);
 });
@@ -322,6 +322,21 @@ test("function-wrap adapter rejects foreign motifs and malformed windows", () =>
       entryWindow: { start: 0.8, end: 0.2 }
     }),
     /entry window must be ordered/
+  );
+  assert.throws(
+    () => adaptKpNativeKatexFunctionWrapReception({
+      ...input,
+      horizontalSqueezeTreatment: { outwardOffsetInNativeHeights: 0.46 }
+    }),
+    /requires horizontal-squeeze motion/
+  );
+  assert.throws(
+    () => adaptKpNativeKatexFunctionWrapReception({
+      ...input,
+      motion: "horizontal-squeeze",
+      horizontalSqueezeTreatment: { outwardOffsetInNativeHeights: 0 }
+    }),
+    /must be within/
   );
 });
 

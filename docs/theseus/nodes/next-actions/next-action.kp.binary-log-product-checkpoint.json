@@ -239,11 +239,59 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-17T17:50:06.152Z"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/rendering/log-product-transit-session.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:50.892Z"
+    },
+    {
+      "command": "node focused log-product and native KaTeX choreography tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:51.972Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:52.917Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:53.849Z"
+    },
+    {
+      "command": "Chromium focused closure-coupled operator browser proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:54.766Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:13:55.668Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:13:56.587Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:13:57.531Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Binary ln operators now collapse toward a point before fading and expand from a point after appearing, while measured centers, factor transit, enclosure squeeze, and deterministic seeking remain stable. Awaiting human visual approval before caller promotion."
+    "summary": "Binary target ln operators now echo in during restrained enclosure closure and settle on the same sampled instant; source contraction, factor continuity, endpoints, clock, and non-binary callers remain unchanged. Awaiting human visual approval before promotion."
   },
   "expectedLearning": [
     "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."

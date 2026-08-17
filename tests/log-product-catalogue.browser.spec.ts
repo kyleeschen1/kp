@@ -185,9 +185,9 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     "source.log.operator",
     ...operatorIds
   ])).toBe(0);
-  const operatorEntry = await at(0.61, operatorIds);
-  const operatorMidpoint = await at(0.67, operatorIds);
-  const operatorSettlement = await at(0.73, operatorIds);
+  const operatorEntry = await at(0.55, operatorIds);
+  const operatorMidpoint = await at(0.6, operatorIds);
+  const operatorSettlement = await at(0.64, operatorIds);
   for (const entityId of operatorIds) {
     const samples = [operatorEntry, operatorMidpoint, operatorSettlement]
       .map((geometry) => geometry[entityId]!);
@@ -201,9 +201,9 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
     expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
-  await seek.fill("0.58");
+  await seek.fill("0.53");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);
-  await seek.fill("0.64");
+  await seek.fill("0.58");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(1);
 
   const enclosureIds = [
@@ -213,8 +213,8 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     "target.right.log.close"
   ] as const;
   const enclosureEntry = await at(0.48, enclosureIds);
-  const enclosureMidpoint = await at(0.57, enclosureIds);
-  const enclosureSettlement = await at(0.66, enclosureIds);
+  const enclosureMidpoint = await at(0.56, enclosureIds);
+  const enclosureSettlement = await at(0.64, enclosureIds);
   for (const prefix of ["target.left.log", "target.right.log"]) {
     const leading = [enclosureEntry, enclosureMidpoint, enclosureSettlement]
       .map((geometry) => geometry[`${prefix}.open`]!);
@@ -225,9 +225,13 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     expect(trailing[0]!.left).toBeGreaterThan(trailing[1]!.left);
     expect(trailing[1]!.left).toBeGreaterThan(trailing[2]!.left);
     expect(leading[2]!.left - leading[0]!.left)
-      .toBeGreaterThan(leading[2]!.height * 0.5);
+      .toBeGreaterThan(leading[2]!.height * 0.25);
+    expect(leading[2]!.left - leading[0]!.left)
+      .toBeLessThan(leading[2]!.height * 0.7);
     expect(trailing[0]!.left - trailing[2]!.left)
-      .toBeGreaterThan(trailing[2]!.height * 0.5);
+      .toBeGreaterThan(trailing[2]!.height * 0.25);
+    expect(trailing[0]!.left - trailing[2]!.left)
+      .toBeLessThan(trailing[2]!.height * 0.7);
   }
 });
 

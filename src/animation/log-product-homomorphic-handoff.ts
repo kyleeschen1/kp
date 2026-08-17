@@ -17,14 +17,14 @@ const MAX_OPERATOR_VACANCY = 0.270_001;
 const binaryHandoffWindows = Object.freeze({
   operatorSourceContraction: window(0.18, 0.28),
   operatorSourceRelease: window(0.24, 0.32),
-  operatorTargetPresence: window(0.59, 0.67),
-  operatorTargetExpansion: window(0.63, 0.73),
+  operatorTargetPresence: window(0.54, 0.62),
+  operatorTargetExpansion: window(0.55, 0.64),
   payloadTransit: window(0.2, 0.44),
   enclosureSourceRelease: window(0.12, 0.2),
   enclosureTargetPresence: window(0.44, 0.48),
-  enclosureTransit: window(0.48, 0.66),
-  relationReception: window(0.59, 0.67),
-  targetHold: window(0.73, 1)
+  enclosureTransit: window(0.48, 0.64),
+  relationReception: window(0.54, 0.62),
+  targetHold: window(0.64, 1)
 });
 
 export interface KpBinaryLogProductHomomorphicHandoff {
@@ -38,6 +38,7 @@ export interface KpBinaryLogProductHomomorphicHandoff {
     readonly topology: "matched-dissolve-to-derived-successors";
     readonly sourceExit: "collapse-to-point";
     readonly targetEntry: "expand-from-point";
+    readonly receptionSynchronization: "closure-coupled";
     readonly correspondenceRecordId:
       "correspondence.log-product.operator-fission";
     readonly sourceEntityId: string;
@@ -155,6 +156,7 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
       topology: "matched-dissolve-to-derived-successors" as const,
       sourceExit: "collapse-to-point" as const,
       targetEntry: "expand-from-point" as const,
+      receptionSynchronization: "closure-coupled" as const,
       correspondenceRecordId: OPERATOR_FISSION_RECORD_ID,
       sourceEntityId: operator.sourceSelectorIds[0]!,
       targetEntityIds: Object.freeze([
@@ -316,6 +318,10 @@ function assertCoverageOrdering(
       handoff.operatorHandoff.targetExpansionWindow.start ||
     handoff.operatorHandoff.targetPresenceWindow.end >
       handoff.operatorHandoff.targetExpansionWindow.end ||
+    handoff.operatorHandoff.targetPresenceWindow.start <=
+      handoff.enclosureHandoff.transitWindow.start ||
+    handoff.operatorHandoff.targetExpansionWindow.end !==
+      handoff.enclosureHandoff.transitWindow.end ||
     handoff.operatorHandoff.targetPresenceWindow.start >
       handoff.enclosureHandoff.transitWindow.end ||
     handoff.payloadHandoff.transitWindow.end >
@@ -325,7 +331,9 @@ function assertCoverageOrdering(
     handoff.operatorHandoff.targetExpansionWindow.end >
       handoff.targetHoldWindow.start ||
     handoff.enclosureHandoff.transitWindow.end >
-      handoff.targetHoldWindow.start
+      handoff.targetHoldWindow.start ||
+    handoff.targetHoldWindow.start !==
+      handoff.enclosureHandoff.transitWindow.end
   ) {
     throw new Error(
       "Homomorphic handoff requires a bounded operator match-dissolve, clear payload corridor, synchronized syntax reception, and final hold."
