@@ -2,8 +2,9 @@
 
 Last Updated: 2026-08-17
 Status: active
-Active Thread: `threads/animation-catalogue.md`
+Active Thread: `threads/generative-animation-compiler.md`
 Supporting Threads:
+- `threads/animation-catalogue.md`
 - `threads/architecture-convergence.md`
 - `threads/explanation-attention.md`
 - `threads/semantic-runtime.md`
@@ -51,13 +52,14 @@ layout. This does not validate demand or reopen learner-facing layout work.
 
 The catalogue contains a mixture of teaching animations, fixtures, and
 diagnostic proofs. The supported equation domain has completed its narrow-core
-convergence: typed declarations, recipes, motif invocations, generated closed
-dispatch, preservation evidence, governed authoring metadata, and a
-cross-domain host boundary now replace the earlier caller-by-caller authority.
-The current decision is to prove that this architecture is cheaper to author
-against, attribute its remaining compiler and verification cost, and retire
-only redundancy with exact reachability evidence. Matrix-to-linear-map remains
-tabled; no stable promotion rank has been silently changed.
+convergence. The new active priority is to make that capability boundary
+visible and authorable: accept natural-language intent or ordered semantic
+states, beginning with LaTeX, resolve verified operations to canonical motifs,
+compose them into one deterministic sequence, and retain typed gaps when KP
+does not yet support the request. Matrix, code, Graph2D, and Graph3D join the
+long-term generation envelope through domain-owned frontends rather than one
+universal renderer or semantic model. The accepted direction is recorded in
+`decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`.
 
 ## One Active Lane
 
@@ -109,6 +111,12 @@ Only this repository sequence is active:
    development erasure, measured algebra/CSS splits, and five enforced neutral
    facades are closed. See
    `reviews/2026-08-16-kp-bundle-application-isolation-closeout.md`.
+12. **Capability coverage and transform-series generation:** new active
+    priority after the bounded homomorphic closeout. Add one evidence-derived
+    Transformation Coverage view, one governed equation-series compiler, URL
+    and Review reproducibility, and explicit future frontend seams for matrix,
+    code, Graph2D, and Graph3D. The function-coordinate exemplar is deferred
+    until this generation foundation is honest.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -129,7 +137,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | Three fixed requests compile with zero repair through one narrow direct entrance; live-model quality remains unmeasured | Preserve the boundary; evaluate live models only as a separately scoped experiment. |
+| LLM generation | Three fixed requests compile with zero repair through one narrow direct entrance; live-model quality remains unmeasured | Build the governed series and coverage boundary, then evaluate live models as a separately measured promotion gate. |
 
 ## Active Tightening Phase
 

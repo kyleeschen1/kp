@@ -67,18 +67,22 @@ Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
 
-KP is in **catalogue animation development alongside external educator
-discovery**. The semantic/runtime engine is sufficiently capable, while the
-existence and shape of a valuable educator workflow remain unvalidated. Product
-discovery is being carried forward outside this Codex thread; repository work
-returns to the internal Catalogue because reusable semantic animations retain
-value across later layouts and product decisions.
+KP is in **governed animation generation and capability coverage alongside
+external educator discovery**. The semantic/runtime engine is sufficiently
+capable, while the existence and shape of a valuable educator workflow remain
+unvalidated. Repository work now makes the executable library legible and
+authorable: natural-language intent or ordered source states should resolve to
+verified semantic operations and canonical motifs when supported, and to
+typed repair gaps when unsupported. Native LaTeX is the first reference input;
+matrix, code, Graph2D, and Graph3D remain domain-owned future frontends over the
+shared request, sequencing, hosting, URL, and review envelope.
 
-This is not permission for undirected domain expansion. The active catalogue
-lane is now exhaustive convergence inside the finite equation domain: validate
-one canonical compiler with a new reversible log-product exemplar, stop for
-human review, then migrate every supported equation asset in reversible family
-waves. Learner-facing layout, curriculum, SRS, LLM tutoring, and public-site
+This is not permission for undirected domain expansion or a universal
+generator. The next bounded work promotes only the already proven
+product/quotient causal crossover, creates an evidence-derived Transformation
+Coverage view, and proves one governed equation-transform-series compiler.
+Additional motif families and domain frontends remain explicit ordered gaps.
+Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
