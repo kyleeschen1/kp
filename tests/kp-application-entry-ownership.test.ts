@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -51,7 +51,7 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
       },
       {
         id: "entry-owner.public-web",
-        current: "shared-main-graph",
+        current: "dedicated-production-graph",
         required: "dedicated-production-graph"
       },
       {
@@ -66,6 +66,25 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
       }
     ]
   );
+});
+
+test("the shared main build does not compile or own Public Web routes", () => {
+  const publicWeb = findKpApplicationEntryOwner("entry-owner.public-web");
+  const developmentInputs = readFileSync(
+    "src/dev-toolbar/development-page-build-entries.ts",
+    "utf8"
+  );
+  const mainConfig = readFileSync("vite.config.ts", "utf8");
+
+  assert.deepEqual(publicWeb.currentBuildConfigs, publicWeb.requiredBuildConfigs);
+  assert.ok(publicWeb.currentBuildConfigs.every((path) =>
+    path.startsWith("vite.public-")
+  ));
+  for (const document of publicWeb.hostDocuments) {
+    assert.doesNotMatch(developmentInputs, new RegExp(escapeRegExp(document)));
+  }
+  assert.doesNotMatch(mainConfig, /src\/public-web\//u);
+  assert.doesNotMatch(mainConfig, /kp-(?:typescript|fraction)-.+publication/u);
 });
 
 test("public and development entry roots cannot masquerade as kernel or Studio", () => {
@@ -115,3 +134,7 @@ test("ownership rejects duplicate roots incomplete registries and unsafe dev pol
       : owner
   )), /erased from production/);
 });
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}

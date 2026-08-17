@@ -67,14 +67,6 @@ import {
 import {
   renderKpFractionCompositionStaticPublication
 } from "./src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts";
-import {
-  compileKpTypeScriptFreeShippingPublicLesson,
-  renderKpTypeScriptFreeShippingPublicLesson
-} from "./src/public-web/typescript-free-shipping-publication.ts";
-import {
-  compileKpFractionCompositionPublicLesson,
-  renderKpFractionCompositionPublicLesson
-} from "./src/public-web/fraction-composition-publication.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
@@ -138,18 +130,6 @@ const algebraFractionCompositionArticleSourceFilename = resolve(
 );
 let algebraFractionCompositionStaticPublication =
   compileAlgebraFractionCompositionStaticPublication();
-const typeScriptFreeShippingPublicFilename = resolve(
-  projectRoot,
-  "learn/code/free-shipping/index.html"
-);
-const typeScriptFreeShippingPublicPublication =
-  compileTypeScriptFreeShippingPublicPublication();
-const fractionCompositionPublicFilename = resolve(
-  projectRoot,
-  "learn/math/fraction-composition/index.html"
-);
-const fractionCompositionPublicPublication =
-  compileFractionCompositionPublicPublication();
 
 export default defineConfig({
   define: {
@@ -307,34 +287,6 @@ export default defineConfig({
             : html;
         }
       }
-    },
-    {
-      name: "kp-typescript-free-shipping-publication",
-      transformIndexHtml: {
-        order: "pre",
-        handler(html, context) {
-          return context.filename === typeScriptFreeShippingPublicFilename
-            ? html.replace(
-                "<!-- kp:typescript-free-shipping-publication -->",
-                typeScriptFreeShippingPublicPublication
-              )
-            : html;
-        }
-      }
-    },
-    {
-      name: "kp-fraction-composition-publication",
-      transformIndexHtml: {
-        order: "pre",
-        handler(html, context) {
-          return context.filename === fractionCompositionPublicFilename
-            ? html.replace(
-                "<!-- kp:fraction-composition-publication -->",
-                fractionCompositionPublicPublication
-              )
-            : html;
-        }
-      }
     }
   ],
   build: {
@@ -408,20 +360,6 @@ export default defineConfig({
     strictPort: true
   }
 });
-
-function compileTypeScriptFreeShippingPublicPublication(): string {
-  const source = readFileSync(resolve(
-    projectRoot,
-    "content/lessons/typescript-free-shipping.kp.md"
-  ), "utf8");
-  const lock = JSON.parse(readFileSync(resolve(
-    projectRoot,
-    "content/lessons/typescript-free-shipping.kp.lock.json"
-  ), "utf8")) as KpArticleImportLock;
-  return renderKpTypeScriptFreeShippingPublicLesson(
-    compileKpTypeScriptFreeShippingPublicLesson({ text: source, lock })
-  );
-}
 
 function readReviewBuildIdentity(): { commit: string; fingerprint: string; dirty: boolean } {
   try {
@@ -522,19 +460,5 @@ function compileAlgebraFractionCompositionStaticPublication(): string {
   ), "utf8")) as KpArticleImportLock;
   return renderKpFractionCompositionStaticPublication(
     compileKpFractionCompositionArticle({ text, lock })
-  );
-}
-
-function compileFractionCompositionPublicPublication(): string {
-  const text = readFileSync(resolve(
-    projectRoot,
-    "content/lessons/algebra-fraction-composition.kp.md"
-  ), "utf8");
-  const lock = JSON.parse(readFileSync(resolve(
-    projectRoot,
-    "content/lessons/algebra-fraction-composition.kp.lock.json"
-  ), "utf8")) as KpArticleImportLock;
-  return renderKpFractionCompositionPublicLesson(
-    compileKpFractionCompositionPublicLesson({ text, lock })
   );
 }

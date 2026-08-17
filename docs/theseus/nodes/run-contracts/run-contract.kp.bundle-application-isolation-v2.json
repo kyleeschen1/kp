@@ -151,7 +151,8 @@
     {
       "id": "s17",
       "title": "isolate-public-web-production-entries",
-      "status": "planned"
+      "summary": "Removed three Public Web HTML inputs and two publication compilers from the shared Vite graph; all four lessons retain dedicated builds and explicit ownership, negative closure excludes Studio, bootstrap, and development tooling, 44 Chromium checks pass, and the shared build now transforms 1,413 modules instead of 1,445.",
+      "status": "complete"
     },
     {
       "id": "s18",

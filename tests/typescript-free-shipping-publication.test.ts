@@ -102,19 +102,16 @@ test("checkpoint links carry semantic IDs and exact normalized progress", () => 
   );
 });
 
-test("public lesson owns one physical build route", () => {
+test("public lesson owns one dedicated route outside the shared dev build", () => {
   assert.equal(kpTypeScriptFreeShippingPublicPath,
     "/learn/code/free-shipping/");
   assert.equal(isKpTypeScriptFreeShippingPublicRoute(
     "/learn/code/free-shipping"), true);
   assert.equal(isKpTypeScriptFreeShippingPublicRoute(
     "/tutorials/programming/scheme-factorial/"), false);
-  assert.deepEqual(kpDevelopmentBuildEntries.find(
+  assert.equal(kpDevelopmentBuildEntries.find(
     ({ name }) => name === "publicTypeScriptFreeShipping"
-  ), {
-    name: "publicTypeScriptFreeShipping",
-    htmlPath: "learn/code/free-shipping/index.html"
-  });
+  ), undefined);
   assert.ok(kpDevelopmentPages.some(({ id, href }) =>
     id === "tutorial.public-typescript-free-shipping" &&
     href === kpTypeScriptFreeShippingPublicPath));

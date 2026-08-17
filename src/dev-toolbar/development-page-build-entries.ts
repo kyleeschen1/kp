@@ -4,8 +4,9 @@ export interface KpDevelopmentBuildEntry {
 }
 
 /**
- * Physical first-party HTML inputs that are not generated from the reader
- * manifest. Logical query-backed pages may share `index.html`.
+ * Physical HTML inputs owned by the legacy development build. Public Web and
+ * Internal Studio documents have dedicated build declarations and must not be
+ * reintroduced here merely to make development navigation aware of them.
  */
 export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
   Object.freeze([
@@ -33,17 +34,5 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
     Object.freeze({
       name: "schemeFactorialTutorial",
       htmlPath: "tutorials/programming/scheme-factorial/index.html"
-    }),
-    Object.freeze({
-      name: "publicTypeScriptFreeShipping",
-      htmlPath: "learn/code/free-shipping/index.html"
-    }),
-    Object.freeze({
-      name: "publicFractionComposition",
-      htmlPath: "learn/math/fraction-composition/index.html"
-    }),
-    Object.freeze({
-      name: "publicNormalMatrices",
-      htmlPath: "learn/math/normal-matrices/index.html"
     })
   ]);

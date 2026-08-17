@@ -307,8 +307,15 @@ function publicScenario(
     activations,
     expectedOwners: [entryRoot],
     forbiddenOwners: [
+      "src/bootstrap.ts",
+      "src/internal-studio/internal-studio-entry.ts",
       "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
-      "src/main.ts"
+      "src/main.ts",
+      "src/dev-toolbar/development-toolbar-bootstrap.ts",
+      "src/dev-review/editor-animation-library-review-bootstrap.ts",
+      "src/dev-review/reader-review-bootstrap.ts",
+      "src/dev-review/tutorial-review-bootstrap.ts",
+      "src/dev-review/workbench-review-bootstrap.ts"
     ],
     budgets: totalBudget === undefined
       ? []

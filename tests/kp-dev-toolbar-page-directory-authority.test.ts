@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { generatedConceptCatalog } from "../content/public-api.ts";
+import { findKpApplicationEntryOwner } from
+  "../src/architecture/kp-application-entry-ownership.ts";
 import {
   kpDevelopmentBuildEntries
 } from "../src/dev-toolbar/development-page-build-entries.ts";
@@ -41,7 +43,14 @@ test("logical pages resolve only through declared Vite or reader HTML inputs", (
     htmlPath));
   const readerPaths = new Set(kpReaderRouteManifest.map(({ route }) =>
     kpReaderRouteHtmlPath(route)));
-  const expectedPhysicalPaths = new Set([...buildPaths, ...readerPaths]);
+  const publicPaths = findKpApplicationEntryOwner(
+    "entry-owner.public-web"
+  ).hostDocuments;
+  const expectedPhysicalPaths = new Set([
+    ...buildPaths,
+    ...readerPaths,
+    ...publicPaths
+  ]);
 
   for (const page of kpDevelopmentPages) {
     const physicalPath = physicalHtmlPath(page.href);

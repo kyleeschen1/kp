@@ -114,7 +114,7 @@ test("distributed evidence names two typed lineages over native selectors", () =
   )?.id, "variable-term");
 });
 
-test("public symbolic lesson owns one route and development-directory entry", () => {
+test("public symbolic lesson owns a dedicated route and directory entry", () => {
   assert.equal(
     kpFractionCompositionPublicPath,
     "/learn/math/fraction-composition/"
@@ -123,12 +123,9 @@ test("public symbolic lesson owns one route and development-directory entry", ()
     "/learn/math/fraction-composition"), true);
   assert.equal(isKpFractionCompositionPublicRoute(
     "/tutorials/algebra/fraction-composition/"), false);
-  assert.deepEqual(kpDevelopmentBuildEntries.find(
+  assert.equal(kpDevelopmentBuildEntries.find(
     ({ name }) => name === "publicFractionComposition"
-  ), {
-    name: "publicFractionComposition",
-    htmlPath: "learn/math/fraction-composition/index.html"
-  });
+  ), undefined);
   assert.ok(kpDevelopmentPages.some(({ id, href }) =>
     id === "tutorial.public-fraction-composition" &&
     href === kpFractionCompositionPublicPath));

@@ -75,7 +75,7 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     id: "entry-owner.public-web",
     delivery: "public-product",
     frameworkBoundary: "host-owned",
-    currentBoundary: "shared-main-graph",
+    currentBoundary: "dedicated-production-graph",
     requiredBoundary: "dedicated-production-graph",
     entryModules: [
       "src/public-web/typescript-free-shipping-entry.ts",
@@ -90,7 +90,6 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
       "learn/math/eigenvectors/index.html"
     ],
     currentBuildConfigs: [
-      "vite.config.ts",
       "vite.public-typescript.config.ts",
       "vite.public-fraction-composition.config.ts",
       "vite.public-normal-matrices.config.ts",
