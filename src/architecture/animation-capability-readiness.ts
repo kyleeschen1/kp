@@ -3,6 +3,8 @@ import {
   listKpEquationIntentSurfaceVocabularies,
   type KpCompiledEquationIntentPlan
 } from "../authoring/compile-equation-intent.ts";
+import { kpEquationGenerationPressureFixtures } from
+  "../authoring/equation-generation-pressure-contract.ts";
 import type { KpAnimationCapabilityPlan } from
   "./animation-capability-plan.ts";
 import {
@@ -30,8 +32,10 @@ export type KpAnimationCapabilityReadinessStatus =
 export interface KpAnimationCapabilityDirectIntentEvidence {
   readonly animationId: string;
   readonly operationId: string;
+  readonly authoringAuthorityId: string;
   readonly planKind: KpCompiledEquationIntentPlan["kind"];
   readonly resolvedAuthorityIds: readonly string[];
+  readonly generationCorpusAuthorityIds: readonly string[];
   readonly sourcePath: "src/authoring/compile-equation-intent.ts";
 }
 
@@ -177,6 +181,9 @@ export function compileKpAnimationCapabilityReadiness(input: {
         ...evidence,
         resolvedAuthorityIds: Object.freeze([
           ...evidence.resolvedAuthorityIds
+        ]),
+        generationCorpusAuthorityIds: Object.freeze([
+          ...evidence.generationCorpusAuthorityIds
         ])
       })
     )),
@@ -219,8 +226,16 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
       return Object.freeze({
         animationId: result.plan.animationId,
         operationId: result.plan.operationId,
+        authoringAuthorityId: vocabulary.authoringAuthorityId,
         planKind: result.plan.kind,
         resolvedAuthorityIds: authorityIdsForPlan(result.plan),
+        generationCorpusAuthorityIds: Object.freeze(
+          kpEquationGenerationPressureFixtures
+            .filter(({ request }) =>
+              request.animationId === vocabulary.animationId &&
+              request.operation.operationId === vocabulary.operationId)
+            .map(({ id }) => id)
+        ),
         sourcePath: "src/authoring/compile-equation-intent.ts" as const
       });
     }

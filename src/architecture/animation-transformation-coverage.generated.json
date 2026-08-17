@@ -1,0 +1,1889 @@
+{
+  "schemaVersion": "kp.animation-transformation-coverage.v1",
+  "kind": "animation-transformation-coverage",
+  "generatedFrom": {
+    "planId": "plan.kp.animation-capabilities.v1",
+    "planSchemaVersion": "kp.animation-capability-plan.v1",
+    "assetEvidenceSchemaVersion": "kp.animation-capability-asset-evidence.v1",
+    "compilerEvidenceSchemaVersion": "kp.animation-capability-compiler-evidence.v1",
+    "readinessSchemaVersion": "kp.animation-capability-readiness.v1"
+  },
+  "summary": {
+    "total": 28,
+    "byStatus": {
+      "Direct": 3,
+      "Registered": 3,
+      "Exemplar": 11,
+      "Missing": 11
+    }
+  },
+  "entries": [
+    {
+      "capabilityId": "capability.equation.function-wrapping",
+      "order": 1,
+      "domain": "equation",
+      "title": "Function wrapping",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.structural-wrap.v1"
+      },
+      "status": "Direct",
+      "requirements": [
+        {
+          "id": "requirement.equation.function-wrapping.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.wrap-function.v1",
+          "summary": "A typed operation identifies content and the function application that receives it.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.function-wrap.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.function-wrapping.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.function-application.v1",
+          "summary": "The compiler selects the canonical wrapping recipe.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.equation.function-application.v1",
+            "equation-pack.function-wrap.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.function-wrapping.motif",
+          "kind": "motion-motif",
+          "authorityId": "motif.function-wrap.v1",
+          "summary": "Parentheses receive and settle around their argument through the shared wrap motif.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.function-wrap.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.function-wrapping.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.function-wrap.apply-f",
+          "summary": "A reviewed native-KaTeX exemplar proves the canonical visual language.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.function-wrap.apply-f"
+          ]
+        },
+        {
+          "id": "requirement.equation.function-wrapping.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "compiler.equation.intent.function-wrap.v1",
+          "summary": "The tool-neutral equation intent entrance resolves the operation without geometry input.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-intent.ts"
+          ]
+        },
+        {
+          "id": "requirement.equation.function-wrapping.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "pressure.equation.function-wrap",
+          "summary": "A fixed pressure fixture proves direct selection and typed role closure.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "pressure.equation.function-wrap"
+          ]
+        }
+      ],
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.function-wrap.apply-f",
+          "title": "Generated wrap x with f",
+          "href": "/?artifact=animation.generated.function-wrap.apply-f"
+        }
+      ],
+      "evidenceTensions": [
+        "direct-deterministic-not-live-model-evidence"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.distribution",
+      "order": 2,
+      "domain": "equation",
+      "title": "Distribution",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.distribution.v1"
+      },
+      "status": "Direct",
+      "requirements": [
+        {
+          "id": "requirement.equation.distribution.operation",
+          "kind": "semantic-operation",
+          "authorityId": "kp.algebra.distribute-multiplication",
+          "summary": "A typed operation owns factor and addend correspondences.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "kp.algebra@0.1.0"
+          ]
+        },
+        {
+          "id": "requirement.equation.distribution.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.operation-plan.distribution.v1",
+          "summary": "A canonical operation plan owns distribution instead of caller-local trajectories.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.operation-plan.distribution.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.distribution.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.distribution.expand-a-sum",
+          "summary": "A concrete expansion exemplar preserves factor identity through the result.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.distribution.expand-a-sum"
+          ]
+        },
+        {
+          "id": "requirement.equation.distribution.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "compiler.equation.intent.distribution.v1",
+          "summary": "The direct intent entrance compiles distribution from semantic roles.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-intent.ts"
+          ]
+        },
+        {
+          "id": "requirement.equation.distribution.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "pressure.equation.distribution-factoring",
+          "summary": "A pressure fixture proves generated expansion without presentation fields.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "pressure.equation.distribution-factoring"
+          ]
+        }
+      ],
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.distribution.expand-a-sum",
+          "title": "Generated distribute a over sum",
+          "href": "/?artifact=animation.generated.distribution.expand-a-sum"
+        }
+      ],
+      "evidenceTensions": [
+        "direct-deterministic-not-live-model-evidence"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.additive-cancellation",
+      "order": 3,
+      "domain": "equation",
+      "title": "Additive cancellation",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.inverse-cancellation.v1"
+      },
+      "status": "Direct",
+      "requirements": [
+        {
+          "id": "requirement.equation.additive-cancellation.operation",
+          "kind": "semantic-operation",
+          "authorityId": "kp.algebra.cancel-additive-inverses",
+          "summary": "A typed operation identifies inverse terms and their surviving context.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "kp.algebra@0.1.0"
+          ]
+        },
+        {
+          "id": "requirement.equation.additive-cancellation.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.operation-plan.inverse-cancellation.v1",
+          "summary": "A canonical cancellation recipe owns the annihilation sequence.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.operation-plan.inverse-cancellation.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.additive-cancellation.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.cancellation.additive-inverses",
+          "summary": "A concrete exemplar proves inverse terms can meet and disappear without disturbing context.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.cancellation.additive-inverses"
+          ]
+        },
+        {
+          "id": "requirement.equation.additive-cancellation.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "compiler.equation.intent.additive-cancellation.v1",
+          "summary": "The direct intent entrance resolves cancellation from named semantic roles.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-intent.ts"
+          ]
+        },
+        {
+          "id": "requirement.equation.additive-cancellation.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "pressure.equation.cancellation",
+          "summary": "A fixed fixture proves direct selection and rejects malformed cardinality.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "pressure.equation.cancellation"
+          ]
+        }
+      ],
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.cancellation.additive-inverses",
+          "title": "Cancel an additive inverse pair",
+          "href": "/?artifact=animation.generated.cancellation.additive-inverses"
+        }
+      ],
+      "evidenceTensions": [
+        "direct-deterministic-not-live-model-evidence"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.log-homomorphic-decomposition",
+      "order": 4,
+      "domain": "equation",
+      "title": "Logarithmic homomorphic decomposition",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.log-homomorphism.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.equation.log-homomorphism.product-operation",
+          "kind": "semantic-operation",
+          "authorityId": "law.logarithm.product",
+          "summary": "The product law licenses ordered factor decomposition into a sum.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.quotient-operation",
+          "kind": "semantic-operation",
+          "authorityId": "law.logarithm.quotient",
+          "summary": "The quotient law licenses a difference-to-quotient fusion.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.homomorphic-decomposition.v1",
+          "summary": "One causal recipe names shared operator-shell and connector phases without owning caller geometry.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.product-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.log-product.xy-to-sum",
+          "summary": "The approved product exemplar proves one-to-many application fission.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.quotient-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.log-quotient.difference-to-quotient",
+          "summary": "The approved quotient exemplar pressure-tests many-to-one application fusion.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.log-quotient.difference-to-quotient"
+          ]
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.log-homomorphism.v1",
+          "summary": "Governed authoring selects product or quotient behavior from semantic law and roles.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.log-homomorphism.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.log-homomorphism.v1",
+          "summary": "Binary product, multi-factor product, and quotient fixtures pressure cardinality and direction.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.log-homomorphism.product-operation",
+        "requirement.equation.log-homomorphism.quotient-operation",
+        "requirement.equation.log-homomorphism.recipe",
+        "requirement.equation.log-homomorphism.product-exemplar",
+        "requirement.equation.log-homomorphism.authoring",
+        "requirement.equation.log-homomorphism.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.algebra.log-quotient.difference-to-quotient",
+          "title": "Combine a difference of logarithms",
+          "href": "/?artifact=animation.algebra.log-quotient.difference-to-quotient"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.transform-series",
+      "order": 5,
+      "domain": "equation",
+      "title": "Ordered transform series",
+      "scope": {
+        "kind": "transform-series",
+        "authorityId": "series.equation.transform.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.transform-series.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.native-latex.v1",
+          "summary": "Supported native-LaTeX endpoints normalize into semantic shapes or typed syntax gaps.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.transform-series.runtime",
+          "kind": "series-runtime",
+          "authorityId": "runtime.equation.transform-series.v1",
+          "summary": "One deterministic clock composes one accepted semantic operation per adjacency.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.transform-series.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.transform-series.v1",
+          "summary": "Authors can supply ordered LaTeX states with explicit or proposed adjacency intents.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.transform-series.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.transform-series.v1",
+          "summary": "Positive and repair fixtures cover seek, rewind, ambiguity, and unsupported syntax.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.transform-series.normalizer",
+        "requirement.equation.transform-series.runtime",
+        "requirement.equation.transform-series.authoring",
+        "requirement.equation.transform-series.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.balanced-operations",
+      "order": 6,
+      "domain": "equation",
+      "title": "Balanced equation operations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.balanced-operation.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.equation.balanced-operations.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.apply-both-sides.v1",
+          "summary": "A typed operation applies one legal transformation to both sides of a relation.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.balanced-operations.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.balanced-operation.v1",
+          "summary": "A shared causal recipe keeps the applied group cohesive and the equality relation stable.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.balanced-operations.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.log-exponent.solve-two-power-x",
+          "summary": "The current logarithm/division example remains evidence for one shape, not the whole family.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.log-exponent.solve-two-power-x"
+          ]
+        },
+        {
+          "id": "requirement.equation.balanced-operations.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.balanced-operation.v1",
+          "summary": "Governed authoring names the operation, operands, sides, and domain assumptions.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.balanced-operations.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.balanced-operation.v1",
+          "summary": "Subtract, add, multiply, divide, exponentiate, root, and logarithm cases pressure varied operands.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.balanced-operations.operation",
+        "requirement.equation.balanced-operations.recipe",
+        "requirement.equation.balanced-operations.authoring",
+        "requirement.equation.balanced-operations.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+          "title": "Solve an exponential equation with logarithms",
+          "href": "/?artifact=animation.algebra.log-exponent.solve-two-power-x"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.alternative-logarithm-bases",
+      "order": 7,
+      "domain": "equation",
+      "title": "Alternative logarithm bases and change of base",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.logarithm-base.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.logarithm-base.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.logarithm-base-syntax.v1",
+          "summary": "The endpoint parser preserves explicit bases in forms such as log_b(x) and log_{10}(x).",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.logarithm-change-of-base.v1",
+          "summary": "A typed law relates source base, target base, numerator log, and denominator log under valid domain assumptions.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.logarithm-change-of-base.v1",
+          "summary": "A canonical recipe owns base transfer and quotient construction without treating the base as decoration.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.motif",
+          "kind": "motion-motif",
+          "authorityId": "motif.equation.logarithm-base-handoff.v1",
+          "summary": "A distinct motif preserves base identity as notation moves between operator subscripts and the change-of-base quotient.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "exemplar.equation.logarithm-change-of-base.v1",
+          "summary": "One reviewed exemplar establishes syntax, identity, and attention choreography before promotion.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.logarithm-base.v1",
+          "summary": "Authors name source and target bases semantically; KP chooses notation and motion.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.logarithm-base.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.logarithm-base.v1",
+          "summary": "Fixtures cover symbolic and numeric bases, omitted natural bases, and invalid base/domain cases.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.logarithm-base.normalizer",
+        "requirement.equation.logarithm-base.operation",
+        "requirement.equation.logarithm-base.recipe",
+        "requirement.equation.logarithm-base.motif",
+        "requirement.equation.logarithm-base.exemplar",
+        "requirement.equation.logarithm-base.authoring",
+        "requirement.equation.logarithm-base.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.fraction-equivalence",
+      "order": 8,
+      "domain": "equation",
+      "title": "Fraction equivalence and repartition",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.fraction-equivalence.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.fraction-equivalence.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.fraction-equivalence.v1",
+          "summary": "A typed equivalence owns numerator/denominator scaling and repartition.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-equivalence.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.fraction-equivalence.v1",
+          "summary": "A canonical recipe preserves fraction material and lineages through split, merge, and scale.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-equivalence.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.fraction-composition.split-merge",
+          "summary": "Existing split/merge behavior is recorded as exemplar evidence rather than general coverage.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-equivalence.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.fraction-equivalence.v1",
+          "summary": "Fixtures vary term count, grouping, signs, and symbolic denominators.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.fraction-equivalence.operation",
+        "requirement.equation.fraction-equivalence.recipe",
+        "requirement.equation.fraction-equivalence.exemplar",
+        "requirement.equation.fraction-equivalence.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.common-denominator-construction",
+      "order": 9,
+      "domain": "equation",
+      "title": "Common-denominator construction",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.common-denominator.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.common-denominator.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.construct-common-denominator.v1",
+          "summary": "A typed operation identifies denominator factors and the legal multipliers for each term.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.common-denominator.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.common-denominator.v1",
+          "summary": "A recipe coordinates equivalent scaling before arithmetic begins.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.common-denominator.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "exemplar.equation.common-denominator.v1",
+          "summary": "A reviewed exemplar must establish the visual grammar before generalization.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.common-denominator.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.common-denominator.v1",
+          "summary": "Fixtures cover numeric, symbolic, already-shared, and partially shared denominators.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.common-denominator.operation",
+        "requirement.equation.common-denominator.recipe",
+        "requirement.equation.common-denominator.exemplar",
+        "requirement.equation.common-denominator.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.fraction-arithmetic",
+      "order": 10,
+      "domain": "equation",
+      "title": "Fraction addition and subtraction",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.fraction-arithmetic.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.fraction-arithmetic.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.fraction-arithmetic.v1",
+          "summary": "A typed operation distinguishes denominator preparation from numerator combination.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-arithmetic.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.fraction-arithmetic.v1",
+          "summary": "A canonical recipe sequences common-denominator construction, combination, and settlement.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-arithmetic.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.fraction-arithmetic.v1",
+          "summary": "Governed authoring rejects arithmetic requests whose denominator equivalence is unproved.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-arithmetic.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.fraction-arithmetic.v1",
+          "summary": "Fixtures cover signs, multiple terms, symbolic factors, and simplification opportunities.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.fraction-arithmetic.operation",
+        "requirement.equation.fraction-arithmetic.recipe",
+        "requirement.equation.fraction-arithmetic.authoring",
+        "requirement.equation.fraction-arithmetic.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.fraction-factor-cancellation",
+      "order": 11,
+      "domain": "equation",
+      "title": "Fraction factor cancellation",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.fraction-factor-cancellation.v1"
+      },
+      "status": "Registered",
+      "requirements": [
+        {
+          "id": "requirement.equation.fraction-factor-cancellation.operation",
+          "kind": "semantic-operation",
+          "authorityId": "kp.algebra.cancel-multiplicative-inverses",
+          "summary": "A typed operation proves matching nonzero factors may cancel across a fraction bar.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "kp.algebra@0.1.0"
+          ]
+        },
+        {
+          "id": "requirement.equation.fraction-factor-cancellation.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.fraction-factor-cancellation.v1",
+          "summary": "A canonical recipe owns opposed arcs, overlap, annihilation, and surviving material.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-factor-cancellation.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.fraction-composition.multiplicative-cancellation",
+          "summary": "Existing cancellation behavior is exemplar evidence until varied callers pass.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.fraction-factor-cancellation.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.fraction-factor-cancellation.v1",
+          "summary": "Fixtures vary factor location, multiplicity, grouping, signs, and forbidden zero factors.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.fraction-factor-cancellation.recipe",
+        "requirement.equation.fraction-factor-cancellation.exemplar",
+        "requirement.equation.fraction-factor-cancellation.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "registered-without-direct-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.nested-fraction-normalization",
+      "order": 12,
+      "domain": "equation",
+      "title": "Nested-fraction normalization",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.nested-fraction.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.nested-fraction.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.nested-fraction.v1",
+          "summary": "Nested numerator and denominator groups remain explicit semantic structures.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.nested-fraction.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.normalize-nested-fraction.v1",
+          "summary": "A typed operation owns reciprocal multiplication and denominator clearing.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.nested-fraction.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.nested-fraction.v1",
+          "summary": "A recipe preserves group cohesion while the nested structure is rewritten.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.nested-fraction.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.nested-fraction.v1",
+          "summary": "Fixtures cover numerator nesting, denominator nesting, compound terms, and signs.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.nested-fraction.normalizer",
+        "requirement.equation.nested-fraction.operation",
+        "requirement.equation.nested-fraction.recipe",
+        "requirement.equation.nested-fraction.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.power-and-exponent-transformations",
+      "order": 13,
+      "domain": "equation",
+      "title": "Power and exponent transformations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.power-exponent.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.equation.power-exponent.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.power-exponent.v1",
+          "summary": "Typed operations cover exponent absorption, lowering, expansion, and inverse relationships.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.power-exponent.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.power-exponent.v1",
+          "summary": "A canonical recipe preserves base/exponent roles through each supported rewrite.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.power-exponent.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.log-exponent.solve-two-power-x",
+          "summary": "The current solve example is one compound exemplar rather than family-wide proof.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.log-exponent.solve-two-power-x"
+          ]
+        },
+        {
+          "id": "requirement.equation.power-exponent.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.power-exponent.v1",
+          "summary": "Governed authoring names the exact law and direction instead of inferring it from glyph resemblance.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.power-exponent.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.power-exponent.v1",
+          "summary": "Fixtures pressure symbolic bases, nested powers, products, quotients, and invalid domain assumptions.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.power-exponent.operation",
+        "requirement.equation.power-exponent.recipe",
+        "requirement.equation.power-exponent.authoring",
+        "requirement.equation.power-exponent.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+          "title": "Solve an exponential equation with logarithms",
+          "href": "/?artifact=animation.algebra.log-exponent.solve-two-power-x"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.radical-inversion",
+      "order": 14,
+      "domain": "equation",
+      "title": "Root and radical inversion",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.radical-inversion.v1"
+      },
+      "status": "Registered",
+      "requirements": [
+        {
+          "id": "requirement.equation.radical-inversion.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.radical.v1",
+          "summary": "Root indices, radicands, and power equivalents normalize without losing grouping.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.radical-inversion.operation",
+          "kind": "semantic-operation",
+          "authorityId": "kp.algebra.rewrite-power-as-root",
+          "summary": "A typed operation relates powers and roots under explicit parity and domain conditions.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "kp.algebra@0.1.0"
+          ]
+        },
+        {
+          "id": "requirement.equation.radical-inversion.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.radical-inversion.v1",
+          "summary": "A recipe owns exponent-to-index lineage and radical enclosure construction.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.radical-inversion.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "exemplar.equation.radical-succession.v1",
+          "summary": "A reviewed exemplar establishes the visual grammar before broad promotion.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.radical-inversion.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.radical-inversion.v1",
+          "summary": "Fixtures cover square, odd, symbolic, nested, and principal-root cases.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.radical-inversion.normalizer",
+        "requirement.equation.radical-inversion.recipe",
+        "requirement.equation.radical-inversion.exemplar",
+        "requirement.equation.radical-inversion.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "registered-without-direct-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.substitution-collection-factoring",
+      "order": 15,
+      "domain": "equation",
+      "title": "Substitution, collection, and factoring",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.substitution-collection-factoring.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.equation.substitution-collection-factoring.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.substitution-collection-factoring.v1",
+          "summary": "Typed operations distinguish substitution, like-term collection, and common-factor extraction.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.substitution-collection-factoring.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.substitution-collection-factoring.v1",
+          "summary": "Recipes preserve semantic identity while terms enter, coalesce, or factor out.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.substitution-collection-factoring.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.distribution.factor-common-a",
+          "summary": "The current factoring exemplar is one pressure case, not universal support.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.distribution.factor-common-a"
+          ]
+        },
+        {
+          "id": "requirement.equation.substitution-collection-factoring.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.substitution-collection-factoring.v1",
+          "summary": "Fixtures vary repeated terms, coefficients, nesting, and replacement cardinality.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.substitution-collection-factoring.operation",
+        "requirement.equation.substitution-collection-factoring.recipe",
+        "requirement.equation.substitution-collection-factoring.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.distribution.factor-common-a",
+          "title": "Generated factor common a",
+          "href": "/?artifact=animation.generated.distribution.factor-common-a"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.branching-and-domain-conditions",
+      "order": 16,
+      "domain": "equation",
+      "title": "Branching, domain conditions, and rejected solutions",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.branching-domain.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.branching-domain.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.branching-domain.v1",
+          "summary": "Typed operations own branch creation, assumptions, and rejection evidence.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.branching-domain.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.branching-domain.v1",
+          "summary": "A recipe keeps branches visibly related while allowing different outcomes.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.branching-domain.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.branching-domain.v1",
+          "summary": "Authors must name branch conditions and verification steps; the compiler does not invent them.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.branching-domain.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.branching-domain.v1",
+          "summary": "Fixtures include plus/minus roots, logs, denominators, absolute value, and extraneous solutions.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.branching-domain.operation",
+        "requirement.equation.branching-domain.recipe",
+        "requirement.equation.branching-domain.authoring",
+        "requirement.equation.branching-domain.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.inequality-transformations",
+      "order": 17,
+      "domain": "equation",
+      "title": "Inequality and absolute-value transformations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.inequality.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.inequality.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.inequality-transform.v1",
+          "summary": "Typed operations own order reversal, interval intersection, and absolute-value case splitting.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.inequality.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.inequality-transform.v1",
+          "summary": "A canonical recipe makes order reversal and branch creation causally visible.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.inequality.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.inequality.v1",
+          "summary": "Governed authoring supplies sign knowledge and case conditions explicitly.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.inequality.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.inequality.v1",
+          "summary": "Fixtures cover positive/negative multipliers, compound bounds, and absolute value.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.inequality.operation",
+        "requirement.equation.inequality.recipe",
+        "requirement.equation.inequality.authoring",
+        "requirement.equation.inequality.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.binders-and-calculus-operators",
+      "order": 18,
+      "domain": "equation",
+      "title": "Binders, large operators, and calculus operators",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.binders-calculus.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.binders-calculus.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.binders-calculus.v1",
+          "summary": "Bound variables, limits, bodies, differentials, and evaluation bounds retain semantic roles.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.binders-calculus.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.binders-calculus.v1",
+          "summary": "Typed operations own scope-preserving substitution and operator laws.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.binders-calculus.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.binders-calculus.v1",
+          "summary": "Recipes preserve binding scope and prevent accidental variable capture.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.binders-calculus.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.binders-calculus.v1",
+          "summary": "Fixtures cover sums, products, limits, derivatives, integrals, and nested binders.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.binders-calculus.normalizer",
+        "requirement.equation.binders-calculus.operation",
+        "requirement.equation.binders-calculus.recipe",
+        "requirement.equation.binders-calculus.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.multiline-derivation-continuity",
+      "order": 19,
+      "domain": "equation",
+      "title": "Multi-line derivation continuity",
+      "scope": {
+        "kind": "transform-series",
+        "authorityId": "series.equation.derivation.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.equation.derivation.runtime",
+          "kind": "series-runtime",
+          "authorityId": "runtime.equation.derivation.v1",
+          "summary": "A deterministic series preserves object identity and checkpoints across multiple displayed lines.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.derivation.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.derivation-adjacency.v1",
+          "summary": "Every adjacent line identifies one licensed semantic operation or requests segmentation.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.derivation.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.derivation.v1",
+          "summary": "Authors provide ordered states, narration, and explicit intents without presentation coordinates.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.equation.derivation.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.derivation.v1",
+          "summary": "Fixtures pressure insertion, deletion, reordering, branch continuation, direct seek, and rewind.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.equation.derivation.runtime",
+        "requirement.equation.derivation.operation",
+        "requirement.equation.derivation.authoring",
+        "requirement.equation.derivation.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.matrix.vector-composition",
+      "order": 20,
+      "domain": "matrix",
+      "title": "Matrix-vector composition",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.matrix.vector-composition.v1"
+      },
+      "status": "Registered",
+      "requirements": [
+        {
+          "id": "requirement.matrix.domain-frontend.vector-composition",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.matrix.semantic-composition.v1",
+          "summary": "Matrix-vector composition must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.vector-composition.operation",
+          "kind": "semantic-operation",
+          "authorityId": "kp.semantic-motion.matrix-vector",
+          "summary": "Matrix rows, vector components, contribution products, and result coordinates retain typed roles.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "kp.semantic-motion@0.1.0"
+          ]
+        },
+        {
+          "id": "requirement.matrix.vector-composition.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.matrix.vector-composition.v1",
+          "summary": "A matrix-owned recipe traverses rows and gathers products without equation-specific assumptions.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.vector-composition.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+          "summary": "The existing two-by-two animation is concrete evidence, not proof of arbitrary dimensions.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.linear-algebra.matrix-vector.two-by-two"
+          ]
+        },
+        {
+          "id": "requirement.matrix.vector-composition.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.matrix.vector-composition.v1",
+          "summary": "Fixtures pressure rectangular dimensions, symbolic entries, sparse rows, and invalid shapes.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.matrix.domain-frontend.vector-composition",
+        "requirement.matrix.vector-composition.recipe",
+        "requirement.matrix.vector-composition.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+          "title": "Generated matrix-vector product",
+          "href": "/?artifact=animation.generated.linear-algebra.matrix-vector.two-by-two"
+        }
+      ],
+      "evidenceTensions": [
+        "registered-without-direct-generation",
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.matrix.matrix-composition",
+      "order": 21,
+      "domain": "matrix",
+      "title": "Matrix-matrix composition",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.matrix.matrix-composition.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.matrix.domain-frontend.matrix-composition",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.matrix.semantic-composition.v1",
+          "summary": "Matrix-matrix composition must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.matrix-composition.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.matrix.matrix-composition.v1",
+          "summary": "A matrix-owned operation identifies row-column dot products and result cells.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.matrix-composition.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.matrix.matrix-composition.v1",
+          "summary": "A canonical matrix recipe owns cell order, intermediate products, and accumulation.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.matrix-composition.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+          "summary": "The existing two-by-two product is exemplar evidence rather than a general authoring entrance.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+          ]
+        },
+        {
+          "id": "requirement.matrix.matrix-composition.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.matrix.matrix-composition.v1",
+          "summary": "Fixtures pressure compatible and incompatible dimensions, symbolic entries, and traversal order.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.matrix.domain-frontend.matrix-composition",
+        "requirement.matrix.matrix-composition.operation",
+        "requirement.matrix.matrix-composition.recipe",
+        "requirement.matrix.matrix-composition.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+          "title": "Generated matrix-matrix product",
+          "href": "/?artifact=animation.generated.linear-algebra.matrix-matrix.two-by-two"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.matrix.linear-map-geometry",
+      "order": 22,
+      "domain": "matrix",
+      "title": "Matrix and linear-map geometry",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.matrix.linear-map-geometry.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.matrix.domain-frontend.linear-map-geometry",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.matrix.linear-map.v1",
+          "summary": "Matrix and linear-map geometry must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.linear-map.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.matrix.apply-linear-map.v1",
+          "summary": "A matrix-owned operation relates the symbolic matrix to basis images and geometric vectors.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.linear-map.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.matrix.linear-map-geometry.v1",
+          "summary": "A canonical recipe preserves identity across symbolic and geometric representations.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.matrix.linear-map.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.graph.vector.linear-map-scale",
+          "summary": "The current vector-scale animation supplies bounded representation evidence.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.graph.vector.linear-map-scale"
+          ]
+        },
+        {
+          "id": "requirement.matrix.linear-map.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.matrix.linear-map-geometry.v1",
+          "summary": "Fixtures cover scale, rotate, shear, projection, rank loss, and basis changes.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.matrix.domain-frontend.linear-map-geometry",
+        "requirement.matrix.linear-map.operation",
+        "requirement.matrix.linear-map.recipe",
+        "requirement.matrix.linear-map.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.graph.vector.linear-map-scale",
+          "title": "Apply a scale matrix to a vector",
+          "href": "/?animation=editor-animation.sample.animation.vector-add-scale.basic"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.code.typescript-refactoring",
+      "order": 23,
+      "domain": "code",
+      "title": "TypeScript refactoring",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.code.typescript-refactoring.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.code.domain-frontend.typescript-refactoring",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.code.typescript-compiler.v1",
+          "summary": "TypeScript refactoring must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.typescript-refactoring.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.code.extract-typescript-helper.v1",
+          "summary": "The TypeScript frontend owns syntax, bindings, source ranges, and refactor legality.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.typescript-refactoring.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.code.extract-helper.v1",
+          "summary": "A code recipe moves stable semantic entities rather than raw colored glyphs.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.typescript-refactoring.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.programming.typescript-free-shipping-refactor",
+          "summary": "The approved free-shipping refactor is one concrete language caller.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.programming.typescript-free-shipping-refactor"
+          ]
+        },
+        {
+          "id": "requirement.code.typescript-refactoring.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.code.typescript-refactoring.v1",
+          "summary": "Fixtures pressure renaming, extraction, duplicated expressions, types, and compiler rejection.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.code.domain-frontend.typescript-refactoring",
+        "requirement.code.typescript-refactoring.operation",
+        "requirement.code.typescript-refactoring.recipe",
+        "requirement.code.typescript-refactoring.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.programming.typescript-free-shipping-refactor",
+          "title": "One free-shipping rule",
+          "href": "/?animation=editor-animation.animation.programming.typescript-free-shipping-refactor"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.code.python-refactoring",
+      "order": 24,
+      "domain": "code",
+      "title": "Python refactoring",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.code.python-refactoring.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.code.domain-frontend.python-refactoring",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.code.python-ast.v1",
+          "summary": "Python refactoring must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.python-refactoring.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.code.extract-python-helper.v1",
+          "summary": "The Python frontend owns syntax nodes, bindings, source ranges, and refactor legality.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.python-refactoring.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.code.extract-helper.v1",
+          "summary": "The shared causal recipe may be reused only after Python supplies authoritative entities and correspondence.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.python-refactoring.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.programming.python-free-shipping-refactor",
+          "summary": "The Python free-shipping refactor is a separate language pressure caller.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.programming.python-free-shipping-refactor"
+          ]
+        },
+        {
+          "id": "requirement.code.python-refactoring.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.code.python-refactoring.v1",
+          "summary": "Fixtures pressure indentation, scopes, expressions, annotations, and invalid extraction.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.code.domain-frontend.python-refactoring",
+        "requirement.code.python-refactoring.operation",
+        "requirement.code.python-refactoring.recipe",
+        "requirement.code.python-refactoring.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.programming.python-free-shipping-refactor",
+          "title": "One free-shipping rule",
+          "href": "/?animation=editor-animation.animation.programming.python-free-shipping-refactor"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.code.scheme-structural-evaluation",
+      "order": 25,
+      "domain": "code",
+      "title": "Scheme structural evaluation",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.code.scheme-structural-evaluation.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.code.domain-frontend.scheme-structural-evaluation",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.code.scheme-reader-evaluator.v1",
+          "summary": "Scheme structural evaluation must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.scheme-evaluation.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.code.scheme-evaluation.v1",
+          "summary": "The Scheme frontend owns s-expression structure, bindings, evaluator evidence, and pedagogical step selection.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.scheme-evaluation.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.code.scheme-structural-evaluation.v1",
+          "summary": "A Scheme recipe composes bloom/fold, binding, branch, primitive, and return motifs.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.code.scheme-evaluation.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.programming.scheme-factorial",
+          "summary": "The factorial evaluation proves one interpreter-backed semantic sequence.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.programming.scheme-factorial"
+          ]
+        },
+        {
+          "id": "requirement.code.scheme-evaluation.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.code.scheme-structural-evaluation.v1",
+          "summary": "Fixtures pressure nested calls, lexical scope, recursion, predicates, values, and selected pedagogical traces.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.code.domain-frontend.scheme-structural-evaluation",
+        "requirement.code.scheme-evaluation.operation",
+        "requirement.code.scheme-evaluation.recipe",
+        "requirement.code.scheme-evaluation.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.programming.scheme-factorial",
+          "title": "Evaluate (factorial 3)",
+          "href": "/?animation=editor-animation.animation.programming.scheme-factorial"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.graph-2d.function-transformations",
+      "order": 26,
+      "domain": "graph-2d",
+      "title": "Graph2D function transformations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.graph-2d.function-transformation.v1"
+      },
+      "status": "Missing",
+      "requirements": [
+        {
+          "id": "requirement.graph-2d.domain-frontend.function-transformations",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.graph-2d.function-model.v1",
+          "summary": "Graph2D function transformations must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.function.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.graph-2d.transform-function.v1",
+          "summary": "A Graph2D frontend owns function parameters, curve identity, salient points, and coordinate semantics.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.function.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.graph-2d.function-transformation.v1",
+          "summary": "A graph recipe interpolates semantic curve states without resizing typography or inventing algebra.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.function.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "exemplar.graph-2d.function-transformation.v1",
+          "summary": "One reviewed translation/reflection/stretch exemplar must establish the family grammar.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.function.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.graph-2d.function-transformation.v1",
+          "summary": "Fixtures cover translation, reflection, stretch, compression, domain, and discontinuity.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.graph-2d.domain-frontend.function-transformations",
+        "requirement.graph-2d.function.operation",
+        "requirement.graph-2d.function.recipe",
+        "requirement.graph-2d.function.exemplar",
+        "requirement.graph-2d.function.corpus"
+      ],
+      "exemplarLinks": [],
+      "evidenceTensions": [
+        "planned-capability-without-exact-asset"
+      ]
+    },
+    {
+      "capabilityId": "capability.graph-2d.model-transformations",
+      "order": 27,
+      "domain": "graph-2d",
+      "title": "Graph2D model transformations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.graph-2d.model-transformation.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.graph-2d.domain-frontend.model-transformations",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.graph-2d.semantic-scene.v1",
+          "summary": "Graph2D model transformations must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.model.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.graph-2d.transform-model.v1",
+          "summary": "A model frontend owns curve meaning, parameters, intersections, and domain-specific validity.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.model.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.graph-2d.model-transformation.v1",
+          "summary": "A Graph2D recipe preserves scene identity while caller-owned model semantics change.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-2d.model.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.economics.supply-demand-equilibrium-shift",
+          "summary": "The economics shift is one domain caller, not a universal graph operation.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.economics.supply-demand-equilibrium-shift"
+          ]
+        },
+        {
+          "id": "requirement.graph-2d.model.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.graph-2d.model-transformation.v1",
+          "summary": "Fixtures pressure curve shifts, intersections, tangencies, parameter sweeps, and invalid models.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.graph-2d.domain-frontend.model-transformations",
+        "requirement.graph-2d.model.operation",
+        "requirement.graph-2d.model.recipe",
+        "requirement.graph-2d.model.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.economics.supply-demand-equilibrium-shift",
+          "title": "Supply and demand equilibrium shift",
+          "href": "/?animation=editor-animation.animation.economics.supply-demand-equilibrium-shift"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    },
+    {
+      "capabilityId": "capability.graph-3d.scene-transformations",
+      "order": 28,
+      "domain": "graph-3d",
+      "title": "Graph3D scene transformations",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.graph-3d.scene-transformation.v1"
+      },
+      "status": "Exemplar",
+      "requirements": [
+        {
+          "id": "requirement.graph-3d.domain-frontend.scene-transformations",
+          "kind": "domain-frontend",
+          "authorityId": "frontend.graph-3d.semantic-scene.v1",
+          "summary": "Graph3D scene transformations must be normalized and verified by its domain-owned frontend.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-3d.scene.operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.graph-3d.transform-scene.v1",
+          "summary": "A Graph3D frontend owns surfaces, curves, camera semantics, topology, and transformation validity.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-3d.scene.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.graph-3d.scene-transformation.v1",
+          "summary": "A Graph3D recipe samples one semantic scene transition while respecting resource leases.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-3d.scene.renderer",
+          "kind": "renderer-capability",
+          "authorityId": "renderer-capability.graph-3d.lazy-webgl-with-svg-fallback.v1",
+          "summary": "Rendering remains lazy, bounded by the context lease pool, and paired with semantic SVG fallback.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
+          "id": "requirement.graph-3d.scene.exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.graph.surface-mode.mesh-to-donut",
+          "summary": "The internal mesh-to-donut animation is bounded host evidence, not general generation support.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.graph.surface-mode.mesh-to-donut"
+          ]
+        },
+        {
+          "id": "requirement.graph-3d.scene.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.graph-3d.scene-transformation.v1",
+          "summary": "Fixtures pressure surfaces, curves, topology, camera, context loss, fallback parity, seek, and rewind.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        }
+      ],
+      "remainingRequirementIds": [
+        "requirement.graph-3d.domain-frontend.scene-transformations",
+        "requirement.graph-3d.scene.operation",
+        "requirement.graph-3d.scene.recipe",
+        "requirement.graph-3d.scene.renderer",
+        "requirement.graph-3d.scene.corpus"
+      ],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.graph.surface-mode.mesh-to-donut",
+          "title": "Saddle surface mesh to donut",
+          "href": "/?animation=editor-animation.animation.graph.surface-mode.mesh-to-donut"
+        }
+      ],
+      "evidenceTensions": [
+        "playable-exemplar-without-general-generation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s08",
+  "kind": "next-action",
+  "title": "Generated-coverage-artifact",
+  "status": "resolved",
+  "summary": "Coverage is generated from exact evidence and exposes rather than erases authority drift.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s08 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-transformation-coverage.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-transformation-coverage.generated.json"
+    },
+    {
+      "kind": "file",
+      "path": "scripts/generate-animation-transformation-coverage.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-transformation-coverage.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s07"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s07"
+  ],
+  "verification": [
+    "npm run test:animation-transformation-coverage",
+    "npm run check:animation-transformation-coverage",
+    "npm run test:equation-generation-boundary",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T22:19:47.301Z",
+      "notes": "5 coverage projection tests passed."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "freshness",
+      "checkedAt": "2026-08-17T22:19:48.351Z",
+      "notes": "Generated coverage is current."
+    },
+    {
+      "command": "npm run test:equation-generation-boundary",
+      "status": "passed",
+      "scope": "compiler-boundary",
+      "checkedAt": "2026-08-17T22:19:49.383Z",
+      "notes": "12 direct facade tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T22:19:50.364Z",
+      "notes": "Dependency and compiler authority gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-17T22:19:51.601Z",
+      "notes": "TypeScript Svelte and domain checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated coverage artifact and freshness gate are complete."
+  },
+  "expectedLearning": [
+    "Whether one deterministic generated artifact can preserve exact status evidence remaining requirements exemplar links and evidence tensions without becoming a second editable plan."
+  ],
+  "allowedWork": [
+    "Generated read-only coverage projection freshness script and direct facade authority identifiers needed for exact joins."
+  ],
+  "disallowedWork": [
+    "Manually edited generated status renderer loading UI presentation state heuristics or roadmap ownership."
+  ],
+  "criteria": [
+    {
+      "id": "generated-artifact-is-fresh-and-deterministic",
+      "weight": "high"
+    },
+    {
+      "id": "remaining-requirements-are-exact",
+      "weight": "high"
+    },
+    {
+      "id": "direct-and-exemplar-tensions-stay-visible",
+      "weight": "high"
+    }
+  ]
+}

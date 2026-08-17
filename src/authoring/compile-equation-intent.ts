@@ -50,6 +50,7 @@ export interface KpEquationIntentRepairDiagnostic {
 export interface KpEquationIntentSurfaceVocabulary {
   readonly animationId: string;
   readonly operationId: string;
+  readonly authoringAuthorityId: string;
   readonly availableSemanticEntityIds: readonly string[];
   readonly canonicalRoleBindings:
     Readonly<Record<string, readonly string[]>>;
@@ -184,6 +185,7 @@ function describeFunctionWrap(): KpEquationIntentSurfaceVocabulary {
   return vocabulary({
     animationId: "animation.generated.function-wrap.apply-f",
     operationId: "kp.algebra.wrap-function",
+    authoringAuthorityId: "compiler.equation.intent.function-wrap.v1",
     availableSemanticEntityIds: animation.bundle.objects.flatMap(
       ({ selectors }) => selectors.map(({ id }) => id)
     ),
@@ -214,6 +216,8 @@ function describeCancellation(): KpEquationIntentSurfaceVocabulary {
   return vocabulary({
     animationId: contract.animationId,
     operationId: contract.operationId,
+    authoringAuthorityId:
+      "compiler.equation.intent.additive-cancellation.v1",
     availableSemanticEntityIds: [
       contract.source.objectId,
       ...contract.source.selectorIds,
@@ -245,6 +249,7 @@ function describeDistribution(): KpEquationIntentSurfaceVocabulary {
   return vocabulary({
     animationId: contract.animationId,
     operationId: "kp.algebra.distribute-multiplication",
+    authoringAuthorityId: "compiler.equation.intent.distribution.v1",
     availableSemanticEntityIds: [
       ...animation.bundle.objects.flatMap((object) => [
         object.id,
