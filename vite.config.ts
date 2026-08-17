@@ -1,6 +1,4 @@
 import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 import { svelte } from "@sveltejs/vite-plugin-svelte";
@@ -9,6 +7,13 @@ import { defineConfig } from "vite";
 import {
   kpProductionDevelopmentErasurePlugin
 } from "./scripts/vite-production-development-erasure.ts";
+import {
+  kpViteDevelopmentServer,
+  kpViteLiveReviewBuildPlugin,
+  kpViteProductionBuild,
+  kpViteProjectRoot,
+  readKpReviewBuildIdentity
+} from "./scripts/kp-vite-config-helpers.ts";
 
 import {
   kpProductionCompatibilityBuildEntries
@@ -73,7 +78,7 @@ import {
 } from "./src/tutorial/algebra-fraction-composition/fraction-composition-static-publication.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
-const projectRoot = fileURLToPath(new URL(".", import.meta.url));
+const projectRoot = kpViteProjectRoot(import.meta.url);
 const readerBuildRoutes = kpReaderRouteManifest.map((descriptor) => ({
   descriptor,
   filename: resolve(projectRoot, kpReaderRouteHtmlPath(descriptor.route)),
@@ -82,7 +87,7 @@ const readerBuildRoutes = kpReaderRouteManifest.map((descriptor) => ({
 const readerBuildRouteByFilename = new Map(
   readerBuildRoutes.map((route) => [route.filename, route] as const)
 );
-const reviewBuildIdentity = readReviewBuildIdentity();
+const reviewBuildIdentity = readKpReviewBuildIdentity(projectRoot);
 const lispTutorialFilename = resolve(
   projectRoot,
   "tutorials/programming/lisp-function-application/index.html"
@@ -144,22 +149,10 @@ export default defineConfig({
     // Svelte owns only catalogue application composition; animation assets,
     // clocks, sampled frames, and renderer ports remain plain TypeScript.
     svelte(),
-    {
+    kpViteLiveReviewBuildPlugin({
       name: "kp-live-dev-review-build",
-      configureServer(server) {
-        server.middlewares.use(
-          "/__kp/dev-review/build",
-          (_request, response) => {
-            // The config-time define becomes stale across commits while the
-            // dev server stays open. Review evidence asks this read-only
-            // endpoint for the current worktree identity at capture time.
-            response.setHeader("content-type", "application/json");
-            response.setHeader("cache-control", "no-store");
-            response.end(JSON.stringify(readReviewBuildIdentity()));
-          }
-        );
-      }
-    },
+      projectRoot
+    }),
     {
       name: "kp-economics-authoring-save-boundary",
       configResolved(config) {
@@ -294,97 +287,60 @@ export default defineConfig({
       }
     }
   ],
-  build: {
-    manifest: true,
+  build: kpViteProductionBuild({
     // All supported publication targets implement modulepreload. Shipping the
     // legacy polyfill would add a startup request to every route.
-    modulePreload: { polyfill: false },
-    rollupOptions: {
-      input: {
-        ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [
-          entry.name,
-          resolve(projectRoot, entry.htmlPath)
-        ])),
-        ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
-          kpReaderRouteEntryName(descriptor.route),
-          filename
-        ]))
-      },
-      output: {
-        manualChunks(id) {
-          // Vite injects this helper into every entry that performs a dynamic
-          // import. If Rollup adopts it into the tutorial chunk, unrelated
-          // readers inherit the entire Svelte/tutorial closure just to preload
-          // their own runtime capability.
-          if (id.includes("vite/preload-helper")) return "kp-preload-helper";
-          // Both tutorial routes should pay for one lazy platform seam, not a
-          // request per extracted primitive. Domain assets remain separately
-          // lazy and the catalogue entry does not eagerly import this chunk.
-          if (
-            !id.includes(".css") &&
-            (id.includes("/src/tutorial/kp-tutorial-") ||
-              id.includes("/src/tutorial/KpTutorialLessonShell.svelte") ||
-              id.includes("/src/editor/animation-catalogue-review-host.ts"))
-          ) return "kp-tutorial-core";
-          // These pure pathname matchers are synchronously read together by
-          // bootstrap. Keeping one tiny route table avoids three startup
-          // requests without pulling either tutorial implementation forward.
-          if (
-            id.includes("/src/editor/animation-catalogue-route.ts") ||
-              id.includes("/src/tutorial/economics-demand-shift/economics-demand-shift-route.ts") ||
-              id.includes("/src/tutorial/lisp-function-application/lisp-function-application-route.ts") ||
-              id.includes("/src/tutorial/scheme-factorial/scheme-factorial-route.ts")
-          ) return "kp-route-table";
-          // These dependency-free IDs travel together in the display catalog;
-          // one metadata leaf avoids request overhead without creating a large
-          // startup evaluation task or coupling their render implementations.
-          if (
-            id.includes("/src/rendering/dimensional-continuity-graph-language.ts") ||
+    entries: {
+      ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [
+        entry.name,
+        resolve(projectRoot, entry.htmlPath)
+      ])),
+      ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
+        kpReaderRouteEntryName(descriptor.route),
+        filename
+      ]))
+    },
+    output: {
+      manualChunks(id) {
+        // Vite injects this helper into every entry that performs a dynamic
+        // import. If Rollup adopts it into the tutorial chunk, unrelated
+        // readers inherit the entire Svelte/tutorial closure just to preload
+        // their own runtime capability.
+        if (id.includes("vite/preload-helper")) return "kp-preload-helper";
+        // Both tutorial routes should pay for one lazy platform seam, not a
+        // request per extracted primitive. Domain assets remain separately
+        // lazy and the catalogue entry does not eagerly import this chunk.
+        if (
+          !id.includes(".css") &&
+          (id.includes("/src/tutorial/kp-tutorial-") ||
+            id.includes("/src/tutorial/KpTutorialLessonShell.svelte") ||
+            id.includes("/src/editor/animation-catalogue-review-host.ts"))
+        ) return "kp-tutorial-core";
+        // These pure pathname matchers are synchronously read together by
+        // bootstrap. Keeping one tiny route table avoids three startup
+        // requests without pulling either tutorial implementation forward.
+        if (
+          id.includes("/src/editor/animation-catalogue-route.ts") ||
+            id.includes("/src/tutorial/economics-demand-shift/economics-demand-shift-route.ts") ||
+            id.includes("/src/tutorial/lisp-function-application/lisp-function-application-route.ts") ||
+            id.includes("/src/tutorial/scheme-factorial/scheme-factorial-route.ts")
+        ) return "kp-route-table";
+        // These dependency-free IDs travel together in the display catalog;
+        // one metadata leaf avoids request overhead without creating a large
+        // startup evaluation task or coupling their render implementations.
+        if (
+          id.includes("/src/rendering/dimensional-continuity-graph-language.ts") ||
             id.includes("/src/tutorial/verified-generated-linear-solve-identity.ts")
-          ) return "kp-route-table";
-          return undefined;
-        }
+        ) return "kp-route-table";
+        return undefined;
       }
     }
-  },
-  server: {
-    host: "127.0.0.1",
+  }),
+  server: kpViteDevelopmentServer({
     port: 8000,
-    watch: {
-      // Browser checks write traces and screenshots here. Watching that
-      // scratch tree used to broadcast unrelated full-page reloads into the
-      // long-lived review webview and could strand its shared iframe host.
-      ignored: ["**/tmp/codex/**"]
-    },
-    proxy: {
-      "/api": {
-        changeOrigin: true,
-        target: apiTarget
-      }
-    },
-    strictPort: true
-  }
+    apiTarget
+  })
 });
-
-function readReviewBuildIdentity(): { commit: string; fingerprint: string; dirty: boolean } {
-  try {
-    const commit = execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
-      cwd: projectRoot,
-      encoding: "utf8"
-    }).trim();
-    const dirty = execFileSync("git", ["status", "--porcelain", "--untracked-files=no"], {
-      cwd: projectRoot,
-      encoding: "utf8"
-    }).trim().length > 0;
-    return {
-      commit,
-      fingerprint: dirty ? `${commit}-dirty` : commit,
-      dirty
-    };
-  } catch {
-    return { commit: "unknown", fingerprint: "dev-unknown", dirty: true };
-  }
-}
 
 function compileEconomicsTutorialStaticNarrative(): string {
   const artifact: unknown = JSON.parse(

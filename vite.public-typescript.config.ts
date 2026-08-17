@@ -1,6 +1,4 @@
 import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 import { defineConfig } from "vite";
@@ -8,6 +6,13 @@ import { defineConfig } from "vite";
 import {
   kpProductionDevelopmentErasurePlugin
 } from "./scripts/vite-production-development-erasure.ts";
+import {
+  kpViteDevelopmentServer,
+  kpViteLiveReviewBuildPlugin,
+  kpViteProductionBuild,
+  kpViteProjectRoot,
+  readKpReviewBuildIdentity
+} from "./scripts/kp-vite-config-helpers.ts";
 
 import type { KpArticleImportLock } from
   "./src/article/kp-article-import-lock.ts";
@@ -16,7 +21,7 @@ import {
   renderKpTypeScriptFreeShippingPublicLesson
 } from "./src/public-web/typescript-free-shipping-publication.ts";
 
-const projectRoot = fileURLToPath(new URL(".", import.meta.url));
+const projectRoot = kpViteProjectRoot(import.meta.url);
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const routeFilename = resolve(
   projectRoot,
@@ -30,7 +35,9 @@ const routeFilename = resolve(
  */
 export default defineConfig({
   define: {
-    __KP_DEV_REVIEW_BUILD__: JSON.stringify(readReviewBuildIdentity())
+    __KP_DEV_REVIEW_BUILD__: JSON.stringify(
+      readKpReviewBuildIdentity(projectRoot)
+    )
   },
   plugins: [
     kpProductionDevelopmentErasurePlugin({ projectRoot }),
@@ -48,40 +55,21 @@ export default defineConfig({
         }
       }
     },
-    {
+    kpViteLiveReviewBuildPlugin({
       name: "kp-public-typescript-live-review-build",
-      configureServer(server) {
-        server.middlewares.use("/__kp/dev-review/build", (_request, response) => {
-          response.setHeader("content-type", "application/json");
-          response.setHeader("cache-control", "no-store");
-          response.end(JSON.stringify(readReviewBuildIdentity()));
-        });
-      }
-    }
+      projectRoot
+    })
   ],
-  build: {
+  build: kpViteProductionBuild({
     outDir: "dist/public-typescript",
-    emptyOutDir: true,
-    manifest: true,
-    modulePreload: { polyfill: false },
-    rollupOptions: {
-      input: {
-        publicTypeScriptFreeShipping: routeFilename
-      }
+    entries: {
+      publicTypeScriptFreeShipping: routeFilename
     }
-  },
-  server: {
-    host: "127.0.0.1",
+  }),
+  server: kpViteDevelopmentServer({
     port: 4192,
-    strictPort: true,
-    watch: { ignored: ["**/tmp/codex/**"] },
-    proxy: {
-      "/api": {
-        changeOrigin: true,
-        target: apiTarget
-      }
-    }
-  }
+    apiTarget
+  })
 });
 
 function compilePublication(): string {
@@ -96,29 +84,4 @@ function compilePublication(): string {
   return renderKpTypeScriptFreeShippingPublicLesson(
     compileKpTypeScriptFreeShippingPublicLesson({ text, lock })
   );
-}
-
-function readReviewBuildIdentity(): {
-  commit: string;
-  fingerprint: string;
-  dirty: boolean;
-} {
-  try {
-    const commit = execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
-      cwd: projectRoot,
-      encoding: "utf8"
-    }).trim();
-    const dirty = execFileSync(
-      "git",
-      ["status", "--porcelain", "--untracked-files=no"],
-      { cwd: projectRoot, encoding: "utf8" }
-    ).trim().length > 0;
-    return {
-      commit,
-      fingerprint: dirty ? `${commit}-dirty` : commit,
-      dirty
-    };
-  } catch {
-    return { commit: "unknown", fingerprint: "dev-unknown", dirty: true };
-  }
 }

@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 import { defineConfig } from "vite";
@@ -7,6 +6,12 @@ import { defineConfig } from "vite";
 import {
   kpProductionDevelopmentErasurePlugin
 } from "./scripts/vite-production-development-erasure.ts";
+import {
+  kpViteDevelopmentServer,
+  kpViteProductionBuild,
+  kpViteProjectRoot,
+  kpViteScopedRootRedirectPlugin
+} from "./scripts/kp-vite-config-helpers.ts";
 
 import type { KpArticleImportLock } from
   "./src/article/kp-article-import-lock.ts";
@@ -16,7 +21,7 @@ import {
   renderKpNormalMatrixProofPublicLesson
 } from "./src/public-web/normal-matrix-proof-publication.ts";
 
-const projectRoot = fileURLToPath(new URL(".", import.meta.url));
+const projectRoot = kpViteProjectRoot(import.meta.url);
 const routeFilename = resolve(
   projectRoot,
   "learn/math/normal-matrices/index.html"
@@ -30,23 +35,10 @@ const reviewRouteFilename = resolve(
 export default defineConfig({
   plugins: [
     kpProductionDevelopmentErasurePlugin({ projectRoot }),
-    {
+    kpViteScopedRootRedirectPlugin({
       name: "kp-public-normal-matrices-scoped-root",
-      configureServer(server) {
-        server.middlewares.use((request, response, next) => {
-          if (request.url === undefined ||
-              new URL(request.url, "http://127.0.0.1").pathname !== "/") {
-            next();
-            return;
-          }
-          // This server intentionally excludes the catalogue's Svelte
-          // compiler; keep its root inside the proof projection boundary.
-          response.statusCode = 307;
-          response.setHeader("location", "/learn/math/normal-matrices/");
-          response.end();
-        });
-      }
-    },
+      pathname: "/learn/math/normal-matrices/"
+    }),
     {
       name: "kp-public-normal-matrices-static-publication",
       transformIndexHtml: {
@@ -69,24 +61,14 @@ export default defineConfig({
       }
     }
   ],
-  build: {
+  build: kpViteProductionBuild({
     outDir: "dist/public-normal-matrices",
-    emptyOutDir: true,
-    manifest: true,
-    modulePreload: { polyfill: false },
-    rollupOptions: {
-      input: {
-        publicNormalMatrices: routeFilename,
-        publicNormalMatricesReview: reviewRouteFilename
-      }
+    entries: {
+      publicNormalMatrices: routeFilename,
+      publicNormalMatricesReview: reviewRouteFilename
     }
-  },
-  server: {
-    host: "127.0.0.1",
-    port: 4194,
-    strictPort: true,
-    watch: { ignored: ["**/tmp/codex/**"] }
-  }
+  }),
+  server: kpViteDevelopmentServer({ port: 4194 })
 });
 
 function compilePublication(): string {

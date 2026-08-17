@@ -187,7 +187,8 @@
     {
       "id": "s23",
       "title": "extract-route-neutral-vite-helpers",
-      "status": "planned"
+      "summary": "Extracted route-neutral Vite helpers for project roots, build mechanics, dev servers, scoped redirects, and live Review identity; every application still declares its own entries, routes, outputs, plugins, and production erasure, and all six builds pass.",
+      "status": "complete"
     },
     {
       "id": "s24",
