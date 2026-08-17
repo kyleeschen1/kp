@@ -12,6 +12,9 @@ import {
   kpDevReviewNoteV2Schema
 } from "../protocols/dev-review-v2-schema.ts";
 
+const placeValueBrowserHostPath =
+  "/tests/fixtures/place-value-addition-browser-host.html";
+
 for (const viewport of [
   { name: "wide", width: 1180, height: 800 },
   { name: "phone", width: 320, height: 700 }
@@ -20,7 +23,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto(placeValueBrowserHostPath);
     const evidence = await page.evaluate(async ({ width, height, name }) => {
       const navigationUrl =
         "/src/rendering/place-value-addition-navigation.ts";
@@ -57,6 +60,7 @@ for (const viewport of [
       surface.root.style.inlineSize = `${width - 16}px`;
       document.body.append(surface.root);
       await document.fonts.ready;
+      await surface.shared.prepareNativeScenesWhenReady();
 
       const writtenHost = surface.shared.root.querySelector<HTMLElement>(
         '[data-kp-place-value-view="written"]'
@@ -351,7 +355,9 @@ test("responsive layout is invariant in CSS pixels at DPR 1 and 2", async ({
       deviceScaleFactor
     });
     const page = await context.newPage();
-    await page.goto("http://127.0.0.1:4173/");
+    await page.goto(
+      "http://127.0.0.1:4173/tests/fixtures/place-value-addition-browser-host.html"
+    );
     snapshots.push(await page.evaluate(async () => {
       const navigationUrl =
         "/src/rendering/place-value-addition-navigation.ts";
@@ -375,6 +381,7 @@ test("responsive layout is invariant in CSS pixels at DPR 1 and 2", async ({
       if (app !== null) app.style.display = "none";
       document.body.append(surface.root);
       await document.fonts.ready;
+      await surface.shared.prepareNativeScenesWhenReady();
       surface.apply(navigation.seekOutline("outline.place-value.tens"));
       const written = surface.root.querySelector<HTMLElement>(
         '[data-kp-place-value-view="written"]'
@@ -407,11 +414,7 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
   page
 }) => {
   await page.setViewportSize({ width: 390, height: 700 });
-  await page.goto("/");
-  await expect(page.locator("body")).toHaveAttribute(
-    "data-kp-dev-review-ready",
-    "true"
-  );
+  await page.goto(placeValueBrowserHostPath);
   const initial = await page.evaluate(async () => {
     const navigationUrl =
       "/src/rendering/place-value-addition-navigation.ts";
@@ -419,6 +422,10 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
       "/src/rendering/place-value-addition-responsive-surface.ts";
     const reviewUrl =
       "/src/dev-review/editor-animation-library-capture-provider.ts";
+    const reviewBootstrapUrl =
+      "/src/dev-review/editor-animation-library-review-bootstrap.ts";
+    const toolbarUrl =
+      "/src/dev-toolbar/development-toolbar-bootstrap.ts";
     const navigationModule = await import(
       /* @vite-ignore */ navigationUrl
     );
@@ -427,6 +434,12 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
     );
     const reviewModule = await import(
       /* @vite-ignore */ reviewUrl
+    );
+    const reviewBootstrapModule = await import(
+      /* @vite-ignore */ reviewBootstrapUrl
+    );
+    const toolbarModule = await import(
+      /* @vite-ignore */ toolbarUrl
     );
     const navigation =
       navigationModule.createKpPlaceValueAdditionNavigationSession({
@@ -458,6 +471,7 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
     player.append(stage);
     library.append(player);
     document.body.append(library);
+    await surface.shared.prepareNativeScenesWhenReady();
     surface.apply(navigation.sampleProgress({
       progress: 0.635,
       source: "controls"
@@ -472,6 +486,8 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
       capturedAtMs: performance.now(),
       eventTarget: null
     });
+    toolbarModule.mountKpDevelopmentToolbar(window);
+    reviewBootstrapModule.mountKpEditorAnimationLibraryDevReview(window);
     return {
       visualAriaHidden:
         surface.shared.root.getAttribute("aria-hidden"),
@@ -489,6 +505,12 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
       review: captured
     };
   });
+
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-dev-review-ready",
+    "true",
+    { timeout: 15_000 }
+  );
 
   expect(initial.visualAriaHidden).toBe("true");
   expect(initial.transcriptSteps).toBe(7);
@@ -551,8 +573,9 @@ test("accessibility keyboard and Review metadata share the sealed frame", async 
   ).toHaveCount(0);
 
   const review = page.locator("[data-kp-dev-review-shell]");
-  await expect(review.locator("button.launcher")).toBeVisible();
-  await review.locator("button.launcher").click();
+  const toolbar = page.locator("[data-kp-dev-toolbar]");
+  await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
+  await toolbar.getByRole("button", { name: "Review" }).click();
   await review.locator("textarea").fill(
     "Place-value Review round-trip proof."
   );

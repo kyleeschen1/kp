@@ -14,7 +14,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const navigationUrl =
         "/src/rendering/place-value-addition-navigation.ts";
@@ -38,6 +38,7 @@ for (const viewport of [
       if (app !== null) app.style.display = "none";
       document.body.append(dom.root);
       await document.fonts.ready;
+      await dom.prepareNativeScenesWhenReady();
 
       const writtenHost = dom.root.querySelector<HTMLElement>(
         '[data-kp-place-value-view="written"]'

@@ -8,7 +8,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const runtimeUrl =
         "/src/rendering/place-value-addition-runtime.ts";
@@ -43,6 +43,7 @@ for (const viewport of [
       if (app !== null) app.style.display = "none";
       document.body.append(dom.root);
       await document.fonts.ready;
+      await dom.prepareNativeScenesWhenReady();
 
       const written = dom.writtenRoot as HTMLElement;
       const roots = [
@@ -105,7 +106,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const runtimeUrl =
         "/src/rendering/place-value-addition-runtime.ts";
@@ -144,6 +145,7 @@ for (const viewport of [
       if (app !== null) app.style.display = "none";
       document.body.append(dom.root);
       await document.fonts.ready;
+      await dom.prepareNativeScenesWhenReady();
 
       const written = dom.writtenRoot as HTMLElement;
       const documentary = [

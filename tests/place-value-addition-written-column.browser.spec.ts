@@ -107,7 +107,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async () => {
       const projectionUrl =
         "/src/rendering/place-value-addition-base-ten-projection.ts";
@@ -196,7 +196,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const runtimeUrl =
         "/src/rendering/place-value-addition-runtime.ts";
@@ -232,6 +232,7 @@ for (const viewport of [
       const app = document.querySelector<HTMLElement>("#app");
       if (app !== null) app.style.display = "none";
       document.body.append(dom.root);
+      await dom.prepareNativeScenesWhenReady();
       const writtenRoot = dom.writtenRoot as HTMLElement;
       const baseTenRoot = dom.baseTenRoot as SVGSVGElement;
       const writtenCells = [
@@ -298,7 +299,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const runtimeUrl =
         "/src/rendering/place-value-addition-runtime.ts";
@@ -339,6 +340,7 @@ for (const viewport of [
         placeItems: "center"
       });
       await document.fonts.ready;
+      await dom.prepareNativeScenesWhenReady();
 
       const writtenRoot = dom.writtenRoot as HTMLElement;
       const persistentElements = new Map(
@@ -628,7 +630,7 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
     const evidence = await page.evaluate(async ({ width }) => {
       const runtimeUrl =
         "/src/rendering/place-value-addition-runtime.ts";
@@ -670,6 +672,7 @@ for (const viewport of [
         placeItems: "center"
       });
       await document.fonts.ready;
+      await dom.prepareNativeScenesWhenReady();
 
       const evaluation = () => document.querySelector<HTMLElement>(
         "[data-kp-place-value-ones-evaluation]"
@@ -948,7 +951,7 @@ async function mountAndMeasure(
   page: Page,
   endpoint: Endpoint
 ): Promise<StageMetric> {
-  await page.goto("/");
+  await page.goto("/tests/fixtures/place-value-addition-browser-host.html");
   await page.evaluate(async (selectedEndpoint) => {
     const projectionUrl =
       "/src/reader/compiler/place-value-addition-written-column-projection.ts";

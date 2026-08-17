@@ -451,10 +451,27 @@ export async function createKpGeneratedPlaceValueAdditionBrowserHarness(input: {
     root
   });
   await kpNativeKatexFeaturePackLoader.load();
-  for (const scene of scenes) scene.prepare();
+  await Promise.all([
+    input.document.fonts.load("40px KaTeX_Main"),
+    input.document.fonts.load("40px KaTeX_Math")
+  ]);
+  await input.document.fonts.ready;
   const view = input.document.defaultView;
   if (view === null) {
     throw new Error("Generated browser harness requires a live window.");
+  }
+  await new Promise<void>((resolve) => view.requestAnimationFrame(() =>
+    view.requestAnimationFrame(() => resolve())
+  ));
+  for (const scene of scenes) {
+    const display = scene.root.style.display;
+    try {
+      scene.root.style.display = "grid";
+      void scene.root.offsetWidth;
+      scene.prepare();
+    } finally {
+      scene.root.style.display = display;
+    }
   }
   const persistentCell = (semanticEntityId: string): HTMLElement => {
     const element = written.cellElements.get(semanticEntityId);

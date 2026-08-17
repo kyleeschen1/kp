@@ -19,6 +19,7 @@ test("representative bundle scenarios cover each approved experience family", ()
       "bundle-experience.catalogue.programming-trace",
       "bundle-experience.catalogue.graph-3d",
       "bundle-experience.catalogue.place-value",
+      "bundle-experience.catalogue.place-value-motion",
       "bundle-experience.studio.legacy-host",
       "bundle-experience.public.typescript-free-shipping",
       "bundle-experience.public.fraction-composition",
@@ -51,7 +52,10 @@ test("selected experiences preserve explicit comparable catalogue bases", () => 
   const placeValue = findKpBundleExperienceScenario(
     "bundle-experience.catalogue.place-value"
   );
-  assert.ok(selected.filter(({ id }) => id !== placeValue.id)
+  assert.ok(selected.filter(({ id }) =>
+    id !== placeValue.id &&
+    id !== "bundle-experience.catalogue.place-value-motion"
+  )
     .every(({ comparisonBaseId }) =>
       comparisonBaseId === "bundle-experience.catalogue.empty"
     ));
@@ -68,6 +72,20 @@ test("selected experiences preserve explicit comparable catalogue bases", () => 
     id: "load-selected-surface",
     manifestRoots: ["src/editor/place-value-addition-surface-adapter.ts"]
   }]);
+  const placeValueMotion = findKpBundleExperienceScenario(
+    "bundle-experience.catalogue.place-value-motion"
+  );
+  assert.equal(placeValueMotion.comparisonBaseId, placeValue.id);
+  assert.equal(placeValueMotion.budgets[0]?.gzipBytes, 60_000);
+  assert.deepEqual(placeValueMotion.activations.at(-1), {
+    id: "load-selected-renderer",
+    manifestRoots: [
+      "src/rendering/native-katex-feature-pack-implementation.ts"
+    ]
+  });
+  assert.ok(placeValueMotion.expectedOwners.includes(
+    "src/rendering/native-katex-feature-pack-implementation.ts"
+  ));
 });
 
 test("non-equation catalogue experiences exclude the native KaTeX pack", () => {

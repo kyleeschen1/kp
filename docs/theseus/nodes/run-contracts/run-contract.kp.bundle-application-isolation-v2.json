@@ -133,7 +133,8 @@
     {
       "id": "s14",
       "title": "prove-place-value-headroom-and-preservation",
-      "status": "planned"
+      "summary": "Proved 31.5% headroom at initial place-value selection and 10.8% headroom for the separately measured native-motion activation; all 126 browser checks pass across Chromium, Firefox, and WebKit with semantic, responsive, Review, seek, rewind, and lifecycle behavior preserved.",
+      "status": "complete"
     },
     {
       "id": "s15",

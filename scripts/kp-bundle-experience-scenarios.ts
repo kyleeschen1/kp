@@ -124,12 +124,13 @@ export const kpBundleExperienceScenarios:
     }),
     selectedCatalogueScenario({
       id: "bundle-experience.catalogue.place-value",
-      title: "Catalogue with place-value addition selected",
+      title: "Catalogue with place-value addition initially selected",
       packRoot: "src/animation/catalog-packs/place-value.ts",
       surfaceRoot: "src/editor/place-value-addition-surface-adapter.ts",
       forbiddenOwners: [
         "src/editor/programming-surface-capability.ts",
-        "src/rendering/graph-webgl-three.ts"
+        "src/rendering/graph-webgl-three.ts",
+        NATIVE_KATEX_FEATURE_PACK_OWNER
       ],
       budgets: [{
         phase: "incremental",
@@ -137,6 +138,23 @@ export const kpBundleExperienceScenarios:
         gzipBytes: 75_000
       }],
       comparisonBaseId: "bundle-experience.catalogue.solve-x"
+    }),
+    selectedCatalogueScenario({
+      id: "bundle-experience.catalogue.place-value-motion",
+      title: "Catalogue after place-value native motion is requested",
+      packRoot: "src/animation/catalog-packs/place-value.ts",
+      surfaceRoot: "src/editor/place-value-addition-surface-adapter.ts",
+      rendererRoot: NATIVE_KATEX_FEATURE_PACK_OWNER,
+      forbiddenOwners: [
+        "src/editor/programming-surface-capability.ts",
+        "src/rendering/graph-webgl-three.ts"
+      ],
+      budgets: [{
+        phase: "incremental",
+        resource: "total",
+        gzipBytes: 60_000
+      }],
+      comparisonBaseId: "bundle-experience.catalogue.place-value"
     }),
     scenario({
       id: "bundle-experience.studio.legacy-host",
@@ -242,7 +260,11 @@ function selectedCatalogueScenario(input: {
     activations,
     comparisonBaseId: input.comparisonBaseId ??
       "bundle-experience.catalogue.empty",
-    expectedOwners: [input.packRoot, input.surfaceRoot],
+    expectedOwners: [
+      input.packRoot,
+      input.surfaceRoot,
+      ...(input.rendererRoot === undefined ? [] : [input.rendererRoot])
+    ],
     forbiddenOwners: input.forbiddenOwners,
     ...(input.budgets === undefined ? {} : { budgets: input.budgets })
   });
