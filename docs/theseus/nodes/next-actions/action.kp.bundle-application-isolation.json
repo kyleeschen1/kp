@@ -401,6 +401,21 @@
       "scope": "shared production compatibility",
       "checkedAt": "2026-08-17T03:11:28.414Z",
       "notes": "1361 modules built and production erasure gate passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/kp-algebra-pack-closure-attribution.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-08-17T03:19:01.510Z"
+    },
+    {
+      "command": "npm run measure:bundle:algebra-pack",
+      "status": "passed",
+      "checkedAt": "2026-08-17T03:19:14.521Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-08-17T03:19:20.285Z"
     }
   ],
   "expectedLearning": [

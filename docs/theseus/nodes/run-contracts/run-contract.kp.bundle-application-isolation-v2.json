@@ -175,7 +175,8 @@
     {
       "id": "s21",
       "title": "attribute-algebra-pack-closure",
-      "status": "planned"
+      "summary": "Attributed the 83877-byte solve-x algebra domain-pack activation across caller, semantic, runtime, renderer, and KaTeX ownership with exact per-resource evidence; KaTeX contributes zero bytes until the separate equation-surface activation.",
+      "status": "complete"
     },
     {
       "id": "s22",
