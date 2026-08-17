@@ -139,7 +139,8 @@
     {
       "id": "s15",
       "title": "declare-application-entry-ownership",
-      "status": "planned"
+      "summary": "Declared one immutable entry-ownership authority that distinguishes present from required boundaries for the neutral kernel, Internal Studio, Public Web, development tooling, and compatibility routing; duplicate and incomplete ownership fails closed.",
+      "status": "complete"
     },
     {
       "id": "s16",

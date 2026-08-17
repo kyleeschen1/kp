@@ -1,0 +1,115 @@
+import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import test from "node:test";
+
+import {
+  defineKpApplicationEntryOwners,
+  findKpApplicationEntryOwner,
+  kpApplicationEntryOwnerIds,
+  kpApplicationEntryOwners
+} from "../src/architecture/kp-application-entry-ownership.ts";
+
+test("application entry ownership is complete immutable and filesystem-backed", () => {
+  assert.deepEqual(
+    kpApplicationEntryOwners.map(({ id }) => id),
+    [...kpApplicationEntryOwnerIds]
+  );
+  assert.ok(Object.isFrozen(kpApplicationEntryOwners));
+  for (const owner of kpApplicationEntryOwners) {
+    assert.ok(Object.isFrozen(owner));
+    assert.ok(Object.isFrozen(owner.entryModules));
+    assert.ok(Object.isFrozen(owner.hostDocuments));
+    for (const path of [
+      ...owner.entryModules,
+      ...owner.hostDocuments,
+      ...owner.currentBuildConfigs
+    ]) assert.ok(existsSync(path), `${path} must exist`);
+  }
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(kpApplicationEntryOwners)),
+    kpApplicationEntryOwners
+  );
+});
+
+test("entry owners state the migrations that slices 16 through 19 must prove", () => {
+  assert.deepEqual(
+    kpApplicationEntryOwners.map((owner) => ({
+      id: owner.id,
+      current: owner.currentBoundary,
+      required: owner.requiredBoundary
+    })),
+    [
+      {
+        id: "entry-owner.kernel",
+        current: "framework-neutral-library",
+        required: "framework-neutral-library"
+      },
+      {
+        id: "entry-owner.internal-studio",
+        current: "shared-main-graph",
+        required: "dedicated-production-graph"
+      },
+      {
+        id: "entry-owner.public-web",
+        current: "shared-main-graph",
+        required: "dedicated-production-graph"
+      },
+      {
+        id: "entry-owner.development-tooling",
+        current: "shared-main-graph",
+        required: "development-erased"
+      },
+      {
+        id: "entry-owner.compatibility",
+        current: "shared-main-graph",
+        required: "routing-only-compatibility"
+      }
+    ]
+  );
+});
+
+test("public and development entry roots cannot masquerade as kernel or Studio", () => {
+  const kernel = findKpApplicationEntryOwner("entry-owner.kernel");
+  const studio = findKpApplicationEntryOwner("entry-owner.internal-studio");
+  const publicWeb = findKpApplicationEntryOwner("entry-owner.public-web");
+  const development = findKpApplicationEntryOwner(
+    "entry-owner.development-tooling"
+  );
+  assert.deepEqual(kernel.entryModules, ["src/kernel/public-api.ts"]);
+  assert.deepEqual(studio.entryModules, ["src/main.ts"]);
+  assert.ok(publicWeb.entryModules.every((path) =>
+    path.startsWith("src/public-web/")
+  ));
+  assert.ok(development.entryModules.every((path) =>
+    path.startsWith("src/dev-toolbar/") ||
+    path.startsWith("src/dev-review/") ||
+    path.startsWith("src/experiments/")
+  ));
+  assert.ok(publicWeb.requiredBuildConfigs.every((path) =>
+    path.startsWith("vite.public-")
+  ));
+  assert.deepEqual(development.requiredBuildConfigs, []);
+});
+
+test("ownership rejects duplicate roots incomplete registries and unsafe dev policy", () => {
+  const owners = kpApplicationEntryOwners.map((owner) => ({ ...owner }));
+  assert.throws(() => defineKpApplicationEntryOwners([
+    ...owners.slice(0, -1),
+    { ...owners.at(-1)!, id: "entry-owner.kernel" }
+  ]), /duplicated/);
+  assert.throws(() => defineKpApplicationEntryOwners([
+    ...owners.slice(0, -1),
+    {
+      ...owners.at(-1)!,
+      entryModules: [owners[0]!.entryModules[0]!]
+    }
+  ]), /two owners/);
+  assert.throws(() => defineKpApplicationEntryOwners(
+    owners.filter(({ id }) => id !== "entry-owner.compatibility")
+  ), /every owner once/);
+  assert.throws(() => defineKpApplicationEntryOwners(owners.map((owner) =>
+    owner.id === "entry-owner.development-tooling"
+      ? { ...owner, requiredBoundary: "shared-main-graph" }
+      : owner
+  )), /erased from production/);
+});

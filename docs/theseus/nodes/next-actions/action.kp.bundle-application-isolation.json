@@ -247,6 +247,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-17T01:36:16.339Z",
       "notes": "120 place-value tests and 14 bundle scenario tests pass; typecheck and architecture are clean; production build is 1,445 modules; initial closure is 51,396/75,000 and delayed motion is 53,522/60,000 gzip bytes."
+    },
+    {
+      "command": "application entry ownership tests typecheck and architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T01:47:17.558Z",
+      "notes": "Typed immutable ownership covers kernel, Internal Studio, four Public Web entries, development tooling, and compatibility routing; current and required boundaries are distinct, four focused tests pass, and the zero-exception architecture gate covers 1,567 modules."
     }
   ],
   "expectedLearning": [
