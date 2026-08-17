@@ -5,18 +5,27 @@ import {
   proveKpEquationGenerationBoundary
 } from "../scripts/prove-equation-generation-boundary.ts";
 
-test("all three pressure cases compile first-pass through the direct facade", () => {
+test("all six pressure cases compile first-pass through the direct facade", () => {
   const proof = proveKpEquationGenerationBoundary();
   assert.deepEqual(proof.cases.map(({ status }) => status), [
     "accepted",
     "accepted",
+    "accepted",
+    "accepted",
+    "accepted",
     "accepted"
   ]);
-  assert.deepEqual(proof.cases.map(({ repairRounds }) => repairRounds), [0, 0, 0]);
+  assert.deepEqual(
+    proof.cases.map(({ repairRounds }) => repairRounds),
+    [0, 0, 0, 0, 0, 0]
+  );
   assert.deepEqual(proof.cases.map(({ planKind }) => planKind), [
     "function-wrap-motif-plan",
     "cancellation-semantic-motion-plan",
-    "distribution-operation-plan"
+    "distribution-operation-plan",
+    "homomorphic-crossover-semantic-motion-plan",
+    "homomorphic-crossover-semantic-motion-plan",
+    "homomorphic-crossover-semantic-motion-plan"
   ]);
 });
 

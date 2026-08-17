@@ -153,6 +153,18 @@ function summarizePlan(plan: KpCompiledEquationIntentPlan): Readonly<
         inverseOperationId: plan.inverseOperationId,
         transformationId: plan.plan.transformationId
       });
+    case "homomorphic-crossover-semantic-motion-plan":
+      return Object.freeze({
+        kind: plan.kind,
+        animationId: plan.animationId,
+        operationId: plan.operationId,
+        extensionPackId: plan.extensionPackId,
+        operationKind: plan.operationKind,
+        recipeId: plan.recipeId,
+        semanticAuthorityId: plan.semanticAuthorityId,
+        callerRegistrationId: plan.callerRegistrationId,
+        choreographyId: plan.plan.id
+      });
   }
 }
 

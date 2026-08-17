@@ -22,6 +22,7 @@ if (result.status === "accepted") {
     case "function-wrap-motif-plan":
     case "cancellation-semantic-motion-plan":
     case "distribution-operation-plan":
+    case "homomorphic-crossover-semantic-motion-plan":
       break;
     default: {
       const exhaustive: never = plan;

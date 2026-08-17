@@ -34,6 +34,20 @@ import {
 import {
   kpCanonicalDistributionPressureContract
 } from "../semantic/distribution-pressure-contract.ts";
+import {
+  kpLogProductSemanticMotionBundles,
+  type KpCompiledLogProductSemanticMotionBundle
+} from "../semantic/log-product-semantic-motion.ts";
+import {
+  kpCanonicalCompiledLogQuotientSemanticMotion,
+  kpCanonicalLogQuotientSemanticMotionRequest
+} from "../semantic/log-quotient-semantic-motion.ts";
+import { kpHomomorphicCrossoverCallerDeclarations } from
+  "../animation/homomorphic-crossover-caller-declarations.ts";
+import { kpHomomorphicCrossoverEquationExtensionPackId } from
+  "../animation/equation-extension-packs/homomorphic-crossover.ts";
+import { kpHomomorphicCrossoverAuthoringAuthorityId } from
+  "./homomorphic-crossover-authoring.ts";
 
 export type KpEquationIntentRepairCode =
   | "equation-intent.surface.unsupported"
@@ -79,6 +93,21 @@ export type KpCompiledEquationIntentPlan =
       operationSpecId: typeof kpDistributionCanonicalOperationSpec.id;
       inverseOperationId: string;
       plan: KpCanonicalOperationExecutionResult;
+    }>
+  | Readonly<{
+      kind: "homomorphic-crossover-semantic-motion-plan";
+      animationId: string;
+      operationId:
+        | "kp.semantic-motion.log-product"
+        | "kp.semantic-motion.quotient";
+      extensionPackId: typeof kpHomomorphicCrossoverEquationExtensionPackId;
+      operationKind: string;
+      recipeId: "recipe.equation.homomorphic-decomposition.v1";
+      semanticAuthorityId:
+        | "law.logarithm.product"
+        | "law.logarithm.quotient";
+      callerRegistrationId: string;
+      plan: KpCompiledSemanticMotionChoreography;
     }>;
 
 export type KpCompileEquationIntentResult =
@@ -122,7 +151,8 @@ const surfaceHandlers = Object.freeze([
     operationId: "kp.algebra.distribute-multiplication",
     describe: describeDistribution,
     compile: compileDistribution
-  })
+  }),
+  ...createHomomorphicSurfaceHandlers()
 ] as const satisfies readonly KpEquationIntentSurfaceHandler[]);
 
 export function listKpEquationIntentSurfaceVocabularies():
@@ -279,6 +309,83 @@ function compileDistribution(): KpCompiledEquationIntentPlan {
     inverseOperationId: kpDistributionCanonicalOperationSpec.rewind.operationId,
     plan: contract.operationExecution
   });
+}
+
+function createHomomorphicSurfaceHandlers():
+readonly KpEquationIntentSurfaceHandler[] {
+  const productHandlers = kpLogProductSemanticMotionBundles.map((bundle) =>
+    homomorphicHandler({
+      declaration: requireHomomorphicDeclaration(
+        bundle.request.assetId,
+        bundle.request.operation.operationId
+      ),
+      request: bundle.request,
+      choreography: bundle.choreography
+    })
+  );
+  return Object.freeze([
+    ...productHandlers,
+    homomorphicHandler({
+      declaration: requireHomomorphicDeclaration(
+        kpCanonicalLogQuotientSemanticMotionRequest.assetId,
+        kpCanonicalLogQuotientSemanticMotionRequest.operation.operationId
+      ),
+      request: kpCanonicalLogQuotientSemanticMotionRequest,
+      choreography: kpCanonicalCompiledLogQuotientSemanticMotion
+    })
+  ]);
+}
+
+function homomorphicHandler(input: {
+  readonly declaration:
+    (typeof kpHomomorphicCrossoverCallerDeclarations)[number];
+  readonly request:
+    KpCompiledLogProductSemanticMotionBundle["request"] |
+    typeof kpCanonicalLogQuotientSemanticMotionRequest;
+  readonly choreography: KpCompiledSemanticMotionChoreography;
+}): KpEquationIntentSurfaceHandler {
+  const { declaration, request, choreography } = input;
+  return Object.freeze({
+    animationId: declaration.callerId,
+    operationId: declaration.semanticMotionOperationId,
+    describe: () => vocabulary({
+      animationId: declaration.callerId,
+      operationId: declaration.semanticMotionOperationId,
+      authoringAuthorityId: kpHomomorphicCrossoverAuthoringAuthorityId,
+      availableSemanticEntityIds: [
+        ...request.sourceState.entityIds,
+        ...request.targetState.entityIds
+      ],
+      canonicalRoleBindings: request.operation.roleBindings
+    }),
+    compile: () => Object.freeze({
+      kind: "homomorphic-crossover-semantic-motion-plan" as const,
+      animationId: declaration.callerId,
+      operationId: declaration.semanticMotionOperationId,
+      extensionPackId: kpHomomorphicCrossoverEquationExtensionPackId,
+      operationKind: declaration.operationKind,
+      recipeId: declaration.recipeId,
+      semanticAuthorityId: declaration.semanticAuthorityId,
+      callerRegistrationId: declaration.callerRegistrationId,
+      plan: choreography
+    })
+  });
+}
+
+function requireHomomorphicDeclaration(
+  animationId: string,
+  operationId: string
+): (typeof kpHomomorphicCrossoverCallerDeclarations)[number] {
+  const declaration = kpHomomorphicCrossoverCallerDeclarations.find(
+    (candidate) => candidate.callerId === animationId &&
+      candidate.semanticMotionOperationId === operationId
+  );
+  if (declaration === undefined) {
+    throw new Error(
+      `Missing homomorphic caller declaration for ${animationId} and ${operationId}.`
+    );
+  }
+  return declaration;
 }
 
 function vocabulary(

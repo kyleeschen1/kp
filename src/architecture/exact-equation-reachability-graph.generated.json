@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3214,
+  "scannedFileCount": 3246,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -24,7 +24,9 @@
       "authorityId": "compiler.semantic-motion-choreography",
       "sourceCallers": [
         "src/domain-ir/public-api.ts",
-        "src/semantic/cancellation-pressure-semantic-motion.ts"
+        "src/semantic/cancellation-pressure-semantic-motion.ts",
+        "src/semantic/log-product-semantic-motion.ts",
+        "src/semantic/log-quotient-semantic-motion.ts"
       ],
       "testCallers": [],
       "scriptCallers": [],
@@ -102,13 +104,15 @@
       "authorityId": "compiler.log-product-operation",
       "sourceCallers": [
         "src/animation/log-product-adapter.ts",
+        "src/animation/log-product-homomorphic-handoff.ts",
         "src/editor/log-product-surface-adapter.ts",
         "src/rendering/log-product-transit-session.ts",
         "src/semantic/log-product-semantic-motion.ts"
       ],
       "testCallers": [
         "tests/log-product-semantic-caller.test.ts",
-        "tests/log-product-transit-session.test.ts"
+        "tests/log-product-transit-session.test.ts",
+        "tests/native-katex-operation-choreography.test.ts"
       ],
       "scriptCallers": [],
       "otherCallers": [],
@@ -279,9 +283,11 @@
       "sourcePath": "src/architecture/equation-asset-manifest.ts",
       "authorityId": "manifest.src/architecture/equation-asset-manifest.ts",
       "sourceCallers": [
+        "src/architecture/animation-capability-asset-evidence.ts",
         "src/architecture/equation-asset-conformance.ts"
       ],
       "testCallers": [
+        "tests/animation-capability-asset-evidence.test.ts",
         "tests/animation-library-display-catalog-generation.test.ts",
         "tests/equation-asset-conformance.test.ts",
         "tests/equation-asset-manifest.test.ts",
@@ -738,6 +744,7 @@
         "src/animation/llm-semantic-motion-operation-authoring.ts",
         "src/animation/log-exponent-continuity.ts",
         "src/animation/log-exponent-lifecycle.ts",
+        "src/animation/log-product-homomorphic-handoff.ts",
         "src/animation/log-quotient-continuity.ts",
         "src/animation/operation-presentation-correspondence.ts",
         "src/animation/successor-synthesis.ts",

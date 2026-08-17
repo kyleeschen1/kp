@@ -2,24 +2,40 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  kpEquationGenerationPressureCorpora,
   kpEquationGenerationPressureFixtures,
   validateKpEquationGenerationPressureFixture
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 
-test("three contrasting LLM-shaped requests use only governed semantic vocabulary", () => {
+test("six contrasting LLM-shaped requests use only governed semantic vocabulary", () => {
   assert.deepEqual(
     kpEquationGenerationPressureFixtures.map(({ scenario }) => scenario),
-    ["function-wrap", "cancellation", "distribution-factoring"]
+    [
+      "function-wrap",
+      "cancellation",
+      "distribution-factoring",
+      "log-product-binary",
+      "log-product-three-factor",
+      "log-quotient"
+    ]
   );
   assert.equal(
     new Set(kpEquationGenerationPressureFixtures.map(({ id }) => id)).size,
-    3
+    6
   );
   for (const fixture of kpEquationGenerationPressureFixtures) {
     assert.deepEqual(validateKpEquationGenerationPressureFixture(fixture), []);
     assert.equal(fixture.successCriteria.maximumRepairCount, 0);
     assert.equal(fixture.repairAccounting.unit, "validator-round");
   }
+  assert.deepEqual(kpEquationGenerationPressureCorpora, [{
+    id: "corpus.equation.log-homomorphism.v1",
+    fixtureIds: [
+      "pressure.equation.log-product.binary",
+      "pressure.equation.log-product.three-factor",
+      "pressure.equation.log-quotient"
+    ]
+  }]);
 });
 
 test("pressure requests contain no geometry, timing, renderer, or recipe authority", () => {

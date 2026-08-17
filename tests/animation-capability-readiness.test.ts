@@ -13,13 +13,14 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
-test("readiness derives the three exact direct generation capabilities", () => {
+test("readiness derives the four exact direct generation capabilities", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const direct = readiness.entries.filter(({ status }) => status === "Direct");
   assert.deepEqual(direct.map(({ capabilityId }) => capabilityId), [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
-    "capability.equation.additive-cancellation"
+    "capability.equation.additive-cancellation",
+    "capability.equation.log-homomorphic-decomposition"
   ]);
   assert.ok(direct.every(({ evidence }) =>
     evidence.gate === "direct-intent-and-registered-authority"));
@@ -30,7 +31,7 @@ test("registered exemplar and missing statuses retain distinct gates", () => {
   assert.equal(status(readiness,
     "capability.equation.fraction-factor-cancellation"), "Registered");
   assert.equal(status(readiness,
-    "capability.equation.log-homomorphic-decomposition"), "Registered");
+    "capability.equation.log-homomorphic-decomposition"), "Direct");
   assert.equal(status(readiness,
     "capability.equation.alternative-logarithm-bases"), "Missing");
 });

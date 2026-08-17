@@ -11,8 +11,8 @@
   "summary": {
     "total": 28,
     "byStatus": {
-      "Direct": 3,
-      "Registered": 4,
+      "Direct": 4,
+      "Registered": 3,
       "Exemplar": 10,
       "Missing": 11
     }
@@ -260,7 +260,7 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.log-homomorphism.v1"
       },
-      "status": "Registered",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.equation.log-homomorphism.product-operation",
@@ -316,22 +316,24 @@
           "kind": "authoring-surface",
           "authorityId": "authoring.equation.log-homomorphism.v1",
           "summary": "Governed authoring selects product or quotient behavior from semantic law and roles.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-intent.ts"
+          ]
         },
         {
           "id": "requirement.equation.log-homomorphism.corpus",
           "kind": "generation-corpus",
           "authorityId": "corpus.equation.log-homomorphism.v1",
           "summary": "Binary product, multi-factor product, and quotient fixtures pressure cardinality and direction.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.log-homomorphism.v1"
+          ]
         }
       ],
       "remainingRequirementIds": [
-        "requirement.equation.log-homomorphism.product-exemplar",
-        "requirement.equation.log-homomorphism.authoring",
-        "requirement.equation.log-homomorphism.corpus"
+        "requirement.equation.log-homomorphism.product-exemplar"
       ],
       "exemplarLinks": [
         {
@@ -341,8 +343,7 @@
         }
       ],
       "evidenceTensions": [
-        "registered-without-direct-generation",
-        "playable-exemplar-without-general-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {

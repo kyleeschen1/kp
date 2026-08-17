@@ -7,7 +7,10 @@ import {
 export type KpEquationGenerationPressureScenario =
   | "function-wrap"
   | "cancellation"
-  | "distribution-factoring";
+  | "distribution-factoring"
+  | "log-product-binary"
+  | "log-product-three-factor"
+  | "log-quotient";
 
 export type KpEquationGenerationProofId =
   | "catalogue-accepted"
@@ -41,6 +44,11 @@ export interface KpEquationGenerationPressureFixture {
   };
 }
 
+export interface KpEquationGenerationPressureCorpus {
+  readonly id: string;
+  readonly fixtureIds: readonly string[];
+}
+
 export type KpEquationGenerationPressureIssueCode =
   | "pressure.fixture.shape"
   | "pressure.fixture.identity"
@@ -52,6 +60,51 @@ export interface KpEquationGenerationPressureIssue {
   readonly code: KpEquationGenerationPressureIssueCode;
   readonly path: string;
   readonly message: string;
+}
+
+const logProductRoleIds = Object.freeze([
+  "source-application",
+  "target-applications",
+  "source-operator",
+  "target-operators",
+  "source-arguments",
+  "target-arguments",
+  "source-shells",
+  "target-shells",
+  "source-product",
+  "target-sum",
+  "connector"
+]);
+
+function logProductPressureBindings(
+  factorNames: readonly [string, string, ...string[]]
+): Readonly<Record<string, readonly string[]>> {
+  return Object.freeze({
+    "source-application": Object.freeze(["source.application"]),
+    "target-applications": Object.freeze(factorNames.map((name) =>
+      `target.application.${name}`
+    )),
+    "source-operator": Object.freeze(["source.operator"]),
+    "target-operators": Object.freeze(factorNames.map((name) =>
+      `target.operator.${name}`
+    )),
+    "source-arguments": Object.freeze(factorNames.map((name) =>
+      `source.argument.${name}`
+    )),
+    "target-arguments": Object.freeze(factorNames.map((name) =>
+      `target.argument.${name}`
+    )),
+    "source-shells": Object.freeze(["source.open", "source.close"]),
+    "target-shells": Object.freeze(factorNames.flatMap((name) => [
+      `target.open.${name}`,
+      `target.close.${name}`
+    ])),
+    "source-product": Object.freeze(["source.product"]),
+    "target-sum": Object.freeze(["target.sum"]),
+    connector: Object.freeze(factorNames.slice(1).map((_, index) =>
+      `target.connector.${index}`
+    ))
+  });
 }
 
 export const kpEquationGenerationPressureFixtures = Object.freeze([
@@ -103,8 +156,59 @@ export const kpEquationGenerationPressureFixtures = Object.freeze([
       "products-after": ["target.product.ax", "target.product.ay"]
     },
     teachingIntent: "Show one factor becoming the common cause of two products."
+  }),
+  pressureFixture({
+    id: "pressure.equation.log-product.binary",
+    scenario: "log-product-binary",
+    animationId: "animation.algebra.log-product.product-to-sum",
+    operationId: "kp.semantic-motion.log-product",
+    roleIds: logProductRoleIds,
+    roleBindings: logProductPressureBindings(["x", "y"]),
+    teachingIntent:
+      "Show one logarithm application deriving two ordered applications while both factors persist."
+  }),
+  pressureFixture({
+    id: "pressure.equation.log-product.three-factor",
+    scenario: "log-product-three-factor",
+    animationId: "animation.algebra.log-product.three-factors-to-sum",
+    operationId: "kp.semantic-motion.log-product",
+    roleIds: logProductRoleIds,
+    roleBindings: logProductPressureBindings(["x", "y", "z"]),
+    teachingIntent:
+      "Pressure the same logarithm-product operation with three ordered factors."
+  }),
+  pressureFixture({
+    id: "pressure.equation.log-quotient",
+    scenario: "log-quotient",
+    animationId: "animation.algebra.log-quotient.difference-to-quotient",
+    operationId: "kp.semantic-motion.quotient",
+    roleIds: [
+      "source-operators",
+      "source-arguments",
+      "target-operator",
+      "target-arguments"
+    ],
+    roleBindings: {
+      "source-operators": ["source.operator.left", "source.operator.right"],
+      "source-arguments": ["source.argument.x", "source.argument.y"],
+      "target-operator": ["target.operator"],
+      "target-arguments": ["target.argument.x", "target.argument.y"]
+    },
+    teachingIntent:
+      "Show two logarithm applications fusing around a quotient of persistent arguments."
   })
 ] as const satisfies readonly KpEquationGenerationPressureFixture[]);
+
+export const kpEquationGenerationPressureCorpora = Object.freeze([
+  Object.freeze({
+    id: "corpus.equation.log-homomorphism.v1",
+    fixtureIds: Object.freeze([
+      "pressure.equation.log-product.binary",
+      "pressure.equation.log-product.three-factor",
+      "pressure.equation.log-quotient"
+    ])
+  })
+] as const satisfies readonly KpEquationGenerationPressureCorpus[]);
 
 export function validateKpEquationGenerationPressureFixture(
   value: unknown
@@ -328,7 +432,10 @@ function issue(
 function isScenario(value: unknown): value is KpEquationGenerationPressureScenario {
   return value === "function-wrap" ||
     value === "cancellation" ||
-    value === "distribution-factoring";
+    value === "distribution-factoring" ||
+    value === "log-product-binary" ||
+    value === "log-product-three-factor" ||
+    value === "log-quotient";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

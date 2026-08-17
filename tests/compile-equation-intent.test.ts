@@ -10,7 +10,7 @@ import {
   kpEquationGenerationPressureFixtures
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 
-test("the three uncorrected pressure requests receive typed entity repairs", () => {
+test("all uncorrected pressure requests receive typed entity repairs", () => {
   for (const fixture of kpEquationGenerationPressureFixtures) {
     const result = compileEquationIntent(fixture.request);
     assert.equal(result.status, "repair-required");
@@ -39,6 +39,9 @@ test("canonical surface vocabularies compile through existing authorities", () =
   assert.deepEqual(plans.map((result) => result.status), [
     "accepted",
     "accepted",
+    "accepted",
+    "accepted",
+    "accepted",
     "accepted"
   ]);
   assert.deepEqual(plans.map((result) =>
@@ -46,7 +49,10 @@ test("canonical surface vocabularies compile through existing authorities", () =
   ), [
     "function-wrap-motif-plan",
     "cancellation-semantic-motion-plan",
-    "distribution-operation-plan"
+    "distribution-operation-plan",
+    "homomorphic-crossover-semantic-motion-plan",
+    "homomorphic-crossover-semantic-motion-plan",
+    "homomorphic-crossover-semantic-motion-plan"
   ]);
 });
 

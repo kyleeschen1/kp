@@ -28,14 +28,20 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 3);
-  for (const entry of direct) {
+  assert.equal(direct.length, 4);
+  for (const entry of direct.slice(0, 3)) {
     assert.deepEqual(entry.remainingRequirementIds, []);
     assert.equal(entry.exemplarLinks.length, 1);
     assert.deepEqual(entry.evidenceTensions, [
       "direct-deterministic-not-live-model-evidence"
     ]);
   }
+  assert.deepEqual(direct[3]?.remainingRequirementIds, [
+    "requirement.equation.log-homomorphism.product-exemplar"
+  ]);
+  assert.deepEqual(direct[3]?.evidenceTensions, [
+    "direct-deterministic-not-live-model-evidence"
+  ]);
 });
 
 test("alternative logarithm bases expose every syntax and motif gap", () => {
@@ -55,19 +61,18 @@ test("alternative logarithm bases expose every syntax and motif gap", () => {
   ]);
 });
 
-test("registered examples still expose authoring corpus and exemplar gaps", () => {
+test("direct homomorphic generation retains only the unreviewed product exemplar gap", () => {
   const entry = createKpAnimationTransformationCoverage().entries.find(
     ({ capabilityId }) => capabilityId ===
       "capability.equation.log-homomorphic-decomposition"
   );
-  assert.equal(entry?.status, "Registered");
+  assert.equal(entry?.status, "Direct");
   assert.equal(entry?.exemplarLinks.length, 1);
-  assert.ok(entry?.remainingRequirementIds.includes(
+  assert.deepEqual(entry?.remainingRequirementIds, [
     "requirement.equation.log-homomorphism.product-exemplar"
-  ));
+  ]);
   assert.deepEqual(entry?.evidenceTensions, [
-    "registered-without-direct-generation",
-    "playable-exemplar-without-general-generation"
+    "direct-deterministic-not-live-model-evidence"
   ]);
 });
 

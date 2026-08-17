@@ -1,0 +1,114 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s12",
+  "kind": "next-action",
+  "title": "Homomorphic-generation-benchmark",
+  "status": "resolved",
+  "summary": "Homomorphic generation benchmark complete; coverage advances to Direct with only the product visual exemplar gap remaining.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s12 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "scripts/prove-homomorphic-generation-benchmark.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/authoring/compile-equation-intent.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/authoring/equation-generation-pressure-contract.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s11"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s11"
+  ],
+  "verification": [
+    "npm run verify:impact",
+    "npm run test:equation-generation-boundary",
+    "npm run test:semantic-motion-diagnostics",
+    "npm run test:svelte-catalogue-shell",
+    "npm run test:dev-toolbar",
+    "npm run build:internal-studio",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run visual:animation-catalogue",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:homomorphic-generation-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T23:17:57.779Z",
+      "notes": "Three homomorphic cases compile with zero repairs; unsupported lookalikes fail closed."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "reachability",
+      "checkedAt": "2026-08-17T23:17:59.170Z",
+      "notes": "Generated authority graph is current and exact."
+    },
+    {
+      "command": "npm run test:equation-fallback-audit",
+      "status": "passed",
+      "scope": "fallback",
+      "checkedAt": "2026-08-17T23:18:00.614Z",
+      "notes": "No new generic or silent fallback path was introduced."
+    },
+    {
+      "command": "npm run verify:equation:boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-17T23:18:02.058Z",
+      "notes": "Preservation, extension, semantic protocol, type, and architecture gates passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Binary product, three-factor product, and quotient now compile directly from canonical role bindings through one registered homomorphic recipe with zero geometry, timing, repairs, or fallback."
+  },
+  "expectedLearning": [
+    "Whether Homomorphic-generation-benchmark can be completed inside Governed animation generation foundation."
+  ],
+  "allowedWork": [
+    "Typed capability plan generated coverage evidence and minimal Coverage view.",
+    "Bounded homomorphic crossover promotion with no approved visual delta.",
+    "Governed equation transform-series request validator compiler sampler CLI corpus and typed repairs.",
+    "Model-neutral natural-language planning port without provider integration.",
+    "Shared request and coverage seams for matrix code Graph2D and Graph3D with domain-owned semantics.",
+    "URL-backed theme and settings global development dock and exact-state Review repair."
+  ],
+  "disallowedWork": [
+    "Full CAS theorem prover arbitrary-code executor or live-model provider integration.",
+    "Universal parser semantic operation set renderer motif registry or geometry across domains.",
+    "Public layout curriculum SRS broad tutoring or complete fraction root matrix code Graph2D or Graph3D backlog.",
+    "Any change to approved log-product or log-quotient choreography timing geometry cardinality fraction construction or optics.",
+    "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
+  ]
+}

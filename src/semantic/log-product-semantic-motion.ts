@@ -1,15 +1,23 @@
 import {
-  compileKpSemanticMotion,
+  compileKpSemanticMotion
+} from "../domain-ir/semantic-motion-compiler.ts";
+import {
   createKpSemanticMotionCompilerRequestV1,
-  createKpSemanticMotionSourceAuthority,
   kpSemanticMotionCompilerRequestSchemaVersion,
-  type KpCompiledSemanticMotionChoreography,
-  type KpSemanticMotionCompilerRequestV1,
+  type KpSemanticMotionCompilerRequestV1
+} from "../domain-ir/semantic-motion-compiler-contract.ts";
+import type { KpCompiledSemanticMotionChoreography } from
+  "../domain-ir/semantic-motion-choreography-compiler.ts";
+import {
   type KpSemanticMotionEventSpec,
-  type KpSemanticMotionOperationStructureContract,
-  type KpSemanticMotionPrecedenceSpec,
-  type KpSemanticMotionSourceAuthorityV1
-} from "../domain-ir/public-api.ts";
+  type KpSemanticMotionPrecedenceSpec
+} from "../domain-ir/semantic-motion-precedence-compiler.ts";
+import type { KpSemanticMotionOperationStructureContract } from
+  "../domain-ir/semantic-motion-role-cohort-compiler.ts";
+import { createKpSemanticMotionSourceAuthority } from
+  "../domain-ir/semantic-motion-source-authority.ts";
+import type { KpSemanticMotionSourceAuthorityV1 } from
+  "../domain-ir/semantic-motion-endpoint-validator.ts";
 import {
   listKpLogProductExpressionNodes,
   type KpLogProductSemanticId,

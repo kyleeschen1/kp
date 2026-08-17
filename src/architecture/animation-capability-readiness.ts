@@ -3,7 +3,10 @@ import {
   listKpEquationIntentSurfaceVocabularies,
   type KpCompiledEquationIntentPlan
 } from "../authoring/compile-equation-intent.ts";
-import { kpEquationGenerationPressureFixtures } from
+import {
+  kpEquationGenerationPressureCorpora,
+  kpEquationGenerationPressureFixtures
+} from
   "../authoring/equation-generation-pressure-contract.ts";
 import type { KpAnimationCapabilityPlan } from
   "./animation-capability-plan.ts";
@@ -234,7 +237,12 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
             .filter(({ request }) =>
               request.animationId === vocabulary.animationId &&
               request.operation.operationId === vocabulary.operationId)
-            .map(({ id }) => id)
+            .flatMap(({ id }) => [
+              id,
+              ...kpEquationGenerationPressureCorpora
+                .filter(({ fixtureIds }) => fixtureIds.includes(id))
+                .map(({ id: corpusId }) => corpusId)
+            ])
         ),
         sourcePath: "src/authoring/compile-equation-intent.ts" as const
       });
@@ -259,6 +267,15 @@ function authorityIdsForPlan(
         plan.operationId,
         plan.operationSpecId,
         plan.inverseOperationId
+      ]);
+    case "homomorphic-crossover-semantic-motion-plan":
+      return Object.freeze([
+        plan.operationId,
+        plan.extensionPackId,
+        plan.operationKind,
+        plan.recipeId,
+        plan.semanticAuthorityId,
+        plan.callerRegistrationId
       ]);
   }
 }
