@@ -1,0 +1,108 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s07",
+  "kind": "next-action",
+  "title": "Derived-readiness-status",
+  "status": "resolved",
+  "summary": "Readiness is immutable traceable and cannot silently upgrade.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s07 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-capability-readiness.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-capability-readiness.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s06"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s06"
+  ],
+  "verification": [
+    "npm run test:animation-capability-readiness",
+    "npm run test:equation-generation-boundary",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-readiness",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T22:12:39.176Z",
+      "notes": "5 readiness projection tests passed."
+    },
+    {
+      "command": "npm run test:equation-generation-boundary",
+      "status": "passed",
+      "scope": "compiler-boundary",
+      "checkedAt": "2026-08-17T22:12:40.217Z",
+      "notes": "12 direct-facade tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T22:12:41.194Z",
+      "notes": "All dependency and compiler authority gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-17T22:12:42.214Z",
+      "notes": "TypeScript Svelte and domain checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Derived all readiness statuses from exact named evidence gates."
+  },
+  "expectedLearning": [
+    "Whether Direct Registered Exemplar and Missing can be derived from exact direct-intent compiler and asset evidence without heuristic promotion."
+  ],
+  "allowedWork": [
+    "Read-only readiness projection over the capability plan asset evidence compiler evidence and direct equation intent facade."
+  ],
+  "disallowedWork": [
+    "Readiness fields in authored plans title or family matching renderer imports silent fallback or claims beyond exact named gates."
+  ],
+  "criteria": [
+    {
+      "id": "direct-requires-accepted-intent-and-resolved-authority",
+      "weight": "high"
+    },
+    {
+      "id": "registered-and-exemplar-require-exact-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "missing-never-upgrades-heuristically",
+      "weight": "high"
+    }
+  ]
+}
