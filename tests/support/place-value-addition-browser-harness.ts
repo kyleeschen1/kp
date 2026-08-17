@@ -5,6 +5,9 @@ import {
   measureKpNativeKatexSubtreePaintRect
 } from "../../src/rendering/native-katex-paint-geometry.ts";
 import {
+  kpNativeKatexFeaturePackLoader
+} from "../../src/rendering/native-katex-feature-pack-loader.ts";
+import {
   createKpPlaceValueAdditionRuntimeSession,
   sampleKpPlaceValueAdditionRuntime
 } from "../../src/rendering/place-value-addition-runtime.ts";
@@ -97,6 +100,7 @@ export async function createKpPlaceValueAdditionBrowserHarness(input: {
     root: dom.root
   });
   dom.prepareNativeScenes();
+  await dom.prepareNativeScenesWhenReady();
   const view = input.document.defaultView;
   if (view === null) throw new Error("Browser harness requires a live window.");
 
@@ -446,6 +450,8 @@ export async function createKpGeneratedPlaceValueAdditionBrowserHarness(input: {
     view: initialView,
     root
   });
+  await kpNativeKatexFeaturePackLoader.load();
+  for (const scene of scenes) scene.prepare();
   const view = input.document.defaultView;
   if (view === null) {
     throw new Error("Generated browser harness requires a live window.");
@@ -490,7 +496,6 @@ export async function createKpGeneratedPlaceValueAdditionBrowserHarness(input: {
     }
     entry.scene.root.style.display = "grid";
     void entry.scene.root.offsetWidth;
-    entry.scene.prepare();
     entry.scene.apply(input.progress, input.direction);
   };
   const materialOwners = (stage: HTMLElement) => Object.freeze([

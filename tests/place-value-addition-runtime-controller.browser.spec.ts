@@ -10,6 +10,7 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const evidence = await page.evaluate(async ({ width }) => {
+      await import(/* @vite-ignore */ "/node_modules/katex/dist/katex.min.css");
       const nextPaint = async (): Promise<void> => {
         await new Promise<void>((resolve) => {
           requestAnimationFrame(() =>
@@ -209,6 +210,7 @@ test("preparation buffers the latest progress without a cold interaction frame",
   await page.setViewportSize({ width: 1180, height: 800 });
   await page.goto("/");
   const evidence = await page.evaluate(async () => {
+    await import(/* @vite-ignore */ "/node_modules/katex/dist/katex.min.css");
     const controllerUrl =
       "/src/rendering/place-value-addition-runtime-controller.ts";
     const controllerModule = await import(/* @vite-ignore */ controllerUrl);
@@ -246,12 +248,75 @@ test("preparation buffers the latest progress without a cold interaction frame",
   expect(evidence.ready.maximumApplyDurationMs).toBeLessThan(80);
 });
 
+test("static selection defers native paint until a written motion checkpoint", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/");
+  const evidence = await page.evaluate(async () => {
+    await import(/* @vite-ignore */ "/node_modules/katex/dist/katex.min.css");
+    const controllerUrl =
+      "/src/rendering/place-value-addition-runtime-controller.ts";
+    const controllerModule = await import(/* @vite-ignore */ controllerUrl);
+    const app = document.querySelector<HTMLElement>("#app");
+    if (app !== null) app.style.display = "none";
+    const host = document.createElement("main");
+    document.body.append(host);
+    const controller =
+      controllerModule.createKpPlaceValueAdditionRuntimeController({
+        document,
+        viewportWidth: 320
+      });
+    controller.mount(host);
+    const afterMount = controller.inspect();
+    controller.requestProgress({ progress: 0.05, source: "scroll" });
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+    const afterEstablish = controller.inspect();
+    controller.setView("base-ten");
+    controller.requestProgress({ progress: 0.2, source: "scroll" });
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+    const afterBaseTenMotion = controller.inspect();
+    controller.setView("written");
+    controller.requestProgress({ progress: 0.2, source: "scroll" });
+    const duringWrittenMotion = controller.inspect();
+    await controller.whenReady();
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+    const afterWrittenMotion = controller.inspect();
+    controller.dispose();
+    return {
+      afterMount,
+      afterEstablish,
+      afterBaseTenMotion,
+      duringWrittenMotion,
+      afterWrittenMotion
+    };
+  });
+
+  expect(evidence.afterMount.nativeScenePreparationCount).toBe(0);
+  expect(evidence.afterMount.nativeScenesReady).toBe(false);
+  expect(evidence.afterEstablish.lastAppliedProgress).toBe(0.05);
+  expect(evidence.afterEstablish.nativeScenePreparationCount).toBe(0);
+  expect(evidence.afterBaseTenMotion.lastAppliedProgress).toBe(0.2);
+  expect(evidence.afterBaseTenMotion.nativeScenePreparationCount).toBe(0);
+  expect(evidence.duringWrittenMotion.nativeScenePreparationCount).toBe(1);
+  expect(evidence.duringWrittenMotion.nativeScenesReady).toBe(false);
+  expect(evidence.afterWrittenMotion.nativeScenesReady).toBe(true);
+  expect(evidence.afterWrittenMotion.lastAppliedProgress).toBe(0.2);
+});
+
 test("rapid seeking and direct seeking produce the same visible frame", async ({
   page
 }) => {
   await page.setViewportSize({ width: 1180, height: 800 });
   await page.goto("/");
   const evidence = await page.evaluate(async () => {
+    await import(/* @vite-ignore */ "/node_modules/katex/dist/katex.min.css");
     const controllerUrl =
       "/src/rendering/place-value-addition-runtime-controller.ts";
     const controllerModule = await import(/* @vite-ignore */ controllerUrl);

@@ -191,6 +191,48 @@
       "scope": "standard",
       "checkedAt": "2026-08-17T00:09:04.922Z",
       "notes": "The typed family declaration now directly owns the one literal place-value renderer import; the redundant production wrapper and unused global registration path are absent. Closure is 74,931 bytes, 17 below s11, with no heavy duplication."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "place-value semantic and runtime preservation",
+      "checkedAt": "2026-08-17T00:55:50.960Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain type boundaries",
+      "checkedAt": "2026-08-17T00:55:53.464Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "zero-exception dependency and architecture boundaries",
+      "checkedAt": "2026-08-17T00:55:54.705Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/place-value-addition-animation-library.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "canonical Animation Library lazy mount, phone capture, and disposal",
+      "checkedAt": "2026-08-17T00:55:55.780Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/place-value-addition-runtime-controller.browser.spec.ts --project=chromium --grep static selection|rapid seeking",
+      "status": "passed",
+      "scope": "deferred native paint plus direct-seek equivalence",
+      "checkedAt": "2026-08-17T00:55:56.877Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production chunk graph",
+      "checkedAt": "2026-08-17T00:55:57.974Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/measure-kp-bundle-experiences.ts --scenario bundle-experience.catalogue.place-value --check",
+      "status": "passed",
+      "scope": "selected place-value closure 51396/75000 gzip bytes",
+      "checkedAt": "2026-08-17T00:56:01.392Z"
     }
   ],
   "expectedLearning": [

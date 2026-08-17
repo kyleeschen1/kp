@@ -1,18 +1,19 @@
 import {
   createKpEquationFontReadiness
 } from "./equation-font-readiness.ts";
-import {
-  createKpCanonicalNativeKatexSceneSession,
-  type KpNativeKatexSceneOwnershipFrame,
-  type KpNativeKatexRendererSession
+import type {
+  KpEquationFontReadiness
+} from "./equation-font-readiness.ts";
+import type {
+  KpNativeKatexSceneOwnershipFrame,
+  KpNativeKatexRendererSession
 } from "./native-katex-scene-compositor.ts";
+import {
+  requireLoadedKpNativeKatexFeaturePack
+} from "./native-katex-feature-pack-loader.ts";
 import type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "./native-katex-successor-synthesis.ts";
-import {
-  observeKpNativeKatexRenderedScene
-} from "./native-katex-rendered-scene.ts";
-
 export interface KpPlaceValueNativeSceneDom {
   readonly root: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -55,32 +56,39 @@ export function createKpPlaceValueNativeSceneDom(input: {
     "position:absolute;inset:0;pointer-events:none";
   root.append(input.sourceRoot, input.targetRoot, materialLayer);
 
-  const fontReadiness = createKpEquationFontReadiness(input.document);
+  let fontReadiness: KpEquationFontReadiness | undefined;
   let renderer: KpNativeKatexRendererSession | undefined;
+  let disposed = false;
   const requireRenderer = (): KpNativeKatexRendererSession => {
+    if (disposed) {
+      throw new Error("Place-value native scene is disposed.");
+    }
     if (renderer !== undefined) return renderer;
     if (!root.isConnected) {
       throw new Error(
         "Place-value native scene must be connected before paint measurement."
       );
     }
-    const source = observeKpNativeKatexRenderedScene({
+    const nativeKatex = requireLoadedKpNativeKatexFeaturePack();
+    const sceneFontReadiness = fontReadiness ??=
+      createKpEquationFontReadiness(input.document);
+    const source = nativeKatex.observe.observe({
       endpoint: "source",
       stage: root,
       root: input.sourceRoot,
       semanticEntityId: input.sourceSceneId,
       presentationGroupId: input.sourceSceneId,
-      fontReadiness
+      fontReadiness: sceneFontReadiness
     });
-    const target = observeKpNativeKatexRenderedScene({
+    const target = nativeKatex.observe.observe({
       endpoint: "target",
       stage: root,
       root: input.targetRoot,
       semanticEntityId: input.targetSceneId,
       presentationGroupId: input.targetSceneId,
-      fontReadiness
+      fontReadiness: sceneFontReadiness
     });
-    renderer = createKpCanonicalNativeKatexSceneSession({
+    renderer = nativeKatex.compose.createSession({
       source,
       target,
       relations: [],
@@ -100,12 +108,14 @@ export function createKpPlaceValueNativeSceneDom(input: {
       return requireRenderer().apply(progress);
     },
     dispose() {
+      if (disposed) return;
+      disposed = true;
       renderer?.retire({
         kind: "native-katex-paint-preserving-retirement",
         reason: "surface-disposed",
         structuralSuccession: "retire-preserving-paint"
       });
-      fontReadiness.dispose();
+      fontReadiness?.dispose();
     }
   });
 }

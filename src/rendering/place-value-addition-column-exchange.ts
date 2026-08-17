@@ -304,7 +304,6 @@ export function createKpPlaceValueColumnExchangeDom(input: {
     targetRoot: scene.targetRoot,
     prepare,
     apply(progress: number, direction: "forward" | "rewind") {
-      prepare();
       const execution = direction === "forward"
         ? input.exchange.forward
         : input.exchange.rewind;

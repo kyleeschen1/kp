@@ -40,6 +40,9 @@ import type {
 import {
   measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
+import {
+  kpNativeKatexFeaturePackLoader
+} from "./native-katex-feature-pack-loader.ts";
 import type {
   KpPlaceValueWrittenOwnershipPlan
 } from "./place-value-addition-written-ownership.ts";
@@ -226,21 +229,43 @@ export function createKpPlaceValueAdditionSharedDom(input: {
       );
     }
     nativeScenePreparation = (async () => {
+      // Fetch the selected renderer before exposing any hidden endpoint for
+      // measurement; yielding inside that geometry window destabilizes phone
+      // layout and invalidates the compositor's native-paint contract.
+      await kpNativeKatexFeaturePackLoader.load();
+      // Hidden endpoint trees do not reliably enroll their faces in
+      // `fonts.ready`; request the two native math faces explicitly before
+      // measuring so a deferred renderer cannot capture fallback glyph ink.
+      await Promise.all([
+        input.document.fonts.load("40px KaTeX_Main"),
+        input.document.fonts.load("40px KaTeX_Math")
+      ]);
       await input.document.fonts.ready;
       await nextLayoutFrame(view);
       await nextLayoutFrame(view);
-      for (const scene of motionScenes) {
-        if (disposed) return;
-        await nextTask(view);
-        if (disposed) return;
-        withVisibleNativeScene(scene.root, () => {
-          // Preparing only after fonts and two connected layout frames keeps
-          // cold compositor construction out of scroll callbacks without
-          // reviving the stale hidden-preflight geometry fixed in slice 16.
-          scene.prepare();
-        });
+      const restoreWrittenHost = exposeWrittenHostForMeasurement({
+        host: writtenHost,
+        documentaryRoot: written.root
+      });
+      try {
+        for (const scene of motionScenes) {
+          if (disposed) return;
+          await nextTask(view);
+          if (disposed) return;
+          withVisibleNativeScene(scene.root, () => {
+            // Preparing only after fonts and two connected layout frames keeps
+            // cold compositor construction out of scroll callbacks without
+            // reviving the stale hidden-preflight geometry fixed in slice 16.
+            scene.prepare();
+          });
+        }
+      } finally {
+        restoreWrittenHost();
       }
-    })();
+    })().catch((error: unknown) => {
+      nativeScenePreparation = undefined;
+      throw error;
+    });
     return nativeScenePreparation;
   };
 
@@ -284,7 +309,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     }
     if (writtenVisible && activeEvaluation !== undefined) {
       void activeEvaluation.scene.root.offsetWidth;
-      activeEvaluation.scene.prepare();
       activeEvaluation.scene.apply(
         frame.beatProgress,
         frame.clock.direction
@@ -306,7 +330,6 @@ export function createKpPlaceValueAdditionSharedDom(input: {
     let exchangeFrame: KpPlaceValueColumnExchangeFrame | undefined;
     if (writtenVisible && activeExchange !== undefined) {
       void activeExchange.scene.root.offsetWidth;
-      activeExchange.scene.prepare();
       exchangeFrame = activeExchange.scene.apply(
         frame.beatProgress,
         frame.clock.direction
@@ -381,6 +404,34 @@ function withVisibleNativeScene(
     root.style.inset = previous.inset;
     root.style.pointerEvents = previous.pointerEvents;
   }
+}
+
+function exposeWrittenHostForMeasurement(input: {
+  readonly host: HTMLElement;
+  readonly documentaryRoot: HTMLElement;
+}): () => void {
+  if (input.host.style.display !== "none") return () => undefined;
+  const previous = {
+    hostDisplay: input.host.style.display,
+    hostOpacity: input.host.style.opacity,
+    hostPosition: input.host.style.position,
+    hostInset: input.host.style.inset,
+    documentaryDisplay: input.documentaryRoot.style.display
+  };
+  // A phone may request written motion while the base-ten projection is still
+  // selected. Keep the written geometry measurable but out of flow and paint.
+  input.host.style.display = "grid";
+  input.host.style.opacity = "0";
+  input.host.style.position = "absolute";
+  input.host.style.inset = "0";
+  input.documentaryRoot.style.display = "grid";
+  return () => {
+    input.host.style.display = previous.hostDisplay;
+    input.host.style.opacity = previous.hostOpacity;
+    input.host.style.position = previous.hostPosition;
+    input.host.style.inset = previous.hostInset;
+    input.documentaryRoot.style.display = previous.documentaryDisplay;
+  };
 }
 
 function nextLayoutFrame(view: Window): Promise<void> {

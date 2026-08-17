@@ -299,7 +299,6 @@ export function createKpPlaceValueColumnEvaluationDom(input: {
     targetRoot: scene.targetRoot,
     prepare,
     apply(progress: number, direction: "forward" | "rewind") {
-      prepare();
       const execution = direction === "forward"
         ? input.evaluation.forward
         : input.evaluation.rewind;

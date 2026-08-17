@@ -127,7 +127,8 @@
     {
       "id": "s13",
       "title": "isolate-heavy-place-value-rendering",
-      "status": "planned"
+      "summary": "Deferred the canonical native-KaTeX renderer until the first written-motion checkpoint, retained deterministic direct seek and disposal, made KaTeX CSS ownership explicit, and reduced selected place-value closure to 51,396/75,000 gzip bytes.",
+      "status": "complete"
     },
     {
       "id": "s14",

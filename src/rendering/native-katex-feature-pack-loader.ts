@@ -36,8 +36,25 @@ export function createKpNativeKatexFeaturePackLoader(
 
 export const kpNativeKatexFeaturePackLoader =
   createKpNativeKatexFeaturePackLoader(
-    () => import("./native-katex-feature-pack-implementation.ts")
+    () => import("./native-katex-feature-pack-implementation.ts").then(
+      (module) => {
+        loadedKpNativeKatexFeaturePack = module.kpNativeKatexFeaturePack;
+        return module;
+      }
+    )
   );
+
+let loadedKpNativeKatexFeaturePack: KpNativeKatexFeaturePack | undefined;
+
+export function requireLoadedKpNativeKatexFeaturePack():
+KpNativeKatexFeaturePack {
+  if (loadedKpNativeKatexFeaturePack === undefined) {
+    throw new Error(
+      "Native KaTeX feature pack must load before synchronous paint setup."
+    );
+  }
+  return loadedKpNativeKatexFeaturePack;
+}
 
 function assertKpNativeKatexFeaturePack(
   candidate: KpNativeKatexFeaturePack

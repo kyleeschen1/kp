@@ -108,7 +108,8 @@ test("production application callers do not bypass the native KaTeX pack", async
     "src/reader/app/reader-canonical-equation-session.ts",
     "src/reader/renderers/equation-scene-compositor-adapter.ts",
     "src/rendering/log-exponent-native-endpoints.ts",
-    "src/rendering/log-exponent-transit-session.ts"
+    "src/rendering/log-exponent-transit-session.ts",
+    "src/rendering/place-value-addition-native-scene-dom.ts"
   ]) {
     const source = await readFile(path, "utf8");
     assert.doesNotMatch(

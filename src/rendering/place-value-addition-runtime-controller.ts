@@ -178,7 +178,7 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
     const mounted = requireMounted();
     requestCount += 1;
     desired = freezeRequest(next);
-    if (!nativeScenesReady) {
+    if (!nativeScenesReady && requestNeedsNativeScenes(desired)) {
       // The card remains on its stable initial frame while fonts and native
       // geometry settle. Retaining only the latest request prevents a cold
       // compositor build from being smuggled into a scroll callback.
@@ -191,6 +191,7 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
       } else {
         preparationBufferedImmediatePlan = undefined;
       }
+      void ensureNativeScenesReady();
       syncTelemetry();
       return;
     }
@@ -279,6 +280,45 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
       String(kpPlaceValueAdditionRuntimeControllerPolicy.webglLeaseCount);
   };
 
+  const ensureNativeScenesReady = (): Promise<void> => {
+    if (nativeScenesReady) return Promise.resolve();
+    if (readiness !== undefined) return readiness;
+    const mounted = requireMounted();
+    const preparationStartedAt = now();
+    mounted.surface.shared.prepareNativeScenes();
+    nativeScenePreparationCount += 1;
+    const mountedSurface = mounted.surface;
+    const mountedScheduler = mounted.scheduler;
+    readiness = mountedSurface.shared.prepareNativeScenesWhenReady().then(
+      () => {
+        if (status === "disposed" || surface !== mountedSurface) return;
+        nativeScenesReady = true;
+        nativeScenePreparationDurationMs = now() - preparationStartedAt;
+        const preparedPlan = preparationBufferedImmediatePlan;
+        preparationBufferedImmediatePlan = undefined;
+        if (
+          preparedPlan !== undefined &&
+          sameVisualRequest(desired, preparedPlan.request) &&
+          !preparedPlan.reused
+        ) {
+          mountedSurface.apply(preparedPlan.frame);
+          applyCount += 1;
+          lastAppliedRequest = preparedPlan.request;
+        } else if (!sameVisualRequest(desired, lastAppliedRequest)) {
+          mountedScheduler.render(desired);
+        }
+        syncTelemetry();
+      },
+      (error: unknown) => {
+        readiness = undefined;
+        syncTelemetry();
+        throw error;
+      }
+    );
+    syncTelemetry();
+    return readiness;
+  };
+
   const controller: KpPlaceValueAdditionRuntimeController = {
     schemaVersion: "kp.place-value-addition-runtime-controller.v1",
     get root() {
@@ -314,9 +354,10 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
         onViewRequest: (view) => controller.setView(view)
       });
       host.append(surface.root);
-      const preparationStartedAt = now();
+      // Warm the connected endpoint layout without loading the compositor.
+      // This preserves the established phone geometry before later async
+      // capability loading, while the heavy renderer remains deferred.
       surface.shared.prepareNativeScenes();
-      nativeScenePreparationCount += 1;
       lastAppliedRequest = desired;
       mountCount += 1;
       sampleCount += 1;
@@ -357,38 +398,12 @@ export function createKpPlaceValueAdditionRuntimeController(input: {
           syncTelemetry();
         }
       });
-      const mountedSurface = surface;
-      const mountedScheduler = scheduler;
-      readiness = mountedSurface.shared.prepareNativeScenesWhenReady().then(
-        () => {
-          if (status === "disposed" || surface !== mountedSurface) return;
-          nativeScenesReady = true;
-          nativeScenePreparationDurationMs = now() - preparationStartedAt;
-          const preparedPlan = preparationBufferedImmediatePlan;
-          preparationBufferedImmediatePlan = undefined;
-          if (
-            preparedPlan !== undefined &&
-            sameVisualRequest(desired, preparedPlan.request) &&
-            !preparedPlan.reused
-          ) {
-            mountedSurface.apply(preparedPlan.frame);
-            applyCount += 1;
-            lastAppliedRequest = preparedPlan.request;
-          } else if (!sameVisualRequest(desired, lastAppliedRequest)) {
-            mountedScheduler.render(desired);
-          }
-          syncTelemetry();
-        }
-      );
       syncTelemetry();
       return surface;
     },
     whenReady() {
       requireMounted();
-      if (readiness === undefined) {
-        throw new Error("Place-value runtime readiness was not initialized.");
-      }
-      return readiness;
+      return ensureNativeScenesReady();
     },
     requestProgress(request) {
       queue({
@@ -506,6 +521,14 @@ function sameVisualRequest(
     left.progress === right.progress &&
     left.selectedView === right.selectedView &&
     left.viewportWidth === right.viewportWidth;
+}
+
+function requestNeedsNativeScenes(
+  request: KpPlaceValueAdditionRenderRequest
+): boolean {
+  const writtenVisible =
+    request.viewportWidth >= 881 || request.selectedView === "written";
+  return writtenVisible && request.progress >= 0.1 && request.progress < 0.87;
 }
 
 function responsiveMode(
