@@ -61,7 +61,7 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
       },
       {
         id: "entry-owner.compatibility",
-        current: "shared-main-graph",
+        current: "routing-only-compatibility",
         required: "routing-only-compatibility"
       }
     ]

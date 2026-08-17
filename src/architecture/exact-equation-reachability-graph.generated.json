@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3186,
+  "scannedFileCount": 3190,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -2145,7 +2145,7 @@
       "sourcePath": "src/authoring/public-api.ts",
       "authorityId": "facade.concept-authoring",
       "sourceCallers": [
-        "src/bootstrap.ts"
+        "src/compatibility/legacy-concept-room-entry.ts"
       ],
       "testCallers": [
         "tests/canonical-animation-api-map.test.ts",

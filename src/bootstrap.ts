@@ -1,133 +1,100 @@
 import {
-  generatedConceptCatalog,
-  solveXPlusThreeSymbolicStory,
-  type GeneratedConceptCatalogEntry
-} from "../content/public-api.ts";
-import {
-  assertConceptPublicationFit,
-  definePublicationEnvironment
-} from "./authoring/public-api.ts";
-import {
-  readKpAnimationCatalogueRoute
-} from "./editor/animation-catalogue-route.ts";
-import {
-  isKpEconomicsDemandShiftTutorialRoute
-} from "./tutorial/economics-demand-shift/economics-demand-shift-route.ts";
-import {
-  isKpLispFunctionApplicationTutorialRoute
-} from "./tutorial/lisp-function-application/lisp-function-application-route.ts";
-import {
-  isKpSchemeFactorialTutorialRoute
-} from "./tutorial/scheme-factorial/scheme-factorial-route.ts";
+  selectKpLegacyRootRoute
+} from "./compatibility/legacy-root-route.ts";
 
 type KpDevelopmentToolbarClient = typeof import(
   "./dev-toolbar/development-toolbar-bootstrap.ts"
 );
 
-// Vite can erase this branch and its entire tooling graph from production.
+// Production compilation erases both the branch and the development graph.
 const loadKpDevelopmentToolbar:
   | (() => Promise<KpDevelopmentToolbarClient>)
   | undefined = import.meta.env.DEV
     ? () => import("./dev-toolbar/development-toolbar-bootstrap.ts")
     : undefined;
 
-const conceptCatalog: readonly GeneratedConceptCatalogEntry[] = generatedConceptCatalog;
-
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>("#app");
   if (root === null) throw new Error("Expected #app root element to exist.");
-  if (isKpSchemeFactorialTutorialRoute(window.location.pathname)) {
-    await mountDevelopmentToolbar();
-    const tutorial = await import(
-      "./tutorial/scheme-factorial/scheme-factorial-tutorial-entry.ts"
-    );
-    const dispose = tutorial.mountKpSchemeFactorialTutorial({ root });
-    window.addEventListener("pagehide", dispose, { once: true });
-    return;
-  }
-  if (isKpLispFunctionApplicationTutorialRoute(window.location.pathname)) {
-    await mountDevelopmentToolbar();
-    const tutorial = await import(
-      "./tutorial/lisp-function-application/lisp-function-application-tutorial-entry.ts"
-    );
-    const dispose = await tutorial.mountKpLispFunctionApplicationTutorial({ root });
-    window.addEventListener("pagehide", dispose, { once: true });
-    return;
-  }
-  if (isKpEconomicsDemandShiftTutorialRoute(window.location.pathname)) {
-    await mountDevelopmentToolbar();
-    const route = await import(
-      "./tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts"
-    );
-    const session = await route.mountKpEconomicsDemandShiftRoute({
-      root,
-      search: window.location.search,
-      hash: window.location.hash
-    });
-    window.addEventListener("pagehide", session.dispose, { once: true });
-    return;
-  }
-  const entry = conceptCatalog.find((candidate) =>
-    candidate.canonicalPath === window.location.pathname ||
-    candidate.legacyAliases.includes(window.location.pathname)
-  );
-  if (entry === undefined) {
-    if (readKpAnimationCatalogueRoute(window.location.search).active) {
+
+  const route = selectKpLegacyRootRoute({
+    pathname: window.location.pathname,
+    search: window.location.search
+  });
+  switch (route) {
+    case "scheme-factorial": {
+      await mountDevelopmentToolbar();
+      const tutorial = await import(
+        "./tutorial/scheme-factorial/scheme-factorial-tutorial-entry.ts"
+      );
+      registerPagehide(tutorial.mountKpSchemeFactorialTutorial({ root }));
+      return;
+    }
+    case "lisp-function-application": {
+      await mountDevelopmentToolbar();
+      const tutorial = await import(
+        "./tutorial/lisp-function-application/lisp-function-application-tutorial-entry.ts"
+      );
+      registerPagehide(await tutorial.mountKpLispFunctionApplicationTutorial({
+        root
+      }));
+      return;
+    }
+    case "economics-demand-shift": {
+      await mountDevelopmentToolbar();
+      const routeEntry = await import(
+        "./tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts"
+      );
+      const session = await routeEntry.mountKpEconomicsDemandShiftRoute({
+        root,
+        search: window.location.search,
+        hash: window.location.hash
+      });
+      registerPagehide(session.dispose);
+      return;
+    }
+    case "animation-catalogue": {
       const catalogue = await import(
         "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
       );
-      // The catalogue module owns the application-wide box model and reading
-      // fonts. Resolve it before mounting fixed dev chrome so later stylesheet
-      // injection cannot remeasure an already-painted toolbar.
+      // Catalogue CSS owns the application-wide box model. Let it settle
+      // before fixed development chrome measures the viewport.
       await mountDevelopmentToolbar();
-      const dispose = await catalogue.mountKpSvelteCatalogueExemplar({
+      registerPagehide(await catalogue.mountKpSvelteCatalogueExemplar({
         root,
         search: window.location.search
-      });
-      window.addEventListener("pagehide", dispose, { once: true });
+      }));
       return;
     }
-    await mountDevelopmentToolbar();
-    await import("./main.ts");
-    return;
+    case "concept-room": {
+      await mountDevelopmentToolbar();
+      const concept = await import(
+        "./compatibility/legacy-concept-room-entry.ts"
+      );
+      const session = await concept.tryMountKpLegacyConceptRoom({ root });
+      if (session !== null) {
+        root.dataset["kpConceptRoomMounted"] = "true";
+        registerPagehide(session.dispose);
+        return;
+      }
+      await import("./main.ts");
+      return;
+    }
+    case "internal-studio-fallback":
+      await mountDevelopmentToolbar();
+      await import("./main.ts");
   }
-
-  await mountDevelopmentToolbar();
-  await import("katex/dist/katex.min.css");
-  const [shell, runtimeModule, themeModule] = await Promise.all([
-    import("./app-adapters/concept-room-shell.ts"),
-    import("./app-adapters/linear-equation-concept-runtime.ts"),
-    import("./app-adapters/concept-room-theme.ts")
-  ]);
-  const environment = definePublicationEnvironment({
-    capabilities: [{ id: "kp.equation", major: 1, implementationVersion: "1.0.0" }],
-    providers: [{
-      id: "linear-problems.exact-rational",
-      protocol: "linear-problem.v1",
-      versions: ["1.0.0"]
-    }],
-    styleRoles: themeModule.conceptRoomStyleRoles
-  });
-  const handle = await shell.tryMountConceptRoomRoute({
-    root,
-    catalog: conceptCatalog,
-    runtime: runtimeModule.createLinearEquationConceptRuntime(),
-    symbolicStory: solveXPlusThreeSymbolicStory,
-    validateArtifact: (artifact) => assertConceptPublicationFit(artifact, environment)
-  });
-  if (handle === null) {
-    await import("./main.ts");
-    return;
-  }
-  window.addEventListener("pagehide", () => handle.dispose(), { once: true });
-  root.dataset["kpConceptRoomMounted"] = "true";
 }
 
 async function mountDevelopmentToolbar(): Promise<void> {
   if (loadKpDevelopmentToolbar === undefined) return;
   const client = await loadKpDevelopmentToolbar();
   const session = client.mountKpDevelopmentToolbar(window);
-  window.addEventListener("pagehide", session.dispose, { once: true });
+  registerPagehide(session.dispose);
+}
+
+function registerPagehide(dispose: () => void): void {
+  window.addEventListener("pagehide", dispose, { once: true });
 }
 
 void bootstrap();

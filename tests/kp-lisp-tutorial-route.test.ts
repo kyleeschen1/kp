@@ -25,11 +25,14 @@ test("Lisp tutorial owns one canonical trailing-slash URL", () => {
 });
 
 test("bootstrap lazy-loads the Lisp Svelte host", async () => {
-  const bootstrap = await readFile(
-    new URL("../src/bootstrap.ts", import.meta.url),
-    "utf8"
-  );
-  assert.match(bootstrap, /isKpLispFunctionApplicationTutorialRoute/);
+  const [bootstrap, routeSelection] = await Promise.all([
+    readFile(new URL("../src/bootstrap.ts", import.meta.url), "utf8"),
+    readFile(new URL(
+      "../src/compatibility/legacy-root-route.ts",
+      import.meta.url
+    ), "utf8")
+  ]);
+  assert.match(routeSelection, /isKpLispFunctionApplicationTutorialRoute/);
   assert.match(bootstrap, /lisp-function-application-tutorial-entry\.ts/);
 });
 

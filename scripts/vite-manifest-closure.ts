@@ -52,11 +52,14 @@ export interface KpViteManifestExperienceClosure {
 
 export function collectKpViteManifestStaticClosure(
   manifest: KpViteManifest,
-  rootKeys: readonly string[]
+  rootReferences: readonly string[]
 ): KpViteManifestClosure {
-  if (rootKeys.length === 0) {
+  if (rootReferences.length === 0) {
     throw new Error("Vite manifest closure requires at least one root.");
   }
+  const rootKeys = rootReferences.map((reference) =>
+    resolveManifestRootKey(manifest, reference)
+  );
   const chunks = new Set<string>();
   const queue = [...rootKeys];
   while (queue.length > 0) {
@@ -78,7 +81,7 @@ export function collectKpViteManifestExperienceClosure(
     scenario.entryRoots
   );
   let current = entry;
-  const activeRoots = [...scenario.entryRoots];
+  const activeRoots = [...entry.rootKeys];
   const activations: KpViteManifestActivationClosure[] = [];
 
   for (const activation of scenario.activations) {
@@ -213,6 +216,27 @@ function requireChunk(
     throw new Error(`Vite manifest lacks chunk ${key}.`);
   }
   return chunk;
+}
+
+function resolveManifestRootKey(
+  manifest: KpViteManifest,
+  reference: string
+): string {
+  if (manifest[reference] !== undefined) return reference;
+  const namePrefix = "@name:";
+  if (!reference.startsWith(namePrefix)) {
+    throw new Error(`Vite manifest lacks chunk ${reference}.`);
+  }
+  const name = reference.slice(namePrefix.length);
+  const matches = Object.entries(manifest)
+    .filter(([, chunk]) => chunk.name === name)
+    .map(([key]) => key);
+  if (matches.length !== 1) {
+    throw new Error(
+      `Vite manifest name ${name} resolved ${matches.length} chunks.`
+    );
+  }
+  return matches[0]!;
 }
 
 function resourceKind(

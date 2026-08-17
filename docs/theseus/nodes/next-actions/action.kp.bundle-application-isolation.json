@@ -261,6 +261,20 @@
       "scope": "broad",
       "checkedAt": "2026-08-17T01:59:02.911Z",
       "notes": "The dedicated Studio build transforms 1,001 modules versus the shared build's 1,445; initial shell is 2,288 gzip bytes and default editor experience is 316,521/490,000. Two Chromium route proofs pass; bootstrap, Public Web, toolbar, and Review bootstrap owners are absent."
+    },
+    {
+      "command": "Public Web focused tests dedicated builds closure browser matrix typecheck architecture shared build and reachability",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-17T02:19:50.400Z",
+      "notes": "All four Public Web lessons now own dedicated production graphs and are absent from the shared development input/compiler graph. Four closure scenarios pass; 44 Chromium route, static fallback, responsive, seek, and enhancement checks pass; typecheck and architecture are clean; shared build transforms 1,413 modules, 32 fewer than before slice 17."
+    },
+    {
+      "command": "legacy root focused tests production build closure route browser typecheck architecture and reachability",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-17T02:40:19.095Z",
+      "notes": "Bootstrap now owns only typed route selection, development lifecycle, and lazy compatibility dispatch. Concept composition moved behind a lazy compatibility entry; initial root closure is 3,860/10,000 gzip bytes and excludes main, concept, Svelte, tutorial, and development implementations. Twenty-three focused tests, six route browser proofs, type checks, zero-exception architecture, and reachability pass."
     }
   ],
   "expectedLearning": [

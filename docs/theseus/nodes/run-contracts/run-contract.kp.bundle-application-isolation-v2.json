@@ -157,7 +157,8 @@
     {
       "id": "s18",
       "title": "narrow-legacy-root-bootstrap",
-      "status": "planned"
+      "summary": "Reduced bootstrap to a typed route selector, lazy capability dispatch, and pagehide ownership; concept publication composition now lives behind a lazy compatibility entry, the initial root closes at 3,860/10,000 gzip bytes, and six canonical legacy routes mount without URL or visible changes.",
+      "status": "complete"
     },
     {
       "id": "s19",

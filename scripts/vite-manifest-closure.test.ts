@@ -35,6 +35,11 @@ const manifest: KpViteManifest = {
     file: "assets/renderer.js",
     src: "renderer.ts",
     assets: ["assets/grid.svg"]
+  },
+  "_bootstrap-hash.js": {
+    file: "assets/bootstrap-hash.js",
+    name: "bootstrap",
+    imports: ["shared.ts"]
   }
 };
 
@@ -54,6 +59,19 @@ test("static manifest closure includes owned resources but not dynamic chunks", 
   );
   assert.deepEqual(closure.discoverableDynamicRoots, ["pack.ts"]);
   assert.ok(Object.isFrozen(closure.resources));
+});
+
+test("named entry references resolve one hash-keyed shared HTML root", () => {
+  const closure = collectKpViteManifestStaticClosure(
+    manifest,
+    ["@name:bootstrap"]
+  );
+  assert.deepEqual(closure.rootKeys, ["_bootstrap-hash.js"]);
+  assert.deepEqual(closure.chunkKeys, ["_bootstrap-hash.js", "shared.ts"]);
+  assert.throws(
+    () => collectKpViteManifestStaticClosure(manifest, ["@name:missing"]),
+    /resolved 0 chunks/
+  );
 });
 
 test("experience closure activates only declared dynamic roots in order", () => {

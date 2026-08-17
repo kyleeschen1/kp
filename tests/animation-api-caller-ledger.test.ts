@@ -115,7 +115,7 @@ test("animation facade has exactly the two approved production callers", () => {
 
 test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.concept-authoring").sourceCallers, [
-    "src/bootstrap.ts"
+    "src/compatibility/legacy-concept-room-entry.ts"
   ]);
   assert.deepEqual(record("facade.provider-integration").sourceCallers, [
     "src/animation/verified-linear-problem-animation-compiler.ts",

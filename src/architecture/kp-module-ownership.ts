@@ -153,6 +153,11 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/public-web/", "application"),
     ownershipRule("src/project-dashboard/", "application"),
     ownershipRule("src/internal-studio/", "application"),
+    ownershipRule(
+      "src/compatibility/",
+      "application",
+      "Legacy route selection and fallback composition remain host-owned migration seams."
+    ),
     ownershipRule("src/dev-review/", "application"),
     ownershipRule("src/dev-toolbar/", "application"),
     ownershipRule(

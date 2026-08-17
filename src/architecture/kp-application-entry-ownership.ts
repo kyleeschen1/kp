@@ -132,7 +132,7 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     id: "entry-owner.compatibility",
     delivery: "compatibility",
     frameworkBoundary: "host-owned",
-    currentBoundary: "shared-main-graph",
+    currentBoundary: "routing-only-compatibility",
     requiredBoundary: "routing-only-compatibility",
     entryModules: ["src/bootstrap.ts"],
     hostDocuments: [

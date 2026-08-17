@@ -162,6 +162,24 @@ export const kpBundleExperienceScenarios:
       comparisonBaseId: "bundle-experience.catalogue.place-value"
     }),
     scenario({
+      id: "bundle-experience.compatibility.legacy-root",
+      title: "Legacy route-selection root",
+      // Several compatibility HTML inputs share this emitted chunk, so its
+      // content hash is resolved through Vite's stable chunk name.
+      entryRoots: ["@name:bootstrap"],
+      expectedOwners: ["bootstrap"],
+      forbiddenOwners: [
+        "src/main.ts",
+        "src/compatibility/legacy-concept-room-entry.ts",
+        "src/editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts",
+        "src/tutorial/economics-demand-shift/economics-demand-shift-route-entry.ts",
+        "src/tutorial/lisp-function-application/lisp-function-application-tutorial-entry.ts",
+        "src/tutorial/scheme-factorial/scheme-factorial-tutorial-entry.ts",
+        "src/dev-toolbar/development-toolbar-bootstrap.ts"
+      ],
+      budgets: [{ phase: "entry", resource: "total", gzipBytes: 10_000 }]
+    }),
+    scenario({
       id: "bundle-experience.studio.internal-host",
       title: "Internal Studio dedicated host",
       buildId: "bundle-build.internal-studio",

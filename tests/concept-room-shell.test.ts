@@ -16,9 +16,16 @@ test("generated concept paths resolve without a handwritten room switch", () => 
 
 test("bootstrap preserves the legacy entrypoint as a fallback", () => {
   const bootstrap = readFileSync(new URL("../src/bootstrap.ts", import.meta.url), "utf8");
+  const conceptEntry = readFileSync(
+    new URL("../src/compatibility/legacy-concept-room-entry.ts", import.meta.url),
+    "utf8"
+  );
   const legacyMain = readFileSync(new URL("../src/main.ts", import.meta.url), "utf8");
-  assert.match(bootstrap, /generatedConceptCatalog/);
+  assert.doesNotMatch(bootstrap, /generatedConceptCatalog|authoring\/public-api/);
+  assert.match(bootstrap, /legacy-concept-room-entry\.ts/);
   assert.match(bootstrap, /import\("\.\/main\.ts"\)/);
+  assert.match(conceptEntry, /generatedConceptCatalog/);
+  assert.match(conceptEntry, /tryMountConceptRoomRoute/);
   assert.equal(legacyMain.includes("concept-room-shell"), false);
   assert.equal(legacyMain.includes("solve-with-balance"), false);
 });

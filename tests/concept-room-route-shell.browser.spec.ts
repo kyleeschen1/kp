@@ -20,8 +20,8 @@ test("generated concept route mounts, deep-links, navigates, rewinds, and dispos
   await expect(page.locator("[data-kp-concept-room-shell]")).toHaveCount(0);
 });
 
-test("legacy root still loads through the untouched main entrypoint", async ({ page }) => {
-  await page.goto("/");
+test("explicit editor view still loads the legacy main fallback", async ({ page }) => {
+  await page.goto("/?view=editor");
   await expect(page.getByRole("heading", { name: "Identity Matrix" })).toBeVisible();
   await expect(page.locator("[data-kp-concept-room-shell]")).toHaveCount(0);
 });

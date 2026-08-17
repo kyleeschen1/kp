@@ -20,6 +20,7 @@ test("representative bundle scenarios cover each approved experience family", ()
       "bundle-experience.catalogue.graph-3d",
       "bundle-experience.catalogue.place-value",
       "bundle-experience.catalogue.place-value-motion",
+      "bundle-experience.compatibility.legacy-root",
       "bundle-experience.studio.internal-host",
       "bundle-experience.public.typescript-free-shipping",
       "bundle-experience.public.fraction-composition",
