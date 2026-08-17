@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s05",
+  "kind": "next-action",
+  "title": "Asset-evidence-projection",
+  "status": "resolved",
+  "summary": "Asset evidence now joins generated authorities without title heuristics or duplicate registry state.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s05 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-capability-asset-evidence.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-capability-asset-evidence.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s04"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s04"
+  ],
+  "verification": [
+    "npm run test:animation-capability-asset-evidence",
+    "npm run test:equation-asset-manifest",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-asset-evidence",
+      "status": "passed",
+      "scope": "exact generated manifest projection and orphan diagnostics",
+      "checkedAt": "2026-08-17T21:56:20.769Z"
+    },
+    {
+      "command": "npm run test:equation-asset-manifest",
+      "status": "passed",
+      "scope": "generated asset and display authority closure",
+      "checkedAt": "2026-08-17T21:56:21.751Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-17T21:56:22.701Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Projected exact generated asset evidence for every exemplar requirement, carrying authoritative dispositions and URLs while leaving unmatched planned exemplars as typed missing evidence."
+  },
+  "expectedLearning": [
+    "Whether capability exemplar requirements can be joined to generated asset and display evidence without creating a second asset registry."
+  ],
+  "allowedWork": [
+    "Read-only projection of generated manifest disposition representation and direct-link evidence plus explicit orphan diagnostics."
+  ],
+  "disallowedWork": [
+    "Authored readiness duplicate asset metadata inferred matches or changes to generated manifest authorities."
+  ],
+  "criteria": [
+    {
+      "id": "projection-copies-only-named-manifest-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "orphan-exemplar-references-are-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "asset-links-and-dispositions-remain-authoritative",
+      "weight": "high"
+    }
+  ]
+}
