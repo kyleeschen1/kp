@@ -46,10 +46,46 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-17T18:31:43.408Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:44:46.763Z"
+    },
+    {
+      "command": "Chromium complete log-product connector structural-reception proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:44:49.471Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:44:50.910Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:44:52.296Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:44:53.545Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:44:54.929Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The three-factor caller now consumes the approved shared log-product timing and Native KaTeX optical profiles, preserves all factor identities on direct lanes, and adds no caller-owned timing, path, or renderer branch. Awaiting human visual approval before quotient promotion."
+    "summary": "Two- and three-factor connectors now join enclosure reception as structural syntax, becoming legible at the first collision-free sample before derived ln operators resolve; endpoints, factor identity, direct seek, rewind, and shared profiles remain intact. Awaiting human visual approval."
   }
 }

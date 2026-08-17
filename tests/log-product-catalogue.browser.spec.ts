@@ -200,9 +200,9 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
     expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
-  await seek.fill("0.53");
+  await seek.fill("0.52");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);
-  await seek.fill("0.58");
+  await seek.fill("0.54");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(1);
 
   const enclosureIds = [
@@ -312,6 +312,14 @@ test("three-factor product uses the same lazy surface and deterministic clock", 
     "target.xyz.term-2.log.operator",
     "target.xyz.term-3.log.operator"
   ] as const;
+  const multiFactorConnectorIds = [
+    "target.xyz.sum.plus.0",
+    "target.xyz.sum.plus.1"
+  ] as const;
+  await seek.fill("0.52");
+  expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(0);
+  await seek.fill("0.54");
+  expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(2);
   await seek.fill("0.53");
   expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(0);
   await seek.fill("0.58");

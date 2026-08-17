@@ -129,11 +129,15 @@ test("log-product homomorphic handoff stages a contracted operator match-dissolv
   assert.equal(handoff.enclosureHandoff.sizeBehavior, "native-size");
   assert.equal(
     handoff.relationHandoff.synchronization,
-    "with-derived-operators"
+    "with-derived-enclosures"
   );
-  assert.equal(
-    handoff.relationHandoff.receptionWindow.end,
-    handoff.operatorHandoff.targetPresenceWindow.end
+  assert.ok(
+    handoff.relationHandoff.receptionWindow.start >
+      handoff.enclosureHandoff.transitWindow.start
+  );
+  assert.ok(
+    handoff.relationHandoff.receptionWindow.start <
+      handoff.operatorHandoff.targetPresenceWindow.start
   );
   assert.ok(
     handoff.operatorHandoff.sourceContractionWindow.end <
@@ -156,8 +160,8 @@ test("log-product homomorphic handoff stages a contracted operator match-dissolv
     handoff.enclosureHandoff.transitWindow.end
   );
   assert.ok(
-    handoff.relationHandoff.receptionWindow.start >
-      handoff.enclosureHandoff.transitWindow.start
+    handoff.relationHandoff.receptionWindow.end <
+      handoff.operatorHandoff.targetPresenceWindow.end
   );
   assert.ok(
     handoff.operatorHandoff.targetPresenceWindow.start -
