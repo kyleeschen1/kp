@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s06",
+  "kind": "next-action",
+  "title": "Compiler-evidence-projection",
+  "status": "resolved",
+  "summary": "Compiler evidence is source-named, immutable, exact-match only, and verified.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s06 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-capability-compiler-evidence.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-capability-compiler-evidence.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s05"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s05"
+  ],
+  "verification": [
+    "npm run test:animation-capability-compiler-evidence",
+    "npm run check:architecture",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-compiler-evidence",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T22:04:14.048Z",
+      "notes": "5 tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T22:04:15.021Z",
+      "notes": "Dependency and compiler-authority gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-17T22:04:16.008Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Projected exact compiler evidence without renderer imports or a second registry."
+  },
+  "expectedLearning": [
+    "Whether exact capability requirements can be projected from existing operation recipe motif and promotion authorities without importing renderer modules or establishing another registry."
+  ],
+  "allowedWork": [
+    "Read-only compiler evidence adapters over existing equation extension registries LLM operation catalogue recipe catalogue and promotion evidence."
+  ],
+  "disallowedWork": [
+    "Renderer imports broad animation barrels duplicate registrations heuristic matching or readiness status."
+  ],
+  "criteria": [
+    {
+      "id": "compiler-evidence-is-exact-and-source-named",
+      "weight": "high"
+    },
+    {
+      "id": "projection-imports-no-renderers",
+      "weight": "high"
+    },
+    {
+      "id": "projection-creates-no-registry",
+      "weight": "high"
+    }
+  ]
+}

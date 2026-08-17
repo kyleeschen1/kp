@@ -135,6 +135,7 @@
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:animation-capability-plan": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-plan.test.ts tests/equation-animation-capability-plan.test.ts tests/cross-domain-animation-capability-plan.test.ts",
     "test:animation-capability-asset-evidence": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-asset-evidence.test.ts",
+    "test:animation-capability-compiler-evidence": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-compiler-evidence.test.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
     "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",
