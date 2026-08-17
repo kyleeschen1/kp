@@ -2,8 +2,9 @@
   "id": "next-action.kp.log-quotient-structural-pressure-checkpoint",
   "kind": "next-action",
   "title": "Review log-quotient structural pressure choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Approved quotient structural-pressure choreography; its exemplar timings and Native KaTeX treatment are no longer provisional.",
   "verificationRecords": [
     {
       "command": "npm run test:log-quotient",
@@ -49,7 +50,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Transferred the approved homomorphic matched-dissolve, payload continuity, fraction construction, and function-wrap reception grammar to the quotient exemplar; deterministic checks pass and promotion awaits human motion review."
+    "state": "complete",
+    "summary": "Human visual review approved the log-quotient transfer: matched-dissolve operators, persistent x/y quotient formation, centered fraction-rule growth, restrained outside-in enclosures, and closure-coupled target ln reception."
   }
 }
