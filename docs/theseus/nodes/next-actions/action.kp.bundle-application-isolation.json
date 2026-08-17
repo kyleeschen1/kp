@@ -352,6 +352,55 @@
       "scope": "legacy route compatibility",
       "checkedAt": "2026-08-17T03:02:45.817Z",
       "notes": "dedicated Chromium route check passed"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-capability-loader.test.ts scripts/kp-bundle-experience-scenarios.test.ts scripts/measure-kp-bundle-experiences.test.ts",
+      "status": "passed",
+      "scope": "dashboard ordering and bundle scenario model",
+      "checkedAt": "2026-08-17T03:11:22.892Z",
+      "notes": "9 focused tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "dashboard capability types",
+      "checkedAt": "2026-08-17T03:11:23.869Z",
+      "notes": "all configured TypeScript Svelte and domain checks passed"
+    },
+    {
+      "command": "npm run build:internal-studio",
+      "status": "passed",
+      "scope": "dashboard production manifest",
+      "checkedAt": "2026-08-17T03:11:24.788Z",
+      "notes": "996 modules built and production erasure gate passed"
+    },
+    {
+      "command": "npm run measure:bundle:studio-dashboard",
+      "status": "passed",
+      "scope": "ordered dashboard closure",
+      "checkedAt": "2026-08-17T03:11:25.706Z",
+      "notes": "data discovery precedes selected renderer; both scenario checks passed"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "dashboard visible behavior",
+      "checkedAt": "2026-08-17T03:11:26.607Z",
+      "notes": "Chromium round trip passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "repository architecture",
+      "checkedAt": "2026-08-17T03:11:27.506Z",
+      "notes": "all dependency and authority gates passed"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "shared production compatibility",
+      "checkedAt": "2026-08-17T03:11:28.414Z",
+      "notes": "1361 modules built and production erasure gate passed"
     }
   ],
   "expectedLearning": [

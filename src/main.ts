@@ -135,6 +135,9 @@ import type {
 import type {
   KpSemanticAnimationWorkbenchIndex
 } from "./editor/semantic-animation-workbench-index.ts";
+import {
+  createKpProjectDashboardCapabilityLoader
+} from "./project-dashboard/capability-loader.ts";
 const app = document.querySelector<HTMLDivElement>("#app");
 
 if (app === null) {
@@ -191,10 +194,14 @@ type Graph3DEditorControllerClient = typeof import(
 type Graph3DEditorController = ReturnType<
   Graph3DEditorControllerClient["createKpEditorGraph3DController"]
 >;
-let projectDashboardClientPromise: Promise<{
-  readonly data: ProjectDashboardDataClient;
-  readonly render: ProjectDashboardRenderClient;
-}> | undefined;
+const projectDashboardCapabilityLoader =
+  createKpProjectDashboardCapabilityLoader<
+    ProjectDashboardDataClient,
+    ProjectDashboardRenderClient
+  >({
+    importData: () => import("./project-dashboard/data.ts"),
+    importSelectedRenderer: () => import("./project-dashboard/render.ts")
+  });
 let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefined;
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
 let animationWorkbenchViewClientPromise:
@@ -2004,17 +2011,7 @@ function loadProjectDashboardClient(): Promise<{
   readonly data: ProjectDashboardDataClient;
   readonly render: ProjectDashboardRenderClient;
 }> {
-  if (projectDashboardClientPromise === undefined) {
-    // The dashboard imports every showcase family. Keep that authoring surface
-    // behind an explicit navigation boundary so the editor starts with only
-    // the capability pack selected for playback.
-    projectDashboardClientPromise = Promise.all([
-      import("./project-dashboard/data.ts"),
-      import("./project-dashboard/render.ts")
-    ]).then(([data, render]) => ({ data, render }));
-  }
-
-  return projectDashboardClientPromise;
+  return projectDashboardCapabilityLoader.load();
 }
 
 function selectKatexTransformFixture(button: HTMLButtonElement): void {

@@ -203,6 +203,36 @@ export const kpBundleExperienceScenarios:
       ],
       budgets: [{ phase: "entry", resource: "total", gzipBytes: 490_000 }]
     }),
+    scenario({
+      id: "bundle-experience.studio.dashboard",
+      title: "Internal Studio dashboard data then selected renderer",
+      buildId: "bundle-build.internal-studio",
+      entryRoots: ["studio/index.html"],
+      activations: [
+        { id: "load-default-editor", manifestRoots: ["src/main.ts"] },
+        {
+          id: "discover-dashboard-data",
+          manifestRoots: ["src/project-dashboard/data.ts"]
+        },
+        {
+          id: "render-selected-dashboard",
+          manifestRoots: ["src/project-dashboard/render.ts"]
+        }
+      ],
+      expectedOwners: [
+        "studio/index.html",
+        "src/main.ts",
+        "src/project-dashboard/data.ts",
+        "src/project-dashboard/render.ts"
+      ],
+      forbiddenOwners: [
+        "src/bootstrap.ts",
+        "src/dev-toolbar/development-toolbar-bootstrap.ts",
+        "src/dev-review/workbench-review-bootstrap.ts"
+      ],
+      budgets: [],
+      comparisonBaseId: "bundle-experience.studio.internal-host"
+    }),
     publicScenario(
       "bundle-experience.public.typescript-free-shipping",
       "Public TypeScript free-shipping lesson",

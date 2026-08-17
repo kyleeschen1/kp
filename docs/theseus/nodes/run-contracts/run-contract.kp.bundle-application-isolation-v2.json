@@ -169,7 +169,8 @@
     {
       "id": "s20",
       "title": "make-dashboard-startup-data-only",
-      "status": "planned"
+      "summary": "Dashboard loading now has an explicit cached data-first capability contract: the 14.6 KB gzip data projection settles before the 57.8 KB renderer and showcase closure is requested; measured Studio phases and the existing browser round trip pass.",
+      "status": "complete"
     },
     {
       "id": "s21",

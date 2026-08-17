@@ -22,12 +22,30 @@ test("representative bundle scenarios cover each approved experience family", ()
       "bundle-experience.catalogue.place-value-motion",
       "bundle-experience.compatibility.legacy-root",
       "bundle-experience.studio.internal-host",
+      "bundle-experience.studio.dashboard",
       "bundle-experience.public.typescript-free-shipping",
       "bundle-experience.public.fraction-composition",
       "bundle-experience.public.normal-matrices",
       "bundle-experience.public.eigenvectors"
     ]
   );
+});
+
+test("dashboard scenario records data discovery before selected rendering", () => {
+  const dashboard = findKpBundleExperienceScenario(
+    "bundle-experience.studio.dashboard"
+  );
+  assert.equal(
+    dashboard.comparisonBaseId,
+    "bundle-experience.studio.internal-host"
+  );
+  assert.deepEqual(dashboard.activations.slice(1), [{
+    id: "discover-dashboard-data",
+    manifestRoots: ["src/project-dashboard/data.ts"]
+  }, {
+    id: "render-selected-dashboard",
+    manifestRoots: ["src/project-dashboard/render.ts"]
+  }]);
 });
 
 test("scenario and build registries are immutable data-only declarations", () => {
