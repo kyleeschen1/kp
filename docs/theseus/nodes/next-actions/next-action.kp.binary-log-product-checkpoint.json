@@ -155,11 +155,53 @@
       "scope": "canonical visual checkpoint",
       "checkedAt": "2026-08-17T16:43:37.355Z",
       "notes": "Deterministic contact sheet regenerated at tmp/codex/log-product-checkpoint/contact-sheet.png."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "binary exemplar and multi-factor preservation",
+      "checkedAt": "2026-08-17T17:34:53.069Z",
+      "notes": "15 semantic, endpoint, identity, routing, and match-dissolve timing tests passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "equation authority preservation",
+      "checkedAt": "2026-08-17T17:34:57.055Z",
+      "notes": "10 inventory, authority, endpoint, clock, and sampled-frame preservation checks passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-product-catalogue.browser.spec.ts --grep match-dissolves --project chromium firefox webkit",
+      "status": "passed",
+      "scope": "visible match-dissolve geometry",
+      "checkedAt": "2026-08-17T17:35:06.039Z",
+      "notes": "Focused measured-DOM choreography passed separately in Chromium, Firefox, and WebKit; no unrelated protected-transit intersections."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository types",
+      "checkedAt": "2026-08-17T17:35:11.187Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T17:35:15.730Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, and compiler authority passed."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "canonical match-dissolve contact sheet",
+      "checkedAt": "2026-08-17T17:35:20.492Z",
+      "notes": "Regenerated deterministic contact sheet with source fade, isolated factor transit, enclosure squeeze, and late native-size syntax reception."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Corrected logarithm baseline and visible enclosure squeeze; promoted measured horizontal-axis and stale-route invalidation contracts. Awaiting the mandatory human visual checkpoint before broader promotion."
+    "summary": "Replaced crossing ln trajectories with a bounded native-size match-dissolve: source syntax fades, factors separate alone, target enclosures squeeze, then ln and plus resolve together. Awaiting human visual approval before promotion."
   },
   "expectedLearning": [
     "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."

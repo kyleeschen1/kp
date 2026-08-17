@@ -74,7 +74,7 @@ test("log-product declares synchronized function-wrap enclosure roles", () => {
   );
 });
 
-test("binary homomorphic handoff keeps a visible ln carrier while structure changes", () => {
+test("binary homomorphic handoff stages a bounded operator match-dissolve", () => {
   const handoff = compileKpBinaryLogProductHomomorphicHandoff(
     kpCanonicalCompiledLogProductOperation
   );
@@ -82,16 +82,38 @@ test("binary homomorphic handoff keeps a visible ln carrier while structure chan
   assert.equal(handoff.kind, "log-product-homomorphic-handoff");
   assert.equal(handoff.maturity, "candidate");
   assert.deepEqual(handoff.operatorHandoff, {
-    topology: "source-overlaps-derived-successors",
+    topology: "matched-dissolve-to-derived-successors",
     correspondenceRecordId: "correspondence.log-product.operator-fission",
     sourceEntityId: "source.log.operator",
     targetEntityIds: [
       "target.left.log.operator",
       "target.right.log.operator"
     ],
-    targetPresenceWindow: { start: 0.14, end: 0.22 },
-    transitWindow: { start: 0.22, end: 0.72 },
-    sourceReleaseWindow: { start: 0.22, end: 0.34 }
+    sourceReleaseWindow: { start: 0.18, end: 0.32 },
+    targetPresenceWindow: { start: 0.59, end: 0.68 }
+  });
+  assert.deepEqual(handoff.payloadHandoff.transitWindow, {
+    start: 0.2,
+    end: 0.44
+  });
+  assert.deepEqual(handoff.enclosureHandoff, {
+    topology: "source-scope-clears-before-derived-scopes",
+    correspondenceRecordIds: [
+      "correspondence.log-product.open-shell-fission",
+      "correspondence.log-product.close-shell-fission"
+    ],
+    sourceEntityIds: ["source.log.open", "source.log.close"],
+    targetEntityIds: [
+      "target.left.log.open",
+      "target.left.log.close",
+      "target.right.log.open",
+      "target.right.log.close"
+    ],
+    reception: "horizontal-squeeze",
+    sizeBehavior: "native-size",
+    targetPresenceWindow: { start: 0.44, end: 0.48 },
+    transitWindow: { start: 0.48, end: 0.66 },
+    sourceReleaseWindow: { start: 0.12, end: 0.2 }
   });
   assert.equal(handoff.payloadHandoff.topology, "ordered-continuity");
   assert.equal(handoff.enclosureHandoff.reception, "horizontal-squeeze");
@@ -102,23 +124,20 @@ test("binary homomorphic handoff keeps a visible ln carrier while structure chan
   );
   assert.equal(
     handoff.relationHandoff.receptionWindow.end,
-    handoff.operatorHandoff.transitWindow.end
+    handoff.operatorHandoff.targetPresenceWindow.end
   );
   assert.ok(
     handoff.relationHandoff.receptionWindow.start >
-      handoff.operatorHandoff.transitWindow.start
+      handoff.enclosureHandoff.transitWindow.start
   );
-
-  for (let step = 0; step <= 100; step += 1) {
-    const coverage = measureKpBinaryLogProductCarrierCoverage(
-      handoff,
-      step / 100
-    );
-    assert.ok(
-      coverage.sourcePresence + coverage.targetPresence >= 1,
-      `ln carrier vacancy at ${step / 100}`
-    );
-  }
+  assert.ok(
+    handoff.operatorHandoff.targetPresenceWindow.start -
+      handoff.operatorHandoff.sourceReleaseWindow.end <= 0.270_001
+  );
+  assert.deepEqual(
+    measureKpBinaryLogProductCarrierCoverage(handoff, 0.48),
+    { sourcePresence: 0, targetPresence: 0 }
+  );
   assert.throws(
     () => compileKpBinaryLogProductHomomorphicHandoff(
       kpMultiFactorCompiledLogProductOperation

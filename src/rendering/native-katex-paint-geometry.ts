@@ -12,13 +12,6 @@ export type KpNativeKatexPaintMeasuredTrack<Track> = Track & {
   readonly endPaintRect: KpStageRelativeRect;
 };
 
-export interface KpNativeKatexHorizontalPaintTransitGeometry {
-  readonly startRect: KpStageRelativeRect;
-  readonly endRect: KpStageRelativeRect;
-  readonly startPaintRect: KpStageRelativeRect;
-  readonly endPaintRect: KpStageRelativeRect;
-}
-
 export type KpNativeKatexTrackWithoutMotionPath<Track> =
   Track extends unknown
     ? Omit<Track, "motionPath" | "motionPathSampling">
@@ -41,35 +34,6 @@ export function invalidateKpNativeKatexMotionPath<
     ...withoutPath
   } = track;
   return withoutPath as KpNativeKatexTrackWithoutMotionPath<Track>;
-}
-
-/**
- * A target-native clone may originate over another symbol, but its own
- * measured ink metrics remain authoritative. Translating the target geometry
- * only on x preserves its baseline and prevents endpoint handoff snaps.
- */
-export function projectKpNativeKatexHorizontalPaintTransit(input: {
-  readonly originPaintRect: KpStageRelativeRect;
-  readonly targetRect: KpStageRelativeRect;
-  readonly targetPaintRect: KpStageRelativeRect;
-}): KpNativeKatexHorizontalPaintTransitGeometry {
-  const originCenterX = input.originPaintRect.left +
-    input.originPaintRect.width / 2;
-  const targetCenterX = input.targetPaintRect.left +
-    input.targetPaintRect.width / 2;
-  const deltaX = originCenterX - targetCenterX;
-  return Object.freeze({
-    startRect: Object.freeze({
-      ...input.targetRect,
-      left: input.targetRect.left + deltaX
-    }),
-    endRect: Object.freeze({ ...input.targetRect }),
-    startPaintRect: Object.freeze({
-      ...input.targetPaintRect,
-      left: input.targetPaintRect.left + deltaX
-    }),
-    endPaintRect: Object.freeze({ ...input.targetPaintRect })
-  });
 }
 
 export function attachKpNativeKatexTrackPaintGeometry<

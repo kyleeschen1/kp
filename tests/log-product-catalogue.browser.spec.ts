@@ -124,7 +124,7 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
   expect(pageErrors).toEqual([]);
 });
 
-test("binary handoff visibly preserves its axis and receives enclosures", async ({
+test("binary handoff visibly match-dissolves operators and receives enclosures", async ({
   page
 }) => {
   await page.goto(`/?artifact=${animationId}`);
@@ -134,7 +134,10 @@ test("binary handoff visibly preserves its axis and receives enclosures", async 
   );
   const stage = player.locator("[data-kp-log-product-stage]");
   const seek = player.locator('[data-action="seek-editor-animation"]');
-  await expect.poll(() => stage.getAttribute("data-kp-log-product-stage"))
+  await expect.poll(
+    () => stage.getAttribute("data-kp-log-product-stage"),
+    { timeout: 15_000 }
+  )
     .not.toBe("preparing");
   if (await stage.getAttribute("data-kp-log-product-stage") === "failed") {
     throw new Error(
@@ -156,14 +159,32 @@ test("binary handoff visibly preserves its axis and receives enclosures", async 
     "target.left.log.operator",
     "target.right.log.operator"
   ] as const;
-  const operatorOrigin = await at(0.22, operatorIds);
-  const operatorMidpoint = await at(0.47, operatorIds);
-  const operatorSettlement = await at(0.72, operatorIds);
+  await seek.fill("0.48");
+  await expect(stage).toHaveAttribute("data-kp-log-product-progress", "0.48");
+  expect(await visibleMaterialCount(stage, [
+    "source.log.operator",
+    ...operatorIds
+  ])).toBe(0);
+  const operatorEntry = await at(0.6, operatorIds);
+  const operatorMidpoint = await at(0.64, operatorIds);
+  const operatorSettlement = await at(0.68, operatorIds);
   for (const entityId of operatorIds) {
-    const tops = [operatorOrigin, operatorMidpoint, operatorSettlement]
-      .map((geometry) => geometry[entityId]!.top);
-    expect(Math.max(...tops) - Math.min(...tops)).toBeLessThanOrEqual(0.25);
+    const samples = [operatorEntry, operatorMidpoint, operatorSettlement]
+      .map((geometry) => geometry[entityId]!);
+    const centerXs = samples.map(({ left, width }) => left + width / 2);
+    const centerYs = samples.map(({ top, height }) => top + height / 2);
+    expect(Math.max(...centerXs) - Math.min(...centerXs))
+      .toBeLessThanOrEqual(1.25);
+    expect(Math.max(...centerYs) - Math.min(...centerYs))
+      .toBeLessThanOrEqual(1.25);
+    expect(Math.max(...samples.map(({ width }) => width)) -
+      Math.min(...samples.map(({ width }) => width)))
+      .toBeLessThanOrEqual(0.25);
   }
+  await seek.fill("0.58");
+  expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);
+  await seek.fill("0.64");
+  expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(1);
 
   const enclosureIds = [
     "target.left.log.open",
@@ -171,9 +192,9 @@ test("binary handoff visibly preserves its axis and receives enclosures", async 
     "target.right.log.open",
     "target.right.log.close"
   ] as const;
-  const enclosureEntry = await at(0.54, enclosureIds);
-  const enclosureMidpoint = await at(0.63, enclosureIds);
-  const enclosureSettlement = await at(0.72, enclosureIds);
+  const enclosureEntry = await at(0.48, enclosureIds);
+  const enclosureMidpoint = await at(0.57, enclosureIds);
+  const enclosureSettlement = await at(0.66, enclosureIds);
   for (const prefix of ["target.left.log", "target.right.log"]) {
     const leading = [enclosureEntry, enclosureMidpoint, enclosureSettlement]
       .map((geometry) => geometry[`${prefix}.open`]!);
@@ -284,6 +305,19 @@ async function movingPaintSnapshot(stage: Locator) {
       transform: owner.style.transform
     })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
   );
+}
+
+async function visibleMaterialCount(
+  stage: Locator,
+  entityIds: readonly string[]
+): Promise<number> {
+  return stage.evaluate((root, expectedEntityIds) =>
+    expectedEntityIds.flatMap((entityId) =>
+      [...root.querySelectorAll<HTMLElement>(
+        `[data-kp-equation-material-semantic-entity-id="${CSS.escape(entityId)}"]`
+      )]
+    ).filter((owner) => Number(getComputedStyle(owner).opacity) > 0.01).length,
+  entityIds);
 }
 
 async function visibleMaterialGeometry(

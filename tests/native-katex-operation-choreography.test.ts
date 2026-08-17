@@ -35,9 +35,6 @@ import {
   applyKpNativeKatexLogProductHomomorphicHandoff
 } from "../src/rendering/native-katex-log-product-homomorphic-handoff.ts";
 import {
-  projectKpNativeKatexHorizontalPaintTransit
-} from "../src/rendering/native-katex-paint-geometry.ts";
-import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import type {
@@ -160,26 +157,7 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
   assert.ok(tracks.every(({ motionPath }) => motionPath === undefined));
 });
 
-test("horizontal paint projection preserves target-native vertical geometry", () => {
-  const geometry = projectKpNativeKatexHorizontalPaintTransit({
-    originPaintRect: { left: 100, top: 42, width: 18, height: 16 },
-    targetRect: { left: 24, top: 18, width: 20, height: 24 },
-    targetPaintRect: { left: 28, top: 23, width: 12, height: 14 }
-  });
-
-  assert.deepEqual(geometry.startPaintRect, {
-    left: 103,
-    top: 23,
-    width: 12,
-    height: 14
-  });
-  assert.equal(geometry.startRect.top, geometry.endRect.top);
-  assert.equal(geometry.startPaintRect.top, geometry.endPaintRect.top);
-  assert.equal(geometry.startPaintRect.width, geometry.endPaintRect.width);
-  assert.equal(geometry.startPaintRect.height, geometry.endPaintRect.height);
-});
-
-test("homomorphic operator successors emerge from one visible source carrier", () => {
+test("homomorphic operators use a centered match-dissolve around payload transit", () => {
   const sourceOperator = atom(
     "source",
     "source.log.operator",
@@ -217,23 +195,27 @@ test("homomorphic operator successors emerge from one visible source carrier", (
   const leftTrack = tracks[1]!;
   const rightTrack = tracks[2]!;
 
+  assert.deepEqual(center(sourceTrack.startRect), center(sourceTrack.endRect));
+  assert.deepEqual(center(leftTrack.startRect), center(targetLeft.rect));
+  assert.deepEqual(center(rightTrack.startRect), center(targetRight.rect));
   assert.deepEqual(sourceTrack.startRect, sourceTrack.endRect);
-  assert.deepEqual(leftTrack.startRect, sourceOperator.rect);
-  assert.deepEqual(rightTrack.startRect, sourceOperator.rect);
-  assert.equal(leftTrack.motionAxisConstraint, "horizontal");
-  assert.equal(rightTrack.motionAxisConstraint, "horizontal");
-  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.22, false);
-  assert.equal(reception[0]!.opacity, 1);
-  assert.equal(reception[1]!.opacity, 1);
-  assert.equal(reception[2]!.opacity, 1);
-  assert.deepEqual(reception[1]!.rect, sourceOperator.rect);
-  assert.deepEqual(reception[2]!.rect, sourceOperator.rect);
-  const fission = sampleKpNativeKatexSceneTrackFrames(tracks, 0.42, false);
-  assert.ok(center(fission[1]!.rect).x < center(sourceOperator.rect).x);
-  assert.ok(center(fission[2]!.rect).x > center(sourceOperator.rect).x);
-  assert.equal(fission[0]!.opacity, 0);
-  assert.equal(center(fission[1]!.rect).y, center(sourceOperator.rect).y);
-  assert.equal(center(fission[2]!.rect).y, center(sourceOperator.rect).y);
+  assert.deepEqual(leftTrack.startRect, leftTrack.endRect);
+  assert.deepEqual(rightTrack.startRect, rightTrack.endRect);
+  assert.equal(leftTrack.motionAxisConstraint, undefined);
+  assert.equal(rightTrack.motionAxisConstraint, undefined);
+
+  const sourceEcho = sampleKpNativeKatexSceneTrackFrames(tracks, 0.3, false);
+  assert.ok(sourceEcho[0]!.opacity > 0 && sourceEcho[0]!.opacity < 1);
+  assert.equal(sourceEcho[1]!.opacity, 0);
+  assert.equal(sourceEcho[2]!.opacity, 0);
+  const vacancy = sampleKpNativeKatexSceneTrackFrames(tracks, 0.48, false);
+  assert.ok(vacancy.every(({ opacity }) => opacity === 0));
+  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.64, false);
+  assert.equal(reception[0]!.opacity, 0);
+  assert.ok(reception[1]!.opacity > 0 && reception[1]!.opacity < 1);
+  assert.ok(reception[2]!.opacity > 0 && reception[2]!.opacity < 1);
+  assert.deepEqual(center(reception[1]!.rect), center(targetLeft.rect));
+  assert.deepEqual(center(reception[2]!.rect), center(targetRight.rect));
 });
 
 test("function-wrap adapter certifies reverse settlement and synchronized ownership", () => {

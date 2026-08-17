@@ -12,17 +12,17 @@ const OPERATOR_FISSION_RECORD_ID =
   "correspondence.log-product.operator-fission" as const;
 const PRODUCT_DERIVES_SUM_RECORD_ID =
   "correspondence.log-product.product-derives-sum" as const;
+const MAX_OPERATOR_VACANCY = 0.270_001;
 
 const binaryHandoffWindows = Object.freeze({
-  operatorTargetPresence: window(0.14, 0.22),
-  operatorTransit: window(0.22, 0.72),
-  operatorSourceRelease: window(0.22, 0.34),
-  payloadTransit: window(0.16, 0.48),
-  enclosureSourceRelease: window(0.08, 0.16),
-  enclosureTargetPresence: window(0.48, 0.54),
-  enclosureTransit: window(0.54, 0.72),
-  relationReception: window(0.66, 0.72),
-  targetHold: window(0.72, 1)
+  operatorSourceRelease: window(0.18, 0.32),
+  operatorTargetPresence: window(0.59, 0.68),
+  payloadTransit: window(0.2, 0.44),
+  enclosureSourceRelease: window(0.12, 0.2),
+  enclosureTargetPresence: window(0.44, 0.48),
+  enclosureTransit: window(0.48, 0.66),
+  relationReception: window(0.59, 0.68),
+  targetHold: window(0.68, 1)
 });
 
 export interface KpBinaryLogProductHomomorphicHandoff {
@@ -33,14 +33,13 @@ export interface KpBinaryLogProductHomomorphicHandoff {
   readonly applicationCorrespondenceRecordId:
     "correspondence.log-product.application-fission";
   readonly operatorHandoff: {
-    readonly topology: "source-overlaps-derived-successors";
+    readonly topology: "matched-dissolve-to-derived-successors";
     readonly correspondenceRecordId:
       "correspondence.log-product.operator-fission";
     readonly sourceEntityId: string;
     readonly targetEntityIds: readonly [string, string];
-    readonly targetPresenceWindow: KpFunctionWrapMotionWindow;
-    readonly transitWindow: KpFunctionWrapMotionWindow;
     readonly sourceReleaseWindow: KpFunctionWrapMotionWindow;
+    readonly targetPresenceWindow: KpFunctionWrapMotionWindow;
   };
   readonly payloadHandoff: {
     readonly topology: "ordered-continuity";
@@ -85,9 +84,9 @@ const compiledHandoffs = new WeakSet<object>();
 
 /**
  * The compiler preserves occurrence truth while authoring visual continuity:
- * one source application derives distinct successors, but their paint must
- * overlap long enough to read as the same logarithm concept penetrating the
- * product structure.
+ * one source application derives distinct successors. A matched dissolve
+ * preserves that concept while keeping source syntax, payload transit, and
+ * target reception out of one another's spatial corridors.
  */
 export function compileKpBinaryLogProductHomomorphicHandoff(
   operation: KpCompiledLogProductOperation
@@ -147,16 +146,15 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
     transformationId: operation.transformation.id,
     applicationCorrespondenceRecordId: APPLICATION_FISSION_RECORD_ID,
     operatorHandoff: Object.freeze({
-      topology: "source-overlaps-derived-successors" as const,
+      topology: "matched-dissolve-to-derived-successors" as const,
       correspondenceRecordId: OPERATOR_FISSION_RECORD_ID,
       sourceEntityId: operator.sourceSelectorIds[0]!,
       targetEntityIds: Object.freeze([
         operator.targetSelectorIds[0]!,
         operator.targetSelectorIds[1]!
       ]) as readonly [string, string],
-      targetPresenceWindow: binaryHandoffWindows.operatorTargetPresence,
-      transitWindow: binaryHandoffWindows.operatorTransit,
-      sourceReleaseWindow: binaryHandoffWindows.operatorSourceRelease
+      sourceReleaseWindow: binaryHandoffWindows.operatorSourceRelease,
+      targetPresenceWindow: binaryHandoffWindows.operatorTargetPresence
     }),
     payloadHandoff: Object.freeze({
       topology: "ordered-continuity" as const,
@@ -283,23 +281,34 @@ function assertCoverageOrdering(
   handoff: KpBinaryLogProductHomomorphicHandoff
 ): void {
   if (
-    handoff.operatorHandoff.targetPresenceWindow.end >
-      handoff.operatorHandoff.sourceReleaseWindow.start ||
-    handoff.enclosureHandoff.sourceReleaseWindow.end >
+    handoff.enclosureHandoff.sourceReleaseWindow.end !==
       handoff.payloadHandoff.transitWindow.start ||
-    handoff.payloadHandoff.transitWindow.end >
+    handoff.payloadHandoff.transitWindow.end !==
       handoff.enclosureHandoff.targetPresenceWindow.start ||
+    handoff.enclosureHandoff.targetPresenceWindow.end !==
+      handoff.enclosureHandoff.transitWindow.start ||
+    handoff.operatorHandoff.sourceReleaseWindow.end >
+      handoff.operatorHandoff.targetPresenceWindow.start ||
+    handoff.operatorHandoff.targetPresenceWindow.start -
+      handoff.operatorHandoff.sourceReleaseWindow.end >
+        MAX_OPERATOR_VACANCY ||
+    handoff.payloadHandoff.transitWindow.end >
+      handoff.operatorHandoff.targetPresenceWindow.start ||
+    handoff.relationHandoff.receptionWindow.start !==
+      handoff.operatorHandoff.targetPresenceWindow.start ||
     handoff.relationHandoff.receptionWindow.end !==
-      handoff.operatorHandoff.transitWindow.end ||
+      handoff.operatorHandoff.targetPresenceWindow.end ||
+    handoff.operatorHandoff.targetPresenceWindow.start >
+      handoff.enclosureHandoff.transitWindow.end ||
     handoff.payloadHandoff.transitWindow.end >
       handoff.targetHoldWindow.start ||
-    handoff.operatorHandoff.transitWindow.end >
+    handoff.operatorHandoff.targetPresenceWindow.end >
       handoff.targetHoldWindow.start ||
     handoff.enclosureHandoff.transitWindow.end >
       handoff.targetHoldWindow.start
   ) {
     throw new Error(
-      "Homomorphic handoff requires continuous operator coverage, a clear payload corridor, synchronized relation settlement, and a final hold."
+      "Homomorphic handoff requires a bounded operator match-dissolve, clear payload corridor, synchronized syntax reception, and final hold."
     );
   }
 }
