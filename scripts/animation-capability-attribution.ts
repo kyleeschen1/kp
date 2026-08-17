@@ -8,7 +8,8 @@ import { chromium, type Browser } from "playwright";
 import { preview, type PreviewServer } from "vite";
 
 import {
-  inspectKpAnimationLibraryBundleBoundary
+  inspectKpAnimationLibraryBundleBoundary,
+  kpAnimationLibraryProductionTarget
 } from "./check-animation-library-bundle-boundary.ts";
 
 interface ViteManifestChunk {
@@ -316,7 +317,7 @@ async function captureKpAnimationCapabilityAttribution(): Promise<void> {
     };
   };
   const bundleBoundary = await inspectKpAnimationLibraryBundleBoundary(
-    distRoot
+    resolve(kpAnimationLibraryProductionTarget.distRoot)
   );
   const server = await startPreview();
   const browser = await chromium.launch({ headless: true });

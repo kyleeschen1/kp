@@ -4,6 +4,9 @@ import {
   createKpAlgebraAnimationPack
 } from "../src/animation/catalog-packs/algebra.ts";
 import {
+  createKpAlgebraLinearSolveAnimationPack
+} from "../src/animation/catalog-packs/algebra-linear-solve.ts";
+import {
   createKpAlgebraChoreographyCapabilities
 } from "../src/animation/algebra-choreography-capabilities.ts";
 import {
@@ -29,9 +32,16 @@ test("the algebra pack carries immutable runtime capabilities beside serializabl
       "animation.generated.exponent.square-as-product",
       "animation.generated.fraction-expression.two-fourths",
       "animation.generated.function-wrap.apply-f",
-      "animation.generated.linear-solve.linear-68c15d41",
       "animation.generated.radical.square-root-as-power",
-      "animation.inequality.sign-flip.basic",
+      "animation.inequality.sign-flip.basic"
+    ].sort()
+  );
+  assert.deepEqual(
+    createKpAlgebraLinearSolveAnimationPack().catalog
+      .map(({ id }) => id)
+      .sort(),
+    [
+      "animation.generated.linear-solve.linear-68c15d41",
       "animation.linear-solve.solve-x"
     ].sort()
   );

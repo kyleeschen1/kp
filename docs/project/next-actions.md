@@ -7,7 +7,7 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The post-convergence infrastructure-compression contract is complete. There is
+The ownership and bundle/application-isolation tranches are complete. There is
 one active next action:
 
 1. Return to the bounded binary log-product exemplar already waiting at its

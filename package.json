@@ -135,7 +135,7 @@
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
-    "check:animation-library-bundle-boundary": "node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",
+    "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",
     "measure:bundle-experiences": "node --disable-warning=ExperimentalWarning scripts/measure-kp-bundle-experiences.ts --build bundle-build.main",
     "measure:bundle:algebra-pack": "node --disable-warning=ExperimentalWarning scripts/measure-kp-algebra-pack-closure.ts",
     "check:bundle:algebra-pack-split": "node --disable-warning=ExperimentalWarning scripts/check-kp-algebra-pack-split.ts",

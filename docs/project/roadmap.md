@@ -2,9 +2,9 @@
 
 Last Updated: 2026-08-16
 Status: active
-Active Thread: `threads/architecture-convergence.md`
+Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
-- `threads/animation-catalogue.md`
+- `threads/architecture-convergence.md`
 - `threads/explanation-attention.md`
 - `threads/semantic-runtime.md`
 - `threads/portable-publication-platform.md`
@@ -87,14 +87,17 @@ Only this repository sequence is active:
    largest mixed-ownership modules, and retired only one exactly unreachable
    prototype. See
    `reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
-7. **Binary log-product human checkpoint:** preserved and paused. The bounded
+7. **Binary log-product human checkpoint:** current. The bounded
    dissolve-spread-wrap choreography still requires human review before any
    visual policy promotion or three-factor/quotient pressure.
-8. **Core ownership convergence:** current. Execute the approved 24-slice
-   dependency-direction tranche without changing visible behavior, then run
-   the separately ordered bundle/application-isolation tranche before
-   returning to the preserved log-product checkpoint. See
-   `reviews/2026-08-16-kp-core-ownership-convergence-long-loop-proposal.md`.
+8. **Core ownership convergence:** complete. The dependency-direction graph is
+   enforced with zero exceptions. See
+   `reviews/2026-08-16-kp-core-ownership-convergence-closeout.md`.
+9. **Bundle and application isolation:** complete. Selected-experience closure,
+   place-value headroom, dedicated Studio and Public Web builds, production
+   development erasure, measured algebra/CSS splits, and five enforced neutral
+   facades are closed. See
+   `reviews/2026-08-16-kp-bundle-application-isolation-closeout.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

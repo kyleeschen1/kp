@@ -20,9 +20,10 @@
     }
   },
   "selectedCapabilities": {
-    "count": 10,
+    "count": 11,
     "ids": [
       "equation-katex",
+      "exact-fraction-quantity",
       "graph-svg-economics",
       "graph-svg-katex-labels",
       "graph-webgl-3d",
@@ -34,7 +35,8 @@
       "programming-trace"
     ],
     "callerCounts": {
-      "equation-katex": 26,
+      "equation-katex": 27,
+      "exact-fraction-quantity": 1,
       "graph-svg-economics": 1,
       "graph-svg-katex-labels": 6,
       "graph-webgl-3d": 1,

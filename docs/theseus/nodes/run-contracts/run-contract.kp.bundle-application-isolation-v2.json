@@ -2,7 +2,8 @@
   "id": "run-contract.kp.bundle-application-isolation-v2",
   "kind": "run-contract",
   "title": "KP Bundle And Application Isolation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -205,7 +206,8 @@
     {
       "id": "s26",
       "title": "release-verify-closeout-and-restore-checkpoint",
-      "status": "planned"
+      "summary": "Release-gates-pass-closeout-recorded-and-binary-log-product-human-checkpoint-restored",
+      "status": "complete"
     }
   ]
 }

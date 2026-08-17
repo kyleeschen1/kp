@@ -11,9 +11,11 @@ test("in-shell selection keeps one review composer lifecycle", async () => {
     )
   ]);
 
-  assert.match(svelteEntry, /const reviewHost = createKpAnimationCatalogueReviewHost/);
-  assert.match(svelteEntry, /void reviewHost\.mount\(\)/);
-  assert.match(svelteEntry, /reviewHost\.dispose\(\)/);
+  assert.match(svelteEntry, /const reviewHost = import\.meta\.env\.DEV/);
+  assert.match(svelteEntry, /import\("\.\.\/animation-catalogue-review-host\.ts"\)/);
+  assert.match(svelteEntry, /createKpAnimationCatalogueReviewHost\(\)/);
+  assert.match(svelteEntry, /void reviewHost\?\.mount\(\)/);
+  assert.match(svelteEntry, /reviewHost\?\.dispose\(\)/);
   assert.match(host, /pending \?\?=/);
   assert.match(host, /disposeReview !== undefined/);
   assert.doesNotMatch(host, /capture\(|createNote|sessionStorage/);

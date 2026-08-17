@@ -2,9 +2,9 @@
   "id": "action.kp.bundle-application-isolation",
   "kind": "next-action",
   "title": "KP bundle and application isolation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
-  "summary": "Measure and reduce selected-experience closure, repair the place-value budget structurally, and isolate Internal Studio and Public Web entry graphs without weakening the framework-neutral kernel.",
+  "summary": "Completed-selected-experience-closure-place-value-headroom-application-isolation-development-erasure-and-neutral-entrypoint-enforcement",
   "sourceRefs": [
     {
       "kind": "file",
@@ -457,6 +457,41 @@
       "scope": "slice-25-entrypoint-boundary",
       "checkedAt": "2026-08-17T04:04:15.709Z",
       "notes": "22 focused ownership, resolution, immutability, and negative-policy checks pass."
+    },
+    {
+      "command": "npm-test",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-17T04:39:10.303Z",
+      "notes": "4802-of-4802-tests-passed"
+    },
+    {
+      "command": "npm-run-build-bundle",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-17T04:39:11.453Z",
+      "notes": "1363-modules-transformed"
+    },
+    {
+      "command": "npm-run-check-animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bundle",
+      "checkedAt": "2026-08-17T04:39:12.415Z",
+      "notes": "outer-2319-main-168698-route-96509-place-value-50384-gzip-bytes"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T04:39:13.465Z",
+      "notes": "1580-modules-zero-exceptions"
+    },
+    {
+      "command": "npm-run-test-browser-place-value-addition",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-17T04:39:14.514Z",
+      "notes": "125-pass-one-firefox-budget-defect-repaired-and-exact-checkpoint-rerun-passed"
     }
   ],
   "expectedLearning": [

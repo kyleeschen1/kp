@@ -57,8 +57,13 @@ export const kpAnimationLibraryBundleBoundary = Object.freeze({
   placeValueIncrementalGzipBytes: 75_000
 });
 
+export const kpAnimationLibraryProductionTarget = Object.freeze({
+  distRoot: "dist/internal-studio",
+  outerEntry: "studio/index.html"
+});
+
 export async function inspectKpAnimationLibraryBundleBoundary(
-  distRoot = resolve("dist")
+  distRoot = resolve(kpAnimationLibraryProductionTarget.distRoot)
 ): Promise<KpAnimationLibraryBundleBoundaryMeasurement> {
   const manifest = JSON.parse(await readFile(
     resolve(distRoot, ".vite/manifest.json"),
@@ -66,7 +71,7 @@ export async function inspectKpAnimationLibraryBundleBoundary(
   )) as ViteManifest;
   const outerKeys = collectClosureKeys(
     manifest,
-    ["canonical-animation-review.html"]
+    [kpAnimationLibraryProductionTarget.outerEntry]
   );
   const mainKeys = collectClosureKeys(manifest, ["src/main.ts"]);
   const catalogueKeys = collectClosureKeys(

@@ -1,5 +1,6 @@
 import "../../styles.css";
 import "../animation-catalogue-shell.css";
+import "katex/dist/katex.min.css";
 
 import { mount, unmount } from "svelte";
 

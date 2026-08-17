@@ -2,8 +2,9 @@
 
 Status: supporting
 Last Updated: 2026-08-16
-Current Next Action: core ownership convergence is complete. The next
-separately approved long-loop tranche owns bundle and application isolation.
+Current Next Action: bundle and application isolation is complete. Return to
+the binary log-product human checkpoint; further architecture work requires a
+named measured blocker.
 
 ## Goal
 
@@ -54,10 +55,9 @@ The 26-slice equation narrow-core run completed that convergence boundary. Its
 work, replaced selected-capability switch extension, separated proven module
 owners, and closed exact reachability without broad pruning. See
 `../reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
-No visual policy changed. The user has now approved one further complexity-
-negative ownership tranche because concrete source-layer inversions and bundle
-isolation pressure remain measurable. The binary log-product human checkpoint
-is preserved behind these two architecture tranches rather than superseded.
+No visual policy changed. The subsequent complexity-negative ownership and
+bundle-isolation tranches are both complete. The binary log-product human
+checkpoint is restored rather than superseded.
 
 ## Ordered Work
 
@@ -100,11 +100,11 @@ is preserved behind these two architecture tranches rather than superseded.
     no longer depend upward on tutorials; renderer encoding and theme
     dependencies are inverted; and the unexported legacy SDK is retired. The
     exact dependency exception ledger is empty.
-12. **Bundle and application isolation (next approved planning order):** add
-    selected-experience closure scenarios, repair the place-value budget
-    structurally, isolate Internal Studio and Public Web entry graphs, make
-    dashboard startup data-only, and split packs/CSS/build helpers only when
-    attribution proves value.
+12. **Bundle and application isolation (complete):** selected-experience
+    closure is measured, place value has structural headroom, Internal Studio
+    and Public Web own separate graphs, dashboard startup is data-only, and
+    pack/CSS/build-helper splits followed measured attribution. See
+    `../reviews/2026-08-16-kp-bundle-application-isolation-closeout.md`.
 
 ## Accepted Scope
 

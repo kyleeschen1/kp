@@ -31,6 +31,6 @@ test("Studio entry selects only Studio surfaces and excludes product routes", ()
   assert.doesNotMatch(source, /public-web|tutorial\/|content\/public-api/);
   const config = readFileSync("vite.internal-studio.config.ts", "utf8");
   assert.match(config, /outDir: "dist\/internal-studio"/);
-  assert.match(config, /input: \{ internalStudio: routeFilename \}/);
+  assert.match(config, /entries: \{ internalStudio: routeFilename \}/);
   assert.doesNotMatch(config, /public-web|readerBuildRoutes|kpDevelopmentBuildEntries/);
 });

@@ -77,7 +77,12 @@ test("unit-exponent absorption projects the canonical elimination contract", asy
       ({ lifecycle }) => lifecycle === "exit"
     )
   );
-  assert.match(adapter, /createKpCanonicalNativeKatexSceneSession/);
+  assert.match(adapter, /kpNativeKatexFeaturePackLoader\.load\(\)/);
+  assert.match(adapter, /nativeKatex\.compose\.createSession/);
+  assert.doesNotMatch(
+    adapter,
+    /import\s*\{[^}]*createKpCanonicalNativeKatexSceneSession/
+  );
   assert.doesNotMatch(adapter, /unit-exponent|unwrap-unit-exponent/);
 });
 

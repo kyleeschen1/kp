@@ -1,12 +1,11 @@
 # Animation Catalogue Thread
 
-Status: supporting
+Status: active
 Last Updated: 2026-08-16
-Current Next Action: preserve the completed equation narrow core and bounded
-dissolve-direct-wrap binary log-product exemplar unchanged while the approved
-core-ownership and bundle/application-isolation tranches execute. Resume human
-review afterward; do not promote the visual policy or pressure the
-three-factor and quotient callers before that checkpoint.
+Current Next Action: review the bounded dissolve-direct-wrap binary log-product
+exemplar. Core ownership and bundle/application isolation are complete. Do not
+promote the visual policy or pressure the three-factor and quotient callers
+before this human checkpoint passes.
 
 ## Goal
 

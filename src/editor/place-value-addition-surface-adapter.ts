@@ -1,7 +1,3 @@
-/// <reference types="vite/client" />
-
-import "katex/dist/katex.min.css";
-
 import {
   kpPlaceValueAdditionAnimationId
 } from "../animation/place-value-addition-adapter.ts";
