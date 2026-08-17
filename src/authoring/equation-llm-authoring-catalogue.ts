@@ -2,6 +2,10 @@ import {
   createKpLlmSemanticMotionOperationCatalog,
   type KpLlmPromotedOperationAuthoringDefinition
 } from "../animation/llm-semantic-motion-operation-authoring.ts";
+import { kpHomomorphicCrossoverCallerDeclarations } from
+  "../animation/homomorphic-crossover-caller-declarations.ts";
+import { createKpHomomorphicCrossoverAuthoringOperations } from
+  "./homomorphic-crossover-authoring.ts";
 import {
   kpWaveAEquationOperationPlanDeclarations,
   kpWaveBEquationStructuralDeclarations,
@@ -16,7 +20,8 @@ import {
 
 export type KpEquationLlmRecipeId =
   | KpEquationOperationPlanRecipeId
-  | KpEquationStructuralRecipeId;
+  | KpEquationStructuralRecipeId
+  | "recipe.equation.homomorphic-decomposition.v1";
 
 export type KpEquationLlmSurfaceAuthoringStatus =
   | "promoted"
@@ -65,6 +70,7 @@ export type KpEquationLlmRepairCode =
   | "equation-llm.request.type"
   | "equation-llm.surface.unknown"
   | "equation-llm.surface.not-promoted"
+  | "equation-llm.surface-operation.mismatch"
   | "equation-llm.operation.unknown"
   | "equation-llm.role.missing"
   | "equation-llm.role.unknown"
@@ -139,6 +145,7 @@ const repairCodes: readonly KpEquationLlmRepairCode[] = Object.freeze([
   "equation-llm.request.type",
   "equation-llm.surface.unknown",
   "equation-llm.surface.not-promoted",
+  "equation-llm.surface-operation.mismatch",
   "equation-llm.operation.unknown",
   "equation-llm.role.missing",
   "equation-llm.role.unknown",
@@ -208,6 +215,11 @@ export function createKpEquationLlmAuthoringCatalogue():
 KpEquationLlmAuthoringCatalogue {
   const operationCatalogue = createKpLlmSemanticMotionOperationCatalog();
   const surfaces = createSurfaceDefinitions();
+  const operations = Object.freeze([
+    ...operationCatalogue.operations,
+    ...createKpHomomorphicCrossoverAuthoringOperations()
+  ]);
+  assertUniqueIds(operations.map(({ operationId }) => operationId), "operation");
   return Object.freeze({
     kind: "kp-equation-llm-authoring-catalogue" as const,
     schemaVersion: "kp.equation-llm-authoring-catalogue.v1" as const,
@@ -222,7 +234,7 @@ KpEquationLlmAuthoringCatalogue {
     ] as const),
     surfaces,
     recipes: createRecipeDefinitions(surfaces),
-    operations: operationCatalogue.operations,
+    operations,
     examples: authoringExamples,
     prohibitedAuthoringFields: operationCatalogue.prohibitedAuthoringFields,
     repairCodes
@@ -282,6 +294,22 @@ export function validateKpEquationLlmAuthoringRequest(
     ));
   } else {
     validateRoleBindings(operationInput?.["roleBindings"], operation, diagnostics);
+    const governedOperations = surface === undefined
+      ? []
+      : catalogue.operations.filter(({ extensionAuthority }) =>
+          extensionAuthority?.callerIds.includes(surface.animationId) === true
+        );
+    if (
+      governedOperations.length > 0 &&
+      !governedOperations.some(({ operationId: allowed }) => allowed === operationId)
+    ) {
+      diagnostics.push(diagnostic(
+        "equation-llm.surface-operation.mismatch",
+        "$.operation.operationId",
+        `${animationId} does not declare ${operationId}.`,
+        `Use ${governedOperations.map(({ operationId: allowed }) => allowed).join(" or ")}.`
+      ));
+    }
   }
   if (!["compact", "standard", "expanded"].includes(
     String(value["explanationDepth"])
@@ -396,7 +424,29 @@ function createSurfaceDefinitions(): readonly KpEquationLlmSurfaceDefinition[] {
         exampleSourcePaths: [entry.authoritySourcePath]
       });
     })
-  ]);
+  ].map(promoteRegisteredHomomorphicCaller));
+}
+
+function promoteRegisteredHomomorphicCaller(
+  candidate: KpEquationLlmSurfaceDefinition
+): KpEquationLlmSurfaceDefinition {
+  const declaration = kpHomomorphicCrossoverCallerDeclarations.find(
+    ({ callerId }) => callerId === candidate.animationId
+  );
+  if (declaration === undefined) return candidate;
+  return surface({
+    animationId: candidate.animationId,
+    migrationWave: candidate.migrationWave,
+    disposition: candidate.disposition,
+    presentationRoute: candidate.presentationRoute,
+    authoringStatus: "promoted",
+    traits: [...candidate.traits, "semantic-transition"],
+    recipeIds: [
+      ...candidate.recipeIds,
+      declaration.recipeId
+    ],
+    exampleSourcePaths: candidate.exampleSourcePaths
+  });
 }
 
 function createRecipeDefinitions(
@@ -411,9 +461,10 @@ function createRecipeDefinitions(
         ? "operation-plan" as const
         : "structural-recipe" as const,
       callerAnimationIds: Object.freeze(callers.map((entry) => entry.animationId)),
-      ownerSourcePaths: Object.freeze([
-        ...new Set(callers.flatMap((entry) => entry.exampleSourcePaths))
-      ]),
+      ownerSourcePaths: Object.freeze(recipeId ===
+        "recipe.equation.homomorphic-decomposition.v1"
+        ? ["src/authoring/homomorphic-crossover-authoring.ts"]
+        : [...new Set(callers.flatMap((entry) => entry.exampleSourcePaths))]),
       selectionAuthority: "kp-compiler" as const
     });
   }));
@@ -543,4 +594,11 @@ function repairRequired(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function assertUniqueIds(ids: readonly string[], label: string): void {
+  const duplicate = ids.find((id, index) => ids.indexOf(id) !== index);
+  if (duplicate !== undefined) {
+    throw new Error(`Duplicate equation authoring ${label} id ${duplicate}.`);
+  }
 }

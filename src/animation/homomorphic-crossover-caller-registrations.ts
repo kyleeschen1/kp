@@ -8,14 +8,13 @@ import {
   type KpHomomorphicCausalPhaseId
 } from "../domain-ir/homomorphic-causal-phases.ts";
 import {
-  kpCanonicalLogProductSemanticMotionPrecedence,
-  kpLogProductSemanticMotionBundles
+  kpCanonicalLogProductSemanticMotionPrecedence
 } from "../semantic/log-product-semantic-motion.ts";
 import {
   kpCanonicalLogQuotientSemanticMotionPrecedence
 } from "../semantic/log-quotient-semantic-motion.ts";
-import { kpLogQuotientAnimationId } from
-  "../semantic/log-quotient-ids.ts";
+import { kpHomomorphicCrossoverCallerDeclarations } from
+  "./homomorphic-crossover-caller-declarations.ts";
 import {
   createKpHomomorphicCrossoverEquationExtensionPack,
   kpHomomorphicCrossoverRecipeRegistration,
@@ -38,14 +37,20 @@ if (!isKpValidatedEquationExtensionPack(registryAuthority)) {
   throw new Error("Homomorphic crossover requires validated registry authority.");
 }
 
+const productCallers = kpHomomorphicCrossoverCallerDeclarations.filter(
+  ({ semanticAuthorityId }) => semanticAuthorityId === "law.logarithm.product"
+);
+const quotientCaller = kpHomomorphicCrossoverCallerDeclarations.find(
+  ({ semanticAuthorityId }) => semanticAuthorityId === "law.logarithm.quotient"
+)!;
+
 export const kpLogProductHomomorphicCrossoverCallerRegistration =
   registerKpHomomorphicCrossoverCaller({
-    id: "caller-registration.log-product.homomorphic-crossover.v1",
-    callerIds: kpLogProductSemanticMotionBundles.map(
-      ({ operation }) => operation.contract.animationId
-    ) as [string, ...string[]],
-    semanticMotionOperationId: "kp.semantic-motion.log-product",
-    semanticAuthorityId: "law.logarithm.product",
+    id: productCallers[0]!.callerRegistrationId,
+    callerIds: productCallers.map(({ callerId }) => callerId) as
+      [string, ...string[]],
+    semanticMotionOperationId: productCallers[0]!.semanticMotionOperationId,
+    semanticAuthorityId: productCallers[0]!.semanticAuthorityId,
     operationRegistration: kpLogProductHomomorphicOperationRegistration,
     recipeId: kpHomomorphicCrossoverRecipeRegistration.id,
     grammar: kpCanonicalHomomorphicCausalPhaseGrammar,
@@ -71,10 +76,10 @@ export const kpLogProductHomomorphicCrossoverCallerRegistration =
 
 export const kpLogQuotientHomomorphicCrossoverCallerRegistration =
   registerKpHomomorphicCrossoverCaller({
-    id: "caller-registration.log-quotient.homomorphic-crossover.v1",
-    callerIds: [kpLogQuotientAnimationId],
-    semanticMotionOperationId: "kp.semantic-motion.quotient",
-    semanticAuthorityId: "law.logarithm.quotient",
+    id: quotientCaller.callerRegistrationId,
+    callerIds: [quotientCaller.callerId],
+    semanticMotionOperationId: quotientCaller.semanticMotionOperationId,
+    semanticAuthorityId: quotientCaller.semanticAuthorityId,
     operationRegistration: kpLogQuotientHomomorphicOperationRegistration,
     recipeId: kpHomomorphicCrossoverRecipeRegistration.id,
     grammar: kpCanonicalHomomorphicCausalPhaseGrammar,

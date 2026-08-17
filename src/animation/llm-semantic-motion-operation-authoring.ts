@@ -16,6 +16,16 @@ import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
 } from "./motifs/visual-motif.ts";
+import type { KpHomomorphicCausalPhaseId } from
+  "../domain-ir/homomorphic-causal-phases.ts";
+
+export type KpLlmOperationVisualMotifKind =
+  | EquationVisualMotifKind
+  | "homomorphic-crossover";
+
+export type KpLlmOperationSemanticPhaseId =
+  | EquationVisualMotifPhaseId
+  | KpHomomorphicCausalPhaseId;
 
 export interface KpLlmPromotedOperationAuthoringDefinition {
   readonly operationId: string;
@@ -43,8 +53,14 @@ export interface KpLlmPromotedOperationAuthoringDefinition {
     readonly threeDPolicy: "none" | "optional";
   };
   readonly explanationDepths: readonly KpLlmAnimationExplanationDepth[];
-  readonly visualMotif: EquationVisualMotifKind;
-  readonly semanticPhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly visualMotif: KpLlmOperationVisualMotifKind;
+  readonly semanticPhaseIds: readonly KpLlmOperationSemanticPhaseId[];
+  readonly extensionAuthority?: Readonly<{
+    operationKind: string;
+    recipeId: string;
+    semanticAuthorityIds: readonly string[];
+    callerIds: readonly string[];
+  }> | undefined;
 }
 
 export interface KpLlmSemanticMotionOperationCatalog {

@@ -48,7 +48,7 @@
     "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
   ],
   "goal": "Build an evidence-derived transformation coverage view and first governed equation transform-series compiler while preserving typed gaps and domain-local matrix code Graph2D and Graph3D frontends.",
-  "target": "next-action.kp.governed-animation-generation.s10",
+  "target": "next-action.kp.governed-animation-generation.s11",
   "runMode": "run",
   "maxSlices": 29,
   "commitCadence": "Commit each independently reversible verified slice with exact path staging and completed Theseus evidence; never stage protected economics files or unrelated user documents.",
@@ -127,7 +127,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s11",
       "title": "Homomorphic-authoring-exposure",
-      "status": "planned"
+      "summary": "Homomorphic authoring exposure complete; direct compiler and corpus benchmark remain isolated to slice 12.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s12",
