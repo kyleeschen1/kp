@@ -193,7 +193,8 @@
     {
       "id": "s24",
       "title": "split-route-owned-css-without-visual-change",
-      "status": "planned"
+      "summary": "Moved 734 lines of workbench-only CSS behind the lazy semantic-workbench view without changing selectors; empty catalogue style closure fell 2105 gzip bytes to 15359/16500, and focused desktop, narrow, interaction, and catalogue checks preserve appearance.",
+      "status": "complete"
     },
     {
       "id": "s25",

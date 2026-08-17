@@ -1,3 +1,5 @@
+import "./semantic-animation-workbench.css";
+
 import type { KpEditorAnimationDescriptor } from "./animation-descriptor.ts";
 import {
   createKpSemanticAnimationWorkbenchIndex

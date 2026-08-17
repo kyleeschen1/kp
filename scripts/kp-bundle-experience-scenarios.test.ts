@@ -47,6 +47,20 @@ test("dashboard scenario records data discovery before selected rendering", () =
   }]);
 });
 
+test("empty catalogue excludes route-owned workbench styling", () => {
+  const empty = findKpBundleExperienceScenario(
+    "bundle-experience.catalogue.empty"
+  );
+  assert.ok(empty.forbiddenOwners.includes(
+    "src/editor/semantic-animation-workbench-view.ts"
+  ));
+  assert.deepEqual(empty.budgets, [{
+    phase: "experience",
+    resource: "style",
+    gzipBytes: 16_500
+  }]);
+});
+
 test("scenario and build registries are immutable data-only declarations", () => {
   assert.ok(Object.isFrozen(kpBundleExperienceScenarios));
   assert.ok(Object.isFrozen(kpBundleBuildDeclarations));

@@ -64,9 +64,14 @@ export const kpBundleExperienceScenarios:
         "src/editor/equation-surface-capability.ts",
         "src/editor/place-value-addition-surface-capability.ts",
         "src/rendering/graph-webgl-three.ts",
+        "src/editor/semantic-animation-workbench-view.ts",
         NATIVE_KATEX_FEATURE_PACK_OWNER
       ],
-      budgets: []
+      budgets: [{
+        phase: "experience",
+        resource: "style",
+        gzipBytes: 16_500
+      }]
     }),
     selectedCatalogueScenario({
       id: "bundle-experience.catalogue.solve-x",
