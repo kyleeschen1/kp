@@ -56,11 +56,39 @@
       "scope": "focused",
       "checkedAt": "2026-08-17T14:46:38.750Z",
       "notes": "Deterministic binary and preservation contact sheet generated; review-backend proxy was unavailable to the isolated harness but capture completed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T15:17:51.054Z",
+      "notes": "All 14 log-product semantic, identity, and routing checks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-operation-choreography.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T15:17:53.070Z",
+      "notes": "Nine focused choreography checks pass, including zero-scale horizontal squeeze and native-baseline invariants."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T15:17:54.665Z",
+      "notes": "Deterministic contact sheet captured; binary exemplar is ready for human motion review and multi-factor behavior remains outside promotion scope."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T15:18:14.071Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks completed with zero reported errors or warnings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Binary ln(xy) semantics and deterministic capture pass. The sampled sequence matches the accepted dissolve-spread-wrap contract; no production change is justified before the required human visual judgment. Three-factor and quotient promotion remain disallowed."
+    "summary": "Binary ln(xy) now uses a typed horizontal-squeeze reception: parentheses keep native size and baseline, enter from opposite horizontal sides, and settle around persistent arguments. Focused semantic, motion, visual, and type checks pass. Awaiting the required human checkpoint before any promotion to multi-factor, quotient, or other callers."
   },
   "expectedLearning": [
     "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."

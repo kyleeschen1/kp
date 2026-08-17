@@ -16,6 +16,16 @@ export const kpNativeKatexFunctionWrapReceptionStyle = Object.freeze({
   outwardOffsetInNativeHeights: 0.42
 });
 
+export type KpNativeKatexFunctionWrapReceptionMotion =
+  | "canonical-scale-settle"
+  | "horizontal-squeeze";
+
+const kpNativeKatexHorizontalSqueezeReceptionStyle = Object.freeze({
+  initialScale: 1,
+  outwardOffsetInNativeHeights: 0.85,
+  opacityCompletionFraction: 0.42
+});
+
 export interface KpNativeKatexFunctionWrapAdaptationCertificate {
   readonly schemaVersion: "kp.native-katex-function-wrap-certificate.v1";
   readonly motifId: KpFunctionWrapReceptionPlan["motifId"];
@@ -45,6 +55,7 @@ export function applyKpNativeKatexFunctionWrapReception(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plan: KpFunctionWrapReceptionPlan;
   readonly entryWindow: { readonly start: number; readonly end: number };
+  readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   return adaptKpNativeKatexFunctionWrapReception(input).tracks;
 }
@@ -55,6 +66,7 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plan: KpFunctionWrapReceptionPlan;
   readonly entryWindow: { readonly start: number; readonly end: number };
+  readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
 }): KpNativeKatexFunctionWrapAdaptation {
   if (input.plan.motifId !== kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1) {
     throw new Error(`Native KaTeX function-wrap adapter rejects motif ${input.plan.motifId}.`);
@@ -85,11 +97,22 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
     ] as const)
   ));
   const matched = new Set<string>();
+  const motion = input.motion ?? "canonical-scale-settle";
   const sample = (progress: number) => smoothWindow(
     progress,
     input.entryWindow.start,
     input.entryWindow.end
   );
+  const sampleOpacity = motion === "horizontal-squeeze"
+    ? (progress: number) => smoothWindow(
+        progress,
+        input.entryWindow.start,
+        input.entryWindow.start +
+          (input.entryWindow.end - input.entryWindow.start) *
+            kpNativeKatexHorizontalSqueezeReceptionStyle
+              .opacityCompletionFraction
+      )
+    : sample;
   const tracks = input.tracks.map((track) => {
     const atomId = input.plan.direction === "forward"
       ? track.targetAtomId
@@ -104,25 +127,57 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
       return track;
     }
     matched.add(entityId!);
-    const nativeRect = input.plan.direction === "forward"
+    const nativeLayoutRect = input.plan.direction === "forward"
+      ? track.endRect
+      : track.startRect;
+    const nativePaintRect = input.plan.direction === "forward"
       ? track.endPaintRect ?? track.endRect
       : track.startPaintRect ?? track.startRect;
-    const receptiveRect = outsideReceptionRect(nativeRect, side);
+    const receptionStyle = motion === "horizontal-squeeze"
+      ? kpNativeKatexHorizontalSqueezeReceptionStyle
+      : kpNativeKatexFunctionWrapReceptionStyle;
+    const receptivePaintRect = outsideReceptionRect(
+      nativePaintRect,
+      side,
+      receptionStyle
+    );
+    // Generic introduction tracks may carry a vertical entry offset. The
+    // squeeze treatment owns a horizontal enclosure approach, so its layout
+    // box must share the native baseline instead of inheriting that fallback.
+    const receptiveLayoutRect = motion === "horizontal-squeeze"
+      ? horizontallyOffsetRect(
+          nativeLayoutRect,
+          nativePaintRect.height * receptionStyle.outwardOffsetInNativeHeights,
+          side
+        )
+      : undefined;
     return Object.freeze({
       ...track,
       ...(input.plan.direction === "forward"
         ? {
-            startPaintRect: receptiveRect,
-            endPaintRect: Object.freeze({ ...nativeRect })
+            ...(receptiveLayoutRect === undefined
+              ? {}
+              : {
+                  startRect: receptiveLayoutRect,
+                  endRect: Object.freeze({ ...nativeLayoutRect })
+                }),
+            startPaintRect: receptivePaintRect,
+            endPaintRect: Object.freeze({ ...nativePaintRect })
           }
         : {
-            startPaintRect: Object.freeze({ ...nativeRect }),
-            endPaintRect: receptiveRect
+            ...(receptiveLayoutRect === undefined
+              ? {}
+              : {
+                  startRect: Object.freeze({ ...nativeLayoutRect }),
+                  endRect: receptiveLayoutRect
+                }),
+            startPaintRect: Object.freeze({ ...nativePaintRect }),
+            endPaintRect: receptivePaintRect
           }),
       timingGroupId: input.plan.id,
       opacityScheduleAuthority: "semantic-choreography" as const,
       sampleProgress: sample,
-      sampleOpacityProgress: sample
+      sampleOpacityProgress: sampleOpacity
     });
   });
   const missing = [...roleByEntityId.keys()].filter((id) => !matched.has(id));
@@ -158,14 +213,18 @@ export const kpNativeKatexFunctionWrapAdapterDefinition = Object.freeze({
 
 function outsideReceptionRect(
   nativeRect: KpNativeKatexPaintMeasuredSceneTrack["startRect"],
-  side: "leading" | "trailing"
+  side: "leading" | "trailing",
+  style: {
+    readonly initialScale: number;
+    readonly outwardOffsetInNativeHeights: number;
+  }
 ): KpNativeKatexPaintMeasuredSceneTrack["startRect"] {
-  const scale = kpNativeKatexFunctionWrapReceptionStyle.initialScale;
+  const scale = style.initialScale;
   const width = nativeRect.width * scale;
   const height = nativeRect.height * scale;
   const outward =
     nativeRect.height *
-    kpNativeKatexFunctionWrapReceptionStyle.outwardOffsetInNativeHeights *
+    style.outwardOffsetInNativeHeights *
     (side === "leading" ? -1 : 1);
   const centerX = nativeRect.left + nativeRect.width / 2 + outward;
   const centerY = nativeRect.top + nativeRect.height / 2;
@@ -174,6 +233,17 @@ function outsideReceptionRect(
     top: centerY - height / 2,
     width,
     height
+  });
+}
+
+function horizontallyOffsetRect(
+  nativeRect: KpNativeKatexPaintMeasuredSceneTrack["startRect"],
+  outwardOffset: number,
+  side: "leading" | "trailing"
+): KpNativeKatexPaintMeasuredSceneTrack["startRect"] {
+  return Object.freeze({
+    ...nativeRect,
+    left: nativeRect.left + outwardOffset * (side === "leading" ? -1 : 1)
   });
 }
 

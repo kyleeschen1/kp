@@ -323,7 +323,8 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
         source: projectionInput.source,
         target: projectionInput.target,
         plan: functionWrapReception,
-        entryWindow: BINARY_VISUAL_PHASES.targetDelimiterIntroduction
+        entryWindow: BINARY_VISUAL_PHASES.targetDelimiterIntroduction,
+        motion: "horizontal-squeeze"
       });
     }
   });

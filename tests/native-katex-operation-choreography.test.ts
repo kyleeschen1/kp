@@ -81,6 +81,65 @@ test("function-wrap enclosures arrive outside and oversized before settling nati
   assert.deepEqual(settled.map(({ rect }) => rect), [open.rect, close.rect]);
 });
 
+test("horizontal squeeze reception removes scale and vertical drift", () => {
+  const open = atom("target", "target.wrap.open", 40);
+  const close = atom("target", "target.wrap.close", 80);
+  const target = scene("target", [open, close]);
+  const tracks = applyKpNativeKatexFunctionWrapReception({
+    source: scene("source", []),
+    target,
+    tracks: [introducedTrack(open, 0), introducedTrack(close, 1)],
+    plan: createKpFunctionWrapReceptionPlan({
+      id: "function-wrap-reception.horizontal-squeeze-test",
+      direction: "forward",
+      branches: [{
+        id: "branch.horizontal-squeeze-test",
+        argumentEntityIds: ["target.argument"],
+        syntaxEntityIds: ["target.wrap.operator"],
+        enclosureEntityRoles: [
+          { entityId: "target.wrap.open", side: "leading" },
+          { entityId: "target.wrap.close", side: "trailing" }
+        ]
+      }]
+    }),
+    entryWindow: { start: 0.42, end: 0.7 },
+    motion: "horizontal-squeeze"
+  });
+
+  const samples = [0.42, 0.56, 0.7].map((progress) =>
+    sampleKpNativeKatexSceneTrackFrames(tracks, progress, false)
+  );
+  const leadingCenters = samples.map(([frame]) => center(frame!.rect));
+  const trailingCenters = samples.map(([, frame]) => center(frame!.rect));
+  const nativeLeading = center(open.rect);
+  const nativeTrailing = center(close.rect);
+
+  assert.ok(leadingCenters[0]!.x < leadingCenters[1]!.x);
+  assert.ok(leadingCenters[1]!.x < nativeLeading.x);
+  assert.ok(trailingCenters[0]!.x > trailingCenters[1]!.x);
+  assert.ok(trailingCenters[1]!.x > nativeTrailing.x);
+  assert.deepEqual(
+    leadingCenters.map(({ y }) => y),
+    [nativeLeading.y, nativeLeading.y, nativeLeading.y]
+  );
+  assert.deepEqual(
+    trailingCenters.map(({ y }) => y),
+    [nativeTrailing.y, nativeTrailing.y, nativeTrailing.y]
+  );
+  assert.deepEqual(
+    tracks.map(({ startRect, endRect }) => ({
+      startSize: [startRect.width, startRect.height],
+      endSize: [endRect.width, endRect.height]
+    })),
+    [
+      { startSize: [12, 18], endSize: [12, 18] },
+      { startSize: [12, 18], endSize: [12, 18] }
+    ]
+  );
+  assert.equal(samples[1]![0]!.opacity, 1);
+  assert.equal(samples[1]![1]!.opacity, 1);
+});
+
 test("function-wrap adapter certifies reverse settlement and synchronized ownership", () => {
   const open = atom("source", "source.wrap.open", 40);
   const close = atom("source", "source.wrap.close", 80);
@@ -544,5 +603,17 @@ function eliminatedTrack(
     endPaintRect: { ...source.rect, top: source.rect.top - 8 },
     startOpacity: 1,
     endOpacity: 0
+  };
+}
+
+function center(rect: {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}): { readonly x: number; readonly y: number } {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
   };
 }
