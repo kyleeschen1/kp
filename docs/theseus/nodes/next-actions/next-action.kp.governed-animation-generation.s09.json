@@ -1,0 +1,117 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s09",
+  "kind": "next-action",
+  "title": "Homomorphic-causal-phases",
+  "status": "resolved",
+  "summary": "Causal sharing is renderer-neutral and caller presentation remains local.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s09 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/domain-ir/homomorphic-causal-phases.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/homomorphic-causal-phases.test.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s08"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s08"
+  ],
+  "verification": [
+    "npm run test:homomorphic-causal-phases",
+    "npm run test:log-product",
+    "npm run test:log-quotient",
+    "npm run test:semantic-motion-diagnostics",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:homomorphic-causal-phases",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T22:26:44.295Z",
+      "notes": "5 causal grammar tests passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-17T22:26:45.379Z",
+      "notes": "16 product tests passed with existing choreography unchanged."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-17T22:26:46.538Z",
+      "notes": "36 quotient and selected-surface tests passed."
+    },
+    {
+      "command": "npm run test:semantic-motion-diagnostics",
+      "status": "passed",
+      "scope": "semantic-motion",
+      "checkedAt": "2026-08-17T22:26:47.582Z",
+      "notes": "39 semantic compiler tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-17T22:26:48.660Z",
+      "notes": "TypeScript Svelte and domain checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Shared homomorphic causal phase grammar is complete with zero approved visual delta."
+  },
+  "expectedLearning": [
+    "Whether product decomposition and quotient fusion share a renderer-neutral causal phase graph while timing geometry optics cardinality and caller presentation remain local."
+  ],
+  "allowedWork": [
+    "Declarative domain-IR phase vocabulary precedence invariants public export and preservation tests."
+  ],
+  "disallowedWork": [
+    "Changes to product or quotient timing geometry visual adapters correspondence cardinality renderer ownership or approved choreography."
+  ],
+  "criteria": [
+    {
+      "id": "phase-grammar-names-shared-causality",
+      "weight": "high"
+    },
+    {
+      "id": "target-syntax-and-connector-may-resolve-concurrently",
+      "weight": "high"
+    },
+    {
+      "id": "visual-and-presentation-policy-remain-local",
+      "weight": "high"
+    }
+  ]
+}

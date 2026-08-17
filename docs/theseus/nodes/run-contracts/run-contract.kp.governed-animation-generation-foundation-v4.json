@@ -48,7 +48,7 @@
     "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
   ],
   "goal": "Build an evidence-derived transformation coverage view and first governed equation transform-series compiler while preserving typed gaps and domain-local matrix code Graph2D and Graph3D frontends.",
-  "target": "next-action.kp.governed-animation-generation.s08",
+  "target": "next-action.kp.governed-animation-generation.s09",
   "runMode": "run",
   "maxSlices": 29,
   "commitCadence": "Commit each independently reversible verified slice with exact path staging and completed Theseus evidence; never stage protected economics files or unrelated user documents.",
@@ -115,7 +115,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s09",
       "title": "Homomorphic-causal-phases",
-      "status": "planned"
+      "summary": "Homomorphic causal phases complete.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s10",
