@@ -1,12 +1,12 @@
+import {
+  kpAnimationDomains,
+  type KpAnimationDomain
+} from "../domain-ir/animation-domain.ts";
+
 export const KP_ANIMATION_CAPABILITY_PLAN_SCHEMA =
   "kp.animation-capability-plan.v1" as const;
 
-export type KpAnimationCapabilityDomain =
-  | "equation"
-  | "matrix"
-  | "code"
-  | "graph-2d"
-  | "graph-3d";
+export type KpAnimationCapabilityDomain = KpAnimationDomain;
 
 export type KpAnimationCapabilityScopeKind =
   | "operation"
@@ -77,13 +77,7 @@ export class KpAnimationCapabilityPlanError extends Error {
   }
 }
 
-const domains = Object.freeze([
-  "equation",
-  "matrix",
-  "code",
-  "graph-2d",
-  "graph-3d"
-] as const);
+const domains = kpAnimationDomains;
 const scopeKinds = Object.freeze([
   "operation",
   "transformation-family",
