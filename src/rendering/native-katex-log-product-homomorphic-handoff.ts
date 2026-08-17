@@ -82,7 +82,7 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
       targetOperatorIds.has(targetAtom.semanticEntityId)
     ) {
       adaptedTargetOperatorAtomIds.add(targetAtom.id);
-      return revealOperatorAtNativePosition(
+      return revealSyntaxAtNativePosition(
         track,
         input.plan.operatorHandoff.targetPresenceWindow,
         input.plan.operatorHandoff.targetExpansionWindow
@@ -114,9 +114,10 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
       targetAtom !== undefined &&
       relationTargetIds.has(targetAtom.semanticEntityId)
     ) {
-      return revealAtNativePosition(
+      return revealSyntaxAtNativePosition(
         track,
-        input.plan.relationHandoff.receptionWindow
+        input.plan.relationHandoff.receptionWindow,
+        input.plan.relationHandoff.expansionWindow
       );
     }
     return track;
@@ -186,7 +187,7 @@ function revealAtNativePosition(
   });
 }
 
-function revealOperatorAtNativePosition(
+function revealSyntaxAtNativePosition(
   track: IntroducedTrack,
   presenceWindow: { readonly start: number; readonly end: number },
   expansionWindow: { readonly start: number; readonly end: number }

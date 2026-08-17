@@ -200,10 +200,32 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
     expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
-  await seek.fill("0.52");
+  await seek.fill("0.53");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);
-  await seek.fill("0.54");
+  await seek.fill("0.58");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(1);
+  const connectorEntry = await at(0.55, ["target.sum.plus"]);
+  const connectorMidpoint = await at(0.6, ["target.sum.plus"]);
+  const connectorSettlement = await at(0.64, ["target.sum.plus"]);
+  const connectorSamples = [
+    connectorEntry,
+    connectorMidpoint,
+    connectorSettlement
+  ].map((geometry) => geometry["target.sum.plus"]!);
+  const connectorCenterXs = connectorSamples.map(
+    ({ left, width }) => left + width / 2
+  );
+  const connectorCenterYs = connectorSamples.map(
+    ({ top, height }) => top + height / 2
+  );
+  expect(Math.max(...connectorCenterXs) - Math.min(...connectorCenterXs))
+    .toBeLessThanOrEqual(1.25);
+  expect(Math.max(...connectorCenterYs) - Math.min(...connectorCenterYs))
+    .toBeLessThanOrEqual(1.25);
+  expect(connectorSamples[0]!.width).toBeLessThan(connectorSamples[1]!.width);
+  expect(connectorSamples[1]!.width).toBeLessThan(connectorSamples[2]!.width);
+  expect(connectorSamples[2]!.width)
+    .toBeGreaterThan(connectorSamples[0]!.width * 3);
 
   const enclosureIds = [
     "target.left.log.open",
@@ -316,9 +338,9 @@ test("three-factor product uses the same lazy surface and deterministic clock", 
     "target.xyz.sum.plus.0",
     "target.xyz.sum.plus.1"
   ] as const;
-  await seek.fill("0.52");
+  await seek.fill("0.53");
   expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(0);
-  await seek.fill("0.54");
+  await seek.fill("0.58");
   expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(2);
   await seek.fill("0.53");
   expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(0);
@@ -333,6 +355,22 @@ test("three-factor product uses the same lazy surface and deterministic clock", 
     expect(widths[0]).toBeLessThan(widths[1]!);
     expect(widths[1]).toBeLessThan(widths[2]!);
     expect(widths[2]).toBeGreaterThan(widths[0]! * 3);
+  }
+  const connectorEntry = await at(0.55, multiFactorConnectorIds);
+  const connectorMidpoint = await at(0.6, multiFactorConnectorIds);
+  const connectorSettlement = await at(0.64, multiFactorConnectorIds);
+  for (const entityId of multiFactorConnectorIds) {
+    const samples = [connectorEntry, connectorMidpoint, connectorSettlement]
+      .map((geometry) => geometry[entityId]!);
+    const centerXs = samples.map(({ left, width }) => left + width / 2);
+    const centerYs = samples.map(({ top, height }) => top + height / 2);
+    expect(Math.max(...centerXs) - Math.min(...centerXs))
+      .toBeLessThanOrEqual(1.25);
+    expect(Math.max(...centerYs) - Math.min(...centerYs))
+      .toBeLessThanOrEqual(1.25);
+    expect(samples[0]!.width).toBeLessThan(samples[1]!.width);
+    expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
+    expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
   const enclosureIds = [
     "target.xyz.term-1.log.open",

@@ -82,10 +82,46 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-17T18:44:54.929Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:53:59.925Z"
+    },
+    {
+      "command": "Chromium synchronized connector center-pop proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:54:03.103Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:54:04.979Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:54:06.529Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:54:10.075Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:54:13.867Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Two- and three-factor connectors now join enclosure reception as structural syntax, becoming legible at the first collision-free sample before derived ln operators resolve; endpoints, factor identity, direct seek, rewind, and shared profiles remain intact. Awaiting human visual approval."
+    "summary": "Connectors now share the derived-operator presence and expansion windows and grow from fixed centers in both factor counts; semantic identities, endpoints, direct seek, reverse, and reduced-motion behavior remain intact. Awaiting human visual approval."
   }
 }

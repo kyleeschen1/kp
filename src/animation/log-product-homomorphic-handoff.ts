@@ -13,7 +13,10 @@ const PRODUCT_DERIVES_SUM_RECORD_ID =
   "correspondence.log-product.product-derives-sum" as const;
 const MAX_OPERATOR_VACANCY = 0.270_001;
 const STRUCTURAL_RECEPTION_WINDOW = window(0.44, 0.48);
-const CONNECTOR_RECEPTION_WINDOW = window(0.52, 0.55);
+// Derived operators and connectors are one syntax-resolution cohort. Giving
+// either separate timing falsely turns the additive relation into a new beat.
+const SYNTAX_PRESENCE_WINDOW = window(0.54, 0.62);
+const SYNTAX_EXPANSION_WINDOW = window(0.55, 0.64);
 
 // Cardinality changes semantic bindings, not the causal phrase. This profile
 // is the single tuning point for every log-product handoff caller.
@@ -21,13 +24,14 @@ export const kpLogProductHomomorphicHandoffTiming = Object.freeze({
   id: "timing.log-product.homomorphic-decomposition.v1" as const,
   operatorSourceContraction: window(0.18, 0.28),
   operatorSourceRelease: window(0.24, 0.32),
-  operatorTargetPresence: window(0.54, 0.62),
-  operatorTargetExpansion: window(0.55, 0.64),
+  operatorTargetPresence: SYNTAX_PRESENCE_WINDOW,
+  operatorTargetExpansion: SYNTAX_EXPANSION_WINDOW,
   payloadTransit: window(0.2, 0.44),
   enclosureSourceRelease: window(0.12, 0.2),
   enclosureTargetPresence: STRUCTURAL_RECEPTION_WINDOW,
   enclosureTransit: window(0.48, 0.64),
-  connectorReception: CONNECTOR_RECEPTION_WINDOW,
+  connectorTargetPresence: SYNTAX_PRESENCE_WINDOW,
+  connectorTargetExpansion: SYNTAX_EXPANSION_WINDOW,
   targetHold: window(0.64, 1)
 });
 
@@ -80,8 +84,10 @@ export interface KpLogProductHomomorphicHandoff {
       "correspondence.log-product.product-derives-sum";
     readonly sourceEntityIds: readonly string[];
     readonly targetEntityIds: readonly string[];
-    readonly synchronization: "with-derived-enclosures";
+    readonly targetEntry: "expand-from-point";
+    readonly synchronization: "with-derived-operators";
     readonly receptionWindow: KpFunctionWrapMotionWindow;
+    readonly expansionWindow: KpFunctionWrapMotionWindow;
   };
   readonly targetHoldWindow: KpFunctionWrapMotionWindow;
 }
@@ -206,8 +212,12 @@ export function compileKpLogProductHomomorphicHandoff(
         relation.sourceSelectorIds[0]!
       ]) as readonly [string],
       targetEntityIds: Object.freeze([...relation.targetSelectorIds]),
-      synchronization: "with-derived-enclosures" as const,
-      receptionWindow: kpLogProductHomomorphicHandoffTiming.connectorReception
+      targetEntry: "expand-from-point" as const,
+      synchronization: "with-derived-operators" as const,
+      receptionWindow:
+        kpLogProductHomomorphicHandoffTiming.connectorTargetPresence,
+      expansionWindow:
+        kpLogProductHomomorphicHandoffTiming.connectorTargetExpansion
     }),
     targetHoldWindow: kpLogProductHomomorphicHandoffTiming.targetHold
   }) satisfies KpLogProductHomomorphicHandoff;
@@ -307,12 +317,14 @@ function assertCoverageOrdering(
         MAX_OPERATOR_VACANCY ||
     handoff.payloadHandoff.transitWindow.end >
       handoff.operatorHandoff.targetPresenceWindow.start ||
-    handoff.relationHandoff.receptionWindow.start <=
-      handoff.enclosureHandoff.transitWindow.start ||
-    handoff.relationHandoff.receptionWindow.start >=
+    handoff.relationHandoff.receptionWindow.start !==
       handoff.operatorHandoff.targetPresenceWindow.start ||
-    handoff.relationHandoff.receptionWindow.end >=
+    handoff.relationHandoff.receptionWindow.end !==
       handoff.operatorHandoff.targetPresenceWindow.end ||
+    handoff.relationHandoff.expansionWindow.start !==
+      handoff.operatorHandoff.targetExpansionWindow.start ||
+    handoff.relationHandoff.expansionWindow.end !==
+      handoff.operatorHandoff.targetExpansionWindow.end ||
     handoff.operatorHandoff.targetPresenceWindow.start >
       handoff.operatorHandoff.targetExpansionWindow.start ||
     handoff.operatorHandoff.targetPresenceWindow.end >
@@ -335,7 +347,7 @@ function assertCoverageOrdering(
       handoff.enclosureHandoff.transitWindow.end
   ) {
     throw new Error(
-      "Homomorphic handoff requires a bounded operator match-dissolve, clear payload corridor, synchronized structural reception, and final hold."
+      "Homomorphic handoff requires a bounded operator match-dissolve, clear payload corridor, synchronized syntax reception, and final hold."
     );
   }
 }
