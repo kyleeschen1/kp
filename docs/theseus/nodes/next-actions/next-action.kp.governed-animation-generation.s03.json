@@ -1,0 +1,66 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s03",
+  "kind": "next-action",
+  "title": "Equation-capability-order",
+  "status": "ready",
+  "summary": "Starting the ordered equation capability plan from the approved backlog and exact evidence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s03 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "s02"
+    ]
+  },
+  "affects": [
+    "s02"
+  ],
+  "verification": [
+    "npm run test:animation-capability-plan",
+    "npm run typecheck"
+  ],
+  "expectedLearning": [
+    "Whether an authored equation capability order can distinguish evidence-backed general capability from one exemplar and from an explicit planned gap."
+  ],
+  "allowedWork": [
+    "Ordered equation capabilities for fractions roots balanced transforms branching binders derivations and logarithmic base conversion.",
+    "Explicit requirement references for syntax semantic operations recipes motifs exemplars authoring and corpus evidence."
+  ],
+  "disallowedWork": [
+    "Derived readiness presentation labels motif implementation renderer geometry or changes to approved logarithm choreography."
+  ],
+  "criteria": [
+    {
+      "id": "equation-capability-order-is-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "alternative-base-logarithms-are-distinct",
+      "weight": "high"
+    },
+    {
+      "id": "exemplars-do-not-imply-general-capability",
+      "weight": "high"
+    }
+  ]
+}

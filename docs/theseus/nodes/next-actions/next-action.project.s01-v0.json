@@ -2,8 +2,8 @@
   "id": "next-action.project.s01-v0",
   "kind": "next-action",
   "title": "Baseline-evidence",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice s01 in Governed animation generation foundation.",
+  "status": "resolved",
+  "summary": "Baseline evidence is committed in 308bb784; the active run continues through its remaining stored slices.",
   "sourceRefs": [
     {
       "kind": "file",

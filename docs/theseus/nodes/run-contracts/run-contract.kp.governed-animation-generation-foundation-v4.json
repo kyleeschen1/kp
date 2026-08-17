@@ -1,13 +1,12 @@
 {
-  "id": "run-contract.kp.governed-animation-generation-foundation-v3",
+  "id": "run-contract.kp.governed-animation-generation-foundation-v4",
   "kind": "run-contract",
   "title": "Governed animation generation foundation",
-  "status": "superseded",
-  "summary": "Superseded after slice s02 exposed globally ambiguous generic slice IDs; implementation scope and the two completed slices are preserved in v4.",
+  "status": "ready",
   "sourceRefs": [
     {
       "kind": "file",
-      "path": "docs/theseus/nodes/next-actions/next-action.project.s01-v0.json",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
       "summary": "Run-contract target that explains why this generated contract exists."
     },
     {
@@ -49,7 +48,7 @@
     "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
   ],
   "goal": "Build an evidence-derived transformation coverage view and first governed equation transform-series compiler while preserving typed gaps and domain-local matrix code Graph2D and Graph3D frontends.",
-  "target": "s02",
+  "target": "next-action.kp.governed-animation-generation.s03",
   "runMode": "run",
   "maxSlices": 29,
   "commitCadence": "Commit each independently reversible verified slice with exact path staging and completed Theseus evidence; never stage protected economics files or unrelated user documents.",
@@ -61,153 +60,155 @@
     "Cross-domain declarations require shared domain semantics or one universal renderer.",
     "Coverage readiness cannot be tied to exact named evidence.",
     "Existing URLs Review history accessibility or bundle boundaries regress.",
-    "Stop after s28 for explicit human visual review before s29.",
+    "Stop after the Coverage human checkpoint for explicit visual review before closeout.",
     "Work would expand into live-model integration full CAS public layout curriculum or the deferred family backlog."
   ],
   "slices": [
     {
       "id": "next-action.project.s01-v0",
       "title": "Baseline-evidence",
+      "summary": "Baseline evidence committed in 308bb784.",
       "status": "complete"
     },
     {
       "id": "s02",
       "title": "Capability-plan-schema",
-      "summary": "Started authored capability-plan schema.",
+      "summary": "Capability-plan schema implemented and verified in the current slice.",
       "status": "complete"
     },
     {
-      "id": "s03",
+      "id": "next-action.kp.governed-animation-generation.s03",
       "title": "Equation-capability-order",
-      "status": "planned"
+      "summary": "Starting the ordered equation capability plan from the approved backlog and exact evidence.",
+      "status": "in-progress"
     },
     {
-      "id": "s04",
+      "id": "next-action.kp.governed-animation-generation.s04",
       "title": "Cross-domain-capability-plan",
       "status": "planned"
     },
     {
-      "id": "s05",
+      "id": "next-action.kp.governed-animation-generation.s05",
       "title": "Asset-evidence-projection",
       "status": "planned"
     },
     {
-      "id": "s06",
+      "id": "next-action.kp.governed-animation-generation.s06",
       "title": "Compiler-evidence-projection",
       "status": "planned"
     },
     {
-      "id": "s07",
+      "id": "next-action.kp.governed-animation-generation.s07",
       "title": "Derived-readiness-status",
       "status": "planned"
     },
     {
-      "id": "s08",
+      "id": "next-action.kp.governed-animation-generation.s08",
       "title": "Generated-coverage-artifact",
       "status": "planned"
     },
     {
-      "id": "s09",
+      "id": "next-action.kp.governed-animation-generation.s09",
       "title": "Homomorphic-causal-phases",
       "status": "planned"
     },
     {
-      "id": "s10",
+      "id": "next-action.kp.governed-animation-generation.s10",
       "title": "Homomorphic-recipe-registration",
       "status": "planned"
     },
     {
-      "id": "s11",
+      "id": "next-action.kp.governed-animation-generation.s11",
       "title": "Homomorphic-authoring-exposure",
       "status": "planned"
     },
     {
-      "id": "s12",
+      "id": "next-action.kp.governed-animation-generation.s12",
       "title": "Homomorphic-generation-benchmark",
       "status": "planned"
     },
     {
-      "id": "s13",
+      "id": "next-action.kp.governed-animation-generation.s13",
       "title": "Cross-domain-generation-envelope",
       "status": "planned"
     },
     {
-      "id": "s14",
+      "id": "next-action.kp.governed-animation-generation.s14",
       "title": "Equation-transform-series-request",
       "status": "planned"
     },
     {
-      "id": "s15",
+      "id": "next-action.kp.governed-animation-generation.s15",
       "title": "Latex-endpoint-normalization",
       "status": "planned"
     },
     {
-      "id": "s16",
+      "id": "next-action.kp.governed-animation-generation.s16",
       "title": "Adjacency-segmentation-law",
       "status": "planned"
     },
     {
-      "id": "s17",
+      "id": "next-action.kp.governed-animation-generation.s17",
       "title": "Declaration-driven-intent-resolver",
       "status": "planned"
     },
     {
-      "id": "s18",
+      "id": "next-action.kp.governed-animation-generation.s18",
       "title": "Deterministic-series-runtime",
       "status": "planned"
     },
     {
-      "id": "s19",
+      "id": "next-action.kp.governed-animation-generation.s19",
       "title": "Series-repair-taxonomy",
       "status": "planned"
     },
     {
-      "id": "s20",
+      "id": "next-action.kp.governed-animation-generation.s20",
       "title": "Tool-neutral-series-CLI",
       "status": "planned"
     },
     {
-      "id": "s21",
+      "id": "next-action.kp.governed-animation-generation.s21",
       "title": "Equation-series-corpus",
       "status": "planned"
     },
     {
-      "id": "s22",
+      "id": "next-action.kp.governed-animation-generation.s22",
       "title": "Natural-language-planner-port",
       "status": "planned"
     },
     {
-      "id": "s23",
+      "id": "next-action.kp.governed-animation-generation.s23",
       "title": "Domain-frontend-gaps",
       "status": "planned"
     },
     {
-      "id": "s24",
+      "id": "next-action.kp.governed-animation-generation.s24",
       "title": "Transformation-coverage-view",
       "status": "planned"
     },
     {
-      "id": "s25",
+      "id": "next-action.kp.governed-animation-generation.s25",
       "title": "URL-view-and-settings-state",
       "status": "planned"
     },
     {
-      "id": "s26",
+      "id": "next-action.kp.governed-animation-generation.s26",
       "title": "Global-development-dock",
       "status": "planned"
     },
     {
-      "id": "s27",
+      "id": "next-action.kp.governed-animation-generation.s27",
       "title": "Review-collision-and-exact-state",
       "status": "planned"
     },
     {
-      "id": "s28",
+      "id": "next-action.kp.governed-animation-generation.s28",
       "title": "Coverage-human-checkpoint",
       "status": "planned"
     },
     {
-      "id": "s29",
+      "id": "next-action.kp.governed-animation-generation.s29",
       "title": "Post-approval-release-closeout",
       "status": "planned"
     }

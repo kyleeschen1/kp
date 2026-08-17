@@ -1,0 +1,87 @@
+{
+  "id": "s02",
+  "kind": "next-action",
+  "title": "Capability-plan-schema",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Defined and verified the strict animation capability-plan schema; readiness and presentation remain evidence-derived downstream concerns.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved source for capability-plan schema slice s02."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-capability-plan.ts",
+      "summary": "Strict authored capability-plan schema and validator."
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-capability-plan.test.ts",
+      "summary": "Positive, forbidden-field, ordering, duplication, and invalid requirement coverage."
+    },
+    {
+      "kind": "file",
+      "path": "package.json",
+      "summary": "Stable focused capability-plan test command."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v3"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:animation-capability-plan",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-plan",
+      "status": "passed",
+      "scope": "capability-plan schema",
+      "checkedAt": "2026-08-17T21:21:57.961Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript and Svelte boundary",
+      "checkedAt": "2026-08-17T21:21:58.219Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and compiler authority boundaries",
+      "checkedAt": "2026-08-17T21:21:58.476Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable graph validity",
+      "checkedAt": "2026-08-17T21:21:58.798Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the strict kp.animation-capability-plan.v1 schema for stable domain-scoped ordered capability goals and explicit authority requirements; readiness and presentation fields fail closed."
+  },
+  "expectedLearning": [
+    "Whether one compact authored schema can order cross-domain capability requirements without owning evidence-derived readiness or renderer geometry."
+  ],
+  "allowedWork": [
+    "Stable capability IDs domain order scope and explicit requirement references."
+  ],
+  "disallowedWork": [
+    "Readiness labels renderer geometry roadmap status or universal domain semantics."
+  ],
+  "criteria": [
+    {
+      "id": "capability-plan-schema-rejects-readiness-and-presentation",
+      "weight": "high"
+    }
+  ]
+}
