@@ -92,15 +92,19 @@ Only this repository sequence is active:
    motif timing profile and one Native KaTeX optical profile tune every
    log-product cardinality; connectors and derived operators now resolve as
    one center-expanding syntax cohort.
-8. **Log-quotient structural pressure:** next. Apply the approved semantic
-   phase grammar to the existing difference-to-quotient caller while retaining
-   its distinct fraction construction and fusion choreography. Stop for human
-   visual review before promoting a reusable homomorphic-decomposition recipe
-   or beginning another migration wave.
-9. **Core ownership convergence:** complete. The dependency-direction graph is
+8. **Log-quotient structural pressure:** complete. Human review approved the
+   matched-dissolve operator handoff, persistent operand transport, centered
+   fraction construction, restrained outside-in enclosure reception, and
+   closure-coupled target operator on 2026-08-17.
+9. **Homomorphic crossover promotion:** next. Product cardinality and quotient
+   structural pressure now justify one bounded shared causal recipe. Preserve
+   timing, geometry, cardinality, fraction construction, and Native KaTeX
+   optical treatment as caller or renderer policy; stop if promotion changes
+   either approved choreography.
+10. **Core ownership convergence:** complete. The dependency-direction graph is
    enforced with zero exceptions. See
    `reviews/2026-08-16-kp-core-ownership-convergence-closeout.md`.
-10. **Bundle and application isolation:** complete. Selected-experience closure,
+11. **Bundle and application isolation:** complete. Selected-experience closure,
    place-value headroom, dedicated Studio and Public Web builds, production
    development erasure, measured algebra/CSS splits, and five enforced neutral
    facades are closed. See
@@ -362,11 +366,13 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   factors redistribute directly, target enclosures receive them through the
   canonical outside-in function-wrap treatment, and derived `ln` operators
   and connectors expand from fixed centers on one shared syntax window. The
-  log-quotient caller is now the contrasting structural pressure case; do not
-  promote a reusable homomorphic-decomposition recipe before its checkpoint.
+  log-quotient caller has now passed the contrasting structural-pressure
+  checkpoint. One bounded promotion may extract the shared causal grammar;
+  local timing, geometry, cardinality, fraction construction, and optical
+  treatment remain deliberately separate.
   See
   `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md` and
-  `reviews/2026-08-17-post-log-product-approval-next-step-review.md`.
+  `reviews/2026-08-17-post-log-quotient-next-step-review.md`.
 - The eleven-step iteration-architecture sequence supplied the completed
   narrow core. Its successor infrastructure-compression run is complete: it
   reduced generation repairs and compiler closure, made selected capability

@@ -2,11 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-17
-Current Next Action: pressure the existing log-quotient caller with the
-approved homomorphic-decomposition phase grammar while preserving its distinct
-fraction/fusion choreography. Core ownership, bundle/application isolation,
-and the binary/three-factor log-product checkpoint are complete. Stop for
-human review before recipe promotion or another migration wave.
+Current Next Action: promote the product/quotient homomorphic crossover at the
+narrowest proven causal boundary. Preserve timing, geometry, cardinality,
+fraction construction, and Native KaTeX optical treatment as local policy.
+After that bounded closeout, select one function-coordinate transformation as
+the next independently reversible catalogue exemplar.
 
 ## Goal
 
@@ -167,6 +167,16 @@ a subtraction relation fuse into one target application containing a quotient.
 Reuse the approved semantic phase vocabulary and canonical function wrapping,
 but retain fraction construction and fusion timing as quotient-owned policy
 until human review proves a common boundary.
+
+Human review approved the log-quotient structural-pressure caller on
+2026-08-17. Its source operators withdraw through a matched dissolve; `x` and
+`y` retain identity into numerator and denominator; the fraction rule grows
+from its center; and one derived operator resolves with restrained outside-in
+function-wrap reception. Product and quotient now justify one bounded shared
+causal recipe, but not shared timing, geometry, cardinality, fraction
+construction, or Native KaTeX optical treatment. The promotion order and the
+subsequent return to visible catalogue breadth are recorded in
+`../reviews/2026-08-17-post-log-quotient-next-step-review.md`.
 
 The completed overnight reorder made one missing boundary explicit: motif
 names are not suggestions. Recipes invoke nominal typed motifs with semantic
