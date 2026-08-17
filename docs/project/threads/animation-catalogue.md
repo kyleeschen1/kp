@@ -1,11 +1,11 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-16
-Current Next Action: review the bounded dissolve-direct-wrap binary log-product
-exemplar. Core ownership and bundle/application isolation are complete. Do not
-promote the visual policy or pressure the three-factor and quotient callers
-before this human checkpoint passes.
+Last Updated: 2026-08-17
+Current Next Action: review the three-factor log-product pressure caller after
+the binary closure-coupled choreography passed its human checkpoint. Core
+ownership and bundle/application isolation are complete. Do not promote the
+visual policy to quotient before this cardinality checkpoint passes.
 
 ## Goal
 
@@ -145,6 +145,15 @@ path. Governed LLM generation follows singular equation authority; one graph
 and one code caller then pressure only the shared upper host/runtime boundary.
 The eleven-step order is owned by
 `../reviews/2026-08-16-equation-iteration-architecture-next-step-review.md`.
+
+Human review approved the binary closure-coupled operator echo on 2026-08-17.
+Its causal timing is now owned by one log-product motif profile, while its
+measured squeeze distance and operator point scale are owned by one Native
+KaTeX optical profile. Every log-product cardinality consumes those same
+profiles, so later motif tuning updates all callers without moving geometry
+into semantic authority. The existing `ln(xyz)` caller is the current visual
+checkpoint: it adds a third ordered factor, wrapper branch, derived operator,
+and connector without adding a timing table, path rule, or renderer branch.
 
 The completed overnight reorder made one missing boundary explicit: motif
 names are not suggestions. Recipes invoke nominal typed motifs with semantic

@@ -30,26 +30,23 @@ import {
   type KpCompiledFunctionWrapInvocationGroup
 } from "../animation/function-wrap-invocation.ts";
 import {
-  compileKpBinaryLogProductHomomorphicHandoff
+  compileKpLogProductHomomorphicHandoff
 } from "../animation/log-product-homomorphic-handoff.ts";
 import {
-  applyKpNativeKatexFunctionWrapReception,
-  type KpNativeKatexHorizontalSqueezeTreatment
+  applyKpNativeKatexFunctionWrapReception
 } from "./native-katex-function-wrap-reception.ts";
 import {
   applyKpNativeKatexLogProductHomomorphicHandoff
 } from "./native-katex-log-product-homomorphic-handoff.ts";
+import {
+  kpNativeKatexLogProductHomomorphicProfile
+} from "./native-katex-log-product-homomorphic-profile.ts";
 import {
   isKpCompiledLogProductOperation,
   kpCanonicalCompiledLogProductOperation,
   type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
 
-const LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS = 0.75;
-const BINARY_VISUAL_DISCOVERY_FAMILY_ID = "family.log-product.xy";
-const BINARY_CLOSURE_COUPLED_SQUEEZE = Object.freeze({
-  outwardOffsetInNativeHeights: 0.46
-}) satisfies KpNativeKatexHorizontalSqueezeTreatment;
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
   readonly clearanceInInkHeights?: number;
@@ -85,25 +82,13 @@ export function createKpLogProductSemanticMotionProjectionPolicy(
   };
   const routeByTargetEntityId: Record<string, ReturnType<typeof fissionRoute>> = {};
   const factors = operation.contract.family.factors;
-  factors.forEach((factor, index) => {
-    // The binary exemplar has a clear same-baseline corridor, so curvature
-    // would imply a structural detour that the operation does not contain.
-    const directBinaryTransit =
-      operation.contract.family.id === BINARY_VISUAL_DISCOVERY_FAMILY_ID;
-    const argumentVariant = directBinaryTransit
-      ? "direct" as const
-      : index === 0
-        ? "arc-below" as const
-        : index === factors.length - 1
-          ? "arc-above" as const
-          : "direct" as const;
+  factors.forEach((factor) => {
+    // Ordered factors share one unobstructed baseline at every supported
+    // cardinality; arcs would imply a structural detour absent from the law.
     routeByCorrespondenceRecordId[
       `correspondence.log-product.${factor.name}-argument-continuity`
     ] = fissionRoute({
-      variant: argumentVariant,
-      ...(argumentVariant === "direct"
-        ? {}
-        : { clearanceInInkHeights: LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS })
+      variant: "direct" as const
     }, contactGroupId);
     // Every target shell/operator is a derived successor. All branch tracks
     // begin overlapped at the source and separate together; withholding paint
@@ -186,22 +171,20 @@ export function projectKpLogProductNativePaintRelations(
   if (records === undefined) {
     throw new Error("Log-product paint relations require correspondence.");
   }
-  const visuallyWithdrawSourceApplication =
-    operation.contract.family.id === BINARY_VISUAL_DISCOVERY_FAMILY_ID;
   return projectKpNativeKatexSemanticPaintRelations({
     // Application and additive containers own meaning, not glyph paint. In
-    // the binary discovery the source shell withdraws and its typed successor
+    // this motif the source shell withdraws and its typed successor
     // glyphs are introduced at their targets; their semantic derivation stays
     // in the compiler rather than being misread as copied paint.
     groups: records
       .filter(({ id }) =>
         id !== "correspondence.log-product.application-fission" &&
         id !== "correspondence.log-product.product-derives-sum" &&
-        (!visuallyWithdrawSourceApplication || ![
+        ![
           "correspondence.log-product.operator-fission",
           "correspondence.log-product.open-shell-fission",
           "correspondence.log-product.close-shell-fission"
-        ].includes(id))
+        ].includes(id)
       )
       .map((record) => Object.freeze({
         id: record.id,
@@ -229,7 +212,7 @@ export function createKpLogProductTransitSession(input: {
     relations: projectKpLogProductNativePaintRelations(input.operation),
     copyFanOutRouting: false,
     endpointDwellFraction: 0,
-    trackProjection: createKpLogProductVisualDiscoveryTrackProjection(input)
+    trackProjection: createKpLogProductHomomorphicTrackProjection(input)
   });
   let retired = false;
   return Object.freeze({
@@ -256,7 +239,7 @@ export function createKpLogProductTransitSession(input: {
   });
 }
 
-function createKpLogProductVisualDiscoveryTrackProjection(input: {
+function createKpLogProductHomomorphicTrackProjection(input: {
   readonly operation: KpCompiledLogProductOperation;
   readonly semanticMotion: KpCompiledSemanticMotionChoreography;
   readonly sourceEndpoint: KpLogProductNativeEndpoint;
@@ -266,18 +249,15 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
     input.semanticMotion,
     createKpLogProductSemanticMotionProjectionPolicy(input.operation)
   );
-  if (input.operation.contract.family.id !== BINARY_VISUAL_DISCOVERY_FAMILY_ID) {
-    return semanticProjection;
-  }
   const functionWrapReception = createKpFunctionWrapInvocationGroupReception({
     group: compileKpLogProductFunctionWrapInvocationGroup(input.operation),
     direction: "forward"
   });
-  const homomorphicHandoff = compileKpBinaryLogProductHomomorphicHandoff(
+  const homomorphicHandoff = compileKpLogProductHomomorphicHandoff(
     input.operation
   );
   return createKpNativeKatexTrackProjection({
-    id: `track-projection.log-product.binary-visual-discovery.${input.semanticMotion.id}`,
+    id: `track-projection.log-product.homomorphic-decomposition.${input.semanticMotion.id}`,
     project(projectionInput) {
       const semanticTracks = semanticProjection.project(projectionInput);
       const handoffTracks = applyKpNativeKatexLogProductHomomorphicHandoff({
@@ -295,7 +275,8 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
         presenceWindow:
           homomorphicHandoff.enclosureHandoff.targetPresenceWindow,
         motion: "horizontal-squeeze",
-        horizontalSqueezeTreatment: BINARY_CLOSURE_COUPLED_SQUEEZE
+        horizontalSqueezeTreatment:
+          kpNativeKatexLogProductHomomorphicProfile.horizontalSqueeze
       });
     }
   });

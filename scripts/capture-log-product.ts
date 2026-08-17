@@ -21,8 +21,8 @@ const animations = Object.freeze([{
   id: "animation.algebra.log-product.three-factors-to-sum",
   label: "three factors",
   progressions: [
-    { phase: "forward", samples: [0, 0.2, 0.4, 0.6, 0.8, 1] },
-    { phase: "return", samples: [0.8, 0.6, 0.4, 0.2, 0] }
+    { phase: "forward", samples: [0, 0.14, 0.22, 0.34, 0.48, 0.54, 0.6, 0.66, 0.72, 1] },
+    { phase: "return", samples: [0.72, 0.66, 0.6, 0.54, 0.48, 0.34, 0.22, 0.14, 0] }
   ]
 }] as const);
 

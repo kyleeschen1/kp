@@ -57,8 +57,7 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
   );
   expect(derivedOperatorTracks).toHaveLength(2);
   expect(derivedOperatorTracks.every(({ motionAxisConstraint, motionPathVariant }) =>
-    motionAxisConstraint === "horizontal" &&
-    (motionPathVariant === undefined || motionPathVariant === "direct")
+    motionAxisConstraint === undefined && motionPathVariant === undefined
   )).toBe(true);
   expect(tracks.filter(({ lifecycle }) => lifecycle === "split")).toHaveLength(0);
   for (const entityId of ["source.product.x", "source.product.y"]) {
@@ -255,12 +254,103 @@ test("three-factor product uses the same lazy surface and deterministic clock", 
   await expect(stage.locator(".kp-log-product-stage__endpoint")).toHaveCount(2);
   const tracks = JSON.parse(
     await stage.getAttribute("data-kp-log-product-track-summary") ?? "[]"
-  ) as Array<{ lifecycle: string; sourceEntityId?: string }>;
+  ) as Array<{
+    lifecycle: string;
+    sourceEntityId?: string;
+    targetEntityId?: string;
+    visualKey?: string;
+    motionAxisConstraint?: string;
+    motionPathVariant?: string;
+  }>;
   for (const factor of ["x", "y", "z"] as const) {
     expect(tracks.some(({ lifecycle, sourceEntityId }) =>
       lifecycle === "persist" &&
       sourceEntityId === `source.xyz.product.${factor}`
     )).toBe(true);
+  }
+  const derivedOperators = tracks.filter(({ targetEntityId, visualKey }) =>
+    targetEntityId?.endsWith(".log.operator") === true &&
+    visualKey === "glyph:ln"
+  );
+  expect(derivedOperators).toHaveLength(3);
+  expect(derivedOperators.every(({ motionAxisConstraint, motionPathVariant }) =>
+    motionAxisConstraint === undefined && motionPathVariant === undefined
+  )).toBe(true);
+  expect(tracks.filter(({ lifecycle }) => lifecycle === "split")).toHaveLength(0);
+  for (const entityId of [
+    "source.xyz.log.operator",
+    "source.xyz.log.open",
+    "source.xyz.log.close"
+  ]) {
+    const matching = tracks.filter(({ sourceEntityId }) =>
+      sourceEntityId === entityId
+    );
+    expect(matching.length).toBeGreaterThan(0);
+    expect(matching.every(({ lifecycle }) => lifecycle === "eliminate")).toBe(true);
+  }
+  for (const entityId of [
+    "target.xyz.term-1.log.operator",
+    "target.xyz.term-2.log.operator",
+    "target.xyz.term-3.log.operator",
+    "target.xyz.sum.plus.0",
+    "target.xyz.sum.plus.1"
+  ]) {
+    const matching = tracks.filter(({ targetEntityId }) => targetEntityId === entityId);
+    expect(matching.length).toBeGreaterThan(0);
+    expect(matching.every(({ lifecycle }) => lifecycle === "introduce")).toBe(true);
+  }
+  const at = async (progress: number, entityIds: readonly string[]) => {
+    await seek.fill(String(progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-progress",
+      String(progress)
+    );
+    return visibleMaterialGeometry(stage, entityIds);
+  };
+  const multiFactorOperatorIds = [
+    "target.xyz.term-1.log.operator",
+    "target.xyz.term-2.log.operator",
+    "target.xyz.term-3.log.operator"
+  ] as const;
+  await seek.fill("0.53");
+  expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(0);
+  await seek.fill("0.58");
+  expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(3);
+  const operatorEntry = await at(0.55, multiFactorOperatorIds);
+  const operatorMidpoint = await at(0.6, multiFactorOperatorIds);
+  const operatorSettlement = await at(0.64, multiFactorOperatorIds);
+  for (const entityId of multiFactorOperatorIds) {
+    const widths = [operatorEntry, operatorMidpoint, operatorSettlement]
+      .map((geometry) => geometry[entityId]!.width);
+    expect(widths[0]).toBeLessThan(widths[1]!);
+    expect(widths[1]).toBeLessThan(widths[2]!);
+    expect(widths[2]).toBeGreaterThan(widths[0]! * 3);
+  }
+  const enclosureIds = [
+    "target.xyz.term-1.log.open",
+    "target.xyz.term-1.log.close",
+    "target.xyz.term-2.log.open",
+    "target.xyz.term-2.log.close",
+    "target.xyz.term-3.log.open",
+    "target.xyz.term-3.log.close"
+  ] as const;
+  const enclosureEntry = await at(0.48, enclosureIds);
+  const enclosureSettlement = await at(0.64, enclosureIds);
+  for (const prefix of [
+    "target.xyz.term-1.log",
+    "target.xyz.term-2.log",
+    "target.xyz.term-3.log"
+  ] as const) {
+    const leadingEntry = enclosureEntry[`${prefix}.open`]!;
+    const leadingSettlement = enclosureSettlement[`${prefix}.open`]!;
+    const trailingEntry = enclosureEntry[`${prefix}.close`]!;
+    const trailingSettlement = enclosureSettlement[`${prefix}.close`]!;
+    expect(leadingEntry.left).toBeLessThan(leadingSettlement.left);
+    expect(trailingEntry.left).toBeGreaterThan(trailingSettlement.left);
+    expect(leadingSettlement.left - leadingEntry.left)
+      .toBeGreaterThan(leadingSettlement.height * 0.25);
+    expect(leadingSettlement.left - leadingEntry.left)
+      .toBeLessThan(leadingSettlement.height * 0.7);
   }
   for (const progress of [0, 0.35, 0.7, 1]) {
     await seek.fill(String(progress));

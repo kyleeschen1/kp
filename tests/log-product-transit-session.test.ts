@@ -13,13 +13,17 @@ import {
   isKpCompiledFunctionWrapInvocationGroup
 } from "../src/animation/function-wrap-invocation.ts";
 import {
-  compileKpBinaryLogProductHomomorphicHandoff,
-  measureKpBinaryLogProductCarrierCoverage
+  compileKpLogProductHomomorphicHandoff,
+  kpLogProductHomomorphicHandoffTiming,
+  measureKpLogProductCarrierCoverage
 } from "../src/animation/log-product-homomorphic-handoff.ts";
 import {
   kpCanonicalCompiledLogProductOperation,
   kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
+import {
+  kpNativeKatexLogProductHomomorphicProfile
+} from "../src/rendering/native-katex-log-product-homomorphic-profile.ts";
 
 test("log-product declares synchronized function-wrap enclosure roles", () => {
   const group = compileKpLogProductFunctionWrapInvocationGroup(
@@ -74,8 +78,8 @@ test("log-product declares synchronized function-wrap enclosure roles", () => {
   );
 });
 
-test("binary homomorphic handoff stages a contracted operator match-dissolve", () => {
-  const handoff = compileKpBinaryLogProductHomomorphicHandoff(
+test("log-product homomorphic handoff stages a contracted operator match-dissolve", () => {
+  const handoff = compileKpLogProductHomomorphicHandoff(
     kpCanonicalCompiledLogProductOperation
   );
 
@@ -160,14 +164,63 @@ test("binary homomorphic handoff stages a contracted operator match-dissolve", (
       handoff.operatorHandoff.sourceReleaseWindow.end <= 0.270_001
   );
   assert.deepEqual(
-    measureKpBinaryLogProductCarrierCoverage(handoff, 0.48),
+    measureKpLogProductCarrierCoverage(handoff, 0.48),
     { sourcePresence: 0, targetPresence: 0 }
   );
-  assert.throws(
-    () => compileKpBinaryLogProductHomomorphicHandoff(
-      kpMultiFactorCompiledLogProductOperation
-    ),
-    /binary visual exemplar/
+});
+
+test("multi-factor handoff derives cardinality from semantic authority and shares timing", () => {
+  const handoff = compileKpLogProductHomomorphicHandoff(
+    kpMultiFactorCompiledLogProductOperation
+  );
+
+  assert.equal(handoff.factorCount, 3);
+  assert.equal(handoff.timingProfileId, kpLogProductHomomorphicHandoffTiming.id);
+  assert.deepEqual(handoff.operatorHandoff.targetEntityIds, [
+    "target.xyz.term-1.log.operator",
+    "target.xyz.term-2.log.operator",
+    "target.xyz.term-3.log.operator"
+  ]);
+  assert.deepEqual(
+    handoff.payloadHandoff.correspondences.map(({ sourceEntityId, targetEntityId }) => ({
+      sourceEntityId,
+      targetEntityId
+    })),
+    kpMultiFactorCompiledLogProductOperation.contract.family.factors.map((factor) => ({
+      sourceEntityId: factor.sourceOccurrenceId,
+      targetEntityId: factor.targetOccurrenceId
+    }))
+  );
+  assert.deepEqual(handoff.enclosureHandoff.targetEntityIds, [
+    "target.xyz.term-1.log.open",
+    "target.xyz.term-1.log.close",
+    "target.xyz.term-2.log.open",
+    "target.xyz.term-2.log.close",
+    "target.xyz.term-3.log.open",
+    "target.xyz.term-3.log.close"
+  ]);
+  assert.deepEqual(handoff.relationHandoff.targetEntityIds, [
+    "target.xyz.sum",
+    "target.xyz.sum.plus.0",
+    "target.xyz.sum.plus.1"
+  ]);
+  assert.strictEqual(
+    handoff.operatorHandoff.targetExpansionWindow,
+    kpLogProductHomomorphicHandoffTiming.operatorTargetExpansion
+  );
+  assert.strictEqual(
+    handoff.enclosureHandoff.transitWindow,
+    kpLogProductHomomorphicHandoffTiming.enclosureTransit
+  );
+  assert.equal(
+    kpNativeKatexLogProductHomomorphicProfile.horizontalSqueeze
+      .outwardOffsetInNativeHeights,
+    0.46
+  );
+  assert.equal(Object.isFrozen(kpNativeKatexLogProductHomomorphicProfile), true);
+  assert.equal(
+    Object.isFrozen(kpNativeKatexLogProductHomomorphicProfile.horizontalSqueeze),
+    true
   );
 });
 
@@ -192,37 +245,41 @@ test("multi-factor log-product reuses one function-wrap invocation per target br
   );
 });
 
-test("binary visual proof withdraws its source application while factors persist", () => {
-  const relations = projectKpLogProductNativePaintRelations(
-    kpCanonicalCompiledLogProductOperation
-  );
-  assert.equal(relations.length, 2);
-  assert.equal(relations.filter(({ relation }) => relation === "split").length, 0);
-  assert.equal(relations.filter(({ relation }) => relation === "persist").length, 2);
-  assert.equal(relations.some(({ sourceEntityIds }) =>
-    sourceEntityIds.includes("source.log.operator") ||
-    sourceEntityIds.includes("source.log.open") ||
-    sourceEntityIds.includes("source.log.close")
-  ), false);
-  assert.ok(relations.some(({ sourceEntityIds, targetEntityIds }) =>
-    sourceEntityIds.includes("source.product.x") &&
-    targetEntityIds.includes("target.left.argument.x")
-  ));
-  assert.equal(relations.some(({ targetEntityIds }) =>
-    targetEntityIds.includes("target.sum.plus")
-  ), false);
-  for (const factor of ["x", "y"] as const) {
+test("every log-product caller withdraws source syntax while factors persist directly", () => {
+  for (const operation of [
+    kpCanonicalCompiledLogProductOperation,
+    kpMultiFactorCompiledLogProductOperation
+  ]) {
+    const relations = projectKpLogProductNativePaintRelations(operation);
+    assert.equal(relations.length, operation.contract.family.factors.length);
+    assert.equal(relations.filter(({ relation }) => relation === "split").length, 0);
     assert.equal(
-      kpLogProductSemanticMotionProjectionPolicy
-        .routeByCorrespondenceRecordId[
-          `correspondence.log-product.${factor}-argument-continuity`
-        ]?.variant,
-      "direct"
+      relations.filter(({ relation }) => relation === "persist").length,
+      operation.contract.family.factors.length
     );
+    assert.equal(relations.some(({ sourceEntityIds }) =>
+      sourceEntityIds.some((entityId) =>
+        entityId.endsWith(".log.operator") ||
+        entityId.endsWith(".log.open") ||
+        entityId.endsWith(".log.close")
+      )
+    ), false);
+    assert.equal(relations.some(({ targetEntityIds }) =>
+      targetEntityIds.some((entityId) => entityId.includes(".sum.plus"))
+    ), false);
+    const policy = createKpLogProductSemanticMotionProjectionPolicy(operation);
+    for (const factor of operation.contract.family.factors) {
+      assert.equal(
+        policy.routeByCorrespondenceRecordId[
+          `correspondence.log-product.${factor.name}-argument-continuity`
+        ]?.variant,
+        "direct"
+      );
+    }
   }
 });
 
-test("multi-factor routing derives symmetric wrapper branches and ordinal argument lanes", () => {
+test("multi-factor routing keeps wrappers and ordered arguments on direct lanes", () => {
   const policy = createKpLogProductSemanticMotionProjectionPolicy(
     kpMultiFactorCompiledLogProductOperation
   );
@@ -240,7 +297,7 @@ test("multi-factor routing derives symmetric wrapper branches and ordinal argume
     policy.routeByCorrespondenceRecordId?.[
       "correspondence.log-product.x-argument-continuity"
     ]?.variant,
-    "arc-below"
+    "direct"
   );
   assert.equal(
     policy.routeByCorrespondenceRecordId?.[
@@ -252,12 +309,12 @@ test("multi-factor routing derives symmetric wrapper branches and ordinal argume
     policy.routeByCorrespondenceRecordId?.[
       "correspondence.log-product.z-argument-continuity"
     ]?.variant,
-    "arc-above"
+    "direct"
   );
   const relations = projectKpLogProductNativePaintRelations(
     kpMultiFactorCompiledLogProductOperation
   );
-  assert.equal(relations.filter(({ relation }) => relation === "split").length, 3);
+  assert.equal(relations.filter(({ relation }) => relation === "split").length, 0);
   assert.equal(relations.filter(({ relation }) => relation === "persist").length, 3);
 });
 

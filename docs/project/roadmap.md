@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-16
+Last Updated: 2026-08-17
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -87,9 +87,11 @@ Only this repository sequence is active:
    largest mixed-ownership modules, and retired only one exactly unreachable
    prototype. See
    `reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
-7. **Binary log-product human checkpoint:** current. The bounded
-   dissolve-spread-wrap choreography still requires human review before any
-   visual policy promotion or three-factor/quotient pressure.
+7. **Multi-factor log-product human checkpoint:** current. Human review
+   approved the closure-coupled binary choreography on 2026-08-17. One shared
+   motif timing profile and one Native KaTeX optical profile now tune every
+   log-product cardinality; the three-factor caller is the active structural
+   pressure case before quotient promotion.
 8. **Core ownership convergence:** complete. The dependency-direction graph is
    enforced with zero exceptions. See
    `reviews/2026-08-16-kp-core-ownership-convergence-closeout.md`.

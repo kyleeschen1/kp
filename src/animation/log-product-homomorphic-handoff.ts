@@ -5,7 +5,6 @@ import {
 } from "../semantic/log-product-transformation-compiler.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 
-const BINARY_LOG_PRODUCT_FAMILY_ID = "family.log-product.xy";
 const APPLICATION_FISSION_RECORD_ID =
   "correspondence.log-product.application-fission" as const;
 const OPERATOR_FISSION_RECORD_ID =
@@ -14,7 +13,10 @@ const PRODUCT_DERIVES_SUM_RECORD_ID =
   "correspondence.log-product.product-derives-sum" as const;
 const MAX_OPERATOR_VACANCY = 0.270_001;
 
-const binaryHandoffWindows = Object.freeze({
+// Cardinality changes semantic bindings, not the causal phrase. This profile
+// is the single tuning point for every log-product handoff caller.
+export const kpLogProductHomomorphicHandoffTiming = Object.freeze({
+  id: "timing.log-product.homomorphic-decomposition.v1" as const,
   operatorSourceContraction: window(0.18, 0.28),
   operatorSourceRelease: window(0.24, 0.32),
   operatorTargetPresence: window(0.54, 0.62),
@@ -27,11 +29,13 @@ const binaryHandoffWindows = Object.freeze({
   targetHold: window(0.64, 1)
 });
 
-export interface KpBinaryLogProductHomomorphicHandoff {
+export interface KpLogProductHomomorphicHandoff {
   readonly schemaVersion: "kp.log-product-homomorphic-handoff.v1";
   readonly kind: "log-product-homomorphic-handoff";
   readonly maturity: "candidate";
   readonly transformationId: string;
+  readonly factorCount: number;
+  readonly timingProfileId: typeof kpLogProductHomomorphicHandoffTiming.id;
   readonly applicationCorrespondenceRecordId:
     "correspondence.log-product.application-fission";
   readonly operatorHandoff: {
@@ -42,7 +46,7 @@ export interface KpBinaryLogProductHomomorphicHandoff {
     readonly correspondenceRecordId:
       "correspondence.log-product.operator-fission";
     readonly sourceEntityId: string;
-    readonly targetEntityIds: readonly [string, string];
+    readonly targetEntityIds: readonly string[];
     readonly sourceContractionWindow: KpFunctionWrapMotionWindow;
     readonly sourceReleaseWindow: KpFunctionWrapMotionWindow;
     readonly targetPresenceWindow: KpFunctionWrapMotionWindow;
@@ -50,25 +54,18 @@ export interface KpBinaryLogProductHomomorphicHandoff {
   };
   readonly payloadHandoff: {
     readonly topology: "ordered-continuity";
-    readonly correspondences: readonly [
-      {
-        readonly correspondenceRecordId: string;
-        readonly sourceEntityId: string;
-        readonly targetEntityId: string;
-      },
-      {
-        readonly correspondenceRecordId: string;
-        readonly sourceEntityId: string;
-        readonly targetEntityId: string;
-      }
-    ];
+    readonly correspondences: readonly {
+      readonly correspondenceRecordId: string;
+      readonly sourceEntityId: string;
+      readonly targetEntityId: string;
+    }[];
     readonly transitWindow: KpFunctionWrapMotionWindow;
   };
   readonly enclosureHandoff: {
     readonly topology: "source-scope-clears-before-derived-scopes";
     readonly correspondenceRecordIds: readonly [string, string];
     readonly sourceEntityIds: readonly [string, string];
-    readonly targetEntityIds: readonly [string, string, string, string];
+    readonly targetEntityIds: readonly string[];
     readonly reception: "horizontal-squeeze";
     readonly sizeBehavior: "native-size";
     readonly targetPresenceWindow: KpFunctionWrapMotionWindow;
@@ -79,8 +76,8 @@ export interface KpBinaryLogProductHomomorphicHandoff {
     readonly topology: "product-derives-additive-structure";
     readonly correspondenceRecordId:
       "correspondence.log-product.product-derives-sum";
-    readonly sourceEntityIds: readonly [string];
-    readonly targetEntityIds: readonly [string, string];
+    readonly sourceEntityIds: readonly string[];
+    readonly targetEntityIds: readonly string[];
     readonly synchronization: "with-derived-operators";
     readonly receptionWindow: KpFunctionWrapMotionWindow;
   };
@@ -95,19 +92,15 @@ const compiledHandoffs = new WeakSet<object>();
  * preserves that concept while keeping source syntax, payload transit, and
  * target reception out of one another's spatial corridors.
  */
-export function compileKpBinaryLogProductHomomorphicHandoff(
+export function compileKpLogProductHomomorphicHandoff(
   operation: KpCompiledLogProductOperation
-): KpBinaryLogProductHomomorphicHandoff {
+): KpLogProductHomomorphicHandoff {
   if (!isKpCompiledLogProductOperation(operation)) {
     throw new Error(
       "Log-product homomorphic handoff requires nominal compiler authority."
     );
   }
-  if (operation.contract.family.id !== BINARY_LOG_PRODUCT_FAMILY_ID) {
-    throw new Error(
-      "Log-product homomorphic handoff is limited to the binary visual exemplar."
-    );
-  }
+  const factorCount = operation.contract.family.factors.length;
   const records = operation.transformation.correspondenceMap?.records;
   if (records === undefined) {
     throw new Error("Log-product homomorphic handoff requires correspondence authority.");
@@ -115,27 +108,27 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
   requireFanOut(
     records,
     APPLICATION_FISSION_RECORD_ID,
-    2
+    factorCount
   );
   const operator = requireFanOut(
     records,
     OPERATOR_FISSION_RECORD_ID,
-    2
+    factorCount
   );
   const openShell = requireFanOut(
     records,
     "correspondence.log-product.open-shell-fission",
-    2
+    factorCount
   );
   const closeShell = requireFanOut(
     records,
     "correspondence.log-product.close-shell-fission",
-    2
+    factorCount
   );
   const relation = requireFanOut(
     records,
     PRODUCT_DERIVES_SUM_RECORD_ID,
-    2
+    factorCount
   );
   const payloadRecords = operation.contract.family.factors.map(({ name }) =>
     requireOneToOne(
@@ -143,14 +136,16 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
       `correspondence.log-product.${name}-argument-continuity`
     )
   );
-  if (payloadRecords.length !== 2) {
-    throw new Error("Binary log-product handoff requires exactly two payloads.");
+  if (payloadRecords.length !== factorCount || factorCount < 2) {
+    throw new Error("Log-product handoff requires every ordered factor payload.");
   }
   const handoff = Object.freeze({
     schemaVersion: "kp.log-product-homomorphic-handoff.v1" as const,
     kind: "log-product-homomorphic-handoff" as const,
     maturity: "candidate" as const,
     transformationId: operation.transformation.id,
+    factorCount,
+    timingProfileId: kpLogProductHomomorphicHandoffTiming.id,
     applicationCorrespondenceRecordId: APPLICATION_FISSION_RECORD_ID,
     operatorHandoff: Object.freeze({
       topology: "matched-dissolve-to-derived-successors" as const,
@@ -159,14 +154,15 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
       receptionSynchronization: "closure-coupled" as const,
       correspondenceRecordId: OPERATOR_FISSION_RECORD_ID,
       sourceEntityId: operator.sourceSelectorIds[0]!,
-      targetEntityIds: Object.freeze([
-        operator.targetSelectorIds[0]!,
-        operator.targetSelectorIds[1]!
-      ]) as readonly [string, string],
-      sourceContractionWindow: binaryHandoffWindows.operatorSourceContraction,
-      sourceReleaseWindow: binaryHandoffWindows.operatorSourceRelease,
-      targetPresenceWindow: binaryHandoffWindows.operatorTargetPresence,
-      targetExpansionWindow: binaryHandoffWindows.operatorTargetExpansion
+      targetEntityIds: Object.freeze([...operator.targetSelectorIds]),
+      sourceContractionWindow:
+        kpLogProductHomomorphicHandoffTiming.operatorSourceContraction,
+      sourceReleaseWindow:
+        kpLogProductHomomorphicHandoffTiming.operatorSourceRelease,
+      targetPresenceWindow:
+        kpLogProductHomomorphicHandoffTiming.operatorTargetPresence,
+      targetExpansionWindow:
+        kpLogProductHomomorphicHandoffTiming.operatorTargetExpansion
     }),
     payloadHandoff: Object.freeze({
       topology: "ordered-continuity" as const,
@@ -174,8 +170,8 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
         correspondenceRecordId: record.id,
         sourceEntityId: record.sourceSelectorIds[0]!,
         targetEntityId: record.targetSelectorIds[0]!
-      }))) as KpBinaryLogProductHomomorphicHandoff["payloadHandoff"]["correspondences"],
-      transitWindow: binaryHandoffWindows.payloadTransit
+      }))),
+      transitWindow: kpLogProductHomomorphicHandoffTiming.payloadTransit
     }),
     enclosureHandoff: Object.freeze({
       topology: "source-scope-clears-before-derived-scopes" as const,
@@ -187,17 +183,19 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
         openShell.sourceSelectorIds[0]!,
         closeShell.sourceSelectorIds[0]!
       ]) as readonly [string, string],
-      targetEntityIds: Object.freeze([
-        openShell.targetSelectorIds[0]!,
-        closeShell.targetSelectorIds[0]!,
-        openShell.targetSelectorIds[1]!,
-        closeShell.targetSelectorIds[1]!
-      ]) as readonly [string, string, string, string],
+      targetEntityIds: Object.freeze(operation.contract.family.factors.flatMap(
+        (_, index) => [
+          openShell.targetSelectorIds[index]!,
+          closeShell.targetSelectorIds[index]!
+        ]
+      )),
       reception: "horizontal-squeeze" as const,
       sizeBehavior: "native-size" as const,
-      targetPresenceWindow: binaryHandoffWindows.enclosureTargetPresence,
-      transitWindow: binaryHandoffWindows.enclosureTransit,
-      sourceReleaseWindow: binaryHandoffWindows.enclosureSourceRelease
+      targetPresenceWindow:
+        kpLogProductHomomorphicHandoffTiming.enclosureTargetPresence,
+      transitWindow: kpLogProductHomomorphicHandoffTiming.enclosureTransit,
+      sourceReleaseWindow:
+        kpLogProductHomomorphicHandoffTiming.enclosureSourceRelease
     }),
     relationHandoff: Object.freeze({
       topology: "product-derives-additive-structure" as const,
@@ -205,35 +203,32 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
       sourceEntityIds: Object.freeze([
         relation.sourceSelectorIds[0]!
       ]) as readonly [string],
-      targetEntityIds: Object.freeze([
-        relation.targetSelectorIds[0]!,
-        relation.targetSelectorIds[1]!
-      ]) as readonly [string, string],
+      targetEntityIds: Object.freeze([...relation.targetSelectorIds]),
       synchronization: "with-derived-operators" as const,
-      receptionWindow: binaryHandoffWindows.relationReception
+      receptionWindow: kpLogProductHomomorphicHandoffTiming.relationReception
     }),
-    targetHoldWindow: binaryHandoffWindows.targetHold
-  }) satisfies KpBinaryLogProductHomomorphicHandoff;
+    targetHoldWindow: kpLogProductHomomorphicHandoffTiming.targetHold
+  }) satisfies KpLogProductHomomorphicHandoff;
   assertCoverageOrdering(handoff);
   compiledHandoffs.add(handoff);
   return handoff;
 }
 
-export function isKpBinaryLogProductHomomorphicHandoff(
+export function isKpLogProductHomomorphicHandoff(
   value: unknown
-): value is KpBinaryLogProductHomomorphicHandoff {
+): value is KpLogProductHomomorphicHandoff {
   return typeof value === "object" && value !== null && compiledHandoffs.has(value);
 }
 
-export function measureKpBinaryLogProductCarrierCoverage(
-  handoff: KpBinaryLogProductHomomorphicHandoff,
+export function measureKpLogProductCarrierCoverage(
+  handoff: KpLogProductHomomorphicHandoff,
   progress: number
 ): Readonly<{
   sourcePresence: number;
   targetPresence: number;
 }> {
-  if (!isKpBinaryLogProductHomomorphicHandoff(handoff)) {
-    throw new Error("Carrier coverage requires a compiled binary handoff.");
+  if (!isKpLogProductHomomorphicHandoff(handoff)) {
+    throw new Error("Carrier coverage requires a compiled log-product handoff.");
   }
   return Object.freeze({
     sourcePresence: 1 - sampleWindow(
@@ -290,7 +285,7 @@ function requireRecord(
 }
 
 function assertCoverageOrdering(
-  handoff: KpBinaryLogProductHomomorphicHandoff
+  handoff: KpLogProductHomomorphicHandoff
 ): void {
   if (
     handoff.enclosureHandoff.sourceReleaseWindow.end !==

@@ -11,7 +11,7 @@ import {
   createKpFunctionWrapReceptionPlan
 } from "../src/animation/function-wrap-reception.ts";
 import {
-  compileKpBinaryLogProductHomomorphicHandoff
+  compileKpLogProductHomomorphicHandoff
 } from "../src/animation/log-product-homomorphic-handoff.ts";
 import {
   compileKpEquationOperationChoreography
@@ -187,7 +187,7 @@ test("homomorphic operators contract and expand around a fixed ink center", () =
       introducedTrack(targetLeft, 1),
       introducedTrack(targetRight, 2)
     ],
-    plan: compileKpBinaryLogProductHomomorphicHandoff(
+    plan: compileKpLogProductHomomorphicHandoff(
       kpCanonicalCompiledLogProductOperation
     )
   });

@@ -1,6 +1,6 @@
 import {
-  isKpBinaryLogProductHomomorphicHandoff,
-  type KpBinaryLogProductHomomorphicHandoff
+  isKpLogProductHomomorphicHandoff,
+  type KpLogProductHomomorphicHandoff
 } from "../animation/log-product-homomorphic-handoff.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
@@ -11,6 +11,9 @@ import type {
 import {
   invalidateKpNativeKatexMotionPath
 } from "./native-katex-paint-geometry.ts";
+import {
+  kpNativeKatexLogProductHomomorphicProfile
+} from "./native-katex-log-product-homomorphic-profile.ts";
 
 type IntroducedTrack = Extract<
   KpNativeKatexPaintMeasuredSceneTrack,
@@ -21,15 +24,13 @@ type EliminatedTrack = Extract<
   { readonly lifecycle: "eliminate" }
 >;
 
-const POINT_OPERATOR_SCALE = 0.04;
-
 export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-  readonly plan: KpBinaryLogProductHomomorphicHandoff;
+  readonly plan: KpLogProductHomomorphicHandoff;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
-  if (!isKpBinaryLogProductHomomorphicHandoff(input.plan)) {
+  if (!isKpLogProductHomomorphicHandoff(input.plan)) {
     throw new Error(
       "Native KaTeX log-product handoff requires compiled presentation authority."
     );
@@ -163,7 +164,7 @@ function releaseOperatorAtNativePosition(
     sampleMaterialScale: scaleWindow({
       window: contractionWindow,
       from: 1,
-      to: POINT_OPERATOR_SCALE
+      to: kpNativeKatexLogProductHomomorphicProfile.operatorPointScale
     })
   });
 }
@@ -194,7 +195,7 @@ function revealOperatorAtNativePosition(
     ...revealAtNativePosition(track, presenceWindow),
     sampleMaterialScale: scaleWindow({
       window: expansionWindow,
-      from: POINT_OPERATOR_SCALE,
+      from: kpNativeKatexLogProductHomomorphicProfile.operatorPointScale,
       to: 1
     })
   });

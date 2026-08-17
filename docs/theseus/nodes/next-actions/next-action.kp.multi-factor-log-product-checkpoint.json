@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.multi-factor-log-product-checkpoint",
+  "kind": "next-action",
+  "title": "Review multi-factor log-product choreography",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run verify:impact -- --path src/animation/log-product-homomorphic-handoff.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:31:35.369Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:31:37.384Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:31:38.555Z"
+    },
+    {
+      "command": "Chromium complete log-product catalogue browser proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:31:39.822Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T18:31:40.971Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:31:42.056Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T18:31:43.408Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "The three-factor caller now consumes the approved shared log-product timing and Native KaTeX optical profiles, preserves all factor identities on direct lanes, and adds no caller-owned timing, path, or renderer branch. Awaiting human visual approval before quotient promotion."
+  }
+}
