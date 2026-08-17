@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s03",
   "kind": "next-action",
   "title": "Equation-capability-order",
-  "status": "ready",
-  "summary": "Starting the ordered equation capability plan from the approved backlog and exact evidence.",
+  "status": "resolved",
+  "summary": "Equation capability order is explicit, validated, and keeps exemplar evidence separate from general capability.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,6 +24,18 @@
       "kind": "file",
       "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
       "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/equation-animation-capability-plan.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-animation-capability-plan.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/generative-animation-compiler.md"
     }
   ],
   "dependsOn": {
@@ -39,6 +51,24 @@
     "npm run test:animation-capability-plan",
     "npm run typecheck"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-capability-plan",
+      "status": "passed",
+      "scope": "schema and exact equation capability order",
+      "checkedAt": "2026-08-17T21:44:05.120Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-17T21:44:06.188Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Encoded 19 ordered equation capabilities with exact requirements, detailed fraction/root/branch/binder/derivation gaps, and an explicit alternative-base logarithm syntax and motif capability."
+  },
   "expectedLearning": [
     "Whether an authored equation capability order can distinguish evidence-backed general capability from one exemplar and from an explicit planned gap."
   ],

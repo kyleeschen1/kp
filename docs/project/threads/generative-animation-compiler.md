@@ -60,18 +60,21 @@ and playable does not mean generally generatable.
    adjacency, typed segmentation repairs, and one deterministic clock.
 4. Balanced equation operations: consolidate existing subtract/divide/log
    examples into a general verified family before broadening operands.
-5. Fraction equivalence and repartition.
-6. Common-denominator fraction addition/subtraction and factor cancellation.
-7. Power, exponent, and root inversion with branches and domain conditions.
-8. Substitution, like-term collection, and common-factor coalescence.
-9. Inequality transformations, explicit branching, absolute value, and
+5. Alternative-base logarithm syntax and change-of-base transformations:
+   preserve bases as semantic operator parameters and establish a distinct
+   base-handoff motif rather than treating subscripts as decoration.
+6. Fraction equivalence and repartition.
+7. Common-denominator fraction addition/subtraction and factor cancellation.
+8. Power, exponent, and root inversion with branches and domain conditions.
+9. Substitution, like-term collection, and common-factor coalescence.
+10. Inequality transformations, explicit branching, absolute value, and
    rejected/extraneous solutions.
-10. Binders, large operators, calculus operators, and multi-line derivation
+11. Binders, large operators, calculus operators, and multi-line derivation
     continuity.
-11. Matrix/tabular semantics and spatial linear-algebra pressure.
-12. Code transformation generation through language-owned frontends.
-13. Graph2D function/model transformations.
-14. Graph3D scene transformations through an explicitly bounded semantic
+12. Matrix/tabular semantics and spatial linear-algebra pressure.
+13. Code transformation generation through language-owned frontends.
+14. Graph2D function/model transformations.
+15. Graph3D scene transformations through an explicitly bounded semantic
     frontend.
 
 This is a capability order, not permission to implement every row in one run.
@@ -111,4 +114,3 @@ the exact view, artifact, settings, and playhead.
 - `semantic-runtime.md`
 - `../authoring/llm-generation-entrypoint.md`
 - `../reviews/2026-08-17-post-log-quotient-next-step-review.md`
-
