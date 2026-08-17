@@ -1,0 +1,94 @@
+{
+  "id": "next-action.kp.binary-log-product-checkpoint",
+  "kind": "next-action",
+  "title": "Review binary log-product choreography",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Prepare and verify the bounded ln(xy) dissolve-spread-wrap exemplar, preserve semantic/compiler/runtime authority, and stop for human visual judgment before any promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current repository lane and checkpoint authority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-catalogue.md",
+      "summary": "Active catalogue thread and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md",
+      "summary": "Approved binary exemplar choreography and promotion gate."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-16-kp-bundle-application-isolation-closeout.md",
+      "summary": "Completed architecture boundary that restores the human checkpoint."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path src/rendering/log-product-transit-session.ts",
+    "npm run test:log-product",
+    "npm run visual:log-product"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run verify:impact -- --path src/rendering/log-product-transit-session.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T14:46:36.728Z",
+      "notes": "Impact selector classified the shared renderer path as promotion-risk; the accepted discovery contract therefore limits this pre-approval slice to the focused semantic and visual checks."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T14:46:37.819Z",
+      "notes": "14 of 14 semantic, endpoint, lineage, routing, and transit tests passed."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T14:46:38.750Z",
+      "notes": "Deterministic binary and preservation contact sheet generated; review-backend proxy was unavailable to the isolated harness but capture completed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Binary ln(xy) semantics and deterministic capture pass. The sampled sequence matches the accepted dissolve-spread-wrap contract; no production change is justified before the required human visual judgment. Three-factor and quotient promotion remain disallowed."
+  },
+  "expectedLearning": [
+    "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."
+  ],
+  "allowedWork": [
+    "Inspect and, only if deterministic evidence identifies a defect, correct the binary ln(xy) exemplar presentation.",
+    "Run focused semantic, sampled-frame, bundle-impact, and single-exemplar visual checks."
+  ],
+  "disallowedWork": [
+    "Promote visual policy to three-factor, quotient, or other equation families before human approval.",
+    "Change semantic identity, compiler authority, native endpoints, clocks, catalogue host, product layout, or application packaging."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-wrap-reception",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    },
+    {
+      "id": "reversible-exemplar",
+      "weight": "medium"
+    }
+  ]
+}
