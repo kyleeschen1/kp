@@ -55,6 +55,10 @@ export function applyKpNativeKatexFunctionWrapReception(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plan: KpFunctionWrapReceptionPlan;
   readonly entryWindow: { readonly start: number; readonly end: number };
+  readonly presenceWindow?: {
+    readonly start: number;
+    readonly end: number;
+  } | undefined;
   readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   return adaptKpNativeKatexFunctionWrapReception(input).tracks;
@@ -66,6 +70,10 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plan: KpFunctionWrapReceptionPlan;
   readonly entryWindow: { readonly start: number; readonly end: number };
+  readonly presenceWindow?: {
+    readonly start: number;
+    readonly end: number;
+  } | undefined;
   readonly motion?: KpNativeKatexFunctionWrapReceptionMotion | undefined;
 }): KpNativeKatexFunctionWrapAdaptation {
   if (input.plan.motifId !== kpCanonicalEquationMotionVocabulary.motifs.functionWrapV1) {
@@ -79,6 +87,20 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
     input.entryWindow.start >= input.entryWindow.end
   ) {
     throw new Error("Native KaTeX function-wrap entry window must be ordered within unit progress.");
+  }
+  if (
+    input.presenceWindow !== undefined &&
+    (
+      !Number.isFinite(input.presenceWindow.start) ||
+      !Number.isFinite(input.presenceWindow.end) ||
+      input.presenceWindow.start < 0 ||
+      input.presenceWindow.end > input.entryWindow.start ||
+      input.presenceWindow.start >= input.presenceWindow.end
+    )
+  ) {
+    throw new Error(
+      "Native KaTeX function-wrap presence must resolve before entry motion begins."
+    );
   }
   const endpoint = input.plan.direction === "forward"
     ? input.target
@@ -103,7 +125,13 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
     input.entryWindow.start,
     input.entryWindow.end
   );
-  const sampleOpacity = motion === "horizontal-squeeze"
+  const sampleOpacity = input.presenceWindow !== undefined
+    ? (progress: number) => smoothWindow(
+        progress,
+        input.presenceWindow!.start,
+        input.presenceWindow!.end
+      )
+    : motion === "horizontal-squeeze"
     ? (progress: number) => smoothWindow(
         progress,
         input.entryWindow.start,
@@ -177,7 +205,10 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
       timingGroupId: input.plan.id,
       opacityScheduleAuthority: "semantic-choreography" as const,
       sampleProgress: sample,
-      sampleOpacityProgress: sampleOpacity
+      sampleOpacityProgress: sampleOpacity,
+      ...(motion === "horizontal-squeeze"
+        ? { motionAxisConstraint: "horizontal" as const }
+        : {})
     });
   });
   const missing = [...roleByEntityId.keys()].filter((id) => !matched.has(id));

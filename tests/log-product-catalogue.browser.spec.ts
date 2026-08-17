@@ -44,9 +44,22 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
     lifecycle: string;
     sourceEntityId?: string;
     targetEntityId?: string;
+    visualEntityId?: string;
+    visualKey?: string;
     semanticMotionUnitId?: string;
     timingGroupId?: string;
+    motionAxisConstraint?: string;
+    motionPathVariant?: string;
   }>;
+  const derivedOperatorTracks = tracks.filter(({ targetEntityId, visualKey }) =>
+    targetEntityId?.endsWith(".log.operator") === true &&
+    visualKey === "glyph:ln"
+  );
+  expect(derivedOperatorTracks).toHaveLength(2);
+  expect(derivedOperatorTracks.every(({ motionAxisConstraint, motionPathVariant }) =>
+    motionAxisConstraint === "horizontal" &&
+    (motionPathVariant === undefined || motionPathVariant === "direct")
+  )).toBe(true);
   expect(tracks.filter(({ lifecycle }) => lifecycle === "split")).toHaveLength(0);
   for (const entityId of ["source.product.x", "source.product.y"]) {
     const matching = tracks.filter(({ sourceEntityId }) =>

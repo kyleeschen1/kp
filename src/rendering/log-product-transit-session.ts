@@ -25,17 +25,19 @@ import {
   type KpCompiledSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
 import {
-  kpCanonicalFunctionWrapMotionProfile,
-  offsetKpFunctionWrapMotionWindow
-} from "../animation/function-wrap-motion-profile.ts";
-import {
   compileKpFunctionWrapInvocationGroup,
   createKpFunctionWrapInvocationGroupReception,
   type KpCompiledFunctionWrapInvocationGroup
 } from "../animation/function-wrap-invocation.ts";
 import {
+  compileKpBinaryLogProductHomomorphicHandoff
+} from "../animation/log-product-homomorphic-handoff.ts";
+import {
   applyKpNativeKatexFunctionWrapReception
 } from "./native-katex-function-wrap-reception.ts";
+import {
+  applyKpNativeKatexLogProductHomomorphicHandoff
+} from "./native-katex-log-product-homomorphic-handoff.ts";
 import {
   isKpCompiledLogProductOperation,
   kpCanonicalCompiledLogProductOperation,
@@ -44,23 +46,6 @@ import {
 
 const LOG_PRODUCT_ARGUMENT_CLEARANCE_IN_INK_HEIGHTS = 0.75;
 const BINARY_VISUAL_DISCOVERY_FAMILY_ID = "family.log-product.xy";
-const BINARY_FUNCTION_WRAP_OFFSET = 0.18;
-
-const BINARY_VISUAL_PHASES = Object.freeze({
-  sourceApplicationWithdrawal: Object.freeze({ start: 0.04, end: 0.16 }),
-  factorTransit: offsetKpFunctionWrapMotionWindow(
-    kpCanonicalFunctionWrapMotionProfile.materialTransit,
-    BINARY_FUNCTION_WRAP_OFFSET
-  ),
-  targetDelimiterIntroduction: offsetKpFunctionWrapMotionWindow(
-    kpCanonicalFunctionWrapMotionProfile.enclosureReception,
-    BINARY_FUNCTION_WRAP_OFFSET
-  ),
-  targetSyntaxIntroduction: offsetKpFunctionWrapMotionWindow(
-    kpCanonicalFunctionWrapMotionProfile.syntaxResolution,
-    BINARY_FUNCTION_WRAP_OFFSET
-  )
-});
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
   readonly clearanceInInkHeights?: number;
@@ -284,86 +269,31 @@ function createKpLogProductVisualDiscoveryTrackProjection(input: {
     group: compileKpLogProductFunctionWrapInvocationGroup(input.operation),
     direction: "forward"
   });
-  const sourceKindByOccurrence = new Map(
-    input.sourceEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
-  );
-  const targetKindByOccurrence = new Map(
-    input.targetEndpoint.nodes.map(({ occurrenceId, kind }) => [occurrenceId, kind])
+  const homomorphicHandoff = compileKpBinaryLogProductHomomorphicHandoff(
+    input.operation
   );
   return createKpNativeKatexTrackProjection({
     id: `track-projection.log-product.binary-visual-discovery.${input.semanticMotion.id}`,
     project(projectionInput) {
       const semanticTracks = semanticProjection.project(projectionInput);
-      const sourceOccurrenceByAtom = new Map(
-        projectionInput.source.atoms.map(({ id, semanticEntityId }) => [id, semanticEntityId])
-      );
-      const targetOccurrenceByAtom = new Map(
-        projectionInput.target.atoms.map(({ id, semanticEntityId }) => [id, semanticEntityId])
-      );
-      const timedTracks = Object.freeze(semanticTracks.map((track) => {
-        const sourceKind = track.sourceAtomId === undefined
-          ? undefined
-          : sourceKindByOccurrence.get(sourceOccurrenceByAtom.get(track.sourceAtomId) ?? "");
-        const targetKind = track.targetAtomId === undefined
-          ? undefined
-          : targetKindByOccurrence.get(targetOccurrenceByAtom.get(track.targetAtomId) ?? "");
-        const window = binaryVisualWindow(track.lifecycle, sourceKind, targetKind);
-        if (window === undefined) return track;
-        const sample = (progress: number) => sampleVisualWindow(progress, window);
-        return Object.freeze({
-          ...track,
-          sampleProgress: sample,
-          ...(track.lifecycle === "introduce" || track.lifecycle === "eliminate"
-            ? { sampleOpacityProgress: sample }
-            : {})
-        });
-      }));
+      const handoffTracks = applyKpNativeKatexLogProductHomomorphicHandoff({
+        tracks: semanticTracks,
+        source: projectionInput.source,
+        target: projectionInput.target,
+        plan: homomorphicHandoff
+      });
       return applyKpNativeKatexFunctionWrapReception({
-        tracks: timedTracks,
+        tracks: handoffTracks,
         source: projectionInput.source,
         target: projectionInput.target,
         plan: functionWrapReception,
-        entryWindow: BINARY_VISUAL_PHASES.targetDelimiterIntroduction,
+        entryWindow: homomorphicHandoff.enclosureHandoff.transitWindow,
+        presenceWindow:
+          homomorphicHandoff.enclosureHandoff.targetPresenceWindow,
         motion: "horizontal-squeeze"
       });
     }
   });
-}
-
-function binaryVisualWindow(
-  lifecycle: "persist" | "merge" | "split" | "introduce" | "eliminate" | "unsupported",
-  sourceKind: KpLogProductNativeEndpoint["nodes"][number]["kind"] | undefined,
-  targetKind: KpLogProductNativeEndpoint["nodes"][number]["kind"] | undefined
-): { readonly start: number; readonly end: number } | undefined {
-  if (
-    lifecycle === "eliminate" &&
-    (sourceKind === "function-operator" || sourceKind === "delimiter")
-  ) {
-    return BINARY_VISUAL_PHASES.sourceApplicationWithdrawal;
-  }
-  if (lifecycle === "persist" && targetKind === "symbol") {
-    return BINARY_VISUAL_PHASES.factorTransit;
-  }
-  if (lifecycle === "introduce" && targetKind === "delimiter") {
-    return BINARY_VISUAL_PHASES.targetDelimiterIntroduction;
-  }
-  if (lifecycle === "introduce" && targetKind === "function-operator") {
-    return BINARY_VISUAL_PHASES.targetSyntaxIntroduction;
-  }
-  if (lifecycle === "introduce" && targetKind === "plus-operator") {
-    return BINARY_VISUAL_PHASES.targetSyntaxIntroduction;
-  }
-  return undefined;
-}
-
-function sampleVisualWindow(
-  progress: number,
-  window: { readonly start: number; readonly end: number }
-): number {
-  if (progress <= window.start) return 0;
-  if (progress >= window.end) return 1;
-  const local = (progress - window.start) / (window.end - window.start);
-  return local * local * (3 - 2 * local);
 }
 
 function assertTransitInput(input: {

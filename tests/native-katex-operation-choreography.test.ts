@@ -11,6 +11,9 @@ import {
   createKpFunctionWrapReceptionPlan
 } from "../src/animation/function-wrap-reception.ts";
 import {
+  compileKpBinaryLogProductHomomorphicHandoff
+} from "../src/animation/log-product-homomorphic-handoff.ts";
+import {
   compileKpEquationOperationChoreography
 } from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
 import {
@@ -28,6 +31,9 @@ import {
   kpNativeKatexFunctionWrapReceptionStyle
 } from "../src/rendering/native-katex-function-wrap-reception.ts";
 import {
+  applyKpNativeKatexLogProductHomomorphicHandoff
+} from "../src/rendering/native-katex-log-product-homomorphic-handoff.ts";
+import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import type {
@@ -37,6 +43,9 @@ import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
+import {
+  kpCanonicalCompiledLogProductOperation
+} from "../src/semantic/log-product-transformation-compiler.ts";
 
 const animation = createKpFractionCompositionEquationAnimationAsset();
 
@@ -103,6 +112,7 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
       }]
     }),
     entryWindow: { start: 0.42, end: 0.7 },
+    presenceWindow: { start: 0.34, end: 0.42 },
     motion: "horizontal-squeeze"
   });
 
@@ -136,8 +146,67 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
       { startSize: [12, 18], endSize: [12, 18] }
     ]
   );
+  assert.equal(samples[0]![0]!.opacity, 1);
+  assert.equal(samples[0]![1]!.opacity, 1);
   assert.equal(samples[1]![0]!.opacity, 1);
   assert.equal(samples[1]![1]!.opacity, 1);
+});
+
+test("homomorphic operator successors emerge from one visible source carrier", () => {
+  const sourceOperator = atom(
+    "source",
+    "source.log.operator",
+    56,
+    20,
+    "natural-log"
+  );
+  const targetLeft = atom(
+    "target",
+    "target.left.log.operator",
+    24,
+    20,
+    "natural-log"
+  );
+  const targetRight = atom(
+    "target",
+    "target.right.log.operator",
+    96,
+    20,
+    "natural-log"
+  );
+  const tracks = applyKpNativeKatexLogProductHomomorphicHandoff({
+    source: scene("source", [sourceOperator]),
+    target: scene("target", [targetLeft, targetRight]),
+    tracks: [
+      eliminatedTrack(sourceOperator, 0),
+      introducedTrack(targetLeft, 1),
+      introducedTrack(targetRight, 2)
+    ],
+    plan: compileKpBinaryLogProductHomomorphicHandoff(
+      kpCanonicalCompiledLogProductOperation
+    )
+  });
+  const sourceTrack = tracks[0]!;
+  const leftTrack = tracks[1]!;
+  const rightTrack = tracks[2]!;
+
+  assert.deepEqual(sourceTrack.startRect, sourceTrack.endRect);
+  assert.deepEqual(leftTrack.startRect, sourceOperator.rect);
+  assert.deepEqual(rightTrack.startRect, sourceOperator.rect);
+  assert.equal(leftTrack.motionAxisConstraint, "horizontal");
+  assert.equal(rightTrack.motionAxisConstraint, "horizontal");
+  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.22, false);
+  assert.equal(reception[0]!.opacity, 1);
+  assert.equal(reception[1]!.opacity, 1);
+  assert.equal(reception[2]!.opacity, 1);
+  assert.deepEqual(reception[1]!.rect, sourceOperator.rect);
+  assert.deepEqual(reception[2]!.rect, sourceOperator.rect);
+  const fission = sampleKpNativeKatexSceneTrackFrames(tracks, 0.42, false);
+  assert.ok(center(fission[1]!.rect).x < center(sourceOperator.rect).x);
+  assert.ok(center(fission[2]!.rect).x > center(sourceOperator.rect).x);
+  assert.equal(fission[0]!.opacity, 0);
+  assert.equal(center(fission[1]!.rect).y, center(sourceOperator.rect).y);
+  assert.equal(center(fission[2]!.rect).y, center(sourceOperator.rect).y);
 });
 
 test("function-wrap adapter certifies reverse settlement and synchronized ownership", () => {
@@ -543,7 +612,8 @@ function atom(
   endpoint: "source" | "target",
   semanticEntityId: string,
   left: number,
-  top = 20
+  top = 20,
+  visualKey = semanticEntityId
 ): KpNativeKatexPaintAtomObservation {
   return {
     kind: "native-katex-paint-atom-observation",
@@ -553,7 +623,7 @@ function atom(
     semanticEntityId,
     presentationGroupId: `group.${semanticEntityId}`,
     paintKind: "glyph",
-    visualKey: semanticEntityId,
+    visualKey,
     sourceElement: {} as HTMLElement,
     rect: { left, top, width: 12, height: 18 },
     styleFingerprint: "test",

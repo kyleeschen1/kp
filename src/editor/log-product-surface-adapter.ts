@@ -177,19 +177,29 @@ async function prepareSurface(
       atom.id,
       atom.semanticEntityId
     ]));
+    const visualAtoms = new Map(
+      [...source.atoms, ...target.atoms].map((atom) => [atom.id, atom] as const)
+    );
     session.stage.dataset["kpLogProductTrackSummary"] = JSON.stringify(
-      session.transit.canonical.session.tracks.map((track) => ({
-        id: track.id,
-        lifecycle: track.lifecycle,
-        sourceEntityId: track.sourceAtomId === undefined
-          ? undefined
-          : sourceEntities.get(track.sourceAtomId),
-        targetEntityId: track.targetAtomId === undefined
-          ? undefined
-          : targetEntities.get(track.targetAtomId),
-        semanticMotionUnitId: track.semanticMotionUnitId,
-        timingGroupId: track.timingGroupId
-      }))
+      session.transit.canonical.session.tracks.map((track) => {
+        const visualAtom = visualAtoms.get(track.visualAtomId);
+        return {
+          id: track.id,
+          lifecycle: track.lifecycle,
+          sourceEntityId: track.sourceAtomId === undefined
+            ? undefined
+            : sourceEntities.get(track.sourceAtomId),
+          targetEntityId: track.targetAtomId === undefined
+            ? undefined
+            : targetEntities.get(track.targetAtomId),
+          visualEntityId: visualAtom?.semanticEntityId,
+          visualKey: visualAtom?.visualKey,
+          semanticMotionUnitId: track.semanticMotionUnitId,
+          timingGroupId: track.timingGroupId,
+          motionAxisConstraint: track.motionAxisConstraint,
+          motionPathVariant: track.motionPath?.variant
+        };
+      })
     );
     session.stage.dataset["kpLogProductStage"] = "ready";
     applyFrame(session, session.pendingState);

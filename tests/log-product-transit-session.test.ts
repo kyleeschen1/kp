@@ -13,6 +13,10 @@ import {
   isKpCompiledFunctionWrapInvocationGroup
 } from "../src/animation/function-wrap-invocation.ts";
 import {
+  compileKpBinaryLogProductHomomorphicHandoff,
+  measureKpBinaryLogProductCarrierCoverage
+} from "../src/animation/log-product-homomorphic-handoff.ts";
+import {
   kpCanonicalCompiledLogProductOperation,
   kpMultiFactorCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
@@ -67,6 +71,59 @@ test("log-product declares synchronized function-wrap enclosure roles", () => {
         ]
       }
     ]
+  );
+});
+
+test("binary homomorphic handoff keeps a visible ln carrier while structure changes", () => {
+  const handoff = compileKpBinaryLogProductHomomorphicHandoff(
+    kpCanonicalCompiledLogProductOperation
+  );
+
+  assert.equal(handoff.kind, "log-product-homomorphic-handoff");
+  assert.equal(handoff.maturity, "candidate");
+  assert.deepEqual(handoff.operatorHandoff, {
+    topology: "source-overlaps-derived-successors",
+    correspondenceRecordId: "correspondence.log-product.operator-fission",
+    sourceEntityId: "source.log.operator",
+    targetEntityIds: [
+      "target.left.log.operator",
+      "target.right.log.operator"
+    ],
+    targetPresenceWindow: { start: 0.14, end: 0.22 },
+    transitWindow: { start: 0.22, end: 0.72 },
+    sourceReleaseWindow: { start: 0.22, end: 0.34 }
+  });
+  assert.equal(handoff.payloadHandoff.topology, "ordered-continuity");
+  assert.equal(handoff.enclosureHandoff.reception, "horizontal-squeeze");
+  assert.equal(handoff.enclosureHandoff.sizeBehavior, "native-size");
+  assert.equal(
+    handoff.relationHandoff.synchronization,
+    "with-derived-operators"
+  );
+  assert.equal(
+    handoff.relationHandoff.receptionWindow.end,
+    handoff.operatorHandoff.transitWindow.end
+  );
+  assert.ok(
+    handoff.relationHandoff.receptionWindow.start >
+      handoff.operatorHandoff.transitWindow.start
+  );
+
+  for (let step = 0; step <= 100; step += 1) {
+    const coverage = measureKpBinaryLogProductCarrierCoverage(
+      handoff,
+      step / 100
+    );
+    assert.ok(
+      coverage.sourcePresence + coverage.targetPresence >= 1,
+      `ln carrier vacancy at ${step / 100}`
+    );
+  }
+  assert.throws(
+    () => compileKpBinaryLogProductHomomorphicHandoff(
+      kpMultiFactorCompiledLogProductOperation
+    ),
+    /binary visual exemplar/
   );
 });
 
