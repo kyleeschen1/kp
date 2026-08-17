@@ -87,15 +87,20 @@ Only this repository sequence is active:
    largest mixed-ownership modules, and retired only one exactly unreachable
    prototype. See
    `reviews/2026-08-16-post-convergence-infrastructure-compression-closeout.md`.
-7. **Multi-factor log-product human checkpoint:** current. Human review
-   approved the closure-coupled binary choreography on 2026-08-17. One shared
-   motif timing profile and one Native KaTeX optical profile now tune every
-   log-product cardinality; the three-factor caller is the active structural
-   pressure case before quotient promotion.
-8. **Core ownership convergence:** complete. The dependency-direction graph is
+7. **Multi-factor log-product human checkpoint:** complete. Human review
+   approved the binary and three-factor choreography on 2026-08-17. One shared
+   motif timing profile and one Native KaTeX optical profile tune every
+   log-product cardinality; connectors and derived operators now resolve as
+   one center-expanding syntax cohort.
+8. **Log-quotient structural pressure:** next. Apply the approved semantic
+   phase grammar to the existing difference-to-quotient caller while retaining
+   its distinct fraction construction and fusion choreography. Stop for human
+   visual review before promoting a reusable homomorphic-decomposition recipe
+   or beginning another migration wave.
+9. **Core ownership convergence:** complete. The dependency-direction graph is
    enforced with zero exceptions. See
    `reviews/2026-08-16-kp-core-ownership-convergence-closeout.md`.
-9. **Bundle and application isolation:** complete. Selected-experience closure,
+10. **Bundle and application isolation:** complete. Selected-experience closure,
    place-value headroom, dedicated Studio and Public Web builds, production
    development erasure, measured algebra/CSS splits, and five enforced neutral
    facades are closed. See
@@ -353,12 +358,15 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   target. See
   `decisions/2026-08-15-kp-exhaustive-symbolic-equation-convergence.md` and
   `reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`.
-- The log-product semantic and multi-factor checkpoint is technically complete,
-  but its wrapper-splitting choreography is not approved. Run one bounded
-  dissolve-spread-wrap visual discovery on the binary caller before migration
-  wave A; quotient becomes the contrasting caller only after binary approval.
+- The binary and three-factor log-product choreography is approved. Persistent
+  factors redistribute directly, target enclosures receive them through the
+  canonical outside-in function-wrap treatment, and derived `ln` operators
+  and connectors expand from fixed centers on one shared syntax window. The
+  log-quotient caller is now the contrasting structural pressure case; do not
+  promote a reusable homomorphic-decomposition recipe before its checkpoint.
   See
-  `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md`.
+  `decisions/2026-08-16-kp-homomorphic-decomposition-visual-discovery.md` and
+  `reviews/2026-08-17-post-log-product-approval-next-step-review.md`.
 - The eleven-step iteration-architecture sequence supplied the completed
   narrow core. Its successor infrastructure-compression run is complete: it
   reduced generation repairs and compiler closure, made selected capability

@@ -2,10 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-17
-Current Next Action: review the three-factor log-product pressure caller after
-the binary closure-coupled choreography passed its human checkpoint. Core
-ownership and bundle/application isolation are complete. Do not promote the
-visual policy to quotient before this cardinality checkpoint passes.
+Current Next Action: pressure the existing log-quotient caller with the
+approved homomorphic-decomposition phase grammar while preserving its distinct
+fraction/fusion choreography. Core ownership, bundle/application isolation,
+and the binary/three-factor log-product checkpoint are complete. Stop for
+human review before recipe promotion or another migration wave.
 
 ## Goal
 
@@ -151,17 +152,29 @@ Its causal timing is now owned by one log-product motif profile, while its
 measured squeeze distance and operator point scale are owned by one Native
 KaTeX optical profile. Every log-product cardinality consumes those same
 profiles, so later motif tuning updates all callers without moving geometry
-into semantic authority. The existing `ln(xyz)` caller is the current visual
-checkpoint: it adds a third ordered factor, wrapper branch, derived operator,
-and connector without adding a timing table, path rule, or renderer branch.
+into semantic authority. The existing `ln(xyz)` caller supplied the structural
+pressure case: it added a third ordered factor, wrapper branch, derived
+operator, and connector without adding a timing table, path rule, or renderer
+branch.
+
+Human review approved the three-factor pressure caller and the corrected shared
+syntax cohort on 2026-08-17. In every product cardinality, derived `ln`
+operators and `+` connectors now expand from fixed centers on the exact same
+presence and expansion windows. This closes cardinality pressure without a
+caller-owned timing table or renderer branch. The existing log-quotient caller
+is next because it changes structural direction: two source applications and
+a subtraction relation fuse into one target application containing a quotient.
+Reuse the approved semantic phase vocabulary and canonical function wrapping,
+but retain fraction construction and fusion timing as quotient-owned policy
+until human review proves a common boundary.
 
 The completed overnight reorder made one missing boundary explicit: motif
 names are not suggestions. Recipes invoke nominal typed motifs with semantic
 role bindings; a shared motif compiler and renderer adapter supply the actual
 motion. Its 26 independently reversible slices completed, including supported
 surface disposition, governed authoring metadata, and the cross-domain upper
-host/runtime proof. The current log-product look remains pending review and was
-not promoted by the completed successor infrastructure run. The completed
+host/runtime proof. That run correctly left the log-product look pending; the
+later binary and three-factor human reviews have now approved it. The completed
 order is owned by
 `../reviews/2026-08-16-equation-narrow-core-overnight-reorder-proposal.md`; the
 successor closeout is
