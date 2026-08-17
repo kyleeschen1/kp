@@ -199,7 +199,8 @@
     {
       "id": "s25",
       "title": "enforce-narrow-framework-neutral-entrypoints",
-      "status": "planned"
+      "summary": "Established explicit semantic, runtime, renderer, authoring, and publication facades. A transitive graph gate now rejects undeclared public modules, unsupported public targets, host/product reachability, forbidden ownership zones, and undeclared packages; no Svelte or product lifecycle enters the public closures.",
+      "status": "complete"
     },
     {
       "id": "s26",

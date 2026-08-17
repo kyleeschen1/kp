@@ -51,12 +51,19 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     frameworkBoundary: "framework-neutral",
     currentBoundary: "framework-neutral-library",
     requiredBoundary: "framework-neutral-library",
-    entryModules: ["src/kernel/public-api.ts"],
+    entryModules: [
+      "src/kernel/public-api.ts",
+      "src/public/semantic.ts",
+      "src/public/runtime.ts",
+      "src/public/renderer.ts",
+      "src/public/authoring.ts",
+      "src/public/publication.ts"
+    ],
     hostDocuments: [],
     currentBuildConfigs: [],
     requiredBuildConfigs: [],
     rationale:
-      "The kernel exposes portable state and routing contracts and owns no page lifecycle."
+      "The kernel and narrow public facades expose portable contracts and own no page lifecycle."
   },
   {
     id: "entry-owner.internal-studio",

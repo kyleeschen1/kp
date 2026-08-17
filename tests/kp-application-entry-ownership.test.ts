@@ -94,7 +94,14 @@ test("public and development entry roots cannot masquerade as kernel or Studio",
   const development = findKpApplicationEntryOwner(
     "entry-owner.development-tooling"
   );
-  assert.deepEqual(kernel.entryModules, ["src/kernel/public-api.ts"]);
+  assert.deepEqual(kernel.entryModules, [
+    "src/kernel/public-api.ts",
+    "src/public/semantic.ts",
+    "src/public/runtime.ts",
+    "src/public/renderer.ts",
+    "src/public/authoring.ts",
+    "src/public/publication.ts"
+  ]);
   assert.deepEqual(studio.entryModules, [
     "src/internal-studio/internal-studio-entry.ts"
   ]);
