@@ -5,6 +5,13 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "Approved synchronized syntax-resolution cohort; connector timing is no longer provisional.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/log-product-homomorphic-handoff.ts",
+      "summary": "Approved two- and three-factor log-product choreography implementation reviewed at this checkpoint."
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run verify:impact -- --path src/animation/log-product-homomorphic-handoff.ts",

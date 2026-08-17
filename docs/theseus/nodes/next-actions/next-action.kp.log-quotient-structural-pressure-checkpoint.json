@@ -5,6 +5,13 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "Approved quotient structural-pressure choreography; its exemplar timings and Native KaTeX treatment are no longer provisional.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/log-quotient-homomorphic-fusion.ts",
+      "summary": "Approved log-quotient structural-pressure choreography implementation reviewed at this checkpoint."
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:log-quotient",

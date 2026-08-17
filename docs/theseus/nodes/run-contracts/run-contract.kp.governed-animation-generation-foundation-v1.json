@@ -1,0 +1,200 @@
+{
+  "id": "run-contract.kp.governed-animation-generation-foundation-v1",
+  "kind": "run-contract",
+  "title": "Governed animation generation foundation",
+  "status": "superseded",
+  "summary": "Superseded before execution because the compatibility help omitted required typed-autonomy fields; no slice opened.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact",
+    "npm run test:equation-generation-boundary",
+    "npm run test:semantic-motion-diagnostics",
+    "npm run test:svelte-catalogue-shell",
+    "npm run test:dev-toolbar",
+    "npm run build:internal-studio",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run visual:animation-catalogue",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Typed capability plan generated coverage evidence and minimal Coverage view.",
+    "Bounded homomorphic crossover promotion with no approved visual delta.",
+    "Governed equation transform-series request validator compiler sampler CLI corpus and typed repairs.",
+    "Model-neutral natural-language planning port without provider integration.",
+    "Shared request and coverage seams for matrix code Graph2D and Graph3D with domain-owned semantics.",
+    "URL-backed theme and settings global development dock and exact-state Review repair."
+  ],
+  "disallowedWork": [
+    "Full CAS theorem prover arbitrary-code executor or live-model provider integration.",
+    "Universal parser semantic operation set renderer motif registry or geometry across domains.",
+    "Public layout curriculum SRS broad tutoring or complete fraction root matrix code Graph2D or Graph3D backlog.",
+    "Any change to approved log-product or log-quotient choreography timing geometry cardinality fraction construction or optics.",
+    "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
+  ],
+  "goal": "Build an evidence-derived transformation coverage view and first governed equation transform-series compiler while preserving typed gaps and domain-local matrix code Graph2D and Graph3D frontends.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Baseline-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Capability-plan-schema",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Equation-capability-order",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Cross-domain-capability-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Asset-evidence-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Compiler-evidence-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Derived-readiness-status",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Generated-coverage-artifact",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Homomorphic-causal-phases",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Homomorphic-recipe-registration",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Homomorphic-authoring-exposure",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Homomorphic-generation-benchmark",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Cross-domain-generation-envelope",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Equation-transform-series-request",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Latex-endpoint-normalization",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Adjacency-segmentation-law",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Declaration-driven-intent-resolver",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Deterministic-series-runtime",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Series-repair-taxonomy",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Tool-neutral-series-CLI",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Equation-series-corpus",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Natural-language-planner-port",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Domain-frontend-gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Transformation-coverage-view",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "URL-view-and-settings-state",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Global-development-dock",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Review-collision-and-exact-state",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Coverage-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Post-approval-release-closeout",
+      "status": "planned"
+    }
+  ]
+}
