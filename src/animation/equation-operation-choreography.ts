@@ -87,8 +87,19 @@ export interface KpHomomorphicFusionChoreography
   readonly maturity: "candidate";
   readonly canonicalShape: "H(a) o H(b) -> H(a star b)";
   readonly targetFunctionWrap: KpCompiledFunctionWrapInvocationGroup;
+  readonly targetFunctionReception: KpFunctionWrapReceptionPlan;
+  readonly targetFunctionReceptionWindow: KpEquationChoreographyWindow;
   readonly operatorApplicationFusion: KpHomomorphicFusionRelation;
   readonly operatorGlyphFusion: KpHomomorphicFusionRelation;
+  readonly operatorVisualHandoff: {
+    readonly topology: "matched-dissolve-to-derived-successor";
+    readonly sourceExit: "collapse-to-point";
+    readonly targetEntry: "expand-from-point";
+    readonly sourceContractionWindow: KpEquationChoreographyWindow;
+    readonly sourceReleaseWindow: KpEquationChoreographyWindow;
+    readonly targetPresenceWindow: KpEquationChoreographyWindow;
+    readonly targetExpansionWindow: KpEquationChoreographyWindow;
+  };
   readonly argumentTransfers: readonly [
     KpHomomorphicFusionArgumentTransfer,
     KpHomomorphicFusionArgumentTransfer
@@ -107,7 +118,6 @@ export interface KpHomomorphicFusionChoreography
     KpHomomorphicFusionStructuralEntry,
     ...KpHomomorphicFusionStructuralEntry[]
   ];
-  readonly operatorFusionWindow: KpEquationChoreographyWindow;
   readonly argumentTransferWindow: KpEquationChoreographyWindow;
 }
 
@@ -177,7 +187,12 @@ export function createKpHomomorphicFusionChoreography(input: {
       readonly entryWindow: KpEquationChoreographyWindow;
     }[]
   ];
-  readonly operatorFusionWindow: KpEquationChoreographyWindow;
+  readonly operatorVisualHandoff: {
+    readonly sourceContractionWindow: KpEquationChoreographyWindow;
+    readonly sourceReleaseWindow: KpEquationChoreographyWindow;
+    readonly targetPresenceWindow: KpEquationChoreographyWindow;
+    readonly targetExpansionWindow: KpEquationChoreographyWindow;
+  };
   readonly argumentTransferWindow: KpEquationChoreographyWindow;
   readonly connectorRetirementWindow: KpEquationChoreographyWindow;
   readonly sourceRetirementWindow: KpEquationChoreographyWindow;
@@ -256,7 +271,22 @@ export function createKpHomomorphicFusionChoreography(input: {
       entryWindow: Object.freeze({ ...entry.entryWindow })
     });
   }) as unknown as KpHomomorphicFusionChoreography["targetStructureEntries"];
-  assertUnitWindow(input.operatorFusionWindow, "Homomorphic operator fusion");
+  assertUnitWindow(
+    input.operatorVisualHandoff.sourceContractionWindow,
+    "Homomorphic source-operator contraction"
+  );
+  assertUnitWindow(
+    input.operatorVisualHandoff.sourceReleaseWindow,
+    "Homomorphic source-operator release"
+  );
+  assertUnitWindow(
+    input.operatorVisualHandoff.targetPresenceWindow,
+    "Homomorphic target-operator presence"
+  );
+  assertUnitWindow(
+    input.operatorVisualHandoff.targetExpansionWindow,
+    "Homomorphic target-operator expansion"
+  );
   assertUnitWindow(input.argumentTransferWindow, "Homomorphic argument transfer");
   assertUnitWindow(input.connectorRetirementWindow, "Homomorphic connector retirement");
   assertUnitWindow(input.sourceRetirementWindow, "Homomorphic source retirement");
@@ -268,25 +298,55 @@ export function createKpHomomorphicFusionChoreography(input: {
       "Homomorphic source enclosures must retire before the connector."
     );
   }
-  const firstMaterialTransfer = Math.min(
-    input.operatorFusionWindow.start,
-    input.argumentTransferWindow.start
-  );
+  const firstMaterialTransfer = input.argumentTransferWindow.start;
   if (input.connectorRetirementWindow.end > firstMaterialTransfer) {
     throw new Error(
       "Homomorphic source connector must retire before material transfers."
     );
   }
-  const lastMaterialSettlement = Math.max(
-    input.operatorFusionWindow.end,
-    input.argumentTransferWindow.end
-  );
+  const lastMaterialSettlement = input.argumentTransferWindow.end;
   const earliestTargetEntry = Math.min(...input.targetStructureEntries.map(
     ({ entryWindow }) => entryWindow.start
   ));
   if (lastMaterialSettlement > earliestTargetEntry) {
     throw new Error(
       "Homomorphic target structure must enter after material transfers settle."
+    );
+  }
+  const reception = createKpFunctionWrapInvocationGroupReception({
+    group: input.targetFunctionWrap,
+    direction: input.direction
+  });
+  const enclosureIds = reception.branches.flatMap(({ enclosureEntityRoles }) =>
+    enclosureEntityRoles.map(({ entityId }) => entityId)
+  );
+  const functionEntries = targetStructureEntries.filter(({ targetEntityIds }) =>
+    targetEntityIds.length === enclosureIds.length &&
+    enclosureIds.every((entityId) => targetEntityIds.includes(entityId))
+  );
+  if (functionEntries.length !== 1) {
+    throw new Error(
+      "Homomorphic fusion requires one target entry for its function enclosures."
+    );
+  }
+  const functionEntryWindow = functionEntries[0]!.entryWindow;
+  const operatorHandoff = input.operatorVisualHandoff;
+  if (
+    operatorHandoff.sourceContractionWindow.start >
+      operatorHandoff.sourceReleaseWindow.start ||
+    operatorHandoff.sourceContractionWindow.end >
+      operatorHandoff.sourceReleaseWindow.end ||
+    operatorHandoff.sourceReleaseWindow.end >
+      operatorHandoff.targetPresenceWindow.start ||
+    operatorHandoff.targetPresenceWindow.start >
+      operatorHandoff.targetExpansionWindow.start ||
+    operatorHandoff.targetPresenceWindow.end >
+      operatorHandoff.targetExpansionWindow.end ||
+    operatorHandoff.targetPresenceWindow.start < functionEntryWindow.start ||
+    operatorHandoff.targetExpansionWindow.end > functionEntryWindow.end
+  ) {
+    throw new Error(
+      "Homomorphic operators must dissolve source paint before closure-coupled target expansion."
     );
   }
   if (
@@ -337,11 +397,30 @@ export function createKpHomomorphicFusionChoreography(input: {
     maturity: "candidate" as const,
     canonicalShape: "H(a) o H(b) -> H(a star b)" as const,
     targetFunctionWrap: input.targetFunctionWrap,
+    targetFunctionReception: reception,
+    targetFunctionReceptionWindow: functionEntryWindow,
     id: `operation-choreography.${input.transformation.id}.homomorphic-fusion.${input.direction}`,
     transformationId: input.transformation.id,
     direction: input.direction,
     operatorApplicationFusion: relationProjection(application),
     operatorGlyphFusion: relationProjection(operator),
+    operatorVisualHandoff: Object.freeze({
+      topology: "matched-dissolve-to-derived-successor" as const,
+      sourceExit: "collapse-to-point" as const,
+      targetEntry: "expand-from-point" as const,
+      sourceContractionWindow: Object.freeze({
+        ...operatorHandoff.sourceContractionWindow
+      }),
+      sourceReleaseWindow: Object.freeze({
+        ...operatorHandoff.sourceReleaseWindow
+      }),
+      targetPresenceWindow: Object.freeze({
+        ...operatorHandoff.targetPresenceWindow
+      }),
+      targetExpansionWindow: Object.freeze({
+        ...operatorHandoff.targetExpansionWindow
+      })
+    }),
     argumentTransfers,
     connectorDerivation: Object.freeze({
       ...relationProjection(connector),
@@ -357,7 +436,6 @@ export function createKpHomomorphicFusionChoreography(input: {
       exitWindow: Object.freeze({ ...input.sourceRetirementWindow })
     }),
     targetStructureEntries,
-    operatorFusionWindow: Object.freeze({ ...input.operatorFusionWindow }),
     argumentTransferWindow: Object.freeze({ ...input.argumentTransferWindow })
   }) as KpHomomorphicFusionChoreography;
 }

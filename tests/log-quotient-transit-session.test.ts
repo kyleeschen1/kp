@@ -13,16 +13,13 @@ test("compiled quotient correspondence projects complete native paint lineage", 
   const relations = projectKpLogQuotientNativePaintRelations(
     kpCanonicalCompiledLogQuotientOperation
   );
-  assert.equal(relations.length, 3);
-  assert.ok(relations.some(({ relation, sourceEntityIds, targetEntityIds }) =>
-    relation === "merge" &&
-    sourceEntityIds.includes("source.left.log.operator") &&
-    sourceEntityIds.includes("source.right.log.operator") &&
+  assert.equal(relations.length, 2);
+  assert.deepEqual(relations.map(({ relation }) => relation), ["persist", "persist"]);
+  // Semantic operator fan-in remains compiler truth, but neither source glyph
+  // falsely survives as the one derived target glyph in native paint.
+  assert.equal(relations.some(({ sourceEntityIds, targetEntityIds }) =>
+    sourceEntityIds.some((entityId) => entityId.endsWith("log.operator")) ||
     targetEntityIds.includes("target.log.operator")
-  ));
-  // Native entry/removal stays structural choreography, not fake glyph travel.
-  assert.equal(relations.some(({ relation }) =>
-    relation !== "persist" && relation !== "merge" && relation !== "split"
   ), false);
   assert.equal(relations.some(({ sourceEntityIds, targetEntityIds }) =>
     sourceEntityIds.includes("source.subtract") &&

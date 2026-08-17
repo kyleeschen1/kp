@@ -5,7 +5,6 @@ import {
   createKpHomomorphicFusionChoreography
 } from "../src/animation/equation-operation-choreography.ts";
 import {
-  kpCanonicalLogQuotientFunctionWrapInvocationGroup,
   kpCanonicalLogQuotientHomomorphicFusionChoreography
 } from "../src/animation/log-quotient-homomorphic-fusion.ts";
 import {
@@ -14,6 +13,9 @@ import {
 import {
   applyKpNativeKatexOperationChoreography
 } from "../src/rendering/native-katex-operation-choreography.ts";
+import {
+  applyKpNativeKatexLogQuotientHomomorphicFusion
+} from "../src/rendering/native-katex-log-quotient-homomorphic-fusion.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "../src/rendering/native-katex-scene-compositor.ts";
@@ -36,6 +38,11 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
     true
   );
   assert.equal(choreography.targetFunctionWrap.motifId, "motif.function-wrap.v1");
+  assert.equal(choreography.targetFunctionReception.motifId, "motif.function-wrap.v1");
+  assert.equal(
+    choreography.operatorVisualHandoff.topology,
+    "matched-dissolve-to-derived-successor"
+  );
   assert.deepEqual(choreography.targetFunctionWrap.branches.map((branch) => ({
     sourceArgumentEntityIds: branch.sourceArgumentEntityIds,
     targetArgumentEntityIds: branch.targetArgumentEntityIds,
@@ -81,22 +88,29 @@ test("quotient binds the candidate homomorphic-fusion grammar to exact lineage",
   );
   assert.ok(
     choreography.connectorDerivation.exitWindow.end <=
-      Math.min(
-        choreography.operatorFusionWindow.start,
-        choreography.argumentTransferWindow.start
-      )
+      choreography.argumentTransferWindow.start
   );
   assert.ok(
-    Math.max(
-      choreography.operatorFusionWindow.end,
-      choreography.argumentTransferWindow.end
-    ) <= Math.min(...choreography.targetStructureEntries.map(
+    choreography.argumentTransferWindow.end <= Math.min(
+      ...choreography.targetStructureEntries.map(
       ({ entryWindow }) => entryWindow.start
-    ))
+      )
+    )
+  );
+  assert.ok(
+    choreography.operatorVisualHandoff.sourceReleaseWindow.end <=
+      choreography.operatorVisualHandoff.targetPresenceWindow.start
+  );
+  assert.deepEqual(
+    choreography.targetFunctionReceptionWindow,
+    choreography.targetStructureEntries.find(({ targetEntityIds }) =>
+      targetEntityIds.includes("target.log.open") &&
+      targetEntityIds.includes("target.log.close")
+    )?.entryWindow
   );
 });
 
-test("homomorphic choreography routes arguments but keeps operator fusion direct", () => {
+test("homomorphic choreography routes arguments and dissolves operators in place", () => {
   const source = scene("source", [
     atom("source", "source.left.log.operator", 0, 30),
     atom("source", "source.right.log.operator", 120, 30),
@@ -125,8 +139,9 @@ test("homomorphic choreography routes arguments but keeps operator fusion direct
     entry
   ]));
   const tracks: KpNativeKatexPaintMeasuredSceneTrack[] = [
-    mergeTrack(sourceByEntity.get("source.left.log.operator")!, targetByEntity.get("target.log.operator")!, 0),
-    mergeTrack(sourceByEntity.get("source.right.log.operator")!, targetByEntity.get("target.log.operator")!, 1),
+    eliminateTrack(sourceByEntity.get("source.left.log.operator")!, 0),
+    eliminateTrack(sourceByEntity.get("source.right.log.operator")!, 1),
+    introduceTrack(targetByEntity.get("target.log.operator")!, 0),
     persistTrack(sourceByEntity.get("source.left.argument.x")!, targetByEntity.get("target.numerator.x")!, 0),
     persistTrack(sourceByEntity.get("source.right.argument.y")!, targetByEntity.get("target.denominator.y")!, 1),
     ...[
@@ -140,11 +155,17 @@ test("homomorphic choreography routes arguments but keeps operator fusion direct
     introduceTrack(targetByEntity.get("target.log.close")!, 1),
     introduceTrack(targetByEntity.get("target.quotient.bar")!, 2)
   ];
-  const routed = applyKpNativeKatexOperationChoreography({
-    tracks,
+  const choreography = kpCanonicalLogQuotientHomomorphicFusionChoreography;
+  const routed = applyKpNativeKatexLogQuotientHomomorphicFusion({
+    tracks: applyKpNativeKatexOperationChoreography({
+      tracks,
+      source,
+      target,
+      choreography
+    }),
     source,
     target,
-    choreography: kpCanonicalLogQuotientHomomorphicFusionChoreography
+    plan: choreography
   });
   const bySourceEntity = new Map(routed.flatMap((track) => {
     const entityId = track.sourceAtomId === undefined
@@ -161,6 +182,18 @@ test("homomorphic choreography routes arguments but keeps operator fusion direct
     bySourceEntity.get("source.left.log.operator")?.motionAxisConstraint,
     undefined
   );
+  assert.deepEqual(
+    bySourceEntity.get("source.left.log.operator")?.startRect,
+    bySourceEntity.get("source.left.log.operator")?.endRect
+  );
+  assert.equal(
+    bySourceEntity.get("source.left.log.operator")?.sampleMaterialScale?.(0.14),
+    1
+  );
+  assert.ok(Math.abs(
+    (bySourceEntity.get("source.left.log.operator")?.sampleMaterialScale?.(0.24) ?? 0) -
+      0.04
+  ) < Number.EPSILON);
   assert.equal(
     bySourceEntity.get("source.left.argument.x")?.motionPath?.variant,
     "arc-above"
@@ -176,52 +209,31 @@ test("homomorphic choreography routes arguments but keeps operator fusion direct
   )!;
   assert.equal(bar.startRect.width, 1);
   assert.equal(bar.endRect.width, 28);
+  const targetOperator = routed.find((track) =>
+    track.targetAtomId === targetByEntity.get("target.log.operator")!.id
+  )!;
+  assert.deepEqual(targetOperator.startRect, targetOperator.endRect);
+  assert.equal(targetOperator.sampleMaterialScale?.(0.55), 0.04);
+  assert.equal(targetOperator.sampleMaterialScale?.(0.66), 1);
+  const targetOpen = routed.find((track) =>
+    track.targetAtomId === targetByEntity.get("target.log.open")!.id
+  )!;
+  const targetClose = routed.find((track) =>
+    track.targetAtomId === targetByEntity.get("target.log.close")!.id
+  )!;
+  assert.ok(targetOpen.startRect.left < targetOpen.endRect.left);
+  assert.ok(targetClose.startRect.left > targetClose.endRect.left);
+  assert.equal(targetOpen.motionAxisConstraint, "horizontal");
+  assert.equal(targetClose.motionAxisConstraint, "horizontal");
 });
 
 test("homomorphic mint rejects a connector-to-structure identity", () => {
   assert.throws(() => createKpHomomorphicFusionChoreography({
-    transformation:
-      kpCanonicalCompiledLogQuotientOperation.transformation,
-    direction: "forward",
-    targetFunctionWrap:
-      kpCanonicalLogQuotientFunctionWrapInvocationGroup,
-    operatorApplicationFusionRecordId:
-      "correspondence.log-quotient.application-fusion",
-    operatorGlyphFusionRecordId:
-      "correspondence.log-quotient.operator-fusion",
-    argumentTransfers: [
-      {
-        id: "left",
-        role: "left",
-        relationRecordId: "correspondence.log-quotient.x-to-numerator",
-        route: "arc-above"
-      },
-      {
-        id: "right",
-        role: "right",
-        relationRecordId: "correspondence.log-quotient.y-to-denominator",
-        route: "arc-below"
-      }
-    ],
-    connectorDerivationRecordId:
-      "correspondence.log-quotient.difference-derives-quotient",
+    ...canonicalHomomorphicInput(),
     forbiddenConnectorIdentityPairs: [{
       sourceEntityId: "source.subtract",
       targetEntityId: "target.quotient"
-    }],
-    sourceEnclosureRetirementRecordId:
-      "correspondence.log-quotient.retire-source-enclosures",
-    targetStructureEntries: [
-      {
-        relationRecordId:
-          "correspondence.log-quotient.introduce-fraction-bar",
-        entryWindow: { start: 0.72, end: 0.9 }
-      }
-    ],
-    operatorFusionWindow: { start: 0.1, end: 0.6 },
-    argumentTransferWindow: { start: 0.1, end: 0.7 },
-    connectorRetirementWindow: { start: 0.08, end: 0.09 },
-    sourceRetirementWindow: { start: 0.01, end: 0.08 }
+    }]
   }), /cannot preserve identity as target structure/);
 });
 
@@ -245,7 +257,7 @@ test("homomorphic mint rejects copied function-wrap claims", () => {
 test("homomorphic mint clears the connector before moving material", () => {
   assert.throws(() => createKpHomomorphicFusionChoreography({
     ...canonicalHomomorphicInput(),
-    connectorRetirementWindow: { start: 0.1, end: 0.2 }
+    connectorRetirementWindow: { start: 0.13, end: 0.2 }
   }), /connector must retire before material transfers/);
 });
 
@@ -256,7 +268,7 @@ test("homomorphic mint settles material before target structure enters", () => {
     targetStructureEntries: [
       {
         ...input.targetStructureEntries[0],
-        entryWindow: { start: 0.6, end: 0.82 }
+        entryWindow: { start: 0.4, end: 0.6 }
       },
       input.targetStructureEntries[1]!
     ]
@@ -304,7 +316,7 @@ function canonicalHomomorphicInput():
         entryWindow: base.targetStructureEntries[1]!.entryWindow
       }
     ],
-    operatorFusionWindow: base.operatorFusionWindow,
+    operatorVisualHandoff: base.operatorVisualHandoff,
     argumentTransferWindow: base.argumentTransferWindow,
     connectorRetirementWindow: base.connectorDerivation.exitWindow,
     sourceRetirementWindow:
@@ -354,14 +366,6 @@ function atom(
     zOrder: 0,
     fontRevision: 1
   };
-}
-
-function mergeTrack(
-  source: KpNativeKatexPaintAtomObservation,
-  target: KpNativeKatexPaintAtomObservation,
-  index: number
-): KpNativeKatexPaintMeasuredSceneTrack {
-  return baseTrack("merge", source, target, index, 1, 1);
 }
 
 function persistTrack(

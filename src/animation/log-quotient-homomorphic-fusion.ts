@@ -9,6 +9,27 @@ import {
   compileKpFunctionWrapInvocationGroup
 } from "./function-wrap-invocation.ts";
 
+function window(start: number, end: number) {
+  return Object.freeze({ start, end });
+}
+
+// Quotient owns its fraction and fusion pacing while consuming the same
+// causal grammar as product decomposition.
+export const kpLogQuotientHomomorphicFusionTiming = Object.freeze({
+  id: "timing.log-quotient.homomorphic-fusion.v1" as const,
+  sourceEnclosureRelease: window(0.04, 0.12),
+  sourceConnectorRelease: window(0.12, 0.18),
+  sourceOperatorContraction: window(0.14, 0.24),
+  sourceOperatorRelease: window(0.18, 0.28),
+  argumentTransfer: window(0.18, 0.48),
+  fractionRuleEntry: window(0.48, 0.58),
+  targetEnclosureReception: window(0.5, 0.66),
+  // Match the approved product rhythm: derived syntax resolves as one late
+  // cohort instead of leaving the logarithm operator absent for a new beat.
+  targetOperatorPresence: window(0.54, 0.62),
+  targetOperatorExpansion: window(0.55, 0.66)
+});
+
 export const kpCanonicalLogQuotientFunctionWrapInvocationGroup =
   compileKpFunctionWrapInvocationGroup({
     id: kpCanonicalCompiledLogQuotientOperation.transformation.id,
@@ -75,18 +96,31 @@ export function createKpCanonicalLogQuotientHomomorphicFusionChoreography(
       {
         relationRecordId:
           "correspondence.log-quotient.introduce-fraction-bar",
-        entryWindow: { start: 0.72, end: 0.86 }
+        entryWindow: kpLogQuotientHomomorphicFusionTiming.fractionRuleEntry
       },
       {
         relationRecordId:
           "correspondence.log-quotient.introduce-target-enclosure",
-        entryWindow: { start: 0.78, end: 0.94 }
+        entryWindow:
+          kpLogQuotientHomomorphicFusionTiming.targetEnclosureReception
       }
     ],
-    operatorFusionWindow: { start: 0.18, end: 0.7 },
-    argumentTransferWindow: { start: 0.16, end: 0.7 },
-    connectorRetirementWindow: { start: 0.1, end: 0.15 },
-    sourceRetirementWindow: { start: 0.03, end: 0.1 }
+    operatorVisualHandoff: {
+      sourceContractionWindow:
+        kpLogQuotientHomomorphicFusionTiming.sourceOperatorContraction,
+      sourceReleaseWindow:
+        kpLogQuotientHomomorphicFusionTiming.sourceOperatorRelease,
+      targetPresenceWindow:
+        kpLogQuotientHomomorphicFusionTiming.targetOperatorPresence,
+      targetExpansionWindow:
+        kpLogQuotientHomomorphicFusionTiming.targetOperatorExpansion
+    },
+    argumentTransferWindow:
+      kpLogQuotientHomomorphicFusionTiming.argumentTransfer,
+    connectorRetirementWindow:
+      kpLogQuotientHomomorphicFusionTiming.sourceConnectorRelease,
+    sourceRetirementWindow:
+      kpLogQuotientHomomorphicFusionTiming.sourceEnclosureRelease
   });
 }
 

@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.log-quotient-structural-pressure-checkpoint",
+  "kind": "next-action",
+  "title": "Review log-quotient structural pressure choreography",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "candidate semantic and renderer contract",
+      "checkedAt": "2026-08-17T19:23:06.799Z"
+    },
+    {
+      "command": "npm run test:browser:log-quotient",
+      "status": "passed",
+      "scope": "Chromium lifecycle and measured geometry",
+      "checkedAt": "2026-08-17T19:23:08.006Z"
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "deterministic human-review contact sheet",
+      "checkedAt": "2026-08-17T19:23:08.949Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "equation preservation boundary",
+      "checkedAt": "2026-08-17T19:23:09.898Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript and Svelte boundary",
+      "checkedAt": "2026-08-17T19:23:10.901Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and compiler authority boundaries",
+      "checkedAt": "2026-08-17T19:23:11.873Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "approved canonical motif preservation",
+      "checkedAt": "2026-08-17T19:24:03.238Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Transferred the approved homomorphic matched-dissolve, payload continuity, fraction construction, and function-wrap reception grammar to the quotient exemplar; deterministic checks pass and promotion awaits human motion review."
+  }
+}

@@ -8,9 +8,15 @@ import {
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  createKpNativeKatexTrackProjection
+} from "./native-katex-track-projection.ts";
+import {
+  applyKpNativeKatexLogQuotientHomomorphicFusion
+} from "./native-katex-log-quotient-homomorphic-fusion.ts";
 import type {
-  KpEquationOperationChoreography
-} from "./native-katex-operation-choreography.ts";
+  KpHomomorphicFusionChoreography
+} from "../animation/equation-operation-choreography.ts";
 import type {
   KpLogQuotientNativeEndpoint
 } from "./log-quotient-native-endpoints.ts";
@@ -47,7 +53,6 @@ export function projectKpLogQuotientNativePaintRelations(
     throw new Error("Log-quotient paint relations require correspondence.");
   }
   const paintBearingRecordIds = new Set([
-    "correspondence.log-quotient.operator-fusion",
     "correspondence.log-quotient.x-to-numerator",
     "correspondence.log-quotient.y-to-denominator"
   ]);
@@ -72,7 +77,7 @@ export function createKpLogQuotientTransitSession(input: {
   readonly targetEndpoint: KpLogQuotientNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
-  readonly operationChoreography?: KpEquationOperationChoreography | undefined;
+  readonly operationChoreography: KpHomomorphicFusionChoreography;
 }): KpLogQuotientTransitSession {
   assertTransitInput(input);
   const canonical = createKpCanonicalNativeKatexSceneSession({
@@ -80,9 +85,16 @@ export function createKpLogQuotientTransitSession(input: {
     target: input.target,
     relations: projectKpLogQuotientNativePaintRelations(input.operation),
     endpointDwellFraction: 0,
-    ...(input.operationChoreography === undefined
-      ? {}
-      : { operationChoreography: input.operationChoreography })
+    operationChoreography: input.operationChoreography,
+    trackProjection: createKpNativeKatexTrackProjection({
+      id: `track-projection.log-quotient.homomorphic-fusion.${input.operationChoreography.id}`,
+      project(projectionInput) {
+        return applyKpNativeKatexLogQuotientHomomorphicFusion({
+          ...projectionInput,
+          plan: input.operationChoreography
+        });
+      }
+    })
   });
   let retired = false;
   return Object.freeze({
@@ -138,6 +150,7 @@ function assertTransitInput(input: {
   readonly targetEndpoint: KpLogQuotientNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly operationChoreography: KpHomomorphicFusionChoreography;
 }): void {
   if (!isKpCompiledLogQuotientOperation(input.operation)) {
     throw new Error("Log-quotient transit requires nominal compiler authority.");
@@ -165,6 +178,15 @@ function assertTransitInput(input: {
     input.source.stage !== input.target.stage
   ) {
     throw new Error("Log-quotient transit requires one shared measured stage.");
+  }
+  if (
+    input.operationChoreography.kind !== "homomorphic-fusion" ||
+    input.operationChoreography.transformationId !==
+      input.operation.transformation.id
+  ) {
+    throw new Error(
+      "Log-quotient transit requires matching homomorphic-fusion presentation authority."
+    );
   }
 }
 

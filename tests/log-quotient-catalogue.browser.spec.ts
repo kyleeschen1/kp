@@ -89,14 +89,21 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
   expect(trackSummary.some(({ sourceAtomId, targetAtomId }) =>
     sourceAtomId !== undefined && targetAtomId !== undefined
   )).toBe(true);
-  const operatorFusion = trackSummary.filter(({ lifecycle, targetEntityId }) =>
-    lifecycle === "merge" && targetEntityId === "target.log.operator"
+  const sourceOperatorExits = trackSummary.filter(({ lifecycle, sourceEntityId }) =>
+    lifecycle === "eliminate" && sourceEntityId?.endsWith("log.operator") === true
   );
-  expect(operatorFusion.map(({ sourceEntityId }) => sourceEntityId).sort()).toEqual([
+  expect(sourceOperatorExits.map(({ sourceEntityId }) => sourceEntityId).sort()).toEqual([
     "source.left.log.operator",
     "source.right.log.operator"
   ]);
-  expect(operatorFusion.every(({ motionPathVariant, motionAxisConstraint }) =>
+  const targetOperatorEntries = trackSummary.filter(({ lifecycle, targetEntityId }) =>
+    lifecycle === "introduce" && targetEntityId === "target.log.operator"
+  );
+  expect(targetOperatorEntries).toHaveLength(1);
+  expect([...sourceOperatorExits, ...targetOperatorEntries].every(({
+    motionPathVariant,
+    motionAxisConstraint
+  }) =>
     motionPathVariant === undefined && motionAxisConstraint === undefined
   )).toBe(true);
   expect(trackSummary.find(({ sourceEntityId }) =>
@@ -105,6 +112,47 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
   expect(trackSummary.find(({ sourceEntityId }) =>
     sourceEntityId === "source.right.argument.y"
   )?.motionPathVariant).toBe("arc-below");
+
+  await seek.fill("0.14");
+  const sourceOperatorStart = await materialGeometry(
+    stage,
+    "source.left.log.operator"
+  );
+  await seek.fill("0.24");
+  const sourceOperatorPoint = await materialGeometry(
+    stage,
+    "source.left.log.operator"
+  );
+  expect(sourceOperatorPoint.width).toBeLessThan(sourceOperatorStart.width * 0.12);
+  expect(sourceOperatorPoint.centerX).toBeCloseTo(sourceOperatorStart.centerX, 1);
+  expect(sourceOperatorPoint.centerY).toBeCloseTo(sourceOperatorStart.centerY, 1);
+
+  await seek.fill("0.55");
+  const targetOperatorPoint = await materialGeometry(stage, "target.log.operator");
+  await seek.fill("0.66");
+  const targetOperatorEnd = await materialGeometry(stage, "target.log.operator");
+  expect(targetOperatorPoint.width).toBeLessThan(targetOperatorEnd.width * 0.12);
+  expect(targetOperatorPoint.centerX).toBeCloseTo(targetOperatorEnd.centerX, 1);
+  expect(targetOperatorPoint.centerY).toBeCloseTo(targetOperatorEnd.centerY, 1);
+
+  await seek.fill("0.48");
+  const barStart = await materialGeometry(stage, "target.quotient.bar");
+  await seek.fill("0.53");
+  const barMiddle = await materialGeometry(stage, "target.quotient.bar");
+  await seek.fill("0.58");
+  const barEnd = await materialGeometry(stage, "target.quotient.bar");
+  expect(barStart.width).toBeLessThan(barMiddle.width);
+  expect(barMiddle.width).toBeLessThan(barEnd.width);
+  expect(barStart.centerX).toBeCloseTo(barEnd.centerX, 1);
+
+  await seek.fill("0.5");
+  const openOutside = await materialGeometry(stage, "target.log.open");
+  const closeOutside = await materialGeometry(stage, "target.log.close");
+  await seek.fill("0.66");
+  const openSettled = await materialGeometry(stage, "target.log.open");
+  const closeSettled = await materialGeometry(stage, "target.log.close");
+  expect(openOutside.left).toBeLessThan(openSettled.left);
+  expect(closeOutside.left).toBeGreaterThan(closeSettled.left);
 
   for (const progress of [0, 0.25, 0.5, 0.75, 0.875, 1]) {
     await seek.fill(String(progress));
@@ -257,6 +305,29 @@ async function movingPaintSnapshot(stage: Locator) {
       transform: owner.style.transform
     })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
   );
+}
+
+async function materialGeometry(stage: Locator, entityId: string) {
+  return stage.evaluate((root, semanticEntityId) => {
+    const owner = [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].find((candidate) =>
+      candidate.dataset["kpEquationMaterialSemanticEntityId"] ===
+        semanticEntityId
+    );
+    if (owner === undefined) {
+      throw new Error(`Missing material owner for ${semanticEntityId}.`);
+    }
+    const rect = owner.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      centerX: rect.left + rect.width / 2,
+      centerY: rect.top + rect.height / 2
+    };
+  }, entityId);
 }
 
 async function expectLogQuotientReady(stage: Locator): Promise<void> {

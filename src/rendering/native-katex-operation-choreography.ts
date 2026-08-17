@@ -76,10 +76,10 @@ function applyHomomorphicFusion(
     atom.semanticEntityId
   ]));
   const forward = choreography.direction === "forward";
-  const operatorStartIds = new Set(forward
+  const operatorExitIds = new Set(forward
     ? choreography.operatorGlyphFusion.sourceEntityIds
     : choreography.operatorGlyphFusion.targetEntityIds);
-  const operatorEndIds = new Set(forward
+  const operatorEntryIds = new Set(forward
     ? choreography.operatorGlyphFusion.targetEntityIds
     : choreography.operatorGlyphFusion.sourceEntityIds);
   const transferByPair = new Map(choreography.argumentTransfers.map((transfer) => {
@@ -102,7 +102,8 @@ function applyHomomorphicFusion(
       entry.targetEntityIds.map((entityId) => [entityId, entry] as const)
     )
   );
-  const matchedOperators = new Set<string>();
+  const matchedOperatorExits = new Set<string>();
+  const matchedOperatorEntries = new Set<string>();
   const matchedTransfers = new Set<string>();
   const matchedRetirement = new Set<string>();
   const matchedTargetEntries = new Set<string>();
@@ -115,29 +116,70 @@ function applyHomomorphicFusion(
     const targetEntityId = track.targetAtomId === undefined
       ? undefined
       : targetEntities.get(track.targetAtomId);
+    const operatorExitEntityId = forward ? sourceEntityId : targetEntityId;
     if (
-      sourceEntityId !== undefined &&
-      targetEntityId !== undefined &&
-      operatorStartIds.has(sourceEntityId) &&
-      operatorEndIds.has(targetEntityId) &&
-      track.lifecycle === (forward ? "merge" : "split")
+      operatorExitEntityId !== undefined &&
+      operatorExitIds.has(operatorExitEntityId) &&
+      track.lifecycle === (forward ? "eliminate" : "introduce")
     ) {
-      matchedOperators.add(sourceEntityId);
+      matchedOperatorExits.add(operatorExitEntityId);
       const sample = (progress: number) => directionalWindowProgress(
         choreography,
         progress,
-        choreography.operatorFusionWindow
+        choreography.operatorVisualHandoff.sourceReleaseWindow
       );
+      const nativeRect = forward ? track.startRect : track.endRect;
+      const nativePaintRect = forward
+        ? track.startPaintRect
+        : track.endPaintRect;
       return Object.freeze({
         ...track,
-        // Operator fusion is a restrained convergence, not an argument arc.
-        // It is not universally horizontal: a fraction-bearing target can
-        // establish a different native baseline. Leaving the route direct
-        // preserves the existing convergence without making a false axis
-        // promise that would snap at endpoint handoff.
-        timingGroupId: `${choreography.id}.operator-fusion`,
-        semanticMotionUnitId: `${choreography.id}.operator-fusion`,
-        sampleProgress: sample
+        startRect: Object.freeze({ ...nativeRect }),
+        endRect: Object.freeze({ ...nativeRect }),
+        ...(nativePaintRect === undefined
+          ? {}
+          : {
+              startPaintRect: Object.freeze({ ...nativePaintRect }),
+              endPaintRect: Object.freeze({ ...nativePaintRect })
+            }),
+        timingGroupId: `${choreography.id}.operator-source-release`,
+        semanticMotionUnitId: `${choreography.id}.operator-source-release`,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
+      });
+    }
+    const operatorEntryEntityId = forward ? targetEntityId : sourceEntityId;
+    if (
+      operatorEntryEntityId !== undefined &&
+      operatorEntryIds.has(operatorEntryEntityId) &&
+      track.lifecycle === (forward ? "introduce" : "eliminate")
+    ) {
+      matchedOperatorEntries.add(operatorEntryEntityId);
+      const sample = (progress: number) => directionalWindowProgress(
+        choreography,
+        progress,
+        choreography.operatorVisualHandoff.targetPresenceWindow
+      );
+      const nativeRect = forward ? track.endRect : track.startRect;
+      const nativePaintRect = forward
+        ? track.endPaintRect
+        : track.startPaintRect;
+      return Object.freeze({
+        ...track,
+        startRect: Object.freeze({ ...nativeRect }),
+        endRect: Object.freeze({ ...nativeRect }),
+        ...(nativePaintRect === undefined
+          ? {}
+          : {
+              startPaintRect: Object.freeze({ ...nativePaintRect }),
+              endPaintRect: Object.freeze({ ...nativePaintRect })
+            }),
+        timingGroupId: `${choreography.id}.operator-target-reception`,
+        semanticMotionUnitId: `${choreography.id}.operator-target-reception`,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
       });
     }
     if (sourceEntityId !== undefined && targetEntityId !== undefined) {
@@ -270,9 +312,14 @@ function applyHomomorphicFusion(
   });
 
   assertEntityCoverage(
-    [...operatorStartIds],
-    matchedOperators,
-    `${choreography.id}.operator-fusion`
+    [...operatorExitIds],
+    matchedOperatorExits,
+    `${choreography.id}.operator-source-release`
+  );
+  assertEntityCoverage(
+    [...operatorEntryIds],
+    matchedOperatorEntries,
+    `${choreography.id}.operator-target-reception`
   );
   assertEntityCoverage(
     choreography.argumentTransfers.map(({ id }) => id),
