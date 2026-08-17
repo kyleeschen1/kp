@@ -46,7 +46,7 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
       },
       {
         id: "entry-owner.internal-studio",
-        current: "shared-main-graph",
+        current: "dedicated-production-graph",
         required: "dedicated-production-graph"
       },
       {
@@ -76,7 +76,9 @@ test("public and development entry roots cannot masquerade as kernel or Studio",
     "entry-owner.development-tooling"
   );
   assert.deepEqual(kernel.entryModules, ["src/kernel/public-api.ts"]);
-  assert.deepEqual(studio.entryModules, ["src/main.ts"]);
+  assert.deepEqual(studio.entryModules, [
+    "src/internal-studio/internal-studio-entry.ts"
+  ]);
   assert.ok(publicWeb.entryModules.every((path) =>
     path.startsWith("src/public-web/")
   ));

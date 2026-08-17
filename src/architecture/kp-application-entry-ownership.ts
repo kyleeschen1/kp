@@ -62,11 +62,11 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     id: "entry-owner.internal-studio",
     delivery: "internal-product",
     frameworkBoundary: "host-owned",
-    currentBoundary: "shared-main-graph",
+    currentBoundary: "dedicated-production-graph",
     requiredBoundary: "dedicated-production-graph",
-    entryModules: ["src/main.ts"],
-    hostDocuments: ["index.html"],
-    currentBuildConfigs: ["vite.config.ts"],
+    entryModules: ["src/internal-studio/internal-studio-entry.ts"],
+    hostDocuments: ["studio/index.html"],
+    currentBuildConfigs: ["vite.internal-studio.config.ts"],
     requiredBuildConfigs: ["vite.internal-studio.config.ts"],
     rationale:
       "Internal Studio owns editor, catalogue, dashboard, and workbench composition."

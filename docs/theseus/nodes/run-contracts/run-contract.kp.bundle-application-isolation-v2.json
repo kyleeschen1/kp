@@ -145,7 +145,8 @@
     {
       "id": "s16",
       "title": "isolate-internal-studio-production-entry",
-      "status": "planned"
+      "summary": "Added a dedicated /studio/ shell, production config, and typed entry that selects only the legacy editor or canonical Svelte catalogue; its independent default-editor closure is 316,521/490,000 gzip bytes and excludes bootstrap, Public Web, and development owners.",
+      "status": "complete"
     },
     {
       "id": "s17",

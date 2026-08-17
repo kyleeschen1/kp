@@ -254,6 +254,13 @@
       "scope": "standard",
       "checkedAt": "2026-08-17T01:47:17.558Z",
       "notes": "Typed immutable ownership covers kernel, Internal Studio, four Public Web entries, development tooling, and compatibility routing; current and required boundaries are distinct, four focused tests pass, and the zero-exception architecture gate covers 1,567 modules."
+    },
+    {
+      "command": "Internal Studio focused tests dedicated build browser smoke typecheck architecture and closure",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-17T01:59:02.911Z",
+      "notes": "The dedicated Studio build transforms 1,001 modules versus the shared build's 1,445; initial shell is 2,288 gzip bytes and default editor experience is 316,521/490,000. Two Chromium route proofs pass; bootstrap, Public Web, toolbar, and Review bootstrap owners are absent."
     }
   ],
   "expectedLearning": [

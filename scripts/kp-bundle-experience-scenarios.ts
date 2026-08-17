@@ -23,6 +23,11 @@ export const kpBundleBuildDeclarations: readonly KpBundleBuildDeclaration[] =
   Object.freeze([
     build(MAIN_BUILD, "dist", "npm run build:bundle"),
     build(
+      "bundle-build.internal-studio",
+      "dist/internal-studio",
+      "npm run build:internal-studio"
+    ),
+    build(
       "bundle-build.public-typescript",
       "dist/public-typescript",
       "npm run build:public-typescript"
@@ -157,11 +162,27 @@ export const kpBundleExperienceScenarios:
       comparisonBaseId: "bundle-experience.catalogue.place-value"
     }),
     scenario({
-      id: "bundle-experience.studio.legacy-host",
-      title: "Internal Studio legacy host",
-      entryRoots: ["src/main.ts"],
-      expectedOwners: ["src/main.ts"],
-      forbiddenOwners: ["src/rendering/graph-webgl-three.ts"],
+      id: "bundle-experience.studio.internal-host",
+      title: "Internal Studio dedicated host",
+      buildId: "bundle-build.internal-studio",
+      entryRoots: ["studio/index.html"],
+      activations: [{
+        id: "load-default-editor",
+        manifestRoots: ["src/main.ts"]
+      }],
+      expectedOwners: [
+        "studio/index.html",
+        "src/main.ts"
+      ],
+      forbiddenOwners: [
+        "src/bootstrap.ts",
+        "src/dev-toolbar/development-toolbar-bootstrap.ts",
+        "src/dev-review/editor-animation-library-review-bootstrap.ts",
+        "src/public-web/typescript-free-shipping-entry.ts",
+        "src/public-web/fraction-composition-public-entry.ts",
+        "src/public-web/normal-matrix-proof-public-entry.ts",
+        "src/public-web/eigenvector-attentional-surface-public-entry.ts"
+      ],
       budgets: [{ phase: "entry", resource: "total", gzipBytes: 490_000 }]
     }),
     publicScenario(
