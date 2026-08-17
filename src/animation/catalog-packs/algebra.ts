@@ -1,5 +1,4 @@
 import type { KpAnimationAsset } from "../asset.ts";
-import { createLinearSolveAnimationAsset } from "../linear-solve-adapter.ts";
 import { createFractionSimplificationAnimationAsset } from "../fraction-adapter.ts";
 import {
   createExponentExpansionAnimationAsset,
@@ -20,9 +19,6 @@ import {
   createKpLogQuotientAnimationAsset
 } from "../log-quotient-adapter.ts";
 import {
-  createKpVerifiedGeneratedLinearSolveRuntimeAsset
-} from "../verified-generated-linear-solve-runtime-asset.ts";
-import {
   createKpCanonicalCancellationPressureAnimationAsset
 } from "../cancellation-pressure-animation.ts";
 import {
@@ -40,8 +36,6 @@ export interface KpAlgebraAnimationPack {
 export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
   return Object.freeze({
     catalog: Object.freeze([
-      createLinearSolveAnimationAsset(),
-      createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
       createKpCanonicalCancellationPressureAnimationAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),

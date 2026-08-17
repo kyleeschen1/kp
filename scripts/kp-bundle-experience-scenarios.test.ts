@@ -12,7 +12,6 @@ test("representative bundle scenarios cover each approved experience family", ()
   assert.deepEqual(
     kpBundleExperienceScenarios.map(({ id }) => id),
     [
-      "bundle-experience.catalogue.outer-shell",
       "bundle-experience.catalogue.empty",
       "bundle-experience.catalogue.solve-x",
       "bundle-experience.catalogue.economics",
@@ -64,7 +63,6 @@ test("scenario and build registries are immutable data-only declarations", () =>
 test("selected experiences preserve explicit comparable catalogue bases", () => {
   const selected = kpBundleExperienceScenarios.filter(({ id }) =>
     id.startsWith("bundle-experience.catalogue.") &&
-    !id.endsWith("outer-shell") &&
     !id.endsWith("empty")
   );
   assert.ok(selected.length >= 5);

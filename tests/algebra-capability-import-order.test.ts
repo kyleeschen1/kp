@@ -43,8 +43,6 @@ test("every compiler-first and pack-first clean-process order has the same resul
   results.forEach((result) => assert.deepEqual(result, results[0]));
   assert.deepEqual(results[0], {
     assetIds: [
-      "animation.linear-solve.solve-x",
-      "animation.generated.linear-solve.linear-68c15d41",
       "animation.generated.cancellation.additive-inverses",
       "animation.generated.fraction-expression.two-fourths",
       "animation.generated.exponent.square-as-product",
@@ -65,6 +63,26 @@ test("every compiler-first and pack-first clean-process order has the same resul
     ],
     reverseCount: 8
   });
+});
+
+test("linear solve and remaining algebra share one choreography authority", async () => {
+  const [{ createKpAlgebraAnimationPack }, {
+    createKpAlgebraLinearSolveAnimationPack
+  }] = await Promise.all([
+    import("../src/animation/catalog-packs/algebra.ts"),
+    import("../src/animation/catalog-packs/algebra-linear-solve.ts")
+  ]);
+  const algebra = createKpAlgebraAnimationPack();
+  const linearSolve = createKpAlgebraLinearSolveAnimationPack();
+
+  assert.equal(
+    linearSolve.runtimeCapabilities,
+    algebra.runtimeCapabilities
+  );
+  assert.deepEqual(linearSolve.catalog.map(({ id }) => id), [
+    "animation.linear-solve.solve-x",
+    "animation.generated.linear-solve.linear-68c15d41"
+  ]);
 });
 
 test("repeated lazy loads return one deterministic pack capability identity", async () => {

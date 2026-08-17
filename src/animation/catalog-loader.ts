@@ -66,10 +66,7 @@ export class KpAnimationCatalogLoadError extends Error {
   }
 }
 
-const packCache = new Map<
-  KpAnimationCatalogPackId,
-  Promise<KpLoadedAnimationPack>
->();
+const packCache = new Map<string, Promise<KpLoadedAnimationPack>>();
 
 interface KpLoadedAnimationPack {
   readonly catalog: readonly KpAnimationAsset[];
@@ -80,7 +77,8 @@ interface KpAnimationCatalogPackDeclaration {
   readonly id: KpAnimationCatalogPackId;
   readonly sourcePath: KpAnimationCatalogPackSourcePath;
   readonly owns: (animationId: string) => boolean;
-  readonly load: () => Promise<KpLoadedAnimationPack>;
+  readonly cacheKey: (animationId: string) => string;
+  readonly load: (animationId: string) => Promise<KpLoadedAnimationPack>;
 }
 
 // These declarations are the build-visible lazy boundary. Literal imports
@@ -100,7 +98,9 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
     pack("log-product", "src/animation/catalog-packs/log-product.ts",
       (id) => id.startsWith("animation.algebra.log-product."),
       async () => dataOnlyPack((await import("./catalog-packs/log-product.ts")).createKpLogProductAnimationPack())),
-    pack("algebra", "src/animation/catalog-packs/algebra.ts",
+    // The public algebra identity remains stable while solve-x avoids loading
+    // unrelated symbolic families; both variants import one shared runtime.
+    splitPack("algebra", "src/animation/catalog-packs/algebra.ts",
       (id) => id === "animation.linear-solve.solve-x" ||
         id.startsWith("animation.generated.linear-solve.") ||
         id.startsWith("animation.generated.fraction-") ||
@@ -112,7 +112,16 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
         id.startsWith("animation.algebra.log-exponent.") ||
         id.startsWith("animation.algebra.log-quotient.") ||
         id.startsWith("animation.inequality."),
-      async () => (await import("./catalog-packs/algebra.ts")).createKpAlgebraAnimationPack()),
+      (id) => id === "animation.linear-solve.solve-x" ||
+        id.startsWith("animation.generated.linear-solve.")
+        ? "linear-solve"
+        : "remaining-algebra",
+      async (id) => id === "animation.linear-solve.solve-x" ||
+        id.startsWith("animation.generated.linear-solve.")
+        ? (await import("./catalog-packs/algebra-linear-solve.ts"))
+          .createKpAlgebraLinearSolveAnimationPack()
+        : (await import("./catalog-packs/algebra.ts"))
+          .createKpAlgebraAnimationPack()),
     pack("generated-drafts", "src/animation/catalog-packs/generated-drafts.ts",
       (id) => id === "animation.generated.pipeline-diagram" ||
         id === "animation.generated.add-zero" ||
@@ -152,7 +161,7 @@ export async function loadKpAnimationAsset(
   const packId = kpAnimationCatalogPackId(animationId);
   let loadedPack: KpLoadedAnimationPack;
   try {
-    loadedPack = await loadPack(packId);
+    loadedPack = await loadPack(packId, animationId);
   } catch (cause: unknown) {
     throw new KpAnimationCatalogLoadError(
       "pack-load-failed",
@@ -196,27 +205,22 @@ export function kpAnimationCatalogPackSourcePath(
 }
 
 async function loadPack(
-  packId: KpAnimationCatalogPackId
+  packId: KpAnimationCatalogPackId,
+  animationId: string
 ): Promise<KpLoadedAnimationPack> {
-  const existing = packCache.get(packId);
+  const declaration = requirePackDeclaration(packId);
+  const cacheKey = `${packId}:${declaration.cacheKey(animationId)}`;
+  const existing = packCache.get(cacheKey);
   if (existing !== undefined) return existing;
 
-  // Literal imports preserve independent capability chunks; a computed module
-  // path would collapse this boundary or force the bundler to include a glob.
-  const loaded = loadUncachedPack(packId);
-  packCache.set(packId, loaded);
+  const loaded = declaration.load(animationId);
+  packCache.set(cacheKey, loaded);
   // A transient chunk failure must remain explicit without poisoning every
   // later attempt in this host for the lifetime of the page.
   void loaded.catch(() => {
-    if (packCache.get(packId) === loaded) packCache.delete(packId);
+    if (packCache.get(cacheKey) === loaded) packCache.delete(cacheKey);
   });
   return loaded;
-}
-
-async function loadUncachedPack(
-  packId: KpAnimationCatalogPackId
-): Promise<KpLoadedAnimationPack> {
-  return requirePackDeclaration(packId).load();
 }
 
 function pack(
@@ -225,7 +229,23 @@ function pack(
   owns: (animationId: string) => boolean,
   load: () => Promise<KpLoadedAnimationPack>
 ): KpAnimationCatalogPackDeclaration {
-  return Object.freeze({ id, sourcePath, owns, load });
+  return Object.freeze({
+    id,
+    sourcePath,
+    owns,
+    cacheKey: () => "default",
+    load
+  });
+}
+
+function splitPack(
+  id: KpAnimationCatalogPackId,
+  sourcePath: KpAnimationCatalogPackSourcePath,
+  owns: (animationId: string) => boolean,
+  cacheKey: (animationId: string) => string,
+  load: (animationId: string) => Promise<KpLoadedAnimationPack>
+): KpAnimationCatalogPackDeclaration {
+  return Object.freeze({ id, sourcePath, owns, cacheKey, load });
 }
 
 function requirePackDeclaration(

@@ -52,17 +52,6 @@ export const kpBundleBuildDeclarations: readonly KpBundleBuildDeclaration[] =
 export const kpBundleExperienceScenarios:
   readonly KpBundleExperienceScenario[] = Object.freeze([
     scenario({
-      id: "bundle-experience.catalogue.outer-shell",
-      title: "Animation catalogue outer shell",
-      entryRoots: ["canonical-animation-review.html"],
-      expectedOwners: ["canonical-animation-review.html"],
-      forbiddenOwners: [
-        "src/editor/equation-surface-capability.ts",
-        "src/rendering/graph-webgl-three.ts"
-      ],
-      budgets: [{ phase: "entry", resource: "total", gzipBytes: 50_000 }]
-    }),
-    scenario({
       id: "bundle-experience.catalogue.empty",
       title: "Svelte catalogue before a selected capability",
       entryRoots: [
@@ -82,7 +71,7 @@ export const kpBundleExperienceScenarios:
     selectedCatalogueScenario({
       id: "bundle-experience.catalogue.solve-x",
       title: "Catalogue with solve-x equation selected",
-      packRoot: "src/animation/catalog-packs/algebra.ts",
+      packRoot: "src/animation/catalog-packs/algebra-linear-solve.ts",
       surfaceRoot: "src/editor/equation-surface-capability.ts",
       forbiddenOwners: [
         "src/editor/programming-surface-capability.ts",

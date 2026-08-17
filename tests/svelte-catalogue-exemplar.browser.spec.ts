@@ -165,10 +165,13 @@ test("Svelte in-shell selection ignores a stale pack completion", async ({
   const algebraRequestGate = new Promise<void>((resolve) => {
     releaseAlgebraRequest = resolve;
   });
-  await page.route("**/src/animation/catalog-packs/algebra.ts*", async (route) => {
-    await algebraRequestGate;
-    await route.continue();
-  });
+  await page.route(
+    "**/algebra-linear-solve.ts*",
+    async (route) => {
+      await algebraRequestGate;
+      await route.continue();
+    }
+  );
   const documentRequests: string[] = [];
   page.on("request", (request) => {
     if (request.resourceType() === "document") {
@@ -187,7 +190,10 @@ test("Svelte in-shell selection ignores a stale pack completion", async ({
     "data-kp-animation-catalogue-stage-state",
     "loading"
   );
-  await expect(stage.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+  await expect(stage.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  )).toHaveCount(1);
 
   await search.fill("demand equilibrium");
   await exemplar.getByRole("link", { name: /Supply and demand/ }).click();
