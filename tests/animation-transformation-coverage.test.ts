@@ -55,20 +55,18 @@ test("alternative logarithm bases expose every syntax and motif gap", () => {
   ]);
 });
 
-test("working examples do not overstate general generation support", () => {
+test("registered examples still expose authoring corpus and exemplar gaps", () => {
   const entry = createKpAnimationTransformationCoverage().entries.find(
     ({ capabilityId }) => capabilityId ===
       "capability.equation.log-homomorphic-decomposition"
   );
-  assert.equal(entry?.status, "Exemplar");
+  assert.equal(entry?.status, "Registered");
   assert.equal(entry?.exemplarLinks.length, 1);
   assert.ok(entry?.remainingRequirementIds.includes(
     "requirement.equation.log-homomorphism.product-exemplar"
   ));
-  assert.ok(entry?.remainingRequirementIds.includes(
-    "requirement.equation.log-homomorphism.recipe"
-  ));
   assert.deepEqual(entry?.evidenceTensions, [
+    "registered-without-direct-generation",
     "playable-exemplar-without-general-generation"
   ]);
 });

@@ -30,7 +30,7 @@ test("registered exemplar and missing statuses retain distinct gates", () => {
   assert.equal(status(readiness,
     "capability.equation.fraction-factor-cancellation"), "Registered");
   assert.equal(status(readiness,
-    "capability.equation.log-homomorphic-decomposition"), "Exemplar");
+    "capability.equation.log-homomorphic-decomposition"), "Registered");
   assert.equal(status(readiness,
     "capability.equation.alternative-logarithm-bases"), "Missing");
 });

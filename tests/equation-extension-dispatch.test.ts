@@ -65,6 +65,38 @@ test("all generated dispatch kinds load the declared named export", async () => 
   assert.equal(typeof packFactory, "function");
 });
 
+test("homomorphic crossover authorities remain independently lazy-loadable", async () => {
+  const [product, quotient, recipe, motif, capability, packFactory] =
+    await Promise.all([
+      loadKpEquationOperation(
+        "operation.equation.log-product-decomposition.v1"
+      ),
+      loadKpEquationOperation("operation.equation.log-quotient-fusion.v1"),
+      loadKpEquationRecipe(
+        "recipe.equation.homomorphic-decomposition.v1"
+      ),
+      loadKpEquationMotif("motif.homomorphic-crossover.v1"),
+      loadKpEquationRendererCapability(
+        "renderer-capability.equation.homomorphic-crossover.v1"
+      ),
+      loadKpEquationExtensionPack("equation-pack.homomorphic-crossover.v1")
+    ]);
+  assert.deepEqual([
+    (product as { id: string }).id,
+    (quotient as { id: string }).id,
+    (recipe as { id: string }).id,
+    (motif as { id: string }).id,
+    (capability as { id: string }).id
+  ], [
+    "operation.equation.log-product-decomposition.v1",
+    "operation.equation.log-quotient-fusion.v1",
+    "recipe.equation.homomorphic-decomposition.v1",
+    "motif.homomorphic-crossover.v1",
+    "renderer-capability.equation.homomorphic-crossover.v1"
+  ]);
+  assert.equal(typeof packFactory, "function");
+});
+
 test("unknown ids fail explicitly without a fallback import", async () => {
   await assert.rejects(
     loadKpEquationMotif("motif.unknown.v1"),

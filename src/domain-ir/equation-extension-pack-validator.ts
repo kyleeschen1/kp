@@ -19,6 +19,7 @@ export type KpEquationExtensionPackDiagnosticCode =
   | "pack.operation.family-missing"
   | "pack.operation.recipe-missing"
   | "pack.operation.recipe-mismatch"
+  | "pack.operation.semantic-authority"
   | "pack.recipe.family-missing"
   | "pack.recipe.operation-missing"
   | "pack.recipe.operation-unclaimed"
@@ -28,6 +29,7 @@ export type KpEquationExtensionPackDiagnosticCode =
   | "pack.recipe.operation-incompatible"
   | "pack.recipe.dependency-missing"
   | "pack.recipe.dependency-cycle"
+  | "pack.recipe.causal-grammar"
   | "pack.motif.family-missing"
   | "pack.motif.schema-mismatch"
   | "pack.motif.capability-missing"
@@ -135,10 +137,16 @@ function validateOperations(
       const recipePath = `${path}.recipeIds[${recipeIndex}]`;
       if (recipe === undefined) {
         diagnostics.push(issue("pack.operation.recipe-missing", recipePath, `Operation ${operation.id} references missing recipe ${recipeId}.`));
-      } else if (recipe.operationKind !== operation.id) {
-        diagnostics.push(issue("pack.operation.recipe-mismatch", recipePath, `Recipe ${recipeId} targets ${recipe.operationKind}, not ${operation.id}.`));
+      } else if (!recipe.operationKinds.includes(operation.id)) {
+        diagnostics.push(issue("pack.operation.recipe-mismatch", recipePath, `Recipe ${recipeId} does not support ${operation.id}.`));
       }
     });
+    checkUniqueText(
+      operation.semanticAuthorityIds,
+      `${path}.semanticAuthorityIds`,
+      "pack.operation.semantic-authority",
+      diagnostics
+    );
   });
 }
 
@@ -151,12 +159,24 @@ function validateRecipes(
     if (pack.families.byId[recipe.familyId] === undefined) {
       diagnostics.push(issue("pack.recipe.family-missing", `${path}.familyId`, `Recipe ${recipe.id} references missing family ${recipe.familyId}.`));
     }
-    const operation = pack.operations.byId[recipe.operationKind];
-    if (operation === undefined) {
-      diagnostics.push(issue("pack.recipe.operation-missing", `${path}.operationKind`, `Recipe ${recipe.id} references missing operation ${recipe.operationKind}.`));
-    } else if (!operation.recipeIds.includes(recipe.id)) {
-      diagnostics.push(issue("pack.recipe.operation-unclaimed", `${path}.operationKind`, `Operation ${operation.id} does not claim recipe ${recipe.id}.`));
+    recipe.operationKinds.forEach((operationKind, operationIndex) => {
+      const operationPath = `${path}.operationKinds[${operationIndex}]`;
+      const operation = pack.operations.byId[operationKind];
+      if (operation === undefined) {
+        diagnostics.push(issue("pack.recipe.operation-missing", operationPath, `Recipe ${recipe.id} references missing operation ${operationKind}.`));
+      } else if (!operation.recipeIds.includes(recipe.id)) {
+        diagnostics.push(issue("pack.recipe.operation-unclaimed", operationPath, `Operation ${operation.id} does not claim recipe ${recipe.id}.`));
+      }
+    });
+    if (recipe.operationKinds.length === 0) {
+      diagnostics.push(issue("pack.recipe.operation-missing", `${path}.operationKinds`, `Recipe ${recipe.id} requires at least one operation.`));
     }
+    checkUniqueText(
+      recipe.causalGrammarIds,
+      `${path}.causalGrammarIds`,
+      "pack.recipe.causal-grammar",
+      diagnostics
+    );
     const useIds = new Set<string>();
     recipe.motifUses.forEach((use, useIndex) => {
       const usePath = `${path}.motifUses[${useIndex}]`;
@@ -173,8 +193,11 @@ function validateRecipes(
       if (!sameUniqueValues(use.roleIds, expectedRoles)) {
         diagnostics.push(issue("pack.recipe.role-incompatible", `${usePath}.roleIds`, `Motif use ${use.id} must bind exactly the roles declared by ${motif.id}.`));
       }
-      if (!motif.schema.operationKinds.includes(recipe.operationKind)) {
-        diagnostics.push(issue("pack.recipe.operation-incompatible", `${usePath}.motifId`, `Motif ${motif.id} does not support ${recipe.operationKind}.`));
+      const unsupportedOperations = recipe.operationKinds.filter(
+        (operationKind) => !motif.schema.operationKinds.includes(operationKind)
+      );
+      if (unsupportedOperations.length > 0) {
+        diagnostics.push(issue("pack.recipe.operation-incompatible", `${usePath}.motifId`, `Motif ${motif.id} does not support ${unsupportedOperations.join(", ")}.`));
       }
     });
     recipe.dependencyRecipeIds.forEach((dependencyId, dependencyIndex) => {
@@ -321,4 +344,25 @@ function issue(
   message: string
 ): KpEquationExtensionPackDiagnostic {
   return Object.freeze({ code, path, message });
+}
+
+function checkUniqueText(
+  values: readonly string[],
+  path: string,
+  code: Extract<
+    KpEquationExtensionPackDiagnosticCode,
+    "pack.operation.semantic-authority" | "pack.recipe.causal-grammar"
+  >,
+  diagnostics: KpEquationExtensionPackDiagnostic[]
+): void {
+  if (
+    values.some((value) => value.trim() === "") ||
+    new Set(values).size !== values.length
+  ) {
+    diagnostics.push(issue(
+      code,
+      path,
+      "Authority references must be non-empty and unique."
+    ));
+  }
 }

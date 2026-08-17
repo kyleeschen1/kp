@@ -2,31 +2,37 @@
 type KpGeneratedLoader = () => Promise<unknown>;
 
 const kpEquationOperationLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "operation.wrap-function.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapOperationRegistration)
+  "operation.wrap-function.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapOperationRegistration),
+  "operation.equation.log-product-decomposition.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.kpLogProductHomomorphicOperationRegistration),
+  "operation.equation.log-quotient-fusion.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.kpLogQuotientHomomorphicOperationRegistration)
 });
 
 const kpEquationRecipeLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "recipe.equation.function-application.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapRecipeRegistration)
+  "recipe.equation.function-application.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapRecipeRegistration),
+  "recipe.equation.homomorphic-decomposition.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.kpHomomorphicCrossoverRecipeRegistration)
 });
 
 const kpEquationMotifLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "motif.function-wrap.v1": () => import("../animation/function-wrap-motif.ts").then((module) => module.kpFunctionWrapMotifDefinition)
+  "motif.function-wrap.v1": () => import("../animation/function-wrap-motif.ts").then((module) => module.kpFunctionWrapMotifDefinition),
+  "motif.homomorphic-crossover.v1": () => import("../animation/homomorphic-crossover-motif.ts").then((module) => module.kpHomomorphicCrossoverMotifDefinition)
 });
 
 const kpEquationRendererCapabilityLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "renderer-capability.equation.native-katex.v1": () => import("../rendering/native-katex-function-wrap-reception.ts").then((module) => module.kpNativeKatexFunctionWrapAdapterDefinition)
+  "renderer-capability.equation.native-katex.v1": () => import("../rendering/native-katex-function-wrap-reception.ts").then((module) => module.kpNativeKatexFunctionWrapAdapterDefinition),
+  "renderer-capability.equation.homomorphic-crossover.v1": () => import("../animation/homomorphic-crossover-motif.ts").then((module) => module.kpHomomorphicCrossoverRendererCapabilityDefinition)
 });
 
 const kpEquationLazyPackLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
-  "equation-pack.function-wrap.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.createKpFunctionWrapEquationExtensionPack)
+  "equation-pack.function-wrap.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.createKpFunctionWrapEquationExtensionPack),
+  "equation-pack.homomorphic-crossover.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.createKpHomomorphicCrossoverEquationExtensionPack)
 });
 
 export const kpGeneratedEquationDispatchIds = Object.freeze({
-  "operation": Object.freeze(["operation.wrap-function.v1"]),
-  "recipe": Object.freeze(["recipe.equation.function-application.v1"]),
-  "motif": Object.freeze(["motif.function-wrap.v1"]),
-  "renderer-capability": Object.freeze(["renderer-capability.equation.native-katex.v1"]),
-  "lazy-pack": Object.freeze(["equation-pack.function-wrap.v1"])
+  "operation": Object.freeze(["operation.wrap-function.v1", "operation.equation.log-product-decomposition.v1", "operation.equation.log-quotient-fusion.v1"]),
+  "recipe": Object.freeze(["recipe.equation.function-application.v1", "recipe.equation.homomorphic-decomposition.v1"]),
+  "motif": Object.freeze(["motif.function-wrap.v1", "motif.homomorphic-crossover.v1"]),
+  "renderer-capability": Object.freeze(["renderer-capability.equation.native-katex.v1", "renderer-capability.equation.homomorphic-crossover.v1"]),
+  "lazy-pack": Object.freeze(["equation-pack.function-wrap.v1", "equation-pack.homomorphic-crossover.v1"])
 });
 
 export function loadKpEquationOperation(id: string): Promise<unknown> {

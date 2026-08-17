@@ -58,6 +58,25 @@ test("compiler evidence joins promoted operations and declared recipes", () => {
   }
 });
 
+test("one homomorphic recipe is exact authority for both logarithm laws", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  for (const requirementId of [
+    "requirement.equation.log-homomorphism.product-operation",
+    "requirement.equation.log-homomorphism.quotient-operation",
+    "requirement.equation.log-homomorphism.recipe"
+  ]) {
+    const requirement = projection.requirements.find((candidate) =>
+      candidate.requirementId === requirementId
+    );
+    assert.equal(requirement?.status, "matched", requirementId);
+    if (requirement?.status !== "matched") continue;
+    assert.deepEqual(
+      [...new Set(requirement.evidence.map(({ sourceId }) => sourceId))],
+      ["equation-pack.homomorphic-crossover.v1"]
+    );
+  }
+});
+
 test("planned alternative-base authorities remain exact compiler gaps", () => {
   const projection = createKpAnimationCapabilityCompilerEvidence();
   const requirementIds = [

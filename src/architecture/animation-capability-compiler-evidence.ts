@@ -5,6 +5,9 @@ import {
   createKpFunctionWrapEquationExtensionPack
 } from "../animation/equation-extension-packs/function-wrap.ts";
 import {
+  createKpHomomorphicCrossoverEquationExtensionPack
+} from "../animation/equation-extension-packs/homomorphic-crossover.ts";
+import {
   createKpLlmSemanticMotionOperationCatalog
 } from "../animation/llm-semantic-motion-operation-authoring.ts";
 import type {
@@ -179,7 +182,14 @@ function createCompilerAuthorities():
 readonly KpAnimationCapabilityCompilerAuthority[] {
   const operationCatalogue = createKpLlmSemanticMotionOperationCatalog();
   const authoringCatalogue = createKpEquationLlmAuthoringCatalogue();
-  const functionWrapPack = createKpFunctionWrapEquationExtensionPack();
+  const extensionPacks = Object.freeze([{
+    pack: createKpFunctionWrapEquationExtensionPack(),
+    sourcePath: "src/animation/equation-extension-packs/function-wrap.ts"
+  }, {
+    pack: createKpHomomorphicCrossoverEquationExtensionPack(),
+    sourcePath:
+      "src/animation/equation-extension-packs/homomorphic-crossover.ts"
+  }]);
   return Object.freeze([
     ...operationCatalogue.operations.map((operation) => authority({
       authorityId: operation.operationId,
@@ -197,36 +207,40 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
       sourceId: recipe.recipeId,
       sourcePath: "src/authoring/equation-llm-authoring-catalogue.ts"
     })),
-    ...functionWrapPack.operations.entries.map((operation) => authority({
-      authorityId: operation.id,
-      kind: "semantic-operation",
-      source: "equation-extension-pack",
-      sourceId: functionWrapPack.id,
-      sourcePath: "src/animation/equation-extension-packs/function-wrap.ts"
-    })),
-    ...functionWrapPack.recipes.entries.map((recipe) => authority({
-      authorityId: recipe.id,
-      kind: "canonical-recipe",
-      source: "equation-extension-pack",
-      sourceId: functionWrapPack.id,
-      sourcePath: "src/animation/equation-extension-packs/function-wrap.ts"
-    })),
-    ...functionWrapPack.motifs.entries.map((motif) => authority({
-      authorityId: motif.id,
-      kind: "motion-motif",
-      source: "equation-extension-pack",
-      sourceId: functionWrapPack.id,
-      sourcePath: "src/animation/equation-extension-packs/function-wrap.ts"
-    })),
-    ...functionWrapPack.rendererCapabilities.entries.map((renderer) =>
-      authority({
+    ...extensionPacks.flatMap(({ pack, sourcePath }) => [
+      ...pack.operations.entries.flatMap((operation) =>
+        [operation.id, ...operation.semanticAuthorityIds].map(
+          (authorityId) => authority({
+            authorityId,
+            kind: "semantic-operation",
+            source: "equation-extension-pack",
+            sourceId: pack.id,
+            sourcePath
+          })
+        )
+      ),
+      ...pack.recipes.entries.map((recipe) => authority({
+        authorityId: recipe.id,
+        kind: "canonical-recipe",
+        source: "equation-extension-pack",
+        sourceId: pack.id,
+        sourcePath
+      })),
+      ...pack.motifs.entries.map((motif) => authority({
+        authorityId: motif.id,
+        kind: "motion-motif",
+        source: "equation-extension-pack",
+        sourceId: pack.id,
+        sourcePath
+      })),
+      ...pack.rendererCapabilities.entries.map((renderer) => authority({
         authorityId: renderer.id,
         kind: "renderer-capability",
         source: "equation-extension-pack",
-        sourceId: functionWrapPack.id,
-        sourcePath: "src/animation/equation-extension-packs/function-wrap.ts"
-      })
-    )
+        sourceId: pack.id,
+        sourcePath
+      }))
+    ])
   ]);
 }
 

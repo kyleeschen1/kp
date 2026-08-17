@@ -1,0 +1,137 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s10",
+  "kind": "next-action",
+  "title": "Homomorphic-recipe-registration",
+  "status": "resolved",
+  "summary": "Registration is lazy-loadable and evidence-derived; approved timing, geometry, cardinality, fraction construction, optics, and rendering remain unchanged.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v4.json",
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s10 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/s02.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md",
+      "summary": "Approved 29-slice implementation proposal with verification cadence rollback units and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md",
+      "summary": "Accepted priority for natural-language and ordered-state governed animation generation across domain-owned frontends."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/equation-extension-packs/homomorphic-crossover.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/homomorphic-crossover-caller-registrations.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/homomorphic-crossover-registration.test.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/animation-transformation-coverage.generated.json"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v4",
+      "next-action.kp.governed-animation-generation.s09"
+    ]
+  },
+  "affects": [
+    "next-action.kp.governed-animation-generation.s09"
+  ],
+  "verification": [
+    "npm run test:homomorphic-crossover-registration",
+    "npm run test:log-product",
+    "npm run test:log-quotient",
+    "npm run test:semantic-motion-diagnostics",
+    "npm run verify:equation:boundary",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:homomorphic-crossover-registration",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T22:44:06.570Z",
+      "notes": "3 pack, caller-binding, and fail-closed phase tests passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-17T22:44:07.542Z",
+      "notes": "16 product tests passed with timing and geometry unchanged."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-17T22:44:08.519Z",
+      "notes": "36 quotient and selected-surface tests passed with fraction construction unchanged."
+    },
+    {
+      "command": "npm run test:semantic-motion-diagnostics",
+      "status": "passed",
+      "scope": "semantic-motion",
+      "checkedAt": "2026-08-17T22:44:09.470Z",
+      "notes": "39 semantic compiler tests passed."
+    },
+    {
+      "command": "npm run verify:equation:boundary",
+      "status": "passed",
+      "scope": "contract",
+      "checkedAt": "2026-08-17T22:44:10.429Z",
+      "notes": "Equation preservation, dispatch, protocol, type, and architecture gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-17T22:44:11.375Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Log product and quotient now share one validated nominal crossover recipe with exact law aliases, explicit causal phase bindings, and caller-local presentation."
+  },
+  "expectedLearning": [
+    "Whether two direction-specific logarithm laws can share one nominal crossover recipe without sharing caller presentation policy."
+  ],
+  "allowedWork": [
+    "Equation extension registration, exact law aliases, causal phase bindings, lazy dispatch, and evidence projection."
+  ],
+  "disallowedWork": [
+    "Changes to product or quotient timing, geometry, cardinality, fraction construction, optics, semantic identity, or renderer behavior."
+  ],
+  "criteria": [
+    {
+      "id": "single-nominal-recipe",
+      "weight": "high"
+    },
+    {
+      "id": "exact-law-registration",
+      "weight": "high"
+    },
+    {
+      "id": "zero-visual-delta",
+      "weight": "high"
+    },
+    {
+      "id": "lazy-dispatch-and-typed-gaps",
+      "weight": "medium"
+    }
+  ]
+}

@@ -18,14 +18,17 @@ export interface KpEquationOperationRegistration {
   readonly id: KpOperationKind;
   readonly familyId: KpFamilyId;
   readonly recipeIds: readonly KpRecipeId[];
+  /** Exact laws or domain operations licensed by this compiler operation. */
+  readonly semanticAuthorityIds: readonly string[];
 }
 
 export interface KpEquationRecipeRegistration {
   readonly id: KpRecipeId;
   readonly familyId: KpFamilyId;
-  readonly operationKind: KpOperationKind;
+  readonly operationKinds: readonly KpOperationKind[];
   readonly motifUses: readonly KpEquationRecipeMotifUse[];
   readonly dependencyRecipeIds: readonly KpRecipeId[];
+  readonly causalGrammarIds: readonly string[];
 }
 
 export interface KpEquationRecipeMotifUse {
@@ -132,7 +135,8 @@ export function createKpEquationOperationRegistry(
     "semantic-operations",
     entries.map((entry) => Object.freeze({
       ...entry,
-      recipeIds: freezeIds(entry.recipeIds)
+      recipeIds: freezeIds(entry.recipeIds),
+      semanticAuthorityIds: freezeIds(entry.semanticAuthorityIds)
     }))
   );
 }
@@ -144,11 +148,13 @@ export function createKpEquationRecipeRegistry(
     "recipes",
     entries.map((entry) => Object.freeze({
       ...entry,
+      operationKinds: freezeIds(entry.operationKinds),
       motifUses: Object.freeze(entry.motifUses.map((use) => Object.freeze({
         ...use,
         roleIds: freezeIds(use.roleIds)
       }))),
-      dependencyRecipeIds: freezeIds(entry.dependencyRecipeIds)
+      dependencyRecipeIds: freezeIds(entry.dependencyRecipeIds),
+      causalGrammarIds: freezeIds(entry.causalGrammarIds)
     }))
   );
 }

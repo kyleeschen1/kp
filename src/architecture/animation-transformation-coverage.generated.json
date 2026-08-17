@@ -12,8 +12,8 @@
     "total": 28,
     "byStatus": {
       "Direct": 3,
-      "Registered": 3,
-      "Exemplar": 11,
+      "Registered": 4,
+      "Exemplar": 10,
       "Missing": 11
     }
   },
@@ -260,31 +260,37 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.log-homomorphism.v1"
       },
-      "status": "Exemplar",
+      "status": "Registered",
       "requirements": [
         {
           "id": "requirement.equation.log-homomorphism.product-operation",
           "kind": "semantic-operation",
           "authorityId": "law.logarithm.product",
           "summary": "The product law licenses ordered factor decomposition into a sum.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.homomorphic-crossover.v1"
+          ]
         },
         {
           "id": "requirement.equation.log-homomorphism.quotient-operation",
           "kind": "semantic-operation",
           "authorityId": "law.logarithm.quotient",
           "summary": "The quotient law licenses a difference-to-quotient fusion.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.homomorphic-crossover.v1"
+          ]
         },
         {
           "id": "requirement.equation.log-homomorphism.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.equation.homomorphic-decomposition.v1",
           "summary": "One causal recipe names shared operator-shell and connector phases without owning caller geometry.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.homomorphic-crossover.v1"
+          ]
         },
         {
           "id": "requirement.equation.log-homomorphism.product-exemplar",
@@ -322,9 +328,6 @@
         }
       ],
       "remainingRequirementIds": [
-        "requirement.equation.log-homomorphism.product-operation",
-        "requirement.equation.log-homomorphism.quotient-operation",
-        "requirement.equation.log-homomorphism.recipe",
         "requirement.equation.log-homomorphism.product-exemplar",
         "requirement.equation.log-homomorphism.authoring",
         "requirement.equation.log-homomorphism.corpus"
@@ -337,6 +340,7 @@
         }
       ],
       "evidenceTensions": [
+        "registered-without-direct-generation",
         "playable-exemplar-without-general-generation"
       ]
     },

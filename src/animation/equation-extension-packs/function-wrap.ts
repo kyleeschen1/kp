@@ -23,19 +23,21 @@ export const kpFunctionWrapEquationExtensionPackId =
 export const kpFunctionWrapOperationRegistration = Object.freeze({
   id: vocabulary.operations.wrapFunctionV1,
   familyId: vocabulary.families.structuralWrapV1,
-  recipeIds: Object.freeze([vocabulary.recipes.functionApplicationV1])
+  recipeIds: Object.freeze([vocabulary.recipes.functionApplicationV1]),
+  semanticAuthorityIds: Object.freeze([])
 } as const satisfies KpEquationOperationRegistration);
 
 export const kpFunctionWrapRecipeRegistration = Object.freeze({
   id: vocabulary.recipes.functionApplicationV1,
   familyId: vocabulary.families.structuralWrapV1,
-  operationKind: vocabulary.operations.wrapFunctionV1,
+  operationKinds: Object.freeze([vocabulary.operations.wrapFunctionV1]),
   motifUses: Object.freeze([Object.freeze({
     id: "function-wrap",
     motifId: vocabulary.motifs.functionWrapV1,
     roleIds: Object.freeze(kpFunctionWrapMotifSchema.roles.map(({ id }) => id))
   })]),
-  dependencyRecipeIds: Object.freeze([])
+  dependencyRecipeIds: Object.freeze([]),
+  causalGrammarIds: Object.freeze([])
 } as const satisfies KpEquationRecipeRegistration);
 
 export const kpFunctionWrapMotifRegistration = Object.freeze({

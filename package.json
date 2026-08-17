@@ -141,6 +141,7 @@
     "check:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning scripts/generate-animation-transformation-coverage.ts --check",
     "test:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning --test tests/animation-transformation-coverage.test.ts",
     "test:homomorphic-causal-phases": "node --disable-warning=ExperimentalWarning --test tests/homomorphic-causal-phases.test.ts",
+    "test:homomorphic-crossover-registration": "node --disable-warning=ExperimentalWarning --test tests/homomorphic-crossover-registration.test.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
     "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",

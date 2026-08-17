@@ -92,18 +92,20 @@ function validPack(): KpEquationExtensionPack {
     operations: createKpEquationOperationRegistry([{
       id: vocabulary.operations.wrapFunctionV1,
       familyId: vocabulary.families.structuralWrapV1,
-      recipeIds: [recipeId]
+      recipeIds: [recipeId],
+      semanticAuthorityIds: []
     }]),
     recipes: createKpEquationRecipeRegistry([{
       id: recipeId,
       familyId: vocabulary.families.structuralWrapV1,
-      operationKind: vocabulary.operations.wrapFunctionV1,
+      operationKinds: [vocabulary.operations.wrapFunctionV1],
       motifUses: [{
         id: "wrap",
         motifId: vocabulary.motifs.functionWrapV1,
         roleIds: ["continuant"]
       }],
-      dependencyRecipeIds: []
+      dependencyRecipeIds: [],
+      causalGrammarIds: []
     }]),
     motifs: createKpEquationMotifRegistry([{
       id: vocabulary.motifs.functionWrapV1,
