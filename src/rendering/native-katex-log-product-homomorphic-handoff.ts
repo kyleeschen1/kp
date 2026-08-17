@@ -9,6 +9,10 @@ import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  invalidateKpNativeKatexMotionPath,
+  projectKpNativeKatexHorizontalPaintTransit
+} from "./native-katex-paint-geometry.ts";
 
 type IntroducedTrack = Extract<
   KpNativeKatexPaintMeasuredSceneTrack,
@@ -42,10 +46,10 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
     ({ semanticEntityId }) =>
       semanticEntityId === input.plan.operatorHandoff.sourceEntityId
   );
-  const sourceOperatorByVisualKey = uniqueAtomsByVisualKey(
-    sourceOperatorAtoms,
-    "source logarithm operator"
-  );
+  const sourceOperatorByVisualKey = uniqueOperatorTracksByVisualKey({
+    atoms: sourceOperatorAtoms,
+    tracks: input.tracks
+  });
   const targetOperatorIds = new Set(
     input.plan.operatorHandoff.targetEntityIds
   );
@@ -75,8 +79,7 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
     ) {
       return freezeElimination(
         track,
-        input.plan.operatorHandoff.sourceReleaseWindow,
-        sourceAtom.rect
+        input.plan.operatorHandoff.sourceReleaseWindow
       );
     }
     if (
@@ -91,7 +94,7 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
         );
       }
       adaptedTargetOperatorAtomIds.add(targetAtom.id);
-      return deriveOperatorSuccessor(track, origin, targetAtom, input.plan);
+      return deriveOperatorSuccessor(track, origin, input.plan);
     }
     if (
       track.lifecycle === "persist" &&
@@ -111,8 +114,7 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
     ) {
       return freezeElimination(
         track,
-        input.plan.enclosureHandoff.sourceReleaseWindow,
-        sourceAtom.rect
+        input.plan.enclosureHandoff.sourceReleaseWindow
       );
     }
     if (
@@ -122,7 +124,6 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
     ) {
       return revealAtNativePosition(
         track,
-        targetAtom,
         input.plan.relationHandoff.receptionWindow
       );
     }
@@ -146,17 +147,18 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
 
 function deriveOperatorSuccessor(
   track: IntroducedTrack,
-  sourceAtom: KpNativeKatexPaintAtomObservation,
-  targetAtom: KpNativeKatexPaintAtomObservation,
+  sourceTrack: EliminatedTrack,
   plan: KpBinaryLogProductHomomorphicHandoff
 ): KpNativeKatexPaintMeasuredSceneTrack {
-  const withoutPath = omitMotionPath(track);
+  const withoutPath = invalidateKpNativeKatexMotionPath(track);
+  const geometry = projectKpNativeKatexHorizontalPaintTransit({
+    originPaintRect: sourceTrack.startPaintRect,
+    targetRect: track.endRect,
+    targetPaintRect: track.endPaintRect
+  });
   return Object.freeze({
     ...withoutPath,
-    startRect: Object.freeze({ ...sourceAtom.rect }),
-    endRect: Object.freeze({ ...targetAtom.rect }),
-    startPaintRect: Object.freeze({ ...sourceAtom.rect }),
-    endPaintRect: Object.freeze({ ...targetAtom.rect }),
+    ...geometry,
     sampleProgress: sampleWindow(plan.operatorHandoff.transitWindow),
     sampleOpacityProgress: sampleWindow(
       plan.operatorHandoff.targetPresenceWindow
@@ -169,16 +171,15 @@ function deriveOperatorSuccessor(
 
 function freezeElimination(
   track: EliminatedTrack,
-  releaseWindow: { readonly start: number; readonly end: number },
-  nativeRect: KpNativeKatexPaintAtomObservation["rect"]
+  releaseWindow: { readonly start: number; readonly end: number }
 ): KpNativeKatexPaintMeasuredSceneTrack {
-  const withoutPath = omitMotionPath(track);
+  const withoutPath = invalidateKpNativeKatexMotionPath(track);
   return Object.freeze({
     ...withoutPath,
-    startRect: Object.freeze({ ...nativeRect }),
-    endRect: Object.freeze({ ...nativeRect }),
-    startPaintRect: Object.freeze({ ...nativeRect }),
-    endPaintRect: Object.freeze({ ...nativeRect }),
+    startRect: Object.freeze({ ...track.startRect }),
+    endRect: Object.freeze({ ...track.startRect }),
+    startPaintRect: Object.freeze({ ...track.startPaintRect }),
+    endPaintRect: Object.freeze({ ...track.startPaintRect }),
     sampleProgress: sampleWindow(releaseWindow),
     sampleOpacityProgress: sampleWindow(releaseWindow),
     opacityScheduleAuthority: "semantic-choreography" as const
@@ -187,49 +188,44 @@ function freezeElimination(
 
 function revealAtNativePosition(
   track: IntroducedTrack,
-  targetAtom: KpNativeKatexPaintAtomObservation,
   receptionWindow: { readonly start: number; readonly end: number }
 ): KpNativeKatexPaintMeasuredSceneTrack {
-  const withoutPath = omitMotionPath(track);
+  const withoutPath = invalidateKpNativeKatexMotionPath(track);
   return Object.freeze({
     ...withoutPath,
-    startRect: Object.freeze({ ...targetAtom.rect }),
-    endRect: Object.freeze({ ...targetAtom.rect }),
-    startPaintRect: Object.freeze({ ...targetAtom.rect }),
-    endPaintRect: Object.freeze({ ...targetAtom.rect }),
+    startRect: Object.freeze({ ...track.endRect }),
+    endRect: Object.freeze({ ...track.endRect }),
+    startPaintRect: Object.freeze({ ...track.endPaintRect }),
+    endPaintRect: Object.freeze({ ...track.endPaintRect }),
     sampleProgress: sampleWindow(receptionWindow),
     sampleOpacityProgress: sampleWindow(receptionWindow),
     opacityScheduleAuthority: "semantic-choreography" as const
   });
 }
 
-function omitMotionPath<Track extends KpNativeKatexPaintMeasuredSceneTrack>(
-  track: Track
-): Omit<
-  Track,
-  "motionPath" | "motionPathSampling"
-> {
-  const {
-    motionPath: _motionPath,
-    motionPathSampling: _motionPathSampling,
-    ...withoutPath
-  } = track;
-  return withoutPath;
-}
-
-function uniqueAtomsByVisualKey(
-  atoms: readonly KpNativeKatexPaintAtomObservation[],
-  label: string
-): ReadonlyMap<string, KpNativeKatexPaintAtomObservation> {
-  const byVisualKey = new Map<string, KpNativeKatexPaintAtomObservation>();
-  for (const atom of atoms) {
+function uniqueOperatorTracksByVisualKey(input: {
+  readonly atoms: readonly KpNativeKatexPaintAtomObservation[];
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+}): ReadonlyMap<string, EliminatedTrack> {
+  const byVisualKey = new Map<string, EliminatedTrack>();
+  for (const atom of input.atoms) {
     if (byVisualKey.has(atom.visualKey)) {
-      throw new Error(`${label} contains ambiguous ${atom.visualKey} paint.`);
+      throw new Error(
+        `source logarithm operator contains ambiguous ${atom.visualKey} paint.`
+      );
     }
-    byVisualKey.set(atom.visualKey, atom);
+    const matches = input.tracks.filter((track): track is EliminatedTrack =>
+      track.lifecycle === "eliminate" && track.sourceAtomId === atom.id
+    );
+    if (matches.length !== 1) {
+      throw new Error(
+        `Source logarithm paint ${atom.id} requires one measured elimination track.`
+      );
+    }
+    byVisualKey.set(atom.visualKey, matches[0]!);
   }
   if (byVisualKey.size === 0) {
-    throw new Error(`${label} requires visible paint.`);
+    throw new Error("source logarithm operator requires visible paint.");
   }
   return byVisualKey;
 }

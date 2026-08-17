@@ -124,6 +124,72 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
   expect(pageErrors).toEqual([]);
 });
 
+test("binary handoff visibly preserves its axis and receives enclosures", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-product-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expect.poll(() => stage.getAttribute("data-kp-log-product-stage"))
+    .not.toBe("preparing");
+  if (await stage.getAttribute("data-kp-log-product-stage") === "failed") {
+    throw new Error(
+      await stage.getAttribute("data-kp-log-product-error") ??
+      "Log-product stage failed without diagnostics."
+    );
+  }
+  await expect(stage).toHaveAttribute("data-kp-log-product-stage", "ready");
+
+  const at = async (progress: number, entityIds: readonly string[]) => {
+    await seek.fill(String(progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-progress",
+      String(progress)
+    );
+    return visibleMaterialGeometry(stage, entityIds);
+  };
+  const operatorIds = [
+    "target.left.log.operator",
+    "target.right.log.operator"
+  ] as const;
+  const operatorOrigin = await at(0.22, operatorIds);
+  const operatorMidpoint = await at(0.47, operatorIds);
+  const operatorSettlement = await at(0.72, operatorIds);
+  for (const entityId of operatorIds) {
+    const tops = [operatorOrigin, operatorMidpoint, operatorSettlement]
+      .map((geometry) => geometry[entityId]!.top);
+    expect(Math.max(...tops) - Math.min(...tops)).toBeLessThanOrEqual(0.25);
+  }
+
+  const enclosureIds = [
+    "target.left.log.open",
+    "target.left.log.close",
+    "target.right.log.open",
+    "target.right.log.close"
+  ] as const;
+  const enclosureEntry = await at(0.54, enclosureIds);
+  const enclosureMidpoint = await at(0.63, enclosureIds);
+  const enclosureSettlement = await at(0.72, enclosureIds);
+  for (const prefix of ["target.left.log", "target.right.log"]) {
+    const leading = [enclosureEntry, enclosureMidpoint, enclosureSettlement]
+      .map((geometry) => geometry[`${prefix}.open`]!);
+    const trailing = [enclosureEntry, enclosureMidpoint, enclosureSettlement]
+      .map((geometry) => geometry[`${prefix}.close`]!);
+    expect(leading[0]!.left).toBeLessThan(leading[1]!.left);
+    expect(leading[1]!.left).toBeLessThan(leading[2]!.left);
+    expect(trailing[0]!.left).toBeGreaterThan(trailing[1]!.left);
+    expect(trailing[1]!.left).toBeGreaterThan(trailing[2]!.left);
+    expect(leading[2]!.left - leading[0]!.left)
+      .toBeGreaterThan(leading[2]!.height * 0.5);
+    expect(trailing[0]!.left - trailing[2]!.left)
+      .toBeGreaterThan(trailing[2]!.height * 0.5);
+  }
+});
+
 test("three-factor product uses the same lazy surface and deterministic clock", async ({
   page
 }) => {
@@ -218,4 +284,36 @@ async function movingPaintSnapshot(stage: Locator) {
       transform: owner.style.transform
     })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
   );
+}
+
+async function visibleMaterialGeometry(
+  stage: Locator,
+  entityIds: readonly string[]
+): Promise<Record<string, { left: number; top: number; width: number; height: number }>> {
+  return stage.evaluate((root, expectedEntityIds) => {
+    const result: Record<
+      string,
+      { left: number; top: number; width: number; height: number }
+    > = {};
+    for (const entityId of expectedEntityIds) {
+      const owners = [...root.querySelectorAll<HTMLElement>(
+        `[data-kp-equation-material-semantic-entity-id="${CSS.escape(entityId)}"]`
+      )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0.01);
+      if (owners.length === 0) {
+        throw new Error(`No visible material paint for ${entityId}.`);
+      }
+      const rects = owners.map((owner) => owner.getBoundingClientRect());
+      const left = Math.min(...rects.map((rect) => rect.left));
+      const top = Math.min(...rects.map((rect) => rect.top));
+      const right = Math.max(...rects.map((rect) => rect.right));
+      const bottom = Math.max(...rects.map((rect) => rect.bottom));
+      result[entityId] = {
+        left,
+        top,
+        width: right - left,
+        height: bottom - top
+      };
+    }
+    return result;
+  }, entityIds);
 }

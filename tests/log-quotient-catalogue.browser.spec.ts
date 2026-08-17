@@ -16,7 +16,7 @@ test("visible play control drives continuous log quotient motion", async ({
   const stage = player.locator("[data-kp-log-quotient-stage]");
   const play = player.getByRole("button", { name: "Play animation" });
 
-  await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
+  await expectLogQuotientReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-log-quotient-fraction-treatment",
     "compact-native"
@@ -65,7 +65,7 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
     "data-kp-editor-animation-adapter-id",
     "editor-animation-surface.log-quotient.canonical-native-katex"
   );
-  await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
+  await expectLogQuotientReady(stage);
   await expect(stage.locator(".kp-log-quotient-stage__endpoint")).toHaveCount(2);
   await expect(stage.locator(
     '[data-kp-semantic-entity-id="target.quotient.bar"].frac-line'
@@ -97,7 +97,7 @@ test("log quotient mounts lazily and seeks through one native paint owner", asyn
     "source.right.log.operator"
   ]);
   expect(operatorFusion.every(({ motionPathVariant, motionAxisConstraint }) =>
-    motionPathVariant === undefined && motionAxisConstraint === "horizontal"
+    motionPathVariant === undefined && motionAxisConstraint === undefined
   )).toBe(true);
   expect(trackSummary.find(({ sourceEntityId }) =>
     sourceEntityId === "source.left.argument.x"
@@ -257,4 +257,16 @@ async function movingPaintSnapshot(stage: Locator) {
       transform: owner.style.transform
     })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
   );
+}
+
+async function expectLogQuotientReady(stage: Locator): Promise<void> {
+  await expect.poll(() => stage.getAttribute("data-kp-log-quotient-stage"))
+    .not.toBe("preparing");
+  if (await stage.getAttribute("data-kp-log-quotient-stage") === "failed") {
+    throw new Error(
+      await stage.getAttribute("data-kp-log-quotient-error") ??
+      "Log-quotient stage failed without diagnostics."
+    );
+  }
+  await expect(stage).toHaveAttribute("data-kp-log-quotient-stage", "ready");
 }

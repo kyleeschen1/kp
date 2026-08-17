@@ -131,9 +131,10 @@ function applyHomomorphicFusion(
       return Object.freeze({
         ...track,
         // Operator fusion is a restrained convergence, not an argument arc.
-        // The axis constraint also prevents generic collision repair from
-        // silently turning the shared operator into a different motif.
-        motionAxisConstraint: "horizontal" as const,
+        // It is not universally horizontal: a fraction-bearing target can
+        // establish a different native baseline. Leaving the route direct
+        // preserves the existing convergence without making a false axis
+        // promise that would snap at endpoint handoff.
         timingGroupId: `${choreography.id}.operator-fusion`,
         semanticMotionUnitId: `${choreography.id}.operator-fusion`,
         sampleProgress: sample

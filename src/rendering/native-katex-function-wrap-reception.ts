@@ -9,6 +9,9 @@ import type {
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  invalidateKpNativeKatexMotionPath
+} from "./native-katex-paint-geometry.ts";
 
 export const kpNativeKatexFunctionWrapReceptionStyle = Object.freeze({
   initialScale:
@@ -179,8 +182,11 @@ export function adaptKpNativeKatexFunctionWrapReception(input: {
           side
         )
       : undefined;
+    const geometryTrack = motion === "horizontal-squeeze"
+      ? invalidateKpNativeKatexMotionPath(track)
+      : track;
     return Object.freeze({
-      ...track,
+      ...geometryTrack,
       ...(input.plan.direction === "forward"
         ? {
             ...(receptiveLayoutRect === undefined

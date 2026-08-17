@@ -120,11 +120,46 @@
       "status": "passed",
       "scope": "dependency direction, framework-neutrality, semantic boundaries, and equation compiler authority",
       "checkedAt": "2026-08-17T16:02:03.816Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-path-planner.test.ts tests/native-katex-operation-choreography.test.ts tests/log-product-transit-session.test.ts tests/log-quotient-homomorphic-fusion.test.ts",
+      "status": "passed",
+      "scope": "motion contracts",
+      "checkedAt": "2026-08-17T16:43:33.058Z",
+      "notes": "39 focused contract tests passed, including stale-path invalidation and measured horizontal-axis enforcement."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-product-catalogue.browser.spec.ts --grep binary handoff visibly --reporter=line --workers=1",
+      "status": "passed",
+      "scope": "visible material geometry",
+      "checkedAt": "2026-08-17T16:43:34.545Z",
+      "notes": "Measured DOM geometry passed in Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository types",
+      "checkedAt": "2026-08-17T16:43:35.497Z",
+      "notes": "App, node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-17T16:43:36.434Z",
+      "notes": "Dependency, framework-neutrality, semantic, operation, and compiler authority gates passed."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "canonical visual checkpoint",
+      "checkedAt": "2026-08-17T16:43:37.355Z",
+      "notes": "Deterministic contact sheet regenerated at tmp/codex/log-product-checkpoint/contact-sheet.png."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented the bounded binary homomorphic handoff: the source ln remains visible until two derived ln successors establish, both successors travel horizontally from the source carrier, the source shell clears before payload transit, native-size parentheses receive by horizontal squeeze, and the plus sign settles with the derived operators. Semantic/compiler/clock authority and the three-factor caller remain unchanged. Awaiting human visual judgment before promotion."
+    "summary": "Corrected logarithm baseline and visible enclosure squeeze; promoted measured horizontal-axis and stale-route invalidation contracts. Awaiting the mandatory human visual checkpoint before broader promotion."
   },
   "expectedLearning": [
     "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."

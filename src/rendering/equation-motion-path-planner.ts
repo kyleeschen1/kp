@@ -90,6 +90,7 @@ const kpProtectedTransitContextRanges = [
 // Measured paint includes antialiasing fringes that may touch in native KaTeX.
 export const kpNativeInkContactTolerancePx = 0.75;
 export const kpNativeReorderInkContactTolerancePx = 1.5;
+export const kpEquationHorizontalAxisTolerancePx = 0.25;
 
 interface KpEquationReorderChoreography {
   readonly moverRange: {
@@ -944,11 +945,55 @@ export function sampleKpEquationMotionTrackRect(
   track: KpEquationCollisionTrack,
   progress: number
 ): KpEquationLayoutRect {
+  assertKpEquationMotionTrackAxisConstraint(track);
   const p = clamp01(progress);
   const motionProgress = trackMotionProgress(track, p);
   return track.motionPath === undefined
     ? interpolateRect(track.startRect, track.endRect, motionProgress)
     : layoutRectAt(track, track.motionPath, motionProgress);
+}
+
+/**
+ * Axis metadata is a renderer contract, not a routing hint. Failing here
+ * prevents a caller from certifying horizontal motion while measured paint
+ * quietly drifts and then snaps at native endpoint handoff.
+ */
+export function assertKpEquationMotionTrackAxisConstraint(
+  track: KpEquationCollisionTrack
+): void {
+  if (track.motionAxisConstraint !== "horizontal") return;
+  const start = track.startPaintRect ?? track.startRect;
+  const end = track.endPaintRect ?? track.endRect;
+  const startCenter = rectCenter(start);
+  const endCenter = rectCenter(end);
+  const delta = Math.abs(startCenter.y - endCenter.y);
+  if (delta > kpEquationHorizontalAxisTolerancePx) {
+    throw new Error(
+      `Track ${track.id} declares horizontal-axis motion but its measured paint ` +
+      `drifts ${delta.toFixed(3)}px vertically.`
+    );
+  }
+  if (
+    track.motionPath !== undefined &&
+    (
+      pointDistance(track.motionPath.start, startCenter) >
+        kpEquationHorizontalAxisTolerancePx ||
+      pointDistance(track.motionPath.end, endCenter) >
+        kpEquationHorizontalAxisTolerancePx
+    )
+  ) {
+    throw new Error(
+      `Track ${track.id} declares horizontal-axis motion but its motion path ` +
+      `does not match the measured paint endpoints.`
+    );
+  }
+}
+
+function pointDistance(
+  left: KpEquationLayoutPoint,
+  right: KpEquationLayoutPoint
+): number {
+  return Math.hypot(left.x - right.x, left.y - right.y);
 }
 
 export function sampleKpEquationMotionTrackPaintRect(

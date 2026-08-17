@@ -253,6 +253,41 @@ test("protected transit routes around a semantic axis continuant", () => {
   assert.notEqual(crossing.motionPath, undefined);
 });
 
+test("horizontal-axis metadata rejects non-horizontal measured paint", () => {
+  const invalid: KpEquationCollisionTrack = {
+    id: "track.invalid-horizontal-paint",
+    componentId: "component.invalid-horizontal-paint",
+    lifecycle: "persist",
+    startRect: { left: 0, top: 0, width: 10, height: 10 },
+    endRect: { left: 40, top: 8, width: 10, height: 10 },
+    startPaintRect: { left: 1, top: 1, width: 8, height: 8 },
+    endPaintRect: { left: 41, top: 9, width: 8, height: 8 },
+    motionAxisConstraint: "horizontal"
+  };
+
+  assert.throws(
+    () => sampleKpEquationMotionTrackRect(invalid, 0.5),
+    /horizontal-axis.*measured paint/u
+  );
+
+  const stalePath: KpEquationCollisionTrack = {
+    ...invalid,
+    id: "track.stale-horizontal-path",
+    endRect: { left: 40, top: 0, width: 10, height: 10 },
+    endPaintRect: { left: 41, top: 1, width: 8, height: 8 },
+    motionPath: planKpEquationMotionPathBetweenPoints({
+      id: "path.stale-horizontal-path",
+      start: { x: 25, y: 5 },
+      end: { x: 45, y: 5 },
+      variants: ["direct"]
+    }).selected
+  };
+  assert.throws(
+    () => sampleKpEquationMotionTrackRect(stalePath, 0.5),
+    /motion path.*measured paint endpoints/u
+  );
+});
+
 test("protected transit admits same-component fission contact", () => {
   const compilation = compileKpCollisionSafeTransitTracks({
     tracks: [

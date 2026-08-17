@@ -159,7 +159,7 @@ test("homomorphic choreography routes arguments but keeps operator fusion direct
   );
   assert.equal(
     bySourceEntity.get("source.left.log.operator")?.motionAxisConstraint,
-    "horizontal"
+    undefined
   );
   assert.equal(
     bySourceEntity.get("source.left.argument.x")?.motionPath?.variant,

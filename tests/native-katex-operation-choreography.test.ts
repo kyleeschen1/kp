@@ -18,6 +18,7 @@ import {
 } from "../src/reader/renderers/equation-operation-choreography-compiler.ts";
 import {
   compileKpCollisionSafeTransitTracks,
+  planKpEquationMotionPathBetweenPoints,
   sampleKpEquationMotionTrackRect,
   sampleKpEquationMotionTrackOpacityProgress,
   type KpEquationCollisionTrack
@@ -33,6 +34,9 @@ import {
 import {
   applyKpNativeKatexLogProductHomomorphicHandoff
 } from "../src/rendering/native-katex-log-product-homomorphic-handoff.ts";
+import {
+  projectKpNativeKatexHorizontalPaintTransit
+} from "../src/rendering/native-katex-paint-geometry.ts";
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
@@ -97,7 +101,10 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
   const tracks = applyKpNativeKatexFunctionWrapReception({
     source: scene("source", []),
     target,
-    tracks: [introducedTrack(open, 0), introducedTrack(close, 1)],
+    tracks: [
+      withDirectMotionPath(introducedTrack(open, 0)),
+      withDirectMotionPath(introducedTrack(close, 1))
+    ],
     plan: createKpFunctionWrapReceptionPlan({
       id: "function-wrap-reception.horizontal-squeeze-test",
       direction: "forward",
@@ -150,6 +157,26 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
   assert.equal(samples[0]![1]!.opacity, 1);
   assert.equal(samples[1]![0]!.opacity, 1);
   assert.equal(samples[1]![1]!.opacity, 1);
+  assert.ok(tracks.every(({ motionPath }) => motionPath === undefined));
+});
+
+test("horizontal paint projection preserves target-native vertical geometry", () => {
+  const geometry = projectKpNativeKatexHorizontalPaintTransit({
+    originPaintRect: { left: 100, top: 42, width: 18, height: 16 },
+    targetRect: { left: 24, top: 18, width: 20, height: 24 },
+    targetPaintRect: { left: 28, top: 23, width: 12, height: 14 }
+  });
+
+  assert.deepEqual(geometry.startPaintRect, {
+    left: 103,
+    top: 23,
+    width: 12,
+    height: 14
+  });
+  assert.equal(geometry.startRect.top, geometry.endRect.top);
+  assert.equal(geometry.startPaintRect.top, geometry.endPaintRect.top);
+  assert.equal(geometry.startPaintRect.width, geometry.endPaintRect.width);
+  assert.equal(geometry.startPaintRect.height, geometry.endPaintRect.height);
 });
 
 test("homomorphic operator successors emerge from one visible source carrier", () => {
@@ -673,6 +700,20 @@ function eliminatedTrack(
     endPaintRect: { ...source.rect, top: source.rect.top - 8 },
     startOpacity: 1,
     endOpacity: 0
+  };
+}
+
+function withDirectMotionPath(
+  track: KpNativeKatexPaintMeasuredSceneTrack
+): KpNativeKatexPaintMeasuredSceneTrack {
+  return {
+    ...track,
+    motionPath: planKpEquationMotionPathBetweenPoints({
+      id: `path.${track.id}`,
+      start: center(track.startPaintRect),
+      end: center(track.endPaintRect),
+      variants: ["direct"]
+    }).selected
   };
 }
 
