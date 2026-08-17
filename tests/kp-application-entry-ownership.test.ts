@@ -56,7 +56,7 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
       },
       {
         id: "entry-owner.development-tooling",
-        current: "shared-main-graph",
+        current: "development-erased",
         required: "development-erased"
       },
       {
@@ -110,6 +110,22 @@ test("public and development entry roots cannot masquerade as kernel or Studio",
     path.startsWith("vite.public-")
   ));
   assert.deepEqual(development.requiredBuildConfigs, []);
+  assert.deepEqual(development.currentBuildConfigs, []);
+});
+
+test("every production build inspects Rollup's rendered modules for development leaks", () => {
+  const configs = [
+    "vite.config.ts",
+    "vite.internal-studio.config.ts",
+    ...findKpApplicationEntryOwner("entry-owner.public-web").currentBuildConfigs
+  ];
+  for (const config of configs) {
+    assert.match(
+      readFileSync(config, "utf8"),
+      /kpProductionDevelopmentErasurePlugin\(\{ projectRoot \}\)/u,
+      `${config} must enforce development erasure`
+    );
+  }
 });
 
 test("ownership rejects duplicate roots incomplete registries and unsafe dev policy", () => {

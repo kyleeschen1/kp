@@ -57,7 +57,7 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-kp-animation-workbench-review/);
   assert.match(html, /data-kp-animation-workbench-promotion-lineage/);
   assert.match(html, /Promotion lineage/);
-  assert.match(html, /Loading the existing development review inbox/);
+  assert.match(html, /data-review-state="loading"/);
   assert.match(
     html,
     /data-action="select-animation-workbench-representation"/

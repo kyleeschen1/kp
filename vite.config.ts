@@ -7,7 +7,11 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 
 import {
-  kpDevelopmentBuildEntries
+  kpProductionDevelopmentErasurePlugin
+} from "./scripts/vite-production-development-erasure.ts";
+
+import {
+  kpProductionCompatibilityBuildEntries
 } from "./src/dev-toolbar/development-page-build-entries.ts";
 import { kpSchemeFactorialTimeline } from
   "./src/animation/scheme-factorial-canonical-timeline.ts";
@@ -136,6 +140,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    kpProductionDevelopmentErasurePlugin({ projectRoot }),
     // Svelte owns only catalogue application composition; animation assets,
     // clocks, sampled frames, and renderer ports remain plain TypeScript.
     svelte(),
@@ -296,7 +301,7 @@ export default defineConfig({
     modulePreload: { polyfill: false },
     rollupOptions: {
       input: {
-        ...Object.fromEntries(kpDevelopmentBuildEntries.map((entry) => [
+        ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [
           entry.name,
           resolve(projectRoot, entry.htmlPath)
         ])),

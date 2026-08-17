@@ -9,17 +9,6 @@ html[data-kp-economics-view="attention-stage"] {
   --kp-attention-stage-section-gap: clamp(0.75rem, 1.5svh, 1.25rem);
 }
 
-html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
-  --kp-attention-stage-viewport-clearance: 5.75rem;
-}
-
-html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"]
-  .kp-economics-static-publication__projection {
-  /* Reserve an actual scrollable tail as well as sizing clearance so text-only
-     zoom can move transport controls above the fixed development toolbar. */
-  margin-block-end: var(--kp-attention-stage-viewport-clearance);
-}
-
 html[data-kp-economics-view="attention-stage"]
   .kp-economics-static-publication__projection {
   display: flex;
@@ -285,10 +274,6 @@ html[data-kp-economics-view="attention-stage"]
     --kp-attention-stage-max-block: 32rem;
     --kp-attention-stage-copy-block: 8.25rem;
     --kp-attention-stage-graph-block-min: clamp(11rem, 32svh, 16rem);
-  }
-
-  html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
-    --kp-attention-stage-viewport-clearance: 8rem;
   }
 
   html[data-kp-economics-view="attention-stage"]

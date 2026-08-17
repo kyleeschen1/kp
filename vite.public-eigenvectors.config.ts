@@ -3,6 +3,10 @@ import { resolve } from "node:path";
 
 import { defineConfig } from "vite";
 
+import {
+  kpProductionDevelopmentErasurePlugin
+} from "./scripts/vite-production-development-erasure.ts";
+
 import { renderKpEigenvectorPublicLesson } from
   "./src/public-web/eigenvector-attentional-surface-publication.ts";
 
@@ -12,6 +16,7 @@ const routeFilename = resolve(projectRoot, "learn/math/eigenvectors/index.html")
 /** Keep the attentional exemplar independent from the catalogue runtime. */
 export default defineConfig({
   plugins: [
+    kpProductionDevelopmentErasurePlugin({ projectRoot }),
     {
       name: "kp-public-eigenvectors-scoped-root",
       configureServer(server) {

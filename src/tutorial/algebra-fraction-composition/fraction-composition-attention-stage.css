@@ -11,10 +11,6 @@ html[data-kp-algebra-view="attention-stage"] {
   --kp-algebra-attention-player-progress: 0%;
 }
 
-html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
-  --kp-algebra-attention-viewport-clearance: 6rem;
-}
-
 html[data-kp-algebra-view="attention-stage"] .kp-algebra-article {
   width: min(100% - 2rem, 72rem);
   padding-block-start: clamp(1rem, 3svh, 2rem);

@@ -108,7 +108,7 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     id: "entry-owner.development-tooling",
     delivery: "development-only",
     frameworkBoundary: "host-owned",
-    currentBoundary: "shared-main-graph",
+    currentBoundary: "development-erased",
     requiredBoundary: "development-erased",
     entryModules: [
       "src/dev-toolbar/development-toolbar-bootstrap.ts",
@@ -123,7 +123,7 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
       "canonical-animation-review.html",
       "glyph-reconciliation-experiment.html"
     ],
-    currentBuildConfigs: ["vite.config.ts"],
+    currentBuildConfigs: [],
     requiredBuildConfigs: [],
     rationale:
       "Review, capture, navigation, and diagnostic chrome observe products only in development."

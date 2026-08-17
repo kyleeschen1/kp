@@ -166,7 +166,25 @@ html[data-kp-dev-toolbar-active] .kp-economics-tutorial__bottom-controls {
   display: none;
 }
 
+html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
+  --kp-attention-stage-viewport-clearance: 5.75rem;
+}
+
+html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"]
+  .kp-economics-static-publication__projection {
+  /* The development chrome needs real scroll tail, not only sizing clearance. */
+  margin-block-end: var(--kp-attention-stage-viewport-clearance);
+}
+
+html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
+  --kp-algebra-attention-viewport-clearance: 6rem;
+}
+
 @media (max-width: 560px) {
+  html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
+    --kp-attention-stage-viewport-clearance: 8rem;
+  }
+
   [data-kp-dev-toolbar] {
     right: 8px;
     bottom: 8px;

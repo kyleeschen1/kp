@@ -19,9 +19,6 @@ import {
   createKpAnimationCatalogueSelectionPreparationService
 } from "../animation-catalogue-selection-preparation.ts";
 import {
-  createKpAnimationCatalogueReviewHost
-} from "../animation-catalogue-review-host.ts";
-import {
   prepareKpAnimationCatalogueChromeFonts
 } from "../animation-catalogue-font-reservation.ts";
 import { createKpEditorAnimationLibrary } from "../animation-library.ts";
@@ -46,7 +43,12 @@ export async function mountKpSvelteCatalogueExemplar(input: {
     projection,
     prepare: selectionPreparation.prepare
   });
-  const reviewHost = createKpAnimationCatalogueReviewHost();
+  const reviewHost = import.meta.env.DEV
+    ? await import("../animation-catalogue-review-host.ts").then(
+        ({ createKpAnimationCatalogueReviewHost }) =>
+          createKpAnimationCatalogueReviewHost()
+      )
+    : undefined;
   const selection = resolveKpAnimationCatalogueSelection({
     projection,
     artifactId: route.artifactId
@@ -99,7 +101,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
         }
       }
     });
-    void reviewHost.mount();
+    void reviewHost?.mount();
   } catch (error: unknown) {
     const message = error instanceof Error
       ? error.message
@@ -118,7 +120,7 @@ export async function mountKpSvelteCatalogueExemplar(input: {
   }
 
   return () => {
-    reviewHost.dispose();
+    reviewHost?.dispose();
     delete input.root.dataset["kpSvelteCatalogueExemplar"];
     if (component !== undefined) void unmount(component);
   };

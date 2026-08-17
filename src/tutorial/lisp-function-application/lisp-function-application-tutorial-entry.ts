@@ -13,7 +13,6 @@ import { createKpEditorAnimationLibrary } from "../../editor/animation-library.t
 import { createKpLispLambdaApplicationAsset } from "../../semantic/lisp-lambda-application-asset.ts";
 import { defineKpTutorialScrubBar } from "../kp-tutorial-scrub-bar.ts";
 import { defineKpTutorialToc } from "../kp-tutorial-toc-element.ts";
-import { createKpTutorialReviewHost } from "../kp-tutorial-review-host.ts";
 import KpLispFunctionApplicationTutorial from "./KpLispFunctionApplicationTutorial.svelte";
 import {
   createKpLispLessonMotionController
@@ -77,13 +76,20 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
   if (tutorialRoot === null) {
     throw new Error("Lisp tutorial host did not render its semantic root.");
   }
+  const review = import.meta.env.DEV
+    ? await import("./lisp-function-application-review-adapter.ts").then(
+        ({ createKpLispLessonReviewAdapter }) =>
+          createKpLispLessonReviewAdapter({ root: tutorialRoot, source })
+      )
+    : undefined;
   const motion = createKpLispLessonMotionController({
     root: tutorialRoot,
     animation,
     descriptor,
     source,
     plan,
-    stageProjector
+    stageProjector,
+    ...(review === undefined ? {} : { review })
   });
   const navigation = createKpLispLessonNavigationController({
     root: tutorialRoot,
@@ -95,15 +101,19 @@ export async function mountKpLispFunctionApplicationTutorial(input: {
     motion,
     navigation
   });
-  const reviewHost = createKpTutorialReviewHost();
+  const reviewHost = import.meta.env.DEV
+    ? await import("../kp-tutorial-review-host.ts").then(
+        ({ createKpTutorialReviewHost }) => createKpTutorialReviewHost()
+      )
+    : undefined;
   input.root.dataset["kpLispFunctionApplicationTutorialMounted"] = "true";
-  void reviewHost.mount();
+  void reviewHost?.mount();
 
   return () => {
     scroll.dispose();
     navigation.dispose();
     motion.dispose();
-    reviewHost.dispose();
+    reviewHost?.dispose();
     style.remove();
     delete input.root.dataset["kpLispFunctionApplicationTutorialMounted"];
     void unmount(component);

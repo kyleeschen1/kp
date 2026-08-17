@@ -55,8 +55,8 @@ test("the Lisp route owns a build entry with a static fallback", async () => {
       htmlPath: "tutorials/programming/lisp-function-application/index.html"
     }
   );
-  // The directory-owned entry table is now the one Vite input authority.
-  assert.match(vite, /kpDevelopmentBuildEntries\.map/);
+  // Production selects the compatibility subset, leaving review roots dev-only.
+  assert.match(vite, /kpProductionCompatibilityBuildEntries\.map/);
   assert.match(vite, /compileLispTutorialStaticFallback/);
 });
 

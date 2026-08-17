@@ -5,6 +5,10 @@ import { resolve } from "node:path";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 
+import {
+  kpProductionDevelopmentErasurePlugin
+} from "./scripts/vite-production-development-erasure.ts";
+
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
 const routeFilename = resolve(projectRoot, "studio/index.html");
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
@@ -15,6 +19,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(readReviewBuildIdentity())
   },
   plugins: [
+    kpProductionDevelopmentErasurePlugin({ projectRoot }),
     svelte(),
     {
       name: "kp-internal-studio-scoped-root",

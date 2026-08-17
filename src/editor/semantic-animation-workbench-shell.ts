@@ -14,9 +14,6 @@ import {
   deriveKpAnimationAcceptanceBrief,
   renderKpAnimationAcceptanceBrief
 } from "./semantic-animation-workbench-acceptance.ts";
-import {
-  renderKpAnimationWorkbenchReviewPanel
-} from "./semantic-animation-workbench-review.ts";
 import type {
   KpAnimationRepresentationRelationship
 } from "./semantic-animation-workbench-representation.ts";
@@ -312,10 +309,7 @@ function renderSelectedSummary(
         selected.representations,
         selectedRepresentationId
       )}
-      ${renderKpAnimationWorkbenchReviewPanel({
-        animationId: selected.identity.animationId,
-        state: "loading"
-      })}
+      <section data-kp-animation-workbench-review="${escapeHtml(selected.identity.animationId)}" data-review-state="loading"></section>
     </section>
   </article>`;
 }

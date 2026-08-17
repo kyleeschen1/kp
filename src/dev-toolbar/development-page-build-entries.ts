@@ -36,3 +36,16 @@ export const kpDevelopmentBuildEntries: readonly KpDevelopmentBuildEntry[] =
       htmlPath: "tutorials/programming/scheme-factorial/index.html"
     })
   ]);
+
+const developmentOnlyBuildEntryNames = new Set([
+  "glyphReconciliationExperiment",
+  "canonicalAnimationReview"
+]);
+
+/** Production retains compatibility documents, never review or experiment roots. */
+export const kpProductionCompatibilityBuildEntries:
+readonly KpDevelopmentBuildEntry[] = Object.freeze(
+  kpDevelopmentBuildEntries.filter(({ name }) =>
+    !developmentOnlyBuildEntryNames.has(name)
+  )
+);

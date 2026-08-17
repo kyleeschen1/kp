@@ -29,7 +29,7 @@ import {
 import { projectKpLispLessonSalience } from "./lisp-function-application-salience.ts";
 import type { KpLispLessonStageProjector } from
   "./lisp-function-application-stage-projector.ts";
-import { createKpLispLessonReviewAdapter } from
+import type { KpLispLessonReviewAdapter } from
   "./lisp-function-application-review-adapter.ts";
 
 export { kpLispReconstructedGlobalProgress };
@@ -87,6 +87,7 @@ export function createKpLispLessonMotionController(input: {
   readonly source: KpLispLambdaApplicationAsset;
   readonly plan: KpLispBotanicalPresentationPlan;
   readonly stageProjector: KpLispLessonStageProjector;
+  readonly review?: KpLispLessonReviewAdapter | undefined;
 }): KpLispLessonMotionController {
   const view = input.root.ownerDocument.defaultView;
   if (view === null) throw new Error("Lisp motion controls require a browser view.");
@@ -109,10 +110,7 @@ export function createKpLispLessonMotionController(input: {
     "untouched";
   let request: number | undefined;
   let stageVisible = true;
-  const review = createKpLispLessonReviewAdapter({
-    root: input.root,
-    source: input.source
-  });
+  const review = input.review;
 
   const render = (): void => {
     const local = sessionProgress(session);
@@ -134,7 +132,7 @@ export function createKpLispLessonMotionController(input: {
       availableWidthPx: stageWidth(stage),
       reducedMotion: reducedMotionQuery.matches
     });
-    const reviewProjection = review.project({
+    const reviewProjection = review?.project({
       activeBlockId,
       localProgress: local
     });
@@ -144,14 +142,15 @@ export function createKpLispLessonMotionController(input: {
       input.stageProjector.rendererKind;
     input.root.dataset["kpLispTutorialActiveMotionBlock"] = activeBlockId;
     input.root.dataset["kpLispTutorialMotionOwner"] = motionOwner;
-    input.root.dataset["kpTutorialReviewMotionBlock"] = activeBlockId;
-    input.root.dataset["kpTutorialReviewProgress"] =
-      local.toFixed(4);
-    input.root.dataset["kpTutorialReviewCheckpoint"] =
-      reviewProjection.checkpointId;
-    input.root.dataset["kpTutorialReviewMotionAuthority"] = motionOwner;
-    input.root.dataset["kpTutorialReviewPlaybackDirection"] =
-      session.player.direction;
+    if (reviewProjection !== undefined) {
+      input.root.dataset["kpTutorialReviewMotionBlock"] = activeBlockId;
+      input.root.dataset["kpTutorialReviewProgress"] = local.toFixed(4);
+      input.root.dataset["kpTutorialReviewCheckpoint"] =
+        reviewProjection.checkpointId;
+      input.root.dataset["kpTutorialReviewMotionAuthority"] = motionOwner;
+      input.root.dataset["kpTutorialReviewPlaybackDirection"] =
+        session.player.direction;
+    }
     // Reduced motion is a user preference, so it remains observable even when
     // navigation or manual controls own the current semantic checkpoint.
     if (reducedMotionQuery.matches) {

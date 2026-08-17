@@ -5,6 +5,10 @@ import { resolve } from "node:path";
 
 import { defineConfig } from "vite";
 
+import {
+  kpProductionDevelopmentErasurePlugin
+} from "./scripts/vite-production-development-erasure.ts";
+
 import type { KpArticleImportLock } from
   "./src/article/kp-article-import-lock.ts";
 import {
@@ -28,6 +32,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(readReviewBuildIdentity())
   },
   plugins: [
+    kpProductionDevelopmentErasurePlugin({ projectRoot }),
     {
       name: "kp-public-fraction-composition-static-publication",
       transformIndexHtml: {

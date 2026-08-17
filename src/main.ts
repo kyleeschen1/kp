@@ -129,21 +129,6 @@ import {
 import type {
   KpSemanticAnimationWorkbenchIndexEntry
 } from "./editor/semantic-animation-workbench-index.ts";
-import {
-  loadKpAnimationWorkbenchReviewEvidence
-} from "./editor/semantic-animation-workbench-review-loader.ts";
-import {
-  renderKpAnimationWorkbenchReviewPanel
-} from "./editor/semantic-animation-workbench-review.ts";
-import {
-  loadKpAnimationWorkbenchDevelopmentReview
-} from "./editor/semantic-animation-workbench-review-capture-loader.ts";
-import {
-  loadKpEditorAnimationLibraryDevelopmentReview
-} from "./editor/editor-animation-library-review-capture-loader.ts";
-import {
-  loadKpAnimationCatalogueDevelopmentReview
-} from "./editor/animation-catalogue-review-capture-loader.ts";
 import type {
   KpSemanticAnimationWorkbenchRoadmapRouteState
 } from "./editor/semantic-animation-workbench-route.ts";
@@ -180,6 +165,21 @@ type FtcTutorialEditorClient = typeof import("./editor/ftc-tutorial-editor-surfa
 type AnimationWorkbenchViewClient = typeof import(
   "./editor/semantic-animation-workbench-view.ts"
 );
+type AnimationWorkbenchReviewLoaderClient = typeof import(
+  "./editor/semantic-animation-workbench-review-loader.ts"
+);
+type AnimationWorkbenchReviewRendererClient = typeof import(
+  "./editor/semantic-animation-workbench-review.ts"
+);
+type AnimationWorkbenchReviewCaptureClient = typeof import(
+  "./editor/semantic-animation-workbench-review-capture-loader.ts"
+);
+type AnimationCatalogueReviewCaptureClient = typeof import(
+  "./editor/animation-catalogue-review-capture-loader.ts"
+);
+type AnimationLibraryReviewCaptureClient = typeof import(
+  "./editor/editor-animation-library-review-capture-loader.ts"
+);
 type EditorClient = typeof import("./editor/editor.ts");
 type ApiCatalogClient = typeof import("./editor/api-catalog.ts");
 type AnimationDiagnosticsCapabilityClient = typeof import(
@@ -209,6 +209,32 @@ let graph3DEditorControllerClientPromise:
   | Promise<Graph3DEditorControllerClient>
   | undefined;
 let graph3DEditorController: Graph3DEditorController | undefined;
+const animationWorkbenchReviewClientsPromise:
+  | Promise<readonly [
+      AnimationWorkbenchReviewLoaderClient,
+      AnimationWorkbenchReviewRendererClient
+    ]>
+  | undefined = import.meta.env.DEV
+    ? Promise.all([
+        import("./editor/semantic-animation-workbench-review-loader.ts"),
+        import("./editor/semantic-animation-workbench-review.ts")
+      ])
+    : undefined;
+const animationWorkbenchReviewCaptureClientPromise:
+  | Promise<AnimationWorkbenchReviewCaptureClient>
+  | undefined = import.meta.env.DEV
+    ? import("./editor/semantic-animation-workbench-review-capture-loader.ts")
+    : undefined;
+const animationCatalogueReviewCaptureClientPromise:
+  | Promise<AnimationCatalogueReviewCaptureClient>
+  | undefined = import.meta.env.DEV
+    ? import("./editor/animation-catalogue-review-capture-loader.ts")
+    : undefined;
+const animationLibraryReviewCaptureClientPromise:
+  | Promise<AnimationLibraryReviewCaptureClient>
+  | undefined = import.meta.env.DEV
+    ? import("./editor/editor-animation-library-review-capture-loader.ts")
+    : undefined;
 let activeView:
   | "dashboard"
   | "editor"
@@ -1352,6 +1378,9 @@ async function updateAnimationWorkbenchRoadmapQuery(
 async function mountAnimationWorkbenchReviewCapture(
   revision: number
 ): Promise<void> {
+  if (animationWorkbenchReviewCaptureClientPromise === undefined) return;
+  const { loadKpAnimationWorkbenchDevelopmentReview } =
+    await animationWorkbenchReviewCaptureClientPromise;
   if (loadKpAnimationWorkbenchDevelopmentReview === undefined) return;
   const client = await loadKpAnimationWorkbenchDevelopmentReview();
   if (activeView !== "animation-workbench" || revision !== viewRevision) {
@@ -1365,6 +1394,9 @@ async function mountAnimationWorkbenchReviewCapture(
 async function mountAnimationCatalogueReviewCapture(
   revision: number
 ): Promise<void> {
+  if (animationCatalogueReviewCaptureClientPromise === undefined) return;
+  const { loadKpAnimationCatalogueDevelopmentReview } =
+    await animationCatalogueReviewCaptureClientPromise;
   if (loadKpAnimationCatalogueDevelopmentReview === undefined) return;
   const client = await loadKpAnimationCatalogueDevelopmentReview();
   if (activeView !== "animation-catalogue" || revision !== viewRevision) {
@@ -1378,6 +1410,9 @@ async function mountAnimationCatalogueReviewCapture(
 async function mountEditorAnimationLibraryReviewCapture(
   revision: number
 ): Promise<void> {
+  if (animationLibraryReviewCaptureClientPromise === undefined) return;
+  const { loadKpEditorAnimationLibraryDevelopmentReview } =
+    await animationLibraryReviewCaptureClientPromise;
   if (loadKpEditorAnimationLibraryDevelopmentReview === undefined) return;
   const client = await loadKpEditorAnimationLibraryDevelopmentReview();
   if (
@@ -1439,13 +1474,15 @@ async function hydrateAnimationWorkbenchReview(
     "[data-kp-animation-workbench-review]"
   );
   if (reviewContainer === null) return;
-  if (loadKpAnimationWorkbenchReviewEvidence === undefined) {
-    reviewContainer.outerHTML = renderKpAnimationWorkbenchReviewPanel({
-      animationId: entry.identity.animationId,
-      state: "unavailable"
-    });
+  if (animationWorkbenchReviewClientsPromise === undefined) {
+    reviewContainer.remove();
     return;
   }
+  const [loaderClient, rendererClient] =
+    await animationWorkbenchReviewClientsPromise;
+  const { loadKpAnimationWorkbenchReviewEvidence } = loaderClient;
+  const { renderKpAnimationWorkbenchReviewPanel } = rendererClient;
+  if (loadKpAnimationWorkbenchReviewEvidence === undefined) return;
   try {
     const result = await loadKpAnimationWorkbenchReviewEvidence({
       identities: index.entries.map(

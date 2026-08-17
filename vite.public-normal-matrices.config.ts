@@ -4,6 +4,10 @@ import { resolve } from "node:path";
 
 import { defineConfig } from "vite";
 
+import {
+  kpProductionDevelopmentErasurePlugin
+} from "./scripts/vite-production-development-erasure.ts";
+
 import type { KpArticleImportLock } from
   "./src/article/kp-article-import-lock.ts";
 import {
@@ -25,6 +29,7 @@ const reviewRouteFilename = resolve(
 /** Keep this proof experiment attributable outside the catalogue bundle. */
 export default defineConfig({
   plugins: [
+    kpProductionDevelopmentErasurePlugin({ projectRoot }),
     {
       name: "kp-public-normal-matrices-scoped-root",
       configureServer(server) {
