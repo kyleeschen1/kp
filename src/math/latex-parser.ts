@@ -20,7 +20,7 @@ export interface ParsedLatexBinaryExpression {
 
 export interface ParsedLatexCallExpression {
   kind: "call";
-  name: "cos" | "sin" | "sqrt";
+  name: "cos" | "ln" | "sin" | "sqrt";
   argument: ParsedLatexExpression;
 }
 
@@ -203,7 +203,12 @@ class LatexParser {
       };
     }
 
-    if (token.value === "sin" || token.value === "cos" || token.value === "sqrt") {
+    if (
+      token.value === "sin" ||
+      token.value === "cos" ||
+      token.value === "ln" ||
+      token.value === "sqrt"
+    ) {
       return {
         kind: "call",
         name: token.value,

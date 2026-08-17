@@ -48,7 +48,7 @@
     "Planned-only rows in the asset-first Catalogue or a second phase-plan tree."
   ],
   "goal": "Build an evidence-derived transformation coverage view and first governed equation transform-series compiler while preserving typed gaps and domain-local matrix code Graph2D and Graph3D frontends.",
-  "target": "next-action.kp.governed-animation-generation.s14",
+  "target": "next-action.kp.governed-animation-generation.s15",
   "runMode": "run",
   "maxSlices": 29,
   "commitCadence": "Commit each independently reversible verified slice with exact path staging and completed Theseus evidence; never stage protected economics files or unrelated user documents.",
@@ -151,7 +151,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s15",
       "title": "Latex-endpoint-normalization",
-      "status": "planned"
+      "summary": "LaTeX endpoint normalization complete across nested fractions roots functions and equality relations with typed gaps.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s16",

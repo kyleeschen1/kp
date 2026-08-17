@@ -38,7 +38,7 @@ export function parsedLatexExpressionToMathExpression(
 }
 
 function lowerCallExpression(
-  name: "cos" | "sin" | "sqrt",
+  name: "cos" | "ln" | "sin" | "sqrt",
   argument: ParsedLatexExpression
 ): MathExpression {
   const loweredArgument = parsedLatexExpressionToMathExpression(argument);
@@ -48,6 +48,13 @@ function lowerCallExpression(
       return cos(loweredArgument);
     case "sin":
       return sin(loweredArgument);
+    case "ln":
+      // Syntax normalization supports logs before numeric graph evaluation does.
+      throw new LatexParseError(
+        "Natural logarithms are not executable math expressions yet.",
+        0,
+        "executable function"
+      );
     case "sqrt":
       return power(loweredArgument, 0.5);
   }
