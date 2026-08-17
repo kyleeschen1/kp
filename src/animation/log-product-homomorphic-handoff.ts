@@ -15,14 +15,16 @@ const PRODUCT_DERIVES_SUM_RECORD_ID =
 const MAX_OPERATOR_VACANCY = 0.270_001;
 
 const binaryHandoffWindows = Object.freeze({
-  operatorSourceRelease: window(0.18, 0.32),
-  operatorTargetPresence: window(0.59, 0.68),
+  operatorSourceContraction: window(0.18, 0.28),
+  operatorSourceRelease: window(0.24, 0.32),
+  operatorTargetPresence: window(0.59, 0.67),
+  operatorTargetExpansion: window(0.63, 0.73),
   payloadTransit: window(0.2, 0.44),
   enclosureSourceRelease: window(0.12, 0.2),
   enclosureTargetPresence: window(0.44, 0.48),
   enclosureTransit: window(0.48, 0.66),
-  relationReception: window(0.59, 0.68),
-  targetHold: window(0.68, 1)
+  relationReception: window(0.59, 0.67),
+  targetHold: window(0.73, 1)
 });
 
 export interface KpBinaryLogProductHomomorphicHandoff {
@@ -34,12 +36,16 @@ export interface KpBinaryLogProductHomomorphicHandoff {
     "correspondence.log-product.application-fission";
   readonly operatorHandoff: {
     readonly topology: "matched-dissolve-to-derived-successors";
+    readonly sourceExit: "collapse-to-point";
+    readonly targetEntry: "expand-from-point";
     readonly correspondenceRecordId:
       "correspondence.log-product.operator-fission";
     readonly sourceEntityId: string;
     readonly targetEntityIds: readonly [string, string];
+    readonly sourceContractionWindow: KpFunctionWrapMotionWindow;
     readonly sourceReleaseWindow: KpFunctionWrapMotionWindow;
     readonly targetPresenceWindow: KpFunctionWrapMotionWindow;
+    readonly targetExpansionWindow: KpFunctionWrapMotionWindow;
   };
   readonly payloadHandoff: {
     readonly topology: "ordered-continuity";
@@ -147,14 +153,18 @@ export function compileKpBinaryLogProductHomomorphicHandoff(
     applicationCorrespondenceRecordId: APPLICATION_FISSION_RECORD_ID,
     operatorHandoff: Object.freeze({
       topology: "matched-dissolve-to-derived-successors" as const,
+      sourceExit: "collapse-to-point" as const,
+      targetEntry: "expand-from-point" as const,
       correspondenceRecordId: OPERATOR_FISSION_RECORD_ID,
       sourceEntityId: operator.sourceSelectorIds[0]!,
       targetEntityIds: Object.freeze([
         operator.targetSelectorIds[0]!,
         operator.targetSelectorIds[1]!
       ]) as readonly [string, string],
+      sourceContractionWindow: binaryHandoffWindows.operatorSourceContraction,
       sourceReleaseWindow: binaryHandoffWindows.operatorSourceRelease,
-      targetPresenceWindow: binaryHandoffWindows.operatorTargetPresence
+      targetPresenceWindow: binaryHandoffWindows.operatorTargetPresence,
+      targetExpansionWindow: binaryHandoffWindows.operatorTargetExpansion
     }),
     payloadHandoff: Object.freeze({
       topology: "ordered-continuity" as const,
@@ -287,6 +297,10 @@ function assertCoverageOrdering(
       handoff.enclosureHandoff.targetPresenceWindow.start ||
     handoff.enclosureHandoff.targetPresenceWindow.end !==
       handoff.enclosureHandoff.transitWindow.start ||
+    handoff.operatorHandoff.sourceContractionWindow.start >
+      handoff.operatorHandoff.sourceReleaseWindow.start ||
+    handoff.operatorHandoff.sourceContractionWindow.end >
+      handoff.operatorHandoff.sourceReleaseWindow.end ||
     handoff.operatorHandoff.sourceReleaseWindow.end >
       handoff.operatorHandoff.targetPresenceWindow.start ||
     handoff.operatorHandoff.targetPresenceWindow.start -
@@ -299,10 +313,16 @@ function assertCoverageOrdering(
     handoff.relationHandoff.receptionWindow.end !==
       handoff.operatorHandoff.targetPresenceWindow.end ||
     handoff.operatorHandoff.targetPresenceWindow.start >
+      handoff.operatorHandoff.targetExpansionWindow.start ||
+    handoff.operatorHandoff.targetPresenceWindow.end >
+      handoff.operatorHandoff.targetExpansionWindow.end ||
+    handoff.operatorHandoff.targetPresenceWindow.start >
       handoff.enclosureHandoff.transitWindow.end ||
     handoff.payloadHandoff.transitWindow.end >
       handoff.targetHoldWindow.start ||
     handoff.operatorHandoff.targetPresenceWindow.end >
+      handoff.targetHoldWindow.start ||
+    handoff.operatorHandoff.targetExpansionWindow.end >
       handoff.targetHoldWindow.start ||
     handoff.enclosureHandoff.transitWindow.end >
       handoff.targetHoldWindow.start

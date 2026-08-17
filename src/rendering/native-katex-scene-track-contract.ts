@@ -33,6 +33,8 @@ export type KpNativeKatexSceneTrackContract<
   readonly sampleProgress?: (progress: number) => number;
   readonly sampleOpacityProgress?: (progress: number) => number;
   readonly samplePaintPresence?: (progress: number) => number;
+  /** Renderer-local paint scale; it never changes measured layout authority. */
+  readonly sampleMaterialScale?: (progress: number) => number;
 } & KpNativeKatexSceneTrackOpacityContract;
 
 export interface KpNativeKatexSceneTrackFrameContract<
@@ -49,6 +51,7 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly rect: Rect;
   readonly expectedPaintRect?: Rect | undefined;
   readonly opacity: number;
+  readonly materialScale?: number | undefined;
   readonly intentionalContactGroupId?: string | undefined;
   readonly verifiedOperationCohortId?: string | undefined;
 }

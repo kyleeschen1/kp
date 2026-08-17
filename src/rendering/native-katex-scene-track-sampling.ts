@@ -42,6 +42,13 @@ export function sampleKpNativeKatexSceneTrackFrames(
     const hasMeasuredPaint =
       sceneTrack.startPaintRect !== undefined &&
       sceneTrack.endPaintRect !== undefined;
+    const materialScale = sceneTrack.sampleMaterialScale?.(bounded);
+    if (
+      materialScale !== undefined &&
+      (!Number.isFinite(materialScale) || materialScale <= 0)
+    ) {
+      throw new Error("Native KaTeX material scale must be finite and positive.");
+    }
     return Object.freeze({
       trackId: sceneTrack.id,
       componentId: sceneTrack.componentId,
@@ -50,6 +57,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
       paintKind: sceneTrack.paintKind,
       sizingMode: sceneTrack.sizingMode,
       rect,
+      ...(materialScale === undefined ? {} : { materialScale }),
       ...(hasMeasuredPaint
         ? {
             expectedPaintRect: Object.freeze(

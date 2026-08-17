@@ -658,6 +658,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly expectedPaintRect:
       NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
     readonly opacity: number;
+    readonly materialScale?: number | undefined;
     readonly intentionalContactGroupId?: string | undefined;
     readonly verifiedOperationCohortId?: string | undefined;
   }[];
@@ -689,7 +690,11 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
           ? {}
           : { expectedPaintRect: frame.expectedPaintRect }),
         opacity: input.visible ? frame.opacity : 0,
-        transform: "none",
+        // Scale paint on its stationary measured owner. This keeps the ink
+        // center fixed while an operation-specific adapter contracts a glyph.
+        transform: frame.materialScale === undefined || frame.materialScale === 1
+          ? "none"
+          : `scale(${frame.materialScale})`,
         fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
       };
     }),

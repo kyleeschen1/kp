@@ -157,7 +157,7 @@ test("horizontal squeeze reception removes scale and vertical drift", () => {
   assert.ok(tracks.every(({ motionPath }) => motionPath === undefined));
 });
 
-test("homomorphic operators use a centered match-dissolve around payload transit", () => {
+test("homomorphic operators contract and expand around a fixed ink center", () => {
   const sourceOperator = atom(
     "source",
     "source.log.operator",
@@ -204,18 +204,32 @@ test("homomorphic operators use a centered match-dissolve around payload transit
   assert.equal(leftTrack.motionAxisConstraint, undefined);
   assert.equal(rightTrack.motionAxisConstraint, undefined);
 
+  const sourceContraction = sampleKpNativeKatexSceneTrackFrames(
+    tracks,
+    0.24,
+    false
+  );
+  assert.ok(sourceContraction[0]!.materialScale! < 1);
+  assert.equal(sourceContraction[0]!.opacity, 1);
   const sourceEcho = sampleKpNativeKatexSceneTrackFrames(tracks, 0.3, false);
+  assert.ok(sourceEcho[0]!.materialScale! <= 0.040_001);
   assert.ok(sourceEcho[0]!.opacity > 0 && sourceEcho[0]!.opacity < 1);
   assert.equal(sourceEcho[1]!.opacity, 0);
   assert.equal(sourceEcho[2]!.opacity, 0);
   const vacancy = sampleKpNativeKatexSceneTrackFrames(tracks, 0.48, false);
   assert.ok(vacancy.every(({ opacity }) => opacity === 0));
-  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.64, false);
+  const reception = sampleKpNativeKatexSceneTrackFrames(tracks, 0.65, false);
   assert.equal(reception[0]!.opacity, 0);
   assert.ok(reception[1]!.opacity > 0 && reception[1]!.opacity < 1);
   assert.ok(reception[2]!.opacity > 0 && reception[2]!.opacity < 1);
+  assert.ok(reception[1]!.materialScale! > 0.04);
+  assert.ok(reception[1]!.materialScale! < 1);
+  assert.equal(reception[1]!.materialScale, reception[2]!.materialScale);
   assert.deepEqual(center(reception[1]!.rect), center(targetLeft.rect));
   assert.deepEqual(center(reception[2]!.rect), center(targetRight.rect));
+  const settled = sampleKpNativeKatexSceneTrackFrames(tracks, 0.73, false);
+  assert.equal(settled[1]!.materialScale, 1);
+  assert.equal(settled[2]!.materialScale, 1);
 });
 
 test("function-wrap adapter certifies reverse settlement and synchronized ownership", () => {

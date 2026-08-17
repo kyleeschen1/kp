@@ -21,6 +21,8 @@ type EliminatedTrack = Extract<
   { readonly lifecycle: "eliminate" }
 >;
 
+const POINT_OPERATOR_SCALE = 0.04;
+
 export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly source: KpNativeKatexRenderedSceneObservation;
@@ -67,8 +69,9 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
       track.lifecycle === "eliminate" &&
       sourceAtom?.semanticEntityId === input.plan.operatorHandoff.sourceEntityId
     ) {
-      return releaseAtNativePosition(
+      return releaseOperatorAtNativePosition(
         track,
+        input.plan.operatorHandoff.sourceContractionWindow,
         input.plan.operatorHandoff.sourceReleaseWindow
       );
     }
@@ -78,9 +81,10 @@ export function applyKpNativeKatexLogProductHomomorphicHandoff(input: {
       targetOperatorIds.has(targetAtom.semanticEntityId)
     ) {
       adaptedTargetOperatorAtomIds.add(targetAtom.id);
-      return revealAtNativePosition(
+      return revealOperatorAtNativePosition(
         track,
-        input.plan.operatorHandoff.targetPresenceWindow
+        input.plan.operatorHandoff.targetPresenceWindow,
+        input.plan.operatorHandoff.targetExpansionWindow
       );
     }
     if (
@@ -149,6 +153,21 @@ function releaseAtNativePosition(
   });
 }
 
+function releaseOperatorAtNativePosition(
+  track: EliminatedTrack,
+  contractionWindow: { readonly start: number; readonly end: number },
+  releaseWindow: { readonly start: number; readonly end: number }
+): KpNativeKatexPaintMeasuredSceneTrack {
+  return Object.freeze({
+    ...releaseAtNativePosition(track, releaseWindow),
+    sampleMaterialScale: scaleWindow({
+      window: contractionWindow,
+      from: 1,
+      to: POINT_OPERATOR_SCALE
+    })
+  });
+}
+
 function revealAtNativePosition(
   track: IntroducedTrack,
   presenceWindow: { readonly start: number; readonly end: number }
@@ -164,6 +183,30 @@ function revealAtNativePosition(
     sampleOpacityProgress: sampleWindow(presenceWindow),
     opacityScheduleAuthority: "semantic-choreography" as const
   });
+}
+
+function revealOperatorAtNativePosition(
+  track: IntroducedTrack,
+  presenceWindow: { readonly start: number; readonly end: number },
+  expansionWindow: { readonly start: number; readonly end: number }
+): KpNativeKatexPaintMeasuredSceneTrack {
+  return Object.freeze({
+    ...revealAtNativePosition(track, presenceWindow),
+    sampleMaterialScale: scaleWindow({
+      window: expansionWindow,
+      from: POINT_OPERATOR_SCALE,
+      to: 1
+    })
+  });
+}
+
+function scaleWindow(input: {
+  readonly window: { readonly start: number; readonly end: number };
+  readonly from: number;
+  readonly to: number;
+}): (progress: number) => number {
+  const sample = sampleWindow(input.window);
+  return (progress) => input.from + (input.to - input.from) * sample(progress);
 }
 
 function sampleWindow(

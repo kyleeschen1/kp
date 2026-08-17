@@ -74,7 +74,7 @@ test("log-product declares synchronized function-wrap enclosure roles", () => {
   );
 });
 
-test("binary homomorphic handoff stages a bounded operator match-dissolve", () => {
+test("binary homomorphic handoff stages a contracted operator match-dissolve", () => {
   const handoff = compileKpBinaryLogProductHomomorphicHandoff(
     kpCanonicalCompiledLogProductOperation
   );
@@ -83,14 +83,18 @@ test("binary homomorphic handoff stages a bounded operator match-dissolve", () =
   assert.equal(handoff.maturity, "candidate");
   assert.deepEqual(handoff.operatorHandoff, {
     topology: "matched-dissolve-to-derived-successors",
+    sourceExit: "collapse-to-point",
+    targetEntry: "expand-from-point",
     correspondenceRecordId: "correspondence.log-product.operator-fission",
     sourceEntityId: "source.log.operator",
     targetEntityIds: [
       "target.left.log.operator",
       "target.right.log.operator"
     ],
-    sourceReleaseWindow: { start: 0.18, end: 0.32 },
-    targetPresenceWindow: { start: 0.59, end: 0.68 }
+    sourceContractionWindow: { start: 0.18, end: 0.28 },
+    sourceReleaseWindow: { start: 0.24, end: 0.32 },
+    targetPresenceWindow: { start: 0.59, end: 0.67 },
+    targetExpansionWindow: { start: 0.63, end: 0.73 }
   });
   assert.deepEqual(handoff.payloadHandoff.transitWindow, {
     start: 0.2,
@@ -125,6 +129,14 @@ test("binary homomorphic handoff stages a bounded operator match-dissolve", () =
   assert.equal(
     handoff.relationHandoff.receptionWindow.end,
     handoff.operatorHandoff.targetPresenceWindow.end
+  );
+  assert.ok(
+    handoff.operatorHandoff.sourceContractionWindow.end <
+      handoff.operatorHandoff.sourceReleaseWindow.end
+  );
+  assert.ok(
+    handoff.operatorHandoff.targetPresenceWindow.start <
+      handoff.operatorHandoff.targetExpansionWindow.start
   );
   assert.ok(
     handoff.relationHandoff.receptionWindow.start >

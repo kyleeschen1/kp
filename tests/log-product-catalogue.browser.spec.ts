@@ -124,7 +124,7 @@ test("log product mounts lazily and seeks through typed semantic tracks", async 
   expect(pageErrors).toEqual([]);
 });
 
-test("binary handoff visibly match-dissolves operators and receives enclosures", async ({
+test("binary handoff contracts operators through its match-dissolve", async ({
   page
 }) => {
   await page.goto(`/?artifact=${animationId}`);
@@ -159,15 +159,35 @@ test("binary handoff visibly match-dissolves operators and receives enclosures",
     "target.left.log.operator",
     "target.right.log.operator"
   ] as const;
+  const sourceOperatorStart = await at(0.18, ["source.log.operator"]);
+  const sourceOperatorMidpoint = await at(0.23, ["source.log.operator"]);
+  const sourceOperatorPoint = await at(0.28, ["source.log.operator"]);
+  const sourceSamples = [
+    sourceOperatorStart,
+    sourceOperatorMidpoint,
+    sourceOperatorPoint
+  ].map((geometry) => geometry["source.log.operator"]!);
+  const sourceCenterXs = sourceSamples.map(
+    ({ left, width }) => left + width / 2
+  );
+  const sourceCenterYs = sourceSamples.map(
+    ({ top, height }) => top + height / 2
+  );
+  expect(sourceSamples[0]!.width).toBeGreaterThan(sourceSamples[1]!.width);
+  expect(sourceSamples[1]!.width).toBeGreaterThan(sourceSamples[2]!.width);
+  expect(Math.max(...sourceCenterXs) - Math.min(...sourceCenterXs))
+    .toBeLessThanOrEqual(1.25);
+  expect(Math.max(...sourceCenterYs) - Math.min(...sourceCenterYs))
+    .toBeLessThanOrEqual(1.25);
   await seek.fill("0.48");
   await expect(stage).toHaveAttribute("data-kp-log-product-progress", "0.48");
   expect(await visibleMaterialCount(stage, [
     "source.log.operator",
     ...operatorIds
   ])).toBe(0);
-  const operatorEntry = await at(0.6, operatorIds);
-  const operatorMidpoint = await at(0.64, operatorIds);
-  const operatorSettlement = await at(0.68, operatorIds);
+  const operatorEntry = await at(0.61, operatorIds);
+  const operatorMidpoint = await at(0.67, operatorIds);
+  const operatorSettlement = await at(0.73, operatorIds);
   for (const entityId of operatorIds) {
     const samples = [operatorEntry, operatorMidpoint, operatorSettlement]
       .map((geometry) => geometry[entityId]!);
@@ -177,9 +197,9 @@ test("binary handoff visibly match-dissolves operators and receives enclosures",
       .toBeLessThanOrEqual(1.25);
     expect(Math.max(...centerYs) - Math.min(...centerYs))
       .toBeLessThanOrEqual(1.25);
-    expect(Math.max(...samples.map(({ width }) => width)) -
-      Math.min(...samples.map(({ width }) => width)))
-      .toBeLessThanOrEqual(0.25);
+    expect(samples[0]!.width).toBeLessThan(samples[1]!.width);
+    expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
+    expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
   await seek.fill("0.58");
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);

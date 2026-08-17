@@ -197,11 +197,53 @@
       "scope": "canonical match-dissolve contact sheet",
       "checkedAt": "2026-08-17T17:35:20.492Z",
       "notes": "Regenerated deterministic contact sheet with source fade, isolated factor transit, enclosure squeeze, and late native-size syntax reception."
+    },
+    {
+      "command": "node focused log-product and native KaTeX choreography tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T17:49:59.983Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T17:50:01.171Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T17:50:02.128Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T17:50:03.072Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-17T17:50:04.055Z"
+    },
+    {
+      "command": "Chromium focused binary operator contraction browser proof",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T17:50:05.011Z"
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-17T17:50:06.152Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Replaced crossing ln trajectories with a bounded native-size match-dissolve: source syntax fades, factors separate alone, target enclosures squeeze, then ln and plus resolve together. Awaiting human visual approval before promotion."
+    "summary": "Binary ln operators now collapse toward a point before fading and expand from a point after appearing, while measured centers, factor transit, enclosure squeeze, and deterministic seeking remain stable. Awaiting human visual approval before caller promotion."
   },
   "expectedLearning": [
     "Whether canonical function-wrap reception makes the binary homomorphic decomposition readable without semantic or runtime changes."
