@@ -83,7 +83,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s19",
       "title": "Series-repair-taxonomy",
-      "status": "planned"
+      "summary": "Stable request syntax operation role entity jump frontend and runtime repairs implemented.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s19a",
