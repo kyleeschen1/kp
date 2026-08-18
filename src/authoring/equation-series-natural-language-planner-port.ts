@@ -26,9 +26,16 @@ export interface KpEquationSeriesPlannerPrompt {
   }>[];
   readonly operations: readonly Readonly<{
     operationId: string;
-    source: "canonical-operation" | "equation-extension";
+      source:
+        | "canonical-operation"
+        | "equation-extension"
+        | "both-sides-operation";
     familyId: string;
     roleIds: readonly string[];
+    governedRequirements?: Readonly<{
+      operationPin: Readonly<{ packId: string; version: string }>;
+      requiredAssumptionEvidenceIds: readonly string[];
+    }> | undefined;
   }>[];
 }
 
@@ -108,11 +115,19 @@ export function createKpEquationSeriesPlannerPrompt(input: {
         : []
     ),
     operations: kpEquationSeriesOperationRegistry.declarations.map(
-      ({ operationId, source, familyId, roleIds }) => ({
+      ({ operationId, source, familyId, roleIds, bothSides }) => ({
         operationId,
         source,
         familyId,
-        roleIds
+        roleIds,
+        ...(bothSides === undefined ? {} : {
+          governedRequirements: {
+            operationPin: { ...bothSides.operationPin },
+            requiredAssumptionEvidenceIds: [
+              ...bothSides.requiredAssumptionEvidenceIds
+            ]
+          }
+        })
       })
     )
   });

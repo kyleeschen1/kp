@@ -22,9 +22,9 @@
         "sourceNeedle": "rearrangement(\"addBothSides\", \"balanced-introduction\", false)"
       },
       "authoring": {
-        "exposure": "canonical-equation-series",
-        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
-        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "addBothSides: \"kp.algebra.add-both-sides\"",
         "operationId": "kp.algebra.add-both-sides"
       },
       "literalSourcePaths": [
@@ -68,9 +68,9 @@
         "sourceNeedle": "rearrangement(\"subtractBothSides\", \"balanced-introduction\", true)"
       },
       "authoring": {
-        "exposure": "canonical-equation-series",
-        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
-        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "subtractBothSides: \"kp.algebra.subtract-both-sides\"",
         "operationId": "kp.algebra.subtract-both-sides"
       },
       "literalSourcePaths": [
@@ -122,9 +122,10 @@
         "sourceNeedle": "rearrangement(\"multiplyBothSides\", \"balanced-introduction\", false)"
       },
       "authoring": {
-        "exposure": "semantic-assets-only",
-        "sourcePath": "src/animation/symbolic-manipulation-families/algebra.ts",
-        "sourceNeedle": "id: \"definition.symbolic.algebra.multiply-both-sides\""
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "multiplyBothSides: \"kp.algebra.multiply-both-sides\"",
+        "operationId": "kp.algebra.multiply-both-sides"
       },
       "literalSourcePaths": [
         "src/animation/equation-linear-rearrangement-kind.ts",
@@ -138,9 +139,7 @@
         "src/semantic/fractional-linear-certified-transfer.ts",
         "src/semantic/fractional-linear-equation-asset.ts"
       ],
-      "gaps": [
-        "Multiply-both-sides has direct semantic assets and presentation defaults but no generated transform definition, canonical operation-registry entry, or equation-series authoring declaration."
-      ],
+      "gaps": [],
       "roles": [
         "lhs",
         "rhs",
@@ -169,9 +168,9 @@
         "sourceNeedle": "rearrangement(\"divideBothSides\", \"divide-both-sides\", false)"
       },
       "authoring": {
-        "exposure": "canonical-equation-series",
-        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
-        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "divideBothSides: \"kp.algebra.divide-both-sides\"",
         "operationId": "kp.algebra.divide-both-sides"
       },
       "literalSourcePaths": [
@@ -222,10 +221,10 @@
         "sourceNeedle": "rearrangement(\"applyNaturalLogBothSides\", \"balanced-introduction\", false)"
       },
       "authoring": {
-        "exposure": "specialized-authored-program",
-        "sourcePath": "src/semantic/log-exponent-authored-operations.ts",
-        "sourceNeedle": "kind: \"apply-natural-log-both-sides\"",
-        "operationId": "operation.log-exponent.apply-log-both-sides"
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "applyNaturalLogBothSides: \"kp.algebra.apply-natural-log-both-sides\"",
+        "operationId": "kp.algebra.apply-natural-log-both-sides"
       },
       "literalSourcePaths": [
         "src/animation/equation-linear-rearrangement-kind.ts",
@@ -233,9 +232,7 @@
         "src/semantic/both-sides-operation-registrations/logarithmic.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
-      "gaps": [
-        "Apply-log is governed inside the specialized log-exponent program but is not exposed through the tool-neutral equation-series operation registry."
-      ],
+      "gaps": [],
       "roles": [
         "lhs",
         "rhs",
@@ -264,19 +261,17 @@
         "sourceNeedle": "id: \"operation.log-exponent.divide-by-log-base\""
       },
       "authoring": {
-        "exposure": "specialized-authored-program",
-        "sourcePath": "src/semantic/log-exponent-authored-operations.ts",
-        "sourceNeedle": "kind: \"divide-both-sides-by-log-base\"",
-        "operationId": "operation.log-exponent.divide-by-log-base"
+        "exposure": "governed-equation-series",
+        "sourcePath": "src/authoring/equation-series-both-sides-authoring.ts",
+        "sourceNeedle": "divideBothSidesByLogBase:",
+        "operationId": "kp.algebra.divide-both-sides-by-log-base"
       },
       "literalSourcePaths": [
         "src/semantic/both-sides-operation-registration.ts",
         "src/semantic/both-sides-operation-registrations/logarithmic.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
-      "gaps": [
-        "The log-base divisor now projects through shared both-sides causality, but is not yet exposed through the tool-neutral equation-series authoring registry."
-      ],
+      "gaps": [],
       "roles": [
         "lhs",
         "rhs",

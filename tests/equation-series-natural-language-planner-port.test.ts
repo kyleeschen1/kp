@@ -23,6 +23,12 @@ test("prompt creation exposes only source states adjacencies and registered oper
   assert.equal(prompt.operations.some(({ operationId }) =>
     operationId === "kp.algebra.wrap-function"
   ), true);
+  const governed = prompt.operations.find(({ operationId }) =>
+    operationId === "kp.algebra.apply-natural-log-both-sides"
+  );
+  assert.deepEqual(governed?.roleIds,
+    ["lhs", "rhs", "relation", "applied-operation"]);
+  assert.equal(governed?.governedRequirements?.operationPin.version, "1.0.0");
   assert.equal(
     JSON.stringify(prompt).includes("models-propose-operations-kp-verifies"),
     true

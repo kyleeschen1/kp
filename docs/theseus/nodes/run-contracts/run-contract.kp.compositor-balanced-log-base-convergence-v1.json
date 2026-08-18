@@ -908,6 +908,62 @@
       "scope": "s20 narrow reduced-motion retry",
       "checkedAt": "2026-08-18T19:04:18.210Z",
       "notes": "1/1 Firefox checkpoint passes. The preceding full 21-test matrix passed 20 tests and hit one isolated 5-second readiness timeout in this same checkpoint; the immediate isolated retry passed in 8.9 seconds overall, so no semantic or paint regression was reproduced."
+    },
+    {
+      "command": "npm run test:equation-series-both-sides-authoring",
+      "status": "passed",
+      "scope": "s21 governed both-sides authoring",
+      "checkedAt": "2026-08-18T19:22:52.216Z",
+      "notes": "18/18 tests pass across six declarations, exact pins, roles, source authority, assumptions, typed repairs, and declaration-driven no-switch architecture."
+    },
+    {
+      "command": "npm run test:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "s21 authoring exposure inventory",
+      "checkedAt": "2026-08-18T19:22:53.508Z",
+      "notes": "5/5 tests pass; every inventoried caller now resolves through the governed equation-series family with no authoring gaps."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "s21 logarithmic behavior preservation",
+      "checkedAt": "2026-08-18T19:22:54.560Z",
+      "notes": "57/57 tests pass with existing log motion and semantic behavior unchanged."
+    },
+    {
+      "command": "npm run test:equation-series-planner-port",
+      "status": "passed",
+      "scope": "s21 LLM proposal boundary",
+      "checkedAt": "2026-08-18T19:22:55.580Z",
+      "notes": "6/6 tests pass; the prompt exposes governed requirements while model output remains proposal-only."
+    },
+    {
+      "command": "npm run test:compile-equation-transform-series-cli",
+      "status": "passed",
+      "scope": "s21 tool-neutral catalogue",
+      "checkedAt": "2026-08-18T19:22:56.600Z",
+      "notes": "5/5 tests pass; list mode exposes all six governed authoring declarations and requirements."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 repository type boundary",
+      "checkedAt": "2026-08-18T19:22:57.614Z",
+      "notes": "TypeScript, Svelte, and domain checks pass with zero Svelte errors and warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 framework-neutral architecture",
+      "checkedAt": "2026-08-18T19:22:58.648Z",
+      "notes": "All dependency, framework-neutral, semantic, presentation, and compiler-authority gates pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s21 patch hygiene",
+      "checkedAt": "2026-08-18T19:22:59.667Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -1055,7 +1111,8 @@
     {
       "id": "s21",
       "title": "Expose governed authoring surface",
-      "status": "planned"
+      "summary": "Exposed all six registered both-sides transformations through one framework-neutral equation-series authoring family. Exact operation and semantic-source pins, four canonical branch/relation/application roles, and declaration-owned assumption evidence now compile transactionally; missing or mismatched pins, sources, entities, roles, assumptions, raw prose authority, and renderer fields return distinct typed repairs while retaining the last valid candidate. The CLI and planner catalogue expose requirements without granting the model mathematical authority, and the balanced caller inventory now reports zero authoring gaps.",
+      "status": "complete"
     },
     {
       "id": "s22",

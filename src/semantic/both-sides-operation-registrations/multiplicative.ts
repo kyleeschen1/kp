@@ -14,6 +14,9 @@ Object.freeze({
       lawId: "law.equation.multiply-both-sides" as const,
       nonzeroEvidenceId:
         "assumption.equality.multiply-operand-nonzero",
+      authoringAssumptionEvidenceIds: Object.freeze([
+        "assumption.equality.multiply-operand-nonzero"
+      ] as const),
       applicationSelection: Object.freeze({
         kind: "introduced-targets" as const
       })
@@ -26,6 +29,9 @@ Object.freeze({
       lawId: "law.equation.divide-both-sides" as const,
       nonzeroEvidenceId:
         "assumption.equality.divide-operand-nonzero",
+      authoringAssumptionEvidenceIds: Object.freeze([
+        "assumption.equality.divide-operand-nonzero"
+      ] as const),
       applicationSelection: Object.freeze({
         kind: "introduced-targets" as const
       })

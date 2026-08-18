@@ -17,6 +17,8 @@ import {
 import {
   kpCanonicalLogExponentAuthoredProgram
 } from "../src/semantic/log-exponent-authored-operations.ts";
+import { kpEquationSeriesOperationRegistry } from
+  "../src/authoring/equation-series-operation-declarations.ts";
 
 const transformTypes = kpBalancedOperationCallerInventory.entries.map(
   ({ transformType }) => transformType
@@ -69,7 +71,7 @@ test("literal discovery cannot add an orphan balanced-operation caller", async (
   }
 });
 
-test("canonical and specialized authoring exposure is stated rather than inferred", () => {
+test("governed canonical and specialized exposure is stated rather than inferred", () => {
   for (const item of kpBalancedOperationCallerInventory.entries) {
     const canonical = kpCanonicalOperationRegistry.entries.find(
       ({ sourceTransformType }) => sourceTransformType === item.transformType
@@ -77,7 +79,13 @@ test("canonical and specialized authoring exposure is stated rather than inferre
     const specialized = kpCanonicalLogExponentAuthoredProgram.operations.find(
       ({ id }) => id === item.authoring.operationId
     );
-    if (item.authoring.exposure === "canonical-equation-series") {
+    if (item.authoring.exposure === "governed-equation-series") {
+      const governed = item.authoring.operationId === undefined
+        ? undefined
+        : kpEquationSeriesOperationRegistry.byId[item.authoring.operationId];
+      assert.equal(governed?.bothSides?.registrationId,
+        item.transformType, item.id);
+    } else if (item.authoring.exposure === "canonical-equation-series") {
       assert.equal(canonical?.id, item.authoring.operationId, item.id);
       assert.equal(specialized, undefined, item.id);
     } else if (item.authoring.exposure === "specialized-authored-program") {

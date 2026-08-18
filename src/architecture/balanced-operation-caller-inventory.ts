@@ -7,6 +7,7 @@ export type KpBalancedOperationCategory =
 
 export type KpBalancedOperationAuthoringExposure =
   | "canonical-equation-series"
+  | "governed-equation-series"
   | "specialized-authored-program"
   | "semantic-assets-only";
 
@@ -51,16 +52,14 @@ const algebraFamilyPath =
   "src/animation/symbolic-manipulation-families/algebra.ts";
 const generatedDefinitionsPath =
   "src/semantic/generated-algebra-transform-definition-registry.ts";
-const equationSeriesPath =
-  "src/authoring/equation-series-operation-declarations.ts";
+const governedBothSidesAuthoringPath =
+  "src/authoring/equation-series-both-sides-authoring.ts";
 const rearrangementPath =
   "src/animation/equation-linear-rearrangement-kind.ts";
 const motifDefaultsPath =
   "src/animation/motifs/equation-visual-motif-defaults.ts";
 const logCompilerPath =
   "src/semantic/log-exponent-transformation-compiler.ts";
-const logProgramPath =
-  "src/semantic/log-exponent-authored-operations.ts";
 
 const rawEntries = [
   entry({
@@ -82,9 +81,9 @@ const rawEntries = [
       'rearrangement("addBothSides", "balanced-introduction", false)'
     ),
     authoring: authoring(
-      "canonical-equation-series",
-      equationSeriesPath,
-      "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'addBothSides: "kp.algebra.add-both-sides"',
       "kp.algebra.add-both-sides"
     ),
     literalSourcePaths: [
@@ -120,9 +119,9 @@ const rawEntries = [
       'rearrangement("subtractBothSides", "balanced-introduction", true)'
     ),
     authoring: authoring(
-      "canonical-equation-series",
-      equationSeriesPath,
-      "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'subtractBothSides: "kp.algebra.subtract-both-sides"',
       "kp.algebra.subtract-both-sides"
     ),
     literalSourcePaths: [
@@ -168,9 +167,10 @@ const rawEntries = [
       'rearrangement("multiplyBothSides", "balanced-introduction", false)'
     ),
     authoring: authoring(
-      "semantic-assets-only",
-      algebraFamilyPath,
-      'id: "definition.symbolic.algebra.multiply-both-sides"'
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'multiplyBothSides: "kp.algebra.multiply-both-sides"',
+      "kp.algebra.multiply-both-sides"
     ),
     literalSourcePaths: [
       rearrangementPath,
@@ -184,9 +184,7 @@ const rawEntries = [
       "src/semantic/fractional-linear-certified-transfer.ts",
       "src/semantic/fractional-linear-equation-asset.ts"
     ],
-    gaps: [
-      "Multiply-both-sides has direct semantic assets and presentation defaults but no generated transform definition, canonical operation-registry entry, or equation-series authoring declaration."
-    ]
+    gaps: []
   }),
   entry({
     id: "balanced-operation.divide",
@@ -209,9 +207,9 @@ const rawEntries = [
       'rearrangement("divideBothSides", "divide-both-sides", false)'
     ),
     authoring: authoring(
-      "canonical-equation-series",
-      equationSeriesPath,
-      "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'divideBothSides: "kp.algebra.divide-both-sides"',
       "kp.algebra.divide-both-sides"
     ),
     literalSourcePaths: [
@@ -256,10 +254,10 @@ const rawEntries = [
       'rearrangement("applyNaturalLogBothSides", "balanced-introduction", false)'
     ),
     authoring: authoring(
-      "specialized-authored-program",
-      logProgramPath,
-      'kind: "apply-natural-log-both-sides"',
-      "operation.log-exponent.apply-log-both-sides"
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'applyNaturalLogBothSides: "kp.algebra.apply-natural-log-both-sides"',
+      "kp.algebra.apply-natural-log-both-sides"
     ),
     literalSourcePaths: [
       rearrangementPath,
@@ -267,9 +265,7 @@ const rawEntries = [
       "src/semantic/both-sides-operation-registrations/logarithmic.ts",
       logCompilerPath
     ],
-    gaps: [
-      "Apply-log is governed inside the specialized log-exponent program but is not exposed through the tool-neutral equation-series operation registry."
-    ]
+    gaps: []
   }),
   entry({
     id: "balanced-operation.divide-by-log-base",
@@ -290,19 +286,17 @@ const rawEntries = [
       'id: "operation.log-exponent.divide-by-log-base"'
     ),
     authoring: authoring(
-      "specialized-authored-program",
-      logProgramPath,
-      'kind: "divide-both-sides-by-log-base"',
-      "operation.log-exponent.divide-by-log-base"
+      "governed-equation-series",
+      governedBothSidesAuthoringPath,
+      'divideBothSidesByLogBase:',
+      "kp.algebra.divide-both-sides-by-log-base"
     ),
     literalSourcePaths: [
       "src/semantic/both-sides-operation-registration.ts",
       "src/semantic/both-sides-operation-registrations/logarithmic.ts",
       logCompilerPath
     ],
-    gaps: [
-      "The log-base divisor now projects through shared both-sides causality, but is not yet exposed through the tool-neutral equation-series authoring registry."
-    ]
+    gaps: []
   })
 ] as const;
 

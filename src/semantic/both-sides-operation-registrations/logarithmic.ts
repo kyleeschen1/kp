@@ -20,6 +20,11 @@ export const kpLogarithmicBothSidesOperationRegistrationPack = Object.freeze({
         "assumption.log-exponent.right-positive",
       injectivityEvidenceId:
         "assumption.log-exponent.log-injective",
+      authoringAssumptionEvidenceIds: Object.freeze([
+        "assumption.log-exponent.power-positive",
+        "assumption.log-exponent.right-positive",
+        "assumption.log-exponent.log-injective"
+      ] as const),
       applicationSelection: Object.freeze({
         kind: "introduced-targets" as const
       })
@@ -32,6 +37,9 @@ export const kpLogarithmicBothSidesOperationRegistrationPack = Object.freeze({
       lawId: "law.equation.divide-both-sides" as const,
       nonzeroEvidenceId:
         "assumption.log-exponent.log-base-nonzero",
+      authoringAssumptionEvidenceIds: Object.freeze([
+        "assumption.log-exponent.log-base-nonzero"
+      ] as const),
       applicationSelection: Object.freeze({
         kind: "correspondence-records" as const,
         recordIds: Object.freeze([

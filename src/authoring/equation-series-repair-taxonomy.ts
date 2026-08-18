@@ -46,6 +46,24 @@ export type KpEquationSeriesRepair =
       action: Readonly<{ kind: "reconcile-operation-authority" }>;
     }>)
   | (KpEquationSeriesRepairBase & Readonly<{
+      kind: "operation-pin";
+      code: "equation-series.repair.operation-pin";
+      operationId: string;
+      action: Readonly<{ kind: "pin-operation-pack" }>;
+    }>)
+  | (KpEquationSeriesRepairBase & Readonly<{
+      kind: "semantic-source";
+      code: "equation-series.repair.semantic-source";
+      operationId: string;
+      action: Readonly<{ kind: "provide-verified-source" }>;
+    }>)
+  | (KpEquationSeriesRepairBase & Readonly<{
+      kind: "assumption-evidence";
+      code: "equation-series.repair.assumption-evidence";
+      operationId: string;
+      action: Readonly<{ kind: "provide-assumption-evidence" }>;
+    }>)
+  | (KpEquationSeriesRepairBase & Readonly<{
       kind: "invalid-role";
       code: "equation-series.repair.invalid-role";
       roleId?: string | undefined;
@@ -242,7 +260,10 @@ export function repairsForKpEquationSeriesExternalDiagnostics(
       message: diagnostic.message,
       sourceCode: diagnostic.code
     };
-    if (diagnostic.code === "equation-llm.entity.unresolved") return {
+    if (
+      diagnostic.code === "equation-llm.entity.unresolved" ||
+      diagnostic.code === "equation-series.governance.entity.unresolved"
+    ) return {
       ...base,
       kind: "unresolved-entity" as const,
       code: "equation-series.repair.unresolved-entity" as const,
@@ -252,6 +273,7 @@ export function repairsForKpEquationSeriesExternalDiagnostics(
     };
     if (
       diagnostic.code.startsWith("equation-llm.role.") ||
+      diagnostic.code === "equation-series.governance.role.invalid" ||
       diagnostic.code === "equation-intent.role-binding.mismatch"
     ) return {
       ...base,
@@ -259,6 +281,30 @@ export function repairsForKpEquationSeriesExternalDiagnostics(
       code: "equation-series.repair.invalid-role" as const,
       ...(diagnostic.roleId === undefined ? {} : { roleId: diagnostic.roleId }),
       action: { kind: "repair-role-binding" as const }
+    };
+    if (diagnostic.code === "equation-series.governance.pin.mismatch") return {
+      ...base,
+      kind: "operation-pin" as const,
+      code: "equation-series.repair.operation-pin" as const,
+      operationId: diagnostic.operationId ?? "operation.unresolved",
+      action: { kind: "pin-operation-pack" as const }
+    };
+    if (diagnostic.code === "equation-series.governance.source.unresolved") return {
+      ...base,
+      kind: "semantic-source" as const,
+      code: "equation-series.repair.semantic-source" as const,
+      operationId: diagnostic.operationId ?? "operation.unresolved",
+      action: { kind: "provide-verified-source" as const }
+    };
+    if (
+      diagnostic.code === "equation-series.governance.assumption.invalid" ||
+      diagnostic.code === "equation-series.governance.assumption.mismatch"
+    ) return {
+      ...base,
+      kind: "assumption-evidence" as const,
+      code: "equation-series.repair.assumption-evidence" as const,
+      operationId: diagnostic.operationId ?? "operation.unresolved",
+      action: { kind: "provide-assumption-evidence" as const }
     };
     if (diagnostic.code === "equation-series.motif.unavailable") return {
       ...base,

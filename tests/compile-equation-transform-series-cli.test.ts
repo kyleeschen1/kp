@@ -18,6 +18,10 @@ interface CliResponse {
   readonly operations?: readonly Readonly<{
     operationId: string;
     source: string;
+    governedAuthoring?: Readonly<{
+      schemaVersion: string;
+      roleIds: readonly string[];
+    }> | undefined;
   }>[] | undefined;
   readonly request?: Readonly<{ id: string }> | undefined;
   readonly runtime?: Readonly<{
@@ -46,6 +50,18 @@ test("list mode exposes deterministic series capabilities", async () => {
   assert.deepEqual(
     response.operations?.map(({ operationId }) => operationId),
     kpEquationSeriesOperationRegistry.ids
+  );
+  assert.equal(
+    response.operations?.filter(({ governedAuthoring }) =>
+      governedAuthoring !== undefined
+    ).length,
+    6
+  );
+  assert.deepEqual(
+    response.operations?.find(({ operationId }) =>
+      operationId === "kp.algebra.apply-natural-log-both-sides"
+    )?.governedAuthoring?.roleIds,
+    ["lhs", "rhs", "relation", "applied-operation"]
   );
 });
 

@@ -15,15 +15,24 @@ import { createKpHomomorphicCrossoverAuthoringOperations } from
   "./homomorphic-crossover-authoring.ts";
 import type { KpLlmPromotedOperationAuthoringDefinition } from
   "../animation/llm-semantic-motion-operation-authoring.ts";
+import {
+  kpEquationSeriesBothSidesAuthoringDeclarations,
+  type KpEquationSeriesBothSidesAuthoringDeclaration
+} from "./equation-series-both-sides-authoring.ts";
 
 export interface KpEquationSeriesOperationDeclaration {
   readonly operationId: string;
-  readonly source: "canonical-operation" | "equation-extension";
+  readonly source:
+    | "canonical-operation"
+    | "equation-extension"
+    | "both-sides-operation";
   readonly familyId: string;
   readonly recipeIds: readonly string[];
   readonly authorityRefIds: readonly string[];
   readonly roleIds: readonly string[];
   readonly canonicalComposition: readonly string[];
+  readonly bothSides?:
+    KpEquationSeriesBothSidesAuthoringDeclaration | undefined;
 }
 
 export interface KpEquationSeriesOperationRegistry {
@@ -64,13 +73,43 @@ export function createKpEquationSeriesOperationRegistry(
   });
 }
 
-export const kpEquationSeriesOperationRegistry =
-  createKpEquationSeriesOperationRegistry([
+const existingOperationDeclarations = [
     ...kpCanonicalOperationRegistry.entries.map(canonicalDeclaration),
     ...extensionOperationRegistrations.map(extensionDeclaration),
     ...createKpHomomorphicCrossoverAuthoringOperations().map(
       promotedExtensionDeclaration
     )
+  ];
+
+const bothSidesByOperationId = new Map(
+  kpEquationSeriesBothSidesAuthoringDeclarations.map((entry) => [
+    entry.operationId,
+    entry
+  ])
+);
+
+export const kpEquationSeriesOperationRegistry =
+  createKpEquationSeriesOperationRegistry([
+    ...existingOperationDeclarations.map((entry) => {
+      const bothSides = bothSidesByOperationId.get(entry.operationId);
+      return bothSides === undefined ? entry : {
+        ...entry,
+        familyId: bothSides.operationPin.packId,
+        authorityRefIds: unique([
+          ...entry.authorityRefIds,
+          bothSides.semanticAuthorityId,
+          bothSides.lawId,
+          ...bothSides.requiredAssumptionEvidenceIds
+        ]),
+        roleIds: bothSides.roleIds,
+        bothSides
+      };
+    }),
+    ...kpEquationSeriesBothSidesAuthoringDeclarations
+      .filter(({ operationId }) => !existingOperationDeclarations.some(
+        (entry) => entry.operationId === operationId
+      ))
+      .map(bothSidesDeclaration)
   ]);
 
 function canonicalDeclaration(
@@ -124,6 +163,25 @@ function promotedExtensionDeclaration(
   });
 }
 
+function bothSidesDeclaration(
+  entry: KpEquationSeriesBothSidesAuthoringDeclaration
+): KpEquationSeriesOperationDeclaration {
+  return declaration({
+    operationId: entry.operationId,
+    source: "both-sides-operation",
+    familyId: entry.operationPin.packId,
+    recipeIds: [],
+    authorityRefIds: [
+      entry.semanticAuthorityId,
+      entry.lawId,
+      ...entry.requiredAssumptionEvidenceIds
+    ],
+    roleIds: entry.roleIds,
+    canonicalComposition: [entry.operationId],
+    bothSides: entry
+  });
+}
+
 function declaration(
   input: KpEquationSeriesOperationDeclaration
 ): KpEquationSeriesOperationDeclaration {
@@ -132,7 +190,17 @@ function declaration(
     recipeIds: Object.freeze([...input.recipeIds]),
     authorityRefIds: Object.freeze([...input.authorityRefIds]),
     roleIds: Object.freeze([...input.roleIds]),
-    canonicalComposition: Object.freeze([...input.canonicalComposition])
+    canonicalComposition: Object.freeze([...input.canonicalComposition]),
+    ...(input.bothSides === undefined ? {} : {
+      bothSides: deepFreeze({
+        ...input.bothSides,
+        operationPin: { ...input.bothSides.operationPin },
+        roleIds: input.bothSides.roleIds,
+        requiredAssumptionEvidenceIds: [
+          ...input.bothSides.requiredAssumptionEvidenceIds
+        ]
+      })
+    })
   });
 }
 

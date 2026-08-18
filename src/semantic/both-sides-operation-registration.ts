@@ -28,6 +28,7 @@ interface KpAddBothSidesOperationRegistration {
   readonly semanticAuthorityId: string;
   readonly lawId: "law.equation.add-both-sides";
   readonly relationDomainEvidenceIds: readonly [string, ...string[]];
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 
@@ -37,6 +38,7 @@ interface KpSubtractBothSidesOperationRegistration {
   readonly semanticAuthorityId: string;
   readonly lawId: "law.equation.subtract-both-sides";
   readonly relationDomainEvidenceIds: readonly [string, ...string[]];
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 
@@ -50,6 +52,7 @@ interface KpMultiplyBothSidesOperationRegistration {
   readonly semanticAuthorityId: string;
   readonly lawId: "law.equation.multiply-both-sides";
   readonly nonzeroEvidenceId: string;
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 
@@ -59,6 +62,7 @@ interface KpDivideBothSidesOperationRegistration {
   readonly semanticAuthorityId: string;
   readonly lawId: "law.equation.divide-both-sides";
   readonly nonzeroEvidenceId: string;
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 
@@ -77,6 +81,7 @@ interface KpApplyNaturalLogBothSidesOperationRegistration {
   readonly lhsDomainEvidenceId: string;
   readonly rhsDomainEvidenceId: string;
   readonly injectivityEvidenceId: string;
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 
@@ -86,6 +91,7 @@ interface KpDivideBothSidesByLogBaseOperationRegistration {
   readonly semanticAuthorityId: string;
   readonly lawId: "law.equation.divide-both-sides";
   readonly nonzeroEvidenceId: string;
+  readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
 }
 

@@ -51,7 +51,16 @@ export async function runKpEquationTransformSeriesCli(
           recipeIds: declaration.recipeIds,
           authorityRefIds: declaration.authorityRefIds,
           roleIds: declaration.roleIds,
-          canonicalComposition: declaration.canonicalComposition
+          canonicalComposition: declaration.canonicalComposition,
+          ...(declaration.bothSides === undefined ? {} : {
+            governedAuthoring: {
+              schemaVersion: "kp.equation-series.both-sides-intent.v1",
+              operationPin: declaration.bothSides.operationPin,
+              roleIds: declaration.bothSides.roleIds,
+              requiredAssumptionEvidenceIds:
+                declaration.bothSides.requiredAssumptionEvidenceIds
+            }
+          })
         })
       )
     });
