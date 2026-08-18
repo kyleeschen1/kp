@@ -19,6 +19,11 @@ import {
   type KpAnimationCapabilityReadiness,
   type KpAnimationCapabilityReadinessStatus
 } from "./animation-capability-readiness.ts";
+import {
+  createKpAnimationDomainFrontendEvidence,
+  type KpAnimationDomainFrontendEvidence,
+  type KpAnimationDomainFrontendRequirementEvidence
+} from "./animation-domain-frontend-evidence.ts";
 import { kpAnimationCapabilityPlan } from
   "./cross-domain-animation-capability-plan.ts";
 
@@ -34,6 +39,7 @@ export interface KpAnimationTransformationCoverage {
     planSchemaVersion: string;
     assetEvidenceSchemaVersion: string;
     compilerEvidenceSchemaVersion: string;
+    frontendEvidenceSchemaVersion: string;
     readinessSchemaVersion: string;
   }>;
   readonly summary: Readonly<{
@@ -52,6 +58,7 @@ export interface KpAnimationTransformationCoverageEntry {
   readonly status: KpAnimationCapabilityReadinessStatus;
   readonly requirements:
     readonly KpAnimationTransformationCoverageRequirement[];
+  readonly gaps: readonly KpAnimationTransformationCoverageGap[];
   readonly remainingRequirementIds: readonly string[];
   readonly exemplarLinks: readonly Readonly<{
     assetId: string;
@@ -70,6 +77,13 @@ export type KpAnimationTransformationCoverageRequirement = Readonly<{
   evidenceSourceIds: readonly string[];
 }>;
 
+export type KpAnimationTransformationCoverageGap = Readonly<{
+  kind: "frontend-required";
+  requirementId: string;
+  authorityId: string;
+  repair: "Provide exact evidence from the declared domain-owned frontend.";
+}>;
+
 export type KpAnimationCoverageEvidenceTension =
   | "direct-deterministic-not-live-model-evidence"
   | "registered-without-direct-generation"
@@ -84,6 +98,7 @@ export function compileKpAnimationTransformationCoverage(input: {
   readonly plan: KpAnimationCapabilityPlan;
   readonly assetEvidence: KpAnimationCapabilityAssetEvidence;
   readonly compilerEvidence: KpAnimationCapabilityCompilerEvidence;
+  readonly frontendEvidence: KpAnimationDomainFrontendEvidence;
   readonly readiness: KpAnimationCapabilityReadiness;
 }): KpAnimationTransformationCoverage {
   const entries = Object.freeze(input.plan.entries.map((capability) => {
@@ -94,9 +109,20 @@ export function compileKpAnimationTransformationCoverage(input: {
         requirement,
         assetEvidence: input.assetEvidence.requirements,
         compilerEvidence: input.compilerEvidence.requirements,
+        frontendEvidence: input.frontendEvidence.requirements,
         directIntentEvidence: input.readiness.directIntentEvidence
       })
     ));
+    const gaps = Object.freeze(input.frontendEvidence.requirements
+      .filter((evidence) => evidence.capabilityId === capability.id &&
+        evidence.status === "missing")
+      .map((evidence): KpAnimationTransformationCoverageGap => Object.freeze({
+        kind: "frontend-required" as const,
+        requirementId: evidence.requirementId,
+        authorityId: evidence.authorityId,
+        repair:
+          "Provide exact evidence from the declared domain-owned frontend." as const
+      })));
     const exemplarLinks = Object.freeze(input.assetEvidence.requirements
       .filter((evidence): evidence is Extract<
         KpAnimationCapabilityAssetRequirementEvidence,
@@ -116,6 +142,7 @@ export function compileKpAnimationTransformationCoverage(input: {
       scope: Object.freeze({ ...capability.scope }),
       status: readiness.status,
       requirements,
+      gaps,
       remainingRequirementIds: Object.freeze(requirements
         .filter(({ status }) => status === "missing")
         .map(({ id }) => id)),
@@ -138,6 +165,7 @@ export function compileKpAnimationTransformationCoverage(input: {
       planSchemaVersion: input.plan.schemaVersion,
       assetEvidenceSchemaVersion: input.assetEvidence.schemaVersion,
       compilerEvidenceSchemaVersion: input.compilerEvidence.schemaVersion,
+      frontendEvidenceSchemaVersion: input.frontendEvidence.schemaVersion,
       readinessSchemaVersion: input.readiness.schemaVersion
     }),
     summary: Object.freeze({
@@ -154,6 +182,7 @@ KpAnimationTransformationCoverage {
     plan: kpAnimationCapabilityPlan,
     assetEvidence: createKpAnimationCapabilityAssetEvidence(),
     compilerEvidence: createKpAnimationCapabilityCompilerEvidence(),
+    frontendEvidence: createKpAnimationDomainFrontendEvidence(),
     readiness: createKpAnimationCapabilityReadiness()
   });
 }
@@ -165,6 +194,8 @@ function projectRequirement(input: {
     readonly KpAnimationCapabilityAssetRequirementEvidence[];
   readonly compilerEvidence:
     readonly KpAnimationCapabilityCompilerRequirementEvidence[];
+  readonly frontendEvidence:
+    readonly KpAnimationDomainFrontendRequirementEvidence[];
   readonly directIntentEvidence:
     readonly KpAnimationCapabilityDirectIntentEvidence[];
 }): KpAnimationTransformationCoverageRequirement {
@@ -197,6 +228,16 @@ function projectRequirement(input: {
         ? [input.requirement.authorityId]
         : []
     ));
+  }
+  if (input.requirement.kind === "domain-frontend") {
+    const frontend = input.frontendEvidence.find((evidence) =>
+      evidence.capabilityId === input.capabilityId &&
+      evidence.requirementId === input.requirement.id &&
+      evidence.status === "matched"
+    );
+    if (frontend?.status === "matched") {
+      evidenceSourceIds.push(frontend.evidence.sourcePath);
+    }
   }
   return Object.freeze({
     id: input.requirement.id,

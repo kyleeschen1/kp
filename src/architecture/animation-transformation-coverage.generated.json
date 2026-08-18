@@ -6,6 +6,7 @@
     "planSchemaVersion": "kp.animation-capability-plan.v1",
     "assetEvidenceSchemaVersion": "kp.animation-capability-asset-evidence.v1",
     "compilerEvidenceSchemaVersion": "kp.animation-capability-compiler-evidence.v1",
+    "frontendEvidenceSchemaVersion": "kp.animation-domain-frontend-evidence.v1",
     "readinessSchemaVersion": "kp.animation-capability-readiness.v1"
   },
   "summary": {
@@ -91,6 +92,7 @@
           ]
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [],
       "exemplarLinks": [
         {
@@ -165,6 +167,7 @@
           ]
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [],
       "exemplarLinks": [
         {
@@ -239,6 +242,7 @@
           ]
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [],
       "exemplarLinks": [
         {
@@ -332,6 +336,7 @@
           ]
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.log-homomorphism.product-exemplar"
       ],
@@ -390,6 +395,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.transform-series.normalizer",
         "requirement.equation.transform-series.runtime",
@@ -455,6 +461,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.balanced-operations.operation",
         "requirement.equation.balanced-operations.recipe",
@@ -540,6 +547,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.logarithm-base.normalizer",
         "requirement.equation.logarithm-base.operation",
@@ -598,6 +606,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.fraction-equivalence.operation",
         "requirement.equation.fraction-equivalence.recipe",
@@ -653,6 +662,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.common-denominator.operation",
         "requirement.equation.common-denominator.recipe",
@@ -708,6 +718,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.fraction-arithmetic.operation",
         "requirement.equation.fraction-arithmetic.recipe",
@@ -765,6 +776,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.fraction-factor-cancellation.recipe",
         "requirement.equation.fraction-factor-cancellation.exemplar",
@@ -819,6 +831,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.nested-fraction.normalizer",
         "requirement.equation.nested-fraction.operation",
@@ -884,6 +897,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.power-exponent.operation",
         "requirement.equation.power-exponent.recipe",
@@ -955,6 +969,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.radical-inversion.normalizer",
         "requirement.equation.radical-inversion.recipe",
@@ -1012,6 +1027,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.substitution-collection-factoring.operation",
         "requirement.equation.substitution-collection-factoring.recipe",
@@ -1072,6 +1088,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.branching-domain.operation",
         "requirement.equation.branching-domain.recipe",
@@ -1127,6 +1144,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.inequality.operation",
         "requirement.equation.inequality.recipe",
@@ -1182,6 +1200,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.binders-calculus.normalizer",
         "requirement.equation.binders-calculus.operation",
@@ -1237,6 +1256,7 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [],
       "remainingRequirementIds": [
         "requirement.equation.derivation.runtime",
         "requirement.equation.derivation.operation",
@@ -1302,6 +1322,14 @@
           "summary": "Fixtures pressure rectangular dimensions, symbolic entries, sparse rows, and invalid shapes.",
           "status": "missing",
           "evidenceSourceIds": []
+        }
+      ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.matrix.domain-frontend.vector-composition",
+          "authorityId": "frontend.matrix.semantic-composition.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
         }
       ],
       "remainingRequirementIds": [
@@ -1375,6 +1403,14 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.matrix.domain-frontend.matrix-composition",
+          "authorityId": "frontend.matrix.semantic-composition.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
+        }
+      ],
       "remainingRequirementIds": [
         "requirement.matrix.domain-frontend.matrix-composition",
         "requirement.matrix.matrix-composition.operation",
@@ -1444,6 +1480,14 @@
           "summary": "Fixtures cover scale, rotate, shear, projection, rank loss, and basis changes.",
           "status": "missing",
           "evidenceSourceIds": []
+        }
+      ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.matrix.domain-frontend.linear-map-geometry",
+          "authorityId": "frontend.matrix.linear-map.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
         }
       ],
       "remainingRequirementIds": [
@@ -1517,6 +1561,14 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.code.domain-frontend.typescript-refactoring",
+          "authorityId": "frontend.code.typescript-compiler.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
+        }
+      ],
       "remainingRequirementIds": [
         "requirement.code.domain-frontend.typescript-refactoring",
         "requirement.code.typescript-refactoring.operation",
@@ -1586,6 +1638,14 @@
           "summary": "Fixtures pressure indentation, scopes, expressions, annotations, and invalid extraction.",
           "status": "missing",
           "evidenceSourceIds": []
+        }
+      ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.code.domain-frontend.python-refactoring",
+          "authorityId": "frontend.code.python-ast.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
         }
       ],
       "remainingRequirementIds": [
@@ -1659,6 +1719,14 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.code.domain-frontend.scheme-structural-evaluation",
+          "authorityId": "frontend.code.scheme-reader-evaluator.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
+        }
+      ],
       "remainingRequirementIds": [
         "requirement.code.domain-frontend.scheme-structural-evaluation",
         "requirement.code.scheme-evaluation.operation",
@@ -1728,6 +1796,14 @@
           "evidenceSourceIds": []
         }
       ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.graph-2d.domain-frontend.function-transformations",
+          "authorityId": "frontend.graph-2d.function-model.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
+        }
+      ],
       "remainingRequirementIds": [
         "requirement.graph-2d.domain-frontend.function-transformations",
         "requirement.graph-2d.function.operation",
@@ -1792,6 +1868,14 @@
           "summary": "Fixtures pressure curve shifts, intersections, tangencies, parameter sweeps, and invalid models.",
           "status": "missing",
           "evidenceSourceIds": []
+        }
+      ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.graph-2d.domain-frontend.model-transformations",
+          "authorityId": "frontend.graph-2d.semantic-scene.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
         }
       ],
       "remainingRequirementIds": [
@@ -1871,6 +1955,14 @@
           "summary": "Fixtures pressure surfaces, curves, topology, camera, context loss, fallback parity, seek, and rewind.",
           "status": "missing",
           "evidenceSourceIds": []
+        }
+      ],
+      "gaps": [
+        {
+          "kind": "frontend-required",
+          "requirementId": "requirement.graph-3d.domain-frontend.scene-transformations",
+          "authorityId": "frontend.graph-3d.semantic-scene.v1",
+          "repair": "Provide exact evidence from the declared domain-owned frontend."
         }
       ],
       "remainingRequirementIds": [

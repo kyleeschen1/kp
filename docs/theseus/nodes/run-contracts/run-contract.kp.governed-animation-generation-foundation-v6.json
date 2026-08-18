@@ -81,13 +81,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s23",
       "title": "Domain-frontend-gaps",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s23 in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Cross-domain frontend plans now bind to exact evidence or deterministic frontend-required gaps without universal semantics.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s19b",
       "title": "Shared-playback-readiness-and-exponent-repair",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s19b in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s24",

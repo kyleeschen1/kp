@@ -4,6 +4,10 @@ import test from "node:test";
 
 import { validateKpAnimationGenerationCapabilityPins } from
   "../src/architecture/animation-generation-request-capability.ts";
+import { compileKpAnimationDomainFrontendEvidence } from
+  "../src/architecture/animation-domain-frontend-evidence.ts";
+import { kpAnimationCapabilityPlan } from
+  "../src/architecture/cross-domain-animation-capability-plan.ts";
 import {
   validateKpAnimationGenerationRequest,
   type KpAnimationGenerationDomain,
@@ -42,13 +46,20 @@ const domainExamples: readonly Readonly<{
   capabilityId: "capability.graph-3d.scene-transformations"
 }]);
 
-test("one envelope accepts opaque requests for every declared domain", () => {
+test("one envelope accepts opaque requests while unbuilt frontends stay gaps", () => {
   for (const example of domainExamples) {
     const input = request(example);
     const result = validateKpAnimationGenerationRequest(input);
     assert.equal(result.status, "accepted", example.domain);
     if (result.status !== "accepted") continue;
-    assert.deepEqual(validateKpAnimationGenerationCapabilityPins(result.request), []);
+    assert.deepEqual(
+      validateKpAnimationGenerationCapabilityPins(result.request).map(
+        ({ code }) => code
+      ),
+      example.domain === "equation"
+        ? []
+        : ["animation-generation.frontend.required"]
+    );
     assert.equal(Object.isFrozen(result.request), true);
     assert.equal(Object.isFrozen(result.request.source.input), true);
     assert.equal(Object.isFrozen((input["source"] as any)["input"]), false);
@@ -87,6 +98,22 @@ test("domain source and capability mismatches produce typed repairs", () => {
       code
     ),
     ["animation-generation.capability.domain-mismatch"]
+  );
+});
+
+test("exact domain-owned evidence closes the matching frontend gap", () => {
+  const accepted = requireAccepted(request(domainExamples[1]!));
+  const evidence = compileKpAnimationDomainFrontendEvidence({
+    plan: kpAnimationCapabilityPlan,
+    authorities: [{
+      authorityId: "frontend.matrix.semantic-composition.v1",
+      domain: "matrix",
+      sourcePath: "src/domains/matrix/semantic-composition-frontend.ts"
+    }]
+  });
+  assert.deepEqual(
+    validateKpAnimationGenerationCapabilityPins(accepted, evidence),
+    []
   );
 });
 

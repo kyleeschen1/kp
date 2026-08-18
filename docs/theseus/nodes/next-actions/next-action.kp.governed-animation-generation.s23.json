@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s23",
   "kind": "next-action",
   "title": "Domain-frontend-gaps",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s23 in Governed generation overnight nonvisual-first continuation.",
+  "status": "resolved",
+  "summary": "Matrix, code, Graph2D, and Graph3D declarations now remain honest typed gaps until exact domain frontend evidence is registered.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,61 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T05:39:13.126Z",
+      "notes": "Fifteen frontend evidence, request routing, exact closure, coverage projection, and dependency-light boundary cases passed."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T05:39:14.187Z",
+      "notes": "Generated coverage is current and includes exact frontend evidence schema plus typed frontend-required gaps."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:39:15.163Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:39:16.115Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic boundaries, and compiler authority passed."
+    },
+    {
+      "command": "node --test tests/cross-domain-animation-capability-plan.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T05:39:17.076Z",
+      "notes": "All four cross-domain ordering and domain-owned frontend boundary tests passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T05:39:18.048Z",
+      "notes": "Internal Studio built; lazy capability chunks and all gzip boundaries remained within limits."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:40:12.465Z",
+      "notes": "Workspace validates 1001 nodes and 22593 events after domain-gap closure and playback-slice materialization."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Separated planned frontend IDs from implementation evidence, added exact domain-owned authority joins, exposed typed frontend-required gaps in requests and generated coverage, and preserved lazy dependency boundaries."
+  },
   "expectedLearning": [
     "Whether Domain-frontend-gaps can be completed inside Governed generation overnight nonvisual-first continuation."
   ],

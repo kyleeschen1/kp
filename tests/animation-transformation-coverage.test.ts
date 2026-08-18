@@ -76,6 +76,34 @@ test("direct homomorphic generation retains only the unreviewed product exemplar
   ]);
 });
 
+test("cross-domain rows expose exact frontend-required gaps", () => {
+  const coverage = createKpAnimationTransformationCoverage();
+  const crossDomain = coverage.entries.filter(({ domain }) =>
+    domain !== "equation"
+  );
+  assert.equal(crossDomain.length, 9);
+  for (const entry of crossDomain) {
+    assert.deepEqual(entry.gaps.filter(({ kind }) =>
+      kind === "frontend-required"
+    ), [{
+      kind: "frontend-required",
+      requirementId: entry.requirements.find(({ kind }) =>
+        kind === "domain-frontend"
+      )?.id,
+      authorityId: entry.requirements.find(({ kind }) =>
+        kind === "domain-frontend"
+      )?.authorityId,
+      repair: "Provide exact evidence from the declared domain-owned frontend."
+    }]);
+  }
+  assert.ok(coverage.entries.filter(({ domain }) => domain === "equation")
+    .every(({ gaps }) => gaps.length === 0));
+  assert.equal(
+    coverage.generatedFrom.frontendEvidenceSchemaVersion,
+    "kp.animation-domain-frontend-evidence.v1"
+  );
+});
+
 test("generated coverage contains no mutable roadmap or presentation state", () => {
   const serialized = JSON.stringify(createKpAnimationTransformationCoverage());
   for (const forbidden of [
