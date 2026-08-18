@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "kp.balanced-operation-caller-inventory.v1",
+  "entries": [
+    {
+      "id": "balanced-operation.add",
+      "category": "add",
+      "transformType": "addBothSides",
+      "semanticAuthority": {
+        "kind": "generated-definition",
+        "id": "definition.generated.linear-solve.add-both-sides",
+        "sourcePath": "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "sourceNeedle": "transformType: \"addBothSides\""
+      },
+      "lawId": "law.equation.add-both-sides",
+      "assumptions": [
+        "Adding equal quantities preserves equality."
+      ],
+      "presentation": {
+        "status": "motif-only",
+        "route": "append-after-shift",
+        "sourcePath": "src/animation/motifs/equation-visual-motif-defaults.ts",
+        "sourceNeedle": "transformType: \"addBothSides\""
+      },
+      "authoring": {
+        "exposure": "canonical-equation-series",
+        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
+        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "operationId": "kp.algebra.add-both-sides"
+      },
+      "literalSourcePaths": [
+        "src/animation/animation-design-diagnostics.ts",
+        "src/animation/motifs/equation-visual-motif-defaults.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/semantic/canonical-operation-registry.ts",
+        "src/semantic/generated-algebra-canonical-composition.ts",
+        "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "src/semantic/generated-algebra-tutorial-fixture.ts"
+      ],
+      "gaps": [
+        "No executable linear-rearrangement registration currently compiles the add-both-sides motif into a balanced presentation plan."
+      ],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    },
+    {
+      "id": "balanced-operation.subtract",
+      "category": "subtract",
+      "transformType": "subtractBothSides",
+      "semanticAuthority": {
+        "kind": "generated-definition",
+        "id": "definition.generated.linear-solve.subtract-both-sides",
+        "sourcePath": "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "sourceNeedle": "transformType: \"subtractBothSides\""
+      },
+      "lawId": "law.equation.subtract-both-sides",
+      "assumptions": [
+        "Subtracting equal quantities preserves equality."
+      ],
+      "presentation": {
+        "status": "registered",
+        "route": "synchronized-balanced-introduction",
+        "sourcePath": "src/animation/equation-linear-rearrangement-kind.ts",
+        "sourceNeedle": "rearrangement(\"subtractBothSides\", \"balanced-introduction\", true)"
+      },
+      "authoring": {
+        "exposure": "canonical-equation-series",
+        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
+        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "operationId": "kp.algebra.subtract-both-sides"
+      },
+      "literalSourcePaths": [
+        "src/animation/animation-design-diagnostics.ts",
+        "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/animation/fraction-composition-visual-motifs.ts",
+        "src/animation/motifs/equation-visual-motif-defaults.ts",
+        "src/animation/semantic-motion-library-promotion.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/animation/verified-linear-problem-animation-compiler.ts",
+        "src/reader/compiler/fraction-composition-preservation-manifest.ts",
+        "src/semantic/algebra-trace-port-fixture.ts",
+        "src/semantic/canonical-operation-registry.ts",
+        "src/semantic/fraction-solve-macro.ts",
+        "src/semantic/fractional-linear-equation-asset.ts",
+        "src/semantic/generated-algebra-canonical-composition.ts",
+        "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "src/semantic/generated-algebra-tutorial-fixture.ts",
+        "src/semantic/linear-solve-asset.ts"
+      ],
+      "gaps": [],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    },
+    {
+      "id": "balanced-operation.multiply",
+      "category": "multiply",
+      "transformType": "multiplyBothSides",
+      "semanticAuthority": {
+        "kind": "fragmented-semantic-assets",
+        "id": "definition.symbolic.algebra.multiply-both-sides",
+        "sourcePath": "src/animation/symbolic-manipulation-families/algebra.ts",
+        "sourceNeedle": "transformType: \"multiplyBothSides\""
+      },
+      "lawId": "law.equation.multiply-both-sides",
+      "assumptions": [
+        "Multiplying both sides preserves equality; equivalence requires a non-zero multiplier."
+      ],
+      "presentation": {
+        "status": "registered",
+        "route": "synchronized-balanced-introduction",
+        "sourcePath": "src/animation/equation-linear-rearrangement-kind.ts",
+        "sourceNeedle": "rearrangement(\"multiplyBothSides\", \"balanced-introduction\", false)"
+      },
+      "authoring": {
+        "exposure": "semantic-assets-only",
+        "sourcePath": "src/animation/symbolic-manipulation-families/algebra.ts",
+        "sourceNeedle": "id: \"definition.symbolic.algebra.multiply-both-sides\""
+      },
+      "literalSourcePaths": [
+        "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/animation/fraction-composition-visual-motifs.ts",
+        "src/animation/motifs/equation-visual-motif-defaults.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/reader/compiler/fraction-composition-preservation-manifest.ts",
+        "src/semantic/fraction-solve-macro.ts",
+        "src/semantic/fractional-linear-certified-transfer.ts",
+        "src/semantic/fractional-linear-equation-asset.ts"
+      ],
+      "gaps": [
+        "Multiply-both-sides has direct semantic assets and presentation defaults but no generated transform definition, canonical operation-registry entry, or equation-series authoring declaration."
+      ],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    },
+    {
+      "id": "balanced-operation.divide",
+      "category": "divide",
+      "transformType": "divideBothSides",
+      "semanticAuthority": {
+        "kind": "generated-definition",
+        "id": "definition.generated.linear-solve.divide-both-sides",
+        "sourcePath": "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "sourceNeedle": "transformType: \"divideBothSides\""
+      },
+      "lawId": "law.equation.divide-both-sides",
+      "assumptions": [
+        "Dividing equal quantities by the same non-zero value preserves equality."
+      ],
+      "presentation": {
+        "status": "registered",
+        "route": "divide-both-sides",
+        "sourcePath": "src/animation/equation-linear-rearrangement-kind.ts",
+        "sourceNeedle": "rearrangement(\"divideBothSides\", \"divide-both-sides\", false)"
+      },
+      "authoring": {
+        "exposure": "canonical-equation-series",
+        "sourcePath": "src/authoring/equation-series-operation-declarations.ts",
+        "sourceNeedle": "kpCanonicalOperationRegistry.entries.map(canonicalDeclaration)",
+        "operationId": "kp.algebra.divide-both-sides"
+      },
+      "literalSourcePaths": [
+        "src/animation/animation-design-diagnostics.ts",
+        "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/animation/fraction-composition-visual-motifs.ts",
+        "src/animation/motifs/equation-visual-motif-defaults.ts",
+        "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/animation/verified-linear-problem-animation-compiler.ts",
+        "src/reader/compiler/fraction-composition-preservation-manifest.ts",
+        "src/semantic/canonical-operation-registry.ts",
+        "src/semantic/divide-both-sides-equation-asset.ts",
+        "src/semantic/fraction-solve-macro.ts",
+        "src/semantic/generated-algebra-canonical-composition.ts",
+        "src/semantic/generated-algebra-transform-definition-registry.ts",
+        "src/semantic/generated-algebra-tutorial-fixture.ts"
+      ],
+      "gaps": [],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    },
+    {
+      "id": "balanced-operation.apply-natural-log",
+      "category": "apply-log",
+      "transformType": "applyNaturalLogBothSides",
+      "semanticAuthority": {
+        "kind": "specialized-compiler",
+        "id": "transformation.log-exponent.apply-log-both-sides",
+        "sourcePath": "src/semantic/log-exponent-transformation-compiler.ts",
+        "sourceNeedle": "transformType: \"applyNaturalLogBothSides\""
+      },
+      "lawId": "law.equation.apply-injective-function",
+      "assumptions": [
+        "assumption.log-exponent.power-positive",
+        "assumption.log-exponent.right-positive",
+        "assumption.log-exponent.log-injective"
+      ],
+      "presentation": {
+        "status": "registered",
+        "route": "synchronized-balanced-introduction + specialized-log-envelope",
+        "sourcePath": "src/animation/equation-linear-rearrangement-kind.ts",
+        "sourceNeedle": "rearrangement(\"applyNaturalLogBothSides\", \"balanced-introduction\", false)"
+      },
+      "authoring": {
+        "exposure": "specialized-authored-program",
+        "sourcePath": "src/semantic/log-exponent-authored-operations.ts",
+        "sourceNeedle": "kind: \"apply-natural-log-both-sides\"",
+        "operationId": "operation.log-exponent.apply-log-both-sides"
+      },
+      "literalSourcePaths": [
+        "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/semantic/log-exponent-transformation-compiler.ts"
+      ],
+      "gaps": [
+        "Apply-log is governed inside the specialized log-exponent program but is not exposed through the tool-neutral equation-series operation registry."
+      ],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    },
+    {
+      "id": "balanced-operation.divide-by-log-base",
+      "category": "divide",
+      "transformType": "divideBothSidesByLogBase",
+      "semanticAuthority": {
+        "kind": "specialized-compiler",
+        "id": "transformation.log-exponent.divide-by-log-base",
+        "sourcePath": "src/semantic/log-exponent-transformation-compiler.ts",
+        "sourceNeedle": "transformType: \"divideBothSidesByLogBase\""
+      },
+      "lawId": "law.equation.divide-both-sides",
+      "assumptions": [
+        "assumption.log-exponent.log-base-nonzero"
+      ],
+      "presentation": {
+        "status": "registered",
+        "route": "specialized-log-envelope",
+        "sourcePath": "src/animation/log-exponent-operation-presentation-registry.ts",
+        "sourceNeedle": "id: \"operation.log-exponent.divide-by-log-base\""
+      },
+      "authoring": {
+        "exposure": "specialized-authored-program",
+        "sourcePath": "src/semantic/log-exponent-authored-operations.ts",
+        "sourceNeedle": "kind: \"divide-both-sides-by-log-base\"",
+        "operationId": "operation.log-exponent.divide-by-log-base"
+      },
+      "literalSourcePaths": [
+        "src/semantic/log-exponent-transformation-compiler.ts"
+      ],
+      "gaps": [
+        "The log-base divisor is domain-verified and cohesive, but its both-sides semantics are not yet projected through the shared equation-series authoring registry."
+      ],
+      "roles": [
+        "lhs",
+        "rhs",
+        "relation",
+        "applied-operation"
+      ]
+    }
+  ]
+}

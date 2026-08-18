@@ -656,6 +656,34 @@
       "scope": "browser-environment-debt",
       "checkedAt": "2026-08-18T17:54:03.538Z",
       "notes": "Chromium surfaces an existing unhandled ResizeObserver notification; deterministic preservation matrix remains green. Debt retained visibly rather than weakening the gate."
+    },
+    {
+      "command": "npm run test:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "balance-baseline",
+      "checkedAt": "2026-08-18T18:02:46.366Z",
+      "notes": "5/5: generated evidence current, live authority needles, exact literal caller discovery, authoring exposure, contradiction and duplicate-source rejection."
+    },
+    {
+      "command": "npm run check:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "generated-evidence",
+      "checkedAt": "2026-08-18T18:02:47.794Z",
+      "notes": "Committed caller inventory matches its typed source projection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-authority",
+      "checkedAt": "2026-08-18T18:02:48.839Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T18:02:49.906Z",
+      "notes": "All dependency and authority ratchets pass with the new architecture evidence module."
     }
   ],
   "allowedWork": [
@@ -767,7 +795,8 @@
     {
       "id": "s15",
       "title": "Inventory balanced operation callers",
-      "status": "planned"
+      "summary": "Added a generated, exact caller inventory for add, subtract, multiply, divide, apply-natural-log, and divide-by-log-base across semantic authority, laws, assumptions, common roles, presentation routes, authoring exposure, and literal source discovery. The inventory makes three adoption gaps explicit and rejects contradictory authorities, duplicate evidence, stale source claims, and new orphan callers.",
+      "status": "complete"
     },
     {
       "id": "s16",
