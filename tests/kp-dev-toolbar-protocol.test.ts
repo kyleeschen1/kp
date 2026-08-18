@@ -3,9 +3,11 @@ import test from "node:test";
 
 import {
   createKpDevToolbarHost,
+  kpDevToolbarCopyLinkControlId,
   kpDevToolbarPagesControlId,
   kpDevToolbarProtocolSchema,
   kpDevToolbarReviewControlId,
+  kpDevToolbarThemeControlId,
   type KpDevToolbarCommand,
   type KpDevToolbarRouteContribution
 } from "../src/dev-toolbar/dev-toolbar-protocol.ts";
@@ -66,6 +68,55 @@ test("the host owns an immutable Pages directory before route controls", () => {
   assert.throws(() => host.dispatch({
     controlId: kpDevToolbarPagesControlId
   }), /native anchor navigation/u);
+});
+
+test("the host owns replaceable global dock controls before route capabilities", () => {
+  const commands: KpDevToolbarCommand[] = [];
+  const host = createKpDevToolbarHost({
+    execute: (command) => commands.push(command),
+    globals: [{
+      kind: "action",
+      id: kpDevToolbarCopyLinkControlId,
+      label: "Copy link",
+      group: "primary",
+      order: 10
+    }, {
+      kind: "toggle",
+      id: kpDevToolbarThemeControlId,
+      label: "Dark mode",
+      group: "preferences",
+      order: 20,
+      pressed: false
+    }]
+  });
+  host.setRoute(economicsContribution());
+
+  assert.deepEqual(host.snapshot().controls.map(({ id }) => id), [
+    kpDevToolbarReviewControlId,
+    kpDevToolbarCopyLinkControlId,
+    kpDevToolbarThemeControlId,
+    "economics.view",
+    "economics.theme"
+  ]);
+  host.dispatch({ controlId: kpDevToolbarThemeControlId, value: true });
+  assert.deepEqual(commands, [{
+    routeId: "tutorial.economics.demand-shift",
+    controlId: kpDevToolbarThemeControlId,
+    value: true
+  }]);
+
+  host.setGlobals([{
+    kind: "toggle",
+    id: kpDevToolbarThemeControlId,
+    label: "Dark mode",
+    group: "preferences",
+    order: 20,
+    pressed: true
+  }]);
+  const theme = host.snapshot().controls.find(
+    ({ id }) => id === kpDevToolbarThemeControlId
+  );
+  assert.equal(theme?.kind === "toggle" && theme.pressed, true);
 });
 
 test("route contributions are immutable, sorted capabilities rather than DOM", () => {

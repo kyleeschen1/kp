@@ -2,9 +2,6 @@ import { getKpDevelopmentToolbar } from
   "../../dev-toolbar/development-toolbar-bootstrap.ts";
 import { mountKpTutorialDevReview } from "../../dev-review/tutorial-review-bootstrap.ts";
 import {
-  writeKpEconomicsDemandShiftTheme
-} from "./economics-demand-shift-theme.ts";
-import {
   writeKpEconomicsDemandShiftView,
   type KpEconomicsDemandShiftView
 } from "./economics-demand-shift-view.ts";
@@ -37,13 +34,6 @@ export function mountKpEconomicsDemandShiftDevToolbar(input: {
       input.navigate(writeKpEconomicsDemandShiftView({
         search,
         view: command.value as KpEconomicsDemandShiftView
-      }));
-      return;
-    }
-    if (command.controlId === "economics.theme" && typeof command.value === "boolean") {
-      input.navigate(writeKpEconomicsDemandShiftTheme({
-        search,
-        theme: command.value ? "dark" : "light"
       }));
       return;
     }

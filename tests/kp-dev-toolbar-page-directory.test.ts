@@ -12,9 +12,10 @@ import {
 } from "../src/dev-toolbar/development-page-descriptor.ts";
 
 test("the page directory contains the supported first-party development surfaces", () => {
-  assert.equal(kpDevelopmentPages.length, 28);
+  assert.equal(kpDevelopmentPages.length, 29);
   assert.deepEqual(kpDevelopmentPages.map(({ id }) => id), [
     "studio.catalogue",
+    "studio.transformation-coverage",
     "studio.editor",
     "studio.dashboard",
     "studio.animation-library-host",

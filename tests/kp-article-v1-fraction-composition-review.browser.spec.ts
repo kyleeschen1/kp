@@ -79,7 +79,7 @@ test("captures the universal Pages directory on the algebra route", async ({ pag
   });
   const pages = toolbar.locator(
     "[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']"
-  ).getByText("Pages", { exact: true });
+  ).getByText("View", { exact: true });
   await pages.click();
   await expect(pages)
     .toHaveAttribute("aria-expanded", "true");

@@ -17,7 +17,7 @@ export function createKpDevelopmentPagesControl(
   return {
     kind: "links",
     id: kpDevToolbarPagesControlId,
-    label: "Pages",
+    label: "View",
     group: "primary",
     order: 5,
     groups: [...groupKpDevelopmentPages()].map(([id, pages]) => ({

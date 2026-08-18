@@ -4,6 +4,7 @@ import { kpDevelopmentPages } from "../src/dev-toolbar/development-page-director
 
 const readySelectors: Readonly<Record<string, string>> = Object.freeze({
   "studio.catalogue": "[data-kp-svelte-catalogue-shell]",
+  "studio.transformation-coverage": ".kp-transformation-coverage",
   "studio.editor": "[data-kp-editor-animation-library]",
   "studio.dashboard": "[data-kp-project-dashboard]",
   "studio.animation-library-host": "[data-kp-editor-animation-library-host]",
@@ -15,6 +16,14 @@ const readySelectors: Readonly<Record<string, string>> = Object.freeze({
     "[data-kp-algebra-fraction-composition-publication]",
   "tutorial.lisp-function-application":
     "[data-kp-lisp-function-application-tutorial]",
+  "tutorial.scheme-factorial":
+    "[data-kp-scheme-factorial-focus-publication]",
+  "tutorial.public-typescript-free-shipping":
+    "[data-kp-public-typescript-lesson]",
+  "tutorial.public-fraction-composition":
+    "[data-kp-public-symbolic-lesson]",
+  "tutorial.public-normal-matrices":
+    "[data-kp-public-proof-memory]",
   "diagnostic.canonical-animation-review":
     "[data-kp-animation-library][data-catalog-ready='true']",
   "diagnostic.glyph-reconciliation":

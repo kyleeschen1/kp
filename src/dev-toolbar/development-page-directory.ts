@@ -15,7 +15,20 @@ export const kpDevelopmentPageGroupLabels:
 
 export const kpDevelopmentPages: readonly KpDevelopmentPageDescriptor[] =
   Object.freeze([
-    page("studio.catalogue", "Animation catalogue", "studio", "/", ["view"]),
+    page(
+      "studio.catalogue",
+      "Animation catalogue",
+      "studio",
+      "/",
+      undefined,
+      [{ name: "view", value: "animation-catalogue" }]
+    ),
+    page(
+      "studio.transformation-coverage",
+      "Transformation coverage",
+      "studio",
+      "/?view=coverage"
+    ),
     page("studio.editor", "Animation editor", "studio", "/?view=editor"),
     page("studio.dashboard", "Project dashboard", "studio", "/?view=dashboard"),
     page(
@@ -175,13 +188,15 @@ function page(
   label: string,
   group: KpDevelopmentPageGroup,
   href: string,
-  absentQuery?: readonly string[]
+  absentQuery?: readonly string[],
+  optionalQuery?: readonly Readonly<{ name: string; value: string }>[]
 ): KpDevelopmentPageDescriptor {
   return defineKpDevelopmentPage({
     id,
     label,
     group,
     href,
-    ...(absentQuery === undefined ? {} : { absentQuery })
+    ...(absentQuery === undefined ? {} : { absentQuery }),
+    ...(optionalQuery === undefined ? {} : { optionalQuery })
   });
 }

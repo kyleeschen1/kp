@@ -60,6 +60,29 @@ test("an absent query key distinguishes a default page from query-backed views",
   }), false);
 });
 
+test("an optional default query preserves legacy and exact copied identities", () => {
+  const catalogue = defineKpDevelopmentPage({
+    id: "studio.catalogue",
+    label: "Animation catalogue",
+    group: "studio",
+    href: "/",
+    optionalQuery: [{ name: "view", value: "animation-catalogue" }]
+  });
+
+  assert.equal(isKpDevelopmentPageCurrent(catalogue, {
+    pathname: "/",
+    search: "?artifact=animation.example"
+  }), true);
+  assert.equal(isKpDevelopmentPageCurrent(catalogue, {
+    pathname: "/",
+    search: "?view=animation-catalogue&artifact=animation.example"
+  }), true);
+  assert.equal(isKpDevelopmentPageCurrent(catalogue, {
+    pathname: "/",
+    search: "?view=coverage"
+  }), false);
+});
+
 test("pathname matching tolerates a missing trailing slash", () => {
   const page = defineKpDevelopmentPage({
     id: "reader.solve-x",

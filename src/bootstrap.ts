@@ -2,7 +2,8 @@ import {
   selectKpLegacyRootRoute
 } from "./compatibility/legacy-root-route.ts";
 import {
-  KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT
+  KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT,
+  navigateKpAnimationDevelopmentView
 } from "./editor/animation-development-view-navigation.ts";
 
 type KpAnimationDevelopmentRootRoute =
@@ -29,7 +30,7 @@ async function bootstrap(): Promise<void> {
     search: window.location.search
   });
   if (isAnimationDevelopmentRootRoute(route)) {
-    await mountDevelopmentToolbar();
+    await mountDevelopmentToolbar(route);
     registerPagehide(await mountAnimationDevelopmentRoot({ root, route }));
     return;
   }
@@ -170,10 +171,34 @@ function isAnimationDevelopmentRootRoute(
   return route === "animation-catalogue" || route === "animation-coverage";
 }
 
-async function mountDevelopmentToolbar(): Promise<void> {
+async function mountDevelopmentToolbar(
+  route?: KpAnimationDevelopmentRootRoute
+): Promise<void> {
   if (loadKpDevelopmentToolbar === undefined) return;
   const client = await loadKpDevelopmentToolbar();
-  const session = client.mountKpDevelopmentToolbar(window);
+  const session = client.mountKpDevelopmentToolbar(window, route === undefined
+    ? {}
+    : {
+        defaultTheme: route === "animation-coverage" ? "dark" : "light",
+        resolveExactHref: async () => {
+          const state = await import(
+            "./editor/animation-development-url-state.ts"
+          );
+          return state.createKpAnimationDevelopmentExactHref(
+            window.location.href
+          );
+        },
+        navigateLink: ({ id }) => {
+          const view = id === "studio.catalogue"
+            ? "animation-catalogue" as const
+            : id === "studio.transformation-coverage"
+              ? "coverage" as const
+              : undefined;
+          if (view === undefined) return false;
+          navigateKpAnimationDevelopmentView({ ownerWindow: window, view });
+          return true;
+        }
+      });
   registerPagehide(session.dispose);
 }
 

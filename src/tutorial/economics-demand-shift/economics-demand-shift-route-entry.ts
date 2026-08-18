@@ -231,6 +231,9 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   const onPopState = (): void => {
     void enqueueMount(window.location.search, window.location.hash);
   };
+  const onDevelopmentTheme = (): void => {
+    void enqueueMount(window.location.search, window.location.hash);
+  };
   const onViewClick = (event: MouseEvent): void => {
     if (!(event.target instanceof Element) || event.defaultPrevented ||
         event.button !== 0 || event.metaKey || event.ctrlKey ||
@@ -260,6 +263,10 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
   };
 
   window.addEventListener("popstate", onPopState);
+  window.addEventListener(
+    "kp-development-theme-change",
+    onDevelopmentTheme
+  );
   input.root.addEventListener("click", onViewClick);
   window.addEventListener(
     KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT,
@@ -301,6 +308,10 @@ export async function mountKpEconomicsDemandShiftRoute(input: {
       void articleEditor?.close(true);
       articleEditor = undefined;
       window.removeEventListener("popstate", onPopState);
+      window.removeEventListener(
+        "kp-development-theme-change",
+        onDevelopmentTheme
+      );
       input.root.removeEventListener("click", onViewClick);
       window.removeEventListener(
         KP_ECONOMICS_DEMAND_SHIFT_ROUTE_REQUEST_EVENT,

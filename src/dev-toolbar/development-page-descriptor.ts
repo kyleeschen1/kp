@@ -19,6 +19,12 @@ export interface KpDevelopmentPageDescriptor {
    * article parameters remain incidental to page identity.
    */
   readonly absentQuery?: readonly string[];
+  /** Query values that may be omitted because the route treats them as its
+   * legacy default. Exact copied URLs can still make the value explicit. */
+  readonly optionalQuery?: readonly Readonly<{
+    name: string;
+    value: string;
+  }>[];
 }
 
 export interface KpDevelopmentPageLocation {
@@ -43,10 +49,17 @@ export function defineKpDevelopmentPage(
     throw new Error(`Development page ${input.id} cannot use a fragment.`);
   }
   const absentQuery = input.absentQuery?.map((name) => name.trim()) ?? [];
+  const optionalQuery = input.optionalQuery?.map(({ name, value }) => ({
+    name: name.trim(),
+    value
+  })) ?? [];
   if (
     absentQuery.some((name) => name === "")
     || new Set(absentQuery).size !== absentQuery.length
     || absentQuery.some((name) => url.searchParams.has(name))
+    || optionalQuery.some(({ name, value }) =>
+      name === "" || value === "" || url.searchParams.has(name))
+    || new Set(optionalQuery.map(({ name }) => name)).size !== optionalQuery.length
   ) {
     throw new Error(`Development page ${input.id} has invalid absent query keys.`);
   }
@@ -57,7 +70,13 @@ export function defineKpDevelopmentPage(
     href: `${url.pathname}${url.search}`,
     ...(absentQuery.length === 0
       ? {}
-      : { absentQuery: Object.freeze(absentQuery) })
+      : { absentQuery: Object.freeze(absentQuery) }),
+    ...(optionalQuery.length === 0
+      ? {}
+      : {
+          optionalQuery: Object.freeze(optionalQuery.map((entry) =>
+            Object.freeze(entry)))
+        })
   });
 }
 
@@ -71,6 +90,10 @@ export function isKpDevelopmentPageCurrent(
   const actualQuery = new URLSearchParams(location.search);
   for (const [name, value] of expected.searchParams) {
     if (actualQuery.get(name) !== value) return false;
+  }
+  for (const { name, value } of descriptor.optionalQuery ?? []) {
+    const actual = actualQuery.get(name);
+    if (actual !== null && actual !== value) return false;
   }
   return descriptor.absentQuery?.every((name) => !actualQuery.has(name))
     ?? true;

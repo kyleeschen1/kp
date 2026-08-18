@@ -1,6 +1,8 @@
 export const kpDevToolbarProtocolSchema = "kp.dev-toolbar.v1" as const;
 export const kpDevToolbarReviewControlId = "kp.dev-toolbar.review" as const;
 export const kpDevToolbarPagesControlId = "kp.dev-toolbar.pages" as const;
+export const kpDevToolbarThemeControlId = "kp.dev-toolbar.theme" as const;
+export const kpDevToolbarCopyLinkControlId = "kp.dev-toolbar.copy-link" as const;
 
 export type KpDevToolbarControl =
   | KpDevToolbarAction
@@ -69,6 +71,8 @@ export interface KpDevToolbarCommand {
 }
 
 export interface KpDevToolbarHost {
+  readonly setGlobals: (controls: readonly KpDevToolbarControl[]) => void;
+  readonly setPages: (pages: KpDevToolbarLinks | undefined) => void;
   readonly setRoute: (contribution: KpDevToolbarRouteContribution) => void;
   readonly clearRoute: (routeId: string) => void;
   readonly snapshot: () => KpDevToolbarSnapshot;
@@ -83,8 +87,11 @@ export interface KpDevToolbarHost {
 export function createKpDevToolbarHost(input: {
   readonly execute: (command: KpDevToolbarCommand) => void;
   readonly pages?: KpDevToolbarLinks;
+  readonly globals?: readonly KpDevToolbarControl[];
 }): KpDevToolbarHost {
   let contribution: KpDevToolbarRouteContribution | undefined;
+  let globals = validateGlobalControls(input.globals ?? []);
+  let pages = input.pages === undefined ? undefined : freezeLinks(input.pages);
   const listeners = new Set<(snapshot: KpDevToolbarSnapshot) => void>();
 
   const snapshot = (): KpDevToolbarSnapshot => Object.freeze({
@@ -93,7 +100,8 @@ export function createKpDevToolbarHost(input: {
     ...(contribution === undefined ? {} : { routeId: contribution.routeId }),
     controls: Object.freeze([
       reviewControl,
-      ...(input.pages === undefined ? [] : [freezeLinks(input.pages)]),
+      ...(pages === undefined ? [] : [pages]),
+      ...globals,
       ...(contribution?.controls ?? [])
     ])
   });
@@ -103,6 +111,14 @@ export function createKpDevToolbarHost(input: {
   };
 
   return Object.freeze({
+    setGlobals: (next: readonly KpDevToolbarControl[]) => {
+      globals = validateGlobalControls(next);
+      publish();
+    },
+    setPages: (next: KpDevToolbarLinks | undefined) => {
+      pages = next === undefined ? undefined : freezeLinks(next);
+      publish();
+    },
     setRoute: (next: KpDevToolbarRouteContribution) => {
       contribution = validateContribution(next);
       publish();
@@ -159,6 +175,8 @@ function validateContribution(
       || !Number.isFinite(control.order)
       || control.id === kpDevToolbarReviewControlId
       || control.id === kpDevToolbarPagesControlId
+      || control.id === kpDevToolbarThemeControlId
+      || control.id === kpDevToolbarCopyLinkControlId
       || control.kind === "links"
       || ids.has(control.id)
     ) throw new Error(`Invalid or duplicate toolbar control ${control.id}.`);
@@ -180,6 +198,27 @@ function validateContribution(
     routeId: contribution.routeId,
     controls: Object.freeze(controls)
   });
+}
+
+function validateGlobalControls(
+  controls: readonly KpDevToolbarControl[]
+): readonly KpDevToolbarControl[] {
+  const ids = new Set<string>();
+  const reserved = new Set<string>([
+    kpDevToolbarReviewControlId,
+    kpDevToolbarPagesControlId
+  ]);
+  return Object.freeze(controls.map((control) => {
+    if (
+      control.kind === "links"
+      || reserved.has(control.id)
+      || ids.has(control.id)
+      || control.id.trim() === ""
+      || control.label.trim() === ""
+    ) throw new Error(`Invalid or duplicate global toolbar control ${control.id}.`);
+    ids.add(control.id);
+    return Object.freeze({ ...control });
+  }).sort(compareControls));
 }
 
 function compareControls(left: KpDevToolbarControl, right: KpDevToolbarControl): number {

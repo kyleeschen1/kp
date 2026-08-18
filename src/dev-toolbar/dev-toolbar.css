@@ -59,6 +59,27 @@
   background: color-mix(in srgb, currentcolor 9%, transparent);
 }
 
+[data-kp-dev-toolbar] button[aria-pressed="true"] {
+  background: color-mix(in srgb, currentcolor 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentcolor 28%, transparent);
+}
+
+[data-kp-dev-toolbar] button[aria-pressed]::before {
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  content: "";
+}
+
+[data-kp-dev-toolbar] button[aria-pressed="true"]::before {
+  background: currentcolor;
+}
+
+[data-kp-dev-toolbar] button[data-kp-dev-toolbar-copied="true"] {
+  background: color-mix(in srgb, #85d5b0 20%, transparent);
+}
+
 [data-kp-dev-toolbar] button:focus-visible,
 [data-kp-dev-toolbar] select:focus-visible,
 [data-kp-dev-toolbar] summary:focus-visible,

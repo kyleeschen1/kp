@@ -460,6 +460,13 @@
     ownerDocument.addEventListener("visibilitychange", pauseWhenHidden);
     ownerWindow?.addEventListener("pagehide", pauseForBackground);
     window.addEventListener("popstate", restoreHistorySelection);
+    const syncDevelopmentTheme = (): void => {
+      syncRoutePresentation(window.location.href);
+    };
+    window.addEventListener(
+      "kp-development-theme-change",
+      syncDevelopmentTheme
+    );
     pauseWhenHidden();
     return () => {
       mountedShell.removeEventListener(
@@ -470,6 +477,10 @@
       ownerDocument.removeEventListener("visibilitychange", pauseWhenHidden);
       ownerWindow?.removeEventListener("pagehide", pauseForBackground);
       window.removeEventListener("popstate", restoreHistorySelection);
+      window.removeEventListener(
+        "kp-development-theme-change",
+        syncDevelopmentTheme
+      );
     };
   });
 

@@ -15,6 +15,11 @@ import {
 } from "./development-page-toolbar-control.ts";
 
 export interface KpMountedDevToolbar {
+  readonly updateGlobals: (controls: readonly KpDevToolbarControl[]) => void;
+  readonly updateLocation: (location: Readonly<{
+    pathname: string;
+    search: string;
+  }>) => void;
   readonly update: (contribution: KpDevToolbarRouteContribution) => void;
   readonly clear: (routeId: string) => void;
   readonly dispose: () => void;
@@ -23,7 +28,11 @@ export interface KpMountedDevToolbar {
 export function mountKpDevToolbar(input: {
   readonly ownerDocument?: Document;
   readonly contribution?: KpDevToolbarRouteContribution;
+  readonly globals?: readonly KpDevToolbarControl[];
   readonly execute: (command: KpDevToolbarCommand) => void;
+  readonly navigateLink?: (
+    link: Readonly<{ id: string; href: string }>
+  ) => boolean;
 }): KpMountedDevToolbar {
   const ownerDocument = input.ownerDocument ?? document;
   if (ownerDocument.querySelector("[data-kp-dev-toolbar]") !== null) {
@@ -35,6 +44,7 @@ export function mountKpDevToolbar(input: {
   const location = ownerDocument.defaultView?.location;
   const host = createKpDevToolbarHost({
     execute: input.execute,
+    ...(input.globals === undefined ? {} : { globals: input.globals }),
     ...(location === undefined
       ? {}
       : {
@@ -50,7 +60,8 @@ export function mountKpDevToolbar(input: {
       ownerDocument,
       control,
       snapshot.routeId,
-      host.dispatch
+      host.dispatch,
+      input.navigateLink
     )));
   };
   const unsubscribe = host.subscribe(render);
@@ -59,6 +70,13 @@ export function mountKpDevToolbar(input: {
   ownerDocument.body.append(toolbar);
 
   return Object.freeze({
+    updateGlobals: host.setGlobals,
+    updateLocation: (location: Readonly<{
+      pathname: string;
+      search: string;
+    }>) => {
+      host.setPages(createKpDevelopmentPagesControl(location));
+    },
     update: host.setRoute,
     clear: host.clearRoute,
     dispose: () => {
@@ -73,12 +91,15 @@ function renderControl(
   ownerDocument: Document,
   control: KpDevToolbarControl,
   routeId: string | undefined,
-  dispatch: (command: KpDevToolbarCommand) => void
+  dispatch: (command: KpDevToolbarCommand) => void,
+  navigateLink?: ((link: Readonly<{ id: string; href: string }>) => boolean)
 ): HTMLElement {
   if (control.kind === "choice") {
     return renderChoice(ownerDocument, control, routeId, dispatch);
   }
-  if (control.kind === "links") return renderLinks(ownerDocument, control);
+  if (control.kind === "links") {
+    return renderLinks(ownerDocument, control, navigateLink);
+  }
   const button = ownerDocument.createElement("button");
   button.type = "button";
   button.dataset["kpDevToolbarControl"] = control.id;
@@ -96,7 +117,8 @@ function renderControl(
 
 function renderLinks(
   ownerDocument: Document,
-  control: KpDevToolbarLinks
+  control: KpDevToolbarLinks,
+  navigateLink?: ((link: Readonly<{ id: string; href: string }>) => boolean)
 ): HTMLElement {
   const disclosure = ownerDocument.createElement("details");
   disclosure.dataset["kpDevToolbarControl"] = control.id;
@@ -121,6 +143,20 @@ function renderLinks(
       anchor.href = link.href;
       anchor.textContent = link.label;
       if (link.current) anchor.setAttribute("aria-current", "page");
+      anchor.addEventListener("click", (event) => {
+        if (
+          navigateLink === undefined
+          || event.defaultPrevented
+          || event.button !== 0
+          || event.metaKey
+          || event.ctrlKey
+          || event.shiftKey
+          || event.altKey
+        ) return;
+        if (!navigateLink({ id: link.id, href: link.href })) return;
+        event.preventDefault();
+        disclosure.open = false;
+      });
       item.append(anchor);
       list.append(item);
     }

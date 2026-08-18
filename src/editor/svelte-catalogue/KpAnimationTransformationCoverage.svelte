@@ -1,15 +1,32 @@
 <script lang="ts">
+  import { onMount, untrack } from "svelte";
+
   import type {
     KpAnimationTransformationCoverageViewModel
   } from "../animation-transformation-coverage-view-model.ts";
   import type {
     KpAnimationDevelopmentTheme
   } from "../animation-development-url-state.ts";
+  import {
+    readKpAnimationDevelopmentUrlState
+  } from "../animation-development-url-state.ts";
 
-  let { view, theme }: {
+  let { view, theme: initialTheme }: {
     view: KpAnimationTransformationCoverageViewModel;
     theme: KpAnimationDevelopmentTheme;
   } = $props();
+  let theme = $state(untrack(() => initialTheme));
+
+  onMount(() => {
+    const syncTheme = (): void => {
+      theme = readKpAnimationDevelopmentUrlState(window.location.href).theme;
+    };
+    window.addEventListener("kp-development-theme-change", syncTheme);
+    return () => window.removeEventListener(
+      "kp-development-theme-change",
+      syncTheme
+    );
+  });
 </script>
 
 <svelte:head>

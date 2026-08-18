@@ -5,7 +5,7 @@ import test from "node:test";
 import { kpDevToolbarReviewControlId } from "../src/dev-toolbar/dev-toolbar-protocol.ts";
 import { createKpEconomicsDevToolbarContribution } from "../src/tutorial/economics-demand-shift/economics-demand-shift-dev-toolbar-contribution.ts";
 
-test("economics contributes compact URL-derived layout and theme controls", () => {
+test("economics contributes compact controls while the dock owns theme", () => {
   const contribution = createKpEconomicsDevToolbarContribution(
     "?view=deck&theme=light"
   );
@@ -13,13 +13,11 @@ test("economics contributes compact URL-derived layout and theme controls", () =
   assert.equal(contribution.routeId, "tutorial.economics.demand-shift");
   assert.deepEqual(contribution.controls.map(({ id }) => id), [
     "economics.view",
-    "economics.edit-article",
-    "economics.theme"
+    "economics.edit-article"
   ]);
   assert.equal(contribution.controls[0]!.kind, "choice");
   assert.equal(contribution.controls[0]!.kind === "choice" && contribution.controls[0]!.value, "deck");
   assert.equal(contribution.controls[1]!.disabled, false);
-  assert.equal(contribution.controls[2]!.kind === "toggle" && contribution.controls[2]!.pressed, false);
   for (const view of [
     "reader",
     "deck",

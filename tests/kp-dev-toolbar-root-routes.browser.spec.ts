@@ -8,6 +8,12 @@ const rootRoutes = [
     pageId: "studio.catalogue"
   },
   {
+    name: "transformation coverage",
+    href: "/?view=coverage",
+    ready: ".kp-transformation-coverage",
+    pageId: "studio.transformation-coverage"
+  },
+  {
     name: "editor",
     href: "/?view=editor",
     ready: "[data-kp-editor-animation-library]",

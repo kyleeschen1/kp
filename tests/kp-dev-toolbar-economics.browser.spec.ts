@@ -104,9 +104,10 @@ test("economics opens a real page link without disturbing article state", async 
   expect(controlOrder).toEqual([
     "kp.dev-toolbar.review",
     "kp.dev-toolbar.pages",
+    "kp.dev-toolbar.copy-link",
+    "kp.dev-toolbar.theme",
     "economics.view",
-    "economics.edit-article",
-    "economics.theme"
+    "economics.edit-article"
   ]);
   const presenter = page.locator("[data-kp-tutorial-review-root]");
   await expect(presenter).toHaveAttribute("data-kp-tutorial-review-progress", "0.7200");

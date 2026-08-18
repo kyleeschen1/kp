@@ -6,7 +6,7 @@ Status: navigation tranche complete
 ## Outcome
 
 Every supported first-party development surface is reachable from the fixed
-bottom **Pages** disclosure. The disclosure uses grouped native links, marks
+bottom **View** disclosure. The disclosure uses grouped native links, marks
 the current page, supports ordinary new-tab and copy-link behavior, and does
 not reserve document flow. It is development-only: production closure checks
 reject both the toolbar protocol and its visible labels.
@@ -19,7 +19,7 @@ declared page is absent from this ledger.
 ## Inspection
 
 Start the development server with `npm run dev`, then [open the animation
-catalogue](http://localhost:5173/). Open **Pages** at the bottom of any listed
+catalogue](http://localhost:5173/). Open **View** at the bottom of any listed
 surface to move among all four groups. The economics route is the canonical
 wide/phone toolbar exemplar; reader and diagnostic entries also verify that
 only one Review owner is present.
@@ -27,6 +27,7 @@ only one Review owner is present.
 | Group | Page ID | Page | Development URL |
 | --- | --- | --- | --- |
 | Studio | `studio.catalogue` | Animation catalogue | [Open](http://localhost:5173/) |
+| Studio | `studio.transformation-coverage` | Transformation coverage | [Open](http://localhost:5173/?view=coverage) |
 | Studio | `studio.editor` | Animation editor | [Open](http://localhost:5173/?view=editor) |
 | Studio | `studio.dashboard` | Project dashboard | [Open](http://localhost:5173/?view=dashboard) |
 | Studio | `studio.animation-library-host` | Animation library host | [Open](http://localhost:5173/?view=animation-library-host) |
@@ -59,7 +60,7 @@ only one Review owner is present.
 
 - `npm run test:dev-toolbar`: descriptor, grouping, route-authority, host
   ownership, layout non-reservation, and ledger agreement.
-- `npm run test:browser:page-directory`: directory inventory plus all 28 links,
+- `npm run test:browser:page-directory`: directory inventory plus all 29 links,
   exact current-page identity, successful documents, fixture exclusion, and
   Review ownership where supported.
 - `npm run visual:economics-dev-toolbar`: wide, phone, and short-viewport

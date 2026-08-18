@@ -2,7 +2,6 @@ import {
   kpDevToolbarProtocolSchema,
   type KpDevToolbarRouteContribution
 } from "../../dev-toolbar/dev-toolbar-protocol.ts";
-import { readKpEconomicsDemandShiftTheme } from "./economics-demand-shift-theme.ts";
 import {
   kpEconomicsDemandShiftViews,
   readKpEconomicsDemandShiftView,
@@ -12,7 +11,6 @@ import {
 export function createKpEconomicsDevToolbarContribution(
   search: string
 ): KpDevToolbarRouteContribution {
-  const theme = readKpEconomicsDemandShiftTheme(search);
   const view = readKpEconomicsDemandShiftView(search);
   return {
     schemaVersion: kpDevToolbarProtocolSchema,
@@ -35,13 +33,6 @@ export function createKpEconomicsDevToolbarContribution(
       group: "context",
       order: 15,
       disabled: false
-    }, {
-      kind: "toggle",
-      id: "economics.theme",
-      label: "Dark mode",
-      group: "preferences",
-      order: 20,
-      pressed: theme === "dark"
     }]
   };
 }

@@ -15,6 +15,15 @@ import {
   type KpNormalMatrixProofUrlState
 } from "./normal-matrix-proof-url-codec.ts";
 
+type KpDevelopmentToolbarClient = typeof import(
+  "../dev-toolbar/development-toolbar-bootstrap.ts"
+);
+const loadKpDevelopmentToolbar:
+  | (() => Promise<KpDevelopmentToolbarClient>)
+  | undefined = import.meta.env.DEV
+    ? () => import("../dev-toolbar/development-toolbar-bootstrap.ts")
+    : undefined;
+
 let routeState = decodeKpNormalMatrixProofUrl(window.location.href);
 let semanticAddress = decodeKpNormalMatrixProofSemanticLocation(
   window.location.hash
@@ -103,6 +112,18 @@ if (fallback !== null && routeState.evidence === "motion") {
 }
 
 if (semanticAddress !== undefined) requestCapability();
+
+let disposeDevelopmentToolbar = (): void => undefined;
+if (loadKpDevelopmentToolbar !== undefined) {
+  void loadKpDevelopmentToolbar().then(({ mountKpDevelopmentToolbar }) => {
+    const toolbar = mountKpDevelopmentToolbar(window);
+    disposeDevelopmentToolbar = toolbar.dispose;
+  });
+}
+
+window.addEventListener("pagehide", () => {
+  disposeDevelopmentToolbar();
+}, { once: true });
 
 function replaceCanonicalHistory(state: KpNormalMatrixProofUrlState): void {
   const canonical = encodeKpNormalMatrixProofUrl(window.location.href, state);

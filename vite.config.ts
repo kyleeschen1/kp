@@ -139,6 +139,12 @@ const algebraFractionCompositionArticleSourceFilename = resolve(
 );
 let algebraFractionCompositionStaticPublication =
   compileAlgebraFractionCompositionStaticPublication();
+const crossBuildDevelopmentPublicationFilenames = new Set([
+  resolve(projectRoot, "learn/code/free-shipping/index.html"),
+  resolve(projectRoot, "learn/math/fraction-composition/index.html"),
+  resolve(projectRoot, "learn/math/normal-matrices/index.html")
+]);
+const crossBuildDevelopmentPublicationCache = new Map<string, Promise<string>>();
 
 export default defineConfig({
   define: {
@@ -149,6 +155,25 @@ export default defineConfig({
     // Svelte owns only catalogue application composition; animation assets,
     // clocks, sampled frames, and renderer ports remain plain TypeScript.
     svelte(),
+    {
+      name: "kp-cross-build-development-publications",
+      apply: "serve",
+      transformIndexHtml: {
+        order: "pre",
+        async handler(html, context) {
+          if (!crossBuildDevelopmentPublicationFilenames.has(context.filename)) {
+            return html;
+          }
+          // Public production graphs stay isolated. The dev host compiles only
+          // the page actually opened so the global View directory has one
+          // origin without paying for every publication during startup.
+          const publication = await readCrossBuildDevelopmentPublication(
+            context.filename
+          );
+          return html.replace(publication.placeholder, publication.html);
+        }
+      }
+    },
     kpViteLiveReviewBuildPlugin({
       name: "kp-live-dev-review-build",
       projectRoot
@@ -422,4 +447,73 @@ function compileAlgebraFractionCompositionStaticPublication(): string {
   return renderKpFractionCompositionStaticPublication(
     compileKpFractionCompositionArticle({ text, lock })
   );
+}
+
+async function readCrossBuildDevelopmentPublication(
+  filename: string
+): Promise<{ readonly placeholder: string; readonly html: string }> {
+  let html = crossBuildDevelopmentPublicationCache.get(filename);
+  if (html === undefined) {
+    html = compileCrossBuildDevelopmentPublication(filename);
+    crossBuildDevelopmentPublicationCache.set(filename, html);
+  }
+  const placeholder = filename.endsWith("learn/code/free-shipping/index.html")
+    ? "<!-- kp:typescript-free-shipping-publication -->"
+    : filename.endsWith("learn/math/fraction-composition/index.html")
+      ? "<!-- kp:fraction-composition-publication -->"
+      : "<!-- kp:normal-matrix-proof-publication -->";
+  return { placeholder, html: await html };
+}
+
+async function compileCrossBuildDevelopmentPublication(
+  filename: string
+): Promise<string> {
+  if (filename.endsWith("learn/code/free-shipping/index.html")) {
+    const publication = await import(
+      "./src/public-web/typescript-free-shipping-publication.ts"
+    );
+    const text = readFileSync(resolve(
+      projectRoot,
+      "content/lessons/typescript-free-shipping.kp.md"
+    ), "utf8");
+    const lock = readArticleLock(
+      "content/lessons/typescript-free-shipping.kp.lock.json"
+    );
+    return publication.renderKpTypeScriptFreeShippingPublicLesson(
+      publication.compileKpTypeScriptFreeShippingPublicLesson({ text, lock })
+    );
+  }
+  if (filename.endsWith("learn/math/fraction-composition/index.html")) {
+    const publication = await import(
+      "./src/public-web/fraction-composition-publication.ts"
+    );
+    const text = readFileSync(resolve(
+      projectRoot,
+      "content/lessons/algebra-fraction-composition.kp.md"
+    ), "utf8");
+    const lock = readArticleLock(
+      "content/lessons/algebra-fraction-composition.kp.lock.json"
+    );
+    return publication.renderKpFractionCompositionPublicLesson(
+      publication.compileKpFractionCompositionPublicLesson({ text, lock })
+    );
+  }
+  const publication = await import(
+    "./src/public-web/normal-matrix-proof-publication.ts"
+  );
+  const text = readFileSync(resolve(
+    projectRoot,
+    "content/lessons/linear-algebra-normal-matrices.kp.md"
+  ), "utf8");
+  const lock = readArticleLock(
+    "content/lessons/linear-algebra-normal-matrices.kp.lock.json"
+  );
+  return publication.renderKpNormalMatrixProofPublicLesson(
+    publication.compileKpNormalMatrixProofPublicLesson({ text, lock })
+  );
+}
+
+function readArticleLock(path: string): KpArticleImportLock {
+  return JSON.parse(readFileSync(resolve(projectRoot, path), "utf8")) as
+    KpArticleImportLock;
 }
