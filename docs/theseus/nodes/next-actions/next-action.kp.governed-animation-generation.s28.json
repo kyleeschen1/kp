@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s28",
   "kind": "next-action",
   "title": "Combined-visual-human-checkpoint",
-  "status": "ready",
-  "summary": "Resume only the transparent foreground-backing correction while preserving arc timing semantics and other motifs.",
+  "status": "resolved",
+  "summary": "Canonical 2^x = 7 combined visual checkpoint approved by the user",
   "sourceRefs": [
     {
       "kind": "file",
@@ -91,11 +91,18 @@
       "scope": "standard",
       "checkedAt": "2026-08-18T14:46:42.849Z",
       "notes": "TypeScript Svelte and domain checks pass with zero Svelte diagnostics"
+    },
+    {
+      "command": "human visual review 2026-08-18",
+      "status": "passed",
+      "scope": "canonical-exemplar",
+      "checkedAt": "2026-08-18T14:50:23.102Z",
+      "notes": "User approved the transparent exponent crossing and reported the prior full-sequence jerk is now fine"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Transparent-exponent-backing-correction-implemented-and-verified; preserve-arc-and-z-order; awaiting-human-visual-review; full-sequence-jerk-remains-separate"
+    "state": "complete",
+    "summary": "Human-approved-transparent-exponent-crossing-and-current-full-sequence-motion; approval-is-exemplar-bounded"
   },
   "revisitWhen": [
     "After the intervening approved work, resume the exact 2^x = 7 checkpoint before canonical promotion or release."

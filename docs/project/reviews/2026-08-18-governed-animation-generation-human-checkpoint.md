@@ -2,7 +2,7 @@
 
 Date: 2026-08-18
 Run: `run-contract.kp.governed-animation-generation-foundation-v6`
-Status: `HUMAN_CHECKPOINT`
+Status: `APPROVED`
 
 ## Deferred disposition
 
@@ -15,6 +15,10 @@ The unresolved acceptance criterion is narrow: play the complete sequence and re
 On 2026-08-18 the user resumed one bounded presentation correction. The moving exponent retains its approved shallow arc and foreground ordering, but its rectangular knockout is now transparent. This removes the visible square that travelled with the glyph while preserving semantic state, endpoint geometry, timing, and all other equation motifs.
 
 The focused lifecycle suite passes 21 cases across Chromium, Firefox, and WebKit, and `npm run visual:log-exponent` regenerated the eight-frame contact sheet. Human review still owns whether the transparent crossing is visually preferable; this correction does not resolve or certify the separately deferred full-sequence jerk.
+
+## Human verdict
+
+Approved on 2026-08-18. The transparent exponent crossing looks correct, and the previously reported full-sequence jerk was no longer observable during the approving review. This approval certifies the bounded `2^x = 7` exemplar as currently rendered; it does not promote the transparent-foreground treatment across unrelated callers without the separately required pressure evidence.
 
 ## What is ready to inspect
 
