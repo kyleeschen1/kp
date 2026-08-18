@@ -20,7 +20,7 @@ import {
 } from "./native-katex-track-projection.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 
 export const kpNativeKatexLogExponentExtractionProfile = Object.freeze({
   residualReflowWindow: Object.freeze({ start: 0.42, end: 0.72 }),

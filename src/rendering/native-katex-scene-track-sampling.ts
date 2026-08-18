@@ -7,9 +7,11 @@ import {
   sampleKpNativeKatexCopyFanOutTrack
 } from "./native-katex-copy-fan-out-motion.ts";
 import type {
-  KpNativeKatexSceneTrack,
   KpNativeKatexSceneTrackFrame
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSceneTrack
+} from "./native-katex-base-scene-plan.ts";
 
 export function sampleKpNativeKatexSceneTrackFrames(
   tracks: readonly KpNativeKatexSceneTrack[],

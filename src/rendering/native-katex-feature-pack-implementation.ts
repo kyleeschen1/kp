@@ -4,6 +4,7 @@ import {
 } from "./native-katex-rendered-scene.ts";
 import {
   compileKpCanonicalNativeKatexPureScenePlan,
+  compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession
 } from "./native-katex-scene-compositor.ts";
 import {
@@ -27,6 +28,7 @@ export const kpNativeKatexFeaturePack: KpNativeKatexFeaturePack =
     }),
     compose: Object.freeze({
       compilePurePlan: compileKpCanonicalNativeKatexPureScenePlan,
+      compileScenePlan: compileKpCanonicalNativeKatexScenePlan,
       createSession: createKpCanonicalNativeKatexSceneSession,
       projectRelations: projectKpNativeKatexSemanticPaintRelations
     })

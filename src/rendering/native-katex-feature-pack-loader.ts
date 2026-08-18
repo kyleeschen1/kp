@@ -65,6 +65,7 @@ function assertKpNativeKatexFeaturePack(
     typeof candidate.observe?.observe !== "function" ||
     typeof candidate.observe?.settleAndObserve !== "function" ||
     typeof candidate.compose?.compilePurePlan !== "function" ||
+    typeof candidate.compose?.compileScenePlan !== "function" ||
     typeof candidate.compose?.createSession !== "function" ||
     typeof candidate.compose?.projectRelations !== "function"
   ) {

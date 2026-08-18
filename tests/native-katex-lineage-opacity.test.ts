@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  sampleKpNativeKatexSceneTracks,
-  type KpNativeKatexSceneTrack
+  sampleKpNativeKatexSceneTracks
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSceneTrack
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 
 const rect = { left: 0, top: 0, width: 12, height: 2 };
 

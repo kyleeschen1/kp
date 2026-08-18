@@ -6,7 +6,7 @@ import {
   createKpNativeKatexCompoundScenePlan,
   type KpNativeKatexCompoundScene
 } from "../src/rendering/native-katex-compound-scene-plan.ts";
-import type { KpNativeKatexSceneTrack } from "../src/rendering/native-katex-scene-compositor.ts";
+import type { KpNativeKatexSceneTrack } from "../src/rendering/native-katex-base-scene-plan.ts";
 
 test("compound trace speeds up every canonical operation without omission", () => {
   const trace = createKpGlyphReconciliationCompoundTrace();

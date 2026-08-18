@@ -1,8 +1,10 @@
 import type {
   KpCanonicalNativeKatexSceneSession,
-  KpNativeKatexSceneOwnershipFrame,
-  KpNativeKatexSemanticPaintRelation
+  KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSemanticPaintRelation
+} from "./native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexFeaturePack
 } from "./native-katex-feature-pack-contract.ts";

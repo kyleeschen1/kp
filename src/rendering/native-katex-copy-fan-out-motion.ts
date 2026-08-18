@@ -12,7 +12,7 @@ import type {
 } from "./native-katex-fragment-observer.ts";
 import type {
   KpNativeKatexSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 
 /**
  * Projects the promoted copy/fan-out schedule onto measured native paint.

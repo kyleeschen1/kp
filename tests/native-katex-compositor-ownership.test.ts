@@ -76,9 +76,11 @@ test("semantic motion and track projection enter through the base-plan port", as
     "src/rendering/native-katex-track-projection.ts",
     "src/rendering/native-katex-operation-choreography.ts"
   ] as const;
-  const [compositor, ...planners] = await Promise.all(
+  const sources = await Promise.all(
     paths.map((path) => readFile(path, "utf8"))
   );
+  const compositor = sources[0]!;
+  const planners = sources.slice(1);
 
   assert.doesNotMatch(compositor, /from "\.\/native-katex-symbol-motion\.ts"/);
   assert.doesNotMatch(compositor, /from "\.\/native-katex-track-projection\.ts"/);

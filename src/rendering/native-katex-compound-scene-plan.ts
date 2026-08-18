@@ -1,8 +1,10 @@
 import {
   sampleKpNativeKatexSceneTracks,
-  type KpNativeKatexSceneTrack,
   type KpNativeKatexSceneTrackFrame
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSceneTrack
+} from "./native-katex-base-scene-plan.ts";
 
 export interface KpNativeKatexCompoundTimeline {
   readonly operationIds: readonly string[];

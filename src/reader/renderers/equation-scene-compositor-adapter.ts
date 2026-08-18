@@ -1,9 +1,11 @@
 import type {
   KpCanonicalNativeKatexPureScenePlan,
   KpCanonicalNativeKatexSceneInput,
-  KpNativeKatexRendererSession,
-  KpNativeKatexSemanticPaintRelation
+  KpNativeKatexRendererSession
 } from "../../rendering/native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSemanticPaintRelation
+} from "../../rendering/native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "../../rendering/native-katex-rendered-scene.ts";
@@ -237,12 +239,17 @@ export function createKpReaderEquationSceneCompositorSession(
     input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
       dispatch.staticCheckpoint.reason;
   }
-  const canonical = input.nativeKatex.compose.createSession({
+  // Compile at the reader boundary so renderer setup consumes the exact
+  // nominal plan that the exhaustive presentation dispatch authorized.
+  const rendererReadyPlan = input.nativeKatex.compose.compileScenePlan({
     ...prepared.canonicalInput,
     ...(input.purePlan === undefined
       ? {}
       : { purePlan: input.purePlan.nativePlan })
   });
+  const canonical = input.nativeKatex.compose.createSession(
+    rendererReadyPlan
+  );
   if (dispatch.planKind === "factoring") {
     dispatch.factoring.recordEvidence();
   }

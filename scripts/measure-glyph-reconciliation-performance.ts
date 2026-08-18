@@ -17,9 +17,11 @@ import { kpGlyphReconciliationExperimentLedger } from "../src/animation/semantic
 import {
   sampleKpNativeKatexSceneTracks,
   sampleKpNativeKatexTypographyStylePlan,
-  type KpNativeKatexSceneTrack,
   type KpNativeKatexTypographyStylePlan
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexSceneTrack
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 
 const budgets = kpGlyphReconciliationExperimentLedger.budget;
 const cases = [

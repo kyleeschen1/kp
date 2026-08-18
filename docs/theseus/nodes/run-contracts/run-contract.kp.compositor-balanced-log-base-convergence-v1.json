@@ -376,6 +376,62 @@
       "scope": "broad",
       "checkedAt": "2026-08-18T17:15:19.360Z",
       "notes": "Production Vite build completed; lazy feature-pack and canonical compositor chunks resolve after facade convergence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-feature-pack.test.ts tests/semantic-reader-equation-scene-compositor-adapter.test.ts tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:24:50.840Z",
+      "notes": "23/23; feature-pack identity, exhaustive reader dispatch, and compile-once/render-once source contract pass."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:24:53.361Z",
+      "notes": "18/18; reader cache, scheduling, focus, and location behavior preserved."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:24:55.539Z",
+      "notes": "187/187; closed reader plan union, static checkpoints, executable programs, and operation presentation laws preserved."
+    },
+    {
+      "command": "npm run visual:equation-responsive-fit",
+      "status": "passed",
+      "scope": "browser-smoke",
+      "checkedAt": "2026-08-18T17:24:57.976Z",
+      "notes": "Chromium responsive equation fit smoke passes with centered no-wrap geometry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:24:59.150Z",
+      "notes": "All TypeScript, Svelte, test, and domain type gates pass after plan-only imports moved to the scene-plan authority."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:25:00.711Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, reader boundaries, semantic boundaries, and compiler authority pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:25:02.445Z",
+      "notes": "28/28; compositor ownership, nominal plan lifecycle, direct source budget, reader schedule, and endpoints pass."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:25:03.567Z",
+      "notes": "Core 118905/140000; exact direct closure 14 modules and 154706/295000; aggregate 454940/455000; no ceiling increase."
     }
   ],
   "allowedWork": [
@@ -463,7 +519,8 @@
     {
       "id": "s11",
       "title": "Migrate exhaustive reader adapter",
-      "status": "planned"
+      "summary": "Migrated the exhaustive reader adapter to compile exactly one nominal renderer-ready plan and render that exact object through the native KaTeX feature pack; preserved the nine-way closed presentation dispatch, static checkpoints, runtime scheduling, accessibility-responsive browser behavior, and fixed compositor ceilings while moving stale plan-only imports to their true scene-plan authority.",
+      "status": "complete"
     },
     {
       "id": "s12",

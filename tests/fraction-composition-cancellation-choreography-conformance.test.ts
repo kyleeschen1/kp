@@ -39,7 +39,7 @@ import {
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
-} from "../src/rendering/native-katex-scene-compositor.ts";
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation

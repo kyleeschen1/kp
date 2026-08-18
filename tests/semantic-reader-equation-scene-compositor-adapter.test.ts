@@ -603,3 +603,31 @@ test("the canonical adapter exhaustively dispatches the closed reader plan union
   );
   assert.match(dispatch, /default:\s*[\s\S]*unreachablePresentationPlan/);
 });
+
+test("the reader compiles once and renders that nominal scene plan once", async () => {
+  const source = await readFile(
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    "utf8"
+  );
+  const session = source.slice(
+    source.indexOf("export function createKpReaderEquationSceneCompositorSession"),
+    source.indexOf("function prepareReaderEquationScene")
+  );
+
+  assert.equal(
+    (session.match(/\.compose\.compileScenePlan\(/gu) ?? []).length,
+    1
+  );
+  assert.equal(
+    (session.match(/\.compose\.createSession\(/gu) ?? []).length,
+    1
+  );
+  assert.match(
+    session,
+    /const rendererReadyPlan = [\s\S]*?createSession\(\s*rendererReadyPlan\s*\)/u
+  );
+  assert.doesNotMatch(
+    session,
+    /createSession\(\s*\{/u
+  );
+});

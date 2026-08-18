@@ -23,7 +23,7 @@ import type {
 } from "./native-katex-rendered-scene.ts";
 import {
   type KpNativeKatexSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 import type {
   KpFactorCommonTermMotifBinding
 } from "../animation/factoring-motif-binding.ts";

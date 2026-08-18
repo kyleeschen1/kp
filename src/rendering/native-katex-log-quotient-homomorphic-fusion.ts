@@ -6,7 +6,7 @@ import {
 } from "./native-katex-function-wrap-reception.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";

@@ -7,7 +7,7 @@ import {
 import type {
   KpNativeKatexSceneReconciliation,
   KpNativeKatexSceneTrack
-} from "../src/rendering/native-katex-scene-compositor.ts";
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 import type {
   KpEquationStructuralSuccessionIntent
 } from "../src/animation/structural-succession-presentation.ts";
