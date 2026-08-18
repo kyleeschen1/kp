@@ -29,6 +29,16 @@ test("prompt creation exposes only source states adjacencies and registered oper
   assert.deepEqual(governed?.roleIds,
     ["lhs", "rhs", "relation", "applied-operation"]);
   assert.equal(governed?.governedRequirements?.operationPin.version, "1.0.0");
+  assert.deepEqual(prompt.operations.filter(({ governedRequirements }) =>
+    governedRequirements !== undefined).map(({ operationId }) =>
+      operationId).sort(), [
+    "kp.algebra.add-both-sides",
+    "kp.algebra.subtract-both-sides",
+    "kp.algebra.multiply-both-sides",
+    "kp.algebra.divide-both-sides",
+    "kp.algebra.apply-natural-log-both-sides",
+    "kp.algebra.divide-both-sides-by-log-base"
+  ].sort());
   assert.equal(
     JSON.stringify(prompt).includes("models-propose-operations-kp-verifies"),
     true

@@ -9,6 +9,10 @@ import type { KpEquationSeriesIntentResolutionResult } from
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
 
+/** Stable evidence ID for the governed transform-series authoring surface. */
+export const KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY =
+  "authoring.equation.balanced-operation.v1" as const;
+
 export const KP_BOTH_SIDES_AUTHORING_PACK_PIN = Object.freeze({
   packId: "kp.both-sides",
   version: "1.0.0"

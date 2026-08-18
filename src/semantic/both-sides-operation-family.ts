@@ -1,5 +1,9 @@
 declare const kpVerifiedBothSidesOperationBrand: unique symbol;
 
+/** Capability evidence names the family contract, not any caller's optics. */
+export const KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY =
+  "operation.equation.apply-both-sides.v1" as const;
+
 export type KpBothSidesOperationKind =
   | "add"
   | "subtract"

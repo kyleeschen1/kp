@@ -1006,6 +1006,60 @@
       "scope": "s22 patch hygiene",
       "checkedAt": "2026-08-18T19:29:43.696Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:animation-capability-compiler-evidence",
+      "status": "passed",
+      "scope": "s23 exact compiler authority projection",
+      "checkedAt": "2026-08-18T19:40:44.216Z"
+    },
+    {
+      "command": "npm run test:animation-capability-readiness",
+      "status": "passed",
+      "scope": "s23 readiness gates",
+      "checkedAt": "2026-08-18T19:40:45.475Z"
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "s23 coverage and LLM-visible view",
+      "checkedAt": "2026-08-18T19:40:46.499Z"
+    },
+    {
+      "command": "npm run test:equation-series-planner-port",
+      "status": "passed",
+      "scope": "s23 LLM proposal catalogue",
+      "checkedAt": "2026-08-18T19:40:47.519Z"
+    },
+    {
+      "command": "npm run test:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "s23 balanced corpus authority",
+      "checkedAt": "2026-08-18T19:40:48.555Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 repository type boundary",
+      "checkedAt": "2026-08-18T19:40:49.555Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 architecture boundaries",
+      "checkedAt": "2026-08-18T19:40:50.574Z"
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "s23 generated coverage freshness",
+      "checkedAt": "2026-08-18T19:40:51.572Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23 patch hygiene",
+      "checkedAt": "2026-08-18T19:40:52.591Z"
     }
   ],
   "allowedWork": [
@@ -1165,7 +1219,8 @@
     {
       "id": "s23",
       "title": "Recompute coverage evidence",
-      "status": "planned"
+      "summary": "Promoted balanced operations to Direct only after exact family, recipe, authoring, corpus, exemplar, and deterministic compiler evidence aligned; retained the not-live-model evidence tension and corrected the planned corpus scope to six governed operations.",
+      "status": "complete"
     },
     {
       "id": "s24",

@@ -2,6 +2,12 @@ import {
   createKpEquationLlmAuthoringCatalogue
 } from "../authoring/equation-llm-authoring-catalogue.ts";
 import {
+  KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY
+} from "../authoring/equation-series-both-sides-authoring.ts";
+import {
+  KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
+} from "../animation/both-sides-causal-recipe.ts";
+import {
   createKpFunctionWrapEquationExtensionPack
 } from "../animation/equation-extension-packs/function-wrap.ts";
 import {
@@ -10,6 +16,9 @@ import {
 import {
   createKpLlmSemanticMotionOperationCatalog
 } from "../animation/llm-semantic-motion-operation-authoring.ts";
+import {
+  KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY
+} from "../semantic/both-sides-operation-family.ts";
 import type {
   KpAnimationCapabilityPlan,
   KpAnimationCapabilityRequirementKind
@@ -31,6 +40,8 @@ export type KpAnimationCapabilityCompilerRequirementKind = Extract<
 export type KpAnimationCapabilityCompilerAuthoritySource =
   | "llm-operation-catalogue"
   | "equation-authoring-catalogue"
+  | "equation-series-authoring-family"
+  | "both-sides-causal-recipe"
   | "equation-extension-pack";
 
 export interface KpAnimationCapabilityCompilerAuthority {
@@ -191,6 +202,20 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
       "src/animation/equation-extension-packs/homomorphic-crossover.ts"
   }]);
   return Object.freeze([
+    authority({
+      authorityId: KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
+      kind: "semantic-operation",
+      source: "equation-series-authoring-family",
+      sourceId: KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
+      sourcePath: "src/authoring/equation-series-both-sides-authoring.ts"
+    }),
+    authority({
+      authorityId: KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY,
+      kind: "canonical-recipe",
+      source: "both-sides-causal-recipe",
+      sourceId: KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY,
+      sourcePath: "src/animation/both-sides-causal-recipe.ts"
+    }),
     ...operationCatalogue.operations.map((operation) => authority({
       authorityId: operation.operationId,
       kind: "semantic-operation",

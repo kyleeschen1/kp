@@ -6,6 +6,10 @@ import {
 
 declare const kpVerifiedBothSidesCausalRecipeBrand: unique symbol;
 
+/** Capability evidence names the shared causal order, not a timing preset. */
+export const KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY =
+  "recipe.equation.balanced-operation.v1" as const;
+
 export type KpBothSidesCausalDirection = "forward" | "rewind";
 
 export interface KpBothSidesPrepareBranchesPhase {

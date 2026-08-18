@@ -101,7 +101,7 @@ const equationCapabilityDrafts = Object.freeze([
       requirement("requirement.equation.balanced-operations.recipe", "canonical-recipe", "recipe.equation.balanced-operation.v1", "A shared causal recipe keeps the applied group cohesive and the equality relation stable."),
       requirement("requirement.equation.balanced-operations.exemplar", "canonical-exemplar", "animation.algebra.log-exponent.solve-two-power-x", "The current logarithm/division example remains evidence for one shape, not the whole family."),
       requirement("requirement.equation.balanced-operations.authoring", "authoring-surface", "authoring.equation.balanced-operation.v1", "Governed authoring names the operation, operands, sides, and domain assumptions."),
-      requirement("requirement.equation.balanced-operations.corpus", "generation-corpus", "corpus.equation.balanced-operation.v1", "Subtract, add, multiply, divide, exponentiate, root, and logarithm cases pressure varied operands.")
+      requirement("requirement.equation.balanced-operations.corpus", "generation-corpus", "corpus.equation.balanced-operation.v1", "Add, subtract, multiply, divide, apply-log, and divide-by-log-base cases pressure varied operands and invalid assumptions.")
     ]
   ),
   capability(

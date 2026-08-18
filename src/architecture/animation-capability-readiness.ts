@@ -8,6 +8,20 @@ import {
   kpEquationGenerationPressureFixtures
 } from
   "../authoring/equation-generation-pressure-contract.ts";
+import {
+  evaluateKpBalancedOperationAuthoringCorpus,
+  kpBalancedOperationAuthoringCorpus
+} from "../authoring/balanced-operation-authoring-corpus.ts";
+import {
+  KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
+  kpEquationSeriesBothSidesAuthoringDeclarations
+} from "../authoring/equation-series-both-sides-authoring.ts";
+import {
+  KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
+} from "../animation/both-sides-causal-recipe.ts";
+import {
+  KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY
+} from "../semantic/both-sides-operation-family.ts";
 import type { KpAnimationCapabilityPlan } from
   "./animation-capability-plan.ts";
 import {
@@ -36,10 +50,14 @@ export interface KpAnimationCapabilityDirectIntentEvidence {
   readonly animationId: string;
   readonly operationId: string;
   readonly authoringAuthorityId: string;
-  readonly planKind: KpCompiledEquationIntentPlan["kind"];
+  readonly planKind:
+    | KpCompiledEquationIntentPlan["kind"]
+    | "equation-transform-series-runtime";
   readonly resolvedAuthorityIds: readonly string[];
   readonly generationCorpusAuthorityIds: readonly string[];
-  readonly sourcePath: "src/authoring/compile-equation-intent.ts";
+  readonly sourcePath:
+    | "src/authoring/compile-equation-intent.ts"
+    | "src/authoring/compile-equation-transform-series.ts";
 }
 
 export interface KpAnimationCapabilityReadiness {
@@ -211,7 +229,7 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
 
 function createDirectIntentEvidence():
 readonly KpAnimationCapabilityDirectIntentEvidence[] {
-  return Object.freeze(listKpEquationIntentSurfaceVocabularies().map(
+  const intentEvidence = listKpEquationIntentSurfaceVocabularies().map(
     (vocabulary) => {
       const result = compileEquationIntent({
         animationId: vocabulary.animationId,
@@ -247,7 +265,39 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
         sourcePath: "src/authoring/compile-equation-intent.ts" as const
       });
     }
-  ));
+  );
+  const balancedEvidence = createBalancedOperationDirectEvidence();
+  return Object.freeze([
+    ...intentEvidence,
+    ...(balancedEvidence === undefined ? [] : [balancedEvidence])
+  ]);
+}
+
+function createBalancedOperationDirectEvidence():
+KpAnimationCapabilityDirectIntentEvidence | undefined {
+  const corpus = evaluateKpBalancedOperationAuthoringCorpus();
+  const expectedOperationCount = 6;
+  if (corpus.status !== "passed" ||
+      kpEquationSeriesBothSidesAuthoringDeclarations.length !==
+        expectedOperationCount) {
+    return undefined;
+  }
+  return Object.freeze({
+    animationId: "animation.algebra.log-exponent.solve-two-power-x",
+    operationId: KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
+    authoringAuthorityId:
+      KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
+    planKind: "equation-transform-series-runtime" as const,
+    resolvedAuthorityIds: Object.freeze([
+      KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
+      KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
+    ]),
+    generationCorpusAuthorityIds: Object.freeze([
+      kpBalancedOperationAuthoringCorpus.id
+    ]),
+    sourcePath:
+      "src/authoring/compile-equation-transform-series.ts" as const
+  });
 }
 
 function authorityIdsForPlan(

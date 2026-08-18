@@ -12,9 +12,9 @@
   "summary": {
     "total": 28,
     "byStatus": {
-      "Direct": 4,
+      "Direct": 5,
       "Registered": 3,
-      "Exemplar": 10,
+      "Exemplar": 9,
       "Missing": 11
     }
   },
@@ -416,23 +416,27 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.balanced-operation.v1"
       },
-      "status": "Exemplar",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.equation.balanced-operations.operation",
           "kind": "semantic-operation",
           "authorityId": "operation.equation.apply-both-sides.v1",
           "summary": "A typed operation applies one legal transformation to both sides of a relation.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "authoring.equation.balanced-operation.v1"
+          ]
         },
         {
           "id": "requirement.equation.balanced-operations.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.equation.balanced-operation.v1",
           "summary": "A shared causal recipe keeps the applied group cohesive and the equality relation stable.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.equation.balanced-operation.v1"
+          ]
         },
         {
           "id": "requirement.equation.balanced-operations.exemplar",
@@ -449,25 +453,24 @@
           "kind": "authoring-surface",
           "authorityId": "authoring.equation.balanced-operation.v1",
           "summary": "Governed authoring names the operation, operands, sides, and domain assumptions.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-transform-series.ts"
+          ]
         },
         {
           "id": "requirement.equation.balanced-operations.corpus",
           "kind": "generation-corpus",
           "authorityId": "corpus.equation.balanced-operation.v1",
-          "summary": "Subtract, add, multiply, divide, exponentiate, root, and logarithm cases pressure varied operands.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "Add, subtract, multiply, divide, apply-log, and divide-by-log-base cases pressure varied operands and invalid assumptions.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.balanced-operation.v1"
+          ]
         }
       ],
       "gaps": [],
-      "remainingRequirementIds": [
-        "requirement.equation.balanced-operations.operation",
-        "requirement.equation.balanced-operations.recipe",
-        "requirement.equation.balanced-operations.authoring",
-        "requirement.equation.balanced-operations.corpus"
-      ],
+      "remainingRequirementIds": [],
       "exemplarLinks": [
         {
           "assetId": "animation.algebra.log-exponent.solve-two-power-x",
@@ -476,7 +479,7 @@
         }
       ],
       "evidenceTensions": [
-        "playable-exemplar-without-general-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {

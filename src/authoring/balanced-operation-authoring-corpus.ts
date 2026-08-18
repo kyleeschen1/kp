@@ -89,7 +89,7 @@ const logSource = sourceAuthority(logDeclaration,
 
 export const kpBalancedOperationAuthoringCorpus = deepFreeze({
   schemaVersion: "kp.balanced-operation-authoring-corpus.v1" as const,
-  id: "corpus.equation.balanced-operation-authoring.v1",
+  id: "corpus.equation.balanced-operation.v1",
   liveModelEvidence: false as const,
   fixtures: [
     ...compiledFixtures,

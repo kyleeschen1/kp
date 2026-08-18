@@ -28,20 +28,44 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 4);
-  for (const entry of direct.slice(0, 3)) {
+  assert.equal(direct.length, 5);
+  for (const capabilityId of [
+    "capability.equation.function-wrapping",
+    "capability.equation.distribution",
+    "capability.equation.additive-cancellation",
+    "capability.equation.balanced-operations"
+  ]) {
+    const entry = direct.find((candidate) =>
+      candidate.capabilityId === capabilityId
+    );
+    assert.ok(entry, capabilityId);
     assert.deepEqual(entry.remainingRequirementIds, []);
     assert.equal(entry.exemplarLinks.length, 1);
     assert.deepEqual(entry.evidenceTensions, [
       "direct-deterministic-not-live-model-evidence"
     ]);
   }
-  assert.deepEqual(direct[3]?.remainingRequirementIds, [
+  const homomorphism = direct.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.log-homomorphic-decomposition");
+  assert.deepEqual(homomorphism?.remainingRequirementIds, [
     "requirement.equation.log-homomorphism.product-exemplar"
   ]);
-  assert.deepEqual(direct[3]?.evidenceTensions, [
+  assert.deepEqual(homomorphism?.evidenceTensions, [
     "direct-deterministic-not-live-model-evidence"
   ]);
+});
+
+test("balanced operation coverage promotes only the proved six-operation path", () => {
+  const entry = createKpAnimationTransformationCoverage().entries.find(
+    ({ capabilityId }) => capabilityId ===
+      "capability.equation.balanced-operations"
+  );
+  assert.equal(entry?.status, "Direct");
+  assert.deepEqual(entry?.remainingRequirementIds, []);
+  assert.match(entry?.requirements.find(({ kind }) =>
+    kind === "generation-corpus")?.summary ?? "", /apply-log/u);
+  assert.doesNotMatch(entry?.requirements.find(({ kind }) =>
+    kind === "generation-corpus")?.summary ?? "", /exponentiate|root/u);
 });
 
 test("alternative logarithm bases expose every syntax and motif gap", () => {

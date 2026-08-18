@@ -58,13 +58,50 @@ test("compiler evidence joins promoted operations and declared recipes", () => {
   }
 });
 
+test("balanced operations expose exact family and causal recipe authority", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  const expected = new Map([
+    [
+      "requirement.equation.balanced-operations.operation",
+      [
+        "operation.equation.apply-both-sides.v1",
+        "authoring.equation.balanced-operation.v1"
+      ]
+    ],
+    [
+      "requirement.equation.balanced-operations.recipe",
+      [
+        "recipe.equation.balanced-operation.v1",
+        "recipe.equation.balanced-operation.v1"
+      ]
+    ]
+  ]);
+  for (const [requirementId, [authorityId, sourceId]] of expected) {
+    const requirement = projection.requirements.find((candidate) =>
+      candidate.requirementId === requirementId
+    );
+    assert.equal(requirement?.status, "matched", requirementId);
+    assert.equal(requirement?.authorityId, authorityId);
+    if (requirement?.status !== "matched") continue;
+    assert.equal(requirement.evidence[0]?.sourceId, sourceId);
+  }
+});
+
 test("one homomorphic recipe is exact authority for both logarithm laws", () => {
   const projection = createKpAnimationCapabilityCompilerEvidence();
-  for (const requirementId of [
-    "requirement.equation.log-homomorphism.product-operation",
-    "requirement.equation.log-homomorphism.quotient-operation",
-    "requirement.equation.log-homomorphism.recipe"
-  ]) {
+  const expectations = new Map([
+    ["requirement.equation.log-homomorphism.product-operation", [
+      "equation-pack.homomorphic-crossover.v1"
+    ]],
+    ["requirement.equation.log-homomorphism.quotient-operation", [
+      "equation-pack.homomorphic-crossover.v1"
+    ]],
+    ["requirement.equation.log-homomorphism.recipe", [
+      "recipe.equation.homomorphic-decomposition.v1",
+      "equation-pack.homomorphic-crossover.v1"
+    ]]
+  ]);
+  for (const [requirementId, sourceIds] of expectations) {
     const requirement = projection.requirements.find((candidate) =>
       candidate.requirementId === requirementId
     );
@@ -72,7 +109,7 @@ test("one homomorphic recipe is exact authority for both logarithm laws", () => 
     if (requirement?.status !== "matched") continue;
     assert.deepEqual(
       [...new Set(requirement.evidence.map(({ sourceId }) => sourceId))],
-      ["equation-pack.homomorphic-crossover.v1"]
+      sourceIds
     );
   }
 });
