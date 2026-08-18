@@ -15,6 +15,9 @@ import type {
 export const KP_EQUATION_LATEX_ENDPOINT_NORMALIZER =
   "normalizer.equation.native-latex.v1" as const;
 
+export const KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER =
+  "normalizer.equation.logarithm-base-syntax.v1" as const;
+
 export type KpNormalizedLatexEndpoint =
   | Readonly<{
       kind: "expression";
@@ -32,6 +35,9 @@ export interface KpNormalizedEquationTransformSeriesState {
   readonly latex: string;
   readonly narration?: string | undefined;
   readonly authority: typeof KP_EQUATION_LATEX_ENDPOINT_NORMALIZER;
+  readonly syntaxAuthorityIds?: readonly [
+    typeof KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
+  ] | undefined;
   readonly endpoint: KpNormalizedLatexEndpoint;
 }
 
@@ -71,13 +77,19 @@ export function normalizeKpEquationTransformSeriesEndpoints(
 
   request.states.forEach((state, index) => {
     try {
+      const endpoint = parseEndpoint(state.latex);
       states.push(deepFreeze({
         id: state.id,
         index,
         latex: state.latex,
         ...(state.narration === undefined ? {} : { narration: state.narration }),
         authority: KP_EQUATION_LATEX_ENDPOINT_NORMALIZER,
-        endpoint: parseEndpoint(state.latex)
+        ...(endpointContainsExplicitBaseLog(endpoint)
+          ? { syntaxAuthorityIds: [
+              KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
+            ] as const }
+          : {}),
+        endpoint
       }));
     } catch (error) {
       diagnostics.push(diagnosticFor(state, index, error));
@@ -97,6 +109,33 @@ export function normalizeKpEquationTransformSeriesEndpoints(
     states,
     diagnostics: [] as readonly []
   });
+}
+
+function endpointContainsExplicitBaseLog(
+  endpoint: KpNormalizedLatexEndpoint
+): boolean {
+  return endpoint.kind === "expression"
+    ? expressionContainsExplicitBaseLog(endpoint.expression)
+    : expressionContainsExplicitBaseLog(endpoint.equation.left) ||
+      expressionContainsExplicitBaseLog(endpoint.equation.right);
+}
+
+function expressionContainsExplicitBaseLog(
+  expression: ParsedLatexExpression
+): boolean {
+  switch (expression.kind) {
+    case "number":
+    case "identifier":
+      return false;
+    case "unary":
+      return expressionContainsExplicitBaseLog(expression.value);
+    case "binary":
+      return expressionContainsExplicitBaseLog(expression.left) ||
+        expressionContainsExplicitBaseLog(expression.right);
+    case "call":
+      return expression.name === "log" ||
+        expressionContainsExplicitBaseLog(expression.argument);
+  }
 }
 
 function parseEndpoint(latex: string): KpNormalizedLatexEndpoint {

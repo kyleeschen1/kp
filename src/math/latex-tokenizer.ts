@@ -42,8 +42,9 @@ export interface LatexPunctuationToken {
     | "leftBrace"
     | "leftParen"
     | "rightBrace"
-    | "rightParen";
-  value: "=" | "{" | "(" | "}" | ")";
+    | "rightParen"
+    | "subscript";
+  value: "=" | "{" | "(" | "}" | ")" | "_";
   offset: number;
 }
 
@@ -108,6 +109,12 @@ export function tokenizeLatex(input: string): readonly LatexToken[] {
 
     if (character === "=") {
       tokens.push({ kind: "equals", value: character, offset });
+      offset += 1;
+      continue;
+    }
+
+    if (character === "_") {
+      tokens.push({ kind: "subscript", value: character, offset });
       offset += 1;
       continue;
     }

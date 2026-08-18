@@ -18,9 +18,20 @@ export interface ParsedLatexBinaryExpression {
   right: ParsedLatexExpression;
 }
 
-export interface ParsedLatexCallExpression {
+export type ParsedLatexCallExpression =
+  | ParsedLatexNamedCallExpression
+  | ParsedLatexExplicitBaseLogExpression;
+
+export interface ParsedLatexNamedCallExpression {
   kind: "call";
   name: "cos" | "ln" | "sin" | "sqrt";
+  argument: ParsedLatexExpression;
+}
+
+export interface ParsedLatexExplicitBaseLogExpression {
+  kind: "call";
+  name: "log";
+  base: ParsedLatexIdentifierExpression | ParsedLatexNumberExpression;
   argument: ParsedLatexExpression;
 }
 
@@ -166,6 +177,9 @@ class LatexParser {
         };
       case "identifier":
         this.advance();
+        if (token.value === "log" && this.peek().kind === "subscript") {
+          return this.parseExplicitBaseLogExpression();
+        }
         return {
           kind: "identifier",
           name: token.value
@@ -181,6 +195,7 @@ class LatexParser {
       case "operator":
       case "rightBrace":
       case "rightParen":
+      case "subscript":
         throw new LatexParseError(
           "Expected expression.",
           token.offset,
@@ -201,6 +216,17 @@ class LatexParser {
         left: this.parseRequiredBracedExpression(),
         right: this.parseRequiredBracedExpression()
       };
+    }
+
+    if (token.value === "log") {
+      if (this.peek().kind !== "subscript") {
+        throw new LatexParseError(
+          "Expected an explicit base for \\log.",
+          this.peek().offset,
+          "explicit logarithm base"
+        );
+      }
+      return this.parseExplicitBaseLogExpression();
     }
 
     if (
@@ -239,7 +265,8 @@ class LatexParser {
       token.kind === "equals" ||
       token.kind === "operator" ||
       token.kind === "rightBrace" ||
-      token.kind === "rightParen"
+      token.kind === "rightParen" ||
+      token.kind === "subscript"
     ) {
       throw new LatexParseError(
         `Expected argument for \\${commandName}.`,
@@ -249,6 +276,60 @@ class LatexParser {
     }
 
     return this.parseUnaryExpression();
+  }
+
+  private parseExplicitBaseLogExpression(): ParsedLatexExplicitBaseLogExpression {
+    const subscript = this.peek();
+    if (subscript.kind !== "subscript") {
+      throw new LatexParseError(
+        "Expected an explicit logarithm base.",
+        subscript.offset,
+        "_"
+      );
+    }
+    this.advance();
+    return {
+      kind: "call",
+      name: "log",
+      base: this.parseExplicitLogBase(),
+      argument: this.parseCommandArgument("log")
+    };
+  }
+
+  private parseExplicitLogBase():
+  ParsedLatexExplicitBaseLogExpression["base"] {
+    const token = this.peek();
+    if (token.kind !== "leftBrace") return this.parseExplicitLogBaseAtom();
+    this.advance();
+    const base = this.parseExplicitLogBaseAtom();
+    const close = this.peek();
+    if (close.kind !== "rightBrace") {
+      throw new LatexParseError(
+        "Expected } after the explicit logarithm base.",
+        close.offset,
+        "}"
+      );
+    }
+    this.advance();
+    return base;
+  }
+
+  private parseExplicitLogBaseAtom():
+  ParsedLatexExplicitBaseLogExpression["base"] {
+    const token = this.peek();
+    if (token.kind === "identifier") {
+      this.advance();
+      return { kind: "identifier", name: token.value };
+    }
+    if (token.kind === "number") {
+      this.advance();
+      return { kind: "number", value: Number(token.value) };
+    }
+    throw new LatexParseError(
+      "Expected one symbolic or numeric logarithm base.",
+      token.offset,
+      "symbolic or numeric logarithm base"
+    );
   }
 
   private parseRequiredBracedExpression(): ParsedLatexExpression {
@@ -363,6 +444,13 @@ function collectExpressionSelectorPaths(
       return;
     case "call":
       paths.push({ path, kind: "call", label: expression.name });
+      if (expression.name === "log") {
+        collectExpressionSelectorPaths(
+          expression.base,
+          `${path}.base`,
+          paths
+        );
+      }
       collectExpressionSelectorPaths(
         expression.argument,
         `${path}.argument`,

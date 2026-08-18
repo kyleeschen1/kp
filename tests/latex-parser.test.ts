@@ -76,6 +76,38 @@ test("parseLatexExpression parses functions and unary minus", () => {
   });
 });
 
+test("parseLatexExpression preserves bounded explicit logarithm bases", () => {
+  assert.deepEqual(parseLatexExpression("log_b(x)"), {
+    kind: "call",
+    name: "log",
+    base: { kind: "identifier", name: "b" },
+    argument: { kind: "identifier", name: "x" }
+  });
+  assert.deepEqual(parseLatexExpression("\\log_{10}(x+1)"), {
+    kind: "call",
+    name: "log",
+    base: { kind: "number", value: 10 },
+    argument: {
+      kind: "binary",
+      operator: "+",
+      left: { kind: "identifier", name: "x" },
+      right: { kind: "number", value: 1 }
+    }
+  });
+});
+
+test("explicit logarithm syntax rejects omitted and compound bases", () => {
+  assert.throws(
+    () => parseLatexExpression("\\log(x)"),
+    (error) => error instanceof LatexParseError &&
+      error.expected === "explicit logarithm base"
+  );
+  assert.throws(
+    () => parseLatexExpression("\\log_{b+1}(x)"),
+    (error) => error instanceof LatexParseError && error.expected === "}"
+  );
+});
+
 test("parseLatexExpression reports structured parse errors", () => {
   assert.throws(
     () => parseLatexExpression("\\frac{x}{"),
@@ -104,6 +136,14 @@ test("collectLatexExpressionSelectorPaths emits stable expression paths", () => 
       { path: "equation.right.left", kind: "number", label: "7" },
       { path: "equation.right.operator", kind: "operator", label: "-" },
       { path: "equation.right.right", kind: "number", label: "3" }
+    ]
+  );
+  assert.deepEqual(
+    collectLatexExpressionSelectorPaths("\\log_b(x)", "expression"),
+    [
+      { path: "expression", kind: "call", label: "log" },
+      { path: "expression.base", kind: "identifier", label: "b" },
+      { path: "expression.argument", kind: "identifier", label: "x" }
     ]
   );
 });

@@ -130,6 +130,9 @@ function collectVariableNames(
     case "unary":
       return collectVariableNames(expression.value, variables);
     case "call":
+      if (expression.name === "log") {
+        collectVariableNames(expression.base, variables);
+      }
       return collectVariableNames(expression.argument, variables);
     case "binary":
       collectVariableNames(expression.left, variables);

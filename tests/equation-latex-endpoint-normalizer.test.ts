@@ -66,6 +66,62 @@ test("normalizes nested fractions roots logarithms and equalities", () => {
   assert.deepEqual(JSON.parse(JSON.stringify(result)), result);
 });
 
+test("normalizes explicit log bases with distinct base and argument identity", () => {
+  const source = "\\log_2(7)=\\log_{b}(x)";
+  const result = normalizeKpEquationTransformSeriesEndpoints(request([
+    source,
+    "log_{10}(100)"
+  ]));
+
+  assert.equal(result.status, "normalized");
+  if (result.status !== "normalized") return;
+  assert.deepEqual(result.states[0]?.endpoint, {
+    kind: "relation",
+    relation: "equals",
+    equation: {
+      kind: "equation",
+      left: {
+        kind: "call",
+        name: "log",
+        base: { kind: "number", value: 2 },
+        argument: { kind: "number", value: 7 }
+      },
+      right: {
+        kind: "call",
+        name: "log",
+        base: { kind: "identifier", name: "b" },
+        argument: { kind: "identifier", name: "x" }
+      }
+    }
+  });
+  assert.equal(result.states[0]?.latex, source);
+  assert.deepEqual(result.states.map(({ syntaxAuthorityIds }) =>
+    syntaxAuthorityIds), [[
+    "normalizer.equation.logarithm-base-syntax.v1"
+  ], [
+    "normalizer.equation.logarithm-base-syntax.v1"
+  ]]);
+  assert.deepEqual(
+    normalizeKpEquationTransformSeriesEndpoints(request([source, source])),
+    normalizeKpEquationTransformSeriesEndpoints(request([source, source]))
+  );
+});
+
+test("explicit log base syntax fails closed outside the bounded grammar", () => {
+  const result = normalizeKpEquationTransformSeriesEndpoints(request([
+    "\\log(x)",
+    "\\log_{b+1}(x)"
+  ]));
+
+  assert.equal(result.status, "unsupported-syntax");
+  if (result.status !== "unsupported-syntax") return;
+  assert.deepEqual(result.states, []);
+  assert.deepEqual(result.diagnostics.map(({ expected }) => expected), [
+    "explicit logarithm base",
+    "}"
+  ]);
+});
+
 test("returns typed gaps for every unsupported endpoint without fallback", () => {
   const result = normalizeKpEquationTransformSeriesEndpoints(request([
     "\\tan(x)",

@@ -1060,6 +1060,36 @@
       "status": "passed",
       "scope": "s23 patch hygiene",
       "checkedAt": "2026-08-18T19:40:52.591Z"
+    },
+    {
+      "command": "npm run test:equation-latex-endpoint-normalizer",
+      "status": "passed",
+      "scope": "s24 bounded explicit log-base grammar",
+      "checkedAt": "2026-08-18T19:47:13.394Z"
+    },
+    {
+      "command": "npm run test:equation-transform-series-corpus",
+      "status": "passed",
+      "scope": "s24 existing series repair preservation",
+      "checkedAt": "2026-08-18T19:47:14.491Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24 repository type boundary",
+      "checkedAt": "2026-08-18T19:47:15.555Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 architecture boundaries",
+      "checkedAt": "2026-08-18T19:47:16.603Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24 patch hygiene",
+      "checkedAt": "2026-08-18T19:47:17.623Z"
     }
   ],
   "allowedWork": [
@@ -1225,7 +1255,8 @@
     {
       "id": "s24",
       "title": "Normalize explicit logarithm bases",
-      "status": "planned"
+      "summary": "Extended the bounded native-LaTeX grammar with explicit symbolic or numeric log subscripts in command and identifier forms, preserving base and argument as distinct parsed nodes and annotating exact syntax authority. Omitted or compound bases remain typed unsupported-syntax gaps; no general TeX parser or graph evaluator was added.",
+      "status": "complete"
     },
     {
       "id": "s25",

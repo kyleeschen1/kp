@@ -13,6 +13,7 @@ import {
 import {
   LatexParseError,
   parseLatexExpression,
+  type ParsedLatexCallExpression,
   type ParsedLatexExpression
 } from "./latex-parser.ts";
 
@@ -31,19 +32,20 @@ export function parsedLatexExpressionToMathExpression(
     case "unary":
       return negate(parsedLatexExpressionToMathExpression(expression.value));
     case "call":
-      return lowerCallExpression(expression.name, expression.argument);
+      return lowerCallExpression(expression);
     case "binary":
       return lowerBinaryExpression(expression);
   }
 }
 
 function lowerCallExpression(
-  name: "cos" | "ln" | "sin" | "sqrt",
-  argument: ParsedLatexExpression
+  expression: ParsedLatexCallExpression
 ): MathExpression {
-  const loweredArgument = parsedLatexExpressionToMathExpression(argument);
+  const loweredArgument = parsedLatexExpressionToMathExpression(
+    expression.argument
+  );
 
-  switch (name) {
+  switch (expression.name) {
     case "cos":
       return cos(loweredArgument);
     case "sin":
@@ -52,6 +54,13 @@ function lowerCallExpression(
       // Syntax normalization supports logs before numeric graph evaluation does.
       throw new LatexParseError(
         "Natural logarithms are not executable math expressions yet.",
+        0,
+        "executable function"
+      );
+    case "log":
+      // Parsing explicit bases is semantic-authoring support, not graph evaluation.
+      throw new LatexParseError(
+        "Explicit-base logarithms are not executable math expressions yet.",
         0,
         "executable function"
       );
