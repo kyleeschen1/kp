@@ -36,44 +36,35 @@ export interface KpLogarithmChangeOfBaseNativeEndpoint {
 }
 
 const semantic = kpCanonicalLogarithmChangeOfBase;
-const numeratorOpen = `${semantic.target.numerator.applicationEntityId}.open`;
-const numeratorClose = `${semantic.target.numerator.applicationEntityId}.close`;
-const denominatorOpen = `${semantic.target.denominator.applicationEntityId}.open`;
-const denominatorClose = `${semantic.target.denominator.applicationEntityId}.close`;
-
 export const kpCanonicalLogarithmChangeOfBaseNativeEndpoints = Object.freeze([
   createEndpoint({
     side: "source",
     stateId: semantic.source.stateId,
     accessibleText: "log base two of seven",
-    rawLatex: "\\log_{2}(7)",
+    rawLatex: "\\log_{2} 7",
     parts: [
       part(semantic.source.operatorEntityId, "semantic.logarithm.operator.source", "operator", "\\log"),
       part(semantic.source.base.entityId, semantic.source.base.semanticId, "base", "2"),
       part(semantic.source.argument.entityId, semantic.source.argument.semanticId, "argument", "7")
     ],
     compose(parts) {
-      return `${parts[0]}_{${parts[1]}}(${parts[2]})`;
+      return `${parts[0]}_{${parts[1]}} ${parts[2]}`;
     }
   }),
   createEndpoint({
     side: "target",
     stateId: semantic.target.stateId,
     accessibleText: "natural log of seven divided by natural log of two",
-    rawLatex: "\\frac{\\ln(7)}{\\ln(2)}",
+    rawLatex: "\\frac{\\ln 7}{\\ln 2}",
     parts: [
       part(semantic.target.numerator.operatorEntityId, "semantic.logarithm.operator.natural", "operator", "\\ln"),
-      part(numeratorOpen, "semantic.logarithm.enclosure.numerator.open", "delimiter", "("),
       part(semantic.target.numerator.argument.entityId, semantic.target.numerator.argument.semanticId, "argument", "7"),
-      part(numeratorClose, "semantic.logarithm.enclosure.numerator.close", "delimiter", ")"),
       part(semantic.target.denominator.operatorEntityId, "semantic.logarithm.operator.natural", "operator", "\\ln"),
-      part(denominatorOpen, "semantic.logarithm.enclosure.denominator.open", "delimiter", "("),
       part(semantic.target.denominator.argument.entityId, semantic.target.denominator.argument.semanticId, "base", "2"),
-      part(denominatorClose, "semantic.logarithm.enclosure.denominator.close", "delimiter", ")"),
       part(semantic.target.divisionEntityId, "semantic.logarithm.change-of-base.division", "fraction-bar", "")
     ],
     compose(parts) {
-      return `\\frac{${parts[0]}${parts[1]}${parts[2]}${parts[3]}}{${parts[4]}${parts[5]}${parts[6]}${parts[7]}}`;
+      return `\\frac{${parts[0]} ${parts[1]}}{${parts[2]} ${parts[3]}}`;
     }
   })
 ] as const);

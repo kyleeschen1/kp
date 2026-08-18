@@ -1220,6 +1220,48 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-08-18T20:41:57.276Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T21:38:29.705Z",
+      "notes": "14/14; bare numeric-log endpoints, identity transfer, causal timing, and authoring contracts pass."
+    },
+    {
+      "command": "npm run visual:logarithm-change-of-base:catalogue",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-18T21:38:31.223Z",
+      "notes": "6/6 across Chromium, Firefox, and WebKit; no delimiter owners, locally settled transform removal, direct seek, rewind, and URL restore pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T21:38:32.264Z",
+      "notes": "73/73; shared typography handoff and compositor ownership remain green."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T21:38:33.295Z",
+      "notes": "28/28; exact module and source-byte ceilings remain green without raising budgets."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T21:38:34.362Z",
+      "notes": "TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T21:39:05.690Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic boundaries, operation presentation, and equation compiler authority pass."
     }
   ],
   "allowedWork": [
@@ -1409,7 +1451,7 @@
     {
       "id": "s28",
       "title": "Produce visual evidence and stop for review",
-      "summary": "Captured deterministic wide and phone forward/return evidence for the change-of-base exemplar, repaired the source-operator and enclosure handoff inside the caller-local projection, and verified exact seek, URL restoration, exclusive accessible ownership, and protected transit across Chromium Firefox and WebKit. Stopped before promotion for the mandatory human checkpoint.",
+      "summary": "Revised the mandatory change-of-base checkpoint after human rejection: numeric logarithm applications now compile bare notation with no delimiter roles or endpoint parentheses; source log syntax retires before persistent 7 and base 2 reflow; fraction rule, derived ln operators, and role-changing material co-terminate at one frontier. The compositor now couples role-change typography to the track motion sample and removes each settled transform at local completion, preventing a scene-end size snap. Exact seek/reverse, wide/phone capture, and Chromium/Firefox/WebKit gates pass. Promotion remains blocked pending renewed human visual approval.",
       "status": "complete"
     },
     {

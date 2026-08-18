@@ -37,6 +37,7 @@ export type KpNativeKatexSceneTrackContract<
   readonly sampleProgress?: (progress: number) => number;
   readonly sampleOpacityProgress?: (progress: number) => number;
   readonly samplePaintPresence?: (progress: number) => number;
+  readonly motionMetrics?: true;
   /** Renderer-local paint scale; it never changes measured layout authority. */
   readonly sampleMaterialScale?: (progress: number) => number;
 } & KpNativeKatexSceneTrackOpacityContract;
@@ -55,6 +56,7 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly rect: Rect;
   readonly expectedPaintRect?: Rect | undefined;
   readonly opacity: number;
+  readonly metricProgress?: number;
   readonly materialScale?: number | undefined;
   readonly intentionalContactGroupId?: string | undefined;
   readonly intentionalForegroundOcclusion?:
@@ -112,9 +114,7 @@ export interface KpNativeKatexRendererSessionContract<
   readonly tracks: readonly Track[];
   readonly sample: (progress: number) => readonly Frame[];
   readonly apply: (progress: number) => OwnershipFrame;
-  // Retirement deliberately has no reset-to-source variant. A renderer that
-  // owns visible paint may release authority, but lifecycle cleanup must not
-  // select a pose; doing so caused detached start frames to flash at handoff.
+  // Retirement never selects a pose; rewinding here flashed detached start frames.
   readonly retire: (
     retirement: KpNativeKatexPaintPreservingRetirement
   ) => void;

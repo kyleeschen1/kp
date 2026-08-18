@@ -773,24 +773,23 @@ export function sampleKpNativeKatexTypographyStylePlan(
     throw new Error("Typography style progress must be finite.");
   }
   const bounded = Math.max(0, Math.min(1, progress));
-  const eased = smoothstep(bounded);
-  const sceneRectByOwner = sceneFrames === undefined
+  const sceneFrameByOwner = sceneFrames === undefined
     ? undefined
-    : new Map(sceneFrames.map((frame) => [
-        `native-scene-owner.${frame.trackId}`,
-        frame.rect
-      ]));
+    : new Map(sceneFrames.map((frame) =>
+      [`native-scene-owner.${frame.trackId}`, frame]));
   return Object.freeze({
     kind: "native-katex-typography-style-frame",
     lifecycle: "renderer-session",
     progress: bounded,
     entries: Object.freeze(plan.entries.map((entry) => {
-      const rect = sceneRectByOwner?.get(entry.materialOwnerId);
-      if (sceneRectByOwner !== undefined && rect === undefined) {
+      const sceneFrame = sceneFrameByOwner?.get(entry.materialOwnerId);
+      if (sceneFrameByOwner !== undefined && sceneFrame === undefined) {
         throw new Error(
           `Typography style plan ${entry.id} has no scene frame.`
         );
       }
+      const rect = sceneFrame?.rect;
+      const eased = smoothstep(sceneFrame?.metricProgress ?? bounded);
       const paint = entry.glyphPaintFrame;
       if (paint !== undefined) {
         const scale = lerp(paint.sourceScale, 1, eased);
@@ -814,7 +813,7 @@ export function sampleKpNativeKatexTypographyStylePlan(
             desiredPaintTop -
             entry.targetRect.top -
             paint.targetInsetY * scale,
-          // Keep glyph axes uniform; independent fitting distorts notation.
+          // Uniform scaling keeps notation undistorted.
           scaleX: scale,
           scaleY: scale
         });
@@ -890,7 +889,8 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
       revisionKey:
         `target:${entry.targetPaintAtomId}:${entry.targetStyleFingerprint}`
     });
-    const endpointIdentity = styleFrame.progress === 1;
+    const endpointIdentity = frame.translateX === 0 && frame.translateY === 0 &&
+      frame.scaleX === 1 && frame.scaleY === 1;
     owner.style.left = `${entry.targetRect.left}px`;
     owner.style.top = `${entry.targetRect.top}px`;
     owner.style.width = `${entry.targetRect.width}px`;
@@ -898,7 +898,7 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     owner.style.transformOrigin = "0 0";
     // An identity transform is not paint-neutral in WebKit: it can create a
     // composited text layer with different antialiasing than native KaTeX.
-    // Remove the transform at the exact pose before the binary owner handoff.
+    // Remove settled transforms early; scene-end removal caused a final snap.
     owner.style.transform = endpointIdentity
       ? "none"
       : `translate(${frame.translateX}px, ${frame.translateY}px) ` +

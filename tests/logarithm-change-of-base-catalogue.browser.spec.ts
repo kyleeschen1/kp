@@ -42,6 +42,7 @@ test("change-of-base mounts one native compositor and seeks deterministically", 
     sourceEntityId?: string;
     targetEntityId?: string;
     timingGroupId?: string;
+    metricInterpolation?: string;
   }>;
   expect(summary.some(({ lifecycle, sourceEntityId, targetEntityId }) =>
     lifecycle === "persist" &&
@@ -63,11 +64,46 @@ test("change-of-base mounts one native compositor and seeks deterministically", 
     sourceEntityId === "source.log-base-two.operator" &&
     timingGroupId === "timing.logarithm-change-of-base.operator-handoff"
   )).toBe(true);
-  expect(summary.filter(({ lifecycle, sourceEntityId, timingGroupId }) =>
-    lifecycle === "eliminate" &&
-    sourceEntityId === "state.logarithm.change-base.source" &&
-    timingGroupId === "timing.logarithm-change-of-base.source-enclosure-exit"
+  await expect(stage.locator('[data-kp-semantic-entity-id$=".open"], ' +
+    '[data-kp-semantic-entity-id$=".close"]')).toHaveCount(0);
+  expect(summary.filter(({ lifecycle, metricInterpolation }) =>
+    lifecycle === "persist" &&
+    metricInterpolation === "semantic-role-change"
   )).toHaveLength(2);
+
+  const sourceBase = stage.locator(
+    '[data-kp-semantic-entity-id="source.log-base-two.base"]'
+  );
+  const targetArgument = stage.locator(
+    '[data-kp-semantic-entity-id="target.denominator.argument-two"]'
+  );
+  const sourceHeight = await sourceBase.evaluate((element) =>
+    element.getBoundingClientRect().height
+  );
+  const targetHeight = await targetArgument.evaluate((element) =>
+    element.getBoundingClientRect().height
+  );
+  expect(targetHeight).toBeGreaterThan(sourceHeight + 1);
+  const roleChangeHeights: number[] = [];
+  for (const progress of [0.22, 0.5, 0.78, 0.999]) {
+    await seek.fill(String(progress));
+    const owner = stage.locator(
+      '[data-kp-equation-material-semantic-entity-id="source.log-base-two.base"]'
+    );
+    await expect(owner).toHaveCount(1);
+    roleChangeHeights.push(await owner.evaluate((element) =>
+      element.getBoundingClientRect().height
+    ));
+  }
+  expect(roleChangeHeights[1]!).toBeGreaterThan(roleChangeHeights[0]! + 0.25);
+  expect(roleChangeHeights[1]!).toBeLessThan(roleChangeHeights[2]! - 0.25);
+  expect(Math.abs(roleChangeHeights[2]! - targetHeight)).toBeLessThan(0.75);
+  expect(Math.abs(roleChangeHeights[3]! - targetHeight)).toBeLessThan(0.75);
+  await seek.fill("0.78");
+  const settledRoleChange = stage.locator(
+    '[data-kp-equation-material-semantic-entity-id="source.log-base-two.base"]'
+  );
+  await expect(settledRoleChange).toHaveCSS("transform", "none");
 
   for (const progress of [0, 0.25, 0.5, 0.75, 1, 0.625, 0]) {
     await seek.fill(String(progress));

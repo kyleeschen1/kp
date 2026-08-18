@@ -55,17 +55,14 @@ test("change-of-base exemplar binds exact semantic and presentation authority", 
     }, {
       id: "correspondence.change-of-base.division",
       relation: "introduction"
-    }, {
-      id: "correspondence.change-of-base.target-enclosures",
-      relation: "introduction"
     }]
   );
 });
 
 test("native endpoints preserve argument and base while owning target syntax", () => {
   const [source, target] = kpCanonicalLogarithmChangeOfBaseNativeEndpoints;
-  assert.equal(source.annotated.rawLatex, "\\log_{2}(7)");
-  assert.equal(target.annotated.rawLatex, "\\frac{\\ln(7)}{\\ln(2)}");
+  assert.equal(source.annotated.rawLatex, "\\log_{2} 7");
+  assert.equal(target.annotated.rawLatex, "\\frac{\\ln 7}{\\ln 2}");
   assert.equal(source.nodes.some(({ occurrenceId }) =>
     occurrenceId === "source.log-base-two.argument-seven"), true);
   assert.equal(target.nodes.some(({ occurrenceId }) =>
@@ -73,20 +70,23 @@ test("native endpoints preserve argument and base while owning target syntax", (
   assert.equal(target.nodes.some(({ occurrenceId }) =>
     occurrenceId === "target.denominator.argument-two"), true);
   assert.equal(target.nodes.filter(({ kind }) => kind === "operator").length, 2);
-  assert.equal(target.nodes.filter(({ kind }) => kind === "delimiter").length, 4);
+  assert.equal(source.nodes.filter(({ kind }) => kind === "delimiter").length, 0);
+  assert.equal(target.nodes.filter(({ kind }) => kind === "delimiter").length, 0);
   assert.equal(target.nodes.filter(({ kind }) => kind === "fraction-bar").length, 1);
   assert.match(target.nativeHtmlAndMathml, /frac-line/);
 });
 
 test("exemplar timing orders continuants fraction and function reception", () => {
+  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.sourceOperatorRelease.end <=
+    kpLogarithmChangeOfBaseExemplarTiming.argumentReflow.start);
   assert.ok(kpLogarithmChangeOfBaseExemplarTiming.argumentReflow.start <
     kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.start);
-  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.argumentReflow.end <=
+  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.start <
+    kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.start);
+  assert.equal(kpLogarithmChangeOfBaseExemplarTiming.argumentReflow.end,
     kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.end);
-  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.end <=
-    kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.start);
-  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.sourceOperatorRelease.end <=
-    kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.start);
+  assert.equal(kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.end,
+    kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.end);
 });
 
 test("catalogue route and lazy pack resolve the exact exemplar", async () => {

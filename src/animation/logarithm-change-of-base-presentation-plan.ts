@@ -89,13 +89,6 @@ export function compileKpLogarithmChangeOfBasePresentationPlan(
       "Change-of-base presentation requires verifier-minted semantic truth."
     );
   }
-  const numeratorOpen = `${semantic.target.numerator.applicationEntityId}.open`;
-  const numeratorClose =
-    `${semantic.target.numerator.applicationEntityId}.close`;
-  const denominatorOpen =
-    `${semantic.target.denominator.applicationEntityId}.open`;
-  const denominatorClose =
-    `${semantic.target.denominator.applicationEntityId}.close`;
   const functionWrapInvocationGroup = compileKpFunctionWrapInvocationGroup({
     id: semantic.id,
     branches: [{
@@ -104,35 +97,25 @@ export function compileKpLogarithmChangeOfBasePresentationPlan(
       sourceArgumentEntityIds: [semantic.source.argument.entityId],
       targetArgumentEntityIds: [semantic.target.numerator.argument.entityId],
       functionEntityIds: [semantic.target.numerator.operatorEntityId],
-      enclosureEntityRoles: [
-        { entityId: numeratorOpen, side: "leading" },
-        { entityId: numeratorClose, side: "trailing" }
-      ]
+      enclosureEntityRoles: []
     }, {
       id: "change-of-base.denominator",
       semanticObjectId: semantic.target.denominator.applicationEntityId,
       sourceArgumentEntityIds: [semantic.source.base.entityId],
       targetArgumentEntityIds: [semantic.target.denominator.argument.entityId],
       functionEntityIds: [semantic.target.denominator.operatorEntityId],
-      enclosureEntityRoles: [
-        { entityId: denominatorOpen, side: "leading" },
-        { entityId: denominatorClose, side: "trailing" }
-      ]
+      enclosureEntityRoles: []
     }]
   });
   const numeratorEntityIds = Object.freeze([
     semantic.target.numerator.applicationEntityId,
     semantic.target.numerator.operatorEntityId,
-    numeratorOpen,
-    semantic.target.numerator.argument.entityId,
-    numeratorClose
+    semantic.target.numerator.argument.entityId
   ]);
   const denominatorEntityIds = Object.freeze([
     semantic.target.denominator.applicationEntityId,
     semantic.target.denominator.operatorEntityId,
-    denominatorOpen,
-    semantic.target.denominator.argument.entityId,
-    denominatorClose
+    semantic.target.denominator.argument.entityId
   ]);
   const sourceSelectorIds = Object.freeze([
     semantic.source.applicationEntityId,

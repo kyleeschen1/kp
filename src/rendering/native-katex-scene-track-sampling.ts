@@ -24,8 +24,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
   const bounded = Math.max(0, Math.min(1, progress));
   const eased = smoothstep(bounded);
   return Object.freeze(tracks.map((sceneTrack) => {
-    // A family-neutral topology sampler may shape local fan-out motion, but
-    // the compiled semantic track remains the authority for when it runs.
+    // Fan-out may shape motion, but the compiled semantic schedule owns timing.
     const semanticProgress = sceneTrack.sampleProgress?.(bounded);
     const copySample = copyFanOut
       ? sampleKpNativeKatexCopyFanOutTrack({
@@ -59,6 +58,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
       paintKind: sceneTrack.paintKind,
       sizingMode: sceneTrack.sizingMode,
       rect,
+      ...(sceneTrack.motionMetrics ? { metricProgress: paintProgress } : {}),
       ...(materialScale === undefined ? {} : { materialScale }),
       ...(hasMeasuredPaint
         ? {

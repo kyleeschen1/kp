@@ -159,7 +159,10 @@ async function prepareSurface(
         targetEntityId: track.targetAtomId === undefined
           ? undefined
           : targetEntities.get(track.targetAtomId),
-        timingGroupId: track.timingGroupId
+        timingGroupId: track.timingGroupId,
+        metricInterpolation: track.motionMetrics !== true
+          ? "default"
+          : "semantic-role-change"
       })));
     session.stage.dataset["kpLogarithmChangeOfBaseStage"] = "ready";
     applyFrame(session, session.pendingState);

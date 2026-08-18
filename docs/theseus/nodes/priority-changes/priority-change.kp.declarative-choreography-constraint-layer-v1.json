@@ -1,0 +1,53 @@
+{
+  "id": "priority-change.kp.declarative-choreography-constraint-layer-v1",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.declarative-choreography-constraint-layer-v1",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The accepted change-of-base review exposed a recurring class of errors: semantic role changes can preserve identity while typography follows a different schedule, and causal phase relationships remain unenforced local timing. Make a data-only declarative constraint compiler with typed conflicts, automatic metric interpolation obligations, native-settlement laws, registry-selected motifs, and an inspectable compilation trace the next architecture priority after the current visual checkpoint and release closeout.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The accepted change-of-base review exposed a recurring class of errors: semantic role changes can preserve identity while typography follows a different schedule, and causal phase relationships remain unenforced local timing. Make a data-only declarative constraint compiler with typed conflicts, automatic metric interpolation obligations, native-settlement laws, registry-selected motifs, and an inspectable compilation trace the next architecture priority after the current visual checkpoint and release closeout.",
+      "occurredAt": "2026-08-18T21:14:13.845Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-18-declarative-choreography-constraint-layer.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.compositor-balanced-log-base-convergence-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.compositor-balanced-log-base-convergence-v1"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The accepted change-of-base review exposed a recurring class of errors: semantic role changes can preserve identity while typography follows a different schedule, and causal phase relationships remain unenforced local timing. Make a data-only declarative constraint compiler with typed conflicts, automatic metric interpolation obligations, native-settlement laws, registry-selected motifs, and an inspectable compilation trace the next architecture priority after the current visual checkpoint and release closeout.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.compositor-balanced-log-base-convergence-v1"
+    ],
+    "changes": [
+      {
+        "subject": "declarative-choreography-constraint-layer",
+        "to": "next"
+      },
+      {
+        "subject": "new-symbolic-family-expansion",
+        "to": "after"
+      }
+    ],
+    "effectiveAt": "2026-08-18T21:14:13.845Z",
+    "requestedBy": "user"
+  }
+}

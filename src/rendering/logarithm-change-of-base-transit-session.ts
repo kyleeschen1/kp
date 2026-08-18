@@ -1,6 +1,7 @@
 import {
   createKpCanonicalFunctionWrapChoreography,
-  createKpCausalStructuralIntroductionChoreography
+  createKpCausalStructuralIntroductionChoreography,
+  type KpCanonicalFunctionWrapChoreography
 } from "../animation/equation-operation-choreography.ts";
 import {
   kpCanonicalLogarithmChangeOfBasePresentationPlan
@@ -30,11 +31,10 @@ import {
 
 export const kpLogarithmChangeOfBaseExemplarTiming = Object.freeze({
   id: "timing.logarithm-change-of-base.exemplar.v1" as const,
-  argumentReflow: Object.freeze({ start: 0.06, end: 0.54 }),
-  sourceEnclosureExit: Object.freeze({ start: 0.08, end: 0.24 }),
-  fractionRuleEntry: Object.freeze({ start: 0.44, end: 0.58 }),
-  wrapperEntry: Object.freeze({ start: 0.58, end: 0.9 }),
-  sourceOperatorRelease: Object.freeze({ start: 0.32, end: 0.5 })
+  sourceOperatorRelease: Object.freeze({ start: 0.04, end: 0.14 }),
+  argumentReflow: Object.freeze({ start: 0.22, end: 0.78 }),
+  fractionRuleEntry: Object.freeze({ start: 0.26, end: 0.78 }),
+  wrapperEntry: Object.freeze({ start: 0.4, end: 0.78 })
 });
 
 export interface KpLogarithmChangeOfBaseTransitSession {
@@ -93,7 +93,9 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
         });
         return projectSourceSyntaxHandoff({
           tracks: withFractionRule,
-          source: projectionInput.source
+          source: projectionInput.source,
+          target: projectionInput.target,
+          functionWrap
         });
       }
     })
@@ -124,16 +126,53 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
 function projectSourceSyntaxHandoff(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly functionWrap: KpCanonicalFunctionWrapChoreography;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
     atom.id,
     atom.semanticEntityId
   ]));
+  const targetEntityByAtomId = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
   const sourceOperatorId = kpCanonicalLogarithmChangeOfBase.source.operatorEntityId;
+  const branchByRoleChange = new Map(
+    input.functionWrap.branches.flatMap((branch) =>
+      branch.sourceArgumentEntityIds.flatMap((sourceEntityId) =>
+        branch.targetArgumentEntityIds.map((targetEntityId) => [
+          `${sourceEntityId}\u0000${targetEntityId}`,
+          branch.id
+        ] as const)
+      )
+    )
+  );
   return Object.freeze(input.tracks.map((track) => {
     const sourceEntityId = track.sourceAtomId === undefined
       ? undefined
       : sourceEntityByAtomId.get(track.sourceAtomId);
+    const targetEntityId = track.targetAtomId === undefined
+      ? undefined
+      : targetEntityByAtomId.get(track.targetAtomId);
+    if (
+      track.lifecycle === "persist" &&
+      sourceEntityId !== undefined &&
+      targetEntityId !== undefined &&
+      branchByRoleChange.has(`${sourceEntityId}\u0000${targetEntityId}`)
+    ) {
+      const branchId = branchByRoleChange.get(
+        `${sourceEntityId}\u0000${targetEntityId}`
+      )!;
+      return Object.freeze({
+        ...track,
+        // Material crossing into its own enclosure is intentional contact,
+        // unlike unrelated paint overlap elsewhere in the expression.
+        intentionalContactGroupId:
+          `${input.functionWrap.id}.${branchId}.wrapper-reception`,
+        motionMetrics: true
+      });
+    }
     if (sourceEntityId === sourceOperatorId && track.lifecycle === "eliminate") {
       const sample = (progress: number) => smoothWindow(
         progress,
@@ -142,22 +181,6 @@ function projectSourceSyntaxHandoff(input: {
       return Object.freeze({
         ...track,
         timingGroupId: "timing.logarithm-change-of-base.operator-handoff",
-        opacityScheduleAuthority: "semantic-choreography" as const,
-        sampleProgress: sample,
-        sampleOpacityProgress: sample
-      });
-    }
-    if (
-      sourceEntityId === kpCanonicalLogarithmChangeOfBase.source.stateId &&
-      track.lifecycle === "eliminate"
-    ) {
-      const sample = (progress: number) => smoothWindow(
-        progress,
-        kpLogarithmChangeOfBaseExemplarTiming.sourceEnclosureExit
-      );
-      return Object.freeze({
-        ...track,
-        timingGroupId: "timing.logarithm-change-of-base.source-enclosure-exit",
         opacityScheduleAuthority: "semantic-choreography" as const,
         sampleProgress: sample,
         sampleOpacityProgress: sample

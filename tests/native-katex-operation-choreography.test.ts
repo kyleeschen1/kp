@@ -628,6 +628,16 @@ test("generic collision repair retimes a certified introduction cohort atomicall
   );
 });
 
+test("semantic role changes keep metric and motion progress together", () => {
+  const target = atom("target", "target.role-change", 40);
+  const track = introducedTrack(target, 0);
+  assert.equal(sampleKpNativeKatexSceneTrackFrames([{
+    ...track,
+    motionMetrics: true,
+    sampleProgress: (progress) => progress
+  }], 0.4, false)[0]!.metricProgress, 0.4);
+});
+
 function scene(
   endpoint: "source" | "target",
   atoms: readonly KpNativeKatexPaintAtomObservation[]

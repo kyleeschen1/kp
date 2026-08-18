@@ -800,6 +800,19 @@ test("glyph paint frames preserve contact with uniform font scaling", () => {
       scaleY: 1
     }
   );
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 0.1, [{
+      ...sourceFrame[0]!,
+      metricProgress: 0.5
+    }]).entries[0],
+    {
+      id: "entry.paint",
+      translateX: -20,
+      translateY: 10,
+      scaleX: 1.5,
+      scaleY: 1.5
+    }
+  );
 });
 
 test("handoff telemetry rejects invalid geometry and document boundaries", () => {

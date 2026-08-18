@@ -47,10 +47,10 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
       id: semantic.source.stateId,
       objectType: "equation",
       title: "Logarithm in base two",
-      value: Object.freeze({ latex: "\\log_{2}(7)", stateKind: "source" }),
+      value: Object.freeze({ latex: "\\log_{2} 7", stateKind: "source" }),
       selectors: sourceSelectors,
       metadata: {
-        latex: "\\log_{2}(7)",
+        latex: "\\log_{2} 7",
         settledEndpointAuthority: "native-katex"
       }
     }),
@@ -59,12 +59,12 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
       objectType: "equation",
       title: "Natural-log quotient",
       value: Object.freeze({
-        latex: "\\frac{\\ln(7)}{\\ln(2)}",
+        latex: "\\frac{\\ln 7}{\\ln 2}",
         stateKind: "target"
       }),
       selectors: targetSelectors,
       metadata: {
-        latex: "\\frac{\\ln(7)}{\\ln(2)}",
+        latex: "\\frac{\\ln 7}{\\ln 2}",
         settledEndpointAuthority: "native-katex"
       }
     })
@@ -91,18 +91,7 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
           sourceSelectorIds: record.sourceEntityIds,
           targetSelectorIds: record.targetEntityIds,
           summary: record.summary
-        })),
-        {
-          id: "correspondence.change-of-base.target-enclosures",
-          relation: "introduction" as const,
-          sourceSelectorIds: [],
-          targetSelectorIds: presentation.forwardReception.branches.flatMap(
-            ({ enclosureEntityRoles }) => enclosureEntityRoles.map(
-              ({ entityId }) => entityId
-            )
-          ),
-          summary: "Each derived natural logarithm receives its own enclosure."
-        }
+        }))
       ]
     },
     correspondence: presentation.identityTransfers.map((transfer) => ({
