@@ -27,6 +27,9 @@ export type KpEquationStructuralOperationKind =
   | KpFractionChoreographyKind
   | KpIdentityAbsorptionChoreographyKind;
 
+export const KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID =
+  "recipe.equation.fraction-material.v1" as const;
+
 interface KpEquationStructuralChoreographyDeclarationBase {
   readonly transformType: string;
   readonly recipeId:
@@ -62,11 +65,11 @@ readonly KpEquationStructuralChoreographyDeclaration[] = Object.freeze([
   structural("rewritePowerAsRoot", "radical-succession",
     "recipe.equation.radical-succession.v1"),
   structuralOperation("splitFractionFactors", "fraction-material",
-    "recipe.equation.fraction-material.v1", "split-factors"),
+    KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID, "split-factors"),
   structuralOperation("mergeFractionCommonFactor", "fraction-material",
-    "recipe.equation.fraction-material.v1", "separate-common-factor"),
+    KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID, "separate-common-factor"),
   structuralOperation("simplifyUnitFractionFactor", "fraction-material",
-    "recipe.equation.fraction-material.v1", "simplify-unit-factor"),
+    KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID, "simplify-unit-factor"),
   structuralOperation("lowerExponent", "exponent-law",
     "recipe.equation.exponent-expansion.v1", "peel-one-factor"),
   structuralOperation("unwrapUnitExponent", "exponent-law",

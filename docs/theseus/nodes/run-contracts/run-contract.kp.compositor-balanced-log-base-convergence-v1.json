@@ -1126,6 +1126,42 @@
       "status": "passed",
       "scope": "s25 patch hygiene",
       "checkedAt": "2026-08-18T19:56:52.583Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "s26 composed motif and endpoint dry run",
+      "checkedAt": "2026-08-18T20:02:23.641Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "s26 established presentation authority preservation",
+      "checkedAt": "2026-08-18T20:02:24.866Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s26 no-new-compositor-primitive gate",
+      "checkedAt": "2026-08-18T20:02:25.850Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26 repository type boundary",
+      "checkedAt": "2026-08-18T20:02:26.866Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 architecture boundaries",
+      "checkedAt": "2026-08-18T20:02:27.901Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s26 patch hygiene",
+      "checkedAt": "2026-08-18T20:02:28.944Z"
     }
   ],
   "allowedWork": [
@@ -1303,7 +1339,8 @@
     {
       "id": "s26",
       "title": "Define change-of-base presentation plan",
-      "status": "planned"
+      "summary": "Compiled the verified change-of-base law into one caller-local presentation plan that composes the canonical function-wrap motif, existing fraction-material recipe, and native-KaTeX capability. Two synchronized branches transfer argument and base identity into numerator and denominator wrappers; the fraction settles natively. The plan adds no timing, geometry, clock, compositor primitive, or renderer dispatch.",
+      "status": "complete"
     },
     {
       "id": "s27",
