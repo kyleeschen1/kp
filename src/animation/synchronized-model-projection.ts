@@ -7,6 +7,8 @@ export interface KpSynchronizedModelProjectionProgressV1 {
   readonly presentationProgress: number;
 }
 
+export const KP_SYNCHRONIZED_MODEL_PROGRESS_DENOMINATOR = 1_000_000;
+
 export function sampleKpSynchronizedModelProjectionProgress(
   clock: KpAnimationRuntimeClock
 ): KpSynchronizedModelProjectionProgressV1 {
@@ -26,12 +28,18 @@ export function sampleKpSynchronizedModelProjectionProgress(
 export function exactKpSynchronizedModelProgress(
   value: number
 ): ExactRationalDto {
-  const denominator = 1_000_000;
+  const denominator = KP_SYNCHRONIZED_MODEL_PROGRESS_DENOMINATOR;
   const numerator = Math.round(clamp01(value) * denominator);
   return Object.freeze({
     numerator: String(numerator),
     denominator: String(denominator)
   });
+}
+
+export function quantizeKpSynchronizedModelProgress(value: number): number {
+  return Math.round(
+    clamp01(value) * KP_SYNCHRONIZED_MODEL_PROGRESS_DENOMINATOR
+  ) / KP_SYNCHRONIZED_MODEL_PROGRESS_DENOMINATOR;
 }
 
 export function easeKpSynchronizedModelProgress(value: number): number {
@@ -44,5 +52,5 @@ function clamp01(value: number): number {
 }
 
 function quantize01(value: number): number {
-  return Math.round(clamp01(value) * 1_000_000) / 1_000_000;
+  return quantizeKpSynchronizedModelProgress(value);
 }
