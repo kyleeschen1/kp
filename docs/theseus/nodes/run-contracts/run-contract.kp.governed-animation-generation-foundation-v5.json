@@ -71,7 +71,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s17",
       "title": "Declaration-driven-intent-resolver",
-      "status": "planned"
+      "summary": "Joined canonical and extension declaration authorities, resolved explicit series operations, and preserved all direct generation trials.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s18",
