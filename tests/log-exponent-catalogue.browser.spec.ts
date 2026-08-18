@@ -230,6 +230,54 @@ test("catalogue route seeks the exact semantic sequence without replay", async (
   );
 });
 
+test("terminal scrubbing replays from the source after the native surface is ready", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-exponent-stage]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const toggle = player.locator('[data-action="toggle-editor-animation"]');
+
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-surface-readiness",
+    "ready"
+  );
+  await expect(toggle).toBeEnabled();
+
+  for (let replay = 0; replay < 2; replay += 1) {
+    await scrubber.fill("1");
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-status",
+      "paused"
+    );
+    const synchronousReplay = await toggle.evaluate((button) => {
+      (button as HTMLButtonElement).click();
+      const owner = button.closest<HTMLElement>(
+        "[data-kp-editor-animation-player]"
+      );
+      return {
+        progress: owner?.dataset["kpEditorAnimationProgress"],
+        status: owner?.dataset["kpEditorAnimationStatus"]
+      };
+    });
+    expect(synchronousReplay).toEqual({ progress: "0", status: "playing" });
+    await expect.poll(async () => Number(
+      await player.getAttribute("data-kp-editor-animation-progress")
+    )).toBeGreaterThan(0);
+    await toggle.click();
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-status",
+      "paused"
+    );
+  }
+});
+
 test("canonical checkpoint fits narrow reduced-motion viewports with one accessible equation", async ({
   page
 }) => {

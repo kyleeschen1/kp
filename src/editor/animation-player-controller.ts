@@ -30,6 +30,10 @@ import {
   type KpRenderQualityCapabilities,
   type KpRenderQualityState
 } from "../animation/render-quality.ts";
+import {
+  KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT,
+  readKpEditorAnimationSurfaceReadiness
+} from "./animation-surface-readiness.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_DISPOSE_EVENT =
@@ -138,6 +142,10 @@ export function disposeKpEditorAnimationPlayer(player: HTMLElement): void {
   player.removeEventListener("click", handlePlayerClick);
   player.removeEventListener("input", handlePlayerInput);
   player.removeEventListener("keydown", handlePlayerKeydown);
+  player.removeEventListener(
+    KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT,
+    handlePlayerSurfaceReadiness
+  );
   sessions.delete(player);
   authoringStates.delete(player);
   renderQualityStates.delete(player);
@@ -165,6 +173,10 @@ export function dispatchKpEditorAnimationPlaybackAction(
 ): void {
   const session = sessions.get(player);
   if (session === undefined) return;
+  if (
+    isPlaybackStartAction(action) &&
+    readKpEditorAnimationSurfaceReadiness(player) !== "ready"
+  ) return;
 
   syncRenderQualityForPlaybackAction(player, session, action);
 
@@ -304,6 +316,10 @@ async function hydrateKpEditorAnimationPlayer(
   player.addEventListener("click", handlePlayerClick);
   player.addEventListener("input", handlePlayerInput);
   player.addEventListener("keydown", handlePlayerKeydown);
+  player.addEventListener(
+    KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT,
+    handlePlayerSurfaceReadiness
+  );
   syncLoadedDiagnostics(player, animation, catalog);
   syncPlayerDom(player, session);
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
@@ -391,6 +407,12 @@ function handlePlayerClick(event: MouseEvent): void {
       dispatchKpEditorAnimationPlaybackAction(player, { type: "reset" });
       return;
   }
+}
+
+function handlePlayerSurfaceReadiness(event: Event): void {
+  const player = event.currentTarget;
+  if (!(player instanceof HTMLElement)) return;
+  syncPlayerControlAvailability(player);
 }
 
 function handlePlayerInput(event: Event): void {
@@ -811,11 +833,10 @@ function syncPlayerDom(
       : state.playbackStatus === "complete"
         ? "Replay"
         : "Play";
-    toggleButton.disabled =
-      player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
     replacePlayerText(toggleButton, label);
     toggleButton.setAttribute("aria-label", `${label} animation`);
   }
+  syncPlayerControlAvailability(player);
   animationPlayerGestaltCapability
     ?.syncKpEditorAnimationGestaltAtCadence(player, session);
 
@@ -823,6 +844,30 @@ function syncPlayerDom(
     bubbles: true,
     detail: state
   }));
+}
+
+function syncPlayerControlAvailability(player: HTMLElement): void {
+  const surfaceReady =
+    readKpEditorAnimationSurfaceReadiness(player) === "ready";
+  player.querySelectorAll<HTMLButtonElement>("button[data-action]")
+    .forEach((button) => {
+      const staticPlayback =
+        button.dataset["action"] === "toggle-editor-animation" &&
+        player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
+      button.disabled = !surfaceReady || staticPlayback;
+    });
+  const scrubber = player.querySelector<HTMLInputElement>(
+    '[data-action="seek-editor-animation"]'
+  );
+  if (scrubber !== null) scrubber.disabled = !surfaceReady;
+}
+
+function isPlaybackStartAction(
+  action: KpEditorAnimationPlaybackAction
+): boolean {
+  return action.type === "play" ||
+    action.type === "forward" ||
+    action.type === "rewind";
 }
 
 function replacePlayerText(

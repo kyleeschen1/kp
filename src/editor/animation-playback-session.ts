@@ -113,24 +113,29 @@ export function reduceKpEditorAnimationPlaybackSession(
     case "play":
       return resampleSession(session, {
         playbackStatus: "playing",
-        progress: session.player.playbackStatus === "complete"
+        // A scrubber seek can reach the endpoint while leaving the session
+        // paused. Endpoint position, rather than the path taken there, owns
+        // whether Play means replay.
+        progress: isTerminalPlaybackProgress(session.player.progress)
           ? 0
           : session.player.progress,
         lastTickMs: normalizeTimestamp(action.nowMs)
       });
-    case "forward":
+    case "forward": {
+      const forwardProgress = session.player.direction === "rewind"
+        ? 1 - session.player.progress
+        : session.player.progress;
       return resampleSession(session, {
         playbackStatus: "playing",
         direction: "forward",
         // Direction changes mirror the clock so the rendered frame is
         // continuous; replaying a completed forward run begins at its source.
-        progress: session.player.direction === "rewind"
-          ? 1 - session.player.progress
-          : session.player.playbackStatus === "complete"
-            ? 0
-            : session.player.progress,
+        progress: isTerminalPlaybackProgress(forwardProgress)
+          ? 0
+          : forwardProgress,
         lastTickMs: normalizeTimestamp(action.nowMs)
       });
+    }
     case "pause": {
       const sampled = action.nowMs === undefined
         ? session
@@ -256,6 +261,10 @@ function resampleSession(
 function stepSize(session: KpEditorAnimationPlaybackSession): number {
   const beatCount = session.player.beatCount;
   return beatCount === undefined || beatCount <= 0 ? 0.01 : 1 / beatCount;
+}
+
+function isTerminalPlaybackProgress(progress: number): boolean {
+  return progress >= 1;
 }
 
 function normalizeTimestamp(timestamp: number): number {

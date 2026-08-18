@@ -67,6 +67,9 @@ import type {
 import type {
   KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
+import {
+  publishKpEditorAnimationSurfaceReadiness
+} from "./animation-surface-readiness.ts";
 
 interface KpLogExponentSurfaceSession {
   readonly player: HTMLElement;
@@ -207,6 +210,13 @@ function mountSurface(
   stage.className = "kp-log-exponent-stage";
   stage.dataset["kpLogExponentStage"] = "preparing";
   stage.setAttribute("aria-label", "Solve two to the x equals seven");
+  // Native KaTeX geometry is not paintable until fonts and endpoint bounds
+  // settle. Holding transport here prevents the clock from outrunning that
+  // asynchronous preparation and appearing already finished on first play.
+  publishKpEditorAnimationSurfaceReadiness({
+    player,
+    readiness: "preparing"
+  });
 
   const endpointRoots = kpCanonicalLogExponentNativeEndpoints.map(
     (endpoint, index) => {
@@ -322,11 +332,19 @@ async function prepareSurface(
     session.preparedOperations = Object.freeze(preparedOperations);
     session.stage.dataset["kpLogExponentStage"] = "ready";
     applyFrame(session, session.pendingState);
+    publishKpEditorAnimationSurfaceReadiness({
+      player: session.player,
+      readiness: "ready"
+    });
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
     session.stage.dataset["kpLogExponentStage"] = "failed";
     session.stage.dataset["kpLogExponentError"] =
       error instanceof Error ? error.message : String(error);
+    publishKpEditorAnimationSurfaceReadiness({
+      player: session.player,
+      readiness: "failed"
+    });
     session.endpointRoots.forEach((root, index) => {
       root.style.opacity = index === 0 ? "1" : "0";
       setAccessibleEndpoint(root, index === 0);

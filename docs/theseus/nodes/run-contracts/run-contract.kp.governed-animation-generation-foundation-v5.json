@@ -89,7 +89,7 @@
     {
       "id": "next-action.kp.governed-animation-generation.s19a",
       "title": "Exponential-equation-visual-repair-checkpoint",
-      "summary": "Continuity repair verified; stop remains at the exponent-log human checkpoint.",
+      "summary": "Fixed terminal seek replay and prevented the shared clock from outrunning asynchronous native KaTeX preparation; repeated endpoint replay passes in the catalogue.",
       "status": "complete"
     },
     {

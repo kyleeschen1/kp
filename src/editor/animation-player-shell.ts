@@ -54,16 +54,16 @@ export function renderKpEditorAnimationPlayerShell(input: {
       <div class="editor-animation-player__controls" role="group" aria-label="Animation playback controls">
         <div class="editor-animation-player__transport">
           ${hasControl("playback") ? `
-            <button type="button" data-action="toggle-editor-animation" aria-label="${toggleLabel} animation">${toggleLabel}</button>
+            <button type="button" data-action="toggle-editor-animation" aria-label="${toggleLabel} animation" disabled>${toggleLabel}</button>
           ` : ""}
-          ${compact ? "" : hasControl("step") ? `<button type="button" data-action="step-editor-animation" aria-label="Step animation forward">Step</button>` : ""}
-          ${compact ? "" : hasControl("rewind") ? `<button type="button" data-action="rewind-editor-animation" aria-label="Rewind animation">Rewind</button>` : ""}
-          ${compact ? "" : hasControl("playback") ? `<button type="button" data-action="reset-editor-animation" aria-label="Reset animation">Reset</button>` : ""}
+          ${compact ? "" : hasControl("step") ? `<button type="button" data-action="step-editor-animation" aria-label="Step animation forward" disabled>Step</button>` : ""}
+          ${compact ? "" : hasControl("rewind") ? `<button type="button" data-action="rewind-editor-animation" aria-label="Rewind animation" disabled>Rewind</button>` : ""}
+          ${compact ? "" : hasControl("playback") ? `<button type="button" data-action="reset-editor-animation" aria-label="Reset animation" disabled>Reset</button>` : ""}
         </div>
         ${hasControl("scrubber") ? `
           <label class="editor-animation-player__scrubber">
             <span>Progress</span>
-            <input type="range" min="0" max="1" step="0.001" value="${progress}" data-action="seek-editor-animation" aria-label="Scrub animation progress" />
+            <input type="range" min="0" max="1" step="0.001" value="${progress}" data-action="seek-editor-animation" aria-label="Scrub animation progress" disabled />
             <output data-kp-editor-animation-progress-label>${progressPercent}%</output>
           </label>
         ` : ""}

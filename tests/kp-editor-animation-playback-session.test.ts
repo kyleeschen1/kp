@@ -109,6 +109,46 @@ test("editor playback session changes from rewind to forward without a frame jum
   );
 });
 
+test("editor playback restarts after the scrubber seeks to the terminal frame", () => {
+  const terminal = reduceKpEditorAnimationPlaybackSession(
+    createSolveXSession(),
+    { type: "seek", progress: 1 }
+  );
+  const replaying = reduceKpEditorAnimationPlaybackSession(terminal, {
+    type: "play",
+    nowMs: 2_000
+  });
+  const advanced = reduceKpEditorAnimationPlaybackSession(replaying, {
+    type: "tick",
+    nowMs: 2_240
+  });
+
+  assert.equal(terminal.player.playbackStatus, "paused");
+  assert.equal(terminal.player.progress, 1);
+  assert.equal(replaying.player.playbackStatus, "playing");
+  assert.equal(replaying.player.progress, 0);
+  assert.equal(advanced.player.progress, 0.1);
+});
+
+test("explicit forward playback restarts a terminal frame after direction normalization", () => {
+  const terminalRewindCoordinate = reduceKpEditorAnimationPlaybackSession(
+    reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+      type: "rewind",
+      nowMs: 1_000
+    }),
+    { type: "seek", progress: 0 }
+  );
+  const forwarding = reduceKpEditorAnimationPlaybackSession(
+    terminalRewindCoordinate,
+    { type: "forward", nowMs: 2_000 }
+  );
+
+  assert.equal(terminalRewindCoordinate.player.direction, "rewind");
+  assert.equal(forwarding.player.direction, "forward");
+  assert.equal(forwarding.player.playbackStatus, "playing");
+  assert.equal(forwarding.player.progress, 0);
+});
+
 test("editor playback session reset restores the forward idle frame", () => {
   const rewinding = reduceKpEditorAnimationPlaybackSession(
     reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
