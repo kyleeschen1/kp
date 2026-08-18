@@ -25,6 +25,9 @@ import {
   createKpExplicitStaticCheckpointPlan,
   type KpExplicitStaticCheckpointReason
 } from "../../animation/operation-presentation-plan-types.ts";
+import {
+  compileKpBothSidesCausalRecipe
+} from "../../animation/both-sides-causal-recipe.ts";
 
 export type KpEquationOperationChoreographyDecision =
   | {
@@ -105,6 +108,12 @@ export function decideKpEquationOperationChoreography(input: {
       `balanced introduction ${input.transformation.id}`
     );
     assertBalancedEntryWindow(input.balancedIntroductionEntryWindow);
+    const bothSidesCausalRecipe = binding.bothSidesCausalBinding === undefined
+      ? undefined
+      : compileKpBothSidesCausalRecipe({
+          operation: binding.bothSidesCausalBinding.operation,
+          direction: input.direction
+        });
     return {
       status: "verified",
       choreography: Object.freeze({
@@ -118,6 +127,9 @@ export function decideKpEquationOperationChoreography(input: {
         linearRearrangementKind: binding.kind,
         semanticEntityIds: Object.freeze(semanticEntityIds),
         branchSchedule: binding.branchSchedule,
+        ...(bothSidesCausalRecipe === undefined
+          ? {}
+          : { bothSidesCausalRecipe }),
         ...(input.balancedIntroductionEntryWindow === undefined
           ? {}
           : {

@@ -16,10 +16,10 @@
         "Adding equal quantities preserves equality."
       ],
       "presentation": {
-        "status": "motif-only",
-        "route": "append-after-shift",
-        "sourcePath": "src/animation/motifs/equation-visual-motif-defaults.ts",
-        "sourceNeedle": "transformType: \"addBothSides\""
+        "status": "registered",
+        "route": "synchronized-balanced-introduction",
+        "sourcePath": "src/animation/equation-linear-rearrangement-kind.ts",
+        "sourceNeedle": "rearrangement(\"addBothSides\", \"balanced-introduction\", false)"
       },
       "authoring": {
         "exposure": "canonical-equation-series",
@@ -29,16 +29,17 @@
       },
       "literalSourcePaths": [
         "src/animation/animation-design-diagnostics.ts",
+        "src/animation/equation-linear-rearrangement-kind.ts",
         "src/animation/motifs/equation-visual-motif-defaults.ts",
         "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/semantic/both-sides-operation-registration.ts",
+        "src/semantic/both-sides-operation-registrations/additive.ts",
         "src/semantic/canonical-operation-registry.ts",
         "src/semantic/generated-algebra-canonical-composition.ts",
         "src/semantic/generated-algebra-transform-definition-registry.ts",
         "src/semantic/generated-algebra-tutorial-fixture.ts"
       ],
-      "gaps": [
-        "No executable linear-rearrangement registration currently compiles the add-both-sides motif into a balanced presentation plan."
-      ],
+      "gaps": [],
       "roles": [
         "lhs",
         "rhs",
@@ -82,6 +83,8 @@
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/reader/compiler/fraction-composition-preservation-manifest.ts",
         "src/semantic/algebra-trace-port-fixture.ts",
+        "src/semantic/both-sides-operation-registration.ts",
+        "src/semantic/both-sides-operation-registrations/additive.ts",
         "src/semantic/canonical-operation-registry.ts",
         "src/semantic/fraction-solve-macro.ts",
         "src/semantic/fractional-linear-equation-asset.ts",

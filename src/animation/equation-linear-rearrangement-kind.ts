@@ -31,6 +31,7 @@ export interface KpEquationLinearRearrangementDeclaration {
 
 export const kpEquationLinearRearrangementDeclarations:
 readonly KpEquationLinearRearrangementDeclaration[] = Object.freeze([
+  rearrangement("addBothSides", "balanced-introduction", false),
   rearrangement("subtractBothSides", "balanced-introduction", true),
   rearrangement("multiplyBothSides", "balanced-introduction", false),
   rearrangement("applyNaturalLogBothSides", "balanced-introduction", false),

@@ -76,10 +76,10 @@ const rawEntries = [
     lawId: "law.equation.add-both-sides",
     assumptions: ["Adding equal quantities preserves equality."],
     presentation: presentation(
-      "motif-only",
-      "append-after-shift",
-      motifDefaultsPath,
-      'transformType: "addBothSides"'
+      "registered",
+      "synchronized-balanced-introduction",
+      rearrangementPath,
+      'rearrangement("addBothSides", "balanced-introduction", false)'
     ),
     authoring: authoring(
       "canonical-equation-series",
@@ -89,16 +89,17 @@ const rawEntries = [
     ),
     literalSourcePaths: [
       "src/animation/animation-design-diagnostics.ts",
+      rearrangementPath,
       motifDefaultsPath,
       algebraFamilyPath,
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/additive.ts",
       "src/semantic/canonical-operation-registry.ts",
       "src/semantic/generated-algebra-canonical-composition.ts",
       generatedDefinitionsPath,
       "src/semantic/generated-algebra-tutorial-fixture.ts"
     ],
-    gaps: [
-      "No executable linear-rearrangement registration currently compiles the add-both-sides motif into a balanced presentation plan."
-    ]
+    gaps: []
   }),
   entry({
     id: "balanced-operation.subtract",
@@ -134,6 +135,8 @@ const rawEntries = [
       "src/animation/verified-linear-problem-animation-compiler.ts",
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
       "src/semantic/algebra-trace-port-fixture.ts",
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/additive.ts",
       "src/semantic/canonical-operation-registry.ts",
       "src/semantic/fraction-solve-macro.ts",
       "src/semantic/fractional-linear-equation-asset.ts",

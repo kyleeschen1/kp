@@ -747,6 +747,48 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T18:15:10.544Z",
       "notes": "New animation-layer projection preserves dependency direction and semantic authority boundaries."
+    },
+    {
+      "command": "npm run test:registered-both-sides-additive",
+      "status": "passed",
+      "scope": "additive-registration",
+      "checkedAt": "2026-08-18T18:30:55.969Z",
+      "notes": "19/19: data-only add/sub registry, generated fixture continuity, exact branch binding, forward/rewind recipe, and fail-closed law checks."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "existing-caller-preservation",
+      "checkedAt": "2026-08-18T18:30:57.299Z",
+      "notes": "187/187 existing operation presentation, choreography, continuity, and reader checks remain green."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "renderer-preservation",
+      "checkedAt": "2026-08-18T18:30:58.335Z",
+      "notes": "28/28 canonical renderer, ownership, native readiness, and source-budget checks remain green."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "compositor-budget",
+      "checkedAt": "2026-08-18T18:30:59.367Z",
+      "notes": "Canonical core remains 4 modules / 118,908 bytes; renderer support remains inside its 455,000-byte ceiling."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-authority",
+      "checkedAt": "2026-08-18T18:31:00.369Z",
+      "notes": "Application, test, Svelte, and domain projects compile with the registered additive binding."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T18:31:01.457Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, and semantic/animation authority boundaries pass."
     }
   ],
   "allowedWork": [
@@ -876,7 +918,8 @@
     {
       "id": "s18",
       "title": "Register additive callers",
-      "status": "planned"
+      "summary": "Registered addBothSides and subtractBothSides through one data-only pack and one closed registry; compiled existing semantic correspondence and balanced branch scheduling into the verified causal recipe without changing presentation paint; added compiler-owned correspondence for generated additive fixtures while preserving their legacy selector identity; and closed law, branch, generated-fixture, architecture, type, renderer, and source-budget checks.",
+      "status": "complete"
     },
     {
       "id": "s19",

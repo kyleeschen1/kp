@@ -1104,8 +1104,11 @@ export function createGeneratedAlgebraSemanticTransformation(
 
   const generatedCancellationMap =
     createGeneratedLinearSolveCancellationMap(input);
+  const generatedBalancedIntroductionMap =
+    createGeneratedLinearSolveBalancedIntroductionMap(input);
   if (
-    generatedCancellationMap !== undefined &&
+    (generatedCancellationMap !== undefined ||
+      generatedBalancedIntroductionMap !== undefined) &&
     input.correspondenceMap !== undefined
   ) {
     throw new Error(
@@ -1125,9 +1128,62 @@ export function createGeneratedAlgebraSemanticTransformation(
       assumptions: definition.assumptions,
       lawRefs: definition.lawRefs,
       correspondenceMap:
-        generatedCancellationMap ?? input.correspondenceMap,
+        generatedCancellationMap ?? generatedBalancedIntroductionMap ??
+          input.correspondenceMap,
       correspondence: input.correspondence
     })
+  });
+}
+
+function createGeneratedLinearSolveBalancedIntroductionMap(
+  input: CreateGeneratedAlgebraSemanticTransformationInput
+): CorrespondenceMap | undefined {
+  if (
+    input.familyId !== "generated.linear-solve" ||
+    (input.transformType !== "addBothSides" &&
+      input.transformType !== "subtractBothSides")
+  ) return undefined;
+  const sourceId = input.sourceObjectIds[0];
+  const targetId = input.targetObjectIds[0];
+  if (
+    sourceId === undefined ||
+    targetId === undefined ||
+    input.sourceObjectIds.length !== 1 ||
+    input.targetObjectIds.length !== 1
+  ) {
+    throw new Error(
+      `Generated balanced operation ${input.id} requires one equation on each endpoint.`
+    );
+  }
+  const identityRecords = (input.correspondence ?? []).map(
+    (correspondence, index) => Object.freeze({
+      id: `${input.id}.identity.${index}`,
+      relation: "identity" as const,
+      sourceSelectorIds: Object.freeze([correspondence.sourceSelectorId]),
+      targetSelectorIds: Object.freeze([correspondence.targetSelectorId]),
+      summary: correspondence.summary ?? "The equation material persists."
+    })
+  );
+  // Generated linear-solve fixtures historically name the introduced inverse
+  // selectors `subtract` for both signs. These IDs are referential identity;
+  // the registered operation and strict law remain the algebraic authority.
+  const introducedSelectorRole = "subtract";
+  return Object.freeze({
+    id: `${input.id}.correspondence`,
+    records: Object.freeze([
+      ...identityRecords,
+      Object.freeze({
+        id: `${input.id}.introduce-balanced-operation`,
+        relation: "introduction" as const,
+        sourceSelectorIds: Object.freeze([]),
+        targetSelectorIds: Object.freeze([
+          `${targetId}.lhs.${introducedSelectorRole}`,
+          `${targetId}.rhs.${introducedSelectorRole}`
+        ]),
+        summary:
+          "The same additive inverse enters both equation branches."
+      })
+    ])
   });
 }
 

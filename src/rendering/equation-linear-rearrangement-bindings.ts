@@ -15,6 +15,10 @@ import {
 import {
   resolveKpEquationPresentationBranchStrategy
 } from "../animation/equation-presentation-policy.ts";
+import {
+  compileKpRegisteredBothSidesCausalBinding,
+  type KpRegisteredBothSidesCausalBinding
+} from "../animation/registered-both-sides-causal-binding.ts";
 
 export interface KpEquationLinearRearrangementBinding {
   readonly transformationId: string;
@@ -22,6 +26,8 @@ export interface KpEquationLinearRearrangementBinding {
   readonly branchOperation?: KpBalancedBranchScheduling["branchOperation"] | undefined;
   readonly branchSchedules?: KpBalancedBranchScheduling["branchSchedules"] | undefined;
   readonly branchSchedule?: KpBalancedBranchScheduling["branchSchedule"] | undefined;
+  readonly bothSidesCausalBinding?:
+    KpRegisteredBothSidesCausalBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }
 
@@ -144,6 +150,13 @@ export function createKpEquationLinearRearrangementBinding(input: {
         selectedStrategy: selectedBranchStrategy
       })
     : undefined;
+  const bothSidesCausalBinding = branchScheduling === undefined
+    ? undefined
+    : compileKpRegisteredBothSidesCausalBinding({
+        transformation,
+        branchScheduling,
+        direction: "forward"
+      });
   const successorSynthesisBindings =
     createKpEquationSuccessorSynthesisBindings(input);
   if (isSuccessorKind(kind) && successorSynthesisBindings.length !== 1) {
@@ -155,6 +168,9 @@ export function createKpEquationLinearRearrangementBinding(input: {
     transformationId: transformation.id,
     kind,
     ...(branchScheduling === undefined ? {} : branchScheduling),
+    ...(bothSidesCausalBinding === undefined
+      ? {}
+      : { bothSidesCausalBinding }),
     ...(isSuccessorKind(kind)
       ? {
           successorSynthesisBinding: successorSynthesisBindings[0]

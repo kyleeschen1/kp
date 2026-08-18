@@ -10,6 +10,9 @@ import {
   isKpCompiledFunctionWrapInvocationGroup,
   type KpCompiledFunctionWrapInvocationGroup
 } from "./function-wrap-invocation.ts";
+import type {
+  KpBothSidesCausalRecipe
+} from "./both-sides-causal-recipe.ts";
 
 declare const kpEquationOperationChoreographyBrand: unique symbol;
 
@@ -39,6 +42,7 @@ export interface KpSynchronizedBalancedIntroductionChoreography
   readonly linearRearrangementKind: "balanced-introduction";
   readonly semanticEntityIds: readonly string[];
   readonly branchSchedule: KpSemanticBranchSchedule;
+  readonly bothSidesCausalRecipe?: KpBothSidesCausalRecipe | undefined;
   readonly entryWindow?: {
     readonly start: number;
     readonly end: number;

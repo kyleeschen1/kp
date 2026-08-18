@@ -346,6 +346,7 @@
     "test:balanced-operation-inventory": "node --disable-warning=ExperimentalWarning --test tests/balanced-operation-caller-inventory.test.ts",
     "test:both-sides-operation-family": "node --disable-warning=ExperimentalWarning --test tests/both-sides-operation-family.test.ts",
     "test:both-sides-causal-recipe": "node --disable-warning=ExperimentalWarning --test tests/both-sides-causal-recipe.test.ts",
+    "test:registered-both-sides-additive": "node --disable-warning=ExperimentalWarning --test tests/registered-both-sides-additive-callers.test.ts tests/equation-linear-rearrangement-bindings.test.ts tests/balanced-introduction-presentation-plan.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
     "test:manifest-projection-authority": "node --disable-warning=ExperimentalWarning --test tests/manifest-projection-authority.test.ts",
     "test:selected-surface-capability-declarations": "node --disable-warning=ExperimentalWarning --test tests/selected-surface-capability-declarations.test.ts",
     "test:equation-adapter-ownership-map": "node --disable-warning=ExperimentalWarning --test tests/equation-adapter-ownership-map.test.ts",

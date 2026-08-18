@@ -36,10 +36,10 @@ export function createKpBalancedBranchScheduling(input: {
     );
   }
   const leftEntityIds = input.targetSelectorIds.filter((id) =>
-    branchRole(id) === "lhs"
+    kpEquationBranchRoleForSemanticId(id) === "lhs"
   );
   const rightEntityIds = input.targetSelectorIds.filter((id) =>
-    branchRole(id) === "rhs"
+    kpEquationBranchRoleForSemanticId(id) === "rhs"
   );
   if (
     leftEntityIds.length === 0 ||
@@ -87,7 +87,9 @@ export function createKpBalancedBranchScheduling(input: {
   };
 }
 
-function branchRole(entityId: string): "lhs" | "rhs" | undefined {
+export function kpEquationBranchRoleForSemanticId(
+  entityId: string
+): "lhs" | "rhs" | undefined {
   const segments = new Set(entityId.split("."));
   const lhs = segments.has("lhs") || segments.has("left");
   const rhs = segments.has("rhs") || segments.has("right");
