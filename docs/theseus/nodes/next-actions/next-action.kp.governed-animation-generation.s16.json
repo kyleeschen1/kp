@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s16",
   "kind": "next-action",
   "title": "Adjacency-segmentation-law",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s16 in Governed animation generation foundation continuation.",
+  "status": "resolved",
+  "summary": "Adjacency segmentation law implemented and verified without parser, renderer, timing, or DOM authority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -22,6 +22,14 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/authoring/equation-series-adjacency-segmentation.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-series-adjacency-segmentation.test.ts"
     }
   ],
   "dependsOn": {
@@ -45,6 +53,33 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:equation-series-adjacency-segmentation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T00:06:39.777Z",
+      "notes": "11 adjacency request and segmentation tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-18T00:06:41.238Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T00:06:42.586Z",
+      "notes": "Dependency, framework-neutral, semantic, presentation, and compiler-authority gates pass."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Each displayed adjacency now resolves to exactly one immutable operation segment or a typed fail-closed repair; compound jumps specify the minimum intermediate states required."
+  },
   "expectedLearning": [
     "Whether Adjacency-segmentation-law can be completed inside Governed animation generation foundation continuation."
   ],

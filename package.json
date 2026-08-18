@@ -147,6 +147,7 @@
     "test:animation-generation-request": "node --disable-warning=ExperimentalWarning --test tests/animation-generation-request.test.ts",
     "test:equation-transform-series-request": "node --disable-warning=ExperimentalWarning --test tests/equation-transform-series-request.test.ts",
     "test:equation-latex-endpoint-normalizer": "node --disable-warning=ExperimentalWarning --test tests/equation-latex-endpoint-normalizer.test.ts tests/latex-parser.test.ts tests/equation-classifier.test.ts",
+    "test:equation-series-adjacency-segmentation": "node --disable-warning=ExperimentalWarning --test tests/equation-series-adjacency-segmentation.test.ts tests/equation-transform-series-request.test.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
     "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",

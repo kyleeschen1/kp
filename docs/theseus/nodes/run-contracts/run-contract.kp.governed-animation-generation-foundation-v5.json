@@ -65,8 +65,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s16",
       "title": "Adjacency-segmentation-law",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s16 in Governed animation generation foundation continuation.",
-      "status": "ready"
+      "summary": "Shipped typed one-operation adjacency segmentation, compound and ambiguity repairs, and explicit-intent authority checks.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s17",
