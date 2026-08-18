@@ -35,6 +35,13 @@ export type {
   KpEquationOperationChoreography,
   KpNativeKatexFactoringSceneBinding
 } from "./native-katex-operation-choreography.ts";
+export {
+  compileKpNativeKatexSuccessorSynthesisScenePlans,
+  partitionKpNativeKatexSuccessorOwnedTracks
+} from "./native-katex-successor-synthesis.ts";
+export type {
+  KpNativeKatexSuccessorSynthesisIntent
+} from "./native-katex-successor-synthesis.ts";
 
 /**
  * Pure renderer-session planning lives here so semantic correspondence and

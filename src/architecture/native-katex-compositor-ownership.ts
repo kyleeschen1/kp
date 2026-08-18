@@ -148,6 +148,8 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetLayer: "scene-plan-compilation",
     targetEffect: "none",
     evidence: [
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexSuccessorSynthesisScenePlans"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "partitionKpNativeKatexSuccessorOwnedTracks"),
       evidence("src/rendering/native-katex-structural-succession-renderer.ts", "syncKpNativeKatexStructuralSuccession"),
       evidence("src/rendering/native-katex-successor-synthesis.ts", "compileKpNativeKatexSuccessorSynthesisScenePlans"),
       evidence("src/rendering/native-katex-scene-compositor.ts", "compileKpCanonicalNativeKatexPureScenePlan")

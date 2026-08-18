@@ -36,10 +36,7 @@ import {
 } from "./native-katex-paint-geometry.ts";
 import {
   composeKpNativeKatexSceneMaterialOwners,
-  compileKpNativeKatexSuccessorSynthesisScenePlans,
-  partitionKpNativeKatexSuccessorOwnedTracks,
-  sampleKpNativeKatexSuccessorSynthesisScenePlans,
-  type KpNativeKatexSuccessorSynthesisIntent
+  sampleKpNativeKatexSuccessorSynthesisScenePlans
 } from "./native-katex-successor-synthesis.ts";
 import {
   sampleKpNativeKatexSceneTrackFrames
@@ -58,6 +55,8 @@ import {
   compileKpNativeKatexProjectedTracks,
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexSemanticMotionTracks,
+  compileKpNativeKatexSuccessorSynthesisScenePlans,
+  partitionKpNativeKatexSuccessorOwnedTracks,
   reconcileKpNativeKatexScenes,
   type KpCompiledSymbolMotionContract,
   type KpEquationOperationChoreography,
@@ -68,6 +67,7 @@ import {
   type KpNativeKatexSceneReconciliation,
   type KpNativeKatexSceneTrack,
   type KpNativeKatexSemanticPaintRelation,
+  type KpNativeKatexSuccessorSynthesisIntent,
   type KpNativeKatexTrackProjection
 } from "./native-katex-base-scene-plan.ts";
 

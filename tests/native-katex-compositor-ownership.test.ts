@@ -69,6 +69,26 @@ test("semantic motion and track projection enter through the base-plan port", as
   }
 });
 
+test("successor planning is upstream while measured paint realization stays local", async () => {
+  const [basePlan, compositor, successor] = await Promise.all([
+    readFile("src/rendering/native-katex-base-scene-plan.ts", "utf8"),
+    readFile("src/rendering/native-katex-scene-compositor.ts", "utf8"),
+    readFile("src/rendering/native-katex-successor-synthesis.ts", "utf8")
+  ]);
+  const directImport = compositor.slice(
+    compositor.indexOf("from \"./native-katex-successor-synthesis.ts\"") - 220,
+    compositor.indexOf("from \"./native-katex-successor-synthesis.ts\"") + 52
+  );
+
+  assert.doesNotMatch(directImport, /compileKpNativeKatexSuccessor/);
+  assert.doesNotMatch(directImport, /partitionKpNativeKatexSuccessor/);
+  assert.match(directImport, /composeKpNativeKatexSceneMaterialOwners/);
+  assert.match(directImport, /sampleKpNativeKatexSuccessorSynthesisScenePlans/);
+  assert.match(basePlan, /compileKpNativeKatexSuccessorSynthesisScenePlans/);
+  assert.match(basePlan, /partitionKpNativeKatexSuccessorOwnedTracks/);
+  assert.match(successor, /export function composeKpNativeKatexSceneMaterialOwners/);
+});
+
 test("pure planning and sampling cannot acquire runtime effects", () => {
   for (const responsibility of kpNativeKatexCompositorOwnership) {
     if (

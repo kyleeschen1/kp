@@ -217,6 +217,39 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T16:34:23.411Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:40:13.277Z",
+      "notes": "186/186 successor, evaluation, rewind, and presentation cases."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:40:14.909Z",
+      "notes": "73/73 measured paint and endpoint cases."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:40:16.476Z",
+      "notes": "26/26; planning/realization split and all fixed source ceilings pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:40:17.810Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:40:19.614Z"
     }
   ],
   "allowedWork": [
@@ -286,7 +319,8 @@
     {
       "id": "s08",
       "title": "Move successor synthesis planning upstream",
-      "status": "planned"
+      "summary": "Moved successor synthesis compilation and claimed-track partitioning upstream while retaining measured owner composition and sampling in the renderer; operation, glyph, canonical, type, architecture, and fixed ownership budgets all pass.",
+      "status": "complete"
     },
     {
       "id": "s09",
