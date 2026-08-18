@@ -13,7 +13,10 @@ Object.freeze({
         "definition.symbolic.algebra.multiply-both-sides",
       lawId: "law.equation.multiply-both-sides" as const,
       nonzeroEvidenceId:
-        "assumption.equality.multiply-operand-nonzero"
+        "assumption.equality.multiply-operand-nonzero",
+      applicationSelection: Object.freeze({
+        kind: "introduced-targets" as const
+      })
     }),
     Object.freeze({
       id: "divideBothSides" as const,
@@ -22,7 +25,10 @@ Object.freeze({
         "definition.generated.linear-solve.divide-both-sides",
       lawId: "law.equation.divide-both-sides" as const,
       nonzeroEvidenceId:
-        "assumption.equality.divide-operand-nonzero"
+        "assumption.equality.divide-operand-nonzero",
+      applicationSelection: Object.freeze({
+        kind: "introduced-targets" as const
+      })
     })
   ])
 } satisfies KpBothSidesOperationRegistrationPack);

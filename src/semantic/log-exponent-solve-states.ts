@@ -179,6 +179,17 @@ export function listKpLogExponentExpressionNodes(
   return listKpExpressionNodes(state.equation, kpLogExponentExpressionProtocol);
 }
 
+export function listKpLogExponentBranchNodeIds(
+  state: KpLogExponentSolveState,
+  side: "lhs" | "rhs"
+): readonly string[] {
+  const root = side === "lhs" ? state.equation.left : state.equation.right;
+  return Object.freeze(
+    listKpExpressionNodes(root, kpLogExponentExpressionProtocol)
+      .map(({ id }) => id)
+  );
+}
+
 function state(
   suffix: "source" | "logged-both-sides" | "exponent-extracted" | "solved",
   kind: KpLogExponentSolveStateKind,

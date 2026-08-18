@@ -13,7 +13,10 @@ export const kpAdditiveBothSidesOperationRegistrationPack = Object.freeze({
       lawId: "law.equation.add-both-sides" as const,
       relationDomainEvidenceIds: Object.freeze([
         "assumption.equality.addition-closed"
-      ] as const)
+      ] as const),
+      applicationSelection: Object.freeze({
+        kind: "introduced-targets" as const
+      })
     }),
     Object.freeze({
       id: "subtractBothSides" as const,
@@ -23,7 +26,10 @@ export const kpAdditiveBothSidesOperationRegistrationPack = Object.freeze({
       lawId: "law.equation.subtract-both-sides" as const,
       relationDomainEvidenceIds: Object.freeze([
         "assumption.equality.subtraction-closed"
-      ] as const)
+      ] as const),
+      applicationSelection: Object.freeze({
+        kind: "introduced-targets" as const
+      })
     })
   ])
 } satisfies KpBothSidesOperationRegistrationPack);

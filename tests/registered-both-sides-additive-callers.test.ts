@@ -4,9 +4,6 @@ import test from "node:test";
 import { createLinearSolveAnimationAsset } from
   "../src/animation/linear-solve-adapter.ts";
 import {
-  createKpBalancedBranchScheduling
-} from "../src/animation/equation-balanced-branch-scheduling.ts";
-import {
   kpEquationLinearRearrangementKindForTransformType
 } from "../src/animation/equation-linear-rearrangement-kind.ts";
 import {
@@ -48,12 +45,17 @@ test("add and subtract register through one data-only operation pack", () => {
     ]
   );
   assert.equal(
-    JSON.stringify(kpBothSidesOperationRegistrationRegistry).includes(
-      "function"
-    ),
+    containsExecutableValue(kpBothSidesOperationRegistrationRegistry),
     false
   );
 });
+
+function containsExecutableValue(value: unknown): boolean {
+  if (typeof value === "function") return true;
+  if (Array.isArray(value)) return value.some(containsExecutableValue);
+  if (typeof value !== "object" || value === null) return false;
+  return Object.values(value).some(containsExecutableValue);
+}
 
 test("canonical subtraction binding carries the shared recipe without paint drift", () => {
   const animation = createLinearSolveAnimationAsset();
@@ -107,27 +109,12 @@ test("generated addition compiles the same recipe in both directions", () => {
   const transformation = fixture.transformations.find(
     ({ transformType }) => transformType === "addBothSides"
   )!;
-  const targetSelectorIds = transformation.correspondenceMap!.records
-    .filter(({ relation }) => relation === "introduction")
-    .flatMap(({ targetSelectorIds }) => targetSelectorIds);
-  const branchScheduling = createKpBalancedBranchScheduling({
-    transformationId: transformation.id,
-    authorityId: "kp.algebra.add-both-sides",
-    targetSelectorIds,
-    selectedStrategy: "together"
-  })!;
   const forward = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
-      ({ entityIds }) => entityIds
-    ),
     direction: "forward"
   })!;
   const rewind = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
-      ({ entityIds }) => entityIds
-    ),
     direction: "rewind"
   })!;
   assert.equal(
@@ -150,24 +137,12 @@ test("registered additive callers fail closed on law or branch drift", () => {
   const transformation = fixture.transformations.find(
     ({ transformType }) => transformType === "addBothSides"
   )!;
-  const targetSelectorIds = transformation.correspondenceMap!.records
-    .filter(({ relation }) => relation === "introduction")
-    .flatMap(({ targetSelectorIds }) => targetSelectorIds);
-  const branchScheduling = createKpBalancedBranchScheduling({
-    transformationId: transformation.id,
-    authorityId: "kp.algebra.add-both-sides",
-    targetSelectorIds,
-    selectedStrategy: "together"
-  })!;
   assert.throws(
     () => compileKpRegisteredBothSidesCausalBinding({
       transformation: {
         ...transformation,
         lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }]
       },
-      applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
-        ({ entityIds }) => entityIds
-      ),
       direction: "forward"
     }),
     /lacks strict law.equation.add-both-sides authority/

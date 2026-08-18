@@ -229,6 +229,8 @@
       },
       "literalSourcePaths": [
         "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/semantic/both-sides-operation-registration.ts",
+        "src/semantic/both-sides-operation-registrations/logarithmic.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
       "gaps": [
@@ -268,10 +270,12 @@
         "operationId": "operation.log-exponent.divide-by-log-base"
       },
       "literalSourcePaths": [
+        "src/semantic/both-sides-operation-registration.ts",
+        "src/semantic/both-sides-operation-registrations/logarithmic.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
       "gaps": [
-        "The log-base divisor is domain-verified and cohesive, but its both-sides semantics are not yet projected through the shared equation-series authoring registry."
+        "The log-base divisor now projects through shared both-sides causality, but is not yet exposed through the tool-neutral equation-series authoring registry."
       ],
       "roles": [
         "lhs",

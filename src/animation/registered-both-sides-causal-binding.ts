@@ -19,6 +19,9 @@ import {
 import type {
   KpEquationBranchRoleIndex
 } from "../semantic/equation-branch-role-index.ts";
+import {
+  selectKpBothSidesApplicationEntityIds
+} from "../semantic/both-sides-operation-application-selection.ts";
 
 export interface KpRegisteredBothSidesCausalBinding {
   readonly registrationId: string;
@@ -28,7 +31,6 @@ export interface KpRegisteredBothSidesCausalBinding {
 
 export function compileKpRegisteredBothSidesCausalBinding(input: {
   readonly transformation: KpSemanticTransformation;
-  readonly applicationEntityIds: readonly string[];
   readonly branchRoles?: KpEquationBranchRoleIndex | undefined;
   readonly direction: KpBothSidesCausalDirection;
 }): KpRegisteredBothSidesCausalBinding | undefined {
@@ -36,6 +38,10 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
     input.transformation.transformType
   );
   if (registration === undefined) return undefined;
+  const applicationEntityIds = selectKpBothSidesApplicationEntityIds({
+    transformation: input.transformation,
+    registration
+  });
   const law = input.transformation.lawRefs?.find(
     ({ id, level }) => id === registration.lawId && level === "strict"
   );
@@ -94,7 +100,7 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
           input.branchRoles
         ),
         appliedEntityIds: branchApplicationIds(
-          input.applicationEntityIds,
+          applicationEntityIds,
           "lhs",
           input.transformation.id,
           input.branchRoles
@@ -115,7 +121,7 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
           input.branchRoles
         ),
         appliedEntityIds: branchApplicationIds(
-          input.applicationEntityIds,
+          applicationEntityIds,
           "rhs",
           input.transformation.id,
           input.branchRoles
@@ -187,6 +193,33 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
             evidenceId: registration.nonzeroEvidenceId
           }
         });
+      case "apply-injective-function":
+        assertAssumptionIds(input.transformation, [
+          registration.lhsDomainEvidenceId,
+          registration.rhsDomainEvidenceId,
+          registration.injectivityEvidenceId
+        ]);
+        return verifyKpBothSidesOperation({
+          ...common,
+          operation: {
+            kind: "apply-injective-function",
+            functionSemanticId: registration.functionSemanticId,
+            lhsArgumentSemanticId: registration.lhsArgumentSemanticId,
+            rhsArgumentSemanticId: registration.rhsArgumentSemanticId
+          },
+          lawAuthority: {
+            id: registration.lawId,
+            authorityRefId: registration.semanticAuthorityId,
+            level: "strict"
+          },
+          domainEvidence: {
+            kind: "injective-function-domain",
+            functionSemanticId: registration.functionSemanticId,
+            lhsDomainEvidenceId: registration.lhsDomainEvidenceId,
+            rhsDomainEvidenceId: registration.rhsDomainEvidenceId,
+            injectivityEvidenceId: registration.injectivityEvidenceId
+          }
+        });
     }
   })();
   return Object.freeze({
@@ -239,6 +272,19 @@ function branchRole(
 ): "lhs" | "rhs" | undefined {
   return kpEquationBranchRoleForSemanticId(entityId) ??
     branchRoles?.[entityId];
+}
+
+function assertAssumptionIds(
+  transformation: KpSemanticTransformation,
+  requiredIds: readonly string[]
+): void {
+  const assumptions = new Set(transformation.assumptions ?? []);
+  const missing = requiredIds.find((id) => !assumptions.has(id));
+  if (missing !== undefined) {
+    throw new Error(
+      `Registered both-sides caller ${transformation.id} lacks assumption ${missing}.`
+    );
+  }
 }
 
 function assertNonzeroAssumption(

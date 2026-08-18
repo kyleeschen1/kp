@@ -22,14 +22,15 @@ import {
 
 test("multiply and divide register through one data-only operation pack", () => {
   assert.deepEqual(
-    kpBothSidesOperationRegistrationRegistry.entries.slice(2).map((entry) => ({
+    kpBothSidesOperationRegistrationRegistry.entries.slice(2, 4)
+      .map((entry) => ({
       id: entry.id,
       operationKind: entry.operationKind,
       lawId: entry.lawId,
       evidenceId: "nonzeroEvidenceId" in entry
         ? entry.nonzeroEvidenceId
         : undefined
-    })),
+      })),
     [
       {
         id: "multiplyBothSides",
@@ -128,17 +129,12 @@ test("generated division has total correspondence and exact rewind", () => {
   const transformation = fixture.transformations.find(
     ({ transformType }) => transformType === "divideBothSides"
   )!;
-  const applications = transformation.correspondenceMap!.records
-    .filter(({ relation }) => relation === "introduction")
-    .flatMap(({ targetSelectorIds }) => targetSelectorIds);
   const forward = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    applicationEntityIds: applications,
     direction: "forward"
   })!;
   const rewind = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    applicationEntityIds: applications,
     direction: "rewind"
   })!;
   assert.equal(forward.recipe.phases[1].action, "apply");
@@ -154,13 +150,9 @@ test("multiplicative registration fails closed without nonzero evidence", () => 
   const transformation = animation.transformations.find(
     ({ transformType }) => transformType === "divideBothSides"
   )!;
-  const applications = transformation.correspondenceMap!.records
-    .filter(({ relation }) => relation === "introduction")
-    .flatMap(({ targetSelectorIds }) => targetSelectorIds);
   assert.throws(
     () => compileKpRegisteredBothSidesCausalBinding({
       transformation: { ...transformation, assumptions: [] },
-      applicationEntityIds: applications,
       direction: "forward"
     }),
     /lacks a nonzero operand assumption/

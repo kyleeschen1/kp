@@ -17,12 +17,18 @@ import {
   requireKpClosedDispatchEntry
 } from "../domain-ir/equation-extension-registry.ts";
 import type { KpLogExponentOperationKind } from "../semantic/log-exponent-operation-dispatch.ts";
+import {
+  compileKpRegisteredBothSidesCausalBinding,
+  type KpRegisteredBothSidesCausalBinding
+} from "./registered-both-sides-causal-binding.ts";
 
 export interface KpLogExponentSymbolMotionPlan {
   readonly operationId: string;
   readonly contract: KpCompiledSymbolMotionContract;
   readonly functionWrapInvocationGroup?:
     KpCompiledFunctionWrapInvocationGroup | undefined;
+  readonly bothSidesCausalBinding?:
+    KpRegisteredBothSidesCausalBinding | undefined;
 }
 
 export function compileKpLogExponentSymbolMotionPlans(
@@ -37,12 +43,24 @@ export function compileKpLogExponentSymbolMotionPlans(
     const contract = dispatch.compileContract(operation);
     const functionWrapInvocationGroup =
       dispatch.compileFunctionWrapInvocationGroup?.(operation, contract);
+    const bothSidesCausalBinding =
+      compileKpRegisteredBothSidesCausalBinding({
+        transformation: operation.transformation,
+        branchRoles: Object.freeze({
+          ...operation.sourceRoles.branchByOccurrenceId,
+          ...operation.targetRoles.branchByOccurrenceId
+        }),
+        direction: "forward"
+      });
     return Object.freeze({
       operationId: operation.operation.id,
       contract,
       ...(functionWrapInvocationGroup === undefined
         ? {}
-        : { functionWrapInvocationGroup })
+        : { functionWrapInvocationGroup }),
+      ...(bothSidesCausalBinding === undefined
+        ? {}
+        : { bothSidesCausalBinding })
     });
   }));
 }

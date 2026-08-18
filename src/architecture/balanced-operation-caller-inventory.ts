@@ -261,7 +261,12 @@ const rawEntries = [
       'kind: "apply-natural-log-both-sides"',
       "operation.log-exponent.apply-log-both-sides"
     ),
-    literalSourcePaths: [rearrangementPath, logCompilerPath],
+    literalSourcePaths: [
+      rearrangementPath,
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+      logCompilerPath
+    ],
     gaps: [
       "Apply-log is governed inside the specialized log-exponent program but is not exposed through the tool-neutral equation-series operation registry."
     ]
@@ -290,9 +295,13 @@ const rawEntries = [
       'kind: "divide-both-sides-by-log-base"',
       "operation.log-exponent.divide-by-log-base"
     ),
-    literalSourcePaths: [logCompilerPath],
+    literalSourcePaths: [
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+      logCompilerPath
+    ],
     gaps: [
-      "The log-base divisor is domain-verified and cohesive, but its both-sides semantics are not yet projected through the shared equation-series authoring registry."
+      "The log-base divisor now projects through shared both-sides causality, but is not yet exposed through the tool-neutral equation-series authoring registry."
     ]
   })
 ] as const;

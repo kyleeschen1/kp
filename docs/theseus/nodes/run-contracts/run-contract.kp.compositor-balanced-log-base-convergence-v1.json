@@ -845,6 +845,69 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T18:45:48.396Z",
       "notes": "Dependency direction, framework-neutral entrypoints, and semantic/animation boundaries pass."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "s20 logarithmic semantic registration and canonical motion preservation",
+      "checkedAt": "2026-08-18T19:04:03.876Z",
+      "notes": "57/57 tests pass, including shared causal binding, exact branch roles, domain evidence, rigid compounds, and rewind."
+    },
+    {
+      "command": "npm run test:registered-both-sides-additive",
+      "status": "passed",
+      "scope": "s20 existing additive caller preservation",
+      "checkedAt": "2026-08-18T19:04:06.859Z",
+      "notes": "19/19 tests pass."
+    },
+    {
+      "command": "npm run test:registered-both-sides-multiplicative",
+      "status": "passed",
+      "scope": "s20 existing multiplicative caller preservation",
+      "checkedAt": "2026-08-18T19:04:08.376Z",
+      "notes": "26/26 tests pass."
+    },
+    {
+      "command": "npm run test:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "s20 caller inventory authority",
+      "checkedAt": "2026-08-18T19:04:11.135Z",
+      "notes": "5/5 tests pass and generated inventory is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 repository type boundary",
+      "checkedAt": "2026-08-18T19:04:12.661Z",
+      "notes": "TypeScript and Svelte checks pass with zero errors and zero warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 architecture boundaries",
+      "checkedAt": "2026-08-18T19:04:13.861Z",
+      "notes": "All architecture checks pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s20 canonical compositor preservation",
+      "checkedAt": "2026-08-18T19:04:15.571Z",
+      "notes": "28/28 tests pass."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "s20 compositor ownership budget",
+      "checkedAt": "2026-08-18T19:04:16.838Z",
+      "notes": "All module and byte ceilings remain within their audited bounds."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-exponent-catalogue.browser.spec.ts --project=firefox --workers=1 --grep canonical.checkpoint.fits.narrow",
+      "status": "passed",
+      "scope": "s20 narrow reduced-motion retry",
+      "checkedAt": "2026-08-18T19:04:18.210Z",
+      "notes": "1/1 Firefox checkpoint passes. The preceding full 21-test matrix passed 20 tests and hit one isolated 5-second readiness timeout in this same checkpoint; the immediate isolated retry passed in 8.9 seconds overall, so no semantic or paint regression was reproduced."
     }
   ],
   "allowedWork": [
@@ -986,7 +1049,8 @@
     {
       "id": "s20",
       "title": "Register logarithmic callers",
-      "status": "planned"
+      "summary": "Registered applyNaturalLogBothSides and divideBothSidesByLogBase through one data-only logarithmic pack and registration-owned application-selection protocol. The injective-function operation carries exact positive-domain and injectivity evidence; division binds the same ln(base) semantic divisor across lhs source and rhs denominator occurrences with nonzero evidence. Exact equation-tree branch roles feed the shared causal recipe while canonical function-wrap, exponent-transit, rigid-compound, quotient, timing, seek/rewind, and paint contracts remain unchanged; 57 semantic/motion checks pass and the isolated Firefox narrow reduced-motion retry is green after one full-matrix readiness timeout.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -160,15 +160,12 @@ export function createKpEquationLinearRearrangementBinding(input: {
         selectedStrategy: selectedBranchStrategy
       })
     : undefined;
-  const applicationEntityIds = branchScheduling?.branchOperation.branches
-    .flatMap(({ entityIds }) => entityIds) ?? introducedTargetSelectorIds;
   const bothSidesCausalBinding =
     findKpBothSidesOperationRegistration(transformation.transformType) ===
         undefined
       ? undefined
       : compileKpRegisteredBothSidesCausalBinding({
           transformation,
-          applicationEntityIds,
           branchRoles: input.branchRoles ??
             createKpEquationBranchRoleIndex(animation.bundle),
           direction: "forward"

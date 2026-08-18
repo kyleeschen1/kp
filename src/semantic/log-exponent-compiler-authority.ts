@@ -1,5 +1,6 @@
 import {
   listKpLogExponentExpressionNodes,
+  listKpLogExponentBranchNodeIds,
   type KpLogExponentSolveState,
   type KpLogExponentSolveStateId
 } from "./log-exponent-solve-states.ts";
@@ -33,6 +34,7 @@ export interface KpCompiledLogExponentStateRoles {
   readonly schemaVersion: "kp.compiled-log-exponent-state-roles.v1";
   readonly stateId: KpLogExponentSolveStateId;
   readonly bindings: readonly KpLogExponentRoleBinding[];
+  readonly branchByOccurrenceId: Readonly<Record<string, "lhs" | "rhs">>;
   readonly [kpLogExponentCompilerAuthority]: true;
 }
 
@@ -80,10 +82,23 @@ export function compileKpLogExponentStateRoles(
       })
     )
   );
+  const lhsIds = listKpLogExponentBranchNodeIds(state, "lhs");
+  const rhsIds = listKpLogExponentBranchNodeIds(state, "rhs");
+  const rhsIdSet = new Set(rhsIds);
+  const branchByOccurrenceId = Object.freeze(Object.fromEntries([
+    ...lhsIds.map((id) => [id, "lhs"] as const),
+    ...rhsIds.map((id) => [id, "rhs"] as const)
+  ]));
+  if (lhsIds.some((id) => rhsIdSet.has(id))) {
+    throw new Error(
+      `Log-exponent state ${state.id} reuses an occurrence across equation branches.`
+    );
+  }
   const compiled = Object.freeze({
     schemaVersion: "kp.compiled-log-exponent-state-roles.v1" as const,
     stateId: state.id,
-    bindings
+    bindings,
+    branchByOccurrenceId
   }) as KpCompiledLogExponentStateRoles;
   compiledRoleAuthorities.add(compiled);
   return compiled;
