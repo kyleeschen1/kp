@@ -134,6 +134,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetLayer: "scene-plan-compilation",
     targetEffect: "none",
     evidence: [
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexOperationTracks"),
       evidence("src/rendering/native-katex-operation-choreography.ts", "applyKpNativeKatexOperationChoreography"),
       evidence("src/rendering/native-katex-factoring-choreography.ts", "compileKpNativeKatexFactoringScenePlan"),
       evidence("src/rendering/native-katex-fan-in-motion.ts", "compileKpQualityBoundedFanInTracks")

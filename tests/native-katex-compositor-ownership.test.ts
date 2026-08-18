@@ -56,8 +56,13 @@ test("semantic motion and track projection enter through the base-plan port", as
 
   assert.doesNotMatch(compositor, /from "\.\/native-katex-symbol-motion\.ts"/);
   assert.doesNotMatch(compositor, /from "\.\/native-katex-track-projection\.ts"/);
+  assert.doesNotMatch(
+    compositor,
+    /from "\.\/native-katex-operation-choreography\.ts"/
+  );
   assert.match(compositor, /compileKpNativeKatexSemanticMotionTracks/);
   assert.match(compositor, /compileKpNativeKatexProjectedTracks/);
+  assert.match(compositor, /compileKpNativeKatexOperationTracks/);
   for (const planner of planners) {
     assert.doesNotMatch(planner, /from "\.\/native-katex-scene-compositor\.ts"/);
     assert.match(planner, /from "\.\/native-katex-base-scene-plan\.ts"/);

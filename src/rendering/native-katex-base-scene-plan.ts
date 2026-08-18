@@ -21,6 +21,9 @@ import {
 import {
   applyKpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
+import {
+  applyKpNativeKatexOperationChoreography
+} from "./native-katex-operation-choreography.ts";
 
 export type {
   KpCompiledSymbolMotionContract
@@ -28,6 +31,10 @@ export type {
 export type {
   KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
+export type {
+  KpEquationOperationChoreography,
+  KpNativeKatexFactoringSceneBinding
+} from "./native-katex-operation-choreography.ts";
 
 /**
  * Pure renderer-session planning lives here so semantic correspondence and
@@ -89,17 +96,12 @@ export type KpNativeKatexSceneTrack = KpNativeKatexSceneTrackContract<
 export type KpNativeKatexPaintMeasuredSceneTrack =
   KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
 
-export function compileKpNativeKatexSemanticMotionTracks(
-  input: Parameters<typeof applyKpNativeKatexSymbolMotionContract>[0]
-) {
-  return applyKpNativeKatexSymbolMotionContract(input);
-}
-
-export function compileKpNativeKatexProjectedTracks(
-  input: Parameters<typeof applyKpNativeKatexTrackProjection>[0]
-) {
-  return applyKpNativeKatexTrackProjection(input);
-}
+export const compileKpNativeKatexSemanticMotionTracks =
+  applyKpNativeKatexSymbolMotionContract;
+export const compileKpNativeKatexProjectedTracks =
+  applyKpNativeKatexTrackProjection;
+export const compileKpNativeKatexOperationTracks =
+  applyKpNativeKatexOperationChoreography;
 
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;

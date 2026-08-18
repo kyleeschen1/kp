@@ -42,11 +42,6 @@ import {
   type KpNativeKatexSuccessorSynthesisIntent
 } from "./native-katex-successor-synthesis.ts";
 import {
-  applyKpNativeKatexOperationChoreography,
-  type KpEquationOperationChoreography,
-  type KpNativeKatexFactoringSceneBinding
-} from "./native-katex-operation-choreography.ts";
-import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
 import type {
@@ -59,13 +54,16 @@ import type {
 } from "./native-katex-scene-track-contract.ts";
 import {
   compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexOperationTracks,
   compileKpNativeKatexProjectedTracks,
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexSemanticMotionTracks,
   reconcileKpNativeKatexScenes,
   type KpCompiledSymbolMotionContract,
+  type KpEquationOperationChoreography,
   type KpNativeKatexAtomLifecycle,
   type KpNativeKatexHierarchicalScenePlan,
+  type KpNativeKatexFactoringSceneBinding,
   type KpNativeKatexPaintMeasuredSceneTrack,
   type KpNativeKatexSceneReconciliation,
   type KpNativeKatexSceneTrack,
@@ -1540,7 +1538,7 @@ function prepareKpCanonicalNativeKatexScene(
     target: input.target,
     contract: input.symbolMotionContract
   });
-  const operationTracks = applyKpNativeKatexOperationChoreography({
+  const operationTracks = compileKpNativeKatexOperationTracks({
     tracks: semanticMotionTracks,
     source: input.source,
     target: input.target,

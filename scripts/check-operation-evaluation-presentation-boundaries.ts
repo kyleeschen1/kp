@@ -180,10 +180,18 @@ const compositorSource = readFileSync(
   join(projectRoot, canonicalCompositor),
   "utf8"
 );
-if (!compositorSource.includes("applyKpNativeKatexOperationChoreography")) {
+const basePlanSource = readFileSync(
+  join(projectRoot, "src/rendering/native-katex-base-scene-plan.ts"),
+  "utf8"
+);
+if (
+  !compositorSource.includes("compileKpNativeKatexOperationTracks") ||
+  !basePlanSource.includes("applyKpNativeKatexOperationChoreography") ||
+  !basePlanSource.includes("compileKpNativeKatexOperationTracks")
+) {
   violations.push(
-    `${canonicalCompositor} must apply certified operation choreography ` +
-    "before generic protected transit."
+    `${canonicalCompositor} must route certified operation choreography ` +
+    "through the typed base-plan port before generic protected transit."
   );
 }
 

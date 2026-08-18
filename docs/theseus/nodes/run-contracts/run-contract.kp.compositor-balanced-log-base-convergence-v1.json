@@ -191,6 +191,32 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T16:27:58.165Z"
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:34:16.199Z",
+      "notes": "186/186; exhaustive operation authority, caller profiles, and reverse laws preserved."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:34:18.617Z",
+      "notes": "25/25; direct closure is 16 modules and 246863/295000 bytes; aggregate remains 454665/455000."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:34:21.032Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:34:23.411Z"
     }
   ],
   "allowedWork": [
@@ -254,7 +280,8 @@
     {
       "id": "s07",
       "title": "Move operation choreography behind typed port",
-      "status": "planned"
+      "summary": "Routed operation choreography through the base-plan typed port, removed direct compositor authority, updated the architectural ratchet, and preserved all 186 operation plans plus the canonical source gate.",
+      "status": "complete"
     },
     {
       "id": "s08",
