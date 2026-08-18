@@ -222,6 +222,7 @@ function sourceAuthority(
   return {
     sourceId: "source.governed.equation",
     revisionId: "revision.governed.equation.v1",
+    operationIds: [declaration.operationId],
     entityIds: [
       "entity.equation.lhs",
       "entity.equation.rhs",

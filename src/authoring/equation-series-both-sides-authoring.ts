@@ -53,6 +53,7 @@ export interface KpEquationSeriesBothSidesSemanticArguments {
 export interface KpEquationSeriesVerifiedSemanticSource {
   readonly sourceId: string;
   readonly revisionId: string;
+  readonly operationIds: readonly string[];
   readonly entityIds: readonly string[];
   readonly assumptionEvidenceIds: readonly string[];
 }
@@ -200,6 +201,17 @@ function resolveSourceAuthority(
     `${input.path}.sourcePin`,
     "The semantic source pin does not resolve to compiler-provided authority.",
     "Pin an exact verified source ID and revision available to the compiler.",
+    input.declaration.operationId
+  ));
+  if (
+    authority !== undefined &&
+    !authority.operationIds.includes(input.declaration.operationId)
+  ) input.diagnostics.push(diagnostic(
+    "equation-series.governance.source.unresolved",
+    `${input.path}.sourcePin`,
+    `${authority.sourceId}@${authority.revisionId} does not authorize ` +
+      `${input.declaration.operationId}.`,
+    "Use a verified semantic source that owns the selected operation.",
     input.declaration.operationId
   ));
   return authority;

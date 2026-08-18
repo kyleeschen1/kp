@@ -166,6 +166,8 @@
     "check:equation-transform-series-corpus": "node --disable-warning=ExperimentalWarning scripts/check-equation-transform-series-corpus.ts",
     "test:equation-series-planner-port": "node --disable-warning=ExperimentalWarning --test tests/equation-series-natural-language-planner-port.test.ts",
     "test:equation-series-both-sides-authoring": "node --disable-warning=ExperimentalWarning --test tests/equation-series-both-sides-authoring.test.ts tests/equation-series-repair-taxonomy.test.ts tests/equation-series-intent-resolver.test.ts",
+    "test:balanced-operation-authoring-corpus": "node --disable-warning=ExperimentalWarning --test tests/balanced-operation-authoring-corpus.test.ts tests/equation-series-both-sides-authoring.test.ts",
+    "check:balanced-operation-authoring-corpus": "node --disable-warning=ExperimentalWarning scripts/check-balanced-operation-authoring-corpus.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
     "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",

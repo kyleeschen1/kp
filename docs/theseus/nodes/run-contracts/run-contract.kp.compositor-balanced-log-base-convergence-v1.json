@@ -964,6 +964,48 @@
       "scope": "s21 patch hygiene",
       "checkedAt": "2026-08-18T19:22:59.667Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "s22 fixed balanced-operation corpus",
+      "checkedAt": "2026-08-18T19:29:38.296Z",
+      "notes": "9/9 tests pass: six varied valid callers plus division-by-zero, log-domain, ambiguity, and compound-operation repairs; no silent fallback."
+    },
+    {
+      "command": "npm run check:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "s22 tool-neutral deterministic report",
+      "checkedAt": "2026-08-18T19:29:39.570Z",
+      "notes": "All 10 corpus cases match exact statuses, operation IDs, repair kinds, and source codes."
+    },
+    {
+      "command": "npm run test:equation-transform-series-corpus",
+      "status": "passed",
+      "scope": "s22 existing series corpus preservation",
+      "checkedAt": "2026-08-18T19:29:40.630Z",
+      "notes": "9/9 tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 repository type boundary",
+      "checkedAt": "2026-08-18T19:29:41.670Z",
+      "notes": "TypeScript, Svelte, and domain checks pass with zero Svelte errors and warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 framework-neutral corpus architecture",
+      "checkedAt": "2026-08-18T19:29:42.679Z",
+      "notes": "All architecture and compiler-authority gates pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22 patch hygiene",
+      "checkedAt": "2026-08-18T19:29:43.696Z",
+      "notes": "No whitespace errors."
     }
   ],
   "allowedWork": [
@@ -1117,7 +1159,8 @@
     {
       "id": "s22",
       "title": "Add balanced-operation corpus",
-      "status": "planned"
+      "summary": "Added a deterministic framework-neutral corpus with six governed successes across add, subtract, multiply, divide, apply-log, and divide-by-log-base using distinct operand shapes. Four adversarial fixtures prove exact fail-closed repairs for unavailable nonzero evidence, unavailable log-domain evidence, ambiguous operation selection, and compound jumps requiring intermediate states. Every invalid case yields one stable typed repair, no active runtime, and no renderer or timing input; the existing transform-series corpus remains unchanged and green.",
+      "status": "complete"
     },
     {
       "id": "s23",
