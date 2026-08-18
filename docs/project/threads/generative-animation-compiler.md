@@ -3,9 +3,12 @@
 Status: active
 Last Updated: 2026-08-18
 Current Next Action: the governed animation generation foundation is complete.
-Prepare, but do not begin without approval, one bounded balanced-equation
-reconciliation and exemplar-selection plan. Alternative-base logarithms remain
-the next distinct syntax/motif family after that pressure test.
+The specialized canonical-renderer gate now exposes a committed dependency
+closure of 309,245 source bytes against its 295,000-byte ceiling while runtime,
+glyph, reader, and presentation-plan behavior remains green. Prepare the
+approved-order proposal: restore compositor ownership health first, then
+reconcile balanced operations, then pressure one alternative-base logarithm
+exemplar. Do not implement before the new long-loop contract is approved.
 
 ## Goal
 
@@ -61,6 +64,10 @@ Asset disposition is separate evidence. Adapter-backed does not mean broken,
 and playable does not mean generally generatable.
 
 ## Ordered Capability Plan
+
+0. Canonical compositor ownership health: restore the sealed dependency gate
+   through explicit renderer/planner ownership and separately measured closure,
+   never by raising the existing ceiling or moving unmeasured code.
 
 1. Function wrapping, distribution, and additive cancellation: preserve the
    existing direct baseline.
@@ -123,6 +130,8 @@ the exact view, artifact, settings, and playhead.
 - `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
 - `../reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md`
 - `../reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`
+- `../reviews/2026-08-18-compositor-before-balanced-operations-next-step-review.md`
+- `../reviews/2026-08-18-compositor-balanced-log-base-long-loop-proposal.md`
 - `animation-catalogue.md`
 - `architecture-convergence.md`
 - `semantic-runtime.md`

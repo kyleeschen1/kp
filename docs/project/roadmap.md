@@ -122,11 +122,20 @@ Only this repository sequence is active:
     Graph2D, and Graph3D. The combined surface and exponent/log checkpoint was
     human-approved on 2026-08-18; release checks are recorded in
     `reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`.
-13. **Balanced equation operations:** next bounded capability frontier. First
-    reconcile the existing subtract, divide, and apply-log examples against
-    the new series compiler, select one canonical exemplar, and propose a
-    reversible pressure slice. Do not broaden operand shapes or begin the
-    alternative-base logarithm family without a separately approved plan.
+13. **Canonical compositor ownership health:** next. Restore the failed sealed
+    dependency-closure gate without raising its ceiling or hiding responsibility
+    in an unmeasured helper. Separate renderer-session paint/settlement from
+    compiled scene planning, measure both ownership zones, preserve every
+    approved equation endpoint and choreography, and keep route budgets flat.
+14. **Balanced equation operations:** after the compositor gate is green.
+    Reconcile the existing subtract, multiply, divide, and apply-log examples
+    against one typed family contract and shared causal recipe. Treat this as
+    authoring/compiler consolidation, not a visual rebuild; promote only the
+    smallest seam that the existing callers prove.
+15. **Alternative logarithm bases:** after balanced-operation pressure. Preserve
+    explicit bases as semantic operator parameters, define change-of-base truth
+    and domain assumptions, then perfect one reversible exemplar before any
+    family-wide authoring promotion.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

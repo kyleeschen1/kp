@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-15
+Last Updated: 2026-08-18
 
 ## North Star
 
@@ -78,9 +78,11 @@ matrix, code, Graph2D, and Graph3D remain domain-owned future frontends over the
 shared request, sequencing, hosting, URL, and review envelope.
 
 This is not permission for undirected domain expansion or a universal
-generator. The next bounded work promotes only the already proven
-product/quotient causal crossover, creates an evidence-derived Transformation
-Coverage view, and proves one governed equation-transform-series compiler.
+generator. The product/quotient crossover, evidence-derived Transformation
+Coverage view, and governed equation-transform-series compiler are complete.
+The next bounded sequence restores the canonical compositor's sealed ownership
+gate, reconciles existing balanced operations as one generated family, and
+then pressures that boundary with one alternative-base logarithm exemplar.
 Additional motif families and domain frontends remain explicit ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
@@ -99,12 +101,14 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is now architectural convergence within the
-finite equation domain. After the three-operation promotion gate, route every
-supported equation animation through one canonical semantic-motion compiler,
-prove the boundary with one new log-product caller, and retire competing
-authority paths beside their final callers. This is an exhaustive equation
-cutover, not a universal graph, code, diagram, or 3D compiler.
+The immediate repository question is now whether the finite equation domain
+can remain extensible without letting its canonical compositor become a second
+presentation compiler. Runtime behavior is healthy, but the compositor's
+sealed direct-dependency source budget is exceeded. Restore explicit
+renderer-versus-plan ownership first; then use existing subtract, multiply,
+divide, and apply-log callers to prove a narrow balanced-operation family.
+This remains equation-domain convergence, not a universal graph, code,
+diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
