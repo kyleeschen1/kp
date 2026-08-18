@@ -551,6 +551,51 @@ test("unsupported style plan compiles only exact checkpoint settlement", () => {
   });
 });
 
+test("style planning isolates metric capability per semantic handoff", () => {
+  const telemetry = alignmentTelemetry({
+    pairs: [{
+      id: "pair.metric",
+      materialRect: { left: 10, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 10.05, top: 20, width: 12, height: 24 }
+    }, {
+      id: "pair.introduced",
+      materialRect: { left: 30, top: 20, width: 12, height: 24 },
+      nativeRect: { left: 34, top: 20, width: 5, height: 24 },
+      materialStyle: "font-size:16px|color:black",
+      nativeStyle: "font-size:16px|color:red"
+    }]
+  });
+  const correlation = (id: string) => ({
+    kind: "native-katex-handoff-correlation" as const,
+    lifecycle: "renderer-session" as const,
+    id: `pair.${id}`,
+    materialOwnerId: `owner.${id}`,
+    trackId: `track.${id}`,
+    componentId: `component.${id}`,
+    atomLifecycle: "persist" as const,
+    visualAtomId: `paint.pair.${id}`,
+    targetAtomId: `paint.pair.${id}`,
+    semanticEntityId: `entity.${id}`,
+    disposition: "target-bound" as const
+  });
+  const plan = compileKpNativeKatexTypographyStylePlan({
+    telemetry,
+    correlations: [correlation("metric"), correlation("introduced")],
+    tolerancePx: 0.1,
+    maximumTranslationPx: 2,
+    maximumScaleRatio: 1.1
+  });
+
+  assert.equal(plan.model, "native-checkpoint-settlement");
+  assert.deepEqual(plan.entries.map(({ id, model }) => ({ id, model })), [{
+    id: "pair.introduced",
+    model: "native-checkpoint-settlement"
+  }, {
+    id: "pair.metric",
+    model: "target-style-reverse-flip"
+  }]);
+});
+
 test("style plan requires total correlation-to-target paint coverage", () => {
   const telemetry = alignmentTelemetry({
     pairs: [{
@@ -733,6 +778,15 @@ test("style sampling can follow the whole generic scene transit", () => {
     () => sampleKpNativeKatexTypographyStylePlan(plan, 0.25, []),
     /scene frame/
   );
+  assert.throws(() => sampleKpNativeKatexTypographyStylePlan({
+    ...plan,
+    model: "native-checkpoint-settlement",
+    entries: plan.entries.map((entry) => ({
+      ...entry,
+      model: "native-checkpoint-settlement" as const
+    }))
+  }, 0.25, [{ ...sceneFrames[0]!, metricProgress: 0.25 }]),
+  /cannot defer required metric interpolation/);
 });
 
 test("glyph paint frames preserve contact with uniform font scaling", () => {

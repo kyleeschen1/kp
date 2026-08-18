@@ -77,33 +77,32 @@ test("change-of-base mounts one native compositor and seeks deterministically", 
   const targetArgument = stage.locator(
     '[data-kp-semantic-entity-id="target.denominator.argument-two"]'
   );
-  const sourceHeight = await sourceBase.evaluate((element) =>
-    element.getBoundingClientRect().height
-  );
-  const targetHeight = await targetArgument.evaluate((element) =>
-    element.getBoundingClientRect().height
-  );
-  expect(targetHeight).toBeGreaterThan(sourceHeight + 1);
-  const roleChangeHeights: number[] = [];
+  const sourceInk = await measureNativeKatexInk(sourceBase, false);
+  const targetInk = await measureNativeKatexInk(targetArgument, false);
+  expect(targetInk.height).toBeGreaterThan(sourceInk.height + 1);
+  const roleChangeInk: Array<{ width: number; height: number }> = [];
   for (const progress of [0.22, 0.5, 0.78, 0.999]) {
     await seek.fill(String(progress));
     const owner = stage.locator(
       '[data-kp-equation-material-semantic-entity-id="source.log-base-two.base"]'
     );
     await expect(owner).toHaveCount(1);
-    roleChangeHeights.push(await owner.evaluate((element) =>
-      element.getBoundingClientRect().height
-    ));
+    await expect(owner).toHaveAttribute(
+      "data-kp-native-katex-typography-model",
+      "target-style-reverse-flip"
+    );
+    await expect(owner).toHaveAttribute(
+      "data-kp-equation-material-visual-revision",
+      /target:/
+    );
+    roleChangeInk.push(await measureNativeKatexInk(owner, true));
   }
-  expect(roleChangeHeights[1]!).toBeGreaterThan(roleChangeHeights[0]! + 0.25);
-  expect(roleChangeHeights[1]!).toBeLessThan(roleChangeHeights[2]! - 0.25);
-  expect(Math.abs(roleChangeHeights[2]! - targetHeight)).toBeLessThan(0.75);
-  expect(Math.abs(roleChangeHeights[3]! - targetHeight)).toBeLessThan(0.75);
-  await seek.fill("0.78");
-  const settledRoleChange = stage.locator(
-    '[data-kp-equation-material-semantic-entity-id="source.log-base-two.base"]'
-  );
-  await expect(settledRoleChange).toHaveCSS("transform", "none");
+  expect(Math.abs(roleChangeInk[0]!.height - sourceInk.height)).toBeLessThan(0.4);
+  expect(roleChangeInk[1]!.height).toBeGreaterThan(roleChangeInk[0]!.height + 1);
+  expect(roleChangeInk[1]!.height).toBeLessThan(roleChangeInk[2]!.height - 1);
+  expect(Math.abs(roleChangeInk[2]!.height - targetInk.height)).toBeLessThan(0.4);
+  expect(Math.abs(roleChangeInk[3]!.height - targetInk.height)).toBeLessThan(0.4);
+  expect(Math.abs(roleChangeInk[3]!.width - targetInk.width)).toBeLessThan(0.4);
 
   for (const progress of [0, 0.25, 0.5, 0.75, 1, 0.625, 0]) {
     await seek.fill(String(progress));
@@ -115,6 +114,28 @@ test("change-of-base mounts one native compositor and seeks deterministically", 
   }
   expect(pageErrors).toEqual([]);
 });
+
+async function measureNativeKatexInk(
+  locator: Locator,
+  useFirstChild: boolean
+): Promise<{ width: number; height: number }> {
+  return locator.evaluate(async (element, firstChild) => {
+    const modulePath = "/src/rendering/native-katex-paint-geometry.ts";
+    const geometry = await import(modulePath);
+    const stage = element.closest<HTMLElement>(
+      "[data-kp-logarithm-change-of-base-stage]"
+    );
+    const root = firstChild ? element.firstElementChild : element;
+    if (stage === null || !(root instanceof HTMLElement)) {
+      throw new Error("Change-of-base ink probe could not find native paint.");
+    }
+    const rect = geometry.measureKpNativeKatexSubtreePaintRect(stage, root);
+    if (rect === undefined) {
+      throw new Error("Change-of-base ink probe found no painted geometry.");
+    }
+    return { width: rect.width, height: rect.height };
+  }, useFirstChild);
+}
 
 test("change-of-base URL restores direct semantic playhead", async ({ page }) => {
   await page.goto(`/?artifact=${animationId}&playhead=0.625`);

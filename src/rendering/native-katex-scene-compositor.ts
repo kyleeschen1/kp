@@ -686,10 +686,8 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   readonly maximumTranslationPx: number;
   readonly maximumScaleRatio: number;
 }): KpNativeKatexTypographyStylePlan {
-  const selection = selectKpNativeKatexTypographyHandoffModel(input);
-  const model = selection.selectedModel === "target-style-reverse-flip"
-    ? selection.selectedModel
-    : "native-checkpoint-settlement";
+  const planModel = selectKpNativeKatexTypographyHandoffModel(input)
+    .selectedModel;
   const targetBound = input.correlations.filter(
     ({ disposition }) => disposition === "target-bound"
   );
@@ -715,6 +713,16 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
           `Typography style plan ${id} has no matching target paint atom.`
         );
       }
+      // Unrelated introduced glyphs cannot downgrade this semantic handoff.
+      const model = selectKpNativeKatexTypographyHandoffModel({
+        ...input,
+        telemetry: {
+          ...input.telemetry,
+          observations: source === undefined
+            ? [material, native]
+            : [source, material, native]
+        }
+      }).selectedModel;
       return freezeTypographyStylePlanEntry({
         id,
         materialOwnerId: correlation.materialOwnerId,
@@ -759,7 +767,7 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   return Object.freeze({
     kind: "native-katex-typography-style-plan",
     lifecycle: "renderer-session",
-    model,
+    model: planModel,
     entries: Object.freeze(entries)
   });
 }
@@ -787,6 +795,12 @@ export function sampleKpNativeKatexTypographyStylePlan(
         throw new Error(
           `Typography style plan ${entry.id} has no scene frame.`
         );
+      }
+      if (
+        sceneFrame?.metricProgress !== undefined &&
+        entry.model === "native-checkpoint-settlement"
+      ) {
+        throw new Error(`${entry.id} cannot defer required metric interpolation.`);
       }
       const rect = sceneFrame?.rect;
       const eased = smoothstep(sceneFrame?.metricProgress ?? bounded);
@@ -896,9 +910,7 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
     owner.style.width = `${entry.targetRect.width}px`;
     owner.style.height = `${entry.targetRect.height}px`;
     owner.style.transformOrigin = "0 0";
-    // An identity transform is not paint-neutral in WebKit: it can create a
-    // composited text layer with different antialiasing than native KaTeX.
-    // Remove settled transforms early; scene-end removal caused a final snap.
+    // WebKit repaints even identity transforms; remove them before settlement.
     owner.style.transform = endpointIdentity
       ? "none"
       : `translate(${frame.translateX}px, ${frame.translateY}px) ` +
@@ -1174,9 +1186,7 @@ export function createKpNativeKatexRendererSession(input: {
       if (disposed) return;
       assertKpNativeKatexPaintPreservingRetirement(retirement);
       disposed = true;
-      // Preserve the last applied DOM exactly. The stage host owns replacement;
-      // a session retirement that rewinds endpoint paint can be composited for
-      // one frame even after that stage has been detached.
+      // The host replaces the stage; rewinding here causes a detached-frame flash.
     }
   });
 }
@@ -1282,9 +1292,7 @@ export function createKpCanonicalNativeKatexSceneSession(
       ? {}
       : { supplementalMaterialOwners: plan.supplementalMaterialOwners })
   });
-  // A successor synthesis owns its target paint directly. If it claims every
-  // target glyph there is deliberately no residual native-track handoff to
-  // inspect; requiring one would reject the correctly partitioned scene.
+  // Successor synthesis may own every target, leaving no residual handoff.
   const typographyPlan = glyphLinks.length === 0
     ? undefined
     : (() => {
@@ -1662,9 +1670,7 @@ function pureSceneGeometryMatches(
   current: readonly number[]
 ): boolean {
   if (cached.length !== current.length) return false;
-  // Browser layout can report the same painted edge with ~1e-4 CSS-pixel
-  // scroll-dependent noise. The explicit 1/64px bound is below physical paint
-  // resolution; larger drift must miss so stale motion geometry cannot mount.
+  // Ignore sub-pixel layout noise, but reject physically visible stale geometry.
   return cached.every((value, index) =>
     Math.abs(value - current[index]!) <= 1 / 64
   );
@@ -1816,6 +1822,18 @@ function createGlyphPaintFrame(
 ): NonNullable<KpNativeKatexTypographyStylePlanEntry["glyphPaintFrame"]> {
   const sourcePaint = measureKpNativeKatexTextInkRect(stage, source.element);
   const targetPaint = measureKpNativeKatexTextInkRect(stage, target.element);
+  const scaleX = safeScale(sourcePaint.width, targetPaint.width);
+  const scaleY = safeScale(sourcePaint.height, targetPaint.height);
+  const maximumInkScaleAnisotropy = 1.025;
+  if (
+    !Number.isFinite(scaleX) ||
+    !Number.isFinite(scaleY) ||
+    symmetricScaleRatio(scaleX / scaleY) > maximumInkScaleAnisotropy
+  ) {
+    throw new Error(
+      "Native glyph metric interpolation requires uniform measured ink scale."
+    );
+  }
   return Object.freeze({
     sourceLeft: source.rect.left,
     sourceTop: source.rect.top,
@@ -1823,18 +1841,8 @@ function createGlyphPaintFrame(
     sourceInsetY: sourcePaint.top - source.rect.top,
     targetInsetX: targetPaint.left - target.rect.left,
     targetInsetY: targetPaint.top - target.rect.top,
-    sourceScale:
-      cssPixels(getComputedStyle(source.element).fontSize) /
-      cssPixels(getComputedStyle(target.element).fontSize)
+    sourceScale: Math.sqrt(scaleX * scaleY)
   });
-}
-
-function cssPixels(value: string): number {
-  const pixels = Number.parseFloat(value);
-  if (!(pixels > 0)) {
-    throw new Error(`Native handoff requires positive CSS pixels, got ${value}.`);
-  }
-  return pixels;
 }
 
 function fontMetricBaseline(
