@@ -2,8 +2,8 @@
   "id": "run-contract.kp.governed-animation-generation-foundation-v6",
   "kind": "run-contract",
   "title": "Governed generation overnight nonvisual-first continuation",
-  "status": "ready",
-  "summary": "User resumed the bounded exponent/log foreground-mask correction at the preserved s28 checkpoint; s29 remains gated on visual review.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -133,7 +133,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s29",
       "title": "Post-approval-release-closeout",
-      "status": "planned"
+      "summary": "Post-approval release closeout complete with durable roadmap and verification evidence.",
+      "status": "complete"
     }
   ]
 }

@@ -1,8 +1,9 @@
 # Governed Animation Generation Foundation Long-Loop Proposal
 
 Date: 2026-08-17
-Status: approved; execution order amended for overnight autonomy on 2026-08-17
-Proposed contract id: `run-contract.kp.governed-animation-generation-foundation-v1`
+Status: complete; human-approved and release-verified on 2026-08-18
+Executed continuation contract id:
+`run-contract.kp.governed-animation-generation-foundation-v6`
 Source decision:
 `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
 

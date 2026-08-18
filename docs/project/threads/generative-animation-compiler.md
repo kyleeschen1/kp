@@ -1,16 +1,11 @@
 # Generative Animation Compiler Thread
 
 Status: active
-Last Updated: 2026-08-17
-Current Next Action: continue the approved governed animation generation
-foundation contract in its nonvisual-first overnight order. Complete the
-tool-neutral CLI, deterministic corpus, model-neutral planner port, and
-domain-owned frontend gaps; then repair shared full-motion readiness and the
-canonical `2^x = 7` pressure surface before URL/exact-state integration. The
-minimal Transformation Coverage view, global dock, Review geometry, and all
-subjective motion judgment converge at one final human checkpoint. The first
-compiler promotion remains the already approved product/quotient homomorphic
-crossover.
+Last Updated: 2026-08-18
+Current Next Action: the governed animation generation foundation is complete.
+Prepare, but do not begin without approval, one bounded balanced-equation
+reconciliation and exemplar-selection plan. Alternative-base logarithms remain
+the next distinct syntax/motif family after that pressure test.
 
 ## Goal
 
@@ -30,22 +25,25 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
 - The direct equation intent facade compiles function wrapping, additive
   cancellation, and distribution with zero fixture repairs.
 - Live-model quality is unmeasured.
-- Multi-operation deterministic clocks exist, but no general LaTeX-series
-  authoring entrance owns adjacency planning and typed repair.
-- Log product and quotient have approved distinct choreographies and justify a
-  bounded shared causal recipe.
-- The `2^x = 7` exponent/log caller remains the semantic exemplar, but its
-  current full-motion surface is not visually healthy. A clean preview still
-  interpolates, while the long-lived development host fails shared surface
-  readiness for unrelated animation families and can silently present native
-  endpoint fallback as discrete playback. The repair is deliberately ordered
-  after independent compiler work and before URL/exact-state integration; its
-  subjective review is deferred to the final combined checkpoint.
+- One tool-neutral LaTeX-series entrance owns adjacency validation, typed
+  repair, deterministic composition, direct seek, and rewind.
+- Log product and quotient retain their approved distinct choreographies while
+  sharing one bounded renderer-neutral causal recipe.
+- The `2^x = 7` exponent/log caller is the approved semantic and visual
+  exemplar. Shared surface readiness is settlement-aware, the governed
+  foreground crossing avoids glyph occlusion, and clean-load/remount playback
+  passed cross-browser pressure. The transparent crossing treatment is not a
+  globally promoted salience motif.
 - Thirty equation surfaces exist, but asset count is not capability coverage:
   three are canonical, twenty-two adapter-backed, four static-only, and one a
   retirement candidate in the current generated inventory.
 - Matrix, code, Graph2D, and Graph3D are real governed callers with different
-  semantic frontends; none should be presented as generally generatable yet.
+  semantic frontends. Their exact capability gaps are visible, and none is
+  presented as generally generatable yet.
+- Coverage state, development navigation, theme/settings, exact links, and
+  Review capture now restore from one URL-backed source of truth.
+- Live-model quality remains unmeasured: the planner port records proposals,
+  but KP still owns mathematical authority, motif selection, and motion.
 
 ## Capability Vocabulary
 
@@ -124,6 +122,7 @@ the exact view, artifact, settings, and playhead.
 
 - `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
 - `../reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md`
+- `../reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`
 - `animation-catalogue.md`
 - `architecture-convergence.md`
 - `semantic-runtime.md`

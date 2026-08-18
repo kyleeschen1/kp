@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-17
+Last Updated: 2026-08-18
 Status: active
 Active Thread: `threads/generative-animation-compiler.md`
 Supporting Threads:
@@ -69,15 +69,12 @@ Only this repository sequence is active:
 1. **Reconcile the backlog:** complete. Distinguish existing assets, partial
    or diagnostic implementations, and genuinely missing transformations.
 2. **Select one exemplar:** complete. The accepted semantic exponent/log
-   caller is the native-KaTeX `2^x = 7` transformation sequence. Its later
-   full-motion collision means it is not currently a production-ready visual
-   exemplar.
-3. **Perfect one asset:** shared playback repair scheduled after the objective
-   compiler foundation. Preserve the approved semantic states, identities,
-   correspondence, and typed symbol-motion seam; finish the tool-neutral CLI,
-   deterministic corpus, planner port, and domain-gap declarations first,
-   then repair shared full-motion readiness and carry subjective exponent/log
-   judgment into the final combined visual checkpoint.
+   caller is the native-KaTeX `2^x = 7` transformation sequence.
+3. **Perfect one asset:** complete. Shared readiness now waits for native
+   settlement instead of presenting endpoint fallback as playback, the
+   exponent crosses the equation on a governed foreground layer, and human
+   review approved the complete sequence on 2026-08-18. The transparent
+   crossing treatment remains exemplar-bounded rather than a global motif.
 4. **Pressure before promotion:** complete. Quotient, distribution, and
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
@@ -104,11 +101,11 @@ Only this repository sequence is active:
    matched-dissolve operator handoff, persistent operand transport, centered
    fraction construction, restrained outside-in enclosure reception, and
    closure-coupled target operator on 2026-08-17.
-9. **Homomorphic crossover promotion:** next. Product cardinality and quotient
-   structural pressure now justify one bounded shared causal recipe. Preserve
-   timing, geometry, cardinality, fraction construction, and Native KaTeX
-   optical treatment as caller or renderer policy; stop if promotion changes
-   either approved choreography.
+9. **Homomorphic crossover promotion:** complete. Product and quotient now
+   share one renderer-neutral causal recipe while timing, geometry,
+   cardinality, fraction construction, and Native KaTeX optics remain local.
+   The governed authoring entrance and fixed generation benchmark prove the
+   crossover without changing either approved choreography.
 10. **Core ownership convergence:** complete. The dependency-direction graph is
    enforced with zero exceptions. See
    `reviews/2026-08-16-kp-core-ownership-convergence-closeout.md`.
@@ -117,18 +114,19 @@ Only this repository sequence is active:
    development erasure, measured algebra/CSS splits, and five enforced neutral
    facades are closed. See
    `reviews/2026-08-16-kp-bundle-application-isolation-closeout.md`.
-12. **Capability coverage and transform-series generation:** new active
-    priority after the bounded homomorphic closeout. Add one evidence-derived
-    Transformation Coverage view, one governed equation-series compiler, URL
-    and Review reproducibility, and explicit future frontend seams for matrix,
-    code, Graph2D, and Graph3D. The function-coordinate exemplar is deferred
-    until this generation foundation is honest. The active contract now runs
-    objective compiler work before the bounded `2^x = 7` and shared
-    playback-readiness repair. URL/exact-state work remains downstream of that
-    repair, and all subjective Coverage, dock, Review, and exponent/log
-    judgments are consolidated into one end-of-run human checkpoint. No
-    downstream evidence may describe the currently degraded full-motion
-    surface as healthy before that checkpoint.
+12. **Capability coverage and transform-series generation:** complete. KP now
+    has an evidence-derived Transformation Coverage view, a tool-neutral
+    governed series compiler and CLI, deterministic positive and repair
+    corpus, model-neutral planner port, exact URL and Review state, a global
+    development dock, and honest `frontend-required` gaps for matrix, code,
+    Graph2D, and Graph3D. The combined surface and exponent/log checkpoint was
+    human-approved on 2026-08-18; release checks are recorded in
+    `reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`.
+13. **Balanced equation operations:** next bounded capability frontier. First
+    reconcile the existing subtract, divide, and apply-log examples against
+    the new series compiler, select one canonical exemplar, and propose a
+    reversible pressure slice. Do not broaden operand shapes or begin the
+    alternative-base logarithm family without a separately approved plan.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
