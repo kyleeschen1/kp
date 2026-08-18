@@ -18,15 +18,6 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import {
-  compileKpCollisionSafeTransitTracks,
-  compileKpCollisionSafeReorderTracks,
-  type KpEquationProtectedTransitCertificate,
-  type KpEquationMotionStageOccupancy as O
-} from "./equation-motion-path-planner.ts";
-import {
-  compileKpQualityBoundedFanInTracks
-} from "./native-katex-fan-in-motion.ts";
-import {
   retireKpNativeKatexStructuralSuccessionPreservingPaint,
   syncKpNativeKatexStructuralSuccession
 } from "./native-katex-structural-succession-renderer.ts";
@@ -50,16 +41,21 @@ import type {
   KpNativeKatexSceneTrackFrameContract
 } from "./native-katex-scene-track-contract.ts";
 import {
+  compileKpCollisionSafeReorderTracks,
+  compileKpCollisionSafeTransitTracks,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexOperationTracks,
   compileKpNativeKatexProjectedTracks,
   compileKpNativeKatexSceneTracks,
   compileKpNativeKatexSemanticMotionTracks,
   compileKpNativeKatexSuccessorSynthesisScenePlans,
+  compileKpQualityBoundedFanInTracks,
   partitionKpNativeKatexSuccessorOwnedTracks,
   reconcileKpNativeKatexScenes,
   type KpCompiledSymbolMotionContract,
+  type KpEquationMotionStageOccupancy as O,
   type KpEquationOperationChoreography,
+  type KpEquationProtectedTransitCertificate,
   type KpNativeKatexAtomLifecycle,
   type KpNativeKatexHierarchicalScenePlan,
   type KpNativeKatexFactoringSceneBinding,

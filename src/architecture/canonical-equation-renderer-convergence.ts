@@ -47,9 +47,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/equation-font-readiness.ts",
     "src/rendering/equation-material-layer-dom.ts",
     "src/rendering/equation-material-owner.ts",
-    "src/rendering/equation-motion-path-planner.ts",
     "src/rendering/native-katex-base-scene-plan.ts",
-    "src/rendering/native-katex-fan-in-motion.ts",
     "src/rendering/native-katex-paint-geometry.ts",
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-scene-track-sampling.ts",
@@ -87,10 +85,8 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // compositor instead of introducing an equation-specific renderer. Keep the
   // ratchet close enough that a parallel implementation still cannot hide.
   maximumProductionSourceBytes: 140_000,
-  // Direct dependencies remain separate responsibilities, but freezing their
-  // current closure prevents a core reduction from merely relocating bytes to
-  // an unmeasured helper.
-  maximumProductionDirectDependencyModules: 16,
+  // Freeze direct dependencies so core reductions cannot hide in helpers.
+  maximumProductionDirectDependencyModules: 14,
   maximumProductionDirectDependencySourceBytes: 295_000,
   // Planner source receives responsibilities still embedded in the current
   // compositor. The aggregate ceiling, not this migration envelope, prevents
@@ -172,7 +168,7 @@ export function validateKpCanonicalEquationRendererConvergence(
   }
   if (
     policy.maximumProductionSourceBytes !== 140_000 ||
-    policy.maximumProductionDirectDependencyModules !== 16 ||
+    policy.maximumProductionDirectDependencyModules !== 14 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||
     policy.maximumProductionScenePlanBoundarySourceBytes !== 315_000 ||

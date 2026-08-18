@@ -135,6 +135,8 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetEffect: "none",
     evidence: [
       evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexOperationTracks"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpCollisionSafeReorderTracks"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpQualityBoundedFanInTracks"),
       evidence("src/rendering/native-katex-operation-choreography.ts", "applyKpNativeKatexOperationChoreography"),
       evidence("src/rendering/native-katex-factoring-choreography.ts", "compileKpNativeKatexFactoringScenePlan"),
       evidence("src/rendering/native-katex-fan-in-motion.ts", "compileKpQualityBoundedFanInTracks")
@@ -164,6 +166,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetEffect: "read-native-dom",
     evidence: [
       evidence("src/rendering/native-katex-paint-geometry.ts", "attachKpNativeKatexTrackPaintGeometry"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpCollisionSafeTransitTracks"),
       evidence("src/rendering/native-katex-scene-compositor.ts", "measureKpNativeKatexGlyphHandoff")
     ],
     forbiddenAuthority: noSemanticInference

@@ -250,6 +250,48 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T16:40:19.614Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:18.830Z",
+      "notes": "19/19; direct, arc, reorder, occupancy, and protected-transit routes preserved."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:28.884Z",
+      "notes": "27/27; fixed aggregate and exact 14-module direct closure pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:33.986Z",
+      "notes": "73/73; dense fan-in, reorder, direct-seek, and endpoint behavior preserved."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:37.691Z",
+      "notes": "186/186; operation choreography remains unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:39.816Z",
+      "notes": "All TypeScript, Svelte, and domain type gates pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:51:42.741Z",
+      "notes": "Dependency direction and semantic authority gates pass."
     }
   ],
   "allowedWork": [
@@ -325,7 +367,8 @@
     {
       "id": "s09",
       "title": "Move collision reorder and fan-in orchestration",
-      "status": "planned"
+      "summary": "Moved collision-safe transit, semantic reorder, and quality-bounded fan-in behind the base scene-plan port, reduced the exact direct dependency closure from 16 modules to 14 without raising any ceiling, and preserved all 301 focused motion and operation checks.",
+      "status": "complete"
     },
     {
       "id": "s10",

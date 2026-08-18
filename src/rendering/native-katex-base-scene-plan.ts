@@ -42,12 +42,19 @@ export {
 export type {
   KpNativeKatexSuccessorSynthesisIntent
 } from "./native-katex-successor-synthesis.ts";
+export {
+  compileKpCollisionSafeReorderTracks,
+  compileKpCollisionSafeTransitTracks
+} from "./equation-motion-path-planner.ts";
+export type {
+  KpEquationMotionStageOccupancy,
+  KpEquationProtectedTransitCertificate
+} from "./equation-motion-path-planner.ts";
+export {
+  compileKpQualityBoundedFanInTracks
+} from "./native-katex-fan-in-motion.ts";
 
-/**
- * Pure renderer-session planning lives here so semantic correspondence and
- * base trajectories can be tested without granting the paint compositor DOM
- * mutation, scheduling, or operation-selection authority.
- */
+/** Pure planning has no runtime authority. */
 
 export type KpNativeKatexAtomLifecycle =
   | "persist"

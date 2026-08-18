@@ -89,6 +89,19 @@ test("successor planning is upstream while measured paint realization stays loca
   assert.match(successor, /export function composeKpNativeKatexSceneMaterialOwners/);
 });
 
+test("collision, reorder, and fan-in planning enter through the base-plan port", async () => {
+  const [basePlan, compositor] = await Promise.all([
+    readFile("src/rendering/native-katex-base-scene-plan.ts", "utf8"),
+    readFile("src/rendering/native-katex-scene-compositor.ts", "utf8")
+  ]);
+
+  assert.doesNotMatch(compositor, /from "\.\/equation-motion-path-planner\.ts"/);
+  assert.doesNotMatch(compositor, /from "\.\/native-katex-fan-in-motion\.ts"/);
+  assert.match(basePlan, /compileKpCollisionSafeTransitTracks/);
+  assert.match(basePlan, /compileKpCollisionSafeReorderTracks/);
+  assert.match(basePlan, /compileKpQualityBoundedFanInTracks/);
+});
+
 test("pure planning and sampling cannot acquire runtime effects", () => {
   for (const responsibility of kpNativeKatexCompositorOwnership) {
     if (
