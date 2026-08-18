@@ -15,11 +15,13 @@ import {
 } from "../rendering/exponent-radical-selector-annotated-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
-  createKpCanonicalNativeKatexSceneSession,
+  createKpCanonicalNativeKatexSceneSession
+} from "../rendering/native-katex-scene-compositor.ts";
+import {
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes,
   reverseKpNativeKatexSemanticPaintRelations
-} from "../rendering/native-katex-scene-compositor.ts";
+} from "../rendering/native-katex-base-scene-plan.ts";
 import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";

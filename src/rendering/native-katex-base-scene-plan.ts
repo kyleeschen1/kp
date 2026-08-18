@@ -1,6 +1,13 @@
 import type {
-  KpEquationCollisionTrack
+  KpEquationCollisionTrack,
+  KpEquationProtectedTransitCertificate
 } from "./equation-motion-path-planner.ts";
+import type {
+  KpEquationStructuralSuccessionIntent
+} from "../animation/structural-succession-presentation.ts";
+import type {
+  KpEquationMaterialLayerOwnerFrame
+} from "./equation-material-layer-dom.ts";
 import type {
   KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
@@ -10,6 +17,7 @@ import {
   unionKpStageRelativeRects as unionRects
 } from "./native-katex-rendered-scene.ts";
 import type {
+  KpNativeKatexRendererDispositionContract,
   KpNativeKatexSceneTrackContract
 } from "./native-katex-scene-track-contract.ts";
 import type {
@@ -109,6 +117,116 @@ export type KpNativeKatexSceneTrack = KpNativeKatexSceneTrackContract<
 
 export type KpNativeKatexPaintMeasuredSceneTrack =
   KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
+
+export interface KpNativeKatexHandoffCorrelation {
+  readonly kind: "native-katex-handoff-correlation";
+  readonly lifecycle: "renderer-session";
+  readonly id: string;
+  readonly materialOwnerId: string;
+  readonly trackId: string;
+  readonly componentId: string;
+  readonly atomLifecycle: KpNativeKatexAtomLifecycle;
+  readonly visualAtomId: string;
+  readonly sourceAtomId?: string | undefined;
+  readonly targetAtomId?: string | undefined;
+  readonly semanticEntityId: string;
+  readonly disposition: "target-bound" | "departing-without-native-target";
+}
+
+/** Measured plans live for one mounted session and never enter durable state. */
+export interface KpNativeKatexRendererReadyScenePlan {
+  readonly kind: "native-katex-renderer-ready-scene-plan";
+  readonly lifecycle: "renderer-session-ephemeral";
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly protectedTransit: KpEquationProtectedTransitCertificate;
+  readonly disposition: KpNativeKatexRendererDispositionContract;
+  readonly handoffCorrelations: readonly KpNativeKatexHandoffCorrelation[];
+  readonly structuralSuccession?:
+    KpEquationStructuralSuccessionIntent | undefined;
+  readonly structuralMotion?: "full" | "checkpoint" | undefined;
+  readonly copyFanOut: boolean;
+  readonly endpointDwellFraction: number;
+  readonly supplementalMaterialOwners?:
+    ((progress: number) => readonly KpEquationMaterialLayerOwnerFrame[]) |
+    undefined;
+  readonly toJSON: () => never;
+}
+
+const liveRendererReadyPlans = new WeakSet<KpNativeKatexRendererReadyScenePlan>();
+
+type KpNativeKatexRendererReadyScenePlanInput = Omit<
+  KpNativeKatexRendererReadyScenePlan,
+  "kind" | "lifecycle" | "copyFanOut" | "endpointDwellFraction" |
+  "handoffCorrelations" | "toJSON"
+> & {
+  readonly handoffCorrelations?: readonly KpNativeKatexHandoffCorrelation[];
+  readonly copyFanOut?: boolean | undefined;
+  readonly endpointDwellFraction?: number | undefined;
+};
+
+export function createKpNativeKatexRendererReadyScenePlan(
+  input: KpNativeKatexRendererReadyScenePlanInput
+): KpNativeKatexRendererReadyScenePlan {
+  const { source, target } = input.reconciliation;
+  if (
+    source.lifecycle !== "renderer-session" ||
+    target.lifecycle !== "renderer-session"
+  ) {
+    throw new Error(
+      "Renderer-ready plans require ephemeral renderer-session observations."
+    );
+  }
+  if (source.stage !== target.stage) {
+    throw new Error("Renderer-ready endpoints must share one measured stage.");
+  }
+  const trackIds = input.tracks.map(({ id }) => id);
+  if (new Set(trackIds).size !== trackIds.length) {
+    throw new Error("Renderer-ready plans require unique measured track IDs.");
+  }
+  const endpointDwellFraction = input.endpointDwellFraction ?? 0;
+  if (
+    !Number.isFinite(endpointDwellFraction) ||
+    endpointDwellFraction < 0 ||
+    endpointDwellFraction > 0.25
+  ) {
+    throw new Error(
+      "Renderer-ready endpoint dwell must be between zero and 0.25."
+    );
+  }
+  const plan = Object.freeze({
+    kind: "native-katex-renderer-ready-scene-plan" as const,
+    lifecycle: "renderer-session-ephemeral" as const,
+    reconciliation: input.reconciliation,
+    hierarchy: input.hierarchy,
+    tracks: Object.freeze([...input.tracks]),
+    protectedTransit: input.protectedTransit,
+    disposition: input.disposition,
+    handoffCorrelations: Object.freeze([
+      ...(input.handoffCorrelations ?? [])
+    ]),
+    structuralSuccession: input.structuralSuccession,
+    structuralMotion: input.structuralMotion,
+    copyFanOut: input.copyFanOut ?? false,
+    endpointDwellFraction,
+    supplementalMaterialOwners: input.supplementalMaterialOwners,
+    toJSON(): never {
+      throw new Error(
+        "Renderer-ready native KaTeX plans cannot enter durable state."
+      );
+    }
+  });
+  liveRendererReadyPlans.add(plan);
+  return plan;
+}
+
+export function isKpNativeKatexRendererReadyScenePlan(
+  value: unknown
+): value is KpNativeKatexRendererReadyScenePlan {
+  return typeof value === "object" && value !== null &&
+    liveRendererReadyPlans.has(value as KpNativeKatexRendererReadyScenePlan);
+}
 
 export const compileKpNativeKatexSemanticMotionTracks =
   applyKpNativeKatexSymbolMotionContract;

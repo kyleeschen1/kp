@@ -3,11 +3,9 @@ import test from "node:test";
 
 import {
   createKpNativeKatexRendererReadyScenePlan,
-  isKpNativeKatexRendererReadyScenePlan
-} from "../src/rendering/native-katex-renderer-ready-scene-plan.ts";
-import type {
-  KpNativeKatexPaintMeasuredSceneTrack
-} from "../src/rendering/native-katex-scene-compositor.ts";
+  isKpNativeKatexRendererReadyScenePlan,
+  type KpNativeKatexPaintMeasuredSceneTrack
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 import type {
   KpEquationProtectedTransitCertificate
 } from "../src/rendering/equation-protected-transit-types.ts";
@@ -25,8 +23,6 @@ test("renderer-ready plans are immutable one-session handoffs", () => {
     dispositions: Object.freeze([])
   });
   const plan = createKpNativeKatexRendererReadyScenePlan({
-    source,
-    target,
     reconciliation,
     hierarchy: Object.freeze({
       kind: "native-katex-hierarchical-scene-plan",
@@ -102,8 +98,6 @@ function createMinimalPlan(
     dispositions: Object.freeze([])
   });
   return createKpNativeKatexRendererReadyScenePlan({
-    source,
-    target,
     reconciliation,
     hierarchy: Object.freeze({
       kind: "native-katex-hierarchical-scene-plan",

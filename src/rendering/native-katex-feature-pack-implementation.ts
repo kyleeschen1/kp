@@ -4,9 +4,11 @@ import {
 } from "./native-katex-rendered-scene.ts";
 import {
   compileKpCanonicalNativeKatexPureScenePlan,
-  createKpCanonicalNativeKatexSceneSession,
-  projectKpNativeKatexSemanticPaintRelations
+  createKpCanonicalNativeKatexSceneSession
 } from "./native-katex-scene-compositor.ts";
+import {
+  projectKpNativeKatexSemanticPaintRelations
+} from "./native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexFeaturePack
 } from "./native-katex-feature-pack-contract.ts";

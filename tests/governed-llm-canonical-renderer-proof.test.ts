@@ -8,12 +8,14 @@ import {
   createKpGovernedFractionFanOutExemplar
 } from "../src/authoring/governed-fraction-fan-out-exemplar.ts";
 import {
+  createKpNativeKatexRendererSession
+} from "../src/rendering/native-katex-scene-compositor.ts";
+import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
-  createKpNativeKatexRendererSession,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes
-} from "../src/rendering/native-katex-scene-compositor.ts";
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 import {
   createKpNativeKatexRenderedSceneObservation,
   type KpNativeKatexPaintAtomObservation

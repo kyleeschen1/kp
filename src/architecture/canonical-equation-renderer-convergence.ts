@@ -65,7 +65,6 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-factoring-choreography.ts",
     "src/rendering/native-katex-fan-in-motion.ts",
     "src/rendering/native-katex-operation-choreography.ts",
-    "src/rendering/native-katex-renderer-ready-scene-plan.ts",
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-successor-synthesis.ts",
     "src/rendering/native-katex-symbol-motion.ts",

@@ -9,7 +9,7 @@ import {
 } from "../src/authoring/governed-exponent-radical-promotion.ts";
 import {
   projectKpNativeKatexSemanticPaintRelations
-} from "../src/rendering/native-katex-scene-compositor.ts";
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 
 test("existing governed radical trace compiles into the v2 construction", () => {
   const fixture = createKpGovernedRadicalSuccessionFixture();

@@ -292,6 +292,90 @@
       "scope": "broad",
       "checkedAt": "2026-08-18T16:51:42.741Z",
       "notes": "Dependency direction and semantic authority gates pass."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:15:06.706Z",
+      "notes": "Core 118905; exact direct closure 14 modules and 154649 bytes; planner boundary 14 modules; aggregate 454884/455000."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:15:08.042Z",
+      "notes": "28/28; one compiler facade, one renderer facade, nominal ephemeral plan, exact reachability, and source gates pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:15:09.512Z",
+      "notes": "73/73; measured scenes, direct seek, fan-in, reorder, and endpoint settlement preserved."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:15:11.031Z",
+      "notes": "18/18; cache identity, scheduler, latest-session handoff, and focus remain stable."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-feature-pack.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:15:12.107Z",
+      "notes": "6/6; the lazy feature pack still references the canonical authorities."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:15:13.131Z",
+      "notes": "186/186; exhaustive operation and reader presentation authority preserved."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:15:14.183Z",
+      "notes": "16/16; product callers preserve homomorphic choreography."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:15:15.241Z",
+      "notes": "53/53; canonical direct seek, rewind, and compiler authority preserved."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:15:16.274Z",
+      "notes": "36/36; quotient fusion and surface capabilities preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:15:17.301Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:15:18.334Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, and semantic authority gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:15:19.360Z",
+      "notes": "Production Vite build completed; lazy feature-pack and canonical compositor chunks resolve after facade convergence."
     }
   ],
   "allowedWork": [
@@ -373,7 +457,8 @@
     {
       "id": "s10",
       "title": "Converge planner and renderer facades",
-      "status": "planned"
+      "summary": "Converged the nominal renderer-ready contract into the single scene-plan authority, added one canonical compiler facade feeding the existing renderer facade, removed the superseded standalone plan module and compatibility exports, preserved old input callers through the same path, and kept every fixed source and bundle gate green.",
+      "status": "complete"
     },
     {
       "id": "s11",

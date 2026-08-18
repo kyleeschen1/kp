@@ -15,9 +15,11 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   compileKpCanonicalNativeKatexPureScenePlan,
-  createKpCanonicalNativeKatexSceneSession,
-  projectKpNativeKatexSemanticPaintRelations
+  createKpCanonicalNativeKatexSceneSession
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import {
+  projectKpNativeKatexSemanticPaintRelations
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 
 test("native KaTeX pack is an immutable view of the canonical renderer", () => {
   assert.ok(Object.isFrozen(kpNativeKatexFeaturePack));

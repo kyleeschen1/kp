@@ -180,7 +180,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     evidence: [
       evidence("src/rendering/native-katex-scene-track-contract.ts", "KpNativeKatexSceneTrackContract"),
       evidence("src/rendering/native-katex-scene-track-sampling.ts", "sampleKpNativeKatexSceneTrackFrames"),
-      evidence("src/rendering/native-katex-renderer-ready-scene-plan.ts", "createKpNativeKatexRendererReadyScenePlan"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "createKpNativeKatexRendererReadyScenePlan"),
       evidence("src/rendering/native-katex-scene-compositor.ts", "sampleKpNativeKatexSceneTracks")
     ],
     forbiddenAuthority: Object.freeze([

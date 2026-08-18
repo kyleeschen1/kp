@@ -1,10 +1,12 @@
 import {
   createKpCanonicalNativeKatexSceneSession,
-  projectKpNativeKatexSemanticPaintRelations,
   type KpCanonicalNativeKatexSceneSession,
-  type KpNativeKatexSceneOwnershipFrame,
-  type KpNativeKatexSemanticPaintRelation
+  type KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
+import {
+  projectKpNativeKatexSemanticPaintRelations,
+  type KpNativeKatexSemanticPaintRelation
+} from "./native-katex-base-scene-plan.ts";
 import {
   createKpNativeKatexSemanticMotionTrackProjection,
   type KpNativeKatexSemanticRouteRegistry,

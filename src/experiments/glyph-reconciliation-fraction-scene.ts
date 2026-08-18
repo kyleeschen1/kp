@@ -9,19 +9,21 @@ import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
-  compileKpNativeKatexHierarchicalScenePlan,
-  compileKpNativeKatexSceneTracks,
   compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexRendererSession,
   measureKpNativeKatexCorrelatedHandoff,
   measureKpNativeKatexGlyphHandoff,
   measureKpNativeKatexRuleHandoff,
-  reconcileKpNativeKatexScenes,
   realizeKpNativeKatexTypographyStylePlan,
   sampleKpNativeKatexTypographyStylePlan,
   traceKpNativeKatexHandoffOwnership
 } from "../rendering/native-katex-scene-compositor.ts";
+import {
+  compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
+  reconcileKpNativeKatexScenes
+} from "../rendering/native-katex-base-scene-plan.ts";
 
 export type KpFractionExperimentDirection = "merge" | "split";
 

@@ -18,12 +18,14 @@ import {
   createKpNativeKatexCompoundScenePlan
 } from "../rendering/native-katex-compound-scene-plan.ts";
 import {
+  createKpNativeKatexRendererSession
+} from "../rendering/native-katex-scene-compositor.ts";
+import {
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexSceneTracks,
-  createKpNativeKatexRendererSession,
   projectKpNativeKatexSemanticPaintRelations,
   reconcileKpNativeKatexScenes
-} from "../rendering/native-katex-scene-compositor.ts";
+} from "../rendering/native-katex-base-scene-plan.ts";
 import {
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";

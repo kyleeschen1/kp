@@ -24,7 +24,7 @@ test("ownership evidence names live source authority", async () => {
   }
 });
 
-test("pure base planning is extracted behind the compositor compatibility facade", async () => {
+test("pure planning authority lives only in the scene-plan facade", async () => {
   const [basePlan, compositor] = await Promise.all([
     readFile("src/rendering/native-katex-base-scene-plan.ts", "utf8"),
     readFile("src/rendering/native-katex-scene-compositor.ts", "utf8")
@@ -39,8 +39,34 @@ test("pure base planning is extracted behind the compositor compatibility facade
   for (const authority of authorities) {
     assert.match(basePlan, new RegExp(`export function ${authority}\\b`));
     assert.doesNotMatch(compositor, new RegExp(`function ${authority}\\b`));
+    assert.doesNotMatch(compositor, new RegExp(`export \\{[^}]*${authority}`));
   }
   assert.match(compositor, /from "\.\/native-katex-base-scene-plan\.ts"/);
+});
+
+test("one canonical compiler facade feeds one renderer facade", async () => {
+  const [basePlan, compositor] = await Promise.all([
+    readFile("src/rendering/native-katex-base-scene-plan.ts", "utf8"),
+    readFile("src/rendering/native-katex-scene-compositor.ts", "utf8")
+  ]);
+  const renderer = compositor.slice(
+    compositor.indexOf("export function createKpCanonicalNativeKatexSceneSession"),
+    compositor.indexOf("function compileKpCanonicalNativeKatexProtectedPlan")
+  );
+
+  assert.equal(
+    (compositor.match(/export function compileKpCanonicalNativeKatexScenePlan\b/g) ?? []).length,
+    1
+  );
+  assert.equal(
+    (compositor.match(/export function createKpCanonicalNativeKatexSceneSession\b/g) ?? []).length,
+    1
+  );
+  assert.match(renderer, /isKpNativeKatexRendererReadyScenePlan/);
+  assert.match(renderer, /compileKpCanonicalNativeKatexScenePlan\(input\)/);
+  assert.doesNotMatch(renderer, /prepareKpCanonicalNativeKatexScene/);
+  assert.match(basePlan, /interface KpNativeKatexRendererReadyScenePlan/);
+  assert.match(basePlan, /const liveRendererReadyPlans = new WeakSet/);
 });
 
 test("semantic motion and track projection enter through the base-plan port", async () => {
@@ -49,7 +75,7 @@ test("semantic motion and track projection enter through the base-plan port", as
     "src/rendering/native-katex-symbol-motion.ts",
     "src/rendering/native-katex-track-projection.ts",
     "src/rendering/native-katex-operation-choreography.ts"
-  ];
+  ] as const;
   const [compositor, ...planners] = await Promise.all(
     paths.map((path) => readFile(path, "utf8"))
   );

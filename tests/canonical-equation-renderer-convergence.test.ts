@@ -227,7 +227,7 @@ test("canonical scene core exposes one ephemeral renderer session contract", asy
   assert.equal(source.includes("KpNativeKatexScenePlayback"), false);
   const sessionSource = source.slice(
     source.indexOf("export function createKpNativeKatexRendererSession"),
-    source.indexOf("function assertLifecycleArity")
+    source.indexOf("export function compileKpCanonicalNativeKatexPureScenePlan")
   );
   assert.doesNotMatch(
     sessionSource,

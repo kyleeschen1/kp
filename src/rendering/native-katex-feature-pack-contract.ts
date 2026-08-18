@@ -11,7 +11,7 @@ export type KpCreateCanonicalNativeKatexSceneSession = typeof import(
 )["createKpCanonicalNativeKatexSceneSession"];
 
 export type KpProjectNativeKatexSemanticPaintRelations = typeof import(
-  "./native-katex-scene-compositor.ts"
+  "./native-katex-base-scene-plan.ts"
 )["projectKpNativeKatexSemanticPaintRelations"];
 
 export type KpCompileCanonicalNativeKatexPureScenePlan = typeof import(

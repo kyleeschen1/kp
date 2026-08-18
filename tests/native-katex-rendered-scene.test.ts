@@ -9,24 +9,26 @@ import {
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
   assessKpNativeKatexTypographyHandoff,
-  compileKpNativeKatexHierarchicalScenePlan,
-  compileKpNativeKatexSceneTracks,
   compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexRendererSession,
-  createKpNativeKatexSceneReconciliation,
   decideKpNativeKatexRendererDisposition,
   evaluateKpNativeKatexTypographyHandoffLaw,
-  projectKpNativeKatexSemanticPaintRelations,
-  reconcileKpNativeKatexScenes,
-  reverseKpNativeKatexSemanticPaintRelations,
   selectKpNativeKatexTypographyRealizationDisposition,
   sampleKpNativeKatexEndpointDwellProgress,
   sampleKpNativeKatexSceneTracks,
   sampleKpNativeKatexTypographyStylePlan,
-  selectKpNativeKatexTypographyHandoffModel,
-  type KpNativeKatexSceneTrack
+  selectKpNativeKatexTypographyHandoffModel
 } from "../src/rendering/native-katex-scene-compositor.ts";
+import {
+  compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexSceneTracks,
+  createKpNativeKatexSceneReconciliation,
+  projectKpNativeKatexSemanticPaintRelations,
+  reconcileKpNativeKatexScenes,
+  reverseKpNativeKatexSemanticPaintRelations,
+  type KpNativeKatexSceneTrack
+} from "../src/rendering/native-katex-base-scene-plan.ts";
 import {
   compileKpQualityBoundedFanInTracks,
   evaluateKpNativeKatexFanInMotionQuality
