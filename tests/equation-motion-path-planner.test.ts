@@ -7,6 +7,7 @@ import {
   planKpEquationMotionPath,
   planKpEquationMotionPathBetweenPoints,
   sampleKpEquationMotionPath,
+  sampleKpEquationMotionPathWithSampling,
   sampleKpEquationMotionTrackOpacityProgress,
   sampleKpEquationMotionTrackRect,
   sampleKpEquationMotionTrackPaintRect
@@ -98,6 +99,39 @@ test("quadratic sampling clamps progress and preserves exact endpoints", () => {
   assert.deepEqual(sampleKpEquationMotionPath(plan.selected, -1), { x: 10, y: 20 });
   assert.deepEqual(sampleKpEquationMotionPath(plan.selected, 1), { x: 90, y: 20 });
   assert.ok(sampleKpEquationMotionPath(plan.selected, 0.5).y < 20);
+});
+
+test("minimal-clearance role transfer uses one shallow deterministic bow", () => {
+  const path = planKpEquationMotionPathBetweenPoints({
+    id: "path.role-transfer",
+    start: { x: 100, y: 20 },
+    end: { x: 0, y: 40 },
+    variants: ["arc-above"],
+    clearance: 20
+  }).selected;
+  const sample = (progress: number) =>
+    sampleKpEquationMotionPathWithSampling(
+      path,
+      progress,
+      "minimal-clearance-role-transfer"
+    );
+  const points = Array.from({ length: 21 }, (_value, index) =>
+    sample(index / 20)
+  );
+
+  assert.deepEqual(sample(0), path.start);
+  assert.deepEqual(sample(1), path.end);
+  assert.ok(points.every((point, index) =>
+    index === 0 || point.x <= points[index - 1]!.x
+  ));
+  assert.ok(sample(0.1).x > 98);
+  const midpoint = sample(0.5);
+  const directY = path.start.y +
+    (path.end.y - path.start.y) * ((path.start.x - midpoint.x) / 100);
+  const bow = directY - midpoint.y;
+  assert.ok(bow >= 20 && bow <= 24);
+  assert.deepEqual(sample(-1), path.start);
+  assert.deepEqual(sample(2), path.end);
 });
 
 test("curved tracks follow measured paint while reconstructing wrapper offsets", () => {

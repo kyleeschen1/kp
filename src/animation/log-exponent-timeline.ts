@@ -143,6 +143,21 @@ export function sampleKpLogExponentSequenceFrame(input: {
 export const kpCanonicalLogExponentSequenceTimeline =
   compileKpLogExponentSequenceTimeline();
 
+/**
+ * Resolves a non-animated fallback from semantic time, never from whichever
+ * DOM endpoint happened to paint first. Mid-transit states choose the nearest
+ * stable endpoint so direct URLs and failed enhancement remain intelligible.
+ */
+export function resolveKpLogExponentNearestEndpointIndex(input: {
+  readonly progress: number;
+  readonly direction?: "forward" | "rewind" | undefined;
+  readonly reducedMotion?: boolean | undefined;
+}): number {
+  const frame = sampleKpLogExponentSequenceFrame(input);
+  const operationProgress = frame.obligationFrames[0]?.progress ?? 0;
+  return frame.operationIndex + (operationProgress >= 0.5 ? 1 : 0);
+}
+
 function operationActProgress(
   frame: KpChoreographyTimelineFrame,
   timeline: KpChoreographyTimeline

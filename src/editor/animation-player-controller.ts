@@ -412,6 +412,19 @@ function handlePlayerClick(event: MouseEvent): void {
 function handlePlayerSurfaceReadiness(event: Event): void {
   const player = event.currentTarget;
   if (!(player instanceof HTMLElement)) return;
+  const readiness = readKpEditorAnimationSurfaceReadiness(player);
+  const session = sessions.get(player);
+  if (
+    readiness !== "ready" &&
+    session?.player.playbackStatus === "playing"
+  ) {
+    // A surface that loses readiness must stop the shared clock before its
+    // renderer can accumulate invisible progress behind a stable fallback.
+    dispatchKpEditorAnimationPlaybackAction(player, {
+      type: "pause",
+      nowMs: performance.now()
+    });
+  }
   syncPlayerControlAvailability(player);
 }
 

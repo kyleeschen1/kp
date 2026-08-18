@@ -24,7 +24,7 @@ import type {
 
 export const kpNativeKatexLogExponentExtractionProfile = Object.freeze({
   residualReflowWindow: Object.freeze({ start: 0.42, end: 0.72 }),
-  exponentClearanceInLocalInkHeights: 6
+  exponentClearanceInLocalInkHeights: 1.75
 });
 
 interface KpLogExponentTrackProjectionDispatchEntry {
@@ -114,7 +114,12 @@ function createExtractionProjection(
         return Object.freeze({
           ...useSingleOperationProgress(track),
           motionPath,
-          motionPathSampling: "planned-curve" as const
+          // The exponent changes role rather than leaving the expression, so
+          // use the shortest shallow transfer that clears measured neighbors.
+          motionPathSampling: "minimal-clearance-role-transfer" as const,
+          // The role-transfer sampler owns its easing; stacking the generic
+          // scene smoothstep would concentrate travel into a visible lurch.
+          sampleProgress: identityProgress
         });
       });
       if (exponentTrackCount === 0) {
@@ -157,6 +162,10 @@ function sampleWindow(
     const local = (progress - window.start) / (window.end - window.start);
     return local * local * (3 - 2 * local);
   };
+}
+
+function identityProgress(progress: number): number {
+  return progress;
 }
 
 function center(rect: {

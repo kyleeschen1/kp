@@ -252,11 +252,41 @@
       "scope": "s19a durable control-plane integrity",
       "checkedAt": "2026-08-18T02:56:39.386Z",
       "notes": "Workspace validates 994 nodes and 22502 events with the checkpoint reopened and partial."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T04:17:12.621Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T04:17:13.978Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T04:17:15.238Z"
+    },
+    {
+      "command": "playwright canonical log-exponent checkpoints on chromium firefox webkit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T04:17:16.954Z"
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T04:17:18.087Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Lifecycle candidate repaired: catalogue pauses before background time can reach the shared clock, BFCache pagehide preserves the mounted DOM, exact URL state survives restoration, and the seven accepted visual checkpoints are unchanged. Awaiting human playback review; s20 remains unopened. Two inherited broad gates remain red outside this patch."
+    "summary": "Firefox/WebKit blank-stage lifecycle is repaired and the exponent now uses the named minimal-clearance role-transfer sampler: one shallow monotone bow, collision-safe across Chromium Firefox and WebKit, awaiting human playback review before s20."
   },
   "expectedLearning": [
     "Whether Exponential-equation-visual-repair-checkpoint can be completed inside Governed animation generation foundation continuation."

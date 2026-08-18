@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   kpCanonicalLogExponentSequenceTimeline,
+  resolveKpLogExponentNearestEndpointIndex,
   sampleKpLogExponentSequenceFrame
 } from "../src/animation/log-exponent-timeline.ts";
 
@@ -56,4 +57,23 @@ test("exponent extraction obligations progress only through the act window", () 
     JSON.stringify(kpCanonicalLogExponentSequenceTimeline).includes("durationMs"),
     false
   );
+});
+
+test("fallback endpoints derive from semantic time in both directions", () => {
+  assert.equal(resolveKpLogExponentNearestEndpointIndex({ progress: 0 }), 0);
+  assert.equal(resolveKpLogExponentNearestEndpointIndex({ progress: 1 }), 3);
+  assert.equal(resolveKpLogExponentNearestEndpointIndex({
+    progress: 0,
+    direction: "rewind"
+  }), 3);
+  assert.equal(resolveKpLogExponentNearestEndpointIndex({
+    progress: 1,
+    direction: "rewind"
+  }), 0);
+  for (const progress of [0.16, 0.35, 0.5, 0.625, 0.86]) {
+    const endpointIndex = resolveKpLogExponentNearestEndpointIndex({
+      progress
+    });
+    assert.ok(endpointIndex >= 0 && endpointIndex <= 3);
+  }
 });

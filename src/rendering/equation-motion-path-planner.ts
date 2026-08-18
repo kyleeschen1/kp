@@ -52,7 +52,21 @@ export interface KpEquationMotionPathPlan {
 
 export type KpEquationMotionPathSampling =
   | "planned-curve"
+  | "minimal-clearance-role-transfer"
   | "canonical-clearance-lane";
+
+/**
+ * Presentation policy for a continuant changing syntactic role without
+ * crossing an instructional obstacle. The path spends only enough curvature
+ * to clear adjacent paint; larger arcs remain reserved for named structure.
+ */
+export const kpMinimalClearanceRoleTransferProfile = Object.freeze({
+  departureEnd: 0.18,
+  transitStart: 0.08,
+  transitEnd: 0.82,
+  settlementStart: 0.72,
+  middleBowRatio: 0.12
+});
 
 export interface KpEquationMotionStageOccupancy {
   readonly measurementIdentity: {
@@ -345,6 +359,9 @@ export function sampleKpEquationMotionPathWithSampling(
   if (sampling === "planned-curve") {
     return sampleKpEquationMotionPath(path, progress);
   }
+  if (sampling === "minimal-clearance-role-transfer") {
+    return sampleMinimalClearanceRoleTransfer(path, progress);
+  }
   const p = clamp01(progress);
   if (p === 0) return path.start;
   if (p === 1) return path.end;
@@ -377,6 +394,43 @@ export function sampleKpEquationMotionPathWithSampling(
     x: baseline.x,
     // Linear transit keeps visible travel pending through the final descent.
     y: baseline.y + lift * liftProgress
+  };
+}
+
+function sampleMinimalClearanceRoleTransfer(
+  path: KpEquationMotionPathCandidate,
+  progress: number
+): KpEquationLayoutPoint {
+  const p = clamp01(progress);
+  if (p === 0) return path.start;
+  if (p === 1) return path.end;
+  const profile = kpMinimalClearanceRoleTransferProfile;
+  const transit = smoothWindowProgress(
+    p,
+    profile.transitStart,
+    profile.transitEnd
+  );
+  const direct = {
+    x: interpolate(path.start.x, path.end.x, transit),
+    y: interpolate(path.start.y, path.end.y, transit)
+  };
+  const midpointY = (path.start.y + path.end.y) / 2;
+  const above = path.control.y <= midpointY;
+  const clearance = above
+    ? Math.max(0, Math.min(path.start.y, path.end.y) - path.control.y)
+    : Math.max(0, path.control.y - Math.max(path.start.y, path.end.y));
+  const departure = smoothWindowProgress(p, 0, profile.departureEnd);
+  const settlement = 1 - smoothWindowProgress(
+    p,
+    profile.settlementStart,
+    1
+  );
+  const shallowBow = 1 +
+    4 * transit * (1 - transit) * profile.middleBowRatio;
+  const offset = clearance * Math.min(departure, settlement) * shallowBow;
+  return {
+    x: direct.x,
+    y: direct.y + (above ? -offset : offset)
   };
 }
 
@@ -2347,6 +2401,16 @@ function interpolate(source: number, target: number, progress: number): number {
 
 function smoothstep(value: number): number {
   return value * value * (3 - 2 * value);
+}
+
+function smoothWindowProgress(
+  progress: number,
+  start: number,
+  end: number
+): number {
+  if (progress <= start) return 0;
+  if (progress >= end) return 1;
+  return smoothstep((progress - start) / (end - start));
 }
 
 function controlPoint(

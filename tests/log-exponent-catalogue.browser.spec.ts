@@ -104,8 +104,9 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
       baselineDelta: Math.abs(
         log.y + log.height / 2 - (equality.y + equality.height / 2)
       ),
-      exponentBottom: exponent.bottom,
-      baselineTop: equality.top,
+      exponentCenter: exponent.y + exponent.height / 2,
+      exponentHeight: exponent.height,
+      baselineCenter: equality.y + equality.height / 2,
       ownersRemainInsideStage: visibleOwners.every((owner) => {
         const rect = owner.getBoundingClientRect();
         return rect.left >= stageRect.left - 1 &&
@@ -115,10 +116,14 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
       })
     };
   });
-  // The exponent may lift, but the persistent logarithm must not inherit that path.
+  // The exponent clears adjacent paint with a shallow role transfer; the
+  // persistent logarithm must neither inherit the lift nor force a flight lane.
   expect(extractionGeometry.baselineDelta).toBeLessThan(8);
-  expect(extractionGeometry.exponentBottom)
-    .toBeLessThan(extractionGeometry.baselineTop);
+  expect(extractionGeometry.exponentCenter)
+    .toBeLessThan(extractionGeometry.baselineCenter);
+  expect(
+    extractionGeometry.baselineCenter - extractionGeometry.exponentCenter
+  ).toBeLessThan(extractionGeometry.exponentHeight * 2);
   expect(extractionGeometry.ownersRemainInsideStage).toBe(true);
   const exponentPositions: Array<{ x: number; y: number }> = [];
   for (const progress of [

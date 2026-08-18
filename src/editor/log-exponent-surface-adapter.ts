@@ -15,6 +15,7 @@ import type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
 import {
+  resolveKpLogExponentNearestEndpointIndex,
   sampleKpLogExponentSequenceFrame
 } from "../animation/log-exponent-timeline.ts";
 import {
@@ -196,6 +197,10 @@ export const kpEditorLogExponentSurfaceAdapter = Object.freeze({
       void prepareSurface(session, generation);
     }
     session.pendingState = state;
+    if (session.stage.dataset["kpLogExponentStage"] === "failed") {
+      showFallbackEndpoint(session, state);
+      return;
+    }
     if (session.preparedOperations !== undefined) applyFrame(session, state);
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
@@ -218,6 +223,11 @@ function mountSurface(
     readiness: "preparing"
   });
 
+  const initialEndpointIndex = resolveFallbackEndpointIndex(
+    state,
+    player.dataset["kpEditorAnimationAccessibilityMode"]
+  );
+
   const endpointRoots = kpCanonicalLogExponentNativeEndpoints.map(
     (endpoint, index) => {
       const root = document.createElement("div");
@@ -225,9 +235,12 @@ function mountSurface(
       root.dataset["kpLogExponentEndpointStateId"] = endpoint.stateId;
       root.dataset["kpLogExponentEndpointIndex"] = String(index);
       root.innerHTML = endpoint.nativeHtmlAndMathml;
-      root.style.opacity = index === 0 ? "1" : "0";
-      root.setAttribute("aria-hidden", index === 0 ? "false" : "true");
-      if (index !== 0) root.setAttribute("inert", "");
+      root.style.opacity = index === initialEndpointIndex ? "1" : "0";
+      root.setAttribute(
+        "aria-hidden",
+        index === initialEndpointIndex ? "false" : "true"
+      );
+      if (index !== initialEndpointIndex) root.setAttribute("inert", "");
       bindKpLogExponentNativeEndpointOwnership({ root, endpoint });
       return root;
     }
@@ -338,17 +351,7 @@ async function prepareSurface(
     });
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
-    session.stage.dataset["kpLogExponentStage"] = "failed";
-    session.stage.dataset["kpLogExponentError"] =
-      error instanceof Error ? error.message : String(error);
-    publishKpEditorAnimationSurfaceReadiness({
-      player: session.player,
-      readiness: "failed"
-    });
-    session.endpointRoots.forEach((root, index) => {
-      root.style.opacity = index === 0 ? "1" : "0";
-      setAccessibleEndpoint(root, index === 0);
-    });
+    failSurface(session, session.pendingState, error);
   }
 }
 
@@ -371,15 +374,25 @@ function applyFrame(
   });
   let activeTransit = session.activeTransit;
   if (activeTransit?.operationIndex !== frame.operationIndex) {
+    const prepared = preparedOperations[frame.operationIndex]!;
+    let nextTransit: KpLogExponentTransitSession;
+    try {
+      // Compile the successor before releasing current paint. If measured
+      // geometry rejects it, the current task can still install a semantic
+      // endpoint fallback without exposing a blank frame.
+      nextTransit = createKpLogExponentTransitSession(prepared);
+    } catch (error: unknown) {
+      failSurface(session, state, error);
+      return;
+    }
     activeTransit?.transit.retire();
     // A native KaTeX material layer has one renderer-session authority.
     // Clearing it before an operation boundary prevents generic track IDs
     // from reusing the preceding operation's computed-style clone.
     syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
-    const prepared = preparedOperations[frame.operationIndex]!;
     activeTransit = {
       operationIndex: frame.operationIndex,
-      transit: createKpLogExponentTransitSession(prepared)
+      transit: nextTransit
     };
     session.activeTransit = activeTransit;
     session.stage.dataset["kpLogExponentOperationChoreographyId"] =
@@ -395,11 +408,17 @@ function applyFrame(
     root.style.opacity = "0";
     setAccessibleEndpoint(root, false);
   });
-  const ownership = activeTransit.transit.apply({
-    progress: operationProgress,
-    direction: "forward",
-    reducedMotion
-  });
+  let ownership: ReturnType<KpLogExponentTransitSession["apply"]>;
+  try {
+    ownership = activeTransit.transit.apply({
+      progress: operationProgress,
+      direction: "forward",
+      reducedMotion
+    });
+  } catch (error: unknown) {
+    failSurface(session, state, error);
+    return;
+  }
   const accessibleIndex = ownership.visualOwner === "source-native"
     ? frame.operationIndex
     : frame.operationIndex + 1;
@@ -427,6 +446,55 @@ function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {
   root.setAttribute("aria-hidden", active ? "false" : "true");
   if (active) root.removeAttribute("inert");
   else root.setAttribute("inert", "");
+}
+
+function failSurface(
+  session: KpLogExponentSurfaceSession,
+  state: KpEditorAnimationPlayerState,
+  error: unknown
+): void {
+  session.stage.dataset["kpLogExponentStage"] = "failed";
+  session.stage.dataset["kpLogExponentError"] =
+    error instanceof Error ? error.message : String(error);
+  publishKpEditorAnimationSurfaceReadiness({
+    player: session.player,
+    readiness: "failed"
+  });
+  session.activeTransit?.transit.retire();
+  session.activeTransit = undefined;
+  syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+  showFallbackEndpoint(session, state);
+}
+
+function showFallbackEndpoint(
+  session: KpLogExponentSurfaceSession,
+  state: KpEditorAnimationPlayerState
+): void {
+  const endpointIndex = resolveFallbackEndpointIndex(
+    state,
+    session.player.dataset["kpEditorAnimationAccessibilityMode"]
+  );
+  session.endpointRoots.forEach((root, index) => {
+    const active = index === endpointIndex;
+    root.style.opacity = active ? "1" : "0";
+    setAccessibleEndpoint(root, active);
+  });
+  session.stage.dataset["kpLogExponentFallbackEndpointIndex"] =
+    String(endpointIndex);
+  session.stage.dataset["kpLogExponentVisualOwner"] = "fallback-native";
+}
+
+function resolveFallbackEndpointIndex(
+  state: KpEditorAnimationPlayerState,
+  accessibilityMode: string | undefined
+): number {
+  return resolveKpLogExponentNearestEndpointIndex({
+    progress: state.progress,
+    direction: state.direction,
+    reducedMotion:
+      accessibilityMode === "reduced-motion" ||
+      accessibilityMode === "static"
+  });
 }
 
 function disposeSurface(

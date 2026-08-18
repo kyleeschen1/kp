@@ -434,6 +434,8 @@ function applyCanonicalFunctionWrap(
       return track;
     }
     wrapperPaintByBranch.add(wrapperBranch);
+    const wrapperReceptionContactGroupId =
+      `${choreography.id}.${wrapperBranch}.wrapper-reception`;
     const sample = (progress: number) => smoothWindow(
       progress,
       choreography.wrapperEntryWindow.start,
@@ -459,6 +461,10 @@ function applyCanonicalFunctionWrap(
               endPaintRect: Object.freeze({ ...nativePaintRect })
             }),
         timingGroupId: choreography.id,
+        // A function name and its adjacent enclosure are one typed reception
+        // unit. Their temporary contact during a horizontal squeeze is the
+        // motif itself, not unrelated paint crowding.
+        intentionalContactGroupId: wrapperReceptionContactGroupId,
         opacityScheduleAuthority: "semantic-choreography" as const,
         sampleProgress: sample,
         sampleOpacityProgress: sample,
@@ -473,6 +479,7 @@ function applyCanonicalFunctionWrap(
     return Object.freeze({
       ...track,
       timingGroupId: choreography.id,
+      intentionalContactGroupId: wrapperReceptionContactGroupId,
       opacityScheduleAuthority: "semantic-choreography" as const,
       sampleProgress: sample,
       sampleOpacityProgress: sample
