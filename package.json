@@ -345,6 +345,7 @@
     "check:balanced-operation-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-balanced-operation-caller-inventory.ts --check",
     "test:balanced-operation-inventory": "node --disable-warning=ExperimentalWarning --test tests/balanced-operation-caller-inventory.test.ts",
     "test:both-sides-operation-family": "node --disable-warning=ExperimentalWarning --test tests/both-sides-operation-family.test.ts",
+    "test:both-sides-causal-recipe": "node --disable-warning=ExperimentalWarning --test tests/both-sides-causal-recipe.test.ts",
     "test:manifest-projection-authority": "node --disable-warning=ExperimentalWarning --test tests/manifest-projection-authority.test.ts",
     "test:selected-surface-capability-declarations": "node --disable-warning=ExperimentalWarning --test tests/selected-surface-capability-declarations.test.ts",
     "test:equation-adapter-ownership-map": "node --disable-warning=ExperimentalWarning --test tests/equation-adapter-ownership-map.test.ts",

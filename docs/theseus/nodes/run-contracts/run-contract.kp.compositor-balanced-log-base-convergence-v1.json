@@ -712,6 +712,41 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T18:10:36.567Z",
       "notes": "Framework-neutral and semantic authority boundaries accept the new data-only family."
+    },
+    {
+      "command": "npm run test:both-sides-causal-recipe",
+      "status": "passed",
+      "scope": "causal-recipe",
+      "checkedAt": "2026-08-18T18:15:06.289Z",
+      "notes": "5/5: exact four-phase order, synchronized branch ownership, relation continuity, endpoint exchange, exact rewind, injective-function reuse, and forbidden presentation authority."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "existing-caller-preservation",
+      "checkedAt": "2026-08-18T18:15:07.507Z",
+      "notes": "187/187 existing operation presentation and choreography checks remain unchanged."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "existing-log-preservation",
+      "checkedAt": "2026-08-18T18:15:08.530Z",
+      "notes": "53/53 approved log-exponent semantic, timing, seek, rewind, and native projection checks remain unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-authority",
+      "checkedAt": "2026-08-18T18:15:09.540Z",
+      "notes": "Causal projection compiles across application, test, Svelte, and domain projects."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T18:15:10.544Z",
+      "notes": "New animation-layer projection preserves dependency direction and semantic authority boundaries."
     }
   ],
   "allowedWork": [
@@ -835,7 +870,8 @@
     {
       "id": "s17",
       "title": "Define shared causal recipe",
-      "status": "planned"
+      "summary": "Added a verified four-phase both-sides causal recipe that projects only prepare-branches, synchronized application/withdrawal, equality continuity, and endpoint settlement from branded semantic authority. Forward and rewind exchange exact endpoints and preserve branch/application identity; the recipe admits no timing, geometry, topology, routes, or optics, and all 187 existing operation plus 53 log-exponent checks remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s18",
