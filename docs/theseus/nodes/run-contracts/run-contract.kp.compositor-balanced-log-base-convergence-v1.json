@@ -58,6 +58,24 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T15:33:51.045Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-compositor-ownership.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:41:59.396Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:42:01.983Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:42:04.612Z"
     }
   ],
   "allowedWork": [
@@ -78,7 +96,8 @@
     {
       "id": "s02",
       "title": "Classify compositor ownership",
-      "status": "planned"
+      "summary": "Added an exact-set ownership ledger for twelve compositor responsibilities, legal target effects, forbidden cross-layer authority, and live source evidence covering all four owners and twenty dependencies.",
+      "status": "complete"
     },
     {
       "id": "s03",

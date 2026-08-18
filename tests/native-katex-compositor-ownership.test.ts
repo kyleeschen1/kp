@@ -1,0 +1,57 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+import {
+  kpNativeKatexCompositorOwnership,
+  validateKpNativeKatexCompositorOwnership
+} from "../src/architecture/native-katex-compositor-ownership.ts";
+
+test("every compositor responsibility has one legal target owner", () => {
+  assert.deepEqual(validateKpNativeKatexCompositorOwnership(), []);
+  assert.equal(kpNativeKatexCompositorOwnership.length, 12);
+});
+
+test("ownership evidence names live source authority", async () => {
+  for (const responsibility of kpNativeKatexCompositorOwnership) {
+    for (const evidence of responsibility.evidence) {
+      const source = await readFile(evidence.path, "utf8");
+      assert.ok(
+        source.includes(evidence.needle),
+        `${responsibility.id} lacks ${evidence.needle} in ${evidence.path}.`
+      );
+    }
+  }
+});
+
+test("pure planning and sampling cannot acquire runtime effects", () => {
+  for (const responsibility of kpNativeKatexCompositorOwnership) {
+    if (
+      responsibility.targetLayer === "semantic-input" ||
+      responsibility.targetLayer === "scene-plan-compilation" ||
+      responsibility.targetLayer === "sampling"
+    ) {
+      assert.equal(responsibility.targetEffect, "none");
+    }
+  }
+});
+
+test("final paint and settlement owners cannot infer semantic truth", () => {
+  for (const responsibility of kpNativeKatexCompositorOwnership) {
+    if (
+      responsibility.targetLayer === "paint-ownership" ||
+      responsibility.targetLayer === "settlement"
+    ) {
+      assert.ok(
+        responsibility.forbiddenAuthority.includes(
+          "semantic identity inferred from glyph or LaTeX equality"
+        )
+      );
+      assert.ok(
+        responsibility.forbiddenAuthority.includes(
+          "route, collision, or successor synthesis"
+        )
+      );
+    }
+  }
+});
