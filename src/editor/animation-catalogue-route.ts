@@ -12,28 +12,25 @@ export interface KpAnimationCatalogueRoute {
 export function readKpAnimationCatalogueRoute(
   search: string
 ): KpAnimationCatalogueRoute {
-  const params = new URLSearchParams(search);
-  const view = params.get("view");
-  const artifactId = nonBlank(
-    params.get(KP_ANIMATION_CATALOGUE_ARTIFACT_PARAM)
-  );
-  const playhead = readPlayhead(
-    params.get(KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM)
-  );
-  if (view === null) {
+  const state = readKpAnimationDevelopmentUrlState(search);
+  if (state.viewSource === "default") {
     return Object.freeze({
       active: true,
       source: "default" as const,
-      ...(artifactId === undefined ? {} : { artifactId }),
-      ...(playhead === undefined ? {} : { playhead })
+      ...(state.artifactId === undefined
+        ? {}
+        : { artifactId: state.artifactId }),
+      ...(state.playhead === undefined ? {} : { playhead: state.playhead })
     });
   }
-  if (view === KP_ANIMATION_CATALOGUE_VIEW) {
+  if (state.view === KP_ANIMATION_CATALOGUE_VIEW) {
     return Object.freeze({
       active: true,
       source: "explicit" as const,
-      ...(artifactId === undefined ? {} : { artifactId }),
-      ...(playhead === undefined ? {} : { playhead })
+      ...(state.artifactId === undefined
+        ? {}
+        : { artifactId: state.artifactId }),
+      ...(state.playhead === undefined ? {} : { playhead: state.playhead })
     });
   }
   return Object.freeze({ active: false, source: "other-view" as const });
@@ -70,19 +67,9 @@ export function writeKpAnimationCatalogueRoute(
   return query.length === 0 ? "" : `?${query}`;
 }
 
-function nonBlank(value: string | null): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed === undefined || trimmed.length === 0 ? undefined : trimmed;
-}
-
-function readPlayhead(value: string | null): number | undefined {
-  if (value === null || value.trim().length === 0) return undefined;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1
-    ? parsed
-    : undefined;
-}
-
 function formatPlayhead(value: number): string {
   return String(Math.round(value * 1_000) / 1_000);
 }
+import {
+  readKpAnimationDevelopmentUrlState
+} from "./animation-development-url-state.ts";

@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s25",
   "kind": "next-action",
   "title": "URL-view-and-settings-state",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s25 in Governed generation overnight nonvisual-first continuation.",
+  "status": "resolved",
+  "summary": "URL values and validation remain framework-neutral; browser hosts alone choose push versus replace and the root remounts only when the application view changes.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,68 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-development-url-state",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:23.961Z",
+      "notes": "18 codec route navigation and compatibility checks"
+    },
+    {
+      "command": "npm run visual:animation-development-url-state",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:25.079Z",
+      "notes": "Chromium exact-state tuning view swap and Back Forward proof with one document request"
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:26.062Z",
+      "notes": "36 canonical shell and host boundary checks"
+    },
+    {
+      "command": "playwright Review composer focused check",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:27.039Z",
+      "notes": "global Review owner preserves one draft across in-shell selection"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:28.050Z",
+      "notes": "application Node test Svelte and domain types"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:29.086Z",
+      "notes": "dependency framework-neutral semantic and compiler authority boundaries"
+    },
+    {
+      "command": "npm run build:internal-studio",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:30.089Z",
+      "notes": "Internal Studio production build"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-08-18T06:57:31.099Z",
+      "notes": "catalogue lazy-family and outer-shell budgets"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added one headless animation-development URL codec for view, route-default theme, display style/focus, artifact, checkpoint, and bounded playhead; exact links canonicalize all state, and Catalogue/Coverage plus artifact Back/Forward restore without document reload."
+  },
   "expectedLearning": [
     "Whether URL-view-and-settings-state can be completed inside Governed generation overnight nonvisual-first continuation."
   ],
@@ -60,5 +122,23 @@
     "Public layout curriculum SRS broad tutoring or the deferred transformation-family backlog.",
     "Any change to approved log-product or log-quotient choreography timing geometry cardinality fraction construction or optics.",
     "Any semantic endpoint identity correspondence or mathematical operation-order change in the exponent-log repair."
+  ],
+  "criteria": [
+    {
+      "id": "url-codec-owns-values-while-host-owns-history",
+      "weight": "high"
+    },
+    {
+      "id": "exact-links-round-trip-view-theme-display-artifact-checkpoint-and-playhead",
+      "weight": "high"
+    },
+    {
+      "id": "catalogue-and-coverage-history-switch-without-document-reload",
+      "weight": "high"
+    },
+    {
+      "id": "legacy-artifact-links-and-back-forward-remain-compatible",
+      "weight": "high"
+    }
   ]
 }

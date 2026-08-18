@@ -444,7 +444,11 @@ test("Svelte keeps one Review composer and draft across selection", async ({
     "catalogue-rail"
   );
   await expect(review).toHaveAttribute("data-kp-dev-review-available", "true");
-  await review.getByRole("button", { name: "Review" }).click();
+  // The global development toolbar is the visible Review owner; the
+  // catalogue-local launcher remains hidden to preserve one entry point.
+  await page.locator(
+    '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+  ).click();
   const comment = review.getByRole("textbox", { name: "What should change?" });
   await comment.fill("Keep this draft through the asset transition.");
   await review.evaluate((element) => {

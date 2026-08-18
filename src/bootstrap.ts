@@ -1,6 +1,13 @@
 import {
   selectKpLegacyRootRoute
 } from "./compatibility/legacy-root-route.ts";
+import {
+  KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT
+} from "./editor/animation-development-view-navigation.ts";
+
+type KpAnimationDevelopmentRootRoute =
+  | "animation-catalogue"
+  | "animation-coverage";
 
 type KpDevelopmentToolbarClient = typeof import(
   "./dev-toolbar/development-toolbar-bootstrap.ts"
@@ -21,6 +28,11 @@ async function bootstrap(): Promise<void> {
     pathname: window.location.pathname,
     search: window.location.search
   });
+  if (isAnimationDevelopmentRootRoute(route)) {
+    await mountDevelopmentToolbar();
+    registerPagehide(await mountAnimationDevelopmentRoot({ root, route }));
+    return;
+  }
   switch (route) {
     case "scheme-factorial": {
       await mountDevelopmentToolbar();
@@ -53,29 +65,6 @@ async function bootstrap(): Promise<void> {
       registerPagehide(session.dispose);
       return;
     }
-    case "animation-catalogue": {
-      const catalogue = await import(
-        "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
-      );
-      // Catalogue CSS owns the application-wide box model. Let it settle
-      // before fixed development chrome measures the viewport.
-      await mountDevelopmentToolbar();
-      registerPagehide(await catalogue.mountKpSvelteCatalogueExemplar({
-        root,
-        search: window.location.search
-      }));
-      return;
-    }
-    case "animation-coverage": {
-      const coverage = await import(
-        "./editor/svelte-catalogue/animation-transformation-coverage-entry.ts"
-      );
-      await mountDevelopmentToolbar();
-      registerPagehide(coverage.mountKpAnimationTransformationCoverage({
-        root
-      }));
-      return;
-    }
     case "concept-room": {
       await mountDevelopmentToolbar();
       const concept = await import(
@@ -94,6 +83,91 @@ async function bootstrap(): Promise<void> {
       await mountDevelopmentToolbar();
       await import("./main.ts");
   }
+}
+
+async function mountAnimationDevelopmentRoot(input: {
+  readonly root: HTMLElement;
+  readonly route: KpAnimationDevelopmentRootRoute;
+}): Promise<() => void> {
+  let targetRoute = input.route;
+  let activeDispose = await mountAnimationDevelopmentRoute({
+    root: input.root,
+    route: targetRoute
+  });
+  let revision = 0;
+  let disposed = false;
+  const restoreLocation = (): void => {
+    void remountForLocation();
+  };
+  const remountForLocation = async (): Promise<void> => {
+    const route = selectKpLegacyRootRoute({
+      pathname: window.location.pathname,
+      search: window.location.search
+    });
+    if (route === targetRoute) return;
+    if (!isAnimationDevelopmentRootRoute(route)) {
+      window.location.assign(window.location.href);
+      return;
+    }
+    targetRoute = route;
+    const currentRevision = ++revision;
+    activeDispose();
+    input.root.replaceChildren();
+    const dispose = await mountAnimationDevelopmentRoute({
+      root: input.root,
+      route
+    });
+    if (disposed || currentRevision !== revision) {
+      dispose();
+      return;
+    }
+    targetRoute = route;
+    activeDispose = dispose;
+  };
+  window.addEventListener("popstate", restoreLocation);
+  window.addEventListener(
+    KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT,
+    restoreLocation
+  );
+  return () => {
+    if (disposed) return;
+    disposed = true;
+    revision += 1;
+    window.removeEventListener("popstate", restoreLocation);
+    window.removeEventListener(
+      KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT,
+      restoreLocation
+    );
+    activeDispose();
+  };
+}
+
+async function mountAnimationDevelopmentRoute(input: {
+  readonly root: HTMLElement;
+  readonly route: KpAnimationDevelopmentRootRoute;
+}): Promise<() => void> {
+  if (input.route === "animation-catalogue") {
+    const catalogue = await import(
+      "./editor/svelte-catalogue/svelte-catalogue-exemplar-entry.ts"
+    );
+    return catalogue.mountKpSvelteCatalogueExemplar({
+      root: input.root,
+      search: window.location.search
+    });
+  }
+  const coverage = await import(
+    "./editor/svelte-catalogue/animation-transformation-coverage-entry.ts"
+  );
+  return coverage.mountKpAnimationTransformationCoverage({
+    root: input.root,
+    search: window.location.search
+  });
+}
+
+function isAnimationDevelopmentRootRoute(
+  route: ReturnType<typeof selectKpLegacyRootRoute>
+): route is KpAnimationDevelopmentRootRoute {
+  return route === "animation-catalogue" || route === "animation-coverage";
 }
 
 async function mountDevelopmentToolbar(): Promise<void> {

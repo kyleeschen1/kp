@@ -15,15 +15,23 @@
     type KpAnimationCatalogueSelectedHostViewModel
   } from "../animation-catalogue-host-view-model.ts";
   import {
+    projectKpAnimationCatalogueDisplaySettings,
+    updateKpAnimationCatalogueDisplaySettings
+  } from "../animation-catalogue-display-settings.ts";
+  import {
+    readKpAnimationDevelopmentUrlState,
+    writeKpAnimationDevelopmentUrlState,
+    type KpAnimationDevelopmentDisplaySettings,
+    type KpAnimationDevelopmentTheme,
+    type KpAnimationDevelopmentUrlState
+  } from "../animation-development-url-state.ts";
+  import {
     applyKpAnimationCatalogueParameterInput
   } from "../animation-catalogue-parameter-host.ts";
   import {
     decideKpAnimationCatalogueLinkNavigation,
     resolveKpAnimationCatalogueHistoryNavigation
   } from "../animation-catalogue-navigation.ts";
-  import {
-    writeKpAnimationCatalogueRoute
-  } from "../animation-catalogue-route.ts";
   import {
     selectKpAnimationCatalogueInspector,
     tuneKpAnimationCataloguePresentation
@@ -78,6 +86,16 @@
   let stageMessage = $state("");
   let selectionRevision = 0;
   let disposed = false;
+  const initialUrlState = readKpAnimationDevelopmentUrlState(
+    window.location.href
+  );
+  let routePresentation = $state<{
+    readonly theme: KpAnimationDevelopmentTheme;
+    readonly display: KpAnimationDevelopmentDisplaySettings;
+  }>({
+    theme: initialUrlState.theme,
+    display: initialUrlState.display
+  });
   let playerHtml = $derived(selection === undefined
     ? ""
     : renderKpEditorAnimationPlayerShell({
@@ -123,6 +141,16 @@
     }
     if (event.target.dataset["action"] === "tune-animation-catalogue") {
       tuneKpAnimationCataloguePresentation(shell, event.target);
+      const display = updateKpAnimationCatalogueDisplaySettings({
+        current: routePresentation.display,
+        select: event.target
+      });
+      if (display !== undefined) {
+        replaceUrlPresentation({
+          theme: routePresentation.theme,
+          display
+        });
+      }
     }
   }
 
@@ -162,7 +190,19 @@
     if (decision.action === "native") return;
     event.preventDefault();
     if (decision.action === "stay") return;
-    const href = decision.href;
+    const current = currentUrlState();
+    if (current === undefined) return;
+    const href = writeKpAnimationDevelopmentUrlState({
+      baseUrl: window.location.href,
+      state: {
+        ...current,
+        view: "animation-catalogue",
+        viewSource: "explicit",
+        artifactId: decision.entry.animationId,
+        checkpointId: undefined,
+        playhead: decision.playhead
+      }
+    });
     window.history.pushState(null, "", href);
     void prepareSelection({
       entry: decision.entry,
@@ -203,15 +243,23 @@
       typeof event.detail !== "object" || event.detail === null) return;
     const progress = (event.detail as { readonly progress?: unknown }).progress;
     if (typeof progress !== "number" || view === undefined) return;
-    const search = writeKpAnimationCatalogueRoute(window.location.search, {
-      artifactId: view.entry.animationId,
-      playhead: progress
+    const current = currentUrlState();
+    if (current === undefined) return;
+    const href = writeKpAnimationDevelopmentUrlState({
+      baseUrl: window.location.href,
+      state: {
+        ...current,
+        view: "animation-catalogue",
+        viewSource: "explicit",
+        artifactId: view.entry.animationId,
+        playhead: progress
+      }
     });
-    if (search !== window.location.search) {
+    if (href !== window.location.href) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.pathname}${search}${window.location.hash}`
+        href
       );
     }
   }
@@ -222,10 +270,16 @@
       projection: selection.selectionHost.projection,
       href: window.location.href
     });
+    if (decision.action === "leave-catalogue" &&
+      readKpAnimationDevelopmentUrlState(window.location.href).view ===
+        "coverage") {
+      return;
+    }
     if (decision.action !== "select") {
       window.location.assign(window.location.href);
       return;
     }
+    syncRoutePresentation(window.location.href);
     void prepareSelection({
       entry: decision.entry,
       playhead: decision.playhead,
@@ -241,6 +295,7 @@
     readonly selectionHost: KpSvelteCatalogueSelectionHost;
   }): Promise<void> {
     const revision = ++selectionRevision;
+    syncRoutePresentation(input.search);
     // Capture chrome intent at the selection boundary. Paint observations may
     // replace the current view while the selected pack is loading, but they
     // must not reset the inspector choice that initiated this transition.
@@ -317,6 +372,43 @@
     });
   }
 
+  function currentUrlState(): KpAnimationDevelopmentUrlState | undefined {
+    const state = readKpAnimationDevelopmentUrlState(window.location.href);
+    return state.view === "animation-catalogue" ? state : undefined;
+  }
+
+  function replaceUrlPresentation(next: {
+    readonly theme: KpAnimationDevelopmentTheme;
+    readonly display: KpAnimationDevelopmentDisplaySettings;
+  }): void {
+    const current = currentUrlState();
+    if (current === undefined) return;
+    const href = writeKpAnimationDevelopmentUrlState({
+      baseUrl: window.location.href,
+      state: {
+        ...current,
+        view: "animation-catalogue",
+        viewSource: "explicit",
+        theme: next.theme,
+        display: next.display
+      }
+    });
+    routePresentation = next;
+    if (href !== window.location.href) {
+      window.history.replaceState(null, "", href);
+    }
+  }
+
+  function syncRoutePresentation(href: string): void {
+    const state = readKpAnimationDevelopmentUrlState(
+      new URL(href, window.location.href)
+    );
+    routePresentation = {
+      theme: state.theme,
+      display: state.display
+    };
+  }
+
   $effect(() => {
     if (selection === undefined || shell === undefined) return;
     const mountedShell = shell;
@@ -338,6 +430,14 @@
         });
         hostOutcome = observation.outcome.status;
       }
+    });
+  });
+
+  $effect(() => {
+    if (shell === undefined || selection === undefined) return;
+    projectKpAnimationCatalogueDisplaySettings({
+      shell,
+      display: routePresentation.display
     });
   });
 
@@ -396,6 +496,9 @@
     data-kp-animation-catalogue-host-outcome={hostOutcome}
     data-kp-animation-catalogue-overlay={view.chrome.overlay}
     data-kp-animation-catalogue-inspector-view={view.chrome.inspectorView}
+    data-kp-animation-catalogue-theme={routePresentation.theme}
+    data-kp-animation-catalogue-style={routePresentation.display.style}
+    data-kp-animation-catalogue-focus={routePresentation.display.focus}
     aria-labelledby="kp-animation-catalogue-title"
   >
     <h1

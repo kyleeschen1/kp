@@ -2,9 +2,13 @@
   import type {
     KpAnimationTransformationCoverageViewModel
   } from "../animation-transformation-coverage-view-model.ts";
+  import type {
+    KpAnimationDevelopmentTheme
+  } from "../animation-development-url-state.ts";
 
-  let { view }: {
+  let { view, theme }: {
     view: KpAnimationTransformationCoverageViewModel;
+    theme: KpAnimationDevelopmentTheme;
   } = $props();
 </script>
 
@@ -15,6 +19,7 @@
 <main
   class="kp-transformation-coverage"
   data-kp-transformation-coverage
+  data-kp-animation-coverage-theme={theme}
   aria-labelledby="kp-transformation-coverage-title"
 >
   <header class="kp-transformation-coverage__header">

@@ -105,13 +105,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s25",
       "title": "URL-view-and-settings-state",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s25 in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Delivered exact URL state and same-document Catalogue/Coverage navigation while preserving legacy artifact routes and browser history.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s26",
       "title": "Global-development-dock",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s26 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s27",
