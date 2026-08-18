@@ -107,6 +107,7 @@ simple. No broader UI treatment is promoted before that checkpoint.
 | s17 | Resolve explicit adjacency intents through declarations rather than the three handwritten surface handlers. | High | Broad | Existing three generation trials; declaration exhaustiveness; architecture | Declaration-driven resolver commit | Existing direct cases regress or a central switch grows. |
 | s18 | Compose accepted adjacency plans onto one deterministic series clock with stable checkpoints and direct seek/rewind. | High | Broad | Composition, history independence, boundary sampling, reverse laws | Series runtime commit | A second clock or lesson-local scheduler appears. |
 | s19 | Add a series-level typed repair taxonomy for unknown operations, roles, entities, unsupported syntax, ambiguous jumps, and unavailable domains. | Medium | Standard | Negative corpus; stable diagnostics; previous-valid preservation | Repair taxonomy commit | Invalid input partially mutates the active artifact. |
+| s19a | Repair the canonical `2^x = 7` surface as the first visual pressure test of the series machinery: expose perceptible micro-beats, keep every `\ln` and enclosure inside the stage, remove the known `0.64–0.66` protected-transit collision, and stop for human review. Preserve semantic endpoints, stable identities, mathematical operation order, direct seek/rewind, and all product/quotient choreography. | High/visual | Broad/manual | Log-exponent semantic suite; collision-free Chromium playback; deterministic forward/rewind contact sheet; narrow-stage fit; human visual judgment | Exponential-equation repair commit | Any preserved semantic authority changes, the repair adds a caller-local clock, or human judgment is required; stop as `HUMAN_CHECKPOINT`. |
 | s20 | Add a tool-neutral series CLI that lists capabilities and compiles JSON/TypeScript requests without editor, Svelte, DOM, or browser closure. | Medium | Standard | CLI tests; closure audit; malformed input behavior | Series CLI commit | CLI imports application runtime or broad barrels. |
 | s21 | Add a fixed equation-series corpus covering direct success, one typed repair, invalid algebra authority, unsupported syntax, and unsupported motif. | Medium | Standard | Corpus benchmark; zero silent fallback; deterministic output | Series corpus commit | Fixtures are presented as live-model evidence. |
 | s22 | Define a model-neutral natural-language planner port and recorded proposal/diagnostic format; do not integrate a provider. | Medium | Focused | Port contract tests; forbidden authority fields | Planner-port commit | Natural language becomes mathematical authority. |
@@ -128,6 +129,13 @@ simple. No broader UI treatment is promoted before that checkpoint.
   impact-selected broad checks plus the scoped browser command.
 - The visual checkpoint extends the stable repository-owned catalogue capture;
   no changing scratch browser script is introduced.
+- The inserted s19a checkpoint uses the existing log-exponent capture and
+  browser entrypoints. Its canonical reference is the approved semantic
+  `2^x = 7` sequence plus the canonical lateral function-wrap motif. Promotion
+  requires readable intermediate beats, no clipped operators, no protected
+  intersections, and exact seek/rewind. The independently reversible rollback
+  unit is the one repair commit; the series compiler and approved log-product
+  and log-quotient presentations are outside its rollback boundary.
 - The release slice runs only after human approval and uses the impact-selected
   release gate, Internal Studio build, bundle boundary, and Theseus validation.
 
@@ -163,4 +171,3 @@ Graph2D, and Graph3D. It will not yet turn arbitrary prose or arbitrary LaTeX
 into animations. It will provide the stable, measurable boundary through which
 a live model and additional motif families can be added without inventing
 motion or silently lying.
-

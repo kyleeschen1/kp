@@ -2,8 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-17
-Current Next Action: approve and run the governed animation generation
-foundation contract. Its first visible product is the minimal Transformation
+Current Next Action: continue the approved governed animation generation
+foundation contract at adjacency segmentation. After the series repair
+taxonomy, stop on a bounded visual checkpoint that repairs the canonical
+`2^x = 7` exponent/log surface before CLI, corpus, or Coverage claims consume
+it. The contract's first new visible product remains the minimal Transformation
 Coverage view; its first compiler promotion is the already approved
 product/quotient homomorphic crossover.
 
@@ -29,6 +32,12 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   authoring entrance owns adjacency planning and typed repair.
 - Log product and quotient have approved distinct choreographies and justify a
   bounded shared causal recipe.
+- The `2^x = 7` exponent/log caller remains the semantic exemplar, but its
+  current full-motion surface is not visually healthy: deterministic capture
+  reproduces protected-transit intersections at progress `0.64–0.66`, and its
+  three macro operations do not expose enough perceptual micro-beats. A repair
+  checkpoint is ordered after typed series diagnostics and before downstream
+  CLI/corpus work.
 - Thirty equation surfaces exist, but asset count is not capability coverage:
   three are canonical, twenty-two adapter-backed, four static-only, and one a
   retirement candidate in the current generated inventory.
@@ -104,6 +113,9 @@ the exact view, artifact, settings, and playhead.
 - Natural-language fixtures are presented as live-model reliability evidence.
 - Coverage status cannot be derived from named evidence.
 - The minimal dashboard grows into another ontology or project-management UI.
+- The exponent/log repair changes its semantic endpoints, stable identities,
+  mathematical operation order, or any approved product/quotient choreography
+  instead of remaining a presentation-only exemplar repair.
 
 ## Links
 

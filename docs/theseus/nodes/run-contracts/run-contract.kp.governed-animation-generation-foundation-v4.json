@@ -2,7 +2,8 @@
   "id": "run-contract.kp.governed-animation-generation-foundation-v4",
   "kind": "run-contract",
   "title": "Governed animation generation foundation",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Superseded after fifteen completed slices by the user-approved v5 continuation, which inserts the exponent-log visual repair checkpoint after series diagnostics and before CLI/corpus work.",
   "sourceRefs": [
     {
       "kind": "file",

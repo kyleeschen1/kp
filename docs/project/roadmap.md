@@ -68,10 +68,14 @@ Only this repository sequence is active:
 
 1. **Reconcile the backlog:** complete. Distinguish existing assets, partial
    or diagnostic implementations, and genuinely missing transformations.
-2. **Select one exemplar:** complete. The accepted exponent/log caller is the
-   native-KaTeX `2^x = 7` transformation sequence.
-3. **Perfect one asset:** complete through the approved corrected exemplar and
-   its typed symbol-motion seam.
+2. **Select one exemplar:** complete. The accepted semantic exponent/log
+   caller is the native-KaTeX `2^x = 7` transformation sequence. Its later
+   full-motion collision means it is not currently a production-ready visual
+   exemplar.
+3. **Perfect one asset:** visual repair scheduled. Preserve the approved
+   semantic states, identities, correspondence, and typed symbol-motion seam;
+   after the transform-series repair taxonomy is complete, repair perceptual
+   granularity and the function-wrap collision before CLI and corpus work.
 4. **Pressure before promotion:** complete. Quotient, distribution, and
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
@@ -116,7 +120,10 @@ Only this repository sequence is active:
     Transformation Coverage view, one governed equation-series compiler, URL
     and Review reproducibility, and explicit future frontend seams for matrix,
     code, Graph2D, and Graph3D. The function-coordinate exemplar is deferred
-    until this generation foundation is honest.
+    until this generation foundation is honest. The active contract now
+    includes a bounded `2^x = 7` visual-repair checkpoint after series-level
+    diagnostics and before the tool-neutral CLI/corpus, so downstream evidence
+    cannot describe the currently colliding surface as healthy.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
