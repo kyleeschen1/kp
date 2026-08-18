@@ -76,6 +76,24 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T15:42:04.612Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-renderer-ready-scene-plan.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:49:15.451Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:49:16.677Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:49:17.702Z"
     }
   ],
   "allowedWork": [
@@ -102,7 +120,8 @@
     {
       "id": "s03",
       "title": "Define ephemeral renderer-ready scene plan",
-      "status": "planned"
+      "summary": "Defined and validated a non-serializable renderer-session-only scene-plan contract with measured endpoints, reconciliation, hierarchy, paint-measured tracks, protected transit, disposition, and supplemental owner sampling but no clock or apply authority.",
+      "status": "complete"
     },
     {
       "id": "s04",
