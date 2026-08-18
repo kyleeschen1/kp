@@ -502,6 +502,62 @@
       "scope": "broad",
       "checkedAt": "2026-08-18T17:31:40.269Z",
       "notes": "28/28 canonical ownership and renderer-plan gates pass after host migration."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:36:36.442Z",
+      "notes": "28/28; the renderer accepts only a live nominal plan, and all fixed source and ownership gates pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:36:37.880Z",
+      "notes": "73/73; direct seek, rewind, native endpoints, opacity laws, routing, and settlement remain unchanged."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:36:38.956Z",
+      "notes": "16/16 after explicit compile-then-render migration."
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:36:40.018Z",
+      "notes": "36/36 after explicit compile-then-render migration."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:36:41.101Z",
+      "notes": "All TypeScript, Svelte, test, and domain gates pass with the raw-input renderer overload removed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:36:42.163Z",
+      "notes": "All dependency and authority ratchets pass; no compatibility exception was introduced."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:36:43.184Z",
+      "notes": "Core 118908/140000; exact direct closure 14 modules and 154706/295000; scene-plan 272111/315000; aggregate 454943/455000; no ceiling increase."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:36:44.229Z",
+      "notes": "Production build passes and all native KaTeX compiler/renderer chunks resolve after compatibility retirement."
     }
   ],
   "allowedWork": [
@@ -601,7 +657,8 @@
     {
       "id": "s13",
       "title": "Retire dead entries and restore source gates",
-      "status": "planned"
+      "summary": "Retired the proven-dead raw scene-input renderer compatibility entry, migrated the remaining radical, log-product, and log-quotient direct callers to explicit compile-then-render handoffs, preserved runtime nominal validation, and restored every fixed compositor source gate with the exact direct closure at 154706/295000 bytes and aggregate at 454943/455000 without raising a ceiling.",
+      "status": "complete"
     },
     {
       "id": "s14",

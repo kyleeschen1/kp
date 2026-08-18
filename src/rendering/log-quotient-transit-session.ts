@@ -1,4 +1,5 @@
 import {
+  compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession,
   type KpCanonicalNativeKatexSceneSession,
   type KpNativeKatexSceneOwnershipFrame
@@ -82,7 +83,7 @@ export function createKpLogQuotientTransitSession(input: {
   readonly operationChoreography: KpHomomorphicFusionChoreography;
 }): KpLogQuotientTransitSession {
   assertTransitInput(input);
-  const canonical = createKpCanonicalNativeKatexSceneSession({
+  const rendererReadyPlan = compileKpCanonicalNativeKatexScenePlan({
     source: input.source,
     target: input.target,
     relations: projectKpLogQuotientNativePaintRelations(input.operation),
@@ -98,6 +99,9 @@ export function createKpLogQuotientTransitSession(input: {
       }
     })
   });
+  const canonical = createKpCanonicalNativeKatexSceneSession(
+    rendererReadyPlan
+  );
   let retired = false;
   return Object.freeze({
     kind: "kp-log-quotient-transit-session" as const,

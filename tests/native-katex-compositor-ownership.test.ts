@@ -63,7 +63,14 @@ test("one canonical compiler facade feeds one renderer facade", async () => {
     1
   );
   assert.match(renderer, /isKpNativeKatexRendererReadyScenePlan/);
-  assert.match(renderer, /compileKpCanonicalNativeKatexScenePlan\(input\)/);
+  assert.match(
+    renderer,
+    /plan: KpNativeKatexRendererReadyScenePlan/
+  );
+  assert.doesNotMatch(
+    renderer,
+    /compileKpCanonicalNativeKatexScenePlan\(/
+  );
   assert.doesNotMatch(renderer, /prepareKpCanonicalNativeKatexScene/);
   assert.match(basePlan, /interface KpNativeKatexRendererReadyScenePlan/);
   assert.match(basePlan, /const liveRendererReadyPlans = new WeakSet/);

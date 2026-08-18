@@ -310,9 +310,9 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
     adapter,
     /const rendererReadyPlan = input\.nativeKatex\.compose\.compileScenePlan\([\s\S]*?const canonical = input\.nativeKatex\.compose\.createSession\(\s*rendererReadyPlan\s*\)/u
   );
-  assert.equal(
-    experiment.includes("createKpCanonicalNativeKatexSceneSession"),
-    true
+  assert.match(
+    experiment,
+    /createKpCanonicalNativeKatexSceneSession\(\s*compileKpCanonicalNativeKatexScenePlan\(/u
   );
   assert.equal(sessionBridge.includes(".playback"), false);
 });

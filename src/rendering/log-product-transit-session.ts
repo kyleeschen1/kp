@@ -1,4 +1,5 @@
 import {
+  compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession,
   type KpCanonicalNativeKatexSceneSession,
   type KpNativeKatexSceneOwnershipFrame
@@ -208,7 +209,7 @@ export function createKpLogProductTransitSession(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
 }): KpLogProductTransitSession {
   assertTransitInput(input);
-  const canonical = createKpCanonicalNativeKatexSceneSession({
+  const rendererReadyPlan = compileKpCanonicalNativeKatexScenePlan({
     source: input.source,
     target: input.target,
     relations: projectKpLogProductNativePaintRelations(input.operation),
@@ -216,6 +217,9 @@ export function createKpLogProductTransitSession(input: {
     endpointDwellFraction: 0,
     trackProjection: createKpLogProductHomomorphicTrackProjection(input)
   });
+  const canonical = createKpCanonicalNativeKatexSceneSession(
+    rendererReadyPlan
+  );
   let retired = false;
   return Object.freeze({
     kind: "kp-log-product-transit-session" as const,

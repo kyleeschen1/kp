@@ -1250,11 +1250,13 @@ export function compileKpCanonicalNativeKatexScenePlan(
 }
 
 export function createKpCanonicalNativeKatexSceneSession(
-  input: KpCanonicalNativeKatexSceneInput | KpNativeKatexRendererReadyScenePlan
+  plan: KpNativeKatexRendererReadyScenePlan
 ): KpCanonicalNativeKatexSceneSession {
-  const plan = isKpNativeKatexRendererReadyScenePlan(input)
-    ? input
-    : compileKpCanonicalNativeKatexScenePlan(input);
+  if (!isKpNativeKatexRendererReadyScenePlan(plan)) {
+    throw new Error(
+      "Canonical native KaTeX rendering requires a live renderer-ready plan."
+    );
+  }
   const { source, target } = plan.reconciliation;
   const { reconciliation, hierarchy, tracks } = plan;
   source.stage.dataset["kpNativeKatexHorizontalAxisTrackCount"] = String(

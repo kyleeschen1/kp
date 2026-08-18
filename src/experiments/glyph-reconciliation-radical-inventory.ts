@@ -15,6 +15,7 @@ import {
 } from "../rendering/exponent-radical-selector-annotated-latex.ts";
 import { createKpEquationFontReadiness } from "../rendering/equation-font-readiness.ts";
 import {
+  compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession
 } from "../rendering/native-katex-scene-compositor.ts";
 import {
@@ -197,12 +198,14 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   ) {
     throw new Error("Canonical radical structural succession is unavailable.");
   }
-  const canonical = createKpCanonicalNativeKatexSceneSession({
-    source,
-    target,
-    relations,
-    structuralSuccession
-  });
+  const canonical = createKpCanonicalNativeKatexSceneSession(
+    compileKpCanonicalNativeKatexScenePlan({
+      source,
+      target,
+      relations,
+      structuralSuccession
+    })
+  );
   const reconciliation = canonical.reconciliation;
   const permutedReconciliation = reconcileKpNativeKatexScenes({
     source: { ...source, atoms: [...source.atoms].reverse() },
@@ -211,12 +214,14 @@ async function initializeRadicalInventory(panel: HTMLElement): Promise<void> {
   });
   const reverseRelations =
     reverseKpNativeKatexSemanticPaintRelations(relations);
-  const reverseCanonical = createKpCanonicalNativeKatexSceneSession({
-    source: reverseSource,
-    target: reverseTarget,
-    relations: reverseRelations,
-    structuralSuccession: reverseStructuralSuccession
-  });
+  const reverseCanonical = createKpCanonicalNativeKatexSceneSession(
+    compileKpCanonicalNativeKatexScenePlan({
+      source: reverseSource,
+      target: reverseTarget,
+      relations: reverseRelations,
+      structuralSuccession: reverseStructuralSuccession
+    })
+  );
   const reverseReconciliation = reverseCanonical.reconciliation;
   const plan = canonical.hierarchy;
   const reversePlan = reverseCanonical.hierarchy;
