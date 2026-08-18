@@ -87,6 +87,7 @@
     "test:expression-protocol": "node --disable-warning=ExperimentalWarning --test tests/expression-node-protocol.test.ts",
     "test:log-product": "node --disable-warning=ExperimentalWarning --test tests/log-product-*.test.ts",
     "test:log-exponent": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-*.test.ts",
+    "test:logarithm-change-of-base": "node --disable-warning=ExperimentalWarning --test tests/logarithm-change-of-base.test.ts",
     "visual:log-quotient": "node --disable-warning=ExperimentalWarning scripts/capture-log-quotient.ts",
     "visual:log-product": "node --disable-warning=ExperimentalWarning scripts/capture-log-product.ts",
     "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",

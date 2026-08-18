@@ -1090,6 +1090,42 @@
       "status": "passed",
       "scope": "s24 patch hygiene",
       "checkedAt": "2026-08-18T19:47:17.623Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "s25 semantic law correspondence reverse and corpus",
+      "checkedAt": "2026-08-18T19:56:47.231Z"
+    },
+    {
+      "command": "npm run test:equation-latex-endpoint-normalizer",
+      "status": "passed",
+      "scope": "s25 syntax-semantic boundary preservation",
+      "checkedAt": "2026-08-18T19:56:48.488Z"
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "s25 existing logarithm behavior preservation",
+      "checkedAt": "2026-08-18T19:56:49.501Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 repository type boundary",
+      "checkedAt": "2026-08-18T19:56:50.526Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 framework-neutral semantic boundary",
+      "checkedAt": "2026-08-18T19:56:51.566Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25 patch hygiene",
+      "checkedAt": "2026-08-18T19:56:52.583Z"
     }
   ],
   "allowedWork": [
@@ -1261,7 +1297,8 @@
     {
       "id": "s25",
       "title": "Define verified change-of-base semantics",
-      "status": "planned"
+      "summary": "Added branded, data-only change-of-base semantic authority for log_b(x) = ln(x)/ln(b), with explicit law and domain evidence, identity-preserving base/argument correspondence, derived operator and quotient lineage, and exact reverse limits. A fixed nine-case corpus covers numeric and symbolic success plus invalid, nonfinite, missing-evidence, and identity-mismatch failures without renderer authority.",
+      "status": "complete"
     },
     {
       "id": "s26",
