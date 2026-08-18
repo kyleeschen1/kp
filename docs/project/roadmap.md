@@ -72,10 +72,12 @@ Only this repository sequence is active:
    caller is the native-KaTeX `2^x = 7` transformation sequence. Its later
    full-motion collision means it is not currently a production-ready visual
    exemplar.
-3. **Perfect one asset:** visual repair scheduled. Preserve the approved
-   semantic states, identities, correspondence, and typed symbol-motion seam;
-   after the transform-series repair taxonomy is complete, repair perceptual
-   granularity and the function-wrap collision before CLI and corpus work.
+3. **Perfect one asset:** shared playback repair scheduled after the objective
+   compiler foundation. Preserve the approved semantic states, identities,
+   correspondence, and typed symbol-motion seam; finish the tool-neutral CLI,
+   deterministic corpus, planner port, and domain-gap declarations first,
+   then repair shared full-motion readiness and carry subjective exponent/log
+   judgment into the final combined visual checkpoint.
 4. **Pressure before promotion:** complete. Quotient, distribution, and
    cancellation passed independently reversible implementation and human
    checkpoints; the cross-caller decision promoted seven operation-independent
@@ -120,10 +122,13 @@ Only this repository sequence is active:
     Transformation Coverage view, one governed equation-series compiler, URL
     and Review reproducibility, and explicit future frontend seams for matrix,
     code, Graph2D, and Graph3D. The function-coordinate exemplar is deferred
-    until this generation foundation is honest. The active contract now
-    includes a bounded `2^x = 7` visual-repair checkpoint after series-level
-    diagnostics and before the tool-neutral CLI/corpus, so downstream evidence
-    cannot describe the currently colliding surface as healthy.
+    until this generation foundation is honest. The active contract now runs
+    objective compiler work before the bounded `2^x = 7` and shared
+    playback-readiness repair. URL/exact-state work remains downstream of that
+    repair, and all subjective Coverage, dock, Review, and exponent/log
+    judgments are consolidated into one end-of-run human checkpoint. No
+    downstream evidence may describe the currently degraded full-motion
+    surface as healthy before that checkpoint.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

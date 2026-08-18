@@ -1,0 +1,53 @@
+{
+  "id": "priority-change.kp.overnight-nonvisual-first-20260817",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.overnight-nonvisual-first-20260817",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Run independent compiler and capability work before repairing shared playback; keep subjective visual judgment at one final checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Run independent compiler and capability work before repairing shared playback; keep subjective visual judgment at one final checkpoint.",
+      "occurredAt": "2026-08-18T05:07:40.237Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.governed-animation-generation-foundation-v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.governed-animation-generation-foundation-v5"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "Run independent compiler and capability work before repairing shared playback; keep subjective visual judgment at one final checkpoint.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.governed-animation-generation-foundation-v5"
+    ],
+    "changes": [
+      {
+        "subject": "governed-generation",
+        "to": "now"
+      },
+      {
+        "subject": "shared-playback-readiness",
+        "to": "after-objective-foundation"
+      },
+      {
+        "subject": "visual-review",
+        "to": "end-of-run"
+      }
+    ],
+    "effectiveAt": "2026-08-18T05:07:40.237Z",
+    "requestedBy": "user"
+  }
+}

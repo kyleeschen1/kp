@@ -1,7 +1,7 @@
 # Governed Animation Generation Foundation Long-Loop Proposal
 
 Date: 2026-08-17
-Status: proposed; explicit approval required before execution
+Status: approved; execution order amended for overnight autonomy on 2026-08-17
 Proposed contract id: `run-contract.kp.governed-animation-generation-foundation-v1`
 Source decision:
 `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
@@ -25,6 +25,26 @@ specific, adapter-backed, or static. The approved log-product and log-quotient
 callers provide the next warranted compiler promotion. A capability-derived
 Coverage view and one equation-series compiler make that progress visible and
 usable without reopening public layout work.
+
+## Approved Overnight Reprioritization
+
+The user approved a nonvisual-first continuation so useful work can run while
+human visual judgment is unavailable. This amendment changes ordering and
+checkpoint placement, not scope:
+
+1. complete `s20` through `s23` (CLI, corpus, planner port, and domain gaps);
+2. replace the interrupted `s19a` checkpoint with an objective shared
+   playback/readiness and exponent/log repair slice;
+3. continue `s24` through `s27`, keeping URL and exact-state behavior
+   downstream of reliable playback;
+4. consolidate exponent/log motion, Coverage density, dock, and Review
+   presentation judgment at `s28`;
+5. retain `s29` behind explicit human approval.
+
+The original table below remains the scope and verification source for each
+slice. The active Theseus continuation contract owns this amended live order.
+No visual treatment is promoted merely because automated checks pass
+overnight.
 
 ## Allowed Work
 

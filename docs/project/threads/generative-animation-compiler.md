@@ -3,12 +3,14 @@
 Status: active
 Last Updated: 2026-08-17
 Current Next Action: continue the approved governed animation generation
-foundation contract at adjacency segmentation. After the series repair
-taxonomy, stop on a bounded visual checkpoint that repairs the canonical
-`2^x = 7` exponent/log surface before CLI, corpus, or Coverage claims consume
-it. The contract's first new visible product remains the minimal Transformation
-Coverage view; its first compiler promotion is the already approved
-product/quotient homomorphic crossover.
+foundation contract in its nonvisual-first overnight order. Complete the
+tool-neutral CLI, deterministic corpus, model-neutral planner port, and
+domain-owned frontend gaps; then repair shared full-motion readiness and the
+canonical `2^x = 7` pressure surface before URL/exact-state integration. The
+minimal Transformation Coverage view, global dock, Review geometry, and all
+subjective motion judgment converge at one final human checkpoint. The first
+compiler promotion remains the already approved product/quotient homomorphic
+crossover.
 
 ## Goal
 
@@ -33,11 +35,12 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
 - Log product and quotient have approved distinct choreographies and justify a
   bounded shared causal recipe.
 - The `2^x = 7` exponent/log caller remains the semantic exemplar, but its
-  current full-motion surface is not visually healthy: deterministic capture
-  reproduces protected-transit intersections at progress `0.64–0.66`, and its
-  three macro operations do not expose enough perceptual micro-beats. A repair
-  checkpoint is ordered after typed series diagnostics and before downstream
-  CLI/corpus work.
+  current full-motion surface is not visually healthy. A clean preview still
+  interpolates, while the long-lived development host fails shared surface
+  readiness for unrelated animation families and can silently present native
+  endpoint fallback as discrete playback. The repair is deliberately ordered
+  after independent compiler work and before URL/exact-state integration; its
+  subjective review is deferred to the final combined checkpoint.
 - Thirty equation surfaces exist, but asset count is not capability coverage:
   three are canonical, twenty-two adapter-backed, four static-only, and one a
   retirement candidate in the current generated inventory.

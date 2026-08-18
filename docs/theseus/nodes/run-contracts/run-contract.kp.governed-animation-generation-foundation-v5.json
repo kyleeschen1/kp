@@ -2,7 +2,8 @@
   "id": "run-contract.kp.governed-animation-generation-foundation-v5",
   "kind": "run-contract",
   "title": "Governed animation generation foundation continuation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -89,58 +90,68 @@
     {
       "id": "next-action.kp.governed-animation-generation.s19a",
       "title": "Exponential-equation-visual-repair-checkpoint",
-      "summary": "Human review reproduced background-time jumps, blank BFCache restoration, and misleading non-motion progress; reopen the bounded exponent-log lifecycle checkpoint before CLI work.",
-      "status": "in-progress"
+      "summary": "Reordered into the user-approved nonvisual-first continuation as s19b.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s20",
       "title": "Tool-neutral-series-CLI",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s21",
       "title": "Equation-series-corpus",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s22",
       "title": "Natural-language-planner-port",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s23",
       "title": "Domain-frontend-gaps",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s24",
       "title": "Transformation-coverage-view",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s25",
       "title": "URL-view-and-settings-state",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s26",
       "title": "Global-development-dock",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s27",
       "title": "Review-collision-and-exact-state",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s28",
       "title": "Coverage-human-checkpoint",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s29",
       "title": "Post-approval-release-closeout",
-      "status": "planned"
+      "summary": "Moved unchanged into continuation v6.",
+      "status": "skipped"
     }
   ]
 }
