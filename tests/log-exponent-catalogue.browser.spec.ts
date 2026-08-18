@@ -278,6 +278,86 @@ test("terminal scrubbing replays from the source after the native surface is rea
   }
 });
 
+test("catalogue playback does not charge background-tab time", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-exponent-stage]");
+  const toggle = player.locator('[data-action="toggle-editor-animation"]');
+
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await toggle.click();
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(0.02);
+
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: true
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "paused"
+  );
+  const hiddenProgress = Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ));
+  const hiddenUrl = page.url();
+  await page.waitForTimeout(250);
+  expect(Number(await player.getAttribute(
+    "data-kp-editor-animation-progress"
+  ))).toBe(hiddenProgress);
+  expect(page.url()).toBe(hiddenUrl);
+
+  await page.evaluate(() => {
+    delete (document as unknown as { hidden?: boolean }).hidden;
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await toggle.click();
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(hiddenProgress);
+});
+
+test("catalogue survives a persisted pagehide and pageshow cycle", async ({
+  page
+}) => {
+  const playhead = 0.625;
+  await page.goto(`/?artifact=${animationId}&playhead=${playhead}`);
+  const exemplar = page.locator("[data-kp-svelte-catalogue-shell]");
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-exponent-stage]");
+
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await page.evaluate(() => {
+    window.dispatchEvent(new PageTransitionEvent("pagehide", {
+      persisted: true
+    }));
+    window.dispatchEvent(new PageTransitionEvent("pageshow", {
+      persisted: true
+    }));
+  });
+
+  await expect(exemplar).toHaveCount(1);
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    String(playhead)
+  );
+});
+
 test("canonical checkpoint fits narrow reduced-motion viewports with one accessible equation", async ({
   page
 }) => {

@@ -89,8 +89,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s19a",
       "title": "Exponential-equation-visual-repair-checkpoint",
-      "summary": "Fixed terminal seek replay and prevented the shared clock from outrunning asynchronous native KaTeX preparation; repeated endpoint replay passes in the catalogue.",
-      "status": "complete"
+      "summary": "Human review reproduced background-time jumps, blank BFCache restoration, and misleading non-motion progress; reopen the bounded exponent-log lifecycle checkpoint before CLI work.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s20",

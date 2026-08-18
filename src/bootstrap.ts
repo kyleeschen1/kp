@@ -94,7 +94,16 @@ async function mountDevelopmentToolbar(): Promise<void> {
 }
 
 function registerPagehide(dispose: () => void): void {
-  window.addEventListener("pagehide", dispose, { once: true });
+  let disposed = false;
+  const handlePagehide = (event: PageTransitionEvent): void => {
+    // A persisted pagehide freezes this exact DOM for BFCache restoration;
+    // unmounting here would return a permanently blank cached document.
+    if (event.persisted || disposed) return;
+    disposed = true;
+    window.removeEventListener("pagehide", handlePagehide);
+    dispose();
+  };
+  window.addEventListener("pagehide", handlePagehide);
 }
 
 void bootstrap();

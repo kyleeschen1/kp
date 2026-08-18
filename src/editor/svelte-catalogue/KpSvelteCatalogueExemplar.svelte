@@ -43,7 +43,8 @@
     renderKpEditorAnimationPlayerShell
   } from "../animation-player-shell.ts";
   import {
-    KP_EDITOR_ANIMATION_FRAME_EVENT
+    KP_EDITOR_ANIMATION_FRAME_EVENT,
+    pauseKpEditorAnimationPlayers
   } from "../animation-player-controller.ts";
   import {
     applyKpAnimationCatalogueObservedHealth,
@@ -343,18 +344,31 @@
   onMount(() => {
     const mountedShell = shell;
     if (mountedShell === undefined) return;
+    const ownerDocument = mountedShell.ownerDocument;
+    const ownerWindow = ownerDocument.defaultView;
+    const pauseForBackground = (): void => {
+      pauseKpEditorAnimationPlayers(mountedShell);
+    };
+    const pauseWhenHidden = (): void => {
+      if (ownerDocument.hidden) pauseForBackground();
+    };
     mountedShell.addEventListener(
       KP_EDITOR_ANIMATION_FRAME_EVENT,
       replacePlayhead
     );
     mountedShell.addEventListener("keydown", closeOverlay);
+    ownerDocument.addEventListener("visibilitychange", pauseWhenHidden);
+    ownerWindow?.addEventListener("pagehide", pauseForBackground);
     window.addEventListener("popstate", restoreHistorySelection);
+    pauseWhenHidden();
     return () => {
       mountedShell.removeEventListener(
         KP_EDITOR_ANIMATION_FRAME_EVENT,
         replacePlayhead
       );
       mountedShell.removeEventListener("keydown", closeOverlay);
+      ownerDocument.removeEventListener("visibilitychange", pauseWhenHidden);
+      ownerWindow?.removeEventListener("pagehide", pauseForBackground);
       window.removeEventListener("popstate", restoreHistorySelection);
     };
   });

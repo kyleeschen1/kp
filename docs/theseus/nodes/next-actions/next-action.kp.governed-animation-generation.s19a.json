@@ -182,11 +182,81 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T02:01:17.139Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-exponent-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s19a lifecycle replay seek BFCache and visual exemplar",
+      "checkedAt": "2026-08-18T02:56:04.855Z",
+      "notes": "Six of six Chromium cases pass, including background pause and persisted page restoration."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19a host lifecycle types",
+      "checkedAt": "2026-08-18T02:56:06.173Z",
+      "notes": "All TypeScript and Svelte boundaries pass."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s19a catalogue host preservation",
+      "checkedAt": "2026-08-18T02:56:07.255Z",
+      "notes": "All 36 catalogue shell and Svelte lifecycle cases pass."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "s19a semantic and motion preservation",
+      "checkedAt": "2026-08-18T02:56:08.397Z",
+      "notes": "All 52 canonical log-exponent semantic timeline and motion cases pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s19a lazy bundle boundary",
+      "checkedAt": "2026-08-18T02:56:09.510Z",
+      "notes": "Catalogue route remains within all bundle ceilings."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s19a production closure",
+      "checkedAt": "2026-08-18T02:56:10.594Z",
+      "notes": "Production bundle builds successfully."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "s19a deterministic visual checkpoint",
+      "checkedAt": "2026-08-18T02:56:11.663Z",
+      "notes": "All seven canonical checkpoints render unchanged."
+    },
+    {
+      "command": "npm run test:browser:animation-equation-capability",
+      "status": "failed",
+      "scope": "inherited broad capability gate",
+      "checkedAt": "2026-08-18T02:56:12.811Z",
+      "notes": "Four of five pass; existing programming-route assertion classifies the global KaTeX stylesheet as an unrelated capability. Changed files do not alter the stylesheet import."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "inherited aggregate unit gate",
+      "checkedAt": "2026-08-18T02:56:13.907Z",
+      "notes": "Aggregate suite reaches an existing stale homomorphic-recipe assertion: compiler evidence now returns both the recipe and equation-pack authorities while the test expects only the pack."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19a durable control-plane integrity",
+      "checkedAt": "2026-08-18T02:56:39.386Z",
+      "notes": "Workspace validates 994 nodes and 22502 events with the checkpoint reopened and partial."
     }
   ],
   "progress": {
-    "state": "complete",
-    "summary": "Eliminated intermittent no-op and terminal-frame freezes: endpoint position now owns replay reset, native KaTeX preparation gates transport, and repeated real-browser replay is covered."
+    "state": "partial",
+    "summary": "Lifecycle candidate repaired: catalogue pauses before background time can reach the shared clock, BFCache pagehide preserves the mounted DOM, exact URL state survives restoration, and the seven accepted visual checkpoints are unchanged. Awaiting human playback review; s20 remains unopened. Two inherited broad gates remain red outside this patch."
   },
   "expectedLearning": [
     "Whether Exponential-equation-visual-repair-checkpoint can be completed inside Governed animation generation foundation continuation."
