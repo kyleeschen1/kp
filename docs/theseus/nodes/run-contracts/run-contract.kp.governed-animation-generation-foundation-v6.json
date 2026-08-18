@@ -63,12 +63,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s20",
       "title": "Tool-neutral-series-CLI",
-      "status": "planned"
+      "summary": "Tool-neutral CLI compiles JSON requests, exposes TypeScript API use, lists registered capabilities, and excludes UI/rendering closure.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s21",
       "title": "Equation-series-corpus",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s21 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s22",

@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.governed-animation-generation.s20",
+  "kind": "next-action",
+  "title": "Tool-neutral equation-series CLI",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Tool-neutral equation-series CLI shipped with deterministic capabilities, typed repairs, and no UI/rendering closure.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:compile-equation-transform-series-cli",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T05:14:31.738Z",
+      "notes": "Five CLI catalogue compile repair argument and closure cases passed."
+    },
+    {
+      "command": "npm run test:equation-series-repair-taxonomy",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:14:34.354Z",
+      "notes": "All eighteen request resolution runtime and repair cases passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:14:39.527Z",
+      "notes": "Application Node test Svelte and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T05:14:44.064Z",
+      "notes": "Dependency direction framework neutrality semantic boundaries and compiler authority passed."
+    },
+    {
+      "command": "npm run author:equation-series -- --list",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T05:14:47.835Z",
+      "notes": "The installed CLI listed deterministic semantic operation declarations."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a JSON/stdin equation-series CLI, deterministic capability listing, full typed repair output, import-closure protection, and an importable TypeScript compiler path without UI or renderer authority."
+  }
+}
