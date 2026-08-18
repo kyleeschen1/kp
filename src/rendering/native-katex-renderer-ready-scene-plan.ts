@@ -7,9 +7,11 @@ import type {
 import type {
   KpNativeKatexHierarchicalScenePlan,
   KpNativeKatexPaintMeasuredSceneTrack,
-  KpNativeKatexRendererDisposition,
   KpNativeKatexSceneReconciliation
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
+import type {
+  KpNativeKatexRendererDispositionContract as KpNativeKatexRendererDisposition
+} from "./native-katex-scene-track-contract.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";

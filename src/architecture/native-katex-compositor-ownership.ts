@@ -95,7 +95,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     evidence: [
       evidence("src/rendering/native-katex-fragment-observer.ts", "bindKpNativeKatexFragmentsWithinSemanticLineage"),
       evidence("src/animation/lineage-constrained-glyph-matcher.ts", "matchKpGlyphsWithinSemanticLineage"),
-      evidence("src/rendering/native-katex-scene-compositor.ts", "reconcileKpNativeKatexScenes")
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "reconcileKpNativeKatexScenes")
     ],
     forbiddenAuthority: noDomAuthority
   }),
@@ -106,9 +106,9 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetLayer: "scene-plan-compilation",
     targetEffect: "none",
     evidence: [
-      evidence("src/rendering/native-katex-scene-compositor.ts", "createKpNativeKatexSceneReconciliation"),
-      evidence("src/rendering/native-katex-scene-compositor.ts", "compileKpNativeKatexHierarchicalScenePlan"),
-      evidence("src/rendering/native-katex-scene-compositor.ts", "compileKpNativeKatexSceneTracks")
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "createKpNativeKatexSceneReconciliation"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexHierarchicalScenePlan"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexSceneTracks")
     ],
     forbiddenAuthority: noDomAuthority
   }),
@@ -172,6 +172,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     evidence: [
       evidence("src/rendering/native-katex-scene-track-contract.ts", "KpNativeKatexSceneTrackContract"),
       evidence("src/rendering/native-katex-scene-track-sampling.ts", "sampleKpNativeKatexSceneTrackFrames"),
+      evidence("src/rendering/native-katex-renderer-ready-scene-plan.ts", "createKpNativeKatexRendererReadyScenePlan"),
       evidence("src/rendering/native-katex-scene-compositor.ts", "sampleKpNativeKatexSceneTracks")
     ],
     forbiddenAuthority: Object.freeze([
@@ -263,7 +264,9 @@ export function validateKpNativeKatexCompositorOwnership(
 
   const requiredPaths = [
     ...kpCanonicalEquationRendererConvergence.productionSourceFiles,
-    ...kpCanonicalEquationRendererConvergence.productionDirectDependencySourceFiles
+    ...kpCanonicalEquationRendererConvergence.productionDirectDependencySourceFiles,
+    ...kpCanonicalEquationRendererConvergence.productionScenePlanBoundarySourceFiles,
+    ...kpCanonicalEquationRendererConvergence.productionRendererSupportSourceFiles
   ];
   for (const path of requiredPaths) {
     if (!coveredPaths.has(path)) {

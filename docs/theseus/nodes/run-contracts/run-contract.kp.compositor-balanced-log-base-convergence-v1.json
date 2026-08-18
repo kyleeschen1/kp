@@ -118,6 +118,39 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T15:53:50.208Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:12:54.477Z",
+      "notes": "73/73 including renderer-session direct seek and rewind."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T16:13:03.047Z",
+      "notes": "Core 119377/140000; aggregate 453783/455000; exact 20-module inventory; known direct byte debt remains 314971/295000."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T16:13:22.153Z",
+      "notes": "Only the pre-existing direct-dependency byte gate fails; all other 23 checks pass. Retirement remains scheduled for s13."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:13:42.940Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:13:55.667Z"
     }
   ],
   "allowedWork": [
@@ -128,6 +161,19 @@
   ],
   "goal": "Restore honestly measured native-KaTeX compositor ownership without visual change, consolidate verified both-sides operations through one governed family, and deliver one review-ready alternative-base logarithm exemplar.",
   "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 29,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if existing semantic or visual behavior changes outside the new exemplar.",
+    "Stop if the failed compositor gate can only be cleared by raising a ceiling, hiding bytes, or weakening aggregate or bundle attribution.",
+    "Stop if the work introduces a second renderer, clock, scheduler, lifecycle, or paint vocabulary.",
+    "Stop if both-sides generalization accepts unverified algebra, erases distinct domain assumptions, or grows a central closed switch.",
+    "Stop if log-base work expands into arbitrary logarithm or CAS support.",
+    "Stop if user-owned dirty files overlap required edits.",
+    "Always stop for explicit human visual judgment at s28; s29 requires later approval."
+  ],
   "slices": [
     {
       "id": "s01",
@@ -156,7 +202,8 @@
     {
       "id": "s05",
       "title": "Extract reconciliation hierarchy and base tracks",
-      "status": "planned"
+      "summary": "Extracted pure reconciliation, hierarchy, and base-track compilation behind the preserved compositor API; all 73 glyph tests and architecture/type gates pass, while the known direct-dependency byte debt stays visible for s13.",
+      "status": "complete"
     },
     {
       "id": "s06",

@@ -1,6 +1,6 @@
 import type {
   KpNativeKatexAtomLifecycle
-} from "../rendering/native-katex-scene-compositor.ts";
+} from "../rendering/native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexPaintKind
 } from "../rendering/native-katex-rendered-scene.ts";
@@ -49,7 +49,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/equation-material-layer-dom.ts",
     "src/rendering/equation-material-owner.ts",
     "src/rendering/equation-motion-path-planner.ts",
-    "src/rendering/native-katex-factoring-choreography.ts",
+    "src/rendering/native-katex-base-scene-plan.ts",
     "src/rendering/native-katex-fan-in-motion.ts",
     "src/rendering/native-katex-operation-choreography.ts",
     "src/rendering/native-katex-paint-geometry.ts",
@@ -67,6 +67,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/animation/structural-succession-presentation.ts",
     "src/animation/symbol-motion-contract.ts",
     "src/rendering/equation-motion-path-planner.ts",
+    "src/rendering/native-katex-base-scene-plan.ts",
     "src/rendering/native-katex-factoring-choreography.ts",
     "src/rendering/native-katex-fan-in-motion.ts",
     "src/rendering/native-katex-operation-choreography.ts",

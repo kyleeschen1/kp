@@ -24,6 +24,25 @@ test("ownership evidence names live source authority", async () => {
   }
 });
 
+test("pure base planning is extracted behind the compositor compatibility facade", async () => {
+  const [basePlan, compositor] = await Promise.all([
+    readFile("src/rendering/native-katex-base-scene-plan.ts", "utf8"),
+    readFile("src/rendering/native-katex-scene-compositor.ts", "utf8")
+  ]);
+  const authorities = [
+    "reconcileKpNativeKatexScenes",
+    "createKpNativeKatexSceneReconciliation",
+    "compileKpNativeKatexHierarchicalScenePlan",
+    "compileKpNativeKatexSceneTracks"
+  ];
+
+  for (const authority of authorities) {
+    assert.match(basePlan, new RegExp(`export function ${authority}\\b`));
+    assert.doesNotMatch(compositor, new RegExp(`function ${authority}\\b`));
+  }
+  assert.match(compositor, /from "\.\/native-katex-base-scene-plan\.ts"/);
+});
+
 test("pure planning and sampling cannot acquire runtime effects", () => {
   for (const responsibility of kpNativeKatexCompositorOwnership) {
     if (

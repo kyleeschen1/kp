@@ -47,6 +47,7 @@ const report = Object.freeze({
       moduleCeiling: policy.maximumProductionDirectDependencyModules,
       byteCeiling: policy.maximumProductionDirectDependencySourceBytes
     }),
+    discoveredFiles: discoveredDependencies,
     inventoryMatchesImports:
       JSON.stringify(discoveredDependencies) ===
       JSON.stringify([...policy.productionDirectDependencySourceFiles])

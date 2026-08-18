@@ -17,6 +17,9 @@ import {
 export type {
   KpRegisteredEquationOperationChoreography as KpEquationOperationChoreography
 } from "../animation/balanced-introduction-presentation-plan.ts";
+export type {
+  KpNativeKatexFactoringSceneBinding
+} from "./native-katex-factoring-choreography.ts";
 import {
   sampleKpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement.ts";
