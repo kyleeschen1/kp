@@ -45,6 +45,7 @@
     "test:browser:page-directory": "playwright test --config playwright.page-directory.config.ts --project=chromium --workers=1",
     "visual:economics-dev-toolbar": "playwright test --config playwright.economics-dev-toolbar.config.ts --project=chromium --workers=1",
     "visual:development-dock": "playwright test --config playwright.economics-dev-toolbar.config.ts tests/kp-dev-toolbar-animation-development.browser.spec.ts --project=chromium --workers=1",
+    "visual:animation-development-checkpoint": "node --disable-warning=ExperimentalWarning scripts/capture-animation-development-checkpoint.ts",
     "test:economics-demand-shift-css": "node --disable-warning=ExperimentalWarning --test tests/economics-demand-shift-stylesheet-ownership.test.ts tests/economics-demand-shift-visual-baseline.test.ts",
     "test:economics-article-source-save": "node --disable-warning=ExperimentalWarning --test server/kp-article-source-http-adapter.test.ts",
     "test:economics-lesson-source-save": "npm run test:economics-article-source-save",

@@ -1,0 +1,43 @@
+{
+  "id": "priority-change.kp.exponent-log-perceptual-motion-deferred-20260818",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.exponent-log-perceptual-motion-deferred-20260818",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user wants the perceptual jerk solved but is out of review time; preserve it as a named post-intervening-work checkpoint without claiming automated smoothness.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user wants the perceptual jerk solved but is out of review time; preserve it as a named post-intervening-work checkpoint without claiming automated smoothness.",
+      "occurredAt": "2026-08-18T08:03:33.099Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The user wants the perceptual jerk solved but is out of review time; preserve it as a named post-intervening-work checkpoint without claiming automated smoothness.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "exponent-log-perceptual-continuity",
+        "to": "after-other-approved-work"
+      },
+      {
+        "subject": "exponent-log-release-approval",
+        "to": "pending"
+      }
+    ],
+    "effectiveAt": "2026-08-18T08:03:33.099Z",
+    "requestedBy": "user"
+  }
+}

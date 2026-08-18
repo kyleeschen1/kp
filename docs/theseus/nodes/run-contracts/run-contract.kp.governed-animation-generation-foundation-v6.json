@@ -2,7 +2,8 @@
   "id": "run-contract.kp.governed-animation-generation-foundation-v6",
   "kind": "run-contract",
   "title": "Governed generation overnight nonvisual-first continuation",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "USER_PAUSED at slice s28 with nine slices complete; preserve s28 visual evidence and leave s29 unstarted while other separately approved work proceeds.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +30,9 @@
     "npm run visual:animation-catalogue",
     "npm run typecheck",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "The user returns to the exponent/log perceptual-motion repair and visual checkpoint."
   ],
   "allowedWork": [
     "Remaining governed equation transform-series CLI corpus planner and typed repair work.",
@@ -123,7 +127,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s28",
       "title": "Combined-visual-human-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT-ready-do-not-start-s29-until-explicit-visual-approval",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s29",
