@@ -37,9 +37,19 @@ import {
 import {
   applyKpNativeKatexFunctionWrapReception
 } from "./native-katex-function-wrap-reception.ts";
+import {
+  invalidateKpNativeKatexMotionPath
+} from "./native-katex-paint-geometry.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-scene-compositor.ts";
+
+const kpCanonicalNativeKatexFunctionWrapTreatment = Object.freeze({
+  syntaxPointScale: 0.04,
+  horizontalSqueeze: Object.freeze({
+    outwardOffsetInNativeHeights: 0.11
+  })
+});
 
 export function applyKpNativeKatexOperationChoreography(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
@@ -380,6 +390,9 @@ function applyCanonicalFunctionWrap(
       branch.id
     ] as const)
   ));
+  const syntaxEntityIds = new Set(choreography.reception.branches.flatMap(
+    ({ syntaxEntityIds }) => syntaxEntityIds
+  ));
   const argumentPaintByBranch = new Set<string>();
   const wrapperPaintByBranch = new Set<string>();
   const tracks = input.tracks.map((track) => {
@@ -426,6 +439,37 @@ function applyCanonicalFunctionWrap(
       choreography.wrapperEntryWindow.start,
       choreography.wrapperEntryWindow.end
     );
+    if (wrapperEntityId !== undefined && syntaxEntityIds.has(wrapperEntityId)) {
+      const nativeRect = choreography.direction === "forward"
+        ? track.endRect
+        : track.startRect;
+      const nativePaintRect = choreography.direction === "forward"
+        ? track.endPaintRect
+        : track.startPaintRect;
+      const pointScale =
+        kpCanonicalNativeKatexFunctionWrapTreatment.syntaxPointScale;
+      return Object.freeze({
+        ...invalidateKpNativeKatexMotionPath(track),
+        startRect: Object.freeze({ ...nativeRect }),
+        endRect: Object.freeze({ ...nativeRect }),
+        ...(nativePaintRect === undefined
+          ? {}
+          : {
+              startPaintRect: Object.freeze({ ...nativePaintRect }),
+              endPaintRect: Object.freeze({ ...nativePaintRect })
+            }),
+        timingGroupId: choreography.id,
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample,
+        sampleMaterialScale: (progress: number) => {
+          const local = sample(progress);
+          return choreography.direction === "forward"
+            ? pointScale + (1 - pointScale) * local
+            : 1 - (1 - pointScale) * local;
+        }
+      });
+    }
     return Object.freeze({
       ...track,
       timingGroupId: choreography.id,
@@ -449,7 +493,10 @@ function applyCanonicalFunctionWrap(
     source: input.source,
     target: input.target,
     plan: choreography.reception,
-    entryWindow: choreography.wrapperEntryWindow
+    entryWindow: choreography.wrapperEntryWindow,
+    motion: "horizontal-squeeze",
+    horizontalSqueezeTreatment:
+      kpCanonicalNativeKatexFunctionWrapTreatment.horizontalSqueeze
   });
 }
 

@@ -93,9 +93,12 @@ export function applyKpNativeKatexSymbolMotionContract(input: {
         `Structural shell ${shell.id} compiled through ${track.lifecycle}.`
       );
     }
+    // These names are causal contracts: a retiring shell must not disappear
+    // while its continuant is still departing, and a target shell must wait
+    // until the continuant has reached its native destination.
     const window = shell.lifecycle === "retire"
-      ? { start: 0.38, end: 0.5 }
-      : { start: 0.72, end: 0.92 };
+      ? { start: 0.32, end: 0.42 }
+      : { start: 0.9, end: 0.99 };
     const sample = (progress: number) => smoothWindow(
       progress,
       window.start,

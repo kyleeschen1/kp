@@ -78,6 +78,48 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   expect(Math.max(...wrapperOpacity.right)).toBeGreaterThan(0);
   expect(new Set([...wrapperOpacity.left, ...wrapperOpacity.right]).size)
     .toBe(1);
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.494");
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-exponent-operation-id",
+    "operation.log-exponent.extract-exponent"
+  );
+  const extractionGeometry = await stage.evaluate((root) => {
+    const stageRect = root.getBoundingClientRect();
+    const visibleOwners = Array.from(root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )).filter((owner) => Number(getComputedStyle(owner).opacity) > 0.01);
+    const rectFor = (entityId: string) => {
+      const owner = visibleOwners.find((candidate) =>
+        candidate.dataset["kpEquationMaterialSemanticEntityId"] === entityId
+      );
+      if (owner === undefined) {
+        throw new Error(`Missing visible material owner ${entityId}`);
+      }
+      return owner.getBoundingClientRect();
+    };
+    const log = rectFor("logged.left.log.operator");
+    const equality = rectFor("logged.equality");
+    const exponent = rectFor("logged.exponent");
+    return {
+      baselineDelta: Math.abs(
+        log.y + log.height / 2 - (equality.y + equality.height / 2)
+      ),
+      exponentBottom: exponent.bottom,
+      baselineTop: equality.top,
+      ownersRemainInsideStage: visibleOwners.every((owner) => {
+        const rect = owner.getBoundingClientRect();
+        return rect.left >= stageRect.left - 1 &&
+          rect.right <= stageRect.right + 1 &&
+          rect.top >= stageRect.top - 1 &&
+          rect.bottom <= stageRect.bottom + 1;
+      })
+    };
+  });
+  // The exponent may lift, but the persistent logarithm must not inherit that path.
+  expect(extractionGeometry.baselineDelta).toBeLessThan(8);
+  expect(extractionGeometry.exponentBottom)
+    .toBeLessThan(extractionGeometry.baselineTop);
+  expect(extractionGeometry.ownersRemainInsideStage).toBe(true);
   await player.locator('[data-action="seek-editor-animation"]').fill("0.872");
   await expect.poll(async () => Number(
     await stage.getAttribute("data-kp-log-exponent-operation-progress")

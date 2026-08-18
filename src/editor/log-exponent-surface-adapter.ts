@@ -160,12 +160,6 @@ const kpLogExponentSurfaceDispatch =
         sourceStatus: "The exponent is now a coefficient.",
         activeStatus: "Dividing both sides by the logarithm of two.",
         targetStatus: "x is isolated as a quotient of logarithms.",
-        horizontalAxisSemanticEntityIds: [
-          "extracted.coefficient",
-          "solved.left",
-          "extracted.equality",
-          "solved.equality"
-        ],
         compileChoreography: ({ operation }) =>
           createKpCausalStructuralIntroductionChoreography({
             id: "operation-choreography.transformation.log-exponent.divide-by-log-base.structural-entry.forward",

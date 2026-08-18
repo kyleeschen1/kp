@@ -25,6 +25,9 @@ import type {
 import type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
+import {
+  createKpLogExponentTrackProjection
+} from "./native-katex-log-exponent-track-projection.ts";
 
 export interface KpLogExponentTransitApplication {
   readonly progress: number;
@@ -93,7 +96,8 @@ export function createKpLogExponentTransitSession(input: {
       : {
           horizontalAxisSemanticEntityIds:
             input.horizontalAxisSemanticEntityIds
-        })
+        }),
+    ...optionalTrackProjection(input.operation)
   });
   const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
     atom.id,
@@ -173,6 +177,15 @@ export function createKpLogExponentTransitSession(input: {
       });
     }
   });
+}
+
+function optionalTrackProjection(
+  operation: KpCompiledLogExponentOperation
+): Readonly<{
+  trackProjection?: ReturnType<typeof createKpLogExponentTrackProjection>;
+}> {
+  const trackProjection = createKpLogExponentTrackProjection(operation);
+  return trackProjection === undefined ? {} : { trackProjection };
 }
 
 export function assertExclusiveKpLogExponentTransitOwnership(
