@@ -50,7 +50,7 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   );
   await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
   const readinessEvents = await page.evaluate(() => (
-    window as Window & {
+    window as unknown as Window & {
       __kpReadinessEvents: Array<{ type: string; status: string }>;
     }
   ).__kpReadinessEvents);

@@ -472,14 +472,14 @@ test("protected transit ignores only bounded native-ink fringe area", () => {
       sampleCount: 2,
       sampleFrames: () => [
         {
-          trackId: tracks[0].id,
-          componentId: tracks[0].componentId,
+          trackId: tracks[0]!.id,
+          componentId: tracks[0]!.componentId,
           rect: { left: 0, top: 0, width: 10, height: 10 },
           opacity: 1
         },
         {
-          trackId: tracks[1].id,
-          componentId: tracks[1].componentId,
+          trackId: tracks[1]!.id,
+          componentId: tracks[1]!.componentId,
           rect: {
             left: 10 - overlap.width,
             top: 10 - overlap.height,

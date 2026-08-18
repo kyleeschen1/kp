@@ -2,6 +2,9 @@ import {
   readKpAnimationCatalogueRoute
 } from "../editor/animation-catalogue-route.ts";
 import {
+  readKpAnimationTransformationCoverageRoute
+} from "../editor/animation-transformation-coverage-route.ts";
+import {
   isKpEconomicsDemandShiftTutorialRoute
 } from "../tutorial/economics-demand-shift/economics-demand-shift-route.ts";
 import {
@@ -16,6 +19,7 @@ export const kpLegacyRootRouteKinds = [
   "lisp-function-application",
   "economics-demand-shift",
   "concept-room",
+  "animation-coverage",
   "animation-catalogue",
   "internal-studio-fallback"
 ] as const;
@@ -44,6 +48,9 @@ export function selectKpLegacyRootRoute(input: {
   if (input.pathname === "/concepts" ||
       input.pathname.startsWith("/concepts/")) {
     return "concept-room";
+  }
+  if (readKpAnimationTransformationCoverageRoute(input.search).active) {
+    return "animation-coverage";
   }
   if (readKpAnimationCatalogueRoute(input.search).active) {
     return "animation-catalogue";

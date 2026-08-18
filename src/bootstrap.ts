@@ -66,6 +66,16 @@ async function bootstrap(): Promise<void> {
       }));
       return;
     }
+    case "animation-coverage": {
+      const coverage = await import(
+        "./editor/svelte-catalogue/animation-transformation-coverage-entry.ts"
+      );
+      await mountDevelopmentToolbar();
+      registerPagehide(coverage.mountKpAnimationTransformationCoverage({
+        root
+      }));
+      return;
+    }
     case "concept-room": {
       await mountDevelopmentToolbar();
       const concept = await import(

@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s24",
   "kind": "next-action",
   "title": "Transformation-coverage-view",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s24 in Governed generation overnight nonvisual-first continuation.",
+  "status": "resolved",
+  "summary": "Transformation Coverage is available at ?view=coverage and remains a read-only projection rather than another roadmap or registry authority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,54 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:50.010Z",
+      "notes": "11 unit and route checks; generated evidence and flat ordered list"
+    },
+    {
+      "command": "npm run visual:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:51.268Z",
+      "notes": "Chromium route smoke; 28 rows, exact statuses and exemplar link, zero buttons"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:52.307Z",
+      "notes": "application Node test Svelte and domain type surfaces"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:53.302Z",
+      "notes": "production lazy coverage route bundle"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:54.413Z",
+      "notes": "existing catalogue and lazy-family budgets"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-08-18T06:30:55.412Z",
+      "notes": "dependency framework-neutral semantic and compiler authority boundaries"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added the lazy generated-evidence Coverage route: one flat ordered list of 28 capabilities with compact readiness, exact remaining requirements, frontend gaps, and exemplar links; focused, browser, type, build, budget, and architecture gates pass."
+  },
   "expectedLearning": [
     "Whether Transformation-coverage-view can be completed inside Governed generation overnight nonvisual-first continuation."
   ],
@@ -60,5 +108,19 @@
     "Public layout curriculum SRS broad tutoring or the deferred transformation-family backlog.",
     "Any change to approved log-product or log-quotient choreography timing geometry cardinality fraction construction or optics.",
     "Any semantic endpoint identity correspondence or mathematical operation-order change in the exponent-log repair."
+  ],
+  "criteria": [
+    {
+      "id": "coverage-view-is-generated-evidence-only",
+      "weight": "high"
+    },
+    {
+      "id": "coverage-view-remains-one-flat-ordered-list",
+      "weight": "high"
+    },
+    {
+      "id": "coverage-route-is-lazy-and-lightweight",
+      "weight": "medium"
+    }
   ]
 }

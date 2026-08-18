@@ -43,6 +43,12 @@
     "Any change to approved log-product or log-quotient choreography timing geometry cardinality fraction construction or optics.",
     "Any semantic endpoint identity correspondence or mathematical operation-order change in the exponent-log repair."
   ],
+  "criteria": [
+    {
+      "id": "combined-checkpoint-confirms-continuous-full-motion-interpolation-without-discrete-jerks",
+      "weight": "high"
+    }
+  ],
   "goal": "Finish the objective equation-generation foundation, repair shared full-motion readiness, then deliver Coverage, URL, dock, and exact-state Review surfaces for one combined human checkpoint.",
   "target": "workflow.kp.delivery",
   "runMode": "run",
@@ -93,13 +99,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s24",
       "title": "Transformation-coverage-view",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s24 in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Delivered the minimal lazy Coverage view from generated evidence with one ordered list, exact remaining work, and exemplar links.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s25",
       "title": "URL-view-and-settings-state",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s25 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s26",

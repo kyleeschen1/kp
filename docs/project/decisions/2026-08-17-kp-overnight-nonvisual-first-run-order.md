@@ -40,6 +40,10 @@ as healthy endpoint playback.
 - Preserve semantic endpoints, stable identities, operation order, one shared
   clock, and approved log-product/log-quotient choreography.
 - Do not claim subjective visual approval during unattended execution.
+- At the combined checkpoint, explicitly review the reported regression where
+  full-motion transforms can appear to jerk between discrete states instead of
+  visibly interpolating. Passing readiness and endpoint tests does not close
+  this perceptual issue.
 - Stop before release closeout for human judgment.
 - Stop earlier if repair requires a second clock, caller-local semantic truth,
   or silent generic fallback.

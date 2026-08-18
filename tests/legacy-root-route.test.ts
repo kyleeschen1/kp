@@ -14,6 +14,7 @@ test("legacy root classifies every supported route before its fallback", () => {
     "lisp-function-application",
     "economics-demand-shift",
     "concept-room",
+    "animation-coverage",
     "animation-catalogue",
     "internal-studio-fallback"
   ]);
@@ -25,6 +26,7 @@ test("legacy root classifies every supported route before its fallback", () => {
     "economics-demand-shift");
   assert.equal(select("/concepts/mathematics/linear-equations/unknown"),
     "concept-room");
+  assert.equal(select("/", "?view=coverage"), "animation-coverage");
   assert.equal(select("/", "?catalogue=1"), "animation-catalogue");
   assert.equal(select("/"), "animation-catalogue");
   assert.equal(select("/", "?view=editor"), "internal-studio-fallback");
