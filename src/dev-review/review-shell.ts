@@ -219,9 +219,14 @@ const shellStyles = `
     border-radius: 0;
     box-shadow: none;
   }
+  :host([data-kp-dev-review-placement="catalogue-rail"]) .panel {
+    width: 100%;
+    border-radius: 0;
+  }
   :host([data-kp-dev-review-placement="captured-moment-sheet"]) {
     right: 12px;
-    bottom: 12px;
+    top: 12px;
+    bottom: auto;
     left: 12px;
   }
   :host([data-kp-dev-review-placement="captured-moment-sheet"]) .panel {

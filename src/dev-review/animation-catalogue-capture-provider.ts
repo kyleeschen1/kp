@@ -42,6 +42,10 @@ export function createKpAnimationCatalogueCaptureProvider(
         ...evidence,
         semantic: {
           ...evidence.semantic,
+          themeId: requiredDataset(
+            shell ?? player,
+            "kpAnimationCatalogueTheme"
+          ),
           ...(Object.keys(parameters).length === 0
             ? {}
             : { parameters }),

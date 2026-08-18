@@ -1,14 +1,14 @@
 {
-  "id": "next-action.kp.governed-animation-generation.s26",
+  "id": "next-action.kp.governed-animation-generation.s27",
   "kind": "next-action",
-  "title": "Global-development-dock",
+  "title": "Review-collision-and-exact-state",
   "status": "resolved",
-  "summary": "Global-development-dock-verified-and-committed-at-7d6971fc",
+  "summary": "Exact-state-Review-and-collision-contract-verified",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v6.json",
-      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s26 was materialized into a child action."
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s27 was materialized into a child action."
     },
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     "theseus workspace validate"
   ],
   "expectedLearning": [
-    "Whether Global-development-dock can be completed inside Governed generation overnight nonvisual-first continuation."
+    "Whether Review-collision-and-exact-state can be completed inside Governed generation overnight nonvisual-first continuation."
   ],
   "allowedWork": [
     "Remaining governed equation transform-series CLI corpus planner and typed repair work.",

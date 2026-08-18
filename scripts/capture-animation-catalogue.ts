@@ -36,6 +36,8 @@ const outputRoot = path.resolve(
   process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/animation-catalogue"
 );
 const viewport = { width: 1440, height: 1000 } as const;
+const expectedCatalogueRowCount =
+  createKpAnimationCatalogueProjection().entries.length;
 const scopeArgumentIndex = process.argv.indexOf("--scope");
 const captureScope = scopeArgumentIndex === -1
   ? "all"
@@ -230,9 +232,9 @@ try {
   const allResultCount = await page.locator(
     "[data-kp-animation-catalogue-row]"
   ).count();
-  if (allResultCount !== 37) {
+  if (allResultCount !== expectedCatalogueRowCount) {
     throw new Error(
-      `Catalogue expected 37 sibling rows, found ${allResultCount}.`
+      `Catalogue expected ${expectedCatalogueRowCount} sibling rows, found ${allResultCount}.`
     );
   }
   const inspectorSelect = page.locator(
@@ -285,8 +287,17 @@ try {
   await styleTuning.selectOption("kp.organic-subtle@1.0.0");
   await focusTuning.selectOption("flat");
   await inspectorSelect.selectOption("details");
-  if (new URL(page.url()).searchParams.has("playhead")) {
-    throw new Error("Transient inspector and tuning state leaked into the URL.");
+  const presentationUrl = new URL(page.url());
+  if (
+    presentationUrl.searchParams.has("inspector") ||
+    presentationUrl.searchParams.get("playhead") !== "0" ||
+    presentationUrl.searchParams.get("view") !== "animation-catalogue" ||
+    presentationUrl.searchParams.get("style") !== "organic-subtle" ||
+    presentationUrl.searchParams.get("focus") !== "flat"
+  ) {
+    throw new Error(
+      `Catalogue URL lost exact presentation state: ${presentationUrl.search}.`
+    );
   }
   const cataloguePlayer = page.locator(
     "[data-kp-animation-catalogue-stage] [data-kp-editor-animation-player]"
@@ -302,7 +313,7 @@ try {
   );
   await page.keyboard.press("Home");
   await page.waitForFunction(() =>
-    !new URL(window.location.href).searchParams.has("playhead")
+    new URL(window.location.href).searchParams.get("playhead") === "0"
   );
   await page.keyboard.press("Space");
   await page.waitForFunction(() =>
@@ -323,27 +334,33 @@ try {
     "catalogue-rail") {
     throw new Error("Catalogue review capture is not docked in its rail.");
   }
-  const reviewLauncher = review.locator("button.launcher");
-  const railBounds = await page.locator(
-    '[data-kp-animation-catalogue-region="rail"]'
-  ).boundingBox();
-  const launcherBounds = await reviewLauncher.boundingBox();
-  if (
-    railBounds === null || launcherBounds === null ||
-    launcherBounds.x < railBounds.x ||
-    launcherBounds.x + launcherBounds.width >
-      railBounds.x + railBounds.width + 1 ||
-    launcherBounds.y + launcherBounds.height <
-      railBounds.y + railBounds.height - 12
-  ) {
-    throw new Error("Catalogue review launcher escaped the lower-left dock.");
+  const developmentDock = page.locator("[data-kp-dev-toolbar]");
+  const reviewButton = developmentDock.locator(
+    '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+  );
+  await reviewButton.waitFor();
+  const scrubber = page.locator(
+    "[data-kp-animation-catalogue-stage] " +
+    ".editor-animation-player__scrubber input"
+  );
+  if (boundingBoxesOverlap(
+    await developmentDock.boundingBox(),
+    await scrubber.boundingBox()
+  )) {
+    throw new Error("Global development dock covers catalogue playback.");
   }
   await page.waitForFunction(() =>
     document.body.dataset["kpDevReviewReady"] === "true"
   );
-  await reviewLauncher.click();
+  await reviewButton.click();
   const reviewPanel = review.locator('[role="dialog"]');
   await reviewPanel.waitFor();
+  if (boundingBoxesOverlap(
+    await reviewPanel.boundingBox(),
+    await scrubber.boundingBox()
+  )) {
+    throw new Error("Catalogue Review panel covers catalogue playback.");
+  }
   if (
     await reviewPanel.locator("h2").count() !== 0 ||
     await reviewPanel.locator("h3").count() !== 1
@@ -419,10 +436,6 @@ try {
     animations: "disabled"
   });
   const midpointScreenshot = path.join(outputRoot, "desktop-midpoint.png");
-  const scrubber = page.locator(
-    "[data-kp-animation-catalogue-stage] " +
-    ".editor-animation-player__scrubber input"
-  );
   await scrubber.fill("0.5");
   await page.waitForFunction(() =>
     document.querySelector<HTMLElement>(
@@ -2091,6 +2104,29 @@ function rectanglesOverlap(
     left.top < right.bottom && left.bottom > right.top;
 }
 
+function boundingBoxesOverlap(
+  left: { readonly x: number; readonly y: number; readonly width: number; readonly height: number } | null,
+  right: { readonly x: number; readonly y: number; readonly width: number; readonly height: number } | null
+): boolean {
+  if (left === null || right === null) {
+    throw new Error("Collision check requires two visible elements.");
+  }
+  return rectanglesOverlap(
+    {
+      left: left.x,
+      right: left.x + left.width,
+      top: left.y,
+      bottom: left.y + left.height
+    },
+    {
+      left: right.x,
+      right: right.x + right.width,
+      top: right.y,
+      bottom: right.y + right.height
+    }
+  );
+}
+
 async function waitForEconomicsExemplar(page: Page) {
   await page.waitForFunction((expectedAnimationId) => {
     const shell = document.querySelector<HTMLElement>(
@@ -2153,7 +2189,9 @@ async function captureCatalogueInteractionSelection(browser: Browser) {
     );
     await inspectorSelect.selectOption("parameters");
     const review = page.locator("[data-kp-dev-review-shell]");
-    await review.locator("button.launcher").click();
+    await page.locator(
+      '[data-kp-dev-toolbar-control="kp.dev-toolbar.review"]'
+    ).click();
     await review.locator('[role="dialog"] textarea').fill(
       "Unsaved catalogue navigation baseline"
     );
@@ -2455,7 +2493,7 @@ async function pressureDistinctCaller(browser: Browser): Promise<void> {
     );
     await page.keyboard.press("Home");
     await page.waitForFunction(() =>
-      !new URL(window.location.href).searchParams.has("playhead")
+      new URL(window.location.href).searchParams.get("playhead") === "0"
     );
     await page.keyboard.press("Space");
     await page.waitForFunction(() =>

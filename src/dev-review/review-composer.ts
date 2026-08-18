@@ -242,7 +242,9 @@ function renderCaptureMeta(
     semantic.activePhase
   ].filter((label): label is string => label !== undefined);
   meta.replaceChildren(...labels.map((label) => pill(meta.ownerDocument, label)));
-  route.textContent = new URL(capture.route).pathname;
+  const capturedRoute = new URL(capture.route);
+  route.textContent = `${capturedRoute.pathname}${capturedRoute.search}` +
+    capturedRoute.hash;
 }
 
 function pill(ownerDocument: Document, label: string): HTMLSpanElement {

@@ -41,6 +41,7 @@ export function mountKpDevReview(input: {
   readonly placement: (viewportWidth: number) => KpDevReviewPlacement;
   readonly beforeCapture?: (() => Promise<void>) | undefined;
   readonly screenshotSurface?: "animation-catalogue" | undefined;
+  readonly resolveCaptureRoute?: ((currentHref: string) => string) | undefined;
   readonly onDispose?: (() => void) | undefined;
 }): () => void {
   const ownerWindow = input.ownerWindow ?? window;
@@ -126,7 +127,8 @@ export function mountKpDevReview(input: {
         }
         const build = await readLiveReviewBuildIdentity(ownerWindow);
         const result: KpDevReviewCaptureV1 = {
-          route: ownerWindow.location.href,
+          route: input.resolveCaptureRoute?.(ownerWindow.location.href) ??
+            ownerWindow.location.href,
           capturedAt: new Date().toISOString(),
           environment: captureKpDevReviewEnvironment(
             browserKpDevReviewEnvironmentSource(

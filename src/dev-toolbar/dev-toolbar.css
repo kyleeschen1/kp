@@ -26,6 +26,18 @@
   margin-inline: auto;
 }
 
+html[data-kp-dev-toolbar-active] {
+  --kp-development-dock-clearance: 5.25rem;
+}
+
+/* The catalogue is a viewport application, so reserving the dock in its
+   height keeps transport controls reachable without changing stage geometry. */
+html[data-kp-dev-toolbar-active] .kp-animation-catalogue-shell,
+html[data-kp-dev-toolbar-active] .kp-animation-catalogue-bootstrap {
+  height: calc(100svh - var(--kp-development-dock-clearance));
+  min-height: min(38rem, calc(100svh - var(--kp-development-dock-clearance)));
+}
+
 [data-kp-dev-toolbar] button,
 [data-kp-dev-toolbar] label,
 [data-kp-dev-toolbar] select,
@@ -202,6 +214,9 @@ html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
 }
 
 @media (max-width: 560px) {
+  html[data-kp-dev-toolbar-active] {
+    --kp-development-dock-clearance: 7.5rem;
+  }
   html[data-kp-dev-toolbar-active][data-kp-economics-view="attention-stage"] {
     --kp-attention-stage-viewport-clearance: 8rem;
   }

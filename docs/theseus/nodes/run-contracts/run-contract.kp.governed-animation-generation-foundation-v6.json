@@ -117,7 +117,8 @@
     {
       "id": "next-action.kp.governed-animation-generation.s27",
       "title": "Review-collision-and-exact-state",
-      "status": "planned"
+      "summary": "Review-now-captures-one-canonical-reproducible-animation-state-and-never-intersects-the-scrubber-at-wide-or-phone-width",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s28",
