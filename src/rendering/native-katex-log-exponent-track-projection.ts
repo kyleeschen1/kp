@@ -12,14 +12,18 @@ import {
   planKpEquationMotionPathBetweenPoints
 } from "./equation-motion-path-planner.ts";
 import {
+  invalidateKpNativeKatexMotionPath
+} from "./native-katex-paint-geometry.ts";
+import {
   createKpNativeKatexTrackProjection,
   type KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
+import type {
+  KpNativeKatexPaintMeasuredSceneTrack
+} from "./native-katex-scene-compositor.ts";
 
 export const kpNativeKatexLogExponentExtractionProfile = Object.freeze({
-  exponentDepartureWindow: Object.freeze({ start: 0.04, end: 0.3 }),
-  exponentSettlementWindow: Object.freeze({ start: 0.7, end: 0.88 }),
-  contextReflowWindow: Object.freeze({ start: 0.4, end: 0.64 }),
+  residualReflowWindow: Object.freeze({ start: 0.42, end: 0.72 }),
   exponentClearanceInLocalInkHeights: 6
 });
 
@@ -72,10 +76,11 @@ function createExtractionProjection(
           sourceEntityId !== "logged.exponent" ||
           targetEntityId !== "extracted.coefficient"
         ) {
+          const continuousTrack = useSingleOperationProgress(track);
           const start = track.startPaintRect ?? track.startRect;
           const end = track.endPaintRect ?? track.endRect;
           return Object.freeze({
-            ...track,
+            ...continuousTrack,
             motionPath: planKpEquationMotionPathBetweenPoints({
               id: `operation-path.${operation.transformation.id}.${track.id}.direct-context`,
               relationRecordId: track.semanticContinuantId ?? track.id,
@@ -84,18 +89,14 @@ function createExtractionProjection(
               variants: ["direct"]
             }).selected,
             motionPathSampling: "planned-curve" as const,
+            // The enclosure retires before its contents reflow, but this is
+            // still one continuous transit rather than a second settlement.
             sampleProgress: sampleWindow(
-              kpNativeKatexLogExponentExtractionProfile.contextReflowWindow
+              kpNativeKatexLogExponentExtractionProfile.residualReflowWindow
             )
           });
         }
         exponentTrackCount += 1;
-        const sampleProgress = sampleDepartureHoldSettlement({
-          departure:
-            kpNativeKatexLogExponentExtractionProfile.exponentDepartureWindow,
-          settlement:
-            kpNativeKatexLogExponentExtractionProfile.exponentSettlementWindow
-        });
         const start = track.startPaintRect ?? track.startRect;
         const end = track.endPaintRect ?? track.endRect;
         const localInkHeight = Math.max(start.height, end.height, 1);
@@ -111,10 +112,9 @@ function createExtractionProjection(
               .exponentClearanceInLocalInkHeights
         }).selected;
         return Object.freeze({
-          ...track,
+          ...useSingleOperationProgress(track),
           motionPath,
-          motionPathSampling: "planned-curve" as const,
-          sampleProgress
+          motionPathSampling: "planned-curve" as const
         });
       });
       if (exponentTrackCount === 0) {
@@ -127,15 +127,18 @@ function createExtractionProjection(
   });
 }
 
-function sampleDepartureHoldSettlement(input: {
-  readonly departure: { readonly start: number; readonly end: number };
-  readonly settlement: { readonly start: number; readonly end: number };
-}): (progress: number) => number {
-  const depart = sampleWindow(input.departure);
-  const settle = sampleWindow(input.settlement);
-  return (progress) => progress < input.settlement.start
-    ? depart(progress) * 0.5
-    : 0.5 + settle(progress) * 0.5;
+function useSingleOperationProgress(
+  track: KpNativeKatexPaintMeasuredSceneTrack
+): KpNativeKatexPaintMeasuredSceneTrack {
+  const withoutPath = invalidateKpNativeKatexMotionPath(track);
+  const {
+    sampleProgress: _sampleProgress,
+    motionProgressRange: _motionProgressRange,
+    ...continuous
+  } = withoutPath;
+  // The host act progress is the sole positional clock. Structural presence
+  // may remain staged, but continuants cannot acquire a second piecewise move.
+  return Object.freeze(continuous) as KpNativeKatexPaintMeasuredSceneTrack;
 }
 
 function entry(

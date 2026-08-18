@@ -120,6 +120,44 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   expect(extractionGeometry.exponentBottom)
     .toBeLessThan(extractionGeometry.baselineTop);
   expect(extractionGeometry.ownersRemainInsideStage).toBe(true);
+  const exponentPositions: Array<{ x: number; y: number }> = [];
+  for (const progress of [
+    0.47,
+    0.482,
+    0.494,
+    0.506,
+    0.518,
+    0.53,
+    0.542,
+    0.554,
+    0.566
+  ]) {
+    await player.locator('[data-action="seek-editor-animation"]')
+      .fill(String(progress));
+    exponentPositions.push(await stage.evaluate((root) => {
+      const owner = Array.from(root.querySelectorAll<HTMLElement>(
+        '[data-kp-equation-material-semantic-entity-id="logged.exponent"]'
+      )).find((candidate) => Number(getComputedStyle(candidate).opacity) > 0.01);
+      if (owner === undefined) {
+        throw new Error("Missing visible extracted exponent material.");
+      }
+      const rect = owner.getBoundingClientRect();
+      return { x: rect.x, y: rect.y };
+    }));
+  }
+  const exponentSteps = exponentPositions.slice(1).map((position, index) =>
+    Math.hypot(
+      position.x - exponentPositions[index]!.x,
+      position.y - exponentPositions[index]!.y
+    )
+  );
+  // A lift-hold-settle remap is continuous on paper but reads as two snaps.
+  // Every sampled interval must advance, without one interval owning the move.
+  expect(Math.min(...exponentSteps)).toBeGreaterThan(0.1);
+  expect(
+    Math.max(...exponentSteps) /
+      exponentSteps.reduce((sum, distance) => sum + distance, 0)
+  ).toBeLessThan(0.23);
   await player.locator('[data-action="seek-editor-animation"]').fill("0.872");
   await expect.poll(async () => Number(
     await stage.getAttribute("data-kp-log-exponent-operation-progress")

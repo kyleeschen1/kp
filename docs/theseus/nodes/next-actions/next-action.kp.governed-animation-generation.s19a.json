@@ -3,7 +3,7 @@
   "kind": "next-action",
   "title": "Exponential-equation-visual-repair-checkpoint",
   "status": "resolved",
-  "summary": "The 2^x = 7 exemplar is ready for its required human visual checkpoint.",
+  "summary": "Corrected exemplar is ready for renewed human visual review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -111,11 +111,46 @@
       "scope": "focused",
       "checkedAt": "2026-08-18T01:07:36.442Z",
       "notes": "All ten equation surface inventory and preservation checks passed."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T01:30:30.935Z",
+      "notes": "Continuous extraction capture passes collision and bounds diagnostics with no lift-hold-settle remap."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/log-exponent-catalogue.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T01:30:32.485Z",
+      "notes": "Chromium verifies every sampled extraction interval advances and no interval owns a snap-sized share of the transit."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T01:30:33.880Z",
+      "notes": "All fifty-two semantic, lifecycle, clock, and renderer tests pass after continuity repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T01:30:35.230Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T01:30:36.606Z",
+      "notes": "Dependency, framework-neutrality, semantic boundary, and compiler authority gates pass."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Repaired the canonical exponent-log presentation without changing semantic endpoints or operation order; visual, browser, type, architecture, and preservation checks pass."
+    "summary": "Replaced the rejected piecewise x lift-hold-settle motion with one continuous measured transit; residual context performs one collision-safe reflow after enclosure retirement."
   },
   "expectedLearning": [
     "Whether Exponential-equation-visual-repair-checkpoint can be completed inside Governed animation generation foundation continuation."
