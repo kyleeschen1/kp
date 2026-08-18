@@ -94,6 +94,30 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T15:49:17.702Z"
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:53:46.990Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-name-pattern planner-renderer-support tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:53:48.204Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:53:49.196Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:53:50.208Z"
     }
   ],
   "allowedWork": [
@@ -126,7 +150,8 @@
     {
       "id": "s04",
       "title": "Measure planner and aggregate closures",
-      "status": "planned"
+      "summary": "Added disjoint source budgets for canonical core, scene-plan boundary, renderer support, and their unique aggregate; all new budgets pass while the unchanged direct-dependency budget remains intentionally visible.",
+      "status": "complete"
     },
     {
       "id": "s05",

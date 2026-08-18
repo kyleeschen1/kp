@@ -16,6 +16,19 @@ const coreFiles = await measureFiles(policy.productionSourceFiles);
 const dependencyFiles = await measureFiles(
   policy.productionDirectDependencySourceFiles
 );
+const scenePlanBoundaryFiles = await measureFiles(
+  policy.productionScenePlanBoundarySourceFiles
+);
+const rendererSupportFiles = await measureFiles(
+  policy.productionRendererSupportSourceFiles
+);
+const aggregateFiles = await measureFiles(Object.freeze([
+  ...new Set([
+    ...policy.productionSourceFiles,
+    ...policy.productionScenePlanBoundarySourceFiles,
+    ...policy.productionRendererSupportSourceFiles
+  ])
+]));
 const discoveredDependencies = await collectDirectDependencies(
   policy.productionSourceFiles
 );
@@ -38,6 +51,21 @@ const report = Object.freeze({
       JSON.stringify(discoveredDependencies) ===
       JSON.stringify([...policy.productionDirectDependencySourceFiles])
   },
+  scenePlanBoundary: summarizeMeasuredClosure({
+    files: scenePlanBoundaryFiles,
+    moduleCeiling: policy.maximumProductionScenePlanBoundaryModules,
+    byteCeiling: policy.maximumProductionScenePlanBoundarySourceBytes
+  }),
+  rendererSupport: summarizeMeasuredClosure({
+    files: rendererSupportFiles,
+    moduleCeiling: policy.maximumProductionRendererSupportModules,
+    byteCeiling: policy.maximumProductionRendererSupportSourceBytes
+  }),
+  aggregate: summarizeMeasuredClosure({
+    files: aggregateFiles,
+    moduleCeiling: policy.maximumProductionAggregateModules,
+    byteCeiling: policy.maximumProductionAggregateSourceBytes
+  }),
   directCallers: Object.freeze(callerGraph)
 });
 

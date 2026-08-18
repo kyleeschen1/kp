@@ -60,6 +60,31 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-symbol-motion.ts",
     "src/rendering/native-katex-track-projection.ts"
   ]),
+  productionScenePlanBoundarySourceFiles: Object.freeze([
+    "src/animation/canonical-operation-lineage-adapter.ts",
+    "src/animation/equation-shared-presentation-policy.ts",
+    "src/animation/lineage-constrained-glyph-matcher.ts",
+    "src/animation/structural-succession-presentation.ts",
+    "src/animation/symbol-motion-contract.ts",
+    "src/rendering/equation-motion-path-planner.ts",
+    "src/rendering/native-katex-factoring-choreography.ts",
+    "src/rendering/native-katex-fan-in-motion.ts",
+    "src/rendering/native-katex-operation-choreography.ts",
+    "src/rendering/native-katex-renderer-ready-scene-plan.ts",
+    "src/rendering/native-katex-scene-track-contract.ts",
+    "src/rendering/native-katex-successor-synthesis.ts",
+    "src/rendering/native-katex-symbol-motion.ts",
+    "src/rendering/native-katex-track-projection.ts"
+  ]),
+  productionRendererSupportSourceFiles: Object.freeze([
+    "src/rendering/computed-style-clone.ts",
+    "src/rendering/equation-font-readiness.ts",
+    "src/rendering/equation-material-layer-dom.ts",
+    "src/rendering/equation-material-owner.ts",
+    "src/rendering/native-katex-paint-geometry.ts",
+    "src/rendering/native-katex-scene-track-sampling.ts",
+    "src/rendering/native-katex-structural-succession-renderer.ts"
+  ]),
   maximumProductionModules: 4,
   // The axis-continuant contract adds generic routing authority to the one
   // compositor instead of introducing an equation-specific renderer. Keep the
@@ -70,6 +95,15 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // an unmeasured helper.
   maximumProductionDirectDependencyModules: 20,
   maximumProductionDirectDependencySourceBytes: 295_000,
+  // Planner source receives responsibilities still embedded in the current
+  // compositor. The aggregate ceiling, not this migration envelope, prevents
+  // source from disappearing while those functions move to their true owner.
+  maximumProductionScenePlanBoundaryModules: 20,
+  maximumProductionScenePlanBoundarySourceBytes: 315_000,
+  maximumProductionRendererSupportModules: 7,
+  maximumProductionRendererSupportSourceBytes: 65_000,
+  maximumProductionAggregateModules: 31,
+  maximumProductionAggregateSourceBytes: 455_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -143,6 +177,12 @@ export function validateKpCanonicalEquationRendererConvergence(
     policy.maximumProductionSourceBytes !== 140_000 ||
     policy.maximumProductionDirectDependencyModules !== 20 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
+    policy.maximumProductionScenePlanBoundaryModules !== 20 ||
+    policy.maximumProductionScenePlanBoundarySourceBytes !== 315_000 ||
+    policy.maximumProductionRendererSupportModules !== 7 ||
+    policy.maximumProductionRendererSupportSourceBytes !== 65_000 ||
+    policy.maximumProductionAggregateModules !== 31 ||
+    policy.maximumProductionAggregateSourceBytes !== 455_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

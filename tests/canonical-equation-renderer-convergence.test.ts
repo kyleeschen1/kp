@@ -125,6 +125,57 @@ test("canonical scene source audit seals its direct local dependency closure", a
   );
 });
 
+test("planner renderer support and aggregate source remain separately measured", async () => {
+  const policy = kpCanonicalEquationRendererConvergence;
+  const planner = [...policy.productionScenePlanBoundarySourceFiles];
+  const rendererSupport = [...policy.productionRendererSupportSourceFiles];
+  const core = [...policy.productionSourceFiles];
+  const partitions = [core, planner, rendererSupport];
+  const aggregate = new Set(partitions.flat());
+
+  assert.equal(
+    aggregate.size,
+    partitions.reduce((total, paths) => total + paths.length, 0),
+    "Canonical ownership accounting cannot count one source in two budgets."
+  );
+  assert.ok(planner.length <= policy.maximumProductionScenePlanBoundaryModules);
+  assert.ok(
+    rendererSupport.length <= policy.maximumProductionRendererSupportModules
+  );
+  assert.ok(aggregate.size <= policy.maximumProductionAggregateModules);
+  assert.deepEqual(
+    [...policy.productionDirectDependencySourceFiles].filter(
+      (path) => !aggregate.has(path)
+    ),
+    [],
+    "Every direct dependency must remain visible in aggregate accounting."
+  );
+
+  const measure = async (paths: readonly string[]) => (await Promise.all(
+    paths.map(async (path) => Buffer.byteLength(await readFile(path, "utf8")))
+  )).reduce((total, bytes) => total + bytes, 0);
+  const [plannerBytes, rendererSupportBytes, aggregateBytes] = await Promise.all([
+    measure(planner),
+    measure(rendererSupport),
+    measure([...aggregate])
+  ]);
+  assert.ok(
+    plannerBytes <= policy.maximumProductionScenePlanBoundarySourceBytes,
+    `Scene-plan boundary uses ${plannerBytes} source bytes; ceiling is ` +
+      `${policy.maximumProductionScenePlanBoundarySourceBytes}.`
+  );
+  assert.ok(
+    rendererSupportBytes <= policy.maximumProductionRendererSupportSourceBytes,
+    `Renderer support uses ${rendererSupportBytes} source bytes; ceiling is ` +
+      `${policy.maximumProductionRendererSupportSourceBytes}.`
+  );
+  assert.ok(
+    aggregateBytes <= policy.maximumProductionAggregateSourceBytes,
+    `Canonical aggregate uses ${aggregateBytes} source bytes; ceiling is ` +
+      `${policy.maximumProductionAggregateSourceBytes}.`
+  );
+});
+
 test("canonical scene core keeps one handoff and rectangle measurement authority", async () => {
   const sources = await Promise.all(
     kpCanonicalEquationRendererConvergence.productionSourceFiles.map(
