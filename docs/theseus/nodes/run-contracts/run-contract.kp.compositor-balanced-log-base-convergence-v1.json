@@ -558,6 +558,104 @@
       "scope": "broad",
       "checkedAt": "2026-08-18T17:36:44.229Z",
       "notes": "Production build passes and all native KaTeX compiler/renderer chunks resolve after compatibility retirement."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "compositor-boundary",
+      "checkedAt": "2026-08-18T17:53:46.899Z",
+      "notes": "28/28 canonical renderer tests pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "compositor-boundary",
+      "checkedAt": "2026-08-18T17:53:48.582Z",
+      "notes": "73/73 deterministic glyph compositor tests pass."
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "reader-runtime",
+      "checkedAt": "2026-08-18T17:53:49.675Z",
+      "notes": "18/18 reader lifecycle and ownership tests pass."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "presentation-authority",
+      "checkedAt": "2026-08-18T17:53:50.721Z",
+      "notes": "187/187 presentation plan tests pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "surface-preservation",
+      "checkedAt": "2026-08-18T17:53:51.771Z",
+      "notes": "10/10 inventory, authority graph, preservation matrix, and evidence checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-authority",
+      "checkedAt": "2026-08-18T17:53:52.807Z",
+      "notes": "TypeScript project check passes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T17:53:54.028Z",
+      "notes": "Architecture checks pass without widened exceptions."
+    },
+    {
+      "command": "npm run build:internal-studio",
+      "status": "passed",
+      "scope": "studio-build",
+      "checkedAt": "2026-08-18T17:53:55.430Z",
+      "notes": "Internal Studio production build passes."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-08-18T17:53:56.753Z",
+      "notes": "Production build and economics publication check pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bundle-boundary",
+      "checkedAt": "2026-08-18T17:53:58.199Z",
+      "notes": "Animation-library attribution and fixed boundaries pass."
+    },
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "source-budget",
+      "checkedAt": "2026-08-18T17:53:59.773Z",
+      "notes": "All fixed ceilings pass: core 118908/140000, direct 154706/295000, scene plan 272111/315000, renderer support 63924/65000, aggregate 454943/455000."
+    },
+    {
+      "command": "npm run test:browser:real-katex-glyph-compositor",
+      "status": "failed",
+      "scope": "baseline-debt-audit",
+      "checkedAt": "2026-08-18T17:54:00.884Z",
+      "notes": "37/44 Chromium checks pass. The exact seven failures reproduce with the same residuals and snapshots at pre-tranche commit b5f75e14, proving they are retained baseline debt rather than a Tranche-A regression."
+    },
+    {
+      "command": "npm run test:browser:canonical-host-parity",
+      "status": "failed",
+      "scope": "baseline-debt-audit",
+      "checkedAt": "2026-08-18T17:54:02.001Z",
+      "notes": "Radical host readiness does not settle. The same failure reproduces at pre-tranche commit b5f75e14."
+    },
+    {
+      "command": "npm run test:browser:equation-surface-preservation",
+      "status": "failed",
+      "scope": "browser-environment-debt",
+      "checkedAt": "2026-08-18T17:54:03.538Z",
+      "notes": "Chromium surfaces an existing unhandled ResizeObserver notification; deterministic preservation matrix remains green. Debt retained visibly rather than weakening the gate."
     }
   ],
   "allowedWork": [
@@ -663,7 +761,8 @@
     {
       "id": "s14",
       "title": "Verify compositor boundary",
-      "status": "planned"
+      "summary": "Closed Tranche A with one compile-plan/render-session boundary across editor, reader, and feature-pack hosts; deterministic ownership, preservation, architecture, type, build, bundle, and fixed source-budget gates pass. Broad browser debt remains explicit: seven glyph checks and the radical parity readiness failure reproduce unchanged at pre-tranche b5f75e14, while the equation-surface browser gate retains its ResizeObserver environment failure.",
+      "status": "complete"
     },
     {
       "id": "s15",
