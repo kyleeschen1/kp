@@ -59,6 +59,14 @@
       "summary": "Log-exponent operations use their dedicated typed semantic compiler."
     },
     {
+      "id": "compiler.logarithm-change-of-base-operation",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/logarithm-change-of-base.ts",
+      "sourceNeedle": "export function verifyKpLogarithmChangeOfBase",
+      "summary": "Change of base enters rendering only through verifier-minted mathematical authority."
+    },
+    {
       "id": "compiler.log-quotient-operation",
       "category": "compiler",
       "authority": "local",
@@ -99,6 +107,14 @@
       "summary": "Log-exponent symbols use a caller-local compiled motion contract."
     },
     {
+      "id": "motif.logarithm-change-of-base-composition",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/logarithm-change-of-base-presentation-plan.ts",
+      "sourceNeedle": "export function compileKpLogarithmChangeOfBasePresentationPlan",
+      "summary": "The exemplar composes canonical function-wrap and fraction-material authorities without adding a renderer primitive."
+    },
+    {
       "id": "motif.log-quotient-homomorphic-fusion",
       "category": "motif",
       "authority": "local",
@@ -137,6 +153,14 @@
       "sourcePath": "src/animation/log-exponent-timeline.ts",
       "sourceNeedle": "export function sampleKpLogExponentSequenceFrame",
       "summary": "The log-exponent timeline maps shared progress to operation-local time."
+    },
+    {
+      "id": "timing.logarithm-change-of-base-exemplar",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/rendering/logarithm-change-of-base-transit-session.ts",
+      "sourceNeedle": "export const kpLogarithmChangeOfBaseExemplarTiming",
+      "summary": "The unpromoted exemplar owns one reversible timing profile pending visual review."
     },
     {
       "id": "timing.copy-fan-out-presentation-profile",
@@ -187,6 +211,14 @@
       "summary": "Log exponent owns a dedicated native endpoint transit session."
     },
     {
+      "id": "renderer.logarithm-change-of-base-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/logarithm-change-of-base-transit-session.ts",
+      "sourceNeedle": "export function createKpLogarithmChangeOfBaseTransitSession",
+      "summary": "Change of base composes the canonical native KaTeX scene session at a lazy caller boundary."
+    },
+    {
       "id": "renderer.log-quotient-transit",
       "category": "renderer-inference",
       "authority": "local",
@@ -225,6 +257,14 @@
       "sourcePath": "src/editor/log-exponent-surface-adapter.ts",
       "sourceNeedle": "session.stage.dataset[\"kpLogExponentStage\"] = \"failed\"",
       "summary": "Log-exponent preparation records an explicit failed stage."
+    },
+    {
+      "id": "fallback.logarithm-change-of-base-failed-stage",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/logarithm-change-of-base-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpLogarithmChangeOfBaseStage\"] = \"failed\"",
+      "summary": "Change-of-base preparation fails closed to its readable source endpoint."
     },
     {
       "id": "fallback.log-quotient-failed-stage",
@@ -619,6 +659,43 @@
         "sampler.generic-semantic-token",
         "sampler.linear-rearrangement",
         "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.equation.logarithm-change-of-base.v1",
+      "pathClass": "logarithm-change-of-base-specialized",
+      "transformationTypes": [
+        "changeLogarithmBase"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.logarithm-change-of-base-operation"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.logarithm-change-of-base-composition"
+      ],
+      "localTimingNodeIds": [
+        "timing.logarithm-change-of-base-exemplar"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.logarithm-change-of-base-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.logarithm-change-of-base-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
       ]
     },
     {

@@ -14,8 +14,8 @@
     "byStatus": {
       "Direct": 5,
       "Registered": 3,
-      "Exemplar": 9,
-      "Missing": 11
+      "Exemplar": 10,
+      "Missing": 10
     }
   },
   "entries": [
@@ -491,7 +491,7 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.logarithm-base.v1"
       },
-      "status": "Missing",
+      "status": "Exemplar",
       "requirements": [
         {
           "id": "requirement.equation.logarithm-base.normalizer",
@@ -528,10 +528,12 @@
         {
           "id": "requirement.equation.logarithm-base.exemplar",
           "kind": "canonical-exemplar",
-          "authorityId": "exemplar.equation.logarithm-change-of-base.v1",
+          "authorityId": "animation.equation.logarithm-change-of-base.v1",
           "summary": "One reviewed exemplar establishes syntax, identity, and attention choreography before promotion.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.equation.logarithm-change-of-base.v1"
+          ]
         },
         {
           "id": "requirement.equation.logarithm-base.authoring",
@@ -556,13 +558,18 @@
         "requirement.equation.logarithm-base.operation",
         "requirement.equation.logarithm-base.recipe",
         "requirement.equation.logarithm-base.motif",
-        "requirement.equation.logarithm-base.exemplar",
         "requirement.equation.logarithm-base.authoring",
         "requirement.equation.logarithm-base.corpus"
       ],
-      "exemplarLinks": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.equation.logarithm-change-of-base.v1",
+          "title": "Change logarithm base",
+          "href": "/?artifact=animation.equation.logarithm-change-of-base.v1"
+        }
+      ],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "playable-exemplar-without-general-generation"
       ]
     },
     {

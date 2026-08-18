@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 3246,
+  "scannedFileCount": 3331,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -64,12 +64,33 @@
         "src/animation/log-exponent-symbol-motion.ts",
         "src/editor/log-exponent-surface-adapter.ts",
         "src/rendering/log-exponent-transit-session.ts",
+        "src/rendering/native-katex-log-exponent-track-projection.ts",
         "src/semantic/log-exponent-operation-dispatch.ts",
         "src/semantic/log-exponent-transformation-tree.ts"
       ],
       "testCallers": [
         "tests/log-exponent-apply-log-correspondence.test.ts",
         "tests/log-exponent-extraction-correspondence.test.ts"
+      ],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
+      "id": "reachability.compiler.compiler.logarithm-change-of-base-operation.src/semantic/logarithm-change-of-base.ts",
+      "concern": "compiler",
+      "sourcePath": "src/semantic/logarithm-change-of-base.ts",
+      "authorityId": "compiler.logarithm-change-of-base-operation",
+      "sourceCallers": [
+        "src/animation/logarithm-change-of-base-exemplar.ts",
+        "src/animation/logarithm-change-of-base-presentation-plan.ts",
+        "src/rendering/logarithm-change-of-base-native-endpoints.ts",
+        "src/rendering/logarithm-change-of-base-transit-session.ts",
+        "src/semantic/logarithm-change-of-base-corpus.ts"
+      ],
+      "testCallers": [
+        "tests/logarithm-change-of-base-presentation-plan.test.ts",
+        "tests/logarithm-change-of-base.test.ts"
       ],
       "scriptCallers": [],
       "otherCallers": [],
@@ -237,6 +258,19 @@
       "reachability": "live-callers"
     },
     {
+      "id": "reachability.generic-fallback.fallback.logarithm-change-of-base-failed-stage.src/editor/logarithm-change-of-base-surface-adapter.ts",
+      "concern": "generic-fallback",
+      "sourcePath": "src/editor/logarithm-change-of-base-surface-adapter.ts",
+      "authorityId": "fallback.logarithm-change-of-base-failed-stage",
+      "sourceCallers": [
+        "src/editor/logarithm-change-of-base-surface-capability.ts"
+      ],
+      "testCallers": [],
+      "scriptCallers": [],
+      "otherCallers": [],
+      "reachability": "live-callers"
+    },
+    {
       "id": "reachability.generic-fallback.fallback.log-quotient-failed-stage.src/editor/log-quotient-surface-adapter.ts",
       "concern": "generic-fallback",
       "sourcePath": "src/editor/log-quotient-surface-adapter.ts",
@@ -395,6 +429,8 @@
         "src/editor/log-product-surface-capability.ts",
         "src/editor/log-quotient-surface-adapter.ts",
         "src/editor/log-quotient-surface-capability.ts",
+        "src/editor/logarithm-change-of-base-surface-adapter.ts",
+        "src/editor/logarithm-change-of-base-surface-capability.ts",
         "src/editor/operation-evaluation-surface-adapter.ts",
         "src/editor/operation-evaluation-surface-capability.ts",
         "src/editor/place-value-addition-surface-adapter.ts",
@@ -457,6 +493,7 @@
         "tests/cross-domain-upper-boundary.test.ts",
         "tests/log-exponent-catalogue-integration.test.ts",
         "tests/log-quotient-catalogue-integration.test.ts",
+        "tests/logarithm-change-of-base-exemplar.test.ts",
         "tests/selected-surface-capability-declarations.test.ts",
         "tests/selected-surface-capability.test.ts",
         "tests/vector-dot-projection-catalogue-integration.test.ts"
@@ -500,6 +537,7 @@
         "src/animation/lisp-lambda-application-adapter.ts",
         "src/animation/llm-animation-draft-compiler.ts",
         "src/animation/llm-animation-draft.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/operation-evaluation-adapter.ts",
         "src/animation/operation-presentation-plan-types.ts",
@@ -507,6 +545,7 @@
         "src/animation/place-value-addition-adapter.ts",
         "src/animation/programming-adapter.ts",
         "src/animation/quadratic-branching-asset.ts",
+        "src/animation/registered-both-sides-causal-binding.ts",
         "src/animation/representation-transform-samples.ts",
         "src/animation/representation-transform.ts",
         "src/animation/structural-succession-operation-presentation-plan.ts",
@@ -532,6 +571,7 @@
         "src/semantic/asset-interpreter.ts",
         "src/semantic/asset-laws.ts",
         "src/semantic/asset-port.ts",
+        "src/semantic/both-sides-operation-application-selection.ts",
         "src/semantic/cancellation-pressure-contract.ts",
         "src/semantic/cancellation-witness.ts",
         "src/semantic/constant-quotient-evaluation-asset.ts",
@@ -628,6 +668,7 @@
         "src/animation/visual-frame-adapter.ts",
         "src/architecture/equation-surface-preservation-matrix.ts",
         "src/architecture/operation-evaluation-caller-conformance.ts",
+        "src/authoring/equation-series-runtime.ts",
         "src/editor/animation-diagnostics.ts",
         "src/editor/animation-player-state.ts",
         "src/editor/equation-motion-demo-controller.ts",
@@ -850,6 +891,7 @@
         "src/animation/log-exponent-adapter.ts",
         "src/animation/log-product-adapter.ts",
         "src/animation/log-quotient-adapter.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/numerator-split-merge-equation-adapter.ts",
         "src/animation/operation-evaluation-adapter.ts",
@@ -969,6 +1011,7 @@
         "src/animation/log-exponent-adapter.ts",
         "src/animation/log-product-adapter.ts",
         "src/animation/log-quotient-adapter.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/matrix-linear-map-frame.ts",
         "src/animation/matrix-linear-map-pacing.ts",
@@ -1147,6 +1190,7 @@
         "src/animation/visual-frame-adapter.ts",
         "src/architecture/equation-surface-preservation-matrix.ts",
         "src/architecture/operation-evaluation-caller-conformance.ts",
+        "src/authoring/equation-series-runtime.ts",
         "src/editor/animation-diagnostics.ts",
         "src/editor/animation-player-state.ts",
         "src/editor/equation-motion-demo-controller.ts",
@@ -1269,6 +1313,7 @@
         "src/animation/lisp-lambda-application-adapter.ts",
         "src/animation/llm-animation-draft-compiler.ts",
         "src/animation/llm-animation-draft.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/operation-evaluation-adapter.ts",
         "src/animation/operation-presentation-plan-types.ts",
@@ -1276,6 +1321,7 @@
         "src/animation/place-value-addition-adapter.ts",
         "src/animation/programming-adapter.ts",
         "src/animation/quadratic-branching-asset.ts",
+        "src/animation/registered-both-sides-causal-binding.ts",
         "src/animation/representation-transform-samples.ts",
         "src/animation/representation-transform.ts",
         "src/animation/structural-succession-operation-presentation-plan.ts",
@@ -1301,6 +1347,7 @@
         "src/semantic/asset-interpreter.ts",
         "src/semantic/asset-laws.ts",
         "src/semantic/asset-port.ts",
+        "src/semantic/both-sides-operation-application-selection.ts",
         "src/semantic/cancellation-pressure-contract.ts",
         "src/semantic/cancellation-witness.ts",
         "src/semantic/constant-quotient-evaluation-asset.ts",
@@ -1403,6 +1450,7 @@
         "src/animation/log-exponent-adapter.ts",
         "src/animation/log-product-adapter.ts",
         "src/animation/log-quotient-adapter.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/numerator-split-merge-equation-adapter.ts",
         "src/animation/operation-evaluation-adapter.ts",
@@ -1526,6 +1574,7 @@
         "src/animation/visual-frame-adapter.ts",
         "src/architecture/equation-surface-preservation-matrix.ts",
         "src/architecture/operation-evaluation-caller-conformance.ts",
+        "src/authoring/equation-series-runtime.ts",
         "src/editor/animation-diagnostics.ts",
         "src/editor/animation-player-state.ts",
         "src/editor/equation-motion-demo-controller.ts",
@@ -1709,6 +1758,7 @@
         "src/animation/log-exponent-adapter.ts",
         "src/animation/log-product-adapter.ts",
         "src/animation/log-quotient-adapter.ts",
+        "src/animation/logarithm-change-of-base-exemplar.ts",
         "src/animation/matrix-linear-map-asset-enrichment.ts",
         "src/animation/matrix-linear-map-frame.ts",
         "src/animation/matrix-linear-map-pacing.ts",
@@ -1932,10 +1982,12 @@
         "src/animation/llm-animation-draft-v2-compiler.ts",
         "src/animation/llm-animation-draft-v2.ts",
         "src/animation/llm-semantic-motion-operation-authoring.ts",
+        "src/authoring/equation-series-operation-declarations.ts",
         "src/authoring/governed-semantic-compiler.ts",
         "src/semantic/cancellation-witness.ts"
       ],
       "testCallers": [
+        "tests/balanced-operation-caller-inventory.test.ts",
         "tests/cancellation-witness.test.ts",
         "tests/canonical-operation-registry.test.ts",
         "tests/canonical-reverse-choreography.test.ts",

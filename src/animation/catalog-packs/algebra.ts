@@ -19,6 +19,9 @@ import {
   createKpLogQuotientAnimationAsset
 } from "../log-quotient-adapter.ts";
 import {
+  createKpLogarithmChangeOfBaseExemplarAsset
+} from "../logarithm-change-of-base-exemplar.ts";
+import {
   createKpCanonicalCancellationPressureAnimationAsset
 } from "../cancellation-pressure-animation.ts";
 import {
@@ -45,7 +48,8 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createDistributionFactoringAnimationAsset(),
       createInequalitySignFlipAnimationAsset(),
       createKpLogExponentAnimationAsset(),
-      createKpLogQuotientAnimationAsset()
+      createKpLogQuotientAnimationAsset(),
+      createKpLogarithmChangeOfBaseExemplarAsset()
     ]),
     runtimeCapabilities: kpAlgebraChoreographyCapabilities
   });

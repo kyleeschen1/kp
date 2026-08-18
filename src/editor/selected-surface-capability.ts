@@ -40,6 +40,7 @@ export type KpEditorSelectedSurfaceCapability =
 export const kpEditorSelectedSurfaceCapabilityValues = Object.freeze([
   "equation-katex",
   "log-exponent",
+  "logarithm-change-of-base",
   "log-quotient",
   "log-product",
   "exact-fraction-quantity",

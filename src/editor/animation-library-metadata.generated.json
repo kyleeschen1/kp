@@ -680,6 +680,37 @@
     }
   },
   {
+    "id": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.equation.logarithm-change-of-base.v1",
+    "title": "Change logarithm base",
+    "summary": "A checkpoint exemplar for semantic identity across logarithm bases.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 5400,
+    "beatCount": 108,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "katex",
+      "logarithm"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.algebra.log-product.product-to-sum",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.algebra.log-product.product-to-sum",

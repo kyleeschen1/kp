@@ -508,6 +508,84 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.logarithm-change-of-base.v1",
+      "title": "Change logarithm base",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+        "transformationIds": [
+          "transformation.logarithm.change-base.two-seven-natural"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A checkpoint exemplar for semantic identity across logarithm bases.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "katex",
+          "logarithm"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "logarithm-change-of-base",
+        "familyId": "logarithm",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.logarithm-change-of-base.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-37820a96",
+          "fnv1a32-13e16db7",
+          "fnv1a32-3a9b93f7"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "semantic-native-katex"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+            "label": "Change logarithm base",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.logarithm-change-of-base.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.generated.add-zero",
       "title": "Generated: remove additive zero",
       "semanticSource": {

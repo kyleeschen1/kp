@@ -60,6 +60,7 @@ export interface KpEquationAssetManifestEntry {
     readonly selectedCapabilityId:
       | "equation-katex"
       | "log-exponent"
+      | "logarithm-change-of-base"
       | "log-quotient"
       | "log-product"
       | "operation-evaluation";

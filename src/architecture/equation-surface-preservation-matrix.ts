@@ -299,6 +299,7 @@ function preservationRow(input: {
       // records the present split for a later accessibility migration.
       mathSemantics:
         pathClass === "log-exponent-specialized" ||
+        pathClass === "logarithm-change-of-base-specialized" ||
         pathClass === "log-quotient-specialized"
           ? "katex-mathml" as const
           : "semantic-stage-aria-label" as const,
@@ -312,6 +313,7 @@ function preservationRow(input: {
       adapterStatus: "ready" as const,
       endpointAuthority:
         pathClass === "log-exponent-specialized" ||
+        pathClass === "logarithm-change-of-base-specialized" ||
         pathClass === "log-quotient-specialized"
           ? "semantic-native-katex" as const
           : "labelled-semantic-stage" as const
@@ -346,6 +348,7 @@ function migrationObligations(input: {
   }
   const endpointAuthority =
     authority.pathClass === "log-exponent-specialized" ||
+    authority.pathClass === "logarithm-change-of-base-specialized" ||
     authority.pathClass === "log-quotient-specialized"
       ? "semantic-native-katex" as const
       : "labelled-semantic-stage" as const;
@@ -452,7 +455,9 @@ function endpointRefs(
 }
 
 function familyForAnimation(animationId: string): KpEquationSurfaceFamilyId {
-  if (animationId.includes("log-")) return "logarithm";
+  if (animationId.includes("log-") || animationId.includes("logarithm")) {
+    return "logarithm";
+  }
   if (animationId.includes("operation-evaluation")) {
     return "operation-evaluation";
   }

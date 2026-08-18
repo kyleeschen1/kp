@@ -27,6 +27,9 @@ import {
   createKpLogQuotientAnimationAsset
 } from "./log-quotient-adapter.ts";
 import {
+  createKpLogarithmChangeOfBaseExemplarAsset
+} from "./logarithm-change-of-base-exemplar.ts";
+import {
   createKpLogProductAnimationAssets
 } from "./log-product-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
@@ -108,6 +111,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createInequalitySignFlipAnimationAsset(),
     createKpLogExponentAnimationAsset(),
     createKpLogQuotientAnimationAsset(),
+    createKpLogarithmChangeOfBaseExemplarAsset(),
     ...createKpLogProductAnimationAssets()
   ];
 }

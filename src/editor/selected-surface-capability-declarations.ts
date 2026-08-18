@@ -90,6 +90,23 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     }
   }),
   declaration({
+    capabilityId: "logarithm-change-of-base",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.logarithm-change-of-base.canonical-native-katex"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const client = await import(
+        "./logarithm-change-of-base-surface-capability.ts"
+      );
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client.registerKpEditorLogarithmChangeOfBaseSurfaceCapability(
+          registry
+        ));
+    }
+  }),
+  declaration({
     capabilityId: "log-quotient",
     domain: "equation",
     adapterIds: [

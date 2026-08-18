@@ -21,6 +21,7 @@ export type KpEquationSurfaceAuthorityCategory =
 export type KpEquationSurfaceAuthorityPathClass =
   | "generic-semantic-equation"
   | "log-exponent-specialized"
+  | "logarithm-change-of-base-specialized"
   | "log-quotient-specialized"
   | "log-product-specialized"
   | "operation-evaluation-specialized";
@@ -101,6 +102,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/semantic/log-exponent-transformation-compiler.ts",
     "export function compileKpApplyNaturalLogBothSides",
     "Log-exponent operations use their dedicated typed semantic compiler."),
+  node("compiler.logarithm-change-of-base-operation", "compiler", "local",
+    "src/semantic/logarithm-change-of-base.ts",
+    "export function verifyKpLogarithmChangeOfBase",
+    "Change of base enters rendering only through verifier-minted mathematical authority."),
   node("compiler.log-quotient-operation", "compiler", "local",
     "src/semantic/log-quotient-transformation-compiler.ts",
     "export function compileKpLogQuotientOperation",
@@ -121,6 +126,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-symbol-motion.ts",
     "export function compileKpLogExponentSymbolMotionPlans",
     "Log-exponent symbols use a caller-local compiled motion contract."),
+  node("motif.logarithm-change-of-base-composition", "motif", "local",
+    "src/animation/logarithm-change-of-base-presentation-plan.ts",
+    "export function compileKpLogarithmChangeOfBasePresentationPlan",
+    "The exemplar composes canonical function-wrap and fraction-material authorities without adding a renderer primitive."),
   node("motif.log-quotient-homomorphic-fusion", "motif", "local",
     "src/animation/log-quotient-homomorphic-fusion.ts",
     "export function createKpCanonicalLogQuotientHomomorphicFusionChoreography",
@@ -141,6 +150,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent timeline maps shared progress to operation-local time."),
+  node("timing.logarithm-change-of-base-exemplar", "local-timing", "local",
+    "src/rendering/logarithm-change-of-base-transit-session.ts",
+    "export const kpLogarithmChangeOfBaseExemplarTiming",
+    "The unpromoted exemplar owns one reversible timing profile pending visual review."),
   node("timing.copy-fan-out-presentation-profile", "local-timing", "canonical",
     "src/animation/copy-fan-out-motion-profile.ts",
     "export const kpCanonicalNativeKatexCopyFanOutMotionProfile",
@@ -165,6 +178,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/log-exponent-transit-session.ts",
     "export function createKpLogExponentTransitSession",
     "Log exponent owns a dedicated native endpoint transit session."),
+  node("renderer.logarithm-change-of-base-transit", "renderer-inference", "local",
+    "src/rendering/logarithm-change-of-base-transit-session.ts",
+    "export function createKpLogarithmChangeOfBaseTransitSession",
+    "Change of base composes the canonical native KaTeX scene session at a lazy caller boundary."),
   node("renderer.log-quotient-transit", "renderer-inference", "local",
     "src/rendering/log-quotient-transit-session.ts",
     "export function createKpLogQuotientTransitSession",
@@ -185,6 +202,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/log-exponent-surface-adapter.ts",
     "session.stage.dataset[\"kpLogExponentStage\"] = \"failed\"",
     "Log-exponent preparation records an explicit failed stage."),
+  node("fallback.logarithm-change-of-base-failed-stage", "fallback", "canonical",
+    "src/editor/logarithm-change-of-base-surface-adapter.ts",
+    "session.stage.dataset[\"kpLogarithmChangeOfBaseStage\"] = \"failed\"",
+    "Change-of-base preparation fails closed to its readable source endpoint."),
   node("fallback.log-quotient-failed-stage", "fallback", "canonical",
     "src/editor/log-quotient-surface-adapter.ts",
     "session.stage.dataset[\"kpLogQuotientStage\"] = \"failed\"",
@@ -381,6 +402,19 @@ KpEquationSurfaceAuthorityRow {
       samplers: ["sampler.log-exponent-sequence"]
     });
   }
+  if (pathClass === "logarithm-change-of-base-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: ["compiler.logarithm-change-of-base-operation"],
+      motif: ["motif.logarithm-change-of-base-composition"],
+      timing: ["timing.logarithm-change-of-base-exemplar"],
+      renderer: ["renderer.logarithm-change-of-base-transit"],
+      fallback: ["fallback.logarithm-change-of-base-failed-stage"],
+      samplers: ["sampler.operation-native-scene"]
+    });
+  }
   if (pathClass === "log-quotient-specialized") {
     return row(asset.id, pathClass, transformationTypes, {
       semantic: asset.transformations.length,
@@ -514,6 +548,9 @@ function authorityPathClass(
   }
   if (animationId === "animation.algebra.log-exponent.solve-two-power-x") {
     return "log-exponent-specialized";
+  }
+  if (animationId === "animation.equation.logarithm-change-of-base.v1") {
+    return "logarithm-change-of-base-specialized";
   }
   if (
     animationId ===

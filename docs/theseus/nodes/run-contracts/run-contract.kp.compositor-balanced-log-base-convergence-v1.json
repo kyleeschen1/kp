@@ -1162,6 +1162,34 @@
       "status": "passed",
       "scope": "s26 patch hygiene",
       "checkedAt": "2026-08-18T20:02:28.944Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "change-of-base semantic endpoint catalogue and timing contracts",
+      "checkedAt": "2026-08-18T20:29:27.951Z",
+      "notes": "14 focused tests passed."
+    },
+    {
+      "command": "npm run test:browser:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "Chromium direct seek URL restore exact ownership and lazy surface",
+      "checkedAt": "2026-08-18T20:29:29.215Z",
+      "notes": "2 focused browser tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and compiler authority boundaries",
+      "checkedAt": "2026-08-18T20:29:30.269Z",
+      "notes": "Architecture ratchets passed with the specialized change-of-base path."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript Svelte and domain type boundaries",
+      "checkedAt": "2026-08-18T20:29:31.744Z",
+      "notes": "Typecheck completed successfully."
     }
   ],
   "allowedWork": [
@@ -1345,7 +1373,8 @@
     {
       "id": "s27",
       "title": "Implement change-of-base exemplar",
-      "status": "planned"
+      "summary": "Implemented the exact change-of-base exemplar as a lazy native-KaTeX surface. The verified semantic contract preserves 7 and 2, composes canonical function-wrap reception with fraction-rule construction, uses one shared player clock and canonical compositor, supports deterministic seek rewind and URL restore, and records a specialized architecture path without a new renderer primitive.",
+      "status": "complete"
     },
     {
       "id": "s28",

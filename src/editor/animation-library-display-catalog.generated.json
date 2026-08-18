@@ -470,6 +470,32 @@
     ]
   },
   {
+    "animationId": "animation.equation.logarithm-change-of-base.v1",
+    "title": "Change logarithm base",
+    "summary": "A checkpoint exemplar for semantic identity across logarithm bases.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "katex",
+      "logarithm"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+    "representations": [
+      {
+        "id": "editor-animation.animation.equation.logarithm-change-of-base.v1",
+        "label": "Change logarithm base",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.logarithm-change-of-base.v1",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.algebra.log-quotient.difference-to-quotient",
     "title": "Combine a difference of logarithms",
     "summary": "A typed native-KaTeX pressure caller for the logarithm quotient law.",

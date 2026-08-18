@@ -35,6 +35,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["equation"]
   }), ["log-exponent"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.equation.logarithm-change-of-base.v1",
+    slotKinds: ["equation"]
+  }), ["logarithm-change-of-base"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.algebra.log-quotient.difference-to-quotient",
     slotKinds: ["equation"]
   }), ["log-quotient"]);

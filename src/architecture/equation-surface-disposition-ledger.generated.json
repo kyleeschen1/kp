@@ -457,6 +457,78 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.logarithm-change-of-base.v1",
+      "familyId": "logarithm",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-b-structural-native-math",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-37820a96",
+          "fnv1a32-13e16db7",
+          "fnv1a32-3a9b93f7"
+        ],
+        "route": "/?artifact=animation.equation.logarithm-change-of-base.v1",
+        "adapterId": "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
+        "accessibilityMode": "katex-mathml",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.logarithm-change-of-base.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "logarithm-change-of-base-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/logarithm-change-of-base-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.logarithm-change-of-base.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.logarithm-change-of-base.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.logarithm-change-of-base.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/logarithm-change-of-base-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.logarithm-change-of-base.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.logarithm-change-of-base.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.logarithm",
+            "kind": "family-verification",
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.generated.add-zero",
       "familyId": "substitution",
       "disposition": "adapter-backed",

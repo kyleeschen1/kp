@@ -36,19 +36,19 @@ test("asset evidence joins exact generated manifests and direct links", () => {
   assert.equal(Object.isFrozen(evidence.assets), true);
 });
 
-test("planned exemplar requirements remain explicit exact-match gaps", () => {
+test("change-of-base exemplar matches only its exact generated asset", () => {
   const evidence = createKpAnimationCapabilityAssetEvidence();
   const alternativeBase = evidence.requirements.find(
     ({ requirementId }) =>
       requirementId === "requirement.equation.logarithm-base.exemplar"
   );
-  assert.deepEqual(alternativeBase, {
-    capabilityId: "capability.equation.alternative-logarithm-bases",
-    requirementId: "requirement.equation.logarithm-base.exemplar",
-    assetId: "exemplar.equation.logarithm-change-of-base.v1",
-    status: "missing",
-    reason: "no-exact-generated-asset"
-  });
+  assert.equal(alternativeBase?.status, "matched");
+  if (alternativeBase?.status !== "matched") return;
+  assert.equal(alternativeBase.assetId,
+    "animation.equation.logarithm-change-of-base.v1");
+  assert.equal(alternativeBase.asset.source,
+    "equation-asset-manifest");
+  assert.match(alternativeBase.asset.href ?? "", /artifact=/);
 });
 
 test("display-only domain exemplars retain their generated canonical link", () => {

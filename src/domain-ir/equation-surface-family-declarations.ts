@@ -1,6 +1,7 @@
 export type KpEquationSelectedSurfaceCapability =
   | "equation-katex"
   | "log-exponent"
+  | "logarithm-change-of-base"
   | "log-quotient"
   | "log-product"
   | "exact-fraction-quantity"
@@ -10,6 +11,7 @@ export type KpEquationSelectedSurfaceCapability =
 export type KpEquationPrimarySurfaceCapability =
   | "equation-katex"
   | "log-exponent"
+  | "logarithm-change-of-base"
   | "log-quotient"
   | "log-product"
   | "operation-evaluation";
@@ -49,6 +51,7 @@ export type KpEquationStructuralRecipeId =
   | "recipe.equation.fraction-material.v1"
   | "recipe.equation.function-application.v1"
   | "recipe.equation.log-exponent.v1"
+  | "recipe.equation.change-logarithm-base.v1"
   | "recipe.equation.log-quotient-fusion.v1"
   | "recipe.equation.dot-product-traversal.v1"
   | "recipe.equation.matrix-matrix-composition.v1"
@@ -188,6 +191,16 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererSourcePath: "src/editor/log-exponent-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.logarithm-change-of-base",
+    matches: (id) => id === "animation.equation.logarithm-change-of-base.v1",
+    selectedCapabilityIds: ["logarithm-change-of-base"],
+    primaryCapabilityId: "logarithm-change-of-base",
+    rendererAdapterId:
+      "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
+    rendererSourcePath:
+      "src/editor/logarithm-change-of-base-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.log-quotient",
     matches: (id) => id === "animation.algebra.log-quotient.difference-to-quotient",
     selectedCapabilityIds: ["log-quotient"],
@@ -310,6 +323,18 @@ readonly KpWaveBEquationStructuralDeclaration[] = Object.freeze([
     animationId: "animation.algebra.log-exponent.solve-two-power-x",
     recipeIds: ["recipe.equation.log-exponent.v1"],
     recipeOwnerPaths: ["src/editor/log-exponent-surface-adapter.ts"]
+  }),
+  structural({
+    animationId: "animation.equation.logarithm-change-of-base.v1",
+    recipeIds: [
+      "recipe.equation.change-logarithm-base.v1",
+      "recipe.equation.fraction-material.v1",
+      "recipe.equation.function-application.v1"
+    ],
+    recipeOwnerPaths: [
+      "src/animation/logarithm-change-of-base-presentation-plan.ts",
+      "src/animation/function-wrap-motif.ts"
+    ]
   }),
   structural({
     animationId: "animation.algebra.log-quotient.difference-to-quotient",
