@@ -2,8 +2,8 @@
   "id": "run-contract.kp.governed-animation-generation-foundation-v6",
   "kind": "run-contract",
   "title": "Governed generation overnight nonvisual-first continuation",
-  "status": "deferred",
-  "summary": "USER_PAUSED at slice s28 with nine slices complete; preserve s28 visual evidence and leave s29 unstarted while other separately approved work proceeds.",
+  "status": "ready",
+  "summary": "User resumed the bounded exponent/log foreground-mask correction at the preserved s28 checkpoint; s29 remains gated on visual review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -127,7 +127,7 @@
     {
       "id": "next-action.kp.governed-animation-generation.s28",
       "title": "Combined-visual-human-checkpoint",
-      "summary": "HUMAN_CHECKPOINT-ready-do-not-start-s29-until-explicit-visual-approval",
+      "summary": "HUMAN_CHECKPOINT-transparent-backing-ready-full-motion-jerk-still-unapproved-do-not-start-s29",
       "status": "in-progress"
     },
     {

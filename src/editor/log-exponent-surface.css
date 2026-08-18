@@ -1,6 +1,7 @@
 .kp-log-exponent-stage {
-  --kp-equation-foreground-occlusion-surface:
-    var(--kp-catalogue-stage-background, #fffefa);
+  /* The exponent's arc and z-order carry the handoff; an opaque rectangular
+     knockout made the moving glyph look detached from the equation. */
+  --kp-equation-foreground-occlusion-surface: transparent;
   position: relative;
   display: grid;
   width: 100%;

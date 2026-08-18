@@ -2,13 +2,19 @@
 
 Date: 2026-08-18
 Run: `run-contract.kp.governed-animation-generation-foundation-v6`
-Status: `USER_PAUSED`
+Status: `HUMAN_CHECKPOINT`
 
 ## Deferred disposition
 
 The user intentionally deferred the perceptual full-motion repair on 2026-08-18 so that later approved work can proceed without treating automated lifecycle checks as proof of smooth choreography. Preserve the exact `2^x = 7` URL and contact sheets below. Revisit the repair after the intervening approved work, before promoting or releasing the exponent/log choreography as canonical.
 
 The unresolved acceptance criterion is narrow: play the complete sequence and remove the perceptual jerk between semantic states without changing mathematical endpoints, semantic identity, or the approved log-product and log-quotient choreography. The existing cross-browser tests prove lifecycle and endpoint behavior only.
+
+## Resumed foreground-backing correction
+
+On 2026-08-18 the user resumed one bounded presentation correction. The moving exponent retains its approved shallow arc and foreground ordering, but its rectangular knockout is now transparent. This removes the visible square that travelled with the glyph while preserving semantic state, endpoint geometry, timing, and all other equation motifs.
+
+The focused lifecycle suite passes 21 cases across Chromium, Firefox, and WebKit, and `npm run visual:log-exponent` regenerated the eight-frame contact sheet. Human review still owns whether the transparent crossing is visually preferable; this correction does not resolve or certify the separately deferred full-sequence jerk.
 
 ## What is ready to inspect
 

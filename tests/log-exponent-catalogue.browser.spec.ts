@@ -231,7 +231,7 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   expect(crossing?.exponentRole).toBe("occluder");
   expect(crossing?.logRole).toBe("occluded");
   expect(crossing?.exponentZIndex).toBe("2");
-  expect(crossing?.occlusionSurface).not.toBe("rgba(0, 0, 0, 0)");
+  expect(crossing?.occlusionSurface).toBe("rgba(0, 0, 0, 0)");
   await player.locator('[data-action="seek-editor-animation"]').fill("0.872");
   await expect.poll(async () => Number(
     await stage.getAttribute("data-kp-log-exponent-operation-progress")

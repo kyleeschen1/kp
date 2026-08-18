@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s28",
   "kind": "next-action",
   "title": "Combined-visual-human-checkpoint",
-  "status": "deferred",
-  "summary": "USER_PAUSED: preserve the exact exponent/log full-motion checkpoint; perceptual jerk remains unresolved and is queued after other separately approved work.",
+  "status": "ready",
+  "summary": "Resume only the transparent foreground-backing correction while preserving arc timing semantics and other motifs.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -70,11 +70,32 @@
       "scope": "bundle-boundary",
       "checkedAt": "2026-08-18T07:59:41.639Z",
       "notes": "All four governed gzip budgets passed"
+    },
+    {
+      "command": "npm run visual:log-exponent:catalogue",
+      "status": "passed",
+      "scope": "focused-cross-browser",
+      "checkedAt": "2026-08-18T14:46:40.420Z",
+      "notes": "21 cases pass; transparent backing preserves foreground role and removes rectangular paint in Chromium Firefox and WebKit"
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "visual-checkpoint",
+      "checkedAt": "2026-08-18T14:46:41.856Z",
+      "notes": "Regenerated eight-frame contact sheet with transparent exponent crossing"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T14:46:42.849Z",
+      "notes": "TypeScript Svelte and domain checks pass with zero Svelte diagnostics"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT-contact-sheets-and-automated-gates-ready-motion-Coverage-dock-and-Review-await-human-visual-judgment"
+    "summary": "Transparent-exponent-backing-correction-implemented-and-verified; preserve-arc-and-z-order; awaiting-human-visual-review; full-sequence-jerk-remains-separate"
   },
   "revisitWhen": [
     "After the intervening approved work, resume the exact 2^x = 7 checkpoint before canonical promotion or release."
