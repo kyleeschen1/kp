@@ -684,6 +684,34 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T18:02:49.906Z",
       "notes": "All dependency and authority ratchets pass with the new architecture evidence module."
+    },
+    {
+      "command": "npm run test:both-sides-operation-family",
+      "status": "passed",
+      "scope": "semantic-family",
+      "checkedAt": "2026-08-18T18:10:33.336Z",
+      "notes": "5/5 positive and adversarial laws: all variants verify; unsafe division, mismatched injectivity, executable callbacks, presentation fields, and invalid branch roles fail closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-contract",
+      "checkedAt": "2026-08-18T18:10:34.569Z",
+      "notes": "Positive variants typecheck; negative fixtures forbid fabricated authority, wrong laws, missing nonzero evidence, callbacks, and timing fields."
+    },
+    {
+      "command": "npm run test:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-18T18:10:35.575Z",
+      "notes": "Caller baseline remains exact after adding the unadopted semantic family."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T18:10:36.567Z",
+      "notes": "Framework-neutral and semantic authority boundaries accept the new data-only family."
     }
   ],
   "allowedWork": [
@@ -801,7 +829,8 @@
     {
       "id": "s16",
       "title": "Define typed both-sides family",
-      "status": "planned"
+      "summary": "Defined and verified a framework-neutral, data-only both-sides equality-operation family for add, subtract, multiply, divide, and injective-function application. The closed union couples each operation to its exact law and domain-evidence shape, requires total distinct lhs/rhs roles, brands only verifier output, and rejects callbacks, presentation policy, unsafe zero-sensitive operations, mismatched function evidence, and fabricated authority in runtime and type fixtures.",
+      "status": "complete"
     },
     {
       "id": "s17",
