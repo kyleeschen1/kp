@@ -1,0 +1,219 @@
+{
+  "id": "run-contract.kp.compositor-balanced-log-base-convergence-v1",
+  "kind": "run-contract",
+  "title": "Compositor, balanced operations, and log-base convergence",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-compositor-balanced-log-base-long-loop-proposal.md",
+      "summary": "User-approved 29-slice compositor-first plan with a mandatory visual checkpoint at s28."
+    }
+  ],
+  "verification": [
+    "npm run --silent loop:status",
+    "npm run verify:impact -- --path src",
+    "npm run check",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run --silent measure:canonical-compositor-ownership",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:33:44.000Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:33:46.108Z"
+    },
+    {
+      "command": "npm run test:reader-runtime-hardening",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:33:47.473Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T15:33:48.636Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:33:49.872Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T15:33:51.045Z"
+    }
+  ],
+  "allowedWork": [
+    "Compositor dependency attribution, ephemeral scene-plan ownership, independently measured budgets, behavior-preserving caller migrations, typed balanced-operation declarations and corpus, explicit-base logarithm semantics, one change-of-base exemplar, verification, project memory, and closeout."
+  ],
+  "disallowedWork": [
+    "Ceiling increases, hidden code, visual changes to existing callers, second clocks or renderers, universal CAS operations, inferred truth from glyphs, unrelated families or product layout, and user-owned economics or unrelated documentation."
+  ],
+  "goal": "Restore honestly measured native-KaTeX compositor ownership without visual change, consolidate verified both-sides operations through one governed family, and deliver one review-ready alternative-base logarithm exemplar.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze compositor baseline and evidence",
+      "summary": "Frozen exact four-owner and twenty-dependency source baseline, generated direct caller graph, production manifest and native-motion bundle attribution, and accepted glyph/reader behavior evidence without changing runtime code.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Classify compositor ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define ephemeral renderer-ready scene plan",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Measure planner and aggregate closures",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Extract reconciliation hierarchy and base tracks",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Extract semantic motion and track projection",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Move operation choreography behind typed port",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Move successor synthesis planning upstream",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Move collision reorder and fan-in orchestration",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Converge planner and renderer facades",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Migrate exhaustive reader adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Migrate catalogue and feature-pack callers",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Retire dead entries and restore source gates",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Verify compositor boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Inventory balanced operation callers",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Define typed both-sides family",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Define shared causal recipe",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Register additive callers",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Register multiplicative callers",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Register logarithmic callers",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Expose governed authoring surface",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Add balanced-operation corpus",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Recompute coverage evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Normalize explicit logarithm bases",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Define verified change-of-base semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Define change-of-base presentation plan",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Implement change-of-base exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Produce visual evidence and stop for review",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Post-approval pressure and release closeout",
+      "status": "planned"
+    }
+  ]
+}
