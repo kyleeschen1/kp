@@ -449,6 +449,53 @@ test("protected transit admits same-component fission contact", () => {
   assert.deepEqual(compilation.certificate.opacityScheduledTrackIds, []);
 });
 
+test("protected transit ignores only bounded native-ink fringe area", () => {
+  const tracks = [
+    {
+      id: "track.left",
+      componentId: "component.left",
+      lifecycle: "persist",
+      startRect: { left: 0, top: 0, width: 10, height: 10 },
+      endRect: { left: 0, top: 0, width: 10, height: 10 }
+    },
+    {
+      id: "track.right",
+      componentId: "component.right",
+      lifecycle: "persist",
+      startRect: { left: 20, top: 0, width: 10, height: 10 },
+      endRect: { left: 20, top: 0, width: 10, height: 10 }
+    }
+  ] satisfies readonly KpEquationCollisionTrack[];
+  const inspect = (overlap: { width: number; height: number }) =>
+    inspectKpEquationProtectedTransitTracks({
+      tracks,
+      sampleCount: 2,
+      sampleFrames: () => [
+        {
+          trackId: tracks[0].id,
+          componentId: tracks[0].componentId,
+          rect: { left: 0, top: 0, width: 10, height: 10 },
+          opacity: 1
+        },
+        {
+          trackId: tracks[1].id,
+          componentId: tracks[1].componentId,
+          rect: {
+            left: 10 - overlap.width,
+            top: 10 - overlap.height,
+            width: 10,
+            height: 10
+          },
+          opacity: 1
+        }
+      ]
+    });
+
+  assert.equal(inspect({ width: 1.7, height: 2.4 }).intersections.length, 0);
+  assert.equal(inspect({ width: 2.5, height: 2.5 }).intersections.length, 1);
+  assert.equal(inspect({ width: 1, height: 5 }).intersections.length, 1);
+});
+
 test("protected transit rechecks structural visibility after choosing a route", () => {
   const structural = track({
     id: "track.late-structural",

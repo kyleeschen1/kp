@@ -36,7 +36,8 @@ test("pending or placeholder slots cannot mint paint evidence", () => {
   const cases: readonly KpAnimationCatalogueSurfaceSlotEvidence[][] = [
     [{ ...readyEquation, adapterStatus: "pending" }],
     [{ ...readyEquation, adapterId: undefined }],
-    [{ ...readyEquation, painted: false }]
+    [{ ...readyEquation, painted: false }],
+    [{ ...readyEquation, surfaceReadiness: "preparing" }]
   ];
 
   for (const slots of cases) {
@@ -45,6 +46,20 @@ test("pending or placeholder slots cannot mint paint evidence", () => {
       { status: "not-observed" }
     );
   }
+});
+
+test("surface failure outranks fallback endpoint paint", () => {
+  assert.deepEqual(
+    classifyKpAnimationCatalogueSlotEvidence([{
+      ...readyEquation,
+      surfaceReadiness: "failed",
+      surfaceError: "Native equation geometry failed to settle."
+    }]),
+    {
+      status: "failed",
+      message: "Native equation geometry failed to settle."
+    }
+  );
 });
 
 test("missing adapters remain hostability gaps rather than paint failures", () => {

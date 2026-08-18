@@ -31,8 +31,10 @@ import {
   type KpRenderQualityState
 } from "../animation/render-quality.ts";
 import {
+  deriveKpEditorAnimationLoadOutcome,
   KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT,
-  readKpEditorAnimationSurfaceReadiness
+  readKpEditorAnimationSurfaceReadiness,
+  type KpEditorAnimationLoadOutcome
 } from "./animation-surface-readiness.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
@@ -240,6 +242,8 @@ async function hydrateKpEditorAnimationPlayer(
   if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
     player.dataset["kpEditorAnimationLoading"] === "true") return;
   player.dataset["kpEditorAnimationLoading"] = "true";
+  player.dataset["kpEditorAnimationLoadStatus"] = "loading";
+  delete player.dataset["kpEditorAnimationLoadError"];
 
   const descriptorId = player.dataset["kpEditorAnimationDescriptorId"];
   const animationId = player.dataset["kpEditorAnimationId"];
@@ -322,10 +326,7 @@ async function hydrateKpEditorAnimationPlayer(
   );
   syncLoadedDiagnostics(player, animation, catalog);
   syncPlayerDom(player, session);
-  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
-    bubbles: true,
-    detail: Object.freeze({ status: "ready" as const })
-  }));
+  syncPlayerLoadOutcomeWithSurfaceReadiness(player);
 }
 
 async function loadAnimationLibraryClient(): Promise<AnimationLibraryClient> {
@@ -368,12 +369,9 @@ function markPlayerLoadFailure(player: HTMLElement, error: unknown): void {
     diagnostics.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics-counts]")
       ?.replaceChildren(document.createTextNode(message));
   }
-  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
-    bubbles: true,
-    detail: Object.freeze({
-      status: "failed" as const,
-      message
-    })
+  commitPlayerLoadOutcome(player, Object.freeze({
+    status: "failed" as const,
+    message
   }));
 }
 
@@ -426,6 +424,38 @@ function handlePlayerSurfaceReadiness(event: Event): void {
     });
   }
   syncPlayerControlAvailability(player);
+  syncPlayerLoadOutcomeWithSurfaceReadiness(player);
+}
+
+function syncPlayerLoadOutcomeWithSurfaceReadiness(
+  player: HTMLElement
+): void {
+  const outcome = deriveKpEditorAnimationLoadOutcome({
+    readiness: readKpEditorAnimationSurfaceReadiness(player),
+    ...(player.dataset["kpEditorAnimationSurfaceError"] === undefined
+      ? {}
+      : { error: player.dataset["kpEditorAnimationSurfaceError"] })
+  });
+  commitPlayerLoadOutcome(player, outcome);
+}
+
+function commitPlayerLoadOutcome(
+  player: HTMLElement,
+  outcome: KpEditorAnimationLoadOutcome
+): void {
+  const current = player.dataset["kpEditorAnimationLoadStatus"];
+  if (current === "ready" || current === "failed") return;
+  player.dataset["kpEditorAnimationLoadStatus"] = outcome.status;
+  if (outcome.status === "loading") return;
+  if (outcome.status === "failed") {
+    player.dataset["kpEditorAnimationLoadError"] = "true";
+  }
+  // Asset/session availability cannot mint readiness before an asynchronous
+  // renderer has established native geometry and interpolation ownership.
+  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_LOAD_EVENT, {
+    bubbles: true,
+    detail: outcome
+  }));
 }
 
 function handlePlayerInput(event: Event): void {

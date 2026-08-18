@@ -453,12 +453,13 @@ function failSurface(
   state: KpEditorAnimationPlayerState,
   error: unknown
 ): void {
+  const message = error instanceof Error ? error.message : String(error);
   session.stage.dataset["kpLogExponentStage"] = "failed";
-  session.stage.dataset["kpLogExponentError"] =
-    error instanceof Error ? error.message : String(error);
+  session.stage.dataset["kpLogExponentError"] = message;
   publishKpEditorAnimationSurfaceReadiness({
     player: session.player,
-    readiness: "failed"
+    readiness: "failed",
+    error: message
   });
   session.activeTransit?.transit.retire();
   session.activeTransit = undefined;

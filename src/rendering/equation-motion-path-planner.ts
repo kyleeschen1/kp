@@ -122,6 +122,8 @@ const kpProtectedTransitContextRanges = [
 ] as const;
 // Measured paint includes antialiasing fringes that may touch in native KaTeX.
 export const kpNativeInkContactTolerancePx = 0.75;
+export const kpNativeInkContactAreaToleranceSquarePx = 4.5;
+export const kpNativeInkContactMaximumDimensionPx = 2.5;
 export const kpNativeReorderInkContactTolerancePx = 1.5;
 export const kpEquationHorizontalAxisTolerancePx = 0.25;
 
@@ -1509,6 +1511,12 @@ function inspectProtectedTransit<
         if (
           overlap.width <= kpNativeInkContactTolerancePx ||
           overlap.height <= kpNativeInkContactTolerancePx
+        ) continue;
+        if (
+          overlap.width * overlap.height <=
+            kpNativeInkContactAreaToleranceSquarePx &&
+          Math.max(overlap.width, overlap.height) <=
+            kpNativeInkContactMaximumDimensionPx
         ) continue;
         const endpointContact = protectedTransitEndpointContact(
           leftTrack,

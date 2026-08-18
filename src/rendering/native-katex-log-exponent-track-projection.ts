@@ -25,7 +25,7 @@ import type {
 export const kpNativeKatexLogExponentExtractionProfile = Object.freeze({
   residualReflowWindow: Object.freeze({ start: 0.42, end: 0.72 }),
   foregroundOcclusionWindow: Object.freeze({ start: 0.5, end: 0.94 }),
-  exponentDepartureClearanceInLocalInkHeights: 1.75
+  exponentDepartureClearanceInLocalInkHeights: 2
 });
 
 interface KpLogExponentTrackProjectionDispatchEntry {

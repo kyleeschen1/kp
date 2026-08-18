@@ -4,6 +4,9 @@ import type {
 import type {
   KpEditorAnimationSurfaceSlotKind
 } from "./animation-surface-dispatch.ts";
+import type {
+  KpEditorAnimationSurfaceReadiness
+} from "./animation-surface-readiness.ts";
 
 export interface KpAnimationCatalogueSurfaceSlotEvidence {
   readonly slotKind: KpEditorAnimationSurfaceSlotKind;
@@ -11,6 +14,8 @@ export interface KpAnimationCatalogueSurfaceSlotEvidence {
   readonly adapterId?: string | undefined;
   readonly painted: boolean;
   readonly unavailableMessage?: string | undefined;
+  readonly surfaceReadiness?: KpEditorAnimationSurfaceReadiness | undefined;
+  readonly surfaceError?: string | undefined;
 }
 
 export function observeKpAnimationCatalogueHost(
@@ -37,6 +42,11 @@ export function observeKpAnimationCatalogueHost(
     const initialPlaceholder = slot.children.length === 1 &&
       slot.firstElementChild?.tagName === "SPAN";
     const status = slot.dataset["kpEditorAnimationAdapterStatus"];
+    const player = slot.closest<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    const surfaceReadiness = player
+      ?.dataset["kpEditorAnimationSurfaceReadiness"];
     return [{
       slotKind,
       adapterStatus: status === "ready" || status === "missing"
@@ -46,6 +56,12 @@ export function observeKpAnimationCatalogueHost(
         ? {}
         : { adapterId: slot.dataset["kpEditorAnimationAdapterId"] }),
       painted: !initialPlaceholder && slot.childElementCount > 0,
+      ...(isSurfaceReadiness(surfaceReadiness)
+        ? { surfaceReadiness }
+        : {}),
+      ...(player?.dataset["kpEditorAnimationSurfaceError"] === undefined
+        ? {}
+        : { surfaceError: player.dataset["kpEditorAnimationSurfaceError"] }),
       ...(unavailable?.textContent?.trim()
         ? { unavailableMessage: unavailable.textContent.trim() }
         : {})
@@ -56,6 +72,16 @@ export function observeKpAnimationCatalogueHost(
 export function classifyKpAnimationCatalogueSlotEvidence(
   slots: readonly KpAnimationCatalogueSurfaceSlotEvidence[]
 ): KpAnimationCatalogueHostObservation {
+  const surfaceFailure = slots.find(
+    ({ surfaceReadiness }) => surfaceReadiness === "failed"
+  );
+  if (surfaceFailure !== undefined) {
+    return Object.freeze({
+      status: "failed" as const,
+      message: surfaceFailure.surfaceError ??
+        "Animation surface failed to prepare."
+    });
+  }
   const unavailable = slots.find(
     ({ unavailableMessage }) => unavailableMessage !== undefined
   );
@@ -69,12 +95,19 @@ export function classifyKpAnimationCatalogueSlotEvidence(
     // Missing-adapter is terminal hostability evidence, not a paint failure.
     return Object.freeze({ status: "not-observed" as const });
   }
-  if (slots.some(({ adapterStatus, adapterId, painted }) =>
+  if (slots.some(({ adapterStatus, adapterId, painted, surfaceReadiness }) =>
+    surfaceReadiness === "preparing" ||
     adapterStatus !== "ready" || adapterId === undefined || !painted
   )) {
     return Object.freeze({ status: "not-observed" as const });
   }
   return Object.freeze({ status: "painted" as const });
+}
+
+function isSurfaceReadiness(
+  value: string | undefined
+): value is KpEditorAnimationSurfaceReadiness {
+  return value === "preparing" || value === "ready" || value === "failed";
 }
 
 function isSlotKind(

@@ -2,8 +2,8 @@
   "id": "next-action.kp.governed-animation-generation.s19b",
   "kind": "next-action",
   "title": "Shared-playback-readiness-and-exponent-repair",
-  "status": "ready",
-  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s19b in Governed generation overnight nonvisual-first continuation.",
+  "status": "resolved",
+  "summary": "One authoritative renderer-readiness lifecycle now gates host paint and playback; canonical exponent extraction retains typed endpoints and passes the three-browser catalogue matrix.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,47 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T06:14:13.800Z",
+      "notes": "Canonical log-exponent semantic, compiler, timing, and transit laws passed (53 tests)."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-path-planner.test.ts tests/animation-surface-readiness.test.ts tests/animation-catalogue-host-observation.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T06:14:14.854Z",
+      "notes": "Shared readiness truth, fallback host classification, and bounded native-ink collision laws passed (26 tests)."
+    },
+    {
+      "command": "npm run visual:log-exponent:catalogue",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T06:14:15.818Z",
+      "notes": "Catalogue readiness, direct seek, in-shell remount, replay, lifecycle, and reduced-motion checks passed in Chromium, Firefox, and WebKit (21 tests)."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T06:14:16.787Z",
+      "notes": "Application, node, test, Svelte, and domain TypeScript projects passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T06:14:17.736Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic boundaries, and equation authority ratchets passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "The catalogue now derives readiness from native surface preparation, rejects fallback-only paint, restores interpolating remounts, and keeps the exponent extraction collision-safe across browser font engines without changing semantic endpoints."
+  },
   "expectedLearning": [
     "Whether Shared-playback-readiness-and-exponent-repair can be completed inside Governed generation overnight nonvisual-first continuation."
   ],

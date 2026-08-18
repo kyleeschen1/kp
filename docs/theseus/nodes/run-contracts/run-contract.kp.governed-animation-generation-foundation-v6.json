@@ -87,13 +87,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s19b",
       "title": "Shared-playback-readiness-and-exponent-repair",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s19b in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Unified surface/player/host readiness, repaired cross-browser exponent clearance, and certified clean-load plus remount interpolation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s24",
       "title": "Transformation-coverage-view",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s24 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s25",

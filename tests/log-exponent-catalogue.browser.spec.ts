@@ -6,6 +6,26 @@ const animationId =
 test("canonical log-exponent sequence mounts through its lazy native surface", async ({
   page
 }) => {
+  await page.addInitScript(() => {
+    const events: Array<{ type: string; status: string }> = [];
+    Object.assign(window, { __kpReadinessEvents: events });
+    document.addEventListener(
+      "kp-editor-animation-surface-readiness",
+      (event) => {
+        const detail = (event as CustomEvent<{ readiness: string }>).detail;
+        events.push({ type: "surface", status: detail.readiness });
+      },
+      true
+    );
+    document.addEventListener(
+      "kp-editor-animation-load",
+      (event) => {
+        const detail = (event as CustomEvent<{ status: string }>).detail;
+        events.push({ type: "load", status: detail.status });
+      },
+      true
+    );
+  });
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.goto(`/?artifact=${animationId}`);
@@ -29,6 +49,16 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
     "editor-animation-surface.log-exponent.canonical-native-katex"
   );
   await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  const readinessEvents = await page.evaluate(() => (
+    window as Window & {
+      __kpReadinessEvents: Array<{ type: string; status: string }>;
+    }
+  ).__kpReadinessEvents);
+  expect(readinessEvents).toEqual([
+    { type: "surface", status: "preparing" },
+    { type: "surface", status: "ready" },
+    { type: "load", status: "ready" }
+  ]);
   await expect(stage.locator(".kp-log-exponent-stage__endpoint"))
     .toHaveCount(4);
   await expect(page.locator("body")).toHaveAttribute(
@@ -79,6 +109,7 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
   expect(new Set([...wrapperOpacity.left, ...wrapperOpacity.right]).size)
     .toBe(1);
   await player.locator('[data-action="seek-editor-animation"]').fill("0.494");
+  expect(await stage.getAttribute("data-kp-log-exponent-error")).toBeNull();
   await expect(stage).toHaveAttribute(
     "data-kp-log-exponent-operation-id",
     "operation.log-exponent.extract-exponent"
@@ -271,6 +302,53 @@ test("catalogue route seeks the exact semantic sequence without replay", async (
     "data-kp-editor-animation-progress",
     "0.625"
   );
+});
+
+test("in-shell remount restores native interpolation readiness", async ({
+  page
+}) => {
+  const documentRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "document") {
+      documentRequests.push(request.url());
+    }
+  });
+  await page.goto(`/?artifact=${animationId}`);
+  const shell = page.locator("[data-kp-svelte-catalogue-shell]");
+  const select = async (id: string) => {
+    await shell.locator(`[data-kp-animation-catalogue-row="${id}"] a`)
+      .click();
+    await expect(shell).toHaveAttribute(
+      "data-kp-animation-catalogue-selection",
+      id
+    );
+  };
+
+  await select("animation.dot-projection.basic");
+  await select(animationId);
+
+  const player = shell.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-log-exponent-stage]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-load-status",
+    "ready"
+  );
+  await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
+  await expect(shell).toHaveAttribute(
+    "data-kp-animation-catalogue-host-outcome",
+    "painted"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await expect(stage.locator("[data-kp-equation-material-owner-id]").first())
+    .toBeAttached();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    "0.5"
+  );
+  expect(documentRequests).toHaveLength(1);
 });
 
 test("terminal scrubbing replays from the source after the native surface is ready", async ({
