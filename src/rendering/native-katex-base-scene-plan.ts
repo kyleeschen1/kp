@@ -15,6 +15,19 @@ import type {
 import type {
   KpNativeKatexPaintMeasuredTrack
 } from "./native-katex-paint-geometry.ts";
+import {
+  applyKpNativeKatexSymbolMotionContract
+} from "./native-katex-symbol-motion.ts";
+import {
+  applyKpNativeKatexTrackProjection
+} from "./native-katex-track-projection.ts";
+
+export type {
+  KpCompiledSymbolMotionContract
+} from "../animation/symbol-motion-contract.ts";
+export type {
+  KpNativeKatexTrackProjection
+} from "./native-katex-track-projection.ts";
 
 /**
  * Pure renderer-session planning lives here so semantic correspondence and
@@ -75,6 +88,18 @@ export type KpNativeKatexSceneTrack = KpNativeKatexSceneTrackContract<
 
 export type KpNativeKatexPaintMeasuredSceneTrack =
   KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
+
+export function compileKpNativeKatexSemanticMotionTracks(
+  input: Parameters<typeof applyKpNativeKatexSymbolMotionContract>[0]
+) {
+  return applyKpNativeKatexSymbolMotionContract(input);
+}
+
+export function compileKpNativeKatexProjectedTracks(
+  input: Parameters<typeof applyKpNativeKatexTrackProjection>[0]
+) {
+  return applyKpNativeKatexTrackProjection(input);
+}
 
 export interface KpNativeKatexSemanticPaintRelation {
   readonly id: string;

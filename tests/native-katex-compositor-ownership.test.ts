@@ -43,6 +43,27 @@ test("pure base planning is extracted behind the compositor compatibility facade
   assert.match(compositor, /from "\.\/native-katex-base-scene-plan\.ts"/);
 });
 
+test("semantic motion and track projection enter through the base-plan port", async () => {
+  const paths = [
+    "src/rendering/native-katex-scene-compositor.ts",
+    "src/rendering/native-katex-symbol-motion.ts",
+    "src/rendering/native-katex-track-projection.ts",
+    "src/rendering/native-katex-operation-choreography.ts"
+  ];
+  const [compositor, ...planners] = await Promise.all(
+    paths.map((path) => readFile(path, "utf8"))
+  );
+
+  assert.doesNotMatch(compositor, /from "\.\/native-katex-symbol-motion\.ts"/);
+  assert.doesNotMatch(compositor, /from "\.\/native-katex-track-projection\.ts"/);
+  assert.match(compositor, /compileKpNativeKatexSemanticMotionTracks/);
+  assert.match(compositor, /compileKpNativeKatexProjectedTracks/);
+  for (const planner of planners) {
+    assert.doesNotMatch(planner, /from "\.\/native-katex-scene-compositor\.ts"/);
+    assert.match(planner, /from "\.\/native-katex-base-scene-plan\.ts"/);
+  }
+});
+
 test("pure planning and sampling cannot acquire runtime effects", () => {
   for (const responsibility of kpNativeKatexCompositorOwnership) {
     if (

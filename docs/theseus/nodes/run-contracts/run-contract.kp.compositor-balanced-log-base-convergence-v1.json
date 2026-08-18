@@ -151,6 +151,46 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-18T16:13:55.667Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:27:46.111Z",
+      "notes": "25/25; fixed direct closure is now 17 modules and 293609/295000 bytes."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T16:27:48.606Z",
+      "notes": "73/73; direct seek, rewind, and endpoints preserved."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T16:27:51.184Z",
+      "notes": "16/16 semantic track projection callers preserved."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T16:27:52.794Z",
+      "notes": "53/53 including direct seek and rewind."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:27:55.597Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T16:27:58.165Z"
     }
   ],
   "allowedWork": [
@@ -208,7 +248,8 @@
     {
       "id": "s06",
       "title": "Extract semantic motion and track projection",
-      "status": "planned"
+      "summary": "Moved semantic-motion and track-projection application behind the pure base-plan port, removed compositor imports of three semantic modules, restored the unchanged 295000-byte direct gate at 293609 bytes, and preserved all canonical, glyph, and log fixtures.",
+      "status": "complete"
     },
     {
       "id": "s07",

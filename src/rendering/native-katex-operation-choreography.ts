@@ -45,7 +45,7 @@ import {
 } from "./native-katex-paint-geometry.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 
 const kpCanonicalNativeKatexFunctionWrapTreatment = Object.freeze({
   syntaxPointScale: 0.04,

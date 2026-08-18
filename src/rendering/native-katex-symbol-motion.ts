@@ -4,7 +4,7 @@ import {
 } from "../animation/symbol-motion-contract.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrack
-} from "./native-katex-scene-compositor.ts";
+} from "./native-katex-base-scene-plan.ts";
 import type {
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";

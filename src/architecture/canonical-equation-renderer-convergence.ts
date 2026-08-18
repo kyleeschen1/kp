@@ -43,7 +43,6 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/animation/equation-shared-presentation-policy.ts",
     "src/animation/lineage-constrained-glyph-matcher.ts",
     "src/animation/structural-succession-presentation.ts",
-    "src/animation/symbol-motion-contract.ts",
     "src/rendering/computed-style-clone.ts",
     "src/rendering/equation-font-readiness.ts",
     "src/rendering/equation-material-layer-dom.ts",
@@ -56,9 +55,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-scene-track-sampling.ts",
     "src/rendering/native-katex-structural-succession-renderer.ts",
-    "src/rendering/native-katex-successor-synthesis.ts",
-    "src/rendering/native-katex-symbol-motion.ts",
-    "src/rendering/native-katex-track-projection.ts"
+    "src/rendering/native-katex-successor-synthesis.ts"
   ]),
   productionScenePlanBoundarySourceFiles: Object.freeze([
     "src/animation/canonical-operation-lineage-adapter.ts",
@@ -94,7 +91,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // Direct dependencies remain separate responsibilities, but freezing their
   // current closure prevents a core reduction from merely relocating bytes to
   // an unmeasured helper.
-  maximumProductionDirectDependencyModules: 20,
+  maximumProductionDirectDependencyModules: 17,
   maximumProductionDirectDependencySourceBytes: 295_000,
   // Planner source receives responsibilities still embedded in the current
   // compositor. The aggregate ceiling, not this migration envelope, prevents
@@ -176,7 +173,7 @@ export function validateKpCanonicalEquationRendererConvergence(
   }
   if (
     policy.maximumProductionSourceBytes !== 140_000 ||
-    policy.maximumProductionDirectDependencyModules !== 20 ||
+    policy.maximumProductionDirectDependencyModules !== 17 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||
     policy.maximumProductionScenePlanBoundarySourceBytes !== 315_000 ||

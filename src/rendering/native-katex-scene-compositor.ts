@@ -49,16 +49,6 @@ import {
 import {
   sampleKpNativeKatexSceneTrackFrames
 } from "./native-katex-scene-track-sampling.ts";
-import {
-  applyKpNativeKatexSymbolMotionContract
-} from "./native-katex-symbol-motion.ts";
-import {
-  applyKpNativeKatexTrackProjection,
-  type KpNativeKatexTrackProjection
-} from "./native-katex-track-projection.ts";
-import type {
-  KpCompiledSymbolMotionContract
-} from "../animation/symbol-motion-contract.ts";
 import type {
   KpNativeKatexPaintMeasuredSceneTrackFrameContract,
   KpNativeKatexPaintPreservingRetirement,
@@ -69,14 +59,18 @@ import type {
 } from "./native-katex-scene-track-contract.ts";
 import {
   compileKpNativeKatexHierarchicalScenePlan,
+  compileKpNativeKatexProjectedTracks,
   compileKpNativeKatexSceneTracks,
+  compileKpNativeKatexSemanticMotionTracks,
   reconcileKpNativeKatexScenes,
+  type KpCompiledSymbolMotionContract,
   type KpNativeKatexAtomLifecycle,
   type KpNativeKatexHierarchicalScenePlan,
   type KpNativeKatexPaintMeasuredSceneTrack,
   type KpNativeKatexSceneReconciliation,
   type KpNativeKatexSceneTrack,
-  type KpNativeKatexSemanticPaintRelation
+  type KpNativeKatexSemanticPaintRelation,
+  type KpNativeKatexTrackProjection
 } from "./native-katex-base-scene-plan.ts";
 
 export {
@@ -1540,7 +1534,7 @@ function prepareKpCanonicalNativeKatexScene(
     target: input.target,
     intents: input.successorSyntheses ?? []
   });
-  const semanticMotionTracks = applyKpNativeKatexSymbolMotionContract({
+  const semanticMotionTracks = compileKpNativeKatexSemanticMotionTracks({
     tracks: axisConstrainedTracks,
     source: input.source,
     target: input.target,
@@ -1552,7 +1546,7 @@ function prepareKpCanonicalNativeKatexScene(
     target: input.target,
     choreography: input.operationChoreography
   });
-  const projectedTracks = applyKpNativeKatexTrackProjection({
+  const projectedTracks = compileKpNativeKatexProjectedTracks({
     projection: input.trackProjection,
     tracks: operationTracks,
     source: input.source,

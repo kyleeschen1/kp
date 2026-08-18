@@ -119,6 +119,8 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetLayer: "scene-plan-compilation",
     targetEffect: "none",
     evidence: [
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexSemanticMotionTracks"),
+      evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexProjectedTracks"),
       evidence("src/rendering/native-katex-symbol-motion.ts", "applyKpNativeKatexSymbolMotionContract"),
       evidence("src/rendering/native-katex-track-projection.ts", "applyKpNativeKatexTrackProjection"),
       evidence("src/rendering/equation-motion-path-planner.ts", "planKpEquationMotionPath")
