@@ -51,6 +51,14 @@ export interface CreateGeneratedAlgebraSemanticTransformationInput {
   readonly targetObjectIds: readonly string[];
   readonly correspondenceMap?: CorrespondenceMap | undefined;
   readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
+  /**
+   * Describes representation topology only; the registry still owns relation
+   * kinds, IDs, branch validation, and the resulting correspondence map.
+   */
+  readonly introductionTopology?: {
+    readonly operationSelectorIds: readonly string[];
+    readonly structuralSelectorIds?: readonly string[] | undefined;
+  } | undefined;
 }
 
 export interface GeneratedFractionExpressionTransformExpectation {
@@ -1116,6 +1124,15 @@ export function createGeneratedAlgebraSemanticTransformation(
       `Generated cancellation ${input.id} correspondence is compiler-owned.`
     );
   }
+  if (
+    generatedCancellationMap === undefined &&
+    generatedBalancedIntroductionMap === undefined &&
+    input.introductionTopology !== undefined
+  ) {
+    throw new Error(
+      `Generated transform ${input.id} cannot declare introduction topology.`
+    );
+  }
   return mintKpCompilerGeneratedAlgebraTransformation({
     familyId: input.familyId,
     transformation: createKpSemanticTransformation({
@@ -1155,6 +1172,10 @@ function createGeneratedLinearSolveDivisionMap(
       `Generated division ${input.id} requires one equation on each endpoint.`
     );
   }
+  const topology = resolveGeneratedIntroductionTopology(input, targetId, [
+    `${targetId}.lhs.divide`,
+    `${targetId}.rhs.divide`
+  ]);
   return Object.freeze({
     id: `${input.id}.correspondence`,
     records: Object.freeze([
@@ -1176,12 +1197,18 @@ function createGeneratedLinearSolveDivisionMap(
         id: `${input.id}.introduce-matched-divisors`,
         relation: "introduction" as const,
         sourceSelectorIds: Object.freeze([]),
-        targetSelectorIds: Object.freeze([
-          `${targetId}.lhs.divide`,
-          `${targetId}.rhs.divide`
-        ]),
+        targetSelectorIds: topology.operationSelectorIds,
         summary: "The same nonzero divisor enters both equation branches."
-      })
+      }),
+      ...(topology.structuralSelectorIds.length === 0
+        ? []
+        : [Object.freeze({
+            id: `${input.id}.introduce-structural-notation`,
+            relation: "introduction" as const,
+            sourceSelectorIds: Object.freeze([]),
+            targetSelectorIds: topology.structuralSelectorIds,
+            summary: "The quotient structure appears around both branches."
+          })])
     ])
   });
 }
@@ -1219,6 +1246,10 @@ function createGeneratedLinearSolveBalancedIntroductionMap(
   // selectors `subtract` for both signs. These IDs are referential identity;
   // the registered operation and strict law remain the algebraic authority.
   const introducedSelectorRole = "subtract";
+  const topology = resolveGeneratedIntroductionTopology(input, targetId, [
+    `${targetId}.lhs.${introducedSelectorRole}`,
+    `${targetId}.rhs.${introducedSelectorRole}`
+  ]);
   return Object.freeze({
     id: `${input.id}.correspondence`,
     records: Object.freeze([
@@ -1227,14 +1258,41 @@ function createGeneratedLinearSolveBalancedIntroductionMap(
         id: `${input.id}.introduce-balanced-operation`,
         relation: "introduction" as const,
         sourceSelectorIds: Object.freeze([]),
-        targetSelectorIds: Object.freeze([
-          `${targetId}.lhs.${introducedSelectorRole}`,
-          `${targetId}.rhs.${introducedSelectorRole}`
-        ]),
+        targetSelectorIds: topology.operationSelectorIds,
         summary:
           "The same additive inverse enters both equation branches."
       })
     ])
+  });
+}
+
+function resolveGeneratedIntroductionTopology(
+  input: CreateGeneratedAlgebraSemanticTransformationInput,
+  targetId: string,
+  fallbackOperationSelectorIds: readonly string[]
+): {
+  readonly operationSelectorIds: readonly string[];
+  readonly structuralSelectorIds: readonly string[];
+} {
+  const operationSelectorIds = input.introductionTopology
+    ?.operationSelectorIds ?? fallbackOperationSelectorIds;
+  const structuralSelectorIds = input.introductionTopology
+    ?.structuralSelectorIds ?? [];
+  const allIds = [...operationSelectorIds, ...structuralSelectorIds];
+  if (
+    operationSelectorIds.length < 2 ||
+    !operationSelectorIds.some((id) => id.startsWith(`${targetId}.lhs.`)) ||
+    !operationSelectorIds.some((id) => id.startsWith(`${targetId}.rhs.`)) ||
+    allIds.some((id) => !id.startsWith(`${targetId}.`)) ||
+    new Set(allIds).size !== allIds.length
+  ) {
+    throw new Error(
+      `Generated operation ${input.id} requires unique target-owned introduction selectors on both branches.`
+    );
+  }
+  return Object.freeze({
+    operationSelectorIds: Object.freeze([...operationSelectorIds]),
+    structuralSelectorIds: Object.freeze([...structuralSelectorIds])
   });
 }
 

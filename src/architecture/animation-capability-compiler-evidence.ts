@@ -5,8 +5,15 @@ import {
   KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY
 } from "../authoring/equation-series-both-sides-authoring.ts";
 import {
+  KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
+} from "../authoring/equation-latex-endpoint-normalizer.ts";
+import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
+import {
+  KP_LOGARITHM_BASE_HANDOFF_MOTIF_AUTHORITY,
+  KP_LOGARITHM_CHANGE_OF_BASE_RECIPE_AUTHORITY
+} from "../animation/logarithm-change-of-base-presentation-plan.ts";
 import {
   createKpFunctionWrapEquationExtensionPack
 } from "../animation/equation-extension-packs/function-wrap.ts";
@@ -19,6 +26,12 @@ import {
 import {
   KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY
 } from "../semantic/both-sides-operation-family.ts";
+import {
+  KP_LOGARITHM_CHANGE_OF_BASE_OPERATION_AUTHORITY
+} from "../semantic/logarithm-change-of-base.ts";
+import {
+  KP_LOGARITHM_CHANGE_OF_BASE_CORPUS_AUTHORITY
+} from "../semantic/logarithm-change-of-base-corpus.ts";
 import type {
   KpAnimationCapabilityPlan,
   KpAnimationCapabilityRequirementKind
@@ -32,8 +45,10 @@ export const KP_ANIMATION_CAPABILITY_COMPILER_EVIDENCE_SCHEMA =
 export type KpAnimationCapabilityCompilerRequirementKind = Extract<
   KpAnimationCapabilityRequirementKind,
   | "semantic-operation"
+  | "endpoint-normalizer"
   | "canonical-recipe"
   | "motion-motif"
+  | "generation-corpus"
   | "renderer-capability"
 >;
 
@@ -42,6 +57,7 @@ export type KpAnimationCapabilityCompilerAuthoritySource =
   | "equation-authoring-catalogue"
   | "equation-series-authoring-family"
   | "both-sides-causal-recipe"
+  | "verified-capability-authority"
   | "equation-extension-pack";
 
 export interface KpAnimationCapabilityCompilerAuthority {
@@ -201,7 +217,31 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     sourcePath:
       "src/animation/equation-extension-packs/homomorphic-crossover.ts"
   }]);
+  const verified = (
+    authorityId: string,
+    kind: KpAnimationCapabilityCompilerRequirementKind,
+    sourcePath: string
+  ) => authority({
+    authorityId,
+    kind,
+    source: "verified-capability-authority",
+    sourceId: authorityId,
+    sourcePath
+  });
   return Object.freeze([
+    verified(KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER,
+      "endpoint-normalizer",
+      "src/authoring/equation-latex-endpoint-normalizer.ts"),
+    verified(KP_LOGARITHM_CHANGE_OF_BASE_OPERATION_AUTHORITY,
+      "semantic-operation", "src/semantic/logarithm-change-of-base.ts"),
+    verified(KP_LOGARITHM_CHANGE_OF_BASE_RECIPE_AUTHORITY,
+      "canonical-recipe",
+      "src/animation/logarithm-change-of-base-presentation-plan.ts"),
+    verified(KP_LOGARITHM_BASE_HANDOFF_MOTIF_AUTHORITY, "motion-motif",
+      "src/animation/logarithm-change-of-base-presentation-plan.ts"),
+    verified(KP_LOGARITHM_CHANGE_OF_BASE_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "src/semantic/logarithm-change-of-base-corpus.ts"),
     authority({
       authorityId: KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
       kind: "semantic-operation",
@@ -286,7 +326,9 @@ function isCompilerRequirementKind(
   kind: KpAnimationCapabilityRequirementKind
 ): kind is KpAnimationCapabilityCompilerRequirementKind {
   return kind === "semantic-operation" ||
+    kind === "endpoint-normalizer" ||
     kind === "canonical-recipe" ||
     kind === "motion-motif" ||
+    kind === "generation-corpus" ||
     kind === "renderer-capability";
 }

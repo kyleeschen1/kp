@@ -64,6 +64,32 @@ test("compiler expands one verified generated solve into the canonical asset", (
     ),
     true
   );
+  const subtractIntroduction = animation.transformations[0]
+    ?.correspondenceMap?.records.find(
+      ({ id }) => id.endsWith("introduce-balanced-operation")
+    );
+  assert.deepEqual(subtractIntroduction?.targetSelectorIds, [
+    `equation.${namespace}.subtract-introduced.lhs.subtract`,
+    `equation.${namespace}.subtract-introduced.rhs.minus`,
+    `equation.${namespace}.subtract-introduced.rhs.subtrahend`
+  ]);
+  const divisionIntroduction = animation.transformations[3]
+    ?.correspondenceMap?.records.filter(
+      ({ relation }) => relation === "introduction"
+    );
+  assert.deepEqual(
+    divisionIntroduction?.map(({ targetSelectorIds }) => targetSelectorIds),
+    [
+      [
+        `equation.${namespace}.divide-introduced.lhs.divide`,
+        `equation.${namespace}.divide-introduced.rhs.divisor`
+      ],
+      [
+        `equation.${namespace}.divide-introduced.lhs.rule`,
+        `equation.${namespace}.divide-introduced.rhs.rule`
+      ]
+    ]
+  );
   assert.deepEqual(animation.metadata, {
     generatedProblemImport: true,
     generatedProblemInstanceId: contract.identity.instanceId,

@@ -25,7 +25,11 @@ const processes: readonly DevProcess[] = [
   {
     name: "api",
     command: process.execPath,
-    args: ["--disable-warning=ExperimentalWarning", "--watch", "server/main.ts"],
+    // Playwright owns the isolated server lifetime; adding Node watch mode
+    // only consumes file descriptors and can exhaust macOS before Vite starts.
+    args: isolatedTestMode
+      ? ["--disable-warning=ExperimentalWarning", "server/main.ts"]
+      : ["--disable-warning=ExperimentalWarning", "--watch", "server/main.ts"],
     env: {
       ...process.env,
       KP_DEV_REVIEW: "1",

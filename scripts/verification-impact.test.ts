@@ -149,6 +149,62 @@ test("generated equation dispatch selects closure proof without a visual exempla
   assert.equal(ids(result).includes("focused-visual"), false);
 });
 
+test("change-of-base rendering selects its bounded family gate", () => {
+  const result = selectKpVerificationImpact([
+    "src/rendering/logarithm-change-of-base-native-endpoints.ts"
+  ]);
+  assert.deepEqual(ids(result), [
+    "logarithm-change-of-base-unit",
+    "typecheck-app",
+    "architecture",
+    "logarithm-change-of-base-browser"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+  assert.equal(ids(result).includes("typecheck"), false);
+  assert.equal(ids(result).includes("test"), false);
+  assert.equal(ids(result).includes("build"), false);
+});
+
+test("inference contracts avoid Svelte and full-suite verification", () => {
+  const result = selectKpVerificationImpact([
+    "src/rendering/equation-motion-occlusion-types.ts"
+  ]);
+  assert.deepEqual(ids(result), [
+    "inference-contracts",
+    "inference-budget-unit",
+    "typecheck-app"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+  assert.equal(ids(result).includes("typecheck"), false);
+  assert.equal(ids(result).includes("focused-visual"), false);
+});
+
+test("native KaTeX settlement selects compositor checks without Svelte", () => {
+  const result = selectKpVerificationImpact([
+    "src/rendering/native-katex-rendered-scene.ts"
+  ]);
+  assert.deepEqual(ids(result), [
+    "native-katex-paint-unit",
+    "canonical-equation-renderer-unit",
+    "typecheck-app",
+    "architecture"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+  assert.equal(ids(result).includes("typecheck"), false);
+  assert.equal(ids(result).includes("test"), false);
+});
+
+test("browser host changes select one non-watching smoke lane", () => {
+  const result = selectKpVerificationImpact(["scripts/dev.ts"]);
+  assert.deepEqual(ids(result), [
+    "typecheck-node",
+    "browser-test-host-smoke"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+  assert.equal(ids(result).includes("typecheck"), false);
+  assert.equal(ids(result).includes("test"), false);
+});
+
 test("unknown paths fail broad even when discovery mode is requested", () => {
   const result = selectKpVerificationImpact(
     ["new-subsystem/unknown.ts"],

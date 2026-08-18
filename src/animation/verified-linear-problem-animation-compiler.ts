@@ -622,27 +622,14 @@ function createTransformations(
         "equals",
         "rhs.value"
       ]),
-      correspondenceMap: map(ids.subtract, [
-        ...identityRecords(ids.initial, ids.subtractIntroduced, [
-          "lhs.coefficient",
-          "lhs.variable",
-          "lhs.addend",
-          "equals",
-          "rhs.value"
-        ]),
-        relation(
-          "balanced-inverses-enter",
-          "introduction",
-          [],
-          selectors(
-            ids.subtractIntroduced,
-            "lhs.subtract",
-            "rhs.minus",
-            "rhs.subtrahend"
-          ),
-          "Equal inverse terms enter on both sides."
+      introductionTopology: {
+        operationSelectorIds: selectors(
+          ids.subtractIntroduced,
+          "lhs.subtract",
+          "rhs.minus",
+          "rhs.subtrahend"
         )
-      ])
+      }
     }),
     transform({
       familyId: "generated.linear-solve",
@@ -721,50 +708,18 @@ function createTransformations(
           "rhs.constant"
         )
       ],
-      correspondenceMap: map(ids.divide, [
-        identityRecord(
-          "coefficient-enters-numerator",
-          ids.afterSubtract,
-          "lhs.coefficient",
+      introductionTopology: {
+        operationSelectorIds: selectors(
           ids.divideIntroduced,
-          "lhs.coefficient"
+          "lhs.divide",
+          "rhs.divisor"
         ),
-        identityRecord(
-          "variable-enters-numerator",
-          ids.afterSubtract,
-          "lhs.variable",
+        structuralSelectorIds: selectors(
           ids.divideIntroduced,
-          "lhs.variable"
-        ),
-        identityRecord(
-          "relation-persists",
-          ids.afterSubtract,
-          "equals",
-          ids.divideIntroduced,
-          "equals"
-        ),
-        identityRecord(
-          "constant-enters-numerator",
-          ids.afterSubtract,
-          "rhs.constant",
-          ids.divideIntroduced,
-          "rhs.constant"
-        ),
-        relation(
-          "matched-divisors-enter",
-          "introduction",
-          [],
-          selectors(ids.divideIntroduced, "lhs.divide", "rhs.divisor"),
-          "The same non-zero divisor enters beneath both sides."
-        ),
-        relation(
-          "fraction-rules-enter",
-          "introduction",
-          [],
-          selectors(ids.divideIntroduced, "lhs.rule", "rhs.rule"),
-          "Fraction rules expose the whole-side quotients."
+          "lhs.rule",
+          "rhs.rule"
         )
-      ])
+      }
     }),
     transform({
       familyId: "generated.linear-solve",

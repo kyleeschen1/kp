@@ -3,7 +3,7 @@ import type {
 } from "./equation-visible-paint-overlap-types.ts";
 import type {
   KpEquationIntentionalForegroundOcclusion
-} from "./equation-motion-path-planner.ts";
+} from "./equation-motion-occlusion-types.ts";
 
 /**
  * This frame contract is intentionally independent of the DOM implementation.

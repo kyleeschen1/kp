@@ -110,8 +110,8 @@ const equationCapabilityDrafts = Object.freeze([
     "family.equation.logarithm-base.v1",
     [
       requirement("requirement.equation.logarithm-base.normalizer", "endpoint-normalizer", "normalizer.equation.logarithm-base-syntax.v1", "The endpoint parser preserves explicit bases in forms such as log_b(x) and log_{10}(x)."),
-      requirement("requirement.equation.logarithm-base.operation", "semantic-operation", "operation.equation.logarithm-change-of-base.v1", "A typed law relates source base, target base, numerator log, and denominator log under valid domain assumptions."),
-      requirement("requirement.equation.logarithm-base.recipe", "canonical-recipe", "recipe.equation.logarithm-change-of-base.v1", "A canonical recipe owns base transfer and quotient construction without treating the base as decoration."),
+      requirement("requirement.equation.logarithm-base.operation", "semantic-operation", "operation.equation.change-logarithm-base.v1", "A typed law relates source base, target base, numerator log, and denominator log under valid domain assumptions."),
+      requirement("requirement.equation.logarithm-base.recipe", "canonical-recipe", "recipe.equation.change-logarithm-base.v1", "A canonical recipe owns base transfer and quotient construction without treating the base as decoration."),
       requirement("requirement.equation.logarithm-base.motif", "motion-motif", "motif.equation.logarithm-base-handoff.v1", "A distinct motif preserves base identity as notation moves between operator subscripts and the change-of-base quotient."),
       requirement("requirement.equation.logarithm-base.exemplar", "canonical-exemplar", "animation.equation.logarithm-change-of-base.v1", "One reviewed exemplar establishes syntax, identity, and attention choreography before promotion."),
       requirement("requirement.equation.logarithm-base.authoring", "authoring-surface", "authoring.equation.logarithm-base.v1", "Authors name source and target bases semantically; KP chooses notation and motion."),

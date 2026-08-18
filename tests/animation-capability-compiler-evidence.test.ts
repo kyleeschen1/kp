@@ -114,20 +114,23 @@ test("one homomorphic recipe is exact authority for both logarithm laws", () => 
   }
 });
 
-test("planned alternative-base authorities remain exact compiler gaps", () => {
+test("reviewed alternative-base authorities are exact registrations", () => {
   const projection = createKpAnimationCapabilityCompilerEvidence();
   const requirementIds = [
+    "requirement.equation.logarithm-base.normalizer",
     "requirement.equation.logarithm-base.operation",
     "requirement.equation.logarithm-base.recipe",
-    "requirement.equation.logarithm-base.motif"
+    "requirement.equation.logarithm-base.motif",
+    "requirement.equation.logarithm-base.corpus"
   ];
   for (const requirementId of requirementIds) {
     const requirement = projection.requirements.find((candidate) =>
       candidate.requirementId === requirementId
     );
-    assert.equal(requirement?.status, "missing", requirementId);
-    if (requirement?.status !== "missing") continue;
-    assert.equal(requirement.reason, "no-exact-compiler-authority");
+    assert.equal(requirement?.status, "matched", requirementId);
+    if (requirement?.status !== "matched") continue;
+    assert.equal(requirement.evidence[0]?.source,
+      "verified-capability-authority");
   }
 });
 

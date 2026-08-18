@@ -10,12 +10,18 @@ import type {
   KpEquationProtectedTransitCertificate
 } from "./equation-protected-transit-types.ts";
 import type {
+  KpEquationIntentionalForegroundOcclusion
+} from "./equation-motion-occlusion-types.ts";
+import type {
   KpVerifiedOperationPresentationPlanId
 } from "../animation/operation-presentation-plan-authority.ts";
 
 export type {
   KpEquationProtectedTransitCertificate
 } from "./equation-protected-transit-types.ts";
+export type {
+  KpEquationIntentionalForegroundOcclusion
+} from "./equation-motion-occlusion-types.ts";
 
 export const kpEquationMotionPathVariantIds = [
   "direct",
@@ -55,16 +61,6 @@ export type KpEquationMotionPathSampling =
   | "foreground-diagonal-role-transfer"
   | "minimal-clearance-role-transfer"
   | "canonical-clearance-lane";
-
-export interface KpEquationIntentionalForegroundOcclusion {
-  readonly id: string;
-  readonly role: "occluder" | "occluded";
-  readonly counterpartTrackId: string;
-  readonly progressWindow: {
-    readonly start: number;
-    readonly end: number;
-  };
-}
 
 /**
  * Presentation policy for a continuant changing syntactic role without

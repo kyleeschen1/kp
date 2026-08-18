@@ -68,19 +68,18 @@ test("balanced operation coverage promotes only the proved six-operation path", 
     kind === "generation-corpus")?.summary ?? "", /exponentiate|root/u);
 });
 
-test("alternative logarithm bases expose an exemplar without overclaiming generation", () => {
+test("alternative logarithm bases register without overclaiming authoring", () => {
   const entry = createKpAnimationTransformationCoverage().entries.find(
     ({ capabilityId }) => capabilityId ===
       "capability.equation.alternative-logarithm-bases"
   );
-  assert.equal(entry?.status, "Exemplar");
+  assert.equal(entry?.status, "Registered");
   assert.deepEqual(entry?.remainingRequirementIds, [
-    "requirement.equation.logarithm-base.normalizer",
-    "requirement.equation.logarithm-base.operation",
-    "requirement.equation.logarithm-base.recipe",
-    "requirement.equation.logarithm-base.motif",
-    "requirement.equation.logarithm-base.authoring",
-    "requirement.equation.logarithm-base.corpus"
+    "requirement.equation.logarithm-base.authoring"
+  ]);
+  assert.deepEqual(entry?.evidenceTensions, [
+    "registered-without-direct-generation",
+    "playable-exemplar-without-general-generation"
   ]);
 });
 

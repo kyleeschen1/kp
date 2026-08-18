@@ -2,7 +2,8 @@
   "id": "run-contract.kp.compositor-balanced-log-base-convergence-v1",
   "kind": "run-contract",
   "title": "Compositor, balanced operations, and log-base convergence",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1262,6 +1263,76 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T21:39:05.690Z",
       "notes": "Dependency direction, framework-neutral entrypoints, semantic boundaries, operation presentation, and equation compiler authority pass."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/rendering/logarithm-change-of-base-native-endpoints.ts --run",
+      "status": "failed",
+      "scope": "release",
+      "checkedAt": "2026-08-18T22:25:58.256Z",
+      "notes": "Stopped during npm test at the frozen TypeScript inference-cost gate: 69040 types and 96764 instantiations exceed 55000 and 75000. An isolated committed-HEAD snapshot produced identical counts, proving this slice introduced no regression. Typecheck and architecture checks before the gate passed; production build did not run."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T22:43:27.447Z",
+      "notes": "Owner-local occlusion type extraction reduced the unchanged 55k/75k gate to 53,903 types and 72,992 instantiations."
+    },
+    {
+      "command": "node --test tests/typescript-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T22:43:28.428Z",
+      "notes": "Three inference budget and lightweight ownership checks pass."
+    },
+    {
+      "command": "npm run test:browser:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T23:44:45.071Z",
+      "notes": "Chromium 3/3; canonical seek, URL restore, and multi-glyph second caller pass with explicit KaTeX font readiness."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T23:44:46.595Z",
+      "notes": "28/28; fixed compositor source and aggregate ceilings remain green."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T23:44:47.657Z",
+      "notes": "53,903 types and 72,992 instantiations under unchanged 55,000/75,000 ceilings."
+    },
+    {
+      "command": "node --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T23:44:48.704Z",
+      "notes": "30/30; log-base, native KaTeX, inference, and browser-host changes avoid broad fallback."
+    },
+    {
+      "command": "node --test tests/verified-linear-problem-animation-compiler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T23:44:49.763Z",
+      "notes": "4/4; compiler-owned correspondence accepts typed split-operation and fraction topology."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T23:44:50.811Z",
+      "notes": "All dependency, framework-neutral, reader, animation, operation, and compiler authority gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-18T23:44:51.876Z",
+      "notes": "Production build passes after generated balanced-operation caller convergence."
     }
   ],
   "allowedWork": [
@@ -1457,7 +1528,8 @@
     {
       "id": "s29",
       "title": "Post-approval pressure and release closeout",
-      "status": "planned"
+      "summary": "Approved change-of-base choreography now survives a structurally different multi-glyph base and argument, Coverage records exact registered authority without overclaiming generation, compiler inference stays below unchanged ceilings, focused impact routing avoids unnecessary Svelte/full-suite work, isolated Playwright hosts do not watch, and generated balanced-operation callers build through compiler-owned correspondence. Focused unit/browser, architecture, inference, compositor-budget, and production build gates pass.",
+      "status": "complete"
     }
   ]
 }

@@ -99,6 +99,41 @@ const checks = {
     "medium",
     "Check repository-wide TypeScript boundaries."
   ),
+  typecheckApp: check(
+    "typecheck-app",
+    [
+      "node", "node_modules/typescript/bin/tsc", "--project",
+      "tsconfig.app.json", "--noEmit"
+    ],
+    "medium",
+    "Type-check framework-neutral application TypeScript without invoking Svelte analysis."
+  ),
+  typecheckNode: check(
+    "typecheck-node",
+    [
+      "node", "node_modules/typescript/bin/tsc", "--project",
+      "tsconfig.node.json", "--noEmit"
+    ],
+    "medium",
+    "Type-check Node tooling without invoking application or Svelte analysis."
+  ),
+  inference: check(
+    "inference-contracts",
+    ["npm", "run", "check:inference"],
+    "medium",
+    "Enforce the frozen TypeScript inference-cost ceilings.",
+    "discovery"
+  ),
+  inferenceBudgetUnit: check(
+    "inference-budget-unit",
+    [
+      "node", "--disable-warning=ExperimentalWarning", "--test",
+      "tests/typescript-inference-budget.test.ts"
+    ],
+    "low",
+    "Protect measured inference headroom and lightweight type ownership.",
+    "discovery"
+  ),
   architecture: check(
     "architecture",
     ["npm", "run", "check:architecture"],
@@ -192,6 +227,44 @@ const checks = {
     ],
     "medium",
     "Protect single motif authority, canonical callers, and renderer-neutral function-wrap laws."
+  ),
+  logarithmChangeOfBaseUnit: check(
+    "logarithm-change-of-base-unit",
+    ["npm", "run", "test:logarithm-change-of-base"],
+    "medium",
+    "Exercise verified change-of-base semantics, endpoints, transit, and seek laws.",
+    "discovery"
+  ),
+  logarithmChangeOfBaseBrowser: check(
+    "logarithm-change-of-base-browser",
+    ["npm", "run", "test:browser:logarithm-change-of-base"],
+    "high",
+    "Pressure the canonical and structurally different change-of-base callers in Chromium.",
+    "promotion"
+  ),
+  browserTestHostSmoke: check(
+    "browser-test-host-smoke",
+    [
+      "npx", "playwright", "test", "tests/legacy-root-route.browser.spec.ts",
+      "--project=chromium", "--workers=1"
+    ],
+    "medium",
+    "Prove the isolated non-watching browser-test host starts and serves routes.",
+    "promotion"
+  ),
+  nativeKatexPaintUnit: check(
+    "native-katex-paint-unit",
+    ["npm", "run", "test:real-katex-glyph-compositor"],
+    "medium",
+    "Exercise painted-glyph observation, settlement, and endpoint capture.",
+    "discovery"
+  ),
+  canonicalEquationRendererUnit: check(
+    "canonical-equation-renderer-unit",
+    ["npm", "run", "test:canonical-equation-renderer"],
+    "high",
+    "Protect canonical compositor ownership, lineage, readiness, and source budgets.",
+    "contract"
   ),
   equationPreservation: check(
     "equation-surface-preservation",
@@ -298,6 +371,43 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "browser-test-host",
+    matches: (path) =>
+      path === "scripts/dev.ts" || path === "playwright.config.ts",
+    checks: [checks.typecheckNode, checks.browserTestHostSmoke],
+    reason: "The shared Playwright host lifecycle or isolation policy changed."
+  },
+  {
+    id: "inference-contract",
+    matches: isInferenceContractPath,
+    checks: [checks.inference, checks.inferenceBudgetUnit, checks.typecheckApp],
+    reason: "A TypeScript inference budget or lightweight paint-contract boundary changed."
+  },
+  {
+    id: "logarithm-change-of-base",
+    matches: isLogarithmChangeOfBasePath,
+    checks: [
+      checks.logarithmChangeOfBaseUnit,
+      checks.typecheckApp,
+      checks.architecture,
+      checks.logarithmChangeOfBaseBrowser
+    ],
+    reason: "The bounded change-of-base semantic, compositor, or exemplar family changed."
+  },
+  {
+    id: "native-katex-renderer",
+    matches: (path) =>
+      path.startsWith("src/rendering/native-katex-") &&
+      !isInferenceContractPath(path),
+    checks: [
+      checks.nativeKatexPaintUnit,
+      checks.canonicalEquationRendererUnit,
+      checks.typecheckApp,
+      checks.architecture
+    ],
+    reason: "A shared native-KaTeX paint, ownership, or settlement contract changed."
+  },
   {
     id: "equation-extension-dispatch",
     matches: (path) =>
@@ -445,7 +555,8 @@ const rules: readonly KpVerificationRule[] = [
   {
     id: "animation-ownership-seam",
     matches: (path) =>
-      path.startsWith("src/architecture/") ||
+      (path.startsWith("src/architecture/") &&
+        !isInferenceContractPath(path)) ||
       path.startsWith("scripts/check-semantic-animation-boundaries"),
     checks: [checks.typecheck, checks.architecture],
     reason: "An executable animation ownership or compatibility seam changed."
@@ -478,6 +589,8 @@ const rules: readonly KpVerificationRule[] = [
       (!path.startsWith("src/domain-ir/") &&
         !path.includes("equation-extension-dispatch") &&
         !isFunctionWrapPath(path) &&
+        !isInferenceContractPath(path) &&
+        !path.startsWith("src/rendering/native-katex-") &&
         (path.includes("equation") || path.includes("visual"))),
     checks: [
       checks.equationPreservation,
@@ -594,6 +707,21 @@ function isTypeScriptRefactorPath(path: string): boolean {
 
 function isFunctionWrapPath(path: string): boolean {
   return path.includes("function-wrap");
+}
+
+function isLogarithmChangeOfBasePath(path: string): boolean {
+  return path.includes("logarithm-change-of-base");
+}
+
+function isInferenceContractPath(path: string): boolean {
+  return path === "src/architecture/typescript-inference-budget.ts" ||
+    path === "src/rendering/equation-motion-occlusion-types.ts" ||
+    path === "src/rendering/equation-material-layer-types.ts" ||
+    path === "src/rendering/native-katex-scene-track-contract.ts" ||
+    path === "scripts/check-inference-contracts.ts" ||
+    path === "tests/typescript-inference-budget.test.ts" ||
+    path === "tsconfig.inference.json" ||
+    path.startsWith("tests/type-fixtures/");
 }
 
 /**

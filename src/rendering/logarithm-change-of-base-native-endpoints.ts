@@ -11,7 +11,9 @@ import type {
   KpSelectorLatexAnnotation
 } from "./selector-annotated-latex.ts";
 import {
-  kpCanonicalLogarithmChangeOfBase
+  kpCanonicalLogarithmChangeOfBase,
+  type KpLogarithmChangeOfBaseAtom,
+  type KpVerifiedLogarithmChangeOfBase
 } from "../semantic/logarithm-change-of-base.ts";
 
 export type KpLogarithmChangeOfBaseEndpointSide = "source" | "target";
@@ -35,17 +37,24 @@ export interface KpLogarithmChangeOfBaseNativeEndpoint {
   readonly nodes: readonly KpLogarithmChangeOfBaseNativeEndpointNode[];
 }
 
-const semantic = kpCanonicalLogarithmChangeOfBase;
-export const kpCanonicalLogarithmChangeOfBaseNativeEndpoints = Object.freeze([
+export function createKpLogarithmChangeOfBaseNativeEndpoints(
+  semantic: KpVerifiedLogarithmChangeOfBase
+): readonly [
+  KpLogarithmChangeOfBaseNativeEndpoint,
+  KpLogarithmChangeOfBaseNativeEndpoint
+] {
+  const base = atomLatex(semantic.source.base);
+  const argument = atomLatex(semantic.source.argument);
+  return Object.freeze([
   createEndpoint({
     side: "source",
     stateId: semantic.source.stateId,
-    accessibleText: "log base two of seven",
-    rawLatex: "\\log_{2} 7",
+    accessibleText: `log base ${base} of ${argument}`,
+    rawLatex: `\\log_{${base}} ${argument}`,
     parts: [
       part(semantic.source.operatorEntityId, "semantic.logarithm.operator.source", "operator", "\\log"),
-      part(semantic.source.base.entityId, semantic.source.base.semanticId, "base", "2"),
-      part(semantic.source.argument.entityId, semantic.source.argument.semanticId, "argument", "7")
+      part(semantic.source.base.entityId, semantic.source.base.semanticId, "base", base),
+      part(semantic.source.argument.entityId, semantic.source.argument.semanticId, "argument", argument)
     ],
     compose(parts) {
       return `${parts[0]}_{${parts[1]}} ${parts[2]}`;
@@ -54,20 +63,27 @@ export const kpCanonicalLogarithmChangeOfBaseNativeEndpoints = Object.freeze([
   createEndpoint({
     side: "target",
     stateId: semantic.target.stateId,
-    accessibleText: "natural log of seven divided by natural log of two",
-    rawLatex: "\\frac{\\ln 7}{\\ln 2}",
+    accessibleText:
+      `natural log of ${argument} divided by natural log of ${base}`,
+    rawLatex: `\\frac{\\ln ${argument}}{\\ln ${base}}`,
     parts: [
       part(semantic.target.numerator.operatorEntityId, "semantic.logarithm.operator.natural", "operator", "\\ln"),
-      part(semantic.target.numerator.argument.entityId, semantic.target.numerator.argument.semanticId, "argument", "7"),
+      part(semantic.target.numerator.argument.entityId, semantic.target.numerator.argument.semanticId, "argument", argument),
       part(semantic.target.denominator.operatorEntityId, "semantic.logarithm.operator.natural", "operator", "\\ln"),
-      part(semantic.target.denominator.argument.entityId, semantic.target.denominator.argument.semanticId, "base", "2"),
+      part(semantic.target.denominator.argument.entityId, semantic.target.denominator.argument.semanticId, "base", base),
       part(semantic.target.divisionEntityId, "semantic.logarithm.change-of-base.division", "fraction-bar", "")
     ],
     compose(parts) {
       return `\\frac{${parts[0]} ${parts[1]}}{${parts[2]} ${parts[3]}}`;
     }
   })
-] as const);
+  ] as const);
+}
+
+export const kpCanonicalLogarithmChangeOfBaseNativeEndpoints =
+  createKpLogarithmChangeOfBaseNativeEndpoints(
+    kpCanonicalLogarithmChangeOfBase
+  );
 
 export function bindKpLogarithmChangeOfBaseNativeEndpointOwnership(input: {
   readonly root: HTMLElement;
@@ -129,6 +145,12 @@ function part(
   latex: string
 ): EndpointPart {
   return Object.freeze({ occurrenceId, semanticId, kind, latex });
+}
+
+function atomLatex(atom: KpLogarithmChangeOfBaseAtom): string {
+  if (atom.kind === "number") return String(atom.value);
+  if (/^[A-Za-z]$/.test(atom.symbol)) return atom.symbol;
+  throw new Error("Native change-of-base endpoints require scalar atoms.");
 }
 
 function createEndpoint(input: {

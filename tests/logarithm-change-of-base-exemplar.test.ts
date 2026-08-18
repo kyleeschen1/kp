@@ -13,8 +13,15 @@ import {
   kpCanonicalLogarithmChangeOfBasePresentationPlan
 } from "../src/animation/logarithm-change-of-base-presentation-plan.ts";
 import {
+  createKpLogarithmChangeOfBaseNativeEndpoints,
   kpCanonicalLogarithmChangeOfBaseNativeEndpoints
 } from "../src/rendering/logarithm-change-of-base-native-endpoints.ts";
+import {
+  kpLogarithmChangeOfBaseCorpus
+} from "../src/semantic/logarithm-change-of-base-corpus.ts";
+import {
+  verifyKpLogarithmChangeOfBase
+} from "../src/semantic/logarithm-change-of-base.ts";
 import {
   kpLogarithmChangeOfBaseExemplarTiming
 } from "../src/rendering/logarithm-change-of-base-transit-session.ts";
@@ -74,6 +81,19 @@ test("native endpoints preserve argument and base while owning target syntax", (
   assert.equal(target.nodes.filter(({ kind }) => kind === "delimiter").length, 0);
   assert.equal(target.nodes.filter(({ kind }) => kind === "fraction-bar").length, 1);
   assert.match(target.nativeHtmlAndMathml, /frac-line/);
+});
+
+test("native endpoint factory preserves multi-glyph scalar identity", () => {
+  const fixture = kpLogarithmChangeOfBaseCorpus.cases.find(({ id }) =>
+    id.endsWith("ten-hundred"));
+  assert.ok(fixture);
+  const [source, target] = createKpLogarithmChangeOfBaseNativeEndpoints(
+    verifyKpLogarithmChangeOfBase(fixture.draft)
+  );
+  assert.equal(source.annotated.rawLatex, "\\log_{10} 100");
+  assert.equal(target.annotated.rawLatex, "\\frac{\\ln 100}{\\ln 10}");
+  assert.equal(source.nodes.find(({ kind }) => kind === "base")?.semanticId,
+    target.nodes.find(({ kind }) => kind === "base")?.semanticId);
 });
 
 test("exemplar timing orders continuants fraction and function reception", () => {

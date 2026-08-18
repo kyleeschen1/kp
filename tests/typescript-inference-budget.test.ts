@@ -38,3 +38,19 @@ test("owner-local inference laws avoid broad public barrels", () => {
   assert.ok(publicContract.includes("/public-api.ts"));
 });
 
+test("leaf paint contracts do not import the motion planner implementation", () => {
+  const leafContracts = [
+    "src/rendering/equation-material-layer-types.ts",
+    "src/rendering/native-katex-scene-track-contract.ts"
+  ];
+
+  for (const path of leafContracts) {
+    const source = readFileSync(path, "utf8");
+    assert.equal(
+      source.includes("equation-motion-path-planner"),
+      false,
+      `${path} must import lightweight occlusion types instead of the planner`
+    );
+    assert.ok(source.includes("equation-motion-occlusion-types"), path);
+  }
+});

@@ -26,7 +26,7 @@ import type {
 } from "./equation-visible-paint-overlap-types.ts";
 import type {
   KpEquationIntentionalForegroundOcclusion
-} from "./equation-motion-path-planner.ts";
+} from "./equation-motion-occlusion-types.ts";
 import type {
   KpNativeKatexSuccessorEvaluationContact,
   KpNativeKatexSuccessorContactAuthority,

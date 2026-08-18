@@ -4,10 +4,12 @@ import {
   type KpCanonicalFunctionWrapChoreography
 } from "../animation/equation-operation-choreography.ts";
 import {
+  compileKpLogarithmChangeOfBasePresentationPlan,
   kpCanonicalLogarithmChangeOfBasePresentationPlan
 } from "../animation/logarithm-change-of-base-presentation-plan.ts";
 import {
-  kpCanonicalLogarithmChangeOfBase
+  kpCanonicalLogarithmChangeOfBase,
+  type KpVerifiedLogarithmChangeOfBase
 } from "../semantic/logarithm-change-of-base.ts";
 import {
   projectKpNativeKatexSemanticPaintRelations,
@@ -47,6 +49,7 @@ export interface KpLogarithmChangeOfBaseTransitSession {
 export function createKpLogarithmChangeOfBaseTransitSession(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly semantic?: KpVerifiedLogarithmChangeOfBase | undefined;
 }): KpLogarithmChangeOfBaseTransitSession {
   if (
     input.source.endpoint !== "source" ||
@@ -55,7 +58,10 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
   ) {
     throw new Error("Change-of-base transit requires one shared measured stage.");
   }
-  const presentation = kpCanonicalLogarithmChangeOfBasePresentationPlan;
+  const semantic = input.semantic ?? kpCanonicalLogarithmChangeOfBase;
+  const presentation = semantic === kpCanonicalLogarithmChangeOfBase
+    ? kpCanonicalLogarithmChangeOfBasePresentationPlan
+    : compileKpLogarithmChangeOfBasePresentationPlan(semantic);
   const functionWrap = createKpCanonicalFunctionWrapChoreography({
     invocationGroup: presentation.functionWrapInvocationGroup,
     direction: "forward",
@@ -64,10 +70,10 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
   });
   const fractionRule = createKpCausalStructuralIntroductionChoreography({
     id: "operation-choreography.logarithm-change-of-base.fraction-rule.forward",
-    transformationId: kpCanonicalLogarithmChangeOfBase.id,
+    transformationId: semantic.id,
     direction: "forward",
     semanticEntityIds: [
-      kpCanonicalLogarithmChangeOfBase.target.divisionEntityId
+      semantic.target.divisionEntityId
     ],
     entryWindow: kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry
   });
@@ -95,7 +101,8 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
           tracks: withFractionRule,
           source: projectionInput.source,
           target: projectionInput.target,
-          functionWrap
+          functionWrap,
+          sourceOperatorId: semantic.source.operatorEntityId
         });
       }
     })
@@ -128,6 +135,7 @@ function projectSourceSyntaxHandoff(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly functionWrap: KpCanonicalFunctionWrapChoreography;
+  readonly sourceOperatorId: string;
 }): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
   const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
     atom.id,
@@ -137,7 +145,6 @@ function projectSourceSyntaxHandoff(input: {
     atom.id,
     atom.semanticEntityId
   ]));
-  const sourceOperatorId = kpCanonicalLogarithmChangeOfBase.source.operatorEntityId;
   const branchByRoleChange = new Map(
     input.functionWrap.branches.flatMap((branch) =>
       branch.sourceArgumentEntityIds.flatMap((sourceEntityId) =>
@@ -173,7 +180,10 @@ function projectSourceSyntaxHandoff(input: {
         motionMetrics: true
       });
     }
-    if (sourceEntityId === sourceOperatorId && track.lifecycle === "eliminate") {
+    if (
+      sourceEntityId === input.sourceOperatorId &&
+      track.lifecycle === "eliminate"
+    ) {
       const sample = (progress: number) => smoothWindow(
         progress,
         kpLogarithmChangeOfBaseExemplarTiming.sourceOperatorRelease

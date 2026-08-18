@@ -1,6 +1,6 @@
 import type {
   KpEquationIntentionalForegroundOcclusion
-} from "./equation-motion-path-planner.ts";
+} from "./equation-motion-occlusion-types.ts";
 
 export type KpNativeKatexSceneTrackOpacityContract =
   | {

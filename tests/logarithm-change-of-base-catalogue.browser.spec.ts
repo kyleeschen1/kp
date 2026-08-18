@@ -154,6 +154,156 @@ test("change-of-base URL restores direct semantic playhead", async ({ page }) =>
   await expectExclusiveOwner(stage);
 });
 
+test("accepted choreography survives multi-glyph base and argument paint", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}&playhead=0`);
+  const result = await page.evaluate(async () => {
+    const paths = {
+      corpus: "/src/semantic/logarithm-change-of-base-corpus.ts",
+      semantic: "/src/semantic/logarithm-change-of-base.ts",
+      endpoints:
+        "/src/rendering/logarithm-change-of-base-native-endpoints.ts",
+      transit: "/src/rendering/logarithm-change-of-base-transit-session.ts",
+      fonts: "/src/rendering/equation-font-readiness.ts",
+      geometry: "/src/rendering/native-katex-paint-geometry.ts"
+    };
+    const [corpus, semanticApi, endpointApi, transitApi, fontApi, geometry] =
+      await Promise.all([
+        import(paths.corpus),
+        import(paths.semantic),
+        import(paths.endpoints),
+        import(paths.transit),
+        import(paths.fonts),
+        import(paths.geometry)
+      ]);
+    const fixture = corpus.kpLogarithmChangeOfBaseCorpus.cases.find(
+      ({ id }: { id: string }) => id.endsWith("ten-hundred")
+    );
+    if (fixture === undefined) throw new Error("Missing pressure fixture.");
+    const semantic = semanticApi.verifyKpLogarithmChangeOfBase(fixture.draft);
+    const endpoints = endpointApi.createKpLogarithmChangeOfBaseNativeEndpoints(
+      semantic
+    );
+    const stage = document.createElement("section");
+    stage.className = "kp-logarithm-change-of-base-stage";
+    stage.style.cssText =
+      "position:fixed;left:0;top:0;width:800px;height:480px;contain:layout paint";
+    const roots = endpoints.map((endpoint: typeof endpoints[number]) => {
+      const root = document.createElement("div");
+      root.className = "kp-logarithm-change-of-base-stage__endpoint";
+      root.innerHTML = endpoint.nativeHtmlAndMathml;
+      stage.append(root);
+      return root;
+    });
+    const layer = document.createElement("div");
+    layer.className = "kp-logarithm-change-of-base-stage__material-layer";
+    layer.dataset["kpEditorEquationMaterialLayer"] = "true";
+    stage.append(layer);
+    document.body.append(stage);
+    // This synthetic caller bypasses the catalogue's font reservation. Load
+    // the exact native math faces before granting measurement authority.
+    await Promise.all([
+      document.fonts.load("40px KaTeX_Main", "100"),
+      document.fonts.load("40px KaTeX_Math", "x")
+    ]);
+    await document.fonts.ready;
+    const fontReadiness = fontApi.createKpEquationFontReadiness(document);
+    try {
+      const source = await endpointApi
+        .settleAndObserveKpLogarithmChangeOfBaseNativeEndpoint({
+          endpointSide: "source",
+          stage,
+          root: roots[0]!,
+          endpoint: endpoints[0],
+          fontReadiness
+        });
+      const target = await endpointApi
+        .settleAndObserveKpLogarithmChangeOfBaseNativeEndpoint({
+          endpointSide: "target",
+          stage,
+          root: roots[1]!,
+          endpoint: endpoints[1],
+          fontReadiness
+        });
+      const session = transitApi.createKpLogarithmChangeOfBaseTransitSession({
+        source,
+        target,
+        semantic
+      });
+      const ink = (root: HTMLElement) => {
+        const rect = geometry.measureKpNativeKatexSubtreePaintRect(stage, root);
+        if (rect === undefined) throw new Error("Pressure fixture has no ink.");
+        return { width: rect.width, height: rect.height };
+      };
+      const sourceBase = roots[0]!.querySelector(
+        `[data-kp-semantic-entity-id="${semantic.source.base.entityId}"]`
+      ) as HTMLElement | null;
+      const targetBase = roots[1]!.querySelector(
+        `[data-kp-semantic-entity-id="${
+          semantic.target.denominator.argument.entityId
+        }"]`
+      ) as HTMLElement | null;
+      if (sourceBase === null || targetBase === null) {
+        throw new Error("Pressure fixture lost semantic base ownership.");
+      }
+      const sourceInk = ink(sourceBase);
+      const targetInk = ink(targetBase);
+      const samples = [0.22, 0.5, 0.78, 0.999].map((progress) => {
+        session.apply(progress);
+        const owner = stage.querySelector<HTMLElement>(
+          `[data-kp-equation-material-semantic-entity-id="${
+            semantic.source.base.entityId
+          }"]`
+        );
+        if (owner?.firstElementChild instanceof HTMLElement) {
+          return {
+            ...ink(owner.firstElementChild),
+            model: owner.dataset["kpNativeKatexTypographyModel"]
+          };
+        }
+        throw new Error("Pressure fixture lost moving base paint.");
+      });
+      const reverse = [1, 0.5, 0].map((progress) =>
+        session.apply(progress).visualOwner);
+      session.retire();
+      return {
+        latex: endpoints.map((endpoint: typeof endpoints[number]) =>
+          endpoint.annotated.rawLatex),
+        sourceInk,
+        targetInk,
+        samples,
+        reverse
+      };
+    } finally {
+      fontReadiness.dispose();
+      stage.remove();
+    }
+  });
+
+  expect(result.latex).toEqual([
+    "\\log_{10} 100",
+    "\\frac{\\ln 100}{\\ln 10}"
+  ]);
+  expect(result.samples.every(({ model }) =>
+    model === "target-style-reverse-flip"
+  )).toBe(true);
+  expect(Math.abs(result.samples[0]!.height - result.sourceInk.height))
+    .toBeLessThan(0.4);
+  expect(result.samples[1]!.height).toBeGreaterThan(
+    result.samples[0]!.height + 1
+  );
+  expect(Math.abs(result.samples[2]!.height - result.targetInk.height))
+    .toBeLessThan(0.4);
+  expect(Math.abs(result.samples[3]!.width - result.targetInk.width))
+    .toBeLessThan(0.4);
+  expect(result.reverse).toEqual([
+    "target-native",
+    "material-scene",
+    "source-native"
+  ]);
+});
+
 async function expectExclusiveOwner(stage: Locator): Promise<void> {
   await expect.poll(async () => stage.evaluate((root) => {
     const endpointOpacities = [...root.querySelectorAll<HTMLElement>(
