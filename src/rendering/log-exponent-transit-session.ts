@@ -82,7 +82,7 @@ export function createKpLogExponentTransitSession(input: {
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
 }): KpLogExponentTransitSession {
   assertTransitInput(input);
-  const canonical = input.nativeKatex.compose.createSession({
+  const rendererReadyPlan = input.nativeKatex.compose.compileScenePlan({
     source: input.source,
     target: input.target,
     relations: projectKpLogExponentNativePaintRelations(
@@ -101,6 +101,9 @@ export function createKpLogExponentTransitSession(input: {
         }),
     ...optionalTrackProjection(input.operation)
   });
+  const canonical = input.nativeKatex.compose.createSession(
+    rendererReadyPlan
+  );
   const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
     atom.id,
     atom.semanticEntityId

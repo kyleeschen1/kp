@@ -126,3 +126,17 @@ test("production application callers do not bypass the native KaTeX pack", async
     );
   }
 });
+
+test("feature-pack session callers compile one nominal plan before rendering", async () => {
+  for (const path of [
+    "src/editor/exact-fraction-quantity-surface-adapter.ts",
+    "src/reader/renderers/equation-scene-compositor-adapter.ts",
+    "src/rendering/log-exponent-transit-session.ts",
+    "src/rendering/place-value-addition-native-scene-dom.ts"
+  ]) {
+    const source = await readFile(path, "utf8");
+    assert.match(source, /\.compose\.compileScenePlan\(/u, path);
+    assert.match(source, /\.compose\.createSession\(/u, path);
+    assert.doesNotMatch(source, /\.compose\.createSession\(\s*\{/u, path);
+  }
+});

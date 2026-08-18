@@ -693,21 +693,23 @@ function compilePreparedSymbolicSegments(input: {
             : undefined;
       const canonical = continuity
         ? undefined
-        : input.nativeKatex.compose.createSession({
-            source,
-            target,
-            relations: symbolicPaintRelations(segment, input.nativeKatex),
-            successorSyntheses: segment.successorSyntheses.map((binding) =>
-              exactSuccessorIntent(binding, identityTransferProgram)
-            ),
-            endpointDwellFraction: 0.04,
-            fanInRouting:
-              dispatch === "merge-fan-in" ||
-              dispatch === "identity-fusion",
-            copyFanOutRouting:
-              dispatch === "copy-fan-out" ||
-              dispatch === "identity-fission"
-          });
+        : input.nativeKatex.compose.createSession(
+            input.nativeKatex.compose.compileScenePlan({
+              source,
+              target,
+              relations: symbolicPaintRelations(segment, input.nativeKatex),
+              successorSyntheses: segment.successorSyntheses.map((binding) =>
+                exactSuccessorIntent(binding, identityTransferProgram)
+              ),
+              endpointDwellFraction: 0.04,
+              fanInRouting:
+                dispatch === "merge-fan-in" ||
+                dispatch === "identity-fusion",
+              copyFanOutRouting:
+                dispatch === "copy-fan-out" ||
+                dispatch === "identity-fission"
+            })
+          );
       segments.set(segment.id, {
         kind: "exact-prepared-symbolic-segment",
         segment,

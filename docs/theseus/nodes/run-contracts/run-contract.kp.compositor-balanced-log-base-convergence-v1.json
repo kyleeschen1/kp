@@ -432,6 +432,76 @@
       "scope": "focused",
       "checkedAt": "2026-08-18T17:25:03.567Z",
       "notes": "Core 118905/140000; exact direct closure 14 modules and 154706/295000; aggregate 454940/455000; no ceiling increase."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:31:30.715Z",
+      "notes": "101/101; synchronized exact symbolic sessions, opaque identities, direct seek, rewind, and four-view truth preserved."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:31:32.016Z",
+      "notes": "53/53; canonical sequence, wrapper cohesion, exponent transit, direct seek, rewind, and native relations preserved."
+    },
+    {
+      "command": "npm run test:place-value-addition",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:31:33.097Z",
+      "notes": "120/120; place-value native scene lifecycle, contributor fusion, direct seek, and rewind preserved."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-feature-pack.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:31:34.099Z",
+      "notes": "7/7; all production feature-pack session callers compile a nominal plan before rendering."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-18T17:31:35.094Z",
+      "notes": "36/36; catalogue selection, lazy capabilities, host preparation, and shell ownership preserved."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-18T17:31:36.101Z",
+      "notes": "14/14 Chromium catalogue scenarios pass, including lazy rich surfaces and playhead/history restoration."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bundle",
+      "checkedAt": "2026-08-18T17:31:37.128Z",
+      "notes": "Outer 2850/50000 gzip; catalogue route 98331/190000; place-value increment 50590/75000; native pack remains lazy."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:31:38.150Z",
+      "notes": "All TypeScript, Svelte, test, and domain type gates pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-18T17:31:39.168Z",
+      "notes": "All dependency, framework-neutral, reader, animation, operation, and compiler-authority gates pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-18T17:31:40.269Z",
+      "notes": "28/28 canonical ownership and renderer-plan gates pass after host migration."
     }
   ],
   "allowedWork": [
@@ -525,7 +595,8 @@
     {
       "id": "s12",
       "title": "Migrate catalogue and feature-pack callers",
-      "status": "planned"
+      "summary": "Migrated catalogue exact-symbolic, log-exponent, and place-value native-KaTeX feature-pack callers to compile a single nominal renderer-ready plan before session creation; added a caller ratchet and preserved lazy capability loading, bundle attribution, all direct-seek and rewind laws, and the full catalogue browser host.",
+      "status": "complete"
     },
     {
       "id": "s13",

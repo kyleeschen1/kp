@@ -88,12 +88,13 @@ export function createKpPlaceValueNativeSceneDom(input: {
       presentationGroupId: input.targetSceneId,
       fontReadiness: sceneFontReadiness
     });
-    renderer = nativeKatex.compose.createSession({
+    const rendererReadyPlan = nativeKatex.compose.compileScenePlan({
       source,
       target,
       relations: [],
       successorSyntheses: input.successorSyntheses
-    }).session;
+    });
+    renderer = nativeKatex.compose.createSession(rendererReadyPlan).session;
     return renderer;
   };
 
