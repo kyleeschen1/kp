@@ -1190,6 +1190,36 @@
       "scope": "TypeScript Svelte and domain type boundaries",
       "checkedAt": "2026-08-18T20:29:31.744Z",
       "notes": "Typecheck completed successfully."
+    },
+    {
+      "command": "npm run visual:logarithm-change-of-base",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:51.808Z"
+    },
+    {
+      "command": "npm run visual:logarithm-change-of-base:catalogue",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:53.097Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:54.161Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:55.200Z"
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:56.234Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-08-18T20:41:57.276Z"
     }
   ],
   "allowedWork": [
@@ -1379,7 +1409,8 @@
     {
       "id": "s28",
       "title": "Produce visual evidence and stop for review",
-      "status": "planned"
+      "summary": "Captured deterministic wide and phone forward/return evidence for the change-of-base exemplar, repaired the source-operator and enclosure handoff inside the caller-local projection, and verified exact seek, URL restoration, exclusive accessible ownership, and protected transit across Chromium Firefox and WebKit. Stopped before promotion for the mandatory human checkpoint.",
+      "status": "complete"
     },
     {
       "id": "s29",

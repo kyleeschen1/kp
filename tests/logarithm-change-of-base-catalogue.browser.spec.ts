@@ -58,6 +58,16 @@ test("change-of-base mounts one native compositor and seeks deterministically", 
     targetEntityId === "target.natural-log-quotient.division" &&
     timingGroupId?.includes("fraction-rule") === true
   )).toBe(true);
+  expect(summary.some(({ lifecycle, sourceEntityId, timingGroupId }) =>
+    lifecycle === "eliminate" &&
+    sourceEntityId === "source.log-base-two.operator" &&
+    timingGroupId === "timing.logarithm-change-of-base.operator-handoff"
+  )).toBe(true);
+  expect(summary.filter(({ lifecycle, sourceEntityId, timingGroupId }) =>
+    lifecycle === "eliminate" &&
+    sourceEntityId === "state.logarithm.change-base.source" &&
+    timingGroupId === "timing.logarithm-change-of-base.source-enclosure-exit"
+  )).toHaveLength(2);
 
   for (const progress of [0, 0.25, 0.5, 0.75, 1, 0.625, 0]) {
     await seek.fill(String(progress));

@@ -9,7 +9,8 @@ import {
   kpCanonicalLogarithmChangeOfBase
 } from "../semantic/logarithm-change-of-base.ts";
 import {
-  projectKpNativeKatexSemanticPaintRelations
+  projectKpNativeKatexSemanticPaintRelations,
+  type KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-base-scene-plan.ts";
 import {
   applyKpNativeKatexOperationChoreography
@@ -30,8 +31,10 @@ import {
 export const kpLogarithmChangeOfBaseExemplarTiming = Object.freeze({
   id: "timing.logarithm-change-of-base.exemplar.v1" as const,
   argumentReflow: Object.freeze({ start: 0.06, end: 0.54 }),
+  sourceEnclosureExit: Object.freeze({ start: 0.08, end: 0.24 }),
   fractionRuleEntry: Object.freeze({ start: 0.44, end: 0.58 }),
-  wrapperEntry: Object.freeze({ start: 0.58, end: 0.9 })
+  wrapperEntry: Object.freeze({ start: 0.58, end: 0.9 }),
+  sourceOperatorRelease: Object.freeze({ start: 0.32, end: 0.5 })
 });
 
 export interface KpLogarithmChangeOfBaseTransitSession {
@@ -84,9 +87,13 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
     trackProjection: createKpNativeKatexTrackProjection({
       id: "track-projection.logarithm-change-of-base.fraction-rule.v1",
       project(projectionInput) {
-        return applyKpNativeKatexOperationChoreography({
+        const withFractionRule = applyKpNativeKatexOperationChoreography({
           ...projectionInput,
           choreography: fractionRule
+        });
+        return projectSourceSyntaxHandoff({
+          tracks: withFractionRule,
+          source: projectionInput.source
         });
       }
     })
@@ -112,6 +119,60 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
       });
     }
   });
+}
+
+function projectSourceSyntaxHandoff(input: {
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly source: KpNativeKatexRenderedSceneObservation;
+}): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const sourceOperatorId = kpCanonicalLogarithmChangeOfBase.source.operatorEntityId;
+  return Object.freeze(input.tracks.map((track) => {
+    const sourceEntityId = track.sourceAtomId === undefined
+      ? undefined
+      : sourceEntityByAtomId.get(track.sourceAtomId);
+    if (sourceEntityId === sourceOperatorId && track.lifecycle === "eliminate") {
+      const sample = (progress: number) => smoothWindow(
+        progress,
+        kpLogarithmChangeOfBaseExemplarTiming.sourceOperatorRelease
+      );
+      return Object.freeze({
+        ...track,
+        timingGroupId: "timing.logarithm-change-of-base.operator-handoff",
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
+      });
+    }
+    if (
+      sourceEntityId === kpCanonicalLogarithmChangeOfBase.source.stateId &&
+      track.lifecycle === "eliminate"
+    ) {
+      const sample = (progress: number) => smoothWindow(
+        progress,
+        kpLogarithmChangeOfBaseExemplarTiming.sourceEnclosureExit
+      );
+      return Object.freeze({
+        ...track,
+        timingGroupId: "timing.logarithm-change-of-base.source-enclosure-exit",
+        opacityScheduleAuthority: "semantic-choreography" as const,
+        sampleProgress: sample,
+        sampleOpacityProgress: sample
+      });
+    }
+    return track;
+  }));
+}
+
+function smoothWindow(
+  progress: number,
+  window: Readonly<{ start: number; end: number }>
+): number {
+  const linear = bounded((progress - window.start) / (window.end - window.start));
+  return linear * linear * (3 - (2 * linear));
 }
 
 function bounded(value: number): number {

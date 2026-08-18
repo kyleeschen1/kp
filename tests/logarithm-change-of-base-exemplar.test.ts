@@ -85,6 +85,8 @@ test("exemplar timing orders continuants fraction and function reception", () =>
     kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.end);
   assert.ok(kpLogarithmChangeOfBaseExemplarTiming.fractionRuleEntry.end <=
     kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.start);
+  assert.ok(kpLogarithmChangeOfBaseExemplarTiming.sourceOperatorRelease.end <=
+    kpLogarithmChangeOfBaseExemplarTiming.wrapperEntry.start);
 });
 
 test("catalogue route and lazy pack resolve the exact exemplar", async () => {
