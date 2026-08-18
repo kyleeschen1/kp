@@ -5,6 +5,9 @@ import {
 import {
   kpAdditiveBothSidesOperationRegistrationPack
 } from "./both-sides-operation-registrations/additive.ts";
+import {
+  kpMultiplicativeBothSidesOperationRegistrationPack
+} from "./both-sides-operation-registrations/multiplicative.ts";
 
 interface KpAddBothSidesOperationRegistration {
   readonly id: "addBothSides";
@@ -26,8 +29,29 @@ export type KpAdditiveBothSidesOperationRegistration =
   | KpAddBothSidesOperationRegistration
   | KpSubtractBothSidesOperationRegistration;
 
+interface KpMultiplyBothSidesOperationRegistration {
+  readonly id: "multiplyBothSides";
+  readonly operationKind: "multiply";
+  readonly semanticAuthorityId: string;
+  readonly lawId: "law.equation.multiply-both-sides";
+  readonly nonzeroEvidenceId: string;
+}
+
+interface KpDivideBothSidesOperationRegistration {
+  readonly id: "divideBothSides";
+  readonly operationKind: "divide";
+  readonly semanticAuthorityId: string;
+  readonly lawId: "law.equation.divide-both-sides";
+  readonly nonzeroEvidenceId: string;
+}
+
+export type KpMultiplicativeBothSidesOperationRegistration =
+  | KpMultiplyBothSidesOperationRegistration
+  | KpDivideBothSidesOperationRegistration;
+
 export type KpBothSidesOperationRegistration =
-  KpAdditiveBothSidesOperationRegistration;
+  | KpAdditiveBothSidesOperationRegistration
+  | KpMultiplicativeBothSidesOperationRegistration;
 
 export interface KpBothSidesOperationRegistrationPack {
   readonly id: string;
@@ -35,7 +59,8 @@ export interface KpBothSidesOperationRegistrationPack {
 }
 
 export const kpBothSidesOperationRegistrationPacks = Object.freeze([
-  kpAdditiveBothSidesOperationRegistrationPack
+  kpAdditiveBothSidesOperationRegistrationPack,
+  kpMultiplicativeBothSidesOperationRegistrationPack
 ] satisfies readonly KpBothSidesOperationRegistrationPack[]);
 
 export const kpBothSidesOperationRegistrationRegistry:
@@ -43,7 +68,8 @@ KpClosedDispatchRegistry<string, KpBothSidesOperationRegistration> =
   createKpClosedDispatchRegistry(
     "both-sides operation",
     kpBothSidesOperationRegistrationPacks.flatMap(
-      ({ registrations }) => registrations
+      ({ registrations }): readonly KpBothSidesOperationRegistration[] =>
+        registrations
     )
   );
 

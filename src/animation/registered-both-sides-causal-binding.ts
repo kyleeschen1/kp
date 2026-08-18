@@ -7,9 +7,6 @@ import {
   kpEquationBranchRoleForSemanticId
 } from "./equation-balanced-branch-scheduling.ts";
 import type {
-  KpBalancedBranchScheduling
-} from "./equation-balanced-branch-scheduling.ts";
-import type {
   KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import {
@@ -19,6 +16,9 @@ import {
 import {
   findKpBothSidesOperationRegistration
 } from "../semantic/both-sides-operation-registration.ts";
+import type {
+  KpEquationBranchRoleIndex
+} from "../semantic/equation-branch-role-index.ts";
 
 export interface KpRegisteredBothSidesCausalBinding {
   readonly registrationId: string;
@@ -28,7 +28,8 @@ export interface KpRegisteredBothSidesCausalBinding {
 
 export function compileKpRegisteredBothSidesCausalBinding(input: {
   readonly transformation: KpSemanticTransformation;
-  readonly branchScheduling: KpBalancedBranchScheduling;
+  readonly applicationEntityIds: readonly string[];
+  readonly branchRoles?: KpEquationBranchRoleIndex | undefined;
   readonly direction: KpBothSidesCausalDirection;
 }): KpRegisteredBothSidesCausalBinding | undefined {
   const registration = findKpBothSidesOperationRegistration(
@@ -80,55 +81,114 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
     branches: {
       lhs: {
         side: "lhs",
-        sourceExpressionEntityIds: branchIds(sourceIds, "lhs", input.transformation.id),
-        targetExpressionEntityIds: branchIds(targetIds, "lhs", input.transformation.id),
-        appliedEntityIds: branchApplicationIds(
-          input.branchScheduling,
+        sourceExpressionEntityIds: branchIds(
+          sourceIds,
           "lhs",
-          input.transformation.id
+          input.transformation.id,
+          input.branchRoles
+        ),
+        targetExpressionEntityIds: branchIds(
+          targetIds,
+          "lhs",
+          input.transformation.id,
+          input.branchRoles
+        ),
+        appliedEntityIds: branchApplicationIds(
+          input.applicationEntityIds,
+          "lhs",
+          input.transformation.id,
+          input.branchRoles
         )
       },
       rhs: {
         side: "rhs",
-        sourceExpressionEntityIds: branchIds(sourceIds, "rhs", input.transformation.id),
-        targetExpressionEntityIds: branchIds(targetIds, "rhs", input.transformation.id),
-        appliedEntityIds: branchApplicationIds(
-          input.branchScheduling,
+        sourceExpressionEntityIds: branchIds(
+          sourceIds,
           "rhs",
-          input.transformation.id
+          input.transformation.id,
+          input.branchRoles
+        ),
+        targetExpressionEntityIds: branchIds(
+          targetIds,
+          "rhs",
+          input.transformation.id,
+          input.branchRoles
+        ),
+        appliedEntityIds: branchApplicationIds(
+          input.applicationEntityIds,
+          "rhs",
+          input.transformation.id,
+          input.branchRoles
         )
       }
     }
   } as const;
   const operandSemanticId =
     `semantic.operation-operand.${input.transformation.id}`;
-  const operation = registration.operationKind === "add"
-    ? verifyKpBothSidesOperation({
-        ...common,
-        operation: { kind: "add", operandSemanticId },
-        lawAuthority: {
-          id: registration.lawId,
-          authorityRefId: registration.semanticAuthorityId,
-          level: "strict"
-        },
-        domainEvidence: {
-          kind: "declared-relation-domain",
-          evidenceIds: registration.relationDomainEvidenceIds
-        }
-      })
-    : verifyKpBothSidesOperation({
-        ...common,
-        operation: { kind: "subtract", operandSemanticId },
-        lawAuthority: {
-          id: registration.lawId,
-          authorityRefId: registration.semanticAuthorityId,
-          level: "strict"
-        },
-        domainEvidence: {
-          kind: "declared-relation-domain",
-          evidenceIds: registration.relationDomainEvidenceIds
-        }
-      });
+  const operation = (() => {
+    switch (registration.operationKind) {
+      case "add":
+        return verifyKpBothSidesOperation({
+          ...common,
+          operation: { kind: "add", operandSemanticId },
+          lawAuthority: {
+            id: registration.lawId,
+            authorityRefId: registration.semanticAuthorityId,
+            level: "strict"
+          },
+          domainEvidence: {
+            kind: "declared-relation-domain",
+            evidenceIds: registration.relationDomainEvidenceIds
+          }
+        });
+      case "subtract":
+        return verifyKpBothSidesOperation({
+          ...common,
+          operation: { kind: "subtract", operandSemanticId },
+          lawAuthority: {
+            id: registration.lawId,
+            authorityRefId: registration.semanticAuthorityId,
+            level: "strict"
+          },
+          domainEvidence: {
+            kind: "declared-relation-domain",
+            evidenceIds: registration.relationDomainEvidenceIds
+          }
+        });
+      case "multiply":
+        assertNonzeroAssumption(input.transformation);
+        return verifyKpBothSidesOperation({
+          ...common,
+          operation: { kind: "multiply", operandSemanticId },
+          lawAuthority: {
+            id: registration.lawId,
+            authorityRefId: registration.semanticAuthorityId,
+            level: "strict"
+          },
+          domainEvidence: {
+            kind: "nonzero-operand",
+            operandSemanticId,
+            evidenceId: registration.nonzeroEvidenceId
+          }
+        });
+      case "divide":
+        assertNonzeroAssumption(input.transformation);
+        return verifyKpBothSidesOperation({
+          ...common,
+          operation: { kind: "divide", operandSemanticId },
+          lawAuthority: {
+            id: registration.lawId,
+            authorityRefId: registration.semanticAuthorityId,
+            level: "strict"
+          },
+          domainEvidence: {
+            kind: "nonzero-operand",
+            operandSemanticId,
+            evidenceId: registration.nonzeroEvidenceId
+          }
+        });
+    }
+  })();
   return Object.freeze({
     registrationId: registration.id,
     operation,
@@ -142,10 +202,11 @@ export function compileKpRegisteredBothSidesCausalBinding(input: {
 function branchIds(
   ids: readonly string[],
   side: "lhs" | "rhs",
-  transformationId: string
+  transformationId: string,
+  branchRoles: KpEquationBranchRoleIndex | undefined
 ): readonly [string, ...string[]] {
   const matches = ids.filter((id) =>
-    kpEquationBranchRoleForSemanticId(id) === side
+    branchRole(id, branchRoles) === side
   );
   if (matches.length === 0) {
     throw new Error(
@@ -156,19 +217,42 @@ function branchIds(
 }
 
 function branchApplicationIds(
-  scheduling: KpBalancedBranchScheduling,
+  applicationEntityIds: readonly string[],
   side: "lhs" | "rhs",
-  transformationId: string
+  transformationId: string,
+  branchRoles: KpEquationBranchRoleIndex | undefined
 ): readonly [string, ...string[]] {
-  const ids = scheduling.branchOperation.branches.find(
-    ({ id }) => id === side
-  )?.entityIds;
-  if (ids === undefined || ids.length === 0) {
+  const ids = applicationEntityIds.filter((id) =>
+    branchRole(id, branchRoles) === side
+  );
+  if (ids.length === 0) {
     throw new Error(
       `Registered both-sides caller ${transformationId} lacks ${side} application roles.`
     );
   }
   return ids as [string, ...string[]];
+}
+
+function branchRole(
+  entityId: string,
+  branchRoles: KpEquationBranchRoleIndex | undefined
+): "lhs" | "rhs" | undefined {
+  return kpEquationBranchRoleForSemanticId(entityId) ??
+    branchRoles?.[entityId];
+}
+
+function assertNonzeroAssumption(
+  transformation: KpSemanticTransformation
+): void {
+  const hasNonzeroEvidence = transformation.assumptions?.some((assumption) =>
+    assumption.toLowerCase().replaceAll("-", "").replaceAll(" ", "")
+      .includes("nonzero")
+  ) ?? false;
+  if (!hasNonzeroEvidence) {
+    throw new Error(
+      `Registered both-sides caller ${transformation.id} lacks a nonzero operand assumption.`
+    );
+  }
 }
 
 function isEqualityEntityId(id: string): boolean {

@@ -789,6 +789,62 @@
       "scope": "architecture",
       "checkedAt": "2026-08-18T18:31:01.457Z",
       "notes": "Dependency direction, framework-neutral entrypoints, and semantic/animation authority boundaries pass."
+    },
+    {
+      "command": "npm run test:registered-both-sides-multiplicative",
+      "status": "passed",
+      "scope": "multiplicative-registration",
+      "checkedAt": "2026-08-18T18:45:41.008Z",
+      "notes": "26/26: multiply/divide packs, nonzero proof obligation, generated correspondence, exact rewind, and existing fraction/cancellation motion."
+    },
+    {
+      "command": "npm run test:registered-both-sides-additive",
+      "status": "passed",
+      "scope": "additive-preservation",
+      "checkedAt": "2026-08-18T18:45:42.191Z",
+      "notes": "19/19 additive registration and generated-fixture checks remain green after the generic branch-role seam."
+    },
+    {
+      "command": "npm run test:operation-presentation-plans",
+      "status": "passed",
+      "scope": "presentation-preservation",
+      "checkedAt": "2026-08-18T18:45:43.189Z",
+      "notes": "187/187 operation presentation and reader choreography checks remain green."
+    },
+    {
+      "command": "npm run test:fraction-composition-architecture",
+      "status": "passed",
+      "scope": "fraction-preservation",
+      "checkedAt": "2026-08-18T18:45:44.214Z",
+      "notes": "64/64 fraction composition, exact arithmetic, structure, folding, endpoint, and promotion checks remain green."
+    },
+    {
+      "command": "npm run test:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "inventory",
+      "checkedAt": "2026-08-18T18:45:45.270Z",
+      "notes": "5/5 exact source discovery and balanced-operation authority checks pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "renderer-preservation",
+      "checkedAt": "2026-08-18T18:45:46.303Z",
+      "notes": "28/28 canonical renderer, ownership, readiness, and source-budget checks remain green."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-authority",
+      "checkedAt": "2026-08-18T18:45:47.358Z",
+      "notes": "Application, test, Svelte, and domain projects compile with exact multiplicative variants."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-18T18:45:48.396Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, and semantic/animation boundaries pass."
     }
   ],
   "allowedWork": [
@@ -924,7 +980,8 @@
     {
       "id": "s19",
       "title": "Register multiplicative callers",
-      "status": "planned"
+      "summary": "Registered multiplyBothSides and divideBothSides through one data-only multiplicative pack and the verified shared causal recipe. Added explicit nonzero proof obligations, generated division correspondence, and one reusable equation branch-role index that prefers semantic side IDs and safely recovers legacy ordered equations. Fraction construction, balanced entry, cancellation, exact arithmetic, native paint, and all accepted choreography remain caller-owned and unchanged; 26 focused, 187 presentation, and 64 fraction-architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "s20",

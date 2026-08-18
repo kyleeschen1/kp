@@ -47,6 +47,7 @@ export interface KpFractionSolveMacroStep {
   readonly sourceStateId: string;
   readonly targetStateId: string;
   readonly authorityIds: readonly string[];
+  readonly assumptions: readonly string[];
 }
 
 export interface KpLawfulFractionSolveMacro {
@@ -153,7 +154,7 @@ export function createKpLawfulFractionSolveMacro(input: {
     ]),
     step("multiply-by-three", "multiplyBothSides", states, 7, [
       "law.equation.multiply-both-sides"
-    ]),
+    ], ["The verified multiplier three is nonzero."]),
     step("cancel-denominator", "cancelMultiplicativeInverses", states, 8, [
       "kp.core.eliminate"
     ]),
@@ -162,7 +163,7 @@ export function createKpLawfulFractionSolveMacro(input: {
     ]),
     step("divide-by-two", "divideBothSides", states, 10, [
       "law.equation.divide-both-sides"
-    ]),
+    ], ["The verified divisor two is nonzero."]),
     step("cancel-coefficient", "cancelMultiplicativeInverses", states, 11, [
       "kp.core.eliminate"
     ]),
@@ -211,14 +212,16 @@ function step(
   transformType: string,
   states: readonly KpFractionSolveEquationState[],
   sourceIndex: number,
-  authorityIds: readonly string[]
+  authorityIds: readonly string[],
+  assumptions: readonly string[] = []
 ): KpFractionSolveMacroStep {
   return Object.freeze({
     id: `fraction-solve.step.${suffix}`,
     transformType,
     sourceStateId: states[sourceIndex]!.id,
     targetStateId: states[sourceIndex + 1]!.id,
-    authorityIds: Object.freeze([...authorityIds])
+    authorityIds: Object.freeze([...authorityIds]),
+    assumptions: Object.freeze([...assumptions])
   });
 }
 

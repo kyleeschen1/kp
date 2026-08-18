@@ -1105,7 +1105,8 @@ export function createGeneratedAlgebraSemanticTransformation(
   const generatedCancellationMap =
     createGeneratedLinearSolveCancellationMap(input);
   const generatedBalancedIntroductionMap =
-    createGeneratedLinearSolveBalancedIntroductionMap(input);
+    createGeneratedLinearSolveBalancedIntroductionMap(input) ??
+    createGeneratedLinearSolveDivisionMap(input);
   if (
     (generatedCancellationMap !== undefined ||
       generatedBalancedIntroductionMap !== undefined) &&
@@ -1132,6 +1133,56 @@ export function createGeneratedAlgebraSemanticTransformation(
           input.correspondenceMap,
       correspondence: input.correspondence
     })
+  });
+}
+
+function createGeneratedLinearSolveDivisionMap(
+  input: CreateGeneratedAlgebraSemanticTransformationInput
+): CorrespondenceMap | undefined {
+  if (
+    input.familyId !== "generated.linear-solve" ||
+    input.transformType !== "divideBothSides"
+  ) return undefined;
+  const sourceId = input.sourceObjectIds[0];
+  const targetId = input.targetObjectIds[0];
+  if (
+    sourceId === undefined ||
+    targetId === undefined ||
+    input.sourceObjectIds.length !== 1 ||
+    input.targetObjectIds.length !== 1
+  ) {
+    throw new Error(
+      `Generated division ${input.id} requires one equation on each endpoint.`
+    );
+  }
+  return Object.freeze({
+    id: `${input.id}.correspondence`,
+    records: Object.freeze([
+      ...(input.correspondence ?? []).map((correspondence, index) =>
+        Object.freeze({
+          id: `${input.id}.identity.${index}`,
+          relation: "identity" as const,
+          sourceSelectorIds: Object.freeze([
+            correspondence.sourceSelectorId
+          ]),
+          targetSelectorIds: Object.freeze([
+            correspondence.targetSelectorId
+          ]),
+          summary:
+            correspondence.summary ?? "The equation material persists."
+        })
+      ),
+      Object.freeze({
+        id: `${input.id}.introduce-matched-divisors`,
+        relation: "introduction" as const,
+        sourceSelectorIds: Object.freeze([]),
+        targetSelectorIds: Object.freeze([
+          `${targetId}.lhs.divide`,
+          `${targetId}.rhs.divide`
+        ]),
+        summary: "The same nonzero divisor enters both equation branches."
+      })
+    ])
   });
 }
 

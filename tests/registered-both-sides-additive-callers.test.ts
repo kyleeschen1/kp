@@ -23,16 +23,17 @@ import {
 } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 
 test("add and subtract register through one data-only operation pack", () => {
-  assert.deepEqual(kpBothSidesOperationRegistrationRegistry.ids, [
-    "addBothSides",
-    "subtractBothSides"
-  ]);
   assert.deepEqual(
-    kpBothSidesOperationRegistrationRegistry.entries.map((entry) => ({
-      id: entry.id,
-      operationKind: entry.operationKind,
-      lawId: entry.lawId
-    })),
+    kpBothSidesOperationRegistrationRegistry.ids.slice(0, 2),
+    ["addBothSides", "subtractBothSides"]
+  );
+  assert.deepEqual(
+    kpBothSidesOperationRegistrationRegistry.entries.slice(0, 2)
+      .map((entry) => ({
+        id: entry.id,
+        operationKind: entry.operationKind,
+        lawId: entry.lawId
+      })),
     [
       {
         id: "addBothSides",
@@ -117,12 +118,16 @@ test("generated addition compiles the same recipe in both directions", () => {
   })!;
   const forward = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    branchScheduling,
+    applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
+      ({ entityIds }) => entityIds
+    ),
     direction: "forward"
   })!;
   const rewind = compileKpRegisteredBothSidesCausalBinding({
     transformation,
-    branchScheduling,
+    applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
+      ({ entityIds }) => entityIds
+    ),
     direction: "rewind"
   })!;
   assert.equal(
@@ -160,7 +165,9 @@ test("registered additive callers fail closed on law or branch drift", () => {
         ...transformation,
         lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }]
       },
-      branchScheduling,
+      applicationEntityIds: branchScheduling.branchOperation.branches.flatMap(
+        ({ entityIds }) => entityIds
+      ),
       direction: "forward"
     }),
     /lacks strict law.equation.add-both-sides authority/

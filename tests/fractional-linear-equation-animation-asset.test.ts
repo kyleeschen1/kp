@@ -28,7 +28,7 @@ test("fractional subtraction reuses the accepted balanced-introduction engine", 
   const bindings = createKpEquationLinearRearrangementBindings(
     createFractionalLinearEquationAnimationAsset()
   );
-  assert.deepEqual(bindings[0], {
+  assert.deepEqual(projectBindingIdentity(bindings[0]), {
     transformationId: "transform.fractional-linear.subtract-both-sides-3",
     kind: "balanced-introduction"
   });
@@ -58,11 +58,22 @@ test("multiplication enters as one balanced operation on both sides", () => {
   const bindings = createKpEquationLinearRearrangementBindings(
     createFractionalLinearEquationAnimationAsset()
   );
-  assert.deepEqual(bindings[3], {
+  assert.deepEqual(projectBindingIdentity(bindings[3]), {
     transformationId: "transform.fractional-linear.multiply-both-sides-2",
     kind: "balanced-introduction"
   });
 });
+
+function projectBindingIdentity(
+  binding:
+    | ReturnType<typeof createKpEquationLinearRearrangementBindings>[number]
+    | undefined
+) {
+  return {
+    transformationId: binding?.transformationId,
+    kind: binding?.kind
+  };
+}
 
 test("denominator removal has an explicit multiplicative cancellation kind", () => {
   const bindings = createKpEquationLinearRearrangementBindings(

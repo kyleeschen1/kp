@@ -54,6 +54,7 @@ KpFractionCompositionEquationAsset {
         id: `${step.id}.correspondence`,
         records: spec.records
       },
+      assumptions: step.assumptions,
       lawRefs: step.authorityIds.map((id) => ({ id, level: "strict" }))
     });
   }));

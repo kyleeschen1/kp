@@ -178,6 +178,8 @@ const rawEntries = [
       motifDefaultsPath,
       algebraFamilyPath,
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/multiplicative.ts",
       "src/semantic/fraction-solve-macro.ts",
       "src/semantic/fractional-linear-certified-transfer.ts",
       "src/semantic/fractional-linear-equation-asset.ts"
@@ -221,6 +223,8 @@ const rawEntries = [
       "src/animation/verified-linear-problem-animation-compiler.ts",
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
       "src/semantic/canonical-operation-registry.ts",
+      "src/semantic/both-sides-operation-registration.ts",
+      "src/semantic/both-sides-operation-registrations/multiplicative.ts",
       "src/semantic/divide-both-sides-equation-asset.ts",
       "src/semantic/fraction-solve-macro.ts",
       "src/semantic/generated-algebra-canonical-composition.ts",

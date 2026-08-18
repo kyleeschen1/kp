@@ -19,6 +19,13 @@ import {
   compileKpRegisteredBothSidesCausalBinding,
   type KpRegisteredBothSidesCausalBinding
 } from "../animation/registered-both-sides-causal-binding.ts";
+import {
+  createKpEquationBranchRoleIndex,
+  type KpEquationBranchRoleIndex
+} from "../semantic/equation-branch-role-index.ts";
+import {
+  findKpBothSidesOperationRegistration
+} from "../semantic/both-sides-operation-registration.ts";
 
 export interface KpEquationLinearRearrangementBinding {
   readonly transformationId: string;
@@ -34,10 +41,12 @@ export interface KpEquationLinearRearrangementBinding {
 export function createKpEquationLinearRearrangementBindings(
   animation: KpAnimationAsset
 ): readonly KpEquationLinearRearrangementBinding[] {
+  const branchRoles = createKpEquationBranchRoleIndex(animation.bundle);
   return animation.transformations.flatMap((transformation) => {
     const binding = createKpEquationLinearRearrangementBinding({
       animation,
-      transformation
+      transformation,
+      branchRoles
     });
     return binding === undefined ? [] : [binding];
   });
@@ -120,6 +129,7 @@ export function createKpEquationSuccessorSynthesisBindings(input: {
 export function createKpEquationLinearRearrangementBinding(input: {
   readonly animation: KpAnimationAsset;
   readonly transformation: KpSemanticTransformation;
+  readonly branchRoles?: KpEquationBranchRoleIndex | undefined;
 }): KpEquationLinearRearrangementBinding | undefined {
   const { animation, transformation } = input;
   const kind = kpEquationLinearRearrangementKindForTransformType(
@@ -136,7 +146,7 @@ export function createKpEquationLinearRearrangementBinding(input: {
   }
   const selectedBranchStrategy =
     resolveKpEquationPresentationBranchStrategy(animation);
-  const balancedTargetSelectorIds = transformation.correspondenceMap?.records
+  const introducedTargetSelectorIds = transformation.correspondenceMap?.records
     .filter(({ relation }) => relation === "introduction")
     .flatMap(({ targetSelectorIds }) => targetSelectorIds) ?? [];
   const branchScheduling = kind === "balanced-introduction"
@@ -146,17 +156,23 @@ export function createKpEquationLinearRearrangementBinding(input: {
         // Balanced operations commonly author one introduction record per
         // glyph or term. Scheduling the first record alone silently desynced
         // otherwise equivalent lhs/rhs branches.
-        targetSelectorIds: balancedTargetSelectorIds,
+        targetSelectorIds: introducedTargetSelectorIds,
         selectedStrategy: selectedBranchStrategy
       })
     : undefined;
-  const bothSidesCausalBinding = branchScheduling === undefined
-    ? undefined
-    : compileKpRegisteredBothSidesCausalBinding({
-        transformation,
-        branchScheduling,
-        direction: "forward"
-      });
+  const applicationEntityIds = branchScheduling?.branchOperation.branches
+    .flatMap(({ entityIds }) => entityIds) ?? introducedTargetSelectorIds;
+  const bothSidesCausalBinding =
+    findKpBothSidesOperationRegistration(transformation.transformType) ===
+        undefined
+      ? undefined
+      : compileKpRegisteredBothSidesCausalBinding({
+          transformation,
+          applicationEntityIds,
+          branchRoles: input.branchRoles ??
+            createKpEquationBranchRoleIndex(animation.bundle),
+          direction: "forward"
+        });
   const successorSynthesisBindings =
     createKpEquationSuccessorSynthesisBindings(input);
   if (isSuccessorKind(kind) && successorSynthesisBindings.length !== 1) {

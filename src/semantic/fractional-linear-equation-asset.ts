@@ -11,6 +11,9 @@ import {
 import type {
   SelectorCorrespondenceRecord
 } from "./correspondence.ts";
+import {
+  findKpBothSidesOperationRegistration
+} from "./both-sides-operation-registration.ts";
 
 export interface FractionalLinearEquationKpAsset {
   readonly sourceTraceId: string;
@@ -274,7 +277,11 @@ function transform(
     preserves: ["value"],
     correspondenceMap: { id: `${id}.correspondence`, records },
     assumptions: [assumption],
-    lawRefs: [{ id: `law.${transformType}`, level: "strict" }]
+    lawRefs: [{
+      id: findKpBothSidesOperationRegistration(transformType)?.lawId ??
+        `law.${transformType}`,
+      level: "strict"
+    }]
   });
 }
 
