@@ -282,11 +282,46 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-18T04:17:18.087Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "foreground occlusion typed contracts",
+      "checkedAt": "2026-08-18T04:49:39.332Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "canonical log-exponent semantic preservation",
+      "checkedAt": "2026-08-18T04:49:40.509Z",
+      "notes": "53 focused log-exponent tests pass."
+    },
+    {
+      "command": "node --test tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "pair-scoped time-bounded occlusion law",
+      "checkedAt": "2026-08-18T04:49:41.470Z",
+      "notes": "18 motion-planner tests pass; third-party and out-of-window collisions remain violations."
+    },
+    {
+      "command": "playwright test tests/log-exponent-catalogue.browser.spec.ts",
+      "status": "passed",
+      "scope": "Chromium canonical exponent transfer exemplar",
+      "checkedAt": "2026-08-18T04:49:42.441Z",
+      "notes": "Measured x/log overlap, paint ordering, local aperture, smooth travel, and endpoint continuity pass."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "human visual checkpoint sheet",
+      "checkedAt": "2026-08-18T04:49:43.409Z",
+      "notes": "Contact sheet includes the exact foreground crossing at playhead 0.515."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Firefox/WebKit blank-stage lifecycle is repaired and the exponent now uses the named minimal-clearance role-transfer sampler: one shallow monotone bow, collision-safe across Chromium Firefox and WebKit, awaiting human playback review before s20."
+    "summary": "Implemented the approved x-through-ln visual spike as a typed reciprocal, pair-scoped, time-bounded foreground occlusion. The exponent clears its base locally, descends through the log operator with explicit paint priority, and awaits human choreography review before promotion or s20."
   },
   "expectedLearning": [
     "Whether Exponential-equation-visual-repair-checkpoint can be completed inside Governed animation generation foundation continuation."

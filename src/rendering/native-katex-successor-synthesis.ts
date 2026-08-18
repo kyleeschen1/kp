@@ -25,6 +25,9 @@ import type {
   KpEquationVisiblePaintCertifiedContact
 } from "./equation-visible-paint-overlap-types.ts";
 import type {
+  KpEquationIntentionalForegroundOcclusion
+} from "./equation-motion-path-planner.ts";
+import type {
   KpNativeKatexSuccessorEvaluationContact,
   KpNativeKatexSuccessorContactAuthority,
   KpNativeKatexSuccessorMaterialOwnerFrame
@@ -660,6 +663,8 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly opacity: number;
     readonly materialScale?: number | undefined;
     readonly intentionalContactGroupId?: string | undefined;
+    readonly intentionalForegroundOcclusion?:
+      KpEquationIntentionalForegroundOcclusion | undefined;
     readonly verifiedOperationCohortId?: string | undefined;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -682,6 +687,8 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         semanticEntityId: atom.semanticEntityId,
         semanticContacts: contacts.get(frame.trackId),
         verifiedOperationCohortId: frame.verifiedOperationCohortId,
+        intentionalForegroundOcclusion:
+          frame.intentionalForegroundOcclusion,
         rect: frame.rect,
         // Structural SVG paths scale through their preserved viewBox and have
         // no HTML text/rule inset to normalize. Glyphs and CSS rules retain
@@ -711,6 +718,8 @@ function sceneMaterialContacts(input: {
     readonly componentId: string;
     readonly visualAtomId: string;
     readonly intentionalContactGroupId?: string | undefined;
+    readonly intentionalForegroundOcclusion?:
+      KpEquationIntentionalForegroundOcclusion | undefined;
     readonly verifiedOperationCohortId?: string | undefined;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -736,6 +745,36 @@ function sceneMaterialContacts(input: {
         sceneMaterialOwnerId(left.trackId),
         sceneMaterialOwnerId(right.trackId)
       ] as const;
+      const leftOcclusion = left.intentionalForegroundOcclusion;
+      const rightOcclusion = right.intentionalForegroundOcclusion;
+      if (
+        leftOcclusion !== undefined &&
+        rightOcclusion !== undefined &&
+        leftOcclusion.id === rightOcclusion.id &&
+        leftOcclusion.counterpartTrackId === right.trackId &&
+        rightOcclusion.counterpartTrackId === left.trackId &&
+        leftOcclusion.role !== rightOcclusion.role
+      ) {
+        addContact(
+          ids,
+          left.trackId,
+          right.trackId,
+          Object.freeze({
+            id: `foreground-occlusion-contact.${leftOcclusion.id}`,
+            ownerIds,
+            reason: "semantic-foreground-occlusion",
+            phase: "transit",
+            maximumOverlapWidthPx: Math.min(
+              leftAtom.rect.width,
+              rightAtom.rect.width
+            ),
+            maximumOverlapHeightPx: Math.min(
+              leftAtom.rect.height,
+              rightAtom.rect.height
+            )
+          })
+        );
+      }
       if (
         left.intentionalContactGroupId !== undefined &&
         left.intentionalContactGroupId ===

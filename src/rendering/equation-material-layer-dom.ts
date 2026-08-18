@@ -135,6 +135,16 @@ export function syncKpEquationMaterialLayer(input: {
     );
     setOptionalDataset(
       owner,
+      "kpEquationMaterialForegroundOcclusionId",
+      frame.intentionalForegroundOcclusion?.id
+    );
+    setOptionalDataset(
+      owner,
+      "kpEquationMaterialForegroundOcclusionRole",
+      frame.intentionalForegroundOcclusion?.role
+    );
+    setOptionalDataset(
+      owner,
       "kpEquationMaterialFragmentRole",
       frame.fragmentRole
     );

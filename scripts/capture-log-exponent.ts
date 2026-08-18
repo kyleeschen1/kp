@@ -16,6 +16,7 @@ const samples = [
   { id: "wrap-mid", label: "Balanced log wrappers · entering", progress: 0.16 },
   { id: "logged", label: "Logged endpoint", progress: 0.28 },
   { id: "extract-mid", label: "Exponent transfer · midpoint", progress: 0.4942 },
+  { id: "extract-cross", label: "Exponent transfer · foreground crossing", progress: 0.515 },
   { id: "product", label: "Product endpoint", progress: 0.7 },
   { id: "divide-mid", label: "Fraction structure · entering", progress: 0.872 },
   { id: "solved", label: "Solved endpoint", progress: 1 }

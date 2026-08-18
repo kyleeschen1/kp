@@ -2,6 +2,7 @@
 .kp-animation-catalogue-bootstrap {
   --kp-catalogue-border: rgb(36 32 27 / 12%);
   --kp-catalogue-muted: #746f66;
+  --kp-catalogue-stage-background: #fffefa;
   --kp-catalogue-grid-columns:
     minmax(14rem, 18vw) minmax(0, 1fr) minmax(16rem, 21vw);
   width: 100%;

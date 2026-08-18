@@ -116,8 +116,8 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
       })
     };
   });
-  // The exponent clears adjacent paint with a shallow role transfer; the
-  // persistent logarithm must neither inherit the lift nor force a flight lane.
+  // The exponent clears its base locally before descending through the log
+  // operator; the persistent logarithm must not inherit that local lift.
   expect(extractionGeometry.baselineDelta).toBeLessThan(8);
   expect(extractionGeometry.exponentCenter)
     .toBeLessThan(extractionGeometry.baselineCenter);
@@ -163,6 +163,44 @@ test("canonical log-exponent sequence mounts through its lazy native surface", a
     Math.max(...exponentSteps) /
       exponentSteps.reduce((sum, distance) => sum + distance, 0)
   ).toBeLessThan(0.23);
+  const foregroundCrossings = [];
+  for (const progress of [0.53, 0.55, 0.57, 0.59, 0.61, 0.63]) {
+    await player.locator('[data-action="seek-editor-animation"]')
+      .fill(String(progress));
+    foregroundCrossings.push(await stage.evaluate((root) => {
+      const owner = (entityId: string) =>
+        Array.from(root.querySelectorAll<HTMLElement>(
+          `[data-kp-equation-material-semantic-entity-id="${entityId}"]`
+        )).find((candidate) => Number(getComputedStyle(candidate).opacity) > 0.01);
+      const exponent = owner("logged.exponent");
+      const log = owner("logged.left.log.operator");
+      if (exponent === undefined || log === undefined) return undefined;
+      const exponentRect = exponent.getBoundingClientRect();
+      const logRect = log.getBoundingClientRect();
+      return {
+        overlapWidth: Math.min(exponentRect.right, logRect.right) -
+          Math.max(exponentRect.left, logRect.left),
+        overlapHeight: Math.min(exponentRect.bottom, logRect.bottom) -
+          Math.max(exponentRect.top, logRect.top),
+        exponentRole:
+          exponent.dataset["kpEquationMaterialForegroundOcclusionRole"],
+        logRole: log.dataset["kpEquationMaterialForegroundOcclusionRole"],
+        exponentZIndex: getComputedStyle(exponent).zIndex,
+        occlusionSurface:
+          getComputedStyle(exponent, "::before").backgroundColor
+      };
+    }));
+  }
+  const crossing = foregroundCrossings.find((sample) =>
+    sample !== undefined &&
+    sample.overlapWidth > 0.75 &&
+    sample.overlapHeight > 0.75
+  );
+  expect(crossing).toBeDefined();
+  expect(crossing?.exponentRole).toBe("occluder");
+  expect(crossing?.logRole).toBe("occluded");
+  expect(crossing?.exponentZIndex).toBe("2");
+  expect(crossing?.occlusionSurface).not.toBe("rgba(0, 0, 0, 0)");
   await player.locator('[data-action="seek-editor-animation"]').fill("0.872");
   await expect.poll(async () => Number(
     await stage.getAttribute("data-kp-log-exponent-operation-progress")

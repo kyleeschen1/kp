@@ -52,8 +52,19 @@ export interface KpEquationMotionPathPlan {
 
 export type KpEquationMotionPathSampling =
   | "planned-curve"
+  | "foreground-diagonal-role-transfer"
   | "minimal-clearance-role-transfer"
   | "canonical-clearance-lane";
+
+export interface KpEquationIntentionalForegroundOcclusion {
+  readonly id: string;
+  readonly role: "occluder" | "occluded";
+  readonly counterpartTrackId: string;
+  readonly progressWindow: {
+    readonly start: number;
+    readonly end: number;
+  };
+}
 
 /**
  * Presentation policy for a continuant changing syntactic role without
@@ -66,6 +77,14 @@ export const kpMinimalClearanceRoleTransferProfile = Object.freeze({
   transitEnd: 0.82,
   settlementStart: 0.72,
   middleBowRatio: 0.12
+});
+
+export const kpForegroundDiagonalRoleTransferProfile = Object.freeze({
+  departureEnd: 0.16,
+  transitStart: 0.06,
+  transitEnd: 0.94,
+  descentStart: 0.36,
+  descentEnd: 0.72
 });
 
 export interface KpEquationMotionStageOccupancy {
@@ -196,6 +215,13 @@ export interface KpEquationCollisionTrack {
    * ignores contact only when both tracks carry the same compiler-owned ID.
    */
   readonly intentionalContactGroupId?: string | undefined;
+  /**
+   * Allows one named mover to cross one named peer in front of it. The exact
+   * reciprocal pair and bounded interval keep a local occlusion from becoming
+   * a general collision waiver.
+   */
+  readonly intentionalForegroundOcclusion?:
+    KpEquationIntentionalForegroundOcclusion | undefined;
   /**
    * Binds renderer metadata to a validator-minted plan. It never waives
    * collision checks by itself: a pair must also share an explicit contact
@@ -362,6 +388,9 @@ export function sampleKpEquationMotionPathWithSampling(
   if (sampling === "minimal-clearance-role-transfer") {
     return sampleMinimalClearanceRoleTransfer(path, progress);
   }
+  if (sampling === "foreground-diagonal-role-transfer") {
+    return sampleForegroundDiagonalRoleTransfer(path, progress);
+  }
   const p = clamp01(progress);
   if (p === 0) return path.start;
   if (p === 1) return path.end;
@@ -394,6 +423,43 @@ export function sampleKpEquationMotionPathWithSampling(
     x: baseline.x,
     // Linear transit keeps visible travel pending through the final descent.
     y: baseline.y + lift * liftProgress
+  };
+}
+
+function sampleForegroundDiagonalRoleTransfer(
+  path: KpEquationMotionPathCandidate,
+  progress: number
+): KpEquationLayoutPoint {
+  const p = clamp01(progress);
+  if (p === 0) return path.start;
+  if (p === 1) return path.end;
+  // A short local departure clears the exponent's base; the early descent is
+  // what makes the rest of the role transfer read as one foreground diagonal.
+  const profile = kpForegroundDiagonalRoleTransferProfile;
+  const transit = smoothWindowProgress(
+    p,
+    profile.transitStart,
+    profile.transitEnd
+  );
+  const direct = {
+    x: interpolate(path.start.x, path.end.x, transit),
+    y: interpolate(path.start.y, path.end.y, transit)
+  };
+  const midpointY = (path.start.y + path.end.y) / 2;
+  const above = path.control.y <= midpointY;
+  const clearance = above
+    ? Math.max(0, Math.min(path.start.y, path.end.y) - path.control.y)
+    : Math.max(0, path.control.y - Math.max(path.start.y, path.end.y));
+  const departure = smoothWindowProgress(p, 0, profile.departureEnd);
+  const descent = 1 - smoothWindowProgress(
+    p,
+    profile.descentStart,
+    profile.descentEnd
+  );
+  return {
+    x: direct.x,
+    y: direct.y +
+      (above ? -1 : 1) * clearance * Math.min(departure, descent)
   };
 }
 
@@ -1429,6 +1495,13 @@ function inspectProtectedTransit<
         ) {
           continue;
         }
+        if (permitsIntentionalForegroundOcclusion(
+          leftTrack,
+          rightTrack,
+          progress
+        )) {
+          continue;
+        }
         const overlap = rectIntersection(
           left.expectedPaintRect ?? left.rect,
           right.expectedPaintRect ?? right.rect
@@ -2075,6 +2148,59 @@ function assertUniqueCollisionTrackIds(
   ) {
     throw new Error("Protected transit tracks must have unique IDs.");
   }
+  const tracksById = new Map(tracks.map((track) => [track.id, track]));
+  for (const track of tracks) {
+    const occlusion = track.intentionalForegroundOcclusion;
+    if (occlusion === undefined) continue;
+    const counterpart = tracksById.get(occlusion.counterpartTrackId);
+    if (
+      occlusion.id.trim() === "" ||
+      counterpart === undefined ||
+      counterpart.id === track.id ||
+      occlusion.progressWindow.start < 0 ||
+      occlusion.progressWindow.end > 1 ||
+      occlusion.progressWindow.start >= occlusion.progressWindow.end
+    ) {
+      throw new Error(
+        `Track ${track.id} has an invalid foreground occlusion contract.`
+      );
+    }
+    const reciprocal = counterpart.intentionalForegroundOcclusion;
+    if (
+      reciprocal?.id !== occlusion.id ||
+      reciprocal.counterpartTrackId !== track.id ||
+      reciprocal.role === occlusion.role ||
+      reciprocal.progressWindow.start !== occlusion.progressWindow.start ||
+      reciprocal.progressWindow.end !== occlusion.progressWindow.end
+    ) {
+      throw new Error(
+        `Track ${track.id} foreground occlusion must be reciprocal and pair-scoped.`
+      );
+    }
+  }
+}
+
+function permitsIntentionalForegroundOcclusion(
+  left: KpEquationCollisionTrack,
+  right: KpEquationCollisionTrack,
+  progress: number
+): boolean {
+  const leftOcclusion = left.intentionalForegroundOcclusion;
+  const rightOcclusion = right.intentionalForegroundOcclusion;
+  if (
+    leftOcclusion === undefined ||
+    rightOcclusion === undefined ||
+    leftOcclusion.id !== rightOcclusion.id ||
+    leftOcclusion.counterpartTrackId !== right.id ||
+    rightOcclusion.counterpartTrackId !== left.id ||
+    leftOcclusion.role === rightOcclusion.role
+  ) {
+    return false;
+  }
+  return progress >= leftOcclusion.progressWindow.start &&
+    progress <= leftOcclusion.progressWindow.end &&
+    progress >= rightOcclusion.progressWindow.start &&
+    progress <= rightOcclusion.progressWindow.end;
 }
 
 function resolveCertifiedClearanceLane(

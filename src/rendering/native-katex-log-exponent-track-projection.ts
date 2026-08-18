@@ -24,7 +24,8 @@ import type {
 
 export const kpNativeKatexLogExponentExtractionProfile = Object.freeze({
   residualReflowWindow: Object.freeze({ start: 0.42, end: 0.72 }),
-  exponentClearanceInLocalInkHeights: 1.75
+  foregroundOcclusionWindow: Object.freeze({ start: 0.5, end: 0.94 }),
+  exponentDepartureClearanceInLocalInkHeights: 1.75
 });
 
 interface KpLogExponentTrackProjectionDispatchEntry {
@@ -67,6 +68,48 @@ function createExtractionProjection(
         atom.id,
         atom.semanticEntityId
       ]));
+      const semanticPair = (track: KpNativeKatexPaintMeasuredSceneTrack) => [
+        sourceEntities.get(track.sourceAtomId ?? ""),
+        targetEntities.get(track.targetAtomId ?? "")
+      ] as const;
+      const exponentTrack = tracks.find((track) => {
+        const [sourceEntityId, targetEntityId] = semanticPair(track);
+        return sourceEntityId === "logged.exponent" &&
+          targetEntityId === "extracted.coefficient";
+      });
+      const logOperatorTrack = tracks.find((track) => {
+        const [sourceEntityId, targetEntityId] = semanticPair(track);
+        return sourceEntityId === "logged.left.log.operator" &&
+          targetEntityId === "extracted.left.log.operator";
+      });
+      if (exponentTrack === undefined || logOperatorTrack === undefined) {
+        throw new Error(
+          "Log-exponent extraction requires measured exponent and log-operator paint."
+        );
+      }
+      const occlusionId =
+        `foreground-occlusion.${operation.transformation.id}.exponent-through-log`;
+      const withForegroundOcclusion = (
+        track: KpNativeKatexPaintMeasuredSceneTrack
+      ): KpNativeKatexPaintMeasuredSceneTrack => {
+        if (track.id !== exponentTrack.id && track.id !== logOperatorTrack.id) {
+          return track;
+        }
+        return Object.freeze({
+          ...track,
+          intentionalForegroundOcclusion: Object.freeze({
+            id: occlusionId,
+            role: track.id === exponentTrack.id ? "occluder" : "occluded",
+            counterpartTrackId:
+              track.id === exponentTrack.id
+                ? logOperatorTrack.id
+                : exponentTrack.id,
+            progressWindow:
+              kpNativeKatexLogExponentExtractionProfile
+                .foregroundOcclusionWindow
+          })
+        });
+      };
       let exponentTrackCount = 0;
       const projected = tracks.map((track) => {
         if (track.lifecycle !== "persist") return track;
@@ -79,7 +122,7 @@ function createExtractionProjection(
           const continuousTrack = useSingleOperationProgress(track);
           const start = track.startPaintRect ?? track.startRect;
           const end = track.endPaintRect ?? track.endRect;
-          return Object.freeze({
+          return withForegroundOcclusion(Object.freeze({
             ...continuousTrack,
             motionPath: planKpEquationMotionPathBetweenPoints({
               id: `operation-path.${operation.transformation.id}.${track.id}.direct-context`,
@@ -94,33 +137,33 @@ function createExtractionProjection(
             sampleProgress: sampleWindow(
               kpNativeKatexLogExponentExtractionProfile.residualReflowWindow
             )
-          });
+          }));
         }
         exponentTrackCount += 1;
         const start = track.startPaintRect ?? track.startRect;
         const end = track.endPaintRect ?? track.endRect;
         const localInkHeight = Math.max(start.height, end.height, 1);
         const motionPath = planKpEquationMotionPathBetweenPoints({
-          id: `operation-path.${operation.transformation.id}.${track.id}.above-residual`,
+          id: `operation-path.${operation.transformation.id}.${track.id}.through-log-operator`,
           relationRecordId: "correspondence.extract-exponent.unknown-x",
           start: center(start),
           end: center(end),
           variants: ["arc-above"],
           clearance:
             localInkHeight *
-            kpNativeKatexLogExponentExtractionProfile
-              .exponentClearanceInLocalInkHeights
+              kpNativeKatexLogExponentExtractionProfile
+              .exponentDepartureClearanceInLocalInkHeights
         }).selected;
-        return Object.freeze({
+        return withForegroundOcclusion(Object.freeze({
           ...useSingleOperationProgress(track),
           motionPath,
-          // The exponent changes role rather than leaving the expression, so
-          // use the shortest shallow transfer that clears measured neighbors.
-          motionPathSampling: "minimal-clearance-role-transfer" as const,
+          // The exponent deliberately crosses the named log operator instead
+          // of inventing a high clearance lane above the equation.
+          motionPathSampling: "foreground-diagonal-role-transfer" as const,
           // The role-transfer sampler owns its easing; stacking the generic
           // scene smoothstep would concentrate travel into a visible lurch.
           sampleProgress: identityProgress
-        });
+        }));
       });
       if (exponentTrackCount === 0) {
         throw new Error(

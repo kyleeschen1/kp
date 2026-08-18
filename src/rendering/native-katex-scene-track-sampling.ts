@@ -75,6 +75,16 @@ export function sampleKpNativeKatexSceneTrackFrames(
             intentionalContactGroupId:
               sceneTrack.intentionalContactGroupId
           }),
+      ...(sceneTrack.intentionalForegroundOcclusion === undefined ||
+        bounded <
+          sceneTrack.intentionalForegroundOcclusion.progressWindow.start ||
+        bounded >
+          sceneTrack.intentionalForegroundOcclusion.progressWindow.end
+        ? {}
+        : {
+            intentionalForegroundOcclusion:
+              sceneTrack.intentionalForegroundOcclusion
+          }),
       ...(sceneTrack.verifiedOperationCohortId === undefined
         ? {}
         : {

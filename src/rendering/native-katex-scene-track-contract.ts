@@ -1,3 +1,7 @@
+import type {
+  KpEquationIntentionalForegroundOcclusion
+} from "./equation-motion-path-planner.ts";
+
 export type KpNativeKatexSceneTrackOpacityContract =
   | {
       readonly lifecycle: "persist" | "split" | "merge";
@@ -53,6 +57,8 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly opacity: number;
   readonly materialScale?: number | undefined;
   readonly intentionalContactGroupId?: string | undefined;
+  readonly intentionalForegroundOcclusion?:
+    KpEquationIntentionalForegroundOcclusion | undefined;
   readonly verifiedOperationCohortId?: string | undefined;
 }
 

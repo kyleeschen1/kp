@@ -1,6 +1,9 @@
 import type {
   KpEquationVisiblePaintCertifiedContact
 } from "./equation-visible-paint-overlap-types.ts";
+import type {
+  KpEquationIntentionalForegroundOcclusion
+} from "./equation-motion-path-planner.ts";
 
 /**
  * This frame contract is intentionally independent of the DOM implementation.
@@ -20,6 +23,8 @@ export interface KpEquationMaterialLayerOwnerFrame {
   readonly semanticContacts?:
     readonly KpEquationVisiblePaintCertifiedContact[] | undefined;
   readonly verifiedOperationCohortId?: string | undefined;
+  readonly intentionalForegroundOcclusion?:
+    KpEquationIntentionalForegroundOcclusion | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;

@@ -1,4 +1,6 @@
 .kp-log-exponent-stage {
+  --kp-equation-foreground-occlusion-surface:
+    var(--kp-catalogue-stage-background, #fffefa);
   position: relative;
   display: grid;
   width: 100%;

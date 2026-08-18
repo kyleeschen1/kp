@@ -9,6 +9,7 @@ export type KpEquationVisiblePaintContactReason =
   | "semantic-fission"
   | "semantic-evaluation"
   | "semantic-cancellation"
+  | "semantic-foreground-occlusion"
   | "semantic-reconciliation"
   | "typographic-adjacency";
 

@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   compileKpCollisionSafeTransitTracks,
+  inspectKpEquationProtectedTransitTracks,
   kpEquationMotionPathVariantIds,
   planKpEquationMotionPath,
   planKpEquationMotionPathBetweenPoints,
@@ -132,6 +133,105 @@ test("minimal-clearance role transfer uses one shallow deterministic bow", () =>
   assert.ok(bow >= 20 && bow <= 24);
   assert.deepEqual(sample(-1), path.start);
   assert.deepEqual(sample(2), path.end);
+});
+
+test("foreground diagonal role transfer preserves one low continuous route", () => {
+  const path = planKpEquationMotionPathBetweenPoints({
+    id: "path.foreground-role-transfer",
+    start: { x: 100, y: 20 },
+    end: { x: 0, y: 40 },
+    variants: ["arc-above"],
+    clearance: 3
+  }).selected;
+  const sample = (progress: number) =>
+    sampleKpEquationMotionPathWithSampling(
+      path,
+      progress,
+      "foreground-diagonal-role-transfer"
+    );
+  const points = Array.from({ length: 21 }, (_value, index) =>
+    sample(index / 20)
+  );
+
+  assert.deepEqual(sample(0), path.start);
+  assert.deepEqual(sample(1), path.end);
+  assert.ok(points.every((point, index) =>
+    index === 0 || point.x <= points[index - 1]!.x
+  ));
+  const midpoint = sample(0.5);
+  assert.ok(midpoint.y > 26 && midpoint.y < 30);
+});
+
+test("foreground occlusion waives only its reciprocal pair and time window", () => {
+  const window = Object.freeze({ start: 0.4, end: 0.6 });
+  const occluder = {
+    id: "track.x",
+    componentId: "component.x",
+    lifecycle: "persist",
+    startRect: { left: 0, top: 0, width: 10, height: 10 },
+    endRect: { left: 20, top: 0, width: 10, height: 10 },
+    intentionalForegroundOcclusion: {
+      id: "occlusion.x-through-ln",
+      role: "occluder" as const,
+      counterpartTrackId: "track.ln",
+      progressWindow: window
+    }
+  } satisfies KpEquationCollisionTrack;
+  const occluded = {
+    id: "track.ln",
+    componentId: "component.ln",
+    lifecycle: "persist",
+    startRect: { left: 10, top: 0, width: 10, height: 10 },
+    endRect: { left: 10, top: 0, width: 10, height: 10 },
+    intentionalForegroundOcclusion: {
+      id: "occlusion.x-through-ln",
+      role: "occluded" as const,
+      counterpartTrackId: "track.x",
+      progressWindow: window
+    }
+  } satisfies KpEquationCollisionTrack;
+  const frame = (track: KpEquationCollisionTrack, overlap: boolean) => ({
+    trackId: track.id,
+    componentId: track.componentId,
+    rect: overlap
+      ? { left: 10, top: 0, width: 10, height: 10 }
+      : track.startRect,
+    opacity: 1
+  });
+  const sampleFrames = (
+    tracks: readonly KpEquationCollisionTrack[],
+    progress: number
+  ) => tracks.map((track) => frame(track, progress === 0.5));
+
+  assert.equal(inspectKpEquationProtectedTransitTracks({
+    tracks: [occluder, occluded],
+    sampleFrames,
+    sampleCount: 4
+  }).intersections.length, 0);
+
+  const third = {
+    id: "track.third",
+    componentId: "component.third",
+    lifecycle: "persist",
+    startRect: { left: 40, top: 0, width: 10, height: 10 },
+    endRect: { left: 40, top: 0, width: 10, height: 10 }
+  } satisfies KpEquationCollisionTrack;
+  const withThird = inspectKpEquationProtectedTransitTracks({
+    tracks: [occluder, occluded, third],
+    sampleFrames,
+    sampleCount: 4
+  });
+  assert.ok(withThird.intersections.some(({ leftTrackId, rightTrackId }) =>
+    leftTrackId === third.id || rightTrackId === third.id
+  ));
+
+  const outsideWindow = inspectKpEquationProtectedTransitTracks({
+    tracks: [occluder, occluded],
+    sampleFrames: (tracks, progress) =>
+      tracks.map((track) => frame(track, progress === 0.25)),
+    sampleCount: 4
+  });
+  assert.ok(outsideWindow.intersections.length > 0);
 });
 
 test("curved tracks follow measured paint while reconstructing wrapper offsets", () => {
