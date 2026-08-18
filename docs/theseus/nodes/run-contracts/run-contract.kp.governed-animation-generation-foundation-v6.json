@@ -69,13 +69,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s21",
       "title": "Equation-series-corpus",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s21 in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Five deterministic corpus outcomes pass with typed repairs, no partial runtime, and no live-model evidence claim.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s22",
       "title": "Natural-language-planner-port",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s22 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s23",

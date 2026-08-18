@@ -1,14 +1,14 @@
 {
-  "id": "next-action.kp.governed-animation-generation.s21",
+  "id": "next-action.kp.governed-animation-generation.s22",
   "kind": "next-action",
-  "title": "Equation-series-corpus",
-  "status": "resolved",
-  "summary": "Deterministic equation-series corpus now certifies direct success and four explicit repair outcomes without live-model claims.",
+  "title": "Natural-language-planner-port",
+  "status": "ready",
+  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s22 in Governed generation overnight nonvisual-first continuation.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v6.json",
-      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s21 was materialized into a child action."
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s22 was materialized into a child action."
     },
     {
       "kind": "file",
@@ -45,42 +45,8 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
-  "verificationRecords": [
-    {
-      "command": "npm run test:equation-transform-series-corpus",
-      "status": "passed",
-      "scope": "focused",
-      "checkedAt": "2026-08-18T05:22:28.065Z",
-      "notes": "Nine corpus and repair-taxonomy cases passed."
-    },
-    {
-      "command": "npm run check:equation-transform-series-corpus",
-      "status": "passed",
-      "scope": "focused",
-      "checkedAt": "2026-08-18T05:22:29.638Z",
-      "notes": "Five fixed cases produced exact deterministic outcomes with no silent fallback."
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:22:30.835Z",
-      "notes": "Application Node test Svelte and domain typechecks passed."
-    },
-    {
-      "command": "npm run check:architecture",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:22:31.908Z",
-      "notes": "Dependency and compiler authority gates passed."
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Added a fixed five-case equation-series corpus with exact compiled and repair signatures, deterministic evaluation, explicit non-model epistemic status, and typed unsupported-motif repair."
-  },
   "expectedLearning": [
-    "Whether Equation-series-corpus can be completed inside Governed generation overnight nonvisual-first continuation."
+    "Whether Natural-language-planner-port can be completed inside Governed generation overnight nonvisual-first continuation."
   ],
   "allowedWork": [
     "Remaining governed equation transform-series CLI corpus planner and typed repair work.",
@@ -97,15 +63,15 @@
   ],
   "criteria": [
     {
-      "id": "corpus-covers-required-outcomes",
+      "id": "planner-port-is-model-neutral",
       "weight": "high"
     },
     {
-      "id": "corpus-is-deterministic-and-fail-closed",
+      "id": "proposals-cannot-own-math-or-presentation",
       "weight": "high"
     },
     {
-      "id": "fixtures-are-not-live-model-evidence",
+      "id": "diagnostics-are-recordable-and-deterministic",
       "weight": "high"
     }
   ]

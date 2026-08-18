@@ -81,6 +81,13 @@ export type KpEquationSeriesRepair =
       action: Readonly<{ kind: "provide-domain-frontend" }>;
     }>)
   | (KpEquationSeriesRepairBase & Readonly<{
+      kind: "unsupported-motif";
+      code: "equation-series.repair.unsupported-motif";
+      operationId: string;
+      motifId?: string | undefined;
+      action: Readonly<{ kind: "provide-registered-motif" }>;
+    }>)
+  | (KpEquationSeriesRepairBase & Readonly<{
       kind: "runtime-invariant";
       code: "equation-series.repair.runtime-invariant";
       action: Readonly<{ kind: "repair-runtime-contract" }>;
@@ -93,6 +100,8 @@ export interface KpEquationSeriesExternalDiagnostic {
   readonly repair?: string | undefined;
   readonly entityId?: string | undefined;
   readonly roleId?: string | undefined;
+  readonly operationId?: string | undefined;
+  readonly motifId?: string | undefined;
 }
 
 export function repairsForKpEquationSeriesRequest(
@@ -250,6 +259,16 @@ export function repairsForKpEquationSeriesExternalDiagnostics(
       code: "equation-series.repair.invalid-role" as const,
       ...(diagnostic.roleId === undefined ? {} : { roleId: diagnostic.roleId }),
       action: { kind: "repair-role-binding" as const }
+    };
+    if (diagnostic.code === "equation-series.motif.unavailable") return {
+      ...base,
+      kind: "unsupported-motif" as const,
+      code: "equation-series.repair.unsupported-motif" as const,
+      operationId: diagnostic.operationId ?? "operation.unresolved",
+      ...(diagnostic.motifId === undefined
+        ? {}
+        : { motifId: diagnostic.motifId }),
+      action: { kind: "provide-registered-motif" as const }
     };
     if (diagnostic.code === "equation-llm.operation.unknown") return {
       ...base,
