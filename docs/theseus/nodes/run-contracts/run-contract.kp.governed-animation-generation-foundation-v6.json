@@ -75,13 +75,14 @@
     {
       "id": "next-action.kp.governed-animation-generation.s22",
       "title": "Natural-language-planner-port",
-      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s22 in Governed generation overnight nonvisual-first continuation.",
-      "status": "ready"
+      "summary": "Model-neutral planner prompt and versioned record preserve KP ownership of truth presentation and motion.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s23",
       "title": "Domain-frontend-gaps",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s23 in Governed generation overnight nonvisual-first continuation.",
+      "status": "ready"
     },
     {
       "id": "next-action.kp.governed-animation-generation.s19b",

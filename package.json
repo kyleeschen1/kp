@@ -155,6 +155,7 @@
     "test:compile-equation-transform-series-cli": "node --disable-warning=ExperimentalWarning --test tests/compile-equation-transform-series-cli.test.ts",
     "test:equation-transform-series-corpus": "node --disable-warning=ExperimentalWarning --test tests/equation-transform-series-corpus.test.ts tests/equation-series-repair-taxonomy.test.ts",
     "check:equation-transform-series-corpus": "node --disable-warning=ExperimentalWarning scripts/check-equation-transform-series-corpus.ts",
+    "test:equation-series-planner-port": "node --disable-warning=ExperimentalWarning --test tests/equation-series-natural-language-planner-port.test.ts",
     "test:equation-asset-conformance": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-conformance.test.ts",
     "generate:verified-generated-linear-solve": "node --disable-warning=ExperimentalWarning scripts/generate-verified-generated-linear-solve-asset.ts",
     "check:animation-library-bundle-boundary": "npm run build:internal-studio && node --disable-warning=ExperimentalWarning scripts/check-animation-library-bundle-boundary.ts",

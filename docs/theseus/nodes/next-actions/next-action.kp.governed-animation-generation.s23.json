@@ -1,14 +1,14 @@
 {
-  "id": "next-action.kp.governed-animation-generation.s22",
+  "id": "next-action.kp.governed-animation-generation.s23",
   "kind": "next-action",
-  "title": "Natural-language-planner-port",
-  "status": "resolved",
-  "summary": "Model-neutral planner boundary now converts untrusted model output into validated semantic-operation proposals or deterministic repair diagnostics.",
+  "title": "Domain-frontend-gaps",
+  "status": "ready",
+  "summary": "Materialized from stored run-contract slice next-action.kp.governed-animation-generation.s23 in Governed generation overnight nonvisual-first continuation.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.governed-animation-generation-foundation-v6.json",
-      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s22 was materialized into a child action."
+      "summary": "Run contract whose stored slice next-action.kp.governed-animation-generation.s23 was materialized into a child action."
     },
     {
       "kind": "file",
@@ -45,49 +45,8 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
-  "verificationRecords": [
-    {
-      "command": "npm run test:equation-series-planner-port",
-      "status": "passed",
-      "scope": "focused",
-      "checkedAt": "2026-08-18T05:30:54.983Z",
-      "notes": "Six model-neutral prompt, proposal, fail-closed authority, port-error, and import-closure cases passed."
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:30:56.146Z",
-      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
-    },
-    {
-      "command": "npm run check:architecture",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:30:57.136Z",
-      "notes": "Dependency direction, framework-neutral boundaries, semantic boundaries, and compiler authority passed."
-    },
-    {
-      "command": "npm run test:equation-series-repair-taxonomy",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:30:58.114Z",
-      "notes": "All eighteen request, resolver, runtime, and repair taxonomy cases passed."
-    },
-    {
-      "command": "theseus workspace validate",
-      "status": "passed",
-      "scope": "standard",
-      "checkedAt": "2026-08-18T05:32:19.184Z",
-      "notes": "Workspace validates 1000 nodes and 22577 events after planner closure and next-slice materialization."
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Added a model-neutral natural-language planning port, versioned proposal record, deterministic fail-closed diagnostics, registered-operation validation, exact adjacency coverage, and explicit prohibition on model-owned truth or presentation."
-  },
   "expectedLearning": [
-    "Whether Natural-language-planner-port can be completed inside Governed generation overnight nonvisual-first continuation."
+    "Whether Domain-frontend-gaps can be completed inside Governed generation overnight nonvisual-first continuation."
   ],
   "allowedWork": [
     "Remaining governed equation transform-series CLI corpus planner and typed repair work.",
@@ -104,15 +63,15 @@
   ],
   "criteria": [
     {
-      "id": "planner-port-is-model-neutral",
+      "id": "domain-frontends-remain-separate",
       "weight": "high"
     },
     {
-      "id": "proposals-cannot-own-math-or-presentation",
+      "id": "missing-capabilities-produce-typed-gaps",
       "weight": "high"
     },
     {
-      "id": "diagnostics-are-recordable-and-deterministic",
+      "id": "coverage-evidence-is-exact-and-named",
       "weight": "high"
     }
   ]
