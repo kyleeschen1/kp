@@ -1,0 +1,61 @@
+{
+  "id": "next-action.kp.review-native-katex-ownership-repair",
+  "kind": "next-action",
+  "title": "Relocate Review and repair Native KaTeX endpoint ownership",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-review-placement-and-native-katex-ownership-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.paint-ownership-evaluation-order.v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run visual:common-denominator-pressure",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether immutable endpoint handles and hierarchical ownership remove the composite-to-leaf seam without caller timing masks."
+  ],
+  "allowedWork": [
+    "Relocate Catalogue Review and repair shared Native KaTeX endpoint ownership for the common-denominator pressure exemplar."
+  ],
+  "disallowedWork": [
+    "Evaluation-family implementation, fraction promotion, public layout work, and unrelated dirty files."
+  ],
+  "criteria": [
+    {
+      "id": "review-save-reachable",
+      "weight": "high"
+    },
+    {
+      "id": "endpoint-measured-once",
+      "weight": "high"
+    },
+    {
+      "id": "leaf-seam-continuous",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-seek-rewind",
+      "weight": "high"
+    },
+    {
+      "id": "approved-semantics-preserved",
+      "weight": "high"
+    }
+  ]
+}

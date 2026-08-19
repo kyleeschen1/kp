@@ -1,0 +1,155 @@
+{
+  "id": "run-contract.kp.review-native-katex-ownership-v1",
+  "kind": "run-contract",
+  "title": "Review placement and Native KaTeX ownership repair",
+  "status": "superseded",
+  "summary": "Contract creation omitted required long-run hygiene fields because the specialist help surface did not list them; replaced before implementation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.review-native-katex-ownership-repair.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-review-placement-and-native-katex-ownership-long-loop-proposal.md",
+      "summary": "User-approved 22-slice long-loop proposal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md",
+      "summary": "Accepted ownership and evaluation-presentation operating model."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run test:common-denominator-pressure-presentation",
+    "npm run visual:common-denominator-pressure",
+    "npm run visual:animation-catalogue",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Review placement, shell, responsive lifecycle, and focused exact-state evidence.",
+    "Native KaTeX rendered-scene endpoint handles, hierarchical ownership views, equivalent-pose seam certificates, and per-leaf diagnostics.",
+    "Common-denominator pressure integration and focused deterministic verification through its human checkpoint."
+  ],
+  "disallowedWork": [
+    "Evaluation-family exemplar implementation or default promotion.",
+    "Fraction-equivalence promotion, second-caller promotion, like-denominator arithmetic, or unrelated catalogue work.",
+    "Changes to semantic endpoints, approved fraction-equivalence choreography, public layouts, or user-owned dirty files."
+  ],
+  "goal": "Relocate Catalogue Review, establish immutable shared Native KaTeX endpoint ownership, repair the common-denominator composite-to-leaf seam, and stop for human review.",
+  "target": "next-action.kp.review-native-katex-ownership-repair",
+  "slices": [
+    {
+      "id": "r01",
+      "title": "Capture-current-review-and-seam-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "r02",
+      "title": "Add-inspector-drawer-placement-vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "r03",
+      "title": "Implement-inspector-side-review-drawer",
+      "status": "planned"
+    },
+    {
+      "id": "r04",
+      "title": "Preserve-review-lifecycle-across-placement",
+      "status": "planned"
+    },
+    {
+      "id": "r05",
+      "title": "Bound-narrow-review-sheet",
+      "status": "planned"
+    },
+    {
+      "id": "r06",
+      "title": "Close-review-placement-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "r07",
+      "title": "Add-immutable-endpoint-handle-type",
+      "status": "planned"
+    },
+    {
+      "id": "r08",
+      "title": "Implement-single-measurement-handle-factory",
+      "status": "planned"
+    },
+    {
+      "id": "r09",
+      "title": "Add-atomic-font-viewport-invalidation",
+      "status": "planned"
+    },
+    {
+      "id": "r10",
+      "title": "Add-hierarchical-compound-leaf-views",
+      "status": "planned"
+    },
+    {
+      "id": "r11",
+      "title": "Compile-views-without-rebind-or-remeasure",
+      "status": "planned"
+    },
+    {
+      "id": "r12",
+      "title": "Adapt-canonical-scene-planning-to-handles",
+      "status": "planned"
+    },
+    {
+      "id": "r13",
+      "title": "Adapt-fraction-equivalence-transit-to-handles",
+      "status": "planned"
+    },
+    {
+      "id": "r14",
+      "title": "Define-adjacent-phase-seam-certificate",
+      "status": "planned"
+    },
+    {
+      "id": "r15",
+      "title": "Validate-equivalent-pose-per-leaf",
+      "status": "planned"
+    },
+    {
+      "id": "r16",
+      "title": "Extend-paint-continuity-diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "r17",
+      "title": "Replace-pressure-endpoint-coalescing",
+      "status": "planned"
+    },
+    {
+      "id": "r18",
+      "title": "Connect-introduction-and-equivalence-seam",
+      "status": "planned"
+    },
+    {
+      "id": "r19",
+      "title": "Preserve-evaluation-and-context-in-surface",
+      "status": "planned"
+    },
+    {
+      "id": "r20",
+      "title": "Verify-playback-seek-rewind-interruption",
+      "status": "planned"
+    },
+    {
+      "id": "r21",
+      "title": "Verify-theme-viewport-font-accessibility",
+      "status": "planned"
+    },
+    {
+      "id": "r22",
+      "title": "Produce-human-checkpoint-evidence",
+      "status": "planned"
+    }
+  ]
+}

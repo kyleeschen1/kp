@@ -1,7 +1,8 @@
 # Review Placement and Native KaTeX Ownership Repair
 
 Date: 2026-08-19
-Status: proposed; awaiting explicit long-loop approval
+Status: approved on 2026-08-19; executing through the human checkpoint
+Run contract: `run-contract.kp.review-native-katex-ownership-v2`
 Source decision:
 `../decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md`
 
