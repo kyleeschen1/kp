@@ -1477,6 +1477,32 @@
     ]
   },
   {
+    "animationId": "animation.equation.fraction-equivalence.v1",
+    "title": "Multiply a fraction by two over two",
+    "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "fraction",
+      "katex"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.v1",
+    "representations": [
+      {
+        "id": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "label": "Multiply a fraction by two over two",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.v1",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.programming.python-free-shipping-refactor",
     "title": "One free-shipping rule",
     "summary": "If only one copy of the $50 threshold changes, the checkout price and customer message can disagree.",
@@ -1618,8 +1644,8 @@
     ]
   },
   {
-    "animationId": "animation.equation.fraction-equivalence.v1",
-    "title": "Scale a fraction equivalently",
+    "animationId": "animation.equation.fraction-equivalence.compact.v1",
+    "title": "Scale numerator and denominator together",
     "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
     "tags": [
       "algebra",
@@ -1632,13 +1658,13 @@
     "availability": "playable",
     "canonicalFormat": "legacy",
     "featured": false,
-    "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.v1",
+    "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
     "representations": [
       {
-        "id": "editor-animation.animation.equation.fraction-equivalence.v1",
-        "label": "Scale a fraction equivalently",
+        "id": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
+        "label": "Scale numerator and denominator together",
         "kind": "editor",
-        "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.v1",
+        "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.compact.v1",
         "role": "canonical-host"
       }
     ]

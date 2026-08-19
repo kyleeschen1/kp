@@ -6,7 +6,9 @@ import {
   createKpCanonicalBalancedSolveEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import {
-  kpCanonicalFractionEquivalencePresentationPlan
+  kpCanonicalCompactFractionEquivalencePresentationPlan,
+  kpCanonicalFractionEquivalencePresentationPlan,
+  type KpFractionEquivalencePresentationMode
 } from "./fraction-equivalence-presentation-plan.ts";
 import {
   createKpAssetBundle,
@@ -25,10 +27,19 @@ import {
 
 export const kpFractionEquivalenceExemplarId =
   "animation.equation.fraction-equivalence.v1" as const;
+export const kpCompactFractionEquivalenceExemplarId =
+  "animation.equation.fraction-equivalence.compact.v1" as const;
 
-export function createKpFractionEquivalenceExemplarAsset(): KpAnimationAsset {
+export function createKpFractionEquivalenceExemplarAsset(
+  mode: KpFractionEquivalencePresentationMode = "explain-unit-factor"
+): KpAnimationAsset {
   const semantic = kpCanonicalFractionEquivalence;
-  const presentation = kpCanonicalFractionEquivalencePresentationPlan;
+  const presentation = mode === "explain-unit-factor"
+    ? kpCanonicalFractionEquivalencePresentationPlan
+    : kpCanonicalCompactFractionEquivalencePresentationPlan;
+  const animationId = mode === "explain-unit-factor"
+    ? kpFractionEquivalenceExemplarId
+    : kpCompactFractionEquivalenceExemplarId;
   const sourceEquation = createKpSemanticAssetObject({
     id: semantic.source.stateId,
     objectType: "equation",
@@ -133,13 +144,15 @@ export function createKpFractionEquivalenceExemplarAsset(): KpAnimationAsset {
       summary: transformation.title
     })
   );
-  const timelineId = `timeline.${kpFractionEquivalenceExemplarId}`;
+  const timelineId = `timeline.${animationId}`;
   const renderTargetId = "render.fraction-equivalence.equation";
   return createKpAnimationAsset({
-    id: kpFractionEquivalenceExemplarId,
-    title: "Scale a fraction equivalently",
+    id: animationId,
+    title: mode === "explain-unit-factor"
+      ? "Multiply a fraction by two over two"
+      : "Scale numerator and denominator together",
     bundle: createKpAssetBundle({
-      id: "asset.fraction-equivalence.symbolic-times-two",
+      id: `asset.fraction-equivalence.symbolic-times-two.${mode}`,
       title: "Scale a symbolic fraction by two over two",
       objects
     }),
@@ -166,13 +179,15 @@ export function createKpFractionEquivalenceExemplarAsset(): KpAnimationAsset {
       transformationIds: [transformation.id],
       timelineId,
       summary:
-        "Copy one nonzero factor into both branches while fraction material persists."
+        mode === "explain-unit-factor"
+          ? "Join a visible unit factor with the original fraction."
+          : "Introduce matched factors into numerator and denominator together."
     }],
     checks: [{
       id: "check.fraction-equivalence.reference-closure",
       lawId: "animation.reference-closure",
       level: "strict",
-      targetId: kpFractionEquivalenceExemplarId
+      targetId: animationId
     }, {
       id: "check.fraction-equivalence.seek-rewind",
       lawId: "animation.seek-rewind",
@@ -180,12 +195,12 @@ export function createKpFractionEquivalenceExemplarAsset(): KpAnimationAsset {
       targetId: root.id
     }],
     exportTargets: [{
-      id: "export.fraction-equivalence.frames",
+      id: `export.fraction-equivalence.frames.${mode}`,
       kind: "frame-sequence",
-      artifactId: "artifact.fraction-equivalence.frames"
+      artifactId: `artifact.fraction-equivalence.frames.${mode}`
     }],
     dashboard: {
-      rowId: "exemplar-equation-fraction-equivalence-v1",
+      rowId: `exemplar-equation-fraction-equivalence-${mode}-v1`,
       tags: ["algebra", "animation", "equation", "fraction", "katex"],
       sourceRefIds: [semantic.lawAuthority.id]
     },
@@ -194,11 +209,20 @@ export function createKpFractionEquivalenceExemplarAsset(): KpAnimationAsset {
     metadata: {
       sourceFamilyId: "family.algebra.fraction-equivalence",
       presentationPlanId: presentation.id,
+      presentationMode: mode,
       settledEndpointAuthority: "native-katex",
       summary:
         "A reversible checkpoint exemplar for equivalent-fraction identity."
     }
   });
+}
+
+export function createKpFractionEquivalenceExemplarAssets():
+readonly KpAnimationAsset[] {
+  return Object.freeze([
+    createKpFractionEquivalenceExemplarAsset("explain-unit-factor"),
+    createKpFractionEquivalenceExemplarAsset("compact-paired-operation")
+  ]);
 }
 
 function selector(id: string) {

@@ -457,6 +457,152 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.fraction-equivalence.compact.v1",
+      "familyId": "fraction",
+      "disposition": "unsupported",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "Equation surface animation.equation.fraction-equivalence.compact.v1 has no supported semantic motion contract.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-1bdfe906",
+          "fnv1a32-1ad8c6f3",
+          "fnv1a32-661a5626",
+          "fnv1a32-58c42283"
+        ],
+        "route": "/?artifact=animation.equation.fraction-equivalence.compact.v1",
+        "adapterId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.fraction-equivalence.compact.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "generic-semantic-equation",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/fraction-equivalence-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:operation-presentation-plans",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.fraction-equivalence.compact.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.fraction-equivalence.compact.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.fraction-equivalence.compact.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/fraction-equivalence-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.fraction-equivalence.compact.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.fraction-equivalence.compact.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.fraction",
+            "kind": "family-verification",
+            "command": "npm run test:operation-presentation-plans"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.fraction-equivalence.v1",
+      "familyId": "fraction",
+      "disposition": "unsupported",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "Equation surface animation.equation.fraction-equivalence.v1 has no supported semantic motion contract.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-1bdfe906",
+          "fnv1a32-1ad8c6f3",
+          "fnv1a32-67d345b6",
+          "fnv1a32-58c42283"
+        ],
+        "route": "/?artifact=animation.equation.fraction-equivalence.v1",
+        "adapterId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.fraction-equivalence.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "generic-semantic-equation",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/fraction-equivalence-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:operation-presentation-plans",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.fraction-equivalence.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.fraction-equivalence.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.fraction-equivalence.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/fraction-equivalence-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.fraction-equivalence.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.fraction-equivalence.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.fraction",
+            "kind": "family-verification",
+            "command": "npm run test:operation-presentation-plans"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.equation.logarithm-change-of-base.v1",
       "familyId": "logarithm",
       "disposition": "adapter-backed",
@@ -464,9 +610,9 @@
       "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
-          "fnv1a32-37820a96",
-          "fnv1a32-13e16db7",
-          "fnv1a32-3a9b93f7"
+          "fnv1a32-15d1d2a6",
+          "fnv1a32-8ba9d8b3",
+          "fnv1a32-f9cd2367"
         ],
         "route": "/?artifact=animation.equation.logarithm-change-of-base.v1",
         "adapterId": "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",

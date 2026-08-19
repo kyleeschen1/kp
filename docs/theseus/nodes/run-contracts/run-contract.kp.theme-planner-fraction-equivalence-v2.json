@@ -2,7 +2,8 @@
   "id": "run-contract.kp.theme-planner-fraction-equivalence-v2",
   "kind": "run-contract",
   "title": "Theme, planner binding, and fraction equivalence",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Theme, planner binding, and fraction-equivalence run completed at the approved human checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -406,11 +407,48 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T03:38:43.337Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed after Catalogue host integration."
+    },
+    {
+      "command": "npm run visual:fraction-equivalence",
+      "status": "passed",
+      "scope": "manual",
+      "checkedAt": "2026-08-19T03:41:07.156Z",
+      "notes": "Captured dark/light forward and return contact-sheet evidence at exact semantic playheads. Endpoint ownership and nonblank settlement held; human review is required for the visually ambiguous clustering of the two factor descendants near 25 to 50 percent."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T04:46:05.686Z"
+    },
+    {
+      "command": "npm run test:browser:fraction-equivalence",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-19T04:46:07.122Z"
+    },
+    {
+      "command": "npm run visual:fraction-equivalence",
+      "status": "passed",
+      "scope": "manual",
+      "checkedAt": "2026-08-19T04:46:08.156Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T04:46:09.339Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-19T04:46:10.377Z"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s21 establishes the bounded fraction-scaling law, one-to-two factor correspondence, persistent numerator/denominator/division identity, exact reverse limits, and nonzero evidence."
+    "state": "complete",
+    "summary": "All 26 approved slices are complete; the fraction-equivalence exemplar passed focused, browser, visual, type, architecture, and human review gates."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -591,7 +629,8 @@
     {
       "id": "s26",
       "title": "Fraction-equivalence-human-checkpoint",
-      "status": "planned"
+      "summary": "Human approved dark/light forward/reverse fraction-equivalence evidence after typed bar fusion, explicit numeric-product notation, and synchronized term/bar settlement.",
+      "status": "complete"
     }
   ]
 }

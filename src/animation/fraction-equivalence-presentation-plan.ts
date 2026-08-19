@@ -11,31 +11,103 @@ declare const kpVerifiedFractionEquivalencePresentationBrand: unique symbol;
 
 export const KP_FRACTION_EQUIVALENCE_PRESENTATION_RECIPE_AUTHORITY =
   "recipe.equation.fraction-equivalence.v1" as const;
-export const KP_FRACTION_EQUIVALENCE_FACTOR_COPY_MOTIF_AUTHORITY =
-  "motif.equation.fraction-equivalence-factor-copy.v1" as const;
+export const KP_FRACTION_EQUIVALENCE_UNIT_FACTOR_JOIN_MOTIF_AUTHORITY =
+  "motif.equation.fraction-equivalence-unit-factor-join.v1" as const;
+export const KP_FRACTION_EQUIVALENCE_PAIRED_APPLICATION_MOTIF_AUTHORITY =
+  "motif.equation.fraction-equivalence-paired-application.v1" as const;
+
+export type KpFractionEquivalencePresentationMode =
+  | "explain-unit-factor"
+  | "compact-paired-operation";
+
+export const kpFractionEquivalencePresentationOccurrenceIds = Object.freeze({
+  unitFactorNumerator:
+    "presentation.fraction-equivalence.unit-factor.numerator",
+  unitFactorDenominator:
+    "presentation.fraction-equivalence.unit-factor.denominator",
+  unitFactorDivision:
+    "presentation.fraction-equivalence.unit-factor.division",
+  pairedOperationNumerator:
+    "presentation.fraction-equivalence.paired-operation.numerator",
+  pairedOperationDenominator:
+    "presentation.fraction-equivalence.paired-operation.denominator"
+} as const);
+
+export type KpFractionEquivalenceFactorTransfer =
+  | Readonly<{
+      readonly kind: "paired-unit-factor-transfer";
+      readonly correspondenceId:
+        "correspondence.fraction-equivalence.factor";
+      readonly relation: "paired-occurrences";
+      readonly sourceSemanticEntityId: string;
+      readonly sourceOccurrenceEntityIds: readonly [string, string];
+      readonly targetEntityIds: readonly [string, string];
+      readonly targetRoles: readonly [
+        "numerator-factor",
+        "denominator-factor"
+      ];
+      readonly synchronization: "together";
+    }>
+  | Readonly<{
+      readonly kind: "paired-operation-transfer";
+      readonly correspondenceId:
+        "correspondence.fraction-equivalence.factor";
+      readonly relation: "paired-occurrences";
+      readonly sourceSemanticEntityId: string;
+      readonly sourceOccurrenceEntityIds: readonly [string, string];
+      readonly targetEntityIds: readonly [string, string];
+      readonly targetRoles: readonly [
+        "numerator-factor",
+        "denominator-factor"
+      ];
+      readonly synchronization: "together";
+    }>;
+
+export type KpFractionEquivalenceDivisionTransfer =
+  | Readonly<{
+      readonly kind: "fraction-bar-fusion";
+      readonly correspondenceId:
+        "correspondence.fraction-equivalence.division";
+      readonly relation: "many-to-one";
+      readonly sourceDivisionEntityIds: readonly [string, string];
+      readonly targetDivisionEntityIds: readonly [string];
+    }>
+  | Readonly<{
+      readonly kind: "fraction-bar-persistence";
+      readonly correspondenceId:
+        "correspondence.fraction-equivalence.division";
+      readonly relation: "one-to-one";
+      readonly sourceDivisionEntityIds: readonly [string];
+      readonly targetDivisionEntityIds: readonly [string];
+    }>;
+
+export type KpFractionEquivalenceProductNotation =
+  | "implicit-juxtaposition"
+  | "explicit-multiplication";
 
 export interface KpFractionEquivalencePresentationPlan {
   readonly schemaVersion: "kp.fraction-equivalence-presentation-plan.v1";
   readonly id: string;
   readonly semanticContractId: string;
+  readonly mode: KpFractionEquivalencePresentationMode;
   readonly recipeId:
     typeof KP_FRACTION_EQUIVALENCE_PRESENTATION_RECIPE_AUTHORITY;
   readonly motif: Readonly<{
     readonly id:
-      typeof KP_FRACTION_EQUIVALENCE_FACTOR_COPY_MOTIF_AUTHORITY;
+      | typeof KP_FRACTION_EQUIVALENCE_UNIT_FACTOR_JOIN_MOTIF_AUTHORITY
+      | typeof KP_FRACTION_EQUIVALENCE_PAIRED_APPLICATION_MOTIF_AUTHORITY;
     readonly primitiveAuthorityIds: readonly [
       "kp.core.persist",
-      "kp.core.fan-out",
+      "kp.core.introduce",
       typeof KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID
     ];
     readonly rendererPrimitive: "none";
   }>;
   readonly structureContinuity: Readonly<{
-    readonly kind: "stable-native-fraction-structure";
+    readonly kind: "native-fraction-structure";
     readonly sourceFractionEntityId: string;
     readonly targetFractionEntityId: string;
-    readonly sourceDivisionEntityId: string;
-    readonly targetDivisionEntityId: string;
+    readonly divisionTransfer: KpFractionEquivalenceDivisionTransfer;
     readonly settlement: "native-target";
   }>;
   readonly operandTransfers: readonly [
@@ -56,34 +128,32 @@ export interface KpFractionEquivalencePresentationPlan {
       readonly relation: "identity";
     }>
   ];
-  readonly factorTransfer: Readonly<{
-    readonly correspondenceId:
-      "correspondence.fraction-equivalence.factor";
-    readonly relation: "copy";
-    readonly sourceEntityId: string;
-    readonly targetEntityIds: readonly [string, string];
-    readonly targetRoles: readonly [
-      "numerator-factor",
-      "denominator-factor"
-    ];
-    readonly synchronization: "together";
-  }>;
+  readonly factorTransfer: KpFractionEquivalenceFactorTransfer;
   readonly targetProducts: Readonly<{
     readonly correspondenceId:
       "correspondence.fraction-equivalence.products";
     readonly numeratorProductEntityId: string;
     readonly denominatorProductEntityId: string;
     readonly cohesion: "join-after-material-arrival";
+    readonly notation: Readonly<{
+      readonly factorOrder: "factor-then-source";
+      readonly numerator: KpFractionEquivalenceProductNotation;
+      readonly denominator: KpFractionEquivalenceProductNotation;
+      readonly evaluation: "preserve-unevaluated-product";
+    }>;
   }>;
-  readonly phaseOrder: readonly [
-    "hold-source-structure",
-    "introduce-shared-factor",
-    "copy-factor-to-both-branches",
-    "join-target-products",
-    "settle-native-target"
-  ];
+  readonly joinCohort: Readonly<{
+    readonly id: "cohort.fraction-equivalence.material-join";
+    readonly memberRoles: readonly [
+      "factor-transfer",
+      "operand-transfer",
+      "division-transfer"
+    ];
+    readonly arrival: "simultaneous";
+  }>;
+  readonly phaseOrder: readonly string[];
   readonly sourceSelectorIds: readonly string[];
-  readonly operationMaterialSelectorIds: readonly [string];
+  readonly operationMaterialSelectorIds: readonly string[];
   readonly targetSelectorIds: readonly string[];
   readonly [kpVerifiedFractionEquivalencePresentationBrand]: true;
 }
@@ -91,26 +161,27 @@ export interface KpFractionEquivalencePresentationPlan {
 const verifiedPlans = new WeakSet<object>();
 
 /**
- * This plan fixes causal identity and phase order only. The exemplar owns the
- * provisional route, timing, geometry, and paint until human review.
+ * The semantic law is shared, while the mode chooses how much of its reason
+ * becomes learner-visible. Geometry, timing, and paint remain exemplar-owned.
  */
 export function compileKpFractionEquivalencePresentationPlan(
-  semantic: KpVerifiedFractionEquivalence
+  semantic: KpVerifiedFractionEquivalence,
+  options: Readonly<{
+    readonly mode?: KpFractionEquivalencePresentationMode | undefined;
+  }> = {}
 ): KpFractionEquivalencePresentationPlan {
   if (!isKpVerifiedFractionEquivalence(semantic)) {
     throw new Error(
       "Fraction-equivalence presentation requires verifier-minted semantic truth."
     );
   }
+  const mode = options.mode ?? "explain-unit-factor";
   const sourceSelectorIds = Object.freeze([
     semantic.source.fractionEntityId,
     semantic.source.divisionEntityId,
     semantic.source.numerator.entityId,
     semantic.source.denominator.entityId
   ]);
-  const operationMaterialSelectorIds = Object.freeze([
-    semantic.factor.entityId
-  ] as const);
   const targetSelectorIds = Object.freeze([
     semantic.target.fractionEntityId,
     semantic.target.divisionEntityId,
@@ -121,30 +192,104 @@ export function compileKpFractionEquivalencePresentationPlan(
     semantic.target.denominatorSourceOccurrenceEntityId,
     semantic.target.denominatorFactorOccurrenceEntityId
   ]);
+  const targetFactorIds = [
+    semantic.target.numeratorFactorOccurrenceEntityId,
+    semantic.target.denominatorFactorOccurrenceEntityId
+  ] as const;
+  const targetRoles = [
+    "numerator-factor",
+    "denominator-factor"
+  ] as const;
+  const explanatory = mode === "explain-unit-factor";
+  const operationMaterialSelectorIds = explanatory
+    ? Object.freeze([
+        semantic.factor.entityId,
+        kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator,
+        kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator,
+        kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision
+      ])
+    : Object.freeze([
+        semantic.factor.entityId,
+        kpFractionEquivalencePresentationOccurrenceIds
+          .pairedOperationNumerator,
+        kpFractionEquivalencePresentationOccurrenceIds
+          .pairedOperationDenominator
+      ]);
   requireUnique(sourceSelectorIds, "source selector");
   requireUnique(operationMaterialSelectorIds, "operation material selector");
   requireUnique(targetSelectorIds, "target selector");
 
+  const factorTransfer: KpFractionEquivalenceFactorTransfer = explanatory
+    ? {
+        kind: "paired-unit-factor-transfer",
+        correspondenceId: "correspondence.fraction-equivalence.factor",
+        relation: "paired-occurrences",
+        sourceSemanticEntityId: semantic.factor.entityId,
+        sourceOccurrenceEntityIds: [
+          kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator,
+          kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator
+        ],
+        targetEntityIds: targetFactorIds,
+        targetRoles,
+        synchronization: "together"
+      }
+    : {
+        kind: "paired-operation-transfer",
+        correspondenceId: "correspondence.fraction-equivalence.factor",
+        relation: "paired-occurrences",
+        sourceSemanticEntityId: semantic.factor.entityId,
+        sourceOccurrenceEntityIds: [
+          kpFractionEquivalencePresentationOccurrenceIds
+            .pairedOperationNumerator,
+          kpFractionEquivalencePresentationOccurrenceIds
+            .pairedOperationDenominator
+        ],
+        targetEntityIds: targetFactorIds,
+        targetRoles,
+        synchronization: "together"
+      };
+  const divisionTransfer: KpFractionEquivalenceDivisionTransfer = explanatory
+    ? {
+        kind: "fraction-bar-fusion",
+        correspondenceId:
+          "correspondence.fraction-equivalence.division",
+        relation: "many-to-one",
+        sourceDivisionEntityIds: [
+          kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision,
+          semantic.source.divisionEntityId
+        ],
+        targetDivisionEntityIds: [semantic.target.divisionEntityId]
+      }
+    : {
+        kind: "fraction-bar-persistence",
+        correspondenceId:
+          "correspondence.fraction-equivalence.division",
+        relation: "one-to-one",
+        sourceDivisionEntityIds: [semantic.source.divisionEntityId],
+        targetDivisionEntityIds: [semantic.target.divisionEntityId]
+      };
   const plan = deepFreeze({
     schemaVersion: "kp.fraction-equivalence-presentation-plan.v1" as const,
-    id: `presentation.${semantic.id}`,
+    id: `presentation.${semantic.id}.${mode}`,
     semanticContractId: semantic.id,
+    mode,
     recipeId: KP_FRACTION_EQUIVALENCE_PRESENTATION_RECIPE_AUTHORITY,
     motif: {
-      id: KP_FRACTION_EQUIVALENCE_FACTOR_COPY_MOTIF_AUTHORITY,
+      id: explanatory
+        ? KP_FRACTION_EQUIVALENCE_UNIT_FACTOR_JOIN_MOTIF_AUTHORITY
+        : KP_FRACTION_EQUIVALENCE_PAIRED_APPLICATION_MOTIF_AUTHORITY,
       primitiveAuthorityIds: [
         "kp.core.persist",
-        "kp.core.fan-out",
+        "kp.core.introduce",
         KP_EQUATION_FRACTION_MATERIAL_RECIPE_ID
       ] as const,
       rendererPrimitive: "none" as const
     },
     structureContinuity: {
-      kind: "stable-native-fraction-structure" as const,
+      kind: "native-fraction-structure" as const,
       sourceFractionEntityId: semantic.source.fractionEntityId,
       targetFractionEntityId: semantic.target.fractionEntityId,
-      sourceDivisionEntityId: semantic.source.divisionEntityId,
-      targetDivisionEntityId: semantic.target.divisionEntityId,
+      divisionTransfer,
       settlement: "native-target" as const
     },
     operandTransfers: [{
@@ -162,36 +307,55 @@ export function compileKpFractionEquivalencePresentationPlan(
       targetEntityId: semantic.target.denominatorSourceOccurrenceEntityId,
       relation: "identity" as const
     }] as const,
-    factorTransfer: {
-      correspondenceId:
-        "correspondence.fraction-equivalence.factor" as const,
-      relation: "copy" as const,
-      sourceEntityId: semantic.factor.entityId,
-      targetEntityIds: [
-        semantic.target.numeratorFactorOccurrenceEntityId,
-        semantic.target.denominatorFactorOccurrenceEntityId
-      ] as const,
-      targetRoles: ["numerator-factor", "denominator-factor"] as const,
-      synchronization: "together" as const
-    },
+    factorTransfer,
     targetProducts: {
       correspondenceId:
         "correspondence.fraction-equivalence.products" as const,
       numeratorProductEntityId: semantic.target.numeratorProductEntityId,
       denominatorProductEntityId: semantic.target.denominatorProductEntityId,
-      cohesion: "join-after-material-arrival" as const
+      cohesion: "join-after-material-arrival" as const,
+      notation: {
+        factorOrder: "factor-then-source" as const,
+        numerator: productNotationFor(
+          semantic.factor,
+          semantic.source.numerator
+        ),
+        denominator: productNotationFor(
+          semantic.factor,
+          semantic.source.denominator
+        ),
+        // Arithmetic evaluation is a separate semantic operation; notation
+        // must not silently turn two numeric operands into a new value.
+        evaluation: "preserve-unevaluated-product" as const
+      }
     },
-    phaseOrder: [
-      "hold-source-structure",
-      "introduce-shared-factor",
-      "copy-factor-to-both-branches",
-      "join-target-products",
-      "settle-native-target"
-    ] as const,
+    joinCohort: {
+      id: "cohort.fraction-equivalence.material-join" as const,
+      memberRoles: [
+        "factor-transfer",
+        "operand-transfer",
+        "division-transfer"
+      ] as const,
+      arrival: "simultaneous" as const
+    },
+    phaseOrder: explanatory
+      ? [
+          "hold-source-structure",
+          "introduce-unit-factor",
+          "join-unit-factor-with-fraction",
+          "join-target-products",
+          "settle-native-target"
+        ] as const
+      : [
+          "hold-source-structure",
+          "introduce-paired-branch-factors",
+          "join-target-products",
+          "settle-native-target"
+        ] as const,
     sourceSelectorIds,
     operationMaterialSelectorIds,
     targetSelectorIds
-  }) as KpFractionEquivalencePresentationPlan;
+  }) as unknown as KpFractionEquivalencePresentationPlan;
   verifiedPlans.add(plan);
   return plan;
 }
@@ -204,7 +368,25 @@ export function isKpFractionEquivalencePresentationPlan(
 }
 
 export const kpCanonicalFractionEquivalencePresentationPlan =
-  compileKpFractionEquivalencePresentationPlan(kpCanonicalFractionEquivalence);
+  compileKpFractionEquivalencePresentationPlan(
+    kpCanonicalFractionEquivalence,
+    { mode: "explain-unit-factor" }
+  );
+
+export const kpCanonicalCompactFractionEquivalencePresentationPlan =
+  compileKpFractionEquivalencePresentationPlan(
+    kpCanonicalFractionEquivalence,
+    { mode: "compact-paired-operation" }
+  );
+
+function productNotationFor(
+  _factor: KpVerifiedFractionEquivalence["factor"],
+  source: KpVerifiedFractionEquivalence["source"]["numerator"]
+): KpFractionEquivalenceProductNotation {
+  return source.kind === "number"
+    ? "explicit-multiplication"
+    : "implicit-juxtaposition";
+}
 
 function requireUnique(values: readonly string[], label: string): void {
   if (values.some((value) => value.trim().length === 0) ||

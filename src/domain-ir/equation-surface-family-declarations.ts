@@ -195,7 +195,8 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
   }),
   declaration({
     id: "family.equation.fraction-equivalence",
-    matches: (id) => id === "animation.equation.fraction-equivalence.v1",
+    matches: (id) =>
+      id.startsWith("animation.equation.fraction-equivalence."),
     selectedCapabilityIds: ["fraction-equivalence"],
     primaryCapabilityId: "fraction-equivalence",
     rendererAdapterId:

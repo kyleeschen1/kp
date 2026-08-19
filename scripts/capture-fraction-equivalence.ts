@@ -11,7 +11,13 @@ import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 const outputRoot = path.resolve(
   "tmp/codex/fraction-equivalence-checkpoint"
 );
-const animationId = "animation.equation.fraction-equivalence.v1";
+const presentations = [{
+  mode: "explain-unit-factor",
+  animationId: "animation.equation.fraction-equivalence.v1"
+}, {
+  mode: "compact-paired-operation",
+  animationId: "animation.equation.fraction-equivalence.compact.v1"
+}] as const;
 const viewport = { width: 1_080, height: 720 } as const;
 const themes = ["dark", "light"] as const;
 const progressions = [{
@@ -24,6 +30,8 @@ const progressions = [{
 
 interface CaptureEvidence {
   readonly id: string;
+  readonly mode: typeof presentations[number]["mode"];
+  readonly animationId: string;
   readonly theme: "dark" | "light";
   readonly phase: "forward" | "return";
   readonly progress: number;
@@ -39,43 +47,47 @@ async function capture(): Promise<void> {
   const items: KpVisualContactSheetItem[] = [];
   const evidence: CaptureEvidence[] = [];
   try {
-    for (const theme of themes) {
-      const page = await harness.page({ viewport, colorScheme: theme });
-      const url = new URL("/", harness.baseUrl);
-      url.searchParams.set("artifact", animationId);
-      url.searchParams.set("theme", theme);
-      await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
-      const stage = page.locator(
-        `[data-kp-animation-catalogue-stage] ` +
-        `[data-kp-fraction-equivalence-stage]`
-      );
-      const seek = page.locator(
-        `[data-kp-editor-animation-id="${animationId}"] ` +
-        `[data-action="seek-editor-animation"]`
-      );
-      await waitForReady(stage);
-      for (const progression of progressions) {
-        for (const progress of progression.samples) {
-          const captured = await captureSample({
-            page,
-            stage,
-            seek,
-            theme,
-            phase: progression.phase,
-            progress
-          });
-          evidence.push(captured);
-          const image = await readFile(path.resolve(captured.file));
-          items.push({
-            id: captured.id,
-            label:
-              `${theme} · ${progression.phase} · ` +
-              `${Math.round(progress * 100)}%`,
-            progress,
-            viewport,
-            file: captured.file,
-            dataUrl: `data:image/png;base64,${image.toString("base64")}`
-          });
+    for (const presentation of presentations) {
+      for (const theme of themes) {
+        const page = await harness.page({ viewport, colorScheme: theme });
+        const url = new URL("/", harness.baseUrl);
+        url.searchParams.set("artifact", presentation.animationId);
+        url.searchParams.set("theme", theme);
+        await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
+        const stage = page.locator(
+          `[data-kp-animation-catalogue-stage] ` +
+          `[data-kp-fraction-equivalence-stage]`
+        );
+        const seek = page.locator(
+          `[data-kp-editor-animation-id="${presentation.animationId}"] ` +
+          `[data-action="seek-editor-animation"]`
+        );
+        await waitForReady(stage);
+        for (const progression of progressions) {
+          for (const progress of progression.samples) {
+            const captured = await captureSample({
+              page,
+              stage,
+              seek,
+              mode: presentation.mode,
+              animationId: presentation.animationId,
+              theme,
+              phase: progression.phase,
+              progress
+            });
+            evidence.push(captured);
+            const image = await readFile(path.resolve(captured.file));
+            items.push({
+              id: captured.id,
+              label:
+                `${presentation.mode} · ${theme} · ${progression.phase} · ` +
+                `${Math.round(progress * 100)}%`,
+              progress,
+              viewport,
+              file: captured.file,
+              dataUrl: `data:image/png;base64,${image.toString("base64")}`
+            });
+          }
         }
       }
     }
@@ -100,7 +112,7 @@ async function capture(): Promise<void> {
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.fraction-equivalence-visual-checkpoint.v1",
-      animationId,
+      presentations,
       themes,
       viewport,
       samples: evidence,
@@ -121,6 +133,8 @@ async function captureSample(input: {
   readonly page: Page;
   readonly stage: Locator;
   readonly seek: Locator;
+  readonly mode: typeof presentations[number]["mode"];
+  readonly animationId: string;
   readonly theme: "dark" | "light";
   readonly phase: "forward" | "return";
   readonly progress: number;
@@ -139,6 +153,7 @@ async function captureSample(input: {
     ));
   });
   const id = [
+    input.mode,
     input.theme,
     input.phase,
     String(input.progress).replace(".", "-")
@@ -160,6 +175,8 @@ async function captureSample(input: {
   }
   return {
     id,
+    mode: input.mode,
+    animationId: input.animationId,
     theme: input.theme,
     phase: input.phase,
     progress: input.progress,

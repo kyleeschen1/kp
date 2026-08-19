@@ -714,7 +714,38 @@
     "id": "editor-animation.animation.equation.fraction-equivalence.v1",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.equation.fraction-equivalence.v1",
-    "title": "Scale a fraction equivalently",
+    "title": "Multiply a fraction by two over two",
+    "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 4800,
+    "beatCount": 96,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "fraction",
+      "katex"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
+    "id": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.equation.fraction-equivalence.compact.v1",
+    "title": "Scale numerator and denominator together",
     "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
     "renderTargetKinds": [
       "equation"

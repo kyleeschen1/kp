@@ -1,15 +1,26 @@
 /// <reference types="vite/client" />
 
-import { kpFractionEquivalenceExemplarId } from
+import {
+  kpCompactFractionEquivalenceExemplarId,
+  kpFractionEquivalenceExemplarId
+} from
   "../animation/fraction-equivalence-exemplar.ts";
+import {
+  kpCanonicalCompactFractionEquivalencePresentationPlan,
+  kpCanonicalFractionEquivalencePresentationPlan,
+  type KpFractionEquivalencePresentationMode,
+  type KpFractionEquivalencePresentationPlan
+} from "../animation/fraction-equivalence-presentation-plan.ts";
 import { createKpEquationFontReadiness } from
   "../rendering/equation-font-readiness.ts";
 import { syncKpEquationMaterialLayer } from
   "../rendering/equation-material-layer-dom.ts";
 import {
   bindKpFractionEquivalenceNativeEndpointOwnership,
+  kpCanonicalCompactFractionEquivalenceNativeEndpoints,
   kpCanonicalFractionEquivalenceNativeEndpoints,
-  settleAndObserveKpFractionEquivalenceNativeEndpoint
+  settleAndObserveKpFractionEquivalenceNativeEndpoint,
+  type KpFractionEquivalenceNativeEndpoint
 } from "../rendering/fraction-equivalence-native-endpoints.ts";
 import {
   createKpFractionEquivalenceTransitSession,
@@ -26,6 +37,11 @@ interface KpFractionEquivalenceSurfaceSession {
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
+  readonly endpoints: readonly [
+    KpFractionEquivalenceNativeEndpoint,
+    KpFractionEquivalenceNativeEndpoint
+  ];
+  readonly presentation: KpFractionEquivalencePresentationPlan;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
@@ -41,7 +57,8 @@ export const kpEditorFractionEquivalenceSurfaceAdapter = Object.freeze({
   slotKind: "equation" as const,
   priority: 133,
   supports(state) {
-    return state.animationId === kpFractionEquivalenceExemplarId;
+    return state.animationId === kpFractionEquivalenceExemplarId ||
+      state.animationId === kpCompactFractionEquivalenceExemplarId;
   },
   render({ player, slot, state }) {
     let session = sessions.get(player);
@@ -67,9 +84,17 @@ function mountSurface(
   state: KpEditorAnimationPlayerState
 ): KpFractionEquivalenceSurfaceSession {
   const document = player.ownerDocument;
+  const mode = presentationMode(state.animationId);
+  const presentation = mode === "explain-unit-factor"
+    ? kpCanonicalFractionEquivalencePresentationPlan
+    : kpCanonicalCompactFractionEquivalencePresentationPlan;
+  const endpoints = mode === "explain-unit-factor"
+    ? kpCanonicalFractionEquivalenceNativeEndpoints
+    : kpCanonicalCompactFractionEquivalenceNativeEndpoints;
   const stage = document.createElement("section");
   stage.className = "kp-fraction-equivalence-stage";
   stage.dataset["kpFractionEquivalenceStage"] = "preparing";
+  stage.dataset["kpFractionEquivalencePresentationMode"] = mode;
   stage.setAttribute("aria-label", "Equivalent fraction scaling");
   const createRoot = (
     endpoint: typeof kpCanonicalFractionEquivalenceNativeEndpoints[number],
@@ -85,8 +110,8 @@ function mountSurface(
     return root;
   };
   const roots: [HTMLElement, HTMLElement] = [
-    createRoot(kpCanonicalFractionEquivalenceNativeEndpoints[0]!, true),
-    createRoot(kpCanonicalFractionEquivalenceNativeEndpoints[1]!, false)
+    createRoot(endpoints[0]!, true),
+    createRoot(endpoints[1]!, false)
   ];
   const materialLayer = document.createElement("div");
   materialLayer.className = "kp-fraction-equivalence-stage__material-layer";
@@ -96,13 +121,15 @@ function mountSurface(
   status.className = "kp-fraction-equivalence-stage__status";
   status.dataset["kpFractionEquivalenceStatus"] = "true";
   status.setAttribute("aria-live", "polite");
-  status.textContent = "A over b with shared factor two ready.";
+  status.textContent = initialStatus(mode);
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   return {
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
+    endpoints,
+    presentation,
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
     pendingState: state,
@@ -119,20 +146,21 @@ async function prepareSurface(
       endpointSide: "source",
       stage: session.stage,
       root: session.endpointRoots[0],
-      endpoint: kpCanonicalFractionEquivalenceNativeEndpoints[0]!,
+      endpoint: session.endpoints[0]!,
       fontReadiness: session.fontReadiness
     });
     const target = await settleAndObserveKpFractionEquivalenceNativeEndpoint({
       endpointSide: "target",
       stage: session.stage,
       root: session.endpointRoots[1],
-      endpoint: kpCanonicalFractionEquivalenceNativeEndpoints[1]!,
+      endpoint: session.endpoints[1]!,
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
     session.transit = createKpFractionEquivalenceTransitSession({
       source,
-      target
+      target,
+      presentation: session.presentation
     });
     const sourceEntities = new Map(source.atoms.map((atom) => [
       atom.id,
@@ -152,7 +180,9 @@ async function prepareSurface(
         targetEntityId: track.targetAtomId === undefined
           ? undefined
           : targetEntities.get(track.targetAtomId),
-        motionPathVariant: track.motionPath?.variant
+        motionPathVariant: track.motionPath?.variant,
+        timingGroupId: track.timingGroupId,
+        motionProgressRange: track.motionProgressRange
       })));
     session.stage.dataset["kpFractionEquivalenceStage"] = "ready";
     applyFrame(session, session.pendingState);
@@ -195,11 +225,31 @@ function applyFrame(
   );
   if (status !== null) {
     status.textContent = progress === 0
-      ? "A over b with shared factor two ready."
+      ? initialStatus(session.presentation.mode)
       : progress === 1
         ? "Two a over two b: an equivalent fraction."
-        : "Copying the same nonzero factor into numerator and denominator.";
+        : session.presentation.mode === "explain-unit-factor"
+          ? "Joining two over two, equal to one, with the original fraction."
+          : "Multiplying numerator and denominator by two together.";
   }
+}
+
+function presentationMode(
+  animationId: string
+): KpFractionEquivalencePresentationMode {
+  if (animationId === kpFractionEquivalenceExemplarId) {
+    return "explain-unit-factor";
+  }
+  if (animationId === kpCompactFractionEquivalenceExemplarId) {
+    return "compact-paired-operation";
+  }
+  throw new Error(`Unknown fraction-equivalence presentation: ${animationId}`);
+}
+
+function initialStatus(mode: KpFractionEquivalencePresentationMode): string {
+  return mode === "explain-unit-factor"
+    ? "Two over two, multiplied by a over b."
+    : "A over b, ready for matched numerator and denominator factors.";
 }
 
 function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {

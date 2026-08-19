@@ -30,7 +30,7 @@ import {
   createKpLogarithmChangeOfBaseExemplarAsset
 } from "./logarithm-change-of-base-exemplar.ts";
 import {
-  createKpFractionEquivalenceExemplarAsset
+  createKpFractionEquivalenceExemplarAssets
 } from "./fraction-equivalence-exemplar.ts";
 import {
   createKpLogProductAnimationAssets
@@ -115,7 +115,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpLogExponentAnimationAsset(),
     createKpLogQuotientAnimationAsset(),
     createKpLogarithmChangeOfBaseExemplarAsset(),
-    createKpFractionEquivalenceExemplarAsset(),
+    ...createKpFractionEquivalenceExemplarAssets(),
     ...createKpLogProductAnimationAssets()
   ];
 }

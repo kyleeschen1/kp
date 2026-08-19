@@ -9,6 +9,14 @@ import type {
   KpSelectorLatexAnnotation
 } from "./selector-annotated-latex.ts";
 import {
+  compileKpFractionEquivalencePresentationPlan,
+  kpCanonicalCompactFractionEquivalencePresentationPlan,
+  kpCanonicalFractionEquivalencePresentationPlan,
+  type KpFractionEquivalencePresentationMode,
+  type KpFractionEquivalencePresentationPlan,
+  type KpFractionEquivalenceProductNotation
+} from "../animation/fraction-equivalence-presentation-plan.ts";
+import {
   kpCanonicalFractionEquivalence,
   type KpFractionEquivalenceScalar,
   type KpVerifiedFractionEquivalence
@@ -19,13 +27,14 @@ export type KpFractionEquivalenceEndpointSide = "source" | "target";
 export interface KpFractionEquivalenceNativeEndpointNode {
   readonly occurrenceId: string;
   readonly semanticId: string;
-  readonly kind: "operand" | "factor" | "fraction-bar";
+  readonly kind: "operand" | "factor" | "operator" | "fraction-bar";
   readonly motionId: string;
   readonly presentationGroupId: string;
 }
 
 export interface KpFractionEquivalenceNativeEndpoint {
   readonly schemaVersion: "kp.fraction-equivalence-native-endpoint.v1";
+  readonly mode: KpFractionEquivalencePresentationMode;
   readonly side: KpFractionEquivalenceEndpointSide;
   readonly stateId: string;
   readonly accessibleText: string;
@@ -36,63 +45,102 @@ export interface KpFractionEquivalenceNativeEndpoint {
 }
 
 export function createKpFractionEquivalenceNativeEndpoints(
-  semantic: KpVerifiedFractionEquivalence
+  semantic: KpVerifiedFractionEquivalence,
+  presentation: KpFractionEquivalencePresentationPlan =
+    compileKpFractionEquivalencePresentationPlan(semantic)
 ): readonly [
   KpFractionEquivalenceNativeEndpoint,
   KpFractionEquivalenceNativeEndpoint
 ] {
+  if (presentation.semanticContractId !== semantic.id) {
+    throw new Error(
+      "Fraction-equivalence endpoints require matching semantic and presentation authority."
+    );
+  }
   const numerator = scalarLatex(semantic.source.numerator);
   const denominator = scalarLatex(semantic.source.denominator);
   const factor = scalarLatex(semantic.factor);
+  const numeratorProduct = createTargetProduct({
+    productEntityId: semantic.target.numeratorProductEntityId,
+    factorOccurrenceEntityId:
+      semantic.target.numeratorFactorOccurrenceEntityId,
+    factorSemanticId: semantic.factor.semanticId,
+    factor,
+    sourceOccurrenceEntityId:
+      semantic.target.numeratorSourceOccurrenceEntityId,
+    sourceSemanticId: semantic.source.numerator.semanticId,
+    source: numerator,
+    notation: presentation.targetProducts.notation.numerator
+  });
+  const denominatorProduct = createTargetProduct({
+    productEntityId: semantic.target.denominatorProductEntityId,
+    factorOccurrenceEntityId:
+      semantic.target.denominatorFactorOccurrenceEntityId,
+    factorSemanticId: semantic.factor.semanticId,
+    factor,
+    sourceOccurrenceEntityId:
+      semantic.target.denominatorSourceOccurrenceEntityId,
+    sourceSemanticId: semantic.source.denominator.semanticId,
+    source: denominator,
+    notation: presentation.targetProducts.notation.denominator
+  });
+  const source = presentation.mode === "explain-unit-factor"
+    ? createExplanatorySourceEndpoint({
+        semantic,
+        presentation,
+        numerator,
+        denominator,
+        factor
+      })
+    : createCompactSourceEndpoint({
+        semantic,
+        presentation,
+        numerator,
+        denominator,
+        factor
+      });
   return Object.freeze([
+    source,
     createEndpoint({
-      side: "source",
-      stateId: semantic.source.stateId,
-      accessibleText:
-        `${numerator} over ${denominator}, with shared nonzero factor ${factor}`,
-      rawLatex: `\\frac{${numerator}}{${denominator}}\\qquad ${factor}`,
-      parts: [
-        part(semantic.source.numerator.entityId,
-          semantic.source.numerator.semanticId, "operand", numerator),
-        part(semantic.source.denominator.entityId,
-          semantic.source.denominator.semanticId, "operand", denominator),
-        part(semantic.source.divisionEntityId,
-          "semantic.fraction-equivalence.division", "fraction-bar", ""),
-        part(semantic.factor.entityId,
-          semantic.factor.semanticId, "factor", factor)
-      ],
-      compose(parts) {
-        return `\\frac{${parts[0]}}{${parts[1]}}\\qquad ${parts[3]}`;
-      }
-    }),
-    createEndpoint({
+      mode: presentation.mode,
       side: "target",
       stateId: semantic.target.stateId,
       accessibleText:
-        `${factor} ${numerator} over ${factor} ${denominator}`,
+        `${numeratorProduct.accessibleText} over ` +
+        denominatorProduct.accessibleText,
       rawLatex:
-        `\\frac{${factor}${numerator}}{${factor}${denominator}}`,
+        `\\frac{${numeratorProduct.rawLatex}}` +
+        `{${denominatorProduct.rawLatex}}`,
       parts: [
-        part(semantic.target.numeratorFactorOccurrenceEntityId,
-          semantic.factor.semanticId, "factor", factor),
-        part(semantic.target.numeratorSourceOccurrenceEntityId,
-          semantic.source.numerator.semanticId, "operand", numerator),
-        part(semantic.target.denominatorFactorOccurrenceEntityId,
-          semantic.factor.semanticId, "factor", factor),
-        part(semantic.target.denominatorSourceOccurrenceEntityId,
-          semantic.source.denominator.semanticId, "operand", denominator),
+        ...numeratorProduct.parts,
+        ...denominatorProduct.parts,
         part(semantic.target.divisionEntityId,
           "semantic.fraction-equivalence.division", "fraction-bar", "")
       ],
       compose(parts) {
-        return `\\frac{${parts[0]}${parts[1]}}{${parts[2]}${parts[3]}}`;
+        const numeratorParts = parts.slice(0, numeratorProduct.parts.length);
+        const denominatorParts = parts.slice(
+          numeratorProduct.parts.length,
+          numeratorProduct.parts.length + denominatorProduct.parts.length
+        );
+        return `\\frac{${numeratorParts.join("")}}` +
+          `{${denominatorParts.join("")}}`;
       }
     })
   ] as const);
 }
 
 export const kpCanonicalFractionEquivalenceNativeEndpoints =
-  createKpFractionEquivalenceNativeEndpoints(kpCanonicalFractionEquivalence);
+  createKpFractionEquivalenceNativeEndpoints(
+    kpCanonicalFractionEquivalence,
+    kpCanonicalFractionEquivalencePresentationPlan
+  );
+
+export const kpCanonicalCompactFractionEquivalenceNativeEndpoints =
+  createKpFractionEquivalenceNativeEndpoints(
+    kpCanonicalFractionEquivalence,
+    kpCanonicalCompactFractionEquivalencePresentationPlan
+  );
 
 export function bindKpFractionEquivalenceNativeEndpointOwnership(input: {
   readonly root: HTMLElement;
@@ -102,23 +150,28 @@ export function bindKpFractionEquivalenceNativeEndpointOwnership(input: {
   input.root.dataset["kpPresentationGroupId"] =
     input.endpoint.rootPresentationGroupId;
   const fractionBars = [...input.root.querySelectorAll<HTMLElement>(".frac-line")];
+  const fractionBarNodes = input.endpoint.nodes.filter(({ kind }) =>
+    kind === "fraction-bar"
+  );
+  if (fractionBars.length !== fractionBarNodes.length) {
+    throw new Error(
+      `Fraction-equivalence endpoint ${input.endpoint.stateId} expected ${fractionBarNodes.length} native fraction bars, received ${fractionBars.length}.`
+    );
+  }
+  fractionBarNodes.forEach((node, index) => {
+    bindOwnedElement(fractionBars[index]!, node);
+  });
   for (const node of input.endpoint.nodes) {
-    const elements = node.kind === "fraction-bar"
-      ? fractionBars
-      : [...input.root.querySelectorAll<HTMLElement>(
-          `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
-        )];
+    if (node.kind === "fraction-bar") continue;
+    const elements = [...input.root.querySelectorAll<HTMLElement>(
+      `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
+    )];
     if (elements.length !== 1) {
       throw new Error(
         `Fraction-equivalence endpoint ${input.endpoint.stateId} expected one native owner for ${node.occurrenceId}, received ${elements.length}.`
       );
     }
-    const element = elements[0]!;
-    element.dataset["kpMotionId"] = node.motionId;
-    element.dataset["kpSemanticEntityId"] = node.occurrenceId;
-    element.dataset["kpSemanticIdentityId"] = node.semanticId;
-    element.dataset["kpSemanticSelectorId"] = node.occurrenceId;
-    element.dataset["kpPresentationGroupId"] = node.presentationGroupId;
+    bindOwnedElement(elements[0]!, node);
   }
 }
 
@@ -147,6 +200,12 @@ interface EndpointPart {
   readonly latex: string;
 }
 
+interface TargetProduct {
+  readonly rawLatex: string;
+  readonly accessibleText: string;
+  readonly parts: readonly EndpointPart[];
+}
+
 function part(
   occurrenceId: string,
   semanticId: string,
@@ -162,7 +221,50 @@ function scalarLatex(scalar: KpFractionEquivalenceScalar): string {
   throw new Error("Native fraction-equivalence endpoints require scalar atoms.");
 }
 
+function createTargetProduct(input: {
+  readonly productEntityId: string;
+  readonly factorOccurrenceEntityId: string;
+  readonly factorSemanticId: string;
+  readonly factor: string;
+  readonly sourceOccurrenceEntityId: string;
+  readonly sourceSemanticId: string;
+  readonly source: string;
+  readonly notation: KpFractionEquivalenceProductNotation;
+}): TargetProduct {
+  const factorPart = part(
+    input.factorOccurrenceEntityId,
+    input.factorSemanticId,
+    "factor",
+    input.factor
+  );
+  const sourcePart = part(
+    input.sourceOccurrenceEntityId,
+    input.sourceSemanticId,
+    "operand",
+    input.source
+  );
+  if (input.notation === "implicit-juxtaposition") {
+    return Object.freeze({
+      rawLatex: `${input.factor}${input.source}`,
+      accessibleText: `${input.factor} ${input.source}`,
+      parts: Object.freeze([factorPart, sourcePart])
+    });
+  }
+  const operatorPart = part(
+    `${input.productEntityId}.operator`,
+    "semantic.operation.multiplication",
+    "operator",
+    "\\cdot"
+  );
+  return Object.freeze({
+    rawLatex: `${input.factor}\\cdot${input.source}`,
+    accessibleText: `${input.factor} times ${input.source}`,
+    parts: Object.freeze([factorPart, operatorPart, sourcePart])
+  });
+}
+
 function createEndpoint(input: {
+  readonly mode: KpFractionEquivalencePresentationMode;
   readonly side: KpFractionEquivalenceEndpointSide;
   readonly stateId: string;
   readonly accessibleText: string;
@@ -207,6 +309,7 @@ function createEndpoint(input: {
   });
   return Object.freeze({
     schemaVersion: "kp.fraction-equivalence-native-endpoint.v1" as const,
+    mode: input.mode,
     side: input.side,
     stateId: input.stateId,
     accessibleText: input.accessibleText,
@@ -219,4 +322,110 @@ function createEndpoint(input: {
     }),
     nodes
   });
+}
+
+function createExplanatorySourceEndpoint(input: {
+  readonly semantic: KpVerifiedFractionEquivalence;
+  readonly presentation: KpFractionEquivalencePresentationPlan;
+  readonly numerator: string;
+  readonly denominator: string;
+  readonly factor: string;
+}): KpFractionEquivalenceNativeEndpoint {
+  if (input.presentation.factorTransfer.kind !==
+      "paired-unit-factor-transfer") {
+    throw new Error("Explanatory fraction staging requires a unit factor.");
+  }
+  const [unitNumeratorId, unitDenominatorId] =
+    input.presentation.factorTransfer.sourceOccurrenceEntityIds;
+  const unitDivisionId =
+    input.presentation.operationMaterialSelectorIds.find((id) =>
+      id.includes("unit-factor.division")
+    );
+  if (unitDivisionId === undefined) {
+    throw new Error("Explanatory fraction staging requires a unit fraction bar.");
+  }
+  return createEndpoint({
+    mode: input.presentation.mode,
+    side: "source",
+    stateId: input.semantic.source.stateId,
+    accessibleText:
+      `${input.factor} over ${input.factor}, multiplied by ` +
+      `${input.numerator} over ${input.denominator}`,
+    rawLatex:
+      `\\frac{${input.factor}}{${input.factor}}` +
+      `\\cdot\\frac{${input.numerator}}{${input.denominator}}`,
+    parts: [
+      part(unitNumeratorId, input.semantic.factor.semanticId,
+        "factor", input.factor),
+      part(unitDenominatorId, input.semantic.factor.semanticId,
+        "factor", input.factor),
+      part(unitDivisionId, "semantic.fraction-equivalence.unit-factor.division",
+        "fraction-bar", ""),
+      part(input.semantic.source.numerator.entityId,
+        input.semantic.source.numerator.semanticId, "operand", input.numerator),
+      part(input.semantic.source.denominator.entityId,
+        input.semantic.source.denominator.semanticId,
+        "operand", input.denominator),
+      part(input.semantic.source.divisionEntityId,
+        "semantic.fraction-equivalence.division", "fraction-bar", "")
+    ],
+    compose(parts) {
+      return `\\frac{${parts[0]}}{${parts[1]}}` +
+        `\\cdot\\frac{${parts[3]}}{${parts[4]}}`;
+    }
+  });
+}
+
+function createCompactSourceEndpoint(input: {
+  readonly semantic: KpVerifiedFractionEquivalence;
+  readonly presentation: KpFractionEquivalencePresentationPlan;
+  readonly numerator: string;
+  readonly denominator: string;
+  readonly factor: string;
+}): KpFractionEquivalenceNativeEndpoint {
+  if (input.presentation.factorTransfer.kind !==
+      "paired-operation-transfer") {
+    throw new Error("Compact fraction staging requires paired operations.");
+  }
+  const [numeratorFactorId, denominatorFactorId] =
+    input.presentation.factorTransfer.sourceOccurrenceEntityIds;
+  return createEndpoint({
+    mode: input.presentation.mode,
+    side: "source",
+    stateId: input.semantic.source.stateId,
+    accessibleText:
+      `Multiply numerator and denominator of ${input.numerator} over ` +
+      `${input.denominator} by ${input.factor}`,
+    rawLatex:
+      `\\begin{matrix}${input.factor}\\times\\\\${input.factor}\\times` +
+      `\\end{matrix}\\qquad\\frac{${input.numerator}}{${input.denominator}}`,
+    parts: [
+      part(numeratorFactorId, input.semantic.factor.semanticId,
+        "factor", input.factor),
+      part(denominatorFactorId, input.semantic.factor.semanticId,
+        "factor", input.factor),
+      part(input.semantic.source.numerator.entityId,
+        input.semantic.source.numerator.semanticId, "operand", input.numerator),
+      part(input.semantic.source.denominator.entityId,
+        input.semantic.source.denominator.semanticId,
+        "operand", input.denominator),
+      part(input.semantic.source.divisionEntityId,
+        "semantic.fraction-equivalence.division", "fraction-bar", "")
+    ],
+    compose(parts) {
+      return `\\begin{matrix}${parts[0]}\\times\\\\${parts[1]}\\times` +
+        `\\end{matrix}\\qquad\\frac{${parts[2]}}{${parts[3]}}`;
+    }
+  });
+}
+
+function bindOwnedElement(
+  element: HTMLElement,
+  node: KpFractionEquivalenceNativeEndpointNode
+): void {
+  element.dataset["kpMotionId"] = node.motionId;
+  element.dataset["kpSemanticEntityId"] = node.occurrenceId;
+  element.dataset["kpSemanticIdentityId"] = node.semanticId;
+  element.dataset["kpSemanticSelectorId"] = node.occurrenceId;
+  element.dataset["kpPresentationGroupId"] = node.presentationGroupId;
 }

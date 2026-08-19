@@ -22,7 +22,7 @@ import {
   createKpLogarithmChangeOfBaseExemplarAsset
 } from "../logarithm-change-of-base-exemplar.ts";
 import {
-  createKpFractionEquivalenceExemplarAsset
+  createKpFractionEquivalenceExemplarAssets
 } from "../fraction-equivalence-exemplar.ts";
 import {
   createKpCanonicalCancellationPressureAnimationAsset
@@ -53,7 +53,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createKpLogExponentAnimationAsset(),
       createKpLogQuotientAnimationAsset(),
       createKpLogarithmChangeOfBaseExemplarAsset(),
-      createKpFractionEquivalenceExemplarAsset()
+      ...createKpFractionEquivalenceExemplarAssets()
     ]),
     runtimeCapabilities: kpAlgebraChoreographyCapabilities
   });
