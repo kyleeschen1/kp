@@ -13,7 +13,13 @@ const requirement: KpEquationSeriesGovernedSourceRequirement = {
   operationId: "kp.example.transform",
   requiredEntityIds: ["entity.x", "entity.y"],
   requiredAssumptionEvidenceIds: ["assumption.x-nonzero"],
-  requiredSemanticContractKinds: ["kp.contract.example.v1"]
+  requiredSemanticContractKinds: ["kp.contract.example.v1"],
+  requiredAdjacency: {
+    adjacencyId: "adjacency.example",
+    fromStateId: "state.before",
+    toStateId: "state.after"
+  },
+  requiredCorrespondenceIds: ["correspondence.x"]
 };
 
 const source: KpEquationSeriesVerifiedSemanticSource = {
@@ -25,6 +31,13 @@ const source: KpEquationSeriesVerifiedSemanticSource = {
   semanticContracts: [{
     kind: "kp.contract.example.v1",
     authority: Object.freeze({ verified: true })
+  }],
+  adjacencyEvidence: [{
+    adjacencyId: "adjacency.example",
+    fromStateId: "state.before",
+    toStateId: "state.after",
+    correspondenceIds: ["correspondence.x"],
+    roleBindings: { variable: ["entity.x"] }
   }]
 };
 
@@ -80,6 +93,26 @@ test("resolver fails closed across pin operation evidence and contract gaps", ()
       requirement: {
         ...requirement,
         requiredSemanticContractKinds: ["kp.contract.missing.v1"]
+      },
+      sources: [source]
+    },
+    {
+      expected: "adjacency-unavailable",
+      requirement: {
+        ...requirement,
+        requiredAdjacency: {
+          adjacencyId: "adjacency.other",
+          fromStateId: "state.before",
+          toStateId: "state.after"
+        }
+      },
+      sources: [source]
+    },
+    {
+      expected: "correspondences-unavailable",
+      requirement: {
+        ...requirement,
+        requiredCorrespondenceIds: ["correspondence.missing"]
       },
       sources: [source]
     }

@@ -324,6 +324,12 @@ function semanticArguments(
     },
     assumptionEvidenceIds: [
       ...declaration.requiredAssumptionEvidenceIds
+    ],
+    correspondenceIds: [
+      `${prefix}.correspondence.lhs`,
+      `${prefix}.correspondence.rhs`,
+      `${prefix}.correspondence.relation`,
+      `${prefix}.correspondence.operation`
     ]
   };
 }
@@ -345,7 +351,24 @@ function sourceAuthority(
     ],
     assumptionEvidenceIds: [
       ...declaration.requiredAssumptionEvidenceIds
-    ]
+    ],
+    adjacencyEvidence: [{
+      adjacencyId: `adjacency.${fixtureId}`,
+      fromStateId: `state.${fixtureId}.before`,
+      toStateId: `state.${fixtureId}.after`,
+      correspondenceIds: [
+        `${sourceId}.correspondence.lhs`,
+        `${sourceId}.correspondence.rhs`,
+        `${sourceId}.correspondence.relation`,
+        `${sourceId}.correspondence.operation`
+      ],
+      roleBindings: {
+        lhs: [`${sourceId}.entity.lhs`],
+        rhs: [`${sourceId}.entity.rhs`],
+        relation: [`${sourceId}.entity.relation`],
+        "applied-operation": [`${sourceId}.entity.operation`]
+      }
+    }]
   });
 }
 

@@ -8,8 +8,10 @@ import type { KpEquationSeriesIntentResolutionResult } from
   "./equation-series-intent-resolver.ts";
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
-import type { KpEquationSeriesVerifiedSemanticSource } from
-  "./equation-series-governed-source.ts";
+import {
+  resolveKpEquationSeriesGovernedSource,
+  type KpEquationSeriesVerifiedSemanticSource
+} from "./equation-series-governed-source.ts";
 
 export type { KpEquationSeriesVerifiedSemanticSource } from
   "./equation-series-governed-source.ts";
@@ -58,6 +60,7 @@ export interface KpEquationSeriesBothSidesSemanticArguments {
   readonly roleBindings: Readonly<Record<KpBothSidesAuthoringRoleId,
     readonly string[]>>;
   readonly assumptionEvidenceIds: readonly string[];
+  readonly correspondenceIds: readonly string[];
 }
 
 interface KpBothSidesArgumentValidationInput {
@@ -67,6 +70,7 @@ interface KpBothSidesArgumentValidationInput {
   readonly diagnostics: KpEquationSeriesExternalDiagnostic[];
   readonly sourceAuthorities:
     readonly KpEquationSeriesVerifiedSemanticSource[];
+  readonly adjacency: KpEquationTransformSeriesRequest["adjacencies"][number];
 }
 
 const operationIdsByRegistrationId = Object.freeze({
@@ -126,6 +130,7 @@ export function validateKpEquationSeriesBothSidesAuthoring(input: {
       : undefined;
     validateArguments({
       declaration,
+      adjacency: input.request.adjacencies[index]!,
       value,
       path,
       diagnostics,
@@ -137,6 +142,7 @@ export function validateKpEquationSeriesBothSidesAuthoring(input: {
 
 function validateArguments(input: {
   readonly declaration: KpEquationSeriesBothSidesAuthoringDeclaration;
+  readonly adjacency: KpEquationTransformSeriesRequest["adjacencies"][number];
   readonly value: unknown;
   readonly path: string;
   readonly diagnostics: KpEquationSeriesExternalDiagnostic[];
@@ -161,7 +167,8 @@ function validateArguments(input: {
     "sourcePin",
     "operationPin",
     "roleBindings",
-    "assumptionEvidenceIds"
+    "assumptionEvidenceIds",
+    "correspondenceIds"
   ]);
   Object.keys(input.value).filter((key) => !allowed.has(key)).forEach((key) =>
     input.diagnostics.push(diagnostic(
@@ -182,7 +189,18 @@ function validateArguments(input: {
   }
   const sourceAuthority = resolveSourceAuthority(validatedInput);
   validatePin(validatedInput);
-  validateRoles(validatedInput, sourceAuthority?.entityIds);
+  const adjacencyEvidence = sourceAuthority?.adjacencyEvidence?.find(
+    ({ adjacencyId, fromStateId, toStateId }) =>
+      adjacencyId === input.adjacency.id &&
+      fromStateId === input.adjacency.fromStateId &&
+      toStateId === input.adjacency.toStateId
+  );
+  validateRoles(
+    validatedInput,
+    sourceAuthority?.entityIds,
+    adjacencyEvidence?.roleBindings
+  );
+  validateCorrespondences(validatedInput, adjacencyEvidence?.correspondenceIds);
   validateAssumptions(validatedInput, sourceAuthority);
 }
 
@@ -192,32 +210,46 @@ function resolveSourceAuthority(
   const pin = input.value["sourcePin"];
   const sourceId = isRecord(pin) ? pin["sourceId"] : undefined;
   const revisionId = isRecord(pin) ? pin["revisionId"] : undefined;
-  const authority = input.sourceAuthorities.find((candidate) =>
-    candidate.sourceId === sourceId && candidate.revisionId === revisionId
-  );
   if (
     !isRecord(pin) || typeof sourceId !== "string" ||
-    typeof revisionId !== "string" || authority === undefined ||
+    typeof revisionId !== "string" ||
     Object.keys(pin).some((key) => key !== "sourceId" && key !== "revisionId")
-  ) input.diagnostics.push(diagnostic(
-    "equation-series.governance.source.unresolved",
-    `${input.path}.sourcePin`,
-    "The semantic source pin does not resolve to compiler-provided authority.",
-    "Pin an exact verified source ID and revision available to the compiler.",
-    input.declaration.operationId
-  ));
-  if (
-    authority !== undefined &&
-    !authority.operationIds.includes(input.declaration.operationId)
-  ) input.diagnostics.push(diagnostic(
-    "equation-series.governance.source.unresolved",
-    `${input.path}.sourcePin`,
-    `${authority.sourceId}@${authority.revisionId} does not authorize ` +
-      `${input.declaration.operationId}.`,
-    "Use a verified semantic source that owns the selected operation.",
-    input.declaration.operationId
-  ));
-  return authority;
+  ) {
+    input.diagnostics.push(diagnostic(
+      "equation-series.governance.source.unresolved",
+      `${input.path}.sourcePin`,
+      "The semantic source pin must identify one exact compiler source.",
+      "Pin an exact verified source ID and revision available to the compiler.",
+      input.declaration.operationId
+    ));
+    return undefined;
+  }
+  const correspondenceIds = stringIds(input.value["correspondenceIds"]);
+  const resolution = resolveKpEquationSeriesGovernedSource({
+    requirement: {
+      sourcePin: { sourceId, revisionId },
+      operationId: input.declaration.operationId,
+      requiredAdjacency: {
+        adjacencyId: input.adjacency.id,
+        fromStateId: input.adjacency.fromStateId,
+        toStateId: input.adjacency.toStateId
+      },
+      requiredCorrespondenceIds: correspondenceIds ?? []
+    },
+    sources: input.sourceAuthorities
+  });
+  if (resolution.status !== "resolved") {
+    input.diagnostics.push(diagnostic(
+      "equation-series.governance.source.unresolved",
+      `${input.path}.sourcePin`,
+      `The governed source could not satisfy ${resolution.status}: ` +
+        `${resolution.missingIds.join(", ")}.`,
+      "Use an exact verified source with matching endpoints and correspondences.",
+      input.declaration.operationId
+    ));
+    return undefined;
+  }
+  return resolution.source;
 }
 
 function validatePin(input: KpBothSidesArgumentValidationInput): void {
@@ -240,7 +272,9 @@ function validatePin(input: KpBothSidesArgumentValidationInput): void {
 
 function validateRoles(
   input: KpBothSidesArgumentValidationInput,
-  approvedEntityIds: readonly string[] | undefined
+  approvedEntityIds: readonly string[] | undefined,
+  approvedRoleBindings:
+    Readonly<Record<string, readonly string[]>> | undefined
 ): void {
   const bindings = input.value["roleBindings"];
   if (!isRecord(bindings)) {
@@ -281,7 +315,34 @@ function validateRoles(
         roleId
       })
     );
+    const approved = approvedRoleBindings?.[roleId];
+    if (approved !== undefined && !equal(ids, approved)) {
+      input.diagnostics.push(roleDiagnostic(
+        `${input.path}.roleBindings.${roleId}`,
+        `Both-sides role ${roleId} does not match the pinned adjacency evidence.`,
+        roleId
+      ));
+    }
   });
+}
+
+function validateCorrespondences(
+  input: KpBothSidesArgumentValidationInput,
+  approvedCorrespondenceIds: readonly string[] | undefined
+): void {
+  const actual = stringIds(input.value["correspondenceIds"]);
+  if (
+    actual === undefined ||
+    approvedCorrespondenceIds === undefined ||
+    !equal(actual, approvedCorrespondenceIds) ||
+    new Set(actual).size !== actual.length
+  ) input.diagnostics.push(diagnostic(
+    "equation-series.governance.correspondence.mismatch",
+    `${input.path}.correspondenceIds`,
+    "Both-sides correspondences must exactly match the pinned adjacency evidence.",
+    "Use the verified source's ordered correspondence IDs.",
+    input.declaration.operationId
+  ));
 }
 
 function validateAssumptions(
@@ -355,6 +416,11 @@ function stringIds(value: unknown): readonly string[] | undefined {
     typeof id !== "string" || id.trim() === ""
   )) return undefined;
   return Object.freeze([...value]);
+}
+
+function equal(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

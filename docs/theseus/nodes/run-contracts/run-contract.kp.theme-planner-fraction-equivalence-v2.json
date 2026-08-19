@@ -175,11 +175,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:06:16.798Z",
       "notes": "All TypeScript, Svelte, and domain typechecks passed with governed source requirement and resolution types."
+    },
+    {
+      "command": "npm run test:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:12:43.881Z",
+      "notes": "9 corpus and authoring tests passed across all six balanced operations, exact endpoints/correspondences, wrong pins, source gaps, role mismatches, and assumptions."
+    },
+    {
+      "command": "npm run test:equation-series-governed-source",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:12:56.841Z",
+      "notes": "4 governed source resolver tests passed after endpoint and correspondence requirements were added."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 adds one deterministic selection protocol for exact source revision, operation, entity, assumption, and semantic-contract availability; family validators retain truth verification."
+    "summary": "s13 routes all six balanced operations through exact governed source pins, endpoint evidence, ordered correspondences, role mappings, assumptions, and operation pack pins."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -282,7 +296,8 @@
     {
       "id": "s13",
       "title": "Balanced-operation-binding",
-      "status": "planned"
+      "summary": "All six balanced operations now require exact source/revision, adjacency endpoints, ordered correspondences, role mappings, assumptions, and operation pins before compilation.",
+      "status": "complete"
     },
     {
       "id": "s14",

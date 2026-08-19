@@ -82,6 +82,24 @@ test("wrong pins absent source incomplete roles and assumptions have distinct re
     ...valid,
     assumptionEvidenceIds: []
   }, [authority]), "assumption-evidence");
+  assert.equal(repairKind(declaration, {
+    ...valid,
+    correspondenceIds: ["correspondence.fabricated"]
+  }, [authority]), "semantic-source");
+  assert.equal(repairKind(declaration, {
+    ...valid,
+    roleBindings: {
+      ...valid.roleBindings,
+      lhs: ["entity.equation.rhs"]
+    }
+  }, [authority]), "invalid-role");
+  assert.equal(repairKind(declaration, valid, [{
+    ...authority,
+    adjacencyEvidence: authority.adjacencyEvidence?.map((entry) => ({
+      ...entry,
+      fromStateId: "state.wrong.before"
+    }))
+  }]), "semantic-source");
 });
 
 test("unapproved entities fail closed and preserve the prior valid candidate", () => {
@@ -212,6 +230,12 @@ function semanticArguments(
     },
     assumptionEvidenceIds: [
       ...declaration.requiredAssumptionEvidenceIds
+    ],
+    correspondenceIds: [
+      "correspondence.equation.lhs",
+      "correspondence.equation.rhs",
+      "correspondence.equation.relation",
+      "correspondence.equation.operation"
     ]
   };
 }
@@ -231,6 +255,23 @@ function sourceAuthority(
     ],
     assumptionEvidenceIds: [
       ...declaration.requiredAssumptionEvidenceIds
-    ]
+    ],
+    adjacencyEvidence: [{
+      adjacencyId: "adjacency.governed.both-sides",
+      fromStateId: "state.governed.before",
+      toStateId: "state.governed.after",
+      correspondenceIds: [
+        "correspondence.equation.lhs",
+        "correspondence.equation.rhs",
+        "correspondence.equation.relation",
+        "correspondence.equation.operation"
+      ],
+      roleBindings: {
+        lhs: ["entity.equation.lhs"],
+        rhs: ["entity.equation.rhs"],
+        relation: ["entity.equation.equals"],
+        "applied-operation": ["entity.operation.value"]
+      }
+    }]
   };
 }

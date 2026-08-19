@@ -3,6 +3,14 @@ export interface KpEquationSeriesVerifiedSemanticContract {
   readonly authority: unknown;
 }
 
+export interface KpEquationSeriesVerifiedAdjacencyEvidence {
+  readonly adjacencyId: string;
+  readonly fromStateId: string;
+  readonly toStateId: string;
+  readonly correspondenceIds: readonly string[];
+  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+}
+
 /**
  * Tool-neutral source pin shared by governed equation families. Specialized
  * validators must still recognize the branded contract they consume; this
@@ -16,6 +24,8 @@ export interface KpEquationSeriesVerifiedSemanticSource {
   readonly assumptionEvidenceIds: readonly string[];
   readonly semanticContracts?:
     readonly KpEquationSeriesVerifiedSemanticContract[] | undefined;
+  readonly adjacencyEvidence?:
+    readonly KpEquationSeriesVerifiedAdjacencyEvidence[] | undefined;
 }
 
 export interface KpEquationSeriesGovernedSourceRequirement {
@@ -27,6 +37,12 @@ export interface KpEquationSeriesGovernedSourceRequirement {
   readonly requiredEntityIds?: readonly string[] | undefined;
   readonly requiredAssumptionEvidenceIds?: readonly string[] | undefined;
   readonly requiredSemanticContractKinds?: readonly string[] | undefined;
+  readonly requiredAdjacency?: Readonly<{
+    readonly adjacencyId: string;
+    readonly fromStateId: string;
+    readonly toStateId: string;
+  }> | undefined;
+  readonly requiredCorrespondenceIds?: readonly string[] | undefined;
 }
 
 export type KpEquationSeriesGovernedSourceResolution =
@@ -42,7 +58,9 @@ export type KpEquationSeriesGovernedSourceResolution =
         | "operation-unavailable"
         | "entities-unavailable"
         | "evidence-unavailable"
-        | "contracts-unavailable";
+        | "contracts-unavailable"
+        | "adjacency-unavailable"
+        | "correspondences-unavailable";
       readonly sourceId: string;
       readonly revisionId: string;
       readonly missingIds: readonly string[];
@@ -113,6 +131,32 @@ export function resolveKpEquationSeriesGovernedSource(input: {
     input.requirement,
     missingContracts
   );
+  const requiredAdjacency = input.requirement.requiredAdjacency;
+  if (requiredAdjacency !== undefined) {
+    const adjacencyEvidence = (source.adjacencyEvidence ?? []).find(
+      (candidate) =>
+        candidate.adjacencyId === requiredAdjacency.adjacencyId &&
+        candidate.fromStateId === requiredAdjacency.fromStateId &&
+        candidate.toStateId === requiredAdjacency.toStateId
+    );
+    if (adjacencyEvidence === undefined) return unavailable(
+      "adjacency-unavailable",
+      input.requirement,
+      [
+        `${requiredAdjacency.adjacencyId}:` +
+        `${requiredAdjacency.fromStateId}->${requiredAdjacency.toStateId}`
+      ]
+    );
+    const missingCorrespondences = missing(
+      input.requirement.requiredCorrespondenceIds ?? [],
+      adjacencyEvidence.correspondenceIds
+    );
+    if (missingCorrespondences.length > 0) return unavailable(
+      "correspondences-unavailable",
+      input.requirement,
+      missingCorrespondences
+    );
+  }
   return Object.freeze({ status: "resolved" as const, source });
 }
 
