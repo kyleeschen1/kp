@@ -71,11 +71,25 @@
       "scope": "cps02",
       "checkedAt": "2026-08-19T21:42:23.144Z",
       "notes": "Validated 1030 nodes and 23493 events after baseline evidence registration."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps03",
+      "checkedAt": "2026-08-19T21:48:34.905Z",
+      "notes": "3/3 semantic fixture, duplicate-ID, and forged-identity assertions pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "cps03",
+      "checkedAt": "2026-08-19T21:48:36.360Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Preservation baseline frozen: approved contributor fusion, repaired unit-factor ownership, and generated add-zero suites pass; canonical-renderer audit remains at its two classified pre-existing failures without a raised ceiling."
+    "summary": "Canonical 2 × 1 semantic truth now names one correspondence-backed carrier and two removals; equal glyphs and duplicate IDs cannot counterfeit identity."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

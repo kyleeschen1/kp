@@ -65,7 +65,8 @@
     {
       "id": "cps03",
       "title": "Add-two-times-one-semantic-fixture",
-      "status": "planned"
+      "summary": "Added the semantic-only two-times-one fixture, explicit carrier/removal lifecycles, multiplicative-identity law witness, stable focused test command, and adversarial duplicate/forged-identity coverage.",
+      "status": "complete"
     },
     {
       "id": "cps04",
