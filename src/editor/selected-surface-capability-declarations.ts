@@ -171,7 +171,8 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     capabilityId: "operation-evaluation",
     domain: "equation",
     adapterIds: [
-      "editor-animation-surface.operation-evaluation.canonical-native-katex"
+      "editor-animation-surface.operation-evaluation.canonical-native-katex",
+      "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
     ],
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {

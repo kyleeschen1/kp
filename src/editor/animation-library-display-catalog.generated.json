@@ -323,6 +323,32 @@
     ]
   },
   {
+    "animationId": "animation.operation-evaluation.two-times-one-carrier",
+    "title": "2 \\times 1 → 2",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+    "representations": [
+      {
+        "id": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "label": "2 \\times 1 → 2",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.operation-evaluation.two-times-three",
     "title": "2 \\times 3 → 6",
     "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",

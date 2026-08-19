@@ -232,11 +232,32 @@
       "scope": "cps11",
       "checkedAt": "2026-08-19T22:27:34.425Z",
       "notes": "Settlement certificate and guarded session API typecheck."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps12",
+      "checkedAt": "2026-08-19T22:41:32.763Z",
+      "notes": "20/20 assertions pass; the stable two-times-one ID loads from the operation-evaluation pack, restores through the artifact route, and resolves to its exact candidate adapter."
+    },
+    {
+      "command": "npm run test:equation-surface-inventory",
+      "status": "passed",
+      "scope": "cps12",
+      "checkedAt": "2026-08-19T22:41:34.077Z",
+      "notes": "5/5 inventory and generated-catalog assertions pass with the audited 36th equation surface and its lazy operation-evaluation ownership."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps12",
+      "checkedAt": "2026-08-19T22:41:35.058Z",
+      "notes": "The lazy candidate surface, lifecycle revision guard, and catalogue registrations typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Carrier transit is now certified at exact target ink and baseline before native takeover; terminal frames remain stable, completion selects native target paint, and stale font or viewport revisions fail before a frame is applied."
+    "summary": "The 2 × 1 → 2 candidate is now a stable lazy catalogue asset with exact-ID surface ownership, direct artifact URL restoration, native endpoint hosting, responsive remeasurement, accessible endpoint handoff, and development-only recipe/track/settlement telemetry."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

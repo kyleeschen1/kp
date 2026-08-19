@@ -119,7 +119,8 @@
     {
       "id": "cps12",
       "title": "Host-canonical-exemplar",
-      "status": "planned"
+      "summary": "Hosted the canonical exemplar in the operation-evaluation pack, generated its catalogue and architecture projections, registered a higher-priority exact-ID adapter, and preserved the promoted evaluation family unchanged.",
+      "status": "complete"
     },
     {
       "id": "cps13",

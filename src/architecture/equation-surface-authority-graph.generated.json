@@ -1665,6 +1665,43 @@
     },
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.operation-evaluation.two-times-one-carrier",
+      "pathClass": "operation-evaluation-specialized",
+      "transformationTypes": [
+        "simplifyMultiplicativeIdentity"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.operation-evaluation-render-plan"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.operation-evaluation-material"
+      ],
+      "localTimingNodeIds": [
+        "timing.operation-endpoint-dwell"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.operation-measured-compositor"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.operation-failed-stage"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.operation-evaluation.two-times-three",
       "pathClass": "operation-evaluation-specialized",
       "transformationTypes": [

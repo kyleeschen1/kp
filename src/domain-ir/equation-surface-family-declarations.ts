@@ -160,6 +160,17 @@ interface KpEquationSurfaceFamilyDeclaration {
 export const kpEquationSurfaceFamilyDeclarations:
 readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
   declaration({
+    id: "family.equation.carrier-preserving-simplification",
+    matches: (id) => id ===
+      "animation.operation-evaluation.two-times-one-carrier",
+    selectedCapabilityIds: ["operation-evaluation", "equation-katex"],
+    primaryCapabilityId: "operation-evaluation",
+    rendererAdapterId:
+      "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+    rendererSourcePath:
+      "src/editor/carrier-preserving-simplification-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.exact-fraction-quantity",
     matches: (id) => id === "animation.exact-fraction-quantity.third-plus-sixth",
     selectedCapabilityIds: ["exact-fraction-quantity", "equation-katex"],
@@ -432,6 +443,18 @@ const waveBStructuralByAnimationId = Object.freeze(Object.fromEntries(
 
 export const kpWaveCEquationDispositionDeclarations:
 readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
+  waveC({
+    animationId:
+      "animation.operation-evaluation.two-times-one-carrier",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath:
+      "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The carrier-preserving simplification exemplar has a dedicated Native KaTeX adapter and remains a reversible candidate until two human checkpoints approve promotion."
+  }),
   waveC({
     animationId:
       "animation.equation.fraction-equivalence.common-denominator-pressure.v1",

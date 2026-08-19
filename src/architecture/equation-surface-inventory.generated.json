@@ -16,9 +16,10 @@
       "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
       "animation.algebra.log-product.product-to-sum",
       "animation.algebra.log-product.three-factors-to-sum",
+      "animation.operation-evaluation.two-times-one-carrier",
       "animation.operation-evaluation.two-times-three"
     ],
-    "currentCount": 35,
+    "currentCount": 36,
     "reconciled": true
   },
   "entries": [
@@ -1269,6 +1270,45 @@
         "representationId": "library.editor.contributor-fusion.three-sixths",
         "representationKind": "editor",
         "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.three-sixths",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.operation-evaluation.two-times-one-carrier",
+      "title": "2 \\times 1 → 2",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.operation-evaluation.two-times-one-carrier",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "operation-evaluation",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+        "rendererSourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 1719,
+        "beatCount": 50
+      },
+      "lazyCapability": {
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-one-carrier&view=editor",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

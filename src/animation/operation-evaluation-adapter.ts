@@ -17,6 +17,9 @@ import {
   createKpConstantProductEvaluationAsset,
   type KpConstantProductEvaluationSpec
 } from "../semantic/constant-product-evaluation-asset.ts";
+import {
+  createKpTwoTimesOneCarrierExemplar
+} from "../semantic/carrier-preserving-simplification-exemplar.ts";
 import type { KpAssetBundle } from "../semantic/asset.ts";
 import type {
   KpSemanticTransformation
@@ -41,6 +44,8 @@ export const kpThreeSixthsEvaluationAnimationId =
   "animation.operation-evaluation.three-sixths";
 export const kpTwoTimesThreeEvaluationAnimationId =
   "animation.operation-evaluation.two-times-three";
+export const kpTwoTimesOneCarrierAnimationId =
+  "animation.operation-evaluation.two-times-one-carrier";
 export const kpFivePlusTwoEvaluationSpec =
   Object.freeze({
     id: "five-plus-two",
@@ -214,5 +219,12 @@ export function createKpTwoTimesThreeEvaluationAnimationAsset():
 KpAnimationAsset {
   return createKpConstantProductEvaluationAnimationAsset(
     kpTwoTimesThreeEvaluationSpec
+  );
+}
+
+export function createKpTwoTimesOneCarrierAnimationAsset():
+KpAnimationAsset {
+  return createKpOperationEvaluationAnimationAsset(
+    createKpTwoTimesOneCarrierExemplar()
   );
 }

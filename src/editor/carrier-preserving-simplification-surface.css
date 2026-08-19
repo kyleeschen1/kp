@@ -1,0 +1,38 @@
+.kp-carrier-preserving-simplification-stage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: clamp(16rem, 44vh, 27rem);
+  overflow: hidden;
+  place-items: center;
+  color: var(--kp-equation-foreground, currentColor);
+  background: transparent;
+  isolation: isolate;
+  text-transform: none;
+}
+
+.kp-carrier-preserving-simplification-stage__endpoint,
+.kp-carrier-preserving-simplification-stage__material-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.35rem, 6vw, 4.4rem);
+}
+
+.kp-carrier-preserving-simplification-stage__endpoint .katex-display {
+  margin: 0;
+}
+
+.kp-carrier-preserving-simplification-stage__material-layer {
+  pointer-events: none;
+}
+
+.kp-carrier-preserving-simplification-stage__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

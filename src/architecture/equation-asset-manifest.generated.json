@@ -2843,6 +2843,84 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.operation-evaluation.two-times-one-carrier",
+      "title": "2 \\times 1 → 2",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "transformationIds": [
+          "transform.operation-evaluation.two-times-one-carrier.simplify-identity"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+        "tags": [
+          "animation",
+          "arithmetic",
+          "editor",
+          "equation",
+          "operation-evaluation",
+          "presentation-compiler"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "operation-evaluation",
+        "familyId": "operation-evaluation",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.operation-evaluation.two-times-one-carrier",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-2ce4145c",
+          "fnv1a32-2d658abd",
+          "fnv1a32-f8766bb2"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+        "representations": [
+          {
+            "id": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
+            "label": "2 \\times 1 → 2",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-one-carrier",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.operation-evaluation.two-times-three",
       "title": "2 \\times 3 → 6",
       "semanticSource": {

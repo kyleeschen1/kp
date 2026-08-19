@@ -2364,6 +2364,78 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.operation-evaluation.two-times-one-carrier",
+      "familyId": "operation-evaluation",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-2ce4145c",
+          "fnv1a32-2d658abd",
+          "fnv1a32-f8766bb2"
+        ],
+        "route": "/?artifact=animation.operation-evaluation.two-times-one-carrier",
+        "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.operation-evaluation.two-times-one-carrier",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "operation-evaluation-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/operation-evaluation.ts",
+          "src/animation/catalog.ts",
+          "src/editor/carrier-preserving-simplification-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:operation-presentation-plans",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.operation-evaluation.two-times-one-carrier",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.operation-evaluation.two-times-one-carrier",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+          },
+          {
+            "id": "route.animation.operation-evaluation.two-times-one-carrier",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.operation-evaluation.two-times-one-carrier",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.operation-evaluation.two-times-one-carrier",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.operation-evaluation",
+            "kind": "family-verification",
+            "command": "npm run test:operation-presentation-plans"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.operation-evaluation.two-times-three",
       "familyId": "operation-evaluation",
       "disposition": "canonical",
