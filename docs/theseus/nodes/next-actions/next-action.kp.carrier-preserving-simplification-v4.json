@@ -85,11 +85,25 @@
       "scope": "cps03",
       "checkedAt": "2026-08-19T21:48:36.360Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps04",
+      "checkedAt": "2026-08-19T21:52:31.241Z",
+      "notes": "7/7 semantic and carrier-evidence assertions pass, including strict-law, cohort, and second-carrier adversarial cases."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps04",
+      "checkedAt": "2026-08-19T21:52:32.885Z",
+      "notes": "The semantic authority contract and focused fixtures typecheck without renderer dependencies."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical 2 × 1 semantic truth now names one correspondence-backed carrier and two removals; equal glyphs and duplicate IDs cannot counterfeit identity."
+    "summary": "A branded semantic-only carrier certificate now proves exact endpoints, one identity-backed carrier, strict identity-law witness, complete removed syntax, stationary context, and total lifecycle partitioning."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

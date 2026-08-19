@@ -71,7 +71,8 @@
     {
       "id": "cps04",
       "title": "Define-carrier-evidence-contract",
-      "status": "planned"
+      "summary": "Added the normalized carrier-evidence authority and fail-closed validator; verified data cannot retain geometry, timing, opacity, renderer, or DOM fields, and adversarial incomplete/overlapping evidence is rejected.",
+      "status": "complete"
     },
     {
       "id": "cps05",
