@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-carrier-preserving-simplification-baseline.md"
     }
   ],
   "dependsOn": {
@@ -39,11 +43,39 @@
       "scope": "cps01",
       "checkedAt": "2026-08-19T21:38:52.117Z",
       "notes": "Validated 1030 nodes and 23486 events after replacing the non-actionable scaffold with the typed v4 target."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps02",
+      "checkedAt": "2026-08-19T21:42:18.823Z",
+      "notes": "12/12 contributor-fusion and declaration assertions pass."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "cps02",
+      "checkedAt": "2026-08-19T21:42:20.310Z",
+      "notes": "10/10 repaired unit-factor ownership and pressure-plan assertions pass."
+    },
+    {
+      "command": "focused add-zero semantic and identity suites",
+      "status": "passed",
+      "scope": "cps02",
+      "checkedAt": "2026-08-19T21:42:21.752Z",
+      "notes": "15/15 draft, compiler, and identity-absorption assertions pass; exact command is frozen in the baseline review."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps02",
+      "checkedAt": "2026-08-19T21:42:23.144Z",
+      "notes": "Validated 1030 nodes and 23493 events after baseline evidence registration."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Durable truth is reconciled: completed prerequisites are no longer queued, the breadth-first carrier family is current, and the approved v4 contract owns all 27 bounded slices."
+    "summary": "Preservation baseline frozen: approved contributor fusion, repaired unit-factor ownership, and generated add-zero suites pass; canonical-renderer audit remains at its two classified pre-existing failures without a raised ceiling."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

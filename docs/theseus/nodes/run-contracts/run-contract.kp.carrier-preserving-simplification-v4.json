@@ -59,7 +59,8 @@
     {
       "id": "cps02",
       "title": "Freeze-preservation-baseline",
-      "status": "planned"
+      "summary": "Frozen passing contributor-fusion, unit-factor, and add-zero baselines and documented the exact pre-existing canonical-renderer allowlist and byte-ceiling failures without modifying either guard.",
+      "status": "complete"
     },
     {
       "id": "cps03",
