@@ -308,11 +308,18 @@
       "scope": "live",
       "checkedAt": "2026-08-19T02:51:25.692Z",
       "notes": "Prompt fnv1a64:882146c856a2586a; 18/18 case-runs passed, 15 exact selections, 15 preserved adjacency identities, 3 explicit abstentions, 9 guided governance repairs, 0 authority attempts, 0 compiled mismatches, 0 silent fallbacks, 0 provider errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-08-19T02:54:22.890Z",
+      "notes": "Validated 1015 nodes and 23119 events after planner closeout and direction updates."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 passed three pinned gpt-5.6-sol repetitions across the six-case corpus; provider outputs varied only in response content while every semantic outcome remained exact and fail-closed."
+    "summary": "s20 closes the planner action in roadmap, strategy, and compiler thread memory; fraction equivalence is now the explicit next bounded family."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -457,7 +464,8 @@
     {
       "id": "s20",
       "title": "Planner-binding-closeout",
-      "status": "planned"
+      "summary": "Planner vocabulary and governed binding are durably closed with deterministic and pinned-live evidence; roadmap, strategy, thread, workflow reference, and next capability now agree on fraction equivalence.",
+      "status": "complete"
     },
     {
       "id": "s21",

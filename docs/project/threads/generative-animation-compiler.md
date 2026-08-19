@@ -2,11 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: converge the planner-facing operation vocabulary and the
-deterministic governed-source binding step, then rerun the fixed live-model
-corpus with an explicitly pinned model. Do not begin fraction equivalence,
-reopen compositor/balanced-operation work, or resume layout without that
-evidence.
+Current Next Action: encode fraction equivalence as governed semantic truth,
+register one canonical authoring operation, and perfect one reversible
+native-KaTeX exemplar. Stop for human visual review before promotion; do not
+reopen compositor, balanced-operation, or layout work.
 
 ## Goal
 
@@ -55,13 +54,18 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   identities, abstained on unsupported fraction equivalence, and attempted no
   authority fields. KP's compiler produced typed governance repairs and zero
   silent fallbacks.
-- Exact operation-ID selection is unstable because function wrapping and log
-  product each expose both a planner-facing authoring ID and a backend
-  operation kind. Both compile, so the registry needs explicit exposure and
-  alias-normalization policy rather than better prompt wording.
-- Governed selections still stop at a typed repair until a deterministic KP
-  step binds an existing verified source; the model must never mint that source
-  or its evidence.
+- Planner exposure now contains one canonical operation ID per semantic act;
+  backend and historical aliases normalize with explicit provenance and are
+  never parallel model choices.
+- Registered source binders deterministically materialize semantic arguments
+  from exact verified source, revision, adjacency, correspondence, role, and
+  assumption evidence. The model cannot provide those fields.
+- One narrow orchestration call owns planning, canonicalization, source
+  binding, typed repair, deterministic compilation, and explicit last-valid
+  recovery without importing provider or renderer authority.
+- Three pinned `gpt-5.6-sol` repetitions passed all 18 fixed-corpus case-runs:
+  15 exact supported selections, three explicit abstentions, zero authority
+  attempts, zero compiled mismatches, and zero silent fallbacks.
 
 ## Capability Vocabulary
 
@@ -94,11 +98,11 @@ and playable does not mean generally generatable.
 5. Alternative-base logarithm syntax and change-of-base transformations:
    complete, reviewed, pressure-tested, directly authorable, and included in
    the live benchmark.
-5a. Planner vocabulary convergence: expose one canonical semantic ID per act
-    and normalize or hide backend aliases before compilation.
-5b. Governed binding convergence: deterministically join accepted selections
-    to already-verified sources, then rerun the frozen corpus with a pinned
-    model ID.
+5a. Planner vocabulary convergence: complete through canonical exposure,
+    source-derived aliases, validation provenance, and typed abstention.
+5b. Governed binding convergence: complete through registered source binders,
+    narrow orchestration, typed last-valid recovery, reproducible benchmark
+    evidence, and a passing pinned three-repeat live run.
 6. Fraction equivalence and repartition: next visual family unless benchmark
    convergence evidence identifies another fundamental compiler gap.
 7. Common-denominator fraction addition/subtraction and factor cancellation.

@@ -1,7 +1,8 @@
 # Fixed Live-Model Equation Generation Benchmark
 
 Date: 2026-08-19
-Status: benchmark complete; planner vocabulary convergence next
+Status: historical baseline; convergence completed by
+`2026-08-19-planner-vocabulary-governed-binding-closeout.md`
 
 ## Question
 

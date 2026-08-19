@@ -82,11 +82,12 @@ generator. The product/quotient crossover, evidence-derived Transformation
 Coverage view, governed equation-transform-series compiler, compositor
 ownership repair, balanced-operation family, and alternative-base logarithm
 exemplar and governed authoring path are complete. Change of base is now
-`Direct`; the fixed live-model benchmark shows that semantic-family selection,
-abstention, identity preservation, and the authority firewall work, while
-duplicate planner-visible operation IDs make exact selection unstable. KP
-should converge that vocabulary and add deterministic verified-source binding
-before it opens another motif family. Additional motif
+`Direct`. Planner vocabulary and governed-source binding have also converged:
+one canonical model-facing ID represents each semantic act, compiler-owned
+binders attach exact verified evidence, and typed recovery preserves the last
+valid candidate. A pinned three-repeat live corpus passed all 18 case-runs with
+zero authority attempts, compiled mismatches, or silent fallbacks. Fraction
+equivalence is therefore the next bounded motif family. Additional motif
 families and domain frontends remain explicit ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
@@ -105,13 +106,11 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is now how to expose one canonical
-planner-facing ID per semantic act while keeping implementation operation kinds
-available behind the boundary. The same convergence slice should bind governed
-selections to existing verified sources without letting model output mint
-semantic identities or assumptions. Then rerun the fixed live-model corpus
-with an explicitly pinned model. This remains equation-domain convergence,
-not a universal graph, code, diagram, or 3D compiler.
+The immediate repository question is now whether one governed fraction-
+equivalence operation can preserve factor identity, nonzero assumptions,
+native fraction structure, deterministic seek/rewind, and causal motion in a
+single reviewable exemplar. This remains equation-domain convergence, not a
+universal graph, code, diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

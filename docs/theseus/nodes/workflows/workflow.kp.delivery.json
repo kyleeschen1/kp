@@ -14,6 +14,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-24-semantic-glyph-reconciliation-experiment-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-planner-vocabulary-governed-binding-closeout.md"
     }
   ],
   "decisions": [],
