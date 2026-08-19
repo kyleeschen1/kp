@@ -166,24 +166,36 @@ Only this repository sequence is active:
     caller-authored geometry or timing. Product, quotient, and sum have nominal
     release evidence, exact focused-host URLs, and cross-browser gates. The
     other evaluation families remain provisional.
-22. **Review composer visibility:** next. Move the wide Catalogue composer out
-   of the cramped lower-left rail into a fully visible inspector-side drawer,
-   retain a bounded narrow-screen sheet, and keep Save reachable without
-   covering the stage, scrubber, or development dock.
-23. **Sequence-level paint ownership:** after Review placement. Render and
-   measure shared Native KaTeX endpoints once, preserve compound and leaf
-   ownership in one hierarchy, require equivalent-pose certificates between
-   adjacent phases, and repair the `2/2` handoff without caller timing masks.
-    Contributor fusion must not enter the fraction-addition sequence before
-    this repair.
-24. **Remaining evaluation presentation families:** punctuated substitution, result reception,
-    carrier-preserving simplification, operator aperture, and expanded
-    calculation remain distinct typed instructional choices. Do not promote
-    scaling-to-zero or simultaneous readable pre/post glyphs as a default, and
-    do not let callers or model planners author geometry or timing.
-25. **Fraction promotion and arithmetic:** only after the ownership repair and
-    evaluation-family checkpoints. Promote contracts demonstrated by two
-    callers before designing like-denominator addition choreography.
+22. **Review composer visibility:** complete. The Catalogue now places Review
+   in a constrained inspector-side drawer, switches to a bounded captured-
+   moment sheet on narrow screens, preserves the locked draft across placement
+   changes, and keeps Save clear of playback and the development dock.
+23. **Sequence-level paint ownership:** complete. Shared immutable Native
+   KaTeX endpoint handles, compound/leaf ownership views, leaf-level
+   equivalent-pose certificates, revision invalidation, and exact terminal
+   settlement repaired the `2/2` handoff without caller timing masks. The
+   completed run contract and subsequent human confirmation supersede the
+   stale instruction to implement this work next.
+24. **Carrier-preserving simplification:** next contrasting family. Hold
+   `2 × 1 → 2` as the canonical same-operator contrast with contributor fusion,
+   then pressure the accepted `x + 0 = 4 → x = 4` caller. Preserve the proven
+   carrier by semantic identity; callers and model planners may not author
+   geometry, timing, opacity, or renderer nodes.
+25. **Mixed-family governed generation:** after two reviewed carrier callers.
+   Promote only the demonstrated family/handoff boundary. Derive one
+   machine-readable and human-readable capability catalogue from canonical
+   declarations, expose friendly names, aliases, examples, counterexamples,
+   required evidence, and support state, then let natural-language and
+   ordered-LaTeX requests select contributor fusion or carrier preservation
+   from verified semantics—or enter a typed clarification/repair exchange.
+26. **Remaining evaluation presentation families:** punctuated substitution,
+   result reception, operator aperture, and expanded calculation remain
+   separate future instructional choices. Do not promote scaling-to-zero or
+   simultaneous readable pre/post glyphs as a default.
+27. **Fraction promotion and arithmetic:** deferred while KP broadens its
+   evaluation topology. Return to like-denominator combination after the
+   contrasting-family proof rather than completing fractions for category
+   coverage alone.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -195,7 +207,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; fraction equivalence has one approved exemplar and one pressure caller that exposed ownership and evaluation-presentation defects | Relocate Review, repair sequence-level hierarchical ownership, then compare typed evaluation families before any fraction promotion or addition choreography. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion is promoted | Prove carrier-preserving simplification on `2 × 1 → 2`, pressure it on the existing add-zero caller, then test mixed-family governed generation before returning to fraction arithmetic. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |

@@ -2,11 +2,16 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: relocate the Catalogue Review composer into a fully
-visible inspector-side drawer with a bounded narrow-screen sheet. After that,
-repair the `1/3 + 1/6` composite-to-leaf jerk through one sequence-level Native
-KaTeX ownership contract before embedding contributor fusion or implementing
-common-denominator addition choreography.
+Current Next Action: propose the carrier-preserving simplification family on
+`2 × 1 → 2`, then pressure the approved visual language on the existing
+`x + 0 = 4 → x = 4` caller. Review placement and the sequence-level Native
+KaTeX ownership repair are already complete; do not repeat them or continue
+fraction arithmetic merely for category coverage.
+
+Execution authority: the user-approved proposal at
+`docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md`
+and `run-contract.kp.carrier-preserving-simplification-v4`. Earlier `v1`–`v3`
+records are superseded setup attempts, not resumable plans.
 
 ## Goal
 
@@ -19,6 +24,15 @@ The long-term envelope includes equation notation, matrices, code, Graph2D,
 and Graph3D. Shared infrastructure owns discovery, request envelopes,
 capability evidence, sequencing, URL state, hosting, and review. Each domain
 owns its parser, truth, operations, motifs, geometry, and renderer policy.
+
+Human authors and LLM planners discover capabilities from the same canonical
+typed declarations. The public authoring vocabulary uses friendly names,
+aliases, examples, counterexamples, required evidence, and support status;
+neither audience must memorize internal operation IDs. Deterministic source-
+state comparison narrows eligible operations before an LLM chooses among
+plausible meanings. The compiler then verifies and binds authority, returning
+typed clarification or repair when evidence is missing or a request is
+incompatible.
 
 ## Current Truth
 
@@ -80,13 +94,14 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   from `1/3 + 1/6` through `2/6 + 1/6`, preserves the untouched term, uses one
   shared clock, and has deterministic dark, light, narrow, direct-seek, and
   rewind evidence. It remains unpromoted pending human visual review.
-- Human review rejected promotion of that caller in its current form. The
-  unit-factor introduction changes from one composite owner to separately
-  addressable leaves across adjacent renderer sessions, creating a visible
-  internal jerk that aggregate stage bounds did not detect. The accepted fix
-  is shared immutable endpoint measurement plus hierarchical ownership views
-  and a fail-closed sequence seam certificate, not more dwell or caller-local
-  timing.
+- Human review rejected the original pressure caller because its unit-factor
+  introduction changed from one composite owner to separately addressable
+  leaves across adjacent renderer sessions. The completed ownership run now
+  renders and measures one immutable endpoint, exposes compound and leaf views
+  without rebinding, certifies the seam per semantic leaf, invalidates by
+  revision, and settles to exact native geometry. The repaired `2/2` handoff
+  subsequently passed human review; final fraction arithmetic remains deferred
+  for breadth, not blocked by this old defect.
 - Operator evaluation now has an accepted presentation taxonomy rather than
   one universal shrink-collapse-expand animation. Punctuated substitution,
   result reception, contributor fusion, carrier-preserving simplification,
@@ -185,10 +200,10 @@ parallel roadmap controls.
 
 The global development dock owns Catalogue/Coverage navigation, theme, exact
 link copying, and Review access. URL state is authoritative when present. The
-next Review correction places the wide Catalogue composer in a fully visible
-inspector-side drawer and retains a bounded narrow-screen sheet; it must not
-cover playback controls and must store the exact view, artifact, settings, and
-playhead.
+wide Catalogue composer now occupies a fully visible inspector-side drawer and
+uses a bounded narrow-screen sheet without covering playback controls. Exact
+view, artifact, settings, playhead, locked capture, and draft state survive the
+responsive placement change.
 
 ## Stop Conditions
 

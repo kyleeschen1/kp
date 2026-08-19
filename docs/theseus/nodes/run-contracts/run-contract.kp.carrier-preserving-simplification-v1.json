@@ -1,0 +1,179 @@
+{
+  "id": "run-contract.kp.carrier-preserving-simplification-v1",
+  "kind": "run-contract",
+  "title": "Carrier-preserving simplification and discoverable authoring",
+  "status": "deferred",
+  "summary": "Superseded before implementation because compact help omitted required typed-autonomy fields; v2 preserves the exact approved 27 slices with complete run hygiene.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.carrier-preserving-simplification-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md",
+      "summary": "User-approved 27-slice proposal with two mandatory human visual checkpoints, preservation and rollback boundaries, discovery API requirements, verification cadence, and explicit deferrals."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run test:operation-evaluation-family-exemplar",
+    "npm run test:operation-presentation-plans",
+    "npm run test:real-katex-glyph-compositor",
+    "npm run verify:equation:promotion",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Never resume v1; use run-contract.kp.carrier-preserving-simplification-v2."
+  ],
+  "allowedWork": [
+    "Carrier-preserving simplification semantic evidence, typed family and handoff contracts, renderer-neutral recipe, Native KaTeX exemplar, existing add-zero pressure caller, catalogue hosting, focused verification, discoverability metadata and APIs, governed authoring, mixed benchmark, and durable project records.",
+    "Reuse the existing deterministic clock, Native KaTeX endpoint handles, equivalent-pose seams, presentation registry, Catalogue host, URL state, Review lifecycle, and generated capability infrastructure."
+  ],
+  "disallowedWork": [
+    "Fraction arithmetic choreography, other evaluation presentation families, matrices, code, Graph2D, Graph3D, learner layouts, curriculum, SRS, tutoring, Public Web, public authoring, universal renderer rewrites, caller-authored geometry or timing, and unrelated dirty work.",
+    "No promotion before both mandatory human checkpoints; no semantic identity inference from glyph equality; no silent generic fallback; no new clock, renderer branch, or model-authored authority."
+  ],
+  "goal": "Prove carrier-preserving simplification on a canonical identity operation, pressure it on the existing add-zero caller, promote only the demonstrated boundary, and expose one discoverable human and LLM authoring API.",
+  "target": "next-action.kp.carrier-preserving-simplification-v1",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile-durable-truth",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Freeze-preservation-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add-two-times-one-semantic-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define-carrier-evidence-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Add-family-and-handoff-vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Constrain-presentation-registry",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Compile-renderer-neutral-carrier-recipe",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Add-native-katex-optical-profile",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Bind-measured-carrier-endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Implement-exclusive-carrier-motion",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Guarantee-native-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Host-canonical-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Prove-lifecycle-behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Produce-responsive-review-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Canonical-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Freeze-approved-profile",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Adapt-existing-add-zero-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Preserve-carrier-and-stationary-context",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Decide-legacy-sampler-disposition",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Pressure-second-caller",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Second-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Promote-demonstrated-family",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add-discoverability-metadata",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Expose-tool-neutral-discovery-api",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Project-human-discovery-surfaces",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Add-bounded-LLM-exchange",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Run-mixed-benchmark-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

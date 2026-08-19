@@ -1,0 +1,75 @@
+{
+  "id": "next-action.kp.carrier-preserving-simplification-v4",
+  "kind": "next-action",
+  "title": "Build and promote carrier-preserving simplification",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Execute the approved 27-slice carrier-preserving simplification run from canonical multiplication-by-one exemplar through second-caller pressure, discoverability, bounded LLM selection, and closeout.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.operation-evaluation-presentation-registry-v0",
+      "next-action.kp.operation-evaluation-family-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:operation-evaluation-family-exemplar",
+    "npm run test:operation-presentation-plans",
+    "npm run visual:operation-evaluation-family-exemplar"
+  ],
+  "verificationRecords": [
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "cps01",
+      "checkedAt": "2026-08-19T21:38:50.651Z",
+      "notes": "Durable reconciliation and generated Theseus records have no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps01",
+      "checkedAt": "2026-08-19T21:38:52.117Z",
+      "notes": "Validated 1030 nodes and 23486 events after replacing the non-actionable scaffold with the typed v4 target."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Durable truth is reconciled: completed prerequisites are no longer queued, the breadth-first carrier family is current, and the approved v4 contract owns all 27 bounded slices."
+  },
+  "expectedLearning": [
+    "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
+  ],
+  "allowedWork": [
+    "Implement the approved carrier-preserving simplification family, canonical two-times-one exemplar, existing add-zero pressure caller, promotion metadata, discovery surfaces, bounded LLM selection, and directly supporting tests and documentation."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated visual motifs, layouts, lessons, renderers, or public product surfaces; do not broaden the family beyond demonstrated callers; do not alter contributor-fusion behavior."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-correctness",
+      "weight": "high"
+    },
+    {
+      "id": "paint-ownership",
+      "weight": "high"
+    },
+    {
+      "id": "motion-legibility",
+      "weight": "high"
+    },
+    {
+      "id": "discoverability",
+      "weight": "medium"
+    }
+  ]
+}

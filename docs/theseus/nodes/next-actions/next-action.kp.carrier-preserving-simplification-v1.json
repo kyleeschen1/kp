@@ -1,0 +1,17 @@
+{
+  "id": "next-action.kp.carrier-preserving-simplification-v1",
+  "kind": "next-action",
+  "title": "Prove carrier-preserving simplification and discoverable authoring",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Scaffold target superseded by the fully typed v2 contract targeting the active KP delivery workflow.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md"
+    }
+  ],
+  "revisitWhen": [
+    "Never select this scaffold; use run-contract.kp.carrier-preserving-simplification-v2."
+  ]
+}
