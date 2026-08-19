@@ -2,11 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: visually review the structurally different
-`1/3 + 1/6` fraction-equivalence pressure caller. If approved, promote only
-the contracts demonstrated by both callers; do not infer or implement
-common-denominator addition choreography from this checkpoint. Do not reopen
-compositor, balanced-operation, cross-domain, or layout work.
+Current Next Action: relocate the Catalogue Review composer so feedback is
+fully visible. Then repair the `1/3 + 1/6` composite-to-leaf jerk through one
+sequence-level Native KaTeX ownership contract: immutable shared endpoint
+handles, hierarchical compound/leaf views, equivalent-pose seam certificates,
+and per-entity continuity evidence. Only after that repair should separate
+evaluation-presentation exemplars be compared. Do not promote the pressure
+caller or implement common-denominator addition choreography yet.
 
 ## Goal
 
@@ -81,6 +83,20 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   from `1/3 + 1/6` through `2/6 + 1/6`, preserves the untouched term, uses one
   shared clock, and has deterministic dark, light, narrow, direct-seek, and
   rewind evidence. It remains unpromoted pending human visual review.
+- Human review rejected promotion of that caller in its current form. The
+  unit-factor introduction changes from one composite owner to separately
+  addressable leaves across adjacent renderer sessions, creating a visible
+  internal jerk that aggregate stage bounds did not detect. The accepted fix
+  is shared immutable endpoint measurement plus hierarchical ownership views
+  and a fail-closed sequence seam certificate, not more dwell or caller-local
+  timing.
+- Operator evaluation now has an accepted presentation taxonomy rather than
+  one universal shrink-collapse-expand animation. Punctuated substitution,
+  result reception, contributor fusion, carrier-preserving simplification,
+  operator aperture, and expanded calculation require distinct typed choices
+  and reviewed exemplars. Simultaneous source/result glyphs are too busy;
+  literal scale-to-zero and scale-from-zero reads as mechanical rather than
+  transformational.
 
 ## Capability Vocabulary
 
@@ -147,9 +163,11 @@ expand in place. There are no cards, charts, nested menus, ontology trees, or
 parallel roadmap controls.
 
 The global development dock owns Catalogue/Coverage navigation, theme, exact
-link copying, and Review access. URL state is authoritative when present.
-Review reserves layout space rather than covering playback controls and stores
-the exact view, artifact, settings, and playhead.
+link copying, and Review access. URL state is authoritative when present. The
+next Review correction places the wide Catalogue composer in a fully visible
+inspector-side drawer and retains a bounded narrow-screen sheet; it must not
+cover playback controls and must store the exact view, artifact, settings, and
+playhead.
 
 ## Stop Conditions
 
@@ -168,6 +186,7 @@ the exact view, artifact, settings, and playhead.
 ## Links
 
 - `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
+- `../decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md`
 - `../reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md`
 - `../reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`
 - `../reviews/2026-08-18-compositor-before-balanced-operations-next-step-review.md`

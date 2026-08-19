@@ -154,11 +154,27 @@ Only this repository sequence is active:
     typed many-to-one bar fusion, and synchronized term/bar arrival passed the
     human checkpoint. A structurally different second caller is still required
     before narrow motif promotion.
-20. **Fraction structural pressure:** implementation and evidence complete;
-    human checkpoint required. The `1/3 + 1/6` caller preserves the untouched
-    second term, composes the approved unit-factor join with synchronized
-    product evaluation, and stops at `2/6 + 1/6`. Review its motion before
-    promoting shared contracts or authorizing fraction-addition choreography.
+20. **Fraction structural pressure:** human review found two unresolved motion
+    classes. The `1/3 + 1/6` caller preserves the untouched second term and
+    stops at `2/6 + 1/6`, but its composite-to-leaf unit-factor handoff jerks
+    and its shared successor-synthesis evaluation is too visually busy. Keep
+    the caller unpromoted.
+21. **Review composer visibility:** next. Move the wide Catalogue composer out
+    of the cramped lower-left rail into a fully visible inspector-side drawer,
+    retain a bounded narrow-screen sheet, and keep Save reachable without
+    covering the stage, scrubber, or development dock.
+22. **Sequence-level paint ownership:** after Review placement. Render and
+    measure shared Native KaTeX endpoints once, preserve compound and leaf
+    ownership in one hierarchy, require equivalent-pose certificates between
+    adjacent phases, and repair the `2/2` handoff without caller timing masks.
+23. **Evaluation presentation families:** after ownership stability. Give
+    punctuated substitution, result reception, contributor fusion, carrier-
+    preserving simplification, operator aperture, and expanded calculation
+    distinct typed presentation choices and exemplar checkpoints. Do not
+    promote scaling-to-zero or simultaneous pre/post glyphs as a default.
+24. **Fraction promotion and arithmetic:** only after the ownership repair and
+    evaluation-family checkpoints. Promote contracts demonstrated by two
+    callers before designing like-denominator addition choreography.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -170,7 +186,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; fraction equivalence now has an approved exemplar plus one unpromoted structural-pressure caller | Review the `1/3 + 1/6` caller, then promote only demonstrated contracts before designing common-denominator addition. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; fraction equivalence has one approved exemplar and one pressure caller that exposed ownership and evaluation-presentation defects | Relocate Review, repair sequence-level hierarchical ownership, then compare typed evaluation families before any fraction promotion or addition choreography. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
