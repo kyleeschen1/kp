@@ -357,6 +357,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T03:14:42.245Z",
       "notes": "Ten authoring and semantic tests still pass after declaration linkage to the caller-local recipe and motif authorities."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:23:29.586Z",
+      "notes": "Thirteen semantic, presentation, asset, endpoint, identity, symbolic-numeric, and playback-contract tests passed; native source exposes one factor and target owns two exact descendants with native fraction endpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T03:23:31.049Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with the native endpoint factory and copy-fan-out compositor session."
     }
   ],
   "progress": {
@@ -530,7 +544,8 @@
     {
       "id": "s24",
       "title": "Fraction-equivalence-exemplar",
-      "status": "planned"
+      "summary": "The reversible native-KaTeX exemplar now gives one operation factor explicit source ownership, maps it to two synchronized target descendants, persists numerator, denominator, and fraction structure through the canonical compositor, and settles at exact native endpoints.",
+      "status": "complete"
     },
     {
       "id": "s25",
