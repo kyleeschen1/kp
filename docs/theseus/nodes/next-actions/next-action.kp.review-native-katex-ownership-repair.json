@@ -158,6 +158,55 @@
       "scope": "slice r16 adjacent-phase diagnostics",
       "checkedAt": "2026-08-19T14:32:37.674Z",
       "notes": "Focused diagnostics cover blank intervals, competing complete states, duplicate owners, and per-leaf pose drift without adding aesthetic timing policy."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "slice r17 shared endpoint integration",
+      "checkedAt": "2026-08-19T14:35:59.663Z",
+      "notes": "Three one-worker Chromium checks pass for the full timeline, direct URL seek/light mode, and narrow stage after removing coalescing/rebinding."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "slice r17 endpoint preservation",
+      "checkedAt": "2026-08-19T14:36:00.717Z",
+      "notes": "All 10 semantic, endpoint, timeline, and adapter tests pass with unchanged LaTeX and operation ordering."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "slices r17-r19 shared caller seam",
+      "checkedAt": "2026-08-19T14:38:47.734Z",
+      "notes": "Runtime asserts four endpoint measurements, a verified non-empty per-leaf seam certificate, exclusive paint ownership, untouched context, and unchanged final evaluation across dark/light/narrow checkpoints."
+    },
+    {
+      "command": "playwright common-denominator pressure natural playback interruption",
+      "status": "passed",
+      "scope": "slice r20 playback, rapid seek, rewind, and seam resampling",
+      "checkedAt": "2026-08-19T14:43:31.797Z",
+      "notes": "One-worker Chromium proof interrupts natural playback, rapidly resamples both sides of the seam, reverses, and retains exactly one verified paint owner."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "slice r21 theme viewport font DPR and accessibility boundary",
+      "checkedAt": "2026-08-19T14:52:58.090Z",
+      "notes": "Six one-worker Chromium checks pass across dark/light, wide/narrow, live resize, late font invalidation, DPR 2, reduced motion, and static checkpoints with exact state retention and one paint/accessibility owner."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice r21 immutable endpoint revision boundary",
+      "checkedAt": "2026-08-19T14:52:58.651Z",
+      "notes": "All 79 focused Native KaTeX compositor tests pass after adding explicit viewport-generation identity."
+    },
+    {
+      "command": "tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice r21 replacement lifecycle typecheck",
+      "checkedAt": "2026-08-19T14:52:59.078Z",
+      "notes": "Application TypeScript accepts atomic font/viewport replacement and typed retirement reasons."
     }
   ],
   "progress": {

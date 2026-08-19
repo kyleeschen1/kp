@@ -7,6 +7,9 @@ import {
   type KpCommonDenominatorPressureTimelineSegment
 } from "../animation/common-denominator-pressure-exemplar.ts";
 import {
+  createKpAdjacentPhaseEquivalentPoseSeamIntent
+} from "../animation/paint-continuity-plan-types.ts";
+import {
   kpCanonicalCommonDenominatorPressurePresentationPlan
 } from "../animation/common-denominator-pressure-presentation-plan.ts";
 import { createKpEquationFontReadiness } from
@@ -18,9 +21,7 @@ import {
   type KpFractionEquivalenceTransitSession
 } from "../rendering/fraction-equivalence-transit-session.ts";
 import {
-  bindKpCommonDenominatorPressureIntroductionTarget,
   bindKpCommonDenominatorPressureNativeEndpoint,
-  coalesceKpCommonDenominatorPressureIntroductionTarget,
   kpCanonicalCommonDenominatorPressureNativeEndpoints,
   type KpCommonDenominatorPressureNativeEndpoint
 } from "../rendering/common-denominator-pressure-native-endpoints.ts";
@@ -32,9 +33,20 @@ import {
 import type {
   KpNativeKatexSemanticPaintRelation
 } from "../rendering/native-katex-base-scene-plan.ts";
+import type {
+  KpNativeKatexPaintPreservingRetirement
+} from "../rendering/native-katex-scene-track-contract.ts";
 import {
-  settleAndObserveKpNativeKatexRenderedScene
+  settleAndCreateKpNativeKatexRenderedEndpointHandle,
+  type KpNativeKatexRenderedEndpointHandle
 } from "../rendering/native-katex-rendered-scene.ts";
+import {
+  createKpNativeKatexEndpointOwnershipView
+} from "../rendering/native-katex-endpoint-ownership.ts";
+import {
+  validateAndMintKpNativeKatexEquivalentPoseSeam,
+  type KpNativeKatexEquivalentPoseSeamCertificate
+} from "../rendering/native-katex-equivalent-pose-seam.ts";
 import { KP_EDITOR_ANIMATION_DISPOSE_EVENT } from
   "./animation-player-controller.ts";
 import type { KpEditorAnimationPlayerState } from
@@ -50,11 +62,27 @@ interface KpCommonDenominatorPressureSurfaceSession {
     HTMLElement
   >;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  endpointHandles?: ReadonlyMap<
+    KpCommonDenominatorPressureNativeEndpoint["kind"],
+    KpNativeKatexRenderedEndpointHandle
+  > | undefined;
+  measuredEndpointRevisions: Set<string>;
+  introductionToEquivalenceSeam?:
+    KpNativeKatexEquivalentPoseSeamCertificate | undefined;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   introduction?: KpCanonicalNativeKatexSceneSession | undefined;
   equivalence?: KpFractionEquivalenceTransitSession | undefined;
   evaluation?: KpCanonicalNativeKatexSceneSession | undefined;
+  measurementRevision: number;
+  preparedFontRevision?: number | undefined;
+  preparedViewportFingerprint?: string | undefined;
+  invalidationQueued: boolean;
+  replacementPreparing: boolean;
+  readonly pendingInvalidationReasons: Set<"fonts" | "viewport">;
+  resizeObserver?: ResizeObserver | undefined;
+  removeWindowResizeListener?: (() => void) | undefined;
+  unsubscribeFonts?: (() => void) | undefined;
   disposed: boolean;
 }
 
@@ -63,6 +91,12 @@ const sessions = new WeakMap<
   KpCommonDenominatorPressureSurfaceSession
 >();
 const plan = kpCanonicalCommonDenominatorPressurePresentationPlan;
+const introductionToEquivalenceIntent =
+  createKpAdjacentPhaseEquivalentPoseSeamIntent({
+    id: "seam.common-denominator-pressure.introduction-to-equivalence",
+    fromPhaseId: "stage-unit-factor",
+    toPhaseId: "join-equivalent-fraction"
+  });
 
 export const kpEditorCommonDenominatorPressureSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
@@ -136,7 +170,12 @@ function mountSurface(
     stage,
     roots,
     fontReadiness: createKpEquationFontReadiness(document),
+    measuredEndpointRevisions: new Set(),
     generation: 0,
+    measurementRevision: 0,
+    invalidationQueued: false,
+    replacementPreparing: false,
+    pendingInvalidationReasons: new Set(),
     pendingState: state,
     disposed: false
   };
@@ -155,46 +194,76 @@ async function prepareSurface(
     KpCommonDenominatorPressureNativeEndpoint["kind"],
     KpCommonDenominatorPressureNativeEndpoint
   >;
+  const measurements = new Set<string>();
   try {
-    bindKpCommonDenominatorPressureNativeEndpoint({
-      root: requiredRoot(session, endpoints.problem.kind),
-      endpoint: endpoints.problem
+    kpCanonicalCommonDenominatorPressureNativeEndpoints.forEach((endpoint) =>
+      bindKpCommonDenominatorPressureNativeEndpoint({
+        root: requiredRoot(session, endpoint.kind),
+        endpoint
+      })
+    );
+    const [problemHandle, equivalenceHandle, productHandle, evaluatedHandle] =
+      await Promise.all([
+        observeHandle(session, endpoints.problem, "source", measurements),
+        observeHandle(
+          session,
+          endpoints["equivalence-source"],
+          "target",
+          measurements
+        ),
+        observeHandle(session, endpoints.product, "target", measurements),
+        observeHandle(session, endpoints.evaluated, "target", measurements)
+      ]);
+    const problemSource = createKpNativeKatexEndpointOwnershipView({
+      handle: problemHandle,
+      endpoint: "source"
     });
-    bindKpCommonDenominatorPressureIntroductionTarget({
-      root: requiredRoot(session, endpoints["equivalence-source"].kind),
-      endpoint: endpoints["equivalence-source"]
+    const equivalenceTarget = createKpNativeKatexEndpointOwnershipView({
+      handle: equivalenceHandle,
+      endpoint: "target",
+      collapsedGroupIds: endpoints["equivalence-source"].introductionNodes
+        .map(({ presentationGroupId }) => presentationGroupId)
     });
-    const [problemSource, rawEquivalenceTarget] = await Promise.all([
-      observe(session, endpoints.problem, "source"),
-      observe(session, endpoints["equivalence-source"], "target")
-    ]);
-    const equivalenceTarget =
-      coalesceKpCommonDenominatorPressureIntroductionTarget({
-        observation: rawEquivalenceTarget,
-        endpoint: endpoints["equivalence-source"]
-      });
-    bindKpCommonDenominatorPressureNativeEndpoint({
-      root: requiredRoot(session, endpoints["equivalence-source"].kind),
-      endpoint: endpoints["equivalence-source"]
+    const equivalenceSource = createKpNativeKatexEndpointOwnershipView({
+      handle: equivalenceHandle,
+      endpoint: "source"
     });
-    bindKpCommonDenominatorPressureNativeEndpoint({
-      root: requiredRoot(session, endpoints.product.kind),
-      endpoint: endpoints.product
+    const productTarget = createKpNativeKatexEndpointOwnershipView({
+      handle: productHandle,
+      endpoint: "target"
     });
-    const [equivalenceSource, productTarget] = await Promise.all([
-      observe(session, endpoints["equivalence-source"], "source"),
-      observe(session, endpoints.product, "target")
-    ]);
-    bindKpCommonDenominatorPressureNativeEndpoint({
-      root: requiredRoot(session, endpoints.evaluated.kind),
-      endpoint: endpoints.evaluated
+    const productSource = createKpNativeKatexEndpointOwnershipView({
+      handle: productHandle,
+      endpoint: "source"
     });
-    const [productSource, evaluatedTarget] = await Promise.all([
-      observe(session, endpoints.product, "source"),
-      observe(session, endpoints.evaluated, "target")
-    ]);
+    const evaluatedTarget = createKpNativeKatexEndpointOwnershipView({
+      handle: evaluatedHandle,
+      endpoint: "target"
+    });
+    const seam = validateAndMintKpNativeKatexEquivalentPoseSeam({
+      intent: introductionToEquivalenceIntent,
+      from: equivalenceTarget,
+      to: equivalenceSource
+    });
+    if (seam.status !== "verified") {
+      throw new Error(
+        "Common-denominator introduction seam failed: " +
+        seam.issues.map(({ code, leafId }) =>
+          `${code}${leafId === undefined ? "" : `:${leafId}`}`
+        ).join(", ")
+      );
+    }
     if (session.disposed || session.generation !== generation) return;
-    session.introduction = createKpCanonicalNativeKatexSceneSession(
+    const endpointHandles = new Map<
+      KpCommonDenominatorPressureNativeEndpoint["kind"],
+      KpNativeKatexRenderedEndpointHandle
+    >([
+      ["problem", problemHandle],
+      ["equivalence-source", equivalenceHandle],
+      ["product", productHandle],
+      ["evaluated", evaluatedHandle]
+    ]);
+    const introduction = createKpCanonicalNativeKatexSceneSession(
       compileKpCanonicalNativeKatexScenePlan({
         source: problemSource,
         target: equivalenceTarget,
@@ -204,14 +273,14 @@ async function prepareSurface(
         endpointDwellFraction: 0
       })
     );
-    session.equivalence = createKpFractionEquivalenceTransitSession({
+    const equivalence = createKpFractionEquivalenceTransitSession({
       source: equivalenceSource,
       target: productTarget,
       semantic: plan.equivalence.focus.semantic,
       presentation: plan.equivalence.focus.presentation,
       contextRelations: equivalenceContextRelations()
     });
-    session.evaluation = createKpCanonicalNativeKatexSceneSession(
+    const evaluation = createKpCanonicalNativeKatexSceneSession(
       compileKpCanonicalNativeKatexScenePlan({
         source: productSource,
         target: evaluatedTarget,
@@ -226,10 +295,45 @@ async function prepareSurface(
         endpointDwellFraction: 0
       })
     );
+    if (session.disposed || session.generation !== generation) {
+      retirePreparedSessions({ introduction, equivalence, evaluation });
+      return;
+    }
+    // A replacement is installed as one ownership transaction. The old scene
+    // keeps its last paint until the new scene can sample the exact playhead.
+    retireSurfaceSessions(session, "measurement-invalidated");
+    session.endpointHandles = endpointHandles;
+    session.measuredEndpointRevisions = measurements;
+    session.introductionToEquivalenceSeam = seam.certificate;
+    session.introduction = introduction;
+    session.equivalence = equivalence;
+    session.evaluation = evaluation;
+    session.preparedFontRevision = session.fontReadiness.revision;
+    session.preparedViewportFingerprint = pressureViewportFingerprint(
+      session.stage
+    );
+    session.stage.dataset["kpCommonDenominatorPressureMeasurementCount"] =
+      String(measurements.size);
+    session.stage.dataset["kpCommonDenominatorPressureMeasurementRevision"] =
+      String(session.measurementRevision);
+    session.stage.dataset["kpCommonDenominatorPressureFontRevision"] =
+      String(session.preparedFontRevision);
+    session.stage.dataset["kpCommonDenominatorPressureViewportKey"] =
+      equivalenceHandle.revision.viewportKey;
+    session.stage.dataset["kpCommonDenominatorPressureSeam"] = "verified";
+    session.stage.dataset["kpCommonDenominatorPressureSeamLeafCount"] =
+      String(seam.certificate.leaves.length);
     session.stage.dataset["kpCommonDenominatorPressureStage"] = "ready";
+    session.replacementPreparing = false;
+    delete session.stage.dataset[
+      "kpCommonDenominatorPressureInvalidationReason"
+    ];
+    installSurfaceInvalidationLifecycle(session);
     applyFrame(session, session.pendingState);
+    flushPendingSurfaceInvalidation(session);
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
+    session.replacementPreparing = false;
     session.stage.dataset["kpCommonDenominatorPressureStage"] = "failed";
     session.stage.dataset["kpCommonDenominatorPressureError"] =
       error instanceof Error ? error.message : String(error);
@@ -237,26 +341,116 @@ async function prepareSurface(
   }
 }
 
-function observe(
+async function observeHandle(
   session: KpCommonDenominatorPressureSurfaceSession,
   endpoint: KpCommonDenominatorPressureNativeEndpoint,
-  side: "source" | "target"
+  side: "source" | "target",
+  measurements: Set<string>
 ) {
-  return settleAndObserveKpNativeKatexRenderedScene({
+  const handle = await settleAndCreateKpNativeKatexRenderedEndpointHandle({
     endpoint: side,
     stage: session.stage,
     root: requiredRoot(session, endpoint.kind),
     semanticEntityId: endpoint.stateId,
     presentationGroupId: endpoint.rootPresentationGroupId,
-    fontReadiness: session.fontReadiness
+    fontReadiness: session.fontReadiness,
+    viewportRevision: session.measurementRevision
   });
+  const measurementKey = [
+    endpoint.kind,
+    handle.revision.fontRevision,
+    handle.revision.viewportKey
+  ].join("|");
+  if (measurements.has(measurementKey)) {
+    throw new Error(
+      `Pressure endpoint ${endpoint.kind} was measured twice for one revision.`
+    );
+  }
+  measurements.add(measurementKey);
+  return handle;
+}
+
+function installSurfaceInvalidationLifecycle(
+  session: KpCommonDenominatorPressureSurfaceSession
+): void {
+  if (session.unsubscribeFonts !== undefined) return;
+  session.unsubscribeFonts = session.fontReadiness.subscribe(() =>
+    scheduleSurfaceMeasurementReplacement(session, "fonts")
+  );
+  const view = session.stage.ownerDocument.defaultView;
+  if (view !== null) {
+    const onWindowResize = (): void =>
+      scheduleSurfaceMeasurementReplacement(session, "viewport");
+    view.addEventListener("resize", onWindowResize);
+    session.removeWindowResizeListener = () =>
+      view.removeEventListener("resize", onWindowResize);
+  }
+  if (typeof ResizeObserver !== "undefined") {
+    session.resizeObserver = new ResizeObserver(() =>
+      scheduleSurfaceMeasurementReplacement(session, "viewport")
+    );
+    session.resizeObserver.observe(session.stage);
+  }
+}
+
+function scheduleSurfaceMeasurementReplacement(
+  session: KpCommonDenominatorPressureSurfaceSession,
+  reason: "fonts" | "viewport"
+): void {
+  if (session.disposed) return;
+  session.pendingInvalidationReasons.add(reason);
+  if (session.invalidationQueued || session.replacementPreparing) return;
+  session.invalidationQueued = true;
+  queueMicrotask(() => {
+    session.invalidationQueued = false;
+    if (session.disposed) return;
+    const fontChanged = session.pendingInvalidationReasons.has("fonts") &&
+      session.fontReadiness.revision !== session.preparedFontRevision;
+    const viewportFingerprint = pressureViewportFingerprint(session.stage);
+    const viewportChanged =
+      session.pendingInvalidationReasons.has("viewport") &&
+      viewportFingerprint !== session.preparedViewportFingerprint;
+    session.pendingInvalidationReasons.clear();
+    if (!fontChanged && !viewportChanged) return;
+    session.replacementPreparing = true;
+    session.measurementRevision += 1;
+    const generation = ++session.generation;
+    session.stage.dataset["kpCommonDenominatorPressureStage"] = "preparing";
+    session.stage.dataset["kpCommonDenominatorPressureInvalidationReason"] =
+      fontChanged && viewportChanged
+        ? "fonts-and-viewport"
+        : fontChanged ? "fonts" : "viewport";
+    void prepareSurface(session, generation);
+  });
+}
+
+function flushPendingSurfaceInvalidation(
+  session: KpCommonDenominatorPressureSurfaceSession
+): void {
+  const nextReason = session.pendingInvalidationReasons.has("fonts")
+    ? "fonts"
+    : session.pendingInvalidationReasons.has("viewport")
+      ? "viewport"
+      : undefined;
+  if (nextReason !== undefined) {
+    scheduleSurfaceMeasurementReplacement(session, nextReason);
+  }
+}
+
+function pressureViewportFingerprint(stage: HTMLElement): string {
+  const rect = stage.getBoundingClientRect();
+  const dpr = stage.ownerDocument.defaultView?.devicePixelRatio ?? 1;
+  return `${rect.width}x${rect.height}@${dpr}`;
 }
 
 function applyFrame(
   session: KpCommonDenominatorPressureSurfaceSession,
   state: KpEditorAnimationPlayerState
 ): void {
-  if (!isReady(session)) return;
+  if (
+    !isReady(session) ||
+    session.stage.dataset["kpCommonDenominatorPressureStage"] !== "ready"
+  ) return;
   const forwardProgress = state.direction === "rewind"
     ? 1 - state.progress
     : state.progress;
@@ -418,10 +612,13 @@ function isReady(
   readonly introduction: KpCanonicalNativeKatexSceneSession;
   readonly equivalence: KpFractionEquivalenceTransitSession;
   readonly evaluation: KpCanonicalNativeKatexSceneSession;
+  readonly introductionToEquivalenceSeam:
+    KpNativeKatexEquivalentPoseSeamCertificate;
 } {
   return session.introduction !== undefined &&
     session.equivalence !== undefined &&
-    session.evaluation !== undefined;
+    session.evaluation !== undefined &&
+    session.introductionToEquivalenceSeam !== undefined;
 }
 
 function showOnly(
@@ -452,6 +649,37 @@ function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {
   else root.setAttribute("inert", "");
 }
 
+function retirePreparedSessions(input: {
+  readonly introduction: KpCanonicalNativeKatexSceneSession;
+  readonly equivalence: KpFractionEquivalenceTransitSession;
+  readonly evaluation: KpCanonicalNativeKatexSceneSession;
+}): void {
+  const retirement = paintPreservingRetirement("measurement-invalidated");
+  input.introduction.session.retire(retirement);
+  input.equivalence.retire("measurement-invalidated");
+  input.evaluation.session.retire(retirement);
+}
+
+function retireSurfaceSessions(
+  session: KpCommonDenominatorPressureSurfaceSession,
+  reason: KpNativeKatexPaintPreservingRetirement["reason"]
+): void {
+  const retirement = paintPreservingRetirement(reason);
+  session.introduction?.session.retire(retirement);
+  session.equivalence?.retire(reason);
+  session.evaluation?.session.retire(retirement);
+}
+
+function paintPreservingRetirement(
+  reason: KpNativeKatexPaintPreservingRetirement["reason"]
+): KpNativeKatexPaintPreservingRetirement {
+  return {
+    kind: "native-katex-paint-preserving-retirement",
+    reason,
+    structuralSuccession: "retire-preserving-paint"
+  };
+}
+
 function disposeSurface(
   player: HTMLElement,
   session: KpCommonDenominatorPressureSurfaceSession
@@ -459,14 +687,10 @@ function disposeSurface(
   if (session.disposed) return;
   session.disposed = true;
   session.generation += 1;
-  const retirement = {
-    kind: "native-katex-paint-preserving-retirement" as const,
-    reason: "surface-disposed" as const,
-    structuralSuccession: "retire-preserving-paint" as const
-  };
-  session.introduction?.session.retire(retirement);
-  session.equivalence?.retire();
-  session.evaluation?.session.retire(retirement);
+  retireSurfaceSessions(session, "surface-disposed");
+  session.resizeObserver?.disconnect();
+  session.removeWindowResizeListener?.();
+  session.unsubscribeFonts?.();
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
   session.fontReadiness.dispose();
   sessions.delete(player);

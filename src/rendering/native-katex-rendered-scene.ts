@@ -283,6 +283,7 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
   readonly presentationGroupId: string;
   readonly fontReadiness: KpEquationFontReadiness;
   readonly geometryTolerancePx?: number | undefined;
+  readonly viewportRevision?: number | undefined;
 }): Promise<KpNativeKatexRenderedSceneObservation> {
   await input.fontReadiness.whenReady();
   await nextSceneLayoutFrame(input.stage.ownerDocument);
@@ -573,6 +574,7 @@ export function observeKpNativeKatexRenderedScene(input: {
   readonly presentationGroupId: string;
   readonly fontReadiness: KpEquationFontReadiness;
   readonly includeHiddenPaint?: boolean | undefined;
+  readonly viewportRevision?: number | undefined;
 }): KpNativeKatexRenderedSceneObservation {
   const atoms = observeKpNativeKatexPaintAtoms({
     endpoint: input.endpoint,
@@ -631,7 +633,8 @@ export function observeKpNativeKatexRenderedScene(input: {
     fontRevision: input.fontReadiness.revision,
     viewportKey:
       `${input.endpoint}:${stageRect.width}x${stageRect.height}` +
-      `@${dpr}:font-${input.fontReadiness.revision}`
+      `@${dpr}:font-${input.fontReadiness.revision}` +
+      `:viewport-${input.viewportRevision ?? 0}`
   });
 }
 

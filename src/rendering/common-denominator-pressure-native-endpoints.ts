@@ -7,12 +7,6 @@ import type {
   KpSelectorAnnotatedLatex,
   KpSelectorLatexAnnotation
 } from "./selector-annotated-latex.ts";
-import {
-  createKpNativeKatexRenderedSceneObservation,
-  fingerprintKpNativeKatexPaintStyle,
-  unionKpStageRelativeRects,
-  type KpNativeKatexRenderedSceneObservation
-} from "./native-katex-rendered-scene.ts";
 
 export interface KpCommonDenominatorPressureNativeNode {
   readonly occurrenceId: string;
@@ -87,7 +81,6 @@ export function bindKpCommonDenominatorPressureNativeEndpoint(input: {
   readonly root: HTMLElement;
   readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
 }): void {
-  clearIntroductionOwnership(input.root, input.endpoint);
   input.root.dataset["kpSemanticEntityId"] = input.endpoint.stateId;
   input.root.dataset["kpPresentationGroupId"] =
     input.endpoint.rootPresentationGroupId;
@@ -115,13 +108,8 @@ export function bindKpCommonDenominatorPressureNativeEndpoint(input: {
       }
       bindNode(elements[0]!, node);
     });
-}
-
-export function bindKpCommonDenominatorPressureIntroductionTarget(input: {
-  readonly root: HTMLElement;
-  readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
-}): void {
-  bindKpCommonDenominatorPressureNativeEndpoint(input);
+  // Compound groups and their semantic leaves coexist in one annotated tree;
+  // renderer phases select an ownership view instead of rewriting the DOM.
   input.endpoint.introductionNodes.forEach((node) => {
     const owner = input.root.querySelector<HTMLElement>(
       `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
@@ -132,85 +120,7 @@ export function bindKpCommonDenominatorPressureIntroductionTarget(input: {
         `owner ${node.occurrenceId}.`
       );
     }
-    // A fraction is one structural paint unit while it enters. Its interior
-    // becomes individually addressable only after native endpoint settlement.
-    owner.querySelectorAll<HTMLElement>("[data-kp-semantic-entity-id]")
-      .forEach(clearNodeOwnership);
     bindNode(owner, node);
-  });
-}
-
-export function coalesceKpCommonDenominatorPressureIntroductionTarget(
-  input: {
-    readonly observation: KpNativeKatexRenderedSceneObservation;
-    readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
-  }
-): KpNativeKatexRenderedSceneObservation {
-  const node = input.endpoint.introductionNodes[0];
-  if (node === undefined || input.endpoint.introductionNodes.length !== 1) {
-    throw new Error(
-      "Pressure introduction requires exactly one structural unit factor."
-    );
-  }
-  const owner = input.observation.root.querySelector<HTMLElement>(
-    `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
-  );
-  if (owner === null) {
-    throw new Error("Pressure introduction unit-factor paint is missing.");
-  }
-  const contained = input.observation.atoms.filter(({ sourceElement }) =>
-    owner.contains(sourceElement)
-  );
-  if (contained.length === 0) {
-    throw new Error("Pressure introduction unit factor owns no native paint.");
-  }
-  const removedIds = new Set(contained.map(({ id }) => id));
-  const compositeId = `${input.observation.endpoint}.paint.unit-factor`;
-  const composite = Object.freeze({
-    kind: "native-katex-paint-atom-observation" as const,
-    lifecycle: "renderer-session" as const,
-    id: compositeId,
-    endpoint: input.observation.endpoint,
-    semanticEntityId: node.occurrenceId,
-    presentationGroupId: node.presentationGroupId,
-    paintKind: "glyph" as const,
-    visualKey: "glyph:unit-fraction",
-    sourceElement: owner,
-    rect: unionKpStageRelativeRects(contained.map(({ rect }) => rect)),
-    styleFingerprint: fingerprintKpNativeKatexPaintStyle(
-      getComputedStyle(owner)
-    ),
-    zOrder: Math.min(...contained.map(({ zOrder }) => zOrder)),
-    fontRevision: input.observation.fontRevision
-  });
-  const atoms = Object.freeze([
-    ...input.observation.atoms.filter(({ id }) => !removedIds.has(id)),
-    composite
-  ]);
-  const atomById = new Map(atoms.map((atom) => [atom.id, atom]));
-  const groups = Object.freeze(input.observation.groups.flatMap((group) => {
-    const ownedIntroductionPaint = group.atomIds.some((id) =>
-      removedIds.has(id)
-    );
-    const atomIds = [
-      ...group.atomIds.filter((id) => !removedIds.has(id)),
-      ...(ownedIntroductionPaint ? [compositeId] : [])
-    ];
-    if (atomIds.length === 0) return [];
-    return [Object.freeze({
-      ...group,
-      atomIds: Object.freeze(atomIds),
-      rect: unionKpStageRelativeRects(atomIds.map((id) => atomById.get(id)!.rect))
-    })];
-  }));
-  return createKpNativeKatexRenderedSceneObservation({
-    endpoint: input.observation.endpoint,
-    stage: input.observation.stage,
-    root: input.observation.root,
-    atoms,
-    groups,
-    fontRevision: input.observation.fontRevision,
-    viewportKey: input.observation.viewportKey
   });
 }
 
@@ -503,27 +413,6 @@ function sequence(...parts: readonly NativePart[]): NativePart {
       ({ introductionNodes }) => introductionNodes
     ))
   });
-}
-
-function clearIntroductionOwnership(
-  root: HTMLElement,
-  endpoint: KpCommonDenominatorPressureNativeEndpoint
-): void {
-  endpoint.introductionNodes.forEach((node) => {
-    const owner = root.querySelector<HTMLElement>(
-      `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
-    );
-    if (owner !== null) clearNodeOwnership(owner);
-  });
-}
-
-function clearNodeOwnership(element: HTMLElement): void {
-  for (const key of [
-    "kpSemanticEntityId",
-    "kpSemanticIdentityId",
-    "kpSemanticSelectorId",
-    "kpPresentationGroupId"
-  ]) delete element.dataset[key];
 }
 
 function context(

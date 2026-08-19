@@ -19,6 +19,9 @@ import {
   type KpCanonicalNativeKatexSceneSession,
   type KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
+import type {
+  KpNativeKatexPaintPreservingRetirement
+} from "./native-katex-scene-track-contract.ts";
 import {
   createKpNativeKatexTrackProjection,
   type KpNativeKatexTrackProjection
@@ -28,7 +31,9 @@ export interface KpFractionEquivalenceTransitSession {
   readonly kind: "kp-fraction-equivalence-transit-session";
   readonly canonical: KpCanonicalNativeKatexSceneSession;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
-  readonly retire: () => void;
+  readonly retire: (
+    reason?: KpNativeKatexPaintPreservingRetirement["reason"]
+  ) => void;
 }
 
 /**
@@ -199,12 +204,15 @@ export function createKpFractionEquivalenceTransitSession(input: {
       }
       return canonical.session.apply(bounded(progress));
     },
-    retire() {
+    retire(
+      reason: KpNativeKatexPaintPreservingRetirement["reason"] =
+        "surface-disposed"
+    ) {
       if (retired) return;
       retired = true;
       canonical.session.retire({
         kind: "native-katex-paint-preserving-retirement",
-        reason: "surface-disposed",
+        reason,
         structuralSuccession: "retire-preserving-paint"
       });
     }

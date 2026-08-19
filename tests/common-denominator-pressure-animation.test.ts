@@ -122,6 +122,10 @@ test("the pressure adapter composes existing paint authorities", async () => {
   assert.match(source, /createKpFractionEquivalenceTransitSession/u);
   assert.match(source, /createKpCanonicalNativeKatexSceneSession/u);
   assert.match(source, /KpEditorAnimationPlayerState/u);
+  assert.match(source, /settleAndCreateKpNativeKatexRenderedEndpointHandle/u);
+  assert.match(source, /validateAndMintKpNativeKatexEquivalentPoseSeam/u);
   assert.doesNotMatch(source,
     /requestAnimationFrame|setInterval|setTimeout|\.animate\(/u);
+  assert.doesNotMatch(source,
+    /coalesceKpCommonDenominatorPressureIntroductionTarget|bindKpCommonDenominatorPressureIntroductionTarget/u);
 });

@@ -25,6 +25,18 @@ test("pressure caller stays complete and deterministic across its timeline", asy
   await expect(player.locator(
     '[data-kp-editor-animation-surface-slot="equation"]'
   )).toHaveAttribute("data-kp-editor-animation-adapter-id", adapterId);
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-measurement-count",
+    "4"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-seam",
+    "verified"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-seam-leaf-count",
+    /[1-9]\d*/u
+  );
 
   for (const progress of [0, 0.09, 0.18, 0.44, 0.7, 0.85, 1, 0.44, 0]) {
     await seek.fill(String(progress));
@@ -115,6 +127,92 @@ test("direct URL seek remounts the reviewed state in light mode", async ({
   await expectExactlyOnePaintOwner(remounted);
 });
 
+test("natural playback can be interrupted and directly resampled at the seam", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}&playhead=0&theme=dark`);
+  const { player, stage, seek } = await readyPressureSurface(page);
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+  await expect.poll(async () => Number(
+    await player.getAttribute("data-kp-editor-animation-progress")
+  )).toBeGreaterThan(0);
+
+  for (const progress of ["0.179", "0.181", "0.18", "0.44", "0.18"]) {
+    await seek.fill(progress);
+    await expect(stage).toHaveAttribute(
+      "data-kp-common-denominator-pressure-progress",
+      progress
+    );
+    await expectExactlyOnePaintOwner(stage);
+  }
+  await player.focus();
+  await page.keyboard.press("r");
+  await seek.fill("0.82");
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-progress",
+    String(1 - 0.82)
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-seam",
+    "verified"
+  );
+  await expectExactlyOnePaintOwner(stage);
+});
+
+test("font and viewport replacement retain the exact state without replay", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}&playhead=0.44&theme=dark`);
+  const { player, stage, seek } = await readyPressureSurface(page);
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-measurement-revision",
+    "0"
+  );
+
+  await page.setViewportSize({ width: 1_100, height: 800 });
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-measurement-revision",
+    "1"
+  );
+  await expectPressureReplacement(stage, "0.44");
+
+  await page.evaluate(() =>
+    document.fonts.dispatchEvent(new Event("loadingdone"))
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-measurement-revision",
+    "2"
+  );
+  await expectPressureReplacement(stage, "0.44");
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-font-revision",
+    /[1-9]\d*/u
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-viewport-key",
+    /@\d+(?:\.\d+)?:font-\d+:viewport-2$/u
+  );
+
+  await player.evaluate((element) => {
+    element.dataset["kpEditorAnimationAccessibilityMode"] = "reduced-motion";
+  });
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await seek.fill("0.82");
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-progress",
+    "0.7"
+  );
+  await expectExactlyOneAccessibleEndpoint(stage);
+  await expectExactlyOnePaintOwner(stage);
+});
+
 test("narrow view keeps the pressure stage and transport unobstructed", async ({
   page
 }, testInfo) => {
@@ -135,6 +233,37 @@ test("narrow view keeps the pressure stage and transport unobstructed", async ({
   )).toHaveAttribute("aria-hidden", "false");
   await expectExactlyOnePaintOwner(stage);
   await captureStage(stage, testInfo, "pressure-narrow-final.png");
+});
+
+test("device scale and static checkpoints preserve one endpoint owner", async ({
+  browser
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(`/?artifact=${animationId}&playhead=0.82&theme=dark`);
+    const { player, stage, seek } = await readyPressureSurface(page);
+    expect(await page.evaluate(() => window.devicePixelRatio)).toBe(2);
+    await expect(stage).toHaveAttribute(
+      "data-kp-common-denominator-pressure-viewport-key",
+      /@2:font-\d+:viewport-0$/u
+    );
+    await player.evaluate((element) => {
+      element.dataset["kpEditorAnimationAccessibilityMode"] = "static";
+    });
+    await seek.fill("0.82");
+    await expect(stage).toHaveAttribute(
+      "data-kp-common-denominator-pressure-progress",
+      "0.7"
+    );
+    await expectExactlyOneAccessibleEndpoint(stage);
+    await expectExactlyOnePaintOwner(stage);
+  } finally {
+    await context.close();
+  }
 });
 
 async function readyPressureSurface(page: Page) {
@@ -189,6 +318,47 @@ async function expectExactlyOnePaintOwner(stage: Locator): Promise<void> {
       )].some((element) => Number(getComputedStyle(element).opacity) > 0);
     return endpoints.length + Number(hasMaterial);
   })).toBe(1);
+}
+
+async function expectPressureReplacement(
+  stage: Locator,
+  progress: string
+): Promise<void> {
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-stage",
+    "ready"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-measurement-count",
+    "4"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-seam",
+    "verified"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-common-denominator-pressure-progress",
+    progress
+  );
+  await expectExactlyOneAccessibleEndpoint(stage);
+  await expectExactlyOnePaintOwner(stage);
+}
+
+async function expectExactlyOneAccessibleEndpoint(
+  stage: Locator
+): Promise<void> {
+  const endpoints = stage.locator(
+    ".kp-common-denominator-pressure-stage__endpoint"
+  );
+  await expect(endpoints).toHaveCount(4);
+  await expect(stage.locator(
+    ".kp-common-denominator-pressure-stage__endpoint" +
+    '[aria-hidden="false"]:not([inert])'
+  )).toHaveCount(1);
+  await expect(stage.locator(
+    ".kp-common-denominator-pressure-stage__endpoint" +
+    '[aria-hidden="true"][inert]'
+  )).toHaveCount(3);
 }
 
 async function captureStage(

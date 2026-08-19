@@ -153,32 +153,38 @@
     {
       "id": "r17",
       "title": "Replace-pressure-endpoint-coalescing",
-      "status": "planned"
+      "summary": "Removed introduction coalescing and DOM ownership rebinding; the pressure surface now binds one hierarchy and measures each endpoint once.",
+      "status": "complete"
     },
     {
       "id": "r18",
       "title": "Connect-introduction-and-equivalence-seam",
-      "status": "planned"
+      "summary": "Connected introduction and equivalence only after their compound/leaf views mint a verified equivalent-pose seam certificate.",
+      "status": "complete"
     },
     {
       "id": "r19",
       "title": "Preserve-evaluation-and-context-in-surface",
-      "status": "planned"
+      "summary": "Preserved the existing evaluation session, successor synthesis, plus sign, and untouched one-sixth while sharing product endpoint ownership.",
+      "status": "complete"
     },
     {
       "id": "r20",
       "title": "Verify-playback-seek-rewind-interruption",
-      "status": "planned"
+      "summary": "Proved natural playback interruption, rapid direct seam seeks, and reverse sampling preserve the verified seam and one paint owner.",
+      "status": "complete"
     },
     {
       "id": "r21",
       "title": "Verify-theme-viewport-font-accessibility",
-      "status": "planned"
+      "summary": "Verified dark/light, narrow/wide, atomic resize and font replacement, DPR 2, reduced motion, and static accessibility with exact-state retention and no ownership divergence.",
+      "status": "complete"
     },
     {
       "id": "r22",
       "title": "Produce-human-checkpoint-evidence",
-      "status": "planned"
+      "summary": "Producing the mandatory human checkpoint evidence and stopping before evaluation-family work.",
+      "status": "in-progress"
     }
   ]
 }
