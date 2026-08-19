@@ -189,11 +189,25 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T02:12:56.841Z",
       "notes": "4 governed source resolver tests passed after endpoint and correspondence requirements were added."
+    },
+    {
+      "command": "npm run test:equation-series-logarithm-base",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:18:33.788Z",
+      "notes": "6 declaration, exact source, numeric/symbolic alternative-base corpus, adversarial pin/evidence/endpoint/correspondence, recovery, and dispatch tests passed."
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:18:44.039Z",
+      "notes": "15 semantic, corpus, presentation, compositor, route, and authority tests passed; accepted change-of-base choreography remained unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 routes all six balanced operations through exact governed source pins, endpoint evidence, ordered correspondences, role mappings, assumptions, and operation pack pins."
+    "summary": "s14 routes numeric and symbolic change-of-base authoring through exact source, revision, endpoints, correspondences, branded contract, bases, and domain evidence."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -302,7 +316,8 @@
     {
       "id": "s14",
       "title": "Change-of-base-binding",
-      "status": "planned"
+      "summary": "Change-of-base now uses shared governed source selection plus its existing branded verifier for exact bases, domains, endpoints, and ordered correspondences; accepted motion is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s15",

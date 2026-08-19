@@ -20,10 +20,13 @@ import { kpEquationSeriesOperationRegistry } from
   "../src/authoring/equation-series-operation-declarations.ts";
 import { kpCanonicalLogarithmChangeOfBase } from
   "../src/semantic/logarithm-change-of-base.ts";
+import { evaluateKpLogarithmBaseAuthoringEvidence } from
+  "../src/authoring/logarithm-base-authoring-evidence.ts";
 
 const source = createKpEquationSeriesLogarithmBaseSemanticSource({
   sourceId: "source.logarithm.change-of-base.canonical",
   revisionId: "revision.logarithm.change-of-base.canonical.v1",
+  adjacencyId: "adjacency.logarithm.change-of-base.canonical",
   transformation: kpCanonicalLogarithmChangeOfBase
 });
 
@@ -61,6 +64,13 @@ test("verified source and semantic arguments compile exact ordered LaTeX", () =>
   KP_LOGARITHM_BASE_EQUATION_SERIES_AUTHORING_AUTHORITY);
 });
 
+test("numeric and symbolic alternative-base corpus binds through authoring", () => {
+  const evidence = evaluateKpLogarithmBaseAuthoringEvidence();
+  assert.equal(evidence.status, "passed");
+  assert.equal(evidence.cases.length >= 2, true);
+  assert.equal(evidence.cases.every(({ passed }) => passed), true);
+});
+
 test("pins sources identities evidence and endpoints fail with typed repairs", () => {
   assert.equal(repairKind({
     ...semanticArguments(),
@@ -81,6 +91,17 @@ test("pins sources identities evidence and endpoints fail with typed repairs", (
       sourceBaseNotOneEvidenceId: "evidence.fabricated"
     }
   }), "assumption-evidence");
+  assert.equal(repairKind({
+    ...semanticArguments(),
+    correspondenceIds: ["correspondence.fabricated"]
+  }), "semantic-source");
+  assert.equal(repairKind(semanticArguments(), [{
+    ...source,
+    adjacencyEvidence: source.adjacencyEvidence?.map((entry) => ({
+      ...entry,
+      fromStateId: "state.fabricated.source"
+    }))
+  }]), "semantic-source");
   assert.equal(repairKind(semanticArguments(), [source],
     "\\frac{\\ln(2)}{\\ln(7)}"), "semantic-source");
 });
@@ -163,7 +184,8 @@ KpEquationSeriesLogarithmBaseSemanticArguments {
       sourceArgumentSemanticId: transformation.source.argument.semanticId,
       targetLogarithmFunction: "natural-logarithm"
     },
-    domainEvidenceIds: { ...transformation.domainEvidence }
+    domainEvidenceIds: { ...transformation.domainEvidence },
+    correspondenceIds: transformation.correspondence.map(({ id }) => id)
   };
 }
 

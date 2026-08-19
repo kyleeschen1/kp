@@ -39,6 +39,7 @@ export function evaluateKpLogarithmBaseAuthoringEvidence() {
     const source = createKpEquationSeriesLogarithmBaseSemanticSource({
       sourceId: `source.authoring.${id}`,
       revisionId: `revision.authoring.${id}.v1`,
+      adjacencyId: `adjacency.authoring.${transformation.id}`,
       transformation
     });
     const result = compileKpEquationTransformSeries({
@@ -128,7 +129,8 @@ function semanticArguments(
       sourceArgumentSemanticId: transformation.source.argument.semanticId,
       targetLogarithmFunction: "natural-logarithm"
     },
-    domainEvidenceIds: { ...transformation.domainEvidence }
+    domainEvidenceIds: { ...transformation.domainEvidence },
+    correspondenceIds: transformation.correspondence.map(({ id }) => id)
   };
 }
 

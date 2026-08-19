@@ -11,8 +11,10 @@ import {
 } from "../semantic/logarithm-change-of-base.ts";
 import type { KpNormalizedEquationTransformSeriesState } from
   "./equation-latex-endpoint-normalizer.ts";
-import type { KpEquationSeriesVerifiedSemanticSource } from
-  "./equation-series-governed-source.ts";
+import {
+  resolveKpEquationSeriesGovernedSource,
+  type KpEquationSeriesVerifiedSemanticSource
+} from "./equation-series-governed-source.ts";
 import type { KpEquationSeriesIntentResolutionResult } from
   "./equation-series-intent-resolver.ts";
 import type { KpEquationSeriesExternalDiagnostic } from
@@ -69,6 +71,7 @@ export interface KpEquationSeriesLogarithmBaseSemanticArguments {
     sourceArgumentPositiveEvidenceId: string;
     naturalLogarithmTargetEvidenceId: string;
   }>;
+  readonly correspondenceIds: readonly string[];
 }
 
 export const kpEquationSeriesLogarithmBaseAuthoringDeclaration = deepFreeze({
@@ -90,6 +93,7 @@ export const kpEquationSeriesLogarithmBaseAuthoringDeclaration = deepFreeze({
 export function createKpEquationSeriesLogarithmBaseSemanticSource(input: {
   readonly sourceId: string;
   readonly revisionId: string;
+  readonly adjacencyId: string;
   readonly transformation: KpVerifiedLogarithmChangeOfBase;
 }): KpEquationSeriesVerifiedSemanticSource {
   if (!isKpVerifiedLogarithmChangeOfBase(input.transformation)) {
@@ -104,6 +108,22 @@ export function createKpEquationSeriesLogarithmBaseSemanticSource(input: {
     semanticContracts: [{
       kind: KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND,
       authority: input.transformation
+    }],
+    adjacencyEvidence: [{
+      adjacencyId: input.adjacencyId,
+      fromStateId: input.transformation.source.stateId,
+      toStateId: input.transformation.target.stateId,
+      correspondenceIds: input.transformation.correspondence.map(({ id }) => id),
+      roleBindings: {
+        "source-base": [input.transformation.source.base.entityId],
+        "source-argument": [input.transformation.source.argument.entityId],
+        "target-numerator": [
+          input.transformation.target.numerator.argument.entityId
+        ],
+        "target-denominator": [
+          input.transformation.target.denominator.argument.entityId
+        ]
+      }
     }]
   });
 }
@@ -168,7 +188,8 @@ function validateArguments(input: {
     "sourcePin",
     "operationPin",
     "semanticBindings",
-    "domainEvidenceIds"
+    "domainEvidenceIds",
+    "correspondenceIds"
   ], input.path, input.diagnostics);
   if (input.value["schemaVersion"] !==
       "kp.equation-series.logarithm-base-intent.v1") {
@@ -182,7 +203,9 @@ function validateArguments(input: {
   validatePin(input.value["operationPin"], input.path, input.diagnostics);
   const resolved = resolveSource(
     input.value["sourcePin"],
+    input.value["correspondenceIds"],
     input.path,
+    input.plan,
     input.sourceAuthorities,
     input.diagnostics
   );
@@ -204,7 +227,9 @@ function validateArguments(input: {
 
 function resolveSource(
   value: unknown,
+  correspondenceValue: unknown,
   path: string,
+  plan: Parameters<typeof validateArguments>[0]["plan"],
   sources: readonly KpEquationSeriesVerifiedSemanticSource[],
   diagnostics: KpEquationSeriesExternalDiagnostic[]
 ): Readonly<{
@@ -213,25 +238,66 @@ function resolveSource(
 }> | undefined {
   const sourceId = isRecord(value) ? value["sourceId"] : undefined;
   const revisionId = isRecord(value) ? value["revisionId"] : undefined;
-  const source = sources.find((candidate) =>
-    candidate.sourceId === sourceId && candidate.revisionId === revisionId
-  );
-  const contract = source?.semanticContracts?.find(({ kind }) =>
-    kind === KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND
-  );
   if (
     !isRecord(value) || Object.keys(value).some((key) =>
       key !== "sourceId" && key !== "revisionId"
-    ) || source === undefined ||
-    !source.operationIds.includes(KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID) ||
-    contract === undefined ||
-    !isKpVerifiedLogarithmChangeOfBase(contract.authority)
+    ) || typeof sourceId !== "string" || typeof revisionId !== "string"
   ) {
     diagnostics.push(diagnostic(
       "equation-series.governance.source.unresolved",
       `${path}.sourcePin`,
       "The source pin does not resolve to verified change-of-base authority.",
       "Pin an exact source and revision created from a verified change-of-base contract.",
+      KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID
+    ));
+    return undefined;
+  }
+  const correspondenceIds = stringIds(correspondenceValue);
+  const resolution = resolveKpEquationSeriesGovernedSource({
+    requirement: {
+      sourcePin: { sourceId, revisionId },
+      operationId: KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID,
+      requiredSemanticContractKinds: [
+        KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND
+      ],
+      requiredAdjacency: {
+        adjacencyId: plan.id,
+        fromStateId: plan.fromStateId,
+        toStateId: plan.toStateId
+      },
+      requiredCorrespondenceIds: correspondenceIds ?? []
+    },
+    sources
+  });
+  if (resolution.status !== "resolved") {
+    diagnostics.push(diagnostic(
+      "equation-series.governance.source.unresolved",
+      `${path}.sourcePin`,
+      `The change-of-base source could not satisfy ${resolution.status}: ` +
+        `${resolution.missingIds.join(", ")}.`,
+      "Use the exact verified source, endpoints, and correspondence identities.",
+      KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID
+    ));
+    return undefined;
+  }
+  const source = resolution.source;
+  const contract = source.semanticContracts?.find(({ kind }) =>
+    kind === KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND
+  );
+  if (
+    contract === undefined ||
+    !isKpVerifiedLogarithmChangeOfBase(contract.authority) ||
+    correspondenceIds === undefined ||
+    !equal(
+      correspondenceIds,
+      contract.authority.correspondence.map(({ id }) => id)
+    )
+  ) {
+    diagnostics.push(diagnostic(
+      "equation-series.governance.source.unresolved",
+      `${path}.correspondenceIds`,
+      "Correspondence identity must exactly match the verified change-of-base contract.",
+      "Use the verified contract's ordered correspondence IDs.",
       KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID
     ));
     return undefined;
@@ -401,6 +467,18 @@ function rejectUnknown(
       "Remove geometry, timing, rendering, and other unrecognized fields."
     ))
   );
+}
+
+function stringIds(value: unknown): readonly string[] | undefined {
+  if (!Array.isArray(value) || value.some((id) =>
+    typeof id !== "string" || id.trim().length === 0
+  ) || new Set(value).size !== value.length) return undefined;
+  return Object.freeze([...value]) as readonly string[];
+}
+
+function equal(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 }
 
 function diagnostic(
