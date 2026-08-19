@@ -147,7 +147,8 @@ function unsupportedRecord(entry: KpEquationSeriesLiveModelBenchmarkCase) {
     requestId: entry.request.id,
     plannerId,
     status: "unsupported",
-    proposals: [],
+    reason: "No supplied semantic operation represents this adjacency.",
+    unsupportedAdjacencyIds: entry.request.adjacencies.map(({ id }) => id),
     diagnostics: []
   };
 }

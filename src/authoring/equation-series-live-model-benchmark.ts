@@ -46,7 +46,7 @@ export interface KpEquationSeriesLiveModelBatchPort {
 export interface KpEquationSeriesLiveModelBenchmarkCaseReport {
   readonly caseId: string;
   readonly expectation: KpEquationSeriesLiveBenchmarkExpectation["kind"];
-  readonly plannerStatus: "proposed" | "repair-required";
+  readonly plannerStatus: "proposed" | "unsupported" | "repair-required";
   readonly proposedOperationIds: readonly string[];
   readonly exactOperationSelection: boolean;
   readonly adjacencyIdentityPreserved: boolean;
@@ -255,7 +255,7 @@ function evaluateCase(input: {
     );
   const explicitUnsupportedAbstention =
     input.entry.expectation.kind === "unsupported" &&
-    isExplicitUnsupported(input.candidate, input.entry.request.id);
+    planner.status === "unsupported";
   const compiled = planner.status === "proposed"
     ? compileKpEquationTransformSeries({
         value: input.entry.request,
@@ -279,10 +279,9 @@ function evaluateCase(input: {
     input.entry.expectation.kind === "unsupported"
     ? 1
     : 0;
-  const repairGuidancePresent = hasRepairGuidance(
-    planner.diagnostics,
-    compilerRepairs
-  );
+  const repairGuidancePresent = planner.status === "unsupported"
+    ? planner.record.reason.trim().length > 0
+    : hasRepairGuidance(planner.diagnostics, compilerRepairs);
   const passed = passesExpectation({
     expectation: input.entry.expectation,
     plannerStatus: planner.status,
@@ -314,7 +313,7 @@ function evaluateCase(input: {
 
 function passesExpectation(input: {
   readonly expectation: KpEquationSeriesLiveBenchmarkExpectation;
-  readonly plannerStatus: "proposed" | "repair-required";
+  readonly plannerStatus: "proposed" | "unsupported" | "repair-required";
   readonly exactOperationSelection: boolean;
   readonly explicitUnsupportedAbstention: boolean;
   readonly compilationStatus: "compiled" | "repair-required" | "not-run";
@@ -326,7 +325,7 @@ function passesExpectation(input: {
     return false;
   }
   if (input.expectation.kind === "unsupported") {
-    return input.plannerStatus === "repair-required" &&
+    return input.plannerStatus === "unsupported" &&
       input.explicitUnsupportedAbstention;
   }
   if (!input.exactOperationSelection) return false;
@@ -348,12 +347,6 @@ function hasRepairGuidance(
     ...compiler.map(({ action }) => action.kind)
   ];
   return guidance.length > 0 && guidance.every((value) => value.trim() !== "");
-}
-
-function isExplicitUnsupported(value: unknown, requestId: string): boolean {
-  return isRecord(value) && value["requestId"] === requestId &&
-    value["status"] === "unsupported" &&
-    Array.isArray(value["proposals"]) && value["proposals"].length === 0;
 }
 
 function benchmarkCase(input: {
@@ -403,10 +396,6 @@ function sum<T, K extends keyof T>(values: readonly T[], key: K): number {
 function equal(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length &&
     left.every((value, index) => value === right[index]);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function deepFreeze<T>(value: T): T {

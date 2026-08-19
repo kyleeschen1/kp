@@ -186,6 +186,47 @@ test("authored normalization provenance cannot override the registry", () => {
   ));
 });
 
+test("unsupported transformations are typed abstentions, not proposals", async () => {
+  const request = proposedRequest();
+  const result = await runKpEquationSeriesNaturalLanguagePlanner({
+    request,
+    naturalLanguageIntent: "Perform an unavailable semantic transform.",
+    port: {
+      id: "planner.fake.unsupported.v1",
+      propose: async () => ({
+        schemaVersion: "kp.equation-series-planner-record.v1",
+        kind: "equation-series-planner-record",
+        requestId: request.id,
+        plannerId: "planner.fake.unsupported.v1",
+        status: "unsupported",
+        reason: "No supplied operation represents this transformation.",
+        unsupportedAdjacencyIds: ["adjacency.planner.wrap"],
+        diagnostics: []
+      })
+    }
+  });
+  assert.equal(result.status, "unsupported");
+  if (result.status !== "unsupported") return;
+  assert.deepEqual(result.record.unsupportedAdjacencyIds,
+    ["adjacency.planner.wrap"]);
+  assert.equal("proposals" in result.record, false);
+});
+
+test("malformed abstention stays repair-required", () => {
+  const request = proposedRequest();
+  const result = validateKpEquationSeriesPlannerRecord({
+    schemaVersion: "kp.equation-series-planner-record.v1",
+    kind: "equation-series-planner-record",
+    requestId: request.id,
+    plannerId: "planner.fake.unsupported.v1",
+    status: "unsupported",
+    reason: "",
+    unsupportedAdjacencyIds: [],
+    diagnostics: []
+  }, request);
+  assert.equal(result.status, "repair-required");
+});
+
 test("port errors become recorded diagnostics instead of thrown authority", async () => {
   const request = proposedRequest();
   const result = await runKpEquationSeriesNaturalLanguagePlanner({

@@ -58,6 +58,7 @@ export interface KpEquationSeriesPlannerDiagnostic {
     | "equation-series.planner.request.mismatch"
     | "equation-series.planner.id.invalid"
     | "equation-series.planner.status.invalid"
+    | "equation-series.planner.unsupported.invalid"
     | "equation-series.planner.proposal.invalid"
     | "equation-series.planner.adjacency.coverage"
     | "equation-series.planner.operation.unknown"
@@ -80,6 +81,17 @@ export interface KpEquationSeriesPlannerRecord {
   readonly diagnostics: readonly [];
 }
 
+export interface KpEquationSeriesPlannerUnsupportedRecord {
+  readonly schemaVersion: "kp.equation-series-planner-record.v1";
+  readonly kind: "equation-series-planner-record";
+  readonly requestId: string;
+  readonly plannerId: string;
+  readonly status: "unsupported";
+  readonly reason: string;
+  readonly unsupportedAdjacencyIds: readonly string[];
+  readonly diagnostics: readonly [];
+}
+
 export interface KpEquationSeriesPlannerOperationNormalization {
   readonly operationLocation: string;
   readonly requestedOperationId: string;
@@ -96,6 +108,11 @@ export type KpEquationSeriesPlannerRecordResult =
   | Readonly<{
       status: "repair-required";
       diagnostics: readonly KpEquationSeriesPlannerDiagnostic[];
+    }>
+  | Readonly<{
+      status: "unsupported";
+      record: KpEquationSeriesPlannerUnsupportedRecord;
+      diagnostics: readonly [];
     }>;
 
 const protocolId = /^[a-z][a-z0-9]*(?:[._:-][a-z0-9]+)+$/u;
@@ -198,7 +215,7 @@ export function validateKpEquationSeriesPlannerRecord(
     "Planner output must be one versioned proposal record.",
     "Return a JSON object matching kp.equation-series-planner-record.v1."
   )]);
-  rejectUnknown(value, [
+  const proposedFields = [
     "schemaVersion",
     "kind",
     "requestId",
@@ -207,7 +224,25 @@ export function validateKpEquationSeriesPlannerRecord(
     "proposals",
     "operationNormalizations",
     "diagnostics"
-  ], "$", diagnostics);
+  ];
+  const unsupportedFields = [
+    "schemaVersion",
+    "kind",
+    "requestId",
+    "plannerId",
+    "status",
+    "reason",
+    "unsupportedAdjacencyIds",
+    "diagnostics"
+  ];
+  rejectUnknown(
+    value,
+    value["status"] === "unsupported"
+      ? unsupportedFields
+      : proposedFields,
+    "$",
+    diagnostics
+  );
   rejectForbidden(value, "$", diagnostics);
   if (
     value["schemaVersion"] !== "kp.equation-series-planner-record.v1" ||
@@ -235,12 +270,14 @@ export function validateKpEquationSeriesPlannerRecord(
       ? "Provide a stable planner protocol ID."
       : `Use the invoked port ID ${expectedPlannerId}.`
   ));
-  if (value["status"] !== "proposed") diagnostics.push(diagnostic(
+  if (value["status"] !== "proposed" && value["status"] !== "unsupported") {
+    diagnostics.push(diagnostic(
     "equation-series.planner.status.invalid",
     "$.status",
-    "A planner record may only propose semantic operations.",
-    "Use proposed, or let KP create a repair-required result."
-  ));
+    "A planner record must propose semantic operations or explicitly abstain.",
+    "Use proposed or unsupported; KP alone creates repair-required results."
+    ));
+  }
   if (!Array.isArray(value["diagnostics"]) || value["diagnostics"].length > 0) {
     diagnostics.push(diagnostic(
       "equation-series.planner.status.invalid",
@@ -248,6 +285,14 @@ export function validateKpEquationSeriesPlannerRecord(
       "Accepted proposal records cannot author their own diagnostics.",
       "Return an empty diagnostics array; KP owns validation diagnostics."
     ));
+  }
+
+  if (value["status"] === "unsupported") {
+    return validateUnsupportedPlannerRecord(
+      value,
+      request,
+      diagnostics
+    );
   }
 
   const rawProposals = Array.isArray(value["proposals"])
@@ -287,6 +332,55 @@ export function validateKpEquationSeriesPlannerRecord(
       status: "proposed" as const,
       proposals,
       operationNormalizations,
+      diagnostics: [] as []
+    },
+    diagnostics: [] as []
+  });
+}
+
+function validateUnsupportedPlannerRecord(
+  value: Record<string, unknown>,
+  request: KpEquationTransformSeriesRequest,
+  diagnostics: KpEquationSeriesPlannerDiagnostic[]
+): KpEquationSeriesPlannerRecordResult {
+  const expectedAdjacencyIds = request.adjacencies.filter(({ intent }) =>
+    intent.mode === "proposed"
+  ).map(({ id }) => id);
+  const reason = value["reason"];
+  const unsupportedAdjacencyIds = value["unsupportedAdjacencyIds"];
+  if (typeof reason !== "string" || reason.trim().length === 0) {
+    diagnostics.push(diagnostic(
+      "equation-series.planner.unsupported.invalid",
+      "$.reason",
+      "Unsupported results require a concise reason.",
+      "Explain which requested semantic transformation is not represented."
+    ));
+  }
+  if (
+    !Array.isArray(unsupportedAdjacencyIds) ||
+    unsupportedAdjacencyIds.length !== expectedAdjacencyIds.length ||
+    unsupportedAdjacencyIds.some((id, index) =>
+      id !== expectedAdjacencyIds[index]
+    )
+  ) diagnostics.push(diagnostic(
+    "equation-series.planner.unsupported.invalid",
+    "$.unsupportedAdjacencyIds",
+    "Unsupported results must identify every proposed adjacency in order.",
+    `Use: ${expectedAdjacencyIds.join(", ") || "no proposed adjacencies"}.`
+  ));
+  if (diagnostics.length > 0) return repair(diagnostics);
+  return deepFreeze({
+    status: "unsupported" as const,
+    record: {
+      schemaVersion: "kp.equation-series-planner-record.v1" as const,
+      kind: "equation-series-planner-record" as const,
+      requestId: request.id,
+      plannerId: value["plannerId"] as string,
+      status: "unsupported" as const,
+      reason: reason as string,
+      unsupportedAdjacencyIds: [
+        ...(unsupportedAdjacencyIds as string[])
+      ],
       diagnostics: [] as []
     },
     diagnostics: [] as []

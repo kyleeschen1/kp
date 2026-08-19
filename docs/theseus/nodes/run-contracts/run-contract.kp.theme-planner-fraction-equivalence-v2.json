@@ -147,11 +147,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T01:57:22.792Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed after canonicalization provenance became part of accepted records."
+    },
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:02:32.606Z",
+      "notes": "15 planner and benchmark tests passed; typed unsupported abstention is measured separately and never compiled."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:02:45.441Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks passed with typed unsupported planner results propagated through benchmark reporting."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s10 validates every requested operation through the alias registry, emits canonical proposals with auditable requested-to-canonical provenance, and fails closed on unknown or forged normalization."
+    "summary": "s11 makes unsupported a validated planner abstention with exact adjacency coverage and a reason; benchmark orchestration never sends it to compilation."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -242,7 +256,8 @@
     {
       "id": "s11",
       "title": "Typed-unsupported-result",
-      "status": "planned"
+      "summary": "Unsupported transformations now produce a validated typed abstention with exact adjacency coverage and never enter compilation; malformed abstentions remain repair-required.",
+      "status": "complete"
     },
     {
       "id": "s12",
