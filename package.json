@@ -173,6 +173,7 @@
     "test:equation-transform-series-corpus": "node --disable-warning=ExperimentalWarning --test tests/equation-transform-series-corpus.test.ts tests/equation-series-repair-taxonomy.test.ts",
     "check:equation-transform-series-corpus": "node --disable-warning=ExperimentalWarning scripts/check-equation-transform-series-corpus.ts",
     "test:equation-series-planner-port": "node --disable-warning=ExperimentalWarning --test tests/equation-series-natural-language-planner-port.test.ts",
+    "test:equation-series-natural-language-compiler": "node --disable-warning=ExperimentalWarning --test tests/compile-natural-language-equation-series.test.ts tests/equation-series-natural-language-planner-port.test.ts",
     "test:equation-series-live-model-benchmark": "node --disable-warning=ExperimentalWarning --test tests/equation-series-live-model-benchmark.test.ts tests/equation-series-natural-language-planner-port.test.ts",
     "benchmark:equation-series:live": "node --disable-warning=ExperimentalWarning scripts/run-equation-series-live-model-benchmark.ts",
     "test:equation-series-both-sides-authoring": "node --disable-warning=ExperimentalWarning --test tests/equation-series-both-sides-authoring.test.ts tests/equation-series-repair-taxonomy.test.ts tests/equation-series-intent-resolver.test.ts",

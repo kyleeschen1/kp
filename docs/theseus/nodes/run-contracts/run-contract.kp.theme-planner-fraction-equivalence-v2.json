@@ -203,11 +203,39 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T02:18:44.039Z",
       "notes": "15 semantic, corpus, presentation, compositor, route, and authority tests passed; accepted change-of-base choreography remained unchanged."
+    },
+    {
+      "command": "npm run test:equation-series-natural-language-compiler",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:30:19.142Z",
+      "notes": "15 orchestration and planner tests passed across ungoverned, balanced, change-of-base, unsupported, missing-source, duplicate-owner, and authority-boundary paths."
+    },
+    {
+      "command": "npm run test:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:30:21.916Z",
+      "notes": "9 balanced-operation corpus and authoring tests passed after planner-owned proposals gained compiler-owned source binding."
+    },
+    {
+      "command": "npm run test:equation-series-logarithm-base",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:30:26.476Z",
+      "notes": "6 change-of-base declaration, source, corpus, adversarial, recovery, and dispatch tests passed through the existing governed contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:30:29.584Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with the narrow natural-language orchestration API and governed binder registry."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s14 routes numeric and symbolic change-of-base authoring through exact source, revision, endpoints, correspondences, branded contract, bases, and domain evidence."
+    "summary": "s15 connects model proposals to canonical operation resolution, registry-owned semantic source binding, typed repair, and deterministic compilation through one renderer-neutral call."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -322,7 +350,8 @@
     {
       "id": "s15",
       "title": "Narrow-planner-orchestration",
-      "status": "planned"
+      "summary": "Natural-language equation series now use one narrow orchestration seam: the model proposes canonical operations, registered binders attach exact verified evidence, and only then does the deterministic compiler run.",
+      "status": "complete"
     },
     {
       "id": "s16",
