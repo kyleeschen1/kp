@@ -159,24 +159,28 @@ Only this repository sequence is active:
     stops at `2/6 + 1/6`, but its composite-to-leaf unit-factor handoff jerks
     and its shared successor-synthesis evaluation is too visually busy. Keep
     the caller unpromoted.
-21. **Review composer visibility:** next. Move the wide Catalogue composer out
-    of the cramped lower-left rail into a fully visible inspector-side drawer,
-    retain a bounded narrow-screen sheet, and keep Save reachable without
-    covering the stage, scrubber, or development dock.
-22. **Sequence-level paint ownership:** after Review placement. Render and
-    measure shared Native KaTeX endpoints once, preserve compound and leaf
-    ownership in one hierarchy, require equivalent-pose certificates between
-    adjacent phases, and repair the `2/2` handoff without caller timing masks.
-23. **Evaluation presentation families:** contributor fusion has one
-    human-approved `2 × 3 → 6` ink-knot exemplar. Pressure that exact candidate
-    on the structurally different `3/6 → 1/2` caller before narrow promotion,
-    then return to sequence-level ownership before embedding it in the
-    fraction-addition sequence. Punctuated substitution, result reception,
+21. **Contributor-fusion promotion:** next. Human review approved the exact
+    ink-knot candidate on both horizontal `2 × 3 → 6` and vertical
+    `3/6 → 1/2`. Promote only the demonstrated atomic many-to-one recipe and
+    Native KaTeX optical profile, then route one constant-sum caller through
+    the same seam as confirmation. Do not promote the other evaluation
+    families or permit caller-authored geometry and timing.
+22. **Review composer visibility:** after the bounded promotion. Move the wide Catalogue composer out
+   of the cramped lower-left rail into a fully visible inspector-side drawer,
+   retain a bounded narrow-screen sheet, and keep Save reachable without
+   covering the stage, scrubber, or development dock.
+23. **Sequence-level paint ownership:** after Review placement. Render and
+   measure shared Native KaTeX endpoints once, preserve compound and leaf
+   ownership in one hierarchy, require equivalent-pose certificates between
+   adjacent phases, and repair the `2/2` handoff without caller timing masks.
+    Contributor fusion must not enter the fraction-addition sequence before
+    this repair.
+24. **Remaining evaluation presentation families:** punctuated substitution, result reception,
     carrier-preserving simplification, operator aperture, and expanded
     calculation remain distinct typed instructional choices. Do not promote
     scaling-to-zero or simultaneous readable pre/post glyphs as a default, and
     do not let callers or model planners author geometry or timing.
-24. **Fraction promotion and arithmetic:** only after the ownership repair and
+25. **Fraction promotion and arithmetic:** only after the ownership repair and
     evaluation-family checkpoints. Promote contracts demonstrated by two
     callers before designing like-denominator addition choreography.
 

@@ -2,12 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: pressure the human-approved `2 × 3 → 6` ink-knot
-contributor-fusion candidate on the structurally different `3/6 → 1/2`
-caller, then stop for visual review. Do not promote from one caller. After that
-bounded checkpoint, relocate the Catalogue Review composer and repair the
-`1/3 + 1/6` composite-to-leaf jerk through one sequence-level Native KaTeX
-ownership contract before embedding the evaluation motif or implementing
+Current Next Action: narrowly promote the human-approved contributor-fusion
+boundary demonstrated by `2 × 3 → 6` and the structurally different
+`3/6 → 1/2`, then route one constant-sum caller through it as confirmation.
+After that bounded checkpoint, relocate the Catalogue Review composer and
+repair the `1/3 + 1/6` composite-to-leaf jerk through one sequence-level Native
+KaTeX ownership contract before embedding the evaluation motif or implementing
 common-denominator addition choreography.
 
 ## Goal
@@ -103,12 +103,14 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   existing continuity/compiler seams produce deterministic paint. Invalid
   family/handoff combinations remain typed gaps; callers do not own timing,
   coordinates, opacity schedules, or renderer nodes.
-- Human review approved contributor fusion's first presentation exemplar on
-  2026-08-19. In `2 × 3 → 6`, native operand and catalyst ink preserve spatial
-  order, share one area-derived compression schedule, transfer exclusive paint
-  at one locus, and expand into the native result. The rejected separate
-  carrier is historical evidence. `3/6 → 1/2` is the required structurally
-  different pressure caller before any narrow promotion.
+- Human review approved contributor fusion on two structurally different
+  callers on 2026-08-19. In `2 × 3 → 6`, native operand and catalyst ink
+  preserve horizontal order; in `3/6 → 1/2`, numerator, rule, and denominator
+  preserve vertical order through measured dominant-axis geometry. Both share
+  one area-derived compression schedule, exclusive paint handoff, and native
+  result expansion without caller-authored timing or coordinates. This closes
+  the pressure gate for a narrow promotion; it does not promote the other
+  evaluation families or sequence embedding.
 
 ## Capability Vocabulary
 
@@ -205,6 +207,7 @@ playhead.
 - `../reviews/2026-08-18-compositor-balanced-log-base-long-loop-proposal.md`
 - `../reviews/2026-08-18-post-log-base-convergence-next-step-review.md`
 - `../reviews/2026-08-19-post-ink-knot-evaluation-next-step-review.md`
+- `../reviews/2026-08-19-post-quotient-ink-knot-pressure-next-step-review.md`
 - `animation-catalogue.md`
 - `architecture-convergence.md`
 - `semantic-runtime.md`
