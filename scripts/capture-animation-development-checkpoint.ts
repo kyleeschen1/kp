@@ -19,35 +19,48 @@ const items: KpVisualContactSheetItem[] = [];
 
 try {
   await capture({
-    id: "catalogue-exponent-motion",
-    label: "Catalogue · exponent/log motion at 45%",
+    id: "catalogue-exponent-motion-dark",
+    label: "Catalogue · dark · exponent/log motion at 45%",
     viewport: { width: 1280, height: 900 },
-    href: exactHref("animation-catalogue", 0.45)
+    href: exactHref("animation-catalogue", "dark", 0.45)
+  });
+  await capture({
+    id: "catalogue-exponent-motion-light",
+    label: "Catalogue · light · exponent/log motion at 45%",
+    viewport: { width: 1280, height: 900 },
+    href: exactHref("animation-catalogue", "light", 0.45)
   });
   await capture({
     id: "coverage-wide",
     label: "Coverage · full ordered capability projection",
     viewport: { width: 1280, height: 900 },
-    href: exactHref("coverage", 0.45)
+    href: exactHref("coverage", "dark", 0.45)
   });
   await capture({
-    id: "review-wide",
-    label: "Catalogue · exact-state Review, wide",
+    id: "review-wide-dark",
+    label: "Catalogue · dark · exact-state Review, wide",
     viewport: { width: 1280, height: 900 },
-    href: exactHref("animation-catalogue", 0.45),
+    href: exactHref("animation-catalogue", "dark", 0.45),
+    openReview: true
+  });
+  await capture({
+    id: "review-wide-light",
+    label: "Catalogue · light · exact-state Review, wide",
+    viewport: { width: 1280, height: 900 },
+    href: exactHref("animation-catalogue", "light", 0.45),
     openReview: true
   });
   await capture({
     id: "catalogue-phone",
     label: "Catalogue · phone transport clearance",
     viewport: { width: 390, height: 844 },
-    href: exactHref("animation-catalogue", 0.45)
+    href: exactHref("animation-catalogue", "dark", 0.45)
   });
   await capture({
     id: "review-phone",
     label: "Catalogue · exact-state Review, phone",
     viewport: { width: 390, height: 844 },
-    href: exactHref("animation-catalogue", 0.45),
+    href: exactHref("animation-catalogue", "dark", 0.45),
     openReview: true
   });
 
@@ -147,11 +160,12 @@ async function waitForProjection(page: Page, href: string): Promise<void> {
 
 function exactHref(
   view: "animation-catalogue" | "coverage",
+  theme: "light" | "dark",
   playhead: number
 ): string {
   const url = new URL("/", baseUrl);
   url.searchParams.set("view", view);
-  url.searchParams.set("theme", "dark");
+  url.searchParams.set("theme", theme);
   url.searchParams.set("style", "restrained-editorial");
   url.searchParams.set("focus", "no-depth");
   url.searchParams.set("artifact", exponentArtifactId);
