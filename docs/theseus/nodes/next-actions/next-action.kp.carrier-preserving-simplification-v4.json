@@ -281,11 +281,25 @@
       "scope": "cps13",
       "checkedAt": "2026-08-19T22:55:38.555Z",
       "notes": "Test TypeScript graph compiles cleanly."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification:checkpoint",
+      "status": "passed",
+      "scope": "cps14",
+      "checkedAt": "2026-08-19T23:02:18.942Z",
+      "notes": "Generated 32 wide/phone, dark/light, normal/reduced-motion states with carrier/owner diagnostics; every state preserved one accessible endpoint, live Review access, static description, and viewport fit."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps14",
+      "checkedAt": "2026-08-19T23:02:20.728Z",
+      "notes": "The stable checkpoint capture entrypoint and manifest schema typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical carrier simplification now has browser-proven direct restore, seek/rewind, interruption, resize coalescing, reduced motion, deterministic signatures, exact paint settlement, and bounded DEV telemetry."
+    "summary": "The canonical 2 × 1 → 2 candidate now has a deterministic 32-state review packet, machine-readable carrier/owner diagnostics, responsive/theme/reduced-motion coverage, and a documented live Review route; promotion remains blocked on human judgment."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

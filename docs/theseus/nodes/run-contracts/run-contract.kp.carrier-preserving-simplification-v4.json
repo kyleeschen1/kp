@@ -131,7 +131,8 @@
     {
       "id": "cps14",
       "title": "Produce-responsive-review-evidence",
-      "status": "planned"
+      "summary": "Produced and inspected the responsive canonical review packet with stable regeneration, semantic diagnostics, accessibility/overflow guards, and the live Review path.",
+      "status": "complete"
     },
     {
       "id": "cps15",
