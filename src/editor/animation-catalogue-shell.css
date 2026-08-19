@@ -3,6 +3,7 @@
   --kp-catalogue-border: rgb(36 32 27 / 12%);
   --kp-catalogue-muted: #746f66;
   --kp-catalogue-ink: #25231f;
+  --kp-equation-foreground: var(--kp-catalogue-ink);
   --kp-catalogue-secondary-ink: #555149;
   --kp-catalogue-link: #345c67;
   --kp-catalogue-health: #805a2f;
@@ -268,6 +269,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  color: var(--kp-equation-foreground);
 }
 
 .kp-animation-catalogue-shell__stage-status {

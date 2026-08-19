@@ -49,11 +49,18 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T01:22:16.666Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:animation-catalogue-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:26:43.033Z",
+      "notes": "Neutral Catalogue equation paint aliases the prose ink token; log-exponent consumes the shared equation foreground without changing typography."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 wired the shared dark fallback through Catalogue, Coverage, and the development dock while explicit light URLs remain authoritative."
+    "summary": "s03 made neutral Catalogue KaTeX consume the same foreground authority as default prose while leaving semantic accent paint and font metrics untouched."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -96,7 +103,8 @@
     {
       "id": "s03",
       "title": "Neutral-foreground-parity",
-      "status": "planned"
+      "summary": "Neutral equation paint now aliases Catalogue prose ink through one theme-responsive token; no prose-font or motion change.",
+      "status": "complete"
     },
     {
       "id": "s04",

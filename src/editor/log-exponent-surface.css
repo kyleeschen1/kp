@@ -8,7 +8,7 @@
   min-height: clamp(18rem, 48vh, 30rem);
   place-items: center;
   overflow: hidden;
-  color: inherit;
+  color: var(--kp-equation-foreground, currentColor);
   background: transparent;
   isolation: isolate;
 }
