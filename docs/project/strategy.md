@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-18
+Last Updated: 2026-08-19
 
 ## North Star
 
@@ -106,11 +106,13 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is now whether one governed fraction-
-equivalence operation can preserve factor identity, nonzero assumptions,
-native fraction structure, deterministic seek/rewind, and causal motion in a
-single reviewable exemplar. This remains equation-domain convergence, not a
-universal graph, code, diagram, or 3D compiler.
+The immediate repository question is whether the approved fraction-equivalence
+choreography remains legible when selectively embedded in `1/3 + 1/6`. The
+governed pressure caller now preserves context, composes synchronized product
+evaluation, supports direct seek/rewind, and stops before addition. Human
+review—not another architecture pass—must decide whether this second caller
+proves a narrow promotion boundary. This remains equation-domain convergence,
+not a universal graph, code, diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

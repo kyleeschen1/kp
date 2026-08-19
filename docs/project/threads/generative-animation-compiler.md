@@ -2,10 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: pressure the approved fraction-equivalence exemplar with
-one structurally different caller inside a larger expression, then stop for
-human review before promoting only the shared contracts the two callers prove.
-Do not reopen compositor, balanced-operation, cross-domain, or layout work.
+Current Next Action: visually review the structurally different
+`1/3 + 1/6` fraction-equivalence pressure caller. If approved, promote only
+the contracts demonstrated by both callers; do not infer or implement
+common-denominator addition choreography from this checkpoint. Do not reopen
+compositor, balanced-operation, cross-domain, or layout work.
 
 ## Goal
 
@@ -35,9 +36,10 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   foreground crossing avoids glyph occlusion, and clean-load/remount playback
   passed cross-browser pressure. The transparent crossing treatment is not a
   globally promoted salience motif.
-- Thirty equation surfaces exist, but asset count is not capability coverage:
-  three are canonical, twenty-two adapter-backed, four static-only, and one a
-  retirement candidate in the current generated inventory.
+- Thirty-four equation surfaces exist, but asset count is not capability
+  coverage: three are canonical, twenty-four adapter-backed, four static-only,
+  two unsupported, and one a retirement candidate in the current generated
+  inventory.
 - The canonical compositor ownership gate is green with explicit planning and
   rendering boundaries and unchanged fixed ceilings.
 - Balanced equation operations are `Direct` through one typed family, causal
@@ -72,6 +74,13 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   notation, and an approved human checkpoint. Typed many-to-one bar fusion and
   synchronized term/bar arrival remain exemplar-bounded until a structurally
   different second caller passes review.
+- Common-denominator alignment and raw like-denominator combination are
+  separately governed, repairable, and planner-visible as `Registered`; they
+  do not claim animation parity. One conservative native-KaTeX pressure caller
+  composes the approved fraction-equivalence and successor-synthesis motifs
+  from `1/3 + 1/6` through `2/6 + 1/6`, preserves the untouched term, uses one
+  shared clock, and has deterministic dark, light, narrow, direct-seek, and
+  rewind evidence. It remains unpromoted pending human visual review.
 
 ## Capability Vocabulary
 

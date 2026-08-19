@@ -2,7 +2,8 @@
   "id": "run-contract.kp.fraction-common-denominator-overnight-v2",
   "kind": "run-contract",
   "title": "Fraction common denominator overnight",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -233,6 +234,30 @@
       "command": "npm run test:common-denominator-pressure-presentation",
       "status": "passed",
       "checkedAt": "2026-08-19T07:28:16.118Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-19T07:34:27.635Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-19T07:34:28.912Z"
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-19T07:34:30.041Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-19T07:34:31.091Z"
     }
   ],
   "progress": {
@@ -409,7 +434,8 @@
     {
       "id": "s26",
       "title": "Close at human checkpoint",
-      "status": "planned"
+      "summary": "Affected release gates passed; durable direction now requires human review before promotion or addition motion.",
+      "status": "complete"
     }
   ]
 }

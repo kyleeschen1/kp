@@ -203,9 +203,9 @@ async function captureStage(
 
 async function visiblePaintBounds(stage: Locator) {
   return stage.evaluate(async (root) => {
-    const geometry = await import(
-      "/src/rendering/native-katex-paint-geometry.ts"
-    );
+    const geometryModulePath =
+      "/src/rendering/native-katex-paint-geometry.ts";
+    const geometry = await import(geometryModulePath);
     const visibleEndpointPaint = [
       ...root.querySelectorAll<HTMLElement>(
         ".kp-common-denominator-pressure-stage__endpoint"
