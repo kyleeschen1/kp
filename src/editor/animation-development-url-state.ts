@@ -83,11 +83,9 @@ export function readKpAnimationDevelopmentUrlState(
     : view === undefined
       ? "other-view" as const
       : "explicit" as const;
-  const defaultTheme = view === "coverage" ? "dark" : "light";
-  const theme = member(
-    url.searchParams.get("theme"),
-    kpAnimationDevelopmentThemes
-  ) ?? defaultTheme;
+  const theme = resolveKpAnimationDevelopmentTheme({
+    explicitTheme: url.searchParams.get("theme")
+  });
   const style = member(
     url.searchParams.get("style"),
     kpAnimationDevelopmentStyles

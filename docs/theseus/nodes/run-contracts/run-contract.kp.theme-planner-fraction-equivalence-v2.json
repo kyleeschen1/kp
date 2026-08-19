@@ -28,11 +28,32 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T01:18:12.936Z",
       "notes": "19 tests passed; theme precedence is explicit URL, then host preference, then shared dark fallback."
+    },
+    {
+      "command": "npm run test:animation-development-url-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:22:13.597Z",
+      "notes": "19 URL and route tests passed with dark fallback and explicit light preservation."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:22:15.243Z",
+      "notes": "31 development-toolbar ownership and routing tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T01:22:16.666Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 defined a host-neutral theme precedence resolver and dark fallback without yet changing route behavior."
+    "summary": "s02 wired the shared dark fallback through Catalogue, Coverage, and the development dock while explicit light URLs remain authoritative."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -69,7 +90,8 @@
     {
       "id": "s02",
       "title": "Dark-defaults",
-      "status": "planned"
+      "summary": "Development animation surfaces now default dark through the shared theme authority; explicit light state still round trips.",
+      "status": "complete"
     },
     {
       "id": "s03",

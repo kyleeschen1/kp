@@ -176,29 +176,27 @@ async function mountDevelopmentToolbar(
 ): Promise<void> {
   if (loadKpDevelopmentToolbar === undefined) return;
   const client = await loadKpDevelopmentToolbar();
-  const session = client.mountKpDevelopmentToolbar(window, route === undefined
-    ? {}
-    : {
-        defaultTheme: route === "animation-coverage" ? "dark" : "light",
-        resolveExactHref: async () => {
-          const state = await import(
-            "./editor/animation-development-url-state.ts"
-          );
-          return state.createKpAnimationDevelopmentExactHref(
-            window.location.href
-          );
-        },
-        navigateLink: ({ id }) => {
-          const view = id === "studio.catalogue"
-            ? "animation-catalogue" as const
-            : id === "studio.transformation-coverage"
-              ? "coverage" as const
-              : undefined;
-          if (view === undefined) return false;
-          navigateKpAnimationDevelopmentView({ ownerWindow: window, view });
-          return true;
-        }
-      });
+  if (route === undefined) {
+    registerPagehide(client.mountKpDevelopmentToolbar(window).dispose);
+    return;
+  }
+  const state = await import("./editor/animation-development-url-state.ts");
+  const session = client.mountKpDevelopmentToolbar(window, {
+    defaultTheme: state.KP_ANIMATION_DEVELOPMENT_DEFAULT_THEME,
+    resolveExactHref: async () => state.createKpAnimationDevelopmentExactHref(
+      window.location.href
+    ),
+    navigateLink: ({ id }) => {
+      const view = id === "studio.catalogue"
+        ? "animation-catalogue" as const
+        : id === "studio.transformation-coverage"
+          ? "coverage" as const
+          : undefined;
+      if (view === undefined) return false;
+      navigateKpAnimationDevelopmentView({ ownerWindow: window, view });
+      return true;
+    }
+  });
   registerPagehide(session.dispose);
 }
 

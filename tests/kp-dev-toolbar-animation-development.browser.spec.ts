@@ -29,15 +29,15 @@ test("the development dock preserves exact state across Catalogue and Coverage",
   const theme = toolbar.getByRole("button", { name: "Dark mode" });
   await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
   await expect(toolbar.getByRole("button", { name: "Copy link" })).toBeVisible();
-  await expect(theme).toHaveAttribute("aria-pressed", "false");
+  await expect(theme).toHaveAttribute("aria-pressed", "true");
 
   await theme.focus();
   await expect(theme).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(theme).toHaveAttribute("aria-pressed", "true");
+  await expect(theme).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("[data-kp-svelte-catalogue-shell]"))
-    .toHaveAttribute("data-kp-animation-catalogue-theme", "dark");
-  expect(new URL(page.url()).searchParams.get("theme")).toBe("dark");
+    .toHaveAttribute("data-kp-animation-catalogue-theme", "light");
+  expect(new URL(page.url()).searchParams.get("theme")).toBe("light");
 
   const view = toolbar.locator(
     "[data-kp-dev-toolbar-control='kp.dev-toolbar.pages']"
@@ -49,7 +49,7 @@ test("the development dock preserves exact state across Catalogue and Coverage",
   await expect(coverage).toBeVisible();
   await expect(coverage).toHaveAttribute(
     "data-kp-animation-coverage-theme",
-    "dark"
+    "light"
   );
   expect(new URL(page.url()).searchParams.get("artifact")).toBe(vectorId);
   expect(new URL(page.url()).searchParams.get("playhead")).toBe("0.42");
@@ -66,7 +66,7 @@ test("the development dock preserves exact state across Catalogue and Coverage",
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   const copiedUrl = new URL(copied);
   expect(copiedUrl.searchParams.get("view")).toBe("coverage");
-  expect(copiedUrl.searchParams.get("theme")).toBe("dark");
+  expect(copiedUrl.searchParams.get("theme")).toBe("light");
   expect(copiedUrl.searchParams.get("style")).toBe("restrained-editorial");
   expect(copiedUrl.searchParams.get("focus")).toBe("no-depth");
   expect(copiedUrl.searchParams.get("artifact")).toBe(vectorId);

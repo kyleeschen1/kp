@@ -33,7 +33,7 @@ test("legacy catalogue links acquire typed defaults without losing exact state",
   ), {
     view: "animation-catalogue",
     viewSource: "default",
-    theme: "light",
+    theme: "dark",
     display: {
       style: "organic-subtle",
       focus: "flat"
@@ -104,7 +104,7 @@ test("exact links make default catalogue state explicit and stable", () => {
   const url = new URL(exact);
 
   assert.equal(url.searchParams.get("view"), "animation-catalogue");
-  assert.equal(url.searchParams.get("theme"), "light");
+  assert.equal(url.searchParams.get("theme"), "dark");
   assert.equal(url.searchParams.get("style"), "organic-subtle");
   assert.equal(url.searchParams.get("focus"), "flat");
   assert.equal(url.searchParams.get("artifact"), "animation.example");
@@ -154,6 +154,6 @@ test("same-document view navigation preserves state and publishes one remount si
   assert.equal(url.searchParams.get("view"), "coverage");
   assert.equal(url.searchParams.get("artifact"), "animation.example");
   assert.equal(url.searchParams.get("playhead"), "0.42");
-  assert.equal(url.searchParams.get("theme"), "light");
+  assert.equal(url.searchParams.get("theme"), "dark");
   assert.deepEqual(events, [KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT]);
 });
