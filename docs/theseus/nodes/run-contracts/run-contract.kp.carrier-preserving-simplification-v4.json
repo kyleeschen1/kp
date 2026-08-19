@@ -125,7 +125,8 @@
     {
       "id": "cps13",
       "title": "Prove-lifecycle-behavior",
-      "status": "planned"
+      "summary": "Proved lifecycle behavior and corrected the shared endpoint measurement seam so composited and native target geometry use the same exact KaTeX paint metric.",
+      "status": "complete"
     },
     {
       "id": "cps14",

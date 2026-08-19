@@ -70,6 +70,8 @@ interface KpCarrierPreservingSimplificationSurfaceSession {
   preparedFontRevision?: number | undefined;
   preparedViewportFingerprint?: string | undefined;
   invalidationQueued: boolean;
+  replacementPreparing: boolean;
+  pendingInvalidation: boolean;
   resizeObserver?: ResizeObserver | undefined;
   removeWindowResizeListener?: (() => void) | undefined;
   unsubscribeFonts?: (() => void) | undefined;
@@ -190,6 +192,8 @@ function mountSurface(
     measurementRevision: 0,
     pendingState: state,
     invalidationQueued: false,
+    replacementPreparing: false,
+    pendingInvalidation: false,
     disposed: false
   };
 }
@@ -259,11 +263,23 @@ async function prepareSurface(
       session.stage.dataset[
         "kpCarrierPreservingSimplificationTerminalStableFrom"
       ] = String(playback.settlement.terminalStableFrom);
+      session.stage.dataset[
+        "kpCarrierPreservingSimplificationMeasurementRevision"
+      ] = String(session.measurementRevision);
+      session.stage.dataset[
+        "kpCarrierPreservingSimplificationFontRevision"
+      ] = String(sourceHandle.revision.fontRevision);
+      session.stage.dataset[
+        "kpCarrierPreservingSimplificationViewportKey"
+      ] = sourceHandle.revision.viewportKey;
     }
     installInvalidationLifecycle(session);
     applyFrame(session, session.pendingState);
+    session.replacementPreparing = false;
+    flushPendingInvalidation(session);
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
+    session.replacementPreparing = false;
     session.stage.dataset["kpCarrierPreservingSimplificationStage"] =
       "failed";
     session.stage.dataset["kpCarrierPreservingSimplificationError"] =
@@ -362,15 +378,19 @@ function installInvalidationLifecycle(
 function scheduleMeasurementReplacement(
   session: KpCarrierPreservingSimplificationSurfaceSession
 ): void {
-  if (session.disposed || session.invalidationQueued) return;
+  if (session.disposed) return;
+  session.pendingInvalidation = true;
+  if (session.invalidationQueued || session.replacementPreparing) return;
   session.invalidationQueued = true;
   queueMicrotask(() => {
     session.invalidationQueued = false;
     if (session.disposed) return;
+    session.pendingInvalidation = false;
     const changed =
       session.preparedFontRevision !== session.fontReadiness.revision ||
       session.preparedViewportFingerprint !== viewportFingerprint(session.stage);
     if (!changed) return;
+    session.replacementPreparing = true;
     session.playback?.retire("measurement-invalidated");
     session.playback = undefined;
     syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
@@ -380,6 +400,12 @@ function scheduleMeasurementReplacement(
     const generation = ++session.generation;
     void prepareSurface(session, generation);
   });
+}
+
+function flushPendingInvalidation(
+  session: KpCarrierPreservingSimplificationSurfaceSession
+): void {
+  if (session.pendingInvalidation) scheduleMeasurementReplacement(session);
 }
 
 function viewportFingerprint(stage: HTMLElement): string {

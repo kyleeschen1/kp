@@ -253,11 +253,39 @@
       "scope": "cps12",
       "checkedAt": "2026-08-19T22:41:35.058Z",
       "notes": "The lazy candidate surface, lifecycle revision guard, and catalogue registrations typecheck."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps13",
+      "checkedAt": "2026-08-19T22:55:35.279Z",
+      "notes": "3/3 Chromium lifecycle checks passed: direct URL restore, seek/rewind, interruption, resize remeasurement, reduced motion, one paint owner, one accessible endpoint, and exact native settlement."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps13",
+      "checkedAt": "2026-08-19T22:55:36.593Z",
+      "notes": "20/20 focused semantic, recipe, binding, sampling, and catalogue checks passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "cps13",
+      "checkedAt": "2026-08-19T22:55:37.570Z",
+      "notes": "79/79 shared compositor and endpoint-ownership checks passed after unifying native target paint measurement."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps13",
+      "checkedAt": "2026-08-19T22:55:38.555Z",
+      "notes": "Test TypeScript graph compiles cleanly."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The 2 × 1 → 2 candidate is now a stable lazy catalogue asset with exact-ID surface ownership, direct artifact URL restoration, native endpoint hosting, responsive remeasurement, accessible endpoint handoff, and development-only recipe/track/settlement telemetry."
+    "summary": "Canonical carrier simplification now has browser-proven direct restore, seek/rewind, interruption, resize coalescing, reduced motion, deterministic signatures, exact paint settlement, and bounded DEV telemetry."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

@@ -50,29 +50,6 @@ export function attachKpNativeKatexTrackPaintGeometry<
 }): readonly KpNativeKatexPaintMeasuredTrack<Track>[] {
   const sourceAtoms = new Map(input.source.atoms.map((atom) => [atom.id, atom]));
   const targetAtoms = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
-  const paintRect = (
-    atom: KpNativeKatexPaintAtomObservation | undefined,
-    stage: HTMLElement
-  ) => atom === undefined
-    ? undefined
-    : atom.paintMeasurement === "atomic-text" &&
-        typeof atom.sourceElement.ownerDocument.createRange === "function"
-      ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
-      : atom.paintMeasurement === "subtree" &&
-          typeof atom.sourceElement.getBoundingClientRect === "function" &&
-          atom.sourceElement.ownerDocument.defaultView !== null
-        // Rules, delimiters, and compound owners carry layout space beyond
-        // visible paint. Their actual subtree union is the endpoint authority.
-        ? measureKpNativeKatexSubtreePaintRect(
-            stage,
-            atom.sourceElement
-          ) ?? atom.rect
-        : atom.paintKind === "glyph" &&
-            typeof atom.sourceElement.ownerDocument.createRange === "function"
-          // Compatibility for external renderer-session fixtures created
-          // before paint measurement became explicit.
-          ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
-          : atom.rect;
   return Object.freeze(input.tracks.map((track) => {
     const sourceAtom =
       sourceAtoms.get(track.sourceAtomId ?? "") ??
@@ -85,9 +62,11 @@ export function attachKpNativeKatexTrackPaintGeometry<
     // hairline). Preserve that renderer-session authority instead of silently
     // overwriting it with the static endpoint measurement.
     const startPaintRect = track.startPaintRect ??
-      paintRect(sourceAtom, input.source.stage);
+      (sourceAtom === undefined ? undefined :
+        measureKpNativeKatexPaintAtomRect(input.source.stage, sourceAtom));
     const endPaintRect = track.endPaintRect ??
-      paintRect(targetAtom, input.target.stage);
+      (targetAtom === undefined ? undefined :
+        measureKpNativeKatexPaintAtomRect(input.target.stage, targetAtom));
     if (startPaintRect === undefined || endPaintRect === undefined) {
       throw new Error(
         "Native KaTeX render tracks require measured paint at both endpoints."
@@ -99,6 +78,44 @@ export function attachKpNativeKatexTrackPaintGeometry<
       endPaintRect
     });
   }));
+}
+
+/**
+ * One measurement function defines native paint geometry for both compositor
+ * tracks and semantic bindings. This prevents a selector layout box from
+ * being compared with glyph ink at a later settlement seam.
+ */
+export function measureKpNativeKatexPaintAtomRect(
+  stage: HTMLElement,
+  atom: KpNativeKatexPaintAtomObservation
+): KpStageRelativeRect {
+  if (
+    atom.paintMeasurement === "atomic-text" &&
+    typeof atom.sourceElement.ownerDocument.createRange === "function"
+  ) {
+    return measureKpNativeKatexTextInkRect(stage, atom.sourceElement);
+  }
+  if (
+    atom.paintMeasurement === "subtree" &&
+    typeof atom.sourceElement.getBoundingClientRect === "function" &&
+    atom.sourceElement.ownerDocument.defaultView !== null
+  ) {
+    // Rules, delimiters, and compound owners carry layout space beyond
+    // visible paint. Their actual subtree union is the endpoint authority.
+    return measureKpNativeKatexSubtreePaintRect(
+      stage,
+      atom.sourceElement
+    ) ?? atom.rect;
+  }
+  if (
+    atom.paintKind === "glyph" &&
+    typeof atom.sourceElement.ownerDocument.createRange === "function"
+  ) {
+    // Compatibility for external renderer-session fixtures created before
+    // paint measurement became explicit.
+    return measureKpNativeKatexTextInkRect(stage, atom.sourceElement);
+  }
+  return atom.rect;
 }
 
 /**

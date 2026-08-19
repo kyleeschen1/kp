@@ -11,6 +11,9 @@ import type {
   KpNativeKatexRenderedEndpointHandle,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  measureKpNativeKatexPaintAtomRect
+} from "./native-katex-paint-geometry.ts";
 
 export interface KpNativeKatexMeasuredSelectorOwner {
   readonly selectorRef: string;
@@ -190,15 +193,40 @@ function measuredSelectorOwner(
   if (group.atomIds.length === 0) {
     throw new Error(`Measured selector ${selectorRef} owns no native paint.`);
   }
+  const atomsById = new Map(observation.atoms.map((atom) => [atom.id, atom]));
+  const paintRects = group.atomIds.map((atomId) => {
+    const atom = atomsById.get(atomId);
+    if (atom === undefined) {
+      throw new Error(
+        `Measured selector ${selectorRef} references absent paint ${atomId}.`
+      );
+    }
+    return measureKpNativeKatexPaintAtomRect(observation.stage, atom);
+  });
   return Object.freeze({
     selectorRef,
     presentationGroupId: group.id,
     paintAtomIds: Object.freeze([...group.atomIds]),
-    rect: Object.freeze({ ...group.rect }),
+    rect: Object.freeze(unionRects(paintRects)),
     baselineY,
     styleFingerprint: group.styleFingerprint,
     element: group.sourceElement
   });
+}
+
+function unionRects(
+  rects: readonly KpStageRelativeRect[]
+): KpStageRelativeRect {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return {
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  };
 }
 
 function frozenPose(
