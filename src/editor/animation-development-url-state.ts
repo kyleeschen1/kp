@@ -4,6 +4,7 @@ export const kpAnimationDevelopmentViews = [
 ] as const;
 
 export const kpAnimationDevelopmentThemes = ["light", "dark"] as const;
+export const KP_ANIMATION_DEVELOPMENT_DEFAULT_THEME = "dark" as const;
 export const kpAnimationDevelopmentStyles = [
   "organic-subtle",
   "restrained-editorial"
@@ -36,6 +37,22 @@ export interface KpAnimationDevelopmentUrlState {
   readonly artifactId?: string | undefined;
   readonly checkpointId?: string | undefined;
   readonly playhead?: number | undefined;
+}
+
+/**
+ * Keeps theme precedence independent from any particular persistence host:
+ * exact links must win, while a host may supply a saved preference before the
+ * shared dark fallback is used.
+ */
+export function resolveKpAnimationDevelopmentTheme(input: {
+  readonly explicitTheme: string | null;
+  readonly preferredTheme?: string | null | undefined;
+  readonly fallbackTheme?: KpAnimationDevelopmentTheme | undefined;
+}): KpAnimationDevelopmentTheme {
+  return member(input.explicitTheme, kpAnimationDevelopmentThemes) ??
+    member(input.preferredTheme ?? null, kpAnimationDevelopmentThemes) ??
+    input.fallbackTheme ??
+    KP_ANIMATION_DEVELOPMENT_DEFAULT_THEME;
 }
 
 const ownedParameters = [

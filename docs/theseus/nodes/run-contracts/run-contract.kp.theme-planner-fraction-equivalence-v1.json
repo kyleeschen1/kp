@@ -1,0 +1,171 @@
+{
+  "id": "run-contract.kp.theme-planner-fraction-equivalence-v1",
+  "kind": "run-contract",
+  "title": "Theme-planner-fraction-equivalence",
+  "status": "superseded",
+  "summary": "Unused",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-theme-planner-fraction-equivalence-long-loop-proposal.md",
+      "summary": "Approved"
+    }
+  ],
+  "verification": [
+    "npm",
+    "npm",
+    "npm",
+    "npm"
+  ],
+  "allowedWork": [
+    "Development",
+    "Planner",
+    "One",
+    "Focused"
+  ],
+  "disallowedWork": [
+    "Public",
+    "General",
+    "Changes",
+    "Edits"
+  ],
+  "goal": "Establish",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Theme-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Dark-defaults",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Neutral-foreground-parity",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Development-dock-theming",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Theme-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Planner-ID-collision-guard",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Planner-exposure-metadata",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Alias-normalization-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Canonical-prompt-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Validator-canonicalization",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Typed-unsupported-result",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Governed-source-resolver",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Balanced-operation-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Change-of-base-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Narrow-planner-orchestration",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Typed-repair-recovery",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Reproducible-live-benchmark",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Deterministic-boundary-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Pinned-live-benchmark",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Planner-binding-closeout",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Fraction-equivalence-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Fraction-equivalence-registration",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Fraction-equivalence-presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Fraction-equivalence-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Fraction-equivalence-host",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Fraction-equivalence-human-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

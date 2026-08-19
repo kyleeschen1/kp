@@ -1,0 +1,195 @@
+{
+  "id": "run-contract.kp.theme-planner-fraction-equivalence-v2",
+  "kind": "run-contract",
+  "title": "Theme, planner binding, and fraction equivalence",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-theme-planner-fraction-equivalence-long-loop-proposal.md",
+      "summary": "Approved 26-slice proposal and scope authority."
+    }
+  ],
+  "verification": [
+    "npm run test:animation-development-url-state",
+    "npm run test:dev-toolbar",
+    "npm run check:architecture",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-development-url-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:18:12.936Z",
+      "notes": "19 tests passed; theme precedence is explicit URL, then host preference, then shared dark fallback."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 defined a host-neutral theme precedence resolver and dark fallback without yet changing route behavior."
+  },
+  "allowedWork": [
+    "Development theme authority, defaults, and dock styling.",
+    "Planner vocabulary, normalization, governed-source binding, repair, and benchmarks.",
+    "One fraction-equivalence semantic operation and native-KaTeX exemplar.",
+    "Focused tests, stable visual checks, architecture evidence, and project memory."
+  ],
+  "disallowedWork": [
+    "Public layout, curriculum, SRS, tutor, matrix, code, Graph2D, or Graph3D expansion.",
+    "General CAS or model-authored mathematical authority.",
+    "Changes to approved logarithm, exponent, or balanced-equation choreography.",
+    "Edits to dirty economics lesson and generated publication files."
+  ],
+  "goal": "Establish consistent development theming, close planner-to-governed-source binding, and deliver one fraction-equivalence exemplar for human review.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit after each verified slice with its completed Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if existing artifact identity or accepted choreography must change.",
+    "Stop if model output becomes semantic authority or any silent fallback appears.",
+    "Stop if user-owned dirty files overlap required edits.",
+    "Stop if provider instability or model identity prevents a pinned live benchmark.",
+    "Always stop for human visual review at slice s26."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Theme-authority",
+      "summary": "Defined explicit URL over host preference over dark fallback as one tested theme authority.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Dark-defaults",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Neutral-foreground-parity",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Development-dock-theming",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Theme-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Planner-ID-collision-guard",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Planner-exposure-metadata",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Alias-normalization-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Canonical-prompt-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Validator-canonicalization",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Typed-unsupported-result",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Governed-source-resolver",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Balanced-operation-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Change-of-base-binding",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Narrow-planner-orchestration",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Typed-repair-recovery",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Reproducible-live-benchmark",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Deterministic-boundary-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Pinned-live-benchmark",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Planner-binding-closeout",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Fraction-equivalence-authority",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Fraction-equivalence-registration",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Fraction-equivalence-presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Fraction-equivalence-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Fraction-equivalence-host",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Fraction-equivalence-human-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

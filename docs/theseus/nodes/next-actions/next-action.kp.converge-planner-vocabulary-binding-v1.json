@@ -13,5 +13,45 @@
       "kind": "file",
       "path": "docs/project/threads/generative-animation-compiler.md"
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.fixed-live-model-generation-benchmark-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:equation-series-live-model-benchmark",
+    "npm run test:equation-series-planner-port",
+    "npm run check:architecture"
+  ],
+  "expectedLearning": [
+    "Whether one canonical planner vocabulary plus deterministic governed-source binding produces repeatable compilable proposals without silent fallback or model-authored authority."
+  ],
+  "allowedWork": [
+    "Planner declarations, prompt projection, alias normalization, typed unsupported results, governed-source binding, repair, benchmarks, focused tests, and durable evidence."
+  ],
+  "disallowedWork": [
+    "Do not change accepted rendering choreography, add a general CAS, trust model-authored mathematical truth, or broaden into unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-planner-vocabulary",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-governed-binding",
+      "weight": "high"
+    },
+    {
+      "id": "zero-silent-fallback",
+      "weight": "high"
+    },
+    {
+      "id": "reproducible-live-benchmark",
+      "weight": "high"
+    }
   ]
 }

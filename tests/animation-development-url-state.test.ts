@@ -4,12 +4,28 @@ import test from "node:test";
 import {
   createKpAnimationDevelopmentExactHref,
   readKpAnimationDevelopmentUrlState,
+  resolveKpAnimationDevelopmentTheme,
   writeKpAnimationDevelopmentUrlState
 } from "../src/editor/animation-development-url-state.ts";
 import {
   KP_ANIMATION_DEVELOPMENT_LOCATION_EVENT,
   navigateKpAnimationDevelopmentView
 } from "../src/editor/animation-development-view-navigation.ts";
+
+test("theme precedence keeps exact links above preferences and dark fallback", () => {
+  assert.equal(resolveKpAnimationDevelopmentTheme({
+    explicitTheme: "light",
+    preferredTheme: "dark"
+  }), "light");
+  assert.equal(resolveKpAnimationDevelopmentTheme({
+    explicitTheme: null,
+    preferredTheme: "light"
+  }), "light");
+  assert.equal(resolveKpAnimationDevelopmentTheme({
+    explicitTheme: "neon",
+    preferredTheme: "sepia"
+  }), "dark");
+});
 
 test("legacy catalogue links acquire typed defaults without losing exact state", () => {
   assert.deepEqual(readKpAnimationDevelopmentUrlState(
