@@ -1,3 +1,35 @@
+[data-kp-development-theme="light"] {
+  --kp-development-dock-surface:
+    var(--kp-lesson-theme-control-surface, #fbfaf7);
+  --kp-development-dock-panel: #f5f3ee;
+  --kp-development-dock-input: #fffefa;
+  --kp-development-dock-ink:
+    var(--kp-lesson-theme-control-ink, #25231f);
+  --kp-development-dock-muted: #746f66;
+  --kp-development-dock-accent: #805a2f;
+  --kp-development-dock-relation: #345c67;
+  --kp-development-dock-line:
+    var(--kp-lesson-theme-control-border, rgb(36 32 27 / 18%));
+  --kp-development-dock-shadow:
+    var(--kp-lesson-theme-shadow, rgb(36 32 27 / 16%));
+}
+
+[data-kp-development-theme="dark"] {
+  --kp-development-dock-surface:
+    var(--kp-lesson-theme-control-surface, #0d0e1c);
+  --kp-development-dock-panel: #111424;
+  --kp-development-dock-input: #0d0e1c;
+  --kp-development-dock-ink:
+    var(--kp-lesson-theme-control-ink, #ede8d0);
+  --kp-development-dock-muted: #989898;
+  --kp-development-dock-accent: #c0965b;
+  --kp-development-dock-relation: #76afbf;
+  --kp-development-dock-line:
+    var(--kp-lesson-theme-control-border, rgb(237 232 208 / 18%));
+  --kp-development-dock-shadow:
+    var(--kp-lesson-theme-shadow, rgb(0 0 0 / 32%));
+}
+
 [data-kp-dev-toolbar] {
   /* This stylesheet loads before the application-wide border-box reset. Keep
      the fixed toolbar's outer height identical across that lazy boundary. */
@@ -14,11 +46,11 @@
   gap: 0.4rem;
   align-items: center;
   padding: 0.28rem;
-  border: 1px solid var(--kp-lesson-theme-control-border, #56606b);
+  border: 1px solid var(--kp-development-dock-line, #56606b);
   border-radius: 999px;
-  color: var(--kp-lesson-theme-control-ink, #f4f5f7);
-  background: var(--kp-lesson-theme-control-surface, #171a24);
-  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow, rgb(0 0 0 / 24%));
+  color: var(--kp-development-dock-ink, #f4f5f7);
+  background: var(--kp-development-dock-surface, #171a24);
+  box-shadow: 0 12px 34px var(--kp-development-dock-shadow, rgb(0 0 0 / 24%));
   /* Dev chrome is route-independent; inheriting a lazy route font changed its
      compact wrapping after the toolbar was already visible. */
   font-family: ui-sans-serif, system-ui, sans-serif;
@@ -108,8 +140,8 @@ html[data-kp-dev-toolbar-active] .kp-animation-catalogue-bootstrap {
 
 [data-kp-dev-toolbar] .kp-dev-toolbar__review {
   padding-inline: 0.85rem;
-  color: var(--kp-lesson-theme-control-surface, #171a24);
-  background: var(--kp-lesson-theme-control-ink, #f4f5f7);
+  color: var(--kp-development-dock-surface, #171a24);
+  background: var(--kp-development-dock-ink, #f4f5f7);
   font-weight: 650;
 }
 
@@ -151,11 +183,11 @@ html[data-kp-dev-toolbar-active] .kp-animation-catalogue-bootstrap {
   gap: 1rem;
   overflow: auto;
   padding: 1rem;
-  border: 1px solid var(--kp-lesson-theme-control-border, #56606b);
+  border: 1px solid var(--kp-development-dock-line, #56606b);
   border-radius: 1rem;
-  color: var(--kp-lesson-theme-control-ink, #f4f5f7);
-  background: var(--kp-lesson-theme-control-surface, #171a24);
-  box-shadow: 0 12px 34px var(--kp-lesson-theme-shadow, rgb(0 0 0 / 24%));
+  color: var(--kp-development-dock-ink, #f4f5f7);
+  background: var(--kp-development-dock-surface, #171a24);
+  box-shadow: 0 12px 34px var(--kp-development-dock-shadow, rgb(0 0 0 / 24%));
   transform: translateX(-50%);
 }
 
@@ -190,8 +222,8 @@ html[data-kp-dev-toolbar-active] .kp-animation-catalogue-bootstrap {
 }
 
 [data-kp-dev-toolbar] .kp-dev-toolbar__pages a[aria-current="page"] {
-  color: var(--kp-lesson-theme-control-surface, #171a24);
-  background: var(--kp-lesson-theme-control-ink, #f4f5f7);
+  color: var(--kp-development-dock-surface, #171a24);
+  background: var(--kp-development-dock-ink, #f4f5f7);
   font-weight: 650;
 }
 

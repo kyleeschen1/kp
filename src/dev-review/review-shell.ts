@@ -183,13 +183,14 @@ function button(ownerDocument: Document, className: string, label: string): HTML
 
 const shellStyles = `
   :host {
-    --paper: #f7f3e8;
-    --surface: #fffaf0;
-    --ink: #16231d;
-    --muted: #59645e;
-    --accent: #df7047;
-    --relation: #1f6371;
-    --line: #d2d7cd;
+    --paper: var(--kp-development-dock-surface, #f7f3e8);
+    --surface: var(--kp-development-dock-panel, #fffaf0);
+    --input-surface: var(--kp-development-dock-input, #fffdf7);
+    --ink: var(--kp-development-dock-ink, #16231d);
+    --muted: var(--kp-development-dock-muted, #59645e);
+    --accent: var(--kp-development-dock-accent, #df7047);
+    --relation: var(--kp-development-dock-relation, #1f6371);
+    --line: var(--kp-development-dock-line, #d2d7cd);
     --focus-ring: var(--relation);
     position: fixed;
     z-index: 2147483000;
@@ -287,8 +288,8 @@ const shellStyles = `
     border-radius: 1rem;
     /* The captured page remains inspectable through the chrome; the writing
        surface below stays opaque so feedback itself never loses contrast. */
-    background: rgb(255 250 240 / 86%);
-    box-shadow: 0 24px 70px rgb(22 35 29 / 18%);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    box-shadow: 0 24px 70px var(--kp-development-dock-shadow, rgb(22 35 29 / 18%));
     overflow: hidden;
     pointer-events: auto;
   }
@@ -394,7 +395,7 @@ const shellStyles = `
     border: 1px solid var(--line);
     border-radius: .62rem;
     color: var(--ink);
-    background: #fffdf7;
+    background: var(--input-surface);
     font: 400 .79rem/1.5 var(--kp-economics-non-katex-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
   }
   textarea::placeholder { color: color-mix(in srgb, var(--muted) 72%, transparent); }

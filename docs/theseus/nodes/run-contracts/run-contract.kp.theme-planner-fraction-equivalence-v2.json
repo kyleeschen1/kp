@@ -56,11 +56,39 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T01:26:43.033Z",
       "notes": "Neutral Catalogue equation paint aliases the prose ink token; log-exponent consumes the shared equation foreground without changing typography."
+    },
+    {
+      "command": "npm run test:animation-catalogue-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:31:16.080Z",
+      "notes": "Both foreground and dock/review palette contracts passed."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:31:17.394Z",
+      "notes": "31 dock ownership, route, and fixed-layout tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/vite-production-development-erasure.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:31:18.646Z",
+      "notes": "3 production development-erasure policy tests passed."
+    },
+    {
+      "command": "npm run visual:development-dock",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-19T01:31:19.837Z",
+      "notes": "2 Chromium flows passed, including exact theme navigation and narrow review placement without playback overlap."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 made neutral Catalogue KaTeX consume the same foreground authority as default prose while leaving semantic accent paint and font metrics untouched."
+    "summary": "s04 introduced theme-responsive development chrome tokens consumed by the dock, page directory, review panel, and review input surface."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -109,7 +137,8 @@
     {
       "id": "s04",
       "title": "Development-dock-theming",
-      "status": "planned"
+      "summary": "Development dock and review capture now follow active light/dark surface tokens with narrow-layout and production-erasure evidence.",
+      "status": "complete"
     },
     {
       "id": "s05",

@@ -25,3 +25,31 @@ test("catalogue prose and neutral equation paint share one foreground token", as
     /--kp-equation-foreground:\s*#[0-9a-f]{3,8}/i
   );
 });
+
+test("development dock and review surfaces inherit the active theme palette", async () => {
+  const [toolbarCss, reviewShell] = await Promise.all([
+    readFile("src/dev-toolbar/dev-toolbar.css", "utf8"),
+    readFile("src/dev-review/review-shell.ts", "utf8")
+  ]);
+
+  assert.match(
+    toolbarCss,
+    /\[data-kp-development-theme="light"\][\s\S]*?--kp-development-dock-surface:[\s\S]*?#fbfaf7\);/
+  );
+  assert.match(
+    toolbarCss,
+    /\[data-kp-development-theme="dark"\][\s\S]*?--kp-development-dock-surface:[\s\S]*?#0d0e1c\);/
+  );
+  assert.match(
+    toolbarCss,
+    /\[data-kp-dev-toolbar\][\s\S]*?background:\s*var\(--kp-development-dock-surface,\s*#171a24\);/
+  );
+  assert.match(
+    reviewShell,
+    /--surface:\s*var\(--kp-development-dock-panel,\s*#fffaf0\);/
+  );
+  assert.match(
+    reviewShell,
+    /background:\s*var\(--input-surface\);/
+  );
+});
