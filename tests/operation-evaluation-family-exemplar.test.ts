@@ -26,9 +26,15 @@ test("the provisional comparison closes each family to one honest handoff", () =
     ]
   );
   assert.equal(
-    kpOperationEvaluationFamilyExemplarRecipes.every(
-      ({ status }) => status === "provisional-human-checkpoint"
-    ),
+    kpOperationEvaluationFamilyExemplarRecipes.find(
+      ({ family }) => family === "contributor-fusion"
+    )?.status,
+    "promoted"
+  );
+  assert.equal(
+    kpOperationEvaluationFamilyExemplarRecipes
+      .filter(({ family }) => family !== "contributor-fusion")
+      .every(({ status }) => status === "provisional-human-checkpoint"),
     true
   );
   for (const family of kpOperationEvaluationFamilyIds) {
@@ -42,14 +48,10 @@ test("the provisional comparison closes each family to one honest handoff", () =
   );
   assert.equal(fusion.family, "contributor-fusion");
   if (fusion.family === "contributor-fusion") {
-    assert.ok(fusion.gatherStartsAt < fusion.compressionStartsAt);
-    assert.ok(fusion.compressionStartsAt < fusion.sourceKernelStartsAt);
-    assert.ok(fusion.sourceKernelStartsAt < fusion.ownershipHandoffAt);
-    assert.ok(fusion.ownershipHandoffAt < fusion.targetLegibilityStartsAt);
-    assert.ok(
-      fusion.targetLegibilityStartsAt < fusion.targetExpansionEndsAt
+    assert.equal(
+      fusion.profileId,
+      "kp.evaluation-family.contributor-fusion.v1"
     );
-    assert.ok(fusion.kernelAreaRatio > 0 && fusion.kernelAreaRatio < 1);
   }
 });
 

@@ -2,6 +2,7 @@ import { expect, test, type Locator } from "@playwright/test";
 
 const animationId = "animation.operation-evaluation.two-times-three";
 const quotientAnimationId = "animation.operation-evaluation.three-sixths";
+const sumAnimationId = "animation.operation-evaluation.five-plus-two";
 
 test("evaluation families share endpoints and change only the handoff", async ({
   page
@@ -155,6 +156,64 @@ test("ink-knot fusion preserves a stacked fraction's native reading order", asyn
   expect(await materialOwnerSignature(stage)).toEqual(firstSignature);
   await seek.fill("1");
   expect((await readableCohortSnapshot(stage)).visibleEquationCohorts).toBe(1);
+});
+
+test("a constant sum confirms the promoted profile without caller choreography", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`/?artifact=${sumAnimationId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${sumAnimationId}"]`
+  );
+  await expect(player.locator(
+    "[data-kp-operation-evaluation-family-review]"
+  )).toHaveCount(0);
+  const stage = player.locator(
+    "[data-kp-operation-evaluation-stage]"
+  ).first();
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-family-profile-id",
+    "kp.evaluation-family.contributor-fusion.v1"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-renderer-profile-id",
+    "kp.rendering.native-katex.operation-evaluation.contributor-fusion.v1"
+  );
+  await expect(stage).toHaveAttribute(
+    "aria-label",
+    /5.*2 evaluates to 7/
+  );
+
+  await seek.fill("0.5");
+  const sourceKernel = await cohortGeometry(stage, "source");
+  expect(sourceKernel.centerSpreadX).toBeGreaterThan(1);
+  expect(sourceKernel.centerSpreadX).toBeLessThan(20);
+  expect(sourceKernel.centerSpreadY).toBeLessThan(1);
+  expect(sourceKernel.maximumScale - sourceKernel.minimumScale)
+    .toBeLessThan(0.001);
+  expect(sourceKernel.rolesInVisualOrder).toEqual([
+    "successor-source:material-input",
+    "successor-source:catalyst",
+    "successor-source:material-input"
+  ]);
+  const firstSignature = await materialOwnerSignature(stage);
+  await seek.fill("1");
+  await seek.fill("0.5");
+  expect(await materialOwnerSignature(stage)).toEqual(firstSignature);
+  await seek.fill("1");
+  expect((await readableCohortSnapshot(stage)).visibleEquationCohorts).toBe(1);
+  await expect(stage.locator(
+    "[data-kp-operation-evaluation-target]"
+  )).toContainText("7");
 });
 
 async function materialOwnerSignature(stage: Locator) {

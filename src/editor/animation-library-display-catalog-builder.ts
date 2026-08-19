@@ -51,6 +51,12 @@ import {
   kpVerifiedVectorDotProjectionReleaseApproval,
   type KpVerifiedVectorDotProjectionReleaseApproval
 } from "../architecture/vector-dot-projection-release-approval.ts";
+import {
+  isKpVerifiedContributorFusionReleaseApproval,
+  kpContributorFusionReleasedAnimationIds,
+  kpVerifiedContributorFusionReleaseApproval,
+  type KpVerifiedContributorFusionReleaseApproval
+} from "../architecture/contributor-fusion-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -126,6 +132,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "vector-dot-projection-release";
         readonly approval?:
           KpVerifiedVectorDotProjectionReleaseApproval | undefined;
+      }
+    | {
+        readonly kind: "contributor-fusion-release";
+        readonly approval?:
+          KpVerifiedContributorFusionReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -167,6 +178,13 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       ]
     }
   ],
+  ...kpContributorFusionReleasedAnimationIds.map((animationId) => [
+    animationId,
+    completeContributorFusionCanonicalFormatEvidence({
+      animationId,
+      approval: kpVerifiedContributorFusionReleaseApproval
+    })
+  ] as const),
   [
     "animation.exact-fraction-quantity.third-plus-sixth",
     completeExactFractionQuantityCanonicalFormatEvidence(
@@ -284,6 +302,36 @@ const supplementalRepresentations = [
     role: "canonical-host"
   },
   {
+    animationId: "animation.operation-evaluation.two-times-three",
+    id: "library.editor.contributor-fusion.two-times-three",
+    label: "Contributor fusion: product",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.two-times-three",
+    role: "canonical-host"
+  },
+  {
+    animationId: "animation.operation-evaluation.three-sixths",
+    id: "library.editor.contributor-fusion.three-sixths",
+    label: "Contributor fusion: quotient",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.three-sixths",
+    role: "canonical-host"
+  },
+  {
+    animationId: "animation.operation-evaluation.five-plus-two",
+    id: "library.editor.contributor-fusion.five-plus-two",
+    label: "Contributor fusion: sum",
+    kind: "editor",
+    href:
+      "/?view=animation-library-host&animation=" +
+      "editor-animation.animation.operation-evaluation.five-plus-two",
+    role: "canonical-host"
+  },
+  {
     animationId: "animation.place-value-addition.278-plus-156",
     id: "library.editor.place-value-addition-focused-host",
     label: "Animation + lesson",
@@ -354,6 +402,18 @@ const preferredRepresentationByAnimation = new Map<string, string>([
   [
     "animation.operation-evaluation.one-plus-two",
     "library.editor.operation-evaluation-focused-host"
+  ],
+  [
+    "animation.operation-evaluation.two-times-three",
+    "library.editor.contributor-fusion.two-times-three"
+  ],
+  [
+    "animation.operation-evaluation.three-sixths",
+    "library.editor.contributor-fusion.three-sixths"
+  ],
+  [
+    "animation.operation-evaluation.five-plus-two",
+    "library.editor.contributor-fusion.five-plus-two"
   ],
   [
     "animation.place-value-addition.278-plus-156",
@@ -658,7 +718,42 @@ function hasKpCanonicalFormatExecutionAuthority(
         approval.checkpointCount === 7
       );
     }
+    case "contributor-fusion-release": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedContributorFusionReleaseApproval(approval) &&
+        approval.releaseDecision === "passed" &&
+        approval.animationIds.includes(
+          evidence.animationId as typeof approval.animationIds[number]
+        ) &&
+        approval.approvedPressureKinds.length === 2 &&
+        approval.confirmationKind === "sum"
+      );
+    }
   }
+}
+
+function completeContributorFusionCanonicalFormatEvidence(input: {
+  readonly animationId: KpVerifiedContributorFusionReleaseApproval[
+    "animationIds"
+  ][number];
+  readonly approval: KpVerifiedContributorFusionReleaseApproval;
+}): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: input.animationId,
+    executionAuthority: Object.freeze({
+      kind: "contributor-fusion-release" as const,
+      approval: input.approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: input.approval.releaseDecision === "passed",
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: input.approval.evidenceSourceIds
+  });
 }
 
 function completeCrossDomainSynchronizedModelCanonicalFormatEvidence(

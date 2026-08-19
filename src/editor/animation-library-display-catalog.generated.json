@@ -302,16 +302,56 @@
       "presentation-compiler"
     ],
     "availability": "playable",
-    "canonicalFormat": "legacy",
+    "canonicalFormat": "ported",
     "featured": false,
-    "primaryRepresentationId": "editor-animation.animation.operation-evaluation.three-sixths",
+    "primaryRepresentationId": "library.editor.contributor-fusion.three-sixths",
     "representations": [
+      {
+        "id": "library.editor.contributor-fusion.three-sixths",
+        "label": "Contributor fusion: quotient",
+        "kind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.three-sixths",
+        "role": "canonical-host"
+      },
       {
         "id": "editor-animation.animation.operation-evaluation.three-sixths",
         "label": "\\frac{3}{6} → \\frac{1}{2}",
         "kind": "editor",
         "href": "/?animation=editor-animation.animation.operation-evaluation.three-sixths",
+        "role": "projection"
+      }
+    ]
+  },
+  {
+    "animationId": "animation.operation-evaluation.two-times-three",
+    "title": "2 \\times 3 → 6",
+    "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+    "tags": [
+      "animation",
+      "arithmetic",
+      "editor",
+      "equation",
+      "operation-evaluation",
+      "presentation-compiler"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "ported",
+    "featured": false,
+    "primaryRepresentationId": "library.editor.contributor-fusion.two-times-three",
+    "representations": [
+      {
+        "id": "library.editor.contributor-fusion.two-times-three",
+        "label": "Contributor fusion: product",
+        "kind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.two-times-three",
         "role": "canonical-host"
+      },
+      {
+        "id": "editor-animation.animation.operation-evaluation.two-times-three",
+        "label": "2 \\times 3 → 6",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-three",
+        "role": "projection"
       }
     ]
   },
@@ -328,16 +368,23 @@
       "presentation-compiler"
     ],
     "availability": "playable",
-    "canonicalFormat": "legacy",
+    "canonicalFormat": "ported",
     "featured": false,
-    "primaryRepresentationId": "editor-animation.animation.operation-evaluation.five-plus-two",
+    "primaryRepresentationId": "library.editor.contributor-fusion.five-plus-two",
     "representations": [
+      {
+        "id": "library.editor.contributor-fusion.five-plus-two",
+        "label": "Contributor fusion: sum",
+        "kind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.five-plus-two",
+        "role": "canonical-host"
+      },
       {
         "id": "editor-animation.animation.operation-evaluation.five-plus-two",
         "label": "5 + 2 → 7",
         "kind": "editor",
         "href": "/?animation=editor-animation.animation.operation-evaluation.five-plus-two",
-        "role": "canonical-host"
+        "role": "projection"
       }
     ]
   },

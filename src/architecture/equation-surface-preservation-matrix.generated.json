@@ -5048,6 +5048,139 @@
     },
     {
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
+      "animationId": "animation.operation-evaluation.two-times-three",
+      "familyId": "operation-evaluation",
+      "pathClass": "operation-evaluation-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transform.operation-evaluation.two-times-three.simplify-product",
+          "transformationType": "simplifyConstantProduct",
+          "transformationFingerprint": "fnv1a32-3d81295e",
+          "source": [
+            {
+              "objectId": "expression.operation-evaluation.two-times-three.source",
+              "objectType": "expression",
+              "title": "Constant product",
+              "semanticFingerprint": "fnv1a32-ee644091"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "expression.operation-evaluation.two-times-three.target",
+              "objectType": "expression",
+              "title": "Evaluated product",
+              "semanticFingerprint": "fnv1a32-3436ba38"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.operation-evaluation.two-times-three",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-1eb40f27",
+          "objectIds": [
+            "expression.operation-evaluation.two-times-three.source",
+            "expression.operation-evaluation.two-times-three.target"
+          ],
+          "transformationIds": [
+            "transform.operation-evaluation.two-times-three.simplify-product"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-92c9defa",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "operation-evaluation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.operation-native-scene"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.operation-evaluation.two-times-three.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.two-times-three.simplify-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.two-times-three.source",
+                "expression.operation-evaluation.two-times-three.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-9bf15e69"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.operation-evaluation.two-times-three.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.two-times-three.simplify-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.two-times-three.source",
+                "expression.operation-evaluation.two-times-three.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-ca57213b"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.operation-evaluation.two-times-three.forward.0",
+              "activeTransformationIds": [
+                "transform.operation-evaluation.two-times-three.simplify-product"
+              ],
+              "activeSemanticObjectIds": [
+                "expression.operation-evaluation.two-times-three.source",
+                "expression.operation-evaluation.two-times-three.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-f6879b2a"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.sample.fourier-transform-pair",
       "familyId": "transform-pair",
       "pathClass": "generic-semantic-equation",
@@ -5566,7 +5699,8 @@
       "animationIds": [
         "animation.operation-evaluation.five-plus-two",
         "animation.operation-evaluation.one-plus-two",
-        "animation.operation-evaluation.three-sixths"
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-three"
       ],
       "representativeAnimationId": "animation.operation-evaluation.five-plus-two",
       "semanticVerificationCommand": "npm run test:operation-presentation-plans",

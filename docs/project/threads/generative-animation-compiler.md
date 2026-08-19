@@ -2,12 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: narrowly promote the human-approved contributor-fusion
-boundary demonstrated by `2 × 3 → 6` and the structurally different
-`3/6 → 1/2`, then route one constant-sum caller through it as confirmation.
-After that bounded checkpoint, relocate the Catalogue Review composer and
+Current Next Action: relocate the Catalogue Review composer into a fully
+visible inspector-side drawer with a bounded narrow-screen sheet. After that,
 repair the `1/3 + 1/6` composite-to-leaf jerk through one sequence-level Native
-KaTeX ownership contract before embedding the evaluation motif or implementing
+KaTeX ownership contract before embedding contributor fusion or implementing
 common-denominator addition choreography.
 
 ## Goal
@@ -38,10 +36,9 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   foreground crossing avoids glyph occlusion, and clean-load/remount playback
   passed cross-browser pressure. The transparent crossing treatment is not a
   globally promoted salience motif.
-- Thirty-four equation surfaces exist, but asset count is not capability
-  coverage: three are canonical, twenty-four adapter-backed, four static-only,
-  two unsupported, and one a retirement candidate in the current generated
-  inventory.
+- Thirty-five equation surfaces exist, but asset count is not capability
+  coverage. The generated inventory remains the authority for each surface's
+  current presentation and migration status.
 - The canonical compositor ownership gate is green with explicit planning and
   rendering boundaries and unchanged fixed ceilings.
 - Balanced equation operations are `Direct` through one typed family, causal
@@ -111,6 +108,16 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   result expansion without caller-authored timing or coordinates. This closes
   the pressure gate for a narrow promotion; it does not promote the other
   evaluation families or sequence embedding.
+- Contributor fusion is now narrowly promoted. One renderer-neutral profile
+  accepts only product, quotient, and sum with the compressed-ink handoff; one
+  Native KaTeX profile owns all optical timing and geometry. `5 + 2 → 7`
+  confirmed that semantic transformation kind alone selects the profile.
+  Product, quotient, and sum have one nominal release approval, evidence-derived
+  `ported` Catalogue status, focused-host URLs, deterministic seek/rewind,
+  reduced-motion and accessibility checks, and Chromium/Firefox/WebKit gates.
+  Infix catalyst ordering is semantic across engines, while native geometry
+  still supplies the contributor axis. Other evaluation families and sequence
+  embedding remain explicitly outside the promotion.
 
 ## Capability Vocabulary
 

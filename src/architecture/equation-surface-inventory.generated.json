@@ -15,9 +15,10 @@
       "animation.equation.fraction-equivalence.compact.v1",
       "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
       "animation.algebra.log-product.product-to-sum",
-      "animation.algebra.log-product.three-factors-to-sum"
+      "animation.algebra.log-product.three-factors-to-sum",
+      "animation.operation-evaluation.two-times-three"
     ],
-    "currentCount": 34,
+    "currentCount": 35,
     "reconciled": true
   },
   "entries": [
@@ -1186,10 +1187,10 @@
         "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
       },
       "currentPresentationAuthority": {
-        "canonicalFormat": "legacy",
-        "representationId": "editor-animation.animation.operation-evaluation.five-plus-two",
+        "canonicalFormat": "ported",
+        "representationId": "library.editor.contributor-fusion.five-plus-two",
         "representationKind": "editor",
-        "href": "/?animation=editor-animation.animation.operation-evaluation.five-plus-two&view=editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.five-plus-two",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },
@@ -1264,10 +1265,49 @@
         "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
       },
       "currentPresentationAuthority": {
-        "canonicalFormat": "legacy",
-        "representationId": "editor-animation.animation.operation-evaluation.three-sixths",
+        "canonicalFormat": "ported",
+        "representationId": "library.editor.contributor-fusion.three-sixths",
         "representationKind": "editor",
-        "href": "/?animation=editor-animation.animation.operation-evaluation.three-sixths&view=editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.three-sixths",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.operation-evaluation.two-times-three",
+      "title": "2 \\times 3 → 6",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.operation-evaluation.two-times-three",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.two-times-three",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "operation-evaluation",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "rendererSourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 1719,
+        "beatCount": 50
+      },
+      "lazyCapability": {
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "ported",
+        "representationId": "library.editor.contributor-fusion.two-times-three",
+        "representationKind": "editor",
+        "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.two-times-three",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

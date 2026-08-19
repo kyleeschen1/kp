@@ -1,6 +1,10 @@
 import type {
   KpEquationFontReadiness
 } from "./equation-font-readiness.ts";
+import {
+  kpEquationSettlementFrameBudget,
+  kpEquationSettlementTolerancePx
+} from "../animation/equation-shared-presentation-policy.ts";
 import type {
   KpCanonicalLineageProjection
 } from "../animation/canonical-operation-lineage-adapter.ts";
@@ -134,30 +138,32 @@ export async function settleAndObserveKpNativeKatexFragments(input: {
 }): Promise<KpNativeKatexFragmentObservationBatch> {
   await input.fontReadiness.whenReady();
   await nextLayoutFrame(input.stage.ownerDocument);
-  const first = observeKpNativeKatexFragments({
+  let previous = observeKpNativeKatexFragments({
     stage: input.stage,
     bindings: input.bindings,
     fontRevision: input.fontReadiness.revision
   });
-  await nextLayoutFrame(input.stage.ownerDocument);
-  const second = observeKpNativeKatexFragments({
-    stage: input.stage,
-    bindings: input.bindings,
-    fontRevision: input.fontReadiness.revision
-  });
-  const tolerance = input.geometryTolerancePx ?? 0.25;
-  first.fragments.forEach((fragment, index) => {
-    const settled = second.fragments[index]!;
-    if (
-      fragment.styleFingerprint !== settled.styleFingerprint ||
-      measureKpStageRelativeRectDelta(fragment.rect, settled.rect) > tolerance
-    ) {
-      throw new Error(
-        `Native fragment ${fragment.id} did not settle across consecutive layout frames.`
-      );
-    }
-  });
-  return second;
+  const tolerance = input.geometryTolerancePx ?? kpEquationSettlementTolerancePx;
+  let lastFailure = "Native fragments did not settle across layout frames.";
+  for (let frame = 1; frame < kpEquationSettlementFrameBudget; frame += 1) {
+    await nextLayoutFrame(input.stage.ownerDocument);
+    const current = observeKpNativeKatexFragments({
+      stage: input.stage,
+      bindings: input.bindings,
+      fontRevision: input.fontReadiness.revision
+    });
+    const unsettled = previous.fragments.find((fragment, index) => {
+      const settled = current.fragments[index];
+      return settled === undefined ||
+        fragment.styleFingerprint !== settled.styleFingerprint ||
+        measureKpStageRelativeRectDelta(fragment.rect, settled.rect) > tolerance;
+    });
+    if (unsettled === undefined) return current;
+    lastFailure =
+      `Native fragment ${unsettled.id} did not settle across consecutive layout frames.`;
+    previous = current;
+  }
+  throw new Error(lastFailure);
 }
 
 export function bindKpNativeKatexFragmentsWithinSemanticLineage(input: {

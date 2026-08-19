@@ -29,6 +29,9 @@ import {
   kpTwoTimesThreeEvaluationAnimationId
 } from "../animation/operation-evaluation-adapter.ts";
 import {
+  resolveKpDefaultOperationEvaluationFamilyProfile
+} from "../animation/operation-evaluation-family-profile.ts";
+import {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRenderPlan,
   type KpReaderEquationStatePlan
@@ -43,6 +46,9 @@ import {
 import {
   createKpEquationStageMeasurementIdentity
 } from "../reader/runtime/public-api.ts";
+import {
+  createKpNativeKatexContributorFusionPlayback
+} from "../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 import type {
   KpSelectorAnnotatedLatex
 } from "../rendering/selector-annotated-latex.ts";
@@ -297,23 +303,40 @@ async function prepareOperationEvaluationSurface(input: {
       stage,
       "[data-kp-operation-evaluation-target]"
     );
+    stage.dataset["kpOperationEvaluationFontStatus"] =
+      input.session.fontReadiness.status;
+    stage.dataset["kpOperationEvaluationPreparationPhase"] =
+      "await-font-readiness";
+    await input.session.fontReadiness.whenReady();
+    stage.dataset["kpOperationEvaluationFontStatus"] =
+      input.session.fontReadiness.status;
+    stage.dataset["kpOperationEvaluationPreparationPhase"] =
+      "settle-native-endpoints";
+    const sourceSettlement = nativeKatex.observe.settleAndObserve({
+      endpoint: "source",
+      stage,
+      root: sourceRoot,
+      semanticEntityId: `${transition.id}.source`,
+      presentationGroupId: `${transition.id}.source`,
+      fontReadiness: input.session.fontReadiness
+    }).then((scene) => {
+      stage.dataset["kpOperationEvaluationSourceSettlement"] = "ready";
+      return scene;
+    });
+    const targetSettlement = nativeKatex.observe.settleAndObserve({
+      endpoint: "target",
+      stage,
+      root: targetRoot,
+      semanticEntityId: `${transition.id}.target`,
+      presentationGroupId: `${transition.id}.target`,
+      fontReadiness: input.session.fontReadiness
+    }).then((scene) => {
+      stage.dataset["kpOperationEvaluationTargetSettlement"] = "ready";
+      return scene;
+    });
     const [sourceScene, targetScene] = await Promise.all([
-      nativeKatex.observe.settleAndObserve({
-        endpoint: "source",
-        stage,
-        root: sourceRoot,
-        semanticEntityId: `${transition.id}.source`,
-        presentationGroupId: `${transition.id}.source`,
-        fontReadiness: input.session.fontReadiness
-      }),
-      nativeKatex.observe.settleAndObserve({
-        endpoint: "target",
-        stage,
-        root: targetRoot,
-        semanticEntityId: `${transition.id}.target`,
-        presentationGroupId: `${transition.id}.target`,
-        fontReadiness: input.session.fontReadiness
-      })
+      sourceSettlement,
+      targetSettlement
     ]);
     if (
       input.session.disposed ||
@@ -323,6 +346,8 @@ async function prepareOperationEvaluationSurface(input: {
       return;
     }
     if (import.meta.env.DEV) {
+      stage.dataset["kpOperationEvaluationPreparationPhase"] =
+        "load-endpoint-microscope";
       const {
         mountKpOperationEvaluationEndpointMicroscope
       } = await import(
@@ -342,6 +367,8 @@ async function prepareOperationEvaluationSurface(input: {
           targetScene
         });
     }
+    stage.dataset["kpOperationEvaluationPreparationPhase"] =
+      "compile-compositor";
     const materialPlan = compileKpReaderEquationMaterialPlan(
       input.renderPlan
     );
@@ -381,7 +408,21 @@ async function prepareOperationEvaluationSurface(input: {
             base: canonicalPlayback,
             initialFamily: input.session.familyComparison.selectedFamily
           });
-    const playback = familyPlayback ?? canonicalPlayback;
+    const defaultFamilyProfile =
+      resolveKpDefaultOperationEvaluationFamilyProfile(
+        transition.transformType
+      );
+    const promotedPlayback = defaultFamilyProfile === undefined
+      ? undefined
+      : createKpNativeKatexContributorFusionPlayback({
+          stage,
+          base: canonicalPlayback,
+          familyProfile: defaultFamilyProfile
+        });
+    // The development comparison owns explicit candidate selection. Outside
+    // that review surface, semantic transformation kind selects the promoted
+    // profile without an animation-id or DOM branch.
+    const playback = familyPlayback ?? promotedPlayback ?? canonicalPlayback;
     if (
       familyReviewModule !== undefined &&
       input.session.familyComparison !== undefined
@@ -405,6 +446,7 @@ async function prepareOperationEvaluationSurface(input: {
     input.session.activeStage = stage;
     input.session.measurementCertificate = measurementCertificate;
     stage.dataset["kpOperationEvaluationStatus"] = "ready";
+    stage.dataset["kpOperationEvaluationPreparationPhase"] = "ready";
     stage.dataset["kpOperationEvaluationPresentationMode"] =
       playback.presentationMode;
     input.session.referenceComparison?.bindCurrentStage(stage);
@@ -671,6 +713,13 @@ function markCompilationFailure(
   slot: HTMLElement,
   message: string
 ): void {
+  const stage = slot.querySelector<HTMLElement>(
+    "[data-kp-operation-evaluation-stage]"
+  );
+  if (stage !== null) {
+    stage.dataset["kpOperationEvaluationStatus"] = "error";
+    stage.dataset["kpOperationEvaluationPreparationPhase"] = "error";
+  }
   player.dataset["kpOperationEvaluationContinuityStatus"] = "error";
   slot.dataset["kpEditorAnimationAdapterStatus"] = "error";
   slot.dataset["kpOperationEvaluationError"] = message;

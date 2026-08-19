@@ -2364,6 +2364,78 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.operation-evaluation.two-times-three",
+      "familyId": "operation-evaluation",
+      "disposition": "canonical",
+      "migrationWave": "wave-a-operation-plan",
+      "rationale": "Existing operation-evaluation authority is the canonical executable anchor; later convergence must preserve its native endpoint and scene contracts.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-3d81295e",
+          "fnv1a32-ee644091",
+          "fnv1a32-3436ba38"
+        ],
+        "route": "/?artifact=animation.operation-evaluation.two-times-three",
+        "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.operation-evaluation.two-times-three",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "operation-evaluation-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/operation-evaluation.ts",
+          "src/animation/catalog.ts",
+          "src/editor/operation-evaluation-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:operation-presentation-plans",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.operation-evaluation.two-times-three",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.operation-evaluation.two-times-three",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+          },
+          {
+            "id": "route.animation.operation-evaluation.two-times-three",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/operation-evaluation-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.operation-evaluation.two-times-three",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.operation-evaluation.two-times-three",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.operation-evaluation",
+            "kind": "family-verification",
+            "command": "npm run test:operation-presentation-plans"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.sample.fourier-transform-pair",
       "familyId": "transform-pair",
       "disposition": "static-only",

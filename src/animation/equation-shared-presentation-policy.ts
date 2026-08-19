@@ -23,6 +23,8 @@ export type KpEquationMotionAccessibilityProjection =
   | "no-depth";
 
 export const kpEquationSettlementTolerancePx = 0.25;
+export const kpEquationSettlementConsecutiveFrameCount = 2;
+export const kpEquationSettlementFrameBudget = 4;
 
 export interface KpCallerProvenEquationPresentationPolicy {
   readonly schemaVersion: "kp.caller-proven-equation-policy.v1";
@@ -38,7 +40,8 @@ export interface KpCallerProvenEquationPresentationPolicy {
   readonly measurement: {
     readonly fontGate: "document-fonts-ready";
     readonly invalidationReasons: readonly ["ready", "loading-done"];
-    readonly settlementFrames: 2;
+    readonly settlementConsecutiveFrames: 2;
+    readonly settlementFrameBudget: number;
     readonly geometryTolerancePx: number;
   };
   readonly accessibility: {
@@ -76,7 +79,11 @@ export const kpCallerProvenEquationPresentationPolicy = Object.freeze({
   measurement: Object.freeze({
     fontGate: "document-fonts-ready",
     invalidationReasons: Object.freeze(["ready", "loading-done"] as const),
-    settlementFrames: 2,
+    // WebKit can settle a native fraction rule one frame later than its
+    // glyphs. Require the same consecutive-frame proof while permitting a
+    // small bounded sampling window; never weaken the geometry tolerance.
+    settlementConsecutiveFrames: kpEquationSettlementConsecutiveFrameCount,
+    settlementFrameBudget: kpEquationSettlementFrameBudget,
     geometryTolerancePx: kpEquationSettlementTolerancePx
   }),
   accessibility: Object.freeze({

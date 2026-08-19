@@ -508,6 +508,249 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "title": "Give one third a denominator of six",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "transformationIds": [
+          "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor",
+          "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.join-equivalent-fraction",
+          "transformation.fraction.common-denominator.third-plus-sixth.pressure.evaluate-products"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A conservative larger-expression caller for the approved fraction equivalence and product-evaluation motifs.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "fraction",
+          "katex",
+          "pressure-caller"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "fraction-equivalence",
+        "familyId": "fraction",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-9ea895f4",
+          "fnv1a32-b2e8bb8e",
+          "fnv1a32-67f58633",
+          "fnv1a32-9b6b8077",
+          "fnv1a32-6c6e18ed",
+          "fnv1a32-38ae6f6f",
+          "fnv1a32-603c6e64"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "label": "Give one third a denominator of six",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.compact.v1",
+      "title": "Scale numerator and denominator together",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
+        "transformationIds": [
+          "transformation.fraction-equivalence.symbolic-times-two"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "fraction",
+          "katex"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "fraction-equivalence",
+        "familyId": "fraction",
+        "disposition": "unsupported",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.fraction-equivalence.compact.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-1bdfe906",
+          "fnv1a32-1ad8c6f3",
+          "fnv1a32-661a5626",
+          "fnv1a32-58c42283"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.fraction-equivalence.compact.v1",
+            "label": "Scale numerator and denominator together",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.compact.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.v1",
+      "title": "Multiply a fraction by two over two",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "transformationIds": [
+          "transformation.fraction-equivalence.symbolic-times-two"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "fraction",
+          "katex"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "fraction-equivalence",
+        "familyId": "fraction",
+        "disposition": "unsupported",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.fraction-equivalence.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-1bdfe906",
+          "fnv1a32-1ad8c6f3",
+          "fnv1a32-67d345b6",
+          "fnv1a32-58c42283"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.fraction-equivalence.v1",
+            "label": "Multiply a fraction by two over two",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.equation.logarithm-change-of-base.v1",
       "title": "Change logarithm base",
       "semanticSource": {
@@ -551,9 +794,9 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-37820a96",
-          "fnv1a32-13e16db7",
-          "fnv1a32-3a9b93f7"
+          "fnv1a32-15d1d2a6",
+          "fnv1a32-8ba9d8b3",
+          "fnv1a32-f9cd2367"
         ],
         "nativeSettlement": {
           "slotKind": "equation",
@@ -2407,16 +2650,23 @@
       },
       "catalogue": {
         "availability": "playable",
-        "canonicalFormat": "legacy",
+        "canonicalFormat": "ported",
         "featured": false,
-        "primaryRepresentationId": "editor-animation.animation.operation-evaluation.five-plus-two",
+        "primaryRepresentationId": "library.editor.contributor-fusion.five-plus-two",
         "representations": [
+          {
+            "id": "library.editor.contributor-fusion.five-plus-two",
+            "label": "Contributor fusion: sum",
+            "kind": "editor",
+            "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.five-plus-two",
+            "role": "canonical-host"
+          },
           {
             "id": "editor-animation.animation.operation-evaluation.five-plus-two",
             "label": "5 + 2 → 7",
             "kind": "editor",
             "href": "/?animation=editor-animation.animation.operation-evaluation.five-plus-two",
-            "role": "canonical-host"
+            "role": "projection"
           }
         ]
       }
@@ -2570,16 +2820,108 @@
       },
       "catalogue": {
         "availability": "playable",
-        "canonicalFormat": "legacy",
+        "canonicalFormat": "ported",
         "featured": false,
-        "primaryRepresentationId": "editor-animation.animation.operation-evaluation.three-sixths",
+        "primaryRepresentationId": "library.editor.contributor-fusion.three-sixths",
         "representations": [
+          {
+            "id": "library.editor.contributor-fusion.three-sixths",
+            "label": "Contributor fusion: quotient",
+            "kind": "editor",
+            "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.three-sixths",
+            "role": "canonical-host"
+          },
           {
             "id": "editor-animation.animation.operation-evaluation.three-sixths",
             "label": "\\frac{3}{6} → \\frac{1}{2}",
             "kind": "editor",
             "href": "/?animation=editor-animation.animation.operation-evaluation.three-sixths",
+            "role": "projection"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.operation-evaluation.two-times-three",
+      "title": "2 \\times 3 → 6",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.operation-evaluation.two-times-three",
+        "transformationIds": [
+          "transform.operation-evaluation.two-times-three.simplify-product"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A registry-compiled arithmetic evaluation with verified opaque paint continuity and native KaTeX endpoints.",
+        "tags": [
+          "animation",
+          "arithmetic",
+          "editor",
+          "equation",
+          "operation-evaluation",
+          "presentation-compiler"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "operation-evaluation",
+        "familyId": "operation-evaluation",
+        "disposition": "canonical",
+        "migrationWave": "wave-a-operation-plan"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "operation-evaluation",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.operation-evaluation.two-times-three",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-3d81295e",
+          "fnv1a32-ee644091",
+          "fnv1a32-3436ba38"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "ported",
+        "featured": false,
+        "primaryRepresentationId": "library.editor.contributor-fusion.two-times-three",
+        "representations": [
+          {
+            "id": "library.editor.contributor-fusion.two-times-three",
+            "label": "Contributor fusion: product",
+            "kind": "editor",
+            "href": "/?view=animation-library-host&animation=editor-animation.animation.operation-evaluation.two-times-three",
             "role": "canonical-host"
+          },
+          {
+            "id": "editor-animation.animation.operation-evaluation.two-times-three",
+            "label": "2 \\times 3 → 6",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-three",
+            "role": "projection"
           }
         ]
       }

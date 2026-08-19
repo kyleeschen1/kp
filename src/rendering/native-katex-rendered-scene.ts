@@ -7,6 +7,7 @@ import type {
   KpEquationFontReadiness
 } from "./equation-font-readiness.ts";
 import {
+  kpEquationSettlementFrameBudget,
   kpEquationSettlementTolerancePx
 } from "../animation/equation-shared-presentation-policy.ts";
 import {
@@ -289,25 +290,40 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
 }): Promise<KpNativeKatexRenderedSceneObservation> {
   await input.fontReadiness.whenReady();
   await nextSceneLayoutFrame(input.stage.ownerDocument);
-  const first = observeKpNativeKatexRenderedScene(input);
-  await nextSceneLayoutFrame(input.stage.ownerDocument);
-  const second = observeKpNativeKatexRenderedScene(input);
+  let previous = observeKpNativeKatexRenderedScene(input);
   const tolerance = input.geometryTolerancePx ?? kpEquationSettlementTolerancePx;
-  if (first.atoms.length !== second.atoms.length) {
-    throw new Error("Rendered scene paint inventory changed between layout frames.");
+  let lastFailure = "Rendered scene did not settle.";
+  for (let frame = 1; frame < kpEquationSettlementFrameBudget; frame += 1) {
+    await nextSceneLayoutFrame(input.stage.ownerDocument);
+    const current = observeKpNativeKatexRenderedScene(input);
+    const failure = renderedSceneSettlementFailure(previous, current, tolerance);
+    if (failure === undefined) return current;
+    lastFailure = failure;
+    previous = current;
   }
-  first.atoms.forEach((atom, index) => {
-    const settled = second.atoms[index]!;
+  throw new Error(lastFailure);
+}
+
+function renderedSceneSettlementFailure(
+  previous: KpNativeKatexRenderedSceneObservation,
+  current: KpNativeKatexRenderedSceneObservation,
+  tolerance: number
+): string | undefined {
+  if (previous.atoms.length !== current.atoms.length) {
+    return "Rendered scene paint inventory changed between layout frames.";
+  }
+  for (const [index, atom] of previous.atoms.entries()) {
+    const settled = current.atoms[index]!;
     if (
       atom.id !== settled.id ||
       atom.visualKey !== settled.visualKey ||
       atom.styleFingerprint !== settled.styleFingerprint ||
       measureKpStageRelativeRectDelta(atom.rect, settled.rect) > tolerance
     ) {
-      throw new Error(`Rendered scene atom ${atom.id} did not settle.`);
+      return `Rendered scene atom ${atom.id} did not settle.`;
     }
-  });
-  return second;
+  }
+  return undefined;
 }
 
 export async function settleAndCreateKpNativeKatexRenderedEndpointHandle(

@@ -159,13 +159,14 @@ Only this repository sequence is active:
     stops at `2/6 + 1/6`, but its composite-to-leaf unit-factor handoff jerks
     and its shared successor-synthesis evaluation is too visually busy. Keep
     the caller unpromoted.
-21. **Contributor-fusion promotion:** next. Human review approved the exact
+21. **Contributor-fusion promotion:** complete. Human review approved the exact
     ink-knot candidate on both horizontal `2 × 3 → 6` and vertical
-    `3/6 → 1/2`. Promote only the demonstrated atomic many-to-one recipe and
-    Native KaTeX optical profile, then route one constant-sum caller through
-    the same seam as confirmation. Do not promote the other evaluation
-    families or permit caller-authored geometry and timing.
-22. **Review composer visibility:** after the bounded promotion. Move the wide Catalogue composer out
+    `3/6 → 1/2`. One neutral typed family profile and one Native KaTeX optical
+    profile now own the shared behavior; `5 + 2 → 7` confirms the seam without
+    caller-authored geometry or timing. Product, quotient, and sum have nominal
+    release evidence, exact focused-host URLs, and cross-browser gates. The
+    other evaluation families remain provisional.
+22. **Review composer visibility:** next. Move the wide Catalogue composer out
    of the cramped lower-left rail into a fully visible inspector-side drawer,
    retain a bounded narrow-screen sheet, and keep Save reachable without
    covering the stage, scrubber, or development dock.

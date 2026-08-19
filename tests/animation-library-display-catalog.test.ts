@@ -166,6 +166,22 @@ test("canonical-format status distinguishes complete, partial, and legacy hosts"
     status("animation.generated.distribution.expand-a-sum"),
     "legacy"
   );
+  assert.equal(
+    status("animation.operation-evaluation.two-times-three"),
+    "ported"
+  );
+  assert.equal(
+    status("animation.operation-evaluation.three-sixths"),
+    "ported"
+  );
+  assert.equal(
+    status("animation.operation-evaluation.five-plus-two"),
+    "ported"
+  );
+  assert.equal(
+    status("animation.operation-evaluation.one-plus-two"),
+    "partial"
+  );
 });
 
 test("ported status fails closed when any promotion facet is missing", () => {

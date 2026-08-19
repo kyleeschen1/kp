@@ -26,6 +26,15 @@ test("shared equation policy is evidenced by three contrasting callers", () => {
     kpEquationSettlementTolerancePx
   );
   assert.equal(
+    kpCallerProvenEquationPresentationPolicy.measurement
+      .settlementConsecutiveFrames,
+    2
+  );
+  assert.ok(
+    kpCallerProvenEquationPresentationPolicy.measurement
+      .settlementFrameBudget > 2
+  );
+  assert.equal(
     kpCallerProvenEquationPresentationPolicy.clock.rendererScheduling,
     "forbidden"
   );

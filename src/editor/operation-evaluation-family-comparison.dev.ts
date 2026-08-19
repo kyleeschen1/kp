@@ -7,6 +7,13 @@ import {
 import type {
   KpReaderEquationMeasuredRendererSession
 } from "../reader/renderers/equation-scene-compositor-adapter.ts";
+import {
+  applyKpNativeKatexContributorFusion,
+  kpNativeKatexContributorFusionOpticalProfile
+} from "../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
+import {
+  kpContributorFusionEvaluationFamilyProfile
+} from "../animation/operation-evaluation-family-profile.ts";
 
 const familyQueryParameter = "evaluationFamily";
 
@@ -212,16 +219,11 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
     }
     const frame = input.base.apply(bounded);
     if (recipe.family === "contributor-fusion") {
-      applyInkKnotFusion({
+      applyKpNativeKatexContributorFusion({
         stage: input.stage,
         progress: bounded,
-        gatherStartsAt: recipe.gatherStartsAt,
-        compressionStartsAt: recipe.compressionStartsAt,
-        sourceKernelStartsAt: recipe.sourceKernelStartsAt,
-        ownershipHandoffAt: recipe.ownershipHandoffAt,
-        targetLegibilityStartsAt: recipe.targetLegibilityStartsAt,
-        targetExpansionEndsAt: recipe.targetExpansionEndsAt,
-        kernelAreaRatio: recipe.kernelAreaRatio
+        familyProfile: kpContributorFusionEvaluationFamilyProfile,
+        opticalProfile: kpNativeKatexContributorFusionOpticalProfile
       });
       return frame;
     }
@@ -278,206 +280,6 @@ function readSelectedFamily(
   return value !== null && isKpOperationEvaluationFamilyId(value)
     ? value
     : "contributor-fusion";
-}
-
-function applyInkKnotFusion(input: {
-  readonly stage: HTMLElement;
-  readonly progress: number;
-  readonly gatherStartsAt: number;
-  readonly compressionStartsAt: number;
-  readonly sourceKernelStartsAt: number;
-  readonly ownershipHandoffAt: number;
-  readonly targetLegibilityStartsAt: number;
-  readonly targetExpansionEndsAt: number;
-  readonly kernelAreaRatio: number;
-}): void {
-  const sourceOwners = materialOwners(input.stage, "source");
-  const targetOwners = materialOwners(input.stage, "target");
-  if (sourceOwners.length === 0 || targetOwners.length === 0) return;
-  const sourceRects = sourceOwners.map(ownerBaseRect);
-  const targetRects = targetOwners.map(ownerBaseRect);
-  const knotCenter = centerOfUnion(targetRects);
-  const sourceArea = summedArea(sourceRects);
-  const targetArea = summedArea(targetRects);
-  // The renderer uses endpoint ink boxes as an optical proxy: exact pixel
-  // rasterization would make this provisional motif expensive and brittle.
-  const kernelArea = input.kernelAreaRatio *
-    Math.sqrt(sourceArea * targetArea);
-  const kernelSpan = Math.sqrt(kernelArea);
-  const sourceKernelScale = boundedKernelScale(
-    Math.sqrt(kernelArea / sourceArea)
-  );
-  const targetKernelScale = boundedKernelScale(
-    Math.sqrt(kernelArea / targetArea)
-  );
-  const gatherProgress = smoothstep(
-    input.gatherStartsAt,
-    input.sourceKernelStartsAt,
-    input.progress
-  );
-  const compressionProgress = smoothstep(
-    input.compressionStartsAt,
-    input.sourceKernelStartsAt,
-    input.progress
-  );
-  const targetExpansion = smoothstep(
-    input.ownershipHandoffAt,
-    input.targetExpansionEndsAt,
-    input.progress
-  );
-  const sourceOwnsPaint = input.progress < input.ownershipHandoffAt;
-  const sourceKernelOffsets = centeredOffsetsByNativeGeometry(
-    sourceRects,
-    kernelSpan
-  );
-
-  sourceOwners.forEach((owner, index) => {
-    const rect = sourceRects[index]!;
-    const sourceCenter = centerOfRect(rect);
-    const slotOffset = sourceKernelOffsets[index]!;
-    setOwnerPaintPresence(owner, sourceOwnsPaint);
-    owner.style.transform = ownerTransform({
-      translateX:
-        (knotCenter.x - sourceCenter.x + slotOffset.x) * gatherProgress,
-      translateY:
-        (knotCenter.y - sourceCenter.y + slotOffset.y) * gatherProgress,
-      scale: lerp(1, sourceKernelScale, compressionProgress)
-    });
-  });
-  targetOwners.forEach((owner, index) => {
-    const rect = targetRects[index]!;
-    const targetCenter = centerOfRect(rect);
-    setOwnerPaintPresence(owner, !sourceOwnsPaint);
-    const visual = owner.firstElementChild as HTMLElement | null;
-    if (visual !== null) {
-      const reveal = smoothstep(
-        input.ownershipHandoffAt,
-        input.targetLegibilityStartsAt,
-        input.progress
-      );
-      const inset = 28 * (1 - reveal);
-      visual.style.clipPath = `inset(${inset}% ${inset}%)`;
-    }
-    owner.style.transform = ownerTransform({
-      translateX: (knotCenter.x - targetCenter.x) * (1 - targetExpansion),
-      translateY: (knotCenter.y - targetCenter.y) * (1 - targetExpansion),
-      scale: lerp(targetKernelScale, 1, targetExpansion)
-    });
-  });
-
-  const legibilityState = input.progress < input.sourceKernelStartsAt
-    ? "source"
-    : input.progress < input.targetLegibilityStartsAt
-      ? "kernel"
-      : "target";
-  input.stage.dataset["kpOperationEvaluationLegibilityState"] =
-    legibilityState;
-  input.stage.dataset["kpOperationEvaluationReadableCohortCount"] =
-    legibilityState === "kernel" ? "0" : "1";
-}
-
-function materialOwners(
-  stage: HTMLElement,
-  side: "source" | "target"
-): readonly HTMLElement[] {
-  return [...stage.querySelectorAll<HTMLElement>(
-    `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
-  )];
-}
-
-function setOwnerPaintPresence(owner: HTMLElement, present: boolean): void {
-  owner.style.visibility = present ? "visible" : "hidden";
-  owner.style.opacity = present ? "1" : "0";
-}
-
-interface KpInkRect {
-  readonly left: number;
-  readonly top: number;
-  readonly width: number;
-  readonly height: number;
-}
-
-function ownerBaseRect(owner: HTMLElement): KpInkRect {
-  const left = Number.parseFloat(owner.style.left);
-  const top = Number.parseFloat(owner.style.top);
-  const width = Number.parseFloat(owner.style.width);
-  const height = Number.parseFloat(owner.style.height);
-  if (![left, top, width, height].every(Number.isFinite)) {
-    throw new Error("Ink-knot fusion requires measured material-owner boxes.");
-  }
-  return { left, top, width, height };
-}
-
-function centerOfRect(rect: KpInkRect): { readonly x: number; readonly y: number } {
-  return {
-    x: rect.left + rect.width / 2,
-    y: rect.top + rect.height / 2
-  };
-}
-
-function centerOfUnion(
-  rects: readonly KpInkRect[]
-): { readonly x: number; readonly y: number } {
-  const left = Math.min(...rects.map((rect) => rect.left));
-  const top = Math.min(...rects.map((rect) => rect.top));
-  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
-  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
-  return { x: (left + right) / 2, y: (top + bottom) / 2 };
-}
-
-function summedArea(rects: readonly KpInkRect[]): number {
-  return Math.max(1, rects.reduce(
-    (area, rect) => area + Math.max(0, rect.width * rect.height),
-    0
-  ));
-}
-
-function centeredOffsetsByNativeGeometry(
-  rects: readonly KpInkRect[],
-  span: number
-): readonly { readonly x: number; readonly y: number }[] {
-  if (rects.length <= 1) return rects.map(() => ({ x: 0, y: 0 }));
-  const centers = rects.map(centerOfRect);
-  const spreadX = coordinateSpread(centers.map(({ x }) => x));
-  const spreadY = coordinateSpread(centers.map(({ y }) => y));
-  // Preserve the endpoint's own reading axis inside the compressed knot.
-  // This keeps horizontal operators and stacked fractions on one measured
-  // choreography without teaching the renderer quotient semantics.
-  const dominantAxis = spreadY > spreadX ? "y" : "x";
-  const offsets = rects.map(() => ({ x: 0, y: 0 }));
-  const orderedIndexes = rects
-    .map((_, index) => ({ index, coordinate: centers[index]![dominantAxis] }))
-    .sort((left, right) =>
-      left.coordinate - right.coordinate || left.index - right.index)
-    .map(({ index }) => index);
-  orderedIndexes.forEach((sourceIndex, rank) => {
-    const offset = (rank / (rects.length - 1) - 0.5) * span;
-    offsets[sourceIndex] = dominantAxis === "x"
-      ? { x: offset, y: 0 }
-      : { x: 0, y: offset };
-  });
-  return offsets;
-}
-
-function coordinateSpread(coordinates: readonly number[]): number {
-  return Math.max(...coordinates) - Math.min(...coordinates);
-}
-
-function boundedKernelScale(scale: number): number {
-  return Math.max(0.24, Math.min(0.52, scale));
-}
-
-function ownerTransform(input: {
-  readonly translateX: number;
-  readonly translateY: number;
-  readonly scale: number;
-}): string {
-  return `translate3d(${input.translateX}px, ${input.translateY}px, 0) ` +
-    `scale(${input.scale})`;
-}
-
-function lerp(start: number, end: number, progress: number): number {
-  return start + (end - start) * progress;
 }
 
 function writeSelectedFamily(

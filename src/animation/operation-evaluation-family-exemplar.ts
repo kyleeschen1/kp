@@ -1,20 +1,20 @@
-export const kpOperationEvaluationFamilyIds = [
-  "punctuated-substitution",
-  "result-reception",
-  "contributor-fusion"
-] as const;
+import {
+  kpContributorFusionEvaluationFamilyProfile,
+  type KpOperationEvaluationFamilyId
+} from "./operation-evaluation-family-profile.ts";
 
-export type KpOperationEvaluationFamilyId =
-  (typeof kpOperationEvaluationFamilyIds)[number];
-
-export type KpOperationEvaluationHandoffKind =
-  | "discrete-cut"
-  | "progressive-replacement"
-  | "compressed-ink-handoff";
+export {
+  isKpOperationEvaluationFamilyId,
+  kpOperationEvaluationFamilyIds
+} from "./operation-evaluation-family-profile.ts";
+export type {
+  KpOperationEvaluationFamilyId,
+  KpOperationEvaluationHandoffKind
+} from "./operation-evaluation-family-profile.ts";
 
 interface KpOperationEvaluationFamilyRecipeBase {
   readonly kind: "operation-evaluation-family-exemplar-recipe";
-  readonly status: "provisional-human-checkpoint";
+  readonly status: "provisional-human-checkpoint" | "promoted";
   readonly id: string;
   readonly family: KpOperationEvaluationFamilyId;
   readonly label: string;
@@ -39,13 +39,7 @@ export type KpOperationEvaluationFamilyRecipe =
       readonly family: "contributor-fusion";
       readonly handoff: "compressed-ink-handoff";
       readonly synthesisSampling: "canonical-successor";
-      readonly gatherStartsAt: number;
-      readonly compressionStartsAt: number;
-      readonly sourceKernelStartsAt: number;
-      readonly ownershipHandoffAt: number;
-      readonly targetLegibilityStartsAt: number;
-      readonly targetExpansionEndsAt: number;
-      readonly kernelAreaRatio: number;
+      readonly profileId: "kp.evaluation-family.contributor-fusion.v1";
     });
 
 /**
@@ -84,22 +78,17 @@ readonly KpOperationEvaluationFamilyRecipe[] = Object.freeze([
   }),
   Object.freeze({
     kind: "operation-evaluation-family-exemplar-recipe" as const,
-    status: "provisional-human-checkpoint" as const,
-    id: "kp.evaluation-recipe.contributor-fusion.review-v2",
-    family: "contributor-fusion" as const,
-    handoff: "compressed-ink-handoff" as const,
+    status: "promoted" as const,
+    id: "kp.evaluation-recipe.contributor-fusion.promoted-v1",
+    family: kpContributorFusionEvaluationFamilyProfile.family,
+    handoff: kpContributorFusionEvaluationFamilyProfile.handoff,
     label: "Ink-knot fusion",
     summary:
       "Gather the native operand and operator ink into one compact knot, " +
       "then expand the result from that same measured locus.",
-    synthesisSampling: "canonical-successor" as const,
-    gatherStartsAt: 0.18,
-    compressionStartsAt: 0.38,
-    sourceKernelStartsAt: 0.48,
-    ownershipHandoffAt: 0.52,
-    targetLegibilityStartsAt: 0.58,
-    targetExpansionEndsAt: 0.7,
-    kernelAreaRatio: 0.1
+    synthesisSampling:
+      kpContributorFusionEvaluationFamilyProfile.synthesisSampling,
+    profileId: kpContributorFusionEvaluationFamilyProfile.id
   })
 ]);
 
@@ -118,10 +107,4 @@ export function resolveKpOperationEvaluationFamilyExemplarRecipe(
     throw new Error(`Unknown operation-evaluation family ${family}.`);
   }
   return recipe;
-}
-
-export function isKpOperationEvaluationFamilyId(
-  value: string
-): value is KpOperationEvaluationFamilyId {
-  return kpOperationEvaluationFamilyIds.some((family) => family === value);
 }

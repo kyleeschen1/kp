@@ -194,7 +194,9 @@ for (const viewport of [
     page
   }) => {
     await page.setViewportSize(viewport);
-    await page.goto(`/?animation=${quotientDescriptorId}`);
+    await page.goto(
+      `/?view=animation-library-host&animation=${quotientDescriptorId}`
+    );
     const player = page.locator(
       `[data-kp-editor-animation-player]` +
       `[data-kp-editor-animation-id="${quotientAnimationId}"]`
