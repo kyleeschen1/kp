@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  isKpOperationEvaluationFamilyReviewSelectable,
   kpOperationEvaluationFamilyExemplarRecipes,
   kpOperationEvaluationFamilyIds,
   resolveKpOperationEvaluationFamilyExemplarRecipe
@@ -22,7 +23,11 @@ test("the provisional comparison closes each family to one honest handoff", () =
     [
       { family: "punctuated-substitution", handoff: "discrete-cut" },
       { family: "result-reception", handoff: "progressive-replacement" },
-      { family: "contributor-fusion", handoff: "compressed-ink-handoff" }
+      { family: "contributor-fusion", handoff: "compressed-ink-handoff" },
+      {
+        family: "carrier-preserving-simplification",
+        handoff: "persistent-carrier-transfer"
+      }
     ]
   );
   assert.equal(
@@ -33,9 +38,16 @@ test("the provisional comparison closes each family to one honest handoff", () =
   );
   assert.equal(
     kpOperationEvaluationFamilyExemplarRecipes
-      .filter(({ family }) => family !== "contributor-fusion")
+      .filter(({ family }) =>
+        family === "punctuated-substitution" || family === "result-reception")
       .every(({ status }) => status === "provisional-human-checkpoint"),
     true
+  );
+  assert.equal(
+    kpOperationEvaluationFamilyExemplarRecipes.find(
+      ({ family }) => family === "carrier-preserving-simplification"
+    )?.status,
+    "semantic-candidate"
   );
   for (const family of kpOperationEvaluationFamilyIds) {
     assert.equal(
@@ -53,6 +65,26 @@ test("the provisional comparison closes each family to one honest handoff", () =
       "kp.evaluation-family.contributor-fusion.v1"
     );
   }
+  const carrier = resolveKpOperationEvaluationFamilyExemplarRecipe(
+    "carrier-preserving-simplification"
+  );
+  assert.equal(carrier.handoff, "persistent-carrier-transfer");
+  if (carrier.family === "carrier-preserving-simplification") {
+    assert.equal(
+      carrier.requiredEvidenceSchemaVersion,
+      "kp.carrier-preserving-simplification-evidence.v1"
+    );
+  }
+  assert.equal(
+    isKpOperationEvaluationFamilyReviewSelectable("contributor-fusion"),
+    true
+  );
+  assert.equal(
+    isKpOperationEvaluationFamilyReviewSelectable(
+      "carrier-preserving-simplification"
+    ),
+    false
+  );
 });
 
 test("two times three preserves semantic inputs, catalyst, and result lineage", () => {

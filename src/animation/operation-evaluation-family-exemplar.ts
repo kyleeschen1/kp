@@ -1,4 +1,5 @@
 import {
+  kpCarrierPreservingSimplificationCandidateProfile,
   kpContributorFusionEvaluationFamilyProfile,
   type KpOperationEvaluationFamilyId
 } from "./operation-evaluation-family-profile.ts";
@@ -14,7 +15,10 @@ export type {
 
 interface KpOperationEvaluationFamilyRecipeBase {
   readonly kind: "operation-evaluation-family-exemplar-recipe";
-  readonly status: "provisional-human-checkpoint" | "promoted";
+  readonly status:
+    | "semantic-candidate"
+    | "provisional-human-checkpoint"
+    | "promoted";
   readonly id: string;
   readonly family: KpOperationEvaluationFamilyId;
   readonly label: string;
@@ -40,6 +44,14 @@ export type KpOperationEvaluationFamilyRecipe =
       readonly handoff: "compressed-ink-handoff";
       readonly synthesisSampling: "canonical-successor";
       readonly profileId: "kp.evaluation-family.contributor-fusion.v1";
+    })
+  | (KpOperationEvaluationFamilyRecipeBase & {
+      readonly family: "carrier-preserving-simplification";
+      readonly handoff: "persistent-carrier-transfer";
+      readonly candidateProfileId:
+        "kp.evaluation-family.carrier-preserving-simplification.candidate-v1";
+      readonly requiredEvidenceSchemaVersion:
+        "kp.carrier-preserving-simplification-evidence.v1";
     });
 
 /**
@@ -89,8 +101,30 @@ readonly KpOperationEvaluationFamilyRecipe[] = Object.freeze([
     synthesisSampling:
       kpContributorFusionEvaluationFamilyProfile.synthesisSampling,
     profileId: kpContributorFusionEvaluationFamilyProfile.id
+  }),
+  Object.freeze({
+    kind: "operation-evaluation-family-exemplar-recipe" as const,
+    status: "semantic-candidate" as const,
+    id: "kp.evaluation-recipe.carrier-preserving-simplification.candidate-v1",
+    family: kpCarrierPreservingSimplificationCandidateProfile.family,
+    handoff: kpCarrierPreservingSimplificationCandidateProfile.handoff,
+    label: "Carrier-preserving simplification",
+    summary:
+      "Keep one semantically justified input continuously meaningful while " +
+      "its identity syntax yields and the carrier settles into native result ink.",
+    candidateProfileId: kpCarrierPreservingSimplificationCandidateProfile.id,
+    requiredEvidenceSchemaVersion:
+      kpCarrierPreservingSimplificationCandidateProfile
+        .requiredEvidenceSchemaVersion
   })
 ]);
+
+export function isKpOperationEvaluationFamilyReviewSelectable(
+  family: KpOperationEvaluationFamilyId
+): boolean {
+  return resolveKpOperationEvaluationFamilyExemplarRecipe(family).status !==
+    "semantic-candidate";
+}
 
 const recipeByFamily = new Map(
   kpOperationEvaluationFamilyExemplarRecipes.map((recipe) => [

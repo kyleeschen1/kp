@@ -77,7 +77,8 @@
     {
       "id": "cps05",
       "title": "Add-family-and-handoff-vocabulary",
-      "status": "planned"
+      "summary": "Added the candidate family/handoff profile, evidence schema dependency, and exemplar recipe while preserving contributor-fusion defaults and failing closed if an unrendered candidate is selected.",
+      "status": "complete"
     },
     {
       "id": "cps06",

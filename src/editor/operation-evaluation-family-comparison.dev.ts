@@ -1,5 +1,6 @@
 import {
   isKpOperationEvaluationFamilyId,
+  isKpOperationEvaluationFamilyReviewSelectable,
   kpOperationEvaluationFamilyExemplarRecipes,
   resolveKpOperationEvaluationFamilyExemplarRecipe,
   type KpOperationEvaluationFamilyId
@@ -58,7 +59,10 @@ export function mountKpOperationEvaluationFamilyComparison(input: {
     </header>
     <div class="kp-operation-evaluation-family-review__choices"
       role="group" aria-label="Evaluation choreography">
-      ${kpOperationEvaluationFamilyExemplarRecipes.map((recipe) => `
+      ${kpOperationEvaluationFamilyExemplarRecipes
+        .filter(({ family }) =>
+          isKpOperationEvaluationFamilyReviewSelectable(family))
+        .map((recipe) => `
         <button type="button" data-kp-operation-evaluation-family-choice
           data-family="${recipe.family}" aria-pressed="false">
           ${recipe.label}
@@ -169,7 +173,7 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
   cue.dataset["kpOperationEvaluationFamilyCue"] = "";
   cue.setAttribute("aria-hidden", "true");
   input.stage.append(cue);
-  let family = input.initialFamily;
+  let family = requireReviewSelectable(input.initialFamily);
 
   const clearCue = () => {
     delete input.stage.dataset["kpOperationEvaluationCueKind"];
@@ -248,7 +252,7 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
       return family;
     },
     selectFamily(nextFamily: KpOperationEvaluationFamilyId) {
-      family = nextFamily;
+      family = requireReviewSelectable(nextFamily);
     },
     sample(progress: number) {
       const recipe = resolveKpOperationEvaluationFamilyExemplarRecipe(family);
@@ -277,7 +281,9 @@ function readSelectedFamily(
     ? null
     : new URL(window.location.href).searchParams.get(familyQueryParameter);
   if (value === "masked-carrier-relay") return "contributor-fusion";
-  return value !== null && isKpOperationEvaluationFamilyId(value)
+  return value !== null &&
+    isKpOperationEvaluationFamilyId(value) &&
+    isKpOperationEvaluationFamilyReviewSelectable(value)
     ? value
     : "contributor-fusion";
 }
@@ -290,6 +296,17 @@ function writeSelectedFamily(
   const url = new URL(window.location.href);
   url.searchParams.set(familyQueryParameter, family);
   window.history.replaceState(window.history.state, "", url);
+}
+
+function requireReviewSelectable(
+  family: KpOperationEvaluationFamilyId
+): KpOperationEvaluationFamilyId {
+  if (!isKpOperationEvaluationFamilyReviewSelectable(family)) {
+    throw new Error(
+      `Operation-evaluation family ${family} has no reviewable renderer yet.`
+    );
+  }
+  return family;
 }
 
 function punctuatedCueProgress(input: {

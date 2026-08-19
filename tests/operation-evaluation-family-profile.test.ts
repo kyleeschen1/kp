@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  kpCarrierPreservingSimplificationCandidateProfile,
   kpContributorFusionEvaluationFamilyProfile,
   resolveKpDefaultOperationEvaluationFamilyProfile,
   resolveKpOperationEvaluationFamilyProfile
@@ -31,6 +32,19 @@ test("unsupported and incompatible family requests remain typed gaps", () => {
     family: "contributor-fusion",
     handoff: "discrete-cut"
   }).status, "incompatible-handoff");
+  assert.equal(resolveKpOperationEvaluationFamilyProfile({
+    family: "carrier-preserving-simplification",
+    handoff: "persistent-carrier-transfer"
+  }).status, "unsupported-family");
+  assert.equal(
+    kpCarrierPreservingSimplificationCandidateProfile.status,
+    "semantic-candidate"
+  );
+  assert.deepEqual(
+    kpCarrierPreservingSimplificationCandidateProfile
+      .supportedTransformationKinds,
+    ["simplifyMultiplicativeIdentity"]
+  );
 });
 
 test("only the three approved arithmetic transformations select the profile", () => {

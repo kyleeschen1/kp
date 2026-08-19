@@ -5,7 +5,8 @@ import type {
 export const kpOperationEvaluationFamilyIds = [
   "punctuated-substitution",
   "result-reception",
-  "contributor-fusion"
+  "contributor-fusion",
+  "carrier-preserving-simplification"
 ] as const;
 
 export type KpOperationEvaluationFamilyId =
@@ -14,7 +15,20 @@ export type KpOperationEvaluationFamilyId =
 export type KpOperationEvaluationHandoffKind =
   | "discrete-cut"
   | "progressive-replacement"
-  | "compressed-ink-handoff";
+  | "compressed-ink-handoff"
+  | "persistent-carrier-transfer";
+
+export interface KpCarrierPreservingSimplificationCandidateProfile {
+  readonly schemaVersion: "kp.operation-evaluation-family-candidate.v1";
+  readonly id: "kp.evaluation-family.carrier-preserving-simplification.candidate-v1";
+  readonly status: "semantic-candidate";
+  readonly family: "carrier-preserving-simplification";
+  readonly handoff: "persistent-carrier-transfer";
+  readonly requiredEvidenceSchemaVersion:
+    "kp.carrier-preserving-simplification-evidence.v1";
+  readonly supportedTransformationKinds:
+    readonly ["simplifyMultiplicativeIdentity"];
+}
 
 export interface KpContributorFusionEvaluationFamilyProfile {
   readonly schemaVersion: "kp.operation-evaluation-family-profile.v1";
@@ -59,6 +73,24 @@ export const kpContributorFusionEvaluationFamilyProfile = Object.freeze({
     "simplifyConstantSum"
   ] as const)
 } satisfies KpContributorFusionEvaluationFamilyProfile);
+
+/**
+ * Candidate vocabulary is visible to typed planning but intentionally absent
+ * from promoted profile resolution until two callers pass human review.
+ */
+export const kpCarrierPreservingSimplificationCandidateProfile = Object.freeze({
+  schemaVersion: "kp.operation-evaluation-family-candidate.v1" as const,
+  id:
+    "kp.evaluation-family.carrier-preserving-simplification.candidate-v1" as const,
+  status: "semantic-candidate" as const,
+  family: "carrier-preserving-simplification" as const,
+  handoff: "persistent-carrier-transfer" as const,
+  requiredEvidenceSchemaVersion:
+    "kp.carrier-preserving-simplification-evidence.v1" as const,
+  supportedTransformationKinds: Object.freeze([
+    "simplifyMultiplicativeIdentity"
+  ] as const)
+} satisfies KpCarrierPreservingSimplificationCandidateProfile);
 
 const promotedProfiles: readonly KpOperationEvaluationFamilyProfile[] =
   Object.freeze([kpContributorFusionEvaluationFamilyProfile]);

@@ -99,11 +99,25 @@
       "scope": "cps04",
       "checkedAt": "2026-08-19T21:52:32.885Z",
       "notes": "The semantic authority contract and focused fixtures typecheck without renderer dependencies."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps05",
+      "checkedAt": "2026-08-19T21:56:22.489Z",
+      "notes": "12/12 family vocabulary, candidate status, promotion preservation, and declaration assertions pass."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps05",
+      "checkedAt": "2026-08-19T21:56:25.419Z",
+      "notes": "7/7 semantic evidence assertions remain green after adding candidate vocabulary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "A branded semantic-only carrier certificate now proves exact endpoints, one identity-backed carrier, strict identity-law witness, complete removed syntax, stationary context, and total lifecycle partitioning."
+    "summary": "Carrier-preserving simplification and persistent-carrier transfer are now typed candidate vocabulary; they remain absent from promoted resolution and hidden from the review UI until rendering exists."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
