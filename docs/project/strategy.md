@@ -82,8 +82,11 @@ generator. The product/quotient crossover, evidence-derived Transformation
 Coverage view, governed equation-transform-series compiler, compositor
 ownership repair, balanced-operation family, and alternative-base logarithm
 exemplar and governed authoring path are complete. Change of base is now
-`Direct`; a fixed live-model benchmark should measure the entrance before KP
-opens another motif family. Additional motif
+`Direct`; the fixed live-model benchmark shows that semantic-family selection,
+abstention, identity preservation, and the authority firewall work, while
+duplicate planner-visible operation IDs make exact selection unstable. KP
+should converge that vocabulary and add deterministic verified-source binding
+before it opens another motif family. Additional motif
 families and domain frontends remain explicit ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
@@ -102,11 +105,13 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is now whether the complete governed
-equation entrance is legible enough for a model to select the right verified
-operation without unnecessary repairs or silent fallback. Measure that
-question with a fixed live-model benchmark. This remains equation-domain convergence, not a
-universal graph, code, diagram, or 3D compiler.
+The immediate repository question is now how to expose one canonical
+planner-facing ID per semantic act while keeping implementation operation kinds
+available behind the boundary. The same convergence slice should bind governed
+selections to existing verified sources without letting model output mint
+semantic identities or assumptions. Then rerun the fixed live-model corpus
+with an explicitly pinned model. This remains equation-domain convergence,
+not a universal graph, code, diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

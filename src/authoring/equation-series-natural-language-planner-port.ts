@@ -271,7 +271,6 @@ function parseProposal(
     ));
     return undefined;
   }
-  rejectForbidden(value, path, diagnostics);
   const kind = value["kind"];
   const allowed = kind === "single"
     ? ["adjacencyId", "kind", "operationId"]

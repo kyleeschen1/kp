@@ -1,12 +1,12 @@
 # Generative Animation Compiler Thread
 
 Status: active
-Last Updated: 2026-08-18
-Current Next Action: run a fixed live-model benchmark against the now-complete
-governed equation entrance before selecting the next visual family. Measure
-operation selection, semantic identities, assumption handling, repair quality,
-and silent fallback. Do not reopen compositor, balanced operation, or layout
-work without new evidence.
+Last Updated: 2026-08-19
+Current Next Action: converge the planner-facing operation vocabulary and the
+deterministic governed-source binding step, then rerun the fixed live-model
+corpus with an explicitly pinned model. Do not begin fraction equivalence,
+reopen compositor/balanced-operation work, or resume layout without that
+evidence.
 
 ## Goal
 
@@ -25,7 +25,8 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
 - The semantic/runtime and native-KaTeX spine is strong.
 - The direct equation intent facade compiles function wrapping, additive
   cancellation, and distribution with zero fixture repairs.
-- Live-model quality is unmeasured.
+- Live-model use is now measured by one fixed six-case corpus and replayable
+  provider-neutral scorecard.
 - One tool-neutral LaTeX-series entrance owns adjacency validation, typed
   repair, deterministic composition, direct seek, and rewind.
 - Log product and quotient retain their approved distinct choreographies while
@@ -50,8 +51,17 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   presented as generally generatable yet.
 - Coverage state, development navigation, theme/settings, exact links, and
   Review capture now restore from one URL-backed source of truth.
-- Live-model quality remains unmeasured: the planner port records proposals,
-  but KP still owns mathematical authority, motif selection, and motion.
+- The live model selected the intended semantic families, preserved adjacency
+  identities, abstained on unsupported fraction equivalence, and attempted no
+  authority fields. KP's compiler produced typed governance repairs and zero
+  silent fallbacks.
+- Exact operation-ID selection is unstable because function wrapping and log
+  product each expose both a planner-facing authoring ID and a backend
+  operation kind. Both compile, so the registry needs explicit exposure and
+  alias-normalization policy rather than better prompt wording.
+- Governed selections still stop at a typed repair until a deterministic KP
+  step binds an existing verified source; the model must never mint that source
+  or its evidence.
 
 ## Capability Vocabulary
 
@@ -82,10 +92,15 @@ and playable does not mean generally generatable.
    adjacency, typed segmentation repairs, and one deterministic clock.
 4. Balanced equation operations: complete across six governed operations.
 5. Alternative-base logarithm syntax and change-of-base transformations:
-   complete, reviewed, pressure-tested, and directly authorable; now measure
-   live-model use of the complete entrance.
+   complete, reviewed, pressure-tested, directly authorable, and included in
+   the live benchmark.
+5a. Planner vocabulary convergence: expose one canonical semantic ID per act
+    and normalize or hide backend aliases before compilation.
+5b. Governed binding convergence: deterministically join accepted selections
+    to already-verified sources, then rerun the frozen corpus with a pinned
+    model ID.
 6. Fraction equivalence and repartition: next visual family unless benchmark
-   evidence identifies a more fundamental compiler gap.
+   convergence evidence identifies another fundamental compiler gap.
 7. Common-denominator fraction addition/subtraction and factor cancellation.
 8. Power, exponent, and root inversion with branches and domain conditions.
 9. Substitution, like-term collection, and common-factor coalescence.

@@ -1,0 +1,17 @@
+{
+  "id": "next-action.kp.converge-planner-vocabulary-binding-v1",
+  "kind": "next-action",
+  "title": "Converge planner vocabulary and governed binding",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-fixed-live-model-generation-benchmark.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/generative-animation-compiler.md"
+    }
+  ]
+}

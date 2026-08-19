@@ -137,12 +137,18 @@ Only this repository sequence is active:
     protocol validates exact verified source pins, semantic base/argument
     identity, natural-logarithm target, domain evidence, and ordered LaTeX;
     Coverage now derives `Direct` without a renderer change.
-17. **Fixed live-model generation benchmark:** next. Measure
-    operation selection, semantic roles, assumptions, repairs, and silent
-    fallback against a small frozen request set; preserve KP as mathematical
-    authority.
-18. **Fraction equivalence and repartition:** next visual family unless the
-    benchmark identifies a more fundamental compiler gap. Perfect one
+17. **Fixed live-model generation benchmark:** complete. The six-case live
+    corpus preserved adjacency identity, abstained on unsupported fraction
+    equivalence, attempted no authority fields, and produced no silent
+    fallback. Repeated calls did expose unstable selection between duplicate
+    planner-visible IDs for wrapping and log-product decomposition.
+18. **Planner vocabulary and governed binding convergence:** next. Expose one
+    canonical authoring ID per semantic act, normalize or hide implementation
+    aliases, then join selected governed operations to already-verified sources
+    without granting the model mathematical authority. Rerun the frozen corpus
+    with an explicitly pinned model.
+19. **Fraction equivalence and repartition:** next visual family after the
+    benchmark rerun is stable. Perfect one
     reversible exemplar and stop for human review before promotion.
 
 Educator discovery continues as an external product-research track. Public
@@ -164,7 +170,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | Fixed requests, balanced operations, and change of base compile through one governed series entrance; live-model quality remains unmeasured | Run a small fixed live-model benchmark before expanding capability coverage. |
+| LLM generation | A live six-case corpus selects the right semantic families, preserves adjacency identity, abstains when unsupported, and never authors authority; duplicate public operation IDs still make exact selection unstable | Converge the planner vocabulary and deterministic governed-source binding, then rerun the frozen corpus before expanding capability coverage. |
 
 ## Active Tightening Phase
 

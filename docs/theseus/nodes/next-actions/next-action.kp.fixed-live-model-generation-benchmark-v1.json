@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.fixed-live-model-generation-benchmark-v1",
+  "kind": "next-action",
+  "title": "Benchmark live equation generation",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Live benchmark complete; planner vocabulary and deterministic governed-source binding convergence are now the active frontier.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-post-log-base-convergence-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/generative-animation-compiler.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T00:54:43.168Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T00:54:44.391Z"
+    },
+    {
+      "command": "npm run test:equation-transform-series-corpus",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T00:54:45.433Z"
+    },
+    {
+      "command": "npm run test:balanced-operation-authoring-corpus",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T00:54:46.428Z"
+    },
+    {
+      "command": "TypeScript app, node, and test project checks",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T00:54:47.411Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Built and ran a fixed six-case live-model benchmark. It proved semantic-family selection, identity preservation, unsupported abstention, typed governance repair, zero authority attempts, and zero silent fallback while exposing duplicate planner-visible operation IDs."
+  }
+}
