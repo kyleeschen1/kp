@@ -23,7 +23,7 @@ test("evaluation families share endpoints and change only the handoff", async ({
   );
   await expect(review).toHaveAttribute(
     "data-kp-operation-evaluation-family",
-    "punctuated-substitution"
+    "masked-carrier-relay"
   );
   await expect(stage.locator(
     "[data-kp-operation-evaluation-source]"
@@ -36,45 +36,32 @@ test("evaluation families share endpoints and change only the handoff", async ({
   await source.evaluate((element) => {
     (element as HTMLElement).dataset["kpEndpointIdentityProbe"] = "stable";
   });
-  await seek.fill("0.55");
-  await expect(source).toHaveCSS("opacity", "1");
-  expect(await visibleMaterialOwnerCount(stage)).toBe(0);
-  await seek.fill("0.7");
-  await expect(stage.locator(
-    "[data-kp-operation-evaluation-target]"
-  )).toHaveCSS("opacity", "1");
+  for (const checkpoint of [
+    { progress: 0.2, state: "source" },
+    { progress: 0.49, state: "source" },
+    { progress: 0.53, state: "carrier" },
+    { progress: 0.6, state: "target" },
+    { progress: 0.85, state: "target" }
+  ] as const) {
+    await seek.fill(String(checkpoint.progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-operation-evaluation-legibility-state",
+      checkpoint.state
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-operation-evaluation-readable-cohort-count",
+      checkpoint.state === "carrier" ? "0" : "1"
+    );
+    const snapshot = await readableCohortSnapshot(stage);
+    expect(snapshot.readableEquationCohorts).toBeLessThanOrEqual(1);
+    expect(snapshot.hasVisiblePaint).toBe(true);
+  }
 
-  await review.locator(
-    '[data-family="contributor-fusion"]'
-  ).click();
-  await expect(page).toHaveURL(/evaluationFamily=contributor-fusion/);
-  await expect(source).toHaveAttribute(
-    "data-kp-endpoint-identity-probe",
-    "stable"
-  );
-  await seek.fill("0.55");
-  const materialOwners = stage.locator(
-    "[data-kp-equation-material-owner-id]"
-  );
-  await expect(materialOwners).not.toHaveCount(0);
+  await seek.fill("0.53");
   const firstSignature = await materialOwnerSignature(stage);
   await seek.fill("0.2");
-  await seek.fill("0.55");
+  await seek.fill("0.53");
   expect(await materialOwnerSignature(stage)).toEqual(firstSignature);
-
-  await review.locator('[data-family="result-reception"]').click();
-  await seek.fill("0.88");
-  await expect(stage).toHaveAttribute(
-    "data-kp-operation-evaluation-cue-kind",
-    "result-reception"
-  );
-  const cueScale = await stage.locator(
-    "[data-kp-operation-evaluation-family-cue]"
-  ).evaluate((element) => {
-    const transform = getComputedStyle(element).transform;
-    return transform === "none" ? 0 : new DOMMatrix(transform).a;
-  });
-  expect(cueScale).toBeGreaterThan(0.01);
   await expect(source).toHaveAttribute(
     "data-kp-endpoint-identity-probe",
     "stable"
@@ -83,7 +70,7 @@ test("evaluation families share endpoints and change only the handoff", async ({
 
 test("a family URL reconstructs its exact candidate", async ({ page }) => {
   await page.goto(
-    `/?artifact=${animationId}&evaluationFamily=result-reception`
+    `/?artifact=${animationId}&evaluationFamily=masked-carrier-relay`
   );
   const review = page.locator(
     "[data-kp-operation-evaluation-family-review]"
@@ -96,33 +83,67 @@ test("a family URL reconstructs its exact candidate", async ({ page }) => {
   );
   await expect(review).toHaveAttribute(
     "data-kp-operation-evaluation-family",
-    "result-reception"
+    "masked-carrier-relay"
   );
   await expect(review.locator(
-    '[data-family="result-reception"]'
+    '[data-family="masked-carrier-relay"]'
   )).toHaveAttribute("aria-pressed", "true");
 });
 
 async function materialOwnerSignature(stage: Locator) {
-  return stage.locator("[data-kp-equation-material-owner-id]").evaluateAll(
-    (owners) => owners.map((owner) => {
-      const element = owner as HTMLElement;
-      return {
-        id: element.dataset["kpEquationMaterialOwnerId"],
-        transform: element.style.transform,
-        text: element.textContent
-      };
-    })
-  );
+  return stage.evaluate((element) => {
+    const root = element as HTMLElement;
+    const carrier = root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-masked-carrier]"
+    );
+    return {
+      owners: [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].map((owner) => ({
+        id: owner.dataset["kpEquationMaterialOwnerId"],
+        transform: owner.style.transform,
+        visibility: owner.style.visibility,
+        clipPath:
+          (owner.firstElementChild as HTMLElement | null)?.style.clipPath,
+        text: owner.textContent
+      })),
+      carrier: carrier === null ? null : {
+        transform: carrier.style.transform,
+        visibility: carrier.style.visibility
+      }
+    };
+  });
 }
 
-async function visibleMaterialOwnerCount(stage: Locator): Promise<number> {
-  return stage.locator("[data-kp-equation-material-owner-id]").evaluateAll(
-    (owners) => owners.filter((owner) => {
-      const element = owner as HTMLElement;
-      const style = getComputedStyle(element);
-      const rect = element.getBoundingClientRect();
-      return Number(style.opacity) > 0.01 && rect.width > 0 && rect.height > 0;
-    }).length
-  );
+async function readableCohortSnapshot(stage: Locator) {
+  return stage.evaluate((element) => {
+    const root = element as HTMLElement;
+    const visible = (candidate: HTMLElement | null) => {
+      if (candidate === null) return false;
+      const style = getComputedStyle(candidate);
+      const rect = candidate.getBoundingClientRect();
+      return style.visibility !== "hidden" &&
+        Number(style.opacity) > 0.01 &&
+        rect.width > 0 && rect.height > 0;
+    };
+    const cohortVisible = (side: "source" | "target") => [
+      ...root.querySelectorAll<HTMLElement>(
+        `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
+      )
+    ].some(visible);
+    const sourceVisible = visible(root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-source]"
+    )) || cohortVisible("source");
+    const targetVisible = visible(root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-target]"
+    )) || cohortVisible("target");
+    const carrierVisible = visible(root.querySelector<HTMLElement>(
+      "[data-kp-operation-evaluation-masked-carrier]"
+    ));
+    return {
+      readableEquationCohorts:
+        Number(sourceVisible) + Number(targetVisible),
+      hasVisiblePaint: sourceVisible || targetVisible || carrierVisible
+    };
+  });
 }

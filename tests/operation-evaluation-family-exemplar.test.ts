@@ -19,7 +19,8 @@ test("the provisional comparison closes each family to one honest handoff", () =
     [
       { family: "punctuated-substitution", handoff: "discrete-cut" },
       { family: "result-reception", handoff: "progressive-replacement" },
-      { family: "contributor-fusion", handoff: "contact-occlusion" }
+      { family: "contributor-fusion", handoff: "contact-occlusion" },
+      { family: "masked-carrier-relay", handoff: "legibility-gated-relay" }
     ]
   );
   assert.equal(
@@ -33,6 +34,17 @@ test("the provisional comparison closes each family to one honest handoff", () =
       resolveKpOperationEvaluationFamilyExemplarRecipe(family).family,
       family
     );
+  }
+  const masked = resolveKpOperationEvaluationFamilyExemplarRecipe(
+    "masked-carrier-relay"
+  );
+  assert.equal(masked.family, "masked-carrier-relay");
+  if (masked.family === "masked-carrier-relay") {
+    assert.ok(masked.sourceClipStartsAt < masked.sourceLegibilityEndsAt);
+    assert.ok(
+      masked.sourceLegibilityEndsAt < masked.targetLegibilityStartsAt
+    );
+    assert.ok(masked.targetLegibilityStartsAt < masked.targetRevealEndsAt);
   }
 });
 

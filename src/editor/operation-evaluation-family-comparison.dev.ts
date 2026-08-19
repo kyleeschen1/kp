@@ -161,12 +161,31 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
   cue.className = "kp-operation-evaluation-family-cue";
   cue.dataset["kpOperationEvaluationFamilyCue"] = "";
   cue.setAttribute("aria-hidden", "true");
-  input.stage.append(cue);
+  const carrier = input.stage.ownerDocument.createElement("div");
+  carrier.className = "kp-operation-evaluation-masked-carrier";
+  carrier.dataset["kpOperationEvaluationMaskedCarrier"] = "";
+  carrier.setAttribute("aria-hidden", "true");
+  input.stage.append(cue, carrier);
   let family = input.initialFamily;
 
   const clearCue = () => {
     delete input.stage.dataset["kpOperationEvaluationCueKind"];
     cue.style.transform = "scaleX(0)";
+  };
+  const clearCarrier = () => {
+    carrier.style.visibility = "hidden";
+    carrier.style.transform = "translate(-50%, -50%) scale(0)";
+  };
+  const resetMaterialPresentationOverrides = () => {
+    input.stage.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    ).forEach((owner) => {
+      owner.style.removeProperty("visibility");
+      const visual = owner.firstElementChild as HTMLElement | null;
+      visual?.style.removeProperty("clip-path");
+    });
+    delete input.stage.dataset["kpOperationEvaluationLegibilityState"];
+    delete input.stage.dataset["kpOperationEvaluationReadableCohortCount"];
   };
   const positionCue = (endpoint: HTMLElement) => {
     const stageRect = input.stage.getBoundingClientRect();
@@ -181,6 +200,8 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
     input.stage.dataset["kpOperationEvaluationFamily"] = family;
     input.stage.dataset["kpOperationEvaluationHandoff"] = recipe.handoff;
     clearCue();
+    clearCarrier();
+    resetMaterialPresentationOverrides();
     if (recipe.family === "punctuated-substitution") {
       const source = required(
         input.stage,
@@ -197,6 +218,19 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
       cue.style.transform = `scaleX(${cueProgress})`;
       return input.base.apply(bounded < recipe.replacementAt ? 0 : 1);
     }
+    const frame = input.base.apply(bounded);
+    if (recipe.family === "masked-carrier-relay") {
+      applyMaskedCarrierRelay({
+        stage: input.stage,
+        carrier,
+        progress: bounded,
+        sourceClipStartsAt: recipe.sourceClipStartsAt,
+        sourceLegibilityEndsAt: recipe.sourceLegibilityEndsAt,
+        targetLegibilityStartsAt: recipe.targetLegibilityStartsAt,
+        targetRevealEndsAt: recipe.targetRevealEndsAt
+      });
+      return frame;
+    }
     if (recipe.family === "result-reception") {
       const target = required(
         input.stage,
@@ -209,7 +243,7 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
         "result-reception";
       cue.style.transform = `scaleX(${cueProgress})`;
     }
-    return input.base.apply(bounded);
+    return frame;
   };
 
   return Object.freeze({
@@ -235,6 +269,7 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
       >[0]
     ) {
       cue.remove();
+      carrier.remove();
       input.base.retire(retirement);
     }
   });
@@ -248,7 +283,116 @@ function readSelectedFamily(
     : new URL(window.location.href).searchParams.get(familyQueryParameter);
   return value !== null && isKpOperationEvaluationFamilyId(value)
     ? value
-    : "punctuated-substitution";
+    : "masked-carrier-relay";
+}
+
+function applyMaskedCarrierRelay(input: {
+  readonly stage: HTMLElement;
+  readonly carrier: HTMLElement;
+  readonly progress: number;
+  readonly sourceClipStartsAt: number;
+  readonly sourceLegibilityEndsAt: number;
+  readonly targetLegibilityStartsAt: number;
+  readonly targetRevealEndsAt: number;
+}): void {
+  const sourceOwners = materialOwners(input.stage, "source");
+  const targetOwners = materialOwners(input.stage, "target");
+  const sourceIsLegible = input.progress < input.sourceLegibilityEndsAt;
+  const targetIsLegible = input.progress >= input.targetLegibilityStartsAt;
+  const sourceClip = 50 * smoothstep(
+    input.sourceClipStartsAt,
+    input.sourceLegibilityEndsAt,
+    input.progress
+  );
+  const targetReveal = smoothstep(
+    input.targetLegibilityStartsAt,
+    input.targetRevealEndsAt,
+    input.progress
+  );
+
+  setOwnerCohortVisibility(sourceOwners, sourceIsLegible);
+  setOwnerCohortVisibility(targetOwners, targetIsLegible);
+  if (sourceIsLegible) {
+    setOwnerCohortClip(sourceOwners, sourceClip);
+  }
+  if (targetIsLegible) {
+    setOwnerCohortClip(targetOwners, 50 * (1 - targetReveal));
+  }
+
+  const carrierArrival = smoothstep(
+    input.sourceClipStartsAt,
+    input.sourceLegibilityEndsAt,
+    input.progress
+  );
+  const carrierDeparture = 1 - smoothstep(
+    input.targetLegibilityStartsAt,
+    input.targetRevealEndsAt,
+    input.progress
+  );
+  const carrierPresence = Math.min(carrierArrival, carrierDeparture);
+  if (carrierPresence > 0) {
+    positionMaskedCarrier(input.stage, input.carrier);
+    input.carrier.style.visibility = "visible";
+    input.carrier.style.transform =
+      `translate(-50%, -50%) ` +
+      `scaleX(${0.35 + carrierPresence * 0.65}) ` +
+      `scaleY(${carrierPresence})`;
+  }
+
+  const legibilityState = sourceIsLegible
+    ? "source"
+    : targetIsLegible
+      ? "target"
+      : "carrier";
+  input.stage.dataset["kpOperationEvaluationLegibilityState"] =
+    legibilityState;
+  input.stage.dataset["kpOperationEvaluationReadableCohortCount"] =
+    legibilityState === "carrier" ? "0" : "1";
+}
+
+function materialOwners(
+  stage: HTMLElement,
+  side: "source" | "target"
+): readonly HTMLElement[] {
+  return [...stage.querySelectorAll<HTMLElement>(
+    `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
+  )];
+}
+
+function setOwnerCohortVisibility(
+  owners: readonly HTMLElement[],
+  visible: boolean
+): void {
+  owners.forEach((owner) => {
+    owner.style.visibility = visible ? "visible" : "hidden";
+  });
+}
+
+function setOwnerCohortClip(
+  owners: readonly HTMLElement[],
+  horizontalInsetPercent: number
+): void {
+  owners.forEach((owner) => {
+    const visual = owner.firstElementChild as HTMLElement | null;
+    if (visual !== null) {
+      visual.style.clipPath =
+        `inset(0 ${horizontalInsetPercent}% 0 ${horizontalInsetPercent}%)`;
+    }
+  });
+}
+
+function positionMaskedCarrier(
+  stage: HTMLElement,
+  carrier: HTMLElement
+): void {
+  const target = required(stage, "[data-kp-operation-evaluation-target]");
+  const targetPaint = target.querySelector<HTMLElement>("[data-kp-motion-id]")
+    ?? target;
+  const stageRect = stage.getBoundingClientRect();
+  const targetRect = targetPaint.getBoundingClientRect();
+  carrier.style.left = `${targetRect.left - stageRect.left + targetRect.width / 2}px`;
+  carrier.style.top = `${targetRect.top - stageRect.top + targetRect.height / 2}px`;
+  carrier.style.height = `${Math.max(8, targetRect.height * 0.72)}px`;
 }
 
 function writeSelectedFamily(

@@ -1,7 +1,8 @@
 export const kpOperationEvaluationFamilyIds = [
   "punctuated-substitution",
   "result-reception",
-  "contributor-fusion"
+  "contributor-fusion",
+  "masked-carrier-relay"
 ] as const;
 
 export type KpOperationEvaluationFamilyId =
@@ -10,7 +11,8 @@ export type KpOperationEvaluationFamilyId =
 export type KpOperationEvaluationHandoffKind =
   | "discrete-cut"
   | "progressive-replacement"
-  | "contact-occlusion";
+  | "contact-occlusion"
+  | "legibility-gated-relay";
 
 interface KpOperationEvaluationFamilyRecipeBase {
   readonly kind: "operation-evaluation-family-exemplar-recipe";
@@ -39,6 +41,14 @@ export type KpOperationEvaluationFamilyRecipe =
       readonly family: "contributor-fusion";
       readonly handoff: "contact-occlusion";
       readonly synthesisSampling: "canonical-successor";
+    })
+  | (KpOperationEvaluationFamilyRecipeBase & {
+      readonly family: "masked-carrier-relay";
+      readonly handoff: "legibility-gated-relay";
+      readonly sourceClipStartsAt: number;
+      readonly sourceLegibilityEndsAt: number;
+      readonly targetLegibilityStartsAt: number;
+      readonly targetRevealEndsAt: number;
     });
 
 /**
@@ -86,6 +96,21 @@ readonly KpOperationEvaluationFamilyRecipe[] = Object.freeze([
       "Gather both operands and the operator into one bounded contact before " +
       "the result becomes recognizable.",
     synthesisSampling: "canonical-successor" as const
+  }),
+  Object.freeze({
+    kind: "operation-evaluation-family-exemplar-recipe" as const,
+    status: "provisional-human-checkpoint" as const,
+    id: "kp.evaluation-recipe.masked-carrier-relay.review-v1",
+    family: "masked-carrier-relay" as const,
+    handoff: "legibility-gated-relay" as const,
+    label: "Masked carrier relay",
+    summary:
+      "Clip the readable inputs into one opaque carrier, then reveal the " +
+      "result only after the input form has fully retired.",
+    sourceClipStartsAt: 0.34,
+    sourceLegibilityEndsAt: 0.5,
+    targetLegibilityStartsAt: 0.56,
+    targetRevealEndsAt: 0.78
   })
 ]);
 

@@ -1,0 +1,42 @@
+{
+  "id": "next-action.kp.operation-evaluation-masked-carrier-exemplar-v0",
+  "kind": "next-action",
+  "title": "Prototype masked carrier evaluation handoff",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Replace simultaneous readable source and target cohorts in the 2-times-3 review exemplar with a deterministic source-to-opaque-carrier-to-target handoff, then stop for human visual review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.operation-evaluation-family-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:operation-evaluation-family-exemplar",
+    "npm run visual:operation-evaluation-family-exemplar"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "checkedAt": "2026-08-19T17:58:41.085Z"
+    },
+    {
+      "command": "npm run visual:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "checkedAt": "2026-08-19T17:58:49.208Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Two-slice exemplar is implemented and verified. HUMAN_CHECKPOINT: inspect the masked carrier handoff before any family-level promotion."
+  }
+}

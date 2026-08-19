@@ -3328,6 +3328,20 @@ h2 {
   pointer-events: none;
 }
 
+.kp-operation-evaluation-masked-carrier {
+  position: absolute;
+  z-index: 5;
+  width: 0.34em;
+  min-height: 0.8em;
+  border-radius: 999px;
+  color: var(--kp-equation-foreground, currentColor);
+  background: currentColor;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .kp-operation-evaluation-stage[
   data-kp-operation-evaluation-cue-kind="result-reception"
 ] .kp-operation-evaluation-family-cue {
