@@ -2,8 +2,9 @@
   "id": "run-contract.kp.operation-evaluation-family-exemplar-v0",
   "kind": "run-contract",
   "title": "Operation-evaluation family exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -57,8 +58,8 @@
     {
       "id": "s03",
       "title": "Verify continuity and prepare the human visual checkpoint",
-      "summary": "Run focused verification, audit preservation boundaries, and stop at the required human visual checkpoint.",
-      "status": "in-progress"
+      "summary": "Focused semantic and Chromium visual verification pass. The reversible comparison is ready; stop now for human selection before any default promotion or caller migration.",
+      "status": "complete"
     }
   ]
 }
