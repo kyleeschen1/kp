@@ -38,6 +38,24 @@ test("registered exemplar and missing statuses retain distinct gates", () => {
     "capability.equation.alternative-logarithm-bases"), "Direct");
 });
 
+test("denominator operations derive registered status without visual parity", () => {
+  const readiness = createKpAnimationCapabilityReadiness();
+  for (const capabilityId of [
+    "capability.equation.common-denominator-construction",
+    "capability.equation.fraction-arithmetic"
+  ]) {
+    const entry = readiness.entries.find((candidate) =>
+      candidate.capabilityId === capabilityId
+    );
+    assert.equal(entry?.status, "Registered");
+    assert.equal(entry?.evidence.gate, "registered-compiler-authority");
+  }
+  assert.equal(readiness.directIntentEvidence.some(({ operationId }) =>
+    operationId === "operation.equation.common-denominator-alignment.v1" ||
+    operationId === "operation.equation.like-denominator-combination.v1"
+  ), false);
+});
+
 test("balanced operations require the governed corpus-backed series path", () => {
   const direct = createKpAnimationCapabilityDirectIntentEvidence().find(
     ({ operationId }) => operationId ===

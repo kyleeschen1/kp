@@ -131,13 +131,13 @@ const equationCapabilityDrafts = Object.freeze([
   ),
   capability(
     "capability.equation.common-denominator-construction",
-    "Common-denominator construction",
+    "Common-denominator alignment",
     "family.equation.common-denominator.v1",
     [
-      requirement("requirement.equation.common-denominator.operation", "semantic-operation", "operation.equation.construct-common-denominator.v1", "A typed operation identifies denominator factors and the legal multipliers for each term."),
+      requirement("requirement.equation.common-denominator.operation", "semantic-operation", "operation.equation.common-denominator-alignment.v1", "A typed operation verifies caller-supplied denominator factors and legal multipliers for each term without becoming an LCM solver."),
       requirement("requirement.equation.common-denominator.recipe", "canonical-recipe", "recipe.equation.common-denominator.v1", "A recipe coordinates equivalent scaling before arithmetic begins."),
       requirement("requirement.equation.common-denominator.exemplar", "canonical-exemplar", "exemplar.equation.common-denominator.v1", "A reviewed exemplar must establish the visual grammar before generalization."),
-      requirement("requirement.equation.common-denominator.corpus", "generation-corpus", "corpus.equation.common-denominator.v1", "Fixtures cover numeric, symbolic, already-shared, and partially shared denominators.")
+      requirement("requirement.equation.common-denominator.corpus", "generation-corpus", "corpus.equation.fraction-denominator.v1", "Fixed fixtures prove one numeric alignment, explicit evaluation composition, alias normalization, and typed denominator repairs.")
     ]
   ),
   capability(
@@ -145,10 +145,10 @@ const equationCapabilityDrafts = Object.freeze([
     "Fraction addition and subtraction",
     "family.equation.fraction-arithmetic.v1",
     [
-      requirement("requirement.equation.fraction-arithmetic.operation", "semantic-operation", "operation.equation.fraction-arithmetic.v1", "A typed operation distinguishes denominator preparation from numerator combination."),
+      requirement("requirement.equation.fraction-arithmetic.operation", "semantic-operation", "operation.equation.like-denominator-combination.v1", "A typed operation combines raw numerators only after exact shared-denominator authority is present."),
       requirement("requirement.equation.fraction-arithmetic.recipe", "canonical-recipe", "recipe.equation.fraction-arithmetic.v1", "A canonical recipe sequences common-denominator construction, combination, and settlement."),
-      requirement("requirement.equation.fraction-arithmetic.authoring", "authoring-surface", "authoring.equation.fraction-arithmetic.v1", "Governed authoring rejects arithmetic requests whose denominator equivalence is unproved."),
-      requirement("requirement.equation.fraction-arithmetic.corpus", "generation-corpus", "corpus.equation.fraction-arithmetic.v1", "Fixtures cover signs, multiple terms, symbolic factors, and simplification opportunities.")
+      requirement("requirement.equation.fraction-arithmetic.authoring", "authoring-surface", "authoring.equation.like-denominator-combination.v1", "Governed authoring rejects mismatched denominators and hidden reduction while retaining exact contributor lineage."),
+      requirement("requirement.equation.fraction-arithmetic.corpus", "generation-corpus", "corpus.equation.fraction-denominator.v1", "Fixed fixtures cover one valid combination plus denominator-mismatch and hidden-reduction repairs.")
     ]
   ),
   capability(

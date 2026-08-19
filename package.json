@@ -24,6 +24,7 @@
     "test:fraction-like-denominator-combination": "node --disable-warning=ExperimentalWarning --test tests/fraction-like-denominator-combination-semantics.test.ts",
     "test:equation-series-common-denominator": "node --disable-warning=ExperimentalWarning --test tests/equation-series-common-denominator-authoring.test.ts",
     "test:equation-series-like-denominator": "node --disable-warning=ExperimentalWarning --test tests/equation-series-like-denominator-authoring.test.ts",
+    "test:fraction-denominator-generation-corpus": "node --disable-warning=ExperimentalWarning --test tests/fraction-denominator-generation-corpus.test.ts",
     "test:place-value-addition": "node --disable-warning=ExperimentalWarning --test tests/place-value-addition-*.test.ts",
     "test:graph-2d-runtime": "node --disable-warning=ExperimentalWarning --test tests/graph-2d-runtime-session.test.ts",
     "test:graph-3d-runtime": "node --disable-warning=ExperimentalWarning --test tests/graph-3d-runtime-protocol.test.ts tests/editor-graph-3d-host-contract.test.ts tests/editor-graph-3d-surface-adapter.test.ts tests/graph-webgl.test.ts tests/webgl-context-lease-pool.test.ts",

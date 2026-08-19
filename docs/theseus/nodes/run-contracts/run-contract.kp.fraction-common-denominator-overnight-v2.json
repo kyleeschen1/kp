@@ -138,11 +138,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T06:14:02.917Z",
       "notes": "Three tests pass for canonical planner exposure, sealed source binding and compilation, hidden-reduction rejection, and forged-source repair."
+    },
+    {
+      "command": "npm run test:fraction-denominator-generation-corpus",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:20:24.818Z",
+      "notes": "Three tests pass across six fixed natural-language and LaTeX cases with exact canonical operations, typed repairs, determinism, and zero live-model or presentation input."
+    },
+    {
+      "command": "npm run test:animation-capability-readiness",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:22:57.646Z",
+      "notes": "Eight readiness tests pass; common-denominator alignment and like-denominator arithmetic derive Registered through exact compiler evidence and remain absent from Direct intent evidence."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s18 registers like-denominator combination as governed authoring with exact endpoints and no presentation claim."
+    "summary": "Slice s20 truthfully derives both denominator families as Registered, not Direct."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -272,12 +286,14 @@
     {
       "id": "s19",
       "title": "Add fixed generation corpus",
-      "status": "planned"
+      "summary": "Added six deterministic instruction-plus-LaTeX fixtures spanning success, explicit composition, alias normalization, denominator mismatch, and hidden reduction.",
+      "status": "complete"
     },
     {
       "id": "s20",
       "title": "Derive coverage truth",
-      "status": "planned"
+      "summary": "Reconciled planned authority IDs with exact alignment, combination, and fixed-corpus evidence while preserving the unapproved recipe and exemplar gaps.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -5,6 +5,9 @@ import {
   KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY
 } from "../authoring/equation-series-both-sides-authoring.ts";
 import {
+  KP_FRACTION_DENOMINATOR_GENERATION_CORPUS_AUTHORITY
+} from "../authoring/fraction-denominator-generation-corpus.ts";
+import {
   KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
 } from "../authoring/equation-latex-endpoint-normalizer.ts";
 import {
@@ -32,6 +35,12 @@ import {
 import {
   KP_LOGARITHM_CHANGE_OF_BASE_CORPUS_AUTHORITY
 } from "../semantic/logarithm-change-of-base-corpus.ts";
+import {
+  KP_COMMON_DENOMINATOR_ALIGNMENT_OPERATION_AUTHORITY
+} from "../semantic/fraction-common-denominator.ts";
+import {
+  KP_LIKE_DENOMINATOR_COMBINATION_OPERATION_AUTHORITY
+} from "../semantic/fraction-like-denominator-combination.ts";
 import type {
   KpAnimationCapabilityPlan,
   KpAnimationCapabilityRequirementKind
@@ -242,6 +251,15 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     verified(KP_LOGARITHM_CHANGE_OF_BASE_CORPUS_AUTHORITY,
       "generation-corpus",
       "src/semantic/logarithm-change-of-base-corpus.ts"),
+    verified(KP_COMMON_DENOMINATOR_ALIGNMENT_OPERATION_AUTHORITY,
+      "semantic-operation",
+      "src/semantic/fraction-common-denominator.ts"),
+    verified(KP_LIKE_DENOMINATOR_COMBINATION_OPERATION_AUTHORITY,
+      "semantic-operation",
+      "src/semantic/fraction-like-denominator-combination.ts"),
+    verified(KP_FRACTION_DENOMINATOR_GENERATION_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "src/authoring/fraction-denominator-generation-corpus.ts"),
     authority({
       authorityId: KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
       kind: "semantic-operation",
