@@ -50,6 +50,74 @@ semantic intent; matching glyph text must not infer a carrier or animation.
 Punctuated substitution is the conservative fallback candidate, not yet a
 promoted default.
 
+## Operational Model
+
+Evaluation presentation is two related but separate compiler decisions:
+
+1. the **evaluation family** states the instructional metaphor; and
+2. the **paint handoff** states how visible ownership passes between the
+   source and result without becoming semantic authority.
+
+Authors and model planners may request an evaluation family from verified
+operation semantics and instructional intent. They must not author geometry,
+opacity, timing, renderer nodes, or a physical trajectory. A constrained
+presentation registry maps an accepted family to a versioned recipe. That
+recipe selects one compatible renderer-neutral handoff:
+
+- **matched-pose substitution** for a stable-anchor replacement;
+- **progressive replacement** for a result that receives attention over time;
+- **persistent-carrier transfer** when semantic lineage proves one carrier
+  survives;
+- **contact occlusion** when contributor combination or operator reception is
+  itself instructional; or
+- **discrete cut** when continuity would falsely imply identity or material
+  flow.
+
+The mapping is not an unrestricted cross-product. Recipe validation must
+reject carrier preservation without identity evidence, contributor fusion
+without material contributors, and operator aperture without an explicit
+operator-as-process teaching intent. Unsupported combinations remain typed
+gaps; they do not silently fall back to generic fades or successor motion.
+
+The selected recipe compiles into the existing paint-continuity and rendered-
+scene machinery. A verified plan names semantic source, target, catalyst, and
+carrier bundles; stable anchor and baseline policy; ownership topology;
+stationary context; and exact native endpoints. It contains no caller-local
+coordinates. Native KaTeX resolves the plan against immutable ink
+measurements, while other renderers may implement the same continuity law
+through their own adapters.
+
+Every handoff must preserve these laws:
+
+- no blank interval with no meaningful paint;
+- no interval with two complete competing states;
+- exactly one dominant owner for each semantic leaf;
+- stable anchor, baseline, and unrelated context;
+- no mandatory collapse of meaningful paint to a zero-size point;
+- exact native start and end geometry; and
+- identical state under playback, direct seek, reverse, interruption, and URL
+  restoration.
+
+Callers reference versioned recipe IDs rather than implementing choreography.
+Tuning a compatible recipe updates all callers of that version; a breaking
+change creates a new version and an explicit migration. The intended pipeline
+is therefore:
+
+```text
+verified operation semantics
+-> instructional evaluation family
+-> constrained presentation recipe
+-> verified paint-continuity plan
+-> renderer-specific measured realization
+-> deterministic paint
+```
+
+The first comparison must hold the mathematical endpoints constant and expose
+matched-pose substitution, progressive replacement, and contributor fusion
+for `2 * 3 -> 6`; `2 * 1 -> 2` separately pressures persistent-carrier
+transfer. Human review selects any default before a second operator shape or
+catalogue migration is attempted.
+
 ## Reason
 
 The current pressure caller coalesces `2/2` into one structural paint owner for
@@ -119,9 +187,11 @@ one visual metaphor.
    stable. Compare punctuated substitution, result reception, and contributor
    fusion on the paired `2 * 1` and `2 * 3` evaluation without changing its
    mathematical endpoints.
-6. Use a second operator shape to decide which family, if any, becomes the
+6. Route each exemplar through the constrained, versioned presentation-recipe
+   registry and the existing paint-continuity compiler. Keep callers free of
+   timing, coordinates, opacity schedules, and renderer-node authority.
+7. Use a second operator shape to decide which family, if any, becomes the
    conservative default. Keep carrier-preserving and operator-aperture motion
    opt-in unless their semantic preconditions are verified.
-7. Revisit fraction-equivalence promotion and common-denominator addition only
+8. Revisit fraction-equivalence promotion and common-denominator addition only
    after the ownership and evaluation checkpoints pass.
-

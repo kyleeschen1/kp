@@ -97,6 +97,12 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   and reviewed exemplars. Simultaneous source/result glyphs are too busy;
   literal scale-to-zero and scale-from-zero reads as mechanical rather than
   transformational.
+- Evaluation family and paint handoff are separate compiler decisions. Model
+  planners may request the instructional family, while a constrained,
+  versioned registry selects a compatible renderer-neutral handoff and the
+  existing continuity/compiler seams produce deterministic paint. Invalid
+  family/handoff combinations remain typed gaps; callers do not own timing,
+  coordinates, opacity schedules, or renderer nodes.
 
 ## Capability Vocabulary
 

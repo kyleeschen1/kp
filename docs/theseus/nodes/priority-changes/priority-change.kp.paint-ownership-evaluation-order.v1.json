@@ -1,0 +1,47 @@
+{
+  "id": "priority-change.kp.paint-ownership-evaluation-order.v1",
+  "kind": "priority-change",
+  "title": "Review placement before paint ownership and evaluation exemplars",
+  "status": "active",
+  "domain": "kp",
+  "summary": "User approved durable separation of evaluation family from paint handoff and directed Review relocation before shared endpoint ownership repair.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "User approved durable separation of evaluation family from paint handoff and directed Review relocation before shared endpoint ownership repair.",
+      "occurredAt": "2026-08-19T13:44:30.403Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "User approved durable separation of evaluation family from paint handoff and directed Review relocation before shared endpoint ownership repair.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "review-composer",
+        "to": "now"
+      },
+      {
+        "subject": "sequence-paint-ownership",
+        "to": "next"
+      },
+      {
+        "subject": "evaluation-presentations",
+        "to": "checkpoint"
+      }
+    ],
+    "effectiveAt": "2026-08-19T13:44:30.403Z",
+    "requestedBy": "user"
+  }
+}

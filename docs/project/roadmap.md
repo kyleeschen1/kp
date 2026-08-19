@@ -170,8 +170,11 @@ Only this repository sequence is active:
 23. **Evaluation presentation families:** after ownership stability. Give
     punctuated substitution, result reception, contributor fusion, carrier-
     preserving simplification, operator aperture, and expanded calculation
-    distinct typed presentation choices and exemplar checkpoints. Do not
-    promote scaling-to-zero or simultaneous pre/post glyphs as a default.
+    distinct typed instructional choices. Resolve them through a constrained,
+    versioned recipe registry into matched-pose, progressive-replacement,
+    persistent-carrier, contact-occlusion, or deliberate-cut handoffs. Do not
+    promote scaling-to-zero or simultaneous pre/post glyphs as a default, and
+    do not let callers or model planners author geometry or timing.
 24. **Fraction promotion and arithmetic:** only after the ownership repair and
     evaluation-family checkpoints. Promote contracts demonstrated by two
     callers before designing like-denominator addition choreography.
