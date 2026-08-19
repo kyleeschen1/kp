@@ -47,7 +47,7 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       withdrawalProgress: 0,
       paintPresence: 1,
       scale: 1,
-      retreatEm: 0
+      retreatInInkHeights: 0
     }
   });
   assert.equal(overlap.phase, "carrier-transit");
@@ -66,7 +66,7 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       withdrawalProgress: 1,
       paintPresence: 0,
       scale: 0.92,
-      retreatEm: 0.18
+      retreatInInkHeights: 0.18
     }
   });
 });

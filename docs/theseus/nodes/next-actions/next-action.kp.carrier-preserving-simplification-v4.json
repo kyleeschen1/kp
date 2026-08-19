@@ -190,11 +190,32 @@
       "scope": "cps09",
       "checkedAt": "2026-08-19T22:14:59.576Z",
       "notes": "Native endpoint compiler and ephemeral measured binding typecheck."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps10",
+      "checkedAt": "2026-08-19T22:23:34.764Z",
+      "notes": "17/17 assertions pass; the renderer-ready plan has one opaque unscaled carrier, two synchronized elimination tracks, and no merge, split, or introduction lifecycle."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps10",
+      "checkedAt": "2026-08-19T22:23:36.390Z",
+      "notes": "13/13 contributor-fusion and family selection preservation assertions pass."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps10",
+      "checkedAt": "2026-08-19T22:23:37.814Z",
+      "notes": "The narrow compositor projection and renderer-session motion-plan boundary typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The canonical 2 × 1 and 2 states now compile to annotated Native KaTeX endpoints; verified selector IDs bind once to immutable ink rects and baselines, and carrier projection reaches both exact native poses without layout reads or glyph inference."
+    "summary": "Carrier preservation now executes through the canonical Native KaTeX compositor: one opaque unscaled carrier crosses exact measured poses while the verified operator and identity witness withdraw together through one bounded cohort schedule."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

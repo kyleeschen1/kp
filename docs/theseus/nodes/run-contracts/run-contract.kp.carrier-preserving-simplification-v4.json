@@ -107,7 +107,8 @@
     {
       "id": "cps10",
       "title": "Implement-exclusive-carrier-motion",
-      "status": "planned"
+      "summary": "Added the narrow canonical-compositor track projection, exclusive persistent-carrier track, synchronized bounded removal cohort, shared profile geometry, and lifecycle inventory smoke coverage.",
+      "status": "complete"
     },
     {
       "id": "cps11",

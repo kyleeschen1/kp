@@ -13,6 +13,12 @@ import {
   projectKpNativeKatexCarrierPose
 } from "../src/rendering/native-katex-carrier-preserving-simplification-binding.ts";
 import {
+  compileKpNativeKatexCarrierPreservingSimplificationMotion
+} from "../src/rendering/native-katex-carrier-preserving-simplification-motion.ts";
+import {
+  sampleKpNativeKatexSceneTrackFrames
+} from "../src/rendering/native-katex-scene-track-sampling.ts";
+import {
   kpCanonicalCarrierPreservingSimplificationNativeEndpoints
 } from "../src/rendering/carrier-preserving-simplification-native-endpoints.ts";
 import {
@@ -29,7 +35,7 @@ import {
   verifyKpCarrierPreservingSimplificationEvidence
 } from "../src/semantic/carrier-preserving-simplification-evidence.ts";
 
-const ownerDocument = {};
+const ownerDocument = { defaultView: null };
 const stage = { ownerDocument } as HTMLElement;
 const root = { ownerDocument } as HTMLElement;
 
@@ -122,6 +128,62 @@ test("equal glyph paint cannot counterfeit a target carrier selector", () => {
     sourceHandle,
     targetHandle: forgedTargetHandle
   }), /expected one measured owner.*target.*carrier/u);
+});
+
+test("motion has one opaque carrier and one synchronized removal cohort", () => {
+  const recipe = canonicalRecipe();
+  const binding = bindKpNativeKatexCarrierPreservingSimplification({
+    recipe,
+    sourceHandle: handle("source", recipe, [
+      owner(kpTwoTimesOneCarrierSelectorIds.sourceCarrier,
+        { left: 10, top: 20, width: 12, height: 24 }, 39),
+      owner(kpTwoTimesOneCarrierSelectorIds.sourceOperator,
+        { left: 26, top: 20, width: 10, height: 24 }, 39),
+      owner(kpTwoTimesOneCarrierSelectorIds.sourceIdentityWitness,
+        { left: 40, top: 20, width: 10, height: 24 }, 39)
+    ]),
+    targetHandle: handle("target", recipe, [
+      owner(kpTwoTimesOneCarrierSelectorIds.targetCarrier,
+        { left: 42, top: 26, width: 12, height: 24 }, 45)
+    ])
+  });
+  const motion = compileKpNativeKatexCarrierPreservingSimplificationMotion({
+    binding
+  });
+  const tracks = motion.rendererPlan.tracks;
+  const carrier = tracks.find(({ id }) => id === motion.carrierTrackId);
+  const removed = tracks.filter(({ id }) =>
+    motion.removedSyntaxTrackIds.includes(id)
+  );
+
+  assert.equal(tracks.length, 3);
+  assert.equal(carrier?.lifecycle, "persist");
+  assert.equal(carrier?.sampleMaterialScale, undefined);
+  assert.deepEqual(removed.map(({ lifecycle }) => lifecycle), [
+    "eliminate",
+    "eliminate"
+  ]);
+  assert.equal(new Set(removed.map(({ timingGroupId }) => timingGroupId)).size, 1);
+  const middle = sampleKpNativeKatexSceneTrackFrames(tracks, 0.36, false);
+  const carrierFrame = middle.find(({ trackId }) =>
+    trackId === motion.carrierTrackId
+  );
+  const removedFrames = middle.filter(({ trackId }) =>
+    motion.removedSyntaxTrackIds.includes(trackId)
+  );
+  assert.equal(carrierFrame?.opacity, 1);
+  assert.equal(carrierFrame?.materialScale, undefined);
+  assert.equal(removedFrames.length, 2);
+  assert.equal(removedFrames[0]?.opacity, removedFrames[1]?.opacity);
+  assert.equal(removedFrames[0]?.materialScale, removedFrames[1]?.materialScale);
+  assert.equal(
+    tracks.some(({ lifecycle }) =>
+      lifecycle === "merge" || lifecycle === "split" ||
+      lifecycle === "introduce"
+    ),
+    false
+  );
+  assert.throws(() => JSON.stringify(motion), /cannot enter durable state/);
 });
 
 interface OwnerFixture {

@@ -8,7 +8,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
     readonly start: number;
     readonly end: number;
     readonly minimumScale: number;
-    readonly maximumRetreatEm: number;
+    readonly maximumRetreatInInkHeights: number;
   };
   readonly carrierTransit: {
     readonly start: number;
@@ -37,7 +37,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
     readonly withdrawalProgress: number;
     readonly paintPresence: number;
     readonly scale: number;
-    readonly retreatEm: number;
+    readonly retreatInInkHeights: number;
   };
 }
 
@@ -57,7 +57,7 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
       start: 0.1,
       end: 0.4,
       minimumScale: 0.92,
-      maximumRetreatEm: 0.18
+      maximumRetreatInInkHeights: 0.18
     },
     carrierTransit: {
       start: 0.32,
@@ -116,8 +116,9 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
       withdrawalProgress,
       paintPresence: 1 - withdrawalProgress,
       scale: withdrawalScale,
-      retreatEm:
-        profile.removedSyntaxWithdrawal.maximumRetreatEm * withdrawalProgress
+      retreatInInkHeights:
+        profile.removedSyntaxWithdrawal.maximumRetreatInInkHeights *
+        withdrawalProgress
     }
   });
 }
@@ -155,8 +156,10 @@ function assertValidProfile(
   if (
     removedSyntaxWithdrawal.minimumScale <= 0 ||
     removedSyntaxWithdrawal.minimumScale > 1 ||
-    !Number.isFinite(removedSyntaxWithdrawal.maximumRetreatEm) ||
-    removedSyntaxWithdrawal.maximumRetreatEm < 0
+    !Number.isFinite(
+      removedSyntaxWithdrawal.maximumRetreatInInkHeights
+    ) ||
+    removedSyntaxWithdrawal.maximumRetreatInInkHeights < 0
   ) {
     throw new Error("Removed syntax geometry must remain bounded and positive.");
   }
