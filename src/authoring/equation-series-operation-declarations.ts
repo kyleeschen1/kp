@@ -30,6 +30,9 @@ import {
   KP_COMMON_DENOMINATOR_SOURCE_OPERATION_ALIASES,
   kpEquationSeriesCommonDenominatorAuthoringDeclaration
 } from "./equation-series-common-denominator-authoring.ts";
+import {
+  kpOperationEvaluationPresentationCoreEntries
+} from "../animation/operation-evaluation-presentation-registry.ts";
 
 export interface KpEquationSeriesGovernedRequirements {
   readonly authoringAuthorityId: string;
@@ -185,7 +188,8 @@ export const kpEquationSeriesOperationRegistry =
     logarithmBaseDeclaration(),
     fractionEquivalenceDeclaration(),
     commonDenominatorDeclaration(),
-    ...commonDenominatorAliasDeclarations()
+    ...commonDenominatorAliasDeclarations(),
+    commonDenominatorProductEvaluationDeclaration()
   ]);
 
 function canonicalDeclaration(
@@ -394,6 +398,35 @@ readonly KpEquationSeriesOperationDeclaration[] {
       canonicalComposition: [canonical.operationId]
     })
   );
+}
+
+function commonDenominatorProductEvaluationDeclaration():
+KpEquationSeriesOperationDeclaration {
+  const entry = kpOperationEvaluationPresentationCoreEntries.find(
+    ({ transformationKind }) =>
+      transformationKind === "simplifyConstantProduct"
+  );
+  if (entry === undefined) {
+    throw new Error(
+      "Common-denominator composition requires registered product evaluation."
+    );
+  }
+  const operationId = entry.semanticOperationIds[0]!;
+  return declaration({
+    operationId,
+    plannerOperationId: operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary:
+        "Evaluate an authored constant product while preserving its surrounding expression."
+    },
+    source: "equation-extension",
+    familyId: "family.equation.operation-evaluation.v1",
+    recipeIds: [entry.id],
+    authorityRefIds: entry.semanticOperationIds,
+    roleIds: [],
+    canonicalComposition: [operationId]
+  });
 }
 
 function declaration(

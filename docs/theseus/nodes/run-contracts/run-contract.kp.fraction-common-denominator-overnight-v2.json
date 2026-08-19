@@ -103,11 +103,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T05:52:19.208Z",
       "notes": "All 10 planner prompt, alias provenance, authority exclusion, abstention, and port-repair tests pass with the new canonical vocabulary."
+    },
+    {
+      "command": "npm run test:equation-series-common-denominator",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:54:29.216Z",
+      "notes": "Five tests pass; the ordered native LaTeX adjacency compiles and a collapsed alignment-plus-evaluation endpoint receives typed semantic-source repair."
+    },
+    {
+      "command": "npm run test:operation-evaluation-presentation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:00:33.468Z",
+      "notes": "All 22 canonical operation-evaluation registry, motif, composition, opacity, pinning, and extension checks pass."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s13 converged common-denominator planner vocabulary to one visible ID plus one source-derived alias."
+    "summary": "Slice s15 composes explicit factor application and product evaluation as separate runtime adjacencies."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -207,12 +221,14 @@
     {
       "id": "s14",
       "title": "Compile LaTeX adjacency",
-      "status": "planned"
+      "summary": "Compiled source-to-explicit-factor-product LaTeX and rejected hidden numeric evaluation in the same adjacency.",
+      "status": "complete"
     },
     {
       "id": "s15",
       "title": "Compose equivalence and evaluation",
-      "status": "planned"
+      "summary": "Compiled a three-state series with governed alignment followed by existing constant-product evaluation; no hidden evaluation or new motif was introduced.",
+      "status": "complete"
     },
     {
       "id": "s16",

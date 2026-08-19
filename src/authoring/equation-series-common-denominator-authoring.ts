@@ -291,11 +291,48 @@ function validateEndpoints(
     source?.endpoint.kind === "expression" &&
     target?.endpoint.kind === "expression" &&
     matchesState(source.endpoint.expression, transformation.source) &&
-    matchesState(target.endpoint.expression, transformation.target);
+    matchesAlignmentApplication(target.endpoint.expression, transformation);
   if (!matches) diagnostics.push(sourceDiagnostic(
     path,
     "Ordered LaTeX endpoints do not represent the pinned alignment contract."
   ));
+}
+
+function matchesAlignmentApplication(
+  expression: ParsedLatexExpression,
+  transformation: KpVerifiedCommonDenominatorAlignment
+): boolean {
+  if (expression.kind !== "binary" || expression.operator !== "+") {
+    return false;
+  }
+  const source = transformation.source.terms[0];
+  const factor = transformation.equivalenceMultipliers[0];
+  return expression.left.kind === "binary" &&
+    expression.left.operator === "/" &&
+    matchesProduct(
+      expression.left.left,
+      source.numerator.value,
+      factor.numerator
+    ) &&
+    matchesProduct(
+      expression.left.right,
+      source.denominator.value,
+      factor.denominator
+    ) &&
+    matchesTerm(expression.right, transformation.target.terms[1]);
+}
+
+function matchesProduct(
+  expression: ParsedLatexExpression,
+  source: bigint,
+  factor: bigint
+): boolean {
+  return expression.kind === "binary" && expression.operator === "*" && (
+    (matchesInteger(expression.left, factor) &&
+      matchesInteger(expression.right, source)) ||
+    (matchesInteger(expression.left, source) &&
+      matchesInteger(expression.right, factor))
+  );
 }
 
 function matchesState(

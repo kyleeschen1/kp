@@ -115,6 +115,65 @@ test("sealed alignment source binds planner selection and exact endpoints", () =
   assert.equal(JSON.stringify(intent).includes("durationMs"), false);
 });
 
+test("alignment adjacency cannot hide numeric evaluation", () => {
+  const request = proposedRequest();
+  const bound = bindKpEquationSeriesGovernedRequest({
+    request,
+    proposals: [{
+      adjacencyId,
+      kind: "single",
+      operationId: KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID
+    }],
+    sources: [source]
+  });
+  assert.equal(bound.status, "bound");
+  if (bound.status !== "bound") return;
+  const directTarget = {
+    ...bound.request,
+    states: [
+      bound.request.states[0],
+      { ...bound.request.states[1], latex: "\\frac{2}{6}+\\frac{1}{6}" }
+    ]
+  } as KpEquationTransformSeriesRequest;
+  const result = compileKpEquationTransformSeries({
+    value: directTarget,
+    governedSources: [source]
+  });
+  assert.equal(result.status, "repair-required");
+  assert.equal(result.repairs[0]?.kind, "semantic-source");
+});
+
+test("alignment and numeric evaluation compile as distinct adjacencies", () => {
+  const request = composedRequest();
+  const bound = bindKpEquationSeriesGovernedRequest({
+    request,
+    proposals: [{
+      adjacencyId,
+      kind: "single",
+      operationId: KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID
+    }, {
+      adjacencyId: "adjacency.common-denominator.evaluate-products",
+      kind: "single",
+      operationId: "kp.algebra.simplify-constant-product"
+    }],
+    sources: [source]
+  });
+
+  assert.equal(bound.status, "bound");
+  if (bound.status !== "bound") return;
+  const result = compileKpEquationTransformSeries({
+    value: bound.request,
+    governedSources: [source]
+  });
+  assert.equal(result.status, "compiled");
+  assert.deepEqual(result.active?.runtime.plans.map(({ operationId }) =>
+    operationId
+  ), [
+    KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID,
+    "kp.algebra.simplify-constant-product"
+  ]);
+});
+
 test("missing or forged alignment authority fails closed", () => {
   const request = proposedRequest();
   const proposal = [{
@@ -146,7 +205,7 @@ function proposedRequest(): KpEquationTransformSeriesRequest {
       latex: "\\frac{1}{3}+\\frac{1}{6}"
     }, {
       id: transformation.target.stateId,
-      latex: "\\frac{2}{6}+\\frac{1}{6}"
+      latex: "\\frac{2*1}{2*3}+\\frac{1}{6}"
     }],
     adjacencies: [{
       id: adjacencyId,
@@ -157,5 +216,34 @@ function proposedRequest(): KpEquationTransformSeriesRequest {
         instruction: "Align both fractions to sixths."
       }
     }]
+  };
+}
+
+function composedRequest(): KpEquationTransformSeriesRequest {
+  const request = proposedRequest();
+  const evaluatedStateId = "state.fraction.common-denominator.evaluated";
+  return {
+    ...request,
+    id: "series.common-denominator.composed.v1",
+    states: [
+      request.states[0],
+      request.states[1],
+      {
+        id: evaluatedStateId,
+        latex: "\\frac{2}{6}+\\frac{1}{6}"
+      }
+    ],
+    adjacencies: [
+      request.adjacencies[0]!,
+      {
+        id: "adjacency.common-denominator.evaluate-products",
+        fromStateId: request.states[1]!.id,
+        toStateId: evaluatedStateId,
+        intent: {
+          mode: "proposed",
+          instruction: "Evaluate the numerator and denominator products."
+        }
+      }
+    ]
   };
 }
