@@ -42,6 +42,7 @@ export interface KpCarrierPreservingSimplificationEvidenceCandidate {
 }
 
 declare const kpVerifiedCarrierEvidenceBrand: unique symbol;
+const verifiedCarrierEvidence = new WeakSet<object>();
 
 export interface KpVerifiedCarrierPreservingSimplificationEvidence
   extends KpCarrierPreservingSimplificationEvidenceCandidate {
@@ -62,6 +63,14 @@ export type KpCarrierEvidenceVerification =
       readonly status: "invalid-evidence";
       readonly issues: readonly KpCarrierEvidenceValidationIssue[];
     };
+
+export function isKpVerifiedCarrierPreservingSimplificationEvidence(
+  value: unknown
+): value is KpVerifiedCarrierPreservingSimplificationEvidence {
+  return typeof value === "object" &&
+    value !== null &&
+    verifiedCarrierEvidence.has(value);
+}
 
 /**
  * Verification consumes semantic IDs and laws only. The normalized branded
@@ -312,7 +321,7 @@ function validateCompleteEvidence(
 function normalizeEvidence(
   candidate: KpCarrierPreservingSimplificationEvidenceCandidate
 ): KpVerifiedCarrierPreservingSimplificationEvidence {
-  return Object.freeze({
+  const evidence = Object.freeze({
     schemaVersion: candidate.schemaVersion,
     id: candidate.id,
     transformationId: candidate.transformationId,
@@ -329,6 +338,8 @@ function normalizeEvidence(
       (context) => Object.freeze({ ...context })
     ))
   }) as KpVerifiedCarrierPreservingSimplificationEvidence;
+  verifiedCarrierEvidence.add(evidence);
+  return evidence;
 }
 
 function findRecord(

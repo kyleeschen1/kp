@@ -113,11 +113,32 @@
       "scope": "cps05",
       "checkedAt": "2026-08-19T21:56:25.419Z",
       "notes": "7/7 semantic evidence assertions remain green after adding candidate vocabulary."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps06",
+      "checkedAt": "2026-08-19T22:00:31.579Z",
+      "notes": "13/13 assertions pass, including exact candidate resolution and four typed gap cases."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps06",
+      "checkedAt": "2026-08-19T22:00:33.310Z",
+      "notes": "7/7 carrier evidence assertions pass with runtime authority branding."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "cps06",
+      "checkedAt": "2026-08-19T22:00:34.794Z",
+      "notes": "Dependency, framework neutrality, semantic boundaries, operation-evaluation boundary, and compiler authority gates pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Carrier-preserving simplification and persistent-carrier transfer are now typed candidate vocabulary; they remain absent from promoted resolution and hidden from the review UI until rendering exists."
+    "summary": "Candidate selection is now data-driven and fail-closed: only the exact identity operation and handoff with runtime-minted evidence resolves; all other cases return typed gaps."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

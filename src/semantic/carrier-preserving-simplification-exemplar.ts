@@ -8,6 +8,9 @@ import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
+import type {
+  KpCarrierPreservingSimplificationEvidenceCandidate
+} from "./carrier-preserving-simplification-evidence.ts";
 
 export interface KpCarrierPreservingSimplificationExemplar {
   readonly id: "operation-evaluation.two-times-one-carrier";
@@ -125,6 +128,41 @@ KpCarrierPreservingSimplificationExemplar {
     title: "2 \\times 1 → 2",
     bundle,
     transformation
+  });
+}
+
+export function createKpTwoTimesOneCarrierEvidenceCandidate():
+KpCarrierPreservingSimplificationEvidenceCandidate {
+  return Object.freeze({
+    schemaVersion: "kp.carrier-preserving-simplification-evidence.v1" as const,
+    id: "kp.carrier-evidence.two-times-one.v1",
+    transformationId: TRANSFORMATION_ID,
+    endpoints: Object.freeze({
+      sourceObjectId: SOURCE_ID,
+      targetObjectId: TARGET_ID
+    }),
+    carrier: Object.freeze({
+      correspondenceRecordId: `${TRANSFORMATION_ID}.carrier-persists`,
+      sourceSelectorId: kpTwoTimesOneCarrierSelectorIds.sourceCarrier,
+      targetSelectorId: kpTwoTimesOneCarrierSelectorIds.targetCarrier
+    }),
+    identityLawWitness: Object.freeze({
+      lawId: LAW_ID,
+      sourceSelectorId:
+        kpTwoTimesOneCarrierSelectorIds.sourceIdentityWitness,
+      removalRecordId: `${TRANSFORMATION_ID}.identity-witness-removed`
+    }),
+    removedSyntaxCohort: Object.freeze({
+      selectorIds: Object.freeze([
+        kpTwoTimesOneCarrierSelectorIds.sourceOperator,
+        kpTwoTimesOneCarrierSelectorIds.sourceIdentityWitness
+      ] as const),
+      correspondenceRecordIds: Object.freeze([
+        `${TRANSFORMATION_ID}.operator-removed`,
+        `${TRANSFORMATION_ID}.identity-witness-removed`
+      ] as const)
+    }),
+    stationaryContext: Object.freeze([])
   });
 }
 

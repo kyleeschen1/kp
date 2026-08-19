@@ -83,7 +83,8 @@
     {
       "id": "cps06",
       "title": "Constrain-presentation-registry",
-      "status": "planned"
+      "summary": "Added runtime carrier authority, canonical candidate construction, constrained candidate-profile registry resolution, and negative coverage for forged evidence, absent evidence, wrong handoff, and non-identity operations.",
+      "status": "complete"
     },
     {
       "id": "cps07",

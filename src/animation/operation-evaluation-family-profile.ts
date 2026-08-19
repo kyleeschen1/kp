@@ -1,6 +1,10 @@
 import type {
   KpCanonicalOperationEvaluationTransformationKind
 } from "./operation-evaluation-presentation-types.ts";
+import {
+  isKpVerifiedCarrierPreservingSimplificationEvidence,
+  type KpVerifiedCarrierPreservingSimplificationEvidence
+} from "../semantic/carrier-preserving-simplification-evidence.ts";
 
 export const kpOperationEvaluationFamilyIds = [
   "punctuated-substitution",
@@ -58,6 +62,24 @@ export type KpOperationEvaluationFamilyProfileResolution =
       readonly message: string;
     };
 
+export type KpOperationEvaluationFamilyCandidateResolution =
+  | {
+      readonly status: "candidate-resolved";
+      readonly profile: KpCarrierPreservingSimplificationCandidateProfile;
+      readonly evidence: KpVerifiedCarrierPreservingSimplificationEvidence;
+    }
+  | {
+      readonly status:
+        | "unsupported-family"
+        | "incompatible-handoff"
+        | "unsupported-operation"
+        | "missing-carrier-evidence";
+      readonly family: string;
+      readonly handoff: string;
+      readonly transformationKind: string;
+      readonly message: string;
+    };
+
 export const kpContributorFusionEvaluationFamilyProfile = Object.freeze({
   schemaVersion: "kp.operation-evaluation-family-profile.v1" as const,
   id: "kp.evaluation-family.contributor-fusion.v1" as const,
@@ -91,6 +113,11 @@ export const kpCarrierPreservingSimplificationCandidateProfile = Object.freeze({
     "simplifyMultiplicativeIdentity"
   ] as const)
 } satisfies KpCarrierPreservingSimplificationCandidateProfile);
+
+export const kpOperationEvaluationFamilyCandidateProfiles:
+readonly KpCarrierPreservingSimplificationCandidateProfile[] = Object.freeze([
+  kpCarrierPreservingSimplificationCandidateProfile
+]);
 
 const promotedProfiles: readonly KpOperationEvaluationFamilyProfile[] =
   Object.freeze([kpContributorFusionEvaluationFamilyProfile]);
@@ -137,6 +164,50 @@ export function resolveKpDefaultOperationEvaluationFamilyProfile(
   return promotedProfiles.find(({ supportedTransformationKinds }) =>
     supportedTransformationKinds.some((kind) => kind === transformationKind)
   );
+}
+
+export function resolveKpOperationEvaluationFamilyCandidate(input: {
+  readonly family: string;
+  readonly handoff: string;
+  readonly transformationKind: string;
+  readonly evidence?: unknown;
+}): KpOperationEvaluationFamilyCandidateResolution {
+  const profile = kpOperationEvaluationFamilyCandidateProfiles.find(
+    ({ family }) => family === input.family
+  );
+  const gap = (status: Exclude<
+    KpOperationEvaluationFamilyCandidateResolution["status"],
+    "candidate-resolved"
+  >, message: string): KpOperationEvaluationFamilyCandidateResolution =>
+    Object.freeze({
+      status,
+      family: input.family,
+      handoff: input.handoff,
+      transformationKind: input.transformationKind,
+      message
+    });
+  if (profile === undefined) {
+    return gap("unsupported-family",
+      `Unknown candidate operation-evaluation family ${input.family}.`);
+  }
+  if (profile.handoff !== input.handoff) {
+    return gap("incompatible-handoff",
+      `Family ${input.family} requires handoff ${profile.handoff}.`);
+  }
+  if (!profile.supportedTransformationKinds.some(
+    (kind) => kind === input.transformationKind)) {
+    return gap("unsupported-operation",
+      `Family ${input.family} does not support ${input.transformationKind}.`);
+  }
+  if (!isKpVerifiedCarrierPreservingSimplificationEvidence(input.evidence)) {
+    return gap("missing-carrier-evidence",
+      `Family ${input.family} requires verified carrier evidence.`);
+  }
+  return Object.freeze({
+    status: "candidate-resolved" as const,
+    profile,
+    evidence: input.evidence
+  });
 }
 
 export function isKpOperationEvaluationFamilyId(

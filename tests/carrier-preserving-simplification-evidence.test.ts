@@ -2,17 +2,18 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpTwoTimesOneCarrierEvidenceCandidate,
   createKpTwoTimesOneCarrierExemplar,
   kpTwoTimesOneCarrierSelectorIds
 } from "../src/semantic/carrier-preserving-simplification-exemplar.ts";
 import {
   verifyKpCarrierPreservingSimplificationEvidence,
-  type KpCarrierPreservingSimplificationEvidenceCandidate
+  isKpVerifiedCarrierPreservingSimplificationEvidence
 } from "../src/semantic/carrier-preserving-simplification-evidence.ts";
 
 test("two times one closes a semantic-only carrier evidence contract", () => {
   const exemplar = createKpTwoTimesOneCarrierExemplar();
-  const candidate = twoTimesOneCandidate(exemplar.transformation.id);
+  const candidate = createKpTwoTimesOneCarrierEvidenceCandidate();
   const result = verifyKpCarrierPreservingSimplificationEvidence({
     candidate,
     bundle: exemplar.bundle,
@@ -21,6 +22,16 @@ test("two times one closes a semantic-only carrier evidence contract", () => {
 
   assert.equal(result.status, "verified");
   if (result.status !== "verified") return;
+  assert.equal(
+    isKpVerifiedCarrierPreservingSimplificationEvidence(result.evidence),
+    true
+  );
+  assert.equal(
+    isKpVerifiedCarrierPreservingSimplificationEvidence({
+      ...result.evidence
+    }),
+    false
+  );
   assert.deepEqual(Object.keys(result.evidence), [
     "schemaVersion",
     "id",
@@ -40,7 +51,7 @@ test("two times one closes a semantic-only carrier evidence contract", () => {
 test("carrier evidence fails closed without a strict identity law", () => {
   const exemplar = createKpTwoTimesOneCarrierExemplar();
   const result = verifyKpCarrierPreservingSimplificationEvidence({
-    candidate: twoTimesOneCandidate(exemplar.transformation.id),
+    candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
     bundle: exemplar.bundle,
     transformation: {
       ...exemplar.transformation,
@@ -61,7 +72,7 @@ test("carrier evidence fails closed without a strict identity law", () => {
 
 test("carrier evidence rejects incomplete or overlapping removal cohorts", () => {
   const exemplar = createKpTwoTimesOneCarrierExemplar();
-  const candidate = twoTimesOneCandidate(exemplar.transformation.id);
+  const candidate = createKpTwoTimesOneCarrierEvidenceCandidate();
   const result = verifyKpCarrierPreservingSimplificationEvidence({
     candidate: {
       ...candidate,
@@ -103,7 +114,7 @@ test("extra identity lineage cannot become an implicit second carrier", () => {
     summary: "Invalid second carrier inferred from a repeated glyph."
   };
   const result = verifyKpCarrierPreservingSimplificationEvidence({
-    candidate: twoTimesOneCandidate(exemplar.transformation.id),
+    candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
     bundle: exemplar.bundle,
     transformation: {
       ...exemplar.transformation,
@@ -118,43 +129,3 @@ test("extra identity lineage cannot become an implicit second carrier", () => {
     true
   );
 });
-
-function twoTimesOneCandidate(
-  transformationId: string
-): KpCarrierPreservingSimplificationEvidenceCandidate {
-  const recordBase =
-    "transform.operation-evaluation.two-times-one-carrier.simplify-identity";
-  return {
-    schemaVersion: "kp.carrier-preserving-simplification-evidence.v1",
-    id: "kp.carrier-evidence.two-times-one.v1",
-    transformationId,
-    endpoints: {
-      sourceObjectId:
-        "expression.operation-evaluation.two-times-one-carrier.source",
-      targetObjectId:
-        "expression.operation-evaluation.two-times-one-carrier.target"
-    },
-    carrier: {
-      correspondenceRecordId: `${recordBase}.carrier-persists`,
-      sourceSelectorId: kpTwoTimesOneCarrierSelectorIds.sourceCarrier,
-      targetSelectorId: kpTwoTimesOneCarrierSelectorIds.targetCarrier
-    },
-    identityLawWitness: {
-      lawId: "law.arithmetic.multiplicative-identity",
-      sourceSelectorId:
-        kpTwoTimesOneCarrierSelectorIds.sourceIdentityWitness,
-      removalRecordId: `${recordBase}.identity-witness-removed`
-    },
-    removedSyntaxCohort: {
-      selectorIds: [
-        kpTwoTimesOneCarrierSelectorIds.sourceOperator,
-        kpTwoTimesOneCarrierSelectorIds.sourceIdentityWitness
-      ],
-      correspondenceRecordIds: [
-        `${recordBase}.operator-removed`,
-        `${recordBase}.identity-witness-removed`
-      ]
-    },
-    stationaryContext: []
-  };
-}
