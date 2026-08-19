@@ -63,27 +63,32 @@
     {
       "id": "r02",
       "title": "Add-inspector-drawer-placement-vocabulary",
-      "status": "planned"
+      "summary": "Added a typed wide-Catalogue inspector-drawer placement while preserving every other surface and narrow-sheet policy.",
+      "status": "complete"
     },
     {
       "id": "r03",
       "title": "Implement-inspector-side-review-drawer",
-      "status": "planned"
+      "summary": "Implemented a bounded inspector-column drawer with scrollable content and a focused browser geometry check.",
+      "status": "complete"
     },
     {
       "id": "r04",
       "title": "Preserve-review-lifecycle-across-placement",
-      "status": "planned"
+      "summary": "Proved drawer-to-sheet placement changes retain the same textarea, draft, and locked semantic capture without remount or recapture.",
+      "status": "complete"
     },
     {
       "id": "r05",
       "title": "Bound-narrow-review-sheet",
-      "status": "planned"
+      "summary": "Kept the narrow captured-moment sheet bounded and proved its Save action remains reachable while the captured reader region stays exposed.",
+      "status": "complete"
     },
     {
       "id": "r06",
       "title": "Close-review-placement-boundary",
-      "status": "planned"
+      "summary": "Closed Review placement with focused lifecycle, non-overlap, Catalogue capture, and production-erasure evidence.",
+      "status": "complete"
     },
     {
       "id": "r07",

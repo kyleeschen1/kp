@@ -71,7 +71,10 @@ export function mountKpDevReviewShell(
   eyebrow.className = "eyebrow";
   eyebrow.textContent = "Developer feedback";
   const title = ownerDocument.createElement(
-    options.placement === "catalogue-rail" ? "h3" : "h2"
+    options.placement === "catalogue-rail" ||
+      options.placement === "catalogue-inspector-drawer"
+      ? "h3"
+      : "h2"
   );
   title.id = "review-title";
   title.textContent = "Review this moment";
@@ -224,6 +227,35 @@ const shellStyles = `
     width: 100%;
     border-radius: 0;
   }
+  :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) {
+    top: 0;
+    right: 0;
+    bottom: var(--kp-development-dock-clearance, 5.25rem);
+    display: flex;
+    width: max(16rem, 21vw);
+    padding: .75rem;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) .launcher {
+    align-self: flex-end;
+  }
+  :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) .panel {
+    display: grid;
+    width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) .panel[hidden] {
+    display: none;
+  }
+  :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) .content {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
   :host([data-kp-dev-review-placement="captured-moment-sheet"]) {
     right: 12px;
     top: 12px;
@@ -243,6 +275,12 @@ const shellStyles = `
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
+  }
+  :host([data-kp-dev-review-placement="captured-moment-sheet"]) .form-footer {
+    position: sticky;
+    bottom: 0;
+    padding-block: .35rem;
+    background: var(--surface);
   }
   *, *::before, *::after { box-sizing: border-box; }
   button { color: inherit; font: inherit; }

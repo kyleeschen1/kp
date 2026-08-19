@@ -60,3 +60,29 @@ test("shadow review shell fits a narrow viewport and keeps canonical focus affor
   await expect(host.locator("button.close")).toHaveCSS("outline-width", "3px");
   await expect(host.locator("button.close")).toHaveCSS("outline-color", "rgb(31, 99, 113)");
 });
+
+test("Catalogue Review opens as a bounded inspector-side drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 1_440, height: 900 });
+  await page.goto("/");
+  await page.setContent(`<!doctype html><style>html,body{margin:0}</style><main>Catalogue fixture</main>`);
+  await page.evaluate(async () => {
+    const modulePath = "/src/dev-review/review-shell.ts";
+    const { mountKpDevReviewShell } = await import(modulePath);
+    mountKpDevReviewShell(document, {
+      placement: "catalogue-inspector-drawer"
+    }).open();
+  });
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  const panel = host.locator("[role=dialog]");
+  await expect(host).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "catalogue-inspector-drawer"
+  );
+  await expect(panel).toBeVisible();
+  const box = await panel.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.x).toBeGreaterThan(1_100);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(1_440);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(900 - 60);
+});

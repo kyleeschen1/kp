@@ -39,11 +39,53 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-19T13:57:34.502Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T13:59:12.958Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/dev-review-shell.browser.spec.ts --project=chromium --workers=1 --grep Catalogue-Review",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T14:04:21.752Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/dev-review-composer.browser.spec.ts --project=chromium --workers=1 --grep responsive-placement",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T14:05:55.793Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/dev-review-composer.browser.spec.ts --project=chromium --workers=1 --grep responsive-placement",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T14:07:33.539Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T14:10:03.327Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T14:10:04.789Z"
+    },
+    {
+      "command": "npm run visual:animation-catalogue",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T14:10:05.890Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Baseline established: pressure semantics and current Review placement tests pass; current browser artifact remains the visual comparison source."
+    "summary": "Review capture now uses a wide inspector-side drawer and bounded narrow sheet; exact draft/capture lifetime and production erasure remain verified."
   },
   "expectedLearning": [
     "Whether immutable endpoint handles and hierarchical ownership remove the composite-to-leaf seam without caller timing masks."

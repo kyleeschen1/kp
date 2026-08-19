@@ -318,3 +318,109 @@ test("retaking changes only the locked moment and preserves the draft", async ({
   }).reviewRetakeState);
   expect(state).toEqual({ captures: 2, submittedProgress: 200 });
 });
+
+test("responsive placement changes preserve one draft and locked moment", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.setContent(`<!doctype html><body></body>`);
+  await page.evaluate(async () => {
+    const shellPath = "/src/dev-review/review-shell.ts";
+    const composerPath = "/src/dev-review/review-composer.ts";
+    const shellModule = await import(shellPath);
+    const composerModule = await import(composerPath);
+    const shell = shellModule.mountKpDevReviewShell(document, {
+      placement: "catalogue-inspector-drawer"
+    });
+    const state = { captures: 0, submittedProgress: 0 };
+    const reviewWindow = window as typeof window & {
+      reviewPlacementState?: typeof state;
+      reviewPlacementShell?: typeof shell;
+    };
+    reviewWindow.reviewPlacementState = state;
+    reviewWindow.reviewPlacementShell = shell;
+    composerModule.mountKpDevReviewComposer({
+      shell,
+      capture: async () => ({
+        route: "http://localhost/?artifact=example&playhead=0.42",
+        capturedAt: "2026-08-19T14:00:00.000Z",
+        environment: {
+          browserName: "Chrome",
+          language: "en-US",
+          viewport: {
+            width: 1_280,
+            height: 720,
+            devicePixelRatio: 1,
+            scrollX: 0,
+            scrollY: 0
+          },
+          reducedMotion: false,
+          forcedColors: false,
+          colorScheme: "dark",
+          build: { commit: "abc", fingerprint: "dev-placement", dirty: false }
+        },
+        semantic: {
+          checkpointId: "story.placement",
+          progressPermille: ++state.captures * 420,
+          activeTransformationIds: [],
+          focusRefs: []
+        },
+        render: { ownerIds: [] },
+        temporalTrace: []
+      }),
+      submit: async (input: {
+        comment: string;
+        capture: { semantic: { progressPermille: number } };
+      }) => {
+        state.submittedProgress = input.capture.semantic.progressPermille;
+        return {
+          schemaVersion: "kp.dev-review.v1",
+          sessionId: "review.test.placement",
+          comment: input.comment,
+          capture: input.capture,
+          id: "review-note.1.placement",
+          sequence: 1,
+          status: "new"
+        };
+      }
+    });
+    shell.open();
+  });
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  const textarea = host.locator("textarea");
+  await textarea.fill("Keep this exact Catalogue moment.");
+  await expect(host.locator(".meta")).toContainText("story.placement");
+  await page.setViewportSize({ width: 390, height: 700 });
+  await page.evaluate(() => {
+    (window as typeof window & {
+      reviewPlacementShell?: { setPlacement(value: string): void };
+    }).reviewPlacementShell?.setPlacement("captured-moment-sheet");
+  });
+  await expect(host).toHaveAttribute(
+    "data-kp-dev-review-placement",
+    "captured-moment-sheet"
+  );
+  await expect(textarea).toHaveValue("Keep this exact Catalogue moment.");
+  await host.locator("button.save").scrollIntoViewIfNeeded();
+  const panelBox = await host.locator("[role=dialog]").boundingBox();
+  const saveBox = await host.locator("button.save").boundingBox();
+  expect(panelBox).not.toBeNull();
+  expect(saveBox).not.toBeNull();
+  expect(saveBox!.y + saveBox!.height).toBeLessThanOrEqual(
+    panelBox!.y + panelBox!.height
+  );
+  await page.evaluate(() => {
+    (window as typeof window & {
+      reviewPlacementShell?: { setPlacement(value: string): void };
+    }).reviewPlacementShell?.setPlacement("catalogue-inspector-drawer");
+  });
+  await expect(textarea).toHaveValue("Keep this exact Catalogue moment.");
+  await host.locator("button.save").click();
+  const state = await page.evaluate(() =>
+    (window as typeof window & {
+      reviewPlacementState?: { captures: number; submittedProgress: number };
+    }).reviewPlacementState
+  );
+  expect(state).toEqual({ captures: 1, submittedProgress: 420 });
+});

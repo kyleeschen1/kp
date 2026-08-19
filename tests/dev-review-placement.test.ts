@@ -46,11 +46,11 @@ test("the Animation Library keeps its review launcher opposite the catalog rail"
   }), "captured-moment-sheet");
 });
 
-test("the animation catalogue docks review in its lower-left rail", () => {
+test("the animation catalogue opens Review beside its inspector", () => {
   assert.equal(resolveKpDevReviewPlacement({
     surface: "animation-catalogue",
     viewportWidth: KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
-  }), "catalogue-rail");
+  }), "catalogue-inspector-drawer");
   assert.equal(resolveKpDevReviewPlacement({
     surface: "animation-catalogue",
     viewportWidth: 390

@@ -9,6 +9,7 @@ export type KpDevReviewPlacement =
   | "bottom-right"
   | "left-prose-rail"
   | "catalogue-rail"
+  | "catalogue-inspector-drawer"
   | "captured-moment-sheet";
 
 export interface KpDevReviewPlacementInput {
@@ -32,7 +33,7 @@ export function resolveKpDevReviewPlacement(
   }
   if (input.surface === "animation-catalogue") {
     return input.viewportWidth >= KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
-      ? "catalogue-rail"
+      ? "catalogue-inspector-drawer"
       : "captured-moment-sheet";
   }
   return input.viewportWidth >= KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH

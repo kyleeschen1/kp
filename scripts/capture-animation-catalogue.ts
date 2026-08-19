@@ -331,8 +331,10 @@ try {
   const review = page.locator("[data-kp-dev-review-shell]");
   await review.waitFor();
   if (await review.getAttribute("data-kp-dev-review-placement") !==
-    "catalogue-rail") {
-    throw new Error("Catalogue review capture is not docked in its rail.");
+    "catalogue-inspector-drawer") {
+    throw new Error(
+      "Catalogue review capture is not docked beside its inspector."
+    );
   }
   const developmentDock = page.locator("[data-kp-dev-toolbar]");
   const reviewButton = developmentDock.locator(
