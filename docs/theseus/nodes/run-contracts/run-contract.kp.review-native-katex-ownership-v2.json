@@ -57,7 +57,8 @@
     {
       "id": "r01",
       "title": "Capture-current-review-and-seam-baseline",
-      "status": "planned"
+      "summary": "Captured focused deterministic baseline for Review placement and the common-denominator pressure caller without adding visual goldens.",
+      "status": "complete"
     },
     {
       "id": "r02",

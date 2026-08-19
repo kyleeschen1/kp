@@ -27,6 +27,24 @@
     "npm run visual:common-denominator-pressure",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T13:57:33.184Z"
+    },
+    {
+      "command": "npm run test:animation-library-display",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T13:57:34.502Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Baseline established: pressure semantics and current Review placement tests pass; current browser artifact remains the visual comparison source."
+  },
   "expectedLearning": [
     "Whether immutable endpoint handles and hierarchical ownership remove the composite-to-leaf seam without caller timing masks."
   ],
