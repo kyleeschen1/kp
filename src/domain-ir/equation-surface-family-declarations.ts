@@ -324,7 +324,8 @@ readonly KpWaveAEquationOperationPlanDeclaration[] = Object.freeze([
   ...[
     "animation.operation-evaluation.five-plus-two",
     "animation.operation-evaluation.one-plus-two",
-    "animation.operation-evaluation.three-sixths"
+    "animation.operation-evaluation.three-sixths",
+    "animation.operation-evaluation.two-times-three"
   ].map((animationId) => operationPlan({
     animationId,
     recipeIds: ["recipe.operation-plan.successor-synthesis.v1"],

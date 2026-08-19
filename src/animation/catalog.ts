@@ -60,7 +60,8 @@ import {
 import {
   createKpFivePlusTwoEvaluationAnimationAsset,
   createKpOnePlusTwoEvaluationAnimationAsset,
-  createKpThreeSixthsEvaluationAnimationAsset
+  createKpThreeSixthsEvaluationAnimationAsset,
+  createKpTwoTimesThreeEvaluationAnimationAsset
 } from "./operation-evaluation-adapter.ts";
 import {
   createKpPlaceValueAdditionAnimationAsset
@@ -86,6 +87,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
     createKpOnePlusTwoEvaluationAnimationAsset(),
     createKpFivePlusTwoEvaluationAnimationAsset(),
     createKpThreeSixthsEvaluationAnimationAsset(),
+    createKpTwoTimesThreeEvaluationAnimationAsset(),
     createKpExactFractionQuantityAnimationAsset(),
     createKpPlaceValueAdditionAnimationAsset(),
     createEconomicsEquilibriumAnimationAsset(),

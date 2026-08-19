@@ -28,7 +28,8 @@ const expectedWaveAIds = Object.freeze([
   "animation.linear-solve.solve-x",
   "animation.operation-evaluation.five-plus-two",
   "animation.operation-evaluation.one-plus-two",
-  "animation.operation-evaluation.three-sixths"
+  "animation.operation-evaluation.three-sixths",
+  "animation.operation-evaluation.two-times-three"
 ]);
 
 test("wave A has one immutable operation recipe declaration per animation", () => {

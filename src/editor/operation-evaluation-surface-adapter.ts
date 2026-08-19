@@ -25,6 +25,9 @@ import {
   kpOpaqueGatherAndRecognizeSourceRetirementProgress
 } from "../animation/successor-synthesis.ts";
 import {
+  kpTwoTimesThreeEvaluationAnimationId
+} from "../animation/operation-evaluation-adapter.ts";
+import {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRenderPlan,
   type KpReaderEquationStatePlan
@@ -48,6 +51,9 @@ import type {
 import type {
   KpOperationEvaluationEndpointMicroscopeSession
 } from "./operation-evaluation-endpoint-microscope.dev.ts";
+import type {
+  KpOperationEvaluationFamilyComparisonSession
+} from "./operation-evaluation-family-comparison.dev.ts";
 
 interface OperationEvaluationSurfaceSession {
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
@@ -58,6 +64,8 @@ interface OperationEvaluationSurfaceSession {
   playback?: KpReaderEquationMeasuredRendererSession | undefined;
   referenceComparison?:
     KpOperationEvaluationReferenceComparisonSession | undefined;
+  familyComparison?:
+    KpOperationEvaluationFamilyComparisonSession | undefined;
   endpointMicroscope?:
     KpOperationEvaluationEndpointMicroscopeSession | undefined;
   disposed: boolean;
@@ -128,6 +136,7 @@ KpEditorAnimationSurfaceAdapter = {
     if (measurementCertificateIsCurrent(session)) {
       session.playback?.apply(session.pendingProgress);
       session.referenceComparison?.apply(session.pendingProgress);
+      session.familyComparison?.apply(session.pendingProgress);
     } else if (session.playback !== undefined) {
       invalidateOperationEvaluationMeasurement(player, session);
     }
@@ -182,7 +191,32 @@ async function prepareOperationEvaluationSurface(input: {
     const measurementHostId =
       `operation-evaluation.${input.renderPlan.animationId}.` +
       `generation-${input.generation}`;
-    if (import.meta.env.DEV) {
+    let familyReviewModule:
+      typeof import("./operation-evaluation-family-comparison.dev.ts") |
+      undefined;
+    if (
+      import.meta.env.DEV &&
+      input.renderPlan.animationId === kpTwoTimesThreeEvaluationAnimationId
+    ) {
+      familyReviewModule = await import(
+        "./operation-evaluation-family-comparison.dev.ts"
+      );
+      if (
+        input.session.disposed ||
+        input.session.generation !== input.generation
+      ) {
+        return;
+      }
+      input.session.referenceComparison?.dispose();
+      input.session.referenceComparison = undefined;
+      input.session.familyComparison?.dispose();
+      input.session.familyComparison =
+        familyReviewModule.mountKpOperationEvaluationFamilyComparison({
+          slot: input.slot,
+          measurementHostId
+        });
+      stageHost = input.session.familyComparison.currentStageHost;
+    } else if (import.meta.env.DEV) {
       const {
         mountKpOperationEvaluationReferenceComparison
       } = await import(
@@ -315,7 +349,7 @@ async function prepareOperationEvaluationSurface(input: {
         fontRevision: input.session.fontReadiness.revision,
         generation: input.generation
       });
-    const playback = createKpReaderEquationSceneCompositorSession({
+    const canonicalPlayback = createKpReaderEquationSceneCompositorSession({
       renderPlan: input.renderPlan,
       materialPlan,
       transitionId: transition.id,
@@ -334,6 +368,30 @@ async function prepareOperationEvaluationSurface(input: {
       target: targetScene,
       nativeKatex
     });
+    const familyPlayback =
+      familyReviewModule === undefined ||
+      input.session.familyComparison === undefined
+        ? undefined
+        : familyReviewModule.createKpOperationEvaluationFamilyPlayback({
+            stage,
+            base: canonicalPlayback,
+            initialFamily: input.session.familyComparison.selectedFamily
+          });
+    const playback = familyPlayback ?? canonicalPlayback;
+    if (
+      familyReviewModule !== undefined &&
+      input.session.familyComparison !== undefined
+    ) {
+      input.session.familyComparison.onFamilyChange((family) => {
+        if (
+          input.session.disposed ||
+          input.session.generation !== input.generation
+        ) return;
+        familyPlayback?.selectFamily(family);
+        playback.apply(input.session.pendingProgress);
+        input.session.familyComparison?.apply(input.session.pendingProgress);
+      });
+    }
     input.session.playback?.retire({
       kind: "native-katex-paint-preserving-retirement",
       reason: "scene-replaced",
@@ -346,10 +404,12 @@ async function prepareOperationEvaluationSurface(input: {
     stage.dataset["kpOperationEvaluationPresentationMode"] =
       playback.presentationMode;
     input.session.referenceComparison?.bindCurrentStage(stage);
+    input.session.familyComparison?.bindCurrentStage(stage);
     playback.apply(input.session.pendingProgress);
     input.session.referenceComparison?.apply(
       input.session.pendingProgress
     );
+    input.session.familyComparison?.apply(input.session.pendingProgress);
     syncProgressTelemetry(
       input.player,
       stage,
@@ -619,6 +679,7 @@ function disposeOperationEvaluationSurface(
   session.disposed = true;
   session.generation += 1;
   session.referenceComparison?.dispose();
+  session.familyComparison?.dispose();
   session.endpointMicroscope?.dispose();
   session.playback?.retire({
     kind: "native-katex-paint-preserving-retirement",

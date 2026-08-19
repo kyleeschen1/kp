@@ -13,6 +13,10 @@ import {
   createKpConstantQuotientEvaluationAsset,
   type KpConstantQuotientEvaluationSpec
 } from "../semantic/constant-quotient-evaluation-asset.ts";
+import {
+  createKpConstantProductEvaluationAsset,
+  type KpConstantProductEvaluationSpec
+} from "../semantic/constant-product-evaluation-asset.ts";
 import type { KpAssetBundle } from "../semantic/asset.ts";
 import type {
   KpSemanticTransformation
@@ -35,6 +39,8 @@ export const kpFivePlusTwoEvaluationAnimationId =
   "animation.operation-evaluation.five-plus-two";
 export const kpThreeSixthsEvaluationAnimationId =
   "animation.operation-evaluation.three-sixths";
+export const kpTwoTimesThreeEvaluationAnimationId =
+  "animation.operation-evaluation.two-times-three";
 export const kpFivePlusTwoEvaluationSpec =
   Object.freeze({
     id: "five-plus-two",
@@ -47,6 +53,12 @@ export const kpThreeSixthsEvaluationSpec =
     numerator: 3,
     denominator: 6
   }) satisfies KpConstantQuotientEvaluationSpec;
+export const kpTwoTimesThreeEvaluationSpec =
+  Object.freeze({
+    id: "two-times-three",
+    left: 2,
+    right: 3
+  }) satisfies KpConstantProductEvaluationSpec;
 
 export function createKpConstantSumEvaluationAnimationAsset(
   spec: KpConstantSumEvaluationSpec
@@ -61,6 +73,14 @@ export function createKpConstantQuotientEvaluationAnimationAsset(
 ): KpAnimationAsset {
   return createKpOperationEvaluationAnimationAsset(
     createKpConstantQuotientEvaluationAsset(spec)
+  );
+}
+
+export function createKpConstantProductEvaluationAnimationAsset(
+  spec: KpConstantProductEvaluationSpec
+): KpAnimationAsset {
+  return createKpOperationEvaluationAnimationAsset(
+    createKpConstantProductEvaluationAsset(spec)
   );
 }
 
@@ -187,5 +207,12 @@ export function createKpThreeSixthsEvaluationAnimationAsset():
 KpAnimationAsset {
   return createKpConstantQuotientEvaluationAnimationAsset(
     kpThreeSixthsEvaluationSpec
+  );
+}
+
+export function createKpTwoTimesThreeEvaluationAnimationAsset():
+KpAnimationAsset {
+  return createKpConstantProductEvaluationAnimationAsset(
+    kpTwoTimesThreeEvaluationSpec
   );
 }

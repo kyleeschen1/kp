@@ -51,12 +51,14 @@
     {
       "id": "s02",
       "title": "Render the deterministic one-at-a-time comparison exemplar",
-      "status": "planned"
+      "summary": "Mounted the 2-times-3 catalogue asset and one-at-a-time family review surface over one native KaTeX compositor session; URL selection, endpoint identity, and deterministic seeking pass in Chromium.",
+      "status": "complete"
     },
     {
       "id": "s03",
       "title": "Verify continuity and prepare the human visual checkpoint",
-      "status": "planned"
+      "summary": "Run focused verification, audit preservation boundaries, and stop at the required human visual checkpoint.",
+      "status": "in-progress"
     }
   ]
 }
