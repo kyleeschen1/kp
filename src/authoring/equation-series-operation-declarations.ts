@@ -32,6 +32,7 @@ export interface KpEquationSeriesGovernedRequirements {
 
 export interface KpEquationSeriesOperationDeclaration {
   readonly operationId: string;
+  readonly plannerOperationId: string;
   readonly source:
     | "canonical-operation"
     | "equation-extension"
@@ -51,9 +52,16 @@ export interface KpEquationSeriesOperationRegistry {
   readonly schemaVersion: "kp.equation-series-operation-registry.v1";
   readonly kind: "equation-series-operation-registry";
   readonly ids: readonly string[];
+  readonly plannerIds: readonly string[];
   readonly declarations: readonly KpEquationSeriesOperationDeclaration[];
   readonly byId: Readonly<Record<string, KpEquationSeriesOperationDeclaration>>;
+  readonly plannerById:
+    Readonly<Record<string, KpEquationSeriesOperationDeclaration>>;
 }
+
+export type KpEquationSeriesOperationDeclarationInput =
+  Omit<KpEquationSeriesOperationDeclaration, "plannerOperationId"> &
+  Readonly<{ readonly plannerOperationId?: string | undefined }>;
 
 const extensionOperationRegistrations = Object.freeze([
   kpFunctionWrapOperationRegistration,
@@ -67,21 +75,39 @@ const extensionOperationRegistrations = Object.freeze([
  * retain family/recipe ownership.
  */
 export function createKpEquationSeriesOperationRegistry(
-  declarations: readonly KpEquationSeriesOperationDeclaration[]
+  declarations: readonly KpEquationSeriesOperationDeclarationInput[]
 ): KpEquationSeriesOperationRegistry {
   const byId: Record<string, KpEquationSeriesOperationDeclaration> = {};
-  declarations.forEach((input) => {
+  const normalized = declarations.map(declaration);
+  normalized.forEach((input) => {
     if (byId[input.operationId] !== undefined) {
       throw new Error(`Duplicate equation series operation ${input.operationId}.`);
     }
-    byId[input.operationId] = declaration(input);
+    byId[input.operationId] = input;
   });
+  const plannerIds = unique(normalized.map(({ plannerOperationId }) =>
+    plannerOperationId
+  ));
+  const plannerById = Object.fromEntries(plannerIds.map((plannerOperationId) => {
+    const owner = byId[plannerOperationId];
+    if (
+      owner === undefined ||
+      owner.plannerOperationId !== owner.operationId
+    ) {
+      throw new Error(
+        `Planner operation ${plannerOperationId} requires one self-canonical declaration.`
+      );
+    }
+    return [plannerOperationId, owner] as const;
+  }));
   return deepFreeze({
     schemaVersion: "kp.equation-series-operation-registry.v1" as const,
     kind: "equation-series-operation-registry" as const,
-    ids: declarations.map(({ operationId }) => operationId),
-    declarations: declarations.map(({ operationId }) => byId[operationId]!),
-    byId
+    ids: normalized.map(({ operationId }) => operationId),
+    plannerIds,
+    declarations: normalized,
+    byId,
+    plannerById
   });
 }
 
@@ -136,6 +162,7 @@ function canonicalDeclaration(
 ): KpEquationSeriesOperationDeclaration {
   return declaration({
     operationId: entry.id,
+    plannerOperationId: entry.id,
     source: "canonical-operation",
     familyId: entry.packId,
     recipeIds: [],
@@ -153,6 +180,7 @@ function extensionDeclaration(
 ): KpEquationSeriesOperationDeclaration {
   return declaration({
     operationId: entry.id,
+    plannerOperationId: entry.canonicalAuthoringOperationId ?? entry.id,
     source: "equation-extension",
     familyId: entry.familyId,
     recipeIds: entry.recipeIds,
@@ -173,6 +201,7 @@ function promotedExtensionDeclaration(
   }
   return declaration({
     operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
     source: "equation-extension",
     familyId: entry.operationPack.packId,
     recipeIds: [entry.extensionAuthority.recipeId],
@@ -187,6 +216,7 @@ function bothSidesDeclaration(
 ): KpEquationSeriesOperationDeclaration {
   return declaration({
     operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
     source: "both-sides-operation",
     familyId: entry.operationPin.packId,
     recipeIds: [],
@@ -212,6 +242,7 @@ KpEquationSeriesOperationDeclaration {
   const entry = kpEquationSeriesLogarithmBaseAuthoringDeclaration;
   return declaration({
     operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
     source: "governed-operation",
     familyId: entry.familyId,
     recipeIds: entry.recipeIds,
@@ -232,10 +263,11 @@ KpEquationSeriesOperationDeclaration {
 }
 
 function declaration(
-  input: KpEquationSeriesOperationDeclaration
+  input: KpEquationSeriesOperationDeclarationInput
 ): KpEquationSeriesOperationDeclaration {
   return Object.freeze({
     ...input,
+    plannerOperationId: input.plannerOperationId ?? input.operationId,
     recipeIds: Object.freeze([...input.recipeIds]),
     authorityRefIds: Object.freeze([...input.authorityRefIds]),
     roleIds: Object.freeze([...input.roleIds]),

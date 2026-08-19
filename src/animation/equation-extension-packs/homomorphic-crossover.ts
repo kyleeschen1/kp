@@ -25,14 +25,16 @@ export const kpLogProductHomomorphicOperationRegistration = Object.freeze({
   id: vocabulary.operations.product,
   familyId: vocabulary.family,
   recipeIds: Object.freeze([vocabulary.recipe]),
-  semanticAuthorityIds: Object.freeze(["law.logarithm.product"])
+  semanticAuthorityIds: Object.freeze(["law.logarithm.product"]),
+  canonicalAuthoringOperationId: "kp.semantic-motion.log-product"
 } as const satisfies KpEquationOperationRegistration);
 
 export const kpLogQuotientHomomorphicOperationRegistration = Object.freeze({
   id: vocabulary.operations.quotient,
   familyId: vocabulary.family,
   recipeIds: Object.freeze([vocabulary.recipe]),
-  semanticAuthorityIds: Object.freeze(["law.logarithm.quotient"])
+  semanticAuthorityIds: Object.freeze(["law.logarithm.quotient"]),
+  canonicalAuthoringOperationId: "kp.semantic-motion.quotient"
 } as const satisfies KpEquationOperationRegistration);
 
 export const kpHomomorphicCrossoverRecipeRegistration = Object.freeze({

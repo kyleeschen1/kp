@@ -20,6 +20,12 @@ export interface KpEquationOperationRegistration {
   readonly recipeIds: readonly KpRecipeId[];
   /** Exact laws or domain operations licensed by this compiler operation. */
   readonly semanticAuthorityIds: readonly string[];
+  /**
+   * A lower-level registry operation may share one author-facing identity with
+   * a richer governed declaration. The owning pack declares that relationship
+   * so authoring registries do not grow a central alias switch.
+   */
+  readonly canonicalAuthoringOperationId?: string | undefined;
 }
 
 export interface KpEquationRecipeRegistration {

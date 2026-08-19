@@ -91,11 +91,18 @@
       "scope": "manual",
       "checkedAt": "2026-08-19T01:35:12.498Z",
       "notes": "Inspected seven-frame contact sheet: dark default, explicit light, neutral math/prose parity, themed dock and review, and narrow transport clearance all held."
+    },
+    {
+      "command": "npm run test:equation-series-intent-resolver",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:40:28.559Z",
+      "notes": "14 intent, extension, and homomorphic benchmark tests passed; planner IDs are unique and aliases require a self-canonical owner."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 recorded the theme checkpoint and its preservation boundary; no renderer-wide palette or prose-font promotion followed."
+    "summary": "s06 moved canonical authoring identity into extension-pack data and made the equation registry reject missing or chained planner owners."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -156,7 +163,8 @@
     {
       "id": "s06",
       "title": "Planner-ID-collision-guard",
-      "status": "planned"
+      "summary": "Function-wrap and homomorphic low-level IDs now coalesce under one data-declared planner identity with collision guards.",
+      "status": "complete"
     },
     {
       "id": "s07",

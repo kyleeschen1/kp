@@ -31,6 +31,22 @@ test("default declarations are unique and exhaustive for promoted intent surface
   }
   assert.equal(Object.isFrozen(kpEquationSeriesOperationRegistry), true);
   assert.equal(Object.isFrozen(kpEquationSeriesOperationRegistry.byId), true);
+  assert.equal(
+    new Set(kpEquationSeriesOperationRegistry.plannerIds).size,
+    kpEquationSeriesOperationRegistry.plannerIds.length
+  );
+  assert.ok(kpEquationSeriesOperationRegistry.plannerIds.includes(
+    "kp.algebra.wrap-function"
+  ));
+  assert.ok(!kpEquationSeriesOperationRegistry.plannerIds.includes(
+    "operation.wrap-function.v1"
+  ));
+  assert.ok(kpEquationSeriesOperationRegistry.plannerIds.includes(
+    "kp.semantic-motion.log-product"
+  ));
+  assert.ok(!kpEquationSeriesOperationRegistry.plannerIds.includes(
+    "operation.equation.log-product-decomposition.v1"
+  ));
 });
 
 test("the three original generation trials resolve declaratively and still compile", () => {
@@ -67,6 +83,7 @@ test("extension operations preserve family recipe and semantic authority", () =>
   if (result.status !== "resolved") return;
   assert.deepEqual(result.plans[0]?.declaration, {
     operationId,
+    plannerOperationId: "kp.semantic-motion.log-product",
     source: "equation-extension",
     familyId: "family.equation.log-homomorphism.v1",
     recipeIds: ["recipe.equation.homomorphic-decomposition.v1"],
@@ -141,6 +158,10 @@ test("a caller can extend resolution without editing the resolver", () => {
     custom.declarations[0]!,
     custom.declarations[0]!
   ]), /Duplicate equation series operation/u);
+  assert.throws(() => createKpEquationSeriesOperationRegistry([{
+    ...custom.declarations[0]!,
+    plannerOperationId: "operation.equation.missing-authoring-owner.v1"
+  }]), /requires one self-canonical declaration/u);
 });
 
 test("resolver owns no surface handler renderer timing DOM or central switch", () => {

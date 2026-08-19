@@ -24,7 +24,8 @@ export const kpFunctionWrapOperationRegistration = Object.freeze({
   id: vocabulary.operations.wrapFunctionV1,
   familyId: vocabulary.families.structuralWrapV1,
   recipeIds: Object.freeze([vocabulary.recipes.functionApplicationV1]),
-  semanticAuthorityIds: Object.freeze([])
+  semanticAuthorityIds: Object.freeze([]),
+  canonicalAuthoringOperationId: "kp.algebra.wrap-function"
 } as const satisfies KpEquationOperationRegistration);
 
 export const kpFunctionWrapRecipeRegistration = Object.freeze({
