@@ -6,8 +6,6 @@ import {
 } from "./native-katex-base-scene-plan.ts";
 import {
   compileKpCanonicalNativeKatexScenePlan,
-  createKpCanonicalNativeKatexSceneSession,
-  type KpCanonicalNativeKatexSceneSession
 } from "./native-katex-scene-compositor.ts";
 import {
   createKpNativeKatexEndpointOwnershipView
@@ -179,12 +177,6 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
       );
     }
   });
-}
-
-export function createKpNativeKatexCarrierPreservingSimplificationSession(
-  plan: KpNativeKatexCarrierPreservingSimplificationMotionPlan
-): KpCanonicalNativeKatexSceneSession {
-  return createKpCanonicalNativeKatexSceneSession(plan.rendererPlan);
 }
 
 function paintRelations(

@@ -16,6 +16,10 @@ import {
   compileKpNativeKatexCarrierPreservingSimplificationMotion
 } from "../src/rendering/native-katex-carrier-preserving-simplification-motion.ts";
 import {
+  assertKpNativeKatexCarrierEndpointRevisions,
+  certifyKpNativeKatexCarrierSettlement
+} from "../src/rendering/native-katex-carrier-preserving-simplification-settlement.ts";
+import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import {
@@ -184,6 +188,40 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
     false
   );
   assert.throws(() => JSON.stringify(motion), /cannot enter durable state/);
+
+  const settlement = certifyKpNativeKatexCarrierSettlement(motion);
+  assert.equal(settlement.carrierTrackId, motion.carrierTrackId);
+  assert.equal(settlement.targetSelectorRef,
+    kpTwoTimesOneCarrierSelectorIds.targetCarrier);
+  assert.deepEqual(settlement.targetRect,
+    binding.carrier.target.rect);
+  assert.equal(settlement.targetBaselineY,
+    binding.carrier.target.baselineY);
+  assert.equal(settlement.nativeOwnerAtCompletion, "target-native");
+  assert.throws(() => JSON.stringify(settlement), /cannot enter durable state/);
+
+  const current = {
+    source: binding.sourceHandle.revision,
+    target: binding.targetHandle.revision
+  };
+  assert.doesNotThrow(() => assertKpNativeKatexCarrierEndpointRevisions({
+    plan: motion,
+    current
+  }));
+  assert.throws(() => assertKpNativeKatexCarrierEndpointRevisions({
+    plan: motion,
+    current: {
+      ...current,
+      source: { ...current.source, fontRevision: 4 }
+    }
+  }), /stale-font/);
+  assert.throws(() => assertKpNativeKatexCarrierEndpointRevisions({
+    plan: motion,
+    current: {
+      ...current,
+      target: { ...current.target, viewportKey: "target:phone:font-3" }
+    }
+  }), /stale-viewport/);
 });
 
 interface OwnerFixture {

@@ -113,7 +113,8 @@
     {
       "id": "cps11",
       "title": "Guarantee-native-settlement",
-      "status": "planned"
+      "summary": "Added the ephemeral settlement certificate, exact terminal-pose checks, guarded renderer session, native-target completion invariant, and pre-paint font/viewport revision rejection.",
+      "status": "complete"
     },
     {
       "id": "cps12",

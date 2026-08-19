@@ -211,11 +211,32 @@
       "scope": "cps10",
       "checkedAt": "2026-08-19T22:23:37.814Z",
       "notes": "The narrow compositor projection and renderer-session motion-plan boundary typecheck."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps11",
+      "checkedAt": "2026-08-19T22:27:31.505Z",
+      "notes": "17/17 assertions pass, including exact target ink/baseline settlement, terminal stability, and stale font/viewport rejection."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "cps11",
+      "checkedAt": "2026-08-19T22:27:33.019Z",
+      "notes": "79/79 shared endpoint dwell, native settlement, revision, ownership, and compositor checks pass."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps11",
+      "checkedAt": "2026-08-19T22:27:34.425Z",
+      "notes": "Settlement certificate and guarded session API typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Carrier preservation now executes through the canonical Native KaTeX compositor: one opaque unscaled carrier crosses exact measured poses while the verified operator and identity witness withdraw together through one bounded cohort schedule."
+    "summary": "Carrier transit is now certified at exact target ink and baseline before native takeover; terminal frames remain stable, completion selects native target paint, and stale font or viewport revisions fail before a frame is applied."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
