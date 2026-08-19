@@ -169,11 +169,32 @@
       "scope": "cps08",
       "checkedAt": "2026-08-19T22:08:54.782Z",
       "notes": "The candidate Native KaTeX profile and pure sampler typecheck."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps09",
+      "checkedAt": "2026-08-19T22:14:51.006Z",
+      "notes": "16/16 endpoint compilation, immutable binding, exact-pose projection, no-remeasurement, and forged-equal-glyph rejection assertions pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "cps09",
+      "checkedAt": "2026-08-19T22:14:55.941Z",
+      "notes": "79/79 shared rendered-scene, endpoint-handle, ownership, equivalent-pose, and compositor preservation assertions pass."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps09",
+      "checkedAt": "2026-08-19T22:14:59.576Z",
+      "notes": "Native endpoint compiler and ephemeral measured binding typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Carrier-preserving simplification now has one provisional Native KaTeX tuning surface: the carrier remains continuously present while the verified removal cohort yields through bounded, deterministic renderer-owned sampling."
+    "summary": "The canonical 2 × 1 and 2 states now compile to annotated Native KaTeX endpoints; verified selector IDs bind once to immutable ink rects and baselines, and carrier projection reaches both exact native poses without layout reads or glyph inference."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

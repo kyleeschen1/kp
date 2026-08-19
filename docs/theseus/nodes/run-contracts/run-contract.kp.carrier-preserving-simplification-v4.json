@@ -101,7 +101,8 @@
     {
       "id": "cps09",
       "title": "Bind-measured-carrier-endpoints",
-      "status": "planned"
+      "summary": "Added canonical Native KaTeX endpoints, semantic ownership binding, immutable renderer-session carrier binding, cached exact-ink pose projection, and negative equal-glyph/no-DOM-read coverage.",
+      "status": "complete"
     },
     {
       "id": "cps10",
