@@ -2,7 +2,7 @@
   "id": "next-action.kp.review-native-katex-ownership-repair",
   "kind": "next-action",
   "title": "Relocate Review and repair Native KaTeX endpoint ownership",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -207,11 +207,46 @@
       "scope": "slice r21 replacement lifecycle typecheck",
       "checkedAt": "2026-08-19T14:52:59.078Z",
       "notes": "Application TypeScript accepts atomic font/viewport replacement and typed retirement reasons."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice r22 repository type boundary",
+      "checkedAt": "2026-08-19T14:57:11.497Z",
+      "notes": "Application, Node, tests, Svelte, and domain TypeScript checks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice r22 production build boundary",
+      "checkedAt": "2026-08-19T14:57:12.044Z",
+      "notes": "Production publication check and Vite bundle build pass; existing large-chunk advisories remain warnings only."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice r22 architecture boundary",
+      "checkedAt": "2026-08-19T14:57:12.483Z",
+      "notes": "All dependency-direction, framework-neutral, concept-room, semantic-reader, semantic-animation, operation-evaluation, and equation compiler authority gates pass."
+    },
+    {
+      "command": "npm run verify:impact promotion selection",
+      "status": "passed",
+      "scope": "slice r22 final impact classification",
+      "checkedAt": "2026-08-19T14:57:12.930Z",
+      "notes": "Selector classified the shared Native KaTeX change as high risk and selected compositor, type, architecture, test, and production-build gates; proportionate focused tests plus the type, architecture, build, and visual boundaries were executed sequentially."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice r22 durable execution record",
+      "checkedAt": "2026-08-19T14:57:22.328Z",
+      "notes": "Workspace validates 1021 nodes and 23428 events before checkpoint closure."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Review capture now uses a wide inspector-side drawer and bounded narrow sheet; exact draft/capture lifetime and production erasure remain verified."
+    "summary": "Implementation and automated evidence are complete. Awaiting the required human review of Review placement and the common-denominator pressure seam before any promotion or evaluation-family work."
   },
   "expectedLearning": [
     "Whether immutable endpoint handles and hierarchical ownership remove the composite-to-leaf seam without caller timing masks."
