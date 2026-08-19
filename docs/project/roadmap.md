@@ -167,13 +167,14 @@ Only this repository sequence is active:
     measure shared Native KaTeX endpoints once, preserve compound and leaf
     ownership in one hierarchy, require equivalent-pose certificates between
     adjacent phases, and repair the `2/2` handoff without caller timing masks.
-23. **Evaluation presentation families:** after ownership stability. Give
-    punctuated substitution, result reception, contributor fusion, carrier-
-    preserving simplification, operator aperture, and expanded calculation
-    distinct typed instructional choices. Resolve them through a constrained,
-    versioned recipe registry into matched-pose, progressive-replacement,
-    persistent-carrier, contact-occlusion, or deliberate-cut handoffs. Do not
-    promote scaling-to-zero or simultaneous pre/post glyphs as a default, and
+23. **Evaluation presentation families:** contributor fusion has one
+    human-approved `2 × 3 → 6` ink-knot exemplar. Pressure that exact candidate
+    on the structurally different `3/6 → 1/2` caller before narrow promotion,
+    then return to sequence-level ownership before embedding it in the
+    fraction-addition sequence. Punctuated substitution, result reception,
+    carrier-preserving simplification, operator aperture, and expanded
+    calculation remain distinct typed instructional choices. Do not promote
+    scaling-to-zero or simultaneous readable pre/post glyphs as a default, and
     do not let callers or model planners author geometry or timing.
 24. **Fraction promotion and arithmetic:** only after the ownership repair and
     evaluation-family checkpoints. Promote contracts demonstrated by two

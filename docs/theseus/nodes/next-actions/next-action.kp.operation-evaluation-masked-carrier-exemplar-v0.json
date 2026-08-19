@@ -2,9 +2,9 @@
   "id": "next-action.kp.operation-evaluation-masked-carrier-exemplar-v0",
   "kind": "next-action",
   "title": "Prototype masked carrier evaluation handoff",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Replace simultaneous readable source and target cohorts in the 2-times-3 review exemplar with a deterministic source-to-opaque-carrier-to-target handoff, then stop for human visual review.",
+  "summary": "Human review approved the revised 2-times-3 ink-knot fusion exemplar: operands and catalyst share one compression schedule, preserve native order, hand off exclusive paint at one locus, and settle into the native result. Promotion still requires a structurally different caller.",
   "sourceRefs": [
     {
       "kind": "file",

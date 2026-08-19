@@ -2,13 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: relocate the Catalogue Review composer so feedback is
-fully visible. Then repair the `1/3 + 1/6` composite-to-leaf jerk through one
-sequence-level Native KaTeX ownership contract: immutable shared endpoint
-handles, hierarchical compound/leaf views, equivalent-pose seam certificates,
-and per-entity continuity evidence. Only after that repair should separate
-evaluation-presentation exemplars be compared. Do not promote the pressure
-caller or implement common-denominator addition choreography yet.
+Current Next Action: pressure the human-approved `2 × 3 → 6` ink-knot
+contributor-fusion candidate on the structurally different `3/6 → 1/2`
+caller, then stop for visual review. Do not promote from one caller. After that
+bounded checkpoint, relocate the Catalogue Review composer and repair the
+`1/3 + 1/6` composite-to-leaf jerk through one sequence-level Native KaTeX
+ownership contract before embedding the evaluation motif or implementing
+common-denominator addition choreography.
 
 ## Goal
 
@@ -103,6 +103,12 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
   existing continuity/compiler seams produce deterministic paint. Invalid
   family/handoff combinations remain typed gaps; callers do not own timing,
   coordinates, opacity schedules, or renderer nodes.
+- Human review approved contributor fusion's first presentation exemplar on
+  2026-08-19. In `2 × 3 → 6`, native operand and catalyst ink preserve spatial
+  order, share one area-derived compression schedule, transfer exclusive paint
+  at one locus, and expand into the native result. The rejected separate
+  carrier is historical evidence. `3/6 → 1/2` is the required structurally
+  different pressure caller before any narrow promotion.
 
 ## Capability Vocabulary
 
@@ -198,6 +204,7 @@ playhead.
 - `../reviews/2026-08-18-compositor-before-balanced-operations-next-step-review.md`
 - `../reviews/2026-08-18-compositor-balanced-log-base-long-loop-proposal.md`
 - `../reviews/2026-08-18-post-log-base-convergence-next-step-review.md`
+- `../reviews/2026-08-19-post-ink-knot-evaluation-next-step-review.md`
 - `animation-catalogue.md`
 - `architecture-convergence.md`
 - `semantic-runtime.md`
