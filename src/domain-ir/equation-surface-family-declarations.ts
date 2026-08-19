@@ -194,6 +194,17 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererSourcePath: "src/editor/log-exponent-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.common-denominator-pressure",
+    matches: (id) => id ===
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+    selectedCapabilityIds: ["fraction-equivalence"],
+    primaryCapabilityId: "fraction-equivalence",
+    rendererAdapterId:
+      "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+    rendererSourcePath:
+      "src/editor/common-denominator-pressure-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.fraction-equivalence",
     matches: (id) =>
       id.startsWith("animation.equation.fraction-equivalence."),
@@ -420,6 +431,19 @@ const waveBStructuralByAnimationId = Object.freeze(Object.fromEntries(
 
 export const kpWaveCEquationDispositionDeclarations:
 readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
+  waveC({
+    animationId:
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath:
+      "src/editor/common-denominator-pressure-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The larger-expression fraction pressure caller composes approved " +
+      "native motifs behind a dedicated adapter while awaiting visual review."
+  }),
   waveC({
     animationId: "animation.algebra.log-product.product-to-sum",
     classification: "generated-bespoke",

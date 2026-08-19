@@ -140,6 +140,8 @@ export function createKpFractionEquivalenceTransitSession(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly semantic?: KpVerifiedFractionEquivalence | undefined;
   readonly presentation?: KpFractionEquivalencePresentationPlan | undefined;
+  readonly contextRelations?:
+    readonly KpNativeKatexSemanticPaintRelation[] | undefined;
 }): KpFractionEquivalenceTransitSession {
   if (
     input.source.endpoint !== "source" ||
@@ -160,7 +162,13 @@ export function createKpFractionEquivalenceTransitSession(input: {
       "Fraction-equivalence transit requires matching semantic and presentation authority."
     );
   }
-  const relations = compileKpFractionEquivalencePaintRelations(presentation);
+  // A larger expression may surround the canonical fraction operation. Its
+  // explicitly verified context joins the reconciliation set without changing
+  // the fraction motif or teaching the compositor any expression semantics.
+  const relations = Object.freeze([
+    ...compileKpFractionEquivalencePaintRelations(presentation),
+    ...(input.contextRelations ?? [])
+  ]);
   const trackProjection = createKpFractionEquivalenceJoinTrackProjection({
     presentation,
     relations

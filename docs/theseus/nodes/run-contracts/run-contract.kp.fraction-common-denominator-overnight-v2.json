@@ -208,11 +208,26 @@
       "scope": "broad",
       "checkedAt": "2026-08-19T06:42:03.094Z",
       "notes": "All application, test, Svelte, and domain type checks pass for the exemplar plan boundary."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "checkedAt": "2026-08-19T07:03:57.114Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "checkedAt": "2026-08-19T07:03:58.361Z"
+    },
+    {
+      "command": "npm run test:equation-surface-disposition",
+      "status": "passed",
+      "checkedAt": "2026-08-19T07:03:59.500Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "The pressure plan now ends at 2/6 plus 1/6 through explicit parallel evaluation, before any unapproved addition choreography."
+    "summary": "Hosted one reversible four-endpoint pressure caller without inventing fraction-addition choreography."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -372,7 +387,8 @@
     {
       "id": "s24",
       "title": "Host native pressure caller",
-      "status": "planned"
+      "summary": "Composed unit-factor introduction, canonical fraction joining, and synchronized product evaluation in one native KaTeX host.",
+      "status": "complete"
     },
     {
       "id": "s25",

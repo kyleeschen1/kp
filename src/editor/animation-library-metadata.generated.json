@@ -773,6 +773,38 @@
     }
   },
   {
+    "id": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+    "title": "Give one third a denominator of six",
+    "summary": "A conservative larger-expression caller for the approved fraction equivalence and product-evaluation motifs.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 8400,
+    "beatCount": 120,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "fraction",
+      "katex",
+      "pressure-caller"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.algebra.log-product.product-to-sum",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.algebra.log-product.product-to-sum",

@@ -1089,6 +1089,191 @@
     },
     {
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
+      "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "familyId": "fraction",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor",
+          "transformationType": "introduceUnitFactor",
+          "transformationFingerprint": "fnv1a32-9ea895f4",
+          "source": [
+            {
+              "objectId": "state.fraction.common-denominator.source",
+              "objectType": "equation",
+              "title": "One third plus one sixth",
+              "semanticFingerprint": "fnv1a32-b2e8bb8e"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+              "objectType": "equation",
+              "title": "Multiply one third by two over two",
+              "semanticFingerprint": "fnv1a32-67f58633"
+            }
+          ]
+        },
+        {
+          "transformationId": "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.join-equivalent-fraction",
+          "transformationType": "alignCommonDenominator",
+          "transformationFingerprint": "fnv1a32-9b6b8077",
+          "source": [
+            {
+              "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+              "objectType": "equation",
+              "title": "Multiply one third by two over two",
+              "semanticFingerprint": "fnv1a32-67f58633"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+              "objectType": "equation",
+              "title": "Equivalent products over a common denominator",
+              "semanticFingerprint": "fnv1a32-6c6e18ed"
+            }
+          ]
+        },
+        {
+          "transformationId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.evaluate-products",
+          "transformationType": "simplifyConstantProduct",
+          "transformationFingerprint": "fnv1a32-38ae6f6f",
+          "source": [
+            {
+              "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+              "objectType": "equation",
+              "title": "Equivalent products over a common denominator",
+              "semanticFingerprint": "fnv1a32-6c6e18ed"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "state.fraction.common-denominator.target.evaluated-products",
+              "objectType": "equation",
+              "title": "Two sixths plus one sixth",
+              "semanticFingerprint": "fnv1a32-603c6e64"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-7356672c",
+          "objectIds": [
+            "state.fraction.common-denominator.source",
+            "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+            "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+            "state.fraction.common-denominator.target.evaluated-products"
+          ],
+          "transformationIds": [
+            "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor",
+            "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.join-equivalent-fraction",
+            "transformation.fraction.common-denominator.third-plus-sixth.pressure.evaluate-products"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-61a6f733",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "fraction-equivalence",
+          "adapterId": "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+          "sourcePath": "src/editor/common-denominator-pressure-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1.forward.0",
+              "activeTransformationIds": [
+                "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor"
+              ],
+              "activeSemanticObjectIds": [
+                "state.fraction.common-denominator.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+                "state.fraction.common-denominator.target.evaluated-products"
+              ],
+              "envelopeFingerprint": "fnv1a32-114c0345"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1.forward.1",
+              "activeTransformationIds": [
+                "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.join-equivalent-fraction"
+              ],
+              "activeSemanticObjectIds": [
+                "state.fraction.common-denominator.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+                "state.fraction.common-denominator.target.evaluated-products"
+              ],
+              "envelopeFingerprint": "fnv1a32-3373876c"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1.forward.2",
+              "activeTransformationIds": [
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.evaluate-products"
+              ],
+              "activeSemanticObjectIds": [
+                "state.fraction.common-denominator.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
+                "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.product",
+                "state.fraction.common-denominator.target.evaluated-products"
+              ],
+              "envelopeFingerprint": "fnv1a32-7f34517a"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.equation.fraction-equivalence.compact.v1",
       "familyId": "fraction",
       "pathClass": "generic-semantic-equation",
@@ -5303,11 +5488,12 @@
     {
       "familyId": "fraction",
       "animationIds": [
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
         "animation.equation.fraction-equivalence.compact.v1",
         "animation.equation.fraction-equivalence.v1",
         "animation.generated.fraction-expression.two-fourths"
       ],
-      "representativeAnimationId": "animation.equation.fraction-equivalence.compact.v1",
+      "representativeAnimationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
       "semanticVerificationCommand": "npm run test:operation-presentation-plans",
       "visualVerificationCommand": "npm run visual:equation-surface-preservation",
       "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",

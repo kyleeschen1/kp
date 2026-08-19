@@ -40,6 +40,7 @@ export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.equation.logarithm-change-of-base.v1",
   "animation.equation.fraction-equivalence.v1",
   "animation.equation.fraction-equivalence.compact.v1",
+  "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
   "animation.algebra.log-product.product-to-sum",
   "animation.algebra.log-product.three-factors-to-sum"
 ] as const);

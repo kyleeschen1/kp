@@ -663,6 +663,45 @@
     },
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "introduceUnitFactor",
+        "alignCommonDenominator",
+        "simplifyConstantProduct"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 0,
+        "nonSemantic": 3
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.equation.fraction-equivalence.compact.v1",
       "pathClass": "generic-semantic-equation",
       "transformationTypes": [

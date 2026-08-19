@@ -457,6 +457,82 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "familyId": "fraction",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-9ea895f4",
+          "fnv1a32-b2e8bb8e",
+          "fnv1a32-67f58633",
+          "fnv1a32-9b6b8077",
+          "fnv1a32-6c6e18ed",
+          "fnv1a32-38ae6f6f",
+          "fnv1a32-603c6e64"
+        ],
+        "route": "/?artifact=animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "adapterId": "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "generic-semantic-equation",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/common-denominator-pressure-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:operation-presentation-plans",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/common-denominator-pressure-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.fraction",
+            "kind": "family-verification",
+            "command": "npm run test:operation-presentation-plans"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.equation.fraction-equivalence.compact.v1",
       "familyId": "fraction",
       "disposition": "unsupported",

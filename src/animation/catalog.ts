@@ -33,6 +33,9 @@ import {
   createKpFractionEquivalenceExemplarAssets
 } from "./fraction-equivalence-exemplar.ts";
 import {
+  createKpCommonDenominatorPressureAnimationAsset
+} from "./common-denominator-pressure-exemplar.ts";
+import {
   createKpLogProductAnimationAssets
 } from "./log-product-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
@@ -116,6 +119,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpLogQuotientAnimationAsset(),
     createKpLogarithmChangeOfBaseExemplarAsset(),
     ...createKpFractionEquivalenceExemplarAssets(),
+    createKpCommonDenominatorPressureAnimationAsset(),
     ...createKpLogProductAnimationAssets()
   ];
 }

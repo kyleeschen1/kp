@@ -80,7 +80,8 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     capabilityId: "fraction-equivalence",
     domain: "equation",
     adapterIds: [
-      "editor-animation-surface.fraction-equivalence.canonical-native-katex"
+      "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+      "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
     ],
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {
