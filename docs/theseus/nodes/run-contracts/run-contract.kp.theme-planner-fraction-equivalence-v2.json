@@ -126,11 +126,18 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T01:50:37.128Z",
       "notes": "All TypeScript, Svelte, and domain typechecks passed with the standalone alias normalization protocol."
+    },
+    {
+      "command": "npm run test:equation-series-planner-port",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:52:24.808Z",
+      "notes": "6 prompt, authority-boundary, validation, compiler-feed, and port-error tests passed; aliases are absent from the model vocabulary while the backend registry retains them."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 projects a frozen alias registry from operation-pack declarations and returns canonical, alias, or unknown normalization without renderer leakage."
+    "summary": "s09 now emits only unique canonical operation IDs and concise declarative summaries to the model; low-level aliases remain available solely in the backend registry."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -209,7 +216,8 @@
     {
       "id": "s09",
       "title": "Canonical-prompt-projection",
-      "status": "planned"
+      "summary": "Planner prompts now contain only canonical exposed operation names and concise summaries; aliases remain preserved for backend compatibility but are not model choices.",
+      "status": "complete"
     },
     {
       "id": "s10",

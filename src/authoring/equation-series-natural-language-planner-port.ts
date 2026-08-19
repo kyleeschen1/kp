@@ -26,11 +26,12 @@ export interface KpEquationSeriesPlannerPrompt {
   }>[];
   readonly operations: readonly Readonly<{
     operationId: string;
-      source:
-        | "canonical-operation"
-        | "equation-extension"
-        | "both-sides-operation"
-        | "governed-operation";
+    summary: string;
+    source:
+      | "canonical-operation"
+      | "equation-extension"
+      | "both-sides-operation"
+      | "governed-operation";
     familyId: string;
     roleIds: readonly string[];
     governedRequirements?: Readonly<{
@@ -116,9 +117,16 @@ export function createKpEquationSeriesPlannerPrompt(input: {
           }]
         : []
     ),
-    operations: kpEquationSeriesOperationRegistry.declarations.map(
-      ({ operationId, source, familyId, roleIds, governed }) => ({
+    operations: kpEquationSeriesOperationRegistry.plannerIds.map(
+      (operationId) => kpEquationSeriesOperationRegistry.plannerById[
+        operationId
+      ]!
+    ).map(
+      ({ operationId, plannerExposure, source, familyId, roleIds, governed }) => ({
         operationId,
+        summary: plannerExposure.kind === "exposed"
+          ? plannerExposure.summary
+          : unreachablePlannerAlias(operationId),
         source,
         familyId,
         roleIds,
@@ -132,6 +140,12 @@ export function createKpEquationSeriesPlannerPrompt(input: {
       })
     )
   });
+}
+
+function unreachablePlannerAlias(operationId: string): never {
+  throw new Error(
+    `Planner projection selected alias declaration ${operationId}.`
+  );
 }
 
 export async function runKpEquationSeriesNaturalLanguagePlanner(input: {

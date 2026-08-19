@@ -9,6 +9,8 @@ import {
   runKpEquationSeriesNaturalLanguagePlanner,
   validateKpEquationSeriesPlannerRecord
 } from "../src/authoring/equation-series-natural-language-planner-port.ts";
+import { kpEquationSeriesOperationRegistry } from
+  "../src/authoring/equation-series-operation-declarations.ts";
 import { validateKpEquationTransformSeriesRequest } from
   "../src/authoring/equation-transform-series-request.ts";
 
@@ -23,6 +25,17 @@ test("prompt creation exposes only source states adjacencies and registered oper
   assert.equal(prompt.operations.some(({ operationId }) =>
     operationId === "kp.algebra.wrap-function"
   ), true);
+  assert.equal(prompt.operations.length,
+    kpEquationSeriesOperationRegistry.plannerIds.length);
+  assert.equal(prompt.operations.some(({ operationId }) =>
+    operationId === "operation.wrap-function.v1"
+  ), false);
+  assert.equal(prompt.operations.every(({ summary }) =>
+    summary.trim().length > 0
+  ), true);
+  assert.ok(kpEquationSeriesOperationRegistry.byId[
+    "operation.wrap-function.v1"
+  ]);
   const governed = prompt.operations.find(({ operationId }) =>
     operationId === "kp.algebra.apply-natural-log-both-sides"
   );
