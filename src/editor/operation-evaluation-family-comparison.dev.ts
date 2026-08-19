@@ -161,26 +161,19 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
   cue.className = "kp-operation-evaluation-family-cue";
   cue.dataset["kpOperationEvaluationFamilyCue"] = "";
   cue.setAttribute("aria-hidden", "true");
-  const carrier = input.stage.ownerDocument.createElement("div");
-  carrier.className = "kp-operation-evaluation-masked-carrier";
-  carrier.dataset["kpOperationEvaluationMaskedCarrier"] = "";
-  carrier.setAttribute("aria-hidden", "true");
-  input.stage.append(cue, carrier);
+  input.stage.append(cue);
   let family = input.initialFamily;
 
   const clearCue = () => {
     delete input.stage.dataset["kpOperationEvaluationCueKind"];
     cue.style.transform = "scaleX(0)";
   };
-  const clearCarrier = () => {
-    carrier.style.visibility = "hidden";
-    carrier.style.transform = "translate(-50%, -50%) scale(0)";
-  };
   const resetMaterialPresentationOverrides = () => {
     input.stage.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     ).forEach((owner) => {
       owner.style.removeProperty("visibility");
+      owner.style.removeProperty("opacity");
       const visual = owner.firstElementChild as HTMLElement | null;
       visual?.style.removeProperty("clip-path");
     });
@@ -200,7 +193,6 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
     input.stage.dataset["kpOperationEvaluationFamily"] = family;
     input.stage.dataset["kpOperationEvaluationHandoff"] = recipe.handoff;
     clearCue();
-    clearCarrier();
     resetMaterialPresentationOverrides();
     if (recipe.family === "punctuated-substitution") {
       const source = required(
@@ -219,15 +211,17 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
       return input.base.apply(bounded < recipe.replacementAt ? 0 : 1);
     }
     const frame = input.base.apply(bounded);
-    if (recipe.family === "masked-carrier-relay") {
-      applyMaskedCarrierRelay({
+    if (recipe.family === "contributor-fusion") {
+      applyInkKnotFusion({
         stage: input.stage,
-        carrier,
         progress: bounded,
-        sourceClipStartsAt: recipe.sourceClipStartsAt,
-        sourceLegibilityEndsAt: recipe.sourceLegibilityEndsAt,
+        gatherStartsAt: recipe.gatherStartsAt,
+        compressionStartsAt: recipe.compressionStartsAt,
+        sourceKernelStartsAt: recipe.sourceKernelStartsAt,
+        ownershipHandoffAt: recipe.ownershipHandoffAt,
         targetLegibilityStartsAt: recipe.targetLegibilityStartsAt,
-        targetRevealEndsAt: recipe.targetRevealEndsAt
+        targetExpansionEndsAt: recipe.targetExpansionEndsAt,
+        kernelAreaRatio: recipe.kernelAreaRatio
       });
       return frame;
     }
@@ -269,7 +263,6 @@ export function createKpOperationEvaluationFamilyPlayback(input: {
       >[0]
     ) {
       cue.remove();
-      carrier.remove();
       input.base.retire(retirement);
     }
   });
@@ -281,73 +274,105 @@ function readSelectedFamily(
   const value = window === null
     ? null
     : new URL(window.location.href).searchParams.get(familyQueryParameter);
+  if (value === "masked-carrier-relay") return "contributor-fusion";
   return value !== null && isKpOperationEvaluationFamilyId(value)
     ? value
-    : "masked-carrier-relay";
+    : "contributor-fusion";
 }
 
-function applyMaskedCarrierRelay(input: {
+function applyInkKnotFusion(input: {
   readonly stage: HTMLElement;
-  readonly carrier: HTMLElement;
   readonly progress: number;
-  readonly sourceClipStartsAt: number;
-  readonly sourceLegibilityEndsAt: number;
+  readonly gatherStartsAt: number;
+  readonly compressionStartsAt: number;
+  readonly sourceKernelStartsAt: number;
+  readonly ownershipHandoffAt: number;
   readonly targetLegibilityStartsAt: number;
-  readonly targetRevealEndsAt: number;
+  readonly targetExpansionEndsAt: number;
+  readonly kernelAreaRatio: number;
 }): void {
   const sourceOwners = materialOwners(input.stage, "source");
   const targetOwners = materialOwners(input.stage, "target");
-  const sourceIsLegible = input.progress < input.sourceLegibilityEndsAt;
-  const targetIsLegible = input.progress >= input.targetLegibilityStartsAt;
-  const sourceClip = 50 * smoothstep(
-    input.sourceClipStartsAt,
-    input.sourceLegibilityEndsAt,
+  if (sourceOwners.length === 0 || targetOwners.length === 0) return;
+  const sourceRects = sourceOwners.map(ownerBaseRect);
+  const targetRects = targetOwners.map(ownerBaseRect);
+  const knotCenter = centerOfUnion(targetRects);
+  const sourceArea = summedArea(sourceRects);
+  const targetArea = summedArea(targetRects);
+  // The renderer uses endpoint ink boxes as an optical proxy: exact pixel
+  // rasterization would make this provisional motif expensive and brittle.
+  const kernelArea = input.kernelAreaRatio *
+    Math.sqrt(sourceArea * targetArea);
+  const kernelSpan = Math.sqrt(kernelArea);
+  const sourceKernelScale = boundedKernelScale(
+    Math.sqrt(kernelArea / sourceArea)
+  );
+  const targetKernelScale = boundedKernelScale(
+    Math.sqrt(kernelArea / targetArea)
+  );
+  const gatherProgress = smoothstep(
+    input.gatherStartsAt,
+    input.sourceKernelStartsAt,
     input.progress
   );
-  const targetReveal = smoothstep(
-    input.targetLegibilityStartsAt,
-    input.targetRevealEndsAt,
+  const compressionProgress = smoothstep(
+    input.compressionStartsAt,
+    input.sourceKernelStartsAt,
     input.progress
+  );
+  const targetExpansion = smoothstep(
+    input.ownershipHandoffAt,
+    input.targetExpansionEndsAt,
+    input.progress
+  );
+  const sourceOwnsPaint = input.progress < input.ownershipHandoffAt;
+  const sourceKernelOffsets = centeredOffsetsByNativeOrder(
+    sourceRects,
+    kernelSpan
   );
 
-  setOwnerCohortVisibility(sourceOwners, sourceIsLegible);
-  setOwnerCohortVisibility(targetOwners, targetIsLegible);
-  if (sourceIsLegible) {
-    setOwnerCohortClip(sourceOwners, sourceClip);
-  }
-  if (targetIsLegible) {
-    setOwnerCohortClip(targetOwners, 50 * (1 - targetReveal));
-  }
+  sourceOwners.forEach((owner, index) => {
+    const rect = sourceRects[index]!;
+    const sourceCenter = centerOfRect(rect);
+    const slotOffsetX = sourceKernelOffsets[index]!;
+    setOwnerPaintPresence(owner, sourceOwnsPaint);
+    owner.style.transform = ownerTransform({
+      translateX:
+        (knotCenter.x - sourceCenter.x + slotOffsetX) * gatherProgress,
+      translateY: (knotCenter.y - sourceCenter.y) * gatherProgress,
+      scale: lerp(1, sourceKernelScale, compressionProgress)
+    });
+  });
+  targetOwners.forEach((owner, index) => {
+    const rect = targetRects[index]!;
+    const targetCenter = centerOfRect(rect);
+    setOwnerPaintPresence(owner, !sourceOwnsPaint);
+    const visual = owner.firstElementChild as HTMLElement | null;
+    if (visual !== null) {
+      const reveal = smoothstep(
+        input.ownershipHandoffAt,
+        input.targetLegibilityStartsAt,
+        input.progress
+      );
+      const inset = 28 * (1 - reveal);
+      visual.style.clipPath = `inset(${inset}% ${inset}%)`;
+    }
+    owner.style.transform = ownerTransform({
+      translateX: (knotCenter.x - targetCenter.x) * (1 - targetExpansion),
+      translateY: (knotCenter.y - targetCenter.y) * (1 - targetExpansion),
+      scale: lerp(targetKernelScale, 1, targetExpansion)
+    });
+  });
 
-  const carrierArrival = smoothstep(
-    input.sourceClipStartsAt,
-    input.sourceLegibilityEndsAt,
-    input.progress
-  );
-  const carrierDeparture = 1 - smoothstep(
-    input.targetLegibilityStartsAt,
-    input.targetRevealEndsAt,
-    input.progress
-  );
-  const carrierPresence = Math.min(carrierArrival, carrierDeparture);
-  if (carrierPresence > 0) {
-    positionMaskedCarrier(input.stage, input.carrier);
-    input.carrier.style.visibility = "visible";
-    input.carrier.style.transform =
-      `translate(-50%, -50%) ` +
-      `scaleX(${0.35 + carrierPresence * 0.65}) ` +
-      `scaleY(${carrierPresence})`;
-  }
-
-  const legibilityState = sourceIsLegible
+  const legibilityState = input.progress < input.sourceKernelStartsAt
     ? "source"
-    : targetIsLegible
-      ? "target"
-      : "carrier";
+    : input.progress < input.targetLegibilityStartsAt
+      ? "kernel"
+      : "target";
   input.stage.dataset["kpOperationEvaluationLegibilityState"] =
     legibilityState;
   input.stage.dataset["kpOperationEvaluationReadableCohortCount"] =
-    legibilityState === "carrier" ? "0" : "1";
+    legibilityState === "kernel" ? "0" : "1";
 }
 
 function materialOwners(
@@ -359,40 +384,84 @@ function materialOwners(
   )];
 }
 
-function setOwnerCohortVisibility(
-  owners: readonly HTMLElement[],
-  visible: boolean
-): void {
-  owners.forEach((owner) => {
-    owner.style.visibility = visible ? "visible" : "hidden";
-  });
+function setOwnerPaintPresence(owner: HTMLElement, present: boolean): void {
+  owner.style.visibility = present ? "visible" : "hidden";
+  owner.style.opacity = present ? "1" : "0";
 }
 
-function setOwnerCohortClip(
-  owners: readonly HTMLElement[],
-  horizontalInsetPercent: number
-): void {
-  owners.forEach((owner) => {
-    const visual = owner.firstElementChild as HTMLElement | null;
-    if (visual !== null) {
-      visual.style.clipPath =
-        `inset(0 ${horizontalInsetPercent}% 0 ${horizontalInsetPercent}%)`;
-    }
-  });
+interface KpInkRect {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
 }
 
-function positionMaskedCarrier(
-  stage: HTMLElement,
-  carrier: HTMLElement
-): void {
-  const target = required(stage, "[data-kp-operation-evaluation-target]");
-  const targetPaint = target.querySelector<HTMLElement>("[data-kp-motion-id]")
-    ?? target;
-  const stageRect = stage.getBoundingClientRect();
-  const targetRect = targetPaint.getBoundingClientRect();
-  carrier.style.left = `${targetRect.left - stageRect.left + targetRect.width / 2}px`;
-  carrier.style.top = `${targetRect.top - stageRect.top + targetRect.height / 2}px`;
-  carrier.style.height = `${Math.max(8, targetRect.height * 0.72)}px`;
+function ownerBaseRect(owner: HTMLElement): KpInkRect {
+  const left = Number.parseFloat(owner.style.left);
+  const top = Number.parseFloat(owner.style.top);
+  const width = Number.parseFloat(owner.style.width);
+  const height = Number.parseFloat(owner.style.height);
+  if (![left, top, width, height].every(Number.isFinite)) {
+    throw new Error("Ink-knot fusion requires measured material-owner boxes.");
+  }
+  return { left, top, width, height };
+}
+
+function centerOfRect(rect: KpInkRect): { readonly x: number; readonly y: number } {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
+}
+
+function centerOfUnion(
+  rects: readonly KpInkRect[]
+): { readonly x: number; readonly y: number } {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { x: (left + right) / 2, y: (top + bottom) / 2 };
+}
+
+function summedArea(rects: readonly KpInkRect[]): number {
+  return Math.max(1, rects.reduce(
+    (area, rect) => area + Math.max(0, rect.width * rect.height),
+    0
+  ));
+}
+
+function centeredOffsetsByNativeOrder(
+  rects: readonly KpInkRect[],
+  span: number
+): readonly number[] {
+  if (rects.length <= 1) return rects.map(() => 0);
+  const offsets = rects.map(() => 0);
+  const orderedIndexes = rects
+    .map((rect, index) => ({ index, x: centerOfRect(rect).x }))
+    .sort((left, right) => left.x - right.x)
+    .map(({ index }) => index);
+  orderedIndexes.forEach((sourceIndex, rank) => {
+    offsets[sourceIndex] = (rank / (rects.length - 1) - 0.5) * span;
+  });
+  return offsets;
+}
+
+function boundedKernelScale(scale: number): number {
+  return Math.max(0.24, Math.min(0.52, scale));
+}
+
+function ownerTransform(input: {
+  readonly translateX: number;
+  readonly translateY: number;
+  readonly scale: number;
+}): string {
+  return `translate3d(${input.translateX}px, ${input.translateY}px, 0) ` +
+    `scale(${input.scale})`;
+}
+
+function lerp(start: number, end: number, progress: number): number {
+  return start + (end - start) * progress;
 }
 
 function writeSelectedFamily(

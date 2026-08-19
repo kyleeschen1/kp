@@ -23,7 +23,7 @@ test("evaluation families share endpoints and change only the handoff", async ({
   );
   await expect(review).toHaveAttribute(
     "data-kp-operation-evaluation-family",
-    "masked-carrier-relay"
+    "contributor-fusion"
   );
   await expect(stage.locator(
     "[data-kp-operation-evaluation-source]"
@@ -38,9 +38,10 @@ test("evaluation families share endpoints and change only the handoff", async ({
   });
   for (const checkpoint of [
     { progress: 0.2, state: "source" },
-    { progress: 0.49, state: "source" },
-    { progress: 0.53, state: "carrier" },
-    { progress: 0.6, state: "target" },
+    { progress: 0.47, state: "source" },
+    { progress: 0.5, state: "kernel" },
+    { progress: 0.54, state: "kernel" },
+    { progress: 0.62, state: "target" },
     { progress: 0.85, state: "target" }
   ] as const) {
     await seek.fill(String(checkpoint.progress));
@@ -50,17 +51,33 @@ test("evaluation families share endpoints and change only the handoff", async ({
     );
     await expect(stage).toHaveAttribute(
       "data-kp-operation-evaluation-readable-cohort-count",
-      checkpoint.state === "carrier" ? "0" : "1"
+      checkpoint.state === "kernel" ? "0" : "1"
     );
     const snapshot = await readableCohortSnapshot(stage);
-    expect(snapshot.readableEquationCohorts).toBeLessThanOrEqual(1);
+    expect(snapshot.visibleEquationCohorts).toBe(1);
     expect(snapshot.hasVisiblePaint).toBe(true);
   }
 
-  await seek.fill("0.53");
+  await seek.fill("0.5");
+  const sourceKernel = await cohortGeometry(stage, "source");
+  expect(sourceKernel.centerSpreadX).toBeGreaterThan(1);
+  expect(sourceKernel.centerSpreadX).toBeLessThan(20);
+  expect(sourceKernel.centerSpreadY).toBeLessThan(1);
+  expect(sourceKernel.maximumScale).toBeLessThan(0.53);
+  expect(sourceKernel.minimumScale).toBeGreaterThanOrEqual(0.18);
+  expect(sourceKernel.maximumScale - sourceKernel.minimumScale)
+    .toBeLessThan(0.001);
+  expect(sourceKernel.rolesInVisualOrder).toEqual([
+    "successor-source:material-input",
+    "successor-source:catalyst",
+    "successor-source:material-input"
+  ]);
+  await expect(stage.locator(
+    "[data-kp-operation-evaluation-masked-carrier]"
+  )).toHaveCount(0);
   const firstSignature = await materialOwnerSignature(stage);
   await seek.fill("0.2");
-  await seek.fill("0.53");
+  await seek.fill("0.5");
   expect(await materialOwnerSignature(stage)).toEqual(firstSignature);
   await expect(source).toHaveAttribute(
     "data-kp-endpoint-identity-probe",
@@ -70,7 +87,7 @@ test("evaluation families share endpoints and change only the handoff", async ({
 
 test("a family URL reconstructs its exact candidate", async ({ page }) => {
   await page.goto(
-    `/?artifact=${animationId}&evaluationFamily=masked-carrier-relay`
+    `/?artifact=${animationId}&evaluationFamily=contributor-fusion`
   );
   const review = page.locator(
     "[data-kp-operation-evaluation-family-review]"
@@ -83,19 +100,16 @@ test("a family URL reconstructs its exact candidate", async ({ page }) => {
   );
   await expect(review).toHaveAttribute(
     "data-kp-operation-evaluation-family",
-    "masked-carrier-relay"
+    "contributor-fusion"
   );
   await expect(review.locator(
-    '[data-family="masked-carrier-relay"]'
+    '[data-family="contributor-fusion"]'
   )).toHaveAttribute("aria-pressed", "true");
 });
 
 async function materialOwnerSignature(stage: Locator) {
   return stage.evaluate((element) => {
     const root = element as HTMLElement;
-    const carrier = root.querySelector<HTMLElement>(
-      "[data-kp-operation-evaluation-masked-carrier]"
-    );
     return {
       owners: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-equation-material-owner-id]"
@@ -106,13 +120,41 @@ async function materialOwnerSignature(stage: Locator) {
         clipPath:
           (owner.firstElementChild as HTMLElement | null)?.style.clipPath,
         text: owner.textContent
-      })),
-      carrier: carrier === null ? null : {
-        transform: carrier.style.transform,
-        visibility: carrier.style.visibility
-      }
+      }))
     };
   });
+}
+
+async function cohortGeometry(
+  stage: Locator,
+  side: "source" | "target"
+) {
+  return stage.evaluate((element, requestedSide) => {
+    const owners = [...element.querySelectorAll<HTMLElement>(
+      `[data-kp-equation-material-fragment-role^="successor-${requestedSide}:"]`
+    )].filter((owner) => getComputedStyle(owner).visibility !== "hidden");
+    const centers = owners.map((owner) => {
+      const rect = owner.getBoundingClientRect();
+      const matrix = new DOMMatrix(getComputedStyle(owner).transform);
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        scale: Math.abs(matrix.a),
+        role: owner.dataset["kpEquationMaterialFragmentRole"] ?? ""
+      };
+    });
+    return {
+      centerSpreadX: Math.max(...centers.map(({ x }) => x)) -
+        Math.min(...centers.map(({ x }) => x)),
+      centerSpreadY: Math.max(...centers.map(({ y }) => y)) -
+        Math.min(...centers.map(({ y }) => y)),
+      minimumScale: Math.min(...centers.map(({ scale }) => scale)),
+      maximumScale: Math.max(...centers.map(({ scale }) => scale)),
+      rolesInVisualOrder: [...centers]
+        .sort((left, right) => left.x - right.x)
+        .map(({ role }) => role)
+    };
+  }, side);
 }
 
 async function readableCohortSnapshot(stage: Locator) {
@@ -137,13 +179,10 @@ async function readableCohortSnapshot(stage: Locator) {
     const targetVisible = visible(root.querySelector<HTMLElement>(
       "[data-kp-operation-evaluation-target]"
     )) || cohortVisible("target");
-    const carrierVisible = visible(root.querySelector<HTMLElement>(
-      "[data-kp-operation-evaluation-masked-carrier]"
-    ));
     return {
-      readableEquationCohorts:
+      visibleEquationCohorts:
         Number(sourceVisible) + Number(targetVisible),
-      hasVisiblePaint: sourceVisible || targetVisible || carrierVisible
+      hasVisiblePaint: sourceVisible || targetVisible
     };
   });
 }

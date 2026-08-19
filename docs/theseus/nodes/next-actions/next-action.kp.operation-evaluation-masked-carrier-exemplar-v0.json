@@ -33,10 +33,20 @@
       "command": "npm run visual:operation-evaluation-family-exemplar",
       "status": "passed",
       "checkedAt": "2026-08-19T17:58:49.208Z"
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "checkedAt": "2026-08-19T18:35:31.253Z"
+    },
+    {
+      "command": "npm run visual:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "checkedAt": "2026-08-19T18:35:41.982Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Two-slice exemplar is implemented and verified. HUMAN_CHECKPOINT: inspect the masked carrier handoff before any family-level promotion."
+    "summary": "Human review rejected the separate carrier; the same reversible exemplar now uses ink-knot contributor fusion. Operands and catalyst share one optical compression schedule and native spatial order. HUMAN_CHECKPOINT before promotion."
   }
 }

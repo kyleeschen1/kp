@@ -1,8 +1,7 @@
 export const kpOperationEvaluationFamilyIds = [
   "punctuated-substitution",
   "result-reception",
-  "contributor-fusion",
-  "masked-carrier-relay"
+  "contributor-fusion"
 ] as const;
 
 export type KpOperationEvaluationFamilyId =
@@ -11,8 +10,7 @@ export type KpOperationEvaluationFamilyId =
 export type KpOperationEvaluationHandoffKind =
   | "discrete-cut"
   | "progressive-replacement"
-  | "contact-occlusion"
-  | "legibility-gated-relay";
+  | "compressed-ink-handoff";
 
 interface KpOperationEvaluationFamilyRecipeBase {
   readonly kind: "operation-evaluation-family-exemplar-recipe";
@@ -39,16 +37,15 @@ export type KpOperationEvaluationFamilyRecipe =
     })
   | (KpOperationEvaluationFamilyRecipeBase & {
       readonly family: "contributor-fusion";
-      readonly handoff: "contact-occlusion";
+      readonly handoff: "compressed-ink-handoff";
       readonly synthesisSampling: "canonical-successor";
-    })
-  | (KpOperationEvaluationFamilyRecipeBase & {
-      readonly family: "masked-carrier-relay";
-      readonly handoff: "legibility-gated-relay";
-      readonly sourceClipStartsAt: number;
-      readonly sourceLegibilityEndsAt: number;
+      readonly gatherStartsAt: number;
+      readonly compressionStartsAt: number;
+      readonly sourceKernelStartsAt: number;
+      readonly ownershipHandoffAt: number;
       readonly targetLegibilityStartsAt: number;
-      readonly targetRevealEndsAt: number;
+      readonly targetExpansionEndsAt: number;
+      readonly kernelAreaRatio: number;
     });
 
 /**
@@ -88,29 +85,21 @@ readonly KpOperationEvaluationFamilyRecipe[] = Object.freeze([
   Object.freeze({
     kind: "operation-evaluation-family-exemplar-recipe" as const,
     status: "provisional-human-checkpoint" as const,
-    id: "kp.evaluation-recipe.contributor-fusion.review-v1",
+    id: "kp.evaluation-recipe.contributor-fusion.review-v2",
     family: "contributor-fusion" as const,
-    handoff: "contact-occlusion" as const,
-    label: "Contributor fusion",
+    handoff: "compressed-ink-handoff" as const,
+    label: "Ink-knot fusion",
     summary:
-      "Gather both operands and the operator into one bounded contact before " +
-      "the result becomes recognizable.",
-    synthesisSampling: "canonical-successor" as const
-  }),
-  Object.freeze({
-    kind: "operation-evaluation-family-exemplar-recipe" as const,
-    status: "provisional-human-checkpoint" as const,
-    id: "kp.evaluation-recipe.masked-carrier-relay.review-v1",
-    family: "masked-carrier-relay" as const,
-    handoff: "legibility-gated-relay" as const,
-    label: "Masked carrier relay",
-    summary:
-      "Clip the readable inputs into one opaque carrier, then reveal the " +
-      "result only after the input form has fully retired.",
-    sourceClipStartsAt: 0.34,
-    sourceLegibilityEndsAt: 0.5,
-    targetLegibilityStartsAt: 0.56,
-    targetRevealEndsAt: 0.78
+      "Gather the native operand and operator ink into one compact knot, " +
+      "then expand the result from that same measured locus.",
+    synthesisSampling: "canonical-successor" as const,
+    gatherStartsAt: 0.18,
+    compressionStartsAt: 0.38,
+    sourceKernelStartsAt: 0.48,
+    ownershipHandoffAt: 0.52,
+    targetLegibilityStartsAt: 0.58,
+    targetExpansionEndsAt: 0.7,
+    kernelAreaRatio: 0.1
   })
 ]);
 

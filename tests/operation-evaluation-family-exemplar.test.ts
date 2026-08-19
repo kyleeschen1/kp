@@ -19,8 +19,7 @@ test("the provisional comparison closes each family to one honest handoff", () =
     [
       { family: "punctuated-substitution", handoff: "discrete-cut" },
       { family: "result-reception", handoff: "progressive-replacement" },
-      { family: "contributor-fusion", handoff: "contact-occlusion" },
-      { family: "masked-carrier-relay", handoff: "legibility-gated-relay" }
+      { family: "contributor-fusion", handoff: "compressed-ink-handoff" }
     ]
   );
   assert.equal(
@@ -35,16 +34,19 @@ test("the provisional comparison closes each family to one honest handoff", () =
       family
     );
   }
-  const masked = resolveKpOperationEvaluationFamilyExemplarRecipe(
-    "masked-carrier-relay"
+  const fusion = resolveKpOperationEvaluationFamilyExemplarRecipe(
+    "contributor-fusion"
   );
-  assert.equal(masked.family, "masked-carrier-relay");
-  if (masked.family === "masked-carrier-relay") {
-    assert.ok(masked.sourceClipStartsAt < masked.sourceLegibilityEndsAt);
+  assert.equal(fusion.family, "contributor-fusion");
+  if (fusion.family === "contributor-fusion") {
+    assert.ok(fusion.gatherStartsAt < fusion.compressionStartsAt);
+    assert.ok(fusion.compressionStartsAt < fusion.sourceKernelStartsAt);
+    assert.ok(fusion.sourceKernelStartsAt < fusion.ownershipHandoffAt);
+    assert.ok(fusion.ownershipHandoffAt < fusion.targetLegibilityStartsAt);
     assert.ok(
-      masked.sourceLegibilityEndsAt < masked.targetLegibilityStartsAt
+      fusion.targetLegibilityStartsAt < fusion.targetExpansionEndsAt
     );
-    assert.ok(masked.targetLegibilityStartsAt < masked.targetRevealEndsAt);
+    assert.ok(fusion.kernelAreaRatio > 0 && fusion.kernelAreaRatio < 1);
   }
 });
 
