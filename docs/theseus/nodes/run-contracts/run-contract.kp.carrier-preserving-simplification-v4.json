@@ -95,7 +95,8 @@
     {
       "id": "cps08",
       "title": "Add-native-katex-optical-profile",
-      "status": "planned"
+      "summary": "Added the deeply frozen candidate Native KaTeX optical profile, pure history-free sampler, bounded removal treatment, continuous-carrier invariant, and contributor-fusion preservation coverage.",
+      "status": "complete"
     },
     {
       "id": "cps09",

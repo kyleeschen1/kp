@@ -148,11 +148,32 @@
       "scope": "cps07",
       "checkedAt": "2026-08-19T22:03:24.453Z",
       "notes": "Renderer-neutral recipe and focused fixtures typecheck."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps08",
+      "checkedAt": "2026-08-19T22:08:51.078Z",
+      "notes": "13/13 semantic, recipe, provisional optical-profile, bounded sampling, deterministic seek/rewind, and carrier-presence assertions pass."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps08",
+      "checkedAt": "2026-08-19T22:08:52.886Z",
+      "notes": "13/13 approved contributor-fusion and candidate-selection preservation assertions pass; the promoted optical profile remains unchanged."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps08",
+      "checkedAt": "2026-08-19T22:08:54.782Z",
+      "notes": "The candidate Native KaTeX profile and pure sampler typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Verified carrier authority now compiles deterministically into a recipe that owns semantic roles, paint topology, measured anchor/baseline policy, stationary context, and native settlement refs—without presentation values."
+    "summary": "Carrier-preserving simplification now has one provisional Native KaTeX tuning surface: the carrier remains continuously present while the verified removal cohort yields through bounded, deterministic renderer-owned sampling."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
