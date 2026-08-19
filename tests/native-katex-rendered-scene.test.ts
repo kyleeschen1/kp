@@ -11,7 +11,12 @@ import {
   type KpNativeKatexPaintAtomObservation
 } from "../src/rendering/native-katex-rendered-scene.ts";
 import {
+  compileKpNativeKatexEndpointOwnershipObservation,
+  createKpNativeKatexEndpointOwnershipView
+} from "../src/rendering/native-katex-endpoint-ownership.ts";
+import {
   assessKpNativeKatexTypographyHandoff,
+  compileKpCanonicalNativeKatexScenePlan,
   compileKpNativeKatexTypographyStylePlan,
   correlateKpNativeKatexSceneHandoff,
   createKpNativeKatexRendererSession,
@@ -102,6 +107,152 @@ test("rendered endpoint handles are immutable physical session authority", () =>
     current: { ...handle.revision, viewportKey: "phone@font-2" }
   }), /replace it outside active sampling/);
   assert.strictEqual(handle.observation, observation);
+});
+
+test("endpoint ownership views partition the same handle into compound or leaf owners", () => {
+  const left = atom("atom.source.left", "group.left");
+  const right = {
+    ...atom("atom.source.right", "group.right"),
+    semanticEntityId: "entity.y",
+    rect: { left: 30, top: 20, width: 12, height: 24 },
+    zOrder: 1
+  };
+  const observation = createKpNativeKatexRenderedSceneObservation({
+    endpoint: "source",
+    stage,
+    root,
+    atoms: [left, right],
+    groups: [{
+      id: "group.left",
+      semanticEntityId: "entity.x",
+      parentGroupId: "group.compound",
+      atomIds: [left.id],
+      rect: left.rect
+    }, {
+      id: "group.right",
+      semanticEntityId: "entity.y",
+      parentGroupId: "group.compound",
+      atomIds: [right.id],
+      rect: right.rect
+    }, {
+      id: "group.compound",
+      semanticEntityId: "entity.xy",
+      atomIds: [left.id, right.id],
+      rect: { left: 10, top: 20, width: 32, height: 24 }
+    }],
+    fontRevision: 2,
+    viewportKey: "wide"
+  });
+  const handle = createKpNativeKatexRenderedEndpointHandle({ observation });
+  const leaves = createKpNativeKatexEndpointOwnershipView({
+    handle,
+    endpoint: "source"
+  });
+  const compound = createKpNativeKatexEndpointOwnershipView({
+    handle,
+    endpoint: "target",
+    collapsedGroupIds: ["group.compound"]
+  });
+
+  assert.deepEqual(leaves.owners.map(({ kind }) => kind), ["leaf", "leaf"]);
+  assert.deepEqual(compound.owners.map(({ kind }) => kind), ["compound"]);
+  assert.deepEqual(compound.leafAtomIds, leaves.leafAtomIds);
+  assert.strictEqual(compound.handle, leaves.handle);
+  assert.equal(Object.isFrozen(compound.owners), true);
+  assert.equal(Object.isFrozen(compound.owners[0]?.leafAtomIds), true);
+  assert.throws(() => createKpNativeKatexEndpointOwnershipView({
+    handle,
+    endpoint: "target",
+    collapsedGroupIds: ["group.compound", "group.left"]
+  }), /cannot own overlapping leaf paint/);
+});
+
+test("ownership views compile from cached evidence without DOM reads or mutation", () => {
+  const compoundElement = {
+    ownerDocument,
+    getBoundingClientRect(): never {
+      throw new Error("ownership projection remeasured native DOM");
+    }
+  } as unknown as HTMLElement;
+  const left = atom("atom.source.left", "group.compound");
+  const right = {
+    ...atom("atom.source.right", "group.compound"),
+    semanticEntityId: "entity.y",
+    rect: { left: 30, top: 20, width: 12, height: 24 },
+    zOrder: 1
+  };
+  const observation = createKpNativeKatexRenderedSceneObservation({
+    endpoint: "source",
+    stage,
+    root,
+    atoms: [left, right],
+    groups: [{
+      id: "group.compound",
+      semanticEntityId: "entity.xy",
+      atomIds: [left.id, right.id],
+      rect: { left: 10, top: 20, width: 32, height: 24 },
+      sourceElement: compoundElement,
+      styleFingerprint: "font-family:KaTeX_Main"
+    }],
+    fontRevision: 2,
+    viewportKey: "wide"
+  });
+  const handle = createKpNativeKatexRenderedEndpointHandle({ observation });
+  const leafObservation = compileKpNativeKatexEndpointOwnershipObservation(
+    createKpNativeKatexEndpointOwnershipView({
+      handle,
+      endpoint: "source"
+    })
+  );
+  const compoundObservation = compileKpNativeKatexEndpointOwnershipObservation(
+    createKpNativeKatexEndpointOwnershipView({
+      handle,
+      endpoint: "target",
+      collapsedGroupIds: ["group.compound"]
+    })
+  );
+
+  assert.equal(leafObservation.atoms.length, 2);
+  assert.equal(compoundObservation.atoms.length, 1);
+  assert.strictEqual(compoundObservation.atoms[0]?.sourceElement, compoundElement);
+  assert.deepEqual(compoundObservation.atoms[0]?.rect, {
+    left: 10,
+    top: 20,
+    width: 32,
+    height: 24
+  });
+  assert.equal(compoundObservation.viewportKey, observation.viewportKey);
+  assert.deepEqual(observation.atoms.map(({ id }) => id), [
+    "atom.source.left",
+    "atom.source.right"
+  ]);
+
+  const plan = compileKpCanonicalNativeKatexScenePlan({
+    source: createKpNativeKatexEndpointOwnershipView({
+      handle,
+      endpoint: "source"
+    }),
+    target: createKpNativeKatexEndpointOwnershipView({
+      handle,
+      endpoint: "target"
+    }),
+    relations: [{
+      id: "paint.x",
+      relation: "persist",
+      sourceEntityIds: ["entity.x"],
+      targetEntityIds: ["entity.x"]
+    }, {
+      id: "paint.y",
+      relation: "persist",
+      sourceEntityIds: ["entity.y"],
+      targetEntityIds: ["entity.y"]
+    }],
+    fanInRouting: false,
+    copyFanOutRouting: false
+  });
+  assert.equal(plan.reconciliation.source.endpoint, "source");
+  assert.equal(plan.reconciliation.target.endpoint, "target");
+  assert.equal(plan.reconciliation.dispositions.length, 2);
 });
 
 test("endpoint dwell reaches the exact target pose before native settlement", () => {

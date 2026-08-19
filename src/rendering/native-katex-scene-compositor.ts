@@ -3,8 +3,13 @@ import {
   measureKpStageRelativeRectDelta as rectDelta,
   type KpNativeKatexHandoffTelemetry,
   type KpNativeKatexPaintAtomObservation,
+  type KpNativeKatexRenderedEndpointHandle,
   type KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  compileKpNativeKatexEndpointOwnershipObservation,
+  type KpNativeKatexEndpointOwnershipView
+} from "./native-katex-endpoint-ownership.ts";
 import {
   normalizeKpStageRelativeRect,
   type KpStageRelativeRect
@@ -105,8 +110,8 @@ export interface KpCanonicalNativeKatexPureScenePlan {
 }
 
 export interface KpCanonicalNativeKatexSceneInput {
-  readonly source: KpNativeKatexRenderedSceneObservation;
-  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly source: KpCanonicalNativeKatexEndpointInput;
+  readonly target: KpCanonicalNativeKatexEndpointInput;
   readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
   readonly structuralSuccession?: KpEquationStructuralSuccessionIntent;
   readonly structuralMotion?: "full" | "checkpoint";
@@ -124,6 +129,19 @@ export interface KpCanonicalNativeKatexSceneInput {
   readonly stageOccupancy?: O;
   readonly purePlan?: KpCanonicalNativeKatexPureScenePlan | undefined;
 }
+
+export type KpCanonicalNativeKatexEndpointInput =
+  | KpNativeKatexRenderedSceneObservation
+  | KpNativeKatexRenderedEndpointHandle
+  | KpNativeKatexEndpointOwnershipView;
+
+type KpResolvedCanonicalNativeKatexSceneInput = Omit<
+  KpCanonicalNativeKatexSceneInput,
+  "source" | "target"
+> & {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+};
 
 export function sampleKpNativeKatexEndpointDwellProgress(
   progress: number,
@@ -1194,13 +1212,14 @@ export function createKpNativeKatexRendererSession(input: {
 export function compileKpCanonicalNativeKatexPureScenePlan(
   input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
 ): KpCanonicalNativeKatexPureScenePlan {
+  const resolved = resolveKpCanonicalNativeKatexSceneInput(input);
   const { prepared, protectedTransit } =
-    compileKpCanonicalNativeKatexProtectedPlan(input);
+    compileKpCanonicalNativeKatexProtectedPlan(resolved);
   return Object.freeze({
     kind: "canonical-native-katex-pure-scene-plan",
     lifecycle: "pure-measured-plan",
     inputTrackSignature: prepared.inputTrackSignature,
-    inputGeometry: pureSceneInputGeometry(input),
+    inputGeometry: pureSceneInputGeometry(resolved),
     tracks: protectedTransit.tracks,
     protectedTransit: protectedTransit.certificate
   });
@@ -1209,11 +1228,12 @@ export function compileKpCanonicalNativeKatexPureScenePlan(
 export function compileKpCanonicalNativeKatexScenePlan(
   input: KpCanonicalNativeKatexSceneInput
 ): KpNativeKatexRendererReadyScenePlan {
-  if (input.source.stage !== input.target.stage) {
+  const resolved = resolveKpCanonicalNativeKatexSceneInput(input);
+  if (resolved.source.stage !== resolved.target.stage) {
     throw new Error("Canonical native KaTeX endpoints must share one stage.");
   }
   const { prepared, protectedTransit } =
-    compileKpCanonicalNativeKatexProtectedPlan(input);
+    compileKpCanonicalNativeKatexProtectedPlan(resolved);
   const {
     reconciliation,
     hierarchy,
@@ -1234,8 +1254,8 @@ export function compileKpCanonicalNativeKatexScenePlan(
     hierarchy,
     tracks: attachKpNativeKatexTrackPaintGeometry({
       tracks,
-      source: input.source,
-      target: input.target
+      source: resolved.source,
+      target: resolved.target
     }),
     protectedTransit: protectedTransit.certificate,
     disposition: decideKpNativeKatexRendererDisposition({
@@ -1441,7 +1461,7 @@ export function createKpCanonicalNativeKatexSceneSession(
 }
 
 function compileKpCanonicalNativeKatexProtectedPlan(
-  input: KpCanonicalNativeKatexSceneInput
+  input: KpResolvedCanonicalNativeKatexSceneInput
 ) {
   const prepared = prepareKpCanonicalNativeKatexScene(input);
   const cached = input.purePlan;
@@ -1505,7 +1525,7 @@ function assertKpNativeKatexPaintPreservingRetirement(
 }
 
 function prepareKpCanonicalNativeKatexScene(
-  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+  input: Omit<KpResolvedCanonicalNativeKatexSceneInput, "purePlan">
 ) {
   const reconciliation = reconcileKpNativeKatexScenes({
     source: input.source,
@@ -1570,7 +1590,7 @@ function prepareKpCanonicalNativeKatexScene(
 }
 
 function pureSceneInputSignature(
-  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+  input: Omit<KpResolvedCanonicalNativeKatexSceneInput, "purePlan">
 ): string {
   const atoms = (scene: KpNativeKatexRenderedSceneObservation) =>
     scene.atoms.map((atom) => ({
@@ -1647,7 +1667,7 @@ function applyHorizontalAxisConstraints(input: {
 }
 
 function pureSceneInputGeometry(
-  input: Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+  input: Omit<KpResolvedCanonicalNativeKatexSceneInput, "purePlan">
 ): readonly number[] {
   const rect = (value: KpStageRelativeRect): readonly number[] => [
     value.left,
@@ -1663,6 +1683,29 @@ function pureSceneInputGeometry(
       ? []
       : rect(input.stageOccupancy.protectedCorridor))
   ]);
+}
+
+function resolveKpCanonicalNativeKatexSceneInput(
+  input: KpCanonicalNativeKatexSceneInput |
+    Omit<KpCanonicalNativeKatexSceneInput, "purePlan">
+): KpResolvedCanonicalNativeKatexSceneInput {
+  return {
+    ...input,
+    source: resolveKpCanonicalNativeKatexEndpointInput(input.source),
+    target: resolveKpCanonicalNativeKatexEndpointInput(input.target)
+  };
+}
+
+export function resolveKpCanonicalNativeKatexEndpointInput(
+  endpoint: KpCanonicalNativeKatexEndpointInput
+): KpNativeKatexRenderedSceneObservation {
+  if (endpoint.kind === "native-katex-rendered-scene-observation") {
+    return endpoint;
+  }
+  if (endpoint.kind === "native-katex-rendered-endpoint-handle") {
+    return endpoint.observation;
+  }
+  return compileKpNativeKatexEndpointOwnershipObservation(endpoint);
 }
 
 function pureSceneGeometryMatches(

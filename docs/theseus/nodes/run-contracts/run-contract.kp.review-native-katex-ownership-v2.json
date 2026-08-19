@@ -111,37 +111,44 @@
     {
       "id": "r10",
       "title": "Add-hierarchical-compound-leaf-views",
-      "status": "planned"
+      "summary": "Added immutable compound/leaf ownership views over one endpoint handle with exhaustive, unique native-leaf ownership.",
+      "status": "complete"
     },
     {
       "id": "r11",
       "title": "Compile-views-without-rebind-or-remeasure",
-      "status": "planned"
+      "summary": "Compiled compound/leaf views solely from cached atom/group evidence; no DOM rebind, mutation, or geometry read is performed.",
+      "status": "complete"
     },
     {
       "id": "r12",
       "title": "Adapt-canonical-scene-planning-to-handles",
-      "status": "planned"
+      "summary": "Adapted canonical Native KaTeX planning to handles/views while preserving every existing observation caller and plan behavior.",
+      "status": "complete"
     },
     {
       "id": "r13",
       "title": "Adapt-fraction-equivalence-transit-to-handles",
-      "status": "planned"
+      "summary": "Fraction-equivalence transit now resolves observations, handles, or ownership views through the shared canonical boundary without changing relations or timing.",
+      "status": "complete"
     },
     {
       "id": "r14",
       "title": "Define-adjacent-phase-seam-certificate",
-      "status": "planned"
+      "summary": "Added a renderer-neutral adjacent-phase equivalent-pose seam intent and Native KaTeX certificate evidence types.",
+      "status": "complete"
     },
     {
       "id": "r15",
       "title": "Validate-equivalent-pose-per-leaf",
-      "status": "planned"
+      "summary": "Added fail-closed Native KaTeX seam validation and an ephemeral certificate only when every semantic paint leaf and revision agrees.",
+      "status": "complete"
     },
     {
       "id": "r16",
       "title": "Extend-paint-continuity-diagnostics",
-      "status": "planned"
+      "summary": "Extended renderer-neutral paint diagnostics with adjacent-phase seam failure classes and focused positive/adversarial tests.",
+      "status": "complete"
     },
     {
       "id": "r17",

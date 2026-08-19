@@ -14,11 +14,11 @@ import {
 import {
   compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession,
+  resolveKpCanonicalNativeKatexEndpointInput,
+  type KpCanonicalNativeKatexEndpointInput,
   type KpCanonicalNativeKatexSceneSession,
   type KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
-import type { KpNativeKatexRenderedSceneObservation } from
-  "./native-katex-rendered-scene.ts";
 import {
   createKpNativeKatexTrackProjection,
   type KpNativeKatexTrackProjection
@@ -136,17 +136,19 @@ export function createKpFractionEquivalenceJoinTrackProjection(input: {
 }
 
 export function createKpFractionEquivalenceTransitSession(input: {
-  readonly source: KpNativeKatexRenderedSceneObservation;
-  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly source: KpCanonicalNativeKatexEndpointInput;
+  readonly target: KpCanonicalNativeKatexEndpointInput;
   readonly semantic?: KpVerifiedFractionEquivalence | undefined;
   readonly presentation?: KpFractionEquivalencePresentationPlan | undefined;
   readonly contextRelations?:
     readonly KpNativeKatexSemanticPaintRelation[] | undefined;
 }): KpFractionEquivalenceTransitSession {
+  const source = resolveKpCanonicalNativeKatexEndpointInput(input.source);
+  const target = resolveKpCanonicalNativeKatexEndpointInput(input.target);
   if (
-    input.source.endpoint !== "source" ||
-    input.target.endpoint !== "target" ||
-    input.source.stage !== input.target.stage
+    source.endpoint !== "source" ||
+    target.endpoint !== "target" ||
+    source.stage !== target.stage
   ) {
     throw new Error(
       "Fraction-equivalence transit requires one shared measured stage."
@@ -174,8 +176,8 @@ export function createKpFractionEquivalenceTransitSession(input: {
     relations
   });
   const plan = compileKpCanonicalNativeKatexScenePlan({
-    source: input.source,
-    target: input.target,
+    source,
+    target,
     relations,
     // Generic fan-in clears context before merging. Fraction multiplication is
     // one composite join, so terms and bars instead share the cohort clock.

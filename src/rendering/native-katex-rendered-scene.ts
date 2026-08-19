@@ -9,6 +9,9 @@ import type {
 import {
   kpEquationSettlementTolerancePx
 } from "../animation/equation-shared-presentation-policy.ts";
+import {
+  measureKpNativeKatexBaselineY
+} from "./native-katex-paint-geometry.ts";
 
 export type KpNativeKatexPaintKind =
   | "glyph"
@@ -28,6 +31,7 @@ export interface KpNativeKatexPaintAtomObservation {
   readonly visualKey: string;
   readonly sourceElement: HTMLElement;
   readonly rect: KpStageRelativeRect;
+  readonly baselineY?: number | null | undefined;
   readonly styleFingerprint: string;
   readonly zOrder: number;
   readonly fontRevision: number;
@@ -39,6 +43,9 @@ export interface KpNativeKatexPresentationGroupObservation {
   readonly parentGroupId?: string | undefined;
   readonly atomIds: readonly string[];
   readonly rect: KpStageRelativeRect;
+  readonly sourceElement?: HTMLElement | undefined;
+  readonly styleFingerprint?: string | undefined;
+  readonly baselineY?: number | null | undefined;
 }
 
 export interface KpNativeKatexRenderedSceneObservation {
@@ -362,6 +369,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(
         stageLayoutHeight,
         fragmentClientRect: clientRect
       }),
+      baselineY: measureKpNativeKatexBaselineY(input.stage, sourceElement),
       styleFingerprint: fingerprintKpNativeKatexPaintStyle(computed),
       zOrder: ordinal,
       fontRevision: input.fontRevision
@@ -416,6 +424,7 @@ export function observeKpNativeKatexPaintAtoms(input:
         stageLayoutHeight,
         fragmentClientRect: clientRect
       }),
+      baselineY: null,
       styleFingerprint: fingerprintKpNativeKatexPaintStyle(computed),
       zOrder: glyphs.length + ordinal,
       fontRevision: input.fontRevision
@@ -497,6 +506,14 @@ export function createKpNativeKatexRenderedSceneObservation(input: {
       if (!atomIds.has(atomId)) {
         throw new Error(`Presentation group ${group.id} references unknown atom ${atomId}.`);
       }
+    }
+    if (
+      group.sourceElement !== undefined &&
+      group.sourceElement.ownerDocument !== input.stage.ownerDocument
+    ) {
+      throw new Error(
+        `Presentation group ${group.id} belongs to another document.`
+      );
     }
   }
   return Object.freeze({
@@ -595,7 +612,12 @@ export function observeKpNativeKatexRenderedScene(input: {
         ? {}
         : { parentGroupId: parent.dataset["kpPresentationGroupId"] }),
       atomIds: groupAtoms.map(({ id }) => id),
-      rect: unionKpStageRelativeRects(groupAtoms.map(({ rect }) => rect))
+      rect: unionKpStageRelativeRects(groupAtoms.map(({ rect }) => rect)),
+      sourceElement: owner,
+      styleFingerprint: fingerprintKpNativeKatexPaintStyle(
+        getComputedStyle(owner)
+      ),
+      baselineY: measureKpNativeKatexBaselineY(input.stage, owner)
     };
   });
   const stageRect = input.stage.getBoundingClientRect();

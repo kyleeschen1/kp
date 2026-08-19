@@ -102,6 +102,62 @@
       "scope": "slice r09 endpoint revision invalidation",
       "checkedAt": "2026-08-19T14:18:30.553Z",
       "notes": "Focused tests cover current, stale-font, stale-viewport, and combined stale states while the original handle remains unchanged."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice r10 compound and leaf ownership views",
+      "checkedAt": "2026-08-19T14:20:49.474Z",
+      "notes": "A compound or leaf view partitions every measured paint atom exactly once and rejects overlapping collapsed groups."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slices r11-r12 ownership projection and compositor adapter",
+      "checkedAt": "2026-08-19T14:25:08.568Z",
+      "notes": "77 focused tests pass; cached ownership projection preserves the base observation and canonical planning accepts views."
+    },
+    {
+      "command": "tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice r12 compatibility typecheck",
+      "checkedAt": "2026-08-19T14:25:09.683Z",
+      "notes": "Application TypeScript accepts legacy observations plus endpoint handles and ownership views."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-exemplar",
+      "status": "passed",
+      "scope": "slice r13 fraction-equivalence handle adapter",
+      "checkedAt": "2026-08-19T14:27:11.964Z",
+      "notes": "18 semantic and presentation tests pass with unchanged endpoint and join-plan authority."
+    },
+    {
+      "command": "tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "slice r13 handle/view transit compatibility",
+      "checkedAt": "2026-08-19T14:27:13.056Z",
+      "notes": "Fraction transit accepts the shared endpoint input union while legacy callers remain valid."
+    },
+    {
+      "command": "node --test paint-continuity-plan-validator",
+      "status": "passed",
+      "scope": "slice r14 renderer-neutral seam intent",
+      "checkedAt": "2026-08-19T14:29:29.926Z",
+      "notes": "Seam intent contains only phase identity, semantic-leaf identity, exclusive ownership, and equivalent-pose topology."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice r15 per-leaf equivalent-pose certificate",
+      "checkedAt": "2026-08-19T14:31:35.232Z",
+      "notes": "79 tests pass, including verified shared-handle compound-to-leaf views and adversarial inventory, rect, baseline, style, paint, font, and viewport drift."
+    },
+    {
+      "command": "node --test paint-continuity-diagnostics",
+      "status": "passed",
+      "scope": "slice r16 adjacent-phase diagnostics",
+      "checkedAt": "2026-08-19T14:32:37.674Z",
+      "notes": "Focused diagnostics cover blank intervals, competing complete states, duplicate owners, and per-leaf pose drift without adding aesthetic timing policy."
     }
   ],
   "progress": {

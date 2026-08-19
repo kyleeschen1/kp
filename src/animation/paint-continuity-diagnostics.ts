@@ -39,7 +39,11 @@ export type KpPaintContinuityDiagnosticCode =
   | "paint.owner-displacement"
   | "paint.owner-style"
   | "paint.owner-structure"
-  | "paint.owner-scale-skew";
+  | "paint.owner-scale-skew"
+  | "paint.blank-interval"
+  | "paint.competing-complete-states"
+  | "paint.duplicate-owner"
+  | "paint.leaf-pose-drift";
 
 export interface KpPaintContinuityDiagnostic {
   readonly code: KpPaintContinuityDiagnosticCode;
@@ -53,6 +57,104 @@ export interface KpPaintContinuityBoundaryReport {
   readonly boundaryProgress: number;
   readonly sampleProgresses: readonly [number, number, number];
   readonly diagnostics: readonly KpPaintContinuityDiagnostic[];
+}
+
+export interface KpAdjacentPhasePaintLeafSnapshot {
+  readonly leafId: string;
+  readonly ownerIds: readonly string[];
+  readonly visible: boolean;
+  readonly poseFingerprint: string;
+}
+
+export interface KpAdjacentPhasePaintSnapshot {
+  readonly stateId: string;
+  readonly leaves: readonly KpAdjacentPhasePaintLeafSnapshot[];
+}
+
+export interface KpAdjacentPhasePaintDiagnosticReport {
+  readonly lawId: "paint-continuity.adjacent-phase-seam";
+  readonly passed: boolean;
+  readonly diagnostics: readonly KpPaintContinuityDiagnostic[];
+}
+
+export function evaluateKpAdjacentPhasePaintSeam(input: {
+  readonly from: KpAdjacentPhasePaintSnapshot;
+  readonly to: KpAdjacentPhasePaintSnapshot;
+  readonly simultaneouslyCompleteStateIds?: readonly string[] | undefined;
+}): KpAdjacentPhasePaintDiagnosticReport {
+  const diagnostics: KpPaintContinuityDiagnostic[] = [];
+  const completeStateIds = [
+    ...new Set(input.simultaneouslyCompleteStateIds ?? [])
+  ];
+  if (completeStateIds.length > 1) {
+    diagnostics.push({
+      code: "paint.competing-complete-states",
+      path: "simultaneouslyCompleteStateIds",
+      message:
+        `Adjacent seam exposes competing complete states: ` +
+        `${completeStateIds.join(", ")}.`
+    });
+  }
+  const fromLeaves = indexAdjacentLeaves(input.from, "from", diagnostics);
+  const toLeaves = indexAdjacentLeaves(input.to, "to", diagnostics);
+  const leafIds = [...new Set([...fromLeaves.keys(), ...toLeaves.keys()])];
+  for (const leafId of leafIds) {
+    const from = fromLeaves.get(leafId);
+    const to = toLeaves.get(leafId);
+    if (from === undefined || to === undefined || !from.visible || !to.visible) {
+      diagnostics.push({
+        code: "paint.blank-interval",
+        path: `leaves.${leafId}`,
+        message:
+          `Semantic paint leaf ${leafId} is absent from one side of the seam.`
+      });
+      continue;
+    }
+    if (from.poseFingerprint !== to.poseFingerprint) {
+      diagnostics.push({
+        code: "paint.leaf-pose-drift",
+        path: `leaves.${leafId}.poseFingerprint`,
+        message:
+          `Semantic paint leaf ${leafId} changes physical pose at the seam.`
+      });
+    }
+  }
+  return Object.freeze({
+    lawId: "paint-continuity.adjacent-phase-seam",
+    passed: diagnostics.length === 0,
+    diagnostics: Object.freeze(diagnostics.map((diagnostic) =>
+      Object.freeze(diagnostic)
+    ))
+  });
+}
+
+function indexAdjacentLeaves(
+  snapshot: KpAdjacentPhasePaintSnapshot,
+  side: "from" | "to",
+  diagnostics: KpPaintContinuityDiagnostic[]
+): ReadonlyMap<string, KpAdjacentPhasePaintLeafSnapshot> {
+  const leaves = new Map<string, KpAdjacentPhasePaintLeafSnapshot>();
+  snapshot.leaves.forEach((leaf, index) => {
+    if (leaves.has(leaf.leafId)) {
+      diagnostics.push({
+        code: "paint.duplicate-owner",
+        path: `${side}.leaves[${index}].leafId`,
+        message: `Semantic paint leaf ${leaf.leafId} is duplicated.`
+      });
+    } else {
+      leaves.set(leaf.leafId, leaf);
+    }
+    if (leaf.ownerIds.length !== 1) {
+      diagnostics.push({
+        code: "paint.duplicate-owner",
+        path: `${side}.leaves[${index}].ownerIds`,
+        message:
+          `Semantic paint leaf ${leaf.leafId} requires exactly one owner; ` +
+          `received ${leaf.ownerIds.length}.`
+      });
+    }
+  });
+  return leaves;
 }
 
 /**

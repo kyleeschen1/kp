@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  evaluateKpAdjacentPhasePaintSeam,
   evaluateKpPaintContinuityBoundary,
   type KpPaintContinuityObservation
 } from "../src/animation/paint-continuity-diagnostics.ts";
@@ -28,6 +29,66 @@ const plan = {
   endpointSettlement: "native-source-and-target",
   nonZeroPaint: "opaque"
 } as unknown as KpVerifiedPaintContinuityPlan;
+
+test("adjacent-phase diagnostics expose ownership and leaf-pose seam failures", () => {
+  const report = evaluateKpAdjacentPhasePaintSeam({
+    from: {
+      stateId: "state.introduction-target",
+      leaves: [{
+        leafId: "leaf.2",
+        ownerIds: ["owner.compound", "owner.leaf"],
+        visible: true,
+        poseFingerprint: "x:10|y:20|baseline:40"
+      }, {
+        leafId: "leaf.bar",
+        ownerIds: ["owner.compound"],
+        visible: true,
+        poseFingerprint: "x:9|y:42|w:12"
+      }]
+    },
+    to: {
+      stateId: "state.equivalence-source",
+      leaves: [{
+        leafId: "leaf.2",
+        ownerIds: ["owner.leaf"],
+        visible: true,
+        poseFingerprint: "x:12|y:20|baseline:40"
+      }, {
+        leafId: "leaf.denominator",
+        ownerIds: ["owner.leaf"],
+        visible: false,
+        poseFingerprint: "x:10|y:44|baseline:60"
+      }]
+    },
+    simultaneouslyCompleteStateIds: [
+      "state.introduction-target",
+      "state.equivalence-source"
+    ]
+  });
+
+  assert.equal(report.passed, false);
+  const codes = new Set(report.diagnostics.map(({ code }) => code));
+  assert.equal(codes.has("paint.duplicate-owner"), true);
+  assert.equal(codes.has("paint.competing-complete-states"), true);
+  assert.equal(codes.has("paint.blank-interval"), true);
+  assert.equal(codes.has("paint.leaf-pose-drift"), true);
+});
+
+test("adjacent-phase diagnostics accept one visible owner at an identical pose", () => {
+  const leaf = {
+    leafId: "leaf.2",
+    ownerIds: ["owner.factor"],
+    visible: true,
+    poseFingerprint: "x:10|y:20|baseline:40"
+  };
+  const report = evaluateKpAdjacentPhasePaintSeam({
+    from: { stateId: "state.from", leaves: [leaf] },
+    to: { stateId: "state.to", leaves: [leaf] },
+    simultaneouslyCompleteStateIds: ["state.to"]
+  });
+  assert.equal(report.passed, true);
+  assert.deepEqual(report.diagnostics, []);
+});
 
 function observation(input: {
   readonly id: string;

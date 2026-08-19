@@ -13,12 +13,34 @@ import {
   createKpOperationPresentationGroup,
   createKpOperationPresentationRoles
 } from "../src/animation/operation-presentation-roles.ts";
-import type {
-  KpPaintContinuityPlanDraft
+import {
+  createKpAdjacentPhaseEquivalentPoseSeamIntent,
+  type KpPaintContinuityPlanDraft
 } from "../src/animation/paint-continuity-plan-types.ts";
 import {
   validateAndMintKpPaintContinuityPlan
 } from "../src/animation/paint-continuity-plan-validator.ts";
+
+test("adjacent-phase seam intent is renderer-neutral and immutable", () => {
+  const intent = createKpAdjacentPhaseEquivalentPoseSeamIntent({
+    id: "seam.stage-to-join",
+    fromPhaseId: "phase.stage-unit-factor",
+    toPhaseId: "phase.join-equivalent-fraction"
+  });
+  assert.equal(intent.topology, "paint-equivalent-pose");
+  assert.equal(intent.identity, "semantic-leaf");
+  assert.equal(intent.ownership, "exclusive");
+  assert.equal(Object.isFrozen(intent), true);
+  assert.deepEqual(Object.keys(intent).sort(), [
+    "fromPhaseId",
+    "id",
+    "identity",
+    "ownership",
+    "schemaVersion",
+    "toPhaseId",
+    "topology"
+  ]);
+});
 
 function operationPlan(): KpVerifiedOperationPresentationPlan {
   const left = createKpOperationPresentationBundle({

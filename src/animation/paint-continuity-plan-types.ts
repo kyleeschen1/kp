@@ -45,3 +45,36 @@ export type KpVerifiedPaintContinuityPlan =
   KpPaintContinuityPlanDraft & {
     readonly [kpVerifiedPaintContinuityPlanAuthority]: true;
   };
+
+/** Renderer-neutral intent; physical pose evidence remains renderer-owned. */
+export interface KpAdjacentPhaseEquivalentPoseSeamIntent {
+  readonly schemaVersion: "kp.adjacent-phase-equivalent-pose-seam.v1";
+  readonly id: string;
+  readonly fromPhaseId: string;
+  readonly toPhaseId: string;
+  readonly topology: "paint-equivalent-pose";
+  readonly identity: "semantic-leaf";
+  readonly ownership: "exclusive";
+}
+
+export function createKpAdjacentPhaseEquivalentPoseSeamIntent(input: {
+  readonly id: string;
+  readonly fromPhaseId: string;
+  readonly toPhaseId: string;
+}): KpAdjacentPhaseEquivalentPoseSeamIntent {
+  for (const [label, value] of Object.entries(input)) {
+    if (value.trim() === "") {
+      throw new Error(`Adjacent-phase seam ${label} must not be empty.`);
+    }
+  }
+  if (input.fromPhaseId === input.toPhaseId) {
+    throw new Error("Adjacent-phase seam must connect distinct phases.");
+  }
+  return Object.freeze({
+    schemaVersion: "kp.adjacent-phase-equivalent-pose-seam.v1",
+    ...input,
+    topology: "paint-equivalent-pose",
+    identity: "semantic-leaf",
+    ownership: "exclusive"
+  });
+}
