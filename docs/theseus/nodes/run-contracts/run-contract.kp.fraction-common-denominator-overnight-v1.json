@@ -1,0 +1,179 @@
+{
+  "id": "run-contract.kp.fraction-common-denominator-overnight-v1",
+  "kind": "run-contract",
+  "title": "Fraction",
+  "status": "resolved",
+  "summary": "Superseded before production work because shell tokenization truncated approved multiword contract boundaries; use v2 with the same reviewed source.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-fraction-common-denominator-overnight-long-loop-proposal.md",
+      "summary": "Approved"
+    }
+  ],
+  "verification": [
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm",
+    "npm"
+  ],
+  "allowedWork": [
+    "Development-dock",
+    "Fraction",
+    "Registered",
+    "One",
+    "Catalogue"
+  ],
+  "disallowedWork": [
+    "Changes",
+    "Common-denominator",
+    "New",
+    "Roots,",
+    "User-owned"
+  ],
+  "goal": "Close",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile",
+      "summary": "Reconcile",
+      "status": "in-progress"
+    },
+    {
+      "id": "s02",
+      "title": "Define",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Implement",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Close",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Reconcile",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Encode",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Encode",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Encode",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Register",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Bind",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Expose",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Compile",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Compose",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Define",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Preserve",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Register",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Derive",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Plan",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Compose",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Host",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Generate",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Close",
+      "status": "planned"
+    }
+  ]
+}

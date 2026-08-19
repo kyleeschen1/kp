@@ -2,8 +2,9 @@
   "id": "next-action.kp.converge-planner-vocabulary-binding-v1",
   "kind": "next-action",
   "title": "Converge planner vocabulary and governed binding",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed after the completed 26-slice planner and fraction-equivalence run supplied the required deterministic and pinned-live evidence.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -27,6 +28,10 @@
     "npm run test:equation-series-planner-port",
     "npm run check:architecture"
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Planner vocabulary, governed binding, typed recovery, and the pinned fixed benchmark were completed and verified by run-contract.kp.theme-planner-fraction-equivalence-v2."
+  },
   "expectedLearning": [
     "Whether one canonical planner vocabulary plus deterministic governed-source binding produces repeatable compilable proposals without silent fallback or model-authored authority."
   ],

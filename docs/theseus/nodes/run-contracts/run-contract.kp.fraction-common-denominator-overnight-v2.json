@@ -1,0 +1,178 @@
+{
+  "id": "run-contract.kp.fraction-common-denominator-overnight-v2",
+  "kind": "run-contract",
+  "title": "Fraction common denominator overnight",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-fraction-common-denominator-overnight-long-loop-proposal.md",
+      "summary": "Approved 26-slice overnight contract, scope, verification cadence, stop conditions, and human-checkpoint boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:animation-catalogue-theme",
+    "npm run test:dev-toolbar",
+    "npm run test:fraction-equivalence-semantics",
+    "npm run test:equation-series-fraction-equivalence",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:equation-surface-preservation",
+    "npm run test:selected-surface-capability-declarations",
+    "npm run test:animation-library-display"
+  ],
+  "allowedWork": [
+    "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
+    "Fraction semantics, correspondence, assumptions, typed repair, declarations, governed binding, planner vocabulary, deterministic series compilation, and fixed model-neutral corpus.",
+    "Registered common-denominator alignment and like-denominator combination without claiming animated parity.",
+    "One local presentation plan and native-KaTeX pressure caller composed from approved operations and motifs.",
+    "Catalogue registration, exact URL state, focused capture tooling, project memory, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Changes to or global promotion of approved fraction-equivalence choreography.",
+    "Common-denominator addition choreography before human review.",
+    "New clocks, renderers, compositor branches, universal fraction or CAS schemas, and silent fallbacks.",
+    "Roots, matrices, code, graphs, layout, curriculum, public-product, and live-model work.",
+    "User-owned economics changes and unrelated untracked documents."
+  ],
+  "goal": "Close development-dock dark theming, establish governed common-denominator fraction semantics and authoring, and deliver one conservative native-KaTeX pressure caller for human review.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile control plane",
+      "summary": "Closed the stale completed planner action, superseded the malformed v1 contract before production work, and aligned the approved v2 contract with current roadmap direction.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Define dock theme contract",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Implement dock theme",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Pressure dock in browser",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Close dock evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Reconcile fraction authority",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Define alignment request",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Encode alignment truth",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Encode alignment identity",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Encode alignment repair",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Register alignment declaration",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Bind alignment evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Expose planner vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Compile LaTeX adjacency",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Compose equivalence and evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Define like-denominator combination",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Preserve combination lineage",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Register combination authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add fixed generation corpus",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Derive coverage truth",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Pressure architecture closure",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Plan pressure presentation",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Compose evaluation presentation",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Host native pressure caller",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Generate review evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Close at human checkpoint",
+      "status": "planned"
+    }
+  ]
+}

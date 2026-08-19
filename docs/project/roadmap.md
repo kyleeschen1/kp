@@ -149,8 +149,14 @@ Only this repository sequence is active:
     pinned `gpt-5.6-sol` repetitions passed all 18 fixed-corpus case-runs with
     zero authority attempts, selection mismatches, or silent fallbacks. See
     `reviews/2026-08-19-planner-vocabulary-governed-binding-closeout.md`.
-19. **Fraction equivalence and repartition:** next visual family. Perfect one
-    reversible exemplar and stop for human review before promotion.
+19. **Fraction equivalence and repartition:** approved exemplar complete.
+    Governed truth, native motion, dual presentation, numeric product notation,
+    typed many-to-one bar fusion, and synchronized term/bar arrival passed the
+    human checkpoint. A structurally different second caller is still required
+    before narrow motif promotion.
+20. **Fraction structural pressure:** next. Apply equivalence selectively
+    inside a larger common-denominator expression, stop for human review, and
+    promote only the contracts demonstrated by both callers.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -162,7 +168,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct through governed transform-series authoring | Benchmark generation, then select the next visual family from measured gaps. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; fraction equivalence is an approved governed exemplar awaiting structural pressure | Pressure fraction equivalence inside a larger expression, then proceed to common-denominator composition. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
@@ -171,7 +177,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, and a pinned three-repeat six-case benchmark are stable-green | Preserve the narrow planner boundary; add new capabilities through governed operations and binders, beginning with fraction equivalence. |
+| LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, and a pinned three-repeat six-case benchmark are stable-green | Preserve the narrow planner boundary; route fraction pressure and common-denominator operations through governed binders, then rerun a mixed-series benchmark. |
 
 ## Active Tightening Phase
 

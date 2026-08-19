@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-19
-Current Next Action: encode fraction equivalence as governed semantic truth,
-register one canonical authoring operation, and perfect one reversible
-native-KaTeX exemplar. Stop for human visual review before promotion; do not
-reopen compositor, balanced-operation, or layout work.
+Current Next Action: pressure the approved fraction-equivalence exemplar with
+one structurally different caller inside a larger expression, then stop for
+human review before promoting only the shared contracts the two callers prove.
+Do not reopen compositor, balanced-operation, cross-domain, or layout work.
 
 ## Goal
 
@@ -66,6 +66,12 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
 - Three pinned `gpt-5.6-sol` repetitions passed all 18 fixed-corpus case-runs:
   15 exact supported selections, three explicit abstentions, zero authority
   attempts, zero compiled mismatches, and zero silent fallbacks.
+- Fraction equivalence now has governed semantic truth, one registered
+  authoring operation, typed nonzero assumptions, deterministic native-KaTeX
+  motion, explanatory and compact presentations, explicit numeric product
+  notation, and an approved human checkpoint. Typed many-to-one bar fusion and
+  synchronized term/bar arrival remain exemplar-bounded until a structurally
+  different second caller passes review.
 
 ## Capability Vocabulary
 
@@ -103,9 +109,10 @@ and playable does not mean generally generatable.
 5b. Governed binding convergence: complete through registered source binders,
     narrow orchestration, typed last-valid recovery, reproducible benchmark
     evidence, and a passing pinned three-repeat live run.
-6. Fraction equivalence and repartition: next visual family unless benchmark
-   convergence evidence identifies another fundamental compiler gap.
-7. Common-denominator fraction addition/subtraction and factor cancellation.
+6. Fraction equivalence and repartition: approved exemplar complete; pressure
+   with one structurally different caller before narrow promotion.
+7. Common-denominator fraction addition/subtraction and factor cancellation:
+   next family after fraction-equivalence pressure.
 8. Power, exponent, and root inversion with branches and domain conditions.
 9. Substitution, like-term collection, and common-factor coalescence.
 10. Inequality transformations, explicit branching, absolute value, and
