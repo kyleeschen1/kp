@@ -137,7 +137,8 @@
     {
       "id": "cps15",
       "title": "Canonical-human-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: review natural playback, scrub, seek, rewind, and phone behavior against 2 × 3 → 6; do not begin cps16 without explicit approval.",
+      "status": "in-progress"
     },
     {
       "id": "cps16",

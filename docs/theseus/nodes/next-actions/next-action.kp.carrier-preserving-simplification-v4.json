@@ -295,11 +295,18 @@
       "scope": "cps14",
       "checkedAt": "2026-08-19T23:02:20.728Z",
       "notes": "The stable checkpoint capture entrypoint and manifest schema typecheck."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps15",
+      "checkedAt": "2026-08-19T23:05:10.968Z",
+      "notes": "Validated 1030 nodes and 23569 events with cps15 held at HUMAN_CHECKPOINT and cps16-cps27 untouched pending explicit visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The canonical 2 × 1 → 2 candidate now has a deterministic 32-state review packet, machine-readable carrier/owner diagnostics, responsive/theme/reduced-motion coverage, and a documented live Review route; promotion remains blocked on human judgment."
+    "summary": "HUMAN_CHECKPOINT: canonical 2 × 1 → 2 is live with deterministic wide/phone, dark/light, normal/reduced evidence and working Review capture. Explicit visual approval is required before profile freezing or add-zero pressure."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
