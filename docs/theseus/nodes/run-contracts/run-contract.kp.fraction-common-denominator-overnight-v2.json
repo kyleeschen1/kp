@@ -54,8 +54,26 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T05:26:00.874Z",
       "notes": "All 101 exact-fraction tests passed; existing sealed authority already covers explicit 2/2 refinement, common-denominator alignment, contributor merge, native fraction structure, direct seek, and rewind. The remaining gap is governed equation-series authoring and composition."
+    },
+    {
+      "command": "npm run test:fraction-common-denominator-semantics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T05:32:40.932Z",
+      "notes": "Canonical request test passed with exact source, target, and explicit multiplier tuples."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:38:38.190Z",
+      "notes": "All 101 existing exact-fraction proofs, projections, motion, seek, and rewind checks passed against the extracted shared certificate authority."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Slice s08 now derives exact alignment truth from one sealed certificate authority shared with the existing quantity trace."
+  },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
     "Fraction semantics, correspondence, assumptions, typed repair, declarations, governed binding, planner vocabulary, deterministic series compilation, and fixed model-neutral corpus.",
@@ -112,12 +130,14 @@
     {
       "id": "s07",
       "title": "Define alignment request",
-      "status": "planned"
+      "summary": "Defined a frozen binary alignment request with explicit unit-factor witnesses and no solver authority.",
+      "status": "complete"
     },
     {
       "id": "s08",
       "title": "Encode alignment truth",
-      "status": "planned"
+      "summary": "Verified explicit factors, positive denominators, aligned targets, term equality, and total preservation through a sealed shared theorem.",
+      "status": "complete"
     },
     {
       "id": "s09",
