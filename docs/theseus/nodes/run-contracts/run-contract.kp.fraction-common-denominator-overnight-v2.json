@@ -47,6 +47,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T05:22:39.944Z",
       "notes": "All 31 dock ownership, route identity, editor lifecycle, and fixed-placement tests passed after the shared palette split."
+    },
+    {
+      "command": "npm run test:exact-fraction-quantity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T05:26:00.874Z",
+      "notes": "All 101 exact-fraction tests passed; existing sealed authority already covers explicit 2/2 refinement, common-denominator alignment, contributor merge, native fraction structure, direct seek, and rewind. The remaining gap is governed equation-series authoring and composition."
     }
   ],
   "allowedWork": [
@@ -99,7 +106,8 @@
     {
       "id": "s06",
       "title": "Reconcile fraction authority",
-      "status": "planned"
+      "summary": "Documented that exact-fraction quantity already proves and animates common-denominator refinement and merge; the new work will compose existing fraction-equivalence and evaluation authority into governed equation-series authoring rather than duplicate the theorem or renderer.",
+      "status": "complete"
     },
     {
       "id": "s07",
