@@ -170,6 +170,8 @@
     "test:equation-series-fraction-equivalence": "node --disable-warning=ExperimentalWarning --test tests/equation-series-fraction-equivalence-authoring.test.ts tests/fraction-equivalence-semantics.test.ts",
     "test:fraction-equivalence-presentation-plan": "node --disable-warning=ExperimentalWarning --test tests/fraction-equivalence-presentation-plan.test.ts tests/fraction-equivalence-semantics.test.ts",
     "test:fraction-equivalence-exemplar": "node --disable-warning=ExperimentalWarning --test tests/fraction-equivalence-exemplar.test.ts tests/fraction-equivalence-presentation-plan.test.ts tests/fraction-equivalence-semantics.test.ts",
+    "test:browser:fraction-equivalence": "playwright test tests/fraction-equivalence-catalogue.browser.spec.ts --project=chromium --workers=1",
+    "visual:fraction-equivalence": "node --disable-warning=ExperimentalWarning scripts/capture-fraction-equivalence.ts",
     "test:equation-series-runtime": "node --disable-warning=ExperimentalWarning --test tests/equation-series-runtime.test.ts tests/synchronized-model-projection.test.ts",
     "test:equation-series-repair-taxonomy": "node --disable-warning=ExperimentalWarning --test tests/equation-series-repair-taxonomy.test.ts tests/equation-series-runtime.test.ts tests/equation-series-intent-resolver.test.ts",
     "author:equation-series": "node --disable-warning=ExperimentalWarning scripts/compile-equation-transform-series.ts",

@@ -371,6 +371,41 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T03:23:31.049Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with the native endpoint factory and copy-fan-out compositor session."
+    },
+    {
+      "command": "npm run test:browser:fraction-equivalence",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-19T03:38:36.536Z",
+      "notes": "Two Chromium flows passed: canonical compositor ownership, exact one-to-two factor lineage, direct seek/rewind sequence, and explicit light URL restoration."
+    },
+    {
+      "command": "npm run test:selected-surface-capability-declarations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:38:38.079Z",
+      "notes": "Seven capability declaration tests passed with literal lazy import ownership and exhaustive fraction-equivalence registration."
+    },
+    {
+      "command": "npm run test:equation-surface-inventory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:38:39.179Z",
+      "notes": "Five generated display and equation-inventory tests passed with the new 32nd audited equation surface."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-19T03:38:40.335Z",
+      "notes": "Dependency direction, framework neutrality, semantic animation, presentation ownership, and equation compiler authority gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T03:38:43.337Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed after Catalogue host integration."
     }
   ],
   "progress": {
@@ -550,7 +585,8 @@
     {
       "id": "s25",
       "title": "Fraction-equivalence-host",
-      "status": "planned"
+      "summary": "The exact fraction-equivalence asset is now reachable at one stable Catalogue URL through a literal lazy capability and specialized native-KaTeX adapter; deterministic browser checks and a scoped dark/light forward/return visual command are in place without Catalogue redesign.",
+      "status": "complete"
     },
     {
       "id": "s26",

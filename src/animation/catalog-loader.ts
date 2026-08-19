@@ -112,6 +112,7 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
         id.startsWith("animation.algebra.log-exponent.") ||
         id.startsWith("animation.algebra.log-quotient.") ||
         id === "animation.equation.logarithm-change-of-base.v1" ||
+        id === "animation.equation.fraction-equivalence.v1" ||
         id.startsWith("animation.inequality."),
       (id) => id === "animation.linear-solve.solve-x" ||
         id.startsWith("animation.generated.linear-solve.")

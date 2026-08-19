@@ -1,0 +1,38 @@
+.kp-fraction-equivalence-stage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: clamp(18rem, 48vh, 30rem);
+  place-items: center;
+  overflow: hidden;
+  color: var(--kp-equation-foreground, currentColor);
+  background: transparent;
+  isolation: isolate;
+  text-transform: none;
+}
+
+.kp-fraction-equivalence-stage__endpoint,
+.kp-fraction-equivalence-stage__material-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+
+.kp-fraction-equivalence-stage__endpoint .katex-display {
+  margin: 0;
+}
+
+.kp-fraction-equivalence-stage__material-layer {
+  pointer-events: none;
+}
+
+.kp-fraction-equivalence-stage__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

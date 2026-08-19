@@ -38,6 +38,7 @@ export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.algebra.log-exponent.solve-two-power-x",
   "animation.algebra.log-quotient.difference-to-quotient",
   "animation.equation.logarithm-change-of-base.v1",
+  "animation.equation.fraction-equivalence.v1",
   "animation.algebra.log-product.product-to-sum",
   "animation.algebra.log-product.three-factors-to-sum"
 ] as const);
@@ -74,6 +75,7 @@ export interface KpEquationSurfaceInventoryEntry {
     readonly slotKind: "equation";
     readonly selectedCapabilityId:
       | "equation-katex"
+      | "fraction-equivalence"
       | "log-exponent"
       | "logarithm-change-of-base"
       | "log-quotient"

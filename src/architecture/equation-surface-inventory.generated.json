@@ -11,10 +11,11 @@
       "animation.algebra.log-exponent.solve-two-power-x",
       "animation.algebra.log-quotient.difference-to-quotient",
       "animation.equation.logarithm-change-of-base.v1",
+      "animation.equation.fraction-equivalence.v1",
       "animation.algebra.log-product.product-to-sum",
       "animation.algebra.log-product.three-factors-to-sum"
     ],
-    "currentCount": 31,
+    "currentCount": 32,
     "reconciled": true
   },
   "entries": [
@@ -250,6 +251,45 @@
         "representationId": "editor-animation.animation.comparison.linear-solve-programming",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.comparison.linear-solve-programming&view=editor",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.equation.fraction-equivalence.v1",
+      "title": "Scale a fraction equivalently",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.equation.fraction-equivalence.v1",
+        "primaryDescriptorId": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "fraction-equivalence",
+        "rendererAdapterId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+        "rendererSourcePath": "src/editor/fraction-equivalence-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 4800,
+        "beatCount": 96
+      },
+      "lazyCapability": {
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.v1&view=editor",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

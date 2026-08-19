@@ -59,6 +59,7 @@ export interface KpEquationAssetManifestEntry {
     readonly renderTargetKinds: readonly KpAnimationAssetRenderTargetKind[];
     readonly selectedCapabilityId:
       | "equation-katex"
+      | "fraction-equivalence"
       | "log-exponent"
       | "logarithm-change-of-base"
       | "log-quotient"

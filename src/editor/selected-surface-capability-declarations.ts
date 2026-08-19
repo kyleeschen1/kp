@@ -77,6 +77,23 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     }
   }),
   declaration({
+    capabilityId: "fraction-equivalence",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.fraction-equivalence.canonical-native-katex"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const client = await import(
+        "./fraction-equivalence-surface-capability.ts"
+      );
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client.registerKpEditorFractionEquivalenceSurfaceCapability(
+          registry
+        ));
+    }
+  }),
+  declaration({
     capabilityId: "log-exponent",
     domain: "equation",
     adapterIds: [

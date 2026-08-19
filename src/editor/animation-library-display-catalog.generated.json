@@ -1618,6 +1618,32 @@
     ]
   },
   {
+    "animationId": "animation.equation.fraction-equivalence.v1",
+    "title": "Scale a fraction equivalently",
+    "summary": "A reversible checkpoint exemplar for equivalent-fraction identity.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "fraction",
+      "katex"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.equation.fraction-equivalence.v1",
+    "representations": [
+      {
+        "id": "editor-animation.animation.equation.fraction-equivalence.v1",
+        "label": "Scale a fraction equivalently",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.v1",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.generated.linear-solve.linear-68c15d41",
     "title": "Solve 2x+3=8",
     "summary": "Solve 2x+3=8",

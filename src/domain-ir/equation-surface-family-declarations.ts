@@ -1,5 +1,6 @@
 export type KpEquationSelectedSurfaceCapability =
   | "equation-katex"
+  | "fraction-equivalence"
   | "log-exponent"
   | "logarithm-change-of-base"
   | "log-quotient"
@@ -10,6 +11,7 @@ export type KpEquationSelectedSurfaceCapability =
 
 export type KpEquationPrimarySurfaceCapability =
   | "equation-katex"
+  | "fraction-equivalence"
   | "log-exponent"
   | "logarithm-change-of-base"
   | "log-quotient"
@@ -49,6 +51,7 @@ export type KpEquationOperationPlanRecipeId =
 export type KpEquationStructuralRecipeId =
   | "recipe.equation.exponent-expansion.v1"
   | "recipe.equation.fraction-material.v1"
+  | "recipe.equation.fraction-equivalence.v1"
   | "recipe.equation.function-application.v1"
   | "recipe.equation.log-exponent.v1"
   | "recipe.equation.change-logarithm-base.v1"
@@ -189,6 +192,16 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererAdapterId:
       "editor-animation-surface.log-exponent.canonical-native-katex",
     rendererSourcePath: "src/editor/log-exponent-surface-adapter.ts"
+  }),
+  declaration({
+    id: "family.equation.fraction-equivalence",
+    matches: (id) => id === "animation.equation.fraction-equivalence.v1",
+    selectedCapabilityIds: ["fraction-equivalence"],
+    primaryCapabilityId: "fraction-equivalence",
+    rendererAdapterId:
+      "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+    rendererSourcePath:
+      "src/editor/fraction-equivalence-surface-adapter.ts"
   }),
   declaration({
     id: "family.equation.logarithm-change-of-base",
