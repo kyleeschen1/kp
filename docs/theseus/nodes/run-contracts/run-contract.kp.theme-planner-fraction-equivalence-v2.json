@@ -315,11 +315,25 @@
       "scope": "project-memory",
       "checkedAt": "2026-08-19T02:54:22.890Z",
       "notes": "Validated 1015 nodes and 23119 events after planner closeout and direction updates."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-semantics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:59:46.487Z",
+      "notes": "4 canonical identity, numeric/symbolic/negative corpus, zero/evidence/entity negative-path, and unforgeable-brand tests passed without presentation or CAS authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:59:48.701Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with the branded fraction-equivalence contract."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s20 closes the planner action in roadmap, strategy, and compiler thread memory; fraction equivalence is now the explicit next bounded family."
+    "summary": "s21 establishes the bounded fraction-scaling law, one-to-two factor correspondence, persistent numerator/denominator/division identity, exact reverse limits, and nonzero evidence."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -470,7 +484,8 @@
     {
       "id": "s21",
       "title": "Fraction-equivalence-authority",
-      "status": "planned"
+      "summary": "Fraction equivalence now has branded semantic authority with exact source/target identities, ordered correspondences, one shared factor copied into both branches, and required denominator/factor nonzero evidence; no CAS or presentation policy was introduced.",
+      "status": "complete"
     },
     {
       "id": "s22",
