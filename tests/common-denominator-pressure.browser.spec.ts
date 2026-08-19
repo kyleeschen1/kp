@@ -67,12 +67,22 @@ test("pressure caller stays complete and deterministic across its timeline", asy
     expect(
       maximumRectDelta(bounds[0]!, bounds[1]!),
       `pre-seam geometry ${seam}: ${JSON.stringify(bounds)}`
-    ).toBeLessThan(8);
+    ).toBeLessThanOrEqual(0.5);
     expect(
       maximumRectDelta(bounds[1]!, bounds[2]!),
       `post-seam geometry ${seam}: ${JSON.stringify(bounds)}`
     ).toBeLessThan(1);
   }
+
+  await seek.fill("0.179");
+  const terminalPose = await terminalMaterialPose(stage);
+  expect(terminalPose.comparedLeafCount).toBeGreaterThan(0);
+  expect(terminalPose.missingTargetAtomIds).toEqual([]);
+  expect(
+    terminalPose.maximumPaintRectDeltaPx,
+    JSON.stringify(terminalPose.leafDeltas)
+  ).toBeLessThanOrEqual(0.5);
+  await seek.fill("0.18");
 
   await seek.fill("0.44");
   await expect(stage.locator(
@@ -405,6 +415,84 @@ async function visiblePaintBounds(stage: Locator) {
       top: Math.min(...rects.map(({ top }) => top)),
       right: Math.max(...rects.map(({ left, width }) => left + width)),
       bottom: Math.max(...rects.map(({ top, height }) => top + height))
+    };
+  });
+}
+
+async function terminalMaterialPose(stage: Locator) {
+  return stage.evaluate(async (root) => {
+    const geometryPath = "/src/rendering/native-katex-paint-geometry.ts";
+    const geometry = await import(geometryPath);
+    const targetRoot = root.querySelector<HTMLElement>(
+      '[data-kp-common-denominator-pressure-endpoint="equivalence-source"]'
+    );
+    if (targetRoot === null) throw new Error("Missing equivalence target root");
+    const owners = [...root.querySelectorAll<HTMLElement>(
+      '[data-kp-equation-material-endpoint-paint-atom-id]'
+    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0);
+    const missingTargetAtomIds: string[] = [];
+    const paintRectDeltas: number[] = [];
+    const leafDeltas: Array<{
+      atomId: string;
+      semanticEntityId: string;
+      paintRectDeltaPx: number;
+      materialRect: { left: number; top: number; width: number; height: number };
+      nativeRect: { left: number; top: number; width: number; height: number };
+    }> = [];
+    const rectDelta = (
+      left: { left: number; top: number; width: number; height: number },
+      right: { left: number; top: number; width: number; height: number }
+    ) => Math.max(
+      Math.abs(left.left - right.left),
+      Math.abs(left.top - right.top),
+      Math.abs(left.width - right.width),
+      Math.abs(left.height - right.height)
+    );
+    for (const owner of owners) {
+      const atomId =
+        owner.dataset["kpEquationMaterialEndpointPaintAtomId"] ?? "";
+      const semanticEntityId =
+        owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "";
+      const nativeCandidates = [...targetRoot.querySelectorAll<HTMLElement>(
+        `[data-kp-semantic-entity-id="${CSS.escape(semanticEntityId)}"]`
+      )];
+      const native = nativeCandidates.length === 1
+        ? nativeCandidates[0]!
+        : undefined;
+      const visual = owner.firstElementChild as HTMLElement | null;
+      if (native === undefined || visual === null) {
+        missingTargetAtomIds.push(atomId);
+        continue;
+      }
+      const materialRect = geometry.measureKpNativeKatexSubtreePaintRect(
+        root,
+        visual
+      );
+      const nativeRect = geometry.measureKpNativeKatexSubtreePaintRect(
+        root,
+        native
+      );
+      if (materialRect === undefined || nativeRect === undefined) {
+        missingTargetAtomIds.push(atomId);
+        continue;
+      }
+      const paintRectDeltaPx = rectDelta(materialRect, nativeRect);
+      paintRectDeltas.push(paintRectDeltaPx);
+      leafDeltas.push({
+        atomId,
+        semanticEntityId,
+        paintRectDeltaPx,
+        materialRect,
+        nativeRect
+      });
+    }
+    const maximum = (values: readonly number[]) =>
+      values.length === 0 ? 0 : Math.max(...values);
+    return {
+      comparedLeafCount: owners.length,
+      missingTargetAtomIds,
+      maximumPaintRectDeltaPx: maximum(paintRectDeltas),
+      leafDeltas
     };
   });
 }

@@ -68,6 +68,7 @@ import {
   type KpNativeKatexFactoringSceneBinding,
   type KpNativeKatexHandoffCorrelation,
   type KpNativeKatexPaintMeasuredSceneTrack,
+  KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION,
   type KpNativeKatexRendererReadyScenePlan,
   type KpNativeKatexSceneReconciliation,
   type KpNativeKatexSceneTrack,
@@ -1076,7 +1077,16 @@ export function createKpNativeKatexRendererSession(input: {
   readonly supplementalMaterialOwners?:
     (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
 }): KpNativeKatexRendererSession {
-  const endpointDwellFraction = input.endpointDwellFraction ?? 0;
+  const endpointDwellFraction = input.endpointDwellFraction ??
+    KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION;
+  if (
+    endpointDwellFraction < KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION
+  ) {
+    throw new Error(
+      `Native KaTeX material transit requires at least ` +
+      `${KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION} terminal settlement.`
+    );
+  }
   sampleKpNativeKatexEndpointDwellProgress(0, endpointDwellFraction);
   const trackIds = input.tracks.map(({ id }) => id);
   if (new Set(trackIds).size !== trackIds.length) {
@@ -1092,6 +1102,10 @@ export function createKpNativeKatexRendererSession(input: {
   const targetById = new Map(input.reconciliation.target.atoms.map((atom) => [
     atom.id,
     atom
+  ]));
+  const targetAtomIdByTrackId = new Map(input.tracks.map((track) => [
+    track.id,
+    track.targetAtomId
   ]));
   const unknownVisualAtom = input.tracks.find(({ visualAtomId }) =>
     !sourceById.has(visualAtomId) && !targetById.has(visualAtomId)
@@ -1139,7 +1153,7 @@ export function createKpNativeKatexRendererSession(input: {
     );
     return sampleKpNativeKatexSceneTracks(
       tracks,
-      mode === "checkpoint-settlement" && poseProgress < 1
+      mode === "checkpoint-settlement" && progress < 1
         ? 0
         : poseProgress,
       input.copyFanOut
@@ -1166,7 +1180,11 @@ export function createKpNativeKatexRendererSession(input: {
       stage: input.stage,
       owners: mode === "atom-transit"
         ? composeKpNativeKatexSceneMaterialOwners({
-            frames,
+            frames: frames.map((frame) => ({
+              ...frame,
+              endpointPaintAtomId:
+                targetAtomIdByTrackId.get(frame.trackId)
+            })),
             sourceAtoms: sourceById,
             targetAtoms: targetById,
             supplementalOwners:
@@ -1316,7 +1334,7 @@ export function createKpCanonicalNativeKatexSceneSession(
   const typographyPlan = glyphLinks.length === 0
     ? undefined
     : (() => {
-        const microscope = 0.96;
+        const microscope = 1 - plan.endpointDwellFraction;
         playback.apply(microscope);
         return compileKpNativeKatexTypographyStylePlan({
           telemetry: measureKpNativeKatexCorrelatedHandoff({

@@ -172,6 +172,7 @@ export function compileKpNativeKatexEndpointOwnershipObservation(
       semanticEntityId: owner.semanticEntityId,
       presentationGroupId: owner.presentationGroupId,
       paintKind: "glyph" as const,
+      paintMeasurement: "subtree" as const,
       visualKey: `compound:${leaves.map(({ visualKey }) => visualKey).join("|")}`,
       sourceElement: group.sourceElement,
       rect: owner.rect,

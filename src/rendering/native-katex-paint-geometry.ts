@@ -55,20 +55,24 @@ export function attachKpNativeKatexTrackPaintGeometry<
     stage: HTMLElement
   ) => atom === undefined
     ? undefined
-    : atom.paintKind === "glyph" &&
+    : atom.paintMeasurement === "atomic-text" &&
         typeof atom.sourceElement.ownerDocument.createRange === "function"
       ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
-      : (atom.paintKind === "rule" || atom.paintKind === "delimiter") &&
+      : atom.paintMeasurement === "subtree" &&
           typeof atom.sourceElement.getBoundingClientRect === "function" &&
           atom.sourceElement.ownerDocument.defaultView !== null
-        // CSS rules and font-built delimiters both carry layout space beyond
-        // their visible mark. Compare cloned paint with native paint so tall
-        // parentheses cannot fail or jump because of wrapper-box geometry.
+        // Rules, delimiters, and compound owners carry layout space beyond
+        // visible paint. Their actual subtree union is the endpoint authority.
         ? measureKpNativeKatexSubtreePaintRect(
             stage,
             atom.sourceElement
           ) ?? atom.rect
-      : atom.rect;
+        : atom.paintKind === "glyph" &&
+            typeof atom.sourceElement.ownerDocument.createRange === "function"
+          // Compatibility for external renderer-session fixtures created
+          // before paint measurement became explicit.
+          ? measureKpNativeKatexTextInkRect(stage, atom.sourceElement)
+          : atom.rect;
   return Object.freeze(input.tracks.map((track) => {
     const sourceAtom =
       sourceAtoms.get(track.sourceAtomId ?? "") ??

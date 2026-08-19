@@ -88,7 +88,6 @@ export function createKpLogarithmChangeOfBaseTransitSession(input: {
         targetEntityIds: [transfer.targetEntityId]
       }))
     }),
-    endpointDwellFraction: 0,
     operationChoreography: functionWrap,
     trackProjection: createKpNativeKatexTrackProjection({
       id: "track-projection.logarithm-change-of-base.fraction-rule.v1",

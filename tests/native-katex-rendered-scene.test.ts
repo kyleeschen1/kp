@@ -214,6 +214,16 @@ test("ownership views compile from cached evidence without DOM reads or mutation
 
   assert.equal(leafObservation.atoms.length, 2);
   assert.equal(compoundObservation.atoms.length, 1);
+  assert.equal(
+    leafObservation.atoms.every(({ paintMeasurement }) =>
+      paintMeasurement === "atomic-text"
+    ),
+    true
+  );
+  assert.equal(
+    compoundObservation.atoms[0]?.paintMeasurement,
+    "subtree"
+  );
   assert.strictEqual(compoundObservation.atoms[0]?.sourceElement, compoundElement);
   assert.deepEqual(compoundObservation.atoms[0]?.rect, {
     left: 10,
@@ -1990,6 +2000,11 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
   assert.equal(Object.isFrozen(playback.tracks), true);
   assert.deepEqual(reverse, [...forward].reverse());
   assert.deepEqual(playback.sample(0.5), playback.sample(0.5));
+  assert.deepEqual(
+    playback.sample(0.96),
+    playback.sample(1),
+    "material must reach every exact terminal track pose before native ownership"
+  );
   assert.throws(
     () => createKpNativeKatexRendererSession({
       stage,
@@ -1999,6 +2014,17 @@ test("renderer session direct seeks and reverses without hidden clock state", ()
       tracks: [{ ...tracks[0]!, visualAtomId: "unknown.atom" }]
     }),
     /unknown visual atom/
+  );
+  assert.throws(
+    () => createKpNativeKatexRendererSession({
+      stage,
+      sourceRoot: source.root,
+      targetRoot: target.root,
+      reconciliation,
+      tracks,
+      endpointDwellFraction: 0
+    }),
+    /requires at least 0.04 terminal settlement/
   );
 });
 

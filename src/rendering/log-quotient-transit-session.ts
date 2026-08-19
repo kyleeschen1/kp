@@ -87,7 +87,6 @@ export function createKpLogQuotientTransitSession(input: {
     source: input.source,
     target: input.target,
     relations: projectKpLogQuotientNativePaintRelations(input.operation),
-    endpointDwellFraction: 0,
     operationChoreography: input.operationChoreography,
     trackProjection: createKpNativeKatexTrackProjection({
       id: `track-projection.log-quotient.homomorphic-fusion.${input.operationChoreography.id}`,

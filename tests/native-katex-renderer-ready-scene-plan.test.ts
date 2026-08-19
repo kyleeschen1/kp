@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   createKpNativeKatexRendererReadyScenePlan,
   isKpNativeKatexRendererReadyScenePlan,
+  KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION,
   type KpNativeKatexPaintMeasuredSceneTrack
 } from "../src/rendering/native-katex-base-scene-plan.ts";
 import type {
@@ -73,13 +74,22 @@ test("renderer-ready plans reject cross-stage and duplicate-track input", () => 
   );
 });
 
-test("renderer-ready plans validate endpoint dwell without owning a clock", () => {
+test("renderer-ready plans require terminal settlement without owning a clock", () => {
   const stage = {} as HTMLElement;
   assert.throws(
     () => createMinimalPlan(stage, stage, [], 0.5),
-    /between zero and 0.25/
+    /between 0.04 and 0.25/
   );
-  assert.equal(createMinimalPlan(stage).endpointDwellFraction, 0);
+  assert.throws(
+    () => createMinimalPlan(stage, stage, [], 0),
+    /between 0.04 and 0.25/
+  );
+  assert.equal(
+    createMinimalPlan(stage).endpointDwellFraction,
+    KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION
+  );
+  assert.equal(createMinimalPlan(stage, stage, [], 0.08)
+    .endpointDwellFraction, 0.08);
 });
 
 function createMinimalPlan(

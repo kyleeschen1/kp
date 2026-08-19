@@ -214,7 +214,6 @@ export function createKpLogProductTransitSession(input: {
     target: input.target,
     relations: projectKpLogProductNativePaintRelations(input.operation),
     copyFanOutRouting: false,
-    endpointDwellFraction: 0,
     trackProjection: createKpLogProductHomomorphicTrackProjection(input)
   });
   const canonical = createKpCanonicalNativeKatexSceneSession(

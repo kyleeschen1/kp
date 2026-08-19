@@ -666,6 +666,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly intentionalForegroundOcclusion?:
       KpEquationIntentionalForegroundOcclusion | undefined;
     readonly verifiedOperationCohortId?: string | undefined;
+    readonly endpointPaintAtomId?: string | undefined;
   }[];
   readonly sourceAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
   readonly targetAtoms: ReadonlyMap<string, KpNativeKatexPaintAtomObservation>;
@@ -685,6 +686,7 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         ownerId: `native-scene-owner.${frame.trackId}`,
         sourceElement: atom.sourceElement,
         semanticEntityId: atom.semanticEntityId,
+        endpointPaintAtomId: frame.endpointPaintAtomId,
         semanticContacts: contacts.get(frame.trackId),
         verifiedOperationCohortId: frame.verifiedOperationCohortId,
         intentionalForegroundOcclusion:

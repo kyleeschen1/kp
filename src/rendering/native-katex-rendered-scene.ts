@@ -28,6 +28,8 @@ export interface KpNativeKatexPaintAtomObservation {
   readonly semanticEntityId: string;
   readonly presentationGroupId: string;
   readonly paintKind: KpNativeKatexPaintKind;
+  /** Atomic text and compound KaTeX subtrees require different ink metrics. */
+  readonly paintMeasurement?: "atomic-text" | "subtree" | undefined;
   readonly visualKey: string;
   readonly sourceElement: HTMLElement;
   readonly rect: KpStageRelativeRect;
@@ -362,6 +364,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(
       semanticEntityId: input.semanticEntityId,
       presentationGroupId: input.presentationGroupId,
       paintKind: "glyph" as const,
+      paintMeasurement: "atomic-text" as const,
       visualKey: `glyph:${text}`,
       sourceElement,
       rect: normalizeKpStageRelativeRect({
@@ -417,6 +420,7 @@ export function observeKpNativeKatexPaintAtoms(input:
       semanticEntityId: input.semanticEntityId,
       presentationGroupId: input.presentationGroupId,
       paintKind,
+      paintMeasurement: "subtree" as const,
       visualKey: structuralVisualKey(sourceElement, paintKind),
       sourceElement,
       rect: normalizeKpStageRelativeRect({
@@ -525,6 +529,8 @@ export function createKpNativeKatexRenderedSceneObservation(input: {
     root: input.root,
     atoms: Object.freeze(input.atoms.map((atom) => Object.freeze({
       ...atom,
+      paintMeasurement: atom.paintMeasurement ??
+        (atom.paintKind === "glyph" ? "atomic-text" : "subtree"),
       rect: Object.freeze({ ...atom.rect })
     }))),
     groups: Object.freeze(input.groups.map((group) => Object.freeze({

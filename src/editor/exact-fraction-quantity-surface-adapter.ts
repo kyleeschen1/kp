@@ -701,7 +701,6 @@ function compilePreparedSymbolicSegments(input: {
               successorSyntheses: segment.successorSyntheses.map((binding) =>
                 exactSuccessorIntent(binding, identityTransferProgram)
               ),
-              endpointDwellFraction: 0.04,
               fanInRouting:
                 dispatch === "merge-fan-in" ||
                 dispatch === "identity-fusion",

@@ -118,6 +118,13 @@ export type KpNativeKatexSceneTrack = KpNativeKatexSceneTrackContract<
 export type KpNativeKatexPaintMeasuredSceneTrack =
   KpNativeKatexPaintMeasuredTrack<KpNativeKatexSceneTrack>;
 
+/**
+ * Moving material must occupy its exact native target pose before the native
+ * endpoint takes paint ownership. Keeping this policy here prevents callers
+ * from trading away endpoint continuity to gain a few percent of motion time.
+ */
+export const KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION = 0.04;
+
 export interface KpNativeKatexHandoffCorrelation {
   readonly kind: "native-katex-handoff-correlation";
   readonly lifecycle: "renderer-session";
@@ -185,14 +192,16 @@ export function createKpNativeKatexRendererReadyScenePlan(
   if (new Set(trackIds).size !== trackIds.length) {
     throw new Error("Renderer-ready plans require unique measured track IDs.");
   }
-  const endpointDwellFraction = input.endpointDwellFraction ?? 0;
+  const endpointDwellFraction = input.endpointDwellFraction ??
+    KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION;
   if (
     !Number.isFinite(endpointDwellFraction) ||
-    endpointDwellFraction < 0 ||
+    endpointDwellFraction < KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION ||
     endpointDwellFraction > 0.25
   ) {
     throw new Error(
-      "Renderer-ready endpoint dwell must be between zero and 0.25."
+      `Renderer-ready endpoint settlement must be between ` +
+      `${KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION} and 0.25.`
     );
   }
   const plan = Object.freeze({

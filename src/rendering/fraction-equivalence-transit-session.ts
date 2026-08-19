@@ -188,8 +188,7 @@ export function createKpFractionEquivalenceTransitSession(input: {
     // one composite join, so terms and bars instead share the cohort clock.
     fanInRouting: false,
     copyFanOutRouting: false,
-    trackProjection,
-    endpointDwellFraction: 0
+    trackProjection
   });
   const canonical = createKpCanonicalNativeKatexSceneSession(plan);
   let retired = false;

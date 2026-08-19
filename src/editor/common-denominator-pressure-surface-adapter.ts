@@ -269,8 +269,7 @@ async function prepareSurface(
         target: equivalenceTarget,
         relations: introductionRelations(),
         fanInRouting: false,
-        copyFanOutRouting: false,
-        endpointDwellFraction: 0
+        copyFanOutRouting: false
       })
     );
     const equivalence = createKpFractionEquivalenceTransitSession({
@@ -291,8 +290,7 @@ async function prepareSurface(
           motion: "full" as const
         })),
         fanInRouting: false,
-        copyFanOutRouting: false,
-        endpointDwellFraction: 0
+        copyFanOutRouting: false
       })
     );
     if (session.disposed || session.generation !== generation) {
