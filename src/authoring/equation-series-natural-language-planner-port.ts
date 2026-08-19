@@ -1,6 +1,8 @@
 import {
   kpEquationSeriesOperationRegistry
 } from "./equation-series-operation-declarations.ts";
+import { normalizeKpEquationSeriesOperationId } from
+  "./equation-series-operation-alias-registry.ts";
 import type { KpEquationSeriesIntentProposal } from
   "./equation-series-intent-resolver.ts";
 import type { KpEquationTransformSeriesRequest } from
@@ -59,6 +61,7 @@ export interface KpEquationSeriesPlannerDiagnostic {
     | "equation-series.planner.proposal.invalid"
     | "equation-series.planner.adjacency.coverage"
     | "equation-series.planner.operation.unknown"
+    | "equation-series.planner.operation.normalization.invalid"
     | "equation-series.planner.port.error";
   readonly path: string;
   readonly message: string;
@@ -72,7 +75,16 @@ export interface KpEquationSeriesPlannerRecord {
   readonly plannerId: string;
   readonly status: "proposed";
   readonly proposals: readonly KpEquationSeriesIntentProposal[];
+  readonly operationNormalizations:
+    readonly KpEquationSeriesPlannerOperationNormalization[];
   readonly diagnostics: readonly [];
+}
+
+export interface KpEquationSeriesPlannerOperationNormalization {
+  readonly operationLocation: string;
+  readonly requestedOperationId: string;
+  readonly canonicalOperationId: string;
+  readonly resolution: "canonical" | "alias";
 }
 
 export type KpEquationSeriesPlannerRecordResult =
@@ -193,6 +205,7 @@ export function validateKpEquationSeriesPlannerRecord(
     "plannerId",
     "status",
     "proposals",
+    "operationNormalizations",
     "diagnostics"
   ], "$", diagnostics);
   rejectForbidden(value, "$", diagnostics);
@@ -246,12 +259,20 @@ export function validateKpEquationSeriesPlannerRecord(
     "Planner proposals must be an ordered array.",
     "Return one proposal for every proposed adjacency."
   ));
+  const operationNormalizations:
+    KpEquationSeriesPlannerOperationNormalization[] = [];
   const proposals = rawProposals.map((proposal, index) => parseProposal(
     proposal,
     `$.proposals[${index}]`,
-    diagnostics
+    diagnostics,
+    operationNormalizations
   )).filter((proposal): proposal is KpEquationSeriesIntentProposal =>
     proposal !== undefined
+  );
+  validateOperationNormalizations(
+    value["operationNormalizations"],
+    operationNormalizations,
+    diagnostics
   );
   validateCoverage(proposals, request, diagnostics);
 
@@ -265,6 +286,7 @@ export function validateKpEquationSeriesPlannerRecord(
       plannerId: value["plannerId"] as string,
       status: "proposed" as const,
       proposals,
+      operationNormalizations,
       diagnostics: [] as []
     },
     diagnostics: [] as []
@@ -274,7 +296,8 @@ export function validateKpEquationSeriesPlannerRecord(
 function parseProposal(
   value: unknown,
   path: string,
-  diagnostics: KpEquationSeriesPlannerDiagnostic[]
+  diagnostics: KpEquationSeriesPlannerDiagnostic[],
+  operationNormalizations: KpEquationSeriesPlannerOperationNormalization[]
 ): KpEquationSeriesIntentProposal | undefined {
   if (!isRecord(value)) {
     diagnostics.push(diagnostic(
@@ -292,28 +315,26 @@ function parseProposal(
   rejectUnknown(value, allowed, path, diagnostics);
   if (!validId(value["adjacencyId"])) return invalidProposal(path, diagnostics);
   if (kind === "single") {
-    if (!registered(value["operationId"])) {
-      diagnostics.push(diagnostic(
-        "equation-series.planner.operation.unknown",
-        `${path}.operationId`,
-        `No registered operation owns ${String(value["operationId"])}.`,
-        "Choose an operation ID from the supplied prompt catalogue."
-      ));
-      return undefined;
-    }
+    const operationId = canonicalOperationId(
+      value["operationId"],
+      `${path}.operationId`,
+      diagnostics,
+      operationNormalizations
+    );
+    if (operationId === undefined) return undefined;
     return Object.freeze({
       adjacencyId: value["adjacencyId"] as string,
       kind,
-      operationId: value["operationId"] as string
+      operationId
     });
   }
   if (kind !== "sequence" && kind !== "alternatives") {
     return invalidProposal(path, diagnostics);
   }
-  const operationIds = Array.isArray(value["operationIds"])
+  const requestedOperationIds = Array.isArray(value["operationIds"])
     ? value["operationIds"]
     : [];
-  if (operationIds.length < 2 || !operationIds.every(registered)) {
+  if (requestedOperationIds.length < 2) {
     diagnostics.push(diagnostic(
       "equation-series.planner.operation.unknown",
       `${path}.operationIds`,
@@ -322,12 +343,95 @@ function parseProposal(
     ));
     return undefined;
   }
+  const operationIds = requestedOperationIds.map((operationId, index) =>
+    canonicalOperationId(
+      operationId,
+      `${path}.operationIds[${index}]`,
+      diagnostics,
+      operationNormalizations
+    )
+  );
+  if (operationIds.some((operationId) => operationId === undefined)) {
+    return undefined;
+  }
   return Object.freeze({
     adjacencyId: value["adjacencyId"] as string,
     kind,
     operationIds: Object.freeze([...operationIds]) as
       readonly [string, string, ...string[]]
   });
+}
+
+function canonicalOperationId(
+  value: unknown,
+  path: string,
+  diagnostics: KpEquationSeriesPlannerDiagnostic[],
+  operationNormalizations: KpEquationSeriesPlannerOperationNormalization[]
+): string | undefined {
+  if (typeof value !== "string") {
+    diagnostics.push(unknownOperationDiagnostic(path, value));
+    return undefined;
+  }
+  const normalization = normalizeKpEquationSeriesOperationId({
+    operationId: value
+  });
+  if (normalization.status === "unknown") {
+    diagnostics.push(unknownOperationDiagnostic(path, value));
+    return undefined;
+  }
+  operationNormalizations.push(Object.freeze({
+    operationLocation: path,
+    requestedOperationId: normalization.requestedOperationId,
+    canonicalOperationId: normalization.canonicalOperationId,
+    resolution: normalization.status
+  }));
+  return normalization.canonicalOperationId;
+}
+
+function unknownOperationDiagnostic(
+  path: string,
+  value: unknown
+): KpEquationSeriesPlannerDiagnostic {
+  return diagnostic(
+    "equation-series.planner.operation.unknown",
+    path,
+    `No canonical operation or registered alias owns ${String(value)}.`,
+    "Choose a canonical operation ID from the supplied prompt catalogue."
+  );
+}
+
+function validateOperationNormalizations(
+  value: unknown,
+  expected: readonly KpEquationSeriesPlannerOperationNormalization[],
+  diagnostics: KpEquationSeriesPlannerDiagnostic[]
+): void {
+  if (value === undefined) return;
+  const valid = Array.isArray(value) && value.length === expected.length &&
+    value.every((candidate, index) => {
+      if (!isRecord(candidate)) return false;
+      const expectedEntry = expected[index];
+      if (
+        expectedEntry === undefined ||
+        candidate["operationLocation"] !== expectedEntry.operationLocation ||
+        candidate["canonicalOperationId"] !==
+          expectedEntry.canonicalOperationId ||
+        typeof candidate["requestedOperationId"] !== "string"
+      ) return false;
+      const normalization = normalizeKpEquationSeriesOperationId({
+        operationId: candidate["requestedOperationId"]
+      });
+      return normalization.status !== "unknown" &&
+        normalization.status === candidate["resolution"] &&
+        normalization.canonicalOperationId ===
+          candidate["canonicalOperationId"];
+    });
+  if (valid) return;
+  diagnostics.push(diagnostic(
+    "equation-series.planner.operation.normalization.invalid",
+    "$.operationNormalizations",
+    "Operation normalization provenance does not match KP's alias registry.",
+    "Omit operationNormalizations or return the exact KP-validated provenance."
+  ));
 }
 
 function validateCoverage(
@@ -402,11 +506,6 @@ function invalidProposal(
     "Use single, sequence, or alternatives with stable semantic IDs."
   ));
   return undefined;
-}
-
-function registered(value: unknown): value is string {
-  return typeof value === "string" &&
-    kpEquationSeriesOperationRegistry.byId[value] !== undefined;
 }
 
 function validId(value: unknown): value is string {

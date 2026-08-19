@@ -137,6 +137,55 @@ test("proposal coverage and operation IDs are validated against the request", ()
   ));
 });
 
+test("known aliases canonicalize with provenance and round trip exactly", () => {
+  const request = proposedRequest();
+  const result = validateKpEquationSeriesPlannerRecord({
+    ...acceptedRecord(request.id),
+    proposals: [{
+      adjacencyId: "adjacency.planner.wrap",
+      kind: "single",
+      operationId: "operation.wrap-function.v1"
+    }]
+  }, request);
+  assert.equal(result.status, "proposed");
+  if (result.status !== "proposed") return;
+  assert.equal(
+    result.record.proposals[0]?.kind === "single"
+      ? result.record.proposals[0].operationId
+      : undefined,
+    "kp.algebra.wrap-function"
+  );
+  assert.deepEqual(result.record.operationNormalizations, [{
+    operationLocation: "$.proposals[0].operationId",
+    requestedOperationId: "operation.wrap-function.v1",
+    canonicalOperationId: "kp.algebra.wrap-function",
+    resolution: "alias"
+  }]);
+  const roundTrip = validateKpEquationSeriesPlannerRecord(
+    result.record,
+    request
+  );
+  assert.equal(roundTrip.status, "proposed");
+});
+
+test("authored normalization provenance cannot override the registry", () => {
+  const request = proposedRequest();
+  const result = validateKpEquationSeriesPlannerRecord({
+    ...acceptedRecord(request.id),
+    operationNormalizations: [{
+      operationLocation: "$.proposals[0].operationId",
+      requestedOperationId: "kp.algebra.wrap-function",
+      canonicalOperationId: "kp.algebra.divide-both-sides",
+      resolution: "alias"
+    }]
+  }, request);
+  assert.equal(result.status, "repair-required");
+  if (result.status !== "repair-required") return;
+  assert.ok(result.diagnostics.some(({ code }) =>
+    code === "equation-series.planner.operation.normalization.invalid"
+  ));
+});
+
 test("port errors become recorded diagnostics instead of thrown authority", async () => {
   const request = proposedRequest();
   const result = await runKpEquationSeriesNaturalLanguagePlanner({

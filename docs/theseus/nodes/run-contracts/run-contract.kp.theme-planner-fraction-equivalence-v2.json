@@ -133,11 +133,25 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T01:52:24.808Z",
       "notes": "6 prompt, authority-boundary, validation, compiler-feed, and port-error tests passed; aliases are absent from the model vocabulary while the backend registry retains them."
+    },
+    {
+      "command": "npm run test:equation-series-planner-port",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:57:08.166Z",
+      "notes": "8 adversarial, alias canonicalization, provenance round-trip, prompt, and authority tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T01:57:22.792Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed after canonicalization provenance became part of accepted records."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 now emits only unique canonical operation IDs and concise declarative summaries to the model; low-level aliases remain available solely in the backend registry."
+    "summary": "s10 validates every requested operation through the alias registry, emits canonical proposals with auditable requested-to-canonical provenance, and fails closed on unknown or forged normalization."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -222,7 +236,8 @@
     {
       "id": "s10",
       "title": "Validator-canonicalization",
-      "status": "planned"
+      "summary": "Validation now canonicalizes registered aliases, records verified requested-to-canonical provenance, round trips accepted records, and rejects unknown or forged normalization.",
+      "status": "complete"
     },
     {
       "id": "s11",
