@@ -30,6 +30,11 @@ test("the development dock preserves exact state across Catalogue and Coverage",
   await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
   await expect(toolbar.getByRole("button", { name: "Copy link" })).toBeVisible();
   await expect(theme).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("html")).toHaveCSS(
+    "background-color",
+    "rgb(13, 14, 28)"
+  );
+  await expect(toolbar).toHaveCSS("background-color", "rgb(17, 20, 36)");
 
   await theme.focus();
   await expect(theme).toBeFocused();
@@ -37,6 +42,11 @@ test("the development dock preserves exact state across Catalogue and Coverage",
   await expect(theme).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("[data-kp-svelte-catalogue-shell]"))
     .toHaveAttribute("data-kp-animation-catalogue-theme", "light");
+  await expect(page.locator("html")).toHaveCSS(
+    "background-color",
+    "rgb(251, 250, 247)"
+  );
+  await expect(toolbar).toHaveCSS("background-color", "rgb(245, 243, 238)");
   expect(new URL(page.url()).searchParams.get("theme")).toBe("light");
 
   const view = toolbar.locator(

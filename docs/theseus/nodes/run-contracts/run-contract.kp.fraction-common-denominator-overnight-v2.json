@@ -26,6 +26,29 @@
     "npm run test:selected-surface-capability-declarations",
     "npm run test:animation-library-display"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-catalogue-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T05:20:09.118Z",
+      "notes": "Two theme laws pass: the reserved viewport strip inherits the page surface and the floating dock uses a distinct toolbar surface in dark mode."
+    },
+    {
+      "command": "npm run visual:development-dock",
+      "status": "passed",
+      "scope": "browser",
+      "checkedAt": "2026-08-19T05:21:37.102Z",
+      "notes": "Two one-worker Chromium checks passed: dark/light palette values, exact route state, phone Review placement, and non-overlap with playback controls."
+    },
+    {
+      "command": "npm run test:dev-toolbar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T05:22:39.944Z",
+      "notes": "All 31 dock ownership, route identity, editor lifecycle, and fixed-placement tests passed after the shared palette split."
+    }
+  ],
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
     "Fraction semantics, correspondence, assumptions, typed repair, declarations, governed binding, planner vocabulary, deterministic series compilation, and fixed model-neutral corpus.",
@@ -52,22 +75,26 @@
     {
       "id": "s02",
       "title": "Define dock theme contract",
-      "status": "planned"
+      "summary": "Added a failing contract test for a page-colored dock reserve and a distinct dark toolbar surface; current CSS fails exactly those assertions.",
+      "status": "complete"
     },
     {
       "id": "s03",
       "title": "Implement dock theme",
-      "status": "planned"
+      "summary": "Separated the reserved-area paint token from the floating dock surface; dark reserve is #0d0e1c and toolbar is #111424 while light mode retains its own pair.",
+      "status": "complete"
     },
     {
       "id": "s04",
       "title": "Pressure dock in browser",
-      "status": "planned"
+      "summary": "Chromium verified the exact dark/light reserve and dock colors, desktop and phone placement, exact route state, and non-overlap with playback controls.",
+      "status": "complete"
     },
     {
       "id": "s05",
       "title": "Close dock evidence",
-      "status": "planned"
+      "summary": "Closed the dock correction with passing theme, 31-case ownership, and two-case browser evidence; broad repository gates remain scheduled at the contract boundary.",
+      "status": "complete"
     },
     {
       "id": "s06",

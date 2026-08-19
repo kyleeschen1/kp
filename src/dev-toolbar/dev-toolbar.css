@@ -1,6 +1,7 @@
 [data-kp-development-theme="light"] {
-  --kp-development-dock-surface:
+  --kp-development-dock-reserved-surface:
     var(--kp-lesson-theme-control-surface, #fbfaf7);
+  --kp-development-dock-surface: #f5f3ee;
   --kp-development-dock-panel: #f5f3ee;
   --kp-development-dock-input: #fffefa;
   --kp-development-dock-ink:
@@ -15,8 +16,9 @@
 }
 
 [data-kp-development-theme="dark"] {
-  --kp-development-dock-surface:
+  --kp-development-dock-reserved-surface:
     var(--kp-lesson-theme-control-surface, #0d0e1c);
+  --kp-development-dock-surface: #111424;
   --kp-development-dock-panel: #111424;
   --kp-development-dock-input: #0d0e1c;
   --kp-development-dock-ink:
@@ -60,6 +62,11 @@
 
 html[data-kp-dev-toolbar-active] {
   --kp-development-dock-clearance: 5.25rem;
+
+  /* Viewport applications shorten their content to reserve this strip. The
+     root therefore owns its paint while the floating toolbar stays a distinct
+     chrome surface above it. */
+  background: var(--kp-development-dock-reserved-surface, #0d0e1c);
 }
 
 /* The catalogue is a viewport application, so reserving the dock in its

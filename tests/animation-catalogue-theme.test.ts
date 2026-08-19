@@ -34,11 +34,19 @@ test("development dock and review surfaces inherit the active theme palette", as
 
   assert.match(
     toolbarCss,
-    /\[data-kp-development-theme="light"\][\s\S]*?--kp-development-dock-surface:[\s\S]*?#fbfaf7\);/
+    /\[data-kp-development-theme="light"\][\s\S]*?--kp-development-dock-reserved-surface:[\s\S]*?#fbfaf7\);/
   );
   assert.match(
     toolbarCss,
-    /\[data-kp-development-theme="dark"\][\s\S]*?--kp-development-dock-surface:[\s\S]*?#0d0e1c\);/
+    /\[data-kp-development-theme="dark"\][\s\S]*?--kp-development-dock-reserved-surface:[\s\S]*?#0d0e1c\);/
+  );
+  assert.match(
+    toolbarCss,
+    /\[data-kp-development-theme="dark"\][\s\S]*?--kp-development-dock-surface:\s*#111424;/
+  );
+  assert.match(
+    toolbarCss,
+    /html\[data-kp-dev-toolbar-active\][\s\S]*?background:\s*var\(--kp-development-dock-reserved-surface,\s*#0d0e1c\);/
   );
   assert.match(
     toolbarCss,
