@@ -343,6 +343,20 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T03:11:00.239Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with fraction-equivalence governed authoring and binding."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-presentation-plan",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:14:40.719Z",
+      "notes": "Nine semantic and pure-plan tests passed; the plan preserves fraction and operand identity, copies one factor to two exact roles, orders cohesion after arrival, and contains no clock, geometry, paint, or host policy."
+    },
+    {
+      "command": "npm run test:equation-series-fraction-equivalence",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:14:42.245Z",
+      "notes": "Ten authoring and semantic tests still pass after declaration linkage to the caller-local recipe and motif authorities."
     }
   ],
   "progress": {
@@ -510,7 +524,8 @@
     {
       "id": "s23",
       "title": "Fraction-equivalence-presentation-plan",
-      "status": "planned"
+      "summary": "Fraction equivalence now compiles into a branded, renderer-neutral presentation plan that keeps native fraction structure stable, persists numerator and denominator identity, copies one factor into two synchronized branches, and defers timing, geometry, and paint to the exemplar.",
+      "status": "complete"
     },
     {
       "id": "s24",

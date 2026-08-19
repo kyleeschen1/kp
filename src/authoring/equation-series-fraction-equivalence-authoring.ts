@@ -1,5 +1,9 @@
 import type { ParsedLatexExpression } from "../math/latex-parser.ts";
 import {
+  KP_FRACTION_EQUIVALENCE_FACTOR_COPY_MOTIF_AUTHORITY,
+  KP_FRACTION_EQUIVALENCE_PRESENTATION_RECIPE_AUTHORITY
+} from "../animation/fraction-equivalence-presentation-plan.ts";
+import {
   isKpVerifiedFractionEquivalence,
   KP_FRACTION_EQUIVALENCE_OPERATION_AUTHORITY,
   type KpFractionEquivalenceScalar,
@@ -83,8 +87,12 @@ export const kpEquationSeriesFractionEquivalenceAuthoringDeclaration =
       KP_FRACTION_EQUIVALENCE_AUTHORING_EVIDENCE_FIELDS,
     semanticAuthorityId: KP_FRACTION_EQUIVALENCE_OPERATION_AUTHORITY,
     lawId: "law.fraction.scale-by-nonzero-unity",
-    recipeIds: [] as readonly string[],
-    motifIds: [] as readonly string[]
+    recipeIds: [
+      KP_FRACTION_EQUIVALENCE_PRESENTATION_RECIPE_AUTHORITY
+    ] as const,
+    motifIds: [
+      KP_FRACTION_EQUIVALENCE_FACTOR_COPY_MOTIF_AUTHORITY
+    ] as const
   } as const);
 
 export function createKpEquationSeriesFractionEquivalenceSemanticSource(input: {

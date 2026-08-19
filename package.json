@@ -168,6 +168,7 @@
     "test:equation-series-logarithm-base": "node --disable-warning=ExperimentalWarning --test tests/equation-series-logarithm-base-authoring.test.ts",
     "test:fraction-equivalence-semantics": "node --disable-warning=ExperimentalWarning --test tests/fraction-equivalence-semantics.test.ts",
     "test:equation-series-fraction-equivalence": "node --disable-warning=ExperimentalWarning --test tests/equation-series-fraction-equivalence-authoring.test.ts tests/fraction-equivalence-semantics.test.ts",
+    "test:fraction-equivalence-presentation-plan": "node --disable-warning=ExperimentalWarning --test tests/fraction-equivalence-presentation-plan.test.ts tests/fraction-equivalence-semantics.test.ts",
     "test:equation-series-runtime": "node --disable-warning=ExperimentalWarning --test tests/equation-series-runtime.test.ts tests/synchronized-model-projection.test.ts",
     "test:equation-series-repair-taxonomy": "node --disable-warning=ExperimentalWarning --test tests/equation-series-repair-taxonomy.test.ts tests/equation-series-runtime.test.ts tests/equation-series-intent-resolver.test.ts",
     "author:equation-series": "node --disable-warning=ExperimentalWarning scripts/compile-equation-transform-series.ts",
