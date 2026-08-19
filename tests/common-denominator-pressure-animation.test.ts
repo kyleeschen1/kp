@@ -4,6 +4,9 @@ import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
+  createKpAlgebraAnimationPack
+} from "../src/animation/catalog-packs/algebra.ts";
+import {
   createKpCommonDenominatorPressureAnimationAsset,
   kpCommonDenominatorPressureAnimationId,
   kpCommonDenominatorPressureTimeline,
@@ -24,8 +27,12 @@ test("pressure caller is one stable native equation catalogue asset", () => {
   const catalogueMatches = createKpAnimationAssets().filter(({ id }) =>
     id === kpCommonDenominatorPressureAnimationId
   );
+  const packMatches = createKpAlgebraAnimationPack().catalog.filter(({ id }) =>
+    id === kpCommonDenominatorPressureAnimationId
+  );
 
   assert.equal(catalogueMatches.length, 1);
+  assert.equal(packMatches.length, 1);
   assert.equal(asset.renderTargets.length, 1);
   assert.equal(asset.renderTargets[0]?.kind, "equation");
   assert.equal(asset.timeline?.durationMs,

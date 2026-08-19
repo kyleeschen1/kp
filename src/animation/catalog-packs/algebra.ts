@@ -25,6 +25,9 @@ import {
   createKpFractionEquivalenceExemplarAssets
 } from "../fraction-equivalence-exemplar.ts";
 import {
+  createKpCommonDenominatorPressureAnimationAsset
+} from "../common-denominator-pressure-exemplar.ts";
+import {
   createKpCanonicalCancellationPressureAnimationAsset
 } from "../cancellation-pressure-animation.ts";
 import {
@@ -53,6 +56,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createKpLogExponentAnimationAsset(),
       createKpLogQuotientAnimationAsset(),
       createKpLogarithmChangeOfBaseExemplarAsset(),
+      createKpCommonDenominatorPressureAnimationAsset(),
       ...createKpFractionEquivalenceExemplarAssets()
     ]),
     runtimeCapabilities: kpAlgebraChoreographyCapabilities

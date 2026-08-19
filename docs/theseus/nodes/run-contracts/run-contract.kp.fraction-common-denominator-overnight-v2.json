@@ -223,11 +223,21 @@
       "command": "npm run test:equation-surface-disposition",
       "status": "passed",
       "checkedAt": "2026-08-19T07:03:59.500Z"
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "checkedAt": "2026-08-19T07:28:14.787Z"
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "checkedAt": "2026-08-19T07:28:16.118Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Hosted one reversible four-endpoint pressure caller without inventing fraction-addition choreography."
+    "summary": "Generated deterministic dark, light, and narrow review evidence for the pressure caller."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -393,7 +403,8 @@
     {
       "id": "s25",
       "title": "Generate review evidence",
-      "status": "planned"
+      "summary": "Established stable browser evidence and a reusable visual review command without broadening choreography.",
+      "status": "complete"
     },
     {
       "id": "s26",

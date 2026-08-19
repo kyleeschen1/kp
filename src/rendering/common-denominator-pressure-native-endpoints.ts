@@ -7,11 +7,22 @@ import type {
   KpSelectorAnnotatedLatex,
   KpSelectorLatexAnnotation
 } from "./selector-annotated-latex.ts";
+import {
+  createKpNativeKatexRenderedSceneObservation,
+  fingerprintKpNativeKatexPaintStyle,
+  unionKpStageRelativeRects,
+  type KpNativeKatexRenderedSceneObservation
+} from "./native-katex-rendered-scene.ts";
 
 export interface KpCommonDenominatorPressureNativeNode {
   readonly occurrenceId: string;
   readonly semanticId: string;
-  readonly kind: "operand" | "factor" | "operator" | "fraction-bar";
+  readonly kind:
+    | "operand"
+    | "factor"
+    | "operator"
+    | "fraction-bar"
+    | "structure";
   readonly motionId: string;
   readonly presentationGroupId: string;
 }
@@ -26,12 +37,16 @@ export interface KpCommonDenominatorPressureNativeEndpoint {
   readonly annotated: KpSelectorAnnotatedLatex;
   readonly nativeHtmlAndMathml: string;
   readonly nodes: readonly KpCommonDenominatorPressureNativeNode[];
+  readonly introductionNodes:
+    readonly KpCommonDenominatorPressureNativeNode[];
 }
 
 interface NativePart {
   readonly rawLatex: string;
   readonly annotatedLatex: string;
   readonly nodes: readonly KpCommonDenominatorPressureNativeNode[];
+  readonly introductionNodes:
+    readonly KpCommonDenominatorPressureNativeNode[];
 }
 
 const plan = kpCanonicalCommonDenominatorPressurePresentationPlan;
@@ -72,6 +87,7 @@ export function bindKpCommonDenominatorPressureNativeEndpoint(input: {
   readonly root: HTMLElement;
   readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
 }): void {
+  clearIntroductionOwnership(input.root, input.endpoint);
   input.root.dataset["kpSemanticEntityId"] = input.endpoint.stateId;
   input.root.dataset["kpPresentationGroupId"] =
     input.endpoint.rootPresentationGroupId;
@@ -101,6 +117,103 @@ export function bindKpCommonDenominatorPressureNativeEndpoint(input: {
     });
 }
 
+export function bindKpCommonDenominatorPressureIntroductionTarget(input: {
+  readonly root: HTMLElement;
+  readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
+}): void {
+  bindKpCommonDenominatorPressureNativeEndpoint(input);
+  input.endpoint.introductionNodes.forEach((node) => {
+    const owner = input.root.querySelector<HTMLElement>(
+      `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
+    );
+    if (owner === null) {
+      throw new Error(
+        `Pressure endpoint ${input.endpoint.kind} is missing introduction ` +
+        `owner ${node.occurrenceId}.`
+      );
+    }
+    // A fraction is one structural paint unit while it enters. Its interior
+    // becomes individually addressable only after native endpoint settlement.
+    owner.querySelectorAll<HTMLElement>("[data-kp-semantic-entity-id]")
+      .forEach(clearNodeOwnership);
+    bindNode(owner, node);
+  });
+}
+
+export function coalesceKpCommonDenominatorPressureIntroductionTarget(
+  input: {
+    readonly observation: KpNativeKatexRenderedSceneObservation;
+    readonly endpoint: KpCommonDenominatorPressureNativeEndpoint;
+  }
+): KpNativeKatexRenderedSceneObservation {
+  const node = input.endpoint.introductionNodes[0];
+  if (node === undefined || input.endpoint.introductionNodes.length !== 1) {
+    throw new Error(
+      "Pressure introduction requires exactly one structural unit factor."
+    );
+  }
+  const owner = input.observation.root.querySelector<HTMLElement>(
+    `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
+  );
+  if (owner === null) {
+    throw new Error("Pressure introduction unit-factor paint is missing.");
+  }
+  const contained = input.observation.atoms.filter(({ sourceElement }) =>
+    owner.contains(sourceElement)
+  );
+  if (contained.length === 0) {
+    throw new Error("Pressure introduction unit factor owns no native paint.");
+  }
+  const removedIds = new Set(contained.map(({ id }) => id));
+  const compositeId = `${input.observation.endpoint}.paint.unit-factor`;
+  const composite = Object.freeze({
+    kind: "native-katex-paint-atom-observation" as const,
+    lifecycle: "renderer-session" as const,
+    id: compositeId,
+    endpoint: input.observation.endpoint,
+    semanticEntityId: node.occurrenceId,
+    presentationGroupId: node.presentationGroupId,
+    paintKind: "glyph" as const,
+    visualKey: "glyph:unit-fraction",
+    sourceElement: owner,
+    rect: unionKpStageRelativeRects(contained.map(({ rect }) => rect)),
+    styleFingerprint: fingerprintKpNativeKatexPaintStyle(
+      getComputedStyle(owner)
+    ),
+    zOrder: Math.min(...contained.map(({ zOrder }) => zOrder)),
+    fontRevision: input.observation.fontRevision
+  });
+  const atoms = Object.freeze([
+    ...input.observation.atoms.filter(({ id }) => !removedIds.has(id)),
+    composite
+  ]);
+  const atomById = new Map(atoms.map((atom) => [atom.id, atom]));
+  const groups = Object.freeze(input.observation.groups.flatMap((group) => {
+    const ownedIntroductionPaint = group.atomIds.some((id) =>
+      removedIds.has(id)
+    );
+    const atomIds = [
+      ...group.atomIds.filter((id) => !removedIds.has(id)),
+      ...(ownedIntroductionPaint ? [compositeId] : [])
+    ];
+    if (atomIds.length === 0) return [];
+    return [Object.freeze({
+      ...group,
+      atomIds: Object.freeze(atomIds),
+      rect: unionKpStageRelativeRects(atomIds.map((id) => atomById.get(id)!.rect))
+    })];
+  }));
+  return createKpNativeKatexRenderedSceneObservation({
+    endpoint: input.observation.endpoint,
+    stage: input.observation.stage,
+    root: input.observation.root,
+    atoms,
+    groups,
+    fontRevision: input.observation.fontRevision,
+    viewportKey: input.observation.viewportKey
+  });
+}
+
 function problemEndpoint(): KpCommonDenominatorPressureNativeEndpoint {
   return endpoint("problem", "One third plus one sixth", sequence(
     fraction(
@@ -124,13 +237,14 @@ KpCommonDenominatorPressureNativeEndpoint {
     "equivalence-source",
     "Two over two times one third, plus one sixth",
     sequence(
-      fraction(
+      introductionGroup(fraction(
         atom(factorNumeratorId, local.factor.semanticId,
           "factor", "2", "equivalence-source"),
         atom(factorDenominatorId, local.factor.semanticId,
           "factor", "2", "equivalence-source"),
         bar(requiredUnitFactorDivisionId(), "equivalence-source")
-      ),
+      ), `${local.source.stateId}.unit-factor`,
+      "semantic.fraction-equivalence.unit-factor", "equivalence-source"),
       atom(`${local.source.stateId}.unit-factor-multiplication`,
         "semantic.operation.multiplication", "operator", "\\cdot",
         "equivalence-source"),
@@ -258,11 +372,12 @@ function endpoint(
     );
   }
   const annotations: readonly KpSelectorLatexAnnotation[] = Object.freeze(
-    content.nodes.flatMap((node) => node.kind === "fraction-bar" ? [] : [{
+    [...content.nodes, ...content.introductionNodes]
+      .flatMap((node) => node.kind === "fraction-bar" ? [] : [{
       selectorId: node.occurrenceId,
       motionId: node.motionId,
       latex: latexForMotion(content.annotatedLatex, node.motionId)
-    }])
+      }])
   );
   const annotated = Object.freeze({
     id: `common-denominator-pressure.${kind}`,
@@ -284,7 +399,8 @@ function endpoint(
       output: "htmlAndMathml",
       trust: true
     }),
-    nodes: content.nodes
+    nodes: content.nodes,
+    introductionNodes: content.introductionNodes
   });
 }
 
@@ -309,7 +425,8 @@ function atom(
   return Object.freeze({
     rawLatex: latex,
     annotatedLatex: `\\htmlData{kp-motion-id=${motionId}}{${latex}}`,
-    nodes: Object.freeze([node])
+    nodes: Object.freeze([node]),
+    introductionNodes: Object.freeze([])
   });
 }
 
@@ -342,7 +459,36 @@ function fraction(
       ...numerator.nodes,
       ...denominator.nodes,
       division
+    ]),
+    introductionNodes: Object.freeze([
+      ...numerator.introductionNodes,
+      ...denominator.introductionNodes
     ])
+  });
+}
+
+function introductionGroup(
+  content: NativePart,
+  occurrenceId: string,
+  semanticId: string,
+  endpointKind: KpCommonDenominatorPressureEndpointKind
+): NativePart {
+  const motionId =
+    `common-denominator-pressure.${endpointKind}.${occurrenceId}`;
+  const node = Object.freeze({
+    occurrenceId,
+    semanticId,
+    kind: "structure" as const,
+    motionId,
+    presentationGroupId:
+      `group.common-denominator-pressure.${endpointKind}.${occurrenceId}`
+  });
+  return Object.freeze({
+    rawLatex: content.rawLatex,
+    annotatedLatex:
+      `\\htmlData{kp-motion-id=${motionId}}{${content.annotatedLatex}}`,
+    nodes: content.nodes,
+    introductionNodes: Object.freeze([node])
   });
 }
 
@@ -352,8 +498,32 @@ function sequence(...parts: readonly NativePart[]): NativePart {
     annotatedLatex: parts.map(({ annotatedLatex }) =>
       annotatedLatex
     ).join(""),
-    nodes: Object.freeze(parts.flatMap(({ nodes }) => nodes))
+    nodes: Object.freeze(parts.flatMap(({ nodes }) => nodes)),
+    introductionNodes: Object.freeze(parts.flatMap(
+      ({ introductionNodes }) => introductionNodes
+    ))
   });
+}
+
+function clearIntroductionOwnership(
+  root: HTMLElement,
+  endpoint: KpCommonDenominatorPressureNativeEndpoint
+): void {
+  endpoint.introductionNodes.forEach((node) => {
+    const owner = root.querySelector<HTMLElement>(
+      `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
+    );
+    if (owner !== null) clearNodeOwnership(owner);
+  });
+}
+
+function clearNodeOwnership(element: HTMLElement): void {
+  for (const key of [
+    "kpSemanticEntityId",
+    "kpSemanticIdentityId",
+    "kpSemanticSelectorId",
+    "kpPresentationGroupId"
+  ]) delete element.dataset[key];
 }
 
 function context(
@@ -391,6 +561,13 @@ function latexForMotion(annotatedLatex: string, motionId: string): string {
   const start = annotatedLatex.indexOf(marker);
   if (start < 0) return "";
   const bodyStart = start + marker.length;
-  const end = annotatedLatex.indexOf("}", bodyStart);
-  return end < 0 ? "" : annotatedLatex.slice(bodyStart, end);
+  let depth = 0;
+  for (let index = bodyStart; index < annotatedLatex.length; index += 1) {
+    const character = annotatedLatex[index];
+    if (character === "{") depth += 1;
+    if (character !== "}") continue;
+    if (depth === 0) return annotatedLatex.slice(bodyStart, index);
+    depth -= 1;
+  }
+  return "";
 }

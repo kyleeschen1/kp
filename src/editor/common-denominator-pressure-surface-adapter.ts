@@ -18,7 +18,9 @@ import {
   type KpFractionEquivalenceTransitSession
 } from "../rendering/fraction-equivalence-transit-session.ts";
 import {
+  bindKpCommonDenominatorPressureIntroductionTarget,
   bindKpCommonDenominatorPressureNativeEndpoint,
+  coalesceKpCommonDenominatorPressureIntroductionTarget,
   kpCanonicalCommonDenominatorPressureNativeEndpoints,
   type KpCommonDenominatorPressureNativeEndpoint
 } from "../rendering/common-denominator-pressure-native-endpoints.ts";
@@ -113,7 +115,6 @@ function mountSurface(
       root.innerHTML = endpoint.nativeHtmlAndMathml;
       root.style.opacity = index === 0 ? "1" : "0";
       setAccessibleEndpoint(root, index === 0);
-      bindKpCommonDenominatorPressureNativeEndpoint({ root, endpoint });
       roots.set(endpoint.kind, root);
       stage.append(root);
     }
@@ -155,18 +156,40 @@ async function prepareSurface(
     KpCommonDenominatorPressureNativeEndpoint
   >;
   try {
-    const [
-      problemSource,
-      equivalenceTarget,
-      equivalenceSource,
-      productTarget,
-      productSource,
-      evaluatedTarget
-    ] = await Promise.all([
+    bindKpCommonDenominatorPressureNativeEndpoint({
+      root: requiredRoot(session, endpoints.problem.kind),
+      endpoint: endpoints.problem
+    });
+    bindKpCommonDenominatorPressureIntroductionTarget({
+      root: requiredRoot(session, endpoints["equivalence-source"].kind),
+      endpoint: endpoints["equivalence-source"]
+    });
+    const [problemSource, rawEquivalenceTarget] = await Promise.all([
       observe(session, endpoints.problem, "source"),
-      observe(session, endpoints["equivalence-source"], "target"),
+      observe(session, endpoints["equivalence-source"], "target")
+    ]);
+    const equivalenceTarget =
+      coalesceKpCommonDenominatorPressureIntroductionTarget({
+        observation: rawEquivalenceTarget,
+        endpoint: endpoints["equivalence-source"]
+      });
+    bindKpCommonDenominatorPressureNativeEndpoint({
+      root: requiredRoot(session, endpoints["equivalence-source"].kind),
+      endpoint: endpoints["equivalence-source"]
+    });
+    bindKpCommonDenominatorPressureNativeEndpoint({
+      root: requiredRoot(session, endpoints.product.kind),
+      endpoint: endpoints.product
+    });
+    const [equivalenceSource, productTarget] = await Promise.all([
       observe(session, endpoints["equivalence-source"], "source"),
-      observe(session, endpoints.product, "target"),
+      observe(session, endpoints.product, "target")
+    ]);
+    bindKpCommonDenominatorPressureNativeEndpoint({
+      root: requiredRoot(session, endpoints.evaluated.kind),
+      endpoint: endpoints.evaluated
+    });
+    const [productSource, evaluatedTarget] = await Promise.all([
       observe(session, endpoints.product, "source"),
       observe(session, endpoints.evaluated, "target")
     ]);
