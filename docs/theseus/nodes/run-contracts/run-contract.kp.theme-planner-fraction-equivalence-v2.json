@@ -112,11 +112,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T01:46:59.616Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed after planner exposure metadata became required."
+    },
+    {
+      "command": "npm run test:equation-series-operation-aliases",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:50:28.385Z",
+      "notes": "3 alias projection, extensibility, unknown-alias, and architecture tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T01:50:37.128Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks passed with the standalone alias normalization protocol."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 gives every planner declaration explicit exposed-or-alias metadata; exposed names require concise source-owned authoring summaries."
+    "summary": "s08 projects a frozen alias registry from operation-pack declarations and returns canonical, alias, or unknown normalization without renderer leakage."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -189,7 +203,8 @@
     {
       "id": "s08",
       "title": "Alias-normalization-protocol",
-      "status": "planned"
+      "summary": "A data-derived alias registry now normalizes legacy/provider IDs to canonical planner IDs and rejects unknown IDs without renderer leakage or central switches.",
+      "status": "complete"
     },
     {
       "id": "s09",
