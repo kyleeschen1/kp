@@ -161,11 +161,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:02:45.441Z",
       "notes": "All TypeScript, Svelte, and domain typechecks passed with typed unsupported planner results propagated through benchmark reporting."
+    },
+    {
+      "command": "npm run test:equation-series-governed-source",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:06:03.545Z",
+      "notes": "4 exact-pin, negative-path, ambiguity, and architecture tests passed for governed source selection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:06:16.798Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks passed with governed source requirement and resolution types."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 makes unsupported a validated planner abstention with exact adjacency coverage and a reason; benchmark orchestration never sends it to compilation."
+    "summary": "s12 adds one deterministic selection protocol for exact source revision, operation, entity, assumption, and semantic-contract availability; family validators retain truth verification."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -262,7 +276,8 @@
     {
       "id": "s12",
       "title": "Governed-source-resolver",
-      "status": "planned"
+      "summary": "Governed source selection now requires one exact source/revision and verifies operation, entity, assumption, and contract availability before specialized truth validation.",
+      "status": "complete"
     },
     {
       "id": "s13",

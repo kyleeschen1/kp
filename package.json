@@ -164,6 +164,7 @@
     "test:equation-series-adjacency-segmentation": "node --disable-warning=ExperimentalWarning --test tests/equation-series-adjacency-segmentation.test.ts tests/equation-transform-series-request.test.ts",
     "test:equation-series-intent-resolver": "node --disable-warning=ExperimentalWarning --test tests/equation-series-intent-resolver.test.ts tests/compile-equation-intent.test.ts tests/homomorphic-generation-benchmark.test.ts",
     "test:equation-series-operation-aliases": "node --disable-warning=ExperimentalWarning --test tests/equation-series-operation-alias-registry.test.ts",
+    "test:equation-series-governed-source": "node --disable-warning=ExperimentalWarning --test tests/equation-series-governed-source.test.ts",
     "test:equation-series-runtime": "node --disable-warning=ExperimentalWarning --test tests/equation-series-runtime.test.ts tests/synchronized-model-projection.test.ts",
     "test:equation-series-repair-taxonomy": "node --disable-warning=ExperimentalWarning --test tests/equation-series-repair-taxonomy.test.ts tests/equation-series-runtime.test.ts tests/equation-series-intent-resolver.test.ts",
     "author:equation-series": "node --disable-warning=ExperimentalWarning scripts/compile-equation-transform-series.ts",
