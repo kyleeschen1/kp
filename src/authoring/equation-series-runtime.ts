@@ -205,7 +205,16 @@ function clonePlan(
       recipeIds: [...plan.declaration.recipeIds],
       authorityRefIds: [...plan.declaration.authorityRefIds],
       roleIds: [...plan.declaration.roleIds],
-      canonicalComposition: [...plan.declaration.canonicalComposition]
+      canonicalComposition: [...plan.declaration.canonicalComposition],
+      ...(plan.declaration.governed === undefined ? {} : {
+        governed: {
+          ...plan.declaration.governed,
+          operationPin: { ...plan.declaration.governed.operationPin },
+          requiredEvidenceIds: [
+            ...plan.declaration.governed.requiredEvidenceIds
+          ]
+        }
+      })
     }
   });
 }

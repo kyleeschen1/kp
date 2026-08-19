@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.close-change-of-base-authoring-v1",
+  "kind": "next-action",
+  "title": "Close governed change-of-base authoring",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Change of base is directly authorable through the governed equation-series compiler; the fixed live-model benchmark is now the active frontier.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-18-post-log-base-convergence-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/generative-animation-compiler.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-series-logarithm-base-authoring.test.ts tests/equation-series-natural-language-planner-port.test.ts tests/animation-capability-readiness.test.ts tests/animation-transformation-coverage.test.ts tests/animation-capability-compiler-evidence.test.ts tests/equation-series-both-sides-authoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T00:32:19.348Z",
+      "notes": "38 focused authoring, readiness, coverage, compiler-evidence, and preservation checks passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T00:32:20.440Z",
+      "notes": "Application TypeScript contract passed without the expensive Svelte/full-suite matrix."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T00:32:21.400Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, and equation compiler ratchets passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T00:32:22.334Z",
+      "notes": "Production bundle completed; only the existing greater-than-500-kB chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Registered governed change-of-base authoring, compiled numeric and symbolic verified sources through ordered LaTeX with typed repairs, and promoted derived Coverage to Direct without renderer changes."
+  }
+}

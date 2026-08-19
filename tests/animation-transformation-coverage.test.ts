@@ -28,12 +28,13 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 5);
+  assert.equal(direct.length, 6);
   for (const capabilityId of [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
     "capability.equation.additive-cancellation",
-    "capability.equation.balanced-operations"
+    "capability.equation.balanced-operations",
+    "capability.equation.alternative-logarithm-bases"
   ]) {
     const entry = direct.find((candidate) =>
       candidate.capabilityId === capabilityId
@@ -68,18 +69,15 @@ test("balanced operation coverage promotes only the proved six-operation path", 
     kind === "generation-corpus")?.summary ?? "", /exponentiate|root/u);
 });
 
-test("alternative logarithm bases register without overclaiming authoring", () => {
+test("alternative logarithm bases become direct only through governed authoring", () => {
   const entry = createKpAnimationTransformationCoverage().entries.find(
     ({ capabilityId }) => capabilityId ===
       "capability.equation.alternative-logarithm-bases"
   );
-  assert.equal(entry?.status, "Registered");
-  assert.deepEqual(entry?.remainingRequirementIds, [
-    "requirement.equation.logarithm-base.authoring"
-  ]);
+  assert.equal(entry?.status, "Direct");
+  assert.deepEqual(entry?.remainingRequirementIds, []);
   assert.deepEqual(entry?.evidenceTensions, [
-    "registered-without-direct-generation",
-    "playable-exemplar-without-general-generation"
+    "direct-deterministic-not-live-model-evidence"
   ]);
 });
 

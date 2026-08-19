@@ -16,16 +16,27 @@ import { createKpHomomorphicCrossoverAuthoringOperations } from
 import type { KpLlmPromotedOperationAuthoringDefinition } from
   "../animation/llm-semantic-motion-operation-authoring.ts";
 import {
+  KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
   kpEquationSeriesBothSidesAuthoringDeclarations,
   type KpEquationSeriesBothSidesAuthoringDeclaration
 } from "./equation-series-both-sides-authoring.ts";
+import {
+  kpEquationSeriesLogarithmBaseAuthoringDeclaration
+} from "./equation-series-logarithm-base-authoring.ts";
+
+export interface KpEquationSeriesGovernedRequirements {
+  readonly authoringAuthorityId: string;
+  readonly operationPin: Readonly<{ packId: string; version: string }>;
+  readonly requiredEvidenceIds: readonly string[];
+}
 
 export interface KpEquationSeriesOperationDeclaration {
   readonly operationId: string;
   readonly source:
     | "canonical-operation"
     | "equation-extension"
-    | "both-sides-operation";
+    | "both-sides-operation"
+    | "governed-operation";
   readonly familyId: string;
   readonly recipeIds: readonly string[];
   readonly authorityRefIds: readonly string[];
@@ -33,6 +44,7 @@ export interface KpEquationSeriesOperationDeclaration {
   readonly canonicalComposition: readonly string[];
   readonly bothSides?:
     KpEquationSeriesBothSidesAuthoringDeclaration | undefined;
+  readonly governed?: KpEquationSeriesGovernedRequirements | undefined;
 }
 
 export interface KpEquationSeriesOperationRegistry {
@@ -102,6 +114,12 @@ export const kpEquationSeriesOperationRegistry =
           ...bothSides.requiredAssumptionEvidenceIds
         ]),
         roleIds: bothSides.roleIds,
+        governed: {
+          authoringAuthorityId:
+            KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
+          operationPin: bothSides.operationPin,
+          requiredEvidenceIds: bothSides.requiredAssumptionEvidenceIds
+        },
         bothSides
       };
     }),
@@ -109,7 +127,8 @@ export const kpEquationSeriesOperationRegistry =
       .filter(({ operationId }) => !existingOperationDeclarations.some(
         (entry) => entry.operationId === operationId
       ))
-      .map(bothSidesDeclaration)
+      .map(bothSidesDeclaration),
+    logarithmBaseDeclaration()
   ]);
 
 function canonicalDeclaration(
@@ -178,7 +197,37 @@ function bothSidesDeclaration(
     ],
     roleIds: entry.roleIds,
     canonicalComposition: [entry.operationId],
+    governed: {
+      authoringAuthorityId:
+        KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
+      operationPin: entry.operationPin,
+      requiredEvidenceIds: entry.requiredAssumptionEvidenceIds
+    },
     bothSides: entry
+  });
+}
+
+function logarithmBaseDeclaration():
+KpEquationSeriesOperationDeclaration {
+  const entry = kpEquationSeriesLogarithmBaseAuthoringDeclaration;
+  return declaration({
+    operationId: entry.operationId,
+    source: "governed-operation",
+    familyId: entry.familyId,
+    recipeIds: entry.recipeIds,
+    authorityRefIds: unique([
+      entry.authoringAuthorityId,
+      entry.semanticAuthorityId,
+      entry.lawId,
+      ...entry.motifIds
+    ]),
+    roleIds: entry.roleIds,
+    canonicalComposition: [entry.operationId],
+    governed: {
+      authoringAuthorityId: entry.authoringAuthorityId,
+      operationPin: entry.operationPin,
+      requiredEvidenceIds: entry.requiredEvidenceIds
+    }
   });
 }
 
@@ -191,6 +240,13 @@ function declaration(
     authorityRefIds: Object.freeze([...input.authorityRefIds]),
     roleIds: Object.freeze([...input.roleIds]),
     canonicalComposition: Object.freeze([...input.canonicalComposition]),
+    ...(input.governed === undefined ? {} : {
+      governed: deepFreeze({
+        ...input.governed,
+        operationPin: { ...input.governed.operationPin },
+        requiredEvidenceIds: [...input.governed.requiredEvidenceIds]
+      })
+    }),
     ...(input.bothSides === undefined ? {} : {
       bothSides: deepFreeze({
         ...input.bothSides,

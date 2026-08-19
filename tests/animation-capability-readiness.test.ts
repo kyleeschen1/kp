@@ -13,7 +13,7 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
-test("readiness derives the five exact direct generation capabilities", () => {
+test("readiness derives the six exact direct generation capabilities", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const direct = readiness.entries.filter(({ status }) => status === "Direct");
   assert.deepEqual(direct.map(({ capabilityId }) => capabilityId), [
@@ -21,7 +21,8 @@ test("readiness derives the five exact direct generation capabilities", () => {
     "capability.equation.distribution",
     "capability.equation.additive-cancellation",
     "capability.equation.log-homomorphic-decomposition",
-    "capability.equation.balanced-operations"
+    "capability.equation.balanced-operations",
+    "capability.equation.alternative-logarithm-bases"
   ]);
   assert.ok(direct.every(({ evidence }) =>
     evidence.gate === "direct-intent-and-registered-authority"));
@@ -34,7 +35,7 @@ test("registered exemplar and missing statuses retain distinct gates", () => {
   assert.equal(status(readiness,
     "capability.equation.log-homomorphic-decomposition"), "Direct");
   assert.equal(status(readiness,
-    "capability.equation.alternative-logarithm-bases"), "Missing");
+    "capability.equation.alternative-logarithm-bases"), "Direct");
 });
 
 test("balanced operations require the governed corpus-backed series path", () => {
@@ -53,6 +54,29 @@ test("balanced operations require the governed corpus-backed series path", () =>
     ],
     generationCorpusAuthorityIds: [
       "corpus.equation.balanced-operation.v1"
+    ],
+    sourcePath: "src/authoring/compile-equation-transform-series.ts"
+  });
+});
+
+test("alternative bases require corpus-backed transform-series authoring", () => {
+  const direct = createKpAnimationCapabilityDirectIntentEvidence().find(
+    ({ operationId }) => operationId ===
+      "operation.equation.change-logarithm-base.v1"
+  );
+  assert.deepEqual(direct, {
+    animationId: "animation.equation.logarithm-change-of-base.v1",
+    operationId: "operation.equation.change-logarithm-base.v1",
+    authoringAuthorityId: "authoring.equation.logarithm-base.v1",
+    planKind: "equation-transform-series-runtime",
+    resolvedAuthorityIds: [
+      "operation.equation.change-logarithm-base.v1",
+      "recipe.equation.change-logarithm-base.v1",
+      "motif.equation.logarithm-base-handoff.v1",
+      "normalizer.equation.logarithm-base-syntax.v1"
+    ],
+    generationCorpusAuthorityIds: [
+      "corpus.equation.logarithm-base.v1"
     ],
     sourcePath: "src/authoring/compile-equation-transform-series.ts"
   });

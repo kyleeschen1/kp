@@ -79,11 +79,12 @@ shared request, sequencing, hosting, URL, and review envelope.
 
 This is not permission for undirected domain expansion or a universal
 generator. The product/quotient crossover, evidence-derived Transformation
-Coverage view, and governed equation-transform-series compiler are complete.
-The next bounded sequence restores the canonical compositor's sealed ownership
-gate, reconciles existing balanced operations as one generated family, and
-then pressures that boundary with one alternative-base logarithm exemplar.
-Additional motif families and domain frontends remain explicit ordered gaps.
+Coverage view, governed equation-transform-series compiler, compositor
+ownership repair, balanced-operation family, and alternative-base logarithm
+exemplar and governed authoring path are complete. Change of base is now
+`Direct`; a fixed live-model benchmark should measure the entrance before KP
+opens another motif family. Additional motif
+families and domain frontends remain explicit ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
 
@@ -101,14 +102,11 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is now whether the finite equation domain
-can remain extensible without letting its canonical compositor become a second
-presentation compiler. Runtime behavior is healthy, but the compositor's
-sealed direct-dependency source budget is exceeded. Restore explicit
-renderer-versus-plan ownership first; then use existing subtract, multiply,
-divide, and apply-log callers to prove a narrow balanced-operation family.
-This remains equation-domain convergence, not a universal graph, code,
-diagram, or 3D compiler.
+The immediate repository question is now whether the complete governed
+equation entrance is legible enough for a model to select the right verified
+operation without unnecessary repairs or silent fallback. Measure that
+question with a fixed live-model benchmark. This remains equation-domain convergence, not a
+universal graph, code, diagram, or 3D compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

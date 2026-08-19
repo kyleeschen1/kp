@@ -29,6 +29,14 @@ test("prompt creation exposes only source states adjacencies and registered oper
   assert.deepEqual(governed?.roleIds,
     ["lhs", "rhs", "relation", "applied-operation"]);
   assert.equal(governed?.governedRequirements?.operationPin.version, "1.0.0");
+  assert.equal(governed?.governedRequirements?.authoringAuthorityId,
+    "authoring.equation.balanced-operation.v1");
+  const changeBase = prompt.operations.find(({ operationId }) =>
+    operationId === "kp.algebra.change-logarithm-base"
+  );
+  assert.equal(changeBase?.source, "governed-operation");
+  assert.equal(changeBase?.governedRequirements?.authoringAuthorityId,
+    "authoring.equation.logarithm-base.v1");
   assert.deepEqual(prompt.operations.filter(({ governedRequirements }) =>
     governedRequirements !== undefined).map(({ operationId }) =>
       operationId).sort(), [
@@ -37,7 +45,8 @@ test("prompt creation exposes only source states adjacencies and registered oper
     "kp.algebra.multiply-both-sides",
     "kp.algebra.divide-both-sides",
     "kp.algebra.apply-natural-log-both-sides",
-    "kp.algebra.divide-both-sides-by-log-base"
+    "kp.algebra.divide-both-sides-by-log-base",
+    "kp.algebra.change-logarithm-base"
   ].sort());
   assert.equal(
     JSON.stringify(prompt).includes("models-propose-operations-kp-verifies"),

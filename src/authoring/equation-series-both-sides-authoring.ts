@@ -8,6 +8,11 @@ import type { KpEquationSeriesIntentResolutionResult } from
   "./equation-series-intent-resolver.ts";
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
+import type { KpEquationSeriesVerifiedSemanticSource } from
+  "./equation-series-governed-source.ts";
+
+export type { KpEquationSeriesVerifiedSemanticSource } from
+  "./equation-series-governed-source.ts";
 
 /** Stable evidence ID for the governed transform-series authoring surface. */
 export const KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY =
@@ -51,14 +56,6 @@ export interface KpEquationSeriesBothSidesSemanticArguments {
   }>;
   readonly roleBindings: Readonly<Record<KpBothSidesAuthoringRoleId,
     readonly string[]>>;
-  readonly assumptionEvidenceIds: readonly string[];
-}
-
-export interface KpEquationSeriesVerifiedSemanticSource {
-  readonly sourceId: string;
-  readonly revisionId: string;
-  readonly operationIds: readonly string[];
-  readonly entityIds: readonly string[];
   readonly assumptionEvidenceIds: readonly string[];
 }
 

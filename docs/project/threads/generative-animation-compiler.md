@@ -2,13 +2,11 @@
 
 Status: active
 Last Updated: 2026-08-18
-Current Next Action: the governed animation generation foundation is complete.
-The specialized canonical-renderer gate now exposes a committed dependency
-closure of 309,245 source bytes against its 295,000-byte ceiling while runtime,
-glyph, reader, and presentation-plan behavior remains green. Prepare the
-approved-order proposal: restore compositor ownership health first, then
-reconcile balanced operations, then pressure one alternative-base logarithm
-exemplar. Do not implement before the new long-loop contract is approved.
+Current Next Action: run a fixed live-model benchmark against the now-complete
+governed equation entrance before selecting the next visual family. Measure
+operation selection, semantic identities, assumption handling, repair quality,
+and silent fallback. Do not reopen compositor, balanced operation, or layout
+work without new evidence.
 
 ## Goal
 
@@ -40,6 +38,13 @@ owns its parser, truth, operations, motifs, geometry, and renderer policy.
 - Thirty equation surfaces exist, but asset count is not capability coverage:
   three are canonical, twenty-two adapter-backed, four static-only, and one a
   retirement candidate in the current generated inventory.
+- The canonical compositor ownership gate is green with explicit planning and
+  rendering boundaries and unchanged fixed ceilings.
+- Balanced equation operations are `Direct` through one typed family, causal
+  recipe, authoring entrance, and adversarial corpus.
+- Alternative logarithm bases are `Direct`: syntax, semantics, recipe, motif,
+  approved exemplar, corpus, structurally different caller, and governed
+  transform-series authoring all have exact evidence.
 - Matrix, code, Graph2D, and Graph3D are real governed callers with different
   semantic frontends. Their exact capability gaps are visible, and none is
   presented as generally generatable yet.
@@ -65,9 +70,9 @@ and playable does not mean generally generatable.
 
 ## Ordered Capability Plan
 
-0. Canonical compositor ownership health: restore the sealed dependency gate
-   through explicit renderer/planner ownership and separately measured closure,
-   never by raising the existing ceiling or moving unmeasured code.
+0. Canonical compositor ownership health: complete through explicit
+   renderer/planner ownership and separately measured closure without raising
+   a ceiling or moving unmeasured code.
 
 1. Function wrapping, distribution, and additive cancellation: preserve the
    existing direct baseline.
@@ -75,12 +80,12 @@ and playable does not mean generally generatable.
    recipe and expose it to governed authoring.
 3. Transform-series compilation: ordered states, one semantic operation per
    adjacency, typed segmentation repairs, and one deterministic clock.
-4. Balanced equation operations: consolidate existing subtract/divide/log
-   examples into a general verified family before broadening operands.
+4. Balanced equation operations: complete across six governed operations.
 5. Alternative-base logarithm syntax and change-of-base transformations:
-   preserve bases as semantic operator parameters and establish a distinct
-   base-handoff motif rather than treating subscripts as decoration.
-6. Fraction equivalence and repartition.
+   complete, reviewed, pressure-tested, and directly authorable; now measure
+   live-model use of the complete entrance.
+6. Fraction equivalence and repartition: next visual family unless benchmark
+   evidence identifies a more fundamental compiler gap.
 7. Common-denominator fraction addition/subtraction and factor cancellation.
 8. Power, exponent, and root inversion with branches and domain conditions.
 9. Substitution, like-term collection, and common-factor coalescence.
@@ -132,6 +137,7 @@ the exact view, artifact, settings, and playhead.
 - `../reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`
 - `../reviews/2026-08-18-compositor-before-balanced-operations-next-step-review.md`
 - `../reviews/2026-08-18-compositor-balanced-log-base-long-loop-proposal.md`
+- `../reviews/2026-08-18-post-log-base-convergence-next-step-review.md`
 - `animation-catalogue.md`
 - `architecture-convergence.md`
 - `semantic-runtime.md`

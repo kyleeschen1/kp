@@ -12,8 +12,8 @@
   "summary": {
     "total": 28,
     "byStatus": {
-      "Direct": 5,
-      "Registered": 4,
+      "Direct": 6,
+      "Registered": 3,
       "Exemplar": 9,
       "Missing": 10
     }
@@ -491,7 +491,7 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.logarithm-base.v1"
       },
-      "status": "Registered",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.equation.logarithm-base.normalizer",
@@ -548,8 +548,10 @@
           "kind": "authoring-surface",
           "authorityId": "authoring.equation.logarithm-base.v1",
           "summary": "Authors name source and target bases semantically; KP chooses notation and motion.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-transform-series.ts"
+          ]
         },
         {
           "id": "requirement.equation.logarithm-base.corpus",
@@ -563,9 +565,7 @@
         }
       ],
       "gaps": [],
-      "remainingRequirementIds": [
-        "requirement.equation.logarithm-base.authoring"
-      ],
+      "remainingRequirementIds": [],
       "exemplarLinks": [
         {
           "assetId": "animation.equation.logarithm-change-of-base.v1",
@@ -574,8 +574,7 @@
         }
       ],
       "evidenceTensions": [
-        "registered-without-direct-generation",
-        "playable-exemplar-without-general-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {

@@ -125,6 +125,9 @@ const fallbackPaths = paths([
 const manualRegistryPaths = paths([
   "src/animation/operation-evaluation-presentation-registry.ts",
   "src/animation/symbolic-manipulation-family-registry.ts",
+  // This registry dispatches authoring validators by declared operation
+  // ownership; it contains no mathematical, presentation, or renderer switch.
+  "src/authoring/equation-series-governed-authoring-registry.ts",
   // This is the intended immutable declaration boundary; the older entries
   // remain inventoried only until their callers migrate and they can retire.
   "src/domain-ir/equation-extension-registry.ts",

@@ -29,12 +29,14 @@ export interface KpEquationSeriesPlannerPrompt {
       source:
         | "canonical-operation"
         | "equation-extension"
-        | "both-sides-operation";
+        | "both-sides-operation"
+        | "governed-operation";
     familyId: string;
     roleIds: readonly string[];
     governedRequirements?: Readonly<{
+      authoringAuthorityId: string;
       operationPin: Readonly<{ packId: string; version: string }>;
-      requiredAssumptionEvidenceIds: readonly string[];
+      requiredEvidenceIds: readonly string[];
     }> | undefined;
   }>[];
 }
@@ -115,17 +117,16 @@ export function createKpEquationSeriesPlannerPrompt(input: {
         : []
     ),
     operations: kpEquationSeriesOperationRegistry.declarations.map(
-      ({ operationId, source, familyId, roleIds, bothSides }) => ({
+      ({ operationId, source, familyId, roleIds, governed }) => ({
         operationId,
         source,
         familyId,
         roleIds,
-        ...(bothSides === undefined ? {} : {
+        ...(governed === undefined ? {} : {
           governedRequirements: {
-            operationPin: { ...bothSides.operationPin },
-            requiredAssumptionEvidenceIds: [
-              ...bothSides.requiredAssumptionEvidenceIds
-            ]
+            authoringAuthorityId: governed.authoringAuthorityId,
+            operationPin: { ...governed.operationPin },
+            requiredEvidenceIds: [...governed.requiredEvidenceIds]
           }
         })
       })

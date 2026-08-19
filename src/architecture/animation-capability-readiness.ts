@@ -16,6 +16,8 @@ import {
   KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
   kpEquationSeriesBothSidesAuthoringDeclarations
 } from "../authoring/equation-series-both-sides-authoring.ts";
+import { evaluateKpLogarithmBaseAuthoringEvidence } from
+  "../authoring/logarithm-base-authoring-evidence.ts";
 import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
@@ -267,9 +269,11 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
     }
   );
   const balancedEvidence = createBalancedOperationDirectEvidence();
+  const logarithmBaseEvidence = createLogarithmBaseDirectEvidence();
   return Object.freeze([
     ...intentEvidence,
-    ...(balancedEvidence === undefined ? [] : [balancedEvidence])
+    ...(balancedEvidence === undefined ? [] : [balancedEvidence]),
+    ...(logarithmBaseEvidence === undefined ? [] : [logarithmBaseEvidence])
   ]);
 }
 
@@ -294,6 +298,26 @@ KpAnimationCapabilityDirectIntentEvidence | undefined {
     ]),
     generationCorpusAuthorityIds: Object.freeze([
       kpBalancedOperationAuthoringCorpus.id
+    ]),
+    sourcePath:
+      "src/authoring/compile-equation-transform-series.ts" as const
+  });
+}
+
+function createLogarithmBaseDirectEvidence():
+KpAnimationCapabilityDirectIntentEvidence | undefined {
+  const evidence = evaluateKpLogarithmBaseAuthoringEvidence();
+  if (evidence.status !== "passed") return undefined;
+  return Object.freeze({
+    animationId: evidence.animationId,
+    operationId: evidence.operationId,
+    authoringAuthorityId: evidence.authoringAuthorityId,
+    planKind: "equation-transform-series-runtime" as const,
+    resolvedAuthorityIds: Object.freeze([
+      ...evidence.resolvedAuthorityIds
+    ]),
+    generationCorpusAuthorityIds: Object.freeze([
+      ...evidence.generationCorpusAuthorityIds
     ]),
     sourcePath:
       "src/authoring/compile-equation-transform-series.ts" as const

@@ -25,9 +25,10 @@ import {
   type KpEquationTransformSeriesRequest
 } from "./equation-transform-series-request.ts";
 import {
-  validateKpEquationSeriesBothSidesAuthoring,
-  type KpEquationSeriesVerifiedSemanticSource
-} from "./equation-series-both-sides-authoring.ts";
+  validateKpEquationSeriesGovernedAuthoring
+} from "./equation-series-governed-authoring-registry.ts";
+import type { KpEquationSeriesVerifiedSemanticSource } from
+  "./equation-series-governed-source.ts";
 
 export interface KpCompiledEquationTransformSeriesCandidate {
   readonly request: KpEquationTransformSeriesRequest;
@@ -93,16 +94,16 @@ export function compileKpEquationTransformSeries(input: {
       repairs: resolution.repairs
     })
   );
-  const governedBothSidesDiagnostics =
-    validateKpEquationSeriesBothSidesAuthoring({
+  const governedDiagnostics = validateKpEquationSeriesGovernedAuthoring({
       request: validated.request,
+      normalizedStates: normalized.states,
       resolution,
       sourceAuthorities: input.governedSources
     });
-  if (governedBothSidesDiagnostics.length > 0) return failed(
+  if (governedDiagnostics.length > 0) return failed(
     input.previous,
     repairsForKpEquationSeriesExternalDiagnostics(
-      governedBothSidesDiagnostics
+      governedDiagnostics
     )
   );
   const compiled = compileKpEquationSeriesRuntime({

@@ -122,20 +122,28 @@ Only this repository sequence is active:
     Graph2D, and Graph3D. The combined surface and exponent/log checkpoint was
     human-approved on 2026-08-18; release checks are recorded in
     `reviews/2026-08-18-governed-animation-generation-foundation-closeout.md`.
-13. **Canonical compositor ownership health:** next. Restore the failed sealed
-    dependency-closure gate without raising its ceiling or hiding responsibility
-    in an unmeasured helper. Separate renderer-session paint/settlement from
-    compiled scene planning, measure both ownership zones, preserve every
-    approved equation endpoint and choreography, and keep route budgets flat.
-14. **Balanced equation operations:** after the compositor gate is green.
-    Reconcile the existing subtract, multiply, divide, and apply-log examples
-    against one typed family contract and shared causal recipe. Treat this as
-    authoring/compiler consolidation, not a visual rebuild; promote only the
-    smallest seam that the existing callers prove.
-15. **Alternative logarithm bases:** after balanced-operation pressure. Preserve
-    explicit bases as semantic operator parameters, define change-of-base truth
-    and domain assumptions, then perfect one reversible exemplar before any
-    family-wide authoring promotion.
+13. **Canonical compositor ownership health:** complete. Renderer-session
+    paint/settlement and ephemeral scene planning now have explicit ownership,
+    separately measured closures, and green fixed ceilings without changing
+    approved behavior.
+14. **Balanced equation operations:** complete. Add, subtract, multiply,
+    divide, apply-log, and divide-by-log-base share one typed semantic family,
+    causal recipe, governed authoring entrance, and positive/negative corpus
+    while retaining caller-owned presentation.
+15. **Alternative logarithm bases:** exemplar and pressure complete. Explicit
+    bases survive bounded parsing, semantic truth, identity correspondence,
+    native motion, direct seek/rewind, and a structurally different caller.
+16. **Change-of-base authoring closure:** complete. A registered governance
+    protocol validates exact verified source pins, semantic base/argument
+    identity, natural-logarithm target, domain evidence, and ordered LaTeX;
+    Coverage now derives `Direct` without a renderer change.
+17. **Fixed live-model generation benchmark:** next. Measure
+    operation selection, semantic roles, assumptions, repairs, and silent
+    fallback against a small frozen request set; preserve KP as mathematical
+    authority.
+18. **Fraction equivalence and repartition:** next visual family unless the
+    benchmark identifies a more fundamental compiler gap. Perfect one
+    reversible exemplar and stop for human review before promotion.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -147,7 +155,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Supported surfaces route through one narrow declaration/recipe/compiler path with explicit dispositions | Pressure the authoring and extension seams; do not add another symbolic family during infrastructure compression. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct through governed transform-series authoring | Benchmark generation, then select the next visual family from measured gaps. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
@@ -156,7 +164,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | Three fixed requests compile with zero repair through one narrow direct entrance; live-model quality remains unmeasured | Build the governed series and coverage boundary, then evaluate live models as a separately measured promotion gate. |
+| LLM generation | Fixed requests, balanced operations, and change of base compile through one governed series entrance; live-model quality remains unmeasured | Run a small fixed live-model benchmark before expanding capability coverage. |
 
 ## Active Tightening Phase
 
