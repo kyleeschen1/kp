@@ -136,6 +136,91 @@ test("unsupported and missing-source outcomes never compile invented truth", asy
   assert.equal(missingSource.compilation.active, undefined);
 });
 
+test("planner and source repairs retain the exact last valid candidate", async () => {
+  const validRequest = proposedRequest({
+    id: "series.orchestration.recovery.valid.v1",
+    beforeId: "state.orchestration.recovery.valid.before",
+    beforeLatex: "x",
+    afterId: "state.orchestration.recovery.valid.after",
+    afterLatex: "\\ln(x)",
+    adjacencyId: "adjacency.orchestration.recovery.valid"
+  });
+  const valid = await compileNaturalLanguageKpEquationSeries({
+    request: validRequest,
+    naturalLanguageIntent: "Wrap x in a natural logarithm.",
+    planner: planner(validRequest, "kp.algebra.wrap-function")
+  });
+  assert.equal(valid.status, "compiled");
+  if (valid.status !== "compiled") return;
+
+  const malformedPlanner = await compileNaturalLanguageKpEquationSeries({
+    request: validRequest,
+    naturalLanguageIntent: "Return malformed output.",
+    planner: {
+      id: "planner.orchestration.malformed.v1",
+      propose: async () => ({ status: "invented" })
+    },
+    previous: valid.compilation
+  });
+  assert.equal(malformedPlanner.status, "repair-required");
+  if (malformedPlanner.status !== "repair-required") return;
+  assert.equal(malformedPlanner.recovery.disposition, "retained-last-valid");
+  assert.equal(malformedPlanner.compilation.active, valid.compilation.active);
+  assert.equal(malformedPlanner.repairs.length > 0, true);
+  assert.equal(malformedPlanner.boundRequest, undefined);
+
+  const governedRequest = proposedRequest({
+    id: "series.orchestration.recovery.governed.v1",
+    beforeId: "state.orchestration.recovery.governed.before",
+    beforeLatex: "x=3",
+    afterId: "state.orchestration.recovery.governed.after",
+    afterLatex: "x+2=5",
+    adjacencyId: "adjacency.orchestration.recovery.governed"
+  });
+  const declaration = kpEquationSeriesBothSidesAuthoringDeclarations.find(
+    ({ registrationId }) => registrationId === "addBothSides"
+  )!;
+  const missingSource = await compileNaturalLanguageKpEquationSeries({
+    request: governedRequest,
+    naturalLanguageIntent: "Add two to both sides.",
+    planner: planner(governedRequest, declaration.operationId),
+    previous: valid.compilation
+  });
+  assert.equal(missingSource.status, "repair-required");
+  if (missingSource.status !== "repair-required") return;
+  assert.equal(missingSource.recovery.disposition, "retained-last-valid");
+  assert.equal(missingSource.compilation.active, valid.compilation.active);
+  assert.equal(missingSource.repairs[0]?.kind, "semantic-source");
+});
+
+test("unsupported records expose preservation without silently compiling", async () => {
+  const request = proposedRequest({
+    id: "series.orchestration.recovery.unsupported.v1",
+    beforeId: "state.orchestration.recovery.unsupported.before",
+    beforeLatex: "x",
+    afterId: "state.orchestration.recovery.unsupported.after",
+    afterLatex: "\\ln(x)",
+    adjacencyId: "adjacency.orchestration.recovery.unsupported"
+  });
+  const valid = await compileNaturalLanguageKpEquationSeries({
+    request,
+    naturalLanguageIntent: "Wrap x in a natural logarithm.",
+    planner: planner(request, "kp.algebra.wrap-function")
+  });
+  assert.equal(valid.status, "compiled");
+  if (valid.status !== "compiled") return;
+  const unsupported = await compileNaturalLanguageKpEquationSeries({
+    request,
+    naturalLanguageIntent: "Do something unsupported.",
+    planner: unsupportedPlanner(request),
+    previous: valid.compilation
+  });
+  assert.equal(unsupported.status, "unsupported");
+  if (unsupported.status !== "unsupported") return;
+  assert.equal(unsupported.recovery.disposition, "retained-last-valid");
+  assert.equal("compilation" in unsupported, false);
+});
+
 test("governed binders reject duplicate owners and remain renderer neutral", () => {
   const binder = kpEquationSeriesGovernedSourceBindingRegistry.binders[0]!;
   assert.throws(() => createKpEquationSeriesGovernedSourceBindingRegistry([

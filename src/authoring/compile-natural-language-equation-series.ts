@@ -1,5 +1,6 @@
 import {
   compileKpEquationTransformSeries,
+  type KpCompiledEquationTransformSeriesCandidate,
   type KpEquationTransformSeriesCompilationState
 } from "./compile-equation-transform-series.ts";
 import { bindKpEquationSeriesGovernedRequest } from
@@ -15,19 +16,52 @@ import {
 } from "./equation-series-natural-language-planner-port.ts";
 import type { KpEquationSeriesExternalDiagnostic } from
   "./equation-series-repair-taxonomy.ts";
+import type { KpEquationSeriesRepair } from
+  "./equation-series-repair-taxonomy.ts";
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
 
+export type KpNaturalLanguageEquationSeriesRecovery =
+  | Readonly<{
+      readonly disposition: "compiled-new-candidate";
+      readonly active: KpCompiledEquationTransformSeriesCandidate;
+    }>
+  | Readonly<{
+      readonly disposition: "retained-last-valid";
+      readonly active: KpCompiledEquationTransformSeriesCandidate;
+    }>
+  | Readonly<{
+      readonly disposition: "no-valid-candidate";
+    }>;
+
 export type KpNaturalLanguageEquationSeriesCompilationResult =
   | Readonly<{
-      readonly status: "compiled" | "repair-required";
+      readonly status: "compiled";
+      readonly plannerRecord: KpEquationSeriesPlannerRecord;
+      readonly boundRequest: KpEquationTransformSeriesRequest;
+      readonly compilation: KpEquationTransformSeriesCompilationState &
+        Readonly<{
+          readonly status: "compiled";
+          readonly active: KpCompiledEquationTransformSeriesCandidate;
+        }>;
+      readonly recovery: Extract<KpNaturalLanguageEquationSeriesRecovery,
+        { readonly disposition: "compiled-new-candidate" }>;
+    }>
+  | Readonly<{
+      readonly status: "repair-required";
       readonly plannerRecord?: KpEquationSeriesPlannerRecord | undefined;
       readonly boundRequest?: KpEquationTransformSeriesRequest | undefined;
-      readonly compilation: KpEquationTransformSeriesCompilationState;
+      readonly compilation: KpEquationTransformSeriesCompilationState &
+        Readonly<{ readonly status: "repair-required" }>;
+      readonly repairs: readonly KpEquationSeriesRepair[];
+      readonly recovery: Exclude<KpNaturalLanguageEquationSeriesRecovery,
+        { readonly disposition: "compiled-new-candidate" }>;
     }>
   | Readonly<{
       readonly status: "unsupported";
       readonly plannerRecord: KpEquationSeriesPlannerUnsupportedRecord;
+      readonly recovery: Exclude<KpNaturalLanguageEquationSeriesRecovery,
+        { readonly disposition: "compiled-new-candidate" }>;
     }>;
 
 /**
@@ -49,7 +83,8 @@ export async function compileNaturalLanguageKpEquationSeries(input: {
   });
   if (planned.status === "unsupported") return Object.freeze({
     status: "unsupported" as const,
-    plannerRecord: planned.record
+    plannerRecord: planned.record,
+    recovery: previousRecovery(input.previous)
   });
   if (planned.status === "repair-required") {
     const compilation = compileKpEquationTransformSeries({
@@ -57,7 +92,7 @@ export async function compileNaturalLanguageKpEquationSeries(input: {
       previous: input.previous,
       externalDiagnostics: planned.diagnostics.map(plannerDiagnostic)
     });
-    return Object.freeze({ status: "repair-required" as const, compilation });
+    return repairResult({ compilation: requireRepairCompilation(compilation) });
   }
   const binding = bindKpEquationSeriesGovernedRequest({
     request: input.request,
@@ -72,10 +107,9 @@ export async function compileNaturalLanguageKpEquationSeries(input: {
       previous: input.previous,
       externalDiagnostics: binding.diagnostics
     });
-    return Object.freeze({
-      status: "repair-required" as const,
+    return repairResult({
       plannerRecord: planned.record,
-      compilation
+      compilation: requireRepairCompilation(compilation)
     });
   }
   const compilation = compileKpEquationTransformSeries({
@@ -83,12 +117,73 @@ export async function compileNaturalLanguageKpEquationSeries(input: {
     previous: input.previous,
     governedSources: input.governedSources
   });
-  return Object.freeze({
-    status: compilation.status,
+  if (compilation.status === "repair-required") return repairResult({
     plannerRecord: planned.record,
     boundRequest: binding.request,
-    compilation
+    compilation: requireRepairCompilation(compilation)
   });
+  const active = compilation.active;
+  if (active === undefined) {
+    throw new Error("Compiled equation series must expose its active candidate.");
+  }
+  const compiledState = Object.freeze({
+    ...compilation,
+    status: "compiled" as const,
+    active
+  });
+  return Object.freeze({
+    status: "compiled" as const,
+    plannerRecord: planned.record,
+    boundRequest: binding.request,
+    compilation: compiledState,
+    recovery: Object.freeze({
+      disposition: "compiled-new-candidate" as const,
+      active
+    })
+  }) as KpNaturalLanguageEquationSeriesCompilationResult;
+}
+
+function repairResult(input: {
+  readonly plannerRecord?: KpEquationSeriesPlannerRecord | undefined;
+  readonly boundRequest?: KpEquationTransformSeriesRequest | undefined;
+  readonly compilation: KpEquationTransformSeriesCompilationState &
+    Readonly<{ readonly status: "repair-required" }>;
+}): Extract<KpNaturalLanguageEquationSeriesCompilationResult,
+  { readonly status: "repair-required" }> {
+  return Object.freeze({
+    status: "repair-required" as const,
+    ...(input.plannerRecord === undefined
+      ? {}
+      : { plannerRecord: input.plannerRecord }),
+    ...(input.boundRequest === undefined
+      ? {}
+      : { boundRequest: input.boundRequest }),
+    compilation: input.compilation,
+    repairs: input.compilation.repairs,
+    recovery: previousRecovery(input.compilation)
+  });
+}
+
+function requireRepairCompilation(
+  compilation: KpEquationTransformSeriesCompilationState
+): KpEquationTransformSeriesCompilationState &
+  Readonly<{ readonly status: "repair-required" }> {
+  if (compilation.status !== "repair-required") {
+    throw new Error("Repair path unexpectedly produced a compiled candidate.");
+  }
+  return Object.freeze({ ...compilation, status: "repair-required" as const });
+}
+
+function previousRecovery(
+  state: KpEquationTransformSeriesCompilationState | undefined
+): Exclude<KpNaturalLanguageEquationSeriesRecovery,
+  { readonly disposition: "compiled-new-candidate" }> {
+  return state?.active === undefined
+    ? Object.freeze({ disposition: "no-valid-candidate" as const })
+    : Object.freeze({
+        disposition: "retained-last-valid" as const,
+        active: state.active
+      });
 }
 
 function plannerDiagnostic(

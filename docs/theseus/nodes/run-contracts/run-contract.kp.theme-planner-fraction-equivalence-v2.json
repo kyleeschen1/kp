@@ -231,11 +231,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:30:29.584Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with the narrow natural-language orchestration API and governed binder registry."
+    },
+    {
+      "command": "npm run test:equation-series-natural-language-compiler",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:34:55.042Z",
+      "notes": "17 orchestration, planner, typed repair, last-valid preservation, unsupported, governed binding, and authority-boundary tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:34:56.358Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with explicit compiled, repair-required, unsupported, and recovery result variants."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 connects model proposals to canonical operation resolution, registry-owned semantic source binding, typed repair, and deterministic compilation through one renderer-neutral call."
+    "summary": "s16 exposes explicit compiled-new, retained-last-valid, and no-valid-candidate recovery dispositions; planner and binding failures keep typed repairs and never blank a valid prior artifact."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -356,7 +370,8 @@
     {
       "id": "s16",
       "title": "Typed-repair-recovery",
-      "status": "planned"
+      "summary": "Planner, source-binding, and deterministic compilation failures now preserve the exact last valid candidate with typed repairs and an explicit recovery disposition; unsupported remains a non-compilation abstention.",
+      "status": "complete"
     },
     {
       "id": "s17",
