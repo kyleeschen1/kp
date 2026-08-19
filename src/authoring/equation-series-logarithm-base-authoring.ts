@@ -73,6 +73,8 @@ export interface KpEquationSeriesLogarithmBaseSemanticArguments {
 
 export const kpEquationSeriesLogarithmBaseAuthoringDeclaration = deepFreeze({
   operationId: KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID,
+  authoringSummary:
+    "Rewrite a logarithm in a verified alternative base as a quotient of natural logarithms.",
   authoringAuthorityId:
     KP_LOGARITHM_BASE_EQUATION_SERIES_AUTHORING_AUTHORITY,
   familyId: "family.equation.logarithm-base.v1",

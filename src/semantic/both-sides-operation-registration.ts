@@ -30,6 +30,7 @@ interface KpAddBothSidesOperationRegistration {
   readonly relationDomainEvidenceIds: readonly [string, ...string[]];
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 interface KpSubtractBothSidesOperationRegistration {
@@ -40,6 +41,7 @@ interface KpSubtractBothSidesOperationRegistration {
   readonly relationDomainEvidenceIds: readonly [string, ...string[]];
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 export type KpAdditiveBothSidesOperationRegistration =
@@ -54,6 +56,7 @@ interface KpMultiplyBothSidesOperationRegistration {
   readonly nonzeroEvidenceId: string;
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 interface KpDivideBothSidesOperationRegistration {
@@ -64,6 +67,7 @@ interface KpDivideBothSidesOperationRegistration {
   readonly nonzeroEvidenceId: string;
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 export type KpMultiplicativeBothSidesOperationRegistration =
@@ -83,6 +87,7 @@ interface KpApplyNaturalLogBothSidesOperationRegistration {
   readonly injectivityEvidenceId: string;
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 interface KpDivideBothSidesByLogBaseOperationRegistration {
@@ -93,6 +98,7 @@ interface KpDivideBothSidesByLogBaseOperationRegistration {
   readonly nonzeroEvidenceId: string;
   readonly authoringAssumptionEvidenceIds: readonly [string, ...string[]];
   readonly applicationSelection: KpBothSidesApplicationSelection;
+  readonly authoringSummary: string;
 }
 
 export type KpLogarithmicBothSidesOperationRegistration =

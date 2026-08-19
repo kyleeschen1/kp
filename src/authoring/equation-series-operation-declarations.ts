@@ -30,9 +30,20 @@ export interface KpEquationSeriesGovernedRequirements {
   readonly requiredEvidenceIds: readonly string[];
 }
 
+export type KpEquationSeriesPlannerExposure =
+  | Readonly<{
+      readonly kind: "exposed";
+      readonly summary: string;
+    }>
+  | Readonly<{
+      readonly kind: "alias";
+      readonly canonicalOperationId: string;
+    }>;
+
 export interface KpEquationSeriesOperationDeclaration {
   readonly operationId: string;
   readonly plannerOperationId: string;
+  readonly plannerExposure: KpEquationSeriesPlannerExposure;
   readonly source:
     | "canonical-operation"
     | "equation-extension"
@@ -84,6 +95,15 @@ export function createKpEquationSeriesOperationRegistry(
       throw new Error(`Duplicate equation series operation ${input.operationId}.`);
     }
     byId[input.operationId] = input;
+    const expectedPlannerOperationId = input.plannerExposure.kind === "exposed"
+      ? input.operationId
+      : input.plannerExposure.canonicalOperationId;
+    if (input.plannerOperationId !== expectedPlannerOperationId) {
+      throw new Error(
+        `Planner exposure for ${input.operationId} disagrees with ` +
+        `planner operation ${input.plannerOperationId}.`
+      );
+    }
   });
   const plannerIds = unique(normalized.map(({ plannerOperationId }) =>
     plannerOperationId
@@ -92,7 +112,8 @@ export function createKpEquationSeriesOperationRegistry(
     const owner = byId[plannerOperationId];
     if (
       owner === undefined ||
-      owner.plannerOperationId !== owner.operationId
+      owner.plannerOperationId !== owner.operationId ||
+      owner.plannerExposure.kind !== "exposed"
     ) {
       throw new Error(
         `Planner operation ${plannerOperationId} requires one self-canonical declaration.`
@@ -163,6 +184,10 @@ function canonicalDeclaration(
   return declaration({
     operationId: entry.id,
     plannerOperationId: entry.id,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.id, entry.authoringSummary)
+    },
     source: "canonical-operation",
     familyId: entry.packId,
     recipeIds: [],
@@ -181,6 +206,15 @@ function extensionDeclaration(
   return declaration({
     operationId: entry.id,
     plannerOperationId: entry.canonicalAuthoringOperationId ?? entry.id,
+    plannerExposure: entry.canonicalAuthoringOperationId === undefined
+      ? {
+          kind: "exposed",
+          summary: requiredPlannerSummary(entry.id, entry.plannerSummary)
+        }
+      : {
+          kind: "alias",
+          canonicalOperationId: entry.canonicalAuthoringOperationId
+        },
     source: "equation-extension",
     familyId: entry.familyId,
     recipeIds: entry.recipeIds,
@@ -202,6 +236,10 @@ function promotedExtensionDeclaration(
   return declaration({
     operationId: entry.operationId,
     plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.summary)
+    },
     source: "equation-extension",
     familyId: entry.operationPack.packId,
     recipeIds: [entry.extensionAuthority.recipeId],
@@ -217,6 +255,10 @@ function bothSidesDeclaration(
   return declaration({
     operationId: entry.operationId,
     plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.authoringSummary)
+    },
     source: "both-sides-operation",
     familyId: entry.operationPin.packId,
     recipeIds: [],
@@ -243,6 +285,10 @@ KpEquationSeriesOperationDeclaration {
   return declaration({
     operationId: entry.operationId,
     plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.authoringSummary)
+    },
     source: "governed-operation",
     familyId: entry.familyId,
     recipeIds: entry.recipeIds,
@@ -294,6 +340,18 @@ function declaration(
 
 function unique(values: readonly string[]): readonly string[] {
   return [...new Set(values)];
+}
+
+function requiredPlannerSummary(
+  operationId: string,
+  summary: string | undefined
+): string {
+  if (summary === undefined || summary.trim().length === 0) {
+    throw new Error(
+      `Exposed planner operation ${operationId} requires an authoring summary.`
+    );
+  }
+  return summary;
 }
 
 function deepFreeze<T>(value: T): T {

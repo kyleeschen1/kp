@@ -98,11 +98,25 @@
       "scope": "focused",
       "checkedAt": "2026-08-19T01:40:28.559Z",
       "notes": "14 intent, extension, and homomorphic benchmark tests passed; planner IDs are unique and aliases require a self-canonical owner."
+    },
+    {
+      "command": "npm run test:equation-series-intent-resolver",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T01:46:58.696Z",
+      "notes": "14 planner registry, resolver, compiler, and homomorphic benchmark tests passed with declarative exposed/alias metadata and required summaries."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T01:46:59.616Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed after planner exposure metadata became required."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 moved canonical authoring identity into extension-pack data and made the equation registry reject missing or chained planner owners."
+    "summary": "s07 gives every planner declaration explicit exposed-or-alias metadata; exposed names require concise source-owned authoring summaries."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -169,7 +183,8 @@
     {
       "id": "s07",
       "title": "Planner-exposure-metadata",
-      "status": "planned"
+      "summary": "Every operation now declares canonical planner exposure or alias status; exposed operations carry required concise source-owned summaries.",
+      "status": "complete"
     },
     {
       "id": "s08",

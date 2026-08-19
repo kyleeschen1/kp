@@ -8,6 +8,8 @@ export const kpLogarithmicBothSidesOperationRegistrationPack = Object.freeze({
     Object.freeze({
       id: "applyNaturalLogBothSides" as const,
       operationKind: "apply-injective-function" as const,
+      authoringSummary:
+        "Apply the natural logarithm to both positive sides of an equation.",
       semanticAuthorityId:
         "transformation.log-exponent.apply-log-both-sides",
       lawId: "law.equation.apply-injective-function" as const,
@@ -32,6 +34,8 @@ export const kpLogarithmicBothSidesOperationRegistrationPack = Object.freeze({
     Object.freeze({
       id: "divideBothSidesByLogBase" as const,
       operationKind: "divide" as const,
+      authoringSummary:
+        "Divide both sides by the same verified nonzero logarithm of the base.",
       semanticAuthorityId:
         "transformation.log-exponent.divide-by-log-base",
       lawId: "law.equation.divide-both-sides" as const,

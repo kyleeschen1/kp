@@ -104,6 +104,7 @@ export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
       id: operation.id,
       packId: kpCanonicalOperationCorePack.id,
       canonicalComposition: [operation.id],
+      authoringSummary: operation.summary,
       contract: coreOperationContract(operation)
     })),
     ...kpGeneratedAlgebraOperationEntries,

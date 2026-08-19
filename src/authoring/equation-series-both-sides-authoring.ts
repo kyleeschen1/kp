@@ -42,6 +42,7 @@ export interface KpEquationSeriesBothSidesAuthoringDeclaration {
   readonly requiredAssumptionEvidenceIds: readonly string[];
   readonly semanticAuthorityId: string;
   readonly lawId: string;
+  readonly authoringSummary: string;
 }
 
 export interface KpEquationSeriesBothSidesSemanticArguments {
@@ -90,7 +91,8 @@ export const kpEquationSeriesBothSidesAuthoringDeclarations = Object.freeze(
         ...registration.authoringAssumptionEvidenceIds
       ]),
       semanticAuthorityId: registration.semanticAuthorityId,
-      lawId: registration.lawId
+      lawId: registration.lawId,
+      authoringSummary: registration.authoringSummary
     }))
   )
 );

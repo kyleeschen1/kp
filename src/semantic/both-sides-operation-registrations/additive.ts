@@ -8,6 +8,7 @@ export const kpAdditiveBothSidesOperationRegistrationPack = Object.freeze({
     Object.freeze({
       id: "addBothSides" as const,
       operationKind: "add" as const,
+      authoringSummary: "Add the same quantity to both sides of an equation.",
       semanticAuthorityId:
         "definition.generated.linear-solve.add-both-sides",
       lawId: "law.equation.add-both-sides" as const,
@@ -24,6 +25,8 @@ export const kpAdditiveBothSidesOperationRegistrationPack = Object.freeze({
     Object.freeze({
       id: "subtractBothSides" as const,
       operationKind: "subtract" as const,
+      authoringSummary:
+        "Subtract the same quantity from both sides of an equation.",
       semanticAuthorityId:
         "definition.generated.linear-solve.subtract-both-sides",
       lawId: "law.equation.subtract-both-sides" as const,

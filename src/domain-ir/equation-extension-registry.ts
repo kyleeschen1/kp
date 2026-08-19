@@ -26,6 +26,7 @@ export interface KpEquationOperationRegistration {
    * so authoring registries do not grow a central alias switch.
    */
   readonly canonicalAuthoringOperationId?: string | undefined;
+  readonly plannerSummary?: string | undefined;
 }
 
 export interface KpEquationRecipeRegistration {

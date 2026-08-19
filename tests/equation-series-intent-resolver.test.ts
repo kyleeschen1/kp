@@ -47,6 +47,15 @@ test("default declarations are unique and exhaustive for promoted intent surface
   assert.ok(!kpEquationSeriesOperationRegistry.plannerIds.includes(
     "operation.equation.log-product-decomposition.v1"
   ));
+  for (const operationId of kpEquationSeriesOperationRegistry.plannerIds) {
+    const declaration = kpEquationSeriesOperationRegistry.plannerById[
+      operationId
+    ];
+    assert.equal(declaration?.plannerExposure.kind, "exposed");
+    if (declaration?.plannerExposure.kind === "exposed") {
+      assert.ok(declaration.plannerExposure.summary.length > 12);
+    }
+  }
 });
 
 test("the three original generation trials resolve declaratively and still compile", () => {
@@ -84,6 +93,10 @@ test("extension operations preserve family recipe and semantic authority", () =>
   assert.deepEqual(result.plans[0]?.declaration, {
     operationId,
     plannerOperationId: "kp.semantic-motion.log-product",
+    plannerExposure: {
+      kind: "alias",
+      canonicalOperationId: "kp.semantic-motion.log-product"
+    },
     source: "equation-extension",
     familyId: "family.equation.log-homomorphism.v1",
     recipeIds: ["recipe.equation.homomorphic-decomposition.v1"],
@@ -142,6 +155,10 @@ test("unknown operations and absent proposals never fall back", () => {
 test("a caller can extend resolution without editing the resolver", () => {
   const custom = createKpEquationSeriesOperationRegistry([{
     operationId: "operation.equation.custom-proof-step.v1",
+    plannerExposure: {
+      kind: "exposed",
+      summary: "Perform one custom verified proof step."
+    },
     source: "equation-extension",
     familyId: "family.equation.custom-proof.v1",
     recipeIds: ["recipe.equation.custom-proof.v1"],
@@ -160,8 +177,16 @@ test("a caller can extend resolution without editing the resolver", () => {
   ]), /Duplicate equation series operation/u);
   assert.throws(() => createKpEquationSeriesOperationRegistry([{
     ...custom.declarations[0]!,
-    plannerOperationId: "operation.equation.missing-authoring-owner.v1"
+    plannerOperationId: "operation.equation.missing-authoring-owner.v1",
+    plannerExposure: {
+      kind: "alias",
+      canonicalOperationId: "operation.equation.missing-authoring-owner.v1"
+    }
   }]), /requires one self-canonical declaration/u);
+  assert.throws(() => createKpEquationSeriesOperationRegistry([{
+    ...custom.declarations[0]!,
+    plannerOperationId: "operation.equation.other.v1"
+  }]), /Planner exposure .* disagrees/u);
 });
 
 test("resolver owns no surface handler renderer timing DOM or central switch", () => {
