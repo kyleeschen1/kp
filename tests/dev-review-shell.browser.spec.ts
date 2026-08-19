@@ -64,13 +64,27 @@ test("shadow review shell fits a narrow viewport and keeps canonical focus affor
 test("Catalogue Review opens as a bounded inspector-side drawer", async ({ page }) => {
   await page.setViewportSize({ width: 1_440, height: 900 });
   await page.goto("/");
-  await page.setContent(`<!doctype html><style>html,body{margin:0}</style><main>Catalogue fixture</main>`);
+  await page.setContent(`<!doctype html>
+    <style>
+      html,body{margin:0}
+      #inspector{position:fixed;inset:0 0 0 auto;width:302px}
+    </style>
+    <main>Catalogue fixture</main>
+    <aside id="inspector">Inspector fixture</aside>`);
   await page.evaluate(async () => {
     const modulePath = "/src/dev-review/review-shell.ts";
     const { mountKpDevReviewShell } = await import(modulePath);
-    mountKpDevReviewShell(document, {
-      placement: "catalogue-inspector-drawer"
-    }).open();
+    const inspector = document.querySelector<HTMLElement>("#inspector")!;
+    const shell = mountKpDevReviewShell(document, {
+      placement: "catalogue-inspector-drawer",
+      constraintElement: inspector
+    });
+    shell.setReviewRound(
+      "A deliberately long review round label that must remain inside the drawer",
+      12,
+      false
+    );
+    shell.open();
   });
 
   const host = page.locator("[data-kp-dev-review-shell]");
@@ -82,7 +96,19 @@ test("Catalogue Review opens as a bounded inspector-side drawer", async ({ page 
   await expect(panel).toBeVisible();
   const box = await panel.boundingBox();
   expect(box).not.toBeNull();
-  expect(box!.x).toBeGreaterThan(1_100);
+  expect(box!.x).toBeGreaterThanOrEqual(1_138);
+  expect(box!.width).toBeCloseTo(278, 0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(1_440);
   expect(box!.y + box!.height).toBeLessThanOrEqual(900 - 60);
+  await expect.poll(() => panel.evaluate((element) =>
+    element.scrollWidth <= element.clientWidth
+  )).toBe(true);
+
+  await page.locator("#inspector").evaluate((element) => {
+    (element as HTMLElement).style.width = "256px";
+  });
+  await expect.poll(async () => (await panel.boundingBox())?.width).toBe(232);
+  await expect.poll(() => panel.evaluate((element) =>
+    element.scrollWidth <= element.clientWidth
+  )).toBe(true);
 });

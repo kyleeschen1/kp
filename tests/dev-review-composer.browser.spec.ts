@@ -323,14 +323,19 @@ test("responsive placement changes preserve one draft and locked moment", async 
   page
 }) => {
   await page.goto("/");
-  await page.setContent(`<!doctype html><body></body>`);
+  await page.setContent(`<!doctype html>
+    <style>#inspector{position:fixed;inset:0 0 0 auto;width:302px}</style>
+    <aside id="inspector"></aside>`);
   await page.evaluate(async () => {
     const shellPath = "/src/dev-review/review-shell.ts";
     const composerPath = "/src/dev-review/review-composer.ts";
     const shellModule = await import(shellPath);
     const composerModule = await import(composerPath);
+    const inspector = document.querySelector<HTMLElement>("#inspector");
+    if (inspector === null) throw new Error("Missing inspector fixture");
     const shell = shellModule.mountKpDevReviewShell(document, {
-      placement: "catalogue-inspector-drawer"
+      placement: "catalogue-inspector-drawer",
+      constraintElement: inspector
     });
     const state = { captures: 0, submittedProgress: 0 };
     const reviewWindow = window as typeof window & {
@@ -390,6 +395,16 @@ test("responsive placement changes preserve one draft and locked moment", async 
   const host = page.locator("[data-kp-dev-review-shell]");
   const textarea = host.locator("textarea");
   await textarea.fill("Keep this exact Catalogue moment.");
+  const initialPanelBox = await host.locator("[role=dialog]").boundingBox();
+  const initialTextareaBox = await textarea.boundingBox();
+  expect(initialPanelBox).not.toBeNull();
+  expect(initialTextareaBox).not.toBeNull();
+  expect(initialTextareaBox!.x).toBeGreaterThan(initialPanelBox!.x);
+  expect(initialTextareaBox!.x + initialTextareaBox!.width)
+    .toBeLessThan(initialPanelBox!.x + initialPanelBox!.width);
+  await expect.poll(() => textarea.evaluate((element) =>
+    element.scrollWidth <= element.clientWidth
+  )).toBe(true);
   await expect(host.locator(".meta")).toContainText("story.placement");
   await page.setViewportSize({ width: 390, height: 700 });
   await page.evaluate(() => {

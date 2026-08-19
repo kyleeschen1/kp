@@ -42,6 +42,7 @@ export function mountKpDevReview(input: {
   readonly beforeCapture?: (() => Promise<void>) | undefined;
   readonly screenshotSurface?: "animation-catalogue" | undefined;
   readonly resolveCaptureRoute?: ((currentHref: string) => string) | undefined;
+  readonly constraintElement?: HTMLElement | undefined;
   readonly onDispose?: (() => void) | undefined;
 }): () => void {
   const ownerWindow = input.ownerWindow ?? window;
@@ -53,7 +54,8 @@ export function mountKpDevReview(input: {
   const registry = new KpDevReviewCaptureProviderRegistry();
   const unregisterProvider = registry.register(input.provider);
   const shell = mountKpDevReviewShell(ownerDocument, {
-    placement: input.placement(ownerWindow.innerWidth)
+    placement: input.placement(ownerWindow.innerWidth),
+    constraintElement: input.constraintElement
   });
   const syncPlacement = (): void => {
     shell.setPlacement(input.placement(ownerWindow.innerWidth));

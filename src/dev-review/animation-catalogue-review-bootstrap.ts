@@ -10,6 +10,9 @@ import {
 export function mountKpAnimationCatalogueDevReview(
   ownerWindow: Window = window
 ): () => void {
+  const inspector = ownerWindow.document.querySelector<HTMLElement>(
+    '[data-kp-animation-catalogue-region="inspector"]'
+  );
   return mountKpDevReview({
     ownerWindow,
     provider: createKpAnimationCatalogueCaptureProvider(
@@ -19,6 +22,7 @@ export function mountKpAnimationCatalogueDevReview(
     // Review evidence must restore the same projection even when the user
     // arrived through the legacy root URL without an explicit view parameter.
     resolveCaptureRoute: createKpAnimationDevelopmentExactHref,
+    ...(inspector === null ? {} : { constraintElement: inspector }),
     placement: (viewportWidth) =>
       resolveKpDevReviewPlacement({
         surface: "animation-catalogue",

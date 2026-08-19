@@ -2,6 +2,7 @@ import type { KpDevReviewPlacement } from "./review-placement.ts";
 
 export interface KpDevReviewShellOptions {
   readonly placement?: KpDevReviewPlacement;
+  readonly constraintElement?: HTMLElement | undefined;
 }
 
 export interface KpDevReviewShell {
@@ -128,6 +129,48 @@ export function mountKpDevReviewShell(
   launcher.addEventListener("click", open);
   closeButton.addEventListener("click", close);
   root.addEventListener("keydown", onKeyDown);
+  const syncConstraint = (): void => {
+    if (
+      placement !== "catalogue-inspector-drawer" ||
+      options.constraintElement === undefined
+    ) {
+      clearConstraintProperties(host);
+      return;
+    }
+    const rect = options.constraintElement.getBoundingClientRect();
+    if (!options.constraintElement.isConnected || rect.width <= 0) {
+      clearConstraintProperties(host);
+      return;
+    }
+    const viewport = ownerDocument.defaultView;
+    const viewportWidth = viewport?.innerWidth ?? ownerDocument.documentElement.clientWidth;
+    const viewportHeight = viewport?.innerHeight ?? ownerDocument.documentElement.clientHeight;
+    host.style.setProperty("--kp-dev-review-constraint-width", `${rect.width}px`);
+    host.style.setProperty(
+      "--kp-dev-review-constraint-right",
+      `${Math.max(0, viewportWidth - rect.right)}px`
+    );
+    host.style.setProperty(
+      "--kp-dev-review-constraint-top",
+      `${Math.max(0, rect.top)}px`
+    );
+    host.style.setProperty(
+      "--kp-dev-review-constraint-bottom",
+      `${Math.max(0, viewportHeight - rect.bottom)}px`
+    );
+  };
+  const constraintElement = options.constraintElement;
+  const constraintObserver =
+    constraintElement === undefined || typeof ResizeObserver === "undefined"
+      ? undefined
+      : new ResizeObserver(syncConstraint);
+  if (constraintElement !== undefined) {
+    constraintObserver?.observe(constraintElement);
+  }
+  ownerDocument.defaultView?.addEventListener("resize", syncConstraint, {
+    passive: true
+  });
+  syncConstraint();
   const setInboxCount = (count: number): void => {
     if (!Number.isInteger(count) || count < 0) throw new RangeError("Inbox count must be a non-negative integer");
     const noun = count === 1 ? "note" : "notes";
@@ -148,6 +191,7 @@ export function mountKpDevReviewShell(
     if (placement === nextPlacement) return;
     placement = nextPlacement;
     host.dataset["kpDevReviewPlacement"] = nextPlacement;
+    syncConstraint();
     host.dispatchEvent(new CustomEvent(KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT, {
       detail: { placement: nextPlacement }
     }));
@@ -172,9 +216,20 @@ export function mountKpDevReviewShell(
       launcher.removeEventListener("click", open);
       closeButton.removeEventListener("click", close);
       root.removeEventListener("keydown", onKeyDown);
+      constraintObserver?.disconnect();
+      ownerDocument.defaultView?.removeEventListener("resize", syncConstraint);
       host.remove();
     }
   };
+}
+
+function clearConstraintProperties(host: HTMLElement): void {
+  for (const property of [
+    "--kp-dev-review-constraint-width",
+    "--kp-dev-review-constraint-right",
+    "--kp-dev-review-constraint-top",
+    "--kp-dev-review-constraint-bottom"
+  ]) host.style.removeProperty(property);
 }
 
 function button(ownerDocument: Document, className: string, label: string): HTMLButtonElement {
@@ -228,11 +283,19 @@ const shellStyles = `
     border-radius: 0;
   }
   :host([data-kp-dev-review-placement="catalogue-inspector-drawer"]) {
-    top: 0;
-    right: 0;
-    bottom: var(--kp-development-dock-clearance, 5.25rem);
+    top: var(--kp-dev-review-constraint-top, 0);
+    right: var(--kp-dev-review-constraint-right, 0);
+    bottom: max(
+      var(--kp-dev-review-constraint-bottom, 0px),
+      var(--kp-development-dock-clearance, 5.25rem)
+    );
     display: flex;
-    width: max(16rem, 21vw);
+    width: var(
+      --kp-dev-review-constraint-width,
+      clamp(20rem, 28vw, 30rem)
+    );
+    max-width: calc(100vw - var(--kp-dev-review-constraint-right, 0px));
+    min-width: 0;
     padding: .75rem;
     align-items: stretch;
     flex-direction: column;
@@ -334,14 +397,21 @@ const shellStyles = `
   .panel[hidden] { display: none; }
   header {
     display: flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
     padding: 1rem 1rem .78rem;
     border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+    overflow: hidden;
   }
+  header > div:first-child { flex: 1 1 auto; width: 0; min-width: 0; overflow: hidden; }
   .eyebrow {
     display: block;
+    width: 100%;
+    min-width: 0;
     margin-bottom: .18rem;
     color: var(--accent);
     font-size: .61rem;
@@ -358,7 +428,7 @@ const shellStyles = `
   }
   .review-round {
     display: block;
-    max-width: 14rem;
+    max-width: 100%;
     margin-top: .2rem;
     color: var(--muted);
     font-size: .63rem;
@@ -367,7 +437,7 @@ const shellStyles = `
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .header-actions { display: flex; align-items: center; gap: .42rem; }
+  .header-actions { display: flex; flex: none; min-width: 0; align-items: center; gap: .42rem; }
   .inbox-count {
     padding: .22rem .45rem;
     border: 1px solid color-mix(in srgb, var(--relation) 22%, var(--line));
@@ -393,11 +463,11 @@ const shellStyles = `
     cursor: pointer;
   }
   .close:hover { color: var(--ink); background: color-mix(in srgb, var(--line) 42%, transparent); }
-  .content { padding: 1rem; }
+  .content { min-width: 0; max-width: 100%; padding: 1rem; overflow-x: hidden; }
   .intro { margin: 0 0 .75rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
   /* Capture metadata settles asynchronously after the first character. Reserve
      its normal two-line footprint so the writing surface never jumps. */
-  .capture-row { display: flex; min-height: 3.25rem; align-items: flex-start; justify-content: space-between; gap: .55rem; }
+  .capture-row { display: flex; width: 100%; min-width: 0; max-width: 100%; min-height: 3.25rem; align-items: flex-start; justify-content: space-between; gap: .55rem; overflow: hidden; }
   .retake {
     flex: none;
     padding: .25rem .45rem;
@@ -412,8 +482,10 @@ const shellStyles = `
   .retake:hover { background: color-mix(in srgb, var(--relation) 7%, transparent); }
   .retake[hidden] { display: block; visibility: hidden; }
   .retake:disabled { cursor: wait; opacity: .58; }
-  .meta { display: flex; min-height: 3.25rem; flex-wrap: wrap; align-content: flex-start; gap: .34rem; margin: 0 0 .4rem; }
+  .meta { display: flex; min-width: 0; max-width: 100%; min-height: 3.25rem; flex-wrap: wrap; align-content: flex-start; gap: .34rem; margin: 0 0 .4rem; overflow: hidden; }
   .meta span {
+    min-width: 0;
+    max-width: 100%;
     padding: .2rem .44rem;
     border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
     border-radius: 999px;
@@ -421,12 +493,18 @@ const shellStyles = `
     background: color-mix(in srgb, var(--relation) 6%, transparent);
     font-size: .63rem;
     font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .route { min-height: .86rem; margin: 0 0 .85rem; color: var(--muted); font-family: var(--kp-economics-non-katex-font-family, ui-monospace, SFMono-Regular, Menlo, monospace); font-size: .61rem; overflow-wrap: anywhere; }
-  form { display: grid; gap: .48rem; }
+  form { display: grid; width: 100%; min-width: 0; max-width: 100%; gap: .48rem; }
   label { font-size: .72rem; font-weight: 750; }
   textarea {
+    display: block;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 112px;
     resize: vertical;
     padding: .68rem .72rem;
@@ -435,11 +513,14 @@ const shellStyles = `
     color: var(--ink);
     background: var(--input-surface);
     font: 400 .79rem/1.5 var(--kp-economics-non-katex-font-family, Inter, ui-sans-serif, system-ui, sans-serif);
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
   }
   textarea::placeholder { color: color-mix(in srgb, var(--muted) 72%, transparent); }
   textarea:disabled { opacity: .65; }
-  .form-footer { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
-  .count { color: var(--muted); font-size: .62rem; }
+  .form-footer { display: flex; width: 100%; min-width: 0; max-width: 100%; align-items: center; justify-content: space-between; gap: .8rem; }
+  .count { min-width: 0; color: var(--muted); font-size: .62rem; }
   .save {
     min-height: 36px;
     padding: .48rem .72rem;
