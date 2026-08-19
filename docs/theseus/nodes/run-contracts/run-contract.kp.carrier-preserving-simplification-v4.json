@@ -89,7 +89,8 @@
     {
       "id": "cps07",
       "title": "Compile-renderer-neutral-carrier-recipe",
-      "status": "planned"
+      "summary": "Added the renderer-neutral carrier recipe compiler, deterministic serialization, exact ownership and settlement policy, unresolved-candidate gap, and explicit exclusion of caller-authored presentation fields.",
+      "status": "complete"
     },
     {
       "id": "cps08",

@@ -134,11 +134,25 @@
       "scope": "cps06",
       "checkedAt": "2026-08-19T22:00:34.794Z",
       "notes": "Dependency, framework neutrality, semantic boundaries, operation-evaluation boundary, and compiler authority gates pass."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps07",
+      "checkedAt": "2026-08-19T22:03:22.318Z",
+      "notes": "10/10 semantic, evidence, registry, deterministic recipe, and presentation-field exclusion assertions pass."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps07",
+      "checkedAt": "2026-08-19T22:03:24.453Z",
+      "notes": "Renderer-neutral recipe and focused fixtures typecheck."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Candidate selection is now data-driven and fail-closed: only the exact identity operation and handoff with runtime-minted evidence resolves; all other cases return typed gaps."
+    "summary": "Verified carrier authority now compiles deterministically into a recipe that owns semantic roles, paint topology, measured anchor/baseline policy, stationary context, and native settlement refs—without presentation values."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
