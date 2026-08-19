@@ -259,11 +259,46 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:39:22.366Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with benchmark report v2 and the repeat-aware live runner."
+    },
+    {
+      "command": "npm run test:equation-series-natural-language-compiler",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T02:47:33.535Z",
+      "notes": "17 narrow-orchestration, recovery, source-binding, abstention, and authority-boundary tests passed."
+    },
+    {
+      "command": "npm run test:equation-transform-series-corpus",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T02:47:34.954Z",
+      "notes": "9 deterministic corpus, repair taxonomy, preservation, immutability, and no-silent-fallback tests passed."
+    },
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T02:47:36.027Z",
+      "notes": "19 reproducibility, disjoint output-schema, planner, authority-attempt, unsupported, and provider-failure tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-19T02:47:37.056Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, concept-room, semantic-reader, semantic-animation, presentation ownership, and equation compiler authority gates passed after inventorying the declaration-derived alias registry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:47:38.116Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed at the deterministic planner boundary."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s17 upgrades live benchmark evidence to report v2 with explicit model ID, bounded repetition count, stable prompt fingerprint, repeat-indexed cases, and raw-response provenance."
+    "summary": "s18 passes deterministic semantic, repair, architecture, framework-neutrality, ownership, and type gates; the live output schema now represents proposed and unsupported records as disjoint valid shapes."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -396,7 +431,8 @@
     {
       "id": "s18",
       "title": "Deterministic-boundary-gate",
-      "status": "planned"
+      "summary": "The deterministic planner boundary passes equation corpus, orchestration, reproducibility, architecture, ownership, and type gates; its live schema can express both proposals and typed abstentions without ambiguity.",
+      "status": "complete"
     },
     {
       "id": "s19",

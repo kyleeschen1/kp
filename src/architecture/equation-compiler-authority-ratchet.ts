@@ -125,6 +125,9 @@ const fallbackPaths = paths([
 const manualRegistryPaths = paths([
   "src/animation/operation-evaluation-presentation-registry.ts",
   "src/animation/symbolic-manipulation-family-registry.ts",
+  // Aliases are projected from operation declarations and normalize provider
+  // vocabulary; they cannot register math, presentation, or renderer policy.
+  "src/authoring/equation-series-operation-alias-registry.ts",
   // This registry dispatches authoring validators by declared operation
   // ownership; it contains no mathematical, presentation, or renderer switch.
   "src/authoring/equation-series-governed-authoring-registry.ts",

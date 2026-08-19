@@ -14,6 +14,8 @@ import {
 } from "../src/authoring/equation-series-live-model-benchmark.ts";
 import type { KpEquationSeriesPlannerPrompt } from
   "../src/authoring/equation-series-natural-language-planner-port.ts";
+import { createKpEquationSeriesLiveModelBatchResponseSchema } from
+  "../src/authoring/equation-series-live-model-batch-schema.ts";
 
 const plannerId = "planner.codex-cli.live.v1";
 const outputDirectory = resolve(
@@ -27,7 +29,10 @@ const arguments_ = parseArguments(process.argv.slice(2));
 mkdirSync(outputDirectory, { recursive: true });
 writeFileSync(
   schemaPath,
-  `${JSON.stringify(batchResponseSchema(), null, 2)}\n`,
+  `${JSON.stringify(createKpEquationSeriesLiveModelBatchResponseSchema({
+    plannerId,
+    resultCount: 6
+  }), null, 2)}\n`,
   "utf8"
 );
 
@@ -133,7 +138,8 @@ function benchmarkPrompt(
     "Use kind=single when one registered operation exactly explains an adjacency.",
     "Use sequence only when one adjacency truly contains multiple registered operations.",
     "Use alternatives only when the supplied evidence is genuinely ambiguous.",
-    "If no registered operation exactly applies, set status=unsupported and proposals=[].",
+    "If no registered operation exactly applies, set status=unsupported, include a",
+    "nonblank reason and every unsupportedAdjacencyId, and omit proposals entirely.",
     "Never invent an operation and never author math, semantic arguments, roles, geometry,",
     "motion, timing, rendering, LaTeX, styles, diagnostics, or other authority fields.",
     `Every result must use plannerId=${plannerId} and diagnostics=[].`,
@@ -142,89 +148,6 @@ function benchmarkPrompt(
     "Fixed benchmark requests:",
     JSON.stringify(cases, null, 2)
   ].join("\n");
-}
-
-function batchResponseSchema(): Readonly<Record<string, unknown>> {
-  const single = {
-    type: "object",
-    additionalProperties: false,
-    required: ["adjacencyId", "kind", "operationId"],
-    properties: {
-      adjacencyId: { type: "string" },
-      kind: { type: "string", const: "single" },
-      operationId: { type: "string" }
-    }
-  };
-  const multiple = (kind: "sequence" | "alternatives") => ({
-    type: "object",
-    additionalProperties: false,
-    required: ["adjacencyId", "kind", "operationIds"],
-    properties: {
-      adjacencyId: { type: "string" },
-      kind: { type: "string", const: kind },
-      operationIds: {
-        type: "array",
-        minItems: 2,
-        items: { type: "string" }
-      }
-    }
-  });
-  return {
-    type: "object",
-    additionalProperties: false,
-    required: ["schemaVersion", "results"],
-    properties: {
-      schemaVersion: {
-        type: "string",
-        const: "kp.equation-series-planner-batch.v1"
-      },
-      results: {
-        type: "array",
-        minItems: 6,
-        maxItems: 6,
-        items: {
-          type: "object",
-          additionalProperties: false,
-          required: [
-            "schemaVersion",
-            "kind",
-            "requestId",
-            "plannerId",
-            "status",
-            "proposals",
-            "diagnostics"
-          ],
-          properties: {
-            schemaVersion: {
-              type: "string",
-              const: "kp.equation-series-planner-record.v1"
-            },
-            kind: {
-              type: "string",
-              const: "equation-series-planner-record"
-            },
-            requestId: { type: "string" },
-            plannerId: { type: "string", const: plannerId },
-            status: {
-              type: "string",
-              enum: ["proposed", "unsupported"]
-            },
-            proposals: {
-              type: "array",
-              items: {
-                anyOf: [single, multiple("sequence"), multiple("alternatives")]
-              }
-            },
-            diagnostics: {
-              type: "array",
-              maxItems: 0,
-              items: { type: "string" }
-            }
-          }
-        }
-      }
-    }
-  };
 }
 
 function parseArguments(values: readonly string[]): Readonly<{
