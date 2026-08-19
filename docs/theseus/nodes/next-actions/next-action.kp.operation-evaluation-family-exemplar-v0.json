@@ -1,0 +1,27 @@
+{
+  "id": "next-action.kp.operation-evaluation-family-exemplar-v0",
+  "kind": "next-action",
+  "title": "Compare operation-evaluation presentation families",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Build one reversible 2-times-3 Native KaTeX comparison for punctuated substitution, result reception, and contributor fusion; stop for human visual review before promoting a default or migrating callers.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "plan-revision.kp.v22"
+  ],
+  "verification": [
+    "npm run test:operation-evaluation-family-exemplar",
+    "npm run visual:operation-evaluation-family-exemplar"
+  ]
+}

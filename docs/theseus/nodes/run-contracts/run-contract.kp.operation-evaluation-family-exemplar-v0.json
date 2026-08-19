@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.operation-evaluation-family-exemplar-v0",
+  "kind": "run-contract",
+  "title": "Operation-evaluation family exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.operation-evaluation-family-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md",
+      "summary": "Accepted taxonomy and exemplar promotion boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:operation-evaluation-family-exemplar",
+    "npm run visual:operation-evaluation-family-exemplar"
+  ],
+  "allowedWork": [
+    "One 2-times-3 development exemplar and its provisional family recipes.",
+    "Existing Native KaTeX compositor, endpoint measurement, deterministic clock, and catalogue controls.",
+    "Focused semantic, direct-seek, rewind, ownership, and single-browser visual evidence."
+  ],
+  "disallowedWork": [
+    "No default-family promotion or migration of existing operation-evaluation callers.",
+    "No 2-times-1 carrier-preserving implementation before human review.",
+    "No caller-local coordinates, CSS animation clocks, glyph-text inference, or new renderer authority."
+  ],
+  "goal": "Compare three instructional evaluation families on the same 2-times-3 Native KaTeX endpoints and stop for human visual selection before promotion.",
+  "target": "next-action.kp.operation-evaluation-family-exemplar-v0",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "slice",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Stop if any candidate requires changing mathematical endpoints or operation semantics.",
+    "Stop if exact paint ownership or direct-seek determinism cannot be preserved.",
+    "Stop after the visual comparison is ready for human review."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Compile provisional typed evaluation-family recipes",
+      "summary": "Added provisional closed family recipes and a governed 2-times-3 semantic product asset; focused semantic tests and typecheck pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Render the deterministic one-at-a-time comparison exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Verify continuity and prepare the human visual checkpoint",
+      "status": "planned"
+    }
+  ]
+}

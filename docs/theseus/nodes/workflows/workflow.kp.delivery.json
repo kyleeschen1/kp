@@ -45,7 +45,8 @@
     "next-action.kp.tutorial.unified-attention-projection-v0",
     "next-action.refill.experiment.plan-revision.kp.v22.semantic-layout-before-local-routing",
     "next-action.kp.economics-public-projection-spike",
-    "next-action.kp.binary-log-product-checkpoint"
+    "next-action.kp.binary-log-product-checkpoint",
+    "next-action.kp.operation-evaluation-family-exemplar-v0"
   ],
   "verificationRecords": [
     {
