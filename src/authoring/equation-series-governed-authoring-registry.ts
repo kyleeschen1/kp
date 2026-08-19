@@ -24,6 +24,10 @@ import {
   kpEquationSeriesCommonDenominatorAuthoringDeclaration,
   validateKpEquationSeriesCommonDenominatorAuthoring
 } from "./equation-series-common-denominator-authoring.ts";
+import {
+  kpEquationSeriesLikeDenominatorAuthoringDeclaration,
+  validateKpEquationSeriesLikeDenominatorAuthoring
+} from "./equation-series-like-denominator-authoring.ts";
 
 export interface KpEquationSeriesGovernedAuthoringValidator {
   readonly id: string;
@@ -84,6 +88,12 @@ export const kpEquationSeriesGovernedAuthoringRegistry =
       kpEquationSeriesCommonDenominatorAuthoringDeclaration.operationId
     ],
     validate: validateKpEquationSeriesCommonDenominatorAuthoring
+  }, {
+    id: "governance.equation-series.like-denominator-combination.v1",
+    operationIds: [
+      kpEquationSeriesLikeDenominatorAuthoringDeclaration.operationId
+    ],
+    validate: validateKpEquationSeriesLikeDenominatorAuthoring
   }]);
 
 /** Each governed operation is dispatched by registered ownership, not a switch. */

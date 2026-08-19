@@ -117,11 +117,32 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T06:00:33.468Z",
       "notes": "All 22 canonical operation-evaluation registry, motif, composition, opacity, pinning, and extension checks pass."
+    },
+    {
+      "command": "npm run test:fraction-like-denominator-combination",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:07:22.319Z",
+      "notes": "Four tests pass for raw addition, unequal-denominator rejection, hidden-reduction rejection, and exact subtraction."
+    },
+    {
+      "command": "npm run test:fraction-like-denominator-combination",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:08:26.270Z",
+      "notes": "Five tests pass; every source structural occurrence has explicit target lineage and the operator contributes to the raw numerator."
+    },
+    {
+      "command": "npm run test:equation-series-like-denominator",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:14:02.917Z",
+      "notes": "Three tests pass for canonical planner exposure, sealed source binding and compilation, hidden-reduction rejection, and forged-source repair."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s15 composes explicit factor application and product evaluation as separate runtime adjacencies."
+    "summary": "Slice s18 registers like-denominator combination as governed authoring with exact endpoints and no presentation claim."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -233,17 +254,20 @@
     {
       "id": "s16",
       "title": "Define like-denominator combination",
-      "status": "planned"
+      "summary": "Added shared exact-fraction draft vocabulary and verified 2/6 + 1/6 to 3/6 as a distinct raw combination adjacency.",
+      "status": "complete"
     },
     {
       "id": "s17",
       "title": "Preserve combination lineage",
-      "status": "planned"
+      "summary": "Mapped both terms, fractions, division structures, numerators, denominator occurrences, and operator into the combined result.",
+      "status": "complete"
     },
     {
       "id": "s18",
       "title": "Register combination authoring",
-      "status": "planned"
+      "summary": "Registered, bound, validated, and planner-exposed raw like-denominator combination through open registries with empty recipe and motif sets.",
+      "status": "complete"
     },
     {
       "id": "s19",

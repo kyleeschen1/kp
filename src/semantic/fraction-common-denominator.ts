@@ -4,6 +4,15 @@ import {
   equalKpRationals,
   type KpNormalizedRational
 } from "../../domains/math/exact-rational.ts";
+import type {
+  KpExactFractionForm,
+  KpExactFractionTermDraft,
+  KpExactIntegerOccurrenceDraft
+} from "./exact-fraction-expression.ts";
+
+export type {
+  KpExactFractionForm
+} from "./exact-fraction-expression.ts";
 
 declare const kpVerifiedCommonDenominatorBrand: unique symbol;
 declare const kpCommonDenominatorProofBrand: unique symbol;
@@ -14,19 +23,11 @@ const sealedProofs = new WeakSet<object>();
 export const KP_COMMON_DENOMINATOR_ALIGNMENT_OPERATION_AUTHORITY =
   "operation.equation.common-denominator-alignment.v1" as const;
 
-export interface KpCommonDenominatorIntegerOccurrence {
-  readonly entityId: string;
-  readonly semanticId: string;
-  readonly value: bigint;
-}
+export type KpCommonDenominatorIntegerOccurrence =
+  KpExactIntegerOccurrenceDraft;
 
-export interface KpCommonDenominatorFractionTermDraft {
-  readonly termEntityId: string;
-  readonly fractionEntityId: string;
-  readonly divisionEntityId: string;
-  readonly numerator: KpCommonDenominatorIntegerOccurrence;
-  readonly denominator: KpCommonDenominatorIntegerOccurrence;
-}
+export type KpCommonDenominatorFractionTermDraft =
+  KpExactFractionTermDraft;
 
 export interface KpCommonDenominatorMultiplierDraft {
   readonly entityId: string;
@@ -71,12 +72,6 @@ export interface KpCommonDenominatorAlignmentDraft {
     KpCommonDenominatorMultiplierDraft,
     KpCommonDenominatorMultiplierDraft
   ];
-}
-
-export interface KpExactFractionForm {
-  readonly numerator: bigint;
-  readonly denominator: bigint;
-  readonly value: KpNormalizedRational;
 }
 
 export interface KpFractionEquivalenceMultiplier

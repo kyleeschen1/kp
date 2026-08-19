@@ -50,6 +50,17 @@ import {
   isKpVerifiedCommonDenominatorAlignment,
   type KpVerifiedCommonDenominatorAlignment
 } from "../semantic/fraction-common-denominator.ts";
+import {
+  KP_LIKE_DENOMINATOR_AUTHORING_CONTRACT_KIND,
+  KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID,
+  kpEquationSeriesLikeDenominatorAuthoringDeclaration,
+  roleBindings as likeDenominatorRoleBindings,
+  type KpEquationSeriesLikeDenominatorSemanticArguments
+} from "./equation-series-like-denominator-authoring.ts";
+import {
+  isKpVerifiedLikeDenominatorCombination,
+  type KpVerifiedLikeDenominatorCombination
+} from "../semantic/fraction-like-denominator-combination.ts";
 
 export interface KpEquationSeriesGovernedSourceBindingInput {
   readonly adjacency: KpEquationTransformSeriesAdjacency;
@@ -140,12 +151,20 @@ const commonDenominatorBinder: KpEquationSeriesGovernedSourceBinder =
     bind: bindCommonDenominator
   });
 
+const likeDenominatorBinder: KpEquationSeriesGovernedSourceBinder =
+  Object.freeze({
+    id: "binding.equation-series.like-denominator-combination.v1",
+    operationIds: [KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID],
+    bind: bindLikeDenominator
+  });
+
 export const kpEquationSeriesGovernedSourceBindingRegistry =
   createKpEquationSeriesGovernedSourceBindingRegistry([
     bothSidesBinder,
     logarithmBaseBinder,
     fractionEquivalenceBinder,
-    commonDenominatorBinder
+    commonDenominatorBinder,
+    likeDenominatorBinder
   ]);
 
 /**
@@ -447,6 +466,60 @@ function bindCommonDenominator(
   } satisfies KpEquationSeriesCommonDenominatorSemanticArguments);
 }
 
+function bindLikeDenominator(
+  input: KpEquationSeriesGovernedSourceBindingInput
+): KpEquationSeriesGovernedSourceBindingResult {
+  const selected = selectExactSource(input);
+  if (selected.status !== "selected") return selected.result;
+  const evidence = exactAdjacencyEvidence(selected.source, input.adjacency);
+  if (evidence === undefined) return sourceRepair(
+    input,
+    "The selected like-denominator source has no exact adjacency evidence."
+  );
+  const resolution = resolveKpEquationSeriesGovernedSource({
+    requirement: {
+      sourcePin: sourcePin(selected.source),
+      operationId: KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID,
+      requiredEntityIds: Object.values(evidence.roleBindings).flat(),
+      requiredSemanticContractKinds: [
+        KP_LIKE_DENOMINATOR_AUTHORING_CONTRACT_KIND
+      ],
+      requiredAdjacency: adjacencyRequirement(input.adjacency),
+      requiredCorrespondenceIds: evidence.correspondenceIds
+    },
+    sources: input.sources
+  });
+  if (resolution.status !== "resolved") return sourceRepair(
+    input,
+    `The like-denominator source failed ${resolution.status}: ` +
+      `${resolution.missingIds.join(", ")}.`
+  );
+  const transformation = verifiedLikeDenominator(resolution.source);
+  if (transformation === undefined) return sourceRepair(
+    input,
+    "The source contract is not authenticated combination authority."
+  );
+  const roleBindings = likeDenominatorRoleBindings(transformation);
+  const expectedRoleIds =
+    kpEquationSeriesLikeDenominatorAuthoringDeclaration.roleIds;
+  if (expectedRoleIds.some((roleId) =>
+    !equalIds(evidence.roleBindings[roleId], roleBindings[roleId])
+  )) return sourceRepair(
+    input,
+    "The source does not bind every like-denominator role exactly."
+  );
+  return bound({
+    schemaVersion:
+      "kp.equation-series.like-denominator-combination-intent.v1",
+    sourcePin: sourcePin(selected.source),
+    operationPin: {
+      ...kpEquationSeriesLikeDenominatorAuthoringDeclaration.operationPin
+    },
+    roleBindings,
+    correspondenceIds: transformation.correspondence.map(({ id }) => id)
+  } satisfies KpEquationSeriesLikeDenominatorSemanticArguments);
+}
+
 function selectExactSource(input: KpEquationSeriesGovernedSourceBindingInput):
   | Readonly<{
       status: "selected";
@@ -510,6 +583,17 @@ function verifiedCommonDenominator(
     kind === KP_COMMON_DENOMINATOR_AUTHORING_CONTRACT_KIND
   )?.authority;
   return isKpVerifiedCommonDenominatorAlignment(authority)
+    ? authority
+    : undefined;
+}
+
+function verifiedLikeDenominator(
+  source: KpEquationSeriesVerifiedSemanticSource
+): KpVerifiedLikeDenominatorCombination | undefined {
+  const authority = source.semanticContracts?.find(({ kind }) =>
+    kind === KP_LIKE_DENOMINATOR_AUTHORING_CONTRACT_KIND
+  )?.authority;
+  return isKpVerifiedLikeDenominatorCombination(authority)
     ? authority
     : undefined;
 }

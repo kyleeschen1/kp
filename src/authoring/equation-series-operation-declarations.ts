@@ -31,6 +31,9 @@ import {
   kpEquationSeriesCommonDenominatorAuthoringDeclaration
 } from "./equation-series-common-denominator-authoring.ts";
 import {
+  kpEquationSeriesLikeDenominatorAuthoringDeclaration
+} from "./equation-series-like-denominator-authoring.ts";
+import {
   kpOperationEvaluationPresentationCoreEntries
 } from "../animation/operation-evaluation-presentation-registry.ts";
 
@@ -189,6 +192,7 @@ export const kpEquationSeriesOperationRegistry =
     fractionEquivalenceDeclaration(),
     commonDenominatorDeclaration(),
     ...commonDenominatorAliasDeclarations(),
+    likeDenominatorDeclaration(),
     commonDenominatorProductEvaluationDeclaration()
   ]);
 
@@ -398,6 +402,34 @@ readonly KpEquationSeriesOperationDeclaration[] {
       canonicalComposition: [canonical.operationId]
     })
   );
+}
+
+function likeDenominatorDeclaration():
+KpEquationSeriesOperationDeclaration {
+  const entry = kpEquationSeriesLikeDenominatorAuthoringDeclaration;
+  return declaration({
+    operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.authoringSummary)
+    },
+    source: "governed-operation",
+    familyId: entry.familyId,
+    recipeIds: entry.recipeIds,
+    authorityRefIds: unique([
+      entry.authoringAuthorityId,
+      entry.semanticAuthorityId,
+      entry.lawId
+    ]),
+    roleIds: entry.roleIds,
+    canonicalComposition: [entry.operationId],
+    governed: {
+      authoringAuthorityId: entry.authoringAuthorityId,
+      operationPin: entry.operationPin,
+      requiredEvidenceIds: entry.requiredEvidenceIds
+    }
+  });
 }
 
 function commonDenominatorProductEvaluationDeclaration():
