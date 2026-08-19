@@ -23,6 +23,9 @@ import {
 import {
   kpEquationSeriesLogarithmBaseAuthoringDeclaration
 } from "./equation-series-logarithm-base-authoring.ts";
+import {
+  kpEquationSeriesFractionEquivalenceAuthoringDeclaration
+} from "./equation-series-fraction-equivalence-authoring.ts";
 
 export interface KpEquationSeriesGovernedRequirements {
   readonly authoringAuthorityId: string;
@@ -175,7 +178,8 @@ export const kpEquationSeriesOperationRegistry =
         (entry) => entry.operationId === operationId
       ))
       .map(bothSidesDeclaration),
-    logarithmBaseDeclaration()
+    logarithmBaseDeclaration(),
+    fractionEquivalenceDeclaration()
   ]);
 
 function canonicalDeclaration(
@@ -282,6 +286,35 @@ function bothSidesDeclaration(
 function logarithmBaseDeclaration():
 KpEquationSeriesOperationDeclaration {
   const entry = kpEquationSeriesLogarithmBaseAuthoringDeclaration;
+  return declaration({
+    operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.authoringSummary)
+    },
+    source: "governed-operation",
+    familyId: entry.familyId,
+    recipeIds: entry.recipeIds,
+    authorityRefIds: unique([
+      entry.authoringAuthorityId,
+      entry.semanticAuthorityId,
+      entry.lawId,
+      ...entry.motifIds
+    ]),
+    roleIds: entry.roleIds,
+    canonicalComposition: [entry.operationId],
+    governed: {
+      authoringAuthorityId: entry.authoringAuthorityId,
+      operationPin: entry.operationPin,
+      requiredEvidenceIds: entry.requiredEvidenceIds
+    }
+  });
+}
+
+function fractionEquivalenceDeclaration():
+KpEquationSeriesOperationDeclaration {
+  const entry = kpEquationSeriesFractionEquivalenceAuthoringDeclaration;
   return declaration({
     operationId: entry.operationId,
     plannerOperationId: entry.operationId,

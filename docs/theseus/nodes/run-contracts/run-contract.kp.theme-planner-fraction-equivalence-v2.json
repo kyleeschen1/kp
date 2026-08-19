@@ -329,6 +329,20 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:59:48.701Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with the branded fraction-equivalence contract."
+    },
+    {
+      "command": "npm run test:equation-series-fraction-equivalence",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T03:10:59.010Z",
+      "notes": "Ten fraction semantic and authoring tests passed across direct and natural-language compilation, exact pins, roles, evidence, identities, endpoints, registry ownership, and renderer neutrality."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T03:11:00.239Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with fraction-equivalence governed authoring and binding."
     }
   ],
   "progress": {
@@ -490,7 +504,8 @@
     {
       "id": "s22",
       "title": "Fraction-equivalence-registration",
-      "status": "planned"
+      "summary": "Fraction-equivalence semantics now enter compilation through one planner-exposed governed operation with authenticated source binding, exact roles, nonzero evidence, correspondence identity, and endpoint validation.",
+      "status": "complete"
     },
     {
       "id": "s23",

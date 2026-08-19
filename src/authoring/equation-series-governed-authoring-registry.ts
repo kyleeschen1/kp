@@ -16,6 +16,10 @@ import type { KpEquationSeriesExternalDiagnostic } from
   "./equation-series-repair-taxonomy.ts";
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
+import {
+  kpEquationSeriesFractionEquivalenceAuthoringDeclaration,
+  validateKpEquationSeriesFractionEquivalenceAuthoring
+} from "./equation-series-fraction-equivalence-authoring.ts";
 
 export interface KpEquationSeriesGovernedAuthoringValidator {
   readonly id: string;
@@ -64,6 +68,12 @@ export const kpEquationSeriesGovernedAuthoringRegistry =
       kpEquationSeriesLogarithmBaseAuthoringDeclaration.operationId
     ],
     validate: validateKpEquationSeriesLogarithmBaseAuthoring
+  }, {
+    id: "governance.equation-series.fraction-equivalence.v1",
+    operationIds: [
+      kpEquationSeriesFractionEquivalenceAuthoringDeclaration.operationId
+    ],
+    validate: validateKpEquationSeriesFractionEquivalenceAuthoring
   }]);
 
 /** Each governed operation is dispatched by registered ownership, not a switch. */

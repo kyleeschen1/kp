@@ -29,6 +29,16 @@ import {
   isKpVerifiedLogarithmChangeOfBase,
   type KpVerifiedLogarithmChangeOfBase
 } from "../semantic/logarithm-change-of-base.ts";
+import {
+  KP_FRACTION_EQUIVALENCE_AUTHORING_CONTRACT_KIND,
+  KP_FRACTION_EQUIVALENCE_AUTHORING_OPERATION_ID,
+  kpEquationSeriesFractionEquivalenceAuthoringDeclaration,
+  type KpEquationSeriesFractionEquivalenceSemanticArguments
+} from "./equation-series-fraction-equivalence-authoring.ts";
+import {
+  isKpVerifiedFractionEquivalence,
+  type KpVerifiedFractionEquivalence
+} from "../semantic/fraction-equivalence.ts";
 
 export interface KpEquationSeriesGovernedSourceBindingInput {
   readonly adjacency: KpEquationTransformSeriesAdjacency;
@@ -105,10 +115,18 @@ const logarithmBaseBinder: KpEquationSeriesGovernedSourceBinder = Object.freeze(
   bind: bindLogarithmBase
 });
 
+const fractionEquivalenceBinder: KpEquationSeriesGovernedSourceBinder =
+  Object.freeze({
+    id: "binding.equation-series.fraction-equivalence.v1",
+    operationIds: [KP_FRACTION_EQUIVALENCE_AUTHORING_OPERATION_ID],
+    bind: bindFractionEquivalence
+  });
+
 export const kpEquationSeriesGovernedSourceBindingRegistry =
   createKpEquationSeriesGovernedSourceBindingRegistry([
     bothSidesBinder,
-    logarithmBaseBinder
+    logarithmBaseBinder,
+    fractionEquivalenceBinder
   ]);
 
 /**
@@ -297,6 +315,65 @@ function bindLogarithmBase(
   } satisfies KpEquationSeriesLogarithmBaseSemanticArguments);
 }
 
+function bindFractionEquivalence(
+  input: KpEquationSeriesGovernedSourceBindingInput
+): KpEquationSeriesGovernedSourceBindingResult {
+  const selected = selectExactSource(input);
+  if (selected.status !== "selected") return selected.result;
+  const evidence = exactAdjacencyEvidence(selected.source, input.adjacency);
+  if (evidence === undefined) return sourceRepair(
+    input,
+    "The selected fraction-equivalence source has no exact adjacency evidence."
+  );
+  const resolution = resolveKpEquationSeriesGovernedSource({
+    requirement: {
+      sourcePin: sourcePin(selected.source),
+      operationId: KP_FRACTION_EQUIVALENCE_AUTHORING_OPERATION_ID,
+      requiredEntityIds: Object.values(evidence.roleBindings).flat(),
+      requiredAssumptionEvidenceIds: selected.source.assumptionEvidenceIds,
+      requiredSemanticContractKinds: [
+        KP_FRACTION_EQUIVALENCE_AUTHORING_CONTRACT_KIND
+      ],
+      requiredAdjacency: adjacencyRequirement(input.adjacency),
+      requiredCorrespondenceIds: evidence.correspondenceIds
+    },
+    sources: input.sources
+  });
+  if (resolution.status !== "resolved") return sourceRepair(
+    input,
+    `The fraction-equivalence source failed ${resolution.status}: ` +
+      `${resolution.missingIds.join(", ")}.`
+  );
+  const transformation = verifiedFractionEquivalence(resolution.source);
+  if (transformation === undefined) return sourceRepair(
+    input,
+    "The source contract is not authenticated fraction-equivalence authority."
+  );
+  const roleIds =
+    kpEquationSeriesFractionEquivalenceAuthoringDeclaration.roleIds;
+  if (roleIds.some((roleId) =>
+    (evidence.roleBindings[roleId]?.length ?? 0) !== 1
+  )) return sourceRepair(
+    input,
+    "The source does not bind every fraction-equivalence role exactly once."
+  );
+  const roleBindings = Object.fromEntries(roleIds.map((roleId) => [
+    roleId,
+    [...evidence.roleBindings[roleId]!]
+  ])) as unknown as
+    KpEquationSeriesFractionEquivalenceSemanticArguments["roleBindings"];
+  return bound({
+    schemaVersion: "kp.equation-series.fraction-equivalence-intent.v1",
+    sourcePin: sourcePin(selected.source),
+    operationPin: {
+      ...kpEquationSeriesFractionEquivalenceAuthoringDeclaration.operationPin
+    },
+    roleBindings,
+    nonzeroEvidenceIds: { ...transformation.nonzeroEvidence },
+    correspondenceIds: transformation.correspondence.map(({ id }) => id)
+  } satisfies KpEquationSeriesFractionEquivalenceSemanticArguments);
+}
+
 function selectExactSource(input: KpEquationSeriesGovernedSourceBindingInput):
   | Readonly<{
       status: "selected";
@@ -342,6 +419,15 @@ function verifiedChangeOfBase(
     kind === KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND
   )?.authority;
   return isKpVerifiedLogarithmChangeOfBase(authority) ? authority : undefined;
+}
+
+function verifiedFractionEquivalence(
+  source: KpEquationSeriesVerifiedSemanticSource
+): KpVerifiedFractionEquivalence | undefined {
+  const authority = source.semanticContracts?.find(({ kind }) =>
+    kind === KP_FRACTION_EQUIVALENCE_AUTHORING_CONTRACT_KIND
+  )?.authority;
+  return isKpVerifiedFractionEquivalence(authority) ? authority : undefined;
 }
 
 function adjacencyRequirement(adjacency: KpEquationTransformSeriesAdjacency) {
