@@ -12,8 +12,9 @@ import {
 test("the candidate profile is one deeply frozen Native KaTeX tuning surface", () => {
   const profile = kpNativeKatexCarrierPreservingSimplificationOpticalProfile;
   assert.equal(profile.status, "provisional-human-checkpoint");
+  assert.equal(profile.treatment, "identity-absorption");
   assert.equal(Object.isFrozen(profile), true);
-  assert.equal(Object.isFrozen(profile.removedSyntaxWithdrawal), true);
+  assert.equal(Object.isFrozen(profile.removedSyntaxAbsorption), true);
   assert.equal(Object.isFrozen(profile.carrierTransit), true);
   assert.equal(Object.isFrozen(profile.nativeSettlement), true);
   assert.deepEqual(kpNativeKatexContributorFusionOpticalProfile, {
@@ -44,16 +45,21 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       nativeSettlementProgress: 0
     },
     removedSyntaxCohort: {
-      withdrawalProgress: 0,
+      absorptionProgress: 0,
+      disappearanceProgress: 0,
       paintPresence: 1,
-      scale: 1,
-      retreatInInkHeights: 0
+      scale: 1
     }
   });
-  assert.equal(overlap.phase, "carrier-transit");
+  assert.equal(overlap.phase, "identity-absorption");
   assert.equal(overlap.carrier.paintPresence, 1);
-  assert.ok(overlap.carrier.transitProgress > 0);
-  assert.ok(overlap.removedSyntaxCohort.withdrawalProgress > 0);
+  assert.equal(overlap.carrier.transitProgress, 0);
+  assert.ok(overlap.removedSyntaxCohort.absorptionProgress > 0);
+  assert.ok(overlap.removedSyntaxCohort.disappearanceProgress > 0);
+  assert.ok(
+    sampleKpNativeKatexCarrierPreservingSimplificationOptics(0.6)
+      .carrier.transitProgress > 0
+  );
   assert.deepEqual(target, {
     progress: 1,
     phase: "target",
@@ -63,10 +69,10 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       nativeSettlementProgress: 1
     },
     removedSyntaxCohort: {
-      withdrawalProgress: 1,
+      absorptionProgress: 1,
+      disappearanceProgress: 1,
       paintPresence: 0,
-      scale: 0.92,
-      retreatInInkHeights: 0.18
+      scale: 0.4
     }
   });
 });
@@ -90,7 +96,13 @@ test("sampling is bounded, deterministic, and history independent", () => {
   assert.deepEqual(forward, reverse);
   assert.equal(
     sampleKpNativeKatexCarrierPreservingSimplificationOptics(
-      profile.removedSyntaxWithdrawal.end
+      profile.removedSyntaxAbsorption.end
+    ).removedSyntaxCohort.absorptionProgress,
+    1
+  );
+  assert.equal(
+    sampleKpNativeKatexCarrierPreservingSimplificationOptics(
+      profile.removedSyntaxAbsorption.disappearanceEnd
     ).removedSyntaxCohort.paintPresence,
     0
   );

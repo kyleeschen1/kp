@@ -14,7 +14,7 @@ const animationId =
 const outputRoot = path.resolve(
   "tmp/codex/carrier-preserving-simplification-checkpoint"
 );
-const normalSamples = [0, 0.2, 0.4, 0.65, 0.9, 1] as const;
+const normalSamples = [0, 0.2, 0.3, 0.4, 0.65, 0.9, 1] as const;
 const reducedSamples = [0.2, 0.8] as const;
 const profiles = Object.freeze([
   {
@@ -89,6 +89,7 @@ interface CaptureEvidence {
   readonly requestedProgress: number;
   readonly sampledProgress: number;
   readonly visualOwner: string;
+  readonly treatment: string;
   readonly carrierTrackId: string;
   readonly removedTrackCount: number;
   readonly activeEndpointCount: number;
@@ -250,6 +251,8 @@ async function captureSample(input: {
       ),
       visualOwner:
         root.dataset["kpCarrierPreservingSimplificationVisualOwner"] ?? "",
+      treatment:
+        root.dataset["kpCarrierPreservingSimplificationTreatment"] ?? "",
       carrierTrackId:
         root.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] ?? "",
       removedTrackCount: Number(
@@ -280,7 +283,11 @@ async function captureSample(input: {
   if (state.activeEndpointCount !== 1) {
     throw new Error(`${id} must expose exactly one accessible equation.`);
   }
-  if (state.removedTrackCount !== 2 || state.carrierTrackId.length === 0) {
+  if (
+    state.removedTrackCount !== 2 ||
+    state.carrierTrackId.length === 0 ||
+    state.treatment !== "identity-absorption"
+  ) {
     throw new Error(`${id} is missing canonical carrier/owner diagnostics.`);
   }
   if (!state.reviewAvailable) {

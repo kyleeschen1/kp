@@ -4,11 +4,15 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
   readonly id:
     "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
   readonly status: "provisional-human-checkpoint";
-  readonly removedSyntaxWithdrawal: {
+  readonly treatment: "identity-absorption";
+  readonly removedSyntaxAbsorption: {
     readonly start: number;
     readonly end: number;
+    readonly disappearanceStart: number;
+    readonly disappearanceEnd: number;
     readonly minimumScale: number;
-    readonly maximumRetreatInInkHeights: number;
+    readonly pointOffsetInCarrierInkHeights: number;
+    readonly kernelSpanInCarrierInkHeights: number;
   };
   readonly carrierTransit: {
     readonly start: number;
@@ -24,7 +28,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
   readonly progress: number;
   readonly phase:
     | "source"
-    | "syntax-withdrawal"
+    | "identity-absorption"
     | "carrier-transit"
     | "native-settlement"
     | "target";
@@ -34,10 +38,10 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
     readonly nativeSettlementProgress: number;
   };
   readonly removedSyntaxCohort: {
-    readonly withdrawalProgress: number;
+    readonly absorptionProgress: number;
+    readonly disappearanceProgress: number;
     readonly paintPresence: number;
     readonly scale: number;
-    readonly retreatInInkHeights: number;
   };
 }
 
@@ -53,18 +57,22 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
     id:
       "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
     status: "provisional-human-checkpoint" as const,
-    removedSyntaxWithdrawal: {
+    treatment: "identity-absorption" as const,
+    removedSyntaxAbsorption: {
       start: 0.1,
-      end: 0.4,
-      minimumScale: 0.92,
-      maximumRetreatInInkHeights: 0.18
+      end: 0.44,
+      disappearanceStart: 0.26,
+      disappearanceEnd: 0.44,
+      minimumScale: 0.4,
+      pointOffsetInCarrierInkHeights: 0.1,
+      kernelSpanInCarrierInkHeights: 0.24
     },
     carrierTransit: {
-      start: 0.32,
-      end: 0.86
+      start: 0.44,
+      end: 0.88
     },
     nativeSettlement: {
-      start: 0.86,
+      start: 0.88,
       end: 1
     }
   } satisfies KpNativeKatexCarrierPreservingSimplificationOpticalProfile);
@@ -83,10 +91,15 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
   }
   assertValidProfile(profile);
   const bounded = clamp01(progress);
-  const withdrawalProgress = sampleInterval(
+  const absorptionProgress = sampleInterval(
     bounded,
-    profile.removedSyntaxWithdrawal.start,
-    profile.removedSyntaxWithdrawal.end
+    profile.removedSyntaxAbsorption.start,
+    profile.removedSyntaxAbsorption.end
+  );
+  const disappearanceProgress = sampleInterval(
+    bounded,
+    profile.removedSyntaxAbsorption.disappearanceStart,
+    profile.removedSyntaxAbsorption.disappearanceEnd
   );
   const transitProgress = sampleInterval(
     bounded,
@@ -98,10 +111,10 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
     profile.nativeSettlement.start,
     profile.nativeSettlement.end
   );
-  const withdrawalScale = lerp(
+  const absorptionScale = lerp(
     1,
-    profile.removedSyntaxWithdrawal.minimumScale,
-    withdrawalProgress
+    profile.removedSyntaxAbsorption.minimumScale,
+    absorptionProgress
   );
 
   return deepFreeze({
@@ -113,12 +126,10 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
       nativeSettlementProgress
     },
     removedSyntaxCohort: {
-      withdrawalProgress,
-      paintPresence: 1 - withdrawalProgress,
-      scale: withdrawalScale,
-      retreatInInkHeights:
-        profile.removedSyntaxWithdrawal.maximumRetreatInInkHeights *
-        withdrawalProgress
+      absorptionProgress,
+      disappearanceProgress,
+      paintPresence: 1 - disappearanceProgress,
+      scale: absorptionScale
     }
   });
 }
@@ -128,7 +139,7 @@ function phaseAt(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): KpNativeKatexCarrierPreservingSimplificationOpticalSample["phase"] {
   if (progress <= 0) return "source";
-  if (progress < profile.carrierTransit.start) return "syntax-withdrawal";
+  if (progress < profile.carrierTransit.start) return "identity-absorption";
   if (progress < profile.nativeSettlement.start) return "carrier-transit";
   if (progress < 1) return "native-settlement";
   return "target";
@@ -137,9 +148,9 @@ function phaseAt(
 function assertValidProfile(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): void {
-  const { removedSyntaxWithdrawal, carrierTransit, nativeSettlement } = profile;
+  const { removedSyntaxAbsorption, carrierTransit, nativeSettlement } = profile;
   for (const [label, interval] of [
-    ["removed syntax withdrawal", removedSyntaxWithdrawal],
+    ["removed syntax absorption", removedSyntaxAbsorption],
     ["carrier transit", carrierTransit],
     ["native settlement", nativeSettlement]
   ] as const) {
@@ -154,17 +165,32 @@ function assertValidProfile(
     }
   }
   if (
-    removedSyntaxWithdrawal.minimumScale <= 0 ||
-    removedSyntaxWithdrawal.minimumScale > 1 ||
+    removedSyntaxAbsorption.minimumScale <= 0 ||
+    removedSyntaxAbsorption.minimumScale > 1 ||
     !Number.isFinite(
-      removedSyntaxWithdrawal.maximumRetreatInInkHeights
+      removedSyntaxAbsorption.pointOffsetInCarrierInkHeights
     ) ||
-    removedSyntaxWithdrawal.maximumRetreatInInkHeights < 0
+    removedSyntaxAbsorption.pointOffsetInCarrierInkHeights < 0 ||
+    removedSyntaxAbsorption.pointOffsetInCarrierInkHeights > 0.5 ||
+    !Number.isFinite(
+      removedSyntaxAbsorption.kernelSpanInCarrierInkHeights
+    ) ||
+    removedSyntaxAbsorption.kernelSpanInCarrierInkHeights <= 0 ||
+    removedSyntaxAbsorption.kernelSpanInCarrierInkHeights > 0.75
   ) {
-    throw new Error("Removed syntax geometry must remain bounded and positive.");
+    throw new Error("Identity-absorption geometry must remain bounded and positive.");
   }
-  if (removedSyntaxWithdrawal.end >= carrierTransit.end) {
-    throw new Error("Removed syntax must yield before carrier transit completes.");
+  if (
+    removedSyntaxAbsorption.disappearanceStart <
+      removedSyntaxAbsorption.start ||
+    removedSyntaxAbsorption.disappearanceEnd <=
+      removedSyntaxAbsorption.disappearanceStart ||
+    removedSyntaxAbsorption.disappearanceEnd > carrierTransit.end ||
+    removedSyntaxAbsorption.end !== carrierTransit.start
+  ) {
+    throw new Error(
+      "Identity absorption must gather before and yield during carrier transit."
+    );
   }
   if (
     nativeSettlement.start !== carrierTransit.end ||

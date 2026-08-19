@@ -33,6 +33,10 @@ test("carrier simplification seeks and rewinds through one paint owner", async (
     "data-kp-carrier-preserving-simplification-removed-track-count",
     "2"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-carrier-preserving-simplification-treatment",
+    "identity-absorption"
+  );
   await expectOnePaintSurface(stage);
   await expectOneAccessibleEndpoint(stage);
   await expectOpaqueUnscaledCarrier(stage);
@@ -88,6 +92,13 @@ test("direct URL, interruption, and resize preserve the selected state", async (
     "data-kp-carrier-preserving-simplification-progress",
     "0.64"
   );
+  // Leave enough real-time runway to prove interruption; at 64% the short
+  // exemplar can finish before Playwright observes its transient play state.
+  await remounted.seek.fill("0.05");
+  await expect(remounted.stage).toHaveAttribute(
+    "data-kp-carrier-preserving-simplification-progress",
+    "0.05"
+  );
 
   await remounted.player.locator(
     '[data-action="toggle-editor-animation"]'
@@ -98,7 +109,7 @@ test("direct URL, interruption, and resize preserve the selected state", async (
   );
   await expect.poll(async () => Number(
     await remounted.player.getAttribute("data-kp-editor-animation-progress")
-  )).toBeGreaterThan(0.64);
+  )).toBeGreaterThan(0.05);
   await remounted.seek.fill("0.36");
   await expect(remounted.player).not.toHaveAttribute(
     "data-kp-editor-animation-status",

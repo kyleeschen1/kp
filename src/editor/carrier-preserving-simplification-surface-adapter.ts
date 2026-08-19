@@ -17,6 +17,9 @@ import {
   compileKpNativeKatexCarrierPreservingSimplificationMotion
 } from "../rendering/native-katex-carrier-preserving-simplification-motion.ts";
 import {
+  kpNativeKatexCarrierPreservingSimplificationOpticalProfile
+} from "../rendering/native-katex-carrier-preserving-simplification-profile.ts";
+import {
   createKpNativeKatexCarrierPreservingSimplificationSession,
   type KpNativeKatexCarrierPreservingSimplificationSession
 } from "../rendering/native-katex-carrier-preserving-simplification-settlement.ts";
@@ -255,6 +258,8 @@ async function prepareSurface(
         canonicalRecipe.id;
       session.stage.dataset["kpCarrierPreservingSimplificationProfileId"] =
         canonicalRecipe.candidateProfileId;
+      session.stage.dataset["kpCarrierPreservingSimplificationTreatment"] =
+        kpNativeKatexCarrierPreservingSimplificationOpticalProfile.treatment;
       session.stage.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] =
         motion.carrierTrackId;
       session.stage.dataset[
@@ -323,7 +328,7 @@ function applyFrame(
       ? "Two times one ready."
       : progress === 1
         ? "Two remains."
-        : "The multiplication sign and identity witness withdraw while two stays present.";
+        : "The multiplication sign and identity witness gather and are absorbed while two stays present.";
   }
 }
 

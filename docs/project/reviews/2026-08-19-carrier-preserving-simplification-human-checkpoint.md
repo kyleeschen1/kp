@@ -14,6 +14,13 @@ The canonical candidate is `2 \times 1 \to 2`:
 - approved contrast: `/?artifact=animation.operation-evaluation.two-times-three`
 - regeneration: `npm run visual:carrier-preserving-simplification:checkpoint`
 
+The treatment under review is **identity absorption**. The verified removal
+cohort (`\times 1`) contracts toward a small, renderer-measured kernel beside
+the carrier's ink edge, then disappears; the carrier remains full-size and
+opaque throughout. **Recognition** is the recorded runner-up: it has not been
+implemented, so this checkpoint compares one clear candidate rather than two
+partly tuned choreographies.
+
 The Catalogue's development toolbar and Review launcher remain available on
 the live route. Review notes therefore retain the exact artifact URL and
 playhead instead of referring only to this document or a screenshot.
@@ -28,8 +35,8 @@ to other expressions.
 Please inspect natural playback, direct scrubbing, reverse, and phone width:
 
 1. The surviving `2` should remain visually continuous, opaque, and unscaled.
-2. `\times` and `1` should withdraw as one syntax cohort without appearing to
-   fuse into the result.
+2. `\times` and `1` should contract and be absorbed as one syntax cohort,
+   without becoming result paint or making the `2` look like it collapses.
 3. There should be no blank interval, duplicate complete equation, terminal
    snap, or ambiguity about which glyph survives.
 4. The motion should contrast clearly with contributor fusion in
@@ -45,15 +52,15 @@ carrier evidence, recipe, hosted URL, and approved contributor-fusion family.
 The disposable packet is regenerated under
 `tmp/codex/carrier-preserving-simplification-checkpoint/`:
 
-- `contact-sheet.png`: 32 deterministic review states
+- `contact-sheet.png`: 36 deterministic review states
 - `index.html`: inspectable contact sheet
 - `manifest.json`: profile, playhead, carrier track, ownership, Review,
   accessibility, and endpoint diagnostics for every state
 
 Coverage includes the full wide/phone × dark/light matrix in normal motion and
 source/target semantic checkpoints for all four reduced-motion profiles. The
-normal-motion sheet samples source, syntax withdrawal, early and late carrier
-transit, native settlement, and target.
+normal-motion sheet samples source, absorption approach, absorption contact,
+early and late carrier transit, native settlement, and target.
 
 Automated evidence proves each state has one accessible endpoint, the expected
 one carrier plus two removal tracks, no horizontal overflow, a non-empty static
@@ -64,7 +71,7 @@ of causality, pacing, or visual quality.
 ## Verification
 
 - `npm run visual:carrier-preserving-simplification:checkpoint` — generated all
-  32 states without clipping, missing diagnostics, inaccessible endpoints, or
+  36 states without clipping, missing diagnostics, inaccessible endpoints, or
   unavailable Review capture.
 - `npm run visual:carrier-preserving-simplification` — 3/3 focused Chromium
   lifecycle scenarios passed.

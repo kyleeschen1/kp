@@ -24,6 +24,8 @@ import {
 
 const REMOVED_SYNTAX_COHORT_ID =
   "cohort.carrier-preserving-simplification.removed-syntax";
+const IDENTITY_ABSORPTION_CONTACT_ID =
+  "contact.carrier-preserving-simplification.identity-absorption";
 
 export interface KpNativeKatexCarrierPreservingSimplificationMotionPlan {
   readonly kind:
@@ -79,6 +81,10 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
   const removedRefs = new Set(
     binding.recipe.removedSyntaxCohort.selectorRefs
   );
+  const absorptionTargets = identityAbsorptionTargets(binding, profile);
+  const removedOwnerBySelector = new Map(
+    binding.removedSyntaxCohort.map((owner) => [owner.selectorRef, owner])
+  );
   let carrierTrackId: string | undefined;
   const removedSyntaxTrackIds: string[] = [];
   const trackProjection = createKpNativeKatexTrackProjection({
@@ -110,6 +116,9 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           return Object.freeze({
             ...track,
             timingGroupId: binding.recipe.carrier.correspondenceRecordId,
+            // The identity cohort is allowed to meet the carrier's ink edge,
+            // but only the verified one-to-one carrier relation owns result paint.
+            intentionalContactGroupId: IDENTITY_ABSORPTION_CONTACT_ID,
             sampleProgress: (progress: number) =>
               optics(progress, profile).carrier.transitProgress
           });
@@ -120,17 +129,23 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           track.lifecycle === "eliminate"
         ) {
           removedSyntaxTrackIds.push(track.id);
-          const retreat = track.startPaintRect.height *
-            profile.removedSyntaxWithdrawal.maximumRetreatInInkHeights;
+          const [endRect, endPaintRect] = settleScaledPaintAtTarget(
+            track,
+            removedOwnerBySelector.get(sourceEntity)!,
+            absorptionTargets.get(sourceEntity)!,
+            profile.removedSyntaxAbsorption.minimumScale
+          );
           return Object.freeze({
             ...track,
-            endRect: translateDown(track.startRect, retreat),
-            endPaintRect: translateDown(track.startPaintRect, retreat),
+            endRect,
+            endPaintRect,
             timingGroupId: REMOVED_SYNTAX_COHORT_ID,
+            intentionalContactGroupId: IDENTITY_ABSORPTION_CONTACT_ID,
+            opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: (progress: number) =>
-              optics(progress, profile).removedSyntaxCohort.withdrawalProgress,
+              optics(progress, profile).removedSyntaxCohort.absorptionProgress,
             sampleOpacityProgress: (progress: number) =>
-              optics(progress, profile).removedSyntaxCohort.withdrawalProgress,
+              optics(progress, profile).removedSyntaxCohort.disappearanceProgress,
             sampleMaterialScale: (progress: number) =>
               optics(progress, profile).removedSyntaxCohort.scale
           });
@@ -207,9 +222,75 @@ function optics(
   );
 }
 
-function translateDown(
-  rect: KpNativeKatexPaintMeasuredSceneTrack["startRect"],
-  distance: number
-): KpNativeKatexPaintMeasuredSceneTrack["startRect"] {
-  return Object.freeze({ ...rect, top: rect.top + distance });
+function identityAbsorptionTargets(
+  binding: KpNativeKatexCarrierPreservingSimplificationBinding,
+  profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
+): ReadonlyMap<string, {
+  readonly paintCenterX: number;
+  readonly baselineY: number;
+}> {
+  const carrier = binding.carrier.source.rect;
+  const centerX = carrier.left + carrier.width +
+      carrier.height *
+        profile.removedSyntaxAbsorption.pointOffsetInCarrierInkHeights;
+  const owners = [...binding.removedSyntaxCohort];
+  const ordered = owners.map((owner, index) => ({ owner, index }))
+    .sort((left, right) =>
+      left.owner.rect.left - right.owner.rect.left ||
+      left.index - right.index
+    );
+  const span = carrier.height *
+    profile.removedSyntaxAbsorption.kernelSpanInCarrierInkHeights;
+  const targets = new Map<string, {
+    readonly paintCenterX: number;
+    readonly baselineY: number;
+  }>();
+  ordered.forEach(({ owner }, rank) => {
+    const offset = ordered.length === 1
+      ? 0
+      : (rank / (ordered.length - 1) - 0.5) * span;
+    targets.set(owner.selectorRef, Object.freeze({
+      paintCenterX: centerX + offset,
+      baselineY: binding.carrier.source.baselineY
+    }));
+  });
+  return targets;
+}
+
+function settleScaledPaintAtTarget(
+  track: KpNativeKatexPaintMeasuredSceneTrack,
+  owner: KpNativeKatexCarrierPreservingSimplificationBinding[
+    "removedSyntaxCohort"
+  ][number],
+  target: { readonly paintCenterX: number; readonly baselineY: number },
+  scale: number
+): readonly [
+  KpNativeKatexPaintMeasuredSceneTrack["startRect"],
+  NonNullable<KpNativeKatexPaintMeasuredSceneTrack["startPaintRect"]>
+] {
+  const paint = track.startPaintRect;
+  const ownerCenterX = track.startRect.left + track.startRect.width / 2;
+  const ownerCenterY = track.startRect.top + track.startRect.height / 2;
+  const paintCenterOffsetX =
+    paint.left + paint.width / 2 - ownerCenterX;
+  const baselineOffsetY = owner.baselineY - ownerCenterY;
+  // Scaling happens around the material-owner center. Solve the destination
+  // center backward so the contracted ink retains the equation baseline and
+  // cannot read as a superscript beside the full-size carrier.
+  const endOwnerCenterX = target.paintCenterX - scale * paintCenterOffsetX;
+  const endOwnerCenterY = target.baselineY - scale * baselineOffsetY;
+  const deltaX = endOwnerCenterX - ownerCenterX;
+  const deltaY = endOwnerCenterY - ownerCenterY;
+  return Object.freeze([
+    Object.freeze({
+      ...track.startRect,
+      left: track.startRect.left + deltaX,
+      top: track.startRect.top + deltaY
+    }),
+    Object.freeze({
+      ...paint,
+      left: paint.left + deltaX,
+      top: paint.top + deltaY
+    })
+  ]);
 }

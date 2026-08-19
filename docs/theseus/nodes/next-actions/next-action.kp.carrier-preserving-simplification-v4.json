@@ -302,11 +302,53 @@
       "scope": "cps15",
       "checkedAt": "2026-08-19T23:05:10.968Z",
       "notes": "Validated 1030 nodes and 23569 events with cps15 held at HUMAN_CHECKPOINT and cps16-cps27 untouched pending explicit visual approval."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "canonical absorption semantic, profile, binding, sampling, and catalogue contracts",
+      "checkedAt": "2026-08-19T23:34:48.891Z",
+      "notes": "20/20 focused tests passed after the absorption revision."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "canonical absorption Chromium lifecycle",
+      "checkedAt": "2026-08-19T23:34:50.024Z",
+      "notes": "3/3 seek, interruption, resize, and reduced-motion scenarios passed."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification:checkpoint",
+      "status": "passed",
+      "scope": "identity absorption review packet",
+      "checkedAt": "2026-08-19T23:34:51.020Z",
+      "notes": "Generated 36 wide/phone, dark/light, normal/reduced states with diagnostics."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "strict test TypeScript graph",
+      "checkedAt": "2026-08-19T23:34:52.022Z",
+      "notes": "Passed after keeping unverified timing groups out of verified operation-plan authority."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps15 identity absorption checkpoint",
+      "checkedAt": "2026-08-19T23:35:12.149Z",
+      "notes": "Validated 1030 nodes and 23578 events with cps15 held at HUMAN_CHECKPOINT and downstream promotion slices untouched."
+    },
+    {
+      "command": "git diff --cached --check",
+      "status": "passed",
+      "scope": "cps15 absorption checkpoint commit boundary",
+      "checkedAt": "2026-08-19T23:37:05.692Z",
+      "notes": "Exact staged absorption implementation, evidence, docs, and run records have no whitespace errors; unrelated user files remain unstaged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: canonical 2 × 1 → 2 is live with deterministic wide/phone, dark/light, normal/reduced evidence and working Review capture. Explicit visual approval is required before profile freezing or add-zero pressure."
+    "summary": "HUMAN_CHECKPOINT candidate revised to identity absorption: ×1 contracts toward a measured baseline-aware kernel beside an opaque full-size carrier. Recognition is recorded but unimplemented as the runner-up."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
