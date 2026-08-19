@@ -180,11 +180,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T06:32:02.260Z",
       "notes": "Semantic authority exactly projects to executable presentation entries; authoring no longer imports the animation registry."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:37:26.811Z",
+      "notes": "Three plan tests pass: approved motif scope, complete context persistence, and absence of timing, geometry, evaluation, or new motif authority."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:42:00.705Z",
+      "notes": "Five tests pass across approved equivalence scope, context identity, synchronized numerator and denominator evaluation, ordered endpoints, and absence of hidden addition."
+    },
+    {
+      "command": "npm run test:operation-evaluation-presentation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:42:02.008Z",
+      "notes": "All 22 shared operation-evaluation registry and motif continuity checks remain green for the composed caller."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T06:42:03.094Z",
+      "notes": "All application, test, Svelte, and domain type checks pass for the exemplar plan boundary."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Closed the authoring-to-runtime dependency inversion with semantic operation-evaluation authority and exact boundary tests."
+    "summary": "The pressure plan now ends at 2/6 plus 1/6 through explicit parallel evaluation, before any unapproved addition choreography."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -332,12 +360,14 @@
     {
       "id": "s22",
       "title": "Plan pressure presentation",
-      "status": "planned"
+      "summary": "Built the local 1/3 plus 1/6 pressure-equivalence plan entirely from verified alignment and approved fraction-equivalence authority.",
+      "status": "complete"
     },
     {
       "id": "s23",
       "title": "Compose evaluation presentation",
-      "status": "planned"
+      "summary": "Composed exact product evaluation as an approved synchronized cohort and preserved four inspectable native endpoints.",
+      "status": "complete"
     },
     {
       "id": "s24",
