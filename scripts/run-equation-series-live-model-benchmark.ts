@@ -7,7 +7,9 @@ import {
 import { resolve } from "node:path";
 
 import {
+  fingerprintKpEquationSeriesBenchmarkPayload,
   runKpEquationSeriesLiveModelBenchmark,
+  type KpEquationSeriesLiveModelBatchResult,
   type KpEquationSeriesLiveModelBatchPort
 } from "../src/authoring/equation-series-live-model-benchmark.ts";
 import type { KpEquationSeriesPlannerPrompt } from
@@ -19,7 +21,6 @@ const outputDirectory = resolve(
   "tmp/codex/equation-series-live-model-benchmark"
 );
 const schemaPath = resolve(outputDirectory, "batch-response.schema.json");
-const responsePath = resolve(outputDirectory, "latest-response.json");
 const reportPath = resolve(outputDirectory, "latest-report.json");
 const arguments_ = parseArguments(process.argv.slice(2));
 
@@ -32,12 +33,15 @@ writeFileSync(
 
 const port: KpEquationSeriesLiveModelBatchPort = {
   id: plannerId,
-  modelId: arguments_.model ?? "codex-default-profile",
-  propose: async (prompts) => arguments_.replay
-    ? readBatchResponse(prompts)
-    : runCodexBatch(prompts, arguments_.model)
+  modelId: arguments_.model,
+  propose: async ({ prompts, repetitionIndex }) => arguments_.replay
+    ? readBatchResponse(prompts, repetitionIndex, "replayed-file")
+    : runCodexBatch(prompts, repetitionIndex, arguments_.model)
 };
-const report = await runKpEquationSeriesLiveModelBenchmark({ port });
+const report = await runKpEquationSeriesLiveModelBenchmark({
+  port,
+  repetitionCount: arguments_.repetitionCount
+});
 writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 process.stderr.write(`Disposable report: ${reportPath}\n`);
@@ -45,8 +49,10 @@ if (arguments_.check && report.status !== "passed") process.exitCode = 1;
 
 function runCodexBatch(
   prompts: readonly KpEquationSeriesPlannerPrompt[],
-  model: string | undefined
-): readonly unknown[] {
+  repetitionIndex: number,
+  model: string
+): KpEquationSeriesLiveModelBatchResult {
+  const responsePath = responsePathFor(repetitionIndex);
   const args = [
     "exec",
     "--ephemeral",
@@ -58,7 +64,8 @@ function runCodexBatch(
     "never",
     "-c",
     "model_reasoning_effort=\"low\"",
-    ...(model === undefined ? [] : ["--model", model]),
+    "--model",
+    model,
     "--output-schema",
     schemaPath,
     "--output-last-message",
@@ -76,21 +83,40 @@ function runCodexBatch(
     const detail = child.stderr.trim().slice(-4_000);
     throw new Error(`Codex CLI exited ${String(child.status)}: ${detail}`);
   }
-  return readBatchResponse(prompts);
+  return readBatchResponse(prompts, repetitionIndex, "captured-file");
 }
 
 function readBatchResponse(
-  prompts: readonly KpEquationSeriesPlannerPrompt[]
-): readonly unknown[] {
-  const decoded = JSON.parse(readFileSync(responsePath, "utf8")) as unknown;
+  prompts: readonly KpEquationSeriesPlannerPrompt[],
+  repetitionIndex: number,
+  kind: "captured-file" | "replayed-file"
+): KpEquationSeriesLiveModelBatchResult {
+  const responsePath = responsePathFor(repetitionIndex);
+  const rawResponse = readFileSync(responsePath, "utf8");
+  const decoded = JSON.parse(rawResponse) as unknown;
   if (!isRecord(decoded) || !Array.isArray(decoded["results"])) {
     throw new Error("Codex CLI returned no benchmark result array.");
   }
   const records = decoded["results"];
   // Request identity, not model ordering, joins batch output back to prompts.
-  return prompts.map(({ requestId }) => records.find((record) =>
-    isRecord(record) && record["requestId"] === requestId
-  ));
+  return Object.freeze({
+    candidates: prompts.map(({ requestId }) => records.find((record) =>
+      isRecord(record) && record["requestId"] === requestId
+    )),
+    rawResponseProvenance: Object.freeze({
+      kind,
+      locator: responsePath,
+      contentFingerprint:
+        fingerprintKpEquationSeriesBenchmarkPayload(rawResponse)
+    })
+  });
+}
+
+function responsePathFor(repetitionIndex: number): string {
+  return resolve(
+    outputDirectory,
+    `response-${String(repetitionIndex).padStart(2, "0")}.json`
+  );
 }
 
 function benchmarkPrompt(
@@ -202,11 +228,13 @@ function batchResponseSchema(): Readonly<Record<string, unknown>> {
 }
 
 function parseArguments(values: readonly string[]): Readonly<{
-  model?: string | undefined;
+  model: string;
+  repetitionCount: number;
   check: boolean;
   replay: boolean;
 }> {
   let model: string | undefined;
+  let repetitionCount: number | undefined;
   let check = false;
   let replay = false;
   for (let index = 0; index < values.length; index += 1) {
@@ -226,10 +254,30 @@ function parseArguments(values: readonly string[]): Readonly<{
       index += 1;
       continue;
     }
+    if (values[index] === "--repetitions") {
+      const raw = values[index + 1];
+      repetitionCount = raw === undefined ? undefined : Number(raw);
+      if (
+        repetitionCount === undefined ||
+        !Number.isSafeInteger(repetitionCount) ||
+        repetitionCount < 1 || repetitionCount > 20
+      ) {
+        throw new Error("--repetitions requires an integer from 1 to 20.");
+      }
+      index += 1;
+      continue;
+    }
     throw new Error(`Unknown argument ${String(values[index])}.`);
   }
+  if (model === undefined) throw new Error(
+    "--model is required so benchmark evidence names the exact model."
+  );
+  if (repetitionCount === undefined) throw new Error(
+    "--repetitions is required so benchmark evidence records run count."
+  );
   return Object.freeze({
-    ...(model === undefined ? {} : { model }),
+    model,
+    repetitionCount,
     check,
     replay
   });

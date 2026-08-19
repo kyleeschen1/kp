@@ -245,11 +245,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:34:56.358Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed with explicit compiled, repair-required, unsupported, and recovery result variants."
+    },
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:39:21.109Z",
+      "notes": "17 benchmark and planner tests passed, including three-repeat evidence, stable prompt fingerprint, raw-response provenance, required model identity, required run count, provider failure, and authority-boundary cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-08-19T02:39:22.366Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with benchmark report v2 and the repeat-aware live runner."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s16 exposes explicit compiled-new, retained-last-valid, and no-valid-candidate recovery dispositions; planner and binding failures keep typed repairs and never blank a valid prior artifact."
+    "summary": "s17 upgrades live benchmark evidence to report v2 with explicit model ID, bounded repetition count, stable prompt fingerprint, repeat-indexed cases, and raw-response provenance."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -376,7 +390,8 @@
     {
       "id": "s17",
       "title": "Reproducible-live-benchmark",
-      "status": "planned"
+      "summary": "Live benchmark evidence is now reproducible: model identity and repetition count are mandatory, prompts are fingerprinted deterministically, and every repetition records raw-response provenance and indexed results.",
+      "status": "complete"
     },
     {
       "id": "s18",

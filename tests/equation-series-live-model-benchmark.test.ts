@@ -12,11 +12,13 @@ const plannerId = "planner.fake.live-benchmark.v1";
 
 test("the fixed live corpus measures direct governed and unsupported planning", async () => {
   const report = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
     port: {
       id: plannerId,
       modelId: "model.fake.perfect.v1",
-      propose: async () => kpEquationSeriesLiveModelBenchmarkCases.map(
-        perfectRecord
+      propose: async () => fixtureBatch(
+        kpEquationSeriesLiveModelBenchmarkCases.map(perfectRecord),
+        "perfect"
       )
     }
   });
@@ -47,13 +49,14 @@ test("the fixed live corpus measures direct governed and unsupported planning", 
 test("a known operation applied to unsupported endpoints is a silent fallback", async () => {
   const unsupported = kpEquationSeriesLiveModelBenchmarkCases.at(-1)!;
   const report = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
     cases: [unsupported],
     port: {
       id: plannerId,
       modelId: "model.fake.false-positive.v1",
-      propose: async () => [proposedRecord(unsupported, [
+      propose: async () => fixtureBatch([proposedRecord(unsupported, [
         "kp.algebra.wrap-function"
-      ])]
+      ])], "false-positive")
     }
   });
 
@@ -67,18 +70,19 @@ test("model-authored presentation or semantic authority fails closed", async () 
   const wrap = kpEquationSeriesLiveModelBenchmarkCases[0]!;
   const candidate = proposedRecord(wrap, ["kp.algebra.wrap-function"]);
   const report = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
     cases: [wrap],
     port: {
       id: plannerId,
       modelId: "model.fake.authority-attempt.v1",
-      propose: async () => [{
+      propose: async () => fixtureBatch([{
         ...candidate,
         proposals: [{
           ...candidate.proposals[0],
           semanticArguments: { wrapper: "ln" },
           durationMs: 800
         }]
-      }]
+      }], "authority-attempt")
     }
   });
 
@@ -90,6 +94,7 @@ test("model-authored presentation or semantic authority fails closed", async () 
 
 test("provider failure becomes bounded benchmark evidence", async () => {
   const report = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
     cases: [kpEquationSeriesLiveModelBenchmarkCases[0]!],
     port: {
       id: plannerId,
@@ -99,9 +104,94 @@ test("provider failure becomes bounded benchmark evidence", async () => {
   });
 
   assert.equal(report.status, "failed");
-  assert.equal(report.providerError, "offline");
+  assert.deepEqual(report.providerErrors, [{
+    repetitionIndex: 1,
+    message: "offline"
+  }]);
   assert.deepEqual(report.cases[0]?.plannerDiagnosticCodes,
     ["equation-series.planner.record.type"]);
+});
+
+test("reports explicit repeated-run prompt and raw-response provenance", async () => {
+  const seen: Array<Readonly<{
+    repetitionIndex: number;
+    promptFingerprint: string;
+  }>> = [];
+  const report = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 3,
+    cases: [kpEquationSeriesLiveModelBenchmarkCases[0]!],
+    port: {
+      id: plannerId,
+      modelId: "model.fake.repeated.v1",
+      propose: async ({ repetitionIndex, promptFingerprint }) => {
+        seen.push({ repetitionIndex, promptFingerprint });
+        return fixtureBatch([
+          perfectRecord(kpEquationSeriesLiveModelBenchmarkCases[0]!)
+        ], `repeat-${repetitionIndex}`);
+      }
+    }
+  });
+  assert.equal(report.status, "passed");
+  assert.equal(report.modelId, "model.fake.repeated.v1");
+  assert.equal(report.repetitionCount, 3);
+  assert.match(report.promptFingerprint, /^fnv1a64:[0-9a-f]{16}$/u);
+  assert.deepEqual(seen.map(({ repetitionIndex }) => repetitionIndex),
+    [1, 2, 3]);
+  assert.equal(new Set(seen.map(({ promptFingerprint }) =>
+    promptFingerprint)).size, 1);
+  assert.deepEqual(report.rawResponseProvenance.map((entry) => ({
+    repetitionIndex: entry.repetitionIndex,
+    kind: entry.kind,
+    locator: entry.locator
+  })), [1, 2, 3].map((repetitionIndex) => ({
+    repetitionIndex,
+    kind: "fixture",
+    locator: `fixture://repeat-${repetitionIndex}`
+  })));
+  assert.equal(report.metrics.caseCount, 3);
+  assert.deepEqual(report.cases.map(({ repetitionIndex }) => repetitionIndex),
+    [1, 2, 3]);
+});
+
+test("missing model repetition or raw provenance fails closed", async () => {
+  const benchmarkCase = kpEquationSeriesLiveModelBenchmarkCases[0]!;
+  await assert.rejects(() => runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
+    cases: [benchmarkCase],
+    port: {
+      id: plannerId,
+      modelId: "",
+      propose: async () => fixtureBatch([perfectRecord(benchmarkCase)], "x")
+    }
+  }), /explicit model ID/u);
+  await assert.rejects(() => runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 0,
+    cases: [benchmarkCase],
+    port: {
+      id: plannerId,
+      modelId: "model.fake.invalid-repetitions.v1",
+      propose: async () => fixtureBatch([perfectRecord(benchmarkCase)], "x")
+    }
+  }), /repetitions/u);
+  const provenanceFailure = await runKpEquationSeriesLiveModelBenchmark({
+    repetitionCount: 1,
+    cases: [benchmarkCase],
+    port: {
+      id: plannerId,
+      modelId: "model.fake.no-provenance.v1",
+      propose: async () => ({
+        candidates: [perfectRecord(benchmarkCase)],
+        rawResponseProvenance: {
+          kind: "fixture",
+          locator: "",
+          contentFingerprint: ""
+        }
+      })
+    }
+  });
+  assert.equal(provenanceFailure.status, "failed");
+  assert.match(provenanceFailure.providerErrors[0]?.message ?? "",
+    /raw-response provenance/u);
 });
 
 test("the benchmark core remains model and framework neutral", () => {
@@ -150,5 +240,16 @@ function unsupportedRecord(entry: KpEquationSeriesLiveModelBenchmarkCase) {
     reason: "No supplied semantic operation represents this adjacency.",
     unsupportedAdjacencyIds: entry.request.adjacencies.map(({ id }) => id),
     diagnostics: []
+  };
+}
+
+function fixtureBatch(candidates: readonly unknown[], label: string) {
+  return {
+    candidates,
+    rawResponseProvenance: {
+      kind: "fixture" as const,
+      locator: `fixture://${label}`,
+      contentFingerprint: `fixture:${label}`
+    }
   };
 }

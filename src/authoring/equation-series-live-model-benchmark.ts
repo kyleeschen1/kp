@@ -39,11 +39,28 @@ export interface KpEquationSeriesLiveModelBatchPort {
   readonly id: string;
   readonly modelId: string;
   readonly propose: (
-    prompts: readonly KpEquationSeriesPlannerPrompt[]
-  ) => Promise<readonly unknown[]>;
+    input: Readonly<{
+      prompts: readonly KpEquationSeriesPlannerPrompt[];
+      repetitionIndex: number;
+      promptFingerprint: string;
+    }>
+  ) => Promise<KpEquationSeriesLiveModelBatchResult>;
+}
+
+export interface KpEquationSeriesLiveModelRawResponseProvenance {
+  readonly kind: "captured-file" | "replayed-file" | "fixture";
+  readonly locator: string;
+  readonly contentFingerprint: string;
+}
+
+export interface KpEquationSeriesLiveModelBatchResult {
+  readonly candidates: readonly unknown[];
+  readonly rawResponseProvenance:
+    KpEquationSeriesLiveModelRawResponseProvenance;
 }
 
 export interface KpEquationSeriesLiveModelBenchmarkCaseReport {
+  readonly repetitionIndex: number;
   readonly caseId: string;
   readonly expectation: KpEquationSeriesLiveBenchmarkExpectation["kind"];
   readonly plannerStatus: "proposed" | "unsupported" | "repair-required";
@@ -63,11 +80,17 @@ export interface KpEquationSeriesLiveModelBenchmarkCaseReport {
 }
 
 export interface KpEquationSeriesLiveModelBenchmarkReport {
-  readonly schemaVersion: "kp.equation-series-live-model-benchmark-report.v1";
+  readonly schemaVersion: "kp.equation-series-live-model-benchmark-report.v2";
   readonly benchmarkId: "benchmark.equation-series.live-model.v1";
   readonly evidenceKind: "live-model";
   readonly plannerId: string;
   readonly modelId: string;
+  readonly repetitionCount: number;
+  readonly promptFingerprint: string;
+  readonly rawResponseProvenance:
+    readonly Readonly<KpEquationSeriesLiveModelRawResponseProvenance & {
+      repetitionIndex: number;
+    }>[];
   readonly status: "passed" | "failed";
   readonly metrics: Readonly<{
     caseCount: number;
@@ -80,7 +103,10 @@ export interface KpEquationSeriesLiveModelBenchmarkReport {
     silentFallbackCount: number;
   }>;
   readonly cases: readonly KpEquationSeriesLiveModelBenchmarkCaseReport[];
-  readonly providerError?: string | undefined;
+  readonly providerErrors: readonly Readonly<{
+    repetitionIndex: number;
+    message: string;
+  }>[];
 }
 
 export const kpEquationSeriesLiveModelBenchmarkCases = deepFreeze([
@@ -171,26 +197,58 @@ export const kpEquationSeriesLiveModelBenchmarkCases = deepFreeze([
  */
 export async function runKpEquationSeriesLiveModelBenchmark(input: {
   readonly port: KpEquationSeriesLiveModelBatchPort;
+  readonly repetitionCount: number;
   readonly cases?:
     readonly KpEquationSeriesLiveModelBenchmarkCase[] | undefined;
 }): Promise<KpEquationSeriesLiveModelBenchmarkReport> {
+  assertReproducibleInput(input.port.modelId, input.repetitionCount);
   const cases = input.cases ?? kpEquationSeriesLiveModelBenchmarkCases;
   const prompts = cases.map((entry) => createKpEquationSeriesPlannerPrompt({
     request: entry.request,
     naturalLanguageIntent: entry.intent
   }));
-  let candidates: readonly unknown[] = [];
-  let providerError: string | undefined;
-  try {
-    candidates = await input.port.propose(prompts);
-  } catch (error) {
-    providerError = error instanceof Error ? error.message : String(error);
+  const promptFingerprint = fingerprintKpEquationSeriesBenchmarkPrompt(prompts);
+  const reports: KpEquationSeriesLiveModelBenchmarkCaseReport[] = [];
+  const rawResponseProvenance: Array<Readonly<
+    KpEquationSeriesLiveModelRawResponseProvenance & {
+      repetitionIndex: number;
+    }
+  >> = [];
+  const providerErrors: Array<Readonly<{
+    repetitionIndex: number;
+    message: string;
+  }>> = [];
+  for (
+    let repetitionIndex = 1;
+    repetitionIndex <= input.repetitionCount;
+    repetitionIndex += 1
+  ) {
+    let candidates: readonly unknown[] = [];
+    try {
+      const batch = await input.port.propose({
+        prompts,
+        repetitionIndex,
+        promptFingerprint
+      });
+      validateRawResponseProvenance(batch.rawResponseProvenance);
+      candidates = batch.candidates;
+      rawResponseProvenance.push(Object.freeze({
+        repetitionIndex,
+        ...batch.rawResponseProvenance
+      }));
+    } catch (error) {
+      providerErrors.push(Object.freeze({
+        repetitionIndex,
+        message: error instanceof Error ? error.message : String(error)
+      }));
+    }
+    reports.push(...cases.map((entry, index) => evaluateCase({
+      entry,
+      candidate: candidates[index],
+      plannerId: input.port.id,
+      repetitionIndex
+    })));
   }
-  const reports = cases.map((entry, index) => evaluateCase({
-    entry,
-    candidate: candidates[index],
-    plannerId: input.port.id
-  }));
   const metrics = {
     caseCount: reports.length,
     exactOperationSelections: count(reports, "exactOperationSelection"),
@@ -212,24 +270,47 @@ export async function runKpEquationSeriesLiveModelBenchmark(input: {
   };
   return deepFreeze({
     schemaVersion:
-      "kp.equation-series-live-model-benchmark-report.v1" as const,
+      "kp.equation-series-live-model-benchmark-report.v2" as const,
     benchmarkId: "benchmark.equation-series.live-model.v1" as const,
     evidenceKind: "live-model" as const,
     plannerId: input.port.id,
     modelId: input.port.modelId,
-    status: providerError === undefined && reports.every(({ passed }) => passed)
+    repetitionCount: input.repetitionCount,
+    promptFingerprint,
+    rawResponseProvenance,
+    status: providerErrors.length === 0 &&
+      reports.every(({ passed }) => passed)
       ? "passed" as const
       : "failed" as const,
     metrics,
     cases: reports,
-    ...(providerError === undefined ? {} : { providerError })
+    providerErrors
   });
+}
+
+export function fingerprintKpEquationSeriesBenchmarkPrompt(
+  prompts: readonly KpEquationSeriesPlannerPrompt[]
+): string {
+  return fingerprintKpEquationSeriesBenchmarkPayload(JSON.stringify(prompts));
+}
+
+export function fingerprintKpEquationSeriesBenchmarkPayload(
+  value: string
+): string {
+  let hash = 0xcbf29ce484222325n;
+  const prime = 0x100000001b3n;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= BigInt(value.charCodeAt(index));
+    hash = BigInt.asUintN(64, hash * prime);
+  }
+  return `fnv1a64:${hash.toString(16).padStart(16, "0")}`;
 }
 
 function evaluateCase(input: {
   readonly entry: KpEquationSeriesLiveModelBenchmarkCase;
   readonly candidate: unknown;
   readonly plannerId: string;
+  readonly repetitionIndex: number;
 }): KpEquationSeriesLiveModelBenchmarkCaseReport {
   const planner = validateKpEquationSeriesPlannerRecord(
     input.candidate,
@@ -293,6 +374,7 @@ function evaluateCase(input: {
     silentFallbackCount
   });
   return deepFreeze({
+    repetitionIndex: input.repetitionIndex,
     caseId: input.entry.id,
     expectation: input.entry.expectation.kind,
     plannerStatus: planner.status,
@@ -309,6 +391,34 @@ function evaluateCase(input: {
     silentFallbackCount,
     passed
   });
+}
+
+function assertReproducibleInput(
+  modelId: string,
+  repetitionCount: number
+): void {
+  if (modelId.trim() === "") {
+    throw new TypeError("Live benchmark requires an explicit model ID.");
+  }
+  if (
+    !Number.isSafeInteger(repetitionCount) || repetitionCount < 1 ||
+    repetitionCount > 20
+  ) {
+    throw new TypeError("Live benchmark repetitions must be an integer from 1 to 20.");
+  }
+}
+
+function validateRawResponseProvenance(
+  value: KpEquationSeriesLiveModelRawResponseProvenance
+): void {
+  if (
+    !["captured-file", "replayed-file", "fixture"].includes(value.kind) ||
+    value.locator.trim() === "" || value.contentFingerprint.trim() === ""
+  ) {
+    throw new TypeError(
+      "Every benchmark repetition requires raw-response provenance."
+    );
+  }
 }
 
 function passesExpectation(input: {
