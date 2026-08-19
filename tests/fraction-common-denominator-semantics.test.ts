@@ -6,7 +6,9 @@ import {
   isKpCommonDenominatorProof,
   isKpVerifiedCommonDenominatorAlignment,
   kpCanonicalCommonDenominatorAlignment,
-  kpCanonicalCommonDenominatorAlignmentDraft
+  kpCanonicalCommonDenominatorAlignmentDraft,
+  verifyKpCommonDenominatorAlignment,
+  type KpCommonDenominatorAlignmentDraft
 } from "../src/semantic/fraction-common-denominator.ts";
 
 test("alignment request supplies bounded explicit unit factors", () => {
@@ -40,6 +42,41 @@ test("alignment request supplies bounded explicit unit factors", () => {
   assert.equal(Object.isFrozen(draft), true);
 });
 
+test("invalid factors targets denominators aliases and policy fail closed", () => {
+  assert.throws(() => verifyKpCommonDenominatorAlignment(draft({
+    equivalenceMultipliers: [
+      {
+        ...kpCanonicalCommonDenominatorAlignmentDraft
+          .equivalenceMultipliers[0],
+        denominator: 3n
+      },
+      kpCanonicalCommonDenominatorAlignmentDraft.equivalenceMultipliers[1]
+    ]
+  })), (error) => code(error) === "common-denominator.invalid-factor");
+  assert.throws(() => verifyKpCommonDenominatorAlignment(draft({
+    target: stateWithDenominator(7n)
+  })), (error) => code(error) === "common-denominator.unaligned-target");
+  assert.throws(() => verifyKpCommonDenominatorAlignment(draft({
+    source: stateWithDenominator(0n, "source")
+  })), (error) => code(error) === "common-denominator.invalid-denominator");
+  assert.throws(() => verifyKpCommonDenominatorAlignment(draft({
+    target: {
+      ...kpCanonicalCommonDenominatorAlignmentDraft.target,
+      operatorEntityId:
+        kpCanonicalCommonDenominatorAlignmentDraft.source.operatorEntityId
+    }
+  })), (error) => code(error) === "common-denominator.entity-alias");
+  assert.throws(() => verifyKpCommonDenominatorAlignment({
+    ...draft(),
+    durationMs: 700
+  } as KpCommonDenominatorAlignmentDraft), (error) =>
+    code(error) === "common-denominator.unexpected-field"
+  );
+  assert.equal(isKpVerifiedCommonDenominatorAlignment({
+    ...kpCanonicalCommonDenominatorAlignment
+  }), false);
+});
+
 test("alignment authority verifies exact term and expression value", () => {
   const verified = kpCanonicalCommonDenominatorAlignment;
 
@@ -67,4 +104,78 @@ test("alignment authority verifies exact term and expression value", () => {
   assert.equal(Object.isFrozen(verified), true);
   assert.equal(isKpCommonDenominatorProof(verified.proof), true);
   assert.equal(isKpCommonDenominatorProof({ ...verified.proof }), false);
+});
+
+function draft(overrides: Partial<KpCommonDenominatorAlignmentDraft> = {}) {
+  return {
+    ...kpCanonicalCommonDenominatorAlignmentDraft,
+    ...overrides
+  } as KpCommonDenominatorAlignmentDraft;
+}
+
+function stateWithDenominator(
+  denominator: bigint,
+  stage: "source" | "target" = "target"
+) {
+  const stateValue = kpCanonicalCommonDenominatorAlignmentDraft[stage];
+  return {
+    ...stateValue,
+    terms: [
+      {
+        ...stateValue.terms[0],
+        denominator: {
+          ...stateValue.terms[0].denominator,
+          value: denominator
+        }
+      },
+      stateValue.terms[1]
+    ]
+  } as KpCommonDenominatorAlignmentDraft[typeof stage];
+}
+
+function code(error: unknown): unknown {
+  return typeof error === "object" && error !== null && "code" in error
+    ? error.code
+    : undefined;
+}
+
+test("alignment preserves operator and untouched term by explicit identity", () => {
+  const correspondence = kpCanonicalCommonDenominatorAlignment.correspondence;
+  const byId = (id: string) => correspondence.find((item) => item.id === id)!;
+
+  assert.deepEqual(byId("correspondence.common-denominator.operator"), {
+    id: "correspondence.common-denominator.operator",
+    relation: "identity",
+    sourceEntityIds: [
+      "entity.fraction.common-denominator.source.plus"
+    ],
+    targetEntityIds: [
+      "entity.fraction.common-denominator.target.plus"
+    ],
+    summary: "The addition operator persists across denominator alignment."
+  });
+  assert.equal(
+    byId("correspondence.common-denominator.first.term").relation,
+    "equivalence"
+  );
+  assert.deepEqual(
+    byId("correspondence.common-denominator.first.numerator").sourceEntityIds,
+    [
+      "entity.fraction.common-denominator.source.first.numerator",
+      "entity.fraction.common-denominator.first.multiplier"
+    ]
+  );
+  ["term", "fraction", "division", "numerator", "denominator"].forEach(
+    (part) => assert.equal(
+      byId(`correspondence.common-denominator.second.${part}`).relation,
+      "identity"
+    )
+  );
+  assert.deepEqual(
+    byId("correspondence.common-denominator.first.factor").targetEntityIds,
+    [
+      "entity.fraction.common-denominator.target.first.numerator",
+      "entity.fraction.common-denominator.target.first.denominator"
+    ]
+  );
 });

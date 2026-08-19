@@ -95,7 +95,16 @@ extends KpCommonDenominatorAlignmentDraft {
   ];
   readonly exactTotal: KpNormalizedRational;
   readonly proof: KpCommonDenominatorCertificate;
+  readonly correspondence: readonly KpCommonDenominatorCorrespondence[];
   readonly [kpVerifiedCommonDenominatorBrand]: true;
+}
+
+export interface KpCommonDenominatorCorrespondence {
+  readonly id: string;
+  readonly relation: "identity" | "equivalence" | "derivation";
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+  readonly summary: string;
 }
 
 export interface KpCommonDenominatorCertificate {
@@ -119,7 +128,11 @@ export class KpCommonDenominatorSemanticError extends Error {
     | "common-denominator.invalid-denominator"
     | "common-denominator.invalid-factor"
     | "common-denominator.unaligned-target"
-    | "common-denominator.value-mismatch";
+    | "common-denominator.value-mismatch"
+    | "common-denominator.invalid-id"
+    | "common-denominator.state-alias"
+    | "common-denominator.entity-alias"
+    | "common-denominator.unexpected-field";
 
   constructor(
     code:
@@ -127,7 +140,11 @@ export class KpCommonDenominatorSemanticError extends Error {
       | "common-denominator.invalid-denominator"
       | "common-denominator.invalid-factor"
       | "common-denominator.unaligned-target"
-      | "common-denominator.value-mismatch",
+      | "common-denominator.value-mismatch"
+      | "common-denominator.invalid-id"
+      | "common-denominator.state-alias"
+      | "common-denominator.entity-alias"
+      | "common-denominator.unexpected-field",
     message: string
   ) {
     super(message);
@@ -143,6 +160,7 @@ export class KpCommonDenominatorSemanticError extends Error {
 export function verifyKpCommonDenominatorAlignment(
   draft: KpCommonDenominatorAlignmentDraft
 ): KpVerifiedCommonDenominatorAlignment {
+  validateDraftShape(draft);
   if (
     draft.schemaVersion !== "kp.common-denominator-alignment.v1" ||
     draft.operationAuthority !==
@@ -169,10 +187,254 @@ export function verifyKpCommonDenominatorAlignment(
     targetForms: proof.targetForms,
     equivalenceMultipliers: proof.equivalenceMultipliers,
     exactTotal: proof.exactTotal,
-    proof
+    proof,
+    correspondence: createCorrespondence(draft)
   }) as KpVerifiedCommonDenominatorAlignment;
   verifiedAlignments.add(verified);
   return verified;
+}
+
+function validateDraftShape(draft: KpCommonDenominatorAlignmentDraft): void {
+  assertExactKeys(draft, [
+    "schemaVersion",
+    "id",
+    "operationAuthority",
+    "lawAuthority",
+    "source",
+    "target",
+    "equivalenceMultipliers"
+  ], "alignment");
+  assertExactKeys(draft.lawAuthority, [
+    "id",
+    "authorityRefId",
+    "level"
+  ], "lawAuthority");
+  requireIds([draft.id, draft.lawAuthority.authorityRefId]);
+  if (draft.source.stateId === draft.target.stateId) {
+    fail(
+      "common-denominator.state-alias",
+      "Source and target alignment states require distinct identities."
+    );
+  }
+  [draft.source, draft.target].forEach((stateValue, stateIndex) => {
+    assertExactKeys(stateValue, [
+      "stateId",
+      "expressionEntityId",
+      "operatorEntityId",
+      "terms"
+    ], `state[${stateIndex}]`);
+    if (!Array.isArray(stateValue.terms) || stateValue.terms.length !== 2) {
+      fail(
+        "common-denominator.unexpected-field",
+        "Bounded alignment requires exactly two ordered fraction terms."
+      );
+    }
+    requireIds([
+      stateValue.stateId,
+      stateValue.expressionEntityId,
+      stateValue.operatorEntityId
+    ]);
+    stateValue.terms.forEach((term, termIndex) => {
+      assertExactKeys(term, [
+        "termEntityId",
+        "fractionEntityId",
+        "divisionEntityId",
+        "numerator",
+        "denominator"
+      ], `state[${stateIndex}].terms[${termIndex}]`);
+      requireIds([
+        term.termEntityId,
+        term.fractionEntityId,
+        term.divisionEntityId
+      ]);
+      [term.numerator, term.denominator].forEach((occurrence) => {
+        assertExactKeys(occurrence, [
+          "entityId",
+          "semanticId",
+          "value"
+        ], "integerOccurrence");
+        requireIds([occurrence.entityId, occurrence.semanticId]);
+        if (typeof occurrence.value !== "bigint") {
+          fail(
+            "common-denominator.unexpected-field",
+            "Exact fraction occurrences require bigint values."
+          );
+        }
+      });
+    });
+  });
+  if (!Array.isArray(draft.equivalenceMultipliers) ||
+      draft.equivalenceMultipliers.length !== 2) {
+    fail(
+      "common-denominator.unexpected-field",
+      "Bounded alignment requires exactly two explicit multipliers."
+    );
+  }
+  draft.equivalenceMultipliers.forEach((factor, index) => {
+    assertExactKeys(factor, [
+      "entityId",
+      "semanticId",
+      "numerator",
+      "denominator"
+    ], `equivalenceMultipliers[${index}]`);
+    requireIds([factor.entityId, factor.semanticId]);
+    if (typeof factor.numerator !== "bigint" ||
+        typeof factor.denominator !== "bigint") {
+      fail(
+        "common-denominator.unexpected-field",
+        "Exact multipliers require bigint values."
+      );
+    }
+  });
+  const entityIds = [
+    draft.source.expressionEntityId,
+    draft.source.operatorEntityId,
+    draft.target.expressionEntityId,
+    draft.target.operatorEntityId,
+    ...draft.source.terms.flatMap(termEntityIds),
+    ...draft.target.terms.flatMap(termEntityIds),
+    ...draft.equivalenceMultipliers.map(({ entityId }) => entityId)
+  ];
+  if (new Set(entityIds).size !== entityIds.length) {
+    fail(
+      "common-denominator.entity-alias",
+      "Every state occurrence and explicit factor requires one entity ID."
+    );
+  }
+}
+
+function termEntityIds(term: KpCommonDenominatorFractionTermDraft) {
+  return [
+    term.termEntityId,
+    term.fractionEntityId,
+    term.divisionEntityId,
+    term.numerator.entityId,
+    term.denominator.entityId
+  ];
+}
+
+function assertExactKeys(
+  value: object,
+  expected: readonly string[],
+  path: string
+): void {
+  const actual = Object.keys(value);
+  const missing = expected.filter((key) => !actual.includes(key));
+  const unexpected = actual.filter((key) => !expected.includes(key));
+  if (missing.length > 0 || unexpected.length > 0) {
+    fail(
+      "common-denominator.unexpected-field",
+      `${path} fields differ: missing=${missing.join(",")}; ` +
+        `unexpected=${unexpected.join(",")}.`
+    );
+  }
+}
+
+function requireIds(ids: readonly string[]): void {
+  ids.forEach((id) => {
+    if (!/^[a-z][a-z0-9]*(?:[._:-][a-z0-9]+)+$/u.test(id)) {
+      fail(
+        "common-denominator.invalid-id",
+        `${id || "<blank>"} is not a protocol ID.`
+      );
+    }
+  });
+}
+
+function createCorrespondence(
+  draft: KpCommonDenominatorAlignmentDraft
+): readonly KpCommonDenominatorCorrespondence[] {
+  const result: KpCommonDenominatorCorrespondence[] = [
+    correspondence(
+      "correspondence.common-denominator.expression",
+      "equivalence",
+      [draft.source.expressionEntityId],
+      [draft.target.expressionEntityId],
+      "The complete expression preserves its exact value."
+    ),
+    correspondence(
+      "correspondence.common-denominator.operator",
+      "identity",
+      [draft.source.operatorEntityId],
+      [draft.target.operatorEntityId],
+      "The addition operator persists across denominator alignment."
+    )
+  ];
+  draft.source.terms.forEach((source, index) => {
+    const target = draft.target.terms[index]!;
+    const factor = draft.equivalenceMultipliers[index]!;
+    const position = index === 0 ? "first" : "second";
+    const unchanged = factor.numerator === 1n && factor.denominator === 1n &&
+      source.numerator.value === target.numerator.value &&
+      source.denominator.value === target.denominator.value;
+    result.push(
+      correspondence(
+        `correspondence.common-denominator.${position}.term`,
+        unchanged ? "identity" : "equivalence",
+        [source.termEntityId],
+        [target.termEntityId],
+        unchanged
+          ? "The untouched term persists as the same semantic addend."
+          : "The transformed term remains exactly equivalent."
+      ),
+      correspondence(
+        `correspondence.common-denominator.${position}.fraction`,
+        unchanged ? "identity" : "equivalence",
+        [source.fractionEntityId],
+        [target.fractionEntityId],
+        unchanged
+          ? "The untouched fraction persists."
+          : "The fraction persists by exact equivalence."
+      ),
+      correspondence(
+        `correspondence.common-denominator.${position}.division`,
+        "identity",
+        [source.divisionEntityId],
+        [target.divisionEntityId],
+        "Native fraction division structure persists."
+      ),
+      correspondence(
+        `correspondence.common-denominator.${position}.numerator`,
+        unchanged ? "identity" : "derivation",
+        unchanged
+          ? [source.numerator.entityId]
+          : [source.numerator.entityId, factor.entityId],
+        [target.numerator.entityId],
+        unchanged
+          ? "The untouched numerator persists."
+          : "The target numerator derives from the source and unit factor."
+      ),
+      correspondence(
+        `correspondence.common-denominator.${position}.denominator`,
+        unchanged ? "identity" : "derivation",
+        unchanged
+          ? [source.denominator.entityId]
+          : [source.denominator.entityId, factor.entityId],
+        [target.denominator.entityId],
+        unchanged
+          ? "The untouched denominator persists."
+          : "The target denominator derives from the source and unit factor."
+      ),
+      correspondence(
+        `correspondence.common-denominator.${position}.factor`,
+        "derivation",
+        [factor.entityId],
+        [target.numerator.entityId, target.denominator.entityId],
+        "The explicit unit factor contributes to both target branches."
+      )
+    );
+  });
+  return result;
+}
+
+function correspondence(
+  id: string,
+  relation: KpCommonDenominatorCorrespondence["relation"],
+  sourceEntityIds: readonly string[],
+  targetEntityIds: readonly string[],
+  summary: string
+): KpCommonDenominatorCorrespondence {
+  return { id, relation, sourceEntityIds, targetEntityIds, summary };
 }
 
 export function certifyKpCommonDenominator(input: Readonly<{

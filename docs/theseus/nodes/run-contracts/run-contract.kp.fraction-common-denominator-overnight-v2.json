@@ -68,11 +68,25 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T05:38:38.190Z",
       "notes": "All 101 existing exact-fraction proofs, projections, motion, seek, and rewind checks passed against the extracted shared certificate authority."
+    },
+    {
+      "command": "npm run test:fraction-common-denominator-semantics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:40:52.726Z",
+      "notes": "Three semantic tests pass, including exact identity for the plus and every structural part of the untouched second term."
+    },
+    {
+      "command": "npm run test:fraction-common-denominator-semantics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:43:08.738Z",
+      "notes": "Four tests pass across request, exact truth, lineage, and the negative repair corpus."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s08 now derives exact alignment truth from one sealed certificate authority shared with the existing quantity trace."
+    "summary": "Slice s10 made unsupported alignment requests fail with stable typed error codes."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -142,12 +156,14 @@
     {
       "id": "s09",
       "title": "Encode alignment identity",
-      "status": "planned"
+      "summary": "Encoded factor derivation, transformed-term equivalence, persistent division, plus identity, and full untouched-term identity.",
+      "status": "complete"
     },
     {
       "id": "s10",
       "title": "Encode alignment repair",
-      "status": "planned"
+      "summary": "Added exact-shape validation and typed failures for invalid factors, denominators, targets, aliases, IDs, policy, and forgeries.",
+      "status": "complete"
     },
     {
       "id": "s11",
