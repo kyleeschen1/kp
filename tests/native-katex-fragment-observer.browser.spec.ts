@@ -332,6 +332,60 @@ test("complete scene observation settles and invalidates by viewport", async ({
   expect(phoneKey).not.toBe(first.viewportKey);
 });
 
+test("endpoint handle factory settles one immutable observation transaction", async ({
+  page
+}) => {
+  await page.goto("/glyph-reconciliation-experiment.html?progress=0");
+  await page.locator('[data-kp-glyph-review][data-kp-ready="true"]').waitFor();
+  const evidence = await page.evaluate(async () => {
+    const createHandle = (window as unknown as {
+      __kpSettleAndCreateNativeKatexRenderedEndpointHandle: (input: {
+        endpoint: "source";
+        stage: HTMLElement;
+        root: HTMLElement;
+        semanticEntityId: string;
+        presentationGroupId: string;
+        fontReadiness: {
+          revision: number;
+          whenReady(): Promise<void>;
+        };
+      }) => Promise<{
+        kind: string;
+        lifecycle: string;
+        observation: { atoms: readonly unknown[]; viewportKey: string };
+        revision: { fontRevision: number; viewportKey: string };
+      }>;
+    }).__kpSettleAndCreateNativeKatexRenderedEndpointHandle;
+    const handle = await createHandle({
+      endpoint: "source",
+      stage: document.querySelector<HTMLElement>("[data-fraction-stage]")!,
+      root: document.querySelector<HTMLElement>("[data-fraction-source]")!,
+      semanticEntityId: "fraction.expression",
+      presentationGroupId: "group.fraction.source",
+      fontReadiness: { revision: 11, async whenReady() {} }
+    });
+    return {
+      kind: handle.kind,
+      lifecycle: handle.lifecycle,
+      atomCount: handle.observation.atoms.length,
+      sameViewportKey:
+        handle.revision.viewportKey === handle.observation.viewportKey,
+      fontRevision: handle.revision.fontRevision,
+      frozen: Object.isFrozen(handle) && Object.isFrozen(handle.revision)
+    };
+  });
+
+  expect(evidence).toEqual({
+    kind: "native-katex-rendered-endpoint-handle",
+    lifecycle: "renderer-session-ephemeral",
+    atomCount: expect.any(Number),
+    sameViewportKey: true,
+    fontRevision: 11,
+    frozen: true
+  });
+  expect(evidence.atomCount).toBeGreaterThanOrEqual(7);
+});
+
 test("live fraction route exposes complete source and target inventories", async ({
   page
 }) => {

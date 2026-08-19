@@ -57,6 +57,7 @@ import {
 import {
   observeKpNativeKatexGlyphPaintAtoms,
   observeKpNativeKatexPaintAtoms,
+  settleAndCreateKpNativeKatexRenderedEndpointHandle,
   settleAndObserveKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
@@ -98,7 +99,9 @@ if (import.meta.env.DEV) {
     __kpObserveNativeKatexPaintAtoms:
       observeKpNativeKatexPaintAtoms,
     __kpSettleAndObserveNativeKatexRenderedScene:
-      settleAndObserveKpNativeKatexRenderedScene
+      settleAndObserveKpNativeKatexRenderedScene,
+    __kpSettleAndCreateNativeKatexRenderedEndpointHandle:
+      settleAndCreateKpNativeKatexRenderedEndpointHandle
   });
 }
 

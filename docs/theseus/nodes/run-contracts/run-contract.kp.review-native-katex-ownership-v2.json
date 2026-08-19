@@ -93,17 +93,20 @@
     {
       "id": "r07",
       "title": "Add-immutable-endpoint-handle-type",
-      "status": "planned"
+      "summary": "Added a frozen, non-serializable renderer-session endpoint handle over one settled observation; it introduces no new semantic authority.",
+      "status": "complete"
     },
     {
       "id": "r08",
       "title": "Implement-single-measurement-handle-factory",
-      "status": "planned"
+      "summary": "Added one async settle-and-create factory and browser evidence that it returns a frozen handle over the settled observation transaction.",
+      "status": "complete"
     },
     {
       "id": "r09",
       "title": "Add-atomic-font-viewport-invalidation",
-      "status": "planned"
+      "summary": "Added pure fail-closed font/viewport revision assessment; replacement is required outside sampling and never mutates a live handle.",
+      "status": "complete"
     },
     {
       "id": "r10",

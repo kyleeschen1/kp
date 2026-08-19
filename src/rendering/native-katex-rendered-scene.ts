@@ -53,6 +53,84 @@ export interface KpNativeKatexRenderedSceneObservation {
   readonly viewportKey: string;
 }
 
+export interface KpNativeKatexRenderedEndpointRevision {
+  readonly fontRevision: number;
+  readonly viewportKey: string;
+}
+
+/**
+ * Ephemeral physical authority for one settled Native KaTeX endpoint.
+ *
+ * The handle deliberately adds no semantic state: the rendered observation
+ * remains a projection of an existing semantic plan, while the handle gives
+ * adjacent renderer phases one immutable measurement identity to share.
+ */
+export interface KpNativeKatexRenderedEndpointHandle {
+  readonly kind: "native-katex-rendered-endpoint-handle";
+  readonly lifecycle: "renderer-session-ephemeral";
+  readonly observation: KpNativeKatexRenderedSceneObservation;
+  readonly revision: KpNativeKatexRenderedEndpointRevision;
+  readonly toJSON: () => never;
+}
+
+export type KpNativeKatexEndpointRevisionStatus =
+  | "current"
+  | "stale-font"
+  | "stale-viewport"
+  | "stale-font-and-viewport";
+
+export function createKpNativeKatexRenderedEndpointHandle(input: {
+  readonly observation: KpNativeKatexRenderedSceneObservation;
+}): KpNativeKatexRenderedEndpointHandle {
+  if (input.observation.lifecycle !== "renderer-session") {
+    throw new Error(
+      "Native KaTeX endpoint handles require a renderer-session observation."
+    );
+  }
+  const handle = Object.freeze({
+    kind: "native-katex-rendered-endpoint-handle" as const,
+    lifecycle: "renderer-session-ephemeral" as const,
+    observation: input.observation,
+    revision: Object.freeze({
+      fontRevision: input.observation.fontRevision,
+      viewportKey: input.observation.viewportKey
+    }),
+    toJSON(): never {
+      throw new Error(
+        "Native KaTeX endpoint handles cannot enter durable state."
+      );
+    }
+  });
+  return handle;
+}
+
+export function assessKpNativeKatexEndpointRevision(input: {
+  readonly handle: KpNativeKatexRenderedEndpointHandle;
+  readonly current: KpNativeKatexRenderedEndpointRevision;
+}): KpNativeKatexEndpointRevisionStatus {
+  const staleFont =
+    input.handle.revision.fontRevision !== input.current.fontRevision;
+  const staleViewport =
+    input.handle.revision.viewportKey !== input.current.viewportKey;
+  if (staleFont && staleViewport) return "stale-font-and-viewport";
+  if (staleFont) return "stale-font";
+  if (staleViewport) return "stale-viewport";
+  return "current";
+}
+
+export function assertKpNativeKatexEndpointRevision(input: {
+  readonly handle: KpNativeKatexRenderedEndpointHandle;
+  readonly current: KpNativeKatexRenderedEndpointRevision;
+}): KpNativeKatexRenderedEndpointHandle {
+  const status = assessKpNativeKatexEndpointRevision(input);
+  if (status !== "current") {
+    throw new Error(
+      `Native KaTeX endpoint handle is ${status}; replace it outside active sampling.`
+    );
+  }
+  return input.handle;
+}
+
 export type KpNativeKatexHandoffSide =
   | "native-source"
   | "material"
@@ -220,6 +298,13 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
     }
   });
   return second;
+}
+
+export async function settleAndCreateKpNativeKatexRenderedEndpointHandle(
+  input: Parameters<typeof settleAndObserveKpNativeKatexRenderedScene>[0]
+): Promise<KpNativeKatexRenderedEndpointHandle> {
+  const observation = await settleAndObserveKpNativeKatexRenderedScene(input);
+  return createKpNativeKatexRenderedEndpointHandle({ observation });
 }
 
 type KpNativeKatexPaintObservationInput = {

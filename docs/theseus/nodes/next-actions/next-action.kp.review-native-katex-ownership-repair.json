@@ -81,6 +81,27 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-19T14:10:05.890Z"
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice r07 immutable endpoint handle type",
+      "checkedAt": "2026-08-19T14:14:38.601Z",
+      "notes": "75 focused Native KaTeX observation/compositor tests passed; handle is frozen, session-ephemeral, and non-serializable."
+    },
+    {
+      "command": "playwright native-katex fragment observer endpoint-handle factory",
+      "status": "passed",
+      "scope": "slice r08 single settlement transaction",
+      "checkedAt": "2026-08-19T14:17:17.112Z",
+      "notes": "One Chromium worker proved the async factory waits for settlement and returns one frozen observation/revision handle."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "slice r09 endpoint revision invalidation",
+      "checkedAt": "2026-08-19T14:18:30.553Z",
+      "notes": "Focused tests cover current, stale-font, stale-viewport, and combined stale states while the original handle remains unchanged."
     }
   ],
   "progress": {

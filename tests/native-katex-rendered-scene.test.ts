@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  assertKpNativeKatexEndpointRevision,
+  assessKpNativeKatexEndpointRevision,
   createKpNativeKatexHandoffTelemetry,
+  createKpNativeKatexRenderedEndpointHandle,
   createKpNativeKatexRenderedSceneObservation,
   type KpNativeKatexHandoffPaintObservation,
   type KpNativeKatexPaintAtomObservation
@@ -49,6 +52,57 @@ const ownerDocument = {};
 const stage = { ownerDocument } as HTMLElement;
 const root = { ownerDocument } as HTMLElement;
 const sourceElement = { ownerDocument } as HTMLElement;
+
+test("rendered endpoint handles are immutable physical session authority", () => {
+  const observation = createKpNativeKatexRenderedSceneObservation({
+    endpoint: "source",
+    stage,
+    root,
+    atoms: [atom()],
+    groups: [{
+      id: "group.source",
+      semanticEntityId: "entity.x",
+      atomIds: ["atom.source.x"],
+      rect: { left: 10, top: 20, width: 12, height: 24 }
+    }],
+    fontRevision: 2,
+    viewportKey: "source:1040x360@1:font-2"
+  });
+  const handle = createKpNativeKatexRenderedEndpointHandle({ observation });
+
+  assert.equal(handle.kind, "native-katex-rendered-endpoint-handle");
+  assert.equal(handle.lifecycle, "renderer-session-ephemeral");
+  assert.strictEqual(handle.observation, observation);
+  assert.deepEqual(handle.revision, {
+    fontRevision: 2,
+    viewportKey: "source:1040x360@1:font-2"
+  });
+  assert.equal(Object.isFrozen(handle), true);
+  assert.equal(Object.isFrozen(handle.revision), true);
+  assert.throws(() => JSON.stringify(handle), /cannot enter durable state/);
+
+  assert.equal(assessKpNativeKatexEndpointRevision({
+    handle,
+    current: handle.revision
+  }), "current");
+  assert.equal(assessKpNativeKatexEndpointRevision({
+    handle,
+    current: { ...handle.revision, fontRevision: 3 }
+  }), "stale-font");
+  assert.equal(assessKpNativeKatexEndpointRevision({
+    handle,
+    current: { ...handle.revision, viewportKey: "phone@font-2" }
+  }), "stale-viewport");
+  assert.equal(assessKpNativeKatexEndpointRevision({
+    handle,
+    current: { fontRevision: 3, viewportKey: "phone@font-3" }
+  }), "stale-font-and-viewport");
+  assert.throws(() => assertKpNativeKatexEndpointRevision({
+    handle,
+    current: { ...handle.revision, viewportKey: "phone@font-2" }
+  }), /replace it outside active sampling/);
+  assert.strictEqual(handle.observation, observation);
+});
 
 test("endpoint dwell reaches the exact target pose before native settlement", () => {
   assert.equal(sampleKpNativeKatexEndpointDwellProgress(0, 0.04), 0);
