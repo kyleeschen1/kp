@@ -294,11 +294,25 @@
       "scope": "typecheck",
       "checkedAt": "2026-08-19T02:47:38.116Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed at the deterministic planner boundary."
+    },
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-19T02:51:22.192Z",
+      "notes": "19 offline benchmark, supported-anyOf output schema, planner, provenance, and authority-boundary tests passed before the accepted live run."
+    },
+    {
+      "command": "npm run benchmark:equation-series:live -- --model gpt-5.6-sol --repetitions 3 --check",
+      "status": "passed",
+      "scope": "live",
+      "checkedAt": "2026-08-19T02:51:25.692Z",
+      "notes": "Prompt fnv1a64:882146c856a2586a; 18/18 case-runs passed, 15 exact selections, 15 preserved adjacency identities, 3 explicit abstentions, 9 guided governance repairs, 0 authority attempts, 0 compiled mismatches, 0 silent fallbacks, 0 provider errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s18 passes deterministic semantic, repair, architecture, framework-neutrality, ownership, and type gates; the live output schema now represents proposed and unsupported records as disjoint valid shapes."
+    "summary": "s19 passed three pinned gpt-5.6-sol repetitions across the six-case corpus; provider outputs varied only in response content while every semantic outcome remained exact and fail-closed."
   },
   "allowedWork": [
     "Development theme authority, defaults, and dock styling.",
@@ -437,7 +451,8 @@
     {
       "id": "s19",
       "title": "Pinned-live-benchmark",
-      "status": "planned"
+      "summary": "The pinned three-repeat live benchmark passed all 18 case-runs with exact supported selections, explicit unsupported abstentions, typed governed repairs, and zero authority attempts, mismatches, silent fallbacks, or provider errors.",
+      "status": "complete"
     },
     {
       "id": "s20",

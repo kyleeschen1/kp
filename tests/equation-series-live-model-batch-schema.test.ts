@@ -13,7 +13,7 @@ test("batch schema keeps proposed and unsupported records disjoint", () => {
       results: {
         minItems: number;
         maxItems: number;
-        items: { oneOf: Array<{
+        items: { anyOf: Array<{
           required: string[];
           properties: Record<string, { const?: string }>;
         }>;
@@ -24,7 +24,7 @@ test("batch schema keeps proposed and unsupported records disjoint", () => {
   const results = schema.properties.results;
   assert.equal(results.minItems, 6);
   assert.equal(results.maxItems, 6);
-  const [proposed, unsupported] = results.items.oneOf;
+  const [proposed, unsupported] = results.items.anyOf;
   assert.equal(proposed?.properties["status"]?.const, "proposed");
   assert.equal(proposed?.required.includes("proposals"), true);
   assert.equal(proposed?.required.includes("reason"), false);

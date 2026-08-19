@@ -105,7 +105,7 @@ export function createKpEquationSeriesLiveModelBatchResponseSchema(input: {
         type: "array",
         minItems: input.resultCount,
         maxItems: input.resultCount,
-        items: { oneOf: [proposed, unsupported] }
+        items: { anyOf: [proposed, unsupported] }
       }
     }
   });
