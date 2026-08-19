@@ -326,7 +326,7 @@ function applyInkKnotFusion(input: {
     input.progress
   );
   const sourceOwnsPaint = input.progress < input.ownershipHandoffAt;
-  const sourceKernelOffsets = centeredOffsetsByNativeOrder(
+  const sourceKernelOffsets = centeredOffsetsByNativeGeometry(
     sourceRects,
     kernelSpan
   );
@@ -334,12 +334,13 @@ function applyInkKnotFusion(input: {
   sourceOwners.forEach((owner, index) => {
     const rect = sourceRects[index]!;
     const sourceCenter = centerOfRect(rect);
-    const slotOffsetX = sourceKernelOffsets[index]!;
+    const slotOffset = sourceKernelOffsets[index]!;
     setOwnerPaintPresence(owner, sourceOwnsPaint);
     owner.style.transform = ownerTransform({
       translateX:
-        (knotCenter.x - sourceCenter.x + slotOffsetX) * gatherProgress,
-      translateY: (knotCenter.y - sourceCenter.y) * gatherProgress,
+        (knotCenter.x - sourceCenter.x + slotOffset.x) * gatherProgress,
+      translateY:
+        (knotCenter.y - sourceCenter.y + slotOffset.y) * gatherProgress,
       scale: lerp(1, sourceKernelScale, compressionProgress)
     });
   });
@@ -431,20 +432,35 @@ function summedArea(rects: readonly KpInkRect[]): number {
   ));
 }
 
-function centeredOffsetsByNativeOrder(
+function centeredOffsetsByNativeGeometry(
   rects: readonly KpInkRect[],
   span: number
-): readonly number[] {
-  if (rects.length <= 1) return rects.map(() => 0);
-  const offsets = rects.map(() => 0);
+): readonly { readonly x: number; readonly y: number }[] {
+  if (rects.length <= 1) return rects.map(() => ({ x: 0, y: 0 }));
+  const centers = rects.map(centerOfRect);
+  const spreadX = coordinateSpread(centers.map(({ x }) => x));
+  const spreadY = coordinateSpread(centers.map(({ y }) => y));
+  // Preserve the endpoint's own reading axis inside the compressed knot.
+  // This keeps horizontal operators and stacked fractions on one measured
+  // choreography without teaching the renderer quotient semantics.
+  const dominantAxis = spreadY > spreadX ? "y" : "x";
+  const offsets = rects.map(() => ({ x: 0, y: 0 }));
   const orderedIndexes = rects
-    .map((rect, index) => ({ index, x: centerOfRect(rect).x }))
-    .sort((left, right) => left.x - right.x)
+    .map((_, index) => ({ index, coordinate: centers[index]![dominantAxis] }))
+    .sort((left, right) =>
+      left.coordinate - right.coordinate || left.index - right.index)
     .map(({ index }) => index);
   orderedIndexes.forEach((sourceIndex, rank) => {
-    offsets[sourceIndex] = (rank / (rects.length - 1) - 0.5) * span;
+    const offset = (rank / (rects.length - 1) - 0.5) * span;
+    offsets[sourceIndex] = dominantAxis === "x"
+      ? { x: offset, y: 0 }
+      : { x: 0, y: offset };
   });
   return offsets;
+}
+
+function coordinateSpread(coordinates: readonly number[]): number {
+  return Math.max(...coordinates) - Math.min(...coordinates);
 }
 
 function boundedKernelScale(scale: number): number {

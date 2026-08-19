@@ -25,6 +25,7 @@ import {
   kpOpaqueGatherAndRecognizeSourceRetirementProgress
 } from "../animation/successor-synthesis.ts";
 import {
+  kpThreeSixthsEvaluationAnimationId,
   kpTwoTimesThreeEvaluationAnimationId
 } from "../animation/operation-evaluation-adapter.ts";
 import {
@@ -196,7 +197,10 @@ async function prepareOperationEvaluationSurface(input: {
       undefined;
     if (
       import.meta.env.DEV &&
-      input.renderPlan.animationId === kpTwoTimesThreeEvaluationAnimationId
+      (
+        input.renderPlan.animationId === kpTwoTimesThreeEvaluationAnimationId ||
+        input.renderPlan.animationId === kpThreeSixthsEvaluationAnimationId
+      )
     ) {
       familyReviewModule = await import(
         "./operation-evaluation-family-comparison.dev.ts"

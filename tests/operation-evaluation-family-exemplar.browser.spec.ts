@@ -1,6 +1,7 @@
 import { expect, test, type Locator } from "@playwright/test";
 
 const animationId = "animation.operation-evaluation.two-times-three";
+const quotientAnimationId = "animation.operation-evaluation.three-sixths";
 
 test("evaluation families share endpoints and change only the handoff", async ({
   page
@@ -107,6 +108,55 @@ test("a family URL reconstructs its exact candidate", async ({ page }) => {
   )).toHaveAttribute("aria-pressed", "true");
 });
 
+test("ink-knot fusion preserves a stacked fraction's native reading order", async ({
+  page
+}) => {
+  await page.goto(
+    `/?artifact=${quotientAnimationId}&evaluationFamily=contributor-fusion`
+  );
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${quotientAnimationId}"]`
+  );
+  const review = player.locator(
+    "[data-kp-operation-evaluation-family-review]"
+  );
+  const stage = review.locator("[data-kp-operation-evaluation-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-status",
+    "ready",
+    { timeout: 15_000 }
+  );
+  const source = stage.locator("[data-kp-operation-evaluation-source]");
+  const target = stage.locator("[data-kp-operation-evaluation-target]");
+  await expect(source).toContainText("3");
+  await expect(source).toContainText("6");
+  await expect(target).toContainText("1");
+  await expect(target).toContainText("2");
+
+  await seek.fill("0.5");
+  const sourceKernel = await cohortGeometry(stage, "source");
+  expect(sourceKernel.centerSpreadX).toBeLessThan(1);
+  expect(sourceKernel.centerSpreadY).toBeGreaterThan(1);
+  expect(sourceKernel.centerSpreadY).toBeLessThan(20);
+  expect(sourceKernel.maximumScale - sourceKernel.minimumScale)
+    .toBeLessThan(0.001);
+  expect(sourceKernel.rolesInVerticalOrder).toEqual([
+    "successor-source:material-input",
+    "successor-source:catalyst",
+    "successor-source:material-input"
+  ]);
+
+  const firstSignature = await materialOwnerSignature(stage);
+  await seek.fill("0.8");
+  await seek.fill("0.5");
+  expect(await materialOwnerSignature(stage)).toEqual(firstSignature);
+  await seek.fill("1");
+  expect((await readableCohortSnapshot(stage)).visibleEquationCohorts).toBe(1);
+});
+
 async function materialOwnerSignature(stage: Locator) {
   return stage.evaluate((element) => {
     const root = element as HTMLElement;
@@ -152,6 +202,9 @@ async function cohortGeometry(
       maximumScale: Math.max(...centers.map(({ scale }) => scale)),
       rolesInVisualOrder: [...centers]
         .sort((left, right) => left.x - right.x)
+        .map(({ role }) => role),
+      rolesInVerticalOrder: [...centers]
+        .sort((top, bottom) => top.y - bottom.y)
         .map(({ role }) => role)
     };
   }, side);
