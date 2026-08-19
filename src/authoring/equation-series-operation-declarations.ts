@@ -34,8 +34,8 @@ import {
   kpEquationSeriesLikeDenominatorAuthoringDeclaration
 } from "./equation-series-like-denominator-authoring.ts";
 import {
-  kpOperationEvaluationPresentationCoreEntries
-} from "../animation/operation-evaluation-presentation-registry.ts";
+  resolveKpOperationEvaluationAuthority
+} from "../semantic/operation-evaluation-authority.ts";
 
 export interface KpEquationSeriesGovernedRequirements {
   readonly authoringAuthorityId: string;
@@ -434,15 +434,9 @@ KpEquationSeriesOperationDeclaration {
 
 function commonDenominatorProductEvaluationDeclaration():
 KpEquationSeriesOperationDeclaration {
-  const entry = kpOperationEvaluationPresentationCoreEntries.find(
-    ({ transformationKind }) =>
-      transformationKind === "simplifyConstantProduct"
+  const entry = resolveKpOperationEvaluationAuthority(
+    "simplifyConstantProduct"
   );
-  if (entry === undefined) {
-    throw new Error(
-      "Common-denominator composition requires registered product evaluation."
-    );
-  }
   const operationId = entry.semanticOperationIds[0]!;
   return declaration({
     operationId,
@@ -454,7 +448,7 @@ KpEquationSeriesOperationDeclaration {
     },
     source: "equation-extension",
     familyId: "family.equation.operation-evaluation.v1",
-    recipeIds: [entry.id],
+    recipeIds: [entry.presentationId],
     authorityRefIds: entry.semanticOperationIds,
     roleIds: [],
     canonicalComposition: [operationId]

@@ -152,11 +152,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T06:22:57.646Z",
       "notes": "Eight readiness tests pass; common-denominator alignment and like-denominator arithmetic derive Registered through exact compiler evidence and remain absent from Direct intent evidence."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T06:31:58.884Z",
+      "notes": "Dependency direction passed across 1667 TypeScript modules; semantic animation and equation compiler boundaries remain closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-19T06:32:00.171Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:32:01.230Z",
+      "notes": "All ten equation authority, inventory, and endpoint preservation checks pass."
+    },
+    {
+      "command": "npm run test:operation-evaluation-authority-boundary",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T06:32:02.260Z",
+      "notes": "Semantic authority exactly projects to executable presentation entries; authoring no longer imports the animation registry."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s20 truthfully derives both denominator families as Registered, not Direct."
+    "summary": "Closed the authoring-to-runtime dependency inversion with semantic operation-evaluation authority and exact boundary tests."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -298,7 +326,8 @@
     {
       "id": "s21",
       "title": "Pressure architecture closure",
-      "status": "planned"
+      "summary": "Pressure architecture closure passed dependency direction, type, equation preservation, and capability gates.",
+      "status": "complete"
     },
     {
       "id": "s22",

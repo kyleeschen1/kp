@@ -44,6 +44,9 @@ import {
 import {
   createKpCanonicalOperationEvaluationContinuityProgram
 } from "./operation-evaluation-continuity-program.ts";
+import {
+  kpOperationEvaluationAuthorityDescriptors
+} from "../semantic/operation-evaluation-authority.ts";
 
 export {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -126,46 +129,15 @@ export const kpOperationEvaluationPresentationCorePack =
   });
 
 export const kpOperationEvaluationPresentationCoreEntries:
-  readonly KpOperationEvaluationPresentationEntry[] = [
-    coreEntry({
-      id: "kp.presentation.operation-evaluation.product",
-      transformationKind: "simplifyConstantProduct",
-      semanticOperationIds: [
-        "kp.algebra.simplify-constant-product",
-        "kp.arithmetic.multiply"
-      ]
-    }),
-    coreEntry({
-      id: "kp.presentation.operation-evaluation.quotient",
-      transformationKind: "simplifyConstantQuotient",
-      semanticOperationIds: [
-        "kp.algebra.simplify-constant-quotient",
-        "kp.arithmetic.divide"
-      ],
-      definitionId:
-        "definition.generated.linear-solve.simplify-constant-quotient"
-    }),
-    coreEntry({
-      id: "kp.presentation.operation-evaluation.difference",
-      transformationKind: "simplifyConstantDifference",
-      semanticOperationIds: [
-        "kp.algebra.simplify-constant-difference",
-        "kp.arithmetic.subtract"
-      ],
-      definitionId:
-        "definition.generated.linear-solve.simplify-constant-difference"
-    }),
-    coreEntry({
-      id: "kp.presentation.operation-evaluation.sum",
-      transformationKind: "simplifyConstantSum",
-      semanticOperationIds: [
-        "kp.algebra.simplify-constant-sum",
-        "kp.arithmetic.add"
-      ],
-      definitionId:
-        "definition.generated.linear-solve.simplify-constant-sum"
-    })
-  ];
+  readonly KpOperationEvaluationPresentationEntry[] =
+  kpOperationEvaluationAuthorityDescriptors.map((descriptor) => coreEntry({
+    id: descriptor.presentationId,
+    transformationKind: descriptor.transformationKind,
+    semanticOperationIds: descriptor.semanticOperationIds,
+    ...(descriptor.definitionId === undefined
+      ? {}
+      : { definitionId: descriptor.definitionId })
+  }));
 
 export const kpOperationEvaluationPresentationRegistry =
   createKpOperationEvaluationPresentationRegistry({
