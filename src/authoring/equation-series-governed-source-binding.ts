@@ -39,6 +39,17 @@ import {
   isKpVerifiedFractionEquivalence,
   type KpVerifiedFractionEquivalence
 } from "../semantic/fraction-equivalence.ts";
+import {
+  KP_COMMON_DENOMINATOR_AUTHORING_CONTRACT_KIND,
+  KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID,
+  kpEquationSeriesCommonDenominatorAuthoringDeclaration,
+  roleBindings as commonDenominatorRoleBindings,
+  type KpEquationSeriesCommonDenominatorSemanticArguments
+} from "./equation-series-common-denominator-authoring.ts";
+import {
+  isKpVerifiedCommonDenominatorAlignment,
+  type KpVerifiedCommonDenominatorAlignment
+} from "../semantic/fraction-common-denominator.ts";
 
 export interface KpEquationSeriesGovernedSourceBindingInput {
   readonly adjacency: KpEquationTransformSeriesAdjacency;
@@ -122,11 +133,19 @@ const fractionEquivalenceBinder: KpEquationSeriesGovernedSourceBinder =
     bind: bindFractionEquivalence
   });
 
+const commonDenominatorBinder: KpEquationSeriesGovernedSourceBinder =
+  Object.freeze({
+    id: "binding.equation-series.common-denominator-alignment.v1",
+    operationIds: [KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID],
+    bind: bindCommonDenominator
+  });
+
 export const kpEquationSeriesGovernedSourceBindingRegistry =
   createKpEquationSeriesGovernedSourceBindingRegistry([
     bothSidesBinder,
     logarithmBaseBinder,
-    fractionEquivalenceBinder
+    fractionEquivalenceBinder,
+    commonDenominatorBinder
   ]);
 
 /**
@@ -374,6 +393,60 @@ function bindFractionEquivalence(
   } satisfies KpEquationSeriesFractionEquivalenceSemanticArguments);
 }
 
+function bindCommonDenominator(
+  input: KpEquationSeriesGovernedSourceBindingInput
+): KpEquationSeriesGovernedSourceBindingResult {
+  const selected = selectExactSource(input);
+  if (selected.status !== "selected") return selected.result;
+  const evidence = exactAdjacencyEvidence(selected.source, input.adjacency);
+  if (evidence === undefined) return sourceRepair(
+    input,
+    "The selected common-denominator source has no exact adjacency evidence."
+  );
+  const resolution = resolveKpEquationSeriesGovernedSource({
+    requirement: {
+      sourcePin: sourcePin(selected.source),
+      operationId: KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID,
+      requiredEntityIds: Object.values(evidence.roleBindings).flat(),
+      requiredSemanticContractKinds: [
+        KP_COMMON_DENOMINATOR_AUTHORING_CONTRACT_KIND
+      ],
+      requiredAdjacency: adjacencyRequirement(input.adjacency),
+      requiredCorrespondenceIds: evidence.correspondenceIds
+    },
+    sources: input.sources
+  });
+  if (resolution.status !== "resolved") return sourceRepair(
+    input,
+    `The common-denominator source failed ${resolution.status}: ` +
+      `${resolution.missingIds.join(", ")}.`
+  );
+  const transformation = verifiedCommonDenominator(resolution.source);
+  if (transformation === undefined) return sourceRepair(
+    input,
+    "The source contract is not authenticated common-denominator authority."
+  );
+  const roleBindings = commonDenominatorRoleBindings(transformation);
+  const expectedRoleIds =
+    kpEquationSeriesCommonDenominatorAuthoringDeclaration.roleIds;
+  if (expectedRoleIds.some((roleId) =>
+    !equalIds(evidence.roleBindings[roleId], roleBindings[roleId])
+  )) return sourceRepair(
+    input,
+    "The source does not bind every common-denominator role exactly."
+  );
+  return bound({
+    schemaVersion:
+      "kp.equation-series.common-denominator-alignment-intent.v1",
+    sourcePin: sourcePin(selected.source),
+    operationPin: {
+      ...kpEquationSeriesCommonDenominatorAuthoringDeclaration.operationPin
+    },
+    roleBindings,
+    correspondenceIds: transformation.correspondence.map(({ id }) => id)
+  } satisfies KpEquationSeriesCommonDenominatorSemanticArguments);
+}
+
 function selectExactSource(input: KpEquationSeriesGovernedSourceBindingInput):
   | Readonly<{
       status: "selected";
@@ -428,6 +501,25 @@ function verifiedFractionEquivalence(
     kind === KP_FRACTION_EQUIVALENCE_AUTHORING_CONTRACT_KIND
   )?.authority;
   return isKpVerifiedFractionEquivalence(authority) ? authority : undefined;
+}
+
+function verifiedCommonDenominator(
+  source: KpEquationSeriesVerifiedSemanticSource
+): KpVerifiedCommonDenominatorAlignment | undefined {
+  const authority = source.semanticContracts?.find(({ kind }) =>
+    kind === KP_COMMON_DENOMINATOR_AUTHORING_CONTRACT_KIND
+  )?.authority;
+  return isKpVerifiedCommonDenominatorAlignment(authority)
+    ? authority
+    : undefined;
+}
+
+function equalIds(
+  left: readonly string[] | undefined,
+  right: readonly string[]
+): boolean {
+  return left !== undefined && left.length === right.length &&
+    left.every((id, index) => id === right[index]);
 }
 
 function adjacencyRequirement(adjacency: KpEquationTransformSeriesAdjacency) {

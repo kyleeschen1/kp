@@ -20,6 +20,10 @@ import {
   kpEquationSeriesFractionEquivalenceAuthoringDeclaration,
   validateKpEquationSeriesFractionEquivalenceAuthoring
 } from "./equation-series-fraction-equivalence-authoring.ts";
+import {
+  kpEquationSeriesCommonDenominatorAuthoringDeclaration,
+  validateKpEquationSeriesCommonDenominatorAuthoring
+} from "./equation-series-common-denominator-authoring.ts";
 
 export interface KpEquationSeriesGovernedAuthoringValidator {
   readonly id: string;
@@ -74,6 +78,12 @@ export const kpEquationSeriesGovernedAuthoringRegistry =
       kpEquationSeriesFractionEquivalenceAuthoringDeclaration.operationId
     ],
     validate: validateKpEquationSeriesFractionEquivalenceAuthoring
+  }, {
+    id: "governance.equation-series.common-denominator-alignment.v1",
+    operationIds: [
+      kpEquationSeriesCommonDenominatorAuthoringDeclaration.operationId
+    ],
+    validate: validateKpEquationSeriesCommonDenominatorAuthoring
   }]);
 
 /** Each governed operation is dispatched by registered ownership, not a switch. */

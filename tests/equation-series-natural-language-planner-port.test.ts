@@ -59,7 +59,9 @@ test("prompt creation exposes only source states adjacencies and registered oper
     "kp.algebra.divide-both-sides",
     "kp.algebra.apply-natural-log-both-sides",
     "kp.algebra.divide-both-sides-by-log-base",
-    "kp.algebra.change-logarithm-base"
+    "kp.algebra.change-logarithm-base",
+    "kp.algebra.scale-fraction-equivalently",
+    "kp.algebra.align-common-denominator"
   ].sort());
   assert.equal(
     JSON.stringify(prompt).includes("models-propose-operations-kp-verifies"),

@@ -26,6 +26,10 @@ import {
 import {
   kpEquationSeriesFractionEquivalenceAuthoringDeclaration
 } from "./equation-series-fraction-equivalence-authoring.ts";
+import {
+  KP_COMMON_DENOMINATOR_SOURCE_OPERATION_ALIASES,
+  kpEquationSeriesCommonDenominatorAuthoringDeclaration
+} from "./equation-series-common-denominator-authoring.ts";
 
 export interface KpEquationSeriesGovernedRequirements {
   readonly authoringAuthorityId: string;
@@ -179,7 +183,9 @@ export const kpEquationSeriesOperationRegistry =
       ))
       .map(bothSidesDeclaration),
     logarithmBaseDeclaration(),
-    fractionEquivalenceDeclaration()
+    fractionEquivalenceDeclaration(),
+    commonDenominatorDeclaration(),
+    ...commonDenominatorAliasDeclarations()
   ]);
 
 function canonicalDeclaration(
@@ -339,6 +345,55 @@ KpEquationSeriesOperationDeclaration {
       requiredEvidenceIds: entry.requiredEvidenceIds
     }
   });
+}
+
+function commonDenominatorDeclaration():
+KpEquationSeriesOperationDeclaration {
+  const entry = kpEquationSeriesCommonDenominatorAuthoringDeclaration;
+  return declaration({
+    operationId: entry.operationId,
+    plannerOperationId: entry.operationId,
+    plannerExposure: {
+      kind: "exposed",
+      summary: requiredPlannerSummary(entry.operationId, entry.authoringSummary)
+    },
+    source: "governed-operation",
+    familyId: entry.familyId,
+    recipeIds: entry.recipeIds,
+    authorityRefIds: unique([
+      entry.authoringAuthorityId,
+      entry.semanticAuthorityId,
+      entry.lawId
+    ]),
+    roleIds: entry.roleIds,
+    canonicalComposition: [entry.operationId],
+    governed: {
+      authoringAuthorityId: entry.authoringAuthorityId,
+      operationPin: entry.operationPin,
+      requiredEvidenceIds: entry.requiredEvidenceIds
+    }
+  });
+}
+
+function commonDenominatorAliasDeclarations():
+readonly KpEquationSeriesOperationDeclaration[] {
+  const canonical = kpEquationSeriesCommonDenominatorAuthoringDeclaration;
+  return KP_COMMON_DENOMINATOR_SOURCE_OPERATION_ALIASES.map((operationId) =>
+    declaration({
+      operationId,
+      plannerOperationId: canonical.operationId,
+      plannerExposure: {
+        kind: "alias",
+        canonicalOperationId: canonical.operationId
+      },
+      source: "governed-operation",
+      familyId: canonical.familyId,
+      recipeIds: [],
+      authorityRefIds: [canonical.semanticAuthorityId, canonical.lawId],
+      roleIds: canonical.roleIds,
+      canonicalComposition: [canonical.operationId]
+    })
+  );
 }
 
 function declaration(

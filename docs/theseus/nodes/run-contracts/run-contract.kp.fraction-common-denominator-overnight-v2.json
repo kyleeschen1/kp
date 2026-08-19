@@ -82,11 +82,32 @@
       "scope": "standard",
       "checkedAt": "2026-08-19T05:43:08.738Z",
       "notes": "Four tests pass across request, exact truth, lineage, and the negative repair corpus."
+    },
+    {
+      "command": "npm run test:equation-series-common-denominator",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:47:00.985Z",
+      "notes": "The governed declaration is unique, planner exposed, pinned, renderer neutral, and explicitly has no presentation recipe."
+    },
+    {
+      "command": "npm run test:equation-series-common-denominator",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:50:44.709Z",
+      "notes": "Three tests pass for registration, deterministic source binding and compilation, missing-source repair, and structural-forgery rejection."
+    },
+    {
+      "command": "npm run test:equation-series-planner-port",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-19T05:52:19.208Z",
+      "notes": "All 10 planner prompt, alias provenance, authority exclusion, abstention, and port-repair tests pass with the new canonical vocabulary."
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Slice s10 made unsupported alignment requests fail with stable typed error codes."
+    "summary": "Slice s13 converged common-denominator planner vocabulary to one visible ID plus one source-derived alias."
   },
   "allowedWork": [
     "Development-dock theme tokens, reserved-area paint, toolbar styling, and focused route/browser evidence.",
@@ -168,17 +189,20 @@
     {
       "id": "s11",
       "title": "Register alignment declaration",
-      "status": "planned"
+      "summary": "Registered the canonical common-denominator operation, roles, pin, authority, and law with no animation-parity claim.",
+      "status": "complete"
     },
     {
       "id": "s12",
       "title": "Bind alignment evidence",
-      "status": "planned"
+      "summary": "Bound planner selection to sealed alignment proof, exact endpoints, roles, identities, pin, and source revision without model-authored authority.",
+      "status": "complete"
     },
     {
       "id": "s13",
       "title": "Expose planner vocabulary",
-      "status": "planned"
+      "summary": "Exposed one canonical planner operation and declaration-derived alias normalization without duplicate model-visible IDs.",
+      "status": "complete"
     },
     {
       "id": "s14",
