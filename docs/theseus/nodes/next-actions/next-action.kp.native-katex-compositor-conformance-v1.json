@@ -122,6 +122,34 @@
       "scope": "ncc13",
       "checkedAt": "2026-08-20T02:51:03.585Z",
       "notes": "Twenty-six checks pass; deterministic JSON diagnostics report environment revisions, five realized samples, seam failure classes, and exact translation/scale metrics without screenshots."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc14",
+      "checkedAt": "2026-08-20T02:55:51.645Z",
+      "notes": "One Chromium worker, one reusable page, two scenarios, and five semantic samples per transition captured actual text ink, baseline, and all owner opacities in 14.6 seconds with no screenshots or page errors."
+    },
+    {
+      "command": "npm run build && npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc15",
+      "checkedAt": "2026-08-20T02:58:53.283Z",
+      "notes": "Full typecheck and 1,431-module production build passed; source and emitted HTML/JS/CSS/maps contain none of five test-only conformance schema, trace, assessment, report, or registry markers."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc16",
+      "checkedAt": "2026-08-20T02:59:55.135Z",
+      "notes": "Canonical digit 2 passes both actual-paint ownership seams with no diagnostic failures while sharing the same observer, trace, laws, page, and compositor path as italic x."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc17",
+      "checkedAt": "2026-08-20T03:00:56.232Z",
+      "notes": "Italic x is now an executable expected regression: the same actual-paint harness classifies only vertical translation at both source-to-material and material-to-target seams, greater than 10px in symmetric directions; digit 2 remains clean."
     }
   ],
   "expectedLearning": [

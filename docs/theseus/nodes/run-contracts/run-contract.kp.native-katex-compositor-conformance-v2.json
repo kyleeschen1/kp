@@ -125,22 +125,26 @@
     {
       "id": "ncc14",
       "title": "Build-browser-harness",
-      "status": "planned"
+      "summary": "Added one scoped Playwright lane that reuses one Chromium page to capture both canonical carrier scenarios at the five approved semantic checkpoints using the existing production paint-geometry module.",
+      "status": "complete"
     },
     {
       "id": "ncc15",
       "title": "Prove-production-exclusion",
-      "status": "planned"
+      "summary": "Added and passed a negative production-closure gate over source plus emitted artifacts; the conformance registry, traces, laws, reports, and harness remain development-only after a full build.",
+      "status": "complete"
     },
     {
       "id": "ncc16",
       "title": "Prove-clean-two-control",
-      "status": "planned"
+      "summary": "Promoted canonical digit 2 into an executable browser control: it passes both actual-paint seams with no failure classifications through the same runtime and test path as italic x.",
+      "status": "complete"
     },
     {
       "id": "ncc17",
       "title": "Freeze-failing-x-regression",
-      "status": "planned"
+      "summary": "Promoted italic x into an executable expected regression: only vertical actual-paint translation fails, symmetrically at both ownership seams, while all other laws and the digit control remain clean.",
+      "status": "complete"
     },
     {
       "id": "ncc18",
