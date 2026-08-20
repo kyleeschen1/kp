@@ -38,6 +38,20 @@
       "scope": "ncc01",
       "checkedAt": "2026-08-20T02:19:02.178Z",
       "notes": "Approved proposal correction and generated control-plane records have no whitespace errors; protected economics and unrelated untracked files remain unstaged."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc02",
+      "checkedAt": "2026-08-20T02:22:46.938Z",
+      "notes": "Three deterministic baseline assertions freeze canonical 2 as continuous, italic x as a symmetric 13.828125px source/material/target seam regression, and =4 as stationary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "ncc02",
+      "checkedAt": "2026-08-20T02:23:06.141Z",
+      "notes": "Application, Node, test, Svelte, and domain TypeScript projects accept the test-only baseline fixture and command."
     }
   ],
   "expectedLearning": [
