@@ -177,13 +177,13 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
     )).size,
     1
   );
-  assert.equal(removed[0]?.intentionalContactGroupId,
-    carrier?.intentionalContactGroupId);
+  assert.ok(removed[0]?.intentionalContactGroupId);
+  assert.equal(carrier?.intentionalContactGroupId, undefined);
   assert.equal(removed[0]?.verifiedOperationCohortId, undefined);
   const scale =
     kpNativeKatexCarrierPreservingSimplificationOpticalProfile
-      .removedSyntaxAbsorption.minimumScale;
-  const absorptionCenters = removed.map(({ endRect, endPaintRect }) => {
+      .removedSyntaxRecognition.minimumScale;
+  const recognitionCenters = removed.map(({ endRect, endPaintRect }) => {
     const ownerCenter = {
       x: endRect.left + endRect.width / 2,
       y: endRect.top + endRect.height / 2
@@ -197,16 +197,20 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
       )
     };
   });
-  assert.ok(absorptionCenters[0]!.x < absorptionCenters[1]!.x);
-  const carrierRight = binding.carrier.source.rect.left +
-    binding.carrier.source.rect.width;
-  const absorptionCenterX = (
-    absorptionCenters[0]!.x + absorptionCenters[1]!.x
+  assert.ok(recognitionCenters[0]!.x < recognitionCenters[1]!.x);
+  const sourceCohortLeft = Math.min(...binding.removedSyntaxCohort.map(
+    ({ rect }) => rect.left
+  ));
+  const sourceCohortRight = Math.max(...binding.removedSyntaxCohort.map(
+    ({ rect }) => rect.left + rect.width
+  ));
+  const recognitionCenterX = (
+    recognitionCenters[0]!.x + recognitionCenters[1]!.x
   ) / 2;
-  assert.ok(absorptionCenterX >= carrierRight);
   assert.ok(
-    absorptionCenterX - carrierRight <=
-    binding.carrier.source.rect.height * 0.2
+    Math.abs(
+      recognitionCenterX - (sourceCohortLeft + sourceCohortRight) / 2
+    ) < 1e-9
   );
   removed.forEach((track, index) => {
     const sourceOwner = binding.removedSyntaxCohort[index]!;

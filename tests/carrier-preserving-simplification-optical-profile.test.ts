@@ -12,9 +12,9 @@ import {
 test("the candidate profile is one deeply frozen Native KaTeX tuning surface", () => {
   const profile = kpNativeKatexCarrierPreservingSimplificationOpticalProfile;
   assert.equal(profile.status, "provisional-human-checkpoint");
-  assert.equal(profile.treatment, "identity-absorption");
+  assert.equal(profile.treatment, "identity-recognition");
   assert.equal(Object.isFrozen(profile), true);
-  assert.equal(Object.isFrozen(profile.removedSyntaxAbsorption), true);
+  assert.equal(Object.isFrozen(profile.removedSyntaxRecognition), true);
   assert.equal(Object.isFrozen(profile.carrierTransit), true);
   assert.equal(Object.isFrozen(profile.nativeSettlement), true);
   assert.deepEqual(kpNativeKatexContributorFusionOpticalProfile, {
@@ -45,16 +45,16 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       nativeSettlementProgress: 0
     },
     removedSyntaxCohort: {
-      absorptionProgress: 0,
+      recognitionProgress: 0,
       disappearanceProgress: 0,
       paintPresence: 1,
       scale: 1
     }
   });
-  assert.equal(overlap.phase, "identity-absorption");
+  assert.equal(overlap.phase, "identity-recognition");
   assert.equal(overlap.carrier.paintPresence, 1);
   assert.equal(overlap.carrier.transitProgress, 0);
-  assert.ok(overlap.removedSyntaxCohort.absorptionProgress > 0);
+  assert.ok(overlap.removedSyntaxCohort.recognitionProgress > 0);
   assert.ok(overlap.removedSyntaxCohort.disappearanceProgress > 0);
   assert.ok(
     sampleKpNativeKatexCarrierPreservingSimplificationOptics(0.6)
@@ -69,10 +69,10 @@ test("sampling preserves the carrier while the removal cohort yields", () => {
       nativeSettlementProgress: 1
     },
     removedSyntaxCohort: {
-      absorptionProgress: 1,
+      recognitionProgress: 1,
       disappearanceProgress: 1,
       paintPresence: 0,
-      scale: 0.4
+      scale: 0.36
     }
   });
 });
@@ -96,13 +96,13 @@ test("sampling is bounded, deterministic, and history independent", () => {
   assert.deepEqual(forward, reverse);
   assert.equal(
     sampleKpNativeKatexCarrierPreservingSimplificationOptics(
-      profile.removedSyntaxAbsorption.end
-    ).removedSyntaxCohort.absorptionProgress,
+      profile.removedSyntaxRecognition.end
+    ).removedSyntaxCohort.recognitionProgress,
     1
   );
   assert.equal(
     sampleKpNativeKatexCarrierPreservingSimplificationOptics(
-      profile.removedSyntaxAbsorption.disappearanceEnd
+      profile.removedSyntaxRecognition.disappearanceEnd
     ).removedSyntaxCohort.paintPresence,
     0
   );

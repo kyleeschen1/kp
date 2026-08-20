@@ -35,7 +35,7 @@ test("carrier simplification seeks and rewinds through one paint owner", async (
   );
   await expect(stage).toHaveAttribute(
     "data-kp-carrier-preserving-simplification-treatment",
-    "identity-absorption"
+    "identity-recognition"
   );
   await expectOnePaintSurface(stage);
   await expectOneAccessibleEndpoint(stage);

@@ -4,14 +4,13 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
   readonly id:
     "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
   readonly status: "provisional-human-checkpoint";
-  readonly treatment: "identity-absorption";
-  readonly removedSyntaxAbsorption: {
+  readonly treatment: "identity-recognition";
+  readonly removedSyntaxRecognition: {
     readonly start: number;
     readonly end: number;
     readonly disappearanceStart: number;
     readonly disappearanceEnd: number;
     readonly minimumScale: number;
-    readonly pointOffsetInCarrierInkHeights: number;
     readonly kernelSpanInCarrierInkHeights: number;
   };
   readonly carrierTransit: {
@@ -28,7 +27,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
   readonly progress: number;
   readonly phase:
     | "source"
-    | "identity-absorption"
+    | "identity-recognition"
     | "carrier-transit"
     | "native-settlement"
     | "target";
@@ -38,7 +37,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
     readonly nativeSettlementProgress: number;
   };
   readonly removedSyntaxCohort: {
-    readonly absorptionProgress: number;
+    readonly recognitionProgress: number;
     readonly disappearanceProgress: number;
     readonly paintPresence: number;
     readonly scale: number;
@@ -57,15 +56,14 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
     id:
       "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
     status: "provisional-human-checkpoint" as const,
-    treatment: "identity-absorption" as const,
-    removedSyntaxAbsorption: {
-      start: 0.1,
+    treatment: "identity-recognition" as const,
+    removedSyntaxRecognition: {
+      start: 0.12,
       end: 0.44,
-      disappearanceStart: 0.26,
+      disappearanceStart: 0.28,
       disappearanceEnd: 0.44,
-      minimumScale: 0.4,
-      pointOffsetInCarrierInkHeights: 0.1,
-      kernelSpanInCarrierInkHeights: 0.24
+      minimumScale: 0.36,
+      kernelSpanInCarrierInkHeights: 0.18
     },
     carrierTransit: {
       start: 0.44,
@@ -91,15 +89,15 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
   }
   assertValidProfile(profile);
   const bounded = clamp01(progress);
-  const absorptionProgress = sampleInterval(
+  const recognitionProgress = sampleInterval(
     bounded,
-    profile.removedSyntaxAbsorption.start,
-    profile.removedSyntaxAbsorption.end
+    profile.removedSyntaxRecognition.start,
+    profile.removedSyntaxRecognition.end
   );
   const disappearanceProgress = sampleInterval(
     bounded,
-    profile.removedSyntaxAbsorption.disappearanceStart,
-    profile.removedSyntaxAbsorption.disappearanceEnd
+    profile.removedSyntaxRecognition.disappearanceStart,
+    profile.removedSyntaxRecognition.disappearanceEnd
   );
   const transitProgress = sampleInterval(
     bounded,
@@ -111,10 +109,10 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
     profile.nativeSettlement.start,
     profile.nativeSettlement.end
   );
-  const absorptionScale = lerp(
+  const recognitionScale = lerp(
     1,
-    profile.removedSyntaxAbsorption.minimumScale,
-    absorptionProgress
+    profile.removedSyntaxRecognition.minimumScale,
+    recognitionProgress
   );
 
   return deepFreeze({
@@ -126,10 +124,10 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
       nativeSettlementProgress
     },
     removedSyntaxCohort: {
-      absorptionProgress,
+      recognitionProgress,
       disappearanceProgress,
       paintPresence: 1 - disappearanceProgress,
-      scale: absorptionScale
+      scale: recognitionScale
     }
   });
 }
@@ -139,7 +137,7 @@ function phaseAt(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): KpNativeKatexCarrierPreservingSimplificationOpticalSample["phase"] {
   if (progress <= 0) return "source";
-  if (progress < profile.carrierTransit.start) return "identity-absorption";
+  if (progress < profile.carrierTransit.start) return "identity-recognition";
   if (progress < profile.nativeSettlement.start) return "carrier-transit";
   if (progress < 1) return "native-settlement";
   return "target";
@@ -148,9 +146,9 @@ function phaseAt(
 function assertValidProfile(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): void {
-  const { removedSyntaxAbsorption, carrierTransit, nativeSettlement } = profile;
+  const { removedSyntaxRecognition, carrierTransit, nativeSettlement } = profile;
   for (const [label, interval] of [
-    ["removed syntax absorption", removedSyntaxAbsorption],
+    ["removed syntax recognition", removedSyntaxRecognition],
     ["carrier transit", carrierTransit],
     ["native settlement", nativeSettlement]
   ] as const) {
@@ -165,31 +163,26 @@ function assertValidProfile(
     }
   }
   if (
-    removedSyntaxAbsorption.minimumScale <= 0 ||
-    removedSyntaxAbsorption.minimumScale > 1 ||
+    removedSyntaxRecognition.minimumScale <= 0 ||
+    removedSyntaxRecognition.minimumScale > 1 ||
     !Number.isFinite(
-      removedSyntaxAbsorption.pointOffsetInCarrierInkHeights
+      removedSyntaxRecognition.kernelSpanInCarrierInkHeights
     ) ||
-    removedSyntaxAbsorption.pointOffsetInCarrierInkHeights < 0 ||
-    removedSyntaxAbsorption.pointOffsetInCarrierInkHeights > 0.5 ||
-    !Number.isFinite(
-      removedSyntaxAbsorption.kernelSpanInCarrierInkHeights
-    ) ||
-    removedSyntaxAbsorption.kernelSpanInCarrierInkHeights <= 0 ||
-    removedSyntaxAbsorption.kernelSpanInCarrierInkHeights > 0.75
+    removedSyntaxRecognition.kernelSpanInCarrierInkHeights <= 0 ||
+    removedSyntaxRecognition.kernelSpanInCarrierInkHeights > 0.75
   ) {
-    throw new Error("Identity-absorption geometry must remain bounded and positive.");
+    throw new Error("Identity-recognition geometry must remain bounded and positive.");
   }
   if (
-    removedSyntaxAbsorption.disappearanceStart <
-      removedSyntaxAbsorption.start ||
-    removedSyntaxAbsorption.disappearanceEnd <=
-      removedSyntaxAbsorption.disappearanceStart ||
-    removedSyntaxAbsorption.disappearanceEnd > carrierTransit.end ||
-    removedSyntaxAbsorption.end !== carrierTransit.start
+    removedSyntaxRecognition.disappearanceStart <
+      removedSyntaxRecognition.start ||
+    removedSyntaxRecognition.disappearanceEnd <=
+      removedSyntaxRecognition.disappearanceStart ||
+    removedSyntaxRecognition.disappearanceEnd > carrierTransit.end ||
+    removedSyntaxRecognition.end !== carrierTransit.start
   ) {
     throw new Error(
-      "Identity absorption must gather before and yield during carrier transit."
+      "Identity recognition must gather before and yield during carrier transit."
     );
   }
   if (

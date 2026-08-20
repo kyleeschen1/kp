@@ -286,7 +286,7 @@ async function captureSample(input: {
   if (
     state.removedTrackCount !== 2 ||
     state.carrierTrackId.length === 0 ||
-    state.treatment !== "identity-absorption"
+    state.treatment !== "identity-recognition"
   ) {
     throw new Error(`${id} is missing canonical carrier/owner diagnostics.`);
   }

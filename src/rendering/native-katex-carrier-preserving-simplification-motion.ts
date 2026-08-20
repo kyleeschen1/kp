@@ -24,8 +24,8 @@ import {
 
 const REMOVED_SYNTAX_COHORT_ID =
   "cohort.carrier-preserving-simplification.removed-syntax";
-const IDENTITY_ABSORPTION_CONTACT_ID =
-  "contact.carrier-preserving-simplification.identity-absorption";
+const IDENTITY_RECOGNITION_CONTACT_ID =
+  "contact.carrier-preserving-simplification.identity-recognition";
 
 export interface KpNativeKatexCarrierPreservingSimplificationMotionPlan {
   readonly kind:
@@ -81,7 +81,7 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
   const removedRefs = new Set(
     binding.recipe.removedSyntaxCohort.selectorRefs
   );
-  const absorptionTargets = identityAbsorptionTargets(binding, profile);
+  const recognitionTargets = identityRecognitionTargets(binding, profile);
   const removedOwnerBySelector = new Map(
     binding.removedSyntaxCohort.map((owner) => [owner.selectorRef, owner])
   );
@@ -116,9 +116,6 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           return Object.freeze({
             ...track,
             timingGroupId: binding.recipe.carrier.correspondenceRecordId,
-            // The identity cohort is allowed to meet the carrier's ink edge,
-            // but only the verified one-to-one carrier relation owns result paint.
-            intentionalContactGroupId: IDENTITY_ABSORPTION_CONTACT_ID,
             sampleProgress: (progress: number) =>
               optics(progress, profile).carrier.transitProgress
           });
@@ -132,18 +129,20 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           const [endRect, endPaintRect] = settleScaledPaintAtTarget(
             track,
             removedOwnerBySelector.get(sourceEntity)!,
-            absorptionTargets.get(sourceEntity)!,
-            profile.removedSyntaxAbsorption.minimumScale
+            recognitionTargets.get(sourceEntity)!,
+            profile.removedSyntaxRecognition.minimumScale
           );
           return Object.freeze({
             ...track,
             endRect,
             endPaintRect,
             timingGroupId: REMOVED_SYNTAX_COHORT_ID,
-            intentionalContactGroupId: IDENTITY_ABSORPTION_CONTACT_ID,
+            // Recognition contracts the verified removal cohort into its own
+            // measured kernel; it never grants contact with carrier paint.
+            intentionalContactGroupId: IDENTITY_RECOGNITION_CONTACT_ID,
             opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: (progress: number) =>
-              optics(progress, profile).removedSyntaxCohort.absorptionProgress,
+              optics(progress, profile).removedSyntaxCohort.recognitionProgress,
             sampleOpacityProgress: (progress: number) =>
               optics(progress, profile).removedSyntaxCohort.disappearanceProgress,
             sampleMaterialScale: (progress: number) =>
@@ -222,25 +221,24 @@ function optics(
   );
 }
 
-function identityAbsorptionTargets(
+function identityRecognitionTargets(
   binding: KpNativeKatexCarrierPreservingSimplificationBinding,
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): ReadonlyMap<string, {
   readonly paintCenterX: number;
   readonly baselineY: number;
 }> {
-  const carrier = binding.carrier.source.rect;
-  const centerX = carrier.left + carrier.width +
-      carrier.height *
-        profile.removedSyntaxAbsorption.pointOffsetInCarrierInkHeights;
   const owners = [...binding.removedSyntaxCohort];
   const ordered = owners.map((owner, index) => ({ owner, index }))
     .sort((left, right) =>
       left.owner.rect.left - right.owner.rect.left ||
       left.index - right.index
     );
-  const span = carrier.height *
-    profile.removedSyntaxAbsorption.kernelSpanInCarrierInkHeights;
+  const left = Math.min(...owners.map(({ rect }) => rect.left));
+  const right = Math.max(...owners.map(({ rect }) => rect.left + rect.width));
+  const centerX = (left + right) / 2;
+  const span = binding.carrier.source.rect.height *
+    profile.removedSyntaxRecognition.kernelSpanInCarrierInkHeights;
   const targets = new Map<string, {
     readonly paintCenterX: number;
     readonly baselineY: number;

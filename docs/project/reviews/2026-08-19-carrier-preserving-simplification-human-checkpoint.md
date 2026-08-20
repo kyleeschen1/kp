@@ -14,12 +14,11 @@ The canonical candidate is `2 \times 1 \to 2`:
 - approved contrast: `/?artifact=animation.operation-evaluation.two-times-three`
 - regeneration: `npm run visual:carrier-preserving-simplification:checkpoint`
 
-The treatment under review is **identity absorption**. The verified removal
-cohort (`\times 1`) contracts toward a small, renderer-measured kernel beside
-the carrier's ink edge, then disappears; the carrier remains full-size and
-opaque throughout. **Recognition** is the recorded runner-up: it has not been
-implemented, so this checkpoint compares one clear candidate rather than two
-partly tuned choreographies.
+The treatment under review is **identity recognition**. After a short hold,
+the verified removal cohort (`\times 1`) contracts toward its own
+renderer-measured center and disappears there; the carrier remains full-size
+and opaque throughout. The prior **identity absorption** candidate remains an
+independently recoverable comparator at commit `1d6009b7`.
 
 The Catalogue's development toolbar and Review launcher remain available on
 the live route. Review notes therefore retain the exact artifact URL and
@@ -35,8 +34,8 @@ to other expressions.
 Please inspect natural playback, direct scrubbing, reverse, and phone width:
 
 1. The surviving `2` should remain visually continuous, opaque, and unscaled.
-2. `\times` and `1` should contract and be absorbed as one syntax cohort,
-   without becoming result paint or making the `2` look like it collapses.
+2. `\times` and `1` should register as one neutral syntax cohort, contract
+   toward their own center, and withdraw without feeding into result paint.
 3. There should be no blank interval, duplicate complete equation, terminal
    snap, or ambiguity about which glyph survives.
 4. The motion should contrast clearly with contributor fusion in
@@ -59,7 +58,7 @@ The disposable packet is regenerated under
 
 Coverage includes the full wide/phone × dark/light matrix in normal motion and
 source/target semantic checkpoints for all four reduced-motion profiles. The
-normal-motion sheet samples source, absorption approach, absorption contact,
+normal-motion sheet samples source, recognition hold, recognition contraction,
 early and late carrier transit, native settlement, and target.
 
 Automated evidence proves each state has one accessible endpoint, the expected

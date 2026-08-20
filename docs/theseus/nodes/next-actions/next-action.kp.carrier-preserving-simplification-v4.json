@@ -344,11 +344,53 @@
       "scope": "cps15 absorption checkpoint commit boundary",
       "checkedAt": "2026-08-19T23:37:05.692Z",
       "notes": "Exact staged absorption implementation, evidence, docs, and run records have no whitespace errors; unrelated user files remain unstaged."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "canonical recognition semantic, optical, ownership, and catalogue contracts",
+      "checkedAt": "2026-08-20T00:02:06.167Z",
+      "notes": "20/20 focused tests passed; the removed cohort contracts around its own measured center and has no carrier contact authority."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification:checkpoint",
+      "status": "passed",
+      "scope": "identity recognition review packet",
+      "checkedAt": "2026-08-20T00:02:08.432Z",
+      "notes": "Generated 36 deterministic wide/phone, dark/light, normal/reduced states with recognition diagnostics."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "canonical recognition Chromium lifecycle",
+      "checkedAt": "2026-08-20T00:02:09.792Z",
+      "notes": "3/3 direct seek, reverse, interruption, resize, and reduced-motion scenarios passed."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "recognition checkpoint TypeScript graph",
+      "checkedAt": "2026-08-20T00:02:10.774Z",
+      "notes": "Recognition profile, measured kernel projection, tests, and capture schema typecheck."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps15 recognition checkpoint",
+      "checkedAt": "2026-08-20T00:02:37.765Z",
+      "notes": "Validated 1030 nodes and 23588 events with recognition held at HUMAN_CHECKPOINT and downstream promotion untouched."
+    },
+    {
+      "command": "git diff --cached --check",
+      "status": "passed",
+      "scope": "cps15 recognition checkpoint commit boundary",
+      "checkedAt": "2026-08-20T00:03:55.404Z",
+      "notes": "Exact staged recognition implementation and evidence have no whitespace errors; unrelated user files remain unstaged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT candidate revised to identity absorption: ×1 contracts toward a measured baseline-aware kernel beside an opaque full-size carrier. Recognition is recorded but unimplemented as the runner-up."
+    "summary": "HUMAN_CHECKPOINT candidate revised to identity recognition: ×1 contracts around its own measured center and withdraws without contacting the opaque full-size carrier. Absorption remains recoverable at 1d6009b7."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

@@ -328,7 +328,7 @@ function applyFrame(
       ? "Two times one ready."
       : progress === 1
         ? "Two remains."
-        : "The multiplication sign and identity witness gather and are absorbed while two stays present.";
+        : "The multiplication sign and identity witness are recognized as neutral and withdraw while two stays present.";
   }
 }
 
