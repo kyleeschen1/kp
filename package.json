@@ -156,6 +156,8 @@
     "check:equation-operation-discovery-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-equation-operation-discovery-catalog.ts --check",
     "test:equation-operation-discoverability": "node --disable-warning=ExperimentalWarning --test tests/equation-operation-discoverability.test.ts",
     "test:equation-operation-discovery-api": "node --disable-warning=ExperimentalWarning --test tests/equation-operation-discovery-api.test.ts tests/equation-operation-discoverability.test.ts",
+    "discover:equation-operations": "node --disable-warning=ExperimentalWarning scripts/discover-equation-operations.ts",
+    "test:equation-operation-discovery-help": "node --disable-warning=ExperimentalWarning --test tests/equation-operation-discovery-help.test.ts tests/animation-transformation-coverage-view.test.ts",
     "generate:equation-asset-manifest": "node --disable-warning=ExperimentalWarning scripts/generate-equation-asset-manifest.ts",
     "check:equation-asset-manifest": "node --disable-warning=ExperimentalWarning scripts/generate-equation-asset-manifest.ts --check",
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",

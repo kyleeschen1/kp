@@ -28,10 +28,10 @@ test("coverage view is one ordered evidence-derived list", () => {
   const view = createKpAnimationTransformationCoverageViewModel();
   assert.equal(view.total, 28);
   assert.deepEqual(view.statusCounts, [
-    { status: "Direct", count: 5 },
+    { status: "Direct", count: 6 },
     { status: "Registered", count: 3 },
     { status: "Exemplar", count: 9 },
-    { status: "Missing", count: 11 }
+    { status: "Missing", count: 10 }
   ]);
   assert.deepEqual(
     view.rows.map(({ order }) => order),
@@ -45,19 +45,17 @@ test("coverage view is one ordered evidence-derived list", () => {
       "capability.equation.function-wrapping")?.remaining.length,
     0
   );
-  assert.deepEqual(
-    view.rows.find(({ capabilityId }) => capabilityId ===
-      "capability.equation.alternative-logarithm-bases")?.remaining.map(
-      ({ summary }) => summary
-    ),
-    [
-      "The endpoint parser preserves explicit bases in forms such as log_b(x) and log_{10}(x).",
-      "A typed law relates source base, target base, numerator log, and denominator log under valid domain assumptions.",
-      "A canonical recipe owns base transfer and quotient construction without treating the base as decoration.",
-      "A distinct motif preserves base identity as notation moves between operator subscripts and the change-of-base quotient.",
-      "One reviewed exemplar establishes syntax, identity, and attention choreography before promotion.",
-      "Authors name source and target bases semantically; KP chooses notation and motion.",
-      "Fixtures cover symbolic and numeric bases, omitted natural bases, and invalid base/domain cases."
-    ]
+  const logarithmBases = view.rows.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.alternative-logarithm-bases");
+  assert.equal(logarithmBases?.status, "Direct");
+  assert.deepEqual(logarithmBases?.remaining, []);
+  assert.ok(view.operationDiscovery.total > 10);
+  const additive = view.operationDiscovery.entries.find(({ operationId }) =>
+    operationId === "kp.semantic-motion.absorb-additive-identity"
   );
+  assert.ok(additive);
+  assert.equal(additive.friendlyName, "Remove additive identity");
+  assert.match(additive.inspectExample,
+    /npm run discover:equation-operations/u);
+  assert.match(additive.positiveExample, /x \+ 0/u);
 });

@@ -201,7 +201,8 @@
     {
       "id": "cps25",
       "title": "Project-human-discovery-surfaces",
-      "status": "planned"
+      "summary": "Projected the generated API into a compact Coverage search/details surface and a three-line CLI with inspect/search output. Results expose meaning, positive/negative examples, evidence, and copyable commands; no buttons, ontology tree, or duplicated status authority were added. Unit, Svelte typecheck, accessible Chromium interaction, and bundle boundary pass (131,192-byte measured catalogue-route gzip under 190,000).",
+      "status": "complete"
     },
     {
       "id": "cps26",
