@@ -110,7 +110,7 @@ construction motifs, while branch policy remains semantic evidence rather
 than choreography. The even-power caller must introduce its two real branches
 explicitly instead of reusing the unique odd-root result.
 
-## Recommended Orthogonal Tranche — Persistent Equivalence And Derivation
+## Accepted Orthogonal Tranche — Persistent Equivalence And Derivation
 
 After the exponential and root packets, prove that the same semantic traces
 support multiple retention projections without duplicating an operation or
@@ -127,9 +127,9 @@ Use a log-product law to pressure the equivalence frame and a multi-step
 power/root solve to pressure the derivation trail. A semantic object may have
 multiple simultaneous representation occurrences, but one paint occurrence
 must not be claimed as the same carrier in two places. Historical occurrences
-retain referent and lineage while the current occurrence owns motion. This
-tranche is recommended pending explicit approval; it is not another
-mathematical family and does not alter the accepted family order.
+retain referent and lineage while the current occurrence owns motion. The user
+accepted this tranche on 2026-08-20. It is not another mathematical family and
+does not alter the accepted family order.
 
 ## Why This Order
 

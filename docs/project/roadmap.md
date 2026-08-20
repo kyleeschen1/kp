@@ -222,11 +222,18 @@ Only this repository sequence is active:
    Graph3D semantic transformation; then distinct differentiation and
    integration operator coverage. Graph2D function translation and fraction
    structural pressure are deferred and no longer block foundational breadth.
-31. **Persistent equivalence and derivation projection:** recommended
-   cross-family tranche after exponential/root pressure, pending explicit
-   approval. Project the same verified transitions as replacement,
+31. **Persistent equivalence and derivation projection:** accepted
+   cross-family tranche after exponential/root pressure. Project the same
+   verified transitions as replacement,
    side-by-side equivalence, or bounded derivation history; do not fork
    semantic operations, motif recipes, or paint-carrier identity.
+32. **Symbolic mathematics through Calculus BC:** accepted near-term coverage
+   horizon. Extend the generated capability atlas so common algebra,
+   precalculus, trigonometric, sequence/series, limit, differentiation,
+   integration, polar/parametric, and related symbolic transformations are
+   either governed and animatable or return an exact typed gap. This is not a
+   CAS or a claim that all families are visually canonical. See
+   `decisions/2026-08-20-symbolic-mathematics-through-calculus-bc-target.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -238,7 +245,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; prove exponential duality, then root branching; keep semantic operation, motif recipe, and state-retention projection distinct. |
+| Equation animation | The current generated ledger has 19 equation capabilities: 6 Direct, 2 Registered, 2 Exemplar, and 9 Missing. Balanced operations and alternative logarithm bases are Direct; the shared runtime, compositor, governed discovery, and repair envelope are strong | Preserve the converged vocabulary; prove exponential duality, then root branching and the accepted persistent-state projection; make Calculus BC breadth explicit without overstating maturity. |
 | Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
 | Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | Close TypeScript and Python generation frontends after the exponent/root packets without changing approved choreography. |
 | Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek; calculus operator coverage follows as a distinct packet. |

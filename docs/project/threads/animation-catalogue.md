@@ -16,7 +16,9 @@ The accepted packets are exponential duality, root inversion,
 TypeScript/Python frontend closure, finite sum/product binders, a bounded
 Graph3D semantic scene proof, and distinct differentiation/integration
 operator coverage. A persistent equivalence/derivation projection tranche is
-recommended after exponent/root pressure but still awaits approval. Graph2D
+accepted after exponent/root pressure. Common symbolic mathematics through
+Calculus BC is the near-term capability horizon, measured as explicit maturity
+or typed gaps rather than a claim of universal animation support. Graph2D
 function translation remains valuable but no longer leads the foundational
 sequence. See
 `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.

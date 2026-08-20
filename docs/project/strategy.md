@@ -73,21 +73,24 @@ capable, while the existence and shape of a valuable educator workflow remain
 unvalidated. Repository work now makes the executable library legible and
 authorable: natural-language intent or ordered source states should resolve to
 verified semantic operations and canonical motifs when supported, and to
-typed repair gaps when unsupported. Native LaTeX is the first reference input;
-matrix, code, Graph2D, and Graph3D remain domain-owned future frontends over the
-shared request, sequencing, hosting, URL, and review envelope.
+typed repair gaps when unsupported. Common symbolic transformations through
+Calculus BC are the accepted near-term coverage horizon, with maturity kept
+distinct from mere KaTeX paintability. Native LaTeX is the first reference
+input; matrix, code, Graph2D, and Graph3D remain domain-owned future frontends
+over the shared request, sequencing, hosting, URL, and review envelope.
 
-This is not permission for undirected domain expansion or a universal
-generator. The product/quotient crossover, evidence-derived Transformation
-Coverage view, governed equation-transform-series compiler, compositor
-ownership repair, balanced-operation family, and alternative-base logarithm
-exemplar and governed authoring path are complete. Change of base is now
-`Direct`. Planner vocabulary and governed-source binding have also converged:
+This is not permission for undirected domain expansion, a universal generator,
+or a complete CAS. The product/quotient crossover, evidence-derived
+Transformation Coverage view, governed equation-transform-series compiler,
+compositor ownership repair, balanced-operation family, and alternative-base
+logarithm exemplar and governed authoring path are complete. Change of base is
+now `Direct`. Planner vocabulary and governed-source binding have also converged:
 one canonical model-facing ID represents each semantic act, compiler-owned
 binders attach exact verified evidence, and typed recovery preserves the last
 valid candidate. A pinned three-repeat live corpus passed all 18 case-runs with
-zero authority attempts, compiled mismatches, or silent fallbacks. Fraction
-equivalence is therefore the next bounded motif family. Additional motif
+zero authority attempts, compiled mismatches, or silent fallbacks. Exponential
+duality is the accepted next bounded family, followed by root branching and
+the accepted persistent equivalence/derivation projection. Additional motif
 families and domain frontends remain explicit ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
@@ -106,13 +109,12 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is whether the approved fraction-equivalence
-choreography remains legible when selectively embedded in `1/3 + 1/6`. The
-governed pressure caller now preserves context, composes synchronized product
-evaluation, supports direct seek/rewind, and stops before addition. Human
-review—not another architecture pass—must decide whether this second caller
-proves a narrow promotion boundary. This remains equation-domain convergence,
-not a universal graph, code, diagram, or 3D compiler.
+The immediate repository question is whether the shared homomorphism law can
+support a power-application realization without copying log-specific
+choreography. The bounded sequence then pressures root branching and a
+persistent equivalence projection. Human visual review remains the promotion
+gate. This is equation-domain breadth, not a universal graph, code, diagram,
+3D, or curriculum compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

@@ -1,6 +1,6 @@
 # Prudent Animation-Family Next Loops Review
 
-Status: family order accepted; persistent-state projection recommended pending approval
+Status: accepted
 Reviewed: 2026-08-20
 Decision: `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`
 
@@ -89,8 +89,8 @@ separate exemplar/pressure checkpoints while reusing only proved binder and
 operator infrastructure. Re-rank matrix, geometric dissection, Graph2D
 function transformation, and the difference-quotient/tangent bridge afterward.
 
-An orthogonal persistent-state tranche is recommended after exponential and
-root pressure and before broad family expansion. It should project existing
+An orthogonal persistent-state tranche is accepted after exponential and root
+pressure and before broad family expansion. It should project existing
 semantic transitions as replacement, side-by-side equivalence, or bounded
 derivation history. It must not fork semantic operations, motion recipes, or
 paint-carrier identity merely to keep a historical source visible.
@@ -102,9 +102,9 @@ preserving the converged shared runtime and governed authoring envelope.
 
 Next action: propose the single `b^(x + y) → b^x b^y` exponential-duality
 exemplar with a canonical reference, acceptance criteria, preservation
-boundary, rollback unit, and human checkpoint. The family order is approved;
-the persistent-state projection tranche still awaits explicit approval. No
-implementation is authorized by this review alone.
+boundary, rollback unit, and human checkpoint. The family order and
+persistent-state projection tranche are approved. No implementation is
+authorized by this review alone.
 
 Files changed by this review: this review, its accepted direction record, the
 roadmap, and the two affected workstream headers.
