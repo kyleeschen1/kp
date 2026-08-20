@@ -231,6 +231,108 @@ const equationCapabilityDrafts = Object.freeze([
     ]
   ),
   capability(
+    "capability.equation.trigonometric-transformations",
+    "Trigonometric notation and transformations",
+    "family.equation.trigonometric-transformation.v1",
+    [
+      requirement("requirement.equation.trigonometric.normalizer", "endpoint-normalizer", "normalizer.equation.trigonometric-notation.v1", "Function powers, inverse functions, reciprocal functions, arguments, and angle units retain distinct typed roles."),
+      requirement("requirement.equation.trigonometric.operation", "semantic-operation", "operation.equation.trigonometric-transform.v1", "Typed operations name the exact identity, inverse relation, or argument transformation instead of guessing from superscripts."),
+      requirement("requirement.equation.trigonometric.recipe", "canonical-recipe", "recipe.equation.trigonometric-transformation.v1", "Canonical recipes preserve function and argument identity through supported rewrites."),
+      requirement("requirement.equation.trigonometric.authoring", "authoring-surface", "authoring.equation.trigonometric-transformation.v1", "Governed authoring requires an exact law and rejects ambiguous inverse or reciprocal syntax."),
+      requirement("requirement.equation.trigonometric.corpus", "generation-corpus", "corpus.equation.trigonometric-transformation.v1", "Fixtures distinguish function powers, inverse functions, reciprocal functions, identities, and compositions.")
+    ]
+  ),
+  capability(
+    "capability.equation.piecewise-transformations",
+    "Piecewise definitions and case transformations",
+    "family.equation.piecewise-transformation.v1",
+    [
+      requirement("requirement.equation.piecewise.normalizer", "endpoint-normalizer", "normalizer.equation.piecewise.v1", "Branches, conditions, delimiters, and default cases remain explicit and ordered."),
+      requirement("requirement.equation.piecewise.operation", "semantic-operation", "operation.equation.piecewise-transform.v1", "Typed operations preserve branch conditions while selecting, splitting, combining, or substituting cases."),
+      requirement("requirement.equation.piecewise.recipe", "canonical-recipe", "recipe.equation.piecewise-transformation.v1", "A canonical recipe preserves case lineage and prevents branches from visually swapping meaning."),
+      requirement("requirement.equation.piecewise.corpus", "generation-corpus", "corpus.equation.piecewise-transformation.v1", "Fixtures cover two and three cases, boundary conditions, absolute-value expansion, and undefined regions.")
+    ]
+  ),
+  capability(
+    "capability.equation.sequence-series-transformations",
+    "Sequence and series transformations",
+    "family.equation.sequence-series.v1",
+    [
+      requirement("requirement.equation.sequence-series.normalizer", "endpoint-normalizer", "normalizer.equation.sequence-series.v1", "Terms, indices, bounds, ellipses, recurrence references, and partial sums retain semantic roles."),
+      requirement("requirement.equation.sequence-series.operation", "semantic-operation", "operation.equation.sequence-series-transform.v1", "Typed operations own index shifts, term expansion, recurrence substitution, and finite or infinite sum rewrites."),
+      requirement("requirement.equation.sequence-series.recipe", "canonical-recipe", "recipe.equation.sequence-series.v1", "Recipes preserve binding scope and term lineage while a sequence or series changes form."),
+      requirement("requirement.equation.sequence-series.corpus", "generation-corpus", "corpus.equation.sequence-series.v1", "Fixtures cover explicit and recursive sequences, partial sums, geometric series, convergence statements, and index shifts.")
+    ]
+  ),
+  capability(
+    "capability.equation.limit-transformations",
+    "Limit notation and transformations",
+    "family.equation.limit-transformation.v1",
+    [
+      requirement("requirement.equation.limit.normalizer", "endpoint-normalizer", "normalizer.equation.limit-notation.v1", "Bound variables, approach values, one-sided directions, infinity, and expression bodies remain distinct."),
+      requirement("requirement.equation.limit.operation", "semantic-operation", "operation.equation.limit-transform.v1", "Typed operations name a licensed limit law, substitution, factor cancellation, squeeze argument, or unsupported gap."),
+      requirement("requirement.equation.limit.recipe", "canonical-recipe", "recipe.equation.limit-transformation.v1", "A canonical recipe preserves the binder while the body changes and makes one-sided evidence visible when required."),
+      requirement("requirement.equation.limit.corpus", "generation-corpus", "corpus.equation.limit-transformation.v1", "Fixtures cover finite, infinite, one-sided, indeterminate, and piecewise limits without inferring proofs.")
+    ]
+  ),
+  capability(
+    "capability.equation.differentiation-transformations",
+    "Differentiation transformations",
+    "family.equation.differentiation.v1",
+    [
+      requirement("requirement.equation.differentiation.normalizer", "endpoint-normalizer", "normalizer.equation.derivative-notation.v1", "Leibniz, prime, operator, and partial-derivative spellings normalize while retaining their source notation."),
+      requirement("requirement.equation.differentiation.operation", "semantic-operation", "operation.equation.differentiate.v1", "Typed operations apply declared derivative rules with bound variable, assumptions, and contributor lineage."),
+      requirement("requirement.equation.differentiation.recipe", "canonical-recipe", "recipe.equation.differentiation.v1", "Recipes expose rule structure without pretending that a visual rewrite proves differentiability."),
+      requirement("requirement.equation.differentiation.authoring", "authoring-surface", "authoring.equation.differentiation.v1", "Governed authoring selects a derivative rule or supplies verified operation evidence."),
+      requirement("requirement.equation.differentiation.corpus", "generation-corpus", "corpus.equation.differentiation.v1", "Fixtures cover constant, power, sum, product, quotient, chain, implicit, inverse, and parametric differentiation.")
+    ]
+  ),
+  capability(
+    "capability.equation.integration-transformations",
+    "Integration transformations",
+    "family.equation.integration.v1",
+    [
+      requirement("requirement.equation.integration.normalizer", "endpoint-normalizer", "normalizer.equation.integral-notation.v1", "Bounds, integrands, differentials, constants of integration, and evaluation bars retain semantic roles."),
+      requirement("requirement.equation.integration.operation", "semantic-operation", "operation.equation.integrate.v1", "Typed operations apply declared antiderivative, substitution, parts, accumulation, or evaluation laws with assumptions."),
+      requirement("requirement.equation.integration.recipe", "canonical-recipe", "recipe.equation.integration.v1", "Recipes preserve binder scope and show contributor correspondence through supported integral rewrites."),
+      requirement("requirement.equation.integration.authoring", "authoring-surface", "authoring.equation.integration.v1", "Governed authoring distinguishes indefinite, definite, and accumulation forms before selecting a recipe."),
+      requirement("requirement.equation.integration.corpus", "generation-corpus", "corpus.equation.integration.v1", "Fixtures cover antiderivatives, definite evaluation, substitution, parts, area, volume, and improper integrals.")
+    ]
+  ),
+  capability(
+    "capability.equation.polar-parametric-transformations",
+    "Polar and parametric transformations",
+    "family.equation.polar-parametric.v1",
+    [
+      requirement("requirement.equation.polar-parametric.normalizer", "endpoint-normalizer", "normalizer.equation.polar-parametric.v1", "Parameters, coordinate functions, polar radii, angles, and derivative roles remain explicit."),
+      requirement("requirement.equation.polar-parametric.operation", "semantic-operation", "operation.equation.polar-parametric-transform.v1", "Typed operations own coordinate conversion, parameter elimination, slope, area, and arc-length rewrites."),
+      requirement("requirement.equation.polar-parametric.recipe", "canonical-recipe", "recipe.equation.polar-parametric.v1", "Recipes preserve correspondence between symbolic coordinates and any later graph representation."),
+      requirement("requirement.equation.polar-parametric.corpus", "generation-corpus", "corpus.equation.polar-parametric.v1", "Fixtures cover Cartesian conversion, parametric derivatives, polar derivatives, area, arc length, and ambiguous parameters.")
+    ]
+  ),
+  capability(
+    "capability.equation.differential-equation-transformations",
+    "Differential-equation transformations",
+    "family.equation.differential-equation.v1",
+    [
+      requirement("requirement.equation.differential-equation.normalizer", "endpoint-normalizer", "normalizer.equation.differential-equation.v1", "Dependent variables, independent variables, derivative terms, initial conditions, and solution families retain roles."),
+      requirement("requirement.equation.differential-equation.operation", "semantic-operation", "operation.equation.differential-equation-transform.v1", "Typed operations own separation, initial-condition application, slope-field correspondence, and solution verification."),
+      requirement("requirement.equation.differential-equation.recipe", "canonical-recipe", "recipe.equation.differential-equation.v1", "Recipes preserve differential grouping and distinguish equation manipulation from integration."),
+      requirement("requirement.equation.differential-equation.corpus", "generation-corpus", "corpus.equation.differential-equation.v1", "Fixtures cover separable equations, exponential growth and decay, logistic models, initial values, and verification.")
+    ]
+  ),
+  capability(
+    "capability.equation.taylor-series-transformations",
+    "Taylor polynomial and series transformations",
+    "family.equation.taylor-series.v1",
+    [
+      requirement("requirement.equation.taylor-series.normalizer", "endpoint-normalizer", "normalizer.equation.taylor-series.v1", "Centers, derivative orders, factorial denominators, indices, remainders, and convergence conditions retain roles."),
+      requirement("requirement.equation.taylor-series.operation", "semantic-operation", "operation.equation.taylor-series-transform.v1", "Typed operations own coefficient construction, finite approximation, series substitution, and error-bound rewrites."),
+      requirement("requirement.equation.taylor-series.recipe", "canonical-recipe", "recipe.equation.taylor-series.v1", "Recipes preserve term lineage between derivatives, coefficients, polynomial terms, and the represented function."),
+      requirement("requirement.equation.taylor-series.corpus", "generation-corpus", "corpus.equation.taylor-series.v1", "Fixtures cover Maclaurin and centered series, common expansions, products, substitutions, alternating error, and Lagrange remainder.")
+    ]
+  ),
+  capability(
     "capability.equation.binders-and-calculus-operators",
     "Binders, large operators, and calculus operators",
     "family.equation.binders-calculus.v1",

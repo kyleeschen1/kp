@@ -30,19 +30,30 @@ test("generated coverage is a fresh deterministic plan projection", () => {
 });
 
 test("Calc BC planning starts from an exact equation coverage baseline", () => {
-  assert.deepEqual(
-    summarizeKpEquationCoverage(createKpAnimationTransformationCoverage()),
-    {
-      equationCapabilityCount:
-        kpEquationCoverageBaseline20260820.equationCapabilityCount,
-      byStatus: kpEquationCoverageBaseline20260820.byStatus
-    }
-  );
+  assert.deepEqual(kpEquationCoverageBaseline20260820.byStatus, {
+    Direct: 6,
+    Registered: 4,
+    Exemplar: 2,
+    Missing: 7
+  });
   assert.equal(
     Object.values(kpEquationCoverageBaseline20260820.byStatus)
       .reduce((sum, count) => sum + count, 0),
     kpEquationCoverageBaseline20260820.equationCapabilityCount
   );
+  const live = summarizeKpEquationCoverage(
+    createKpAnimationTransformationCoverage()
+  );
+  assert.ok(
+    live.equationCapabilityCount >=
+      kpEquationCoverageBaseline20260820.equationCapabilityCount
+  );
+  assert.deepEqual(live.byStatus, {
+    Direct: 6,
+    Registered: 4,
+    Exemplar: 2,
+    Missing: 16
+  });
 });
 
 test("coverage maturity keeps paint meaning promotion and generation separate", () => {

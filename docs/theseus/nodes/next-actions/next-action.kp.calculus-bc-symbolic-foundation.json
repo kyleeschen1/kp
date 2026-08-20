@@ -75,11 +75,46 @@
       "scope": "slice s01 coverage baseline",
       "checkedAt": "2026-08-20T18:22:51.165Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s02 calculus bc taxonomy",
+      "checkedAt": "2026-08-20T18:29:36.128Z",
+      "notes": "12 focused coverage and taxonomy tests pass; all new curriculum rows remain evidence-derived Missing."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s02 calculus bc taxonomy",
+      "checkedAt": "2026-08-20T18:29:37.139Z",
+      "notes": "The generated coverage projection is current with the 28-row equation ledger."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s02 calculus bc taxonomy",
+      "checkedAt": "2026-08-20T18:29:38.075Z",
+      "notes": "TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s02 calculus bc taxonomy",
+      "checkedAt": "2026-08-20T18:29:39.017Z",
+      "notes": "Dependency, framework-neutral, semantic animation, presentation, and equation compiler ratchets pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s02 calculus bc taxonomy",
+      "checkedAt": "2026-08-20T18:29:39.962Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 froze an explicit six-dimensional historical coverage baseline and reconciled stale generated authorities to the truthful equation inventory: 6 Direct, 4 Registered, 2 Exemplar, 7 Missing."
+    "summary": "s02 added nine ordered Calculus BC curriculum groups that reference the canonical ledger and nine explicit Missing capability families, growing live equation coverage from 19 to 28 rows without duplicating status authority."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

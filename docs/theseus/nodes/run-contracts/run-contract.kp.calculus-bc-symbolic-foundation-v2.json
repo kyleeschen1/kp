@@ -57,7 +57,8 @@
     {
       "id": "s02",
       "title": "calculus-bc-capability-taxonomy",
-      "status": "planned"
+      "summary": "Calculus BC taxonomy projects through canonical capability IDs; all new families remain typed Missing gaps.",
+      "status": "complete"
     },
     {
       "id": "s03",
