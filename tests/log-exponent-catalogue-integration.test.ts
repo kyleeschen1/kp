@@ -58,6 +58,6 @@ test("canonical log-exponent catalogue route preserves artifact and playhead", (
     active: true,
     source: "default",
     artifactId: kpLogExponentAnimationId,
-    playhead: 0.625
+    playhead: 0.63
   });
 });

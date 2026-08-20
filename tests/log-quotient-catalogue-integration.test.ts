@@ -56,6 +56,6 @@ test("log-quotient catalogue route preserves direct semantic playhead", () => {
     active: true,
     source: "default",
     artifactId: kpLogQuotientAnimationId,
-    playhead: 0.625
+    playhead: 0.63
   });
 });

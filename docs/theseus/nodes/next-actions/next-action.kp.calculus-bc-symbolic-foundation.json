@@ -520,6 +520,36 @@
       "scope": "r01 repaired checkpoint state",
       "checkedAt": "2026-08-20T21:16:25.792Z",
       "notes": "Durable graph validates at 1042 nodes and 23978 events before commit."
+    },
+    {
+      "command": "npm run test:native-katex-foreground-ordering",
+      "status": "passed",
+      "scope": "r02 focused backing-plate retirement",
+      "checkedAt": "2026-08-20T23:04:16.646Z"
+    },
+    {
+      "command": "npm run test:log-exponent",
+      "status": "passed",
+      "scope": "r02 log-exponent preservation after backing-plate retirement and URL precision repair",
+      "checkedAt": "2026-08-20T23:06:17.805Z"
+    },
+    {
+      "command": "npm run test:log-quotient",
+      "status": "passed",
+      "scope": "r02 log-quotient preservation after backing-plate retirement and URL precision repair",
+      "checkedAt": "2026-08-20T23:06:21.513Z"
+    },
+    {
+      "command": "npm run test:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "r02 change-of-base preservation after backing-plate retirement and URL precision repair",
+      "checkedAt": "2026-08-20T23:06:26.950Z"
+    },
+    {
+      "command": "npm run visual:log-exponent:foreground-ordering",
+      "status": "passed",
+      "scope": "r02 scoped three-browser foreground-ordering canary",
+      "checkedAt": "2026-08-20T23:06:28.913Z"
     }
   ],
   "progress": {

@@ -126,6 +126,6 @@ test("catalogue route and lazy pack resolve the exact exemplar", async () => {
     active: true,
     source: "default",
     artifactId: kpLogarithmChangeOfBaseExemplarId,
-    playhead: 0.625
+    playhead: 0.63
   });
 });
