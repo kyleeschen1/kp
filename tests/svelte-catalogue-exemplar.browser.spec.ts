@@ -252,7 +252,7 @@ test("Svelte history restores artifact and playhead without a document load", as
   await economicsPlayer.locator(
     '[data-action="seek-editor-animation"]'
   ).fill("0.625");
-  await expect.poll(() => page.url()).toContain("playhead=0.625");
+  await expect.poll(() => page.url()).toContain("playhead=0.63");
 
   await page.goBack();
   await expect(exemplar).toHaveAttribute(

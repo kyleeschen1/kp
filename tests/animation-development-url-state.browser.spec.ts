@@ -128,3 +128,52 @@ test("URL-backed catalogue settings and history restore without document reload"
   ).__kpUrlStateIdentity)).toBe("stable");
   expect(documentRequests).toHaveLength(1);
 });
+
+test("frame-rate playhead events produce a bounded coarse URL projection", async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    const original = window.history.replaceState.bind(window.history);
+    (window as Window & { __kpReplaceStateCalls?: number })
+      .__kpReplaceStateCalls = 0;
+    window.history.replaceState = (state, unused, url) => {
+      (window as Window & { __kpReplaceStateCalls?: number })
+        .__kpReplaceStateCalls! += 1;
+      original(state, unused, url);
+    };
+  });
+  await page.goto(`/?artifact=${vectorId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${vectorId}"]`
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await page.evaluate(() => {
+    (window as Window & { __kpReplaceStateCalls?: number })
+      .__kpReplaceStateCalls = 0;
+  });
+
+  await player.evaluate((element) => {
+    const seek = element.querySelector<HTMLInputElement>(
+      '[data-action="seek-editor-animation"]'
+    );
+    if (seek === null) throw new Error("Player has no seek control.");
+    for (let index = 0; index <= 120; index += 1) {
+      seek.value = String(index / 120);
+      seek.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    seek.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+
+  await expect.poll(() =>
+    new URL(page.url()).searchParams.get("playhead")
+  ).toBe("1");
+  const replacements = await page.evaluate(() =>
+    (window as Window & { __kpReplaceStateCalls?: number })
+      .__kpReplaceStateCalls ?? 0
+  );
+  expect(replacements).toBeLessThanOrEqual(2);
+});

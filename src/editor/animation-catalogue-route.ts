@@ -1,3 +1,6 @@
+import { formatKpAnimationUrlPlayhead } from
+  "./animation-playhead-url-policy.ts";
+
 export const KP_ANIMATION_CATALOGUE_VIEW = "animation-catalogue";
 export const KP_ANIMATION_CATALOGUE_ARTIFACT_PARAM = "artifact";
 export const KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM = "playhead";
@@ -60,15 +63,11 @@ export function writeKpAnimationCatalogueRoute(
   } else {
     params.set(
       KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM,
-      formatPlayhead(state.playhead)
+      formatKpAnimationUrlPlayhead(state.playhead)
     );
   }
   const query = params.toString();
   return query.length === 0 ? "" : `?${query}`;
-}
-
-function formatPlayhead(value: number): string {
-  return String(Math.round(value * 1_000) / 1_000);
 }
 import {
   readKpAnimationDevelopmentUrlState

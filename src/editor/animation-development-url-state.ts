@@ -1,3 +1,6 @@
+import { formatKpAnimationUrlPlayhead } from
+  "./animation-playhead-url-policy.ts";
+
 export const kpAnimationDevelopmentViews = [
   "animation-catalogue",
   "coverage"
@@ -131,7 +134,10 @@ export function writeKpAnimationDevelopmentUrlState(input: {
   setNonBlank(url.searchParams, "artifact", input.state.artifactId);
   setNonBlank(url.searchParams, "checkpoint", input.state.checkpointId);
   if (input.state.playhead !== undefined) {
-    url.searchParams.set("playhead", formatPlayhead(input.state.playhead));
+    url.searchParams.set(
+      "playhead",
+      formatKpAnimationUrlPlayhead(input.state.playhead)
+    );
   }
   url.searchParams.sort();
   return url.href;
@@ -166,13 +172,6 @@ function readPlayhead(value: string | null): number | undefined {
   return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1
     ? parsed
     : undefined;
-}
-
-function formatPlayhead(value: number): string {
-  if (!Number.isFinite(value) || value < 0 || value > 1) {
-    throw new RangeError("Animation playhead must be between zero and one.");
-  }
-  return String(Math.round(value * 1_000) / 1_000);
 }
 
 function setNonBlank(

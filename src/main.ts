@@ -28,6 +28,11 @@ import {
   writeKpAnimationCatalogueRoute
 } from "./editor/animation-catalogue-route.ts";
 import {
+  createKpAnimationUrlReplaceScheduler,
+  readKpAnimationPlayheadHistoryState,
+  writeKpAnimationPlayheadHistoryState
+} from "./editor/animation-playhead-url-policy.ts";
+import {
   resolveKpAnimationCatalogueSelection
 } from "./editor/animation-catalogue-selection.ts";
 import {
@@ -145,6 +150,8 @@ if (app === null) {
 }
 
 const appRoot = app;
+const animationPlayheadUrlScheduler =
+  createKpAnimationUrlReplaceScheduler();
 let editorDocument: KpDocument;
 let projectDashboardQuery = "";
 let projectDashboardSelectedAgendaRowId: string | undefined;
@@ -289,20 +296,44 @@ appRoot.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, (event) => {
     event.target.closest("[data-kp-animation-catalogue]") === null ||
     typeof event.detail !== "object" || event.detail === null
   ) return;
-  const progress = (event.detail as { readonly progress?: unknown }).progress;
-  if (typeof progress !== "number") return;
-  const route = readKpAnimationCatalogueRoute(window.location.search);
-  const search = writeKpAnimationCatalogueRoute(window.location.search, {
-    artifactId: route.artifactId,
-    playhead: progress
+  const detail = event.detail as {
+    readonly animationId?: unknown;
+    readonly progress?: unknown;
+  };
+  if (
+    typeof detail.animationId !== "string" ||
+    typeof detail.progress !== "number"
+  ) return;
+  const player = event.target;
+  const animationId = detail.animationId;
+  const progress = detail.progress;
+  animationPlayheadUrlScheduler.request(() => {
+    if (
+      !player.isConnected ||
+      player.dataset["kpEditorAnimationId"] !== animationId ||
+      activeView !== "animation-catalogue"
+    ) return;
+    const route = readKpAnimationCatalogueRoute(window.location.search);
+    if (
+      route.artifactId !== undefined &&
+      route.artifactId !== animationId
+    ) return;
+    const search = writeKpAnimationCatalogueRoute(window.location.search, {
+      artifactId: route.artifactId ?? animationId,
+      playhead: progress
+    });
+    if (search !== window.location.search) {
+      window.history.replaceState(
+        writeKpAnimationPlayheadHistoryState({
+          currentState: window.history.state,
+          animationId,
+          progress
+        }),
+        "",
+        `${window.location.pathname}${search}${window.location.hash}`
+      );
+    }
   });
-  if (search !== window.location.search) {
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}${search}${window.location.hash}`
-    );
-  }
 });
 let viewRevision = 0;
 let disposeAnimationDevelopmentReview:
@@ -341,7 +372,10 @@ window.addEventListener("popstate", () => {
     void renderAnimationCatalogueSelectionInShell({
       shell,
       entry: decision.entry,
-      playhead: decision.playhead
+      playhead: readKpAnimationPlayheadHistoryState({
+        state: window.history.state,
+        animationId: decision.entry.animationId
+      }) ?? decision.playhead
     });
     return;
   }
@@ -372,6 +406,8 @@ document.addEventListener("visibilitychange", () => {
 });
 
 window.addEventListener("pagehide", () => {
+  animationPlayheadUrlScheduler.flush();
+  animationPlayheadUrlScheduler.dispose();
   disposeAnimationDevelopmentReviewCapture();
   disposeAnimationCatalogueHostEvidenceObserver();
   disposeKpEditorAnimationPlayers(appRoot);
@@ -381,6 +417,12 @@ window.addEventListener("pagehide", () => {
 appRoot.addEventListener("click", (event) => {
   if (!(event.target instanceof Element)) {
     return;
+  }
+
+  if (event.target.closest(
+    "[data-kp-editor-animation-player] button[data-action]"
+  ) !== null) {
+    animationPlayheadUrlScheduler.flush();
   }
 
   const catalogueLink = event.target.closest<HTMLAnchorElement>(
@@ -541,6 +583,13 @@ appRoot.addEventListener("focusin", (event) => {
 });
 
 appRoot.addEventListener("change", (event) => {
+  if (
+    event.target instanceof HTMLInputElement &&
+    event.target.dataset["action"] === "seek-editor-animation"
+  ) {
+    animationPlayheadUrlScheduler.flush();
+    return;
+  }
   if (!(event.target instanceof HTMLSelectElement)) {
     return;
   }

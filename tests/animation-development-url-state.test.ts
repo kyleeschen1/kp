@@ -68,7 +68,7 @@ test("coverage and catalogue state round trip with unrelated query data", () => 
   assert.equal(url.searchParams.get("focus"), "no-depth");
   assert.equal(url.searchParams.get("artifact"), "animation.example");
   assert.equal(url.searchParams.get("checkpoint"), "operation.divide");
-  assert.equal(url.searchParams.get("playhead"), "0.625");
+  assert.equal(url.searchParams.get("playhead"), "0.63");
   assert.deepEqual(readKpAnimationDevelopmentUrlState(encoded), {
     view: "coverage",
     viewSource: "explicit",
@@ -79,7 +79,7 @@ test("coverage and catalogue state round trip with unrelated query data", () => 
     },
     artifactId: "animation.example",
     checkpointId: "operation.divide",
-    playhead: 0.625
+    playhead: 0.63
   });
 });
 

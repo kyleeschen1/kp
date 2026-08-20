@@ -55,6 +55,12 @@
     pauseKpEditorAnimationPlayers
   } from "../animation-player-controller.ts";
   import {
+    createKpAnimationUrlReplaceScheduler,
+    readKpAnimationPlayheadHistoryState,
+    writeKpAnimationPlayheadHistoryState,
+    type KpAnimationUrlReplaceScheduler
+  } from "../animation-playhead-url-policy.ts";
+  import {
     applyKpAnimationCatalogueObservedHealth,
     renderKpAnimationCatalogueInspector
   } from "../animation-catalogue-shell.ts";
@@ -86,6 +92,7 @@
   let stageMessage = $state("");
   let selectionRevision = 0;
   let disposed = false;
+  let playheadUrlScheduler: KpAnimationUrlReplaceScheduler | undefined;
   const initialUrlState = readKpAnimationDevelopmentUrlState(
     window.location.href
   );
@@ -241,27 +248,47 @@
       !(event.target instanceof HTMLElement) ||
       event.target.closest("[data-kp-svelte-catalogue-shell]") !== shell ||
       typeof event.detail !== "object" || event.detail === null) return;
-    const progress = (event.detail as { readonly progress?: unknown }).progress;
-    if (typeof progress !== "number" || view === undefined) return;
-    const current = currentUrlState();
-    if (current === undefined) return;
-    const href = writeKpAnimationDevelopmentUrlState({
-      baseUrl: window.location.href,
-      state: {
-        ...current,
-        view: "animation-catalogue",
-        viewSource: "explicit",
-        artifactId: view.entry.animationId,
-        playhead: progress
+    const detail = event.detail as {
+      readonly animationId?: unknown;
+      readonly progress?: unknown;
+    };
+    if (
+      typeof detail.animationId !== "string" ||
+      typeof detail.progress !== "number" ||
+      view === undefined
+    ) return;
+    const animationId = detail.animationId;
+    const progress = detail.progress;
+    playheadUrlScheduler?.request(() => {
+      if (
+        disposed ||
+        view === undefined ||
+        view.entry.animationId !== animationId
+      ) return;
+      const current = currentUrlState();
+      if (current === undefined) return;
+      const href = writeKpAnimationDevelopmentUrlState({
+        baseUrl: window.location.href,
+        state: {
+          ...current,
+          view: "animation-catalogue",
+          viewSource: "explicit",
+          artifactId: animationId,
+          playhead: progress
+        }
+      });
+      if (href !== window.location.href) {
+        window.history.replaceState(
+          writeKpAnimationPlayheadHistoryState({
+            currentState: window.history.state,
+            animationId,
+            progress
+          }),
+          "",
+          href
+        );
       }
     });
-    if (href !== window.location.href) {
-      window.history.replaceState(
-        null,
-        "",
-        href
-      );
-    }
   }
 
   function restoreHistorySelection(): void {
@@ -282,7 +309,10 @@
     syncRoutePresentation(window.location.href);
     void prepareSelection({
       entry: decision.entry,
-      playhead: decision.playhead,
+      playhead: readKpAnimationPlayheadHistoryState({
+        state: window.history.state,
+        animationId: decision.entry.animationId
+      }) ?? decision.playhead,
       search: window.location.search,
       selectionHost: selection.selectionHost
     });
@@ -446,17 +476,32 @@
     if (mountedShell === undefined) return;
     const ownerDocument = mountedShell.ownerDocument;
     const ownerWindow = ownerDocument.defaultView;
+    playheadUrlScheduler = createKpAnimationUrlReplaceScheduler();
     const pauseForBackground = (): void => {
       pauseKpEditorAnimationPlayers(mountedShell);
     };
     const pauseWhenHidden = (): void => {
       if (ownerDocument.hidden) pauseForBackground();
     };
+    const flushSettledPlayhead = (event: Event): void => {
+      if (
+        event.target instanceof HTMLInputElement &&
+        event.target.dataset["action"] === "seek-editor-animation"
+      ) playheadUrlScheduler?.flush();
+    };
+    const flushAnimationControl = (event: Event): void => {
+      if (
+        event.target instanceof Element &&
+        event.target.closest("button[data-action]") !== null
+      ) playheadUrlScheduler?.flush();
+    };
     mountedShell.addEventListener(
       KP_EDITOR_ANIMATION_FRAME_EVENT,
       replacePlayhead
     );
     mountedShell.addEventListener("keydown", closeOverlay);
+    mountedShell.addEventListener("change", flushSettledPlayhead);
+    mountedShell.addEventListener("click", flushAnimationControl);
     ownerDocument.addEventListener("visibilitychange", pauseWhenHidden);
     ownerWindow?.addEventListener("pagehide", pauseForBackground);
     window.addEventListener("popstate", restoreHistorySelection);
@@ -474,6 +519,8 @@
         replacePlayhead
       );
       mountedShell.removeEventListener("keydown", closeOverlay);
+      mountedShell.removeEventListener("change", flushSettledPlayhead);
+      mountedShell.removeEventListener("click", flushAnimationControl);
       ownerDocument.removeEventListener("visibilitychange", pauseWhenHidden);
       ownerWindow?.removeEventListener("pagehide", pauseForBackground);
       window.removeEventListener("popstate", restoreHistorySelection);
@@ -481,6 +528,8 @@
         "kp-development-theme-change",
         syncDevelopmentTheme
       );
+      playheadUrlScheduler?.dispose();
+      playheadUrlScheduler = undefined;
     };
   });
 

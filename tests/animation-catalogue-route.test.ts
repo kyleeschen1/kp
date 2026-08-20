@@ -32,13 +32,13 @@ test("catalogue route round trips a bounded shareable playhead", () => {
 
   assert.equal(params.get(KP_ANIMATION_CATALOGUE_ARTIFACT_PARAM),
     "animation.linear-solve.solve-x");
-  assert.equal(params.get(KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM), "0.553");
+  assert.equal(params.get(KP_ANIMATION_CATALOGUE_PLAYHEAD_PARAM), "0.55");
   assert.equal(params.get("utm_source"), "review");
   assert.deepEqual(readKpAnimationCatalogueRoute(search), {
     active: true,
     source: "default",
     artifactId: "animation.linear-solve.solve-x",
-    playhead: 0.553
+    playhead: 0.55
   });
 });
 
