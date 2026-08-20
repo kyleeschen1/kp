@@ -176,6 +176,7 @@
     "test:power-application-normalizer": "node --disable-warning=ExperimentalWarning --test tests/power-application-endpoint-normalizer.test.ts",
     "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts",
     "test:exponential-extension-pack": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-extension-pack.test.ts tests/equation-extension-dispatch.test.ts",
+    "test:exponential-native-endpoints": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-native-endpoints.test.ts",
     "visual:animation-transformation-coverage": "playwright test tests/animation-transformation-coverage.browser.spec.ts --project=chromium --workers=1",
     "test:animation-development-url-state": "node --disable-warning=ExperimentalWarning --test tests/animation-playhead-url-policy.test.ts tests/animation-development-url-state.test.ts tests/animation-catalogue-route.test.ts tests/animation-catalogue-navigation.test.ts",
     "visual:animation-development-url-state": "playwright test tests/animation-development-url-state.browser.spec.ts --project=chromium --workers=1",

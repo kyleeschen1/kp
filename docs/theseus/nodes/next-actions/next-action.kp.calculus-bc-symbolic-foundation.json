@@ -313,11 +313,32 @@
       "scope": "slice s08 canonical recipe binding",
       "checkedAt": "2026-08-20T19:00:59.952Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:exponential-native-endpoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-20T19:10:47.888Z",
+      "notes": "Five endpoint, adjacency, ink-anchor, equivalent-pose/DPR, and fail-closed tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-20T19:10:49.618Z",
+      "notes": "TypeScript, Svelte, and domain type checks passed after native endpoint addition."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-20T19:10:50.808Z",
+      "notes": "Dependency, framework-neutrality, semantic animation, presentation, and compiler authority gates passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 bound exponential semantic authority to a power-specific nominal recipe and motif through generated lazy dispatch while reusing the canonical homomorphism phase grammar."
+    "summary": "Slice s09 complete: native KaTeX power endpoints and renderer-session ink certificates are implemented without synthetic target typography."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

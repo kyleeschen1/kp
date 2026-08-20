@@ -99,7 +99,8 @@
     {
       "id": "s09",
       "title": "native-katex-power-endpoints",
-      "status": "planned"
+      "summary": "Projected b^{x+y} and b^{x}b^{y} as exact native KaTeX endpoints; certified bases, exponent planes, payloads, and native/derived connector anchors in CSS pixels with DPR invariance.",
+      "status": "complete"
     },
     {
       "id": "s10",
