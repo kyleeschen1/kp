@@ -1,7 +1,7 @@
 # Resume Animation-Family Breadth At A Two-Loop Cadence
 
 Date: 2026-08-20
-Status: breadth goal accepted; exact sequence recommended pending approval
+Status: accepted
 
 ## Decision
 
@@ -17,7 +17,12 @@ families at a prudent **two-loop cadence**:
 Do not place multiple unreviewed families in one autonomous run. Do not require
 every historical catalogue animation to migrate before new breadth begins.
 
-## Recommended Family Order
+## Accepted Family Order
+
+The user accepted this order on 2026-08-20. A mathematical family advances
+through verified semantic operations and reviewed callers; a motif remains a
+presentation mechanism selected by the family's recipe, not the authored
+mathematical truth.
 
 ### Packet 1 — Exponential/logarithmic duality
 
@@ -72,6 +77,60 @@ seek/rewind, resource leases, context restoration, and semantic SVG fallback.
 Do not infer general surface generation or WebGL salience parity from one
 scene.
 
+### Packet 6 — Calculus operators: differentiation and integration
+
+Treat differentiation and integration as related calculus coverage, not one
+interchangeable operation. Begin differentiation with one bounded symbolic
+operator application that proves differentiation-variable scope, operand
+identity, operator discharge, and exact verified result; pressure it with a
+structurally different rule such as linearity or the chain rule. Then give
+integration its own exemplar and pressure caller because bounds, orientation,
+measure/differential identity, constants of integration, substitution, and the
+Fundamental Theorem introduce semantics that differentiation alone does not
+prove. Reuse binder infrastructure where evidence warrants it without using a
+shared visual treatment as mathematical authority.
+
+## Three Separate Authoring Decisions
+
+Every governed transformation keeps three decisions distinct:
+
+1. **Semantic operation:** what mathematically or programmatically happened,
+   including legality, domain, branches, correspondence, and provenance.
+2. **Motif recipe:** how the operation directs attention and motion through
+   canonical renderer-neutral motifs and renderer-owned optical realization.
+3. **State-retention projection:** whether the source yields to the target,
+   remains beside it as an equivalence frame, or joins an accumulated
+   derivation trail.
+
+Specific transformations are therefore required as executable truth and
+pressure cases, but they should not each become bespoke motifs. For example,
+`x^3 = 8 → x = root(3, 8)` is an inverse-power balanced-equation operation.
+The exponent-to-radical-index handoff may use role transfer and radical
+construction motifs, while branch policy remains semantic evidence rather
+than choreography. The even-power caller must introduce its two real branches
+explicitly instead of reusing the unique odd-root result.
+
+## Recommended Orthogonal Tranche — Persistent Equivalence And Derivation
+
+After the exponential and root packets, prove that the same semantic traces
+support multiple retention projections without duplicating an operation or
+motif implementation:
+
+- **replacement:** the source relinquishes paint ownership and the target
+  settles in its place;
+- **equivalence frame:** a frozen source occurrence remains, the relation is
+  introduced, and a live target occurrence is constructed beside it; and
+- **derivation trail:** selected prior states remain as bounded historical
+  rows while the current transition owns live paint.
+
+Use a log-product law to pressure the equivalence frame and a multi-step
+power/root solve to pressure the derivation trail. A semantic object may have
+multiple simultaneous representation occurrences, but one paint occurrence
+must not be claimed as the same carrier in two places. Historical occurrences
+retain referent and lineage while the current occurrence owns motion. This
+tranche is recommended pending explicit approval; it is not another
+mathematical family and does not alter the accepted family order.
+
 ## Why This Order
 
 - Exponential duality and roots extend existing equation evidence while adding
@@ -84,6 +143,12 @@ scene.
 - Graph3D adds camera/model separation, resource ownership, fallback parity,
   and semantic scene generation. Its higher cost justifies placing it after
   three cheaper foundational packets, not deferring it indefinitely.
+- Differentiation and integration add operator application, variable and
+  measure binding, rule selection, and a bridge between symbolic operations
+  and later geometric meaning.
+- A state-retention projection is useful only if it reuses the same verified
+  transition; separate handwritten "teaching equations" would recreate the
+  duplication and identity problems the narrow core removed.
 
 ## Deferred Work
 
@@ -96,9 +161,8 @@ scene.
   but existing economics and physics callers already prove the Graph2D host,
   lifecycle, shared clock, and responsive surface. It no longer precedes the
   more foundational representational gaps above.
-- Broad matrix generation, integral-specific transformations, geometric
-  dissection, networks, and additional programming languages remain behind the
-  five packets above.
+- Broad matrix generation, geometric dissection, networks, and additional
+  programming languages remain behind the six packets above.
 - Learner layout, curriculum, SRS, and public-product expansion remain frozen
   pending external educator evidence.
 

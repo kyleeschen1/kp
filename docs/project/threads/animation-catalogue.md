@@ -2,7 +2,8 @@
 
 Status: active
 Last Updated: 2026-08-20
-Current Next Action: propose one exponential-duality exemplar,
+Current Next Action: the family order is accepted. Propose one
+exponential-duality exemplar,
 `b^(x + y) → b^x b^y`, using the shared homomorphism law and a Native KaTeX
 power-application realization. Preserve exponent operands and semantic roles;
 keep base/wrapper successors, connector transformation, geometry, and timing
@@ -11,10 +12,13 @@ difference-to-quotient pressure caller.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.
-The revised proposed packets are exponential duality, root inversion,
-TypeScript/Python frontend closure, finite sum/product binders, and a bounded
-Graph3D semantic scene proof. Graph2D function translation remains valuable
-but no longer leads the foundational sequence. See
+The accepted packets are exponential duality, root inversion,
+TypeScript/Python frontend closure, finite sum/product binders, a bounded
+Graph3D semantic scene proof, and distinct differentiation/integration
+operator coverage. A persistent equivalence/derivation projection tranche is
+recommended after exponent/root pressure but still awaits approval. Graph2D
+function translation remains valuable but no longer leads the foundational
+sequence. See
 `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
 
 ## Goal

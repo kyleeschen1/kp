@@ -206,21 +206,27 @@ Only this repository sequence is active:
    promotion candidates. Carrier-preserving simplification remains canonical
    when nominal evidence proves that one identity carrier survives. See
    `decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md`.
-28. **Prudent family breadth cadence:** accepted goal, with the exact sequence
-   awaiting approval. The recommended cadence advances new families through
+28. **Prudent family breadth cadence:** accepted, including the revised family
+   order. The cadence advances new families through
    one reversible exemplar and human checkpoint, followed by one structurally
    different caller and narrow promotion. Historical catalogue migration is
    not a prerequisite. See
    `decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
-29. **Exponential/logarithmic duality:** revised recommendation pending
-   approval. Build one `b^(x + y) → b^x b^y` exemplar through a shared
+29. **Exponential/logarithmic duality:** accepted next family. Build one
+   `b^(x + y) → b^x b^y` exemplar through a shared
    homomorphism law and a Native KaTeX power-application realization; then
    pressure it with difference-to-quotient before narrow promotion.
-30. **Proposed subsequent family packets:** root inversion with explicit branch
+30. **Accepted subsequent family packets:** root inversion with explicit branch
    and domain truth; existing TypeScript/Python refactors through domain-owned
-   frontends; finite summation/product binder infrastructure; then one bounded
-   Graph3D semantic transformation. Graph2D function translation and fraction
+   frontends; finite summation/product binder infrastructure; one bounded
+   Graph3D semantic transformation; then distinct differentiation and
+   integration operator coverage. Graph2D function translation and fraction
    structural pressure are deferred and no longer block foundational breadth.
+31. **Persistent equivalence and derivation projection:** recommended
+   cross-family tranche after exponential/root pressure, pending explicit
+   approval. Project the same verified transitions as replacement,
+   side-by-side equivalence, or bounded derivation history; do not fork
+   semantic operations, motif recipes, or paint-carrier identity.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -232,10 +238,10 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; prove exponential duality, then root branching, before binder/large-operator work. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; prove exponential duality, then root branching; keep semantic operation, motif recipe, and state-retention projection distinct. |
 | Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
 | Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | Close TypeScript and Python generation frontends after the exponent/root packets without changing approved choreography. |
-| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek. |
+| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek; calculus operator coverage follows as a distinct packet. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |

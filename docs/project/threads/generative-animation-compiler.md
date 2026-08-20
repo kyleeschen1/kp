@@ -2,12 +2,15 @@
 
 Status: supporting
 Last Updated: 2026-08-20
-Current Next Action: support the active Catalogue proposal for exponential
+Current Next Action: support the accepted Catalogue order: exponential
 homomorphism duality and root branching, then close TypeScript/Python generation
-frontends, binders/large operators, and one bounded Graph3D frontend in that
-order. Graph2D function translation and fraction structural pressure are
-deferred. Models retain semantic-choice authority only; geometry, timing, and
-renderer policy remain code-owned.
+frontends, binders/large operators, one bounded Graph3D frontend, and distinct
+differentiation/integration operator coverage. Keep semantic operations, motif
+recipes, and state-retention projections separate. A persistent
+equivalence/derivation projection tranche is recommended after root pressure
+but remains pending approval. Graph2D function translation and fraction
+structural pressure are deferred. Models retain semantic-choice authority only;
+geometry, timing, and renderer policy remain code-owned.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.

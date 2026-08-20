@@ -1,6 +1,6 @@
 # Prudent Animation-Family Next Loops Review
 
-Status: revised recommendation pending approval
+Status: family order accepted; persistent-state projection recommended pending approval
 Reviewed: 2026-08-20
 Decision: `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`
 
@@ -29,6 +29,8 @@ speculative.
 | Existing TypeScript/Python refactors through domain frontends | 5 | 4 | 5 | 3 | 3 | Third family packet |
 | Summation/product binder foundation | 5 | 5 | 5 | 2 | 4 | Fourth family packet |
 | Bounded Graph3D semantic transformation | 4 | 5 | 5 | 2 | 5 | Fifth family packet |
+| Differentiation and integration operator coverage | 5 | 5 | 5 | 2 | 4 | Sixth family packet; keep the two operations distinct |
+| Persistent equivalence and derivation projection | 5 | 5 | 5 | 3 | 3 | Orthogonal tranche after exponent/root pressure |
 | Graph2D horizontal function translation | 4 | 4 | 4 | 4 | 2 | Valuable later; not a foundational runtime gap |
 | Fraction structural-pressure repair | 4 | 4 | 4 | 3 | 3 | Defer; no longer a breadth gate |
 | Geometric dissection and rearrangement | 3 | 5 | 5 | 3 | 3 | Strong fourth/fifth packet |
@@ -81,10 +83,17 @@ optics remain language-owned.
 ## Cadence After These Six
 
 Loops 7–8 establish finite summation and pressure the binder seam with finite
-product. Integral notation follows as its own semantic family. Loops 9–10 then
-build and pressure one bounded Graph3D rotation or projection. Re-rank matrix,
-geometric dissection, Graph2D function transformation, and the
-difference-quotient/tangent bridge afterward.
+product. Loops 9–10 build and pressure one bounded Graph3D rotation or
+projection. The sixth family packet then gives differentiation and integration
+separate exemplar/pressure checkpoints while reusing only proved binder and
+operator infrastructure. Re-rank matrix, geometric dissection, Graph2D
+function transformation, and the difference-quotient/tangent bridge afterward.
+
+An orthogonal persistent-state tranche is recommended after exponential and
+root pressure and before broad family expansion. It should project existing
+semantic transitions as replacement, side-by-side equivalence, or bounded
+derivation history. It must not fork semantic operations, motion recipes, or
+paint-carrier identity merely to keep a historical source visible.
 
 ## Current Focus And Next Action
 
@@ -93,12 +102,14 @@ preserving the converged shared runtime and governed authoring envelope.
 
 Next action: propose the single `b^(x + y) → b^x b^y` exponential-duality
 exemplar with a canonical reference, acceptance criteria, preservation
-boundary, rollback unit, and human checkpoint. No implementation is authorized
-by this review.
+boundary, rollback unit, and human checkpoint. The family order is approved;
+the persistent-state projection tranche still awaits explicit approval. No
+implementation is authorized by this review alone.
 
 Files changed by this review: this review, its accepted direction record, the
 roadmap, and the two affected workstream headers.
 
 Stale-plan note: the fraction-pressure-next instruction and the
 punctuated-substitution promotion sequence are superseded as active gates.
-They remain retrievable diagnostic history rather than deleted work.
+They remain retrievable diagnostic history rather than deleted work. The
+earlier Graph2D-first breadth recommendation is also superseded.
