@@ -143,7 +143,8 @@
     {
       "id": "cps16",
       "title": "Freeze-approved-profile",
-      "status": "planned"
+      "summary": "Froze identity recognition as the approved canonical Native KaTeX profile without changing timings or promoting the family.",
+      "status": "complete"
     },
     {
       "id": "cps17",

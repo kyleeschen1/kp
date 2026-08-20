@@ -11,7 +11,7 @@ import {
 
 test("the candidate profile is one deeply frozen Native KaTeX tuning surface", () => {
   const profile = kpNativeKatexCarrierPreservingSimplificationOpticalProfile;
-  assert.equal(profile.status, "provisional-human-checkpoint");
+  assert.equal(profile.status, "approved-canonical-exemplar");
   assert.equal(profile.treatment, "identity-recognition");
   assert.equal(Object.isFrozen(profile), true);
   assert.equal(Object.isFrozen(profile.removedSyntaxRecognition), true);

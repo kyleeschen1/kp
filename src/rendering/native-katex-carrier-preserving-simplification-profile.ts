@@ -3,7 +3,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
     "kp.native-katex-carrier-preserving-simplification-optical-profile.v1";
   readonly id:
     "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
-  readonly status: "provisional-human-checkpoint";
+  readonly status: "approved-canonical-exemplar";
   readonly treatment: "identity-recognition";
   readonly removedSyntaxRecognition: {
     readonly start: number;
@@ -55,7 +55,9 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
       "kp.native-katex-carrier-preserving-simplification-optical-profile.v1" as const,
     id:
       "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
-    status: "provisional-human-checkpoint" as const,
+    // Visual approval freezes this Native KaTeX treatment, while the semantic
+    // family remains a candidate until the structurally different caller passes.
+    status: "approved-canonical-exemplar" as const,
     treatment: "identity-recognition" as const,
     removedSyntaxRecognition: {
       start: 0.12,

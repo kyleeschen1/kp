@@ -386,11 +386,25 @@
       "scope": "cps15 recognition checkpoint commit boundary",
       "checkedAt": "2026-08-20T00:03:55.404Z",
       "notes": "Exact staged recognition implementation and evidence have no whitespace errors; unrelated user files remain unstaged."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps16 approved profile freeze",
+      "checkedAt": "2026-08-20T00:10:28.311Z",
+      "notes": "20/20 focused contracts passed with recognition marked approved-canonical-exemplar and family promotion still withheld."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps16 frozen profile lifecycle",
+      "checkedAt": "2026-08-20T00:10:29.623Z",
+      "notes": "3/3 Chromium lifecycle scenarios passed without retuning the approved choreography."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical identity-recognition choreography explicitly approved; profile freeze and add-zero pressure are now authorized, but family promotion remains gated by cps21."
+    "summary": "Approved recognition profile is frozen; next is adapting the unchanged generated add-zero semantic caller."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
