@@ -54,6 +54,9 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly paintKind: PaintKind;
   readonly sizingMode: "rect" | "rule-length";
   readonly rect: Rect;
+  /** Unscaled measured ink used to register a material clone to its owner. */
+  readonly paintAlignmentRect?: Rect | undefined;
+  /** Post-transform visible ink used for collision and bounds truth. */
   readonly expectedPaintRect?: Rect | undefined;
   readonly opacity: number;
   readonly metricProgress?: number;
@@ -67,7 +70,10 @@ export interface KpNativeKatexSceneTrackFrameContract<
 export type KpNativeKatexPaintMeasuredSceneTrackFrameContract<
   Frame,
   Rect
-> = Frame & { readonly expectedPaintRect: Rect };
+> = Frame & {
+  readonly paintAlignmentRect: Rect;
+  readonly expectedPaintRect: Rect;
+};
 
 export interface KpNativeKatexSceneOwnershipFrameContract<Frame> {
   readonly visualOwner: "source-native" | "material-scene" | "target-native";

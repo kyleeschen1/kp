@@ -50,7 +50,7 @@ export function sampleKpNativeKatexSceneTrackFrames(
     ) {
       throw new Error("Native KaTeX material scale must be finite and positive.");
     }
-    const expectedPaintRect = hasMeasuredPaint
+    const paintAlignmentRect = hasMeasuredPaint
       ? projectKpEquationMotionTrackPaintRect(
           sceneTrack,
           rect,
@@ -67,15 +67,16 @@ export function sampleKpNativeKatexSceneTrackFrames(
       rect,
       ...(sceneTrack.motionMetrics ? { metricProgress: paintProgress } : {}),
       ...(materialScale === undefined ? {} : { materialScale }),
-      ...(expectedPaintRect === undefined
+      ...(paintAlignmentRect === undefined
         ? {}
         : {
-            // The compositor scales paint around the owner center. Collision
-            // certification must inspect that same visible ink, not the
-            // unscaled native box that the material no longer occupies.
+            // Registration needs unscaled ink while collision certification
+            // needs the post-transform extent. Keeping both prevents a
+            // shrinking collision rect from translating the clone itself.
+            paintAlignmentRect: Object.freeze(paintAlignmentRect),
             expectedPaintRect: Object.freeze(materialScale === undefined
-              ? expectedPaintRect
-              : scaleRectAroundCenter(expectedPaintRect, materialScale))
+              ? paintAlignmentRect
+              : scaleRectAroundCenter(paintAlignmentRect, materialScale))
           }),
       ...(sceneTrack.intentionalContactGroupId === undefined
         ? {}

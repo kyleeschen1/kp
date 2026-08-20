@@ -401,6 +401,7 @@ function ownerFrame(input: {
       width: input.geometry.atom.rect.width,
       height: input.geometry.atom.rect.height
     }),
+    paintAlignmentRect: input.desiredPaintRect,
     expectedPaintRect: input.desiredPaintRect,
     opacity: input.opacity,
     transform: "none",

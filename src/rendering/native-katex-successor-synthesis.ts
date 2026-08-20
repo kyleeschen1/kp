@@ -658,6 +658,8 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
     readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
     readonly sizingMode: "rect" | "rule-length";
     readonly rect: KpEquationMaterialLayerOwnerFrame["rect"];
+    readonly paintAlignmentRect?:
+      KpEquationMaterialLayerOwnerFrame["paintAlignmentRect"];
     readonly expectedPaintRect:
       NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
     readonly opacity: number;
@@ -682,6 +684,15 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
       if (atom === undefined) {
         throw new Error(`Unknown scene material atom ${frame.visualAtomId}.`);
       }
+      if (
+        frame.materialScale !== undefined &&
+        frame.paintAlignmentRect === undefined
+      ) {
+        throw new Error(
+          `Scaled scene material ${frame.trackId} requires unscaled paint ` +
+          "alignment geometry."
+        );
+      }
       return {
         ownerId: `native-scene-owner.${frame.trackId}`,
         sourceElement: atom.sourceElement,
@@ -697,7 +708,11 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         // measured-paint alignment; paths keep their exact owner rectangle.
         ...(frame.paintKind === "path"
           ? {}
-          : { expectedPaintRect: frame.expectedPaintRect }),
+          : {
+              paintAlignmentRect:
+                frame.paintAlignmentRect ?? frame.expectedPaintRect,
+              expectedPaintRect: frame.expectedPaintRect
+            }),
         opacity: input.visible ? frame.opacity : 0,
         // Scale paint on its stationary measured owner. This keeps the ink
         // center fixed while an operation-specific adapter contracts a glyph.
@@ -939,6 +954,9 @@ function ownerFrames(input: {
   const groupCenter = center(input.annotation.rect);
   return input.annotation.atoms.map((atom) => {
     const atomCenter = center(atom.rect);
+    const paintAlignmentRect = atom.paintKind === "path"
+      ? undefined
+      : successorAtomPaintRect(input.annotation.stage, atom);
     const scaledCenter = {
       x: groupCenter.x + (atomCenter.x - groupCenter.x) * input.pose.scale,
       y: groupCenter.y + (atomCenter.y - groupCenter.y) * input.pose.scale
@@ -967,13 +985,11 @@ function ownerFrames(input: {
         width: atom.rect.width,
         height: atom.rect.height
       }),
-      ...(atom.paintKind === "path"
+      ...(paintAlignmentRect === undefined
         ? {}
         : {
-            expectedPaintRect: successorAtomPaintRect(
-              input.annotation.stage,
-              atom
-            )
+            paintAlignmentRect,
+            expectedPaintRect: paintAlignmentRect
           }),
       opacity: input.pose.opacity,
       transform:

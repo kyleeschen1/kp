@@ -1,4 +1,7 @@
 import { expect, test, type Locator } from "@playwright/test";
+import {
+  measureVisibleKpMaterialInkGeometry
+} from "./support/native-katex-material-ink-geometry.ts";
 
 const animationId = "animation.algebra.log-product.product-to-sum";
 const multiFactorAnimationId =
@@ -200,9 +203,9 @@ test("binary handoff contracts operators through its match-dissolve", async ({
     expect(samples[1]!.width).toBeLessThan(samples[2]!.width);
     expect(samples[2]!.width).toBeGreaterThan(samples[0]!.width * 3);
   }
-  await seek.fill("0.53");
+  await seekAndWait(stage, seek, 0.5);
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(0);
-  await seek.fill("0.58");
+  await seekAndWait(stage, seek, 0.58);
   expect(await visibleMaterialCount(stage, ["target.sum.plus"])).toBe(1);
   const connectorEntry = await at(0.55, ["target.sum.plus"]);
   const connectorMidpoint = await at(0.6, ["target.sum.plus"]);
@@ -338,13 +341,13 @@ test("three-factor product uses the same lazy surface and deterministic clock", 
     "target.xyz.sum.plus.0",
     "target.xyz.sum.plus.1"
   ] as const;
-  await seek.fill("0.53");
+  await seekAndWait(stage, seek, 0.5);
   expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(0);
-  await seek.fill("0.58");
+  await seekAndWait(stage, seek, 0.58);
   expect(await visibleMaterialCount(stage, multiFactorConnectorIds)).toBe(2);
-  await seek.fill("0.53");
+  await seekAndWait(stage, seek, 0.5);
   expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(0);
-  await seek.fill("0.58");
+  await seekAndWait(stage, seek, 0.58);
   expect(await visibleMaterialCount(stage, multiFactorOperatorIds)).toBe(3);
   const operatorEntry = await at(0.55, multiFactorOperatorIds);
   const operatorMidpoint = await at(0.6, multiFactorOperatorIds);
@@ -480,34 +483,21 @@ async function visibleMaterialCount(
   entityIds);
 }
 
+async function seekAndWait(
+  stage: Locator,
+  seek: Locator,
+  progress: number
+): Promise<void> {
+  await seek.fill(String(progress));
+  await expect(stage).toHaveAttribute(
+    "data-kp-log-product-progress",
+    String(progress)
+  );
+}
+
 async function visibleMaterialGeometry(
   stage: Locator,
   entityIds: readonly string[]
 ): Promise<Record<string, { left: number; top: number; width: number; height: number }>> {
-  return stage.evaluate((root, expectedEntityIds) => {
-    const result: Record<
-      string,
-      { left: number; top: number; width: number; height: number }
-    > = {};
-    for (const entityId of expectedEntityIds) {
-      const owners = [...root.querySelectorAll<HTMLElement>(
-        `[data-kp-equation-material-semantic-entity-id="${CSS.escape(entityId)}"]`
-      )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0.01);
-      if (owners.length === 0) {
-        throw new Error(`No visible material paint for ${entityId}.`);
-      }
-      const rects = owners.map((owner) => owner.getBoundingClientRect());
-      const left = Math.min(...rects.map((rect) => rect.left));
-      const top = Math.min(...rects.map((rect) => rect.top));
-      const right = Math.max(...rects.map((rect) => rect.right));
-      const bottom = Math.max(...rects.map((rect) => rect.bottom));
-      result[entityId] = {
-        left,
-        top,
-        width: right - left,
-        height: bottom - top
-      };
-    }
-    return result;
-  }, entityIds);
+  return stage.evaluate(measureVisibleKpMaterialInkGeometry, entityIds);
 }

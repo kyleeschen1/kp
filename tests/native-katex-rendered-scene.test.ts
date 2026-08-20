@@ -343,7 +343,35 @@ test("structural path owners preserve their rectangle without text inset alignme
 
   assert.equal(owners[0]?.fragmentRole, "path:rect");
   assert.equal(owners[0]?.expectedPaintRect, undefined);
+  assert.equal(owners[0]?.paintAlignmentRect, undefined);
   assert.equal(owners[1]?.expectedPaintRect, glyph.rect);
+  assert.equal(owners[1]?.paintAlignmentRect, glyph.rect);
+});
+
+test("scaled glyph owners require separate unscaled alignment geometry", () => {
+  const glyph = atom("atom.source.scaled-glyph");
+  assert.throws(() => composeKpNativeKatexSceneMaterialOwners({
+    frames: [{
+      trackId: "track.scaled-glyph",
+      componentId: "component.scaled-glyph",
+      visualAtomId: glyph.id,
+      paintKind: "glyph",
+      sizingMode: "rect",
+      rect: glyph.rect,
+      expectedPaintRect: {
+        left: glyph.rect.left + glyph.rect.width / 4,
+        top: glyph.rect.top + glyph.rect.height / 4,
+        width: glyph.rect.width / 2,
+        height: glyph.rect.height / 2
+      },
+      opacity: 1,
+      materialScale: 0.5
+    }],
+    sourceAtoms: new Map([[glyph.id, glyph]]),
+    targetAtoms: new Map(),
+    supplementalOwners: [],
+    visible: true
+  }), /requires unscaled paint alignment geometry/);
 });
 
 function handoffObservation(
@@ -1136,6 +1164,105 @@ test("glyph paint frames preserve contact with uniform font scaling", () => {
       scaleX: 1.5,
       scaleY: 1.5
     }
+  );
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 0.1, [{
+      ...sourceFrame[0]!,
+      metricProgress: 0.5,
+      materialScale: 0.5,
+      paintAlignmentRect: {
+        left: 10.75,
+        top: 21.5,
+        width: 9,
+        height: 18
+      },
+      expectedPaintRect: {
+        left: 13,
+        top: 26,
+        width: 4.5,
+        height: 9
+      }
+    }]).entries[0],
+    {
+      id: "entry.paint",
+      translateX: -17.375,
+      translateY: 15.25,
+      scaleX: 0.75,
+      scaleY: 0.75,
+      expectedPaintRect: {
+        left: 13,
+        top: 26,
+        width: 4.5,
+        height: 9
+      }
+    }
+  );
+});
+
+test("introduced target glyphs compose motif scale around measured ink", () => {
+  const plan = {
+    kind: "native-katex-typography-style-plan" as const,
+    lifecycle: "renderer-session" as const,
+    model: "target-style-reverse-flip" as const,
+    entries: [{
+      id: "entry.introduced",
+      materialOwnerId: "native-scene-owner.track.introduced",
+      componentId: "component.introduced",
+      atomLifecycle: "introduce" as const,
+      targetPaintAtomId: "target.introduced",
+      paintKind: "glyph" as const,
+      paintRealization: "realize-target-glyph" as const,
+      model: "target-style-reverse-flip" as const,
+      targetRect: { left: 30, top: 10, width: 6, height: 12 },
+      targetGlyphPaintFrame: {
+        targetInsetX: 0.5,
+        targetInsetY: 1,
+        targetWidth: 5,
+        targetHeight: 10
+      },
+      inverseTranslateX: 0,
+      inverseTranslateY: 0,
+      inverseScaleX: 1,
+      inverseScaleY: 1,
+      targetStyleFingerprint: "style"
+    }]
+  };
+  const sceneFrame = {
+    trackId: "track.introduced",
+    componentId: "component.introduced",
+    lifecycle: "introduce" as const,
+    visualAtomId: "target.introduced",
+    paintKind: "glyph" as const,
+    sizingMode: "rect" as const,
+    rect: { left: 30, top: 10, width: 6, height: 12 },
+    paintAlignmentRect: { left: 30.5, top: 11, width: 5, height: 10 },
+    expectedPaintRect: { left: 31.75, top: 13.5, width: 2.5, height: 5 },
+    materialScale: 0.5,
+    opacity: 1
+  };
+
+  assert.deepEqual(
+    sampleKpNativeKatexTypographyStylePlan(plan, 0.5, [sceneFrame])
+      .entries[0],
+    {
+      id: "entry.introduced",
+      translateX: 1.5,
+      translateY: 3,
+      scaleX: 0.5,
+      scaleY: 0.5,
+      expectedPaintRect: sceneFrame.expectedPaintRect
+    }
+  );
+  const {
+    targetGlyphPaintFrame: _targetPaint,
+    ...withoutTargetPaint
+  } = plan.entries[0]!;
+  assert.throws(
+    () => sampleKpNativeKatexTypographyStylePlan({
+      ...plan,
+      entries: [withoutTargetPaint]
+    }, 0.5, [sceneFrame]),
+    /requires measured target ink/
   );
 });
 
@@ -2576,6 +2703,7 @@ test("one atom-transit session carries the complete structural cohort", () => {
     true
   );
   assert.deepEqual(startFrames.map(({
+    paintAlignmentRect: _paintAlignmentRect,
     expectedPaintRect: _expectedPaintRect,
     ...frame
   }) => frame), tracks.map((track) => ({

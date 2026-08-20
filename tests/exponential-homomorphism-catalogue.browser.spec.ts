@@ -1,4 +1,8 @@
 import { expect, test, type Locator } from "@playwright/test";
+import {
+  measureVisibleKpMaterialInkGeometry,
+  type KpVisibleMaterialInkGeometry
+} from "./support/native-katex-material-ink-geometry.ts";
 
 const animationId =
   "animation.algebra.exponential-homomorphism.sum-to-product";
@@ -79,6 +83,64 @@ test("exponential homomorphism preserves endpoints, seek, rewind, and resize", a
   expect(pageErrors).toEqual([]);
 });
 
+test("scaled glyphs contract and expand around their measured ink centers", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-exponential-homomorphism-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expectReady(stage);
+
+  const sourceEntityIds = [
+    "occurrence.exponential.sum-to-product.xy.target.base.0",
+    "occurrence.exponential.sum-to-product.xy.source.combination-connector.0"
+  ] as const;
+  const sourceSamples = [];
+  for (const progress of [0.18, 0.23, 0.28]) {
+    await seek.fill(String(progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-exponential-homomorphism-progress",
+      String(progress)
+    );
+    sourceSamples.push(
+      await visibleMaterialInkGeometry(stage, sourceEntityIds)
+    );
+  }
+  for (const entityId of sourceEntityIds) {
+    const geometries = sourceSamples.map((sample) => sample[entityId]!);
+    expect(geometries[0]!.width).toBeGreaterThan(geometries[1]!.width);
+    expect(geometries[1]!.width).toBeGreaterThan(geometries[2]!.width);
+    expectStationaryInkCenter(geometries);
+  }
+
+  const targetEntityIds = [
+    "occurrence.exponential.sum-to-product.xy.target.base.0",
+    "occurrence.exponential.sum-to-product.xy.target.base.1"
+  ] as const;
+  const targetSamples = [];
+  for (const progress of [0.57, 0.6, 0.64]) {
+    await seek.fill(String(progress));
+    await expect(stage).toHaveAttribute(
+      "data-kp-exponential-homomorphism-progress",
+      String(progress)
+    );
+    targetSamples.push(
+      await visibleMaterialInkGeometry(stage, targetEntityIds)
+    );
+  }
+  for (const entityId of targetEntityIds) {
+    const geometries = targetSamples.map((sample) => sample[entityId]!);
+    expect(geometries[0]!.width).toBeLessThan(geometries[1]!.width);
+    expect(geometries[1]!.width).toBeLessThan(geometries[2]!.width);
+    expectStationaryInkCenter(geometries);
+  }
+});
+
 test("exponential homomorphism keeps one accessible endpoint under reduced motion", async ({
   page
 }) => {
@@ -157,4 +219,25 @@ async function movingPaintSnapshot(stage: Locator) {
       transform: owner.style.transform
     })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
   );
+}
+
+function expectStationaryInkCenter(geometries: readonly {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}[]): void {
+  const centerXs = geometries.map(({ left, width }) => left + width / 2);
+  const centerYs = geometries.map(({ top, height }) => top + height / 2);
+  expect(Math.max(...centerXs) - Math.min(...centerXs))
+    .toBeLessThanOrEqual(0.75);
+  expect(Math.max(...centerYs) - Math.min(...centerYs))
+    .toBeLessThanOrEqual(0.75);
+}
+
+async function visibleMaterialInkGeometry(
+  stage: Locator,
+  entityIds: readonly string[]
+): Promise<Record<string, KpVisibleMaterialInkGeometry>> {
+  return stage.evaluate(measureVisibleKpMaterialInkGeometry, entityIds);
 }

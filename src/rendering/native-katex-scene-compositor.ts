@@ -261,6 +261,13 @@ interface KpNativeKatexTypographyStylePlanEntryBase {
   readonly targetStyleFingerprint: string;
 }
 
+interface KpNativeKatexTargetGlyphPaintFrame {
+  readonly targetInsetX: number;
+  readonly targetInsetY: number;
+  readonly targetWidth: number;
+  readonly targetHeight: number;
+}
+
 export type KpNativeKatexTypographyStylePlanEntry =
   KpNativeKatexTypographyStylePlanEntryBase & (
     | {
@@ -277,6 +284,8 @@ export type KpNativeKatexTypographyStylePlanEntry =
         readonly targetInsetY: number;
         readonly sourceScale: number;
       } | undefined;
+      readonly targetGlyphPaintFrame?:
+        KpNativeKatexTargetGlyphPaintFrame | undefined;
     }
     | {
       readonly paintKind: Exclude<
@@ -796,6 +805,9 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
       const glyphPaintFrame = source === undefined
         ? undefined
         : createGlyphPaintFrame(input.telemetry.stage, source, native);
+      const targetGlyphPaintFrame = source === undefined
+        ? createTargetGlyphPaintFrame(input.telemetry.stage, native)
+        : undefined;
       const paintRealization = selectKpNativeKatexGlyphPaintRealization({
         source,
         target: native,
@@ -807,7 +819,10 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
         paintRealization,
         ...(glyphPaintFrame === undefined
           ? {}
-          : { glyphPaintFrame })
+          : { glyphPaintFrame }),
+        ...(targetGlyphPaintFrame === undefined
+          ? {}
+          : { targetGlyphPaintFrame })
       });
     }
   );
@@ -881,17 +896,21 @@ export function sampleKpNativeKatexTypographyStylePlan(
       const eased = smoothstep(sceneFrame?.metricProgress ?? bounded);
       const paint = entry.glyphPaintFrame;
       if (paint !== undefined) {
-        const scale = lerp(paint.sourceScale, 1, eased);
+        const typographyScale = lerp(paint.sourceScale, 1, eased);
+        // Typography FLIP and motif-local contraction share one CSS transform
+        // owner. Compose their scales and solve translation from the final
+        // visible ink rect so neither authority silently overwrites the other.
+        const scale = typographyScale * (sceneFrame?.materialScale ?? 1);
         const sampledLeft =
           rect?.left ?? lerp(paint.sourceLeft, entry.targetRect.left, eased);
         const sampledTop =
           rect?.top ?? lerp(paint.sourceTop, entry.targetRect.top, eased);
         const desiredPaintLeft =
-          sampledLeft +
-          lerp(paint.sourceInsetX, paint.targetInsetX, eased);
+          sceneFrame?.expectedPaintRect?.left ??
+          sampledLeft + lerp(paint.sourceInsetX, paint.targetInsetX, eased);
         const desiredPaintTop =
-          sampledTop +
-          lerp(paint.sourceInsetY, paint.targetInsetY, eased);
+          sceneFrame?.expectedPaintRect?.top ??
+          sampledTop + lerp(paint.sourceInsetY, paint.targetInsetY, eased);
         return Object.freeze({
           id: entry.id,
           translateX:
@@ -910,20 +929,49 @@ export function sampleKpNativeKatexTypographyStylePlan(
             : { expectedPaintRect: sceneFrame.expectedPaintRect })
         });
       }
+      const materialScale = entry.paintKind === "glyph"
+        ? sceneFrame?.materialScale ?? 1
+        : 1;
+      const baseScaleX = rect === undefined
+        ? lerp(entry.inverseScaleX, 1, eased)
+        : safeScale(rect.width, entry.targetRect.width);
+      const baseScaleY = rect === undefined
+        ? lerp(entry.inverseScaleY, 1, eased)
+        : safeScale(rect.height, entry.targetRect.height);
+      const scaleX = baseScaleX * materialScale;
+      const scaleY = baseScaleY * materialScale;
+      const targetPaint = entry.paintKind === "glyph"
+        ? entry.targetGlyphPaintFrame
+        : undefined;
+      if (
+        materialScale !== 1 &&
+        entry.paintKind === "glyph" &&
+        targetPaint === undefined
+      ) {
+        throw new Error(
+          `${entry.id} requires measured target ink to compose material scale.`
+        );
+      }
+      const expectedPaint = sceneFrame?.expectedPaintRect;
       return Object.freeze({
         id: entry.id,
-        translateX: rect === undefined
-          ? lerp(entry.inverseTranslateX, 0, eased)
-          : rect.left - entry.targetRect.left,
-        translateY: rect === undefined
-          ? lerp(entry.inverseTranslateY, 0, eased)
-          : rect.top - entry.targetRect.top,
-        scaleX: rect === undefined
-          ? lerp(entry.inverseScaleX, 1, eased)
-          : safeScale(rect.width, entry.targetRect.width),
-        scaleY: rect === undefined
-          ? lerp(entry.inverseScaleY, 1, eased)
-          : safeScale(rect.height, entry.targetRect.height)
+        translateX: expectedPaint !== undefined && targetPaint !== undefined
+          ? expectedPaint.left - entry.targetRect.left -
+            targetPaint.targetInsetX * scaleX
+          : rect === undefined
+            ? lerp(entry.inverseTranslateX, 0, eased)
+            : rect.left - entry.targetRect.left,
+        translateY: expectedPaint !== undefined && targetPaint !== undefined
+          ? expectedPaint.top - entry.targetRect.top -
+            targetPaint.targetInsetY * scaleY
+          : rect === undefined
+            ? lerp(entry.inverseTranslateY, 0, eased)
+            : rect.top - entry.targetRect.top,
+        scaleX,
+        scaleY,
+        ...(expectedPaint === undefined
+          ? {}
+          : { expectedPaintRect: expectedPaint })
       });
     }))
   });
@@ -1980,6 +2028,27 @@ function createGlyphPaintFrame(
   });
 }
 
+function createTargetGlyphPaintFrame(
+  stage: HTMLElement,
+  target: KpNativeKatexHandoffTelemetry["observations"][number]
+): KpNativeKatexTargetGlyphPaintFrame | undefined {
+  if (
+    typeof target.element.ownerDocument.createRange !== "function" ||
+    typeof target.element.getBoundingClientRect !== "function"
+  ) {
+    // Headless contract fixtures may prove typography without a paint
+    // backend. A scaled runtime frame will still fail closed in the sampler.
+    return undefined;
+  }
+  const paint = measureKpNativeKatexTextInkRect(stage, target.element);
+  return Object.freeze({
+    targetInsetX: paint.left - target.rect.left,
+    targetInsetY: paint.top - target.rect.top,
+    targetWidth: paint.width,
+    targetHeight: paint.height
+  });
+}
+
 function fontMetricBaseline(
   element: HTMLElement,
   computed: CSSStyleDeclaration,
@@ -2263,6 +2332,13 @@ function freezeTypographyStylePlanEntry(
   return Object.freeze({
     ...entry,
     targetRect: Object.freeze({ ...entry.targetRect }),
+    ...(entry.targetGlyphPaintFrame === undefined
+      ? {}
+      : {
+          targetGlyphPaintFrame: Object.freeze({
+            ...entry.targetGlyphPaintFrame
+          })
+        }),
     ...(entry.glyphPaintFrame === undefined
       ? {}
       : { glyphPaintFrame: Object.freeze({ ...entry.glyphPaintFrame }) })

@@ -100,6 +100,7 @@ export function syncKpEquationMaterialLayer(input: {
     setStyle(owner.style, "height", `${frame.rect.height}px`);
     setStyle(owner.style, "opacity", String(frame.opacity));
     setStyle(owner.style, "transform", frame.transform);
+    setStyle(owner.style, "transformOrigin", "center center");
     setStyle(owner.style, "filter", frame.filter ?? "none");
     setOptionalDataset(
       owner,
@@ -148,7 +149,17 @@ export function syncKpEquationMaterialLayer(input: {
       "kpEquationMaterialFragmentRole",
       frame.fragmentRole
     );
-    if (frame.expectedPaintRect === undefined || visual === null) {
+    if (
+      (frame.paintAlignmentRect === undefined) !==
+        (frame.expectedPaintRect === undefined)
+    ) {
+      throw new Error(
+        `Material owner ${frame.ownerId} must provide unscaled alignment and ` +
+        "post-transform paint geometry together."
+      );
+    }
+    const paintAlignmentRect = frame.paintAlignmentRect;
+    if (paintAlignmentRect === undefined || visual === null) {
       for (const key of [
         "kpEquationMaterialPaintAlignment",
         "kpEquationMaterialPaintAlignmentKey",
@@ -164,8 +175,8 @@ export function syncKpEquationMaterialLayer(input: {
         owner.dataset["kpEquationMaterialVisualRevision"],
         frame.rect.width,
         frame.rect.height,
-        frame.expectedPaintRect.width,
-        frame.expectedPaintRect.height
+        paintAlignmentRect.width,
+        paintAlignmentRect.height
       ].join(":");
       if (
         owner.dataset["kpEquationMaterialPaintAlignmentKey"] !== alignmentKey
@@ -197,7 +208,7 @@ export function syncKpEquationMaterialLayer(input: {
           );
         }
         const paintReference = frame.fragmentRole?.startsWith("rule:") === true
-          ? frame.expectedPaintRect
+          ? paintAlignmentRect
           : nativePaint;
         const widthResidual = Math.abs(
           measured.width - paintReference.width
@@ -225,20 +236,30 @@ export function syncKpEquationMaterialLayer(input: {
           String(measured.top - frame.rect.top)
         );
       }
-      // Clone-internal KaTeX offsets can differ from the native wrapper even
-      // when both outer boxes agree. Preserve that inset while the expected
-      // native paint inset changes across endpoints.
+      // Register the unscaled clone before applying its material transform.
+      // Post-scale collision geometry is a different authority and must never
+      // translate the owner as it contracts.
       const correctionX =
-        frame.expectedPaintRect.left -
+        paintAlignmentRect.left -
         frame.rect.left -
         Number(owner.dataset["kpEquationMaterialPaintInsetX"]);
       const correctionY =
-        frame.expectedPaintRect.top -
+        paintAlignmentRect.top -
         frame.rect.top -
         Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
-      setStyle(owner.style, "left", `${frame.rect.left + correctionX}px`);
-      setStyle(owner.style, "top", `${frame.rect.top + correctionY}px`);
-      const expected = frame.expectedPaintRect;
+      const ownerLeft = frame.rect.left + correctionX;
+      const ownerTop = frame.rect.top + correctionY;
+      setStyle(owner.style, "left", `${ownerLeft}px`);
+      setStyle(owner.style, "top", `${ownerTop}px`);
+      // KaTeX wrapper centers are not reliable ink centers. Scaling around the
+      // measured paint pivot prevents asymmetric glyphs from drifting.
+      setStyle(
+        owner.style,
+        "transformOrigin",
+        `${paintAlignmentRect.left + paintAlignmentRect.width / 2 - ownerLeft}px ` +
+        `${paintAlignmentRect.top + paintAlignmentRect.height / 2 - ownerTop}px`
+      );
+      const expected = frame.expectedPaintRect ?? paintAlignmentRect;
       for (const [key, value] of [
         ["kpEquationMaterialExpectedPaintInsetX", expected.left - frame.rect.left],
         ["kpEquationMaterialExpectedPaintInsetY", expected.top - frame.rect.top],

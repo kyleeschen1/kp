@@ -172,14 +172,24 @@ test("compressed paint geometry, rather than its native box, owns collision trut
   const frame = frameFor(bases, visibleSource.id, 0.23);
   const nativePaint = visibleSource.startPaintRect;
   assert.ok(frame.materialScale! < 1);
+  assert.equal(frame.paintAlignmentRect.width, nativePaint.width);
+  assert.equal(frame.paintAlignmentRect.height, nativePaint.height);
   assert.ok(frame.expectedPaintRect.width < nativePaint.width);
   assert.ok(frame.expectedPaintRect.height < nativePaint.height);
   assert.ok(Math.abs(
     frame.expectedPaintRect.left + frame.expectedPaintRect.width / 2 -
+      (frame.paintAlignmentRect.left + frame.paintAlignmentRect.width / 2)
+  ) < Number.EPSILON * 32);
+  assert.ok(Math.abs(
+    frame.paintAlignmentRect.left + frame.paintAlignmentRect.width / 2 -
       (frame.rect.left + frame.rect.width / 2)
   ) < Number.EPSILON * 32);
   assert.ok(Math.abs(
     frame.expectedPaintRect.top + frame.expectedPaintRect.height / 2 -
+      (frame.paintAlignmentRect.top + frame.paintAlignmentRect.height / 2)
+  ) < Number.EPSILON * 32);
+  assert.ok(Math.abs(
+    frame.paintAlignmentRect.top + frame.paintAlignmentRect.height / 2 -
       (frame.rect.top + frame.rect.height / 2)
   ) < Number.EPSILON * 32);
 });
