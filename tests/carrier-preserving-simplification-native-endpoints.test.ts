@@ -38,6 +38,10 @@ import {
 import {
   verifyKpCarrierPreservingSimplificationEvidence
 } from "../src/semantic/carrier-preserving-simplification-evidence.ts";
+import {
+  createKpGeneratedAddZeroCarrierSource,
+  kpGeneratedAddZeroCarrierSelectorIds
+} from "../src/semantic/generated-add-zero-carrier-preserving-simplification.ts";
 
 const ownerDocument = { defaultView: null };
 const stage = { ownerDocument } as HTMLElement;
@@ -245,19 +249,92 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
   }), /stale-viewport/);
 });
 
+test("add-zero keeps equality context stationary while x remains the carrier", () => {
+  const recipe = addZeroRecipe();
+  const ids = kpGeneratedAddZeroCarrierSelectorIds;
+  const binding = bindKpNativeKatexCarrierPreservingSimplification({
+    recipe,
+    sourceHandle: handle("source", recipe, [
+      owner(ids.sourceCarrier,
+        { left: 10, top: 20, width: 12, height: 24 }, 39, "glyph:x"),
+      owner(ids.sourceOperator,
+        { left: 26, top: 20, width: 10, height: 24 }, 39, "glyph:plus"),
+      owner(ids.sourceIdentityWitness,
+        { left: 40, top: 20, width: 10, height: 24 }, 39, "glyph:zero"),
+      owner(ids.sourceEquals,
+        { left: 56, top: 20, width: 10, height: 24 }, 39, "glyph:equals"),
+      owner(ids.sourceFour,
+        { left: 70, top: 20, width: 10, height: 24 }, 39, "glyph:four")
+    ]),
+    targetHandle: handle("target", recipe, [
+      owner(ids.targetCarrier,
+        { left: 42, top: 20, width: 12, height: 24 }, 39, "glyph:x"),
+      owner(ids.targetEquals,
+        { left: 56, top: 20, width: 10, height: 24 }, 39, "glyph:equals"),
+      owner(ids.targetFour,
+        { left: 70, top: 20, width: 10, height: 24 }, 39, "glyph:four")
+    ])
+  });
+  const motion = compileKpNativeKatexCarrierPreservingSimplificationMotion({
+    binding
+  });
+  const contextTracks = motion.rendererPlan.tracks.filter(({ id }) =>
+    id !== motion.carrierTrackId &&
+    !motion.removedSyntaxTrackIds.includes(id)
+  );
+  assert.equal(motion.rendererPlan.tracks.length, 5);
+  assert.equal(contextTracks.length, 2);
+  assert.deepEqual(contextTracks.map(({ lifecycle }) => lifecycle), [
+    "persist",
+    "persist"
+  ]);
+  contextTracks.forEach((track) => {
+    assert.deepEqual(track.endRect, track.startRect);
+    assert.deepEqual(track.endPaintRect, track.startPaintRect);
+  });
+  const frames = sampleKpNativeKatexSceneTrackFrames(
+    motion.rendererPlan.tracks,
+    0.7,
+    false
+  );
+  for (const track of contextTracks) {
+    const frame = frames.find(({ trackId }) => trackId === track.id);
+    assert.equal(frame?.opacity, 1);
+    assert.deepEqual(frame?.rect, track.startRect);
+  }
+  assert.equal(
+    frames.find(({ trackId }) => trackId === motion.carrierTrackId)?.opacity,
+    1
+  );
+  assert.deepEqual(
+    frames.filter(({ trackId }) =>
+      motion.removedSyntaxTrackIds.includes(trackId)
+    ).map(({ opacity }) => opacity),
+    [0, 0]
+  );
+  assert.equal(
+    certifyKpNativeKatexCarrierSettlement(motion).nativeOwnerAtCompletion,
+    "target-native"
+  );
+});
+
 interface OwnerFixture {
   readonly selectorRef: string;
   readonly rect: { readonly left: number; readonly top: number;
     readonly width: number; readonly height: number };
   readonly baselineY: number;
+  readonly visualKey?: string | undefined;
 }
 
 function owner(
   selectorRef: string,
   rect: OwnerFixture["rect"],
-  baselineY: number
+  baselineY: number,
+  visualKey?: string
 ): OwnerFixture {
-  return { selectorRef, rect, baselineY };
+  return { selectorRef, rect, baselineY, ...(
+    visualKey === undefined ? {} : { visualKey }
+  ) };
 }
 
 function handle(
@@ -315,7 +392,8 @@ function atom(
     presentationGroupId: `group.${side}.${ownerFixture.selectorRef}`,
     paintKind: "glyph",
     paintMeasurement: "atomic-text",
-    visualKey: index === 0 ? "glyph:2" : `glyph:${index}`,
+    visualKey: ownerFixture.visualKey ??
+      (index === 0 ? "glyph:2" : `glyph:${index}`),
     sourceElement: unreadableElement(),
     rect: ownerFixture.rect,
     baselineY: ownerFixture.baselineY,
@@ -356,6 +434,28 @@ function canonicalRecipe(): KpCarrierPreservingSimplificationRecipe {
       family: "carrier-preserving-simplification",
       handoff: "persistent-carrier-transfer",
       transformationKind: "simplifyMultiplicativeIdentity",
+      evidence: verification.evidence
+    })
+  );
+  assert.equal(compilation.status, "compiled");
+  if (compilation.status !== "compiled") throw new Error("invalid recipe");
+  return compilation.recipe;
+}
+
+function addZeroRecipe(): KpCarrierPreservingSimplificationRecipe {
+  const source = createKpGeneratedAddZeroCarrierSource();
+  const verification = verifyKpCarrierPreservingSimplificationEvidence({
+    candidate: source.evidenceCandidate,
+    bundle: source.animation.bundle,
+    transformation: source.transformation
+  });
+  assert.equal(verification.status, "verified");
+  if (verification.status !== "verified") throw new Error("invalid fixture");
+  const compilation = compileKpCarrierPreservingSimplificationRecipe(
+    resolveKpOperationEvaluationFamilyCandidate({
+      family: "carrier-preserving-simplification",
+      handoff: "persistent-carrier-transfer",
+      transformationKind: source.transformation.transformType,
       evidence: verification.evidence
     })
   );

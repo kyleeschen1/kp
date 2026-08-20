@@ -31,7 +31,10 @@ export interface KpCarrierPreservingSimplificationCandidateProfile {
   readonly requiredEvidenceSchemaVersion:
     "kp.carrier-preserving-simplification-evidence.v1";
   readonly supportedTransformationKinds:
-    readonly ["simplifyMultiplicativeIdentity"];
+    readonly [
+      "simplifyMultiplicativeIdentity",
+      "simplify-additive-identity"
+    ];
 }
 
 export interface KpContributorFusionEvaluationFamilyProfile {
@@ -110,7 +113,8 @@ export const kpCarrierPreservingSimplificationCandidateProfile = Object.freeze({
   requiredEvidenceSchemaVersion:
     "kp.carrier-preserving-simplification-evidence.v1" as const,
   supportedTransformationKinds: Object.freeze([
-    "simplifyMultiplicativeIdentity"
+    "simplifyMultiplicativeIdentity",
+    "simplify-additive-identity"
   ] as const)
 } satisfies KpCarrierPreservingSimplificationCandidateProfile);
 

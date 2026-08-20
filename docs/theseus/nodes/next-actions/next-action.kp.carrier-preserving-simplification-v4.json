@@ -463,11 +463,39 @@
       "scope": "cps17 approved fade-only closeout",
       "checkedAt": "2026-08-20T00:35:20.877Z",
       "notes": "Validated 1030 nodes and 23622 events; cps18 is now the active continuation."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps18 add-zero semantic and motion pressure",
+      "checkedAt": "2026-08-20T00:43:22.196Z",
+      "notes": "23/23 tests passed: exact accepted draft remains unchanged, trusted adapter mints additive-identity evidence, shared recipe preserves x, +0 withdraws together, and =4 stays stationary."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "cps18 candidate family breadth",
+      "checkedAt": "2026-08-20T00:43:23.916Z",
+      "notes": "13/13 family and contributor-fusion preservation tests passed after adding the additive-identity candidate kind."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps18 add-zero carrier TypeScript graph",
+      "checkedAt": "2026-08-20T00:43:24.990Z",
+      "notes": "Trusted semantic adapter, candidate profile, recipe pressure, and renderer motion fixtures typecheck."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps18 add-zero carrier closeout",
+      "checkedAt": "2026-08-20T00:44:03.197Z",
+      "notes": "Validated 1030 nodes and 23631 events; legacy sampler disposition is next."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Human approved literal fade-only identity withdrawal for 2 × 1 → 2; second-caller pressure is authorized while family promotion remains gated by cps21."
+    "summary": "The existing generated add-zero semantics now compile through the shared carrier recipe with x continuous, +0 withdrawn as one cohort, and =4 stationary; next is evidence-backed legacy sampler disposition."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

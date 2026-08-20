@@ -51,7 +51,7 @@ test("unsupported and incompatible family requests remain typed gaps", () => {
   assert.deepEqual(
     kpCarrierPreservingSimplificationCandidateProfile
       .supportedTransformationKinds,
-    ["simplifyMultiplicativeIdentity"]
+    ["simplifyMultiplicativeIdentity", "simplify-additive-identity"]
   );
 });
 
