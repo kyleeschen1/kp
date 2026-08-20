@@ -178,6 +178,7 @@ const equationCapabilityDrafts = Object.freeze([
     "Power and exponent transformations",
     "family.equation.power-exponent.v1",
     [
+      requirement("requirement.equation.power-exponent.normalizer", "endpoint-normalizer", "normalizer.equation.power-application.v1", "Power bases, superscript regions, grouped exponent operands, and connector roles normalize while retaining authored spelling."),
       requirement("requirement.equation.power-exponent.operation", "semantic-operation", "operation.equation.power-exponent.v1", "Typed operations cover exponent absorption, lowering, expansion, and inverse relationships."),
       requirement("requirement.equation.power-exponent.recipe", "canonical-recipe", "recipe.equation.power-exponent.v1", "A canonical recipe preserves base/exponent roles through each supported rewrite."),
       requirement("requirement.equation.power-exponent.exemplar", "canonical-exemplar", "animation.algebra.log-exponent.solve-two-power-x", "The current solve example is one compound exemplar rather than family-wide proof."),

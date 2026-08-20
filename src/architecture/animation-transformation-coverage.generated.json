@@ -1057,6 +1057,14 @@
       "status": "Exemplar",
       "requirements": [
         {
+          "id": "requirement.equation.power-exponent.normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.power-application.v1",
+          "summary": "Power bases, superscript regions, grouped exponent operands, and connector roles normalize while retaining authored spelling.",
+          "status": "missing",
+          "evidenceSourceIds": []
+        },
+        {
           "id": "requirement.equation.power-exponent.operation",
           "kind": "semantic-operation",
           "authorityId": "operation.equation.power-exponent.v1",
@@ -1101,6 +1109,7 @@
       ],
       "gaps": [],
       "remainingRequirementIds": [
+        "requirement.equation.power-exponent.normalizer",
         "requirement.equation.power-exponent.operation",
         "requirement.equation.power-exponent.recipe",
         "requirement.equation.power-exponent.authoring",

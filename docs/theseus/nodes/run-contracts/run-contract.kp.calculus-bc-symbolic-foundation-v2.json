@@ -81,7 +81,8 @@
     {
       "id": "s06",
       "title": "power-application-normalizer",
-      "status": "planned"
+      "summary": "Power applications now expose typed base, superscript, payload, connector, grouping, and source-provenance roles.",
+      "status": "complete"
     },
     {
       "id": "s07",
