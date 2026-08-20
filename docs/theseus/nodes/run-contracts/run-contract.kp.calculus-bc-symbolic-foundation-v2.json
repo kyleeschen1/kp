@@ -117,7 +117,8 @@
     {
       "id": "s12",
       "title": "exemplar-preservation-gate",
-      "status": "planned"
+      "summary": "Exponential exemplar passes equation boundary and focused browser preservation gates; real KaTeX collision is modeled as a bounded payload-foreground crossing, resize/font invalidation rebuilds measured paint, and existing log-product behavior remains preserved.",
+      "status": "complete"
     },
     {
       "id": "s13",

@@ -31,6 +31,7 @@ export const kpExponentialHomomorphismTransitProfile = Object.freeze({
   sourceConnectorRelease: Object.freeze({ start: 0.06, end: 0.18 }),
   payloadTransit: Object.freeze({ start: 0.18, end: 0.66 }),
   baseFission: Object.freeze({ start: 0.28, end: 0.7 }),
+  basePayloadForegroundCrossing: Object.freeze({ start: 0.3, end: 0.62 }),
   terminalSettlementFraction: 0.04
 });
 
@@ -40,7 +41,9 @@ export interface KpExponentialHomomorphismTransitSession {
   readonly authorityId: string;
   readonly canonical: KpCanonicalNativeKatexSceneSession;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
-  readonly retire: () => void;
+  readonly retire: (
+    reason?: "surface-disposed" | "measurement-invalidated"
+  ) => void;
 }
 
 export function projectKpExponentialHomomorphismNativePaintRelations(
@@ -137,12 +140,15 @@ export function createKpExponentialHomomorphismTransitSession(input: {
       }
       return canonical.session.apply(bounded(progress));
     },
-    retire() {
+    retire(
+      reason: "surface-disposed" | "measurement-invalidated" =
+        "surface-disposed"
+    ) {
       if (retired) return;
       retired = true;
       canonical.session.retire({
         kind: "native-katex-paint-preserving-retirement",
-        reason: "surface-disposed",
+        reason,
         structuralSuccession: "retire-preserving-paint"
       });
     }
@@ -173,6 +179,12 @@ function createKpExponentialHomomorphismTrackProjection(
         atom.id,
         atom.semanticEntityId
       ]));
+      const crossing = findBinaryBasePayloadCrossing({
+        authority,
+        tracks,
+        sourceEntities,
+        targetEntities
+      });
       return Object.freeze(tracks.map((track) => {
         const sourceEntityId = sourceEntities.get(track.sourceAtomId ?? "");
         const targetEntityId = targetEntities.get(track.targetAtomId ?? "");
@@ -183,7 +195,7 @@ function createKpExponentialHomomorphismTrackProjection(
           sourcePayloadIds.has(sourceEntityId) &&
           targetPayloadIds.has(targetEntityId)
         ) {
-          return Object.freeze({
+          return withBinaryForegroundCrossing(Object.freeze({
             ...track,
             timingGroupId: `timing.${authority.id}.payload-transit`,
             semanticMotionUnitId: `motion-unit.${authority.id}.payloads`,
@@ -192,7 +204,7 @@ function createKpExponentialHomomorphismTrackProjection(
               kpExponentialHomomorphismTransitProfile.payloadTransit
             ),
             motionMetrics: true as const
-          });
+          }), crossing);
         }
         if (
           track.lifecycle === "split" &&
@@ -201,7 +213,7 @@ function createKpExponentialHomomorphismTrackProjection(
           sourceBaseIds.has(sourceEntityId) &&
           targetBaseIds.has(targetEntityId)
         ) {
-          return Object.freeze({
+          return withBinaryForegroundCrossing(Object.freeze({
             ...track,
             timingGroupId: `timing.${authority.id}.base-fission`,
             semanticMotionUnitId: `motion-unit.${authority.id}.base-fission`,
@@ -213,7 +225,7 @@ function createKpExponentialHomomorphismTrackProjection(
               kpExponentialHomomorphismTransitProfile.baseFission
             ),
             motionMetrics: true as const
-          });
+          }), crossing);
         }
         if (
           track.lifecycle === "eliminate" &&
@@ -228,6 +240,67 @@ function createKpExponentialHomomorphismTrackProjection(
         return track;
       }));
     }
+  });
+}
+
+function findBinaryBasePayloadCrossing(input: {
+  readonly authority: KpExponentialHomomorphismCorrespondenceAuthority;
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly sourceEntities: ReadonlyMap<string, string>;
+  readonly targetEntities: ReadonlyMap<string, string>;
+}) {
+  const sourcePayload = input.authority.occurrences.find((occurrence) =>
+    occurrence.endpoint === "source" &&
+    occurrence.role === "exponent-payload" &&
+    occurrence.ordinal === 0
+  );
+  const secondTargetBase = input.authority.occurrences.find((occurrence) =>
+    occurrence.endpoint === "target" &&
+    occurrence.role === "base" &&
+    occurrence.ordinal === 1
+  );
+  const payloadTrack = input.tracks.find((track) =>
+    input.sourceEntities.get(track.sourceAtomId ?? "") === sourcePayload?.id
+  );
+  const baseTrack = input.tracks.find((track) =>
+    input.targetEntities.get(track.targetAtomId ?? "") === secondTargetBase?.id
+  );
+  if (payloadTrack === undefined || baseTrack === undefined) {
+    throw new Error(
+      "Binary exponential transit requires its base/payload foreground crossing pair."
+    );
+  }
+  return Object.freeze({
+    id: `foreground-occlusion.${input.authority.id}.base-under-payload`,
+    payloadTrackId: payloadTrack.id,
+    baseTrackId: baseTrack.id
+  });
+}
+
+function withBinaryForegroundCrossing(
+  track: KpNativeKatexPaintMeasuredSceneTrack,
+  crossing: Readonly<{
+    id: string;
+    payloadTrackId: string;
+    baseTrackId: string;
+  }>
+): KpNativeKatexPaintMeasuredSceneTrack {
+  if (
+    track.id !== crossing.payloadTrackId &&
+    track.id !== crossing.baseTrackId
+  ) return track;
+  const payloadIsForeground = track.id === crossing.payloadTrackId;
+  return Object.freeze({
+    ...track,
+    intentionalForegroundOcclusion: Object.freeze({
+      id: crossing.id,
+      role: payloadIsForeground ? "occluder" as const : "occluded" as const,
+      counterpartTrackId: payloadIsForeground
+        ? crossing.baseTrackId
+        : crossing.payloadTrackId,
+      progressWindow:
+        kpExponentialHomomorphismTransitProfile.basePayloadForegroundCrossing
+    })
   });
 }
 

@@ -43,6 +43,13 @@ interface KpExponentialHomomorphismSurfaceSession {
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   transit?: KpExponentialHomomorphismTransitSession | undefined;
+  preparedFontRevision?: number | undefined;
+  preparedViewportFingerprint?: string | undefined;
+  invalidationQueued: boolean;
+  replacementPreparing: boolean;
+  resizeObserver?: ResizeObserver | undefined;
+  removeWindowResizeListener?: (() => void) | undefined;
+  unsubscribeFonts?: (() => void) | undefined;
   disposed: boolean;
 }
 
@@ -118,6 +125,8 @@ function mountSurface(
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
     pendingState: state,
+    invalidationQueued: false,
+    replacementPreparing: false,
     disposed: false
   };
 }
@@ -153,6 +162,10 @@ async function prepareSurface(
       source,
       target
     });
+    session.preparedFontRevision = session.fontReadiness.revision;
+    session.preparedViewportFingerprint = viewportFingerprint(session.stage);
+    session.replacementPreparing = false;
+    installInvalidationLifecycle(session);
     session.stage.dataset["kpExponentialHomomorphismTrackSummary"] =
       JSON.stringify(session.transit.canonical.session.tracks.map((track) => ({
         id: track.id,
@@ -160,6 +173,8 @@ async function prepareSurface(
         timingGroupId: track.timingGroupId,
         motionAxisConstraint: track.motionAxisConstraint
       })));
+    session.stage.dataset["kpExponentialHomomorphismMeasurementRevision"] =
+      String(generation);
     session.stage.dataset["kpExponentialHomomorphismStage"] = "ready";
     applyFrame(session, session.pendingState);
   } catch (error: unknown) {
@@ -167,8 +182,66 @@ async function prepareSurface(
     session.stage.dataset["kpExponentialHomomorphismStage"] = "failed";
     session.stage.dataset["kpExponentialHomomorphismError"] =
       error instanceof Error ? error.message : String(error);
+    session.replacementPreparing = false;
     showEndpoint(session, 0);
   }
+}
+
+function installInvalidationLifecycle(
+  session: KpExponentialHomomorphismSurfaceSession
+): void {
+  if (session.unsubscribeFonts !== undefined) return;
+  session.unsubscribeFonts = session.fontReadiness.subscribe(() =>
+    scheduleMeasurementReplacement(session)
+  );
+  const view = session.stage.ownerDocument.defaultView;
+  if (view !== null) {
+    const onResize = (): void => scheduleMeasurementReplacement(session);
+    view.addEventListener("resize", onResize);
+    session.removeWindowResizeListener = () =>
+      view.removeEventListener("resize", onResize);
+  }
+  if (typeof ResizeObserver !== "undefined") {
+    session.resizeObserver = new ResizeObserver(() =>
+      scheduleMeasurementReplacement(session)
+    );
+    session.resizeObserver.observe(session.stage);
+  }
+}
+
+function scheduleMeasurementReplacement(
+  session: KpExponentialHomomorphismSurfaceSession
+): void {
+  if (
+    session.disposed ||
+    session.invalidationQueued ||
+    session.replacementPreparing
+  ) return;
+  session.invalidationQueued = true;
+  queueMicrotask(() => {
+    session.invalidationQueued = false;
+    if (session.disposed) return;
+    const changed =
+      session.preparedFontRevision !== session.fontReadiness.revision ||
+      session.preparedViewportFingerprint !== viewportFingerprint(session.stage);
+    if (!changed) return;
+    // Measured paint belongs to one font/viewport transaction. Retire it
+    // before rebuilding so stale geometry can never flash after a resize.
+    session.replacementPreparing = true;
+    session.transit?.retire("measurement-invalidated");
+    session.transit = undefined;
+    syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+    showEndpoint(session, session.pendingState.progress < 0.5 ? 0 : 1);
+    session.stage.dataset["kpExponentialHomomorphismStage"] = "preparing";
+    const generation = ++session.generation;
+    void prepareSurface(session, generation);
+  });
+}
+
+function viewportFingerprint(stage: HTMLElement): string {
+  const rect = stage.getBoundingClientRect();
+  const dpr = stage.ownerDocument.defaultView?.devicePixelRatio ?? 1;
+  return `${rect.width}x${rect.height}@${dpr}`;
 }
 
 function applyFrame(
@@ -214,6 +287,7 @@ function createEndpointRoot(
   const root = document.createElement("div");
   root.className = "kp-exponential-homomorphism-stage__endpoint";
   root.dataset["kpExponentialHomomorphismEndpoint"] = endpoint.endpoint;
+  root.dataset["kpExponentialHomomorphismLatex"] = endpoint.rawLatex;
   root.innerHTML = endpoint.nativeHtmlAndMathml;
   root.style.opacity = active ? "1" : "0";
   setAccessibleEndpoint(root, active);
@@ -244,7 +318,10 @@ function disposeSurface(
   if (session.disposed) return;
   session.disposed = true;
   session.generation += 1;
-  session.transit?.retire();
+  session.resizeObserver?.disconnect();
+  session.removeWindowResizeListener?.();
+  session.unsubscribeFonts?.();
+  session.transit?.retire("surface-disposed");
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
   session.fontReadiness.dispose();
   sessions.delete(player);

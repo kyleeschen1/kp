@@ -91,6 +91,20 @@ test("one compositor plan stages connector release and direct horizontal transit
   assert.ok(bases.every(({ motionAxisConstraint }) =>
     motionAxisConstraint === "horizontal"
   ));
+  const foregroundPair = plan.tracks.filter(
+    ({ intentionalForegroundOcclusion }) =>
+      intentionalForegroundOcclusion !== undefined
+  );
+  assert.equal(foregroundPair.length, 2);
+  assert.deepEqual(
+    new Set(foregroundPair.map(({ intentionalForegroundOcclusion }) =>
+      intentionalForegroundOcclusion?.role)),
+    new Set(["occluder", "occluded"])
+  );
+  assert.equal(foregroundPair.every(({ intentionalForegroundOcclusion }) =>
+    intentionalForegroundOcclusion?.progressWindow ===
+      kpExponentialHomomorphismTransitProfile.basePayloadForegroundCrossing
+  ), true);
 });
 
 test("sampled motion is deterministic under direct seek and rewind", () => {

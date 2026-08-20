@@ -1,0 +1,160 @@
+import { expect, test, type Locator } from "@playwright/test";
+
+const animationId =
+  "animation.algebra.exponential-homomorphism.sum-to-product";
+
+test("exponential homomorphism preserves endpoints, seek, rewind, and resize", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.goto(`/?artifact=${animationId}`);
+
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const slot = player.locator(
+    '[data-kp-editor-animation-surface-slot="equation"]'
+  );
+  const stage = slot.locator("[data-kp-exponential-homomorphism-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-pack-id",
+    "exponential-homomorphism"
+  );
+  await expect(slot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-id",
+    "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+  );
+  await expectReady(stage);
+  await expect(stage.locator(
+    ".kp-exponential-homomorphism-stage__endpoint"
+  )).toHaveCount(2);
+  await expect(stage.locator(".katex-mathml")).toHaveCount(2);
+
+  await seek.fill("0");
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-visual-owner",
+    "source-native"
+  );
+  expect(await accessibleEndpointText(stage)).toBe("b^{x+y}");
+
+  await seek.fill("0.5");
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-progress",
+    "0.5"
+  );
+  const middle = await movingPaintSnapshot(stage);
+  expect(middle.length).toBeGreaterThan(0);
+
+  await seek.fill("1");
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-visual-owner",
+    "target-native"
+  );
+  expect(await accessibleEndpointText(stage)).toBe("b^{x}b^{y}");
+
+  await seek.fill("0.5");
+  expect(await movingPaintSnapshot(stage)).toEqual(middle);
+  await seek.fill("0");
+  expect(await accessibleEndpointText(stage)).toBe("b^{x+y}");
+
+  const initialMeasurementRevision = Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision"
+  ));
+  await page.setViewportSize({ width: 390, height: 760 });
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision"
+  ))).toBeGreaterThan(initialMeasurementRevision);
+  await expectReady(stage);
+  await seek.fill("1");
+  expect(await accessibleEndpointText(stage)).toBe("b^{x}b^{y}");
+  const overflow = await page.evaluate(() =>
+    document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+  expect(pageErrors).toEqual([]);
+});
+
+test("exponential homomorphism keeps one accessible endpoint under reduced motion", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 390, height: 760 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`/?artifact=${animationId}&playhead=0.5`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator(
+    "[data-kp-exponential-homomorphism-stage]"
+  );
+
+  await expectReady(stage);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  const accessibility = await stage.evaluate((root) => {
+    const endpoints = [...root.querySelectorAll<HTMLElement>(
+      ".kp-exponential-homomorphism-stage__endpoint"
+    )];
+    const active = endpoints.filter((endpoint) =>
+      endpoint.getAttribute("aria-hidden") === "false"
+    );
+    return {
+      activeCount: active.length,
+      activeHasMathMl: active[0]?.querySelector("math") !== null,
+      inactiveAreInert: endpoints
+        .filter((endpoint) => endpoint !== active[0])
+        .every((endpoint) => endpoint.hasAttribute("inert"))
+    };
+  });
+  expect(accessibility).toEqual({
+    activeCount: 1,
+    activeHasMathMl: true,
+    inactiveAreInert: true
+  });
+});
+
+async function expectReady(stage: Locator): Promise<void> {
+  await expect.poll(
+    () => stage.getAttribute("data-kp-exponential-homomorphism-stage"),
+    { timeout: 15_000 }
+  ).not.toBe("preparing");
+  const state = await stage.getAttribute(
+    "data-kp-exponential-homomorphism-stage"
+  );
+  if (state === "failed") {
+    throw new Error(
+      await stage.getAttribute("data-kp-exponential-homomorphism-error") ??
+      "Exponential stage failed without diagnostics."
+    );
+  }
+  expect(state).toBe("ready");
+}
+
+async function accessibleEndpointText(stage: Locator): Promise<string | null> {
+  return stage.locator(
+    '.kp-exponential-homomorphism-stage__endpoint[aria-hidden="false"]'
+  ).getAttribute("data-kp-exponential-homomorphism-latex");
+}
+
+async function movingPaintSnapshot(stage: Locator) {
+  return stage.evaluate((root) =>
+    [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].map((owner) => ({
+      id: owner.dataset["kpEquationMaterialOwnerId"],
+      left: owner.style.left,
+      top: owner.style.top,
+      width: owner.style.width,
+      height: owner.style.height,
+      opacity: owner.style.opacity,
+      transform: owner.style.transform
+    })).sort((left, right) => (left.id ?? "").localeCompare(right.id ?? ""))
+  );
+}
