@@ -1,0 +1,70 @@
+{
+  "id": "next-action.kp.native-katex-compositor-conformance-v1",
+  "kind": "next-action",
+  "title": "Build bounded Native KaTeX compositor conformance",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-native-katex-compositor-conformance-long-loop-proposal.md",
+      "summary": "Approved objective, coverage model, budgets, slice order, preservation boundary, rollback units, and checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v22"
+    ]
+  },
+  "affects": [
+    "run-contract.kp.carrier-preserving-simplification-v4"
+  ],
+  "verification": [
+    "npm run test:real-katex-glyph-compositor",
+    "npm run check:architecture",
+    "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "ncc01",
+      "checkedAt": "2026-08-20T02:18:45.129Z",
+      "notes": "Validated 1,035 nodes and 23,683 events after cutover setup; complete v2 contract is active, malformed v1 is superseded, carrier run and action are deferred, and the return condition is explicit."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "ncc01",
+      "checkedAt": "2026-08-20T02:19:02.178Z",
+      "notes": "Approved proposal correction and generated control-plane records have no whitespace errors; protected economics and unrelated untracked files remain unstaged."
+    }
+  ],
+  "expectedLearning": [
+    "Determine whether feature-class coverage plus actual-paint seam observation can prevent Native KaTeX carrier discontinuities without glyph-specific branches or production cost."
+  ],
+  "allowedWork": [
+    "Execute only the approved Native KaTeX compositor-conformance proposal through its typed run contract."
+  ],
+  "disallowedWork": [
+    "Do not resume carrier promotion until conformance closes; do not ship test infrastructure or broaden into aesthetics, lessons, layouts, or other renderers."
+  ],
+  "criteria": [
+    {
+      "id": "actual-paint-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "production-zero-closure",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-feature-coverage",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-lifecycle",
+      "weight": "medium"
+    }
+  ]
+}

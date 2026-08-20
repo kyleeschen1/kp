@@ -2,9 +2,9 @@
   "id": "next-action.kp.carrier-preserving-simplification-v4",
   "kind": "next-action",
   "title": "Build and promote carrier-preserving simplification",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Execute the approved 27-slice carrier-preserving simplification run from canonical multiplication-by-one exemplar through second-caller pressure, discoverability, bounded LLM selection, and closeout.",
+  "summary": "Broad carrier action is intentionally paused after its rejected second checkpoint; no more evidence may accumulate until compositor conformance v2 closes.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -651,6 +651,9 @@
     "state": "partial",
     "summary": "Second-caller evidence is ready for human review. The stable checkpoint places canonical 2x1 and add-zero side by side at each state; no promotion metadata or compatibility retirement has been applied."
   },
+  "revisitWhen": [
+    "run-contract.kp.native-katex-compositor-conformance-v2 completes ncc27 and returns to carrier slice cps22"
+  ],
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
   ],

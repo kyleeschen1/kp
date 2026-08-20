@@ -1,0 +1,184 @@
+{
+  "id": "run-contract.kp.native-katex-compositor-conformance-v2",
+  "kind": "run-contract",
+  "title": "Native KaTeX compositor conformance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.native-katex-compositor-conformance-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-native-katex-compositor-conformance-long-loop-proposal.md",
+      "summary": "User-approved 27-slice development-only compositor conformance proposal with hard scenario budgets, a mandatory ncc19 two/x checkpoint, rollback units, and a named carrier-loop return target."
+    }
+  ],
+  "verification": [
+    "npm run test:real-katex-glyph-compositor",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Development-only typed shape descriptors, deterministic coverage planning, actual-paint observation, seam diagnostics, bounded browser fixtures, one evidence-driven shared typography repair, feature-class pressure, and production-exclusion gates.",
+    "Reuse existing Native KaTeX measurement, ownership, lifecycle, deterministic-clock, catalogue-host, and release-gate infrastructure; matrices are diagnostic compound fixtures only."
+  ],
+  "disallowedWork": [
+    "No glyph, equation, fixture, or caller-specific offsets; no semantic, correspondence, choreography, timing, URL, static endpoint, authoring, lesson, layout, public-product, Svelte, SVG, Canvas, or WebGL changes.",
+    "No production import of the suite, aesthetic certification, planned geometry presented as actual paint, silent fallback, unbounded fuzzing, or carrier-family promotion before the ncc19 checkpoint and ncc27 closeout."
+  ],
+  "goal": "Build a bounded development-only feature-class conformance suite, repair the shared realized-paint handoff exposed by italic x without changing canonical 2, stop for human review, then expand and return to carrier promotion.",
+  "target": "next-action.kp.native-katex-compositor-conformance-v1",
+  "runMode": "run",
+  "maxSlices": 27,
+  "commitCadence": "Commit each independently reversible verified control-plane, schema-planner, observer-reporter, shared-repair, fixture-family, and closeout boundary with exact path staging; emit loop status at slice, commit, and stop boundaries.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at ncc19 for explicit human visual approval of the canonical 2 and italic x handoff before any shape-family expansion.",
+    "Stop if test-only conformance code enters a production closure or affects browser bundle bytes.",
+    "Stop if repair requires a glyph, equation, fixture, or caller-specific offset, or if observation cannot distinguish realized paint from planned geometry.",
+    "Stop if hard scenario, sample, page, or worker budgets are exceeded or browser variance cannot be classified.",
+    "Stop if work begins encoding aesthetics, changes semantic or timing authority, expands matrices into lesson design, or alters approved behavior outside the paint seam."
+  ],
+  "slices": [
+    {
+      "id": "ncc01",
+      "title": "Priority-cutover",
+      "summary": "Completed the approved cutover: rejected cps21 is durable, carrier run and broad target are deferred at cps22 with an explicit return condition, malformed v1 controls are superseded, complete v2 owns all 27 slices and hard stops, project hygiene is unblocked, and unrelated files remain protected.",
+      "status": "complete"
+    },
+    {
+      "id": "ncc02",
+      "title": "Baseline-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "ncc03",
+      "title": "Inventory-existing-seams",
+      "status": "planned"
+    },
+    {
+      "id": "ncc04",
+      "title": "Define-terminology",
+      "status": "planned"
+    },
+    {
+      "id": "ncc05",
+      "title": "Freeze-cost-budgets",
+      "status": "planned"
+    },
+    {
+      "id": "ncc06",
+      "title": "Add-shape-schema",
+      "status": "planned"
+    },
+    {
+      "id": "ncc07",
+      "title": "Add-risk-tags",
+      "status": "planned"
+    },
+    {
+      "id": "ncc08",
+      "title": "Build-pairwise-planner",
+      "status": "planned"
+    },
+    {
+      "id": "ncc09",
+      "title": "Generate-coverage-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "ncc10",
+      "title": "Build-visible-ink-observer",
+      "status": "planned"
+    },
+    {
+      "id": "ncc11",
+      "title": "Define-seam-traces",
+      "status": "planned"
+    },
+    {
+      "id": "ncc12",
+      "title": "Encode-continuity-laws",
+      "status": "planned"
+    },
+    {
+      "id": "ncc13",
+      "title": "Add-diagnostic-reporter",
+      "status": "planned"
+    },
+    {
+      "id": "ncc14",
+      "title": "Build-browser-harness",
+      "status": "planned"
+    },
+    {
+      "id": "ncc15",
+      "title": "Prove-production-exclusion",
+      "status": "planned"
+    },
+    {
+      "id": "ncc16",
+      "title": "Prove-clean-two-control",
+      "status": "planned"
+    },
+    {
+      "id": "ncc17",
+      "title": "Freeze-failing-x-regression",
+      "status": "planned"
+    },
+    {
+      "id": "ncc18",
+      "title": "Repair-shared-typography-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "ncc19",
+      "title": "Two-x-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "ncc20",
+      "title": "Add-atomic-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc21",
+      "title": "Add-script-style-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc22",
+      "title": "Add-structured-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc23",
+      "title": "Add-context-mutations",
+      "status": "planned"
+    },
+    {
+      "id": "ncc24",
+      "title": "Add-matrix-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "ncc25",
+      "title": "Add-compound-risk-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "ncc26",
+      "title": "Pressure-lifecycle-and-browsers",
+      "status": "planned"
+    },
+    {
+      "id": "ncc27",
+      "title": "Close-and-reactivate-carrier",
+      "status": "planned"
+    }
+  ]
+}

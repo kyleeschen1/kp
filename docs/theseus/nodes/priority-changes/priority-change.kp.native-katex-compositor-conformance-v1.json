@@ -1,0 +1,52 @@
+{
+  "id": "priority-change.kp.native-katex-compositor-conformance-v1",
+  "kind": "priority-change",
+  "title": "Move compositor conformance ahead of carrier promotion",
+  "status": "superseded",
+  "domain": "kp",
+  "summary": "Superseded by the complete v2 run-contract cutover record; priority direction is unchanged.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The second carrier caller exposed a 13.8px realized-paint discontinuity that existing planned-geometry tests missed. Build the bounded test-only conformance seam first, stop at the two/x human checkpoint, and resume carrier promotion only after conformance closeout.",
+      "occurredAt": "2026-08-20T02:10:07.414Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.carrier-preserving-simplification-v4",
+      "run-contract.kp.native-katex-compositor-conformance-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.carrier-preserving-simplification-v4",
+    "run-contract.kp.native-katex-compositor-conformance-v1"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "The second carrier caller exposed a 13.8px realized-paint discontinuity that existing planned-geometry tests missed. Build the bounded test-only conformance seam first, stop at the two/x human checkpoint, and resume carrier promotion only after conformance closeout.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.carrier-preserving-simplification-v4",
+      "run-contract.kp.native-katex-compositor-conformance-v1"
+    ],
+    "changes": [
+      {
+        "subject": "native-katex-compositor-conformance",
+        "to": "now"
+      },
+      {
+        "subject": "carrier-preserving-simplification",
+        "to": "after-conformance"
+      }
+    ],
+    "effectiveAt": "2026-08-20T02:10:07.414Z",
+    "requestedBy": "user"
+  }
+}

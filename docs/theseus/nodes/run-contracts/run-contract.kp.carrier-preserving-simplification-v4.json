@@ -2,8 +2,9 @@
   "id": "run-contract.kp.carrier-preserving-simplification-v4",
   "kind": "run-contract",
   "title": "Carrier-preserving simplification and discoverable authoring",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "Carrier promotion waits at cps22 while the approved Native KaTeX compositor conformance v2 contract repairs and certifies the realized-paint seam.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +26,9 @@
     "npm run check:architecture",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "run-contract.kp.native-katex-compositor-conformance-v2 completes ncc27 and explicitly reactivates this return target"
   ],
   "allowedWork": [
     "Carrier-preserving simplification semantic evidence, typed family and handoff contracts, renderer-neutral recipe, Native KaTeX exemplar, existing add-zero pressure caller, catalogue hosting, focused verification, discoverability metadata and APIs, governed authoring, mixed benchmark, and durable project records.",
@@ -173,8 +177,8 @@
     {
       "id": "cps21",
       "title": "Second-human-checkpoint",
-      "summary": "Stable two-caller checkpoint evidence is generated and inspected. Awaiting explicit human approval before cps21 can complete or cps22 promotion can begin.",
-      "status": "in-progress"
+      "summary": "Human checkpoint rejected because the add-zero italic x drops about 13.8px at the native-to-material paint handoff while the canonical 2 control remains stable. Carrier-family promotion is forbidden; remediation moves to complete run-contract.kp.native-katex-compositor-conformance-v2, then returns here at cps22 only after conformance closeout.",
+      "status": "complete"
     },
     {
       "id": "cps22",

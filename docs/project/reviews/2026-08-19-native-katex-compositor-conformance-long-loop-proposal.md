@@ -2,8 +2,13 @@
 
 Date: 2026-08-19
 Status: approved
-Contract: `run-contract.kp.native-katex-compositor-conformance-v1`
+Contract: `run-contract.kp.native-katex-compositor-conformance-v2`
 Return target: `run-contract.kp.carrier-preserving-simplification-v4`
+
+The `v1` control record was superseded before implementation because the
+specialist CLI's abbreviated help omitted the run-mode, cadence, limit, and
+stop-condition flags. `v2` is the exact executable contract for this reviewed
+proposal.
 
 ## Objective
 

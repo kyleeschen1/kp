@@ -1,0 +1,173 @@
+{
+  "id": "run-contract.kp.native-katex-compositor-conformance-v1",
+  "kind": "run-contract",
+  "title": "Native KaTeX compositor conformance",
+  "status": "superseded",
+  "summary": "Superseded before implementation by v2 because the first specialist command omitted required run mode, slice limit, commit cadence, verification level, and stop conditions. No production slice ran under v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.native-katex-compositor-conformance-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-19-native-katex-compositor-conformance-long-loop-proposal.md",
+      "summary": "User-approved 27-slice development-only compositor conformance proposal with hard scenario budgets, a mandatory ncc19 two/x checkpoint, rollback units, and a named carrier-loop return target."
+    }
+  ],
+  "verification": [
+    "npm run test:real-katex-glyph-compositor",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Development-only typed shape descriptors, deterministic coverage planning, actual-paint observation, seam diagnostics, bounded browser fixtures, one evidence-driven shared typography repair, feature-class pressure, and production-exclusion gates.",
+    "Reuse existing Native KaTeX measurement, ownership, lifecycle, deterministic-clock, catalogue-host, and release-gate infrastructure; matrices are diagnostic compound fixtures only."
+  ],
+  "disallowedWork": [
+    "No glyph, equation, fixture, or caller-specific offsets; no semantic, correspondence, choreography, timing, URL, static endpoint, authoring, lesson, layout, public-product, Svelte, SVG, Canvas, or WebGL changes.",
+    "No production import of the suite, aesthetic certification, planned geometry presented as actual paint, silent fallback, unbounded fuzzing, or carrier-family promotion before the ncc19 checkpoint and ncc27 closeout."
+  ],
+  "goal": "Build a bounded development-only feature-class conformance suite, repair the shared realized-paint handoff exposed by italic x without changing canonical 2, stop for human review, then expand and return to carrier promotion.",
+  "target": "next-action.kp.native-katex-compositor-conformance-v1",
+  "slices": [
+    {
+      "id": "ncc01",
+      "title": "Priority-cutover",
+      "status": "planned"
+    },
+    {
+      "id": "ncc02",
+      "title": "Baseline-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "ncc03",
+      "title": "Inventory-existing-seams",
+      "status": "planned"
+    },
+    {
+      "id": "ncc04",
+      "title": "Define-terminology",
+      "status": "planned"
+    },
+    {
+      "id": "ncc05",
+      "title": "Freeze-cost-budgets",
+      "status": "planned"
+    },
+    {
+      "id": "ncc06",
+      "title": "Add-shape-schema",
+      "status": "planned"
+    },
+    {
+      "id": "ncc07",
+      "title": "Add-risk-tags",
+      "status": "planned"
+    },
+    {
+      "id": "ncc08",
+      "title": "Build-pairwise-planner",
+      "status": "planned"
+    },
+    {
+      "id": "ncc09",
+      "title": "Generate-coverage-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "ncc10",
+      "title": "Build-visible-ink-observer",
+      "status": "planned"
+    },
+    {
+      "id": "ncc11",
+      "title": "Define-seam-traces",
+      "status": "planned"
+    },
+    {
+      "id": "ncc12",
+      "title": "Encode-continuity-laws",
+      "status": "planned"
+    },
+    {
+      "id": "ncc13",
+      "title": "Add-diagnostic-reporter",
+      "status": "planned"
+    },
+    {
+      "id": "ncc14",
+      "title": "Build-browser-harness",
+      "status": "planned"
+    },
+    {
+      "id": "ncc15",
+      "title": "Prove-production-exclusion",
+      "status": "planned"
+    },
+    {
+      "id": "ncc16",
+      "title": "Prove-clean-two-control",
+      "status": "planned"
+    },
+    {
+      "id": "ncc17",
+      "title": "Freeze-failing-x-regression",
+      "status": "planned"
+    },
+    {
+      "id": "ncc18",
+      "title": "Repair-shared-typography-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "ncc19",
+      "title": "Two-x-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "ncc20",
+      "title": "Add-atomic-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc21",
+      "title": "Add-script-style-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc22",
+      "title": "Add-structured-shapes",
+      "status": "planned"
+    },
+    {
+      "id": "ncc23",
+      "title": "Add-context-mutations",
+      "status": "planned"
+    },
+    {
+      "id": "ncc24",
+      "title": "Add-matrix-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "ncc25",
+      "title": "Add-compound-risk-fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "ncc26",
+      "title": "Pressure-lifecycle-and-browsers",
+      "status": "planned"
+    },
+    {
+      "id": "ncc27",
+      "title": "Close-and-reactivate-carrier",
+      "status": "planned"
+    }
+  ]
+}
