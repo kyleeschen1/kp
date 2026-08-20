@@ -207,7 +207,8 @@
     {
       "id": "cps26",
       "title": "Add-bounded-LLM-exchange",
-      "status": "planned"
+      "summary": "Bounded model exchange now receives only deterministic equation-operation candidates and friendly aliases. KP rejects invalid or out-of-shortlist choices, binds code-owned evidence including nominal carrier proof, and preserves the last valid plan for clarification.",
+      "status": "complete"
     },
     {
       "id": "cps27",
