@@ -289,6 +289,7 @@ export interface KpNativeKatexTypographyStyleFrame {
     readonly translateY: number;
     readonly scaleX: number;
     readonly scaleY: number;
+    readonly expectedPaintRect?: KpStageRelativeRect | undefined;
   }[];
 }
 
@@ -848,7 +849,10 @@ export function sampleKpNativeKatexTypographyStylePlan(
             paint.targetInsetY * scale,
           // Uniform scaling keeps notation undistorted.
           scaleX: scale,
-          scaleY: scale
+          scaleY: scale,
+          ...(sceneFrame?.expectedPaintRect === undefined
+            ? {}
+            : { expectedPaintRect: sceneFrame.expectedPaintRect })
         });
       }
       return Object.freeze({
@@ -972,6 +976,20 @@ function normalizeKpNativeKatexMaterialGlyphPaint(input: {
     return;
   }
   const clonePaint = measureKpNativeKatexTextInkRect(input.stage, input.visual);
+  if (input.frame.expectedPaintRect !== undefined) {
+    // Replacing a moving source clone with target-styled paint changes KaTeX's
+    // internal ink inset. Reconcile that realized paint once against the
+    // track's authoritative expected ink rather than reusing wrapper geometry.
+    const correctionX =
+      (input.frame.expectedPaintRect.left - clonePaint.left) /
+      input.frame.scaleX;
+    const correctionY =
+      (input.frame.expectedPaintRect.top - clonePaint.top) /
+      input.frame.scaleY;
+    input.visual.style.translate = `${correctionX}px ${correctionY}px`;
+    input.visual.dataset["kpNativeKatexPaintFrameNormalized"] = "true";
+    return;
+  }
   const ownerRect = stageRelativeRect(
     input.stage,
     input.owner.getBoundingClientRect()

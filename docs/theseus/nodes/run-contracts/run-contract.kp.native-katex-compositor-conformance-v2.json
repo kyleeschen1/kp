@@ -149,12 +149,14 @@
     {
       "id": "ncc18",
       "title": "Repair-shared-typography-handoff",
-      "status": "planned"
+      "summary": "Repaired the shared target-style handoff: style frames carry authoritative expected ink, and replacement KaTeX clones reconcile their measured realized ink once against that paint. Both 2 and x now pass without case-specific logic.",
+      "status": "complete"
     },
     {
       "id": "ncc19",
       "title": "Two-x-human-checkpoint",
-      "status": "planned"
+      "summary": "Prepared the compact two/x contact sheet and passed all machine gates; paused at the mandatory human visual checkpoint before shape-family expansion.",
+      "status": "in-progress"
     },
     {
       "id": "ncc20",

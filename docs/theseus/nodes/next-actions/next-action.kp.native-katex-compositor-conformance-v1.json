@@ -150,6 +150,20 @@
       "scope": "ncc17",
       "checkedAt": "2026-08-20T03:00:56.232Z",
       "notes": "Italic x is now an executable expected regression: the same actual-paint harness classifies only vertical translation at both source-to-material and material-to-target seams, greater than 10px in symmetric directions; digit 2 remains clean."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance && npm run test:browser:native-katex-compositor-conformance && npm run test:real-katex-glyph-compositor && npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "ncc18",
+      "checkedAt": "2026-08-20T03:11:37.769Z",
+      "notes": "Shared target-style normalization now carries each track's authoritative expected paint rectangle and reconciles a replacement clone's measured ink once. All 28 conformance units, both browser traces, 79 compositor tests, and five carrier lifecycle cases pass; no glyph-specific branch or offset was added."
+    },
+    {
+      "command": "npm run visual:native-katex-compositor-conformance && npm run check:architecture && npm run build && npm run check:native-katex-compositor-conformance-production && theseus workspace validate",
+      "status": "passed",
+      "scope": "ncc19",
+      "checkedAt": "2026-08-20T03:17:53.111Z",
+      "notes": "Compact ten-frame 2/x overlay contact sheet generated from one reused page; architecture gates, full production build, test-only closure exclusion, and 1,035-node workspace validation pass. Awaiting the mandatory human visual decision before ncc20."
     }
   ],
   "expectedLearning": [

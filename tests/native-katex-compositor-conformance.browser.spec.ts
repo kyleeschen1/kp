@@ -106,22 +106,8 @@ test("captures two deterministic actual-paint seam traces on one reusable page",
   expect(twoReport?.failures).toEqual([]);
   const xReport = reports.find(({ shapeId }) => shapeId === "shape.italic-x");
   expect(xReport).toBeDefined();
-  expect(xReport?.status).toBe("failed");
-  expect(xReport?.failures.map(({ seam, reasons }) => ({ seam, reasons })))
-    .toEqual([
-      {
-        seam: "source-to-material",
-        reasons: ["vertical-translation"]
-      },
-      {
-        seam: "material-to-target",
-        reasons: ["vertical-translation"]
-      }
-    ]);
-  expect(xReport?.failures[0]?.metrics.verticalTranslationPx)
-    .toBeGreaterThan(10);
-  expect(xReport?.failures[1]?.metrics.verticalTranslationPx)
-    .toBeLessThan(-10);
+  expect(xReport?.status).toBe("passed");
+  expect(xReport?.failures).toEqual([]);
   expect(JSON.parse(JSON.stringify(reports))).toEqual(reports);
   expect(pageErrors).toEqual([]);
 });
