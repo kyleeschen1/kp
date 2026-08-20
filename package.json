@@ -285,6 +285,7 @@
     "test:reader-runtime-hardening": "node --disable-warning=ExperimentalWarning --test tests/reader-compositor-geometry-cache-identity.test.ts tests/reader-compositor-pure-plan-cache.test.ts tests/reader-idle-prewarm-queue.test.ts tests/reader-latest-session-handoff.test.ts tests/reader-viewport-anchor-cache.test.ts tests/semantic-reader-frame-scheduler.test.ts tests/semantic-reader-scheduled-adapter.test.ts tests/semantic-reader-semantic-focus.test.ts tests/semantic-reader-location-settlement.test.ts",
     "test:browser:real-katex-glyph-compositor": "playwright test tests/native-katex-fragment-observer.browser.spec.ts --project=chromium --workers=1",
     "test:browser:native-katex-compositor-conformance": "playwright test tests/native-katex-compositor-conformance.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:native-katex-compositor-conformance:release": "playwright test tests/native-katex-compositor-conformance.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "test:browser:animation-workbench": "playwright test tests/semantic-animation-workbench.browser.spec.ts --project=chromium --workers=1",
     "smoke:linear-equation": "playwright test tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",

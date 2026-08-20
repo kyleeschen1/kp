@@ -19,6 +19,10 @@ import {
   type KpNativeKatexConformanceSampleSlot,
   type KpNativeKatexConformanceSeamSample
 } from "./support/native-katex-compositor-seam-trace.ts";
+import {
+  kpNativeKatexConformanceReleaseProfile,
+  type KpNativeKatexConformanceLifecycleAction
+} from "./fixtures/native-katex-compositor-conformance-release.ts";
 
 const checkpoints = Object.freeze([
   { slot: "source-native", progress: 0 },
@@ -59,7 +63,8 @@ test("captures two deterministic actual-paint seam traces on one reusable page",
 
   for (const scenario of scenarios) {
     await page.goto(
-      `/?artifact=${scenario.animationId}&playhead=0&theme=dark`
+      `/?artifact=${scenario.animationId}&playhead=0&theme=dark`,
+      { waitUntil: "networkidle" }
     );
     const { stage, seek } = await readySurface(page, scenario.animationId);
     const samples: KpNativeKatexConformanceSeamSample[] = [];
@@ -112,6 +117,155 @@ test("captures two deterministic actual-paint seam traces on one reusable page",
   expect(pageErrors).toEqual([]);
 });
 
+test("pressures the bounded lifecycle cohort on one reusable page", async ({
+  browserName,
+  page
+}) => {
+  test.slow();
+  expect(kpNativeKatexConformanceReleaseProfile.engines).toContain(browserName);
+  expect(kpNativeKatexConformanceReleaseProfile.scenariosPerEngine)
+    .toBeLessThanOrEqual(12);
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  for (const scenario of
+    kpNativeKatexConformanceReleaseProfile.lifecycleScenarios) {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.setViewportSize({ width: 1_280, height: 720 });
+    await page.goto(
+      `/?artifact=${scenario.animationId}` +
+      `&playhead=${scenario.initialPlayhead}&theme=${scenario.theme}`,
+      { waitUntil: "networkidle" }
+    );
+    const surface = await readySurface(page, scenario.animationId);
+    await lifecyclePressureHandlers[scenario.action]({ page, ...surface });
+    await expectOneConformancePaintOwner(surface.stage);
+  }
+
+  expect(pageErrors).toEqual([]);
+});
+
+interface LifecyclePressureContext {
+  readonly page: Page;
+  readonly player: Locator;
+  readonly stage: Locator;
+  readonly seek: Locator;
+}
+
+type LifecyclePressureHandler = (
+  context: LifecyclePressureContext
+) => Promise<void>;
+
+const lifecyclePressureHandlers: Record<
+  KpNativeKatexConformanceLifecycleAction,
+  LifecyclePressureHandler
+> = {
+  "direct-seek": async ({ stage, seek }) => {
+    await seek.fill("0.61");
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.61"
+    );
+  },
+  reverse: async ({ page, player, stage, seek }) => {
+    await player.focus();
+    await page.keyboard.press("r");
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-direction",
+      "rewind"
+    );
+    await seek.fill("0.25");
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.75"
+    );
+  },
+  interruption: async ({ player, stage, seek }) => {
+    await seek.fill("0.05");
+    await player.locator('[data-action="toggle-editor-animation"]').click();
+    await expect.poll(async () => Number(
+      await player.getAttribute("data-kp-editor-animation-progress")
+    )).toBeGreaterThan(0.05);
+    await seek.fill("0.36");
+    await expect(player).not.toHaveAttribute(
+      "data-kp-editor-animation-status",
+      "playing"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.36"
+    );
+  },
+  "font-invalidation": async ({ page, stage }) => {
+    const revision = await measurementRevision(stage);
+    await page.evaluate(() => {
+      document.fonts.dispatchEvent(new Event("loadingdone"));
+    });
+    await expect.poll(() => measurementRevision(stage))
+      .toBeGreaterThan(revision);
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.41"
+    );
+  },
+  "viewport-resize": async ({ page, stage }) => {
+    const revision = await measurementRevision(stage);
+    await page.setViewportSize({ width: 1_100, height: 800 });
+    await expect.poll(() => measurementRevision(stage))
+      .toBeGreaterThan(revision);
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.36"
+    );
+  },
+  "dpr-change": async ({ page, stage }) => {
+    const revision = await measurementRevision(stage);
+    await page.evaluate(() => {
+      Object.defineProperty(window, "devicePixelRatio", {
+        configurable: true,
+        value: window.devicePixelRatio === 1 ? 2 : 1
+      });
+      window.dispatchEvent(new Event("resize"));
+    });
+    await expect.poll(() => measurementRevision(stage))
+      .toBeGreaterThan(revision);
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.59"
+    );
+  },
+  "theme-change": async ({ page, stage }) => {
+    const toolbar = page.getByRole("complementary", {
+      name: "Development tools"
+    });
+    const toggle = toolbar.getByRole("button", { name: "Dark mode" });
+    await expect(toggle).toHaveAttribute("aria-pressed", "true");
+    await toggle.click();
+    await expect(page.locator("[data-kp-svelte-catalogue-shell]"))
+      .toHaveAttribute("data-kp-animation-catalogue-theme", "light");
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "0.57"
+    );
+  },
+  "reduced-motion": async ({ page, player, stage, seek }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await player.evaluate((element) => {
+      element.dataset["kpEditorAnimationAccessibilityMode"] =
+        "reduced-motion";
+    });
+    await seek.fill("0.8");
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-progress",
+      "1"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-carrier-preserving-simplification-visual-owner",
+      "target-native"
+    );
+  }
+};
+
 async function readySurface(page: Page, animationId: string) {
   const player = page.locator(
     `[data-kp-animation-catalogue-stage] ` +
@@ -127,7 +281,25 @@ async function readySurface(page: Page, animationId: string) {
     "ready",
     { timeout: 15_000 }
   );
-  return { stage, seek };
+  return { player, stage, seek };
+}
+
+async function measurementRevision(stage: Locator): Promise<number> {
+  return Number(await stage.getAttribute(
+    "data-kp-carrier-preserving-simplification-measurement-revision"
+  ));
+}
+
+async function expectOneConformancePaintOwner(stage: Locator): Promise<void> {
+  await expect.poll(() => stage.evaluate((root) => {
+    const endpoints = [...root.querySelectorAll<HTMLElement>(
+      ".kp-carrier-preserving-simplification-stage__endpoint"
+    )].filter((element) => Number(getComputedStyle(element).opacity) > 0);
+    const materialOwners = [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].filter((element) => Number(getComputedStyle(element).opacity) > 0);
+    return endpoints.length + Number(materialOwners.length > 0);
+  })).toBe(1);
 }
 
 async function observeCheckpoint(input: {

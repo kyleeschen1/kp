@@ -197,7 +197,8 @@
     {
       "id": "ncc26",
       "title": "Pressure-lifecycle-and-browsers",
-      "status": "planned"
+      "summary": "Added and passed a ten-scenario-per-engine release cohort across Chromium, Firefox, and WebKit. It pressures seam traces, seek, reverse, interruption, font, resize, DPR, theme, and reduced motion on one reusable page; navigation-aborted lazy-import variance was classified and eliminated by waiting for network quiescence.",
+      "status": "complete"
     },
     {
       "id": "ncc27",

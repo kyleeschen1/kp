@@ -283,6 +283,20 @@
       "scope": "ncc25",
       "checkedAt": "2026-08-20T04:50:05.504Z",
       "notes": "The production closure rejects the compound-risk fixture marker; source and emitted artifacts remain clean across eight forbidden conformance markers."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance:release",
+      "status": "passed",
+      "scope": "ncc26",
+      "checkedAt": "2026-08-20T05:14:07.417Z",
+      "notes": "Chromium, Firefox, and WebKit each pass two five-sample seam traces plus eight lifecycle/environment scenarios: direct seek, reverse, interruption, font invalidation, resize, DPR, theme, and reduced motion. Ten scenarios per engine stay below the 12-scenario cap; one worker and one reusable page per engine completed in 1.3 minutes."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc26",
+      "checkedAt": "2026-08-20T05:14:08.715Z",
+      "notes": "Forty-nine deterministic checks pass; the release profile freezes supported engines, lifecycle actions, ten scenarios per engine, one page, one worker, zero routine screenshots, and structured diagnostics."
     }
   ],
   "expectedLearning": [

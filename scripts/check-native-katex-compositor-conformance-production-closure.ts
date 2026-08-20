@@ -22,6 +22,7 @@ const testOnlyMarkers = Object.freeze([
   "native-katex-conformance-compound-risk-fixture",
   "native-katex-conformance-context-mutation-registry",
   "native-katex-conformance-matrix-fixture",
+  "native-katex-conformance-release-profile",
   "native-katex-conformance-shape-registry"
 ]);
 

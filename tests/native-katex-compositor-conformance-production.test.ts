@@ -37,4 +37,8 @@ test("keeps conformance schemas out of production source and bundles", () => {
     path: "dist/compound.js",
     source: "native-katex-conformance-compound-risk-fixture"
   }])[0]?.marker, "native-katex-conformance-compound-risk-fixture");
+  assert.equal(checkKpNativeKatexConformanceProductionArtifacts([{
+    path: "dist/release.js",
+    source: "native-katex-conformance-release-profile"
+  }])[0]?.marker, "native-katex-conformance-release-profile");
 });
