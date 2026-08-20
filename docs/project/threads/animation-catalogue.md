@@ -2,16 +2,19 @@
 
 Status: active
 Last Updated: 2026-08-20
-Current Next Action: propose one Graph2D horizontal function-translation
-exemplar, preferably `y = x² → y = (x - 2)²`, with equation/curve identity,
-fixed viewport and typography, deterministic seek/reverse, one exact catalogue
-URL, and a human visual checkpoint. Do not implement reflection, stretch,
-compression, a universal graph frontend, or a second curve before approval.
+Current Next Action: propose one exponential-duality exemplar,
+`b^(x + y) → b^x b^y`, using the shared homomorphism law and a Native KaTeX
+power-application realization. Preserve exponent operands and semantic roles;
+keep base/wrapper successors, connector transformation, geometry, and timing
+out of authoring authority. Stop for visual review before the
+difference-to-quotient pressure caller.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.
-After Graph2D, the planned packets are TypeScript/Python expression wrapping
-and power/root inversion with explicit branch and domain truth. See
+The revised proposed packets are exponential duality, root inversion,
+TypeScript/Python frontend closure, finite sum/product binders, and a bounded
+Graph3D semantic scene proof. Graph2D function translation remains valuable
+but no longer leads the foundational sequence. See
 `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
 
 ## Goal

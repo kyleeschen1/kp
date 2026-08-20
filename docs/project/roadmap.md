@@ -212,14 +212,15 @@ Only this repository sequence is active:
    different caller and narrow promotion. Historical catalogue migration is
    not a prerequisite. See
    `decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
-29. **Graph2D horizontal function translation:** recommended next pending
-   approval. Build one equation-linked parabola translation and stop for visual
-   review. After approval, pressure the same operation with a structurally
-   different curve and promote only the horizontal-translation boundary.
-30. **Proposed subsequent family packets:** code expression wrapping through
-   TypeScript then Python, followed by power/root inversion with explicit
-   branch and domain truth. Each packet retains the two-loop cadence. Fraction
-   structural pressure is deferred and no longer blocks breadth.
+29. **Exponential/logarithmic duality:** revised recommendation pending
+   approval. Build one `b^(x + y) → b^x b^y` exemplar through a shared
+   homomorphism law and a Native KaTeX power-application realization; then
+   pressure it with difference-to-quotient before narrow promotion.
+30. **Proposed subsequent family packets:** root inversion with explicit branch
+   and domain truth; existing TypeScript/Python refactors through domain-owned
+   frontends; finite summation/product binder infrastructure; then one bounded
+   Graph3D semantic transformation. Graph2D function translation and fraction
+   structural pressure are deferred and no longer block foundational breadth.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -231,10 +232,10 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; defer fraction pressure and prepare power/root branching only after the Graph2D and code packets. |
-| Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Build one horizontal function-translation exemplar next, then pressure that operation with a different curve before promotion. |
-| Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | After Graph2D promotion, prototype code expression wrapping in TypeScript and pressure it through Python without sharing language-specific syntax or rendering. |
-| Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; prove exponential duality, then root branching, before binder/large-operator work. |
+| Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
+| Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | Close TypeScript and Python generation frontends after the exponent/root packets without changing approved choreography. |
+| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |

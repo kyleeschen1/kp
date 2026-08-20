@@ -19,54 +19,71 @@ every historical catalogue animation to migrate before new breadth begins.
 
 ## Recommended Family Order
 
-### Packet 1 — Graph2D horizontal function translation
+### Packet 1 — Exponential/logarithmic duality
 
-Begin with one equation-linked Graph2D exemplar such as
-`y = x² → y = (x - 2)²`. Preserve curve identity, axes, typography, viewport,
-and salient points while the semantic horizontal offset changes. The graph
-frontend—not LaTeX or renderer geometry—owns the coordinate meaning.
+Do not build a parallel set of handcrafted exponential motifs for every log
+law. Model both directions through one typed homomorphism schema:
 
-After approval, pressure the same horizontal-translation operation with a
-structurally different curve such as `sin(x)`. Promote horizontal translation
-only; reflection, vertical shift, stretch, compression, discontinuity, and
-domain changes remain later operations even if the frontend anticipates them.
+```text
+F(combine-source(arguments))
+  <-> combine-target(F(arguments))
+```
 
-### Packet 2 — Code expression wrapping
+The semantic law can share decomposition/recombination, persistent argument,
+and connector-role authority. Native KaTeX still needs a power-application
+realization because `b^(x + y)` uses a base and superscript region rather than
+a prefix operator and parentheses. The first exemplar should therefore be
+`b^(x + y) → b^x b^y`; the pressure caller should use
+`b^(x - y) → b^x / b^y`. Promote the shared dual law only after both visual
+directions are reviewed. Power/scalar transport and inverse cancellation
+remain distinct operations.
 
-Use a novice-readable TypeScript exemplar in which a stable expression is
-wrapped by a function call, such as
-`price + tax → Math.round(price + tax)`. The expression retains semantic
-identity while code-owned syntax introduces the callee and delimiters. This
-may reuse the semantic idea of function wrapping, but it must not reuse Native
-KaTeX geometry or paint policy.
+### Packet 2 — Root inversion with explicit branches
 
-After approval, pressure the same intent through a Python caller such as
-`round(price + tax)`. Extract only the shared request and lineage contracts;
-language frontends retain parsing, binding, syntax, and renderer policy.
+Use a bounded real-domain exemplar such as `x² = 9 → x = ±3`, making the two
+branches and domain assumptions explicit semantic state rather than visual
+annotation. Pressure it with an odd-power or inverse-direction caller. Promote
+only the branch/domain laws and motion boundary proved by both callers.
 
-### Packet 3 — Power/root inversion with explicit branches
+### Packet 3 — Code generation frontend
 
-Return to the equation domain for one genuinely new semantic family rather
-than old motif repair. Use a bounded real-domain exemplar such as
-`x² = 9 → x = ±3`, making the two branches and domain assumptions explicit
-semantic state rather than visual annotation.
+Build on the approved TypeScript and Python refactoring exemplars rather than
+inventing another visual first. Give each language a domain-owned frontend for
+AST identity, bindings, source ranges, transformation legality, and exact
+correspondence; then prove the existing shared causal recipe through both
+languages. A later code-wrap exemplar may add a second topology after this
+generation entrance is honest.
 
-After approval, pressure the family with an odd-power or inverse-direction
-caller. Promote only the branch/domain laws and motion boundary proved by both
-callers.
+### Packet 4 — Binders and large operators
+
+Begin with finite summation expansion, for example
+`sum_(i=1)^3 a_i → a_1 + a_2 + a_3`, so bound-variable scope, limits, body,
+instantiation order, and repeated identity are explicit. Pressure the binder
+seam with a finite product. Share scope and iteration infrastructure, not
+operator-specific arithmetic or choreography. Integration remains a separate
+follow-on because differentials, orientation, measure, substitution, and the
+Fundamental Theorem add semantics that sums and products do not prove.
+
+### Packet 5 — Bounded Graph3D semantic transformation
+
+Build one semantic rotation or projection in a fixed, bounded scene. Prove
+model transformation versus camera state, stable object identity, deterministic
+seek/rewind, resource leases, context restoration, and semantic SVG fallback.
+Do not infer general surface generation or WebGL salience parity from one
+scene.
 
 ## Why This Order
 
-- Graph2D function transformation is the only wholly missing near-term family
-  whose lifecycle and host infrastructure are already mature.
-- Code wrapping tests cross-domain reuse without requiring a universal parser,
-  semantic model, or renderer.
-- Root inversion then extends the strongest equation frontend with branching
-  and domain truth, not another presentation-only variation.
-- Matrix-vector composition remains a strong fourth packet, but its domain
-  frontend, recipe, and corpus are all still gaps. It should follow successful
-  Graph2D and code packets rather than reopen the tabled linear-algebra frontier
-  immediately.
+- Exponential duality and roots extend existing equation evidence while adding
+  superscript-container roles, inverse direction, branching, and domain truth.
+- Code is the first strong pressure that semantic generation is not merely a
+  LaTeX compiler with multiple renderers.
+- Large operators add lexical binding, scope, repeated instantiation, and
+  structurally tall native notation—none of which current equation motifs
+  prove.
+- Graph3D adds camera/model separation, resource ownership, fallback parity,
+  and semantic scene generation. Its higher cost justifies placing it after
+  three cheaper foundational packets, not deferring it indefinitely.
 
 ## Deferred Work
 
@@ -75,8 +92,13 @@ callers.
   an explicit product priority or a new caller needs that seam.
 - Punctuated substitution and result reception remain non-authoritative
   comparison evidence.
-- Graph3D, broad matrix generation, calculus, geometric dissection, networks,
-  and additional programming languages remain behind the three packets above.
+- Graph2D function translation remains valuable for symbolic/graph continuity,
+  but existing economics and physics callers already prove the Graph2D host,
+  lifecycle, shared clock, and responsive surface. It no longer precedes the
+  more foundational representational gaps above.
+- Broad matrix generation, integral-specific transformations, geometric
+  dissection, networks, and additional programming languages remain behind the
+  five packets above.
 - Learner layout, curriculum, SRS, and public-product expansion remain frozen
   pending external educator evidence.
 

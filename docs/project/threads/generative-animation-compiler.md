@@ -2,11 +2,12 @@
 
 Status: supporting
 Last Updated: 2026-08-20
-Current Next Action: preserve the converged equation compiler while the active
-Catalogue thread proves Graph2D horizontal translation and then code expression
-wrapping through domain-owned frontends. Fraction structural pressure is
-deferred. Re-enter this thread for power/root branching after those two family
-packets, without giving models geometry, timing, or renderer authority.
+Current Next Action: support the active Catalogue proposal for exponential
+homomorphism duality and root branching, then close TypeScript/Python generation
+frontends, binders/large operators, and one bounded Graph3D frontend in that
+order. Graph2D function translation and fraction structural pressure are
+deferred. Models retain semantic-choice authority only; geometry, timing, and
+renderer policy remain code-owned.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.
