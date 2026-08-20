@@ -174,6 +174,7 @@
     "test:equation-syntax-hazards": "node --disable-warning=ExperimentalWarning --test tests/equation-syntax-hazard-corpus.test.ts tests/equation-latex-endpoint-normalizer.test.ts",
     "test:exponential-homomorphism-law": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-law.test.ts",
     "test:power-application-normalizer": "node --disable-warning=ExperimentalWarning --test tests/power-application-endpoint-normalizer.test.ts",
+    "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts",
     "visual:animation-transformation-coverage": "playwright test tests/animation-transformation-coverage.browser.spec.ts --project=chromium --workers=1",
     "test:animation-development-url-state": "node --disable-warning=ExperimentalWarning --test tests/animation-playhead-url-policy.test.ts tests/animation-development-url-state.test.ts tests/animation-catalogue-route.test.ts tests/animation-catalogue-navigation.test.ts",
     "visual:animation-development-url-state": "playwright test tests/animation-development-url-state.browser.spec.ts --project=chromium --workers=1",

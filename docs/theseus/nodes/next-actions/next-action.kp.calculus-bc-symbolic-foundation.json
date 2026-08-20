@@ -243,11 +243,46 @@
       "scope": "slice s06 power application normalizer",
       "checkedAt": "2026-08-20T18:48:11.990Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:exponential-correspondence",
+      "status": "passed",
+      "scope": "slice s07 correspondence successor authority",
+      "checkedAt": "2026-08-20T18:55:21.579Z",
+      "notes": "5 identity, successor, connector, completeness, and illegal-authoring tests pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-motion-correspondence-validator.test.ts",
+      "status": "passed",
+      "scope": "slice s07 correspondence successor authority",
+      "checkedAt": "2026-08-20T18:55:22.752Z",
+      "notes": "4 existing provenance and anti-forgery checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 correspondence successor authority",
+      "checkedAt": "2026-08-20T18:55:24.089Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s07 correspondence successor authority",
+      "checkedAt": "2026-08-20T18:55:25.125Z",
+      "notes": "All dependency and equation architecture ratchets pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s07 correspondence successor authority",
+      "checkedAt": "2026-08-20T18:55:26.157Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 normalized grouped additive and subtractive power applications with exact source spelling while malformed or atomic shapes remain typed gaps."
+    "summary": "s07 established exact payload continuity, derived base/application/superscript occurrences, connector succession, forbidden glyph identities, and total endpoint coverage."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

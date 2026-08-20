@@ -87,7 +87,8 @@
     {
       "id": "s07",
       "title": "correspondence-successor-authority",
-      "status": "planned"
+      "summary": "Exponential identity and successor authority is complete, immutable, anti-forgery checked, and presentation-free.",
+      "status": "complete"
     },
     {
       "id": "s08",
