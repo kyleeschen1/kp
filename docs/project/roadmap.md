@@ -2,9 +2,9 @@
 
 Last Updated: 2026-08-20
 Status: active
-Active Thread: `threads/generative-animation-compiler.md`
+Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
-- `threads/animation-catalogue.md`
+- `threads/generative-animation-compiler.md`
 - `threads/architecture-convergence.md`
 - `threads/explanation-attention.md`
 - `threads/semantic-runtime.md`
@@ -206,11 +206,20 @@ Only this repository sequence is active:
    promotion candidates. Carrier-preserving simplification remains canonical
    when nominal evidence proves that one identity carrier survives. See
    `decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md`.
-28. **Fraction structural pressure:** next. Revisit the deferred
-   `1/3 + 1/6` sequence using canonical contributor fusion for its visible
-   local product evaluation while preserving the approved
-   fraction-equivalence choreography and repaired paint-ownership seam. Stop
-   for human review before fraction promotion or arithmetic continuation.
+28. **Prudent family breadth cadence:** accepted goal, with the exact sequence
+   awaiting approval. The recommended cadence advances new families through
+   one reversible exemplar and human checkpoint, followed by one structurally
+   different caller and narrow promotion. Historical catalogue migration is
+   not a prerequisite. See
+   `decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
+29. **Graph2D horizontal function translation:** recommended next pending
+   approval. Build one equation-linked parabola translation and stop for visual
+   review. After approval, pressure the same operation with a structurally
+   different curve and promote only the horizontal-translation boundary.
+30. **Proposed subsequent family packets:** code expression wrapping through
+   TypeScript then Python, followed by power/root inversion with explicit
+   branch and domain truth. Each packet retains the two-loop cadence. Fraction
+   structural pressure is deferred and no longer blocks breadth.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -222,9 +231,9 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Revisit the deferred fraction pressure sequence with canonical ink-knot evaluation and stop for human review before promotion or continued arithmetic. |
-| Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
-| Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Preserve the converged vocabulary; defer fraction pressure and prepare power/root branching only after the Graph2D and code packets. |
+| Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Build one horizontal function-translation exemplar next, then pressure that operation with a different curve before promotion. |
+| Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | After Graph2D promotion, prototype code expression wrapping in TypeScript and pressure it through Python without sharing language-specific syntax or rendering. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |

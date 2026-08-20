@@ -1,6 +1,6 @@
 # Post-Carrier Next Loops Review
 
-Status: partially superseded by canonical ink-knot selection
+Status: superseded by prudent animation-family breadth cadence
 Reviewed: 2026-08-20
 Active thread: `../threads/generative-animation-compiler.md`
 

@@ -1,12 +1,18 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-17
-Current Next Action: promote the product/quotient homomorphic crossover at the
-narrowest proven causal boundary. Preserve timing, geometry, cardinality,
-fraction construction, and Native KaTeX optical treatment as local policy.
-After that bounded closeout, select one function-coordinate transformation as
-the next independently reversible catalogue exemplar.
+Last Updated: 2026-08-20
+Current Next Action: propose one Graph2D horizontal function-translation
+exemplar, preferably `y = x² → y = (x - 2)²`, with equation/curve identity,
+fixed viewport and typography, deterministic seek/reverse, one exact catalogue
+URL, and a human visual checkpoint. Do not implement reflection, stretch,
+compression, a universal graph frontend, or a second curve before approval.
+
+The accepted breadth cadence is two loops per family: one reversible exemplar
+and checkpoint, then one structurally different caller plus narrow promotion.
+After Graph2D, the planned packets are TypeScript/Python expression wrapping
+and power/root inversion with explicit branch and domain truth. See
+`../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
 
 ## Goal
 

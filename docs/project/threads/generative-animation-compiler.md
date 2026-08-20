@@ -1,13 +1,12 @@
 # Generative Animation Compiler Thread
 
-Status: active
+Status: supporting
 Last Updated: 2026-08-20
-Current Next Action: revisit the deferred `1/3 + 1/6` pressure sequence using
-the canonical ink-knot contributor-fusion treatment for its visible local
-product evaluation. Preserve the approved fraction-equivalence choreography,
-the repaired sequence-level paint-ownership seam, and carrier-preserving
-identity behavior. Stop for human review before fraction promotion or further
-arithmetic.
+Current Next Action: preserve the converged equation compiler while the active
+Catalogue thread proves Graph2D horizontal translation and then code expression
+wrapping through domain-owned frontends. Fraction structural pressure is
+deferred. Re-enter this thread for power/root branching after those two family
+packets, without giving models geometry, timing, or renderer authority.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.
