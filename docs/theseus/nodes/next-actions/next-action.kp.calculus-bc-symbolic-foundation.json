@@ -1,0 +1,113 @@
+{
+  "id": "next-action.kp.calculus-bc-symbolic-foundation",
+  "kind": "next-action",
+  "title": "Build Calc BC symbolic foundation",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Establish the generated symbolic coverage atlas, prove exponential duality and root inversion through human-gated exemplar and pressure callers, then prove one persistent equivalence projection without duplicating semantic or paint authority.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-20-calculus-bc-symbolic-foundation-long-loop-proposal.md",
+      "summary": "Approved source for objective, 30 ordered slices, verification cadence, rollback units, expected learning, and mandatory human checkpoints."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "workflow.kp.delivery"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run verify:equation:inner",
+    "npm run verify:equation:boundary",
+    "npm run verify:equation:release",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "failed",
+      "scope": "s01 initial coverage authority reconciliation",
+      "checkedAt": "2026-08-20T18:21:17.395Z",
+      "notes": "The initial run correctly exposed stale generated carrier format and fraction readiness evidence before the baseline could be frozen."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:36.267Z",
+      "notes": "9 focused coverage and maturity-baseline tests pass after regenerating stale authorities"
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:47.302Z",
+      "notes": "Generated transformation coverage is current at 6 Direct / 4 Registered / 2 Exemplar / 7 Missing."
+    },
+    {
+      "command": "npm run check:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:48.327Z",
+      "notes": "Generated equation asset authorities are current after canonical format reconciliation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:49.279Z",
+      "notes": "TypeScript and Svelte checks pass for the new typed baseline."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:50.214Z",
+      "notes": "All architecture ratchets pass, including equation compiler and operation-evaluation boundaries."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s01 coverage baseline",
+      "checkedAt": "2026-08-20T18:22:51.165Z",
+      "notes": "No whitespace errors in the slice diff."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 froze an explicit six-dimensional historical coverage baseline and reconciled stale generated authorities to the truthful equation inventory: 6 Direct, 4 Registered, 2 Exemplar, 7 Missing."
+  },
+  "expectedLearning": [
+    "Whether the shared homomorphism law supports power applications without copying log choreography.",
+    "Whether explicit branch evidence can govern root motion without becoming presentation authority.",
+    "Whether one verified transition can support replacement and persistent equivalence without semantic or paint duplication."
+  ],
+  "allowedWork": [
+    "Execute only the approved 30-slice equation-domain and coverage-atlas proposal through its human gates."
+  ],
+  "disallowedWork": [
+    "Do not implement deferred domains, a CAS, a new runtime owner, or promote past a visual checkpoint without approval."
+  ],
+  "criteria": [
+    {
+      "id": "calculus-bc-coverage-is-derived",
+      "weight": "high"
+    },
+    {
+      "id": "unsupported-requests-remain-typed-gaps",
+      "weight": "high"
+    },
+    {
+      "id": "existing-callers-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "human-checkpoints-gate-promotion",
+      "weight": "high"
+    }
+  ]
+}

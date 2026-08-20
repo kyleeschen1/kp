@@ -10,6 +10,11 @@ import {
 } from "../src/architecture/animation-transformation-coverage.ts";
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
+import {
+  kpEquationCoverageBaseline20260820,
+  kpSymbolicCoverageMaturityDimensions,
+  summarizeKpEquationCoverage
+} from "../src/architecture/symbolic-mathematics-coverage-baseline.ts";
 
 test("generated coverage is a fresh deterministic plan projection", () => {
   const coverage = createKpAnimationTransformationCoverage();
@@ -22,6 +27,41 @@ test("generated coverage is a fresh deterministic plan projection", () => {
     capabilityId: id,
     order
   })));
+});
+
+test("Calc BC planning starts from an exact equation coverage baseline", () => {
+  assert.deepEqual(
+    summarizeKpEquationCoverage(createKpAnimationTransformationCoverage()),
+    {
+      equationCapabilityCount:
+        kpEquationCoverageBaseline20260820.equationCapabilityCount,
+      byStatus: kpEquationCoverageBaseline20260820.byStatus
+    }
+  );
+  assert.equal(
+    Object.values(kpEquationCoverageBaseline20260820.byStatus)
+      .reduce((sum, count) => sum + count, 0),
+    kpEquationCoverageBaseline20260820.equationCapabilityCount
+  );
+});
+
+test("coverage maturity keeps paint meaning promotion and generation separate", () => {
+  assert.deepEqual(kpSymbolicCoverageMaturityDimensions.map(({ id }) => id), [
+    "notation-paintable",
+    "semantic-representable",
+    "operation-authoritative",
+    "exemplar-executable",
+    "family-promoted",
+    "generation-governed"
+  ]);
+  assert.match(
+    kpSymbolicCoverageMaturityDimensions[0]?.claim ?? "",
+    /without asserting its meaning/u
+  );
+  assert.match(
+    kpSymbolicCoverageMaturityDimensions[5]?.claim ?? "",
+    /typed repair/u
+  );
 });
 
 test("direct rows have exact authoring corpus compiler and exemplar evidence", () => {

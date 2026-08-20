@@ -13,9 +13,9 @@
     "total": 28,
     "byStatus": {
       "Direct": 6,
-      "Registered": 3,
+      "Registered": 5,
       "Exemplar": 9,
-      "Missing": 10
+      "Missing": 8
     }
   },
   "entries": [
@@ -637,20 +637,22 @@
       "capabilityId": "capability.equation.common-denominator-construction",
       "order": 9,
       "domain": "equation",
-      "title": "Common-denominator construction",
+      "title": "Common-denominator alignment",
       "scope": {
         "kind": "transformation-family",
         "authorityId": "family.equation.common-denominator.v1"
       },
-      "status": "Missing",
+      "status": "Registered",
       "requirements": [
         {
           "id": "requirement.equation.common-denominator.operation",
           "kind": "semantic-operation",
-          "authorityId": "operation.equation.construct-common-denominator.v1",
-          "summary": "A typed operation identifies denominator factors and the legal multipliers for each term.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "authorityId": "operation.equation.common-denominator-alignment.v1",
+          "summary": "A typed operation verifies caller-supplied denominator factors and legal multipliers for each term without becoming an LCM solver.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.equation.common-denominator-alignment.v1"
+          ]
         },
         {
           "id": "requirement.equation.common-denominator.recipe",
@@ -671,22 +673,22 @@
         {
           "id": "requirement.equation.common-denominator.corpus",
           "kind": "generation-corpus",
-          "authorityId": "corpus.equation.common-denominator.v1",
-          "summary": "Fixtures cover numeric, symbolic, already-shared, and partially shared denominators.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "authorityId": "corpus.equation.fraction-denominator.v1",
+          "summary": "Fixed fixtures prove one numeric alignment, explicit evaluation composition, alias normalization, and typed denominator repairs.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.fraction-denominator.v1"
+          ]
         }
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.common-denominator.operation",
         "requirement.equation.common-denominator.recipe",
-        "requirement.equation.common-denominator.exemplar",
-        "requirement.equation.common-denominator.corpus"
+        "requirement.equation.common-denominator.exemplar"
       ],
       "exemplarLinks": [],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "registered-without-direct-generation"
       ]
     },
     {
@@ -698,15 +700,17 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.fraction-arithmetic.v1"
       },
-      "status": "Missing",
+      "status": "Registered",
       "requirements": [
         {
           "id": "requirement.equation.fraction-arithmetic.operation",
           "kind": "semantic-operation",
-          "authorityId": "operation.equation.fraction-arithmetic.v1",
-          "summary": "A typed operation distinguishes denominator preparation from numerator combination.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "authorityId": "operation.equation.like-denominator-combination.v1",
+          "summary": "A typed operation combines raw numerators only after exact shared-denominator authority is present.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.equation.like-denominator-combination.v1"
+          ]
         },
         {
           "id": "requirement.equation.fraction-arithmetic.recipe",
@@ -719,30 +723,30 @@
         {
           "id": "requirement.equation.fraction-arithmetic.authoring",
           "kind": "authoring-surface",
-          "authorityId": "authoring.equation.fraction-arithmetic.v1",
-          "summary": "Governed authoring rejects arithmetic requests whose denominator equivalence is unproved.",
+          "authorityId": "authoring.equation.like-denominator-combination.v1",
+          "summary": "Governed authoring rejects mismatched denominators and hidden reduction while retaining exact contributor lineage.",
           "status": "missing",
           "evidenceSourceIds": []
         },
         {
           "id": "requirement.equation.fraction-arithmetic.corpus",
           "kind": "generation-corpus",
-          "authorityId": "corpus.equation.fraction-arithmetic.v1",
-          "summary": "Fixtures cover signs, multiple terms, symbolic factors, and simplification opportunities.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "authorityId": "corpus.equation.fraction-denominator.v1",
+          "summary": "Fixed fixtures cover one valid combination plus denominator-mismatch and hidden-reduction repairs.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.fraction-denominator.v1"
+          ]
         }
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.fraction-arithmetic.operation",
         "requirement.equation.fraction-arithmetic.recipe",
-        "requirement.equation.fraction-arithmetic.authoring",
-        "requirement.equation.fraction-arithmetic.corpus"
+        "requirement.equation.fraction-arithmetic.authoring"
       ],
       "exemplarLinks": [],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "registered-without-direct-generation"
       ]
     },
     {

@@ -1,15 +1,15 @@
 # Calculus BC Symbolic Foundation Long-Loop Proposal
 
-Status: proposed; explicit execution approval required
+Status: approved; executing through mandatory human checkpoints
 Reviewed: 2026-08-20
 Decision: `../decisions/2026-08-20-symbolic-mathematics-through-calculus-bc-target.md`
-Primary target: `workflow.kp.delivery` successor action to be materialized only
-after approval
+Primary target: `next-action.kp.calculus-bc-symbolic-foundation`
+Run contract: `run-contract.kp.calculus-bc-symbolic-foundation-v2`
 
 ## Why This Loop Is Current
 
-The current generated transformation ledger has 19 equation capabilities: 6
-are `Direct`, 2 `Registered`, 2 `Exemplar`, and 9 `Missing`. KaTeX can paint
+The reconciled generated transformation ledger has 19 equation capabilities: 6
+are `Direct`, 4 `Registered`, 2 `Exemplar`, and 7 `Missing`. KaTeX can paint
 most prerequisite and Calculus BC notation, and the narrow equation runtime
 already supplies identity, deterministic time, direct seek/rewind, canonical
 motifs, measured native paint, governed discovery, and typed repair. The main
@@ -64,7 +64,7 @@ promptly. The first mandatory stop is slice 13.
 
 | Slice | Target and intended change | Risk | Verification | Commit and stop condition |
 | --- | --- | --- | --- | --- |
-| 01 | **Coverage baseline.** Freeze the current 19-row equation counts and define the difference between paintable notation, semantic representation, operation authority, exemplar, promotion, and governed generation. | A prose estimate becomes false authority. | Focused: coverage generator/check and existing coverage tests. | Commit declarations/tests/docs only. Stop if the generated ledger disagrees with the recorded 6/2/2/9 baseline. |
+| 01 | **Coverage baseline.** Freeze the current 19-row equation counts and define the difference between paintable notation, semantic representation, operation authority, exemplar, promotion, and governed generation. | A prose estimate becomes false authority. | Focused: coverage generator/check and existing coverage tests. | Commit declarations/tests/docs only. Stop if the generated ledger disagrees with the reconciled 6/4/2/7 baseline. |
 | 02 | **Calculus BC capability taxonomy.** Add typed, data-driven declarations for algebra/functions, trigonometric syntax, inequalities/piecewise, sequences/series, limits, calculus operators, polar/parametric forms, differential equations, and Taylor series without marking missing work complete. | A curriculum ontology becomes a second hand-maintained dashboard. | Focused: declaration uniqueness, generated projection, no duplicate authority IDs. | Commit taxonomy and projection. Stop if categories cannot project through the existing coverage schema. |
 | 03 | **Syntax-hazard corpus.** Add parse/normalization fixtures for `sin^2(x)`, inverse sine versus reciprocal sine, inverse functions, roots, absolute values, piecewise forms, binder limits, derivatives, differentials, integrals, and one-sided limits. Unsupported cases must remain typed gaps. | Parsing surface spelling as mathematical meaning. | Focused: parser/normalizer corpus and negative ambiguity cases. | Commit fixtures/tests. Stop on any silent inverse/reciprocal guess. |
 | 04 | **Generated atlas projection.** Extend the existing simple Transformation Coverage view with the new declarations, maturity dimensions, and planned order; do not add another navigation system. | UI breadth outruns executable truth or increases startup closure. | Standard: coverage generation/check, coverage-view tests, typecheck, Theseus validation. | Commit generated projection and small view changes. Stop on manual status duplication or eager capability loading. |
@@ -144,4 +144,3 @@ At root pressure, it should reveal whether semantic branch evidence can govern
 motion without becoming choreography. At the final checkpoint, it should show
 whether one verified transition can support both replacement and persistent
 equivalence without duplicated semantics or paint ownership.
-
