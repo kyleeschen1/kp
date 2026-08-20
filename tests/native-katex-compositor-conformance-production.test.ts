@@ -29,4 +29,8 @@ test("keeps conformance schemas out of production source and bundles", () => {
     path: "src/leak.ts",
     source: "native-katex-conformance-context-mutation-registry"
   }])[0]?.marker, "native-katex-conformance-context-mutation-registry");
+  assert.equal(checkKpNativeKatexConformanceProductionArtifacts([{
+    path: "dist/matrix.js",
+    source: "native-katex-conformance-matrix-fixture"
+  }])[0]?.marker, "native-katex-conformance-matrix-fixture");
 });

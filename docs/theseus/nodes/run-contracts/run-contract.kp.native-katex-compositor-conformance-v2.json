@@ -185,7 +185,8 @@
     {
       "id": "ncc24",
       "title": "Add-matrix-fixtures",
-      "status": "planned"
+      "summary": "Added exactly two diagnostic matrix fixtures: one whole compound owner and one heterogeneous 2x2 matrix with persistent cell semantic IDs. Both remain test-only, renderable, bounded, and free of pedagogy or choreography fields.",
+      "status": "complete"
     },
     {
       "id": "ncc25",

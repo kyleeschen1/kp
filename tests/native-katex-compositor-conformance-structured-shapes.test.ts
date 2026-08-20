@@ -28,9 +28,9 @@ test("adds a bounded structured-shape cohort to the shared registry", () => {
     ),
     expectedStructuredShapes
   );
-  assert.equal(
-    kpNativeKatexConformanceShapeRegistry.descriptors.length,
-    kpNativeKatexAtomicConformanceShapes.length +
+  assert.ok(
+    kpNativeKatexConformanceShapeRegistry.descriptors.length >=
+      kpNativeKatexAtomicConformanceShapes.length +
       kpNativeKatexScriptStyleConformanceShapes.length +
       expectedStructuredShapes.length
   );

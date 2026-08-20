@@ -212,6 +212,38 @@ const structuredShapeDefinitions = Object.freeze([
   }
 ] as const satisfies readonly ShapeDefinition[]);
 
+const matrixShapeDefinitions = Object.freeze([
+  {
+    id: "shape.matrix.whole-2x2",
+    label: "whole two by two matrix",
+    representativeLatex: "\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}",
+    shapeClass: "multirow-compound",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["vertical-list", "delimiter", "multirow"]
+  },
+  {
+    id: "shape.matrix.heterogeneous-2x2",
+    label: "heterogeneous two by two matrix",
+    representativeLatex:
+      "\\begin{pmatrix}x&\\frac{1}{2}\\\\g&y^{2}\\end{pmatrix}",
+    shapeClass: "multirow-compound",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: [
+      "glyph",
+      "rule",
+      "script",
+      "vertical-list",
+      "delimiter",
+      "multirow",
+      "font-style"
+    ]
+  }
+] as const satisfies readonly ShapeDefinition[]);
+
 export const kpNativeKatexAtomicConformanceShapes = Object.freeze(
   atomicShapeDefinitions.map((definition) =>
     createKpNativeKatexConformanceShapeDescriptor(definition))
@@ -232,9 +264,15 @@ export const kpNativeKatexStructuredConformanceShapes = Object.freeze(
     createKpNativeKatexConformanceShapeDescriptor(definition))
 );
 
+export const kpNativeKatexMatrixConformanceShapes = Object.freeze(
+  matrixShapeDefinitions.map((definition) =>
+    createKpNativeKatexConformanceShapeDescriptor(definition))
+);
+
 export const kpNativeKatexConformanceShapeRegistry =
   createKpNativeKatexConformanceShapeRegistry([
     ...kpNativeKatexAtomicConformanceShapes,
     ...kpNativeKatexScriptStyleConformanceShapes,
-    ...kpNativeKatexStructuredConformanceShapes
+    ...kpNativeKatexStructuredConformanceShapes,
+    ...kpNativeKatexMatrixConformanceShapes
   ]);
